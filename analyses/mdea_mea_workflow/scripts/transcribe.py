@@ -16,7 +16,7 @@ SOURCES={
 'Ermatchkov2006':('UD6X5RGU','Table 6, PDF p.8, printed p.6088','total bubble pressure MPa; T K; overall molality mol/kg water','Source Table 6 prints no per-row uncertainty; corrected Kamps data; see source discussion pp.6085,6089'),
 'Jakobsen2005':('XVFDEJM2','Table A5, PDF p.9, printed p.9902','species mole fractions; T degC; loadNMR mol CO2/mol amine; 23 wt% unloaded MDEA','species ratios estimated 5-10%, Experimental/Discussion; issue 222 fixes same scale; no per-row uncertainties'),
 'BottingerMDEA2008':('W3HEICT5','Table 2, PDF p.6, printed p.7922','species mole fractions; initial amine g/g; loading mol CO2/mol amine; T K','amine balance <3%, CO2 <5%, p.7919'),
-'Carson2000':('8ZD86YIF','Table 3, PDF p.9, printed p.1293','partial molar enthalpy kJ/mol CO2; cumulative amount mol; CO2 mole fraction; unloaded amine mass fraction','estimated uncertainty 1-2%, abstract and p.1294'),
+'Carson2000':('8ZD86YIF','Table 3, PDF p.9, printed p.1293','integral enthalpy from zero loading kJ/mol CO2; cumulative amount mol; CO2 mole fraction; unloaded amine mass fraction','estimated uncertainty 1-2%, abstract and p.1294'),
 'Weiland1997':('27V9SYLA','Table 1, PDF p.1, printed p.1004','Cp J/g/K; loading mol CO2/mol amine; unloaded amine mass fraction; 298.15 K; complete loaded solution mass','repeatability and standard-system comparison 1%, p.1004'),
 'Weiland1998':('U4KFM6ST','Table 1, PDF p.2, printed p.379','density g/mL; loading mol CO2/mol amine; unloaded amine mass fraction; 298.15 K; complete solution','unloaded densities within 0.1% of literature, p.378; not an explicit loaded-density uncertainty'),
 'Sobrino2016':('VWXSCIWF','Table 5, PDF p.4, printed p.234','density kg/m3; T K; pressure MPa; unloaded MDEA mass fraction','standard u(T)=0.01 K, ur(p)=0.0001, u(w)=0.0001, u(rho)=0.35 kg/m3, Table 5 footnote'),
@@ -35,7 +35,7 @@ def emit(name,columns,rows,complete=True,note=''):
  meta=next(m for m in manifest if m['source_key']==name)
  p=OUT/(name+'_stage1.csv')
  with p.open('w',newline='') as f:
-  w=csv.writer(f);w.writerow(['source_key','pdf_attachment_key','source_locator','source_row',*columns])
+  w=csv.writer(f,lineterminator="\n");w.writerow(['source_key','pdf_attachment_key','source_locator','source_row',*columns])
   w.writerows([[name,meta['pdf_attachment_key'],meta['locator'],i,*r] for i,r in enumerate(rows,1)])
  meta['files'].append(dict(path=str(p.relative_to(ROOT)),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),rows=len(rows)))
  meta.update(status='complete' if complete else 'incomplete',check=note)
@@ -96,9 +96,9 @@ for line in b.splitlines():
  if 'w3 =' in line:
   w=re.search(r'w3 = (\d+\.\d+)',line).group(1);run='2' if 'Run 2' in line else '1'
  vals=re.findall(num,line.replace('−','-'))
- if len(vals)==4 and re.match(r'^\s*0\.',line):rows.append([w,run,*vals,'partial-molar'])
+ if len(vals)==4 and re.match(r'^\s*0\.',line):rows.append([w,run,*vals,'integral-from-zero-loading'])
 assert len(rows)==40,len(rows)
-emit('Carson2000',['MDEA_mass_fraction','run','n_CO2_mol','x_CO2','enthalpy_change_J','solution_enthalpy_kJ_mol_CO2','heat_definition'],rows,note='Printed 0.0180 mol in run 2 kept; inconsistent with neighboring cumulative amounts; no silent repair.')
+emit('Carson2000',['MDEA_mass_fraction','run','n_CO2_mol','x_CO2','enthalpy_change_J','solution_enthalpy_kJ_mol_CO2','heat_definition'],rows,note='Integral DeltaH/n1 from zero loading, procedure printed p.1289 PDF p.5. Printed row 38 n1=0.0180 mol is a source typo: -622.0/(-48.59*1000)=0.012801 mol; printed values retained; arithmetic in results/carson-arithmetic.json.')
 # Weiland Cp table has empty cells: read numeric columns by fixed printed positions.
 b=texts['Weiland1997'].split('Table 1. Heat Capacity')[1].split('Table 2. Heat Capacity')[0]
 rows=[]

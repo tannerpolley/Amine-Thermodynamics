@@ -1,0 +1,68 @@
+{
+  "schema": "mea-physical-ideal-gas-calorics-v1",
+  "reference_pressure_pa": 100000.0,
+  "components": {
+    "carbon-dioxide": {
+      "representation": "shomate",
+      "coefficients": [
+        24.99735,
+        55.18696,
+        -33.69137,
+        7.948387,
+        -0.136638,
+        -403.6075,
+        228.2431,
+        -393.5224
+      ],
+      "range_k": [
+        298.0,
+        1200.0
+      ],
+      "basis": "ideal gas; Shomate Cp in J/mol/K, t = T[K]/1000",
+      "formation_enthalpy_j_per_mol": -393510.0,
+      "source": "NIST Chemistry WebBook gas Shomate coefficients (Chase 1998); CODATA formation enthalpy"
+    },
+    "water": {
+      "representation": "shomate",
+      "coefficients": [
+        30.092,
+        6.832514,
+        6.793435,
+        -2.53448,
+        0.082139,
+        -250.881,
+        223.3967,
+        -241.8264
+      ],
+      "source_range_k": [
+        500.0,
+        1700.0
+      ],
+      "range_k": [
+        273.15,
+        1700.0
+      ],
+      "basis": "ideal gas; Shomate Cp in J/mol/K, t = T[K]/1000",
+      "formation_enthalpy_j_per_mol": -241826.0,
+      "source": "NIST Chemistry WebBook gas Shomate coefficients (Chase 1998); CODATA formation enthalpy",
+      "note": "Extrapolated below 500 K; Cp at 298.15 K is 33.59 J/mol/K in JANAF."
+    },
+    "methyldiethanolamine": {
+      "representation": "cp_polynomial",
+      "coefficients": [
+        91.8741258383046,
+        -0.10807627945499615,
+        0.001642278673494647,
+        -1.6764775248379965e-06
+      ],
+      "range_k": [
+        293.0,
+        423.0
+      ],
+      "basis": "ideal gas; Cp = a+b*T+c*T^2+d*T^3 in J/mol/K",
+      "source": "Wangler 2018 Table 3 Eq.26 printed p.18 PDF G7ZTAJZS; restored factor T, owner decision 2026-10-28",
+      "enthalpy_entropy_anchor_k": 313.15,
+      "anchor_basis": "h=s=0 at 313.15 K, MEA amine convention"
+    }
+  }
+}

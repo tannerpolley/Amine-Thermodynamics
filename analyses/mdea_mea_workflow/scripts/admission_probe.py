@@ -10,6 +10,21 @@ p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
 eq=p.eq
 
 
+def caloric_record(params):
+ from math import comb
+ sources=json.loads((p.OUT/'inputs/physical-ideal-gas-calorics.json').read_text())
+ intervals=[[] for _ in params.component_ids]
+ for cid,source in sources['components'].items():
+  if cid not in params.component_ids:continue
+  if source['representation']=='cp_polynomial':
+   centre=source['enthalpy_entropy_anchor_k']; cp=source['coefficients']
+   coefficients=[sum(a*comb(j,k)*centre**(j-k) for j,a in enumerate(cp) if j>=k) for k in range(4)]
+   form=p.epcsaft.IdealPolynomial(coefficients,centre,0.,0.)
+  else:form=p.epcsaft.IdealShomate(source['coefficients'],source['formation_enthalpy_j_per_mol'])
+  intervals[list(params.component_ids).index(cid)]=[p.epcsaft.IdealInterval(*source['range_k'],True,True,p.epcsaft.IdealCorrelation(form,1e5))]
+ return p.epcsaft.ThermochemistryRecord(1e5,intervals)
+
+
 def problem(T,m,a,P,reactions):
  n=1/.01801528
  extent=.97*min(m,a)
@@ -28,7 +43,7 @@ def main():
  reactions.append(eq.Reaction({p.H:-1,p.W:-1,p.M:1,'hydronium-cation':1},name='MDEA-dissociation',correlation=eq.ReactionLogPolynomial(-83.491+4.0165+10.976*math.log(313.15),-819.7,10.976,0.,313.15,278.,393.15,ref),reference=eq.ReactionReference(eq.ReferenceSourceBasis.CommonMolalityInfiniteDilution,1e5)))
  p.write('inputs/probe-reaction-reference.json',dict(shared=records,MDEA=dict(a=-83.491,b=-819.7,c=10.976,lnKx_to_lnKm=4.0165,reference_pressure_Pa=1e5,range_note='278-368 K original title; extension to 393 K is the issue 222 model assumption; original paper unavailable'),row_tolerance=1e-10))
  rows=[r for r in csv.DictReader((p.DATA/'Kuranov_1996_CO2_MDEA_total_pressure.csv').open()) if float(r['m_CO2_mol_per_kg_H2O'])/float(r['m_MDEA_mol_per_kg_H2O'])>1 and round(float(r['temperature_K']))<=393]
- # The issue calls these nominal 393 K rows; actual printed temperatures reach 393.17 K.
+ # The 20 rows comprise 13 at nominal 313 K, five at 333 K and two at 373 K; none at 393 K.
  assert len(rows)==20,len(rows)
  p.write('inputs/probe-rows.json',rows)
  for variant in 'AB':
@@ -36,14 +51,29 @@ def main():
   report=dict(variant=variant,status='incomplete',states=[])
   try:
    params=p.epcsaft.Parameters.from_mapping(d)
-   model=p.epcsaft.Mixture(params)
+   model=p.epcsaft.Mixture(params,thermochemistry=caloric_record(params))
    report['admission_message']='Parameters.from_mapping and Mixture construction returned without exception'
    for name,x in [('unloaded',{p.W:.95,p.M:.05}),('loaded',{p.W:.94,p.M:.04,p.H:.01,'bicarbonate-anion':.01})]:
     state=model.state(313.15,P=1e5,x=x,phase='liquid')
     terms={k:getattr(state,k) for k in ('hard_chain','dispersion','association','debye_huckel','born','residual_helmholtz')}
     report['states'].append(dict(name=name,T_K=313.15,P_Pa=1e5,x=x,rho_mol_m3=state.molar_density,bulk_permittivity=state.bulk_relative_permittivity,terms=terms,pressure_residual_Pa=state.pressure-1e5))
-   report['reason']='Parameter admission and both liquid evaluations succeeded. Full criterion remains incomplete because item (c) has no adopted MDEA ideal-gas record.'
+   pure_params=p.epcsaft.Parameters.from_mapping(d,components=[p.M,p.W])
+   pure_model=p.epcsaft.Mixture(pure_params,thermochemistry=caloric_record(pure_params))
+   pure=pure_model.state(313.15,rho=1e5/(p.epcsaft.GAS_CONSTANT_J_PER_MOL_K*313.15),x={p.M:1.})
+   expected=json.loads((p.OUT/'inputs/physical-ideal-gas-calorics.json').read_text())['components'][p.M]['coefficients']
+   assert abs(pure.ideal_enthalpy)<1e-9 and abs(pure.ideal_isobaric_heat_capacity-sum(c*313.15**i for i,c in enumerate(expected)))<1e-9
+   assert abs(pure.ideal_entropy)<1e-9
+   report['status']='complete'
+   neutral_params=p.epcsaft.Parameters.from_mapping(d,components=[p.M,p.W])
+   neutral_model=p.epcsaft.Mixture(neutral_params,thermochemistry=caloric_record(neutral_params))
+   unloaded=neutral_model.state(313.15,P=1e5,x={p.W:.95,p.M:.05},phase='liquid')
+   assert unloaded.ideal_enthalpy is not None and unloaded.ideal_isobaric_heat_capacity is not None
+   report['unloaded_calorics']=dict(ideal_h_J_mol=unloaded.ideal_enthalpy,ideal_Cp_J_mol_K=unloaded.ideal_isobaric_heat_capacity,total_h_J_mol=unloaded.total_enthalpy)
+   report['MDEA_ideal_at_anchor']=dict(T_K=313.15,h_J_mol=pure.ideal_enthalpy,s_J_mol_K=pure.ideal_entropy,Cp_J_mol_K=pure.ideal_isobaric_heat_capacity)
+   report['caloric_limit']='Full eight-species neutral thermochemistry admitted. Direct Mixture.state totals require all ionic ideal records, even at zero ionic fractions; reaction-completed ionic totals are deferred to item (g). MDEA ideal functions separately evaluated in native selected-component model.'
+   report['reason']='Full parameter and MDEA ideal-gas admission succeeded in both liquid compositions; prescribed charged composition is not reactive equilibrium. Ionic reference completion remains conditional on item (g).'
   except Exception as e:
+   report['status']='incomplete'
    report['admission_message']=f'{type(e).__name__}: {e}'
    report['reason']='Refusal retained; no alternate convention substituted.'
    p.write(f'results/admission-{variant}.json',report)

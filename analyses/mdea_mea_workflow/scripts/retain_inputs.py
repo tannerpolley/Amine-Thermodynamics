@@ -3,7 +3,6 @@ import csv
 import hashlib
 import json
 from pathlib import Path
-import shutil
 
 ROOT=Path(__file__).resolve().parents[3]
 AN=ROOT/'analyses/mdea_mea_workflow'
@@ -27,12 +26,9 @@ for r in csv.DictReader((MAIN/'literature/index.csv').open()):
 (AN/'inputs/reading-copy-checks.json').write_text(json.dumps(reading,indent=2)+'\n')
 pdf=next((Path.home()/'Zotero/storage/5467GXJK').glob('*.pdf'))
 (AN/'results/derks-basis.json').write_text(json.dumps(dict(status='unscored',source='Derks2011',pdf_attachment_key='5467GXJK',pdf_sha256=sha(pdf),locator='Table 1, PDF p.5 printed p.603; abstract p.599',temperature='room temperature, no numerical value established',basis='2 kmol/m3 analytical MDEA solution; concentrations kmol/m3; loading mol CO2/mol MDEA',reason='Missing numerical temperature; no conversion to mass or mole fractions and no scoring authorized.'),indent=2)+'\n')
-# Exact tables consumed or assessed are copied once as a retained analysis snapshot.
+# Source tables have one owner; retain their hashes without analysis copies.
 source_paths=[ROOT/f['path'] for s in manifest['sources'] for f in s['files']]
 source_paths += [ROOT/'data/reference/MDEA'/n for n in ('Hsieh_2007_MDEA_relative_permittivity.csv','Kuranov_1996_CO2_MDEA_total_pressure.csv')]
-for source in source_paths:
- dest=AN/'inputs/source-tables'/source.name;dest.parent.mkdir(exist_ok=True)
- shutil.copyfile(source,dest)
 methods=[ROOT/'analyses/mea_parameter_bundle/scripts'/n for n in ('mea_association_volume.py','fit_observations.py','fit_campaign.py','shared_evaluation.py')]
 owner=ROOT/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'
 assert sha(owner)=='00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'

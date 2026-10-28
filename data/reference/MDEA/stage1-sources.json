@@ -79,17 +79,17 @@
       "pdf_attachment_key": "8ZD86YIF",
       "pdf_sha256": "d7fd8eeec6bc12c6d74d3cee0ef83590fcb359781bab570046235520e529cc6e",
       "locator": "Table 3, PDF p.9, printed p.1293",
-      "units_and_basis": "partial molar enthalpy kJ/mol CO2; cumulative amount mol; CO2 mole fraction; unloaded amine mass fraction",
+      "units_and_basis": "integral enthalpy from zero loading kJ/mol CO2; cumulative n1 mol; CO2 mole fraction; unloaded amine mass fraction",
       "uncertainty": "estimated uncertainty 1-2%, abstract and p.1294",
       "files": [
         {
           "path": "data/reference/MDEA/Carson2000_stage1.csv",
-          "sha256": "a716517eef14f0ed15df092c37263ec3b66a8a311676087d6b90bce84c7e234c",
+          "sha256": "0f6f4b2315a82607089465b66829951fc92c696c7daad7955a5e796e73dc4844",
           "rows": 40
         }
       ],
       "status": "complete",
-      "check": "Printed 0.0180 mol in run 2 kept; inconsistent with neighboring cumulative amounts; no silent repair."
+      "check": "Procedure printed p.1289 PDF p.5: cumulative DeltaH/n1, not derivative. 27/40 rows within 0.03 kJ/mol; rows 11-20 differ up to 0.29 due to two-significant-figure n1; rows 32/34 differ 0.03-0.04. Row 38 printed 0.0180 mol retained; -622.0/(-48.59*1000)=0.012801 mol. See results/carson-arithmetic.json."
     },
     {
       "source_key": "Weiland1997",
@@ -174,12 +174,12 @@
       "files": [
         {
           "path": "data/reference/MDEA/Merkley1987_stage1.csv",
-          "sha256": "1b6b957b4c1e25f4bf52044bc4c62b17e4087d2441f0341880a2a0e611976044",
+          "sha256": "bd8a1f1f7d736aaa18498d3db1fa6f8ea3a9867652dbf3a5436f1cb51a1d2d6c",
           "rows": 12
         }
       ],
       "status": "incomplete",
-      "check": "12 calibrated Figure 3 markers with QA overlay; source shows pressure-independent below-saturation differential slopes. Exact pressure/finite-loading mapping remains unresolved, no invented loading or pressure."
+      "check": "Both Table 1 candidate pressures retained at 288.71 and 333.15 K: 156 and 1121 kPa; repeats differ up to 9%; Figure 3 assignments unknown. Other temperatures have one Table 1 pressure: 1121 at 388.71 K and 1466 at 422.04 K. Proposed rule awaits owner freeze. Text -66 kJ/mol at 40 wt%, 422.04 K differs from digitized -65.3 by 0.7 kJ/mol."
     }
   ]
 }
