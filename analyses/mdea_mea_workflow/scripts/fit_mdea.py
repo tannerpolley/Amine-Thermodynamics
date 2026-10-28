@@ -87,9 +87,9 @@ def run(label):
     p.write(f'results/joint-fit/{label}/declaration.json',dict(coordinates=declarations,observations=meta))
     initial=reg.differentiate(params,coords,items,optimizer=[0.]*9,thermochemistry=thermal)
     p.write(f'results/joint-fit/{label}/initial-jacobian.json',initial)
-    jac=np.array(initial['residual_optimizer_gradient']).reshape(-1,9)*np.sqrt(weights)[:,None]
+    jac=np.array(initial.residual_optimizer_gradient).reshape(-1,9)*np.sqrt(weights)[:,None]
     _,singular,right=np.linalg.svd(jac,full_matrices=False)
-    p.write(f'results/joint-fit/{label}/initial-identifiability.json',dict(singular_values=singular.tolist(),right_vectors=right.tolist(),rank=int(np.linalg.matrix_rank(jac)),column_scales=[r['scale'] for r in declarations],statuses=initial['statuses']))
+    p.write(f'results/joint-fit/{label}/initial-identifiability.json',dict(singular_values=singular.tolist(),right_vectors=right.tolist(),rank=int(np.linalg.matrix_rank(jac)),column_scales=[r['scale'] for r in declarations],statuses=initial.statuses))
     print(label,'initial derivative retained',flush=True)
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
     workers=min(os.cpu_count(),max(1,available//268435456),len(items))
