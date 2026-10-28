@@ -159,10 +159,3 @@ Bülow 2021 SI Table S3 reports Kuranov pressure ARDs of 10.54–42.21 % (19 wt%
 - Acquisition of Kamps and Maurer 1996 through Zotero: **needs approval.**
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-
-
-
-
-
-
