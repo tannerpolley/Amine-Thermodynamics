@@ -1,0 +1,51 @@
+{
+  "derivatives": [
+    {
+      "variant": "A",
+      "coordinate": "methyldiethanolamine-CO2",
+      "step": 0.0001,
+      "exact": 0.06969851386511035,
+      "finite_difference": 0.06969851594540444,
+      "relative_error": 2.984703653501149e-08,
+      "tolerance": 1e-05,
+      "passed": true
+    },
+    {
+      "variant": "A",
+      "coordinate": "protonated-methyldiethanolamine-CO2",
+      "step": 0.0001,
+      "exact": 0.8312764222226633,
+      "finite_difference": 0.8312764223372682,
+      "relative_error": 1.3786615147131026e-10,
+      "tolerance": 1e-05,
+      "passed": true
+    },
+    {
+      "variant": "B",
+      "coordinate": "methyldiethanolamine-CO2",
+      "step": 0.0001,
+      "exact": -8.313238597673766e-05,
+      "finite_difference": -8.313132404680346e-05,
+      "relative_error": 1.2773961937080066e-05,
+      "tolerance": 1e-05,
+      "passed": false
+    },
+    {
+      "variant": "B",
+      "coordinate": "protonated-methyldiethanolamine-CO2",
+      "step": 0.0001,
+      "exact": 1.500767487017207,
+      "finite_difference": 1.5007674874301102,
+      "relative_error": 2.751280732724274e-10,
+      "tolerance": 1e-05,
+      "passed": true
+    }
+  ],
+  "derivative_checks_pass": false,
+  "source_row": "4",
+  "shared_component_and_pair_invariant": "Assertions in prepare.documents compare against the pinned MEA JSON",
+  "equilibrium_tolerance": 1e-10,
+  "kappa_max_equilibrium_residual": 4.1744385725905886e-14,
+  "dielectric_native_replay_max": 1.4210854715202004e-14,
+  "joint_optimization_run": false
+}

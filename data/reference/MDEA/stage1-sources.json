@@ -1,0 +1,185 @@
+{
+  "issue": 222,
+  "sources": [
+    {
+      "source_key": "Hsieh2007",
+      "zotero_parent_key": "U3L9K37G",
+      "pdf_attachment_key": "8X653CVB",
+      "pdf_sha256": "3a5f95471866b71d4e702061ac1c150d5ae1dc88fc0c669426634507c9cd8cf9",
+      "locator": "Table 5, PDF p.4, printed p.622",
+      "units_and_basis": "relative permittivity; T K; MDEA mole fraction",
+      "uncertainty": "x uncertainty 0.00015, p.619; Table 5 has no per-row permittivity uncertainty",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Hsieh2007_stage1.csv",
+          "sha256": "407a2bdadeb84bef358b1378425e5da6d38a3e0b3e62b2e601690f964218f1f7",
+          "rows": 24
+        }
+      ],
+      "status": "complete",
+      "check": "24 table entries; printed columns and values checked in PDF page render."
+    },
+    {
+      "source_key": "Ermatchkov2006",
+      "zotero_parent_key": "NM9K6UKR",
+      "pdf_attachment_key": "UD6X5RGU",
+      "pdf_sha256": "54d60f67736ac44633078fc39677eee75521cd79f2eed734d5fb514d9462850a",
+      "locator": "Table 6, PDF p.8, printed p.6088",
+      "units_and_basis": "total bubble pressure MPa; T K; overall molality mol/kg water",
+      "uncertainty": "Source Table 6 prints no per-row uncertainty; corrected Kamps data; see source discussion pp.6085,6089",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Ermatchkov2006_stage1.csv",
+          "sha256": "f3daedd9716a73d71147012237800ae7647b4dd8e29ba5c07245cd6bf2149ff9",
+          "rows": 28
+        }
+      ],
+      "status": "complete",
+      "check": "28 rows; blank molality cells forward-filled only within the printed group."
+    },
+    {
+      "source_key": "Jakobsen2005",
+      "zotero_parent_key": "VDRXENRB",
+      "pdf_attachment_key": "XVFDEJM2",
+      "pdf_sha256": "745e83d838a7e56b4371f2db0f99352572b7677fc2859af86beb4981ac682564",
+      "locator": "Table A5, PDF p.9, printed p.9902",
+      "units_and_basis": "species mole fractions; T degC; loadNMR mol CO2/mol amine; 23 wt% unloaded MDEA",
+      "uncertainty": "species ratios estimated 5-10%, Experimental/Discussion; issue 222 fixes same scale; no per-row uncertainties",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Jakobsen2005_stage1.csv",
+          "sha256": "7bc75c453957b27ccf5f8986fa3420aea10e25019f6bf9eb73e93bec9f4fa62d",
+          "rows": 8
+        }
+      ],
+      "status": "complete",
+      "check": "Printed xAmCOO- interpreted as MDEAH+ per issue; blanks preserved; all eight charge imbalances retained separately."
+    },
+    {
+      "source_key": "BottingerMDEA2008",
+      "zotero_parent_key": "X58JPRPU",
+      "pdf_attachment_key": "W3HEICT5",
+      "pdf_sha256": "1e7310f453b919eb4241eb348d2f82c63919dd5ad8c96c7a8e6318bdc24153d4",
+      "locator": "Table 2, PDF p.6, printed p.7922",
+      "units_and_basis": "species mole fractions; initial amine g/g; loading mol CO2/mol amine; T K",
+      "uncertainty": "amine balance <3%, CO2 <5%, p.7919",
+      "files": [
+        {
+          "path": "data/reference/MDEA/BottingerMDEA2008_stage1.csv",
+          "sha256": "1c7bcd36cecb8eace4881c88821aa52a797b1df8a162955986d7bf3edda16a31",
+          "rows": 58
+        }
+      ],
+      "status": "complete",
+      "check": "All rows kept. Reported HCO3 signal includes carbonate; amine signal includes protonated MDEA; no species splitting inferred."
+    },
+    {
+      "source_key": "Carson2000",
+      "zotero_parent_key": "2BQIHUY7",
+      "pdf_attachment_key": "8ZD86YIF",
+      "pdf_sha256": "d7fd8eeec6bc12c6d74d3cee0ef83590fcb359781bab570046235520e529cc6e",
+      "locator": "Table 3, PDF p.9, printed p.1293",
+      "units_and_basis": "integral enthalpy from zero loading kJ/mol CO2; cumulative n1 mol; CO2 mole fraction; unloaded amine mass fraction",
+      "uncertainty": "estimated uncertainty 1-2%, abstract and p.1294",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Carson2000_stage1.csv",
+          "sha256": "0f6f4b2315a82607089465b66829951fc92c696c7daad7955a5e796e73dc4844",
+          "rows": 40
+        }
+      ],
+      "status": "complete",
+      "check": "Procedure printed p.1289 PDF p.5: cumulative DeltaH/n1, not derivative. 27/40 rows within 0.03 kJ/mol; rows 11-20 differ up to 0.29 due to two-significant-figure n1; rows 32/34 differ 0.03-0.04. Row 38 printed 0.0180 mol retained; -622.0/(-48.59*1000)=0.012801 mol. See results/carson-arithmetic.json."
+    },
+    {
+      "source_key": "Weiland1997",
+      "zotero_parent_key": "66XLM3LX",
+      "pdf_attachment_key": "27V9SYLA",
+      "pdf_sha256": "a8ac397216a16c495c41ff350461364aa32813deea065b248d51552ddde32397",
+      "locator": "Table 1, PDF p.1, printed p.1004",
+      "units_and_basis": "Cp J/g/K; loading mol CO2/mol amine; unloaded amine mass fraction; 298.15 K; complete loaded solution mass",
+      "uncertainty": "repeatability and standard-system comparison 1%, p.1004",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Weiland1997_stage1.csv",
+          "sha256": "56a0e21ce0763b59b924a8c1c8ce9546c849e2c1f4516c54b7311a5775ef2b35",
+          "rows": 39
+        }
+      ],
+      "status": "complete",
+      "check": "33 fitted-range and 6 extrapolation entries; 298.15 K; no blank cells fabricated."
+    },
+    {
+      "source_key": "Weiland1998",
+      "zotero_parent_key": "CTSDNKZK",
+      "pdf_attachment_key": "U4KFM6ST",
+      "pdf_sha256": "c057c98684fba6cc13f8090eb357fc017745d61325af623bb99e1e0bc8dea03e",
+      "locator": "Table 1, PDF p.2, printed p.379",
+      "units_and_basis": "density g/mL; loading mol CO2/mol amine; unloaded amine mass fraction; 298.15 K; complete solution",
+      "uncertainty": "unloaded densities within 0.1% of literature, p.378; not an explicit loaded-density uncertainty",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Weiland1998_stage1.csv",
+          "sha256": "bd2075ff7c0fbe3681238bba11c4a218a634b44dbde7778a6da353dd60453071",
+          "rows": 44
+        }
+      ],
+      "status": "incomplete",
+      "check": "Loaded density uncertainty s_rho not explicitly given; unloaded comparison 0.1% cannot be promoted to loaded uncertainty. No residual scale assigned."
+    },
+    {
+      "source_key": "Sobrino2016",
+      "zotero_parent_key": "RZM6VKZF",
+      "pdf_attachment_key": "VWXSCIWF",
+      "pdf_sha256": "713cf402c55d3af0224c1e3abe689050aa63b42350939618a5a0d8a04f3dea78",
+      "locator": "Table 5, PDF p.4, printed p.234",
+      "units_and_basis": "density kg/m3; T K; pressure MPa; unloaded MDEA mass fraction",
+      "uncertainty": "standard u(T)=0.01 K, ur(p)=0.0001, u(w)=0.0001, u(rho)=0.35 kg/m3, Table 5 footnote",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Sobrino2016_stage1.csv",
+          "sha256": "71f37e82e2ad488b71392415f03705fe0fcfd2bbce89b25a8b3e630b9d3dbed6",
+          "rows": 24
+        }
+      ],
+      "status": "complete",
+      "check": "Only 0.1 MPa rows, four printed compositions, six temperatures."
+    },
+    {
+      "source_key": "Kim2008",
+      "zotero_parent_key": "97LARJKT",
+      "pdf_attachment_key": "4SMCK4SC",
+      "pdf_sha256": "76084d83956da30832ef6eb0ef1d2a911c31305fef0d7f944735915fe207c1a6",
+      "locator": "Table 8, PDF p.4, printed p.2524",
+      "units_and_basis": "total bubble pressure kPa; T degC; liquid/vapor MDEA mole fractions",
+      "uncertainty": "u(T)=0.05 K, u(P)=0.3 kPa, p.2526; composition uncertainty discussed pp.2526-2527",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Kim2008_stage1.csv",
+          "sha256": "df2efe487e13566621299bdb65d490bf02ec3009ec1ee25126096b2a182a6dde",
+          "rows": 61
+        }
+      ],
+      "status": "complete",
+      "check": "61 rows verified against all Table 8 blocks on PDF p.4; Table 10 starts on p.5 and is excluded. Source prints y above the range in issue text; y is retained and never scored."
+    },
+    {
+      "source_key": "Merkley1987",
+      "zotero_parent_key": "RWYVWXAE",
+      "pdf_attachment_key": "ED7IMI2E",
+      "pdf_sha256": "35f5b41c6c48cba5c555588accc2f8e25679907a7142de0da401fc97692878aa",
+      "locator": "Figure 3, PDF p.5, printed p.441; Table 1 p.439",
+      "units_and_basis": "sub-saturation plateau differential enthalpy kJ/mol CO2; T K; unloaded MDEA wt%; CO2 partial pressure kPa",
+      "uncertainty": "accuracy 5%, repeat runs within 4%, p.439",
+      "files": [
+        {
+          "path": "data/reference/MDEA/Merkley1987_stage1.csv",
+          "sha256": "bd8a1f1f7d736aaa18498d3db1fa6f8ea3a9867652dbf3a5436f1cb51a1d2d6c",
+          "rows": 12
+        }
+      ],
+      "status": "incomplete",
+      "check": "Both Table 1 candidate pressures retained at 288.71 and 333.15 K: 156 and 1121 kPa; repeats differ up to 9%; Figure 3 assignments unknown. Other temperatures have one Table 1 pressure: 1121 at 388.71 K and 1466 at 422.04 K. Proposed rule awaits owner freeze. Text -66 kJ/mol at 40 wt%, 422.04 K differs from digitized -65.3 by 0.7 kJ/mol."
+    }
+  ]
+}
