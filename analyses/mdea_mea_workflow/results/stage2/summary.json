@@ -1,0 +1,278 @@
+{
+  "base_commit": "799f9f399f648ec96586ceadad42cbb00b6a2b4c",
+  "authority": "Issue 222 latest owner decision: bounds disclosed, phase and non-identification stops retained; native question answers on 2026-10-28",
+  "endpoints": [
+    {
+      "start": "A1",
+      "objective": 400.44801608493293,
+      "iterations": 13,
+      "rank": 9,
+      "smallest_singular_value": 0.0026144106631730284,
+      "active_bounds": [
+        2,
+        3,
+        5,
+        8
+      ],
+      "liquid_witness_states": 5,
+      "replay_max": 2.3243805170174233e-12
+    },
+    {
+      "start": "A3",
+      "objective": 400.44801608784456,
+      "iterations": 13,
+      "rank": 9,
+      "smallest_singular_value": 0.0026144108905463335,
+      "active_bounds": [
+        2,
+        3,
+        5,
+        8
+      ],
+      "liquid_witness_states": 5,
+      "replay_max": 1.957851210954511e-12
+    },
+    {
+      "start": "B1",
+      "objective": 372.1659133746721,
+      "iterations": 12,
+      "rank": 9,
+      "smallest_singular_value": 0.008707036925694609,
+      "active_bounds": [
+        5,
+        8
+      ],
+      "liquid_witness_states": 2,
+      "replay_max": 1.3736897388516974e-12
+    },
+    {
+      "start": "B3",
+      "objective": 393.4614810431316,
+      "iterations": 11,
+      "rank": 9,
+      "smallest_singular_value": 0.005215554420499077,
+      "active_bounds": [
+        3,
+        8
+      ],
+      "liquid_witness_states": 3,
+      "replay_max": 1.4028073229081435e-12
+    }
+  ],
+  "objective_preferred": {
+    "A": "A1",
+    "B": "B1"
+  },
+  "qualified_representatives": {
+    "A": null,
+    "B": null
+  },
+  "selection_reason": "A1 has lower cost than agreeing A3; B1 has lower cost than B3 (cost gap >1%). Every endpoint fails the fitted-state phase gate, so no endpoint qualifies for outside-fit assessment.",
+  "variant_verdicts": {
+    "A": "Bound-active endpoints; phase gate failed; no transfer verdict and no 88-row AARD",
+    "B": "Bound-active endpoints; phase gate failed; no transfer verdict and no 88-row AARD"
+  },
+  "primary": {
+    "rows": 88,
+    "pass_limit_AARD_percent": 24.2,
+    "A_AARD": null,
+    "B_AARD": null,
+    "reference_126_percent": [
+      42.72,
+      60.97
+    ],
+    "declared_subsets": "13 above 49 wt%; 33 below 7 kPa overall, including 29 in the 88-row primary set",
+    "reason": "Not evaluated after endpoint phase stop"
+  },
+  "follow_up": "Bicarbonate-free and MDEA\u2013CO2 control refits not run after phase stop; 2-point margin and bicarbonate/cation-water correlation unavailable. Corrected Kamps excluded from criterion. No MDEA outcome falsifies the MEA bicarbonate value.",
+  "outside_fit": "No outside-fit rows evaluated; no Wangler sensitivity. Derks remains unresolved; Xiao and Zhang remain unscored.",
+  "phase_liquid_witnesses": [
+    {
+      "start": "A1",
+      "index": "83:0",
+      "group": "Jakobsen",
+      "source_row": "8",
+      "T_K": 313.15,
+      "mass_percent": null,
+      "delta_G_over_RT": -2.3030042939353734e-07,
+      "error_over_RT": 7.746184094979974e-09
+    },
+    {
+      "start": "A1",
+      "index": "84:0",
+      "group": "Jakobsen",
+      "source_row": "8",
+      "T_K": 313.15,
+      "mass_percent": null,
+      "delta_G_over_RT": -2.3030042939353734e-07,
+      "error_over_RT": 7.746184094979974e-09
+    },
+    {
+      "start": "A1",
+      "index": "126:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 333.15,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.0022001706206538074,
+      "error_over_RT": 2.629844491107312e-09
+    },
+    {
+      "start": "A1",
+      "index": "127:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "20",
+      "delta_G_over_RT": -0.013355704384593992,
+      "error_over_RT": 2.705682785683721e-08
+    },
+    {
+      "start": "A1",
+      "index": "128:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.004480717194610406,
+      "error_over_RT": 2.5412662659110378e-09
+    },
+    {
+      "start": "A3",
+      "index": "83:0",
+      "group": "Jakobsen",
+      "source_row": "8",
+      "T_K": 313.15,
+      "mass_percent": null,
+      "delta_G_over_RT": -2.300830601598136e-07,
+      "error_over_RT": 7.746301912890421e-09
+    },
+    {
+      "start": "A3",
+      "index": "84:0",
+      "group": "Jakobsen",
+      "source_row": "8",
+      "T_K": 313.15,
+      "mass_percent": null,
+      "delta_G_over_RT": -2.300830601598136e-07,
+      "error_over_RT": 7.746301912890421e-09
+    },
+    {
+      "start": "A3",
+      "index": "126:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 333.15,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.0022001375791660394,
+      "error_over_RT": 2.6304500776675013e-09
+    },
+    {
+      "start": "A3",
+      "index": "127:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "20",
+      "delta_G_over_RT": -0.013355660974411876,
+      "error_over_RT": 2.5740619449989545e-08
+    },
+    {
+      "start": "A3",
+      "index": "128:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.004480668819951461,
+      "error_over_RT": 2.5408655385869862e-09
+    },
+    {
+      "start": "B1",
+      "index": "127:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "20",
+      "delta_G_over_RT": -0.012280675463443913,
+      "error_over_RT": 3.484576705773305e-08
+    },
+    {
+      "start": "B1",
+      "index": "128:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.009999367840237028,
+      "error_over_RT": 3.5726647765814384e-09
+    },
+    {
+      "start": "B3",
+      "index": "126:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 333.15,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.0002708726765376923,
+      "error_over_RT": 3.631211469643663e-09
+    },
+    {
+      "start": "B3",
+      "index": "127:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "20",
+      "delta_G_over_RT": -0.013340874606001307,
+      "error_over_RT": 2.6307754241214093e-08
+    },
+    {
+      "start": "B3",
+      "index": "128:1",
+      "group": "Merkley",
+      "source_row": null,
+      "T_K": 388.71,
+      "mass_percent": "40",
+      "delta_G_over_RT": -0.009417117922112084,
+      "error_over_RT": 3.482347481340814e-09
+    }
+  ],
+  "independent_review": "Open, no subagents authorized",
+  "claim_limits": "Calibration and numerical verification only. Intended assessment 293\u2013395 K, \u226449 wt% primary pressure, \u226450 wt% other properties; not qualified here. Linear MDEA\u2013water k(T), Neumann primary Cp, frozen permittivity extrapolated above 328.15 K. No manuscript promotion or absorber qualification.",
+  "numerical_audit": [
+    {
+      "start": "A1",
+      "derivatives_pass": true,
+      "max_derivative_relative_error": 3.9021637952308255e-06,
+      "max_relative_element_balance_error": 5.677680547933051e-13,
+      "max_absolute_charge_balance_error_mol": 3.5504932327512506e-13,
+      "max_equilibrium_residual_available_states": 2.4797941478027496e-12
+    },
+    {
+      "start": "A3",
+      "derivatives_pass": true,
+      "max_derivative_relative_error": 1.8321769640462373e-06,
+      "max_relative_element_balance_error": 5.67323965583455e-13,
+      "max_absolute_charge_balance_error_mol": 3.548827898214313e-13,
+      "max_equilibrium_residual_available_states": 2.3732127374387346e-12
+    },
+    {
+      "start": "B1",
+      "derivatives_pass": true,
+      "max_derivative_relative_error": 6.57796759792398e-07,
+      "max_relative_element_balance_error": 5.795364188543317e-13,
+      "max_absolute_charge_balance_error_mol": 3.2174263253637037e-13,
+      "max_equilibrium_residual_available_states": 1.5916157281026244e-12
+    },
+    {
+      "start": "B3",
+      "derivatives_pass": true,
+      "max_derivative_relative_error": 1.2441680899111547e-06,
+      "max_relative_element_balance_error": 5.166977956605479e-13,
+      "max_absolute_charge_balance_error_mol": 3.5810243659284424e-13,
+      "max_equilibrium_residual_available_states": 2.3732127374387346e-12
+    }
+  ],
+  "presentation": "Worktree-only native index synchronization completed; full refresh stopped at missing snakemake. Direct Quarto HTML render of the retained-results notebook succeeded; no model rerun."
+}
