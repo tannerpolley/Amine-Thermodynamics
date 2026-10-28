@@ -1,366 +1,169 @@
 ---
-title: "MDEA through the MEA formulation: loading points and phase-assumption stop"
+title: "MDEA through the MEA formulation: Kim pre-fit and joint-fit bound stop"
 format: html
 ---
 
-Item (j) passes. Joint fitting stops before the first optimizer because the
-Carson single-liquid requirement fails at the declared A1 and B1 vectors.
-This is a numerical phase-assumption failure under the prescribed model,
-not an outside-fit pressure verdict or experimental evidence of phase separation.
-The results have not been independently reviewed or promoted for manuscript use.
+Item (k) passes. The first amended joint fit, A1, converges with three
+coordinates on arbitrary bounds, which triggers the required return to Design.
+No representative endpoint is selected and neither variant has a transfer
+pass/fail verdict. These results have not been independently reviewed or
+promoted for manuscript use.
 
-The fixed shared-species record is the MEA JSON with SHA-256
-`00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
-The installed ePC-SAFT wheel has SHA-256
-`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`;
-its package files were checked byte-for-byte against the wheel.
+## Kim-only pre-fit and amended starts
 
-## Loading endpoints and stage-2 disposition
+The ion-free MDEA–water calculation fits all 61 Kim 2008 Table 8 bubble
+pressures, including the pure-water rows, using log-ratio residuals with
+weight one. Vapor mole fractions do not enter the objective. The law is
+$k(T)=k(313.15\,\mathrm{K})+b(1/T-1/313.15\,\mathrm{K})$.
 
-The following tables read retained results only. They do not call the Engine
-or calculate missing fit endpoints.
-
-```{python}
-#| echo: false
-#| output: asis
-import json
-from pathlib import Path
-analysis = next(p for p in (Path("mdea_mea_workflow"), Path("."),
-                            Path("analyses/mdea_mea_workflow"))
-                if (p / "results/stage2-disposition.json").exists())
-loading = json.loads((analysis / "results/merkley-loading-points.json").read_text())
-result = json.loads((analysis / "results/stage2-disposition.json").read_text())
-def table(headers, rows):
-    print("| " + " | ".join(headers) + " |\n| " + " | ".join(["---"]*len(headers))
-                     + " |\n" + "\n".join("| " + " | ".join(map(str,r)) + " |" for r in rows))
-table(["T (K)", "20 wt% αLP", "40 wt% αLP", "60 wt% αLP", "P (kPa)"],
-      [[T, *[r["alpha_LP_mol_CO2_per_mol_MDEA"] for r in loading["rows"] if r["temperature_K"]==T],
-        next(r["pressure_kPa"] for r in loading["rows"] if r["temperature_K"]==T)]
-       for T in dict.fromkeys(r["temperature_K"] for r in loading["rows"])])
-```
-
-Merkley 1987 Fig. 4 (printed p.442, Zotero `ED7IMI2E`) supplies all twelve
-loading points. The linear axes are calibrated at 275/450 K and 0/1.5 mol
-CO₂/mol MDEA. The absolute digitization allowance is ±0.02 mol CO₂/mol MDEA,
-including marker width, axis placement and scan skew; it is not a confidence
-interval or source measurement uncertainty. The 40 wt%, 388.71 K reading is
-0.360, compared with the printed 0.35 in the discussion of Fig. 2 (p.442).
-No source loading-point uncertainty is reported.
-
-![All twelve extracted centres overlaid on Merkley Fig. 4.](results/merkley-loading-overlay.png)
-
-The eight fitted and four outside-fit heat markers each receive αLP at their
-frozen run T/P. Six alternative-pressure assignments retain the required endpoint
-rule `min(alpha_LP, model saturation loading at 156 kPa)`. Their numerical
-model endpoints remain unavailable because fitting stopped. The half-loading
-heat comparison is also uncomputed. All eighteen assignments and the calibration
-are in [the loading-point record](results/merkley-loading-points.json); source
-values and hashes are in [the source directory](../../data/reference/MDEA/Merkley1987_loading_provenance.json).
-
-## Carson pressure check and phase assumption
-
-The owner's 2026-10-28 rulings specify cumulative integral heat from zero
-loading and a model pressure of 101325 Pa. That pressure is a declared convention,
-not a source value. Carson 2000 Table 3 gives T = 298.15 K; pp.1288–1289 give
-265→125 kPa for the injection device, without calorimeter pressures per row.
-The required largest-loading check uses row 10, 10 wt% MDEA, whose printed
-CO₂ mole fraction 0.00408 converts to α = 0.24797645. The source describes
-final loading as approximately 0.2 (p.1289); the computed value is retained
-without imposing an exclusion. Row 1, α = 0.08243368, checks the failure below 0.2.
-
-```{python}
-#| echo: false
-#| output: asis
-table(["Variant, start 1", "Heat at 101325 Pa (kJ/mol CO₂)",
-       "Heat at 265000 Pa (kJ/mol CO₂)", "Absolute relative change (%)"],
-      [[r["variant"], *[round(x["prediction"]["value"]/1000,6) for x in r["pressure_results"]],
-        round(100*r["relative_change"],6)] for r in result["pressure_sensitivity"]])
-table(["Variant, start 1", "Carson row", "α", "Tangent-plane distance / RT",
-       "Split ΔG / RT", "Estimated split error / RT"],
-      [[r["variant"],r["source_row"],round(r["alpha"],8),round(r["tpd_over_RT"],8),
-        round(r["split_delta_G_over_RT"],8),f'{r["split_error_estimate_over_RT"]:.3g}']
-       for r in result["phase_results"]])
-```
-
-Both pressure changes are below the owner's 0.5% limit. The heat values lie on
-the unstable restricted liquid branch and are numerical sensitivities, not
-accepted equilibrium heat predictions. These are checks at
-start 1, not selected endpoint sensitivities, and they do not enter an objective.
-The MEA bundle's `final_evidence.py::stability` supplies the phase search,
-with trial supports mapped to MDEA's eight liquid species and three neutral
-vapor species. The Engine admits charge-balanced, composition-feasible splits
-with lower Gibbs energy for both variants. Every search completes, and each
-has four resolved descending trials out of nine. The neighboring printed row 9
-and lower-loading row 1 reproduce the failure. Equilibrium residuals are below
-4.6 × 10⁻¹³; the feasible split energy changes exceed their estimated numerical
-errors by more than five orders of magnitude. Negative tangent-plane distances
-mean that these single-liquid stationary states are unstable in this model.
-They do not identify the global equilibrium phase assemblage.
-
-This satisfies the issue's phase-assumption stop and the owner's specific
-Carson stop. No authorized correction exists within the frozen Build choices:
-allowing additional phases or changing fitted inputs requires Design. These
-checks establish neither that every declared start is unstable nor that no
-admissible fitted vector could become stable. The numerical failure is shown
-as a table because the sign, feasibility and error estimates decide the stop;
-a plotted trend would imply an unsampled loading dependence.
-
-## Variant verdicts and seven declared endpoints
-
-Both variants return to Design. Neither has an Ermatchkov AARD or a transfer
-pass/fail verdict. The 24.2% limit on the 88 rows remains unchanged.
-
-```{python}
-#| echo: false
-#| output: asis
-table(["Declared start", "Fit endpoint", "Objective / identifiability"],
-      [[r["start"] + (" (Bülow-derived)" if r["start"]=="A4" else ""),
-        "Not run", "Unavailable: phase-assumption stop"] for r in result["seven_endpoints"]])
-```
-
-No representative endpoint was selected. Endpoint identifiability, weak-direction
-profiles, outside-fit comparisons, Neumann Cp sensitivity, and bicarbonate–water
-versus k(MDEA–CO₂) refits are uncomputed. The corrected Kamps data remain outside
-the follow-up criterion. **No MDEA outcome falsifies the MEA bicarbonate value.**
-Xiao and Zhang remain declared but unscored. The frozen MEA record and manuscript
-are unchanged; there is no process-use or manuscript-use claim.
-
-Evidence: [full phase searches](results/carson-phase-check.json),
-[pressure check](results/carson-pressure-check.json),
-[current disposition](results/stage2-disposition.json),
-[owner rulings](inputs/stage2-owner-decisions.json), and
-[wheel verification](results/stage2-runtime.json). The six independent phase jobs
-used six processes, one BLAS thread each, from all 32 available cores, sized
-against free physical memory. The same largest-loading result was reproduced
-before the neighboring cases were evaluated.
-
-## Pure-MDEA conversion and dielectric calibration
-
-The 4C MDEA parameters of Pahlavanzadeh 2013 Table 2 were held fixed except
-for the conversion from the $d^3$ association convention in its Eq. 4 to
-$σ^3$. At 21 temperatures from 293.15 to 393.15 K the MEA saturation and
-native least-squares declarations give:
-
-| Quantity | Retained result |
-|---|---:|
-| Source association volume | 0.123858 |
-| Converted constant, eight significant figures | 0.11800686 |
-| Saturation-pressure AARD against source model | 1.34914246% |
-| Saturated-liquid-density AARD against source model | 0.00525150% |
-| Largest saturation-equilibrium residual | 4.17 × 10⁻¹⁴ |
-
-The owner accepted κ = 0.11800686, fixed to eight significant figures, in
-issue 222, “Stage-1 owner decisions” (2026-10-28); item (b) is complete.
-The unconverted κ = 0.123858 gives pressure AARD **8.38332%** and density
-AARD **0.0339482%** against the same source model (MEA unconverted comparison:
-2.80%). These are numerical model-to-model differences, not experimental validation.
-See [conversion evidence](results/kappa/summary.json) and
-[unconverted replay](results/kappa/unconverted-replay.json).
-
-Hsieh 2007 Table 2 contributes six pure-MDEA measurements; Table 5 contributes
-24 aqueous measurements at MDEA mole fractions 0.2–0.8 and 303.15–328.15 K.
-The two fitted dielectric coefficients are **0.8630669729 L/mol** and
-**1121.773473 K**. At model liquid densities and the assumed measurement
-pressure of 101325 Pa, the 30-point AARD is **3.86106149%**.
-Native replay differs by at most **1.42 × 10⁻¹⁴** in relative permittivity.
-Water coefficients remain fixed. The two coefficients use the MEA
-one-percent relative residual scales; no joint coordinate enters this fit.
-The second local minimum is **0.28087913 L/mol, 2793.648 K**, with cost
-**328.265** and AARD **3.91286%**, versus **318.265** and **3.86106%** for
-the selected solution. Selection follows the MEA larger-volume convention
-(`supplement.tex`, paragraph supplement-20), and also selects the lower cost here.
-At 393 K the two solutions differ by 1.87% at x = 0.2 and 6.69% for pure MDEA. Mean signed deviations
-are **−8.1% at x = 0.2**, **+4.7% at x = 0.6**, and **−3.4% for pure MDEA**.
-Densities are start-1 densities with MDEA–water k = 0. The absorber range
-about 23–49 wt% (x ≈ 0.04–0.13) is below Hsieh's lowest x = 0.2.
-Above 328.15 K the dielectric law is a model assumption.
-See [all dielectric rows](results/dielectric/rows.json) and
-[both minima and composition bias](results/dielectric/summary.json).
-
-## Source transcriptions and physical bases
-
-Ten files retain 338 source observations, including twelve digitized points.
-The [source provenance file](../../data/reference/MDEA/stage1-sources.json)
-identifies each PDF, locator, units, basis, uncertainty, row count and hash.
-
-| Source | Rows | Completion or limit |
-|---|---:|---|
-| Hsieh Table 5 | 24 | All entries checked against PDF p.4 |
-| Ermatchkov Table 6 | 28 | Corrected Kamps total pressures; not partial pressures |
-| Jakobsen A5 | 8 | PDF p.9, printed p.9902; loadNMR used; no rows excluded |
-| Böttinger MDEA Table 2 | 58 | All rows retained; amine sums and carbonate/bicarbonate signal preserved |
-| Carson Table 3 | 40 | Integral ΔH/n₁ from zero loading; both repeated runs retained |
-| Weiland 1997 Table 1 | 39 | 33 entries at 30–50 wt%, six at 60 wt% |
-| Weiland 1998 Table 1 | 44 | No reported loaded uncertainty; explicit scale proposal in README awaits owner freeze |
-| Sobrino Table 5 | 24 | Only the 0.1 MPa rows, six temperatures, four compositions |
-| Kim Table 8 | 61 | All printed series; only total bubble pressure may be scored later |
-| Merkley Figure 3 | 12 | Plateau slopes; both low-temperature pressure candidates retained, proposed assignment awaits freeze |
-
-The Böttinger printed HCO₃⁻ column represents the bicarbonate/carbonate
-signal; the amine column represents MDEA/MDEAH⁺. Individual species are not
-inferred. [Fractions and three-percent flags](results/bottinger-flags.json)
-retain the byproduct and DMDEA⁺ contributions, without excluding any row.
-Jakobsen's column printed as xAmCOO⁻ is interpreted as MDEAH⁺, as required
-by the issue; [charge imbalances](results/jakobsen-charge.json) are retained
-for all eight rows. These source imbalances are not numerical solver errors.
-
-![All twelve extracted Merkley markers are overlaid on the original page. The digitization estimate is ±0.3 kJ/mol CO₂, separate from the paper's ±5% experimental accuracy.](results/merkley-overlay.png)
-
-Carson's printed “partial molar” column is cumulative ΔH/n₁ over sequential
-CO₂ additions, an integral from zero loading, not ∂ΔH/∂n₁ (procedure printed
-p.1289, PDF p.5). Of 40 rows, 27 agree with ΔH/n₁ within 0.03 kJ/mol.
-Rows 11–20 differ by up to 0.29 kJ/mol because n₁ has two significant figures;
-rows 32 and 34 differ by 0.03–0.04 kJ/mol. Row 38 prints 0.0180 mol, a source
-typo: −622.0 J ÷ (−48.59 × 1000 J/mol) = **0.012801 mol**. Printed values
-are preserved; [row arithmetic](results/carson-arithmetic.json) is separate.
-
-Merkley Table 1 lists both 156 and 1121 kPa at 288.71 and 333.15 K; runs
-differ by up to 9%, while Figure 3 assigns no pressure to each marker.
-Every marker retains candidate pressures and ambiguity. At 388.71 K Table 1
-lists only 1121 kPa, and at 422.04 K only 1466 kPa. The text on printed p.441
-gives **−66 kJ/mol** at 40 wt%, 422.04 K, versus digitized **−65.3 kJ/mol**
-(a 0.7 kJ/mol difference); neither value replaces the other. The 5% scale
-and the pressure proposal are in the [README](README.md#owner-freeze-proposals).
-
-Derks 2011 Table 1 specifies only “room temperature”; no numerical
-thermostat temperature is established, so those four states remain unscored.
-
-## Ideal-gas units and reaction basis
-
-The owner adopted the restored factor T in Wangler Eq.26 (PDF G7ZTAJZS,
-printed p.18):
-
-$$H^{ig}/n=T[A_2+A_3(A_4/T)\coth(A_4/T)-A_5(A_6/T)\tanh(A_6/T)+A_1/T].$$
-
-The literal derivative gives only 2.498–4.981 J/mol/K, below the ideal-gas
-lower bound 5R/2 = **20.79 J/mol/K**. With T restored, the Table 3 coefficients
-give water **33.575 J/mol/K** (reference 33.58) and CO₂ **37.243 J/mol/K**
-(reference 37.1) at 298.15 K. The cubic fitted over 293–423 K is
-
-$$C_p^{ig}=91.8741258383-0.108076279455T+0.00164227867349T^2-1.67647752484\times10^{-6}T^3$$
-
-in J/mol/K, with T in K. Its maximum relative deviation is **0.022213%** on
-a 0.1 K grid, below 0.5%; h = s = 0 at 313.15 K. The
-[ideal-gas record](inputs/physical-ideal-gas-calorics.json) uses the MEA format.
-[Fit and check values](results/ideal-gas-polynomial.json) retain the full grid.
-At 298.15 K Wangler gives **161.218 J/mol/K**, versus **189.200 J/mol/K**
-from the independent EOS estimate of [Neumann et al. (2021)](https://doi.org/10.1007/s10765-021-02933-7),
-Eq.5 and Table 8 (author manuscript pp.10–11), a **−14.79%** difference.
-Their ideal part was initialized with Joback and adjusted to liquid Cp and
-sound-speed data; they report Joback deviations up to 27%, no measured
-ideal-gas Cp, and no reliable uncertainty for this property. This is an
-independent estimate comparison, not physical validation of Wangler.
-See [units check](results/ideal-gas-units-check.json) and
-[PDF equation](inputs/wangler-equation-26.png).
-
-Jakobsen 2005 Table 1 prints coefficients −83.4914, −819.7 and 10.9756;
-Uyan 2015 Table 1 prints −83.491, −819.7 and 10.976. At 298.15 K the
-correlations differ by −0.00267904 in ln K. Uyan's law gives pKₓ = 10.29428
-and pKₘ = 8.54994 after the prescribed +4.0165 conversion. Similar
-coefficients do not establish the unavailable original paper's basis.
-Item (g) remains blocked on Kamps–Maurer 1996, DOI 10.1021/je960141+.
-No Zotero write or coefficient substitution was made.
-
-## Two ion conventions at start 1
-
-Both complete eight-species parameter mappings were admitted. Each was
-evaluated at 313.15 K and 100 kPa for an unloaded liquid (water/MDEA
-mole fractions 0.95/0.05) and a charged liquid (water/MDEA/MDEAH⁺/HCO₃⁻
-0.94/0.04/0.01/0.01). These prescribed liquid compositions test capability;
-they are not reactive equilibrium predictions. Their dimensionless
-Helmholtz contributions are in [A](results/admission-A.json) and
-[B](results/admission-B.json). The MDEA ideal-gas record is admitted in each full mapping; native neutral
-selection evaluates Cp and verifies h = s = 0 at 313.15 K at the standard
-ideal-gas density. Direct full-mixture caloric totals require ionic ideal
-records even at zero ionic fractions; reaction-completed ionic totals remain
-conditional on (g). This completes the MDEA caloric admission half of (e).
-
-The pressure-coordinate probe uses all twenty Kuranov rows above unit
-loading: 13 at nominal 313 K, five at 333 K and two at 373 K; none at 393 K.
-Exact printed temperatures are retained. Both columns are exact native derivatives of log total bubble
-pressure, with all MDEA-specific interactions at zero and all other start-1
-values declared in the issue. The MDEA dissociation reference remains
-provisional pending item (g).
-
-| Variant | ‖MDEA–CO₂ column‖ | ‖MDEAH⁺–CO₂ column‖ | Singular values after unit-column normalization |
+| Initialization | k(313.15 K) endpoint | b endpoint (K) | Termination |
 |---|---:|---:|---|
-| A | 0.74498383 | 4.99071572 | 1.36452134, 0.37159322 |
-| B | 0.01073442 | 9.42711583 | 1.05617562, 0.94047491 |
+| −0.184, 0 K, primary | −0.181786994679 | −75.539233386 | Function tolerance |
+| −0.15, 0 K | −0.181787002961 | −75.539241989 | Gradient tolerance |
 
-Both pre-normalization norms rank MDEAH⁺–CO₂ larger. Each normalized column
-has norm one, so the magnitude ranking cannot be based on the normalized
-norms themselves. Both original and normalized columns are retained in
-[A](results/probe-A-columns.csv) and [B](results/probe-B-columns.csv).
-The owner selected k(MDEAH⁺–CO₂) and fixed k(MDEA–CO₂) = 0.
-Raw norms compare directly because both coordinates are dimensionless k.
-Unit-column singular values describe column angles, not sensitivity magnitude.
+Both endpoints converge within the owner's agreement limits of 1e−4 in k
+and 1 K in slope. The primary scaled-Jacobian singular values are
+0.2124813 and 0.02886988, with coordinate scales 0.01 and 10 K and no active
+bounds. Cost is 0.0012265413 and pressure AARD is 0.4998313%. The initial
+zero-pair attempt was refused for local liquid instability before iteration.
+The two subsequent initializations were orchestrator choices from diagnosis
+probes, not source values.
 
-The [shared-only reference checks](results/shared-reference-checks.json) give identical
-water and CO₂ pressures, residual Helmholtz energies and residual enthalpies
-for both variants and the original record at the retained reference states.
+![Kim Table 8 observations and the Kim-only fit at the reported temperatures. Error bars show the source's 0.3 kPa pressure uncertainty; this uncertainty is not an objective weight. Predictions are discrete cross markers.](results/kim-prefit/bubble-pressure.png)
 
-The [numerical checks](results/numerical-checks.json) compare both derivatives
-in both variants against centered re-solves at source row 4. All relative
-errors meet 10⁻⁵ at step 10⁻³. The smaller-step check is retained separately:
-its weakest derivative missed that tolerance slightly, consistent with
-cancellation near zero. This is a numerical derivative check on one source
-state, not a phase-stability or identifiability qualification of a fit.
+All four Gibbs-mixing convex hulls are miscible at 293.15, 313.15, 353.15 and
+393.15 K. The 1,177 tangent-plane searches cover every Kim state and 279
+compositions per grid temperature, including pure endpoints, at the diagnosis
+pressure of 101325 Pa. All searches complete with zero unresolved trials and
+zero liquid–liquid descent witnesses. This finite grid/search does not prove
+global stability at every continuous composition.
 
-## Stage-2 gate
+The 170 vapor witnesses are retained separately. The owner confirmed that
+the gate tests liquid miscibility. All 38 Kim states with vapor witnesses
+have the matching positive bubble-pressure residual, with zero sign
+mismatches. Near pure water at 393.15 K and atmospheric pressure, vapor
+formation is expected; it is not liquid demixing.
 
-Items (b)–(f) are complete for stage-1 preparation. Item (a) retains all
-source rows with explicit proposals awaiting owner freeze; (g) remains blocked. Independent delivered review
-and the owner's exact freeze comment are still required. Stage 2 must also
-retain every declared start, property prediction, failure, phase check,
-identifiability result and sensitivity/control comparison. Nothing here
-selects a variant by its pressure score or establishes absorber suitability.
-The [README](README.md) lists reproduction commands and all remaining gates.
+All ten amended Carson searches pass: A1, A3, A4, B1 and B3 at rows 1 and
+10, 298.15 K and the declared 101325 Pa convention. They complete with
+zero unresolved trials and no descending split. Every start takes the primary
+Kim pair. A1/B1 take ion–water k = −0.2298 with zero slope; A2/B2 are
+recorded as duplicates, not separately run. A4 retains Bülow's ion sizes
+and energy. These are starting-vector checks, not endpoint qualification.
 
-## Start-4 declaration and newer source observations
+[Fit, phase searches, sign checks and claim limits](results/kim-prefit/README.md)
+and [amended documents and hashes](inputs/amended-starts/hashes.json) retain
+the evidence. Kim source locators are Table 8, p.2524 and experimental
+uncertainties, pp.2526–2527. Source provenance stays in the retained `data/reference/MDEA/stage1-sources.json`.
 
-The stage-1 addendum establishes an admissible fourth Variant A initial guess;
-it makes no parameter-transfer claim. [Declaration evidence](results/start-4-declaration.json)
-retains the Bülow Table 3 re-centering, projection, strict bounds, complete
-document diff and native liquid evaluations. Re-centering at 313.15 K gives
-$k=-0.131933125$, $dk/dT=-0.001070625\ \mathrm{K}^{-1}$ and reciprocal-law
-slope $b=104.9886164016\ \mathrm{K}$. The declared rounded slope is
-104.9886164 K; projection minus source cubic is +0.0105989562 at 373.15 K.
-The Engine's reciprocal law agrees with equivalent constant-k evaluations
-at three temperatures within 1e-8. All nine coordinates are strictly inside
-the Variant A bounds; only four ion diameters and the MDEA–water pair differ
-from start 1. The original shared component and pair blocks remain
-byte-identical and the shared owner hash is unchanged.
+## Joint fit and mandatory stop
 
-The prescribed unloaded and loaded liquids at 313.15 K, 100 kPa have molar
-densities 43792.4928 and 45580.2694 mol/m³ and dimensionless residual
-Helmholtz energies −8.93473850 and −11.79080043. Maximum pressure residual
-is 4.30e-6 Pa. These checks verify numerical admission and the parameter
-law; they do not solve chemical equilibrium or validate a physical model.
-The [README addendum](README.md#stage-1-addendum-starts-and-newer-comparisons)
-records compositions and detailed source limits.
+The first objective assembly was refused because the frozen R2 correlation
+domain excluded six fitted rows. The refusal and original declaration remain
+under `results/joint-fit/A1/`. The owner then authorized an application domain
+upper bound of 395.0 K without coefficient changes, and moved the four
+20/40 wt% Merkley markers at 288.71 and 422.04 K out of the fit. They remain
+extrapolation comparisons and are unevaluated here. The fitted Merkley set is
+four markers at 333.15 and 388.71 K. This amendment preserves the two nominal
+393 K Kuranov rows and the full 88-row Ermatchkov comparison set.
 
-[New source records](../../data/reference/MDEA/addendum-sources.json) retain
-six Zheng Table 4 pure-MDEA observations at 323.15 K and 24 Sedighi Table 3
-observations at 303.15–323.15 K. Zheng's integral heat magnitude spans
-47.57–55.96 kJ/mol CO₂; both heat and saturation loading have relative
-expanded uncertainty 0.05. The comparison uses reported saturation loading
-and source total pressure, with model saturation loading reported separately.
-Piperazine blend rows are excluded and SI loading curves are unavailable.
+The owner fixed both Jakobsen ratio scales at 0.10 times the observed ratio,
+within the source's stated 5–10% range. This is an orchestrator choice,
+not a source value or MEA-record precedent. All decisions are retained in
+[the decision record](inputs/item-k-owner-decisions.json).
 
-Fifteen Sedighi rows at 10–50 wt% are designated for later scoring, with nine
-higher-concentration rows unscored. The reported 101.325 kPa is total pressure
-for a CO₂-fed apparatus with solvent vapor; compare total bubble pressure,
-not CO₂ partial pressure. Sections 2.2 and 4.1 describe saturation checks,
-constant pressure, a 20-minute measurement and three-run averaging, but give
-no quantitative equilibrium tolerance. Sedighi reports no uncertainty.
-Its printed loading and mole columns are retained even where inconsistent:
-row 18 gives 0.739 versus mole-ratio loading 0.72922636. This source limitation
-has not been converted into an exclusion or an invented uncertainty.
+The amended objective has 280 residuals. A1 converges after 19 iterations:
+$C_0=3908.8461453$, $C=2478.0559570$. The initial scaled-Jacobian singular
+values span 20.8979 to 0.00258663; endpoint values span 20.9721 to 0.0155412.
+Both have numerical rank nine. The endpoint covariance status is
+`active_bound`. Local rank alone does not establish identifiable physical
+parameters, especially at active bounds; weak-direction refit profiles stop
+with the mandatory bound condition.
 
-Xiao and Zhang remain declared but unscored because their Zotero attachments
-contain only the first page. Thus (h) and the authorized two-source portion
-of (i) are complete; the full four-source criterion awaits full texts.
-No outside-fit prediction was evaluated, no objective or pass criterion
-changed, and no joint optimization was run. The addendum has not received
-independent delivered review or promotion to manuscript use. The owner's
-stage-2 freeze remains required.
+| A1 fitted quantity | Endpoint |
+|---|---:|
+| k(MDEA–water), 313.15 K | −0.179560674 |
+| Reciprocal slope, MDEA–water (K) | −94.3749061 |
+| k(MDEAH⁺–CO₂) | **0.5, upper bound** |
+| k(MDEAH⁺–water), 313.15 K | 0.360212621 |
+| Reciprocal slope, MDEAH⁺–water (K) | −143.775924 |
+| k(MDEAH⁺–HCO₃⁻) | **1.0, upper bound** |
+| MDEAH⁺ σ (Å) | 6.49720424 |
+| MDEAH⁺ u/k (K) | 836.778941 |
+| MDEAH⁺ Born diameter (Å) | **2.0, lower bound** |
+
+The tied packing diameter is 5.71753973 Å and the Debye–Hückel diameter
+equals σ. No bound is widened to retain this endpoint.
+
+| Property group | Endpoint objective contribution |
+|---|---:|
+| Kuranov total pressure | 231.610672 |
+| Jakobsen ratios | 68.989293 |
+| Carson integral heat | 70.492352 |
+| Merkley integral heat | 78.584033 |
+| Loaded heat capacity | 751.832429 |
+| Loaded density | 2.999991 |
+| Unloaded density | 1273.529611 |
+| Kim bubble pressure | 0.017576 |
+
+These are weighted objective contributions, not percentages or independent
+assessment statistics. The endpoint and native residual/Jacobian records
+remain under [A1 evidence](results/joint-fit/A1/fit.json).
+
+| Start | Endpoint status | Objective | Variant verdict |
+|---|---|---:|---|
+| A1 | Converged; three active arbitrary bounds | 2478.055957 | Return to Design; transfer not assessed |
+| A2 | Duplicate of A1, not run | — | — |
+| A3 | Not run after mandatory A1 stop | — | — |
+| A4 | Not run after mandatory A1 stop | — | — |
+| B1 | Not run after mandatory A1 stop | — | Transfer not assessed |
+| B2 | Duplicate of B1, not run | — | — |
+| B3 | Not run after mandatory A1 stop | — | — |
+
+Outside-fit data were not evaluated. The 88-row Ermatchkov CO₂ partial-pressure
+AARD is unavailable for both variants; neither passes nor fails the 24.2%
+criterion on this evidence. Neumann sensitivity and bicarbonate–water versus
+k(MDEA–CO₂) follow-up refits were not run after the mandatory stop. Corrected
+Kamps remains excluded from the two-percentage-point follow-up criterion.
+**No MDEA outcome falsifies the MEA bicarbonate value.** Xiao and Zhang stay
+unscored. No absorber-use or manuscript claim follows from this calibration.
+
+## Endpoint replay and Carson phase evidence
+
+All 280 predictions replay independently within maximum relative difference
+2.2113e−12, below the 1e−8 requirement. At Carson row 1 the endpoint search
+has no descent witness and zero unresolved trials. At row 10, loading
+0.24797645, the endpoint has minimum tangent-plane distance /RT = −0.09140461
+and an admitted split ΔG/RT = −0.04135485, compared with estimated numerical
+error /RT = 2.6017e−8. Single-liquid closure residuals are at most 3.41e−13;
+the row-10 split is a phase-assumption failure at a converged endpoint.
+
+The bounds already required stopping; this independent phase search supplies
+a second reason to return to Design. It does not establish experimental
+liquid demixing. The retained [replay](results/joint-fit/A1/replay.json) and
+[full Carson search](results/joint-fit/A1/carson-phase.json) own the quantities,
+feasibility checks and numerical error estimates. Wider endpoint phase maps,
+weak-direction refits, further starts and comparison states were not run
+after the mandatory stop.
+
+## Provenance and limitations
+
+The shared MEA record remains SHA-256
+`00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
+Engine commit 3e83e19c is used only through the immutable wheel SHA-256
+`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`,
+with installed files checked byte-for-byte. Calculations use the main
+interpreter with `-I`, nice level 10 and one BLAS thread per process; worker
+counts are sized from free memory and the full CPU count. No Engine source
+is imported and no worktree environment is created.
+
+The MDEA dissociation law above 368 K, the 2 K upper-domain extension and
+the MDEA dielectric law above 328.15 K are extrapolation assumptions.
+Conditional transfer, not universal ion parameters or process qualification,
+is the intended scientific question. The bound-stopped endpoint does not
+answer it. The main checkout, MEA record, manuscript and Zotero are unchanged.
+Independent delivered review remains open.
+
+Native presentation refresh was attempted inside this worktree only. It
+failed because the `snakemake` executable is unavailable. The site section
+index is updated; notebook HTML was not regenerated.
