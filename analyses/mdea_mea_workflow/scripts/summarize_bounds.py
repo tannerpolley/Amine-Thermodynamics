@@ -52,7 +52,7 @@ if __name__=='__main__':
  print(table(a));print(table(b))
  for records,out in [(a,'results/joint-fit'),(b,'results/diagnosis-a1-bounds')]:
   with (AN/out/'endpoint-summary.csv').open('w') as stream:
-   writer=csv.writer(stream);writer.writerow(['case','status','cost','active_bounds']+names+groups+['Carson_row1','Carson_row10'])
+   writer=csv.writer(stream,lineterminator="\n");writer.writerow(['case','status','cost','active_bounds']+names+groups+['Carson_row1','Carson_row10'])
    for r in records:writer.writerow([r['case'],r['status'],r['cost'],str(r['active_bounds'])]+list(r['parameters'].values())+[r['group_costs'][g] for g in groups]+[q['message'] for q in r['Carson']])
  cause='''## Attribution and its limits
 
