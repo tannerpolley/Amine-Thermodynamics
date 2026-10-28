@@ -1,0 +1,345 @@
+{
+  "issue": 222,
+  "base_commit": "4a197b9",
+  "disposition": "Return to Design: phase-assumption failure",
+  "item_j": "pass",
+  "verdicts": {
+    "A": "Transfer not assessed; phase-assumption stop at start 1",
+    "B": "Transfer not assessed; phase-assumption stop at start 1"
+  },
+  "phase_results": [
+    {
+      "variant": "A",
+      "start": 1,
+      "source_row": 10,
+      "alpha": 0.2479764497870354,
+      "maximum_equilibrium_residual": 1.7053025658242404e-13,
+      "tpd_over_RT": -5.911976782316671,
+      "split_delta_G_over_RT": -2.78273123798499,
+      "split_error_estimate_over_RT": 1.2951304983605105e-06,
+      "split_moiety_error_mol": 0.0,
+      "split_charge_error_mol": 1.3010426069826053e-18,
+      "resolved_descending_trials": 4
+    },
+    {
+      "variant": "A",
+      "start": 1,
+      "source_row": 9,
+      "alpha": 0.2363834300334447,
+      "maximum_equilibrium_residual": 3.410605131648481e-13,
+      "tpd_over_RT": -5.917518912399203,
+      "split_delta_G_over_RT": -2.813453445691266,
+      "split_error_estimate_over_RT": 1.3418364388068413e-06,
+      "split_moiety_error_mol": 1.0842021724855041e-19,
+      "split_charge_error_mol": 4.336808689942018e-19,
+      "resolved_descending_trials": 4
+    },
+    {
+      "variant": "A",
+      "start": 1,
+      "source_row": 1,
+      "alpha": 0.08243367842662831,
+      "maximum_equilibrium_residual": 4.547473508864641e-13,
+      "tpd_over_RT": -5.960587144965402,
+      "split_delta_G_over_RT": -3.0932162979243003,
+      "split_error_estimate_over_RT": 2.6962849226070244e-08,
+      "split_moiety_error_mol": 1.387778780781446e-17,
+      "split_charge_error_mol": 2.168404344971009e-19,
+      "resolved_descending_trials": 4
+    },
+    {
+      "variant": "B",
+      "start": 1,
+      "source_row": 10,
+      "alpha": 0.2479764497870354,
+      "maximum_equilibrium_residual": 5.684341886080802e-14,
+      "tpd_over_RT": -6.564091504483386,
+      "split_delta_G_over_RT": -3.9474377703973005,
+      "split_error_estimate_over_RT": 1.3942152052775574e-06,
+      "split_moiety_error_mol": 0.0,
+      "split_charge_error_mol": 8.673617379884035e-19,
+      "resolved_descending_trials": 4
+    },
+    {
+      "variant": "B",
+      "start": 1,
+      "source_row": 9,
+      "alpha": 0.2363834300334447,
+      "maximum_equilibrium_residual": 2.7000623958883807e-13,
+      "tpd_over_RT": -6.566404119809135,
+      "split_delta_G_over_RT": -3.7825613873555994,
+      "split_error_estimate_over_RT": 1.5090817046402557e-06,
+      "split_moiety_error_mol": 3.388131789017201e-21,
+      "split_charge_error_mol": 0.0,
+      "resolved_descending_trials": 4
+    },
+    {
+      "variant": "B",
+      "start": 1,
+      "source_row": 1,
+      "alpha": 0.08243367842662831,
+      "maximum_equilibrium_residual": 2.2737367544323206e-13,
+      "tpd_over_RT": -6.472453347103752,
+      "split_delta_G_over_RT": -1.4647859821980092,
+      "split_error_estimate_over_RT": 3.463098618831837e-08,
+      "split_moiety_error_mol": 0.0,
+      "split_charge_error_mol": 0.0,
+      "resolved_descending_trials": 4
+    }
+  ],
+  "pressure_sensitivity": [
+    {
+      "variant": "A",
+      "start": "1",
+      "pressure_results": [
+        {
+          "P_Pa": 101325.0,
+          "prediction": {
+            "branch": null,
+            "convergence": {
+              "amplification": 0.0,
+              "contraction": null,
+              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+              "evaluations": 26,
+              "floor": 2.1259884570317339e-10,
+              "iterations": 13,
+              "residual": 4.425946701528396e-14,
+              "residual_over_criterion": 0.00044259467015283956,
+              "residual_over_floor": 0.00020818300715083946,
+              "stop": "converged"
+            },
+            "message": "SUCCESS: converged: residual 4.4259467015283959e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.1259884570317339e-10, amplification 0",
+            "requested_tolerance_met": true,
+            "residual": 3.3253287692096785,
+            "solver_options": [
+              {
+                "name": "ASSOCIATION_RESIDUAL",
+                "value": 2e-13,
+                "unit": "1 (mass action)",
+                "default": 2e-13
+              },
+              {
+                "name": "DENSITY_ROOT_RESIDUAL",
+                "value": 1e-12,
+                "unit": "1 (reduced pressure)",
+                "default": 1e-12
+              },
+              {
+                "name": "EQUILIBRIUM_ROW_RESIDUAL",
+                "value": 1e-10,
+                "unit": "1 (classified rows)",
+                "default": 1e-10
+              }
+            ],
+            "stable_root_count": null,
+            "status": "Available",
+            "unit": "J/mol",
+            "value": -40514.013692370965
+          }
+        },
+        {
+          "P_Pa": 265000.0,
+          "prediction": {
+            "branch": null,
+            "convergence": {
+              "amplification": 0.0,
+              "contraction": null,
+              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+              "evaluations": 26,
+              "floor": 2.1261488017429487e-10,
+              "iterations": 13,
+              "residual": 5.590345963567287e-14,
+              "residual_over_criterion": 0.0005590345963567287,
+              "residual_over_floor": 0.0002629329593010847,
+              "stop": "converged"
+            },
+            "message": "SUCCESS: converged: residual 5.5903459635672873e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.1261488017429487e-10, amplification 0",
+            "requested_tolerance_met": true,
+            "residual": 3.344763306273283,
+            "solver_options": [
+              {
+                "name": "ASSOCIATION_RESIDUAL",
+                "value": 2e-13,
+                "unit": "1 (mass action)",
+                "default": 2e-13
+              },
+              {
+                "name": "DENSITY_ROOT_RESIDUAL",
+                "value": 1e-12,
+                "unit": "1 (reduced pressure)",
+                "default": 1e-12
+              },
+              {
+                "name": "EQUILIBRIUM_ROW_RESIDUAL",
+                "value": 1e-10,
+                "unit": "1 (classified rows)",
+                "default": 1e-10
+              }
+            ],
+            "stable_root_count": null,
+            "status": "Available",
+            "unit": "J/mol",
+            "value": -40455.71008118015
+          }
+        }
+      ],
+      "relative_change": 0.0014390973857471012,
+      "pressure_check_pass": true
+    },
+    {
+      "variant": "B",
+      "start": "1",
+      "pressure_results": [
+        {
+          "P_Pa": 101325.0,
+          "prediction": {
+            "branch": null,
+            "convergence": {
+              "amplification": 0.0,
+              "contraction": null,
+              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+              "evaluations": 26,
+              "floor": 2.8345766223623987e-10,
+              "iterations": 13,
+              "residual": 2.7951449417903256e-14,
+              "residual_over_criterion": 0.00027951449417903257,
+              "residual_over_floor": 9.860890405074993e-05,
+              "stop": "converged"
+            },
+            "message": "SUCCESS: converged: residual 2.7951449417903256e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.8345766223623987e-10, amplification 0",
+            "requested_tolerance_met": true,
+            "residual": 1.9645612911067825,
+            "solver_options": [
+              {
+                "name": "ASSOCIATION_RESIDUAL",
+                "value": 2e-13,
+                "unit": "1 (mass action)",
+                "default": 2e-13
+              },
+              {
+                "name": "DENSITY_ROOT_RESIDUAL",
+                "value": 1e-12,
+                "unit": "1 (reduced pressure)",
+                "default": 1e-12
+              },
+              {
+                "name": "EQUILIBRIUM_ROW_RESIDUAL",
+                "value": 1e-10,
+                "unit": "1 (classified rows)",
+                "default": 1e-10
+              }
+            ],
+            "stable_root_count": null,
+            "status": "Available",
+            "unit": "J/mol",
+            "value": -44596.31612667965
+          }
+        },
+        {
+          "P_Pa": 265000.0,
+          "prediction": {
+            "branch": null,
+            "convergence": {
+              "amplification": 0.0,
+              "contraction": null,
+              "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+              "evaluations": 26,
+              "floor": 2.8347904115145733e-10,
+              "iterations": 13,
+              "residual": 2.7951449430590853e-14,
+              "residual_over_criterion": 0.0002795144943059085,
+              "residual_over_floor": 9.86014673855798e-05,
+              "stop": "converged"
+            },
+            "message": "SUCCESS: converged: residual 2.7951449430590853e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.8347904115145733e-10, amplification 0",
+            "requested_tolerance_met": true,
+            "residual": 1.9861149965808338,
+            "solver_options": [
+              {
+                "name": "ASSOCIATION_RESIDUAL",
+                "value": 2e-13,
+                "unit": "1 (mass action)",
+                "default": 2e-13
+              },
+              {
+                "name": "DENSITY_ROOT_RESIDUAL",
+                "value": 1e-12,
+                "unit": "1 (reduced pressure)",
+                "default": 1e-12
+              },
+              {
+                "name": "EQUILIBRIUM_ROW_RESIDUAL",
+                "value": 1e-10,
+                "unit": "1 (classified rows)",
+                "default": 1e-10
+              }
+            ],
+            "stable_root_count": null,
+            "status": "Available",
+            "unit": "J/mol",
+            "value": -44531.6550102575
+          }
+        }
+      ],
+      "relative_change": 0.0014499205772620094,
+      "pressure_check_pass": true
+    }
+  ],
+  "seven_endpoints": [
+    {
+      "start": "A1",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "A2",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "A3",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "A4",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "B1",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "B2",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    },
+    {
+      "start": "B3",
+      "endpoint": null,
+      "objective": null,
+      "identifiability": null,
+      "disposition": "not run: Carson single-liquid assumption fails at start 1; owner-directed stop before fitting"
+    }
+  ],
+  "follow_up": "Not run: no representative endpoints. Corrected Kamps excluded from the criterion; no MDEA outcome falsifies the MEA bicarbonate value.",
+  "stopping_point": "Carson phase check before the joint optimizer; no outside-fit evaluation, weak-direction profile, Neumann sensitivity or follow-up refit.",
+  "claim_limits": "Numerical verification of instability at declared start-1 vectors only, not physical validation, not proof that all seven starts or all admissible fitted vectors are unstable, and not an AARD pass/fail. No phase-restricted fit was run after the stop.",
+  "diagnosis": "Exact largest-loading replay plus adjacent row 9 and lower-loading row 1 reproduce the resolved descending splits. Liquid closure converges and admitted split Gibbs changes exceed native estimated numerical errors by over five orders of magnitude. No bound, phase, parameter, tolerance or data change is authorized to remedy this within Build.",
+  "presentation": "Notebook source complete; native refresh stops because snakemake is absent; HTML not regenerated.",
+  "review": "Not independently reviewed; no manuscript promotion."
+}
