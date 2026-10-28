@@ -21,9 +21,9 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
 \end{equation}
 Each neutral species is modeled as a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $u_i$, and each ion as a single charged sphere with $m_i^{\mathrm{seg}}=1$.
 The first three terms are those of PC-SAFT: hard-chain repulsion, dispersion attraction between segments, and hydrogen bonding between association sites.
-The Debye--H\"uckel term adds the screened Coulomb interactions among ions, and the Born term adds the electrostatic energy of charging each ion in the solvent.
+The Debye--H\"uckel term adds the screened Coulomb interactions among ions, and the Born term adds the change in free energy when each ion is charged in the solvent rather than in vacuum.
 The pressure and chemical potentials follow from density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001}, and caloric properties from its temperature derivatives (\cref{sec:heat-method}).
-Because the permittivity in the two electrostatic terms depends on density and composition (\cref{eq:solvent-permittivity}), these derivatives include its variation.
+Because the permittivity in the two electrostatic terms depends on density, temperature and composition (\cref{eq:solvent-permittivity}), these derivatives include its variation.
 In the equations below, $\rho_N=N_{\mathrm A}\rho$ is the number density and $\mathcal I$ is the set of ions.
 
 \subsection{Hard-chain and dispersion contributions}
@@ -115,9 +115,9 @@ Hydrogen bonding is described by Wertheim's first-order theory in the form used 
 where $X_A$ is the fraction of molecules $i$ not bonded at site $A$, $B$ runs over the sites on molecule $j$, and $\Delta^{AB}$ is the strength of an $A$--$B$ bond between molecules $i$ and $j$.
 The site fractions are solved at every state.
 Water and \MEA each carry one donor and one acceptor site (2B), and only donor--acceptor pairs bond.
-\COtwo carries two induced-association sites that bond only with water: it does not self-associate, its sites take the opposite roles of the water sites, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
+\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
 This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
-\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eq.~6]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
+\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eqs.~6 and 7]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
 \begin{equation}
     \epsilon^{AB}_{ij}=\tfrac12\left(\epsilon^{AB}_i+\epsilon^{AB}_j\right),
     \qquad
