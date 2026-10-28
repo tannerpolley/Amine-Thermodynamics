@@ -1,0 +1,62 @@
+{
+  "variant": "A",
+  "status": "complete",
+  "states": [
+    {
+      "name": "unloaded",
+      "T_K": 313.15,
+      "P_Pa": 100000.0,
+      "x": {
+        "water": 0.95,
+        "methyldiethanolamine": 0.05
+      },
+      "rho_mol_m3": 43475.755958795366,
+      "bulk_permittivity": 61.036249179224015,
+      "terms": {
+        "hard_chain": 4.935449622017961,
+        "dispersion": -10.415699186992962,
+        "association": -3.1033108805974896,
+        "debye_huckel": 0.0,
+        "born": 0.0,
+        "residual_helmholtz": -8.583560445572498
+      },
+      "pressure_residual_Pa": 2.3419706849381328e-06
+    },
+    {
+      "name": "loaded",
+      "T_K": 313.15,
+      "P_Pa": 100000.0,
+      "x": {
+        "water": 0.94,
+        "methyldiethanolamine": 0.04,
+        "protonated-methyldiethanolamine": 0.01,
+        "bicarbonate-anion": 0.01
+      },
+      "rho_mol_m3": 44205.278744352705,
+      "bulk_permittivity": 60.30143176870603,
+      "terms": {
+        "hard_chain": 4.830530539440454,
+        "dispersion": -10.205046936494778,
+        "association": -2.953988663144638,
+        "debye_huckel": -0.008371769122765698,
+        "born": -2.700090387239509,
+        "residual_helmholtz": -11.036967216561237
+      },
+      "pressure_residual_Pa": 1.8494174582883716e-06
+    }
+  ],
+  "admission_message": "Parameters.from_mapping and Mixture construction returned without exception",
+  "unloaded_calorics": {
+    "ideal_h_J_mol": -229255.07906660208,
+    "ideal_Cp_J_mol_K": 40.35442949480622,
+    "total_h_J_mol": -272174.02412894554
+  },
+  "MDEA_ideal_at_anchor": {
+    "T_K": 313.15,
+    "h_J_mol": 0.0,
+    "s_J_mol_K": 0.0,
+    "Cp_J_mol_K": 167.5947357764028
+  },
+  "caloric_limit": "Full eight-species neutral thermochemistry admitted. Direct Mixture.state totals require all ionic ideal records, even at zero ionic fractions; reaction-completed ionic totals are deferred to item (g). MDEA ideal functions separately evaluated in native selected-component model.",
+  "reason": "Full parameter and MDEA ideal-gas admission succeeded in both liquid compositions; prescribed charged composition is not reactive equilibrium. Ionic reference completion remains conditional on item (g)."
+}
