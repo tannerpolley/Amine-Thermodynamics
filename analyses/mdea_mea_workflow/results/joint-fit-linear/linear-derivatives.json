@@ -1,0 +1,110 @@
+{
+  "point": "A1 endpoint",
+  "checks": [
+    {
+      "group": "Kim",
+      "source_row": {
+        "source_key": "Kim2008",
+        "pdf_attachment_key": "4SMCK4SC",
+        "source_locator": "Table 8, PDF p.4, printed p.2524",
+        "source_row": "1",
+        "series": "MDEA (1) + H2O (2), 40 \u00b0C",
+        "temperature_C": "39.87",
+        "total_pressure_kPa": "7.27",
+        "liquid_x_MDEA": "0.0076",
+        "vapor_y_MDEA": "0.00001"
+      },
+      "coordinate": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ],
+      "optimizer_step": 0.001,
+      "exact": 1.6842179438366727,
+      "finite_difference": 1.6842179438754101,
+      "relative_error": 2.300026420438594e-11,
+      "tolerance": 1e-05,
+      "passed": true
+    },
+    {
+      "group": "Cp",
+      "source_row": {
+        "source_key": "Weiland1997",
+        "pdf_attachment_key": "27V9SYLA",
+        "source_locator": "Table 1, PDF p.1, printed p.1004",
+        "source_row": "1",
+        "loading": "0.00",
+        "MDEA_mass_fraction": "0.30",
+        "Cp_J_g_K": "3.787"
+      },
+      "coordinate": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ],
+      "optimizer_step": 0.001,
+      "exact": 0.10897253263429521,
+      "finite_difference": 0.10897253270059082,
+      "relative_error": 6.083698918402662e-10,
+      "tolerance": 1e-05,
+      "passed": true
+    },
+    {
+      "group": "Kim",
+      "source_row": {
+        "source_key": "Kim2008",
+        "pdf_attachment_key": "4SMCK4SC",
+        "source_locator": "Table 8, PDF p.4, printed p.2524",
+        "source_row": "1",
+        "series": "MDEA (1) + H2O (2), 40 \u00b0C",
+        "temperature_C": "39.87",
+        "total_pressure_kPa": "7.27",
+        "liquid_x_MDEA": "0.0076",
+        "vapor_y_MDEA": "0.00001"
+      },
+      "coordinate": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ],
+      "optimizer_step": 0.001,
+      "exact": -0.021894833269876075,
+      "finite_difference": -0.021894841211178573,
+      "relative_error": 3.6270212244385247e-07,
+      "tolerance": 1e-05,
+      "passed": true
+    },
+    {
+      "group": "Cp",
+      "source_row": {
+        "source_key": "Weiland1997",
+        "pdf_attachment_key": "27V9SYLA",
+        "source_locator": "Table 1, PDF p.1, printed p.1004",
+        "source_row": "1",
+        "loading": "0.00",
+        "MDEA_mass_fraction": "0.30",
+        "Cp_J_g_K": "3.787"
+      },
+      "coordinate": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ],
+      "optimizer_step": 0.001,
+      "exact": 2.6860338235956362,
+      "finite_difference": 2.6860338223571034,
+      "relative_error": 4.6110098129396004e-10,
+      "tolerance": 1e-05,
+      "passed": true
+    }
+  ],
+  "execution_note": "Initial check command stopped on nonexistent ObservationEvaluation.residuals before computing finite differences. Corrected to compare native predictions against native optimizer_gradient; no model or tolerance changed."
+}

@@ -1,9 +1,65 @@
 ---
-title: "MDEA through the MEA formulation: amended A4 phase gate"
+title: "MDEA through the MEA formulation: linear-law joint fit"
 format: html
 ---
 
-## Amended A4: item (l) remains incomplete
+## Linear-law joint fit: return to Design
+
+**A1 converges at cost 400.448016085 in 13 iterations, but reaches four arbitrary bounds.** The required stop applies before selecting a representative or evaluating outside-fit data. A3, B1 and B3 did not run. The current results use the item-(l) linear MDEA–water law, Neumann ideal-gas Cp, the 395 K reaction domain, Merkley 333.15/388.71 K fit rows, Carson integral heat at 101325 Pa, and Jakobsen 10% scales. Data roles, weights and remaining bounds are unchanged.
+
+The attached task worktree began clean at `2b6cd44`. The requested larger-budget A4 retry cannot be expressed by the pinned wheel: native iteration and recovery-work limits are fixed at 200 and 512, and both requested overrides (400 and 1024) are rejected. The retry was never run. Under the owner's away-mode amendment, A4 is excluded without retry; it remains unqualified because its prior row-1 trial is unresolved, not because instability was established. Item (l) is complete for A1, A3, B1 and B3. A2 and B2 remain duplicates.
+
+| Start | Fitted objective | Disposition |
+|---|---:|---|
+| A1 | 400.44801608493293 | Converged; return to Design: four arbitrary bounds |
+| A2 | — | Duplicate of A1 |
+| A3 | — | Not run after mandatory A1 bound stop |
+| A4 | — | Excluded unqualified without retry by owner amendment |
+| B1 | — | Not run after mandatory A1 bound stop |
+| B2 | — | Duplicate of B1 |
+| B3 | — | Not run after mandatory A1 bound stop |
+
+| A1 coordinate | Endpoint | Bound assessment |
+|---|---:|---|
+| k(MDEA-water) at 313.15 K | -0.206191791938 | interior |
+| c1(MDEA-water), 1/K | 0.00147260443632 | interior |
+| k(MDEAH+-CO2) | 0.5 | active |
+| k(MDEAH+-water) at 313.15 K | -0.5 | active |
+| reciprocal slope(MDEAH+-water), K | -89.9211579971 | interior |
+| k(MDEAH+-HCO3-) | -1 | active |
+| sigma(MDEAH+), angstrom | 6.35776604151 | interior |
+| u/k(MDEAH+), K | 180.131988552 | interior |
+| Born diameter(MDEAH+), angstrom | 7 | active |
+
+The A1 scaled Jacobian has rank nine at start and endpoint. Its singular values range from 106.145425 to 0.0026403123 initially and 106.515942 to 0.00261441066 at the endpoint. Covariance is classified `active_bound`. Full singular values and weak combinations are retained in the fit files; rank alone does not establish parameter identifiability. Weak-direction profiles were not run after the mandatory bound stop.
+
+All 280 fitted predictions replay to 2.32438e-12 relative difference, below 1e−8. The two linear-coefficient derivatives were checked by centered differences at one Kim pressure row and one Weiland Cp row; the retained [derivative checks](results/joint-fit-linear/linear-derivatives.json) give the 1e−5 comparison. Carson liquid defining-row residuals satisfy 1e−10:
+
+| Carson row | Maximum residual | Finite phase search |
+|---|---:|---|
+| 1 | 1.7053e-13 | no witness in the recorded trial set; unresolved trials 0 |
+| 10 | 1.13687e-13 | no witness in the recorded trial set; unresolved trials 0 |
+
+These two finite searches find no descending split and no unresolved trial. They do not establish global stability. Full phase searches across every fitted and comparison state and a broader balance audit were not run after the arbitrary-bound stop. The two-state evidence does not remove that stop.
+
+| Variant | Representative | Ermatchkov 88-row CO2 partial-pressure AARD | Verdict |
+|---|---|---|---|
+| A | None | Not evaluated | Return to Design at A1 |
+| B | None | Not evaluated | Unassessed after A1 stop |
+
+Neither variant has a pass/fail result against 24.2%. All declared Ermatchkov subsets, other outside-fit comparisons and the Wangler sensitivity without refitting remain unevaluated. The bicarbonate-free versus k(MDEA–CO2) control follow-up did not run: neither the two-percentage-point margin nor the bicarbonate/cation-water correlation is available. Corrected Kamps stays excluded from the criterion. **No MDEA outcome falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
+
+This is calibration and numerical verification, not physical validation, parameter adoption, transfer qualification or absorber qualification. Above 328.15 K the frozen MDEA dielectric coefficients remain a model assumption. Independent delivered review remains open; nothing is promoted for the manuscript. A table suffices for this single bound-stopped endpoint; there is no outside-fit comparison to plot.
+
+Evidence: [summary](results/joint-fit-linear/summary.json), [fit and covariance](results/joint-fit-linear/A1/fit.json), [endpoint](results/joint-fit-linear/A1/endpoint.json), [initial identifiability](results/joint-fit-linear/A1/initial-identifiability.json), [replay](results/joint-fit-linear/A1/replay.json), [Carson searches](results/joint-fit-linear/A1/carson-phase.json), [frozen inputs](results/joint-fit-linear/frozen-inputs.json), [runtime](results/joint-fit-linear/runtime.json), and [A4 capability inspection](results/item-l/A4-retry-capability.json).
+
+Execution used the isolated main-venv interpreter and the byte-verified Engine `3e83e19c` wheel, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`. Fit controls stayed at 40 iterations and 2100 seconds; 32 row workers used one BLAS thread each, with 22.08 GB available when sized. Every numerical command ran at nice 10. No worktree venv, Engine source import, main-checkout write, frozen-data change, MEA-record change, manuscript change or Zotero write was made.
+
+The presentation-only notebook refresh failed because `snakemake` is absent from PATH. [The refresh error is retained](results/joint-fit-linear/notebook-refresh.txt). The notebook source and section index are current; HTML remains stale. No preview service was changed.
+
+## Historical A4 amendment before the exclusion decision
+
+### A4 row 1 before the owner amendment
 
 **Stage 2 is blocked by an unresolved A4 phase search.** A4 now takes
 k(MDEAH+–water) = −0.2298 with slope zero, keeping every other value,
@@ -278,6 +334,6 @@ No endpoint is selected or adopted. No outside-fit data, including Ermatchkov, w
 
 ## Retained evidence and reproduction
 
-[Joint-fit README](results/joint-fit/README.md) and [diagnosis README](results/diagnosis-a1-bounds/README.md) provide full endpoint tables and commands. Each endpoint includes the declaration, predictions, weighted residuals, scaled Jacobian, singular vectors, active bounds, endpoint document, fitted-row replay and Carson rows 1/10 searches. The reduced objectives also retain omitted-group predictions. The runtime receipt verifies the installed wheel files byte for byte. The initial derivative-object indexing error is corrected without changing declarations or equations; its failed attempt remains recorded under A3.
+[Joint-fit README](results/joint-fit/README.md) and [diagnosis README](results/diagnosis-a1-bounds/README.md) provide full endpoint tables and commands. Each endpoint includes the declaration, predictions, weighted residuals, scaled Jacobian, singular vectors, active bounds, endpoint document, fitted-row replay and Carson rows 1/10 searches. The reduced objectives also retain omitted-group predictions. The runtime record verifies the installed wheel files byte for byte. The initial derivative-object indexing error is corrected without changing declarations or equations; its failed attempt remains recorded under A3.
 
 All eight new endpoints replay below the frozen 1e−8 relative tolerance. The no-ion density replay and zero ion sensitivities establish the stated invariance. No new numerical tolerance or acceptance rule is introduced. Numerical precision does not quantify experimental uncertainty or model discrepancy. The source notebook is retained; the ordinary site refresh is attempted separately and any missing renderer dependency is recorded in the diagnosis README.
