@@ -3,59 +3,84 @@ title: "MDEA through the MEA formulation: linear-law joint fit"
 format: html
 ---
 
-## Linear-law joint fit: return to Design
+## Stage 2: endpoint phase stop, 2026-10-28
 
-**A1 converges at cost 400.448016085 in 13 iterations, but reaches four arbitrary bounds.** The required stop applies before selecting a representative or evaluating outside-fit data. A3, B1 and B3 did not run. The current results use the item-(l) linear MDEA–water law, Neumann ideal-gas Cp, the 395 K reaction domain, Merkley 333.15/388.71 K fit rows, Carson integral heat at 101325 Pa, and Jakobsen 10% scales. Data roles, weights and remaining bounds are unchanged.
+Both variants return to Design at **bound-active endpoints** because fitted-state phase searches admit descending liquid splits. Active bounds are disclosed and do not cause this stop. All four qualified starts have converged fits; A4 is excluded, and A2/B2 are duplicates. No outside-fit data were evaluated and no transfer verdict is available.
 
-The attached task worktree began clean at `2b6cd44`. The requested larger-budget A4 retry cannot be expressed by the pinned wheel: native iteration and recovery-work limits are fixed at 200 and 512, and both requested overrides (400 and 1024) are rejected. The retry was never run. Under the owner's away-mode amendment, A4 is excluded without retry; it remains unqualified because its prior row-1 trial is unresolved, not because instability was established. Item (l) is complete for A1, A3, B1 and B3. A2 and B2 remain duplicates.
+### Endpoint selection before outside-fit access
 
-| Start | Fitted objective | Disposition |
-|---|---:|---|
-| A1 | 400.44801608493293 | Converged; return to Design: four arbitrary bounds |
-| A2 | — | Duplicate of A1 |
-| A3 | — | Not run after mandatory A1 bound stop |
-| A4 | — | Excluded unqualified without retry by owner amendment |
-| B1 | — | Not run after mandatory A1 bound stop |
-| B2 | — | Duplicate of B1 |
-| B3 | — | Not run after mandatory A1 bound stop |
+The objective-preferred candidates are **A1** and **B1**, selected solely from the fitted objective. A1 and A3 agree in objective to 2.92e−9; B1's cost is 21.295568 lower than B3's, a 5.72% gap relative to B1. All four scaled Jacobians have rank nine. The owner’s distinct-endpoint rule (objectives within 1%, then Ermatchkov disagreement above two AARD points) is not triggered by these cost comparisons. Full rank alone does not establish practical identifiability.
 
-| A1 coordinate | Endpoint | Bound assessment |
-|---|---:|---|
-| k(MDEA-water) at 313.15 K | -0.206191791938 | interior |
-| c1(MDEA-water), 1/K | 0.00147260443632 | interior |
-| k(MDEAH+-CO2) | 0.5 | active |
-| k(MDEAH+-water) at 313.15 K | -0.5 | active |
-| reciprocal slope(MDEAH+-water), K | -89.9211579971 | interior |
-| k(MDEAH+-HCO3-) | -1 | active |
-| sigma(MDEAH+), angstrom | 6.35776604151 | interior |
-| u/k(MDEAH+), K | 180.131988552 | interior |
-| Born diameter(MDEAH+), angstrom | 7 | active |
+**No qualified representative endpoint is frozen for outside-fit assessment:** each candidate fails the retained phase requirement before that stage. The following table records the objective ranking before any outside-fit access, rather than selecting on pressure performance.
 
-The A1 scaled Jacobian has rank nine at start and endpoint. Its singular values range from 106.145425 to 0.0026403123 initially and 106.515942 to 0.00261441066 at the endpoint. Covariance is classified `active_bound`. Full singular values and weak combinations are retained in the fit files; rank alone does not establish parameter identifiability. Weak-direction profiles were not run after the mandatory bound stop.
+| Start | Cost, ½Σwr² | Iterations | Rank | Smallest scaled singular value | Active coordinate indices, 1-based | Fitted states with liquid witnesses |
+|---|---:|---:|---:|---:|---|---:|
+| A1 | 400.448016085 | 13 | 9 | 0.0026144107 | 3, 4, 6, 9 | 5 |
+| A3 | 400.448016088 | 13 | 9 | 0.0026144109 | 3, 4, 6, 9 | 5 |
+| B1 | 372.165913375 | 12 | 9 | 0.0087070369 | 6, 9 | 2 |
+| B3 | 393.461481043 | 11 | 9 | 0.0052155544 | 4, 9 | 3 |
 
-All 280 fitted predictions replay to 2.32438e-12 relative difference, below 1e−8. The two linear-coefficient derivatives were checked by centered differences at one Kim pressure row and one Weiland Cp row; the retained [derivative checks](results/joint-fit-linear/linear-derivatives.json) give the 1e−5 comparison. Carson liquid defining-row residuals satisfy 1e−10:
+Coordinate order: MDEA–water k₀, linear c₁ (K⁻¹), k(MDEAH⁺–CO₂), k(MDEAH⁺–water), its reciprocal-temperature slope (K), k(MDEAH⁺–HCO₃⁻), MDEAH⁺ segment diameter (Å), dispersion energy divided by k (K), and Born diameter (Å). A1/A3 have k(MDEAH⁺–CO₂)=0.5, k(MDEAH⁺–water)=−0.5, k(MDEAH⁺–HCO₃⁻)=−1 and Born diameter=7 Å. B1 has unlike-ion k=−1 and Born diameter=7 Å; B3 has cation–water k=−0.5 and Born diameter=7 Å. Exact coordinate values and bounds remain in each native declaration and endpoint document.
 
-| Carson row | Maximum residual | Finite phase search |
-|---|---:|---|
-| 1 | 1.7053e-13 | no witness in the recorded trial set; unresolved trials 0 |
-| 10 | 1.13687e-13 | no witness in the recorded trial set; unresolved trials 0 |
+### Phase result and bounded diagnosis
 
-These two finite searches find no descending split and no unresolved trial. They do not establish global stability. Full phase searches across every fitted and comparison state and a broader balance audit were not run after the arbitrary-bound stop. The two-state evidence does not remove that stop.
+Each endpoint has 324 fitted-state searches, including the two ends of integral-heat observations. Carson rows 1 and 10 pass for all four endpoints: no descending split and zero unresolved trials. This does not establish global stability. Other fitted states do not pass.
 
-| Variant | Representative | Ermatchkov 88-row CO2 partial-pressure AARD | Verdict |
-|---|---|---|---|
-| A | None | Not evaluated | Return to Design at A1 |
-| B | None | Not evaluated | Unassessed after A1 stop |
+| Start | Fitted observation | T (K) | MDEA wt% | Finite split ΔG/RT | Estimated numerical error |
+|---|---|---:|---:|---:|---:|
+| A1 | Merkley | 333.15 | 40 | -0.0022001706 | 2.63e-09 |
+| A1 | Merkley | 388.71 | 20 | -0.013355704 | 2.71e-08 |
+| A1 | Merkley | 388.71 | 40 | -0.0044807172 | 2.54e-09 |
+| A3 | Merkley | 333.15 | 40 | -0.0022001376 | 2.63e-09 |
+| A3 | Merkley | 388.71 | 20 | -0.013355661 | 2.57e-08 |
+| A3 | Merkley | 388.71 | 40 | -0.0044806688 | 2.54e-09 |
+| B1 | Merkley | 388.71 | 20 | -0.012280675 | 3.48e-08 |
+| B1 | Merkley | 388.71 | 40 | -0.0099993678 | 3.57e-09 |
+| B3 | Merkley | 333.15 | 40 | -0.00027087268 | 3.63e-09 |
+| B3 | Merkley | 388.71 | 20 | -0.013340875 | 2.63e-08 |
+| B3 | Merkley | 388.71 | 40 | -0.0094171179 | 3.48e-09 |
 
-Neither variant has a pass/fail result against 24.2%. All declared Ermatchkov subsets, other outside-fit comparisons and the Wangler sensitivity without refitting remain unevaluated. The bicarbonate-free versus k(MDEA–CO2) control follow-up did not run: neither the two-percentage-point margin nor the bicarbonate/cation-water correlation is available. Corrected Kamps stays excluded from the criterion. **No MDEA outcome falsifies the MEA bicarbonate value.** Xiao and Zhang remain unscored.
+The Merkley witnesses seed two-liquid solutions at every listed state. Their native solves converge below 10⁻¹⁰; both phase amounts remain positive. These bounded probes retain the frozen parameters and original temperature, pressure, feed and reaction declarations. No change to the physical model, phase rule or search budget was attempted: such a correction would change the frozen experiment and requires Design. Finite descending witnesses violate the stipulated single-liquid assumption even though they do not establish the globally stable phase assemblage or experimental liquid separation.
 
-This is calibration and numerical verification, not physical validation, parameter adoption, transfer qualification or absorber qualification. Above 328.15 K the frozen MDEA dielectric coefficients remain a model assumption. Independent delivered review remains open; nothing is promoted for the manuscript. A table suffices for this single bound-stopped endpoint; there is no outside-fit comparison to plot.
+A1/A3 also have a much smaller liquid witness at Jakobsen row 8, repeated for its two fitted ratios (ΔG/RT about −2.303e−7, estimated error 7.75e−9). Its seeded second liquid is refused by the liquid-root admission check. That distinct limitation is retained, not counted as a converged two-liquid state. It is unnecessary to the stop established by the stronger Merkley witnesses.
 
-Evidence: [summary](results/joint-fit-linear/summary.json), [fit and covariance](results/joint-fit-linear/A1/fit.json), [endpoint](results/joint-fit-linear/A1/endpoint.json), [initial identifiability](results/joint-fit-linear/A1/initial-identifiability.json), [replay](results/joint-fit-linear/A1/replay.json), [Carson searches](results/joint-fit-linear/A1/carson-phase.json), [frozen inputs](results/joint-fit-linear/frozen-inputs.json), [runtime](results/joint-fit-linear/runtime.json), and [A4 capability inspection](results/item-l/A4-retry-capability.json).
+Some searches are unresolved, especially zero-loading full-support declarations; some high-temperature ion-free density states admit vapor descent. These are separately retained in the full phase records. The aggregate phase-gate-failure count includes unresolved cases and must not be interpreted as a count of physical phase separations. The stop rests on the listed resolved liquid witnesses at fitted finite-loading states.
 
-Execution used the isolated main-venv interpreter and the byte-verified Engine `3e83e19c` wheel, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`. Fit controls stayed at 40 iterations and 2100 seconds; 32 row workers used one BLAS thread each, with 22.08 GB available when sized. Every numerical command ran at nice 10. No worktree venv, Engine source import, main-checkout write, frozen-data change, MEA-record change, manuscript change or Zotero write was made.
+### Numerical evidence and identifiability limits
 
-The presentation-only notebook refresh failed because `snakemake` is absent from PATH. [The refresh error is retained](results/joint-fit-linear/notebook-refresh.txt). The notebook source and section index are current; HTML remains stale. No preview service was changed.
+Each endpoint independently replays all 280 fitted predictions within the 10⁻⁸ relative tolerance. Each result directory retains the start and endpoint singular values, weak combinations and active bounds. The numerical audit evaluates charge and C/H/N/O balances from native phase amounts and compositions, and compares all nine exact derivative columns with finite differences for one pressure and one Cp row at the 10⁻⁵ relative tolerance. Native equilibrium defining-row residuals are retained for every fitted-state solve.
+
+| Start | Maximum replay relative error | Maximum derivative relative error | Maximum relative element error | Maximum absolute charge error (mol) |
+|---|---:|---:|---:|---:|
+| A1 | 2.324e-12 | 3.902e-06 | 5.678e-13 | 3.55e-13 |
+| A3 | 1.958e-12 | 1.832e-06 | 5.673e-13 | 3.549e-13 |
+| B1 | 1.374e-12 | 6.578e-07 | 5.795e-13 | 3.217e-13 |
+| B3 | 1.403e-12 | 1.244e-06 | 5.167e-13 | 3.581e-13 |
+
+All 36 derivative-column comparisons pass. Available-state equilibrium defining-row residuals are at most 2.48e−12, below 10⁻¹⁰. Refused phase-search states remain explicit numerical non-results.
+
+The owner specified local scans of the two weakest scaled-Jacobian directions at ±0.25, ±0.5 and ±1 optimizer unit within frozen bounds, without refitting. These are **local sensitivity scans, not likelihood profiles**. At A1/A3 both signs of each direction are blocked by different active bounds: no nonzero scan is feasible and no flatness inference follows. B1's second-weakest positive direction and B3's second-weakest negative direction have feasible steps; their objective and maximum relative prediction changes by fitted group are retained. Other requested directions are blocked. No outside-fit predictions enter these scans.
+
+### Primary test and remaining comparisons
+
+| Variant | Ermatchkov 88-row AARD | Verdict |
+|---|---|---|
+| A | Not evaluated | Bound-active endpoint; phase stop before transfer verdict |
+| B | Not evaluated | Bound-active endpoint; phase stop before transfer verdict |
+
+The pass bar remains ≤24.2% for each variant. The #126 reference deviations remain 42.72% and 60.97%. The 13 rows above 49 wt% and 33 rows below 7 kPa (29 in the primary 88) remain declared and unscored here.
+
+Corrected Kamps, Böttinger, Merkley 60 wt% and far-temperature markers, Weiland 60 wt%, Kuranov 413 K, Zheng and Sedighi were not evaluated after the phase stop. Derks remains unscored because its numerical room temperature is unresolved in `results/derks-basis.json`. Xiao and Zhang remain unscored. Wangler ideal-gas Cp sensitivity on heat and Cp groups was not run after the stop. Thus no new extrapolation result or outside-fit physical assessment is claimed.
+
+For each variant, the bicarbonate–water-free refit on [−0.5,1] and MDEA–CO₂-free control refit were not run after the phase stop. No two-AARD-point margin or bicarbonate/cation–water correlation is available; |r|>0.95 remains the non-separability threshold. Corrected Kamps remains excluded from that criterion. **No MDEA outcome falsifies the MEA bicarbonate value.**
+
+### Claim limits and provenance
+
+These are calibration and numerical-verification results. They do not support a transfer claim, physical validation or absorber use. The intended outside-fit assessment is within 293–395 K and ≤49 wt% for pressure / ≤50 wt% for other properties; 60 wt% and far-temperature markers are extrapolation. The frozen permittivity above 328.15 K is a model extrapolation, MDEA–water k(T) is linear, and Neumann ideal-gas Cp is the primary choice. Experimental uncertainty and model discrepancy are not represented by numerical residual tolerances.
+
+The latest issue comment “owner decision on bounds” and the native answers governing the 600-line code ceiling and bounded scans were applied. Frozen roles, scales, weights, bounds, MEA record and manuscript were preserved. The immutable Engine 3e83e19c wheel is checked byte for byte through the isolated main-venv interpreter; no Engine source import is used. No subagents ran. Independent review and investigator promotion remain open.
+
+[Summary and endpoint inventory](results/stage2/summary.json), [liquid-witness values](results/stage2/liquid-witnesses.csv), and [runner and reproduction](results/stage2/README.md) own this stage's evidence. Tables are used because the stopping result is a set of discrete feasibility checks, with no continuous physical relation asserted.
 
 ## Historical A4 amendment before the exclusion decision
 
