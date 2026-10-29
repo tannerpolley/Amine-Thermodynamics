@@ -2,7 +2,7 @@
 import os
 for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'): os.environ[key]='1'
 import concurrent.futures as futures
-import copy, importlib.util, json, multiprocessing, sys, types, zipfile
+import copy, importlib.util, json, math, multiprocessing, sys, types, zipfile
 from pathlib import Path
 import numpy as np
 AN=Path(__file__).resolve().parents[1]
@@ -19,7 +19,7 @@ def write(path,obj):
     p.write(f'{OUT}/{path}',obj)
 def poolmap(fn,jobs):
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
-    workers=min(os.cpu_count(),max(1,available//268435456),len(jobs))
+    workers=min(16,os.cpu_count(),max(1,available//268435456),len(jobs))
     write(f'compute-{fn.__name__}.json',dict(cpu_count=os.cpu_count(),workers=workers,available_memory_bytes=available,BLAS_threads_per_process=1,jobs=len(jobs)))
     with futures.ProcessPoolExecutor(max_workers=workers,mp_context=multiprocessing.get_context('fork')) as pool:
         return list(pool.map(fn,jobs))
@@ -61,25 +61,66 @@ def replay(i):
     if pred.status.name=='Available': record['relative_error']=abs(pred.value-fit['predictions'][i])/max(1.,abs(fit['predictions'][i]))
     return record
 
+def phase_report(prob,state,supports):
+    trials=copy.copy(prob)
+    trials.phases=[eq.Phase(f'trial-{i}',kind=kind,support=support) for i,(kind,support) in enumerate(supports)]
+    options=eq.StabilityOptions();options.trials=trials._native(model).phases
+    native=eq.stability_test(eq.compile_problem(model,prob),state,options)
+    report={k:p.shared._jsonable(getattr(native,k)) for k in ('completed','message','present_phases','work')}
+    report['declared_supports']=supports
+    report['trials']=[dict(seed=t.seed,evidence=t.evidence,message=t.message,resolved_descent=t.resolved_descent,
+        quantities=p.shared._jsonable(t.quantities),split_coordinates=list(t.split_coordinates),
+        phase=dict(kind=t.phase.kind.name.lower(),support=list(t.phase.support))) for t in native.trials]
+    return report
+
+
+def classify_trials(report):
+    policy=load('results/stage2-density/phase-density-threshold.json')
+    dense,gas,ambiguous,rounding,other=[],[],[],[],[]
+    for t in report['trials']:
+        if t['resolved_descent']:
+            # The final split coordinate is ln(packing fraction) of the trial phase,
+            # irrespective of present-phase supports (Engine split_coordinates).
+            eta=math.exp(t['split_coordinates'][-1])
+            row=dict(seed=t['seed'],kind=t['phase']['kind'],packing_fraction=eta,
+                delta_g_over_rt=t['quantities']['split_delta_g_over_rt'])
+            (dense if eta>=policy['packing_fraction_threshold'] else gas).append(row)
+            if policy['ambiguity_interval'][0]<eta<policy['ambiguity_interval'][1]:ambiguous.append(row)
+        if t['evidence'] in ('unresolved','indeterminate','negative_plane_without_positive_donor'):
+            target=rounding if t['evidence']=='unresolved' and t['message'].endswith('reconstruction destroys support') else other
+            target.append(dict(seed=t['seed'],message=t['message'],evidence=t['evidence']))
+    native_unresolved=int(report['message'].split('unresolved trials ')[1].split(';')[0])
+    if native_unresolved!=len(rounding)+len(other):
+        other.append(dict(message='Native unresolved count differs from classified trials',native_count=native_unresolved))
+    if not report['completed']:other.append(dict(message='Native search did not complete'))
+    return dict(dense_splits=dense,gas_evolution=gas,ambiguous=ambiguous,rounding_trials=rounding,other_unresolved=other)
+
+
 def phase(job):
     i,prob=phase_jobs[job]
     try:
         state=eq.solve_equilibrium(model,prob)
-        support=prob.phases[0].support
+        support=list(prob.phases[0].support)
+        carbon_free=prob.feed.values.get(j.C,0.)==0.
+        if carbon_free:support=[c for c in support if c not in (j.C,'bicarbonate-anion','carbonate-anion')]
         neutral=[c for c in p.published.NEUTRAL if c in support]
-        d.f.s=types.SimpleNamespace(COMPONENT_IDS=tuple(neutral)+tuple(c for c in support if c not in neutral),_jsonable=p.shared._jsonable)
-        # The MEA search declares its vapor support as the first three species;
-        # restrict the ion-free face's trial phases explicitly when needed.
-        if len(neutral)==3: report=d.f.stability(model,prob,state)
-        else:
-            options=eq.StabilityOptions();trials=copy.copy(prob)
-            trials.phases=[eq.Phase('trial-L',kind='liquid',support=support),eq.Phase('trial-V',kind='vapor',support=neutral)]
-            options.trials=trials._native(model).phases
-            native=eq.stability_test(eq.compile_problem(model,prob),state,options)
-            report={k:p.shared._jsonable(getattr(native,k)) for k in ('completed','message','present_phases','work')}
-            report['trials']=[dict(resolved_descent=t.resolved_descent,quantities=p.shared._jsonable(t.quantities),evidence=t.evidence,message=t.message,phase=dict(kind=t.phase.kind.name.lower())) for t in native.trials]
-        return dict(index=i,T_K=prob.T,success=state.success,requested_tolerance_met=state.requested_tolerance_met,max_residual=max(map(abs,state.residuals)),residuals=list(state.residuals),amounts=list(state.amounts),mole_fractions=list(state.mole_fractions),component_ids=list(params.component_ids),stability=report,split=any(t['resolved_descent'] for t in report['trials']))
-    except Exception as e: return dict(index=i,error=f'{type(e).__name__}: {e}')
+        report=phase_report(prob,state,[('liquid',support),('vapor',neutral)])
+        gate=classify_trials(report)
+        ion_free=None
+        if gate['rounding_trials']:
+            # #904 is ignored only after checking this same state on the ion-free face.
+            ion_free=phase_report(prob,state,[('liquid',neutral),('vapor',neutral)])
+            check=classify_trials(ion_free)
+            for key in ('dense_splits','gas_evolution','ambiguous','other_unresolved'):gate[key]+=check[key]
+            if check['rounding_trials']:gate['other_unresolved']+=check['rounding_trials']
+        if not state.requested_tolerance_met:gate['other_unresolved'].append(dict(message=state.message))
+        gate['passed']=not any(gate[k] for k in ('dense_splits','ambiguous','other_unresolved'))
+        return dict(index=i,T_K=prob.T,success=state.success,requested_tolerance_met=state.requested_tolerance_met,
+            max_residual=max(map(abs,state.residuals)),residuals=list(state.residuals),amounts=list(state.amounts),
+            mole_fractions=list(state.mole_fractions),component_ids=list(params.component_ids),
+            carbon_free_trial_supports=carbon_free,stability=report,ion_free_check=ion_free,density_gate=gate,
+            split=bool(gate['dense_splits']))
+    except Exception as e:return dict(index=i,error=f'{type(e).__name__}: {e}')
 
 def checks(label):
     global fit,items,meta,phase_jobs
@@ -96,13 +137,13 @@ def checks(label):
     results=poolmap(phase,list(range(len(phase_jobs))))
     write(f'{label}/carson-phase.json',results)
     print(label,'Carson',[(r['index'],r.get('split'),r.get('error'),r.get('stability',{}).get('message')) for r in results],flush=True)
-    if any(r.get('split') or not r.get('requested_tolerance_met',False) or 'unresolved trials 0' not in r.get('stability',{}).get('message','') for r in results):
+    if not phase_summary(results)['passed']:
         write(f'{label}/stop.json',dict(reason='Endpoint phase gate failed or unresolved; return to Design',outside_fit_evaluated=False))
         return False
     phase_jobs=jobs
     results=poolmap(phase,list(range(len(phase_jobs))))
     write(f'{label}/fitted-phase.json',results)
-    failed=[r for r in results if r.get('split') or not r.get('requested_tolerance_met',False) or 'unresolved trials 0' not in r.get('stability',{}).get('message','')]
+    failed=[r for r in results if not r.get('density_gate',{}).get('passed',False)]
     write(f'{label}/checks.json',dict(rows=len(records),max_replay_error=max(r.get('relative_error',float('inf')) for r in records),phase_states=len(results),phase_gate_failures=len(failed),failed_indices=[r['index'] for r in failed]))
     return not failed
 
@@ -210,7 +251,7 @@ def apply_values(doc,decl,values):
     assert next(values,None) is None
     return doc
 
-def fit_document(doc,variant,bounds,folder,removed=()):
+def fit_document(doc,variant,bounds,folder,removed=(),*,maximum_iterations=40):
     setup(doc)
     _,decl=j.coordinates(params,doc,variant)
     for q,b in zip(decl,bounds): q['bounds']=b
@@ -220,10 +261,11 @@ def fit_document(doc,variant,bounds,folder,removed=()):
     metadata=[metadata[i] for i in keep];observations=[observations[i] for i in keep];weights=[weights[i] for i in keep]
     write(f'{folder}/declaration.json',dict(coordinates=decl,observations=metadata,removed_indices=list(removed)))
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
-    controls=dict(maximum_iterations=40,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(os.cpu_count(),max(1,available//268435456),len(keep)))
+    controls=dict(maximum_iterations=maximum_iterations,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(16,os.cpu_count(),max(1,available//268435456),len(keep)))
     write(f'{folder}/compute.json',dict(controls=controls,available_memory_bytes=available,BLAS_threads_per_process=1))
     result=reg.fit(params,coords,observations,weights=weights,thermochemistry=thermal,controls=reg.FitControls(**controls),singular_vectors=True)
-    record={k:p.shared._jsonable(getattr(result,k)) for k in ('status','message','usable','final_cost','physical','optimizer','predictions','weighted_residuals','iterations','iteration_costs','trial_failures')}
+    record={k:p.shared._jsonable(getattr(result,k)) for k in ('status','message','usable','final_cost','physical','optimizer','predictions','weighted_residuals','iterations','iteration_costs','trial_failures','optimizer_jacobian','physical_jacobian','residuals')}
+    record['failures']=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian,optimizer=list(f.optimizer)) for f in result.failures]
     record['covariance']={k:p.shared._jsonable(getattr(result.covariance,k)) for k in ('rank','singular_values','active_bounds','right_vectors')}
     record['group_costs']={g:sum(.5*r*r for m,r in zip(metadata,result.weighted_residuals) if m['group']==g) for g in dict.fromkeys(m['group'] for m in metadata)}
     write(f'{folder}/fit.json',record)
@@ -232,7 +274,7 @@ def fit_document(doc,variant,bounds,folder,removed=()):
     print(folder,record['status'],record['final_cost'],flush=True)
     return candidate,record
 
-def comparison_items():
+def comparison_items(*, capped_merkley=False):
     # Declarations only: this function never calculates a prediction or statistic.
     global comparison_problems
     metadata,observations,comparison_problems=[],[],[]
@@ -243,7 +285,10 @@ def comparison_items():
     def heat(group,r,T,P,w,alpha,obs):
         initial,final=j.problem(T,P,j.water(w),0.),j.problem(T,P,j.water(w),alpha)
         metadata.append(dict(group=group,row=r,observed=obs))
-        observations.append(reg.addition_enthalpy(params,initial,final,{j.C:1.},alpha,T,P,phase='vapor',observed=obs,form='difference',scale=1.))
+        if capped_merkley and group=='Merkley-outside' and 293.15<=T<=395:
+            observations.append(reg.saturation_capped_addition_enthalpy(params,initial,j.problem(T,P,j.water(w),.5,True),{j.C:1.},basis_amount=1.,loading_cap=alpha,loading_bounds=(.05,1.5),loading_grid=[.05*i for i in range(1,31)],T=T,P=P,phase='vapor',observed=obs,form='difference',scale=1.))
+        else:
+            observations.append(reg.addition_enthalpy(params,initial,final,{j.C:1.},alpha,T,P,phase='vapor',observed=obs,form='difference',scale=1.))
         comparison_problems.append([initial,final])
     for r in j.rows('Ermatchkov_2006_CO2_MDEA_partial_pressure.csv'):
         m=float(r['m_MDEA_mol_per_kg_H2O']);alpha=float(r['m_CO2_mol_per_kg_H2O'])/m
@@ -337,12 +382,13 @@ def assess(doc,folder,label):
     return summary
 
 def phase_summary(records):
-    liquid=[];unresolved=[]
-    for r in records:
-        report=r.get('stability',{})
-        if any(t['resolved_descent'] and t['phase']['kind']=='liquid' for t in report.get('trials',[])):liquid.append(r['index'])
-        if not r.get('requested_tolerance_met') or not report.get('completed') or 'unresolved trials 0' not in report.get('message',''):unresolved.append(r['index'])
-    return dict(states=len(records),liquid_witnesses=liquid,unresolved=unresolved,vapor_witnesses=[r['index'] for r in records if any(t['resolved_descent'] and t['phase']['kind']=='vapor' for t in r.get('stability',{}).get('trials',[]))],passed=not liquid and not unresolved)
+    groups={name:[r['index'] for r in records if r.get('density_gate',{}).get(key)]
+        for name,key in [('liquid_witnesses','dense_splits'),('vapor_witnesses','gas_evolution'),
+                         ('rounding_states','rounding_trials'),('ambiguous','ambiguous')]}
+    unresolved=[r['index'] for r in records if 'density_gate' not in r or r['density_gate']['other_unresolved']]
+    return dict(states=len(records),**groups,unresolved=unresolved,
+        rounding_trials=sum(len(r.get('density_gate',{}).get('rounding_trials',[])) for r in records),
+        passed=bool(records) and not groups['liquid_witnesses'] and not groups['ambiguous'] and not unresolved)
 
 def search_document(doc,folder,witness_only=False):
     global phase_jobs
