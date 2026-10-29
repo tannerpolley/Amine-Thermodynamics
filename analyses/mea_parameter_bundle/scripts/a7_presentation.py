@@ -171,9 +171,14 @@ def inventoried():
     old = subprocess.run(['git', '-C', str(ROOT), 'show', f'{INVENTORY_COMMIT}:{TABLE_GENERATOR}'], capture_output=True, check=True).stdout
     assert hashlib.sha256(old).hexdigest() == inventory[TABLE_GENERATOR]
     old, new = old.decode(), (ROOT / TABLE_GENERATOR).read_text()
-    for marker in ('literature=[', 'symbols=['):
-        start = old.index(marker)
-        assert all(line in new for line in old[start:old.index(']]', start)+2].splitlines() if 'This work' not in line), marker
+    # #224 approves citation locators and dispersion notation; pin the revised source blocks.
+    for marker, digest in {
+        'literature=[': 'ebd3acdfff649d0c0c6523a073788c1e165f9062823890df17f33428c4304e07',
+        'symbols=[': '40b014c56512e829dd6a23ce56241176675906efd1d426f407fa841d486767ae',
+    }.items():
+        start = new.index(marker)
+        block = '\n'.join(line for line in new[start:new.index(']]', start)+2].splitlines() if 'This work' not in line)
+        assert hashlib.sha256(block.encode()).hexdigest() == digest, marker
     # #211 Part 2 permits only the approved present-work row and parameter-count caption.
     for marker, digest in {
         "['This work'": '4e353b4fc3fd38196e1982b0248d2e242f3f2d183903a2d58d6a9ad942f282b5',
