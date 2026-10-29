@@ -386,3 +386,40 @@ loading_denominator = "mol analytical MDEA"
 loading_units = "mol CO2 / mol MDEA"
 pressure_units = "Pa"
 temperature_units = "K"
+
+# Atom counts and signed charge for the species in the four declared aqueous reactions.
+[element_formulas]
+water = {H = 2, O = 1, charge = 0}
+carbon-dioxide = {C = 1, O = 2, charge = 0}
+bicarbonate-anion = {H = 1, C = 1, O = 3, charge = -1}
+carbonate-anion = {C = 1, O = 3, charge = -2}
+hydronium-cation = {H = 3, O = 1, charge = 1}
+hydroxide-anion = {H = 1, O = 1, charge = -1}
+methyldiethanolamine = {C = 5, H = 13, N = 1, O = 2, charge = 0}
+protonated-methyldiethanolamine = {C = 5, H = 14, N = 1, O = 2, charge = 1}
+
+[export_conventions]
+mass = "molar_mass is copied unchanged from the Engine parameter document, including rounded magnitudes, units and provenance. Formula masses for conservation are derived by the column; no Engine mass is altered."
+caloric = "inputs/caloric.json is the single source of ideal-gas calorics. Ionic standard thermochemistry is completed by Engine from the four K(T) laws and the aqueous neutral reference; there is no independent reaction enthalpy or second absorption-heat source."
+reaction_direction = "K is dimensionless; correlation is natural ln K: a and c dimensionless, b in K, d in 1/K, reference_temperature and temperature limits in K; reference_pressure_pa in Pa. Negative stoichiometric coefficients are reactants; positive coefficients are products. Extent unit: mol of reaction as written. Enthalpy follows the declared K(T) law and its source_basis/standard_state_id, with Engine reference conversion; it is not an independently fitted heat."
+neutral_reference = "eq.NeutralReference fields: solvent (component ID), solute_molality_ratios (dimensionless), standard_molality_mol_per_kg (mol/kg solvent), species_reference (eq.SpeciesReference enum). No per-species override is declared (empty mapping); Engine uses PureLiquid for solvent and InfiniteDilution for every solute. Enum names: PureLiquid, InfiniteDilution, PureGas; no PureGas choice is used."
+assessment = "Regions are prepared-row minima/maxima, not continuous validity domains. wt_percent is unloaded aqueous analytical amine mass percent using unchanged Engine molar masses; loading is mol CO2/mol analytical MDEA. AARD_percent uses available nonzero observations only and is not experimental uncertainty. Phase search covers only the retained 751 endpoint states. Native observation values are retained by row; derivative actions were not assessed by #228."
+
+[export_property_groups]
+pressure = ["Kuranov", "Ermatchkov", "Kuranov-413K", "Sedighi", "Zheng", "corrected-Kamps"]
+speciation = ["Jakobsen", "Bottinger-amine-sum-25bar", "Bottinger-amine-sum-5bar", "Bottinger-bicarbonate-25bar", "Bottinger-bicarbonate-5bar"]
+heat = ["Carson", "Merkley", "Merkley-half-loading", "Merkley-outside"]
+Cp = ["Cp", "Cp-60wt"]
+density = ["loaded-density", "unloaded-density", "density-60wt"]
+binary_VLE = ["Kim"]
+
+# Analytical mole incidence, consistent with the declared formulas and reaction extents.
+[analytical_components]
+water = {water = 1}
+carbon-dioxide = {carbon-dioxide = 1}
+methyldiethanolamine = {methyldiethanolamine = 1}
+protonated-methyldiethanolamine = {methyldiethanolamine = 1}
+bicarbonate-anion = {carbon-dioxide = 1, water = 1}
+carbonate-anion = {carbon-dioxide = 1, water = 1}
+hydronium-cation = {water = 1}
+hydroxide-anion = {water = 1}
