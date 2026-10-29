@@ -304,7 +304,7 @@ class SolventSpecification:
                     message=t.message,
                     resolved_descent=t.resolved_descent,
                     quantities=jsonable(t.quantities),
-                    split_coordinates=list(t.split_coordinates),
+                    split_coordinates=[v if math.isfinite(v) else str(v) for v in t.split_coordinates],
                     phase=dict(kind=t.phase.kind.name.lower(), support=list(t.phase.support)),
                 )
                 report["trials"].append(row)

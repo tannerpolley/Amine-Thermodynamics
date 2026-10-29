@@ -153,7 +153,7 @@ def test_reaction_coordinate_equivalence(kind):
     (AN / f"results/{kind}-check.json").write_text(json.dumps(results, indent=2) + "\n")
 
 
-def test_nonfinite_split_is_unresolved(monkeypatch):
+def test_nonfinite_split_is_unresolved(monkeypatch, tmp_path):
     spec = SolventSpecification(AN / "B1.toml")
     trial = SimpleNamespace(
         seed=0,
@@ -167,6 +167,11 @@ def test_nonfinite_split_is_unresolved(monkeypatch):
     native = SimpleNamespace(completed=True, message="unresolved trials 0;", present_phases=[], work={}, trials=[trial])
     monkeypatch.setattr(eq, "stability_test", lambda *args: native)
     result = spec.phase(spec.inputs["observations"]["phase_states"][0], spec.spec["phase_policy"])
+    path = tmp_path / "R4-trials.json"
+    path.write_bytes((json.dumps(result, indent=2, allow_nan=False) + "\n").encode())
+    result = json.loads(path.read_bytes())
     assert result["gas"] == [] and len(result["unresolved"]) == 1
-    assert result["stability"]["trials"][0]["split_coordinates"] == [-math.inf]
+    retained = result["stability"]["trials"][0]
+    assert retained["seed"] == 0 and retained["message"] == trial.message
+    assert retained["split_coordinates"] == ["-inf"]
     assert result["unresolved"][0]["classification_unavailable"] == "Missing or nonfinite logarithmic packing fraction"
