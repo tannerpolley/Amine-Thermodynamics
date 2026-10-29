@@ -1,8 +1,9 @@
 # Downstream acceptance of Engine d5138209
 
-The refits are paused for the owner decision requested in Engine #911:
-https://github.com/tannerpolley/ePC-SAFT/issues/911.
-No new endpoint has been selected or assessed.
+All three downstream acceptance checks pass. The orchestrator clarified that
+energy equality means absolute differences no larger than 1e-10 near zero,
+with unchanged classifications. Refits may proceed. Engine #911 is left to
+the orchestrator; it does not block the clarified acceptance.
 
 The issue branch includes main 430c9c9 (merge 7d3ded9), preserving the
 91f8cc7 continuation of db33c11. The isolated worktree `.venv` consumes the
@@ -10,7 +11,7 @@ retained immutable wheel identified in `runtime.json`. The release checksum,
 GitHub asset digest and tag target were checked. All installed package and
 bundled-library bytes equal the wheel. The root dependency pins are unchanged.
 
-## Phase acceptance (a): reconstruction passes; energy equality unresolved
+## Phase acceptance (a): passes under the clarified energy comparison
 
 Each historical endpoint has 754 searched state records. Zero-loading trials
 use carbon-free supports; the density threshold remains 0.10. Counts are
@@ -30,11 +31,9 @@ records, including repeated physical states for different observations.
 | Maximum relative change in ΔG/RT | 6.8585036e-7 | 1.2495957e-8 |
 | Trials exceeding 1e-8 relative change | 11 | 10 |
 
-The strict unchanged-energy comparison fails. Applying the general replay
-criterion as pure relative error also leaves failures near zero. No tolerance
-amendment was assumed. These changes do not demonstrate altered stability:
-every classification is unchanged, and their absolute magnitude is very small.
-The owner must decide the applicable energy comparison or await Engine resolution.
+The largest absolute energy change is below the clarified 1e-10 limit.
+All classifications are unchanged; both searches pass. Relative error near
+zero is retained as diagnostic context and is not the acceptance criterion.
 Per-trial before/after evidence is in `{A1,B1}/acceptance.json`. Full searches
 are in `{A1,B1}/phase.json.gz`; raw and compressed hashes are registered in
 `../../compressed-evidence.json`.
@@ -56,9 +55,11 @@ saturation search has 30 nodes from 0.05 to 1.50 mol/mol; its uniqueness is
 limited to that search. No new fit, switch encounter, root refusal, outside-fit
 statistic, Wangler sensitivity or bicarbonate/control fit was computed.
 
-Acceptance (c), item-(l) and Kim pre-fit replays, was not started after the
-phase acceptance discrepancy. Both variants' selected endpoints, costs,
-active bounds, transfer verdicts and fitted-state truncations remain pending.
+Acceptance (c) passes: both 61-row pressure replays agree within 9.33e-15
+relative; all 2354 binary phase searches have zero liquid splits or unresolved
+trials, all mixing scans are miscible, and the Cp and eight amended Carson
+checks pass. See `prefit-acceptance.json` and row-level retained evidence.
+Both variants' selected endpoints and transfer verdicts remain pending refits.
 Independent delivery review has not run.
 
 Reproduce with the worktree interpreter, without changing root pins:
