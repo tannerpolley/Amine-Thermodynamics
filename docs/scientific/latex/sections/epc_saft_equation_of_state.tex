@@ -19,22 +19,23 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
     +a^{\mathrm{Born}} .
     \label{eq:epcsaft-residual-split}
 \end{equation}
-Each neutral species is modeled as a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $u_i$, and each ion as a single charged sphere with $m_i^{\mathrm{seg}}=1$.
+Each neutral species is modeled as a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $\epsilon_i$ (tabulated as $\epsilon_i/k_B$), and each ion as a single charged sphere with $m_i^{\mathrm{seg}}=1$.
 The hard-chain term is the reference fluid: hard-sphere segments, whose excluded-volume free energy follows Boubl\'ik and Mansoori et al., bonded into chains by Wertheim's first-order perturbation theory.
 Ions have one segment, so they add excluded volume but no chain bonds.
-The dispersion term is Gross and Sadowski's second-order perturbation of this hard-chain fluid; it adds the attraction between segments through the pair energies $u_{ij}$, with universal constants fitted to pure \textit{n}-alkane data.
+The dispersion term is Gross and Sadowski's second-order perturbation of this hard-chain fluid; it adds the attraction between segments through the pair energies $\epsilon_{ij}$, with universal constants fitted to pure \textit{n}-alkane data.
 The association term counts hydrogen bonds between donor and acceptor sites by Wertheim's first-order theory; the fraction of sites left unbonded is solved at every state.
 The Debye--H\"uckel term adds the screened Coulomb interactions among ions of finite diameter in a continuum of the bulk relative permittivity, and the Born term adds the change in free energy when each ion is charged in the solvent rather than in vacuum.
 Section~S11 gives the hard-chain, dispersion, association and Debye--H\"uckel expressions with their source equation numbers \cite{Gross2001,Kleiner2007,Cameretti2005}.
 The pressure and chemical potentials follow from density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001}, and caloric properties from its temperature derivatives (\cref{sec:heat-method}).
 Because the permittivity in the two electrostatic terms depends on density, temperature and composition (\cref{eq:solvent-permittivity}), these derivatives include its variation.
+Dispersion energies $\epsilon_i$ and $\epsilon_{ij}$ are distinct from the association energies $\epsilon^{AB}$; relative permittivities use $\varepsilon$.
 Below, $\mathcal I$ is the set of ions.
 
 \subsection{Segment diameters and dispersion interactions}
 % P:theory-02a
 For the neutral species the hard-sphere diameter depends on temperature \cite[Eq.~A.9]{Gross2001},
 \begin{equation}
-    d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3u_i}{k_BT}\right)\right],
+    d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3\epsilon_i}{k_BT}\right)\right],
     \label{eq:hard-sphere-diameter}
 \end{equation}
 with the water diameter law $\sigma_w(T)$ of Section~S1 in place of a constant $\sigma_i$.
@@ -44,10 +45,10 @@ These diameter choices define the present parameterization; they are not indepen
 % P:theory-02b
 The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the dispersion energy of a pair is
 \begin{equation}
-    u_{ij}=\sqrt{u_iu_j}\,\left(1-k_{ij}\right).
+    \epsilon_{ij}=\sqrt{\epsilon_i\epsilon_j}\,\left(1-k_{ij}\right).
     \label{eq:dispersion-combining-rule}
 \end{equation}
-Dispersion between ions of the same charge sign, including an ion with itself, is excluded ($u_{ij}=0$ for $z_iz_j>0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
+Dispersion between ions of the same charge sign, including an ion with itself, is excluded ($\epsilon_{ij}=0$ for $z_iz_j>0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
 The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal-temperature form
 \begin{equation}
  k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(T^{-1}-T_{\mathrm{ref}}^{-1}),

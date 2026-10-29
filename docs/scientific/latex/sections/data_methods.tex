@@ -8,7 +8,7 @@ The \COtwo--water pressures check the interaction fitted separately in \cref{sec
 
 % P:methods-02
 Each calculated species observable follows its analytical definition.
-B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent \cite[p.~134, Table~3]{Bottinger2008}; their bicarbonate-labelled values are compared here with calculated \ce{HCO3- + CO3^{2-}}.
+B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent \cite[p.~134, Table~3]{Bottinger2008}; their bicarbonate-labeled values are compared here with calculated \ce{HCO3- + CO3^{2-}}.
 Matin et al.\ infer bicarbonate from titration and carbon balance after neglecting carbonate in their working balances \cite[pp.~6615--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}.
 Comparing those observations with calculated \ce{HCO3- + CO3^{2-}} is an observation approximation; all 19 such values remain outside the objective.
 Their figures label \SI{21}{\degreeCelsius}, approximated here by \SI{20}{\degreeCelsius}.
@@ -74,7 +74,15 @@ A fit with wider bounds on the protonated-amine diameter and its water interacti
 Calculations for the reported fit use the parameter set listed here.
 Rounding the reported parameter record to eight significant figures gives the fitted-data statistics of \cref{tab:residual-summary} at their printed precision.
 Table~\ref{supp-tab:supplement-fitted-parameters} gives the joint-fit bounds and conditional standard errors; Section~S1 gives the source or modeling assumption of every fixed input.
-The joint bounded least-squares objective uses property-specific scales and weights to combine the observations; Section~S2 gives the residual definitions and full objective.
+The joint bounded least-squares objective is
+\begin{equation}
+ C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,
+ \label{eq:fit-objective}
+\end{equation}
+where $r_j$ is a property-scaled difference or log ratio and $w_j$ sets its weight; Section~S2 defines every residual, scale and weight.
+Loaded densities have weight $1/47$, carbon-free densities weight 10, binary \MEA--water quantities unit weight, and \COtwo--water pressures weight $1/39$.
+At the reported fit, the binary \MEA--water quantities contribute 61.71\,\% of the objective and loaded densities 0.3798\,\%; these cost shares describe fitting priorities rather than relative physical accuracy.
+Section~S2 gives the complete group contributions.
 The solver uses bounded Levenberg--Marquardt least squares with exact equation-of-state and implicit equilibrium derivatives.
 Software identities are specified in Data and Code Availability.
 

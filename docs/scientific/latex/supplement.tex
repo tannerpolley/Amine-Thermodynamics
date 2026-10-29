@@ -78,9 +78,8 @@ The shared pressure--species--heat group contains 47 pressures, 94 species fract
 The remaining groups are 47 loaded densities, five carbon-free densities, 50 Cai binary quantities, 39 Kiepe pressures and four heat capacities.
 
 % P:supplement-objective-01
-The bounded least-squares problem minimizes
+The bounded least-squares objective is main-text Eq.~17, with residuals
 \begin{equation}
- C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
  r_j=\begin{cases}(y_{c,j}-y_{o,j})/s_j,&\text{difference},\\[4pt]
  \ln(y_{c,j}/y_{o,j})/s_j,&\text{log ratio}.
  \end{cases}\label{eq:fit-residuals}
@@ -103,7 +102,7 @@ Main-text Table~2 distinguishes fitted and compared observations and their use i
 % P:supplement-13
 Hilliard and Xu pressures use measured molality and temperature; the three Xu states above 393.15 K are excluded \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
 B\"ottinger compositions follow Table~3, including the 31 wt\% high-temperature series \cite{Bottinger2008}.
-Matin bicarbonate-labelled values are compared with calculated bicarbonate plus carbonate as the approximation explained in the main text \cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}.
+Matin bicarbonate-labeled values are compared with calculated bicarbonate plus carbonate as the approximation explained in the main text \cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}.
 Both printed Jakobsen loadings are preserved, while calculations use the NMR rather than maximum loading \cite[Tables~A1--A2]{Jakobsen2005}.
 
 % P:supplement-14
@@ -235,7 +234,7 @@ A Newton procedure and an Ipopt minimization use exact first and second derivati
 The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
 
 % P:supplement-08
-For each optimized trial, the tangent-plane distance $D$ is main-text Eq.~18; the multipliers refer to the existing reacting equilibrium.
+For each optimized trial, the tangent-plane distance $D$ is main-text Eq.~19; the multipliers refer to the existing reacting equilibrium.
 A donor phase $d$ with positive amounts of every supported trial species has transfer capacity $\beta_{\max}=\min_i(N_dx_{di}/w_i)$.
 The donor with greatest capacity is used.
 The transfer slope is
@@ -360,8 +359,8 @@ Here $d_i$ is the hard-sphere diameter, $g_{ij}^{\mathrm{hs}}$ is the hard-spher
 The dispersion term is Gross and Sadowski's second-order perturbation expansion \cite[Eqs.~A.10--A.19, Table~1]{Gross2001}:
 \begin{equation}
     a^{\mathrm{disp}}
-    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{u_{ij}}{k_BT}\sigma_{ij}^3
-    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{u_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
+    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{\epsilon_{ij}}{k_BT}\sigma_{ij}^3
+    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{\epsilon_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
     \label{eq:dispersion}
 \end{equation}
 \begin{equation}
@@ -377,7 +376,7 @@ The dispersion term is Gross and Sadowski's second-order perturbation expansion 
 \end{equation}
 where $C_1$ comes from the hard-chain compressibility, and $b_k(\bar m)$ has the same form as $a_k(\bar m)$.
 The coefficients $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are Gross and Sadowski's universal constants.
-The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and $u_{ij}$ is the pair dispersion energy of main-text Eqs.~3 and 4.
+The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and $\epsilon_{ij}$ is the pair dispersion energy of main-text Eq.~3.
 
 \subsection{Association contribution}
 % P:supplement-epcsaft-04
