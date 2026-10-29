@@ -57,7 +57,7 @@ def saturation_gate(label):
         sat=s.saturation(dict(row,pressure_MPa=str(P/1e6)))
         if sat['status']!='Available' or sat['sign_changes']!=1:raise RuntimeError('Owner decision: refused saturation at '+label+' '+str(row))
         lp=loading[(row['temperature_K'],row['MDEA_mass_percent'])];alpha=min(lp,sat['alpha_sat'])
-        caps.append(dict(row,source_loading=lp,saturation_loading=sat['alpha_sat'],selected_loading=alpha,truncation=lp-alpha))
+        caps.append(dict(row,qualification='Formal cap from direct saturation diagnostic; native heat availability is assessed separately',source_loading=lp,saturation_loading=sat['alpha_sat'],selected_loading=alpha,truncation=lp-alpha))
         jobs.append((f'Merkley-capped:{i}',s.j.problem(T,P,s.j.water(float(row['MDEA_mass_percent'])/100),alpha)))
     s.phase_jobs=jobs;extra=n.pool(s.phase,list(range(len(jobs))))
     n.write(f'{label}/capped-phase.json',extra);n.write(f'{label}/Merkley-caps.json',caps)

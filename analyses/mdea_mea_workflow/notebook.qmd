@@ -58,7 +58,7 @@ Only the 88-row pressure statistic has a pass bar. Every other value below is co
 | Weiland density at 60 wt%, extrapolation (11) | 1.318 | 1.798 |
 | Zheng integral heat, context (6) | 18.72 | 22.64 |
 | Sedighi total pressure, context (15) | 80.12 | 74.53 |
-| Merkley 60 wt%, 333.15/388.71 K (2) | 25.7 | 1.309 |
+| Merkley 60 wt%, 333.15/388.71 K (2) | 25.7 | Unavailable |
 
 Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags above the source's 3% amine-balance accuracy. A complete relative bicarbonate AARD is undefined because one observed value is zero; all row-level absolute predictions remain retained. No zero row is silently removed. Xiao and Zhang remain unscored because the retained attachments contain only the first page; Derks remains unscored because temperature/basis is unresolved. Zheng uses the source loading for integral heat, with model saturation loading reported separately. Corrected Kamps never enters the follow-up criterion.
 
@@ -71,7 +71,7 @@ The Böttinger comparison uses the declared model sum HCO₃⁻ + CO₃²⁻. Th
 
 ## Saturation truncation and phase search
 
-The phase classifier was declared before refitting: packing fraction above 0.10 is dense; ambiguity near the threshold and other unresolved trials block a clean gate. Gas evolution is reported separately. Zero-loading searches use carbon-free trial supports. Each selected endpoint has 760 state records, including repeated physical states for distinct observables and six actual capped saturation endpoints. There are zero reconstruction trials, so no residual #904 ion-free recovery is needed. Full state/trial records and hashes are retained, rather than interpreting gas-like liquid seeds as liquid–liquid splitting.
+The phase classifier was declared before refitting: packing fraction above 0.10 is dense; ambiguity near the threshold and other unresolved trials block a clean gate. Gas evolution is reported separately. Zero-loading searches use carbon-free trial supports. Each selected endpoint has 760 state records, including repeated physical states for distinct observables and six formal cap states from the direct saturation diagnostic. Native heat availability is recorded separately. There are zero reconstruction trials, so no residual #904 ion-free recovery is needed. Full state/trial records and hashes are retained, rather than interpreting gas-like liquid seeds as liquid–liquid splitting.
 
 The following loadings are mol CO₂/mol analytical MDEA. A positive truncation means the native heat endpoint is below the source loading point; the 60 wt% entries are extrapolation.
 
@@ -85,7 +85,7 @@ The following loadings are mol CO₂/mol analytical MDEA. A positive truncation 
 | A3 | 388.71 | 60 | 0.18 | 0.2065 | 0.18 | 0 |
 | B1 | 333.15 | 20 | 1.009 | 1.02 | 1.009 | 0 |
 | B1 | 333.15 | 40 | 0.941 | 0.9197 | 0.9197 | 0.02132 |
-| B1 | 333.15 | 60 | 0.811 | 0.8069 | 0.8069 | 0.00409 |
+| B1 | 333.15 | 60 | 0.811 | 0.8069 | Unavailable | Unavailable |
 | B1 | 388.71 | 20 | 0.587 | 0.4532 | 0.4532 | 0.1338 |
 | B1 | 388.71 | 40 | 0.36 | 0.2581 | 0.2581 | 0.1019 |
 | B1 | 388.71 | 60 | 0.18 | 0.1582 | 0.1582 | 0.02184 |
@@ -106,6 +106,8 @@ Signed heats below are kJ/mol CO₂; negative is exothermic. Half-loading uses h
 | B1 | 388.71 | 20 | -59.2 | -62.7 | -66.22 |
 | B1 | 388.71 | 40 | -62 | -66.48 | -69.64 |
 | B1 | 388.71 | 60 | -63.3 | -64.13 | -70.01 |
+
+At B1, the 333.15 K / 60 wt% native heat is unavailable: a sampled vapor branch is not admitted within the declared grid. The direct diagnostic finds an admitted root near 0.8069, but this does not establish the native observable's uniqueness requirement across the full grid. No complete two-row 60 wt% B AARD is reported. Its 388.71 K prediction is −64.1286 kJ/mol CO₂ against −63.3 observed.
 
 The saturation root is unique only within the declared 30-point search over 0.05–1.50 mol/mol; unsampled paired roots or tangencies can escape it. The gradient is unavailable exactly at the cap switch. Native refused optimizer trials remain in `fit.json`; the selected main fits converged despite their retained refusals. No fallback equation, downstream optimizer, or parameter-independent cap was substituted.
 

@@ -37,10 +37,16 @@ def hsieh(doc,folder):
 
 def truncations(doc,folder):
     s.setup(doc);rows=[]
+    status={}
+    for q in s.load(f'{r.OUT}/{folder}/comparisons.json'):
+        if q['group']=='Merkley-outside':status[(q['row']['temperature_K'],q['row']['MDEA_mass_percent'])]=(q['status'],q.get('message'))
+    for q in s.load(f'{r.OUT}/{folder}/replay.json'):
+        if q['group']=='Merkley':status[(q['row']['temperature_K'],q['row']['MDEA_mass_percent'])]=(q['prediction']['status'],q['prediction']['message'])
     loading={(q['temperature_K'],q['MDEA_mass_percent']):float(q['alpha_LP_mol_CO2_per_mol_MDEA']) for q in s.j.rows('Merkley1987_loading_points.csv')}
     for row in s.j.rows('Merkley1987_stage1.csv'):
         T=float(row['temperature_K']);P=float(row['proposed_pressure_kPa'])*1000;lp=loading[(row['temperature_K'],row['MDEA_mass_percent'])]
-        rec=dict(row,source_loading=lp,pressure_Pa=P)
+        native_status,message=status[(row['temperature_K'],row['MDEA_mass_percent'])]
+        rec=dict(row,source_loading=lp,pressure_Pa=P,native_heat_status=native_status,native_heat_message=message,qualification='Direct saturation diagnostic; native heat availability is separate')
         if not 293.15<=T<=395:rows.append(dict(rec,status='outside frozen reaction domain'));continue
         sat=s.saturation(dict(row,pressure_MPa=str(P/1e6)))
         rec.update(saturation=sat)
@@ -48,7 +54,7 @@ def truncations(doc,folder):
         rec.update(selected_loading=min(lp,sat['alpha_sat']),truncation=max(0.,lp-sat['alpha_sat']))
         rows.append(rec)
     n.write(f'{folder}/Merkley-truncations.json',rows)
-    return [q for q in rows if q.get('truncation',0.)>0]
+    return [q for q in rows if q.get('truncation',0.)>0 and q['native_heat_status']=='Available']
 
 original_coordinates=s.j.coordinates
 
