@@ -34,7 +34,7 @@ Checked against final auxiliary labels and section content:
 
 Supplement built first, followed by main, with SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds for each document. Table generator rerun with the existing interpreter via a temporary worktree .venv symlink; the symlink was removed. No dependency file changed.
 
-Freshness check with --write-receipt passed; prose check on every changed .tex file passed; git diff --check passed. Final main/supplement logs contain no unresolved citations/references, duplicate labels, LaTeX/package warnings or overfull boxes. Both PDFs have zero Type 3 fonts.
+Freshness check with `--write-receipt` passed; prose check on every changed .tex file passed; git diff --check passed. Final main/supplement logs contain no unresolved citations/references, duplicate labels, LaTeX/package warnings or overfull boxes. Both PDFs have zero Type 3 fonts.
 
 Automated visual checks completed for all 45 pages with no error-severity findings; conservative warnings remain (main 200, supplement 83), mainly tight line clearances and figure text/path intersections. Contact sheets were inspected for all pages; Methods p. 9, introduction p. 3 and supplement dispersion/association p. 16 were inspected individually at larger size. This is not a complete full-size manual inspection of all 45 pages. No layout changes were made in response to warnings outside the local corrections. Visual reports and build logs remain in builds/issue224-*.
 
