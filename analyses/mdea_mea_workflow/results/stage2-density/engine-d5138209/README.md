@@ -46,9 +46,8 @@ The source caps 0.50 and 0.25 exercise the uncapped branch; 1.25 and 0.75
 force saturation truncation. All twelve heat values agree with the retained
 direct saturation-plus-heat references within 4.7895022e-13 relative (limit
 1e-8). Both branches pass nine-coordinate central differences with optimizer
-steps 0.003 and 0.001. The worst error using the more accurate declared step
-for each column is 2.4128276e-7 relative (limit 1e-5). Both step results are
-retained. All eight actual source-cap start states remain untruncated.
+steps 0.003 and 0.001. All 72 central-difference comparisons pass; the worst relative error across
+both declared steps is 2.1699834e-6 (limit 1e-5). Both step results are retained. All eight actual source-cap start states remain untruncated.
 
 These checks verify numerical calculations, not physical validation. The
 saturation search has 30 nodes from 0.05 to 1.50 mol/mol; its uniqueness is
@@ -72,3 +71,7 @@ agent-heavy nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/ac
 The phase calculation uses at most 16 processes; the heat calculation has
 12 independent jobs. Each process has one BLAS thread. No Engine source or
 main-checkout file was edited.
+
+The initial Engine #911 example mislabeled `fit:126:1` as 20 wt%.
+Its retained declaration is 333.15 K / 40 wt%; the trial index and energy
+values were correct. The orchestrator owns further #911 communication.
