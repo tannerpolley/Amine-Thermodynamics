@@ -41,7 +41,7 @@ The public publisher abstract/highlights describe 30 wt% AMP at 25,35,45 °C,
 an apparent stability calculation, and pH/literature-assisted splitting of
 protonation and carbonate signals. They cannot establish its exact tables,
 equations, uncertainty or temperature coefficients. The acquisition command
-created metadata parent `HBBD5J2B` but obtained no PDF: the official API
+created metadata parent `HBBD5J2B` but obtained no PDF: the Elsevier Article Retrieval service
 returned only one page for an eleven-page paper and the publisher check did
 not clear. No retry or Mathpix conversion was performed. Handoff: the DOI link
 above. A metadata item is not completion of the requested PDF acquisition.
