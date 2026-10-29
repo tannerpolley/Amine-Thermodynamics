@@ -414,6 +414,105 @@ The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\
 \end{equation}
 Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ in SI units, and $\chi_i$ accounts for the finite ion size; $\chi_i\to1$ as $\kappa_{\mathrm D}d_i^{\mathrm{DH}}\to0$, which recovers the Debye--H\"uckel limiting law.
 
+\FloatBarrier
+\section{Transfer of the workflow to MDEA}\label{sec:s-mdea-transfer}
+% P:supplement-mdea-01
+The MDEA calculation retains the shared MEA species parameters and fits nine MDEA-specific coordinates jointly, after declaring species, reactions and data roles.
+The lowest fitted cost among candidates passing the phase gate selects A3 for the single-sphere \ce{MDEAH+} convention (Variant A) and B1 for the charged-molecule convention (Variant B), before outside-fit pressure assessment.
+Table~\ref{tab:mdea-endpoints} gives the selected endpoints; AARD denotes average absolute relative deviation.
+The pre-registered limit applies only to the 88 Ermatchkov pressures at no more than 49 wt\% MDEA.
+Their different active bounds prevent attributing the different test outcomes solely to the cation representation.
+
+\begin{table}[htbp]
+\caption{Selected MDEA endpoints: B1 passes the 24.2\,\% outside-fit pressure limit and A3 fails. Phase counts refer to state records, including repeated physical states for different observables.}
+\label{tab:mdea-endpoints}
+\centering
+\begin{tabular}{lrr}
+\toprule
+Quantity & A3 & B1 \\
+\midrule
+Fitted cost & 403.7 & 374.5 \\
+Active bounds & 4 & 2 \\
+Ermatchkov AARD (\%) & 26.21 & 19.15 \\
+Pressure test & Fail & Pass \\
+Phase state records & 760 & 760 \\
+Dense liquid splits & 0 & 0 \\
+Gas states & 39 & 37 \\
+Reconstruction trials & 0 & 0 \\
+Other unresolved states & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% P:supplement-mdea-02
+The phase gate distinguishes dense splitting from gas evolution using a packing-fraction threshold of 0.10; unresolved or ambiguous trials prevent passage.
+No dense split is detected for either selected endpoint in this finite search; this is numerical verification, not physical validation of phase behavior.
+Table~\ref{tab:mdea-properties} separates fitted deviations from outside-fit comparisons; the latter have no additional pass limits.
+Neumann ideal-gas heat capacity is primary, and the dielectric coefficients remain frozen.
+The B\"ottinger amine sum retains all source rows; a complete relative bicarbonate deviation is undefined because one observed value is zero.
+
+\begin{longtable}{p{0.60\linewidth}rrr}
+\caption{MDEA property AARDs (\%) for the selected endpoints. Row counts identify the observations in each comparison.}\label{tab:mdea-properties}\\
+\toprule
+Property and data role & Rows & A3 & B1 \\
+\midrule
+\endfirsthead
+\toprule
+Property and data role & Rows & A3 & B1 \\
+\midrule
+\endhead
+Kuranov total pressure, fitted & 69 & 20.17 & 21.11 \\
+Jakobsen speciation ratios, fitted & 16 & 13.5 & 13.79 \\
+Carson integral heat, fitted & 40 & 5.531 & 4.834 \\
+Merkley capped heat, fitted & 4 & 8.542 & 8.508 \\
+Weiland heat capacity, fitted & 33 & 3.354 & 2.656 \\
+Weiland loaded density, fitted & 33 & 0.2012 & 0.1832 \\
+Sobrino density, fitted & 24 & 0.05682 & 0.05677 \\
+Kim bubble pressure, fitted & 61 & 3.224 & 3.23 \\
+Hsieh permittivity, frozen coefficients & 30 & 4.194 & 4.195 \\
+Ermatchkov above 49 wt\%, extrapolation & 13 & 54.99 & 28.35 \\
+Ermatchkov below 7 kPa, outside fit & 33 & 37.12 & 16.84 \\
+Primary pressure set below 7 kPa, outside fit & 29 & 33.48 & 16.12 \\
+Corrected Kamps pressure, outside fit & 28 & 18.31 & 25.65 \\
+B\"ottinger amine sum, 5 bar, outside fit & 58 & 7.195 & 7.214 \\
+B\"ottinger amine sum, 25 bar, outside fit & 58 & 7.195 & 7.214 \\
+Weiland heat capacity, 60 wt\%, extrapolation & 6 & 13.43 & 10.73 \\
+Weiland density, 60 wt\%, extrapolation & 11 & 1.318 & 1.798 \\
+Zheng integral heat, outside fit & 6 & 18.72 & 22.64 \\
+Sedighi total pressure, outside fit & 15 & 80.12 & 74.53 \\
+Merkley 60 wt\%, extrapolation & 2 & 25.7 & Unavailable \\
+\bottomrule
+\end{longtable}
+
+% P:supplement-mdea-03
+For the fitted Merkley heat observations at 20 and 40 wt\% MDEA, the final loading is the smaller of the digitized source loading and the model saturation loading at \SI{1121}{\kilo\pascal}.
+Table~\ref{tab:mdea-cap} shows this cap at the fitted temperatures; loadings are mol \COtwo/mol analytical MDEA, with digitization uncertainty $\pm0.02$ mol/mol.
+The saturation search covers 30 points over 0.05--1.50 mol/mol; uniqueness within that search does not exclude unsampled paired roots or tangencies, and the gradient is unavailable exactly at the cap switch.
+
+\begin{table}[htbp]
+\caption{Saturation caps for the fitted Merkley heats. The heat endpoint is the lesser of source and saturation loadings.}
+\label{tab:mdea-cap}
+\centering
+\begin{tabular}{rrrrr}
+\toprule
+$T$ (K) & MDEA (wt\%) & Source & A3 saturation & B1 saturation \\
+\midrule
+333.15 & 20 & 1.009 & 1.013 & 1.020 \\
+333.15 & 40 & 0.941 & 0.9006 & 0.9197 \\
+388.71 & 20 & 0.587 & 0.4574 & 0.4532 \\
+388.71 & 40 & 0.360 & 0.2887 & 0.2581 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% P:supplement-mdea-04
+The result is conditional calibration plus outside-fit assessment, verified numerically, within 293.15--\SI{395}{\kelvin} and no more than 49 wt\% MDEA for the pressure test or 50 wt\% for other properties.
+The dielectric law above \SI{328.15}{\kelvin} is assumed, and 60 wt\% comparisons are extrapolations.
+B1 has two bound-active parameters, the bicarbonate follow-up is unavailable, and no universal shared-ion parameter claim follows.
+The B1 native heat at \SI{333.15}{\kelvin} and 60 wt\% is unavailable, so a complete two-row heat AARD is not reported.
+Nitrogen headspace is not modeled; there is no external benchmark or absorber qualification.
+The cross-amine refit is distinct from the concentration non-transfer of the fixed MEA parameter set.
+
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
 \end{document}
