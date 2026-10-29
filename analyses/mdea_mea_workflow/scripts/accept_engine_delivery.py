@@ -1,5 +1,8 @@
 """Issue 222 downstream acceptance before the saturation-capped refits."""
+import os
+for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'):os.environ[key]='1'
 import importlib.util
+import importlib.metadata
 import sys
 import json
 from pathlib import Path
@@ -27,7 +30,7 @@ def identity():
         for name in z.namelist():
             if name.startswith(('epcsaft/','epcsaft.libs/')) and not name.endswith('/'):
                 assert z.read(name)==(Path(s.p.epcsaft.__file__).parent.parent/name).read_bytes(),name
-    n.write('runtime.json',dict(engine_commit=COMMIT,wheel=str(wheel),wheel_sha256=SHA,module=s.p.epcsaft.__file__,installed_files_byte_identical=True,github_digest='sha256:'+SHA,github_tag_target=COMMIT,engine_reading_clone_commit='7f2a1d7d24b79970ab5fe8b0bbc159ede553de31',workers=16,BLAS_threads_per_process=1))
+    n.write('runtime.json',dict(engine_commit=COMMIT,wheel=str(wheel),wheel_sha256=SHA,module=s.p.epcsaft.__file__,installed_files_byte_identical=True,python=sys.version,packages={name:importlib.metadata.version(name) for name in ('epcsaft','numpy','scipy','matplotlib','pandas')},github_digest='sha256:'+SHA,github_tag_target=COMMIT,engine_reading_clone_commit='7f2a1d7d24b79970ab5fe8b0bbc159ede553de31',workers=16,BLAS_threads_per_process=1))
 
 def phases():
     summaries={}

@@ -37,7 +37,7 @@ def coordinates(params,doc,variant):
         dict(targets=[('born_diameter',H,1.)],origin=comp('born_diameter'),scale=.1,bounds=(2.,7.))]
     return [reg.coordinate(params,q['targets'],origin=q['origin'],scale=q['scale'],bounds=q['bounds']) for q in declarations],declarations
 
-def objective(params):
+def objective(params, *, capped_merkley=False):
     metadata,items,weights=[],[],[]
     def add(group,row,item,weight=1.):metadata.append(dict(group=group,row=row,weight=weight,observed=item.observed,scale=item.scale));items.append(item);weights.append(weight)
     for r in rows('Kuranov_1996_CO2_MDEA_total_pressure.csv'):
@@ -57,7 +57,12 @@ def objective(params):
     loading={(r['temperature_K'],r['MDEA_mass_percent']):float(r['alpha_LP_mol_CO2_per_mol_MDEA']) for r in rows('Merkley1987_loading_points.csv')}
     for r in rows('Merkley1987_stage1.csv'):
         if float(r['MDEA_mass_percent'])>40 or float(r['temperature_K']) not in (333.15,388.71):continue
-        heat('Merkley',r,float(r['temperature_K']),float(r['proposed_pressure_kPa'])*1000,float(r['MDEA_mass_percent'])/100,loading[(r['temperature_K'],r['MDEA_mass_percent'])],float(r['heat_kJ_mol_CO2'])*1000)
+        T,P,w=float(r['temperature_K']),float(r['proposed_pressure_kPa'])*1000,float(r['MDEA_mass_percent'])/100
+        alpha=loading[(r['temperature_K'],r['MDEA_mass_percent'])];obs=float(r['heat_kJ_mol_CO2'])*1000
+        if capped_merkley:
+            add('Merkley',r,reg.saturation_capped_addition_enthalpy(params,problem(T,P,water(w),0.),problem(T,P,water(w),.5,True),{C:1.},basis_amount=1.,loading_cap=alpha,loading_bounds=(.05,1.5),loading_grid=[.05*i for i in range(1,31)],T=T,P=P,phase='vapor',observed=obs,form='difference',scale=max(3000.,.05*abs(obs))))
+        else:
+            heat('Merkley',r,T,P,w,alpha,obs)
     for r in rows('Weiland1997_stage1.csv'):
         w=float(r['MDEA_mass_fraction']);alpha=float(r['loading'])
         if w>.5:continue
