@@ -174,7 +174,20 @@ No fitting, Engine calculations or hold-out scoring took place.
 Source additions/attachments were authorized for Ayad, Pakravesh SI, Ciftja
 2014 and the selected pressure campaign in #229. No other source acquisition,
 deletions or bibliography refresh was performed. Numerical Build remains
-**Block** pending the unresolved gates and the independent readiness re-check.
+**Block** pending the unresolved gates.
+
+Independent GPT-6 Astra readiness re-check, 2026-10-29, reviewed source-preparation
+head `659801a18e4b02de9063c82e9e6261dff5fc70cc` against scoping base
+`ea77804d1761745f0910815c2373aad8bb28aa26`. It confirmed the 24 Hamborg and
+51 Kundu transcriptions, derived Hamborg residuals, pure-AMP parameter values,
+units and association scheme, and all five retained PDF identities. Its verdict
+is **Block for numerical Build**: the neutral convention/reference/tolerances,
+executable protonation law and standard-state mapping, thermodynamic carbamate
+law and representation, and admitted preparation inputs remain unresolved.
+The existing later joint-fitting gates remain unchanged. The one source-claim
+correction was applied: independence from the eventual Hartono calibration
+packet is still to be verified, rather than supported by an unrecorded apparatus
+comparison. Kundu remains a candidate whole-campaign hold-out.
 
 ## PZ and blend outline
 

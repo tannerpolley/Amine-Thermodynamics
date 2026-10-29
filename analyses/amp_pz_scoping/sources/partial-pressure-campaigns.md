@@ -29,10 +29,9 @@ if a temperature/composition restriction is adopted later, record it before
 fitting and keep the unused rows outside model selection.
 
 Its temperatures lie within the measured Hamborg range, and its 30 mass%
-stock overlaps the intended AMP solvent. Independence from the proposed
-Hartono calibration measurements is supported by different authors and source
-apparatus descriptions, not by random row splitting. A cross-paper duplicate
-check is still required on the eventual calibration packet. The 51 table rows
+stock overlaps the intended AMP solvent. Kundu reports its own experimental campaign and is recommended as a candidate whole-campaign hold-out. Independence from the eventual Hartono calibration packet remains to be verified when its source rows and measurement provenance are admitted.
+
+A cross-paper duplicate check is still required on the eventual calibration packet. The 51 table rows
 are observations, not 51 statistically independent experiments.
 
 The ±2% statement concerns solubility/loading. It must not be used as a 2%
