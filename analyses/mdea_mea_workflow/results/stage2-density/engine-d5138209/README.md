@@ -32,8 +32,9 @@ records, including repeated physical states for different observations.
 | Trials exceeding 1e-8 relative change | 11 | 10 |
 
 The largest absolute energy change is below the clarified 1e-10 limit.
-All classifications are unchanged; both searches pass. Relative error near
-zero is retained as diagnostic context and is not the acceptance criterion.
+All classifications are unchanged; both searches pass. Relative errors near
+zero show the effect of small denominators. Acceptance uses absolute energy
+differences.
 Per-trial before/after evidence is in `{A1,B1}/acceptance.json`. Full searches
 are in `{A1,B1}/phase.json.gz`; raw and compressed hashes are registered in
 `../../compressed-evidence.json`.
