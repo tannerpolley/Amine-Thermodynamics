@@ -901,34 +901,126 @@
     374.45201342368006
   ],
   "iteration_seconds": [
-    5.1021575927734375e-05,
-    5.406260013580322,
-    14.612496137619019,
-    9.848047018051147,
-    14.903084993362427,
-    6.548329830169678,
-    10.529371976852417,
-    16.41465401649475,
-    18.789467096328735,
-    6.972062826156616,
-    8.176671981811523,
-    7.038232088088989,
-    8.635854005813599,
-    8.21915888786316,
-    7.871738910675049,
-    7.742246866226196,
-    7.631860017776489,
-    7.5816810131073,
-    8.169802188873291,
-    8.215883016586304,
-    8.151736974716187,
-    7.998149871826172,
-    8.347636938095093,
-    8.164025068283081
+    7.700920104980469e-05,
+    5.66040301322937,
+    13.529237031936646,
+    9.736556053161621,
+    10.781311988830566,
+    6.617063999176025,
+    10.911616086959839,
+    18.111599922180176,
+    19.119784116744995,
+    6.8190741539001465,
+    9.447345972061157,
+    11.32416820526123,
+    16.48697590827942,
+    13.917727947235107,
+    14.480570077896118,
+    14.767132043838501,
+    10.206138849258423,
+    8.31800103187561,
+    9.065351009368896,
+    9.142809867858887,
+    8.869937181472778,
+    8.551687955856323,
+    9.341952085494995,
+    9.845097064971924
   ],
   "trial_failures": 6,
   "residual_evaluations": 24,
   "jacobian_evaluations": 17,
+  "reactions": {
+    "aqueous": [
+      {
+        "name": "R1",
+        "stoichiometry": {
+          "water": -2.0,
+          "hydronium-cation": 1.0,
+          "hydroxide-anion": 1.0
+        },
+        "correlation": {
+          "a": 3.7290977365566675,
+          "b": -13445.9,
+          "c": -22.4773,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 395.0,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution"
+        }
+      },
+      {
+        "name": "R2",
+        "stoichiometry": {
+          "carbon-dioxide": -1.0,
+          "water": -2.0,
+          "bicarbonate-anion": 1.0,
+          "hydronium-cation": 1.0
+        },
+        "correlation": {
+          "a": 23.585516142096935,
+          "b": -11928.056737463849,
+          "c": -36.7816,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 293.15,
+          "temperature_max": 395.0,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "reference": {
+          "source_basis": "CommonMolalityInfiniteDilution"
+        }
+      },
+      {
+        "name": "R3",
+        "stoichiometry": {
+          "water": -1.0,
+          "bicarbonate-anion": -1.0,
+          "carbonate-anion": 1.0,
+          "hydronium-cation": 1.0
+        },
+        "correlation": {
+          "a": 12.145792981306897,
+          "b": -12431.7,
+          "c": -35.4819,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 273.15,
+          "temperature_max": 395.0,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1"
+        },
+        "reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution"
+        }
+      },
+      {
+        "name": "MDEA-dissociation",
+        "stoichiometry": {
+          "protonated-methyldiethanolamine": -1,
+          "water": -1,
+          "methyldiethanolamine": 1,
+          "hydronium-cation": 1
+        },
+        "correlation": {
+          "a": -16.398914976729678,
+          "b": -819.7,
+          "c": 10.976,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 278.0,
+          "temperature_max": 395.0,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        }
+      }
+    ]
+  },
   "covariance": {
     "status": "active_bound",
     "rank": 9,

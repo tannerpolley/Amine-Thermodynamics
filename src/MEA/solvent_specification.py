@@ -177,21 +177,55 @@ class SolventSpecification:
             },
         )
 
-    def fit(self):
-        declarations = self.inputs["coordinates"]
-        coords = [
-            reg.coordinate(
-                self.parameters,
-                [
-                    (family, tuple(target) if isinstance(target, list) else target, factor)
-                    for family, target, factor in q["targets"]
-                ],
-                origin=q["origin"],
-                scale=q["scale"],
-                bounds=q["bounds"],
-            )
-            for q in declarations
+    def coordinates(self):
+        coordinates = []
+        for q in self.inputs["coordinates"]:
+            kind = q.get("kind", "parameter")
+            options = {key: q[key] for key in ("origin", "scale", "bounds")}
+            if kind == "reaction_coordinate":
+                coordinate = reg.reaction_coordinate(q["name"], q["coefficient"], **options)
+            elif kind == "reaction_enthalpy_shift":
+                coordinate = reg.reaction_enthalpy_shift(q["name"], pivot_temperature=q["pivot_temperature"], **options)
+            elif kind == "parameter":
+                targets = [(f, tuple(t) if isinstance(t, list) else t, m) for f, t, m in q["targets"]]
+                coordinate = reg.coordinate(self.parameters, targets, **options)
+            else:
+                raise ValueError(f"Unsupported coordinate kind: {kind}")
+            coordinates.append(coordinate)
+        return coordinates
+
+    def fitted_reactions(self, chart):
+        reactions = copy.deepcopy(self.spec["chemistry"]["reactions"])
+        source_coordinates = [
+            q for q in self.inputs["coordinates"] if q.get("kind") in ("reaction_coordinate", "reaction_enthalpy_shift")
         ]
+        assigned = {}
+        # EvaluatedCoordinates: native reaction rows follow EOS and held-diameter rows.
+        for q, value in zip(source_coordinates, chart.physical[len(chart.active) :], strict=True):
+            if q["kind"] == "reaction_coordinate":
+                assigned.setdefault(q["name"], {})[q["coefficient"]] = value
+        fields = (
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "reference_temperature",
+            "temperature_min",
+            "temperature_max",
+            "standard_state_id",
+        )
+        for group in reactions.values():
+            for reaction in group:
+                reaction["correlation"].update(assigned.get(reaction["name"], {}))
+                if reaction["name"] in chart.reaction_laws:
+                    law = chart.reaction_laws[reaction["name"]]
+                    reaction["correlation"] = {key: getattr(law, key) for key in fields}
+        return reactions
+
+    def fit(self):
+        coords = self.coordinates()
         records = self.inputs["observations"]["fitted"]
         controls = reg.FitControls(**self.spec["optimizer"], workers=os.cpu_count())
         result = reg.fit(
@@ -224,6 +258,7 @@ class SolventSpecification:
                 "jacobian_evaluations",
             )
         }
+        report["reactions"] = self.fitted_reactions(result.chart)
         report["covariance"] = {
             key: jsonable(getattr(result.covariance, key))
             for key in (
@@ -274,10 +309,11 @@ class SolventSpecification:
                 )
                 report["trials"].append(row)
                 if t.resolved_descent:
-                    eta = math.exp(t.split_coordinates[-1]) if t.split_coordinates else float("nan")
-                    if not math.isfinite(eta):
+                    if not t.split_coordinates or not math.isfinite(t.split_coordinates[-1]):
+                        row["classification_unavailable"] = "Missing or nonfinite logarithmic packing fraction"
                         unresolved.append(row)
                         continue
+                    eta = math.exp(t.split_coordinates[-1])
                     row["packing_fraction"] = eta
                     (dense if eta >= policy["packing_fraction_threshold"] else gas).append(t.seed)
                     if policy["ambiguity_interval"][0] < eta < policy["ambiguity_interval"][1]:

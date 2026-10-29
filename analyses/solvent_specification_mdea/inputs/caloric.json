@@ -59,8 +59,8 @@
         293.0,
         423.0
       ],
-      "basis": "ideal gas; Cp = a+b*T+c*T^2+d*T^3 in J/mol/K",
-      "source": "Wangler 2018 Table 3 Eq.26 printed p.18 PDF G7ZTAJZS; restored factor T, owner decision 2026-10-28",
+      "basis": "ideal gas; Cp = sum(a_k*(T - T_ref)^k), T_ref = 313.15 K; Cp in J/(mol K); coefficients in ascending k",
+      "source": "Retained neumann_cubic from analyses/mdea_mea_workflow/results/diagnosis-unloaded-cp/summary.json; cubic approximation of Neumann et al. 2022 Eq. 5, Table 8 (Zotero CA5R9QN8), recentered at 313.15 K during input preparation",
       "enthalpy_entropy_anchor_k": 313.15,
       "anchor_basis": "h=s=0 at 313.15 K, MEA amine convention"
     }
