@@ -5,7 +5,9 @@ format: html
 
 ## Outcome and intended use
 
-Variant A fails the declared 24.2% pressure-transfer test; Variant B passes. AARD is average absolute relative deviation. The endpoints were selected by the lowest fitted cost among candidates passing the density-classified phase gate. Selection was committed in `005f79e` before any outside-fit statistic was computed.
+The declared comparison between gate-passing starts within 1% of the selected cost passes: A1's 88-row Ermatchkov AARD is 26.208496003%, versus 26.208406176% for A3. The absolute difference is 0.0000898275 percentage points, below the non-identification threshold of 2 percentage points or more. B1 has no qualifying alternative: B3 fails the phase gate, and B2 duplicates B1. This check concerns agreement of pressure predictions between starts; it does not establish identification of individual parameters. The [eligibility and comparison record](results/stage2-capped/equal-cost-starts.json) and [88 A1 row predictions](results/stage2-capped/A1/ermatchkov-88.json) retain the numerical evidence.
+
+Variant A fails the declared 24.2% pressure-transfer test; Variant B passes. AARD is average absolute relative deviation. The endpoints were selected by the lowest fitted cost among candidates passing the density-classified phase gate. Selection was committed in `005f79e` before any outside-fit statistic for the new capped endpoints was computed.
 
 | Endpoint | Cost | Ermatchkov AARD (%) | 24.2% test | Dense splits | Gas states | Reconstruction trials | Other unresolved |
 |---|---|---|---|---|---|---|---|
