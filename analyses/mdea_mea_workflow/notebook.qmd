@@ -62,7 +62,7 @@ Only the 88-row pressure statistic has a pass bar. Every other value below is co
 | Sedighi total pressure, context (15) | 80.12 | 74.53 |
 | Merkley 60 wt%, 333.15/388.71 K (2) | 25.7 | Unavailable |
 
-Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags above the source's 3% amine-balance accuracy. A complete relative bicarbonate AARD is undefined because one observed value is zero; all row-level absolute predictions remain retained. No zero row is silently removed. Xiao and Zhang remain unscored because the retained attachments contain only the first page; Derks remains unscored because temperature/basis is unresolved. Zheng uses the source loading for integral heat, with model saturation loading reported separately. Corrected Kamps never enters the follow-up criterion.
+Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags above the source's 3% amine-balance accuracy. A complete relative bicarbonate AARD is undefined because one observed value is zero; all row-level absolute predictions remain retained. No zero row is silently removed. The context section below supersedes the earlier first-page-only Xiao/Zhang status and records the Derks basis assessment. Zheng uses the source loading for integral heat, with model saturation loading reported separately. Corrected Kamps never enters the follow-up criterion.
 
 | Endpoint | Neumann Cp AARD (%) | Wangler Cp AARD (%) | Change (percentage points) | Kim RMS log ratio |
 |---|---|---|---|---|
@@ -157,3 +157,71 @@ Acceptance (a) passes: the historical A1/B1 754-state searches have zero reconst
 The [selection](results/stage2-capped/selection.json), endpoint documents, row-level predictions, native failures and phase summaries own the numerical evidence. Newly retained files above 5 MB are gzipped with raw/compressed SHA-256 hashes in [the evidence registry](results/compressed-evidence.json). The manuscript and Engine source are unchanged. Historical pre-cap results remain in their existing result directories and Git history; they are not the selected endpoints shown here.
 
 This notebook has not been independently reviewed or promoted for manuscript use.
+
+
+## Additional context sources at the frozen endpoints {#context-sources-225}
+
+Xiao's 20 equilibrium measurements give CO₂ partial-pressure AARDs of **20.40% at A3** and **28.28% at B1** at 23.5 wt% unloaded MDEA and 298.15–313.15 K.
+The source is outside the fitted datasets.
+These context comparisons change neither the 24.2% Ermatchkov criterion nor its verdict: A fails and B passes.
+No parameters were fitted and no manuscript result is revised.
+
+| Source and quantity | Rows | A3 AARD (%) | B1 AARD (%) | Conditions and disposition |
+|---|---:|---:|---:|---|
+| Xiao Table 4, CO₂ partial pressure | 20 | 20.397551 | 28.276415 | 23.5 wt%, 298.15–313.15 K, 8.1–60.8 kPa |
+| Ermatchkov primary CO₂ partial pressure, retained #222 statistic | 88 | 26.208406 | 19.146012 | ≤49 wt%; unchanged |
+| Zhang equilibrium pressure/loading | 16 conditions | Unscored | Unscored | 5 mol/L single MDEA; extrapolation; numerical loadings and conversion density unavailable |
+| Derks Table 1, species concentrations | 4 | Unscored | Unscored | 2 kmol/m³ initial MDEA; numerical temperature unavailable |
+
+For Xiao, the calculation follows the #222 bubble-state pressure path at each measured loading and uses $p_{\mathrm{CO_2}}=P y_{\mathrm{CO_2}}$.
+The logarithmic residual is $r_i=\ln(p_{i,\mathrm{model}}/p_{i,\mathrm{observed}})$; the reported AARD is $100 N^{-1}\sum_i |\exp(r_i)-1|$, rather than a percentage of logarithms.
+The mean absolute log ratios are 0.239241 at A3 and 0.354606 at B1.
+All 20 predictions are available at each endpoint, with requested equilibrium tolerances met.
+The unloaded MDEA mass fraction is the printed 0.235; the printed rounded molality 2.58 mol/kg water is retained separately.
+The experiments used CO₂/N₂ at 0.101 MPa; the model omits nitrogen, as in the Ermatchkov comparison.
+These are conditional model predictions compared with measured pressures, not absorber-use qualification.
+Source uncertainty is retained without treating it as parameter uncertainty or propagating it into an AARD confidence interval.
+
+![Frozen endpoint predictions mostly underpredict Xiao's CO₂ partial pressures across the measured loading range. Points show predictions only at measured loadings; observation error bars are the source standard uncertainties, ±0.004 mol/mol loading and 1.5% pressure. Temperature and composition uncertainties are not displayed.](results/context-sources/Xiao-pressure.png)
+
+The same #222 phase search was applied to each scored bubble state: reacting liquid on all eight species, vapor trials on neutral species, packing-fraction threshold 0.10, and the retained ambiguity interval 0.05–0.35.
+At A3 and B1 separately, **20/20 states pass**, with **zero dense-split states, zero gas-evolution states, zero ambiguous states and zero unresolved states**.
+No support-reconstruction failures occurred.
+Gas evolution is counted separately and is not a dense-liquid failure.
+These searches provide numerical evidence for the model's phase assumption at the scored states; they do not establish experimental phase stability or exhaustive global stability.
+No phase search is claimed for unscored Zhang or Derks states.
+
+### Source identities, transcription and unavailable quantities
+
+Xiao et al. (2018), DOI 10.1016/j.jct.2018.03.020, **Table 4 and footnote, printed p.175 (PDF p.6)**, supplies all 20 rows in [the transcription](../../data/reference/MDEA/Xiao2018_context.csv).
+The full 13-page PDF is attachment **C3NAG687**, SHA-256 `7c33012580b85fc940b0efe54380ee65c1745077382c41cd8605c309171f9975`, under new parent **6H2LM5C5**.
+Old parent **WE7ZG7KW** retains first-page attachment **F3EC6J42**.
+The footnote states standard uncertainties: pressure 1.5%, temperature 0.1 K, loading 0.004 mol CO₂/mol amine, unloaded MDEA 0.1 wt%, CO₂ 0.04 wt% and molality 0.01 mol/kg water.
+The printed source-model loading and deviation columns are retained without using them as observations.
+
+Zhang et al. (2023), DOI 10.1016/j.cej.2023.143279, **§2.2 (PDF p.2), §3.3 and Figures 6–9 (PDF pp.6–8)**, specifies 5 mol/L single MDEA and equilibrium experiments at 298, 303, 313 and 323 K, each at 5, 14, 30 and 60 kPa CO₂ partial pressure.
+All 16 conditions per endpoint remain [explicitly unscored](results/context-sources/unscored-states.json).
+The equilibrium loadings are graphical, not tabulated; main Tables 1–3 contain correlation coefficients.
+The [author supplement at CNR](https://iris.cnr.it/handle/20.500.14243/439094), SHA-256 `8488f03dfdb693095b038d53c41a2ea1e8df70abc17d701d63002687498d38b1`, has four pages and supplies **Table S2, p.2**: [eight transient pure-MDEA rows](../../data/reference/MDEA/Zhang2023_context_transient.csv), including the unloaded row, with time, loading and species amounts in mol for 80 mL at 298 K.
+These are time-dependent absorption measurements, not equilibrium pressure observations.
+The paper's endpoint criterion is loading unchanged for two hours within ±0.002 C/N, with duplicate maximum deviation from the mean below 1%; Table S2 has no per-row uncertainty.
+No numerical unloaded-solvent density was found in the main paper or supplement to convert 5 mol/L to mass fraction.
+The issue's “about 57 wt%” remains a domain designation, not a substituted conversion datum.
+Every prospective Zhang comparison is **extrapolation** beyond the 49/50 wt% domain.
+No correlation-generated loadings or assumed density were substituted for observations.
+The full 10-page PDF is **DJURMPCM**, SHA-256 `b29bc0ee96ad0695b1673dd4056d1c8cc7fb9cf7a0efed98ce6393935bb2d24e`, under new parent **PYMWILJ7**; old parent **TMHPSMM9** retains first-page attachment **PU7B5G27**.
+The downloaded supplement has no Zotero attachment identity; no library item was changed.
+
+Derks et al. (2011), DOI 10.1016/j.egypro.2011.01.094, **Table 1, printed p.603 (PDF p.5)**, supplies [four rows](../../data/reference/MDEA/Derks2011_context.csv) at loadings 0, 0.11, 0.42 and 0.80 mol CO₂/mol MDEA.
+Parent **48VSQYEE**, attachment **5467GXJK**, SHA-256 `b646d4caafe53705d0b064698061f487fdc7f87d6e23908b6b31fb8029738582`, identifies the seven-page PDF.
+The initial solvent is aqueous 2 kmol/m³ MDEA, and all three species columns are concentrations per liquid volume in kmol/m³.
+Printed ± entries are retained, including zeros; the source does not state their confidence level.
+The experimental description (§2, pp.600–602), abstract and Table 1 give ambient or room temperature without a numerical value.
+Thus the volume-concentration basis is identified, but a numerical temperature and a density-based conversion to the model feed remain unavailable.
+All four rows remain unscored at both endpoints; neither 298.15 K nor a mass fraction was assumed.
+
+[Source provenance and table hashes](../../data/reference/MDEA/context-sources.json), [row predictions](results/context-sources/A3-Xiao.json), [B1 predictions](results/context-sources/B1-Xiao.json), [phase searches](results/context-sources/A3-phase.json), [B1 searches](results/context-sources/B1-phase.json), [numerical checks](results/context-sources/numerical-checks.json) and [summary](results/context-sources/summary.json) retain the evidence.
+The calculation uses the separate worktree MDEA environment and the immutable merged Engine main-d513820 wheel, SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`; installed Engine files were checked byte-for-byte against that wheel.
+Run `agent-heavy nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/score_context.py` from this worktree, then `nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/plot_context.py` for the retained-value figure.
+Pool size comes from the full CPU count, with one BLAS thread per process.
+This context section has not been independently reviewed or promoted for manuscript use.
