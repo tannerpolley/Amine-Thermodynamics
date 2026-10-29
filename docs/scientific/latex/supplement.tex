@@ -31,6 +31,7 @@
 \renewcommand{\thesection}{S\arabic{section}}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theequation}{S\arabic{equation}}
 
 \title{Supplementary Material for ``Modeling \ce{CO2} absorption in aqueous monoethanolamine with ePC-SAFT''}
 \author{Tanner W. Polley}
@@ -234,7 +235,7 @@ A Newton procedure and an Ipopt minimization use exact first and second derivati
 The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
 
 % P:supplement-08
-For each optimized trial, the tangent-plane distance $D$ is main-text Eq.~28; the multipliers refer to the existing reacting equilibrium.
+For each optimized trial, the tangent-plane distance $D$ is main-text Eq.~18; the multipliers refer to the existing reacting equilibrium.
 A donor phase $d$ with positive amounts of every supported trial species has transfer capacity $\beta_{\max}=\min_i(N_dx_{di}/w_i)$.
 The donor with greatest capacity is used.
 The transfer slope is
@@ -320,6 +321,98 @@ These are study-specific tolerances for retaining property agreement, not publis
 The loaded-density requirement admits exactly the three misses of the reported fit, so it records that outcome rather than testing it.
 
 \input{tables/acceptance_limits}
+
+\section{ePC-SAFT contribution equations}\label{sec:s-epcsaft}
+% P:supplement-epcsaft-01
+This section gives the hard-chain, dispersion, association and Debye--H\"uckel contributions to main-text Eq.~1.
+Here $\rho_N=N_{\mathrm A}\rho$ is the number density, $\mathcal I$ is the set of ions, and the hard-sphere, ion and Debye--H\"uckel diameters are those of main-text Section~2.2.
+
+\subsection{Hard-chain contribution}
+% P:supplement-epcsaft-02
+The hard-chain term, from Wertheim's first-order perturbation theory with the hard-sphere mixture expressions of Boubl\'ik and Mansoori et al., is \cite[Eqs.~A.4--A.8]{Gross2001}:
+\begin{equation}
+    a^{\mathrm{hc}}=\bar m\,a^{\mathrm{hs}}-\sum_i x_i\left(m_i^{\mathrm{seg}}-1\right)\ln g_{ii}^{\mathrm{hs}},
+    \qquad
+    \bar m=\sum_i x_im_i^{\mathrm{seg}},
+    \label{eq:hard-chain}
+\end{equation}
+\begin{equation}
+    a^{\mathrm{hs}}=\frac{1}{\zeta_0}\left[
+    \frac{3\zeta_1\zeta_2}{1-\zeta_3}
+    +\frac{\zeta_2^3}{\zeta_3\left(1-\zeta_3\right)^2}
+    +\left(\frac{\zeta_2^3}{\zeta_3^2}-\zeta_0\right)\ln\left(1-\zeta_3\right)
+    \right],
+    \label{eq:hard-sphere}
+\end{equation}
+\begin{equation}
+    g_{ij}^{\mathrm{hs}}=\frac{1}{1-\zeta_3}
+    +\frac{d_id_j}{d_i+d_j}\frac{3\zeta_2}{\left(1-\zeta_3\right)^2}
+    +\left(\frac{d_id_j}{d_i+d_j}\right)^2\frac{2\zeta_2^2}{\left(1-\zeta_3\right)^3},
+    \qquad
+    \zeta_n=\frac{\pi}{6}\rho_N\sum_i x_im_i^{\mathrm{seg}}d_i^n,
+    \quad n=0,\dots,3.
+    \label{eq:hard-sphere-contact}
+\end{equation}
+Here $d_i$ is the hard-sphere diameter, $g_{ij}^{\mathrm{hs}}$ is the hard-sphere pair distribution function at contact, and $\eta=\zeta_3$ is the packing fraction.
+
+\subsection{Dispersion contribution}
+% P:supplement-epcsaft-03
+The dispersion term is Gross and Sadowski's second-order perturbation expansion \cite[Eqs.~A.10--A.19, Table~1]{Gross2001}:
+\begin{equation}
+    a^{\mathrm{disp}}
+    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{u_{ij}}{k_BT}\sigma_{ij}^3
+    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{u_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
+    \label{eq:dispersion}
+\end{equation}
+\begin{equation}
+    C_1=\left[1+\bar m\frac{8\eta-2\eta^2}{\left(1-\eta\right)^4}
+    +\left(1-\bar m\right)\frac{20\eta-27\eta^2+12\eta^3-2\eta^4}{\left[\left(1-\eta\right)\left(2-\eta\right)\right]^2}\right]^{-1},
+    \label{eq:dispersion-compressibility}
+\end{equation}
+\begin{equation}
+    I_1=\sum_{k=0}^{6}a_k(\bar m)\,\eta^k,\qquad
+    I_2=\sum_{k=0}^{6}b_k(\bar m)\,\eta^k,\qquad
+    a_k(\bar m)=a_{0k}+\frac{\bar m-1}{\bar m}a_{1k}+\frac{\bar m-1}{\bar m}\frac{\bar m-2}{\bar m}a_{2k},
+    \label{eq:dispersion-integrals}
+\end{equation}
+where $C_1$ comes from the hard-chain compressibility, and $b_k(\bar m)$ has the same form as $a_k(\bar m)$.
+The coefficients $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are Gross and Sadowski's universal constants.
+The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and $u_{ij}$ is the pair dispersion energy of main-text Eqs.~3 and 4.
+
+\subsection{Association contribution}
+% P:supplement-epcsaft-04
+Hydrogen bonding is described by Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}:
+\begin{equation}
+    a^{\mathrm{assoc}}=\sum_i x_i\sum_{A\in i}\left(\ln X_A-\frac{X_A}{2}+\frac12\right),
+    \qquad
+    X_A=\left[1+\rho_N\sum_j x_j\sum_{B\in j}X_B\Delta^{AB}\right]^{-1},
+    \label{eq:association}
+\end{equation}
+\begin{equation}
+    \Delta^{AB}=g_{ij}^{\mathrm{hs}}\,\sigma_{ij}^3\,\kappa^{AB}\left[\exp\!\left(\frac{\epsilon^{AB}}{k_BT}\right)-1\right],
+    \label{eq:association-strength}
+\end{equation}
+where $X_A$ is the fraction of molecules $i$ not bonded at site $A$, $B$ runs over the sites on molecule $j$, and $\Delta^{AB}$ is the strength of an $A$--$B$ bond between molecules $i$ and $j$.
+The site fractions are solved at every state.
+The site scheme and the \MEA--water combining rule are given in main-text Section~2.3.
+
+\subsection{Debye--H\"uckel contribution}
+% P:supplement-epcsaft-05
+The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$ \cite[Eqs.~5, 13 and 14]{Cameretti2005}:
+\begin{equation}
+    a^{\mathrm{DH}}=-\frac{\kappa_{\mathrm D}e^2}{12\pi\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2\chi_i,
+    \qquad
+    \kappa_{\mathrm D}^2=\frac{e^2\rho_N}{\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2,
+    \label{eq:debye-huckel}
+\end{equation}
+\begin{equation}
+    \chi_i=\frac{3}{\left(\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^3}
+    \left[\frac32+\ln\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
+    -2\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
+    +\frac12\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^2\right].
+    \label{eq:debye-huckel-chi}
+\end{equation}
+Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ in SI units, and $\chi_i$ accounts for the finite ion size; $\chi_i\to1$ as $\kappa_{\mathrm D}d_i^{\mathrm{DH}}\to0$, which recovers the Debye--H\"uckel limiting law.
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
