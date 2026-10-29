@@ -67,6 +67,7 @@ if __name__=='__main__':
     retained=subprocess.check_output(['git','show',f'HEAD:analyses/mdea_mea_workflow/{r.OUT}/selection.json'],text=True)
     assert json.loads(retained)==selected,'Selection must be committed before outside-fit statistics'
     for variant,choice in selected.items():
+        if len(sys.argv)>1 and variant not in sys.argv[1:]:continue
         label=choice['label'];doc,fit=r.endpoint(label)
         summary=fitted(doc,label,fit)
         comparison=s.assess(doc,label,'Density-gated capped endpoint; conditional transfer assessment')
@@ -88,7 +89,11 @@ if __name__=='__main__':
             candidate,result=s.fit_document(doc,variant,[q['bounds'] for q in decl],folder)
             if not result['usable'] or result['status']!='converged' or result['covariance']['rank']<10:raise RuntimeError('Owner decision: non-identifiable or unusable '+folder)
             phase=s.search_document(candidate,folder)
-            if not phase['passed']:raise RuntimeError('Owner decision: follow-up phase gate '+folder)
+            if not phase['passed']:
+                if FOLLOW=='control':
+                    n.write(f'{label}/followup-comparison.json',dict(status='UNAVAILABLE',reason='Control failed the density-classified phase gate',control_cost=result['final_cost'],control_phase=phase,control_outside_fit_scored=False,owner_decision='2026-10-29 native question: retain failed control; no bicarbonate claim; continue independent assessment'))
+                    break
+                raise RuntimeError('Owner decision: follow-up phase gate '+folder)
             jac=s.np.array(result['optimizer_jacobian']).reshape(-1,10)
             correlation=float(s.np.dot(jac[:,9],jac[:,3])/(s.np.linalg.norm(jac[:,9])*s.np.linalg.norm(jac[:,3])))
             n.write(f'{folder}/correlation.json',dict(definition='Cosine correlation of weighted scaled-Jacobian columns for released coordinate and cation-water constant',correlation=correlation,non_separable=abs(correlation)>.95))
@@ -96,6 +101,7 @@ if __name__=='__main__':
             fitted(candidate,folder,result)
             n.write(f'{folder}/assessment.json',follow_summary)
         s.j.coordinates=original_coordinates
+        if not (AN/f'{r.OUT}/{label}/followup-control/assessment.json').exists():continue
         bicarbonate=s.load(f'{r.OUT}/{label}/followup-bicarbonate/assessment.json')['Ermatchkov88']['AARD_percent']
         control=s.load(f'{r.OUT}/{label}/followup-control/assessment.json')['Ermatchkov88']['AARD_percent']
         n.write(f'{label}/followup-comparison.json',dict(bicarbonate_AARD=bicarbonate,control_AARD=control,improvement_points=control-bicarbonate,margin_points=2.,meets_pressure_margin=control-bicarbonate>=2.,corrected_Kamps_excluded=True,claim='No MDEA outcome falsifies the MEA bicarbonate value; other-property retention must be assessed beside this pressure margin.'))
