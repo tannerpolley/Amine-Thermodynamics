@@ -1,0 +1,42 @@
+---
+title: "MDEA specification reproduction"
+date: 2026-10-29
+format: html
+execute:
+  enabled: false
+---
+
+The specification-driven calculations reproduce the retained B1 and A3 endpoints and the declared B1 phase-state subset in [issue #228](https://github.com/tannerpolley/Amine-Thermodynamics/issues/228). These are numerical reproduction checks against the #222 calculations. They establish neither new physical validation nor qualification for absorber use. Delivered evidence awaits independent review and investigator promotion.
+
+The shared [TOML declarations](declarations.toml) own species supports, reactions and their temperature-domain amendment, the neutral reference, seven named problem templates, observation constructors, row column maps, roles, residual scales and weights. [B1](B1.toml) and [A3](A3.toml) bind parameter, coordinate and caloric records by SHA-256. The driver expands prepared CSV rows at execution time. Preparation performs fixed source transformations; it defines no chemistry or observation constructor and imports no historical script. The generated per-row problem document was removed.
+
+| Check | Actual | Reference and acceptance | Disposition |
+|---|---|---|---|
+| R1: B1 endpoint | Cost 374.4520134237422; relative cost error 6.199485369506874e-13; largest ordered weighted-residual difference 4.546019116702382e-11 across 280 rows | Cost 374.45201342397434, relative error ≤1e-8; every residual absolute difference ≤1e-8 | Pass |
+| R2: B1 refit | Cost 374.45201342397434; maximum optimizer-coordinate difference 0; 23 iterations, usable converged termination | Relative cost error ≤1e-6; all nine coordinate differences ≤1e-5; converged termination | Pass |
+| R3: Ermatchkov | 88 rows, CO₂ partial-pressure mean absolute relative deviation 19.1460124028601% | 19.1460124028601%, difference ≤1e-6 percentage points | Pass |
+| R4: B1 phase states | 751 matching identities; 0 dense splits; same 37 gas-evolution identities; 0 ambiguous, unresolved or reconstruction cases | Exact counts and identities | Pass |
+| R5: A3 endpoint | Cost 403.7149851474161; nine coordinate declarations match, including tied diameters and A bounds | Cost 403.71498514705206, relative error ≤1e-8 | Pass |
+
+The 280 fitted observations retain eight groups: 69 Kuranov, 16 Jakobsen, 40 Carson, four Merkley, 33 heat capacities, 33 loaded densities, 24 unloaded densities and 61 Kim pressures. Their order, source rows, fixed transformations and residual definitions remain explicit. R1 and R5 use the retained endpoints. R2 uses the retained B1 start with the declared zero MDEAH⁺–water reciprocal-temperature slope, original coordinate origins, scales, bounds and target ties. The controls remain 40 maximum iterations, 2100 s maximum elapsed time, function and parameter tolerances 1e-10, and gradient tolerance 1e-8. The native termination is function tolerance reached: relative cost change 3.932338e-12 ≤1e-10. Native rank is nine; active bounds are coordinate indices 5 and 8 (zero-based). Covariance remains marked `active_bound`; it is not unrestricted parameter uncertainty.
+
+R4 includes the 745 fitted and comparison states and six formal Merkley cap states. The endpoint-bound [phase input table](inputs/phase-states.csv) preserves distinct observation identities, including physically repeated states. [Phase provenance](inputs/phase-provenance.json) binds the source files and selected loadings to B1 endpoint hash `1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d`. An initial mapping used source caps for four fitted Merkley endpoint states, producing three additional gas witnesses; comparison with the retained native state amounts identified the input error. Using the retained selected loadings restored the exact 37 identities without changing search controls or classification. The classifier decodes Engine's returned logarithmic packing fraction, with threshold 0.10 and open ambiguity interval (0.05, 0.35). The nine supplemental states from local saturation inversion are excluded. This endpoint check supplies no automatic phase coverage for another fit.
+
+[Complete phase trials](results/R4-trials.json.gz), [phase counts and identities](results/R4.json), [native fit diagnostics](results/R2.json) and [endpoint residual evidence](results/endpoint-checks.json) retain the numerical evidence. Phase trials larger than 5 MB are gzip-compressed. The standalone environment uses the merged Engine commit `d513820994a78bfe628d42fffd55b2eeab6f89bd` and wheel SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`; installed Engine files are byte-identical to the wheel. [Runtime evidence](results/runtime.json) records Python 3.13.14, NumPy 2.5.4, SciPy 1.18.1, 32 workers and one BLAS thread per worker. Root dependency pins are unchanged.
+
+The [comparison records](results/comparisons.json) retain all 432 requested comparisons: 406 available, 25 outside the declared 293.15–395 K assessment interval, and one native `CentralSolveUnavailable`. The 333.15 K, 60 wt% formal Merkley state has diagnostic loading 0.8069104066798605 mol CO₂/mol MDEA but no native capped-heat endpoint loading. Its native refusal remains unavailable despite its formal phase check. The Ermatchkov statistic is conditional outside-fit pressure assessment. Finite search coverage, accepted active bounds, unmodeled nitrogen headspace and property-specific extrapolation or unavailability remain limitations. Reproduction tolerances describe numerical agreement and do not represent experimental uncertainty.
+
+The [partial handoff](results/handoff.json) contains chemistry, named species/phase/feed declarations, calorics, runtime identity and assessment references with hashes. The fitted parameter document remains explicitly unavailable under the accepted export-scope revision and [Engine #928](https://github.com/tannerpolley/ePC-SAFT/issues/928). The missing declaration is a public serializer from the native `ParameterDocument` returned by `reg.fitted_parameters` / `_core.fitted_document` to the `epcsaft.parameters` JSON form read by `Parameters.from_json`. No local parameter-document updater or ASL column handoff was added. The required future check exports the B1 refit, reloads it and reproduces its cost within 1e-8 relative.
+
+Reproduction commands, run from this worktree with the separate uv environment:
+
+```bash
+uv venv --python 3.13 build/issue-228-venv
+uv pip install --python build/issue-228-venv/bin/python /home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl numpy==2.5.4 scipy==1.18.1 pytest
+nice -n 10 env PYTHONPATH=src build/issue-228-venv/bin/python -m pytest -q tests/test_solvent_specification.py
+nice -n 10 env PYTHONPATH=src build/issue-228-venv/bin/python analyses/solvent_specification_mdea/run.py R2
+nice -n 10 env PYTHONPATH=src build/issue-228-venv/bin/python analyses/solvent_specification_mdea/run.py R4
+nice -n 10 env PYTHONPATH=src build/issue-228-venv/bin/python analyses/solvent_specification_mdea/run.py handoff
+```
+
+The local literature shelf was absent. This work uses the accepted retained numerical references and does not claim a fresh paper audit. The notebook is not registered through the manuscript management command because the owner excluded edits to `analyses/_cse-manuscript.json`.
