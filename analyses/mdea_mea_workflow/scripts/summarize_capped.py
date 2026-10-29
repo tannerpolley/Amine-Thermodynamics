@@ -102,6 +102,10 @@ if comparison.get('control_folder')=='B1/followup-control-100':
         control_note+=" The B comparison is UNAVAILABLE under the owner's stopping rule; its control outside-fit AARD and the two-point verdict are unavailable. No further run was made."
 sv=table(['Singular-value index','A3','B1'],[[i+1,*[number(f['covariance']['singular_values'][i]) for f in fits]] for i in range(9)])
 wangler=table(['Endpoint','Neumann Cp AARD (%)','Wangler Cp AARD (%)','Change (percentage points)','Kim RMS log ratio'],[[q,number(a['fitted']['Cp']['AARD_percent']),number(a['Wangler_fitted']['Cp']['AARD_percent']),number(a['Wangler_Cp_delta_points']),number(a['fitted']['Kim']['root_mean_square_log_ratio'])] for q,a in zip(labels,assessment)])
+start_check=load('equal-cost-starts.json')
+assert start_check['passed'],'Non-identification requires an owner decision before the verdict'
+start_comparison=next(q for q in start_check['comparisons'] if q['start']=='A1' and q['selected']=='A3')
+start_note=f"The declared comparison between gate-passing starts within 1% of the selected cost passes: A1's 88-row Ermatchkov AARD is {start_comparison['AARD_percent']:.9f}%, versus {start_comparison['selected_AARD_percent']:.9f}% for A3. The absolute difference is {start_comparison['absolute_difference_points']:.10f} percentage points, below the non-identification threshold of 2 percentage points or more. B1 has no qualifying alternative: B3 fails the phase gate, and B2 duplicates B1. This check concerns agreement of pressure predictions between starts; it does not establish identification of individual parameters. The [eligibility and comparison record](results/stage2-capped/equal-cost-starts.json) and [88 A1 row predictions](results/stage2-capped/A1/ermatchkov-88.json) retain the numerical evidence."
 text='''---
 title: "MDEA transfer with saturation-capped absorption heat"
 format: html
@@ -109,7 +113,9 @@ format: html
 
 ## Outcome and intended use
 
-Variant A fails the declared 24.2% pressure-transfer test; Variant B passes. AARD is average absolute relative deviation. The endpoints were selected by the lowest fitted cost among candidates passing the density-classified phase gate. Selection was committed in `005f79e` before any outside-fit statistic was computed.
+'''+start_note+'''
+
+Variant A fails the declared 24.2% pressure-transfer test; Variant B passes. AARD is average absolute relative deviation. The endpoints were selected by the lowest fitted cost among candidates passing the density-classified phase gate. Selection was committed in `005f79e` before any outside-fit statistic for the new capped endpoints was computed.
 
 '''+primary+'''
 
