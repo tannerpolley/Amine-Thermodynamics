@@ -17,7 +17,7 @@ Stage key: (a) pure PC-SAFT; (b) unloaded VLE; (c) unloaded permittivity; (d) re
 
 A gap means no admissible dataset established by this bounded survey, not no published data. A law's methods being checked does not make its numerical coefficients ready for execution.
 
-## Paper-checked measurement datasets
+## Paper-checked measurement blocks
 
 | Subsystem; stage | Published source and exact locator | Conditions and basis | Count | Check |
 |---|---|---|---:|---|
@@ -28,8 +28,12 @@ A gap means no admissible dataset established by this bounded survey, not no pub
 
 Hsieh methods p.619 specify composition uncertainty ±1.5×10⁻4 mole fraction; Table 2 gives replicate standard deviations, not a blanket expanded uncertainty. Tong §2.3 reports loading repeatability below 1.5% and discusses systematic error; those are not a universal pressure residual scale. Ciftja separates overlapping protonation signals with pH and literature constants: split species are model-assisted, not independent NMR observations.
 
-Hamborg & Versteeg 2009 (DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV), §§experimental/theory and Tables 4, 9, 10, 16, supplies AMP and both PZ dissociation measurements on a molality standard state extrapolated to infinite dilution. The methods and tables were read; numerical law transcription/recount and correlation selection remain preparation work. They are not counted as admitted measurement datasets here.
+AMPH+ dissociation: use Hamborg & Versteeg 2009 Table 1 (p.1320), the correlation form ln K = A/T + B + C ln T in Eq.21 (p.1319), and the 24 AMP experimental runs in Table 16 (p.1325). Table 4 describes DMMEA; Eq.35/Table 15 do not provide the AMP dissociation law. The source uses hydronium, explicit water activity, and an infinite-dilution molality standard state. Transcribe the AMP measurements and establish the numerical correlation and its uncertainty before adoption. Document the mapping into the Engine reaction-reference convention, including water factors, standard pressure, direction, and temperature domain; verify source reference values and reciprocal constants for reversed reactions.
 
+Hamborg & Versteeg 2009: DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV. PZ Tables 9, 10 and 16 require an explicit group-to-reaction mapping checked against named stoichiometry; that mapping remains unresolved. These reaction-equilibrium measurements are excluded from the four measurement-block count.
+
+
+Paper-checked measurement blocks comprise Hsieh Table 2, Hsieh Table 5, Tong Table 4, and Ciftja 2011 Table 2: four blocks from three papers. Hamborg supplies separately checked reaction-equilibrium evidence and is excluded from this four-block count.
 
 ## Missing papers, unread sources and source limits
 
@@ -49,4 +53,4 @@ The DEA readiness review blocked execution for a wrong EOS family, circular reac
 
 ## Closest modeling practice read for this draft
 
-Baygi & Pahlavanzadeh 2015 (DOI 10.1016/j.cherd.2014.07.017), pure-parameter and binary/ternary VLE results, Tables 2–3: PC-SAFT pure MEA association alternatives are fitted to saturation data and binary interactions to unloaded VLE; loaded pressure is then compared without ternary fitting. That study uses ideal chemical speciation and does not establish transfer of the present Born/electrolyte model. Uyan 2015 (DOI 10.1016/j.fluid.2015.02.026), §4, Tables 1,3–4, uses explicit species activities and source reaction laws for MDEA. Wangler 2018 (DOI 10.1016/j.fluid.2017.12.033), model/parameter-estimation and results sections, fits selected ion–water interactions to osmotic coefficients and compares gas solubility/heat outside that fitted property. These papers use different fitted information and domains; none supplies an AMP acceptance tolerance. The source-family/convention checks follow that distinction; the frozen shared species, phase classifier and 24.2% proposal are repository choices, not a literature consensus. Pakravesh 2025 §2.2 and the results/conclusions compare neutral pure/binary/ternary properties across EOS families; they do not establish reactive AMP/PZ pressure or ion parameters.
+Baygi & Pahlavanzadeh 2015 (DOI 10.1016/j.cherd.2014.07.017), pure-parameter and binary/ternary VLE results, Tables 2–3: PC-SAFT pure MEA association alternatives are fitted to saturation data and binary interactions to unloaded VLE; loaded pressure is then compared without ternary fitting. That study uses ideal chemical speciation and does not establish transfer of the present Born/electrolyte model. Uyan 2015 (DOI 10.1016/j.fluid.2015.02.026), §4, Tables 1,3–4, uses explicit species activities and source reaction laws for MDEA. Wangler 2018 (DOI 10.1016/j.fluid.2017.12.033), model/parameter-estimation and results sections, fits selected ion–water interactions to osmotic coefficients and compares gas solubility/heat outside that fitted property. These papers use different fitted information and domains; none supplies an AMP acceptance tolerance. The source-family/convention checks follow that distinction; the frozen shared species and phase classifier are repository choices, not a literature consensus. No numerical AMP pressure acceptance limit is adopted. Pakravesh 2025 §2.2 and the results/conclusions compare neutral pure/binary/ternary properties across EOS families; they do not establish reactive AMP/PZ pressure or ion parameters.
