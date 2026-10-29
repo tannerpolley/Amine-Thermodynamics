@@ -1,4 +1,4 @@
-"""Issue 223 preparation only: fixed-density checks; no equilibrium solve or fitting."""
+"""Issue 223 merged-wheel preparation: fixed-density checks; no equilibrium solve or fitting."""
 import copy
 import csv
 import hashlib
@@ -15,7 +15,8 @@ OUT = Path(__file__).resolve().parent
 MAIN = Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics')
 W, M, C, MH, B, D, H, OH = IDS = ('water', 'methyldiethanolamine', 'carbon-dioxide',
     'protonated-methyldiethanolamine', 'bicarbonate-anion', 'carbonate-anion', 'proton', 'hydroxide-anion')
-EXPECTED_WHEEL = '0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804'
+EXPECTED_WHEEL = 'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'
+ENGINE_COMMIT = 'd513820994a78bfe628d42fffd55b2eeab6f89bd'
 
 def sha(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -111,10 +112,15 @@ def main():
     write('inventory.json',inventory())
     doc['preparation'] = dict(source_record_sha256=sha(OUT/'sources.json'),inventory_sha256=sha(OUT/'inventory.json'),reaction_reference=dict(solvent=W,water='pure-liquid',solutes='all other species, including MDEA and CO2, infinite dilution in water',source_basis='RawMoleFractionInfiniteDilution',pressure='system pressure'),pending_engine_issue='tannerpolley/ePC-SAFT#896',rule_grammar='Descriptive declaration; map to the merged Engine spelling without changing the scientific choice',interpretation='D1–D5 frozen; no sensitivity calculation or convention selection',same_sign_dispersion='All same-sign pairs including self excluded; omitted unlike-pair records are inactive',units='K, mol/m3, Pa; component diameters angstrom')
     write('declaration.json',doc)
+    assert sha(OUT/'declaration.json') == '8e4aa8461e0cc8d3daf9d53a16118225b89fe4d79afc5ecd3341f5ea26915494'
     placeholder=copy.deepcopy(doc)
     placeholder.pop('preparation')
-    placeholder['model_families'][-1]=dict(kind='permittivity',choice='solvent-only',provenance='Issue 223 §7 placeholder only: solvent-only = ion suppression with alpha 0, the normalized mass-weighted salt-free solvent permittivity (not the issue text\'s component-mixing rule); NOT Eq.19')
-    write('placeholder-3e83e19c.json',placeholder)
+    placeholder['model_families'][-1]=dict(kind='permittivity',choice='solvent-mole-weighting',normalization='unnormalized',solvents=[W,M],provenance='D1 literal Eq.19; D3 Hsieh Eq.3/Table 3')
+    comparison=copy.deepcopy(placeholder)
+    comparison['preparation']=doc['preparation']
+    comparison['model_families'][-1]=doc['model_families'][-1]
+    assert comparison == doc
+    write('run-document.json',placeholder)
     params=epcsaft.Parameters.from_mapping(placeholder)
     model=epcsaft.Mixture(params)
     checks={}
@@ -216,7 +222,31 @@ def main():
     prob=eq.Problem(T=T,P=1e5,feed=eq.Amounts({W:55.5084350618,M:2.,C:1.}),phases=[eq.Phase('L',support=IDS,kind='liquid')],reactions=rx,neutral_reference=eq.NeutralReference(solvent=W,standard_molality_mol_per_kg=1.,solute_molality_ratios={M:.125,C:.125,MH:.125,H:.125,B:.125,OH:.0625,D:.03125}))
     compiled=eq.compile_problem(model,prob)
     checks['admission']=dict(status='pass',species=list(params.component_ids),reaction_count=len(rx),charge_rows=compiled.charge_row_count,has_ions=compiled.has_ions,has_reaction=compiled.has_reaction,reference_basis='RawMoleFractionInfiniteDilution',reference_pressure_pa=None,meaning='System-pressure reference; native compile only, no solve',compiled_type=type(compiled).__name__)
-    write('numerical-checks.json',dict(engine_commit='3e83e19ccc771b51d8ebc038931ab25192f4c5b5',wheel_sha256=digest,module=epcsaft.__file__,installed_files_byte_identical=True,declaration_sha256=sha(OUT/'declaration.json'),placeholder_sha256=sha(OUT/'placeholder-3e83e19c.json'),checks=checks,pending_896=['Re-run prepare.py in full on the qualified merged #896 wheel (records its full commit and SHA-256)','Native dielectric values 58 and 72.5 (1e-12 absolute), density/mass independence, pure-solvent limits and zero-denominator refusal','Build the run document from declaration.json as the placeholder is built and assert that only the permittivity entry and the removed preparation block differ','Record both the frozen declaration hash and the hash of the document the run admits'],reproduction_run=False,fitting=False))
+    dielectric=[]
+    for mode,expected in [('unnormalized',58.),('solvent-normalized',72.5)]:
+        for masses in [(0.018,0.119),(0.061,0.019)]:
+            refdoc=copy.deepcopy(placeholder)
+            refdoc['model_families'][-1]['normalization']=mode
+            refdoc['correlations']=[c for c in refdoc['correlations'] if c['family']!='relative_permittivity']
+            for i,epsilon in enumerate([80.,20.]):
+                refdoc['components'][i]['fixed']['molar_mass']['value']['magnitude']=masses[i]
+                refdoc['components'][i]['coefficients'].append(dict(family='relative_permittivity',**coefficient(f'reference/{i}/epsilon',epsilon,'dimensionless')))
+            refmodel=epcsaft.Mixture(epcsaft.Parameters.from_mapping(refdoc))
+            for density in [1000.,20000.]:
+                composition=[.7,.1,0,.1,.1,0,0,0]
+                epsilon=refmodel.state(300.,rho=density,x=composition).bulk_relative_permittivity
+                assert abs(epsilon-expected)<=1e-12
+                dielectric.append(dict(normalization=mode,molar_masses=masses,rho_mol_m3=density,x=composition,native=epsilon,expected=expected))
+            for cid,epsilon in [(W,80.),(M,20.)]:
+                assert abs(refmodel.state(300.,rho=1000.,x={cid:1.}).bulk_relative_permittivity-epsilon)<=1e-12
+            try:
+                refmodel.state(300.,rho=1000.,x={MH:.5,B:.5})
+            except ValueError as error:
+                dielectric.append(dict(normalization=mode,zero_solvent_refusal=str(error)))
+            else:
+                raise AssertionError('Charged zero-solvent state was admitted')
+    checks['dielectric']=dict(status='pass',tolerance_absolute=1e-12,cases=dielectric,pure_solvent_limits='80 and 20')
+    write('repeat-checks.json',dict(engine_commit=ENGINE_COMMIT,wheel_path=str(wheel),wheel_sha256=digest,module=epcsaft.__file__,installed_files_byte_identical=True,declaration_sha256=sha(OUT/'declaration.json'),run_document_sha256=sha(OUT/'run-document.json'),document_diff_assertion='pass: only permittivity entry and removed preparation block',checks=checks,reproduction_run=False,fitting=False))
     assert all(r['status']=='pass' for r in checks.values()), checks
     print(json.dumps(checks,indent=2))
 
