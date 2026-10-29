@@ -1,0 +1,61 @@
+{
+  "source_image": "analyses/mdea_bulow_reproduction/diagnosis-gap/figure4-orange-trace.png",
+  "config": {
+    "source": "B\u00fclow 2021 Zotero E48WQBPB PDF p.6, printed p.6332, Figure 4; embedded image xref 281 (500 by 364 pixels)",
+    "units": {
+      "x": "mol CO2/mol MDEA",
+      "y": "bar (caption: CO2 partial pressure; text: system pressure)"
+    },
+    "axis": {
+      "x1_pixel": [
+        108,
+        281
+      ],
+      "x2_pixel": [
+        482,
+        281
+      ],
+      "x1_value": 0,
+      "x2_value": 1.5,
+      "y1_pixel": [
+        108,
+        281
+      ],
+      "y2_pixel": [
+        108,
+        133
+      ],
+      "y1_value": 1,
+      "y2_value": 10,
+      "x_scale": "linear",
+      "y_scale": "log10"
+    },
+    "roi": [
+      112,
+      27,
+      375,
+      279
+    ],
+    "series": [
+      {
+        "name": "373 K connected orange trace",
+        "mode": "curve",
+        "hsv_lower": [
+          8,
+          120,
+          110
+        ],
+        "hsv_upper": [
+          25,
+          255,
+          255
+        ]
+      }
+    ],
+    "uncertainty": "Axes about 1 pixel; attached markers and line thickness up to 4 pixels, about 7 percent in pressure; classification review. No independent second lane.",
+    "segmentation": "digitize.py selects the largest connected orange component within ROI; detached experimental markers removed, attached markers retained"
+  },
+  "row_count": 192,
+  "csv": "analyses/mdea_bulow_reproduction/diagnosis-gap/figure4-373.csv",
+  "overlay": "analyses/mdea_bulow_reproduction/diagnosis-gap/figure4-overlay.png"
+}
