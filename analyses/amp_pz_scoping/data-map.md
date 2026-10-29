@@ -17,7 +17,7 @@ Stage key: (a) pure PC-SAFT; (b) unloaded VLE; (c) unloaded permittivity; (d) re
 
 A gap means no admissible dataset established by this bounded survey, not no published data. A law's methods being checked does not make its numerical coefficients ready for execution.
 
-## Paper-checked measurement datasets outside the private transcription inventory
+## Paper-checked measurement blocks outside the private transcription inventory
 
 | Subsystem; stage | Published source and exact locator | Conditions and basis | Count | Check |
 |---|---|---|---:|---|
@@ -28,7 +28,9 @@ A gap means no admissible dataset established by this bounded survey, not no pub
 
 Hsieh methods p.619 specify composition uncertainty ±1.5×10⁻4 mole fraction; Table 2 gives replicate standard deviations, not a blanket expanded uncertainty. Tong §2.3 reports loading repeatability below 1.5% and discusses systematic error; those are not a universal pressure residual scale. Ciftja separates overlapping protonation signals with pH and literature constants: split species are model-assisted, not independent NMR observations.
 
-Hamborg & Versteeg 2009 (DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV), §§experimental/theory and Tables 4, 9, 10, 16, supplies AMP and both PZ dissociation measurements on a molality standard state extrapolated to infinite dilution. The methods and tables were read; numerical law transcription/recount and correlation selection remain preparation work. They are not counted as admitted measurement datasets here.
+AMPH+ dissociation: use Hamborg & Versteeg 2009 Table 1 (p.1320), the correlation form ln K = A/T + B + C ln T in Eq.21 (p.1319), and the 24 AMP experimental runs in Table 16 (p.1325). Table 4 describes DMMEA; Eq.35/Table 15 do not provide the AMP dissociation law. The source uses hydronium, explicit water activity, and an infinite-dilution molality standard state. Transcribe the AMP measurements and establish the numerical correlation and its uncertainty before adoption. Document the mapping into the Engine reaction-reference convention, including water factors, standard pressure, direction, and temperature domain; verify source reference values and reciprocal constants for reversed reactions.
+
+Hamborg & Versteeg 2009: DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV. PZ Tables 9, 10 and 16 require an explicit group-to-reaction mapping checked against named stoichiometry; that mapping remains unresolved. These reaction-equilibrium measurements are excluded from the four measurement-block count.
 
 ## CESAR-1 index entries
 
@@ -59,12 +61,12 @@ Hamborg & Versteeg 2009 (DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV), 
 | PZ–CO2–water; e | `derks_loading.csv` | 58 | molality_PZ: 0.2–0.6; temperature: 25–70 | loading; pressure_CO2 | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `dugas_table_4_5.csv` | 43 | PZ_molality: 2–12; temperature: 40–100 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; f | `ermatchkov_et_al_2003.csv` | 121 | temperature: 283.15–333.15; nominal_molality_PZ: 0.1–1.46 | moles_PZ_dissolved; moles_CO2_dissolved; moles_PZ_plus_deuterons; moles_monocarbamate; moles_bicarbamate | CESAR-1 transcription only, unchecked |
-| PZ–CO2–water; e | `hartono_table_15.csv` | 26 | temperature: 313–353 | dH_abs; dH_uncertainty; loading; loading_uncertainty | CESAR-1 transcription only, unchecked |
+| PZ–CO2–water; g | `hartono_table_15.csv` | 26 | temperature: 313–353 | dH_abs; dH_uncertainty; loading; loading_uncertainty | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; i | `hillard_PZ_Cp_concatenated.csv` | 102 | PZ_molality: 2–3.6; temperature: 39.9087–119.955 | CO2_loading; Cp_mass | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `hillard_PZ_loading_concatenated.csv` | 56 | PZ_molality: 0.9–5; temperature: 40–60 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `hillard_figure_14-3-2.csv` | 14 | temperature: 40–60 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
-| PZ–CO2–water; e | `hillard_figure_14-3-3.csv` | 30 | PZ_molality: 0.9–5 | CO2_loading; PZ_partial_pressure | CESAR-1 transcription only, unchecked |
-| PZ–CO2–water; e | `hillard_figure_14-3-4.csv` | 31 | PZ_molality: 0.9–5 | CO2_loading; PZ_partial_pressure | CESAR-1 transcription only, unchecked |
+| PZ–CO2–water; supporting PZ volatility in loaded solution | `hillard_figure_14-3-3.csv` | 30 | PZ_molality: 0.9–5 | CO2_loading; PZ_partial_pressure | CESAR-1 transcription only, unchecked |
+| PZ–CO2–water; supporting PZ volatility in loaded solution | `hillard_figure_14-3-4.csv` | 31 | PZ_molality: 0.9–5 | CO2_loading; PZ_partial_pressure | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `hillard_figure_14-5-1.csv` | 9 | temperature: 40–60 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `hillard_figure_14-5-3.csv` | 11 | temperature: 40–60 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
 | PZ–CO2–water; e | `hillard_figure_14-5-4.csv` | 11 | temperature: 40–60 | CO2_loading; CO2_partial_pressure | CESAR-1 transcription only, unchecked |
@@ -85,7 +87,11 @@ Hamborg & Versteeg 2009 (DOI 10.1021/je800897v; parent D9KXSKLR, PDF 334KGLPV), 
 | PZ–water; b | `nguyen_dissertation_2013_PZ_H2O_pressure_table_5_3_3.csv` | 5 | temperature: 50–70 | pressure_PZ; pressure_H2O | CESAR-1 transcription only, unchecked |
 | AMP–PZ–CO2–water; g | `hartono_table_18.csv` | 41 | temperature: 313–353 | dH_abs; dH_uncertainty; loading; loading_uncertainty | CESAR-1 transcription only, unchecked |
 
-Inventory total: **48 unchecked CSV entries; zero of those files checked row-for-row against an original paper**. Four separate measurement datasets above have paper-checked evidence. Parameter tables and reaction-law leads are excluded from these counts.
+`hartono_table_15.csv`: PZ–CO2–water; stage (g), absorption heat. Its headers are dH_abs and associated uncertainty/loading fields; it is not a pressure dataset.
+
+`hillard_figure_14-3-3.csv` and `hillard_figure_14-3-4.csv`: supporting PZ volatility data in loaded solution; the indexed observable is PZ partial pressure, not stage-(e) CO2 pressure.
+
+Paper-checked measurement blocks comprise Hsieh Table 2, Hsieh Table 5, Tong Table 4, and Ciftja 2011 Table 2: four blocks from three papers. Hamborg supplies separately checked reaction-equilibrium evidence and is excluded from this four-block count. The 48 CESAR-1 CSV entries remain unchecked against their original papers.
 
 ## Missing papers, unread sources and source limits
 
@@ -105,4 +111,4 @@ The DEA readiness review blocked execution for a wrong EOS family, circular reac
 
 ## Closest modeling practice read for this draft
 
-Baygi & Pahlavanzadeh 2015 (DOI 10.1016/j.cherd.2014.07.017), pure-parameter and binary/ternary VLE results, Tables 2–3: PC-SAFT pure MEA association alternatives are fitted to saturation data and binary interactions to unloaded VLE; loaded pressure is then compared without ternary fitting. That study uses ideal chemical speciation and does not establish transfer of the present Born/electrolyte model. Uyan 2015 (DOI 10.1016/j.fluid.2015.02.026), §4, Tables 1,3–4, uses explicit species activities and source reaction laws for MDEA. Wangler 2018 (DOI 10.1016/j.fluid.2017.12.033), model/parameter-estimation and results sections, fits selected ion–water interactions to osmotic coefficients and compares gas solubility/heat outside that fitted property. These papers use different fitted information and domains; none supplies an AMP acceptance tolerance. The source-family/convention checks follow that distinction; the frozen shared species, phase classifier and 24.2% proposal are repository choices, not a literature consensus. Pakravesh 2025 §2.2 and the results/conclusions compare neutral pure/binary/ternary properties across EOS families; they do not establish reactive AMP/PZ pressure or ion parameters.
+Baygi & Pahlavanzadeh 2015 (DOI 10.1016/j.cherd.2014.07.017), pure-parameter and binary/ternary VLE results, Tables 2–3: PC-SAFT pure MEA association alternatives are fitted to saturation data and binary interactions to unloaded VLE; loaded pressure is then compared without ternary fitting. That study uses ideal chemical speciation and does not establish transfer of the present Born/electrolyte model. Uyan 2015 (DOI 10.1016/j.fluid.2015.02.026), §4, Tables 1,3–4, uses explicit species activities and source reaction laws for MDEA. Wangler 2018 (DOI 10.1016/j.fluid.2017.12.033), model/parameter-estimation and results sections, fits selected ion–water interactions to osmotic coefficients and compares gas solubility/heat outside that fitted property. These papers use different fitted information and domains; none supplies an AMP acceptance tolerance. The source-family/convention checks follow that distinction; the frozen shared species and phase classifier are repository choices, not a literature consensus. No numerical AMP pressure acceptance limit is adopted. Pakravesh 2025 §2.2 and the results/conclusions compare neutral pure/binary/ternary properties across EOS families; they do not establish reactive AMP/PZ pressure or ion parameters.

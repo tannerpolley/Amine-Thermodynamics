@@ -24,7 +24,7 @@ Before any numerical work, bind the then-approved immutable merged-main Engine w
 
 Nine liquid species and five independent reactions are given in [chemistry](chemistry.md): six shared species plus AMP, AMPH+, AMPCOO−; three shared reactions plus AMP dissociation and carbamate hydrolysis. Vapor contains only H2O, CO2, AMP. Feed basis: one mole analytical AMP, source water amount, and α moles added CO2, with α in mol CO2/mol analytical AMP. Include loaded CO2 mass in density/Cp conversions. Preserve unloaded versus loaded composition basis per paper.
 
-AMPH+ dissociation: start from Hamborg & Versteeg 2009, Table 4 and Eq.35/Table 15, checked against Table 16 measurements; retain the molality/infinite-dilution basis. Carbamate hydrolysis: establish an activity-based baseline from an original source before fitting. Ciftja 2011's concentration-only apparent constant is not that baseline. Ciftja 2014 and its temperature dependence are missing. No numerical carbamate law is invented here.
+AMPH+ dissociation: use Hamborg & Versteeg 2009 Table 1 (p.1320), the correlation form ln K = A/T + B + C ln T in Eq.21 (p.1319), and the 24 AMP experimental runs in Table 16 (p.1325). Table 4 describes DMMEA; Eq.35/Table 15 do not provide the AMP dissociation law. The source uses hydronium, explicit water activity, and an infinite-dilution molality standard state. Transcribe the AMP measurements and establish the numerical correlation and its uncertainty before adoption. Document the mapping into the Engine reaction-reference convention, including water factors, standard pressure, direction, and temperature domain; verify source reference values and reciprocal constants for reversed reactions. Carbamate hydrolysis: establish an activity-based baseline from an original source before fitting. Ciftja 2011's concentration-only apparent constant is not that baseline. Ciftja 2014 and its temperature dependence are missing. No numerical carbamate law is invented here.
 
 ## Two AMPH+ representations
 
@@ -43,6 +43,8 @@ The retained MDEA notebook reports different outside-fit performance for its two
 
 ## Pure AMP and permittivity
 
+Numerical AMP model construction is blocked until the selected PC-SAFT parameter table and its defining equations are readable and verified. Check Pakravesh SI Table S1 and its cited original source, including Ayad if that is the lineage. Retain the association scheme, parameter units, association-volume convention, source domain, and a defined pure-property reproduction check. If these sources cannot establish an applicable set, return to the owner to select another published PC-SAFT set or authorize a separate neutral-parameter design. Do not substitute another SAFT family. Independently resolve the AMPCOO− representation and the thermodynamic carbamate-hydrolysis law, including temperature dependence; species detection and an apparent NMR constant do not supply these inputs.
+
 Candidate PC-SAFT source: Pakravesh & Zarei 2025, DOI [10.1021/acs.jced.4c00390](https://doi.org/10.1021/acs.jced.4c00390), §2.2 and SI Table S1. Ayad et al. 2023, JC.E.D. 68, 2789–2806 (Pakravesh ref.37), is the original-parameter-source candidate identified in the main text; the SI citation lineage must still be checked. The publisher's SI index lists an AMP 2B PC-SAFT set; verify the actual supplement and original Ayad equations before adopting values. Pakravesh Table 1 is **PρT-SAFT-HR**, a different EOS, and must not supply PC-SAFT parameters. This source distinction is a preparation blocker, as it was for DEA in #220.
 
 Fix neutral m, σ, u/k, association energy and volume after the source convention is verified. Determine whether association volume multiplies d³ or σ³. If conversion is required, use the existing MEA source-model comparison method; retain saturation pressure and saturated-liquid-density comparisons with a predeclared source-model tolerance. No conversion, new neutral fit or Engine calculation belongs to #227.
@@ -51,7 +53,7 @@ Fit the two coefficients of the adopted MEA dielectric law beforehand to Hsieh 2
 
 ## Proposed fitted coordinates
 
-Full carbamate-aware candidate: **14 joint coordinates per AMPH+ variant**, plus two dielectric coefficients fitted beforehand. This is a proposed ceiling to assess in preparation, not a claim that the available NMR identifies fourteen parameters.
+The table below lists 14 candidate coordinates, not an approved joint fit. The executable coordinate set and count remain undetermined. After verifying the calibration sources, propose the smallest set supported by distinct observable sensitivities, with source-backed fixed values or ties for the remaining quantities. Record the scaled sensitivity rank and weak combinations on calibration data before joint fitting, and require endpoint identification checks afterward. Fourteen coordinates may not proceed solely because the number of rows exceeds fourteen or an optimizer converges.
 
 | Fitted quantity | Count |
 |---|---:|
@@ -78,15 +80,13 @@ Declare starts before joint fitting: phase-admissible binary-VLE pre-fit as the 
 Proposed roles, **owner approval required before execution**:
 
 - Calibration: paper-checked AMP-water Hartono/Pappa VLE; Hsieh dielectric preparation; one complete loaded-pressure campaign from Hartono after pressure and composition bases are resolved; Ciftja 2014 NMR after original acquisition, uncertainty assessment and independence review. Keep its overlapping NMR species as measured sums. Do not also fit a law estimated from those rows as independent evidence.
-- Primary outside-fit pressure campaign: Tong 2012 Table 4, 30 mass% AMP, five isotherms. Its measured P is **total pressure**. Preserve its five zero-loading solvent baselines as binary comparisons; score the forty positive-loading rows as total bubble pressure. Counts/conditions checked against Table 4 p.43: 45 rows total, 40 loaded, 5 baselines. Do not subtract an eNRTL-calculated vapor pressure and call the remainder an independent measured CO2 partial pressure.
+- Separately reported total-pressure comparison: Tong 2012 Table 4, 30 mass% AMP, five isotherms. Its measured P is **total pressure**. Preserve its five zero-loading solvent baselines as binary comparisons; score the forty positive-loading rows as total bubble pressure. Counts/conditions checked against Table 4 p.43: 45 rows total, 40 loaded, 5 baselines. Do not subtract an eNRTL-calculated vapor pressure and call the remainder an independent measured CO2 partial pressure.
 - Supplemental outside-fit: independently verified Chen, Dash, Jahangiri and Kundu campaigns; Ciftja 2011 as earlier speciation evidence only after resolving overlap with the 2014 paper. No random row split within one campaign. High-temperature data outside reaction/source domains are reported as extrapolation, not pooled into the primary score.
 - Heat, density and Cp remain outside-fit/unscored until original datasets and caloric inputs are admitted. Arcis 2007 (DOI 10.1016/j.jct.2006.11.011) is an absorption-heat lead requiring source review. Hilliard PZ heat capacity is not AMP heat capacity.
 
 Propose bounded least squares with pressure log ratios, measured species-sum difference residuals, and source uncertainty scales recorded per group. Proposed weights: loaded-pressure 100/9, binary pressure 1, species 1, following #222 as repository precedent. NMR scales cannot be supplied from the private model or silently set to zero; freeze them after source review. Report each objective contribution. No heat/density/Cp residual is created to fill a missing stage.
 
-Proposed falsifier, needing owner approval: after freezing each fitted endpoint and its selection, the positive-loading Tong campaign must have total-pressure AARD ≤ **24.2%**, with all forty rows available and numerical/phase gates passed. This imports the MEA outside-fit level recorded in #220/#222 as an engineering comparator. It is **not** a source uncertainty, and total-pressure error is less discriminating for CO2 than partial-pressure error where solvent vapor dominates. Report temperature-stratified log errors and solvent baselines beside it; do not call a pass a validated CO2 partial-pressure model. Recommend replacing this with a genuinely independent, paper-verified partial-pressure campaign if preparation establishes one; that replacement must be owner-frozen before fitting, not selected after observing scores.
-
-AARD = (100/N) Σ |P_model/P_observed − 1|, with N=40 for this proposed loaded campaign.
+No numerical pressure acceptance limit is adopted yet. The MEA/MDEA 24.2% CO2 partial-pressure limit is not transferred to Tong total pressure. Prefer a whole, independently verified CO2 partial-pressure campaign, excluded from calibration and model selection, with an owner-approved metric and limit justified for the intended transfer assessment. Retain Tong's 40 loaded total pressures and five solvent baselines as separately reported comparisons. Freeze the primary campaign, eligible temperatures, row identities, uncertainty treatment, and acceptance limit before fitting. A primary test over all five Tong isotherms requires supported reaction-law coverage or an explicit owner-approved extrapolation test; it cannot simultaneously be described as wholly within the source domain.
 
 No other statistic becomes a pass bar without a design amendment. Failures return to Design; no retuning on Tong. NMR nonzero carbamate is a chemistry constraint, but the detection/uncertainty threshold needed for a numerical species falsifier is not yet known.
 
@@ -105,8 +105,11 @@ Use `SolventSpecification` in `src/MEA/solvent_specification.py`; do not clone t
 1. `[chemistry]` reaction groups with names, full stoichiometry, `ReactionLogPolynomial` coefficients, pivot, valid T interval and standard-state id; `reference` records with source basis and standard pressure. Neutral-reference amounts cover every declared solute, including carbamate, without importing a private constant.
 2. `[templates]` for unloaded binary bubble, loaded reactive bubble, loaded liquid and zero-loading liquid; optional initial/final heat templates only after calorics admission. Feed contains literal species ids, source water, one AMP and added CO2. Liquid/vapor supports and carbon-free zero-loading phase-search supports are explicit.
 3. `[[datasets]]` per source/observable/role: name, group, `role="calibration"` or comparison, public prepared CSV path and SHA-256, column mapping, filters, weight, constructor, kind, arguments, template and assessment-temperature domain. Inputs carry `identity` and JSON `source` metadata with original locator, units, basis, uncertainty and campaign; identities have a sortable integer in the second colon-separated field.
-4. Separate pressure entries for `pressure` (total) and native CO2 partial-pressure observable, and `amount_ratio` sums for NMR using the true total-AMP denominator, including AMPCOO−. Observations are source checked; no private CSV is used as a runtime input.
+4. Separate pressure entries for `pressure` (total) and native CO2 partial-pressure observable. Observations are source checked; no private CSV is used as a runtime input.
+
 5. Coordinate JSON referenced by the outer file with origins/scales/bounds and tied parameter targets, plus `kind="reaction_coordinate"` for the carbamate law's a offset. Optional future `reaction_enthalpy_shift` requires a declared pivot and independent caloric evidence.
+
+Preserve each paper's reported observation basis. Either compare reported mole fractions directly or retain the explicit conversion to ratios per total analytical AMP, including AMPCOO− in the denominator and propagating normalization uncertainty. Do not fit the normalized AMP+AMPH+ sum and normalized carbamate as independent observations: they are complementary. Use a nonredundant observation set compatible with the driver's scalar residuals, and document remaining correlations and uncertainty assumptions. Do not score pH-derived protonation splits as independent NMR measurements.
 
 Include `[composition]` with analytical amines, amount basis, loading denominator and pressure/temperature units; `[phase_states]` binds the prepared phase rows by path/hash; `[phase_policy]` declares ion/neutral species and the density/ambiguity classifier. These are separate from the reaction and measurement tables.
 
@@ -121,7 +124,9 @@ Include `[composition]` with analytical amines, amount basis, loading denominato
 
 ## Sequence, stop conditions and owner decisions
 
-Preparation may be proposed as a separate Build issue only after owner selection and independent review. Its endpoint is paper-verified public inputs, chemistry/reference conversions, the pure-component convention check, dielectric record, caloric availability, bounded coordinate declaration, binary initialization, native admission and the frozen primary hold-out. It does not include a joint optimizer by implication. A later owner freeze and Ready review authorize execution.
+Readiness verdict: Block for numerical Build. Continue Research/Design to resolve the pure-AMP source, AMP protonation correlation, thermodynamic carbamate law and representation, admissible calibration sources, nonredundant NMR observables, assessment domain, coordinate declaration, and primary falsifier. Source acquisition and transcription may proceed as separately authorized preparation. A numerical preparation Build issue requires settled equations, named inputs, and explicit reference checks and tolerances; it must not delegate unresolved model choices to the implementer. Joint fitting additionally requires retained preparation results, owner-frozen data roles, scales, weights, bounds and starts, and a Ready review. PZ/blend source gaps and absorber transport gaps remain later work and do not enlarge the first AMP task.
+
+Only the sources actually selected for the first AMP assessment must be transcribed before its execution; verifying all 48 indexed files is not necessary.
 
 | Open decision | Recommendation | Effect |
 |---|---|---|
@@ -129,8 +134,8 @@ Preparation may be proposed as a separate Build issue only after owner selection
 | Carbamate | Include AMPCOO−; resolve Ciftja 2014 and activity law first | Bicarbonate-only design cannot claim NMR agreement |
 | Ion convention | Assess A and B side by side; common carbamate convention | Prevents claiming MDEA determines AMP behavior |
 | Pure AMP source | Verify Pakravesh SI and original Ayad PC-SAFT; no SAFT-HR substitution | Blocks numerical declarations until verified |
-| Coordinates | Assess the proposed 14 in preparation; reduce with sourced ties if weak | No unapproved enlarged fit or implicit bounds |
-| Primary hold-out and tolerance | Prefer independent partial-pressure campaign; otherwise approve Tong total-pressure 24.2% comparator with its limitation | Must freeze before optimizer; proposal only |
+| Coordinates | Executable set and count undetermined; select the smallest supported set with sourced fixed values or ties | No unapproved enlarged fit or implicit bounds |
+| Primary hold-out and tolerance | Prefer an independently verified partial-pressure campaign; no numerical limit adopted | Must freeze before optimizer; proposal only |
 | Missing heat/Cp/density | Begin pressure/speciation assessment only; retain those property gaps | No absorber or caloric qualification claim |
 | Source preparation authority | Acquire/read missing originals in a later authorized step; none added here | No CESAR-1 data may be copied |
 
