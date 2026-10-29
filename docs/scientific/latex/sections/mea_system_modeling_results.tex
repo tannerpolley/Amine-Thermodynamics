@@ -202,6 +202,20 @@ Neumann et al.'s ternary density comparisons instead assess predictions after VL
 
 \input{tables/literature_model_comparison}
 
+\subsection{Transfer of the workflow to MDEA}\label{sec:mdea-transfer}
+% P:results-mdea-01
+A separate MDEA calculation tests transfer of the workflow by declaring the species and reactions, assigning fitting and assessment data, fitting the MDEA parameters jointly, applying a phase gate and testing pressures outside the fit.
+Water, \COtwo, \HthreeO, \Hydroxide, \HCOthree and \COthree parameters remain frozen at their MEA values; nine MDEA-specific coordinates are fitted.
+For the pre-registered test of 88 Ermatchkov pressures at no more than 49 wt\% MDEA, Variant B, with \ce{MDEAH+} represented as a charged molecule, gives AARD 19.15\,\% and passes the 24.2\,\% limit; Variant A, with a single-sphere cation, gives 26.21\,\% and fails.
+The selected fits also differ in their active bounds: four for A3 (Variant A) and two for B1 (Variant B).
+The two representations therefore give different outcomes under this test, but the comparison does not isolate representation as the cause; a new amine should test both conventions.
+
+% P:results-mdea-02
+This is conditional calibration plus outside-fit assessment, verified numerically, over 293.15--\SI{395}{\kelvin}, with no more than 49 wt\% MDEA for the pressure test and 50 wt\% for other properties.
+The dielectric temperature law above \SI{328.15}{\kelvin} is assumed, the bicarbonate follow-up is unavailable, and there is no external benchmark or absorber qualification.
+Section~S12 gives the endpoint comparisons, saturation cap and limits.
+This cross-amine calculation refits MDEA-specific parameters; it does not resolve the concentration non-transfer of the fixed MEA parameters reported above.
+
 \subsection{Domain of use}\label{sec:results-domain}
 % P:results-scope-01
 For nominal 30 wt\% MEA, the comparisons assess \COtwo partial pressure, the \ce{MEA + MEAH+} and carbamate fractions, integral heat near \SI{313}{\kelvin}, loaded density up to \SI{353.15}{\kelvin} and heat capacity at the measured states, with the deviations reported above.
