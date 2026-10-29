@@ -171,3 +171,29 @@ and retains every failure. `present.py` reads the retained summary to generate
 `comparison.csv`, `results/comparison.md` and `comparison.png`; it never evaluates the
 model. Independent delivery review remains open. No manuscript or main-checkout
 file was written.
+
+## Four declared pressure starts and complete comparison, 2026-10-29
+
+The owner authorized only the four pressure guesses reported in [Engine diagnosis #912](https://github.com/tannerpolley/Amine-Thermodynamics/issues/223#issuecomment-6488378172). The frozen interpretation, parameters, seeds, tolerance and default budgets are unchanged. All four states qualify; their original failures remain in [row-results.json](row-results.json), and the new results are in [rows-912-starts.json](rows-912-starts.json).
+
+| Row | Guess / Pa | Pressure / Pa | Difference from Engine / Pa | Equation residual | Max element / mol | Charge / mol | Phase sum | Replay relative | Vapor density / mol m⁻³ |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 11 | 1,799,100 | 2,225,195.792249 | +0.000249 | 1.99e-13 | 5.79e-15 | 1.61e-16 | 0 | 4.31e-14 | 953.88 |
+| 18 | 2,012,400 | 2,788,829.468659 | −0.000341 | 1.42e-13 | 5.49e-15 | 1.81e-16 | 2.22e-16 | 1.64e-13 | 1128.84 |
+| 50 | 1,443,100 | 2,109,226.229591 | −0.000409 | 1.14e-13 | 1.16e-14 | 1.43e-15 | 0 | 3.18e-13 | 898.43 |
+| 51 | 1,830,400 | 2,360,564.904480 | +0.000480 | 1.71e-13 | 3.96e-14 | 1.35e-15 | 0 | 2.35e-13 | 1019.65 |
+
+Compositions are nonnegative and sum to one; both phase permittivities and pressure-density derivatives are positive. The vapor densities are dilute relative to the liquid densities (51,849–53,768 mol m⁻³). The relative replay limit is 1e-8; the other listed residual and balance limits are 1e-10. Differences use the Engine pressures rounded to 0.001 Pa.
+
+| MDEA wt% | T / K | N | SI S3 ARD / % | Interval / % | Calculated ARD / % |
+|---:|---:|---:|---:|---:|---:|
+| 19 | 313 | 11 | 42.21 | 39.21–45.21 | 31.60 |
+| 19 | 333 | 7 | 24.69 | 21.69–27.69 | 17.43 |
+| 19 | 373 | 9 | 10.54 | 7.54–13.54 | 19.12 |
+| 19 | 393 | 6 | 14.78 | 11.78–17.78 | 29.45 |
+| 32.3 | 313 | 10 | 63.06 | 60.06–66.06 | 56.26 |
+| 32.3 | 333 | 9 | 42.86 | 39.86–45.86 | 30.90 |
+| 32.3 | 373 | 8 | 14.78 | 11.78–17.78 | 44.05 |
+| 32.3 | 393 | 7 | 17.77 | 14.77–20.77 | 61.32 |
+
+The [complete comparison](comparison-complete.csv) uses total pressure, Bülow Eq. 28 and the issue's ±3 percentage-point intervals. All 67 states qualify and all eight isotherms miss their intervals: **not reproduced under the declared interpretation**. This is numerical verification, not physical validation; global stability and uniqueness of the four roots were not checked. The interpretation was not changed. The remaining source and extrapolation limits below still apply.
