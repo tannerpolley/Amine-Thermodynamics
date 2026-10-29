@@ -513,7 +513,7 @@
     "caloric": "inputs/caloric.json is the single source of ideal-gas calorics. Ionic standard thermochemistry is completed by Engine from the four K(T) laws and the aqueous neutral reference; there is no independent reaction enthalpy or second absorption-heat source.",
     "reaction_direction": "K is dimensionless; correlation is natural ln K: a and c dimensionless, b in K, d in 1/K, reference_temperature and temperature limits in K; reference_pressure_pa in Pa. Negative stoichiometric coefficients are reactants; positive coefficients are products. Extent unit: mol of reaction as written. Enthalpy follows the declared K(T) law and its source_basis/standard_state_id, with Engine reference conversion; it is not an independently fitted heat.",
     "neutral_reference": "eq.NeutralReference fields: solvent (component ID), solute_molality_ratios (dimensionless), standard_molality_mol_per_kg (mol/kg solvent), species_reference (eq.SpeciesReference enum). No per-species override is declared (empty mapping); Engine uses PureLiquid for solvent and InfiniteDilution for every solute. Enum names: PureLiquid, InfiniteDilution, PureGas; no PureGas choice is used.",
-    "assessment": "Regions are prepared-row minima/maxima, not continuous validity domains. wt_percent is unloaded aqueous analytical amine mass percent using unchanged Engine molar masses; loading is mol CO2/mol analytical MDEA. AARD_percent uses available nonzero observations only and is not experimental uncertainty. Phase search covers only the retained 751 endpoint states. Native observation values are retained by row; derivative actions were not assessed by #228."
+    "assessment": "Regions are prepared-row minima/maxima, not continuous validity domains. For saturation-capped heat observations, region records requested loading caps; evaluated_region records available native endpoint loadings from the retained results. wt_percent is unloaded aqueous analytical amine mass percent using unchanged Engine molar masses; loading is mol CO2/mol analytical MDEA. AARD_percent uses available nonzero observations only and is not experimental uncertainty. Phase search covers only the retained 751 endpoint states. Native observation values are retained by row; derivative actions were not assessed by #228."
   },
   "reactions": {
     "aqueous": [
@@ -998,11 +998,11 @@
   "files": [
     {
       "path": "B1.toml",
-      "sha256": "9a3a462bf7ead033668f0b03832591645f2d40f2835401545c206b831f616880"
+      "sha256": "979461913a6a039e0a574943d8bcc585de3a6faffe38ce4546102a1272e15c92"
     },
     {
       "path": "declarations.toml",
-      "sha256": "14bb3cda608d7ef54c639112af693cf76e71bfc2ea6cfcf085da685631780daa"
+      "sha256": "a0a0719e1ba5d1af4227c0ee8ca663e5b860e6400d1ca18e9f064fb3fd25689b"
     },
     {
       "path": "inputs/caloric.json",
@@ -2098,7 +2098,7 @@
               ]
             },
             "rows": 58,
-            "available_rows": 57,
+            "available_rows": 58,
             "evaluated_region": {
               "T_K": [
                 293.15,
@@ -2138,7 +2138,7 @@
               ]
             },
             "rows": 58,
-            "available_rows": 57,
+            "available_rows": 58,
             "evaluated_region": {
               "T_K": [
                 293.15,
@@ -2390,7 +2390,7 @@
                 40.00000000000001
               ],
               "loading_mol_per_mol": [
-                0.36,
+                0.25808584895232506,
                 1.009
               ]
             },
@@ -2645,8 +2645,8 @@
                 59.99999999999999
               ],
               "loading_mol_per_mol": [
-                0.18,
-                0.18
+                0.15815614361212915,
+                0.15815614361212915
               ]
             },
             "AARD_percent": 1.3089769476000157,
@@ -3599,10 +3599,7 @@
                 0.0,
                 0.0
               ],
-              "loading_mol_per_mol": [
-                0.0,
-                0.0
-              ]
+              "loading_mol_per_mol": null
             },
             "rows": 3,
             "available_rows": 3,
@@ -3615,12 +3612,10 @@
                 0.0,
                 0.0
               ],
-              "loading_mol_per_mol": [
-                0.0,
-                0.0
-              ]
+              "loading_mol_per_mol": null
             },
             "AARD_percent": 0.9620846464576394,
+            "loading_unavailable_cause": "Undefined: analytical MDEA amount is zero for pure-water rows.",
             "unavailable": [],
             "observation": {
               "constructor": "observation",

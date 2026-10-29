@@ -129,22 +129,23 @@ elif sys.argv[1] == "handoff":
                 continue
             rows = SPEC.load_record(declaration)
             records = [retained[r["identity"]] for r in rows]
-            masses = {cid: species[cid]["molar_mass"]["value"]["magnitude"]
-                      for cid in SPEC.spec["composition"]["analytical_amines"] + ["water"]}
-            wt = [100 * float(r["amine"]) * masses["methyldiethanolamine"] /
-                  (float(r["amine"]) * masses["methyldiethanolamine"] + float(r["water"]) * masses["water"])
+            wt = [100 * float(r["amine"]) * species["methyldiethanolamine"]["molar_mass"]["value"]["magnitude"] /
+                  sum(float(r[key]) * species[cid]["molar_mass"]["value"]["magnitude"] for key, cid in (("amine", "methyldiethanolamine"), ("water", "water")))
                   for r in rows]
             values = {"T_K": [float(r["T"]) for r in rows], "wt_percent": wt,
-                      "loading_mol_per_mol": [float(r["alpha"]) for r in rows]}
-            region = {key: [min(v), max(v)] for key, v in values.items()}
+                      "loading_mol_per_mol": [float(r["alpha"]) if float(r["amine"]) else None for r in rows]}
+            region = {key: [min(v), max(v)] if None not in v else None for key, v in values.items()}
             evaluated_region = {}
             for key, column in values.items():
-                evaluated = [v for v, r in zip(column, records, strict=True) if r["status"] == "Available"]
+                if key == "loading_mol_per_mol" and declaration["constructor"] == "saturation_capped_addition_enthalpy":
+                    column = [r.get("endpoint_loading") for r in records]
+                evaluated = [v for v, r in zip(column, records, strict=True) if r["status"] == "Available" and v is not None]
                 evaluated_region[key] = [min(evaluated), max(evaluated)] if evaluated else None
-            available = [r for r in records if r["status"] == "Available" and r["observed"]]
+            available = [r for r in records if r["status"] == "Available"]
             datasets.append(dict(name=declaration["name"], role=declaration["role"], region=region,
                                  rows=len(rows), available_rows=len(available), evaluated_region=evaluated_region,
-                                 AARD_percent=relative_error_statistic(available),
+                                 AARD_percent=relative_error_statistic([r for r in available if r["observed"] != 0]),
+                                 **({"loading_unavailable_cause": "Undefined: analytical MDEA amount is zero for pure-water rows."} if None in values["loading_mol_per_mol"] else {}),
                                  unavailable=[r for r in records if r["status"] != "Available"],
                                  observation=dict(constructor=declaration["constructor"], kind=declaration["kind"])))
         properties[prop] = dict(datasets=datasets, phase_search="assessment.phase_search",
