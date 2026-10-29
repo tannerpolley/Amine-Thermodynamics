@@ -80,9 +80,26 @@ for label in labels:
     follow.append([label,number(b['Ermatchkov88']['AARD_percent']),number(corr),f.get('status','Available'),number(f['improvement_points']) if 'improvement_points' in f else 'Unavailable'])
 control_rows=[]
 for label in labels:
-    cf=load(f'{label}/followup-control/fit.json');cp=load(f'{label}/followup-control/phase-summary.json')
-    control_rows.append([label,cf['status'],number(cf['final_cost']),len(cp['liquid_witnesses']),len(cp['unresolved']),'Not computed'])
-control_table=table(['Control start','Termination','Cost','Dense split states','Unresolved states','Outside-fit AARD'],control_rows)
+    comparison=load(f'{label}/followup-comparison.json')
+    folders=[f'{label}/followup-control']
+    if comparison.get('control_folder',folders[0])!=folders[0]:folders.append(comparison['control_folder'])
+    for folder in folders:
+        cf=load(f'{folder}/fit.json');cp=load(f'{folder}/phase-summary.json')
+        budget=load(f'{folder}/compute.json')['controls']['maximum_iterations']
+        aard=number(comparison['control_AARD']) if folder==comparison.get('control_folder') and comparison.get('control_outside_fit_scored') else 'Not computed'
+        control_rows.append([label,budget,cf['status'],number(cf['final_cost']),len(cp['liquid_witnesses']),len(cp['unresolved']),aard])
+control_table=table(['Control start','Iteration limit','Termination','Cost','Dense split states','Unresolved states','Outside-fit AARD'],control_rows)
+control_note="The original B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals and cost 365.820961; its phase results describe that finite, unconverged candidate."
+comparison=load('B1/followup-comparison.json')
+if comparison.get('control_folder')=='B1/followup-control-100':
+    attempt=load(comparison['control_folder']+'/fit.json')
+    control_note+=f" The owner authorized one fresh run from the same control start with only the iteration limit raised to 100. Its termination is {attempt['status']}, cost {attempt['final_cost']:.9f}, with {attempt['trial_failures']} refused trials."
+    control_note+=f" The released MDEA–CO₂ column's cosine correlation with the cation–water column is {comparison['control_column_correlation']:.6f}; at a rejected endpoint this is a diagnostic quantity."
+    if comparison['status']=='AVAILABLE':
+        verdict='meets' if comparison['meets_pressure_margin'] else 'does not meet'
+        control_note+=f" The control AARD is {comparison['control_AARD']:.6f}%; control minus bicarbonate is {comparison['improvement_points']:.6f} percentage points, which {verdict} the declared two-point pressure margin."
+    else:
+        control_note+=" The B comparison is UNAVAILABLE under the owner's stopping rule; its control outside-fit AARD and the two-point verdict are unavailable. No further run was made."
 sv=table(['Singular-value index','A3','B1'],[[i+1,*[number(f['covariance']['singular_values'][i]) for f in fits]] for i in range(9)])
 wangler=table(['Endpoint','Neumann Cp AARD (%)','Wangler Cp AARD (%)','Change (percentage points)','Kim RMS log ratio'],[[q,number(a['fitted']['Cp']['AARD_percent']),number(a['Wangler_fitted']['Cp']['AARD_percent']),number(a['Wangler_Cp_delta_points']),number(a['fitted']['Kim']['root_mean_square_log_ratio'])] for q,a in zip(labels,assessment)])
 text='''---
@@ -152,7 +169,7 @@ The two weakest-direction bounded objective scans are retained in `local-sensiti
 
 '''+control_table+'''
 
-The B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals; its phase results describe that finite, unconverged candidate.
+'''+control_note+'''
 
 The owner's 2026-10-29 decision makes a phase-failed CO₂-control comparison unavailable: retain its endpoint, cost and gate states; do not compute its outside-fit AARD and make no bicarbonate claim for that variant. A bicarbonate-release AARD alone is context, not a verdict. A magnitude above 0.95 in the declared column correlation means the pair is non-separable. When a control passes, the declared margin is two AARD percentage points, with the other property results retained; corrected Kamps is excluded. No MDEA outcome falsifies the MEA bicarbonate value, whose MEA conditional uncertainty already spans the declared range.
 
