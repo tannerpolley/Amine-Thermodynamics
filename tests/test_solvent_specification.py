@@ -43,6 +43,7 @@ def evaluate(label):
 def test_R1_R3_R5():
     global SPEC
     records, residuals, cost = evaluate("B1")
+    assert len(SPEC.species_mapping(SPEC.spec["chemistry"]["reactions"])) == 8
     expected = json.loads((OLD / "B1/fit.json").read_text())
     errors = [abs(a - b) for a, b in zip(residuals, expected["weighted_residuals"], strict=True)]
     first = next((i for i, e in enumerate(errors) if e > 1e-8), None)

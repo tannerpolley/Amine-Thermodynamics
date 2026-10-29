@@ -16,7 +16,7 @@ for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ[variable] = "1"
 
 import epcsaft  # noqa: E402
-from MEA.solvent_specification import SolventSpecification  # noqa: E402
+from MEA.solvent_specification import SolventSpecification, relative_error_statistic  # noqa: E402
 
 AN = Path(__file__).resolve().parent
 OLD = AN.parent / "mdea_mea_workflow/results/stage2-capped/B1"
@@ -117,7 +117,39 @@ elif sys.argv[1] == "R4":
     print("R4", summary, flush=True)
 elif sys.argv[1] == "handoff":
     SPEC = SolventSpecification(AN / "B1.toml")
-    write("comparisons.json", [SPEC.prediction(r) for r in SPEC.inputs["observations"]["comparisons"]])
+    reactions = json.loads((AN / "results/R2.json").read_text())["reactions"]
+    species = SPEC.species_mapping(reactions)
+    comparisons = json.loads((AN / "results/comparisons.json").read_text())
+    retained = {r["identity"]: r for r in checks["R1"]["records"] + comparisons}
+    properties = {}
+    for prop, groups in SPEC.spec["export_property_groups"].items():
+        datasets = []
+        for declaration in SPEC.spec["datasets"]:
+            if declaration["group"] not in groups:
+                continue
+            rows = SPEC.load_record(declaration)
+            records = [retained[r["identity"]] for r in rows]
+            masses = {cid: species[cid]["molar_mass"]["value"]["magnitude"]
+                      for cid in SPEC.spec["composition"]["analytical_amines"] + ["water"]}
+            wt = [100 * float(r["amine"]) * masses["methyldiethanolamine"] /
+                  (float(r["amine"]) * masses["methyldiethanolamine"] + float(r["water"]) * masses["water"])
+                  for r in rows]
+            values = {"T_K": [float(r["T"]) for r in rows], "wt_percent": wt,
+                      "loading_mol_per_mol": [float(r["alpha"]) for r in rows]}
+            region = {key: [min(v), max(v)] for key, v in values.items()}
+            evaluated_region = {}
+            for key, column in values.items():
+                evaluated = [v for v, r in zip(column, records, strict=True) if r["status"] == "Available"]
+                evaluated_region[key] = [min(evaluated), max(evaluated)] if evaluated else None
+            available = [r for r in records if r["status"] == "Available" and r["observed"]]
+            datasets.append(dict(name=declaration["name"], role=declaration["role"], region=region,
+                                 rows=len(rows), available_rows=len(available), evaluated_region=evaluated_region,
+                                 AARD_percent=relative_error_statistic(available),
+                                 unavailable=[r for r in records if r["status"] != "Available"],
+                                 observation=dict(constructor=declaration["constructor"], kind=declaration["kind"])))
+        properties[prop] = dict(datasets=datasets, phase_search="assessment.phase_search",
+                                active_bounds="assessment.active_bounds", fitted_bounds=SPEC.inputs["coordinates"],
+                                actions="Unavailable: derivative actions not assessed in retained #228 results")
     files = [
         AN / "B1.toml",
         AN / "declarations.toml",
@@ -126,7 +158,10 @@ elif sys.argv[1] == "handoff":
         AN / "inputs/phase-provenance.json",
         AN / "inputs/parameter-caloric-provenance.json",
     ]
+    files += [AN / SPEC.spec[key]["path"] for key in ("endpoint", "coordinates", "start", "phase_states")]
+    files += [AN / d["path"] for d in SPEC.spec["datasets"]]
     files += list((AN / "results").glob("R[24]*")) + [
+        AN / "results/runtime.json",
         AN / "results/endpoint-checks.json",
         AN / "results/comparisons.json",
     ]
@@ -138,8 +173,14 @@ elif sys.argv[1] == "handoff":
                 cause="Missing public serializer from native ParameterDocument returned by reg.fitted_parameters / _core.fitted_document to epcsaft.parameters JSON read by Parameters.from_json",
                 required_check="Export the B1 refit, reload it and reproduce its cost within 1e-8 relative and R1 residuals within 1e-8 absolute",
             ),
-            reactions=json.loads((AN / "results/R2.json").read_text())["reactions"],
-            neutral_references=SPEC.spec["chemistry"]["neutral_references"],
+            species=species,
+            balance_checks=dict(species_charges="Exact match to Engine", reactions="All elements and charge conserved"),
+            conventions=SPEC.spec["export_conventions"],
+            reactions={group: [dict(r, interpretation=SPEC.spec["export_conventions"]["reaction_direction"])
+                               for r in rows] for group, rows in reactions.items()},
+            neutral_references={name: dict(r, species_reference={}, effective_species_reference={
+                cid: "PureLiquid" if cid == r["solvent"] else "InfiniteDilution" for cid in species})
+                for name, r in SPEC.spec["chemistry"]["neutral_references"].items()},
             problem_templates=SPEC.spec["templates"],
             caloric=SPEC.inputs["caloric"],
             runtime=json.loads((AN / "results/runtime.json").read_text()),
@@ -148,6 +189,7 @@ elif sys.argv[1] == "handoff":
                 kind="Numerical reproduction; calibration and conditional outside-fit assessment",
                 temperature_domain_K=[293.15, 395.0],
                 composition_basis="Prepared analytical molar feed; CO2 loading per mole MDEA",
+                properties=properties,
                 observation_policy=SPEC.spec["datasets"],
                 active_bounds=json.loads((AN / "results/R2.json").read_text())["covariance"]["active_bounds"],
                 phase_search=json.loads((AN / "results/R4.json").read_text()),
