@@ -42,7 +42,8 @@ for group,title in [('Ermatchkov_above49','Ermatchkov above 49 wt%, extrapolatio
 merkley=[]
 for label in labels:
     comp=load(f'{label}/comparisons.json')
-    selected=[r for r in comp if r['group']=='Merkley-outside' and float(r['row']['MDEA_mass_percent'])==60 and r.get('relative_error') is not None]
+    selected=[r for r in comp if r['group']=='Merkley-outside' and float(r['row']['MDEA_mass_percent'])==60 and 293.15<=float(r['row']['temperature_K'])<=395]
+    assert len(selected)==2
     merkley.append(aggregate(selected))
 metrics.append(['Merkley 60 wt%, 333.15/388.71 K (2)',*[number(q) for q in merkley]])
 metric_table=table(['Source and role','Variant A AARD (%)','Variant B AARD (%)'],metrics)
@@ -56,6 +57,7 @@ for label,fit in zip(labels,fits):
         quantity={'k_ij':'k (dimensionless)','born_diameter':'Born diameter (Å)'}.get(q['targets'][0][0],q['targets'][0][0])
         bounds.append([label,i,target,quantity,number(q['origin']+q['scale']*fit['optimizer'][i]),str(q['bounds'])])
 heatrows=[]
+heat_status={}
 for label in labels:
     comp=load(f'{label}/comparisons.json');replay=load(f'{label}/replay.json')
     for row in load(f'{label}/Merkley-caps.json'):
@@ -63,13 +65,14 @@ for label in labels:
         fitted=next((q for q in replay if q['group']=='Merkley' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key),None)
         outside=next((q for q in comp if q['group']=='Merkley-outside' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key),None)
         half=next(q for q in comp if q['group']=='Merkley-half-loading' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key)
+        heat_status[(label,*key)]=fitted['prediction']['status'] if fitted else outside.get('status')
         value=fitted['prediction']['value'] if fitted else outside.get('predicted')
         heatrows.append([label,*key,number(float(row['heat_kJ_mol_CO2'])),number(value/1000) if value is not None else 'Unavailable',number(half['predicted']/1000)])
 heat_table=table(['Endpoint','T (K)','MDEA wt%','Observed heat','Capped heat','Half-loading heat'],heatrows)
 caprows=[]
 for label in labels:
     for row in load(f'{label}/Merkley-caps.json'):
-        caprows.append([label,row['temperature_K'],row['MDEA_mass_percent'],number(row['source_loading']),number(row['saturation_loading']),number(row['selected_loading']),number(row['truncation'])])
+        caprows.append([label,row['temperature_K'],row['MDEA_mass_percent'],number(row['source_loading']),number(row['saturation_loading']),number(row['selected_loading']) if heat_status[(label,row['temperature_K'],row['MDEA_mass_percent'])]=='Available' else 'Unavailable',number(row['truncation']) if heat_status[(label,row['temperature_K'],row['MDEA_mass_percent'])]=='Available' else 'Unavailable'])
 follow=[]
 for label in labels:
     b=load(f'{label}/followup-bicarbonate/assessment.json');f=load(f'{label}/followup-comparison.json')
@@ -121,7 +124,7 @@ The Böttinger comparison uses the declared model sum HCO₃⁻ + CO₃²⁻. Th
 
 ## Saturation truncation and phase search
 
-The phase classifier was declared before refitting: packing fraction above 0.10 is dense; ambiguity near the threshold and other unresolved trials block a clean gate. Gas evolution is reported separately. Zero-loading searches use carbon-free trial supports. Each selected endpoint has 760 state records, including repeated physical states for distinct observables and six actual capped saturation endpoints. There are zero reconstruction trials, so no residual #904 ion-free recovery is needed. Full state/trial records and hashes are retained, rather than interpreting gas-like liquid seeds as liquid–liquid splitting.
+The phase classifier was declared before refitting: packing fraction above 0.10 is dense; ambiguity near the threshold and other unresolved trials block a clean gate. Gas evolution is reported separately. Zero-loading searches use carbon-free trial supports. Each selected endpoint has 760 state records, including repeated physical states for distinct observables and six formal cap states from the direct saturation diagnostic. Native heat availability is recorded separately. There are zero reconstruction trials, so no residual #904 ion-free recovery is needed. Full state/trial records and hashes are retained, rather than interpreting gas-like liquid seeds as liquid–liquid splitting.
 
 The following loadings are mol CO₂/mol analytical MDEA. A positive truncation means the native heat endpoint is below the source loading point; the 60 wt% entries are extrapolation.
 
@@ -130,6 +133,8 @@ The following loadings are mol CO₂/mol analytical MDEA. A positive truncation 
 Signed heats below are kJ/mol CO₂; negative is exothermic. Half-loading uses half the source loading point.
 
 '''+heat_table+'''
+
+At B1, the 333.15 K / 60 wt% native heat is unavailable: a sampled vapor branch is not admitted within the declared grid. The direct diagnostic finds an admitted root near 0.8069, but this does not establish the native observable's uniqueness requirement across the full grid. No complete two-row 60 wt% B AARD is reported. Its 388.71 K prediction is −64.1286 kJ/mol CO₂ against −63.3 observed.
 
 The saturation root is unique only within the declared 30-point search over 0.05–1.50 mol/mol; unsampled paired roots or tangencies can escape it. The gradient is unavailable exactly at the cap switch. Native refused optimizer trials remain in `fit.json`; the selected main fits converged despite their retained refusals. No fallback equation, downstream optimizer, or parameter-independent cap was substituted.
 
@@ -162,5 +167,5 @@ The [selection](results/stage2-capped/selection.json), endpoint documents, row-l
 This notebook has not been independently reviewed or promoted for manuscript use.
 '''
 (AN/'notebook.qmd').write_text(text)
-(OUT/'reported-statistics.json').write_text(json.dumps(dict(primary=plotted,metrics=metrics,Wangler_delta_points=[a['Wangler_Cp_delta_points'] for a in assessment],Merkley60_in_domain_AARD_percent=merkley),indent=2)+'\n')
+(OUT/'reported-statistics.json').write_text(json.dumps(dict(primary=plotted,metrics=metrics,Wangler_delta_points=[a['Wangler_Cp_delta_points'] for a in assessment],Merkley60_in_domain_AARD_percent=merkley,Merkley60_in_domain_available_rows=[sum(heat_status[(label,T,'60')]=='Available' for T in ('333.15','388.71')) for label in labels]),indent=2)+'\n')
 print('Notebook and figure prepared from retained results')
