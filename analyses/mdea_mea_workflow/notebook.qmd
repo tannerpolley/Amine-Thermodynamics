@@ -136,12 +136,13 @@ The two weakest-direction bounded objective scans are retained in `local-sensiti
 | A3 | 20.73 | 0.9939 | UNAVAILABLE | Unavailable |
 | B1 | 32.52 | -0.7357 | UNAVAILABLE | Unavailable |
 
-| Control start | Termination | Cost | Dense split states | Unresolved states | Outside-fit AARD |
-|---|---|---|---|---|---|
-| A3 | converged | 390.5 | 7 | 1 | Not computed |
-| B1 | limit_reached | 365.8 | 2 | 0 | Not computed |
+| Control start | Iteration limit | Termination | Cost | Dense split states | Unresolved states | Outside-fit AARD |
+|---|---|---|---|---|---|---|
+| A3 | 40 | converged | 390.5 | 7 | 1 | Not computed |
+| B1 | 40 | limit_reached | 365.8 | 2 | 0 | Not computed |
+| B1 | 100 | converged | 365.8 | 2 | 1 | Not computed |
 
-The B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals; its phase results describe that finite, unconverged candidate.
+The original B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals and cost 365.820961; its phase results describe that finite, unconverged candidate. The owner authorized one fresh run from the same control start with only the iteration limit raised to 100. Its termination is converged, cost 365.820958506, with 34 refused trials. The released MDEA–CO₂ column's cosine correlation with the cation–water column is 0.134571; at a rejected endpoint this is a diagnostic quantity. The B comparison is UNAVAILABLE under the owner's stopping rule; its control outside-fit AARD and the two-point verdict are unavailable. No further run was made.
 
 The owner's 2026-10-29 decision makes a phase-failed CO₂-control comparison unavailable: retain its endpoint, cost and gate states; do not compute its outside-fit AARD and make no bicarbonate claim for that variant. A bicarbonate-release AARD alone is context, not a verdict. A magnitude above 0.95 in the declared column correlation means the pair is non-separable. When a control passes, the declared margin is two AARD percentage points, with the other property results retained; corrected Kamps is excluded. No MDEA outcome falsifies the MEA bicarbonate value, whose MEA conditional uncertainty already spans the declared range.
 
