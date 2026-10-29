@@ -39,14 +39,14 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 5328b0739df6e30433340eb20bfd7132c29288f34d916007d017df5a45f968e5
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 a78755343fa631013367b73236ddbca104d37523e29b73bbc4f01b55d90c386d
-% Input: docs/scientific/latex/supplement.tex SHA256 97f19b9239266fac1c122b3f659d4d8c0182cffbf77636354e622496a46863a7
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 8e89377066e7bbeb4153a18995da5199f7a375152ffeb067dc706982bdfe84db
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 e3103d71b7bbc9e8151b5a7c244c334f0d740f8c3c48c5a38b9d0250446793bb
+% Input: docs/scientific/latex/supplement.tex SHA256 afa5b7a6a831f10dff31c377d33210282c0bb85768300b5cbc18f3da56d2ff7d
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{4pt}\centering
 \caption{Species parameters of the reported fit. Bold values were fitted: water to IAPWS-95 (\cref{sec:results-water}), the MEA dielectric coefficients to permittivities (\cref{sec:results-permittivity}) and, marked with a dagger, in the joint fit (\cref{sec:results-joint}); an asterisk marks a joint-fit value at its bound. The other joint-fit parameters are interactions in \cref{tab:interaction-matrix} and the R5 coefficient $A_5$ and R2 and R5 enthalpy shifts included in \cref{tab:reaction-equilibrium-constants}. Values are rounded to at most four decimal places; Table~\ref{supp-tab:supplement-species-parameters} gives them to eight significant figures. Ion packing diameters are $0.88\sigma$ and Debye--H\"uckel diameters equal $\sigma$; the water diameter law $\sigma_w(T)$, whose constant was fitted, and the sources of all fixed inputs are given in Section~S1. Water and MEA each have one donor and one acceptor site, with Wolbach--Sandler MEA--water cross-association; double daggers mark the \ce{CO2} values, which apply only to its induced association with water. The dielectric coefficients apply to the neutral species; the ion-region permittivity is $\varepsilon_{\mathrm{ion}}=8$. A dash marks an input the model does not use.}\label{tab:species-parameters}
 \begin{tabular}{@{}lrrrrrrrrrr@{}}
 \toprule
-Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$u/k_B$\\(K)} & \makecell[rb]{$\epsilon^{AB}/k_B$\\(K)} & $\kappa^{AB}$ & $z$ & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & $f$ & \makecell[rb]{$d_V$\\(L/mol)} & \makecell[rb]{$d_T$\\(K)} \\
+Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$\epsilon/k_B$\\(K)} & \makecell[rb]{$\epsilon^{AB}/k_B$\\(K)} & $\kappa^{AB}$ & $z$ & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & $f$ & \makecell[rb]{$d_V$\\(L/mol)} & \makecell[rb]{$d_T$\\(K)} \\
 \midrule
 \ce{CO2} & $2.0729$ & $2.7852$ & $169.21$ & $878.3249$\rlap{$^{\ddagger}$} & $0.0376$\rlap{$^{\ddagger}$} & $0$ & -- & $1$ & $1\times10^{-8}$ & $1403$ \\
 \ce{MEA} & $3.0353$ & $3.0435$ & $277.174$ & $2586.3$ & $0.0363$ & $0$ & -- & $1$ & $\mathbf{0.7310}$ & $\mathbf{1019.0803}$ \\

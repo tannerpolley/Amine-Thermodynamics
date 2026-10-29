@@ -27,15 +27,15 @@ Pressure, speciation and absorption heat therefore depend on the same reaction e
 
 \subsection{Activity-coefficient models}
 % P:introduction-03
-Liu et al.\ trace the progression from Kent--Eisenberg's ideal activity and fugacity coefficients with fitted reaction constants to Deshmukh--Mather's extended Debye--H\"uckel treatment, the interaction parameters tabulated by Weiland and co-workers, Li--Mather's Pitzer treatment, and Austgen's electrolyte non-random two-liquid (e-NRTL) model \cite{Liu1999}.
+Liu et al.\ trace the progression from Kent--Eisenberg's ideal activity and fugacity coefficients with fitted reaction constants to Deshmukh--Mather's extended Debye--H\"uckel treatment, the interaction parameters tabulated by Weiland and co-workers, Li--Mather's Pitzer treatment, and Austgen's electrolyte non-random two-liquid (eNRTL) model \cite{Liu1999}.
 In their MEA refit, Liu et al.\ warn that simultaneous estimation of the carbamate constant and interaction parameters can overfit scattered solubility data \cite{Liu1999}.
 B\"ottinger et al.\ instead refitted a Pitzer model's carbamate constant to nuclear magnetic resonance (NMR) observations after finding systematically low calculated carbamate \cite{Bottinger2008}.
-Hessen et al.'s refined e-NRTL fit included binary vapor--liquid equilibrium (VLE), freezing-point depression and excess enthalpy, and predicted speciation \cite{Hessen2010}.
+Hessen et al.'s refined eNRTL fit included binary vapor--liquid equilibrium (VLE), freezing-point depression and excess enthalpy, and predicted speciation \cite{Hessen2010}.
 Aronu et al.\ extended the concentration range to 15--60 wt\% MEA using an extended universal quasi-chemical (UNIQUAC) activity model fitted to solubility data, with NMR speciation predicted \cite{Aronu2011}.
 
 % P:introduction-04
 Joint fitting to several properties is established practice for activity models.
-Hilliard fitted e-NRTL parameters to pressure, absorption heat, heat capacity and NMR data, but 18 of 35 parameter estimates were smaller than their standard errors \cite[Tables~13.4-2--13.4-3]{Hilliard2008}.
+Hilliard fitted eNRTL parameters to pressure, absorption heat, heat capacity and NMR data, but 18 of 35 parameter estimates were smaller than their standard errors \cite[Tables~13.4-2--13.4-3]{Hilliard2008}.
 Zhang et al.\ also fitted these properties jointly; their average absolute relative deviations (AARDs) in \COtwo pressure, 13.5--35.5\,\% by source, are for data used in the fit \cite[Table~9]{Zhang2011}.
 Akula et al.\ fitted pressure and differential heat using an analytical excess-enthalpy expression, leaving speciation and heat capacity as comparisons outside the fit \cite{Akula2023a}.
 These studies establish joint fitting of pressure, speciation and caloric data, and they show that such fits can leave parameters strongly correlated or poorly determined \cite[Table~7]{Akula2023a}.
@@ -58,7 +58,7 @@ Wang et al.'s Peng--Robinson cubic-plus-association model, which also represents
 
 % P:introduction-07
 Explicit-ion models instead carry the ions as separate species with their own nonideal activities.
-MEA ions, including carbamate, appear this way in T\'ellez-Arredondo and Medeiros's electrolyte cubic two-state association model \cite{tellez-arredondoModelingCO2H2S2013} and Neumann et al.'s combined Helmholtz-energy/e-NRTL model \cite[Table~3]{neumannNewModelCombining2022}.
+MEA ions, including carbamate, appear this way in T\'ellez-Arredondo and Medeiros's electrolyte cubic two-state association model \cite{tellez-arredondoModelingCO2H2S2013} and Neumann et al.'s combined Helmholtz-energy/eNRTL model \cite[Table~3]{neumannNewModelCombining2022}.
 Najafloo et al.\ included carbamate ions of 2-((2-aminoethyl)amino)ethanol (AEEA) in electrolyte Huang--Radosz SAFT with mean spherical approximation and Born terms \cite{najaflooMeasuringSolubilityCarbon2015}.
 None of these explicit-ion models is based on PC-SAFT.
 
@@ -94,7 +94,7 @@ Fitting equilibrium, caloric and loaded-density data together therefore combines
 \subsection{Phase stability}
 % P:introduction-12
 Michelsen applies Gibbs's tangent-plane criterion before a flash calculation because the number of equilibrium phases is not known beforehand \cite{Michelsen1982}.
-Tsanas et al.\ applied reactive stability analysis to a carbamate-forming, demixing amine mixture using e-NRTL \cite{Tsanas2022}.
+Tsanas et al.\ applied reactive stability analysis to a carbamate-forming, demixing amine mixture using eNRTL \cite{Tsanas2022}.
 Perdomo et al.\ obtained liquid splits in reactive-association SAFT-\(\gamma\) Mie amine mixtures \cite[Figs.~17--18]{perdomoPredictiveGroupcontributionFramework2023}, while Ascani et al.\ searched stability in ePC-SAFT advanced for fully dissociated salts without reactions \cite[Fig.~1]{Ascani2022}.
 Perdomo et al.'s later formal tangent-plane criterion incorporates phase electroneutrality, with its derivation restricted to strong electrolytes \cite{Perdomo2025}.
 The explicit-ion ePC-SAFT amine studies reviewed here do not report a tangent-plane assessment of their parameter sets \cite{Uyan2015,Wangler2018,Cleeton2020,Bulow2021a}.
@@ -102,8 +102,11 @@ A fitting objective built from single-phase properties contains no stability con
 
 \subsection{Aim of this work}
 % P:introduction-13
-No explicit-ion ePC-SAFT treatment of MEA or its carbamate was found in the literature reviewed here.
-We ask whether one such formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous MEA.
+Polley and Hedengren coupled an explicit-ion ePC-SAFT treatment of the same nine liquid species, including \MEAH and \MEACOO, to an absorber model \cite[Sect.~2.2, App.~B]{polleyReactiveEPCSAFTModeling2026}.
+Their parameters were calibrated in separate steps to ion and speciation data, binary VLE, pressure and calorimetry; column caloric properties were empirical rather than equation-of-state derivatives \cite[App.~B]{polleyReactiveEPCSAFTModeling2026}.
+Their \MEAH segment diameter was \SI{3.48508556586}{\angstrom}, compared with \SI{5.35}{\angstrom} here \cite[Table~7]{polleyReactiveEPCSAFTModeling2026}.
+No explicit-ion ePC-SAFT treatment of MEA fitted jointly to pressure, speciation, caloric and density data was found in the literature reviewed here.
+The question is whether one such formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous MEA.
 Relative to the MDEA ePC-SAFT studies, this work adds carbamate ions and their formation reaction.
 Relative to the explicit-ion MEA models of T\'ellez-Arredondo and Medeiros and of Neumann et al., whose reacting-system parameters were adjusted to VLE data \cite{tellez-arredondoModelingCO2H2S2013,neumannNewModelCombining2022}, it adds caloric and loaded-liquid density observations to the joint estimation.
 The Born contribution follows Figiel et al.'s solvation-shell term, which accounts for dielectric saturation near the ions and was parameterized for inorganic ions at \SI{298.15}{\kelvin} \cite[Table~1]{Figiel2025}; here the Born diameters of protonated MEA and carbamate are fitted, and the term is used at other temperatures.
