@@ -138,3 +138,36 @@ imports only the installed pinned Engine and the Python standard library;
 no local environment is created. This command never solves a reactive bubble
 state or fits parameters. Source and inventory hashes, document admission,
 analytic comparisons, and derivative checks protect distinct numerical risks.
+
+## Merged-wheel run, 2026-10-28
+
+The repeat checks and primary run on Engine `d513820994a78bfe628d42fffd55b2eeab6f89bd`
+are retained in `repeat-checks.json`, `run-document.json`, `row-results.json`
+and `summary.json`. The [notebook](notebook.qmd) owns the current comparison
+and numerical limits; the earlier preparation record above remains historical.
+All repeat checks pass. The primary verdict is **inconclusive**, with 63/67
+qualified states and unresolved rows 11, 18, 50 and 51. Engine issue
+[912](https://github.com/tannerpolley/ePC-SAFT/issues/912) requests diagnosis.
+No numerical change, refitting or sensitivity run follows before the owner decision.
+
+Replay uses this worktree's `.venv-bulow`, without `uv sync` or changes to the
+root dependency files. The wheel has been gzip archived under
+`build/engine-wheels/main-d513820994a78bfe628d42fffd55b2eeab6f89bd/` to comply
+with the 5 MB retained-file limit. Before replay, decompress the `.whl.gz`
+there to restore the exact installation-source filename recorded in provenance,
+then check the `.sha256` from that directory. Keep the archive. If rebuilding
+the environment, use `uv venv --python 3.13 .venv-bulow` and `uv pip install
+--python .venv-bulow/bin/python <wheel-path>`; plotting additionally uses
+Matplotlib. Set `OPENBLAS_NUM_THREADS=1`, `OMP_NUM_THREADS=1` and
+`MKL_NUM_THREADS=1` for both commands:
+
+```bash
+nice -n 10 agent-heavy .venv-bulow/bin/python -I analyses/mdea_bulow_reproduction/prepare.py
+nice -n 10 agent-heavy .venv-bulow/bin/python analyses/mdea_bulow_reproduction/run.py
+```
+
+`run.py` uses at most 16 processes, one independent declared start per row,
+and retains every failure. `present.py` reads the retained summary to generate
+`comparison.csv`, `results/comparison.md` and `comparison.png`; it never evaluates the
+model. Independent delivery review remains open. No manuscript or main-checkout
+file was written.
