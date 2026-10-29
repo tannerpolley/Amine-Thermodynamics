@@ -261,10 +261,11 @@ def fit_document(doc,variant,bounds,folder,removed=()):
     metadata=[metadata[i] for i in keep];observations=[observations[i] for i in keep];weights=[weights[i] for i in keep]
     write(f'{folder}/declaration.json',dict(coordinates=decl,observations=metadata,removed_indices=list(removed)))
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
-    controls=dict(maximum_iterations=40,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(os.cpu_count(),max(1,available//268435456),len(keep)))
+    controls=dict(maximum_iterations=40,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(16,os.cpu_count(),max(1,available//268435456),len(keep)))
     write(f'{folder}/compute.json',dict(controls=controls,available_memory_bytes=available,BLAS_threads_per_process=1))
     result=reg.fit(params,coords,observations,weights=weights,thermochemistry=thermal,controls=reg.FitControls(**controls),singular_vectors=True)
-    record={k:p.shared._jsonable(getattr(result,k)) for k in ('status','message','usable','final_cost','physical','optimizer','predictions','weighted_residuals','iterations','iteration_costs','trial_failures')}
+    record={k:p.shared._jsonable(getattr(result,k)) for k in ('status','message','usable','final_cost','physical','optimizer','predictions','weighted_residuals','iterations','iteration_costs','trial_failures','optimizer_jacobian','physical_jacobian','residuals')}
+    record['failures']=[dict(trial=f.trial,observation=f.observation,status=f.status.name,message=f.message,jacobian=f.jacobian,optimizer=list(f.optimizer)) for f in result.failures]
     record['covariance']={k:p.shared._jsonable(getattr(result.covariance,k)) for k in ('rank','singular_values','active_bounds','right_vectors')}
     record['group_costs']={g:sum(.5*r*r for m,r in zip(metadata,result.weighted_residuals) if m['group']==g) for g in dict.fromkeys(m['group'] for m in metadata)}
     write(f'{folder}/fit.json',record)
@@ -273,7 +274,7 @@ def fit_document(doc,variant,bounds,folder,removed=()):
     print(folder,record['status'],record['final_cost'],flush=True)
     return candidate,record
 
-def comparison_items():
+def comparison_items(*, capped_merkley=False):
     # Declarations only: this function never calculates a prediction or statistic.
     global comparison_problems
     metadata,observations,comparison_problems=[],[],[]
@@ -284,7 +285,10 @@ def comparison_items():
     def heat(group,r,T,P,w,alpha,obs):
         initial,final=j.problem(T,P,j.water(w),0.),j.problem(T,P,j.water(w),alpha)
         metadata.append(dict(group=group,row=r,observed=obs))
-        observations.append(reg.addition_enthalpy(params,initial,final,{j.C:1.},alpha,T,P,phase='vapor',observed=obs,form='difference',scale=1.))
+        if capped_merkley and group=='Merkley-outside' and 293.15<=T<=395:
+            observations.append(reg.saturation_capped_addition_enthalpy(params,initial,j.problem(T,P,j.water(w),.5,True),{j.C:1.},basis_amount=1.,loading_cap=alpha,loading_bounds=(.05,1.5),loading_grid=[.05*i for i in range(1,31)],T=T,P=P,phase='vapor',observed=obs,form='difference',scale=1.))
+        else:
+            observations.append(reg.addition_enthalpy(params,initial,final,{j.C:1.},alpha,T,P,phase='vapor',observed=obs,form='difference',scale=1.))
         comparison_problems.append([initial,final])
     for r in j.rows('Ermatchkov_2006_CO2_MDEA_partial_pressure.csv'):
         m=float(r['m_MDEA_mol_per_kg_H2O']);alpha=float(r['m_CO2_mol_per_kg_H2O'])/m
