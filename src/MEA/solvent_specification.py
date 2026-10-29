@@ -100,6 +100,39 @@ class SolventSpecification:
         self.thermal = epcsaft.ThermochemistryRecord(thermal["reference_pressure_pa"], intervals)
         self.model = epcsaft.Mixture(self.parameters, thermochemistry=self.thermal)
 
+    def species_mapping(self, reactions):
+        species = {}
+        for component in self.inputs["endpoint"]["components"]:
+            cid = component["component_id"]
+            formula = self.spec["element_formulas"][cid]
+            fixed = component["fixed"]
+            if formula["charge"] != fixed["charge_number"]["value"]["magnitude"]:
+                raise ValueError(f"Formula charge differs from Engine: {cid}")
+            coverage = "ideal_gas_record" if cid in self.inputs["caloric"]["components"] else "reaction_reference_completion"
+            if coverage == "reaction_reference_completion" and not any(
+                cid in r["stoichiometry"] for g in reactions.values() for r in g
+            ):
+                raise ValueError(f"Missing caloric coverage: {cid}")
+            species[cid] = dict(
+                caloric_coverage=coverage,
+                analytical_components=self.spec["analytical_components"][cid],
+                component_id=cid, aliases=component.get("aliases", []), element_formula=formula,
+                **{key: fixed[key] for key in ("charge_number", "molar_mass")},
+                phase_supports={name: [p["name"] for p in t["phases"] if cid in p["support"]]
+                                for name, t in self.spec["templates"].items()},
+                analytical_feed_templates=[name for name, t in self.spec["templates"].items()
+                                           if cid in t["feed"]["values"]],
+            )
+        quantities = set().union(*(r["element_formula"] for r in species.values()))
+        for group in reactions.values():
+            for reaction in group:
+                for quantity in quantities:
+                    total = sum(n * species[cid]["element_formula"].get(quantity, 0)
+                                for cid, n in reaction["stoichiometry"].items())
+                    if total != 0:
+                        raise ValueError(f"Unbalanced {quantity}: {reaction['name']}: {total}")
+        return species
+
     def load_record(self, record):
         path = self.path.parent / record["path"]
         data = path.read_bytes()
