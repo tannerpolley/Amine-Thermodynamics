@@ -10,7 +10,7 @@ OUT=Path(__file__).resolve().parent
 summary=json.loads((OUT/'summary.json').read_text())
 groups=summary['isotherms']
 with (OUT/'comparison.csv').open('w',newline='') as f:
-    writer=csv.writer(f)
+    writer=csv.writer(f,lineterminator="\n")
     writer.writerow(['nominal_MDEA_wt_percent','nominal_T_K','N','qualified','Bulow_SI_S3_ARD_percent','our_ARD_percent','interval_lower_percent','interval_upper_percent','reached'])
     writer.writerows([[g['nominal_wt_percent'],g['nominal_T_K'],g['N'],g['qualified_count'],g['SI_S3_percent'],g['our_ARD_percent'],*g['interval_percent'],g['reached']] for g in groups])
 lines=['| MDEA / wt% | T / K | Qualified / N | Our ARD / % | SI S3 ARD / % | Interval / % | Disposition |','|---|---|---|---|---|---|---|']
