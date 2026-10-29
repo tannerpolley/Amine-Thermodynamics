@@ -53,7 +53,7 @@ def phases():
         errors=[abs((r['after']['quantities']['split_delta_g_over_rt']-r['before']['quantities']['split_delta_g_over_rt'])/r['before']['quantities']['split_delta_g_over_rt']) for r in changes]
         summary=s.phase_summary(records)
         summary.update(max_energy_relative_change=max(errors,default=0.),trials_exceeding_relative_1e8=sum(e>1e-8 for e in errors))
-        summary.update(states=len(records),unchanged_trials_checked=checked,changes=changes,energy_comparison='exact equality; no tolerance amendment assumed',passed_acceptance=not changes and not summary['rounding_states'])
+        summary.update(states=len(records),unchanged_trials_checked=checked,changes=changes,energy_comparison='owner clarification: absolute change <=1e-10 with classification unchanged',passed_acceptance=not summary['rounding_states'] and all(r['before']['evidence']==r['after']['evidence'] and r['before']['resolved_descent']==r['after']['resolved_descent'] and abs(r['before']['quantities']['split_delta_g_over_rt']-r['after']['quantities']['split_delta_g_over_rt'])<=1e-10 for r in changes))
         n.write(f'{label}/acceptance.json',summary);summaries[label]=summary
         print(label,dict(states=len(records),changed_energies=len(changes),reconstruction_trials=summary['rounding_trials'],passed_acceptance=summary['passed_acceptance']),flush=True)
     n.write('phase-acceptance.json',summaries)
