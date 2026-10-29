@@ -50,7 +50,22 @@ bounds=[]
 for label,fit in zip(labels,fits):
     decl=load(f'{label}/declaration.json')['coordinates']
     for i in fit['covariance']['active_bounds']:
-        q=decl[i];bounds.append([label,i,str(q['targets'][0][1]),q['targets'][0][0],number(q['origin']+q['scale']*fit['optimizer'][i]),str(q['bounds'])])
+        q=decl[i];target=q['targets'][0][1]
+        names={'protonated-methyldiethanolamine':'MDEAH⁺','carbon-dioxide':'CO₂','bicarbonate-anion':'HCO₃⁻','water':'H₂O'}
+        target='–'.join(names.get(t,t) for t in target) if isinstance(target,list) else names.get(target,target)
+        quantity={'k_ij':'k (dimensionless)','born_diameter':'Born diameter (Å)'}.get(q['targets'][0][0],q['targets'][0][0])
+        bounds.append([label,i,target,quantity,number(q['origin']+q['scale']*fit['optimizer'][i]),str(q['bounds'])])
+heatrows=[]
+for label in labels:
+    comp=load(f'{label}/comparisons.json');replay=load(f'{label}/replay.json')
+    for row in load(f'{label}/Merkley-caps.json'):
+        key=(row['temperature_K'],row['MDEA_mass_percent'])
+        fitted=next((q for q in replay if q['group']=='Merkley' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key),None)
+        outside=next((q for q in comp if q['group']=='Merkley-outside' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key),None)
+        half=next(q for q in comp if q['group']=='Merkley-half-loading' and (q['row']['temperature_K'],q['row']['MDEA_mass_percent'])==key)
+        value=fitted['prediction']['value'] if fitted else outside.get('predicted')
+        heatrows.append([label,*key,number(float(row['heat_kJ_mol_CO2'])),number(value/1000) if value is not None else 'Unavailable',number(half['predicted']/1000)])
+heat_table=table(['Endpoint','T (K)','MDEA wt%','Observed heat','Capped heat','Half-loading heat'],heatrows)
 caprows=[]
 for label in labels:
     for row in load(f'{label}/Merkley-caps.json'):
@@ -59,7 +74,12 @@ follow=[]
 for label in labels:
     b=load(f'{label}/followup-bicarbonate/assessment.json');f=load(f'{label}/followup-comparison.json')
     corr=load(f'{label}/followup-bicarbonate/correlation.json')['correlation']
-    follow.append([label,number(b['Ermatchkov88']['AARD_percent']),number(corr),f.get('status','Available'),f.get('improvement_points','Unavailable')])
+    follow.append([label,number(b['Ermatchkov88']['AARD_percent']),number(corr),f.get('status','Available'),number(f['improvement_points']) if 'improvement_points' in f else 'Unavailable'])
+control_rows=[]
+for label in labels:
+    cf=load(f'{label}/followup-control/fit.json');cp=load(f'{label}/followup-control/phase-summary.json')
+    control_rows.append([label,cf['status'],number(cf['final_cost']),len(cp['liquid_witnesses']),len(cp['unresolved']),'Not computed'])
+control_table=table(['Control start','Termination','Cost','Dense split states','Unresolved states','Outside-fit AARD'],control_rows)
 sv=table(['Singular-value index','A3','B1'],[[i+1,*[number(f['covariance']['singular_values'][i]) for f in fits]] for i in range(9)])
 wangler=table(['Endpoint','Neumann Cp AARD (%)','Wangler Cp AARD (%)','Change (percentage points)','Kim RMS log ratio'],[[q,number(a['fitted']['Cp']['AARD_percent']),number(a['Wangler_fitted']['Cp']['AARD_percent']),number(a['Wangler_Cp_delta_points']),number(a['fitted']['Kim']['root_mean_square_log_ratio'])] for q,a in zip(labels,assessment)])
 text='''---
@@ -97,7 +117,7 @@ Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags ab
 
 '''+wangler+'''
 
-The complete Wangler heat/Cp and outside-fit predictions are retained in each endpoint's `wangler-*.json`. Merkley half-loading predictions and the 156 kPa alternatives are retained separately; unavailable out-of-domain rows are not averaged into an apparently complete statistic.
+The Böttinger comparison uses the declared model sum HCO₃⁻ + CO₃²⁻. The complete Wangler heat/Cp and outside-fit predictions are retained in each endpoint's `wangler-*.json`. Merkley half-loading predictions and the 156 kPa alternatives are retained separately; unavailable out-of-domain rows are not averaged into an apparently complete statistic.
 
 ## Saturation truncation and phase search
 
@@ -106,6 +126,10 @@ The phase classifier was declared before refitting: packing fraction above 0.10 
 The following loadings are mol CO₂/mol analytical MDEA. A positive truncation means the native heat endpoint is below the source loading point; the 60 wt% entries are extrapolation.
 
 '''+table(['Endpoint','T (K)','MDEA wt%','Source loading','Model saturation','Heat endpoint','Truncation'],caprows)+'''
+
+Signed heats below are kJ/mol CO₂; negative is exothermic. Half-loading uses half the source loading point.
+
+'''+heat_table+'''
 
 The saturation root is unique only within the declared 30-point search over 0.05–1.50 mol/mol; unsampled paired roots or tangencies can escape it. The gradient is unavailable exactly at the cap switch. Native refused optimizer trials remain in `fit.json`; the selected main fits converged despite their retained refusals. No fallback equation, downstream optimizer, or parameter-independent cap was substituted.
 
@@ -121,13 +145,17 @@ The two weakest-direction bounded objective scans are retained in `local-sensiti
 
 '''+table(['Selected start','Bicarbonate-release pressure AARD (%)','Jacobian correlation with cation–water','Control comparison','Control minus bicarbonate (points)'],follow)+'''
 
+'''+control_table+'''
+
+The B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals; its phase results describe that finite, unconverged candidate.
+
 The owner's 2026-10-29 decision makes a phase-failed CO₂-control comparison unavailable: retain its endpoint, cost and gate states; do not compute its outside-fit AARD and make no bicarbonate claim for that variant. A bicarbonate-release AARD alone is context, not a verdict. A magnitude above 0.95 in the declared column correlation means the pair is non-separable. When a control passes, the declared margin is two AARD percentage points, with the other property results retained; corrected Kamps is excluded. No MDEA outcome falsifies the MEA bicarbonate value, whose MEA conditional uncertainty already spans the declared range.
 
 ## Engine acceptance and provenance
 
 All new calculations use the isolated worktree MDEA environment with Engine `d513820994a78bfe628d42fffd55b2eeab6f89bd`, immutable wheel SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`. The main MEA dependency pins remain on 3e83e19c. Exact wheel path, installed-byte verification and runtime identity are in [runtime.json](results/stage2-capped/runtime.json).
 
-Acceptance (a) passes: the historical A1/B1 754-state searches have zero reconstruction trials; every other classification is unchanged; maximum absolute change in ΔG/RT is 1.82e-12, within the owner's clarified 1e-10 absolute criterion near zero. Acceptance (b) passes: eight start values and four branch checks agree with direct saturation-plus-heat within 4.79e-13 relative, and all nine derivatives pass 1e-5 on both branches (worst more-accurate-step error 2.41e-7). Acceptance (c) passes: both 61-row Kim laws replay within 9.33e-15 relative, all 2354 binary phase searches and all mixing scans pass, and item-(l) Cp and the eight retained Carson checks pass. See the [acceptance guide](results/stage2-density/engine-d5138209/README.md).
+Acceptance (a) passes: the historical A1/B1 754-state searches have zero reconstruction trials; every other classification is unchanged; maximum absolute change in ΔG/RT is 1.82e-12, within the owner's clarified 1e-10 absolute criterion near zero. Acceptance (b) passes: eight start values and four branch checks agree with direct saturation-plus-heat within 4.79e-13 relative, and all nine derivatives pass 1e-5 on both branches (worst error across all 72 comparisons and both declared steps 2.17e-6). Acceptance (c) passes: both 61-row Kim laws replay within 9.33e-15 relative, all 2354 binary phase searches and all mixing scans pass, and item-(l) Cp and the eight retained Carson checks pass. See the [acceptance guide](results/stage2-density/engine-d5138209/README.md).
 
 The [selection](results/stage2-capped/selection.json), endpoint documents, row-level predictions, native failures and phase summaries own the numerical evidence. Newly retained files above 5 MB are gzipped with raw/compressed SHA-256 hashes in [the evidence registry](results/compressed-evidence.json). The manuscript and Engine source are unchanged. Historical pre-cap results remain in their existing result directories and Git history; they are not the selected endpoints shown here.
 

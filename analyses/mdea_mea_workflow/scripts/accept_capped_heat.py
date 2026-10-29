@@ -33,7 +33,7 @@ def check(job):
                     values.append(q.predictions[0])
                 fd=(values[1]-values[0])/(2*step);ex=exact.optimizer_gradient[i]
                 result['central_differences'].append(dict(coordinate=i,step=step,exact=ex,finite_difference=fd,relative_error=abs(fd-ex)/abs(ex)))
-        result['passed'] &= all(min(r['relative_error'] for r in result['central_differences'] if r['coordinate']==i)<=1e-5 for i in range(9))
+        result['passed'] &= all(r['relative_error']<=1e-5 for r in result['central_differences'])
     return result
 
 if __name__=='__main__':
