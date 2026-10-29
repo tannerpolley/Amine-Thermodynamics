@@ -447,8 +447,8 @@
           293.0,
           423.0
         ],
-        "basis": "ideal gas; Cp = a+b*T+c*T^2+d*T^3 in J/mol/K",
-        "source": "Wangler 2018 Table 3 Eq.26 printed p.18 PDF G7ZTAJZS; restored factor T, owner decision 2026-10-28",
+        "basis": "ideal gas; Cp = sum(a_k*(T - T_ref)^k), T_ref = 313.15 K; Cp in J/(mol K); coefficients in ascending k",
+        "source": "Retained neumann_cubic from analyses/mdea_mea_workflow/results/diagnosis-unloaded-cp/summary.json; cubic approximation of Neumann et al. 2022 Eq. 5, Table 8 (Zotero CA5R9QN8), recentered at 313.15 K during input preparation",
         "enthalpy_entropy_anchor_k": 313.15,
         "anchor_basis": "h=s=0 at 313.15 K, MEA amine convention"
       }
@@ -472,7 +472,7 @@
   "files": [
     {
       "path": "B1.toml",
-      "sha256": "e00f1647f4bdc2b84b92aad9f4e43c584c307caa923351e548dd3e26d1617784"
+      "sha256": "a9aaacc2c645bc745d2e2cc127cbd0b6fb88aee3f44f359341a5835c45d7a173"
     },
     {
       "path": "declarations.toml",
@@ -480,7 +480,7 @@
     },
     {
       "path": "inputs/caloric.json",
-      "sha256": "c5b2642f1753284cadf7e413d1b6244598b65dd83fecb4d733299bc686d49241"
+      "sha256": "4e040fa5e20f2acb1073beeddeabb0f06e7ad0ea585e751f905b76ceaac89b7a"
     },
     {
       "path": "inputs/preparation-provenance.json",
@@ -489,6 +489,10 @@
     {
       "path": "inputs/phase-provenance.json",
       "sha256": "e412a4e6e4b495e2f46480331a65986884085369dc540b812487d001de59272d"
+    },
+    {
+      "path": "inputs/parameter-caloric-provenance.json",
+      "sha256": "620486ea8e890779aaeb89fbd539842bb5b407e6f7e56be03e8e1ce70487baf4"
     },
     {
       "path": "results/R4-trials.json.gz",
@@ -500,7 +504,7 @@
     },
     {
       "path": "results/R2.json",
-      "sha256": "6fed67bec9f22ab12233aab2d2d16f01bea85e2b39e6d53171ac89cdbb6f491d"
+      "sha256": "20cde97b76f4ba7f356d21c776e4b2491c27a7c12352cdc195cee8cb709cf2f7"
     },
     {
       "path": "results/endpoint-checks.json",

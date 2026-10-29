@@ -124,6 +124,7 @@ elif sys.argv[1] == "handoff":
         AN / "inputs/caloric.json",
         AN / "inputs/preparation-provenance.json",
         AN / "inputs/phase-provenance.json",
+        AN / "inputs/parameter-caloric-provenance.json",
     ]
     files += list((AN / "results").glob("R[24]*")) + [
         AN / "results/endpoint-checks.json",
@@ -137,7 +138,7 @@ elif sys.argv[1] == "handoff":
                 cause="Missing public serializer from native ParameterDocument returned by reg.fitted_parameters / _core.fitted_document to epcsaft.parameters JSON read by Parameters.from_json",
                 required_check="Export the B1 refit, reload it and reproduce its cost within 1e-8 relative and R1 residuals within 1e-8 absolute",
             ),
-            reactions=SPEC.spec["chemistry"]["reactions"],
+            reactions=json.loads((AN / "results/R2.json").read_text())["reactions"],
             neutral_references=SPEC.spec["chemistry"]["neutral_references"],
             problem_templates=SPEC.spec["templates"],
             caloric=SPEC.inputs["caloric"],
