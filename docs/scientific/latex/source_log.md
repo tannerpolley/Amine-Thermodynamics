@@ -445,3 +445,25 @@ The isolated-Python manuscript freshness command writes the final build hashes, 
 ## Introduction citation locators (#218, 2026-10-27)
 
 At the owner's choice, introduction citations keep only table, equation and figure locators. The full section and page locators checked by the #218 claim review are in `sections/introduction.tex` at commit `cfdb8a7`.
+
+## Brief MDEA transfer demonstration (#226, 2026-10-29)
+
+The owner promoted `analyses/mdea_mea_workflow/notebook.qmd` at commit `97dfbeac8ea88c072dbf18c0e31dfedcaf3c8e6f` for one Discussion subsection and one supplement section, subject to the limits in issue #226. The conclusion future-work paragraph is replaced as authorized there.
+
+All added numbers come from that notebook and `analyses/mdea_mea_workflow/results/stage2-capped/`: `selection.json` supplies costs and active bounds; each of `A3/` and `B1/` supplies `assessment.json` (outside-fit deviations and row counts), `fitted-statistics.json` (fitted deviations and row counts), `phase-summary.json` (state and phase counts), and `Merkley-truncations.json` (source and saturation loadings, temperatures, concentrations and pressure). The notebook supplies the declared pressure limit, coordinate count, domain, dielectric assumption, phase threshold, loading uncertainty and finite saturation-search limits. No model calculation or bibliography refresh was performed.
+
+S12 is appended after S11, preserving all existing section labels and numbers. The comparison does not isolate cation representation from the differing active bounds. Conditional assessment, unavailable bicarbonate follow-up and the absence of absorber qualification remain explicit.
+
+The existing availability sentence is qualified to MEA and identifies the MDEA Engine commit from the promoted notebook, so it no longer attributes the MDEA calculation to the MEA wheel. No section structure is changed. The existing literature reading shelf is absent in this worktree; no new literature comparison or source judgment is added.
+
+The table generator ran with the existing main-checkout virtual-environment interpreter by absolute path because this worktree has no `.venv`; it wrote only this worktree. All existing generated table bodies remain unchanged, with only the supplement SHA-256 comments updated. The prescribed supplement-first and main builds pass, producing 19 and 24 pages respectively. Freshness and prose checks pass, all paragraph identifiers are unique, S1–S11 retain their numbering and labels, and all existing literal supplement pointers remain. Neither final LaTeX log reports warnings or unresolved references. No site-index update was required.
+
+PDF layout checks under `builds/issue-226-qa/` render every page in color and grayscale. Automated checks find zero errors, with conservative clearance warnings (196 main, 71 supplement) requiring judgment. Contact sheets were inspected for flow and the changed main pages 18–20 and supplement pages 17–18 were inspected at full size; no clipping or unintended overlap was found there. This is local presentation verification, not independent scientific review. Both PDFs use embedded vector fonts with no Type 3 bitmap fonts.
+
+## MDEA numbers-and-claims review corrections (#226, 2026-10-29)
+
+Applied the owner's three required replacements word for word: partial-pressure source citations; MDEA-specific property citations and ideal-gas correlation; the Böttinger pressure-range and carbonate-signal qualifications; and the Merkley pressure convention. The paragraph markers and all numerical table cells are unchanged. No model calculation was run.
+
+The existing canonical Better BibTeX export already contains every requested key. The established `scripts/cited_bibliography.py` copier generated the cited records from that export; only the thirteen requested keys absent from the manuscript were added. `Jakobsen2005` was already present. Every pre-existing bibliography entry is byte-for-byte unchanged, no local attachment paths were introduced, and no full-library export or refresh was run. The Böttinger MDEA/PIP, Kim ebulliometry and Neumann MDEA property titles were verified, preserving their distinct identities from the existing MEA references.
+
+The table generator was rerun after editing the supplement; existing generated table bodies are unchanged and their supplement hashes are updated. The prescribed supplement-first and main builds pass at 20 and 24 pages, respectively. Freshness and prose checks pass; neither final LaTeX log contains warnings or unresolved citations/references, and BibTeX reports no missing entries. Table S15 remains a continued table on supplement pages 17–18; both rendered pages were inspected at full size and the labels and numerical columns fit without clipping. Paragraph markers and S1–S12 numbering are unchanged. No site-index edit was needed.
