@@ -133,13 +133,61 @@ Only the sources actually selected for the first AMP assessment must be transcri
 | First amine | AMP, then PZ, then blend | Limits the first species/interaction expansion |
 | Carbamate | Include AMPCOO−; resolve Ciftja 2014 and activity law first | Bicarbonate-only design cannot claim NMR agreement |
 | Ion convention | Assess A and B side by side; common carbamate convention | Prevents claiming MDEA determines AMP behavior |
-| Pure AMP source | Verify Pakravesh SI and original Ayad PC-SAFT; no SAFT-HR substitution | Blocks numerical declarations until verified |
+| Pure AMP source | Tables verified in #229; settle association convention and reproduce pure properties | Values available; numerical adoption remains blocked |
 | Coordinates | Executable set and count undetermined; select the smallest supported set with sourced fixed values or ties | No unapproved enlarged fit or implicit bounds |
-| Primary hold-out and tolerance | Prefer an independently verified partial-pressure campaign; no numerical limit adopted | Must freeze before optimizer; proposal only |
+| Primary hold-out and tolerance | #229 recommends Kundu 2003 whole campaign; pressure scale and limit remain open | Must freeze before optimizer; proposal only |
 | Missing heat/Cp/density | Begin pressure/speciation assessment only; retain those property gaps | No absorber or caloric qualification claim |
-| Source preparation authority | Acquire/read missing originals in a later authorized step; none added here | No CESAR-1 data may be copied |
+| Source preparation authority | #229 authorized selected additions; results below | No CESAR-1 data may be copied |
 
 Stop for unresolved source identity/basis, circular calibration, missing carbamate constants/parameters, native refusal, absent uncertainty scale or bounds, incompatible caloric references, phase instability, weakly determined predictions or hold-out failure. Preserve failures and missing predictions. Do not change shared species, loosen gates or fit blend data to rescue a single-amine failure.
+
+## Source preparation update — #229, 2026-10-29
+
+The [source records](sources/pure-amp-pcsaft.md) supersede the earlier missing-
+source statements above for Ayad and Pakravesh SI only. Ayad Table 5 p.2797
+and Pakravesh SI Table S1 p.2 verify the same neutral AMP 2B PC-SAFT set.
+Original Ayad PDF and the SI are now in Zotero. Source values are settled;
+the association-volume prefactor, saturated-liquid-density comparator and
+owner-approved reproduction tolerances remain prerequisites to numerical use.
+The source record defines the unexecuted pure-property check. No parameters
+are adopted into Engine declarations here.
+
+[Hamborg transcription](sources/hamborg-table-16.md) now retains all 24 AMP
+runs, uncertainties and extrapolation deviations. Eq.21 reconstruction from
+rounded Table 1 values gives RMS 0.03362197 and maximum absolute 0.06106819
+in ln K against Table 16; this is a source consistency check, not an adopted
+reaction fit. Unrounded coefficients or an authorized correlation fit with
+uncertainty and Engine standard-state mapping remain required.
+
+The [carbamate assessment](sources/carbamate-law.md) leaves the thermodynamic
+hydrolysis law, temperature dependence and AMPCOO− representation unresolved.
+Ciftja 2014 metadata were added, but its full PDF could not be acquired.
+Neither its abstract nor Ciftja 2011's apparent constant closes this gate.
+
+[Pressure campaign assessment](sources/partial-pressure-campaigns.md)
+recommends holding out the whole Kundu 2003 Tables 1–3 campaign (51 public
+transcribed pairs). Owner selection, a pressure uncertainty/residual policy,
+metric and numerical limit remain open; no 24.2% or 2% pressure limit is
+adopted. Calibration-packet overlap must be checked before freezing roles.
+No fitting, Engine calculations or hold-out scoring took place.
+
+Source additions/attachments were authorized for Ayad, Pakravesh SI, Ciftja
+2014 and the selected pressure campaign in #229. No other source acquisition,
+deletions or bibliography refresh was performed. Numerical Build remains
+**Block** pending the unresolved gates.
+
+Independent GPT-6 Astra readiness re-check, 2026-10-29, reviewed source-preparation
+head `659801a18e4b02de9063c82e9e6261dff5fc70cc` against scoping base
+`ea77804d1761745f0910815c2373aad8bb28aa26`. It confirmed the 24 Hamborg and
+51 Kundu transcriptions, derived Hamborg residuals, pure-AMP parameter values,
+units and association scheme, and all five retained PDF identities. Its verdict
+is **Block for numerical Build**: the neutral convention/reference/tolerances,
+executable protonation law and standard-state mapping, thermodynamic carbamate
+law and representation, and admitted preparation inputs remain unresolved.
+The existing later joint-fitting gates remain unchanged. The one source-claim
+correction was applied: independence from the eventual Hartono calibration
+packet is still to be verified, rather than supported by an unrecorded apparatus
+comparison. Kundu remains a candidate whole-campaign hold-out.
 
 ## PZ and blend outline
 
