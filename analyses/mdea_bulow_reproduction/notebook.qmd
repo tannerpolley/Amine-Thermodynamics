@@ -54,10 +54,15 @@ pressure guess, and default Engine work limits. No retries, added starts,
 increased budgets or refitting have been used. The other 63 primary states
 supply neighboring-state evidence but do not establish a correction for these
 four cases. [Engine issue 912](https://github.com/tannerpolley/ePC-SAFT/issues/912)
-requests diagnosis with these exact inputs and acceptance criteria. Work pauses
-before altering the numerical method. The declared dielectric sensitivities,
-zero-loading rows and alternative 69-row statistic have not run: the prerequisite
-of a qualified primary miss has not been reached.
+requests diagnosis with these exact inputs and acceptance criteria.
+
+Historical status at completion of the primary run: work paused before
+altering the numerical method; sensitivities had not yet run. The two dielectric
+sensitivities subsequently ran on the 63 qualified rows; see the
+[pressure-gap diagnosis](diagnosis-gap/notebook.qmd). The
+[second diagnosis round](diagnosis-round2/notebook.qmd) corrects Figure 4 and
+reports the authorized convention probes. The zero-loading rows and alternative
+69-row statistic remain unrun. The primary result remains inconclusive.
 
 ## Model, basis and provenance
 
