@@ -1,8 +1,49 @@
 {
   "fitted_parameter_document": {
-    "status": "Unavailable",
-    "cause": "Missing public serializer from native ParameterDocument returned by reg.fitted_parameters / _core.fitted_document to epcsaft.parameters JSON read by Parameters.from_json",
-    "required_check": "Export the B1 refit, reload it and reproduce its cost within 1e-8 relative and R1 residuals within 1e-8 absolute"
+    "B1": {
+      "path": "results/B1-parameters.json",
+      "sha256": "1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d",
+      "bytes": 93016,
+      "wheel_sha256": "b4c0f6d8eb8971abd3c0bd801cb9167b8ca602cb2a63b16a22e924d5b6727496",
+      "components": [
+        "carbon-dioxide",
+        "water",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion",
+        "methyldiethanolamine",
+        "protonated-methyldiethanolamine"
+      ],
+      "note": "Reaction laws stay in reactions.aqueous; the parameter document excludes them.",
+      "fitted_cost": 374.45201342397434,
+      "reload_cost": 374.4520134237422,
+      "cost_relative_error": 6.199485369506874e-13,
+      "native_entries_equal": 124,
+      "native_entries": 124
+    },
+    "A3": {
+      "path": "results/A3-parameters.json",
+      "sha256": "3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8",
+      "bytes": 88770,
+      "wheel_sha256": "b4c0f6d8eb8971abd3c0bd801cb9167b8ca602cb2a63b16a22e924d5b6727496",
+      "components": [
+        "carbon-dioxide",
+        "water",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion",
+        "methyldiethanolamine",
+        "protonated-methyldiethanolamine"
+      ],
+      "note": "Reaction laws stay in reactions.aqueous; the parameter document excludes them.",
+      "fitted_cost": 403.71498514705206,
+      "reload_cost": 403.71498514741603,
+      "cost_relative_error": 9.015010959956271e-13,
+      "native_entries_equal": 118,
+      "native_entries": 118
+    }
   },
   "species": {
     "carbon-dioxide": {
