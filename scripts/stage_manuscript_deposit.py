@@ -15,9 +15,9 @@ E = f'{B}/results/engine-3e83e19c-paper-evidence'
 P = f'{B}/results/engine-3e83e19c-phase-search/run-2'
 M = 'analyses/mdea_mea_workflow'
 L = 'docs/scientific/latex'
-SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '3f1081c'], text=True).strip()
+SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'c84ef77'], text=True).strip()
 NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'f138561'], text=True).strip()
-MDEA_NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '97dfbea'], text=True).strip()
+MDEA_NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '209da68'], text=True).strip()
 
 
 def sha(path):
@@ -41,7 +41,7 @@ def stage():
                 f'{B}/results/engine-3e83e19c-refit-chain/', f'{B}/data/', f'{B}/scripts/',
                 f'{B}/calibration-misfit/', f'{M}/inputs/', f'{M}/scripts/',
                 f'{M}/results/stage2-capped/', f'{M}/results/item-l/',
-                f'{M}/results/stage2-density/', f'{M}/results/dielectric/',
+                f'{M}/results/stage2-density/', f'{M}/results/dielectric/', f'{M}/results/context-sources/',
                 'data/reference/MEA/', 'data/reference/MDEA/', 'src/', f'{L}/']
     selected = {p for p in tracked if any(p.startswith(q) for q in prefixes)
                 and '/builds/' not in p and '/submission/' not in p}
