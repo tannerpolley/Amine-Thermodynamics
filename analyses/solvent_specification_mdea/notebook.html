@@ -2441,6 +2441,55 @@ window.Quarto = {
 <p>Coordinate declarations now dispatch <code>kind = &quot;reaction_coordinate&quot;</code> and <code>kind = &quot;reaction_enthalpy_shift&quot;</code> to the respective native constructors, with <code>name</code>, origin, scale and bounds, plus coefficient or pivot temperature. The check follows Engine commit d513820, <code>engine/docs/equations.md</code>, <code>reaction_constant_coordinate_derivative</code>, and the <code>Coordinate</code> and <code>reg.reaction_coordinate</code> docstrings: <span class="math inline">\(q=\mathrm{origin}+\mathrm{scale}\,v\)</span> assigns a stored coefficient of natural <span class="math inline">\(\ln K\)</span>. For a source enthalpy increment <span class="math inline">\(h\)</span>, <span class="math inline">\(\delta a=h/(RT_p)\)</span> and <span class="math inline">\(\delta b=-h/R\)</span>, preserving <span class="math inline">\(\ln K\)</span> at <span class="math inline">\(T_p\)</span>. The production path uses the Engine constructor, native physical coefficient rows (<code>EvaluatedCoordinates.physical</code>, after the EOS and held-diameter rows) and completed native enthalpy-shift laws (<code>reaction_laws</code>); the direct formula appears only in the numerical comparison.</p>
 <p>On retained Kuranov row <code>fit:11</code> at 333.13 K, the objective at zero optimizer value is 0.1264081715573054. Assigning <span class="math inline">\(a=a_0+0.2\)</span> gives cost 0.5571628213373777 versus direct-law cost 0.5571628213373779. A 1000 J/mol shift about 313.15 K gives cost 0.1603266808251767 versus 0.16032668082517665 from the directly modified law. Both zero optimizer values reproduce the unshifted pressure 162212.48927863713 Pa. The largest cost difference is 2.22e-16, below the 1e-10 numerical-equivalence tolerance. <a href="results/reaction_coordinate-check.json">Coefficient evidence</a> and <a href="results/reaction_enthalpy_shift-check.json">enthalpy-shift evidence</a> retain both zero and nonzero cases. Fitted reaction declarations from those native chart outputs are now retained in the fit report and consumed by the handoff.</p>
 <p>The missing/nonfinite split-coordinate check now precedes exponentiation. A focused failure-injection assertion retains a −∞ trial as one unresolved record with its cause and zero gas-evolution classifications. This assertion tests failure reporting; it is not a physical phase observation. The prior R4 trials contain no such nonfinite coordinate and remain the independently confirmed reproduction evidence.</p>
+<p>For <a href="https://github.com/tannerpolley/Amine-Thermodynamics/issues/230">issue #230</a>, the hand-off now exports eight species with unchanged Engine charges, molar masses and available aliases, explicit element and analytical-component incidence, template-specific supports and analytical feed membership. All eight formula charges equal the Engine charges. All four reactions have exactly zero C, H, N, O and charge imbalance; the three analytical-component rows also close exactly. Three species have ideal-gas caloric records; five ionic species use reaction/reference completion. The neutral reference records the empty override mapping and effective <code>PureLiquid</code> solvent / <code>InfiniteDilution</code> solute choices. Reaction records state direction, extent units, K basis and reference identities. These are declaration and numerical verification results; absorber qualification remains with the column.</p>
+<p>The six property groups in <code>assessment.properties</code> retain calibration/outside-fit row regions (temperature, unloaded analytical amine mass percent and CO₂ loading), separately evaluated regions, available-row relative-error statistics, unavailable rows and causes, fitted bounds and links to the existing phase-search evidence. <code>available_rows</code> counts all Available records, including zero observations; AARD uses only available nonzero observations. Both Böttinger bicarbonate datasets have 58 available rows and no unavailable rows; each AARD uses 57 nonzero observations. For saturation-capped heats, <code>region.loading_mol_per_mol</code> retains requested caps, while <code>evaluated_region.loading_mol_per_mol</code> uses only available retained native <code>endpoint_loading</code> values, without substituting caps for missing endpoints. The evaluated loading ranges are [0.25808584895232506, 1.009] for calibration-Merkley and [0.15815614361212915, 0.15815614361212915] for outside-fit-Merkley-outside. Zero analytical amine makes CO₂ loading per mole MDEA undefined: both loading regions for calibration-Kim-water are null with the stated zero-MDEA cause; its pressures, temperature and mass-percent ranges and AARD remain unchanged. These row ranges are not continuous validity domains or uncertainty estimates. Derivative actions remain unassessed. The <code>handoff</code> command consumes retained endpoint/comparison results; with prediction and fitting calls disabled it produces byte-identical repeated exports, and all 39 listed file hashes match. The existing test file gives four passes, with R1 cost 374.4520134237422 and maximum weighted-residual difference 4.546019116702382e-11. The immutable wheel hash matches the value above. Independent delivery review remains open. The fitted parameter document and its export/reload check remain unavailable on this wheel; no serializer adoption is part of #230.</p>
+<section id="fitted-parameter-export-232" class="level2">
+<h2 class="anchored" data-anchor-id="fitted-parameter-export-232">Fitted parameter export (#232)</h2>
+<p>Engine commit <code>217026ab60b8e244cd7d9dac126b8b3d16bccb67</code> supplies <code>epcsaft.parameters.document_mapping</code>. The new wheel has SHA-256 <code>b4c0f6d8eb8971abd3c0bd801cb9167b8ca602cb2a63b16a22e924d5b6727496</code> and is stored at <code>/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-217026ab/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl</code>. All 12 installed Engine package files match the wheel bytes. The root dependency pins and historical runtime record remain unchanged.</p>
+<p>Before export, <a href="results/issue-232-R1.json">R1 requalification</a> gave cost 374.4520134237422, relative difference 0 against the d513820 endpoint evaluation, and maximum weighted-residual difference 0 across 280 rows. This passes the required relative tolerance of 1e-10 without retuning. The runner reconstructs each fitted native parameter set from its retained starting document, coordinate declarations and fitted optimizer vector through Engine’s coordinate evaluation and <code>reg.fitted_parameters</code>; it runs no new fit. The serialized documents reload with the explicit ordered eight-component selection recorded beside each file in the <a href="results/parameter-reload.json">reload evidence</a>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Endpoint</th>
+<th style="text-align: right;">Own fitted cost</th>
+<th style="text-align: right;">Reload cost</th>
+<th style="text-align: right;">Relative difference</th>
+<th style="text-align: right;">Bitwise-equal native entries</th>
+<th style="text-align: right;">File bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>B1</td>
+<td style="text-align: right;">374.45201342397434</td>
+<td style="text-align: right;">374.4520134237422</td>
+<td style="text-align: right;">6.199485369506874e-13</td>
+<td style="text-align: right;">124/124</td>
+<td style="text-align: right;">93016</td>
+</tr>
+<tr class="even">
+<td>A3</td>
+<td style="text-align: right;">403.71498514705206</td>
+<td style="text-align: right;">403.71498514741603</td>
+<td style="text-align: right;">9.015010959956271e-13</td>
+<td style="text-align: right;">118/118</td>
+<td style="text-align: right;">88770</td>
+</tr>
+</tbody>
+</table>
+<p>Both costs pass relative tolerance 1e-8 against their own fitted costs. Entry comparison includes scalar bit patterns, identities, fields, indices and units. The <a href="results/B1-parameters.json">B1 document</a> has SHA-256 <code>1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d</code>; the <a href="results/A3-parameters.json">A3 document</a> has SHA-256 <code>3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8</code>. They are byte-identical to the retained endpoint input documents. All 280 reloaded observations per endpoint are available; their complete values and residuals remain in <a href="results/B1-reload-residuals.json">B1</a> and <a href="results/A3-reload-residuals.json">A3</a>.</p>
+<p>The new <code>fitted_parameter_document</code> entries in <a href="results/handoff.json">the handoff</a> replace the historical serializer refusal. Each gives the parameter path, file hash, wheel hash and component order. Reaction laws remain in <code>reactions.aqueous</code>, outside the parameter documents. With prediction and fitting disabled, two handoff generations are byte-identical; replacing only that field in the original byte stream yields the new file exactly. All 39 original input hashes still match, and all other fields, including the historical assessment and runtime identity, are unchanged. <a href="results/issue-232-handoff-check.json">Handoff checks</a> retain these comparisons.</p>
+<p>To use the new wheel only for this analysis, create <code>build/issue-232-venv</code> with Python 3.13 and install the wheel above with <code>numpy==2.5.4 scipy==1.18.1 pytest</code>. Run <code>nice -n 10 env PYTHONPATH=src build/issue-232-venv/bin/python analyses/solvent_specification_mdea/run.py export</code>, followed by the same command with <code>handoff</code>. The export command checks the retained R1 requalification and wheel hash first. The existing focused test command is <code>nice -n 10 env PYTHONPATH=src build/issue-232-venv/bin/python -m pytest -q tests/test_solvent_specification.py</code>.</p>
+<p>The existing focused tests give four passes in 13.47 s on the new wheel; the retained endpoint-check file is byte-unchanged. These results verify numerical serialization and objective reproduction. They add no physical validation, uncertainty estimate, derivative assessment or absorber qualification. The existing finite-search, active-bound and measurement limitations still apply. Independent delivery review and investigator promotion remain open. The notebook registry is unchanged under the owner’s instruction to preserve the unrelated main-checkout edit.</p>
+</section>
 
 </main>
 <!-- /main column -->
