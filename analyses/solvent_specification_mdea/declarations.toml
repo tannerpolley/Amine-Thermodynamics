@@ -27,9 +27,9 @@ name = "calibration-Carson"
 group = "Carson"
 role = "calibration"
 path = "inputs/calibration-Carson.csv"
-sha256 = "39cdf3f8dbf05bac96e905299b0a2b6c839b2a4301bc1ea7197f5b519236f9fd"
+sha256 = "7bd0b8e6cd945d0817bf84de66df582b17aef6ed8248aae426a7f65f44c04dfe"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "addition_enthalpy"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
@@ -44,9 +44,9 @@ name = "calibration-Cp"
 group = "Cp"
 role = "calibration"
 path = "inputs/calibration-Cp.csv"
-sha256 = "eac446862ac4c87fa9066c02bfa83920a8f45a20cf493322ed0984ecfb5c11bb"
+sha256 = "32db9e1c6005c6285c28175a1ae02b6f89e4222de9c2a6f6a8b858655b50ec99"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "equilibrium_isobaric_heat_capacity"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
@@ -59,9 +59,9 @@ name = "calibration-Jakobsen-carbonate"
 group = "Jakobsen"
 role = "calibration"
 path = "inputs/calibration-Jakobsen-carbonate.csv"
-sha256 = "be9d36a6a53bf901b3c49e00df8c54dce9cb1cae36b14dc619974a4cca5529f5"
+sha256 = "60c2f5fe1900aa462b94ac89444278b11e5e7450368dd215539846d12534b160"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "amount_ratio"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"], "denominator_phase" = "L", "denominator_species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
@@ -74,9 +74,9 @@ name = "calibration-Jakobsen-cation"
 group = "Jakobsen"
 role = "calibration"
 path = "inputs/calibration-Jakobsen-cation.csv"
-sha256 = "541143be0a3a90f78d384ed3e74c1826094d8d5395f703de73b23b3082981c2f"
+sha256 = "f5203d7c9d392bda01574df18e4f29c182958a74aa637717d6804dfb82107093"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "amount_ratio"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["protonated-methyldiethanolamine"], "denominator_phase" = "L", "denominator_species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
@@ -89,9 +89,9 @@ name = "calibration-Kim-binary"
 group = "Kim"
 role = "calibration"
 path = "inputs/calibration-Kim-binary.csv"
-sha256 = "e24b7ce16931b63ac845915786cc391469d93cbbebcde5e270ccce081e54bea0"
+sha256 = "3edc485cd34ef32cccb53b075d53b787ad2e5a6da7d92aaaae43316d75ad92e6"
 template = "binary-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "log_ratio"}
@@ -104,9 +104,9 @@ name = "calibration-Kim-water"
 group = "Kim"
 role = "calibration"
 path = "inputs/calibration-Kim-water.csv"
-sha256 = "61663ac50fa867a6dff5865a81316cfd3e9a9acb655ffb39550b9e2a26e68da0"
+sha256 = "05e9477b06e6a1283540bb5d5f7b19dceda0934822d1d061c768e774576a89d2"
 template = "water-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "log_ratio"}
@@ -119,9 +119,9 @@ name = "calibration-Kuranov"
 group = "Kuranov"
 role = "calibration"
 path = "inputs/calibration-Kuranov.csv"
-sha256 = "45236446c3fbdda610b8b3f5f561d487f933e9a8c80090932ee41e641f076282"
+sha256 = "beeb775e555c53f766dd0d91df37ff064a0031d1e602034193a9ae6aa7873b99"
 template = "loaded-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "log_ratio"}
@@ -134,9 +134,9 @@ name = "calibration-Merkley"
 group = "Merkley"
 role = "calibration"
 path = "inputs/calibration-Merkley.csv"
-sha256 = "8d649bd4817ca8435f9bccb955caa4f60e0adb12f9eba78bfb1afadf3a98fc26"
+sha256 = "ff5e906205a1e915ad26dba9c9b00a7c55d8df012ac2ed54fba73b8af47c428c"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "saturation_capped_addition_enthalpy"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "T" = "$T", "P" = "$P", "phase" = "vapor", "basis_amount" = 1.0, "loading_cap" = "$alpha", "loading_bounds" = [0.05, 1.5], "loading_grid" = [0.05, 0.1, 0.15000000000000002, 0.2, 0.25, 0.30000000000000004, 0.35000000000000003, 0.4, 0.45, 0.5, 0.55, 0.6000000000000001, 0.65, 0.7000000000000001, 0.75, 0.8, 0.8500000000000001, 0.9, 0.9500000000000001, 1.0, 1.05, 1.1, 1.1500000000000001, 1.2000000000000002, 1.25, 1.3, 1.35, 1.4000000000000001, 1.4500000000000002, 1.5]}
@@ -151,9 +151,9 @@ name = "calibration-loaded-density"
 group = "loaded-density"
 role = "calibration"
 path = "inputs/calibration-loaded-density.csv"
-sha256 = "6264e3347bde4b461263f7562fdf0a7c31362685993fa6936b90a9f54a8637e8"
+sha256 = "f2f796c6c727cab46ca2ff05c955bb8120a7604d9ff6c70483bb9e9e9dd0c64d"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "phase_density"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}
@@ -166,9 +166,9 @@ name = "calibration-unloaded-density"
 group = "unloaded-density"
 role = "calibration"
 path = "inputs/calibration-unloaded-density.csv"
-sha256 = "b3c95a8613a05405a6fc955e8874c584db1d88b52a11bbed5b5c14034b754bde"
+sha256 = "dbbea42108c22509efa86ce0eb9d31cb7647617d78f6b2792783c191305c7e95"
 template = "ion-free-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "phase_density"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}
@@ -181,9 +181,9 @@ name = "outside-fit-Bottinger-amine-sum-25bar"
 group = "Bottinger-amine-sum-25bar"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-amine-sum-25bar.csv"
-sha256 = "6338ae392c16a166592e1b3286c42b38278c732cbd88c59bc914f9876db671a6"
+sha256 = "ca33c3fcc4057a3e74220a0cfbcc475d1275470b9acafa1f0354b523a704798a"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "mole_fraction"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
@@ -196,9 +196,9 @@ name = "outside-fit-Bottinger-amine-sum-5bar"
 group = "Bottinger-amine-sum-5bar"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-amine-sum-5bar.csv"
-sha256 = "ceb7bf4e5f49c05b472a0f618ab44228f371bd2f1db121f219ef88b7765e6fd3"
+sha256 = "488940ecf3fc984edeee3fa145fe6f76936396fce802b5af881bcbee70f677ef"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "mole_fraction"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
@@ -211,9 +211,9 @@ name = "outside-fit-Bottinger-bicarbonate-25bar"
 group = "Bottinger-bicarbonate-25bar"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-bicarbonate-25bar.csv"
-sha256 = "8f031ceb9fec6237fc984f30af6010a78deae0521b78dc08e962ff376eee3e03"
+sha256 = "a788feff21199e1fe2c9a553a133e1fd408bd390d259289b2b7ea3567cc9fbf9"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "mole_fraction"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"]}
@@ -226,9 +226,9 @@ name = "outside-fit-Bottinger-bicarbonate-5bar"
 group = "Bottinger-bicarbonate-5bar"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-bicarbonate-5bar.csv"
-sha256 = "cb8fe27e31a07f94a64e69d90e97ede0680a9d3e9c8271ab9bf282fc672846e0"
+sha256 = "7ac448699c14bc898a7a8a4877afba5950c31f5f9597343316006f87b256da4a"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "mole_fraction"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"]}
@@ -241,9 +241,9 @@ name = "outside-fit-Cp-60wt"
 group = "Cp-60wt"
 role = "outside-fit"
 path = "inputs/outside-fit-Cp-60wt.csv"
-sha256 = "17779d01a0b485bfd07b8fc23c4ec0a598686f7478665b3dbfe299b68212c7e9"
+sha256 = "bd3d8b2d2f90cdca479df34ba63c5ff369d2d2b5856a1c6765de7b643c919f98"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "equilibrium_isobaric_heat_capacity"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
@@ -256,9 +256,9 @@ name = "outside-fit-Ermatchkov"
 group = "Ermatchkov"
 role = "outside-fit"
 path = "inputs/outside-fit-Ermatchkov.csv"
-sha256 = "a35b4d935b8868cd3afb8925b5df07b58f2a8381a373ebbb55f2538df790f7b3"
+sha256 = "bffe5603e6ddc4c12c268226b421deaea4ea6a8397771f84aea186b4b6830ae6"
 template = "loaded-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "partial_pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "V", "species" = ["carbon-dioxide"]}
@@ -271,9 +271,9 @@ name = "outside-fit-Kuranov-413K"
 group = "Kuranov-413K"
 role = "outside-fit"
 path = "inputs/outside-fit-Kuranov-413K.csv"
-sha256 = "81038e8b8a62c14e84398be376904eabe12ca71bd0b09896742f880e8cfc96a1"
+sha256 = "27b302f4baa8efb0af7c79ad562237f484c2e68a9f38f28e7b9fc9b05220fff4"
 template = "loaded-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
@@ -286,9 +286,9 @@ name = "outside-fit-Merkley-half-loading"
 group = "Merkley-half-loading"
 role = "outside-fit"
 path = "inputs/outside-fit-Merkley-half-loading.csv"
-sha256 = "fa997adb55b5fe10601aec932e9d93ec1f07ef24e90a1b9f758a6e0b7ea2eff7"
+sha256 = "b202e6844954310692593f76967abaf5ce7d483f096efa46ae8cae422d18bbee"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "addition_enthalpy"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
@@ -303,9 +303,9 @@ name = "outside-fit-Merkley-outside"
 group = "Merkley-outside"
 role = "outside-fit"
 path = "inputs/outside-fit-Merkley-outside.csv"
-sha256 = "1dce2e0d726166b9bcebb54b255432b3f3177611ed5169a4c62cf5fb302a0536"
+sha256 = "b88e89910d7aa60ebaf3d8535b5a913d352dc28ebdfea490bddaaba81109ec25"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "saturation_capped_addition_enthalpy"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "T" = "$T", "P" = "$P", "phase" = "vapor", "basis_amount" = 1.0, "loading_cap" = "$alpha", "loading_bounds" = [0.05, 1.5], "loading_grid" = [0.05, 0.1, 0.15000000000000002, 0.2, 0.25, 0.30000000000000004, 0.35000000000000003, 0.4, 0.45, 0.5, 0.55, 0.6000000000000001, 0.65, 0.7000000000000001, 0.75, 0.8, 0.8500000000000001, 0.9, 0.9500000000000001, 1.0, 1.05, 1.1, 1.1500000000000001, 1.2000000000000002, 1.25, 1.3, 1.35, 1.4000000000000001, 1.4500000000000002, 1.5]}
@@ -320,9 +320,9 @@ name = "outside-fit-Sedighi"
 group = "Sedighi"
 role = "outside-fit"
 path = "inputs/outside-fit-Sedighi.csv"
-sha256 = "f88f64b9f6213c80bd455845cfc9ea61c91985f62f02b6c9d48103b90a30f51e"
+sha256 = "4ce05f4d475f79af355443fe6a700d25ecf3585fe16ac67a112fe33ee564690c"
 template = "loaded-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
@@ -335,9 +335,9 @@ name = "outside-fit-Zheng"
 group = "Zheng"
 role = "outside-fit"
 path = "inputs/outside-fit-Zheng.csv"
-sha256 = "2832762ce2fc98e6d02547d786ae9366f3c5462b1cd6fd7d9cbe1012b9cf6f26"
+sha256 = "e255f451d0de07ad57279a6ac1b6806eb89b9aa8236f891b473108e6e0dc1b3a"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "addition_enthalpy"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
@@ -352,9 +352,9 @@ name = "outside-fit-corrected-Kamps"
 group = "corrected-Kamps"
 role = "outside-fit"
 path = "inputs/outside-fit-corrected-Kamps.csv"
-sha256 = "1a138a7a062f53d1af342859b1ad395aa3e109b9ba54fd9edab6297aba06e306"
+sha256 = "4a398d4b816bc8c807ed809c81ef12421485b94aab01b6ef874202a56a53d7a6"
 template = "loaded-bubble"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "pressure"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
@@ -367,9 +367,9 @@ name = "outside-fit-density-60wt"
 group = "density-60wt"
 role = "outside-fit"
 path = "inputs/outside-fit-density-60wt.csv"
-sha256 = "6395ae5dc77af85d386827bbd2cfbceff77ac32d2bfa0f095707ecbdf5e6466b"
+sha256 = "facdc0e8649e4cad6cb58b9fb16db407b2713ddf8e7e7bf6e87bb776ff84328e"
 template = "loaded-liquid"
-columns = {"T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
 constructor = "observation"
 kind = "phase_density"
 arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}

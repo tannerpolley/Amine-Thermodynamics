@@ -84,6 +84,7 @@ for role, records in [("calibration", fitted), ("outside-fit", comparisons)]:
             subgroup = "binary" if x else "water"
         key = f"{role}-{group}{'-' + subgroup if subgroup else ''}"
         row = dict(
+            observation_order=i,
             identity=f"{'fit' if role == 'calibration' else 'comparison'}:{i}",
             source=json.dumps(source, sort_keys=True),
             T=T,
@@ -113,3 +114,15 @@ for key, rows in groups.items():
     )
     + "\n"
 )
+
+caloric_path = OUT / 'caloric.json'
+caloric = json.loads(caloric_path.read_text())
+for component in caloric['components'].values():
+    if component['representation'] == 'cp_polynomial':
+        component.update(enthalpy_anchor_j_per_mol=0., entropy_anchor_j_per_mol_k=0.)
+caloric_path.write_text(json.dumps(caloric, indent=2) + '\n')
+for path in (OUT.parent / 'declarations.toml', OUT.parent / 'B1.toml', OUT.parent / 'A3.toml'):
+    import re
+    text = re.sub(r'columns = \{(?:"observation_order" = "observation_order", )?', 'columns = {"observation_order" = "observation_order", ', path.read_text())
+    text = re.sub(r'(path = "([^"]+)"\nsha256 = ")[^"]+', lambda m: m[1] + hashlib.sha256((path.parent / m[2]).read_bytes()).hexdigest(), text)
+    path.write_text(text)
