@@ -50,6 +50,7 @@ class SolventSpecification:
                     continue
                 record = dict(
                     identity=source["identity"],
+                    observation_order=row["observation_order"],
                     group=dataset["group"],
                     row=json.loads(source["source"]),
                     weight=self.bind(dataset["weight"], row),
@@ -71,7 +72,7 @@ class SolventSpecification:
                 target = "fitted" if dataset["role"] == "calibration" else "comparisons"
                 self.inputs["observations"][target].append(record)
         for key in ("fitted", "comparisons"):
-            self.inputs["observations"][key].sort(key=lambda r: int(r["identity"].split(":")[1]))
+            self.inputs["observations"][key].sort(key=lambda r: r["observation_order"])
         for record in self.inputs["observations"]["phase_states"]:
             key = record["identity"] + ":phase"
             row = {k: float(record[k]) for k in ("T", "P", "water", "alpha", "amine")}
@@ -85,7 +86,8 @@ class SolventSpecification:
                 intervals.append([])
                 continue
             if source["representation"] == "cp_polynomial":
-                form = epcsaft.IdealPolynomial(source["coefficients"], source["enthalpy_entropy_anchor_k"], 0.0, 0.0)
+                form = epcsaft.IdealPolynomial(source["coefficients"], source["enthalpy_entropy_anchor_k"],
+                                               source["enthalpy_anchor_j_per_mol"], source["entropy_anchor_j_per_mol_k"])
             elif source["representation"] == "shomate":
                 form = epcsaft.IdealShomate(source["coefficients"], source["formation_enthalpy_j_per_mol"])
             else:
@@ -196,6 +198,12 @@ class SolventSpecification:
             group=record["group"],
             row=record["row"],
             observed=record["arguments"]["observed"],
+            convergence=None if prediction.convergence is None else {
+                k: jsonable(getattr(prediction.convergence, k))
+                for k in ("residual", "floor", "amplification", "contraction", "iterations", "stop")},
+            **{k: jsonable(getattr(prediction, k, None)) for k in ("saturation_loading", "endpoint_loading")},
+            optional_field_unavailability={k: "Not exposed by the installed Engine prediction"
+                                           for k in ("saturation_loading", "endpoint_loading") if not hasattr(prediction, k)},
             **{
                 key: jsonable(getattr(prediction, key))
                 for key in (
@@ -204,8 +212,8 @@ class SolventSpecification:
                     "value",
                     "residual",
                     "requested_tolerance_met",
-                    "saturation_loading",
-                    "endpoint_loading",
+                    "branch",
+                    "stable_root_count",
                 )
             },
         )
