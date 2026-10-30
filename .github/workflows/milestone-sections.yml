@@ -1,0 +1,41 @@
+name: Milestone sections
+
+# One-shot: applies the standing-section milestone plan when this file lands on
+# main. Safe to rerun; delete this file once the run succeeds.
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/milestone-sections.yml]
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Apply sections
+        run: |
+          set -euo pipefail
+          number() { gh api "repos/$GH_REPO/milestones?state=all&per_page=100" --jq ".[] | select(.title == \"$1\") | .number"; }
+          # section <title> <old title or -> <description>: rename or create, and keep open
+          section() {
+            n=$(number "$1"); [ -n "$n" ] || n=$(number "$2")
+            if [ -n "$n" ]; then gh api -X PATCH "repos/$GH_REPO/milestones/$n" -f title="$1" -f state=open -f description="$3" >/dev/null
+            else gh api "repos/$GH_REPO/milestones" -f title="$1" -f description="$3" >/dev/null; fi
+            echo "section: $1"
+          }
+          move() { gh issue edit "$1" --milestone "$2" >/dev/null; echo "#$1 -> $2"; }
+          section "Baseline Models" "01 - Baselines" "Reference models the ePC-SAFT work is compared against: src/MEA/six_species, src/MEA/smith_missen, and the six-species, neutral ePC-SAFT parity, ideal reaction equilibrium, and eNRTL analyses. Excludes ionic ePC-SAFT."
+          section "Activity ePC-SAFT" "02 - Activity ePC-SAFT" "True-species activity-based ePC-SAFT model: reaction basis, residual accounting, and model forms such as permittivity and volume translation, in src/MEA/epcsaft_ionic. Excludes parameter fitting."
+          section "Ionic Regression" "03 - Ionic Regression" "Fitting ionic ePC-SAFT parameters to data: evidence sets, regression runs, validation splits, sensitivity checks, and promotion gates. Excludes model-form changes and the manuscript."
+          section "Paper Validation" "Evidence - Paper Validation" "Literature recreation and source data that support manuscript comparisons: analyses/paper_validation, data/reference, and the MEA validation scripts. Excludes fitting."
+          section "Manuscript" "04 - Manuscript Submission" "LaTeX manuscript, publication figures, source logs, final validation, and submission: analyses/manuscript.py, scripts/build_manuscript.sh, docs/submission."
+          section "Other Amines" "Extension - Other Amines" "ePC-SAFT work on amines other than MEA, starting with the MDEA-CO2-H2O refit. Excludes the MEA work and the manuscript."
+          section "Tooling" "Tooling - Project Infrastructure" "Repo structure, validation orchestration, scripts, .github, pyproject.toml, cleanup, artifact discovery, and cross-repo integration. Excludes model, data, and analysis work."
+          move 172 "Activity ePC-SAFT"
+          gh api "repos/$GH_REPO/milestones?state=all&per_page=100" --jq '.[] | "\(.state)\t\(.open_issues) open\t\(.title)"'
