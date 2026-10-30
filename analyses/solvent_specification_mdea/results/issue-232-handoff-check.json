@@ -1,0 +1,26 @@
+{
+  "prediction_and_fitting_disabled": true,
+  "repeated_export_byte_identical": true,
+  "unchanged_fields": [
+    "species",
+    "balance_checks",
+    "conventions",
+    "reactions",
+    "neutral_references",
+    "problem_templates",
+    "caloric",
+    "runtime",
+    "files",
+    "assessment"
+  ],
+  "changed_fields": [
+    "fitted_parameter_document"
+  ],
+  "original_file_hashes_matching": 39,
+  "installed_wheel_files_matching": 12,
+  "focused_tests": {
+    "command": "nice -n 10 agent-heavy env PYTHONPATH=src build/issue-232-venv/bin/python -m pytest -q tests/test_solvent_specification.py",
+    "result": "4 passed in 13.47s",
+    "retained_endpoint_checks_unchanged": true
+  }
+}
