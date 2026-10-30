@@ -1,0 +1,105 @@
+---
+title: "MEA solvent-specification endpoint reproduction"
+format: html
+---
+
+## Result and intended use
+
+The generic solvent-specification driver reproduces **all 213 admitted reactive
+objective rows exactly**, at dimensionless subset cost **45.37796168239049**.
+The largest relative difference is zero for every prediction, residual,
+weighted residual and row cost. All rows are `Available` and meet their native
+requested numerical tolerance. There is no first differing target.
+
+This is numerical verification of declaration mapping at the supplied endpoint,
+not independent physical validation. No fit, parameter adoption, manuscript
+change, phase search or absorber qualification was performed. The published
+[issue #233](https://github.com/tannerpolley/Amine-Thermodynamics/issues/233)
+owns the scope and comparison tolerance, $10^{-10}$ relative per field.
+
+| Group | Rows | Actual cost | Reference cost | Relative difference |
+|---|---:|---:|---:|---:|
+| common149 | 149 | 23.860996312136727 | 23.860996312136727 | 0 |
+| restored species | 7 | 2.4486746519412517 | 2.4486746519412517 | 0 |
+| Jakobsen | 6 | 13.122182452954206 | 13.122182452954206 | 0 |
+| loaded density | 47 | 0.5654031419421082 | 0.5654031419421082 | 0 |
+| Cp | 4 | 5.380705123416196 | 5.380705123416196 | 0 |
+| Subset | 213 | 45.37796168239049 | 45.37796168239049 | 0 |
+
+Stable summation uses the retained objective $C=\frac12\sum_j w_jr_j^2$.
+Pressure remains in Pa; species mole fractions and amount ratios retain their
+source denominators; heat remains signed J/mol added CO₂; density is kg/m³;
+heat capacity is J/(mol analytical feed K). Source scales and final weights are
+unchanged. The comparison checks numerical identity, not experimental error.
+
+## Inputs and construction checks
+
+The accounting base is `62e256d940731d7f256d24f0bbe9034690458ca9`.
+The supplied parameter document remains byte-identical to the accepted endpoint,
+SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
+The paper wheel is merged Engine `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`,
+SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`.
+Every installed Engine package file was compared with its wheel bytes.
+Python is 3.13.14, NumPy 2.5.4 and SciPy 1.18.1.
+
+Preparation compared all native observation and problem fields recursively with
+the historical construction owners before evaluation. This includes the 13
+request-backed amended declarations, their stored seeded feeds and guesses,
+phase names, reaction references and existing 293.15–436.85 K construction
+bounds. Evaluation uses the unamended endpoint. Element and charge balance,
+species charge agreement and caloric coverage passed the generic driver checks.
+Carbamate retains one analytical amine and one carbon unit. Empty coordinates
+and phase-state lists are explicitly endpoint-only inputs.
+
+The runtime imports none of `fit_observations`, `fit_campaign` or
+`shared_evaluation`. It consumes only prepared TOML/CSV/JSON, installed Engine,
+and the generic driver. Source transformations and chemistry preparation remain
+with their existing owners; no new source interpretation was made here.
+
+## MDEA and caloric checks
+
+MDEA was checked in its separate d5138209 environment, wheel SHA-256
+`ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`,
+with installed package bytes verified. Existing R1/R3/R5 checks passed in
+12.93 s using 32 worker processes and one numerical-library thread per process.
+
+| Check | Actual | Reference | Assessment |
+|---|---:|---:|---|
+| R1 B1 cost | 374.4520134237422 | 374.45201342397434 | relative difference 6.1995e-13; maximum weighted-residual absolute difference 4.5461e-11 |
+| R3 Ermatchkov mean absolute relative deviation, % | 19.1460124028601 | 19.1460124028601 | 88 rows, exact agreement |
+| R5 A3 cost | 403.7149851474161 | 403.71498514705206 | within 1e-8 relative; coordinates identical |
+
+The caloric mapping invariant supplied nonzero anchors of 1234.5 J/mol and
+6.75 J/(mol K) at 313.15 K. Mapped and directly constructed Engine records
+agreed within 1e-13 relative at 313.15 and 333.15 K. Ideal enthalpies were
+1234.5 and 3023.5337971466283 J/mol; ideal entropies at 1 mol/m³ were
+37.08321058816546 and 42.10522260544719 J/(mol K). The entropy includes the
+Engine ideal-density contribution; it is not the standard-pressure anchor.
+The pure neutral MEA record isolates this check from ionic reference completion.
+The persistent check took 0.12 s.
+
+## Evidence, timing and limits
+
+[Row predictions](results/predictions.json), [every row difference and group
+reduction](results/endpoint-checks.json), [input hashes and runtime](results/runtime.json),
+[preparation provenance](inputs/preparation-provenance.json),
+[MDEA environment](results/mdea-runtime.json), and
+[caloric values](results/caloric-anchor.json) retain the numerical evidence.
+The fresh MEA pass used one process and one numerical-library thread at niceness
+10. Its measured wall time is in `results/runtime.json`; the initial successful
+pass took 7.1552 s; the final pass took 7.2805 s. No parallel campaign was needed.
+
+The source-derived uncertainty, calibration roles, active-bound restrictions
+and source-range extrapolation labels remain those of the accepted endpoint.
+R2/R4/R5 candidate-law support remains 293.15–393.15 K; the 13 broader
+construction declarations do not establish validity above 393.15 K. Kiepe,
+Cai and CO₂-free density are deferred. This subset does not reproduce the full
+307-row manuscript objective or qualify neutral continuation, free temperature,
+fitting, phase stability, kinetics or column transport.
+
+Independent delivered review and investigator acceptance remain outstanding.
+No result here is promoted for manuscript or absorber use.
+
+The notebook rendered with Quarto without model execution. Root-site refresh
+could not complete because the `snakemake` executable is unavailable in this
+environment. The notebook is registered once in the site render list and sidebar.
