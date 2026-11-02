@@ -4,7 +4,7 @@
 
 Proposed replacement body for [#235](https://github.com/tannerpolley/Amine-Thermodynamics/issues/235), prepared 2026-11-02. **Design only; not authorized for Build.** Independent readiness review must return **Ready** before execution. The owner approved the executable-line, test-line and time ceilings below on 2026-11-02; this revision does not raise them. This document is the requested committed publication draft; the accountable owner publishes the accepted body and reads it back. No issue mutation, fit, Engine edit or implementation is part of this delivery.
 
-Inspected and proposed accounting base: `ec5e48a7a861d335540cd674da6ea514d29be0f7`. Refresh this explicit base only if intervening integration changes the implementation surface, with owner agreement before Build.
+Accounting base: `35703c29300eddcc2d2988eb84e68c066d24cf16` (main after #240; owner agreement 2026-11-02). The earlier base `ec5e48a` also counted the merged #233 307-row work (196 executable and 36 test lines). Refresh this explicit base only if intervening integration changes the implementation surface, with owner agreement before Build.
 
 Question: can `SolventSpecification.fit()` exercise carbamate-bearing MEA chemistry from one explicitly perturbed chart origin and reach a usable converged solution of the **same 213-row objective** with cost no greater than the accepted endpoint, while remaining in the declared local parameter neighborhood?
 
@@ -134,7 +134,7 @@ The owner-approved ceiling is **170 gross added executable lines plus 20 test li
 
 Reuse the current packet and comparison reductions; no re-materialization of 213 observations, dependency change, solver code or general-purpose export command is earned. If shared driver fitting behavior changes, run the existing MDEA R2 on its declared wheel and preserve its exact 280-row/nine-coordinate tolerances, within an owner-approved amendment for any extra runtime. Do not silently include that fit in this MEA-only attempt. Endpoint R1/R3/R5 are sufficient when changes only transport reporting fields; unchanged fitting code does not require a fresh MDEA fit.
 
-Build runs `scripts/workflow/change_accounting.py` once on its final tree against the fixed base, reviews classification and stops before an expected ceiling overrun. The estimate is not permission to spend all 170 lines or to omit required numerical evidence.
+Build runs the installed CSE helper `/home/tnnrpolley21/Workspaces/Agentic-Coding/plugins/cse/cse-plugin/plugin/scripts/workflow/change_accounting.py` (not copied into this repository) once on its final tree against the fixed base, reviews classification and stops before an expected ceiling overrun. The estimate is not permission to spend all 170 lines or to omit required numerical evidence.
 
 ## Retained delivery and failure meaning
 
