@@ -2,9 +2,9 @@
 
 ## Status and requested outcome
 
-Design amendment for [#235](https://github.com/tannerpolley/Amine-Thermodynamics/issues/235), 2026-11-02, following Build attempt 1 at `4e7243a` and the owner's decision to allow one rerun from a true perturbed start. This amendment is pending independent readiness review, issue-body publication by the accountable owner, and approval of the extra line allowance below. The earlier readiness decision does not cover the corrected starting declaration and recovery falsifier.
+Design amendment for [#235](https://github.com/tannerpolley/Amine-Thermodynamics/issues/235), 2026-11-02, following Build attempt 1 at `4e7243a` and the owner's decision to allow one rerun from a true perturbed start. Independent readiness review of this amendment (GPT-6 Astra, `41cdc8a`) returned **Ready**, and the owner approved the extra line allowance on 2026-11-02. Build of attempt 2 is authorized within the limits below.
 
-Accounting base remains `35703c29300eddcc2d2988eb84e68c066d24cf16`. Attempt 1 spent the approved **170 executable + 20 test lines** from that base. Request **45 additional executable + 0 additional test lines**, for ceilings of **215 + 20**; approval is open. Time remains **30 min total / 20 min fit / 60 iterations** for one further attempt.
+Accounting base remains `35703c29300eddcc2d2988eb84e68c066d24cf16`. Attempt 1 spent the approved **170 executable + 20 test lines** from that base. Request **45 additional executable + 0 additional test lines**, for ceilings of **215 + 20**; owner-approved 2026-11-02. Time remains **30 min total / 20 min fit / 60 iterations** for one further attempt.
 
 Question: can `SolventSpecification.fit()` recover attempt 1's endpoint of the same 213-row objective from the authoritative perturbation, when both physical parameters and starting reaction laws actually carry that perturbation?
 
@@ -136,7 +136,7 @@ At any hard limit, stop without automatic continuation, extra starts, larger box
 
 Attempt 1 at `4e7243a` already spent **170 gross added executable lines and 20 test lines**, counted from `35703c2`, including preparation, fitting runner, destination-law transport fix and its two-domain check. Preserve that evidence and reuse those owners. This Design adds no Build code.
 
-**Owner decision requested before Build: +45 executable lines and +0 test lines**, raising the ceilings to **215 executable + 20 test lines** against the same base. This is a bounded estimate, not approval or a requirement to spend the allowance:
+**Owner-approved 2026-11-02: +45 executable lines and +0 test lines**, raising the ceilings to **215 executable + 20 test lines** against the same base. This is a bounded estimate, not a requirement to spend the allowance:
 
 | Existing owner to change | Additional executable allowance | Basis |
 |---|---:|---|
@@ -165,7 +165,7 @@ Independent delivered `cse:review` must inspect final code and retained numerica
 
 The owner accepted the e6dae5c7 baseline replay and authorized one rerun from the true perturbed start, replacing the one-scale neighborhood with recovery of attempt 1. Preserve **30 min total / 20 min native fit / 60 iterations**, with 300 s preflight and 300 s replay/reporting inside the total. The old **170 + 20** line ceilings remain authoritative until the owner accepts **+45 executable / +0 test**.
 
-1. Independent readiness review of this amendment remains open. No subagent or independent review ran in this design-only task; do not infer Ready from the numerical probe.
+1. Independent readiness review of `41cdc8a` returned **Ready**. It recomputed the R5 translations, evaluated attempt 1's endpoint through the rebased chart (2.38e-14 relative), and reproduced the zero native start. It noted one implementation requirement that follows from the existing preservation rule: 200 of the 307 dataset declarations inherit their observation-construction document from the selected parameter, so selecting `parameter="start"` must keep their original construction documents explicitly.
 2. The accountable issue owner must publish this amendment into the live #235 body and read it back before Build. The live body read at task entry still described the superseded neighborhood and chart-origin start.
 3. Obtain the owner's line decision before Build. This worker requests it through the handoff; it does not approve it or run Build.
 4. Existing MDEA R2 extra fitting runtime remains a separate owner amendment if shared fitting mechanics change. This design uses existing driver start selection and native mechanisms; no such driver change is planned.
