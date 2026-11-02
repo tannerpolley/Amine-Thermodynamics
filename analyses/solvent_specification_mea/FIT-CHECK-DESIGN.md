@@ -2,7 +2,7 @@
 
 ## Status and requested outcome
 
-Proposed replacement body for [#235](https://github.com/tannerpolley/Amine-Thermodynamics/issues/235), prepared 2026-11-02. **Design only; not authorized for Build.** Independent readiness review must return **Ready** before execution. The owner approved the executable-line, test-line and time ceilings below on 2026-11-02; this revision does not raise them. This document is the requested committed publication draft; the accountable owner publishes the accepted body and reads it back. No issue mutation, fit, Engine edit or implementation is part of this delivery.
+Accepted design for [#235](https://github.com/tannerpolley/Amine-Thermodynamics/issues/235), 2026-11-02. Readiness: Block on `f1b9b9c` (Engine #962), resolved by merged Engine `e6dae5c7`; re-review of `4a2e83e` returned Revise on one defect, the accounting base, corrected in `c499336` with owner agreement and checked by the orchestrator (no Python changes from the new base). Build is authorized within the limits below. The owner approved the executable-line, test-line and time ceilings on 2026-11-02; this design does not raise them.
 
 Accounting base: `35703c29300eddcc2d2988eb84e68c066d24cf16` (main after #240; owner agreement 2026-11-02). The earlier base `ec5e48a` also counted the merged #233 307-row work (196 executable and 36 test lines). Refresh this explicit base only if intervening integration changes the implementation surface, with owner agreement before Build.
 
