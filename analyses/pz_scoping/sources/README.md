@@ -30,7 +30,7 @@ Existing items read: Hilliard 2008 thesis `DNQUPRMT`/`LB7LUETY` (§§5.3, 9.4.1,
 - Bishnoi 2002 SLE, Freeman 2011 dissertation, Ma et al. 2012 crystallization, Nguyen 2011/2013 volatility, Hartono 2013 PZ–water VLE, Chen 2010 PZ–water Cp, Liu and Hartono PZ absorption heat, and the primary publication of Kim's PZ heat data: not acquired, or identity unresolved.
 - Hamborg 2009 Supporting Information (EMF data; possibly Eq.21 coefficients): not looked for.
 - The primary data behind Razavi's PZ fit (Yaws handbook; Aspen HYSYS databank).
-- Hilliard Chapter IX (H2O–PZ model regression) beyond §9.4.1, and the NMR method behind App. F.
+- Hilliard Chapter IX (H2O–PZ parameter fitting) beyond §9.4.1, and the NMR method behind App. F.
 - Dugas & Rochelle 2009 (Zotero `B7T53U6N`): its overlap with Dugas 2011 is taken from the correction notice; it was not read.
 
 The main-checkout `literature/` shelf has no PZ paper. It was read, not written. Mathpix was not used: every PDF read has a usable text layer. The local copies made with `pdftotext` were scratch files outside the repository.
