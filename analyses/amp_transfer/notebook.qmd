@@ -1,0 +1,178 @@
+---
+title: "AMP transfer assessment: cation A reactive fit"
+subtitle: "Both starts reach the same endpoint, but two coordinates sit on their bounds; Kundu 2003 is not scored"
+---
+
+## Result
+
+The question for [#242](https://github.com/tannerpolley/Amine-Thermodynamics/issues/242)
+is whether the adopted MEA shared-species parameters, with a refitted pure-AMP
+set and an eight-coordinate AMP reactive fit, predict Kundu 2003's 51 CO₂
+partial pressures within the 30 % screening limit. **This study does not answer
+it.** The cation A sphere fit converges to the same endpoint from both declared
+starts. At that endpoint, however, the AMPH⁺–CO₂ interaction correction is on
+its upper bound (k = +0.5) and the AMPCOO⁻ diameter is on its lower bound
+(4.5 Å). Under design §6 an endpoint on a bound is not adopted. The owner's
+instruction for this case is to stop without scoring Kundu, so the falsifier,
+the α ± 2 % envelope, the Tong comparison and the endpoint phase trials were
+not run.
+
+At the endpoint both declared starts reach, the model does not reproduce
+Hartono 2021's loaded total pressures at the highest loadings. The fit pushes
+to the weakest AMPH⁺–CO₂ attraction allowed, which raises the predicted CO₂
+pressure, and to the smallest carbamate-anion diameter allowed. It still
+under-predicts the 313 K, α = 0.95 row by 58 %. The remaining calibration
+residuals follow a systematic pattern with loading at each isotherm. Our
+reading is a structural limit of the bounded model rather than noise; two
+starts do not show that no other point inside the bounds does better.
+
+This notebook has not been independently reviewed and has not been promoted
+for manuscript use.
+
+## Reactive fits
+
+Cation A is the declared sphere option: AMPH⁺ is a single sphere whose segment,
+Debye–Hückel and packing diameters are tied (packing = 0.88 × segment). Cation
+B, the chain option, fails its start rank gate for a start-state reason
+(`diagnosis-cation-b.md`) and was not fitted (owner decision, 2 November 2026).
+A is the result by default, not by comparison with B.
+
+The objective has 156 calibration rows: 47 loaded total pressures from Hartono
+2021 Table 7 at 313/333/353 K, 52 Hartono 2013 binary values (26 P, 26
+y_AMP), and 57 Ciftja 2014 carbamate fractions. Engine wheel `e6dae5c7`
+(SHA-256 `83ede7d2…77dd6`). The native optimizer was capped at 60 iterations,
+75 min, function and parameter tolerances 1e−10, and gradient tolerance 1e−8.
+
+| Quantity | A-1 (document start) | A-2 (ion–water +0.1, +100 K) |
+|:--|--:|--:|
+| Status, message | converged; function tolerance | converged; function tolerance |
+| Iterations | 58 | 36 |
+| Fit time / s | 42.1 | 29.0 |
+| Initial cost | 2594.95 | 3554.77 |
+| Final cost | 66.866300458 | 66.866300457 |
+| Active bounds | AMPH⁺–CO₂ k (upper), AMPCOO⁻ σ (lower) | same |
+| Endpoint rank, s_min/s_max | 8, 1.68e−3 (condition 595) | 8, 1.68e−3 (condition 595) |
+| Projected gradient norm | 3.1e−4 | 3.3e−4 |
+
+The two starts agree. Their costs differ by 8.5e−10, the largest coordinate
+difference is 2.6e−5 coordinate scales, and the largest difference in any
+weighted calibration residual is 2.1e−5 (1.5e−4 before weighting). The rank gate holds at the endpoint
+(condition ≤ 1e4), but the Engine reports covariance status `active_bound`, so
+no local covariance is claimed.
+
+| Coordinate | Bounds | Endpoint (A-1) |
+|:--|:--|--:|
+| AMP–water k_ref | [−0.5, 0.5] | −0.13349 |
+| AMP–water slope s / K | [−1000, 1000] | −61.20 |
+| AMPH⁺–water k_ref | [−0.5, 0.5] | −0.28634 |
+| AMPH⁺–water slope s / K | [−1000, 1000] | −300.12 |
+| AMPH⁺–CO₂ k | [−0.5, 0.5] | **+0.5 (bound)** |
+| AMPH⁺ σ / Å | [4.5, 6.5] | 5.2842 |
+| AMPCOO⁻ σ / Å | [4.5, 6.5] | **4.5 (bound)** |
+| Carbamate offset δ | [−3, +2] | −1.4576 |
+
+Here k(T) = k_ref + s(1/T − 1/313.15 K). δ is interior: the fitted carbamate law
+is ln K_h,m = −2546.2/T + 10.0974, against the source law's 11.555 intercept.
+Because the endpoint is on two bounds, these values are not adopted parameters.
+
+### Replay with the fitted laws
+
+The fitted reaction laws and parameters were loaded into a new model and every
+calibration row was re-predicted. A first run refused the 11 Hartono 2013
+binary states above 353.22 K, each with a P and a y value, as
+`OutsideDeclaredDomain`: the binary datasets carried the Hamborg protonation
+range [293.12, 353.22] K although binary rows contain no reaction. The binary
+datasets now declare their own measured range, [333.12, 373.17] K, with every
+reactive declaration and value unchanged (owner decision 2026-11-02). The
+rerun of `reactive.py` reproduces both fits exactly (same costs, iterations,
+bounds and endpoints) and replays all rows.
+
+| Replay of 156 rows | A-1 | A-2 |
+|:--|--:|--:|
+| Rows available | 156 | 156 |
+| Relative cost difference from native | 5.0e−13 | 4.9e−13 |
+| Max weighted-residual difference | 8.4e−12 | 7.5e−12 |
+| Binary group cost | 0.29908 | 0.29906 |
+
+Both endpoints pass the replay check (≤ 1e−8). This confirms the fitted
+model is reproduced from its retained records. It does not change the outcome,
+which is decided by the active bounds.
+
+### Calibration agreement at the endpoint
+
+Cost by group, from the native weighted residuals: loaded pressures 63.80,
+binary 0.30, NMR 2.77, total 66.87. The loaded pressures carry 95 % of the
+cost.
+
+| Hartono 2021 isotherm | Rows | Mean abs. error / % | p_calc/p_obs at the highest loading |
+|:--|--:|--:|:--|
+| 313 K | 15 | 11.5 | 0.80 (α 0.90), 0.42 (α 0.95) |
+| 333 K | 17 | 9.8 | 1.04, 1.05 (α 0.94), 0.89 (α 0.96) |
+| 353 K | 15 | 8.5 | 1.01 (α 0.86), 0.99 (α 0.90) |
+| All 47 | 47 | 9.9 (worst row 57.5) | |
+
+The predicted pressure is 8–18 % high at 313 K for α 0.46–0.78 and 15–31 %
+high at 333 K for α 0.69–0.92. At both isotherms it falls below the
+measurement at the highest loading. At 353 K it is 5–18 % low for α
+0.13–0.65. Hartono 2013 binary pressures have a mean error of 1.12 % (worst
+2.97 %); vapour AMP fractions have a mean absolute error of 4.3e−4 (worst
+2.0e−3). The Ciftja carbamate-fraction RMS is 0.00706 over 57 rows, mean signed
+error −0.0011. That is above the 0.006 calibration check, at an endpoint that
+is not adopted.
+
+## Preparation retained before the reactive fit
+
+| Stage | Result |
+|:--|:--|
+| Pure AMP (24 Klepáčová/Belabbaci pressures, 3 Ayad densities) | m 4.0761, σ 3.1870 Å, u/k 237.06 K, ε_AB/k 2385.2 K, κ 0.0366; both starts agree; no active bounds; s_min/s_max 2.0e−4 (gate 1e−4). Klepáčová 1.89 % mean / 7.96 % max; Belabbaci 1.77 % / 4.52 %; densities ≤ 0.03 kg/m³. |
+| Pappa 2006 pure-AMP hold-out (23 pressures) | 1.18 % mean, 3.04 % max. |
+| Hartono 2013 binary pre-fit (2 coordinates, 52 values) | k_ref −0.1307, s −54.14 K; P 1.05 % mean / 2.56 % max; y_AMP 4.2e−4 mean abs. |
+| Hsieh 2007 dielectric (30 rows, fixed density record) | Both branches admissible; lower Hsieh-only cost selects dielectric volume 0.3229 L/mol, dielectric temperature 2056 K (cost 82.11 vs 85.67); 1.74 % mean, 4.81 % max error. |
+| Hamborg 2009 Table 16 protonation law (24 runs) | ln K = −3850.74/T − 55.318 + 8.0646 ln T; χ² 17.0 on 21 degrees of freedom with the printed scales; condition number 1.2e6. |
+| Kundu overlap check | 0 identical rows with Hartono 2021 (different stocks 2.0/2.8/3.4 vs 3.0 mol/L and different observable). |
+
+The 21 Pappa 2006 binary VLE rows named in the design as supplemental
+comparisons were never admitted: the only available copy is the private CESAR-1
+transcription, which the design forbids copying. Pappa is therefore represented
+only by the pure-AMP hold-out above.
+
+## Not assessed
+
+Kundu 2003 (51 rows, E_p ≤ 30 %), the α ± 2 % sensitivity envelope, Tong 2012
+(40 loaded and 5 zero-loading rows), the Hartono 2021 373/393 K supplemental
+isotherms, and the endpoint tangent-plane phase trials were not run. Those
+results have no value here. Scoring them from a bound-limited endpoint is
+excluded by the owner's instruction.
+
+The result is a negative disposition reported in tables. A figure would show
+the same few endpoint values and isotherm ratios without making the stop
+condition clearer.
+
+## Limits and next decision
+
+- The stop is a design-rule outcome: two coordinates sit on bounds that
+  the design set as physical limits. It is not a convergence failure, and it
+  does not show that a model with wider bounds would pass Kundu.
+- Two starts that differ only in the ion–water pair reach the same endpoint.
+  That supports a single local minimum under these bounds. It does not
+  establish a global optimum.
+- The cation-A model, the fixed MEA shared species, the fixed Xu/Silkenbäumer
+  carbamate slope, the fixed Hamborg protonation law and the fixed dielectric
+  coefficients all condition the result.
+- Whether to widen bounds, change the ion representation, or stop the AMP
+  transfer is a Design decision for the owner. No such change was made.
+
+## Retained outputs
+
+- `results/reactive/summary.json`: preflight for all four runs; cation A fits,
+  endpoint checks, two-start comparison and stop disposition.
+- `results/reactive/A-1-fit.json`, `A-2-fit.json`: native fit reports
+  (iteration history, predictions, covariance) and replay rows.
+- `inputs/A-1-endpoint.json`, `inputs/A-2-endpoint.json`: endpoint parameter
+  documents (not adopted).
+- `results/reactive/run-cation-a.log`: run log; agent-heavy, 2 min 8 s
+  elapsed, 32 CPUs.
+- `results/pure/summary.json`, `results/binary-dielectric.json`,
+  `results/source-preparation.json`: preparation stages.
+- `diagnosis-cation-b.md`, `results/reactive/probe-cation-b.json`: cation B
+  start-gate cause.
