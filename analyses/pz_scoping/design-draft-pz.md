@@ -1,6 +1,6 @@
 # Draft experiment: do MEA shared-species parameters transfer to aqueous PZ?
 
-Parent: [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220). Research and design delivery: [#237](https://github.com/tannerpolley/Amine-Thermodynamics/issues/237); Kamps 2003 and Yi 2024 added by [#239](https://github.com/tannerpolley/Amine-Thermodynamics/issues/239). It follows the [AMP draft](../amp_pz_scoping/design-draft-amp.md) and reuses its frozen inputs, numerical checks, phase gate and evidence standard. Only what PZ changes is written here. **This is a draft that needs owner decisions and an independent readiness review. No fitting is authorized.** Readiness verdict: **Block for numerical Build**, for the reasons in the table below.
+Parent: [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220). Research and design delivery: [#237](https://github.com/tannerpolley/Amine-Thermodynamics/issues/237); Kamps 2003 and Yi 2024 added by [#239](https://github.com/tannerpolley/Amine-Thermodynamics/issues/239); Derks 2005 and Hartono 2013 by [#240](https://github.com/tannerpolley/Amine-Thermodynamics/issues/240). It follows the [AMP draft](../amp_pz_scoping/design-draft-amp.md) and reuses its frozen inputs, numerical checks, phase gate and evidence standard. Only what PZ changes is written here. **This is a draft that needs owner decisions and an independent readiness review. No fitting is authorized.** Readiness verdict: **Block for numerical Build**, for the reasons in the table below.
 
 ## Question and intended use
 
@@ -47,7 +47,7 @@ Listed so their size is visible; this is **not** an approved fit:
 
 | Quantity | Count |
 |---|---:|
-| PZ–water k at 313.15 K and slope (from Hilliard D.2) | 2 |
+| PZ–water k at a reference temperature and slope (from the PZ–water calibration block; Hartono 2013 recommended) | 2 |
 | PZH+–water k; PZH+–HCO3− k | 2 |
 | PZH+ σ, u/k, Born diameter (A) | 3 |
 | PZCOO− σ, u/k, Born diameter | 3 |
@@ -58,15 +58,17 @@ Listed so their size is visible; this is **not** an approved fit:
 | PZH2²+ quantities | fixed/tied, not fitted |
 | Total | 19 |
 
-Nineteen coordinates against 62 + 121 + 46 calibration rows is not evidence of identifiability. Several carbamate species appear only lumped in NMR sums. Before any joint fit, compute scaled sensitivity rank on calibration data at the declared starts. Then tie or fix quantities on source evidence until the set is identifiable: candidate ties are a shared σ/u/k for PZCOO− and PZ(COO)2²−, or fixing the P4 offset. Do not add pair coefficients to cure a pressure residual. Bounds follow the AMP proposal; zwitterion and −2/+2 ion bounds need owner approval.
+Nineteen coordinates against 62 + 121 + 23 calibration rows (46 if Hilliard D.2 stays in calibration) is not evidence of identifiability. Several carbamate species appear only lumped in NMR sums. Before any joint fit, compute scaled sensitivity rank on calibration data at the declared starts. Then tie or fix quantities on source evidence until the set is identifiable: candidate ties are a shared σ/u/k for PZCOO− and PZ(COO)2²−, or fixing the P4 offset. Do not add pair coefficients to cure a pressure residual. Bounds follow the AMP proposal; zwitterion and −2/+2 ion bounds need owner approval.
 
 ## Data roles and falsifier
 
 Use the roles in the [data map](data-map.md#proposed-roles-not-frozen):
-- calibration on Hilliard D.2, Hilliard D.5 and Ermatchkov 2003 NMR;
+- calibration on the PZ–water block (Hartono 2013 Table 6 recommended, owner decision), Hilliard D.5 and Ermatchkov 2003 NMR;
+- Hilliard D.2 as an unloaded-volatility comparison at 33–63 °C, if Hartono is adopted;
 - Ermatchkov 2006 as the whole-campaign primary hold-out;
 - Kamps 2003 total pressure as a secondary high-loading test, at the corrected temperatures of Ermatchkov 2006 Table 6 and with its one precipitation row excluded;
-- Dugas 80/100 °C, Xu Pt and Bishnoi as secondary comparisons.
+- Dugas 80/100 °C, Xu Pt and Bishnoi as secondary comparisons;
+- Derks 2005 (58 rows, 0.2–0.63 m) as a secondary dilute-edge comparison, with loading uncertainty in its residual scale and the 12 rows above 1.0 mol/mol PZ reported separately.
 
 The reasons for keeping Ermatchkov 2006 over Kamps 2003 are in the [data map](data-map.md#proposed-roles-not-frozen). In short, both come from the same lab. Kamps measures total pressure, mostly above 1 mol CO2/mol PZ and at MPa pressures. Ermatchkov 2006 measures P_CO2 over the absorber loading range. The carbamate laws are fitted to the NMR rows, so **NMR agreement is calibration, not validation**. The pressure hold-out is the test.
 
@@ -120,10 +122,10 @@ Failures return to Design. Do not retune on the hold-out.
 | Primary hold-out | Ermatchkov 2006, whole campaign, 393 K reported separately; Kamps 2003 as a secondary high-loading test (#239) | Different lab from the pressure calibration. It measures P_CO2 over the absorber loading range; Kamps mostly probes > 1 mol/mol PZ at MPa pressures. |
 | Kamps 2003 temperatures | Use Ermatchkov 2006 Table 6 (p.1795): printed values +0.6 to +1.8 K | The authors' own thermometer recalibration. A hand check of the unloaded 2 m row against Raoult's law agrees at the corrected temperature only. |
 | Kamps 2003 exclusions | Exclude the precipitation row; report the 11 rows below 0.2 MPa and the 374–395 K blocks separately; use the 2 unloaded rows as an unloaded-volatility check | Up to 10 % uncertainty below 0.1 MPa. Above 333 K the carbamate laws are extrapolated. |
-| PZ–water volatility calibration | Keep Hilliard D.2 for now; read Hartono 2013 (24 points) before freezing k(T) | Yi 2024 rejected Hilliard D.2 because its PZ partial pressures (< 1 Pa) are at the FTIR detection limit (SI Table S1) |
+| PZ–water volatility calibration (#240) | Calibrate on Hartono 2013 Table 6: yP and P, 23 rows, the 80 °C x = 0.0472 outlier reported separately, rounding of y in the scale. Use Hilliard D.2 as the 33–63 °C comparison. Set the k reference temperature inside 333–373 K, or accept a correlated k and slope at 313.15 K | Hartono's P_PZ is ≥ 7 Pa on every row (ebulliometer and titration, NTNU). The two sets agree at 60 °C. Yi's "lower than 1 Pa" applies to only 2 of the 46 D.2 rows ([source note](sources/derks-2005-hartono-2013.md)) |
 | MDEA + PZ blend | Record Kamps Table 4 (10 rows, 353 K) for a later MDEA/PZ assessment; it has no published temperature correction | Not used in the PZ assessment |
 | Solid handling | Domain restriction now; decide later whether to request an Engine solid capability | Liquid claims only |
-| Derks 2005 PDF | Owner opens it through the hand-off link https://doi.org/10.1002/aic.10442 (Zotero `PRYYEZ43` has only a saved web page); Kamps 2003 is now read (#239) | Derks would add 58 dilute rows (0.2–0.63 m) from a third lab, a candidate dilute-edge comparison |
+| Derks 2005 role (#240) | Secondary dilute-edge comparison, all 58 rows, not the primary hold-out; convert the nominal 0.2/0.6 M to molality at an assumed 1.00 kg/L (≈0.2035/0.633 m) | Third lab (Twente). It lies below the calibrated concentration range. 4 % loading uncertainty near 1 mol/mol PZ; row method and titrated concentrations not printed |
 | Loaded SLE boundary | Read the Freeman 2011 dissertation and the SINTEF crystallization work before using the rich-side limit; digitizing Freeman Fig.1 needs a separate authorization | Fixes the liquid window |
 
 ## Cross-check: Yi 2024 eNRTL model (#239)
@@ -133,6 +135,6 @@ Yi et al. 2024 is an open-access eNRTL model for PZ, AMP and their blend, fitted
 - *Hamborg Eq.21, D2O and solid handling:* none is settled. Yi computes K from aqueous formation Gibbs energies and enthalpies, not printed ln K laws. PZH+ values were set from pKa data, the zwitterion's was tuned, and the carbamate values have no stated origin. It does not mention D2O or precipitation.
 - *Zwitterion:* Yi treats it as neutral and nonvolatile, with its own interaction parameters. That is independent precedent for the draft's choice.
 - *PZH2²+:* Yi drops it, as Hilliard did. The draft keeps it.
-- *New evidence:* Yi rejected the Hilliard D.2 PZ volatility and Kamps 2003, and identified Hartono 2013 and Hartono 2021 as further PZ data.
+- *New evidence:* Yi rejected the Hilliard D.2 PZ volatility and Kamps 2003, and identified Hartono 2013 and Hartono 2021 as further PZ data. Hartono 2013 has now been read (#240). It agrees with D.2 at 60 °C, and Yi's "lower than 1 Pa" reason covers only 2 of the 46 D.2 rows.
 
 This draft contains no fitted value, Engine result or adopted parameter.
