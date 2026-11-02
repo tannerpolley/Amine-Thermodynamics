@@ -3,6 +3,133 @@ title: "MEA solvent-specification endpoint reproduction"
 format: html
 ---
 
+## Issue 235 attempt 2: fit from the true perturbed start (2 November 2026)
+
+**Outcome: different endpoint; the fitting path is not qualified by this
+attempt.** The fit started where it was declared to start and returned the same
+cost as attempt 1 within the 1e-6 band, with the same six active bounds. Three
+free coordinates did not recover attempt 1 within **1e-5 scaled units**: the
+largest difference is **0.0499 scales** (bicarbonate–water `k_ij`), about 5000
+times the tolerance. Under the accepted plan, a coordinate mismatch is a
+different endpoint even when the cost agrees.
+
+The start was correct this time. Engine inferred an optimizer start of exactly
+**0** in all 14 entries from the physical start document
+([`inputs/fit-start.json`](inputs/fit-start.json), $q^*+s\,d$ for each named
+target, including the 0.88 and 1 diameter ties) and the Engine-completed
+starting laws in [`declarations-fit.toml`](declarations-fit.toml). The native
+`FitResult.initial_cost` was **45.89741010758851**, against
+**45.897410107590936** from fresh predictions of the start document and laws:
+a relative difference of **5.27e-14**, limit 1e-8. The starting physical values,
+ties and R2/R5 coefficients matched their declarations with zero error. All 213
+start rows were available, the 213 × 14 derivatives were finite, and the start
+weighted residuals differed from the baseline by norm **0.98276** (limit 1e-4).
+The fit declaration differs from the endpoint declaration in only two ways: the
+starting R2/R5 laws, and an explicit `inputs/endpoint.json` construction
+document for the 200 datasets that previously inherited the selected parameter
+document. Observation construction is therefore unchanged when the start is
+selected. The baseline again reproduced #233 at **45.37796168239802**
+(1.66e-13 relative).
+
+| Quantity | Value | Limit |
+|---|---:|---|
+| Native termination | converged, usable; function tolerance 7.88e-9 ≤ 1e-8 | usable converged |
+| Iterations; residual/Jacobian evaluations; trial failures | 24; 25/14; 0 | ≤ 60 |
+| Start → final dimensionless cost | 45.897410107590936 → 45.36052592593432 | progress ≥ 1e-6 |
+| Final cost relative to attempt 1 (45.360525618233154) | +6.78e-9 (+3.08e-7 absolute) | ≤ 1e-6 |
+| Replay cost difference, relative | 4.06e-14 | ≤ 1e-8 |
+| Maximum replay weighted-residual difference | 1.42e-12 | ≤ 1e-8 absolute |
+| Maximum scaled coordinate difference from attempt 1 | 0.0499 (bicarbonate–water `k_ij`) | ≤ 1e-5 |
+| Active bounds | indices 1, 3, 5, 10 lower; 7, 8 upper | same six, same sides |
+| Rank; condition number; smallest singular value | 14; 18534.4; 8.99e-4 | reported |
+| Projected-gradient norm | 1.244e-4 (attempt 1: 1.398e-4) | reported |
+
+Coordinates in the original table basis (rebased R5 `b` minus
+30.06808876068135 K; rebased enthalpy shifts plus −250 J/mol), compared with
+attempt 1's fitted values:
+
+| Original index | Coordinate | Attempt 2 | Attempt 1 | Scaled difference |
+|---:|---|---:|---:|---:|
+| 0 | carbamate–water `k_ij` | −0.0107756753 | −0.0106782379 | −9.74e-3 |
+| 1 | MEAH+–water `k_ij` (lower bound) | −0.5 | −0.5 | 0 |
+| 2 | bicarbonate–water `k_ij` | 0.7036038054 | 0.7041032606 | **−4.99e-2** |
+| 3 | carbamate–MEAH+ `k_ij` (lower bound) | −1 | −1 | 0 |
+| 4 | MEAH+–water slope, K | −44.87550336 | −44.86342807 | −1.21e-3 |
+| 5 | MEAH+ segment diameter, Å (lower bound) | 5.35 | 5.35 | 0 |
+| 6 | carbamate segment diameter, Å | 4.8681531445 | 4.8681193583 | +3.38e-4 |
+| 7 | MEAH+ Born diameter, Å (upper bound) | 5 | 5 | 0 |
+| 8 | carbamate Born diameter, Å (upper bound) | 5 | 5 | 0 |
+| 9 | R5 native `b`, K | −7742.42628022 | −7742.18943757 | −1.29e-3 |
+| 10 | R2 incremental shift, J/mol (lower bound) | −8636.06842588 | −8636.06842588 | 0 |
+| 11 | R5 incremental shift, J/mol | −8359.39826354 | −8360.36256442 | +3.86e-4 |
+| 14 | MEAH+ dispersion energy/k, K | 177.832762608 | 177.844288475 | −1.15e-3 |
+| 15 | carbamate dispersion energy/k, K | 207.131651691 | 207.112957063 | +1.87e-3 |
+
+Group costs after attempt 2, with changes from the start and from attempt 1:
+common149 23.832044071 (−0.332799; −3.20e-4), restored species 2.447297350
+(+0.066829; −2.72e-5), Jakobsen 13.138819875 (−0.251321; +3.34e-4), loaded
+density 0.565279802 (−0.012906; −3.06e-5), and Cp 5.377084829 (−0.006687;
++4.40e-5). The two endpoints redistribute fit quality among the groups by
+amounts of order 1e-4 while their total cost differs by only 3.08e-7.
+
+**Interpretation.** The two endpoints lie in one weakly determined valley of
+the 213-row objective; the evidence does not show two distinct minima.
+A post-run reduction of the retained Jacobian at the attempt 2 endpoint
+([`weak-direction.json`](results/fit-true-start-e6dae5c7/weak-direction.json);
+array reduction only, no Engine call) puts **70 %** of the squared coordinate
+difference on the weakest singular direction ($\sigma=8.99\times10^{-4}$) and
+**93 %** on the weakest two. That weakest direction is dominated by
+bicarbonate–water `k_ij` (component −0.82), with the two enthalpy shifts
+(−0.35 each). A linear estimate of the cost of moving along the difference is
+$\tfrac12\lVert J\,\Delta z\rVert^2=1.76\times10^{-7}$. This is of the same
+order as the observed 3.08e-7 cost gap. Both runs stopped on function tolerance
+with projected-gradient norms near 1e-4, so neither stopping point is shown to
+be an exact minimizer. The 1e-5 coordinate tolerance along this
+direction was not met by function-tolerance termination here. The design
+anticipated this outcome, and the result is retained without relaxing the
+tolerance. Physically, the retained rows constrain bicarbonate–water `k_ij`
+weakly, and only in combination with the R2/R5 enthalpy coordinates: the two
+endpoints differ by 5.0e-4 in that `k_ij` at a cost difference of 3.1e-7.
+This is local numerical sensitivity, not an estimated parameter uncertainty.
+
+Evidence type: numerical verification of start selection, replay and endpoint
+reproducibility for one local fit. It is not physical validation, parameter
+adoption, an identifiability proof or a fitted-document export. No numerical
+uncertainty estimate was made. No further attempt follows automatically; any
+change of tolerance, stopping rule or comparison basis is an owner/Design
+decision.
+
+Runtime: memory-admission wait **0.10 s**; active wall **46.56 s** (preflight
+18.05 s, native fit 23.83 s, replay and reporting 4.67 s), within the 300,
+1200, 300 and 1800 s limits. Engine was asked for 32 workers with one
+numerical-library thread each; the actual worker count is not exposed. Python
+3.13.14, NumPy 2.5.4, SciPy 1.18.1 and Engine 1.2.0 from merged commit
+`e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4` (wheel SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`, installed
+files byte-identical) ran in an isolated environment. The five issue reference
+hashes, the endpoint and the wheel were checked before execution. Attempt 1's
+result files are byte-for-byte unchanged. Its fit declaration is the
+`MEA-fit.toml` at commit `4e7243a`; the current file is attempt 2's.
+
+Retained evidence: [fit declaration](MEA-fit.toml),
+[fit declarations with starting laws](declarations-fit.toml),
+[physical start document](inputs/fit-start.json),
+[rebased coordinates](inputs/fit-start-coordinates.json),
+[original perturbation table](inputs/fit-coordinates.json),
+[preparation](prepare.py), [runner](fit.py),
+[disposition, checks, coordinates, bound distances, ties, recovery and
+timing](results/fit-true-start-e6dae5c7/summary.json),
+[baseline rows and differences](results/fit-true-start-e6dae5c7/baseline.json),
+[start rows, inferred optimizer, laws and derivatives](results/fit-true-start-e6dae5c7/start.json),
+[native fit report with optimizer Jacobian, singular vectors, iteration costs,
+trial failures and completed laws](results/fit-true-start-e6dae5c7/native-fit.json),
+[fresh replay rows and per-row differences](results/fit-true-start-e6dae5c7/replay.json),
+[weak-direction reduction](results/fit-true-start-e6dae5c7/weak-direction.json)
+and [command log with reference hashes](results/fit-true-start-e6dae5c7/run.log).
+A table is used because the result is a set of scalar comparisons against
+tolerances. This section has not been independently reviewed and is not
+promoted for manuscript use.
+
 ## Issue 235 bounded fit on Engine e6dae5c7 (2 November 2026)
 
 **Outcome: invalid coordinate/law declaration; the fitting path is not
