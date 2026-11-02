@@ -1,4 +1,4 @@
-"""#242 stage 3b: AMP reactive fits (cations A, B; two starts each), gates, calibration selection and Kundu score (design §§2, 5-7)."""
+"""#242 stage 3b: AMP reactive fits (cation A, two starts; B preflight only, owner 2026-11-02), endpoint gates and Kundu score (design §§2, 5-7)."""
 import copy, gzip, hashlib, json, math, os, sys, time
 from pathlib import Path
 import numpy as np
@@ -94,7 +94,8 @@ for run in ('A-1', 'A-2', 'B-1', 'B-2'):
     pre['co2_columns']['ratio'] = pre['co2_columns']['AMP_CO2'] / pre['co2_columns']['AMPH_CO2'] if pre['co2_columns']['AMPH_CO2'] else None
     pre['passed'] = bool(pre['shared_records_unchanged'] and max(lnq) <= 1e-8 and pre['s_min_over_s_max'] >= 1e-4 and min(pre['column_norms']) > 0)
     write('summary.json', summary)
-if not all(summary['runs'][r]['passed'] for r in specs):
+summary['B'] = 'not fitted: fails its start rank gate for a start-state reason (diagnosis-cation-b.md); owner decision 2026-11-02, cation A only'
+if not all(summary['runs'][r]['passed'] for r in ('A-1', 'A-2')):
     stop('preflight failed (rank gate, ln Q = ln K, shared records or start): return to Design with the matrices')
 
 def apply_laws(spec, chart, parameters):  # completed fitted laws and fitted parameters into every declared problem
@@ -104,7 +105,7 @@ def apply_laws(spec, chart, parameters):  # completed fitted laws and fitted par
             reaction.correlation = eq.ReactionLogPolynomial(**laws[reaction.name])
     spec.model = epcsaft.Mixture(parameters, thermochemistry=spec.thermal)
     return laws
-for run, spec in specs.items():
+for run, spec in [(r, specs[r]) for r in ('A-1', 'A-2')]:
     started = time.perf_counter()
     result, report, fitted = spec.fit()
     pre, rows = summary['runs'][run], spec.inputs['observations']['fitted']
@@ -116,23 +117,19 @@ for run, spec in specs.items():
     pre.update(status=result.status, usable=result.usable, message=result.message, iterations=result.iterations, initial_cost=result.initial_cost, cost=result.final_cost,
                fit_seconds=time.perf_counter() - started, physical=list(result.chart.physical), active_bounds=list(result.covariance.active_bounds), groups=groups,
                endpoint_singular_values=list(result.covariance.singular_values), replay_cost_relative=abs(cost / result.final_cost - 1), carbamate_law=laws['carbamate-hydrolysis'],
-               delta=laws['carbamate-hydrolysis']['a'] - 11.555, nmr_rms=math.sqrt(np.mean([(p['value'] - p['observed']) ** 2 for p in replay if p['group'] == 'nmr'])))
-    pre['admissible'] = bool(result.status == 'converged' and result.usable and not pre['active_bounds'] and pre['replay_cost_relative'] <= 1e-8 and not math.isnan(cost))
+               delta=laws['carbamate-hydrolysis']['a'] - 11.555, weighted_residuals=w, endpoint_s_min_over_s_max=min(result.covariance.singular_values) / max(result.covariance.singular_values), nmr_rms=math.sqrt(np.mean([(p['value'] - p['observed']) ** 2 for p in replay if p['group'] == 'nmr'])))
+    pre['admissible'] = bool(result.status == 'converged' and result.usable and not pre['active_bounds'] and pre['replay_cost_relative'] <= 1e-8 and not math.isnan(cost) and pre['endpoint_s_min_over_s_max'] >= 1e-4)
     write(f'{run}-fit.json', dict(report=report, replay=replay))
     (AN / f'inputs/{run}-endpoint.json').write_text(json.dumps(epcsaft.parameters.document_mapping(fitted), indent=1) + '\n')
     write('summary.json', summary)
 
-# Each variant keeps its lower-cost admissible start; select on calibration cost (ties within 1 % prefer A), then score both.
-best = {}
-for cation in 'AB':
-    pair = [summary['runs'][f'{cation}-{i}'] for i in (1, 2)]
-    ok = [(f'{cation}-{i}', p) for i, p in zip((1, 2), pair) if p['admissible']]
-    summary[f'{cation}_starts'] = dict(cost_difference=pair[0]['cost'] - pair[1]['cost'], max_physical_difference=max(abs(a - b) for a, b in zip(pair[0]['physical'], pair[1]['physical'])))
-    if ok:
-        best[cation] = min(ok, key=lambda x: x[1]['cost'])[0]
-if not best:
-    stop('no admissible reactive endpoint')
-selected = 'A' if 'A' in best and ('B' not in best or summary['runs'][best['A']]['cost'] <= 1.01 * summary['runs'][best['B']]['cost']) else 'B'
+# Endpoint checks (converged and usable, no active bound, replay <= 1e-8, endpoint condition <= 1e4) and the two-start comparison in coordinate scales and normalized calibration residuals.
+a, b = (summary['runs'][r] for r in ('A-1', 'A-2'))
+summary['A_starts'] = dict(cost_difference=a['cost'] - b['cost'], max_coordinate_difference_in_scales=max(abs(x - y) / c['scale'] for x, y, c in zip(a['physical'], b['physical'], coordinates('A'))),
+                           max_weighted_residual_difference=max(abs(x - y) for x, y in zip(a['weighted_residuals'], b['weighted_residuals'])))
+if not (ok := [r for r in ('A-1', 'A-2') if summary['runs'][r]['admissible']]):
+    stop('both cation A endpoints fail their endpoint checks: Kundu not scored')
+best, selected = {'A': min(ok, key=lambda r: summary['runs'][r]['cost'])}, 'A'
 summary.update(best=best, selected=selected)
 policy = specs['A-1'].spec['phase_policy']
 for cation, run in best.items():
