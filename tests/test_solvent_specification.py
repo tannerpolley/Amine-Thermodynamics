@@ -176,3 +176,23 @@ def test_nonfinite_split_is_unresolved(monkeypatch, tmp_path):
     assert retained["seed"] == 0 and retained["message"] == trial.message
     assert retained["split_coordinates"] == ["-inf"]
     assert result["unresolved"][0]["classification_unavailable"] == "Missing or nonfinite logarithmic packing fraction"
+
+
+def test_fitted_reactions_keep_destination_domains():
+    state, fields = "aqueous-molality-infinite-dilution-water-v1", ("a", "b", "c", "d", "e", "f", "reference_temperature")
+    domains = dict(aqueous=393.15, amended=436.85)
+    law = lambda a, b, s=state: SimpleNamespace(a=a, b=b, c=0.0, d=0.0, e=0.0, f=0.0, reference_temperature=313.15,
+                                                temperature_min=293.15, temperature_max=393.15, standard_state_id=s)
+    spec = SolventSpecification.__new__(SolventSpecification)
+    spec.inputs = dict(coordinates=[dict(kind="reaction_enthalpy_shift", name=n) for n in ("R2", "R5")])
+    spec.spec = dict(chemistry=dict(reactions={k: [dict(name=n, correlation=dict(vars(law(1.0, -1.0)), temperature_max=t))
+                                                   for n in ("R2", "R5")] for k, t in domains.items()}))
+    laws = dict(R2=law(23.48949797584855, -11897.988648703167), R5=law(2.8538383112075874, -7674.6101162509585))
+    chart = SimpleNamespace(active=[], physical=[-250.0, -250.0], reaction_laws=laws)  # issue 235: -250 J/mol shifts, one 393.15 K bound
+    for key, reactions in spec.fitted_reactions(chart).items():
+        for r in reactions:
+            assert all(r["correlation"][k] == getattr(laws[r["name"]], k) for k in fields)
+            assert (r["correlation"]["temperature_min"], r["correlation"]["temperature_max"]) == (293.15, domains[key])
+    laws["R5"] = law(2.8538383112075874, -7674.6101162509585, "aqueous-mole-fraction-infinite-dilution-water-v1")
+    with pytest.raises(ValueError, match="Standard-state mismatch"):
+        spec.fitted_reactions(chart)
