@@ -229,6 +229,100 @@
     "Jakobsen2005_state_022::MEAH+",
     "Jakobsen2005_state_022::MEACOO-",
     "Jakobsen2005_state_022::HCO3- + CO3^2-",
+    "kiepe-313.20-02",
+    "kiepe-313.20-03",
+    "kiepe-313.20-04",
+    "kiepe-313.20-05",
+    "kiepe-313.20-06",
+    "kiepe-313.20-07",
+    "kiepe-313.20-08",
+    "kiepe-313.20-09",
+    "kiepe-313.20-10",
+    "kiepe-313.20-11",
+    "kiepe-313.20-12",
+    "kiepe-313.20-13",
+    "kiepe-353.11-02",
+    "kiepe-353.11-03",
+    "kiepe-353.11-04",
+    "kiepe-353.11-05",
+    "kiepe-353.11-06",
+    "kiepe-353.11-07",
+    "kiepe-353.11-08",
+    "kiepe-353.11-09",
+    "kiepe-353.11-10",
+    "kiepe-373.26-02",
+    "kiepe-373.26-03",
+    "kiepe-373.26-04",
+    "kiepe-373.26-05",
+    "kiepe-373.26-06",
+    "kiepe-373.26-07",
+    "kiepe-373.26-08",
+    "kiepe-373.26-09",
+    "kiepe-373.26-10",
+    "kiepe-373.26-11",
+    "kiepe-373.26-12",
+    "kiepe-373.26-13",
+    "kiepe-393.17-02",
+    "kiepe-393.17-03",
+    "kiepe-393.17-04",
+    "kiepe-393.17-05",
+    "kiepe-393.17-06",
+    "kiepe-393.17-07",
+    "AMU-DENS-002",
+    "AMU-DENS-009",
+    "AMU-DENS-016",
+    "AMU-DENS-023",
+    "AMU-DENS-030",
+    "cai1996_10133_002-temperature",
+    "cai1996_10133_002-mole_fraction",
+    "cai1996_10133_003-temperature",
+    "cai1996_10133_003-mole_fraction",
+    "cai1996_10133_004-temperature",
+    "cai1996_10133_004-mole_fraction",
+    "cai1996_10133_005-temperature",
+    "cai1996_10133_005-mole_fraction",
+    "cai1996_10133_006-temperature",
+    "cai1996_10133_006-mole_fraction",
+    "cai1996_10133_007-temperature",
+    "cai1996_10133_007-mole_fraction",
+    "cai1996_10133_008-temperature",
+    "cai1996_10133_008-mole_fraction",
+    "cai1996_10133_009-temperature",
+    "cai1996_10133_009-mole_fraction",
+    "cai1996_10133_010-temperature",
+    "cai1996_10133_010-mole_fraction",
+    "cai1996_10133_011-temperature",
+    "cai1996_10133_011-mole_fraction",
+    "cai1996_10133_012-temperature",
+    "cai1996_10133_012-mole_fraction",
+    "cai1996_10133_013-temperature",
+    "cai1996_10133_013-mole_fraction",
+    "cai1996_06666_002-temperature",
+    "cai1996_06666_002-mole_fraction",
+    "cai1996_06666_003-temperature",
+    "cai1996_06666_003-mole_fraction",
+    "cai1996_06666_004-temperature",
+    "cai1996_06666_004-mole_fraction",
+    "cai1996_06666_005-temperature",
+    "cai1996_06666_005-mole_fraction",
+    "cai1996_06666_006-temperature",
+    "cai1996_06666_006-mole_fraction",
+    "cai1996_06666_007-temperature",
+    "cai1996_06666_007-mole_fraction",
+    "cai1996_06666_008-temperature",
+    "cai1996_06666_008-mole_fraction",
+    "cai1996_06666_009-temperature",
+    "cai1996_06666_009-mole_fraction",
+    "cai1996_06666_010-temperature",
+    "cai1996_06666_010-mole_fraction",
+    "cai1996_06666_011-temperature",
+    "cai1996_06666_011-mole_fraction",
+    "cai1996_06666_012-temperature",
+    "cai1996_06666_012-mole_fraction",
+    "cai1996_06666_013-temperature",
+    "cai1996_06666_013-mole_fraction",
+    "cai1996_06666_014-temperature",
+    "cai1996_06666_014-mole_fraction",
     "Amundsen2009_state_060",
     "Amundsen2009_state_061",
     "Amundsen2009_state_062",
@@ -281,7 +375,96 @@
     "Hilliard2008_Cp_353.15_0.0",
     "Hilliard2008_Cp_353.15_0.358"
   ],
-  "declarations_equal": 213,
-  "construction": "13 request-backed declarations retain F1 neutral-domain amendment; runtime uses unamended endpoint",
+  "declarations_equal": 307,
+  "continuation_equal": 39,
+  "paired_states_equal": 25,
+  "construction_source": {
+    "path": "inputs/construction-parameters.json",
+    "sha256": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569"
+  },
+  "construction_domain_changes": {
+    "kind": "fit-range",
+    "temperature_min": {
+      "magnitude": 293.15,
+      "unit": "kelvin"
+    },
+    "temperature_max": {
+      "magnitude": 436.85,
+      "unit": "kelvin"
+    },
+    "pressure_min": {
+      "magnitude": 1.0,
+      "unit": "pascal"
+    },
+    "pressure_max": {
+      "magnitude": 100000000.0,
+      "unit": "pascal"
+    }
+  },
+  "construction_differences": [
+    {
+      "domain_id": "mea-candidate-293-15-to-393-15-k",
+      "fields": {
+        "pressure_max": {
+          "before": {
+            "magnitude": 10000000.0,
+            "unit": "pascal"
+          },
+          "after": {
+            "magnitude": 100000000.0,
+            "unit": "pascal"
+          }
+        },
+        "temperature_max": {
+          "before": {
+            "magnitude": 393.15,
+            "unit": "kelvin"
+          },
+          "after": {
+            "magnitude": 436.85,
+            "unit": "kelvin"
+          }
+        }
+      }
+    },
+    {
+      "domain_id": "cai-1996-neutral-refit",
+      "fields": {
+        "pressure_max": {
+          "before": null,
+          "after": {
+            "magnitude": 100000000.0,
+            "unit": "pascal"
+          }
+        },
+        "temperature_min": {
+          "before": null,
+          "after": {
+            "magnitude": 293.15,
+            "unit": "kelvin"
+          }
+        },
+        "temperature_max": {
+          "before": null,
+          "after": {
+            "magnitude": 436.85,
+            "unit": "kelvin"
+          }
+        },
+        "kind": {
+          "before": "unknown",
+          "after": "fit-range"
+        },
+        "pressure_min": {
+          "before": null,
+          "after": {
+            "magnitude": 1.0,
+            "unit": "pascal"
+          }
+        }
+      }
+    }
+  ],
+  "construction": "Stage-2 construction and continuation use amended parameters; prediction uses unamended endpoint",
   "endpoint_only": "Empty coordinates and phase states; start equals endpoint; no fit or phase search"
 }

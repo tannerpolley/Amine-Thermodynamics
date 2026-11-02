@@ -1,0 +1,2840 @@
+{
+  "fixed": {
+    "identity": "AMU-DENS-002",
+    "group": "CO2-free density",
+    "status": "OutsideDeclaredDomain",
+    "message": "Temperature outside declared assessment domain",
+    "value": null,
+    "observed": 1010.5999999999999,
+    "row": {
+      "id": "AMU-DENS-002",
+      "state_id": "AMU-DENS-002",
+      "T_K": 298.15,
+      "P_Pa": 100000.0,
+      "MEA_weight_fraction": 0.3,
+      "quantity": "phase_density",
+      "observed": 1010.5999999999999,
+      "scale": 0.5,
+      "form": "difference",
+      "weight": 10.0,
+      "source_locator": "3QJR6RHH/NGQVTDX7 Table 1; pressure unreported; uncertainty pp.3099-3100"
+    }
+  },
+  "pair": [
+    {
+      "identity": "cai1996_10133_002-temperature",
+      "group": "Cai",
+      "row": {
+        "state_id": "cai1996_10133_002",
+        "T_K": 431.85,
+        "P_Pa": 101330.0,
+        "feed": {
+          "water": 0.0736,
+          "monoethanolamine": 0.9264
+        },
+        "vapor_guess": {
+          "water": 0.3411,
+          "monoethanolamine": 0.6589
+        },
+        "weight": 1,
+        "form": "difference",
+        "source_locator": "Table 2 row 2",
+        "id": "cai1996_10133_002-temperature",
+        "quantity": "temperature",
+        "observed": 431.85,
+        "scale": 1.0
+      },
+      "observed": 431.85,
+      "convergence": {
+        "residual": 1.3322676295501878e-14,
+        "floor": 4.555492778503101e-11,
+        "amplification": 0.0,
+        "contraction": null,
+        "iterations": 0,
+        "stop": "converged"
+      },
+      "saturation_loading": null,
+      "endpoint_loading": null,
+      "optional_field_unavailability": {
+        "saturation_loading": "Not exposed by the installed Engine prediction",
+        "endpoint_loading": "Not exposed by the installed Engine prediction"
+      },
+      "status": "PairUnavailable",
+      "message": "Paired native temperature/fraction unavailable or outside declared domain",
+      "value": 500.0,
+      "residual": 1.8229375243275854,
+      "requested_tolerance_met": true,
+      "branch": null,
+      "stable_root_count": null,
+      "domain_evidence": {
+        "target": "cai1996_10133_002-temperature",
+        "temperature": 500.0,
+        "prediction": {
+          "identity": "cai1996_10133_002-temperature",
+          "group": "Cai",
+          "row": {
+            "state_id": "cai1996_10133_002",
+            "T_K": 431.85,
+            "P_Pa": 101330.0,
+            "feed": {
+              "water": 0.0736,
+              "monoethanolamine": 0.9264
+            },
+            "vapor_guess": {
+              "water": 0.3411,
+              "monoethanolamine": 0.6589
+            },
+            "weight": 1,
+            "form": "difference",
+            "source_locator": "Table 2 row 2",
+            "id": "cai1996_10133_002-temperature",
+            "quantity": "temperature",
+            "observed": 431.85,
+            "scale": 1.0
+          },
+          "observed": 431.85,
+          "convergence": {
+            "residual": 1.3322676295501878e-14,
+            "floor": 4.555492778503101e-11,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 0,
+            "stop": "converged"
+          },
+          "saturation_loading": null,
+          "endpoint_loading": null,
+          "optional_field_unavailability": {
+            "saturation_loading": "Not exposed by the installed Engine prediction",
+            "endpoint_loading": "Not exposed by the installed Engine prediction"
+          },
+          "status": "Available",
+          "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+          "value": 500.0,
+          "residual": 1.8229375243275854,
+          "requested_tolerance_met": true,
+          "branch": null,
+          "stable_root_count": null
+        },
+        "members": [
+          {
+            "identity": "cai1996_10133_002-temperature",
+            "group": "Cai",
+            "row": {
+              "state_id": "cai1996_10133_002",
+              "T_K": 431.85,
+              "P_Pa": 101330.0,
+              "feed": {
+                "water": 0.0736,
+                "monoethanolamine": 0.9264
+              },
+              "vapor_guess": {
+                "water": 0.3411,
+                "monoethanolamine": 0.6589
+              },
+              "weight": 1,
+              "form": "difference",
+              "source_locator": "Table 2 row 2",
+              "id": "cai1996_10133_002-temperature",
+              "quantity": "temperature",
+              "observed": 431.85,
+              "scale": 1.0
+            },
+            "observed": 431.85,
+            "convergence": {
+              "residual": 1.3322676295501878e-14,
+              "floor": 4.555492778503101e-11,
+              "amplification": 0.0,
+              "contraction": null,
+              "iterations": 0,
+              "stop": "converged"
+            },
+            "saturation_loading": null,
+            "endpoint_loading": null,
+            "optional_field_unavailability": {
+              "saturation_loading": "Not exposed by the installed Engine prediction",
+              "endpoint_loading": "Not exposed by the installed Engine prediction"
+            },
+            "status": "Available",
+            "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+            "value": 500.0,
+            "residual": 1.8229375243275854,
+            "requested_tolerance_met": true,
+            "branch": null,
+            "stable_root_count": null
+          },
+          {
+            "identity": "cai1996_10133_002-mole_fraction",
+            "group": "Cai",
+            "row": {
+              "state_id": "cai1996_10133_002",
+              "T_K": 431.85,
+              "P_Pa": 101330.0,
+              "feed": {
+                "water": 0.0736,
+                "monoethanolamine": 0.9264
+              },
+              "vapor_guess": {
+                "water": 0.3411,
+                "monoethanolamine": 0.6589
+              },
+              "weight": 1,
+              "form": "difference",
+              "source_locator": "Table 2 row 2",
+              "id": "cai1996_10133_002-mole_fraction",
+              "quantity": "mole_fraction",
+              "observed": 0.3411,
+              "scale": 0.01
+            },
+            "observed": 0.3411,
+            "convergence": {
+              "residual": 1.3322676295501878e-14,
+              "floor": 4.555492778503101e-11,
+              "amplification": 0.0,
+              "contraction": null,
+              "iterations": 0,
+              "stop": "converged"
+            },
+            "saturation_loading": null,
+            "endpoint_loading": null,
+            "optional_field_unavailability": {
+              "saturation_loading": "Not exposed by the installed Engine prediction",
+              "endpoint_loading": "Not exposed by the installed Engine prediction"
+            },
+            "status": "Available",
+            "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+            "value": 0.3164618391240703,
+            "residual": -2.4638160875929738,
+            "requested_tolerance_met": true,
+            "branch": null,
+            "stable_root_count": null
+          }
+        ]
+      }
+    },
+    {
+      "identity": "cai1996_10133_002-mole_fraction",
+      "group": "Cai",
+      "row": {
+        "state_id": "cai1996_10133_002",
+        "T_K": 431.85,
+        "P_Pa": 101330.0,
+        "feed": {
+          "water": 0.0736,
+          "monoethanolamine": 0.9264
+        },
+        "vapor_guess": {
+          "water": 0.3411,
+          "monoethanolamine": 0.6589
+        },
+        "weight": 1,
+        "form": "difference",
+        "source_locator": "Table 2 row 2",
+        "id": "cai1996_10133_002-mole_fraction",
+        "quantity": "mole_fraction",
+        "observed": 0.3411,
+        "scale": 0.01
+      },
+      "observed": 0.3411,
+      "convergence": {
+        "residual": 1.3322676295501878e-14,
+        "floor": 4.555492778503101e-11,
+        "amplification": 0.0,
+        "contraction": null,
+        "iterations": 0,
+        "stop": "converged"
+      },
+      "saturation_loading": null,
+      "endpoint_loading": null,
+      "optional_field_unavailability": {
+        "saturation_loading": "Not exposed by the installed Engine prediction",
+        "endpoint_loading": "Not exposed by the installed Engine prediction"
+      },
+      "status": "PairUnavailable",
+      "message": "Paired native temperature/fraction unavailable or outside declared domain",
+      "value": 0.3164618391240703,
+      "residual": -2.4638160875929738,
+      "requested_tolerance_met": true,
+      "branch": null,
+      "stable_root_count": null,
+      "domain_evidence": {
+        "target": "cai1996_10133_002-temperature",
+        "temperature": 500.0,
+        "prediction": {
+          "identity": "cai1996_10133_002-temperature",
+          "group": "Cai",
+          "row": {
+            "state_id": "cai1996_10133_002",
+            "T_K": 431.85,
+            "P_Pa": 101330.0,
+            "feed": {
+              "water": 0.0736,
+              "monoethanolamine": 0.9264
+            },
+            "vapor_guess": {
+              "water": 0.3411,
+              "monoethanolamine": 0.6589
+            },
+            "weight": 1,
+            "form": "difference",
+            "source_locator": "Table 2 row 2",
+            "id": "cai1996_10133_002-temperature",
+            "quantity": "temperature",
+            "observed": 431.85,
+            "scale": 1.0
+          },
+          "observed": 431.85,
+          "convergence": {
+            "residual": 1.3322676295501878e-14,
+            "floor": 4.555492778503101e-11,
+            "amplification": 0.0,
+            "contraction": null,
+            "iterations": 0,
+            "stop": "converged"
+          },
+          "saturation_loading": null,
+          "endpoint_loading": null,
+          "optional_field_unavailability": {
+            "saturation_loading": "Not exposed by the installed Engine prediction",
+            "endpoint_loading": "Not exposed by the installed Engine prediction"
+          },
+          "status": "Available",
+          "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+          "value": 500.0,
+          "residual": 1.8229375243275854,
+          "requested_tolerance_met": true,
+          "branch": null,
+          "stable_root_count": null
+        },
+        "members": [
+          {
+            "identity": "cai1996_10133_002-temperature",
+            "group": "Cai",
+            "row": {
+              "state_id": "cai1996_10133_002",
+              "T_K": 431.85,
+              "P_Pa": 101330.0,
+              "feed": {
+                "water": 0.0736,
+                "monoethanolamine": 0.9264
+              },
+              "vapor_guess": {
+                "water": 0.3411,
+                "monoethanolamine": 0.6589
+              },
+              "weight": 1,
+              "form": "difference",
+              "source_locator": "Table 2 row 2",
+              "id": "cai1996_10133_002-temperature",
+              "quantity": "temperature",
+              "observed": 431.85,
+              "scale": 1.0
+            },
+            "observed": 431.85,
+            "convergence": {
+              "residual": 1.3322676295501878e-14,
+              "floor": 4.555492778503101e-11,
+              "amplification": 0.0,
+              "contraction": null,
+              "iterations": 0,
+              "stop": "converged"
+            },
+            "saturation_loading": null,
+            "endpoint_loading": null,
+            "optional_field_unavailability": {
+              "saturation_loading": "Not exposed by the installed Engine prediction",
+              "endpoint_loading": "Not exposed by the installed Engine prediction"
+            },
+            "status": "Available",
+            "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+            "value": 500.0,
+            "residual": 1.8229375243275854,
+            "requested_tolerance_met": true,
+            "branch": null,
+            "stable_root_count": null
+          },
+          {
+            "identity": "cai1996_10133_002-mole_fraction",
+            "group": "Cai",
+            "row": {
+              "state_id": "cai1996_10133_002",
+              "T_K": 431.85,
+              "P_Pa": 101330.0,
+              "feed": {
+                "water": 0.0736,
+                "monoethanolamine": 0.9264
+              },
+              "vapor_guess": {
+                "water": 0.3411,
+                "monoethanolamine": 0.6589
+              },
+              "weight": 1,
+              "form": "difference",
+              "source_locator": "Table 2 row 2",
+              "id": "cai1996_10133_002-mole_fraction",
+              "quantity": "mole_fraction",
+              "observed": 0.3411,
+              "scale": 0.01
+            },
+            "observed": 0.3411,
+            "convergence": {
+              "residual": 1.3322676295501878e-14,
+              "floor": 4.555492778503101e-11,
+              "amplification": 0.0,
+              "contraction": null,
+              "iterations": 0,
+              "stop": "converged"
+            },
+            "saturation_loading": null,
+            "endpoint_loading": null,
+            "optional_field_unavailability": {
+              "saturation_loading": "Not exposed by the installed Engine prediction",
+              "endpoint_loading": "Not exposed by the installed Engine prediction"
+            },
+            "status": "Available",
+            "message": "NEWTON_CONVERGED: converged: residual 1.3322676295501878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 4.5554927785031012e-11, amplification 0",
+            "value": 0.3164618391240703,
+            "residual": -2.4638160875929738,
+            "requested_tolerance_met": true,
+            "branch": null,
+            "stable_root_count": null
+          }
+        ]
+      }
+    }
+  ],
+  "continuation": {
+    "kiepe-313.20-02": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 95090.0,
+        "phases": [
+          {
+            "name": "L",
+            "composition": [
+              0.00036,
+              0.99964
+            ],
+            "packing": null
+          },
+          {
+            "name": "V",
+            "composition": [
+              0.99,
+              0.01
+            ],
+            "packing": null
+          }
+        ]
+      },
+      "success": false,
+      "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+      "residuals": [
+        0.0,
+        8.881784197001252e-16,
+        6.24691319994898e-16,
+        0.0,
+        4.440892098500626e-16,
+        3.123456599974491e-16,
+        -1.0842021724855044e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": null,
+      "mole_fractions": [],
+      "packing_fractions": [],
+      "requested_tolerance_met": true,
+      "status": "ContinuationUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-03": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-04": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-05": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-06": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-07": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-08": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-09": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-10": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-11": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-12": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-313.20-13": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "status": "DependentUnavailable",
+      "cause": {
+        "predecessor": null,
+        "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+        "incoming": {
+          "pressure": 95090.0,
+          "phases": [
+            {
+              "name": "L",
+              "composition": [
+                0.00036,
+                0.99964
+              ],
+              "packing": null
+            },
+            {
+              "name": "V",
+              "composition": [
+                0.99,
+                0.01
+              ],
+              "packing": null
+            }
+          ]
+        },
+        "success": false,
+        "message": "phases_coincide: phase distance between L and V is too small: 0.000000",
+        "residuals": [
+          0.0,
+          8.881784197001252e-16,
+          6.24691319994898e-16,
+          0.0,
+          4.440892098500626e-16,
+          3.123456599974491e-16,
+          -1.0842021724855044e-19,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "pressure": null,
+        "mole_fractions": [],
+        "packing_fractions": [],
+        "requested_tolerance_met": true,
+        "target": "kiepe-313.20-02",
+        "exception": "ValueError",
+        "exception_message": "Continuation unavailable: phases_coincide: phase distance between L and V is too small: 0.000000"
+      }
+    },
+    "kiepe-353.11-02": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 134230.0,
+        "phases": [
+          {
+            "name": "L",
+            "composition": [
+              0.00022,
+              0.99978
+            ],
+            "packing": null
+          },
+          {
+            "name": "V",
+            "composition": [
+              0.99,
+              0.01
+            ],
+            "packing": null
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.7319479184152442e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 2.0076621784680902e-10, amplification 0",
+      "residuals": [
+        -8.881784197001252e-15,
+        -1.7319479184152442e-14,
+        -1.5496489717786947e-14,
+        4.440892098500626e-16,
+        4.440892098500626e-16,
+        4.536554408105097e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 137108.78370639143,
+      "mole_fractions": [
+        0.00022,
+        0.0,
+        0.99978,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.6520803288130614,
+        0.0,
+        0.3479196711869385,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4508536905965687,
+        0.0005334607761046397
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-03": {
+      "predecessor": "kiepe-353.11-02",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 137108.78370639143,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.00022,
+              "water": 0.99978
+            },
+            "packing": 0.4508536905965687
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.6520803288130614,
+              "water": 0.3479196711869385
+            },
+            "packing": 0.0005334607761046397
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.6875389974302379e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 6 iterations, contraction absent, floor 2.0034514605064593e-10, amplification 0",
+      "residuals": [
+        1.687538997430238e-14,
+        1.3322676295501878e-15,
+        2.6913872969582378e-15,
+        8.881784197001252e-16,
+        4.440892098500626e-16,
+        1.7747315936566254e-15,
+        6.505213034913027e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 598876.7489804206,
+      "mole_fractions": [
+        0.0013400000000000007,
+        0.0,
+        0.99866,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9176974219604345,
+        0.0,
+        0.08230257803956553,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.45072868024504537,
+        0.0026172165645743234
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-04": {
+      "predecessor": "kiepe-353.11-03",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 598876.7489804206,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0013400000000000007,
+              "water": 0.99866
+            },
+            "packing": 0.45072868024504537
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9176974219604345,
+              "water": 0.08230257803956553
+            },
+            "packing": 0.0026172165645743234
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.7763568394002505e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 2.0001544190443762e-10, amplification 0",
+      "residuals": [
+        -1.7763568394002505e-15,
+        -4.440892098500626e-16,
+        -6.664518953935879e-16,
+        -8.881784197001252e-16,
+        4.440892098500626e-16,
+        5.008401416235294e-16,
+        -8.673617379884035e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 967916.5219698397,
+      "mole_fractions": [
+        0.0022199999999999993,
+        0.0,
+        0.99778,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9477120234948863,
+        0.0,
+        0.05228797650511378,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4506310710303817,
+        0.004327234013416352
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-05": {
+      "predecessor": "kiepe-353.11-04",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 967916.5219698397,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0022199999999999993,
+              "water": 0.99778
+            },
+            "packing": 0.4506310710303817
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9477120234948863,
+              "water": 0.05228797650511378
+            },
+            "packing": 0.004327234013416352
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.5987211554602254e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.9954147856697115e-10, amplification 0",
+      "residuals": [
+        -1.5987211554602254e-14,
+        -8.43769498715119e-15,
+        -8.553123213688278e-15,
+        -8.881784197001252e-16,
+        -8.881784197001252e-16,
+        -4.2013126332616156e-16,
+        -1.3010426069826053e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 1511121.596075566,
+      "mole_fractions": [
+        0.0034899999999999987,
+        0.0,
+        0.99651,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.965153025109099,
+        0.0,
+        0.034846974890901,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.45049124534684093,
+        0.006921303274551976
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-06": {
+      "predecessor": "kiepe-353.11-05",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 1511121.596075566,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0034899999999999987,
+              "water": 0.99651
+            },
+            "packing": 0.45049124534684093
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.965153025109099,
+              "water": 0.034846974890901
+            },
+            "packing": 0.006921303274551976
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 9.7699626167013776e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.990291119767802e-10, amplification 0",
+      "residuals": [
+        9.769962616701378e-15,
+        5.329070518200751e-15,
+        4.855931157266663e-15,
+        0.0,
+        8.881784197001252e-16,
+        0.0,
+        -1.734723475976807e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 2117199.03227262,
+      "mole_fractions": [
+        0.0048699999999999985,
+        0.0,
+        0.99513,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9739744573955912,
+        0.0,
+        0.026025542604408793,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.450340856456155,
+        0.009932087652937098
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-07": {
+      "predecessor": "kiepe-353.11-06",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 2117199.03227262,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0048699999999999985,
+              "water": 0.99513
+            },
+            "packing": 0.450340856456155
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9739744573955912,
+              "water": 0.026025542604408793
+            },
+            "packing": 0.009932087652937098
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 3.730349362740526e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.98449841040557e-10, amplification 0",
+      "residuals": [
+        3.730349362740526e-14,
+        1.9095836023552692e-14,
+        1.1870808513661754e-14,
+        0.0,
+        4.440892098500626e-16,
+        1.071101031137823e-16,
+        -8.673617379884035e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 2829652.130876813,
+      "mole_fractions": [
+        0.00644,
+        0.0,
+        0.9935600000000001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9794275789591464,
+        0.0,
+        0.020572421040853495,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.45017199461379165,
+        0.013643624704985128
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-08": {
+      "predecessor": "kiepe-353.11-07",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 2829652.130876813,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.00644,
+              "water": 0.9935600000000001
+            },
+            "packing": 0.45017199461379165
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9794275789591464,
+              "water": 0.020572421040853495
+            },
+            "packing": 0.013643624704985128
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 5.6843418860808015e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.9675426133898476e-10, amplification 0",
+      "residuals": [
+        5.684341886080802e-14,
+        4.929390229335695e-14,
+        4.090845482232855e-14,
+        8.881784197001252e-16,
+        4.440892098500626e-16,
+        -2.1514366031341369e-16,
+        1.734723475976807e-18,
+        1.1102230246251565e-16,
+        2.220446049250313e-16,
+        0.0
+      ],
+      "pressure": 5139584.4445996955,
+      "mole_fractions": [
+        0.01111,
+        0.0,
+        0.9888899999999999,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9862702021577573,
+        0.0,
+        0.013729797842242772,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4496881283270087,
+        0.027236451776029902
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-09": {
+      "predecessor": "kiepe-353.11-08",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 5139584.4445996955,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.01111,
+              "water": 0.9888899999999999
+            },
+            "packing": 0.4496881283270087
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9862702021577573,
+              "water": 0.013729797842242772
+            },
+            "packing": 0.027236451776029902
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.2434497875801753e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.9560335109020718e-10, amplification 0",
+      "residuals": [
+        -7.993605777301127e-15,
+        -1.2434497875801753e-14,
+        -1.1429501558454951e-14,
+        8.881784197001252e-16,
+        -4.440892098500626e-16,
+        0.0,
+        -5.204170427930421e-18,
+        0.0,
+        2.220446049250313e-16,
+        0.0
+      ],
+      "pressure": 7005895.529029433,
+      "mole_fractions": [
+        0.014369999999999994,
+        0.0,
+        0.9856299999999999,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9879872371299983,
+        0.0,
+        0.012012762870001834,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4493746172743767,
+        0.040534272988911775
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-353.11-10": {
+      "predecessor": "kiepe-353.11-09",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 7005895.529029433,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.014369999999999994,
+              "water": 0.9856299999999999
+            },
+            "packing": 0.4493746172743767
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9879872371299983,
+              "water": 0.012012762870001834
+            },
+            "packing": 0.040534272988911775
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 6.0264228956938853e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.945920133728645e-10, amplification 0",
+      "residuals": [
+        -3.552713678800501e-15,
+        -3.9968028886505635e-15,
+        -6.026422895693885e-15,
+        -1.7763568394002505e-15,
+        0.0,
+        -3.0154308020991165e-16,
+        3.469446951953614e-18,
+        0.0,
+        0.0,
+        -1.1102230246251565e-16
+      ],
+      "pressure": 9027194.494103633,
+      "mole_fractions": [
+        0.017340000000000008,
+        0.0,
+        0.9826600000000001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9883771122933656,
+        0.0,
+        0.011622887706634498,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44911934305363577,
+        0.05834135256249006
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-02": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 175560.0,
+        "phases": [
+          {
+            "name": "L",
+            "composition": [
+              0.00015,
+              0.99985
+            ],
+            "packing": null
+          },
+          {
+            "name": "V",
+            "composition": [
+              0.99,
+              0.01
+            ],
+            "packing": null
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.6645352591003757e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 9.9798671990674016e-09, amplification 0",
+      "residuals": [
+        -2.6645352591003757e-15,
+        -1.3322676295501878e-15,
+        -1.530527014110124e-15,
+        -4.440892098500626e-16,
+        0.0,
+        -2.525415499564631e-16,
+        5.421010862427522e-20,
+        0.0,
+        0.0,
+        2.220446049250313e-16
+      ],
+      "pressure": 173204.29647297604,
+      "mole_fractions": [
+        0.00015000000000000004,
+        0.0,
+        0.99985,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.40926970223560966,
+        0.0,
+        0.5907302977643903,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44351785679229894,
+        0.0005733312294904958
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-03": {
+      "predecessor": "kiepe-373.26-02",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 173204.29647297604,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.00015000000000000004,
+              "water": 0.99985
+            },
+            "packing": 0.44351785679229894
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.40926970223560966,
+              "water": 0.5907302977643903
+            },
+            "packing": 0.0005733312294904958
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.2204460492503131e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 9.7817947274976758e-09, amplification 0",
+      "residuals": [
+        -2.220446049250313e-14,
+        -1.1546319456101628e-14,
+        -1.2167699192788538e-14,
+        0.0,
+        0.0,
+        -3.319249826294154e-16,
+        0.0,
+        -1.1102230246251565e-16,
+        -1.1102230246251565e-16,
+        0.0
+      ],
+      "pressure": 393201.5691514045,
+      "mole_fractions": [
+        0.0006100000000000001,
+        0.0,
+        0.99939,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7362153233474744,
+        0.0,
+        0.2637846766525257,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44346576494484635,
+        0.0014983160956085284
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-04": {
+      "predecessor": "kiepe-373.26-03",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 393201.5691514045,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0006100000000000001,
+              "water": 0.99939
+            },
+            "packing": 0.44346576494484635
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.7362153233474744,
+              "water": 0.2637846766525257
+            },
+            "packing": 0.0014983160956085284
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 3.4638958368304884e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 9.6827044950151613e-09, amplification 0",
+      "residuals": [
+        -3.4638958368304884e-14,
+        -1.9984014443252818e-14,
+        -1.5048014315532075e-14,
+        0.0,
+        0.0,
+        1.7053912333432596e-16,
+        1.0842021724855044e-19,
+        -1.1102230246251565e-16,
+        -1.1102230246251565e-16,
+        -2.220446049250313e-16
+      ],
+      "pressure": 508673.09001087525,
+      "mole_fractions": [
+        0.0008500000000000002,
+        0.0,
+        0.99915,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.794647962663389,
+        0.0,
+        0.2053520373366111,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4434386598238284,
+        0.00198812911541618
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-05": {
+      "predecessor": "kiepe-373.26-04",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 508673.09001087525,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0008500000000000002,
+              "water": 0.99915
+            },
+            "packing": 0.4434386598238284
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.794647962663389,
+              "water": 0.2053520373366111
+            },
+            "packing": 0.00198812911541618
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.6645352591003757e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 9.4513075989623021e-09, amplification 0",
+      "residuals": [
+        2.6645352591003757e-15,
+        1.3322676295501878e-15,
+        1.380414179279074e-15,
+        8.881784197001252e-16,
+        4.440892098500626e-16,
+        4.3338551005951186e-16,
+        -2.168404344971009e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 794624.2880747556,
+      "mole_fractions": [
+        0.0014399999999999999,
+        0.0,
+        0.99856,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8662159967822443,
+        0.0,
+        0.13378400321775574,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44337224709512885,
+        0.0032141500875025736
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-06": {
+      "predecessor": "kiepe-373.26-05",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 794624.2880747556,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0014399999999999999,
+              "water": 0.99856
+            },
+            "packing": 0.44337224709512885
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.8662159967822443,
+              "water": 0.13378400321775574
+            },
+            "packing": 0.0032141500875025736
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.6875389974302379e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 9.0531152986791667e-09, amplification 0",
+      "residuals": [
+        1.687538997430238e-14,
+        7.993605777301127e-15,
+        6.463978920714778e-15,
+        8.881784197001252e-16,
+        4.440892098500626e-16,
+        4.945880519245466e-16,
+        4.336808689942018e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 1370949.5879917678,
+      "mole_fractions": [
+        0.0026100000000000003,
+        0.0,
+        0.99739,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9196283768146312,
+        0.0,
+        0.08037162318536893,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44324152652865106,
+        0.005743745131008311
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-07": {
+      "predecessor": "kiepe-373.26-06",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 1370949.5879917678,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0026100000000000003,
+              "water": 0.99739
+            },
+            "packing": 0.44324152652865106
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9196283768146312,
+              "water": 0.08037162318536893
+            },
+            "packing": 0.005743745131008311
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 4.1744385725905886e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 8.5256022684017324e-09, amplification 0",
+      "residuals": [
+        4.1744385725905886e-14,
+        3.3306690738754696e-14,
+        2.5760425168536287e-14,
+        8.881784197001252e-16,
+        -4.440892098500626e-16,
+        -3.1008275080387125e-16,
+        8.673617379884035e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 2139927.2238342026,
+      "mole_fractions": [
+        0.004130000000000001,
+        0.0,
+        0.99587,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9459303320557242,
+        0.0,
+        0.054069667944275854,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44307383164110886,
+        0.009248500063497664
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-08": {
+      "predecessor": "kiepe-373.26-07",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 2139927.2238342026,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.004130000000000001,
+              "water": 0.99587
+            },
+            "packing": 0.44307383164110886
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9459303320557242,
+              "water": 0.054069667944275854
+            },
+            "packing": 0.009248500063497664
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 3.907985046680551e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 7.7715694148649419e-09, amplification 0",
+      "residuals": [
+        3.907985046680551e-14,
+        3.419486915845482e-14,
+        2.7320827841115692e-14,
+        0.0,
+        0.0,
+        -1.922323314684389e-16,
+        2.6020852139652106e-18,
+        -1.1102230246251565e-16,
+        0.0,
+        0.0
+      ],
+      "pressure": 3332521.40664786,
+      "mole_fractions": [
+        0.006390000000000003,
+        0.0,
+        0.99361,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.962442672475688,
+        0.0,
+        0.03755732752431201,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44282964521927365,
+        0.015006626704667701
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-09": {
+      "predecessor": "kiepe-373.26-08",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 3332521.40664786,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.006390000000000003,
+              "water": 0.99361
+            },
+            "packing": 0.44282964521927365
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.962442672475688,
+              "water": 0.03755732752431201
+            },
+            "packing": 0.015006626704667701
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 4.4408920985006262e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 7.1823767436370426e-09, amplification 0",
+      "residuals": [
+        4.440892098500626e-14,
+        3.3306690738754696e-14,
+        2.8069974335171085e-14,
+        0.0,
+        4.440892098500626e-16,
+        0.0,
+        3.469446951953614e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 4470257.66898542,
+      "mole_fractions": [
+        0.008430000000000005,
+        0.0,
+        0.9915700000000001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9697174625133834,
+        0.0,
+        0.03028253748661659,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44261558813651164,
+        0.020912330802851764
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-10": {
+      "predecessor": "kiepe-373.26-09",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 4470257.66898542,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.008430000000000005,
+              "water": 0.9915700000000001
+            },
+            "packing": 0.44261558813651164
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9697174625133834,
+              "water": 0.03028253748661659
+            },
+            "packing": 0.020912330802851764
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.0658141036401503e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 6.4995137510125849e-09, amplification 0",
+      "residuals": [
+        -1.0658141036401503e-14,
+        -7.105427357601002e-15,
+        -5.433261859882055e-15,
+        0.0,
+        -4.440892098500626e-16,
+        -1.9742456350339375e-16,
+        -1.734723475976807e-18,
+        1.1102230246251565e-16,
+        2.220446049250313e-16,
+        -1.1102230246251565e-16
+      ],
+      "pressure": 5959659.603137242,
+      "mole_fractions": [
+        0.010919999999999997,
+        0.0,
+        0.98908,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9746811389112812,
+        0.0,
+        0.02531886108871884,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.442364687579728,
+        0.029351241134995956
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-11": {
+      "predecessor": "kiepe-373.26-10",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 5959659.603137242,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.010919999999999997,
+              "water": 0.98908
+            },
+            "packing": 0.442364687579728
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9746811389112812,
+              "water": 0.02531886108871884
+            },
+            "packing": 0.029351241134995956
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.9539925233402755e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 6.0134873881650659e-09, amplification 0",
+      "residuals": [
+        1.9539925233402755e-14,
+        8.43769498715119e-15,
+        1.1038307614855794e-14,
+        0.0,
+        0.0,
+        -1.5488715732755699e-16,
+        -1.734723475976807e-18,
+        0.0,
+        0.0,
+        -1.1102230246251565e-16
+      ],
+      "pressure": 7253689.981190356,
+      "mole_fractions": [
+        0.012909999999999998,
+        0.0,
+        0.98709,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.97699766467355,
+        0.0,
+        0.02300233532645001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4421747755863204,
+        0.037442834541436223
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-12": {
+      "predecessor": "kiepe-373.26-11",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 7253689.981190356,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.012909999999999998,
+              "water": 0.98709
+            },
+            "packing": 0.4421747755863204
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.97699766467355,
+              "water": 0.02300233532645001
+            },
+            "packing": 0.037442834541436223
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 8.8817841970012523e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 5.6582713445585683e-09, amplification 0",
+      "residuals": [
+        8.881784197001252e-15,
+        6.217248937900877e-15,
+        6.48546760315737e-15,
+        0.0,
+        8.881784197001252e-16,
+        2.575112424649405e-16,
+        -3.469446951953614e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 8367494.850676904,
+      "mole_fractions": [
+        0.014489999999999996,
+        0.0,
+        0.98551,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9781412568428544,
+        0.0,
+        0.021858743157145675,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.44203276801701197,
+        0.045060271017135105
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-373.26-13": {
+      "predecessor": "kiepe-373.26-12",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 8367494.850676904,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.014489999999999996,
+              "water": 0.98551
+            },
+            "packing": 0.44203276801701197
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9781412568428544,
+              "water": 0.021858743157145675
+            },
+            "packing": 0.045060271017135105
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.5757174171303632e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 5.3673784160850184e-09, amplification 0",
+      "residuals": [
+        -2.5757174171303632e-14,
+        -8.43769498715119e-15,
+        -9.150151735228165e-15,
+        8.881784197001252e-16,
+        -1.3322676295501878e-15,
+        0.0,
+        -3.469446951953614e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 9516792.191737216,
+      "mole_fractions": [
+        0.015989999999999997,
+        0.0,
+        0.98401,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9787488229330724,
+        0.0,
+        0.021251177066927678,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4419072350556009,
+        0.053628065729194936
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-02": {
+      "predecessor": null,
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 204540.0,
+        "phases": [
+          {
+            "name": "L",
+            "composition": [
+              3e-05,
+              0.99997
+            ],
+            "packing": null
+          },
+          {
+            "name": "V",
+            "composition": [
+              0.99,
+              0.01
+            ],
+            "packing": null
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.5979218776228663e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.7835027179627313e-10, amplification 0",
+      "residuals": [
+        -2.5979218776228663e-14,
+        -1.3322676295501878e-14,
+        -1.2620032893788028e-14,
+        0.0,
+        0.0,
+        0.0,
+        -2.371692252312041e-20,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 214372.65225106323,
+      "mole_fractions": [
+        2.9999999999999977e-05,
+        0.0,
+        0.99997,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.07335042668729182,
+        0.0,
+        0.9266495733127083,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4360944826374511,
+        0.0005736906464022579
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-03": {
+      "predecessor": "kiepe-393.17-02",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 214372.65225106323,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 2.9999999999999977e-05,
+              "water": 0.99997
+            },
+            "packing": 0.4360944826374511
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.07335042668729182,
+              "water": 0.9266495733127083
+            },
+            "packing": 0.0005736906464022579
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 4.9737991503207013e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 6 iterations, contraction absent, floor 1.7811487018244508e-10, amplification 0",
+      "residuals": [
+        4.973799150320701e-14,
+        3.108624468950438e-14,
+        2.457269201526212e-14,
+        -8.881784197001252e-16,
+        0.0,
+        -3.1594876066441525e-16,
+        -2.168404344971009e-19,
+        0.0,
+        2.220446049250313e-16,
+        0.0
+      ],
+      "pressure": 577223.5171638017,
+      "mole_fractions": [
+        0.0007099999999999998,
+        0.0,
+        0.9992899999999999,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.6489106634266976,
+        0.0,
+        0.3510893365733024,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4360161410667596,
+        0.002016523745920756
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-04": {
+      "predecessor": "kiepe-393.17-03",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 577223.5171638017,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0007099999999999998,
+              "water": 0.9992899999999999
+            },
+            "packing": 0.4360161410667596
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.6489106634266976,
+              "water": 0.3510893365733024
+            },
+            "packing": 0.002016523745920756
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.042810365310288e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.7795259052941397e-10, amplification 0",
+      "residuals": [
+        -2.042810365310288e-14,
+        -1.2434497875801753e-14,
+        -5.4088971249073204e-15,
+        8.881784197001252e-16,
+        -8.881784197001252e-16,
+        -3.275546407186388e-16,
+        2.168404344971009e-19,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 830490.2495589479,
+      "mole_fractions": [
+        0.0011800000000000003,
+        0.0,
+        0.99882,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7526303796094399,
+        0.0,
+        0.24736962039056004,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.43596227735834253,
+        0.0030376888452647226
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-05": {
+      "predecessor": "kiepe-393.17-04",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 830490.2495589479,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0011800000000000003,
+              "water": 0.99882
+            },
+            "packing": 0.43596227735834253
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.7526303796094399,
+              "water": 0.24736962039056004
+            },
+            "packing": 0.0030376888452647226
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 2.042810365310288e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.7757076106287956e-10, amplification 0",
+      "residuals": [
+        -2.042810365310288e-14,
+        -1.3322676295501878e-14,
+        -1.032852164849125e-14,
+        8.881784197001252e-16,
+        0.0,
+        3.7336413068639977e-16,
+        4.336808689942018e-19,
+        1.1102230246251565e-16,
+        0.0,
+        0.0
+      ],
+      "pressure": 1437133.9880119152,
+      "mole_fractions": [
+        0.0022900000000000004,
+        0.0,
+        0.9977100000000001,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8522788988639945,
+        0.0,
+        0.1477211011360055,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.4358360415254457,
+        0.005532384905369861
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-06": {
+      "predecessor": "kiepe-393.17-05",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 1437133.9880119152,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.0022900000000000004,
+              "water": 0.9977100000000001
+            },
+            "packing": 0.4358360415254457
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.8522788988639945,
+              "water": 0.1477211011360055
+            },
+            "packing": 0.005532384905369861
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 6.2172489379008766e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.7614280654828036e-10, amplification 0",
+      "residuals": [
+        0.0,
+        6.217248937900877e-15,
+        2.9308840076507853e-15,
+        -8.881784197001252e-16,
+        -8.881784197001252e-16,
+        0.0,
+        -1.734723475976807e-18,
+        -1.1102230246251565e-16,
+        -1.1102230246251565e-16,
+        0.0
+      ],
+      "pressure": 3866140.52829785,
+      "mole_fractions": [
+        0.006499999999999999,
+        0.0,
+        0.9935,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9370231317117382,
+        0.0,
+        0.0629768682882618,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.43537181549996384,
+        0.016279461708756094
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    },
+    "kiepe-393.17-07": {
+      "predecessor": "kiepe-393.17-06",
+      "observation_parameters": "47801bc8d29641d7afebac4f5eed4c9e18838a8c7e447888d2a58217f75d1569",
+      "incoming": {
+        "pressure": 3866140.52829785,
+        "phases": [
+          {
+            "name": "L",
+            "composition": {
+              "carbon-dioxide": 0.006499999999999999,
+              "water": 0.9935
+            },
+            "packing": 0.43537181549996384
+          },
+          {
+            "name": "V",
+            "composition": {
+              "carbon-dioxide": 0.9370231317117382,
+              "water": 0.0629768682882618
+            },
+            "packing": 0.016279461708756094
+          }
+        ]
+      },
+      "success": true,
+      "message": "converged: residual 1.5987211554602254e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 0 iterations, contraction absent, floor 1.7522395845402428e-10, amplification 0",
+      "residuals": [
+        1.0658141036401503e-14,
+        1.5987211554602254e-14,
+        1.3357088426380073e-14,
+        0.0,
+        0.0,
+        0.0,
+        -3.469446951953614e-18,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pressure": 5605862.58150305,
+      "mole_fractions": [
+        0.009269999999999997,
+        0.0,
+        0.99073,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.9517694992528571,
+        0.0,
+        0.04823050074714288,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "packing_fractions": [
+        0.43508228728300646,
+        0.024832767020480952
+      ],
+      "requested_tolerance_met": true,
+      "status": "Available"
+    }
+  }
+}
