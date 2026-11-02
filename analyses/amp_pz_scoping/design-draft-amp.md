@@ -3,9 +3,9 @@
 Design for [#241](https://github.com/tannerpolley/Amine-Thermodynamics/issues/241),
 2 November 2026; parent [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220).
 This replaces the superseded preparation statements in the earlier #227/#229
-draft. The source notes retain their dated findings. **Proposal for owner
-decisions and independent readiness review; no fitting or implementation is
-authorized by this document.** No fitted reactive AMP result is reported;
+draft. The source notes retain their dated findings. **Accepted design (owner decisions D1–D8 taken 2026-11-02). Numerical Build
+waits for #235's delivered qualification (D7) and is not authorized by this
+document alone.** No fitted reactive AMP result is reported;
 §3 records the measured-data pre-fit design and the published-set comparison.
 
 ## Question, basis and limits
@@ -254,7 +254,7 @@ standard deviations. The near-ambient tables label observations as liquid withou
 solid–liquid equilibrium. Retain that limitation; do not
 claim a solid-phase model or global liquid stability from them.
 
-### Coordinates, bounds and starts (proposal)
+### Coordinates, bounds and starts
 
 | Coordinate | Start (Ayad Table 5 p.2797) | Proposed bounds | Coordinate scale |
 |---|---:|---:|---:|
@@ -297,7 +297,7 @@ plus the density campaign's mean squared residual. Thus many pressure rows
 do not automatically suppress three density rows. Publish every unscaled
 relative pressure error, density error and campaign contribution.
 
-### Information, acceptance and stop rules (proposal)
+### Information, acceptance and stop rules
 
 Pressure plus a narrow density interval weakly determines five associating
 PC-SAFT parameters. Inspect the weighted, coordinate-scaled Jacobian at both
@@ -332,17 +332,19 @@ flatness between points. No Pappa observation or error enters this decision.
 again omitting m from the Engine coordinates and starting from the Ayad-grid
 refit. Record the fixed value as the owner's **modelling choice, not a fitted
 result**, then repeat the four-parameter information and acceptance checks.
-If the four-parameter fit still shows a second unresolved direction, stop
-and return the Jacobian, endpoints and predictions to the owner; do not fix
-another parameter or add coordinates. Retain the four-column singular values
-and compare the available four-parameter endpoints; rank deficiency, or a
-remaining weak direction reaching a bound without a cost increase of 1,
-prevents adoption even if property predictions agree.
+**Fixed-m information gate (owner decision 2026-11-02).** At the fixed-m
+endpoint, form the four-column weighted, coordinate-scaled Jacobian of the
+calibration residuals (the same weights and coordinate scales as the fit) and
+require s_min/s_max ≥ 1e-4, i.e. condition number ≤ 1e4, the same convention
+as the §6 reactive gate. Failure is a second unresolved direction: stop and
+return the Jacobian, singular values and vectors, endpoints and predictions to
+the owner; do not fix another parameter or add coordinates. Retain the
+singular values either way. No bound-following procedure is part of this test.
 
 If m is identified (profile not flat), retain the selected five-parameter
 fit with m fitted only when the profile rises by ≥1 on both sides of its
-minimum within the declared interval and the remaining directions pass the
-information checks. A profile that is not flat solely because equivalent-cost
+minimum within the declared interval and the five-column Jacobian at the
+selected endpoint passes the same s_min/s_max ≥ 1e-4 gate. A profile that is not flat solely because equivalent-cost
 endpoints differ by >5% pressure or >1 kg/m³ density does not identify m:
 it stops promotion. A one-sided, incomplete or otherwise unresolved profile
 also returns to the owner. No arbitrary-bound fit endpoint is adopted;
@@ -623,7 +625,7 @@ refusal or rescue a state by altering shared parameters.
 
 ## 8. Code, runtime and retained outputs
 
-**D8 revised proposal, not an approved ceiling: 360 gross added executable
+**D8 owner-approved ceiling (2026-11-02): 360 gross added executable
 lines plus 40 numerical-check lines** for AMP preparation/assessment, measured
 against the accepted implementation base after #235 merges. Allocation:
 120 source preparation, 100 pure-property calls/residuals/profiles, 100 reused
@@ -675,35 +677,31 @@ caloric/absorber qualification, PZ fitting or blend fitting is included.
 
 ## Owner decisions and readiness handoff
 
-The decisions already settled in #238 are not reopened. D1–D5 and D7
-are decided by the owner in the 2026-11-02 comments on #241, including D3
-linear kappa and fixed-m identification dispositions. D6 and D8 remain open
-proposals; §3 observation roles, other bounds, scales and acceptance limits
-remain proposals before Build:
+The decisions already settled in #238 are not reopened. D1–D8 are decided by the owner in the 2026-11-02 comments on #241, including
+the D3 linear kappa, fixed-m identification and fixed-m information gate, and
+the §3 observation roles, bounds, scales and acceptance limits:
 
 | Decision and status | Content |
 |---|---|
 | D1 — decided 2026-11-02: Offset interval and water convention | [−3,+2], zero start, explicit water and common molality reference (§1) |
 | D2 — decided 2026-11-02: Anion and cation hypotheses | One nonassociating AMPCOO− sphere; fixed analog energy/Born/water interaction, fitted size; retain A/B cations with fixed energies/Born; B sigma starts at the frozen pure-AMP endpoint (§2) |
-| D3 — decided 2026-11-02: Pure preparation | Fit m, sigma, u/k, epsilon_AB/k and kappa in this repository, effective 2B, Ayad start, Engine sigma³; freeze before binary preparation (§3). Linear kappa [0.0005,0.05], start 0.0058, affine scale 0.005; five fixed-m refits on the §3 grid; if flat by the anchored cost/prediction rule, fix m=3.1552 as a modelling choice and refit four; identified m remains fitted; a second unresolved direction stops for the owner. Observation partition, other bounds, residual scales and property acceptance limits remain proposals pending owner approval. |
+| D3 — decided 2026-11-02: Pure preparation | Fit m, sigma, u/k, epsilon_AB/k and kappa in this repository, effective 2B, Ayad start, Engine sigma³; freeze before binary preparation (§3). Linear kappa [0.0005,0.05], start 0.0058, affine scale 0.005; five fixed-m refits on the §3 grid; if flat by the anchored cost/prediction rule, fix m=3.1552 as a modelling choice and refit four; identified m remains fitted; a second unresolved direction stops for the owner. Fixed-m gate s_min/s_max ≥ 1e-4 (and the same gate for an identified five-parameter endpoint). Observation partition (24 Klepáčová/Belabbaci pressures + 3 Ayad densities; 23 Pappa held out), bounds, residual scales and the ≤5% campaign / ≤10% row / ≤1 kg/m³ limits approved as written. |
 | D4 — decided 2026-11-02: Source preparation and data roles | Estimate Hamborg coefficients from Table 16, fit/freeze Hsieh dielectric after binary pre-fit using its hash-bound fixed liquid-density record, 1% relative scale, admissibility and both-branch Hsieh-only selection; Hartono 2013 binary and 2021 Table-7 first-three-isotherm calibration; reserve Kundu; Pappa/Tong comparisons (§4) |
 | D5 — decided 2026-11-02: Falsifier and residual policy | Kundu 51-row E_p≤30%; no missing rows; 5% pressure floor, group-normalized objective; NMR RMS≤0.006 calibration check (§5) |
-| D6: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; rank failure stops for Design, no smaller fallback; CO2 column norms reported only, no dominance stop; calibration-first A/B selection (§6) |
+| D6 — decided 2026-11-02: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; rank failure stops for Design, no smaller fallback; CO2 column norms reported only, no dominance stop; calibration-first A/B selection (§6) |
 | D7 — decided 2026-11-02: Fitting-path dependency | Wait for delivered #235 qualification on the merged #962 wheel; no duplicate driver repair (§7) |
-| D8 — proposed: Limits and exclusions | 360 executable +40 numerical-check lines; 12 h computation including 4 h pure preparation; pressure/speciation only (§8) |
+| D8 — decided 2026-11-02: Limits and exclusions | 360 executable +40 numerical-check lines; 12 h computation including 4 h pure preparation; pressure/speciation only (§8) |
 
-This draft is ready to be **reviewed as a proposal**, not declared Ready for
-Build. Independent readiness review is not performed by this implementor;
-no subagent or review was authorized in this task. The accountable parent
-publishes the accepted design to #241 through its approved issue-change
-process and reads it back before Build. No tracker body was changed here.
+Readiness: three independent reviews (GPT-6 Astra) on `a805048` (Block),
+`c8cb2c1` (Block) and `2981f1d` (Revise, one defect: the fixed-m test had no
+measure). That defect is closed by the owner-approved s_min/s_max ≥ 1e-4 gate
+in §3. The accepted design is carried into the AMP Build issue, blocked by
+#235; Build reads that issue body back before starting.
 
 ### Further reading or preparation needed
 
-- Approve §3 observation roles, residual scales, five-coordinate bounds,
-  property acceptance limits and D8 limits; kappa and identification dispositions
-  are owner-decided as recorded in D3. The three required pressure PDFs
-  are now available; additional original density sources remain unadmitted.
+- The three required pressure PDFs are available; additional original density
+  sources remain unadmitted.
 - Read Hartono 2021 cited uncertainty methods and SI Part A1 before materializing
   its 47-row calibration packet; retain Table 4 stock composition and reported
   u(P)/u(alpha). Verify no reused Kundu observations. Hartono 2020 original
