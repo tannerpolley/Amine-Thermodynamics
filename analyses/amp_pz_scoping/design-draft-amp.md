@@ -217,6 +217,25 @@ Still open:
 Yi 2024 includes no AMP carbamate, and it fitted its parameters to Kundu 2003 and Tong 2012 among other data.
 Numerical Build remains **Block**.
 
+**Owner decisions (2026-11-02, on #238):**
+
+1. **Slope.** Fix the carbamate temperature slope to Xu/Silkenbäumer,
+   ln K_h,m = −2546.2/T + 11.555 (molality; +21.2 kJ/mol hydrolysis). This
+   resolves line 70's "verified source law" as an owner-accepted fixed slope.
+   It is not a thermodynamically verified law. Only the offset is fitted.
+2. **Ciftja 2011.** Exclude it from fitting and scoring. Mehdizadeh 2013,
+   which was partly fitted to Ciftja 2011, remains a comparison only.
+3. **Ciftja 2014 roles.** All 57 usable rows calibrate. No temperature block is
+   held out; the CO2 pressure hold-outs remain the test.
+4. **Residual and start.** One residual per row, x(AMPCOO−) per total AMP,
+   with an absolute scale of **0.003**. The offset starts at the
+   Xu/Silkenbäumer law's own value.
+
+Still open after these decisions: offset bounds, the AMPCOO− representation
+and its parameters, the pure-AMP association-volume convention, the remaining
+data roles, the pressure hold-out and its limit, and an independent readiness
+review.
+
 ## PZ and blend outline
 
 PZ preparation adds two protonation and three carbamate-related equilibria, the neutral zwitterion and doubly charged ions. Resolve pure PZ PC-SAFT and solid solubility before fitting; verify Ermatchkov NMR, Dugas plus its correction, Kamps/Xu pressures and Hilliard/Liu calorics. Freeze separate molecule/site loading conversions and independently select PZ campaign blocks. Do not reuse AMP's coordinate count or pass bar without design.
