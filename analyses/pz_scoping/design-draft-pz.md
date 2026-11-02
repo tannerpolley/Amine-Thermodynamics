@@ -1,6 +1,6 @@
 # Draft experiment: do MEA shared-species parameters transfer to aqueous PZ?
 
-Parent: [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220). Research and design delivery: [#237](https://github.com/tannerpolley/Amine-Thermodynamics/issues/237). It follows the [AMP draft](../amp_pz_scoping/design-draft-amp.md) and reuses its frozen inputs, numerical checks, phase gate and evidence standard. Only what PZ changes is written here. **This is a draft that needs owner decisions and an independent readiness review. No fitting is authorized.** Readiness verdict: **Block for numerical Build**, for the reasons in the table below.
+Parent: [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220). Research and design delivery: [#237](https://github.com/tannerpolley/Amine-Thermodynamics/issues/237); Kamps 2003 and Yi 2024 added by [#239](https://github.com/tannerpolley/Amine-Thermodynamics/issues/239). It follows the [AMP draft](../amp_pz_scoping/design-draft-amp.md) and reuses its frozen inputs, numerical checks, phase gate and evidence standard. Only what PZ changes is written here. **This is a draft that needs owner decisions and an independent readiness review. No fitting is authorized.** Readiness verdict: **Block for numerical Build**, for the reasons in the table below.
 
 ## Question and intended use
 
@@ -62,15 +62,21 @@ Nineteen coordinates against 62 + 121 + 46 calibration rows is not evidence of i
 
 ## Data roles and falsifier
 
-Use the roles in the [data map](data-map.md#proposed-roles-not-frozen): calibration on Hilliard D.2, Hilliard D.5 and Ermatchkov 2003 NMR; Ermatchkov 2006 as the whole-campaign primary hold-out; Dugas 80/100 °C, Xu Pt and Bishnoi as secondary comparisons. The carbamate laws are fitted to the NMR rows, so **NMR agreement is calibration, not validation**. The pressure hold-out is the test.
+Use the roles in the [data map](data-map.md#proposed-roles-not-frozen):
+- calibration on Hilliard D.2, Hilliard D.5 and Ermatchkov 2003 NMR;
+- Ermatchkov 2006 as the whole-campaign primary hold-out;
+- Kamps 2003 total pressure as a secondary high-loading test, at the corrected temperatures of Ermatchkov 2006 Table 6 and with its one precipitation row excluded;
+- Dugas 80/100 °C, Xu Pt and Bishnoi as secondary comparisons.
 
-Proposed pre-registered falsifier, needing owner approval of the metric and the limit: the CO2 partial-pressure log-ratio residuals on Ermatchkov 2006 rows at 313 and 353 K. Use the source uncertainty Δp = Δp* + 0.02p as the scale (p.1789). The 393 K rows are reported separately as extrapolation beyond the 333 K carbamate-law domain. No numerical limit is adopted. The MEA 24.2 % limit is not transferred.
+The reasons for keeping Ermatchkov 2006 over Kamps 2003 are in the [data map](data-map.md#proposed-roles-not-frozen). In short, both come from the same lab. Kamps measures total pressure, mostly above 1 mol CO2/mol PZ and at MPa pressures. Ermatchkov 2006 measures P_CO2 over the absorber loading range. The carbamate laws are fitted to the NMR rows, so **NMR agreement is calibration, not validation**. The pressure hold-out is the test.
+
+Proposed pre-registered falsifier, needing owner approval of the metric and the limit: the CO2 partial-pressure log-ratio residuals on Ermatchkov 2006 rows at 313 and 353 K. Use the source uncertainty Δp = Δp* + 0.02p as the scale (p.1789). The 393 K rows are reported separately as extrapolation beyond the 333 K carbamate-law domain. No numerical limit is adopted. The MEA 24.2 % limit is not transferred. Kamps 2003 needs its own metric, a total-pressure log-ratio with scale ±0.1 % of the transducer full scale, or 10 % below 0.1 MPa (pp.2664, 2667). It is reported apart from the falsifier.
 
 ## Liquid window and phase gate
 
 The AMP phase gate applies (tangent-plane search, dense/gas classifier, unresolved trials block selection). PZ adds a solid gate (see [solid-phase.md](sources/solid-phase.md)):
 
-- Exclude every row the source marks as precipitating, and every row inside the unloaded hexahydrate liquidus (Hilliard I.1) or outside Freeman's loaded envelope, before fitting.
+- Exclude, before fitting, every row the source marks as precipitating (Kamps 2003: one row, 313 K, 2 m, 1.69 mol CO2/mol PZ), and every row inside the unloaded hexahydrate liquidus (Hilliard I.1) or outside Freeman's loaded envelope.
 - Report no prediction for a state outside the window.
 - The Engine has only liquid and vapor phases, so a passing liquid calculation there is not evidence that the state is liquid.
 
@@ -111,9 +117,22 @@ Failures return to Design. Do not retune on the hold-out.
 | Zwitterion | Neutral, liquid-only, its own m, σ, u/k | No 10⁻⁵-charge workaround |
 | Pure PZ | Run the Razavi reproduction first; refit only if it fails or the subcooled extrapolation is rejected | Settles neutral inputs before any ion fit |
 | Ion convention | A and B side by side for the cations; one carbamate representation | As for AMP |
-| Primary hold-out | Ermatchkov 2006, whole campaign, 393 K reported separately | Different lab from the pressure calibration |
+| Primary hold-out | Ermatchkov 2006, whole campaign, 393 K reported separately; Kamps 2003 as a secondary high-loading test (#239) | Different lab from the pressure calibration. It measures P_CO2 over the absorber loading range; Kamps mostly probes > 1 mol/mol PZ at MPa pressures. |
+| Kamps 2003 temperatures | Use Ermatchkov 2006 Table 6 (p.1795): printed values +0.6 to +1.8 K | The authors' own thermometer recalibration. A hand check of the unloaded 2 m row against Raoult's law agrees at the corrected temperature only. |
+| Kamps 2003 exclusions | Exclude the precipitation row; report the 11 rows below 0.2 MPa and the 374–395 K blocks separately; use the 2 unloaded rows as an unloaded-volatility check | Up to 10 % uncertainty below 0.1 MPa. Above 333 K the carbamate laws are extrapolated. |
+| PZ–water volatility calibration | Keep Hilliard D.2 for now; read Hartono 2013 (24 points) before freezing k(T) | Yi 2024 rejected Hilliard D.2 because its PZ partial pressures (< 1 Pa) are at the FTIR detection limit (SI Table S1) |
+| MDEA + PZ blend | Record Kamps Table 4 (10 rows, 353 K) for a later MDEA/PZ assessment; it has no published temperature correction | Not used in the PZ assessment |
 | Solid handling | Domain restriction now; decide later whether to request an Engine solid capability | Liquid claims only |
-| Wiley PDFs | Owner opens Kamps 2003 and Derks 2005 through the hand-off links | Needed before choosing between Kamps and Ermatchkov 2006 as hold-out, and to identify its precipitation rows |
+| Derks 2005 PDF | Owner opens it through the hand-off link https://doi.org/10.1002/aic.10442 (Zotero `PRYYEZ43` has only a saved web page); Kamps 2003 is now read (#239) | Derks would add 58 dilute rows (0.2–0.63 m) from a third lab, a candidate dilute-edge comparison |
 | Loaded SLE boundary | Read the Freeman 2011 dissertation and the SINTEF crystallization work before using the rich-side limit; digitizing Freeman Fig.1 needs a separate authorization | Fixes the liquid window |
+
+## Cross-check: Yi 2024 eNRTL model (#239)
+
+Yi et al. 2024 is an open-access eNRTL model for PZ, AMP and their blend, fitted sequentially to most of the public data ([source note](sources/kamps-2003-yi-2024.md#yi-2024-an-enrtl-cross-check)). It is a cross-check, not an adopted model.
+
+- *Hamborg Eq.21, D2O and solid handling:* none is settled. Yi computes K from aqueous formation Gibbs energies and enthalpies, not printed ln K laws. PZH+ values were set from pKa data, the zwitterion's was tuned, and the carbamate values have no stated origin. It does not mention D2O or precipitation.
+- *Zwitterion:* Yi treats it as neutral and nonvolatile, with its own interaction parameters. That is independent precedent for the draft's choice.
+- *PZH2²+:* Yi drops it, as Hilliard did. The draft keeps it.
+- *New evidence:* Yi rejected the Hilliard D.2 PZ volatility and Kamps 2003, and identified Hartono 2013 and Hartono 2021 as further PZ data.
 
 This draft contains no fitted value, Engine result or adopted parameter.
