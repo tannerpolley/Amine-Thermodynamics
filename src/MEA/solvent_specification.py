@@ -325,24 +325,16 @@ class SolventSpecification:
         for q, value in zip(source_coordinates, chart.physical[len(chart.active) :], strict=True):
             if q["kind"] == "reaction_coordinate":
                 assigned.setdefault(q["name"], {})[q["coefficient"]] = value
-        fields = (
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "reference_temperature",
-            "temperature_min",
-            "temperature_max",
-            "standard_state_id",
-        )
+        # Completed laws carry one observation's domain; each destination keeps its own bounds.
+        fields = ("a", "b", "c", "d", "e", "f", "reference_temperature")
         for group in reactions.values():
             for reaction in group:
                 reaction["correlation"].update(assigned.get(reaction["name"], {}))
                 if reaction["name"] in chart.reaction_laws:
                     law = chart.reaction_laws[reaction["name"]]
-                    reaction["correlation"] = {key: getattr(law, key) for key in fields}
+                    if law.standard_state_id != reaction["correlation"]["standard_state_id"]:
+                        raise ValueError(f"Standard-state mismatch for fitted reaction {reaction['name']}")
+                    reaction["correlation"].update({key: getattr(law, key) for key in fields})
         return reactions
 
     def fit(self):
