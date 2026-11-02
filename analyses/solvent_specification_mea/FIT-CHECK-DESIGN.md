@@ -150,7 +150,7 @@ Independent delivered `cse:review` must inspect final code and retained numerica
 
 The 2026-11-02 owner decisions accept the e6dae5c7 replay under the revised tolerance rule and fix the limits at **170 executable + 20 test lines; 30 min total / 20 min native fit / 60 iterations**. No ceiling increase is requested by this revision.
 
-1. Design readiness: Block on `f1b9b9c` pending #962; re-review of `4a2e83e` (GPT-6 Astra) returned Revise on the accounting base only, corrected in `c499336` with owner agreement. All numerical evidence, the two-domain correction and the perturbation table were independently reproduced in that re-review.
+1. Design readiness: Block on `f1b9b9c` pending #962; re-review of `4a2e83e` (GPT-6 Astra) returned Revise on the accounting base only, corrected in `c499336` with owner agreement. That re-review recomputed the retained numerical evidence, confirmed the reaction-law overwrite with an in-memory probe, and found the perturbation table and stop rules sufficient for Build.
 2. This body is the published accepted plan. Build reads it back before starting.
 3. The equal-or-lower reduced-cost falsifier, 14 coordinates, authoritative perturbation table and one-scale neighborhood remain the proposed scientific check. No recovery requirement is added.
 4. Any extra runtime for the existing MDEA R2 fitting reference, if required by a change to fitting mechanics, needs a separate owner amendment; do not spend beyond this attempt's approved limits. A destination-law transport change is checked by the two-domain case and existing endpoint references.
