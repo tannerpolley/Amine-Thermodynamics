@@ -72,7 +72,7 @@ pressure (both `None`). Central difference uses ±0.05 in AMPH⁺–CO2 k.
 
 **Cause: not wiring, phase or root; a start-state chemical effect.** At B's
 start the high-loading liquid holds 70–160 times less molecular CO2 than A's
-and 15–45 times more carbonate, with a similar AMPH⁺ fraction. CO2 is then
+and 29–46 times more carbonate, with a similar AMPH⁺ fraction. CO2 is then
 1–3 % of the predicted vapor (A: 67–77 %), so the predicted total pressure
 (9–56 kPa against 609–733 kPa measured) is set by water and AMP. Both the CO2
 share and the CO2-fugacity response to k are smaller, giving
