@@ -31,7 +31,7 @@ Public source assessments only. There are no Engine results, no parameter adopti
 | Yi et al. 2024, Sep. Purif. Technol. 350, 127924 | `SDKLQTBQ` | `3YP4GUWT` | already in the library at the start of #239; §§2–4, Tables 1–5 and the Supplementary Information (downloaded, not attached) read |
 | Derks et al. 2005, AIChE J. 51, 2311 | `PRYYEZ43` | none | already in the library at the start of #239, with a saved web page only; not read |
 | Hartono, Saeed, Ciftja & Svendsen 2013, Chem. Eng. Sci. 91, 151 | `5KUR8PRH` | `SEPZQIPE` | acquired (Connector); identity checked on page 1, not read |
-| Hartono, Rafiq, Gondal & Svendsen 2021, Fluid Phase Equilib. 538, 112992 | `NVDXQ5NY` | `L5BIJ5I8` | acquired (Elsevier API); identity checked on page 1, not read |
+| Hartono, Rafiq, Gondal & Svendsen 2021, Fluid Phase Equilib. 538, 112992 | `NVDXQ5NY` | `L5BIJ5I8` | acquired (the `elsevier-api` acquisition step of `cse-zotero acquire`); identity checked on page 1, not read |
 | Nguyen, Hilliard & Rochelle 2010, IJGGC 4, 707 | `62762ZRK` | `ZA6SU36Z` | acquired (Connector); identity checked on page 1, not read |
 | Chen, Caparanga, Soriano & Li 2010, J. Chem. Thermodyn. 42, 54 | `P3ZNCVRZ` | `M8B3RA3J` | acquired (Connector); identity checked on page 1, not read |
 
