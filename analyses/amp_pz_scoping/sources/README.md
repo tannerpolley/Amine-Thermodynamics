@@ -14,6 +14,9 @@ rows, code or parameters was copied or executed.
   law/representation, unavailable Ciftja 2014 full text.
 - [Carbamate law sources](carbamate-law-sources.md), #234: other published
   AMP carbamate laws, their bases and independence; the block remains.
+- [Ciftja 2014](ciftja-2014.md), #238: apparent law, the 57 usable NMR rows
+  ([transcription](ciftja-2014-tables-s1-s3.csv)), the 2011/2014 conflict and
+  the Yi 2024 cross-check.
 - [Pressure campaigns](partial-pressure-campaigns.md): candidates and whole-
   campaign Kundu recommendation, 51 public transcribed observations.
 - `pdf-identities.json`: current Zotero PDF keys and SHA-256 hashes. Full papers
