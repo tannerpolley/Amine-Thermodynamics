@@ -48,7 +48,7 @@ AMP–water VLE), and Ciftja 2014 NMR (30 mass %, no pressure). No stock,
 observable and isotherm coincide; the exact row comparison finds **0
 identical rows**. Hartono 2021's reference list (pp.17–18) does not cite
 Kundu, so no Kundu observation is reused in its Table 7. Hartono 2021 states
-that literature data entered its own eNRTL regression; no Hartono fitted
+that literature data entered its own eNRTL parameter fit; no Hartono fitted
 quantity is used here, so that does not compromise Kundu as a test of this
 fit. **Overlap check: passed; no redesign needed.**
 

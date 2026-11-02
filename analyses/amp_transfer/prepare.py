@@ -34,8 +34,6 @@ shared = [(k, h) for k in kundu for h in hartono if abs(float(k['T_K']) - float(
 overlap = dict(kundu_rows=len(kundu), kundu_stocks_mol_per_L=sorted({k['stock_AMP_mol_per_L'] for k in kundu}),
                hartono_2021_stock_mol_per_L='3.0', identical_rows=len(shared), observable=dict(kundu='p_CO2', hartono_2021='total pressure'))
 (AN / 'results/source-preparation.json').write_text(json.dumps(dict(hamborg=hamborg, kundu_overlap=overlap), indent=2, default=float) + '\n')
-print(json.dumps(dict(A=coef[0], B=coef[1], C=coef[2], chi2=chi2, law=hamborg['engine_law'], se=hamborg['ln_K_standard_error'],
-                      max_scaled=max(abs(r['scaled']) for r in hamborg['residuals']), overlap=overlap), default=float, indent=1))
 
 # Pure-AMP starting record (D3): the adopted MEA document's neutral amine renamed, Ayad Table 5 values, effective 2B.
 import hashlib, epcsaft
@@ -53,3 +51,26 @@ edge['energy_over_k']['value']['magnitude'], edge['volume']['value']['magnitude'
 doc.update(components=[amp], pairs=[], correlations=[], reaction_correlations=[], topology=dict(doc['topology'], edges=[edge], no_cross_association=[], sites=[s for s in doc['topology']['sites'] if s['component_id'] == 'aminomethylpropanol']))
 epcsaft.Parameters.from_mapping(doc)  # native admission
 (AN / 'inputs/amp-pure-ayad.json').write_text(json.dumps(doc, indent=1) + '\n')
+
+# Reactive packets in SolventSpecification row form: one mol analytical AMP; water from the stock mass fraction (design §§4-5).
+water = lambda w: (1 - w) / 0.01801528 / (w / 0.08914)
+order = iter(range(10_000))
+def packet(name, source, values):
+    out = [dict(observation_order=next(order), identity=f'{name}:{i}', source=json.dumps(r), **values(r)) for i, r in enumerate(source)]
+    with (AN / f'inputs/{name}.csv').open('w') as f:
+        writer = csv.DictWriter(f, list(out[0]), lineterminator='\n')
+        writer.writeheader()
+        writer.writerows(out)
+packet('hartono-2021', hartono, lambda r: dict(T=float(r['T_K']), P=1e3 * float(r['P_total_kPa']), water=water(0.268), alpha=float(r['alpha_mol_CO2_per_mol_AMP']),
+       observed=1e3 * float(r['P_total_kPa']), weight=100 / 9 / 47 / max(float(r['u_P_kPa']) / float(r['P_total_kPa']), 0.05) ** 2))
+for kind in ('P', 'y'):  # 26 total pressures (log, scale 0.05) and 26 vapor AMP fractions, one group of 52
+    packet(f'hartono-2013-{kind}', rows(AN / 'inputs/hartono-2013-table-3.csv'), lambda r: dict(T=float(r['t_C']) + 273.15, P=1e3 * float(r['P_kPa']),
+           water=(1 - float(r['x_AMP'])) / float(r['x_AMP']), alpha=0.0, observed=1e3 * float(r['P_kPa']) if kind == 'P' else float(r['y_AMP']),
+           scale=max(1e-4, 0.05 * float(r['y_AMP'])), weight=1 / 52 / (0.05 ** 2 if kind == 'P' else 1)))
+ciftja = [r for r in rows(SRC / 'ciftja-2014-tables-s1-s3.csv') if r['row_status'] == 'ok' and float(r['alpha_NMR_mol_CO2_per_mol_AMP']) > 0]
+packet('ciftja-2014', ciftja, lambda r: dict(T=float(r['T_C']) + 273.15, P=101325.0, water=water(0.30), alpha=float(r['alpha_NMR_mol_CO2_per_mol_AMP']),
+       observed=float(r['x_AMPCOO']) / (float(r['x_AMP_plus_AMPH']) + float(r['x_AMPCOO'])), scale=0.003, weight=1 / 57))
+packet('kundu-2003', kundu, lambda r: dict(T=float(r['T_K']), P=1e3 * (float(r['p_CO2_kPa']) + 5), water=water(float(r['stock_AMP_mass_percent']) / 100),
+       alpha=float(r['alpha_mol_CO2_per_mol_AMP']), observed=1e3 * float(r['p_CO2_kPa']), weight=1.0))
+packet('tong-2012', rows(AN / 'inputs/tong-2012-table-4.csv'), lambda r: dict(T=float(r['T_K']), P=1e3 * float(r['P_total_kPa']), water=water(0.30),
+       alpha=float(r['alpha_mol_CO2_per_mol_AMP']), observed=1e3 * float(r['P_total_kPa']), weight=1.0))
