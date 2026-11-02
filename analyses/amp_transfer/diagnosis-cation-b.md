@@ -84,3 +84,11 @@ measured high-loading pressures in both variants (A under-predicts by 4–27×),
 so the gate result describes the start, not a fitted endpoint. No fit, gate or
 coordinate change was made; the route (A only, return to Design, or B with
 seven coordinates) is the owner's.
+
+## Owner decision (2026-11-02)
+
+**Cation B fails its start rank gate for the start-state reason above and is
+not fitted.** The study continues with cation A only (`reactive.py` keeps B's
+preflight record and fits A from both starts). A is the result by default, not
+by a calibration-cost comparison with B; nothing here shows that B would fail
+from another start or after fitting.
