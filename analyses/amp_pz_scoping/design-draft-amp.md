@@ -24,7 +24,7 @@ Before any numerical work, bind the then-approved immutable merged-main Engine w
 
 Nine liquid species and five independent reactions are given in [chemistry](chemistry.md): six shared species plus AMP, AMPH+, AMPCOO−; three shared reactions plus AMP dissociation and carbamate hydrolysis. Vapor contains only H2O, CO2, AMP. Feed basis: one mole analytical AMP, source water amount, and α moles added CO2, with α in mol CO2/mol analytical AMP. Include loaded CO2 mass in density/Cp conversions. Preserve unloaded versus loaded composition basis per paper.
 
-AMPH+ dissociation: use Hamborg & Versteeg 2009 Table 1 (p.1320), the correlation form ln K = A/T + B + C ln T in Eq.21 (p.1319), and the 24 AMP experimental runs in Table 16 (p.1325). Table 4 describes DMMEA; Eq.35/Table 15 do not provide the AMP dissociation law. The source uses hydronium, explicit water activity, and an infinite-dilution molality standard state. Transcribe the AMP measurements and establish the numerical correlation and its uncertainty before adoption. Document the mapping into the Engine reaction-reference convention, including water factors, standard pressure, direction, and temperature domain; verify source reference values and reciprocal constants for reversed reactions. Carbamate hydrolysis: establish an activity-based baseline from an original source before fitting. Ciftja 2011's concentration-only apparent constant is not that baseline. Ciftja 2014 and its temperature dependence are missing. No numerical carbamate law is invented here.
+AMPH+ dissociation: use Hamborg & Versteeg 2009 Table 1 (p.1320), the correlation form ln K = A/T + B + C ln T in Eq.21 (p.1319), and the 24 AMP experimental runs in Table 16 (p.1325). Table 4 describes DMMEA; Eq.35/Table 15 do not provide the AMP dissociation law. The source uses hydronium, explicit water activity, and an infinite-dilution molality standard state. Transcribe the AMP measurements and establish the numerical correlation and its uncertainty before adoption. Document the mapping into the Engine reaction-reference convention, including water factors, standard pressure, direction, and temperature domain; verify source reference values and reciprocal constants for reversed reactions. Carbamate hydrolysis: establish an activity-based baseline from an original source before fitting. Ciftja 2011's concentration-only apparent constant is not that baseline. Ciftja 2014 was read in #238 ([source note](sources/ciftja-2014.md)): its Eq. 19 is an apparent mole-fraction law with an empirical ionic-strength extrapolation, not a thermodynamic constant, and it cannot be converted to ePC-SAFT without a circular fit. No numerical carbamate law is invented here.
 
 ## Two AMPH+ representations
 
@@ -79,16 +79,16 @@ Declare starts before joint fitting: phase-admissible binary-VLE pre-fit as the 
 
 Proposed roles, **owner approval required before execution**:
 
-- Calibration: paper-checked AMP-water Hartono/Pappa VLE; Hsieh dielectric preparation; one complete loaded-pressure campaign from Hartono after pressure and composition bases are resolved; Ciftja 2014 NMR after original acquisition, uncertainty assessment and independence review. Keep its overlapping NMR species as measured sums. Do not also fit a law estimated from those rows as independent evidence.
+- Calibration: paper-checked AMP-water Hartono/Pappa VLE; Hsieh dielectric preparation; one complete loaded-pressure campaign from Hartono after pressure and composition bases are resolved; Ciftja 2014 NMR, SI Tables S1–S3: 57 usable loaded rows after #238 source review ([transcription](sources/ciftja-2014-tables-s1-s3.csv)); independence review still required. Keep its overlapping NMR species as measured sums. Do not also fit a law estimated from those rows as independent evidence.
 - Separately reported total-pressure comparison: Tong 2012 Table 4, 30 mass% AMP, five isotherms. Its measured P is **total pressure**. Preserve its five zero-loading solvent baselines as binary comparisons; score the forty positive-loading rows as total bubble pressure. Counts/conditions checked against Table 4 p.43: 45 rows total, 40 loaded, 5 baselines. Do not subtract an eNRTL-calculated vapor pressure and call the remainder an independent measured CO2 partial pressure.
-- Supplemental outside-fit: independently verified Chen, Dash, Jahangiri and Kundu campaigns; Ciftja 2011 as earlier speciation evidence only after resolving overlap with the 2014 paper. No random row split within one campaign. High-temperature data outside reaction/source domains are reported as extrapolation, not pooled into the primary score.
+- Supplemental outside-fit: independently verified Chen, Dash, Jahangiri and Kundu campaigns; Ciftja 2011: #238 recommends exclusion from fitting and scoring, because its own CO2 and charge balances fail (owner confirms). No random row split within one campaign. High-temperature data outside reaction/source domains are reported as extrapolation, not pooled into the primary score.
 - Heat, density and Cp remain outside-fit/unscored until original datasets and caloric inputs are admitted. Arcis 2007 (DOI 10.1016/j.jct.2006.11.011) is an absorption-heat lead requiring source review. Hilliard PZ heat capacity is not AMP heat capacity.
 
-Propose bounded least squares with pressure log ratios, measured species-sum difference residuals, and source uncertainty scales recorded per group. Proposed weights: loaded-pressure 100/9, binary pressure 1, species 1, following #222 as repository precedent. NMR scales cannot be supplied from the private model or silently set to zero; freeze them after source review. Report each objective contribution. No heat/density/Cp residual is created to fill a missing stage.
+Propose bounded least squares with pressure log ratios, measured species-sum difference residuals, and source uncertainty scales recorded per group. Proposed weights: loaded-pressure 100/9, binary pressure 1, species 1, following #222 as repository precedent. NMR scales cannot be supplied from the private model or silently set to zero. #238 proposes one residual per row, carbamate per total AMP, with σ ≈ 0.0025–0.003 absolute from the source uncertainty and replicates; the owner freezes it. Report each objective contribution. No heat/density/Cp residual is created to fill a missing stage.
 
 No numerical pressure acceptance limit is adopted yet. The MEA/MDEA 24.2% CO2 partial-pressure limit is not transferred to Tong total pressure. Prefer a whole, independently verified CO2 partial-pressure campaign, excluded from calibration and model selection, with an owner-approved metric and limit justified for the intended transfer assessment. Retain Tong's 40 loaded total pressures and five solvent baselines as separately reported comparisons. Freeze the primary campaign, eligible temperatures, row identities, uncertainty treatment, and acceptance limit before fitting. A primary test over all five Tong isotherms requires supported reaction-law coverage or an explicit owner-approved extrapolation test; it cannot simultaneously be described as wholly within the source domain.
 
-No other statistic becomes a pass bar without a design amendment. Failures return to Design; no retuning on Tong. NMR nonzero carbamate is a chemistry constraint, but the detection/uncertainty threshold needed for a numerical species falsifier is not yet known.
+No other statistic becomes a pass bar without a design amendment. Failures return to Design; no retuning on Tong. NMR nonzero carbamate is a chemistry constraint. Ciftja 2014 states ±0.0002 mole fraction (§2.6, p.321) and quantified carbamate at x ≥ 6.5×10⁻⁴ from α = 0.08 in all three isotherms; a numerical species falsifier built on this still needs design.
 
 ## Numerical checks, phase gate and identifiability
 
@@ -131,7 +131,7 @@ Only the sources actually selected for the first AMP assessment must be transcri
 | Open decision | Recommendation | Effect |
 |---|---|---|
 | First amine | AMP, then PZ, then blend | Limits the first species/interaction expansion |
-| Carbamate | Include AMPCOO−; resolve Ciftja 2014 and activity law first | Bicarbonate-only design cannot claim NMR agreement |
+| Carbamate | Include AMPCOO−; Ciftja 2014 read (#238). Slope: owner choice, Xu/Silkenbäumer apparent slope recommended | Bicarbonate-only design cannot claim NMR agreement |
 | Ion convention | Assess A and B side by side; common carbamate convention | Prevents claiming MDEA determines AMP behavior |
 | Pure AMP source | Tables verified in #229; settle association convention and reproduce pure properties | Values available; numerical adoption remains blocked |
 | Coordinates | Executable set and count undetermined; select the smallest supported set with sourced fixed values or ties | No unapproved enlarged fit or implicit bounds |
@@ -188,6 +188,34 @@ The existing later joint-fitting gates remain unchanged. The one source-claim
 correction was applied: independence from the eventual Hartono calibration
 packet is still to be verified, rather than supported by an unrecorded apparatus
 comparison. Kundu remains a candidate whole-campaign hold-out.
+
+## Source update — #238, 2026-11-02
+
+The [Ciftja 2014 assessment](sources/ciftja-2014.md) settles these items:
+
+- The source has been read.
+- Its data: SI Tables S1–S3 hold 62 rows. Two 25 °C rows fail the CO2
+  balance, leaving 57 usable loaded rows.
+- The 2011/2014 conflict: Ciftja 2011 fails its own balances. Recommend
+  excluding it.
+- The nonredundant NMR observable, a proposed residual scale, and the stated
+  detection uncertainty.
+
+Still open:
+
+- The carbamate temperature slope. No thermodynamically verified slope exists.
+  Xu/Silkenbäumer (VLE) and Ciftja 2014 Eq. 19 (NMR with a pH split) give
+  independent apparent hydrolysis enthalpies of +21.2 and +20.8 kJ/mol at
+  298 K. The note recommends fixing the Xu/Silkenbäumer slope, for the owner
+  to decide.
+- Line 70's "verified source law" needs that decision.
+- Offset bounds.
+- The ePC-SAFT γ-ratio conversion.
+- The AMPCOO− representation.
+- The calibration and hold-out roles of the Ciftja 2014 temperature blocks.
+
+Yi 2024 includes no AMP carbamate, and it fitted its parameters to Kundu 2003 and Tong 2012 among other data.
+Numerical Build remains **Block**.
 
 ## PZ and blend outline
 
