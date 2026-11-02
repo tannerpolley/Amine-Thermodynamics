@@ -84,7 +84,7 @@ The AMP phase gate applies (tangent-plane search, dense/gas classifier, unresolv
 | Loading per molecule vs per alkalinity | Phase-state rows hard-code `T, P, water, alpha, amine` (line 78); dataset columns bind any names | Convert source α to per-molecule in preparation; single PZ fits the `amine` scalar. The blend still needs the row-expansion change named in the AMP draft. |
 | Carbamate offsets | `reaction_coordinate` and `reaction_enthalpy_shift` are implemented (lines 221–236) | Three offsets are possible; their identifiability is unknown. |
 | Solid phase | The phase test builds only liquid and vapor trials (lines 331–334); the Engine `PhaseKind` is `{Liquid, Vapor}` | **Gap.** Without an Engine solid capability, only a declared domain restriction is possible. Any hexahydrate model needs an Engine issue with this repository's use case; none is opened by #237. |
-| Fitted-parameter hand-off | Blocked by ePC-SAFT#928, as for AMP | Unchanged |
+| Fitted-parameter hand-off | `epcsaft.parameters.document_mapping` (ePC-SAFT#928, merged 217026ab; used for MDEA in #232) | None for export; reload must reapply the component order |
 
 ## Sequence, stop conditions and owner decisions
 
