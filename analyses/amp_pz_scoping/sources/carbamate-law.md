@@ -51,3 +51,6 @@ its segment number, association sites, dispersion parameters or Born diameter.
 These remain modeling decisions requiring sources or a separately approved
 identification design. Do not infer the anion's sites from neutral AMP's 2B set,
 or count a law estimated from NMR rows as independent evidence beside those rows.
+
+Other published AMP carbamate laws and their bases are assessed in
+[carbamate-law-sources.md](carbamate-law-sources.md) (#234).
