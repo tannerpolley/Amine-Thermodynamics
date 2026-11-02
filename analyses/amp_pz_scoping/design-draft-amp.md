@@ -6,8 +6,7 @@ This replaces the superseded preparation statements in the earlier #227/#229
 draft. The source notes retain their dated findings. **Proposal for owner
 decisions and independent readiness review; no fitting or implementation is
 authorized by this document.** No fitted reactive AMP result is reported;
-§3 records the reviewer-reported pure-property discrepancy and this source
-diagnosis.
+§3 records the measured-data pre-fit design and the published-set comparison.
 
 ## Question, basis and limits
 
@@ -131,14 +130,23 @@ rescue a fit. No AMPH+–AMPCOO− coordinate is proposed.
 
 Retain the earlier two AMPH+ alternatives so the comparison changes the
 cation alone. A: m=1, packing 0.88 sigma, no association, same-sign dispersion
-excluded. B: m=3.1552, neutral-style temperature-dependent packing, declared
+excluded. B: m fixed to the accepted §3 neutral endpoint, neutral-style temperature-dependent packing, declared
 charged-molecule dispersion including self-dispersion, neutral AMP 2B sites
 with zero self-association energy and AMP association volume; cross-association
 to water/AMP by the adopted combining rule, none to CO2. Both have
 Debye–Hückel diameter sigma and fixed Born diameter 5 Å, solvation factor 1.
-Fix u/k to neutral AMP's 237.94 K in both variants to isolate topology/size
+Fix u/k to the accepted neutral AMP endpoint in both variants to isolate topology/size
 rather than another freely fitted energy. Fit sigma in [4.5,6.5] Å for A,
-[3.0,4.2] Å for B; starts 5.3 and 3.4676 Å, scale 0.25 Å.
+[3.0,4.2] Å for B; starts 5.3 Å and the refitted neutral sigma respectively, scale 0.25 Å.
+Before freezing the reactive declarations, require the refitted B start to lie
+strictly inside its proposed [3.0,4.2] Å interval; otherwise return its bounds
+to the owner. B inherits the refitted m, u/k and kappa, with unchanged 2B
+site counts and zero cation self-association energy. Recompute all
+neutral-dependent cross-association strengths, cation starts and initial
+Jacobian/phase checks from one hash-bound neutral record. A keeps m=1,
+its nonassociating topology and 5.3 Å start, but uses the same refitted u/k.
+Do not mix Ayad m/energy/volume with a newly fitted neutral sigma.
+These are proposed updates to D2, not additional ion coordinates.
 
 Wangler 2018 §3.1 distinguishes spherical nonassociating inorganic ions from
 nonspherical MDEAH+ with cross-association. It is an analog rationale for B,
@@ -146,118 +154,193 @@ not an AMP parameter source. MEA's sphere treatment motivates A. Fixing Born
 at 5 Å is an explicit reduction of the earlier fourteen-coordinate proposal;
 no AMP salt-density or caloric evidence here separates it from other effects.
 
-## 3. Neutral AMP source diagnosis and reproduction gate
+## 3. Pure-AMP preparation fit
 
-**The cause of the pure-pressure mismatch remains unresolved. Do not adopt
-this parameter set numerically yet.** The printed candidate is Ayad 2023
-Table 5 p.2797 / Pakravesh 2025 SI Table S1 p.2: m=3.1552,
-sigma=3.4676 Å, u/k=237.94 K, epsilon_AB/k=3526.15 K,
-kappa_AB=0.0058, effective 2B with one site of each type.
+**D3 decided by the owner on 2 November 2026:** estimate neutral AMP's five
+PC-SAFT parameters in this repository from measured vapor pressures and
+liquid densities before the binary pre-fit. This supersedes the requirement
+to reproduce the published parameter set before proceeding. The cause of its
+Engine/source-model discrepancy remains unknown; a fit is not its diagnosis.
+Use effective 2B (one site of each type), as Ayad §3.1 p.2794 and
+Pakravesh SI Table S1 prescribe, with the Engine's dimensionless kappa
+multiplying sigma³, not a fitted conversion to d(T)³. Freeze the accepted
+neutral endpoint before any binary, dielectric or reactive fitting. Use immutable Engine wheel
+`e6dae5c7`, SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`,
+from `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/`;
+no source-checkout imports. This design made no Engine calculation.
 
-### What the source comparison establishes
+### Observations and independent comparisons
 
-Pakravesh SI Table S8 p.19 explicitly labels its entries **calculated**
-saturation pressures. The AMP PC-SAFT column is 1872.47, 2934.43, 19992.69,
-65312.60 and 162508.39 Pa at 347.5, 354.3, 392.3, 423.0 and 452.0 K.
-These are source-model numerical comparators, not experimental observations.
-Its saturated-density columns belong to MEA; there is no AMP saturated-density
-reference in this table.
+All three original pressure PDFs were acquired legitimately through Zotero
+Connector into the registered project collection `8RZP275E`. Searches by
+Pappa name and DOI found no matching live item before acquisition; it was
+added, not merely rediscovered. No source is awaiting a PDF handoff.
 
-Pakravesh main Table 2 p.1184 reports AMP PC-SAFT vapor-pressure AAD **1.47%**
-(P-rho-T-SAFT-HR: 1.57%). Figure 1 and §3 p.1185 compare vapor pressure
-with experiments; the AMP source is ref.78, Klepáčová et al. (2011),
-*Vapor Pressures of Several Commercially Used Alkanolamines*, JCED 56,
-2242–2248 (bibliography p.1193). SI Table S3 p.4 gives 347–452 K for AMP
-vapor pressure. This experimental AAD is distinct from reproducing Table S8.
-Ayad §4.5 p.2800 says its AMP parameters were fitted to its measured liquid
-densities and literature vapor pressures from ref.66, Belabbaci et al.
-(2010), JCT 42, 1158–1162. **Ayad does not report a pure-AMP vapor-pressure
-AAD** in its parameter/results discussion or tables: Table 6 p.2797 reports
-0.0210% for density only. Neither that density AAD nor Pakravesh's 1.47%
-can explain or excuse a 15–39% source-model reproduction error. The two
-papers cite different pressure datasets; their references alone do not prove
-different implementations.
+| Original source; Zotero parent / PDF | Read measurement evidence and proposed use |
+|---|---|
+| Klepáčová 2011, DOI 10.1021/je101259r; `W3CN3ITJ` / `AC6FKJD6` | Calibrate all 15 measured Table 10 rows, p.2246: 347.5–452.0 K, 1.94–160.0 kPa. Experimental section p.2242: modified Swietoslawski circulation ebulliometer; T precision 0.1 K, pressure precision 0.5% for 1<P<50 kPa and 0.2% for 50<P<400 kPa. AMP 99% purity, used without further purification (Table 1/p.2243). Table 11's 53 points combine this and literature; they are not 53 new measurements. |
+| Belabbaci 2010, DOI 10.1016/j.jct.2010.04.015; `HVW2Q8XJ` / `3MWGVBQX` | Calibrate all 9 pure-AMP Table 2 measurements, p.1159: 293.29–373.00 K, 41.5–8141.8 Pa. Pure static apparatus, MKS differential manometer; §2 pp.1158–1159: sigma(T)=0.02 K, sigma(P)/P=3% below 600 Pa, 1% at 600–1300 Pa, 3% above 1300 Pa. Purity >99 mass%, tested by gas-liquid chromatography. Its abstract's 283–363 K interval does not replace Table 2's pure-AMP range. Table 3 x_AMP=1 endpoints use the second, mixture apparatus; keep as a separate apparatus comparison, not duplicate calibration rows. |
+| Pappa 2006, DOI 10.1016/j.fluid.2006.03.014; `4PIGUS3I` / `EKY3MCAB` | Hold back all 23 pure-AMP Table 1 rows, p.194: 373.25–436.85 K, 8.0–101.3 kPa. §2.2: modified Swietoslawski ebulliometer; pressure controlled within ±0.13 kPa, temperature accuracy ±0.1 K. §2.1: 99% AMP, dried over 4A molecular sieves ≥1 week. §2.3.1's prose says 373.3–463.9 K, contradicting its table; use actual table rows, not the prose endpoint. Normal boiling point measured 436.9 K. These are not its 21 interior binary VLE rows (Table 2 p.195). No Pappa Antoine coefficients enter the pure fit or starts. |
+| Ayad 2023, DOI 10.1021/acs.jced.2c00767; existing `PX8NU8BD` / `SSBW7YJ5` | Calibrate its three Table 2 experimental liquid densities, p.2790: 927.0, 918.6, 910.1 kg/m³ at 303.15, 313.15, 323.15 K and 0.1 MPa. §2.2 p.2792: vibrating U-tube DSA 5000 M, density uncertainty 0.0005 g/cm³; table footnote p.2792 gives expanded uncertainty 0.5 kg/m³ at 95% confidence, u(T)=0.02 K and u(p)=0.04 MPa. Do not treat expanded uncertainty as a standard deviation. Table 1 p.2789 reports only 0.95 AMP mass purity, without further purification (§2.1), an additional systematic limitation. |
 
-The independent readiness review of `a805048` reported, on immutable Engine
-wheel `3e83e19c`, SHA-256
-`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`:
+Other reported pure-density measurements are visible in **Ayad Table 2's
+literature columns**: e.g. at 303.15 K 925.7 (Zhang 2002, ref.3), 928.39
+(Álvarez 2010, ref.1), 926.6 kg/m³ (Balchandani 2019, ref.4); at 313.15 K
+917.2 (Aguila-Hernández 2001, ref.6), 919.65 (Henni 2003, ref.7),
+921.1 (Xu 1991, ref.10), 919.945 (Rebolledo-Libreros 2006, ref.11),
+919.6 kg/m³ (Li–Lie 1994, ref.12). At 323.15 K its reported literature
+values span 909.2–913.4 kg/m³. These are verified as Ayad's cited values,
+not newly read original datasets: their uncertainty, purity, phase status and
+full temperature intervals remain unverified. Do not pool them as extra
+observations or call them independent density validation. Their several
+kg/m³ spread is a reason to retain source-specific bias, not to claim Ayad's
+0.5 kg/m³ uncertainty describes all literature.
 
-| Association-volume candidate | Saturation-pressure error relative to S8 | Ayad Table-2 liquid-density check |
-|---|---|---|
-| kappa sigma³ | +15.3% to +31.3% | absolute error ≤0.71 kg/m³ |
-| kappa d(T)³ | +20.5% to +38.8% | absolute error ≤0.71 kg/m³ |
+### What the original pressure tables show
 
-These are reviewer-reported calculations, reused rather than rerun here.
-Both pressure candidates fail the proposed **0.5% per-point numerical
-reproduction tolerance**; both satisfy the proposed 1.0 kg/m³ density check.
-The latter compares 927.0, 918.6 and 910.1 kg/m³ at 303.15, 313.15 and
-323.15 K, 0.1 MPa (Ayad Table 2; expanded density uncertainty
-0.5 kg/m³). Density cannot discriminate the two
-candidates. This is a numerical reproduction discrepancy, not evidence that
-the reactive AMP model has failed a physical validation.
+Hartono 2013 Eq.2 p.152 (`5KUR8PRH` / `SEPZQIPE`) prints
+$$\ln(p/{\rm kPa})=15.8097-3986.86067/(t+189.9303).$$
+The following line calls t kelvin, but the printed coefficients require
+**t=T/K−273.15 in degrees Celsius**. Direct arithmetic gives 97.2127 kPa
+at 165 °C, versus 12861.7 kPa if 438.15 is inserted directly. Pappa's
+measured 101.3 kPa at 436.85 K independently supports this reading. Treat it
+as an inferred correction of a unit typo, not a confirmed author corrigendum.
+Hartono reports 20–165 °C validity and 3.5% average absolute relative deviation
+against Pappa/Belabbaci/Klepáčová; it is a fitted synthesis, not independent
+pressure data. No equality with atmospheric pressure is imposed at 165 °C.
 
-### Conventions checked and the remaining causal gap
+Arithmetic from all original table rows, signed as 100(p_obs/p_Hartono−1):
+Belabbaci −2.59% to +4.66% (mean absolute 2.92%, 9 rows);
+Klepáčová −5.94% to +10.33% (7.37%, 15 rows, including three temperatures
+above Hartono's 438.15 K range); Pappa +1.62% to +8.60% (6.95%, 23 rows,
+all inside the stated range). These recalculated campaign errors do **not**
+independently reproduce Hartono's aggregate 3.5%; its exact fitting inventory
+and weighting remain unresolved. Do not use 3.5% as a measurement uncertainty.
 
-Ayad §3.1 p.2794 explicitly uses **2B**, describing one oxygen site and
-one hydrogen site for the associating compounds. Pakravesh SI S1 also labels
-AMP 2B. AMP contains OH and NH2, but this is an effective two-site model;
-counting every chemical donor/acceptor or changing to 3B/4C would change the
-published model rather than resolve a unit conversion. Ayad calls kappa the
-“effective volume of interaction”; Table 5 and SI S1 give a bare kappa_AB
-(no dimensional volume unit), consistent with a dimensionless reduced
-association volume. They do not prescribe a conversion to m³/mol. The
-separate SAFT-HR block's volume units and powers of ten must not be applied
-to the PC-SAFT block.
+Because temperatures differ, direct same-temperature measurement differences
+are unavailable. Log-linear interpolation between adjacent original Belabbaci
+Table 2 rows gives Klepáčová differences −8.59%, −5.65%, −3.37%, −1.09% at
+347.5, 354.3, 363.6, 371.4 K. Belabbaci's published Antoine interpolation
+(Table 1, Eq.1, p.1159) gives −9.16%, −6.09%, −3.59%, −1.52% respectively.
+Thus approximately 10% disagreement is supported near the low end of their
+overlap, conditional on interpolation, not universal across all temperatures.
+Against log-interpolated Pappa Table 1, Klepáčová is +1.96%, +2.89%, +2.47%,
++1.84%, +1.04% at 377.2, 392.3, 402.1, 423.0, 436.2 K. Pappa and Klepáčová
+agree much more closely there. Uncertainty in temperature, sample water and
+interpolation must remain distinct from EOS error; no source is discarded.
 
-Engine `3e83e19c`, `engine/docs/equations.md`, `association_strength` uses
-$$\Delta^{ij}_{AB}=g^{hs}_{ij}
-[\exp(\epsilon^{ij}_{AB}/k_BT)-1]\sigma_{ij}^3\kappa^{ij}_{AB},$$
-and `neutral_segment_diameter` uses
-$$d(T)=\sigma[1-0.12\exp(-3(u/k_B)/T)].$$
-Its `dispersion_helmholtz` and `dispersion_chain_coefficients` use the Gross
-2001 chain perturbation and segment-count interpolation. Ayad §3.1 refers
-the detailed EOS to refs.58,59,63 rather than printing these expressions;
-Pakravesh §2.2 p.1183 gives the hard-chain + dispersion + association
-sum and SI S1 cites Ayad for AMP. Neither inspected paper specifies an
-alternative segment-number, dispersion or diameter expression that explains
-the mismatch. Common PC-SAFT lineage is insufficient to verify identical
-implementation. Gross 2002 §2 Eq.3's unlike-volume rule alone does not settle
-the pure prefactor. The source-author prefactor and actual implementation
-remain unverified; there is no evidence here for an Engine defect, a new
-site multiplicity, a dimensional kappa conversion or a parameter correction.
-Changing sigma³ to d³ alone demonstrably does not close the discrepancy.
+S8's five calculated pressures are −9.22%, −2.55%, +8.85%, +10.86%, +9.63%
+relative to this same Hartono reading; 452 K is outside its domain.
+The owner's hand comparison gives Engine sigma³ errors +10.0%, +12.4%,
++26.3%, +36.5%, +43.9% at the same five temperatures. Those Engine values
+are attributed to the owner/reviewer, not independently rerun here. The
+original tables confirm a source spread, but not that it explains the entire
+Engine discrepancy. The present calculations use only source-equation
+arithmetic in isolated Python (`-I`), not Engine calls or a fit.
 
-The smallest resolving evidence is an author/reference implementation or a
-worked pure-AMP coexistence state with the exact five parameters, site
-multiplicities, association strength/contact expression, diameter and
-dispersion conventions, both phase densities and equality of pressure and
-chemical potential. An author correction to S1/S8 or to the printed parameter
-set could also resolve it. Obtain that evidence before assigning a cause.
-No neutral fitting, tolerance widening or Engine source edit is proposed.
+Source SHA-256 (full PDFs, checked after acquisition):
+Klepáčová `696c2dac68f1d0f6ab95d1b7872c1eb6e93c562594ba1163c450c89b3495e9aa`;
+Belabbaci `27be136ec45c638b6330d1084d9e19695a2e727f5ba02909fa9ae5b2bfb6140e`;
+Pappa `b185d1f53476b994a9dcf263ed31fee888d078021a2b04215a302b3a750860b9`.
+Methods, tables, results and limitations above were read in these PDFs;
+Hartono Eq.2 and the three pressure tables were also visually checked.
 
-### Owner choice before numerical preparation
+Do not use either Hartono's or Klepáčová's fitted Antoine pressures as
+additional observations. The original measurements own the pressure evidence.
+Temperature and pressure errors are correlated within each campaign; the
+residual scales below are engineering weights, not independent statistical
+standard deviations. The near-ambient tables label observations as liquid without establishing
+solid–liquid equilibrium. Retain that limitation; do not
+claim a solid-phase model or global liquid stability from them.
 
-**D3 option A (recommended):** retain Ayad as a source candidate and pause
-its numerical adoption while obtaining the resolving source evidence above.
-**Option B:** authorize source review of another published pure-AMP parameter
-set, with its own equations and numerical references, then amend this design;
-no alternative set is selected or imported here. Either route leaves Build
-blocked until the source and its numerical reproduction are settled. A change
-to the neutral source also requires revisiting cation B's source-derived
-m, energy, sites and starts in §2, rather than silently retaining a mixed set.
+### Coordinates, bounds and starts (proposal)
 
-For any subsequent convention test, **always evaluate both candidates on
-all the same five S8 points and three Ayad density points**, independently
-of which candidate passes first. The sigma³ candidate keeps kappa=0.0058;
-the d³ candidate uses
-$$\kappa_{Engine}(T)=0.0058[1-0.12\exp(-3\cdot237.94/T)]^3.$$
-Retain pressures, densities, coexistence residuals and signed errors for both.
-One passing interpretation plus resolved source provenance supports numerical
-adoption; both passing is ambiguous; neither passing retains the source gate.
-Keep the 0.5% pressure and 1.0 kg/m³ density proposals unchanged. No constant
-conversion is fitted. Obtain independent AMP saturated-liquid densities if
-claiming their reproduction; proposed agreement is ≤0.1% relative once the
-same conventions/precision are established. None are invented from S8.
+| Coordinate | Start (Ayad Table 5 p.2797) | Proposed bounds | Coordinate scale |
+|---|---:|---:|---:|
+| m | 3.1552 | [1.5,5.0] | 0.5 |
+| sigma / Å | 3.4676 | [2.8,4.2] | 0.25 Å |
+| u/k / K | 237.94 | [150,400] | 50 K |
+| epsilon_AB/k / K | 3526.15 | [1500,5500] | 500 K |
+| kappa_AB | 0.0058 | [0.0005,0.05] | fit ln(kappa/0.0058), scale 1 |
+
+These bounds are proposed search allowances around Ayad, not molecular
+confidence intervals. All five remain fitted; no parameter is silently fixed
+to make the information check pass. A second declared start is
+(3.0, 3.55 Å, 250 K, 3200 K, 0.008), to test dependence on initialization.
+No reactive or Kundu/Tong evidence selects a neutral start or endpoint.
+Select the lowest-cost admissible neutral endpoint using calibration alone;
+if the profile rule below finds practically equivalent, materially different
+endpoints, stop before scoring Pappa rather than use it for selection.
+
+For each pressure observation solve pure coexistence with equality of
+pressure and chemical potential and distinct mechanically stable vapor and
+liquid roots. For density solve the liquid at its reported T and pressure,
+not at saturation. Use molar mass 89.14 g/mol (Ayad Table 1), recording any
+source rounding in conversion to kg/m³. Proposed residuals are
+$$e_{p,i}=\ln(p_{sat,calc,i}/p_{obs,i})/s_{p,i},\qquad
+ e_{rho,j}=(rho_{calc,j}-rho_{obs,j})/(0.5\ {\rm kg\,m^{-3}}).$$
+Propose s_p=max(0.02,u_p/p_obs,|d ln p_sat/dT|u_T) where a source reports
+uncertainty; retain reported precision separately when it is not a standard
+uncertainty. The 2% floor limits weighting of precise but mutually displaced
+campaigns. Minimize the sum of each pressure campaign's mean squared residual
+plus the density campaign's mean squared residual. Thus many pressure rows
+do not automatically suppress three density rows. Publish every unscaled
+relative pressure error, density error and campaign contribution.
+
+### Information, acceptance and stop rules (proposal)
+
+Pressure plus a narrow density interval weakly determines five associating
+PC-SAFT parameters. Inspect the weighted, coordinate-scaled Jacobian at both
+starts and endpoints; retain all singular values and weak right-singular
+vectors. A full-rank matrix alone does not establish useful identification.
+Before adoption, profile the weakest endpoint singular-vector combination at
+five scaled displacements (−1,−0.5,0,+0.5,+1), reoptimizing the remaining
+four combinations within the same bounds. Record cost, active bounds,
+pressure curves over the measured range and densities at 303.15–323.15 K.
+Stop if profiles cannot be completed within D8, if a weak direction reaches
+arbitrary bounds without a cost increase of 1 in this declared objective,
+or if endpoints differing by less than 1 cost unit differ by >5% pressure
+or >1 kg/m³ density within the measured domain. These are proposed practical
+identification criteria, not likelihood confidence intervals. Fixing a
+parameter (for example m) is an alternative requiring an owner decision and
+new design; it is not an automatic fallback.
+
+These pressure limits are engineering screening proposals reflecting the
+observed campaign spread, not source precision or a confidence interval.
+The 1 kg/m³ density allowance is twice Ayad's expanded uncertainty and
+does not account for its unspecified impurities. Propose calibration checks: each admitted pressure campaign mean absolute
+relative error ≤5%, no row >10%; all three Ayad density errors ≤1 kg/m³.
+Apply the same pressure limits to any whole held-back pressure campaign
+identified above, only after freezing the endpoint. Report its full row count
+and failures. Passing that comparison supports pure-AMP physical assessment
+over its measured range, not an independent reactive validation. If no whole
+campaign is available, report no independent pure-pressure validation and
+return that absence to the owner before adoption. There is no independent
+density validation until another original source is admitted.
+
+Stop on nonfinite predictions, merged roots, failed coexistence or negative
+compressibility, failed numerical tolerances in §6, endpoint at an arbitrary
+bound, failed profile/acceptance checks, or an exhausted stage/global budget.
+Retain failed rows; never remove them, widen bounds, add sites, fix a coordinate
+or refit on held-back observations without a design amendment. The same
+approved wheel must cold-replay the endpoint before it is frozen by hash.
+
+### Published-set comparison retained without an adoption gate
+
+Ayad Table 5 / Pakravesh SI S1's original set is the start above. Pakravesh
+SI Table S8 p.19 contains **calculated**, not measured, AMP PC-SAFT pressures:
+1872.47, 2934.43, 19992.69, 65312.60, 162508.39 Pa at 347.5, 354.3,
+392.3, 423.0, 452.0 K. The earlier independent review on wheel `3e83e19c`
+reported +15.3–31.3% errors with kappa sigma³ and +20.5–38.8% with
+kappa d(T)³; both density comparisons were within 0.71 kg/m³ of Ayad.
+These are inherited reviewer results, not rerun on the newly specified wheel.
+Keep both signed source-model comparisons, parameter identity and numerical
+residuals when replaying them; neither 0.5% S8 reproduction nor an inferred
+association-volume conversion is a gate on the owner-authorized measured-data
+fit. Pakravesh Table 2 p.1184 reports 1.47% pressure AAD against Klepáčová;
+Ayad Table 6 p.2797 reports 0.0210% density AAD, with no pure-pressure AAD.
+Neither supplies new experimental rows or resolves the implementation cause.
 
 ## 4. Remaining data roles
 
@@ -270,7 +353,7 @@ No private CESAR-1 rows or coefficients may be copied or executed.
 | Hsieh 2007 Tables 2,5 | Preparatory fit of the two MEA-form dielectric coefficients, then freeze; 6 pure and 24 aqueous points, 303.15–328.15 K. Use the fixed-density order, residuals and branch rule below. No claim of loaded-solution permittivity validation. |
 | Hamborg 2009 Table 16, Eq.21 | Preparatory weighted correlation of all 24 runs, A/T+B+C ln T, weights 1/u(ln K)^2; then freeze. Printed uncertainties are scales, not established independent standard deviations. Use 293.12–353.22 K only. This is a proposed authorization to estimate the missing unrounded coefficients, not permission to use the ill-conditioned reconstruction of Table 1 as an exact law. Retain covariance and all residuals. |
 | Hartono 2013 Table 3, §§2.2,6.1 | AMP–water VLE calibration: all 26 P–T–x–y observations, roughly 333–373 K. Use measured P and y_AMP at reported liquid x and T; do not fit derived activity coefficients as independent observations. This is the Hartono binary campaign indexed in the original map, not an additional 26 rows. |
-| Pappa 2006 | Reserve as unloaded VLE comparison, not required calibration. Exact paper/tables and uncertainties remain unread here; do not admit its indexed 21 rows until source checked. Hartono 2013 Fig.2b compares it but is not a replacement for the measurements. Broader high-temperature binary data do not extend reactive-law coverage. |
+| Pappa 2006 | All 23 pure pressures reserved for §3 assessment. Its 21 interior binary VLE rows, Table 2 p.195, are supplemental binary comparisons; exclude the six pure endpoints from that count. Methods now read (§3); do not import fitted NRTL/UNIQUAC coefficients. No extension of reactive-law coverage. |
 | Hartono 2021 Table 7 | Loaded-pressure calibration: its own pure-AMP measured **total** pressures, first three columns/isotherms (313,333,353 K), 15+17+15=47 rows, including both 333 K alpha=0.94 measurements. Table 4 owns the 3 M stock conversion. Retain row u(P) and u(alpha), method §§3.2.2–3.2.4. No model-subtracted partial pressure is made. Its 373/393 K columns are supplemental extrapolation only. |
 | Hartono 2020 | Comparison/model lineage only in this bounded first design. Do not import its fitted reaction law or coefficients, its mixed-source pressure compilation, or the indexed overlapping 109/82-row files. This avoids unresolved source overlap while the 2021 own measurements supply calibration. |
 | Ciftja 2014 SI Tables S1–S3 | All 57 usable loaded rows calibrate r_c at fixed scale 0.003, as settled above. Use the source-reviewed inclusion list, not a new loading-based selection. |
@@ -283,7 +366,7 @@ No private CESAR-1 rows or coefficients may be copied or executed.
 Propose the existing MEA procedure in
 `analyses/mea_parameter_bundle/scripts/fit_campaign.py:276–350`, adapted to
 Hsieh's actual temperatures rather than MEA's single 298.15 K isotherm.
-First settle §3's pure-AMP gate, then perform the two-coordinate Hartono-2013
+First fit, assess and freeze §3's neutral AMP endpoint, then perform the two-coordinate Hartono-2013
 binary VLE pre-fit. Freeze its neutral AMP–water endpoint as the **named,
 hash-bound density parameter record** for dielectric preparation. At each
 of the 30 Hsieh rows evaluate that fixed EOS at the reported T and unloaded
@@ -494,35 +577,41 @@ refusal or rescue a state by altering shared parameters.
 
 ## 8. Code, runtime and retained outputs
 
-**Proposed owner ceiling: 240 gross added executable lines plus 30 test lines**
-for AMP preparation/assessment, measured against the accepted implementation
-base after #235 merges (design inspected at `0b54cd7`). Planning allocation:
-120 source preparation, 80 reuse of driver calls/assessment, 40 reference
-checks. TOML/JSON/CSV declarations and the research notebook are counted
-separately, not used to hide executable logic. No shared-driver additions
-are budgeted; #235 owns that repair. No new solver, dependency or general
-solvent framework is proposed. Check additions before exceeding the ceiling.
-The present task changes prose only, zero executable lines.
+**D8 revised proposal, not an approved ceiling: 360 gross added executable
+lines plus 40 numerical-check lines** for AMP preparation/assessment, measured
+against the accepted implementation base after #235 merges. Allocation:
+120 source preparation, 100 pure-property calls/residuals/profiles, 100 reused
+binary/reactive driver calls and reporting, 40 reference checks. This adds
+120 executable and 10 check lines to the previous proposal to include the
+pure fit and its information checks. Data declarations and notebook prose
+are counted separately; executable logic may not be hidden in declarations.
+No generic optimizer, equilibrium solver, new dependency or solvent framework
+is included; reuse Engine fitting and property calls. If the approved Engine
+cannot represent the pure objective or profiles, stop for its owner rather
+than write a local optimizer. This task changes prose only.
 
-**Estimate: 4–8 hours computation, proposed hard ceiling 8 hours total**,
-excluding memory-admission waiting and separate #235 work. Allocate at most
-1 hour to source-law/dielectric/binary preparation and sensitivity checks,
-4 joint attempts (2 variants × 2 starts) at 75 minutes and 60 iterations each,
-and 2 hours to replay, phase trials, hold-out and outputs. Stop on the first
-exhausted global or stage budget; keep incomplete results without a pass.
-Native controls: function/parameter tolerances 1e−10, gradient 1e−8; a budget
-endpoint is not a converged endpoint. Run heavy work as `agent-heavy` in a
-background shell, use available cores via the Engine process workers and one
-BLAS/OpenMP thread per worker, record hardware and admitted wall time.
+**Proposed computation ceiling: 12 hours**, excluding memory-admission waiting
+and separate #235 work; estimate 8–12 hours, not an AMP benchmark. Allocate
+4 hours pure preparation (two fits, at most 45 min/60 iterations each;
+five profile points at most 20 min each; 50 min differentiation/replay),
+1 hour binary/source-law/dielectric preparation, 5 hours for four reactive
+attempts (two variants × two starts, 75 min/60 iterations each), and 2 hours
+phase checks, held-back assessment and retained outputs. Both stage and global
+limits stop work; incomplete profiles or budget endpoints cannot pass.
+Native controls: function/parameter tolerances 1e−10, gradient 1e−8. Run heavy
+work through `agent-heavy` in a background shell. Use full available CPU count
+for process workers with one BLAS/OpenMP thread per worker, sized to memory;
+record hardware and admitted elapsed time.
 
-Basis: #235 reports 4.6 hours cumulative MEA fitting time; #228's MDEA
-280-observation nine-coordinate fitting used a 2100 s native ceiling, 32
-workers and one BLAS thread per worker. AMP has 104 reactive observations and
-52 binary scalar observations and eight joint coordinates per attempt, but
-reactive difficulty/phase-search work does not scale linearly with rows.
-These are planning estimates, not an AMP benchmark or a promised duration.
-Stop after timing initial differentiation if the projected work cannot fit
-the allowance; no unattended enlarged campaign.
+Basis: the inherited proposal cites #235's 4.6-hour cumulative MEA fitting
+and #228's 280-observation, nine-coordinate MDEA fit with a 2100 s native
+ceiling. Those reactive timings justify retaining its 8-hour allowance,
+not the new pure-fit duration. The extra 4 hours is explicit arithmetic
+for two five-coordinate fits plus five conditional profile solves and
+checks. No pure-fit timing was measured in this design. Time the first
+residual/Jacobian evaluation and project all remaining solves before starting
+the campaign; return to the owner if the declared budget is insufficient.
+No automatic ceiling increase or skipped identifiability check.
 
 Retain public source rows with hashes, units/bases, inclusion decisions,
 wheel/commit identity, full starts/bounds/ties, calibration Jacobians, fit
@@ -535,19 +624,20 @@ caloric/absorber qualification, PZ fitting or blend fitting is included.
 
 ## Owner decisions and readiness handoff
 
-The decisions already settled in #238 are not reopened. The following are
-recommendations for one owner decision round before numerical Build:
+The decisions already settled in #238 are not reopened. D1, D3, D5 and D7
+are decided by the owner in the two 2026-11-02 comments on #241. D2, D4, D6,
+D8 and §3 detailed fitting/identification choices remain proposals before Build:
 
-| Decision | Recommendation |
+| Decision and status | Content |
 |---|---|
-| D1: Offset interval and water convention | [−3,+2], zero start, explicit water and common molality reference (§1) |
+| D1 — decided 2026-11-02: Offset interval and water convention | [−3,+2], zero start, explicit water and common molality reference (§1) |
 | D2: Anion and cation hypotheses | One nonassociating AMPCOO− sphere; fixed analog energy/Born/water interaction, fitted size; retain A/B cations with fixed energies/Born (§2) |
-| D3: Pure source and reproduction | A (recommended): obtain author/reference clarification before adopting Ayad; B: authorize review of another published pure-AMP set and amend source-dependent choices. Both convention candidates always tested; retain 0.5% / 1 kg/m³ checks. Cause unresolved (§3) |
+| D3 — decided 2026-11-02: Pure preparation | Fit m, sigma, u/k, epsilon_AB/k and kappa in this repository, effective 2B, Ayad start, Engine sigma³; freeze before binary preparation (§3). Detailed observation partition, bounds, scales, profiles and acceptance are proposals pending owner approval. |
 | D4: Source preparation and data roles | Estimate Hamborg coefficients from Table 16, fit/freeze Hsieh dielectric after binary pre-fit using its hash-bound fixed liquid-density record, 1% relative scale, admissibility and both-branch Hsieh-only selection; Hartono 2013 binary and 2021 Table-7 first-three-isotherm calibration; reserve Kundu; Pappa/Tong comparisons (§4) |
-| D5: Falsifier and residual policy | Kundu 51-row E_p≤30%; no missing rows; 5% pressure floor, group-normalized objective; NMR RMS≤0.006 calibration check (§5) |
+| D5 — decided 2026-11-02: Falsifier and residual policy | Kundu 51-row E_p≤30%; no missing rows; 5% pressure floor, group-normalized objective; NMR RMS≤0.006 calibration check (§5) |
 | D6: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; rank failure stops for Design, no smaller fallback; CO2 column norms reported only, no dominance stop; calibration-first A/B selection (§6) |
-| D7: Fitting-path dependency | Wait for delivered #235 qualification on the merged #962 wheel; no duplicate driver repair (§7) |
-| D8: Limits and exclusions | 240 executable +30 test lines, 8 h computation ceiling, pressure/speciation only (§8) |
+| D7 — decided 2026-11-02: Fitting-path dependency | Wait for delivered #235 qualification on the merged #962 wheel; no duplicate driver repair (§7) |
+| D8 — proposed: Limits and exclusions | 360 executable +40 numerical-check lines; 12 h computation including 4 h pure preparation; pressure/speciation only (§8) |
 
 This draft is ready to be **reviewed as a proposal**, not declared Ready for
 Build. Independent readiness review is not performed by this implementor;
@@ -557,17 +647,14 @@ process and reads it back before Build. No tracker body was changed here.
 
 ### Further reading or preparation needed
 
-- Resolve D3’s source-model discrepancy with author/reference evidence or an
-  approved alternative source; neither volume candidate currently passes.
-  Obtain an independent saturated-liquid-density calculation if that reproduction claim is required.
-  The pressure and measured-density checks alone do not establish it.
+- Approve §3 observation roles, residual scales, five-coordinate bounds,
+  profile/acceptance policy and D8 limits. The three required pressure PDFs
+  are now available; additional original density sources remain unadmitted.
 - Read Hartono 2021 cited uncertainty methods and SI Part A1 before materializing
   its 47-row calibration packet; retain Table 4 stock composition and reported
   u(P)/u(alpha). Verify no reused Kundu observations. Hartono 2020 original
   calibration inventory and Yi 2024 SI are required if importing their fitted
   quantities is later proposed; none are imported here.
-- Read Pappa's original measurement tables/uncertainties before admitting that
-  supplemental comparison. It is not a prerequisite to the proposed fit.
 - Retain the uncertainty of the proposed Hamborg Table-16 correlation and
   verify Engine standard-state mapping, water factors and reference pressure.
   The four-rounded-value reconstruction is not the executable source law.
@@ -594,8 +681,11 @@ SI `96a0e25ce0b975372b6261a1df36a5f13d3c8c77e2a9fedb43273b1d4f36bc82`.
 The main-checkout reading shelf is available; this worktree has no local
 literature shelf. Source equations were read at Engine `3e83e19c` from the
 read-only clone after fetching main; no source checkout was imported.
-Belabbaci/Klepáčová are identified from the papers' references, not claimed
-as newly read original measurement papers. No new Engine calculation was
-run: the pressure/density ranges are explicitly the independent review's
-evidence. No CESAR-1 content, new literature attachment, fit or physical
-validation was produced by this correction.
+For the present revision, Klepáčová's full Experimental/Results/Antoine
+sections and Tables 1/10/11, Belabbaci §§2–4 and Tables 1–3, Pappa §§2–4
+and Tables 1–4, Hartono Eq.2 and Ayad Tables 1/2/5/6, §§2.1/2.2/4.5
+were inspected directly in the live Zotero PDFs. New source identities,
+hashes, readings and arithmetic are retained in §3; earlier comparison
+numbers remain attributed. The present revision adds three original papers
+and PDFs, revises the design only, and performs source-equation arithmetic.
+No Engine probe, fitting, repository code or physical validation was performed.
