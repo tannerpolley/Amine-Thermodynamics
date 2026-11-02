@@ -3,6 +3,54 @@ title: "MEA solvent-specification endpoint reproduction"
 format: html
 ---
 
+## Issue 235 design replay on Engine e6dae5c7 (2 November 2026)
+
+**The 213-row baseline fails the required per-field replay tolerance.**
+At the unchanged endpoint its dimensionless cost is **45.37796168239802**,
+against **45.37796168239049**, an absolute increase of
+$7.531752999057062\times10^{-12}$ and relative change of
+$1.659\times10^{-13}$. Every row is available and meets its native
+requested tolerance. Two rows exceed the separate $10^{-10}$ relative
+comparison standard; agreement of the total cost does not override that failure.
+
+| Field | Largest relative change | Target |
+|---|---:|---|
+| Prediction | 6.95644483271666e-13 | `vle_obs_0133-pco2` |
+| Residual | 1.2627348373152909e-10 | `vle_obs_0124-pco2` |
+| Weighted residual | 1.2627357231932254e-10 | `vle_obs_0124-pco2` |
+| Row cost | 2.525470820199663e-10 | `vle_obs_0124-pco2` |
+
+For the largest row-cost change, the new value is
+**1.1982922885866476e-5**, versus **1.1982922882840224e-5** retained,
+an absolute difference of **3.026252208895852e-15**.
+`vinjarapu2024_source_table4_06` also fails the row-cost comparison
+(**1.6304899911582942e-10** relative). This is numerical verification
+at a fixed endpoint; the small absolute differences do not identify their
+cause or establish physical validation. No numerical uncertainty estimate
+was made.
+
+[Baseline differences, group costs and input hashes](results/design-replay-e6dae5c7/baseline.json)
+and [all 213 predictions](results/design-replay-e6dae5c7/predictions.json)
+retain this single rerun. Python 3.13.14, NumPy 2.5.4 and SciPy 1.18.1
+were used in an isolated environment with Engine **1.2.0**, merged commit
+`e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4`, wheel SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`.
+Installed Engine files were byte-compared with the supplied wheel.
+The scratch command ran through `agent-heavy`; active wall time was
+**4.989714511 s** including packet construction, excluding environment setup
+and memory admission. No input, root dependency pin or Engine source changed.
+
+Per the owner's stop rule, coordinate-aware evaluation, the starting-point
+`reg.differentiate` check and design revision were not attempted. No fitting
+ran. The design remains at `f1b9b9c` on its original branch; its required
+corrections remain pending. The approved Build ceilings remain **170 executable
+lines plus 20 test lines; 30 min total, 20 min native fitting, 60 iterations**.
+The owner must decide how to address this replay mismatch before resuming.
+This result has not received independent review or manuscript promotion.
+The existing 307-row historical result below retains its original wheel identity;
+the 94 neutral rows were not rerun here. No site refresh or manuscript index
+change was made in this design-only task.
+
 ## Result and intended use
 
 The generic solvent-specification driver reproduces **all 307 objective rows
