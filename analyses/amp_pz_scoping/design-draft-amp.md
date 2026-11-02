@@ -5,7 +5,9 @@ Design for [#241](https://github.com/tannerpolley/Amine-Thermodynamics/issues/24
 This replaces the superseded preparation statements in the earlier #227/#229
 draft. The source notes retain their dated findings. **Proposal for owner
 decisions and independent readiness review; no fitting or implementation is
-authorized by this document.** No numerical AMP result is reported.
+authorized by this document.** No fitted reactive AMP result is reported;
+§3 records the reviewer-reported pure-property discrepancy and this source
+diagnosis.
 
 ## Question, basis and limits
 
@@ -73,7 +75,9 @@ comparisons are ln(0.049/K_formation): approximately −0.85, −1.88 and −2.7
 The excluded 2011 value 0.0075 corresponds to +1.88. The proposed interval
 covers these values after rounding outwards; its positive extent is a
 stress allowance, not rehabilitation of the excluded 2011 data. It permits
-formation constants about 0.0066–0.98 kg/mol at 298 K.
+formation constants about 0.0066–0.98 kg/mol at 298 K. Hartono’s fitted
+formation constant is a non-binding comparison inside these bounds, not an
+imported constant or law.
 
 This is an engineering search interval informed by model spread, not a
 confidence interval or a claim of equal source standards. The Ciftja 2014
@@ -142,61 +146,128 @@ not an AMP parameter source. MEA's sphere treatment motivates A. Fixing Born
 at 5 Å is an explicit reduction of the earlier fourteen-coordinate proposal;
 no AMP salt-density or caloric evidence here separates it from other effects.
 
-## 3. Neutral AMP association volume and reproduction
+## 3. Neutral AMP source diagnosis and reproduction gate
 
-Adopt provisionally Ayad 2023 Table 5 / Pakravesh 2025 SI Table S1:
-m=3.1552, sigma=3.4676 Å, u/k=237.94 K, epsilon_AB/k=3526.15 K,
-kappa_AB=0.0058, effective 2B with one site of each type. The values and
-2B statement were verified in #229; Ayad §3.1 and Table 5 were reread here.
-Do not substitute Pakravesh's P-rho-T-SAFT-HR Table 1.
+**The cause of the pure-pressure mismatch remains unresolved. Do not adopt
+this parameter set numerically yet.** The printed candidate is Ayad 2023
+Table 5 p.2797 / Pakravesh 2025 SI Table S1 p.2: m=3.1552,
+sigma=3.4676 Å, u/k=237.94 K, epsilon_AB/k=3526.15 K,
+kappa_AB=0.0058, effective 2B with one site of each type.
 
-**Engine convention is sigma cubed; the author's implementation convention
-is not yet proved.** Read-only inspection at Engine commit
-`217026ab60b8e244cd7d9dac126b8b3d16bccb67`,
-`engine/docs/equations.md`, `association_strength`, gives
+### What the source comparison establishes
+
+Pakravesh SI Table S8 p.19 explicitly labels its entries **calculated**
+saturation pressures. The AMP PC-SAFT column is 1872.47, 2934.43, 19992.69,
+65312.60 and 162508.39 Pa at 347.5, 354.3, 392.3, 423.0 and 452.0 K.
+These are source-model numerical comparators, not experimental observations.
+Its saturated-density columns belong to MEA; there is no AMP saturated-density
+reference in this table.
+
+Pakravesh main Table 2 p.1184 reports AMP PC-SAFT vapor-pressure AAD **1.47%**
+(P-rho-T-SAFT-HR: 1.57%). Figure 1 and §3 p.1185 compare vapor pressure
+with experiments; the AMP source is ref.78, Klepáčová et al. (2011),
+*Vapor Pressures of Several Commercially Used Alkanolamines*, JCED 56,
+2242–2248 (bibliography p.1193). SI Table S3 p.4 gives 347–452 K for AMP
+vapor pressure. This experimental AAD is distinct from reproducing Table S8.
+Ayad §4.5 p.2800 says its AMP parameters were fitted to its measured liquid
+densities and literature vapor pressures from ref.66, Belabbaci et al.
+(2010), JCT 42, 1158–1162. **Ayad does not report a pure-AMP vapor-pressure
+AAD** in its parameter/results discussion or tables: Table 6 p.2797 reports
+0.0210% for density only. Neither that density AAD nor Pakravesh's 1.47%
+can explain or excuse a 15–39% source-model reproduction error. The two
+papers cite different pressure datasets; their references alone do not prove
+different implementations.
+
+The independent readiness review of `a805048` reported, on immutable Engine
+wheel `3e83e19c`, SHA-256
+`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`:
+
+| Association-volume candidate | Saturation-pressure error relative to S8 | Ayad Table-2 liquid-density check |
+|---|---|---|
+| kappa sigma³ | +15.3% to +31.3% | absolute error ≤0.71 kg/m³ |
+| kappa d(T)³ | +20.5% to +38.8% | absolute error ≤0.71 kg/m³ |
+
+These are reviewer-reported calculations, reused rather than rerun here.
+Both pressure candidates fail the proposed **0.5% per-point numerical
+reproduction tolerance**; both satisfy the proposed 1.0 kg/m³ density check.
+The latter compares 927.0, 918.6 and 910.1 kg/m³ at 303.15, 313.15 and
+323.15 K, 0.1 MPa (Ayad Table 2; expanded density uncertainty
+0.5 kg/m³). Density cannot discriminate the two
+candidates. This is a numerical reproduction discrepancy, not evidence that
+the reactive AMP model has failed a physical validation.
+
+### Conventions checked and the remaining causal gap
+
+Ayad §3.1 p.2794 explicitly uses **2B**, describing one oxygen site and
+one hydrogen site for the associating compounds. Pakravesh SI S1 also labels
+AMP 2B. AMP contains OH and NH2, but this is an effective two-site model;
+counting every chemical donor/acceptor or changing to 3B/4C would change the
+published model rather than resolve a unit conversion. Ayad calls kappa the
+“effective volume of interaction”; Table 5 and SI S1 give a bare kappa_AB
+(no dimensional volume unit), consistent with a dimensionless reduced
+association volume. They do not prescribe a conversion to m³/mol. The
+separate SAFT-HR block's volume units and powers of ten must not be applied
+to the PC-SAFT block.
+
+Engine `3e83e19c`, `engine/docs/equations.md`, `association_strength` uses
 $$\Delta^{ij}_{AB}=g^{hs}_{ij}
-[\exp(\epsilon^{ij}_{AB}/k_BT)-1]\sigma_{ij}^3\kappa^{ij}_{AB}.$$
-The ignored clone was read at that commit without synchronization or writes
-to the main checkout. No Engine probe or source import was run.
-Ayad §3.1 delegates equations to Gross 2001/2002 and other references.
-Gross 2002 §2 Eq.3 uses sigma in the unlike-volume combining rule but does
-not print the full strength expression. This alone cannot prove sigma cubed
-for Ayad. Baygi 2015 Eqs.4–5 explicitly use d(T) cubed despite citing Gross;
-therefore the existing MEA conversion must not be copied to AMP by citation.
+[\exp(\epsilon^{ij}_{AB}/k_BT)-1]\sigma_{ij}^3\kappa^{ij}_{AB},$$
+and `neutral_segment_diameter` uses
+$$d(T)=\sigma[1-0.12\exp(-3(u/k_B)/T)].$$
+Its `dispersion_helmholtz` and `dispersion_chain_coefficients` use the Gross
+2001 chain perturbation and segment-count interpolation. Ayad §3.1 refers
+the detailed EOS to refs.58,59,63 rather than printing these expressions;
+Pakravesh §2.2 p.1183 gives the hard-chain + dispersion + association
+sum and SI S1 cites Ayad for AMP. Neither inspected paper specifies an
+alternative segment-number, dispersion or diameter expression that explains
+the mismatch. Common PC-SAFT lineage is insufficient to verify identical
+implementation. Gross 2002 §2 Eq.3's unlike-volume rule alone does not settle
+the pure prefactor. The source-author prefactor and actual implementation
+remain unverified; there is no evidence here for an Engine defect, a new
+site multiplicity, a dimensional kappa conversion or a parameter correction.
+Changing sigma³ to d³ alone demonstrably does not close the discrepancy.
 
-**Recommend sigma-cubed interpretation with unchanged 0.0058 as the first
-reproduction candidate**, conditional on the following pre-fit checks:
+The smallest resolving evidence is an author/reference implementation or a
+worked pure-AMP coexistence state with the exact five parameters, site
+multiplicities, association strength/contact expression, diameter and
+dispersion conventions, both phase densities and equality of pressure and
+chemical potential. An author correction to S1/S8 or to the printed parameter
+set could also resolve it. Obtain that evidence before assigning a cause.
+No neutral fitting, tolerance widening or Engine source edit is proposed.
 
-- Compare pure saturation pressure with Pakravesh SI Table S8 p.19 at
-  347.5,354.3,392.3,423.0,452.0 K: respectively 1872.47,2934.43,19992.69,
-  65312.60,162508.39 Pa. Require every relative error ≤0.5%.
-- Compare pure liquid density at 0.1 MPa with Ayad Table 2 at
-  303.15,313.15,323.15 K: 927.0,918.6,910.1 kg/m³. Require every absolute
-  error ≤1.0 kg/m³ (twice the stated expanded 0.5 kg/m³ measurement
-  uncertainty, allowing fitted-model and rounded-parameter error).
-- The 0.5% pressure limit is a proposed numerical reproduction allowance for
-  rounded parameters and source calculations, not measurement uncertainty.
-  Source-model saturated-liquid densities are not supplied by Table S8;
-  its density columns are MEA. Obtain an author/reference calculation before
-  claiming independent saturated-density reproduction; compare at ≤0.1%
-  relative once identical conventions and precision are established.
+### Owner choice before numerical preparation
 
-If direct use fails, test the d-cubed hypothesis only as a convention
-probe: kappa_Engine(T)=0.0058[1−0.12 exp(−3·237.94/T)]³. Retain both candidates
-on the same reference points without fitting. One passing interpretation
-supports numerical adoption; both passing is ambiguous, neither passing
-returns to source review. Do not fit a constant conversion or neutral
-parameters inside AMP Build. The source-convention question remains an
-explicit preparation gate; this draft does not label it settled.
+**D3 option A (recommended):** retain Ayad as a source candidate and pause
+its numerical adoption while obtaining the resolving source evidence above.
+**Option B:** authorize source review of another published pure-AMP parameter
+set, with its own equations and numerical references, then amend this design;
+no alternative set is selected or imported here. Either route leaves Build
+blocked until the source and its numerical reproduction are settled. A change
+to the neutral source also requires revisiting cation B's source-derived
+m, energy, sites and starts in §2, rather than silently retaining a mixed set.
+
+For any subsequent convention test, **always evaluate both candidates on
+all the same five S8 points and three Ayad density points**, independently
+of which candidate passes first. The sigma³ candidate keeps kappa=0.0058;
+the d³ candidate uses
+$$\kappa_{Engine}(T)=0.0058[1-0.12\exp(-3\cdot237.94/T)]^3.$$
+Retain pressures, densities, coexistence residuals and signed errors for both.
+One passing interpretation plus resolved source provenance supports numerical
+adoption; both passing is ambiguous; neither passing retains the source gate.
+Keep the 0.5% pressure and 1.0 kg/m³ density proposals unchanged. No constant
+conversion is fitted. Obtain independent AMP saturated-liquid densities if
+claiming their reproduction; proposed agreement is ≤0.1% relative once the
+same conventions/precision are established. None are invented from S8.
 
 ## 4. Remaining data roles
 
-These proposals stay in this draft. Worker #240 owns updates to `data-map.md`.
+These proposals stay in this draft. The merged #240 changes at `35703c2`
+are included in this branch; `data-map.md` is unchanged by this correction.
 No private CESAR-1 rows or coefficients may be copied or executed.
 
 | Source and locator | Proposed role; admission and reason |
 |---|---|
-| Hsieh 2007 Tables 2,5 | Preparatory fit of the two MEA-form dielectric coefficients, then freeze; 6 pure and 24 aqueous points, 303.15–328.15 K. Check conditioning and both dielectric branches if present. No claim of loaded-solution permittivity validation. |
+| Hsieh 2007 Tables 2,5 | Preparatory fit of the two MEA-form dielectric coefficients, then freeze; 6 pure and 24 aqueous points, 303.15–328.15 K. Use the fixed-density order, residuals and branch rule below. No claim of loaded-solution permittivity validation. |
 | Hamborg 2009 Table 16, Eq.21 | Preparatory weighted correlation of all 24 runs, A/T+B+C ln T, weights 1/u(ln K)^2; then freeze. Printed uncertainties are scales, not established independent standard deviations. Use 293.12–353.22 K only. This is a proposed authorization to estimate the missing unrounded coefficients, not permission to use the ill-conditioned reconstruction of Table 1 as an exact law. Retain covariance and all residuals. |
 | Hartono 2013 Table 3, §§2.2,6.1 | AMP–water VLE calibration: all 26 P–T–x–y observations, roughly 333–373 K. Use measured P and y_AMP at reported liquid x and T; do not fit derived activity coefficients as independent observations. This is the Hartono binary campaign indexed in the original map, not an additional 26 rows. |
 | Pappa 2006 | Reserve as unloaded VLE comparison, not required calibration. Exact paper/tables and uncertainties remain unread here; do not admit its indexed 21 rows until source checked. Hartono 2013 Fig.2b compares it but is not a replacement for the measurements. Broader high-temperature binary data do not extend reactive-law coverage. |
@@ -206,6 +277,48 @@ No private CESAR-1 rows or coefficients may be copied or executed.
 | Kundu 2003 Tables 1–3 p.790 | Primary hold-out: all 51 transcribed rows (7+25+19), 18/25/30 mass% stock, 303/313/323 K, alpha 0.412–0.966, measured pCO2 3.20–94.0 kPa. Freeze every CSV row before fitting. |
 | Tong 2012 Table 4 p.43 | Separate total-pressure comparison: 40 loaded rows and 5 zero-loading binary baselines. Report each isotherm, with the rows above Hamborg's range explicitly extrapolations; no pooled reactive pass claim over all five. |
 | Yi 2024 Table 4; §2.1.2 | Published-model comparison only. It fitted Kundu and Tong and omitted AMPCOO−. No imported Yi constants or endpoints. |
+
+### Dielectric preparation with fixed density
+
+Propose the existing MEA procedure in
+`analyses/mea_parameter_bundle/scripts/fit_campaign.py:276–350`, adapted to
+Hsieh's actual temperatures rather than MEA's single 298.15 K isotherm.
+First settle §3's pure-AMP gate, then perform the two-coordinate Hartono-2013
+binary VLE pre-fit. Freeze its neutral AMP–water endpoint as the **named,
+hash-bound density parameter record** for dielectric preparation. At each
+of the 30 Hsieh rows evaluate that fixed EOS at the reported T and unloaded
+mole fraction, P=101325 Pa, on the mechanically stable liquid branch
+(dP/drho>0). Retain molar density in mol/L, mass density, pressure and dP/drho.
+Ambiguous/unstable liquid selection stops preparation. No density fit or
+loaded-state density enters this step. This fixed EOS is the density source;
+Hsieh permittivity is not used to change it.
+
+Keep the adopted water dielectric coefficients fixed. Fit only AMP's two
+MEA-form coefficients against all 30 measured permittivities, using
+$$e_{\epsilon,i}=(\epsilon_{calc,i}-\epsilon_{obs,i})/
+(0.01\epsilon_{obs,i}).$$
+The 1% relative scale is a declared residual policy following MEA, not
+Hsieh's measured uncertainty. Retain source replicate uncertainties separately,
+all residuals, coefficient covariance/conditioning, and native replay at the
+same fixed densities. Because Hsieh spans six temperatures, do not apply the
+single-temperature quadratic reduction as an exact solution for the full fit.
+Use the Hsieh 313.15 K isotherm and its fixed densities for the MEA
+quadratic reduction that supplies the two root-derived starts; then evaluate
+both on the full multi-temperature objective. Admit only finite real coefficients with
+positive dielectric volume and dielectric temperature >393.15 K (the MEA
+admissibility rule), and finite permittivity >1 across the declared assessment
+states. Select the admissible branch with the lowest **Hsieh-only** cost;
+if two distinct admissible coefficient pairs have indistinguishable costs
+at retained numerical precision, stop for an owner choice. Two starts
+converging to the same coefficient pair count as one branch. No reactive pressure, NMR or Kundu result selects the branch.
+If neither is admissible or two coefficients are not independently determined,
+return to Design. Retain both branch results, including rejections.
+
+Freeze the selected coefficients before joint fitting. Joint neutral-water
+coordinates may subsequently move as declared in §6, but do not rerun this
+dielectric fit or silently replace its fixed-density reference. Report that
+conditional density assumption with the eventual transfer result. D4 requests
+owner approval of this sequence and residual/branch policy; no fit runs here.
 
 Kundu is compromised for independent assessment of Hartono- or Yi-derived
 models (Hartono 2020 Table 2; Yi 2024 Table 4; source notes). It can be
@@ -300,17 +413,25 @@ Before fitting run observation-aware `reg.differentiate` at both starts on
 calibration only. Retain weighted scaled Jacobian, column norms, singular
 values and right vectors. Require eight nonzero independent columns,
 s_min/s_max≥1e−4 (condition≤1e4); this is a proposed numerical information
-limit, not proof of global identification. Check once that choosing cation–CO2
-rather than neutral–CO2 is supported by the calibration pressure sensitivities;
-if the omitted neutral column dominates or the choice differs between variants,
-return to Design, not an automatic coordinate swap. Tied diameters have one
+limit, not proof of global identification. Report a calibration-only
+diagnostic comparing the AMPH+–CO2 and omitted
+AMP–CO2 constant-k columns, both scaled by 0.05 in physical k (the declared
+cation-k scale), at each full start for each variant. Use the 47 Hartono-2021
+loaded total-pressure rows, with log-pressure residuals, scales and group
+weights exactly as in §5. Report the Euclidean norms of these weighted
+columns and the ratio norm(AMP–CO2)/norm(AMPH+–CO2) (undefined when
+the denominator is zero). This is
+raw column-norm sensitivity, not information remaining after projection on
+the other columns. It has **no dominance threshold or automatic stop/model
+selection consequence**. Retain the eight-column rank gate above; any proposed
+coordinate swap requires a new owner-approved Design amendment.
+Tied diameters have one
 coordinate; do not count packing or Debye–Hückel targets as separate columns.
 
-If rank fails, recommend removing the two ion-water slope coordinates and
-repeating the declared six-column check only after an owner amendment; if the
-anion-size/delta combination remains weak, recommend fixing anion size at
-5.3 Å and retaining delta. These are explicit fallback proposals, not
-permission to choose a model during fitting. Preserve the failed matrix.
+If the eight-column rank gate fails, stop and return to Design with the
+failed matrix. No six-coordinate fallback or automatic anion-size fixing is
+specified; any smaller model requires an explicit coordinate list and owner
+amendment before another fit.
 At endpoints retain active bounds, rank, profiles along weak combinations
 and comparison of the two starts. Select the lowest calibration cost among
 converged, phase-admissible, identified endpoints; ties within 1% prefer A.
@@ -421,10 +542,10 @@ recommendations for one owner decision round before numerical Build:
 |---|---|
 | D1: Offset interval and water convention | [−3,+2], zero start, explicit water and common molality reference (§1) |
 | D2: Anion and cation hypotheses | One nonassociating AMPCOO− sphere; fixed analog energy/Born/water interaction, fitted size; retain A/B cations with fixed energies/Born (§2) |
-| D3: Pure convention and tolerances | Provisional sigma-cubed 0.0058; 0.5% source-pressure / 1 kg/m³ measured-density checks; resolve ambiguity before joint fit (§3) |
-| D4: Source preparation and data roles | Estimate Hamborg coefficients from Table 16, fit/freeze Hsieh dielectric; Hartono 2013 binary and 2021 Table-7 first-three-isotherm calibration; reserve Kundu; Pappa/Tong comparisons (§4) |
+| D3: Pure source and reproduction | A (recommended): obtain author/reference clarification before adopting Ayad; B: authorize review of another published pure-AMP set and amend source-dependent choices. Both convention candidates always tested; retain 0.5% / 1 kg/m³ checks. Cause unresolved (§3) |
+| D4: Source preparation and data roles | Estimate Hamborg coefficients from Table 16, fit/freeze Hsieh dielectric after binary pre-fit using its hash-bound fixed liquid-density record, 1% relative scale, admissibility and both-branch Hsieh-only selection; Hartono 2013 binary and 2021 Table-7 first-three-isotherm calibration; reserve Kundu; Pappa/Tong comparisons (§4) |
 | D5: Falsifier and residual policy | Kundu 51-row E_p≤30%; no missing rows; 5% pressure floor, group-normalized objective; NMR RMS≤0.006 calibration check (§5) |
-| D6: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; no automatic fallback fit; calibration-first A/B selection (§6) |
+| D6: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; rank failure stops for Design, no smaller fallback; CO2 column norms reported only, no dominance stop; calibration-first A/B selection (§6) |
 | D7: Fitting-path dependency | Wait for delivered #235 qualification on the merged #962 wheel; no duplicate driver repair (§7) |
 | D8: Limits and exclusions | 240 executable +30 test lines, 8 h computation ceiling, pressure/speciation only (§8) |
 
@@ -436,9 +557,9 @@ process and reads it back before Build. No tracker body was changed here.
 
 ### Further reading or preparation needed
 
-- Resolve the author's pure association convention by the declared source-model
-  comparison or explicit author equations/implementation. Obtain an independent
-  saturated-liquid-density calculation if that reproduction claim is required.
+- Resolve D3’s source-model discrepancy with author/reference evidence or an
+  approved alternative source; neither volume candidate currently passes.
+  Obtain an independent saturated-liquid-density calculation if that reproduction claim is required.
   The pressure and measured-density checks alone do not establish it.
 - Read Hartono 2021 cited uncertainty methods and SI Part A1 before materializing
   its 47-row calibration packet; retain Table 4 stock composition and reported
@@ -450,8 +571,8 @@ process and reads it back before Build. No tracker body was changed here.
 - Retain the uncertainty of the proposed Hamborg Table-16 correlation and
   verify Engine standard-state mapping, water factors and reference pressure.
   The four-rounded-value reconstruction is not the executable source law.
-- Reconcile #240's eventual data-map findings before freezing preparation;
-  do not count its Hartono 2013 source as a second campaign.
+- Use #240’s merged data map (`35703c2`) when freezing preparation; do not
+  count its Hartono 2013 source as a second campaign.
 
 Sources actually inspected in this design: all requested scoping Markdown
 records and the retained source tables; main-checkout literature README and
@@ -464,5 +585,17 @@ current Zotero PDFs. Ciftja 2014 methods/results were checked in its PDF;
 exact equation sign and SI transcription verification are inherited from #238.
 Xu/Silkenbäumer/Mehdizadeh/Hartono-2020/Yi numerical comparisons here rely on
 the cited retained source assessments, not newly claimed full-paper readings.
-No CESAR-1 content, new literature attachment, Engine calculation, fit or
-physical validation was produced by this design.
+For this correction, Ayad §3.1, Tables 5/6, §4.5 and ref.66, Pakravesh
+§2.2, Table 2, Figure 1/§3 and ref.78, and SI S1/S3/S8/ref.4 were read in
+the current Zotero PDFs (keys SSBW7YJ5, TTAMHITN, 467677SZ). PDF SHA-256:
+Ayad `6cc9a2780f4bfd6176aae097a49a95dea365263e6033ceaf7c5dac0d371da9c8`;
+Pakravesh main `29b1f1e115eecb11cde903aa12d1f9e6a98d2f85499879a5e05b34f429d6e0ea`;
+SI `96a0e25ce0b975372b6261a1df36a5f13d3c8c77e2a9fedb43273b1d4f36bc82`.
+The main-checkout reading shelf is available; this worktree has no local
+literature shelf. Source equations were read at Engine `3e83e19c` from the
+read-only clone after fetching main; no source checkout was imported.
+Belabbaci/Klepáčová are identified from the papers' references, not claimed
+as newly read original measurement papers. No new Engine calculation was
+run: the pressure/density ranges are explicitly the independent review's
+evidence. No CESAR-1 content, new literature attachment, fit or physical
+validation was produced by this correction.
