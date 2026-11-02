@@ -14,6 +14,8 @@ from epcsaft import equilibrium as eq, regression as reg
 
 
 def jsonable(value):
+    if isinstance(value, float) and not math.isfinite(value):
+        return str(value)
     if value is None or isinstance(value, (str, bool, int, float)):
         return value
     if isinstance(value, dict):
@@ -38,17 +40,25 @@ class SolventSpecification:
         self.parameters = epcsaft.Parameters.from_mapping(self.inputs[parameter])
         self.parameter_sha256 = self.spec[parameter]["sha256"]
         self.problems = {}
+        self.construction_parameters = {self.parameter_sha256: self.parameters}
+        self.continuation = {}
         self.inputs["observations"] = {
             "fitted": [],
             "comparisons": [],
             "phase_states": self.load_record(self.spec["phase_states"]),
         }
         for dataset in self.spec["datasets"]:
+            document = dataset.get("observation_parameters", self.spec[parameter])
+            if document["sha256"] not in self.construction_parameters:
+                self.construction_parameters[document["sha256"]] = epcsaft.Parameters.from_mapping(self.load_record(document))
             for source in self.load_record(dataset):
                 row = {key: float(source[column]) for key, column in dataset["columns"].items()}
                 if any(row[key] < bounds[0] or row[key] > bounds[1] for key, bounds in dataset["filter"].items()):
                     continue
                 record = dict(
+                    observation_parameters=document["sha256"],
+                    continuation=dataset.get("continuation"),
+                    state_identity=dataset.get("state_identity"),
                     identity=source["identity"],
                     observation_order=row["observation_order"],
                     group=dataset["group"],
@@ -101,6 +111,67 @@ class SolventSpecification:
             )
         self.thermal = epcsaft.ThermochemistryRecord(thermal["reference_pressure_pa"], intervals)
         self.model = epcsaft.Mixture(self.parameters, thermochemistry=self.thermal)
+        self.continue_groups()
+
+    def continue_groups(self):
+        groups = {}
+        for record in self.inputs["observations"]["fitted"]:
+            if record.get("continuation"):
+                groups.setdefault(record["continuation"]["group"], []).append(record)
+        self.continuation = {}
+        for records in groups.values():
+            records = sorted(records, key=lambda r: r["continuation"]["order"])
+            if len({r["continuation"]["order"] for r in records}) != len(records):
+                raise ValueError("Duplicate continuation order")
+            first = self.problems[records[0]["problem"]]
+            signature = lambda p: [
+                (q.name, q.kind, q.support, type(q.amount).__name__,
+                 getattr(q.amount, "value", None), getattr(q.amount, "guess", None))
+                for q in p.phases]
+            previous, predecessor, failure = None, None, None
+            for record in records:
+                problem = self.problems[record["problem"]]
+                if (record["observation_parameters"] != records[0]["observation_parameters"]
+                        or isinstance(problem.T, eq.Free) or problem.T != first.T
+                        or signature(problem) != signature(first)):
+                    raise ValueError("Conflicting continuation declarations")
+                evidence = dict(predecessor=predecessor, observation_parameters=record["observation_parameters"])
+                self.continuation[record["identity"]] = evidence
+                if failure is not None:
+                    evidence.update(status="DependentUnavailable", cause=failure)
+                    continue
+                try:
+                    if not isinstance(problem.P, eq.Free):
+                        raise ValueError("Continuation requires free pressure")
+                    if previous is not None:
+                        problem.P = eq.Free(previous.pressure)
+                        for i, phase in enumerate(problem.phases):
+                            phase.composition_guess = {
+                                cid: previous.mole_fractions[
+                                    i * len(self.model.component_ids) + self.model.component_ids.index(cid)]
+                                for cid in phase.support}
+                            phase.packing_guess = previous.packing_fractions[i]
+                    evidence["incoming"] = jsonable(dict(
+                        pressure=problem.P.guess,
+                        phases=[dict(name=q.name, composition=q.composition_guess, packing=q.packing_guess)
+                                for q in problem.phases]))
+                    model = epcsaft.Mixture(self.construction_parameters[record["observation_parameters"]], thermochemistry=self.thermal)
+                    state = eq.solve_equilibrium(model, problem)
+                    evidence.update({k: jsonable(getattr(state, k)) for k in (
+                        "success", "message", "residuals", "pressure", "mole_fractions",
+                        "packing_fractions", "requested_tolerance_met")})
+                    quantities = [state.pressure, *state.residuals, *state.mole_fractions, *state.packing_fractions]
+                    if (not state.success or not state.requested_tolerance_met or not state.residuals
+                            or max(map(abs, state.residuals)) > problem.row_tolerance
+                            or len(state.mole_fractions) != len(problem.phases) * len(model.component_ids)
+                            or len(state.packing_fractions) != len(problem.phases)
+                            or not all(math.isfinite(v) for v in quantities)):
+                        raise ValueError("Continuation unavailable: " + state.message)
+                    evidence["status"] = "Available"
+                    previous, predecessor = state, record["identity"]
+                except Exception as error:
+                    failure = dict(evidence, target=record["identity"], exception=type(error).__name__, exception_message=str(error))
+                    evidence.update(status="ContinuationUnavailable", cause=failure)
 
     def species_mapping(self, reactions):
         species = {}
@@ -165,24 +236,28 @@ class SolventSpecification:
         return eq.problem_from_mapping(declaration)
 
     def observation(self, record):
+        parameters = self.construction_parameters[record["observation_parameters"]]
         args = record["arguments"]
         constructor = record["constructor"]
         if constructor == "observation":
-            return reg.observation(self.parameters, record["kind"], self.problems[record["problem"]], **args)
+            return reg.observation(parameters, record["kind"], self.problems[record["problem"]], **args)
         if constructor == "addition_enthalpy":
             return reg.addition_enthalpy(
-                self.parameters, self.problems[record["initial"]], self.problems[record["final"]], **args
+                parameters, self.problems[record["initial"]], self.problems[record["final"]], **args
             )
         if constructor == "saturation_capped_addition_enthalpy":
             return reg.saturation_capped_addition_enthalpy(
-                self.parameters, self.problems[record["initial"]], self.problems[record["bubble"]], **args
+                parameters, self.problems[record["initial"]], self.problems[record["bubble"]], **args
             )
         raise ValueError(f"Unsupported observation constructor: {constructor}")
 
     def prediction(self, record):
         domain = record["temperature_domain"]
         problem = self.problems[record.get("problem", record.get("initial"))]
-        if not domain[0] <= problem.T <= domain[1]:
+        continuation = self.continuation.get(record["identity"], {})
+        if continuation.get("status", "Available") != "Available":
+            return dict(identity=record["identity"], group=record["group"], **continuation)
+        if not isinstance(problem.T, eq.Free) and not domain[0] <= problem.T <= domain[1]:
             return dict(
                 identity=record["identity"],
                 group=record["group"],
@@ -192,31 +267,36 @@ class SolventSpecification:
                 observed=record["arguments"]["observed"],
                 row=record["row"],
             )
-        prediction = reg.predict(self.model, self.observation(record))
-        return dict(
-            identity=record["identity"],
-            group=record["group"],
-            row=record["row"],
-            observed=record["arguments"]["observed"],
-            convergence=None if prediction.convergence is None else {
-                k: jsonable(getattr(prediction.convergence, k))
-                for k in ("residual", "floor", "amplification", "contraction", "iterations", "stop")},
-            **{k: jsonable(getattr(prediction, k, None)) for k in ("saturation_loading", "endpoint_loading")},
-            optional_field_unavailability={k: "Not exposed by the installed Engine prediction"
-                                           for k in ("saturation_loading", "endpoint_loading") if not hasattr(prediction, k)},
-            **{
-                key: jsonable(getattr(prediction, key))
-                for key in (
-                    "status",
-                    "message",
-                    "value",
-                    "residual",
-                    "requested_tolerance_met",
-                    "branch",
-                    "stable_root_count",
-                )
-            },
-        )
+        try:
+            prediction = reg.predict(self.model, self.observation(record))
+            if prediction.status.name == "Available" and not all(math.isfinite(v) for v in (prediction.value, prediction.residual)):
+                raise ValueError(f"Nonfinite native prediction: {prediction.value}, {prediction.residual}; {prediction.message}")
+            return dict(
+                identity=record["identity"],
+                group=record["group"],
+                row=record["row"],
+                observed=record["arguments"]["observed"],
+                convergence=None if prediction.convergence is None else {
+                    k: jsonable(getattr(prediction.convergence, k))
+                    for k in ("residual", "floor", "amplification", "contraction", "iterations", "stop")},
+                **{k: jsonable(getattr(prediction, k, None)) for k in ("saturation_loading", "endpoint_loading")},
+                optional_field_unavailability={k: "Not exposed by the installed Engine prediction"
+                                               for k in ("saturation_loading", "endpoint_loading") if not hasattr(prediction, k)},
+                **{
+                    key: jsonable(getattr(prediction, key))
+                    for key in (
+                        "status",
+                        "message",
+                        "value",
+                        "residual",
+                        "requested_tolerance_met",
+                        "branch",
+                        "stable_root_count",
+                    )
+                },
+            )
+        except Exception as error:
+            return dict(identity=record["identity"], group=record["group"], status="Exception", exception=type(error).__name__, message=str(error))
 
     def coordinates(self):
         coordinates = []

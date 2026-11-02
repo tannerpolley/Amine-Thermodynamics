@@ -1,4 +1,4 @@
-"""Materialize the accepted reactive declarations; never evaluate observations here."""
+"""Materialize the accepted endpoint declarations; never evaluate observations here."""
 import ast
 import copy
 import csv
@@ -45,13 +45,14 @@ def equal(a, b):
 
 def problem(p, chemistry):
     reactions = [dict(name=r.name, stoichiometry=dict(zip(ids, r.stoichiometry)), correlation=fields(r.correlation), reference=fields(r.reference)) for r in p.reactions]
-    key = 'amended' if reactions[1]['correlation']['temperature_max'] == 436.85 else 'aqueous'
-    assert key not in chemistry or chemistry[key] == reactions
-    chemistry[key] = reactions
+    key = 'amended' if reactions and reactions[1]['correlation']['temperature_max'] == 436.85 else 'aqueous'
+    if reactions:
+        assert key not in chemistry or chemistry[key] == reactions
+        chemistry[key] = reactions
     n = p.neutral_reference
-    return dict(T=p.temperature.value, P=dict(free=True, guess=p.pressure.value) if p.pressure.free else p.pressure.value,
-        feed=dict(basis='amounts', values=dict(zip(ids, p.feed.values))), reaction_set=key,
-        neutral_reference='aqueous', phases=[dict(name=q.name, kind=q.kind.name.lower(), support=[ids[i] for i in q.support],
+    return dict(**(dict(reaction_set=key, neutral_reference='aqueous') if reactions else {}),
+        T=dict(free=True, guess=p.temperature.value) if p.temperature.free else p.temperature.value, P=dict(free=True, guess=p.pressure.value) if p.pressure.free else p.pressure.value,
+        feed=dict(basis='amounts', values=dict(zip(ids, p.feed.values))), phases=[dict(name=q.name, kind=q.kind.name.lower(), support=[ids[i] for i in q.support],
         amount=dict(status=q.amount.kind.name.lower(), **({'value':q.amount.fraction} if q.amount.kind.name == 'Pinned' else {})),
         composition_guess=list(q.composition_guess), packing_guess=q.packing_guess) for q in p.phases],
         topology_declared=p.topology_declared, row_tolerance=p.row_tolerance, standard_gibbs_j_per_mol=list(p.standard_gibbs_j_per_mol),
@@ -66,9 +67,9 @@ for path in (E.parent / 'selected-current-best-parameters.json', C / 'run/fit/us
 for name, digest in {'full-replay.json':'aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560', 'fitted-rows.csv':'e18efef61548d20e40578a2223cb203dd903ed288c02b94ab24009d6b861fb44', 'fit-summary.json':'7968c9ce1ca9947d70795787afedccf4f90786a77196e890412a13871f37d0fb', 'replay-identity.json':'96069e3402f3d3d6a26f12f155d9bde730ff838c43f706a85fd0412166fa3f27'}.items():
     assert hashlib.sha256((E / name).read_bytes()).hexdigest() == digest
     sources[str((E / name).relative_to(ROOT))] = digest
-membership = {r['target']:r for r in csv.DictReader((E / 'fitted-rows.csv').open()) if r['group'] in ('common149','restored species','Jakobsen','loaded density','Cp')}
+membership = {r['target']:r for r in csv.DictReader((E / 'fitted-rows.csv').open())}
 reference = [r for r in read(E / 'full-replay.json') if r['target'] in membership]
-assert len(reference) == len(membership) == 213
+assert len(reference) == len(membership) == 307
 for path in [spec[k] for k in ('packet_path','anchors_path','heat_rows_path','stage2_rows_path','state_requests_path')] + [d['table'] for d in spec['observations']]:
     sources[path] = hashlib.sha256((ROOT / path).read_bytes()).hexdigest()
 for record in spec['inputs']:
@@ -83,17 +84,25 @@ amended = copy.deepcopy(mapping)
 for d in amended['domains']:
     if d['domain_id'] in spec['cases'][0]['neutral_domain_ids']:
         d.update(spec['cases'][0]['neutral_domain'])
-declared = read(ROOT / spec['stage2_rows_path'])['F1']
-requests = read(ROOT / spec['state_requests_path'])
-for r in declared:
-    if r['id'] not in membership:
-        continue
-    request = f.s.corrected_request(requests[r['request_id']], f.s.reaction_values(amended), mapping=amended)
-    p = f.s._problem_from_request(request)
-    args = dict(phase=r['phase'], species=r['species'])
-    if r['quantity'] == 'amount_ratio':
-        args.update(denominator_phase=r['phase'], denominator_species=r['denominator_species'])
-    rows[r['id']] = (f.reg.observation(params,r['quantity'],p,observed=r['observed'],form=r['form'],scale=r['scale'],**args),r['weight'])
+construction = write('construction-parameters.json', amended)
+domain_differences = [
+    dict(domain_id=a['domain_id'], fields={k:dict(before=a.get(k), after=b.get(k)) for k in set(a)|set(b) if a.get(k)!=b.get(k)})
+    for a,b in zip(mapping['domains'],amended['domains'],strict=True) if a!=b]
+restored = copy.deepcopy(amended)
+for original, changed in zip(mapping['domains'], restored['domains'], strict=True):
+    if original['domain_id'] in spec['cases'][0]['neutral_domain_ids']:
+        for key in spec['cases'][0]['neutral_domain']:
+            if key in original:
+                changed[key] = original[key]
+            else:
+                changed.pop(key)
+assert restored == mapping
+case = dict(spec['cases'][0], kiepe_continuation=False)
+_, initial = f.stage2_rows(spec, mapping, case)
+_, continued = f.stage2_rows(spec, mapping, spec['cases'][0])
+declared = {r['id']:r for r,_,_ in initial}
+for r, item, _ in initial:
+    rows[r['id']] = (item, r['weight'])
 request = f.s.corrected_request(f.s.load_state_packet(ROOT/spec['packet_path'])['observations'][0]['request'],f.s.reaction_values(mapping),mapping=mapping)
 base = f.s._problem_from_request(request)
 for r, weight in zip(spec['direct_rows'], stage6_weights(spec, spec['direct_rows'], 1.0), strict=True):
@@ -106,11 +115,19 @@ domains = {g:[min(v),max(v)] for g in {r['group'] for r in membership.values()} 
 for order, ref in enumerate(reference):
     identity = ref['target']; item, weight = rows[identity]
     assert (item.observed,item.scale,item.form.name,weight) == (ref['observed'],ref['scale'],ref['form'],ref['weight'])
+    declaration = declared.get(identity, {})
     row = dict(identity=identity, source=json.dumps(ast.literal_eval(membership[identity]['declaration'])), observation_order=order)
     args = dict(observed=item.observed, **({'scale':item.scale} if item.form.name=='Difference' else {}), form={'Difference':'difference','LogRatio':'log_ratio'}[item.form.name])
     heat = item.kind.name == 'AdditionEnthalpy'
     names = ('initial','final') if heat else ('problem',)
     d = dict(name=identity,group=membership[identity]['group'],role='calibration',constructor='addition_enthalpy' if heat else 'observation',kind=next(k for k,v in f.reg._KINDS.items() if v==item.kind) if not heat else 'pressure',arguments=args,weight=weight,filter={},temperature_domain=domains[membership[identity]['group']])
+    if identity in declared:
+        d['observation_parameters'] = construction
+        d['state_identity'] = declaration['state_id']
+    if d['group'] == 'Cai':
+        d['temperature_domain'] = [293.15, 436.85]
+    if d['group'] == 'Kiepe':
+        d['continuation'] = dict(group=str(declaration['T_K']), order=order)
     for name, native in zip(names, (item.problem,item.final_problem), strict=False):
         template = problem(native, chemistry)
         def bind(value):
@@ -150,7 +167,20 @@ config['start'] = config['endpoint']
 (AN/'MEA.toml').write_text('\n'.join(k+' = '+toml(v) for k,v in config.items())+'\n')
 loaded = SolventSpecification(AN/'MEA.toml')
 loaded.species_mapping(loaded.spec['chemistry']['reactions'])
+for record, dataset in zip(loaded.inputs['observations']['fitted'], datasets, strict=True):
+    if record['group'] == 'Kiepe':
+        source = {k:float(v) for k,v in next(csv.DictReader((AN/dataset['path']).open())).items() if k not in ('identity','source')}
+        equal(rows[record['identity']][0].problem, loaded.problem(dataset['template'], source)._native(loaded.model))
+    expected = next((item for r,item,_ in continued if r['id']==record['identity']), rows[record['identity']][0])
+    equal(expected,loaded.observation(record))
+pairs = {}
 for record in loaded.inputs['observations']['fitted']:
-    equal(rows[record['identity']][0],loaded.observation(record))
+    if record['group'] == 'Cai':
+        identity = record['state_identity']
+        inputs = (loaded.problems[record['problem']], record['observation_parameters'])
+        if identity in pairs:
+            equal(inputs, pairs[identity])
+        pairs[identity] = inputs
+assert len(pairs) == 25
 write('reference.json',reference)
-write('preparation-provenance.json',dict(sources=sources,selected_ids=list(membership),declarations_equal=213,construction='13 request-backed declarations retain F1 neutral-domain amendment; runtime uses unamended endpoint',endpoint_only='Empty coordinates and phase states; start equals endpoint; no fit or phase search'))
+write('preparation-provenance.json',dict(sources=sources,selected_ids=list(membership),declarations_equal=307,continuation_equal=len(loaded.continuation),paired_states_equal=len(pairs),construction_source=construction,construction_domain_changes=spec['cases'][0]['neutral_domain'],construction_differences=domain_differences,construction='Stage-2 construction and continuation use amended parameters; prediction uses unamended endpoint',endpoint_only='Empty coordinates and phase states; start equals endpoint; no fit or phase search'))
