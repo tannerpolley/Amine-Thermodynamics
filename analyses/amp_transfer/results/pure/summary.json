@@ -79,7 +79,7 @@
     ],
     "ratio": 0.0009573549161801289
    },
-   "first_jacobian_seconds": 0.019166671991115436,
+   "first_jacobian_seconds": 0.019191037019481882,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 7.498701e-12 <= 1.000000e-10",
@@ -94,7 +94,7 @@
     "kappa": 0.03662096824814445
    },
    "active_bounds": [],
-   "seconds": 0.29254431498702615,
+   "seconds": 0.28707242000382394,
    "endpoint_jacobian": {
     "singular_values": [
      699.671754258307,
@@ -1118,7 +1118,7 @@
     ],
     "ratio": 0.000848248914556454
    },
-   "first_jacobian_seconds": 0.014307912002550438,
+   "first_jacobian_seconds": 0.01496023201616481,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 4.414402e-13 <= 1.000000e-10",
@@ -1133,7 +1133,7 @@
     "kappa": 0.036621131582016506
    },
    "active_bounds": [],
-   "seconds": 0.28081190199009143,
+   "seconds": 0.26427465400774963,
    "endpoint_jacobian": {
     "singular_values": [
      699.6718282892103,
@@ -2143,7 +2143,7 @@
     ],
     "ratio": 0.0006478447347723125
    },
-   "first_jacobian_seconds": 0.013203356007579714,
+   "first_jacobian_seconds": 0.011994569998933002,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 1.017551e-11 <= 1.000000e-10",
@@ -2161,7 +2161,7 @@
     "sigma",
     "epsilon"
    ],
-   "seconds": 0.226008924015332,
+   "seconds": 0.21363477999693714,
    "endpoint_jacobian": {
     "singular_values": [
      595.1239251159479,
@@ -3183,7 +3183,7 @@
     ],
     "ratio": 0.000560393142076266
    },
-   "first_jacobian_seconds": 0.013191217003623024,
+   "first_jacobian_seconds": 0.012339977984083816,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 1.703009e-11 <= 1.000000e-10",
@@ -3198,7 +3198,7 @@
     "kappa": 0.002035442938934456
    },
    "active_bounds": [],
-   "seconds": 0.3052689830074087,
+   "seconds": 0.2758808759972453,
    "endpoint_jacobian": {
     "singular_values": [
      506.0460125947659,
@@ -4199,7 +4199,7 @@
     ],
     "ratio": 0.0004627151132812169
    },
-   "first_jacobian_seconds": 0.012932997982716188,
+   "first_jacobian_seconds": 0.012368336989311501,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 3.328099e-11 <= 1.000000e-10",
@@ -4214,7 +4214,7 @@
     "kappa": 0.008999300127892768
    },
    "active_bounds": [],
-   "seconds": 0.15430112500325777,
+   "seconds": 0.13751551599125378,
    "endpoint_jacobian": {
     "singular_values": [
      568.0932709523255,
@@ -5215,7 +5215,7 @@
     ],
     "ratio": 0.0005324971016734848
    },
-   "first_jacobian_seconds": 0.01282084800186567,
+   "first_jacobian_seconds": 0.011871900991536677,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 1.113292e-12 <= 1.000000e-10",
@@ -5230,7 +5230,7 @@
     "kappa": 0.03669206162504078
    },
    "active_bounds": [],
-   "seconds": 0.1268625759985298,
+   "seconds": 0.11630808998597786,
    "endpoint_jacobian": {
     "singular_values": [
      629.4359479455154,
@@ -6231,7 +6231,7 @@
     ],
     "ratio": 0.000597524544599185
    },
-   "first_jacobian_seconds": 0.012784197984728962,
+   "first_jacobian_seconds": 0.012352777004707605,
    "status": "converged",
    "usable": true,
    "message": "Function tolerance reached. |cost_change|/cost: 2.577694e-11 <= 1.000000e-10",
@@ -6248,7 +6248,7 @@
    "active_bounds": [
     "kappa"
    ],
-   "seconds": 0.13026447198353708,
+   "seconds": 0.1193286320194602,
    "endpoint_jacobian": {
     "singular_values": [
      677.4999832607555,
@@ -7248,6 +7248,29 @@
   }
  ],
  "profile_flat": false,
- "disposition": "profile not flat and m not identified (one-sided, incomplete or equivalent-cost endpoints); return to owner",
- "wall_seconds": 1.9577642579970416
+ "information_gate": {
+  "endpoint": "five-second",
+  "s_min_over_s_max": 0.00020069681212872014,
+  "limit": 0.0001,
+  "passed": true
+ },
+ "frozen_endpoint": {
+  "path": "inputs/amp-pure-endpoint.json",
+  "sha256": "d5c87d208678fafd397950afd76c3a2030435e7458af092c5d6c02e90b8870ba",
+  "values": {
+   "m": 4.076131799300131,
+   "sigma": 3.1870454048166645,
+   "epsilon": 237.05992189901926,
+   "eps_ab": 2385.1893364661555,
+   "kappa": 0.036621131582016506
+  }
+ },
+ "replay_max_relative": 0.0,
+ "pappa": {
+  "n": 23,
+  "mean_abs_percent": 1.1847802962665595,
+  "max_abs_percent": 3.036831619490732
+ },
+ "disposition": "accepted",
+ "wall_seconds": 1.7377910359937232
 }

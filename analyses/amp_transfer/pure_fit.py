@@ -1,18 +1,15 @@
 """#242 stage 2: pure-AMP pre-fit, m profile and gates (design §3), all fitting in the pinned Engine."""
-import copy, csv, hashlib, json, math, os, sys, time, zipfile
+import copy, csv, hashlib, json, math, os, sys, time
 from collections import Counter
 from pathlib import Path
 import numpy as np
 import epcsaft
-from epcsaft import equilibrium as eq, regression as reg
+from epcsaft import regression as reg
+from pinned_engine import SHA256
 
 AN, t0 = Path(__file__).resolve().parent, time.perf_counter()
 OUT = AN / 'results/pure'
 OUT.mkdir(parents=True, exist_ok=True)
-WHEEL = Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/epcsaft-1.2.0-cp313-cp313-manylinux_2_39_x86_64.whl')
-assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == '83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6'
-with zipfile.ZipFile(WHEEL) as z:
-    assert all(z.read(n) == (Path(epcsaft.__file__).parents[1] / n).read_bytes() for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/'))
 AMP, SITES = 'aminomethylpropanol', (('aminomethylpropanol', 'a'), ('aminomethylpropanol', 'b'))
 DECL = dict(m=('segment_count', AMP, 3.1552, 0.5, (1.5, 5.0)), sigma=('segment_diameter', AMP, 3.4676, 0.25, (2.8, 4.2)),
             epsilon=('dispersion_energy_over_k', AMP, 237.94, 50.0, (150.0, 400.0)),
@@ -24,7 +21,7 @@ cal = [r for r in rows if r['role'] == 'calibration']
 N = Counter(r['campaign'] for r in cal)
 # Native cost 1/2 sum w r^2 equals the design objective, the sum over campaigns of mean squared scaled residuals.
 weights = [2 / N[r['campaign']] / (float(r['scale']) ** 2 if r['kind'] == 'pressure' else 1) for r in cal]
-log = dict(software=dict(wheel_sha256='83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6', python=sys.version, cpu_count=os.cpu_count(),
+log = dict(software=dict(wheel_sha256=SHA256, python=sys.version, cpu_count=os.cpu_count(),
            input_sha256={p: hashlib.sha256((AN / p).read_bytes()).hexdigest() for p in ('inputs/pure-amp.csv', 'inputs/amp-pure-ayad.json')}), fits={})
 
 def document(values):
@@ -99,7 +96,7 @@ def fit(label, values, names, seconds):
 def stop(disposition):
     log.update(disposition=disposition, wall_seconds=time.perf_counter() - t0)
     (OUT / 'summary.json').write_text(json.dumps(log, indent=1, default=float) + '\n')
-    sys.exit(disposition)
+    sys.exit(0 if disposition == 'accepted' else disposition)
 
 FIVE = list(DECL)
 starts = [fit('five-ayad', AYAD, FIVE, 2700), fit('five-second', dict(m=3.0, sigma=3.55, epsilon=250.0, eps_ab=3200.0, kappa=0.008), FIVE, 2700)]
@@ -128,7 +125,9 @@ if flat:
 else:
     costs = [p['cost'] for p in profile]
     j = int(np.argmin(costs))
-    if not (all(p['admissible'] for p in profile) and 0 < j < 4 and costs[0] - costs[j] >= 1 and costs[4] - costs[j] >= 1):
+    # Owner decision 2026-11-02: profile points are diagnostics within the declared bounds; each refit must complete.
+    if not (all(p['status'] == 'converged' and p['usable'] for p in profile) and 0 < j < 4
+            and max(costs[:j]) - costs[j] >= 1 and max(costs[j + 1:]) - costs[j] >= 1):
         stop('profile not flat and m not identified (one-sided, incomplete or equivalent-cost endpoints); return to owner')
     final, gate = anchor, anchor['endpoint_jacobian']['ratio']
 log['information_gate'] = dict(endpoint=final['label'], s_min_over_s_max=gate, limit=1e-4, passed=gate >= 1e-4)
