@@ -36,7 +36,8 @@ enthalpy. The temperature derivative belongs to ln K_h, with all standard
 states specified; no slope is inferred from a single-temperature measurement.
 
 Ciftja et al. (2014), DOI [10.1016/j.ces.2013.12.028](https://doi.org/10.1016/j.ces.2013.12.028),
-CES 107, 317–327, remains **unavailable as full text/PDF** in this attempt.
+CES 107, 317–327, was **unavailable as full text/PDF** in this attempt. *Superseded by #238: the PDF
+(`PUUFV6NX`/`FBQ5R6DR`) and its supplement were read; see [ciftja-2014.md](ciftja-2014.md).*
 The public publisher abstract/highlights describe 30 wt% AMP at 25,35,45 °C,
 an apparent stability calculation, and pH/literature-assisted splitting of
 protonation and carbonate signals. They cannot establish its exact tables,

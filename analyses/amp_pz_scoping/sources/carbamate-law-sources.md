@@ -94,6 +94,7 @@ finite-composition relation q_m = q_x·x_w·M_w with x_w ≈ 0.86–0.92 (Ciftja
 |---|---|---|---|
 | Ciftja 2011, mole-fraction apparent 0.47 (Table 2, p.618) | none | ≈0.0075 | — |
 | Ciftja 2014, log Kc = 0.56 as quoted by Sherman (p.62, basis labels inconsistent in the thesis) | none | ≈0.058 (secondary) | — |
+| Ciftja 2014 Eq. 19 at I→0, primary (#238, [ciftja-2014.md](ciftja-2014.md)) | empirical ionic-strength extrapolation | ≈0.76 | +20.8, falling to +19.0 at 318 K |
 | Bosch 1990 (molarity) | none | 0.048 L/mol | — |
 | Chakraborty 1986 / Sartori 1983, 42 / 40 °C | none | ≤ 0.1 L/mol | — |
 | Xu 1992 / Silkenbäumer 1998, extrapolated below 313 K | extended Debye–Hückel | 0.049 | +21.2 (constant) |
@@ -157,7 +158,8 @@ the eNRTL parameterization rather than carbamate evidence.
 ## Unread or unreadable
 
 - Ciftja 2014 full text (`HBBD5J2B`), which the owner is obtaining. Its values
-  quoted here are secondary (Sherman, Hartono).
+  quoted here are secondary (Sherman, Hartono). *Read in #238 from
+  `PUUFV6NX`/`FBQ5R6DR`; see [ciftja-2014.md](ciftja-2014.md).*
 - Wang 2001 thesis; Melchior 1975 NMR (source of Sartori's Table IV); Yang 1982
   Exxon report (Xu's data).
 - Sherman et al. 2016 Ind. Eng. Chem. Res. paper (the thesis was read
