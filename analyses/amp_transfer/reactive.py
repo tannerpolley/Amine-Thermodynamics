@@ -115,7 +115,7 @@ for run, spec in [(r, specs[r]) for r in ('A-1', 'A-2')]:
     cost = math.fsum(0.5 * x * x for x in w)
     groups = {g: math.fsum(0.5 * x * x for x, r in zip(w, rows) if r['group'] == g) for g in dict.fromkeys(r['group'] for r in rows)}
     pre.update(status=result.status, usable=result.usable, message=result.message, iterations=result.iterations, initial_cost=result.initial_cost, cost=result.final_cost,
-               fit_seconds=time.perf_counter() - started, physical=list(result.chart.physical), active_bounds=list(result.covariance.active_bounds), groups=groups,
+               fit_seconds=time.perf_counter() - started, physical=list(result.chart.physical), optimizer=list(report['optimizer']), active_bounds=list(result.covariance.active_bounds), groups=groups,
                endpoint_singular_values=list(result.covariance.singular_values), replay_cost_relative=abs(cost / result.final_cost - 1), carbamate_law=laws['carbamate-hydrolysis'],
                delta=laws['carbamate-hydrolysis']['a'] - 11.555, weighted_residuals=w, endpoint_s_min_over_s_max=min(result.covariance.singular_values) / max(result.covariance.singular_values), nmr_rms=math.sqrt(np.mean([(p['value'] - p['observed']) ** 2 for p in replay if p['group'] == 'nmr'])))
     pre['admissible'] = bool(result.status == 'converged' and result.usable and not pre['active_bounds'] and pre['replay_cost_relative'] <= 1e-8 and not math.isnan(cost) and pre['endpoint_s_min_over_s_max'] >= 1e-4)
@@ -123,9 +123,9 @@ for run, spec in [(r, specs[r]) for r in ('A-1', 'A-2')]:
     (AN / f'inputs/{run}-endpoint.json').write_text(json.dumps(epcsaft.parameters.document_mapping(fitted), indent=1) + '\n')
     write('summary.json', summary)
 
-# Endpoint checks (converged and usable, no active bound, replay <= 1e-8, endpoint condition <= 1e4) and the two-start comparison in coordinate scales and normalized calibration residuals.
+# Endpoint checks (converged and usable, no active bound, replay <= 1e-8, endpoint condition <= 1e4) and the two-start comparison in optimizer coordinates (q = origin + scale·v, so v is in scales) and weighted calibration residuals.
 a, b = (summary['runs'][r] for r in ('A-1', 'A-2'))
-summary['A_starts'] = dict(cost_difference=a['cost'] - b['cost'], max_coordinate_difference_in_scales=max(abs(x - y) / c['scale'] for x, y, c in zip(a['physical'], b['physical'], coordinates('A'))),
+summary['A_starts'] = dict(cost_difference=a['cost'] - b['cost'], max_coordinate_difference_in_scales=max(abs(x - y) for x, y in zip(a['optimizer'], b['optimizer'])),
                            max_weighted_residual_difference=max(abs(x - y) for x, y in zip(a['weighted_residuals'], b['weighted_residuals'])))
 if not (ok := [r for r in ('A-1', 'A-2') if summary['runs'][r]['admissible']]):
     stop('both cation A endpoints fail their endpoint checks: Kundu not scored')

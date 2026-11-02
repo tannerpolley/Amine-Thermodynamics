@@ -17,13 +17,14 @@ instruction for this case is to stop without scoring Kundu, so the falsifier,
 the α ± 2 % envelope, the Tong comparison and the endpoint phase trials were
 not run.
 
-The physical reading is that, within the declared bounds, the model cannot
-reproduce Hartono 2021's loaded total pressures at the highest loadings. The fit
-pushes to the weakest AMPH⁺–CO₂ attraction allowed, which raises the predicted
-CO₂ pressure, and to the smallest carbamate-anion diameter allowed. It still
+At the endpoint both declared starts reach, the model does not reproduce
+Hartono 2021's loaded total pressures at the highest loadings. The fit pushes
+to the weakest AMPH⁺–CO₂ attraction allowed, which raises the predicted CO₂
+pressure, and to the smallest carbamate-anion diameter allowed. It still
 under-predicts the 313 K, α = 0.95 row by 58 %. The remaining calibration
-residuals follow a systematic pattern with loading at each isotherm, which
-points to a structural limit of the bounded model and not to noise.
+residuals follow a systematic pattern with loading at each isotherm. Our
+reading is a structural limit of the bounded model rather than noise; two
+starts do not show that no other point inside the bounds does better.
 
 This notebook has not been independently reviewed and has not been promoted
 for manuscript use.
@@ -46,7 +47,7 @@ y_AMP), and 57 Ciftja 2014 carbamate fractions. Engine wheel `e6dae5c7`
 |:--|--:|--:|
 | Status, message | converged; function tolerance | converged; function tolerance |
 | Iterations | 58 | 36 |
-| Fit time / s | 36.8 | 25.1 |
+| Fit time / s | 42.1 | 29.0 |
 | Initial cost | 2594.95 | 3554.77 |
 | Final cost | 66.866300458 | 66.866300457 |
 | Active bounds | AMPH⁺–CO₂ k (upper), AMPCOO⁻ σ (lower) | same |
@@ -55,7 +56,7 @@ y_AMP), and 57 Ciftja 2014 carbamate fractions. Engine wheel `e6dae5c7`
 
 The two starts agree. Their costs differ by 8.5e−10, the largest coordinate
 difference is 2.6e−5 coordinate scales, and the largest difference in any
-normalized calibration residual is 2.1e−5. The rank gate holds at the endpoint
+weighted calibration residual is 2.1e−5 (1.5e−4 before weighting). The rank gate holds at the endpoint
 (condition ≤ 1e4), but the Engine reports covariance status `active_bound`, so
 no local covariance is claimed.
 
@@ -77,15 +78,14 @@ Because the endpoint is on two bounds, these values are not adopted parameters.
 ### Replay with the fitted laws
 
 The fitted reaction laws and parameters were loaded into a new model and every
-calibration row was re-predicted. The first replay evaluated 134 rows (agreement
-8.4e−12) and refused the 11 Hartono 2013 binary states above 353.22 K, each with
-a P and a y value, as `OutsideDeclaredDomain`: the binary datasets carried the
-Hamborg protonation range [293.12, 353.22] K although binary rows contain no
-reaction. The binary datasets now declare their own measured range,
-[333.12, 373.17] K, with every reactive declaration and value unchanged
-(owner decision 2026-11-02). `replay.py` then replayed the stored A-1 and A-2
-endpoints and completed laws without refitting
-(`results/reactive/replay-binary-domain.json`).
+calibration row was re-predicted. A first run refused the 11 Hartono 2013
+binary states above 353.22 K, each with a P and a y value, as
+`OutsideDeclaredDomain`: the binary datasets carried the Hamborg protonation
+range [293.12, 353.22] K although binary rows contain no reaction. The binary
+datasets now declare their own measured range, [333.12, 373.17] K, with every
+reactive declaration and value unchanged (owner decision 2026-11-02). The
+rerun of `reactive.py` reproduces both fits exactly (same costs, iterations,
+bounds and endpoints) and replays all rows.
 
 | Replay of 156 rows | A-1 | A-2 |
 |:--|--:|--:|
@@ -170,7 +170,7 @@ condition clearer.
   (iteration history, predictions, covariance) and replay rows.
 - `inputs/A-1-endpoint.json`, `inputs/A-2-endpoint.json`: endpoint parameter
   documents (not adopted).
-- `results/reactive/run-cation-a.log`: run log; agent-heavy, 1 min 56 s
+- `results/reactive/run-cation-a.log`: run log; agent-heavy, 2 min 8 s
   elapsed, 32 CPUs.
 - `results/pure/summary.json`, `results/binary-dielectric.json`,
   `results/source-preparation.json`: preparation stages.

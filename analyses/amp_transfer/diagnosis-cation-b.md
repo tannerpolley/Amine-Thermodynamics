@@ -53,9 +53,10 @@ AMP–water column falls about 20-fold in the same rows.
 
 `results/reactive/probe-cation-b.json`; agent-heavy, about 2.5 s. Each row
 solved to an available liquid root plus incipient vapor (liquid packing fraction
-0.43–0.46, vapor ≤ 0.0007) in both variants: **no phase or root change**. The
-prediction's branch and stable-root count are not exposed for an equilibrium
-pressure (both `None`). Central difference uses ±0.05 in AMPH⁺–CO2 k.
+0.427–0.458, vapor ≤ 0.00073) in both variants: **no observed liquid/vapor
+classification change** among the returned solutions. The prediction's branch
+and stable-root count are not exposed for an equilibrium pressure (both
+`None`), so selection of an alternative root is not excluded. Central difference uses ±0.05 in AMPH⁺–CO2 k.
 
 | Row (T, α, measured P) | Variant | Predicted P / kPa | CO2 share of vapor | Liquid x_CO2 | x_CO3²⁻ | x_AMPH⁺ | d ln P / d k |
 |---|---|---|---|---|---|---|---|
@@ -70,9 +71,9 @@ pressure (both `None`). Central difference uses ±0.05 in AMPH⁺–CO2 k.
 
 ## Disposition
 
-**Cause: not wiring, phase or root; a start-state chemical effect.** At B's
+**Cause: not wiring or an observed phase change; a start-state chemical effect.** At B's
 start the high-loading liquid holds 70–160 times less molecular CO2 than A's
-and 29–46 times more carbonate, with a similar AMPH⁺ fraction. CO2 is then
+and 28–44 times more carbonate, with a similar AMPH⁺ fraction. CO2 is then
 1–3 % of the predicted vapor (A: 67–77 %), so the predicted total pressure
 (9–56 kPa against 609–733 kPa measured) is set by water and AMP. Both the CO2
 share and the CO2-fugacity response to k are smaller, giving
