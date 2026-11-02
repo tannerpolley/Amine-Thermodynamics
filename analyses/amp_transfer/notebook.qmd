@@ -77,15 +77,26 @@ Because the endpoint is on two bounds, these values are not adopted parameters.
 ### Replay with the fitted laws
 
 The fitted reaction laws and parameters were loaded into a new model and every
-calibration row was re-predicted. On the 134 rows the replay evaluates, the
-weighted residuals agree with the native fit to 8.4e−12. The other 22 rows are
-the 11 Hartono 2013 binary states above 353.22 K, each with a P and a y value.
-The replay step refuses them as `OutsideDeclaredDomain`, because the binary
-datasets were declared with the Hamborg temperature range [293.12, 353.22] K,
-even though binary rows contain no reaction. The native fit used them. The
-relative replay-cost check is therefore undefined, not failed. This is a
-declaration inconsistency to correct before any future replay gate. It does not
-change the outcome, which is decided by the active bounds.
+calibration row was re-predicted. The first replay evaluated 134 rows (agreement
+8.4e−12) and refused the 11 Hartono 2013 binary states above 353.22 K, each with
+a P and a y value, as `OutsideDeclaredDomain`: the binary datasets carried the
+Hamborg protonation range [293.12, 353.22] K although binary rows contain no
+reaction. The binary datasets now declare their own measured range,
+[333.12, 373.17] K, with every reactive declaration and value unchanged
+(owner decision 2026-11-02). `replay.py` then replayed the stored A-1 and A-2
+endpoints and completed laws without refitting
+(`results/reactive/replay-binary-domain.json`).
+
+| Replay of 156 rows | A-1 | A-2 |
+|:--|--:|--:|
+| Rows available | 156 | 156 |
+| Relative cost difference from native | 5.0e−13 | 4.9e−13 |
+| Max weighted-residual difference | 8.4e−12 | 7.5e−12 |
+| Binary group cost | 0.29908 | 0.29906 |
+
+Both endpoints pass the replay check (≤ 1e−8). This confirms the fitted
+model is reproduced from its retained records. It does not change the outcome,
+which is decided by the active bounds.
 
 ### Calibration agreement at the endpoint
 
