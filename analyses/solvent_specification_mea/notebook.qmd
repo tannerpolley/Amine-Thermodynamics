@@ -28,7 +28,6 @@ owns the scope and comparison tolerance, $10^{-10}$ relative per field.
 | loaded density | 47 | 0.5654031419421082 | 0.5654031419421082 | 0 |
 | Cp | 4 | 5.380705123416196 | 5.380705123416196 | 0 |
 | Preserved subtotal | 213 | 45.37796168239049 | 45.37796168239049 | 0 |
-
 | Added subtotal | 94 | 103.50097766318339 | 103.50097766318339 | 0 |
 | Complete objective | 307 | 148.87893934557388 | 148.87893934557388 | 0 |
 
@@ -96,12 +95,12 @@ reduction](results/endpoint-checks.json), [input hashes and runtime](results/run
 [preparation provenance](inputs/preparation-provenance.json),
 [MDEA environment](results/mdea-runtime.json), and
 [caloric values](results/caloric-anchor.json) retain the numerical evidence.
-The MEA replay uses one process at niceness 10. The final focused checks passed in 9.44 s; the endpoint replay within that run
-took 8.8348 s. Its compute wall time is in
-`results/runtime.json`, separately from unmeasured environment setup and
-heavy-job admission. Numerical thread environment variables were unset; no
-thread cap was added. Preparation's historical owner sets its own library
-threads to one.
+The MEA replay uses one process at niceness 10. The retained endpoint replay
+took 8.09548 s, as recorded in `results/runtime.json`, excluding environment
+setup and heavy-job admission. The focused failure checks passed; their
+outcomes are retained in `results/failure-checks.json`. Numerical thread
+environment variables were unset; no thread cap was added. Preparation's
+historical owner sets its own library threads to one.
 
 ## Continuation and solved-domain evidence
 
