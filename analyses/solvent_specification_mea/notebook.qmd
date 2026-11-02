@@ -7,8 +7,8 @@ format: html
 
 **Outcome: different endpoint; the fitting path is not qualified by this
 attempt.** The fit started where it was declared to start and returned the same
-cost as attempt 1 within the 1e-6 band, with the same six active bounds. Three
-free coordinates did not recover attempt 1 within **1e-5 scaled units**: the
+cost as attempt 1 within the 1e-6 band, with the same six active bounds. All eight
+free (interior) coordinates did not recover attempt 1 within **1e-5 scaled units**: the
 largest difference is **0.0499 scales** (bicarbonate–water `k_ij`), about 5000
 times the tolerance. Under the accepted plan, a coordinate mismatch is a
 different endpoint even when the cost agrees.
@@ -72,24 +72,30 @@ density 0.565279802 (−0.012906; −3.06e-5), and Cp 5.377084829 (−0.006687;
 +4.40e-5). The two endpoints redistribute fit quality among the groups by
 amounts of order 1e-4 while their total cost differs by only 3.08e-7.
 
-**Interpretation.** The two endpoints lie in one weakly determined valley of
-the 213-row objective; the evidence does not show two distinct minima.
+**Interpretation.** The coordinate difference aligns with locally weak
+directions of the 213-row objective at the attempt 2 endpoint, consistent with
+function-tolerance termination. This local evidence does not establish the
+objective's shape between the endpoints, a common basin, or the absence of a
+fitting-path defect.
 A post-run reduction of the retained Jacobian at the attempt 2 endpoint
 ([`weak-direction.json`](results/fit-true-start-e6dae5c7/weak-direction.json);
 array reduction only, no Engine call) puts **70 %** of the squared coordinate
 difference on the weakest singular direction ($\sigma=8.99\times10^{-4}$) and
 **93 %** on the weakest two. That weakest direction is dominated by
 bicarbonate–water `k_ij` (component −0.82), with the two enthalpy shifts
-(−0.35 each). A linear estimate of the cost of moving along the difference is
-$\tfrac12\lVert J\,\Delta z\rVert^2=1.76\times10^{-7}$. This is of the same
-order as the observed 3.08e-7 cost gap. Both runs stopped on function tolerance
+(−0.35 each). The quadratic residual-sensitivity term
+$\tfrac12\lVert J\,\Delta z\rVert^2=1.76\times10^{-7}$ is a diagnostic only, not
+an estimate of the cost change: the linear term $r^\mathsf{T}J\,\Delta z$
+($-8.72\times10^{-7}$ at endpoint 2 toward endpoint 1, independent review) is
+larger in magnitude. The full-chart singular vectors include active-bound
+coordinates, so they are not unconstrained parameter uncertainties. Both runs stopped on function tolerance
 with projected-gradient norms near 1e-4, so neither stopping point is shown to
 be an exact minimizer. The 1e-5 coordinate tolerance along this
 direction was not met by function-tolerance termination here. The design
 anticipated this outcome, and the result is retained without relaxing the
-tolerance. Physically, the retained rows constrain bicarbonate–water `k_ij`
-weakly, and only in combination with the R2/R5 enthalpy coordinates: the two
-endpoints differ by 5.0e-4 in that `k_ij` at a cost difference of 3.1e-7.
+tolerance. The two endpoints differ by 5.0e-4 in bicarbonate–water `k_ij` at a cost
+difference of 3.1e-7; how strongly the retained rows determine that parameter
+is not established by this local evidence.
 This is local numerical sensitivity, not an estimated parameter uncertainty.
 
 Evidence type: numerical verification of start selection, replay and endpoint

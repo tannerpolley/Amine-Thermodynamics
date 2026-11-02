@@ -45,7 +45,7 @@ for q in [q for q in declared if 'targets' in q] + [q for q in declared if 'targ
     where[q['identity']] = len(expected)
     expected += [q['origin'] * t[2] for t in q['targets']] if 'targets' in q else [q['origin']]
 def evaluate(records):  # owned native predictions; weighted residuals and group costs only
-    bad = [p['identity'] for p in records if not (p['status'] == 'Available' and p['requested_tolerance_met'] and all(math.isfinite(p.get(k) or math.nan) for k in ('value', 'residual')))]
+    bad = [p['identity'] for p in records if not (p['status'] == 'Available' and p['requested_tolerance_met'] and all(isinstance(p.get(k), (int, float)) and math.isfinite(p[k]) for k in ('value', 'residual')))]
     w = [math.sqrt(r['weight']) * p['residual'] if not bad else None for r, p in zip(rows, records, strict=True)]
     return dict(unavailable=bad, rows=records, weighted_residuals=w, cost=None if bad else math.fsum(.5 * x * x for x in w),
                 groups=None if bad else {g: math.fsum(.5 * x * x for x, r in zip(w, rows) if r['group'] == g) for g in dict.fromkeys(r['group'] for r in rows)})
