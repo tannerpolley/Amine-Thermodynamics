@@ -36,3 +36,20 @@ overlap = dict(kundu_rows=len(kundu), kundu_stocks_mol_per_L=sorted({k['stock_AM
 (AN / 'results/source-preparation.json').write_text(json.dumps(dict(hamborg=hamborg, kundu_overlap=overlap), indent=2, default=float) + '\n')
 print(json.dumps(dict(A=coef[0], B=coef[1], C=coef[2], chi2=chi2, law=hamborg['engine_law'], se=hamborg['ln_K_standard_error'],
                       max_scaled=max(abs(r['scaled']) for r in hamborg['residuals']), overlap=overlap), default=float, indent=1))
+
+# Pure-AMP starting record (D3): the adopted MEA document's neutral amine renamed, Ayad Table 5 values, effective 2B.
+import hashlib, epcsaft
+MEA = Path(__file__).resolve().parents[1] / 'mea_parameter_bundle/results/selected-current-best-parameters.json'
+assert hashlib.sha256(MEA.read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+doc = json.loads(MEA.read_text().replace('monoethanolamine', 'aminomethylpropanol'))
+ayad = dict(provenance=dict(source_id='ayad-2023', locator='Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789', domain_id='mea-diagnostic-293-15-to-393-15-k'))
+amp = next(c for c in doc['components'] if c['component_id'] == 'aminomethylpropanol')
+for item in amp['coefficients']:
+    if item['family'] in (start := dict(segment_count=3.1552, segment_diameter=3.4676, dispersion_energy_over_k=237.94)):
+        item.update(value=dict(item['value'], magnitude=start[item['family']]), **ayad)
+amp['fixed']['molar_mass'].update(value=dict(magnitude=0.08914, unit='kilogram / mole'), **ayad)
+edge = next(e for e in doc['topology']['edges'] if {e['endpoint_a']['component_id'], e['endpoint_b']['component_id']} == {'aminomethylpropanol'})
+edge['energy_over_k']['value']['magnitude'], edge['volume']['value']['magnitude'], edge['source'] = 3526.15, 0.0058, dict(kind='explicit', provenance=[ayad['provenance']])
+doc.update(components=[amp], pairs=[], correlations=[], reaction_correlations=[], topology=dict(doc['topology'], edges=[edge], no_cross_association=[], sites=[s for s in doc['topology']['sites'] if s['component_id'] == 'aminomethylpropanol']))
+epcsaft.Parameters.from_mapping(doc)  # native admission
+(AN / 'inputs/amp-pure-ayad.json').write_text(json.dumps(doc, indent=1) + '\n')
