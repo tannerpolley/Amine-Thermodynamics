@@ -1,0 +1,449 @@
+{
+ "components": [
+  {
+   "aliases": [
+    "MEA"
+   ],
+   "coefficients": [
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "family": "dispersion_energy_over_k",
+     "identity": "component/aminomethylpropanol/dispersion_energy_over_k",
+     "provenance": {
+      "source_id": "ayad-2023",
+      "locator": "Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789",
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 237.94,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "family": "segment_count",
+     "identity": "component/aminomethylpropanol/segment_count",
+     "provenance": {
+      "source_id": "ayad-2023",
+      "locator": "Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789",
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 3.1552,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "family": "segment_diameter",
+     "identity": "component/aminomethylpropanol/segment_diameter",
+     "provenance": {
+      "source_id": "ayad-2023",
+      "locator": "Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789",
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 3.4676,
+      "unit": "angstrom"
+     }
+    },
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "family": "solvation_factor",
+     "identity": "component/aminomethylpropanol/solvation_factor",
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=solvation_factor:status=retained-literature-lineage",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 1.0,
+      "unit": "dimensionless"
+     }
+    },
+    {
+     "family": "dielectric_volume",
+     "identity": "component/aminomethylpropanol/dielectric_volume",
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json",
+      "source_id": "joint-recalibration-170-stage5"
+     },
+     "value": {
+      "magnitude": 0.7309865858310542,
+      "unit": "liter / mole"
+     }
+    },
+    {
+     "family": "dielectric_temperature",
+     "identity": "component/aminomethylpropanol/dielectric_temperature",
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json",
+      "source_id": "joint-recalibration-170-stage5"
+     },
+     "value": {
+      "magnitude": 1019.0802597119892,
+      "unit": "kelvin"
+     }
+    }
+   ],
+   "component_id": "aminomethylpropanol",
+   "fixed": {
+    "charge_number": {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=charge_number:status=retained-literature-lineage",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 0,
+      "unit": "elementary-charge"
+     }
+    },
+    "molar_mass": {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "provenance": {
+      "source_id": "ayad-2023",
+      "locator": "Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789",
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 0.08914,
+      "unit": "kilogram / mole"
+     }
+    }
+   },
+   "name": "MEA"
+  }
+ ],
+ "correlations": [],
+ "document_id": "joint-recalibration-170-stage5-smaller-dV",
+ "document_version": 2,
+ "domains": [
+  {
+   "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+   "kind": "fit-range",
+   "pressure_max": {
+    "magnitude": 300000.0,
+    "unit": "pascal"
+   },
+   "pressure_min": {
+    "magnitude": 10.0,
+    "unit": "pascal"
+   },
+   "temperature_max": {
+    "magnitude": 393.15,
+    "unit": "kelvin"
+   },
+   "temperature_min": {
+    "magnitude": 293.15,
+    "unit": "kelvin"
+   }
+  },
+  {
+   "domain_id": "mea-provider-source-qualified-313-15-k",
+   "kind": "reported-conditions",
+   "pressure_max": {
+    "magnitude": 100000.0,
+    "unit": "pascal"
+   },
+   "pressure_min": {
+    "magnitude": 100000.0,
+    "unit": "pascal"
+   },
+   "temperature_max": {
+    "magnitude": 313.15,
+    "unit": "kelvin"
+   },
+   "temperature_min": {
+    "magnitude": 313.15,
+    "unit": "kelvin"
+   }
+  },
+  {
+   "domain_id": "mea-candidate-293-15-to-393-15-k",
+   "kind": "fit-range",
+   "pressure_max": {
+    "magnitude": 10000000.0,
+    "unit": "pascal"
+   },
+   "pressure_min": {
+    "magnitude": 1.0,
+    "unit": "pascal"
+   },
+   "temperature_max": {
+    "magnitude": 393.15,
+    "unit": "kelvin"
+   },
+   "temperature_min": {
+    "magnitude": 293.15,
+    "unit": "kelvin"
+   }
+  },
+  {
+   "domain_id": "cai-1996-neutral-refit",
+   "kind": "unknown"
+  },
+  {
+   "domain_id": "mea-working-313-15-to-353-15-k",
+   "kind": "reported-conditions",
+   "temperature_max": {
+    "magnitude": 353.15,
+    "unit": "kelvin"
+   },
+   "temperature_min": {
+    "magnitude": 313.15,
+    "unit": "kelvin"
+   }
+  }
+ ],
+ "model_coefficients": [
+  {
+   "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+   "family": "ionic_region_relative_permittivity",
+   "identity": "model/relative_permittivity/ionic_region_relative_permittivity",
+   "provenance": {
+    "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+    "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:ionic-dielc=8:status=transferred-diagnostic",
+    "source_id": "mea-retained-phase-two-artifact"
+   },
+   "qualification": "candidate_extrapolation",
+   "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+   "value": {
+    "magnitude": 8.0,
+    "unit": "dimensionless"
+   }
+  }
+ ],
+ "model_families": [
+  {
+   "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+   "choice": "pc-saft",
+   "family_id": "model/base",
+   "kind": "base",
+   "provenance": {
+    "domain_id": "mea-provider-source-qualified-313-15-k",
+    "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+    "source_id": "mea-retained-phase-two-artifact"
+   },
+   "qualification": "candidate_extrapolation",
+   "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+  },
+  {
+   "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+   "choice": "general-site",
+   "family_id": "model/association",
+   "kind": "association",
+   "provenance": {
+    "domain_id": "mea-provider-source-qualified-313-15-k",
+    "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+    "source_id": "mea-retained-phase-two-artifact"
+   },
+   "qualification": "candidate_extrapolation",
+   "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+  },
+  {
+   "c_dielectric": 1.0,
+   "c_shell": 1.0,
+   "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+   "choice": "born",
+   "family_id": "model/electrolyte",
+   "ionic_dispersion": "exclude-same-sign-ion-pairs",
+   "kind": "electrolyte",
+   "provenance": {
+    "domain_id": "mea-provider-source-qualified-313-15-k",
+    "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+    "source_id": "mea-retained-phase-two-artifact"
+   },
+   "qualification": "candidate_extrapolation",
+   "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+  },
+  {
+   "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+   "choice": "solvent-density-temperature",
+   "family_id": "model/relative_permittivity",
+   "kind": "permittivity",
+   "provenance": {
+    "domain_id": "mea-provider-source-qualified-313-15-k",
+    "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+    "source_id": "mea-retained-phase-two-artifact"
+   },
+   "qualification": "candidate_extrapolation",
+   "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+  }
+ ],
+ "pairs": [],
+ "purpose": "Amendment 7 restricted feasibility fit (owner, #170 comments 6283064075 and 6283335389): start = design path t = 0.125 vector (analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/design-probes/path-0p125/fixed-parameters.json, sha256 c9f062478a7a38dde923f5e27fbc67aebe6dff25f1b53bf24c3de16336f946d8), carbamate segment diameter 5.8 -> 5.798 A with Held ties; bounds MEAH+ segment diameter [5.49, 5.8] A and MEAH+-water k [-0.5, -0.161].",
+ "reaction_correlations": [],
+ "schema": "epcsaft.parameters",
+ "schema_version": 1,
+ "sources": [
+  {
+   "citation": "MEA-Thermodynamics retained Phase 2 parameter artifact",
+   "source_id": "mea-retained-phase-two-artifact",
+   "use_basis": "authority-neutral regression starts and fixed model inputs; row-level literature lineage, transfer limits, and provisional statuses are audited in docs/ePC-SAFT/full-component-parameter-source-audit.md"
+  },
+  {
+   "citation": "Schick et al. (2023) using Pabsch et al. (2020)",
+   "source_id": "schick-2023-pabsch-2020-induced-association",
+   "use_basis": "CO2 2B sites and reciprocal CO2-water cross-association with the source combining rule"
+  },
+  {
+   "citation": "Zuber et al. (2014), Fluid Phase Equilibria 376, 116-123, doi:10.1016/j.fluid.2014.05.037",
+   "source_id": "zuber-et-al-2014",
+   "use_basis": "Ion-specific aqueous dielectric-suppression coefficients and charge-class fallback values"
+  },
+  {
+   "citation": "Uyan Eq. 5; Wangler campaign Archer-Wang approximation.",
+   "source_id": "uyan-2015-permittivity-transfer",
+   "use_basis": "Explicit transfer approximation, not an exact Floriano-Nascimento replay."
+  },
+  {
+   "citation": "Tong et al. (2012), Table 5 K5 MEA, via Aroua et al. (1999).",
+   "source_id": "tong-2012-aroua-1999",
+   "use_basis": "R4 carbamate hydrolysis source-centred correlation."
+  },
+  {
+   "citation": "Bates and Pinching (1951), equation 7.",
+   "source_id": "bates-pinching-1951",
+   "use_basis": "R5 monoethanolammonium dissociation source-centred correlation."
+  },
+  {
+   "citation": "Project-authored ePC-SAFT parameter fit result.",
+   "source_id": "cai-1996-neutral-refit",
+   "use_basis": "Accepted fitted coefficient values and exact numerical evidence."
+  },
+  {
+   "citation": "MEA-Thermodynamics bounded direct Engine campaign, 2026-09-02.",
+   "source_id": "mea-best-in-slot-campaign-2026-09-02",
+   "use_basis": "Current-best joint pressure/speciation calibration of the R4 correlation and carbon-dioxide dispersion energy; initialized from the retained literature bundle and not an independent validation."
+  },
+  {
+   "citation": "MEA-Thermodynamics Born-permittivity and reaction comparison, 2026-09-02.",
+   "source_id": "mea-born-permittivity-study-2026-09-02",
+   "use_basis": "Selected R5 temperature coefficient for the extended-Born bundle from the common-target pressure and speciation comparison; initialized from Bates and Pinching (1951)."
+  },
+  {
+   "citation": "Figiel et al. (2025), Industrial & Engineering Chemistry Research 64, 9406-9420, doi:10.1021/acs.iecr.5c00475",
+   "source_id": "figiel-2025",
+   "use_basis": "Same-sign ion dispersion exclusion and the coupled SSM+DS diameter, solvation-factor, and dielectric-suppression formulation."
+  },
+  {
+   "citation": "MEA-Thermodynamics reaction-temperature fit, 2026-09-03 (analyses/mea_parameter_bundle/results/reaction-temperature-fit)",
+   "source_id": "mea-reaction-temperature-fit-2026-09-03",
+   "use_basis": "constant R2/R4/R5 reaction-enthalpy shifts fitted to pressure, speciation, and 40/80 C calorimetry with Xu 2011 pressure and 120 C calorimetry held out; ln K preserved at 313.15 K"
+  },
+  {
+   "citation": "Fakouri Baygi, S.; Pahlavanzadeh, H. Application of the PC-SAFT equation of state for modeling CO2 solubility in aqueous aminomethylpropanol solutions. Chemical Engineering Research and Design 2015, 93, 789-799.",
+   "source_id": "fakouri-baygi-pahlavanzadeh-2015",
+   "use_basis": "Table 2 MEA 2B parameters with the 2B association volume converted from the Eq. 4 d_ij^3 convention to sigma_ij^3; Eq. 6 Wolbach-Sandler cross-association volume rule with size factor."
+  },
+  {
+   "citation": "ePC-SAFT Engine data packet {\"engine_commit\": \"1303c119e4a21ba31e46596fe62ee3fdfe4cc253\", \"packet_fingerprint\": \"76315ac4e4961782d089c3c4504fb49667e120b9e31d46fe2a8e99837b8e0a45\", \"packet_id\": \"mea-co2-h2o-nine-species-estimation\", \"packet_path\": \"data/packets/mea-co2-h2o-nine-species-estimation/5\", \"packet_version\": \"5\", \"parameters_sha256\": \"1ba95275f9e23264250e891aee3d6284d801f73205dad255101e6561b29aee5f\"}",
+   "source_id": "epcsaft-packet-mea-co2-h2o-nine-species-estimation-5",
+   "use_basis": "association topology: MEA 2B volume 0.036287 (sigma^3 convention) and Wolbach-Sandler MEA-water cross-association rule"
+  },
+  {
+   "citation": "MEA-Thermodynamics calibration-misfit refit D-1-1-S1-40-80C-f66d972c on f66d972c",
+   "source_id": "mea-calibration-misfit-refit-d-1-1-s1-40-80c-f66d972c",
+   "use_basis": "ion-water, MEAH+-water 1/T slope and cation-anion k_ij; not adopted"
+  },
+  {
+   "citation": "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-11-diagnostic-parameters.json; candidate SHA-256 42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952; analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-11-results.json SHA-256 bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7; analyses/mea_parameter_bundle/model-d/assessment-p5a-11-summary.json SHA-256 9a54c9dfaf1fb7b6388d68b86ab1b3e2eb62cae7b9526d4410ac8f8635b43abb; Engine wheel 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2; MEA producing merge 8c670d3aa9673459867154fa5c344c97526a7818, Engine build 1a905ff8; decisions 21/24 https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5906843564; Supported review https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5907883147; design https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5913854251; amendment https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5914099413",
+   "source_id": "mea-model-d-p5conv-a-11-28181e72",
+   "use_basis": "Limited-domain working record: 30 wt% MEA on unloaded-solvent basis, 313.15\u2013353.15 K (40\u201380 \u00b0C). 142 fitted targets: 48 pressure + 94 species (40 B\u00f6ttinger + 54 Matin). Matin 18 HCO3\u2212 + CO3\u00b2\u2212 pool targets report-only; measurement 21 \u00b0C, packet 20 \u00b0C. SSM+DS narrow 4.6% local optimum advantage over Original Born; HCO3\u2212\u2013water k=+0.5 upper bound, no global optimum or uncertainty band. Poor 15/45 wt% transfer; carbonate comparison only retained nine points; 100\u2013120 \u00b0C outside working qualification. R4 source range 293.15\u2013323.15 K; inherited reaction-source extrapolation. No independent physical validation, caloric or process-column qualification. Two unavailable Born probe solves have undetermined cause under Engine investigation. Inherited pressure bounds are computational, not physically qualified. Historical 160-target SSM+DS: six attempted starts, five converged, one initial evaluation failed. 142-target P5 warm continuation: one further update, function tolerance 1e-12 relative, zero trial failures; not six independent starts. f66d972c S1 remains ancestry."
+  },
+  {
+   "citation": "Yang2024 Eqs.1a/2a/2b Table6; AgieienkoBuchner2024 ESI S1/S2",
+   "source_id": "joint-recalibration-170-stage5",
+   "use_basis": "Measured Schreckenberg coefficient calibration on the revised neutral binary, retaining both roots; no parameter adoption."
+  }
+ ],
+ "topology": {
+  "edges": [
+   {
+    "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+    "endpoint_a": {
+     "component_id": "aminomethylpropanol",
+     "site_id": "a"
+    },
+    "endpoint_b": {
+     "component_id": "aminomethylpropanol",
+     "site_id": "b"
+    },
+    "energy_over_k": {
+     "identity": "association/aminomethylpropanol/a/aminomethylpropanol/b/energy_over_k",
+     "value": {
+      "magnitude": 3526.15,
+      "unit": "kelvin"
+     }
+    },
+    "qualification": "candidate_extrapolation",
+    "source": {
+     "kind": "explicit",
+     "provenance": [
+      {
+       "source_id": "ayad-2023",
+       "locator": "Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789",
+       "domain_id": "mea-diagnostic-293-15-to-393-15-k"
+      }
+     ]
+    },
+    "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+    "volume": {
+     "identity": "association/aminomethylpropanol/a/aminomethylpropanol/b/volume",
+     "value": {
+      "magnitude": 0.0058,
+      "unit": "dimensionless"
+     }
+    }
+   }
+  ],
+  "no_cross_association": [],
+  "presets": [],
+  "sites": [
+   {
+    "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+    "component_id": "aminomethylpropanol",
+    "multiplicity": 1,
+    "provenance": {
+     "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+     "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_site_a:status=retained-literature-lineage",
+     "source_id": "mea-retained-phase-two-artifact"
+    },
+    "qualification": "candidate_extrapolation",
+    "site_id": "a",
+    "site_role": "donor",
+    "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+   },
+   {
+    "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+    "component_id": "aminomethylpropanol",
+    "multiplicity": 1,
+    "provenance": {
+     "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+     "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=association_site_b:status=retained-literature-lineage",
+     "source_id": "mea-retained-phase-two-artifact"
+    },
+    "qualification": "candidate_extrapolation",
+    "site_id": "b",
+    "site_role": "acceptor",
+    "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+   }
+  ]
+ }
+}
