@@ -3,6 +3,214 @@ title: "MEA solvent-specification endpoint reproduction"
 format: html
 ---
 
+## Issue 235 bounded fit on Engine e6dae5c7 (2 November 2026)
+
+**Outcome: invalid coordinate/law declaration; the fitting path is not
+qualified by this attempt.** Native fitting did not begin at the declared
+perturbed origin. Its starting cost was **45.377961682398116**, the accepted
+endpoint chart cost (design probe: 45.37796168239813), whereas the
+independently evaluated perturbed start is **45.897410107590936**. The relative
+difference is **0.01132**, against the 1e-8 limit. Engine computes the starting
+optimizer as $(q_{\mathrm{start}}-o_i)/s_i$ from the start parameter document
+and the problem reaction laws (`engine/native/regression/coordinates.cpp`,
+lines 133–152, at e6dae5c7). Binding the start to the accepted document while
+encoding perturbed origins therefore starts at $v=-d$, the accepted endpoint,
+not at optimizer zero. The design assumed the declared origin would be the
+fitting start; this attempt shows otherwise. The cause is identified; changing
+the start declaration is a Design decision, and any further fitting attempt
+requires owner authorization.
+
+The chart itself was verified at optimizer zero: all 18 physical rows equal the
+perturbation table and its 0.88/1 ties exactly, the completed R2/R5 laws equal
+the design probe, all 213 rows and 213 × 14 residual derivatives are finite, and
+the weighted residuals differ from the baseline by norm **0.98276** (limit 1e-4).
+The baseline reproduced #233 at cost **45.37796168239802**
+(1.66e-13 relative); maximum relative prediction change 6.96e-13 and maximum
+scaled residual/row-cost changes 7.06e-12 and 5.44e-12, inside the 1e-10 rule.
+
+Starting effectively from the accepted endpoint, the single fit returned these
+values on the same 213-row objective with 14 coordinates:
+
+| Quantity | Value | Limit |
+|---|---:|---|
+| Native termination | converged, usable; function tolerance 1.62e-9 ≤ 1e-8 | usable converged |
+| Iterations; residual/Jacobian evaluations; trial failures | 6; 7/6; 0 | ≤ 60 |
+| Final dimensionless cost | 45.360525618233154 | ≤ 45.37800706035217 |
+| Change from accepted endpoint | −0.017436064 (−0.0384 %) | — |
+| Replay cost difference, relative | 7.74e-14 | ≤ 1e-8 |
+| Maximum replay weighted-residual difference | 5.84e-12 | ≤ 1e-8 absolute |
+| Maximum $\lvert(q_f-q^*)/s\rvert$ | 3.454 (R2 enthalpy shift) | ≤ 1 |
+| Rank; condition number; smallest singular value | 14; 18552.2; 8.98e-4 | reported |
+| Projected-gradient norm | 1.398e-4 | reported |
+
+Group costs after the fit, with change from the baseline: common149
+23.832364343 (−0.028632), restored species 2.447324544 (−0.001350), Jakobsen
+13.138485509 (+0.016303), loaded density 0.565310401 (−0.000093), and Cp
+5.377040821 (−0.003664). Six coordinates end on bounds: MEAH+–water and
+carbamate–MEAH+ `k_ij`, the MEAH+ segment diameter, both Born diameters, and
+the R2 incremental enthalpy shift at **−8636.07 J/mol** (total −10000 J/mol,
+its declared lower bound). The R5 incremental shift moved to
+**−8360.36 J/mol** (3.34 scales) and bicarbonate–water `k_ij` from 0.72706 to
+0.70410 (2.30 scales). The lower cost is therefore obtained outside the
+one-scale neighborhood, mostly through the reaction-enthalpy coordinates; the
+cost decrease is small compared with those displacements, consistent with the
+weakly determined directions in the singular values.
+
+This is numerical evidence about one local fit of the reduced objective, not
+physical validation, parameter adoption or a new parameter set. It does not
+answer the issue's question, which concerns a fit from the perturbed start; the
+lower-cost endpoint is retained as observed behavior, not as a qualified result.
+Completed laws returned by Engine carry one observation's 293.15–393.15 K
+domain; the corrected `fitted_reactions` kept each destination's bounds
+(393.15 and 436.85 K) during replay. No numerical uncertainty estimate was made.
+A table is used because the result is a few scalar comparisons; a plot would
+not clarify where the fit started.
+
+Runtime: memory admission wait 0.1 s; active wall **30.42 s** (preflight
+17.06 s, native fit 8.77 s, replay and reporting 4.59 s), within the 300 s,
+1200 s, 300 s and 1800 s limits. Engine was asked for 32 workers with one
+numerical-library thread each; the actual worker count is not exposed.
+Python 3.13.14, NumPy 2.5.4, SciPy 1.18.1 and Engine 1.2.0 from merged commit
+`e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4` (wheel SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`, installed
+files byte-identical) ran in an isolated environment. The five issue reference
+hashes and every packet input were checked at execution.
+
+Retained evidence: [fit declaration](MEA-fit.toml),
+[named coordinates with perturbations](inputs/fit-coordinates.json),
+[runner](fit.py), [disposition, checks, coordinate displacements, ties, active
+bounds and timing](results/fit-e6dae5c7/summary.json),
+[baseline rows and differences](results/fit-e6dae5c7/baseline.json),
+[start chart, laws, rows and derivatives](results/fit-e6dae5c7/start.json),
+[native fit report with optimizer Jacobian, singular vectors, iteration costs
+and completed laws](results/fit-e6dae5c7/native-fit.json),
+[fresh replay rows and per-row differences](results/fit-e6dae5c7/replay.json)
+and [command log with reference hashes](results/fit-e6dae5c7/run.log).
+This section has not been independently reviewed and is not promoted for
+manuscript use.
+
+## Issue 235 design replay on Engine e6dae5c7 (2 November 2026)
+
+**The owner accepted the 213-row e6dae5c7 baseline on 2 November 2026.**
+At the unchanged endpoint its dimensionless cost is **45.37796168239802**,
+against **45.37796168239049**, an absolute increase of
+$7.531752999057062\times10^{-12}$ and relative change of
+$1.659\times10^{-13}$. Every row is available and meets its native
+requested tolerance. Two rows exceeded the original $10^{-10}$ relative comparison for residuals
+and row costs. That original comparison is retained below for traceability;
+the owner replaced it with the rule stated beside this evidence.
+
+| Field | Largest relative change | Target |
+|---|---:|---|
+| Prediction | 6.95644483271666e-13 | `vle_obs_0133-pco2` |
+| Residual | 1.2627348373152909e-10 | `vle_obs_0124-pco2` |
+| Weighted residual | 1.2627357231932254e-10 | `vle_obs_0124-pco2` |
+| Row cost | 2.525470820199663e-10 | `vle_obs_0124-pco2` |
+
+For the largest row-cost change, the new value is
+**1.1982922885866476e-5**, versus **1.1982922882840224e-5** retained,
+an absolute difference of **3.026252208895852e-15**.
+`vinjarapu2024_source_table4_06` also exceeded the original row-cost comparison
+(**1.6304899911582942e-10** relative). This is numerical verification
+at a fixed endpoint; the small absolute differences do not identify their
+cause or establish physical validation. No numerical uncertainty estimate
+was made.
+
+[Baseline differences, group costs and input hashes](results/design-replay-e6dae5c7/baseline.json)
+and [all 213 predictions](results/design-replay-e6dae5c7/predictions.json)
+retain this single rerun. Python 3.13.14, NumPy 2.5.4 and SciPy 1.18.1
+were used in an isolated environment with Engine **1.2.0**, merged commit
+`e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4`, wheel SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`.
+Installed Engine files were byte-compared with the supplied wheel.
+The scratch command ran through `agent-heavy`; active wall time was
+**4.989714511 s** including packet construction, excluding environment setup
+and memory admission. No input, root dependency pin or Engine source changed.
+
+The owner-approved replay rule from 2 November 2026 is **1e-10 relative on
+predicted values and total cost**. Residuals, weighted residuals and row costs
+are compared using $|\Delta|\le10^{-10}\max(|\mathrm{reference}|,1)$.
+For a log-ratio residual, its relative change divides the relative prediction
+change by $|r|$. Near-zero residuals therefore amplify that comparison;
+`vle_obs_0124-pco2` has a residual of approximately −0.00147. This explains the
+sensitivity of the comparison, **not the cause of the approximately 1e-13
+prediction change, which was not diagnosed**. The accepted baseline cost and
+prediction differences satisfy the revised rule. The raw evidence is unchanged.
+
+The earlier stop at baseline replay is superseded by this owner decision.
+The continuation checks below concern coordinate evaluation and the prescribed
+start only. Build ceilings remain **170 executable lines plus 20 test lines;
+30 min total, 20 min native fitting, 60 iterations**. No fitting ran.
+Independent readiness review and publication of the accepted issue body remain
+with the accountable owner. No manuscript promotion is claimed.
+The existing 307-row historical result below retains its original wheel identity;
+the 94 neutral rows were not rerun here. No site refresh or manuscript index
+change was made in this design-only task.
+
+## Coordinate-aware start check for issue 235
+
+**The merged e6dae5c7 wheel accepts all 213 unchanged reactive observations
+with the 14 declared coordinates at both the accepted endpoint and the
+prescribed perturbed start.** This is numerical verification of evaluation and
+local derivatives; no optimization or physical validation was performed.
+The original R2/R5 declarations remain unchanged: each has 200 rows with
+293.15–393.15 K bounds and 13 rows with 293.15–436.85 K bounds. Those broader
+construction bounds do not establish physical validity above 393.15 K.
+
+| Quantity | Accepted-endpoint chart | Prescribed-start chart |
+|---|---:|---:|
+| Available finite predictions | 213 | 213 |
+| Dimensionless weighted cost | 45.37796168239813 | 45.897410107588506 |
+| Weighted-residual norm | 9.52659033257945 | 9.580961340866427 |
+| Weighted Jacobian rank | 14 of 14 | 14 of 14 |
+| Smallest singular value | 0.0008323585689863121 | 0.0008252288917842002 |
+| Condition number | 20011.396178496918 | 20240.03915025077 |
+| Maximum error in declared physical coordinates and ties | 0 | 0 |
+| Coordinate evaluation and differentiation, active seconds | 7.929813417 | 7.886433574 |
+
+The weighted-residual difference norm is **0.9827591589164358**, exceeding the
+required **1e-4**. All 213 × 14 returned residual-derivative entries are finite
+at each point. The endpoint chart predictions differ from the original #233
+reference by at most **7.262194859872024e-13 relative**; total cost differs by
+**1.6830981053317373e-13 relative**. Maximum differences divided by
+$\max(|\mathrm{reference}|,1)$ are **7.062572748850471e-12** for residuals
+and weighted residuals and **5.444256157005611e-12** for row costs. These satisfy
+the owner-approved replay rule. The differentiation baseline and earlier
+fixed replay are separate evaluations; neither replaces the other's records.
+
+The probe used `reg.differentiate` with observations, optimizer zero, no holds
+and the fixed thermal record. `reg.evaluate_coordinates` alone returned an
+empty `reaction_laws` mapping at both points. Observation-aware differentiation
+returned completed R2 and R5 laws. Their standard-state identities agree with
+both original destination sets:
+`aqueous-molality-infinite-dilution-water-v1`. Reference temperature remains
+313.15 K. At the prescribed −250 J/mol incremental shift for each reaction,
+R2 has `a=23.48949797584855`, `b=-11897.988648703167 K`; R5 has
+`a=2.8538383112075874`, `b=-7674.6101162509585 K`, including its simultaneous
+coefficient perturbation. Full coefficients and physical coordinate values
+are retained; no local reaction-law composition was substituted for Engine.
+
+[Coordinate declarations, domains, standard states, group costs and diagnostics](results/design-replay-e6dae5c7/coordinate-checks.json),
+[endpoint-chart predictions and exact derivatives](results/design-replay-e6dae5c7/coordinate-baseline.json)
+and [start-chart predictions and exact derivatives](results/design-replay-e6dae5c7/coordinate-start.json)
+retain the evidence. Input hashes match the baseline packet. Installed Engine
+files were again byte-identical to the supplied wheel. The successful scratch
+probe ran through `agent-heavy`, taking **16.298543099 s active wall** including
+construction; memory-admission wait is excluded. A first scratch invocation
+stopped before numerical evaluation on an incorrect Python reaction-object
+access, which was corrected outside the repository before this successful run.
+
+The [revised design](FIT-CHECK-DESIGN.md) preserves the perturbation table as
+the authoritative record of starts. Build must correct `fitted_reactions` to
+copy only coefficients and their reference-temperature representation, preserve
+each destination's bounds, and reject a standard-state mismatch. One two-domain
+persistent check is planned within the existing 20 test-line allowance.
+No executable repository code or persistent test was changed. The design
+keeps the 170 executable-line ceiling and all approved time/iteration limits.
+No budget increase is proposed. Independent readiness review, accepted issue
+publication and the bounded fitting attempt remain outstanding. No parameter
+adoption or numerical-uncertainty estimate follows from these local checks.
+
 ## Result and intended use
 
 The generic solvent-specification driver reproduces **all 307 objective rows
