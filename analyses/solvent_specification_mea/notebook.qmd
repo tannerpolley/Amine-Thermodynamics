@@ -5,8 +5,8 @@ format: html
 
 ## Result and intended use
 
-The generic solvent-specification driver reproduces **all 213 admitted reactive
-objective rows exactly**, at dimensionless subset cost **45.37796168239049**.
+The generic solvent-specification driver reproduces **all 307 objective rows
+exactly**, at dimensionless cost **148.87893934557388**.
 The largest relative difference is zero for every prediction, residual,
 weighted residual and row cost. All rows are `Available` and meet their native
 requested numerical tolerance. There is no first differing target.
@@ -14,7 +14,7 @@ requested numerical tolerance. There is no first differing target.
 This is numerical verification of declaration mapping at the supplied endpoint,
 not independent physical validation. No fit, parameter adoption, manuscript
 change, phase search or absorber qualification was performed. The published
-[issue #233](https://github.com/tannerpolley/Amine-Thermodynamics/issues/233)
+[issue #236](https://github.com/tannerpolley/Amine-Thermodynamics/issues/236)
 owns the scope and comparison tolerance, $10^{-10}$ relative per field.
 
 | Group | Rows | Actual cost | Reference cost | Relative difference |
@@ -22,9 +22,17 @@ owns the scope and comparison tolerance, $10^{-10}$ relative per field.
 | common149 | 149 | 23.860996312136727 | 23.860996312136727 | 0 |
 | restored species | 7 | 2.4486746519412517 | 2.4486746519412517 | 0 |
 | Jakobsen | 6 | 13.122182452954206 | 13.122182452954206 | 0 |
+| Kiepe | 39 | 0.0006790194987316589 | 0.0006790194987316589 | 0 |
+| CO₂-free density | 5 | 11.625713440586951 | 11.625713440586951 | 0 |
+| Cai | 50 | 91.87458520309771 | 91.87458520309771 | 0 |
 | loaded density | 47 | 0.5654031419421082 | 0.5654031419421082 | 0 |
 | Cp | 4 | 5.380705123416196 | 5.380705123416196 | 0 |
-| Subset | 213 | 45.37796168239049 | 45.37796168239049 | 0 |
+| Preserved subtotal | 213 | 45.37796168239049 | 45.37796168239049 | 0 |
+| Added subtotal | 94 | 103.50097766318339 | 103.50097766318339 | 0 |
+| Complete objective | 307 | 148.87893934557388 | 148.87893934557388 | 0 |
+
+These scalar identity checks use a table: a plot of zero differences would add
+no information to this numerical mapping comparison.
 
 Stable summation uses the retained objective $C=\frac12\sum_j w_jr_j^2$.
 Pressure remains in Pa; species mole fractions and amount ratios retain their
@@ -34,7 +42,7 @@ unchanged. The comparison checks numerical identity, not experimental error.
 
 ## Inputs and construction checks
 
-The accounting base is `62e256d940731d7f256d24f0bbe9034690458ca9`.
+The accounting base is `ec5e48a7a861d335540cd674da6ea514d29be0f7`.
 The supplied parameter document remains byte-identical to the accepted endpoint,
 SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
 The paper wheel is merged Engine `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`,
@@ -43,10 +51,12 @@ Every installed Engine package file was compared with its wheel bytes.
 Python is 3.13.14, NumPy 2.5.4 and SciPy 1.18.1.
 
 Preparation compared all native observation and problem fields recursively with
-the historical construction owners before evaluation. This includes the 13
-request-backed amended declarations, their stored seeded feeds and guesses,
+the historical construction owners before evaluation. This includes neutral and reactive declarations, fixed/free temperature and
+pressure, the 13 request-backed amended declarations, seeded feeds and guesses,
 phase names, reaction references and existing 293.15–436.85 K construction
-bounds. Evaluation uses the unamended endpoint. Element and charge balance,
+bounds. Stage-2 construction and continuation use a hash-bound amended
+parameter document; structural comparison verifies only the declared domain
+fields change. Evaluation uses the unamended endpoint. Element and charge balance,
 species charge agreement and caloric coverage passed the generic driver checks.
 Carbamate retains one analytical amine and one carbon unit. Empty coordinates
 and phase-state lists are explicitly endpoint-only inputs.
@@ -61,7 +71,7 @@ with their existing owners; no new source interpretation was made here.
 MDEA was checked in its separate d5138209 environment, wheel SHA-256
 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`,
 with installed package bytes verified. Existing R1/R3/R5 checks passed in
-12.93 s using 32 worker processes and one numerical-library thread per process.
+14.25 s using 32 worker processes and one numerical-library thread per process.
 
 | Check | Actual | Reference | Assessment |
 |---|---:|---:|---|
@@ -85,21 +95,48 @@ reduction](results/endpoint-checks.json), [input hashes and runtime](results/run
 [preparation provenance](inputs/preparation-provenance.json),
 [MDEA environment](results/mdea-runtime.json), and
 [caloric values](results/caloric-anchor.json) retain the numerical evidence.
-The fresh MEA pass used one process and one numerical-library thread at niceness
-10. Its measured wall time is in `results/runtime.json`; the initial successful
-pass took 7.1552 s; the final pass took 7.2805 s. No parallel campaign was needed.
+The MEA replay uses one process at niceness 10. The retained endpoint replay
+took 8.09548 s, as recorded in `results/runtime.json`, excluding environment
+setup and heavy-job admission. The focused failure checks passed; their
+outcomes are retained in `results/failure-checks.json`. Numerical thread
+environment variables were unset; no thread cap was added. Preparation's
+historical owner sets its own library threads to one.
+
+## Continuation and solved-domain evidence
+
+[Continuation results](results/continuation.json) retain all 39 native solves
+and incoming pressure, supported mole fractions and packing fractions. Four
+isotherms start independently, without a predecessor. Maximum absolute native
+residual is $5.684341886080802\times10^{-14}$. Preparation compared both original
+source guesses and runtime continuation declarations against their owners.
+
+All 25 Cai pairs have identical problem declarations and construction parameters.
+The paired native temperature predictions range from 363.18157890248386 to
+433.6729375243276 K, inside 293.15–436.85 K. Both members must independently
+be available, finite and meet their requested numerical tolerance.
+Their [prediction records](results/predictions.json) retain the temperature
+target, returned value and native diagnostics; no separate domain solve is used.
+
+[Failure checks](results/failure-checks.json) retain a fixed-temperature refusal,
+a 500 K paired temperature prediction that makes both Cai members unavailable,
+and a native continuation failure at 1000 K with coincident phases.
+Every later member of that isotherm becomes dependent unavailable with the
+first failing identity preserved; the other three isotherms still start
+independently and succeed. These deliberately altered test states are failure
+checks, not added assessment observations.
 
 The source-derived uncertainty, calibration roles, active-bound restrictions
 and source-range extrapolation labels remain those of the accepted endpoint.
 R2/R4/R5 candidate-law support remains 293.15–393.15 K; the 13 broader
-construction declarations do not establish validity above 393.15 K. Kiepe,
-Cai and CO₂-free density are deferred. This subset does not reproduce the full
-307-row manuscript objective or qualify neutral continuation, free temperature,
-fitting, phase stability, kinetics or column transport.
+construction declarations do not establish validity above 393.15 K. The five
+CO₂-free densities retain the assumed 100000 Pa pressure; the source experimental
+pressure remains unreported. The complete 307-row objective is reproduced at
+a fixed endpoint. This does not qualify fitting, changing-parameter continuation,
+phase stability, kinetics or column transport.
 
 Independent delivered review and investigator acceptance remain outstanding.
 No result here is promoted for manuscript or absorber use.
 
-The notebook rendered with Quarto without model execution. Root-site refresh
-could not complete because the `snakemake` executable is unavailable in this
-environment. The notebook is registered once in the site render list and sidebar.
+The notebook is rendered without model execution. Root-site refresh requires
+`snakemake`, which is unavailable in this environment; the root site and
+`analyses/_cse-manuscript.json` were not changed.
