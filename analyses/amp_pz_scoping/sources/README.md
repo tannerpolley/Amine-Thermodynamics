@@ -12,6 +12,8 @@ rows, code or parameters was copied or executed.
   tables; remaining convention check and unexecuted reproduction definition.
 - [Carbamate](carbamate-law.md): supported species, unresolved thermodynamic
   law/representation, unavailable Ciftja 2014 full text.
+- [Carbamate law sources](carbamate-law-sources.md), #234: other published
+  AMP carbamate laws, their bases and independence; the block remains.
 - [Pressure campaigns](partial-pressure-campaigns.md): candidates and whole-
   campaign Kundu recommendation, 51 public transcribed observations.
 - `pdf-identities.json`: current Zotero PDF keys and SHA-256 hashes. Full papers
