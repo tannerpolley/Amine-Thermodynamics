@@ -1,4 +1,4 @@
-"""Materialize the accepted endpoint declarations; never evaluate observations here."""
+"""Materialize the accepted endpoint declarations; the only evaluation completes the #235 starting reaction laws."""
 import ast
 import copy
 import csv
@@ -184,3 +184,60 @@ for record in loaded.inputs['observations']['fitted']:
 assert len(pairs) == 25
 write('reference.json',reference)
 write('preparation-provenance.json',dict(sources=sources,selected_ids=list(membership),declarations_equal=307,continuation_equal=len(loaded.continuation),paired_states_equal=len(pairs),construction_source=construction,construction_domain_changes=spec['cases'][0]['neutral_domain'],construction_differences=domain_differences,construction='Stage-2 construction and continuation use amended parameters; prediction uses unamended endpoint',endpoint_only='Empty coordinates and phase states; start equals endpoint; no fit or phase search'))
+
+# Issue 235 fit declaration: 14 reactive C/spec.json coordinates at the design table's perturbed origins.
+# The table fixes each d (one tenth of a scale, inward at active bounds); it is copied, not recomputed.
+endpoint_values = {}
+def collect(value, assign={}):  # records endpoint values; replaces those named in assign
+    if isinstance(value, dict):
+        if isinstance(value.get('value'), dict) and 'magnitude' in value['value'] and 'identity' in value:
+            endpoint_values.setdefault(value['identity'], value['value']['magnitude'])
+            value['value']['magnitude'] = assign.pop(value['identity'], value['value']['magnitude'])
+        for v in value.values(): collect(v, assign)
+    elif isinstance(value, list):
+        for v in value: collect(v, assign)
+collect(mapping)
+perturbation = {0:-.1, 1:.1, 2:.1, 3:.1, 4:.1, 5:.1, 6:-.1, 7:-.1, 8:-.1, 9:.1, 10:-.1, 11:-.1, 14:-.1, 15:.1}
+fit_coordinates = []
+for index, d in perturbation.items():
+    q = spec['information_coordinates'][index]; scale, bounds = q['scale'], q['bounds']
+    if 'coefficient' in q:  # R5 source coefficient -> native natural-log b, factor applied once
+        base = next(r for r in chemistry['aqueous'] if r['name'] == q['reaction'])['correlation'][q['coefficient']]
+        scale, bounds = scale * abs(q['source_to_native_factor']), sorted(q['source_to_native_factor'] * v for v in bounds)
+        kind = dict(kind='reaction_coordinate', name=q['reaction'], coefficient=q['coefficient'])
+    elif q.get('enthalpy_shift'):  # incremental to the inherited shifts; R2 bounds translated to total [-10000, 10000] J/mol
+        base, bounds = 0.0, [-8636.068425883279, 11363.931574116721] if q['reaction'] == 'R2' else bounds
+        kind = dict(kind='reaction_enthalpy_shift', name=q['reaction'], pivot_temperature=313.15)
+    else:
+        base = endpoint_values[q['identity']]
+        kind = dict(targets=[[t['family'], t['target'], t['factor']] for t in q.get('targets', [dict(q, factor=1.0)])])
+    fit_coordinates.append(dict(kind, original_index=index, identity=q['identity'], base=base, scale=scale, bounds=bounds, d=d, origin=base + scale * d))
+probe = json.loads((AN / 'results/design-replay-e6dae5c7/coordinate-checks.json').read_text())['coordinates']
+assert [{k: z[k] for k in probe[0]} for z in fit_coordinates] == probe
+optimizer = dict(maximum_iterations=60, function_tolerance=1e-8, parameter_tolerance=1e-10, gradient_tolerance=1e-8, maximum_elapsed_time_seconds=1200.0)
+fit = dict(config, coordinates=write('fit-coordinates.json', fit_coordinates), optimizer=optimizer)
+(AN / 'MEA-fit.toml').write_text('\n'.join(k + ' = ' + toml(v) for k, v in fit.items()) + '\n')
+
+# Attempt 2: physical start q* + s d and Engine-completed starting laws, so the rebased chart starts at optimizer zero.
+table = SolventSpecification(AN / 'MEA-fit.toml')  # original table chart; at optimizer zero it completes the starting laws
+reactive = [table.observation(r) for r in table.inputs['observations']['fitted'] if r['group'] not in ('Kiepe', 'Cai', 'CO2-free density')]
+chart = f.reg.differentiate(table.parameters, table.coordinates(), reactive, optimizer=[0.] * 14, holds=[], thermochemistry=table.thermal).chart
+shift = chart.reaction_laws['R5'].b - fit_coordinates[9]['origin']  # native R5 b change from completing its -250 J/mol shift
+rebased = copy.deepcopy(fit_coordinates)
+for q in rebased:  # translate origins and physical bounds of the three reaction coordinates; EOS entries unchanged
+    t = dict(reaction_coordinate=shift, reaction_enthalpy_shift=-q['origin']).get(q.get('kind'), 0)
+    q.update(origin=q['origin'] + t, bounds=[b + t for b in q['bounds']])
+values = {('component/' + t if isinstance(t, str) else 'pair/' + '/'.join(t)) + '/' + family.replace('_reciprocal', '/reciprocal'): q['origin'] * m
+          for q in fit_coordinates for family, t, m in q.get('targets', [])}
+collect(start := copy.deepcopy(mapping), values)
+assert not values  # every named EOS target, including both ties of each segment diameter
+design = json.loads((AN / 'results/design-true-start-e6dae5c7/probe.json').read_text())
+starting = table.fitted_reactions(chart)
+assert (rebased, starting, shift) == (design['coordinates'], design['starting_reactions'], design['r5_b_translation'])
+fit_shared = dict(shared, chemistry=dict(shared['chemistry'], reactions=starting),  # parameter="start" keeps each original construction document
+                  datasets=[dict(d, observation_parameters=d.get('observation_parameters', config['endpoint'])) for d in datasets])
+(AN / 'declarations-fit.toml').write_text('\n'.join(k + ' = ' + toml(v) for k, v in fit_shared.items()) + '\n')
+fit.update(declarations=dict(path='declarations-fit.toml', sha256=hashlib.sha256((AN / 'declarations-fit.toml').read_bytes()).hexdigest()),
+           start=write('fit-start.json', start), coordinates=write('fit-start-coordinates.json', rebased))
+assert fit['start']['sha256'] == design['scratch_start_document_sha256']
+(AN / 'MEA-fit.toml').write_text('\n'.join(k + ' = ' + toml(v) for k, v in fit.items()) + '\n')
