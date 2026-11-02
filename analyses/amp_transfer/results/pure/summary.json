@@ -1,0 +1,7253 @@
+{
+ "software": {
+  "wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+  "python": "3.13.14 (main, Jun 23 2026, 15:18:27) [Clang 22.1.3 ]",
+  "cpu_count": 32,
+  "input_sha256": {
+   "inputs/pure-amp.csv": "0f3e09f6181f46b2e8fb17fc5c45de4f7ccff6391d4cf0a38aa42a3e8b74194b",
+   "inputs/amp-pure-ayad.json": "6beced39cfd612a6e750b9f486151686e7d09fd5cad1f245f94a66c57f33eaf1"
+  }
+ },
+ "fits": {
+  "five-ayad": {
+   "label": "five-ayad",
+   "fitted": [
+    "m",
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 3.1552,
+    "sigma": 3.4676,
+    "epsilon": 237.94,
+    "eps_ab": 3526.15,
+    "kappa": 0.0058
+   },
+   "inferred_optimizer": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     702.4772432699264,
+     225.00124015405825,
+     8.231330472497115,
+     1.7471517042098055,
+     0.6725200423491284
+    ],
+    "right_vectors": [
+     [
+      0.5692589461760262,
+      0.8001477594833707,
+      -0.1888594421326904,
+      -0.005702589693046519,
+      -0.0027215400830762435
+     ],
+     [
+      -0.2572756117736982,
+      -0.010308163829551104,
+      -0.8011958121363041,
+      -0.4579051904339404,
+      -0.28655035950743174
+     ],
+     [
+      0.43898929500634243,
+      -0.3029442526202861,
+      0.04567178801329917,
+      0.19460687657573306,
+      -0.8219217907096005
+     ],
+     [
+      0.009921992143526126,
+      -0.1275968775584392,
+      -0.5380777932734426,
+      0.8054009368364583,
+      0.21312487006020267
+     ],
+     [
+      0.6457115956266913,
+      -0.5015985659806833,
+      -0.17550999372750387,
+      -0.32209907105864544,
+      0.44373848650334924
+     ]
+    ],
+    "ratio": 0.0009573549161801289
+   },
+   "first_jacobian_seconds": 0.019166671991115436,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 7.498701e-12 <= 1.000000e-10",
+   "iterations": 43,
+   "initial_cost": 107.54548231667056,
+   "cost": 2.611578340870217,
+   "endpoint": {
+    "m": 4.076128575755844,
+    "sigma": 3.187046338699693,
+    "epsilon": 237.06002983983964,
+    "eps_ab": 2385.190320031449,
+    "kappa": 0.03662096824814445
+   },
+   "active_bounds": [],
+   "seconds": 0.29254431498702615,
+   "endpoint_jacobian": {
+    "singular_values": [
+     699.671754258307,
+     255.25246168747,
+     5.2295259218758074,
+     1.1754876821041262,
+     0.1404223930296237
+    ],
+    "right_vectors": [
+     [
+      0.4401970578115664,
+      0.8738128893737493,
+      -0.20561901677871025,
+      -0.01988758438792195,
+      -0.0016995836285372996
+     ],
+     [
+      -0.2749950263286347,
+      -0.07878384240569276,
+      -0.8887607889926588,
+      -0.35643523590868326,
+      -0.03505744175173527
+     ],
+     [
+      0.5752265967813127,
+      -0.36641024678281947,
+      -0.383144623618316,
+      0.6065261903353664,
+      -0.1420706557934773
+     ],
+     [
+      0.6095183113320409,
+      -0.2933955068260477,
+      0.12792041231904738,
+      -0.7096210622884138,
+      -0.14993605568379123
+     ],
+     [
+      0.16794664716772686,
+      -0.09953264874871538,
+      -0.06827624325200447,
+      -0.03350126839188815,
+      0.9778052951184669
+     ]
+    ],
+    "ratio": 0.00020069753019897116
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2094.3787817758976,
+      "status": "Available",
+      "relative_error_percent": 7.95766916370606,
+      "liquid_vapor_density_mol_m3": [
+       9975.804932635703,
+       0.7258623607895026
+      ],
+      "dP_drho": [
+       109906.86438874343,
+       2881.458625803839
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3082.9010715175655,
+      "status": "Available",
+      "relative_error_percent": 4.860580663862768,
+      "liquid_vapor_density_mol_m3": [
+       9909.585954644446,
+       1.0484479161073108
+      ],
+      "dP_drho": [
+       106490.37048669034,
+       2935.074565049229
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5078.282941602877,
+      "status": "Available",
+      "relative_error_percent": 2.799249830017758,
+      "liquid_vapor_density_mol_m3": [
+       9817.987128376453,
+       1.6843210369185952
+      ],
+      "dP_drho": [
+       101823.2360484753,
+       3006.9333238222434
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7530.842075310639,
+      "status": "Available",
+      "relative_error_percent": 1.220995635895683,
+      "liquid_vapor_density_mol_m3": [
+       9740.089182014455,
+       2.4476511089758968
+      ],
+      "dP_drho": [
+       97918.39908509981,
+       3065.546274678124
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 9958.660541087524,
+      "status": "Available",
+      "relative_error_percent": 0.18773180168534243,
+      "liquid_vapor_density_mol_m3": [
+       9681.444847932522,
+       3.189770924409974
+      ],
+      "dP_drho": [
+       95023.05025068215,
+       3107.9256946836263
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19610.54728776963,
+      "status": "Available",
+      "relative_error_percent": -1.4545362423636687,
+      "liquid_vapor_density_mol_m3": [
+       9525.454174388133,
+       6.058401110156475
+      ],
+      "dP_drho": [
+       87531.00312563268,
+       3212.1250235577827
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29388.241774143098,
+      "status": "Available",
+      "relative_error_percent": -1.7115659727655608,
+      "liquid_vapor_density_mol_m3": [
+       9421.290312205438,
+       8.882758151329513
+      ],
+      "dP_drho": [
+       82714.56028836058,
+       3273.773981104289
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39225.18874056214,
+      "status": "Available",
+      "relative_error_percent": -1.691256289317944,
+      "liquid_vapor_density_mol_m3": [
+       9340.905623955065,
+       11.672312365505862
+      ],
+      "dP_drho": [
+       79107.34036357862,
+       3316.4555602104656
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49264.27564325841,
+      "status": "Available",
+      "relative_error_percent": -1.2739967068969849,
+      "liquid_vapor_density_mol_m3": [
+       9273.423803892138,
+       14.480959759022863
+      ],
+      "dP_drho": [
+       76155.68814815542,
+       3348.753011998154
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64204.82622608717,
+      "status": "Available",
+      "relative_error_percent": -1.2233442675582018,
+      "liquid_vapor_density_mol_m3": [
+       9189.969815045648,
+       18.608361955576175
+      ],
+      "dP_drho": [
+       72604.41388491016,
+       3383.9931795697307
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 79422.08947273769,
+      "status": "Available",
+      "relative_error_percent": -0.7223881590778913,
+      "liquid_vapor_density_mol_m3": [
+       9118.613128584433,
+       22.76399299850789
+      ],
+      "dP_drho": [
+       69656.15261095628,
+       3409.829663805821
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 100021.36856562142,
+      "status": "Available",
+      "relative_error_percent": 0.02136856562142686,
+      "liquid_vapor_density_mol_m3": [
+       9036.3640664424,
+       28.332590142283664
+      ],
+      "dP_drho": [
+       66359.83747156129,
+       3434.5284159240728
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 120579.92494264571,
+      "status": "Available",
+      "relative_error_percent": 0.48327078553809244,
+      "liquid_vapor_density_mol_m3": [
+       8965.562057850622,
+       33.841875310341266
+      ],
+      "dP_drho": [
+       63610.190048007695,
+       3451.3277176013844
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 141415.6713713022,
+      "status": "Available",
+      "relative_error_percent": 1.0111938366444306,
+      "liquid_vapor_density_mol_m3": [
+       8901.971559074076,
+       39.38886449969063
+      ],
+      "dP_drho": [
+       61209.96744580701,
+       3462.8421855138886
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 162655.7546288764,
+      "status": "Available",
+      "relative_error_percent": 1.6598466430477465,
+      "liquid_vapor_density_mol_m3": [
+       8843.486791971252,
+       45.014830586102676
+      ],
+      "dP_drho": [
+       59060.25427356589,
+       3470.4224348207135
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 42.12123743837508,
+      "status": "Available",
+      "relative_error_percent": 1.4969576828315345,
+      "liquid_vapor_density_mol_m3": [
+       10492.373982572564,
+       0.017274277324653472
+      ],
+      "dP_drho": [
+       136882.3308913767,
+       2438.209541738342
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 99.08094195628428,
+      "status": "Available",
+      "relative_error_percent": 1.6214789295223353,
+      "liquid_vapor_density_mol_m3": [
+       10396.853458949743,
+       0.039288846219810256
+      ],
+      "dP_drho": [
+       131952.9757188326,
+       2521.5263784773447
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 215.34593018380582,
+      "status": "Available",
+      "relative_error_percent": -1.7134047540822372,
+      "liquid_vapor_density_mol_m3": [
+       10303.163583665633,
+       0.08270434556058533
+      ],
+      "dP_drho": [
+       127059.23710438571,
+       2603.1863977224752
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 445.4433605398367,
+      "status": "Available",
+      "relative_error_percent": -2.229288731379131,
+      "liquid_vapor_density_mol_m3": [
+       10208.221030047665,
+       0.16580550444911493
+      ],
+      "dP_drho": [
+       122070.80261644104,
+       2685.4330715830592
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 835.0103607693114,
+      "status": "Available",
+      "relative_error_percent": -4.515682016087885,
+      "liquid_vapor_density_mol_m3": [
+       10119.437341421111,
+       0.30217909947523797
+      ],
+      "dP_drho": [
+       117404.40201448939,
+       2761.4520899031445
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1621.7704822651724,
+      "status": "Available",
+      "relative_error_percent": -2.2205183730150457,
+      "liquid_vapor_density_mol_m3": [
+       10017.588493409276,
+       0.5690049567222341
+      ],
+      "dP_drho": [
+       112077.5984198429,
+       2847.017814362827
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2894.852616273793,
+      "status": "Available",
+      "relative_error_percent": -1.3174495901212557,
+      "liquid_vapor_density_mol_m3": [
+       9920.631075399066,
+       0.9875599132658209
+      ],
+      "dP_drho": [
+       107057.97940978695,
+       2926.2210798221186
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 4947.935734449188,
+      "status": "Available",
+      "relative_error_percent": -0.7932684822217873,
+      "liquid_vapor_density_mol_m3": [
+       9822.94546663676,
+       1.6432605198870582
+      ],
+      "dP_drho": [
+       102073.8959687236,
+       3003.1202879912653
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8143.466498745819,
+      "status": "Available",
+      "relative_error_percent": 0.02046843137659682,
+      "liquid_vapor_density_mol_m3": [
+       9723.97578744207,
+       2.6360106621057393
+      ],
+      "dP_drho": [
+       97118.88921763879,
+       3077.348287649693
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 102135.88038876,
+      "status": "Available",
+      "relative_error_percent": 0.8251533946298073,
+      "liquid_vapor_density_mol_m3": [
+       9028.63176399362,
+       28.90121368623226
+      ],
+      "dP_drho": [
+       66055.58832206648,
+       3436.5654233307014
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 97310.05530609368,
+      "status": "Available",
+      "relative_error_percent": 1.3646409438475837,
+      "liquid_vapor_density_mol_m3": [
+       9046.450716986372,
+       27.602736855774584
+      ],
+      "dP_drho": [
+       66758.18370410618,
+       3431.7970638220863
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 92066.6578292619,
+      "status": "Available",
+      "relative_error_percent": 1.5067892274111205,
+      "liquid_vapor_density_mol_m3": [
+       9066.540500828882,
+       26.188790812591616
+      ],
+      "dP_drho": [
+       67556.49560344877,
+       3426.1078350747753
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86767.98882814552,
+      "status": "Available",
+      "relative_error_percent": 1.7209716625387061,
+      "liquid_vapor_density_mol_m3": [
+       9087.69237677818,
+       24.756374308383695
+      ],
+      "dP_drho": [
+       68404.0825438329,
+       3419.761090170928
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80632.33345897589,
+      "status": "Available",
+      "relative_error_percent": 0.7904168237198528,
+      "liquid_vapor_density_mol_m3": [
+       9113.380621716935,
+       23.092795088511092
+      ],
+      "dP_drho": [
+       69443.18699697747,
+       3411.564553870032
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 74095.114613591,
+      "status": "Available",
+      "relative_error_percent": 1.0847402641077641,
+      "liquid_vapor_density_mol_m3": [
+       9142.3574048926,
+       21.31394776572653
+      ],
+      "dP_drho": [
+       70628.10749446476,
+       3401.6811105003553
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 70143.90702367063,
+      "status": "Available",
+      "relative_error_percent": 1.2177590529157678,
+      "liquid_vapor_density_mol_m3": [
+       9160.785314481305,
+       20.235260921781205
+      ],
+      "dP_drho": [
+       71388.69953713585,
+       3395.0473337076396
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65677.94217746805,
+      "status": "Available",
+      "relative_error_percent": 0.5787782197060443,
+      "liquid_vapor_density_mol_m3": [
+       9182.551964951446,
+       19.01254610312784
+      ],
+      "dP_drho": [
+       72294.12101795284,
+       3386.8661354020783
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61665.08014528633,
+      "status": "Available",
+      "relative_error_percent": 0.595563042881464,
+      "liquid_vapor_density_mol_m3": [
+       9203.058382620613,
+       17.91045503691687
+      ],
+      "dP_drho": [
+       73154.06161765411,
+       3378.81939507332
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57650.31267107896,
+      "status": "Available",
+      "relative_error_percent": 0.6113659181133713,
+      "liquid_vapor_density_mol_m3": [
+       9224.585313434683,
+       16.804308600486547
+      ],
+      "dP_drho": [
+       74064.01577560348,
+       3370.0217878378517
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54047.95208721473,
+      "status": "Available",
+      "relative_error_percent": 1.4032872180389067,
+      "liquid_vapor_density_mol_m3": [
+       9244.868836682688,
+       15.808524323062587
+      ],
+      "dP_drho": [
+       74928.1481230755,
+       3361.4074562764945
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51189.760849198894,
+      "status": "Available",
+      "relative_error_percent": 0.9659977301753386,
+      "liquid_vapor_density_mol_m3": [
+       9261.691149684299,
+       15.016074360841232
+      ],
+      "dP_drho": [
+       75649.76166823386,
+       3354.0265476081663
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48457.606957072596,
+      "status": "Available",
+      "relative_error_percent": 0.9533478272345741,
+      "liquid_vapor_density_mol_m3": [
+       9278.441364064158,
+       14.256461287027706
+      ],
+      "dP_drho": [
+       76372.71190258447,
+       3346.4664121169258
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44669.51097374516,
+      "status": "Available",
+      "relative_error_percent": 1.5216158494208099,
+      "liquid_vapor_density_mol_m3": [
+       9302.880243644027,
+       13.199587538000568
+      ],
+      "dP_drho": [
+       77435.39822814235,
+       3335.0630968129103
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40512.414669982616,
+      "status": "Available",
+      "relative_error_percent": 1.2810366749565372,
+      "liquid_vapor_density_mol_m3": [
+       9331.57040910618,
+       12.03436426482693
+      ],
+      "dP_drho": [
+       78694.80861035627,
+       3321.1200057073374
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36681.867139706505,
+      "status": "Available",
+      "relative_error_percent": 1.8940753880736239,
+      "liquid_vapor_density_mol_m3": [
+       9360.057762278702,
+       10.955093680508392
+      ],
+      "dP_drho": [
+       79957.88116346666,
+       3306.692529483696
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32258.777311777114,
+      "status": "Available",
+      "relative_error_percent": 0.8086790993034887,
+      "liquid_vapor_density_mol_m3": [
+       9395.93143954966,
+       9.701328109288927
+      ],
+      "dP_drho": [
+       81566.05631013075,
+       3287.717176917492
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28176.546098491206,
+      "status": "Available",
+      "relative_error_percent": 0.6305217803257435,
+      "liquid_vapor_density_mol_m3": [
+       9432.571678950255,
+       8.535949863699567
+      ],
+      "dP_drho": [
+       83228.57263307177,
+       3267.4330381013065
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24135.028797368035,
+      "status": "Available",
+      "relative_error_percent": 0.562619989033486,
+      "liquid_vapor_density_mol_m3": [
+       9473.152269610899,
+       7.373094434539588
+      ],
+      "dP_drho": [
+       85093.016891114,
+       3243.9374913040383
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20246.094464482318,
+      "status": "Available",
+      "relative_error_percent": 1.2304723224115799,
+      "liquid_vapor_density_mol_m3": [
+       9517.569090012737,
+       6.244003517920737
+      ],
+      "dP_drho": [
+       87160.96978157063,
+       3217.02818813537
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16318.214329830562,
+      "status": "Available",
+      "relative_error_percent": 1.9888395614410026,
+      "liquid_vapor_density_mol_m3": [
+       9569.879846291975,
+       5.091325678959173
+      ],
+      "dP_drho": [
+       89631.91395240331,
+       3183.8147549702653
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12081.176927073175,
+      "status": "Available",
+      "relative_error_percent": 0.6764743922764493,
+      "liquid_vapor_density_mol_m3": [
+       9639.071979553953,
+       3.830301556986761
+      ],
+      "dP_drho": [
+       92956.73959499162,
+       3137.5162216210238
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8242.946757209478,
+      "status": "Available",
+      "relative_error_percent": 3.0368344651184875,
+      "liquid_vapor_density_mol_m3": [
+       9721.453727251877,
+       2.6665224426943546
+      ],
+      "dP_drho": [
+       96994.01777590154,
+       3079.184958944335
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 927.0119209337523,
+      "status": "Available",
+      "error_kg_m3": 0.011920933752321616
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.5699658855302,
+      "status": "Available",
+      "error_kg_m3": -0.030034114469799533
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 910.1181645254512,
+      "status": "Available",
+      "error_kg_m3": 0.018164525451197733
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 1.8852663042666369,
+      "max_abs_percent": 7.95766916370606
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.7698352211819786,
+      "max_abs_percent": 4.515682016087885
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.1847817759861525,
+      "max_abs_percent": 3.0368344651184875
+     }
+    },
+    "density_errors": [
+     0.011920933752321616,
+     -0.030034114469799533,
+     0.018164525451197733
+    ],
+    "calibration_accepted": true
+   },
+   "admissible": true
+  },
+  "five-second": {
+   "label": "five-second",
+   "fitted": [
+    "m",
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 3.0,
+    "sigma": 3.55,
+    "epsilon": 250.0,
+    "eps_ab": 3200.0,
+    "kappa": 0.008
+   },
+   "inferred_optimizer": [
+    -0.31039999999999957,
+    0.3295999999999992,
+    0.24120000000000005,
+    -0.6523000000000002,
+    0.4400000000000001
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     694.71701602273,
+     216.03103315690265,
+     6.39425605866178,
+     1.6173430690993713,
+     0.5892929547651794
+    ],
+    "right_vectors": [
+     [
+      0.5996432179907771,
+      0.7818025027699497,
+      -0.1707633616225074,
+      -0.006881589833581557,
+      -0.0023185834147110562
+     ],
+     [
+      -0.27143358867108514,
+      0.025147971956904935,
+      -0.8164810135764877,
+      -0.463698809571338,
+      -0.2098417377902355
+     ],
+     [
+      0.4669722350532861,
+      -0.3926265560352847,
+      -0.16059600716863046,
+      0.3100057685120336,
+      -0.7112571020074014
+     ],
+     [
+      0.1893870268480042,
+      -0.050436557813222566,
+      0.4706855259163153,
+      -0.8044770594439086,
+      -0.3047302154677001
+     ],
+     [
+      0.5593043034072003,
+      -0.48109559060640195,
+      -0.23845898383341907,
+      -0.2040812143271213,
+      0.5976737403275848
+     ]
+    ],
+    "ratio": 0.000848248914556454
+   },
+   "first_jacobian_seconds": 0.014307912002550438,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 4.414402e-13 <= 1.000000e-10",
+   "iterations": 41,
+   "initial_cost": 811.1275296448364,
+   "cost": 2.6115783408510613,
+   "endpoint": {
+    "m": 4.076131799300131,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "active_bounds": [],
+   "seconds": 0.28081190199009143,
+   "endpoint_jacobian": {
+    "singular_values": [
+     699.6718282892103,
+     255.25256490772185,
+     5.229521528491926,
+     1.175486297956141,
+     0.14042190547391778
+    ],
+    "right_vectors": [
+     [
+      0.4401966514362033,
+      0.8738130476744265,
+      -0.20561921249686607,
+      -0.01988760081004686,
+      -0.0016995777336179742
+     ],
+     [
+      -0.2749948770844072,
+      -0.07878424907066903,
+      -0.8887608545818951,
+      -0.3564351141474152,
+      -0.03505727372857687
+     ],
+     [
+      0.5752276104367483,
+      -0.36641043242878113,
+      -0.38314427783070704,
+      0.6065254208159242,
+      -0.1420702905896719
+     ],
+     [
+      0.6095178808731703,
+      -0.29339484913674435,
+      0.1279208497617129,
+      -0.7096217895259311,
+      -0.14993527744384705
+     ],
+     [
+      0.16794604707701147,
+      -0.09953219237855342,
+      -0.06827592091546206,
+      -0.03350108163657762,
+      0.9778054735497494
+     ]
+    ],
+    "ratio": 0.00020069681212872014
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2094.3787367490527,
+      "status": "Available",
+      "relative_error_percent": 7.9576668427346675,
+      "liquid_vapor_density_mol_m3": [
+       9975.804847724628,
+       0.7258623455208355
+      ],
+      "dP_drho": [
+       109906.85479756963,
+       2881.4586231306316
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3082.900997464694,
+      "status": "Available",
+      "relative_error_percent": 4.8605781450576035,
+      "liquid_vapor_density_mol_m3": [
+       9909.58585335035,
+       1.048447891579063
+      ],
+      "dP_drho": [
+       106490.36009061831,
+       2935.074561374355
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5078.282807304381,
+      "status": "Available",
+      "relative_error_percent": 2.7992471114247186,
+      "liquid_vapor_density_mol_m3": [
+       9817.987004480618,
+       1.684320993918413
+      ],
+      "dP_drho": [
+       101823.22469410993,
+       3006.9333183091944
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7530.8418681921685,
+      "status": "Available",
+      "relative_error_percent": 1.2209928520452662,
+      "liquid_vapor_density_mol_m3": [
+       9740.089038973063,
+       2.4476510446765922
+      ],
+      "dP_drho": [
+       97918.38704860631,
+       3065.5462671103464
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 9958.660265379986,
+      "status": "Available",
+      "relative_error_percent": 0.18772902796766466,
+      "liquid_vapor_density_mol_m3": [
+       9681.444690532113,
+       3.1897708409480487
+      ],
+      "dP_drho": [
+       95023.03777566101,
+       3107.925685223461
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19610.546784237904,
+      "status": "Available",
+      "relative_error_percent": -1.4545387726738523,
+      "liquid_vapor_density_mol_m3": [
+       9525.453979044049,
+       6.058400969834596
+      ],
+      "dP_drho": [
+       87530.98976660505,
+       3212.125007359464
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29388.24111478788,
+      "status": "Available",
+      "relative_error_percent": -1.711568177966949,
+      "liquid_vapor_density_mol_m3": [
+       9421.290091727142,
+       8.88275798219309
+      ],
+      "dP_drho": [
+       82714.54653994915,
+       3273.773958797902
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39225.18799577599,
+      "status": "Available",
+      "relative_error_percent": -1.691258155949904,
+      "liquid_vapor_density_mol_m3": [
+       9340.905384180782,
+       11.672312192995866
+      ],
+      "dP_drho": [
+       79107.32640882721,
+       3316.4555321788057
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49264.27487930325,
+      "status": "Available",
+      "relative_error_percent": -1.2739982378692338,
+      "liquid_vapor_density_mol_m3": [
+       9273.423547976581,
+       14.48095960670149
+      ],
+      "dP_drho": [
+       76155.67407599957,
+       3348.7529784175886
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64204.82555013862,
+      "status": "Available",
+      "relative_error_percent": -1.2233453074790401,
+      "liquid_vapor_density_mol_m3": [
+       9189.969539225214,
+       18.60836187293327
+      ],
+      "dP_drho": [
+       72604.39972979936,
+       3383.9931381218717
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 79422.08901751373,
+      "status": "Available",
+      "relative_error_percent": -0.7223887281078367,
+      "liquid_vapor_density_mol_m3": [
+       9118.612835778624,
+       22.763993030802137
+      ],
+      "dP_drho": [
+       69656.13843299696,
+       3409.8296146972625
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 100021.36860051393,
+      "status": "Available",
+      "relative_error_percent": 0.021368600513937963,
+      "liquid_vapor_density_mol_m3": [
+       9036.363754075692,
+       28.332590393787946
+      ],
+      "dP_drho": [
+       66359.82331489174,
+       3434.528356860372
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 120579.92566690854,
+      "status": "Available",
+      "relative_error_percent": 0.4832713890904561,
+      "liquid_vapor_density_mol_m3": [
+       8965.561728640698,
+       33.84187584701103
+      ],
+      "dP_drho": [
+       63610.17594501564,
+       3451.327648963461
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 141415.67298136104,
+      "status": "Available",
+      "relative_error_percent": 1.01119498668647,
+      "liquid_vapor_density_mol_m3": [
+       8901.971214716847,
+       39.38886538751875
+      ],
+      "dP_drho": [
+       61209.953415062504,
+       3462.8421074599814
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 162655.7573216335,
+      "status": "Available",
+      "relative_error_percent": 1.6598483260209296,
+      "liquid_vapor_density_mol_m3": [
+       8843.486433654047,
+       45.01483189188422
+      ],
+      "dP_drho": [
+       59060.24032673402,
+       3470.4223474103455
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 42.121237907872676,
+      "status": "Available",
+      "relative_error_percent": 1.496958814151017,
+      "liquid_vapor_density_mol_m3": [
+       10492.374024664174,
+       0.01727427751745679
+      ],
+      "dP_drho": [
+       136882.33118355938,
+       2438.2095416654065
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 99.08094244144661,
+      "status": "Available",
+      "relative_error_percent": 1.6214794271247168,
+      "liquid_vapor_density_mol_m3": [
+       10396.853477892664,
+       0.039288846413566725
+      ],
+      "dP_drho": [
+       131952.97368618217,
+       2521.526378301019
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 215.3459298105486,
+      "status": "Available",
+      "relative_error_percent": -1.7134049244415306,
+      "liquid_vapor_density_mol_m3": [
+       10303.163579686554,
+       0.08270434542310233
+      ],
+      "dP_drho": [
+       127059.23301050815,
+       2603.186397353079
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 445.4433568170744,
+      "status": "Available",
+      "relative_error_percent": -2.2292895484911424,
+      "liquid_vapor_density_mol_m3": [
+       10208.221002680115,
+       0.16580550308540248
+      ],
+      "dP_drho": [
+       122070.79665784689,
+       2685.433070870507
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 835.0103490394432,
+      "status": "Available",
+      "relative_error_percent": -4.515683357410727,
+      "liquid_vapor_density_mol_m3": [
+       10119.4372920924,
+       0.3021790952977443
+      ],
+      "dP_drho": [
+       117404.39451479791,
+       2761.4520886712944
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1621.770450486262,
+      "status": "Available",
+      "relative_error_percent": -2.2205202890231424,
+      "liquid_vapor_density_mol_m3": [
+       10017.588418847241,
+       0.5690049457883455
+      ],
+      "dP_drho": [
+       112077.58938728916,
+       2847.017812201939
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2894.85254782897,
+      "status": "Available",
+      "relative_error_percent": -1.3174519233349336,
+      "liquid_vapor_density_mol_m3": [
+       9920.630976835535,
+       0.9875598905049822
+      ],
+      "dP_drho": [
+       107057.96914126341,
+       2926.221076331872
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 4947.935604086507,
+      "status": "Available",
+      "relative_error_percent": -0.7932710960098843,
+      "liquid_vapor_density_mol_m3": [
+       9822.945343962121,
+       1.643260478068055
+      ],
+      "dP_drho": [
+       102073.88466180381,
+       3003.120282592798
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8143.46627394424,
+      "status": "Available",
+      "relative_error_percent": 0.020465670296987426,
+      "liquid_vapor_density_mol_m3": [
+       9723.975640450448,
+       2.636010592784535
+      ],
+      "dP_drho": [
+       97118.8770544367,
+       3077.348279593223
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 102135.88048564189,
+      "status": "Available",
+      "relative_error_percent": 0.8251534902683932,
+      "liquid_vapor_density_mol_m3": [
+       9028.631449788045,
+       28.901213964111232
+      ],
+      "dP_drho": [
+       66055.57416976338,
+       3436.565363267252
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 97310.0552645936,
+      "status": "Available",
+      "relative_error_percent": 1.364640900618319,
+      "liquid_vapor_density_mol_m3": [
+       9046.450407018356,
+       27.60273707448521
+      ],
+      "dP_drho": [
+       66758.16954232378,
+       3431.7970060458424
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 92066.65765003976,
+      "status": "Available",
+      "relative_error_percent": 1.5067890298123165,
+      "liquid_vapor_density_mol_m3": [
+       9066.540195638263,
+       26.18879097120189
+      ],
+      "dP_drho": [
+       67556.48143349586,
+       3426.1077798068063
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86767.9885234402,
+      "status": "Available",
+      "relative_error_percent": 1.7209713053226272,
+      "liquid_vapor_density_mol_m3": [
+       9087.692076617726,
+       24.756374410800124
+      ],
+      "dP_drho": [
+       68404.0683682742,
+       3419.7610374639967
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80632.33302663924,
+      "status": "Available",
+      "relative_error_percent": 0.7904162832990558,
+      "liquid_vapor_density_mol_m3": [
+       9113.38032766639,
+       23.092795131723182
+      ],
+      "dP_drho": [
+       69443.1728189262,
+       3411.5645041645803
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 74095.11406679613,
+      "status": "Available",
+      "relative_error_percent": 1.0847395181393216,
+      "liquid_vapor_density_mol_m3": [
+       9142.357117736308,
+       21.313947753015448
+      ],
+      "dP_drho": [
+       70628.09331956226,
+       3401.681064039452
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 70143.90641879392,
+      "status": "Available",
+      "relative_error_percent": 1.2177581800778103,
+      "liquid_vapor_density_mol_m3": [
+       9160.785031711102,
+       20.23526087896616
+      ],
+      "dP_drho": [
+       71388.68536767476,
+       3395.047289233421
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65677.94151729922,
+      "status": "Available",
+      "relative_error_percent": 0.5787772087277432,
+      "liquid_vapor_density_mol_m3": [
+       9182.551687364137,
+       19.012546029745195
+      ],
+      "dP_drho": [
+       72294.10685851228,
+       3386.866093198822
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61665.0794450455,
+      "status": "Available",
+      "relative_error_percent": 0.5955619005636237,
+      "liquid_vapor_density_mol_m3": [
+       9203.058109918595,
+       17.910454939285263
+      ],
+      "dP_drho": [
+       73154.0474713453,
+       3378.8193549356033
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57650.31194009107,
+      "status": "Available",
+      "relative_error_percent": 0.6113646423927976,
+      "liquid_vapor_density_mol_m3": [
+       9224.585045864067,
+       16.804308481732456
+      ],
+      "dP_drho": [
+       74064.001647081,
+       3370.0217497924596
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54047.951336795944,
+      "status": "Available",
+      "relative_error_percent": 1.4032858101237222,
+      "liquid_vapor_density_mol_m3": [
+       9244.868573950223,
+       15.808524188105135
+      ],
+      "dP_drho": [
+       74928.13401519977,
+       3361.4074201324447
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51189.76008898385,
+      "status": "Available",
+      "relative_error_percent": 0.965996230737387,
+      "liquid_vapor_density_mol_m3": [
+       9261.690890966944,
+       15.016074214929098
+      ],
+      "dP_drho": [
+       75649.7475804397,
+       3354.0265129901786
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48457.60619224329,
+      "status": "Available",
+      "relative_error_percent": 0.9533462338402021,
+      "liquid_vapor_density_mol_m3": [
+       9278.4411093472,
+       14.256461132257007
+      ],
+      "dP_drho": [
+       76372.69783753363,
+       3346.466378973332
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44669.510210377346,
+      "status": "Available",
+      "relative_error_percent": 1.5216141144939632,
+      "liquid_vapor_density_mol_m3": [
+       9302.879994768493,
+       13.199587373628512
+      ],
+      "dP_drho": [
+       77435.38420135117,
+       3335.063065741012
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40512.41391901201,
+      "status": "Available",
+      "relative_error_percent": 1.281034797530034,
+      "liquid_vapor_density_mol_m3": [
+       9331.570167096083,
+       12.034364093622598
+      ],
+      "dP_drho": [
+       78694.79463646859,
+       3321.1199769496243
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36681.866410469236,
+      "status": "Available",
+      "relative_error_percent": 1.894073362414539,
+      "liquid_vapor_density_mol_m3": [
+       9360.05752709458,
+       10.955093506575261
+      ],
+      "dP_drho": [
+       79957.86725102153,
+       3306.692502900951
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32258.77662035616,
+      "status": "Available",
+      "relative_error_percent": 0.8086769386129955,
+      "liquid_vapor_density_mol_m3": [
+       9395.931212975262,
+       9.701327936651566
+      ],
+      "dP_drho": [
+       81566.04248831926,
+       3287.717152904667
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28176.545454491916,
+      "status": "Available",
+      "relative_error_percent": 0.6305194803282621,
+      "liquid_vapor_density_mol_m3": [
+       9432.57146118668,
+       8.5359496966913
+      ],
+      "dP_drho": [
+       83228.55891988841,
+       3267.4330165254682
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24135.028212578898,
+      "status": "Available",
+      "relative_error_percent": 0.5626175524120702,
+      "liquid_vapor_density_mol_m3": [
+       9473.15206162713,
+       7.3730942775197
+      ],
+      "dP_drho": [
+       85093.00331825383,
+       3243.937472214621
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20246.093948563186,
+      "status": "Available",
+      "relative_error_percent": 1.2304697428159317,
+      "liquid_vapor_density_mol_m3": [
+       9517.56889276048,
+       6.244003374888265
+      ],
+      "dP_drho": [
+       87160.95638783409,
+       3217.028171523015
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16318.213895637367,
+      "status": "Available",
+      "relative_error_percent": 1.9888368477335439,
+      "liquid_vapor_density_mol_m3": [
+       9569.879661716332,
+       5.091325554662717
+      ],
+      "dP_drho": [
+       89631.90080603864,
+       3183.8147409657413
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12081.176594925057,
+      "status": "Available",
+      "relative_error_percent": 0.6764716243754743,
+      "liquid_vapor_density_mol_m3": [
+       9639.07181181,
+       3.830301458402844
+      ],
+      "dP_drho": [
+       92956.72684079001,
+       3137.5162105885743
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8242.946529559258,
+      "status": "Available",
+      "relative_error_percent": 3.036831619490732,
+      "liquid_vapor_density_mol_m3": [
+       9721.453579642297,
+       2.6665223725694687
+      ],
+      "dP_drho": [
+       96994.00559329918,
+       3079.184950809281
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 927.0119226645004,
+      "status": "Available",
+      "error_kg_m3": 0.011922664500389146
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.5699655517425,
+      "status": "Available",
+      "error_kg_m3": -0.030034448257538315
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 910.1181621103603,
+      "status": "Available",
+      "error_kg_m3": 0.018162110360322004
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 1.8852663107725685,
+      "max_abs_percent": 7.9576668427346675
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.7698361166982313,
+      "max_abs_percent": 4.515683357410727
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.1847802962665595,
+      "max_abs_percent": 3.036831619490732
+     }
+    },
+    "density_errors": [
+     0.011922664500389146,
+     -0.030034448257538315,
+     0.018162110360322004
+    ],
+    "calibration_accepted": true
+   },
+   "admissible": true
+  },
+  "profile-m-1.5": {
+   "label": "profile-m-1.5",
+   "fitted": [
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 1.5,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "inferred_optimizer": [
+    -1.122218380733342,
+    -0.01760156201961479,
+    -2.281921327067689,
+    6.164226316403301
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     1658.230295040891,
+     137.17193372914267,
+     5.220060340931304,
+     1.0742757656821795
+    ],
+    "right_vectors": [
+     [
+      0.9724197949937319,
+      -0.22933019393758142,
+      -0.042358092860967075,
+      -0.0036326879967122985
+     ],
+     [
+      -0.18488447312093417,
+      -0.6468063600894313,
+      -0.7362702299148259,
+      -0.07324897738416355
+     ],
+     [
+      0.14127813901182742,
+      0.7230363454465807,
+      -0.6748772409994269,
+      0.04242216615884757
+     ],
+     [
+      -0.016061174941385443,
+      -0.07916841453298082,
+      -0.025547017269191098,
+      0.996404411224922
+     ]
+    ],
+    "ratio": 0.0006478447347723125
+   },
+   "first_jacobian_seconds": 0.013203356007579714,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 1.017551e-11 <= 1.000000e-10",
+   "iterations": 19,
+   "initial_cost": 9116595.232167529,
+   "cost": 686.1201074786634,
+   "endpoint": {
+    "m": 1.5,
+    "sigma": 4.2,
+    "epsilon": 150.0,
+    "eps_ab": 5260.124756298534,
+    "kappa": 0.0037060023744077382
+   },
+   "active_bounds": [
+    "sigma",
+    "epsilon"
+   ],
+   "seconds": 0.226008924015332,
+   "endpoint_jacobian": {
+    "singular_values": [
+     595.1239251159479,
+     182.04731614435636,
+     10.170372218101345,
+     9.536918444553407
+    ],
+    "right_vectors": [
+     [
+      0.7839250981807906,
+      -0.6201094584621002,
+      -0.021885923676880574,
+      -0.021135427908812766
+     ],
+     [
+      -0.3208327268062535,
+      -0.36266472387217774,
+      -0.6191809036686686,
+      -0.6181874052428051
+     ],
+     [
+      0.41655859193380673,
+      0.545698115955894,
+      -0.706616118060556,
+      0.17142394064232142
+     ],
+     [
+      -0.33016168968919796,
+      -0.4314535013495028,
+      -0.3418035643083479,
+      0.7668190518374834
+     ]
+    ],
+    "ratio": 0.016025096693424536
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 1993.2409214208963,
+      "status": "Available",
+      "relative_error_percent": 2.744377392829711,
+      "liquid_vapor_density_mol_m3": [
+       9940.160116804842,
+       0.9851955030343467
+      ],
+      "dP_drho": [
+       12594.25028052332,
+       1556.1905789164457
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 2902.3335887121907,
+      "status": "Available",
+      "relative_error_percent": -1.281170451966307,
+      "liquid_vapor_density_mol_m3": [
+       9837.954830664701,
+       1.435874613939607
+      ],
+      "dP_drho": [
+       12072.296212046827,
+       1537.8700102309206
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 4744.566606170059,
+      "status": "Available",
+      "relative_error_percent": -3.95614157550489,
+      "liquid_vapor_density_mol_m3": [
+       9695.664393368732,
+       2.3521505911112146
+      ],
+      "dP_drho": [
+       11381.57645161173,
+       1512.4724639747612
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7031.394778952609,
+      "status": "Available",
+      "relative_error_percent": -5.49200565923913,
+      "liquid_vapor_density_mol_m3": [
+       9573.808090300461,
+       3.4940178460980564
+      ],
+      "dP_drho": [
+       10821.108450598702,
+       1491.0272936884228
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 9321.778149664782,
+      "status": "Available",
+      "relative_error_percent": -6.219535717658131,
+      "liquid_vapor_density_mol_m3": [
+       9481.534690962444,
+       4.64159811087134
+      ],
+      "dP_drho": [
+       10414.525688207756,
+       1475.0603523031593
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 18668.81302411926,
+      "status": "Available",
+      "relative_error_percent": -6.186869225531355,
+      "liquid_vapor_density_mol_m3": [
+       9233.668716872085,
+       9.354229707352301
+      ],
+      "dP_drho": [
+       9392.090356393835,
+       1433.539669755919
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 28471.730054690506,
+      "status": "Available",
+      "relative_error_percent": -4.77682255956352,
+      "liquid_vapor_density_mol_m3": [
+       9065.975775246427,
+       14.332733568280972
+      ],
+      "dP_drho": [
+       8752.840503741463,
+       1406.551920776307
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 38613.56734561771,
+      "status": "Available",
+      "relative_error_percent": -3.2241419909330604,
+      "liquid_vapor_density_mol_m3": [
+       8935.21994886555,
+       19.511663381862352
+      ],
+      "dP_drho": [
+       8281.019946503959,
+       1385.996294294152
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49210.71114055354,
+      "status": "Available",
+      "relative_error_percent": -1.3813403996923102,
+      "liquid_vapor_density_mol_m3": [
+       8824.462106439247,
+       24.947906070832676
+      ],
+      "dP_drho": [
+       7898.368266230628,
+       1368.8060915030608
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 65379.386241855726,
+      "status": "Available",
+      "relative_error_percent": 0.5836711413164997,
+      "liquid_vapor_density_mol_m3": [
+       8686.133308749122,
+       33.28330522753812
+      ],
+      "dP_drho": [
+       7441.047715760913,
+       1347.4570315987999
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 82271.15430445435,
+      "status": "Available",
+      "relative_error_percent": 2.8389428805679406,
+      "liquid_vapor_density_mol_m3": [
+       8566.574039130162,
+       42.037373108196356
+      ],
+      "dP_drho": [
+       7063.167521938511,
+       1328.9547637959997
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 105722.98081394577,
+      "status": "Available",
+      "relative_error_percent": 5.722980813945777,
+      "liquid_vapor_density_mol_m3": [
+       8427.180182224543,
+       54.259943328962926
+      ],
+      "dP_drho": [
+       6641.785058556094,
+       1307.1184016934342
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 129712.28815069902,
+      "status": "Available",
+      "relative_error_percent": 8.09357345891586,
+      "liquid_vapor_density_mol_m3": [
+       8305.729176540637,
+       66.83833415884992
+      ],
+      "dP_drho": [
+       6290.602639486229,
+       1287.6894162700607
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 154546.35935427583,
+      "status": "Available",
+      "relative_error_percent": 10.390256681625587,
+      "liquid_vapor_density_mol_m3": [
+       8195.421974390352,
+       79.93541955047337
+      ],
+      "dP_drho": [
+       5983.895861804779,
+       1269.5892699593014
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 180343.34655802298,
+      "status": "Available",
+      "relative_error_percent": 12.714591598764358,
+      "liquid_vapor_density_mol_m3": [
+       8092.8875698362535,
+       93.61885877737805
+      ],
+      "dP_drho": [
+       5708.823099100078,
+       1252.2858665850806
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 54.49667540602112,
+      "status": "Available",
+      "relative_error_percent": 31.31729013499065,
+      "liquid_vapor_density_mol_m3": [
+       10715.797152840814,
+       0.027428715969543452
+      ],
+      "dP_drho": [
+       17397.633821266696,
+       1676.3253530214633
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 116.76420738591979,
+      "status": "Available",
+      "relative_error_percent": 19.758161421456187,
+      "liquid_vapor_density_mol_m3": [
+       10575.776853302052,
+       0.05832347891962827
+      ],
+      "dP_drho": [
+       16407.3022693864,
+       1659.6890593087196
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 235.82059288242453,
+      "status": "Available",
+      "relative_error_percent": 7.631489220641052,
+      "liquid_vapor_density_mol_m3": [
+       10436.742216129833,
+       0.1171631384766529
+      ],
+      "dP_drho": [
+       15481.378809356886,
+       1640.1064358580259
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 460.3961864321976,
+      "status": "Available",
+      "relative_error_percent": 1.0527187076816436,
+      "liquid_vapor_density_mol_m3": [
+       10294.326455305538,
+       0.22794361500110158
+      ],
+      "dP_drho": [
+       14589.1210994987,
+       1617.6868367764894
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 828.7149400959668,
+      "status": "Available",
+      "relative_error_percent": -5.235570029048963,
+      "liquid_vapor_density_mol_m3": [
+       10159.90760213152,
+       0.4096088852167778
+      ],
+      "dP_drho": [
+       13796.040936923408,
+       1595.0054811505238
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1558.1108162403286,
+      "status": "Available",
+      "relative_error_percent": -6.058675012641457,
+      "liquid_vapor_density_mol_m3": [
+       10004.364266697181,
+       0.7698876298037135
+      ],
+      "dP_drho": [
+       12933.816394767495,
+       1567.658663217055
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2729.3352665614716,
+      "status": "Available",
+      "relative_error_percent": -6.959765925976768,
+      "liquid_vapor_density_mol_m3": [
+       9855.040791576499,
+       1.3500282192849857
+      ],
+      "dP_drho": [
+       12158.00562501422,
+       1540.9329746897233
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 4623.76663603412,
+      "status": "Available",
+      "relative_error_percent": -7.292899528137942,
+      "liquid_vapor_density_mol_m3": [
+       9703.394043252578,
+       2.2919599555447583
+      ],
+      "dP_drho": [
+       11418.070353935123,
+       1513.8442443836655
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 7606.847364323626,
+      "status": "Available",
+      "relative_error_percent": -6.57044677683527,
+      "liquid_vapor_density_mol_m3": [
+       9548.501439430576,
+       3.7820058486739305
+      ],
+      "dP_drho": [
+       10708.114006220756,
+       1486.6227342622315
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 108164.8398918307,
+      "status": "Available",
+      "relative_error_percent": 6.776742242675926,
+      "liquid_vapor_density_mol_m3": [
+       8413.983884289639,
+       55.53688919868919
+      ],
+      "dP_drho": [
+       6602.922576353649,
+       1305.0285637456377
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 102600.93678787148,
+      "status": "Available",
+      "relative_error_percent": 6.875975820699454,
+      "liquid_vapor_density_mol_m3": [
+       8444.370282296384,
+       52.6284541610623
+      ],
+      "dP_drho": [
+       6692.671616926592,
+       1309.8339542498616
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 96592.62462775108,
+      "status": "Available",
+      "relative_error_percent": 6.49682979906403,
+      "liquid_vapor_density_mol_m3": [
+       8478.527347349569,
+       49.49237386957317
+      ],
+      "dP_drho": [
+       6794.673525450129,
+       1315.2086791885947
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 90561.62398217423,
+      "status": "Available",
+      "relative_error_percent": 6.168375125643877,
+      "liquid_vapor_density_mol_m3": [
+       8514.375761940217,
+       46.34942671429495
+      ],
+      "dP_drho": [
+       6903.014316702823,
+       1320.822401341063
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 83631.19327889397,
+      "status": "Available",
+      "relative_error_percent": 4.538991598617459,
+      "liquid_vapor_density_mol_m3": [
+       8557.757870280118,
+       42.74408041296575
+      ],
+      "dP_drho": [
+       7035.916019014645,
+       1327.5842598476966
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 76313.12078029987,
+      "status": "Available",
+      "relative_error_percent": 4.110669550204449,
+      "liquid_vapor_density_mol_m3": [
+       8606.494943696152,
+       38.94466158338302
+      ],
+      "dP_drho": [
+       7187.607688479771,
+       1335.1477638577346
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 71924.50630770574,
+      "status": "Available",
+      "relative_error_percent": 3.78716638918577,
+      "liquid_vapor_density_mol_m3": [
+       8637.382456644174,
+       36.67003826484917
+      ],
+      "dP_drho": [
+       7285.073628464164,
+       1339.927481042135
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 66996.91092077956,
+      "status": "Available",
+      "relative_error_percent": 2.5986384698002407,
+      "liquid_vapor_density_mol_m3": [
+       8673.761305362063,
+       34.11964487266056
+      ],
+      "dP_drho": [
+       7401.213955457924,
+       1345.547418653034
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 62600.08145864209,
+      "status": "Available",
+      "relative_error_percent": 2.1208506666265725,
+      "liquid_vapor_density_mol_m3": [
+       8707.932111389577,
+       31.84727158939449
+      ],
+      "dP_drho": [
+       7511.651889111435,
+       1350.8203712157156
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 58231.58773303061,
+      "status": "Available",
+      "relative_error_percent": 1.6258075620080525,
+      "liquid_vapor_density_mol_m3": [
+       8743.699417870836,
+       29.592751268574084
+      ],
+      "dP_drho": [
+       7628.670024236374,
+       1356.3373832893265
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54338.80117297303,
+      "status": "Available",
+      "relative_error_percent": 1.9489703057655294,
+      "liquid_vapor_density_mol_m3": [
+       8777.305309492103,
+       27.5865373790165
+      ],
+      "dP_drho": [
+       7739.961952620877,
+       1361.5222703136058
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51269.02802976528,
+      "status": "Available",
+      "relative_error_percent": 1.1223432539749112,
+      "liquid_vapor_density_mol_m3": [
+       8805.107757818781,
+       26.006411081083588
+      ],
+      "dP_drho": [
+       7833.034975974452,
+       1365.8150104538458
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48350.76716598676,
+      "status": "Available",
+      "relative_error_percent": 0.7307649291390828,
+      "liquid_vapor_density_mol_m3": [
+       8832.730127928515,
+       24.50591369418215
+      ],
+      "dP_drho": [
+       7926.4148498689465,
+       1370.0847137128196
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44331.74219068405,
+      "status": "Available",
+      "relative_error_percent": 0.7539595242819219,
+      "liquid_vapor_density_mol_m3": [
+       8872.924811029576,
+       22.442156771035812
+      ],
+      "dP_drho": [
+       8063.941340440852,
+       1376.3097446103518
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 39959.14183629996,
+      "status": "Available",
+      "relative_error_percent": -0.1021454092500984,
+      "liquid_vapor_density_mol_m3": [
+       8919.953662492524,
+       20.20061761975151
+      ],
+      "dP_drho": [
+       8227.372920060348,
+       1383.617324767664
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 35967.053392559916,
+      "status": "Available",
+      "relative_error_percent": -0.09151835400023067,
+      "liquid_vapor_density_mol_m3": [
+       8966.4861008128,
+       18.157804519689883
+      ],
+      "dP_drho": [
+       8391.815831037013,
+       1390.8806184350747
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 31404.355651361475,
+      "status": "Available",
+      "relative_error_percent": -1.861388589495394,
+      "liquid_vapor_density_mol_m3": [
+       9024.858847979407,
+       15.827622250181928
+      ],
+      "dP_drho": [
+       8602.05018850061,
+       1400.0491522572172
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 27240.886420491028,
+      "status": "Available",
+      "relative_error_percent": -2.711119926817762,
+      "liquid_vapor_density_mol_m3": [
+       9084.229446696689,
+       13.706018157723449
+      ],
+      "dP_drho": [
+       8820.514306633062,
+       1409.451878978758
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 23167.316376818697,
+      "status": "Available",
+      "relative_error_percent": -3.46951509658876,
+      "liquid_vapor_density_mol_m3": [
+       9149.702405368154,
+       11.635024356286037
+      ],
+      "dP_drho": [
+       9067.02946790328,
+       1419.9258461190468
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 19296.549680782515,
+      "status": "Available",
+      "relative_error_percent": -3.517251596087423,
+      "liquid_vapor_density_mol_m3": [
+       9221.039094930024,
+       9.672071492191453
+      ],
+      "dP_drho": [
+       9342.540964095359,
+       1431.4781489105274
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": null,
+      "status": "CentralSolveUnavailable"
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 11345.29370199353,
+      "status": "Available",
+      "relative_error_percent": -5.455885816720574,
+      "liquid_vapor_density_mol_m3": [
+       9414.5642668694,
+       5.658186452455326
+      ],
+      "dP_drho": [
+       10128.554578411666,
+       1463.640434668629
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 7700.451423193465,
+      "status": "Available",
+      "relative_error_percent": -3.7443572100816835,
+      "liquid_vapor_density_mol_m3": [
+       9544.537276373076,
+       3.828872916213959
+      ],
+      "dP_drho": [
+       10690.516950140624,
+       1485.9344766036643
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": null,
+      "status": "Available"
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": null,
+      "status": "Available"
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": null,
+      "status": "Available"
+     }
+    ],
+    "unavailable": [
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": null,
+      "status": "CentralSolveUnavailable"
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": null,
+      "status": "Available"
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": null,
+      "status": "Available"
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": null,
+      "status": "Available"
+     }
+    ],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 5.040428103203629,
+      "max_abs_percent": 12.714591598764358
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 10.208557417489992,
+      "max_abs_percent": 31.31729013499065
+     },
+     "Pappa2006": {
+      "n": 22,
+      "mean_abs_percent": 3.209512147124055,
+      "max_abs_percent": 6.875975820699454
+     }
+    },
+    "density_errors": [],
+    "calibration_accepted": false
+   },
+   "admissible": false,
+   "delta_cost": 683.5085291378123,
+   "max_pressure_change_percent": 29.380517080756086,
+   "max_density_change_kg_m3": Infinity
+  },
+  "profile-m-2.3276": {
+   "label": "profile-m-2.3276",
+   "fitted": [
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 2.3276,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "inferred_optimizer": [
+    -1.122218380733342,
+    -0.01760156201961479,
+    -2.281921327067689,
+    6.164226316403301
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     1079.378906996549,
+     163.5839404974479,
+     2.9613325113409132,
+     0.6048765371826418
+    ],
+    "right_vectors": [
+     [
+      0.9721127297824274,
+      -0.23208598569549335,
+      -0.03353509887903828,
+      -0.002886690472115548
+     ],
+     [
+      -0.20632607526033955,
+      -0.7781970047133506,
+      -0.5902698323210325,
+      -0.05848502008663611
+     ],
+     [
+      0.10474312123767925,
+      0.5491140290262733,
+      -0.7865480733224455,
+      0.2623829072799342
+     ],
+     [
+      -0.038147998846740964,
+      -0.19753303578250775,
+      0.17832288284912343,
+      0.9631855373763217
+     ]
+    ],
+    "ratio": 0.000560393142076266
+   },
+   "first_jacobian_seconds": 0.013191217003623024,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 1.703009e-11 <= 1.000000e-10",
+   "iterations": 45,
+   "initial_cost": 1764372.6325879302,
+   "cost": 6.896777538142994,
+   "endpoint": {
+    "m": 2.3276,
+    "sigma": 3.9128964634190373,
+    "epsilon": 330.89643618741263,
+    "eps_ab": 3054.6063047230523,
+    "kappa": 0.002035442938934456
+   },
+   "active_bounds": [],
+   "seconds": 0.3052689830074087,
+   "endpoint_jacobian": {
+    "singular_values": [
+     506.0460125947659,
+     229.60099827522046,
+     9.041930743183103,
+     3.818894725511505
+    ],
+    "right_vectors": [
+     [
+      0.9816299372956161,
+      -0.17719098406252193,
+      -0.03778365713177241,
+      -0.059819868151880555
+     ],
+     [
+      -0.16774698697976745,
+      -0.6253546513651195,
+      -0.37546214912122494,
+      -0.6631897789867474
+     ],
+     [
+      0.01571066091022788,
+      0.15939308457609064,
+      -0.9171419345643856,
+      0.36496258929728626
+     ],
+     [
+      -0.08953652717175371,
+      -0.7430536722016009,
+      0.12826239392166472,
+      0.6506944051052084
+     ]
+    ],
+    "ratio": 0.0075465365410746135
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2111.088176465921,
+      "status": "Available",
+      "relative_error_percent": 8.818978168346447,
+      "liquid_vapor_density_mol_m3": [
+       10019.251975859093,
+       0.7315184057453497
+      ],
+      "dP_drho": [
+       112967.48301173959,
+       2882.5229546147784
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3114.5102005999697,
+      "status": "Available",
+      "relative_error_percent": 5.935721108842507,
+      "liquid_vapor_density_mol_m3": [
+       9961.087214333027,
+       1.0589336299877488
+      ],
+      "dP_drho": [
+       110075.62760242629,
+       2936.539395350714
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5141.535845961859,
+      "status": "Available",
+      "relative_error_percent": 4.079672995179329,
+      "liquid_vapor_density_mol_m3": [
+       9880.273606517056,
+       1.7046791581690128
+      ],
+      "dP_drho": [
+       106033.12198150493,
+       3009.1265183381474
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7631.95619127889,
+      "status": "Available",
+      "relative_error_percent": 2.5800563343936878,
+      "liquid_vapor_density_mol_m3": [
+       9811.236440814368,
+       2.47930314365919
+      ],
+      "dP_drho": [
+       102572.71695975703,
+       3068.5470176816348
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 10094.142061117474,
+      "status": "Available",
+      "relative_error_percent": 1.5507249609403972,
+      "liquid_vapor_density_mol_m3": [
+       9759.084652136124,
+       3.2312245014125947
+      ],
+      "dP_drho": [
+       99963.03460551429,
+       3111.6666683355957
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19842.436146714124,
+      "status": "Available",
+      "relative_error_percent": -0.2892655944013889,
+      "liquid_vapor_density_mol_m3": [
+       9619.691776573109,
+       6.123984540437454
+      ],
+      "dP_drho": [
+       93048.14332960114,
+       3218.496037630262
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29650.726456176617,
+      "status": "Available",
+      "relative_error_percent": -0.833690782018004,
+      "liquid_vapor_density_mol_m3": [
+       9526.144595483425,
+       8.950156912866122
+      ],
+      "dP_drho": [
+       88489.29167891698,
+       3282.542788817963
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39455.08706743839,
+      "status": "Available",
+      "relative_error_percent": -1.1150700064200714,
+      "liquid_vapor_density_mol_m3": [
+       9453.749034485016,
+       11.72131081350839
+      ],
+      "dP_drho": [
+       85022.60343098089,
+       3327.495423733149
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49400.9848172845,
+      "status": "Available",
+      "relative_error_percent": -1.0000304262835602,
+      "liquid_vapor_density_mol_m3": [
+       9392.864974391305,
+       14.492602622145368
+      ],
+      "dP_drho": [
+       82155.35910912944,
+       3362.020375292145
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64101.11761395709,
+      "status": "Available",
+      "relative_error_percent": -1.382895978527554,
+      "liquid_vapor_density_mol_m3": [
+       9317.467028137475,
+       18.53350875503872
+      ],
+      "dP_drho": [
+       78672.2463004236,
+       3400.467215792039
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 78960.25083131896,
+      "status": "Available",
+      "relative_error_percent": -1.2996864608513015,
+      "liquid_vapor_density_mol_m3": [
+       9252.937655519154,
+       22.56711818331935
+      ],
+      "dP_drho": [
+       75755.3346408539,
+       3429.482632769405
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 98911.45013580631,
+      "status": "Available",
+      "relative_error_percent": -1.0885498641936886,
+      "liquid_vapor_density_mol_m3": [
+       9178.52506398946,
+       27.92210446284946
+      ],
+      "dP_drho": [
+       72469.77748522977,
+       3458.3957099403183
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 118654.49384448615,
+      "status": "Available",
+      "relative_error_percent": -1.121255129594878,
+      "liquid_vapor_density_mol_m3": [
+       9114.470401243572,
+       33.168385874593916
+      ],
+      "dP_drho": [
+       69711.61079848683,
+       3479.3349523530305
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 138508.11390637056,
+      "status": "Available",
+      "relative_error_percent": -1.0656329240210316,
+      "liquid_vapor_density_mol_m3": [
+       9056.96372189305,
+       38.402891352794626
+      ],
+      "dP_drho": [
+       67292.44399430172,
+       3495.001172287666
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 158599.40926172753,
+      "status": "Available",
+      "relative_error_percent": -0.875369211420296,
+      "liquid_vapor_density_mol_m3": [
+       9004.110603289042,
+       43.66660703332871
+      ],
+      "dP_drho": [
+       65117.686941504246,
+       3506.7827077643865
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 41.248826080056084,
+      "status": "Available",
+      "relative_error_percent": -0.6052383613106449,
+      "liquid_vapor_density_mol_m3": [
+       10465.2920396303,
+       0.01691644242436938
+      ],
+      "dP_drho": [
+       133583.08473356478,
+       2438.224414056104
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 97.56566974583893,
+      "status": "Available",
+      "relative_error_percent": 0.0673535854758267,
+      "liquid_vapor_density_mol_m3": [
+       10383.835932039201,
+       0.03868757602867371
+      ],
+      "dP_drho": [
+       130129.67308444252,
+       2521.5804790553143
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 213.2950626687141,
+      "status": "Available",
+      "relative_error_percent": -2.649446522722909,
+      "liquid_vapor_density_mol_m3": [
+       10303.495835595211,
+       0.08191464121377977
+      ],
+      "dP_drho": [
+       126556.4047144716,
+       2603.317439357341
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 443.78865997280104,
+      "status": "Available",
+      "relative_error_percent": -2.5924802517996004,
+      "liquid_vapor_density_mol_m3": [
+       10221.625971238933,
+       0.16518126768937022
+      ],
+      "dP_drho": [
+       122770.9958237908,
+       2685.703450204005
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 836.1110610134369,
+      "status": "Available",
+      "relative_error_percent": -4.389815778909445,
+      "liquid_vapor_density_mol_m3": [
+       10144.647288106136,
+       0.3025510349019404
+      ],
+      "dP_drho": [
+       119103.85065016315,
+       2761.9339841358055
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1631.9364874946039,
+      "status": "Available",
+      "relative_error_percent": -1.6075914931506174,
+      "liquid_vapor_density_mol_m3": [
+       10055.839413103778,
+       0.5724854895048794
+      ],
+      "dP_drho": [
+       114774.26829319603,
+       2847.8760185329293
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2923.5470556529017,
+      "status": "Available",
+      "relative_error_percent": -0.33928564333043365,
+      "liquid_vapor_density_mol_m3": [
+       9970.804148856381,
+       0.9971119476563566
+      ],
+      "dP_drho": [
+       110560.09068951987,
+       2927.6123139352253
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 5009.119038642293,
+      "status": "Available",
+      "relative_error_percent": 0.4334644339306859,
+      "liquid_vapor_density_mol_m3": [
+       9884.658440154955,
+       1.6629859824451514
+      ],
+      "dP_drho": [
+       106252.86179809934,
+       3005.2682763907696
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8253.588537359308,
+      "status": "Available",
+      "relative_error_percent": 1.3730199385800113,
+      "liquid_vapor_density_mol_m3": [
+       9796.921790085182,
+       2.67027387360467
+      ],
+      "dP_drho": [
+       101855.74637614876,
+       3080.5404268545426
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 100949.55744813096,
+      "status": "Available",
+      "relative_error_percent": -0.34594526344426946,
+      "liquid_vapor_density_mol_m3": [
+       9171.529035451122,
+       28.465882023071508
+      ],
+      "dP_drho": [
+       72165.33021804588,
+       3460.861076948044
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 96295.50032003038,
+      "status": "Available",
+      "relative_error_percent": 0.30781283336498433,
+      "liquid_vapor_density_mol_m3": [
+       9187.651303960018,
+       27.223340716791885
+      ],
+      "dP_drho": [
+       72868.09038778297,
+       3455.1140938264602
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 91228.07231671887,
+      "status": "Available",
+      "relative_error_percent": 0.5822186512887129,
+      "liquid_vapor_density_mol_m3": [
+       9205.82809115089,
+       25.867022538351428
+      ],
+      "dP_drho": [
+       73665.31582551249,
+       3448.3572659439947
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86095.63299696892,
+      "status": "Available",
+      "relative_error_percent": 0.9327467725309679,
+      "liquid_vapor_density_mol_m3": [
+       9224.965102530958,
+       24.48941502240287
+      ],
+      "dP_drho": [
+       74510.21949839825,
+       3440.9265685658215
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80137.441417897,
+      "status": "Available",
+      "relative_error_percent": 0.1718017723712606,
+      "liquid_vapor_density_mol_m3": [
+       9248.204361623875,
+       22.884856645033476
+      ],
+      "dP_drho": [
+       75543.80970270482,
+       3431.467563991993
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 73770.92390611651,
+      "status": "Available",
+      "relative_error_percent": 0.6424609906091616,
+      "liquid_vapor_density_mol_m3": [
+       9274.414536858589,
+       21.16344353707325
+      ],
+      "dP_drho": [
+       76719.3370359252,
+       3420.229056068258
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 69913.37974769274,
+      "status": "Available",
+      "relative_error_percent": 0.885107861028489,
+      "liquid_vapor_density_mol_m3": [
+       9291.079959085655,
+       20.11664350297194
+      ],
+      "dP_drho": [
+       77472.09389325627,
+       3412.7705122806537
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65544.37167836307,
+      "status": "Available",
+      "relative_error_percent": 0.3742292164824912,
+      "liquid_vapor_density_mol_m3": [
+       9310.760998845924,
+       18.927313909911266
+      ],
+      "dP_drho": [
+       78366.2871904023,
+       3403.651147205755
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61610.33761863511,
+      "status": "Available",
+      "relative_error_percent": 0.5062603892905582,
+      "liquid_vapor_density_mol_m3": [
+       9329.298149344257,
+       17.852742120231536
+      ],
+      "dP_drho": [
+       79213.59700918372,
+       3394.7553721959525
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57666.34890664205,
+      "status": "Available",
+      "relative_error_percent": 0.6393523676126556,
+      "liquid_vapor_density_mol_m3": [
+       9348.752505685066,
+       16.77170247995425
+      ],
+      "dP_drho": [
+       80108.03985189609,
+       3385.1018491392733
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54120.41459551487,
+      "status": "Available",
+      "relative_error_percent": 1.539239391209879,
+      "liquid_vapor_density_mol_m3": [
+       9367.077552528843,
+       15.796314000758695
+      ],
+      "dP_drho": [
+       80955.34379062771,
+       3375.713308784829
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51302.10029375083,
+      "status": "Available",
+      "relative_error_percent": 1.1875745438872487,
+      "liquid_vapor_density_mol_m3": [
+       9382.271010918439,
+       15.018567936605379
+      ],
+      "dP_drho": [
+       81661.29929442168,
+       3367.7134464530977
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48603.91993300723,
+      "status": "Available",
+      "relative_error_percent": 1.2581665270984033,
+      "liquid_vapor_density_mol_m3": [
+       9397.39486541855,
+       14.27175304848716
+      ],
+      "dP_drho": [
+       82367.06491975719,
+       3359.5573597201346
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44856.0538767528,
+      "status": "Available",
+      "relative_error_percent": 1.9455769926199906,
+      "liquid_vapor_density_mol_m3": [
+       9419.452126741075,
+       13.230529450873004
+      ],
+      "dP_drho": [
+       83401.70605023175,
+       3347.3200107990124
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40733.637314398125,
+      "status": "Available",
+      "relative_error_percent": 1.8340932859953085,
+      "liquid_vapor_density_mol_m3": [
+       9445.331898584232,
+       12.079578956415588
+      ],
+      "dP_drho": [
+       84623.46872087373,
+       3332.449787963764
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36925.97157908753,
+      "status": "Available",
+      "relative_error_percent": 2.572143275243133,
+      "liquid_vapor_density_mol_m3": [
+       9471.01169568854,
+       11.010658340589918
+      ],
+      "dP_drho": [
+       85843.82824327909,
+       3317.1551644515366
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32518.06964472241,
+      "status": "Available",
+      "relative_error_percent": 1.6189676397575292,
+      "liquid_vapor_density_mol_m3": [
+       9503.323245413289,
+       9.765342131987888
+      ],
+      "dP_drho": [
+       87390.19004663482,
+       3297.160200699638
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28438.762135843048,
+      "status": "Available",
+      "relative_error_percent": 1.5670076280108747,
+      "liquid_vapor_density_mol_m3": [
+       9536.291579805904,
+       8.604263708936971
+      ],
+      "dP_drho": [
+       88979.73974729545,
+       3275.913847841168
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24389.237544669922,
+      "status": "Available",
+      "relative_error_percent": 1.6218231027913532,
+      "liquid_vapor_density_mol_m3": [
+       9572.761781244652,
+       7.442176294852936
+      ],
+      "dP_drho": [
+       90750.97004028996,
+       3251.440748319703
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20481.988529250684,
+      "status": "Available",
+      "relative_error_percent": 2.409942646253427,
+      "liquid_vapor_density_mol_m3": [
+       9612.622227716418,
+       6.310366508625511
+      ],
+      "dP_drho": [
+       92700.89894364224,
+       3223.561107700196
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16524.727523774065,
+      "status": "Available",
+      "relative_error_percent": 3.279547023587903,
+      "liquid_vapor_density_mol_m3": [
+       9659.482813797946,
+       5.151308881177514
+      ],
+      "dP_drho": [
+       95009.78092138292,
+       3189.3289174392607
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12243.546968620534,
+      "status": "Available",
+      "relative_error_percent": 2.029558071837778,
+      "liquid_vapor_density_mol_m3": [
+       9721.313019204697,
+       3.8790939622589056
+      ],
+      "dP_drho": [
+       98078.65663363854,
+       3141.8709249678363
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8354.51122772656,
+      "status": "Available",
+      "relative_error_percent": 4.431390346581998,
+      "liquid_vapor_density_mol_m3": [
+       9794.680238643807,
+       2.701201062345513
+      ],
+      "dP_drho": [
+       101743.51217462478,
+       3082.4078577665377
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 925.82801303977,
+      "status": "Available",
+      "error_kg_m3": -1.171986960230015
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.5892179690311,
+      "status": "Available",
+      "error_kg_m3": -0.010782030968925937
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 911.301218002477,
+      "status": "Available",
+      "error_kg_m3": 1.201218002476935
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 2.2024399963622767,
+      "max_abs_percent": 8.818978168346447
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.561966223245575,
+      "max_abs_percent": 4.389815778909445
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.4209985475173206,
+      "max_abs_percent": 4.431390346581998
+     }
+    },
+    "density_errors": [
+     -1.171986960230015,
+     -0.010782030968925937,
+     1.201218002476935
+    ],
+    "calibration_accepted": false
+   },
+   "admissible": true,
+   "delta_cost": 4.2851991972919325,
+   "max_pressure_change_percent": 2.493823844110832,
+   "max_density_change_kg_m3": 1.1839096247304042
+  },
+  "profile-m-3.1552": {
+   "label": "profile-m-3.1552",
+   "fitted": [
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 3.1552,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "inferred_optimizer": [
+    -1.122218380733342,
+    -0.01760156201961479,
+    -2.281921327067689,
+    6.164226316403301
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     804.9199961581479,
+     198.51871923418534,
+     3.1978190679423895,
+     0.3724486472046341
+    ],
+    "right_vectors": [
+     [
+      0.9712589655866949,
+      -0.23612443667564165,
+      -0.02990807987415892,
+      -0.00260363790032237
+     ],
+     [
+      -0.2220784272865978,
+      -0.853568162280482,
+      -0.4689954632868494,
+      -0.04632299527648767
+     ],
+     [
+      0.08081450551564474,
+      0.4387751547017693,
+      -0.8609648324045605,
+      0.24430500747485084
+     ],
+     [
+      -0.0283938303093686,
+      -0.15212825629109863,
+      0.19464922177389002,
+      0.9685878713369335
+     ]
+    ],
+    "ratio": 0.0004627151132812169
+   },
+   "first_jacobian_seconds": 0.012932997982716188,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 3.328099e-11 <= 1.000000e-10",
+   "iterations": 12,
+   "initial_cost": 273594.3625302684,
+   "cost": 3.636953490767998,
+   "endpoint": {
+    "m": 3.1552,
+    "sigma": 3.5027675085975134,
+    "epsilon": 275.85506533520163,
+    "eps_ab": 2695.592560851167,
+    "kappa": 0.008999300127892768
+   },
+   "active_bounds": [],
+   "seconds": 0.15430112500325777,
+   "endpoint_jacobian": {
+    "singular_values": [
+     568.0932709523255,
+     209.41446549052247,
+     6.433979349336427,
+     1.2129725724292666
+    ],
+    "right_vectors": [
+     [
+      0.9768449096330825,
+      -0.21107014420519724,
+      -0.03292822058402468,
+      -0.011796145061113882
+     ],
+     [
+      -0.20388249214066456,
+      -0.8688772197260884,
+      -0.4188356963386043,
+      -0.1675140767581375
+     ],
+     [
+      0.0518659440114748,
+      0.36335924069533665,
+      -0.888799663409139,
+      0.2744360478816672
+     ],
+     [
+      -0.038934249373093234,
+      -0.26167123163918593,
+      0.18310529780846863,
+      0.946828781075363
+     ]
+    ],
+    "ratio": 0.002135164478177844
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2102.3711786792237,
+      "status": "Available",
+      "relative_error_percent": 8.369648385526984,
+      "liquid_vapor_density_mol_m3": [
+       9998.048701035665,
+       0.7285418495889261
+      ],
+      "dP_drho": [
+       112377.16441447253,
+       2882.1747203167483
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3097.821453601912,
+      "status": "Available",
+      "relative_error_percent": 5.368076653126241,
+      "liquid_vapor_density_mol_m3": [
+       9936.163149651547,
+       1.0533471266897325
+      ],
+      "dP_drho": [
+       109204.60408646528,
+       2936.0503435778837
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5107.777956032643,
+      "status": "Available",
+      "relative_error_percent": 3.3963148994462067,
+      "liquid_vapor_density_mol_m3": [
+       9850.473931522261,
+       1.6936964067160183
+      ],
+      "dP_drho": [
+       104826.18940019095,
+       3008.3808737878508
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7577.647218790837,
+      "status": "Available",
+      "relative_error_percent": 1.850097026758557,
+      "liquid_vapor_density_mol_m3": [
+       9777.52469332117,
+       2.4620734272554645
+      ],
+      "dP_drho": [
+       101125.2957904533,
+       3067.516561253626
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 10021.11006292301,
+      "status": "Available",
+      "relative_error_percent": 0.8159966088833848,
+      "liquid_vapor_density_mol_m3": [
+       9722.560532309672,
+       3.2085115535911757
+      ],
+      "dP_drho": [
+       98360.10503882363,
+       3110.374772204688
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19716.73952412969,
+      "status": "Available",
+      "relative_error_percent": -0.920906913921149,
+      "liquid_vapor_density_mol_m3": [
+       9576.183227393334,
+       6.087291727128372
+      ],
+      "dP_drho": [
+       91126.99188102366,
+       3216.269771674353
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29508.48791276541,
+      "status": "Available",
+      "relative_error_percent": -1.3094049740287272,
+      "liquid_vapor_density_mol_m3": [
+       9478.314952210922,
+       8.911403338725949
+      ],
+      "dP_drho": [
+       86422.17554179767,
+       3279.45372799055
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39331.19311804556,
+      "status": "Available",
+      "relative_error_percent": -1.4255811577805533,
+      "liquid_vapor_density_mol_m3": [
+       9402.734674557196,
+       11.691363785702084
+      ],
+      "dP_drho": [
+       82872.91804265755,
+       3323.5776504880496
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49328.95281146937,
+      "status": "Available",
+      "relative_error_percent": -1.14438314334796,
+      "liquid_vapor_density_mol_m3": [
+       9339.257936419961,
+       14.481642894051264
+      ],
+      "dP_drho": [
+       79953.51036271731,
+       3357.2784473359907
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64162.50766111687,
+      "status": "Available",
+      "relative_error_percent": -1.288449752127896,
+      "liquid_vapor_density_mol_m3": [
+       9260.731852158026,
+       18.56741846124967
+      ],
+      "dP_drho": [
+       76424.1590920662,
+       3394.5194571766524
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 79220.06144883773,
+      "status": "Available",
+      "relative_error_percent": -0.9749231889528365,
+      "liquid_vapor_density_mol_m3": [
+       9193.57602300605,
+       22.66491536555943
+      ],
+      "dP_drho": [
+       73481.07224459045,
+       3422.318013356579
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 99529.7803851244,
+      "status": "Available",
+      "relative_error_percent": -0.47021961487559993,
+      "liquid_vapor_density_mol_m3": [
+       9116.16642825854,
+       28.132243263908606
+      ],
+      "dP_drho": [
+       70177.64321823172,
+       3449.587579195642
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 119723.24656142271,
+      "status": "Available",
+      "relative_error_percent": -0.23062786548107006,
+      "liquid_vapor_density_mol_m3": [
+       9049.538043602983,
+       33.5171090344778
+      ],
+      "dP_drho": [
+       67412.45863000599,
+       3468.881847964794
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 140118.46126797466,
+      "status": "Available",
+      "relative_error_percent": 0.08461519141047535,
+      "liquid_vapor_density_mol_m3": [
+       8989.709839881849,
+       38.9163340311817
+      ],
+      "dP_drho": [
+       64992.1023432217,
+       3482.8711978657457
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 160842.2606859691,
+      "status": "Available",
+      "relative_error_percent": 0.5264129287306796,
+      "liquid_vapor_density_mol_m3": [
+       8934.702575263615,
+       44.370924415679525
+      ],
+      "dP_drho": [
+       62819.54546699435,
+       3492.930896581373
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 41.68068543250514,
+      "status": "Available",
+      "relative_error_percent": 0.43538658434973954,
+      "liquid_vapor_density_mol_m3": [
+       10479.277002432193,
+       0.017093529112231335
+      ],
+      "dP_drho": [
+       136322.5218007208,
+       2438.2306788070023
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 98.33820710333421,
+      "status": "Available",
+      "relative_error_percent": 0.8596995931632989,
+      "liquid_vapor_density_mol_m3": [
+       10390.462415023318,
+       0.03899393805151547
+      ],
+      "dP_drho": [
+       132107.4643879559,
+       2521.576742367874
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 214.3703751668192,
+      "status": "Available",
+      "relative_error_percent": -2.158660352889452,
+      "liquid_vapor_density_mol_m3": [
+       10303.285802532147,
+       0.08232803655450406
+      ],
+      "dP_drho": [
+       127847.18274842112,
+       2603.290352086979
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 444.70044146529057,
+      "status": "Available",
+      "relative_error_percent": -2.392352619558702,
+      "liquid_vapor_density_mol_m3": [
+       10214.868956600927,
+       0.16552288331822804
+      ],
+      "dP_drho": [
+       123431.25039492658,
+       2685.630617882542
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 835.6241901083256,
+      "status": "Available",
+      "relative_error_percent": -4.445489981895301,
+      "liquid_vapor_density_mol_m3": [
+       10132.110540924588,
+       0.30238279423080994
+      ],
+      "dP_drho": [
+       119236.95880395359,
+       2761.788987059982
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1626.6945140458256,
+      "status": "Available",
+      "relative_error_percent": -1.9236395727827316,
+      "liquid_vapor_density_mol_m3": [
+       10037.071844258717,
+       0.5706742406998322
+      ],
+      "dP_drho": [
+       114378.02782954856,
+       2847.600051659369
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2908.4223862541453,
+      "status": "Available",
+      "relative_error_percent": -0.8548700782633256,
+      "liquid_vapor_density_mol_m3": [
+       9946.489024300543,
+       0.9920319273830726
+      ],
+      "dP_drho": [
+       109733.6332667786,
+       2927.149162815459
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 4976.481276280492,
+      "status": "Available",
+      "relative_error_percent": -0.22092679136858084,
+      "liquid_vapor_density_mol_m3": [
+       9855.114896218785,
+       1.6523509815354587
+      ],
+      "dP_drho": [
+       105062.60866395109,
+       3004.538566306329
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8194.377115546064,
+      "status": "Available",
+      "relative_error_percent": 0.6457677116370242,
+      "liquid_vapor_density_mol_m3": [
+       9762.426296252599,
+       2.651589342580546
+      ],
+      "dP_drho": [
+       100363.48203745726,
+       3079.442412997051
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 101610.11842064731,
+      "status": "Available",
+      "relative_error_percent": 0.3061386186054449,
+      "liquid_vapor_density_mol_m3": [
+       9108.889400334789,
+       28.689105823721444
+      ],
+      "dP_drho": [
+       69872.09004443062,
+       3451.884084794779
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 96861.11084222308,
+      "status": "Available",
+      "relative_error_percent": 0.8969904606490386,
+      "liquid_vapor_density_mol_m3": [
+       9125.659315409152,
+       27.417109915521333
+      ],
+      "dP_drho": [
+       70577.53579780659,
+       3446.522405618854
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 91696.37145515053,
+      "status": "Available",
+      "relative_error_percent": 1.0985352316984942,
+      "liquid_vapor_density_mol_m3": [
+       9144.56684608781,
+       26.030461838283504
+      ],
+      "dP_drho": [
+       71378.3893750993,
+       3440.183961973318
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86471.96834055704,
+      "status": "Available",
+      "relative_error_percent": 1.3739370932673411,
+      "liquid_vapor_density_mol_m3": [
+       9164.474295987024,
+       24.624028725838176
+      ],
+      "dP_drho": [
+       72227.84548786383,
+       3433.175916700089
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80415.55239801158,
+      "status": "Available",
+      "relative_error_percent": 0.5194404975144895,
+      "liquid_vapor_density_mol_m3": [
+       9188.651351823928,
+       22.988461672005805
+      ],
+      "dP_drho": [
+       73268.04722253933,
+       3424.206369571965
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 73954.50321933927,
+      "status": "Available",
+      "relative_error_percent": 0.8929102583073334,
+      "liquid_vapor_density_mol_m3": [
+       9215.92316351301,
+       21.236920285132648
+      ],
+      "dP_drho": [
+       74452.56958894723,
+       3413.4897569484665
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 70045.06555264663,
+      "status": "Available",
+      "relative_error_percent": 1.075130667599744,
+      "liquid_vapor_density_mol_m3": [
+       9233.26635314536,
+       20.173422105480476
+      ],
+      "dP_drho": [
+       75211.95591223924,
+       3406.3470619128198
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65622.31802409474,
+      "status": "Available",
+      "relative_error_percent": 0.4935957489965448,
+      "liquid_vapor_density_mol_m3": [
+       9253.751077699973,
+       18.966640819294682
+      ],
+      "dP_drho": [
+       76114.95015242301,
+       3397.5852697219425
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61644.57362186863,
+      "status": "Available",
+      "relative_error_percent": 0.5621103129993976,
+      "liquid_vapor_density_mol_m3": [
+       9273.048910294308,
+       17.87771636343581
+      ],
+      "dP_drho": [
+       76971.56638103307,
+       3389.0115021030097
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57661.31980156944,
+      "status": "Available",
+      "relative_error_percent": 0.6305755699292259,
+      "liquid_vapor_density_mol_m3": [
+       9293.30596710846,
+       16.78361837798953
+      ],
+      "dP_drho": [
+       77876.8984476569,
+       3379.681034295489
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54084.06665254938,
+      "status": "Available",
+      "relative_error_percent": 1.4710443762652625,
+      "liquid_vapor_density_mol_m3": [
+       9312.391690206707,
+       15.79765754373538
+      ],
+      "dP_drho": [
+       78735.56843608836,
+       3370.583336872726
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51243.607643179115,
+      "status": "Available",
+      "relative_error_percent": 1.0722044244164008,
+      "liquid_vapor_density_mol_m3": [
+       9328.219520079425,
+       15.01231751005325
+      ],
+      "dP_drho": [
+       79451.80423384377,
+       3362.8150429812713
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48526.55062181069,
+      "status": "Available",
+      "relative_error_percent": 1.0969804621056012,
+      "liquid_vapor_density_mol_m3": [
+       9343.978429472674,
+       14.258919399131342
+      ],
+      "dP_drho": [
+       80168.60884667234,
+       3354.881112435726
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44756.31332283444,
+      "status": "Available",
+      "relative_error_percent": 1.7188939155328153,
+      "liquid_vapor_density_mol_m3": [
+       9366.968820263644,
+       13.209694659497686
+      ],
+      "dP_drho": [
+       81220.8589763669,
+       3342.953331209112
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40614.58299067196,
+      "status": "Available",
+      "relative_error_percent": 1.5364574766798977,
+      "liquid_vapor_density_mol_m3": [
+       9393.954873286317,
+       12.051525086296351
+      ],
+      "dP_drho": [
+       82465.69218853241,
+       3328.4253839635153
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36794.13875114147,
+      "status": "Available",
+      "relative_error_percent": 2.2059409753929726,
+      "liquid_vapor_density_mol_m3": [
+       9420.74578933469,
+       10.97746057836609
+      ],
+      "dP_drho": [
+       83711.67794536235,
+       3313.449124942959
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32377.692810236127,
+      "status": "Available",
+      "relative_error_percent": 1.1802900319878962,
+      "liquid_vapor_density_mol_m3": [
+       9454.476237523177,
+       9.728089991301747
+      ],
+      "dP_drho": [
+       85294.42145241168,
+       3293.826324873551
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28296.630474813912,
+      "status": "Available",
+      "relative_error_percent": 1.0593945529068227,
+      "liquid_vapor_density_mol_m3": [
+       9488.918588762761,
+       8.565152779748693
+      ],
+      "dP_drho": [
+       86926.18831683349,
+       3272.9290568429005
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24251.387299179132,
+      "status": "Available",
+      "relative_error_percent": 1.0474470799130442,
+      "liquid_vapor_density_mol_m3": [
+       9527.053362992074,
+       7.40310186704646
+      ],
+      "dP_drho": [
+       88750.58093572271,
+       3248.8085501506866
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20354.10600933641,
+      "status": "Available",
+      "relative_error_percent": 1.7705300466820617,
+      "liquid_vapor_density_mol_m3": [
+       9568.777870972697,
+       6.273184627650718
+      ],
+      "dP_drho": [
+       90766.99108277351,
+       3221.276949053127
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16412.894884386264,
+      "status": "Available",
+      "relative_error_percent": 2.5805930274141575,
+      "liquid_vapor_density_mol_m3": [
+       9617.895457045697,
+       5.117985250230277
+      ],
+      "dP_drho": [
+       93166.16328376142,
+       3187.40824191393
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12155.837889159724,
+      "status": "Available",
+      "relative_error_percent": 1.2986490763310377,
+      "liquid_vapor_density_mol_m3": [
+       9682.82341554217,
+       3.8522291190997
+      ],
+      "dP_drho": [
+       96376.15336706134,
+       3140.361867442274
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8294.51441632771,
+      "status": "Available",
+      "relative_error_percent": 3.68143020409637,
+      "liquid_vapor_density_mol_m3": [
+       9760.062838897986,
+       2.6822847080659544
+      ],
+      "dP_drho": [
+       100244.37618861209,
+       3081.298984229729
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 926.4303433318677,
+      "status": "Available",
+      "error_kg_m3": -0.5696566681323247
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.5751778223263,
+      "status": "Available",
+      "error_kg_m3": -0.024822177673740953
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 910.7041794068986,
+      "status": "Available",
+      "error_kg_m3": 0.6041794068985382
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 1.878377220293221,
+      "max_abs_percent": 8.369648385526984
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.5485325873231284,
+      "max_abs_percent": 4.445489981895301
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.285618265621365,
+      "max_abs_percent": 3.68143020409637
+     }
+    },
+    "density_errors": [
+     -0.5696566681323247,
+     -0.024822177673740953,
+     0.6041794068985382
+    ],
+    "calibration_accepted": true
+   },
+   "admissible": true,
+   "delta_cost": 1.0253751499169366,
+   "max_pressure_change_percent": 1.1149292625888485,
+   "max_density_change_kg_m3": 0.5860172965382162
+  },
+  "profile-m-4.0776": {
+   "label": "profile-m-4.0776",
+   "fitted": [
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 4.0776,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "inferred_optimizer": [
+    -1.122218380733342,
+    -0.01760156201961479,
+    -2.281921327067689,
+    6.164226316403301
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     629.1276954318232,
+     242.635031253269,
+     3.944300212179156,
+     0.33500867439996473
+    ],
+    "right_vectors": [
+     [
+      0.9673938167471694,
+      -0.2513112937919418,
+      -0.03136900272633559,
+      -0.0027968911168955767
+     ],
+     [
+      -0.2447009042842801,
+      -0.8953037868113023,
+      -0.3704324749716306,
+      -0.03650175680964847
+     ],
+     [
+      0.06308739743976735,
+      0.3554910117235689,
+      -0.9173749279052397,
+      0.1675391372751039
+     ],
+     [
+      -0.017048491020519724,
+      -0.09433929996410044,
+      0.1421935610539496,
+      0.9851854833639212
+     ]
+    ],
+    "ratio": 0.0005324971016734848
+   },
+   "first_jacobian_seconds": 0.01282084800186567,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 1.113292e-12 <= 1.000000e-10",
+   "iterations": 4,
+   "initial_cost": 3.0415359895627097,
+   "cost": 2.611580851960468,
+   "endpoint": {
+    "m": 4.0776,
+    "sigma": 3.1866230422474664,
+    "epsilon": 237.01418745300037,
+    "eps_ab": 2384.687118862682,
+    "kappa": 0.03669206162504078
+   },
+   "active_bounds": [],
+   "seconds": 0.1268625759985298,
+   "endpoint_jacobian": {
+    "singular_values": [
+     629.4359479455154,
+     242.6166814316137,
+     3.940271951535228,
+     0.33445312200011634
+    ],
+    "right_vectors": [
+     [
+      0.9673891503876161,
+      -0.25133022757405293,
+      -0.03136176206095628,
+      -0.0027907526464072564
+     ],
+     [
+      -0.2447125017065289,
+      -0.8952824406840297,
+      -0.3704828456800659,
+      -0.0364363001439417
+     ],
+     [
+      0.063116158111893,
+      0.3555499430560969,
+      -0.9173588132466569,
+      0.1674914813854325
+     ],
+     [
+      -0.01704035815507831,
+      -0.0942693274783892,
+      0.14216788911677053,
+      0.9851960268874417
+     ]
+    ],
+    "ratio": 0.0005313537034098137
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2094.374999327265,
+      "status": "Available",
+      "relative_error_percent": 7.9574741921270675,
+      "liquid_vapor_density_mol_m3": [
+       9975.767115406454,
+       0.7258611393085627
+      ],
+      "dP_drho": [
+       109905.11262754002,
+       2881.4579154442245
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3082.892589337549,
+      "status": "Available",
+      "relative_error_percent": 4.860292154338408,
+      "liquid_vapor_density_mol_m3": [
+       9909.540497940714,
+       1.0484452201664622
+      ],
+      "dP_drho": [
+       106488.1635382576,
+       2935.0735077225713
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5078.263552550736,
+      "status": "Available",
+      "relative_error_percent": 2.7988573390837157,
+      "liquid_vapor_density_mol_m3": [
+       9817.931133385084,
+       1.684315089326609
+      ],
+      "dP_drho": [
+       101820.46941748103,
+       3006.931596919633
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7530.808500871518,
+      "status": "Available",
+      "relative_error_percent": 1.220544366552656,
+      "liquid_vapor_density_mol_m3": [
+       9740.024263991641,
+       2.447641196862291
+      ],
+      "dP_drho": [
+       97915.21724383802,
+       3065.5437662726986
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 9958.613139758563,
+      "status": "Available",
+      "relative_error_percent": 0.18725492714852798,
+      "liquid_vapor_density_mol_m3": [
+       9681.373241711737,
+       3.189757406579672
+      ],
+      "dP_drho": [
+       95019.59060591838,
+       3107.922445386374
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19610.453978198533,
+      "status": "Available",
+      "relative_error_percent": -1.4550051346807424,
+      "liquid_vapor_density_mol_m3": [
+       9525.364920679935,
+       6.0583779181340605
+      ],
+      "dP_drho": [
+       87526.93789338958,
+       3212.119033730362
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29388.121343155963,
+      "status": "Available",
+      "relative_error_percent": -1.7119687519867477,
+      "liquid_vapor_density_mol_m3": [
+       9421.189397891925,
+       8.882733323269024
+      ],
+      "dP_drho": [
+       82710.18751617172,
+       3273.7654224216094
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39225.06173380228,
+      "status": "Available",
+      "relative_error_percent": -1.6915746019993017,
+      "liquid_vapor_density_mol_m3": [
+       9340.795778246,
+       11.672293870491357
+      ],
+      "dP_drho": [
+       79102.77676312848,
+       3316.444549401714
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49264.16279442641,
+      "status": "Available",
+      "relative_error_percent": -1.274222856860896,
+      "liquid_vapor_density_mol_m3": [
+       9273.30650307691,
+       14.480955458611994
+      ],
+      "dP_drho": [
+       76150.99246599193,
+       3348.7395965122832
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64204.771612988865,
+      "status": "Available",
+      "relative_error_percent": -1.2234282877094382,
+      "liquid_vapor_density_mol_m3": [
+       9189.843343556078,
+       18.60839222166353
+      ],
+      "dP_drho": [
+       72599.58682987027,
+       3383.976321355235
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 79422.13724946776,
+      "status": "Available",
+      "relative_error_percent": -0.7223284381652983,
+      "liquid_vapor_density_mol_m3": [
+       9118.478853320372,
+       22.76407381601462
+      ],
+      "dP_drho": [
+       69651.23843901728,
+       3409.8094266876474
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 100021.61949495798,
+      "status": "Available",
+      "relative_error_percent": 0.021619494957980656,
+      "liquid_vapor_density_mol_m3": [
+       9036.220831174687,
+       28.3327621723288
+      ],
+      "dP_drho": [
+       66354.84847224278,
+       3434.503761225141
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 120580.44761983617,
+      "status": "Available",
+      "relative_error_percent": 0.4837063498634775,
+      "liquid_vapor_density_mol_m3": [
+       8965.41113221677,
+       33.842162646291015
+      ],
+      "dP_drho": [
+       63605.15612269904,
+       3451.298795055881
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 141416.53509805154,
+      "status": "Available",
+      "relative_error_percent": 1.011810784322531,
+      "liquid_vapor_density_mol_m3": [
+       8901.813738024273,
+       39.38929181976928
+      ],
+      "dP_drho": [
+       61204.9067975336,
+       3462.8090533902136
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 162657.02995141596,
+      "status": "Available",
+      "relative_error_percent": 1.6606437196349688,
+      "liquid_vapor_density_mol_m3": [
+       8843.322633932117,
+       45.01542323406113
+      ],
+      "dP_drho": [
+       59055.17923130684,
+       3470.3851117264867
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 42.121411841212485,
+      "status": "Available",
+      "relative_error_percent": 1.497377930632493,
+      "liquid_vapor_density_mol_m3": [
+       10492.395247209508,
+       0.0172743487769435
+      ],
+      "dP_drho": [
+       136885.68943431028,
+       2438.2095620044065
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 99.08135341081447,
+      "status": "Available",
+      "relative_error_percent": 1.6219009341686963,
+      "liquid_vapor_density_mol_m3": [
+       10396.863986588532,
+       0.039289009297191785
+      ],
+      "dP_drho": [
+       131955.18084594095,
+       2521.526388466328
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 215.34664864889996,
+      "status": "Available",
+      "relative_error_percent": -1.713076837562777,
+      "liquid_vapor_density_mol_m3": [
+       10303.163461965698,
+       0.08270462188237566
+      ],
+      "dP_drho": [
+       127060.40062294001,
+       2603.1863729858305
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 445.444253262276,
+      "status": "Available",
+      "relative_error_percent": -2.229092787033371,
+      "liquid_vapor_density_mol_m3": [
+       10208.210027223115,
+       0.16580584001224996
+      ],
+      "dP_drho": [
+       122071.0043361253,
+       2685.432965669641
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 835.010813835046,
+      "status": "Available",
+      "relative_error_percent": -4.51563020754191,
+      "liquid_vapor_density_mol_m3": [
+       10119.416110558148,
+       0.30217927712135473
+      ],
+      "dP_drho": [
+       117403.79072191272,
+       2761.4518396573367
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1621.7686131412038,
+      "status": "Available",
+      "relative_error_percent": -2.220631065886658,
+      "liquid_vapor_density_mol_m3": [
+       10017.555501489911,
+       0.5690043548792325
+      ],
+      "dP_drho": [
+       112076.15649837896,
+       2847.0172742791337
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2894.845081858152,
+      "status": "Available",
+      "relative_error_percent": -1.3177064306067243,
+      "liquid_vapor_density_mol_m3": [
+       9920.586891984789,
+       0.9875575102717971
+      ],
+      "dP_drho": [
+       107055.845378053,
+       2926.220087610648
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 4947.917087966894,
+      "status": "Available",
+      "relative_error_percent": -0.7936423465284448,
+      "liquid_vapor_density_mol_m3": [
+       9822.89004095104,
+       1.6432547875584398
+      ],
+      "dP_drho": [
+       102071.15761862452,
+       3003.1186037760044
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8143.429388679373,
+      "status": "Available",
+      "relative_error_percent": 0.02001263454485258,
+      "liquid_vapor_density_mol_m3": [
+       9723.909029056607,
+       2.635999803735419
+      ],
+      "dP_drho": [
+       97115.62814575233,
+       3077.34558959055
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 102136.15617297865,
+      "status": "Available",
+      "relative_error_percent": 0.8254256396630355,
+      "liquid_vapor_density_mol_m3": [
+       9028.487687982499,
+       28.90139648716532
+      ],
+      "dP_drho": [
+       66050.5935820322,
+       3436.5403237305713
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 97310.27543184622,
+      "status": "Available",
+      "relative_error_percent": 1.3648702415064884,
+      "liquid_vapor_density_mol_m3": [
+       9046.308578824535,
+       27.602895449943944
+      ],
+      "dP_drho": [
+       66753.20251482126,
+       3431.772981759212
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 92066.8218246006,
+      "status": "Available",
+      "relative_error_percent": 1.506970038148392,
+      "liquid_vapor_density_mol_m3": [
+       9066.400549119842,
+       26.188924633285406
+      ],
+      "dP_drho": [
+       67551.53107605151,
+       3426.0848676111755
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86768.10078447341,
+      "status": "Available",
+      "relative_error_percent": 1.7211029126300348,
+      "liquid_vapor_density_mol_m3": [
+       9087.554729160507,
+       24.756484742378753
+      ],
+      "dP_drho": [
+       68399.13719586014,
+       3419.739259206999
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80632.39116306366,
+      "status": "Available",
+      "relative_error_percent": 0.7904889538295823,
+      "liquid_vapor_density_mol_m3": [
+       9113.245775409154,
+       23.092880557471076
+      ],
+      "dP_drho": [
+       69438.26728082635,
+       3411.544052628934
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 74095.12177686505,
+      "status": "Available",
+      "relative_error_percent": 1.0847500366508278,
+      "liquid_vapor_density_mol_m3": [
+       9142.225722901325,
+       21.314009198041525
+      ],
+      "dP_drho": [
+       70623.2198951176,
+       3401.6620435893115
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 70143.88735446215,
+      "status": "Available",
+      "relative_error_percent": 1.2177306702195523,
+      "liquid_vapor_density_mol_m3": [
+       9160.655647451478,
+       20.235309139661084
+      ],
+      "dP_drho": [
+       71383.83419696942,
+       3395.029143277302
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65677.89562101928,
+      "status": "Available",
+      "relative_error_percent": 0.5787069234598485,
+      "liquid_vapor_density_mol_m3": [
+       9182.424680718077,
+       19.01258060494228
+      ],
+      "dP_drho": [
+       72289.28387239626,
+       3386.8489450135
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61665.01259982747,
+      "status": "Available",
+      "relative_error_percent": 0.5954528545309312,
+      "liquid_vapor_density_mol_m3": [
+       9202.933346102638,
+       17.910478341368123
+      ],
+      "dP_drho": [
+       73149.25297732034,
+       3378.8031123723085
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57650.22718489129,
+      "status": "Available",
+      "relative_error_percent": 0.6112167275589719,
+      "liquid_vapor_density_mol_m3": [
+       9224.462639634661,
+       16.804321793231374
+      ],
+      "dP_drho": [
+       74059.23915181935,
+       3370.006422559312
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54047.85315220513,
+      "status": "Available",
+      "relative_error_percent": 1.4031015988839268,
+      "liquid_vapor_density_mol_m3": [
+       9244.748392197587,
+       15.808529391412323
+      ],
+      "dP_drho": [
+       74923.40368807515,
+       3361.392922719297
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51189.653054349874,
+      "status": "Available",
+      "relative_error_percent": 0.9657851170608911,
+      "liquid_vapor_density_mol_m3": [
+       9261.572556439556,
+       15.01607363421493
+      ],
+      "dP_drho": [
+       75645.04545943295,
+       3354.012680130573
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48457.49221159848,
+      "status": "Available",
+      "relative_error_percent": 0.9531087741635025,
+      "liquid_vapor_density_mol_m3": [
+       9278.324616295455,
+       14.256455569284665
+      ],
+      "dP_drho": [
+       76368.02521294403,
+       3346.453186806491
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44669.38908152242,
+      "status": "Available",
+      "relative_error_percent": 1.521338821641871,
+      "liquid_vapor_density_mol_m3": [
+       9302.766192456967,
+       13.19957580384906
+      ],
+      "dP_drho": [
+       77430.75720767339,
+       3335.0507713540105
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40512.28831727137,
+      "status": "Available",
+      "relative_error_percent": 1.2807207931784248,
+      "liquid_vapor_density_mol_m3": [
+       9331.459529829714,
+       12.034347164067416
+      ],
+      "dP_drho": [
+       78690.22526870732,
+       3321.108681631607
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36681.73986236138,
+      "status": "Available",
+      "relative_error_percent": 1.8937218398927147,
+      "liquid_vapor_density_mol_m3": [
+       9359.95003937451,
+       10.95507280916521
+      ],
+      "dP_drho": [
+       79953.35959889009,
+       3306.6821424184154
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32258.652827760165,
+      "status": "Available",
+      "relative_error_percent": 0.8082900867505183,
+      "liquid_vapor_density_mol_m3": [
+       9395.827701469498,
+       9.701304324713867
+      ],
+      "dP_drho": [
+       81561.61919336868,
+       3287.7078910792884
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28176.42791103141,
+      "status": "Available",
+      "relative_error_percent": 0.6300996822550253,
+      "liquid_vapor_density_mol_m3": [
+       9432.47202271177,
+       8.53592479914932
+      ],
+      "dP_drho": [
+       83224.22976127168,
+       3267.424789617685
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24134.920384605608,
+      "status": "Available",
+      "relative_error_percent": 0.5621682691900443,
+      "liquid_vapor_density_mol_m3": [
+       9473.057148467584,
+       7.373069472033479
+      ],
+      "dP_drho": [
+       85088.78827702568,
+       3243.9302930095264
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20245.99877115428,
+      "status": "Available",
+      "relative_error_percent": 1.2299938557714052,
+      "liquid_vapor_density_mol_m3": [
+       9517.478950103561,
+       6.243979970285886
+      ],
+      "dP_drho": [
+       87156.87871690735,
+       3217.0220261911495
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16318.13470468479,
+      "status": "Available",
+      "relative_error_percent": 1.9883419042799444,
+      "liquid_vapor_density_mol_m3": [
+       9569.79559627781,
+       5.091304891776919
+      ],
+      "dP_drho": [
+       89628.00252339471,
+       3183.809670994087
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12081.118014671076,
+      "status": "Available",
+      "relative_error_percent": 0.6759834555922994,
+      "liquid_vapor_density_mol_m3": [
+       9638.995558351291,
+       3.830285241009987
+      ],
+      "dP_drho": [
+       92953.09689051173,
+       3137.5123451651484
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8242.909075272684,
+      "status": "Available",
+      "relative_error_percent": 3.0363634409085627,
+      "liquid_vapor_density_mol_m3": [
+       9721.386680993362,
+       2.666511432821143
+      ],
+      "dP_drho": [
+       96990.74450405399,
+       3079.1822302715523
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 927.0128773384849,
+      "status": "Available",
+      "error_kg_m3": 0.012877338484940992
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.569963069449,
+      "status": "Available",
+      "error_kg_m3": -0.03003693055097756
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 910.1171933441196,
+      "status": "Available",
+      "error_kg_m3": 0.017193344119618814
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 1.8853820932954506,
+      "max_abs_percent": 7.9574741921270675
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.7698967971673254,
+      "max_abs_percent": 4.51563020754191
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.1845970712072518,
+      "max_abs_percent": 3.0363634409085627
+     }
+    },
+    "density_errors": [
+     0.012877338484940992,
+     -0.03003693055097756,
+     0.017193344119618814
+    ],
+    "calibration_accepted": true
+   },
+   "admissible": true,
+   "delta_cost": 2.5111094066332385e-06,
+   "max_pressure_change_percent": 0.0007824068470885237,
+   "max_density_change_kg_m3": 0.0009687662407031894
+  },
+  "profile-m-5.0": {
+   "label": "profile-m-5.0",
+   "fitted": [
+    "sigma",
+    "epsilon",
+    "eps_ab",
+    "kappa"
+   ],
+   "start": {
+    "m": 5.0,
+    "sigma": 3.1870454048166645,
+    "epsilon": 237.05992189901926,
+    "eps_ab": 2385.1893364661555,
+    "kappa": 0.036621131582016506
+   },
+   "inferred_optimizer": [
+    -1.122218380733342,
+    -0.01760156201961479,
+    -2.281921327067689,
+    6.164226316403301
+   ],
+   "start_jacobian": {
+    "singular_values": [
+     518.4468061619639,
+     288.984256304008,
+     4.709042470229027,
+     0.3097846917508294
+    ],
+    "right_vectors": [
+     [
+      0.9545209438459187,
+      -0.29525896726802836,
+      -0.041200896959834,
+      -0.0037942188944958782
+     ],
+     [
+      -0.2936791187896593,
+      -0.9072037120445926,
+      -0.29977266729744256,
+      -0.029501660645089484
+     ],
+     [
+      0.050217822911731,
+      0.29307956130689017,
+      -0.94762098258786,
+      0.11660623639147671
+     ],
+     [
+      -0.010977850811156282,
+      -0.0625135012976416,
+      0.10224141719626194,
+      0.9927327140558921
+     ]
+    ],
+    "ratio": 0.000597524544599185
+   },
+   "first_jacobian_seconds": 0.012784197984728962,
+   "status": "converged",
+   "usable": true,
+   "message": "Function tolerance reached. |cost_change|/cost: 2.577694e-11 <= 1.000000e-10",
+   "iterations": 5,
+   "initial_cost": 117085.7111691846,
+   "cost": 4.996475235248464,
+   "endpoint": {
+    "m": 5.0,
+    "sigma": 2.9694351777612797,
+    "epsilon": 230.06099879167624,
+    "eps_ab": 1820.3521383102875,
+    "kappa": 0.05
+   },
+   "active_bounds": [
+    "kappa"
+   ],
+   "seconds": 0.13026447198353708,
+   "endpoint_jacobian": {
+    "singular_values": [
+     677.4999832607555,
+     278.3476754982432,
+     7.211613281821889,
+     0.13701276746832539
+    ],
+    "right_vectors": [
+     [
+      0.9627454041423877,
+      -0.26684284079776205,
+      -0.043684597422659836,
+      -0.002800190298984679
+     ],
+     [
+      -0.26921132503641854,
+      -0.9306180122735263,
+      -0.24731501161243907,
+      -0.01762562723269573
+     ],
+     [
+      -0.025325066368605622,
+      -0.24973652699668714,
+      0.9679405024112144,
+      -0.009027285803828429
+     ],
+     [
+      -0.0022782204176972918,
+      -0.019408261918169193,
+      0.004257319706647154,
+      0.9997999821514099
+     ]
+    ],
+    "ratio": 0.0002022328721085622
+   },
+   "assessment": {
+    "rows": [
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 347.5,
+      "observed": 1940.0,
+      "predicted": 2116.897822240923,
+      "status": "Available",
+      "relative_error_percent": 9.118444445408391,
+      "liquid_vapor_density_mol_m3": [
+       9944.54766294209,
+       0.7335429473686192
+      ],
+      "dP_drho": [
+       122170.04472444729,
+       2882.433254250639
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 354.3,
+      "observed": 2940.0,
+      "predicted": 3120.840151938031,
+      "status": "Available",
+      "relative_error_percent": 6.151025576123503,
+      "liquid_vapor_density_mol_m3": [
+       9872.01594039666,
+       1.0611597833120854
+      ],
+      "dP_drho": [
+       117931.42768469578,
+       2936.1301088810815
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.6,
+      "observed": 4940.0,
+      "predicted": 5144.989123265747,
+      "status": "Available",
+      "relative_error_percent": 4.149577394043469,
+      "liquid_vapor_density_mol_m3": [
+       9771.75928329575,
+       1.7061403506113875
+      ],
+      "dP_drho": [
+       112180.1345673829,
+       3008.010959323346
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 371.4,
+      "observed": 7440.0,
+      "predicted": 7627.649655290809,
+      "status": "Available",
+      "relative_error_percent": 2.5221727861667986,
+      "liquid_vapor_density_mol_m3": [
+       9686.593663559785,
+       2.4787225460605398
+      ],
+      "dP_drho": [
+       107404.28479339286,
+       3066.5204333513916
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 377.2,
+      "observed": 9940.0,
+      "predicted": 10079.7727607813,
+      "status": "Available",
+      "relative_error_percent": 1.4061645953852953,
+      "liquid_vapor_density_mol_m3": [
+       9622.550204303303,
+       3.2281516317525893
+      ],
+      "dP_drho": [
+       103885.0782168501,
+       3108.7224652991276
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 392.3,
+      "observed": 19900.0,
+      "predicted": 19783.740388327926,
+      "status": "Available",
+      "relative_error_percent": -0.5842191541310271,
+      "liquid_vapor_density_mol_m3": [
+       9452.567191912132,
+       6.112133404534977
+      ],
+      "dP_drho": [
+       94868.73315367613,
+       3211.8958596555867
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 402.1,
+      "observed": 29900.0,
+      "predicted": 29558.466538498342,
+      "status": "Available",
+      "relative_error_percent": -1.1422523796042028,
+      "liquid_vapor_density_mol_m3": [
+       9339.407534117243,
+       8.93624576597017
+      ],
+      "dP_drho": [
+       89142.97610535438,
+       3272.296976877936
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 409.5,
+      "observed": 39900.0,
+      "predicted": 39350.04167029133,
+      "status": "Available",
+      "relative_error_percent": -1.3783416784678537,
+      "liquid_vapor_density_mol_m3": [
+       9252.29386830691,
+       11.714458115224032
+      ],
+      "dP_drho": [
+       84891.7921145056,
+       3313.649851274429
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 415.6,
+      "observed": 49900.0,
+      "predicted": 49307.9492348382,
+      "status": "Available",
+      "relative_error_percent": -1.1864744792821735,
+      "liquid_vapor_density_mol_m3": [
+       9179.315170687958,
+       14.502931334947426
+      ],
+      "dP_drho": [
+       81437.10596244398,
+       3344.5636712958535
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 423.0,
+      "observed": 65000.0,
+      "predicted": 64075.09717856037,
+      "status": "Available",
+      "relative_error_percent": -1.4229274175994289,
+      "liquid_vapor_density_mol_m3": [
+       9089.262677769488,
+       18.588061364058486
+      ],
+      "dP_drho": [
+       77309.33833414083,
+       3377.7358017461916
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 429.2,
+      "observed": 80000.0,
+      "predicted": 79063.15637133164,
+      "status": "Available",
+      "relative_error_percent": -1.1710545358354474,
+      "liquid_vapor_density_mol_m3": [
+       9012.443549417816,
+       22.689074298095974
+      ],
+      "dP_drho": [
+       73906.4340336679,
+       3401.481519229977
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 436.2,
+      "observed": 100000.0,
+      "predicted": 99284.22600872461,
+      "status": "Available",
+      "relative_error_percent": -0.7157739912753924,
+      "liquid_vapor_density_mol_m3": [
+       8924.10739801003,
+       28.169750952844918
+      ],
+      "dP_drho": [
+       70127.62175099728,
+       3423.3973254808243
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 442.1,
+      "observed": 120000.0,
+      "predicted": 119401.88297139302,
+      "status": "Available",
+      "relative_error_percent": -0.4984308571724827,
+      "liquid_vapor_density_mol_m3": [
+       8848.24661282275,
+       33.57909947451887
+      ],
+      "dP_drho": [
+       66996.36811145274,
+       3437.4835653912905
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 447.3,
+      "observed": 140000.0,
+      "predicted": 139737.64925264055,
+      "status": "Available",
+      "relative_error_percent": -0.1873933909710357,
+      "liquid_vapor_density_mol_m3": [
+       8780.255891459128,
+       39.01532898976028
+      ],
+      "dP_drho": [
+       64278.545015197735,
+       3446.316883334084
+      ]
+     },
+     {
+      "campaign": "Klepacova2011",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 452.0,
+      "observed": 160000.0,
+      "predicted": 160421.79672071873,
+      "status": "Available",
+      "relative_error_percent": 0.263622950449216,
+      "liquid_vapor_density_mol_m3": [
+       8717.843683089543,
+       44.52074379158941
+      ],
+      "dP_drho": [
+       61856.6332162119,
+       3451.234105372726
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 293.29,
+      "observed": 41.5,
+      "predicted": 40.1849314354333,
+      "status": "Available",
+      "relative_error_percent": -3.1688399146185597,
+      "liquid_vapor_density_mol_m3": [
+       10509.879848970293,
+       0.016479681883390343
+      ],
+      "dP_drho": [
+       156332.76825341387,
+       2438.357466787356
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 303.35,
+      "observed": 97.5,
+      "predicted": 96.32789387074355,
+      "status": "Available",
+      "relative_error_percent": -1.2021601325707176,
+      "liquid_vapor_density_mol_m3": [
+       10405.608227938297,
+       0.03819532653848899
+      ],
+      "dP_drho": [
+       150015.30171540537,
+       2521.770085545381
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 313.24,
+      "observed": 219.1,
+      "predicted": 212.36350282951167,
+      "status": "Available",
+      "relative_error_percent": -3.074622168182717,
+      "liquid_vapor_density_mol_m3": [
+       10303.159609781378,
+       0.08155309413700874
+      ],
+      "dP_drho": [
+       143770.6531438602,
+       2603.55924730088
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 323.25,
+      "observed": 455.6,
+      "predicted": 444.0026411342284,
+      "status": "Available",
+      "relative_error_percent": -2.5455133594757817,
+      "liquid_vapor_density_mol_m3": [
+       10199.213386012454,
+       0.1652527062091223
+      ],
+      "dP_drho": [
+       137438.61886472095,
+       2685.9702337207164
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 332.57,
+      "observed": 874.5,
+      "predicted": 838.2729818236919,
+      "status": "Available",
+      "relative_error_percent": -4.142597847490914,
+      "liquid_vapor_density_mol_m3": [
+       10101.94059618262,
+       0.3033207803725252
+      ],
+      "dP_drho": [
+       131550.4038313773,
+       2762.1627106364813
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 343.18,
+      "observed": 1658.6,
+      "predicted": 1636.836257075939,
+      "status": "Available",
+      "relative_error_percent": -1.312175504887303,
+      "liquid_vapor_density_mol_m3": [
+       9990.329260807219,
+       0.574199534230181
+      ],
+      "dP_drho": [
+       124875.1024820557,
+       2847.9237347740773
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 353.17,
+      "observed": 2933.5,
+      "predicted": 2929.90182594003,
+      "status": "Available",
+      "relative_error_percent": -0.12265805556400666,
+      "liquid_vapor_density_mol_m3": [
+       9884.111445667453,
+       0.9993384192350336
+      ],
+      "dP_drho": [
+       118633.98970189819,
+       2927.2661572758675
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 363.1,
+      "observed": 4987.5,
+      "predicted": 5012.87815696051,
+      "status": "Available",
+      "relative_error_percent": 0.5088352272784036,
+      "liquid_vapor_density_mol_m3": [
+       9777.18347952665,
+       1.6645297644685804
+      ],
+      "dP_drho": [
+       112487.84560211189,
+       3004.2002239213475
+      ]
+     },
+     {
+      "campaign": "Belabbaci2010",
+      "role": "calibration",
+      "kind": "pressure",
+      "T_K": 373.0,
+      "observed": 8141.8,
+      "predicted": 8246.902922896483,
+      "status": "Available",
+      "relative_error_percent": 1.2909052408126342,
+      "liquid_vapor_density_mol_m3": [
+       9668.990119092363,
+       2.6690886316506934
+      ],
+      "dP_drho": [
+       106430.61046523938,
+       3078.2831359054517
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 436.85,
+      "observed": 101300.0,
+      "predicted": 101356.09122954104,
+      "status": "Available",
+      "relative_error_percent": 0.05537140132383378,
+      "liquid_vapor_density_mol_m3": [
+       8915.8144545413,
+       28.72859966036123
+      ],
+      "dP_drho": [
+       69780.21360769794,
+       3425.15222471631
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 435.35,
+      "observed": 96000.0,
+      "predicted": 96626.61928574018,
+      "status": "Available",
+      "relative_error_percent": 0.6527284226460095,
+      "liquid_vapor_density_mol_m3": [
+       8934.928401586943,
+       27.452244152924592
+      ],
+      "dP_drho": [
+       70582.82648541594,
+       3421.028709280227
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 433.65,
+      "observed": 90700.0,
+      "predicted": 91483.86162449252,
+      "status": "Available",
+      "relative_error_percent": 0.8642355286576864,
+      "liquid_vapor_density_mol_m3": [
+       8956.49094206413,
+       26.06154955701961
+      ],
+      "dP_drho": [
+       71496.28610462362,
+       3416.0441286040264
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 431.85,
+      "observed": 85300.0,
+      "predicted": 86282.36950189214,
+      "status": "Available",
+      "relative_error_percent": 1.1516641288301877,
+      "liquid_vapor_density_mol_m3": [
+       8979.207987339896,
+       24.65173754212274
+      ],
+      "dP_drho": [
+       72467.87966098863,
+       3410.413569938228
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 429.65,
+      "observed": 80000.0,
+      "predicted": 80253.19968209916,
+      "status": "Available",
+      "relative_error_percent": 0.31649960262394305,
+      "liquid_vapor_density_mol_m3": [
+       9006.81709304146,
+       23.013117473621314
+      ],
+      "dP_drho": [
+       73661.47148608729,
+       3403.0512664715898
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 427.15,
+      "observed": 73300.0,
+      "predicted": 73821.78662547805,
+      "status": "Available",
+      "relative_error_percent": 0.7118507850996547,
+      "liquid_vapor_density_mol_m3": [
+       9037.986883817493,
+       21.259288373843987
+      ],
+      "dP_drho": [
+       75025.86430500726,
+       3394.0620173177094
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 425.55,
+      "observed": 69300.0,
+      "predicted": 69930.43588058274,
+      "status": "Available",
+      "relative_error_percent": 0.9097198854007837,
+      "liquid_vapor_density_mol_m3": [
+       9057.82385196706,
+       20.194862396278552
+      ],
+      "dP_drho": [
+       75903.51338546386,
+       3387.971108465845
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 423.65,
+      "observed": 65300.0,
+      "predicted": 65528.166315370145,
+      "status": "Available",
+      "relative_error_percent": 0.3494124278256461,
+      "liquid_vapor_density_mol_m3": [
+       9081.269205555378,
+       18.987417745826836
+      ],
+      "dP_drho": [
+       76950.17092933352,
+       3380.405370753003
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 421.85,
+      "observed": 61300.0,
+      "predicted": 61568.74585290514,
+      "status": "Available",
+      "relative_error_percent": 0.43841085302631644,
+      "liquid_vapor_density_mol_m3": [
+       9103.371281439708,
+       17.898221482275858
+      ],
+      "dP_drho": [
+       77946.15284479092,
+       3372.913033734246
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 419.95,
+      "observed": 57300.0,
+      "predicted": 57603.63462446656,
+      "status": "Available",
+      "relative_error_percent": 0.5299033585803858,
+      "liquid_vapor_density_mol_m3": [
+       9126.587955976402,
+       16.804131365835357
+      ],
+      "dP_drho": [
+       79002.07356993917,
+       3364.6710341846215
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 418.15,
+      "observed": 53300.0,
+      "predicted": 54042.391297438924,
+      "status": "Available",
+      "relative_error_percent": 1.3928542165833502,
+      "liquid_vapor_density_mol_m3": [
+       9148.477285644072,
+       15.818390340529582
+      ],
+      "dP_drho": [
+       80006.73608177423,
+       3356.555663390268
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 416.65,
+      "observed": 50700.0,
+      "predicted": 51214.37947705495,
+      "status": "Available",
+      "relative_error_percent": 1.0145551815679443,
+      "liquid_vapor_density_mol_m3": [
+       9166.641374363426,
+       15.033349897349256
+      ],
+      "dP_drho": [
+       80847.12923198659,
+       3349.5706438892357
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 415.15,
+      "observed": 48000.0,
+      "predicted": 48508.94839083386,
+      "status": "Available",
+      "relative_error_percent": 1.0603091475705373,
+      "liquid_vapor_density_mol_m3": [
+       9184.736547476536,
+       14.280326633397262
+      ],
+      "dP_drho": [
+       81690.37936017314,
+       3342.3886878723533
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 412.95,
+      "observed": 44000.0,
+      "predicted": 44754.27478393038,
+      "status": "Available",
+      "relative_error_percent": 1.714260872569029,
+      "liquid_vapor_density_mol_m3": [
+       9211.153606949918,
+       13.231735770622533
+      ],
+      "dP_drho": [
+       82932.25680991643,
+       3331.508784177049
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 410.35,
+      "observed": 40000.0,
+      "predicted": 40628.67874409832,
+      "status": "Available",
+      "relative_error_percent": 1.571696860245786,
+      "liquid_vapor_density_mol_m3": [
+       9242.189822014056,
+       12.074362546426489
+      ],
+      "dP_drho": [
+       84407.65720264756,
+       3318.137840587952
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 407.75,
+      "observed": 36000.0,
+      "predicted": 36821.98127321725,
+      "status": "Available",
+      "relative_error_percent": 2.283281314492358,
+      "liquid_vapor_density_mol_m3": [
+       9273.03166558138,
+       11.00106113354828
+      ],
+      "dP_drho": [
+       85891.28796873713,
+       3304.23413884835
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 404.45,
+      "observed": 32000.0,
+      "predicted": 32419.697408199732,
+      "status": "Available",
+      "relative_error_percent": 1.3115544006241597,
+      "liquid_vapor_density_mol_m3": [
+       9311.905148517582,
+       9.752505921845827
+      ],
+      "dP_drho": [
+       87785.97220452294,
+       3285.857163431027
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 401.05,
+      "observed": 28000.0,
+      "predicted": 28349.636885177468,
+      "status": "Available",
+      "relative_error_percent": 1.248703161348108,
+      "liquid_vapor_density_mol_m3": [
+       9351.648490924246,
+       8.590136723764612
+      ],
+      "dP_drho": [
+       89751.34726721924,
+       3266.1160563088965
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 397.25,
+      "observed": 24000.0,
+      "predicted": 24312.789098609504,
+      "status": "Available",
+      "relative_error_percent": 1.30328791087293,
+      "liquid_vapor_density_mol_m3": [
+       9395.710823933183,
+       7.428319899154956
+      ],
+      "dP_drho": [
+       91963.45178961358,
+       3243.1449757437263
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 393.05,
+      "observed": 20000.0,
+      "predicted": 20420.604843635923,
+      "status": "Available",
+      "relative_error_percent": 2.1030242181796055,
+      "liquid_vapor_density_mol_m3": [
+       9443.9907709512,
+       6.298132602487001
+      ],
+      "dP_drho": [
+       94426.85423676454,
+       3216.721871157398
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 388.05,
+      "observed": 16000.0,
+      "predicted": 16480.73254923885,
+      "status": "Available",
+      "relative_error_percent": 3.0045784327428215,
+      "liquid_vapor_density_mol_m3": [
+       9500.918057749841,
+       5.141911226570012
+      ],
+      "dP_drho": [
+       97383.75486406761,
+       3183.9714026599413
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 381.35,
+      "observed": 12000.0,
+      "predicted": 12219.46321565788,
+      "status": "Available",
+      "relative_error_percent": 1.8288601304823349,
+      "liquid_vapor_density_mol_m3": [
+       9576.320362383916,
+       3.8737747870501047
+      ],
+      "dP_drho": [
+       101385.25664823987,
+       3138.1207550713243
+      ]
+     },
+     {
+      "campaign": "Pappa2006",
+      "role": "held-out",
+      "kind": "pressure",
+      "T_K": 373.25,
+      "observed": 8000.0,
+      "predicted": 8347.42725043868,
+      "status": "Available",
+      "relative_error_percent": 4.342840630483513,
+      "liquid_vapor_density_mol_m3": [
+       9666.23526477754,
+       2.699915524831672
+      ],
+      "dP_drho": [
+       106278.66701103775,
+       3080.1130344889903
+      ]
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 303.15,
+      "observed": 927.0,
+      "predicted": 927.7998531954183,
+      "status": "Available",
+      "error_kg_m3": 0.7998531954183363
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 313.15,
+      "observed": 918.6,
+      "predicted": 918.5686429933297,
+      "status": "Available",
+      "error_kg_m3": -0.031357006670305054
+     },
+     {
+      "campaign": "Ayad2023",
+      "role": "calibration",
+      "kind": "density",
+      "T_K": 323.15,
+      "observed": 910.1,
+      "predicted": 909.3151726959359,
+      "status": "Available",
+      "error_kg_m3": -0.7848273040641516
+     }
+    ],
+    "unavailable": [],
+    "campaigns": {
+     "Klepacova2011": {
+      "n": 15,
+      "mean_abs_percent": 2.1265250421277146,
+      "max_abs_percent": 9.118444445408391
+     },
+     "Belabbaci2010": {
+      "n": 9,
+      "mean_abs_percent": 1.9298119389867816,
+      "max_abs_percent": 4.142597847490914
+     },
+     "Pappa2006": {
+      "n": 23,
+      "mean_abs_percent": 1.3112870813816055,
+      "max_abs_percent": 4.342840630483513
+     }
+    },
+    "density_errors": [
+     0.7998531954183363,
+     -0.031357006670305054,
+     -0.7848273040641516
+    ],
+    "calibration_accepted": true
+   },
+   "admissible": false,
+   "delta_cost": 2.3848968943974023,
+   "max_pressure_change_percent": 4.596983774965146,
+   "max_density_change_kg_m3": 0.8029894144244736
+  }
+ },
+ "anchor": "five-second",
+ "profile": [
+  {
+   "m": 1.5,
+   "admissible": false,
+   "cost": 686.1201074786634,
+   "delta_cost": 683.5085291378123,
+   "max_pressure_change_percent": 29.380517080756086,
+   "max_density_change_kg_m3": Infinity,
+   "active_bounds": [
+    "sigma",
+    "epsilon"
+   ]
+  },
+  {
+   "m": 2.3276,
+   "admissible": true,
+   "cost": 6.896777538142994,
+   "delta_cost": 4.2851991972919325,
+   "max_pressure_change_percent": 2.493823844110832,
+   "max_density_change_kg_m3": 1.1839096247304042,
+   "active_bounds": []
+  },
+  {
+   "m": 3.1552,
+   "admissible": true,
+   "cost": 3.636953490767998,
+   "delta_cost": 1.0253751499169366,
+   "max_pressure_change_percent": 1.1149292625888485,
+   "max_density_change_kg_m3": 0.5860172965382162,
+   "active_bounds": []
+  },
+  {
+   "m": 4.0776,
+   "admissible": true,
+   "cost": 2.611580851960468,
+   "delta_cost": 2.5111094066332385e-06,
+   "max_pressure_change_percent": 0.0007824068470885237,
+   "max_density_change_kg_m3": 0.0009687662407031894,
+   "active_bounds": []
+  },
+  {
+   "m": 5.0,
+   "admissible": false,
+   "cost": 4.996475235248464,
+   "delta_cost": 2.3848968943974023,
+   "max_pressure_change_percent": 4.596983774965146,
+   "max_density_change_kg_m3": 0.8029894144244736,
+   "active_bounds": [
+    "kappa"
+   ]
+  }
+ ],
+ "profile_flat": false,
+ "disposition": "profile not flat and m not identified (one-sided, incomplete or equivalent-cost endpoints); return to owner",
+ "wall_seconds": 1.9577642579970416
+}
