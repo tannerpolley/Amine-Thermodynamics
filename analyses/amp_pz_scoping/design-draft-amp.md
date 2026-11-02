@@ -4,7 +4,7 @@ Design for [#241](https://github.com/tannerpolley/Amine-Thermodynamics/issues/24
 2 November 2026; parent [#220](https://github.com/tannerpolley/Amine-Thermodynamics/issues/220).
 This replaces the superseded preparation statements in the earlier #227/#229
 draft. The source notes retain their dated findings. **Accepted design (owner decisions D1–D8 taken 2026-11-02). Numerical Build
-waits for #235's delivered qualification (D7) and is not authorized by this
+waits for #235's delivered check (D7, amended 2026-11-02) and is not authorized by this
 document alone.** No fitted reactive AMP result is reported;
 §3 records the measured-data pre-fit design and the published-set comparison.
 
@@ -572,7 +572,19 @@ is conditional on fixed ion/Born/dielectric/source-law choices.
 
 ## 7. Fitting path, numerical checks and dependency
 
-**AMP joint-fitting Build must wait for #235's successful delivered check.**
+**Owner amendment (2026-11-02): #235 is delivered and AMP Build may proceed.**
+#235 (merged `c7b4b98`) ended as "different endpoint": from a true perturbed
+start (native initial cost within 5.3e-14) the fit converged usably, matched
+attempt 1's cost to 6.8e-9 with the same six active bounds and replayed to
+4.1e-14, but its eight interior coordinates differed by up to 0.0499 scales
+(limit 1e-5), 96 % on the three weakest directions (condition 1.85e4). The
+independent review found this consistent with function-tolerance stopping in
+weak directions but could not exclude a fitting-path defect. AMP relies on the
+supported parts, not on coordinate recovery; its own calibration rank gate
+(condition ≤1e4), two starts per variant and m profile carry the identifiability
+risk. The text below records the original dependency.
+
+*Original:* AMP joint-fitting Build must wait for #235's successful delivered check.
 Preparation of published input tables may proceed separately under approved
 source authority. #233's 213-row fixed replay alone does not qualify fitting.
 The #235 review comment on 2 November identified two distinct problems:
@@ -689,7 +701,7 @@ the §3 observation roles, bounds, scales and acceptance limits:
 | D4 — decided 2026-11-02: Source preparation and data roles | Estimate Hamborg coefficients from Table 16, fit/freeze Hsieh dielectric after binary pre-fit using its hash-bound fixed liquid-density record, 1% relative scale, admissibility and both-branch Hsieh-only selection; Hartono 2013 binary and 2021 Table-7 first-three-isotherm calibration; reserve Kundu; Pappa/Tong comparisons (§4) |
 | D5 — decided 2026-11-02: Falsifier and residual policy | Kundu 51-row E_p≤30%; no missing rows; 5% pressure floor, group-normalized objective; NMR RMS≤0.006 calibration check (§5) |
 | D6 — decided 2026-11-02: Coordinates and selection | Eight joint coordinates, two fixed starts, calibration-only rank gate 1e4; rank failure stops for Design, no smaller fallback; CO2 column norms reported only, no dominance stop; calibration-first A/B selection (§6) |
-| D7 — decided 2026-11-02: Fitting-path dependency | Wait for delivered #235 qualification on the merged #962 wheel; no duplicate driver repair (§7) |
+| D7 — decided 2026-11-02, amended 2026-11-02: Fitting-path dependency | #235 delivered (merged `c7b4b98`, disposition "different endpoint"); AMP relies on what it showed — honoured start, usable convergence, fitted-law replay, destination-bound transport fix — not on coordinate recovery; AMP's own rank gate, two starts and m profile carry identifiability; no duplicate driver repair (§7) |
 | D8 — decided 2026-11-02: Limits and exclusions | 360 executable +40 numerical-check lines; 12 h computation including 4 h pure preparation; pressure/speciation only (§8) |
 
 Readiness: three independent reviews (GPT-6 Astra) on `a805048` (Block),
