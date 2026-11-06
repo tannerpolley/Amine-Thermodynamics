@@ -1,0 +1,61 @@
+{
+  "basis_commit": "fd8097f",
+  "retained_summary": "analyses/mea_parameter_bundle/results/kim2007-heat-pathways-245/summary.json",
+  "finite_interval_rows": [
+    {
+      "T_K": "313.15",
+      "selection": "source_consistent",
+      "n": 27,
+      "RMSE_kJ_per_mol_CO2": "4.820",
+      "AARD_percent": "4.199",
+      "source": "temperatures.313.15.metrics.semi_differential.source_consistent"
+    },
+    {
+      "T_K": "353.15",
+      "selection": "source_consistent",
+      "n": 26,
+      "RMSE_kJ_per_mol_CO2": "7.232",
+      "AARD_percent": "6.573",
+      "source": "temperatures.353.15.metrics.semi_differential.source_consistent"
+    },
+    {
+      "T_K": "393.15",
+      "selection": "source_consistent",
+      "n": 18,
+      "RMSE_kJ_per_mol_CO2": "24.997",
+      "AARD_percent": "18.076",
+      "source": "temperatures.393.15.metrics.semi_differential.source_consistent"
+    },
+    {
+      "T_K": "393.15",
+      "selection": "all_printed",
+      "n": 20,
+      "RMSE_kJ_per_mol_CO2": "29.120",
+      "AARD_percent": "55.627",
+      "source": "temperatures.393.15.metrics.semi_differential.all_printed"
+    },
+    {
+      "T_K": "393.15",
+      "selection": "without_first120",
+      "n": 16,
+      "RMSE_kJ_per_mol_CO2": "15.463",
+      "AARD_percent": "15.503",
+      "source": "temperatures.393.15.metrics.semi_differential.without_first120"
+    }
+  ],
+  "other_numbers": {
+    "30 wt% / 1.734 MPa / loading <= 0.60": "calorimetry/index.qmd:17 and Basis, inputs and source definitions",
+    "0.078 / 0.445": "calorimetry/index.qmd: Printed inconsistencies and sensitivity",
+    "313 / 353 K, run 1/2, other three pairs": "summary.json:run_pairs",
+    "2.2%": "calorimetry/index.qmd: Run-pair temperature ordering",
+    "0.558": "summary.json:limiting_differential_crossings[0].linear_zero",
+    "notebook 4.82 / 7.23 / 24.997 / 29.12, n=27/26/18/20": "same retained semi_differential entries as table"
+  },
+  "checks": {
+    "numeric_rounding": "pass",
+    "run_pair_outcome": "pass",
+    "notebook_corrections": "pass",
+    "retained_summary_and_figure_unchanged": "pass",
+    "prose": "pass"
+  }
+}
