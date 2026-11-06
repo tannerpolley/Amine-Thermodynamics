@@ -93,3 +93,30 @@ not fitted.** The study continues with cation A only (`reactive.py` keeps B's
 preflight record and fits A from both starts). A is the result by default, not
 by a calibration-cost comparison with B; nothing here shows that B would fail
 from another start or after fitting.
+
+## #243 initialized-B correction and outcome (2026-11-06)
+
+The reviewed #243 design attempts to correct the original start-state failure
+with calibration-only restricted fits, with cation–CO2 k fixed at zero before
+the full information gate. Both fitted sets, both slopes and both starts were
+run. All eight initialization fits converge near cost 2636.317; none yields
+a full start passing s_min/s_max ≥1e−4. Values, matrices and histories are in
+`results/redesign/*-initial.json` and `summary.json`.
+
+For set 1 the resulting ratios are about 1.55e−11 (fixed slope) and 3.05e−12
+(fitted slope); for set 2 they are about 1.58e−19. Column-normalized ratios
+are 0.004–0.005, distinguishing weak sensitivity on the physical coordinate
+scales from exact algebraic singularity. Tiny column normalization would
+change the declared information check, not create physical information.
+
+`results/redesign/probe-cation-b.json` probes both fixed-slope initialized
+sets at four retained calibration states, using the #242 finite ±0.05 k
+probe. At high loading, modeled vapor CO2 fractions are 5.6e−7–2.8e−6 and
+free liquid AMP is of order 1e−14 mole fraction. Total pressures are only
+25.5–173 kPa against 609–733 kPa measured. Liquid/vapor packing classification
+is preserved among the solved roots; branch multiplicity remains unavailable.
+These states explain the weak CO2/carbamate sensitivity after initialization.
+They do not establish which frozen molecular assumption is responsible, a
+physical impossibility of cation B, or global phase stability. No full B fit
+is claimed. The correction attempt and alternative interactions did not
+produce an admissible full start within this declared design.
