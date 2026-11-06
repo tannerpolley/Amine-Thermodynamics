@@ -1,0 +1,26 @@
+{
+  "errors": {
+    "discovery_observation": "a regression observation needs declared phases",
+    "stability_kind": "unknown observation kind stability; expected one of equilibrium_isobaric_heat_capacity, phase_density, pressure, temperature, mole_fraction, phase_fraction, partial_pressure, amount_ratio"
+  },
+  "locators": [
+    "regression.py:483-553 (declared phases required, unknown kind refused)",
+    "regression.py:718-790 (fit arguments)",
+    "_core.pyi:3774-3836 (ObservationKind)",
+    "_core.pyi:4704-4815 (CheckMetric, CheckGroup)"
+  ],
+  "observation_kinds": [
+    "equilibrium_isobaric_heat_capacity",
+    "phase_density",
+    "pressure",
+    "temperature",
+    "mole_fraction",
+    "phase_fraction",
+    "partial_pressure",
+    "amount_ratio"
+  ],
+  "sources": {
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/.venv/lib/python3.13/site-packages/epcsaft/_core.pyi": "bc24606498274ed5878d78b6b01c4fbf1ef5d24fd00394894b2d55a139c87184",
+    "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/.venv/lib/python3.13/site-packages/epcsaft/regression.py": "0be33177fe14a92baa82086b30ddbe2a760d30455fc26a4e725dc3c7827f15c1"
+  }
+}
