@@ -1,22 +1,20 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-01
-One explicit-ion ePC-SAFT formulation was fitted jointly to selected equilibrium, caloric and density observations for nominal 30 wt\% MEA, with property-dependent agreement.
-The formulation includes carbamate ions and their formation reaction and calculates all five target properties, including loaded density without volume translation.
-Pressure AARD is 11.86\,\% over 47 fitted observations at 313.00--\SI{333.15}{\kelvin} and 20.55\,\% over the 159-pressure comparison extending to \SI{393.15}{\kelvin}; pressures above \SI{333.15}{\kelvin} were not fitted.
-The 159-pressure deviation lies within the range reported for related models on different data sets.
-Bicarbonate and carbonate fractions, the \SI{0.51}{\mega\pascal} Arcis heats, the unloaded heat capacity at \SI{318.15}{\kelvin} and loaded densities at 373.15--\SI{393.15}{\kelvin} remain discrepant.
-At 15 and 45 wt\% MEA the pressure deviations rise to 29.5 and 56.0\,\%, so the parameters do not transfer across solvent concentration.
-The available comparisons do not yet establish the model's suitability across absorber and stripper temperatures.
+Joint estimation enables one ePC-SAFT formulation to calculate equilibrium, caloric and density properties of loaded aqueous MEA from a common Helmholtz energy and reaction standard states.
+For nominal 30 wt\% MEA, pressure AARD is 11.86\,\% for 47 fitted and 24.2\,\% for 112 non-fitted pressures (20.55\,\% overall), the 94 fitted species fractions give 7.10\,\%, integral-heat RMSE is \SI{1.84}{\kilo\joule\per\mole} \COtwo at \SI{313.15}{\kelvin}, and loaded-density AARD is 0.18\,\% over 47 fitted values through \SI{353.15}{\kelvin}, without volume translation.
 
 % P:conclusion-02
-The phase comparison shows that similar property agreement can accompany additional calculated liquids.
-Narrowing two parameter bounds removes the detected instabilities at the specified states, at a small fitting-cost increase and with three of the 47 fitted loaded densities outside $2s$.
-This result covers 162 searched states at six temperatures between 313.15 and \SI{393.15}{\kelvin} and loadings $10^{-5}$--0.6.
-The wider-bound fit has detected instabilities at 54 of these states, while the reported parameters have none; this finite search is not a global-stability certificate or physical validation.
-Further work must address concentration dependence and bicarbonate and carbonate speciation, alongside the independent phase-behavior comparisons and broader caloric tests needed before process use.
+Similar property agreement can conceal an additional calculated liquid: the wider-bound fit gives detected instability at 54 states, while the final parameter set has no additional liquid detected at the 162 searched states from 313.15 to \SI{393.15}{\kelvin} and loadings $10^{-5}$--0.6.
+Restricting two bounds increases fitting cost by 0.45\,\% and leaves three fitted densities outside $2s$.
+
+% P:conclusion-limits
+Six parameters are on bounds, four of the remaining ten have standard errors larger than their absolute values, and the R5 shift of 0.49 p$K$ lies within its conditional standard error of 0.55 p$K$; these results are consistent with compensation rather than unique physical parameters.
+The comparisons constrain nominal 30 wt\% MEA at property-specific conditions: fitted pressures and species end near \SI{333}{\kelvin}, fitted densities at \SI{353.15}{\kelvin}, and absorption heat is compared only at 313.15 and \SI{322.5}{\kelvin}.
+Bicarbonate and carbonate fractions, the \SI{0.51}{\mega\pascal} Arcis heats, unloaded heat capacity at \SI{318.15}{\kelvin} and higher-temperature densities remain discrepant; R4 and R5 are extrapolated above their \SI{323.15}{\kelvin} source limit.
+Pressure deviations rise to 29.5 and 56.0\,\% at 15 and 45 wt\% MEA, respectively.
+All comparison data were accessed during development, the parameter errors are conditional, and the phase search supplies numerical evidence at specified states rather than physical validation.
+Broader caloric and phase-behavior comparisons and improved concentration and minor-species descriptions are needed before process use.
 
 % P:conclusion-03
-The MDEA demonstration extends the workflow beyond MEA while keeping the shared-species parameters fixed and fitting nine MDEA-specific coordinates.
-The charged-molecule cation fit passes the pre-registered outside-fit pressure test at 19.15\,\%, whereas the single-sphere fit fails at 26.21\,\% against 24.2\,\%; their different active bounds prevent assigning the difference solely to representation.
-This conditional result does not establish universal shared-ion parameters or absorber suitability, and it does not resolve the MEA concentration dependence.
-Further transfer studies should test both cation conventions and assess additional amines and mixtures within their own data and phase constraints.
+The MDEA fits reverse their pressure-error ranking between Ermatchkov (26.21 versus 19.15\,\%) and Xiao (20.40 versus 28.28\,\%), in single-sphere/charged-molecule order, despite retaining the shared-species parameters.
+With different active bounds, these comparisons do not identify a generally preferable cation representation.

@@ -1,5 +1,9 @@
 % Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
 % Reported parameter SHA256: 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91; Engine wheel SHA256: 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/declaration.json SHA256 86111af51bace3d696b9963cb84a4ac811cdb962f5d851b2c90237d72e7df53b
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/endpoint.json SHA256 3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/declaration.json SHA256 b98bacbcbce32c8b508683d7ca53f66881039a1d509f393e5dd2fd2d6690b644
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/endpoint.json SHA256 1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/limits.json SHA256 5adb3c08282621bc33f0fd0e1c59a865f9c31d4149506df85948acef06fcdc41
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/parameters.csv SHA256 0de35d543269c5b90665e09dadb1dc70e92e2506f4bbbdf225cdb24f02ad5996
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/adoption.json SHA256 52ed2b189b169f5ccf5182bfb58fd31c55698c861d0c1fbe25eb1a19e1a26b52
@@ -39,27 +43,21 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 8e89377066e7bbeb4153a18995da5199f7a375152ffeb067dc706982bdfe84db
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 e3103d71b7bbc9e8151b5a7c244c334f0d740f8c3c48c5a38b9d0250446793bb
-% Input: docs/scientific/latex/supplement.tex SHA256 00a895a80a9fdb416f9ad53fc50753fb51e1935adcdf0339f2fe8db0265992c2
-\begin{table}[pos=!htbp]\footnotesize\setlength{\tabcolsep}{3pt}\centering
-\caption{Model complexity, data roles and reported deviations in related MEA studies. Parameter counts describe the estimation stages named in each row and are not totals for complete model construction; the present count covers the joint fit and excludes the separate water, \COtwo--water and dielectric fits. Relative pressure deviations and caloric metrics use each source's own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.}\label{tab:literature-model-comparison}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.1400\linewidth}>{\raggedright\arraybackslash}p{0.2100\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}>{\raggedright\arraybackslash}p{0.2300\linewidth}>{\raggedright\arraybackslash}p{0.1800\linewidth}@{}}
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 2df4e7bbbb570f34bec85ec406e83738bf82b258d76a210cdaefc8cecbae89d3
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 58b1cf3e25528ee77ea23749359ccc2401b8d1bebd4640072c04f8fb248cc437
+% Input: docs/scientific/latex/supplement.tex SHA256 232f60c197cd091fa46410c61d61237d0a8f4c7f3fe6987dcf401fbd30ccfa68
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Selected MEA comparisons. Pressure AARDs use different data and fitting roles; they do not rank common-data accuracy. Hong et al. use eNRTL reference pressures with a fitted weight at each state. Full data roles and additional models are in Table~\ref{supp-tab:supplement-literature-comparison}.}\label{tab:literature-model-comparison}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.2400\linewidth}>{\raggedright\arraybackslash}p{0.2200\linewidth}>{\raggedright\arraybackslash}p{0.5000\linewidth}@{}}
 \toprule
-Study & Model; fitted parameters & Fitted data & Reported agreement & Other comparisons or qualification \\
+Study & Model & Reported agreement \\
 \midrule
-Böttinger et al. \cite{Bottinger2008} & Pitzer; 6 coefficients in 2 MEA reaction laws & NMR; 293--353 K & No aggregate MEA error stated; R5 fixed to Bates--Pinching & VLE compared with earlier VLE-fitted interactions (Tables 5--6) \\
-Zhang et al. \cite{Zhang2011} & eNRTL/\allowbreak{}PC-SAFT vapor; 12 ternary coefficients & Pressure, differential heat, heat capacity, NMR & Pressure 13.5--35.5\% by source; heat 10.9\% (84); $C_P$ 2.4\% (102); species 35.7\% (24), Table 9 & Additional pressure sources 28.6--112\% (Table 11) \\
-Nasrifar and Tafazzol \cite{Nasrifar2010} & PC-SAFT/\allowbreak{}ideal reactions; 5 pure-MEA + 1 MEA--water parameter & Pure and binary properties & Pure-MEA density 0.50\%, vapor pressure 3.36\% (Table 2); no aggregate ternary error & Acid-gas solubility; ideal-activity speciation \\
-Baygi and Pahlavanzadeh \cite{Baygi2015} & PC-SAFT/\allowbreak{}ideal reactions; 5 pure-MEA + 1 binary parameter & Pure properties; binary VLE & Ternary pressure 36.42\% (691), outside fit (Table 5) & NMR (Fig. 8), binary excess enthalpy (Fig. 6); ternary uses 3B MEA/\allowbreak{}4C water \\
-Najafloo and Zarei \cite{Najafloo2018} & SAFT-HR/\allowbreak{}ideal reactions; 5 pure-MEA parameters & Pure vapor pressure/\allowbreak{}density & Ternary pressure 34.71\% (691), Table 5 & Methods describe pure-component fitting only; the conclusion lists ternary ranges among the fitted data \\
-Lloret et al. \cite{lloretConsistentTransferableThermodynamic2017} & soft-SAFT; 2 reactive-association parameters & 30 wt\% VLE; 313.15--373.15 K & No aggregate pressure error stated \cite[Sect.~4.7]{lloretConsistentTransferableThermodynamic2017} & Heat from pressure derivative underpredicted; no calculated temperature dependence \\
-Akula et al. \cite{Akula2023a} & eNRTL; 10 ternary parameters & 263 pressures + 93 differential heats & Mean absolute percentage error: pressure 40.5\%, differential heat 5.9\% \cite[Sect.~4.2]{Akula2023a} & NMR and heat capacity outside objective \\
-Hessen et al. \cite{Hessen2010} & Refined eNRTL; temperature-dependent interactions (Table 2) & Binary VLE, freezing point, excess enthalpy and ternary pressures & No aggregate MEA pressure statistic stated & Speciation and activity comparisons; Section 4 \\
-Aronu et al. \cite{Aronu2011} & Extended UNIQUAC; ion size/\allowbreak{}surface and pair coefficients (Tables 7--9) & VLE at 15--60 wt\%; \ce{N2O}-derived physical solubility & Fitted \ce{CO2} partial pressure 24.3\%; total pressure 11.7\%; physical solubility 2.7\% (Section 5) & NMR and absorption heat compared outside objective \\
-Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013} & Electrolyte cubic two-state association; 7 MEA ternary parameters & VLE; 15.2--30 wt\%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K & Relative pressure deviation 12.5\%, fitted (Tables 5, 8) & Parameters from earlier subsystems retained \\
-Neumann et al. \cite{neumannNewModelCombining2022} & Helmholtz energy/\allowbreak{}eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained & Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data & Ternary density AARD 0.92\% Hartono; 3.5\% complete Han \cite[Sect.~4.2]{neumannNewModelCombining2022} & VLE/\allowbreak{}density comparisons; density data sets differ from this work \\
-This work & 16 fitted parameters; 6 at bounds & 307 quantities: pressure, species, heat, density, heat capacity and binary VLE & Fitted pressure 11.86\%; shared species subset 7.10\% (94); integral heat RMSE 1.84 kJ/\allowbreak{}mol; loaded density 0.18\% (47) & 159-pressure comparison 20.55\%; 112 not fitted but examined during model development \\
+Zhang et al. \cite{Zhang2011} & eNRTL/\allowbreak{}PC-SAFT vapor & Pressure 13.5--35.5\% by source; heat 10.9\% (84); $C_P$ 2.4\% (102); species 35.7\% (24), Table 9 \\
+Baygi and Pahlavanzadeh \cite{Baygi2015} & PC-SAFT/\allowbreak{}ideal reactions & Ternary pressure 36.42\% (691), outside fit (Table 5) \\
+Najafloo and Zarei \cite{Najafloo2018} & SAFT-HR/\allowbreak{}ideal reactions & Ternary pressure 34.71\% (691), Table 5 \\
+Polley and Hedengren \cite[App.~B]{polleyReactiveEPCSAFTModeling2026} & Explicit-ion ePC-SAFT & No common-data statistic \\
+Hong et al. \cite[Sects.~2.3, 3.2, Table~3]{hongModelingCO2Absorption2027} & Pathway-weighted PC-SAFT & Pressure AARD 1.53\%; carbamate 5.51\% against eNRTL; heat 9.48\% against experiment \\
+This work & 16 fitted parameters & Pressure: 11.86\% fitted (47); 24.2\% non-fitted (112); 20.55\% overall (159) \\
 \bottomrule
 \end{tabular}
 \end{table}

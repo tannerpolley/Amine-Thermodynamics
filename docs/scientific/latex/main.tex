@@ -52,19 +52,9 @@
 \newcommand{\liq}{\ell}
 \newcommand{\vap}{v}
 
-% Footer: this is a preprint, not yet submitted to a journal.
+% Suppress the class's submission footer; journal pagination remains.
 \ExplSyntaxOn
-\cs_set:Npn \__first_footerline:
-{
-  \group_begin:
-  \small
-  \ifnum\theblind>0\relax
-  \else
-	\__short_authors: :~
-  \fi
-  { \rmfamily \itshape Preprint,~not~peer~reviewed }
-  \group_end:
-}
+\cs_set:Npn \__first_footerline: {}
 \ExplSyntaxOff
 
 \begin{document}
@@ -73,10 +63,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{Modeling \texorpdfstring{\ce{CO2}}{CO2} absorption in aqueous MEA with ePC-SAFT}
+\shorttitle{Thermodynamics of loaded aqueous MEA with ePC-SAFT}
 \shortauthors{Polley}
 
-\title[mode = title]{\texorpdfstring{Modeling \ce{CO2} absorption in aqueous monoethanolamine with ePC-SAFT}{Modeling CO2 absorption in aqueous monoethanolamine with ePC-SAFT}}
+\title[mode = title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous monoethanolamine with ePC-SAFT: phase equilibria, speciation, absorption heat, density and phase stability}{Thermodynamics of CO2-loaded aqueous monoethanolamine with ePC-SAFT: phase equilibria, speciation, absorption heat, density and phase stability}}
 
 \author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
 \cormark[1]
@@ -94,29 +84,30 @@
 
 \begin{abstract}
 % P:abstract-01
-This study examines whether one explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous monoethanolamine (MEA).
-After separate water, \COtwo--water and dielectric fits, sixteen parameters are fitted jointly to pressure, species, integral absorption heat, density, heat capacity and binary equilibrium data.
-For nominal 30 wt\% MEA, one parameter set thus represents \COtwo pressure, the amine and carbamate fractions, integral heat at \SI{313.15}{\kelvin} and loaded density through \SI{353.15}{\kelvin}.
-Pressure average absolute relative deviations are 11.86\,\% over 47 fitted observations at 313.00--\SI{333.15}{\kelvin} and 20.55\,\% over 159 observations at 313.00--\SI{393.15}{\kelvin}, including 112 not fitted but examined during model development.
-The shared subset of 94 fitted species fractions gives 7.10\,\% at 293.15--\SI{333.15}{\kelvin}.
-The fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \COtwo; the average absolute relative density deviation is 0.18\,\% over 47 fitted loaded densities, calculated without volume translation, with 44 within twice the assigned scale and three accepted misses at \SI{353.15}{\kelvin}.
-The 159-pressure deviation lies within the range of pressure deviations reported for related MEA models, which use different data sets and fitting roles.
-A fit with wider bounds on the protonated-amine diameter and its water interaction matches the properties similarly but predicts a second liquid phase at some states; narrowing these bounds removes the detected instabilities in a finite search at 162 states between 313.15 and \SI{393.15}{\kelvin}, with a 0.45\,\% higher fitting cost.
-Carbonate shares, titration bicarbonate, the \SI{0.51}{\mega\pascal} Arcis integral heats, loaded densities above \SI{353.15}{\kelvin} and the unloaded heat capacity at \SI{318.15}{\kelvin} remain discrepant, and pressure deviations reach 29.5 and 56.0\,\% at 15 and 45 wt\% MEA.
-The available comparisons do not yet establish suitability across absorber and stripper temperatures.
+A thermodynamic description of reactive absorption must combine equilibrium, caloric and density properties of the loaded solvent.
+This work jointly estimates sixteen ePC-SAFT parameters for aqueous monoethanolamine (MEA) from pressure, species, integral absorption heat, density, heat capacity and binary equilibrium data, following separate water, \ce{CO2}--water and permittivity fits.
+For nominal 30 wt\% MEA, pressure average absolute relative deviations are 11.86\,\% for 47 fitted and 24.2\,\% for 112 non-fitted pressures (20.55\,\% overall), over 313.00--\SI{393.15}{\kelvin}; fitted pressures end at \SI{333.15}{\kelvin}.
+The measured \ce{MEA + MEAH+} sum and carbamate fractions are included in 94 fitted species fractions with 7.10\,\% deviation.
+Integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \ce{CO2} at \SI{313.15}{\kelvin}; loaded-density deviation is 0.18\,\% for 47 fitted values through \SI{353.15}{\kelvin}, without volume translation.
+A wider-bound fit gives similar property agreement but detected instability at 54 states; the final parameter set has no additional liquid detected at the 162 searched states from 313.15 to \SI{393.15}{\kelvin}.
+This numerical search does not physically validate phase behavior.
+Six parameters are on bounds, and four of the remaining ten have standard errors larger than their absolute values; the R5 shift of 0.49 p$K$ lies within its conditional standard error of 0.55 p$K$.
+Bicarbonate, carbonate, higher-temperature caloric and density properties, and pressure transfer to 15 and 45 wt\% MEA remain limitations.
+A brief MDEA demonstration reverses the pressure-error ranking of two cation representations between data sources, identifying neither as generally preferable.
+
 \end{abstract}
 
 \begin{keywords}
-\COtwo solubility\sep{}ePC-SAFT\sep{}joint parameter estimation\sep{}monoethanolamine\sep{}chemical speciation\sep{}reactive vapor--liquid equilibrium
+monoethanolamine\sep{}ePC-SAFT\sep{}chemical speciation\sep{}absorption heat\sep{}phase stability
 \end{keywords}
 
 \maketitle
 
 \hypersetup{
-    pdftitle={Modeling CO2 absorption in aqueous monoethanolamine with ePC-SAFT},
+    pdftitle={Thermodynamics of CO2-loaded aqueous monoethanolamine with ePC-SAFT: phase equilibria, speciation, absorption heat, density and phase stability},
     pdfauthor={Tanner W. Polley},
     pdfsubject={Equilibrium, caloric and density properties of loaded aqueous monoethanolamine with ePC-SAFT},
-    pdfkeywords={carbon dioxide, monoethanolamine, ePC-SAFT, joint calibration, speciation, vapor-liquid equilibrium}
+    pdfkeywords={monoethanolamine, ePC-SAFT, chemical speciation, absorption heat, phase stability}
 }
 
 \input{sections/introduction}
@@ -127,11 +118,13 @@ The available comparisons do not yet establish suitability across absorber and s
 \input{sections/conclusion}
 \input{sections/data_code_availability}
 
+\FloatBarrier
+\input{sections/nomenclature}
+\FloatBarrier
+
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
 
-\clearpage
-\input{sections/nomenclature}
 
 \end{document}
 
