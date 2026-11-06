@@ -265,6 +265,147 @@ Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m
 
 Three fitted loaded densities at 353.15 K fall outside their $2s$ limits (−2.28$s$, −2.06$s$, −2.43$s$). These three rows are underpredicted by 4.2–5.5 kg/m³ (0.40–0.53%). The source-uncertainty discussion and the five excluded Amundsen rows are on the [A7 page](joint-recalibration/index.qmd).
 
+### Higher-temperature density probes (issue 268)
+
+Measured loaded densities above 353.15 K exist, and 20 such Han cells were
+already retained in this repository. Han et al. (2012), DOI
+[10.1021/je2010038](https://doi.org/10.1021/je2010038), Tables 3–4
+(pp.1097–1098), report loaded densities through 413.15 K and unloaded densities
+through 423.15 K. The present model comparison stops at its declared 393.15 K
+limit. Its retained Han subset contains 50 loaded and 17 unloaded cells at
+30 mass % MEA on the CO₂-free solvent basis. Above 353.15 K there are 20 loaded
+cells at analytical loadings 0.10, 0.21, 0.32, 0.44 and 0.56 mol CO₂/mol MEA,
+and five unloaded cells. The recorded pressures are 0.1 MPa through 363.15 K
+and 0.7 MPa from 373.15 K. Han's uncertainty discussion (pp.1101–1102) gives
+combined loaded-density uncertainty 1.3 kg/m³ and expanded uncertainty
+2.6 kg/m³ at 95% confidence. Unloaded expanded uncertainties are 0.68 and
+0.70 kg/m³ below and at/above 373.15 K, respectively.
+
+The comparison adds 24 source-checked unloaded cells from Sobrino et al.
+(2016), DOI [10.1016/j.jct.2016.03.021](https://doi.org/10.1016/j.jct.2016.03.021),
+Table 6 (pp.235–236): 293.15–393.15 K at 0.1 MPa and printed MEA mass fractions
+0.1001, 0.2000, 0.3005 and 0.4000. Its standard density uncertainty is
+0.35 kg/m³; Section 2.1 gives expanded uncertainty below 0.7 kg/m³ with
+coverage factor 2. The comparison uses 0.70 kg/m³ as that reported upper
+limit. The [source record](../../data/reference/MEA/observations/density_viscosity/README.md)
+retains the table checks, composition/pressure conventions, Zotero identities
+and PDF hashes. These cells have no fitting role. The 234 density comparisons
+combine these cells with the previous 210, counting each source cell once.
+
+These are homogeneous-liquid equation-of-state predictions and local
+calibration probes, with no volume translation. Source expanded uncertainties
+and the original 47 fitted-density residual scales remain distinct. The
+existing Han assessment-only adoption is preserved. The two exploratory fits
+add only the 25 higher-temperature Han cells to the unchanged 307-row
+objective, using combined uncertainty as the residual scale and weights 1/20
+for the 20 loaded cells and 1/5 for the five unloaded cells. These group weights
+are study choices, not weights prescribed by Han. Neither fit adopts a new
+parameter record or supplies an untouched prediction assessment.
+
+The original 16-coordinate declarations retain their historical physical
+bounds and size ties. Incremental reaction-enthalpy bounds are translated to
+each start's inherited laws, without applying the inherited shifts twice.
+The 600 s native fit limit, 180-iteration limit and original stopping tolerances
+are retained. The final-start and wider-bound-start fits both converge, but
+convergence is conditional on these bounds and stopping criteria; it is not
+a global minimum or parameter-identifiability claim.
+
+| Parameter vector | Original 307-row cost | Augmented 332-row cost | Original loaded rows within 2s / 47 | Higher-temperature Han loaded rows within 2.6 kg/m³ / 20 | Han unloaded rows within source expanded uncertainty / 5 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Final starting set | 148.878939 | 186.414243 | 44 | 2 | 2 |
+| Wider-bound starting set | 148.211508 | 168.959948 | 47 | 3 | 2 |
+| Probe from final | 153.428254 | 164.095429 | 17 | 13 | 2 |
+| Probe from wider-bound | 151.067550 | 162.701482 | 34 | 10 | 2 |
+
+The final-start probe changes the higher-temperature loaded errors from
+−20.01 to −2.37 kg/m³ to −8.05 to +4.01 kg/m³. The wider-bound-start probe
+has errors −6.75 to +7.94 kg/m³ there. Both improve the added loaded-density
+objective while losing fitted-density agreement; neither meets the issue's
+simultaneous density requirements. These observations do not establish
+nonexistence of a feasible vector elsewhere in the permitted coordinates.
+
+The prescribed Engine wheel first reproduced the endpoint and then refused
+the mixed-temperature-domain R5 chart, as recorded in
+[the original-wheel refusal](results/density-268/original-wheel-final/chart-refusal.json).
+The owner authorized merged Engine e6dae5c7 only in this worktree, SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`.
+The complete final 307-row replay has maximum relative prediction difference
+6.96 × 10⁻¹³ from the retained endpoint. Both endpoint replays agree with their
+native fit predictions within 1.1 × 10⁻¹² using the recorded scaled comparison.
+Every new numerical result records the executing wheel SHA; reused #255
+results retain their original wheel identity.
+
+[Retained study results](results/density-268/) include all row predictions,
+start declarations, native fit reports, endpoint replays and source identities.
+The independent readiness review returned **Ready** after the reaction-bound
+and water-diameter declarations were corrected. Both new endpoints complete
+all 162 retained physical states, with nine stability trials per state, zero
+detected descent states and zero incomplete states. This is a finite search
+for additional descent from the admitted liquid–vapor parent, not proof of
+global phase stability. The grid retains 313.15, 318.15, 333.15, 353.15,
+373.15 and 393.15 K, analytical loadings 10⁻⁵–0.6 mol CO₂/mol MEA at 30 mass %
+MEA, and pressures equal to 0.50, 0.80 and 0.95 of the retained final-set
+bubble pressures. Actual temperatures, feeds and pressures are preserved in
+each compressed phase result. The new wider-bound-start endpoint has MEAH⁺
+segment diameter 5.10278 Å, below 5.35 Å, and still has no detected descent on
+this grid. That observation does not establish a continuous stability interval.
+
+![Density errors at measured coordinates for all 234 retained cells. Every symbol is a discrete equation-of-state evaluation; points are not joined. Sources and parameter vectors are identified by panel, color and marker. Blue error bars in the Han and Sobrino panels show source expanded density uncertainty about the final starting set's error; Sobrino uses the reported 0.70 kg/m³ upper limit. They are measurement comparison intervals, not parameter-confidence intervals.](results/density-268/density-errors.png)
+
+The [sensitivity reduction](results/density-268/sensitivity-summary.json)
+compares full and half centered steps separately for each coordinate. For the
+final set, increasing the constant coefficient in water's temperature-dependent
+segment diameter by 0.1% (0.00278043 Å), with its exponential terms fixed,
+lowers the mean higher-temperature Han density by 2.05863 kg/m³ for unloaded
+rows and 2.13981 kg/m³ for loaded rows. Its maximum full-versus-half-step
+derivative difference on those unloaded rows is 0.00039001 kg/(m³ Å),
+compared with a mean derivative of −740.3976 kg/(m³ Å). This is local numerical
+step verification. It does not assign uncertainty to water parameters.
+The direction improves the positive unloaded errors while worsening negative
+loaded errors. Increasing MEAH⁺ dispersion energy by 0.1% instead changes
+the mean loaded density by +0.01706 kg/m³ and has an unloaded response below
+0.00002 kg/m³ in magnitude. These different responses support treating neutral
+packing and the reactive ionic volume response separately; they do not
+identify unique single-ion volumes or statistically rank uncertain parameters.
+The full file also retains MEA/water segment-count, MEA diameter,
+MEA/water dispersion and MEA–water constant/slope sensitivities at both starts.
+The MEAH⁺ one-segment convention remains fixed.
+
+The [five extensions of retained #255 vectors](results/density-268/reused-255/)
+calculate only the missing higher-temperature Han densities. Their original
+307-row scores and phase searches are reused, not repeated. Setting the final
+MEAH⁺ diameter alone to the wider-bound value overshoots all 20 loaded Han
+higher-temperature densities by 12.33–106.32 kg/m³; its retained fitted-density
+count is 0/47. Increasing the wider-bound diameter alone to 5.35 Å
+underpredicts those 20 by 19.46–93.09 kg/m³ and retains 0/47 fitted density
+checks plus 24/32 detected descent states. The retained wider-bound
+MEAH⁺–water constant −0.175 vector has 40/47 fitted density checks and a
+complete 162-state search without descent; only 8/20 of its newly evaluated
+higher-temperature loaded Han densities meet 2.6 kg/m³. The tested Born and
+ion-pair moves preserve 47/47 fitted density checks but retain descent and
+meet only 4/20 of the new Han checks each. The original phase results use
+wheel `0d08dff9…`; these additional density predictions use the qualified
+`83ede7d2…` wheel and are labelled separately.
+
+For **#255 stage 2**, retain the current parameter adoption and use this work
+as evidence for a joint density/phase fit. Keep the original 47-row requirements
+and higher-temperature Han residuals visible as separate conditions; a lower
+averaged objective alone hides their tradeoff. Preserve the source campaigns
+and reported pressures, and keep Sobrino as an unloaded assessment series.
+Use the MEAH⁺ size, dispersion and water-interaction law together rather than
+changing size alone or treating 5.35 Å as an experimentally established bound.
+Check neutral packing against unloaded/pure-component evidence before freeing
+it to repair loaded densities: the tested water-diameter direction moves both
+cohorts together despite their opposing errors. Any change to persistent Han
+roles, fit weights, physical bounds or model form belongs to the stage-2 design.
+Neither probe supplies a replacement parameter set. The supported conclusion
+is a density conflict among the tested bounded fits with no detected descent,
+not nonexistence across all admissible coordinates. Source correlations,
+active parameter bounds, finite phase searches and the 393.15 K cutoff limit
+transfer to absorber or other process conditions. These are calibration and
+numerical-verification results, not physical validation. Independent delivered
+review remains pending; no manuscript promotion is implied.
+
 ## MEA–water
 
 The neutral MEA–water binary (no reactions) gives bubble temperature and incipient vapor composition at the two Cai isobars over each isobar’s measured liquid range.
