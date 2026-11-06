@@ -261,7 +261,7 @@ def fit_document(doc,variant,bounds,folder,removed=(),*,maximum_iterations=40):
     metadata=[metadata[i] for i in keep];observations=[observations[i] for i in keep];weights=[weights[i] for i in keep]
     write(f'{folder}/declaration.json',dict(coordinates=decl,observations=metadata,removed_indices=list(removed)))
     available=next(int(s.split()[1])*1024 for s in Path('/proc/meminfo').read_text().splitlines() if s.startswith('MemAvailable:'))
-    controls=dict(maximum_iterations=maximum_iterations,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(16,os.cpu_count(),max(1,available//268435456),len(keep)))
+    controls=dict(maximum_iterations=maximum_iterations,function_tolerance=1e-10,parameter_tolerance=1e-10,gradient_tolerance=1e-8,maximum_elapsed_time_seconds=2100.,workers=min(os.cpu_count(),max(1,available//268435456),len(keep)))
     write(f'{folder}/compute.json',dict(controls=controls,available_memory_bytes=available,BLAS_threads_per_process=1))
     result=reg.fit(params,coords,observations,weights=weights,thermochemistry=thermal,controls=reg.FitControls(**controls),singular_vectors=True)
     record={k:p.shared._jsonable(getattr(result,k)) for k in ('status','message','usable','final_cost','physical','optimizer','predictions','weighted_residuals','iterations','iteration_costs','trial_failures','optimizer_jacobian','physical_jacobian','residuals')}
