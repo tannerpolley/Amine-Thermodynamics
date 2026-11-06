@@ -37,7 +37,7 @@ A1, A3, B1 and B3 all converged. A2/B2 are duplicates, and A4 remains excluded. 
 
 ## Property comparisons
 
-Only the 88-row pressure statistic has a pass bar. Every other value below is context under the frozen data roles and residual definitions.
+Only the 88-row pressure statistic has a pass bar. Every other value below is a comparison under the frozen data roles and residual definitions.
 
 | Source and role | Variant A AARD (%) | Variant B AARD (%) |
 |---|---|---|
@@ -53,16 +53,16 @@ Only the 88-row pressure statistic has a pass bar. Every other value below is co
 | Ermatchkov above 49 wt%, extrapolation (13) | 54.99 | 28.35 |
 | Ermatchkov below 7 kPa (33) | 37.12 | 16.84 |
 | Primary-set rows below 7 kPa (29) | 33.48 | 16.12 |
-| Corrected Kamps pressure, context (28) | 18.31 | 25.65 |
+| Corrected Kamps pressure, comparison (28) | 18.31 | 25.65 |
 | Böttinger amine sum, 5 bar (58) | 7.195 | 7.214 |
 | Böttinger amine sum, 25 bar (58) | 7.195 | 7.214 |
 | Weiland Cp at 60 wt%, extrapolation (6) | 13.43 | 10.73 |
 | Weiland density at 60 wt%, extrapolation (11) | 1.318 | 1.798 |
-| Zheng integral heat, context (6) | 18.72 | 22.64 |
-| Sedighi total pressure, context (15) | 80.12 | 74.53 |
+| Zheng integral heat, comparison (6) | 18.72 | 22.64 |
+| Sedighi total pressure, comparison (15) | 80.12 | 74.53 |
 | Merkley 60 wt%, 333.15/388.71 K (2) | 25.7 | Unavailable |
 
-Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags above the source's 3% amine-balance accuracy. A complete relative bicarbonate AARD is undefined because one observed value is zero; all row-level absolute predictions remain retained. No zero row is silently removed. The context section below supersedes the earlier first-page-only Xiao/Zhang status and records the Derks basis assessment. Zheng uses the source loading for integral heat, with model saturation loading reported separately. Corrected Kamps never enters the follow-up criterion.
+Böttinger retains all 58 rows, their DMDEA/byproduct fractions and the flags above the source's 3% amine-balance accuracy. A complete relative bicarbonate AARD is undefined because one observed value is zero; all row-level absolute predictions remain retained. No zero row is silently removed. The additional-source section below supersedes the earlier first-page-only Xiao/Zhang source assessment and records the Derks basis assessment. Zheng uses the source loading for integral heat, with model saturation loading reported separately. Corrected Kamps never enters the follow-up criterion.
 
 | Endpoint | Neumann Cp AARD (%) | Wangler Cp AARD (%) | Change (percentage points) | Kim RMS log ratio |
 |---|---|---|---|---|
@@ -146,7 +146,7 @@ The two weakest-direction bounded objective scans are retained in `local-sensiti
 
 The original B control stopped at the declared 40-iteration limit, with 27 retained saturation refusals and cost 365.820961; its phase results describe that finite, unconverged candidate. The owner authorized one fresh run from the same control start with only the iteration limit raised to 100. Its termination is converged, cost 365.820958506, with 34 refused trials. The released MDEA–CO₂ column's cosine correlation with the cation–water column is 0.134571; at a rejected endpoint this is a diagnostic quantity. The B comparison is UNAVAILABLE under the owner's stopping rule; its control outside-fit AARD and the two-point verdict are unavailable. No further run was made.
 
-The owner's 2026-10-29 decision makes a phase-failed CO₂-control comparison unavailable: retain its endpoint, cost and gate states; do not compute its outside-fit AARD and make no bicarbonate claim for that variant. A bicarbonate-release AARD alone is context, not a verdict. A magnitude above 0.95 in the declared column correlation means the pair is non-separable. When a control passes, the declared margin is two AARD percentage points, with the other property results retained; corrected Kamps is excluded. No MDEA outcome falsifies the MEA bicarbonate value, whose MEA conditional uncertainty already spans the declared range.
+The owner's 2026-10-29 decision makes a phase-failed CO₂-control comparison unavailable: retain its endpoint, cost and gate states; do not compute its outside-fit AARD and make no bicarbonate claim for that variant. A bicarbonate-release AARD alone is comparison evidence, not a verdict. A magnitude above 0.95 in the declared column correlation means the pair is non-separable. When a control passes, the declared margin is two AARD percentage points, with the other property results retained; corrected Kamps is excluded. No MDEA outcome falsifies the MEA bicarbonate value, whose MEA conditional uncertainty already spans the declared range.
 
 ## Engine acceptance and provenance
 
@@ -159,11 +159,11 @@ The [selection](results/stage2-capped/selection.json), endpoint documents, row-l
 This notebook has not been independently reviewed or promoted for manuscript use.
 
 
-## Additional context sources at the frozen endpoints {#context-sources-225}
+## Additional sources at the frozen endpoints {#sources-225}
 
 Xiao's 20 equilibrium measurements give CO₂ partial-pressure AARDs of **20.40% at A3** and **28.28% at B1** at 23.5 wt% unloaded MDEA and 298.15–313.15 K.
 The source is outside the fitted datasets.
-These context comparisons change neither the 24.2% Ermatchkov criterion nor its verdict: A fails and B passes.
+These additional-source comparisons change neither the 24.2% Ermatchkov criterion nor its verdict: A fails and B passes.
 No parameters were fitted and no manuscript result is revised.
 
 | Source and quantity | Rows | A3 AARD (%) | B1 AARD (%) | Conditions and disposition |
@@ -224,7 +224,7 @@ All four rows remain unscored at both endpoints; neither 298.15 K nor a mass fra
 The calculation uses the separate worktree MDEA environment and the immutable merged Engine main-d513820 wheel, SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`; installed Engine files were checked byte-for-byte against that wheel.
 Run `agent-heavy nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/score_context.py` from this worktree, then `nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/plot_context.py` for the retained-value figure.
 Pool size comes from the full CPU count, with one BLAS thread per process.
-This context section has not been independently reviewed or promoted for manuscript use.
+This additional-source section has not been independently reviewed or promoted for manuscript use.
 
 ## Shared bicarbonate sensitivity and the Xiao pressure miss
 
