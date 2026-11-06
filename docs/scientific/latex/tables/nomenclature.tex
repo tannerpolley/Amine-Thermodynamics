@@ -1,5 +1,9 @@
 % Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
 % Reported parameter SHA256: 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91; Engine wheel SHA256: 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/declaration.json SHA256 86111af51bace3d696b9963cb84a4ac811cdb962f5d851b2c90237d72e7df53b
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/endpoint.json SHA256 3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/declaration.json SHA256 b98bacbcbce32c8b508683d7ca53f66881039a1d509f393e5dd2fd2d6690b644
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/endpoint.json SHA256 1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/limits.json SHA256 5adb3c08282621bc33f0fd0e1c59a865f9c31d4149506df85948acef06fcdc41
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/parameters.csv SHA256 0de35d543269c5b90665e09dadb1dc70e92e2506f4bbbdf225cdb24f02ad5996
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/adoption.json SHA256 52ed2b189b169f5ccf5182bfb58fd31c55698c861d0c1fbe25eb1a19e1a26b52
@@ -39,47 +43,47 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 8e89377066e7bbeb4153a18995da5199f7a375152ffeb067dc706982bdfe84db
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 e3103d71b7bbc9e8151b5a7c244c334f0d740f8c3c48c5a38b9d0250446793bb
-% Input: docs/scientific/latex/supplement.tex SHA256 00a895a80a9fdb416f9ad53fc50753fb51e1935adcdf0339f2fe8db0265992c2
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 2df4e7bbbb570f34bec85ec406e83738bf82b258d76a210cdaefc8cecbae89d3
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 58b1cf3e25528ee77ea23749359ccc2401b8d1bebd4640072c04f8fb248cc437
+% Input: docs/scientific/latex/supplement.tex SHA256 232f60c197cd091fa46410c61d61237d0a8f4c7f3fe6987dcf401fbd30ccfa68
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Symbols used in this manuscript.}\label{tab:nomenclature}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.7000\linewidth}@{}}
+\caption{Symbols and units. A unit of 1 denotes a dimensionless quantity.}\label{tab:nomenclature}
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.4800\linewidth}>{\raggedright\arraybackslash}p{0.2200\linewidth}@{}}
 \toprule
-Symbol & Definition \\
+Symbol & Definition & Unit \\
 \midrule
-$\alpha$ & Added \ce{CO2} per mole total amine \\
-$w_{\mathrm{MEA}}$ & MEA mass fraction of unloaded solvent \\
-$T,T_{\mathrm{ref}}$ & Temperature; interaction reference temperature 313.15 K \\
-$P,p_{\mathrm{CO2}},P^\circ$ & Bubble pressure; \ce{CO2} partial pressure; source reference pressure \\
-$x_i,y_i,\boldsymbol w$ & True-species liquid, vapor and trial mole fractions \\
-$z_i,M_i$ & Species charge number and molar mass \\
-$A,a^{\mathrm{res}}$ & Extensive Helmholtz energy; residual Helmholtz energy divided by nRT \\
-$\rho,Z,V$ & Molar density; compressibility factor; phase volume \\
-$\sigma_i,\epsilon_i/k_B$ & Segment diameter; dispersion energy divided by Boltzmann constant \\
-$m_i^{\mathrm{seg}}$ & Segment number \\
-$d_i,d_i^{\mathrm{DH}}$ & Hard-sphere packing diameter; Debye--H\"uckel diameter \\
-$\mathcal I$ & Set of ions \\
-$k_{ij},b_{ij}$ & Binary interaction and its reciprocal-temperature slope (K) \\
-$\kappa^{AB},\epsilon^{AB}/k_B$ & Association volume and energy divided by Boltzmann constant \\
-$d_i^{\mathrm{Born}},D_i$ & Born diameter and outer solvation-shell diameter \\
-$f_i,f_{\mathrm{mix}}$ & Component solvation factor and mixture average \\
-$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Solvation-shell and dielectric-saturation coefficients \\
-$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivities \\
-$e,\varepsilon_0,k_B,R$ & Elementary charge; vacuum permittivity; Boltzmann and gas constants \\
-$d_{V,i},d_{T,i},n_s$ & Dielectric-volume and temperature coefficients; neutral-solvent amount \\
-$\nu_{ri},K_r,K_{m,r},K_{x,r}$ & Stoichiometric coefficient; reaction constant and its molality/\allowbreak{}mole-fraction forms \\
-$A_r,B_r,C_r,D_r,\Delta_r$ & Reaction-correlation coefficients and standard-state offset \\
-$a_i,\phi_i,\mu_i$ & Activity; fugacity coefficient; chemical potential \\
-$m_i,m^\circ$ & Species molality; standard molality 1 mol/\allowbreak{}kg \\
-$\delta h_r$ & Constant reaction-enthalpy adjustment \\
-$H,\Delta h,h^{\mathrm{feed}}$ & Extensive enthalpy; integral absorption heat; feed molar enthalpy \\
-$C_P,c_P,m_{\mathrm{feed}}$ & Extensive and mass-specific heat capacities; analytical-feed mass \\
-$s_j,r_j,w_j,C$ & Assigned scale; residual; weight; weighted least-squares cost \\
-$u_\rho,u_\alpha,g,s_\rho$ & Density and loading uncertainty inputs; local secant; combined density scale \\
-$\boldsymbol\theta,J_I,s_C^2$ & Fitted parameters; free-parameter weighted Jacobian; variance factor \\
-$B,\boldsymbol\lambda,D$ & Conserved-quantity matrix; equilibrium multipliers; tangent-plane distance \\
-AARD; RMSE & Average absolute relative deviation; root-mean-square error \\
+$\alpha$ & Added \ce{CO2} per mole total amine & mol/\allowbreak{}mol \\
+$w_{\mathrm{MEA}}$ & MEA mass fraction of unloaded solvent & kg/\allowbreak{}kg \\
+$T,T_{\mathrm{ref}}$ & Temperature; interaction reference temperature 313.15 K & K \\
+$P,p_{\mathrm{CO2}},P^\circ$ & Bubble pressure; \ce{CO2} partial pressure; source reference pressure & Pa \\
+$x_i,y_i,\boldsymbol w$ & True-species liquid, vapor and trial mole fractions & 1 \\
+$z_i,M_i$ & Species charge number and molar mass & 1; kg/\allowbreak{}mol \\
+$A,a^{\mathrm{res}}$ & Extensive Helmholtz energy; residual Helmholtz energy divided by nRT & J; 1 \\
+$\rho,Z,V$ & Molar density; compressibility factor; phase volume & mol/\allowbreak{}m$^3$; 1; m$^3$ \\
+$\sigma_i,\epsilon_i/k_B$ & Segment diameter; dispersion energy divided by Boltzmann constant & \AA; K \\
+$m_i^{\mathrm{seg}}$ & Segment number & 1 \\
+$d_i,d_i^{\mathrm{DH}}$ & Hard-sphere packing diameter; Debye--H\"uckel diameter & \AA \\
+$\mathcal I$ & Set of ions & -- \\
+$k_{ij},b_{ij}$ & Binary interaction and its reciprocal-temperature slope (K) & 1; K \\
+$\kappa^{AB},\epsilon^{AB}/k_B$ & Association volume and energy divided by Boltzmann constant & 1; K \\
+$d_i^{\mathrm{Born}},D_i$ & Born diameter and outer solvation-shell diameter & \AA \\
+$f_i,f_{\mathrm{mix}}$ & Component solvation factor and mixture average & 1 \\
+$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Solvation-shell and dielectric-saturation coefficients & 1 \\
+$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivities & 1 \\
+$e,\varepsilon_0,k_B,R$ & Elementary charge; vacuum permittivity; Boltzmann and gas constants & C; F/\allowbreak{}m; J/\allowbreak{}K; J/\allowbreak{}(mol K) \\
+$d_{V,i},d_{T,i},n_s$ & Dielectric-volume and temperature coefficients; neutral-solvent amount & L/\allowbreak{}mol; K; mol \\
+$\nu_{ri},K_r,K_{m,r},K_{x,r}$ & Stoichiometric coefficient; reaction constant and its molality/\allowbreak{}mole-fraction forms & 1 \\
+$A_r,B_r,C_r,D_r,\Delta_r$ & Reaction-correlation coefficients and standard-state offset & 1; K; 1; 1/\allowbreak{}K; 1 \\
+$a_i,\phi_i,\mu_i$ & Activity; fugacity coefficient; chemical potential & 1; 1; J/\allowbreak{}mol \\
+$m_i,m^\circ$ & Species molality; standard molality 1 mol/\allowbreak{}kg & mol/\allowbreak{}kg \\
+$\delta h_r$ & Constant reaction-enthalpy adjustment & J/\allowbreak{}mol \\
+$H,\Delta h,h^{\mathrm{feed}}$ & Extensive enthalpy; integral absorption heat; feed molar enthalpy & J; J/\allowbreak{}mol; J/\allowbreak{}mol \\
+$C_P,c_P,m_{\mathrm{feed}}$ & Extensive and mass-specific heat capacities; analytical-feed mass & J/\allowbreak{}K; J/\allowbreak{}(kg K); kg \\
+$s_j,r_j,w_j,C$ & Assigned scale; residual; weight; weighted least-squares cost & Observable unit; 1; 1; 1 \\
+$u_\rho,u_\alpha,g,s_\rho$ & Density and loading uncertainty inputs; local secant; combined density scale & kg/\allowbreak{}m$^3$; mol/\allowbreak{}mol; kg/\allowbreak{}m$^3$; kg/\allowbreak{}m$^3$ \\
+$\boldsymbol\theta,J_I,s_C^2$ & Fitted parameters; free-parameter weighted Jacobian; variance factor & Parameter-dependent; scaled; 1 \\
+$B,\boldsymbol\lambda,D$ & Conserved-quantity matrix; equilibrium multipliers; tangent-plane distance & 1; 1; 1 \\
+AARD; RMSE & Average absolute relative deviation; root-mean-square error & \%; observable unit \\
 \bottomrule
 \end{tabular}
 \end{table}
