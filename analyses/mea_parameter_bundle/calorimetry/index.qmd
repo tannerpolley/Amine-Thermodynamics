@@ -150,6 +150,8 @@ The NMR comparison uses the adopted Böttinger states 042–050 at 313.15 K, 055
 
 The three existing manuscript heat reference cases pass within 0.001 kJ/mol. The study's own zero-to-0.11 heat exactly reproduces the corresponding Vinjarapu prediction to the retained numerical precision. All 43 NMR species reference comparisons pass, with largest relative difference $2.1\times10^{-15}$. Every requested differential step-halving check passes the 0.001 kJ/mol criterion. Available states meet the Engine request and the $10^{-10}$ scaled equilibrium, carbon, nitrogen and charge balance limits. These checks verify the numerical calculations; they do not make the calorimetry independent or validate omitted chemistry.
 
+Integral outputs record their own availability and returned reason, independently of the finite-interval heat. The summary lists unavailable prediction identities, reasons and counts for each integral basis and for the integral curves; domain exclusions and intentionally undefined first truncated integrals are separate from numerical failures. The pinned in-memory check makes `heat(313.15, 0, 0.084)` unavailable: both comparison integrals and the curve integral retain the injected reason and count one numerical failure each, while the valid finite-interval prediction remains available.
+
 ```bash
 agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/kim2007_heat_pathways.py calculate
 agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/kim2007_heat_pathways.py present

@@ -71,6 +71,21 @@ def metrics(rows, predicted='predicted', observed='observed'):
                 exceeds_2p2_percent=[r['record_id'] for r in used if abs(r[predicted] - r[observed]) > .022 * abs(r[observed])])
 
 
+def integral_unavailability(rows, prefix):
+    predictions = []
+    for row in rows:
+        if row[prefix+'_available']:
+            continue
+        reason = row[prefix+'_reason']
+        kind = ('undefined' if reason == 'undefined_first_truncated_integral' else
+                'outside_domain' if reason in ('above_ceiling', 'bubble_pressure_exceeded') else
+                'not_evaluated' if reason.startswith('not_evaluated_after_interval:') else 'numerical_failure')
+        predictions.append(dict(identity=row.get('record_id', f"{row['T_K']:g}K/loading={row['loading']:.12g}"),
+                                reason=reason, kind=kind))
+    return dict(count=len(predictions), counts={kind: sum(r['kind']==kind for r in predictions)
+                for kind in ('undefined', 'outside_domain', 'not_evaluated', 'numerical_failure')}, predictions=predictions)
+
+
 def crossings(x, y):
     return [dict(bracket=[a, b], direction='down' if u > v else 'up',
                  linear_zero=float(a - u * (b - a) / (v - u)))
@@ -202,12 +217,12 @@ def temperature_job(T):
     ladder, curves, fractions, comparisons = [], [], [], []
     for a in grid[1:]:
         row = state(T, float(a))
-        curve = dict(T_K=T, loading=float(a), status=row['status'])
+        curve = dict(T_K=T, loading=float(a), status=row['status'], integral_available=False, integral_reason=row['status'])
         if row['status'] == 'available':
             q, check = differential(T, float(a), upper)
             ladder.append(check)
-            integral, _ = heat(T, 0., float(a))
-            curve.update(differential=q, integral=integral)
+            integral, reason = heat(T, 0., float(a))
+            curve.update(differential=q, integral=integral, integral_available=integral is not None, integral_reason=reason)
             n = row['amounts_mol']
             carbon = sum(n[i] for i in (0, 4, 5, 6))
             f = dict(T_K=T, loading=float(a), carbamate=n[4]/carbon, bicarbonate=(n[5]+n[6])/carbon, free=n[0]/carbon)
@@ -220,20 +235,49 @@ def temperature_job(T):
         if a <= CEILING:
             row['predicted'], row['interval_status'] = heat(T, prev, a)
         row['integral_co2_predicted'], row['integral_mea_predicted'], row['differential_predicted'] = None, None, None
+        start = (0.051 if r['run'] == 1 else .036) if T == 393.15 else 0.
+        reason = row['interval_status'] if row['interval_status'] in ('above_ceiling', 'bubble_pressure_exceeded') else 'not_evaluated_after_interval: '+row['interval_status']
+        row.update(integral_co2_available=False, integral_mea_available=False, integral_co2_reason=reason, integral_mea_reason=reason)
+        if T == 393.15 and a == start:
+            row['integral_co2_reason'] = 'undefined_first_truncated_integral'
         if row['interval_status'] == 'available':
             q, check = differential(T, a, upper)
             row['differential_predicted'] = q
             ladder.append(check)
             integral, reason = heat(T, 0., a)
             row['integral_mea_predicted'] = None if integral is None else a*integral
-            start = (0.051 if r['run'] == 1 else .036) if T == 393.15 else 0.
+            row.update(integral_mea_available=integral is not None, integral_mea_reason=reason)
             if a > start:
-                row['integral_co2_predicted'], _ = heat(T, start, a)
+                row['integral_co2_predicted'], reason = heat(T, start, a)
+                row.update(integral_co2_available=row['integral_co2_predicted'] is not None, integral_co2_reason=reason)
             row['scaled_residual'] = (row['predicted']-row['observed'])/(.022*abs(row['observed']))
         comparisons.append(row)
     print(f'{T:g} K: {len(comparisons)} source rows, {len(fractions)} admitted pathway states, {len(CACHE)} solves', flush=True)
     return dict(T_K=T, comparisons=comparisons, curves=curves, fractions=fractions,
                 states=list(CACHE.values()), differential_checks=ladder, pressure_bracket=crossing)
+
+
+def check_integral_failure():
+    """Pin the reviewed failure: a valid finite interval must survive missing integrals."""
+    from unittest.mock import patch
+    reason = 'injected heat failure: 313.15, 0, 0.084'
+    def failed_heat(T, a, b):
+        return (None, reason) if (T, a, b)==(313.15, 0., .084) else (1., 'available')
+    prior_runs = c.s.RUNS
+    with patch.dict(globals(), heat=failed_heat, state=lambda T, a: dict(status='available', amounts_mol=[a,1.,7.,0.,0.,0.,0.,0.,0.]),
+                    differential=lambda *args: (1., dict(passed=True))):
+        with patch.object(np, 'linspace', return_value=np.array([.084])):
+            result = temperature_job(313.15)
+    c.s.RUNS = prior_runs
+    row = next(r for r in result['comparisons'] if r['run']==1 and r['loading']==.084)
+    summaries = {basis: integral_unavailability(result['comparisons'], basis) for basis in ('integral_co2', 'integral_mea')}
+    summaries['curve_integral'] = integral_unavailability(result['curves'], 'integral')
+    assert row['interval_status']=='available' and row['predicted']==1.
+    for basis in ('integral_co2', 'integral_mea'):
+        assert not row[basis+'_available'] and row[basis+'_reason']==reason
+    assert not result['curves'][0]['integral_available'] and result['curves'][0]['integral_reason']==reason
+    assert all(r['counts']['numerical_failure']==1 and r['predictions'][0]['reason']==reason for r in summaries.values())
+    return dict(case='heat(313.15, 0, 0.084)', finite_interval_preserved=True, unavailable=summaries, passed=True)
 
 
 def bottinger():
@@ -279,6 +323,7 @@ def calculate():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     STAGING = Path(tempfile.mkdtemp(prefix='.kim245-', dir=OUT.parent))
     c.s.RUNS = STAGING / 'runtime'
+    failure_check = check_integral_failure()
     references = c.references(('heat',))
     assert references and all(r['passed'] for r in references), references
     # Five independent temperature batches; each uses one BLAS/OpenMP thread.
@@ -308,6 +353,8 @@ def calculate():
             summaries[name] = dict(all_printed=metrics(candidates, predicted), source_consistent=metrics(clean, predicted),
                                    without_first120=metrics([r for r in clean if not r['first_120']], predicted),
                                    omitted_source_observables=[r['record_id'] for r in candidates if r not in clean])
+            if name in ('integral_co2', 'integral_mea'):
+                summaries[name]['unavailable_predictions'] = integral_unavailability(part, name)
         summary['temperatures'][str(T)] = dict(counts=counts, metrics=summaries,
             first_pressure_excluded=min((r['loading'] for r in part if r['interval_status']=='bubble_pressure_exceeded'), default=None))
     summary['pooled_313_353'] = {name: metrics([r for r in kim if r['T_K'] in (313.15, 353.15)], field)
@@ -316,6 +363,7 @@ def calculate():
     summary['full_table_run_pairs'], _ = pairs(kim, False)
     nmr, nmr_checks = bottinger()
     curves = [r for job in results for r in job['curves']]
+    summary['curve_integral_unavailability'] = {str(T): integral_unavailability([r for r in curves if r['T_K']==T], 'integral') for T in TEMPERATURES}
     diagnostics = [r for job in results for r in job['differential_checks']]
     tables = {'kim-heat.csv': kim, 'heat-curves.csv': curves, 'pathway-fractions.csv': [r for job in results for r in job['fractions']],
               'bottinger-fractions.csv': nmr, 'run-pair-differences.csv': pair_values,
@@ -369,7 +417,7 @@ def calculate():
         crossing['refined_bracket'] = [lo, hi]
         crossing['endpoint_differences_kJ_mol'] = ends
         crossing['resolved_on_numerical_heat_tolerance'] = all(v is not None and abs(v)>2*HEAT_TOL for v in ends)
-    verification = dict(heat_references=references, study_feed_reference=own_references,
+    verification = dict(integral_failure_check=failure_check, heat_references=references, study_feed_reference=own_references,
                         nmr_references=nmr_checks, differential_halving=diagnostics,
                         nmr_passed=all(r['passed'] for r in nmr_checks), differential_passed=all(r['passed'] for r in diagnostics))
     write_json(STAGING/'summary.json', summary)
