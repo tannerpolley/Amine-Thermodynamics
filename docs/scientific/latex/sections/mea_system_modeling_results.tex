@@ -237,34 +237,39 @@ Experimental observations of no demixing, such as those reported by Schick et al
 
 \subsection{Transfer of the workflow to another aqueous amine}\label{sec:mdea-transfer}
 % P:results-mdea-01
-The estimation and comparison workflow can be applied to another aqueous amine by retaining the shared water, \COtwo and inorganic-ion parameters, the bicarbonate/carbonate reaction laws, and the caloric, density and bubble-pressure calculations.
-The phase-stability search and comparison protocol also carry over: the lowest fitting cost among fits with no additional liquid detected selects a parameter set, which is then compared with pressures outside the fit.
+The estimation and comparison workflow can be applied to another aqueous amine by retaining the shared water, \COtwo and inorganic-ion parameters and reactions R1--R3 of \cref{tab:reaction-equilibrium-constants}, and by reusing the caloric, density and bubble-pressure calculations.
+The phase-stability search and comparison protocol also carry over: the lowest fitting cost among fits with no additional liquid detected selects a parameter set, which is then compared with non-fitted pressures.
 The comparison limit, 24.2\,\%, is the MEA model's own AARD on its 112 non-fitted pressures.
 
 % P:results-mdea-inputs
-A new amine requires converted pure-amine PC-SAFT parameters, an amine--water interaction law, a representation of the protonated amine and its interactions, and an amine dissociation law with its reference basis.
-Measurements must be assigned to fitting or outside-fit comparison before estimation.
-For primary or secondary amines, the chemistry must also include carbamate formation; tertiary MDEA forms no carbamate \cite{Vaidya2007}.
-Section~\ref{supp-sec:s-mdea-transfer} specifies these inputs for MDEA, the worked example here, including both cation definitions, reactions, parameter values, bounds and property comparisons.
+A new amine requires pure-amine PC-SAFT parameters refitted to a published model's saturation pressure and liquid density, an amine--water interaction law, a representation of the protonated amine and its interactions, and an amine dissociation constant converted to the common aqueous molality standard of \cref{tab:reaction-equilibrium-constants}.
+Each data set must be designated as fitted or non-fitted before estimation.
+For primary or secondary amines, the chemistry must also include carbamate formation and a carbamate ion with its interactions, as for MEA here; tertiary MDEA forms no carbamate \cite{Vaidya2007}.
+Section~\ref{supp-sec:s-mdea-transfer} specifies these inputs for MDEA, including both cation definitions, reactions, parameter values, bounds and property comparisons.
 
 % P:results-mdea-example
-The MDEA example jointly fits nine MDEA-specific parameters with either a single-sphere or a charged-molecule protonated amine.
-\cref{fig:mdea-pressure} compares the calculated \COtwo partial pressures with measurements outside the fitting objectives.
+The MDEA example jointly fits nine MDEA-specific parameters to pressure, speciation, heat, heat-capacity and density data with either a single-sphere protonated amine, as for \MEAH, or a charged-molecule protonated amine, a chain with the segment number and association sites of neutral MDEA (Table~\ref{supp-tab:mdea-properties}).
+For both representations, the selected parameter set has no additional liquid detected at the searched states (Table~\ref{supp-tab:mdea-endpoints}).
+\Cref{fig:mdea-pressure} compares the calculated \COtwo partial pressures with two non-fitted sources.
 For 88 Ermatchkov observations at no more than 49 wt\% MDEA, AARDs are 26.21\,\% for the single-sphere and 19.15\,\% for the charged-molecule representation \cite{ermatchkovSolubilityCarbonDioxide2006}.
-The charged-molecule fit falls below the MEA comparison limit and the single-sphere fit exceeds it.
-Xiao's 20 observations reverse the ranking: 20.40\,\% for the single-sphere and 28.28\,\% for the charged-molecule representation \cite[Table~4]{xiaoCO2AbsorptionAqueous2018a}.
+The 24.2\,\% limit applies to this set: the charged-molecule fit falls below it and the single-sphere fit exceeds it.
+The single-sphere deviations are largest below \SI{7}{\kilo\pascal} (\cref{fig:mdea-pressure}a; Table~\ref{supp-tab:mdea-properties}).
+Xiao's 20 observations, compared without a limit, reverse the ranking: 20.40\,\% for the single-sphere and 28.28\,\% for the charged-molecule representation \cite[Table~4]{xiaoCO2AbsorptionAqueous2018a}.
+Both fits calculate pressures below nearly every Xiao measurement, with the largest deficits at the highest measured pressure (\cref{fig:mdea-pressure}b), so the reversal reflects the size of a shared underprediction.
 Four and two parameters, respectively, reach bounds, so the differences cannot be attributed solely to the cation representation; with the ranking reversal, these comparisons do not identify a generally preferable cation representation.
 
-\begin{figure}[htbp]
+\begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{figures/generated/mdea-pressure.pdf}
-\caption{The MDEA cation representations reverse their AARD ranking between two outside-fit pressure sources: (a) 88 Ermatchkov observations at no more than 49 wt\% MDEA \cite{ermatchkovSolubilityCarbonDioxide2006}; (b) 20 Xiao observations \cite[Table~4]{xiaoCO2AbsorptionAqueous2018a}.
+\caption{The MDEA protonated-amine representations reverse their AARD ranking between two non-fitted pressure sources: (a) 88 Ermatchkov observations at 313.15--\SI{393.15}{\kelvin} and no more than 49 wt\% MDEA \cite{ermatchkovSolubilityCarbonDioxide2006}; (b) 20 Xiao observations at 298.15--\SI{313.15}{\kelvin} and 23.5 wt\% MDEA \cite[Table~4]{xiaoCO2AbsorptionAqueous2018a}.
 Markers show calculated pressures at the measured states for the single-sphere (circles) and charged-molecule (crosses) fits; the gray line denotes equality of calculated and measured pressure.
 Both axes are logarithmic; the legend gives each fit's AARD.}
 \label{fig:mdea-pressure}
 \end{figure}
 
 % P:results-mdea-02
-The MDEA comparisons cover 293.15--\SI{395}{\kelvin}, up to 49 wt\% MDEA for the pressure test and 50 wt\% for other properties.
-The dielectric law above \SI{328.15}{\kelvin} is assumed, the response to changing the shared bicarbonate interaction is unresolved, and neither an independent implementation comparison nor process-column validation is available.
-This example demonstrates the procedure for one tertiary amine; it does not validate transfer to amines in general or test the additional carbamate chemistry required for primary and secondary amines.
+The intended MDEA comparison domain is 293.15--\SI{395}{\kelvin}, up to 49 wt\% MDEA for the pressure test and 50 wt\% for other properties.
+The dielectric law is extrapolated above \SI{328.15}{\kelvin}, the highest temperature of the permittivity data behind its coefficients.
+The bicarbonate--water interaction retained from the MEA fit has a conditional standard error larger than its value (Section~\ref{sec:results-joint}), and the response of the MDEA fits to changing it is unresolved.
+Neither a comparison with another implementation of the model nor process-column validation is available.
+This example demonstrates the workflow for one tertiary amine; it does not validate transfer to amines in general or test the additional carbamate chemistry required for primary and secondary amines.

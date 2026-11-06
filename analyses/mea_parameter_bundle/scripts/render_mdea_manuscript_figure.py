@@ -54,6 +54,10 @@ def main():
                ylabel=r'Calculated CO$_2$ partial pressure (kPa)',
                title=f'({letter}) {source}: {count} observations')
         ax.set_aspect('equal', adjustable='box')
+        if source == 'Xiao':
+            ticks = [10, 20, 50]
+            ax.set_xticks(ticks, [str(t) for t in ticks])
+            ax.set_yticks(ticks, [str(t) for t in ticks])
         ax.legend(loc='upper left', fontsize=7, frameon=False, title='AARD', title_fontsize=8)
     name = 'mdea-pressure'
     fig.savefig(OUT / f'{name}.pdf', metadata={'CreationDate': None, 'ModDate': None})
