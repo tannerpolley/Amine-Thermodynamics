@@ -225,3 +225,230 @@ The calculation uses the separate worktree MDEA environment and the immutable me
 Run `agent-heavy nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/score_context.py` from this worktree, then `nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/plot_context.py` for the retained-value figure.
 Pool size comes from the full CPU count, with one BLAS thread per process.
 This context section has not been independently reviewed or promoted for manuscript use.
+
+## Shared bicarbonate sensitivity and the Xiao pressure miss
+
+At the frozen MDEA endpoints, reducing the bicarbonate–water interaction from
+$k=0.7270558477497251$ to $0.6270558477497251$ improves Xiao agreement for both
+cation representations. It improves the Ermatchkov comparison for the single
+sphere A3 but worsens it for charged-molecule B1. The same change raises the
+MEA 307-observation weighted cost from 148.879 to 157.930. These are conditional
+parameter sensitivities, not an adopted shared value or evidence that the
+cation representation alone controls the pressure error.
+
+Xiao Table 4 supplies 20 measurements at 23.5 wt% unloaded analytical MDEA,
+298.15–313.15 K and 8.1–60.8 kPa CO₂ partial pressure. The molality calculated
+from that mass fraction is 2.57791 mol/kg water, consistent with the printed
+2.58. Loading is moles of added CO₂ per mole of analytical MDEA. Section 3.2
+and the table footnote identify CO₂/N₂ at 0.101 MPa total pressure. The
+calculation retains the existing nitrogen-free bubble state and computes
+$P y_{\mathrm{CO_2}}$. It therefore matches the reported quantity's label but
+not the experiment's total-pressure state. Nitrogen and this pressure-state
+difference remain unresolved; the results do not isolate an intrinsic
+physical-model cause for the Xiao miss.
+
+The live full Xiao PDF (Zotero `6H2LM5C5` / `C3NAG687`) matches the retained
+SHA-256. Ermatchkov's current reading copy also matches the indexed Zotero
+sidecar. Its Experimental Technique and Tables 1–3 establish the molality
+basis for the 88 primary comparison rows. [Source checks and input hashes](results/transfer-267/source-basis.json)
+record these findings. The four-reaction chemistry retains R1–R3 and the
+MDEAH⁺ dissociation direction and reference convention. Uyan 2015 §3 and Table 1
+supply the mole-fraction law; its molality conversion adds 4.0165 to $\ln K$.
+It gives $pK_m=8.54994$ at 298.15 K, versus 8.55071 from the Kamps–Maurer law.
+The [existing source comparison](results/reaction-basis-kamps-maurer.json)
+attributes the small difference to printed coefficient rounding. Application
+above the source's 368 K limit remains extrapolation. No chemistry law was
+adjusted in these probes. Xiao's own modified Kent–Eisenberg model
+(§2, Eqs. 1–15) correlates its effective dissociation constant with temperature
+and physical CO₂ solubility. That fitted relation is not a replacement for
+the retained thermodynamic dissociation law. These comparisons use the
+experimental loading column, not Xiao's calculated loading column.
+
+AARD is $100\langle|p_{\rm calc}/p_{\rm obs}-1|\rangle$; bias is the signed
+mean of the same relative error. All 108 pressure states per probe returned
+values. Their declared finite phase searches detected zero dense-liquid or
+gas witnesses and zero unresolved states. This does not establish global
+stability. The original pressure predictions replay within $10^{-8}$ relative
+(or $10^{-8}$ Pa near zero).
+
+| Representation and probe | Shared $k$ | Xiao AARD (%) | Xiao bias (%) | Ermatchkov AARD (%) | Ermatchkov bias (%) |
+|---|---:|---:|---:|---:|---:|
+| A3 baseline | 0.727056 | 20.3976 | −20.3976 | 26.2084 | −18.8835 |
+| A3, $k-0.1$ | 0.627056 | 10.5526 | −3.3441 | 23.1772 | −1.3759 |
+| A3, $k+0.1$ | 0.827056 | 34.4541 | −34.4541 | 34.7715 | −32.9226 |
+| A3, retained joint refit | 0.294490 | 19.1954 | −18.6376 | 20.7305 | −5.7513 |
+| B1 baseline | 0.727056 | 28.2764 | −28.2066 | 19.1460 | +0.8939 |
+| B1, $k-0.1$ | 0.627056 | 16.4205 | −11.9838 | 27.2756 | +23.2050 |
+| B1, $k+0.1$ | 0.827056 | 41.4631 | −41.4631 | 23.3225 | −16.9997 |
+| B1, retained joint refit | −0.086756 | 30.0501 | −30.0501 | 32.5173 | −31.2243 |
+
+![The discrete pressure-error metrics show the opposing Ermatchkov consequences of a lower shared bicarbonate interaction. Circles denote A3, squares B1; each point summarizes the retained source rows for one declared probe, without interpolation. Measurement and parameter uncertainty are not propagated.](results/transfer-267/pressure-comparison.png)
+
+The retained joint refits also changed MDEA-specific coordinates. They do not
+isolate bicarbonate sensitivity. The separate frozen-endpoint $k\pm0.1$
+calculations do. The 24.2% Ermatchkov criterion is a repository assessment
+limit, not experimental uncertainty. A3 at $k-0.1$ enters that limit; B1 at the
+same shared value leaves it. None of these cases eliminates the negative Xiao
+mean bias in both representations while meeting the Ermatchkov criterion for
+both.
+
+### Consequences for the frozen MEA parameter record
+
+Every tested shared value was evaluated on all 307 MEA fitted observations,
+with every other parameter and law fixed. All 307 predictions were available
+at each value. The original endpoint cost replays to $10^{-10}$ relative.
+These costs use the existing observation scales and weights; they are not
+uncertainty intervals or independent validation statistics.
+
+| Shared bicarbonate–water $k$ | MEA 307-row cost | Common149 cost | Restored-species cost | Jakobsen cost |
+|---:|---:|---:|---:|---:|
+| 0.7270558477, baseline | 148.87894 | 23.86100 | 2.44867 | 13.12218 |
+| 0.6270558477 | 157.93049 | 33.86784 | 2.85583 | 11.78620 |
+| 0.8270558477 | 158.79830 | 31.65398 | 2.04713 | 15.61860 |
+| 0.2944901719, A3 joint-refit value | 289.82399 | 165.96290 | 4.04353 | 10.45523 |
+| −0.0867558092, B1 joint-refit value | 532.29579 | 406.90172 | 4.90988 | 11.14717 |
+
+The common149 group contains the retained pressure/species/heat observations;
+its row predictions and the separate restored-species and Jakobsen groups
+are retained with every other group in [the MEA results](results/transfer-267/mea/).
+The two joint-refit shared values roughly double or more than triple the MEA
+cost without refitting MEA. Their MDEA scores alone therefore cannot recommend
+a usable shared value. This study does not apply a new MEA accept/reject
+threshold. Issue #266 owns the separate minor-species refits; no matching
+retained results from that issue were available in this checkout when these
+consequences were calculated.
+
+### Testing the active parameter bounds
+
+One matched refit per representation uses the original fitted observations,
+weights and scales, starting from the selected endpoint. Shared values remain
+at the MEA baseline. Only four finite search limits change: cation–CO₂ and
+cation–water constant $k$ use [−0.6, 0.6], cation–bicarbonate uses [−1.2, 1],
+and Born diameter uses [1.5, 8] Å. The other limits and nine-coordinate
+parameterization are unchanged. Native fitting retains the 40-iteration and
+2100-second limits and the original tolerances.
+
+These intervals test whether artificial search limits control the comparison;
+they are not measured physical parameter ranges. Uyan 2015 Eq. 7 gives
+$u_{ij}=\sqrt{u_i u_j}(1-k_{ij})$. Requiring nonnegative unlike attraction
+excludes $k>1$ under that interpretation. Positive component energies and
+diameters are also necessary conditions. They do not establish parameter
+identifiability or physical validation. The cation–water temperature law is
+checked at 293.15 and 395 K, the endpoints of this assessment interval.
+
+The A3 fit converges in 13 iterations, with weighted cost 396.38810 versus
+403.71499 at the original endpoint. Its Ermatchkov AARD is 20.43947%, with
++5.24458% bias; Xiao AARD is 20.96662%, with −19.66526% bias and 17/20
+underpredictions. The cation–water $k=-0.6$, cation–bicarbonate $k=-1.2$ and
+Born diameter 8 Å reach the expanded bounds. Its cation–water law remains
+below 1 at both temperature endpoints. Thus expanding the box changes the
+pressure comparison but does not remove bound dependence or the Xiao miss.
+Its finite full-state phase search covers 754 states, detects 35 gas-evolution
+witnesses, and detects no dense-liquid split or unresolved state. These gas
+witnesses are distinct from the rejected dense-liquid phase condition. [Fit, replay and phase evidence](results/transfer-267/A3-bounds/)
+retain every original fitted group, native trial failure and phase classification.
+
+The B1 expanded-bound fit converges in 5 iterations at cost
+373.17470, versus 374.45201 originally. Its Xiao AARD/bias remain
+28.02791% / −27.95981%; Ermatchkov gives 18.99988% / +0.10828%.
+Its 754-state finite phase search detects 36 gas-evolution witnesses, no
+dense-liquid split, and no unresolved state. Cation–bicarbonate $k=1$ and
+Born diameter 8 Å remain bound-active.
+Extending the former beyond 1 would leave the adopted nonnegative unlike-attraction
+interpretation. Neither fit isolates the cation, and the pressure ranking remains
+reversed between the sources. These two finite box extensions do not support
+an unrestricted statement about every admissible parameterization.
+
+Every original fitted property group remains in the objective. Their weighted
+costs are retained below; heterogeneous groups must not be compared as equally
+weighted physical errors. Fresh native-prediction replays reproduce weighted
+residuals within $10^{-8}$ absolute and cost within $10^{-8}$ relative.
+
+| Fitted group | A3 baseline cost | A3 expanded cost | B1 baseline cost | B1 expanded cost |
+|---|---:|---:|---:|---:|
+| Kuranov | 17.97147 | 23.49031 | 20.35356 | 19.79171 |
+| Jakobsen | 21.34983 | 21.33020 | 22.01985 | 22.01831 |
+| Carson | 23.11187 | 21.07040 | 19.07573 | 19.04978 |
+| Merkley | 7.79258 | 6.52739 | 7.93742 | 7.73542 |
+| Cp | 82.58162 | 73.04635 | 54.30857 | 53.85153 |
+| loaded-density | 1.15602 | 1.26196 | 1.24237 | 1.22307 |
+| unloaded-density | 249.69275 | 249.60260 | 249.45551 | 249.44586 |
+| Kim | 0.05884 | 0.05888 | 0.05901 | 0.05902 |
+
+
+### The missing 333 K heat
+
+The charged-molecule B1 native saturation-capped heat at 333.15 K, 60 wt% MDEA,
+1121 kPa and source loading cap 0.811 mol/mol remains unavailable after
+refining the loading search from the original 30 samples to 60 and 120 samples
+over the same 0.05–1.50 mol/mol bounds. The native diagnostic cannot admit a
+vapor-density branch: at the original grid it finds a stable root at
+33402.24 mol/m³ above a negative-slope sample at 10464.56 mol/m³, with an
+unexamined gap and unresolved slope reversals. Finer loading sampling changes
+the failing density values but does not resolve branch admission. This is a
+numerical search limitation; it does not show that absorption heat is
+physically undefined.
+
+| Control, at 60 wt% and 1121 kPa | 30-sample heat (kJ/mol CO₂) | 60-sample heat | 120-sample heat |
+|---|---:|---:|---:|
+| A3, 333.15 K | −76.268595 | −76.268595 | −76.268595 |
+| B1, 388.71 K | −64.128582 | −64.128582 | −64.128582 |
+
+The controls' largest change is below $4\times10^{-9}$ J/mol CO₂. The separate
+saturation diagnostic near 0.80691 mol/mol was not substituted for the native
+observable. No complete two-observation B1 60 wt% heat AARD is calculated.
+Sixty wt% remains a composition extrapolation. [The exact reproducer](results/transfer-267/heat-reproducer.json)
+retains parameter documents, caloric and reaction declarations, all grids,
+failure messages and the requested upstream check. The requested correction
+must preserve the full-grid uniqueness check and both controls. The
+[original wheel results](results/transfer-267/heat.json) separate the failure
+from these useful control heat values.
+
+The latest merged Engine main tested here is `4ffbb2b0825a28cdfa87dc333a586e641ff4c4b0`,
+with wheel SHA-256 `40a58fc8f341f2ef4d9f26ae604cda93a5380e2a87073147bc2ba8efb17864b2`.
+An unmodified archive of that fetched commit was built and installed in a separate
+worktree environment. The [latest-wheel reproduction](results/transfer-267/heat-latest.json)
+returns the same B1 333.15 K refusal on every grid. Both controls agree with the
+original wheel within $1.4\times10^{-13}$ relative. The failure therefore persists
+on that merged main commit. The combined [heat reproducer](results/transfer-267/heat-reproducer.json)
+contains both wheel identities, all input documents, grids, outputs and the stated
+correction criteria. The orchestrator owns the Engine request; this study has not
+changed Engine source or adopted the diagnostic wheel.
+
+
+For #255 stage 3, retain both cation representations and test the final MEA
+shared values with these source-specific consequences visible. The small
+bicarbonate decrease is a sensitivity direction for joint assessment, not a
+parameter recommendation. The existing joint-refit shared values cause much
+larger MEA cost increases, while bound release does not remove the Xiao miss.
+Resolve the Engine heat search separately before reporting a complete B1
+60 wt% heat statistic. No new parameter record is adopted.
+
+### Calculation identity and reproduction
+
+The pressure, heat-grid and MDEA parameter probes use merged Engine
+`d513820994a78bfe628d42fffd55b2eeab6f89bd`, wheel SHA-256
+`ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`.
+The MEA consequences use merged Engine `3e83e19c`, wheel SHA-256
+`0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`.
+Each process verifies installed Engine files byte-for-byte against its wheel.
+The original MEA and MDEA dependency pins are unchanged. Runtime and row-level
+values are retained under [transfer-267](results/transfer-267/).
+
+The [probe driver](scripts/transfer_probes.py) uses the existing MDEA
+application declarations and native Engine observations, fitting and phase
+searches. Run `agent-heavy .venv/bin/python analyses/mdea_mea_workflow/scripts/transfer_probes.py`
+with argument `heat`, `pressure` or `fit` in the prepared MDEA environment.
+For `mea`, use the main checkout's MEA interpreter on that same worktree script.
+`present` reads retained numbers and creates the pressure figure without
+calculating model predictions. The optional latest-main heat command takes
+`latest-heat`, the built wheel path and its merged commit as arguments; it
+uses a separate environment and does not qualify that wheel for the other
+calculations.
+
+The independent design review returned **Ready** before numerical execution.
+The present results have not yet received independent delivered review and
+have not been promoted for manuscript use. They support conditional numerical
+sensitivity and comparison with physical observations within the stated
+pressure-state, source, finite-search and composition limits. They do not
+qualify absorber use.
