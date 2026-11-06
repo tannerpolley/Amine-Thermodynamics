@@ -447,6 +447,7 @@ def calculate():
 def present():
     import matplotlib
     matplotlib.use('Agg')
+    matplotlib.rcParams.update({'pdf.fonttype': 42, 'ps.fonttype': 42})
     import matplotlib.pyplot as plt
     for name, checksum in json.loads((OUT/'hashes.json').read_text()).items():
         assert digest(OUT/name) == checksum, name
