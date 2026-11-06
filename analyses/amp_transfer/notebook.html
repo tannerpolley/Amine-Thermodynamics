@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>AMP reactive-model redesign</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="notebook_files/libs/clipboard/clipboard.min.js"></script>
+<script src="notebook_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="notebook_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="notebook_files/libs/quarto-html/popper.min.js"></script>
+<script src="notebook_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="notebook_files/libs/quarto-html/anchor.min.js"></script>
+<link href="notebook_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="notebook_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="notebook_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="notebook_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="notebook_files/libs/bootstrap/bootstrap-aeca128ff5825cfb6601657b8edbdab5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AMP reactive-model redesign</h1>
+<p class="subtitle lead">No adopted endpoint within the declared model alternatives; Kundu remains unscored</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="result" class="level2">
+<h2 class="anchored" data-anchor-id="result">Result</h2>
+<p>The redesigned AMP comparison in <a href="https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243">#243</a> produced <strong>no adopted parameter endpoint</strong>. The completed cation-A fits still fail the interior-bound, pressure or carbamate-fraction requirements. Cation B was initialized by the prescribed restricted fits, but its resulting full starts fail the calibration information check. Therefore the 51 Kundu 2003 CO₂ partial pressures remain unscored. The registered outside-fit test, <span class="math inline">\(E_p\le30\%\)</span>, was not reached; it was not failed by a computed Kundu error.</p>
+<p>This is a negative assessment of these declared parameter families and starts under frozen MEA shared species, Hamborg protonation and Hsieh dielectric coefficients. It is not evidence that no AMP ePC-SAFT model can work. It supplies calibration comparisons and numerical verification; it establishes no new held-out prediction or absorber-use qualification. It does not test a secondary amine. Issue #259 owns the separate manuscript decision; no manuscript source was edited.</p>
+</section>
+<section id="cation-a-completed-calibration-fits" class="level2">
+<h2 class="anchored" data-anchor-id="cation-a-completed-calibration-fits">Cation A: completed calibration fits</h2>
+<p>Both fitted sets use the same 156 calibration values: 47 Hartono 2021 total pressures at 313, 333 and 353 K in 26.8 mass% unloaded AMP, 26 pressures and 26 vapor AMP fractions from Hartono 2013, and 57 Ciftja 2014 carbamate fractions at 298.15–318.15 K in 30 mass% AMP. The NMR quantity is carbamate moles divided by total analytical AMP moles. Source rows, uncertainty interpretation and exclusions remain in <a href="source-admission.md">source admission</a>.</p>
+<p>Set 1 retains the ion-size/cation–CO₂ fitted coordinates. Set 2 fixes the carbamate size at the MEA analog and replaces the carbamate-size and cation–CO₂ coordinates with carbamate–water and neutral AMP–CO₂ interactions. The <a href="https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243">issue design</a> owns the exact coordinates, bounds, starts, objective and selection rule. No bound was widened from #242. Two starts were used for each declared case; start 1 is shown below. Cost is the dimensionless group-weighted least-squares objective, not a chi-square statistic.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Cation-A fitted set</th>
+<th style="text-align: right;">Cost</th>
+<th style="text-align: right;">Loaded P mean error / %</th>
+<th style="text-align: right;">Largest row error / %</th>
+<th style="text-align: right;">NMR fraction RMS</th>
+<th style="text-align: right;">Active bounds</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Set 1, fixed slope (#242 reused)</td>
+<td style="text-align: right;">66.866300</td>
+<td style="text-align: right;">9.904</td>
+<td style="text-align: right;">57.540</td>
+<td style="text-align: right;">0.00705745</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Set 1, fitted slope</td>
+<td style="text-align: right;">66.409889</td>
+<td style="text-align: right;">9.919</td>
+<td style="text-align: right;">57.505</td>
+<td style="text-align: right;">0.00637380</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Set 2, fixed slope</td>
+<td style="text-align: right;">104.161953</td>
+<td style="text-align: right;">11.907</td>
+<td style="text-align: right;">65.782</td>
+<td style="text-align: right;">0.00775774</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p>Adoption requires loaded-pressure mean absolute relative error ≤10% overall and on each isotherm, no row above 30%, NMR fraction RMS ≤0.006, interior coordinates and the declared numerical and phase checks. These are engineering acceptance policies set by the orchestrator under the owner’s 2026-11-06 instruction, not published measurement uncertainties.</p>
+<p>For set 1 with fitted slope, mean pressure errors are <strong>11.444%, 9.796% and 8.532%</strong> at 313, 333 and 353 K. Its 313 K, loading 0.95 mol CO₂/mol AMP row is underpredicted by <strong>57.505%</strong>. Allowing the slope to move improves the NMR fit but does not remove the largest pressure disagreement or meet the NMR limit. The cation–CO₂ correction remains at +0.5 and carbamate diameter at 4.5 Å; the enthalpy shift also reaches its −5000 J/mol bound. Total effective hydrolysis enthalpy is <strong>16.1703 kJ/mol</strong>, conditional on this model. The native covariance is unavailable because coordinates are on bounds. Conditional slope standard error and correlations therefore have no available values; no identification claim follows. The prescribed fixed-slope fallback is the already-inadmissible #242 branch.</p>
+<p>Set 2’s fixed-slope pressure errors are <strong>16.488%, 13.002% and 6.085%</strong> on the same isotherms. Its neutral AMP–CO₂ correction reaches +0.5 and carbamate offset reaches −3. Its fitted-slope starts fail the information check before fitting: <span class="math inline">\(s_{min}/s_{max}=6.23\times10^{-5}\)</span> and <span class="math inline">\(5.33\times10^{-5}\)</span>, below <span class="math inline">\(10^{-4}\)</span>. These are start-specific diagnostics, not fitted endpoints or proof of intrinsic nonidentifiability.</p>
+<p>The two completed starts agree closely within each case: cost differences are below <span class="math inline">\(2\times10^{-9}\)</span> for set 1/fitted slope and set 2/fixed slope. They do not establish a global optimum. Binary calibration remains present: set 1/fitted slope gives 1.148% mean binary-pressure error and mean absolute vapor AMP fraction error <span class="math inline">\(4.34\times10^{-4}\)</span>; set 2/fixed slope gives 1.400% and <span class="math inline">\(7.16\times10^{-4}\)</span>. All 156 values remain available in each cold replay.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="results/redesign/pressure-comparison.svg" class="img-fluid figure-img"></p>
+<figcaption>Lowest-calibration-cost cation-A candidate in each fitted set, shown at measured states. Circles are Hartono 2021 total-pressure observations with the reported u(P) and u(alpha); crosses are fitted predictions, not an interpolated curve. These candidates are not adopted. The log pressure scale exposes both low- and high-loading disagreement.</figcaption>
+</figure>
+</div>
+<p>The exact plotted values are in <a href="results/redesign/pressure-plot.csv">pressure-plot.csv</a>; the figure’s candidate choice is for this calibration diagnostic only and has no holdout-selection consequence. Reported source uncertainty bars are not a model confidence band.</p>
+</section>
+<section id="cation-b-initialization-did-not-repair-the-information-failure" class="level2">
+<h2 class="anchored" data-anchor-id="cation-b-initialization-did-not-repair-the-information-failure">Cation B: initialization did not repair the information failure</h2>
+<p>All eight restricted initialization fits converge at cost about <strong>2636.317</strong> and NMR fraction RMS about <strong>0.024684</strong>. The initialized full starts have <span class="math inline">\(s_{min}/s_{max}\)</span> of approximately <span class="math inline">\(1.55\times10^{-11}\)</span> (set 1/fixed slope), <span class="math inline">\(3.05\times10^{-12}\)</span> (set 1/fitted slope), and <span class="math inline">\(1.58\times10^{-19}\)</span> (set 2, either slope), against <span class="math inline">\(10^{-4}\)</span>. No full cation-B fit follows those failed gates. Its initialization was a root-cause correction attempt for the #242 start-state limitation; changing the fitted interaction set did not make its initialized full starts admissible.</p>
+<p>The <a href="results/redesign/probe-cation-b.json">direct state probe</a> evaluates both fixed-slope initialized sets. At the three highest-loading calibration states, 313 K/0.95, 333 K/0.96 and 353 K/0.90, set 1 predicts total pressures <strong>25.52, 73.02 and 172.97 kPa</strong>, versus <strong>609.1, 665.0 and 733.2 kPa</strong> measured. CO₂ comprises only <strong>2.83×10⁻⁶, 2.06×10⁻⁶ and 5.60×10⁻⁷</strong> of the modeled vapor. Liquid free AMP is of order <span class="math inline">\(10^{-14}\)</span> mole fraction; the carbamate fraction is also extremely small. Set 2 gives nearly identical pressures and vapor CO₂ fractions. The selected roots remain dense liquid plus dilute vapor (packing fractions about 0.38–0.43 and below 0.0005 in these probes). Root-selection multiplicity is unavailable, and these probes are not global phase-stability searches.</p>
+<p>This supports a chemical-state explanation for the empty sensitivity columns: the initialized B states suppress free AMP, molecular CO₂ and carbamate, leaving little response to the fitted CO₂/carbamate interactions. It does not identify which frozen energy, solvation or association assumption causes that state. Column normalization raises B’s singular-value ratios to about 0.004–0.005, while some original scaled column norms are as small as <span class="math inline">\(5\times10^{-18}\)</span>. Thus the gate failure is weak physical sensitivity on the specified coordinate scales, not proof of exact algebraic singularity. Normalizing tiny columns does not supply additional measurement information or authorize a different start, bound or gate.</p>
+</section>
+<section id="numerical-verification-uncertainty-and-limits" class="level2">
+<h2 class="anchored" data-anchor-id="numerical-verification-uncertainty-and-limits">Numerical verification, uncertainty and limits</h2>
+<p>The campaign uses immutable Engine e6dae5c7, SHA-256 <code>83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6</code>, with 32 available CPUs, through <code>agent-heavy</code>. The candidate campaign took <strong>587.6 s</strong> admitted wall time, excluding admission waiting and the subsequent verification/plotting job. No pure-AMP, dielectric or protonation fit was repeated. The unchanged two #242 cation-A fixed-slope fits were reused.</p>
+<p>Every completed full-fit endpoint (six including the two historical fits) was serialized, reloaded into a fresh model with its completed laws, and replayed on all <strong>156</strong> calibration values. Maximum relative prediction difference was <strong>0</strong> in these replays; complete shared-component and shared-only pair records were unchanged. For all eight B restarts, initial cost agrees with its restricted endpoint to at most <strong>2.24×10⁻¹³ relative</strong>. This verifies completed-law restart at the actual initialization point; preservation of the full allowed law family follows the independently reviewed restart algebra in #243. The initial-cost agreement is not evidence of a physical fit.</p>
+<p>A reporting defect initially passed the source temperature string to <code>round()</code>. It affected the post-fit pressure summaries, after fit histories and replay values had been retained. The conversion is corrected; pressure summaries were reconstructed from retained values and checked by the cold replays. No optimizer rerun was used to improve the result. Original run messages remain in <a href="results/redesign/run.log">run.log</a>, with the correction checks in <a href="results/redesign/verification.log">verification.log</a>.</p>
+<p>Numerical agreement does not remove model discrepancy, source dependence, correlation within isotherms or the limited NMR temperature span. Hsieh, Hamborg, ion analog energies/Born terms, pure AMP and shared MEA parameters remain fixed. No measurement or parameter uncertainty was propagated into pressure predictions. The source enthalpy allowance is an engineering range, not independent caloric evidence. No available covariance supports fitted slope uncertainty at these bound endpoints.</p>
+<p>Because no candidate passes calibration/adoption, Kundu, its loading sensitivity envelope, Tong and the supplemental Hartono isotherms are not scored, and endpoint tangent-plane phase trials are not reached. No dense-phase stability or outside-fit pressure result is claimed. Other starts, different ion solvation/association assumptions and broader source-justified models remain untested. This task does not establish general transfer to primary or secondary amines; it rejects adoption from the specified alternatives.</p>
+</section>
+<section id="evidence-and-review" class="level2">
+<h2 class="anchored" data-anchor-id="evidence-and-review">Evidence and review</h2>
+<ul>
+<li><a href="results/redesign/summary.json">summary.json</a> retains each start gate, endpoint, group errors, bounds, covariance availability and cold replay.</li>
+<li><code>results/redesign/*-fit.json</code> retains native histories, residuals and replay rows; <code>*-initial.json</code> retains B initialization and its start matrix.</li>
+<li><code>inputs/redesign/</code> and <code>redesign-*.toml</code> bind all candidate starts, coordinates, law baselines and parameter documents by SHA-256.</li>
+<li><a href="results/redesign/probe-cation-b.json">probe-cation-b.json</a> and <a href="diagnosis-cation-b.md">diagnosis-cation-b.md</a> distinguish initialized-B state behavior from a fitting-path or phase-classification claim.</li>
+<li>Design readiness: independent <strong>Ready</strong>, after the restart-family and Kundu-independent slope-bound corrections; reviewed design body SHA-256 <code>496ffe813ae1b09f6ba63a81862d6d26ce9f44e674ece23d2ea1391693e97ea1</code>. Delivered-result review is pending on this retained evidence. No manuscript promotion is made here.</li>
+</ul>
+<p>The following sections retain #242’s original evidence and limits as history.</p>
+</section>
+<section id="historical-242-finding" class="level2">
+<h2 class="anchored" data-anchor-id="historical-242-finding">Historical #242 finding</h2>
+<p>The question for <a href="https://github.com/tannerpolley/Amine-Thermodynamics/issues/242">#242</a> is whether the adopted MEA shared-species parameters, with a refitted pure-AMP set and an eight-coordinate AMP reactive fit, predict Kundu 2003’s 51 CO₂ partial pressures within the 30 % screening limit. <strong>This study does not answer it.</strong> The cation A sphere fit converges to the same endpoint from both declared starts. At that endpoint, however, the AMPH⁺–CO₂ interaction correction is on its upper bound (k = +0.5) and the AMPCOO⁻ diameter is on its lower bound (4.5 Å). Under design §6 an endpoint on a bound is not adopted. The owner’s instruction for this case is to stop without scoring Kundu, so the falsifier, the α ± 2 % envelope, the Tong comparison and the endpoint phase trials were not run.</p>
+<p>At the endpoint both declared starts reach, the model does not reproduce Hartono 2021’s loaded total pressures at the highest loadings. The fit pushes to the weakest AMPH⁺–CO₂ attraction allowed, which raises the predicted CO₂ pressure, and to the smallest carbamate-anion diameter allowed. It still under-predicts the 313 K, α = 0.95 row by 58 %. The remaining calibration residuals follow a systematic pattern with loading at each isotherm. Our reading is a structural limit of the bounded model rather than noise; two starts do not show that no other point inside the bounds does better.</p>
+<p>This historical record is retained as the #242 finding. The #243 assessment and its review state are reported above; no manuscript promotion is made here.</p>
+</section>
+<section id="reactive-fits" class="level2">
+<h2 class="anchored" data-anchor-id="reactive-fits">Reactive fits</h2>
+<p>Cation A is the declared sphere option: AMPH⁺ is a single sphere whose segment, Debye–Hückel and packing diameters are tied (packing = 0.88 × segment). Cation B, the chain option, fails its start rank gate for a start-state reason (<code>diagnosis-cation-b.md</code>) and was not fitted (owner decision, 2 November 2026). A is the result by default, not by comparison with B.</p>
+<p>The objective has 156 calibration rows: 47 loaded total pressures from Hartono 2021 Table 7 at 313/333/353 K, 52 Hartono 2013 binary values (26 P, 26 y_AMP), and 57 Ciftja 2014 carbamate fractions. Engine wheel <code>e6dae5c7</code> (SHA-256 <code>83ede7d2…77dd6</code>). The native optimizer was capped at 60 iterations, 75 min, function and parameter tolerances 1e−10, and gradient tolerance 1e−8.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Quantity</th>
+<th style="text-align: right;">A-1 (document start)</th>
+<th style="text-align: right;">A-2 (ion–water +0.1, +100 K)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Status, message</td>
+<td style="text-align: right;">converged; function tolerance</td>
+<td style="text-align: right;">converged; function tolerance</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Iterations</td>
+<td style="text-align: right;">58</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fit time / s</td>
+<td style="text-align: right;">42.1</td>
+<td style="text-align: right;">29.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Initial cost</td>
+<td style="text-align: right;">2594.95</td>
+<td style="text-align: right;">3554.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Final cost</td>
+<td style="text-align: right;">66.866300458</td>
+<td style="text-align: right;">66.866300457</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Active bounds</td>
+<td style="text-align: right;">AMPH⁺–CO₂ k (upper), AMPCOO⁻ σ (lower)</td>
+<td style="text-align: right;">same</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Endpoint rank, s_min/s_max</td>
+<td style="text-align: right;">8, 1.68e−3 (condition 595)</td>
+<td style="text-align: right;">8, 1.68e−3 (condition 595)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Projected gradient norm</td>
+<td style="text-align: right;">3.1e−4</td>
+<td style="text-align: right;">3.3e−4</td>
+</tr>
+</tbody>
+</table>
+<p>The two starts agree. Their costs differ by 8.5e−10, the largest coordinate difference is 2.6e−5 coordinate scales, and the largest difference in any weighted calibration residual is 2.1e−5 (1.5e−4 before weighting). The rank gate holds at the endpoint (condition ≤ 1e4), but the Engine reports covariance status <code>active_bound</code>, so no local covariance is claimed.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Coordinate</th>
+<th style="text-align: left;">Bounds</th>
+<th style="text-align: right;">Endpoint (A-1)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AMP–water k_ref</td>
+<td style="text-align: left;">[−0.5, 0.5]</td>
+<td style="text-align: right;">−0.13349</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AMP–water slope s / K</td>
+<td style="text-align: left;">[−1000, 1000]</td>
+<td style="text-align: right;">−61.20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AMPH⁺–water k_ref</td>
+<td style="text-align: left;">[−0.5, 0.5]</td>
+<td style="text-align: right;">−0.28634</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AMPH⁺–water slope s / K</td>
+<td style="text-align: left;">[−1000, 1000]</td>
+<td style="text-align: right;">−300.12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AMPH⁺–CO₂ k</td>
+<td style="text-align: left;">[−0.5, 0.5]</td>
+<td style="text-align: right;"><strong>+0.5 (bound)</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AMPH⁺ σ / Å</td>
+<td style="text-align: left;">[4.5, 6.5]</td>
+<td style="text-align: right;">5.2842</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AMPCOO⁻ σ / Å</td>
+<td style="text-align: left;">[4.5, 6.5]</td>
+<td style="text-align: right;"><strong>4.5 (bound)</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Carbamate offset δ</td>
+<td style="text-align: left;">[−3, +2]</td>
+<td style="text-align: right;">−1.4576</td>
+</tr>
+</tbody>
+</table>
+<p>Here k(T) = k_ref + s(1/T − 1/313.15 K). δ is interior: the fitted carbamate law is ln K_h,m = −2546.2/T + 10.0974, against the source law’s 11.555 intercept. Because the endpoint is on two bounds, these values are not adopted parameters.</p>
+<section id="replay-with-the-fitted-laws" class="level3">
+<h3 class="anchored" data-anchor-id="replay-with-the-fitted-laws">Replay with the fitted laws</h3>
+<p>The fitted reaction laws and parameters were loaded into a new model and every calibration row was re-predicted. A first run refused the 11 Hartono 2013 binary states above 353.22 K, each with a P and a y value, as <code>OutsideDeclaredDomain</code>: the binary datasets carried the Hamborg protonation range [293.12, 353.22] K although binary rows contain no reaction. The binary datasets now declare their own measured range, [333.12, 373.17] K, with every reactive declaration and value unchanged (owner decision 2026-11-02). The rerun of <code>reactive.py</code> reproduces both fits exactly (same costs, iterations, bounds and endpoints) and replays all rows.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Replay of 156 rows</th>
+<th style="text-align: right;">A-1</th>
+<th style="text-align: right;">A-2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rows available</td>
+<td style="text-align: right;">156</td>
+<td style="text-align: right;">156</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Relative cost difference from native</td>
+<td style="text-align: right;">5.0e−13</td>
+<td style="text-align: right;">4.9e−13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Max weighted-residual difference</td>
+<td style="text-align: right;">8.4e−12</td>
+<td style="text-align: right;">7.5e−12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Binary group cost</td>
+<td style="text-align: right;">0.29908</td>
+<td style="text-align: right;">0.29906</td>
+</tr>
+</tbody>
+</table>
+<p>Both endpoints pass the replay check (≤ 1e−8). This confirms the fitted model is reproduced from its retained records. It does not change the outcome, which is decided by the active bounds.</p>
+</section>
+<section id="calibration-agreement-at-the-endpoint" class="level3">
+<h3 class="anchored" data-anchor-id="calibration-agreement-at-the-endpoint">Calibration agreement at the endpoint</h3>
+<p>Cost by group, from the native weighted residuals: loaded pressures 63.80, binary 0.30, NMR 2.77, total 66.87. The loaded pressures carry 95 % of the cost.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hartono 2021 isotherm</th>
+<th style="text-align: right;">Rows</th>
+<th style="text-align: right;">Mean abs. error / %</th>
+<th style="text-align: left;">p_calc/p_obs at the highest loading</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">313 K</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">11.5</td>
+<td style="text-align: left;">0.80 (α 0.90), 0.42 (α 0.95)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">333 K</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">9.8</td>
+<td style="text-align: left;">1.04, 1.05 (α 0.94), 0.89 (α 0.96)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">353 K</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">8.5</td>
+<td style="text-align: left;">1.01 (α 0.86), 0.99 (α 0.90)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All 47</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">9.9 (worst row 57.5)</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>The predicted pressure is 8–18 % high at 313 K for α 0.46–0.78 and 15–31 % high at 333 K for α 0.69–0.92. At both isotherms it falls below the measurement at the highest loading. At 353 K it is 5–18 % low for α 0.13–0.65. Hartono 2013 binary pressures have a mean error of 1.12 % (worst 2.97 %); vapour AMP fractions have a mean absolute error of 4.3e−4 (worst 2.0e−3). The Ciftja carbamate-fraction RMS is 0.00706 over 57 rows, mean signed error −0.0011. That is above the 0.006 calibration check, at an endpoint that is not adopted.</p>
+</section>
+</section>
+<section id="preparation-retained-before-the-reactive-fit" class="level2">
+<h2 class="anchored" data-anchor-id="preparation-retained-before-the-reactive-fit">Preparation retained before the reactive fit</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Stage</th>
+<th style="text-align: left;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Pure AMP (24 Klepáčová/Belabbaci pressures, 3 Ayad densities)</td>
+<td style="text-align: left;">m 4.0761, σ 3.1870 Å, u/k 237.06 K, ε_AB/k 2385.2 K, κ 0.0366; both starts agree; no active bounds; s_min/s_max 2.0e−4 (gate 1e−4). Klepáčová 1.89 % mean / 7.96 % max; Belabbaci 1.77 % / 4.52 %; densities ≤ 0.03 kg/m³.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pappa 2006 pure-AMP hold-out (23 pressures)</td>
+<td style="text-align: left;">1.18 % mean, 3.04 % max.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hartono 2013 binary pre-fit (2 coordinates, 52 values)</td>
+<td style="text-align: left;">k_ref −0.1307, s −54.14 K; P 1.05 % mean / 2.56 % max; y_AMP 4.2e−4 mean abs.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hsieh 2007 dielectric (30 rows, fixed density record)</td>
+<td style="text-align: left;">Both branches admissible; lower Hsieh-only cost selects dielectric volume 0.3229 L/mol, dielectric temperature 2056 K (cost 82.11 vs 85.67); 1.74 % mean, 4.81 % max error.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hamborg 2009 Table 16 protonation law (24 runs)</td>
+<td style="text-align: left;">ln K = −3850.74/T − 55.318 + 8.0646 ln T; χ² 17.0 on 21 degrees of freedom with the printed scales; condition number 1.2e6.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kundu overlap check</td>
+<td style="text-align: left;">0 identical rows with Hartono 2021 (different stocks 2.0/2.8/3.4 vs 3.0 mol/L and different observable).</td>
+</tr>
+</tbody>
+</table>
+<p>The 21 Pappa 2006 binary VLE rows named in the design as supplemental comparisons were never admitted: the only available copy is the private CESAR-1 transcription, which the design forbids copying. Pappa is therefore represented only by the pure-AMP hold-out above.</p>
+</section>
+<section id="not-assessed" class="level2">
+<h2 class="anchored" data-anchor-id="not-assessed">Not assessed</h2>
+<p>Kundu 2003 (51 rows, E_p ≤ 30 %), the α ± 2 % sensitivity envelope, Tong 2012 (40 loaded and 5 zero-loading rows), the Hartono 2021 373/393 K supplemental isotherms, and the endpoint tangent-plane phase trials were not run. Those results have no value here. Scoring them from a bound-limited endpoint is excluded by the owner’s instruction.</p>
+<p>The result is a negative disposition reported in tables. A figure would show the same few endpoint values and isotherm ratios without making the stop condition clearer.</p>
+</section>
+<section id="limits-and-next-decision" class="level2">
+<h2 class="anchored" data-anchor-id="limits-and-next-decision">Limits and next decision</h2>
+<ul>
+<li>The stop is a design-rule outcome: two coordinates sit on bounds that the design set as physical limits. It is not a convergence failure, and it does not show that a model with wider bounds would pass Kundu.</li>
+<li>Two starts that differ only in the ion–water pair reach the same endpoint. That supports a single local minimum under these bounds. It does not establish a global optimum.</li>
+<li>The cation-A model, the fixed MEA shared species, the fixed Xu/Silkenbäumer carbamate slope, the fixed Hamborg protonation law and the fixed dielectric coefficients all condition the result.</li>
+<li>Whether to widen bounds, change the ion representation, or stop the AMP transfer is a Design decision for the owner. No such change was made.</li>
+</ul>
+</section>
+<section id="retained-outputs" class="level2">
+<h2 class="anchored" data-anchor-id="retained-outputs">Retained outputs</h2>
+<ul>
+<li><code>results/reactive/summary.json</code>: preflight for all four runs; cation A fits, endpoint checks, two-start comparison and stop disposition.</li>
+<li><code>results/reactive/A-1-fit.json</code>, <code>A-2-fit.json</code>: native fit reports (iteration history, predictions, covariance) and replay rows.</li>
+<li><code>inputs/A-1-endpoint.json</code>, <code>inputs/A-2-endpoint.json</code>: endpoint parameter documents (not adopted).</li>
+<li><code>results/reactive/run-cation-a.log</code>: run log; agent-heavy, 2 min 8 s elapsed, 32 CPUs.</li>
+<li><code>results/pure/summary.json</code>, <code>results/binary-dielectric.json</code>, <code>results/source-preparation.json</code>: preparation stages.</li>
+<li><code>diagnosis-cation-b.md</code>, <code>results/reactive/probe-cation-b.json</code>: cation B start-gate cause.</li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
