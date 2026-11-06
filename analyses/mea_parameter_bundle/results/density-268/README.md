@@ -63,3 +63,13 @@ The approved code ceiling is 450 gross executable additions against `30db72a`,
 zero separate tests. `change-accounting.json` records 374 executable additions;
 assertions in the study command protect the 307-row qualification, chart/start
 identity, native-fit initial cost, endpoint replay and retained row counts.
+
+## Retained 255 vectors
+
+The additional higher-temperature density values and original fixed-vector
+summaries are retained together for
+[final size at the wider-bound value](reused-255/final-size-wide.json),
+[wider-bound size at 5.35 Å](reused-255/wide-size-5.35.json),
+[wider-bound water interaction −0.175](reused-255/wide-water--0.175.json),
+[wider-bound Born diameter 4.5 Å](reused-255/wide-born-4.5.json), and
+[wider-bound ion-pair interaction −0.5](reused-255/wide-pair--0.5.json).
