@@ -53,4 +53,4 @@ sources identified by searches for high-temperature MEA dissociation and
 carbamate hydrolysis. It establishes the existence of independent R5 evidence.
 It does not establish that every published R4 measurement has been found.
 No source law tested outside its measurement interval becomes validated by
-that extrapolation. No model results have yet been calculated for this issue.
+that extrapolation.
