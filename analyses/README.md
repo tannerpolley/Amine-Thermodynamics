@@ -74,9 +74,9 @@ report with `python3 analyses/manuscript.py include analyses <report.qmd>
 (`_quarto-presentation.yml`), which only prepares presentation views and never
 solves the model. The strict bundle
 certification is `result_freshness.py --certify` (see the bundle README).
-`python3 analyses/manuscript.py service analyses/` installs the CSE always-on
-preview unit; it is not installed here (see the bundle README for the
-interpreter requirement and the existing port-8770 preview service).
+The CSE always-on preview unit (`python3 analyses/manuscript.py service
+analyses/`) serves the main checkout at `http://127.0.0.1:8770/`; agents do
+not start or stop it.
 
 ```text
 analyses/
