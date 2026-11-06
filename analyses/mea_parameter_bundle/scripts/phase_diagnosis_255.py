@@ -89,6 +89,32 @@ def decomposition():
     f.table(OUT/'contributions.csv',rows)
     assert len(rows)==51
 
+def reduce_state(raw):
+    reports=raw.get('stability',[])
+    trials=[t for report in reports for t in report['trials']]
+    parent=raw.get('final',{})
+    admitted=bool(parent.get('success') and parent.get('requested_tolerance_met') and max(map(abs,parent.get('raw_residuals',[math.inf])))<=1e-10 and parent['reduced_hessian_minimum']>=0 and all(v>0 for v in parent['pressure_density_derivatives']))
+    unresolved=sum(t['evidence'] in ('unresolved','indeterminate') for t in trials)
+    failed=sum(not t['optimizer']['success'] for t in trials)
+    complete=admitted and bool(reports) and all(r['completed'] for r in reports) and len(trials)==9 and failed==0 and unresolved==0
+    return dict(index=raw['index'],classification=raw['classification'],resolved=sum(t['resolved_descent'] for t in trials),minimum_tpd=min((t['quantities']['tpd_over_rt'] for t in trials if 'tpd_over_rt' in t['quantities']),default=None),failed_optimizers=failed,trials=len(trials),parent_admitted=admitted,reports_completed=bool(reports) and all(r['completed'] for r in reports),unresolved_trials=unresolved,complete=complete)
+
+def regenerate_reductions():
+    summaries=[]
+    for row in csv.DictReader((OUT/'probes.csv').open()):
+        directory=OUT/row['name']
+        with gzip.open(directory/'phase-results.json.gz','rt') as h: raw=json.load(h)
+        reduction=[reduce_state(r) for r in raw]
+        summary=e.load(directory/'summary.json')
+        assert len(reduction)==summary['states']
+        assert sum(r['resolved']>0 for r in reduction)==summary['descent_states']
+        summary['incomplete_states']=sum(not r['complete'] for r in reduction)
+        dump(directory/'reduction.json',reduction)
+        dump(directory/'summary.json',summary)
+        row['incomplete_states']=summary['incomplete_states']
+        summaries.append(row)
+    f.table(OUT/'probes.csv',summaries)
+
 def probe(task):
     name,mapping,changes=task
     started=time.monotonic()
@@ -108,9 +134,8 @@ def probe(task):
         path=directory/'point.json'
         f.family_job(mapping,e.request(mapping,313.15,.11),row,[],path)
         raw=e.load(path)
-        trials=[t for r in raw.get('stability',[]) for t in r['trials']]
         results.append(raw)
-        return dict(index=index,classification=raw['classification'],resolved=sum(t['resolved_descent'] for t in trials),minimum_tpd=min((t['quantities']['tpd_over_rt'] for t in trials if 'tpd_over_rt' in t['quantities']),default=None),failed_optimizers=sum(not t['optimizer']['success'] for t in trials),trials=len(trials))
+        return reduce_state(raw)
     reduction=[run(i) for i in confirmed]
     if all(r['resolved']==0 for r in reduction):
         reduction.extend(run(i) for i in range(162) if i not in confirmed)
@@ -124,7 +149,7 @@ def probe(task):
     dump(directory/'replay.json',values)
     available=all(v['status']=='Available' and v['requested_tolerance_met'] for v in values)
     loaded=[v for v in values if v['target'] in spec['loaded_density_ids']]
-    summary=dict(name=name,changes=changes,states=len(reduction),descent_states=sum(r['resolved']>0 for r in reduction),incomplete_states=sum(r['trials']!=9 or r['failed_optimizers']>0 or r['classification']=='unresolved' for r in reduction),minimum_tpd=min((r['minimum_tpd'] for r in reduction if r['minimum_tpd'] is not None),default=None),rows=len(values),available=available,cost=sum(v.get('cost',0.) for v in values) if available else None,loaded_within_2s=sum(abs(v.get('residual',math.inf))<=2 for v in loaded),loaded_rows=len(loaded),wall_s=time.monotonic()-started,cpu_s=time.process_time()-cpu)
+    summary=dict(name=name,changes=changes,states=len(reduction),descent_states=sum(r['resolved']>0 for r in reduction),incomplete_states=sum(not r['complete'] for r in reduction),minimum_tpd=min((r['minimum_tpd'] for r in reduction if r['minimum_tpd'] is not None),default=None),rows=len(values),available=available,cost=sum(v.get('cost',0.) for v in values) if available else None,loaded_within_2s=sum(abs(v.get('residual',math.inf))<=2 for v in loaded),loaded_rows=len(loaded),wall_s=time.monotonic()-started,cpu_s=time.process_time()-cpu)
     dump(directory/'summary.json',summary)
     print(json.dumps(summary),flush=True)
     return summary
@@ -147,6 +172,9 @@ def engine_capability():
 
 if __name__=='__main__':
     f.s.verify_wheel()
+    if sys.argv[1:]==['--reduce-only']:
+        regenerate_reductions()
+        sys.exit(0)
     OUT.mkdir(exist_ok=True)
     tasks=candidates()
     dump(OUT/('provenance-resume.json' if (OUT/'provenance.json').exists() else 'provenance.json'),dict(engine_commit=f.s.ENGINE_COMMIT,wheel_sha256=f.s.sha256(f.s.installed_wheel()),script_sha256=f.s.sha256(Path(__file__)),inputs={str(v.relative_to(ROOT)):f.s.sha256(v) for v in p.FITS.values()},command=sys.argv))

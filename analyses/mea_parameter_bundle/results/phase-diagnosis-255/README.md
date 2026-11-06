@@ -18,6 +18,8 @@ Each fixed vector first re-solves and searches the 32 states with a retained con
 
 The MEAH⁺ size coordinate retains its original ties: Debye–Hückel diameter equals segment diameter and packing diameter equals 0.88 times segment diameter. Interaction constants change alone unless the probe name contains `water-law`, which interpolates both the constant and reciprocal-temperature slope toward the final values. Born probes change the MEAH⁺ and carbamate Born diameters together. Every other coefficient, including reaction laws, stays at the named starting set.
 
+Completeness is evaluated independently of descent: the parent must pass numerical admission, all reports must complete, all nine trial slots must return successful optimizers, and no trial may have unresolved or indeterminate evidence. A valid descent at an admitted state remains a counterexample even if another trial is unresolved. The regenerated limitation counts are 1 for `wide-pair--0.5` (state 155), 2 for `final-water--0.1` (states 92 and 98, with failed parent admission at 92), and 5 for `final-water-0.0` (failed parent admission at states 55, 56, 74, 92 and 95). The other 45 counts are unchanged.
+
 Each vector replays the exact 307 observation rows and their original weights, with no optimizer call. Cost is one half the sum of squared weighted residuals. Loaded-density counts use the 47 original rows and $|r_i|\leq2$ with their assigned scales. These are calibration diagnostics, not new independent measurements. The scales do not establish parameter uncertainty.
 
 ### Energy accounting
@@ -38,7 +40,7 @@ Strengthening MEAH⁺–water attraction is sufficient to remove detected descen
 | wide | 32 | 32 | 0 | 148.211508 | 47 |
 | wide-size-5.35 | 32 | 24 | 0 | 654.423073 | 0 |
 | wide-pair--0.8 | 32 | 19 | 0 | 182.429824 | 47 |
-| wide-pair--0.5 | 32 | 8 | 0 | 350.057836 | 47 |
+| wide-pair--0.5 | 32 | 8 | 1 | 350.057836 | 47 |
 | wide-born-4.5 | 32 | 23 | 0 | 148.755097 | 47 |
 | wide-water--0.1 | 32 | 3 | 0 | 420.193873 | 46 |
 | wide-water--0.125 | 162 | 7 | 1 | 537.890582 | 42 |
@@ -69,7 +71,7 @@ At wider-bound water constant −0.125, no descent remains among the original 32
 
 ### Coupled energy change
 
-At the strongest confirmed path, state 133, trial 3, 333.15 K, loading 0.5 and pressure 21175.719 Pa, the split lowers Gibbs energy by 7569.9205 J on the stated feed basis. The following extensive changes are divided by RT; the unit is consequently mol on this extensive convention, not a per-mole free-energy difference:
+The confirmed path with the most negative ΔG/(RT), −2.7295539154147264 mol, is state 133, trial 3, at 333.15 K, loading 0.5 and pressure 21175.719 Pa; its Gibbs-energy change is −7560.7640 J on the stated feed basis. State 155, trial 0, at 353.15 K, loading 0.6 and pressure 346562.787 Pa has the largest decrease in joules, −7569.9205 J, with ΔG/(RT) = −2.578089112565067 mol. The following extensive changes are divided by RT; the unit is consequently mol on this extensive convention, not a per-mole free-energy difference:
 
 | Contribution | Split minus parent, divided by RT |
 |---|---:|
@@ -144,8 +146,8 @@ agent-heavy uv run python analyses/mea_parameter_bundle/scripts/check_phase_diag
 uv run python analyses/mea_parameter_bundle/scripts/plot_phase_diagnosis_255.py
 ```
 
-The calculation command resumes completed fixed vectors only after checking their saved mappings equal the requested mappings. It does not call a fitter. Each vector retains raw phase calculations in `phase-results.json.gz` and all observations in `replay.json`. A first reduction assumed every trial supplied a tangent-plane value and stopped on a missing value; `interrupted-point.json` and `initial-run.log` preserve that numerical stopping point. The corrected reduction retains missing quantities as unknown and reruns affected vectors with unchanged solver settings. `provenance.json`, `provenance-resume.json` and `source-hashes.json` bind the wheel, parameter inputs, state list, objective declaration and source files; logs retain the separate calculation runs.
+The calculation command resumes completed fixed vectors only after checking their saved mappings equal the requested mappings. It does not call a fitter. Each vector retains raw phase calculations in `phase-results.json.gz` and all observations in `replay.json`. A first reduction assumed every trial supplied a tangent-plane value and stopped on a missing value; `interrupted-point.json` and `initial-run.log` preserve that numerical stopping point. The corrected reduction retains missing quantities as unknown and reruns affected vectors with unchanged solver settings. Regenerate only the reductions from retained raw searches with `agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/phase_diagnosis_255.py --reduce-only`; this does not run the phase campaign or observation replay. `provenance.json`, `provenance-resume.json` and `source-hashes.json` bind the wheel, parameter inputs, state list, objective declaration and source files; logs retain the separate calculation runs.
 
 The 48-vector numerical check passes: all vectors have 307 available, tolerance-admitted observations; both unchanged objective and density controls reproduce; all 51 contribution sums close within $7.11\times10^{-15}$ in the native extensive $G/(RT)$ convention. The wheel's independent residual-term sum check passes at every decomposed phase. Parent minimum/feasibility checks are reported individually in `validation.json`, including unavailable cases rather than dropping them. The three new scripts pass the selected undefined/unused-name checks.
 
-Quarto produced the updated joint-recalibration notebook HTML. The subsequent home-page refresh failed because the `snakemake` executable is unavailable in this worktree's rendering environment. No model was rerun by rendering. The normal `manuscript.py refresh` command was bypassed because its `sync()` rewrites the owner's `analyses/_cse-manuscript.json`; that file remains unchanged. No preview service was started or altered. This rendering limitation does not change the retained numbers or the completed notebook source.
+Quarto re-rendered the corrected joint-recalibration notebook to `analyses/_site/mea_parameter_bundle/joint-recalibration/index.html` with execution disabled. A temporary copy of the render wrapper omitted only `manuscript.py sync`, which would rewrite the owner's `analyses/_cse-manuscript.json`; that file remains unchanged. No model was rerun by rendering and no preview service was started or altered. The home page was not refreshed in this fix round.
