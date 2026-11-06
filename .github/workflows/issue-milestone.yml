@@ -26,9 +26,9 @@ jobs:
           manuscript='\b(manuscript|paper|submission|chemrxiv|preprint|journal|release|publication|reproducibility)\b'
           amines='\b(mdea|dea|amp|piperazine|other amines?)\b'
           tooling='\b(tooling|repin|workflow|ci|preview|infrastructure|zotero|snakemake|rename|agents\.md|container(ized)?|apis?)\b'
-          if [[ $TITLE =~ $manuscript ]]; then milestone='04 - Manuscript Submission'
-          elif [[ $TITLE =~ $amines ]]; then milestone='Extension - Other Amines'
-          elif [[ $TITLE =~ $tooling ]]; then milestone='Tooling - Project Infrastructure'
-          else milestone='03 - Ionic Regression'
+          if [[ $TITLE =~ $manuscript ]]; then milestone='Manuscript'
+          elif [[ $TITLE =~ $amines ]]; then milestone='Other Amines'
+          elif [[ $TITLE =~ $tooling ]]; then milestone='Tooling'
+          else milestone='Ionic Regression'
           fi
           gh issue edit "$NUMBER" --repo "$REPO" --milestone "$milestone"
