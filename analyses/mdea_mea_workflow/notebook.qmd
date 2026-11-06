@@ -156,7 +156,6 @@ Acceptance (a) passes: the historical A1/B1 754-state searches have zero reconst
 
 The [selection](results/stage2-capped/selection.json), endpoint documents, row-level predictions, native failures and phase summaries own the numerical evidence. Newly retained files above 5 MB are gzipped with raw/compressed SHA-256 hashes in [the evidence registry](results/compressed-evidence.json). The manuscript and Engine source are unchanged. Historical pre-cap results remain in their existing result directories and Git history; they are not the selected endpoints shown here.
 
-This notebook has not been independently reviewed or promoted for manuscript use.
 
 
 ## Additional sources at the frozen endpoints {#sources-225}
@@ -224,7 +223,6 @@ All four rows remain unscored at both endpoints; neither 298.15 K nor a mass fra
 The calculation uses the separate worktree MDEA environment and the immutable merged Engine main-d513820 wheel, SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`; installed Engine files were checked byte-for-byte against that wheel.
 Run `agent-heavy nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/score_context.py` from this worktree, then `nice -n 10 .venv/bin/python -I analyses/mdea_mea_workflow/scripts/plot_context.py` for the retained-value figure.
 Pool size comes from the full CPU count, with one BLAS thread per process.
-This additional-source section has not been independently reviewed or promoted for manuscript use.
 
 ## Shared bicarbonate sensitivity and the Xiao pressure miss
 
@@ -447,8 +445,13 @@ uses a separate environment and does not qualify that wheel for the other
 calculations.
 
 The independent design review returned **Ready** before numerical execution.
-The present results have not yet received independent delivered review and
-have not been promoted for manuscript use. They support conditional numerical
+Independent delivered review returned **Supported** for numerical and scientific
+content at commit `407604db3d25326d4b09e2640a7587e4fd66c635`, against base
+`30db72afad45232c36f8bfce82ea80278f3267e2`. The supported use is conditional
+numerical sensitivity and comparison with measured pressures, informing #255
+stage 3. The heat remains a documented Engine numerical-search limitation.
+This review record changes no numerical evidence. The notebook has not been
+promoted for manuscript use. They support conditional numerical
 sensitivity and comparison with physical observations within the stated
 pressure-state, source, finite-search and composition limits. They do not
 qualify absorber use.
