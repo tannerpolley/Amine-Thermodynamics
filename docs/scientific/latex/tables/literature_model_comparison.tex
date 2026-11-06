@@ -43,9 +43,9 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 2df4e7bbbb570f34bec85ec406e83738bf82b258d76a210cdaefc8cecbae89d3
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 58b1cf3e25528ee77ea23749359ccc2401b8d1bebd4640072c04f8fb248cc437
-% Input: docs/scientific/latex/supplement.tex SHA256 232f60c197cd091fa46410c61d61237d0a8f4c7f3fe6987dcf401fbd30ccfa68
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 06d3a54b74caf989f054df01daf3580d20c3a792a02d238ce797ed3252f83d3a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 86c87660d37e7b98839e6f067842b5924a369fd644836208dc9a180ff85cc8a6
+% Input: docs/scientific/latex/supplement.tex SHA256 ffb6692f14318decc52150533a562b4c5f8a283f9750d0ca987a309689a35d27
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Selected MEA comparisons. Pressure AARDs use different data and fitting roles; they do not rank common-data accuracy. Hong et al. use eNRTL reference pressures with a fitted weight at each state. Full data roles and additional models are in Table~\ref{supp-tab:supplement-literature-comparison}.}\label{tab:literature-model-comparison}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.2400\linewidth}>{\raggedright\arraybackslash}p{0.2200\linewidth}>{\raggedright\arraybackslash}p{0.5000\linewidth}@{}}
@@ -55,8 +55,8 @@ Study & Model & Reported agreement \\
 Zhang et al. \cite{Zhang2011} & eNRTL/\allowbreak{}PC-SAFT vapor & Pressure 13.5--35.5\% by source; heat 10.9\% (84); $C_P$ 2.4\% (102); species 35.7\% (24), Table 9 \\
 Baygi and Pahlavanzadeh \cite{Baygi2015} & PC-SAFT/\allowbreak{}ideal reactions & Ternary pressure 36.42\% (691), outside fit (Table 5) \\
 Najafloo and Zarei \cite{Najafloo2018} & SAFT-HR/\allowbreak{}ideal reactions & Ternary pressure 34.71\% (691), Table 5 \\
-Polley and Hedengren \cite[App.~B]{polleyReactiveEPCSAFTModeling2026} & Explicit-ion ePC-SAFT & No common-data statistic \\
-Hong et al. \cite[Sects.~2.3, 3.2, Table~3]{hongModelingCO2Absorption2027} & Pathway-weighted PC-SAFT & Pressure AARD 1.53\%; carbamate 5.51\% against eNRTL; heat 9.48\% against experiment \\
+Polley and Hedengren \cite[App.~B]{polleyReactiveEPCSAFTModeling2026} & Explicit-ion ePC-SAFT & Not compared on common data \\
+Hong et al. \cite[Sects.~2.3, 3.2, Table~3]{hongModelingCO2Absorption2027} & Pathway-weighted PC-SAFT & Pressure AARD 1.53\%; carbamate-pathway AARD 5.51\% against eNRTL at loadings 0.1--0.7 mol \ce{CO2}/\allowbreak{}mol MEA; heat 9.48\% against experiment \\
 This work & 16 fitted parameters & Pressure: 11.86\% fitted (47); 24.2\% non-fitted (112); 20.55\% overall (159) \\
 \bottomrule
 \end{tabular}

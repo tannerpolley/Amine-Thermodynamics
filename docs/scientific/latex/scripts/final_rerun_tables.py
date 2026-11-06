@@ -20,7 +20,7 @@ UNITS = dict(PartialPressure='Pa', PhaseMoleFraction='mole fraction', AdditionEn
              mole_fraction='vapour water fraction', equilibrium_isobaric_heat_capacity='J/(mol K); total analytical feed')
 
 
-DISPLAY = {'Common149': 'Common-subset', 'common149': 'common subset', 'vapour': 'vapor', 'Vapour': 'Vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa', 'kg/m3': r'\si{\kilogram\per\cubic\metre}'}
+DISPLAY = {'Common149': 'Pressure--species--heat group', 'common149': 'pressure--species--heat group', 'vapour': 'vapor', 'Vapour': 'Vapor', 'LogRatio': 'log ratio', 'Cai mole_fraction': 'Cai vapor water fraction', 'Vinjarapu2024': 'Vinjarapu', 'Arcis2011': 'Arcis', ' at 510000.0 Pa': ' at 0.51 MPa', ' at 1030000.0 Pa': ' at 1.03 MPa', 'kg/m3': r'\si{\kilogram\per\cubic\metre}'}
 SOURCE_NAMES = {'Bottinger2008':'Böttinger et al. (2008)', 'Matin2012':'Matin et al. (2012)', 'vinjarapu2024':'Vinjarapu et al. (2024)', 'Vinjarapu2024':'Vinjarapu et al. (2024)', 'Arcis2011':'Arcis et al. (2011)', 'Amundsen2009':'Amundsen et al. (2009)', 'Hartono2014':'Hartono et al. (2014)', 'Han2012':'Han et al. (2012)', 'Jakobsen2005':'Jakobsen et al. (2005)', 'Hilliard2008':'Hilliard (2008)', 'Jou1995':'Jou et al. (1995)', 'Mamun2005':'Ma’mun et al. (2005)', 'Xu2011':'Xu and Rochelle (2011)', 'cai1996':'Cai et al. (1996)', 'kiepe':'Kiepe et al. (2002)', 'AMU':'Amundsen et al. (2009)'}
 def display(value):
     value = str(value).replace('pooled', 'added together')
@@ -229,8 +229,8 @@ def main():
           ['Group', 'Quantity', 'Unit/basis', 'n', 'Residual', r'\makecell[rb]{Lowest\\scale}', r'\makecell[rb]{Highest\\scale}', 'Weight', 'Cost'], objective, [.16,.18,.12,'r','l','r','r','r','r'])
     # Joint-fit deviations by data group (main text): relative groups give AARD, absolute groups RMSE and bias (mean calculated minus measured).
     residual = [block(5, 'Fitted', True)]
-    for name, group in [('common149 pressure', r'\ce{CO2} partial pressure (Hilliard, Jou)'), ('common149 species', 'Species fractions, shared subset (Böttinger, Matin)'),
-                        ('restored species', 'Species fractions, additional (Böttinger, Matin)'), ('Jakobsen', 'Species/total-amine ratios (Jakobsen)'),
+    for name, group in [('common149 pressure', r'\ce{CO2} partial pressure (Hilliard, Jou)'), ('common149 species', 'Species fractions, pressure--species--heat group (Böttinger, Matin)'),
+                        ('restored species', 'Species fractions, separate group (Böttinger, Matin)'), ('Jakobsen', 'Species/total-amine ratios (Jakobsen)'),
                         ('Kiepe', r'\ce{CO2}--water pressure (Kiepe)'), ('loaded density', 'Loaded density (Amundsen, Hartono)'), ('CO2-free density', r'\ce{CO2}-free density (Amundsen)')]:
         residual.append([group, fit['groups'][name]['n'], num(fit['groups'][name]['AARD_percent']), '--', '--'])
     cp_rows = a.rows(a.E / 'cp.csv')
@@ -311,7 +311,7 @@ def main():
                  v(f'component/{s}/dielectric_volume'), v(f'component/{s}/dielectric_temperature')] for s in species]
     species_headings = ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$\epsilon/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
                         r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}']
-    sources = [r'Segments: \cite[Table~1]{Gross2001}; association: water fit (energy/2)',
+    sources = [r'Segments: \cite[Table~2]{Gross2001}; association: water fit (energy/2)',
                r'Segments, energy: \cite[Table~2]{Baygi2015}; volume conversion: S2',
                'Water fit', 'Joint fit; segment count assumed', 'Joint fit; segment count assumed',
                r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed',
@@ -325,6 +325,7 @@ def main():
           [[row[i] for i in main_indices]+[source] for row,source in zip(species_rows(4),sources,strict=True)],
           ['l']+['r']*6+[.25],sep=3)
     # Full parameter listing in the supplement: one quantity per row, with provenance.
+    inline_headings = ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', '$z$', r'$d^\mathrm{Born}$ (\AA)', '$f$', r'$d_V$ (L/mol)', r'$d_T$ (K)']
     full=[]
     for row,source in zip(species_rows(),sources,strict=True):
         for i in range(1,len(row)):
@@ -333,7 +334,7 @@ def main():
             if i==6: origin='Chemical charge'
             elif i==8: origin=r'Water: \cite[Table~2]{Figiel2025}; others: assumed' if row[0]==r'\ce{H2O}' else 'Assumed'
             elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite[Table~6]{Yang2024}' if row[0]==r'\ce{H2O}' else 'Assumed')
-            full.append([row[0],species_headings[i],row[i],origin])
+            full.append([row[0],inline_headings[i],row[i],origin])
     table('supplement_species_parameters.tex', 'Complete species inputs of the final parameter set. CO2 association entries apply only to induced bonding with water. The water diameter law and the MEA association-volume conversion are specified in the text.',
           ['Species','Quantity (unit)','Value','Source'],full,['l',.25,'r',.4])
     def pair(s, t, quantity='', decimals=None):
@@ -379,7 +380,7 @@ def main():
     arcis = {name: x['RMSE_kJ_mol'] for name, x in displays['arcis'].items()}
     a.close(arcis['reported'], summary['heat']['Arcis2011']['RMSE'])
     acceptance = []
-    for title, key, score, basis, step in [('Common-subset cost', 'common149_cost', 'C149', 'density-free fit', ''),
+    for title, key, score, basis, step in [('Pressure--species--heat group cost', 'common149_cost', 'C149', 'density-free fit', ''),
                                            ('Pressure AARD', 'pressure_AARD_percent', 'pressure_AARD_pct', 'density-free fit', ' percentage points'),
                                            ('Species AARD', 'species_AARD_percent', 'species_AARD_pct', 'density-free fit', ' percentage points'),
                                            ('Vinjarapu RMSE', 'Vinjarapu_RMSE_kJ_mol', 'vinjarapu_rmse_kJ_mol', 'density-free fit', ' kJ/mol'),
@@ -394,7 +395,7 @@ def main():
     within = lambda s: f"{s['loaded_within_2s']}/{s['loaded_count']}"
     acceptance.append(['Loaded densities within $2s$', f"{reported['loaded_count'] - len(a.PERMITTED_MISSES)}/{reported['loaded_count']}", 'observed outcome, with three misses; main-text density comparison', within(comparison), within(reported), '--'])
     descents = {name: sum(int(r['resolved_trials']) > 0 for r in part.values()) for name, part in paired.items()}
-    acceptance.append(['States with detected instability', f"0/{len(paired['reported'])}", 'phase requirement: no resolved descent in the finite search', *(f"{descents[n]}/{len(paired[n])}" for n in ('comparison', 'reported')), '--'])
+    acceptance.append(['States with detected instability', f"0/{len(paired['reported'])}", 'phase requirement: no detected instability at the searched states', *(f"{descents[n]}/{len(paired[n])}" for n in ('comparison', 'reported')), '--'])
     acceptance.append(['CO2-free max absolute error', '1', 'density requirement', *(num(max(abs(x) for x in s['co2_free_errors'].values())) for s in (comparison, reported)), '--'])
     acceptance.append([f'Total cost ({len(fitted)} quantities)', '--', 'no limit', num(comparison['cost']), num(reported['cost']), '--'])
     kinds = {'cost': ('Cost', ''), 'AARD': ('AARD', r'\%'), 'RMSE': ('RMSE', 'kJ/mol'), 'within': ('Count', ''), 'instability': ('Count', ''), 'error': ('Absolute error', r'\si{\kilogram\per\cubic\metre}')}
@@ -446,7 +447,7 @@ def main():
         source_rows.append(['Hilliard2008', num(r['T_K'], 6), num(r['loading']), num(r['observed_kJ_kg_K'], 5),
                             num(r['equilibrium_cp_kJ_kg_K'], 5), f"{float(r['error_percent']):+.2f}"])
     table('supplement_source_aard.tex',r'A7 calibration deviations by source, group and observable. Deviation is AARD in percent except Cai RMSE in K or vapour water mole fraction. It does not combine quantities into an accuracy ranking. Entry costs add to the total objective cost of '+num(fit['cost'])+'; quantity definitions, units and weights are in Section~\\ref{sec:s-objective}. The final block lists the four Hilliard heat capacities and signed percentage errors, $100(c_{P,c}/c_{P,o}-1)$, rather than AARD and cost.',
-          ['Source','Group','Observable','n','AARD (%)','Cost'],source_rows,['l','l',.22,'r','r','r'])
+          ['Source','Group','Observable','n','AARD (%)','Cost'],source_rows,['l','l',.22,'r','r','r'],sep=2)
     outside=[]
     for name,s in a.load(a.E/'state-summary.json')['scores'].items():
         part = [r for r in state if r['identity'] in s['state_ids'] and r['target'] in s['row_ids'] and r['target'] not in common and r['target'] not in {x['id'] for x in fitted}]
@@ -492,7 +493,7 @@ def main():
                            ', '.join(seeds[row['seed']] for row in part), num(r['delta_G_over_RT'], 3),
                            *(num(r[k + '/x/water']) for k in liquids(r))])
     descent_states = sum(int(r['resolved_trials']) > 0 for r in paired['comparison'].values())
-    table('supplement_phase_family.tex', f"All {len(by_state)} distinct confirmed two-liquid splits of the wider-bound fit at {len(by_state)} of its {descent_states} descent states. The {len(confirmed)} confirmed paths from {len(splits)} separately seeded attempts are combined only where seeds reach the same split; the final parameter set has no descent to confirm. "
+    table('supplement_phase_family.tex', f"All {len(by_state)} distinct confirmed two-liquid splits of the wider-bound fit at {len(by_state)} of its {descent_states} states with detected instability. The {len(confirmed)} confirmed paths from {len(splits)} separately seeded attempts are combined only where seeds reach the same split; the final parameter set has no detected instability to confirm. "
           r"Seeds name the trial liquids that start the splits. $\Delta G/(RT)$ is the extensive Gibbs-energy change in mol on the feed basis of Section~\\ref{sec:s-phase}. The two liquids are ordered by increasing water mole fraction $x_w$. Full compositions, amounts, densities and the 40 failed attempts are supplied with the electronic data.",
           ['T (K)', 'Loading', 'P (kPa)', 'Seeds', r'$\Delta G/(RT)$ (mol)', r'Liquid 1 $x_w$', r'Liquid 2 $x_w$'],
           split_rows, 'rrrlrrr')
@@ -512,7 +513,7 @@ def main():
     summary_rows = [[num(T, 6), *(cell(T, f) for f in fractions), f"{sum(counts.get((T, f), [0])[0] for f in fractions)}/{loadings*len(fractions)}"] for T in temperatures]
     summary_rows.append(['All', *(f"{sum(counts.get((T, f), [0, 0])[0] for T in temperatures)} ({sum(counts.get((T, f), [0, 0])[1] for T in temperatures)})" for f in fractions), f"{descent_states}/{len(paired['comparison'])}"])
     low = min(min(v[2]) for (T, f), v in counts.items() if f == '0.5')
-    table('phase_search_summary.tex', f"Phase search of the wider-bound fit in nominal 30 wt% MEA: states with a resolved lower-Gibbs-energy arrangement out of {loadings} loadings ($\\alpha=10^{{-5}}$--0.6) at each temperature and pressure, with the number confirmed as two liquids in parentheses (Table~\\ref{{supp-tab:phase-splits}}). Pressures are fractions of $P^*$, the final parameter set's bubble pressure at each temperature and loading, so every state is a liquid--vapor equilibrium and the search looks for an additional liquid. At $0.50P^*$ only loadings of {num(low)} and above are unstable; closer to $P^*$ the instability extends to lower loadings. The final parameter set shows no detected instability at any of the same {len(paired['reported'])} states. The grid is shown in Fig.~\\ref{{fig:phase-grid}}.",
+    table('phase_search_summary.tex', f"Phase search of the wider-bound fit in nominal 30 wt% MEA: states with detected instability out of {loadings} loadings ($\\alpha=10^{{-5}}$--0.6) at each temperature and pressure, with the number confirmed as two liquids in parentheses (Table~\\ref{{supp-tab:phase-splits}}). Pressures are fractions of $P^*$, the final parameter set's bubble pressure at each temperature and loading, so every state is a liquid--vapor equilibrium and the search looks for an additional liquid. At $0.50P^*$ instability is detected only at loadings of {num(low)} and above; closer to $P^*$ it is also detected at lower loadings. The final parameter set shows no detected instability at any of the same {len(paired['reported'])} states. The grid is shown in Fig.~\\ref{{fig:phase-grid}}.",
           ['T (K)', '$0.50P^*$', '$0.80P^*$', '$0.95P^*$', 'Total'], summary_rows, 'lrrrr')
     species_states = [meta[r['id']] for r in fitted if r['quantity']=='PhaseMoleFraction' or r['group']=='restored species']
     fitted_density_states = [r for r in density if r['id'] in loaded_ids]
@@ -572,8 +573,8 @@ def main():
         [r'Aronu et al. \cite{Aronu2011}','Extended UNIQUAC; ion size/surface and pair coefficients (Tables 7--9)',r'VLE at 15--60 wt%; \ce{N2O}-derived physical solubility','Fitted CO2 partial pressure 24.3%; total pressure 11.7%; physical solubility 2.7% (Section 5)','NMR and absorption heat compared outside objective'],
         [r'Téllez-Arredondo and Medeiros \cite{tellez-arredondoModelingCO2H2S2013}','Electrolyte cubic two-state association; 7 MEA ternary parameters','VLE; 15.2--30 wt%; 298.15--393.15 K in Table~2 and Fig.~8; Section~4.3.3 instead states an upper limit of 366.68 K','Relative pressure deviation 12.5%, fitted (Tables 5, 8)','Parameters from earlier subsystems retained'],
         [r'Neumann et al. \cite{neumannNewModelCombining2022}','Helmholtz energy/eNRTL; 3 ternary reaction laws refitted; ternary eNRTL interactions retained',r'Binary and ternary VLE; one MEA--\ce{CO2} reducing parameter also uses ternary data',r'Ternary density AARD 0.92% Hartono; 3.5% complete Han \cite[Sect.~4.2]{neumannNewModelCombining2022}','VLE/density comparisons; density data sets differ from this work'],
-        [r'Polley and Hedengren \cite[App.~B]{polleyReactiveEPCSAFTModeling2026}','Explicit-ion ePC-SAFT; staged calibration','Ion/species, binary VLE, pressure and calorimetry','No common-data statistic','Empirical column enthalpies; explicit MEA ions already included'],
-        [r'Hong et al. \cite[Sects.~2.3, 3.2, Table~3]{hongModelingCO2Absorption2027}','Pathway-weighted PC-SAFT; weight fitted at each state','90 eNRTL-reference pressures; 30 wt%; 313.15--393.15 K','Pressure AARD 1.53%; carbamate 5.51% against eNRTL; heat 9.48% against experiment','Speciation is a model-reference comparison; heat from pressure derivative'],
+        [r'Polley and Hedengren \cite[App.~B]{polleyReactiveEPCSAFTModeling2026}','Explicit-ion ePC-SAFT; staged calibration','Ion/species, binary VLE, pressure and calorimetry','Not compared on common data','Empirical column enthalpies; explicit MEA ions already included'],
+        [r'Hong et al. \cite[Sects.~2.3, 3.2, Table~3]{hongModelingCO2Absorption2027}','Pathway-weighted PC-SAFT; weight fitted at each state','90 eNRTL-reference pressures; 30 wt%; 313.15--393.15 K','Pressure AARD 1.53%; carbamate-pathway AARD 5.51% against eNRTL at loadings 0.1--0.7 mol CO2/mol MEA; heat 9.48% against experiment','Speciation is a model-reference comparison; heat from pressure derivative'],
         ['This work',f"{len(fit['coordinates'])} fitted parameters; {len(fit['active_bounds'])} at bounds",f'{len(fitted)} quantities: pressure, species, heat, density, heat capacity and binary VLE',f"Pressure: {fit['groups']['common149 pressure']['AARD_percent']:.2f}% fitted (47); 24.2% non-fitted (112); {six_source['AARD_percent']:.2f}% overall (159)",'Species 7.10% (94); integral heat RMSE 1.84 kJ/mol; loaded density 0.18% (47)']]
 
     table('supplement_literature_comparison.tex',r'Model complexity, data roles and reported deviations in related MEA studies. Parameter counts describe the estimation stages named in each row and are not totals for complete model construction; the present count covers the joint fit and excludes the separate water, \COtwo--water and dielectric fits. Relative pressure deviations and caloric metrics use each source\'s own data and definitions; integral-heat RMSE and differential-heat percentage errors are not directly comparable. These are not common-data accuracy rankings.',
@@ -634,7 +635,7 @@ def main():
     declaration=[a.load(mdea/v/'declaration.json')['coordinates'] for v in ('A3','B1')]
     vals=[dict(a.coefficients(doc)) for doc in endpoint]
     rows_m=[]
-    parameter_names=[r'MDEA--water $a_0$',r'MDEA--water $a_1$ (K$^{-1}$)',r'MDEAH$^+$--CO2 $k$',r'MDEAH$^+$--water $k_{\mathrm{ref}}$',r'MDEAH$^+$--water $b$ (K)',r'MDEAH$^+$--HCO3$^-$ $k$',r'Cation $\sigma$ (\AA)',r'Cation $\epsilon/k_B$ (K)',r'Cation Born diameter (\AA)']
+    parameter_names=[r'MDEA--water $a_0$',r'MDEA--water $a_1$ (K$^{-1}$)',r'MDEAH$^+$--CO2 $k$',r'MDEAH$^+$--water $k_{\mathrm{ref}}$',r'MDEAH$^+$--water $b$ (K)',r'MDEAH$^+$--\ce{HCO3-} $k$',r'Cation $\sigma$ (\AA)',r'Cation $\epsilon/k_B$ (K)',r'Cation Born diameter (\AA)']
     def target_value(doc,values,target):
         family,identity,_=target
         if family=='temperature_law_coefficient': return values[identity]['value']['magnitude']
@@ -650,7 +651,7 @@ def main():
             results += [num(v,8),'['+', '.join(num(x,8) for x in q['bounds'])+']']
         rows_m.append([name,*results,'MDEA joint fit'])
     assert len(rows_m)==9
-    table('mdea_fitted_parameters.tex','MDEA fitted values and bounds. The diameter also sets the Debye--Huckel diameter; the single-sphere packing diameter is tied to 0.88 times it.',
+    table('mdea_fitted_parameters.tex','MDEA fitted values and bounds. The diameter also sets the Debye--Hückel diameter; the single-sphere packing diameter is tied to 0.88 times it.',
           ['Parameter','Single-sphere','Bounds','Charged-molecule','Bounds','Source'],rows_m,['l','r','l','r','l','l'])
     a.inventoried()
     for name, body in OUTPUTS.items():

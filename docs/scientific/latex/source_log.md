@@ -526,3 +526,44 @@ The final metadata check removed a duplicate legacy title key that would have ov
 ### Existing repository source-check failure
 
 The additional repository-wide `scripts/validate_mea_source_contracts.py` check fails at `src/MEA/common/mea_source_contracts.py:784` with `MEA homogeneous-liquid pressure Provider evidence is inconsistent`. The historical homogeneous-liquid source record gives metrology CSV SHA-256 `8db8f74f739d13b87e34d12d4df1d5d566e51deb0fd5eea8f547436d030a2f8c`, but the current metrology CSV is `5fc1686cac29de59979c2a5ddf3046fed4d32a89e771b6cb37991d7a021a442f`; its recorded canonical VLE CSV SHA-256 is `a4f9e3c0176894cad78c5960198c13707d36a167e48abf3d5e7a2106a55d5af1`, but the current canonical VLE CSV is `d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a`. The checker, validation module, source record and both CSVs are byte-identical to starting commit `cf17e182460ff3258d332412a1e527368221255b`. This existing hash mismatch was not repaired in the manuscript-only revision. The failing command and traceback are retained in `builds/244-source-prose-checks.log`; the manuscript's retained-input, numerical, bibliography, prose and PDF-freshness checks pass separately. The initial system-Python attempt lacked NumPy; the reported hash failure is from the existing project environment through `uv run --no-sync`, without an environment change or model evaluation.
+
+## Post-review corrections (#244, 2026-11-05)
+
+The complete final numbers/claims and reader-story reviews of `8ad8771` were read through T3. The owner authorized all four numbers defects and optional item 5, all story defects 1–14, and story optional items 15–23 and 25. Story item 24 is skipped as directed; Table 8 remains in the main text. No new fit or model calculation was run.
+
+| Finding | Applied correction |
+| --- | --- |
+| Numbers 1 | The 313.15 K carbonate and dissolved-CO2 maxima are 1.0e-5 and 3.7e-4; the exact retained maxima are 1.0049588396210645e-5 and 0.0003705914339250515. |
+| Numbers 2 | MDEA interaction laws use a defined reference temperature, 313.15 K, with inverse-temperature units explicit. |
+| Numbers 3 | Hong's carbamate-pathway AARD of 5.51% is restricted to loadings 0.1–0.7 mol CO2/mol MEA in the body and both generated comparison tables. |
+| Numbers 4 | The CO2 segment-parameter citation is Gross–Sadowski Table 2. The universal-coefficient citation remains Table 1. |
+| Numbers 5 | The supplement distinguishes 307 objective entries from the 39 fixed-input checks. |
+| Story 1 | Wider bounds defined at first use; removal of detected instability stated explicitly in results and conclusion. |
+| Story 2 | Aim includes phase stability, enumerates three contributions and motivates the MDEA comparison; conclusion answers the question. |
+| Story 3 | The 94 fractions are identified as part of the 101 fitted fractions; the pressure–species–heat group and the separate seven fractions are identified. |
+| Story 4 | Table 5 cited instead of repeating the objective count. |
+| Story 5 | MDEA terminology clarified, differing active bounds acknowledged and the tautological MEA-error sentence removed. |
+| Story 6 | Protonated-MEA dissociation named in the abstract and letter; MDEA sentence subject corrected. |
+| Story 7 | Detected-instability terminology applied in prose and generated tables. |
+| Story 8 | MDEA comparison labels and phase-search descriptions replaced; unresolved rows combined. |
+| Story 9 | Table S1 uses inline quantity/unit labels in its Quantity column. |
+| Story 10 | Cover letter attributes declarations to the manuscript only. |
+| Story 11 | Methods lists all objective groups before explaining the fixed-input checks. |
+| Story 12 | Subject–verb agreement corrected. |
+| Story 13 | Reference pressure uses the same superscript-star symbol in text and captions. |
+| Story 14 | MDEA bicarbonate and Debye–Hückel typesetting corrected. |
+| Story 15 | Speciation figure cited at the opening sentence. |
+| Story 16 | Non-fitted carbonate shares distinguished from fitted ratios. |
+| Story 17 | Group labels changed in the generator and supplement; Table S3 caption checked after regeneration. |
+| Story 18 | Earlier MEA study described as not compared on common data. |
+| Story 19 | Literature comparison sentence separated by study. |
+| Story 20 | Software index located in the data deposit. |
+| Story 21 | Space reserved before the reaction table. |
+| Story 22 | MDEA dielectric coefficients described as fixed. |
+| Story 23 | Highlight spells out pressure deviation. |
+| Story 24 | Skipped as directed: no exact replacement text; Table 8 retained. |
+| Story 25 | Local preprint-draft title and abstract synchronized with the corrected manuscript; nothing published. |
+
+The replacements are verbatim, with no scientific adaptation needed for the owner's three checks. Table S6 lists exactly three fitted reaction quantities: the R5 reciprocal-temperature coefficient and the R2/R5 enthalpy shifts. The count of three in story finding 2 therefore stays. Other replacement quantities reproduce the existing text or retained results. In `engine-3e83e19c-phase-search/run-2/trials.csv`, all 143 comparison trials flagged `resolved_descent=True` have `split_delta_g_over_rt < -split_error_estimate_over_rt`. The phrase “trials that lower the Gibbs energy” is supported. In `analyses/mdea_mea_workflow/scripts/stage2.py:88–95`, reconstruction failures are classified under unresolved evidence; the native unresolved count is checked against reconstruction plus other unresolved trials. The merged row in story finding 8 is supported. The longer group labels required reducing Table S8 column padding from 3 to 2 pt; the replacement wording is unchanged. Numerical input checks remain unchanged; only the exact hash of the approved literature text in the generator was updated.
+
+The final PDFs each have 24 pages. Both built through `agent-heavy` in background shells, with no LaTeX warnings, overfull boxes or unresolved references. The manuscript numerical-input checks, separated-pressure calculation, conditional-error counts, metadata uniqueness/five-keyword checks, bibliography preservation, highlight lengths, deterministic prose check and PDF freshness check pass. The new 313.15 K species maxima were independently reduced from the retained curve rows. The one verification read covered all changed main pages and the repaginated supplement; Table 1 stays together, Table S1 labels occupy the Quantity column, the new group labels are readable, and the MDEA equation and combined unresolved row render correctly. Automated layout reports contain zero errors, with 174 main and 101 supplement spacing warnings assessed during the rendered read. Reports and page images are under `builds/244-fix-qa/`. The previously reported repository-wide historical-source hash mismatch is unchanged and was not repaired in this fix round.
