@@ -5,7 +5,9 @@ The [research notebook](../../notebook.qmd#higher-temperature-density-probes-iss
 owns interpretation, data roles, uncertainty and the recommendation for #255
 stage 2. `summary.json` and `density-summary.json` retain the reduced numbers;
 all JSON results identify the executing wheel. No parameter set is adopted.
-Independent readiness returned Ready. Delivered review is pending.
+Independent readiness returned Ready. Independent delivered review returned
+Supported for scientific commit `889ba3e` and presentation delta `21fcaee`.
+The verdict permits delivery of this bounded study, not manuscript promotion.
 
 The two local fits converge and have no detected descent or incomplete state
 on the retained 162-state search, but preserve only 17/47 and 34/47 fitted
