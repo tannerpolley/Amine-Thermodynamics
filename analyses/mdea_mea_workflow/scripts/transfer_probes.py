@@ -91,7 +91,7 @@ def assess(document, name, baseline=False):
         assert all(abs(r['predicted_Pa']-v)<=1e-8*max(1,abs(v)) for r,v in zip(records,previous,strict=True))
     s.phase_jobs=[(f'{group}:{i}',prob) for i,(group,row,prob,observed) in enumerate(jobs)]
     phases=pool(s.phase,list(range(len(jobs))))
-    write(f'{name}/phase.json',phases)
+    write(f'{name}/pressure-phase.json',phases)
     summary=dict(shared_k=pair(document)['value']['magnitude'], pressure={g:metric([r for r in records if r['group']==g]) for g in ('Xiao','Ermatchkov')},phase=s.phase_summary(phases))
     write(f'{name}/summary.json',summary); print(name,summary,flush=True)
 
