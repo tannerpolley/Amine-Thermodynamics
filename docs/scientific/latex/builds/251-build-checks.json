@@ -1,6 +1,6 @@
 {
   "main": {
-    "sha256": "87a6bea8d173ca04d9657aea8094eb3ad6ab8097532bc8f641630b3934d0236c",
+    "sha256": "42ac0f874c8005990226ee4d743c1003d79fe28b73e9013d351ee18e26ae5178",
     "pages": 25,
     "verification_read_pages": [
       15,
@@ -11,24 +11,42 @@
     "type3_font_present": false
   },
   "supplement": {
-    "sha256": "343b57f14efaa6712760ac95451d67ba16c7413f7878ae860cd99e0804847dc1",
+    "sha256": "674e7f4c0ec443b8ac5b7810e69b44cf30c3a3a52a3f8e06509244d64be5f69b",
     "pages": 24,
     "verification_read_pages": [
       12
     ],
     "unresolved_references_and_citations": 0,
     "overfull_boxes": 0,
-    "type3_font_present": true
+    "type3_font_present": false
   },
   "bibliography": {
     "cited_keys": 84,
     "missing_keys": [],
     "snapshot_unchanged": true
   },
-  "metadata": "pass: main PDF hash agrees with submission metadata and verification receipt; title/author match main.tex. Existing supplement has no PDF title/author metadata.",
-  "visual_read": "Pass: main pp.15 and 20 and supplement p.12 inspected once; values, caption, labels and limits readable; no clipping or overlap.",
+  "metadata": "pass: parsed YAML; PDF hash agrees with submission metadata and verification receipt; title and author unchanged.",
   "warnings": [
-    "Supplement has one existing underfull hbox at lines 36-40.",
-    "Supplied retained heat-temperature.pdf embeds a Type 3 DejaVuSans font, propagated to supplement. Figure unchanged as authorized."
-  ]
+    "Supplement retains one existing underfull hbox at lines 36-40."
+  ],
+  "figure_sha256": {
+    "bottinger-fractions.pdf": "e7887cb35afde6cc53f6f68407a301dc88fd15f48fffdbeabbb28110071a346f",
+    "bottinger-fractions.png": "7e046f288413fdf7641b33bd937396c3edfca01d1b9fd8981b940e886d94df5b",
+    "heat-temperature.pdf": "bdad2eb56114e240f87d55ca8065bf4997025fc1ee3e3348cd38fe259f08c4d8",
+    "heat-temperature.png": "93e1a6671b2899a8c0b94c5c8e69698c72f81defa1ca86604ecb955ecbc4ea2a",
+    "pathway-fractions.pdf": "ad36dde8f39d3e89270b6bd18614e38bf019f99e971d8a0044d6d0edab416ead",
+    "pathway-fractions.png": "137b9c4345043ae177ee0cdff7e012ce05d24511048812406e3fc6548861b417"
+  },
+  "presentation_script_sha256": "557c943a6c4079b6a2631ab99478086daf515efb218485920b578a5efab1dcc4",
+  "presentation_only": "present completed through agent-heavy; all three PNGs, all six CSVs and summary.json byte-identical to 41bb2ec; PDFs regenerated with pdf.fonttype=42 and ps.fonttype=42. Original calculation provenance remains unchanged.",
+  "visual_read": "Pass: one verification read of main pp.15 and20 and supplement p.12. Text, numeric results, limits and caption readable with no clipping or overlap; Fig.5 cross-reference resolves.",
+  "checks": {
+    "prose": "pass",
+    "numeric_and_claim_checks": "pass",
+    "bibliography": "pass",
+    "metadata": "pass",
+    "freshness": "pass",
+    "pdf_fonts_no_type3": "pass",
+    "diff_check": "pass"
+  }
 }
