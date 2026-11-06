@@ -43,9 +43,9 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 2df4e7bbbb570f34bec85ec406e83738bf82b258d76a210cdaefc8cecbae89d3
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 58b1cf3e25528ee77ea23749359ccc2401b8d1bebd4640072c04f8fb248cc437
-% Input: docs/scientific/latex/supplement.tex SHA256 232f60c197cd091fa46410c61d61237d0a8f4c7f3fe6987dcf401fbd30ccfa68
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 06d3a54b74caf989f054df01daf3580d20c3a792a02d238ce797ed3252f83d3a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 86c87660d37e7b98839e6f067842b5924a369fd644836208dc9a180ff85cc8a6
+% Input: docs/scientific/latex/supplement.tex SHA256 ffb6692f14318decc52150533a562b4c5f8a283f9750d0ca987a309689a35d27
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Limits and values for the wider-bound and final parameter sets. Limits are computed from the density-free fit of \Cref{tab:density-free-parameters} and the constant-interaction Cai calculation and compared unrounded; the margin is the limit minus the final-set value. Section~S11 explains the tolerances.}\label{tab:acceptance-limits}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.2200\linewidth}r>{\raggedright\arraybackslash}p{0.3200\linewidth}rrr@{}}
@@ -53,7 +53,7 @@
 Quantity & Limit & Origin of limit & \makecell[rb]{Wider-bound\\fit} & \makecell[rb]{Final parameter\\set} & \makecell[rb]{Reported\\margin} \\
 \midrule
 \multicolumn{6}{@{}l}{\itshape Cost} \\*
-Common-subset cost & $26.15$ & 1.1 × density-free fit 23.78 & $24.92$ & $23.86$ & $2.292$ \\*
+Pressure--species--heat group cost & $26.15$ & 1.1 × density-free fit 23.78 & $24.92$ & $23.86$ & $2.292$ \\*
 Cai cost & $95.86$ & 1.05 × constant-interaction Cai calculation 91.29 & $91.78$ & $91.87$ & $3.983$ \\*
 Total cost (307 quantities) & -- & no limit & $148.2$ & $148.9$ & -- \\
 \addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape AARD (\%)} \\*
@@ -64,7 +64,7 @@ Vinjarapu RMSE & $2.823$ & density-free fit 1.823 + 1 kJ/\allowbreak{}mol & $1.8
 Arcis RMSE & $9.071$ & density-free fit 8.071 + 1 kJ/\allowbreak{}mol & $8.052$ & $8.116$ & $0.9551$ \\
 \addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Count} \\*
 Loaded densities within $2s$ & 44/\allowbreak{}47 & observed outcome, with three misses; main-text density comparison & 47/\allowbreak{}47 & 44/\allowbreak{}47 & -- \\*
-States with detected instability & 0/\allowbreak{}162 & phase requirement: no resolved descent in the finite search & 54/\allowbreak{}162 & 0/\allowbreak{}162 & -- \\
+States with detected instability & 0/\allowbreak{}162 & phase requirement: no detected instability at the searched states & 54/\allowbreak{}162 & 0/\allowbreak{}162 & -- \\
 \addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Absolute error (\si{\kilogram\per\cubic\metre})} \\*
 \ce{CO2}-free max absolute error & $1$ & density requirement & $0.5712$ & $0.5575$ & -- \\
 \bottomrule

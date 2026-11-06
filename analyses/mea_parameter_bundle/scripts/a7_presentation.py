@@ -175,7 +175,7 @@ def inventoried():
     old, new = old.decode(), (ROOT / TABLE_GENERATOR).read_text()
     # #244 approves the revised literature comparison and nomenclature units; pin their exact text.
     for marker, digest in {
-        'literature=[': '1a8d37705ed177b8cc9fc023c11a04073d6c2aac41f405039e99ebda754e5152',
+        'literature=[': '2cc65a40ecaf8438593cc0e6dd8a4b9b61dab2663f4d90d71c63d418b17e5268',
         'symbols=[': '40b014c56512e829dd6a23ce56241176675906efd1d426f407fa841d486767ae',
     }.items():
         start = new.index(marker)
