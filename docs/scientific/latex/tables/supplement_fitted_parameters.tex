@@ -1,5 +1,9 @@
 % Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.
 % Reported parameter SHA256: 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91; Engine wheel SHA256: 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/declaration.json SHA256 86111af51bace3d696b9963cb84a4ac811cdb962f5d851b2c90237d72e7df53b
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/A3/endpoint.json SHA256 3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/declaration.json SHA256 b98bacbcbce32c8b508683d7ca53f66881039a1d509f393e5dd2fd2d6690b644
+% Input: analyses/mdea_mea_workflow/results/stage2-capped/B1/endpoint.json SHA256 1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/limits.json SHA256 5adb3c08282621bc33f0fd0e1c59a865f9c31d4149506df85948acef06fcdc41
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-density-free/parameters.csv SHA256 0de35d543269c5b90665e09dadb1dc70e92e2506f4bbbdf225cdb24f02ad5996
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/adoption.json SHA256 52ed2b189b169f5ccf5182bfb58fd31c55698c861d0c1fbe25eb1a19e1a26b52
@@ -39,37 +43,37 @@
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv SHA256 035a31e81a2141d2385812314af0690e9e12c9108b68d67f546dacfa44547fe8
 % Input: analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json SHA256 41d7036739727ba93a1bcbf08e42d85e96033de3143ddc9c66b6938239385869
 % Input: analyses/mea_parameter_bundle/results/selected-current-best-parameters.json SHA256 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 8e89377066e7bbeb4153a18995da5199f7a375152ffeb067dc706982bdfe84db
-% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 e3103d71b7bbc9e8151b5a7c244c334f0d740f8c3c48c5a38b9d0250446793bb
-% Input: docs/scientific/latex/supplement.tex SHA256 00a895a80a9fdb416f9ad53fc50753fb51e1935adcdf0339f2fe8db0265992c2
+% Input: analyses/mea_parameter_bundle/scripts/a7_presentation.py SHA256 06d3a54b74caf989f054df01daf3580d20c3a792a02d238ce797ed3252f83d3a
+% Input: docs/scientific/latex/scripts/final_rerun_tables.py SHA256 86c87660d37e7b98839e6f067842b5924a369fd644836208dc9a180ff85cc8a6
+% Input: docs/scientific/latex/supplement.tex SHA256 ffb6692f14318decc52150533a562b4c5f8a283f9750d0ca987a309689a35d27
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Sixteen fitted parameters and conditional standard errors (SE). Errors depend on weights, fixed inputs, bounds and local linearization. Born and segment diameters are separate; packing diameter is $0.88\sigma$ and Debye--H\"uckel diameter is $\sigma$. The R5 reciprocal-temperature coefficient precedes its enthalpy shift; R2/R5 shifts are total adjustments. Full optimizer transformations are in the data deposit. A dash marks a parameter at a bound, for which no conditional SE is reported.}\label{tab:supplement-fitted-parameters}
-\begin{tabular}{@{}lrrrr@{}}
+\begin{tabular}{@{}lrrrrl@{}}
 \toprule
-Parameter & Value & Lower bound & Upper bound & Conditional SE \\
+Parameter & Value & Lower bound & Upper bound & Conditional SE & Source \\
 \midrule
-\multicolumn{5}{@{}l}{\itshape Interaction $k_{ij}$} \\*
-\ce{MEACOO-}–water $k_{ij}$ & $-0.003658$ & $-0.5$ & $0.5$ & $0.1821$ \\*
-\ce{MEAH+}–water $k_{ij}$ & $-0.5$ & $-0.5$ & $-0.161$ & -- \\*
-\ce{HCO3-}–water $k_{ij}$ & $0.7271$ & $-0.5$ & $1$ & $1.265$ \\*
-\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & $-1$ & $1$ & -- \\*
-\ce{MEA}–water $k_{ij}$ & $-0.0899$ & $-0.5$ & $0.5$ & $0.001024$ \\
-\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Temperature slope $b_{ij}$ (K)} \\*
-\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.62$ & $-1000$ & $1000$ & $60.26$ \\*
-\ce{MEA}–water $k_{ij}$ temperature slope & $-8.057$ & $-1000$ & $1000$ & $1.806$ \\
-\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Diameter (\AA)} \\*
-\ce{MEAH+} segment diameter & $5.35$ & $5.35$ & $5.8$ & -- \\*
-\ce{MEACOO-} segment diameter & $4.8661086$ & $2$ & $5.8$ & $0.07946$ \\*
-\ce{MEAH+} Born diameter & $5$ & $2$ & $5$ & -- \\*
-\ce{MEACOO-} Born diameter & $5$ & $2$ & $5$ & -- \\
-\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Dispersion energy $\epsilon_i/k_B$ (K)} \\*
-\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.9$ & $50$ & $950$ & $47.82$ \\*
-\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.2$ & $50$ & $1000$ & $83.57$ \\
-\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Reaction coefficient (K)} \\*
-R5 $A_5$ (before enthalpy shift) & $2832$ & $2400$ & $3000$ & $172.6$ \\
-\addlinespace[\aboverulesep]\multicolumn{5}{@{}l}{\itshape Enthalpy shift $\delta h_r$ (kJ/mol)} \\*
-R2 enthalpy shift & $-1.364$ & $-10$ & $10$ & $5.292$ \\*
-R5 enthalpy shift & $10$ & $-10$ & $10$ & -- \\
+\multicolumn{6}{@{}l}{\itshape Interaction $k_{ij}$} \\*
+\ce{MEACOO-}–water $k_{ij}$ & $-0.003658$ & $-0.5$ & $0.5$ & $0.1821$ & Joint fit \\*
+\ce{MEAH+}–water $k_{ij}$ & $-0.5$ & $-0.5$ & $-0.161$ & -- & Joint fit \\*
+\ce{HCO3-}–water $k_{ij}$ & $0.7271$ & $-0.5$ & $1$ & $1.265$ & Joint fit \\*
+\ce{MEACOO-}–\ce{MEAH+} $k_{ij}$ & $-1$ & $-1$ & $1$ & -- & Joint fit \\*
+\ce{MEA}–water $k_{ij}$ & $-0.0899$ & $-0.5$ & $0.5$ & $0.001024$ & Joint fit \\
+\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Temperature slope $b_{ij}$ (K)} \\*
+\ce{MEAH+}–water $k_{ij}$ temperature slope & $-41.62$ & $-1000$ & $1000$ & $60.26$ & Joint fit \\*
+\ce{MEA}–water $k_{ij}$ temperature slope & $-8.057$ & $-1000$ & $1000$ & $1.806$ & Joint fit \\
+\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Diameter (\AA)} \\*
+\ce{MEAH+} segment diameter & $5.35$ & $5.35$ & $5.8$ & -- & Joint fit \\*
+\ce{MEACOO-} segment diameter & $4.8661086$ & $2$ & $5.8$ & $0.07946$ & Joint fit \\*
+\ce{MEAH+} Born diameter & $5$ & $2$ & $5$ & -- & Joint fit \\*
+\ce{MEACOO-} Born diameter & $5$ & $2$ & $5$ & -- & Joint fit \\
+\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Dispersion energy $\epsilon_i/k_B$ (K)} \\*
+\ce{MEAH+} dispersion energy/\allowbreak{}k & $177.9$ & $50$ & $950$ & $47.82$ & Joint fit \\*
+\ce{MEACOO-} dispersion energy/\allowbreak{}k & $207.2$ & $50$ & $1000$ & $83.57$ & Joint fit \\
+\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Reaction coefficient (K)} \\*
+R5 $A_5$ (before enthalpy shift) & $2832$ & $2400$ & $3000$ & $172.6$ & Joint fit \\
+\addlinespace[\aboverulesep]\multicolumn{6}{@{}l}{\itshape Enthalpy shift $\delta h_r$ (kJ/mol)} \\*
+R2 enthalpy shift & $-1.364$ & $-10$ & $10$ & $5.292$ & Joint fit \\*
+R5 enthalpy shift & $10$ & $-10$ & $10$ & -- & Joint fit \\
 \bottomrule
 \end{tabular}
 \end{table}

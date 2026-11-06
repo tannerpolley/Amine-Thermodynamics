@@ -205,7 +205,7 @@ def main():
     ax.set(xlabel='MEA mole fraction', ylabel='Temperature (K)')
     ax.grid(alpha=.15)
     save(fig, 'mea-water', 'Bubble temperature and incipient vapor composition of the neutral MEA-water binary (no reactions) at 101.33 and 66.66 kPa, over each isobar’s measured liquid range, with the Cai et al. (1996) measurements. Liquid and vapor MEA mole fractions are on the same basis; the vapor value is one minus the retained water mole fraction.', ['fitted-rows.csv','model-curves/mea-water.csv'])
-    # Separate fits: every plotted value is calculated with the reported parameters.
+    # Separate fits: every plotted value is calculated with the final parameter set.
     assert a.load(a.E/'water-summary.json')['parameter_sha256'] == fit['record_sha256']
     water = a.rows(a.E/'water.csv')
     fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 2.7), layout='constrained', sharex=True)
@@ -253,8 +253,8 @@ def main():
     for ax in axes:
         ax.grid(alpha=.15)
     axes[0].legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))], fontsize=8, frameon=False)
-    save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the reported parameters.', ['permittivity/rows.csv'])
-    # One 162-state grid (#214), the same states for both fits; the reference pressures are the reported fit's bubble pressures.
+    save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the final parameter set.', ['permittivity/rows.csv'])
+    # One 162-state grid (#214), the same states for both fits; the reference pressures are the final parameter set's bubble pressures.
     temperatures = sorted({float(r['temperature_K']) for r in paired['reported'].values()})
     fractions = sorted({float(r['fraction']) for r in paired['reported'].values()})
     positions = {T: i for i, T in enumerate(temperatures)}
@@ -265,17 +265,17 @@ def main():
             axes[row, fractions.index(float(r['fraction']))].scatter(positions[float(r['temperature_K'])], float(r['loading']), marker='s' if 'single-liquid' in r['classification'] else 'o', s=30,
                                                                        facecolors='#D55E00' if resolved else 'none', edgecolors='#D55E00' if resolved else '#0072B2')
         for fraction, ax in zip(fractions, axes[row]):
-            ax.set(title=('Wider-bound fit' if row == 0 else 'Reported parameters') + f'\nP = {fraction:.2f} P*', xlabel='Temperature (K)')
+            ax.set(title=('Wider-bound fit' if row == 0 else 'Final parameter set') + f'\nP = {fraction:.2f} P*', xlabel='Temperature (K)')
             ax.set_xticks(range(len(temperatures)), labels=[f'{T:g}' for T in temperatures], rotation=45, ha='right')
             ax.set_yticks([1e-5, .1, .3, .5, .6], labels=[r'$10^{-5}$', '0.1', '0.3', '0.5', '0.6'])
             ax.grid(alpha=.15)
         axes[row, 0].set_ylabel(LOADING)
     n = len(paired['reported'])
     descents = {name: sum(int(r['resolved_trials']) > 0 for r in part.values()) for name, part in paired.items()}
-    fig.suptitle(f"Detected instabilities: wider-bound fit {descents['comparison']}/{n}; reported parameters {descents['reported']}/{n}", fontsize=10)
+    fig.suptitle(f"Detected instabilities: wider-bound fit {descents['comparison']}/{n}; final parameter set {descents['reported']}/{n}", fontsize=10)
     single = any('single-liquid' in r['classification'] for part in paired.values() for r in part.values())
     fig.supxlabel('Filled: instability detected; open: none' + ('\nSquares: single liquid; circles: liquid + vapor' if single else '; all states liquid + vapor'), fontsize=8)
-    save(fig, 'phase-family', f"{n} temperature/pressure/loading states at six temperatures, wider-bound fit versus reported parameters: {descents['comparison']}/{n} and {descents['reported']}/{n} resolved-descent states. Columns show 0.50, 0.80 and 0.95 times reference pressures equal to the reported fit's bubble pressures. Finite searches do not certify a continuous stable region.", ['phase-family.csv'])
+    save(fig, 'phase-family', f"{n} temperature/pressure/loading states at six temperatures, wider-bound fit versus final parameter set: {descents['comparison']}/{n} and {descents['reported']}/{n} resolved-descent states. Columns show 0.50, 0.80 and 0.95 times reference pressures equal to the final parameter set's bubble pressures. Finite searches do not certify a continuous stable region.", ['phase-family.csv'])
     comparison = a.load(a.E/'comparison-score.json')
     records = dict(reported=a.record_identity(fit['record_sha256'], fit['engine']), comparison=a.record_identity(comparison['parameter_sha256'], fit['engine']))
     for name, output in OUTPUTS.items():

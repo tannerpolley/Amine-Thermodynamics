@@ -1,16 +1,15 @@
 schema_version: 1
 scientific_lane: explicit_ion_epcsaft_equilibrium_properties_loaded_mea
+title: >
+  Thermodynamics of CO₂-loaded aqueous monoethanolamine with ePC-SAFT: phase equilibria, speciation, absorption heat, density and phase stability
 scientific_claim: >
-  We examine whether one explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation with carbamate chemistry can represent the equilibrium, caloric and density properties of loaded aqueous monoethanolamine (MEA).
-  After separate water, CO₂–water and dielectric fits, sixteen parameters are fitted jointly to pressure, species, integral absorption heat, density, heat capacity and binary equilibrium data.
-  For nominal 30 wt% MEA, one parameter set thus represents CO₂ pressure, the amine and carbamate fractions, integral heat at 313.15 K and loaded density through 353.15 K.
-  Pressure average absolute relative deviations are 11.86% over 47 fitted observations at 313.00–333.15 K and 20.55% over 159 observations at 313.00–393.15 K, including 112 not fitted but examined during model development.
-  The shared subset of 94 fitted species fractions gives 7.10% at 293.15–333.15 K.
-  The fitted integral-heat root-mean-square error is 1.84 kJ/mol CO₂; the average absolute relative density deviation is 0.18% over 47 fitted loaded densities, calculated without volume translation, with 44 within twice the assigned scale and three accepted misses at 353.15 K.
-  The 159-pressure deviation lies within the range of pressure deviations reported for related MEA models, which use different data sets and fitting roles.
-  A fit with wider bounds on the protonated-amine diameter and its water interaction matches the properties similarly but predicts a second liquid phase at some states; narrowing these bounds removes the detected instabilities in a finite search at 162 states between 313.15 and 393.15 K, with a 0.45% higher fitting cost.
-  Carbonate shares, titration bicarbonate, the 0.51 MPa Arcis integral heats, loaded densities above 353.15 K and the unloaded heat capacity at 318.15 K remain discrepant, and pressure deviations reach 29.5 and 56.0% at 15 and 45 wt% MEA.
-  The available comparisons do not yet establish suitability across absorber and stripper temperatures.
+  Joint estimation of equilibrium, caloric, density and binary data supports a common ePC-SAFT description of nominal 30 wt% loaded MEA.
+  Pressure AARD is 11.86% for 47 fitted and 24.2% for 112 non-fitted pressures (20.55% overall).
+  Species AARD is 7.10% over 94 fitted fractions; integral-heat RMSE is 1.84 kJ/mol CO₂; fitted loaded-density AARD is 0.18% over 47 observations.
+  A wider-bound fit gives similar property agreement but detected instability at 54 states, compared with no additional liquid detected at 162 searched states for the final parameter set.
+  Six parameters are on bounds; four of the other ten have conditional errors exceeding their absolute values; the R5 shift of 0.49 pK is within its conditional error of 0.55 pK.
+  Concentration transfer, minor species and high-temperature properties remain limited; the phase search is numerical evidence, not physical validation.
+  The brief MDEA demonstration identifies no generally preferable cation representation.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -39,15 +38,12 @@ declarations:
     final manuscript.
   authority_status: author_approved_2026-10-01
 target_venue: Fluid Phase Equilibria
-title: >
-  Modeling CO2 absorption in aqueous monoethanolamine with ePC-SAFT
 keywords:
-  - CO2 solubility
-  - ePC-SAFT
-  - joint parameter estimation
   - monoethanolamine
+  - ePC-SAFT
   - chemical speciation
-  - reactive vapor-liquid equilibrium
+  - absorption heat
+  - phase stability
 repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT
 repository_visibility_at_submission: owner decision pending
@@ -60,7 +56,7 @@ local_data_release: tmp/joint-design/a7-data-release/
 parameter_record_sha256: 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
 engine_commit: 3e83e19ccc771b51d8ebc038931ab25192f4c5b5
 engine_wheel_sha256: 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804
-pdf_sha256: d80999d5a5e55add0752c537e5d3a84bb81a19325b00595e32bb0784ea410d63
+pdf_sha256: 4559d02a7bb9693bf8151a651d25fad8de43710c9d264cdb2322602afccafe63
 source_zip_sha256: null
 archive_doi: null
 archive_doi_status: pending
@@ -75,6 +71,8 @@ submission_aids:
   chemrxiv: submission/chemrxiv.md
   cover_letter: submission/cover_letter.md
   highlights: submission/highlights.txt
+  graphical_abstract: builds/graphical_abstract.pdf
+  suggested_referees: submission/suggested_referees.md
 excluded_from_upload:
   - docs/scientific/latex/submission_metadata.yml
 remaining_human_gate:

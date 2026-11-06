@@ -20,13 +20,8 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
     \label{eq:epcsaft-residual-split}
 \end{equation}
 Each neutral species is modeled as a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $\epsilon_i$ (tabulated as $\epsilon_i/k_B$), and each ion as a single charged sphere with $m_i^{\mathrm{seg}}=1$.
-The hard-chain term is the reference fluid: hard-sphere segments, whose excluded-volume free energy follows Boubl\'ik and Mansoori et al., bonded into chains by Wertheim's first-order perturbation theory.
-Ions have one segment, so they add excluded volume but no chain bonds.
-The dispersion term is Gross and Sadowski's second-order perturbation of this hard-chain fluid; it adds the attraction between segments through the pair energies $\epsilon_{ij}$, with universal constants fitted to pure \textit{n}-alkane data.
-The association term counts hydrogen bonds between donor and acceptor sites by Wertheim's first-order theory; the fraction of sites left unbonded is solved at every state.
-The Debye--H\"uckel term adds the screened Coulomb interactions among ions of finite diameter in a continuum of the bulk relative permittivity, and the Born term adds the change in free energy when each ion is charged in the solvent rather than in vacuum.
-Section~S11 gives the hard-chain, dispersion, association and Debye--H\"uckel expressions with their source equation numbers \cite{Gross2001,Kleiner2007,Cameretti2005}.
-The pressure and chemical potentials follow from density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001}, and caloric properties from its temperature derivatives (\cref{sec:heat-method}).
+The standard hard-chain, dispersion, association and Debye--H\"uckel expressions and their source equation numbers are given in Section~\ref{supp-sec:s-epcsaft}; the Born and dielectric choices are specified below.
+The pressure and chemical potentials follow from density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001}, and caloric properties from its temperature derivatives (\cref{sec:caloric-model}).
 Because the permittivity in the two electrostatic terms depends on density, temperature and composition (\cref{eq:solvent-permittivity}), these derivatives include its variation.
 Dispersion energies $\epsilon_i$ and $\epsilon_{ij}$ are distinct from the association energies $\epsilon^{AB}$; relative permittivities use $\varepsilon$.
 Below, $\mathcal I$ is the set of ions.
@@ -38,7 +33,7 @@ For the neutral species the hard-sphere diameter depends on temperature \cite[Eq
     d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3\epsilon_i}{k_BT}\right)\right],
     \label{eq:hard-sphere-diameter}
 \end{equation}
-with the water diameter law $\sigma_w(T)$ of Section~S1 in place of a constant $\sigma_i$.
+with the water diameter law $\sigma_w(T)$ of Section~\ref{supp-sec:s-parameters} in place of a constant $\sigma_i$.
 The ion packing diameter is the temperature-independent value $d_i=0.88\sigma_i$; the Debye--H\"uckel diameter equals $\sigma_i$ for all six ions, and the Born diameter is separate.
 These diameter choices define the present parameterization; they are not independently measured ion sizes.
 
@@ -71,7 +66,7 @@ This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and 
     \label{eq:wolbach-sandler}
 \end{equation}
 and \MEA and \COtwo do not bond with each other.
-The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (Eq.~S14 and Section~S1).
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (Eq.~\ref{supp-eq:association-strength} and Section~\ref{supp-sec:s-parameters}).
 
 \subsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
@@ -155,7 +150,7 @@ R1--R3 use the Austgen correlation form \cite[Table~V]{Austgen1991},
 \end{equation}
 where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; the R5 starting law is Bates and Pinching \cite[Eq.~10, Table~2, p.~351]{batesAcidicDissociationConstant1951}, also tabulated by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
-The tabulated R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its two fitted quantities: the reciprocal-temperature coefficient $A_5$ of its p$K$ form (2832~K before the enthalpy shift; Bates--Pinching 2677.91~K) and the total enthalpy shift.
+The tabulated R2 coefficients already include their molality conversion and fitted enthalpy shift; R5 already includes its two fitted quantities: the reciprocal-temperature coefficient $A_5$ of its p$K$ form (before the enthalpy shift) and the total enthalpy shift.
 Neither shift is added again when evaluating the constants in \cref{tab:reaction-equilibrium-constants}.
 For either reaction the constant-enthalpy adjustment has a form that leaves $K_r(T_{\mathrm{ref}})$ unchanged
 \begin{equation}
@@ -166,4 +161,19 @@ For either reaction the constant-enthalpy adjustment has a form that leaves $K_r
 R1 and R3 remain fixed source laws; R2 and R5 are calibrated chemistry parameters rather than independent measurements of reaction enthalpy.
 The reacting calculations use a domain of 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
 
-\input{tables/reaction_equilibrium_constants}
+\needspace{16\baselineskip}\input{tables/reaction_equilibrium_constants}
+
+\subsection{Enthalpy and heat capacity}\label{sec:caloric-model}
+% P:theory-caloric-01
+Total enthalpy follows the same Helmholtz energy and reaction standard states as the equilibrium calculation:
+\begin{equation}
+ H=PV-RT^2\left(\frac{\partial(A/RT)}{\partial T}\right)_{V,\boldsymbol n},\qquad
+ A=A^{\mathrm{ig}}+A^{\mathrm{res}}.
+ \label{eq:total-enthalpy}
+\end{equation}
+Neutral ideal-gas functions supply the caloric reference; the ionic functions are completed from the five reaction laws, including $\Delta_rh^\circ=RT^2d\ln K_r/dT$ and the derivatives of the infinite-dilution reference corrections.
+Reaction enthalpies are therefore included once through the standard-state functions.
+The neutral ideal-gas coefficients follow NIST-JANAF and Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011} and are listed in the data deposit; Section~\ref{supp-sec:s-files} gives the functions and reference convention, including the extrapolation of the water Shomate function below \SI{500}{\kelvin}.
+Equilibrium isobaric heat capacity is $C_P=(dH_{\mathrm{eq}}/dT)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
+The objective uses $C_P/n_{\mathrm{feed}}$ per mole of complete analytical feed, with source mass-specific values converted on that same basis.
+The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}=n_{\MEA}M_{\MEA}+n_wM_w+n_{\COtwo}M_{\COtwo}$ is the complete analytical-feed mass.

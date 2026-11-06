@@ -23,6 +23,8 @@ UNINVENTORIED = {'analyses/mea_parameter_bundle/scripts/a7_presentation.py', 'an
 # Source-only data read by the figures but absent from #215's inventory: pinned here by SHA-256.
 PINNED = {'analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv':
           'ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc'}
+# #244 binds the retained MDEA parameter declarations used by the supplement.
+PINNED.update({'analyses/mdea_mea_workflow/results/stage2-capped/A3/endpoint.json': '3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8', 'analyses/mdea_mea_workflow/results/stage2-capped/A3/declaration.json': '86111af51bace3d696b9963cb84a4ac811cdb962f5d851b2c90237d72e7df53b', 'analyses/mdea_mea_workflow/results/stage2-capped/B1/endpoint.json': '1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d', 'analyses/mdea_mea_workflow/results/stage2-capped/B1/declaration.json': 'b98bacbcbce32c8b508683d7ca53f66881039a1d509f393e5dd2fd2d6690b644'})
 INPUTS = {}
 
 
@@ -171,18 +173,18 @@ def inventoried():
     old = subprocess.run(['git', '-C', str(ROOT), 'show', f'{INVENTORY_COMMIT}:{TABLE_GENERATOR}'], capture_output=True, check=True).stdout
     assert hashlib.sha256(old).hexdigest() == inventory[TABLE_GENERATOR]
     old, new = old.decode(), (ROOT / TABLE_GENERATOR).read_text()
-    # #224 approves citation locators and dispersion notation; pin the revised source blocks.
+    # #244 approves the revised literature comparison and nomenclature units; pin their exact text.
     for marker, digest in {
-        'literature=[': 'ebd3acdfff649d0c0c6523a073788c1e165f9062823890df17f33428c4304e07',
+        'literature=[': '2cc65a40ecaf8438593cc0e6dd8a4b9b61dab2663f4d90d71c63d418b17e5268',
         'symbols=[': '40b014c56512e829dd6a23ce56241176675906efd1d426f407fa841d486767ae',
     }.items():
         start = new.index(marker)
         block = '\n'.join(line for line in new[start:new.index(']]', start)+2].splitlines() if 'This work' not in line)
         assert hashlib.sha256(block.encode()).hexdigest() == digest, marker
-    # #211 Part 2 permits only the approved present-work row and parameter-count caption.
+    # #244 approves the split-pressure row and full-comparison caption.
     for marker, digest in {
-        "['This work'": '4e353b4fc3fd38196e1982b0248d2e242f3f2d183903a2d58d6a9ad942f282b5',
-        "table('literature_model_comparison.tex'": 'ac15b51184425c0833be514310ed22ce356d10ea23eeada8594fabb30b412772',
+        "['This work'": 'deb63e7319e004ea773a4056af6f686cab0cb234b64a46d7b0e7e5dc2db86955',
+        "table('supplement_literature_comparison.tex'": 'b9bb12d4c4224479a7838783f56ebd8ba8dccdd90825b3f869cad9b472337686',
     }.items():
         line, = (line for line in new.splitlines() if marker in line)
         assert hashlib.sha256(line.encode()).hexdigest() == digest, marker
