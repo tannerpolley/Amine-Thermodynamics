@@ -1,0 +1,115 @@
+---
+title: "Permittivity temperature and loading sensitivity"
+format: html
+execute:
+  enabled: false
+---
+
+The reference-anchored ±5% permittivity cases change reactive bubble pressure by about −0.84/+0.77% at 353 K and −1.84/+1.66% at 393 K for a 30 wt% unloaded MEA stock at loading 0.44 mol CO₂/mol MEA. Density changes remain below 0.022%; equilibrium heat-capacity changes remain below 0.203% for these cases. The strongest Hajj-derived frozen-increment case changes bubble pressure by +10.62% at 393 K. These are **fixed-model predictions and numerical verification**, not physical validation of high-temperature or loaded-solution permittivity.
+
+**MEA and MDEA evidence is retained.** MDEA uses its normal pinned wheel separately from MEA. Across available MDEA comparisons, the four reference-anchored ±5% cases change individual pressure predictions by up to 6.05%, combined bicarbonate-plus-carbonate mole-fraction predictions by 0.321%, heat-capacity predictions by 0.0923% and density predictions by 0.0222%. These maxima span each retained property group's source conditions; they are not predictions at the reference composition alone. No parameter set is adopted and manuscript promotion remains separate.
+
+## Physical basis and source assessment
+
+The question is how uncertainty in the bulk static permittivity entering Debye–Hückel and Born contributions affects pressure, species, heat and density with chemistry and every non-dielectric coefficient fixed. The [source assessment](source-assessment.md) owns paper locators, PDF hashes, reading-copy checks and the continued search. The [source values](inputs/source-values.csv) retain quantities and conditions used here.
+
+Agieienko–Buchner 2024 ESI S1/S2 supplies the 14 unloaded 298.15 K calibration points. Hajj-loaded 2024 Table 1 supplies microwave-inferred static estimates through 353.15 K, but §3.3.1 warns that the 915–2450 MHz interval does not accurately establish the static limit. Its less-than-1% spectral repeatability is not a static-limit uncertainty. Hajj-unloaded 2024 Table 1 supplies inferred values at 293.15 and 333.15 K. Lounev 2023 §2 covers 283–313 K over 100 MHz–60 GHz and does not resolve the gap above 328 K. Jadhavpatil 2019 acquisition returned metadata but no PDF; its high-temperature applicability remains unverified. This search found no admitted broadband/low-frequency unloaded MEA dataset above 328 K. That is a bounded search result, not proof of nonexistence.
+
+![The current law and Hajj's inferred values have opposite loading directions at the shown temperatures. Each point is evaluated at its own source loading; the stock solvent is 30 wt% MEA. Model points use 101325 Pa. No error bars are assigned to Hajj's unquantified static-limit uncertainty. Points are discrete evaluations, not a retained continuous curve.](source-comparison.png)
+
+At 353.15 K, current-law predictions are 48.173, 46.254, 44.371 and 42.677, against Hajj's inferred 60.1, 63.4, 68.8 and 72.4 at loadings 0.22, 0.33, 0.44 and 0.55 mol/mol. This is a disagreement with qualified inferred values; it cannot establish a discrepancy beyond static measurement uncertainty or justify fitting a replacement law. The 44 complete [source comparisons](results/source-comparison.json) preserve all 14 calibration, two unloaded challenge and 28 loaded challenge values and native diagnostics.
+
+## Perturbation and conditions
+
+For the existing solvent-density-temperature law, scaling every native dielectric-volume coefficient by $s$ gives, at identical temperature, density and composition,
+
+$$\epsilon_s=1+s(\epsilon_0-1),\qquad s_\pm=1\pm0.05\frac{\epsilon_{\rm ref}}{\epsilon_{\rm ref}-1}.$$
+
+The reference is the unloaded 30 wt% MEA liquid at 101325 Pa at exactly 353 or 393 K. Its native permittivity at 353 K is 52.0511559625. The fixed-density reference check requires an absolute permittivity error below $10^{-10}$. Each scenario holds its multiplier constant internally, allowing Engine to differentiate that model consistently. It is a reference-anchored coefficient sensitivity, not a uniform multiplier of permittivity everywhere. Actual permittivities after reactive re-equilibration are retained in [diagnostics](results/baseline/diagnostics.json) and individual observation records.
+
+For the Hajj-derived amplitude stresses, the source's unloaded 69.10 at 293.15 K and 58.27 at 333.15 K give a linearly extrapolated unloaded comparison baseline of 52.855 at 353.15 K. Subtracting this from the four loaded values gives increments 7.245, 10.545, 15.945 and 19.545. The owner selected carrying these increments unchanged to 393 K. The labels `hajj-0.22` through `hajj-0.55` identify **source amplitudes**, not the loading of the diagnostic calculation, which is always 0.44. They neither replace the law nor implement continuous temperature/loading dependence. Heat and heat-capacity responses exclude derivatives of such dependence. Uncertainty is unquantified; none of these amplitudes is a confidence interval.
+
+Liquid species, density and equilibrium heat capacity use 101325 Pa, 30 wt% MEA before loading and 0.44 mol CO₂/mol MEA. Bubble pressure is a separate incipient-vapor calculation at the same temperature and feed. At 393 K its baseline bubble pressure is 410655.63 Pa, above the diagnostic pressure: the 101325 Pa homogeneous-liquid quantities are a **metastable liquid continuation**, not stable process predictions. Local mechanical admission and convergence do not establish global phase stability. Baseline bubble pressures are 53166.79 and 410655.63 Pa; liquid densities are 1059.535 and 1024.649 kg/m³; native equilibrium heat capacities are 78.91555 and 83.88774 J/(mol K), respectively.
+
+## Pressure, density, heat capacity and species responses
+
+| Case | T (K) | Bubble pressure change (%) | Liquid density change (%) | Equilibrium Cp change (%) |
+|---|---:|---:|---:|---:|
+| 353-minus5 | 353.0 | -0.840602 | +0.012606 | +0.016626 |
+| 353-plus5 | 353.0 | +0.769094 | -0.011552 | -0.013882 |
+| 353-hajj-0.55 | 353.0 | +4.468062 | -0.068321 | -0.064245 |
+| 393-minus5 | 393.0 | -1.837495 | +0.021886 | -0.202646 |
+| 393-plus5 | 393.0 | +1.664579 | -0.020056 | +0.186494 |
+| 393-hajj-0.55 | 393.0 | +10.622462 | -0.134374 | +1.244499 |
+
+![Responses at the scenario's own anchor temperature. Points show discrete fixed-coefficient scenarios. Error bars are omitted because these deterministic stresses have no assigned probabilistic uncertainty. Heat-capacity derivatives belong to each constant-coefficient model.](sensitivity.png)
+
+Species changes below refer to liquid mole fractions, with percentage changes relative to the unperturbed fraction at the same temperature and pressure. The full nine-species composition and all 13 scenarios at both temperatures are in [diagnostics](results/baseline/diagnostics.json) and [plotted values](results/plotted-values.csv).
+
+| Case | Free MEA change (%) | Carbamate change (%) | Bicarbonate change (%) |
+|---|---:|---:|---:|
+| 353-minus5 | -0.015500 | -0.000542 | +0.059134 |
+| 353-plus5 | +0.020105 | -0.002099 | -0.035318 |
+| 353-hajj-0.55 | +0.201056 | -0.048782 | +0.061660 |
+| 393-minus5 | -0.276543 | +0.054962 | +0.316889 |
+| 393-plus5 | +0.261044 | -0.054276 | -0.270207 |
+| 393-hajj-0.55 | +1.866575 | -0.431246 | -1.409319 |
+
+Integral addition-heat and all supporting property responses are retained as individual values/residuals in each scenario's `observations.json`; the group named `common149` includes the accepted pressure/species/integral-heat objective. No uncertainty-weighted dielectric refit is made.
+
+## Objective and phase assessment
+
+The unchanged final parameter record reproduces all 307 values, residuals and costs within $10^{-10}$ relative to the retained generic-driver endpoint. Baseline cost is 148.87893934557388. All 307 quantities are available and meet requested tolerances in all 13 scenarios. For the ±5% cases, total cost ranges from 149.0926237573 to 149.1704375213. Frozen-increment Hajj cases raise it to 150.2681495686–157.0555291326. These changes describe fixed-parameter calibration residuals, not independent predictive assessment or parameter-confidence intervals. All eight existing objective groups are retained separately in each summary.
+
+{{< include results/scenario-table.md >}}
+
+Every scenario evaluates the same 162 retained temperature/loading/pressure states through the existing MEA phase-family owner and classifier. Baseline reproduces 162 `passed-two-phase` classifications, zero resolved-descent states and zero incomplete states. No scenario returns a resolved descent. Seven scenario/state searches are incomplete: two in `353-plus5`, and one each in `353-hajj-0.44`, `353-hajj-0.55`, `393-minus5`, `393-plus5`, and `393-hajj-0.55`. A zero detected-descent count with incomplete trials does not demonstrate stability.
+
+The incomplete trials all converge numerically and then report **reconstruction destroys support** for the native `near-pure-0` liquid trial. For example, `353-plus5`, state 144 (313.15 K, loading 0.6, 18141.1958 Pa) has trial residual $1.1030\times10^{-13}$, but no reconstructed composition or finite-split seed. Raw native logarithmic coordinates span approximately −539.55 to +105.55. The pinned `StabilityOptions` exposes trial declarations/budgets and supplied-trial evaluation, but no support-reconstruction precision/repair control. Increasing iteration limits does not address a failure after convergence. Changing supports or omitting this trial would change the approved search. This diagnostic matches the charge-reconstruction failure documented in Engine #904; its later correction is outside the MEA wheel pinned for this study. A wheel change requires owner authority; no local EOS or reconstruction repair is inserted. Complete raw trials, coordinates, residuals and reduced classifications are retained in each scenario's compressed phase result and reduction. These diagnostics do not establish a physical liquid split.
+
+The first diagnostic-state calculation used a nonexistent local dictionary key `0-problem`; this was a caller error before a model evaluation. The correction selects the first materialized observation's actual problem identity. Diagnostics were regenerated without changing physical inputs, tolerances, starts or model parameters, and the campaign was repeated against the corrected producer. A later shared-code extraction omitted the `jsonable` import used by diagnostics; retained `NameError` messages identified the caller defect. Restoring the import and replacing the broad diagnostic exception conversion with direct evaluation and numerical availability assertions prevents incomplete diagnostics from passing the campaign. The final campaign was rerun after that correction.
+
+## Recommendation for #255 stage 2 and limits
+
+Retain the current law as an explicit extrapolation assumption pending direct broadband/low-frequency unloaded high-temperature and loaded-MEA static evidence. Do not fit Hajj's narrow-band inferred static values. The ±5% directions modestly move pressure/speciation and barely move density in the stated cases; this does not identify the law or show it is physically accurate. The larger Hajj-derived amplitude stresses show pressure changes up to 10.62% at 393 K, with calibration cost rising rather than improving. Treat these as sensitivity evidence alongside the incomplete reconstruction searches and the separate MDEA assessment, not a parameter adoption or an uncertainty bound.
+
+The incomplete native phase reconstructions prevent a complete no-descent statement for six perturbed models. MDEA's known vapor-branch failure and one additional perturbed pressure failure limit comparison coverage as described below.
+
+## MDEA comparison and coverage
+
+MDEA uses its own normal immutable Engine wheel from merged `d513820994a78bfe628d42fffd55b2eeab6f89bd`, SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`. Installed package files were checked byte-for-byte. The B1 endpoint parameter SHA-256 is `1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d`. The existing generic solvent caller owns observations, declared domains and native predictions. No Hajj correction is transferred from MEA.
+
+The baseline reproduces all 432 comparison identities and availability, with 406 available, 25 outside the declared domain and one `CentralSolveUnavailable`; all four capped calibration rows `fit:125`–`fit:128` reproduce and are available. The study-specific same-wheel check is $|q-q_{\rm ref}|\le10^{-10}\max(1,|q_{\rm ref}|)$ in native units for predictions, native residuals and exposed non-null saturation/endpoint loadings. It is numerical verification, not a physical uncertainty. The references are the retained comparison table and `endpoint-checks.json → R1.records`; historical weighted residuals are distinct.
+
+The four independent anchors are unloaded 30 wt% MDEA at 101325 Pa and exactly 353/393 K. Baseline reference permittivities are 49.9006043 and 41.8592320. Constant coefficient scales are 0.948977518/1.051022482 at 353 K and 0.948776286/1.051223714 at 393 K. All fixed-temperature, fixed-density, fixed-composition ratio assertions pass within $10^{-10}$. Actual native permittivities for available rows are retained as `epsilon_primary_state`, with its actual temperature and pressure. For heat observations this explicitly describes the primary initial state, not the integrated path or saturation endpoint; native heat, endpoint and saturation loadings retain their separate meanings.
+
+| Model | Available / requested | Outside domain | Native solve unavailable |
+|---|---:|---:|---:|
+| Baseline | 410 / 436 | 25 | 1 |
+| 353-minus5 | 409 / 436 | 25 | 2 |
+| 353-plus5 | 410 / 436 | 25 | 1 |
+| 393-minus5 | 410 / 436 | 25 | 1 |
+| 393-plus5 | 410 / 436 | 25 | 1 |
+
+Every model retains `comparison:370`, B1 at 333.15 K, 60 wt% MDEA and 1.121 MPa, as unavailable under the owner-authorized Engine #1073 limitation. Native heat, saturation loading and endpoint loading remain null. The six outside-domain capped comparison rows remain counted, and `comparison:374` at 388.71 K, 60 wt% MDEA and 1.121 MPa remains available. For that row, baseline signed heat is −64.12858 kJ/(mol added CO₂), with saturation and endpoint loading both 0.15815614 mol/mol. The 393-minus5/plus5 cases give −64.56189/−63.76178 kJ/(mol added CO₂) and loadings 0.15935744/0.15719831 mol/mol. These are native capped-addition results, without substituting another heat definition or an unavailable endpoint.
+
+The additional failure is `comparison:113` in `353-minus5`: corrected Kamps/Ermatchkov Table 6 row 13, 313.73 K, 7.994 mol MDEA/kg water and 9.227 mol CO₂/kg water; observed total pressure is 7.565 MPa. The native bubble solve exhausts 200 iterations with residual 0.10205 against $10^{-10}$ and reports association trial preparation/polish outside its domain. Its baseline prediction is 5.212761 MPa. The neighboring coefficient case `393-minus5` at the identical physical state succeeds in 82 iterations at 5.384550 MPa; its coefficient scale differs by only 0.00020123. This bounds the failure to numerical convergence for the declared starting conditions; it does not show a physical loss of a bubble point or establish the missing prediction. No tolerance, root, start or iteration-budget change is authorized by this study. The original failed prediction and native diagnostics remain in the all-row table; no value is interpolated from the neighboring model.
+
+All group statistics below use identities available in both the scenario and baseline. The Böttinger groups named `bicarbonate` compare the native sum of bicarbonate and carbonate mole fractions. Mean absolute relative deviations omit zero observed values and retain the denominator: each bicarbonate group has 58 available rows but 57 nonzero terms. For `353-minus5`, corrected-Kamps uses 27 matched rows with baseline matched AARD 25.44479%, compared with scenario 24.95432%; the baseline's full 28-row AARD is 25.64653% and must not be used as the matched denominator. The 13 Kuranov 413 K observations are outside the declared domain, so no AARD is assigned. Tables suit these heterogeneous property groups; they do not imply a continuous sensitivity curve.
+
+{{< include results/mdea/table.md >}}
+
+The maxima cited above are absolute relative prediction changes over matched rows, not relative changes in AARD. MDEA pressure groups respond more strongly than density and heat capacity under these coefficient perturbations. This supports retaining dielectric uncertainty as a sensitivity assumption; it does not select a replacement law or qualify absorber operation. Complete values, native causes, source rows, loadings and per-group denominators are in [MDEA observations and summaries](results/mdea/summary.json).
+
+
+## Reproduction and evidence identity
+
+Engine merged commit `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`; installed Engine package files are checked byte-for-byte. Final parameter SHA-256 is `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`. [Cases](results/cases.json) retain each reference density, permittivity, increment and multiplier. [Campaign provenance](results/summary.json) retains input/producer hashes, process count, numerical thread settings, timing and per-scenario summaries. Source comparison and phase evidence are numerical predictions under those exact inputs. There is no physical validation, parameter adoption or manuscript promotion. Independent design readiness and delivered-result review are recorded in the issue and PR; a review verdict does not promote these results for manuscript use.
+
+```bash
+agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src build/issue-265-venv/bin/python analyses/permittivity_temperature_loading/calculate.py
+agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src build/issue-265-mdea-venv/bin/python analyses/permittivity_temperature_loading/mdea.py
+agent-heavy build/issue-265-venv/bin/python analyses/permittivity_temperature_loading/present.py
+```
+
+Presentation reads retained results only. The notebook registry `analyses/_cse-manuscript.json` is excluded by owner instruction, so no registry refresh or preview service change is made. A standalone HTML render is provided for review; render success is not scientific acceptance.
