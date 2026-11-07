@@ -1,6 +1,7 @@
 ---
 title: "MEA parameter bundle"
 resources:
+  - heat-capacity-264/**
   - results/density-268/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
@@ -448,6 +449,93 @@ The four [Hilliard Cp rows](results/engine-3e83e19c-paper-evidence/cp.csv) enter
 1 of 4 states exceed the 3% comparison limit.
 
 <!-- RESULTS:heat-capacity:END -->
+
+# Broader MEA heat-capacity comparison {#broader-mea-heat-capacity-comparison}
+
+Broader heat-capacity calibration did not remove the unloaded 318.15 K discrepancy in these two bounded probes. With the corrected water ideal-gas record, the baseline error is +5.532%; probe A gives +5.531% and probe B +4.087%, compared with Hilliard's stated ±2% accuracy. Both probes converge, but fail the agreed density-preservation limits and develop dense-liquid descent. They are diagnostic endpoints and are not recommended for adoption. This result means **not removed by these tested probes**; it does not establish structural impossibility.
+
+## Measurements and intended comparison
+
+[Source rows](heat-capacity-264/sources.csv) and [live PDF identities/hashes](heat-capacity-264/source-provenance.json) retain 68 Hilliard measurements, six selected Weiland values and three selected Concepción values. Hilliard (2008), Appendix G.2 p.937/PDF994, provides 17 temperatures from 313.15 to 393.15 K at each of loadings 0, 0.139, 0.358 and 0.541 mol CO₂/mol MEA, with 7 mol MEA/kg water. The first three series supply 51 probe-fit observations; the 17 at 0.541 are outside this issue's loading domain. The four historical fitted observations are part of these 51, and are replaced rather than duplicated. Weiland et al. (1997), Table 3 p.1004, supplies six independent comparison rows at 298.15 K, 30 wt% unloaded analytical MEA, and loadings 0–0.5. Concepción et al. (2023), Table 3 p.3, supplies three independent unloaded comparisons at 313.15, 333.15 and 353.15 K, MEA mass fraction 0.2997 and 0.100 MPa. These sources cover selected states, not the entire temperature–loading rectangle.
+
+Hilliard §§4.5–4.6, pp.71–78, describes sealed pans and a temperature ramp; experimental sample pressure is not reported. The assigned 101325 Pa calculation pressure is an assumption. The falsifier and phase searches are conditional on that prescribed model state, and gas descent does not establish instability in the sealed experiment. Total loaded-solution mass is used for all heat capacities. Nominally unloaded calculations retain the historical 10⁻⁶ mol CO₂/mol MEA trace feed.
+
+Hilliard §4.6 pp.78–80 states ±2% accuracy and ±1% reproducibility; neither is identified as a standard uncertainty. The 2% residual scale continues the existing policy. Weiland's experimental section states ±1% repeatability and agreement with standards; this is a comparison band, not a statistical confidence interval. Concepción Table 3 gives 1% expanded uncertainty with coverage factor 2, corresponding to a 0.5% standard residual scale. [Nearby-composition unloaded source comparisons](heat-capacity-264/unloaded-source-comparison.csv) show Concepción above Hilliard by 4.712%, 4.511% and 4.755% at the three common temperatures. Their slightly different MEA concentrations and the unknown Hilliard pressure prevent treating this as a same-state replication, but the difference exceeds the sum of their stated 2% and 1% bands. Source agreement cannot be assumed.
+
+Zhang, Que and Chen (2011), Table 3 p.68, gives the Aspen MEA ideal-gas polynomial over 283–1000 K, without uncertainty. The retained coefficients are translated to the existing 313.15 K-centered `IdealPolynomial` representation; the polynomial was checked against the source, not refitted here. Their §§3.1–3.3 and Tables 7 and 10 describe fitting binary and ternary caloric data with aqueous electrolyte NRTL and PC-SAFT vapor/pure-fluid properties. Baygi and Pahlavanzadeh (2015), §§3.1–3.3 and Tables 2–5, instead fits saturation/binary VLE and compares ternary pressures. Neither paper's use of a model establishes independent heat-capacity validation for these probes.
+
+## What carries the calculated heat capacity
+
+[Baseline decomposition](heat-capacity-264/decomposition.json) and [probe A](heat-capacity-264/probe-A-decomposition.json) / [probe B](heat-capacity-264/probe-B-decomposition.json) retain all 60 states. Frozen-composition heat capacity comes from the Engine's reference-completed `solved_state_actions` phase property. It includes the ionic caloric reference completion; a homogeneous-state total without that completion would mislabel the reaction remainder. Frozen molar quantities are multiplied by solved phase amount/feed mass, while the equilibrium observable is multiplied by feed amount/feed mass. Both are then expressed in kJ/(kg loaded solution K).
+
+Residual constant-volume contributions use the existing MDEA diagnostic relation, $C_{v,r,t}=-R(2T a_{t,T}+T^2a_{t,TT})$, where $a_t$ is the Engine's dimensionless residual Helmholtz contribution at fixed density and composition. This is a diagnostic derivative of Engine values, not a second equation-of-state implementation. The residual pressure–volume coupling is $C_{p,r}-C_{v,r}$. Neutral ideal terms, completed source-reference calorics, residual contributions and reaction equilibration are reported separately.
+
+At unloaded 318.15 K, the decomposition is:
+
+| Contribution / kJ kg⁻¹ K⁻¹ | Baseline | A | B |
+|---|---:|---:|---:|
+| Neutral MEA ideal | 0.433651 | 0.433652 | 0.433661 |
+| Water ideal | 1.309716 | 1.309717 | 1.309720 |
+| Completed source reference | 0.000123 | 0.000123 | 0.000518 |
+| Hard-chain residual Cv | -1.305965 | -1.305939 | -1.305268 |
+| Dispersion residual Cv | 2.186993 | 2.186919 | 2.137581 |
+| Association residual Cv | 1.261778 | 1.261782 | 1.261876 |
+| Debye–Hückel + Born residual Cv | -0.000047 | -0.000047 | -0.000045 |
+| Pressure–volume coupling minus R | 0.039012 | 0.039026 | 0.033414 |
+| Reaction equilibration | 0.000008 | 0.000000 | 0.000056 |
+| Equilibrium total | 3.925270 | 3.925233 | 3.871513 |
+
+The water change raises the original unloaded 318.15 K prediction by only about 0.000083 kJ kg⁻¹ K⁻¹. The reaction remainder is also too small to account for the 0.205770 kJ kg⁻¹ K⁻¹ baseline difference. Probe B reduces the total by 0.053757 kJ kg⁻¹ K⁻¹, carried mainly by dispersion (−0.049412) and coupling (−0.005598); other terms partially offset that change. This locates the response to the tested residual interaction change, not a unique experimental error in one EOS term. Explaining the entire baseline difference by a uniform MEA caloric-reference shift would require approximately −41.964 J/(mol analytical MEA K); no source uncertainty or independent ideal-gas measurement here authorizes that correction. Loaded states have substantial completed-reference and reaction contributions and cannot be interpreted using the unloaded balance alone.
+
+At 0.05 and 0.025 K derivative steps, the maximum residual-Cv closure discrepancy across all three endpoints and 60 states is 4.61×10⁻⁵ J mol⁻¹ K⁻¹; the maximum term change on halving the step is 2.99×10⁻⁵ J mol⁻¹ K⁻¹. Closure passes the declared 10⁻⁴ relative plus 10⁻⁴ J mol⁻¹ K⁻¹ absolute criterion. This is numerical verification of the decomposition, not physical validation.
+
+## Broader fits and other-property consequences
+
+Probe A uses the existing 14 coordinates and bounds. Probe B adds MEA–water interaction intercept and reciprocal-temperature slope, bounded ±0.05 and ±100 K about the endpoint. Both start from the selected parameter set and accepted reaction laws, keep ideal-gas calorics fixed, and replace the four Cp rows with the 51-row set. The objective therefore contains 354 observations. The 22 existing integral heats are comparison controls; they are not inserted into this objective. Both runs use the declared 60-iteration/1200-second limits and native tolerances. A converges in 31 iterations and B in 35, each with zero native trial failures. Independent endpoint replay agrees with native weighted residuals within 10⁻⁶.
+
+![Hilliard observations and model values at the measured coordinates. Error bars show the source's ±2% accuracy statement. All model states use the assumed 101325 Pa pressure; no connecting lines imply a continuous prediction.](heat-capacity-264/heat-capacity.png){#fig-heat-capacity-264}
+
+| Heat-capacity set | Rows | Baseline AARD / % | A / % | B / % |
+|---|---:|---:|---:|---:|
+| broad Cp | 51 | 2.443 | 2.314 | 2.058 |
+| Weiland1997 comparison | 6 | 3.321 | 2.876 | 2.374 |
+| Concepcion2023 comparison | 3 | 2.073 | 2.072 | 2.386 |
+
+[Temperature, loading and source bins](heat-capacity-264/cp-by-temperature-loading-source.csv) include separate Hilliard-fit and all-source subsets, with AARD and RMSE in kJ kg⁻¹ K⁻¹. [Exact figure values](heat-capacity-264/plotted-values.csv) retain all 180 endpoint-state comparisons.
+
+Every group’s weighted cost and share of the 354-row fit objective is:
+
+| Group | A cost | A share / % | B cost | B share / % |
+|---|---:|---:|---:|---:|
+| common149 | 27.7412 | 13.87 | 26.8430 | 13.96 |
+| restored species | 2.6468 | 1.32 | 2.5171 | 1.31 |
+| Jakobsen | 12.0297 | 6.01 | 12.1167 | 6.30 |
+| Kiepe | 0.0007 | 0.00 | 0.0007 | 0.00 |
+| CO2-free density | 11.5632 | 5.78 | 17.8726 | 9.29 |
+| Cai | 91.8746 | 45.92 | 92.2836 | 47.98 |
+| loaded density | 0.8212 | 0.41 | 0.6805 | 0.35 |
+| broad Cp | 53.3950 | 26.69 | 40.0047 | 20.80 |
+| Total | 200.0723 | 100 | 192.3189 | 100 |
+
+[Full group metrics and control cost shares](heat-capacity-264/group-costs.csv) also report the original 307 rows plus 22 integral-heat controls. Cost shares depend on residual scales and are not independent information fractions. Cai combines temperature and vapor composition, so its RMSE is separated by quantity in the replay records.
+
+All pressure/species groups remain within the allowed +2 percentage-point AARD increase. A raises loaded-density AARD by 12.20% and RMSE by 19.72%, but loses three previously within-2-scale observations. B loses two loaded-density observations and raises unloaded-density AARD by 30.38%, exceeding the 25% limit even though its absolute AARD remains small (0.03648%). Integral-heat AARD improves from 5.611% to 4.887% (A) and 5.255% (B); neither loses a previously within-2-scale heat observation. Original four-point Cp AARD also improves and loses no within-scale observation. Thus neither endpoint satisfies all deterioration limits.
+
+| Phase-search outcome (60 states per endpoint) | Baseline | A | B |
+|---|---:|---:|---:|
+| States with dense-liquid descent | 0 | 15 | 11 |
+| States with gas descent | 13 | 13 | 13 |
+| Unresolved searches | 0 | 0 | 0 |
+
+[Baseline](heat-capacity-264/baseline-stability.json), [A](heat-capacity-264/probe-A-stability.json) and [B](heat-capacity-264/probe-B-stability.json) retain the complete native search evidence. Dense descent prevents a stable-liquid interpretation of the affected probe states; gas descent is distinct and conditional on the prescribed pressure. Prediction availability alone is not a stability certificate.
+
+## Recommendation for issue 255 stage 2
+
+Retain all 51 in-domain Hilliard values as one source campaign for broader caloric calibration, with their pressure assumption and method accuracy explicit; do not present the 17 temperatures as independent campaigns. Keep the six Weiland and three Concepción rows as independent comparison campaigns at this selection stage, retaining the unloaded-source disagreement. Exclude the 0.541-loading Hilliard series from this issue's 0–0.5 domain. Any stage-2 expansion of those roles must preserve source bases and phase requirements.
+
+Do not adopt A or B: both violate density preservation and develop dense-liquid descent. Neither removes the unloaded 318.15 K error below the source accuracy. The residual dispersion/coupling response explains the change achieved by B, while source disagreement and unquantified MEA ideal-reference uncertainty prevent a unique causal attribution. These are local calibration probes and conditional numerical comparisons with measured data; they do not demonstrate independent predictive validity, global non-identifiability, structural impossibility, or physical validation. Parameter adoption remains with issue 255, and this notebook has not been promoted for manuscript use.
+
+The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`; every numerical JSON records it. [Qualification](heat-capacity-264/qualification.json) replays all 307 original observations using their pre-260 water inputs, within relative 10⁻⁸ plus absolute 10⁻⁸ in predicted/residual units; all pass, with objective cost 148.878939345564. Subsequent calculations use the corrected water record. The main checkout's pin is unchanged. [Reproduction and record map](heat-capacity-264/README.md) and [provenance](heat-capacity-264/provenance.json) identify inputs and execution. Delivered-result acceptance requires an independent Supported verdict; the review verdict is recorded with issue 264 and its pull request.
 
 # Where to find more
 
