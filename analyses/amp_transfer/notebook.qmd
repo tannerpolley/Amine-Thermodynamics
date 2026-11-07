@@ -70,9 +70,21 @@ before fitting: $s_{min}/s_{max}=6.23\times10^{-5}$ and
 $5.33\times10^{-5}$, below $10^{-4}$. These are start-specific diagnostics,
 not fitted endpoints or proof of intrinsic nonidentifiability.
 
-The two completed starts agree closely within each case: cost differences
-are below $2\times10^{-9}$ for set 1/fitted slope and set 2/fixed slope.
-They do not establish a global optimum. Binary calibration remains present:
+The two completed starts give the following comparisons over all 156
+calibration values. Scaled-coordinate difference means the largest difference
+in an independent physical coordinate divided by its declared scale; reaction
+coordinates use the original pivot offset and total enthalpy shift. Relative
+prediction difference is $\max_i|y_{i,1}/y_{i,2}-1|$, including pressure,
+vapor AMP fraction and carbamate fraction predictions.
+
+| Cation-A branch | Absolute cost difference | Largest scaled-coordinate difference | Largest relative prediction difference |
+|:--|--:|--:|--:|
+| Set 1, fitted slope | $1.62551\times10^{-9}$ | $1.05210\times10^{-4}$ | $1.09904\times10^{-5}$ |
+| Set 2, fixed slope | $9.55595\times10^{-10}$ | $8.62707\times10^{-5}$ | $1.88072\times10^{-5}$ |
+
+The exact values, and the reused #242 fixed-slope comparison, are retained in
+`summary.json` under `start_comparisons`. These comparisons do not establish
+a global optimum. Binary calibration remains present:
 set 1/fitted slope gives 1.148% mean binary-pressure error and mean absolute
 vapor AMP fraction error $4.34\times10^{-4}$; set 2/fixed slope gives 1.400%
 and $7.16\times10^{-4}$. All 156 values remain available in each cold replay.
@@ -176,8 +188,9 @@ or secondary amines; it rejects adoption from the specified alternatives.
 - Design readiness: independent **Ready**, after the restart-family and
   Kundu-independent slope-bound corrections; reviewed design body SHA-256
   `496ffe813ae1b09f6ba63a81862d6d26ce9f44e674ece23d2ea1391693e97ea1`.
-  Delivered-result review is pending on this retained evidence. No manuscript
-  promotion is made here.
+  Readiness is not delivered acceptance. The current delivered-result review
+  and disposition are recorded in [#243](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243).
+  No manuscript promotion is made here.
 
 The following sections retain #242's original evidence and limits as history.
 

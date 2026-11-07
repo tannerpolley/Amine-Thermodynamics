@@ -157,7 +157,38 @@ window.Quarto = {
 <p>Adoption requires loaded-pressure mean absolute relative error ≤10% overall and on each isotherm, no row above 30%, NMR fraction RMS ≤0.006, interior coordinates and the declared numerical and phase checks. These are engineering acceptance policies set by the orchestrator under the owner’s 2026-11-06 instruction, not published measurement uncertainties.</p>
 <p>For set 1 with fitted slope, mean pressure errors are <strong>11.444%, 9.796% and 8.532%</strong> at 313, 333 and 353 K. Its 313 K, loading 0.95 mol CO₂/mol AMP row is underpredicted by <strong>57.505%</strong>. Allowing the slope to move improves the NMR fit but does not remove the largest pressure disagreement or meet the NMR limit. The cation–CO₂ correction remains at +0.5 and carbamate diameter at 4.5 Å; the enthalpy shift also reaches its −5000 J/mol bound. Total effective hydrolysis enthalpy is <strong>16.1703 kJ/mol</strong>, conditional on this model. The native covariance is unavailable because coordinates are on bounds. Conditional slope standard error and correlations therefore have no available values; no identification claim follows. The prescribed fixed-slope fallback is the already-inadmissible #242 branch.</p>
 <p>Set 2’s fixed-slope pressure errors are <strong>16.488%, 13.002% and 6.085%</strong> on the same isotherms. Its neutral AMP–CO₂ correction reaches +0.5 and carbamate offset reaches −3. Its fitted-slope starts fail the information check before fitting: <span class="math inline">\(s_{min}/s_{max}=6.23\times10^{-5}\)</span> and <span class="math inline">\(5.33\times10^{-5}\)</span>, below <span class="math inline">\(10^{-4}\)</span>. These are start-specific diagnostics, not fitted endpoints or proof of intrinsic nonidentifiability.</p>
-<p>The two completed starts agree closely within each case: cost differences are below <span class="math inline">\(2\times10^{-9}\)</span> for set 1/fitted slope and set 2/fixed slope. They do not establish a global optimum. Binary calibration remains present: set 1/fitted slope gives 1.148% mean binary-pressure error and mean absolute vapor AMP fraction error <span class="math inline">\(4.34\times10^{-4}\)</span>; set 2/fixed slope gives 1.400% and <span class="math inline">\(7.16\times10^{-4}\)</span>. All 156 values remain available in each cold replay.</p>
+<p>The two completed starts give the following comparisons over all 156 calibration values. Scaled-coordinate difference means the largest difference in an independent physical coordinate divided by its declared scale; reaction coordinates use the original pivot offset and total enthalpy shift. Relative prediction difference is <span class="math inline">\(\max_i|y_{i,1}/y_{i,2}-1|\)</span>, including pressure, vapor AMP fraction and carbamate fraction predictions.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Cation-A branch</th>
+<th style="text-align: right;">Absolute cost difference</th>
+<th style="text-align: right;">Largest scaled-coordinate difference</th>
+<th style="text-align: right;">Largest relative prediction difference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Set 1, fitted slope</td>
+<td style="text-align: right;"><span class="math inline">\(1.62551\times10^{-9}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(1.05210\times10^{-4}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(1.09904\times10^{-5}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Set 2, fixed slope</td>
+<td style="text-align: right;"><span class="math inline">\(9.55595\times10^{-10}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(8.62707\times10^{-5}\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(1.88072\times10^{-5}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The exact values, and the reused #242 fixed-slope comparison, are retained in <code>summary.json</code> under <code>start_comparisons</code>. These comparisons do not establish a global optimum. Binary calibration remains present: set 1/fitted slope gives 1.148% mean binary-pressure error and mean absolute vapor AMP fraction error <span class="math inline">\(4.34\times10^{-4}\)</span>; set 2/fixed slope gives 1.400% and <span class="math inline">\(7.16\times10^{-4}\)</span>. All 156 values remain available in each cold replay.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="results/redesign/pressure-comparison.svg" class="img-fluid figure-img"></p>
@@ -187,7 +218,7 @@ window.Quarto = {
 <li><code>results/redesign/*-fit.json</code> retains native histories, residuals and replay rows; <code>*-initial.json</code> retains B initialization and its start matrix.</li>
 <li><code>inputs/redesign/</code> and <code>redesign-*.toml</code> bind all candidate starts, coordinates, law baselines and parameter documents by SHA-256.</li>
 <li><a href="results/redesign/probe-cation-b.json">probe-cation-b.json</a> and <a href="diagnosis-cation-b.md">diagnosis-cation-b.md</a> distinguish initialized-B state behavior from a fitting-path or phase-classification claim.</li>
-<li>Design readiness: independent <strong>Ready</strong>, after the restart-family and Kundu-independent slope-bound corrections; reviewed design body SHA-256 <code>496ffe813ae1b09f6ba63a81862d6d26ce9f44e674ece23d2ea1391693e97ea1</code>. Delivered-result review is pending on this retained evidence. No manuscript promotion is made here.</li>
+<li>Design readiness: independent <strong>Ready</strong>, after the restart-family and Kundu-independent slope-bound corrections; reviewed design body SHA-256 <code>496ffe813ae1b09f6ba63a81862d6d26ce9f44e674ece23d2ea1391693e97ea1</code>. Readiness is not delivered acceptance. The current delivered-result review and disposition are recorded in <a href="https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243">#243</a>. No manuscript promotion is made here.</li>
 </ul>
 <p>The following sections retain #242’s original evidence and limits as history.</p>
 </section>

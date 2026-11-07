@@ -160,6 +160,27 @@ def calibration_checks(pre, spec, replay, slope, H0):
         and max([pre['pressure']['mean_percent'], *pre['pressure']['isotherms'].values()]) <= 10 and max(errors) <= 30 and pre['slope_identified'])
 
 
+def compare_starts(runs):
+    comparisons = {}
+    for first, a in runs.items():
+        second = first[:-1] + '2'
+        if not first.endswith('1') or 'cost' not in a or 'cost' not in runs.get(second, {}):
+            continue
+        b, vectors, predictions = runs[second], [], []
+        for run, point in ((first, a), (second, b)):
+            qs = json.loads((AN / f'inputs/redesign/{run}-coordinates.json').read_text())
+            physical = point.get('independent_physical', [q['origin']+q['scale']*v for q,v in zip(qs,point['optimizer'])])
+            vectors.append([(point['delta'] if q.get('coefficient') == 'a' else point['total_shift_J_mol'] if q.get('kind') == 'reaction_enthalpy_shift' else x)/q['scale'] for q,x in zip(qs,physical)])
+            path = AN / point.get('reused_from', f'results/redesign/{run}-fit.json')
+            if not path.exists():
+                path = path.with_suffix(path.suffix + '.gz')
+            data = json.loads(gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_bytes())
+            predictions.append(data['report']['predictions'])
+        comparisons[first[:-2]] = dict(first=first, second=second, rows=len(predictions[0]), absolute_cost_difference=abs(a['cost']-b['cost']),
+            max_scaled_coordinate_difference=max(abs(x-y) for x,y in zip(*vectors)), max_relative_prediction_difference=max(abs(x/y-1) for x,y in zip(*predictions)))
+    return comparisons
+
+
 specs, best = {}, {}
 for setting, cation, slope, second in itertools.product((1,2), ('A','B'), (False,True), (False,True)):
     run = f'redesign-{setting}-{cation}-{"slope" if slope else "fixed"}-{1+second}'
@@ -235,6 +256,7 @@ for setting, cation, slope, second in itertools.product((1,2), ('A','B'), (False
         print(run, type(error).__name__, str(error), flush=True)
     finally:
         write('summary.json', summary)
+summary['start_comparisons'] = compare_starts(summary['runs'])
 if not best:
     stop('no adopted endpoint; Kundu not scored; calibration evidence requires diagnosis')
 selected = min(best, key=lambda r: (best[r]['near_bounds'], best[r]['cost'], best[r]['fitted_slope'], best[r]['setting'], best[r]['cation'], r))
