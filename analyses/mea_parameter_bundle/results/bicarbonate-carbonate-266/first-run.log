@@ -1,0 +1,28 @@
+Captured output from the initial prepare/baseline/sensitivity/fit1 batch.
+No native fit termination, iteration count or optimizer endpoint was printed.
+
+materialized 153 comparison observations; 23 added fit rows
+baseline verified 148.87893934557388
+sensitivity reaction:R2:a -1
+sensitivity reaction:R2:a 1
+sensitivity reaction:R3:a -1
+sensitivity reaction:R3:a 1
+sensitivity pair/bicarbonate-anion/water/k_ij -1
+sensitivity pair/bicarbonate-anion/water/k_ij 1
+sensitivity pair/carbonate-anion/water/k_ij -1
+sensitivity pair/carbonate-anion/water/k_ij 1
+sensitivity pair/carbonate-anion/protonated-monoethanolamine/k_ij -1
+sensitivity pair/carbonate-anion/protonated-monoethanolamine/k_ij 1
+sensitivity component/carbonate-anion/segment_diameter -1
+sensitivity component/carbonate-anion/segment_diameter 1
+Traceback (most recent call last):
+  File "analyses/mea_parameter_bundle/scripts/bicarbonate_carbonate_266.py", line 136, in <module>
+    result, report, parameters = spec.fit()
+  File "src/MEA/solvent_specification.py", line 374, in fit
+    report["reactions"] = self.fitted_reactions(result.chart)
+  File "src/MEA/solvent_specification.py", line 325, in fitted_reactions
+    for q, value in zip(source_coordinates, chart.physical[len(chart.active) :], strict=True):
+ValueError: zip() argument 2 is shorter than argument 1
+
+The original traceback used absolute paths below this issue worktree; paths
+above are shortened to their repository-relative equivalents.
