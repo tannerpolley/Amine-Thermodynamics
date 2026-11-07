@@ -6,6 +6,7 @@ import importlib.metadata
 import json
 import math
 import os
+import traceback
 from pathlib import Path
 import resource
 import sys
@@ -68,6 +69,9 @@ def fresh():
 
 
 def set_laws(s, laws):
+    for group in s.spec['chemistry']['reactions'].values():
+        for reaction in group:
+            reaction['correlation'].update(laws.get(reaction['name'], {}))
     for problem in s.problems.values():
         for reaction in problem.reactions:
             law = reaction.correlation
@@ -106,6 +110,7 @@ def starting(task):
                        for family, target, factor in q['targets']}
             s.parameters = epcsaft.Parameters.from_mapping(owner.with_parameter_values(s.inputs['endpoint'], updates))
         else:
+            q['bounds'] = [min(q['bounds'][0], node), max(q['bounds'][1], node)]  # Only the held node crosses its frozen historical bound.
             u = [0.]*16
             u[index] = (node-q['origin'])/q['scale']
             v = reg.differentiate(s.parameters, s.coordinates(), [s.observation(r) for r in s.inputs['observations']['fitted']],
@@ -265,7 +270,9 @@ def fit(task):
         if result.usable:
             values = original_values(s, result, task, offset)
             fitted = reg.fitted_parameters(s.parameters, result)
-            mapping = owner.with_parameter_values(dict(document_mapping(fitted)), campaign.completed_reaction_values(result.chart.reaction_laws))
+            laws = {r['name']: eq.ReactionLogPolynomial(**r['correlation']) for group in s.fitted_reactions(result.chart).values()
+                    for r in group if r['name'] in ('R2', 'R5')}
+            mapping = owner.with_parameter_values(dict(document_mapping(fitted)), campaign.completed_reaction_values(laws))
             dump(directory/'parameters.json', mapping)
             reload_candidate(s, read(directory/'parameters.json'))
             final = replay(s, directory/'replay.json.gz')
@@ -275,8 +282,9 @@ def fit(task):
             dump(directory/'replay.json.gz', dict(wheel_sha256=SHA, rows=final, cost=cost, maximum_weighted_residual_difference=difference))
             assert abs(cost-result.final_cost) <= 1e-8*max(abs(cost), 1e-300) and difference <= 1e-8
             assert cost-initial_cost <= 1e-8*max(abs(initial_cost), 1e-300)
-            summary.update(coordinates=values, delta_cost=cost-COST, twice_delta_cost=2*(cost-COST),
-                           lower_reference=cost < COST*(1-1e-8), calibration_cost=math.fsum(.5*r['weight']*v['residual']**2 for r, v in zip(records, final)))
+            summary.update(coordinates=values, calibration_cost=math.fsum(.5*r['weight']*v['residual']**2 for r, v in zip(records, final)))
+            if task['kind'] == 'profile':
+                summary.update(delta_cost=cost-COST, twice_delta_cost=2*(cost-COST), lower_reference=cost < COST*(1-1e-8))
             summary['oracle_failure'] = True
             checked = interactions(mapping, directory/'interactions.json')
             summary['oracle_failure'] = False
@@ -287,7 +295,7 @@ def fit(task):
             elif result.status == 'converged':
                 dump(directory/'curves.json.gz', dict(wheel_sha256=SHA, rows=curve_predictions(mapping, directory/'parameters.json')))
     except Exception as error:
-        summary.update(cause=f'{type(error).__name__}: {error}', inference_available=False)
+        summary.update(cause=f'{type(error).__name__}: {error}', inference_available=False, traceback=traceback.format_exc())
     summary.update(wall_seconds=time.monotonic()-started, peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
     dump(directory/'summary.json', summary)
     print(json.dumps({k: v for k, v in summary.items() if k != 'task'}), flush=True)
@@ -333,17 +341,16 @@ if __name__ == '__main__':
         ref = read(AN/'results/phase-reference/summary.json')
         assert ref['states'] == 162 and ref['descent_states'] == ref['incomplete_states'] == 0
         declared = tasks()
-        dump(AN/'results/runtime.json', dict(wheel_sha256=SHA, workers=workers, cpu_count=os.cpu_count(), available_memory_bytes=memory,
+        selected = declared if command == 'calculate' else [q for q in declared if q['identity'] == command or
+                    (command == 'held-reactions' and q.get('coordinate') in (10, 11) and q['node'] != 0)]
+        assert selected
+        workers = min(workers, len(selected))
+        dump(AN/f'results/runtime-{command}.json', dict(wheel_sha256=SHA, workers=workers, cpu_count=os.cpu_count(), available_memory_bytes=memory,
                                            fit_workers=1, reserve_bytes=8*1024**3, process_allowance_bytes=allowance, process_pid=os.getpid(),
                                            producer_hashes={str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                                            for p in (Path(__file__), B/'scripts/fit_campaign.py', B/'scripts/model_curves.py')}))
-        selected = declared if command == 'calculate' else [q for q in declared if q['identity'] == command]
-        assert selected
-        with ProcessPoolExecutor(min(workers, len(selected))) as pool:
-            summaries = []
+        with ProcessPoolExecutor(workers) as pool:
             for summary in pool.map(fit, selected):
-                summaries.append(summary)
                 if summary.get('oracle_failure'):
                     pool.shutdown(wait=True, cancel_futures=True)
                     raise RuntimeError('Interaction equivalence unavailable; stop and report '+str(summary))
-        dump(AN/'results/summaries.json', dict(wheel_sha256=SHA, summaries=summaries))
