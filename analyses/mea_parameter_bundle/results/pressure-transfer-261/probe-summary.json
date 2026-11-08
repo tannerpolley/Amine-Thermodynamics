@@ -1,0 +1,3032 @@
+[
+  {
+    "name": "fit-15",
+    "scores": {
+      "held-out": {
+        "n": 172,
+        "AARD_percent": 28.863779437373104,
+        "mean_log_error": -0.2489711033298222
+      },
+      "held-lowT": {
+        "n": 62,
+        "AARD_percent": 30.43653157922901,
+        "mean_log_error": -0.34805400365578815
+      },
+      "held-highT": {
+        "n": 110,
+        "AARD_percent": 27.977319139236144,
+        "mean_log_error": -0.1931243776915505
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 37,
+        "AARD_percent": 36.92149129376178,
+        "mean_log_error": -0.20952344895717595
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 15.216598546474007,
+        "mean_log_error": -0.0002898555428204195
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.026534027960749,
+          "metric_kind": "AARD_percent",
+          "cost": 16.335019095067658,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2260.309058039168,
+          "metric_kind": "RMSE",
+          "cost": 1.8016245645999363,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 8.898009233655882,
+          "metric_kind": "AARD_percent",
+          "cost": 2.3906378512507844,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.053236449553474,
+          "metric_kind": "AARD_percent",
+          "cost": 12.733416948447568,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.02940358603333193,
+          "metric_kind": "AARD_percent",
+          "cost": 12.345817207481241,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7866896277669746,
+          "metric_kind": "RMSE",
+          "cost": 39.90324782462613,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.5993363118847217,
+          "metric_kind": "AARD_percent",
+          "cost": 51.78223283315742,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 45,
+          "metric": 0.16730587621100196,
+          "metric_kind": "AARD_percent",
+          "cost": 0.47642742554132733,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 2,
+          "metric": 2.866340376474458,
+          "metric_kind": "AARD_percent",
+          "cost": 6.842157370910705,
+          "zero_observations": 0
+        },
+        "passed": false
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "reactive pressure": 0.2219544843757311,
+        "Kiepe": 3.5485749584993083e-06,
+        "loaded density": 0.0029548126890328254,
+        "common149": 0.12469823643691932,
+        "Cp": 0.02811971599591455,
+        "Jakobsen": 0.06857689380112222,
+        "Cai": 0.48013916092719555,
+        "restored species": 0.012796842458313726,
+        "CO2-free density": 0.0607563047408122
+      },
+      "fitted": {
+        "reactive pressure": 0.12851412475174004,
+        "Kiepe": 3.864565643327003e-06,
+        "loaded density": 0.0027115348877681696,
+        "common149": 0.15166934786123806,
+        "Cp": 0.03894139468932644,
+        "Jakobsen": 0.07247085798426407,
+        "Cai": 0.5218179436729518,
+        "restored species": 0.013606055382559691,
+        "CO2-free density": 0.07026487620450834
+      }
+    },
+    "baseline_cost_shares": {
+      "Kiepe": 4.5608835051919694e-06,
+      "loaded density": 0.0037977375740826888,
+      "common149": 0.16027113315712263,
+      "Cp": 0.03614147942662782,
+      "Jakobsen": 0.08813995122907327,
+      "Cai": 0.6171093480848012,
+      "restored species": 0.016447421392881,
+      "CO2-free density": 0.07808836825190628
+    },
+    "replay_cost": 175.70396298071194,
+    "n_reactive_pressure": 80,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.0870729707560144,
+        "common149 / addition_enthalpy": 0.006343067017652302,
+        "restored species / mole_fraction": 0.012796842458313726,
+        "Jakobsen / amount_ratio": 0.06857689380112222,
+        "Kiepe / pressure": 3.5485749584993083e-06,
+        "CO2-free density / phase_density": 0.0607563047408122,
+        "Cai / temperature": 0.2088367011480782,
+        "Cai / mole_fraction": 0.2713024597791173,
+        "loaded density / phase_density": 0.0029548126890328254,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.02811971599591455,
+        "reactive CO2 pressure": 0.2532366830389837
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.09296898497878986,
+        "common149 / addition_enthalpy": 0.010253750308396353,
+        "restored species / mole_fraction": 0.013606055382559691,
+        "Jakobsen / amount_ratio": 0.07247085798426407,
+        "Kiepe / pressure": 3.864565643327003e-06,
+        "CO2-free density / phase_density": 0.07026487620450834,
+        "Cai / temperature": 0.22710499608370555,
+        "Cai / mole_fraction": 0.29471294758924627,
+        "loaded density / phase_density": 0.0027115348877681696,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03894139468932644,
+        "reactive CO2 pressure": 0.17696073732579198
+      }
+    }
+  },
+  {
+    "name": "fit-45",
+    "scores": {
+      "held-out": {
+        "n": 168,
+        "AARD_percent": 25.70614552834531,
+        "mean_log_error": -0.10261121543883067
+      },
+      "held-lowT": {
+        "n": 63,
+        "AARD_percent": 28.045984655547887,
+        "mean_log_error": -0.2296765103942857
+      },
+      "held-highT": {
+        "n": 105,
+        "AARD_percent": 24.30224205202377,
+        "mean_log_error": -0.026372038465557655
+      },
+      "held-15wt": {
+        "n": 33,
+        "AARD_percent": 32.564413337480474,
+        "mean_log_error": -0.03989045524135397
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 16.551506069768344,
+        "mean_log_error": -0.003708661992189065
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.166376388057519,
+          "metric_kind": "AARD_percent",
+          "cost": 16.88514256552742,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2346.8056839568994,
+          "metric_kind": "RMSE",
+          "cost": 1.87303087006551,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 8.992251131715507,
+          "metric_kind": "AARD_percent",
+          "cost": 2.461705970816414,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.128561089357728,
+          "metric_kind": "AARD_percent",
+          "cost": 13.282521865837397,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.026447864725835935,
+          "metric_kind": "AARD_percent",
+          "cost": 10.978946586751691,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7904399136349425,
+          "metric_kind": "RMSE",
+          "cost": 40.070938554213754,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.5815685474650656,
+          "metric_kind": "AARD_percent",
+          "cost": 52.125814365852776,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.17912545851970693,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5854563569428834,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 2,
+          "metric": 2.8937544706891334,
+          "metric_kind": "AARD_percent",
+          "cost": 6.614340316108194,
+          "zero_observations": 0
+        },
+        "passed": false
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "restored species": 0.011329197822271599,
+        "Jakobsen": 0.06071194503180603,
+        "Kiepe": 3.141595891561479e-06,
+        "reactive pressure": 0.31118699085710416,
+        "Cai": 0.4250729470245026,
+        "loaded density": 0.002615931046338938,
+        "CO2-free density": 0.05378828391465413,
+        "common149": 0.11039684150869938,
+        "Cp": 0.02489472119873157
+      },
+      "fitted": {
+        "restored species": 0.01423502083421803,
+        "Jakobsen": 0.0768072945074124,
+        "Kiepe": 3.92648708898399e-06,
+        "reactive pressure": 0.10400151346749291,
+        "Cai": 0.5331354411222148,
+        "loaded density": 0.0033854503898544,
+        "CO2-free density": 0.06348667763451288,
+        "common149": 0.1666966990236058,
+        "Cp": 0.038247976533599674
+      }
+    },
+    "baseline_cost_shares": {
+      "restored species": 0.016447421392881,
+      "Jakobsen": 0.08813995122907327,
+      "Kiepe": 4.5608835051919694e-06,
+      "Cai": 0.6171093480848012,
+      "loaded density": 0.0037977375740826888,
+      "CO2-free density": 0.07808836825190628,
+      "common149": 0.16027113315712263,
+      "Cp": 0.03614147942662782
+    },
+    "replay_cost": 172.93307817990578,
+    "n_reactive_pressure": 84,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.07708674338073757,
+        "common149 / addition_enthalpy": 0.005615593165032891,
+        "restored species / mole_fraction": 0.011329197822271599,
+        "Jakobsen / amount_ratio": 0.06071194503180603,
+        "Kiepe / pressure": 3.141595891561479e-06,
+        "CO2-free density / phase_density": 0.05378828391465413,
+        "Cai / temperature": 0.18488563155828364,
+        "Cai / mole_fraction": 0.24018731546621896,
+        "loaded density / phase_density": 0.002615931046338938,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.02489472119873157,
+        "reactive CO2 pressure": 0.33888149582003313
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.09763975026201445,
+        "common149 / addition_enthalpy": 0.010830957788867657,
+        "restored species / mole_fraction": 0.01423502083421803,
+        "Jakobsen / amount_ratio": 0.0768072945074124,
+        "Kiepe / pressure": 3.92648708898399e-06,
+        "CO2-free density / phase_density": 0.06348667763451288,
+        "Cai / temperature": 0.23171355634187663,
+        "Cai / mole_fraction": 0.3014218847803382,
+        "loaded density / phase_density": 0.0033854503898544,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.038247976533599674,
+        "reactive CO2 pressure": 0.16222750444021672
+      }
+    }
+  },
+  {
+    "name": "without-Aronu2011",
+    "scores": {
+      "held-out": {
+        "n": 106,
+        "AARD_percent": 32.92465595113507,
+        "mean_log_error": -0.1172738938425199
+      },
+      "held-lowT": {
+        "n": 79,
+        "AARD_percent": 28.41080620610248,
+        "mean_log_error": -0.20471702125178584
+      },
+      "held-highT": {
+        "n": 27,
+        "AARD_percent": 46.13184594586006,
+        "mean_log_error": 0.1385782196882953
+      },
+      "held-15wt": {
+        "n": 33,
+        "AARD_percent": 33.20748424198934,
+        "mean_log_error": -0.02301683172168267
+      },
+      "held-45wt": {
+        "n": 37,
+        "AARD_percent": 38.66390271820819,
+        "mean_log_error": 0.012420563045959229
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 13.131515743455138,
+        "mean_log_error": 0.02978149139569428
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.118837763740448,
+          "metric_kind": "AARD_percent",
+          "cost": 16.44844917006108,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1858.6520636435923,
+          "metric_kind": "RMSE",
+          "cost": 1.290823440002364,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 8.786253383079345,
+          "metric_kind": "AARD_percent",
+          "cost": 2.3329653717738807,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.458568205463976,
+          "metric_kind": "AARD_percent",
+          "cost": 13.115332345846985,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027554752068703614,
+          "metric_kind": "AARD_percent",
+          "cost": 11.407550673742593,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.788591067422478,
+          "metric_kind": "RMSE",
+          "cost": 39.98822508079349,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.588258169531394,
+          "metric_kind": "AARD_percent",
+          "cost": 51.95596421208644,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1805013648479687,
+          "metric_kind": "AARD_percent",
+          "cost": 0.6064364773935613,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.858932997537475,
+          "metric_kind": "AARD_percent",
+          "cost": 5.450953024368919,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "Cai": 0.4964447767841698,
+        "Jakobsen": 0.0709057779621773,
+        "Kiepe": 3.669085228899314e-06,
+        "restored species": 0.013231425625628257,
+        "Cp": 0.029074666819236625,
+        "CO2-free density": 0.06281960023222738,
+        "loaded density": 0.0030551586815230902,
+        "common149": 0.12893301190796422,
+        "reactive pressure": 0.19553191290184455
+      },
+      "fitted": {
+        "Cai": 0.504231350474218,
+        "Jakobsen": 0.07192582578110496,
+        "Kiepe": 3.7238124722940447e-06,
+        "restored species": 0.012794221027627522,
+        "Cp": 0.02989358464071972,
+        "CO2-free density": 0.06256017619016338,
+        "loaded density": 0.0033257597497426904,
+        "common149": 0.13675817052962932,
+        "reactive pressure": 0.17850718779432223
+      }
+    },
+    "baseline_cost_shares": {
+      "Cai": 0.6171093480848012,
+      "Jakobsen": 0.08813995122907327,
+      "Kiepe": 4.5608835051919694e-06,
+      "restored species": 0.016447421392881,
+      "Cp": 0.03614147942662782,
+      "CO2-free density": 0.07808836825190628,
+      "loaded density": 0.0037977375740826888,
+      "common149": 0.16027113315712263
+    },
+    "replay_cost": 182.34524530537135,
+    "n_reactive_pressure": 146,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.09002998515561346,
+        "common149 / addition_enthalpy": 0.006558478761916513,
+        "restored species / mole_fraction": 0.013231425625628257,
+        "Jakobsen / amount_ratio": 0.0709057779621773,
+        "Kiepe / pressure": 3.669085228899314e-06,
+        "CO2-free density / phase_density": 0.06281960023222738,
+        "Cai / temperature": 0.2159288346436725,
+        "Cai / mole_fraction": 0.2805159421404973,
+        "loaded density / phase_density": 0.0030551586815230902,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.029074666819236625,
+        "reactive CO2 pressure": 0.22787646089227864
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.09020497980364152,
+        "common149 / addition_enthalpy": 0.007079007943643596,
+        "restored species / mole_fraction": 0.012794221027627522,
+        "Jakobsen / amount_ratio": 0.07192582578110496,
+        "Kiepe / pressure": 3.7238124722940447e-06,
+        "CO2-free density / phase_density": 0.06256017619016338,
+        "Cai / temperature": 0.2192995217057933,
+        "Cai / mole_fraction": 0.28493182876842454,
+        "loaded density / phase_density": 0.0033257597497426904,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.02989358464071972,
+        "reactive CO2 pressure": 0.21798137057666644
+      }
+    }
+  },
+  {
+    "name": "without-Hilliard2008",
+    "scores": {
+      "held-out": {
+        "n": 31,
+        "AARD_percent": 25.706531490476934,
+        "mean_log_error": 0.13168011746530978
+      },
+      "held-lowT": {
+        "n": 30,
+        "AARD_percent": 24.34840465636764,
+        "mean_log_error": 0.1190852280560982
+      },
+      "held-highT": {
+        "n": 1,
+        "AARD_percent": 66.45033651375569,
+        "mean_log_error": 0.509526799741657
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 29.251181530037417,
+        "mean_log_error": 0.16213486003285704
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.181463220424669,
+          "metric_kind": "AARD_percent",
+          "cost": 18.284296711049862,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2532.4237817242783,
+          "metric_kind": "RMSE",
+          "cost": 2.2042502993423905,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.730973304090353,
+          "metric_kind": "AARD_percent",
+          "cost": 2.9159377272270537,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.79435485766235,
+          "metric_kind": "AARD_percent",
+          "cost": 12.945908249792547,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.026016762010325767,
+          "metric_kind": "AARD_percent",
+          "cost": 10.779127372380405,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7913215704143093,
+          "metric_kind": "RMSE",
+          "cost": 40.110412107894845,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.579014209388424,
+          "metric_kind": "AARD_percent",
+          "cost": 52.20328119340176,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 42,
+          "metric": 0.19709191295732942,
+          "metric_kind": "AARD_percent",
+          "cost": 0.7516929281135823,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.902653753945214,
+          "metric_kind": "AARD_percent",
+          "cost": 5.886318428187904,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "common149": 0.063303583398233,
+        "Cai": 0.2694322228296184,
+        "reactive pressure": 0.5700676888570976,
+        "loaded density": 0.0016581062650959095,
+        "Cp": 0.01577950353286357,
+        "CO2-free density": 0.034093670271800394,
+        "Kiepe": 1.9912985999718627e-06,
+        "restored species": 0.007181004986316278,
+        "Jakobsen": 0.038482228560375045
+      },
+      "fitted": {
+        "common149": 0.1297362147476482,
+        "Cai": 0.35735188588141276,
+        "reactive pressure": 0.3840843097858898,
+        "loaded density": 0.002909848754381242,
+        "Cp": 0.022786294383716488,
+        "CO2-free density": 0.041726653510698535,
+        "Kiepe": 2.62852551711959e-06,
+        "restored species": 0.011287771171026396,
+        "Jakobsen": 0.05011439323970941
+      }
+    },
+    "baseline_cost_shares": {
+      "common149": 0.16027113315712263,
+      "Cai": 0.6171093480848012,
+      "loaded density": 0.0037977375740826888,
+      "Cp": 0.03614147942662782,
+      "CO2-free density": 0.07808836825190628,
+      "Kiepe": 4.5608835051919694e-06,
+      "restored species": 0.016447421392881,
+      "Jakobsen": 0.08813995122907327
+    },
+    "replay_cost": 258.3271474099087,
+    "n_reactive_pressure": 221,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.04886138429922537,
+        "common149 / addition_enthalpy": 0.003559440231500802,
+        "restored species / mole_fraction": 0.007181004986316278,
+        "Jakobsen / amount_ratio": 0.038482228560375045,
+        "Kiepe / pressure": 1.9912985999718627e-06,
+        "CO2-free density / phase_density": 0.034093670271800394,
+        "Cai / temperature": 0.11718964245714451,
+        "Cai / mole_fraction": 0.15224258037247382,
+        "loaded density / phase_density": 0.0016581062650959095,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.01577950353286357,
+        "reactive CO2 pressure": 0.5809504477246044
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.07077961760649445,
+        "common149 / addition_enthalpy": 0.008532786125821794,
+        "restored species / mole_fraction": 0.011287771171026396,
+        "Jakobsen / amount_ratio": 0.05011439323970941,
+        "Kiepe / pressure": 2.62852551711959e-06,
+        "CO2-free density / phase_density": 0.041726653510698535,
+        "Cai / temperature": 0.15526982940065678,
+        "Cai / mole_fraction": 0.202082056480756,
+        "loaded density / phase_density": 0.002909848754381242,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.022786294383716488,
+        "reactive CO2 pressure": 0.4345081208012218
+      }
+    }
+  },
+  {
+    "name": "without-Hilliard2008-normalized",
+    "scores": {
+      "held-out": {
+        "n": 31,
+        "AARD_percent": 24.15372387149875,
+        "mean_log_error": 0.12299537372842566
+      },
+      "held-lowT": {
+        "n": 30,
+        "AARD_percent": 22.858469736238785,
+        "mean_log_error": 0.11080689846625612
+      },
+      "held-highT": {
+        "n": 1,
+        "AARD_percent": 63.011347929297635,
+        "mean_log_error": 0.48864963159351205
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 28.361348862204487,
+        "mean_log_error": 0.1617837262332874
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.136241231298059,
+          "metric_kind": "AARD_percent",
+          "cost": 16.97006664135553,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1926.4792372032796,
+          "metric_kind": "RMSE",
+          "cost": 1.3297988449867686,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.153008190683588,
+          "metric_kind": "AARD_percent",
+          "cost": 2.5377483895036193,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.762386853084667,
+          "metric_kind": "AARD_percent",
+          "cost": 12.505865263355924,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027584162813902857,
+          "metric_kind": "AARD_percent",
+          "cost": 11.433165680771758,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7885017321128125,
+          "metric_kind": "RMSE",
+          "cost": 39.98423057213163,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.5882421780760416,
+          "metric_kind": "AARD_percent",
+          "cost": 51.961918209371184,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.17573293934282938,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5525025574458523,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8397369932669863,
+          "metric_kind": "AARD_percent",
+          "cost": 5.39948427912778,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "Cp": 0.02908127649331544,
+        "reactive pressure": 0.22343548191188817,
+        "restored species": 0.013234433584808915,
+        "loaded density": 0.0030558532244139677,
+        "Kiepe": 3.669919338458718e-06,
+        "common149": 0.10087587048714883,
+        "Jakobsen": 0.0709218972898913,
+        "CO2-free density": 0.06283388129298305,
+        "Cai": 0.4965576357962119
+      },
+      "fitted": {
+        "Cp": 0.03212124754521794,
+        "reactive pressure": 0.13552225559807263,
+        "restored species": 0.015096931486925591,
+        "loaded density": 0.003286808609793941,
+        "Kiepe": 4.039451228907496e-06,
+        "common149": 0.12457388766211329,
+        "Jakobsen": 0.07439673367403306,
+        "CO2-free density": 0.06801530036436816,
+        "Cai": 0.5469827956082465
+      }
+    },
+    "baseline_cost_shares": {
+      "Cp": 0.03614147942662782,
+      "restored species": 0.016447421392881,
+      "loaded density": 0.0037977375740826888,
+      "Kiepe": 4.5608835051919694e-06,
+      "common149": 0.16027113315712263,
+      "Jakobsen": 0.08813995122907327,
+      "CO2-free density": 0.07808836825190628,
+      "Cai": 0.6171093480848012
+    },
+    "replay_cost": 168.09696670488222,
+    "n_reactive_pressure": 221,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.09005045207490436,
+        "common149 / addition_enthalpy": 0.006559969730234004,
+        "restored species / mole_fraction": 0.013234433584808915,
+        "Jakobsen / amount_ratio": 0.0709218972898913,
+        "Kiepe / pressure": 3.669919338458718e-06,
+        "CO2-free density / phase_density": 0.06283388129298305,
+        "Cai / temperature": 0.21597792271164884,
+        "Cai / mole_fraction": 0.28057971308456303,
+        "loaded density / phase_density": 0.0030558532244139677,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.02908127649331544,
+        "reactive CO2 pressure": 0.22770093059389862
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.10095403250880107,
+        "common149 / addition_enthalpy": 0.007910903278352529,
+        "restored species / mole_fraction": 0.015096931486925591,
+        "Jakobsen / amount_ratio": 0.07439673367403306,
+        "Kiepe / pressure": 4.039451228907496e-06,
+        "CO2-free density / phase_density": 0.06801530036436816,
+        "Cai / temperature": 0.2378640814044524,
+        "Cai / mole_fraction": 0.3091187142037941,
+        "loaded density / phase_density": 0.003286808609793941,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03212124754521794,
+        "reactive CO2 pressure": 0.15123120747303231
+      }
+    }
+  },
+  {
+    "name": "without-Idris2014",
+    "scores": {
+      "held-out": {
+        "n": 10,
+        "AARD_percent": 18.78134831857637,
+        "mean_log_error": 0.013290718834130633
+      },
+      "held-lowT": {
+        "n": 10,
+        "AARD_percent": 18.78134831857637,
+        "mean_log_error": 0.013290718834130633
+      },
+      "held-highT": {
+        "n": 0
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 23.306563827874093,
+        "mean_log_error": 0.12248224877481739
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.205566694773464,
+          "metric_kind": "AARD_percent",
+          "cost": 17.800305251815505,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2471.764485517908,
+          "metric_kind": "RMSE",
+          "cost": 2.0838466985688946,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.474461513375612,
+          "metric_kind": "AARD_percent",
+          "cost": 2.7519178184291304,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.39077606135576,
+          "metric_kind": "AARD_percent",
+          "cost": 12.865708250205165,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.026203130970190447,
+          "metric_kind": "AARD_percent",
+          "cost": 10.848107476606776,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7908653760641156,
+          "metric_kind": "RMSE",
+          "cost": 40.08998493981583,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.5804219918130467,
+          "metric_kind": "AARD_percent",
+          "cost": 52.155139488199346,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 43,
+          "metric": 0.1858741216637248,
+          "metric_kind": "AARD_percent",
+          "cost": 0.6538085830879425,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.9012864470687907,
+          "metric_kind": "AARD_percent",
+          "cost": 5.849928323368927,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "common149": 0.07026154226311518,
+        "CO2-free density": 0.03423329627806518,
+        "loaded density": 0.0016648968146000338,
+        "Cp": 0.015844126351162984,
+        "Kiepe": 1.9994536935296456e-06,
+        "reactive pressure": 0.5616082517228232,
+        "Cai": 0.2705356459850848,
+        "Jakobsen": 0.03863982731237852,
+        "restored species": 0.007210413819076538
+      },
+      "fitted": {
+        "common149": 0.13858037796731545,
+        "CO2-free density": 0.04065328410101588,
+        "loaded density": 0.0024501477454268983,
+        "Cp": 0.02192260711034961,
+        "Kiepe": 2.544625654898287e-06,
+        "reactive pressure": 0.3921753677156699,
+        "Cai": 0.34568861512410637,
+        "Jakobsen": 0.04821424324789011,
+        "restored species": 0.010312812362570816
+      }
+    },
+    "baseline_cost_shares": {
+      "common149": 0.16027113315712263,
+      "CO2-free density": 0.07808836825190628,
+      "loaded density": 0.0037977375740826888,
+      "Cp": 0.03614147942662782,
+      "Kiepe": 4.5608835051919694e-06,
+      "Cai": 0.6171093480848012,
+      "Jakobsen": 0.08813995122907327,
+      "restored species": 0.016447421392881
+    },
+    "replay_cost": 266.84455429606226,
+    "n_reactive_pressure": 242,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.04906148947698655,
+        "common149 / addition_enthalpy": 0.0035740174365978352,
+        "restored species / mole_fraction": 0.007210413819076538,
+        "Jakobsen / amount_ratio": 0.03863982731237852,
+        "Kiepe / pressure": 1.9994536935296456e-06,
+        "CO2-free density / phase_density": 0.03423329627806518,
+        "Cai / temperature": 0.11766957675642772,
+        "Cai / mole_fraction": 0.15286606922865706,
+        "loaded density / phase_density": 0.0016648968146000338,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.015844126351162984,
+        "reactive CO2 pressure": 0.579234287072354
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.06670664611752274,
+        "common149 / addition_enthalpy": 0.007809215758837936,
+        "restored species / mole_fraction": 0.010312812362570816,
+        "Jakobsen / amount_ratio": 0.04821424324789011,
+        "Kiepe / pressure": 2.544625654898287e-06,
+        "CO2-free density / phase_density": 0.04065328410101588,
+        "Cai / temperature": 0.15023722348606094,
+        "Cai / mole_fraction": 0.19545139163804545,
+        "loaded density / phase_density": 0.0024501477454268983,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.02192260711034961,
+        "reactive CO2 pressure": 0.4562398838066247
+      }
+    }
+  },
+  {
+    "name": "without-Jou1995",
+    "scores": {
+      "held-out": {
+        "n": 48,
+        "AARD_percent": 34.21986336514251,
+        "mean_log_error": 0.20427983287494644
+      },
+      "held-lowT": {
+        "n": 17,
+        "AARD_percent": 40.6427433562302,
+        "mean_log_error": 0.266026883605453
+      },
+      "held-highT": {
+        "n": 31,
+        "AARD_percent": 30.69763885390087,
+        "mean_log_error": 0.1704185469904751
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 30.800891064249303,
+        "mean_log_error": 0.17617681300147695
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.158806684779784,
+          "metric_kind": "AARD_percent",
+          "cost": 18.115278711906562,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2063.6409183636324,
+          "metric_kind": "RMSE",
+          "cost": 1.4713123497327676,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.743911226197811,
+          "metric_kind": "AARD_percent",
+          "cost": 2.897476218622627,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.767823124507235,
+          "metric_kind": "AARD_percent",
+          "cost": 12.886822264686844,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.02640552950996522,
+          "metric_kind": "AARD_percent",
+          "cost": 10.961458111312504,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7904739697181595,
+          "metric_kind": "RMSE",
+          "cost": 40.07246295297881,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.5811929188933016,
+          "metric_kind": "AARD_percent",
+          "cost": 52.146116296621386,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 42,
+          "metric": 0.1943355581716787,
+          "metric_kind": "AARD_percent",
+          "cost": 0.7176163243212403,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.867354183219531,
+          "metric_kind": "AARD_percent",
+          "cost": 5.77785536722911,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "CO2-free density": 0.03526987525980039,
+        "Jakobsen": 0.03980983538067996,
+        "loaded density": 0.0017153096358122906,
+        "restored species": 0.007428744048037193,
+        "common149": 0.06113084548345416,
+        "Cai": 0.2787274240178062,
+        "Kiepe": 2.059996845928139e-06,
+        "Cp": 0.01632388407668754,
+        "reactive pressure": 0.5595920221008764
+      },
+      "fitted": {
+        "CO2-free density": 0.04508930316155555,
+        "Jakobsen": 0.05300917359542545,
+        "loaded density": 0.002951871883505034,
+        "restored species": 0.011918595345453545,
+        "common149": 0.13272886068884557,
+        "Cai": 0.3793356170947662,
+        "Kiepe": 2.793106147011795e-06,
+        "Cp": 0.0237668629146839,
+        "reactive pressure": 0.3511969222096177
+      }
+    },
+    "baseline_cost_shares": {
+      "CO2-free density": 0.07808836825190628,
+      "Jakobsen": 0.08813995122907327,
+      "loaded density": 0.0037977375740826888,
+      "restored species": 0.016447421392881,
+      "common149": 0.16027113315712263,
+      "Cai": 0.6171093480848012,
+      "Kiepe": 4.5608835051919694e-06,
+      "Cp": 0.03614147942662782
+    },
+    "replay_cost": 243.10551156750992,
+    "n_reactive_pressure": 204,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.050547063883592945,
+        "common149 / addition_enthalpy": 0.0036822381386021085,
+        "restored species / mole_fraction": 0.007428744048037193,
+        "Jakobsen / amount_ratio": 0.03980983538067996,
+        "Kiepe / pressure": 2.059996845928139e-06,
+        "CO2-free density / phase_density": 0.03526987525980039,
+        "Cai / temperature": 0.12123259356511132,
+        "Cai / mole_fraction": 0.15749483045269488,
+        "loaded density / phase_density": 0.0017153096358122906,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.01632388407668754,
+        "reactive CO2 pressure": 0.5664935655621355
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.07451611687082621,
+        "common149 / addition_enthalpy": 0.006052155462235117,
+        "restored species / mole_fraction": 0.011918595345453545,
+        "Jakobsen / amount_ratio": 0.05300917359542545,
+        "Kiepe / pressure": 2.793106147011795e-06,
+        "CO2-free density / phase_density": 0.04508930316155555,
+        "Cai / temperature": 0.16483568264083048,
+        "Cai / mole_fraction": 0.2144999344539357,
+        "loaded density / phase_density": 0.002951871883505034,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.0237668629146839,
+        "reactive CO2 pressure": 0.40335751056540203
+      }
+    }
+  },
+  {
+    "name": "without-Mamun2005",
+    "scores": {
+      "held-out": {
+        "n": 19,
+        "AARD_percent": 20.377653406451817,
+        "mean_log_error": -0.2349527549418612
+      },
+      "held-lowT": {
+        "n": 0
+      },
+      "held-highT": {
+        "n": 19,
+        "AARD_percent": 20.377653406451817,
+        "mean_log_error": -0.2349527549418612
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 23.644902856427866,
+        "mean_log_error": 0.12331313864808512
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.181839547753039,
+          "metric_kind": "AARD_percent",
+          "cost": 17.80364062769836,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2875.955173603577,
+          "metric_kind": "RMSE",
+          "cost": 2.8191371594447787,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.521795428657123,
+          "metric_kind": "AARD_percent",
+          "cost": 2.778952483224724,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.621829035347762,
+          "metric_kind": "AARD_percent",
+          "cost": 12.930625178779593,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.026654770753011814,
+          "metric_kind": "AARD_percent",
+          "cost": 11.01904138817081,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.789952501052852,
+          "metric_kind": "RMSE",
+          "cost": 40.04912445031701,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.583119161211746,
+          "metric_kind": "AARD_percent",
+          "cost": 52.08224960276768,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.18443409900754515,
+          "metric_kind": "AARD_percent",
+          "cost": 0.6297088494610903,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.882431209230468,
+          "metric_kind": "AARD_percent",
+          "cost": 5.608859148796181,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "Cp": 0.015904785341410956,
+        "Jakobsen": 0.038787759287684485,
+        "loaded density": 0.0016712708460488103,
+        "restored species": 0.0072380187757552054,
+        "Kiepe": 2.007108570763579e-06,
+        "common149": 0.07053053748017445,
+        "CO2-free density": 0.0343643579181369,
+        "reactive pressure": 0.5599298757622843,
+        "Cai": 0.27157138747993426
+      },
+      "fitted": {
+        "Cp": 0.021286233300676197,
+        "Jakobsen": 0.04907313536981499,
+        "loaded density": 0.0023898138864845726,
+        "restored species": 0.010546428305676194,
+        "Kiepe": 2.5769531882098483e-06,
+        "common149": 0.1454743429971393,
+        "CO2-free density": 0.04181846602240896,
+        "reactive pressure": 0.3797603722435196,
+        "Cai": 0.349648630921092
+      }
+    },
+    "baseline_cost_shares": {
+      "Cp": 0.03614147942662782,
+      "Jakobsen": 0.08813995122907327,
+      "loaded density": 0.0037977375740826888,
+      "restored species": 0.016447421392881,
+      "Kiepe": 4.5608835051919694e-06,
+      "common149": 0.16027113315712263,
+      "CO2-free density": 0.07808836825190628,
+      "Cai": 0.6171093480848012
+    },
+    "replay_cost": 263.4970250287544,
+    "n_reactive_pressure": 233,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.049249320623101896,
+        "common149 / addition_enthalpy": 0.0035877005065272,
+        "restored species / mole_fraction": 0.0072380187757552054,
+        "Jakobsen / amount_ratio": 0.038787759287684485,
+        "Kiepe / pressure": 2.007108570763579e-06,
+        "CO2-free density / phase_density": 0.0343643579181369,
+        "Cai / temperature": 0.11812007289302454,
+        "Cai / mole_fraction": 0.1534513145869097,
+        "loaded density / phase_density": 0.0016712708460488103,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.015904785341410956,
+        "reactive CO2 pressure": 0.5776233921128295
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.06756676143024962,
+        "common149 / addition_enthalpy": 0.010698933542559493,
+        "restored species / mole_fraction": 0.010546428305676194,
+        "Jakobsen / amount_ratio": 0.04907313536981499,
+        "Kiepe / pressure": 2.5769531882098483e-06,
+        "CO2-free density / phase_density": 0.04181846602240896,
+        "Cai / temperature": 0.15199080310658764,
+        "Cai / mole_fraction": 0.19765782781450433,
+        "loaded density / phase_density": 0.0023898138864845726,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.021286233300676197,
+        "reactive CO2 pressure": 0.4469690202678498
+      }
+    }
+  },
+  {
+    "name": "without-Wagner2013",
+    "scores": {
+      "held-out": {
+        "n": 23,
+        "AARD_percent": 12.662911074619702,
+        "mean_log_error": -0.09438247655766062
+      },
+      "held-lowT": {
+        "n": 0
+      },
+      "held-highT": {
+        "n": 23,
+        "AARD_percent": 12.662911074619702,
+        "mean_log_error": -0.09438247655766062
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 23.35844976963434,
+        "mean_log_error": 0.11944547570965273
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.199283664972439,
+          "metric_kind": "AARD_percent",
+          "cost": 17.734910803854532,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2592.434486321109,
+          "metric_kind": "RMSE",
+          "cost": 2.294652264417657,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.456968769967292,
+          "metric_kind": "AARD_percent",
+          "cost": 2.7385258041628893,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.480836799605296,
+          "metric_kind": "AARD_percent",
+          "cost": 12.878651741066676,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.02629744903324127,
+          "metric_kind": "AARD_percent",
+          "cost": 10.884939573828792,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.790661696308584,
+          "metric_kind": "RMSE",
+          "cost": 40.080866382834195,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.5810030291657866,
+          "metric_kind": "AARD_percent",
+          "cost": 52.13871704948564,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 43,
+          "metric": 0.1847482302501703,
+          "metric_kind": "AARD_percent",
+          "cost": 0.6443865143656997,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8988634176628474,
+          "metric_kind": "AARD_percent",
+          "cost": 5.787697544570283,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "Cai": 0.2718854530264404,
+        "common149": 0.07061210429030358,
+        "restored species": 0.007246389364216397,
+        "CO2-free density": 0.03440409944227183,
+        "Jakobsen": 0.03883261636534453,
+        "Cp": 0.015923178829571345,
+        "reactive pressure": 0.5594209456229485,
+        "loaded density": 0.0016732036291615484,
+        "Kiepe": 2.0094297418413697e-06
+      },
+      "fitted": {
+        "Cai": 0.3483969599131057,
+        "common149": 0.14030934342331294,
+        "restored species": 0.010345894324215371,
+        "CO2-free density": 0.0411222835239,
+        "Jakobsen": 0.04865434159828091,
+        "Cp": 0.021865379937491103,
+        "reactive pressure": 0.38686880003270424,
+        "loaded density": 0.002434431974839437,
+        "Kiepe": 2.565272150176746e-06
+      }
+    },
+    "baseline_cost_shares": {
+      "Cai": 0.6171093480848012,
+      "common149": 0.16027113315712263,
+      "restored species": 0.016447421392881,
+      "CO2-free density": 0.07808836825190628,
+      "Jakobsen": 0.08813995122907327,
+      "Cp": 0.03614147942662782,
+      "loaded density": 0.0037977375740826888,
+      "Kiepe": 4.5608835051919694e-06
+    },
+    "replay_cost": 264.69686605566386,
+    "n_reactive_pressure": 229,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.049306276235915464,
+        "common149 / addition_enthalpy": 0.003591849592816219,
+        "restored species / mole_fraction": 0.007246389364216397,
+        "Jakobsen / amount_ratio": 0.03883261636534453,
+        "Kiepe / pressure": 2.0094297418413697e-06,
+        "CO2-free density / phase_density": 0.03440409944227183,
+        "Cai / temperature": 0.11825667581570627,
+        "Cai / mole_fraction": 0.15362877721073412,
+        "loaded density / phase_density": 0.0016732036291615484,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.015923178829571345,
+        "reactive CO2 pressure": 0.5771349240845205
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.06700083407910469,
+        "common149 / addition_enthalpy": 0.008668981611346724,
+        "restored species / mole_fraction": 0.010345894324215371,
+        "Jakobsen / amount_ratio": 0.04865434159828091,
+        "Kiepe / pressure": 2.565272150176746e-06,
+        "CO2-free density / phase_density": 0.0411222835239,
+        "Cai / temperature": 0.1514217639977856,
+        "Cai / mole_fraction": 0.19697519591532014,
+        "loaded density / phase_density": 0.002434431974839437,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.021865379937491103,
+        "reactive CO2 pressure": 0.4515083277655658
+      }
+    }
+  },
+  {
+    "name": "without-Xu2011",
+    "scores": {
+      "held-out": {
+        "n": 15,
+        "AARD_percent": 32.804175210227456,
+        "mean_log_error": 0.06090939250183335
+      },
+      "held-lowT": {
+        "n": 0
+      },
+      "held-highT": {
+        "n": 15,
+        "AARD_percent": 32.804175210227456,
+        "mean_log_error": 0.06090939250183335
+      },
+      "held-15wt": {
+        "n": 0
+      },
+      "held-45wt": {
+        "n": 0
+      },
+      "original47": {
+        "n": 47,
+        "AARD_percent": 23.634357278861067,
+        "mean_log_error": 0.12219067722091594
+      }
+    },
+    "converged": true,
+    "termination": "converged",
+    "preservation": {
+      "common149 / mole_fraction": {
+        "before": {
+          "n": 94,
+          "within_2s": 94,
+          "metric": 7.10284218155361,
+          "metric_kind": "AARD_percent",
+          "cost": 16.661405112555077,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 94,
+          "within_2s": 93,
+          "metric": 7.206085572835189,
+          "metric_kind": "AARD_percent",
+          "cost": 17.90031553558935,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "common149 / addition_enthalpy": {
+        "before": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 1835.009864751783,
+          "metric_kind": "RMSE",
+          "cost": 1.2137453025845175,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 8,
+          "within_2s": 8,
+          "metric": 2333.4253553317585,
+          "metric_kind": "RMSE",
+          "cost": 1.8538714304061534,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "restored species / mole_fraction": {
+        "before": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.001586275329757,
+          "metric_kind": "AARD_percent",
+          "cost": 2.4486746519416633,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 7,
+          "within_2s": 7,
+          "metric": 9.522373061032123,
+          "metric_kind": "AARD_percent",
+          "cost": 2.7825347381676497,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Jakobsen / amount_ratio": {
+        "before": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 17.514390498016315,
+          "metric_kind": "AARD_percent",
+          "cost": 13.122182452954176,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 6,
+          "within_2s": 4,
+          "metric": 16.41960080543265,
+          "metric_kind": "AARD_percent",
+          "cost": 12.833071125567365,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Kiepe / pressure": {
+        "before": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 39,
+          "within_2s": 39,
+          "metric": 2.6665235636903297,
+          "metric_kind": "AARD_percent",
+          "cost": 0.0006790194987316589,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "CO2-free density / phase_density": {
+        "before": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.027977809820236565,
+          "metric_kind": "AARD_percent",
+          "cost": 11.625713440569626,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 5,
+          "within_2s": 5,
+          "metric": 0.026392030389799093,
+          "metric_kind": "AARD_percent",
+          "cost": 10.932168463819634,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / temperature": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7879795067570878,
+          "metric_kind": "RMSE",
+          "cost": 39.960883957291486,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 1.7904840157904374,
+          "metric_kind": "RMSE",
+          "cost": 40.07291263501314,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "Cai / mole_fraction": {
+        "before": {
+          "n": 25,
+          "within_2s": 18,
+          "metric": 2.590593941937774,
+          "metric_kind": "AARD_percent",
+          "cost": 51.913701245806216,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 25,
+          "within_2s": 19,
+          "metric": 2.581520017472644,
+          "metric_kind": "AARD_percent",
+          "cost": 52.12441616101814,
+          "zero_observations": 0
+        },
+        "passed": true
+      },
+      "loaded density / phase_density": {
+        "before": {
+          "n": 47,
+          "within_2s": 44,
+          "metric": 0.1769694468137074,
+          "metric_kind": "AARD_percent",
+          "cost": 0.5654031419422263,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 47,
+          "within_2s": 43,
+          "metric": 0.18703148897839245,
+          "metric_kind": "AARD_percent",
+          "cost": 0.652217141951909,
+          "zero_observations": 0
+        },
+        "passed": false
+      },
+      "Cp / equilibrium_isobaric_heat_capacity": {
+        "before": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8446236859301117,
+          "metric_kind": "AARD_percent",
+          "cost": 5.380705123415876,
+          "zero_observations": 0
+        },
+        "after": {
+          "n": 4,
+          "within_2s": 3,
+          "metric": 2.8815939471100505,
+          "metric_kind": "AARD_percent",
+          "cost": 5.8062830111771895,
+          "zero_observations": 0
+        },
+        "passed": true
+      }
+    },
+    "cost_shares": {
+      "start": {
+        "loaded density": 0.0017035268348921573,
+        "Cp": 0.016211752090541574,
+        "reactive pressure": 0.5514364008409324,
+        "CO2-free density": 0.035027599515533754,
+        "restored species": 0.007377714536876547,
+        "Cai": 0.27681279025162436,
+        "common149": 0.07189179633026112,
+        "Kiepe": 2.0458463204341343e-06,
+        "Jakobsen": 0.0395363737530178
+      },
+      "fitted": {
+        "loaded density": 0.0025267263176579884,
+        "Cp": 0.022493870750170543,
+        "reactive pressure": 0.37029295120376465,
+        "CO2-free density": 0.04235184264543681,
+        "restored species": 0.010779697895833879,
+        "Cai": 0.3571776975832321,
+        "common149": 0.14465853532945816,
+        "Kiepe": 2.630560172818524e-06,
+        "Jakobsen": 0.049716047714273015
+      }
+    },
+    "baseline_cost_shares": {
+      "loaded density": 0.0037977375740826888,
+      "Cp": 0.03614147942662782,
+      "CO2-free density": 0.07808836825190628,
+      "restored species": 0.016447421392881,
+      "Cai": 0.6171093480848012,
+      "common149": 0.16027113315712263,
+      "Kiepe": 4.5608835051919694e-06,
+      "Jakobsen": 0.08813995122907327
+    },
+    "replay_cost": 258.1273394723835,
+    "n_reactive_pressure": 237,
+    "engine_wheel_sha256": "83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6",
+    "objective_shares_by_observable": {
+      "baseline": {
+        "common149 / mole_fraction": 0.11191243829244484,
+        "common149 / addition_enthalpy": 0.008152565486561425,
+        "restored species / mole_fraction": 0.016447421392881,
+        "Jakobsen / amount_ratio": 0.08813995122907327,
+        "Kiepe / pressure": 4.5608835051919694e-06,
+        "CO2-free density / phase_density": 0.07808836825190628,
+        "Cai / temperature": 0.2684119334336334,
+        "Cai / mole_fraction": 0.34869741465116777,
+        "loaded density / phase_density": 0.0037977375740826888,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.03614147942662782,
+        "reactive CO2 pressure": 0.040206129378116295
+      },
+      "start": {
+        "common149 / mole_fraction": 0.05019984611112612,
+        "common149 / addition_enthalpy": 0.0036569441170319888,
+        "restored species / mole_fraction": 0.007377714536876547,
+        "Jakobsen / amount_ratio": 0.0395363737530178,
+        "Kiepe / pressure": 2.0458463204341343e-06,
+        "CO2-free density / phase_density": 0.035027599515533754,
+        "Cai / temperature": 0.12039982291823467,
+        "Cai / mole_fraction": 0.15641296733338964,
+        "loaded density / phase_density": 0.0017035268348921573,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.016211752090541574,
+        "reactive CO2 pressure": 0.5694714069430353
+      },
+      "fitted": {
+        "common149 / mole_fraction": 0.06934684087387988,
+        "common149 / addition_enthalpy": 0.007182003402644203,
+        "restored species / mole_fraction": 0.010779697895833879,
+        "Jakobsen / amount_ratio": 0.049716047714273015,
+        "Kiepe / pressure": 2.630560172818524e-06,
+        "CO2-free density / phase_density": 0.04235184264543681,
+        "Cai / temperature": 0.1552447436095798,
+        "Cai / mole_fraction": 0.20193295397365232,
+        "loaded density / phase_density": 0.0025267263176579884,
+        "Cp / equilibrium_isobaric_heat_capacity": 0.022493870750170543,
+        "reactive CO2 pressure": 0.4384226422566988
+      }
+    }
+  }
+]

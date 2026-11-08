@@ -1,0 +1,331 @@
+[
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "carbamate-anion",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "original_index": 0,
+    "identity": "pair/carbamate-anion/water/k_ij",
+    "base": -0.0036580495327475336,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      0.5
+    ],
+    "d": -0.1,
+    "origin": -0.0036580495327475336
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "protonated-monoethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "original_index": 1,
+    "identity": "pair/protonated-monoethanolamine/water/k_ij",
+    "base": -0.5,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      -0.161
+    ],
+    "d": 0.1,
+    "origin": -0.5
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "bicarbonate-anion",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "original_index": 2,
+    "identity": "pair/bicarbonate-anion/water/k_ij",
+    "base": 0.7270558477497251,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      1.0
+    ],
+    "d": 0.1,
+    "origin": 0.7270558477497251
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "carbamate-anion",
+          "protonated-monoethanolamine"
+        ],
+        1.0
+      ]
+    ],
+    "original_index": 3,
+    "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+    "base": -1.0,
+    "scale": 0.01,
+    "bounds": [
+      -1.0,
+      1.0
+    ],
+    "d": 0.1,
+    "origin": -1.0
+  },
+  {
+    "targets": [
+      [
+        "k_ij_reciprocal_temperature_slope",
+        [
+          "protonated-monoethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "original_index": 4,
+    "identity": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+    "base": -41.61963413672365,
+    "scale": 10.0,
+    "bounds": [
+      -1000.0,
+      1000.0
+    ],
+    "d": 0.1,
+    "origin": -41.61963413672365
+  },
+  {
+    "targets": [
+      [
+        "segment_diameter",
+        "protonated-monoethanolamine",
+        1.0
+      ],
+      [
+        "packing_diameter",
+        "protonated-monoethanolamine",
+        0.88
+      ],
+      [
+        "debye_huckel_diameter",
+        "protonated-monoethanolamine",
+        1.0
+      ]
+    ],
+    "original_index": 5,
+    "identity": "component/protonated-monoethanolamine/segment_diameter",
+    "base": 5.35,
+    "scale": 0.1,
+    "bounds": [
+      5.35,
+      5.8
+    ],
+    "d": 0.1,
+    "origin": 5.35
+  },
+  {
+    "targets": [
+      [
+        "segment_diameter",
+        "carbamate-anion",
+        1.0
+      ],
+      [
+        "packing_diameter",
+        "carbamate-anion",
+        0.88
+      ],
+      [
+        "debye_huckel_diameter",
+        "carbamate-anion",
+        1.0
+      ]
+    ],
+    "original_index": 6,
+    "identity": "component/carbamate-anion/segment_diameter",
+    "base": 4.866108647520244,
+    "scale": 0.1,
+    "bounds": [
+      2,
+      5.8
+    ],
+    "d": -0.1,
+    "origin": 4.866108647520244
+  },
+  {
+    "targets": [
+      [
+        "born_diameter",
+        "protonated-monoethanolamine",
+        1.0
+      ]
+    ],
+    "original_index": 7,
+    "identity": "component/protonated-monoethanolamine/born_diameter",
+    "base": 5.0,
+    "scale": 0.1,
+    "bounds": [
+      2.0,
+      5.0
+    ],
+    "d": -0.1,
+    "origin": 5.0
+  },
+  {
+    "targets": [
+      [
+        "born_diameter",
+        "carbamate-anion",
+        1.0
+      ]
+    ],
+    "original_index": 8,
+    "identity": "component/carbamate-anion/born_diameter",
+    "base": 5.0,
+    "scale": 0.1,
+    "bounds": [
+      2.0,
+      5.0
+    ],
+    "d": -0.1,
+    "origin": 5.0
+  },
+  {
+    "kind": "reaction_coordinate",
+    "name": "R5",
+    "coefficient": "b",
+    "original_index": 9,
+    "identity": "reaction:R5:correlation:a_k",
+    "base": -7723.098885755592,
+    "scale": 184.2068074395237,
+    "bounds": [
+      -8110.478829409399,
+      -6728.927773612972
+    ],
+    "d": 0.1,
+    "origin": -7723.098885755592
+  },
+  {
+    "kind": "reaction_enthalpy_shift",
+    "name": "R2",
+    "pivot_temperature": 313.15,
+    "original_index": 10,
+    "identity": "reaction:R2:enthalpy_shift",
+    "base": 0.0,
+    "scale": 2500.0,
+    "bounds": [
+      -8636.068425883279,
+      11363.931574116721
+    ],
+    "d": -0.1,
+    "origin": 0.0
+  },
+  {
+    "kind": "reaction_enthalpy_shift",
+    "name": "R5",
+    "pivot_temperature": 313.15,
+    "original_index": 11,
+    "identity": "reaction:R5:enthalpy_shift",
+    "base": 0.0,
+    "scale": 2500.0,
+    "bounds": [
+      -20000.0,
+      0.0
+    ],
+    "d": -0.1,
+    "origin": 0.0
+  },
+  {
+    "identity": "pair/monoethanolamine/water/k_ij",
+    "original_index": 12,
+    "origin": -0.08990160794755829,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      0.5
+    ],
+    "targets": [
+      [
+        "k_ij",
+        [
+          "monoethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ]
+  },
+  {
+    "identity": "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+    "original_index": 13,
+    "origin": -8.057331218929972,
+    "scale": 10.0,
+    "bounds": [
+      -1000.0,
+      1000.0
+    ],
+    "targets": [
+      [
+        "k_ij_reciprocal_temperature_slope",
+        [
+          "monoethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ]
+  },
+  {
+    "targets": [
+      [
+        "dispersion_energy_over_k",
+        "protonated-monoethanolamine",
+        1.0
+      ]
+    ],
+    "original_index": 14,
+    "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+    "base": 177.89333334239393,
+    "scale": 10,
+    "bounds": [
+      50,
+      950
+    ],
+    "d": -0.1,
+    "origin": 177.89333334239393
+  },
+  {
+    "targets": [
+      [
+        "dispersion_energy_over_k",
+        "carbamate-anion",
+        1.0
+      ]
+    ],
+    "original_index": 15,
+    "identity": "component/carbamate-anion/dispersion_energy_over_k",
+    "base": 207.21694618033155,
+    "scale": 10,
+    "bounds": [
+      50,
+      1000
+    ],
+    "d": 0.1,
+    "origin": 207.21694618033155
+  }
+]

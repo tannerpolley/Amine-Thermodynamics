@@ -1,9 +1,200 @@
 ---
-title: "AMP transfer assessment: cation A reactive fit"
-subtitle: "Both starts reach the same endpoint, but two coordinates sit on their bounds; Kundu 2003 is not scored"
+title: "AMP reactive-model redesign"
+subtitle: "No adopted endpoint within the declared model alternatives; Kundu remains unscored"
 ---
 
 ## Result
+
+The redesigned AMP comparison in [#243](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243)
+produced **no adopted parameter endpoint**. The completed cation-A fits still
+fail the interior-bound, pressure or carbamate-fraction requirements. Cation B
+was initialized by the prescribed restricted fits, but its resulting full
+starts fail the calibration information check. Therefore the 51 Kundu 2003
+CO₂ partial pressures remain unscored. The registered outside-fit test,
+$E_p\le30\%$, was not reached; it was not failed by a computed Kundu error.
+
+This is a negative assessment of these declared parameter families and starts
+under frozen MEA shared species, Hamborg protonation and Hsieh dielectric
+coefficients. It is not evidence that no AMP ePC-SAFT model can work. It supplies
+calibration comparisons and numerical verification; it establishes no new
+held-out prediction or absorber-use qualification. It does not test a secondary
+amine. Issue #259 owns the separate manuscript decision; no manuscript source
+was edited.
+
+## Cation A: completed calibration fits
+
+Both fitted sets use the same 156 calibration values: 47 Hartono 2021 total
+pressures at 313, 333 and 353 K in 26.8 mass% unloaded AMP, 26 pressures and
+26 vapor AMP fractions from Hartono 2013, and 57 Ciftja 2014 carbamate fractions
+at 298.15–318.15 K in 30 mass% AMP. The NMR quantity is carbamate moles divided
+by total analytical AMP moles. Source rows, uncertainty interpretation and
+exclusions remain in [source admission](source-admission.md).
+
+Set 1 retains the ion-size/cation–CO₂ fitted coordinates. Set 2 fixes the
+carbamate size at the MEA analog and replaces the carbamate-size and
+cation–CO₂ coordinates with carbamate–water and neutral AMP–CO₂ interactions.
+The [issue design](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243)
+owns the exact coordinates, bounds, starts, objective and selection rule.
+No bound was widened from #242. Two starts were used for each declared case;
+start 1 is shown below. Cost is the dimensionless group-weighted least-squares
+objective, not a chi-square statistic.
+
+| Cation-A fitted set | Cost | Loaded P mean error / % | Largest row error / % | NMR fraction RMS | Active bounds |
+|:--|--:|--:|--:|--:|--:|
+| Set 1, fixed slope (#242 reused) | 66.866300 | 9.904 | 57.540 | 0.00705745 | 2 |
+| Set 1, fitted slope | 66.409889 | 9.919 | 57.505 | 0.00637380 | 3 |
+| Set 2, fixed slope | 104.161953 | 11.907 | 65.782 | 0.00775774 | 2 |
+
+Adoption requires loaded-pressure mean absolute relative error ≤10% overall
+and on each isotherm, no row above 30%, NMR fraction RMS ≤0.006, interior
+coordinates and the declared numerical and phase checks. These are engineering
+acceptance policies set by the orchestrator under the owner's 2026-11-06
+instruction, not published measurement uncertainties.
+
+For set 1 with fitted slope, mean pressure errors are **11.444%, 9.796% and
+8.532%** at 313, 333 and 353 K. Its 313 K, loading 0.95 mol CO₂/mol AMP row is
+underpredicted by **57.505%**. Allowing the slope to move improves the NMR fit
+but does not remove the largest pressure disagreement or meet the NMR limit.
+The cation–CO₂ correction remains at +0.5 and carbamate diameter at 4.5 Å;
+the enthalpy shift also reaches its −5000 J/mol bound. Total effective
+hydrolysis enthalpy is **16.1703 kJ/mol**, conditional on this model. The native
+covariance is unavailable because coordinates are on bounds. Conditional
+slope standard error and correlations therefore have no available values;
+no identification claim follows. The prescribed fixed-slope fallback is the
+already-inadmissible #242 branch.
+
+Set 2's fixed-slope pressure errors are **16.488%, 13.002% and 6.085%** on
+the same isotherms. Its neutral AMP–CO₂ correction reaches +0.5 and carbamate
+offset reaches −3. Its fitted-slope starts fail the information check
+before fitting: $s_{min}/s_{max}=6.23\times10^{-5}$ and
+$5.33\times10^{-5}$, below $10^{-4}$. These are start-specific diagnostics,
+not fitted endpoints or proof of intrinsic nonidentifiability.
+
+The two completed starts give the following comparisons over all 156
+calibration values. Scaled-coordinate difference means the largest difference
+in an independent physical coordinate divided by its declared scale; reaction
+coordinates use the original pivot offset and total enthalpy shift. Relative
+prediction difference is $\max_i|y_{i,1}/y_{i,2}-1|$, including pressure,
+vapor AMP fraction and carbamate fraction predictions.
+
+| Cation-A branch | Absolute cost difference | Largest scaled-coordinate difference | Largest relative prediction difference |
+|:--|--:|--:|--:|
+| Set 1, fitted slope | $1.62551\times10^{-9}$ | $1.05210\times10^{-4}$ | $1.09904\times10^{-5}$ |
+| Set 2, fixed slope | $9.55595\times10^{-10}$ | $8.62707\times10^{-5}$ | $1.88072\times10^{-5}$ |
+
+The exact values, and the reused #242 fixed-slope comparison, are retained in
+`summary.json` under `start_comparisons`. These comparisons do not establish
+a global optimum. Binary calibration remains present:
+set 1/fitted slope gives 1.148% mean binary-pressure error and mean absolute
+vapor AMP fraction error $4.34\times10^{-4}$; set 2/fixed slope gives 1.400%
+and $7.16\times10^{-4}$. All 156 values remain available in each cold replay.
+
+![Lowest-calibration-cost cation-A candidate in each fitted set, shown at measured states. Circles are Hartono 2021 total-pressure observations with the reported u(P) and u(alpha); crosses are fitted predictions, not an interpolated curve. These candidates are not adopted. The log pressure scale exposes both low- and high-loading disagreement.](results/redesign/pressure-comparison.svg)
+
+The exact plotted values are in
+[pressure-plot.csv](results/redesign/pressure-plot.csv); the figure's candidate
+choice is for this calibration diagnostic only and has no holdout-selection
+consequence. Reported source uncertainty bars are not a model confidence band.
+
+## Cation B: initialization did not repair the information failure
+
+All eight restricted initialization fits converge at cost about **2636.317**
+and NMR fraction RMS about **0.024684**. The initialized full starts have
+$s_{min}/s_{max}$ of approximately $1.55\times10^{-11}$ (set 1/fixed slope),
+$3.05\times10^{-12}$ (set 1/fitted slope), and $1.58\times10^{-19}$
+(set 2, either slope), against $10^{-4}$. No full cation-B fit follows those
+failed gates. Its initialization was a root-cause correction attempt for the
+#242 start-state limitation; changing the fitted interaction set did not make
+its initialized full starts admissible.
+
+The [direct state probe](results/redesign/probe-cation-b.json) evaluates both
+fixed-slope initialized sets. At the three highest-loading calibration states,
+313 K/0.95, 333 K/0.96 and 353 K/0.90, set 1 predicts total pressures
+**25.52, 73.02 and 172.97 kPa**, versus **609.1, 665.0 and 733.2 kPa** measured.
+CO₂ comprises only **2.83×10⁻⁶, 2.06×10⁻⁶ and 5.60×10⁻⁷** of the modeled vapor.
+Liquid free AMP is of order $10^{-14}$ mole fraction; the carbamate fraction
+is also extremely small. Set 2 gives nearly identical pressures and vapor CO₂
+fractions. The selected roots remain dense liquid plus dilute vapor
+(packing fractions about 0.38–0.43 and below 0.0005 in these probes).
+Root-selection multiplicity is unavailable, and these probes are not global
+phase-stability searches.
+
+This supports a chemical-state explanation for the empty sensitivity columns:
+the initialized B states suppress free AMP, molecular CO₂ and carbamate,
+leaving little response to the fitted CO₂/carbamate interactions. It does not
+identify which frozen energy, solvation or association assumption causes that
+state. Column normalization raises B's singular-value ratios to about
+0.004–0.005, while some original scaled column norms are as small as
+$5\times10^{-18}$. Thus the gate failure is weak physical sensitivity on the
+specified coordinate scales, not proof of exact algebraic singularity.
+Normalizing tiny columns does not supply additional measurement information
+or authorize a different start, bound or gate.
+
+## Numerical verification, uncertainty and limits
+
+The campaign uses immutable Engine e6dae5c7, SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`,
+with 32 available CPUs, through `agent-heavy`. The candidate campaign took
+**587.6 s** admitted wall time, excluding admission waiting and the subsequent
+verification/plotting job. No pure-AMP, dielectric or protonation fit was
+repeated. The unchanged two #242 cation-A fixed-slope fits were reused.
+
+Every completed full-fit endpoint (six including the two historical fits)
+was serialized, reloaded into a fresh model with its completed laws, and
+replayed on all **156** calibration values. Maximum relative prediction
+difference was **0** in these replays; complete shared-component and
+shared-only pair records were unchanged. For all eight B restarts, initial
+cost agrees with its restricted endpoint to at most **2.24×10⁻¹³ relative**.
+This verifies completed-law restart at the actual initialization point;
+preservation of the full allowed law family follows the independently reviewed
+restart algebra in #243. The initial-cost agreement is
+not evidence of a physical fit.
+
+A reporting defect initially passed the source temperature string to `round()`.
+It affected the post-fit pressure summaries, after fit histories and replay
+values had been retained. The conversion is corrected; pressure summaries
+were reconstructed from retained values and checked by the cold replays.
+No optimizer rerun was used to improve the result. Original run messages
+remain in [run.log](results/redesign/run.log), with the correction checks in
+[verification.log](results/redesign/verification.log).
+
+Numerical agreement does not remove model discrepancy, source dependence,
+correlation within isotherms or the limited NMR temperature span. Hsieh,
+Hamborg, ion analog energies/Born terms, pure AMP and shared MEA parameters
+remain fixed. No measurement or parameter uncertainty was propagated into
+pressure predictions. The source enthalpy allowance is an engineering range,
+not independent caloric evidence. No available covariance supports fitted
+slope uncertainty at these bound endpoints.
+
+Because no candidate passes calibration/adoption, Kundu, its loading
+sensitivity envelope, Tong and the supplemental Hartono isotherms are not
+scored, and endpoint tangent-plane phase trials are not reached. No dense-phase
+stability or outside-fit pressure result is claimed. Other starts, different
+ion solvation/association assumptions and broader source-justified models
+remain untested. This task does not establish general transfer to primary
+or secondary amines; it rejects adoption from the specified alternatives.
+
+## Evidence and review
+
+- [summary.json](results/redesign/summary.json) retains each start gate,
+  endpoint, group errors, bounds, covariance availability and cold replay.
+- `results/redesign/*-fit.json` retains native histories, residuals and replay
+  rows; `*-initial.json` retains B initialization and its start matrix.
+- `inputs/redesign/` and `redesign-*.toml` bind all candidate starts,
+  coordinates, law baselines and parameter documents by SHA-256.
+- [probe-cation-b.json](results/redesign/probe-cation-b.json) and
+  [diagnosis-cation-b.md](diagnosis-cation-b.md) distinguish initialized-B
+  state behavior from a fitting-path or phase-classification claim.
+- Design readiness: independent **Ready**, after the restart-family and
+  Kundu-independent slope-bound corrections; reviewed design body SHA-256
+  `496ffe813ae1b09f6ba63a81862d6d26ce9f44e674ece23d2ea1391693e97ea1`.
+  Readiness is not delivered acceptance. The current delivered-result review
+  and disposition are recorded in [#243](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/243).
+  No manuscript promotion is made here.
+
+The following sections retain #242's original evidence and limits as history.
+
+## Historical #242 finding
 
 The question for [#242](https://github.com/tannerpolley/Amine-Thermodynamics/issues/242)
 is whether the adopted MEA shared-species parameters, with a refitted pure-AMP
@@ -26,8 +217,7 @@ residuals follow a systematic pattern with loading at each isotherm. Our
 reading is a structural limit of the bounded model rather than noise; two
 starts do not show that no other point inside the bounds does better.
 
-This notebook has not been independently reviewed and has not been promoted
-for manuscript use.
+This historical record is retained as the #242 finding. The #243 assessment and its review state are reported above; no manuscript promotion is made here.
 
 ## Reactive fits
 

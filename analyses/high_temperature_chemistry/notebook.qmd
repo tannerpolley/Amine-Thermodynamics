@@ -1,0 +1,229 @@
+---
+title: "High-temperature MEA chemistry: independent R5 evidence and a bounded correction"
+format:
+  html:
+    embed-resources: true
+execute:
+  enabled: false
+---
+
+## Reaction-law changes do not remove the 353 K carbamate excess
+
+For the selected MEA EOS parameters held fixed, fitting two reaction-enthalpy
+shifts leaves **26.39% carbamate excess** at the highest-loading Böttinger state,
+353.15 K and 31 wt% MEA. Holding that state out leaves **26.88% excess**.
+Neither fit meets issue #263's below-10% carbamate target. Both converge without
+hitting the approved ±10 kJ/mol shift limits. This is a result for the declared
+two-shift form, retained objective, and local optimization, not a rejection of
+all possible reaction laws.
+
+Independent dilute MEAH⁺ dissociation measurements above 323 K do exist.
+Replacing the entire incumbent R5 law with a correlation derived from
+Hamborg–Versteeg raises the fitted-pressure AARD to **203.67%** while leaving
+**26.25% carbamate excess** at the highest-loading state. An independently
+measured equilibrium constant does not by itself repair a concentrated-solution
+EOS whose physical parameters were fitted with different reaction laws.
+
+The evidence is numerical verification and conditional comparisons with
+measurements. The probe fits are calibration, and the held-out state is a
+within-series sensitivity comparison. They are not independent physical
+validation or a parameter-adoption decision.
+
+## Source evidence and governing quantities
+
+R4 is carbamate hydrolysis,
+$\mathrm{MEACOO^-+H_2O\rightleftharpoons MEA+HCO_3^-}$; R5 is MEAH⁺
+dissociation, $\mathrm{MEAH^++H_2O\rightleftharpoons MEA+H_3O^+}$.
+The common reference is dimensionless aqueous molality at infinite dilution
+in water. Source concentration constants and constants fitted with an activity
+model are not silently substituted on this scale.
+
+The [source assessment](source-assessment.md) records the methods, exact primary
+locators, activity conventions, ranges and PDF hashes. The decisive findings are:
+
+- **Hamborg and Versteeg (2009), Eq. (18), Eq. (21), Table 16:** 24 MEA
+  measurements extend approximately 293–353 K, with activity corrections and
+  dilution extrapolation. They are independent of fitting the concentrated MEA
+  EOS. The correlated MEA Table 5 alone would miss the higher-temperature data.
+- **Kim et al. (2011), Tables 5 and 7:** direct potentiometric measurements
+  extend to 363.15 K and protonation calorimetry to 393.15 K. Their printed
+  correlation is deferred: Table 5/Eq. (6) gives −8.748265 at 298.15 K and
+  −5.606860 at 353.15 K, versus Table 7's −21.80 and −18.69. No coefficient
+  was silently repaired. The measurements remain evidence; their titration
+  activity assumption also differs from exact infinite dilution.
+- **Aroua et al. (1999), Table 3/Eq. (14):** R4 measurements reach 328 K,
+  extending the 323 K limit stated in the issue. Their molarity convention and
+  calculated-species/activity corrections remain identifiable. They do not
+  resolve a 353 or 393 K thermodynamic law.
+- **Böttinger et al. (2008), §5/Table 5:** its R4 law was fitted with its
+  extended Pitzer activity model and includes oxazolidone chemistry. It is not
+  an independent thermodynamic replacement for this EOS.
+- **Wada et al. (2021), §2, §4.3.1 and Tables 2/4:** MEA carbamate measurements
+  cover 25–45 °C in D₂O, on a concentration basis with activity coefficients
+  set to unity. They do not extend above 323 K. Zotero parent `KG36XZ5V`,
+  PDF `DVCEZP5V`, was acquired for this assessment.
+
+The bounded source search establishes R5 evidence and the limits of the R4
+sources inspected; it is not proof that every published R4 measurement was found.
+
+## Method and numerical verification
+
+The immutable EOS input is
+`../mea_parameter_bundle/results/selected-current-best-parameters.json`,
+SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`.
+The generic `SolventSpecification` declarations own the original **307-row**
+objective. Engine owns equilibrium, thermodynamic derivatives, law completion
+and nonlinear least-squares fitting.
+
+The issue-authorized Engine is merged `e6dae5c7`, wheel SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`,
+in this worktree's environment. [Qualification](results/qualification.json)
+reproduced every original prediction, residual, weighted residual and cost with
+$|x-x_\mathrm{ref}|/\max(|x_\mathrm{ref}|,1)\le10^{-10}$; the maximum was
+$7.0626\times10^{-12}$. This includes 25 Cai paired checks and native admission
+of both zero-origin coordinates. The absolute tolerance below reference
+magnitude one is $10^{-10}$, not experimental uncertainty. The original pinned
+wheel could not admit reaction coordinates tied across the existing destination
+temperature domains; those domains and observations were preserved.
+
+For Hamborg, weighted linear least squares fits the printed 24 Table 16 values
+and printed uncertainty scales to
+
+$$\ln K=A/T+B+C\ln T,$$
+
+with $A=-4335.5224279$ K, $B=-36.18940679$ and $C=5.08765998$.
+The Engine form uses $a=B+C\ln(313.15)$, $b=A$, $c=C$, and $d=e=f=0$.
+The maximum source residual is 0.02610 in $\ln K$. The
+[derived law](results/hamborg-law.json) retains the source residuals,
+conditioning, conditional covariance and native ideal-system evaluation check
+at every source temperature. This is a derived correlation, not coefficients
+published by Hamborg. Its covariance assumes independent errors with standard
+deviations equal to the printed scales solely for weighting. Electrode-based
+uncertainties do not establish independent Gaussian errors or complete physical
+uncertainty. Predictions above the highest measured temperature, 353.26 K,
+remain extrapolations.
+
+The probe starts from the incumbent laws and moves only incremental R4/R5
+enthalpy shifts about 313.15 K, each with scale 2500 J/mol and bounds
+[−10000, +10000] J/mol. EOS parameters remain fixed. The original 307 rows,
+weights and residual definitions are retained. Two measured targets per added
+state are used: MEA + MEAH⁺ and carbamate mole fractions, with residual
+$(x_\mathrm{calc}-x_\mathrm{obs})/(0.1x_\mathrm{obs}+0.001)$ and weight one.
+NMR does not independently resolve MEA from MEAH⁺.
+
+The all-five fit uses 317 observations. The second fit starts independently from
+zero shifts, excludes both targets of `Bottinger2008_state_067` (loading
+0.398 mol CO₂/mol MEA, reported nominally as 0.40), and uses 315 observations.
+The other four states become calibration data. In the all-five fit no 353 K
+state remains outside the fit. The largest-loading exclusion was selected
+before fitting.
+
+Both fits converge within the retained 60-iteration and 1200 s limits. Their
+R4/R5 shifts are **−150.418/+156.164 J/mol** (all five) and
+**−1336.063/+1229.515 J/mol** (holdout). No coordinate reaches a bound and
+neither run records a failed numerical trial. The all-five cost decreases
+153.6179626727 → 153.6169874607; the holdout cost decreases
+150.7136974708 → 150.6498492675. These costs use different row counts and are
+not compared as model-selection scores. Fresh fit replay agrees within
+$1.20\times10^{-13}$ relative cost and $6.48\times10^{-12}$ absolute weighted
+residual (all five), and $2.70\times10^{-14}$ and $2.16\times10^{-12}$
+respectively (holdout), against limits $10^{-8}$ and $10^{-8}$.
+
+## Speciation, pressure and heat comparisons
+
+![The bounded reaction-only correction leaves the high-loading carbamate excess. Measurements are open circles; model predictions are discrete points at the observed states. The model points nearly coincide; the table resolves their small differences. The highest-loading state is excluded only in the holdout case.](figures/speciation.png)
+
+The pressure reporting cohort is the same 159 canonical targets in every case,
+split into **47 fitted targets and 112 non-fitted targets**. The issue's maximum
+**two-percentage-point** increase in pressure AARD applies only to the 47 fitted
+targets. All row identities, signed errors and native prediction diagnostics
+are retained in the assessment JSON files. The new baseline reproduces the
+retained 159 pressure predictions within $7.50\times10^{-13}$ relative.
+Its Kim predictions reproduce the earlier #245 values within
+$8.10\times10^{-11}$ kJ/mol CO₂ absolute.
+
+Kim's heat comparison uses 30 wt% MEA, positive heat release per mole of
+absorbed CO₂, at the existing #245 **1.734 MPa** comparison pressure. It uses
+finite loading increments between successive printed endpoints, rather than
+calling the semi-differential measurements exact endpoint derivatives. Loading
+is restricted to 0.60 mol CO₂/mol MEA. The two known inconsistent 393.15 K
+rows are excluded from the source-consistent metric but remain in the retained
+predictions. The first 393 K intervals remain in the semi-differential metric;
+first-point exclusions for a truncated integral are a different data role.
+The existing source uncertainty estimate is ±2.2%; it is not a row-specific
+independent error distribution. The actual varying reactor pressure and exact
+source doses remain unavailable. The separate native bubble-pressure check
+admits all **296 distinct case/temperature/loading endpoints** used for these
+heat intervals: the largest calculated bubble pressure is **0.955 MPa**, below
+the imposed 1.734 MPa comparison pressure. This checks the declared heat-domain
+condition, not global phase stability.
+
+{{< include results/tables.md >}}
+
+Negative percentages of absolute heat error removed mean that the candidate
+increases the error. Attribution compares identical available rows with the
+baseline and retains omitted identities. This does not assign the remaining
+heat error uniquely to a reaction, pressure history or omitted species.
+
+The all-five fit changes the 47 fitted pressures' AARD from **11.8626% to
+11.8999%**, an increase of **0.0373 percentage points**. The holdout fit gives
+**12.1148%**, an increase of **0.2522 points**. Both satisfy the two-point
+pressure limit while failing the carbamate target.
+
+The all-five fit removes **0.7273%** of baseline absolute heat error at
+353.15 K and **0.1602%** at 393.15 K; the holdout fit removes **4.1198%**
+and **0.7329%**. These are small changes in total absolute error over identical
+source-consistent cohorts. The Hamborg replacement increases these heat errors
+by **211.44%** and **48.09%**, respectively. The figures are conditional on the
+fixed-pressure finite-dose comparison and the stated source exclusions.
+
+## Meaning, limits and recommendation for #255 stage 2
+
+The bounded reaction-only fits fail the below-10% carbamate target even though
+the small fitted-pressure changes remain separately assessable. No numerical
+failure or bound hit explains away the retained carbamate discrepancy. These
+local fits do not demonstrate that a different temperature-law form, a different
+objective, or a joint EOS/chemistry fit would fail.
+
+The issue's compound falsifier must be read in two parts: independent R5
+measurements above 323 K exist, while the approved reaction-only correction
+does not remove the high-temperature species disagreement. R4 at 353/393 K
+and direct R5 constants at 393 K remain unsupported by the inspected source
+measurements. The high-temperature extrapolation problem is therefore not
+resolved by this study.
+
+For **#255 stage 2**, retain the selected record as the comparison baseline;
+do not adopt any vector or law from these probes. Include the Hamborg dilute
+R5 measurements as separately identified external reaction evidence in the
+joint refit design, with their activity convention and conditional uncertainty
+assumptions. Resolve Kim's printed coefficient discrepancy before using its
+correlation. Keep the five 353 K states' calibration roles explicit; the
+loading-0.40 exclusion here is already accessed within-series evidence and
+cannot become an untouched validation set later. Reassess pressure, species,
+heat and stability together before adoption.
+
+Global phase stability was not searched in these probes. A detected-instability
+count is **unavailable**, not zero. Native prediction root diagnostics and zero
+failed numerical trials are not a count of global thermodynamic instabilities.
+The independent stability work in #255 remains necessary. Böttinger identifies
+and measures oxazolidone in its own experiment, but these calculations omit
+it; that observation does not establish its contribution to Kim's remaining
+heat discrepancy or justify inferring missing pressure/dose records.
+
+## Retained evidence and review boundary
+
+[Source assessment](source-assessment.md) · [source rows](inputs/hamborg-table16.csv) ·
+[qualification](results/qualification.json) · [summary](results/summary.json) ·
+[comparison inputs and source hashes](results/comparison-inputs.json) ·
+[all-five fit](results/all-five-fit.json) · [all-five replay](results/all-five-replay.json) ·
+[holdout fit](results/holdout-fit.json) · [holdout replay](results/holdout-replay.json) ·
+[environment](results/environment.json) · [heat pressure-domain checks](results/heat-domain.json).
+
+The independent readiness review returned **Ready** for the amended design.
+The independent delivered-result review returned **Supported** for the numerical
+evidence and scientific conclusions at commit
+`70c27d2059dfbb51a1432e5369abb7fa4b9916b4`, with no required corrections.
+The result has not been promoted for manuscript use.
+This notebook is rendered separately because this task forbids
+editing `analyses/_cse-manuscript.json`, which owns the site's page membership.
+No manuscript text or parameter adoption is part of this result.

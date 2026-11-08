@@ -1,4 +1,4 @@
-"""#242 cation B diagnosis probe (owner 2026-11-02): states, roots and a finite AMPH+-CO2 k change at the A-1 and B-1 starts; no fit."""
+"""#243: probe both initialized cation-B fitted sets; retain #242 diagnosis separately."""
 import copy, json, math
 from pathlib import Path
 import epcsaft
@@ -6,7 +6,7 @@ from epcsaft import equilibrium as eq, regression as reg
 from pinned_engine import SHA256
 from MEA.solvent_specification import SolventSpecification, jsonable
 AN, out, H = Path(__file__).resolve().parent, dict(wheel_sha256=SHA256), 'protonated-aminomethylpropanol'
-for run in ('A-1', 'B-1'):
+for run in ('redesign-1-B-fixed-1', 'redesign-2-B-fixed-1'):
     spec = SolventSpecification(AN / f'{run}.toml', parameter='start')
     def shifted(dk):  # same start document with AMPH+-CO2 k moved by dk
         doc = copy.deepcopy(spec.inputs['start'])
@@ -18,4 +18,4 @@ for run in ('A-1', 'B-1'):
         lnP = [math.log(reg.predict(shifted(dk), spec.observation(r)).value) for dk in (-0.05, 0.05)]
         out[f"{run}:{r['identity']}"] = dict(P_calc=p.get('value'), status=p['status'], branch=p.get('branch'), stable_root_count=p.get('stable_root_count'), success=state.success,
             packing_fractions=list(state.packing_fractions), CO2_share=y['carbon-dioxide'], liquid=x, dlnP_dk_central=(lnP[1] - lnP[0]) / 0.1)
-(AN / 'results/reactive/probe-cation-b.json').write_text(json.dumps(jsonable(out), indent=1, default=float) + '\n')
+(AN / 'results/redesign/probe-cation-b.json').write_text(json.dumps(jsonable(out), indent=1, default=float) + '\n')

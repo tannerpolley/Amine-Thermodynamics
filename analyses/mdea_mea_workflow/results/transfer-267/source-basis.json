@@ -1,0 +1,22 @@
+{
+  "source_checks": {
+    "Xiao": "Live full PDF C3NAG687 matched retained SHA-256 7c33012580b85fc940b0efe54380ee65c1745077382c41cd8605c309171f9975; Table 4 and section 3.2, printed pp.173\u2013175. Unloaded 23.5 wt%, alpha per mole analytical MDEA; CO2 partial pressure in N2 at total 0.101 MPa.",
+    "Ermatchkov": "Current Zotero sidecar UD6X5RGU matched reading-copy SHA-256 f826ebcb00084f36225e1b711c1a959fbe7be970a09b9ad624f3c6fdeac1cd5a. Experimental technique and Tables 1\u20133.",
+    "Uyan": "Sections 2\u20134, Eq.7 and Table 1; independently checked against PDF by readiness reviewer."
+  },
+  "quantities": {
+    "MDEA_molality_from_mass_fraction_mol_per_kg_water": 2.577910969113193,
+    "water_mol_per_mol_analytical_MDEA": 21.53233208084258,
+    "pK_m_Uyan_at_298_15_K": 8.549940578231618
+  },
+  "chemistry": "Four reactions only: frozen R1 water dissociation, R2 carbon dioxide hydration/bicarbonate formation, R3 bicarbonate dissociation, and MDEAH+ + water \u21cc MDEA + hydronium. No carbamate. MDEAH+ source law converted from mole fraction to molality by +4.0165; existing source check records rounding difference <0.0019 in ln K across 278\u2013368 K. Above 368 K is extrapolation.",
+  "pressure_limit": "Nitrogen-free bubble pressure times vapor CO2 fraction is not the same total-pressure experiment as the N2 headspace. This study does not resolve the nitrogen/pressure-state effect.",
+  "files": {
+    "analyses/mdea_mea_workflow/inputs/probe-reaction-reference.json": "36043ca4efcec2c13eed47e8811ed3073bab0ba92707518ec03d2f2f56eb22d1",
+    "analyses/mdea_mea_workflow/results/reaction-basis-kamps-maurer.json": "c9ff18893f67b0fa023817e94dedebef5e4fa3fe31a0214c4c42601d5c54fc1d",
+    "analyses/mdea_mea_workflow/scripts/fit_mdea.py": "be45f5d5b0b0dd4bd3ddf23448d485ecd558d5c251b4b82eef953e37c727042e",
+    "analyses/mdea_mea_workflow/scripts/prepare.py": "2b477fbc616ab1afd2f9edaa886476d5b19b926e4c4eda3ce82370a8176a8b9d",
+    "data/reference/MDEA/Xiao2018_context.csv": "8ad79e32a1998c55e1765321bc107ec959e3a49bc188907a39230796d6fd5b42",
+    "data/reference/MDEA/context-sources.json": "b4b54d25ded82063f40ea142ee04175be8a30e2f3b1b28ac1b901029a83ac56e"
+  }
+}

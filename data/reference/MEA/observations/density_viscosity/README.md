@@ -354,3 +354,32 @@ The status is an assessment role, not a claim of physical validation.
 No Engine calculation, fit, interpolation or new density comparison was
 performed for this adoption.
 
+
+## Sobrino 2016 unloaded densities (comparison only, issue 268)
+
+`Sobrino_2016_density.csv` contains the 24 atmospheric-pressure cells
+(0.1 MPa) in Table 6, pp.235–236 of Sobrino et al., *J. Chem. Thermodynamics*
+98 (2016) 231–241, DOI 10.1016/j.jct.2016.03.021. Zotero parent
+`RZM6VKZF`, PDF `VWXSCIWF`, SHA-256
+`713cf402c55d3af0224c1e3abe689050aa63b42350939618a5a0d8a04f3dea78`.
+The printed MEA mass fractions are 0.1001, 0.2000, 0.3005 and 0.4000;
+temperatures are 293.15, 313.15, 333.15, 353.15, 373.15 and 393.15 K.
+These are unloaded binary mixtures, so the mass fraction is on the
+MEA + water basis. No value is rounded to nominal 30 mass % for calculation.
+Pressure is converted from 0.1 MPa to 100000 Pa; density stays in kg/m³.
+Table 6 footnote reports standard density uncertainty 0.35 kg/m³,
+temperature uncertainty 0.01 K, relative pressure uncertainty 0.0001
+and absolute mass-fraction uncertainty 0.0001. Section 2.1, p.232,
+reports expanded density uncertainty below 0.7 kg/m³ with coverage factor 2;
+0.70 kg/m³ is retained as that stated upper comparison limit. These
+contributions are not added again to the density uncertainty.
+
+Both rendered pages were checked against the CSV values and the layout-text
+extraction on 6 November 2026. Higher-pressure cells were not selected: this
+study asks about temperature and composition errors near the retained density
+measurements, rather than qualifying compressed-liquid behavior up to 120 MPa.
+No fit weight or persistent fitting role is assigned to these new cells.
+The paper is already in the project's Zotero library; no new acquisition or
+Mathpix conversion was needed. Its density measurements and uncertainty
+method were read directly from the PDF, including Sections 2.1 and 3.1 and
+Table 6; the fitted Tait correlations are not observations in this dataset.

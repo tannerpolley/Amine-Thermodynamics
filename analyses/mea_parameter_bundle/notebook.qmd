@@ -1,8 +1,11 @@
 ---
 title: "MEA parameter bundle"
 resources:
+  - heat-capacity-264/**
+  - results/density-268/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
+  - results/bicarbonate-carbonate-266/**
   - results/selected-current-best-parameters.json
   - results/engine-3e83e19c-paper-evidence/model-curves/**
 ---
@@ -10,6 +13,8 @@ resources:
 **Reported parameter record · adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215) · record `00e77608…` · Engine `3e83e19c` · [Download exact parameters](results/selected-current-best-parameters.json)**
 
 These are electrolyte PC-SAFT (ePC-SAFT) parameters for aqueous MEA–CO₂, with nine liquid species (CO₂, MEA, H₂O, MEAH⁺, MEACOO⁻, HCO₃⁻, CO₃²⁻, H₃O⁺, OH⁻) and five reactions R1–R5. A7 is the seventh amendment of the joint-recalibration plan in [#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170); the current record is its [#212 refit](results/engine-3e83e19c-refit-chain/README.md), with MEA association volume 0.036305439.
+
+The [pressure-transfer study for issue #261](composition-transfer/pressure-transfer-261.qmd) records the fixed-parameter concentration diagnosis and local data-role probes for the future #255 refit. These local fits do not change the adopted parameter record.
 
 # Adopted record and result {#working-record}
 
@@ -29,6 +34,22 @@ The [phase search](results/engine-3e83e19c-phase-search/run-2/README.md) complet
 The [parameter-profile and source-block bootstrap study](parameter-identifiability/notebook.qmd) retains #262's sensitivity and conditional-uncertainty calculations for this record. Its bootstrap eligibility decision and delivered-result review remain pending; it adopts no parameter vector.
 
 The [one-wheel evidence package](results/engine-3e83e19c-paper-evidence/README.md) retains exact parameter and Engine identities, input hashes, adoption evidence and the displayed-input inventory. The figures show calibration and named comparison evidence.
+
+## Water ideal-gas calorics {#water-ideal-gas}
+
+The new water record replaces the extrapolated 500–1700 K Shomate function with a fit over 273.15–400 K to the ideal-gas part of [IAPWS R6-95(2018), equation 5 and table 1](https://iapws.org/documents/release/IAPWS-95.download) (Zotero `Y3FU9CXJ`). Its maximum relative heat-capacity error on 10,001 grid points is $6.50\times10^{-7}$, below the 0.001 limit. Maximum absolute errors relative to the transformed reference are $1.09\times10^{-4}$ J/mol in enthalpy and $3.35\times10^{-7}$ J/(mol K) in entropy. These are numerical fit errors, not physical uncertainty. The 501-point fit, verification grid, coefficients and replay are retained in [water-ideal-gas](water-ideal-gas/fit.json).
+
+![Relative ideal-gas water heat-capacity error against IAPWS-95. The two panels have different vertical scales; the old record is extrapolated below 500 K. These curves compare correlations and do not show measurement uncertainty.](water-ideal-gas/cp-error.png)
+
+The reference transformation sets $h^\circ(298.15\,\mathrm K)=-241826$ J/mol, the existing record's formation-enthalpy convention, and $s^\circ(298.15\,\mathrm K)=188.834$ J/(mol K) at 0.1 MPa, from [NIST-JANAF H-064, 298.15 K row](https://janaf.nist.gov/tables/H-064.html) (Zotero `CWCVM9IE`). At other temperatures the reference adds the IAPWS ideal-gas heat-capacity integral, or its integral divided by temperature, to the respective anchor. The old Engine record evaluated to $-241825.473101$ J/mol and $188.835269$ J/(mol K) at the anchor, so the replacement changes those offsets as well as heat capacity.
+
+Using the fixed parameter record `00e77608…` and pinned Engine `3e83e19c`, the maximum change in the four Hilliard predictions was 0.00190 J/(mol K), compared with their 1.59–1.76 J/(mol K) declared 2% scales. Across eight Vinjarapu and fourteen Arcis integral-heat predictions the largest difference was $8.45\times10^{-9}$ J/mol CO₂. The Kim finite-addition comparison produced 73 paired values with a maximum difference of $4.15\times10^{-11}$ kJ/mol CO₂; 13 points exceed the retained loading ceiling. The 313.15 K reference-caloric heat was 83.7170 kJ/mol CO₂ for both records at the reported precision. Individual results and statuses are in [comparison.json](water-ideal-gas/comparison.json).
+
+Relative to the retained source heat uncertainties, the largest absolute change is $8.93\times10^{-12}$ of the reported uncertainty among the 22 Vinjarapu and Arcis observations. The largest change among the 73 admitted Kim intervals is $2.15\times10^{-11}$ of the source's ±2.2% molar-heat uncertainty. These effects are negligible compared with those uncertainties for these observations and conditions, and are at numerical precision. Arcis reports a statistical estimate with unspecified coverage and possible mixing bias; the 2% Hilliard and heat uncertainties are separate from any assigned fitting scales. The [row-level ratios](water-ideal-gas/uncertainty-comparison.json) retain the uncertainty basis and units.
+
+At 313.15 K the isolated water ideal-enthalpy contribution to R1 and R2 changes by +1.0571 J/mol reaction, and that to R3, R4 and R5 by +0.52855 J/mol reaction, using the declared reaction directions. These are component contributions, not complete reaction enthalpies: the Engine's reaction-reference completion and other species also enter the full thermochemistry.
+
+These are fixed-parameter comparisons, not an independent physical validation or a refit. Near-zero heat differences are at numerical precision and should not be interpreted as measured effects. The fitted water record is limited to 273.15–400 K; other temperatures require a separately supported correlation. Existing historical results retain their original inputs. The new input is intended for the subsequent stable refit; this calculation does not adopt new parameters.
 
 # Parameters {#selected-parameters}
 
@@ -201,7 +222,7 @@ These statistics cover 79 comparison points; 182 canonical and Wagner pressure m
 
 ## Speciation
 
-![Observed and calculated liquid species at measured states. Matin bicarbonate denotes the bicarbonate plus carbonate pool; its 19 report-only comparisons are retained separately.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
+![Historical observed and calculated liquid species at measured states. The Matin minor-species predictions use a mixed mapping: bicarbonate plus carbonate at 16 states and bicarbonate alone at states 009, 016 and 019. See the corrected pooling reconciliation below.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
 
 <!-- RESULTS:species:BEGIN -->
 
@@ -213,11 +234,11 @@ These statistics cover 79 comparison points; 182 canonical and Wagner pressure m
 | Restored targets only (7) | 7 / 7 | 9.00 | 0.1319 |
 | Böttinger 2008 | 55 / 55 | 5.63 | 0.0790 |
 | Matin 2012 | 76 / 76 | 23.87 | 0.6937 |
-| Matin HCO₃⁻ + CO₃²⁻ pool (report only) | 19 / 19 | 67.46 | 1.3701 |
+| Matin historical mixed mapping (report only) | 19 / 19 | 67.46 | 1.3701 |
 
 <!-- RESULTS:species:END -->
 
-The common calibration subset contains 94 species targets; seven restored fitted targets are reported separately. The 19 Matin bicarbonate/carbonate pools are report-only comparisons and overlap the displayed population. See the [exact row membership and diagnostics](joint-recalibration/index.qmd).
+The figure and table retain the historical mapping. For the 19 Matin report-only comparisons, consistently summing bicarbonate and carbonate changes AARD from 67.4563% to 67.4145%; see the [corrected pooling reconciliation](#bicarbonate-carbonate-266). The common calibration subset contains 94 species targets; seven restored fitted targets are reported separately. The 19 minor-species comparisons overlap the displayed population. See the [exact row membership and diagnostics](joint-recalibration/index.qmd).
 
 ## Integral heat of absorption {#heat-of-absorption}
 
@@ -267,6 +288,148 @@ Loaded rows use their row-specific $2s$ limits; the CO₂-free five use 1.0 kg/m
 
 Three fitted loaded densities at 353.15 K fall outside their $2s$ limits (−2.28$s$, −2.06$s$, −2.43$s$). These three rows are underpredicted by 4.2–5.5 kg/m³ (0.40–0.53%). The source-uncertainty discussion and the five excluded Amundsen rows are on the [A7 page](joint-recalibration/index.qmd).
 
+### Higher-temperature density probes (issue 268)
+
+Measured loaded densities above 353.15 K exist, and 20 such Han cells were
+already retained in this repository. Han et al. (2012), DOI
+[10.1021/je2010038](https://doi.org/10.1021/je2010038), Tables 3–4
+(pp.1097–1098), report loaded densities through 413.15 K and unloaded densities
+through 423.15 K. The present model comparison stops at its declared 393.15 K
+limit. Its retained Han subset contains 50 loaded and 17 unloaded cells at
+30 mass % MEA on the CO₂-free solvent basis. Above 353.15 K there are 20 loaded
+cells at analytical loadings 0.10, 0.21, 0.32, 0.44 and 0.56 mol CO₂/mol MEA,
+and five unloaded cells. The recorded pressures are 0.1 MPa through 363.15 K
+and 0.7 MPa from 373.15 K. Han's uncertainty discussion (pp.1101–1102) gives
+combined loaded-density uncertainty 1.3 kg/m³ and expanded uncertainty
+2.6 kg/m³ at 95% confidence. Unloaded expanded uncertainties are 0.68 and
+0.70 kg/m³ below and at/above 373.15 K, respectively.
+
+The comparison adds 24 source-checked unloaded cells from Sobrino et al.
+(2016), DOI [10.1016/j.jct.2016.03.021](https://doi.org/10.1016/j.jct.2016.03.021),
+Table 6 (pp.235–236): 293.15–393.15 K at 0.1 MPa and printed MEA mass fractions
+0.1001, 0.2000, 0.3005 and 0.4000. Its standard density uncertainty is
+0.35 kg/m³; Section 2.1 gives expanded uncertainty below 0.7 kg/m³ with
+coverage factor 2. The comparison uses 0.70 kg/m³ as that reported upper
+limit. The [source record](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/src/commit/889ba3e03284442a25d8f1cd40ae6fc475758bf8/data/reference/MEA/observations/density_viscosity/README.md)
+retains the table checks, composition/pressure conventions, Zotero identities
+and PDF hashes. These cells have no fitting role. The 234 density comparisons
+combine these cells with the previous 210, counting each source cell once.
+
+These are homogeneous-liquid equation-of-state predictions and local
+calibration probes, with no volume translation. Source expanded uncertainties
+and the original 47 fitted-density residual scales remain distinct. The
+existing Han assessment-only adoption is preserved. The two exploratory fits
+add only the 25 higher-temperature Han cells to the unchanged 307-row
+objective, using combined uncertainty as the residual scale and weights 1/20
+for the 20 loaded cells and 1/5 for the five unloaded cells. These group weights
+are study choices, not weights prescribed by Han. Neither fit adopts a new
+parameter record or supplies an untouched prediction assessment.
+
+The original 16-coordinate declarations retain their historical physical
+bounds and size ties. Incremental reaction-enthalpy bounds are translated to
+each start's inherited laws, without applying the inherited shifts twice.
+The 600 s native fit limit, 180-iteration limit and original stopping tolerances
+are retained. The final-start and wider-bound-start fits both converge, but
+convergence is conditional on these bounds and stopping criteria; it is not
+a global minimum or parameter-identifiability claim.
+
+| Parameter vector | Original 307-row cost | Augmented 332-row cost | Original loaded rows within 2s / 47 | Higher-temperature Han loaded rows within 2.6 kg/m³ / 20 | Han unloaded rows within source expanded uncertainty / 5 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Final starting set | 148.878939 | 186.414243 | 44 | 2 | 2 |
+| Wider-bound starting set | 148.211508 | 168.959948 | 47 | 3 | 2 |
+| Probe from final | 153.428254 | 164.095429 | 17 | 13 | 2 |
+| Probe from wider-bound | 151.067550 | 162.701482 | 34 | 10 | 2 |
+
+The final-start probe changes the higher-temperature loaded errors from
+−20.01 to −2.37 kg/m³ to −8.05 to +4.01 kg/m³. The wider-bound-start probe
+has errors −6.75 to +7.94 kg/m³ there. Both improve the added loaded-density
+objective while losing fitted-density agreement; neither meets the issue's
+simultaneous density requirements. These observations do not establish
+nonexistence of a feasible vector elsewhere in the permitted coordinates.
+
+The prescribed Engine wheel first reproduced the endpoint and then refused
+the mixed-temperature-domain R5 chart, as recorded in
+[the original-wheel refusal](results/density-268/original-wheel-final/chart-refusal.json).
+The owner authorized merged Engine e6dae5c7 only in this worktree, SHA-256
+`83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`.
+The complete final 307-row replay has maximum relative prediction difference
+6.96 × 10⁻¹³ from the retained endpoint. Both endpoint replays agree with their
+native fit predictions within 1.1 × 10⁻¹² using the recorded scaled comparison.
+Every new numerical result records the executing wheel SHA; reused #255
+results retain their original wheel identity.
+
+[Retained study results](results/density-268/README.md) include all row predictions,
+start declarations, native fit reports, endpoint replays and source identities.
+The independent readiness review returned **Ready** after the reaction-bound
+and water-diameter declarations were corrected. Both new endpoints complete
+all 162 retained physical states, with nine stability trials per state, zero
+detected descent states and zero incomplete states. This is a finite search
+for additional descent from the admitted liquid–vapor parent, not proof of
+global phase stability. The grid retains 313.15, 318.15, 333.15, 353.15,
+373.15 and 393.15 K, analytical loadings 10⁻⁵–0.6 mol CO₂/mol MEA at 30 mass %
+MEA, and pressures equal to 0.50, 0.80 and 0.95 of the retained final-set
+bubble pressures. Actual temperatures, feeds and pressures are preserved in
+each compressed phase result. The new wider-bound-start endpoint has MEAH⁺
+segment diameter 5.10278 Å, below 5.35 Å, and still has no detected descent on
+this grid. That observation does not establish a continuous stability interval.
+
+![Density errors at measured coordinates for all 234 retained cells. Every symbol is a discrete equation-of-state evaluation; points are not joined. Sources and parameter vectors are identified by panel, color and marker. Blue error bars in the Han and Sobrino panels show source expanded density uncertainty about the final starting set's error; Sobrino uses the reported 0.70 kg/m³ upper limit. They are measurement comparison intervals, not parameter-confidence intervals.](results/density-268/density-errors.png)
+
+The [sensitivity reduction](results/density-268/sensitivity-summary.json)
+compares full and half centered steps separately for each coordinate. For the
+final set, increasing the constant coefficient in water's temperature-dependent
+segment diameter by 0.1% (0.00278043 Å), with its exponential terms fixed,
+lowers the mean higher-temperature Han density by 2.05863 kg/m³ for unloaded
+rows and 2.13981 kg/m³ for loaded rows. Its maximum full-versus-half-step
+derivative difference on those unloaded rows is 0.00039001 kg/(m³ Å),
+compared with a mean derivative of −740.3976 kg/(m³ Å). This is local numerical
+step verification. It does not assign uncertainty to water parameters.
+The direction improves the positive unloaded errors while worsening negative
+loaded errors. Increasing MEAH⁺ dispersion energy by 0.1% instead changes
+the mean loaded density by +0.01706 kg/m³ and has an unloaded response below
+0.00002 kg/m³ in magnitude. These different responses support treating neutral
+packing and the reactive ionic volume response separately; they do not
+identify unique single-ion volumes or statistically rank uncertain parameters.
+The full file also retains MEA/water segment-count, MEA diameter,
+MEA/water dispersion and MEA–water constant/slope sensitivities at both starts.
+The MEAH⁺ one-segment convention remains fixed.
+
+The [five extensions of retained #255 vectors](results/density-268/README.md#retained-255-vectors)
+calculate only the missing higher-temperature Han densities. Their original
+307-row scores and phase searches are reused, not repeated. Setting the final
+MEAH⁺ diameter alone to the wider-bound value overshoots all 20 loaded Han
+higher-temperature densities by 12.33–106.32 kg/m³; its retained fitted-density
+count is 0/47. Increasing the wider-bound diameter alone to 5.35 Å
+underpredicts those 20 by 19.46–93.09 kg/m³ and retains 0/47 fitted density
+checks plus 24/32 detected descent states. The retained wider-bound
+MEAH⁺–water constant −0.175 vector has 40/47 fitted density checks and a
+complete 162-state search without descent; only 8/20 of its newly evaluated
+higher-temperature loaded Han densities meet 2.6 kg/m³. The tested Born and
+ion-pair moves preserve 47/47 fitted density checks but retain descent and
+meet only 4/20 of the new Han checks each. The original phase results use
+wheel `0d08dff9…`; these additional density predictions use the qualified
+`83ede7d2…` wheel and are labelled separately.
+
+For **#255 stage 2**, retain the current parameter adoption and use this work
+as evidence for a joint density/phase fit. Keep the original 47-row requirements
+and higher-temperature Han residuals visible as separate conditions; a lower
+averaged objective alone hides their tradeoff. Preserve the source campaigns
+and reported pressures, and keep Sobrino as an unloaded assessment series.
+Use the MEAH⁺ size, dispersion and water-interaction law together rather than
+changing size alone or treating 5.35 Å as an experimentally established bound.
+Check neutral packing against unloaded/pure-component evidence before freeing
+it to repair loaded densities: the tested water-diameter direction moves both
+cohorts together despite their opposing errors. Any change to persistent Han
+roles, fit weights, physical bounds or model form belongs to the stage-2 design.
+Neither probe supplies a replacement parameter set. The supported conclusion
+is a density conflict among the tested bounded fits with no detected descent,
+not nonexistence across all admissible coordinates. Source correlations,
+active parameter bounds, finite phase searches and the 393.15 K cutoff limit
+transfer to absorber or other process conditions. These are calibration and
+numerical-verification results, not physical validation. Independent delivered
+review returned **Supported** for this bounded study and the recommendation to
+#255 stage 2. No manuscript promotion is implied.
+
 ## MEA–water
 
 The neutral MEA–water binary (no reactions) gives bubble temperature and incipient vapor composition at the two Cai isobars over each isobar’s measured liquid range.
@@ -292,6 +455,93 @@ The four [Hilliard Cp rows](results/engine-3e83e19c-paper-evidence/cp.csv) enter
 
 <!-- RESULTS:heat-capacity:END -->
 
+# Broader MEA heat-capacity comparison {#broader-mea-heat-capacity-comparison}
+
+Broader heat-capacity calibration did not remove the unloaded 318.15 K discrepancy in these two bounded probes. With the corrected water ideal-gas record, the baseline error is +5.532%; probe A gives +5.531% and probe B +4.087%, compared with Hilliard's stated ±2% accuracy. Both probes converge, but fail the agreed density-preservation limits and develop dense-liquid descent. They are diagnostic endpoints and are not recommended for adoption. This result means **not removed by these tested probes**; it does not establish structural impossibility.
+
+## Measurements and intended comparison
+
+[Source rows](heat-capacity-264/sources.csv) and [live PDF identities/hashes](heat-capacity-264/source-provenance.json) retain 68 Hilliard measurements, six selected Weiland values and three selected Concepción values. Hilliard (2008), Appendix G.2 p.937/PDF994, provides 17 temperatures from 313.15 to 393.15 K at each of loadings 0, 0.139, 0.358 and 0.541 mol CO₂/mol MEA, with 7 mol MEA/kg water. The first three series supply 51 probe-fit observations; the 17 at 0.541 are outside this issue's loading domain. The four historical fitted observations are part of these 51, and are replaced rather than duplicated. Weiland et al. (1997), Table 3 p.1004, supplies six independent comparison rows at 298.15 K, 30 wt% unloaded analytical MEA, and loadings 0–0.5. Concepción et al. (2023), Table 3 p.3, supplies three independent unloaded comparisons at 313.15, 333.15 and 353.15 K, MEA mass fraction 0.2997 and 0.100 MPa. These sources cover selected states, not the entire temperature–loading rectangle.
+
+Hilliard §§4.5–4.6, pp.71–78, describes sealed pans and a temperature ramp; experimental sample pressure is not reported. The assigned 101325 Pa calculation pressure is an assumption. The falsifier and phase searches are conditional on that prescribed model state, and gas descent does not establish instability in the sealed experiment. Total loaded-solution mass is used for all heat capacities. Nominally unloaded calculations retain the historical 10⁻⁶ mol CO₂/mol MEA trace feed.
+
+Hilliard §4.6 pp.78–80 states ±2% accuracy and ±1% reproducibility; neither is identified as a standard uncertainty. The 2% residual scale continues the existing policy. Weiland's experimental section states ±1% repeatability and agreement with standards; this is a comparison band, not a statistical confidence interval. Concepción Table 3 gives 1% expanded uncertainty with coverage factor 2, corresponding to a 0.5% standard residual scale. [Nearby-composition unloaded source comparisons](heat-capacity-264/unloaded-source-comparison.csv) show Concepción above Hilliard by 4.712%, 4.511% and 4.755% at the three common temperatures. Their slightly different MEA concentrations and the unknown Hilliard pressure prevent treating this as a same-state replication, but the difference exceeds the sum of their stated 2% and 1% bands. Source agreement cannot be assumed.
+
+Zhang, Que and Chen (2011), Table 3 p.68, gives the Aspen MEA ideal-gas polynomial over 283–1000 K, without uncertainty. The retained coefficients are translated to the existing 313.15 K-centered `IdealPolynomial` representation; the polynomial was checked against the source, not refitted here. Their §§3.1–3.3 and Tables 7 and 10 describe fitting binary and ternary caloric data with aqueous electrolyte NRTL and PC-SAFT vapor/pure-fluid properties. Baygi and Pahlavanzadeh (2015), §§3.1–3.3 and Tables 2–5, instead fits saturation/binary VLE and compares ternary pressures. Neither paper's use of a model establishes independent heat-capacity validation for these probes.
+
+## What carries the calculated heat capacity
+
+[Baseline decomposition](heat-capacity-264/decomposition.json) and [probe A](heat-capacity-264/probe-A-decomposition.json) / [probe B](heat-capacity-264/probe-B-decomposition.json) retain all 60 states. Frozen-composition heat capacity comes from the Engine's reference-completed `solved_state_actions` phase property. It includes the ionic caloric reference completion; a homogeneous-state total without that completion would mislabel the reaction remainder. Frozen molar quantities are multiplied by solved phase amount/feed mass, while the equilibrium observable is multiplied by feed amount/feed mass. Both are then expressed in kJ/(kg loaded solution K).
+
+Residual constant-volume contributions use the existing MDEA diagnostic relation, $C_{v,r,t}=-R(2T a_{t,T}+T^2a_{t,TT})$, where $a_t$ is the Engine's dimensionless residual Helmholtz contribution at fixed density and composition. This is a diagnostic derivative of Engine values, not a second equation-of-state implementation. The residual pressure–volume coupling is $C_{p,r}-C_{v,r}$. Neutral ideal terms, completed source-reference calorics, residual contributions and reaction equilibration are reported separately.
+
+At unloaded 318.15 K, the decomposition is:
+
+| Contribution / kJ kg⁻¹ K⁻¹ | Baseline | A | B |
+|---|---:|---:|---:|
+| Neutral MEA ideal | 0.433651 | 0.433652 | 0.433661 |
+| Water ideal | 1.309716 | 1.309717 | 1.309720 |
+| Completed source reference | 0.000123 | 0.000123 | 0.000518 |
+| Hard-chain residual Cv | -1.305965 | -1.305939 | -1.305268 |
+| Dispersion residual Cv | 2.186993 | 2.186919 | 2.137581 |
+| Association residual Cv | 1.261778 | 1.261782 | 1.261876 |
+| Debye–Hückel + Born residual Cv | -0.000047 | -0.000047 | -0.000045 |
+| Pressure–volume coupling minus R | 0.039012 | 0.039026 | 0.033414 |
+| Reaction equilibration | 0.000008 | 0.000000 | 0.000056 |
+| Equilibrium total | 3.925270 | 3.925233 | 3.871513 |
+
+The water change raises the original unloaded 318.15 K prediction by only about 0.000083 kJ kg⁻¹ K⁻¹. The reaction remainder is also too small to account for the 0.205770 kJ kg⁻¹ K⁻¹ baseline difference. Probe B reduces the total by 0.053757 kJ kg⁻¹ K⁻¹, carried mainly by dispersion (−0.049412) and coupling (−0.005598); other terms partially offset that change. This locates the response to the tested residual interaction change, not a unique experimental error in one EOS term. Explaining the entire baseline difference by a uniform MEA caloric-reference shift would require approximately −41.964 J/(mol analytical MEA K); no source uncertainty or independent ideal-gas measurement here authorizes that correction. Loaded states have substantial completed-reference and reaction contributions and cannot be interpreted using the unloaded balance alone.
+
+At 0.05 and 0.025 K derivative steps, the maximum residual-Cv closure discrepancy across all three endpoints and 60 states is 4.61×10⁻⁵ J mol⁻¹ K⁻¹; the maximum term change on halving the step is 2.99×10⁻⁵ J mol⁻¹ K⁻¹. Closure passes the declared 10⁻⁴ relative plus 10⁻⁴ J mol⁻¹ K⁻¹ absolute criterion. This is numerical verification of the decomposition, not physical validation.
+
+## Broader fits and other-property consequences
+
+Probe A uses the existing 14 coordinates and bounds. Probe B adds MEA–water interaction intercept and reciprocal-temperature slope, bounded ±0.05 and ±100 K about the endpoint. Both start from the selected parameter set and accepted reaction laws, keep ideal-gas calorics fixed, and replace the four Cp rows with the 51-row set. The objective therefore contains 354 observations. The 22 existing integral heats are comparison controls; they are not inserted into this objective. Both runs use the declared 60-iteration/1200-second limits and native tolerances. A converges in 31 iterations and B in 35, each with zero native trial failures. Independent endpoint replay agrees with native weighted residuals within 10⁻⁶.
+
+![Hilliard observations and model values at the measured coordinates. Error bars show the source's ±2% accuracy statement. All model states use the assumed 101325 Pa pressure; no connecting lines imply a continuous prediction.](heat-capacity-264/heat-capacity.png){#fig-heat-capacity-264}
+
+| Heat-capacity set | Rows | Baseline AARD / % | A / % | B / % |
+|---|---:|---:|---:|---:|
+| broad Cp | 51 | 2.443 | 2.314 | 2.058 |
+| Weiland1997 comparison | 6 | 3.321 | 2.876 | 2.374 |
+| Concepcion2023 comparison | 3 | 2.073 | 2.072 | 2.386 |
+
+[Temperature, loading and source bins](heat-capacity-264/cp-by-temperature-loading-source.csv) include separate Hilliard-fit and all-source subsets, with AARD and RMSE in kJ kg⁻¹ K⁻¹. [Exact figure values](heat-capacity-264/plotted-values.csv) retain all 180 endpoint-state comparisons.
+
+Every group’s weighted cost and share of the 354-row fit objective is:
+
+| Group | A cost | A share / % | B cost | B share / % |
+|---|---:|---:|---:|---:|
+| common149 | 27.7412 | 13.87 | 26.8430 | 13.96 |
+| restored species | 2.6468 | 1.32 | 2.5171 | 1.31 |
+| Jakobsen | 12.0297 | 6.01 | 12.1167 | 6.30 |
+| Kiepe | 0.0007 | 0.00 | 0.0007 | 0.00 |
+| CO2-free density | 11.5632 | 5.78 | 17.8726 | 9.29 |
+| Cai | 91.8746 | 45.92 | 92.2836 | 47.98 |
+| loaded density | 0.8212 | 0.41 | 0.6805 | 0.35 |
+| broad Cp | 53.3950 | 26.69 | 40.0047 | 20.80 |
+| Total | 200.0723 | 100 | 192.3189 | 100 |
+
+[Full group metrics and control cost shares](heat-capacity-264/group-costs.csv) also report the original 307 rows plus 22 integral-heat controls. Cost shares depend on residual scales and are not independent information fractions. Cai combines temperature and vapor composition, so its RMSE is separated by quantity in the replay records.
+
+All pressure/species groups remain within the allowed +2 percentage-point AARD increase. A raises loaded-density AARD by 12.20% and RMSE by 19.72%, but loses three previously within-2-scale observations. B loses two loaded-density observations and raises unloaded-density AARD by 30.38%, exceeding the 25% limit even though its absolute AARD remains small (0.03648%). Integral-heat AARD improves from 5.611% to 4.887% (A) and 5.255% (B); neither loses a previously within-2-scale heat observation. Original four-point Cp AARD also improves and loses no within-scale observation. Thus neither endpoint satisfies all deterioration limits.
+
+| Phase-search outcome (60 states per endpoint) | Baseline | A | B |
+|---|---:|---:|---:|
+| States with dense-liquid descent | 0 | 15 | 11 |
+| States with gas descent | 13 | 13 | 13 |
+| Unresolved searches | 0 | 0 | 0 |
+
+[Baseline](heat-capacity-264/baseline-stability.json), [A](heat-capacity-264/probe-A-stability.json) and [B](heat-capacity-264/probe-B-stability.json) retain the complete native search evidence. Dense descent prevents a stable-liquid interpretation of the affected probe states; gas descent is distinct and conditional on the prescribed pressure. Prediction availability alone is not a stability certificate.
+
+## Recommendation for issue 255 stage 2
+
+Retain all 51 in-domain Hilliard values as one source campaign for broader caloric calibration, with their pressure assumption and method accuracy explicit; do not present the 17 temperatures as independent campaigns. Keep the six Weiland and three Concepción rows as independent comparison campaigns at this selection stage, retaining the unloaded-source disagreement. Exclude the 0.541-loading Hilliard series from this issue's 0–0.5 domain. Any stage-2 expansion of those roles must preserve source bases and phase requirements.
+
+Do not adopt A or B: both violate density preservation and develop dense-liquid descent. Neither removes the unloaded 318.15 K error below the source accuracy. The residual dispersion/coupling response explains the change achieved by B, while source disagreement and unquantified MEA ideal-reference uncertainty prevent a unique causal attribution. These are local calibration probes and conditional numerical comparisons with measured data; they do not demonstrate independent predictive validity, global non-identifiability, structural impossibility, or physical validation. Parameter adoption remains with issue 255, and this notebook has not been promoted for manuscript use.
+
+The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`; every numerical JSON records it. [Qualification](heat-capacity-264/qualification.json) replays all 307 original observations using their pre-260 water inputs, within relative 10⁻⁸ plus absolute 10⁻⁸ in predicted/residual units; all pass, with objective cost 148.878939345564. Subsequent calculations use the corrected water record. The main checkout's pin is unchanged. [Reproduction and record map](heat-capacity-264/README.md) and [provenance](heat-capacity-264/provenance.json) identify inputs and execution. Delivered-result acceptance requires an independent Supported verdict; the review verdict is recorded with issue 264 and its pull request.
+
 # Where to find more
 
 | Reader question | Page / exact records |
@@ -303,8 +553,112 @@ The four [Hilliard Cp rows](results/engine-3e83e19c-paper-evidence/cp.csv) enter
 | Heat F1 predecessor | [F1 identity and six-fit comparison](heat-f1/index.qmd) |
 | Numerical reproduction and Engine transfers | [Engine adoptions](engine-adoptions/index.qmd) · [Default-path reproduction](joint-recalibration/index.qmd#numerical-reproduction) |
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
+| Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |
 | Earlier designs and ion fitting | [Ionic/speciation fit](ionic-speciation-fit/index.qmd) · [Historical designs](historical-designs/index.qmd) |
 | Sources and provenance | [Evidence map](../evidence-map.qmd) · [Parameter-table input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) |
+
+
+## Bicarbonate and carbonate: source spread and bounded probes {#bicarbonate-carbonate-266}
+
+At 30 wt% MEA and 293.15 K, the accepted parameter record falls inside the Matin–Böttinger pooled-species envelope at 18 of 19 matched loadings, separately at 101325, 500000 and 2500000 Pa. Two converged bounded probe fits preserve every fitted-group criterion but still cover only 18 of 19 points. The remaining point is loading 0.531 mol CO₂/mol analytical MEA. Its atmospheric pool is 0.0105036 mol/mol true liquid at baseline and about 0.010514 after either probe, below the envelope's lower value of 0.0114. Thus source disagreement covers most tested states, but it does not cover every state. These two local probes do not establish an unrestricted structural impossibility or a new adopted parameter set.
+
+### Sources, conditions and quantities
+
+Matin 2012, Method Description and Results/Discussion, pp. 6615–6617, derives speciation from titration and carbon/alkalinity balances and reports bicarbonate values above the NMR comparisons. Jakobsen 2005, Calibration Experiments and Sample Preparation, pp. 9894–9897, Table 2 and Tables A1/A2 p. 9902, separates common-peak species by calibration; its Results/Discussion warns that a species contributing below about 10% of the common signal is difficult to quantify. Böttinger 2008, §§3–7 and Table 3 p. 137, measures the common bicarbonate/carbonate signal by online NMR and fits an extended Pitzer model to speciation and vapor–liquid data. These source statements do not give a statistical uncertainty for the present inter-source difference. The reading copies and their current Zotero sources were hash-checked during reconciliation and independent readiness review. Source keys are Matin X5FACKMR/6UD2LJ7G, Jakobsen VDRXENRB/XVFDEJM2, and Böttinger E322TKPZ/TJCRKTFQ.
+
+The [existing observation mapping](../../data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv) owns the pooled quantity
+
+$$X_{\mathrm{pool}}=x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}.$$
+
+Here each $x$ is a true-liquid species mole fraction, in mol/mol. At each of the 19 Matin loadings 0.106–0.531 mol CO₂/mol analytical MEA, linear interpolation uses only the bracketing points in Böttinger's 12-point 30 wt%, 20 °C series. The empirical scale is the absolute difference of the two source values; it ranges from 0.000418824 to 0.008 mol/mol. The envelope is their minimum and maximum. It is not a confidence interval, a standard deviation or an estimate of the fraction of model error caused by either experiment. Reported zeros remain zeros, and no source extrapolation or logarithm of zero is used.
+
+Matin's retained condition is 293.15 K and 101325 Pa; the paper also labels ambient comparisons at 21 °C, which remains a temperature limitation. Böttinger's individual pressures are unavailable, so its observations remain outside fitting and predictions are evaluated separately at 5 and 25 bar. Those two predictions are scenarios for the same source observations, not independent experiments. The same source envelope is compared with the model at all three pressures; it is not three pressure-matched experimental envelopes.
+
+Jakobsen remains a separate comparison. Its nominal 30 wt% preparation contains dioxane and D₂O dilution; the retained water-equivalent translation uses unloaded MEA mass fraction 0.2714274817 and measured `loadNMR`. A three-source matched spread is unavailable without a model-dependent composition correction. The nine-species model does not describe dioxane or isotope effects explicitly. Probe 2 transfers the 20 °C empirical scale across composition only to states 010–013, at loadings 0.19, 0.29, 0.25 and 0.37. Every other Jakobsen state, including 40 °C states 018–021, remains evaluation-only; [inputs.json](results/bicarbonate-carbonate-266/inputs.json) records all exclusions and source rows.
+
+Two different carbonate fractions must remain distinguishable:
+
+$$S_{\mathrm{pool}}=\frac{x_{\mathrm{CO_3^{2-}}}}{x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}},\qquad
+F_{\mathrm{C}}=\frac{x_{\mathrm{CO_3^{2-}}}}{x_{\mathrm{CO_2}}+x_{\mathrm{MEACOO^-}}+x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}}.$$
+
+Jakobsen state 011 has source pool 0.0008, $S_{\mathrm{pool}}=0.75$ and historical $F_{\mathrm C}=0.0190476$. The last follows the historical treatment of its blank CO₂ entry; that blank is not a measured zero. Baseline predictions are respectively 0.000801645, 0.0350537 and 0.000978759. The historical ten-point calculated/observed mean 0.0727222 refers to $F_{\mathrm C}$, not $S_{\mathrm{pool}}$. Common-peak calibration limitations apply to the split within that signal.
+
+The historical Matin AARD of 67.4563% mixes sixteen pooled predictions with bicarbonate-only predictions for states 009, 016 and 019. Summing the retained bicarbonate and carbonate species consistently gives 67.4145%, which the present baseline reproduces. The maximum difference between those retained sums and the new baseline predictions is 7.1 × 10⁻¹⁶ mol/mol. This is a mapping reconciliation, not a physical improvement. [Historical pool reconciliation](results/bicarbonate-carbonate-266/historical-pool-reconciliation.json) retains each source file hash, both species and the legacy scalar.
+
+### Sensitivity at fixed parameters
+
+The Engine evaluates each positive and negative perturbation with the other parameters fixed. R2 and R3 native log-law coefficient $a$ use steps of 0.1; each interaction coefficient uses 0.01; carbonate segment diameter uses 0.01 Å, with packing/segment ratio 0.88 and Debye–Hückel/segment ratio 1 retained. Born diameter stays at 3 Å. Every fresh prediction agrees with the corresponding native coordinate evaluation within the declared numerical tolerance. The steps are diagnostic choices, not physical parameter uncertainties.
+
+The table shows the change caused by the positive step. The Matin state is 30 wt%, loading 0.531 and 293.15 K; the separate Jakobsen state is the translated nominal-30-wt% state 015 at loading 0.78 and 293.15 K. Both model evaluations are at 101325 Pa. At state 015, baseline $S_{\mathrm{pool}}$ is 1.35695 × 10⁻⁵ versus the source value 0.0307018; the source split lies in the paper's difficult minor-carbonate range and is not fitted here.
+
+| Perturbed quantity | Positive step | Change in Matin $X_{\mathrm{pool}}$ (mol/mol) | Change in Jakobsen $S_{\mathrm{pool}}$ (1) |
+| --- | ---: | ---: | ---: |
+| R2 native $a$ | 0.1 | 1.7689e-06 | -4.3988e-07 |
+| R3 native $a$ | 0.1 | 6.5749e-07 | 1.427e-06 |
+| HCO₃⁻–water $k_{ij}$ | 0.01 | 6.4321e-05 | -2.0632e-07 |
+| CO₃²⁻–water $k_{ij}$ | 0.01 | 2.3643e-07 | 5.2898e-07 |
+| CO₃²⁻–MEAH⁺ $k_{ij}$ | 0.01 | -5.8318e-08 | -1.595e-07 |
+| CO₃²⁻ segment diameter | 0.01 Å | -1.0521e-07 | -2.3616e-07 |
+
+For these declared steps, the bicarbonate–water interaction has the largest effect on the Matin pool at loading 0.531; R3 has the largest effect on the carbonate split at the selected high-loading Jakobsen state. These local responses neither identify unique parameters nor rank effects independently of step size. [All sensitivity values](results/bicarbonate-carbonate-266/sensitivity-values.csv) retain all states, both signs and central finite differences.
+
+### Probe fits and preservation of the original objective
+
+Probe 1 adds the 19 Matin pool observations, with difference residuals divided by the empirical scale and weights 1/19. Probe 2 additionally includes the four declared Jakobsen pool observations, each at weight 1/4; the scale transfer is conditional on the retained composition translation. The original 307 rows keep their construction parameters, observations, scales and weights. Each fit starts independently from the accepted endpoint. Only the six sensitivity coordinates move: R2/R3 $a$ within ±ln(10), the three interactions within ±0.1, and carbonate segment diameter within ±0.2 Å, with the stated diameter ties preserved.
+
+Both fits converge in nine iterations with no trial failures. Fresh weighted residuals agree with the native fits to maxima of 1.59 × 10⁻¹¹ and 7.19 × 10⁻¹², below the 10⁻⁸ absolute allowance. Native and fresh total costs agree within the 10⁻⁸ relative allowance. All 326 probe-1 and 330 probe-2 predictions are available and meet their unchanged requested tolerances. The controls remain 60 iterations, 1200 seconds, function tolerance 10⁻⁸, parameter tolerance 10⁻¹⁰ and gradient tolerance 10⁻⁸. Requested Engine workers equal the full CPU count; numerical-library threads are one. Runtime files record actual elapsed times and package/input identities; no unexposed actual worker count is inferred.
+
+| Endpoint | Original 307-row cost (1) | Total augmented cost (1) | Atmospheric Matin pool AARD (%) | Inside source envelope at each pressure |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline | 148.878939346 | — | 67.41447 | 18/19 |
+| Probe 1 | 148.750868569 | 149.136851992 | 67.70095 | 18/19 |
+| Probe 2 | 148.750916987 | 149.138965887 | 67.69968 | 18/19 |
+
+All preservation criteria pass. Pressure and species AARD may increase by at most two percentage points. For density, heat and heat capacity, the number of observations within twice their existing scale cannot drop and the designated AARD or root-mean-square error cannot increase by more than 25%. The Cai temperature group uses the same count/root-mean-square rule. The next table reports every original group and observable separately. Heat errors are in kJ/mol added CO₂; temperature errors are in K; other entries are AARD in percent. Counts are baseline/probe 1/probe 2. A dash means the log-ratio observation has no supplied difference scale, so that count is unavailable.
+
+| Original group / observable | Metric | Baseline | Probe 1 | Probe 2 | Within $2s$ counts |
+| --- | --- | ---: | ---: | ---: | ---: |
+| common149 / partial_pressure | AARD (%) | 11.8626 | 11.8359 | 11.8358 | — · — · — |
+| common149 / mole_fraction | AARD (%) | 7.10284 | 7.09195 | 7.09193 | 94/94 · 94/94 · 94/94 |
+| common149 / addition_enthalpy | RMSE (kJ/mol) | 1.83501 | 1.83517 | 1.83517 | 8/8 · 8/8 · 8/8 |
+| restored species / mole_fraction | AARD (%) | 9.00159 | 8.9774 | 8.97728 | 7/7 · 7/7 · 7/7 |
+| Jakobsen / amount_ratio | AARD (%) | 17.5144 | 17.0335 | 17.0344 | 4/6 · 4/6 · 4/6 |
+| Kiepe / pressure | AARD (%) | 2.66652 | 2.66652 | 2.66652 | — · — · — |
+| CO2-free density / phase_density | AARD (%) | 0.0279778 | 0.0279778 | 0.0279778 | 5/5 · 5/5 · 5/5 |
+| Cai / temperature | RMSE (K) | 1.78798 | 1.78798 | 1.78798 | 18/25 · 18/25 · 18/25 |
+| Cai / mole_fraction | AARD (%) | 2.59059 | 2.59059 | 2.59059 | 18/25 · 18/25 · 18/25 |
+| loaded density / phase_density | AARD (%) | 0.176969 | 0.17697 | 0.176971 | 44/47 · 44/47 · 44/47 |
+| Cp / equilibrium_isobaric_heat_capacity | AARD (%) | 2.84462 | 2.84421 | 2.84421 | 3/4 · 3/4 · 3/4 |
+
+The [group metrics](results/bicarbonate-carbonate-266/group-metrics.csv) retain every weighted cost and both AARD and root-mean-square error in the native observable units (Pa, K, kg/m³, J/mol added CO₂, J/(mol analytical feed K), or the explicitly denominated dimensionless species quantity). The complete original-group costs are:
+
+| Original group / observable | Baseline cost (1) | Probe 1 cost (1) | Probe 2 cost (1) |
+| --- | ---: | ---: | ---: |
+| common149 / partial_pressure | 5.9858459 | 5.9971175 | 5.9972543 |
+| common149 / mole_fraction | 16.661405 | 16.60457 | 16.604201 |
+| common149 / addition_enthalpy | 1.2137453 | 1.2126089 | 1.212621 |
+| restored species / mole_fraction | 2.4486747 | 2.4349907 | 2.4349005 |
+| Jakobsen / amount_ratio | 13.122182 | 13.055552 | 13.055906 |
+| Kiepe / pressure | 0.0006790195 | 0.0006790195 | 0.0006790195 |
+| CO2-free density / phase_density | 11.625713 | 11.625713 | 11.625713 |
+| Cai / temperature | 39.960884 | 39.960884 | 39.960884 |
+| Cai / mole_fraction | 51.913701 | 51.913701 | 51.913701 |
+| loaded density / phase_density | 0.56540314 | 0.56564972 | 0.56565276 |
+| Cp / equilibrium_isobaric_heat_capacity | 5.3807051 | 5.3794028 | 5.3794045 |
+
+Four coordinates reach their bounds in both probes: R3 $a$ reaches 9.8432078883, carbonate–water $k_{ij}$ reaches −0.35, carbonate–MEAH⁺ $k_{ij}$ reaches +0.1, and carbonate segment diameter reaches 2.6422 Å. Bicarbonate–water $k_{ij}$ moves from 0.7270558477 to 0.7296094565/0.7296315265; R2 $a$ moves from 23.5855161421 to 23.5829717634/23.5829472822. This is boundary-limited local fitting, not an interior optimum, a covariance-based uncertainty estimate or a global search. At Jakobsen state 011 the predicted pooled split decreases to 0.00191464/0.00191455, farther from the source split of 0.75, even though the pooled mole fraction remains near the measured sum. Fitting the pooled amount therefore does not constrain the individual carbonate fraction here.
+
+![Both bounded fits retain the high-loading envelope miss. Grey intervals are the empirical Matin–Böttinger spread at each matched loading, not statistical uncertainty. Observations, interpolated source values and predictions at those loadings are points; no continuous model curve is implied. The pressure panels reuse the same observations under the declared pressure scenarios.](results/bicarbonate-carbonate-266/source-envelope.png){#fig-bicarbonate-carbonate-266}
+
+Each endpoint has 420 completed, resolved phase calculations, with zero detected liquid witnesses, seven calculations with vapor witnesses and no unresolved trial. These calculations include repeated physical states from separate fitted-observation declarations; they are not 420 independent experiments or a proof of global stability. Vapor witnesses remain distinct from liquid instability, and the phase files retain each witness, support, raw residual and native message. The original-wheel baseline had one unresolved reconstruction trial; the final qualified-wheel results supersede it for this comparison, while the old evidence remains in `wheel-3e83e19c/`.
+
+### Recommendation for issue 255 stage 2 and limits
+
+Keep Matin's pooled minor-species observations as source-disagreement diagnostics rather than automatically adding them to the adopted calibration. Keep Böttinger outside fitting under its existing unknown-pressure ruling and retain the 5/25-bar comparisons. Keep separately calibrated Jakobsen carbonate fractions, especially high-loading minor-carbonate splits, outside fitting unless a source-supported uncertainty treatment is selected. Preserve the existing qualified major-species observations and source/campaign identities. The four extra Jakobsen pool rows tested here are composition-transfer diagnostics, not an automatic promotion to active calibration data.
+
+For stage 2, retain the consistently pooled Matin mapping and both explicitly named carbonate denominators. Carry forward the empirical envelopes and this bounded result: most points are consistent with inter-source spread, but neither of the two declared probes reconciles the last point while representing the carbonate split. The near-identical probe endpoints and active bounds warrant no parameter adoption. This is a local diagnostic comparison with measured data and numerical replay/phase verification, not independent physical validation, parameter identification, absorber qualification or evidence that every admissible model would fail.
+
+The result uses parameter record `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91` and the worktree-only merged Engine wheel `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6` (`e6dae5c7`). The 307-row qualification cost is 148.87893934556408, within 6.58 × 10⁻¹⁴ relative of the retained reference. Its residual comparison allows 10⁻⁸ absolute below unit residual magnitude and 10⁻⁸ relative otherwise; predictions and total cost use 10⁻⁸ relative. The repository pin remains unchanged. [Qualification](results/bicarbonate-carbonate-266/qualification-replay.json), [source/coordinate inputs](results/bicarbonate-carbonate-266/inputs.json), [native probe 1](results/bicarbonate-carbonate-266/fit1-executed-native.json), [native probe 2](results/bicarbonate-carbonate-266/fit2-native.json), and the [diagnosis](results/bicarbonate-carbonate-266/diagnosis.md) preserve the exact inputs, wheel identities, initial refusals and owner-authorized recovery. No manuscript file or adopted parameter record was changed. Independent delivered review is pending; this notebook has not been promoted for manuscript use.
