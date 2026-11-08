@@ -371,7 +371,7 @@ class SolventSpecification:
                 "jacobian_evaluations",
             )
         }
-        report["reactions"] = self.fitted_reactions(result.chart)
+        report["reactions"] = self.fitted_reactions(result.chart) if result.usable else None
         report["covariance"] = {
             key: jsonable(getattr(result.covariance, key))
             for key in (
@@ -387,7 +387,7 @@ class SolventSpecification:
             dict(trial=f.trial, observation=f.observation, status=f.status.name, message=f.message, jacobian=f.jacobian)
             for f in result.failures
         ]
-        return result, report, reg.fitted_parameters(self.parameters, result)
+        return result, report, reg.fitted_parameters(self.parameters, result) if result.usable else None
 
     def phase(self, record, policy):
         if record["endpoint_sha256"] != self.parameter_sha256:
