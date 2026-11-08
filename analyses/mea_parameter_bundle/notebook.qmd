@@ -5,6 +5,7 @@ resources:
   - results/density-268/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
+  - results/bicarbonate-carbonate-266/**
   - results/selected-current-best-parameters.json
   - results/engine-3e83e19c-paper-evidence/model-curves/**
 ---
@@ -217,7 +218,7 @@ These statistics cover 79 comparison points; 182 canonical and Wagner pressure m
 
 ## Speciation
 
-![Observed and calculated liquid species at measured states. Matin bicarbonate denotes the bicarbonate plus carbonate pool; its 19 report-only comparisons are retained separately.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
+![Historical observed and calculated liquid species at measured states. The Matin minor-species predictions use a mixed mapping: bicarbonate plus carbonate at 16 states and bicarbonate alone at states 009, 016 and 019. See the corrected pooling reconciliation below.](figures/a7_regression_overview/output/speciation.svg){#fig-speciation}
 
 <!-- RESULTS:species:BEGIN -->
 
@@ -229,11 +230,11 @@ These statistics cover 79 comparison points; 182 canonical and Wagner pressure m
 | Restored targets only (7) | 7 / 7 | 9.00 | 0.1319 |
 | Böttinger 2008 | 55 / 55 | 5.63 | 0.0790 |
 | Matin 2012 | 76 / 76 | 23.87 | 0.6937 |
-| Matin HCO₃⁻ + CO₃²⁻ pool (report only) | 19 / 19 | 67.46 | 1.3701 |
+| Matin historical mixed mapping (report only) | 19 / 19 | 67.46 | 1.3701 |
 
 <!-- RESULTS:species:END -->
 
-The common calibration subset contains 94 species targets; seven restored fitted targets are reported separately. The 19 Matin bicarbonate/carbonate pools are report-only comparisons and overlap the displayed population. See the [exact row membership and diagnostics](joint-recalibration/index.qmd).
+The figure and table retain the historical mapping. For the 19 Matin report-only comparisons, consistently summing bicarbonate and carbonate changes AARD from 67.4563% to 67.4145%; see the [corrected pooling reconciliation](#bicarbonate-carbonate-266). The common calibration subset contains 94 species targets; seven restored fitted targets are reported separately. The 19 minor-species comparisons overlap the displayed population. See the [exact row membership and diagnostics](joint-recalibration/index.qmd).
 
 ## Integral heat of absorption {#heat-of-absorption}
 
@@ -548,8 +549,112 @@ The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce
 | Heat F1 predecessor | [F1 identity and six-fit comparison](heat-f1/index.qmd) |
 | Numerical reproduction and Engine transfers | [Engine adoptions](engine-adoptions/index.qmd) · [Default-path reproduction](joint-recalibration/index.qmd#numerical-reproduction) |
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
+| Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |
 | Earlier designs and ion fitting | [Ionic/speciation fit](ionic-speciation-fit/index.qmd) · [Historical designs](historical-designs/index.qmd) |
 | Sources and provenance | [Evidence map](../evidence-map.qmd) · [Parameter-table input hashes](figures/a7_regression_overview/output/parameter-table-inputs.json) |
+
+
+## Bicarbonate and carbonate: source spread and bounded probes {#bicarbonate-carbonate-266}
+
+At 30 wt% MEA and 293.15 K, the accepted parameter record falls inside the Matin–Böttinger pooled-species envelope at 18 of 19 matched loadings, separately at 101325, 500000 and 2500000 Pa. Two converged bounded probe fits preserve every fitted-group criterion but still cover only 18 of 19 points. The remaining point is loading 0.531 mol CO₂/mol analytical MEA. Its atmospheric pool is 0.0105036 mol/mol true liquid at baseline and about 0.010514 after either probe, below the envelope's lower value of 0.0114. Thus source disagreement covers most tested states, but it does not cover every state. These two local probes do not establish an unrestricted structural impossibility or a new adopted parameter set.
+
+### Sources, conditions and quantities
+
+Matin 2012, Method Description and Results/Discussion, pp. 6615–6617, derives speciation from titration and carbon/alkalinity balances and reports bicarbonate values above the NMR comparisons. Jakobsen 2005, Calibration Experiments and Sample Preparation, pp. 9894–9897, Table 2 and Tables A1/A2 p. 9902, separates common-peak species by calibration; its Results/Discussion warns that a species contributing below about 10% of the common signal is difficult to quantify. Böttinger 2008, §§3–7 and Table 3 p. 137, measures the common bicarbonate/carbonate signal by online NMR and fits an extended Pitzer model to speciation and vapor–liquid data. These source statements do not give a statistical uncertainty for the present inter-source difference. The reading copies and their current Zotero sources were hash-checked during reconciliation and independent readiness review. Source keys are Matin X5FACKMR/6UD2LJ7G, Jakobsen VDRXENRB/XVFDEJM2, and Böttinger E322TKPZ/TJCRKTFQ.
+
+The [existing observation mapping](../../data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv) owns the pooled quantity
+
+$$X_{\mathrm{pool}}=x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}.$$
+
+Here each $x$ is a true-liquid species mole fraction, in mol/mol. At each of the 19 Matin loadings 0.106–0.531 mol CO₂/mol analytical MEA, linear interpolation uses only the bracketing points in Böttinger's 12-point 30 wt%, 20 °C series. The empirical scale is the absolute difference of the two source values; it ranges from 0.000418824 to 0.008 mol/mol. The envelope is their minimum and maximum. It is not a confidence interval, a standard deviation or an estimate of the fraction of model error caused by either experiment. Reported zeros remain zeros, and no source extrapolation or logarithm of zero is used.
+
+Matin's retained condition is 293.15 K and 101325 Pa; the paper also labels ambient comparisons at 21 °C, which remains a temperature limitation. Böttinger's individual pressures are unavailable, so its observations remain outside fitting and predictions are evaluated separately at 5 and 25 bar. Those two predictions are scenarios for the same source observations, not independent experiments. The same source envelope is compared with the model at all three pressures; it is not three pressure-matched experimental envelopes.
+
+Jakobsen remains a separate comparison. Its nominal 30 wt% preparation contains dioxane and D₂O dilution; the retained water-equivalent translation uses unloaded MEA mass fraction 0.2714274817 and measured `loadNMR`. A three-source matched spread is unavailable without a model-dependent composition correction. The nine-species model does not describe dioxane or isotope effects explicitly. Probe 2 transfers the 20 °C empirical scale across composition only to states 010–013, at loadings 0.19, 0.29, 0.25 and 0.37. Every other Jakobsen state, including 40 °C states 018–021, remains evaluation-only; [inputs.json](results/bicarbonate-carbonate-266/inputs.json) records all exclusions and source rows.
+
+Two different carbonate fractions must remain distinguishable:
+
+$$S_{\mathrm{pool}}=\frac{x_{\mathrm{CO_3^{2-}}}}{x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}},\qquad
+F_{\mathrm{C}}=\frac{x_{\mathrm{CO_3^{2-}}}}{x_{\mathrm{CO_2}}+x_{\mathrm{MEACOO^-}}+x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}}.$$
+
+Jakobsen state 011 has source pool 0.0008, $S_{\mathrm{pool}}=0.75$ and historical $F_{\mathrm C}=0.0190476$. The last follows the historical treatment of its blank CO₂ entry; that blank is not a measured zero. Baseline predictions are respectively 0.000801645, 0.0350537 and 0.000978759. The historical ten-point calculated/observed mean 0.0727222 refers to $F_{\mathrm C}$, not $S_{\mathrm{pool}}$. Common-peak calibration limitations apply to the split within that signal.
+
+The historical Matin AARD of 67.4563% mixes sixteen pooled predictions with bicarbonate-only predictions for states 009, 016 and 019. Summing the retained bicarbonate and carbonate species consistently gives 67.4145%, which the present baseline reproduces. The maximum difference between those retained sums and the new baseline predictions is 7.1 × 10⁻¹⁶ mol/mol. This is a mapping reconciliation, not a physical improvement. [Historical pool reconciliation](results/bicarbonate-carbonate-266/historical-pool-reconciliation.json) retains each source file hash, both species and the legacy scalar.
+
+### Sensitivity at fixed parameters
+
+The Engine evaluates each positive and negative perturbation with the other parameters fixed. R2 and R3 native log-law coefficient $a$ use steps of 0.1; each interaction coefficient uses 0.01; carbonate segment diameter uses 0.01 Å, with packing/segment ratio 0.88 and Debye–Hückel/segment ratio 1 retained. Born diameter stays at 3 Å. Every fresh prediction agrees with the corresponding native coordinate evaluation within the declared numerical tolerance. The steps are diagnostic choices, not physical parameter uncertainties.
+
+The table shows the change caused by the positive step. The Matin state is 30 wt%, loading 0.531 and 293.15 K; the separate Jakobsen state is the translated nominal-30-wt% state 015 at loading 0.78 and 293.15 K. Both model evaluations are at 101325 Pa. At state 015, baseline $S_{\mathrm{pool}}$ is 1.35695 × 10⁻⁵ versus the source value 0.0307018; the source split lies in the paper's difficult minor-carbonate range and is not fitted here.
+
+| Perturbed quantity | Positive step | Change in Matin $X_{\mathrm{pool}}$ (mol/mol) | Change in Jakobsen $S_{\mathrm{pool}}$ (1) |
+| --- | ---: | ---: | ---: |
+| R2 native $a$ | 0.1 | 1.7689e-06 | -4.3988e-07 |
+| R3 native $a$ | 0.1 | 6.5749e-07 | 1.427e-06 |
+| HCO₃⁻–water $k_{ij}$ | 0.01 | 6.4321e-05 | -2.0632e-07 |
+| CO₃²⁻–water $k_{ij}$ | 0.01 | 2.3643e-07 | 5.2898e-07 |
+| CO₃²⁻–MEAH⁺ $k_{ij}$ | 0.01 | -5.8318e-08 | -1.595e-07 |
+| CO₃²⁻ segment diameter | 0.01 Å | -1.0521e-07 | -2.3616e-07 |
+
+For these declared steps, the bicarbonate–water interaction has the largest effect on the Matin pool at loading 0.531; R3 has the largest effect on the carbonate split at the selected high-loading Jakobsen state. These local responses neither identify unique parameters nor rank effects independently of step size. [All sensitivity values](results/bicarbonate-carbonate-266/sensitivity-values.csv) retain all states, both signs and central finite differences.
+
+### Probe fits and preservation of the original objective
+
+Probe 1 adds the 19 Matin pool observations, with difference residuals divided by the empirical scale and weights 1/19. Probe 2 additionally includes the four declared Jakobsen pool observations, each at weight 1/4; the scale transfer is conditional on the retained composition translation. The original 307 rows keep their construction parameters, observations, scales and weights. Each fit starts independently from the accepted endpoint. Only the six sensitivity coordinates move: R2/R3 $a$ within ±ln(10), the three interactions within ±0.1, and carbonate segment diameter within ±0.2 Å, with the stated diameter ties preserved.
+
+Both fits converge in nine iterations with no trial failures. Fresh weighted residuals agree with the native fits to maxima of 1.59 × 10⁻¹¹ and 7.19 × 10⁻¹², below the 10⁻⁸ absolute allowance. Native and fresh total costs agree within the 10⁻⁸ relative allowance. All 326 probe-1 and 330 probe-2 predictions are available and meet their unchanged requested tolerances. The controls remain 60 iterations, 1200 seconds, function tolerance 10⁻⁸, parameter tolerance 10⁻¹⁰ and gradient tolerance 10⁻⁸. Requested Engine workers equal the full CPU count; numerical-library threads are one. Runtime files record actual elapsed times and package/input identities; no unexposed actual worker count is inferred.
+
+| Endpoint | Original 307-row cost (1) | Total augmented cost (1) | Atmospheric Matin pool AARD (%) | Inside source envelope at each pressure |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline | 148.878939346 | — | 67.41447 | 18/19 |
+| Probe 1 | 148.750868569 | 149.136851992 | 67.70095 | 18/19 |
+| Probe 2 | 148.750916987 | 149.138965887 | 67.69968 | 18/19 |
+
+All preservation criteria pass. Pressure and species AARD may increase by at most two percentage points. For density, heat and heat capacity, the number of observations within twice their existing scale cannot drop and the designated AARD or root-mean-square error cannot increase by more than 25%. The Cai temperature group uses the same count/root-mean-square rule. The next table reports every original group and observable separately. Heat errors are in kJ/mol added CO₂; temperature errors are in K; other entries are AARD in percent. Counts are baseline/probe 1/probe 2. A dash means the log-ratio observation has no supplied difference scale, so that count is unavailable.
+
+| Original group / observable | Metric | Baseline | Probe 1 | Probe 2 | Within $2s$ counts |
+| --- | --- | ---: | ---: | ---: | ---: |
+| common149 / partial_pressure | AARD (%) | 11.8626 | 11.8359 | 11.8358 | — · — · — |
+| common149 / mole_fraction | AARD (%) | 7.10284 | 7.09195 | 7.09193 | 94/94 · 94/94 · 94/94 |
+| common149 / addition_enthalpy | RMSE (kJ/mol) | 1.83501 | 1.83517 | 1.83517 | 8/8 · 8/8 · 8/8 |
+| restored species / mole_fraction | AARD (%) | 9.00159 | 8.9774 | 8.97728 | 7/7 · 7/7 · 7/7 |
+| Jakobsen / amount_ratio | AARD (%) | 17.5144 | 17.0335 | 17.0344 | 4/6 · 4/6 · 4/6 |
+| Kiepe / pressure | AARD (%) | 2.66652 | 2.66652 | 2.66652 | — · — · — |
+| CO2-free density / phase_density | AARD (%) | 0.0279778 | 0.0279778 | 0.0279778 | 5/5 · 5/5 · 5/5 |
+| Cai / temperature | RMSE (K) | 1.78798 | 1.78798 | 1.78798 | 18/25 · 18/25 · 18/25 |
+| Cai / mole_fraction | AARD (%) | 2.59059 | 2.59059 | 2.59059 | 18/25 · 18/25 · 18/25 |
+| loaded density / phase_density | AARD (%) | 0.176969 | 0.17697 | 0.176971 | 44/47 · 44/47 · 44/47 |
+| Cp / equilibrium_isobaric_heat_capacity | AARD (%) | 2.84462 | 2.84421 | 2.84421 | 3/4 · 3/4 · 3/4 |
+
+The [group metrics](results/bicarbonate-carbonate-266/group-metrics.csv) retain every weighted cost and both AARD and root-mean-square error in the native observable units (Pa, K, kg/m³, J/mol added CO₂, J/(mol analytical feed K), or the explicitly denominated dimensionless species quantity). The complete original-group costs are:
+
+| Original group / observable | Baseline cost (1) | Probe 1 cost (1) | Probe 2 cost (1) |
+| --- | ---: | ---: | ---: |
+| common149 / partial_pressure | 5.9858459 | 5.9971175 | 5.9972543 |
+| common149 / mole_fraction | 16.661405 | 16.60457 | 16.604201 |
+| common149 / addition_enthalpy | 1.2137453 | 1.2126089 | 1.212621 |
+| restored species / mole_fraction | 2.4486747 | 2.4349907 | 2.4349005 |
+| Jakobsen / amount_ratio | 13.122182 | 13.055552 | 13.055906 |
+| Kiepe / pressure | 0.0006790195 | 0.0006790195 | 0.0006790195 |
+| CO2-free density / phase_density | 11.625713 | 11.625713 | 11.625713 |
+| Cai / temperature | 39.960884 | 39.960884 | 39.960884 |
+| Cai / mole_fraction | 51.913701 | 51.913701 | 51.913701 |
+| loaded density / phase_density | 0.56540314 | 0.56564972 | 0.56565276 |
+| Cp / equilibrium_isobaric_heat_capacity | 5.3807051 | 5.3794028 | 5.3794045 |
+
+Four coordinates reach their bounds in both probes: R3 $a$ reaches 9.8432078883, carbonate–water $k_{ij}$ reaches −0.35, carbonate–MEAH⁺ $k_{ij}$ reaches +0.1, and carbonate segment diameter reaches 2.6422 Å. Bicarbonate–water $k_{ij}$ moves from 0.7270558477 to 0.7296094565/0.7296315265; R2 $a$ moves from 23.5855161421 to 23.5829717634/23.5829472822. This is boundary-limited local fitting, not an interior optimum, a covariance-based uncertainty estimate or a global search. At Jakobsen state 011 the predicted pooled split decreases to 0.00191464/0.00191455, farther from the source split of 0.75, even though the pooled mole fraction remains near the measured sum. Fitting the pooled amount therefore does not constrain the individual carbonate fraction here.
+
+![Both bounded fits retain the high-loading envelope miss. Grey intervals are the empirical Matin–Böttinger spread at each matched loading, not statistical uncertainty. Observations, interpolated source values and predictions at those loadings are points; no continuous model curve is implied. The pressure panels reuse the same observations under the declared pressure scenarios.](results/bicarbonate-carbonate-266/source-envelope.png){#fig-bicarbonate-carbonate-266}
+
+Each endpoint has 420 completed, resolved phase calculations, with zero detected liquid witnesses, seven calculations with vapor witnesses and no unresolved trial. These calculations include repeated physical states from separate fitted-observation declarations; they are not 420 independent experiments or a proof of global stability. Vapor witnesses remain distinct from liquid instability, and the phase files retain each witness, support, raw residual and native message. The original-wheel baseline had one unresolved reconstruction trial; the final qualified-wheel results supersede it for this comparison, while the old evidence remains in `wheel-3e83e19c/`.
+
+### Recommendation for issue 255 stage 2 and limits
+
+Keep Matin's pooled minor-species observations as source-disagreement diagnostics rather than automatically adding them to the adopted calibration. Keep Böttinger outside fitting under its existing unknown-pressure ruling and retain the 5/25-bar comparisons. Keep separately calibrated Jakobsen carbonate fractions, especially high-loading minor-carbonate splits, outside fitting unless a source-supported uncertainty treatment is selected. Preserve the existing qualified major-species observations and source/campaign identities. The four extra Jakobsen pool rows tested here are composition-transfer diagnostics, not an automatic promotion to active calibration data.
+
+For stage 2, retain the consistently pooled Matin mapping and both explicitly named carbonate denominators. Carry forward the empirical envelopes and this bounded result: most points are consistent with inter-source spread, but neither of the two declared probes reconciles the last point while representing the carbonate split. The near-identical probe endpoints and active bounds warrant no parameter adoption. This is a local diagnostic comparison with measured data and numerical replay/phase verification, not independent physical validation, parameter identification, absorber qualification or evidence that every admissible model would fail.
+
+The result uses parameter record `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91` and the worktree-only merged Engine wheel `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6` (`e6dae5c7`). The 307-row qualification cost is 148.87893934556408, within 6.58 × 10⁻¹⁴ relative of the retained reference. Its residual comparison allows 10⁻⁸ absolute below unit residual magnitude and 10⁻⁸ relative otherwise; predictions and total cost use 10⁻⁸ relative. The repository pin remains unchanged. [Qualification](results/bicarbonate-carbonate-266/qualification-replay.json), [source/coordinate inputs](results/bicarbonate-carbonate-266/inputs.json), [native probe 1](results/bicarbonate-carbonate-266/fit1-executed-native.json), [native probe 2](results/bicarbonate-carbonate-266/fit2-native.json), and the [diagnosis](results/bicarbonate-carbonate-266/diagnosis.md) preserve the exact inputs, wheel identities, initial refusals and owner-authorized recovery. No manuscript file or adopted parameter record was changed. Independent delivered review is pending; this notebook has not been promoted for manuscript use.
