@@ -1,0 +1,50 @@
+fit-15 converged 175.70396298071194 preservation False
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 254, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 203, in _process_chunk
+    return [fn(*args) for args in chunk]
+            ~~^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/pressure_transfer_261.py", line 312, in phase_job
+    import phase_diagnosis_255 as d
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/phase_diagnosis_255.py", line 15, in <module>
+    import phase_search_214 as p
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/phase_search_214.py", line 14, in <module>
+    import phase_extension_201 as e
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/phase_extension_201.py", line 18, in <module>
+    import final_evidence as f
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/final_evidence.py", line 29, in <module>
+    import probe
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/calibration-misfit/probe.py", line 27, in <module>
+    shared.verify_wheel()  # the pinned Engine wheel must be installed
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/shared_evaluation.py", line 190, in verify_wheel
+    raise RuntimeError("installed Engine wheel does not match the pinned SHA-256")
+RuntimeError: installed Engine wheel does not match the pinned SHA-256
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/pressure_transfer_261.py", line 351, in <module>
+    phase(sys.argv[2])
+    ~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-261-pressure-tran-7f955e726b873e43/analyses/mea_parameter_bundle/scripts/pressure_transfer_261.py", line 326, in phase
+    rows=list(pool.map(phase_job,[(name,i) for i in range(162)]))
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 617, in _chain_from_iterable_of_lists
+    for element in iterable:
+                   ^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 625, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 318, in _result_or_cancel
+    return fut.result(timeout)
+           ~~~~~~~~~~^^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 460, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 402, in __get_result
+    raise self._exception
+RuntimeError: installed Engine wheel does not match the pinned SHA-256
