@@ -1,0 +1,13 @@
+from pathlib import Path
+import sys
+AN = Path(workflow.basedir)
+assert not {'present', 'calculate'}.issubset(sys.argv[1:]), 'choose one entry per run'
+if 'present' in sys.argv[1:]:
+    rule present:
+        input: str(AN/'results/study.json'), str(AN/'results/result-hashes.json'), str(AN/'present.py')
+        shell: 'cd "{AN.parents[2]}" && uv run --no-project --python .venv/bin/python python "{AN}/present.py"'
+else:
+    rule calculate:
+        input: [str(AN/p) for p in ('calculate.py', 'aggregate.py', 'inputs/input-hashes.json', 'inputs/environment.json')]
+        output: str(AN/'results/study.json')
+        shell: 'cd "{AN.parents[2]}" && agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 uv run --no-project --python .venv/bin/python python "{AN}/calculate.py" calculate && uv run --no-project --python .venv/bin/python python "{AN}/aggregate.py"'
