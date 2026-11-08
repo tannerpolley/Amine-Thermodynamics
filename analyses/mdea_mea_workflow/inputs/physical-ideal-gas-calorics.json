@@ -25,27 +25,27 @@
     "water": {
       "representation": "shomate",
       "coefficients": [
-        30.092,
-        6.832514,
-        6.793435,
-        -2.53448,
-        0.082139,
-        -250.881,
-        223.3967,
-        -241.8264
+        38.20344032987093,
+        -35.39032930235045,
+        88.5441906376632,
+        -58.385365975467586,
+        -0.034496604106251993,
+        -252.4259791152223,
+        242.00412252690168,
+        -241.826
       ],
       "source_range_k": [
-        500.0,
-        1700.0
+        273.15,
+        400.0
       ],
       "range_k": [
         273.15,
-        1700.0
+        400.0
       ],
       "basis": "ideal gas; Shomate Cp in J/mol/K, t = T[K]/1000",
       "formation_enthalpy_j_per_mol": -241826.0,
-      "source": "NIST Chemistry WebBook gas Shomate coefficients (Chase 1998); CODATA formation enthalpy",
-      "note": "Extrapolated below 500 K; Cp at 298.15 K is 33.59 J/mol/K in JANAF."
+      "source": "IAPWS R6-95(2018) eq. 5 and table 1; NIST-JANAF H-064 298.15 K entropy",
+      "note": "Shomate fit; anchored at 298.15 K to formation enthalpy -241826 J/mol and entropy 188.834 J/(mol K); see analyses/mea_parameter_bundle/water-ideal-gas/fit.json."
     },
     "methyldiethanolamine": {
       "representation": "cp_polynomial",

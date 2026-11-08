@@ -1,0 +1,912 @@
+{
+  "scenarios": [
+    {
+      "name": "baseline",
+      "scale": 1.0,
+      "anchor": {},
+      "groups": {
+        "Ermatchkov": {
+          "rows": 101,
+          "statuses": {
+            "Available": 101
+          },
+          "matched_available": 101,
+          "nonzero_terms": 101,
+          "AARD_percent": 20.330849028024804,
+          "baseline_matched_AARD_percent": 20.330849028024804,
+          "maximum_prediction_change": 0.0
+        },
+        "corrected-Kamps": {
+          "rows": 28,
+          "statuses": {
+            "Available": 28
+          },
+          "matched_available": 28,
+          "nonzero_terms": 28,
+          "AARD_percent": 25.646534684490266,
+          "baseline_matched_AARD_percent": 25.646534684490266,
+          "maximum_prediction_change": 0.0
+        },
+        "Bottinger-amine-sum-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.214207561594266,
+          "baseline_matched_AARD_percent": 7.214207561594266,
+          "maximum_prediction_change": 0.0
+        },
+        "Bottinger-bicarbonate-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.147191316239494,
+          "baseline_matched_AARD_percent": 11.147191316239494,
+          "maximum_prediction_change": 0.0
+        },
+        "Bottinger-amine-sum-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.214140845105274,
+          "baseline_matched_AARD_percent": 7.214140845105274,
+          "maximum_prediction_change": 0.0
+        },
+        "Bottinger-bicarbonate-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.146250653775935,
+          "baseline_matched_AARD_percent": 11.146250653775935,
+          "maximum_prediction_change": 0.0
+        },
+        "Merkley-half-loading": {
+          "rows": 12,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 16.118292066616647,
+          "baseline_matched_AARD_percent": 16.118292066616647,
+          "maximum_prediction_change": 0.0
+        },
+        "Merkley-outside": {
+          "rows": 8,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "CentralSolveUnavailable": 1,
+            "Available": 1
+          },
+          "matched_available": 1,
+          "nonzero_terms": 1,
+          "AARD_percent": 1.3089769476000157,
+          "baseline_matched_AARD_percent": 1.3089769476000157,
+          "maximum_prediction_change": 0.0
+        },
+        "Cp-60wt": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 10.730579636067818,
+          "baseline_matched_AARD_percent": 10.730579636067818,
+          "maximum_prediction_change": 0.0
+        },
+        "density-60wt": {
+          "rows": 11,
+          "statuses": {
+            "Available": 11
+          },
+          "matched_available": 11,
+          "nonzero_terms": 11,
+          "AARD_percent": 1.797597980456947,
+          "baseline_matched_AARD_percent": 1.797597980456947,
+          "maximum_prediction_change": 0.0
+        },
+        "Kuranov-413K": {
+          "rows": 13,
+          "statuses": {
+            "OutsideDeclaredDomain": 13
+          },
+          "matched_available": 0,
+          "nonzero_terms": 0,
+          "AARD_percent": null,
+          "baseline_matched_AARD_percent": null,
+          "maximum_prediction_change": null
+        },
+        "Zheng": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 22.642545832916642,
+          "baseline_matched_AARD_percent": 22.642545832916642,
+          "maximum_prediction_change": 0.0
+        },
+        "Sedighi": {
+          "rows": 15,
+          "statuses": {
+            "Available": 15
+          },
+          "matched_available": 15,
+          "nonzero_terms": 15,
+          "AARD_percent": 74.52976388591469,
+          "baseline_matched_AARD_percent": 74.52976388591469,
+          "maximum_prediction_change": 0.0
+        },
+        "Merkley": {
+          "rows": 4,
+          "statuses": {
+            "Available": 4
+          },
+          "matched_available": 4,
+          "nonzero_terms": 4,
+          "AARD_percent": 8.507756986271742,
+          "baseline_matched_AARD_percent": 8.507756986271742,
+          "maximum_prediction_change": 0.0
+        }
+      },
+      "rows": 436,
+      "available": 410
+    },
+    {
+      "name": "353-minus5",
+      "scale": 0.9489775177487543,
+      "anchor": {
+        "T_K": 353.0,
+        "pressure_Pa": 101325.0,
+        "rho_mol_m3": 41038.48429569445,
+        "epsilon": 49.90060432744464,
+        "fixed_density_epsilon": 47.40557411107241
+      },
+      "groups": {
+        "Ermatchkov": {
+          "rows": 101,
+          "statuses": {
+            "Available": 101
+          },
+          "matched_available": 101,
+          "nonzero_terms": 101,
+          "AARD_percent": 19.994569297650692,
+          "baseline_matched_AARD_percent": 20.330849028024804,
+          "maximum_prediction_change": 0.060210910359463354
+        },
+        "corrected-Kamps": {
+          "rows": 28,
+          "statuses": {
+            "Available": 27,
+            "CentralSolveUnavailable": 1
+          },
+          "matched_available": 27,
+          "nonzero_terms": 27,
+          "AARD_percent": 24.954322100037228,
+          "baseline_matched_AARD_percent": 25.444787644352843,
+          "maximum_prediction_change": 0.049005229625429636
+        },
+        "Bottinger-amine-sum-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.21700644455202,
+          "baseline_matched_AARD_percent": 7.214207561594266,
+          "maximum_prediction_change": 0.00016620244726839317
+        },
+        "Bottinger-bicarbonate-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.192162347736256,
+          "baseline_matched_AARD_percent": 11.147191316239494,
+          "maximum_prediction_change": 0.0031923489228575797
+        },
+        "Bottinger-amine-sum-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.216939070577193,
+          "baseline_matched_AARD_percent": 7.214140845105274,
+          "maximum_prediction_change": 0.00016607119972200657
+        },
+        "Bottinger-bicarbonate-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.19120797565034,
+          "baseline_matched_AARD_percent": 11.146250653775935,
+          "maximum_prediction_change": 0.0031910342159613414
+        },
+        "Merkley-half-loading": {
+          "rows": 12,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 16.413100309912927,
+          "baseline_matched_AARD_percent": 16.118292066616647,
+          "maximum_prediction_change": 0.007292549229358736
+        },
+        "Merkley-outside": {
+          "rows": 8,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "CentralSolveUnavailable": 1,
+            "Available": 1
+          },
+          "matched_available": 1,
+          "nonzero_terms": 1,
+          "AARD_percent": 1.9905784800164028,
+          "baseline_matched_AARD_percent": 1.3089769476000157,
+          "maximum_prediction_change": 0.00672794803533483
+        },
+        "Cp-60wt": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 10.701207902679108,
+          "baseline_matched_AARD_percent": 10.730579636067818,
+          "maximum_prediction_change": 0.0009189374749654089
+        },
+        "density-60wt": {
+          "rows": 11,
+          "statuses": {
+            "Available": 11
+          },
+          "matched_available": 11,
+          "nonzero_terms": 11,
+          "AARD_percent": 1.808743837667889,
+          "baseline_matched_AARD_percent": 1.797597980456947,
+          "maximum_prediction_change": 0.0002207336936097537
+        },
+        "Kuranov-413K": {
+          "rows": 13,
+          "statuses": {
+            "OutsideDeclaredDomain": 13
+          },
+          "matched_available": 0,
+          "nonzero_terms": 0,
+          "AARD_percent": null,
+          "baseline_matched_AARD_percent": null,
+          "maximum_prediction_change": null
+        },
+        "Zheng": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 22.66504870338234,
+          "baseline_matched_AARD_percent": 22.642545832916642,
+          "maximum_prediction_change": 0.0007623096698354814
+        },
+        "Sedighi": {
+          "rows": 15,
+          "statuses": {
+            "Available": 15
+          },
+          "matched_available": 15,
+          "nonzero_terms": 15,
+          "AARD_percent": 73.65435190630384,
+          "baseline_matched_AARD_percent": 74.52976388591469,
+          "maximum_prediction_change": 0.05320496679488451
+        },
+        "Merkley": {
+          "rows": 4,
+          "statuses": {
+            "Available": 4
+          },
+          "matched_available": 4,
+          "nonzero_terms": 4,
+          "AARD_percent": 8.861934152401945,
+          "baseline_matched_AARD_percent": 8.507756986271742,
+          "maximum_prediction_change": 0.007035059808576438
+        }
+      },
+      "rows": 436,
+      "available": 409
+    },
+    {
+      "name": "353-plus5",
+      "scale": 1.0510224822512457,
+      "anchor": {
+        "T_K": 353.0,
+        "pressure_Pa": 101325.0,
+        "rho_mol_m3": 41038.48429569445,
+        "epsilon": 49.90060432744464,
+        "fixed_density_epsilon": 52.395634543816875
+      },
+      "groups": {
+        "Ermatchkov": {
+          "rows": 101,
+          "statuses": {
+            "Available": 101
+          },
+          "matched_available": 101,
+          "nonzero_terms": 101,
+          "AARD_percent": 20.87573596400426,
+          "baseline_matched_AARD_percent": 20.330849028024804,
+          "maximum_prediction_change": 0.05676116168541068
+        },
+        "corrected-Kamps": {
+          "rows": 28,
+          "statuses": {
+            "Available": 28
+          },
+          "matched_available": 28,
+          "nonzero_terms": 28,
+          "AARD_percent": 26.322325383971513,
+          "baseline_matched_AARD_percent": 25.646534684490266,
+          "maximum_prediction_change": 0.045542778078616175
+        },
+        "Bottinger-amine-sum-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.2116009916530555,
+          "baseline_matched_AARD_percent": 7.214207561594266,
+          "maximum_prediction_change": 0.00015304805847493608
+        },
+        "Bottinger-bicarbonate-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.105205785598528,
+          "baseline_matched_AARD_percent": 11.147191316239494,
+          "maximum_prediction_change": 0.0029469900945280347
+        },
+        "Bottinger-amine-sum-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.2115351107279135,
+          "baseline_matched_AARD_percent": 7.214140845105274,
+          "maximum_prediction_change": 0.00015291345331214234
+        },
+        "Bottinger-bicarbonate-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.104281711610657,
+          "baseline_matched_AARD_percent": 11.146250653775935,
+          "maximum_prediction_change": 0.0029455839681512552
+        },
+        "Merkley-half-loading": {
+          "rows": 12,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 15.854251260180327,
+          "baseline_matched_AARD_percent": 16.118292066616647,
+          "maximum_prediction_change": 0.006590864118128481
+        },
+        "Merkley-outside": {
+          "rows": 8,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "CentralSolveUnavailable": 1,
+            "Available": 1
+          },
+          "matched_available": 1,
+          "nonzero_terms": 1,
+          "AARD_percent": 0.7316013656019305,
+          "baseline_matched_AARD_percent": 1.3089769476000157,
+          "maximum_prediction_change": 0.005699155192305683
+        },
+        "Cp-60wt": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 10.756595208433067,
+          "baseline_matched_AARD_percent": 10.730579636067818,
+          "maximum_prediction_change": 0.0008178855101806937
+        },
+        "density-60wt": {
+          "rows": 11,
+          "statuses": {
+            "Available": 11
+          },
+          "matched_available": 11,
+          "nonzero_terms": 11,
+          "AARD_percent": 1.7873571740431944,
+          "baseline_matched_AARD_percent": 1.797597980456947,
+          "maximum_prediction_change": 0.00020289745959056749
+        },
+        "Kuranov-413K": {
+          "rows": 13,
+          "statuses": {
+            "OutsideDeclaredDomain": 13
+          },
+          "matched_available": 0,
+          "nonzero_terms": 0,
+          "AARD_percent": null,
+          "baseline_matched_AARD_percent": null,
+          "maximum_prediction_change": null
+        },
+        "Zheng": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 22.620228115622968,
+          "baseline_matched_AARD_percent": 22.642545832916642,
+          "maximum_prediction_change": 0.0007366705018654329
+        },
+        "Sedighi": {
+          "rows": 15,
+          "statuses": {
+            "Available": 15
+          },
+          "matched_available": 15,
+          "nonzero_terms": 15,
+          "AARD_percent": 75.34900570426184,
+          "baseline_matched_AARD_percent": 74.52976388591469,
+          "maximum_prediction_change": 0.05005241176760267
+        },
+        "Merkley": {
+          "rows": 4,
+          "statuses": {
+            "Available": 4
+          },
+          "matched_available": 4,
+          "nonzero_terms": 4,
+          "AARD_percent": 8.185294300555752,
+          "baseline_matched_AARD_percent": 8.507756986271742,
+          "maximum_prediction_change": 0.0062829014025813645
+        }
+      },
+      "rows": 436,
+      "available": 410
+    },
+    {
+      "name": "393-minus5",
+      "scale": 0.9487762863486675,
+      "anchor": {
+        "T_K": 393.0,
+        "pressure_Pa": 101325.0,
+        "rho_mol_m3": 39713.495203860926,
+        "epsilon": 41.85923201523074,
+        "fixed_density_epsilon": 39.76627041446921
+      },
+      "groups": {
+        "Ermatchkov": {
+          "rows": 101,
+          "statuses": {
+            "Available": 101
+          },
+          "matched_available": 101,
+          "nonzero_terms": 101,
+          "AARD_percent": 19.994533508293916,
+          "baseline_matched_AARD_percent": 20.330849028024804,
+          "maximum_prediction_change": 0.06045537372337739
+        },
+        "corrected-Kamps": {
+          "rows": 28,
+          "statuses": {
+            "Available": 28
+          },
+          "matched_available": 28,
+          "nonzero_terms": 28,
+          "AARD_percent": 25.090417632381534,
+          "baseline_matched_AARD_percent": 25.646534684490266,
+          "maximum_prediction_change": 0.04920565353356243
+        },
+        "Bottinger-amine-sum-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.217017880978094,
+          "baseline_matched_AARD_percent": 7.214207561594266,
+          "maximum_prediction_change": 0.00016688557223498712
+        },
+        "Bottinger-bicarbonate-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.192345859459078,
+          "baseline_matched_AARD_percent": 11.147191316239494,
+          "maximum_prediction_change": 0.0032054561271590565
+        },
+        "Bottinger-amine-sum-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.2169505048378255,
+          "baseline_matched_AARD_percent": 7.214140845105274,
+          "maximum_prediction_change": 0.00016675381757425
+        },
+        "Bottinger-bicarbonate-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.191391440208717,
+          "baseline_matched_AARD_percent": 11.146250653775935,
+          "maximum_prediction_change": 0.003204136476959274
+        },
+        "Merkley-half-loading": {
+          "rows": 12,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 16.41432937025475,
+          "baseline_matched_AARD_percent": 16.118292066616647,
+          "maximum_prediction_change": 0.007322803177211679
+        },
+        "Merkley-outside": {
+          "rows": 8,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "CentralSolveUnavailable": 1,
+            "Available": 1
+          },
+          "matched_available": 1,
+          "nonzero_terms": 1,
+          "AARD_percent": 1.9935019741136095,
+          "baseline_matched_AARD_percent": 1.3089769476000157,
+          "maximum_prediction_change": 0.006756805242122299
+        },
+        "Cp-60wt": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 10.701084605791914,
+          "baseline_matched_AARD_percent": 10.730579636067818,
+          "maximum_prediction_change": 0.0009227856167854931
+        },
+        "density-60wt": {
+          "rows": 11,
+          "statuses": {
+            "Available": 11
+          },
+          "matched_available": 11,
+          "nonzero_terms": 11,
+          "AARD_percent": 1.8087897536248247,
+          "baseline_matched_AARD_percent": 1.797597980456947,
+          "maximum_prediction_change": 0.00022164282191217133
+        },
+        "Kuranov-413K": {
+          "rows": 13,
+          "statuses": {
+            "OutsideDeclaredDomain": 13
+          },
+          "matched_available": 0,
+          "nonzero_terms": 0,
+          "AARD_percent": null,
+          "baseline_matched_AARD_percent": null,
+          "maximum_prediction_change": null
+        },
+        "Zheng": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 22.665137090348622,
+          "baseline_matched_AARD_percent": 22.642545832916642,
+          "maximum_prediction_change": 0.0007653597888046537
+        },
+        "Sedighi": {
+          "rows": 15,
+          "statuses": {
+            "Available": 15
+          },
+          "matched_available": 15,
+          "nonzero_terms": 15,
+          "AARD_percent": 73.65078561971161,
+          "baseline_matched_AARD_percent": 74.52976388591469,
+          "maximum_prediction_change": 0.05342120271222317
+        },
+        "Merkley": {
+          "rows": 4,
+          "statuses": {
+            "Available": 4
+          },
+          "matched_available": 4,
+          "nonzero_terms": 4,
+          "AARD_percent": 8.863398409321526,
+          "baseline_matched_AARD_percent": 8.507756986271742,
+          "maximum_prediction_change": 0.007064436122619755
+        }
+      },
+      "rows": 436,
+      "available": 410
+    },
+    {
+      "name": "393-plus5",
+      "scale": 1.0512237136513325,
+      "anchor": {
+        "T_K": 393.0,
+        "pressure_Pa": 101325.0,
+        "rho_mol_m3": 39713.495203860926,
+        "epsilon": 41.85923201523074,
+        "fixed_density_epsilon": 43.95219361599229
+      },
+      "groups": {
+        "Ermatchkov": {
+          "rows": 101,
+          "statuses": {
+            "Available": 101
+          },
+          "matched_available": 101,
+          "nonzero_terms": 101,
+          "AARD_percent": 20.877946326220872,
+          "baseline_matched_AARD_percent": 20.330849028024804,
+          "maximum_prediction_change": 0.056978381940523626
+        },
+        "corrected-Kamps": {
+          "rows": 28,
+          "statuses": {
+            "Available": 28
+          },
+          "matched_available": 28,
+          "nonzero_terms": 28,
+          "AARD_percent": 26.32482689619594,
+          "baseline_matched_AARD_percent": 25.646534684490266,
+          "maximum_prediction_change": 0.045715844515419324
+        },
+        "Bottinger-amine-sum-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.211591074865004,
+          "baseline_matched_AARD_percent": 7.214207561594266,
+          "maximum_prediction_change": 0.00015362717553135674
+        },
+        "Bottinger-bicarbonate-5bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.105045861761308,
+          "baseline_matched_AARD_percent": 11.147191316239494,
+          "maximum_prediction_change": 0.002958157078085888
+        },
+        "Bottinger-amine-sum-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 58,
+          "AARD_percent": 7.211525197523243,
+          "baseline_matched_AARD_percent": 7.214140845105274,
+          "maximum_prediction_change": 0.00015349203616110696
+        },
+        "Bottinger-bicarbonate-25bar": {
+          "rows": 58,
+          "statuses": {
+            "Available": 58
+          },
+          "matched_available": 58,
+          "nonzero_terms": 57,
+          "AARD_percent": 11.104121857823069,
+          "baseline_matched_AARD_percent": 11.146250653775935,
+          "maximum_prediction_change": 0.002956745277286177
+        },
+        "Merkley-half-loading": {
+          "rows": 12,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 15.853265727698556,
+          "baseline_matched_AARD_percent": 16.118292066616647,
+          "maximum_prediction_change": 0.006615568923530546
+        },
+        "Merkley-outside": {
+          "rows": 8,
+          "statuses": {
+            "OutsideDeclaredDomain": 6,
+            "CentralSolveUnavailable": 1,
+            "Available": 1
+          },
+          "matched_available": 1,
+          "nonzero_terms": 1,
+          "AARD_percent": 0.7295048352341738,
+          "baseline_matched_AARD_percent": 1.3089769476000157,
+          "maximum_prediction_change": 0.005719849610815397
+        },
+        "Cp-60wt": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 10.756691893245561,
+          "baseline_matched_AARD_percent": 10.730579636067818,
+          "maximum_prediction_change": 0.0008209324638992488
+        },
+        "density-60wt": {
+          "rows": 11,
+          "statuses": {
+            "Available": 11
+          },
+          "matched_available": 11,
+          "nonzero_terms": 11,
+          "AARD_percent": 1.787318425370196,
+          "baseline_matched_AARD_percent": 1.797597980456947,
+          "maximum_prediction_change": 0.0002036653401401578
+        },
+        "Kuranov-413K": {
+          "rows": 13,
+          "statuses": {
+            "OutsideDeclaredDomain": 13
+          },
+          "matched_available": 0,
+          "nonzero_terms": 0,
+          "AARD_percent": null,
+          "baseline_matched_AARD_percent": null,
+          "maximum_prediction_change": null
+        },
+        "Zheng": {
+          "rows": 6,
+          "statuses": {
+            "Available": 6
+          },
+          "matched_available": 6,
+          "nonzero_terms": 6,
+          "AARD_percent": 22.620141048477066,
+          "baseline_matched_AARD_percent": 22.642545832916642,
+          "maximum_prediction_change": 0.0007395196702310036
+        },
+        "Sedighi": {
+          "rows": 15,
+          "statuses": {
+            "Available": 15
+          },
+          "matched_available": 15,
+          "nonzero_terms": 15,
+          "AARD_percent": 75.35212893432374,
+          "baseline_matched_AARD_percent": 74.52976388591469,
+          "maximum_prediction_change": 0.05024375273072357
+        },
+        "Merkley": {
+          "rows": 4,
+          "statuses": {
+            "Available": 4
+          },
+          "matched_available": 4,
+          "nonzero_terms": 4,
+          "AARD_percent": 8.184080863981036,
+          "baseline_matched_AARD_percent": 8.507756986271742,
+          "maximum_prediction_change": 0.0063063237319692655
+        }
+      },
+      "rows": 436,
+      "available": 410
+    }
+  ],
+  "engine_wheel_sha256": "ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5",
+  "engine_commit": "d513820994a78bfe628d42fffd55b2eeab6f89bd",
+  "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-265-permittivity--f072ec48e1a8d7af/build/issue-265-mdea-venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+  "workers": 32,
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "inputs": {
+    "analyses/permittivity_temperature_loading/mdea.py": "e732cab5c8d2a1dfac3620820571dc302d59ba41d69adfdd50ed3255743e0a53",
+    "analyses/permittivity_temperature_loading/dielectric_volume.py": "d4c601ad9eaddf80a86b546fce6c220a714cd0f3f678329d88175bc80def06c5",
+    "src/MEA/solvent_specification.py": "0a737f5801b219889505dba7d1ec6cf629fb3f45ac40dfbcb672d4b5a0a47427",
+    "analyses/solvent_specification_mdea/B1.toml": "71d4bc1bbe187ecffd943727206dea78b94ed6b7c69d626a0644c7c118ea3a67",
+    "analyses/solvent_specification_mdea/declarations.toml": "7fc0d5ef5d9c1536ec66a13bf068eb44b4f199357565d5a953408dfe57942a31",
+    "analyses/solvent_specification_mdea/inputs/A3-coordinates.json": "5b2146dc5f0311bbf22783aaa11e168ce701829af5c5dd102aef2b10d09c6095",
+    "analyses/solvent_specification_mdea/inputs/A3-endpoint.json": "3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8",
+    "analyses/solvent_specification_mdea/inputs/A3-start.json": "38e4bb5dde17b7152aed2e274b5c2aa3151b7824e1b096580114f8b8c1681caa",
+    "analyses/solvent_specification_mdea/inputs/B1-coordinates.json": "0bca9af202313b2bd8325ccaa37a72f32a1b326099c957c5ebf35f630506c8be",
+    "analyses/solvent_specification_mdea/inputs/B1-endpoint.json": "1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d",
+    "analyses/solvent_specification_mdea/inputs/B1-start.json": "87ccd90fd6219395b24dceaec61d5c2ed03edacceeb41c81876488115498bb50",
+    "analyses/solvent_specification_mdea/inputs/calibration-Carson.csv": "7bd0b8e6cd945d0817bf84de66df582b17aef6ed8248aae426a7f65f44c04dfe",
+    "analyses/solvent_specification_mdea/inputs/calibration-Cp.csv": "32db9e1c6005c6285c28175a1ae02b6f89e4222de9c2a6f6a8b858655b50ec99",
+    "analyses/solvent_specification_mdea/inputs/calibration-Jakobsen-carbonate.csv": "60c2f5fe1900aa462b94ac89444278b11e5e7450368dd215539846d12534b160",
+    "analyses/solvent_specification_mdea/inputs/calibration-Jakobsen-cation.csv": "f5203d7c9d392bda01574df18e4f29c182958a74aa637717d6804dfb82107093",
+    "analyses/solvent_specification_mdea/inputs/calibration-Kim-binary.csv": "3edc485cd34ef32cccb53b075d53b787ad2e5a6da7d92aaaae43316d75ad92e6",
+    "analyses/solvent_specification_mdea/inputs/calibration-Kim-water.csv": "05e9477b06e6a1283540bb5d5f7b19dceda0934822d1d061c768e774576a89d2",
+    "analyses/solvent_specification_mdea/inputs/calibration-Kuranov.csv": "beeb775e555c53f766dd0d91df37ff064a0031d1e602034193a9ae6aa7873b99",
+    "analyses/solvent_specification_mdea/inputs/calibration-Merkley.csv": "ff5e906205a1e915ad26dba9c9b00a7c55d8df012ac2ed54fba73b8af47c428c",
+    "analyses/solvent_specification_mdea/inputs/calibration-loaded-density.csv": "f2f796c6c727cab46ca2ff05c955bb8120a7604d9ff6c70483bb9e9e9dd0c64d",
+    "analyses/solvent_specification_mdea/inputs/calibration-unloaded-density.csv": "dbbea42108c22509efa86ce0eb9d31cb7647617d78f6b2792783c191305c7e95",
+    "analyses/solvent_specification_mdea/inputs/caloric.json": "278e7b9832dc051f2896615f870f0f91482a8642b7196d2a2a89b669b905ce6c",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Bottinger-amine-sum-25bar.csv": "ca33c3fcc4057a3e74220a0cfbcc475d1275470b9acafa1f0354b523a704798a",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Bottinger-amine-sum-5bar.csv": "488940ecf3fc984edeee3fa145fe6f76936396fce802b5af881bcbee70f677ef",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Bottinger-bicarbonate-25bar.csv": "a788feff21199e1fe2c9a553a133e1fd408bd390d259289b2b7ea3567cc9fbf9",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Bottinger-bicarbonate-5bar.csv": "7ac448699c14bc898a7a8a4877afba5950c31f5f9597343316006f87b256da4a",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Cp-60wt.csv": "bd3d8b2d2f90cdca479df34ba63c5ff369d2d2b5856a1c6765de7b643c919f98",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Ermatchkov.csv": "bffe5603e6ddc4c12c268226b421deaea4ea6a8397771f84aea186b4b6830ae6",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Kuranov-413K.csv": "27b302f4baa8efb0af7c79ad562237f484c2e68a9f38f28e7b9fc9b05220fff4",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Merkley-half-loading.csv": "b202e6844954310692593f76967abaf5ce7d483f096efa46ae8cae422d18bbee",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Merkley-outside.csv": "b88e89910d7aa60ebaf3d8535b5a913d352dc28ebdfea490bddaaba81109ec25",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Sedighi.csv": "4ce05f4d475f79af355443fe6a700d25ecf3585fe16ac67a112fe33ee564690c",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-Zheng.csv": "e255f451d0de07ad57279a6ac1b6806eb89b9aa8236f891b473108e6e0dc1b3a",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-corrected-Kamps.csv": "4a398d4b816bc8c807ed809c81ef12421485b94aab01b6ef874202a56a53d7a6",
+    "analyses/solvent_specification_mdea/inputs/outside-fit-density-60wt.csv": "facdc0e8649e4cad6cb58b9fb16db407b2713ddf8e7e7bf6e87bb776ff84328e",
+    "analyses/solvent_specification_mdea/inputs/parameter-caloric-provenance.json": "620486ea8e890779aaeb89fbd539842bb5b407e6f7e56be03e8e1ce70487baf4",
+    "analyses/solvent_specification_mdea/inputs/phase-provenance.json": "e412a4e6e4b495e2f46480331a65986884085369dc540b812487d001de59272d",
+    "analyses/solvent_specification_mdea/inputs/phase-states.csv": "1dd77ba96a655a5f6b6cdb94d02d67507cebf68dad4b4c44b9815eb16e927c83",
+    "analyses/solvent_specification_mdea/inputs/preparation-provenance.json": "51c14585f99eab82627afc9b12bf50fd36be90c550ef919d509963ab9451773e",
+    "analyses/solvent_specification_mdea/inputs/runtime.json": "8f323488e3f350258b4e204a65e7fc6fb9b21dcd22d5b8f0a546c1c1a08ced31",
+    "analyses/solvent_specification_mdea/results/comparisons.json": "1c27f0691045af8eed57acfedac570a6d92294240cc4f0c46deca12ad186c1e0",
+    "analyses/solvent_specification_mdea/results/endpoint-checks.json": "314b804cadecb79d1d5b2bf695b8cd0ae546475a8219d5fdc259c249e4f76852"
+  }
+}
