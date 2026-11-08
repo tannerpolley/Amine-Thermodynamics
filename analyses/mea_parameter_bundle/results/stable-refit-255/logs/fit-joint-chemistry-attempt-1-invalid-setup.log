@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 556, in <module>
+    run_fit(sys.argv[2])
+    ~~~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 463, in run_fit
+    report = stage_fit(run, index, scale, start, shifts, enforced, cfg.get('held', ()), cfg.get('extra_shifts', ()),
+                       rows_of(cfg), cfg.get('extra'))
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 430, in stage_fit
+    native, report, _ = spec.fit(stability)
+                        ~~~~~~~~^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/src/MEA/solvent_specification.py", line 380, in fit
+    report["reactions"] = self.fitted_reactions(result.chart) if result.chart is not None else None
+                          ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/src/MEA/solvent_specification.py", line 325, in fitted_reactions
+    for q, value in zip(source_coordinates, chart.physical[len(chart.active) :], strict=True):
+                    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: zip() argument 2 is shorter than argument 1
