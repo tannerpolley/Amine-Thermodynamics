@@ -44,7 +44,7 @@ Both primary starts agree within 0.023 optimizer scales on every coordinate ([fi
 
 Six coordinates end on bounds: MEAH⁺–water k (−0.5), bicarbonate–water k (1.0), carbamate–MEAH⁺ k (−1), both Born diameters (5 Å) and the R5 total shift (+10 000 J/mol).
 
-**Where the stability requirement was binding.** The final-start fit ends with stability cost 0 ([final/stage-0/fit.json](final/stage-0/fit.json)); its four retained stability transitions are trial-minimizer changes at two states that stay without a witness, so no resolved descent was met along the path. From the final set, the requirement was therefore not binding: what held the cost at 148.883 was the narrowed #170/#212 bounds (the MEAH⁺ segment diameter sat at its 5.35 Å bound). About 0.004 of the 0.373 cost gain comes from the input change instead: the final set's own fit, on the stage-1 inputs, cost 148.879, and #260 later changed 4 heat-capacity rows. Lifting them gives a lower-cost local optimum that happens to be stable. From the wide start (unconstrained 148.2156, 1207 descent states), the penalty moved the fit out of the unstable basin to the same optimum. Relative to that unstable optimum, stability costs +0.295 in the 307-row cost. The outcome-A test uses the current-input reference 148.883260 with the relative margin 10⁻⁶; the near-final test uses one optimizer scale per coordinate (enthalpy-shift coordinates are not part of it).
+**Where the stability requirement was binding.** The final-start fit ends with stability cost 0 ([final/stage-0/fit.json](final/stage-0/fit.json)); its four retained stability transitions are trial-minimizer changes at two states that stay without a witness, so no resolved descent was met along the path. From the final set, the requirement was therefore not binding: what held the cost at 148.883 was the narrowed #170/#212 bounds (the MEAH⁺ segment diameter sat at its 5.35 Å bound). About 0.004 of the 0.373 cost gain comes from the input change instead: the final set's own fit, on the stage-1 inputs, cost 148.879, and #260 later changed 4 heat-capacity rows. Lifting those bounds gives a lower-cost local optimum that happens to be stable. From the wide start (unconstrained 148.2156, 1207 descent states), the penalty moved the fit out of the unstable basin to the same optimum. Relative to that unstable optimum, stability costs +0.295 in the 307-row cost. The outcome-A test uses the current-input reference 148.883260 with the relative margin 10⁻⁶; the near-final test uses one optimizer scale per coordinate (enthalpy-shift coordinates are not part of it).
 
 The final-start fit has no `workers` field: it used `os.cpu_count()` = 32. A first wide-start attempt was stopped after 4.5 h of memory thrash caused by concurrent builds ([log](logs/fit-wide-attempt-1-stopped-under-memory-thrash.log)). The retained wide run sizes its workers from free memory (32 at launch). Worker count does not change the calculation.
 
@@ -90,7 +90,7 @@ The final-set rerun reproduces the retained values:
 - all 31 curve references, with curves within 2.1×10⁻¹²;
 - Kim within 2×10⁻⁹;
 - the #264 and #268 group metrics exactly;
-- the MDEA heats within 2×10⁻¹³ relative.
+- the MDEA heats within 2.1×10⁻¹³ relative.
 
 [evidence/comparison.csv](evidence/comparison.csv) lists all 345 same-input differences. The main ones (final set → candidate):
 
@@ -139,7 +139,7 @@ The stability evidence is a finite Full search at declared states. Liquid-parent
 
 [logs/](logs/) keeps every attempt:
 - `fit-final-attempt-1-reduction-crash.log`: after the first final-start fit, the endpoint comparison paired the 307 data values with predictions that also held the appended stability rows (`zip() argument 2 is longer`). The stability predictions are now reported separately; the fit was rerun.
-- `fit-wide-attempt-1-stopped-under-memory-thrash.log`: stopped after 4.5 h of swap thrash from concurrent builds; restarted with workers sized from free memory.
+- `fit-wide-attempt-1-stopped-under-memory-thrash.log`: stopped after 4.5 h of swap thrash from concurrent builds, before it wrote any output, so the log is empty and this note is the only record of the stop; restarted with workers sized from free memory.
 - `fit-joint-chemistry-attempt-1-invalid-setup.log`: the Engine refused the setup (R5 tied declarations and starts disagreed) because the Böttinger rows were built from the specification's stored record instead of the run's start record; the driver then failed reading reactions from the refused fit's empty chart (`zip() argument 2 is shorter`). Fixed in `bottinger_targets`, and the driver now reads reactions only from a chart with physical values.
 - `fit-pressure-roles-261-attempt-1-hash-pin.log`: #261's study pinned the pre-#260 caloric record; replaced by the re-pinned [spec-261/](spec-261/study.toml).
 
