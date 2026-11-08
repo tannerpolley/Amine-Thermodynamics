@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 556, in <module>
+    run_fit(sys.argv[2])
+    ~~~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 463, in run_fit
+    report = stage_fit(run, index, scale, start, shifts, enforced, cfg.get('held', ()), cfg.get('extra_shifts', ()),
+                       rows_of(cfg), cfg.get('extra'))
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 415, in stage_fit
+    spec = bind(start)
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 123, in bind
+    return d.bind(mapping)
+           ~~~~~~^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/density_268.py", line 57, in bind
+    spec = SolventSpecification(AN / 'MEA.toml')
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 121, in <lambda>
+    d.SolventSpecification, original = (lambda path: original(TOML)), d.SolventSpecification
+                                                     ~~~~~~~~^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/src/MEA/solvent_specification.py", line 39, in __init__
+    self.inputs = {key: self.load_record(self.spec[key]) for key in ("start", "endpoint", "coordinates", "caloric")}
+                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/src/MEA/solvent_specification.py", line 213, in load_record
+    raise ValueError(f"Input hash mismatch: {path}")
+ValueError: Input hash mismatch: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/results/pressure-transfer-261/../../../solvent_specification_mea/inputs/caloric.json

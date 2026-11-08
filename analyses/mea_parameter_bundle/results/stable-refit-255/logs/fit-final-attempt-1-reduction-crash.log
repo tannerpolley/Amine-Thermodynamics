@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 547, in <module>
+    run_fit(sys.argv[2])
+    ~~~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 454, in run_fit
+    report = stage_fit(run, index, scale, start, shifts, enforced, cfg.get('held', ()), cfg.get('extra_shifts', ()),
+                       rows_of(cfg), cfg.get('extra'))
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 430, in stage_fit
+    endpoint_prediction_difference=max(abs(v['value'] - p) / max(1., abs(p)) for v, p in zip(values, report['predictions'], strict=True)) if ok and report['predictions'] else None,
+                                   ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-255-diagnose-the--bade13ac0b945602/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 430, in <genexpr>
+    endpoint_prediction_difference=max(abs(v['value'] - p) / max(1., abs(p)) for v, p in zip(values, report['predictions'], strict=True)) if ok and report['predictions'] else None,
+                                                                                         ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: zip() argument 2 is longer than argument 1
