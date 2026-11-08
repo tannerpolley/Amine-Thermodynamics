@@ -1,0 +1,32 @@
+{
+  "campaign_base_commit": "b0b1cba",
+  "restore_command": "git checkout b0b1cba -- analyses/solvent_specification_mea/MEA.toml analyses/solvent_specification_mea/MEA-fit.toml analyses/solvent_specification_mea/inputs/caloric.json data/reference/MEA/thermal/physical-ideal-gas-calorics.json src/MEA/solvent_specification.py",
+  "meaning": "Files changed on main after the campaign (water ideal-gas calorics, commit 0e216fe). calculate.py complete ran on 2026-11-08 with these five files restored to the campaign base bytes, then restored to the delivered tree. Only MEA.toml (and the caloric file it binds) is checked by inputs/input-hashes.json; physical-ideal-gas-calorics.json, read by the curve heat model, is not hash-checked.",
+  "files": [
+    {
+      "path": "analyses/solvent_specification_mea/MEA.toml",
+      "campaign_base_sha256": "6fb9ddedd758922bdb8c52ae92724cc467b965248142e0c0725235d7283baef6",
+      "delivered_tree_sha256": "d09c7004ae3a9f038f6832f8d6ef922af76039b4e9f712dc2e67cee96df097fe"
+    },
+    {
+      "path": "analyses/solvent_specification_mea/MEA-fit.toml",
+      "campaign_base_sha256": "fc953d4516412fa5b38ccf499bac8fea0a48f5291e1e8843a00857b7fb9f945b",
+      "delivered_tree_sha256": "005cdd5bbb0badd45513785225f9c70d194d0a75a4a2e7a1d4c99baa9b8c1f01"
+    },
+    {
+      "path": "analyses/solvent_specification_mea/inputs/caloric.json",
+      "campaign_base_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "delivered_tree_sha256": "d371e5102e6368a51e7db0def4010ac67fa26875b31ee358077ebb904de41efb"
+    },
+    {
+      "path": "data/reference/MEA/thermal/physical-ideal-gas-calorics.json",
+      "campaign_base_sha256": "c94d504e68c6dc6e85d3d950cc51422499846729b1a06994b362040be991924a",
+      "delivered_tree_sha256": "1df8da1f8f28c59dc62a2291becb93fdfa0760a4ccd0a103fe693d9996eb0f1a"
+    },
+    {
+      "path": "src/MEA/solvent_specification.py",
+      "campaign_base_sha256": "0a737f5801b219889505dba7d1ec6cf629fb3f45ac40dfbcb672d4b5a0a47427",
+      "delivered_tree_sha256": "849a0aab4d6d87b44e18cd01a64ba1dba63e4701bb057fa473815d4e653431d5"
+    }
+  ]
+}

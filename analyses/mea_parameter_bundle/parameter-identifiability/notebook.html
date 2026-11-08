@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Which MEA coordinates are constrained by the 307 observations?</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="notebook_files/libs/clipboard/clipboard.min.js"></script>
+<script src="notebook_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="notebook_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="notebook_files/libs/quarto-html/popper.min.js"></script>
+<script src="notebook_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="notebook_files/libs/quarto-html/anchor.min.js"></script>
+<link href="notebook_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="notebook_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="notebook_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="notebook_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="notebook_files/libs/bootstrap/bootstrap-aeca128ff5825cfb6601657b8edbdab5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Which MEA coordinates are constrained by the 307 observations?</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This study examines parameter identification and conditional uncertainty for the retained aqueous MEA–CO₂ model. It provides calibration sensitivity, source/series resampling, model predictions and numerical verification. It does not provide independent physical validation, structural-identifiability proof, parameter adoption, or absorber/stripper qualification. The <a href="https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/262">accepted design in #262</a> defines the finite calculations and their interpretation. Design readiness was reviewed <strong>Ready</strong>, and the delivered evidence was reviewed <strong>Supported</strong> in an independent read-only review. It has not been promoted for manuscript use.</p>
+<section id="each-historical-active-bound-admits-a-lower-cost-tested-excursion" class="level2">
+<h2 class="anchored" data-anchor-id="each-historical-active-bound-admits-a-lower-cost-tested-excursion">Each historical active bound admits a lower-cost tested excursion</h2>
+<p>All 156 declared profile nodes were attempted: 144 converged, eight reached the approved fit-time limit, and four had unavailable 307-row starting evaluations. Every usable endpoint, including the eight time-limited ones, received all 162 frozen phase states. The 24,624 state–endpoint calculations contain 221,616 actual native trials and include 478 cases with detected descent and 24 incomplete cases. Their locations and raw native evidence are retained; incomplete cases are not counted as stable.</p>
+<p>Each of the six historical active bounds has a separate converged excursion with lower cost, zero detected descent states out of 162 and no incomplete phase states:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinate</th>
+<th style="text-align: right;">Historical active limit</th>
+<th style="text-align: right;">Tested fixed value</th>
+<th style="text-align: right;">Replayed cost <span class="math inline">\(C\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\Delta C\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MEAH⁺–water interaction</td>
+<td style="text-align: right;">−0.50</td>
+<td style="text-align: right;">−0.54</td>
+<td style="text-align: right;">148.800004</td>
+<td style="text-align: right;">−0.078936</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ interaction</td>
+<td style="text-align: right;">−1.00</td>
+<td style="text-align: right;">−1.04</td>
+<td style="text-align: right;">148.638379</td>
+<td style="text-align: right;">−0.240560</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ segment diameter (Å)</td>
+<td style="text-align: right;">5.35</td>
+<td style="text-align: right;">4.95</td>
+<td style="text-align: right;">148.510889</td>
+<td style="text-align: right;">−0.368050</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter (Å)</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">5.40</td>
+<td style="text-align: right;">148.832097</td>
+<td style="text-align: right;">−0.046843</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter (Å)</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">5.40</td>
+<td style="text-align: right;">148.870044</td>
+<td style="text-align: right;">−0.008895</td>
+</tr>
+<tr class="even">
+<td>R5 total enthalpy shift (kJ/mol)</td>
+<td style="text-align: right;">+10.0</td>
+<td style="text-align: right;">+20.0</td>
+<td style="text-align: right;">148.751472</td>
+<td style="text-align: right;">−0.127468</td>
+</tr>
+</tbody>
+</table>
+<p>Interaction coefficients and costs are dimensionless. The R5 excursion is a +10 kJ/mol <strong>increment</strong> about the inherited +10 kJ/mol total shift. These are <strong>one-coordinate excursions with the other fifteen refitted under their historical nuisance restrictions</strong>. The prescribed diagnostic does not support treating these six historical limits as data-active at the tested excursions. It does not establish a simultaneously widened admissible box or global phase stability.</p>
+<p>The reference cost is not a minimum of the enlarged profile problems. Negative differences remain retained, and likelihood-interval interpretation is withheld. The finite cost shapes, observed coupling, numerical failures and detected instability still inform the coordinate recommendation.</p>
+<section id="why-a-single-start-excursion-can-lie-below-the-reference" class="level3">
+<h3 class="anchored" data-anchor-id="why-a-single-start-excursion-can-lie-below-the-reference">Why a single-start excursion can lie below the reference</h3>
+<p>The reference <span class="math inline">\(C_*\)</span> is a minimum <strong>inside the historical bound box</strong>, with these six coordinates held on their limits. It is not a minimum along any of these coordinates once its limit is removed. The <a href="../results/engine-3e83e19c-paper-evidence/conditional-uncertainty.json">retained conditional-uncertainty record</a> already shows this at the reference: for all six active coordinates the cost gradient points out of the box (<code>active_bound_outward_descent</code> is true for each). At the reference the other fifteen coordinates are at their optimum, so the slope of the profile (the refitted cost as a function of the held coordinate) equals that partial derivative there. Each profile therefore starts downward out of the box, with first-order change <span class="math inline">\((\partial C/\partial\theta)\,\Delta\theta\)</span>. This is a statement about the refitted cost only. With the other coordinates left at their reference values the cost rises steeply. The retained starting costs at the held node, before any refit, are 216.54 at 4.95 Å MEAH⁺ segment diameter, 203.20 at MEAH⁺–water <span class="math inline">\(k=-0.54\)</span>, 188.00 at a +10 kJ/mol R5 increment and 149.81 at carbamate–MEAH⁺ <span class="math inline">\(k=-1.04\)</span>, all above <span class="math inline">\(C_*\)</span>. The lower costs come from the refit.</p>
+<p>The attained profile costs follow the first-order profile slope for the small steps (full list in the retained tables):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Excursion</th>
+<th style="text-align: right;">Step <span class="math inline">\(\Delta\theta\)</span></th>
+<th style="text-align: right;">Reference <span class="math inline">\(\partial C/\partial\theta\)</span></th>
+<th style="text-align: right;">First-order <span class="math inline">\(\Delta C\)</span></th>
+<th style="text-align: right;">Attained <span class="math inline">\(\Delta C\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MEAH⁺–water <span class="math inline">\(k\)</span> to −0.54</td>
+<td style="text-align: right;">−0.04</td>
+<td style="text-align: right;">1.989</td>
+<td style="text-align: right;">−0.0795</td>
+<td style="text-align: right;">−0.0789</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ <span class="math inline">\(k\)</span> to −1.04</td>
+<td style="text-align: right;">−0.04</td>
+<td style="text-align: right;">6.245</td>
+<td style="text-align: right;">−0.2498</td>
+<td style="text-align: right;">−0.2406</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ segment diameter to 4.95 Å</td>
+<td style="text-align: right;">−0.40 Å</td>
+<td style="text-align: right;">1.939 Å⁻¹</td>
+<td style="text-align: right;">−0.7754</td>
+<td style="text-align: right;">−0.3681</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter to 5.40 Å</td>
+<td style="text-align: right;">+0.40 Å</td>
+<td style="text-align: right;">−0.1339 Å⁻¹</td>
+<td style="text-align: right;">−0.0536</td>
+<td style="text-align: right;">−0.0468</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter to 5.40 Å</td>
+<td style="text-align: right;">+0.40 Å</td>
+<td style="text-align: right;">−0.0747 Å⁻¹</td>
+<td style="text-align: right;">−0.0299</td>
+<td style="text-align: right;">−0.0089</td>
+</tr>
+<tr class="even">
+<td>R5 enthalpy increment +10 kJ/mol</td>
+<td style="text-align: right;">+10000 J/mol</td>
+<td style="text-align: right;">−1.485×10⁻⁵ mol/J</td>
+<td style="text-align: right;">−0.1485</td>
+<td style="text-align: right;">−0.1275</td>
+</tr>
+</tbody>
+</table>
+<p>The largest decrease, the MEAH⁺ segment-diameter excursion to 4.95 Å (<span class="math inline">\(C=148.510889\)</span> against <span class="math inline">\(C_*=148.878939\)</span>), is about half its first-order value because the profile curves over a 0.4 Å step. It is a <strong>finding about the bound box, not a new parameter estimate</strong>. The excursion is one coordinate at a time, used one endpoint nuisance start, and was not checked for a lower minimum elsewhere. Its 4.95 Å value is not proposed for adoption. Any enlarged box must be refitted jointly with phase stability in #255 stage 2.</p>
+</section>
+</section>
+<section id="basis-and-meaning-of-the-calculations" class="level2">
+<h2 class="anchored" data-anchor-id="basis-and-meaning-of-the-calculations">Basis and meaning of the calculations</h2>
+<p>All calculations start from the <a href="../results/selected-current-best-parameters.json">retained endpoint</a>, SHA-256 <code>00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91</code>, using the 307 observations, weights, equilibrium tolerance, continuation declarations, thermal inputs, reaction domains and standard states owned by <a href="../../solvent_specification_mea/MEA.toml">MEA.toml</a>. The sixteen original coordinates, units, ties, endpoint values, historical nuisance restrictions and 156 exact scan nodes are retained in <a href="inputs/coordinates.json">coordinates.json</a>. A profile fixes one coordinate and refits the other fifteen from the endpoint nuisance start. It establishes an attained local cost, not a global minimum.</p>
+<p>The dimensionless weighted least-squares cost is</p>
+<p><span class="math display">\[C(\theta)=\tfrac12\sum_{i=1}^{307} w_i r_i(\theta)^2.\]</span></p>
+<p>The retained reference is <span class="math inline">\(C_*=148.87893934557388\)</span>. Both <span class="math inline">\(\Delta C=C-C_*\)</span> and <span class="math inline">\(2\Delta C\)</span> are retained. The owner-approved approximate one-coordinate comparison is <span class="math inline">\(2\Delta C=3.84\)</span>, or <span class="math inline">\(\Delta C=1.92\)</span>. With <span class="math inline">\(s^2=2C_* /(307-16)=1.0232229508286865\)</span>, the second comparison is <span class="math inline">\(2\Delta C=3.929176131182156\)</span>. These are conditional on the chosen weights, residual independence and fixed model inputs. Active bounds and a finite, single-start search preclude a claim of calibrated 95% coverage. Crossings are brackets between evaluated nodes. Failed fits and untested intervals establish neither a crossing nor a flat profile.</p>
+<p>Original reaction-coordinate accounting is separate from completed-law transport. The R5 coordinate is the native natural-log coefficient <span class="math inline">\(b=-7723.098885755592\)</span> K before incremental enthalpy-shift composition; it is not the completed coefficient after a nuisance shift. The inherited total R2 and R5 enthalpy shifts are −1363.931574116721 and +10000 J/mol. Reported incremental coordinates are relative to these inherited values. For both MEAH⁺ and carbamate, the segment, packing and Debye–Hückel diameters retain the ratio 1:0.88:1; their Born diameters remain separate coordinates. Reaction domains and standard states remain those of each destination observation.</p>
+<p>Historical bounds are numerical restrictions, not measured physical priors. Segment and Born diameters are in ångström; dispersion energies divided by Boltzmann’s constant and reciprocal-temperature interaction slopes are in kelvin. Interaction coefficients are dimensionless. Reading the MEA-owned declaration <span class="math inline">\(k(T)=A+B(1/T-1/T_{\rm ref})\)</span> at 293.15 and 436.85 K bounds this law on that positive-temperature interval. The <span class="math inline">\(k\leq1\)</span> diagnostic means nonnegative unlike dispersion attraction; it does not establish phase stability. Every candidate receives the owner-authorized native constant-law equivalence and perturbation-sensitivity checks. Only fixed-temperature residual chemical potentials are compared; temperature derivatives and caloric properties are excluded from this equivalence check.</p>
+<p>Each usable profile endpoint receives the existing native phase calculation at <strong>all 162 frozen states with nine starts each</strong>, using fitted EOS parameters and completed reaction laws. The states span 313.15–393.15 K and loading <span class="math inline">\(10^{-5}\)</span>–0.6 mol CO₂/mol MEA at 0.50, 0.80 and 0.95 of the retained endpoint bubble pressure. Detected descent, incomplete search and attained cost are separate quantities. Zero detected descents is a finite-search finding, not proof of global stability. Bootstrap predictions do not receive this phase search and can include imposed single-liquid calculations below their predicted bubble pressure.</p>
+</section>
+<section id="dependence-and-resampling" class="level2">
+<h2 class="anchored" data-anchor-id="dependence-and-resampling">Dependence and resampling</h2>
+<p><a href="inputs/blocks.json">blocks.json</a> maps every observation to its source, experimental series and physical state with provenance: ten sources and nineteen series. The mixed common-149 objective is not treated as one experiment. Each of 200 seed-262 draws samples ten source occurrences uniformly with replacement; each source occurrence then samples its own number of series uniformly with replacement. Every selected series is retained completely. Properties belonging to the same physical state have equal multiplicity, and multiplicities accumulate when a source or series is drawn repeatedly. No observation-level resampling is introduced.</p>
+<p>The bootstrap objective is</p>
+<p><span class="math display">\[C^{(b)}(\theta)=\tfrac12\sum_i m_i^{(b)}w_i r_i(\theta)^2.\]</span></p>
+<p>Every fit’s native initial cost is checked against an independently evaluated objective with those exact multiplicities. The full sixteen-coordinate historical bound box remains in force. Failed draws are retained without replacement. Parameter spreads therefore describe the frozen bounded estimation procedure. They do not estimate uncertainty outside that box or propagate uncertainty in fixed chemistry, thermal inputs, source corrections or the model form.</p>
+<p>Each usable converged draw is replayed on the same 307 calibration observations. The reported pressure AARD uses exactly 47 <code>PartialPressure</code> observations; the reported species AARD uses exactly 94 <code>PhaseMoleFraction</code> observations. Here AARD is <span class="math inline">\(100N^{-1}\sum_i |y_i^{\rm model}/y_i^{\rm observed}-1|\)</span> in percent. Other source/property memberships are reported separately. These are distributions of calibration errors across resampled fits, not out-of-sample validation errors.</p>
+<p><a href="inputs/curve-states.json">curve-states.json</a> freezes 785 physical grid states from the reported curves: 365 pressure, 140 speciation, 132 density, 84 heat and 64 MEA–water states, preserving every associated quantity and unit. The existing curve calculation owner evaluates each draw. Pointwise 2.5%, median and 97.5% summaries use only available finite predictions and retain their own successful denominators; they are not simultaneous confidence bands. First-100 versus full-200 changes describe finite resampling precision, not convergence of percentile estimates.</p>
+</section>
+<section id="numerical-reference-checks" class="level2">
+<h2 class="anchored" data-anchor-id="numerical-reference-checks">Numerical reference checks</h2>
+<p>The task-local approved Engine wheel is from merged commit <code>e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4</code>, SHA-256 <code>83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6</code>. Its installed package bytes match the wheel. The main checkout’s pin is unchanged. This amendment resolves the earlier R5 tied-declaration temperature-domain conflict; no Engine source was modified.</p>
+<p>The <a href="results/qualification-replay.json">full reference replay</a> returns all 307 observations with <span class="math inline">\(C=148.87893934556408\)</span>: relative cost difference <span class="math inline">\(6.58\times10^{-14}\)</span> and maximum relative row-residual difference <span class="math inline">\(1.263\times10^{-10}\)</span>, against the approved <span class="math inline">\(10^{-8}\)</span> relative limits. The <a href="results/qualification-coordinates.json">joint coordinate check</a> evaluates all sixteen coordinates and all observations. The <a href="results/qualification-r5-hold.json">R5 hold check</a> gives identical predictions and completed laws for full and reduced coordinate declarations at two nonzero nuisance shifts.</p>
+<p>The <a href="results/qualification-transport.json">written/reloaded candidate check</a> retains 307 available predictions at nonzero R2/R5 shifts and a fixed R5 node. Maximum relative prediction difference is <span class="math inline">\(2.32037\times10^{-13}\)</span> and maximum absolute completed-law coefficient difference is <span class="math inline">\(1.42109\times10^{-14}\)</span>, preserving domains and standard states. This qualifies the existing application-specific completed-law mapping, including native R5 conversion.</p>
+<p>The <a href="results/qualification-interactions.json">interaction-law qualification</a> retains 96 native comparisons over four pairs, both endpoint temperatures, three pressures and below/at/above-one declarations. Maximum relative equivalence error is zero; minimum response to a <span class="math inline">\(10^{-3}\)</span> interaction perturbation is <span class="math inline">\(4.26247\times10^{-5}\)</span> relative, exceeding the <span class="math inline">\(10^{-7}\)</span> sensitivity floor. Actual floating-point classifications are retained, including nominal-one values represented just below one. The <a href="results/phase-reference/summary.json">phase reference</a> reproduces 162 states, nine starts per state, zero detected descent states and zero incomplete states.</p>
+<p>Native fitting uses 180 iterations, function tolerance <span class="math inline">\(10^{-6}\)</span>, parameter tolerance <span class="math inline">\(10^{-10}\)</span>, gradient tolerance <span class="math inline">\(10^{-8}\)</span> and a 600 s elapsed-time budget. Every usable returned fit is independently replayed using written/reloaded candidate parameters and completed laws: native cost agreement within <span class="math inline">\(10^{-8}\)</span> relative, weighted residual agreement within <span class="math inline">\(10^{-8}\)</span> absolute, and no material worsening of the same-node starting cost. Nonconverged, exhausted, unavailable or interaction-inadmissible fits do not enter interval or percentile inference. No failed draw is silently replaced.</p>
+<p>The <a href="results/qualification-held-reactions.json">held-reaction checks</a> qualify candidate export through the existing solvent-specification reaction mapping. Replayed weighted residuals differ from the retained native fits by at most <span class="math inline">\(1.007\times10^{-11}\)</span> for the checked R2 hold and <span class="math inline">\(7.910\times10^{-12}\)</span> for the checked R5 hold. The <a href="results/qualification-held-coordinate-equivalence.json">original/reduced coordinate comparisons</a> give identical 307-row predictions and original-coordinate values for the checked R2 hold and positive R5 enthalpy excursion. The <a href="results/implementation-corrections.json">correction record</a> identifies fourteen implementation failures that were preserved and rerun after this correction, without changing numerical controls or nuisance restrictions.</p>
+<p>The <a href="results/qualification-curve-model-binding.json">candidate-model comparison</a> checks the curve owner’s default model after replacing its candidate: at 313.15 K, 100000 Pa and CO₂-free MEA mass fraction 0.30, default and explicit candidate calculations both give liquid molar density 43921.294702574254 mol/m³. The old reference model gives 43912.968925653804 mol/m³, a relative difference <span class="math inline">\(1.896\times10^{-4}\)</span>. This verifies that the changed model is consumed; it is not a density validation against measurements.</p>
+</section>
+<section id="published-practice-and-claim-limits" class="level2">
+<h2 class="anchored" data-anchor-id="published-practice-and-claim-limits">Published practice and claim limits</h2>
+<p>The source reading used Baygi and Pahlavanzadeh (2015), §§3–4 and Eq. 11, <a href="https://doi.org/10.1016/j.cherd.2014.07.017">DOI</a>; Nasrifar and Tafazzol (2010), §§6–7, <a href="https://doi.org/10.1021/ie901181n">DOI</a>; Uyan et al.&nbsp;(2015), §§4.1–4.3, <a href="https://doi.org/10.1016/j.fluid.2015.02.026">DOI</a>; Wangler et al.&nbsp;(2018), §§6.1.2–6.1.4 and 7, <a href="https://doi.org/10.1016/j.fluid.2017.12.033">DOI</a>; and Albers and Sadowski (2011), §4.1, <a href="https://doi.org/10.1021/ie2010803">DOI</a>. The indexed reading copies and current Zotero source attachments were hash-verified during design and independently checked in readiness review.</p>
+<p>The MEA ideal-speciation calibration and related MDEA ion-transfer or electrolyte fitting practices do not establish numerical physical bounds for this model’s MEAH⁺ or Born diameters. Albers’ examples of parameter compensation support caution about unique physical interpretation; they do not prove structural nonidentifiability in this MEA model. Historical bounds, observed coupling and finite profile variation retain those distinctions here.</p>
+<p>Ten source blocks, nineteen series, historical nuisance restrictions, single local starts, numerical stopping limits, fixed model inputs, possible source bias and model discrepancy limit the uncertainty interpretation. Source-block resampling tests sensitivity to within-experiment dependence; it neither proves independence between sources nor calibrates confidence coverage. Stability-constrained fitting and parameter adoption remain with #255 stage 2 using the Engine #1059 wheel. No recommendation here authorizes adopting a new parameter vector.</p>
+</section>
+<section id="born-diameters-remain-weakly-restricted-over-the-tested-ranges" class="level2">
+<h2 class="anchored" data-anchor-id="born-diameters-remain-weakly-restricted-over-the-tested-ranges">Born diameters remain weakly restricted over the tested ranges</h2>
+<p>Both Born-diameter profiles have nine converged nodes over 2.0–5.4 Å. The attained cost ranges are 148.8321–150.2794 for MEAH⁺ and 148.8654–149.5430 for carbamate. Their largest attained <span class="math inline">\(2\Delta C\)</span> values, 2.801 and 1.328, are below both declared comparison cutoffs. All 2,916 state–endpoint phase calculations complete without detected descent. These are broad finite scans with conditional nuisance restrictions; they do not identify unique physical ion sizes. Their small negative cost differences beyond 5 Å also prevent treating the old upper bounds as established by the observations.</p>
+<p>The lower-bound excursions of MEAH⁺–water interaction, carbamate–MEAH⁺ interaction and MEAH⁺ segment diameter likewise attain lower cost without detected descent at the tested endpoint nuisance refits. Examples are <span class="math inline">\(k_{\mathrm{MEAH^+,water}}=-0.54\)</span> with <span class="math inline">\(C=148.8000\)</span>, <span class="math inline">\(k_{\mathrm{MEACOO^-,MEAH^+}}=-1.04\)</span> with <span class="math inline">\(C=148.6384\)</span>, and MEAH⁺ segment diameter 4.95 Å with <span class="math inline">\(C=148.5109\)</span>. Each has zero detected descent states out of 162 and no incomplete phase states. These are separate one-coordinate excursions. They do not establish a simultaneously widened admissible bound box.</p>
+<p>The opposite MEAH⁺–water endpoint, −0.161, has attained <span class="math inline">\(2\Delta C=4.3183\)</span> and nineteen detected descent states out of 162. Both cost increase and detected instability therefore matter for this direction, with the local-start qualification above. Neither a failed fit nor instability at a starting nuisance vector proves that every nuisance-refitted state at that coordinate is unavailable.</p>
+<p>A materially lower cost than the historical reference is retained as negative <span class="math inline">\(\Delta C\)</span>. Consequently, the tabulated threshold brackets are diagnostic comparisons to that reference; likelihood-interval interpretation is withheld until the enlarged reference problem is reconciled with the owner. Replacing negative differences by zero or calling every un-crossed finite profile a confidence interval would overstate the evidence.</p>
+</section>
+<section id="observed-coupling-does-not-justify-a-physical-parameter-merger" class="level2">
+<h2 class="anchored" data-anchor-id="observed-coupling-does-not-justify-a-physical-parameter-merger">Observed coupling does not justify a physical parameter merger</h2>
+<p>The <a href="../results/engine-3e83e19c-paper-evidence/conditional-correlations.csv">retained conditional correlation matrix</a> covers ten free coordinates conditional on six active bounds. It gives correlation 0.9673 between the MEAH⁺–water interaction slope and R2 enthalpy shift, −0.9661 between the two ion dispersion energies, and 0.9564 between MEAH⁺ dispersion energy and bicarbonate–water interaction. The magnitude of the correlation between carbamate–water interaction and the source R5 reciprocal-temperature coefficient is 0.9498; reversing the sign to the displayed native R5 <span class="math inline">\(b\)</span> coordinate reverses that correlation’s sign. These linear, conditional correlations and compensating profile movements establish observed coupling for this fit, not structural nonidentifiability or physical equivalence of the coupled quantities.</p>
+</section>
+<section id="sourceseries-bootstrap-195-converged-draws" class="level2">
+<h2 class="anchored" data-anchor-id="sourceseries-bootstrap-195-converged-draws">Source/series bootstrap: 195 converged draws</h2>
+<section id="eligibility-decision" class="level3">
+<h3 class="anchored" data-anchor-id="eligibility-decision">Eligibility decision</h3>
+<p>All 200 frozen draws have retained native fit results: 195 converged and five reached their fit limit. The primary bootstrap set is the <strong>195 converged draws</strong>. This was decided on 2026-11-08 by the orchestrator, choosing the recommended option while the owner was away. The reason is that a draw’s fitted parameters depend only on the rows in its own objective. A row with zero multiplicity is not in that objective, so whether its prediction is available cannot affect that draw’s fit. Each eligible draw must satisfy three conditions, all checked from retained data in the <a href="results/study.json">study reduction</a> (<code>draw_eligibility</code>):</p>
+<ul>
+<li>every positive-multiplicity row is available;</li>
+<li>the replayed sampled cost matches the native final cost (largest relative difference <span class="math inline">\(2.6\times10^{-12}\)</span>) and the included weighted residuals match within <span class="math inline">\(1.13\times10^{-10}\)</span>, against the <span class="math inline">\(10^{-8}\)</span> limits;</li>
+<li>the interaction declarations are admissible.</li>
+</ul>
+<p>The five limit-reached draws (000, 014, 061, 092 and 194) are excluded because their fits did not meet the convergence tolerances, not because of their parameter values. All five also omit Cai, the same source pattern as the fourteen retained draws below. Their stopping points are retained in each <code>native-fit.json.gz</code>, and their MEA–water <span class="math inline">\(k\)</span> values there are 0.234 to 0.305, all above the primary 97.5% value of 0.070. These are not converged estimates. Excluding them narrows the upper tail of the MEA–water spread, so the spread reported here is, if anything, understated.</p>
+<p>Fourteen of the 195 have unavailable replay predictions, all on zero-multiplicity rows (8 to 44 rows per draw). The unavailable rows are Cai (1996) MEA–water bubble points, plus one Jou (1995) pressure row in one draw. Of the 281 unavailable rows, the engine reports local phase instability of the imposed liquid at 258. The other 23 are 22 infeasible equilibrium solves (4 in draw 051, 14 in 091 and 4 in 189) and one exhausted solve budget (the Jou row in draw 051). <strong>None of these fourteen draws sampled the Cai source.</strong> They are the no-Cai fits whose MEA–water parameters drifted far enough to make Cai’s omitted states locally unstable. Leaving them out would select draws on an outcome for rows outside their objective. The fit had stopped at that replay, so a completion step finished these fourteen draws from their retained fits without refitting. It recovered the original-basis coordinates from the native chart, a recovery that reproduces all 181 retained draw summaries exactly. It also ran the interaction equivalence and admissibility check (all fourteen admissible) and evaluated the frozen curve grid. <code>main</code> had changed five input files after the campaign (water ideal-gas calorics, commit <code>0e216fe</code>), so these evaluations ran with those files restored to the campaign base commit <code>b0b1cba</code>. The <a href="results/complete-inputs.json">restored-input record</a> lists both hashes for each file. <code>calculate.py</code> hash-checks <code>MEA.toml</code> and the caloric file it binds. It does not hash-check <code>data/reference/MEA/thermal/physical-ideal-gas-calorics.json</code>, which the curve heat model reads. The fourteen draws’ heat curves therefore rest on that file having been restored, which the record shows by its campaign-base hash but which the run did not verify.</p>
+<p>The design’s complete-case alternative requires all 307 replay predictions. It leaves <strong>181 draws</strong> and is reported as a sensitivity alongside the primary set. Prediction summaries for any single row or curve state use the primary draws where that prediction is available, with that denominator stated: 181–195 draws for calibration rows and 179–195 for curve states (CO₂ partial-pressure states go as low as 179). No draw, start, bound, tolerance or fit budget was changed.</p>
+</section>
+<section id="parameter-spreads-and-their-comparison-with-the-conditional-standard-errors" class="level3">
+<h3 class="anchored" data-anchor-id="parameter-spreads-and-their-comparison-with-the-conditional-standard-errors">Parameter spreads and their comparison with the conditional standard errors</h3>
+<p>The bootstrap spreads describe the frozen bounded estimation procedure, refitted on resampled sources and series. Many draws end on a historical bound, so several central-95% ranges are bound-to-bound truncations:</p>
+<ul>
+<li>190 of 195 draws keep the carbamate–MEAH⁺ interaction at −1.</li>
+<li>157 keep the MEAH⁺ Born diameter at 5 Å, and 129 keep the carbamate Born diameter there.</li>
+<li>146 keep the MEAH⁺ segment diameter at 5.35 Å.</li>
+<li>117 keep the MEAH⁺–water interaction at −0.5.</li>
+<li>The R2 and R5 enthalpy increments reach a bound in 120 and 155 draws.</li>
+</ul>
+<p>The bound-active coordinates are therefore held by the box in most resampled fits too, not only at the reference.</p>
+<p>For the ten coordinates free at the reference, the retained conditional standard error (linearized, conditional on weights, fixed inputs and the six active bounds) gives a nominal ±1.96 SE width. The ratio of the bootstrap central-95% width to that width separates three groups:</p>
+<ul>
+<li><strong>Much wider than linearized:</strong> MEA–water interaction (ratio 40.5), its reciprocal-temperature slope (17.6), carbamate segment diameter (5.5) and MEAH⁺–water slope (2.8). None of these is bound-limited, except the carbamate diameter’s upper tail (10 draws at 5.8 Å). For MEA–water <span class="math inline">\(k\)</span>, the upper tail comes from draws that omit Cai, the only MEA–water phase-equilibrium source in the objective. The 113 primary draws containing Cai keep it between −0.0923 and −0.0249 (2.5–97.5%), while the 82 without Cai range up to 0.33. The MEA–water slope behaves differently. Its spread depends on how many of Cai’s two pressure series (101.33 and 66.66 kPa) a draw keeps. Its bootstrap-to-linearized width ratio is 7.7 in the 64 draws with both series, 16.7 in the 49 with one and 19.2 in the 82 with none. Within-source dependence between Cai’s series therefore widens the slope even when Cai is sampled. In both cases the linearized error treats each Cai row as independent information and understates the sensitivity to which Cai data are present.</li>
+<li><strong>Wider than linearized, and cut off by the box:</strong> carbamate–water interaction (ratio 1.4). Its bootstrap range spans the whole ±0.5 box, with 12 draws at each limit, so 1.4 is only a lower bound on how much wider the resampled spread is.</li>
+<li><strong>Comparable:</strong> R5 native <span class="math inline">\(b\)</span> (0.89), R2 enthalpy increment (0.96), and the two ion dispersion energies (0.84 and 0.73). The R5 and R2 ranges are bound-to-bound truncations (69 and 120 draws at a limit), so their similarity to the linearized width is not independent confirmation.</li>
+<li><strong>Narrower because of truncation:</strong> bicarbonate–water interaction (0.30). Its linearized width (4.96) is wider than its whole historical box (1.5), and 50 draws sit at its upper limit 1.0.</li>
+</ul>
+<p>Neither estimate is a calibrated confidence interval. The comparison shows where within-source dependence matters (the MEA–water pair, carbamate size, the carbamate–water interaction and the MEAH⁺–water slope) and where the box, not the data, sets the spread.</p>
+</section>
+<section id="complete-case-sensitivity" class="level3">
+<h3 class="anchored" data-anchor-id="complete-case-sensitivity">Complete-case sensitivity</h3>
+<p>Dropping the fourteen draws (the 181-draw complete case) changes the spreads as follows:</p>
+<ul>
+<li><strong>Upper tails narrow:</strong> carbamate–water interaction from 0.5 to 0.252 (width −0.248), and MEA–water interaction from 0.070 to −0.023 (width −0.093).</li>
+<li><strong>Medians shift:</strong> R2 enthalpy increment +707 J/mol, R5 enthalpy increment +767 J/mol, MEAH⁺–water slope −13.6 K and MEAH⁺ dispersion energy +5.1 K.</li>
+<li><strong>Widths change slightly:</strong> carbamate dispersion energy +8.2 K, MEAH⁺ dispersion energy −2.3 K and MEAH⁺–water slope −2.0 K.</li>
+<li><strong>Unchanged:</strong> every bound-held coordinate and the R5 native <span class="math inline">\(b\)</span> width.</li>
+</ul>
+<p>These changes follow from removing the most extreme no-Cai fits. The complete case therefore understates the MEA–water and carbamate–water sensitivity to source mix. The full per-coordinate changes are in the retained tables.</p>
+</section>
+<section id="calibration-error-and-prediction-spreads" class="level3">
+<h3 class="anchored" data-anchor-id="calibration-error-and-prediction-spreads">Calibration-error and prediction spreads</h3>
+<p>Over the primary set, the reported pressure AARD has 2.5%, median and 97.5% values of <strong>11.360%, 14.517% and 6273.7%</strong> (194 draws; one draw lacks a zero-multiplicity Jou row). The reported species AARD values are <strong>6.293%, 7.135% and 8.660%</strong> (195 draws). The complete case gives 11.360%, 14.574% and 6593.3% for pressure, and 6.290%, 7.150% and 8.691% for species. The retained endpoint values are 11.8626% and 7.10284%. These errors keep their fixed 47-pressure and 94-species memberships. The 95 eligible draws from attempts 0–99 with all 47 pressures available give a pressure 97.5% value of 4437.1%. The upper pressure-tail percentile is therefore imprecise at 194–195 draws; this compares resampling precision and does not assess percentile convergence.</p>
+<p>The large pressure tail is present in the retained row predictions. For example, draw 159 includes none of the 47 reported pressure observations in its sampled objective. Its replay predicts 156039 Pa for Jou row <code>vle_obs_0197-pco2</code>, whose observation is 528 Pa; that row has multiplicity zero. Its 47-row AARD is 16640.7%. Draw 171 likewise includes none of these pressure observations and predicts 510.387 Pa for the 1.47 Pa Jou row <code>vle_obs_0186-pco2</code>; its AARD is 16038.4%. These predictions are unpenalized omitted-row errors in those fits. In the retained replays, 20 of the 194 draws contain no partial-pressure observation in their objective because they sampled neither Hilliard nor Jou. Their 47-row pressure AARD ranges from 1,603% to 16,641%, against 11.3% to 93.1% for the other 174 draws. The 97.5% value of 6,274% lies inside that group, interpolated between draws 039 (6,101.6%) and 100 (7,084.9%); draws 159, 171, 117, 007 and 100 lie above it. Every one of these is a converged fit, and every pressure row in its replay is available with its equilibrium solve converged to tolerance. The retained replays carry no phase-branch identification, and bootstrap draws received no phase search. These files therefore cannot tell whether the large pressures come from a wrong liquid branch or from the fitted model extrapolated without pressure data, and that would need a new calculation. They show sensitivity to the resampled source mix, without establishing a unique causal source or independent predictive validity. Replacing such draws would conceal this sensitivity.</p>
+<p>For the 307 calibration rows, 262 have predictions in all 195 primary draws. The other 45 are one Jou pressure row (194 draws) and 44 Cai rows (181–194 draws). Their percentiles are tabulated with these denominators. The Kiepe CO₂–water rows contain no MEA. Their predictions agree across draws to within <span class="math inline">\(1.5\times10^{-13}\)</span> relative, as expected, because none of the sixteen coordinates enters a CO₂–water state. The 1,829 curve quantities have 179–195 available draws. Speciation, density and heat states are available in all 195. Pressure states have 179–195, and MEA–water states 181–195. The 1,268 unavailable curve evaluations, equal to the missing draw count summed over quantities, are:</p>
+<ul>
+<li>854 local phase instabilities of the imposed liquid;</li>
+<li>209 infeasible equilibrium solves;</li>
+<li>200 pressures outside the frozen packet;</li>
+<li>3 exhausted solve budgets;</li>
+<li>2 cases combining an infeasible or exhausted solve with a stalled trial preparation.</li>
+</ul>
+<p>The curve states receive no bootstrap phase search.</p>
+<p>The prediction spreads on the curves are wide where the calibration data constrain the property weakly. All values below are pointwise 2.5%, median and 97.5% values over the 195 draws, from the <code>curves</code> entries of the <a href="results/study.json">study reduction</a>.</p>
+<ul>
+<li><strong>Integral heat of absorption</strong> at 313.15 K and 1.734 MPa: −93.7, −80.6 and −53.7 kJ/mol CO₂ at loading 0.01, and −94.7, −82.5 and −52.7 kJ/mol CO₂ at 0.43. The width is about 40 kJ/mol across the whole loading range.</li>
+<li><strong>Liquid density</strong> at 313.15 K and 0.1 MPa: 990.4, 1003.3 and 1003.5 kg/m³ at zero loading, and 978.9, 1085.2 and 1089.8 kg/m³ at loading 0.43. The lower tail is long and the upper tail short.</li>
+<li><strong>CO₂ partial pressure</strong> at 313.15 K: 8.83, 11.27 and 612 Pa at loading 0.21, and 7940, 14200 and 396000 Pa at 0.57. The upper tail is one to two orders of magnitude above the median.</li>
+</ul>
+<p>These spreads show calibration sensitivity to the resampled source mix for these imposed states. They are not prediction intervals for new measurements.</p>
+<p>Both Born diameters keep 2.5%, median and 97.5% values of 2.0, 5.0 and 5.0 Å in both sets. Their profiles extend to 5.4 Å with low attained costs, so the bootstrap upper truncation is not evidence of a physical 5 Å upper limit.</p>
+<div id="fig-profiles" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-profiles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/profiles.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-profiles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Attained profile costs at every usable declared node. Vertical dotted lines are historical bounds. Horizontal lines are the two conditional comparison cutoffs. Orange annotations count detected-descent states. Linear vertical scales are used for small cost ranges and symmetric logarithmic scales for large ranges. Failed starts are retained in the result inventory and have no plotted cost.
+</figcaption>
+</figure>
+</div>
+<div id="fig-bootstrap-parameters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bootstrap-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/bootstrap-parameters.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Bootstrap parameter spreads normalized by each coordinate’s declared scale, for the 195-draw primary set (blue) and the 181-draw complete-case sensitivity (orange). Bars span the empirical central 95%; points show medians. Zero is the retained endpoint. Many ranges end on historical bounds; these are bounded finite-resampling spreads, not confidence intervals.
+</figcaption>
+</figure>
+</div>
+<div id="fig-bootstrap-predictions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bootstrap-predictions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/bootstrap-predictions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bootstrap-predictions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Selected pointwise prediction spreads from the frozen curve grid over the 195-draw primary set. Lines show medians and shading the empirical central 95%. Each panel states its conditions and the range of available draws over its states. These are imposed calculation states without bootstrap phase screening; they do not establish operating envelopes or simultaneous coverage.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="recommendation-to-the-stage-2-refit-owner" class="level2">
+<h2 class="anchored" data-anchor-id="recommendation-to-the-stage-2-refit-owner">Recommendation to the stage-2 refit owner</h2>
+<p>The smallest supported reduction to test in #255 stage 2 is to <strong>hold the R2 enthalpy-shift increment at zero</strong>, preserving its inherited total shift of −1.363931574 kJ/mol, and fit the remaining fifteen original coordinates. Holding it at its endpoint value costs nothing by construction (<code>profile-10-03</code> is the endpoint node, <span class="math inline">\(C=148.87893934556044\)</span>), so that node is not the support. The support is the shape of the R2 profile. Its attained <span class="math inline">\(2\Delta C\)</span> stays at or below 0.93 from −8636 J/mol (the lower limit) to +5000 J/mol: 0.290, 0.158, 0.073, 0, 0.233 and 0.926 at −8636, −5000, −2500, 0, +2500 and +5000 J/mol. Every one of those endpoints has zero detected descent states. Only the upper side is restricted, at 3.33 at +10000 J/mol and 4.17 at the +11364 J/mol limit. The coordinate is therefore weakly restricted over most of its range, with a one-sided restriction above. Holding it also removes one member of the observed 0.9673 conditional coupling with the MEAH⁺–water interaction slope. The bootstrap does not point to zero. Across the 195 primary draws the R2 increment has median +7.40 kJ/mol and spans its whole historical range. It ends on a limit in 120 draws, 86 of them at the upper limit, the side where the full-data profile is restricted. Resampled fits therefore mostly favor large positive increments. Some sources evidently provide the upper-side restriction, and removing them pushes R2 to its limit. Holding the increment at zero remains a defensible estimation choice for the next fit, because both the shallow profile and this source dependence show R2 is poorly determined. Its cost under other source mixes has not been tested. It is an estimation choice for the next fit, not a claim that the reaction enthalpy correction is physically known. The current experiment does not quantify its cost after other restrictions, wider bounds or stability constraints change.</p>
+<p>Holding a Born diameter at its retained 5 Å value has zero cost change only by construction (<code>profile-07-05</code> and <code>profile-08-05</code> are the endpoint nodes). The Born profiles are shallow over 2.0–5.4 Å (largest <span class="math inline">\(2\Delta C\)</span> 2.801 and 1.328), but these coordinates already lie on active bounds and their physical values remain weakly restricted. This study therefore does not recommend combining that restriction with the R2 hold without the declared joint held-coordinate calculation. It does not recommend merging the two ion dispersion energies or chemically distinct interaction coefficients solely from their conditional correlations.</p>
+<p>The six lower-cost excursions above argue against interpreting the old active limits as observation-established limits. They provide separate finite test points for #255’s stability-constrained study, not an approved joint bound box or an adopted parameter vector. Reconcile the reference under any enlarged feasible problem before reporting likelihood intervals. Retain the original reaction basis, diameter ties, destination domains and standard states, and recheck the full phase calculation with the #1059 wheel chosen for stage 2. Parameter adoption remains outside #262.</p>
+<p>The bootstrap adds one input for stage 2. The MEA–water interaction and slope both rest on Cai (1996). <span class="math inline">\(k\)</span> depends on whether Cai is sampled at all, while the slope depends on keeping both of Cai’s pressure series. Their linearized standard errors are 18–40 times narrower than the source-resampled spread. Stage 2 should not treat those linearized errors as the uncertainty of the MEA–water coordinates.</p>
+<p>The campaign used the water ideal-gas calorics frozen at its base commit. <code>main</code> has since replaced them with an IAPWS-anchored fit (commit <code>0e216fe</code>). The heat-of-absorption and heat-capacity values here were evaluated with the superseded water caloric input, including the heat curves and the Vinjarapu and Hilliard calibration rows. This study did not evaluate the size of that effect. The merged #260 study measured it on the final parameter set (<code>00e77608…</code>, Engine <code>3e83e19c</code>) in the <a href="../notebook.qmd#water-ideal-gas">water ideal-gas record</a>. The new record’s ideal-gas heat-capacity fit error against IAPWS-95 is at most 0.000065% (<span class="math inline">\(6.50\times10^{-7}\)</span> relative). The largest change in the four Hilliard heat-capacity predictions was 0.0019 J/(mol·K), and the largest change in the Vinjarapu and Arcis integral heats was <span class="math inline">\(8.45\times10^{-9}\)</span> J/mol CO₂. That is #260’s measurement at the final endpoint, not one made here for the profile or bootstrap fits. Stage 2 will use the current inputs.</p>
+</section>
+<section id="retained-tables-and-reproduction" class="level2">
+<h2 class="anchored" data-anchor-id="retained-tables-and-reproduction">Retained tables and reproduction</h2>
+<p>The following tables are generated only from retained results. “Primary” is the 195 eligible draws within 200 attempts and “complete case” the 181 of them with all 307 predictions available; “first 100 attempts” is the eligible subset of draws 0–99. Each AARD row counts only draws with every member of that membership available.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinate</th>
+<th>Unit</th>
+<th style="text-align: right;">Converged and interaction-admissible / attempted</th>
+<th>Attained 2ΔC range</th>
+<th>Observed cost restriction</th>
+<th>Likelihood interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Carbamate–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">9 / 11</td>
+<td>-1.9611e-11 to 0.55289</td>
+<td>numerically unresolved comparison</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">9 / 9</td>
+<td>-0.15787 to 4.3183</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>Bicarbonate–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">11 / 11</td>
+<td>-1.9611e-11 to 14.121</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">9 / 9</td>
+<td>-0.48112 to 19.443</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺–water slope</td>
+<td>K</td>
+<td style="text-align: right;">11 / 11</td>
+<td>-1.9611e-11 to 1081.5</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ segment diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">8 / 8</td>
+<td>-0.7361 to 3.172</td>
+<td>no cutoff crossing in tested range</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>Carbamate segment diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">10 / 11</td>
+<td>-1.9611e-11 to 274.3</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">9 / 9</td>
+<td>-0.093685 to 2.8009</td>
+<td>no cutoff crossing in tested range</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">9 / 9</td>
+<td>-0.027057 to 1.3282</td>
+<td>no cutoff crossing in tested range</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>R5 native b before shift</td>
+<td>K</td>
+<td style="text-align: right;">8 / 8</td>
+<td>-1.9611e-11 to 6.7298</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>R2 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td style="text-align: right;">8 / 8</td>
+<td>-1.9611e-11 to 4.1659</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>R5 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td style="text-align: right;">8 / 8</td>
+<td>-0.25494 to 4.7754</td>
+<td>one-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>MEA–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">6 / 11</td>
+<td>-1.9611e-11 to 5952.3</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>MEA–water slope</td>
+<td>K</td>
+<td style="text-align: right;">8 / 11</td>
+<td>-1.9611e-11 to 2163.1</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ dispersion energy/kB</td>
+<td>K</td>
+<td style="text-align: right;">10 / 11</td>
+<td>-1.9611e-11 to 651.65</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+<tr class="even">
+<td>Carbamate dispersion energy/kB</td>
+<td>K</td>
+<td style="text-align: right;">11 / 11</td>
+<td>-1.9611e-11 to 101.21</td>
+<td>two-sided cost restriction in finite scan</td>
+<td>reference reconciliation required</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinate</th>
+<th style="text-align: right;">Endpoints searched</th>
+<th style="text-align: right;">State–endpoint calculations</th>
+<th style="text-align: right;">Actual trials</th>
+<th style="text-align: right;">Detected descent state–endpoints</th>
+<th style="text-align: right;">Incomplete state–endpoints</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Carbamate–water k</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">16038</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺–water k</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1458</td>
+<td style="text-align: right;">13122</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>Bicarbonate–water k</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">16038</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ k</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1458</td>
+<td style="text-align: right;">13122</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺–water slope</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">16038</td>
+<td style="text-align: right;">89</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ segment diameter</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1296</td>
+<td style="text-align: right;">11664</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>Carbamate segment diameter</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">16038</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1458</td>
+<td style="text-align: right;">13122</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1458</td>
+<td style="text-align: right;">13122</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>R5 native b before shift</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1296</td>
+<td style="text-align: right;">11664</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>R2 incremental enthalpy</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1296</td>
+<td style="text-align: right;">11664</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>R5 incremental enthalpy</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1296</td>
+<td style="text-align: right;">11664</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>MEA–water k</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1620</td>
+<td style="text-align: right;">14580</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td>MEA–water slope</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1458</td>
+<td style="text-align: right;">13122</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ dispersion energy/kB</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1620</td>
+<td style="text-align: right;">14580</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>Carbamate dispersion energy/kB</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1782</td>
+<td style="text-align: right;">16038</td>
+<td style="text-align: right;">51</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinate</th>
+<th>Unit</th>
+<th>Primary 195: 2.5%, median, 97.5%</th>
+<th>Primary, first 100 attempts (96): 2.5%, median, 97.5%</th>
+<th>Complete case 181: 2.5%, median, 97.5%</th>
+<th>Complete case − primary: median, central-95% width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Carbamate–water k</td>
+<td>dimensionless</td>
+<td>-0.5, -0.0574885, 0.5</td>
+<td>-0.5, -0.0523005, 0.5</td>
+<td>-0.5, -0.0765745, 0.251629</td>
+<td>-0.0191, -0.248</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺–water k</td>
+<td>dimensionless</td>
+<td>-0.5, -0.5, -0.161</td>
+<td>-0.5, -0.5, -0.161</td>
+<td>-0.5, -0.5, -0.161</td>
+<td>0, 0</td>
+</tr>
+<tr class="odd">
+<td>Bicarbonate–water k</td>
+<td>dimensionless</td>
+<td>-0.474778, 0.677385, 1</td>
+<td>-0.463423, 0.685254, 1</td>
+<td>-0.475958, 0.688467, 1</td>
+<td>0.0111, 0.00118</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ k</td>
+<td>dimensionless</td>
+<td>-1, -1, -1</td>
+<td>-1, -1, -0.999998</td>
+<td>-1, -1, -0.999998</td>
+<td>0, 1.11e-06</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺–water slope</td>
+<td>K</td>
+<td>-213.955, 95.5426, 443.465</td>
+<td>-194.759, 113.409, 405.96</td>
+<td>-223.36, 81.9286, 432.027</td>
+<td>-13.6, -2.03</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ segment diameter</td>
+<td>angstrom</td>
+<td>5.35, 5.35, 5.8</td>
+<td>5.35, 5.35, 5.8</td>
+<td>5.35, 5.35, 5.8</td>
+<td>0, 0</td>
+</tr>
+<tr class="odd">
+<td>Carbamate segment diameter</td>
+<td>angstrom</td>
+<td>4.07342, 4.84559, 5.8</td>
+<td>3.94243, 4.84933, 5.8</td>
+<td>4.10969, 4.85029, 5.8</td>
+<td>0.00469, -0.0363</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter</td>
+<td>angstrom</td>
+<td>2, 5, 5</td>
+<td>2, 5, 5</td>
+<td>2, 5, 5</td>
+<td>0, 0</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter</td>
+<td>angstrom</td>
+<td>2, 5, 5</td>
+<td>2, 5, 5</td>
+<td>2, 5, 5</td>
+<td>0, 0</td>
+</tr>
+<tr class="even">
+<td>R5 native b before shift</td>
+<td>K</td>
+<td>-8110.48, -7624.2, -6728.93</td>
+<td>-8110.48, -7636, -6728.93</td>
+<td>-8110.48, -7624.03, -6728.93</td>
+<td>0.166, 0</td>
+</tr>
+<tr class="odd">
+<td>R2 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td>-8636.07, 7399.87, 11363.9</td>
+<td>-8636.07, 4358.03, 11363.9</td>
+<td>-8636.07, 8106.45, 11363.9</td>
+<td>707, 0</td>
+</tr>
+<tr class="even">
+<td>R5 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td>-20000, -2625.59, 0</td>
+<td>-20000, -1994.9, 0</td>
+<td>-20000, -1858.48, 0</td>
+<td>767, 0</td>
+</tr>
+<tr class="odd">
+<td>MEA–water k</td>
+<td>dimensionless</td>
+<td>-0.0927701, -0.0894713, 0.0697509</td>
+<td>-0.0927841, -0.0892204, 0.15324</td>
+<td>-0.0927731, -0.089681, -0.023381</td>
+<td>-0.00021, -0.0931</td>
+</tr>
+<tr class="even">
+<td>MEA–water slope</td>
+<td>K</td>
+<td>-29.6354, -7.6144, 95.1583</td>
+<td>-29.6198, -6.96448, 95.6295</td>
+<td>-29.654, -8.64185, 95.0094</td>
+<td>-1.03, -0.13</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ dispersion energy/kB</td>
+<td>K</td>
+<td>117.006, 171.61, 273.669</td>
+<td>112.444, 173.966, 273.13</td>
+<td>119.824, 176.686, 274.173</td>
+<td>5.08, -2.31</td>
+</tr>
+<tr class="even">
+<td>Carbamate dispersion energy/kB</td>
+<td>K</td>
+<td>61.9712, 187.972, 301.582</td>
+<td>58.9415, 187.913, 297.36</td>
+<td>61.4718, 186.159, 309.245</td>
+<td>-1.81, 8.16</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinate</th>
+<th>Unit</th>
+<th style="text-align: right;">Conditional standard error</th>
+<th style="text-align: right;">Linearized ±1.96 SE width</th>
+<th style="text-align: right;">Primary bootstrap central-95% width</th>
+<th style="text-align: right;">Bootstrap / linearized width</th>
+<th style="text-align: right;">Primary draws at lower / upper historical bound (of 195)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Carbamate–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">0.1821</td>
+<td style="text-align: right;">0.7137</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">12 / 12</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0.339</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">117 / 14</td>
+</tr>
+<tr class="odd">
+<td>Bicarbonate–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">1.265</td>
+<td style="text-align: right;">4.959</td>
+<td style="text-align: right;">1.475</td>
+<td style="text-align: right;">0.297</td>
+<td style="text-align: right;">5 / 50</td>
+</tr>
+<tr class="even">
+<td>Carbamate–MEAH⁺ k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">4.748e-07</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">190 / 0</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺–water slope</td>
+<td>K</td>
+<td style="text-align: right;">60.26</td>
+<td style="text-align: right;">236.2</td>
+<td style="text-align: right;">657.4</td>
+<td style="text-align: right;">2.78</td>
+<td style="text-align: right;">0 / 0</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ segment diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">146 / 23</td>
+</tr>
+<tr class="odd">
+<td>Carbamate segment diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">0.07946</td>
+<td style="text-align: right;">0.3115</td>
+<td style="text-align: right;">1.727</td>
+<td style="text-align: right;">5.54</td>
+<td style="text-align: right;">0 / 10</td>
+</tr>
+<tr class="even">
+<td>MEAH⁺ Born diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">19 / 157</td>
+</tr>
+<tr class="odd">
+<td>Carbamate Born diameter</td>
+<td>angstrom</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">52 / 129</td>
+</tr>
+<tr class="even">
+<td>R5 native b before shift</td>
+<td>K</td>
+<td style="text-align: right;">397.4</td>
+<td style="text-align: right;">1558</td>
+<td style="text-align: right;">1382</td>
+<td style="text-align: right;">0.887</td>
+<td style="text-align: right;">38 / 31</td>
+</tr>
+<tr class="odd">
+<td>R2 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td style="text-align: right;">5292</td>
+<td style="text-align: right;">2.075e+04</td>
+<td style="text-align: right;">2e+04</td>
+<td style="text-align: right;">0.964</td>
+<td style="text-align: right;">34 / 86</td>
+</tr>
+<tr class="even">
+<td>R5 incremental enthalpy</td>
+<td>J/mol (increment about endpoint)</td>
+<td style="text-align: right;">on active bound</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">2e+04</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">68 / 87</td>
+</tr>
+<tr class="odd">
+<td>MEA–water k</td>
+<td>dimensionless</td>
+<td style="text-align: right;">0.001024</td>
+<td style="text-align: right;">0.004015</td>
+<td style="text-align: right;">0.1625</td>
+<td style="text-align: right;">40.5</td>
+<td style="text-align: right;">0 / 0</td>
+</tr>
+<tr class="even">
+<td>MEA–water slope</td>
+<td>K</td>
+<td style="text-align: right;">1.806</td>
+<td style="text-align: right;">7.079</td>
+<td style="text-align: right;">124.8</td>
+<td style="text-align: right;">17.6</td>
+<td style="text-align: right;">0 / 0</td>
+</tr>
+<tr class="odd">
+<td>MEAH⁺ dispersion energy/kB</td>
+<td>K</td>
+<td style="text-align: right;">47.82</td>
+<td style="text-align: right;">187.5</td>
+<td style="text-align: right;">156.7</td>
+<td style="text-align: right;">0.836</td>
+<td style="text-align: right;">0 / 0</td>
+</tr>
+<tr class="even">
+<td>Carbamate dispersion energy/kB</td>
+<td>K</td>
+<td style="text-align: right;">83.57</td>
+<td style="text-align: right;">327.6</td>
+<td style="text-align: right;">239.6</td>
+<td style="text-align: right;">0.731</td>
+<td style="text-align: right;">1 / 1</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Profile node</th>
+<th>Coordinate</th>
+<th style="text-align: right;">Fixed value</th>
+<th style="text-align: right;">Step from endpoint</th>
+<th style="text-align: right;">Reference gradient dC/dθ</th>
+<th style="text-align: right;">First-order ΔC</th>
+<th style="text-align: right;">Attained ΔC</th>
+<th>Detected descent / incomplete states</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>profile-01-00</td>
+<td>MEAH⁺–water k (dimensionless)</td>
+<td style="text-align: right;">-0.54</td>
+<td style="text-align: right;">-0.04</td>
+<td style="text-align: right;">1.989</td>
+<td style="text-align: right;">-0.07954</td>
+<td style="text-align: right;">-0.07894</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-01-01</td>
+<td>MEAH⁺–water k (dimensionless)</td>
+<td style="text-align: right;">-0.52</td>
+<td style="text-align: right;">-0.02</td>
+<td style="text-align: right;">1.989</td>
+<td style="text-align: right;">-0.03977</td>
+<td style="text-align: right;">-0.04129</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-01-02</td>
+<td>MEAH⁺–water k (dimensionless)</td>
+<td style="text-align: right;">-0.51</td>
+<td style="text-align: right;">-0.01</td>
+<td style="text-align: right;">1.989</td>
+<td style="text-align: right;">-0.01989</td>
+<td style="text-align: right;">-0.02145</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-03-00</td>
+<td>Carbamate–MEAH⁺ k (dimensionless)</td>
+<td style="text-align: right;">-1.04</td>
+<td style="text-align: right;">-0.04</td>
+<td style="text-align: right;">6.245</td>
+<td style="text-align: right;">-0.2498</td>
+<td style="text-align: right;">-0.2406</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-03-01</td>
+<td>Carbamate–MEAH⁺ k (dimensionless)</td>
+<td style="text-align: right;">-1.02</td>
+<td style="text-align: right;">-0.02</td>
+<td style="text-align: right;">6.245</td>
+<td style="text-align: right;">-0.1249</td>
+<td style="text-align: right;">-0.1206</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-03-02</td>
+<td>Carbamate–MEAH⁺ k (dimensionless)</td>
+<td style="text-align: right;">-1.01</td>
+<td style="text-align: right;">-0.01</td>
+<td style="text-align: right;">6.245</td>
+<td style="text-align: right;">-0.06245</td>
+<td style="text-align: right;">-0.04546</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-05-00</td>
+<td>MEAH⁺ segment diameter (angstrom)</td>
+<td style="text-align: right;">4.95</td>
+<td style="text-align: right;">-0.4</td>
+<td style="text-align: right;">1.939</td>
+<td style="text-align: right;">-0.7754</td>
+<td style="text-align: right;">-0.3681</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-05-01</td>
+<td>MEAH⁺ segment diameter (angstrom)</td>
+<td style="text-align: right;">5.15</td>
+<td style="text-align: right;">-0.2</td>
+<td style="text-align: right;">1.939</td>
+<td style="text-align: right;">-0.3877</td>
+<td style="text-align: right;">-0.2685</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-05-02</td>
+<td>MEAH⁺ segment diameter (angstrom)</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">1.939</td>
+<td style="text-align: right;">-0.1939</td>
+<td style="text-align: right;">-0.1608</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-07-06</td>
+<td>MEAH⁺ Born diameter (angstrom)</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-0.1339</td>
+<td style="text-align: right;">-0.01339</td>
+<td style="text-align: right;">-0.0127</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-07-07</td>
+<td>MEAH⁺ Born diameter (angstrom)</td>
+<td style="text-align: right;">5.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">-0.1339</td>
+<td style="text-align: right;">-0.02678</td>
+<td style="text-align: right;">-0.02466</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-07-08</td>
+<td>MEAH⁺ Born diameter (angstrom)</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">-0.1339</td>
+<td style="text-align: right;">-0.05357</td>
+<td style="text-align: right;">-0.04684</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-08-06</td>
+<td>Carbamate Born diameter (angstrom)</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-0.07471</td>
+<td style="text-align: right;">-0.007471</td>
+<td style="text-align: right;">-0.006942</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-08-07</td>
+<td>Carbamate Born diameter (angstrom)</td>
+<td style="text-align: right;">5.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">-0.07471</td>
+<td style="text-align: right;">-0.01494</td>
+<td style="text-align: right;">-0.01353</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-08-08</td>
+<td>Carbamate Born diameter (angstrom)</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">-0.07471</td>
+<td style="text-align: right;">-0.02988</td>
+<td style="text-align: right;">-0.008895</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-11-05</td>
+<td>R5 incremental enthalpy (J/mol (increment about endpoint))</td>
+<td style="text-align: right;">2500</td>
+<td style="text-align: right;">2500</td>
+<td style="text-align: right;">-1.485e-05</td>
+<td style="text-align: right;">-0.03713</td>
+<td style="text-align: right;">-0.03601</td>
+<td>0 / 0</td>
+</tr>
+<tr class="odd">
+<td>profile-11-06</td>
+<td>R5 incremental enthalpy (J/mol (increment about endpoint))</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">-1.485e-05</td>
+<td style="text-align: right;">-0.07426</td>
+<td style="text-align: right;">-0.0691</td>
+<td>0 / 0</td>
+</tr>
+<tr class="even">
+<td>profile-11-07</td>
+<td>R5 incremental enthalpy (J/mol (increment about endpoint))</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">1e+04</td>
+<td style="text-align: right;">-1.485e-05</td>
+<td style="text-align: right;">-0.1485</td>
+<td style="text-align: right;">-0.1275</td>
+<td>0 / 0</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>AARD membership</th>
+<th style="text-align: right;">Observations</th>
+<th style="text-align: right;">Draws with every member available: primary / complete case</th>
+<th>Primary: 2.5%, median, 97.5% (%)</th>
+<th>Primary, first 100 attempts: 2.5%, median, 97.5% (%)</th>
+<th>Complete case: 2.5%, median, 97.5% (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>reported pressure</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">194 / 181</td>
+<td>11.3601, 14.5171, 6273.68</td>
+<td>11.5767, 14.5737, 4437.12</td>
+<td>11.3597, 14.5737, 6593.27</td>
+</tr>
+<tr class="even">
+<td>reported species</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">195 / 181</td>
+<td>6.29264, 7.13463, 8.65956</td>
+<td>6.28748, 7.04762, 8.61853</td>
+<td>6.28965, 7.15003, 8.6912</td>
+</tr>
+<tr class="odd">
+<td>Hilliard2008 / PartialPressure</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">195 / 181</td>
+<td>7.67225, 11.4563, 6699.57</td>
+<td>8.52056, 11.8161, 4652.78</td>
+<td>7.66839, 11.5359, 7093.38</td>
+</tr>
+<tr class="even">
+<td>Jou1995 / PartialPressure</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">194 / 181</td>
+<td>13.062, 18.5314, 5409</td>
+<td>13.0635, 18.7039, 4018.13</td>
+<td>13.0794, 18.9322, 5529.38</td>
+</tr>
+<tr class="odd">
+<td>Bottinger2008 / PhaseMoleFraction</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">195 / 181</td>
+<td>3.70833, 4.67896, 10.2972</td>
+<td>3.71666, 4.79505, 10.6371</td>
+<td>3.70227, 4.65402, 10.3122</td>
+</tr>
+<tr class="even">
+<td>Matin2012 / PhaseMoleFraction</td>
+<td style="text-align: right;">54</td>
+<td style="text-align: right;">195 / 181</td>
+<td>5.76708, 8.84963, 11.1108</td>
+<td>5.70986, 8.65256, 10.8266</td>
+<td>5.73174, 8.91103, 11.1504</td>
+</tr>
+<tr class="odd">
+<td>Vinjarapu2024 / AdditionEnthalpy</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">195 / 181</td>
+<td>1.29832, 1.8187, 42.8156</td>
+<td>1.32358, 1.75744, 28.3679</td>
+<td>1.30343, 1.79182, 42.9517</td>
+</tr>
+<tr class="even">
+<td>Bottinger2008 / mole_fraction</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">195 / 181</td>
+<td>3.22429, 3.65313, 6.66037</td>
+<td>3.20049, 3.65042, 6.56293</td>
+<td>3.24234, 3.65676, 6.67356</td>
+</tr>
+<tr class="odd">
+<td>Matin2012 / mole_fraction</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">195 / 181</td>
+<td>9.46888, 15.9072, 19.6475</td>
+<td>9.32691, 15.5373, 19.2564</td>
+<td>9.36427, 16.0322, 19.6626</td>
+</tr>
+<tr class="even">
+<td>Jakobsen2005 / amount_ratio</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">195 / 181</td>
+<td>8.83527, 16.9081, 50.4233</td>
+<td>8.86463, 17.4031, 55.7259</td>
+<td>8.76145, 16.9637, 51.0053</td>
+</tr>
+<tr class="odd">
+<td>Kiepe2002 / pressure</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">195 / 181</td>
+<td>2.66652, 2.66652, 2.66652</td>
+<td>2.66652, 2.66652, 2.66652</td>
+<td>2.66652, 2.66652, 2.66652</td>
+</tr>
+<tr class="even">
+<td>Amundsen2009 / phase_density</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">195 / 181</td>
+<td>0.112907, 0.135658, 3.94895</td>
+<td>0.110545, 0.135836, 3.87098</td>
+<td>0.112369, 0.133838, 3.73852</td>
+</tr>
+<tr class="odd">
+<td>Cai1996 / temperature</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">181 / 181</td>
+<td>0.363365, 0.382341, 0.615644</td>
+<td>0.363417, 0.379944, 0.67006</td>
+<td>0.363365, 0.382341, 0.615644</td>
+</tr>
+<tr class="even">
+<td>Cai1996 / mole_fraction</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">181 / 181</td>
+<td>2.44999, 2.64308, 4.26175</td>
+<td>2.4521, 2.64879, 3.68395</td>
+<td>2.44999, 2.64308, 4.26175</td>
+</tr>
+<tr class="odd">
+<td>Hartono2014 / phase_density</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">195 / 181</td>
+<td>0.106331, 0.176952, 6.01069</td>
+<td>0.0948057, 0.176365, 5.94481</td>
+<td>0.10347, 0.172981, 5.85523</td>
+</tr>
+<tr class="even">
+<td>Hilliard2008 / equilibrium_isobaric_heat_capacity</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">195 / 181</td>
+<td>1.76753, 3.53991, 26.4051</td>
+<td>1.75011, 3.4887, 26.1207</td>
+<td>1.85794, 3.58402, 26.0652</td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Calibration row with fewer than 195 available predictions</th>
+<th>Source</th>
+<th>Quantity</th>
+<th style="text-align: right;">Observed</th>
+<th style="text-align: right;">Available draws</th>
+<th>2.5%, median, 97.5%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>vle_obs_0194-pco2</code></td>
+<td>Jou1995</td>
+<td>PartialPressure</td>
+<td style="text-align: right;">4.28</td>
+<td style="text-align: right;">194</td>
+<td>3.43823, 4.36272, 196.895</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_005-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">415.92</td>
+<td style="text-align: right;">192</td>
+<td>381.052, 414.511, 418.357</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_005-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.7344</td>
+<td style="text-align: right;">192</td>
+<td>0.68224, 0.723054, 0.928478</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_006-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">410.94</td>
+<td style="text-align: right;">192</td>
+<td>377.317, 410.771, 414.301</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_006-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.7878</td>
+<td style="text-align: right;">192</td>
+<td>0.744042, 0.774654, 0.942531</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_007-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">406.83</td>
+<td style="text-align: right;">192</td>
+<td>374.715, 407.631, 410.849</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_007-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.8312</td>
+<td style="text-align: right;">192</td>
+<td>0.78896, 0.81217, 0.951112</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_008-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">394.88</td>
+<td style="text-align: right;">191</td>
+<td>369.77, 397.768, 399.599</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_008-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9146</td>
+<td style="text-align: right;">191</td>
+<td>0.896821, 0.903039, 0.966155</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_009-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">393.25</td>
+<td style="text-align: right;">191</td>
+<td>368.938, 395.333, 396.996</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_009-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9293</td>
+<td style="text-align: right;">191</td>
+<td>0.915509, 0.919888, 0.96837</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_010-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">387.85</td>
+<td style="text-align: right;">186</td>
+<td>375.279, 389.309, 390.591</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_010-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9596</td>
+<td style="text-align: right;">186</td>
+<td>0.952324, 0.953551, 0.965595</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_011-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">378.37</td>
+<td style="text-align: right;">181</td>
+<td>377.953, 379.28, 379.787</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_011-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9883</td>
+<td style="text-align: right;">181</td>
+<td>0.986016, 0.988683, 0.989557</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_012-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">376.88</td>
+<td style="text-align: right;">181</td>
+<td>376.806, 377.78, 378.142</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_012-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9914</td>
+<td style="text-align: right;">181</td>
+<td>0.989274, 0.992107, 0.992956</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_10133_013-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">374.09</td>
+<td style="text-align: right;">184</td>
+<td>373.979, 374.57, 374.637</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_10133_013-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9974</td>
+<td style="text-align: right;">184</td>
+<td>0.990975, 0.998016, 0.99841</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_002-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">420.53</td>
+<td style="text-align: right;">194</td>
+<td>389.229, 417.42, 419.8</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_002-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.3589</td>
+<td style="text-align: right;">194</td>
+<td>0.378979, 0.430336, 0.816213</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_003-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">416.6</td>
+<td style="text-align: right;">194</td>
+<td>380.645, 413.115, 415.781</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_003-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.4945</td>
+<td style="text-align: right;">194</td>
+<td>0.486893, 0.535214, 0.879959</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_004-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">413.33</td>
+<td style="text-align: right;">194</td>
+<td>374.232, 409.149, 411.837</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_004-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.5813</td>
+<td style="text-align: right;">194</td>
+<td>0.577394, 0.618286, 0.914712</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_005-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">407.18</td>
+<td style="text-align: right;">192</td>
+<td>371.429, 404.988, 407.469</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_005-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.6781</td>
+<td style="text-align: right;">192</td>
+<td>0.662123, 0.692963, 0.928754</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_006-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">403.3</td>
+<td style="text-align: right;">192</td>
+<td>366.546, 400.532, 402.558</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_006-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.7537</td>
+<td style="text-align: right;">192</td>
+<td>0.7406, 0.760429, 0.946905</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_007-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">395.37</td>
+<td style="text-align: right;">191</td>
+<td>362.122, 394.189, 396.002</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_007-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.8425</td>
+<td style="text-align: right;">191</td>
+<td>0.825166, 0.837287, 0.960963</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_008-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">391.37</td>
+<td style="text-align: right;">191</td>
+<td>359.764, 390.48, 392.225</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_008-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.8848</td>
+<td style="text-align: right;">191</td>
+<td>0.864027, 0.873032, 0.967064</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_009-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">385.73</td>
+<td style="text-align: right;">191</td>
+<td>357.77, 386.201, 387.923</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_009-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.921</td>
+<td style="text-align: right;">191</td>
+<td>0.900578, 0.906858, 0.971819</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_010-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">380.82</td>
+<td style="text-align: right;">191</td>
+<td>356.252, 380.508, 382.004</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_010-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9542</td>
+<td style="text-align: right;">191</td>
+<td>0.939393, 0.942236, 0.975341</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_011-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">375.17</td>
+<td style="text-align: right;">184</td>
+<td>367.819, 375.623, 376.772</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_011-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9732</td>
+<td style="text-align: right;">184</td>
+<td>0.964449, 0.965131, 0.969555</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_012-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">367.96</td>
+<td style="text-align: right;">181</td>
+<td>365.294, 367.038, 367.445</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_012-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9921</td>
+<td style="text-align: right;">181</td>
+<td>0.987366, 0.99132, 0.992052</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_013-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">365.6</td>
+<td style="text-align: right;">181</td>
+<td>364.854, 366.35, 366.693</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_013-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9937</td>
+<td style="text-align: right;">181</td>
+<td>0.988631, 0.992751, 0.993468</td>
+</tr>
+<tr class="even">
+<td><code>cai1996_06666_014-temperature</code></td>
+<td>Cai1996</td>
+<td>temperature</td>
+<td style="text-align: right;">362.81</td>
+<td style="text-align: right;">184</td>
+<td>362.58, 363.153, 363.216</td>
+</tr>
+<tr class="odd">
+<td><code>cai1996_06666_014-mole_fraction</code></td>
+<td>Cai1996</td>
+<td>mole_fraction</td>
+<td style="text-align: right;">0.9982</td>
+<td style="text-align: right;">184</td>
+<td>0.99139, 0.998239, 0.998588</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="results/study.json">study reduction</a>, <a href="inputs/input-hashes.json">input hashes</a>, <a href="results/result-hashes.json">result hashes</a>, per-task summaries, native fit records, candidate documents, 307-row replays, curve rows and raw native phase calculations retain the numerical evidence. The <a href="results/metadata-corrections.json">metadata correction record</a> removes invalid comparisons of bootstrap costs to the reference objective: bootstrap draws have different multiplicities, so their costs cannot be used as profile likelihood differences.</p>
+<p>The <code>calculate</code> and <code>present</code> entries are separate. From the repository root, the calculation entry is <code>agent-heavy uv run --no-project --python .venv/bin/python snakemake -s analyses/mea_parameter_bundle/parameter-identifiability/Snakefile --cores 1 calculate</code>. On the delivered tree this entry stops at the input-hash check, because <code>main</code> has since changed <code>MEA.toml</code>. To reproduce, first restore the five files listed in the <a href="results/complete-inputs.json">restored-input record</a> with its <code>restore_command</code>, run the entry, then restore them with <code>git checkout HEAD -- &lt;files&gt;</code>. Completed task records are preserved on resume; failures are not silently retried. Because <code>results/study.json</code>, the rule’s only output, already exists, Snakemake may report nothing to do, depending on file times and its saved metadata; use <code>--forcerun calculate</code>. A rerun writes a new <code>results/runtime-calculate.json</code> beside the retained campaign <code>results/runtime.json</code>, and <code>aggregate.py</code> then rewrites <code>result-hashes.json</code> to include it. The entry then runs <code>calculate.py complete</code>, which finishes converged draws whose replay stopped only on zero-multiplicity rows (interaction check, original-basis coordinates and curve grid, without refitting), and <code>aggregate.py</code>, which owns the eligibility check. Curve-calculation working directories (<code>results/*/curve-runs/</code>) are not retained; <code>curves.json.gz</code> retains every curve row. The presentation entry replaces <code>calculate</code> with <code>present</code> and verifies retained hashes before drawing; it makes no Engine calls. The report renders with <code>agent-heavy quarto render analyses/mea_parameter_bundle/parameter-identifiability/notebook.qmd --to html --no-execute</code>. This nested report is linked from the existing bundle notebook, without changing <code>analyses/_cse-manuscript.json</code> or the manuscript sources.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
