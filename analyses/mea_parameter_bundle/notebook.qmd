@@ -8,6 +8,15 @@ resources:
   - results/bicarbonate-carbonate-266/**
   - results/selected-current-best-parameters.json
   - results/engine-3e83e19c-paper-evidence/model-curves/**
+  - results/stable-refit-255/README.md
+  - results/stable-refit-255/primary.json
+  - results/stable-refit-255/design-probe/design.md
+  - results/stable-refit-255/*/assessment.json
+  - results/stable-refit-255/*/extras.json
+  - results/stable-refit-255/evidence/candidate-comparison.png
+  - results/stable-refit-255/evidence/candidate-comparison-plotted-values.csv
+  - results/stable-refit-255/evidence/comparison.csv
+  - results/stable-refit-255/evidence/candidate-parameters.json
 ---
 
 **Reported parameter record · adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215) · record `00e77608…` · Engine `3e83e19c` · [Download exact parameters](results/selected-current-best-parameters.json)**
@@ -540,6 +549,57 @@ Do not adopt A or B: both violate density preservation and develop dense-liquid 
 
 The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`; every numerical JSON records it. [Qualification](heat-capacity-264/qualification.json) replays all 307 original observations using their pre-260 water inputs, within relative 10⁻⁸ plus absolute 10⁻⁸ in predicted/residual units; all pass, with objective cost 148.878939345564. Subsequent calculations use the corrected water record. The main checkout's pin is unchanged. [Reproduction and record map](heat-capacity-264/README.md) and [provenance](heat-capacity-264/provenance.json) identify inputs and execution. Delivered-result acceptance requires an independent Supported verdict; the review verdict is recorded with issue 264 and its pull request.
 
+# Stability-constrained refit (issue 255) {#stable-refit-255}
+
+A refit that enforces liquid-phase stability during fitting, inside the original wide bounds, finds one stable optimum from both the final set and the wider-bound fit. It has a lower calibration cost than the final set: **148.5105** against **148.8833** for the 307 objective rows, with both on the same inputs and Engine wheel. It is a candidate only. The adopted record, Engine pin and manuscript are unchanged. Its shared bicarbonate–water interaction would roughly double the MDEA pressure error if transferred, so adoption needs an owner decision.
+
+## What was enforced
+
+Each stability row is the Engine #1059 requirement: a Full tangent-plane search of an all-liquid parent at a pressure $c$ times the candidate's own reactive bubble pressure ($c = 1.05$ and $3.0$). It penalizes the most negative resolved reduced tangent-plane distance $\tau$. The fit enforces 1903 such states: 15, 25, 35 and 45 wt% MEA, 313.15–393.15 K, loadings $10^{-5}$ and 0.025–0.6 mol CO₂/mol MEA, plus the stage-1 census nodes. A further 576 offset states and the stage-1 162-state liquid + vapor census never enter the fit and are checked at each endpoint. The design and its qualification are in the [results README](results/stable-refit-255/README.md) and the [accepted design](results/stable-refit-255/design-probe/design.md). On the new wheel, the final set has 0 descent states and the wider-bound fit has 1207 of 1908, plus 54 of the 162 census states.
+
+| Run | 307-row cost | Descent (enforced / offset / census) | Acceptance |
+|---|---:|---|---|
+| final set (reference) | 148.8833 | 0 / 0 / 0 | — |
+| start from final set | 148.5106 | 0 / 0 / 0 | pass |
+| **start from wider-bound fit (selected)** | **148.5105** | 0 / 0 / 0 | pass |
+| (a) R2 enthalpy shift held (#262) | 148.5210 | 0 / 0 / 0 | pass |
+| (b) adds R4 shift and 10 Böttinger 353 K rows (#263) | 148.2631 | 0 / 0 / 0 | pass |
+| (c) #261 pressure data roles (sensitivity) | 148.6884 | 0 / 0 / 0 | pass |
+
+The two starts agree within 0.023 optimizer scales on every coordinate, so stability alone does not return the fit to the final set. The selected endpoint moves the MEAH⁺ segment diameter from the narrowed 5.35 Å bound to 4.905 Å and the carbamate diameter from 4.866 to 5.32 Å. The bicarbonate–water interaction moves from 0.727 to its upper bound of 1.0. Six coordinates end on bounds. Against the final set, the largest pressure or species rise is +0.012 AARD points (fitted phase mole fractions). Loaded densities within twice their scale rise from 44 to 46 of 47. Heat of absorption and heat capacity keep their within-2s counts, with AARD and RMSE ratios between 0.97 and 1.02 ([assessment](results/stable-refit-255/wide/assessment.json)).
+
+## What the candidate changes downstream
+
+![The selected candidate (solid lines, crosses) against the final set (dashed lines, circles) on the same Engine wheel. Left: model CO₂ pressure curves at 30 wt% MEA with the 30 wt% canonical observations within 3 K (open circles). Right: loaded-density errors for the Amundsen, Hartono and Han rows. Lines are the retained model curves; points are measurements or model values at measured coordinates.](results/stable-refit-255/evidence/candidate-comparison.png){#fig-stable-refit-255}
+
+Every producer behind the paper's tables and figures, and the notebook's density, heat-capacity, Kim 2007 and MDEA studies, was rerun for both records on the same wheel. The final-set rerun reproduces its retained values (state targets within $10^{-12}$; the 4 Cp rows within $2.2\times10^{-5}$, the #260 water record). The [330 same-input differences](results/stable-refit-255/evidence/comparison.csv) include:
+
+| Quantity | Final set | Candidate |
+|---|---:|---:|
+| canonical pressures (159), AARD | 20.55 % | 20.27 % |
+| 15 / 45 wt% transfer, mean ln(calc/obs) | −0.205 / +0.149 | −0.002 / −0.051 |
+| 15 / 45 wt% transfer, AARD | 29.5 / 56.0 % | 33.9 / 44.5 % |
+| Han loaded density above 353 K, mean error | −8.84 kg/m³ | −6.02 kg/m³ |
+| Han loaded density at α = 0.56 | −4 to +2 kg/m³ | +7 to +12 kg/m³ |
+| CO₂-free Hilliard Cp at 318.15 K | +5.53 % | +5.43 % |
+| carbonate share, mean calc/obs | 0.073 | 0.021 |
+| Kim 2007 semi-differential heat, RMSE | 6.12 kJ/mol | 6.30 kJ/mol |
+| largest Böttinger 353 K carbamate excess | 26.3 % | 25.9 % (variant b: 24.9 %) |
+| MDEA Xiao / Ermatchkov pressure AARD (A3) | 20.4 / 26.2 % | 53.2 / 51.1 % |
+
+The MDEA rows transfer only the shared bicarbonate–water interaction. The MDEA heat at 333.15 K, 60 wt% and 1.121 MPa for B1 stays unavailable under Engine #1073.
+
+## Meaning and limits
+
+Enforcing stability during fitting answers the stage-1 objection: the final set's stability does not depend on the narrowed #170/#212 bounds, and a stable, lower-cost fit exists inside the wide bounds. The cost gain is small (0.25 %). The concentration-transfer bias is reduced, but the transfer AARD, the 353 K carbamate excess, the 318 K heat-capacity offset and the carbonate share remain. The selected endpoint pushes the shared bicarbonate–water interaction to its bound, which harms MDEA and pushes the carbonate share further low.
+
+This is calibration and numerical verification:
+- The stability search is finite at declared states; it is not a global certificate.
+- The endpoints are local optima with six coordinates on bounds.
+- The acceptance rules are repository policy.
+
+This section has not been independently reviewed or promoted for the manuscript route.
+
 # Where to find more
 
 | Reader question | Page / exact records |
@@ -552,6 +612,7 @@ The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce
 | Numerical reproduction and Engine transfers | [Engine adoptions](engine-adoptions/index.qmd) · [Default-path reproduction](joint-recalibration/index.qmd#numerical-reproduction) |
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
 | Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
+| Stability-constrained refit candidate (not adopted) | [Issue 255 result](#stable-refit-255) · [Evidence README](results/stable-refit-255/README.md) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |

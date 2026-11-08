@@ -1,0 +1,42 @@
+import os,sys,time,json,itertools
+for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS'): os.environ[k]='1'
+from pathlib import Path
+ROOT=Path.cwd(); B=ROOT/'analyses/mea_parameter_bundle'
+sys.path[:0]=[str(B/'scripts'),str(B/'calibration-misfit'),str(ROOT/'src')]
+import shared_evaluation as _s
+_s.ENGINE_WHEEL_SHA256="8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069"
+import phase_search_214 as p
+f,e=p.f,p.e
+from epcsaft import regression as r, equilibrium as eq
+import epcsaft
+from concurrent.futures import ProcessPoolExecutor
+MW={'m':61.0831,'w':18.01528}
+def feed(wt):
+    return 9.7292821, 9.7292821*MW['m']*(1-wt)/(wt*MW['w'])
+def job(task):
+    which,T,a,wt,c=task
+    mapping=f.s.parameter_mapping(p.FITS['comparison' if which=='wide' else 'reported'])
+    params=epcsaft.Parameters.from_mapping(mapping); model=epcsaft.Mixture(params,thermochemistry=f.thermal.record())
+    req=e.request(mapping,313.15,.11); S=f.s.COMPONENT_IDS
+    nm,nw=feed(wt)
+    def prob(P,ph):
+        pr=f.flash_problem(req,a,T,P,ph); pr.feed=eq.Amounts({'monoethanolamine':nm,'water':nw,'carbon-dioxide':a*nm}); return pr
+    parent=prob(1e5,[eq.Phase('L',kind='liquid',support=S)])
+    ref=prob(eq.Free(2e4),[eq.Phase('L',kind='liquid',support=S),eq.Phase('V',kind='vapor',support=S[:3],amount=eq.Pinned(0.))])
+    t=time.time()
+    try:
+        pr=r.predict(model,r.stability(params,parent,scale=1.,pressure_reference=ref,pressure_ratio=c)); m=pr.stability
+        out=dict(status=str(pr.status),avail=None if m is None else m.available,raw=None if m is None else m.raw_minimum,val=None if m is None else m.value,cause='' if m is None else m.cause+m.event,msg=pr.message[:120],P=pr.pressure_reference.value if pr.pressure_reference else None)
+    except Exception as ex: out=dict(status='exception',msg=str(ex)[:200])
+    return dict(which=which,T=T,a=a,wt=wt,c=c,dt=time.time()-t,**out)
+if __name__=='__main__':
+    which=sys.argv[1]
+    Ts=[313.15+10*i for i in range(9)]; As=[1e-5]+[0.025*i for i in range(1,25)]; Ws=[.15,.25,.35,.45]; Cs=[1.05,3.0]
+    tasks=[(which,T,a,w,c) for T in Ts for a in As for w in Ws for c in Cs]
+    if len(sys.argv)>2: tasks=tasks[::int(sys.argv[2])]
+    t=time.time()
+    with ProcessPoolExecutor(int(os.environ.get('NP','24'))) as pool: rows=list(pool.map(job,tasks,chunksize=4))
+    json.dump(rows,open(f'{os.environ["SP"]}/grid-{which}.json','w'))
+    from collections import Counter
+    print(which,len(rows),'wall',round(time.time()-t),Counter((x['status'],x.get('avail'),(x.get('val') or 0)<0) for x in rows))
+    print('max dt',max(x['dt'] for x in rows))

@@ -1,0 +1,24 @@
+import sys,copy
+sys.path.insert(0,sys.argv[1]); import gp
+p,f,e,eq,r,epcsaft=gp.p,gp.f,gp.e,gp.eq,gp.r,gp.epcsaft
+A=f.s.parameter_mapping(p.FITS['reported']); B=f.s.parameter_mapping(p.FITS['comparison'])
+def mix(a,b,t):
+    if isinstance(a,bool) or isinstance(b,bool): return a
+    if isinstance(a,int) and isinstance(b,int): return a
+    if isinstance(a,(int,float)) and isinstance(b,(int,float)): return a+(b-a)*t
+    if isinstance(a,dict) and isinstance(b,dict): return {k:(mix(a[k],b[k],t) if k in b else a[k]) for k in a}
+    if isinstance(a,list) and isinstance(b,list) and len(a)==len(b): return [mix(x,y,t) for x,y in zip(a,b)]
+    return a
+def run(t,T=333.15,a=0.5,wt=0.35,c=1.05):
+    mapping=mix(A,B,t)
+    params=epcsaft.Parameters.from_mapping(mapping); model=epcsaft.Mixture(params,thermochemistry=f.thermal.record())
+    req=e.request(mapping,313.15,.11); S=f.s.COMPONENT_IDS; nm,nw=gp.feed(wt)
+    def prob(P,ph):
+        pr=f.flash_problem(req,a,T,P,ph); pr.feed=eq.Amounts({'monoethanolamine':nm,'water':nw,'carbon-dioxide':a*nm}); return pr
+    parent=prob(1e5,[eq.Phase('L',kind='liquid',support=S)])
+    ref=prob(eq.Free(2e4),[eq.Phase('L',kind='liquid',support=S),eq.Phase('V',kind='vapor',support=S[:3],amount=eq.Pinned(0.))])
+    pr=r.predict(model,r.stability(params,parent,scale=1.,pressure_reference=ref,pressure_ratio=c)); m=pr.stability
+    taus=sorted((tr.quantities.get('tpd_over_rt'),tr.evidence) for tr in m.report.trials if 'tpd_over_rt' in tr.quantities)
+    return dict(t=t,status=str(pr.status).split('.')[-1],avail=m.available,nd=m.report.no_descent_in_trial_set,raw=m.raw_minimum,unc=m.uncertainty,cause=(m.cause+'|'+m.event)[:90],taus=[(f'{x:.2e}',ev[:22]) for x,ev in taus[:3]])
+if __name__=='__main__':
+    for t in [float(x) for x in sys.argv[2:]]: print(run(t))

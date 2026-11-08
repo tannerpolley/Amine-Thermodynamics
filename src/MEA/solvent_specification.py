@@ -337,27 +337,32 @@ class SolventSpecification:
                     reaction["correlation"].update({key: getattr(law, key) for key in fields})
         return reactions
 
-    def fit(self):
+    def fit(self, stability=()):
+        """Fit the calibration rows plus optional (observation, weight) stability requirements."""
         coords = self.coordinates()
         records = self.inputs["observations"]["fitted"]
-        controls = reg.FitControls(**self.spec["optimizer"], workers=os.cpu_count())
+        controls = reg.FitControls(**{"workers": os.cpu_count(), **self.spec["optimizer"]})
         result = reg.fit(
             self.parameters,
             coords,
-            [self.observation(r) for r in records],
-            weights=[r["weight"] for r in records],
+            [self.observation(r) for r in records] + [o for o, _ in stability],
+            weights=[r["weight"] for r in records] + [w for _, w in stability],
             thermochemistry=self.thermal,
             controls=controls,
             singular_vectors=True,
         )
+        # data_cost/stability_cost/acceptance exist only on Engine wheels with stability requirements.
         report = {
-            key: jsonable(getattr(result, key))
+            key: jsonable(getattr(result, key, None))
             for key in (
                 "status",
                 "message",
                 "usable",
+                "acceptance",
                 "initial_cost",
                 "final_cost",
+                "data_cost",
+                "stability_cost",
                 "physical",
                 "optimizer",
                 "predictions",
@@ -371,7 +376,13 @@ class SolventSpecification:
                 "jacobian_evaluations",
             )
         }
-        report["reactions"] = self.fitted_reactions(result.chart) if result.usable else None
+        # An unusable endpoint keeps its vector and laws: a stability-constrained caller may still retreat from it.
+        report["reactions"] = self.fitted_reactions(result.chart) if result.chart is not None and result.chart.physical else None
+        report["stability_predictions"] = [stability_payload(p) for p in getattr(result, "stability_predictions", [])]
+        report["stability_transitions"] = [
+            {k: jsonable(getattr(x, k)) for k in ("observation", "previous_optimizer", "optimizer", "previous_classification", "classification", "kind")}
+            for x in getattr(result, "stability_transitions", [])
+        ]
         report["covariance"] = {
             key: jsonable(getattr(result.covariance, key))
             for key in (
@@ -459,6 +470,17 @@ class SolventSpecification:
             )
         except Exception as error:
             return dict(identity=record["identity"], unresolved=[dict(cause=type(error).__name__, message=str(error))])
+
+
+def stability_payload(prediction):
+    """Signed Full-search measure of one stability prediction; None for a missing prediction."""
+    if prediction is None or prediction.stability is None:
+        return None if prediction is None else dict(status=prediction.status.name, message=prediction.message, available=False)
+    m = prediction.stability
+    return dict(status=prediction.status.name, message=prediction.message, available=m.available, value=m.value,
+                raw_minimum=m.raw_minimum, uncertainty=m.uncertainty, cause=m.cause, event=m.event,
+                no_descent_in_trial_set=m.report.no_descent_in_trial_set, completed=m.report.completed,
+                pressure_Pa=None if prediction.pressure_reference is None else prediction.pressure_reference.value)
 
 
 def relative_error_statistic(records):
