@@ -217,24 +217,52 @@ def heat_capacity(name):
     path.write_text(json.dumps(dict(wheel_sha256=r.SHA, parameter_sha256=sha(RECORDS[name]), metrics=r.jsonable(hc.group_metrics(broad, predictions)), rows=rows_out), indent=1, allow_nan=False) + '\n')
 
 
-def mdea(k):
-    """#267's MDEA pressure and heat checks with the shared bicarbonate-water k at the final-set and candidate values."""
+def r2_law(mapping):
+    """The record's completed R2 law (CO2 + 2 H2O = HCO3- + H3O+) as the Engine evaluates it."""
+    request = s.corrected_request(s.load_state_packet()['observations'][0]['request'], s.reaction_values(mapping), mapping=mapping)
+    q = next(x.correlation for x in s._problem_from_request(request).reactions if x.name == 'R2')
+    return {key: getattr(q, key) for key in ('a', 'b', 'c', 'd', 'e', 'f', 'reference_temperature', 'standard_state_id')}
+
+
+def mdea(k, r2):
+    """#267's MDEA pressure and heat checks for what MDEA shares with the MEA record: the bicarbonate-water k (in its
+    parameter document) and the R2 law (frozen in inputs/probe-reaction-reference.json as the final set's law).
+    Cases: final set, candidate k only, and candidate k with the candidate R2 law (the adoption consequence)."""
     out = EV / 'mdea-transfer'
     if (out / 'heat.json').exists():
         return
+    frozen = next(x for x in json.loads((ROOT / 'analyses/mdea_mea_workflow/inputs/probe-reaction-reference.json').read_text())['shared']
+                  if x['reaction_id'] == 'R2')['engine_correlation']
+    final = r2_law(s.parameter_mapping(RECORDS['final']))
+    assert final['standard_state_id'] == frozen['standard_state_id'] and r2['standard_state_id'] == frozen['standard_state_id']
+    assert all(abs(final[key] - frozen[key]) <= 1e-9 * max(1., abs(frozen[key])) for key in ('a', 'b', 'c', 'd', 'reference_temperature'))
+    law = {key: r2[key] for key in ('a', 'b', 'c', 'd', 'e', 'f', 'reference_temperature')}
     source = ROOT / 'analyses/mdea_mea_workflow/scripts/transfer_probes.py'
     old_wheel = "'/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl'"
+    swap = ("R2 = " + repr(law) + "\nR2_FROZEN = []\n\n\n"
+            "def set_r2(law):\n"
+            "    # MDEA builds its reactions from the frozen reference (fit_mdea REACTIONS); None restores the frozen final-set law.\n"
+            "    reaction = next(x for x in s.j.d.REACTIONS if x.name == 'R2')\n"
+            "    R2_FROZEN[:] = R2_FROZEN or [reaction.correlation]\n"
+            "    old = R2_FROZEN[0]\n"
+            "    reaction.correlation = old if law is None else s.eq.ReactionLogPolynomial(**law, temperature_min=old.temperature_min, "
+            "temperature_max=old.temperature_max, standard_state_id=old.standard_state_id)\n\n\n")
     producer = copy_of('candidate', source, [
         ("AN / 'results/transfer-267'", f'Path({str(out)!r})'), (old_wheel, repr(str(r.WHEEL))),
         ("'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'", repr(r.SHA)),
-        ("for suffix,k in [('',base_k),('-kminus',base_k-.1),('-kplus',base_k+.1)]:", f"for suffix,k in [('-final-k',base_k),('-candidate-k',{k!r})]:"),
+        ("def metric(records):", swap + "def metric(records):"),
+        ("for suffix,k in [('',base_k),('-kminus',base_k-.1),('-kplus',base_k+.1)]:",
+         f"for suffix,(k,r2) in [('-final-k',(base_k,None)),('-candidate-k',({k!r},None)),('-candidate-k-r2',({k!r},R2))]:"),
+        ("candidate=copy.deepcopy(document); pair(candidate)['value']['magnitude']=k", "set_r2(r2); candidate=copy.deepcopy(document); pair(candidate)['value']['magnitude']=k"),
         ("            assess(read(AN/f'results/stage2-capped/{label}/followup-bicarbonate/endpoint.json'),label+'-released')\n", ''),
-        ("for label,T in [('B1',333.15),('A3',333.15),('B1',388.71)]:", f"for (label,T),kk in [(c,kk) for c in [('B1',333.15),('A3',333.15),('B1',388.71)] for kk in (base_k,{k!r})]:"),
+        ("for label,T in [('B1',333.15),('A3',333.15),('B1',388.71)]:",
+         f"for (label,T),(kk,r2) in [(c,v) for c in [('B1',333.15),('A3',333.15),('B1',388.71)] for v in ((base_k,None),({k!r},None),({k!r},R2))]:"),
         ("            s.setup(read(AN/f'results/stage2-capped/{label}/endpoint.json'))\n",
-         "            document=read(AN/f'results/stage2-capped/{label}/endpoint.json'); pair(document)['value']['magnitude']=kk; s.setup(document)\n"),
-        ("results.append(dict(label=label,T_K=T,", "results.append(dict(label=label,k=kk,T_K=T,")])
+         "            set_r2(r2); document=read(AN/f'results/stage2-capped/{label}/endpoint.json'); pair(document)['value']['magnitude']=kk; s.setup(document)\n"),
+        ("results.append(dict(label=label,T_K=T,", "results.append(dict(label=label,k=kk,R2='candidate' if r2 else 'final',T_K=T,")])
     for mode in ('pressure', 'heat'):
         run('candidate', producer, [mode], record=False)
+    (out / 'r2-laws.json').write_text(json.dumps(dict(frozen_mdea=frozen, final_set=final, candidate=r2), indent=1) + '\n')
 
 
 def compare():
@@ -305,16 +333,19 @@ def compare():
         pick = lambda doc: [x['error_percent'] for x in doc['rows'] if x['T_K'] == T]
         add('heat capacity 60 rows (#264)', f'{T} K', 'mean_error_percent', sum(pick(f)) / len(pick(f)), sum(pick(c)) / len(pick(c)))
     for label in ('A3', 'B1'):
-        f, c = (load('candidate', f'../mdea-transfer/{label}-{k}/summary.json') for k in ('final-k', 'candidate-k'))
-        for source in ('Xiao', 'Ermatchkov'):
-            for key in ('available', 'AARD_percent', 'bias_percent'):
-                add('MDEA transfer pressure', f'{label} {source}', key, f['pressure'][source][key], c['pressure'][source][key])
-    heat = json.loads((EV / 'mdea-transfer/heat.json').read_text())
+        f = load('candidate', f'../mdea-transfer/{label}-final-k/summary.json')
+        for case, title in (('candidate-k', 'MDEA transfer pressure, candidate k only'), ('candidate-k-r2', 'MDEA transfer pressure, candidate k and R2')):
+            c = load('candidate', f'../mdea-transfer/{label}-{case}/summary.json')
+            for source in ('Xiao', 'Ermatchkov'):
+                for key in ('available', 'AARD_percent', 'bias_percent'):
+                    add(title, f'{label} {source}', key, f['pressure'][source][key], c['pressure'][source][key])
+    heat = [x for x in json.loads((EV / 'mdea-transfer/heat.json').read_text()) if len(x['grid']) == 30]
+    shown = lambda x: x['value'] if x['status'] == 'Available' else x['status']
     for x in heat:
-        if x['k'] != heat[0]['k'] and len(x['grid']) == 30:
-            base = next(y for y in heat if (y['label'], y['T_K'], len(y['grid'])) == (x['label'], x['T_K'], 30) and y['k'] == heat[0]['k'])
-            add('MDEA transfer heat (30-point grid)', f"{x['label']} {x['T_K']} K", 'value_J_mol_or_status',
-                base['value'] if base['status'] == 'Available' else base['status'], x['value'] if x['status'] == 'Available' else x['status'])
+        if x['k'] != heat[0]['k']:
+            base = next(y for y in heat if (y['label'], y['T_K']) == (x['label'], x['T_K']) and y['k'] == heat[0]['k'] and y['R2'] == 'final')
+            add(f"MDEA transfer heat (30-point grid), candidate k{' and R2' if x['R2'] == 'candidate' else ' only'}", f"{x['label']} {x['T_K']} K",
+                'value_J_mol_or_status', shown(base), shown(x))
     table(EV / 'comparison.csv', out)
     print(len(out), 'comparison rows', flush=True)
 
@@ -369,8 +400,10 @@ def everything(names=('final', 'candidate')):
         density(name)
         heat_capacity(name)
     if 'candidate' in names:
-        mdea(next(c['value']['magnitude'] for p in s.parameter_mapping(RECORDS['candidate'])['pairs']
-                  if {p['component_id_a'], p['component_id_b']} == {'water', 'bicarbonate-anion'} for c in p['coefficients'] if c['family'] == 'k_ij'))
+        candidate = s.parameter_mapping(RECORDS['candidate'])
+        mdea(next(c['value']['magnitude'] for p in candidate['pairs'] if {p['component_id_a'], p['component_id_b']} == {'water', 'bicarbonate-anion'}
+                  for c in p['coefficients'] if c['family'] == 'k_ij'),
+             r2_law(candidate))
 
 
 if __name__ == '__main__':

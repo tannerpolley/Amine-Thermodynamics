@@ -40,6 +40,18 @@ def pair(document):
     return next(c for p in document['pairs'] if {p['component_id_a'], p['component_id_b']} == {'water','bicarbonate-anion'} for c in p['coefficients'] if c['family']=='k_ij')
 
 
+R2 = {'a': 23.87092013089665, 'b': -12017.430996556475, 'c': -36.7816, 'd': 0.0, 'e': 0.0, 'f': 0.0, 'reference_temperature': 313.15}
+R2_FROZEN = []
+
+
+def set_r2(law):
+    # MDEA builds its reactions from the frozen reference (fit_mdea REACTIONS); None restores the frozen final-set law.
+    reaction = next(x for x in s.j.d.REACTIONS if x.name == 'R2')
+    R2_FROZEN[:] = R2_FROZEN or [reaction.correlation]
+    old = R2_FROZEN[0]
+    reaction.correlation = old if law is None else s.eq.ReactionLogPolynomial(**law, temperature_min=old.temperature_min, temperature_max=old.temperature_max, standard_state_id=old.standard_state_id)
+
+
 def metric(records):
     valid = [r for r in records if r.get('relative_error') is not None]
     complete = len(valid)==len(records) and bool(records)
@@ -160,8 +172,8 @@ elif MODE!='mea':
     base_k=pair(original)['value']['magnitude']
     if MODE=='heat':
         results=[]
-        for (label,T),kk in [(c,kk) for c in [('B1',333.15),('A3',333.15),('B1',388.71)] for kk in (base_k,1.0)]:
-            document=read(AN/f'results/stage2-capped/{label}/endpoint.json'); pair(document)['value']['magnitude']=kk; s.setup(document)
+        for (label,T),(kk,r2) in [(c,v) for c in [('B1',333.15),('A3',333.15),('B1',388.71)] for v in ((base_k,None),(1.0,None),(1.0,R2))]:
+            set_r2(r2); document=read(AN/f'results/stage2-capped/{label}/endpoint.json'); pair(document)['value']['magnitude']=kk; s.setup(document)
             row=next(r for r in s.j.rows('Merkley1987_loading_points.csv') if float(r['temperature_K'])==T and r['MDEA_mass_percent']=='60')
             for count in (30,60,120):
                 grid=[.05+i*1.45/(count-1) for i in range(count)]
@@ -169,13 +181,13 @@ elif MODE!='mea':
                 initial=s.j.problem(T,1121000.,s.j.water(.6),0.)
                 item=reg.saturation_capped_addition_enthalpy(s.params,initial,s.j.problem(T,1121000.,s.j.water(.6),.5,True),{s.j.C:1.},basis_amount=1.,loading_cap=float(row['alpha_LP_mol_CO2_per_mol_MDEA']),loading_bounds=(.05,1.5),loading_grid=grid,T=T,P=1121000.,phase='vapor',observed=0.,form='difference',scale=1.)
                 pred=reg.predict(s.model,item)
-                results.append(dict(label=label,k=kk,T_K=T,wt_percent=60,P_Pa=1121000,grid=grid,**{k:jsonable(getattr(pred,k,None)) for k in ('status','message','value','requested_tolerance_met','saturation_loading','endpoint_loading')}))
+                results.append(dict(label=label,k=kk,R2='candidate' if r2 else 'final',T_K=T,wt_percent=60,P_Pa=1121000,grid=grid,**{k:jsonable(getattr(pred,k,None)) for k in ('status','message','value','requested_tolerance_met','saturation_loading','endpoint_loading')}))
                 write('heat.json',results); print(label,T,count,results[-1]['status'],results[-1]['value'],results[-1]['message'],flush=True)
     elif MODE=='pressure':
         for label in ('A3','B1'):
             document=read(AN/f'results/stage2-capped/{label}/endpoint.json')
-            for suffix,k in [('-final-k',base_k),('-candidate-k',1.0)]:
-                candidate=copy.deepcopy(document); pair(candidate)['value']['magnitude']=k
+            for suffix,(k,r2) in [('-final-k',(base_k,None)),('-candidate-k',(1.0,None)),('-candidate-k-r2',(1.0,R2))]:
+                set_r2(r2); candidate=copy.deepcopy(document); pair(candidate)['value']['magnitude']=k
                 assess(candidate,label+suffix,baseline=not suffix)
     elif MODE=='fit':
         for label in ('A3','B1'):

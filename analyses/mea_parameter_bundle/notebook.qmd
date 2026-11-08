@@ -551,7 +551,7 @@ The merged e6dae5c7 wheel has SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce
 
 # Stability-constrained refit (issue 255) {#stable-refit-255}
 
-A refit that enforces liquid-phase stability during fitting, inside the original wide bounds, finds one stable optimum from both the final set and the wider-bound fit. It has a lower calibration cost than the final set: **148.5105** against **148.8833** for the 307 objective rows, with both on the same inputs and Engine wheel. It is a candidate only. The adopted record, Engine pin and manuscript are unchanged. Its shared bicarbonate–water interaction would roughly double the MDEA pressure error if transferred, so adoption needs an owner decision.
+A refit that enforces liquid-phase stability during fitting, inside the original wide bounds, finds one stable optimum from both the final set and the wider-bound fit. It has a lower calibration cost than the final set: **148.5105** against **148.8833** for the 307 objective rows, with both on the same inputs and Engine wheel. It is a candidate only. The adopted record, Engine pin and manuscript are unchanged. MDEA shares its bicarbonate–water interaction and its R2 law; transferring both roughly doubles the MDEA pressure error, so adoption needs an owner decision.
 
 ## What was enforced
 
@@ -572,7 +572,7 @@ The two starts agree within 0.023 optimizer scales on every coordinate, so stabi
 
 ![The selected candidate (solid lines, crosses) against the final set (dashed lines, circles) on the same Engine wheel. Left: model CO₂ pressure curves at 30 wt% MEA with the 30 wt% canonical observations within 3 K (open circles). Right: loaded-density errors for the Amundsen, Hartono and Han rows. Lines are the retained model curves; points are measurements or model values at measured coordinates.](results/stable-refit-255/evidence/candidate-comparison.png){#fig-stable-refit-255}
 
-Every producer behind the paper's tables and figures, and the notebook's density, heat-capacity, Kim 2007 and MDEA studies, was rerun for both records on the same wheel. The final-set rerun reproduces its retained values (state targets within $10^{-12}$; the 4 Cp rows within $2.2\times10^{-5}$, the #260 water record). The [330 same-input differences](results/stable-refit-255/evidence/comparison.csv) include:
+The producers listed in the [results README](results/stable-refit-255/README.md#downstream-rerun-on-the-primary-candidate-candidate-evidence) were rerun for both records on the same wheel: the paper's pressure, species and caloric tables and curves, and the notebook's density, heat-capacity, Kim 2007 and MDEA studies. The #212 conditional uncertainty, the #214 phase-family export and `generate_figure_data.py` were not rerun; they belong to adoption. The final-set rerun reproduces its retained values (state targets within $10^{-12}$; the 4 Cp rows within $2.2\times10^{-5}$, the #260 water record). The [345 same-input differences](results/stable-refit-255/evidence/comparison.csv) include:
 
 | Quantity | Final set | Candidate |
 |---|---:|---:|
@@ -580,18 +580,20 @@ Every producer behind the paper's tables and figures, and the notebook's density
 | 15 / 45 wt% transfer, mean ln(calc/obs) | −0.205 / +0.149 | −0.002 / −0.051 |
 | 15 / 45 wt% transfer, AARD | 29.5 / 56.0 % | 33.9 / 44.5 % |
 | Han loaded density above 353 K, mean error | −8.84 kg/m³ | −6.02 kg/m³ |
+| Han loaded density to 353 K, mean error; RMSE | −2.70; 3.23 kg/m³ | −0.26; 5.15 kg/m³ |
 | Han loaded density at α = 0.56 | −4 to +2 kg/m³ | +7 to +12 kg/m³ |
 | CO₂-free Hilliard Cp at 318.15 K | +5.53 % | +5.43 % |
 | carbonate share, mean calc/obs | 0.073 | 0.021 |
 | Kim 2007 semi-differential heat, RMSE | 6.12 kJ/mol | 6.30 kJ/mol |
 | largest Böttinger 353 K carbamate excess | 26.3 % | 25.9 % (variant b: 24.9 %) |
-| MDEA Xiao / Ermatchkov pressure AARD (A3) | 20.4 / 26.2 % | 53.2 / 51.1 % |
+| MDEA Xiao / Ermatchkov pressure AARD, A3 (candidate k and R2) | 20.4 / 26.2 % | 52.9 / 52.5 % |
+| MDEA Xiao / Ermatchkov pressure AARD, B1 (candidate k and R2) | 28.3 / 19.1 % | 58.6 / 42.0 % |
 
-The MDEA rows transfer only the shared bicarbonate–water interaction. The MDEA heat at 333.15 K, 60 wt% and 1.121 MPa for B1 stays unavailable under Engine #1073.
+MDEA shares the bicarbonate–water interaction through its parameter documents and the R2 law through its frozen reaction reference, which equals the final set's law. The MDEA rows substitute both; substituting the interaction alone gives almost the same errors (A3: 53.2 / 51.1 %), so the interaction carries the change. The MDEA heat at 333.15 K, 60 wt% and 1.121 MPa for B1 stays unavailable under Engine #1073.
 
 ## Meaning and limits
 
-Enforcing stability during fitting answers the stage-1 objection: the final set's stability does not depend on the narrowed #170/#212 bounds, and a stable, lower-cost fit exists inside the wide bounds. The cost gain is small (0.25 %). The concentration-transfer bias is reduced, but the transfer AARD, the 353 K carbamate excess, the 318 K heat-capacity offset and the carbonate share remain. The selected endpoint pushes the shared bicarbonate–water interaction to its bound, which harms MDEA and pushes the carbonate share further low.
+From the final set the requirement was not binding: that fit ends with stability cost 0 and records no resolved descent along its path, so the narrowed #170/#212 bounds, not stability, held its cost (the MEAH⁺ diameter sat at its 5.35 Å bound). From the wider-bound fit (148.2156, 1207 descent states) the penalty moved the fit to the same stable optimum; relative to that unstable optimum, stability costs +0.295. A stable, lower-cost fit therefore exists inside the wide bounds. The cost gain is small (0.25 %). The concentration-transfer bias is reduced, but the transfer AARD, the 353 K carbamate excess, the 318 K heat-capacity offset and the carbonate share remain. The selected endpoint pushes the shared bicarbonate–water interaction to its bound, which harms MDEA and pushes the carbonate share further low.
 
 This is calibration and numerical verification:
 - The stability search is finite at declared states; it is not a global certificate.
