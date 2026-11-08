@@ -13,6 +13,7 @@ import sys
 import time
 import zipfile
 from concurrent.futures import ProcessPoolExecutor
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[3]
 AN = Path(__file__).resolve().parent
@@ -302,6 +303,31 @@ def fit(task):
     return summary
 
 
+def complete(task):
+    """Finish a converged draw whose replay stopped only on zero-multiplicity rows (owner decision, 2026-11-08).
+
+    Reuses the retained fit and candidate; no refit. Eligibility itself is checked from retained data in aggregate.py.
+    """
+    directory = AN/'results'/task['identity']
+    native = read_gz(directory/'native-fit.json.gz')
+    rows = read_gz(directory/'replay.json.gz')['rows']
+    bad = [m for r, m in zip(rows, task['multiplicities'], strict=True) if r['status'] != 'Available']
+    if native['status'] != 'converged' or not bad or any(bad) or (directory/'completion.json').exists():
+        return None
+    s, offset = starting(task)
+    values = original_values(s, SimpleNamespace(chart=SimpleNamespace(physical=native['physical'])), task, offset)
+    mapping = read(directory/'parameters.json')
+    checked = interactions(mapping, directory/'interactions.json')
+    dump(directory/'curves.json.gz', dict(wheel_sha256=SHA, rows=curve_predictions(mapping, directory/'parameters.json')))
+    record = dict(wheel_sha256=SHA, coordinates=values, interaction_admissible=all(r['admissible'] for r in checked))
+    dump(directory/'completion.json', record)
+    return record
+
+
+def read_gz(path):
+    return json.loads(gzip.decompress(Path(path).read_bytes()))
+
+
 def tasks():
     result = [dict(identity=f'profile-{q["original_index"]:02d}-{j:02d}', kind='profile', coordinate=q['original_index'], node=node)
               for q in COORDS for j, node in enumerate(q['nodes'])]
@@ -329,7 +355,16 @@ if __name__ == '__main__':
         allowance = max(allowance, max(r['peak_rss_kib'] for r in read(reference)['reductions'])*1024)
     workers = max(1, min(os.cpu_count(), (memory-8*1024**3)//allowance))
     command = sys.argv[1]
-    if command == 'phase-reference':
+    if command == 'complete':
+        draws = [t for t in tasks() if t['kind'] == 'bootstrap']
+        for t in draws:  # The coordinate recovery must reproduce every retained converged summary.
+            s = read(AN/'results'/t['identity']/'summary.json')
+            if s.get('coordinates'):
+                native = read_gz(AN/'results'/t['identity']/'native-fit.json.gz')
+                assert original_values(fresh(), SimpleNamespace(chart=SimpleNamespace(physical=native['physical'])), t, 0.) == s['coordinates']
+        with ProcessPoolExecutor(min(workers, len(draws))) as pool:
+            print(sum(r is not None for r in pool.map(complete, draws)), 'draws completed', flush=True)
+    elif command == 'phase-reference':
         directory = AN/'results/phase-reference'
         with ProcessPoolExecutor(workers) as pool:
             rows = list(pool.map(phase_state, [fresh().inputs['endpoint']]*162, range(162), [directory]*162))
