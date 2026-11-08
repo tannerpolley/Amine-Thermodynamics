@@ -1,0 +1,219 @@
+---
+title: "Which MEA coordinates are constrained by the 307 observations?"
+execute:
+  enabled: false
+resources:
+  - inputs/**
+  - results/study.json
+  - results/result-hashes.json
+  - results/qualification-*.json
+  - results/phase-reference/summary.json
+---
+
+This study examines parameter identification and conditional uncertainty for the retained aqueous MEA–CO₂ model. It provides calibration sensitivity, source/series resampling, model predictions and numerical verification. It does not provide independent physical validation, structural-identifiability proof, parameter adoption, or absorber/stripper qualification. The [accepted design in #262](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/262) defines the finite calculations and their interpretation. Design readiness was reviewed **Ready**, and the delivered evidence was reviewed **Supported** in an independent read-only review. It has not been promoted for manuscript use.
+
+## Each historical active bound admits a lower-cost tested excursion
+
+All 156 declared profile nodes were attempted: 144 converged, eight reached the approved fit-time limit, and four had unavailable 307-row starting evaluations. Every usable endpoint, including the eight time-limited ones, received all 162 frozen phase states. The 24,624 state–endpoint calculations contain 221,616 actual native trials and include 478 cases with detected descent and 24 incomplete cases. Their locations and raw native evidence are retained; incomplete cases are not counted as stable.
+
+Each of the six historical active bounds has a separate converged excursion with lower cost, zero detected descent states out of 162 and no incomplete phase states:
+
+| Coordinate | Historical active limit | Tested fixed value | Replayed cost $C$ | $\Delta C$ |
+|---|---:|---:|---:|---:|
+| MEAH⁺–water interaction | −0.50 | −0.54 | 148.800004 | −0.078936 |
+| Carbamate–MEAH⁺ interaction | −1.00 | −1.04 | 148.638379 | −0.240560 |
+| MEAH⁺ segment diameter (Å) | 5.35 | 4.95 | 148.510889 | −0.368050 |
+| MEAH⁺ Born diameter (Å) | 5.00 | 5.40 | 148.832097 | −0.046843 |
+| Carbamate Born diameter (Å) | 5.00 | 5.40 | 148.870044 | −0.008895 |
+| R5 total enthalpy shift (kJ/mol) | +10.0 | +20.0 | 148.751472 | −0.127468 |
+
+Interaction coefficients and costs are dimensionless. The R5 excursion is a +10 kJ/mol **increment** about the inherited +10 kJ/mol total shift. These are **one-coordinate excursions with the other fifteen refitted under their historical nuisance restrictions**. The prescribed diagnostic does not support treating these six historical limits as data-active at the tested excursions. It does not establish a simultaneously widened admissible box or global phase stability.
+
+The reference cost is not a minimum of the enlarged profile problems. Negative differences remain retained, and likelihood-interval interpretation is withheld. The finite cost shapes, observed coupling, numerical failures and detected instability still inform the coordinate recommendation.
+
+### Why a single-start excursion can lie below the reference
+
+The reference $C_*$ is a minimum **inside the historical bound box**, with these six coordinates held on their limits. It is not a minimum along any of these coordinates once its limit is removed. The [retained conditional-uncertainty record](../results/engine-3e83e19c-paper-evidence/conditional-uncertainty.json) already shows this at the reference: for all six active coordinates the cost gradient points out of the box (`active_bound_outward_descent` is true for each). At the reference the other fifteen coordinates are at their optimum, so the slope of the profile (the refitted cost as a function of the held coordinate) equals that partial derivative there. Each profile therefore starts downward out of the box, with first-order change $(\partial C/\partial\theta)\,\Delta\theta$. This is a statement about the refitted cost only. With the other coordinates left at their reference values the cost rises steeply. The retained starting costs at the held node, before any refit, are 216.54 at 4.95 Å MEAH⁺ segment diameter, 203.20 at MEAH⁺–water $k=-0.54$, 188.00 at a +10 kJ/mol R5 increment and 149.81 at carbamate–MEAH⁺ $k=-1.04$, all above $C_*$. The lower costs come from the refit.
+
+The attained profile costs follow the first-order profile slope for the small steps (full list in the retained tables):
+
+| Excursion | Step $\Delta\theta$ | Reference $\partial C/\partial\theta$ | First-order $\Delta C$ | Attained $\Delta C$ |
+|---|---:|---:|---:|---:|
+| MEAH⁺–water $k$ to −0.54 | −0.04 | 1.989 | −0.0795 | −0.0789 |
+| Carbamate–MEAH⁺ $k$ to −1.04 | −0.04 | 6.245 | −0.2498 | −0.2406 |
+| MEAH⁺ segment diameter to 4.95 Å | −0.40 Å | 1.939 Å⁻¹ | −0.7754 | −0.3681 |
+| MEAH⁺ Born diameter to 5.40 Å | +0.40 Å | −0.1339 Å⁻¹ | −0.0536 | −0.0468 |
+| Carbamate Born diameter to 5.40 Å | +0.40 Å | −0.0747 Å⁻¹ | −0.0299 | −0.0089 |
+| R5 enthalpy increment +10 kJ/mol | +10000 J/mol | −1.485×10⁻⁵ mol/J | −0.1485 | −0.1275 |
+
+The largest decrease, the MEAH⁺ segment-diameter excursion to 4.95 Å ($C=148.510889$ against $C_*=148.878939$), is about half its first-order value because the profile curves over a 0.4 Å step. It is a **finding about the bound box, not a new parameter estimate**. The excursion is one coordinate at a time, used one endpoint nuisance start, and was not checked for a lower minimum elsewhere. Its 4.95 Å value is not proposed for adoption. Any enlarged box must be refitted jointly with phase stability in #255 stage 2.
+
+## Basis and meaning of the calculations
+
+All calculations start from the [retained endpoint](../results/selected-current-best-parameters.json), SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`, using the 307 observations, weights, equilibrium tolerance, continuation declarations, thermal inputs, reaction domains and standard states owned by [MEA.toml](../../solvent_specification_mea/MEA.toml). The sixteen original coordinates, units, ties, endpoint values, historical nuisance restrictions and 156 exact scan nodes are retained in [coordinates.json](inputs/coordinates.json). A profile fixes one coordinate and refits the other fifteen from the endpoint nuisance start. It establishes an attained local cost, not a global minimum.
+
+The dimensionless weighted least-squares cost is
+
+$$C(\theta)=\tfrac12\sum_{i=1}^{307} w_i r_i(\theta)^2.$$
+
+The retained reference is $C_*=148.87893934557388$. Both $\Delta C=C-C_*$ and $2\Delta C$ are retained. The owner-approved approximate one-coordinate comparison is $2\Delta C=3.84$, or $\Delta C=1.92$. With $s^2=2C_* /(307-16)=1.0232229508286865$, the second comparison is $2\Delta C=3.929176131182156$. These are conditional on the chosen weights, residual independence and fixed model inputs. Active bounds and a finite, single-start search preclude a claim of calibrated 95% coverage. Crossings are brackets between evaluated nodes. Failed fits and untested intervals establish neither a crossing nor a flat profile.
+
+Original reaction-coordinate accounting is separate from completed-law transport. The R5 coordinate is the native natural-log coefficient $b=-7723.098885755592$ K before incremental enthalpy-shift composition; it is not the completed coefficient after a nuisance shift. The inherited total R2 and R5 enthalpy shifts are −1363.931574116721 and +10000 J/mol. Reported incremental coordinates are relative to these inherited values. For both MEAH⁺ and carbamate, the segment, packing and Debye–Hückel diameters retain the ratio 1:0.88:1; their Born diameters remain separate coordinates. Reaction domains and standard states remain those of each destination observation.
+
+Historical bounds are numerical restrictions, not measured physical priors. Segment and Born diameters are in ångström; dispersion energies divided by Boltzmann's constant and reciprocal-temperature interaction slopes are in kelvin. Interaction coefficients are dimensionless. Reading the MEA-owned declaration $k(T)=A+B(1/T-1/T_{\rm ref})$ at 293.15 and 436.85 K bounds this law on that positive-temperature interval. The $k\leq1$ diagnostic means nonnegative unlike dispersion attraction; it does not establish phase stability. Every candidate receives the owner-authorized native constant-law equivalence and perturbation-sensitivity checks. Only fixed-temperature residual chemical potentials are compared; temperature derivatives and caloric properties are excluded from this equivalence check.
+
+Each usable profile endpoint receives the existing native phase calculation at **all 162 frozen states with nine starts each**, using fitted EOS parameters and completed reaction laws. The states span 313.15–393.15 K and loading $10^{-5}$–0.6 mol CO₂/mol MEA at 0.50, 0.80 and 0.95 of the retained endpoint bubble pressure. Detected descent, incomplete search and attained cost are separate quantities. Zero detected descents is a finite-search finding, not proof of global stability. Bootstrap predictions do not receive this phase search and can include imposed single-liquid calculations below their predicted bubble pressure.
+
+## Dependence and resampling
+
+[blocks.json](inputs/blocks.json) maps every observation to its source, experimental series and physical state with provenance: ten sources and nineteen series. The mixed common-149 objective is not treated as one experiment. Each of 200 seed-262 draws samples ten source occurrences uniformly with replacement; each source occurrence then samples its own number of series uniformly with replacement. Every selected series is retained completely. Properties belonging to the same physical state have equal multiplicity, and multiplicities accumulate when a source or series is drawn repeatedly. No observation-level resampling is introduced.
+
+The bootstrap objective is
+
+$$C^{(b)}(\theta)=\tfrac12\sum_i m_i^{(b)}w_i r_i(\theta)^2.$$
+
+Every fit's native initial cost is checked against an independently evaluated objective with those exact multiplicities. The full sixteen-coordinate historical bound box remains in force. Failed draws are retained without replacement. Parameter spreads therefore describe the frozen bounded estimation procedure. They do not estimate uncertainty outside that box or propagate uncertainty in fixed chemistry, thermal inputs, source corrections or the model form.
+
+Each usable converged draw is replayed on the same 307 calibration observations. The reported pressure AARD uses exactly 47 `PartialPressure` observations; the reported species AARD uses exactly 94 `PhaseMoleFraction` observations. Here AARD is $100N^{-1}\sum_i |y_i^{\rm model}/y_i^{\rm observed}-1|$ in percent. Other source/property memberships are reported separately. These are distributions of calibration errors across resampled fits, not out-of-sample validation errors.
+
+[curve-states.json](inputs/curve-states.json) freezes 785 physical grid states from the reported curves: 365 pressure, 140 speciation, 132 density, 84 heat and 64 MEA–water states, preserving every associated quantity and unit. The existing curve calculation owner evaluates each draw. Pointwise 2.5%, median and 97.5% summaries use only available finite predictions and retain their own successful denominators; they are not simultaneous confidence bands. First-100 versus full-200 changes describe finite resampling precision, not convergence of percentile estimates.
+
+## Numerical reference checks
+
+The task-local approved Engine wheel is from merged commit `e6dae5c7353ae10e0aa2d8e46055847b9d64bbe4`, SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`. Its installed package bytes match the wheel. The main checkout's pin is unchanged. This amendment resolves the earlier R5 tied-declaration temperature-domain conflict; no Engine source was modified.
+
+The [full reference replay](results/qualification-replay.json) returns all 307 observations with $C=148.87893934556408$: relative cost difference $6.58\times10^{-14}$ and maximum relative row-residual difference $1.263\times10^{-10}$, against the approved $10^{-8}$ relative limits. The [joint coordinate check](results/qualification-coordinates.json) evaluates all sixteen coordinates and all observations. The [R5 hold check](results/qualification-r5-hold.json) gives identical predictions and completed laws for full and reduced coordinate declarations at two nonzero nuisance shifts.
+
+The [written/reloaded candidate check](results/qualification-transport.json) retains 307 available predictions at nonzero R2/R5 shifts and a fixed R5 node. Maximum relative prediction difference is $2.32037\times10^{-13}$ and maximum absolute completed-law coefficient difference is $1.42109\times10^{-14}$, preserving domains and standard states. This qualifies the existing application-specific completed-law mapping, including native R5 conversion.
+
+The [interaction-law qualification](results/qualification-interactions.json) retains 96 native comparisons over four pairs, both endpoint temperatures, three pressures and below/at/above-one declarations. Maximum relative equivalence error is zero; minimum response to a $10^{-3}$ interaction perturbation is $4.26247\times10^{-5}$ relative, exceeding the $10^{-7}$ sensitivity floor. Actual floating-point classifications are retained, including nominal-one values represented just below one. The [phase reference](results/phase-reference/summary.json) reproduces 162 states, nine starts per state, zero detected descent states and zero incomplete states.
+
+Native fitting uses 180 iterations, function tolerance $10^{-6}$, parameter tolerance $10^{-10}$, gradient tolerance $10^{-8}$ and a 600 s elapsed-time budget. Every usable returned fit is independently replayed using written/reloaded candidate parameters and completed laws: native cost agreement within $10^{-8}$ relative, weighted residual agreement within $10^{-8}$ absolute, and no material worsening of the same-node starting cost. Nonconverged, exhausted, unavailable or interaction-inadmissible fits do not enter interval or percentile inference. No failed draw is silently replaced.
+
+The [held-reaction checks](results/qualification-held-reactions.json) qualify candidate export through the existing solvent-specification reaction mapping. Replayed weighted residuals differ from the retained native fits by at most $1.007\times10^{-11}$ for the checked R2 hold and $7.910\times10^{-12}$ for the checked R5 hold. The [original/reduced coordinate comparisons](results/qualification-held-coordinate-equivalence.json) give identical 307-row predictions and original-coordinate values for the checked R2 hold and positive R5 enthalpy excursion. The [correction record](results/implementation-corrections.json) identifies fourteen implementation failures that were preserved and rerun after this correction, without changing numerical controls or nuisance restrictions.
+
+The [candidate-model comparison](results/qualification-curve-model-binding.json) checks the curve owner's default model after replacing its candidate: at 313.15 K, 100000 Pa and CO₂-free MEA mass fraction 0.30, default and explicit candidate calculations both give liquid molar density 43921.294702574254 mol/m³. The old reference model gives 43912.968925653804 mol/m³, a relative difference $1.896\times10^{-4}$. This verifies that the changed model is consumed; it is not a density validation against measurements.
+
+## Published practice and claim limits
+
+The source reading used Baygi and Pahlavanzadeh (2015), §§3–4 and Eq. 11, [DOI](https://doi.org/10.1016/j.cherd.2014.07.017); Nasrifar and Tafazzol (2010), §§6–7, [DOI](https://doi.org/10.1021/ie901181n); Uyan et al. (2015), §§4.1–4.3, [DOI](https://doi.org/10.1016/j.fluid.2015.02.026); Wangler et al. (2018), §§6.1.2–6.1.4 and 7, [DOI](https://doi.org/10.1016/j.fluid.2017.12.033); and Albers and Sadowski (2011), §4.1, [DOI](https://doi.org/10.1021/ie2010803). The indexed reading copies and current Zotero source attachments were hash-verified during design and independently checked in readiness review.
+
+The MEA ideal-speciation calibration and related MDEA ion-transfer or electrolyte fitting practices do not establish numerical physical bounds for this model's MEAH⁺ or Born diameters. Albers' examples of parameter compensation support caution about unique physical interpretation; they do not prove structural nonidentifiability in this MEA model. Historical bounds, observed coupling and finite profile variation retain those distinctions here.
+
+Ten source blocks, nineteen series, historical nuisance restrictions, single local starts, numerical stopping limits, fixed model inputs, possible source bias and model discrepancy limit the uncertainty interpretation. Source-block resampling tests sensitivity to within-experiment dependence; it neither proves independence between sources nor calibrates confidence coverage. Stability-constrained fitting and parameter adoption remain with #255 stage 2 using the Engine #1059 wheel. No recommendation here authorizes adopting a new parameter vector.
+
+## Born diameters remain weakly restricted over the tested ranges
+
+Both Born-diameter profiles have nine converged nodes over 2.0–5.4 Å. The attained cost ranges are 148.8321–150.2794 for MEAH⁺ and 148.8654–149.5430 for carbamate. Their largest attained $2\Delta C$ values, 2.801 and 1.328, are below both declared comparison cutoffs. All 2,916 state–endpoint phase calculations complete without detected descent. These are broad finite scans with conditional nuisance restrictions; they do not identify unique physical ion sizes. Their small negative cost differences beyond 5 Å also prevent treating the old upper bounds as established by the observations.
+
+The lower-bound excursions of MEAH⁺–water interaction, carbamate–MEAH⁺ interaction and MEAH⁺ segment diameter likewise attain lower cost without detected descent at the tested endpoint nuisance refits. Examples are $k_{\mathrm{MEAH^+,water}}=-0.54$ with $C=148.8000$, $k_{\mathrm{MEACOO^-,MEAH^+}}=-1.04$ with $C=148.6384$, and MEAH⁺ segment diameter 4.95 Å with $C=148.5109$. Each has zero detected descent states out of 162 and no incomplete phase states. These are separate one-coordinate excursions. They do not establish a simultaneously widened admissible bound box.
+
+The opposite MEAH⁺–water endpoint, −0.161, has attained $2\Delta C=4.3183$ and nineteen detected descent states out of 162. Both cost increase and detected instability therefore matter for this direction, with the local-start qualification above. Neither a failed fit nor instability at a starting nuisance vector proves that every nuisance-refitted state at that coordinate is unavailable.
+
+A materially lower cost than the historical reference is retained as negative $\Delta C$. Consequently, the tabulated threshold brackets are diagnostic comparisons to that reference; likelihood-interval interpretation is withheld until the enlarged reference problem is reconciled with the owner. Replacing negative differences by zero or calling every un-crossed finite profile a confidence interval would overstate the evidence.
+
+## Observed coupling does not justify a physical parameter merger
+
+The [retained conditional correlation matrix](../results/engine-3e83e19c-paper-evidence/conditional-correlations.csv) covers ten free coordinates conditional on six active bounds. It gives correlation 0.9673 between the MEAH⁺–water interaction slope and R2 enthalpy shift, −0.9661 between the two ion dispersion energies, and 0.9564 between MEAH⁺ dispersion energy and bicarbonate–water interaction. The magnitude of the correlation between carbamate–water interaction and the source R5 reciprocal-temperature coefficient is 0.9498; reversing the sign to the displayed native R5 $b$ coordinate reverses that correlation's sign. These linear, conditional correlations and compensating profile movements establish observed coupling for this fit, not structural nonidentifiability or physical equivalence of the coupled quantities.
+
+## Source/series bootstrap: 195 converged draws
+
+### Eligibility decision
+
+All 200 frozen draws have retained native fit results: 195 converged and five reached their fit limit. The primary bootstrap set is the **195 converged draws**. This was decided on 2026-11-08 by the orchestrator, choosing the recommended option while the owner was away. The reason is that a draw's fitted parameters depend only on the rows in its own objective. A row with zero multiplicity is not in that objective, so whether its prediction is available cannot affect that draw's fit. Each eligible draw must satisfy three conditions, all checked from retained data in the [study reduction](results/study.json) (`draw_eligibility`):
+
+- every positive-multiplicity row is available;
+- the replayed sampled cost matches the native final cost (largest relative difference $2.6\times10^{-12}$) and the included weighted residuals match within $1.13\times10^{-10}$, against the $10^{-8}$ limits;
+- the interaction declarations are admissible.
+
+The five limit-reached draws (000, 014, 061, 092 and 194) are excluded because their fits did not meet the convergence tolerances, not because of their parameter values. All five also omit Cai, the same source pattern as the fourteen retained draws below. Their stopping points are retained in each `native-fit.json.gz`, and their MEA–water $k$ values there are 0.234 to 0.305, all above the primary 97.5% value of 0.070. These are not converged estimates. Excluding them narrows the upper tail of the MEA–water spread, so the spread reported here is, if anything, understated.
+
+Fourteen of the 195 have unavailable replay predictions, all on zero-multiplicity rows (8 to 44 rows per draw). The unavailable rows are Cai (1996) MEA–water bubble points, plus one Jou (1995) pressure row in one draw. Of the 281 unavailable rows, the engine reports local phase instability of the imposed liquid at 258. The other 23 are 22 infeasible equilibrium solves (4 in draw 051, 14 in 091 and 4 in 189) and one exhausted solve budget (the Jou row in draw 051). **None of these fourteen draws sampled the Cai source.** They are the no-Cai fits whose MEA–water parameters drifted far enough to make Cai's omitted states locally unstable. Leaving them out would select draws on an outcome for rows outside their objective. The fit had stopped at that replay, so a completion step finished these fourteen draws from their retained fits without refitting. It recovered the original-basis coordinates from the native chart, a recovery that reproduces all 181 retained draw summaries exactly. It also ran the interaction equivalence and admissibility check (all fourteen admissible) and evaluated the frozen curve grid. `main` had changed five input files after the campaign (water ideal-gas calorics, commit `0e216fe`), so these evaluations ran with those files restored to the campaign base commit `b0b1cba`. The [restored-input record](results/complete-inputs.json) lists both hashes for each file. `calculate.py` hash-checks `MEA.toml` and the caloric file it binds. It does not hash-check `data/reference/MEA/thermal/physical-ideal-gas-calorics.json`, which the curve heat model reads. The fourteen draws' heat curves therefore rest on that file having been restored, which the record shows by its campaign-base hash but which the run did not verify.
+
+The design's complete-case alternative requires all 307 replay predictions. It leaves **181 draws** and is reported as a sensitivity alongside the primary set. Prediction summaries for any single row or curve state use the primary draws where that prediction is available, with that denominator stated: 181–195 draws for calibration rows and 179–195 for curve states (CO₂ partial-pressure states go as low as 179). No draw, start, bound, tolerance or fit budget was changed.
+
+### Parameter spreads and their comparison with the conditional standard errors
+
+The bootstrap spreads describe the frozen bounded estimation procedure, refitted on resampled sources and series. Many draws end on a historical bound, so several central-95% ranges are bound-to-bound truncations:
+
+- 190 of 195 draws keep the carbamate–MEAH⁺ interaction at −1.
+- 157 keep the MEAH⁺ Born diameter at 5 Å, and 129 keep the carbamate Born diameter there.
+- 146 keep the MEAH⁺ segment diameter at 5.35 Å.
+- 117 keep the MEAH⁺–water interaction at −0.5.
+- The R2 and R5 enthalpy increments reach a bound in 120 and 155 draws.
+
+The bound-active coordinates are therefore held by the box in most resampled fits too, not only at the reference.
+
+For the ten coordinates free at the reference, the retained conditional standard error (linearized, conditional on weights, fixed inputs and the six active bounds) gives a nominal ±1.96 SE width. The ratio of the bootstrap central-95% width to that width separates three groups:
+
+- **Much wider than linearized:** MEA–water interaction (ratio 40.5), its reciprocal-temperature slope (17.6), carbamate segment diameter (5.5) and MEAH⁺–water slope (2.8). None of these is bound-limited, except the carbamate diameter's upper tail (10 draws at 5.8 Å). For MEA–water $k$, the upper tail comes from draws that omit Cai, the only MEA–water phase-equilibrium source in the objective. The 113 primary draws containing Cai keep it between −0.0923 and −0.0249 (2.5–97.5%), while the 82 without Cai range up to 0.33. The MEA–water slope behaves differently. Its spread depends on how many of Cai's two pressure series (101.33 and 66.66 kPa) a draw keeps. Its bootstrap-to-linearized width ratio is 7.7 in the 64 draws with both series, 16.7 in the 49 with one and 19.2 in the 82 with none. Within-source dependence between Cai's series therefore widens the slope even when Cai is sampled. In both cases the linearized error treats each Cai row as independent information and understates the sensitivity to which Cai data are present.
+- **Wider than linearized, and cut off by the box:** carbamate–water interaction (ratio 1.4). Its bootstrap range spans the whole ±0.5 box, with 12 draws at each limit, so 1.4 is only a lower bound on how much wider the resampled spread is.
+- **Comparable:** R5 native $b$ (0.89), R2 enthalpy increment (0.96), and the two ion dispersion energies (0.84 and 0.73). The R5 and R2 ranges are bound-to-bound truncations (69 and 120 draws at a limit), so their similarity to the linearized width is not independent confirmation.
+- **Narrower because of truncation:** bicarbonate–water interaction (0.30). Its linearized width (4.96) is wider than its whole historical box (1.5), and 50 draws sit at its upper limit 1.0.
+
+Neither estimate is a calibrated confidence interval. The comparison shows where within-source dependence matters (the MEA–water pair, carbamate size, the carbamate–water interaction and the MEAH⁺–water slope) and where the box, not the data, sets the spread.
+
+### Complete-case sensitivity
+
+Dropping the fourteen draws (the 181-draw complete case) changes the spreads as follows:
+
+- **Upper tails narrow:** carbamate–water interaction from 0.5 to 0.252 (width −0.248), and MEA–water interaction from 0.070 to −0.023 (width −0.093).
+- **Medians shift:** R2 enthalpy increment +707 J/mol, R5 enthalpy increment +767 J/mol, MEAH⁺–water slope −13.6 K and MEAH⁺ dispersion energy +5.1 K.
+- **Widths change slightly:** carbamate dispersion energy +8.2 K, MEAH⁺ dispersion energy −2.3 K and MEAH⁺–water slope −2.0 K.
+- **Unchanged:** every bound-held coordinate and the R5 native $b$ width.
+
+These changes follow from removing the most extreme no-Cai fits. The complete case therefore understates the MEA–water and carbamate–water sensitivity to source mix. The full per-coordinate changes are in the retained tables.
+
+### Calibration-error and prediction spreads
+
+Over the primary set, the reported pressure AARD has 2.5%, median and 97.5% values of **11.360%, 14.517% and 6273.7%** (194 draws; one draw lacks a zero-multiplicity Jou row). The reported species AARD values are **6.293%, 7.135% and 8.660%** (195 draws). The complete case gives 11.360%, 14.574% and 6593.3% for pressure, and 6.290%, 7.150% and 8.691% for species. The retained endpoint values are 11.8626% and 7.10284%. These errors keep their fixed 47-pressure and 94-species memberships. The 95 eligible draws from attempts 0–99 with all 47 pressures available give a pressure 97.5% value of 4437.1%. The upper pressure-tail percentile is therefore imprecise at 194–195 draws; this compares resampling precision and does not assess percentile convergence.
+
+The large pressure tail is present in the retained row predictions. For example, draw 159 includes none of the 47 reported pressure observations in its sampled objective. Its replay predicts 156039 Pa for Jou row `vle_obs_0197-pco2`, whose observation is 528 Pa; that row has multiplicity zero. Its 47-row AARD is 16640.7%. Draw 171 likewise includes none of these pressure observations and predicts 510.387 Pa for the 1.47 Pa Jou row `vle_obs_0186-pco2`; its AARD is 16038.4%. These predictions are unpenalized omitted-row errors in those fits. In the retained replays, 20 of the 194 draws contain no partial-pressure observation in their objective because they sampled neither Hilliard nor Jou. Their 47-row pressure AARD ranges from 1,603% to 16,641%, against 11.3% to 93.1% for the other 174 draws. The 97.5% value of 6,274% lies inside that group, interpolated between draws 039 (6,101.6%) and 100 (7,084.9%); draws 159, 171, 117, 007 and 100 lie above it. Every one of these is a converged fit, and every pressure row in its replay is available with its equilibrium solve converged to tolerance. The retained replays carry no phase-branch identification, and bootstrap draws received no phase search. These files therefore cannot tell whether the large pressures come from a wrong liquid branch or from the fitted model extrapolated without pressure data, and that would need a new calculation. They show sensitivity to the resampled source mix, without establishing a unique causal source or independent predictive validity. Replacing such draws would conceal this sensitivity.
+
+For the 307 calibration rows, 262 have predictions in all 195 primary draws. The other 45 are one Jou pressure row (194 draws) and 44 Cai rows (181–194 draws). Their percentiles are tabulated with these denominators. The Kiepe CO₂–water rows contain no MEA. Their predictions agree across draws to within $1.5\times10^{-13}$ relative, as expected, because none of the sixteen coordinates enters a CO₂–water state. The 1,829 curve quantities have 179–195 available draws. Speciation, density and heat states are available in all 195. Pressure states have 179–195, and MEA–water states 181–195. The 1,268 unavailable curve evaluations, equal to the missing draw count summed over quantities, are:
+
+- 854 local phase instabilities of the imposed liquid;
+- 209 infeasible equilibrium solves;
+- 200 pressures outside the frozen packet;
+- 3 exhausted solve budgets;
+- 2 cases combining an infeasible or exhausted solve with a stalled trial preparation.
+
+The curve states receive no bootstrap phase search.
+
+The prediction spreads on the curves are wide where the calibration data constrain the property weakly. All values below are pointwise 2.5%, median and 97.5% values over the 195 draws, from the `curves` entries of the [study reduction](results/study.json).
+
+- **Integral heat of absorption** at 313.15 K and 1.734 MPa: −93.7, −80.6 and −53.7 kJ/mol CO₂ at loading 0.01, and −94.7, −82.5 and −52.7 kJ/mol CO₂ at 0.43. The width is about 40 kJ/mol across the whole loading range.
+- **Liquid density** at 313.15 K and 0.1 MPa: 990.4, 1003.3 and 1003.5 kg/m³ at zero loading, and 978.9, 1085.2 and 1089.8 kg/m³ at loading 0.43. The lower tail is long and the upper tail short.
+- **CO₂ partial pressure** at 313.15 K: 8.83, 11.27 and 612 Pa at loading 0.21, and 7940, 14200 and 396000 Pa at 0.57. The upper tail is one to two orders of magnitude above the median.
+
+These spreads show calibration sensitivity to the resampled source mix for these imposed states. They are not prediction intervals for new measurements.
+
+Both Born diameters keep 2.5%, median and 97.5% values of 2.0, 5.0 and 5.0 Å in both sets. Their profiles extend to 5.4 Å with low attained costs, so the bootstrap upper truncation is not evidence of a physical 5 Å upper limit.
+
+![Attained profile costs at every usable declared node. Vertical dotted lines are historical bounds. Horizontal lines are the two conditional comparison cutoffs. Orange annotations count detected-descent states. Linear vertical scales are used for small cost ranges and symmetric logarithmic scales for large ranges. Failed starts are retained in the result inventory and have no plotted cost.](figures/profiles.png){#fig-profiles}
+
+![Bootstrap parameter spreads normalized by each coordinate's declared scale, for the 195-draw primary set (blue) and the 181-draw complete-case sensitivity (orange). Bars span the empirical central 95%; points show medians. Zero is the retained endpoint. Many ranges end on historical bounds; these are bounded finite-resampling spreads, not confidence intervals.](figures/bootstrap-parameters.png){#fig-bootstrap-parameters}
+
+![Selected pointwise prediction spreads from the frozen curve grid over the 195-draw primary set. Lines show medians and shading the empirical central 95%. Each panel states its conditions and the range of available draws over its states. These are imposed calculation states without bootstrap phase screening; they do not establish operating envelopes or simultaneous coverage.](figures/bootstrap-predictions.png){#fig-bootstrap-predictions}
+
+## Recommendation to the stage-2 refit owner
+
+The smallest supported reduction to test in #255 stage 2 is to **hold the R2 enthalpy-shift increment at zero**, preserving its inherited total shift of −1.363931574 kJ/mol, and fit the remaining fifteen original coordinates. Holding it at its endpoint value costs nothing by construction (`profile-10-03` is the endpoint node, $C=148.87893934556044$), so that node is not the support. The support is the shape of the R2 profile. Its attained $2\Delta C$ stays at or below 0.93 from −8636 J/mol (the lower limit) to +5000 J/mol: 0.290, 0.158, 0.073, 0, 0.233 and 0.926 at −8636, −5000, −2500, 0, +2500 and +5000 J/mol. Every one of those endpoints has zero detected descent states. Only the upper side is restricted, at 3.33 at +10000 J/mol and 4.17 at the +11364 J/mol limit. The coordinate is therefore weakly restricted over most of its range, with a one-sided restriction above. Holding it also removes one member of the observed 0.9673 conditional coupling with the MEAH⁺–water interaction slope. The bootstrap does not point to zero. Across the 195 primary draws the R2 increment has median +7.40 kJ/mol and spans its whole historical range. It ends on a limit in 120 draws, 86 of them at the upper limit, the side where the full-data profile is restricted. Resampled fits therefore mostly favor large positive increments. Some sources evidently provide the upper-side restriction, and removing them pushes R2 to its limit. Holding the increment at zero remains a defensible estimation choice for the next fit, because both the shallow profile and this source dependence show R2 is poorly determined. Its cost under other source mixes has not been tested. It is an estimation choice for the next fit, not a claim that the reaction enthalpy correction is physically known. The current experiment does not quantify its cost after other restrictions, wider bounds or stability constraints change.
+
+Holding a Born diameter at its retained 5 Å value has zero cost change only by construction (`profile-07-05` and `profile-08-05` are the endpoint nodes). The Born profiles are shallow over 2.0–5.4 Å (largest $2\Delta C$ 2.801 and 1.328), but these coordinates already lie on active bounds and their physical values remain weakly restricted. This study therefore does not recommend combining that restriction with the R2 hold without the declared joint held-coordinate calculation. It does not recommend merging the two ion dispersion energies or chemically distinct interaction coefficients solely from their conditional correlations.
+
+The six lower-cost excursions above argue against interpreting the old active limits as observation-established limits. They provide separate finite test points for #255's stability-constrained study, not an approved joint bound box or an adopted parameter vector. Reconcile the reference under any enlarged feasible problem before reporting likelihood intervals. Retain the original reaction basis, diameter ties, destination domains and standard states, and recheck the full phase calculation with the #1059 wheel chosen for stage 2. Parameter adoption remains outside #262.
+
+The bootstrap adds one input for stage 2. The MEA–water interaction and slope both rest on Cai (1996). $k$ depends on whether Cai is sampled at all, while the slope depends on keeping both of Cai's pressure series. Their linearized standard errors are 18–40 times narrower than the source-resampled spread. Stage 2 should not treat those linearized errors as the uncertainty of the MEA–water coordinates.
+
+The campaign used the water ideal-gas calorics frozen at its base commit. `main` has since replaced them with an IAPWS-anchored fit (commit `0e216fe`). The heat-of-absorption and heat-capacity values here were evaluated with the superseded water caloric input, including the heat curves and the Vinjarapu and Hilliard calibration rows. This study did not evaluate the size of that effect. The merged #260 study measured it on the final parameter set (`00e77608…`, Engine `3e83e19c`) in the [water ideal-gas record](../notebook.qmd#water-ideal-gas). The new record's ideal-gas heat-capacity fit error against IAPWS-95 is at most 0.000065% ($6.50\times10^{-7}$ relative). The largest change in the four Hilliard heat-capacity predictions was 0.0019 J/(mol·K), and the largest change in the Vinjarapu and Arcis integral heats was $8.45\times10^{-9}$ J/mol CO₂. That is #260's measurement at the final endpoint, not one made here for the profile or bootstrap fits. Stage 2 will use the current inputs.
+
+## Retained tables and reproduction
+
+The following tables are generated only from retained results. “Primary” is the 195 eligible draws within 200 attempts and “complete case” the 181 of them with all 307 predictions available; “first 100 attempts” is the eligible subset of draws 0–99. Each AARD row counts only draws with every member of that membership available.
+
+{{< include tables.qmd >}}
+
+The [study reduction](results/study.json), [input hashes](inputs/input-hashes.json), [result hashes](results/result-hashes.json), per-task summaries, native fit records, candidate documents, 307-row replays, curve rows and raw native phase calculations retain the numerical evidence. The [metadata correction record](results/metadata-corrections.json) removes invalid comparisons of bootstrap costs to the reference objective: bootstrap draws have different multiplicities, so their costs cannot be used as profile likelihood differences.
+
+The `calculate` and `present` entries are separate. From the repository root, the calculation entry is `agent-heavy uv run --no-project --python .venv/bin/python snakemake -s analyses/mea_parameter_bundle/parameter-identifiability/Snakefile --cores 1 calculate`. On the delivered tree this entry stops at the input-hash check, because `main` has since changed `MEA.toml`. To reproduce, first restore the five files listed in the [restored-input record](results/complete-inputs.json) with its `restore_command`, run the entry, then restore them with `git checkout HEAD -- <files>`. Completed task records are preserved on resume; failures are not silently retried. Because `results/study.json`, the rule's only output, already exists, Snakemake may report nothing to do, depending on file times and its saved metadata; use `--forcerun calculate`. A rerun writes a new `results/runtime-calculate.json` beside the retained campaign `results/runtime.json`, and `aggregate.py` then rewrites `result-hashes.json` to include it. The entry then runs `calculate.py complete`, which finishes converged draws whose replay stopped only on zero-multiplicity rows (interaction check, original-basis coordinates and curve grid, without refitting), and `aggregate.py`, which owns the eligibility check. Curve-calculation working directories (`results/*/curve-runs/`) are not retained; `curves.json.gz` retains every curve row. The presentation entry replaces `calculate` with `present` and verifies retained hashes before drawing; it makes no Engine calls. The report renders with `agent-heavy quarto render analyses/mea_parameter_bundle/parameter-identifiability/notebook.qmd --to html --no-execute`. This nested report is linked from the existing bundle notebook, without changing `analyses/_cse-manuscript.json` or the manuscript sources.

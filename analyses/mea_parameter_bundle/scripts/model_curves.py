@@ -45,7 +45,8 @@ def closure(n, feed):
     return dict(carbon_imbalance_relative=abs(dot(CARBON, n) - carbon) / (carbon or nitrogen),
                 nitrogen_imbalance_relative=abs(dot(NITROGEN, n) - nitrogen) / nitrogen, charge_imbalance_relative=abs(dot(CHARGE, n)) / nitrogen)
 
-def solved(problem, model=MODEL, feed=None):
+def solved(problem, model=None, feed=None):
+    model = MODEL if model is None else model
     result = eq.solve_equilibrium(model, problem)
     if not result.success:
         raise RuntimeError(result.message)

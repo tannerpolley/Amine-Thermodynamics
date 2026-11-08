@@ -25,6 +25,16 @@ def load(path):
     return json.loads(Path(path).read_text())
 
 
+def completed_reaction_values(laws):
+    """Transport completed native laws to the existing MEA source fields."""
+    from epcsaft import regression as reg
+    updates = {}
+    for name, law in laws.items():
+        fields = dict(zip(('a_k', 'b', 'c_per_k'), reg.reaction_log10_reciprocal(law), strict=True)) if name == 'R5' else dict(a=law.a-law.c*math.log(law.reference_temperature), b_k=law.b, c=law.c, d_per_k=law.d)
+        updates.update({f'reaction:{name}:correlation:{k}': value for k, value in fields.items()})
+    return updates
+
+
 def write(path, value):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
@@ -610,9 +620,7 @@ def stage6_study(spec, out, started):
                         if v.usable:
                             ordinary = [c for c in spec['information_coordinates'] if 'reaction' not in c]
                             updates = fitted_parameter_values(ordinary, v.physical[:len(v.chart.active)])
-                            for name,law in v.chart.reaction_laws.items():
-                                fields = dict(zip(('a_k','b','c_per_k'), o.reg.reaction_log10_reciprocal(law), strict=True)) if name=='R5' else dict(a=law.a-law.c*math.log(law.reference_temperature),b_k=law.b,c=law.c,d_per_k=law.d)  # Engine law uses c ln(T/T_ref)
-                                updates.update({f'reaction:{name}:correlation:{k}':val for k,val in fields.items()})
+                            updates.update(completed_reaction_values(v.chart.reaction_laws))
                             endpoint = o.s.with_parameter_values(mapping, updates)
                             assert stage6_ties(spec,endpoint)
                             write(directory/'usable-budget-endpoint.json', endpoint)
