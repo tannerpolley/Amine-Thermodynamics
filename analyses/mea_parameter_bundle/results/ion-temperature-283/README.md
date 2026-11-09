@@ -138,9 +138,11 @@ The largest excess is 25.35 %, against the < 10 % target, so F1 fails. Both stag
 
 The per-strength linear regression of $\ln(p_\mathrm{calc}/p_\mathrm{obs}) = c_0 + c_1/T + c_2\,\alpha$ over the 106 Aronu 2011 rows is retained in [regression.json](regression.json) (`regress`). Strengths come from `data/reference/MEA/manifests/grouped_split_manifest.csv`. The rise is $-c_1(1/313.15-1/353.15)$, given with ± 1 standard error.
 
+Limits: absolute loading-controlled 313 → 353 K change: $|\Delta_{15}|\le0.20$ at 15 wt%, and $|\Delta|\le0.30$ at 30 and 45 wt%.
+
 | Strength (rows) | Final set: rise; loading slope | #255 primary | **Candidate** | Limit |
 |---|---:|---:|---:|---|
-| 15 wt% (33) | +0.470 ± 0.135; −1.62 ± 0.33 | +0.424 ± 0.136; −1.67 ± 0.33 | **+0.257 ± 0.128**; −1.87 ± 0.31 | ≤ 0.20: fail |
+| 15 wt% (33) | +0.470 ± 0.135; −1.62 ± 0.33 | +0.424 ± 0.136; −1.67 ± 0.33 | **+0.257 ± 0.128**; −1.87 ± 0.31 | $\lvert\Delta_{15}\rvert\le0.20$: fail |
 | 30 wt% (36) | −0.021 ± 0.125; −1.28 ± 0.35 | −0.026 ± 0.126; −1.30 ± 0.35 | −0.012 ± 0.119; −1.34 ± 0.33 | ±0.30: pass |
 | 45 wt% (37) | +0.186 ± 0.128; −2.84 ± 0.35 | +0.224 ± 0.128; −2.85 ± 0.35 | **+0.467 ± 0.131**; −2.06 ± 0.35 | ±0.30: fail |
 
@@ -150,11 +152,11 @@ The plotted values are in [transfer-temperature-term-plotted-values.csv](transfe
 
 Both slopes are interior, so under the design, slopes fitted to this calibration do not remove the 15 wt% term. That does not exclude these pairs under a fit that includes 15 wt% rows. A temperature term also appears at 45 wt%. Reported without a threshold: the 45 wt% loading slope is −2.06 ± 0.35, against −2.84 ± 0.35 for the final set.
 
-**Concentration transfer.** The candidate also changes the concentration transfer, and most of that change comes from the variant (b) parameter set, not from the slopes. The mean ln(calc/obs) moves:
+**Concentration transfer.** The candidate also changes the concentration transfer. The mean ln(calc/obs) moves:
 - 15 wt%: from −0.205 (final set) to +0.734, AARD 29.5 → 128.4 %;
 - 45 wt%: from +0.149 to −0.630, AARD 56.0 → 47.6 %.
 
-Start (a) is the #255 variant (b) endpoint with both slopes near 0. It already gives 15 wt% AARD 121.6 %, mean ln ratio +0.710, and a 45 wt% rise of +0.511 ± 0.133 ([a/extras.json](a/extras.json)). The 30 wt% Aronu rows are nearly unchanged (AARD 29.8 → 28.2 %).
+A comparably large concentration-transfer shift already occurs without the two new slopes: #255 variant (b) gives 15 wt% AARD 121.6%, mean ln(calc/obs) +0.710, and 45 wt% mean ln(calc/obs) −0.605. Candidate (a), whose new slopes remain near zero, reproduces those values. The selected candidate instead starts from the #255 primary, whose 15 wt% AARD is 33.9%, and jointly refits the existing parameters and the two new slopes. These comparisons show that the shift can occur without the new slopes; they do not uniquely attribute the selected candidate’s shift to the pre-existing parameters or the new slopes. Candidate (a)'s 45 wt% rise is +0.511 ± 0.133 ([a/extras.json](a/extras.json)). The 30 wt% Aronu rows are nearly unchanged (AARD 29.8 → 28.2 %).
 
 ### F3. Preservation and stability: fail
 
