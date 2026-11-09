@@ -377,3 +377,18 @@ uv run python scripts/build_absorption_handoff.py
 The generated ZIP is intentionally local and is not a checked-in result. The
 packager verifies the selected mapping and current source hashes before writing
 it.
+
+### Apparent liquid composition domain
+
+For the aqueous MEA parameter set, the liquid composition domain is
+$w_{\mathrm{MEA,app}}\leq 0.45$ on a CO₂-free apparent mass basis and
+$10^{-5}\leq\alpha\leq 0.6$ mol CO₂ per mol MEA. Apparent amounts are obtained
+from the liquid's elemental balances, including bound species. This is the
+intersection of the 307-row calibration ranges and the #255 enforced grid:
+the former reaches 0.977104 mass fraction and loading 0–0.668 (307 rows for
+mass fraction, 268 for loading; 39 CO₂–water rows have undefined loading),
+while the grid spans 0.15–0.45 and $10^{-5}$–0.6. The lower grid loading is
+$10^{-5}$; the unloaded calibration rows do not change that intersection.
+These bounds do not imply validation throughout the rectangle or a lower
+mass-fraction bound. The [fixed-parameter flash probe](solvent-domain-285/notebook.qmd)
+reports the boundary crossings and the different permittivity formulations.
