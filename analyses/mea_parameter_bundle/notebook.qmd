@@ -17,6 +17,7 @@ resources:
   - results/stable-refit-255/evidence/candidate-comparison-plotted-values.csv
   - results/stable-refit-255/evidence/comparison.csv
   - results/stable-refit-255/evidence/candidate-parameters.json
+  - results/carbonate-ions-282/**
 ---
 
 **Reported parameter record · adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215) · record `00e77608…` · Engine `3e83e19c` · [Download exact parameters](results/selected-current-best-parameters.json)**
@@ -604,6 +605,59 @@ This is calibration and numerical verification:
 
 This section has not been independently reviewed or promoted for the manuscript route.
 
+# Salt-anchored bicarbonate and carbonate interactions (issue 282) {#carbonate-ions-282}
+
+Issue #282 tests one hypothesis: the fitted bicarbonate–water interaction (0.727 in the final set, 1.0 in the #255 candidate) compensates for an amine-solution effect. Its first step fits the water–HCO₃⁻ and water–CO₃²⁻ temperature laws to aqueous sodium-salt osmotic coefficients on this record's own water model. Its second step refits MEA with those laws held. Falsifier F1 decides whether the salt laws are an established anchor; the MEA refit runs only if it passes.
+
+## Salt reference on the record's water
+
+The data and model:
+- **NaCl.** Hamer & Wu 1972 Table 16, 298.15 K, 0.1–1.0 mol/kg. This sets the water–Na⁺ constant, with Held's 2014 temperature slope held.
+- **NaHCO₃ and Na₂CO₃.** The single-salt rows of Peiper & Pitzer 1982 Table 6, 278.15–318.15 K, 0.01–1.0 mol/kg, transcribed from the PDF page images. Each row is evaluated at its printed equilibrium ionic composition, charge-closed, with dissolved CO₂ removed as ideal.
+- **Ions.** Na⁺ and Cl⁻ follow Held 2014 and the record's ion conventions. Na⁺–Cl⁻, Na⁺–HCO₃⁻, Na⁺–CO₃²⁻ and Na⁺–OH⁻ are Held's values.
+- **Scoring.** The three fits run in sequence; F1 is scored on one document holding all three final laws.
+
+![Osmotic coefficients on the ionic basis: source values (points) and the combined-document model at the same rows (lines) for NaCl, NaHCO₃ and Na₂CO₃. Right: the fitted water–anion laws over 278–393 K (fitted range shaded) against Held 2014, Wangler 2018, the final set and the #255 candidate.](results/carbonate-ions-282/salt/phi-molality.png){#fig-carbonate-ions-282}
+
+| Rows | n | AARD % (combined laws) | F1 limit |
+|---|---:|---:|---|
+| NaCl | 10 | 1.51 | water–Na⁺ $a_0$ must be interior: it is at −1 |
+| NaHCO₃ | 45 | 0.163 | ≤ 1.5 %: met |
+| Na₂CO₃ | 45 | 5.11 | ≤ 1.5 %: **not met**; water–CO₃²⁻ $a_0$ is at −1 |
+| mixed NaHCO₃ + Na₂CO₃ (comparison) | 39 | 2.56 | not fitted |
+
+The fitted laws ([results README](results/carbonate-ions-282/README.md), [laws](results/carbonate-ions-282/salt/laws.csv)):
+
+| Law | Fit | Value at 313.15 K | Comparison at 313.15 K |
+|---|---|---:|---|
+| water–HCO₃⁻ | $0.1117+3.93\times10^{-3}\,(T-298.15)$ | 0.171 | Held 0.00; Wangler −0.100; final set 0.727; #255 candidate 1.0 |
+| water–CO₃²⁻ | $-1.000+1.96\times10^{-3}\,(T-298.15)$ | −0.971 | Held −0.25 |
+| water–Na⁺ | $-1.000-0.007981\,(T-298.15)$ | −1.120 | Held 0.00046 at 298.15 K |
+
+**F1 fails.** Two fitted constants end on their lower bounds, and the Na₂CO₃ AARD is 5.1 %, against the 1.5 % limit. The salt reference is therefore not established on this water model.
+
+Following the issue's F1 branch:
+- the leverage check, the MEA refit and its F2 assessment, and the MDEA transfer were **not run**;
+- no MEAH⁺–HCO₃⁻ coordinate was tested.
+
+The water–HCO₃⁻ law alone fits NaHCO₃ well, and at 0.171 it lies below the 0.5 falsification level. However, it rests on a water–Na⁺ constant pinned at its bound, so it does not establish a salt-supported bicarbonate–water value for MEA.
+
+## What limits the salt fit
+
+At 298.15 K, lowering the water–Na⁺ or water–CO₃²⁻ intercept through the five tested values (−1, −0.5, 0, 0.5 and 1), with the other coefficients fixed, raises φ toward the reference values at every sampled molality. This supports the direction toward the lower bound for those rows; it does not establish global optimality of the full temperature-dependent fit. ([scan](results/carbonate-ions-282/salt/sensitivity.json).) At the bounds:
+- **NaCl** stays 1.1–1.7 % low.
+- **Na₂CO₃** is already 1.1 % low at 0.01 mol/kg, where the water–CO₃²⁻ constant has almost no lever. Its deficit peaks at 8 % near 0.2 mol/kg.
+
+This points to the 2:1 electrostatic and Born treatment on this water and to the fixed Held cross values (Na⁺–CO₃²⁻ = −1.000 is itself a bound value in Held 2014) rather than to the water–anion constants. That is an inference; no term-by-term decomposition was run. Held's ion parameters were fitted with a different water (Fuchs 2006), and the Na⁺/Cl⁻ Born diameter is a design choice without a source.
+
+Revising the salt-reference design is a decision for the owner. Candidates include the Born diameter, refitting Na⁺–CO₃²⁻ or a wider k range; none is authorized here.
+
+## Meaning and limits
+
+This is calibration against model-derived reference values: the Peiper & Pitzer tables come from their Pitzer model. It is numerical verification, not validation. The salt laws were never used in an MEA calculation, and the parameter record, the Engine pin and the manuscript are unchanged.
+
+This section has not been independently reviewed or promoted for the manuscript route.
+
 # Unloaded heat-capacity slope: water, MEA and excess (issue 284) {#cp-slope-284}
 
 The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, while both multi-temperature sources rise by about 0.16 kJ kg⁻¹ K⁻¹. Splitting the mixture into pure water, pure MEA and the excess, $c_p^E=c_p-\sum_i w_ic_{p,i}$, puts the slope error in the **MEA–water excess**: share 1.08–1.11 of the mixture slope error for every pairing of mixture source (Hilliard 2008, Concepción 2023) and pure-MEA source (Maham et al. 1997, Chiu et al. 1999). Pure water contributes −0.10 to −0.11 (its model slope is too steep, the opposite sign). Pure MEA contributes −0.002 to +0.029: its slope matches both sources, although its level is about 8 % low. The one-coefficient temperature-law fit that this routes to did not run, because the Engine refuses the selected coefficient's heat-capacity derivative. Nothing is adopted.
@@ -661,6 +715,7 @@ The evidence is numerical verification and measured comparison, not validation. 
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
 | Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
 | Stability-constrained refit candidate (not adopted) | [Issue 255 result](#stable-refit-255) · [Evidence README](results/stable-refit-255/README.md) |
+| Salt-anchored bicarbonate/carbonate interactions (F1 failed) | [Issue 282 result](#carbonate-ions-282) · [Evidence README](results/carbonate-ions-282/README.md) |
 | Unloaded heat-capacity slope: water, MEA and excess | [Issue 284 result](#cp-slope-284) · [Evidence README](results/cp-slope-284/README.md) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
