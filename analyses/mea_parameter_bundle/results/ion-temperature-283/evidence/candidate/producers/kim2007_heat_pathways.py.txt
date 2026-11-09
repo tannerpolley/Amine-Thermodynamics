@@ -1,0 +1,514 @@
+"""Kim Tables 1–3 finite-addition heat and Hong Eqs.15–16 carbon fractions (#245).
+
+Positive heat release, absorbed CO2 basis, 1.734 MPa; no refit. See issue
+comments 10696/10718 for source exceptions and the admitted run-pair falsifier.
+`present` verifies retained hashes and never imports the thermodynamic runtime.
+"""
+import concurrent.futures
+import csv
+import hashlib
+import json
+import math
+import multiprocessing
+import os
+from pathlib import Path
+import shutil
+import sys
+import tempfile
+
+for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
+    os.environ[key] = '1'
+import numpy as np  # noqa: E402 -- limit numerical-library threads before import
+
+BUNDLE = Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/scripts/kim2007_heat_pathways.py').resolve().parents[1]
+ROOT = BUNDLE.parents[1]
+OUT = Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/results/ion-temperature-283/evidence/candidate/kim2007-heat-pathways')
+FIG = Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/results/ion-temperature-283/evidence/candidate/kim2007-heat-pathways-figures')
+EVIDENCE = Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/results/ion-temperature-283/evidence/candidate')
+SOURCE = ROOT / 'data/reference/MEA/observations/calorimetry/Kim_2007_calorimetry_30wt.csv'
+PRESSURE, CEILING, HEAT_TOL = 1734000., .60, .001
+PARAMETER_HASH = '68d4becd825bf65721ac014ace6a75069e03342f2ecf9f13ed684028438c3c51'
+TEMPERATURES = (313.15, 333.15, 353.15, 373.15, 393.15)
+
+
+def read(path):
+    with Path(path).open() as stream:
+        return list(csv.DictReader(stream))
+
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def write_json(path, value):
+    Path(path).write_text(json.dumps(value, indent=2, allow_nan=False) + '\n')
+
+
+def source_rows():
+    rows = []
+    for raw in read(SOURCE):
+        T = float(raw['temperature_degC']) + 273.15
+        a = float(raw['CO2_loading_endpoint_mol_per_mol_MEA'])
+        run = int(raw['source_run_id_reported'])
+        previous = next((r['loading'] for r in reversed(rows) if (r['T_K'], r['run']) == (T, run)), 0.)
+        inconsistent = T == 393.15 and run == 2 and a in (.078, .445)
+        cumulative_prior = next((float(r['dHint_kJ_per_mol_MEA_reported']) for r in reversed(rows)
+                                 if (r['T_K'], r['run']) == (T, run)), 0.)
+        rows.append(dict(raw, T_K=T, run=run, loading=a, previous_loading=previous,
+                         source_inconsistent=inconsistent, first_120=T == 393.15 and previous == 0.,
+                         cumulative_increment_diagnostic=(float(raw['dHint_kJ_per_mol_MEA_reported'])-cumulative_prior)/(a-previous)))
+    assert len(rows) == 86 and sum(r['loading'] > CEILING for r in rows) == 13
+    return rows
+
+
+def metrics(rows, predicted='predicted', observed='observed'):
+    used = [r for r in rows if r.get(predicted) is not None and r.get(observed) is not None]
+    errors = [r[predicted] - r[observed] for r in used]
+    relative = [abs((r[predicted] - r[observed]) / r[observed]) for r in used if r[observed] != 0]
+    return dict(n=len(used), rmse=math.sqrt(np.mean(np.square(errors))) if errors else None,
+                bias=float(np.mean(errors)) if errors else None,
+                aard_percent=100 * float(np.mean(relative)) if relative else None,
+                exceeds_2p2_percent=[r['record_id'] for r in used if abs(r[predicted] - r[observed]) > .022 * abs(r[observed])])
+
+
+def integral_unavailability(rows, prefix):
+    predictions = []
+    for row in rows:
+        if row[prefix+'_available']:
+            continue
+        reason = row[prefix+'_reason']
+        kind = ('undefined' if reason == 'undefined_first_truncated_integral' else
+                'outside_domain' if reason in ('above_ceiling', 'bubble_pressure_exceeded') else
+                'not_evaluated' if reason.startswith('not_evaluated_after_interval:') else 'numerical_failure')
+        predictions.append(dict(identity=row.get('record_id', f"{row['T_K']:g}K/loading={row['loading']:.12g}"),
+                                reason=reason, kind=kind))
+    return dict(count=len(predictions), counts={kind: sum(r['kind']==kind for r in predictions)
+                for kind in ('undefined', 'outside_domain', 'not_evaluated', 'numerical_failure')}, predictions=predictions)
+
+
+def crossings(x, y):
+    return [dict(bracket=[a, b], direction='down' if u > v else 'up',
+                 linear_zero=float(a - u * (b - a) / (v - u)))
+            for a, b, u, v in zip(x, x[1:], y, y[1:]) if u * v < 0]
+
+
+def pairs(rows, admitted):
+    output, values = [], []
+    for cold_run in (1, 2):
+        for warm_run in (1, 2):
+            parts = [sorted([r for r in rows if r['T_K'] == T and r['run'] == run
+                             and (not admitted or r['interval_status'] == 'available')], key=lambda r: r['loading'])
+                     for T, run in ((313.15, cold_run), (353.15, warm_run))]
+            lo = max(p[0]['loading'] for p in parts)
+            hi = min(p[-1]['loading'] for p in parts)
+            x = sorted({r['loading'] for p in parts for r in p if lo <= r['loading'] <= hi})
+            series = {}
+            for field in ('observed', 'predicted') if admitted else ('observed',):
+                y = [np.interp(x, [r['loading'] for r in p], [r[field] for r in p]) for p in parts]
+                series[field] = y[1] - y[0]
+                if field == 'observed':
+                    scale = .022 * (np.abs(y[0]) + np.abs(y[1]))
+            observed_crossings = crossings(x, series['observed'])
+            for crossing in observed_crossings:
+                indices = [x.index(a) for a in crossing['bracket']]
+                crossing['uncertainty_resolved'] = all(abs(series['observed'][i]) > scale[i] for i in indices)
+            model_crossings = crossings(x, series['predicted']) if admitted else []
+            match = (len(model_crossings) == len(observed_crossings) and all(
+                a['direction'] == b['direction'] and max(a['bracket'][0], b['bracket'][0]) <= min(a['bracket'][1], b['bracket'][1])
+                for a, b in zip(observed_crossings, model_crossings)))
+            output.append(dict(cold_run=cold_run, warm_run=warm_run, range=[lo, hi],
+                               observed_crossings=observed_crossings, model_crossings=model_crossings,
+                               outcome=('same nominal reversal pattern' if match else 'contradicts admitted nominal interval ordering')
+                               if admitted and observed_crossings else 'no admitted experimental reversal to test' if admitted else 'unassessed full-table context',
+                               uncertainty_resolved_reversal=any(r['uncertainty_resolved'] for r in observed_crossings)))
+            values.extend(dict(cold_run=cold_run, warm_run=warm_run, loading=a, observed_difference=float(series['observed'][i]),
+                               model_difference=float(series['predicted'][i]) if admitted else None,
+                               uncertainty_bound=float(scale[i]), resolved_sign=1 if series['observed'][i] > scale[i] else -1 if series['observed'][i] < -scale[i] else 0)
+                          for i, a in enumerate(x))
+    return output, values
+
+
+def state(T, a, w=.3, P=PRESSURE):
+    key = (T, round(a, 12), w, P)
+    if key in CACHE:
+        return CACHE[key]
+    row = dict(T_K=T, loading=a, mea_mass_fraction=w, P_Pa=P, status='numerical_failure')
+    CACHE[key] = row
+    try:
+        if not 0 <= a <= CEILING:
+            row['status'] = 'above_ceiling'
+            return row
+        # Bubble helper uses source molar masses; match the heat helper's exact feed.
+        masses = {r['component_id']: r['fixed']['molar_mass']['value']['magnitude'] for r in c.MAPPING['components']}
+        source_masses = c.TEMPLATE['reaction_system']['molar_masses_kg_per_mol']
+        water = masses['monoethanolamine'] * (1-w) / (w*masses['water'])
+        bubble_w = source_masses[1] / (source_masses[1] + water*source_masses[2])
+        row['bubble_pressure_Pa'] = c.bubble_pressure(T, a, bubble_w)
+        if row['bubble_pressure_Pa'] > P:
+            row['status'] = 'bubble_pressure_exceeded'
+            return row
+        item = c.fo.heat_items(c.MAPPING, c.PARAMS, [dict(temperature_K=T, system_pressure_Pa=P,
+            alpha_final=max(a, .01), observed_addition_enthalpy_J_per_mol_CO2=0., uH_J_per_mol_CO2=1000.)], c.HEAT_REQUEST)[0]
+        problem = item.final_problem if a else item.problem
+        result, checks = c.solved(problem)
+        if max(checks[k] for k in c.IMBALANCES) > 1e-10 or not checks['requested_tolerance_met']:
+            raise RuntimeError(f'equilibrium/balance criterion: {checks}')
+        amounts = [result.amounts[0] * x for x in result.mole_fractions[:9]]
+        row.update(checks, status='available', amounts_mol=amounts, mole_fractions=list(result.mole_fractions[:9]))
+        PROBLEMS[key] = problem
+    except (RuntimeError, ValueError) as error:
+        row['cause'] = str(error)
+    return row
+
+
+def heat(T, a, b):
+    endpoints = [state(T, v) for v in (a, b)]
+    unavailable = [r['status'] for r in endpoints if r['status'] != 'available']
+    if unavailable:
+        return None, unavailable[0]
+    initial, final = [PROBLEMS[(T, round(v, 12), .3, PRESSURE)] for v in (a, b)]
+    item = c.fo.heat_items(c.MAPPING, c.PARAMS, [dict(temperature_K=T, system_pressure_Pa=PRESSURE,
+        alpha_final=b, observed_addition_enthalpy_J_per_mol_CO2=0., uH_J_per_mol_CO2=1000.)], c.HEAT_REQUEST)[0]
+    # heat_items already compiled the endpoints; preserve its feed/reference declaration.
+    item.problem, item.final_problem, item.feed_amount = initial, final, b-a
+    value = c.reg.predict(c.MODEL, item)
+    if value.status.name != 'Available' or not value.requested_tolerance_met or not math.isfinite(value.value):
+        return None, f'addition_enthalpy: {value.message}'
+    return -value.value / 1000, 'available'
+
+
+def differential(T, a, upper):
+    previous, ladder = None, []
+    for index in range(11):
+        h = .001 / 2**index
+        lo, hi = max(0., a - h / 2), min(upper, a + h / 2)
+        q, reason = heat(T, lo, hi)
+        ladder.append(dict(width=hi-lo, heat=q, status=reason))
+        if q is None:
+            break
+        if previous is not None and abs(q - previous) <= HEAT_TOL:
+            return q, dict(T_K=T, loading=a, passed=True, ladder=ladder)
+        previous = q
+    return None, dict(T_K=T, loading=a, passed=False, ladder=ladder)
+
+
+def temperature_job(T):
+    global CACHE, PROBLEMS
+    CACHE, PROBLEMS = {}, {}
+    c.s.RUNS = STAGING / f'runtime-{T}'
+    source = [r for r in source_rows() if r['T_K'] == T]
+    grid = [0., *np.linspace(.1, CEILING, 51)]
+    for a in grid:
+        state(T, float(a))
+    crossing = next(((a, b) for a, b in zip(grid, grid[1:]) if state(T, a)['status'] == 'available'
+                     and state(T, b)['status'] == 'bubble_pressure_exceeded'), None)
+    if crossing:
+        lo, hi = crossing
+        while hi-lo > .001:
+            mid = (lo+hi)/2
+            if state(T, mid)['status'] == 'available':
+                lo = mid
+            elif state(T, mid)['status'] == 'bubble_pressure_exceeded':
+                hi = mid
+            else:
+                break
+        crossing = [lo, hi]
+    upper = crossing[0] if crossing else CEILING
+    ladder, curves, fractions, comparisons = [], [], [], []
+    for a in grid[1:]:
+        row = state(T, float(a))
+        curve = dict(T_K=T, loading=float(a), status=row['status'], integral_available=False, integral_reason=row['status'])
+        if row['status'] == 'available':
+            q, check = differential(T, float(a), upper)
+            ladder.append(check)
+            integral, reason = heat(T, 0., float(a))
+            curve.update(differential=q, integral=integral, integral_available=integral is not None, integral_reason=reason)
+            n = row['amounts_mol']
+            carbon = sum(n[i] for i in (0, 4, 5, 6))
+            f = dict(T_K=T, loading=float(a), carbamate=n[4]/carbon, bicarbonate=(n[5]+n[6])/carbon, free=n[0]/carbon)
+            assert abs(sum(f[k] for k in ('carbamate', 'bicarbonate', 'free'))-1) <= 1e-10
+            fractions.append(f)
+        curves.append(curve)
+    for r in source:
+        a, prev = r['loading'], r['previous_loading']
+        row = dict(r, observed=float(r['dHdiff_kJ_per_mol_CO2_reported']), predicted=None, interval_status='above_ceiling')
+        if a <= CEILING:
+            row['predicted'], row['interval_status'] = heat(T, prev, a)
+        row['integral_co2_predicted'], row['integral_mea_predicted'], row['differential_predicted'] = None, None, None
+        start = (0.051 if r['run'] == 1 else .036) if T == 393.15 else 0.
+        reason = row['interval_status'] if row['interval_status'] in ('above_ceiling', 'bubble_pressure_exceeded') else 'not_evaluated_after_interval: '+row['interval_status']
+        row.update(integral_co2_available=False, integral_mea_available=False, integral_co2_reason=reason, integral_mea_reason=reason)
+        if T == 393.15 and a == start:
+            row['integral_co2_reason'] = 'undefined_first_truncated_integral'
+        if row['interval_status'] == 'available':
+            q, check = differential(T, a, upper)
+            row['differential_predicted'] = q
+            ladder.append(check)
+            integral, reason = heat(T, 0., a)
+            row['integral_mea_predicted'] = None if integral is None else a*integral
+            row.update(integral_mea_available=integral is not None, integral_mea_reason=reason)
+            if a > start:
+                row['integral_co2_predicted'], reason = heat(T, start, a)
+                row.update(integral_co2_available=row['integral_co2_predicted'] is not None, integral_co2_reason=reason)
+            row['scaled_residual'] = (row['predicted']-row['observed'])/(.022*abs(row['observed']))
+        comparisons.append(row)
+    print(f'{T:g} K: {len(comparisons)} source rows, {len(fractions)} admitted pathway states, {len(CACHE)} solves', flush=True)
+    return dict(T_K=T, comparisons=comparisons, curves=curves, fractions=fractions,
+                states=list(CACHE.values()), differential_checks=ladder, pressure_bracket=crossing)
+
+
+def check_integral_failure():
+    """Pin the reviewed failure: a valid finite interval must survive missing integrals."""
+    from unittest.mock import patch
+    reason = 'injected heat failure: 313.15, 0, 0.084'
+    def failed_heat(T, a, b):
+        return (None, reason) if (T, a, b)==(313.15, 0., .084) else (1., 'available')
+    prior_runs = c.s.RUNS
+    with patch.dict(globals(), heat=failed_heat, state=lambda T, a: dict(status='available', amounts_mol=[a,1.,7.,0.,0.,0.,0.,0.,0.]),
+                    differential=lambda *args: (1., dict(passed=True))):
+        with patch.object(np, 'linspace', return_value=np.array([.084])):
+            result = temperature_job(313.15)
+    c.s.RUNS = prior_runs
+    row = next(r for r in result['comparisons'] if r['run']==1 and r['loading']==.084)
+    summaries = {basis: integral_unavailability(result['comparisons'], basis) for basis in ('integral_co2', 'integral_mea')}
+    summaries['curve_integral'] = integral_unavailability(result['curves'], 'integral')
+    assert row['interval_status']=='available' and row['predicted']==1.
+    for basis in ('integral_co2', 'integral_mea'):
+        assert not row[basis+'_available'] and row[basis+'_reason']==reason
+    assert not result['curves'][0]['integral_available'] and result['curves'][0]['integral_reason']==reason
+    assert all(r['counts']['numerical_failure']==1 and r['predictions'][0]['reason']==reason for r in summaries.values())
+    return dict(case='heat(313.15, 0, 0.084)', finite_interval_preserved=True, unavailable=summaries, passed=True)
+
+
+def bottinger():
+    output, checks = [], []
+    packet = {o['identity']: o for o in c.PACKET}
+    membership = read(ROOT / 'data/reference/MEA/manifests/speciation_target_membership.csv')
+    canonical = {r['record_id']: r for r in read(c.s.CANONICAL_SPECIATION)}
+    retained = read(EVIDENCE / 'species-figure-data.csv')
+    for number in (*range(42, 51), *range(55, 60), *range(63, 68)):
+        identity = f'Bottinger2008_state_{number:03d}'
+        observation = packet[identity]
+        request = c.s.corrected_request(observation['request'], c.s.reaction_values(c.MAPPING), mapping=c.MAPPING)
+        problem = c.s._problem_from_request(request)
+        result, diagnostics = c.solved(problem, feed=request['reaction_system']['analytical_feed_contract']['neutral_analytical_amounts_mol'])
+        assert max(diagnostics[k] for k in c.IMBALANCES) <= 1e-10 and diagnostics['requested_tolerance_met']
+        x = result.mole_fractions[:9]
+        rows = [r for r in membership if r['membership_id'].startswith(identity+'|')]
+        raw = {r['species']: float(r['value_mole_fraction']) for m in rows if m['measurement_identity']
+               and (r := canonical[m['measurement_identity']])}
+        # Same-state carbon-pool sum; do not divide mole fractions by analytical loading.
+        source_loading = float(rows[0]['co2_loading_mol_per_mol_mea'])
+        carbon_obs = raw['CO2'] + raw['MEACOO-'] + raw['HCO3-']
+        carbon_model = sum(x[i] for i in (0, 4, 5, 6))
+        source_w = float(rows[0]['mea_mass_fraction'])
+        for species, pred, obs in (('carbamate', x[4]/carbon_model, raw['MEACOO-']/carbon_obs),
+                                   ('bicarbonate', (x[5]+x[6])/carbon_model, raw.get('HCO3-', 0.)/carbon_obs)):
+            output.append(dict(identity=identity, T_K=float(problem.T), P_Pa=float(problem.P), loading=source_loading,
+                               mea_mass_fraction=source_w, species=species, predicted=pred, observed=obs,
+                               basis='total liquid CO2; same-state source carbon-pool sum'))
+        for old in (r for r in retained if r['identity'] == identity):
+            selector = {'MEA + MEAH+': (1, 3), 'MEACOO-': (4,), 'HCO3-': (5, 6)}[old['species']]
+            new = sum(x[i] for i in selector)
+            error = abs(new-float(old['predicted']))/max(abs(new), abs(float(old['predicted'])), 1e-300)
+            checks.append(dict(identity=identity, species=old['species'], relative_error=error, passed=error <= 1e-6))
+    return output, checks
+
+
+def calculate():
+    global c, STAGING, CACHE, PROBLEMS
+    import model_curves as c
+    c.s.verify_wheel()
+    assert c.s.sha256(c.s.PARAMETERS) == PARAMETER_HASH == c.s.sha256(c.RECORD)
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    STAGING = Path(tempfile.mkdtemp(prefix='.kim245-', dir=OUT.parent))
+    c.s.RUNS = STAGING / 'runtime'
+    failure_check = check_integral_failure()
+    references = c.references(('heat',))
+    assert references and all(r['passed'] for r in references), references
+    # Five independent temperature batches; each uses one BLAS/OpenMP thread.
+    with concurrent.futures.ProcessPoolExecutor(min(os.cpu_count() or 1, len(TEMPERATURES)),
+            mp_context=multiprocessing.get_context('fork')) as pool:
+        results = list(pool.map(temperature_job, TEMPERATURES))
+    kim = [r for job in results for r in job['comparisons']]
+    summary = dict(temperatures={}, pressure_brackets={str(r['T_K']): r['pressure_bracket'] for r in results})
+    for T in (313.15, 353.15, 393.15):
+        part = [r for r in kim if r['T_K'] == T]
+        counts = {status: sum(r['interval_status'] == status for r in part) for status in sorted({r['interval_status'] for r in part})}
+        summaries = {}
+        for name, predicted, observed in (
+                ('semi_differential', 'predicted', 'dHdiff_kJ_per_mol_CO2_reported'),
+                ('differential_endpoint', 'differential_predicted', 'dHdiff_kJ_per_mol_CO2_reported'),
+                ('integral_co2', 'integral_co2_predicted', 'dHint_kJ_per_mol_CO2_reported'),
+                ('integral_mea', 'integral_mea_predicted', 'dHint_kJ_per_mol_MEA_reported')):
+            candidates = []
+            for r in part:
+                try:
+                    value = float(r[observed])
+                except ValueError:
+                    continue
+                candidates.append(dict(r, observed=value))
+            clean = [r for r in candidates if not r['source_inconsistent'] and not (
+                name == 'integral_co2' and T == 313.15 and r['run'] == 1 and r['loading'] == .041)]
+            summaries[name] = dict(all_printed=metrics(candidates, predicted), source_consistent=metrics(clean, predicted),
+                                   without_first120=metrics([r for r in clean if not r['first_120']], predicted),
+                                   omitted_source_observables=[r['record_id'] for r in candidates if r not in clean])
+            if name in ('integral_co2', 'integral_mea'):
+                summaries[name]['unavailable_predictions'] = integral_unavailability(part, name)
+        summary['temperatures'][str(T)] = dict(counts=counts, metrics=summaries,
+            first_pressure_excluded=min((r['loading'] for r in part if r['interval_status']=='bubble_pressure_exceeded'), default=None))
+    summary['pooled_313_353'] = {name: metrics([r for r in kim if r['T_K'] in (313.15, 353.15)], field)
+                                      for name, field in (('semi_differential', 'predicted'), ('differential_endpoint', 'differential_predicted'))}
+    summary['run_pairs'], pair_values = pairs(kim, True)
+    summary['full_table_run_pairs'], _ = pairs(kim, False)
+    nmr, nmr_checks = bottinger()
+    curves = [r for job in results for r in job['curves']]
+    summary['curve_integral_unavailability'] = {str(T): integral_unavailability([r for r in curves if r['T_K']==T], 'integral') for T in TEMPERATURES}
+    diagnostics = [r for job in results for r in job['differential_checks']]
+    tables = {'kim-heat.csv': kim, 'heat-curves.csv': curves, 'pathway-fractions.csv': [r for job in results for r in job['fractions']],
+              'bottinger-fractions.csv': nmr, 'run-pair-differences.csv': pair_values,
+              'states.csv': [r for job in results for r in job['states']]}
+    for name, rows in tables.items():
+        c.he.table(STAGING/name, rows)
+    summary['limiting_differential_crossings'] = crossings(
+        [r['loading'] for r in curves if r['T_K']==313.15 and r.get('differential') is not None
+         and any(s['T_K']==353.15 and s['loading']==r['loading'] and s.get('differential') is not None for s in curves)],
+        [next(s['differential'] for s in curves if s['T_K']==353.15 and s['loading']==r['loading'])-r['differential']
+         for r in curves if r['T_K']==313.15 and r.get('differential') is not None
+         and any(s['T_K']==353.15 and s['loading']==r['loading'] and s.get('differential') is not None for s in curves)])
+    CACHE, PROBLEMS = {}, {}
+    c.s.RUNS = STAGING / 'runtime-references'
+    own_references = []
+    for r in references:
+        old = next(x for x in read(EVIDENCE/'heat.csv') if x['id']==r['identity'])
+        # Main reference list spans the three original figure isobars; this study uses 1.734 MPa only.
+        if float(old['P_Pa']) == PRESSURE:
+            q, reason = heat(float(old['T_K']), 0., float(old['loading']))
+            error = None if q is None else abs(q + float(old['predicted_kJ_mol']))
+            own_references.append(dict(identity=r['identity'], error_kJ_mol=error, status=reason,
+                                       passed=error is not None and error <= HEAT_TOL))
+    assert own_references and all(r['passed'] for r in own_references), own_references
+    for crossing in summary['limiting_differential_crossings']:
+        lo, hi = crossing['bracket']
+        upper = min(job['pressure_bracket'][0] if job['pressure_bracket'] else CEILING
+                    for job in results if job['T_K'] in (313.15, 353.15))
+        def difference(a):
+            cold, cold_check = differential(313.15, a, upper)
+            warm, warm_check = differential(353.15, a, upper)
+            diagnostics.extend((cold_check, warm_check))
+            return warm-cold if cold is not None and warm is not None else None
+        left = difference(lo)
+        while hi-lo > .001:
+            mid = (lo+hi)/2
+            value = difference(mid)
+            if value is None:
+                break
+            if value*left > 0:
+                lo, left = mid, value
+            else:
+                hi = mid
+        ends = [difference(lo), difference(hi)]
+        if all(v is not None for v in ends) and min(map(abs, ends)) <= 2*HEAT_TOL:
+            # Avoid certifying a sign at an endpoint indistinguishable from zero.
+            center = lo-ends[0]*(hi-lo)/(ends[1]-ends[0])
+            lo, hi = max(crossing['bracket'][0], center-.00045), min(crossing['bracket'][1], center+.00045)
+            ends = [difference(lo), difference(hi)]
+        assert hi-lo <= .001 and all(v is not None and abs(v)>2*HEAT_TOL for v in ends) and ends[0]*ends[1]<0
+        crossing['refined_bracket'] = [lo, hi]
+        crossing['endpoint_differences_kJ_mol'] = ends
+        crossing['resolved_on_numerical_heat_tolerance'] = all(v is not None and abs(v)>2*HEAT_TOL for v in ends)
+    verification = dict(integral_failure_check=failure_check, heat_references=references, study_feed_reference=own_references,
+                        nmr_references=nmr_checks, differential_halving=diagnostics,
+                        nmr_passed=all(r['passed'] for r in nmr_checks), differential_passed=all(r['passed'] for r in diagnostics))
+    write_json(STAGING/'summary.json', summary)
+    write_json(STAGING/'verification.json', verification)
+    inputs = [SOURCE, Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/scripts/kim2007_heat_pathways.py'), ROOT/'uv.lock', ROOT/'pyproject.toml', c.s.PARAMETERS, c.RECORD,
+              c.s.CANONICAL_SPECIATION, c.s.STATE_PACKET, c.he.vrc.PHYSICAL_CALORICS,
+              ROOT/'data/reference/MEA/manifests/speciation_target_membership.csv', c.s.installed_wheel(),
+              c.fe.CORRECTED/'state-packet.json.gz', c.s.CANONICAL_VLE,
+              EVIDENCE/'heat.csv', EVIDENCE/'species-figure-data.csv',
+              Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json')]
+    inputs += list((BUNDLE/'scripts').glob('*.py')) + list((BUNDLE/'calibration-misfit').glob('*.py'))
+    write_json(STAGING/'inputs.json', dict(parameter_sha256=PARAMETER_HASH, engine_wheel_sha256=c.s.ENGINE_WHEEL_SHA256,
+        engine_commit=c.s.ENGINE_COMMIT, pressure_Pa=PRESSURE, loading_ceiling=CEILING, python=sys.version,
+        commands=[f'agent-heavy uv run --no-sync python {Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-283-temperature-d-598eb3d9d4667e4a/analyses/mea_parameter_bundle/scripts/kim2007_heat_pathways.py').relative_to(ROOT)} {action}' for action in ('calculate', 'present')],
+        files={str(p.relative_to(ROOT)): digest(p) for p in inputs}, design_comment=10718,
+        interpretation='Fixed-parameter prediction; previously accessed data; missing experimental pressures; no process validation.'))
+    for directory in STAGING.glob('runtime*'):
+        if directory.is_dir():
+            shutil.rmtree(directory)
+    write_json(STAGING/'hashes.json', {p.name: digest(p) for p in STAGING.iterdir() if p.is_file()})
+    assert not OUT.exists(), f'Refusing to overwrite retained results: {OUT}'
+    STAGING.rename(OUT)
+    print(json.dumps(dict(counts={T: r['counts'] for T, r in summary['temperatures'].items()},
+        run_pairs=summary['run_pairs'], limiting_differential_crossings=summary['limiting_differential_crossings']), indent=2), flush=True)
+
+
+def present():
+    import matplotlib
+    matplotlib.use('Agg')
+    matplotlib.rcParams.update({'pdf.fonttype': 42, 'ps.fonttype': 42})
+    import matplotlib.pyplot as plt
+    for name, checksum in json.loads((OUT/'hashes.json').read_text()).items():
+        assert digest(OUT/name) == checksum, name
+    FIG.mkdir(parents=True, exist_ok=True)
+    kim, curves, fractions = read(OUT/'kim-heat.csv'), read(OUT/'heat-curves.csv'), read(OUT/'pathway-fractions.csv')
+    summary = json.loads((OUT/'summary.json').read_text())
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.7), sharey=True)
+    for ax, T in zip(axes, (313.15, 353.15, 393.15)):
+        for run, marker in ((1, 'o'), (2, '^')):
+            rows = [r for r in kim if float(r['T_K'])==T and int(r['run'])==run]
+            ax.errorbar([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
+                        yerr=[.022*abs(float(r['observed'])) for r in rows], fmt=marker, ms=3, capsize=1,
+                        fillstyle='none', label=f'Kim run {run}, ±2.2%')
+            admitted = [r for r in rows if r['predicted']]
+            ax.scatter([float(r['loading']) for r in admitted], [float(r['predicted']) for r in admitted], marker='x', s=15,
+                       label=f'Model interval {run}')
+        part = [r for r in curves if float(r['T_K'])==T and r.get('differential')]
+        ax.plot([float(r['loading']) for r in part], [float(r['differential']) for r in part], color='black', lw=1, label='Model differential')
+        ax.axvspan(CEILING, .73, color='0.9', label='Unassessed >0.60')
+        bracket = summary['pressure_brackets'][str(T)]
+        if bracket:
+            ax.axvspan(bracket[1], CEILING, color='0.8', label='Bubble pressure exceeded')
+        ax.set(title=f'{T:g} K; 1.734 MPa', xlabel='Absorbed CO₂ / MEA (mol/mol)', xlim=(0, .73))
+    axes[0].set_ylabel('Heat release (kJ/mol absorbed CO₂)')
+    axes[-1].legend(fontsize=6)
+    fig.tight_layout()
+    save_figure(fig, 'heat-temperature')
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.8), sharey=True)
+    for T in TEMPERATURES:
+        part = [r for r in fractions if float(r['T_K'])==T]
+        for ax, species in zip(axes, ('carbamate', 'bicarbonate')):
+            ax.plot([float(r['loading']) for r in part], [float(r[species]) for r in part], label=f'{T:g} K')
+            ax.set(title=species.capitalize(), xlabel='Absorbed CO₂ / MEA (mol/mol)', ylim=(0, 1))
+    for ax in axes:
+        ax.axvspan(.5, CEILING, color='0.9', label='Chemically conditional')
+    axes[0].set_ylabel('Fraction of total liquid CO₂')
+    axes[-1].legend(fontsize=7)
+    fig.tight_layout()
+    save_figure(fig, 'pathway-fractions')
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.8), sharey=True)
+    nmr = read(OUT/'bottinger-fractions.csv')
+    for T, marker in zip((313.15, 333.15, 353.15), ('o', '^', 's')):
+        for ax, species in zip(axes, ('carbamate', 'bicarbonate')):
+            part = [r for r in nmr if float(r['T_K'])==T and r['species']==species]
+            x = [float(r['loading']) for r in part]
+            ax.scatter(x, [float(r['observed']) for r in part], marker=marker, facecolors='none', edgecolors=f'C{int((T-313.15)/20)}', label=f'NMR {T:g} K')
+            ax.scatter(x, [float(r['predicted']) for r in part], marker='x', s=20, color=f'C{int((T-313.15)/20)}', label=f'Model {T:g} K')
+            ax.set(title=species.capitalize(), xlabel='Source loading (mol/mol MEA)', ylim=(0, 1))
+    axes[0].set_ylabel('Fraction of total absorbed CO₂')
+    axes[-1].legend(fontsize=6)
+    fig.suptitle('Böttinger admitted states: 30 wt%; 31 wt% at 353.15 K; 101325 Pa')
+    fig.tight_layout()
+    save_figure(fig, 'bottinger-fractions')
+
+
+def save_figure(fig, name):
+    import matplotlib.pyplot as plt
+    for suffix in ('pdf', 'png'):
+        fig.savefig(FIG/f'{name}.{suffix}', dpi=180, metadata={'CreationDate': None} if suffix=='pdf' else {})
+    plt.close(fig)
+
+
+if __name__ == '__main__':
+    {'calculate': calculate, 'present': present}[sys.argv[1]]()
