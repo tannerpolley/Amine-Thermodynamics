@@ -18,6 +18,7 @@ import zipfile
 
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
+CORES = int(os.environ.get('AGENT_HEAVY_CORES', os.cpu_count()))  # agent-heavy's per-job core cap
 ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
 sys.path[:0] = [str(B / 'scripts'), str(B / 'calibration-misfit'), str(ROOT / 'src')]
@@ -164,7 +165,7 @@ def _measure(state):
 def grid(mapping, chosen):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
-    with ProcessPoolExecutor(os.cpu_count(), initializer=_init, initargs=(mapping,)) as pool:
+    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping,)) as pool:
         return list(pool.map(_measure, chosen, chunksize=4))
 
 
@@ -208,6 +209,8 @@ def coordinates(spec, shifts, held=(), extra_shifts=()):
 def endpoint_mapping(start, report, declared):
     """Parameter mapping at a fit's returned optimizer (density_268.finish_fit, all fitted reactions)."""
     ordinary = [q for q in read(A6)['information_coordinates'] if 'reaction' not in q]
+    # Untied parameter coordinates declared beyond a6 (#283 slopes) follow a6's in the physical vector.
+    ordinary += [dict(identity=q['identity']) for q in declared if 'targets' in q and q['identity'] not in {x['identity'] for x in ordinary}]
     import fit_campaign as campaign
     updates = campaign.fitted_parameter_values(ordinary, report['physical'][:sum(1 + len(q.get('ties', [])) for q in ordinary)])
     fitted = {q['name'] for q in declared if q.get('kind') in ('reaction_coordinate', 'reaction_enthalpy_shift')}
@@ -307,7 +310,7 @@ def census(mapping, name):
     tmp = OUT / name / 'census-tmp'
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
-    with ProcessPoolExecutor(min(os.cpu_count(), max(1, memory // 750000)), initializer=verify) as pool:
+    with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
         out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json') for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
@@ -487,7 +490,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     controls = read(A6)['controls']
     # Workers sized by free memory (about 0.35 GB each, 7 GB kept for the parent and other work); the result does not depend on it.
     available = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) / 1e6
-    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=7200., workers=max(4, min(os.cpu_count(), int((available - 7) / .35))))
+    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=7200., workers=max(1, min(CORES, int((available - 7) / .35))))
     added = extra(spec, start) if extra else []
     if (OUT / rel / 'fit-native.json').exists():  # resume after an interrupted reduction without refitting
         report = result(f'{rel}/fit-native.json')
@@ -542,10 +545,18 @@ def run_fit(run):
     retreat(run, anchor, endpoint, enforced, rows_of(cfg), (anchor_shifts, endpoint_shifts))
 
 
-def admissible(mapping, enforced, rows=None):
-    tal = tally(grid(mapping, enforced))
+def admissible(mapping, enforced, rows=None, suspects=()):
+    """Admissibility on the full grid. States that failed at the previous point are searched first: any failure
+    among them rejects the point without the full grid (same decision, a few searches instead of all of them)."""
+    if suspects:
+        tal = tally(grid(mapping, suspects))
+        if tal['descent'] or tal['unavailable']:
+            return False, dict(tal, screened=True, suspects=list(suspects)), None
+    measured = grid(mapping, enforced)
+    tal = tally(measured)
+    failed = {r['key'] for r in measured if descent(r) or not r.get('available')}
     _, ok, cost = replay(mapping, rows)
-    return tal['descent'] == 0 and not tal['unavailable'] and ok, tal, cost
+    return tal['descent'] == 0 and not tal['unavailable'] and ok, dict(tal, suspects=[x for x in enforced if x['key'] in failed]), cost
 
 
 def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
@@ -556,10 +567,11 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
         write(f'{run}/retreat.json', dict(t=0., reason='no stage returned an available 307-row endpoint', trace=trace, shifts=shifts[0]))
         write(f'{run}/candidate.json', anchor)
         return
-    passing, t = None, 1.
+    passing, t, suspects = None, 1., ()
     while t > -1e-12:
-        ok, tal, cost = admissible(segment(anchor, endpoint, t), enforced, rows)
-        trace.append(dict(t=t, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+        ok, tal, cost = admissible(segment(anchor, endpoint, t), enforced, rows, suspects)
+        suspects = tal['suspects']
+        trace.append(dict(t=t, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
         print(run, 'retreat', json.dumps(trace[-1]), flush=True)
         if ok:
             passing = t
@@ -569,8 +581,9 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
         low, high = passing, min(1., passing + .01)
         for _ in range(10):
             mid = (low + high) / 2
-            ok, tal, cost = admissible(segment(anchor, endpoint, mid), enforced, rows)
-            trace.append(dict(t=mid, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+            ok, tal, cost = admissible(segment(anchor, endpoint, mid), enforced, rows, suspects)
+            suspects = tal['suspects'] or suspects
+            trace.append(dict(t=mid, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
             print(run, 'refine', json.dumps(trace[-1]), flush=True)
             low, high = (mid, high) if ok else (low, mid)
         passing = low
@@ -600,7 +613,9 @@ def assess(run, rows=None):
     checks = acceptance(m, base)
     a, f = s.parameter_values(candidate), s.parameter_values(s.parameter_mapping(STARTS['final']))
     scales = {q_['identity']: q_['scale'] for q_ in read(A6)['information_coordinates']}
-    distance = {k: dict(final=f[k], candidate=a[k], scaled=(a[k] - f[k]) / scales[k] if k in scales else None) for k in a if a[k] != f[k]}
+    # A slope the final set does not declare is zero (#283).
+    distance = {k: dict(final=f.get(k, 0.), candidate=a[k], scaled=(a[k] - f.get(k, 0.)) / scales[k] if k in scales else None)
+                for k in a if a[k] != f.get(k, 0.)}
     t = result(f'{run}/retreat.json')['t']
     passed = stability_pass and all(c['passed'] for c in checks.values())
     summary = dict(run=run, t=t, cost=cost, final_cost=FINAL_COST, historical_final_cost=HISTORICAL_COST, cost_difference=cost - FINAL_COST, stability=stab, stability_passed=stability_pass,

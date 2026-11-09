@@ -18,6 +18,16 @@ resources:
   - results/stable-refit-255/evidence/comparison.csv
   - results/stable-refit-255/evidence/candidate-parameters.json
   - results/carbonate-ions-282/**
+  - results/ion-temperature-283/README.md
+  - results/ion-temperature-283/primary.json
+  - results/ion-temperature-283/*/assessment.json
+  - results/ion-temperature-283/*/extras.json
+  - results/ion-temperature-283/attribution.json
+  - results/ion-temperature-283/regression.json
+  - results/ion-temperature-283/transfer-temperature-term.png
+  - results/ion-temperature-283/transfer-temperature-term-plotted-values.csv
+  - results/ion-temperature-283/evidence/comparison.csv
+  - results/ion-temperature-283/evidence/candidate-parameters.json
 ---
 
 **Reported parameter record · adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215) · record `00e77608…` · Engine `3e83e19c` · [Download exact parameters](results/selected-current-best-parameters.json)**
@@ -702,6 +712,84 @@ Single-coefficient scans at fixed final-set parameters show what any law must co
 
 The evidence is numerical verification and measured comparison, not validation. This section has not been independently reviewed or promoted for the manuscript route.
 
+# Temperature-dependent carbamate interactions (issue 283) {#ion-temperature-283}
+
+Giving MEACOO⁻–water and MEAH⁺–MEACOO⁻ the reciprocal-temperature law $k_{ij}(T)=k_{ij}+b_{ij}(1/T-1/313.15\ \mathrm K)$ does not remove either target. Both slopes were fitted to the 307 calibration rows plus the 10 Böttinger 2008 353.15 K speciation rows, with the #255 stability requirement.
+
+- **353 K carbamate excess.** The largest Böttinger excess at the selected candidate is **25.35 %**, against a 10 % target. The final set gives 26.33 % and #255 variant (b) 24.94 %.
+- **15 wt% temperature term.** The loading-controlled 313 → 353 K rise in the 15 wt% transfer error is **+0.26 ± 0.13**, against a limit of 0.20 in magnitude. The final set gives +0.47 ± 0.14.
+- **45 wt% temperature term.** A rise of **+0.47 ± 0.13** appears at 45 wt%.
+- **Concentration transfer.** The 15 wt% transfer AARD rises from 29.5 % to 128.4 %.
+
+All three tests (F1–F3) fail. The candidate is not adopted; the record, Engine pin and manuscript are unchanged.
+
+## Fits and the selected candidate
+
+The fit has 19 coordinates: the 16 #255 coordinates, the R4 enthalpy shift and the two slopes, each starting at 0 K with bounds ±1000 K. It ran from two stable starts, with one 3×10⁻³ penalty stage and the #255 retreat toward the start. Both stage endpoints lower the 317-row cost by about 2 and move the slopes the same way: about −170 K for MEACOO⁻–water and +180 to +220 K for MEAH⁺–MEACOO⁻. Both endpoints have resolved descent at 313.15 K, loading 0.6, at 30 and 35 wt%.
+
+| Run | Retreat t | 307 / 317-row cost | MEACOO⁻–water b / K | MEAH⁺–MEACOO⁻ b / K | Acceptance and stability |
+|---|---:|---:|---:|---:|---|
+| final set | — | 148.883 / 153.622 | 0 | 0 | — |
+| (a) from #255 variant (b) | 0.0003 | 148.262 / 152.552 | −0.05 | +0.07 | pass |
+| **(b) from #255 primary (selected)** | **0.985** | **146.619 / 151.016** | **−164.6 ± 601.9** | **+181.3 ± 644.5** | pass |
+
+**Start (a).** That descent goes to zero only at the start, so candidate (a) is effectively #255 variant (b).
+
+**Start (b).** Its stage stopped at the 7200 s wall-time budget under the 3-core cap, so it is not converged. Its retreat keeps 98.5 % of the step.
+
+**Candidate (b).** It passes the #255 criteria against the final set, with no descent at the 1903 enforced, 576 offset or 162 census states. Its conditional standard errors exceed both slopes. The MEACOO⁻–water slope correlates −0.953 with the MEAH⁺–water slope, which moves to +159.4 K.
+
+**Bounds.** Four coordinates sit on bounds: bicarbonate–water k, MEAH⁺–MEACOO⁻ k, the MEAH⁺ Born diameter and the R5 total shift. The R2 and R4 total shifts end within 160 J/mol of +10 kJ/mol. The [results README](results/ion-temperature-283/README.md) gives qualification, every parameter move and the logs.
+
+## The 15 wt% temperature term
+
+![Loading-controlled residual against temperature for the 106 Aronu 2011 rows at each strength, for the final set, the #255 candidate and the #283 candidate. Points are each row's ln(p_calc/p_obs), moved to its strength's mean loading with the fitted loading slope. Lines are the fitted 1/T terms at that loading.](results/ion-temperature-283/transfer-temperature-term.png){#fig-ion-temperature-283}
+
+| Strength | Final set: rise; loading slope | #283 candidate: rise; loading slope | Transfer AARD, final → candidate |
+|---|---:|---:|---:|
+| 15 wt% (33 rows) | +0.470 ± 0.135; −1.62 ± 0.33 | +0.257 ± 0.128; −1.87 ± 0.31 | 29.5 → 128.4 % |
+| 30 wt% (36 rows) | −0.021 ± 0.125; −1.28 ± 0.35 | −0.012 ± 0.119; −1.34 ± 0.33 | 29.8 → 28.2 % |
+| 45 wt% (37 rows) | +0.186 ± 0.128; −2.84 ± 0.35 | +0.467 ± 0.131; −2.06 ± 0.35 | 56.0 → 47.6 % |
+
+A comparably large concentration-transfer shift already occurs without the two new slopes: #255 variant (b) gives 15 wt% AARD 121.6%, mean ln(calc/obs) +0.710, and 45 wt% mean ln(calc/obs) −0.605. Candidate (a), whose new slopes remain near zero, reproduces those values. The selected candidate instead starts from the #255 primary, whose 15 wt% AARD is 33.9%, and jointly refits the existing parameters and the two new slopes. These comparisons show that the shift can occur without the new slopes; they do not uniquely attribute the selected candidate’s shift to the pre-existing parameters or the new slopes.
+
+## Attribution and downstream consequences
+
+**Attribution.** Each slope was set back to 0 with every other candidate parameter fixed ([attribution.json](results/ion-temperature-283/attribution.json)):
+- MEACOO⁻–water slope at 0: the 307-row cost rises to 227.8 and the carbamate excess falls to 18.5 %.
+- MEAH⁺–MEACOO⁻ slope at 0: the cost is 147.8 and the excess 24.6 %.
+- Both slopes at 0: the cost is 244.9 and the excess 17.5 %.
+
+So the MEACOO⁻–water slope mostly offsets the MEAH⁺–water slope. The calibration rows, not the Böttinger rows, hold the carbamate excess near 25 %.
+
+**Downstream.** The #255 stage-3 rerun on the candidate ([comparison.csv](results/ion-temperature-283/evidence/comparison.csv)), final set → candidate:
+
+| Quantity | Final set | Candidate |
+|---|---:|---:|
+| canonical pressures (159), AARD | 20.55 % | 20.72 % |
+| packet pressures (79), AARD | 15.46 % | 17.73 % |
+| Arcis heats (14), RMSE | 8.12 kJ/mol | 7.74 kJ/mol |
+| Kim 2007 semi-differential heat, RMSE | 6.12 kJ/mol | 6.54 kJ/mol |
+| Han loaded density above 353 K, mean error | −8.84 kg/m³ | −1.73 kg/m³ |
+| Han loaded density to 353 K, RMSE | 3.23 kg/m³ | 10.44 kg/m³ |
+| #264 broad Cp, AARD | 2.44 % | 2.30 % |
+| MDEA Ermatchkov AARD (A3 / B1, shared k and R2) | 26.2 / 19.1 % | 66.1 / 60.2 % |
+
+## Meaning and limits
+
+In these two local fits, temperature dependence in the two carbamate interactions does not supply the temperature dependence that the 353 K carbamate excess needs. With slopes fitted to this calibration, it also does not remove the 15 wt% transfer temperature term. That does not exclude these pairs in a fit that includes 15 wt% rows.
+
+The issue's conditional Engine request applies, because F2 failed with both slopes interior: an ion segment-diameter temperature law as active fit parameters. Whether to file it is the orchestrator's decision.
+
+This is calibration and numerical verification:
+- The Böttinger rows are fitted.
+- The Aronu rows were accessed before.
+- The linear regression assumes linear loading dependence and independent residuals, and rests on sparse isotherms.
+- The fits are local, from two starts, and the selected stage is not converged.
+- Stability is a finite search at declared states.
+
+This section has not been independently reviewed or promoted for the manuscript route.
+
 # Where to find more
 
 | Reader question | Page / exact records |
@@ -717,6 +805,7 @@ The evidence is numerical verification and measured comparison, not validation. 
 | Stability-constrained refit candidate (not adopted) | [Issue 255 result](#stable-refit-255) · [Evidence README](results/stable-refit-255/README.md) |
 | Salt-anchored bicarbonate/carbonate interactions (F1 failed) | [Issue 282 result](#carbonate-ions-282) · [Evidence README](results/carbonate-ions-282/README.md) |
 | Unloaded heat-capacity slope: water, MEA and excess | [Issue 284 result](#cp-slope-284) · [Evidence README](results/cp-slope-284/README.md) |
+| Temperature-dependent carbamate interactions (not adopted) | [Issue 283 result](#ion-temperature-283) · [Evidence README](results/ion-temperature-283/README.md) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |
