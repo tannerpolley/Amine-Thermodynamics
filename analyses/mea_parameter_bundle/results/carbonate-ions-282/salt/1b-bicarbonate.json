@@ -1,0 +1,901 @@
+{
+ "wheel_sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+ "result": {
+  "name": "1b-bicarbonate",
+  "status": "converged",
+  "message": "Gradient tolerance reached. Gradient max norm: 1.010925e-11 <= 1.000000e-10",
+  "usable": true,
+  "iterations": 5,
+  "initial_cost": 5.581934478693425,
+  "final_cost": 0.6067037808541742,
+  "active": [
+   "pair/bicarbonate-anion/water/k_ij/a0",
+   "pair/bicarbonate-anion/water/k_ij/a1"
+  ],
+  "start": {
+   "pair/bicarbonate-anion/water/k_ij/a0": 0.0,
+   "pair/bicarbonate-anion/water/k_ij/a1": 0.0
+  },
+  "endpoint": {
+   "pair/bicarbonate-anion/water/k_ij/a0": 0.1117253829105505,
+   "pair/bicarbonate-anion/water/k_ij/a1": 0.0039311876328716865
+  },
+  "on_bound": [],
+  "covariance_active_bounds": [],
+  "replay_maximum_difference": 1.3400724974133027e-11,
+  "laws": {
+   "sodium-cation": {
+    "a0": -1.0,
+    "a1": -0.007981,
+    "t_ref": 298.15
+   },
+   "bicarbonate-anion": {
+    "a0": 0.1117253829105505,
+    "a1": 0.0039311876328716865,
+    "t_ref": 298.15
+   },
+   "carbonate-anion": {
+    "a0": -0.25,
+    "a1": 0.0,
+    "t_ref": 298.15
+   }
+  },
+  "rows": [
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.01,
+    "observed": 0.9658291457286432,
+    "phi_printed": 0.966,
+    "water_activity": 0.99965,
+    "charge_adjustment": 2.574980159653073e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.01,
+     "carbonate-anion": 0.00010000000000000026,
+     "bicarbonate-anion": 0.0098,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9659157382584033,
+    "relative_error": 8.96561572438781e-05
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.02,
+    "observed": 0.9537688442211055,
+    "phi_printed": 0.954,
+    "water_activity": 0.99931,
+    "charge_adjustment": 5.149960319306146e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.02,
+     "carbonate-anion": 0.00020000000000000052,
+     "bicarbonate-anion": 0.0196,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9541171453311001,
+    "relative_error": 0.00036518398782359185
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.05,
+    "observed": 0.9330648567119154,
+    "phi_printed": 0.933,
+    "water_activity": 0.99832,
+    "charge_adjustment": -4.999999999999807e-05,
+    "h2x_share": 0.005994005994005994,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.05,
+     "carbonate-anion": 0.0005500000000000019,
+     "bicarbonate-anion": 0.0489,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9336800077569767,
+    "relative_error": 0.000659280049651656
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.1,
+    "observed": 0.9122891626854414,
+    "phi_printed": 0.913,
+    "water_activity": 0.99671,
+    "charge_adjustment": 5.000000000000512e-05,
+    "h2x_share": 0.005502751375687845,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.1,
+     "carbonate-anion": 0.0011500000000000052,
+     "bicarbonate-anion": 0.0977,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9145582841686782,
+    "relative_error": 0.002487283172977195
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.2,
+    "observed": 0.8902299081876494,
+    "phi_printed": 0.891,
+    "water_activity": 0.9936,
+    "charge_adjustment": 5.000000000000794e-05,
+    "h2x_share": 0.006001500375093773,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.2,
+     "carbonate-anion": 0.0024500000000000077,
+     "bicarbonate-anion": 0.1951,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8924962443736604,
+    "relative_error": 0.002545787515300324
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.4,
+    "observed": 0.8652117476888246,
+    "phi_printed": 0.866,
+    "water_activity": 0.9876,
+    "charge_adjustment": -4.9999999999990156e-05,
+    "h2x_share": 0.006249218847644044,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.4,
+     "carbonate-anion": 0.00495000000000001,
+     "bicarbonate-anion": 0.3901,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8679492324364445,
+    "relative_error": 0.003163947732947925
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.6,
+    "observed": 0.8490566037735849,
+    "phi_printed": 0.85,
+    "water_activity": 0.98179,
+    "charge_adjustment": 6.938893903907228e-18,
+    "h2x_share": 0.00625,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.6,
+     "carbonate-anion": 0.007500000000000007,
+     "bicarbonate-anion": 0.585,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8522342641924915,
+    "relative_error": 0.003742577826712168
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 0.8,
+    "observed": 0.8389672631214818,
+    "phi_printed": 0.84,
+    "water_activity": 0.9761,
+    "charge_adjustment": 5.000000000000317e-05,
+    "h2x_share": 0.006250390649415588,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.8,
+     "carbonate-anion": 0.010050000000000003,
+     "bicarbonate-anion": 0.7799,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8402712411987477,
+    "relative_error": 0.001554265743831662
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 278.15,
+    "m": 1.0,
+    "observed": 0.829895240012076,
+    "phi_printed": 0.831,
+    "water_activity": 0.9705,
+    "charge_adjustment": 9.99999999999994e-05,
+    "h2x_share": 0.006250625062506251,
+    "composition_mol_per_kg": {
+     "sodium-cation": 1.0,
+     "carbonate-anion": 0.0126,
+     "bicarbonate-anion": 0.9748,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8303792615699478,
+    "relative_error": 0.000583232117182364
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.01,
+    "observed": 0.9658291457286432,
+    "phi_printed": 0.966,
+    "water_activity": 0.99965,
+    "charge_adjustment": 2.574980159653073e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.01,
+     "carbonate-anion": 0.00010000000000000026,
+     "bicarbonate-anion": 0.0098,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9656035279314564,
+    "relative_error": -0.00023360011259188074
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.02,
+    "observed": 0.9537688442211055,
+    "phi_printed": 0.954,
+    "water_activity": 0.99931,
+    "charge_adjustment": 5.149960319306146e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.02,
+     "carbonate-anion": 0.00020000000000000052,
+     "bicarbonate-anion": 0.0196,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9537870258878507,
+    "relative_error": 1.906296987508327e-05
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.05,
+    "observed": 0.9325955734406439,
+    "phi_printed": 0.933,
+    "water_activity": 0.99832,
+    "charge_adjustment": -1.0842021724855044e-19,
+    "h2x_share": 0.005999999999999999,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.05,
+     "carbonate-anion": 0.0005999999999999998,
+     "bicarbonate-anion": 0.0488,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9333597517410142,
+    "relative_error": 0.0008194101732126313
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.1,
+    "observed": 0.9134808853118712,
+    "phi_printed": 0.914,
+    "water_activity": 0.99671,
+    "charge_adjustment": -2.168404344971009e-19,
+    "h2x_share": 0.005999999999999999,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.1,
+     "carbonate-anion": 0.0011999999999999997,
+     "bicarbonate-anion": 0.0976,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9146977281009024,
+    "relative_error": 0.0013320944188293105
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.2,
+    "observed": 0.8923270440251573,
+    "phi_printed": 0.893,
+    "water_activity": 0.99359,
+    "charge_adjustment": 2.168404344971009e-18,
+    "h2x_share": 0.0062499999999999995,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.2,
+     "carbonate-anion": 0.0025000000000000022,
+     "bicarbonate-anion": 0.195,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8936744037775177,
+    "relative_error": 0.001509939389803483
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.4,
+    "observed": 0.8701560140915955,
+    "phi_printed": 0.871,
+    "water_activity": 0.98753,
+    "charge_adjustment": 1.0408340855860843e-17,
+    "h2x_share": 0.0065,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.4,
+     "carbonate-anion": 0.00520000000000001,
+     "bicarbonate-anion": 0.3896,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8712248211181479,
+    "relative_error": 0.0012282935579870369
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.6,
+    "observed": 0.8570349368787483,
+    "phi_printed": 0.858,
+    "water_activity": 0.98162,
+    "charge_adjustment": 4.999999999996847e-05,
+    "h2x_share": 0.0065005417118093175,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.6,
+     "carbonate-anion": 0.007849999999999968,
+     "bicarbonate-anion": 0.5843,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8577432274993698,
+    "relative_error": 0.000826443112343922
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 0.8,
+    "observed": 0.8489823523860455,
+    "phi_printed": 0.85,
+    "water_activity": 0.97579,
+    "charge_adjustment": 5.000000000000317e-05,
+    "h2x_share": 0.006562910181886368,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.8,
+     "carbonate-anion": 0.010550000000000004,
+     "bicarbonate-anion": 0.7789,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.84798544277485,
+    "relative_error": -0.0011742406757851986
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 288.15,
+    "m": 1.0,
+    "observed": 0.8439489115389454,
+    "phi_printed": 0.845,
+    "water_activity": 0.97003,
+    "charge_adjustment": 4.9999999999984085e-05,
+    "h2x_share": 0.006600330016500825,
+    "composition_mol_per_kg": {
+     "sodium-cation": 1.0,
+     "carbonate-anion": 0.013249999999999984,
+     "bicarbonate-anion": 0.9735,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8402773726914643,
+    "relative_error": -0.004350427848512806
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.01,
+    "observed": 0.9648241206030151,
+    "phi_printed": 0.965,
+    "water_activity": 0.99965,
+    "charge_adjustment": 2.574980159653073e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.01,
+     "carbonate-anion": 0.00010000000000000026,
+     "bicarbonate-anion": 0.0098,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9652266427740746,
+    "relative_error": 0.0004171974585458482
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.02,
+    "observed": 0.9515647798742138,
+    "phi_printed": 0.953,
+    "water_activity": 0.99931,
+    "charge_adjustment": 5.000000000000021e-05,
+    "h2x_share": 0.005012531328320802,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.02,
+     "carbonate-anion": 0.0002500000000000002,
+     "bicarbonate-anion": 0.0195,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9531365019738749,
+    "relative_error": 0.001651723700690999
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.05,
+    "observed": 0.9325955734406439,
+    "phi_printed": 0.933,
+    "water_activity": 0.99832,
+    "charge_adjustment": -1.0842021724855044e-19,
+    "h2x_share": 0.005999999999999999,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.05,
+     "carbonate-anion": 0.0005999999999999998,
+     "bicarbonate-anion": 0.0488,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9330149304854538,
+    "relative_error": 0.000449666561533002
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.1,
+    "observed": 0.9136674213836479,
+    "phi_printed": 0.914,
+    "water_activity": 0.99671,
+    "charge_adjustment": -4.999999999999883e-05,
+    "h2x_share": 0.006496751624187906,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.1,
+     "carbonate-anion": 0.0012500000000000011,
+     "bicarbonate-anion": 0.0975,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9146117761382591,
+    "relative_error": 0.0010335869841797685
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.2,
+    "observed": 0.8931939096514407,
+    "phi_printed": 0.894,
+    "water_activity": 0.99358,
+    "charge_adjustment": 4.99999999999997e-05,
+    "h2x_share": 0.006501625406351587,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.2,
+     "carbonate-anion": 0.0026499999999999996,
+     "bicarbonate-anion": 0.1947,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8944101308594483,
+    "relative_error": 0.0013616541658711956
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.4,
+    "observed": 0.8730886665408093,
+    "phi_printed": 0.874,
+    "water_activity": 0.98748,
+    "charge_adjustment": 5.0000000000010106e-05,
+    "h2x_share": 0.006750843855481935,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.4,
+     "carbonate-anion": 0.00545000000000001,
+     "bicarbonate-anion": 0.3891,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8739540927004845,
+    "relative_error": 0.0009912236784657136
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.6,
+    "observed": 0.8630279840570589,
+    "phi_printed": 0.864,
+    "water_activity": 0.9815,
+    "charge_adjustment": 4.999999999997888e-05,
+    "h2x_share": 0.0068339028252354375,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.6,
+     "carbonate-anion": 0.00824999999999998,
+     "bicarbonate-anion": 0.5835,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8625015240434002,
+    "relative_error": -0.0006100149976411284
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 0.8,
+    "observed": 0.8569629303291585,
+    "phi_printed": 0.858,
+    "water_activity": 0.97557,
+    "charge_adjustment": 9.99999999999994e-05,
+    "h2x_share": 0.006875859482435303,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.8,
+     "carbonate-anion": 0.011099999999999999,
+     "bicarbonate-anion": 0.7778,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.854779600756403,
+    "relative_error": -0.002547752645399526
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 298.15,
+    "m": 1.0,
+    "observed": 0.852935146022155,
+    "phi_printed": 0.854,
+    "water_activity": 0.96969,
+    "charge_adjustment": 0.00010000000000001327,
+    "h2x_share": 0.00695069506950695,
+    "composition_mol_per_kg": {
+     "sodium-cation": 1.0,
+     "carbonate-anion": 0.014000000000000012,
+     "bicarbonate-anion": 0.972,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8490783960433064,
+    "relative_error": -0.004521738841265277
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.01,
+    "observed": 0.9648241206030151,
+    "phi_printed": 0.965,
+    "water_activity": 0.99965,
+    "charge_adjustment": 2.574980159653073e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.01,
+     "carbonate-anion": 0.00010000000000000026,
+     "bicarbonate-anion": 0.0098,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9647920883820311,
+    "relative_error": -3.320006237406137e-05
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.02,
+    "observed": 0.9515647798742138,
+    "phi_printed": 0.953,
+    "water_activity": 0.99931,
+    "charge_adjustment": 5.000000000000021e-05,
+    "h2x_share": 0.005012531328320802,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.02,
+     "carbonate-anion": 0.0002500000000000002,
+     "bicarbonate-anion": 0.0195,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9526282529759111,
+    "relative_error": 0.0011176045227712095
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.05,
+    "observed": 0.9311202818319073,
+    "phi_printed": 0.932,
+    "water_activity": 0.99832,
+    "charge_adjustment": 5.0000000000001324e-05,
+    "h2x_share": 0.006006006006006005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.05,
+     "carbonate-anion": 0.0006500000000000013,
+     "bicarbonate-anion": 0.0487,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9324036844182463,
+    "relative_error": 0.0013783424240463304
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.1,
+    "observed": 0.9134373427277303,
+    "phi_printed": 0.914,
+    "water_activity": 0.99671,
+    "charge_adjustment": 2.6020852139652106e-18,
+    "h2x_share": 0.0065,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.1,
+     "carbonate-anion": 0.0013000000000000025,
+     "bicarbonate-anion": 0.0974,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9143228972961261,
+    "relative_error": 0.0009694748911308615
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.2,
+    "observed": 0.8943725613593455,
+    "phi_printed": 0.895,
+    "water_activity": 0.99357,
+    "charge_adjustment": -4.999999999999753e-05,
+    "h2x_share": 0.0069982504373906525,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.2,
+     "carbonate-anion": 0.0027500000000000024,
+     "bicarbonate-anion": 0.1945,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8948843770534913,
+    "relative_error": 0.0005722622945496525
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.4,
+    "observed": 0.8751101598892107,
+    "phi_printed": 0.876,
+    "water_activity": 0.98745,
+    "charge_adjustment": 1.0408340855860843e-17,
+    "h2x_share": 0.007125,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.4,
+     "carbonate-anion": 0.005700000000000011,
+     "bicarbonate-anion": 0.3886,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8761877532882332,
+    "relative_error": 0.0012313802860646206
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.6,
+    "observed": 0.8660287081339714,
+    "phi_printed": 0.867,
+    "water_activity": 0.98142,
+    "charge_adjustment": -1.3877787807814457e-17,
+    "h2x_share": 0.0072499999999999995,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.6,
+     "carbonate-anion": 0.008699999999999986,
+     "bicarbonate-anion": 0.5826,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8665753714623436,
+    "relative_error": 0.0006312300311039909
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 0.8,
+    "observed": 0.8619636077443726,
+    "phi_printed": 0.863,
+    "water_activity": 0.97544,
+    "charge_adjustment": 5.000000000003786e-05,
+    "h2x_share": 0.007312957059816239,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.8,
+     "carbonate-anion": 0.011750000000000038,
+     "bicarbonate-anion": 0.7765,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8607186685777333,
+    "relative_error": -0.0014443059491771049
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 308.15,
+    "m": 1.0,
+    "observed": 0.8599273624823696,
+    "phi_printed": 0.861,
+    "water_activity": 0.96946,
+    "charge_adjustment": 9.999999999998031e-05,
+    "h2x_share": 0.00735073507350735,
+    "composition_mol_per_kg": {
+     "sodium-cation": 1.0,
+     "carbonate-anion": 0.01479999999999998,
+     "bicarbonate-anion": 0.9704,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.856890426483728,
+    "relative_error": -0.003531619217086779
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.01,
+    "observed": 0.9638190954773869,
+    "phi_printed": 0.964,
+    "water_activity": 0.99965,
+    "charge_adjustment": 2.574980159653073e-19,
+    "h2x_share": 0.005,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.01,
+     "carbonate-anion": 0.00010000000000000026,
+     "bicarbonate-anion": 0.0098,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9643055048570516,
+    "relative_error": 0.0005046687515812831
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.02,
+    "observed": 0.9528352201257859,
+    "phi_printed": 0.952,
+    "water_activity": 0.99931,
+    "charge_adjustment": -4.999999999999975e-05,
+    "h2x_share": 0.007481296758104738,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.02,
+     "carbonate-anion": 0.0002500000000000002,
+     "bicarbonate-anion": 0.0195,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9520452342296799,
+    "relative_error": -0.0008290897307529077
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.05,
+    "observed": 0.9309823855057875,
+    "phi_printed": 0.931,
+    "water_activity": 0.99832,
+    "charge_adjustment": -4.999999999999872e-05,
+    "h2x_share": 0.006993006993006993,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.05,
+     "carbonate-anion": 0.0006500000000000013,
+     "bicarbonate-anion": 0.0487,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9317994936764132,
+    "relative_error": 0.0008776838137294352
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.1,
+    "observed": 0.9123867069486404,
+    "phi_printed": 0.913,
+    "water_activity": 0.99672,
+    "charge_adjustment": 5.421010862427522e-18,
+    "h2x_share": 0.006999999999999999,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.1,
+     "carbonate-anion": 0.0014000000000000054,
+     "bicarbonate-anion": 0.0972,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.9137659649071648,
+    "relative_error": 0.0015117032591773771
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.2,
+    "observed": 0.8932258876857215,
+    "phi_printed": 0.894,
+    "water_activity": 0.99358,
+    "charge_adjustment": 0.0,
+    "h2x_share": 0.0072499999999999995,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.2,
+     "carbonate-anion": 0.0029,
+     "bicarbonate-anion": 0.1942,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8950252368190749,
+    "relative_error": 0.0020144390776841714
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.4,
+    "observed": 0.8750629722921915,
+    "phi_printed": 0.876,
+    "water_activity": 0.98745,
+    "charge_adjustment": 5.204170427930421e-18,
+    "h2x_share": 0.0075,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.4,
+     "carbonate-anion": 0.006000000000000005,
+     "bicarbonate-anion": 0.388,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8779399941863864,
+    "relative_error": 0.0032877884052830986
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.6,
+    "observed": 0.8669801813906617,
+    "phi_printed": 0.868,
+    "water_activity": 0.9814,
+    "charge_adjustment": -1.3877787807814457e-17,
+    "h2x_share": 0.007666666666666667,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.6,
+     "carbonate-anion": 0.009199999999999986,
+     "bicarbonate-anion": 0.5816,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8700218872223097,
+    "relative_error": 0.0035083914222455714
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 0.8,
+    "observed": 0.8638723189820792,
+    "phi_printed": 0.865,
+    "water_activity": 0.97538,
+    "charge_adjustment": 0.00015000000000001644,
+    "h2x_share": 0.007688941676564356,
+    "composition_mol_per_kg": {
+     "sodium-cation": 0.8,
+     "carbonate-anion": 0.012450000000000017,
+     "bicarbonate-anion": 0.7751,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8658890278214132,
+    "relative_error": 0.002334498739015478
+   },
+   {
+    "salt": "NaHCO3",
+    "T": 318.15,
+    "m": 1.0,
+    "observed": 0.8628872650304893,
+    "phi_printed": 0.864,
+    "water_activity": 0.96936,
+    "charge_adjustment": 9.999999999999246e-05,
+    "h2x_share": 0.0078007800780078,
+    "composition_mol_per_kg": {
+     "sodium-cation": 1.0,
+     "carbonate-anion": 0.015699999999999992,
+     "bicarbonate-anion": 0.9686,
+     "hydroxide-anion": 0.0
+    },
+    "status": "Available",
+    "value": 0.8637835770264888,
+    "relative_error": 0.0010387359187271628
+   }
+  ]
+ }
+}

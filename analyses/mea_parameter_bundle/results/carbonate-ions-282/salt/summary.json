@@ -1,0 +1,4542 @@
+{
+ "wheel_sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+ "result": {
+  "laws": {
+   "sodium-cation": {
+    "a0": -1.0,
+    "a1": -0.007981,
+    "t_ref": 298.15
+   },
+   "bicarbonate-anion": {
+    "a0": 0.1117253829105505,
+    "a1": 0.0039311876328716865,
+    "t_ref": 298.15
+   },
+   "carbonate-anion": {
+    "a0": -1.0,
+    "a1": 0.0019631260450306285,
+    "t_ref": 298.15
+   }
+  },
+  "laws_at_record_reference": {
+   "sodium-cation": {
+    "a0": -1.119715,
+    "a1": -0.007981,
+    "t_ref": 313.15
+   },
+   "bicarbonate-anion": {
+    "a0": 0.1706931974036258,
+    "a1": 0.0039311876328716865,
+    "t_ref": 313.15
+   },
+   "carbonate-anion": {
+    "a0": -0.9705531093245405,
+    "a1": 0.0019631260450306285,
+    "t_ref": 313.15
+   }
+  },
+  "values_313_15": {
+   "sodium-cation": -1.119715,
+   "bicarbonate-anion": 0.1706931974036258,
+   "carbonate-anion": -0.9705531093245405
+  },
+  "scores": {
+   "NaCl": {
+    "n": 10,
+    "aard_percent": 1.5142673403069273,
+    "max_percent": 1.6772893705106373
+   },
+   "NaHCO3": {
+    "n": 45,
+    "aard_percent": 0.16297888463729926,
+    "max_percent": 0.46972880452700316,
+    "by_temperature": {
+     "278.15": {
+      "n": 9,
+      "aard_percent": 0.22455655979680936,
+      "max_percent": 0.46972880452700316
+     },
+     "288.15": {
+      "n": 9,
+      "aard_percent": 0.12075486788814106,
+      "max_percent": 0.27794116854064077
+     },
+     "298.15": {
+      "n": 9,
+      "aard_percent": 0.12915058573660623,
+      "max_percent": 0.2982160685667701
+     },
+     "308.15": {
+      "n": 9,
+      "aard_percent": 0.11282012896514217,
+      "max_percent": 0.2021577097215843
+     },
+     "318.15": {
+      "n": 9,
+      "aard_percent": 0.22761228079979748,
+      "max_percent": 0.4388960019178212
+     }
+    }
+   },
+   "Na2CO3": {
+    "n": 45,
+    "aard_percent": 5.111329872572398,
+    "max_percent": 8.27998618476239,
+    "by_temperature": {
+     "278.15": {
+      "n": 9,
+      "aard_percent": 4.616217224345674,
+      "max_percent": 7.834469282540302
+     },
+     "288.15": {
+      "n": 9,
+      "aard_percent": 5.134383388986095,
+      "max_percent": 8.163107771797684
+     },
+     "298.15": {
+      "n": 9,
+      "aard_percent": 5.363870383738766,
+      "max_percent": 8.27998618476239
+     },
+     "308.15": {
+      "n": 9,
+      "aard_percent": 5.352193015030084,
+      "max_percent": 8.231719635150625
+     },
+     "318.15": {
+      "n": 9,
+      "aard_percent": 5.089985350761372,
+      "max_percent": 7.994651497174409
+     }
+    }
+   },
+   "mixed": {
+    "n": 39,
+    "aard_percent": 2.5614335308089147,
+    "max_percent": 6.302414755571872,
+    "by_temperature": {
+     "278.15": {
+      "n": 6,
+      "aard_percent": 3.4228684758812595,
+      "max_percent": 6.302414755571872
+     },
+     "288.15": {
+      "n": 8,
+      "aard_percent": 2.605993095420428,
+      "max_percent": 4.169355243506967
+     },
+     "298.15": {
+      "n": 8,
+      "aard_percent": 2.427016627259962,
+      "max_percent": 3.818236186804713
+     },
+     "308.15": {
+      "n": 8,
+      "aard_percent": 2.3736445148435648,
+      "max_percent": 3.7352261911200113
+     },
+     "318.15": {
+      "n": 9,
+      "aard_percent": 2.2339403273409415,
+      "max_percent": 3.567301561637981
+     }
+    }
+   }
+  },
+  "gates": {
+   "nahco3_aard_passed": true,
+   "na2co3_aard_passed": false,
+   "coefficients_interior": false,
+   "water_bicarbonate_313": 0.1706931974036258,
+   "compensation_falsified": false,
+   "F1_passed": false
+  },
+  "on_bound": [
+   {
+    "coefficient": "pair/sodium-cation/water/k_ij/a0",
+    "value": -1.0,
+    "bounds": [
+     -1.0,
+     1.0
+    ]
+   },
+   {
+    "coefficient": "pair/carbonate-anion/water/k_ij/a0",
+    "value": -1.0,
+    "bounds": [
+     -1.0,
+     1.0
+    ]
+   }
+  ],
+  "largest_charge_adjustment": 0.0004000000000000791,
+  "largest_dissolved_co2_share": 0.0078007800780078,
+  "curves": [
+   {
+    "T": 278.15,
+    "sodium": -0.84038,
+    "bicarbonate": 0.03310163025311676,
+    "carbonate": -1.0392625209006126,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.089,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 283.15,
+    "sodium": -0.880285,
+    "bicarbonate": 0.0527575684174752,
+    "carbonate": -1.0294468906754595,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0811875,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 288.15,
+    "sodium": -0.92019,
+    "bicarbonate": 0.07241350658183363,
+    "carbonate": -1.0196312604503064,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0765,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 293.15,
+    "sodium": -0.960095,
+    "bicarbonate": 0.09206944474619205,
+    "carbonate": -1.009815630225153,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0749375,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 298.15,
+    "sodium": -1.0,
+    "bicarbonate": 0.1117253829105505,
+    "carbonate": -1.0,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0765,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 303.15,
+    "sodium": -1.039905,
+    "bicarbonate": 0.13138132107490894,
+    "carbonate": -0.9901843697748468,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0811875,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 308.15,
+    "sodium": -1.07981,
+    "bicarbonate": 0.15103725923926736,
+    "carbonate": -0.9803687395496937,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.089,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 313.15,
+    "sodium": -1.119715,
+    "bicarbonate": 0.1706931974036258,
+    "carbonate": -0.9705531093245405,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.0999375,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 318.15,
+    "sodium": -1.15962,
+    "bicarbonate": 0.19034913556798422,
+    "carbonate": -0.9607374790993874,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.114,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 323.15,
+    "sodium": -1.199525,
+    "bicarbonate": 0.21000507373234267,
+    "carbonate": -0.9509218488742343,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.1311875,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 328.15,
+    "sodium": -1.23943,
+    "bicarbonate": 0.22966101189670107,
+    "carbonate": -0.9411062186490812,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.1515,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 333.15,
+    "sodium": -1.279335,
+    "bicarbonate": 0.24931695006105953,
+    "carbonate": -0.931290588423928,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.1749375,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 338.15,
+    "sodium": -1.31924,
+    "bicarbonate": 0.268972888225418,
+    "carbonate": -0.9214749581987749,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.2015,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 343.15,
+    "sodium": -1.359145,
+    "bicarbonate": 0.2886288263897764,
+    "carbonate": -0.9116593279736217,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.2311875,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 348.15,
+    "sodium": -1.39905,
+    "bicarbonate": 0.30828476455413484,
+    "carbonate": -0.9018436977484686,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.264,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 353.15,
+    "sodium": -1.438955,
+    "bicarbonate": 0.32794070271849324,
+    "carbonate": -0.8920280675233154,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.29993749999999997,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 358.15,
+    "sodium": -1.47886,
+    "bicarbonate": 0.3475966408828517,
+    "carbonate": -0.8822124372981623,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.339,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 363.15,
+    "sodium": -1.5187650000000001,
+    "bicarbonate": 0.36725257904721015,
+    "carbonate": -0.8723968070730092,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.38118749999999996,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 368.15,
+    "sodium": -1.55867,
+    "bicarbonate": 0.38690851721156855,
+    "carbonate": -0.862581176847856,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.42650000000000005,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 373.15,
+    "sodium": -1.5985749999999999,
+    "bicarbonate": 0.406564455375927,
+    "carbonate": -0.8527655466227029,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.4749375,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 378.15,
+    "sodium": -1.63848,
+    "bicarbonate": 0.42622039354028546,
+    "carbonate": -0.8429499163975498,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.5265,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 383.15,
+    "sodium": -1.678385,
+    "bicarbonate": 0.44587633170464386,
+    "carbonate": -0.8331342861723966,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.5811875000000001,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 388.15,
+    "sodium": -1.71829,
+    "bicarbonate": 0.4655322698690023,
+    "carbonate": -0.8233186559472434,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.639,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   },
+   {
+    "T": 393.15,
+    "sodium": -1.7581950000000002,
+    "bicarbonate": 0.4851882080333607,
+    "carbonate": -0.8135030257220903,
+    "held_bicarbonate": 0.0,
+    "held_carbonate": -0.25,
+    "wangler_bicarbonate": -0.6999375,
+    "final_set_bicarbonate": 0.7270558477497251,
+    "candidate_255_bicarbonate": 1.0
+   }
+  ],
+  "rows": {
+   "NaCl": [
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.1,
+     "observed": 0.933,
+     "status": "Available",
+     "value": 0.9231304865128035,
+     "relative_error": -0.010578256685098153
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.2,
+     "observed": 0.924,
+     "status": "Available",
+     "value": 0.9104120049298703,
+     "relative_error": -0.014705622370270288
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.3,
+     "observed": 0.921,
+     "status": "Available",
+     "value": 0.9057287917789522,
+     "relative_error": -0.016581116418075914
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.4,
+     "observed": 0.92,
+     "status": "Available",
+     "value": 0.9046294666306529,
+     "relative_error": -0.016707101488420806
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.5,
+     "observed": 0.921,
+     "status": "Available",
+     "value": 0.905552164897597,
+     "relative_error": -0.016772893705106373
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.6,
+     "observed": 0.923,
+     "status": "Available",
+     "value": 0.9077612693597621,
+     "relative_error": -0.01651000069364894
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.7,
+     "observed": 0.926,
+     "status": "Available",
+     "value": 0.9108521853906072,
+     "relative_error": -0.0163583311116553
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.8,
+     "observed": 0.929,
+     "status": "Available",
+     "value": 0.9145793982568899,
+     "relative_error": -0.015522714470516785
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 0.9,
+     "observed": 0.932,
+     "status": "Available",
+     "value": 0.9187833420450521,
+     "relative_error": -0.014180963470974195
+    },
+    {
+     "salt": "NaCl",
+     "T": 298.15,
+     "m": 1.0,
+     "observed": 0.936,
+     "status": "Available",
+     "value": 0.9233548893345573,
+     "relative_error": -0.013509733616925979
+    }
+   ],
+   "NaHCO3": [
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.01,
+     "observed": 0.9658291457286432,
+     "phi_printed": 0.966,
+     "water_activity": 0.99965,
+     "charge_adjustment": 2.574980159653073e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.01,
+      "carbonate-anion": 0.00010000000000000026,
+      "bicarbonate-anion": 0.0098,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9659267280094159,
+     "relative_error": 0.00010103472358879984
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.02,
+     "observed": 0.9537688442211055,
+     "phi_printed": 0.954,
+     "water_activity": 0.99931,
+     "charge_adjustment": 5.149960319306146e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.00020000000000000052,
+      "bicarbonate-anion": 0.0196,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9541391337819505,
+     "relative_error": 0.0003882382645319371
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.05,
+     "observed": 0.9330648567119154,
+     "phi_printed": 0.933,
+     "water_activity": 0.99832,
+     "charge_adjustment": -4.999999999999807e-05,
+     "h2x_share": 0.005994005994005994,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.05,
+      "carbonate-anion": 0.0005500000000000019,
+      "bicarbonate-anion": 0.0489,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.93374045891985,
+     "relative_error": 0.0007240677891517944
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.1,
+     "observed": 0.9122891626854414,
+     "phi_printed": 0.913,
+     "water_activity": 0.99671,
+     "charge_adjustment": 5.000000000000512e-05,
+     "h2x_share": 0.005502751375687845,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0011500000000000052,
+      "bicarbonate-anion": 0.0977,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9146845729105594,
+     "relative_error": 0.00262571377924381
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.2,
+     "observed": 0.8902299081876494,
+     "phi_printed": 0.891,
+     "water_activity": 0.9936,
+     "charge_adjustment": 5.000000000000794e-05,
+     "h2x_share": 0.006001500375093773,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0024500000000000077,
+      "bicarbonate-anion": 0.1951,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8927645587148638,
+     "relative_error": 0.002847186444650651
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.4,
+     "observed": 0.8652117476888246,
+     "phi_printed": 0.866,
+     "water_activity": 0.9876,
+     "charge_adjustment": -4.9999999999990156e-05,
+     "h2x_share": 0.006249218847644044,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.00495000000000001,
+      "bicarbonate-anion": 0.3901,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8684879643527083,
+     "relative_error": 0.0037866067730070174
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.6,
+     "observed": 0.8490566037735849,
+     "phi_printed": 0.85,
+     "water_activity": 0.98179,
+     "charge_adjustment": 6.938893903907228e-18,
+     "h2x_share": 0.00625,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6,
+      "carbonate-anion": 0.007500000000000007,
+      "bicarbonate-anion": 0.585,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8530448672082481,
+     "relative_error": 0.004697288045270032
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 0.8,
+     "observed": 0.8389672631214818,
+     "phi_printed": 0.84,
+     "water_activity": 0.9761,
+     "charge_adjustment": 5.000000000000317e-05,
+     "h2x_share": 0.006250390649415588,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.010050000000000003,
+      "bicarbonate-anion": 0.7799,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8413496142202528,
+     "relative_error": 0.0028396234316785396
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 278.15,
+     "m": 1.0,
+     "observed": 0.829895240012076,
+     "phi_printed": 0.831,
+     "water_activity": 0.9705,
+     "charge_adjustment": 9.99999999999994e-05,
+     "h2x_share": 0.006250625062506251,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.0,
+      "carbonate-anion": 0.0126,
+      "bicarbonate-anion": 0.9748,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8317212843438032,
+     "relative_error": 0.0022003311305902606
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.01,
+     "observed": 0.9658291457286432,
+     "phi_printed": 0.966,
+     "water_activity": 0.99965,
+     "charge_adjustment": 2.574980159653073e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.01,
+      "carbonate-anion": 0.00010000000000000026,
+      "bicarbonate-anion": 0.0098,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9656138422336554,
+     "relative_error": -0.0002229208923130166
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.02,
+     "observed": 0.9537688442211055,
+     "phi_printed": 0.954,
+     "water_activity": 0.99931,
+     "charge_adjustment": 5.149960319306146e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.00020000000000000052,
+      "bicarbonate-anion": 0.0196,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9538076648078707,
+     "relative_error": 4.0702301192130363e-05
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.05,
+     "observed": 0.9325955734406439,
+     "phi_printed": 0.933,
+     "water_activity": 0.99832,
+     "charge_adjustment": -1.0842021724855044e-19,
+     "h2x_share": 0.005999999999999999,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.05,
+      "carbonate-anion": 0.0005999999999999998,
+      "bicarbonate-anion": 0.0488,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9334216256389816,
+     "relative_error": 0.000885756078907951
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.1,
+     "observed": 0.9134808853118712,
+     "phi_printed": 0.914,
+     "water_activity": 0.99671,
+     "charge_adjustment": -2.168404344971009e-19,
+     "h2x_share": 0.005999999999999999,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0011999999999999997,
+      "bicarbonate-anion": 0.0976,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9148214226687099,
+     "relative_error": 0.0014675045514291885
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.2,
+     "observed": 0.8923270440251573,
+     "phi_printed": 0.893,
+     "water_activity": 0.99359,
+     "charge_adjustment": 2.168404344971009e-18,
+     "h2x_share": 0.0062499999999999995,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0025000000000000022,
+      "bicarbonate-anion": 0.195,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8939314822154911,
+     "relative_error": 0.0017980382877296197
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.4,
+     "observed": 0.8701560140915955,
+     "phi_printed": 0.871,
+     "water_activity": 0.98753,
+     "charge_adjustment": 1.0408340855860843e-17,
+     "h2x_share": 0.0065,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.00520000000000001,
+      "bicarbonate-anion": 0.3896,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8717562618549173,
+     "relative_error": 0.0018390354573281087
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.6,
+     "observed": 0.8570349368787483,
+     "phi_printed": 0.858,
+     "water_activity": 0.98162,
+     "charge_adjustment": 4.999999999996847e-05,
+     "h2x_share": 0.0065005417118093175,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6,
+      "carbonate-anion": 0.007849999999999968,
+      "bicarbonate-anion": 0.5843,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8585401121484478,
+     "relative_error": 0.0017562589398996131
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 0.8,
+     "observed": 0.8489823523860455,
+     "phi_printed": 0.85,
+     "water_activity": 0.97579,
+     "charge_adjustment": 5.000000000000317e-05,
+     "h2x_share": 0.006562910181886368,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.010550000000000004,
+      "bicarbonate-anion": 0.7789,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8490488361225142,
+     "relative_error": 7.83099157266598e-05
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 288.15,
+     "m": 1.0,
+     "observed": 0.8439489115389454,
+     "phi_printed": 0.845,
+     "water_activity": 0.97003,
+     "charge_adjustment": 4.9999999999984085e-05,
+     "h2x_share": 0.006600330016500825,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.0,
+      "carbonate-anion": 0.013249999999999984,
+      "bicarbonate-anion": 0.9735,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.841603230072328,
+     "relative_error": -0.0027794116854064077
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.01,
+     "observed": 0.9648241206030151,
+     "phi_printed": 0.965,
+     "water_activity": 0.99965,
+     "charge_adjustment": 2.574980159653073e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.01,
+      "carbonate-anion": 0.00010000000000000026,
+      "bicarbonate-anion": 0.0098,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9652362993836318,
+     "relative_error": 0.00042720613199320745
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.02,
+     "observed": 0.9515647798742138,
+     "phi_printed": 0.953,
+     "water_activity": 0.99931,
+     "charge_adjustment": 5.000000000000021e-05,
+     "h2x_share": 0.005012531328320802,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0002500000000000002,
+      "bicarbonate-anion": 0.0195,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9531606225821146,
+     "relative_error": 0.0016770720624104118
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.05,
+     "observed": 0.9325955734406439,
+     "phi_printed": 0.933,
+     "water_activity": 0.99832,
+     "charge_adjustment": -1.0842021724855044e-19,
+     "h2x_share": 0.005999999999999999,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.05,
+      "carbonate-anion": 0.0005999999999999998,
+      "bicarbonate-anion": 0.0488,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9330728721808155,
+     "relative_error": 0.0005117960601193072
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.1,
+     "observed": 0.9136674213836479,
+     "phi_printed": 0.914,
+     "water_activity": 0.99671,
+     "charge_adjustment": -4.999999999999883e-05,
+     "h2x_share": 0.006496751624187906,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0012500000000000011,
+      "bicarbonate-anion": 0.0975,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9147324256392609,
+     "relative_error": 0.0011656366755423697
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.2,
+     "observed": 0.8931939096514407,
+     "phi_printed": 0.894,
+     "water_activity": 0.99358,
+     "charge_adjustment": 4.99999999999997e-05,
+     "h2x_share": 0.006501625406351587,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0026499999999999996,
+      "bicarbonate-anion": 0.1947,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8946653211398506,
+     "relative_error": 0.0016473595179171685
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.4,
+     "observed": 0.8730886665408093,
+     "phi_printed": 0.874,
+     "water_activity": 0.98748,
+     "charge_adjustment": 5.0000000000010106e-05,
+     "h2x_share": 0.006750843855481935,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.00545000000000001,
+      "bicarbonate-anion": 0.3891,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8744759054790242,
+     "relative_error": 0.0015888866633799736
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.6,
+     "observed": 0.8630279840570589,
+     "phi_printed": 0.864,
+     "water_activity": 0.9815,
+     "charge_adjustment": 4.999999999997888e-05,
+     "h2x_share": 0.0068339028252354375,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6,
+      "carbonate-anion": 0.00824999999999998,
+      "bicarbonate-anion": 0.5835,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8632862975202698,
+     "relative_error": 0.00029931064575272615
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 0.8,
+     "observed": 0.8569629303291585,
+     "phi_printed": 0.858,
+     "water_activity": 0.97557,
+     "charge_adjustment": 9.99999999999994e-05,
+     "h2x_share": 0.006875859482435303,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.011099999999999999,
+      "bicarbonate-anion": 0.7778,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8558282049116099,
+     "relative_error": -0.0013241242735116954
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 298.15,
+     "m": 1.0,
+     "observed": 0.852935146022155,
+     "phi_printed": 0.854,
+     "water_activity": 0.96969,
+     "charge_adjustment": 0.00010000000000001327,
+     "h2x_share": 0.00695069506950695,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.0,
+      "carbonate-anion": 0.014000000000000012,
+      "bicarbonate-anion": 0.972,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8503915563622635,
+     "relative_error": -0.0029821606856677008
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.01,
+     "observed": 0.9648241206030151,
+     "phi_printed": 0.965,
+     "water_activity": 0.99965,
+     "charge_adjustment": 2.574980159653073e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.01,
+      "carbonate-anion": 0.00010000000000000026,
+      "bicarbonate-anion": 0.0098,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9648011082482681,
+     "relative_error": -2.3851346847125754e-05
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.02,
+     "observed": 0.9515647798742138,
+     "phi_printed": 0.953,
+     "water_activity": 0.99931,
+     "charge_adjustment": 5.000000000000021e-05,
+     "h2x_share": 0.005012531328320802,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0002500000000000002,
+      "bicarbonate-anion": 0.0195,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9526507834881175,
+     "relative_error": 0.0011412818516121082
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.05,
+     "observed": 0.9311202818319073,
+     "phi_printed": 0.932,
+     "water_activity": 0.99832,
+     "charge_adjustment": 5.0000000000001324e-05,
+     "h2x_share": 0.006006006006006005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.05,
+      "carbonate-anion": 0.0006500000000000013,
+      "bicarbonate-anion": 0.0487,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9324622943766414,
+     "relative_error": 0.0014412880601137879
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.1,
+     "observed": 0.9134373427277303,
+     "phi_printed": 0.914,
+     "water_activity": 0.99671,
+     "charge_adjustment": 2.6020852139652106e-18,
+     "h2x_share": 0.0065,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0013000000000000025,
+      "bicarbonate-anion": 0.0974,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9144401186212749,
+     "relative_error": 0.001097804793649182
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.2,
+     "observed": 0.8943725613593455,
+     "phi_printed": 0.895,
+     "water_activity": 0.99357,
+     "charge_adjustment": -4.999999999999753e-05,
+     "h2x_share": 0.0069982504373906525,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0027500000000000024,
+      "bicarbonate-anion": 0.1945,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8951318464069732,
+     "relative_error": 0.0008489583429009961
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.4,
+     "observed": 0.8751101598892107,
+     "phi_printed": 0.876,
+     "water_activity": 0.98745,
+     "charge_adjustment": 1.0408340855860843e-17,
+     "h2x_share": 0.007125,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.005700000000000011,
+      "bicarbonate-anion": 0.3886,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8766979107381753,
+     "relative_error": 0.0018143439783233628
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.6,
+     "observed": 0.8660287081339714,
+     "phi_printed": 0.867,
+     "water_activity": 0.98142,
+     "charge_adjustment": -1.3877787807814457e-17,
+     "h2x_share": 0.0072499999999999995,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6,
+      "carbonate-anion": 0.008699999999999986,
+      "bicarbonate-anion": 0.5826,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8673491554153011,
+     "relative_error": 0.00152471536904919
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 0.8,
+     "observed": 0.8619636077443726,
+     "phi_printed": 0.863,
+     "water_activity": 0.97544,
+     "charge_adjustment": 5.000000000003786e-05,
+     "h2x_share": 0.007312957059816239,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.011750000000000038,
+      "bicarbonate-anion": 0.7765,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8617567444368937,
+     "relative_error": -0.00023999076715119916
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 308.15,
+     "m": 1.0,
+     "observed": 0.8599273624823696,
+     "phi_printed": 0.861,
+     "water_activity": 0.96946,
+     "charge_adjustment": 9.999999999998031e-05,
+     "h2x_share": 0.00735073507350735,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.0,
+      "carbonate-anion": 0.01479999999999998,
+      "bicarbonate-anion": 0.9704,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.858188953021106,
+     "relative_error": -0.002021577097215843
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.01,
+     "observed": 0.9638190954773869,
+     "phi_printed": 0.964,
+     "water_activity": 0.99965,
+     "charge_adjustment": 2.574980159653073e-19,
+     "h2x_share": 0.005,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.01,
+      "carbonate-anion": 0.00010000000000000026,
+      "bicarbonate-anion": 0.0098,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9643139108246275,
+     "relative_error": 0.0005133902716416561
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.02,
+     "observed": 0.9528352201257859,
+     "phi_printed": 0.952,
+     "water_activity": 0.99931,
+     "charge_adjustment": -4.999999999999975e-05,
+     "h2x_share": 0.007481296758104738,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0002500000000000002,
+      "bicarbonate-anion": 0.0195,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.952066231897131,
+     "relative_error": -0.0008070526911813092
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.05,
+     "observed": 0.9309823855057875,
+     "phi_printed": 0.931,
+     "water_activity": 0.99832,
+     "charge_adjustment": -4.999999999999872e-05,
+     "h2x_share": 0.006993006993006993,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.05,
+      "carbonate-anion": 0.0006500000000000013,
+      "bicarbonate-anion": 0.0487,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9318541289171017,
+     "relative_error": 0.0009363693931121464
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.1,
+     "observed": 0.9123867069486404,
+     "phi_printed": 0.913,
+     "water_activity": 0.99672,
+     "charge_adjustment": 5.421010862427522e-18,
+     "h2x_share": 0.006999999999999999,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0014000000000000054,
+      "bicarbonate-anion": 0.0972,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.9138835962922377,
+     "relative_error": 0.0016406303732805494
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.2,
+     "observed": 0.8932258876857215,
+     "phi_printed": 0.894,
+     "water_activity": 0.99358,
+     "charge_adjustment": 0.0,
+     "h2x_share": 0.0072499999999999995,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0029,
+      "bicarbonate-anion": 0.1942,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8952685328501453,
+     "relative_error": 0.0022868181415074407
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.4,
+     "observed": 0.8750629722921915,
+     "phi_printed": 0.876,
+     "water_activity": 0.98745,
+     "charge_adjustment": 5.204170427930421e-18,
+     "h2x_share": 0.0075,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.006000000000000005,
+      "bicarbonate-anion": 0.388,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8784408730317466,
+     "relative_error": 0.0038601801773268107
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.6,
+     "observed": 0.8669801813906617,
+     "phi_printed": 0.868,
+     "water_activity": 0.9814,
+     "charge_adjustment": -1.3877787807814457e-17,
+     "h2x_share": 0.007666666666666667,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6,
+      "carbonate-anion": 0.009199999999999986,
+      "bicarbonate-anion": 0.5816,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8707853227442052,
+     "relative_error": 0.004388960019178212
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 0.8,
+     "observed": 0.8638723189820792,
+     "phi_printed": 0.865,
+     "water_activity": 0.97538,
+     "charge_adjustment": 0.00015000000000001644,
+     "h2x_share": 0.007688941676564356,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.012450000000000017,
+      "bicarbonate-anion": 0.7751,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8669155379900684,
+     "relative_error": 0.0035227648127156286
+    },
+    {
+     "salt": "NaHCO3",
+     "T": 318.15,
+     "m": 1.0,
+     "observed": 0.8628872650304893,
+     "phi_printed": 0.864,
+     "water_activity": 0.96936,
+     "charge_adjustment": 9.999999999999246e-05,
+     "h2x_share": 0.0078007800780078,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.0,
+      "carbonate-anion": 0.015699999999999992,
+      "bicarbonate-anion": 0.9686,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.8650694546259128,
+     "relative_error": 0.002528939392038021
+    }
+   ],
+   "Na2CO3": [
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.01,
+     "observed": 0.9089999999999999,
+     "phi_printed": 0.909,
+     "water_activity": 0.9995,
+     "charge_adjustment": 2.710505431213761e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0093,
+      "bicarbonate-anion": 0.0007,
+      "hydroxide-anion": 0.0007000000000000027
+     },
+     "status": "Available",
+     "value": 0.8981235298844655,
+     "relative_error": -0.011965313658453658
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.02,
+     "observed": 0.8829999999999999,
+     "phi_printed": 0.883,
+     "water_activity": 0.99903,
+     "charge_adjustment": 4.9873299934333204e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.04,
+      "carbonate-anion": 0.0191,
+      "bicarbonate-anion": 0.0009,
+      "hydroxide-anion": 0.000900000000000005
+     },
+     "status": "Available",
+     "value": 0.8634936335168043,
+     "relative_error": -0.022091015269757208
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.05,
+     "observed": 0.8471183079973562,
+     "phi_printed": 0.846,
+     "water_activity": 0.9977,
+     "charge_adjustment": -0.00019999999999999337,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0487,
+      "bicarbonate-anion": 0.0014,
+      "hydroxide-anion": 0.0012000000000000066
+     },
+     "status": "Available",
+     "value": 0.8087917861595024,
+     "relative_error": -0.045243411074965656
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.1,
+     "observed": 0.814,
+     "phi_printed": 0.814,
+     "water_activity": 0.99558,
+     "charge_adjustment": 2.3852447794681098e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0982,
+      "bicarbonate-anion": 0.0018,
+      "hydroxide-anion": 0.0018000000000000238
+     },
+     "status": "Available",
+     "value": 0.7629328005871556,
+     "relative_error": -0.06273611721479644
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.2,
+     "observed": 0.777,
+     "phi_printed": 0.777,
+     "water_activity": 0.99161,
+     "charge_adjustment": 1.3444106938820255e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.1976,
+      "bicarbonate-anion": 0.0024,
+      "hydroxide-anion": 0.0024000000000000132
+     },
+     "status": "Available",
+     "value": 0.7161261736746619,
+     "relative_error": -0.07834469282540302
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.4,
+     "observed": 0.7251205320033249,
+     "phi_printed": 0.725,
+     "water_activity": 0.9844,
+     "charge_adjustment": -0.0001999999999999862,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.397,
+      "bicarbonate-anion": 0.0031,
+      "hydroxide-anion": 0.0029000000000000137
+     },
+     "status": "Available",
+     "value": 0.6713226104314763,
+     "relative_error": -0.07419169530783876
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.6,
+     "observed": 0.6870761894199845,
+     "phi_printed": 0.687,
+     "water_activity": 0.97792,
+     "charge_adjustment": -0.00020000000000014147,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2,
+      "carbonate-anion": 0.5966,
+      "bicarbonate-anion": 0.0035,
+      "hydroxide-anion": 0.0032999999999998586
+     },
+     "status": "Available",
+     "value": 0.6470123432341978,
+     "relative_error": -0.058310631051860184
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 0.8,
+     "observed": 0.6570546679980029,
+     "phi_printed": 0.657,
+     "water_activity": 0.97194,
+     "charge_adjustment": -0.00019999999999994154,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.6,
+      "carbonate-anion": 0.7964,
+      "bicarbonate-anion": 0.0037,
+      "hydroxide-anion": 0.0035000000000000586
+     },
+     "status": "Available",
+     "value": 0.63094800132238,
+     "relative_error": -0.039732868431127666
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 278.15,
+     "m": 1.0,
+     "observed": 0.6340422131966176,
+     "phi_printed": 0.634,
+     "water_activity": 0.9663,
+     "charge_adjustment": -0.00019999999999996323,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.0,
+      "carbonate-anion": 0.9962,
+      "bicarbonate-anion": 0.0039,
+      "hydroxide-anion": 0.0037000000000000366
+     },
+     "status": "Available",
+     "value": 0.6195582762902908,
+     "relative_error": -0.02284380535690811
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.01,
+     "observed": 0.91,
+     "phi_printed": 0.91,
+     "water_activity": 0.99949,
+     "charge_adjustment": -1.951563910473908e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0091,
+      "bicarbonate-anion": 0.0009,
+      "hydroxide-anion": 0.000899999999999998
+     },
+     "status": "Available",
+     "value": 0.8987286370811237,
+     "relative_error": -0.01238611309766624
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.02,
+     "observed": 0.884,
+     "phi_printed": 0.884,
+     "water_activity": 0.99903,
+     "charge_adjustment": -2.168404344971009e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.04,
+      "carbonate-anion": 0.0188,
+      "bicarbonate-anion": 0.0012,
+      "hydroxide-anion": 0.0011999999999999997
+     },
+     "status": "Available",
+     "value": 0.8639067909864548,
+     "relative_error": -0.02272987444971175
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.05,
+     "observed": 0.8469999999999998,
+     "phi_printed": 0.847,
+     "water_activity": 0.99769,
+     "charge_adjustment": 9.974659986866641e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0482,
+      "bicarbonate-anion": 0.0018,
+      "hydroxide-anion": 0.00180000000000001
+     },
+     "status": "Available",
+     "value": 0.8091195911808718,
+     "relative_error": -0.0447230328443069
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.1,
+     "observed": 0.817,
+     "phi_printed": 0.817,
+     "water_activity": 0.99556,
+     "charge_adjustment": -1.431146867680866e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0976,
+      "bicarbonate-anion": 0.0024,
+      "hydroxide-anion": 0.0023999999999999855
+     },
+     "status": "Available",
+     "value": 0.763483528153043,
+     "relative_error": -0.06550363751157517
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.2,
+     "observed": 0.7819999999999998,
+     "phi_printed": 0.782,
+     "water_activity": 0.99154,
+     "charge_adjustment": 3.599551212651875e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.1968,
+      "bicarbonate-anion": 0.0032,
+      "hydroxide-anion": 0.003200000000000036
+     },
+     "status": "Available",
+     "value": 0.7181644972245419,
+     "relative_error": -0.08163107771797684
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.4,
+     "observed": 0.7359999999999999,
+     "phi_printed": 0.736,
+     "water_activity": 0.98416,
+     "charge_adjustment": 1.0321604682062002e-16,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.3959,
+      "bicarbonate-anion": 0.0041,
+      "hydroxide-anion": 0.0041000000000001036
+     },
+     "status": "Available",
+     "value": 0.6770618340152431,
+     "relative_error": -0.08007902987059345
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.6,
+     "observed": 0.7030779120026598,
+     "phi_printed": 0.703,
+     "water_activity": 0.97739,
+     "charge_adjustment": -0.0002000000000000517,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2,
+      "carbonate-anion": 0.5954,
+      "bicarbonate-anion": 0.0047,
+      "hydroxide-anion": 0.0044999999999999485
+     },
+     "status": "Available",
+     "value": 0.6565970468807931,
+     "relative_error": -0.06611054668104954
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 0.8,
+     "observed": 0.6790564680444093,
+     "phi_printed": 0.679,
+     "water_activity": 0.971,
+     "charge_adjustment": -0.00019999999999986261,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.6,
+      "carbonate-anion": 0.7951,
+      "bicarbonate-anion": 0.005,
+      "hydroxide-anion": 0.0048000000000001375
+     },
+     "status": "Available",
+     "value": 0.6444418468319972,
+     "relative_error": -0.050974584355403474
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 288.15,
+     "m": 1.0,
+     "observed": 0.6620440584339956,
+     "phi_printed": 0.662,
+     "water_activity": 0.96481,
+     "charge_adjustment": -0.00020000000000010634,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.0,
+      "carbonate-anion": 0.9949,
+      "bicarbonate-anion": 0.0052,
+      "hydroxide-anion": 0.004999999999999893
+     },
+     "status": "Available",
+     "value": 0.6369151113111983,
+     "relative_error": -0.037956608480465115
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.01,
+     "observed": 0.9099999999999999,
+     "phi_printed": 0.91,
+     "water_activity": 0.99949,
+     "charge_adjustment": -2.168404344971009e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0088,
+      "bicarbonate-anion": 0.0012,
+      "hydroxide-anion": 0.0011999999999999997
+     },
+     "status": "Available",
+     "value": 0.8999927030899924,
+     "relative_error": -0.01099702957143689
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.02,
+     "observed": 0.884,
+     "phi_printed": 0.884,
+     "water_activity": 0.99902,
+     "charge_adjustment": 4.119968255444917e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.04,
+      "carbonate-anion": 0.0184,
+      "bicarbonate-anion": 0.0016,
+      "hydroxide-anion": 0.0016000000000000042
+     },
+     "status": "Available",
+     "value": 0.8646290538386258,
+     "relative_error": -0.021912835024179067
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.05,
+     "observed": 0.847,
+     "phi_printed": 0.847,
+     "water_activity": 0.99768,
+     "charge_adjustment": -4.336808689942018e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0476,
+      "bicarbonate-anion": 0.0024,
+      "hydroxide-anion": 0.0023999999999999994
+     },
+     "status": "Available",
+     "value": 0.8093597896877341,
+     "relative_error": -0.044439445469027006
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.1,
+     "observed": 0.817,
+     "phi_printed": 0.817,
+     "water_activity": 0.99554,
+     "charge_adjustment": 8.239936510889834e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0968,
+      "bicarbonate-anion": 0.0032,
+      "hydroxide-anion": 0.0032000000000000084
+     },
+     "status": "Available",
+     "value": 0.7638124803446913,
+     "relative_error": -0.06510100325007184
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.2,
+     "observed": 0.7842595167163191,
+     "phi_printed": 0.784,
+     "water_activity": 0.9915,
+     "charge_adjustment": -0.00020000000000000746,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.1958,
+      "bicarbonate-anion": 0.0043,
+      "hydroxide-anion": 0.0040999999999999925
+     },
+     "status": "Available",
+     "value": 0.7195161712552746,
+     "relative_error": -0.0825534712439625
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.4,
+     "observed": 0.743,
+     "phi_printed": 0.743,
+     "water_activity": 0.98399,
+     "charge_adjustment": 7.112366251504909e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.3946,
+      "bicarbonate-anion": 0.0054,
+      "hydroxide-anion": 0.005400000000000071
+     },
+     "status": "Available",
+     "value": 0.6814797026472155,
+     "relative_error": -0.08279986184762389
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.6,
+     "observed": 0.7149999999999999,
+     "phi_printed": 0.715,
+     "water_activity": 0.977,
+     "charge_adjustment": -6.071532165918825e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2,
+      "carbonate-anion": 0.5939,
+      "bicarbonate-anion": 0.0061,
+      "hydroxide-anion": 0.006099999999999994
+     },
+     "status": "Available",
+     "value": 0.6643898076411862,
+     "relative_error": -0.07078348581652272
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 0.8,
+     "observed": 0.6960578433409514,
+     "phi_printed": 0.696,
+     "water_activity": 0.97029,
+     "charge_adjustment": -0.00019999999999981664,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.6,
+      "carbonate-anion": 0.7935,
+      "bicarbonate-anion": 0.0066,
+      "hydroxide-anion": 0.006400000000000183
+     },
+     "status": "Available",
+     "value": 0.6556723255846322,
+     "relative_error": -0.05802034722067939
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 298.15,
+     "m": 1.0,
+     "observed": 0.6830908637376526,
+     "phi_printed": 0.683,
+     "water_activity": 0.96369,
+     "charge_adjustment": -0.0003999999999998276,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.0,
+      "carbonate-anion": 0.9933,
+      "bicarbonate-anion": 0.0069,
+      "hydroxide-anion": 0.006500000000000172
+     },
+     "status": "Available",
+     "value": 0.6515724671785912,
+     "relative_error": -0.0461408550929856
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.01,
+     "observed": 0.911,
+     "phi_printed": 0.911,
+     "water_activity": 0.99948,
+     "charge_adjustment": -2.168404344971009e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0085,
+      "bicarbonate-anion": 0.0015,
+      "hydroxide-anion": 0.0014999999999999979
+     },
+     "status": "Available",
+     "value": 0.901108241042956,
+     "relative_error": -0.010858132773923224
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.02,
+     "observed": 0.884,
+     "phi_printed": 0.884,
+     "water_activity": 0.99901,
+     "charge_adjustment": 4.7704895589362195e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.04,
+      "carbonate-anion": 0.0179,
+      "bicarbonate-anion": 0.0021,
+      "hydroxide-anion": 0.0021000000000000046
+     },
+     "status": "Available",
+     "value": 0.8656968346530299,
+     "relative_error": -0.0207049381753055
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.05,
+     "observed": 0.846,
+     "phi_printed": 0.846,
+     "water_activity": 0.99767,
+     "charge_adjustment": 5.637851296924623e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0469,
+      "bicarbonate-anion": 0.0031,
+      "hydroxide-anion": 0.0031000000000000055
+     },
+     "status": "Available",
+     "value": 0.8095604517926204,
+     "relative_error": -0.04307275201817917
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.1,
+     "observed": 0.817,
+     "phi_printed": 0.817,
+     "water_activity": 0.99553,
+     "charge_adjustment": 9.540979117872439e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0958,
+      "bicarbonate-anion": 0.0042,
+      "hydroxide-anion": 0.004200000000000009
+     },
+     "status": "Available",
+     "value": 0.7639972873732648,
+     "relative_error": -0.06487480125671385
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.2,
+     "observed": 0.785,
+     "phi_printed": 0.785,
+     "water_activity": 0.99148,
+     "charge_adjustment": 5.204170427930421e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.1945,
+      "bicarbonate-anion": 0.0055,
+      "hydroxide-anion": 0.005500000000000005
+     },
+     "status": "Available",
+     "value": 0.7203810008640676,
+     "relative_error": -0.08231719635150625
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.4,
+     "observed": 0.7461236225039357,
+     "phi_printed": 0.746,
+     "water_activity": 0.9839,
+     "charge_adjustment": -0.0001999999999999719,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.3931,
+      "bicarbonate-anion": 0.007,
+      "hydroxide-anion": 0.006800000000000028
+     },
+     "status": "Available",
+     "value": 0.6847243271670685,
+     "relative_error": -0.0822910486747701
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.6,
+     "observed": 0.7220798760924881,
+     "phi_printed": 0.722,
+     "water_activity": 0.97676,
+     "charge_adjustment": -0.00019999999999996063,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2,
+      "carbonate-anion": 0.5922,
+      "bicarbonate-anion": 0.0079,
+      "hydroxide-anion": 0.00770000000000004
+     },
+     "status": "Available",
+     "value": 0.6705355910843901,
+     "relative_error": -0.07138307923359988
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 0.8,
+     "observed": 0.7061172611385624,
+     "phi_printed": 0.706,
+     "water_activity": 0.96983,
+     "charge_adjustment": -0.0003999999999997825,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.6,
+      "carbonate-anion": 0.7917,
+      "bicarbonate-anion": 0.0085,
+      "hydroxide-anion": 0.008100000000000218
+     },
+     "status": "Available",
+     "value": 0.6648259743547821,
+     "relative_error": -0.05847652940419723
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 308.15,
+     "m": 1.0,
+     "observed": 0.697092664605976,
+     "phi_printed": 0.697,
+     "water_activity": 0.96292,
+     "charge_adjustment": -0.00039999999999982584,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.0,
+      "carbonate-anion": 0.9913,
+      "bicarbonate-anion": 0.0089,
+      "hydroxide-anion": 0.008500000000000174
+     },
+     "status": "Available",
+     "value": 0.6638281740087504,
+     "relative_error": -0.0477188934645123
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.01,
+     "observed": 0.9119999999999998,
+     "phi_printed": 0.912,
+     "water_activity": 0.99948,
+     "charge_adjustment": 2.3852447794681098e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.02,
+      "carbonate-anion": 0.0081,
+      "bicarbonate-anion": 0.0019,
+      "hydroxide-anion": 0.0019000000000000024
+     },
+     "status": "Available",
+     "value": 0.9029142477444686,
+     "relative_error": -0.009962447648608763
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.02,
+     "observed": 0.884,
+     "phi_printed": 0.884,
+     "water_activity": 0.999,
+     "charge_adjustment": 5.204170427930421e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.04,
+      "carbonate-anion": 0.0174,
+      "bicarbonate-anion": 0.0026,
+      "hydroxide-anion": 0.002600000000000005
+     },
+     "status": "Available",
+     "value": 0.8665864634125624,
+     "relative_error": -0.019698570800268822
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.05,
+     "observed": 0.845,
+     "phi_printed": 0.845,
+     "water_activity": 0.99766,
+     "charge_adjustment": 8.673617379884035e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.1,
+      "carbonate-anion": 0.0461,
+      "bicarbonate-anion": 0.0039,
+      "hydroxide-anion": 0.0039000000000000007
+     },
+     "status": "Available",
+     "value": 0.8097698800165251,
+     "relative_error": -0.04169244968458574
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.1,
+     "observed": 0.815,
+     "phi_printed": 0.815,
+     "water_activity": 0.99553,
+     "charge_adjustment": -8.673617379884035e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.2,
+      "carbonate-anion": 0.0947,
+      "bicarbonate-anion": 0.0053,
+      "hydroxide-anion": 0.005299999999999999
+     },
+     "status": "Available",
+     "value": 0.7639082638188044,
+     "relative_error": -0.06268924684809274
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.2,
+     "observed": 0.7832580326248146,
+     "phi_printed": 0.783,
+     "water_activity": 0.99148,
+     "charge_adjustment": -0.0001999999999999719,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.4,
+      "carbonate-anion": 0.1931,
+      "bicarbonate-anion": 0.007,
+      "hydroxide-anion": 0.006800000000000028
+     },
+     "status": "Available",
+     "value": 0.720639282592836,
+     "relative_error": -0.0799465149717441
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.4,
+     "observed": 0.7461234281932495,
+     "phi_printed": 0.746,
+     "water_activity": 0.98388,
+     "charge_adjustment": -0.0001999999999999589,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.8,
+      "carbonate-anion": 0.3912,
+      "bicarbonate-anion": 0.0089,
+      "hydroxide-anion": 0.008700000000000041
+     },
+     "status": "Available",
+     "value": 0.6870511932110472,
+     "relative_error": -0.07917220227924848
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.6,
+     "observed": 0.7240800044201338,
+     "phi_printed": 0.724,
+     "water_activity": 0.97667,
+     "charge_adjustment": -0.0001999999999999693,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2,
+      "carbonate-anion": 0.5901,
+      "bicarbonate-anion": 0.01,
+      "hydroxide-anion": 0.009800000000000031
+     },
+     "status": "Available",
+     "value": 0.6752876624563701,
+     "relative_error": -0.06738529121908032
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 0.8,
+     "observed": 0.7110589894632041,
+     "phi_printed": 0.711,
+     "water_activity": 0.96961,
+     "charge_adjustment": -0.00019999999999982358,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.6,
+      "carbonate-anion": 0.7894,
+      "bicarbonate-anion": 0.0107,
+      "hydroxide-anion": 0.010500000000000176
+     },
+     "status": "Available",
+     "value": 0.6722140218638452,
+     "relative_error": -0.05462973983168962
+    },
+    {
+     "salt": "Na2CO3",
+     "T": 318.15,
+     "m": 1.0,
+     "observed": 0.7040935237462637,
+     "phi_printed": 0.704,
+     "water_activity": 0.96251,
+     "charge_adjustment": -0.0004000000000000791,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.0,
+      "carbonate-anion": 0.989,
+      "bicarbonate-anion": 0.0112,
+      "hydroxide-anion": 0.01079999999999992
+     },
+     "status": "Available",
+     "value": 0.6738722678268274,
+     "relative_error": -0.04292221828520493
+    }
+   ],
+   "mixed": [
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.01,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.02,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.05,
+     "observed": 0.8549999999999998,
+     "phi_printed": 0.855,
+     "water_activity": 0.99615,
+     "charge_adjustment": 1.3877787807814457e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.15000000000000002,
+      "carbonate-anion": 0.05,
+      "bicarbonate-anion": 0.05,
+      "hydroxide-anion": 1.3877787807814457e-17
+     },
+     "status": "Available",
+     "value": 0.8322652777000954,
+     "relative_error": -0.026590318479420283
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.1,
+     "observed": 0.8259999999999997,
+     "phi_printed": 0.826,
+     "water_activity": 0.99259,
+     "charge_adjustment": 2.7755575615628914e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.30000000000000004,
+      "carbonate-anion": 0.1,
+      "bicarbonate-anion": 0.1,
+      "hydroxide-anion": 2.7755575615628914e-17
+     },
+     "status": "Available",
+     "value": 0.7975385707586059,
+     "relative_error": -0.03445693612759548
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.2,
+     "observed": 0.7889999999999998,
+     "phi_printed": 0.789,
+     "water_activity": 0.98588,
+     "charge_adjustment": 5.551115123125783e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6000000000000001,
+      "carbonate-anion": 0.2,
+      "bicarbonate-anion": 0.2,
+      "hydroxide-anion": 5.551115123125783e-17
+     },
+     "status": "Available",
+     "value": 0.7641760289294589,
+     "relative_error": -0.031462574233892204
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.4,
+     "observed": 0.7409499999999999,
+     "phi_printed": 0.741,
+     "water_activity": 0.97365,
+     "charge_adjustment": 0.00010000000000021103,
+     "h2x_share": 5e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2000000000000002,
+      "carbonate-anion": 0.4,
+      "bicarbonate-anion": 0.3999,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7348696408585041,
+     "relative_error": -0.008206166598955011
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.6,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 0.8,
+     "observed": 0.68499212480312,
+     "phi_printed": 0.685,
+     "water_activity": 0.95184,
+     "charge_adjustment": 4.440892098500626e-16,
+     "h2x_share": 2.5e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.4000000000000004,
+      "carbonate-anion": 0.8001,
+      "bicarbonate-anion": 0.7998,
+      "hydroxide-anion": 4.440892098500626e-16
+     },
+     "status": "Available",
+     "value": 0.7135096933499411,
+     "relative_error": 0.04163196555729387
+    },
+    {
+     "salt": "mixed",
+     "T": 278.15,
+     "m": 1.0,
+     "observed": 0.6679933598671973,
+     "phi_printed": 0.668,
+     "water_activity": 0.9416,
+     "charge_adjustment": 0.0,
+     "h2x_share": 2e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 3.0,
+      "carbonate-anion": 1.0001,
+      "bicarbonate-anion": 0.9998,
+      "hydroxide-anion": 0.0
+     },
+     "status": "Available",
+     "value": 0.7100930719457079,
+     "relative_error": 0.06302414755571872
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.01,
+     "observed": 0.912,
+     "phi_printed": 0.912,
+     "water_activity": 0.99918,
+     "charge_adjustment": -6.098637220230962e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.03,
+      "carbonate-anion": 0.0099,
+      "bicarbonate-anion": 0.0101,
+      "hydroxide-anion": 9.99999999999994e-05
+     },
+     "status": "Available",
+     "value": 0.9037250887737809,
+     "relative_error": -0.009073367572608682
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.02,
+     "observed": 0.889,
+     "phi_printed": 0.889,
+     "water_activity": 0.9984,
+     "charge_adjustment": -4.0793106739767104e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.06,
+      "carbonate-anion": 0.0199,
+      "bicarbonate-anion": 0.0201,
+      "hydroxide-anion": 9.999999999999593e-05
+     },
+     "status": "Available",
+     "value": 0.875188316438065,
+     "relative_error": -0.015536201981929065
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.05,
+     "observed": 0.8569999999999998,
+     "phi_printed": 0.857,
+     "water_activity": 0.99615,
+     "charge_adjustment": 1.6737371037744975e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.15000000000000002,
+      "carbonate-anion": 0.0499,
+      "bicarbonate-anion": 0.0501,
+      "hydroxide-anion": 0.00010000000000001674
+     },
+     "status": "Available",
+     "value": 0.8322067989561722,
+     "relative_error": -0.028930222921619064
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.1,
+     "observed": 0.8291657999999997,
+     "phi_printed": 0.829,
+     "water_activity": 0.99256,
+     "charge_adjustment": -9.999999999997225e-05,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.30000000000000004,
+      "carbonate-anion": 0.1,
+      "bicarbonate-anion": 0.1,
+      "hydroxide-anion": 2.7755575615628914e-17
+     },
+     "status": "Available",
+     "value": 0.7986770622105099,
+     "relative_error": -0.03677037546590778
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.2,
+     "observed": 0.7969999999999998,
+     "phi_printed": 0.797,
+     "water_activity": 0.98575,
+     "charge_adjustment": 5.551115123125783e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6000000000000001,
+      "carbonate-anion": 0.2,
+      "bicarbonate-anion": 0.2,
+      "hydroxide-anion": 5.551115123125783e-17
+     },
+     "status": "Available",
+     "value": 0.7684071781989754,
+     "relative_error": -0.0358755606035438
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.4,
+     "observed": 0.7569499999999998,
+     "phi_printed": 0.757,
+     "water_activity": 0.97309,
+     "charge_adjustment": 0.00010000000000021103,
+     "h2x_share": 5e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2000000000000002,
+      "carbonate-anion": 0.4,
+      "bicarbonate-anion": 0.3999,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7454256866088215,
+     "relative_error": -0.015224669253158463
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.6,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 0.8,
+     "observed": 0.7179929498237454,
+     "phi_printed": 0.718,
+     "water_activity": 0.9496,
+     "charge_adjustment": 4.440892098500626e-16,
+     "h2x_share": 2.5e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.4000000000000004,
+      "carbonate-anion": 0.8001,
+      "bicarbonate-anion": 0.7998,
+      "hydroxide-anion": 4.440892098500626e-16
+     },
+     "status": "Available",
+     "value": 0.736212378055071,
+     "relative_error": 0.02537549739979772
+    },
+    {
+     "salt": "mixed",
+     "T": 288.15,
+     "m": 1.0,
+     "observed": 0.7089799995999919,
+     "phi_printed": 0.709,
+     "water_activity": 0.9381,
+     "charge_adjustment": 0.00010000000000021103,
+     "h2x_share": 2.000040000800016e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 3.0,
+      "carbonate-anion": 1.0001,
+      "bicarbonate-anion": 0.9997,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7385398943887299,
+     "relative_error": 0.04169355243506967
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.01,
+     "observed": 0.9109999999999999,
+     "phi_printed": 0.911,
+     "water_activity": 0.99918,
+     "charge_adjustment": -6.098637220230962e-19,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.03,
+      "carbonate-anion": 0.0099,
+      "bicarbonate-anion": 0.0101,
+      "hydroxide-anion": 9.99999999999994e-05
+     },
+     "status": "Available",
+     "value": 0.9026880811230301,
+     "relative_error": -0.009123950468682529
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.02,
+     "observed": 0.889,
+     "phi_printed": 0.889,
+     "water_activity": 0.9984,
+     "charge_adjustment": -4.0793106739767104e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.06,
+      "carbonate-anion": 0.0199,
+      "bicarbonate-anion": 0.0201,
+      "hydroxide-anion": 9.999999999999593e-05
+     },
+     "status": "Available",
+     "value": 0.8740950979419234,
+     "relative_error": -0.016765919075451774
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.05,
+     "observed": 0.8559999999999998,
+     "phi_printed": 0.856,
+     "water_activity": 0.99615,
+     "charge_adjustment": 1.6737371037744975e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.15000000000000002,
+      "carbonate-anion": 0.0499,
+      "bicarbonate-anion": 0.0501,
+      "hydroxide-anion": 0.00010000000000001674
+     },
+     "status": "Available",
+     "value": 0.8315228181362788,
+     "relative_error": -0.028594838625842223
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.1,
+     "observed": 0.8309999999999998,
+     "phi_printed": 0.831,
+     "water_activity": 0.99254,
+     "charge_adjustment": 4.449294665337389e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.30000000000000004,
+      "carbonate-anion": 0.0999,
+      "bicarbonate-anion": 0.1001,
+      "hydroxide-anion": 0.0001000000000000445
+     },
+     "status": "Available",
+     "value": 0.7992704572876527,
+     "relative_error": -0.03818236186804713
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.2,
+     "observed": 0.8010801,
+     "phi_printed": 0.801,
+     "water_activity": 0.98566,
+     "charge_adjustment": -9.99999999999445e-05,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6000000000000001,
+      "carbonate-anion": 0.2,
+      "bicarbonate-anion": 0.2,
+      "hydroxide-anion": 5.551115123125783e-17
+     },
+     "status": "Available",
+     "value": 0.7716074191276636,
+     "relative_error": -0.036791178400682245
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.4,
+     "observed": 0.7679883999999999,
+     "phi_printed": 0.768,
+     "water_activity": 0.97269,
+     "charge_adjustment": 2.1102640034714737e-16,
+     "h2x_share": 4.999750012499375e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2000000000000002,
+      "carbonate-anion": 0.4,
+      "bicarbonate-anion": 0.3999,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7543000731227286,
+     "relative_error": -0.017823611498912317
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.6,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 0.8,
+     "observed": 0.7429935748393708,
+     "phi_printed": 0.743,
+     "water_activity": 0.94789,
+     "charge_adjustment": 4.440892098500626e-16,
+     "h2x_share": 2.5e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.4000000000000004,
+      "carbonate-anion": 0.8001,
+      "bicarbonate-anion": 0.7998,
+      "hydroxide-anion": 4.440892098500626e-16
+     },
+     "status": "Available",
+     "value": 0.7561039422239958,
+     "relative_error": 0.017645330765423406
+    },
+    {
+     "salt": "mixed",
+     "T": 298.15,
+     "m": 1.0,
+     "observed": 0.7419748394967899,
+     "phi_printed": 0.742,
+     "water_activity": 0.93539,
+     "charge_adjustment": 0.00010000000000021103,
+     "h2x_share": 4e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 3.0,
+      "carbonate-anion": 1.0001,
+      "bicarbonate-anion": 0.9997,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7636658354436242,
+     "relative_error": 0.029234139477755328
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.01,
+     "observed": 0.9099999999999999,
+     "phi_printed": 0.91,
+     "water_activity": 0.99918,
+     "charge_adjustment": -1.2197274440461925e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.03,
+      "carbonate-anion": 0.0098,
+      "bicarbonate-anion": 0.0102,
+      "hydroxide-anion": 0.0001999999999999988
+     },
+     "status": "Available",
+     "value": 0.9020365672616383,
+     "relative_error": -0.008751024987210587
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.02,
+     "observed": 0.887,
+     "phi_printed": 0.887,
+     "water_activity": 0.9984,
+     "charge_adjustment": -1.2197274440461925e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.06,
+      "carbonate-anion": 0.0198,
+      "bicarbonate-anion": 0.0202,
+      "hydroxide-anion": 0.0001999999999999988
+     },
+     "status": "Available",
+     "value": 0.873118524318945,
+     "relative_error": -0.015649916213139825
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.05,
+     "observed": 0.855,
+     "phi_printed": 0.855,
+     "water_activity": 0.99615,
+     "charge_adjustment": 3.347474207548995e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.15000000000000002,
+      "carbonate-anion": 0.0498,
+      "bicarbonate-anion": 0.0502,
+      "hydroxide-anion": 0.00020000000000003348
+     },
+     "status": "Available",
+     "value": 0.8306360483742623,
+     "relative_error": -0.028495849854663913
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.1,
+     "observed": 0.8301659668066385,
+     "phi_printed": 0.83,
+     "water_activity": 0.99255,
+     "charge_adjustment": -9.999999999995551e-05,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.30000000000000004,
+      "carbonate-anion": 0.0999,
+      "bicarbonate-anion": 0.1001,
+      "hydroxide-anion": 0.0001000000000000445
+     },
+     "status": "Available",
+     "value": 0.7991573901847122,
+     "relative_error": -0.03735226191120011
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.2,
+     "observed": 0.803,
+     "phi_printed": 0.803,
+     "water_activity": 0.98563,
+     "charge_adjustment": 1.0000409788463172e-16,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6000000000000001,
+      "carbonate-anion": 0.1999,
+      "bicarbonate-anion": 0.2001,
+      "hydroxide-anion": 0.00010000000000010001
+     },
+     "status": "Available",
+     "value": 0.7739444741734115,
+     "relative_error": -0.036183718339462656
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.4,
+     "observed": 0.7749887499999999,
+     "phi_printed": 0.775,
+     "water_activity": 0.97245,
+     "charge_adjustment": 2.1102640034714737e-16,
+     "h2x_share": 4.999750012499375e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2000000000000002,
+      "carbonate-anion": 0.4,
+      "bicarbonate-anion": 0.3999,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7616513231841755,
+     "relative_error": -0.01720983280831423
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.6,
+     "unavailable": "charge closure gives a negative minor anion"
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 0.8,
+     "observed": 0.7599879996999925,
+     "phi_printed": 0.76,
+     "water_activity": 0.94669,
+     "charge_adjustment": 2.1102640034714737e-16,
+     "h2x_share": 4.999875003124921e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.4000000000000004,
+      "carbonate-anion": 0.8001,
+      "bicarbonate-anion": 0.7997,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7734518596324315,
+     "relative_error": 0.017715884905753487
+    },
+    {
+     "salt": "mixed",
+     "T": 308.15,
+     "m": 1.0,
+     "observed": 0.7639905598111962,
+     "phi_printed": 0.764,
+     "water_activity": 0.93345,
+     "charge_adjustment": 2.1102640034714737e-16,
+     "h2x_share": 3.999920001599968e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 3.0,
+      "carbonate-anion": 1.0001,
+      "bicarbonate-anion": 0.9997,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7857895575897615,
+     "relative_error": 0.02853307216774037
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.01,
+     "observed": 0.909,
+     "phi_printed": 0.909,
+     "water_activity": 0.99918,
+     "charge_adjustment": 1.0299920638612292e-18,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.03,
+      "carbonate-anion": 0.0096,
+      "bicarbonate-anion": 0.0104,
+      "hydroxide-anion": 0.00040000000000000105
+     },
+     "status": "Available",
+     "value": 0.9018052965845801,
+     "relative_error": -0.007914965253487338
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.02,
+     "observed": 0.8877666999002992,
+     "phi_printed": 0.886,
+     "water_activity": 0.9984,
+     "charge_adjustment": -0.00020000000000000123,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.06,
+      "carbonate-anion": 0.0197,
+      "bicarbonate-anion": 0.0204,
+      "hydroxide-anion": 0.0001999999999999988
+     },
+     "status": "Available",
+     "value": 0.8719404784333585,
+     "relative_error": -0.017827005077705738
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.05,
+     "observed": 0.853,
+     "phi_printed": 0.853,
+     "water_activity": 0.99616,
+     "charge_adjustment": 2.2497195079074217e-17,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.15000000000000002,
+      "carbonate-anion": 0.0497,
+      "bicarbonate-anion": 0.0503,
+      "hydroxide-anion": 0.00030000000000002247
+     },
+     "status": "Available",
+     "value": 0.8293970755132075,
+     "relative_error": -0.027670485916521104
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.1,
+     "observed": 0.8281655337864853,
+     "phi_printed": 0.828,
+     "water_activity": 0.99257,
+     "charge_adjustment": -9.999999999996649e-05,
+     "h2x_share": 0.0,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.30000000000000004,
+      "carbonate-anion": 0.0998,
+      "bicarbonate-anion": 0.1002,
+      "hydroxide-anion": 0.00020000000000003348
+     },
+     "status": "Available",
+     "value": 0.7986223717667724,
+     "relative_error": -0.03567301561637981
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.2,
+     "observed": 0.8019000199960007,
+     "phi_printed": 0.802,
+     "water_activity": 0.98565,
+     "charge_adjustment": 0.00010000000000007797,
+     "h2x_share": 9.998000399920017e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 0.6000000000000001,
+      "carbonate-anion": 0.1998,
+      "bicarbonate-anion": 0.2001,
+      "hydroxide-anion": 0.000300000000000078
+     },
+     "status": "Available",
+     "value": 0.7754339725038546,
+     "relative_error": -0.03300417362787711
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.4,
+     "observed": 0.7769888505574722,
+     "phi_printed": 0.777,
+     "water_activity": 0.97237,
+     "charge_adjustment": 2.0000819576926343e-16,
+     "h2x_share": 4.9995000499949994e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.2000000000000002,
+      "carbonate-anion": 0.3999,
+      "bicarbonate-anion": 0.4,
+      "hydroxide-anion": 0.00020000000000020002
+     },
+     "status": "Available",
+     "value": 0.7676540614562315,
+     "relative_error": -0.012014057981067916
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.6,
+     "observed": 0.7689666666666667,
+     "phi_printed": 0.769,
+     "water_activity": 0.9593,
+     "charge_adjustment": 9.999999999975592e-05,
+     "h2x_share": 3.3333333333333335e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 1.7999999999999998,
+      "carbonate-anion": 0.6,
+      "bicarbonate-anion": 0.5998,
+      "hydroxide-anion": 0.00019999999999975593
+     },
+     "status": "Available",
+     "value": 0.7750914270181941,
+     "relative_error": 0.007964923080576725
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 0.8,
+     "observed": 0.7699884997124928,
+     "phi_printed": 0.77,
+     "water_activity": 0.94602,
+     "charge_adjustment": 2.1102640034714737e-16,
+     "h2x_share": 4.999875003124921e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 2.4000000000000004,
+      "carbonate-anion": 0.8001,
+      "bicarbonate-anion": 0.7997,
+      "hydroxide-anion": 0.00010000000000021103
+     },
+     "status": "Available",
+     "value": 0.7884768171803016,
+     "relative_error": 0.02401116052345209
+    },
+    {
+     "salt": "mixed",
+     "T": 318.15,
+     "m": 1.0,
+     "observed": 0.7779755595111902,
+     "phi_printed": 0.778,
+     "water_activity": 0.93229,
+     "charge_adjustment": 9.999999999997797e-05,
+     "h2x_share": 4e-05,
+     "composition_mol_per_kg": {
+      "sodium-cation": 3.0,
+      "carbonate-anion": 1.0001,
+      "bicarbonate-anion": 0.9996,
+      "hydroxide-anion": 0.00019999999999997797
+     },
+     "status": "Available",
+     "value": 0.8051851320834003,
+     "relative_error": 0.03497484238361692
+    }
+   ]
+  },
+  "document": {
+   "components": [
+    {
+     "aliases": [
+      "H2O"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/water/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=dispersion_energy_over_k:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 432.3788130932931,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/water/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=segment_count:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.252753837934407,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/water/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=solvation_factor:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.5,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "family": "dielectric_volume",
+       "identity": "component/water/dielectric_volume",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json",
+        "source_id": "joint-recalibration-170-stage5"
+       },
+       "value": {
+        "magnitude": 0.3777,
+        "unit": "liter / mole"
+       }
+      },
+      {
+       "family": "dielectric_temperature",
+       "identity": "component/water/dielectric_temperature",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "analyses/mea_parameter_bundle/data/input/fit-campaigns/joint-recalibration-170-dielectric-rows.csv; fixed Yang water and assumed CO2 pair; MEA pair from reduction.json",
+        "source_id": "joint-recalibration-170-stage5"
+       },
+       "value": {
+        "magnitude": 1403.0,
+        "unit": "kelvin"
+       }
+      }
+     ],
+     "component_id": "water",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=charge_number:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=molar_mass:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.01801528,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "H2O"
+    },
+    {
+     "aliases": [
+      "HCO3-"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "born_diameter",
+       "identity": "component/bicarbonate-anion/born_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=born_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 3.0,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "debye_huckel_diameter",
+       "identity": "component/bicarbonate-anion/debye_huckel_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=segment_diameter:status=transferred-diagnostic:derived-debye_huckel_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.9296,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/bicarbonate-anion/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=dispersion_energy_over_k:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 70.0,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "packing_diameter",
+       "identity": "component/bicarbonate-anion/packing_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=segment_diameter:status=transferred-diagnostic:derived-packing_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.5780480000000003,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/bicarbonate-anion/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=segment_count:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_diameter",
+       "identity": "component/bicarbonate-anion/segment_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=segment_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.9296,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/bicarbonate-anion/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=solvation_factor:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id": "bicarbonate-anion",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=charge_number:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": -1,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=HCO3-:family=molar_mass:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.0610168,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "HCO3-"
+    },
+    {
+     "aliases": [
+      "CO3^2-"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "born_diameter",
+       "identity": "component/carbonate-anion/born_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=born_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 3.0,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "debye_huckel_diameter",
+       "identity": "component/carbonate-anion/debye_huckel_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=segment_diameter:status=transferred-diagnostic:derived-debye_huckel_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.4422,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/carbonate-anion/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=dispersion_energy_over_k:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 249.26,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "packing_diameter",
+       "identity": "component/carbonate-anion/packing_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=segment_diameter:status=transferred-diagnostic:derived-packing_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.149136,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/carbonate-anion/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=segment_count:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_diameter",
+       "identity": "component/carbonate-anion/segment_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=segment_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.4422,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/carbonate-anion/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=solvation_factor:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id": "carbonate-anion",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=charge_number:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": -2,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=CO3^2-:family=molar_mass:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.06001,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "CO3^2-"
+    },
+    {
+     "aliases": [
+      "OH-"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "born_diameter",
+       "identity": "component/hydroxide-anion/born_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=born_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 3.08107689400404,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "debye_huckel_diameter",
+       "identity": "component/hydroxide-anion/debye_huckel_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=segment_diameter:status=transferred-diagnostic:derived-debye_huckel_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.0177,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/hydroxide-anion/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=dispersion_energy_over_k:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 650.0,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "packing_diameter",
+       "identity": "component/hydroxide-anion/packing_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=segment_diameter:status=transferred-diagnostic:derived-packing_diameter=0.88-sigma:fixed-ssm-diameter-convention",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.775576,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/hydroxide-anion/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=segment_count:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_diameter",
+       "identity": "component/hydroxide-anion/segment_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=segment_diameter:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.0177,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/hydroxide-anion/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=solvation_factor:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id": "hydroxide-anion",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=charge_number:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": -1,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=OH-:family=molar_mass:status=transferred-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.01701,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "OH-"
+    },
+    {
+     "aliases": [
+      "sodium-cation"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "born_diameter",
+       "identity": "component/sodium-cation/born_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.8232,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "debye_huckel_diameter",
+       "identity": "component/sodium-cation/debye_huckel_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.8232,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/sodium-cation/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 230.0,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "packing_diameter",
+       "identity": "component/sodium-cation/packing_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.484416,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/sodium-cation/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_diameter",
+       "identity": "component/sodium-cation/segment_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.8232,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/sodium-cation/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id": "sodium-cation",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.02298977,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "sodium-cation"
+    },
+    {
+     "aliases": [
+      "chloride-anion"
+     ],
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "born_diameter",
+       "identity": "component/chloride-anion/born_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.756,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "debye_huckel_diameter",
+       "identity": "component/chloride-anion/debye_huckel_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.756,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "dispersion_energy_over_k",
+       "identity": "component/chloride-anion/dispersion_energy_over_k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 170.0,
+        "unit": "kelvin"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "packing_diameter",
+       "identity": "component/chloride-anion/packing_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.42528,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_count",
+       "identity": "component/chloride-anion/segment_count",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "segment_diameter",
+       "identity": "component/chloride-anion/segment_diameter",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 2.756,
+        "unit": "angstrom"
+       }
+      },
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "solvation_factor",
+       "identity": "component/chloride-anion/solvation_factor",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id": "chloride-anion",
+     "fixed": {
+      "charge_number": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": -1,
+        "unit": "elementary-charge"
+       }
+      },
+      "molar_mass": {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": 0.035453,
+        "unit": "kilogram / mole"
+       }
+      }
+     },
+     "name": "chloride-anion"
+    }
+   ],
+   "correlations": [
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "component_id": "water",
+     "constant": {
+      "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant",
+      "value": {
+       "magnitude": 2.780432614942962,
+       "unit": "angstrom"
+      }
+     },
+     "correlation_id": "component/water/segment_diameter/constant-plus-sum-of-exponentials",
+     "family": "segment_diameter",
+     "form": "constant-plus-sum-of-exponentials",
+     "independent_variables": [
+      "temperature"
+     ],
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=segment_diameter:status=retained-literature-lineage",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "terms": [
+      {
+       "amplitude": {
+        "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/amplitude",
+        "value": {
+         "magnitude": 10.11,
+         "unit": "angstrom"
+        }
+       },
+       "exponent_coefficient": {
+        "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/exponent_coefficient",
+        "value": {
+         "magnitude": -0.01775,
+         "unit": "1 / kelvin"
+        }
+       }
+      },
+      {
+       "amplitude": {
+        "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/amplitude",
+        "value": {
+         "magnitude": -1.417,
+         "unit": "angstrom"
+        }
+       },
+       "exponent_coefficient": {
+        "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/exponent_coefficient",
+        "value": {
+         "magnitude": -0.01146,
+         "unit": "1 / kelvin"
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "document_id": "joint-recalibration-170-stage5-smaller-dV",
+   "document_version": 2,
+   "domains": [
+    {
+     "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+     "kind": "fit-range",
+     "pressure_max": {
+      "magnitude": 300000.0,
+      "unit": "pascal"
+     },
+     "pressure_min": {
+      "magnitude": 10.0,
+      "unit": "pascal"
+     },
+     "temperature_max": {
+      "magnitude": 393.15,
+      "unit": "kelvin"
+     },
+     "temperature_min": {
+      "magnitude": 293.15,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "domain_id": "mea-provider-source-qualified-313-15-k",
+     "kind": "reported-conditions",
+     "pressure_max": {
+      "magnitude": 100000.0,
+      "unit": "pascal"
+     },
+     "pressure_min": {
+      "magnitude": 100000.0,
+      "unit": "pascal"
+     },
+     "temperature_max": {
+      "magnitude": 313.15,
+      "unit": "kelvin"
+     },
+     "temperature_min": {
+      "magnitude": 313.15,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "domain_id": "mea-candidate-293-15-to-393-15-k",
+     "kind": "fit-range",
+     "pressure_max": {
+      "magnitude": 10000000.0,
+      "unit": "pascal"
+     },
+     "pressure_min": {
+      "magnitude": 1.0,
+      "unit": "pascal"
+     },
+     "temperature_max": {
+      "magnitude": 393.15,
+      "unit": "kelvin"
+     },
+     "temperature_min": {
+      "magnitude": 293.15,
+      "unit": "kelvin"
+     }
+    },
+    {
+     "domain_id": "cai-1996-neutral-refit",
+     "kind": "unknown"
+    },
+    {
+     "domain_id": "mea-working-313-15-to-353-15-k",
+     "kind": "reported-conditions",
+     "temperature_max": {
+      "magnitude": 353.15,
+      "unit": "kelvin"
+     },
+     "temperature_min": {
+      "magnitude": 313.15,
+      "unit": "kelvin"
+     }
+    }
+   ],
+   "model_coefficients": [
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "family": "ionic_region_relative_permittivity",
+     "identity": "model/relative_permittivity/ionic_region_relative_permittivity",
+     "provenance": {
+      "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+      "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:ionic-dielc=8:status=transferred-diagnostic",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+     "value": {
+      "magnitude": 8.0,
+      "unit": "dimensionless"
+     }
+    }
+   ],
+   "model_families": [
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "choice": "pc-saft",
+     "family_id": "model/base",
+     "kind": "base",
+     "provenance": {
+      "domain_id": "mea-provider-source-qualified-313-15-k",
+      "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    },
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "choice": "general-site",
+     "family_id": "model/association",
+     "kind": "association",
+     "provenance": {
+      "domain_id": "mea-provider-source-qualified-313-15-k",
+      "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    },
+    {
+     "c_dielectric": 1.0,
+     "c_shell": 1.0,
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "choice": "born",
+     "family_id": "model/electrolyte",
+     "ionic_dispersion": "exclude-same-sign-ion-pairs",
+     "kind": "electrolyte",
+     "provenance": {
+      "domain_id": "mea-provider-source-qualified-313-15-k",
+      "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    },
+    {
+     "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+     "choice": "solvent-density-temperature",
+     "family_id": "model/relative_permittivity",
+     "kind": "permittivity",
+     "provenance": {
+      "domain_id": "mea-provider-source-qualified-313-15-k",
+      "locator": "data/reference/MEA/manifests/reactive_vle_model_configurations.json:diagnostic-explicit-model-switches",
+      "source_id": "mea-retained-phase-two-artifact"
+     },
+     "qualification": "candidate_extrapolation",
+     "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+    }
+   ],
+   "pairs": [
+    {
+     "coefficients": [
+      {
+       "family": "k_ij",
+       "identity": "pair/bicarbonate-anion/water/k_ij",
+       "provenance": {
+        "source_id": "carbonate-ions-282",
+        "locator": "analyses/mea_parameter_bundle/scripts/carbonate_ions_282.py"
+       },
+       "temperature_law": {
+        "form": "polynomial-plus-reciprocal-temperature",
+        "reference_temperature": {
+         "magnitude": 298.15,
+         "unit": "kelvin"
+        },
+        "terms": [
+         {
+          "power": 0,
+          "coefficient": {
+           "identity": "pair/bicarbonate-anion/water/k_ij/a0",
+           "value": {
+            "magnitude": 0.1117253829105505,
+            "unit": "dimensionless"
+           }
+          }
+         },
+         {
+          "power": 1,
+          "coefficient": {
+           "identity": "pair/bicarbonate-anion/water/k_ij/a1",
+           "value": {
+            "magnitude": 0.0039311876328716865,
+            "unit": "1 / kelvin"
+           }
+          }
+         }
+        ]
+       }
+      }
+     ],
+     "component_id_a": "bicarbonate-anion",
+     "component_id_b": "water"
+    },
+    {
+     "coefficients": [
+      {
+       "family": "k_ij",
+       "identity": "pair/carbonate-anion/water/k_ij",
+       "provenance": {
+        "source_id": "carbonate-ions-282",
+        "locator": "analyses/mea_parameter_bundle/scripts/carbonate_ions_282.py"
+       },
+       "temperature_law": {
+        "form": "polynomial-plus-reciprocal-temperature",
+        "reference_temperature": {
+         "magnitude": 298.15,
+         "unit": "kelvin"
+        },
+        "terms": [
+         {
+          "power": 0,
+          "coefficient": {
+           "identity": "pair/carbonate-anion/water/k_ij/a0",
+           "value": {
+            "magnitude": -1.0,
+            "unit": "dimensionless"
+           }
+          }
+         },
+         {
+          "power": 1,
+          "coefficient": {
+           "identity": "pair/carbonate-anion/water/k_ij/a1",
+           "value": {
+            "magnitude": 0.0019631260450306285,
+            "unit": "1 / kelvin"
+           }
+          }
+         }
+        ]
+       }
+      }
+     ],
+     "component_id_a": "carbonate-anion",
+     "component_id_b": "water"
+    },
+    {
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/hydroxide-anion/water/k_ij",
+       "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=OH-:status=explicit-diagnostic",
+        "source_id": "mea-retained-phase-two-artifact"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+       "value": {
+        "magnitude": -0.25,
+        "unit": "dimensionless"
+       }
+      }
+     ],
+     "component_id_a": "hydroxide-anion",
+     "component_id_b": "water"
+    },
+    {
+     "component_id_a": "chloride-anion",
+     "component_id_b": "sodium-cation",
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/chloride-anion/sodium-cation/k_ij",
+       "provenance": {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+       "value": {
+        "magnitude": 0.317,
+        "unit": "dimensionless"
+       }
+      }
+     ]
+    },
+    {
+     "component_id_a": "bicarbonate-anion",
+     "component_id_b": "sodium-cation",
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/bicarbonate-anion/sodium-cation/k_ij",
+       "provenance": {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+       "value": {
+        "magnitude": -0.514,
+        "unit": "dimensionless"
+       }
+      }
+     ]
+    },
+    {
+     "component_id_a": "carbonate-anion",
+     "component_id_b": "sodium-cation",
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/carbonate-anion/sodium-cation/k_ij",
+       "provenance": {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+       "value": {
+        "magnitude": -1.0,
+        "unit": "dimensionless"
+       }
+      }
+     ]
+    },
+    {
+     "component_id_a": "hydroxide-anion",
+     "component_id_b": "sodium-cation",
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/hydroxide-anion/sodium-cation/k_ij",
+       "provenance": {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+       "value": {
+        "magnitude": 0.649,
+        "unit": "dimensionless"
+       }
+      }
+     ]
+    },
+    {
+     "component_id_a": "chloride-anion",
+     "component_id_b": "water",
+     "coefficients": [
+      {
+       "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+       "family": "k_ij",
+       "identity": "pair/chloride-anion/water/k_ij",
+       "provenance": {
+        "domain_id": "mea-working-313-15-to-353-15-k",
+        "locator": "Held 2014 Table 2 (strategy 2), Table 3",
+        "source_id": "held-2014"
+       },
+       "qualification": "candidate_extrapolation",
+       "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+       "value": {
+        "magnitude": -0.25,
+        "unit": "dimensionless"
+       }
+      }
+     ]
+    },
+    {
+     "component_id_a": "sodium-cation",
+     "component_id_b": "water",
+     "coefficients": [
+      {
+       "family": "k_ij",
+       "identity": "pair/sodium-cation/water/k_ij",
+       "provenance": {
+        "source_id": "carbonate-ions-282",
+        "locator": "analyses/mea_parameter_bundle/scripts/carbonate_ions_282.py"
+       },
+       "temperature_law": {
+        "form": "polynomial-plus-reciprocal-temperature",
+        "reference_temperature": {
+         "magnitude": 298.15,
+         "unit": "kelvin"
+        },
+        "terms": [
+         {
+          "power": 0,
+          "coefficient": {
+           "identity": "pair/sodium-cation/water/k_ij/a0",
+           "value": {
+            "magnitude": -1.0,
+            "unit": "dimensionless"
+           }
+          }
+         },
+         {
+          "power": 1,
+          "coefficient": {
+           "identity": "pair/sodium-cation/water/k_ij/a1",
+           "value": {
+            "magnitude": -0.007981,
+            "unit": "1 / kelvin"
+           }
+          }
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "purpose": "Amendment 7 restricted feasibility fit (owner, #170 comments 6283064075 and 6283335389): start = design path t = 0.125 vector (analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-7/design-probes/path-0p125/fixed-parameters.json, sha256 c9f062478a7a38dde923f5e27fbc67aebe6dff25f1b53bf24c3de16336f946d8), carbamate segment diameter 5.8 -> 5.798 A with Held ties; bounds MEAH+ segment diameter [5.49, 5.8] A and MEAH+-water k [-0.5, -0.161].",
+   "reaction_correlations": [],
+   "schema": "epcsaft.parameters",
+   "schema_version": 1,
+   "sources": [
+    {
+     "citation": "MEA-Thermodynamics retained Phase 2 parameter artifact",
+     "source_id": "mea-retained-phase-two-artifact",
+     "use_basis": "authority-neutral regression starts and fixed model inputs; row-level literature lineage, transfer limits, and provisional statuses are audited in docs/ePC-SAFT/full-component-parameter-source-audit.md"
+    },
+    {
+     "citation": "Schick et al. (2023) using Pabsch et al. (2020)",
+     "source_id": "schick-2023-pabsch-2020-induced-association",
+     "use_basis": "CO2 2B sites and reciprocal CO2-water cross-association with the source combining rule"
+    },
+    {
+     "citation": "Zuber et al. (2014), Fluid Phase Equilibria 376, 116-123, doi:10.1016/j.fluid.2014.05.037",
+     "source_id": "zuber-et-al-2014",
+     "use_basis": "Ion-specific aqueous dielectric-suppression coefficients and charge-class fallback values"
+    },
+    {
+     "citation": "Uyan Eq. 5; Wangler campaign Archer-Wang approximation.",
+     "source_id": "uyan-2015-permittivity-transfer",
+     "use_basis": "Explicit transfer approximation, not an exact Floriano-Nascimento replay."
+    },
+    {
+     "citation": "Tong et al. (2012), Table 5 K5 MEA, via Aroua et al. (1999).",
+     "source_id": "tong-2012-aroua-1999",
+     "use_basis": "R4 carbamate hydrolysis source-centred correlation."
+    },
+    {
+     "citation": "Bates and Pinching (1951), equation 7.",
+     "source_id": "bates-pinching-1951",
+     "use_basis": "R5 monoethanolammonium dissociation source-centred correlation."
+    },
+    {
+     "citation": "Project-authored ePC-SAFT parameter fit result.",
+     "source_id": "cai-1996-neutral-refit",
+     "use_basis": "Accepted fitted coefficient values and exact numerical evidence."
+    },
+    {
+     "citation": "MEA-Thermodynamics bounded direct Engine campaign, 2026-09-02.",
+     "source_id": "mea-best-in-slot-campaign-2026-09-02",
+     "use_basis": "Current-best joint pressure/speciation calibration of the R4 correlation and carbon-dioxide dispersion energy; initialized from the retained literature bundle and not an independent validation."
+    },
+    {
+     "citation": "MEA-Thermodynamics Born-permittivity and reaction comparison, 2026-09-02.",
+     "source_id": "mea-born-permittivity-study-2026-09-02",
+     "use_basis": "Selected R5 temperature coefficient for the extended-Born bundle from the common-target pressure and speciation comparison; initialized from Bates and Pinching (1951)."
+    },
+    {
+     "citation": "Figiel et al. (2025), Industrial & Engineering Chemistry Research 64, 9406-9420, doi:10.1021/acs.iecr.5c00475",
+     "source_id": "figiel-2025",
+     "use_basis": "Same-sign ion dispersion exclusion and the coupled SSM+DS diameter, solvation-factor, and dielectric-suppression formulation."
+    },
+    {
+     "citation": "MEA-Thermodynamics reaction-temperature fit, 2026-09-03 (analyses/mea_parameter_bundle/results/reaction-temperature-fit)",
+     "source_id": "mea-reaction-temperature-fit-2026-09-03",
+     "use_basis": "constant R2/R4/R5 reaction-enthalpy shifts fitted to pressure, speciation, and 40/80 C calorimetry with Xu 2011 pressure and 120 C calorimetry held out; ln K preserved at 313.15 K"
+    },
+    {
+     "citation": "Fakouri Baygi, S.; Pahlavanzadeh, H. Application of the PC-SAFT equation of state for modeling CO2 solubility in aqueous monoethanolamine solutions. Chemical Engineering Research and Design 2015, 93, 789-799.",
+     "source_id": "fakouri-baygi-pahlavanzadeh-2015",
+     "use_basis": "Table 2 MEA 2B parameters with the 2B association volume converted from the Eq. 4 d_ij^3 convention to sigma_ij^3; Eq. 6 Wolbach-Sandler cross-association volume rule with size factor."
+    },
+    {
+     "citation": "ePC-SAFT Engine data packet {\"engine_commit\": \"1303c119e4a21ba31e46596fe62ee3fdfe4cc253\", \"packet_fingerprint\": \"76315ac4e4961782d089c3c4504fb49667e120b9e31d46fe2a8e99837b8e0a45\", \"packet_id\": \"mea-co2-h2o-nine-species-estimation\", \"packet_path\": \"data/packets/mea-co2-h2o-nine-species-estimation/5\", \"packet_version\": \"5\", \"parameters_sha256\": \"1ba95275f9e23264250e891aee3d6284d801f73205dad255101e6561b29aee5f\"}",
+     "source_id": "epcsaft-packet-mea-co2-h2o-nine-species-estimation-5",
+     "use_basis": "association topology: MEA 2B volume 0.036287 (sigma^3 convention) and Wolbach-Sandler MEA-water cross-association rule"
+    },
+    {
+     "citation": "MEA-Thermodynamics calibration-misfit refit D-1-1-S1-40-80C-f66d972c on f66d972c",
+     "source_id": "mea-calibration-misfit-refit-d-1-1-s1-40-80c-f66d972c",
+     "use_basis": "ion-water, MEAH+-water 1/T slope and cation-anion k_ij; not adopted"
+    },
+    {
+     "citation": "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-11-diagnostic-parameters.json; candidate SHA-256 42f236600f931f17b111cd6cc9760b706a2806cccba17a625c30086a2fa33952; analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-11-results.json SHA-256 bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7; analyses/mea_parameter_bundle/model-d/assessment-p5a-11-summary.json SHA-256 9a54c9dfaf1fb7b6388d68b86ab1b3e2eb62cae7b9526d4410ac8f8635b43abb; Engine wheel 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2; MEA producing merge 8c670d3aa9673459867154fa5c344c97526a7818, Engine build 1a905ff8; decisions 21/24 https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5906843564; Supported review https://github.com/tannerpolley/MEA-Thermodynamics/issues/121#issuecomment-5907883147; design https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5913854251; amendment https://github.com/tannerpolley/MEA-Thermodynamics/issues/107#issuecomment-5914099413",
+     "source_id": "mea-model-d-p5conv-a-11-28181e72",
+     "use_basis": "Limited-domain working record: 30 wt% MEA on unloaded-solvent basis, 313.15\u2013353.15 K (40\u201380 \u00b0C). 142 fitted targets: 48 pressure + 94 species (40 B\u00f6ttinger + 54 Matin). Matin 18 HCO3\u2212 + CO3\u00b2\u2212 pool targets report-only; measurement 21 \u00b0C, packet 20 \u00b0C. SSM+DS narrow 4.6% local optimum advantage over Original Born; HCO3\u2212\u2013water k=+0.5 upper bound, no global optimum or uncertainty band. Poor 15/45 wt% transfer; carbonate comparison only retained nine points; 100\u2013120 \u00b0C outside working qualification. R4 source range 293.15\u2013323.15 K; inherited reaction-source extrapolation. No independent physical validation, caloric or process-column qualification. Two unavailable Born probe solves have undetermined cause under Engine investigation. Inherited pressure bounds are computational, not physically qualified. Historical 160-target SSM+DS: six attempted starts, five converged, one initial evaluation failed. 142-target P5 warm continuation: one further update, function tolerance 1e-12 relative, zero trial failures; not six independent starts. f66d972c S1 remains ancestry."
+    },
+    {
+     "citation": "Yang2024 Eqs.1a/2a/2b Table6; AgieienkoBuchner2024 ESI S1/S2",
+     "source_id": "joint-recalibration-170-stage5",
+     "use_basis": "Measured Schreckenberg coefficient calibration on the revised neutral binary, retaining both roots; no parameter adoption."
+    }
+   ],
+   "topology": {
+    "edges": [
+     {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "endpoint_a": {
+       "component_id": "water",
+       "site_id": "a"
+      },
+      "endpoint_b": {
+       "component_id": "water",
+       "site_id": "b"
+      },
+      "energy_over_k": {
+       "identity": "association/water/a/water/b/energy_over_k",
+       "value": {
+        "magnitude": 1756.6497964508999,
+        "unit": "kelvin"
+       }
+      },
+      "qualification": "candidate_extrapolation",
+      "source": {
+       "kind": "explicit",
+       "provenance": [
+        {
+         "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+         "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_energy_over_k:status=retained-literature-lineage",
+         "source_id": "mea-retained-phase-two-artifact"
+        },
+        {
+         "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+         "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_volume:status=retained-literature-lineage",
+         "source_id": "mea-retained-phase-two-artifact"
+        }
+       ]
+      },
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "volume": {
+       "identity": "association/water/a/water/b/volume",
+       "value": {
+        "magnitude": 0.0376197279502706,
+        "unit": "dimensionless"
+       }
+      }
+     }
+    ],
+    "no_cross_association": [],
+    "presets": [],
+    "sites": [
+     {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "component_id": "water",
+      "multiplicity": 1,
+      "provenance": {
+       "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+       "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_site_a:status=retained-literature-lineage",
+       "source_id": "mea-retained-phase-two-artifact"
+      },
+      "qualification": "candidate_extrapolation",
+      "site_id": "a",
+      "site_role": "donor",
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+     },
+     {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "component_id": "water",
+      "multiplicity": 1,
+      "provenance": {
+       "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+       "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_site_b:status=retained-literature-lineage",
+       "source_id": "mea-retained-phase-two-artifact"
+      },
+      "qualification": "candidate_extrapolation",
+      "site_id": "b",
+      "site_role": "acceptor",
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+     }
+    ]
+   }
+  }
+ }
+}
