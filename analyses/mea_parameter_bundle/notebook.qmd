@@ -17,6 +17,7 @@ resources:
   - results/stable-refit-255/evidence/candidate-comparison-plotted-values.csv
   - results/stable-refit-255/evidence/comparison.csv
   - results/stable-refit-255/evidence/candidate-parameters.json
+  - results/carbonate-ions-282/**
   - results/ion-temperature-283/README.md
   - results/ion-temperature-283/primary.json
   - results/ion-temperature-283/*/assessment.json
@@ -614,6 +615,103 @@ This is calibration and numerical verification:
 
 This section has not been independently reviewed or promoted for the manuscript route.
 
+# Salt-anchored bicarbonate and carbonate interactions (issue 282) {#carbonate-ions-282}
+
+Issue #282 tests one hypothesis: the fitted bicarbonate–water interaction (0.727 in the final set, 1.0 in the #255 candidate) compensates for an amine-solution effect. Its first step fits the water–HCO₃⁻ and water–CO₃²⁻ temperature laws to aqueous sodium-salt osmotic coefficients on this record's own water model. Its second step refits MEA with those laws held. Falsifier F1 decides whether the salt laws are an established anchor; the MEA refit runs only if it passes.
+
+## Salt reference on the record's water
+
+The data and model:
+- **NaCl.** Hamer & Wu 1972 Table 16, 298.15 K, 0.1–1.0 mol/kg. This sets the water–Na⁺ constant, with Held's 2014 temperature slope held.
+- **NaHCO₃ and Na₂CO₃.** The single-salt rows of Peiper & Pitzer 1982 Table 6, 278.15–318.15 K, 0.01–1.0 mol/kg, transcribed from the PDF page images. Each row is evaluated at its printed equilibrium ionic composition, charge-closed, with dissolved CO₂ removed as ideal.
+- **Ions.** Na⁺ and Cl⁻ follow Held 2014 and the record's ion conventions. Na⁺–Cl⁻, Na⁺–HCO₃⁻, Na⁺–CO₃²⁻ and Na⁺–OH⁻ are Held's values.
+- **Scoring.** The three fits run in sequence; F1 is scored on one document holding all three final laws.
+
+![Osmotic coefficients on the ionic basis: source values (points) and the combined-document model at the same rows (lines) for NaCl, NaHCO₃ and Na₂CO₃. Right: the fitted water–anion laws over 278–393 K (fitted range shaded) against Held 2014, Wangler 2018, the final set and the #255 candidate.](results/carbonate-ions-282/salt/phi-molality.png){#fig-carbonate-ions-282}
+
+| Rows | n | AARD % (combined laws) | F1 limit |
+|---|---:|---:|---|
+| NaCl | 10 | 1.51 | water–Na⁺ $a_0$ must be interior: it is at −1 |
+| NaHCO₃ | 45 | 0.163 | ≤ 1.5 %: met |
+| Na₂CO₃ | 45 | 5.11 | ≤ 1.5 %: **not met**; water–CO₃²⁻ $a_0$ is at −1 |
+| mixed NaHCO₃ + Na₂CO₃ (comparison) | 39 | 2.56 | not fitted |
+
+The fitted laws ([results README](results/carbonate-ions-282/README.md), [laws](results/carbonate-ions-282/salt/laws.csv)):
+
+| Law | Fit | Value at 313.15 K | Comparison at 313.15 K |
+|---|---|---:|---|
+| water–HCO₃⁻ | $0.1117+3.93\times10^{-3}\,(T-298.15)$ | 0.171 | Held 0.00; Wangler −0.100; final set 0.727; #255 candidate 1.0 |
+| water–CO₃²⁻ | $-1.000+1.96\times10^{-3}\,(T-298.15)$ | −0.971 | Held −0.25 |
+| water–Na⁺ | $-1.000-0.007981\,(T-298.15)$ | −1.120 | Held 0.00046 at 298.15 K |
+
+**F1 fails.** Two fitted constants end on their lower bounds, and the Na₂CO₃ AARD is 5.1 %, against the 1.5 % limit. The salt reference is therefore not established on this water model.
+
+Following the issue's F1 branch:
+- the leverage check, the MEA refit and its F2 assessment, and the MDEA transfer were **not run**;
+- no MEAH⁺–HCO₃⁻ coordinate was tested.
+
+The water–HCO₃⁻ law alone fits NaHCO₃ well, and at 0.171 it lies below the 0.5 falsification level. However, it rests on a water–Na⁺ constant pinned at its bound, so it does not establish a salt-supported bicarbonate–water value for MEA.
+
+## What limits the salt fit
+
+At 298.15 K, lowering the water–Na⁺ or water–CO₃²⁻ intercept through the five tested values (−1, −0.5, 0, 0.5 and 1), with the other coefficients fixed, raises φ toward the reference values at every sampled molality. This supports the direction toward the lower bound for those rows; it does not establish global optimality of the full temperature-dependent fit. ([scan](results/carbonate-ions-282/salt/sensitivity.json).) At the bounds:
+- **NaCl** stays 1.1–1.7 % low.
+- **Na₂CO₃** is already 1.1 % low at 0.01 mol/kg, where the water–CO₃²⁻ constant has almost no lever. Its deficit peaks at 8 % near 0.2 mol/kg.
+
+This points to the 2:1 electrostatic and Born treatment on this water and to the fixed Held cross values (Na⁺–CO₃²⁻ = −1.000 is itself a bound value in Held 2014) rather than to the water–anion constants. That is an inference; no term-by-term decomposition was run. Held's ion parameters were fitted with a different water (Fuchs 2006), and the Na⁺/Cl⁻ Born diameter is a design choice without a source.
+
+Revising the salt-reference design is a decision for the owner. Candidates include the Born diameter, refitting Na⁺–CO₃²⁻ or a wider k range; none is authorized here.
+
+## Meaning and limits
+
+This is calibration against model-derived reference values: the Peiper & Pitzer tables come from their Pitzer model. It is numerical verification, not validation. The salt laws were never used in an MEA calculation, and the parameter record, the Engine pin and the manuscript are unchanged.
+
+This section has not been independently reviewed or promoted for the manuscript route.
+
+# Unloaded heat-capacity slope: water, MEA and excess (issue 284) {#cp-slope-284}
+
+The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, while both multi-temperature sources rise by about 0.16 kJ kg⁻¹ K⁻¹. Splitting the mixture into pure water, pure MEA and the excess, $c_p^E=c_p-\sum_i w_ic_{p,i}$, puts the slope error in the **MEA–water excess**: share 1.08–1.11 of the mixture slope error for every pairing of mixture source (Hilliard 2008, Concepción 2023) and pure-MEA source (Maham et al. 1997, Chiu et al. 1999). Pure water contributes −0.10 to −0.11 (its model slope is too steep, the opposite sign). Pure MEA contributes −0.002 to +0.029: its slope matches both sources, although its level is about 8 % low. The one-coefficient temperature-law fit that this routes to did not run, because the Engine refuses the selected coefficient's heat-capacity derivative. Nothing is adopted.
+
+## Sources and basis
+
+Model MEA and mixture evaluations use 101325 Pa; pure water is also evaluated at 300000 Pa. Calculations use the final parameter set, the #260 water caloric record and Engine wheel 8b9609d4… (bc779473). Experimental sample pressures retain their source-specific descriptions. The [results README](results/cp-slope-284/README.md) records inputs and commands. Pure water is compared with IAPWS-95 (chemicals 1.5.2). Two pure liquid MEA sources were acquired for this issue and read for method and uncertainty ([sources](results/cp-slope-284/pure-mea-sources.csv), [provenance and PDF hashes](results/cp-slope-284/source-provenance.json)):
+- Maham et al. (1997), Table 1 p.1748; Table 2 and Eq. (1), p.1748, heat-flow calorimetry, 299–398 K, stated 0.9 % (primary);
+- Chiu, Liu & Li (1999), Table 2 p.633, DSC, 303–353 K, ±2 % (±3 % with impurities).
+
+The mixture is #264's unloaded state (10⁻⁶ mol CO₂/mol MEA) at Hilliard's 7 mol/kg water and at Concepción's mass fraction 0.2997. The reference excess is the measured mixture minus IAPWS-95 water minus a pure-MEA source.
+
+## Where the slope error sits
+
+| 313.15 → 353.15 K change / kJ kg⁻¹ K⁻¹ | Model | Reference |
+|---|---:|---:|
+| pure water | +0.047 | +0.017 (IAPWS-95) |
+| pure MEA | +0.181 | +0.180 (Maham), +0.200 (Chiu) |
+| mixture | −0.031 | +0.160 (Hilliard), +0.169 (Concepción) |
+| excess | −0.119 | +0.088 to +0.103 |
+
+Water and MEA slope errors are weighted by mass fraction; excess is weighted by one. The weighted errors recover the mixture slope error within 3×10⁻¹⁷ kJ kg⁻¹ K⁻¹. The maximum absolute residual-Cv closure discrepancy is approximately 4.53×10⁻⁵ J mol⁻¹ K⁻¹, and every evaluated state satisfies 10⁻⁴|Cv,res| + 10⁻⁴ J mol⁻¹ K⁻¹. Over 313–353 K, the mixture contributions are hard chain +1.034, dispersion −1.188, association −0.231, pressure–volume coupling +0.307, MEA ideal gas +0.037 and water ideal gas +0.009 kJ kg⁻¹ K⁻¹. Together they recover the approximately −0.031 total.
+
+![Heat capacity against temperature. (a) Pure water: model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA: model line, Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water: model line at Hilliard's composition with Hilliard, Concepción and Weiland points. (d) Excess heat capacity: model line and reference excess for each mixture/pure-MEA source pair. Shading marks 313.15–353.15 K. Lines are retained 5 K model evaluations; points are measurements or evaluated references.](results/cp-slope-284/heat-capacity-slope.png){#fig-cp-slope-284}
+
+## What this says about the 318 K offset
+
+Model minus Hilliard at 318.15 K is +0.206 kJ kg⁻¹ K⁻¹ (+5.53 %). It splits exactly into water −0.021, pure MEA −0.067 (Maham; −0.075 with Chiu) and excess **+0.293** (+0.301). The excess alone is too high by about 7.9 % of the mixture: the model excess is +0.251 against a reference of −0.042. The low pure-MEA and water levels hide roughly 30 % of that error. The offset shrinks with temperature because the model excess falls (+0.269 at 313 K to +0.151 at 353 K) while the reference excess rises. Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved. Against Concepción the model excess is too high below about 340 K and too low above ([level split by temperature](results/cp-slope-284/excess-by-temperature.csv)).
+
+## Why the temperature-law fit did not run
+
+The issue's rule chose $a_2$ in $k_{ij}(T)=a_0+a_2(T-313.15\,\text{K})^2+s(1/T-1/313.15\,\text{K})$: its bound-scaled effect on the 313 → 353 K change (−0.171) exceeds that of the linear term $a_1$ (+0.062). The converted record reproduces every prediction exactly at $a_2=0$. The fit stops at its first Jacobian. The Engine refuses the derivative of equilibrium heat capacity with respect to $a_2$ at 40 of the 60 #264 states: unloaded Hilliard states from 343.15 K, loaded ones from 333.15 K, two Weiland states and Concepción at 353.15 K. At unloaded Hilliard 353.15 K the refusal is a reference-completion check on reaction R3 (residual 2.74×10⁻⁸ against criterion 1.49×10⁻⁸). Where it does return them, the Engine's $a_1$ and $a_2$ derivatives agree with central differences within 3×10⁻⁷. The owner kept the selection rule. F2 (slope), F3 (level envelope) and F4 (preservation and stability) are **not run**, and an Engine request for this derivative goes to the orchestrator.
+
+Single-coefficient scans at fixed final-set parameters show what any law must contend with. These are diagnostics, not fits ([diagnosis](results/cp-slope-284/stage2/p2/diagnosis.json)). Curvature in $k_{ij}(T)$ moves the heat-capacity level far more than its slope. $a_2=-2\times10^{-7}$ K⁻² raises Cp at 313 K by 0.055 kJ kg⁻¹ K⁻¹ but the slope by only 0.002. At the bound, $a_2$ gives the needed slope only with Cp near 9.5 kJ kg⁻¹ K⁻¹. $a_1=+10^{-3}$ K⁻¹ raises both level (+0.19) and slope (+0.07). The slope must rise while the Hilliard level must fall, so whether $a_0$ and $s$ can compensate within their bounds remains the question a working fit would answer.
+
+## Limits
+
+- The Hilliard–Concepción level difference stays unresolved; Hilliard's sample pressure is assumed (101325 Pa).
+- Each reference excess combines mixture calorimetry—Hilliard's DSC or Concepción's flow calorimeter—an IAPWS-95 water calculation, and Maham's heat-flow or Chiu's DSC pure-MEA measurement.
+- The roughly 8 % low pure-MEA level is a separate discrepancy, not split here between the Zhang ideal-gas correlation and the residual model.
+- The shares decompose one fixed parameter record; they are not a fitted attribution.
+
+The evidence is numerical verification and measured comparison, not validation. This section has not been independently reviewed or promoted for the manuscript route.
+
 # Temperature-dependent carbamate interactions (issue 283) {#ion-temperature-283}
 
 Giving MEACOO⁻–water and MEAH⁺–MEACOO⁻ the reciprocal-temperature law $k_{ij}(T)=k_{ij}+b_{ij}(1/T-1/313.15\ \mathrm K)$ does not remove either target. Both slopes were fitted to the 307 calibration rows plus the 10 Böttinger 2008 353.15 K speciation rows, with the #255 stability requirement.
@@ -705,6 +803,8 @@ This section has not been independently reviewed or promoted for the manuscript 
 | High-temperature pressure and transfer | [High-temperature comparison](high-temperature/index.qmd) |
 | Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
 | Stability-constrained refit candidate (not adopted) | [Issue 255 result](#stable-refit-255) · [Evidence README](results/stable-refit-255/README.md) |
+| Salt-anchored bicarbonate/carbonate interactions (F1 failed) | [Issue 282 result](#carbonate-ions-282) · [Evidence README](results/carbonate-ions-282/README.md) |
+| Unloaded heat-capacity slope: water, MEA and excess | [Issue 284 result](#cp-slope-284) · [Evidence README](results/cp-slope-284/README.md) |
 | Temperature-dependent carbamate interactions (not adopted) | [Issue 283 result](#ion-temperature-283) · [Evidence README](results/ion-temperature-283/README.md) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
