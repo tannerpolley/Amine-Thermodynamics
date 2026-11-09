@@ -532,6 +532,8 @@ def select():
 
 if __name__ == '__main__':
     command = sys.argv[1]
+    if command in {'leverage', 'anchors', 'fit', 'assess', 'select'}:
+        salt_laws()
     commands = dict(salt=salt, scan=scan, qualify=qualify, leverage=leverage, anchors=anchors, select=select)
     if command in commands:
         commands[command]()

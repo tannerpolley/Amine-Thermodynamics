@@ -88,7 +88,7 @@ The comparison curves are Held 2014 (HCO₃⁻ 0.00, CO₃²⁻ −0.25) and Wan
 ![Left three panels: Peiper & Pitzer and Hamer & Wu osmotic coefficients on the ionic basis (points) and the combined-document model at the same rows (lines), by temperature. Right: fitted water–anion laws over 278–393 K with the fitted range shaded, against Held 2014, Wangler 2018, the final set and the #255 candidate.](salt/phi-molality.png)
 
 **Why the anchor fails (diagnostics, not a fix).**
-- **φ moves monotonically.** Lowering either k raises φ over the whole tested range ([salt/sensitivity.json](salt/sensitivity.json), `scan`, no fit). A coefficient pinned at −1 is the closest this model gets, not an optimizer stop.
+- **Direction toward the bound.** At 298.15 K, lowering the water–Na⁺ or water–CO₃²⁻ intercept through the five tested values (−1, −0.5, 0, 0.5 and 1), with the other coefficients fixed, raises φ toward the reference values at every sampled molality. This supports the direction toward the lower bound for those rows; it does not establish global optimality of the full temperature-dependent fit. ([salt/sensitivity.json](salt/sensitivity.json), `scan`, no fit.)
   - NaCl at 0.4 mol/kg: φ goes 0.790 → 0.905 as water–Na⁺ $a_0$ goes from +1 to −1, against 0.920 observed.
   - Na₂CO₃ at 0.1 mol/kg and 298.15 K: water–CO₃²⁻ $a_0$ moves φ only from 0.748 to 0.764, against 0.817.
 - **Na₂CO₃ is low before k matters.**
