@@ -22,7 +22,7 @@ The evidence is numerical verification and a comparison with measurements at fix
   - 298.15–368.15 K at 101325 Pa;
   - 298.15–393.15 K at 0.3 MPa.
 - **Pure liquid MEA.** 298.15–393.15 K at 101325 Pa, split into ideal-gas and residual parts. The two sources were acquired for this issue ([sources](pure-mea-sources.csv), [provenance with PDF hashes, methods and uncertainty](source-provenance.json)):
-  - **Maham et al. (1997)** (primary). Zotero `5NDWELSM`, Table 1 p.1747 and Table 2 Eq. 1: $c_p = 82.5 + 0.275\,T$ J mol⁻¹ K⁻¹, 299.1–397.8 K. Setaram C-80 heat-flow calorimeter, stated 0.9 %.
+  - **Maham et al. (1997)** (primary). Zotero `5NDWELSM`, Table 1 p.1748; Table 2 and Eq. (1), p.1748: $c_p = 82.5 + 0.275\,T$ J mol⁻¹ K⁻¹, 299.1–397.8 K. Setaram C-80 heat-flow calorimeter, stated 0.9 %.
   - **Chiu, Liu & Li (1999).** Zotero `DZAER4AP`, Table 2 p.633, 303.15–353.15 K. DSC, ±2 % accuracy and ±3 % including impurities.
 
   Hilliard (2008) §4.7.2 measured pure MEA but shows it only in Figure 4.7-3, so it is not used.
@@ -106,7 +106,7 @@ They sum to the −0.031 total. The model's mixture slope comes from near-cancel
 
 **Why the offset shrinks with temperature.** The model excess falls from +0.269 at 313.15 K to +0.151 at 353.15 K. The reference excess rises, from −0.058 to +0.036 with Hilliard, or from +0.117 to +0.220 with Concepción. The temperature-dependent part of the offset is therefore the excess slope.
 
-**The source disagreement lies entirely in the reference excess.** The pure-component references are common to both mixture sources, so the Hilliard–Concepción level difference appears only in the reference excess, as 0.17–0.18 kJ kg⁻¹ K⁻¹. Against Hilliard, the model excess is too high at every temperature. Against Concepción, it is too high below about 340 K and too low above.
+**Source disagreement.** Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved. Against Hilliard, the model excess is too high at every temperature. Against Concepción, it is too high below about 340 K and too low above.
 
 ![Heat capacity against temperature. (a) Pure water, model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA, model line and Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water, model line at Hilliard's composition and Hilliard, Concepción and Weiland points. (d) Excess heat capacity, model line and reference excess points for each mixture/pure-MEA source pair. Shading marks the 313.15–353.15 K slope interval. Model lines are retained 5 K evaluations; points are measurements or evaluated references.](heat-capacity-slope.png)
 
@@ -143,10 +143,7 @@ At Hilliard 353.15 K, unloaded (7 mol MEA/kg water, α = 10⁻⁶, 101325 Pa), t
 
 The other `ActionUnavailable` states give the same message with R1 at 343.15 and 348.15 K (residuals 1.85 and 2.74×10⁻⁸) and with R3 at 358.15 K (2.37×10⁻⁸).
 
-**a₁ is available at all 60 states.** One-iteration probes located the cause:
-- fits with the 14 non-law coordinates on the same 354 rows run;
-- fits with a₀ or s as law slots run;
-- fits including a₂ stop.
+The retained per-state probes show that a₁ derivatives are available at all 60 states, while a₂ derivatives are refused at 40. The full fit also stops at its first Jacobian. These observations isolate a₂ differentiation as a reproducible trigger; they do not establish the underlying Engine cause. The reference-completion message is an observed diagnostic, not proof that the physical state or supplied thermodynamic records are invalid.
 
 **Where available, the Engine derivatives are correct.** They agree with central differences (h = 1 % of the bound) at unloaded Hilliard 313.15 and 333.15 K:
 - a₂ within 1.3×10⁻⁹ relative;
@@ -154,7 +151,23 @@ The other `ActionUnavailable` states give the same message with R1 at 343.15 and
 
 At 353.15 K the central difference for a₂ is −6.52×10⁶ J mol⁻¹ K⁻¹ per K⁻², and the Engine returns nothing.
 
-**Disposition.** The owner chose (2026-11-09) to keep the issue's selection rule, not substitute a₁, and report F2–F4 as not run. The Engine use case (equilibrium Cp and its a₂ derivative) goes to the orchestrator to file.
+**Disposition.** The owner chose (2026-11-09) to keep the issue's selection rule, not substitute a₁, and report F2–F4 as not run.
+
+**Draft Engine use case — equilibrium heat-capacity derivative for the MEA–water quadratic interaction law**
+
+**Exact declaration and inputs.** Use the converted final parameter document retained at `stage2/p2/starts/final.json`, the #255-bound chemistry and caloric declarations, and the #264 60-state Cp observations. The MEA–water `k_ij` declaration has temperature-law form `polynomial-plus-reciprocal-temperature`, reference temperature 313.15 K, power-zero coefficient −0.08990160794755829, power-two coefficient `pair/monoethanolamine/water/k_ij/a2` initially 0 K⁻², and reciprocal-temperature slope −8.057331218929972 K:
+
+$$k_{ij}(T)=-0.08990160794755829+a_2(T-313.15)^2-8.057331218929972(1/T-1/313.15).$$
+
+Activate a₂ through `ParameterFamily.TemperatureLawCoefficient`. A reproducing state is unloaded Hilliard at 353.15 K and 101325 Pa: 1 mol analytical MEA, water corresponding to 7 mol MEA/kg water, and 10⁻⁶ mol CO₂, with the declared nine-species liquid chemistry and neutral references.
+
+**Quantity consumed.** MEA consumes the derivative of `equilibrium_isobaric_heat_capacity` with respect to a₂ through `regression.differentiate` for its parameter-fitting Jacobian. Native Cp predictions are converted to kJ/kg/K using the existing `feed_amount_mol/feed_mass_kg/1000` factor.
+
+**Observed refusal.** Wheel SHA-256 `8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069` returns:
+
+`reference_unavailable: phase[0]: supplied records inconsistent with reaction R3; residual 2.7389677383656975e-08; criterion 1.4901161193847656e-08; reference_completion rank 5/6; threshold 1.1102230246251565e-15`
+
+**Proposed acceptance criterion.** At the converted final set, return available a₂ derivatives for all 60 declared Cp observations and permit the initial joint fitting Jacobian to evaluate while preserving the declared physical inputs and numerical tolerances. At unloaded Hilliard 313.15, 333.15 and 353.15 K, compare against centered differences with step 2×10⁻⁷ K⁻² and require relative discrepancy ≤3×10⁻⁷. The current centered difference at 353.15 K is −6.520096658×10⁶ J mol⁻¹ K⁻¹ per K⁻². Preserve zero-change predictions within the issue's 10⁻¹² relative criterion. This request concerns Engine differentiation; it makes no claim that the subsequent MEA fit will satisfy F2–F4.
 
 **Fixed-parameter scans (diagnostic only; not fits or candidates).** One law coefficient is changed at otherwise fixed final-set parameters. Values are in kJ kg⁻¹ K⁻¹ at the Hilliard composition:
 
@@ -173,16 +186,16 @@ Curvature in $k_{ij}(T)$ moves the Cp level far more than its slope, because Cp 
 
 | | Outcome |
 |---|---|
-| F1 | **Pass**: closure within 4.5×10⁻⁵ J mol⁻¹ K⁻¹, shares against both sources, excess the single carrier → Stage 2 |
+| F1 | Pass: maximum absolute residual-Cv closure discrepancy ≈4.53×10⁻⁵ J mol⁻¹ K⁻¹; all evaluated states meet the declared closure criterion. Shares against both sources; excess the single carrier → Stage 2 |
 | F2 | **Not run**: Engine refuses the a₂ equilibrium-Cp derivative (above) |
 | F3 | **Not run**: same reason |
 | F4 | **Not run**: same reason |
 
 ## Limits
 
-- The Hilliard–Concepción level difference stays unresolved. It sits entirely in the reference excess.
+- Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved.
 - Hilliard's sample pressure is assumed to be 101325 Pa.
-- Each reference excess combines three methods: the mixture calorimetry (Hilliard's DSC or Concepción's), IAPWS-95 water, and a heat-flow (Maham) or DSC (Chiu) pure-MEA measurement.
+- Each reference excess combines mixture calorimetry—Hilliard's DSC or Concepción's flow calorimeter—an IAPWS-95 water calculation, and Maham's heat-flow or Chiu's DSC pure-MEA measurement.
 - The pure-MEA sources differ in level by about 0.7–1.3 % and in 313–353 K slope by 0.020 kJ kg⁻¹ K⁻¹. Both give the same carrier.
 - The low pure-MEA level (about −8 %) is a separate discrepancy. This issue does not split it between the Zhang ideal-gas correlation and the residual; doing so routes to Design.
 - The share rule's 0.5 threshold is a design choice.

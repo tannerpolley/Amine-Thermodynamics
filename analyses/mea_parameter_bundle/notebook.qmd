@@ -610,8 +610,8 @@ The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, w
 
 ## Sources and basis
 
-All states are at 101325 Pa with the final set and the #260 water record, on Engine wheel `8b9609d4…` (`bc779473`); the [results README](results/cp-slope-284/README.md) records inputs and commands. Pure water is compared with IAPWS-95 (chemicals 1.5.2). Two pure liquid MEA sources were acquired for this issue and read for method and uncertainty ([sources](results/cp-slope-284/pure-mea-sources.csv), [provenance and PDF hashes](results/cp-slope-284/source-provenance.json)):
-- Maham et al. (1997), Table 1 p.1747 and Table 2 Eq. 1, heat-flow calorimetry, 299–398 K, stated 0.9 % (primary);
+Model MEA and mixture evaluations use 101325 Pa; pure water is also evaluated at 300000 Pa. Calculations use the final parameter set, the #260 water caloric record and Engine wheel 8b9609d4… (bc779473). Experimental sample pressures retain their source-specific descriptions. The [results README](results/cp-slope-284/README.md) records inputs and commands. Pure water is compared with IAPWS-95 (chemicals 1.5.2). Two pure liquid MEA sources were acquired for this issue and read for method and uncertainty ([sources](results/cp-slope-284/pure-mea-sources.csv), [provenance and PDF hashes](results/cp-slope-284/source-provenance.json)):
+- Maham et al. (1997), Table 1 p.1748; Table 2 and Eq. (1), p.1748, heat-flow calorimetry, 299–398 K, stated 0.9 % (primary);
 - Chiu, Liu & Li (1999), Table 2 p.633, DSC, 303–353 K, ±2 % (±3 % with impurities).
 
 The mixture is #264's unloaded state (10⁻⁶ mol CO₂/mol MEA) at Hilliard's 7 mol/kg water and at Concepción's mass fraction 0.2997. The reference excess is the measured mixture minus IAPWS-95 water minus a pure-MEA source.
@@ -625,13 +625,13 @@ The mixture is #264's unloaded state (10⁻⁶ mol CO₂/mol MEA) at Hilliard's 
 | mixture | −0.031 | +0.160 (Hilliard), +0.169 (Concepción) |
 | excess | −0.119 | +0.088 to +0.103 |
 
-[Shares](results/cp-slope-284/shares.json) weight water and MEA by mass fraction and the excess by one, and sum to one within 3×10⁻¹⁷. The term-by-term residual Cv of pure water, pure MEA and the mixture closes on the native value within 4.5×10⁻⁵ J mol⁻¹ K⁻¹ (criterion 10⁻⁴ relative plus 10⁻⁴ absolute). This is numerical verification of the decomposition. In the mixture, large residual terms nearly cancel over 313–353 K: hard chain +1.034, dispersion −1.188, association −0.231 and pressure–volume coupling +0.307 kJ kg⁻¹ K⁻¹, leaving the −0.031 total.
+Water and MEA slope errors are weighted by mass fraction; excess is weighted by one. The weighted errors recover the mixture slope error within 3×10⁻¹⁷ kJ kg⁻¹ K⁻¹. The maximum absolute residual-Cv closure discrepancy is approximately 4.53×10⁻⁵ J mol⁻¹ K⁻¹, and every evaluated state satisfies 10⁻⁴|Cv,res| + 10⁻⁴ J mol⁻¹ K⁻¹. Over 313–353 K, the mixture contributions are hard chain +1.034, dispersion −1.188, association −0.231, pressure–volume coupling +0.307, MEA ideal gas +0.037 and water ideal gas +0.009 kJ kg⁻¹ K⁻¹. Together they recover the approximately −0.031 total.
 
 ![Heat capacity against temperature. (a) Pure water: model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA: model line, Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water: model line at Hilliard's composition with Hilliard, Concepción and Weiland points. (d) Excess heat capacity: model line and reference excess for each mixture/pure-MEA source pair. Shading marks 313.15–353.15 K. Lines are retained 5 K model evaluations; points are measurements or evaluated references.](results/cp-slope-284/heat-capacity-slope.png){#fig-cp-slope-284}
 
 ## What this says about the 318 K offset
 
-Model minus Hilliard at 318.15 K is +0.206 kJ kg⁻¹ K⁻¹ (+5.53 %). It splits exactly into water −0.021, pure MEA −0.067 (Maham; −0.075 with Chiu) and excess **+0.293** (+0.301). The excess alone is too high by about 7.9 % of the mixture: the model excess is +0.251 against a reference of −0.042. The low pure-MEA and water levels hide roughly 30 % of that error. The offset shrinks with temperature because the model excess falls (+0.269 at 313 K to +0.151 at 353 K) while the reference excess rises. The pure references are common to both mixture sources, so the 4.5–4.8 % Hilliard–Concepción disagreement lies entirely in the reference excess (0.17–0.18 kJ kg⁻¹ K⁻¹). Against Concepción the model excess is too high below about 340 K and too low above ([level split by temperature](results/cp-slope-284/excess-by-temperature.csv)).
+Model minus Hilliard at 318.15 K is +0.206 kJ kg⁻¹ K⁻¹ (+5.53 %). It splits exactly into water −0.021, pure MEA −0.067 (Maham; −0.075 with Chiu) and excess **+0.293** (+0.301). The excess alone is too high by about 7.9 % of the mixture: the model excess is +0.251 against a reference of −0.042. The low pure-MEA and water levels hide roughly 30 % of that error. The offset shrinks with temperature because the model excess falls (+0.269 at 313 K to +0.151 at 353 K) while the reference excess rises. Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved. Against Concepción the model excess is too high below about 340 K and too low above ([level split by temperature](results/cp-slope-284/excess-by-temperature.csv)).
 
 ## Why the temperature-law fit did not run
 
@@ -642,7 +642,7 @@ Single-coefficient scans at fixed final-set parameters show what any law must co
 ## Limits
 
 - The Hilliard–Concepción level difference stays unresolved; Hilliard's sample pressure is assumed (101325 Pa).
-- Each reference excess combines three measurement methods.
+- Each reference excess combines mixture calorimetry—Hilliard's DSC or Concepción's flow calorimeter—an IAPWS-95 water calculation, and Maham's heat-flow or Chiu's DSC pure-MEA measurement.
 - The roughly 8 % low pure-MEA level is a separate discrepancy, not split here between the Zhang ideal-gas correlation and the residual model.
 - The shares decompose one fixed parameter record; they are not a fitted attribution.
 
