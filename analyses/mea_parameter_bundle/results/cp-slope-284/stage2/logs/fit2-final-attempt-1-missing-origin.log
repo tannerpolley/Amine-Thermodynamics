@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-284-unloaded-30-w-f99c188c8553a7ad/analyses/mea_parameter_bundle/scripts/cp_slope_284.py", line 499, in <module>
+    {'fit2': fit2, 'assess2': assess2}[sys.argv[1]](sys.argv[2])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-284-unloaded-30-w-f99c188c8553a7ad/analyses/mea_parameter_bundle/scripts/cp_slope_284.py", line 358, in fit2
+    r.run_fit(run)
+    ~~~~~~~~~^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-284-unloaded-30-w-f99c188c8553a7ad/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 530, in run_fit
+    report = stage_fit(run, index, scale, start, shifts, enforced, cfg.get('held', ()), cfg.get('extra_shifts', ()),
+                       rows_of(cfg), cfg.get('extra'))
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-284-unloaded-30-w-f99c188c8553a7ad/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 483, in stage_fit
+    declared = coordinates(spec, shifts, held, extra_shifts)
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-284-unloaded-30-w-f99c188c8553a7ad/analyses/mea_parameter_bundle/scripts/stable_refit_255.py", line 199, in coordinates
+    origin = values[q['identity']]
+             ~~~~~~^^^^^^^^^^^^^^^
+KeyError: 'pair/monoethanolamine/water/k_ij/a2'
