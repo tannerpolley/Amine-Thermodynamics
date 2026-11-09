@@ -39,7 +39,11 @@ BOUNDS = {0: (-1., 1.), 1: (-0.02, 0.02)}  # a0, a1 / K-1 (design choices)
 SCALES = {0: 0.01, 1: 1e-4}
 WANGLER = (-7.65e-2, -6.25e-4, -6.25e-5)  # Wangler 2018 Table 6, polynomial orders 0-2 about 298.15 K (issue's interpretation)
 F1_AARD = 1.5  # percent
+F1_NA2CO3_AMENDED = 6.5  # percent; owner amendment to F1, 2026-11-09 (Held 2014 Table 5, worst 1:2 salt 6.43 %)
 F1_FALSIFIED = 0.5  # water-HCO3- at 313.15 K
+AMENDMENT = ('Owner amendment to F1 (2026-11-09), issue #282 body, "Numerical falsifier": Na2CO3 AARD <= 6.5 % (Held 2014 Table 5, '
+             'strategy 2, 298.15 K: Na2SO4 2.41 %, K2HPO4 4.95 %, Na2HPO4 6.43 %); NaHCO3 AARD <= 1.5 %; coefficients on a bound are '
+             'stated limits, not gate failures; water-HCO3- >= 0.5 at 313.15 K still falsifies. No fitted number changes.')
 FINAL = r.STARTS['final']
 CANDIDATE = R255 / 'wide/candidate.json'
 
@@ -234,9 +238,6 @@ def salt():
     hco3 = dict(a0=laws[HCO3][0], a1=laws[HCO3][1], t_ref=T_SALT)
     at_313 = law_value(hco3, T_RECORD)
     bounded = a['on_bound'] + b['on_bound'] + c['on_bound']
-    gates = dict(nahco3_aard_passed=scores['NaHCO3']['aard_percent'] <= F1_AARD, na2co3_aard_passed=scores['Na2CO3']['aard_percent'] <= F1_AARD,
-                 coefficients_interior=not bounded, water_bicarbonate_313=at_313, compensation_falsified=at_313 >= F1_FALSIFIED)
-    gates['F1_passed'] = gates['nahco3_aard_passed'] and gates['na2co3_aard_passed'] and gates['coefficients_interior'] and not gates['compensation_falsified']
     temperatures = [278.15 + 5 * i for i in range(24)]
     curves = [dict(T=T, sodium=law_value(dict(a0=laws[NA][0], a1=laws[NA][1], t_ref=T_SALT), T), bicarbonate=law_value(hco3, T),
                    carbonate=law_value(dict(a0=laws[CO3][0], a1=laws[CO3][1], t_ref=T_SALT), T), held_bicarbonate=0.0, held_carbonate=-0.25,
@@ -246,7 +247,7 @@ def salt():
     record = dict(laws={ion: dict(a0=v[0], a1=v[1], t_ref=T_SALT) for ion, v in laws.items()},
                   laws_at_record_reference={ion: dict(a0=v[0] + v[1] * (T_RECORD - T_SALT), a1=v[1], t_ref=T_RECORD) for ion, v in laws.items()},
                   values_313_15={ion: v[0] + v[1] * (T_RECORD - T_SALT) for ion, v in laws.items()},
-                  scores=scores, gates=gates, on_bound=bounded, largest_charge_adjustment=max(adjustments),
+                  scores=scores, **f1_gates(scores, at_313, bounded), on_bound=bounded, largest_charge_adjustment=max(adjustments),
                   largest_dissolved_co2_share=max(x['h2x_share'] for g in ('NaHCO3', 'Na2CO3') for x in replay[g]),
                   curves=curves, rows=replay, document=combined)
     write('salt/summary.json', record)
@@ -264,8 +265,45 @@ def salt():
         w.writeheader()
         w.writerows(curves)
     salt_figure(replay, curves)
-    print(json.dumps(dict(scores={g: {k: v for k, v in x.items() if k != 'by_temperature'} for g, x in scores.items()}, gates=gates,
+    print(json.dumps(dict(scores={g: {k: v for k, v in x.items() if k != 'by_temperature'} for g, x in scores.items()}, gates=record['gates'],
                           values_313_15=record['values_313_15'])), flush=True)
+
+
+def f1_gates(scores, at_313, bounded):
+    """F1 as written in the issue (kept) and under the owner amendment (``gates``, which the MEA guard reads)."""
+    nahco3, na2co3 = scores['NaHCO3']['aard_percent'], scores['Na2CO3']['aard_percent']
+    falsified = at_313 >= F1_FALSIFIED
+    written = dict(nahco3_aard_passed=nahco3 <= F1_AARD, na2co3_aard_passed=na2co3 <= F1_AARD, coefficients_interior=not bounded,
+                   water_bicarbonate_313=at_313, compensation_falsified=falsified)
+    written['F1_passed'] = written['nahco3_aard_passed'] and written['na2co3_aard_passed'] and written['coefficients_interior'] and not falsified
+    amended = dict(rule=AMENDMENT, nahco3_aard_percent=nahco3, nahco3_aard_limit=F1_AARD, nahco3_aard_passed=nahco3 <= F1_AARD,
+                   na2co3_aard_percent=na2co3, na2co3_aard_limit=F1_NA2CO3_AMENDED, na2co3_aard_passed=na2co3 <= F1_NA2CO3_AMENDED,
+                   coefficients_on_bound_stated_limits=[x['coefficient'] for x in bounded], water_bicarbonate_313=at_313,
+                   compensation_falsified=falsified,
+                   conditional_on='every result after F1 is conditional on water-Na+ a0 = -1 (lower bound; Held 2014 about 0.0005 at 298.15 K) '
+                                  'and water-CO3^2- a0 = -1 (lower bound)')
+    amended['F1_passed'] = amended['nahco3_aard_passed'] and amended['na2co3_aard_passed'] and not falsified
+    return dict(gates_as_written=written, gates=amended)
+
+
+def amend():
+    """Re-score F1 on the retained combined document under the owner amendment; no fit, no prediction."""
+    path = OUT / 'salt/summary.json'
+    payload = r.read(path)
+    assert payload['wheel_sha256'] == r.SHA
+    record = payload['result']
+    written = record.pop('gates_as_written', None) or record['gates']  # a rerun finds the as-written block already moved
+    record.pop('gates')
+    at_313 = law_value(record['laws'][HCO3], T_RECORD)
+    gates = f1_gates(record['scores'], at_313, record['on_bound'])
+    assert gates['gates_as_written'] == written, 'as-written gates do not reproduce from the retained scores'
+    ordered = {}
+    for k, v in record.items():
+        ordered[k] = v
+        if k == 'scores':
+            ordered.update(gates)
+    write('salt/summary.json', ordered)
+    print(json.dumps(gates['gates']), flush=True)
 
 
 def salt_figure(replay, curves):
@@ -399,8 +437,10 @@ def a6_spec():
     assert len(coordinates) == len(spec['information_coordinates']) - 1
     if not result('leverage.json')['negligible']:
         coordinates.append(dict(identity=MEAH_HCO3, family='k_ij', scale=0.1, bounds=[-1., 1.], target=[HCO3, MEAH]))
-    A6_282.write_text(json.dumps(dict(controls=spec['controls'], information_coordinates=coordinates,
-                                      source='results/engine-3e83e19c-refit-chain/a6/spec.json with issue 282 changes'), indent=1) + '\n')
+    text = json.dumps(dict(controls=spec['controls'], information_coordinates=coordinates,
+                           source='results/engine-3e83e19c-refit-chain/a6/spec.json with issue 282 changes'), indent=1) + '\n'
+    if not A6_282.exists() or A6_282.read_text() != text:  # the two refits run in parallel and read this file
+        A6_282.write_text(text)
 
 
 def admissible(mapping, enforced):
@@ -420,10 +460,29 @@ def anchors():
     assert out['anchor'], 'neither substituted start is admissible: return to Design'
 
 
+STAGE_SECONDS = 76800.  # owner, 2026-11-09: #255's 7200 s per stage x 32/3 for the standing 3-core cap; these two refits only
+
+
+def scaled_bind(mapping):
+    """r.bind whose fit uses STAGE_SECONDS; #255's stage_fit (shared with #283) keeps its 7200 s line unchanged."""
+    spec = BIND(mapping)
+    fit = spec.fit
+
+    def scaled(*args, **kwargs):
+        spec.spec['optimizer']['maximum_elapsed_time_seconds'] = STAGE_SECONDS
+        return fit(*args, **kwargs)
+    spec.fit = scaled
+    return spec
+
+
+BIND = r.bind
+
+
 def run_fit(run):
     """#255 penalty stages and stop rule from one substituted start; retreat toward the qualified anchor, never to it."""
     r.verify()
     r.A6 = A6_282
+    r.bind = scaled_bind
     a6_spec()
     assert result('qualification/summary.json')['passed']
     anchor_name = result('anchors.json')['anchor']
@@ -451,12 +510,14 @@ def retreat(run, anchor, anchor_name, refreshed, endpoint, enforced, shifts):
     """The #255 scan (t = 1, 0.99, ...) and bisection, without the anchor fallback: t = 0 is never a candidate."""
     if (OUT / run / 'retreat.json').exists():
         return
-    trace, passing = [], None
+    trace, passing, suspects = [], None, ()
     if endpoint is not None and refreshed['admissible']:
         t = 1.
         while t > 0.005:
-            ok, tal, cost = r.admissible(r.segment(anchor, endpoint, t), enforced)
-            trace.append(dict(t=t, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+            ok, tal, cost = r.admissible(r.segment(anchor, endpoint, t), enforced, suspects=suspects)
+            suspects = tal['suspects']  # states failing here are searched first at the next step (same decision, cheaper rejection)
+            trace.append(dict(t=t, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')},
+                              unavailable=len(tal['unavailable'])))
             print(run, 'retreat', json.dumps(trace[-1]), flush=True)
             if ok:
                 passing = t
@@ -466,8 +527,10 @@ def retreat(run, anchor, anchor_name, refreshed, endpoint, enforced, shifts):
             low, high = passing, min(1., passing + .01)
             for _ in range(10):
                 mid = (low + high) / 2
-                ok, tal, cost = r.admissible(r.segment(anchor, endpoint, mid), enforced)
-                trace.append(dict(t=mid, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+                ok, tal, cost = r.admissible(r.segment(anchor, endpoint, mid), enforced, suspects=suspects)
+                suspects = tal['suspects'] or suspects
+                trace.append(dict(t=mid, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')},
+                                  unavailable=len(tal['unavailable'])))
                 print(run, 'refine', json.dumps(trace[-1]), flush=True)
                 low, high = (mid, high) if ok else (low, mid)
             passing = low
@@ -530,11 +593,138 @@ def select():
                                                                             for x, v in runs.items()}))
 
 
+# ---------------------------------------------------------------- comparisons (Method 5) and MDEA transfer (Method 6)
+
+POOL_266 = B / 'results/bicarbonate-carbonate-266/inputs.json'
+CARBONATE_IDS = [x['id'] for x in csv.DictReader((R255 / 'evidence/final/carbonate-share.csv').open())]  # the A7 ten F_C states
+
+
+def pool_and_shares(mapping):
+    """#266's retained comparison records at one record: Matin pool against the Matin-Böttinger envelope at three pressures,
+    the Jakobsen pool, S_pool (carbonate-pool-split) and F_C (carbonate-carbon-fraction). Compared, never fitted."""
+    spec = r.bind(mapping)
+    inputs = json.loads(POOL_266.read_text())
+    spec.spec['templates'].update(inputs['problems'])
+    spec.problems.update({k: spec.problem(k, {}) for k in inputs['problems']})
+    rows = []
+    for x in inputs['records']:
+        p = spec.prediction(x)
+        rows.append(dict(identity=x['identity'], group=x['group'], state=x['state_identity'], pressure_Pa=spec.spec['templates'][x['problem']]['P'],
+                         observed=x['arguments']['observed'], status=p['status'], value=p.get('value')))
+    assert all(x['status'] == 'Available' for x in rows), [x['identity'] for x in rows if x['status'] != 'Available']
+    envelope = {x['identity']: x for x in inputs['reconciliation']}
+    inside = {}
+    for x in rows:
+        if x['group'] == 'Matin2012 pool':
+            e = envelope[x['state']]
+            x.update(lower=e['lower'], upper=e['upper'], inside=e['lower'] <= x['value'] <= e['upper'])
+            inside.setdefault(x['pressure_Pa'], []).append(x['inside'])
+    ratio = lambda xs: [x['value'] / x['observed'] for x in xs if x['observed']]
+    fc = [x for x in rows if x['group'] == 'Jakobsen2005 carbonate-carbon-fraction' and x['state'] in CARBONATE_IDS]
+    split = [x for x in rows if x['group'] == 'Jakobsen2005 carbonate-pool-split']
+    jak = [x for x in rows if x['group'] == 'Jakobsen2005 pool']
+    assert len(fc) == 10
+    summary = dict(matin_pool_inside={str(P): dict(inside=sum(v), total=len(v)) for P, v in sorted(inside.items())},
+                   matin_pool_aard_percent_101325=100 * sum(abs(q - 1) for q in ratio([x for x in rows if x['group'] == 'Matin2012 pool' and x['pressure_Pa'] == 101325.])) / 19,
+                   F_C_mean_calc_over_obs_10=sum(ratio(fc)) / len(ratio(fc)), S_pool_mean_calc_over_obs=sum(ratio(split)) / len(ratio(split)),
+                   S_pool_rows_with_nonzero_observation=len(ratio(split)), jakobsen_pool_aard_percent=100 * sum(abs(q - 1) for q in ratio(jak)) / len(ratio(jak)),
+                   jakobsen_011=dict(S_pool=next(x['value'] for x in split if x['state'] == 'Jakobsen2005_state_011'),
+                                     F_C=next(x['value'] for x in rows if x['group'] == 'Jakobsen2005 carbonate-carbon-fraction' and x['state'] == 'Jakobsen2005_state_011')),
+                   jakobsen_015_S_pool=next(x['value'] for x in split if x['state'] == 'Jakobsen2005_state_015'))
+    return summary, rows
+
+
+def compare():
+    """Carbonate and pool comparisons at the final set (reference), the substituted final set and each refit candidate."""
+    r.verify()
+    sets = {'final set': s.parameter_mapping(FINAL), 'substituted final set': STARTS['final']()[0]}
+    sets.update({f'refit from {x}': result(f'{x}/candidate.json') for x in ('final', 'candidate') if (OUT / x / 'candidate.json').exists()})
+    out, rows = {}, {}
+    for name, mapping in sets.items():
+        out[name], rows[name] = pool_and_shares(mapping)
+        print(name, json.dumps(out[name]), flush=True)
+    # The reference reproduces #266's baseline envelope count and the A7 ten-state F_C mean (0.0727222, notebook #266).
+    write('comparisons.json', dict(summary=out, rows=rows, reference_checks=dict(
+        inside_266=json.loads((B / 'results/bicarbonate-carbonate-266/summary.json').read_text())['inside']['baseline'],
+        F_C_A7_retained=[float(x['calc_over_obs']) for x in csv.DictReader((R255 / 'evidence/final/carbonate-share.csv').open())])))
+
+
+def mdea():
+    """#267 MDEA pressure and heat at fixed MDEA-specific parameters, with water-HCO3- and water-CO3^2- held at the salt laws.
+    Cases: the frozen final-set R2 law, and the selected MEA refit's R2 law (only when F2 selected a candidate)."""
+    import candidate_evidence_255 as ce
+    r.verify()
+    laws = salt_laws()
+    chosen = result('selected.json')
+    r2 = ce.r2_law(result(f"{chosen['run']}/candidate.json")) if chosen['run'] else None
+    frozen = next(x for x in json.loads((ROOT / 'analyses/mdea_mea_workflow/inputs/probe-reaction-reference.json').read_text())['shared']
+                  if x['reaction_id'] == 'R2')['engine_correlation']
+    final = ce.r2_law(s.parameter_mapping(FINAL))
+    assert all(abs(final[k] - frozen[k]) <= 1e-9 * max(1., abs(frozen[k])) for k in ('a', 'b', 'c', 'd', 'reference_temperature'))
+    out = OUT / 'mdea-transfer'
+    ce.EV = OUT  # the producer copy lands in mdea-transfer/producers/
+    nodes = {ion: law_node(LAWS[ion], law['a0'], law['a1'], law['t_ref'], dict(source_id='carbonate-ions-282', locator='salt/summary.json'))
+             for ion, law in laws.items() if ion != NA}
+    cases = [('-salt-frozen-r2', None)] + ([('-salt-refit-r2', {k: r2[k] for k in ('a', 'b', 'c', 'd', 'e', 'f', 'reference_temperature')})] if r2 else [])
+    inject = ("SALT = " + repr(nodes) + "\nR2_FROZEN = []\n\n\n"
+              "def salt(document):\n"
+              "    # issue 282: water-HCO3- and water-CO3^2- replaced by the salt laws; every other pair unchanged\n"
+              "    for ion, node in SALT.items():\n"
+              "        p = next(p for p in document['pairs'] if {p['component_id_a'], p['component_id_b']} == {ion, 'water'})\n"
+              "        assert [c['family'] for c in p['coefficients']] == ['k_ij']\n"
+              "        p['coefficients'] = [copy.deepcopy(node)]\n"
+              "    return document\n\n\n"
+              "def set_r2(law):\n"
+              "    reaction = next(x for x in s.j.d.REACTIONS if x.name == 'R2')\n"
+              "    R2_FROZEN[:] = R2_FROZEN or [reaction.correlation]\n"
+              "    old = R2_FROZEN[0]\n"
+              "    reaction.correlation = old if law is None else s.eq.ReactionLogPolynomial(**law, temperature_min=old.temperature_min, "
+              "temperature_max=old.temperature_max, standard_state_id=old.standard_state_id)\n\n\n")
+    held = "{p['component_id_a'],p['component_id_b']} not in ({'water','bicarbonate-anion'},{'water','carbonate-anion'})"
+    old_wheel = "'/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl'"
+    producer = ce.copy_of('mdea-transfer', ROOT / 'analyses/mdea_mea_workflow/scripts/transfer_probes.py', [
+        ("AN / 'results/transfer-267'", f'Path({str(out)!r})'), (old_wheel, repr(str(r.WHEEL))),
+        ("'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'", repr(r.SHA)),
+        ("def metric(records):", inject + "def metric(records):"),
+        ("    frozen=copy.deepcopy(document); pair(frozen)['value']['magnitude']=pair(base)['value']['magnitude']\n"
+         "    assert [p for p in frozen['pairs'] if {p['component_id_a'],p['component_id_b']}<=shared]==[p for p in base['pairs'] if {p['component_id_a'],p['component_id_b']}<=shared]",
+         f"    same=lambda d:[p for p in d['pairs'] if {{p['component_id_a'],p['component_id_b']}}<=shared and {held}]\n    assert same(document)==same(base)"),
+        ("summary=dict(shared_k=pair(document)['value']['magnitude'],", "summary=dict(shared_laws=SALT,"),
+        ("for suffix,k in [('',base_k),('-kminus',base_k-.1),('-kplus',base_k+.1)]:", f"for suffix,r2 in {cases!r}:"),
+        ("candidate=copy.deepcopy(document); pair(candidate)['value']['magnitude']=k", "set_r2(r2); candidate=salt(copy.deepcopy(document))"),
+        ("assess(candidate,label+suffix,baseline=not suffix)", "assess(candidate,label+suffix)"),
+        ("            assess(read(AN/f'results/stage2-capped/{label}/followup-bicarbonate/endpoint.json'),label+'-released')\n", ''),
+        ("for label,T in [('B1',333.15),('A3',333.15),('B1',388.71)]:",
+         f"for (label,T),(case,r2) in [(c,v) for c in [('B1',333.15),('A3',333.15),('B1',388.71)] for v in {cases!r}]:"),
+        ("            s.setup(read(AN/f'results/stage2-capped/{label}/endpoint.json'))\n",
+         "            set_r2(r2); s.setup(salt(read(AN/f'results/stage2-capped/{label}/endpoint.json')))\n"),
+        ("results.append(dict(label=label,T_K=T,", "results.append(dict(label=label,case=case,T_K=T,")])
+    for mode in ('pressure', 'heat'):
+        ce.run('candidate', producer, [mode], record=False)
+    write('mdea-transfer/r2-laws.json', dict(frozen_mdea=frozen, final_set=final, refit=r2, refit_run=chosen['run']))
+    base = {(x['label'], x['T_K']): x for x in json.loads((R255 / 'evidence/mdea-transfer/heat.json').read_text()) if len(x['grid']) == 30 and x['k'] == 0.7270558477497251 and x['R2'] == 'final'}
+    table = []
+    for label in ('A3', 'B1'):
+        reference = json.loads((R255 / f'evidence/mdea-transfer/{label}-final-k/summary.json').read_text())['pressure']
+        for case, _ in cases:
+            p = json.loads((out / f'{label}{case}/summary.json').read_text())['pressure']
+            table += [dict(quantity='pressure AARD %', label=label, source=src, case=case.strip('-'), final_set=reference[src]['AARD_percent'],
+                           value=p[src]['AARD_percent'], available=p[src]['available'], rows=p[src]['rows']) for src in ('Xiao', 'Ermatchkov')]
+    for x in json.loads((out / 'heat.json').read_text()):
+        if len(x['grid']) == 30:
+            b = base[(x['label'], x['T_K'])]
+            table.append(dict(quantity='heat J/mol (30-point grid)', label=x['label'], source=f"{x['T_K']} K", case=x['case'].strip('-'),
+                              final_set=b['value'] if b['status'] == 'Available' else b['status'],
+                              value=x['value'] if x['status'] == 'Available' else x['status']))
+    write('mdea-transfer/summary.json', table)
+    print(json.dumps(table), flush=True)
+
+
 if __name__ == '__main__':
     command = sys.argv[1]
-    if command in {'leverage', 'anchors', 'fit', 'assess', 'select'}:
+    if command in {'leverage', 'anchors', 'fit', 'assess', 'select', 'compare', 'mdea'}:
         salt_laws()
-    commands = dict(salt=salt, scan=scan, qualify=qualify, leverage=leverage, anchors=anchors, select=select)
+    commands = dict(salt=salt, amend=amend, scan=scan, qualify=qualify, leverage=leverage, anchors=anchors, select=select, compare=compare, mdea=mdea)
     if command in commands:
         commands[command]()
     elif command == 'fit':

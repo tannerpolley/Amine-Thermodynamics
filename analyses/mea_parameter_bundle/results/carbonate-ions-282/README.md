@@ -35,8 +35,8 @@ This is calibration and numerical verification against model-derived reference v
   - Each Peiper & Pitzer row is checked against its own printed water activity: $\phi=-\ln a_w/(M_w\sum_j m_j)$ agrees within print rounding at 133 of 135 rows. The other two, NaHCO₃ at 278.15 K and 0.1 and 0.8 mol/kg, sit at 1.10× and 1.07× the rounding bound. Both match the PDF text layer, so they are kept as printed.
   - The 45 NaHCO₃ rows also match the independent #122 transcription, `data/reference/MEA/observations/ionic_activity/peiper_pitzer_1982_nahco3_osmotic.csv`, exactly.
 - **Observable.**
-  - NaCl uses the formula path, `regression.electrolyte(kind="osmotic_coefficient")`.
-  - Carbonate rows use `regression.mixture_osmotic_coefficient` at the printed equilibrium ionic composition, with Na⁺ nominal and the minor anion set by charge balance (CO₃²⁻ for NaHCO₃ rows, OH⁻ for Na₂CO₃ rows).
+  - NaCl uses the Engine's two-ion formula path, `electrolyte(kind="osmotic_coefficient")`.
+  - Carbonate rows use the Engine's `mixture_osmotic_coefficient` at the printed equilibrium ionic composition, with Na⁺ nominal and the minor anion set by charge balance (CO₃²⁻ for NaHCO₃ rows, OH⁻ for Na₂CO₃ rows).
   - The largest charge adjustment is 4×10⁻⁴ mol/kg.
   - Dissolved CO₂ is removed as ideal: $\phi_\mathrm{ion}=(\phi\sum m-m_\mathrm{H_2X})/\sum_\mathrm{ions}m$. Its largest share of Σm is 0.78 %, at 318.15 K and 1.0 mol/kg NaHCO₃.
   - Six mixed rows are unavailable, because charge closure gives a negative OH⁻.
@@ -67,13 +67,21 @@ This is calibration and numerical verification against model-derived reference v
 | Na₂CO₃ | 45 | **5.111** | 8.28 | 4.62 / 5.13 / 5.36 / 5.35 / 5.09 | ≤ 1.5 %: **fail** |
 | mixed (comparison) | 39 | 2.561 | 6.30 | 3.42 / 2.61 / 2.43 / 2.37 / 2.23 | not fitted |
 
-The F1 gates:
-- coefficients interior: **fail** (1a and 1c $a_0$ at −1);
-- NaHCO₃ AARD: pass;
-- Na₂CO₃ AARD: **fail**;
-- water–HCO₃⁻ at 313.15 K = 0.171 < 0.5: the compensation hypothesis is not falsified by this criterion.
+**F1 gates, as written and as amended** ([salt/summary.json](salt/summary.json): `gates_as_written`, and `gates`, which the script's MEA guard reads). The amendment is the issue body's "Owner amendment to F1 (2026-11-09)". It sets Na₂CO₃ AARD ≤ 6.5 %, the worst comparable univalent-cation/bivalent-anion case in Held 2014 Table 5 (strategy 2, 298.15 K: Na₂SO₄ 2.41 %, K₂HPO₄ 4.95 %, Na₂HPO₄ 6.43 %). Coefficients on a bound become stated limits rather than gate failures. No fitted number changes; the amended gates are re-scored from the retained scores (`amend`, no fit, no prediction).
 
-**F1 outcome: failed.**
+| Gate | Value | As written (first build) | Amended (owner, 2026-11-09) |
+|---|---:|---|---|
+| NaHCO₃ AARD | 0.163 % | ≤ 1.5 %: pass | ≤ 1.5 %: pass |
+| Na₂CO₃ AARD | 5.111 % | ≤ 1.5 %: **fail** | ≤ 6.5 %: pass |
+| Coefficients interior | 1a and 1c $a_0$ at −1 | **fail** | stated limits, not a gate |
+| Water–HCO₃⁻ at 313.15 K | 0.171 | < 0.5: not falsified | < 0.5: not falsified |
+| **F1** | | **failed** | **passed** |
+
+**Stated limits carried by every later result.** Two salt-fit intercepts sit on their −1 lower bounds:
+- water–Na⁺ $a_0$, against Held's ≈ 0.0005 at 298.15 K;
+- water–CO₃²⁻ $a_0$.
+
+The held water–HCO₃⁻ and water–CO₃²⁻ laws were fitted with water–Na⁺ there, so the leverage check, the MEA refit, F2 and the MDEA transfer below are all conditional on these two bound values.
 
 **Fitted laws** ([salt/laws.csv](salt/laws.csv), 278.15–393.15 K in 5 K steps):
 

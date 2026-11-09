@@ -18,6 +18,7 @@ import zipfile
 
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
+CORES = int(os.environ.get('AGENT_HEAVY_CORES', os.cpu_count()))  # agent-heavy's per-job core cap
 ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
 sys.path[:0] = [str(B / 'scripts'), str(B / 'calibration-misfit'), str(ROOT / 'src')]
@@ -164,7 +165,7 @@ def _measure(state):
 def grid(mapping, chosen):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
-    with ProcessPoolExecutor(os.cpu_count(), initializer=_init, initargs=(mapping,)) as pool:
+    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping,)) as pool:
         return list(pool.map(_measure, chosen, chunksize=4))
 
 
@@ -307,7 +308,7 @@ def census(mapping, name):
     tmp = OUT / name / 'census-tmp'
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
-    with ProcessPoolExecutor(min(os.cpu_count(), max(1, memory // 750000)), initializer=verify) as pool:
+    with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
         out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json') for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
@@ -487,7 +488,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     controls = read(A6)['controls']
     # Workers sized by free memory (about 0.35 GB each, 7 GB kept for the parent and other work); the result does not depend on it.
     available = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) / 1e6
-    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=7200., workers=max(4, min(os.cpu_count(), int((available - 7) / .35))))
+    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=7200., workers=max(1, min(CORES, int((available - 7) / .35))))
     added = extra(spec, start) if extra else []
     if (OUT / rel / 'fit-native.json').exists():  # resume after an interrupted reduction without refitting
         report = result(f'{rel}/fit-native.json')
@@ -542,10 +543,18 @@ def run_fit(run):
     retreat(run, anchor, endpoint, enforced, rows_of(cfg), (anchor_shifts, endpoint_shifts))
 
 
-def admissible(mapping, enforced, rows=None):
-    tal = tally(grid(mapping, enforced))
+def admissible(mapping, enforced, rows=None, suspects=()):
+    """Admissibility on the full grid. States that failed at the previous point are searched first: any failure
+    among them rejects the point without the full grid (same decision, a few searches instead of all of them)."""
+    if suspects:
+        tal = tally(grid(mapping, suspects))
+        if tal['descent'] or tal['unavailable']:
+            return False, dict(tal, screened=True, suspects=list(suspects)), None
+    measured = grid(mapping, enforced)
+    tal = tally(measured)
+    failed = {r['key'] for r in measured if descent(r) or not r.get('available')}
     _, ok, cost = replay(mapping, rows)
-    return tal['descent'] == 0 and not tal['unavailable'] and ok, tal, cost
+    return tal['descent'] == 0 and not tal['unavailable'] and ok, dict(tal, suspects=[x for x in enforced if x['key'] in failed]), cost
 
 
 def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
