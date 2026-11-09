@@ -1,0 +1,31 @@
+{
+  "Chiu1999": {
+    "citation": "Chiu, L.-F.; Liu, H.-F.; Li, M.-H. Heat Capacity of Alkanolamines by Differential Scanning Calorimetry. J. Chem. Eng. Data 1999, 44, 631-636.",
+    "doi": "10.1021/je980217x",
+    "zotero_parent": "DZAER4AP",
+    "zotero_attachment": "WN6UYRVT",
+    "pdf_sha256": "480f817be33df3f13d141bf478508f4e9fba2fa0ed2d0effe6c02ed46666d7fa",
+    "acquired": "2026-11-09, cse-zotero acquire into collection 8RZP275E (mea-thermodynamics)",
+    "extraction": "pdftotext -layout; Table 2 'this study' column read against the printed table",
+    "method": "TA Instruments DSC-2010, hermetic pans (to about 3 atm), sapphire standard, 5 K/min, 25-82 C; water check against Osborne 1939 within 0.05% on the average of four runs (Table 1, runs -1.64% to +1.62%)",
+    "uncertainty": "accuracy +-2% from the water check (pp.632-633); +-3% including impurities (abstract; Conclusion p.636). Not a standard uncertainty.",
+    "correlation": "Table 8, Eq. 2: cp/(kJ/kg/K) = 1.27022 + 4.8364e-3 (T/K), 303-353 K",
+    "pressure": "hermetically sealed pans; sample pressure is the sealed self-pressure, not reported"
+  },
+  "Maham1997": {
+    "citation": "Maham, Y.; Hepler, L. G.; Mather, A. E.; Hakin, A. W.; Marriott, R. A. Molar heat capacities of alkanolamines from 299.1 to 397.8 K. Group additivity and molecular connectivity analyses. J. Chem. Soc., Faraday Trans. 1997, 93, 1747-1750.",
+    "doi": "10.1039/a607568a",
+    "zotero_parent": "5NDWELSM",
+    "zotero_attachment": "TY3YDSU5",
+    "pdf_sha256": "5ceb4ecd22f5d482a5594284904749ea29d2424417dbc5f4c094115405843c06",
+    "acquired": "2026-11-09, cse-zotero acquire into collection 8RZP275E (mea-thermodynamics)",
+    "extraction": "pdftotext -layout; Table 1 MEA row and Table 2 MEA coefficients read against the printed tables",
+    "method": "Setaram C-80 heat-flow calorimeter, 2 K scans, sample minus empty-cell reference run; n-decane check at 299-373 K agrees with literature (p.1747); temperatures within 0.08 K",
+    "uncertainty": "0.9% (p.1747). Table 2 MEA: a0 = 82.5 +- 8.7 J/mol/K, a1 = 0.275 +- 0.025 J/mol/K^2 (standard errors; linear form selected by F-test)",
+    "correlation": "Table 2, Eq. 1 (a2 = 0): cp/(J/mol/K) = 82.5 + 0.275 (T/K), 299.1-397.8 K",
+    "pressure": "closed cells at the sample's own vapour pressure, treated as isobaric by the authors (p.1747)",
+    "dow_check": "Dow 1981 MEA at 303.15 K, 164.6 J/mol/K, against 165.9 from Eq. 1 (p.1747)"
+  },
+  "selection": "Maham1997 is the primary pure-MEA reference (0.9% stated uncertainty, covers 299-398 K). Chiu1999 is reported as a second independent reference; the routing must hold against both.",
+  "not_used": "Hilliard 2008 Section 4.7.2 measured pure MEA but shows it only in Figure 4.7-3 (p.80); no table. Dow 1981, Lee 1994 and Lide 1995 are compilations or reports cited secondhand by Chiu (Table 2)."
+}
