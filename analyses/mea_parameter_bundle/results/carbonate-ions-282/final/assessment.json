@@ -1,0 +1,429 @@
+{
+ "wheel_sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+ "result": {
+  "run": "final",
+  "t": 0.9756933593749999,
+  "cost": 150.07466062346296,
+  "final_cost": 148.8832604402288,
+  "candidate_255_cost": 148.5105456539468,
+  "stability": {
+   "enforced": {
+    "states": 1903,
+    "available": 1903,
+    "descent": 0,
+    "unavailable": [],
+    "minimum_tau": null
+   },
+   "excluded": {
+    "states": 5,
+    "available": 3,
+    "descent": 0,
+    "unavailable": [
+     "dense|0.25|313.15|1e-05|1.05",
+     "dense|0.25|313.15|1e-05|3.0"
+    ],
+    "minimum_tau": null
+   },
+   "offset": {
+    "states": 576,
+    "available": 576,
+    "descent": 0,
+    "unavailable": [],
+    "minimum_tau": null
+   },
+   "census": {
+    "states": 162,
+    "descent": 0,
+    "incomplete": 0,
+    "descent_indices": [],
+    "incomplete_indices": []
+   }
+  },
+  "stability_passed": true,
+  "metrics": {
+   "fitted CO2 partial pressure": {
+    "rule": "aard",
+    "n": 47,
+    "within_2s": 47,
+    "aard_percent": 12.1491613518663,
+    "rmse": 4016.1594421801615,
+    "cost": 6.260395345387392
+   },
+   "Kiepe pressure": {
+    "rule": "aard",
+    "n": 39,
+    "within_2s": 39,
+    "aard_percent": 2.666523563690373,
+    "rmse": 179956.60715492824,
+    "cost": 0.00067901949873167
+   },
+   "fitted phase mole fraction": {
+    "rule": "aard",
+    "n": 94,
+    "within_2s": 93,
+    "aard_percent": 7.562625270255081,
+    "rmse": 0.0027542805709644155,
+    "cost": 18.886131257493933
+   },
+   "restored species": {
+    "rule": "aard",
+    "n": 7,
+    "within_2s": 7,
+    "aard_percent": 9.51697901752396,
+    "rmse": 0.0036410959597773475,
+    "cost": 2.7752174585877403
+   },
+   "Jakobsen ratio": {
+    "rule": "aard",
+    "n": 6,
+    "within_2s": 4,
+    "aard_percent": 15.790540398757942,
+    "rmse": 0.04499235243721637,
+    "cost": 11.887765976159576
+   },
+   "loaded density": {
+    "rule": "scaled",
+    "n": 47,
+    "within_2s": 47,
+    "aard_percent": 0.15095640315544612,
+    "rmse": 1.8139976355909808,
+    "cost": 0.3713460675643456
+   },
+   "CO2-free density": {
+    "rule": "scaled",
+    "n": 5,
+    "within_2s": 5,
+    "aard_percent": 0.029458050938186986,
+    "rmse": 0.35791535019720644,
+    "cost": 12.810339790678894
+   },
+   "fitted heat of absorption": {
+    "rule": "scaled",
+    "n": 8,
+    "within_2s": 8,
+    "aard_percent": 1.983133855847484,
+    "rmse": 1821.7098680058732,
+    "cost": 1.2331578455789285
+   },
+   "heat capacity": {
+    "rule": "scaled",
+    "n": 4,
+    "within_2s": 3,
+    "aard_percent": 2.3661527462786074,
+    "rmse": 2.410676935681882,
+    "cost": 4.159259324935381
+   },
+   "Cai MEA-water VLE": {
+    "rule": "report",
+    "n": 50,
+    "within_2s": 36,
+    "aard_percent": 1.4829906048442814,
+    "rmse": 1.2606039328383305,
+    "cost": 91.69036853757805
+   }
+  },
+  "baseline_metrics": {
+   "fitted CO2 partial pressure": {
+    "rule": "aard",
+    "n": 47,
+    "within_2s": 47,
+    "aard_percent": 11.862562814034144,
+    "rmse": 7734.436075909803,
+    "cost": 5.985845897004865
+   },
+   "Kiepe pressure": {
+    "rule": "aard",
+    "n": 39,
+    "within_2s": 39,
+    "aard_percent": 2.666523563690373,
+    "rmse": 179956.60715492824,
+    "cost": 0.00067901949873167
+   },
+   "fitted phase mole fraction": {
+    "rule": "aard",
+    "n": 94,
+    "within_2s": 94,
+    "aard_percent": 7.102842181553603,
+    "rmse": 0.0026883569255366805,
+    "cost": 16.66140511255519
+   },
+   "restored species": {
+    "rule": "aard",
+    "n": 7,
+    "within_2s": 7,
+    "aard_percent": 9.001586275329867,
+    "rmse": 0.003483171150671993,
+    "cost": 2.448674651941749
+   },
+   "Jakobsen ratio": {
+    "rule": "aard",
+    "n": 6,
+    "within_2s": 4,
+    "aard_percent": 17.514390498017292,
+    "rmse": 0.046622278837491635,
+    "cost": 13.122182452954116
+   },
+   "loaded density": {
+    "rule": "scaled",
+    "n": 47,
+    "within_2s": 44,
+    "aard_percent": 0.17696944681365875,
+    "rmse": 2.2029988358137507,
+    "cost": 0.5654031419420612
+   },
+   "CO2-free density": {
+    "rule": "scaled",
+    "n": 5,
+    "within_2s": 5,
+    "aard_percent": 0.027977809820223243,
+    "rmse": 0.3409650046640481,
+    "cost": 11.625713440555437
+   },
+   "fitted heat of absorption": {
+    "rule": "scaled",
+    "n": 8,
+    "within_2s": 8,
+    "aard_percent": 1.877372069667485,
+    "rmse": 1835.009864745106,
+    "cost": 1.213745302573909
+   },
+   "heat capacity": {
+    "rule": "scaled",
+    "n": 4,
+    "within_2s": 3,
+    "aard_percent": 2.8457483834029156,
+    "rmse": 2.755196007787639,
+    "cost": 5.385026218102571
+   },
+   "Cai MEA-water VLE": {
+    "rule": "report",
+    "n": 50,
+    "within_2s": 36,
+    "aard_percent": 1.4799292819942251,
+    "rmse": 1.2643745541162434,
+    "cost": 91.8745852031002
+   }
+  },
+  "checks": {
+   "fitted CO2 partial pressure": {
+    "aard_rise_points": 0.28659853783215716,
+    "passed": true
+   },
+   "Kiepe pressure": {
+    "aard_rise_points": 0.0,
+    "passed": true
+   },
+   "fitted phase mole fraction": {
+    "aard_rise_points": 0.459783088701478,
+    "passed": true
+   },
+   "restored species": {
+    "aard_rise_points": 0.5153927421940931,
+    "passed": true
+   },
+   "Jakobsen ratio": {
+    "aard_rise_points": -1.7238500992593497,
+    "passed": true
+   },
+   "loaded density": {
+    "within_2s": [
+     44,
+     47
+    ],
+    "aard_ratio": 0.8530082783973255,
+    "rmse_ratio": 0.8234219674114901,
+    "passed": true
+   },
+   "CO2-free density": {
+    "within_2s": [
+     5,
+     5
+    ],
+    "aard_ratio": 1.0529076838921743,
+    "rmse_ratio": 1.0497128599747634,
+    "passed": true
+   },
+   "fitted heat of absorption": {
+    "within_2s": [
+     8,
+     8
+    ],
+    "aard_ratio": 1.0563350163181726,
+    "rmse_ratio": 0.9927520843376609,
+    "passed": true
+   },
+   "heat capacity": {
+    "within_2s": [
+     3,
+     3
+    ],
+    "aard_ratio": 0.8314694159464608,
+    "rmse_ratio": 0.8749566015877039,
+    "passed": true
+   }
+  },
+  "passed": true,
+  "coordinates": {
+   "pair/carbamate-anion/water/k_ij": {
+    "final": -0.0036580495327475336,
+    "candidate": -0.231519403629826,
+    "scaled": -22.786135409707846,
+    "bounds": [
+     -0.5,
+     0.5
+    ],
+    "on_bound": false
+   },
+   "pair/protonated-monoethanolamine/water/k_ij": {
+    "final": -0.5,
+    "candidate": -0.11112813141621652,
+    "scaled": 38.88718685837835,
+    "bounds": [
+     -0.5,
+     0.5
+    ],
+    "on_bound": false
+   },
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij": {
+    "final": -1.0,
+    "candidate": -1.0,
+    "scaled": 0.0,
+    "bounds": [
+     -1.0,
+     1.0
+    ],
+    "on_bound": true
+   },
+   "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope": {
+    "final": -41.61963413672365,
+    "candidate": -3.6873543493831633,
+    "scaled": 3.7932279787340484,
+    "bounds": [
+     -1000.0,
+     1000.0
+    ],
+    "on_bound": false
+   },
+   "component/protonated-monoethanolamine/segment_diameter": {
+    "final": 5.35,
+    "candidate": 4.666788063103925,
+    "scaled": -6.832119368960745,
+    "bounds": [
+     2,
+     5.8
+    ],
+    "on_bound": false
+   },
+   "component/carbamate-anion/segment_diameter": {
+    "final": 4.866108647520244,
+    "candidate": 5.482788918652084,
+    "scaled": 6.166802711318402,
+    "bounds": [
+     2,
+     5.8
+    ],
+    "on_bound": false
+   },
+   "component/protonated-monoethanolamine/born_diameter": {
+    "final": 5.0,
+    "candidate": 4.2865209758818175,
+    "scaled": -7.134790241181825,
+    "bounds": [
+     2.0,
+     5.0
+    ],
+    "on_bound": false
+   },
+   "component/carbamate-anion/born_diameter": {
+    "final": 5.0,
+    "candidate": 4.999808041603055,
+    "scaled": -0.0019195839694496897,
+    "bounds": [
+     2.0,
+     5.0
+    ],
+    "on_bound": false
+   },
+   "reaction:R5:correlation:a_k": {
+    "final": 3354.099229276806,
+    "candidate": 3115.8201815695743,
+    "scaled": -2.9784880963403966,
+    "bounds": [
+     2922.336201205647,
+     3522.336201205647
+    ],
+    "on_bound": false
+   },
+   "pair/monoethanolamine/water/k_ij": {
+    "final": -0.08990160794755829,
+    "candidate": -0.08801267087943257,
+    "scaled": 0.18889370681257206,
+    "bounds": [
+     -0.5,
+     0.5
+    ],
+    "on_bound": false
+   },
+   "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope": {
+    "final": -8.057331218929972,
+    "candidate": -5.539824277182797,
+    "scaled": 0.2517506941747175,
+    "bounds": [
+     -1000.0,
+     1000.0
+    ],
+    "on_bound": false
+   },
+   "component/protonated-monoethanolamine/dispersion_energy_over_k": {
+    "final": 177.89333334239393,
+    "candidate": 208.11318854294743,
+    "scaled": 3.02198552005535,
+    "bounds": [
+     50,
+     950
+    ],
+    "on_bound": false
+   },
+   "component/carbamate-anion/dispersion_energy_over_k": {
+    "final": 207.21694618033155,
+    "candidate": 176.56777257583715,
+    "scaled": -3.0649173604494395,
+    "bounds": [
+     50,
+     1000
+    ],
+    "on_bound": false
+   },
+   "pair/bicarbonate-anion/protonated-monoethanolamine/k_ij": {
+    "final": 0.0,
+    "candidate": 0.9756933593749999,
+    "scaled": 9.756933593749999,
+    "bounds": [
+     -1.0,
+     1.0
+    ],
+    "on_bound": false
+   },
+   "reaction:R2:enthalpy_shift_total": {
+    "candidate": 1039.2268329304588,
+    "bounds": [
+     -10000.0,
+     10000.0
+    ],
+    "on_bound": false
+   },
+   "reaction:R5:enthalpy_shift_total": {
+    "candidate": 10000.0,
+    "bounds": [
+     -10000.0,
+     10000.0
+    ],
+    "on_bound": true
+   }
+  },
+  "on_bounds": [
+   "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "reaction:R5:enthalpy_shift_total"
+  ]
+ }
+}
