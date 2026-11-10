@@ -1,0 +1,90 @@
+{
+ "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+ "result": {
+  "passed": true,
+  "excluded": [
+   "dense|0.25|313.15|1e-05|1.05",
+   "dense|0.25|313.15|1e-05|3.0",
+   "dense|0.25|323.15|1e-05|1.05",
+   "dense|0.25|323.15|1e-05|3.0",
+   "dense|0.45|383.15|0.3|1.05"
+  ],
+  "chosen_power": 2,
+  "sensitivity": {
+   "1": {
+    "coefficient": "pair/monoethanolamine/water/k_ij/a1",
+    "bound": 0.001,
+    "unloaded_change": {
+     "+h": -0.030632154432220116,
+     "-h": -0.03186274207414863,
+     "+bound": 0.03958586128241759,
+     "-bound": -0.08468089641398935
+    },
+    "derivative_times_bound": 0.06152938209642577,
+    "k_change_at_bound_393K": 0.08
+   },
+   "2": {
+    "coefficient": "pair/monoethanolamine/water/k_ij/a2",
+    "bound": 2e-05,
+    "unloaded_change": {
+     "+h": -0.03295473943509952,
+     "-h": -0.02952605189815838,
+     "+bound": -0.12204373603729524,
+     "-bound": 0.2180242780303896
+    },
+    "derivative_times_bound": -0.1714343768470572,
+    "k_change_at_bound_393K": 0.128
+   }
+  },
+  "zero_change_replay": {
+   "final": {
+    "rows": 367,
+    "available": true,
+    "cost": [
+     148.88326044022858,
+     148.88326044022858
+    ],
+    "maximum_relative": 0.0,
+    "k_ij_313_393": [
+     [
+      -0.08990160794755829,
+      -0.08698727221237469,
+      -0.08466595913728188
+     ],
+     [
+      -0.08990160794755829,
+      -0.08698727221237469,
+      -0.08466595913728188
+     ]
+    ]
+   },
+   "candidate": {
+    "rows": 367,
+    "available": true,
+    "cost": [
+     148.51054565397726,
+     148.51054565397726
+    ],
+    "maximum_relative": 0.0,
+    "k_ij_313_393": [
+     [
+      -0.08958644196427461,
+      -0.08681295411606914,
+      -0.08460382854143976
+     ],
+     [
+      -0.08958644196427461,
+      -0.08681295411606914,
+      -0.08460382854143976
+     ]
+    ]
+   }
+  },
+  "final_set_broad_cp": {
+   "AARD_60_percent": 2.511889714666057,
+   "AARD_hilliard_51_percent": 2.4425104958289414,
+   "unloaded_change_313_353": -0.031248316919601837
+  },
+  "excluded_source": "results/stable-refit-255/qualification/summary.json"
+ }
+}
