@@ -119,7 +119,7 @@ def preflight(spec):
     shared_ids = (W, CO2, 'bicarbonate-anion', 'carbonate-anion', 'hydronium-cation', 'hydroxide-anion')
     same = lambda x: [c for c in x['components'] if c['component_id'] in shared_ids]
     pairs = lambda x: [p for p in x['pairs'] if {p['component_id_a'], p['component_id_b']} <= set(shared_ids)]
-    mea = json.loads((AN.parent / 'solvent_specification_mea/inputs/endpoint.json').read_text())
+    mea = json.loads((AN.parent / 'mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_text())
     unchanged = same(spec.inputs['start']) == same(mea) and pairs(spec.inputs['start']) == pairs(mea)
     spec.species_mapping(spec.spec['chemistry']['reactions'])
     row = next(r for r in rows if r['group'] == 'loaded-pressure')

@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/generate_figure_data.py", line 809, in <module>
+    bounded_main(main)
+    ~~~~~~~~~~~~^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/refresh_results.py", line 81, in bounded_main
+    main()
+    ~~~~^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/generate_figure_data.py", line 210, in main
+    assert sha256(CANONICAL_SPECIATION) == CANONICAL_SPECIATION_SHA256
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/generate_figure_data.py", line 809, in <module>
+    bounded_main(main)
+    ~~~~~~~~~~~~^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/refresh_results.py", line 83, in bounded_main
+    run_stage(
+    ~~~~~~~~~^
+        [sys.executable, str(Path(sys.argv[0]).resolve()), *sys.argv[1:]],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        cwd=Path.cwd(),
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/refresh_results.py", line 60, in run_stage
+    raise subprocess.CalledProcessError(code, command)
+subprocess.CalledProcessError: Command '['/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/bin/python3', '/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/generate_figure_data.py']' returned non-zero exit status 1.

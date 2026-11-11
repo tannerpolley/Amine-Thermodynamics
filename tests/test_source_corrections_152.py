@@ -137,4 +137,4 @@ def test_declared_domain_pre_dispatch_and_protected_rows(monkeypatch):
     inside = copy.deepcopy(excluded[0])
     inside["request"]["temperature"]["value"] = 393.15
     assert probe.reaction_domain_status(inside) is None
-    assert shared.sha256(probe.RECORD) == "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+    assert shared.sha256(probe.RECORD) == "f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97"
