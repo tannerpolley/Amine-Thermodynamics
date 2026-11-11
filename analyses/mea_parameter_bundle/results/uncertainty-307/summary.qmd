@@ -1,0 +1,46 @@
+## Parameter uncertainty and sensitivity (#307)
+
+Pressure bands cover 47 retained states at 313–333.15 K. Their conditional relative standard errors range from 5.41% to 16%. Covariance propagation includes parameter correlations; the marginal one-SE perturbations used for ranking do not. Large local fractional changes are derivatives multiplied by SE, not nonlinear perturbed predictions.
+
+The 307-row adopted record is unchanged. Covariance and bands are local, linearized and conditional on the fixed model, observation weights, source inputs and bound coordinates. They describe parameter uncertainty under an unknown common residual variance, not model discrepancy, future measurement noise or physical validation. The native variance factor is 1.000071.
+
+The interior-only diagnostic refit changes cost by 3.9222e-12; the largest absolute movement in units of coordinate scale is 0. Ranking uses native conditional covariance; bound coordinates fixed. [Both covariance estimates, the native correlation matrix and all movements](results/uncertainty-307/covariance.json) are retained.
+
+The ranking statistic is the maximum absolute fractional prediction change over each named retained group. Interior coordinates move by one conditional standard error with the others fixed. Bound coordinates use the first inward profile point (1% of the original bound interval), with all remaining coordinates refitted. These are different perturbation sizes; their ranks do not establish statistical significance. Near-zero predictions can dominate relative changes.
+
+| Parameter | Adopted value (physical unit) | SE (bound coordinates fixed) or profile | Largest fractional change | Most affected predictions |
+|---|---:|---|---:|---|
+| component/protonated-monoethanolamine/dispersion_energy_over_k | 199.707 kelvin | ± 51.31 (bound fixed) | 2.094 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| component/protonated-monoethanolamine/segment_diameter | 4.904548 angstrom | ± 1.08 (bound fixed) | 1.868 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| pair/carbamate-anion/water/k_ij | -0.01300479 dimensionless | ± 0.1444 (bound fixed) | 1.482 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| component/carbamate-anion/segment_diameter | 5.319995 angstrom | ± 0.9783 (bound fixed) | 1.317 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| reaction:R5:correlation:a_k | -7583.807 K | ± 265.2 (bound fixed) | 0.8472 | common149: partial_pressure; common149: heat of absorption; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+| component/carbamate-anion/dispersion_energy_over_k | 183.0006 kelvin | ± 36.15 (bound fixed) | 0.7766 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope | -35.3135 kelvin | ± 65.4 (bound fixed) | 0.1259 | common149: partial_pressure; common149: heat of absorption; Cp: equilibrium_isobaric_heat_capacity |
+| reaction:R2:enthalpy_shift | -620.8326 J/mol | ± 5228 (bound fixed) | 0.1205 | common149: partial_pressure; common149: heat of absorption; common149: mole_fraction / bicarbonate-anion |
+| pair/monoethanolamine/water/k_ij | -0.08958644 dimensionless | ± 0.001288 (bound fixed) | 0.03703 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+| pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope | -7.667926 kelvin | ± 2.043 (bound fixed) | 0.01043 | common149: partial_pressure; Cp: equilibrium_isobaric_heat_capacity; common149: heat of absorption |
+| pair/carbamate-anion/protonated-monoethanolamine/k_ij | -1 dimensionless | -0.98: Δcost 0.1117 (converged); -0.9: Δcost 0.5736 (converged); -0.8: Δcost 1.169 (converged) | 0.00941 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| pair/protonated-monoethanolamine/water/k_ij | -0.5 dimensionless | -0.49: Δcost -0.0006588 (converged); -0.45: Δcost -0.001997 (converged); -0.4: Δcost -0.002661 (converged) | 0.003773 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+| component/protonated-monoethanolamine/born_diameter | 5 angstrom | 4.97: Δcost 0.003755 (converged); 4.85: Δcost 0.02041 (converged); 4.7: Δcost 0.04267 (converged) | 0.001448 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+| pair/bicarbonate-anion/water/k_ij | 1 dimensionless | 0.985: Δcost 0.0008803 (converged); 0.925: Δcost 0.004538 (converged); 0.85: Δcost 0.008561 (converged) | 0.001433 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+| reaction:R5:enthalpy_shift | 10000 J/mol | 9800: Δcost 0.007127 (converged); 9000: Δcost 0.03677 (converged); 8000: Δcost 0.07362 (converged) | 0.001396 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion,carbonate-anion; common149: mole_fraction / bicarbonate-anion |
+| component/carbamate-anion/born_diameter | 5 angstrom | 4.97: Δcost 0.001549 (converged); 4.85: Δcost 0.009155 (converged); 4.7: Δcost 0.02584 (converged) | 0.0009599 | common149: partial_pressure; common149: mole_fraction / bicarbonate-anion; common149: mole_fraction / bicarbonate-anion,carbonate-anion |
+
+![Prediction changes per conditional SE or inward profile step.](results/uncertainty-307/sensitivity.png)
+
+![Covariance propagated to pressure predictions at the retained measured states (discrete parity comparison). Error bars are nominal ±1.96 conditional SE; the symmetric logarithmic axis preserves any negative lower limits. These are local parameter-only bands, not physical prediction intervals.](results/uncertainty-307/pressure-bands.png)
+
+The two weakest directions of the complete weighted Jacobian in the original optimizer scales are:
+
+- Singular value 0.00157827: pair/bicarbonate-anion/water/k_ij (-0.9488); pair/protonated-monoethanolamine/water/k_ij (+0.2175); pair/carbamate-anion/water/k_ij (-0.1783); component/carbamate-anion/born_diameter (-0.1213).
+- Singular value 0.00492246: component/carbamate-anion/born_diameter (+0.7662); component/protonated-monoethanolamine/born_diameter (-0.6022); pair/carbamate-anion/protonated-monoethanolamine/k_ij (-0.1252); pair/protonated-monoethanolamine/water/k_ij (+0.1074).
+
+These directions include bound coordinates; their two-sided singular-vector displacements are not necessarily feasible. They describe local confounding in the declared scales, not a unique physical mechanism.
+
+Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record.
+
+[Profile results](results/uncertainty-307/profiles.json), [prediction values and exact native columns](results/uncertainty-307/predictions.json), [bands](results/uncertainty-307/prediction-bands.csv), [ranked values](results/uncertainty-307/ranking.csv) and [input identity](results/uncertainty-307/inputs.json) retain the calculation. MEA ranks only pressure, heat, heat capacity, carbamate/bicarbonate and density at states already in its adopted specification. Bicarbonate is additionally resolved alone at the four states with bicarbonate+carbonate observations; this extra model quantity is not a new measured observation or a fitted target. The summed observable is retained separately; MDEA uses the 20 Xiao and 88 Ermatchkov pressure states at ≤49 wt% from #298, its adopted R2 law, and the 40 Carson heat states. Parameter units and ties are in the coordinate declarations; reaction enthalpy shifts are shown as adopted totals in J/mol, whereas refit increments are about zero.
+
+Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. Run from the repository root using `agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py MEA`. The source base is `79706636e8716974e045b582f1b1cbfe7e4c7009`; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is pending.
+

@@ -10,7 +10,9 @@ execute:
 
 `B1.toml` now binds the selected #298 endpoint and the unchanged adopted #255 shared values and R2 law. `prepare.py` materializes its declaration and excludes Kuranov rows 28 and 72. `agent-heavy env PYTHONPATH=src .venv/bin/python analyses/solvent_specification_mdea/run.py` performs fixed replay and comparisons without fitting. [Verification](results/adoption-302/verification.json) gives 278 rows, cost 374.5190788052401, relative cost difference 2.7600e-13 and zero prediction difference. [Pressure assessment](results/adoption-302/B1/pressure-summary.json) gives Xiao 28.1910414167% and Ermatchkov 18.2705616155% AARD.
 
-The [MDEA workflow disposition](../mdea_mea_workflow/notebook.qmd) records the post-hoc owner gate amendment and all limits: two active bounds (+1 protonated-MDEA–bicarbonate interaction and 7 Å Born diameter), no uncertainty estimate, no F4 evidence at 394.94–395.00 K, the two Kuranov and seven corrected-Kamps domain exclusions, and unavailable 333.15 K / 60 wt% B1 heat. A3 is unchanged and unrefit; it is historical and transfer-penalty evidence. No absorber-use qualification or new physical validation follows.
+The [MDEA workflow disposition](../mdea_mea_workflow/notebook.qmd) records the post-hoc owner gate amendment and all limits: two active bounds (+1 protonated-MDEA–bicarbonate interaction and 7 Å Born diameter), conditional parameter uncertainty in #307 below, no F4 evidence at 394.94–395.00 K, the two Kuranov and seven corrected-Kamps domain exclusions, and unavailable 333.15 K / 60 wt% B1 heat. A3 is unchanged and unrefit; it is historical and transfer-penalty evidence. No absorber-use qualification or new physical validation follows.
+
+{{< include results/uncertainty-307/summary.qmd >}}
 
 ## Historical specification reproduction
 
