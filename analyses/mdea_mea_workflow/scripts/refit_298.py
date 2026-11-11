@@ -1,16 +1,13 @@
-"""Issue 298: qualify the declared MDEA refit inputs before fitting."""
+"""Issue 298 retained replay, pool and input-identity operations."""
 import os
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
-import copy
 import concurrent.futures as futures
 import gzip
 import hashlib
 import json
-import math
 import multiprocessing
 from pathlib import Path
-import sys
 import zipfile
 from datetime import datetime, timezone
 
@@ -31,7 +28,12 @@ def sha(path):
 def write(name, value):
     path = OUT / name
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, allow_nan=False)+'\n')
+    raw=(json.dumps(value, indent=2, allow_nan=False)+'\n').encode()
+    if len(raw)>5_000_000:
+        path.with_suffix(path.suffix+'.gz').write_bytes(gzip.compress(raw,mtime=0))
+        path.unlink(missing_ok=True)
+    else:
+        path.write_bytes(raw)
 
 def pool(fn, jobs):
     with futures.ProcessPoolExecutor(max_workers=min(int(os.environ['AGENT_HEAVY_CORES']), len(jobs)), mp_context=multiprocessing.get_context('fork')) as executor:
@@ -68,51 +70,3 @@ def identities():
     for path in [AN/'inputs/probe-reaction-reference.json',AN/'results/diagnosis-unloaded-cp/summary.json',AN/'results/item-l/declaration.json'] + [AN/f'results/stage2-capped/{label}/{name}.json' for label in ('A3','B1') for name in ('endpoint','fit','declaration')]:
         hashes[str(path.relative_to(ROOT))]=sha(path)
     write('identity.json',dict(time_utc=datetime.now(timezone.utc).isoformat(),wheel=str(WHEEL.relative_to(ROOT)),wheel_sha256=SHA,installed_files_byte_identical=True,selected_sha256=sha(selected),inputs=hashes))
-
-if __name__=='__main__':
-    identities()
-    os.environ['MDEA_ENGINE_WHEEL_SHA256']=SHA
-    import refit_capped as owner
-    s=owner.s
-    s.write=lambda name,value:write(name,s.p.shared._jsonable(value))
-    s.poolmap=pool
-    original=next(r for r in s.j.d.REACTIONS if r.name=='R2').correlation
-    shared=read(ADOPTION/'shared-bicarbonate-water.json')
-    law=read(ADOPTION/'shared-R2.json')
-    assert law==read(ADOPTION/'shared-R2-declaration.json')['correlation']
-    results=[]
-    for label in ('A3','B1'):
-        for adopted in (False,True):
-            name=label+('-substitution' if adopted else '-historical')
-            doc=read(AN/f'results/stage2-capped/{label}/endpoint.json')
-            reaction=next(r for r in s.j.d.REACTIONS if r.name=='R2')
-            reaction.correlation=s.eq.ReactionLogPolynomial(**law) if adopted else original
-            if adopted:
-                index=next(i for i,p in enumerate(doc['pairs']) if {p['component_id_a'],p['component_id_b']}=={'water','bicarbonate-anion'})
-                doc['pairs'][index]=copy.deepcopy(shared)
-            write(f'{name}/parameters.json',doc)
-            write(f'{name}/R2.json',{key:getattr(reaction.correlation,key) for key in law})
-            s.setup(doc)
-            META,ITEMS,weights=s.j.objective(s.params)
-            rows=pool(predict,list(range(len(ITEMS))))
-            write(f'{name}/fitted-replay.json',rows)
-            old=read(AN/f'results/stage2-capped/{label}/fit.json')
-            available=all(r['status']=='Available' and r['requested_tolerance_met'] for r in rows)
-            prediction_error=max((abs(r['value']-v)/max(1.,abs(v)) for r,v in zip(rows,old['predictions'],strict=True) if r['value'] is not None),default=None) if not adopted else None
-            independent=[(math.log(r['value']/r['meta']['observed']) if r['meta']['group'] in ('Kim','Kuranov') else (r['value']-r['meta']['observed'])/r['meta']['scale']) if r['status']=='Available' else None for r in rows]
-            write(f'{name}/independent-residuals.json',independent)
-            native_residual_error=max(abs(v-r['residual']) for v,r in zip(independent,rows,strict=True) if v is not None)
-            residuals=[w**.5*v for w,v in zip(weights,independent,strict=True)] if available else None
-            cost=sum(.5*r*r for r in residuals) if available else None
-            residual_error=max(abs(a-b) for a,b in zip(residuals,old['weighted_residuals'],strict=True)) if available and not adopted else None
-            cost_error=abs(cost/old['final_cost']-1) if cost is not None and not adopted else None
-            result=dict(max_absolute_native_residual_difference=native_residual_error,record=name,rows=len(rows),available=sum(r['status']=='Available' for r in rows),cost=cost,historical_cost=old['final_cost'],max_relative_prediction_difference=prediction_error,max_absolute_weighted_residual_difference=residual_error,relative_cost_difference=cost_error,passed=available and native_residual_error<=1e-8 and (adopted or (prediction_error<=1e-8 and residual_error<=1e-8 and cost_error<=1e-8)))
-            if not adopted:
-                result['largest_prediction_difference_row']=max((dict(index=r['index'],group=r['meta']['group'],row=r['meta']['row'],historical=v,replay=r['value'],relative_difference=abs(r['value']-v)/max(1.,abs(v))) for r,v in zip(rows,old['predictions'],strict=True) if r['value'] is not None),key=lambda r:r['relative_difference'])
-            result['unavailable_rows']=[dict(index=r['index'],meta=r['meta'],status=r['status'],message=r['message']) for r in rows if r['status']!='Available']
-            if not adopted:
-                result['group_maximum_relative_prediction_differences']={g:max(abs(r['value']-v)/max(1.,abs(v)) for r,v in zip(rows,old['predictions'],strict=True) if r['meta']['group']==g and r['value'] is not None) for g in dict.fromkeys(r['meta']['group'] for r in rows)}
-            results.append(result)
-            write('F1-fitted-replays.json',results)
-            print(result,flush=True)
-    write('F1.json',dict(passed=all(r['passed'] for r in results),fitted_replays=results,meaning='Failure is numerical qualification, not a physical transfer penalty.',remaining_checks=['pressure replay','balances','derivatives'],execution_stopped_before_fitting=True))
