@@ -3,7 +3,7 @@
 Public source assessments only. There are no Engine results, no parameter adoption, no copied measurement tables and no CESAR-1 rows, code or parameters. CESAR-1 (commit `f24611b`) was used only to list filenames and CSV header lines, to find papers.
 
 - [Pure PZ PC-SAFT](pure-pz-pcsaft.md): one published 2B set (Razavi 2019); σ³ association convention; handbook-correlation fitting data; reproduction check defined, not run.
-- [Solid phases](solid-phase.md): hexahydrate and anhydrous phase diagram, the loaded liquid window, and the Engine's lack of a solid phase.
+- [Solid phases](solid-phase.md): hexahydrate and anhydrous phase diagram, the loaded liquid window, and source-specific row admission; this assessment declares no qualified solid model.
 - [Kamps 2003, its 2006 temperature correction, and Yi 2024](kamps-2003-yi-2024.md) (#239): total-pressure rows, precipitation, uncertainty, corrected temperatures, the MDEA + PZ blend rows, and the Yi eNRTL cross-check with its Supplementary Information hashes.
 - [Derks 2005 and Hartono 2013](derks-2005-hartono-2013.md) (#240): the dilute CO2 partial-pressure rows and their role; PZ–water, AMP–water and AMP–PZ–water ebulliometer VLE; a hand comparison with Hilliard D.2 at 60 °C; Fosbøl 2011 SLE identity.
 - `pdf-identities.json`: Zotero parent and PDF keys plus SHA-256 for every PDF read.
@@ -66,3 +66,7 @@ Existing items read: Hilliard 2008 thesis `DNQUPRMT`/`LB7LUETY` (§§5.3, 9.4.1,
 - Dugas & Rochelle 2009 (Zotero `B7T53U6N`): its overlap with Dugas 2011 is taken from the correction notice; it was not read.
 
 The main-checkout `literature/` shelf has no PZ paper. It was read, not written. Mathpix was not used: every PDF read has a usable text layer. The local copies made with `pdftotext` were scratch files outside the repository.
+
+## #308 revision
+
+The current [design](../design-draft-pz.md) supersedes historical open decisions here. [Dielectric and uncertainty assessment](dielectric-and-uncertainty.md) records the 11 November source readings, MEA coefficient fallback and residual assumptions. The actual Yaws/HYSYS correlations remain unavailable and block pure reproduction; acquisition failures are recorded in the pure-PZ note.
