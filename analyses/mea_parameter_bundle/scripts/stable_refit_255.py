@@ -44,6 +44,7 @@ SHIFTS = {'final': {'R2': -1363.931574116721, 'R5': 10000.}, 'wide': {'R2': 3442
 HISTORICAL_COST = 148.87893934557388  # final set on pre-#260 water calorics
 FINAL_COST = 148.8832604402288  # final set replayed on current inputs (#260 IAPWS-95 water record), new wheel
 STAGES = (1e-2, 3e-3)
+ELAPSED = 7200.  # per-stage wall limit, sized for 32 cores; #284 stage 2 raises it for its 3-core fits
 CENSUS_FEED = (9.7292821, 76.9751925)
 CENSUS_T = (313.15, 318.15, 333.15, 353.15, 373.15, 393.15)
 CENSUS_A = (1e-5, .05, .1, .2, .256, .3, .4, .5, .6)
@@ -490,7 +491,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     controls = read(A6)['controls']
     # Workers sized by free memory (about 0.35 GB each, 7 GB kept for the parent and other work); the result does not depend on it.
     available = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) / 1e6
-    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=7200., workers=max(1, min(CORES, int((available - 7) / .35))))
+    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=ELAPSED, workers=max(1, min(CORES, int((available - 7) / .35))))
     added = extra(spec, start) if extra else []
     if (OUT / rel / 'fit-native.json').exists():  # resume after an interrupted reduction without refitting
         report = result(f'{rel}/fit-native.json')
@@ -498,7 +499,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         stability = added + [(stability_row(spec, x, scale), 1.) for x in enforced]
         started = time.monotonic()
         native, report, _ = spec.fit(stability)
-        report.update(workers=spec.spec['optimizer']['workers'], scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
+        report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=ELAPSED, scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
                       enforced=[x['key'] for x in enforced], first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
         write(f'{rel}/fit-native.json', report)
     endpoint = None
