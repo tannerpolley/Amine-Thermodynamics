@@ -1,8 +1,8 @@
 # PZ source records, issues #237, #239 and #240
 
-Public source assessments only. There are no Engine results, no parameter adoption, no copied measurement tables and no CESAR-1 rows, code or parameters. CESAR-1 (commit `f24611b`) was used only to list filenames and CSV header lines, to find papers.
+Public source assessments only. There are no Engine results, parameter adoption or copied measurement tables.
 
-- [Pure PZ PC-SAFT](pure-pz-pcsaft.md): one published 2B set (Razavi 2019); σ³ association convention; handbook-correlation fitting data; reproduction check defined, not run.
+- [Pure PZ PC-SAFT](pure-pz-pcsaft.md): one published 2B set (Razavi 2019); σ³ association convention; handbook-correlation fitting data; published-property check defined, not run; verified Hartono 2021 correlation and Steele 1997 liquid-pressure reference, with density still unresolved.
 - [Solid phases](solid-phase.md): hexahydrate and anhydrous phase diagram, the loaded liquid window, and source-specific row admission; this assessment declares no qualified solid model.
 - [Kamps 2003, its 2006 temperature correction, and Yi 2024](kamps-2003-yi-2024.md) (#239): total-pressure rows, precipitation, uncertainty, corrected temperatures, the MDEA + PZ blend rows, and the Yi eNRTL cross-check with its Supplementary Information hashes.
 - [Derks 2005 and Hartono 2013](derks-2005-hartono-2013.md) (#240): the dilute CO2 partial-pressure rows and their role; PZ–water, AMP–water and AMP–PZ–water ebulliometer VLE; a hand comparison with Hilliard D.2 at 60 °C; Fosbøl 2011 SLE identity.
@@ -32,7 +32,7 @@ Public source assessments only. There are no Engine results, no parameter adopti
 | Yi et al. 2024, Sep. Purif. Technol. 350, 127924 | `SDKLQTBQ` | `3YP4GUWT` | already in the library at the start of #239; §§2–4, Tables 1–5 and the Supplementary Information (downloaded, not attached) read |
 | Derks et al. 2005, AIChE J. 51, 2311 | `PRYYEZ43` | none | already in the library at the start of #239, with a saved web page only; merged into `7BYDJFRT` before #240 (below) |
 | Hartono, Saeed, Ciftja & Svendsen 2013, Chem. Eng. Sci. 91, 151 | `5KUR8PRH` | `SEPZQIPE` | acquired (Connector); all 11 pages read under #240 |
-| Hartono, Rafiq, Gondal & Svendsen 2021, Fluid Phase Equilib. 538, 112992 | `NVDXQ5NY` | `L5BIJ5I8` | acquired (the `elsevier-api` acquisition step of `cse-zotero acquire`); identity checked on page 1, not read |
+| Hartono, Rafiq, Gondal & Svendsen 2021, Fluid Phase Equilib. 538, 112992 | `NVDXQ5NY` | `L5BIJ5I8` | acquired (the `elsevier-api` acquisition step of `cse-zotero acquire`); identity checked on page 1; Hartono 2021 subsequently read for #308 (below) |
 | Nguyen, Hilliard & Rochelle 2010, IJGGC 4, 707 | `62762ZRK` | `ZA6SU36Z` | acquired (Connector); identity checked on page 1, not read |
 | Chen, Caparanga, Soriano & Li 2010, J. Chem. Thermodyn. 42, 54 | `P3ZNCVRZ` | `M8B3RA3J` | acquired (Connector); identity checked on page 1, not read |
 
@@ -56,10 +56,10 @@ Existing items read: Hilliard 2008 thesis `DNQUPRMT`/`LB7LUETY` (§§5.3, 9.4.1,
 - Fosbøl 2011 Tables 1–3: not transcribed. Bishnoi & Rochelle 2002 (Ind. Eng. Chem. Res. 41, 604) and Bishnoi's 2000 dissertation, the SLE sources Fosbøl cites: not acquired.
 - Wilson & Wilding 1994 (DIPPR 1990–1991 projects, pp.63–115; identity from Hartono 2013 p.161): not acquired.
 - Kamps 2003 Figs. 1–7 (not digitized; Fig. 1's reaction scheme was not used to fix reaction directions).
-- Yi 2024 SI figures other than S4, S10 and S11. Yi's GitHub model files (github.com/mijndertvanderspek/PZ-CESAR1-thermo-model) were not opened.
-- Three PDFs acquired under #239 (Hartono 2021, Nguyen 2010, Chen 2010), beyond their first page. Hartono 2013 was read under #240.
+- Yi 2024 SI figures other than S4, S10 and S11.
+- Nguyen 2010 and Chen 2010 acquired under #239, beyond their first page. Hartono 2021 was subsequently read for #308. Hartono 2013 was read under #240.
 - MDEA + PZ data cited by Kamps 2003 (Bishnoi & Rochelle 2002; Xu et al. 1998; Liu et al. 1999), and the AMP and AMP/PZ data indexed from Yi Tables 4–5.
-- Freeman 2011 dissertation, Ma et al. 2012 crystallization, Nguyen 2011/2013 volatility, Chen 2010 PZ–water Cp, Liu and Hartono PZ absorption heat, and the primary publication of Kim's PZ heat data: not acquired, or identity unresolved.
+- Freeman 2011 dissertation, Ma et al. 2012 crystallization, Nguyen 2011/2013 volatility (2013 acquisition returned no Zotero translator), Chen 2010 PZ–water Cp, Liu and Hartono PZ absorption heat, and the primary publication of Kim's PZ heat data: not acquired, or identity unresolved.
 - Hamborg 2009 Supporting Information (EMF data; possibly Eq.21 coefficients): not looked for.
 - The primary data behind Razavi's PZ fit (Yaws handbook; Aspen HYSYS databank).
 - Hilliard Chapter IX (H2O–PZ parameter fitting) beyond §9.4.1, and the NMR method behind App. F.
@@ -69,4 +69,6 @@ The main-checkout `literature/` shelf has no PZ paper. It was read, not written.
 
 ## #308 revision
 
-The current [design](../design-draft-pz.md) supersedes historical open decisions here. [Dielectric and uncertainty assessment](dielectric-and-uncertainty.md) records the 11 November source readings, MEA coefficient fallback and residual assumptions. The actual Yaws/HYSYS correlations remain unavailable and block pure reproduction; acquisition failures are recorded in the pure-PZ note.
+The current [design](../design-draft-pz.md) supersedes historical open decisions here. [Dielectric and uncertainty assessment](dielectric-and-uncertainty.md) records the 11 November source readings, MEA coefficient fallback and conditionally approved residual assumptions. The owner replaced exact Yaws/HYSYS reproduction with a published-property check. Hartono 2021 Tables 8/11 and Steele 1997 Table 7 supply verified pressure inputs; density and Nguyen dissertation inputs remain unavailable. The pure-PZ note records the source readings and acquisition handoff.
+
+Steele 1997 DOI 10.1021/je9700986 was acquired for #308: parent `G7NHDTGD`, PDF `JFSXIVZH`. Hartono 2021 `NVDXQ5NY`/`L5BIJ5I8` was read at §§2.2, 5.1–5.2, Tables 1, 8, 10–11 and relevant references. The new PDF hashes are retained alongside the earlier identities.

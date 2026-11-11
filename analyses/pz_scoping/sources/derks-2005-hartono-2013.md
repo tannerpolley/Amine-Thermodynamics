@@ -95,7 +95,7 @@ Hartono gives two more: the NMR repeatability is below 2 %, and the NMR detectio
 
 ### PZ–H2O (Table 6, p.156)
 
-24 rows: 8 at 60 °C, 10 at 80 °C, 6 at 100 °C (59.95–100.03 °C). This matches the 24 points in Table 8 (p.157), the 24 points Yi fitted, and the 24-row CESAR-1 file.
+24 rows: 8 at 60 °C, 10 at 80 °C, 6 at 100 °C (59.95–100.03 °C). This matches the 24 points in Table 8 (p.157) and the 24 points Yi fitted.
 
 Hand check of the ranges:
 - x_PZ = 0.0237–0.1177, which is 1.35–7.41 mol PZ/kg water;
