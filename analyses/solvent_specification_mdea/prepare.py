@@ -126,3 +126,21 @@ for path in (OUT.parent / 'declarations.toml', OUT.parent / 'B1.toml', OUT.paren
     text = re.sub(r'columns = \{(?:"observation_order" = "observation_order", )?', 'columns = {"observation_order" = "observation_order", ', path.read_text())
     text = re.sub(r'(path = "([^"]+)"\nsha256 = ")[^"]+', lambda m: m[1] + hashlib.sha256((path.parent / m[2]).read_bytes()).hexdigest(), text)
     path.write_text(text)
+
+# #302: B1 alone uses the adopted shared law and excludes the two R2-domain rows.
+import re
+law = read(ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/shared-R2.json')
+text = (OUT.parent / 'declarations.toml').read_text()
+pattern = r'("name" = "R2".*?"correlation" = )\{[^}]+\}'
+text = re.sub(pattern, lambda m: m[1] + '{' + ', '.join(f'"{k}" = {json.dumps(v)}' for k,v in law.items()) + '}', text)
+rows = list(csv.DictReader((OUT / 'calibration-Kuranov.csv').open()))
+with (OUT / 'B1-calibration-Kuranov.csv').open('w') as stream:
+    writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
+    writer.writeheader()
+    writer.writerows(r for r in rows if json.loads(r['source'])['source_row'] not in ('28', '72'))
+text = text.replace('inputs/calibration-Kuranov.csv', 'inputs/B1-calibration-Kuranov.csv')
+text = re.sub(r'(path = "([^"]+)"\nsha256 = ")[^"]+', lambda m: m[1] + hashlib.sha256((OUT.parent / m[2]).read_bytes()).hexdigest(), text)
+(OUT.parent / 'B1-declarations.toml').write_text(text)
+spec = (OUT.parent / 'B1.toml').read_text().replace('path = "inputs/B1-endpoint.json"', 'path = "../mdea_mea_workflow/results/refit-298/B1-endpoint/endpoint.json"').replace('path = "declarations.toml"', 'path = "B1-declarations.toml"')
+spec = re.sub(r'(path = "([^"]+)"\nsha256 = ")[^"]+', lambda m: m[1] + hashlib.sha256((OUT.parent / m[2]).read_bytes()).hexdigest(), spec)
+(OUT.parent / 'B1.toml').write_text(spec)

@@ -4890,5 +4890,37 @@
       "endpoint_sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
     }
   },
-  "selection_sha256": "27f6f108a7e6d37c0196c5615f466cc0cf612e2044d0c0684578cea3e34b30b5"
+  "selection_sha256": "27f6f108a7e6d37c0196c5615f466cc0cf612e2044d0c0684578cea3e34b30b5",
+  "owner_adoption_amendment": {
+    "date": "2026-11-11",
+    "kind": "post-hoc owner amendment",
+    "authority": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180",
+    "issue": 302,
+    "original_design_passed": false,
+    "adopted": "B1-endpoint",
+    "not_adopted": "A3 refit; retained as transfer-penalty evidence",
+    "F2": {
+      "original": "A3 failed Xiao (+0.266082 percentage point) and Ermatchkov (+5.233986 percentage points); B1 passed both.",
+      "amendment": "Owner treats the +0.27 pp Xiao difference as measurement-level rather than a loss; the +5.23 pp Ermatchkov systematic loss remains.",
+      "reason": "Original 1e-6 pp rule was a design choice, not uncertainty-based; owner cites Xiao pressure uncertainty \u00b11.5%."
+    },
+    "F3": {
+      "original": "B1 Carson 1.132420 \u00d7 exceeds 1.10; A3 Carson 1.103341 \u00d7 exceeds 1.10.",
+      "amendment": "Owner accepts B1 Carson scaled RMS 1.106 (historical 0.977).",
+      "reason": "Comparable to accepted A3 historical 1.075; other fitted groups preserved."
+    },
+    "Merkley": {
+      "original": "A3 fails two 388.71 K, 60 wt% outside-fit heat comparisons.",
+      "amendment": "Report 60 wt% Merkley heats as concentration extrapolations.",
+      "reason": "Outside intended \u226450 wt% domain; follows the design concentration rule."
+    },
+    "limits": [
+      "Two active bounds: protonated-MDEA\u2013bicarbonate interaction +1 and Born diameter 7 \u00c5.",
+      "No parameter uncertainty estimate.",
+      "No F4 phase evidence at 394.94\u2013395.00 K.",
+      "Kuranov source rows 28 and 72 and seven corrected-Kamps states are outside the adopted R2 domain.",
+      "B1 heat at 333.15 K and 60 wt% MDEA is unavailable.",
+      "No absorber-use qualification; numerical reproduction and conditional outside-fit assessment only."
+    ]
+  }
 }

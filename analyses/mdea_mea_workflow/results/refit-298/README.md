@@ -1,5 +1,7 @@
 # MDEA refits with the adopted shared MEA values
 
+#302 subsequently adopts B1 through the [post-hoc owner amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180), recorded explicitly in `disposition.json`. The original gate outcomes below remain experiment history; A3 is not adopted.
+
 **The declared refits do not recover all required properties.** B1 recovers both pressure baselines; A3 recovers neither. Both selected records fail the Carson group-preservation rule. A3 also fails two outside-fit heat checks at 388.71 K and 60 wt% MDEA. This is the transfer penalty of the adopted shared set under this model, objective, bounds and declared starts, rather than a global impossibility result.
 
 The historical costs reproduce after restoring the pre-0e216fe water ideal-gas calorics in scratch. The refits use current calorics and the pinned 391dfe5d wheel. Kuranov source rows 28 and 72 are excluded from both baselines and refits, leaving 278 fitted observations. The adopted R2 law is unchanged.

@@ -1,5 +1,20 @@
 # MDEA–CO₂–H₂O preparation for issue 222
 
+
+## Current B1 adoption (#302, 11 November 2026)
+
+The owner adopted the #298 **B1-endpoint** on the #255 shared values and complete R2 declaration in a [post-hoc owner amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180). The original design did not pass every gate. A3 remains unrefit in `solvent_specification_mdea/A3.toml`; its old parameters are inconsistent with the adopted shared set. The A3 refit is retained only as evidence of the MEA → MDEA transfer penalty and is not adopted.
+
+- F2 originally failed both A3 pressure comparisons. The owner treats Xiao's +0.27 percentage point as a measurement-level difference, citing ±1.5% pressure uncertainty. Ermatchkov's +5.23 percentage points remains a systematic loss. B1 passed both pressure comparisons.
+- F3 originally failed Carson for B1 (1.132420 × historical scaled RMS, above 1.10) and A3 (1.103341 ×). The owner accepted B1 at scaled RMS 1.106 versus historical 0.977, comparable to accepted A3 historical 1.075.
+- The two A3 388.71 K, 60 wt% Merkley heat failures are reported as concentration extrapolations beyond the intended ≤50 wt% domain, rather than gate failures.
+
+The adopted specification replays 278 fitted predictions with maximum relative difference **0**, and cost **374.5190788052401** versus **374.5190788051367** (relative difference **2.7600e-13**). Xiao pressure AARD is **28.1910414167%** (20 rows); Ermatchkov is **18.2705616155%** (88 rows). This is numerical verification and conditional outside-fit assessment on wheel `391dfe5d`, SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`; it does not establish new physical validation.
+
+Limits: two active bounds (protonated-MDEA–bicarbonate +1 and Born diameter 7 Å); no parameter uncertainty estimate; no F4 phase evidence at 394.94–395.00 K; Kuranov rows 28 and 72 and seven corrected-Kamps states outside the adopted R2 domain; B1 333.15 K / 60 wt% heat unavailable. The retained F4 check covers 775 required records, with zero dense-liquid, ambiguous or unresolved states. No absorber-use qualification is claimed.
+
+[Adoption replay](../solvent_specification_mdea/results/adoption-302/verification.json) and [explicit original verdicts and amendment](results/refit-298/disposition.json) retain the evidence. Independent review of #302 is required before delivery; #298 delivered evidence was Supported at `67cbbd7`. The sections below describe historical studies under their own parameter and wheel bindings.
+
 Stage 1 is retained below. The owner authorized stage 2 on 2026-10-28.
 Stage-2 inspection found an undefined heat observable before any joint fit.
 The earlier preparation descriptions below retain their stage-1 meaning.
@@ -333,4 +348,4 @@ Independent delivered review remains open.
 
 ## MDEA refits with adopted shared MEA values (#298)
 
-The [retained refit result](results/refit-298/README.md) and notebook report four converged 278-row fits on the pinned 391dfe5d wheel. B1 recovers both pressure baselines, while A3 does not. Both selected records fail the Carson group-preservation rule. The owner-amended phase checks pass within the adopted R2 domain; they exclude seven corrected-Kamps states at 394.94–395.00 K. No parameters are adopted. Independent delivered-evidence review remains pending.
+The [retained refit result](results/refit-298/README.md) and notebook report four converged 278-row fits on the pinned 391dfe5d wheel. B1 recovers both pressure baselines, while A3 does not. Both selected records fail the Carson group-preservation rule. The owner-amended phase checks pass within the adopted R2 domain; they exclude seven corrected-Kamps states at 394.94–395.00 K. That experiment did not adopt parameters; the subsequent #302 owner amendment above adopts B1. The #298 evidence re-review was Supported at 67cbbd7.

@@ -29,10 +29,10 @@ def predict(row):
 
 def evaluate(label):
     global SPEC
-    SPEC = SolventSpecification(AN / f"{label}.toml")
+    SPEC = SolventSpecification(AN / ("B1-historical.toml" if label == "B1" else f"{label}.toml"))
     rows = SPEC.inputs["observations"]["fitted"]
     with concurrent.futures.ProcessPoolExecutor(
-        max_workers=os.cpu_count(), mp_context=multiprocessing.get_context("fork")
+        max_workers=int(os.environ['AGENT_HEAVY_CORES']), mp_context=multiprocessing.get_context("fork")
     ) as pool:
         records = list(pool.map(predict, rows))
     assert all(r["status"] == "Available" for r in records), records
@@ -68,7 +68,7 @@ def test_R1_R3_R5():
         if r["group"] == "Ermatchkov" and r["row"]["mass_fraction"] <= 0.49
     ]
     with concurrent.futures.ProcessPoolExecutor(
-        max_workers=os.cpu_count(), mp_context=multiprocessing.get_context("fork")
+        max_workers=int(os.environ['AGENT_HEAVY_CORES']), mp_context=multiprocessing.get_context("fork")
     ) as pool:
         er = list(pool.map(predict, selected))
     aard = relative_error_statistic(er)
@@ -94,7 +94,7 @@ def test_R1_R3_R5():
 @pytest.mark.parametrize("kind", ["reaction_coordinate", "reaction_enthalpy_shift"])
 def test_reaction_coordinate_equivalence(kind):
     # d513820 equations.md: reaction_constant_coordinate_derivative and affine q=origin+scale*v.
-    spec = SolventSpecification(AN / "B1.toml")
+    spec = SolventSpecification(AN / "B1-historical.toml")
     record = spec.inputs["observations"]["fitted"][11]
     problem = spec.problems[record["problem"]]
     original = copy.deepcopy(spec.spec["chemistry"]["reactions"]["aqueous"])
@@ -155,7 +155,7 @@ def test_reaction_coordinate_equivalence(kind):
 
 
 def test_nonfinite_split_is_unresolved(monkeypatch, tmp_path):
-    spec = SolventSpecification(AN / "B1.toml")
+    spec = SolventSpecification(AN / "B1-historical.toml")
     trial = SimpleNamespace(
         seed=0,
         evidence="resolved_descent",
