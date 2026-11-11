@@ -455,3 +455,77 @@ promoted for manuscript use. They support conditional numerical
 sensitivity and comparison with physical observations within the stated
 pressure-state, source, finite-search and composition limits. They do not
 qualify absorber use.
+
+## Issue 298: qualification stops before refitting
+
+The #297 wheel does not qualify the historical A3 and B1 fitted-observation
+replays under #298's F1 tolerance. No fit was started and no selection was
+frozen. These are numerical verification failures, with no pressure-recovery
+or physical transfer-penalty conclusion. The earlier results above retain
+their historical wheel and parameter identities.
+
+The execution used Engine `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel
+SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+The installed package and native-library bytes matched the wheel. The adopted
+MEA record and all three #297 shared-declaration hashes matched the handoff;
+source PDFs and tables from the existing stage-1 manifest matched their hashes.
+The [identity record](results/refit-298/identity.json) retains the checked inputs.
+
+| Record on #297 wheel | Historical retained cost | Same-wheel historical replay cost | Fixed substitution | Refit |
+|---|---:|---:|---|---|
+| A3, single-sphere cation | 403.71498514705206 | 403.72944037066316 | 278/280 fitted rows available; no complete cost | Not run: F1 fails |
+| B1, charged-molecule cation | 374.45201342397434 | 374.4467412886684 | 278/280 fitted rows available; no complete cost | Not run: F1 fails |
+
+| Historical record replay | Largest prediction difference, relative | Largest weighted-residual difference, absolute | Relative cost difference | F1 |
+|---|---:|---:|---:|---|
+| A3 | 2.76249490360e-5 | 0.00136131949643 | 3.58055166214e-5 | Fail |
+| B1 | 2.73222348764e-5 | 0.00136131949605 | 1.40796019701e-5 | Fail |
+
+The tolerance is $10^{-8}$ for each reported metric (absolute prediction
+tolerance near zero). All 280 historical fitted predictions are available.
+The largest prediction difference in both records is Weiland heat capacity,
+source row 35: 30 wt% MDEA, loading 0.50, at 298.15 K and 101325 Pa.
+The historical and replay molar heat capacities are 83.39387609989527 and
+83.39157234831809 J/(mol K) for A3, and 84.31783078138976 and
+84.31552702981288 J/(mol K) for B1. All seven other fitted groups have maximum
+relative prediction differences below $3\times10^{-12}$.
+This localizes the discrepancy to heat capacity among the evaluated groups;
+it does not identify the responsible Engine change.
+
+The fixed substitutions use the full, hash-verified R2 law, including its
+293.15–393.15 K domain. Kuranov source rows 28 and 72 are at 393.17 and
+393.16 K. Both are refused by the Engine as outside that correlation's domain,
+for both representations. The old application declaration extends to 395 K;
+the #255 transfer producer also inherited that old domain when substituting
+R2 coefficients. This execution preserves the exact #297 delivered domain.
+No law was extended, source temperature rounded, or objective row omitted.
+
+The [F1 record](results/refit-298/F1.json), per-record `fitted-replay.json`,
+`independent-residuals.json`, `parameters.json` and `R2.json` in
+[the retained result directory](results/refit-298/) contain the predictions,
+refusals, independent residual checks and exact inputs. The
+[execution log](results/refit-298/logs/f1-final.log) retains the completed
+qualification. Earlier logs retain the import-pin refusal, unsupported native
+object copy, and first domain exception encountered while preparing the replay.
+These preparation attempts ran no optimizer.
+
+F2 pressure recovery, including the separate older 24.2% Ermatchkov criterion,
+is not reassessed. F3 property preservation and outside-fit heats, including
+B1 at 333.15 K / 60 wt%, are not reassessed. F4 phase counts, scaled-Jacobian
+rank and equal-cost comparisons are not reassessed. F5 has no admissible refit
+endpoint because execution stopped at F1; this does not reject any uncomputed
+endpoint or establish a physical transfer penalty. Pressure replay, balances
+and derivative qualification remain unperformed after the failed prerequisite.
+The bounded experiment requires resolution of historical Cp replay and the
+R2-domain conflict before fitting can proceed. A few scalar discrepancies and
+categorical refusals are shown in tables because a plot would not clarify this
+qualification stop.
+
+The historical readers `prepare.py`, `retain_inputs.py` and
+`diagnose_carson_split.py` now bind the immutable outgoing MEA endpoint already
+retained by #297 (SHA-256
+`00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`).
+They remain historical producers and were not rerun. The #298 producer binds
+the adopted shared files explicitly. Historical result files, shared values,
+Engine pin, exports and manuscript files were unchanged. This evidence has
+not received independent delivered-result review or investigator promotion.
