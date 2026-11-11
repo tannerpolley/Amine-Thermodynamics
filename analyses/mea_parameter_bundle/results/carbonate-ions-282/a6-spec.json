@@ -1,0 +1,247 @@
+{
+ "controls": {
+  "maximum_iterations": 180,
+  "function_tolerance": 1e-06,
+  "parameter_tolerance": 1e-10,
+  "gradient_tolerance": 1e-08
+ },
+ "information_coordinates": [
+  {
+   "identity": "pair/carbamate-anion/water/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    0.5
+   ],
+   "target": [
+    "carbamate-anion",
+    "water"
+   ]
+  },
+  {
+   "identity": "pair/protonated-monoethanolamine/water/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    0.5
+   ],
+   "target": [
+    "protonated-monoethanolamine",
+    "water"
+   ]
+  },
+  {
+   "identity": "pair/carbamate-anion/protonated-monoethanolamine/k_ij",
+   "family": "k_ij",
+   "scale": 0.01,
+   "bounds": [
+    -1.0,
+    1.0
+   ],
+   "target": [
+    "carbamate-anion",
+    "protonated-monoethanolamine"
+   ]
+  },
+  {
+   "identity": "pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+   "family": "k_ij_reciprocal_temperature_slope",
+   "scale": 10.0,
+   "bounds": [
+    -1000.0,
+    1000.0
+   ],
+   "target": [
+    "protonated-monoethanolamine",
+    "water"
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/segment_diameter",
+   "family": "segment_diameter",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    2,
+    5.8
+   ],
+   "scale": 0.1,
+   "targets": [
+    {
+     "family": "segment_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 1.0
+    },
+    {
+     "family": "packing_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 0.88
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "target": "protonated-monoethanolamine",
+     "factor": 1.0
+    }
+   ],
+   "ties": [
+    {
+     "identity": "component/protonated-monoethanolamine/packing_diameter",
+     "factor": 0.88
+    },
+    {
+     "identity": "component/protonated-monoethanolamine/debye_huckel_diameter",
+     "factor": 1.0
+    }
+   ]
+  },
+  {
+   "identity": "component/carbamate-anion/segment_diameter",
+   "family": "segment_diameter",
+   "target": "carbamate-anion",
+   "bounds": [
+    2,
+    5.8
+   ],
+   "scale": 0.1,
+   "targets": [
+    {
+     "family": "segment_diameter",
+     "target": "carbamate-anion",
+     "factor": 1.0
+    },
+    {
+     "family": "packing_diameter",
+     "target": "carbamate-anion",
+     "factor": 0.88
+    },
+    {
+     "family": "debye_huckel_diameter",
+     "target": "carbamate-anion",
+     "factor": 1.0
+    }
+   ],
+   "ties": [
+    {
+     "identity": "component/carbamate-anion/packing_diameter",
+     "factor": 0.88
+    },
+    {
+     "identity": "component/carbamate-anion/debye_huckel_diameter",
+     "factor": 1.0
+    }
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/born_diameter",
+   "family": "born_diameter",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    2.0,
+    5.0
+   ],
+   "scale": 0.1
+  },
+  {
+   "identity": "component/carbamate-anion/born_diameter",
+   "family": "born_diameter",
+   "target": "carbamate-anion",
+   "bounds": [
+    2.0,
+    5.0
+   ],
+   "scale": 0.1
+  },
+  {
+   "identity": "reaction:R5:correlation:a_k",
+   "reaction": "R5",
+   "coefficient": "b",
+   "source_to_native_factor": -2.302585092994046,
+   "bounds": [
+    2922.336201205647,
+    3522.336201205647
+   ],
+   "scale": 80.0
+  },
+  {
+   "identity": "reaction:R2:enthalpy_shift",
+   "reaction": "R2",
+   "enthalpy_shift": true,
+   "bounds": [
+    -13417.329799989242,
+    6582.670200010758
+   ],
+   "scale": 2500.0
+  },
+  {
+   "identity": "reaction:R5:enthalpy_shift",
+   "reaction": "R5",
+   "enthalpy_shift": true,
+   "bounds": [
+    -20000.0,
+    0.0
+   ],
+   "scale": 2500.0
+  },
+  {
+   "identity": "pair/monoethanolamine/water/k_ij",
+   "family": "k_ij",
+   "target": [
+    "monoethanolamine",
+    "water"
+   ],
+   "scale": 0.01,
+   "bounds": [
+    -0.5,
+    0.5
+   ]
+  },
+  {
+   "identity": "pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope",
+   "family": "k_ij_reciprocal_temperature_slope",
+   "target": [
+    "monoethanolamine",
+    "water"
+   ],
+   "scale": 10.0,
+   "bounds": [
+    -1000.0,
+    1000.0
+   ]
+  },
+  {
+   "identity": "component/protonated-monoethanolamine/dispersion_energy_over_k",
+   "family": "dispersion_energy_over_k",
+   "target": "protonated-monoethanolamine",
+   "bounds": [
+    50,
+    950
+   ],
+   "scale": 10
+  },
+  {
+   "identity": "component/carbamate-anion/dispersion_energy_over_k",
+   "family": "dispersion_energy_over_k",
+   "target": "carbamate-anion",
+   "bounds": [
+    50,
+    1000
+   ],
+   "scale": 10
+  },
+  {
+   "identity": "pair/bicarbonate-anion/protonated-monoethanolamine/k_ij",
+   "family": "k_ij",
+   "scale": 0.1,
+   "bounds": [
+    -1.0,
+    1.0
+   ],
+   "target": [
+    "bicarbonate-anion",
+    "protonated-monoethanolamine"
+   ]
+  }
+ ],
+ "source": "results/engine-3e83e19c-refit-chain/a6/spec.json with issue 282 changes"
+}
