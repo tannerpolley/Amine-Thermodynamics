@@ -1,0 +1,88 @@
+Running as unit: issue284-qualify2.service; invocation ID: db8b56e0c4984e9296387a1671cec253
+1 +h -0.030632154432220116
+1 -h -0.03186274207414863
+1 +bound 0.03958586128241759
+1 -bound -0.08468089641398935
+2 +h -0.03295473943509952
+2 -h -0.02952605189815838
+2 +bound -0.12204373603729524
+2 -bound 0.2180242780303896
+{
+ "power": 2,
+ "sensitivity": {
+  "1": {
+   "coefficient": "pair/monoethanolamine/water/k_ij/a1",
+   "bound": 0.001,
+   "unloaded_change": {
+    "+h": -0.030632154432220116,
+    "-h": -0.03186274207414863,
+    "+bound": 0.03958586128241759,
+    "-bound": -0.08468089641398935
+   },
+   "derivative_times_bound": 0.06152938209642577,
+   "k_change_at_bound_393K": 0.08
+  },
+  "2": {
+   "coefficient": "pair/monoethanolamine/water/k_ij/a2",
+   "bound": 2e-05,
+   "unloaded_change": {
+    "+h": -0.03295473943509952,
+    "-h": -0.02952605189815838,
+    "+bound": -0.12204373603729524,
+    "-bound": 0.2180242780303896
+   },
+   "derivative_times_bound": -0.1714343768470572,
+   "k_change_at_bound_393K": 0.128
+  }
+ },
+ "replay": {
+  "final": {
+   "rows": 367,
+   "available": true,
+   "cost": [
+    148.88326044022858,
+    148.88326044022858
+   ],
+   "maximum_relative": 0.0,
+   "k_ij_313_393": [
+    [
+     -0.08990160794755829,
+     -0.08698727221237469,
+     -0.08466595913728188
+    ],
+    [
+     -0.08990160794755829,
+     -0.08698727221237469,
+     -0.08466595913728188
+    ]
+   ]
+  },
+  "candidate": {
+   "rows": 367,
+   "available": true,
+   "cost": [
+    148.51054565397726,
+    148.51054565397726
+   ],
+   "maximum_relative": 0.0,
+   "k_ij_313_393": [
+    [
+     -0.08958644196427461,
+     -0.08681295411606914,
+     -0.08460382854143976
+    ],
+    [
+     -0.08958644196427461,
+     -0.08681295411606914,
+     -0.08460382854143976
+    ]
+   ]
+  }
+ }
+}
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 37.497s
+CPU time consumed: 11ms
+Memory peak: 3.2M
+Memory swap peak: 0B
