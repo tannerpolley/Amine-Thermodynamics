@@ -10,13 +10,27 @@ $$D_{PZ}=4.25+1532\,[1/T-1/(298.15\,K)].$$
 
 Hilliard states that PZ was assumed equivalent to piperidine owing to limited data, using CRC (2004) and correcting to one PZ experimental point. This is an analog-derived pure permittivity slope, not a set of PZ mixture density/permittivity measurements that determines the adopted density-dependent Engine dielectric_volume/dielectric_temperature pair. The primary PZ point, its uncertainty and isotope/composition conditions were not recovered in this bounded search. Do not silently fit those Engine coefficients to the analog law. No HPZCOO permittivity measurement was found in the inspected corpus, source PDFs or search results. This is a bounded evidence gap, not proof that none exists anywhere.
 
-Under the owner's explicit fallback, fix PZ and HPZCOO to adopted neutral MEA dielectric_volume 0.7309865858310542 L/mol and dielectric_temperature 1019.0802597119892 K. Values were read from the SHA-256 f8f64820…eef97 document. They are transferred coefficients; no scientific claim of equal permittivity is made. Low-temperature ionic activity, Born solvation and the zwitterion contribution remain conditional on this assumption. No dielectric fitting is authorized here.
+### Verified temperature law and Engine mapping
+
+Hartono 2021, Zotero `NVDXQ5NY` / `L5BIJ5I8`, Table 8 row 5 and footnote p.7 prints
+
+$$\varepsilon_{PZ}=35.76+14836\left[1/(T/\mathrm{K})-1/298.15\right].$$
+
+Relative permittivity is dimensionless; the equivalent dimensional inverse-temperature form uses a 14836 K coefficient and reference temperature 298.15 K. The footnote explicitly says the MEA correlation was used because no data were available. This verifies the proposed numbers and form in an original PZ modeling publication, but **does not verify them as PZ measurements**. No original Akula publication establishing this as PZ data was identified. Hartono reports no independent PZ dielectric uncertainty or validity range for this transferred law. No new dielectric source is adopted.
+
+At Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, `engine/native/surface/parameter_builder.cpp:565–569` requires dielectric_volume and dielectric_temperature for every neutral component under the DensityTemperature formulation. `engine/native/contributions/electrolyte.hpp`, density_correlated_bulk_permittivity, defines, in the pure-neutral limit,
+
+$$\varepsilon_r(T,\rho)=1+\rho_{mol}v_\varepsilon(\Theta_\varepsilon/T-1),$$
+
+with molar density in mol/m³, dielectric volume in m³/mol (document input may be L/mol with conversion), and dielectric temperature in K. Thus a direct assignment of 35.76 to volume or 14836 to temperature is dimensionally wrong. Equating this expression to the temperature-only law requires a density function and a declared pressure/state path. At one reference state there is one equation for two coefficients, leaving infinitely many pairs. Even along a density curve, constant coefficients need not reproduce a temperature-only law exactly over an interval; deriving a pair would require an explicit estimation choice and evidence, not a units conversion. No such estimation is authorized here.
+
+Keep PZ and HPZCOO fixed at the adopted neutral MEA dielectric_volume 0.7309865858310542 L/mol and dielectric_temperature 1019.0802597119892 K under the owner's existing fallback. Values come from the SHA-256 f8f64820…eef97 document. The zwitterion retains that transfer in either event. The proposed Hartono law does not justify replacing these inputs; its source itself uses an MEA analog. Low-temperature ionic activity, Born solvation and the zwitterion contribution remain conditional on the transfer. No dielectric fitting or Engine changes were made.
 
 ## NMR observations
 
 Ermatchkov 2003 §2 pp.1278–1281 reports D2O, 121 experiments at 283/298/313/333 K, about 0.1–1.5 mol/kg PZ. Peak 2 represents the three uncarbamated protonation states; peaks 1+4 the monocarbamate plus protonated monocarbamate; peak 3 the dicarbamate. Eqs.1–7 give A1=A4=4k n_mono, A2=8k n_free, A3=8k n_di, k=sum(A)/(8 n_PZtotal). All groups share the normalization; there are two independent fractions, not three independent observations.
 
-The consistency of separate A1/A4 determinations with their sum is about (2±1.9)% (p.1281); repeated group determinations differed by no more than 1%. Neither statement supplies a measured covariance matrix or a species detection threshold. The design's peak-independence propagation is a declared assumption, with a 3.9% sensitivity calculation, not a source standard deviation. Ten blank dicarbamate cells in Tables 1–4 are not measured zeroes; no numeric upper bound is printed. Omit only that observation; retain the monocarbamate group, analytical total and original blank. Do not derive a third fraction from rounded cells and call it measured.
+The consistency of separate A1/A4 determinations with their sum is about (2±1.9)% (p.1281); repeated group determinations differed by no more than 1%. Neither statement supplies a measured covariance matrix or a species detection threshold. The owner-approved conditional peak-independence propagation is a declared assumption, with a 3.9% sensitivity calculation, not a source standard deviation. Ten blank dicarbamate cells in Tables 1–4 are not measured zeroes; no numeric upper bound is printed. Omit only that observation; retain the monocarbamate group, analytical total and original blank. Do not derive a third fraction from rounded cells and call it measured.
 
 ## Pressure uncertainty
 
