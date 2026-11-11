@@ -17,10 +17,10 @@ AN = Path(__file__).resolve().parent
 SOURCE = AN.parent / 'solvent_specification_mdea'
 OUT = AN / 'results/mdea'
 SPEC = SOURCE / 'B1.toml'
-WHEEL = Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl')
-SHA = 'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'
-REFERENCE = json.loads((SOURCE / 'results/comparisons.json').read_text()) + [r for r in json.loads(
-    (SOURCE / 'results/endpoint-checks.json').read_text())['R1']['records'] if r['identity'] in {f'fit:{i}' for i in range(125, 129)}]
+WHEEL = ROOT / 'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
+REFERENCE = json.loads((SOURCE / 'results/adoption-302/comparisons.json').read_text()) + [r for r in json.loads(
+    (SOURCE / 'results/adoption-302/replay.json').read_text()) if r['identity'] in {f'fit:{i}' for i in range(125, 129)}]
 
 
 def evaluate(case):
@@ -79,12 +79,12 @@ def main():
             assert abs(check.bulk_relative_permittivity / ref.bulk_relative_permittivity - (1 + sign * .05)) <= 1e-10
             cases.append((f'{T:g}-{label}', scale, dict(T_K=T, pressure_Pa=101325., rho_mol_m3=ref.molar_density,
                 epsilon=ref.bulk_relative_permittivity, fixed_density_epsilon=check.bulk_relative_permittivity)))
-    with ProcessPoolExecutor(os.cpu_count()) as pool:
+    with ProcessPoolExecutor(int(os.environ['AGENT_HEAVY_CORES'])) as pool:
         summaries = [baseline, *pool.map(evaluate, cases)]
     files = [Path(__file__), AN / 'dielectric_volume.py', ROOT / 'src/MEA/solvent_specification.py', SPEC,
-        SOURCE / 'declarations.toml', *sorted((SOURCE / 'inputs').iterdir()), SOURCE / 'results/comparisons.json', SOURCE / 'results/endpoint-checks.json']
-    dump(OUT / 'summary.json', dict(scenarios=summaries, engine_wheel_sha256=SHA, engine_commit='d513820994a78bfe628d42fffd55b2eeab6f89bd',
-        module=epcsaft.__file__, workers=os.cpu_count(), threads={k: os.environ.get(k) for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS')},
+        SOURCE / 'B1-declarations.toml', *sorted((SOURCE / 'inputs').iterdir()), SOURCE / 'results/adoption-302/comparisons.json', SOURCE / 'results/adoption-302/replay.json']
+    dump(OUT / 'summary.json', dict(scenarios=summaries, engine_wheel_sha256=SHA, engine_commit='391dfe5d64ede5036bf160bc6ae037ad5e14af32',
+        module=epcsaft.__file__, workers=int(os.environ['AGENT_HEAVY_CORES']), threads={k: os.environ.get(k) for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS')},
         inputs={str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
 
 
