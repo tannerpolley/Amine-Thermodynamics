@@ -46,3 +46,27 @@ plt.close(fig)
 (OUT / 'plot-provenance.json').write_text(json.dumps(dict(summary='summary.json', diagnostic_candidates=selected,
     values='pressure-plot.csv', uncertainty='Hartono Table 7 reported u(P), u(alpha); coverage interpretation in source-admission.md',
     series='observations and fitted predictions at measured states, shown as discrete points'), indent=2)+'\n')
+
+# #304: discrete held-out predictions and loading sensitivity, from retained values only.
+KUNDU = AN / 'results/kundu'
+if (KUNDU / 'current-pressures.csv').exists():
+    with (KUNDU / 'current-pressures.csv').open() as f:
+        rows = [{k: v if k == 'identity' else float(v) for k,v in r.items()} for r in csv.DictReader(f)]
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4), constrained_layout=True)
+    for ax, stock in zip(axes, (2.0, 2.8, 3.4)):
+        for T, color in ((303, '#0072B2'), (313, '#D55E00'), (323, '#009E73')):
+            group = [r for r in rows if r['stock_mol_L']==stock and r['T_K']==T]
+            if not group:
+                continue
+            alpha = [r['alpha'] for r in group]
+            predicted = [r['predicted_Pa']/1000 for r in group]
+            ax.scatter(alpha, [r['observed_Pa']/1000 for r in group], facecolors='none', edgecolors=color, marker='o', s=30, label=f'{T} K measured')
+            ax.errorbar(alpha, predicted,
+                yerr=[[r['predicted_Pa']/1000-min(r['low_alpha_Pa'], r['high_alpha_Pa'])/1000 for r in group],
+                      [max(r['low_alpha_Pa'], r['high_alpha_Pa'])/1000-r['predicted_Pa']/1000 for r in group]],
+                fmt='x', color=color, ms=5, lw=.7, label=f'{T} K predicted, α ±2%')
+        ax.set(title=f'{stock:.1f} mol/L stock', xlabel='Loading / mol CO₂ per mol AMP', ylabel='CO₂ partial pressure / kPa', yscale='log')
+        ax.grid(alpha=.2); ax.legend(fontsize=7)
+    fig.suptitle('Frozen AMP working fit with current shared species: held-out mean error 21.89%')
+    fig.savefig(KUNDU / 'pressure-comparison.svg', metadata={'Date': None})
+    plt.close(fig)
