@@ -7,7 +7,7 @@ execute:
 
 The reference-anchored ±5% permittivity cases change reactive bubble pressure by about −0.84/+0.77% at 353 K and −1.84/+1.66% at 393 K for a 30 wt% unloaded MEA stock at loading 0.44 mol CO₂/mol MEA. Density changes remain below 0.022%; equilibrium heat-capacity changes remain below 0.203% for these cases. The strongest Hajj-derived frozen-increment case changes bubble pressure by +10.62% at 393 K. These are **fixed-model predictions and numerical verification**, not physical validation of high-temperature or loaded-solution permittivity.
 
-**MEA and MDEA evidence is retained.** MDEA uses its normal pinned wheel separately from MEA. Across available MDEA comparisons, the four reference-anchored ±5% cases change individual pressure predictions by up to 6.05%, combined bicarbonate-plus-carbonate mole-fraction predictions by 0.321%, heat-capacity predictions by 0.0923% and density predictions by 0.0222%. These maxima span each retained property group's source conditions; they are not predictions at the reference composition alone. No parameter set is adopted and manuscript promotion remains separate.
+**MEA and MDEA evidence is retained.** MDEA uses the adopted #302 B1 record on the pinned 391dfe5d wheel. Across available MDEA comparisons, the four reference-anchored ±5% cases change individual pressure predictions by up to 6.04%, combined bicarbonate-plus-carbonate mole-fraction predictions by 0.323%, heat-capacity predictions by 0.0907% and density predictions by 0.0223%. These maxima span each retained property group's source conditions; they are not predictions at the reference composition alone. No parameter set is adopted and manuscript promotion remains separate.
 
 ## Physical basis and source assessment
 
@@ -73,29 +73,19 @@ The first diagnostic-state calculation used a nonexistent local dictionary key `
 
 Retain the current law as an explicit extrapolation assumption pending direct broadband/low-frequency unloaded high-temperature and loaded-MEA static evidence. Do not fit Hajj's narrow-band inferred static values. The ±5% directions modestly move pressure/speciation and barely move density in the stated cases; this does not identify the law or show it is physically accurate. The larger Hajj-derived amplitude stresses show pressure changes up to 10.62% at 393 K, with calibration cost rising rather than improving. Treat these as sensitivity evidence alongside the incomplete reconstruction searches and the separate MDEA assessment, not a parameter adoption or an uncertainty bound.
 
-The incomplete native phase reconstructions prevent a complete no-descent statement for six perturbed models. MDEA's known vapor-branch failure and one additional perturbed pressure failure limit comparison coverage as described below.
+The incomplete native phase reconstructions prevent a complete no-descent statement for six perturbed models. MDEA retains the unavailable capped heat and adopted-R2 domain exclusions described below. The earlier additional perturbed pressure failure does not recur with adopted B1.
 
 ## MDEA comparison and coverage
 
-MDEA uses its own normal immutable Engine wheel from merged `d513820994a78bfe628d42fffd55b2eeab6f89bd`, SHA-256 `ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5`. Installed package files were checked byte-for-byte. The B1 endpoint parameter SHA-256 is `1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d`. The existing generic solvent caller owns observations, declared domains and native predictions. No Hajj correction is transferred from MEA.
+MDEA now uses the adopted #302 B1 record, endpoint SHA-256 `2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d`, on Engine `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. Installed files are byte-identical. [The adoption disposition](../mdea_mea_workflow/notebook.qmd) records the post-hoc owner amendment, active bounds and limits. A3 is unchanged and not used in these scenarios. No Hajj correction is transferred from MEA.
 
-The baseline reproduces all 432 comparison identities and availability, with 406 available, 25 outside the declared domain and one `CentralSolveUnavailable`; all four capped calibration rows `fit:125`–`fit:128` reproduce and are available. The study-specific same-wheel check is $|q-q_{\rm ref}|\le10^{-10}\max(1,|q_{\rm ref}|)$ in native units for predictions, native residuals and exposed non-null saturation/endpoint loadings. It is numerical verification, not a physical uncertainty. The references are the retained comparison table and `endpoint-checks.json → R1.records`; historical weighted residuals are distinct.
+Each scenario has **403 available predictions out of 436 requested**: 25 outside the declared assessment interval, seven corrected-Kamps native domain refusals at 394.94–395.00 K (outside adopted R2), and one unavailable native capped heat. All four fitted Merkley heats remain available. Baseline comparisons and four fitted heats reproduce the freshly retained adoption replay within $10^{-10}\max(1,|q_{\rm ref}|)$ in native units, including exposed saturation and endpoint loadings. This is numerical verification, not physical uncertainty.
 
-The four independent anchors are unloaded 30 wt% MDEA at 101325 Pa and exactly 353/393 K. Baseline reference permittivities are 49.9006043 and 41.8592320. Constant coefficient scales are 0.948977518/1.051022482 at 353 K and 0.948776286/1.051223714 at 393 K. All fixed-temperature, fixed-density, fixed-composition ratio assertions pass within $10^{-10}$. Actual native permittivities for available rows are retained as `epsilon_primary_state`, with its actual temperature and pressure. For heat observations this explicitly describes the primary initial state, not the integrated path or saturation endpoint; native heat, endpoint and saturation loadings retain their separate meanings.
+The anchors remain unloaded 30 wt% MDEA at 101325 Pa and exactly 353/393 K. Fixed-temperature, fixed-density, fixed-composition permittivity-ratio checks pass within $10^{-10}$. Actual native permittivities for available primary states remain in `epsilon_primary_state`; they do not describe an integrated heat path.
 
-| Model | Available / requested | Outside domain | Native solve unavailable |
-|---|---:|---:|---:|
-| Baseline | 410 / 436 | 25 | 1 |
-| 353-minus5 | 409 / 436 | 25 | 2 |
-| 353-plus5 | 410 / 436 | 25 | 1 |
-| 393-minus5 | 410 / 436 | 25 | 1 |
-| 393-plus5 | 410 / 436 | 25 | 1 |
+`comparison:370` at 333.15 K and 60 wt% MDEA remains unavailable, with native heat, saturation and endpoint loading null. The 388.71 K / 60 wt% `comparison:374` heat is a concentration extrapolation: baseline −64.49095 kJ/(mol added CO₂), loading 0.15881424 mol/mol; 393-minus5/plus5 give −64.92472/−64.12339 kJ/mol and loadings 0.16002472/0.15784789 mol/mol. Saturation and endpoint loadings coincide in these available native results.
 
-Every model retains `comparison:370`, B1 at 333.15 K, 60 wt% MDEA and 1.121 MPa, as unavailable under the owner-authorized Engine #1073 limitation. Native heat, saturation loading and endpoint loading remain null. The six outside-domain capped comparison rows remain counted, and `comparison:374` at 388.71 K, 60 wt% MDEA and 1.121 MPa remains available. For that row, baseline signed heat is −64.12858 kJ/(mol added CO₂), with saturation and endpoint loading both 0.15815614 mol/mol. The 393-minus5/plus5 cases give −64.56189/−63.76178 kJ/(mol added CO₂) and loadings 0.15935744/0.15719831 mol/mol. These are native capped-addition results, without substituting another heat definition or an unavailable endpoint.
-
-The additional failure is `comparison:113` in `353-minus5`: corrected Kamps/Ermatchkov Table 6 row 13, 313.73 K, 7.994 mol MDEA/kg water and 9.227 mol CO₂/kg water; observed total pressure is 7.565 MPa. The native bubble solve exhausts 200 iterations with residual 0.10205 against $10^{-10}$ and reports association trial preparation/polish outside its domain. Its baseline prediction is 5.212761 MPa. The neighboring coefficient case `393-minus5` at the identical physical state succeeds in 82 iterations at 5.384550 MPa; its coefficient scale differs by only 0.00020123. This bounds the failure to numerical convergence for the declared starting conditions; it does not show a physical loss of a bubble point or establish the missing prediction. No tolerance, root, start or iteration-budget change is authorized by this study. The original failed prediction and native diagnostics remain in the all-row table; no value is interpolated from the neighboring model.
-
-All group statistics below use identities available in both the scenario and baseline. The Böttinger groups named `bicarbonate` compare the native sum of bicarbonate and carbonate mole fractions. Mean absolute relative deviations omit zero observed values and retain the denominator: each bicarbonate group has 58 available rows but 57 nonzero terms. For `353-minus5`, corrected-Kamps uses 27 matched rows with baseline matched AARD 25.44479%, compared with scenario 24.95432%; the baseline's full 28-row AARD is 25.64653% and must not be used as the matched denominator. The 13 Kuranov 413 K observations are outside the declared domain, so no AARD is assigned. Tables suit these heterogeneous property groups; they do not imply a continuous sensitivity curve.
+Group statistics use identities available in both scenario and baseline. Böttinger `bicarbonate` means bicarbonate-plus-carbonate mole fraction; each group has 58 available rows and 57 nonzero terms. Corrected-Kamps uses only 21 matched states. The 13 Kuranov 413 K observations receive no AARD. The earlier 353-minus5 numerical refusal does not recur with the adopted B1 record; all scenarios now share the same availability. No tolerances, starts or search controls changed.
 
 {{< include results/mdea/table.md >}}
 
@@ -108,7 +98,7 @@ Engine merged commit `3e83e19ccc771b51d8ebc038931ab25192f4c5b5`, wheel SHA-256 `
 
 ```bash
 agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src build/issue-265-venv/bin/python analyses/permittivity_temperature_loading/calculate.py
-agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src build/issue-265-mdea-venv/bin/python analyses/permittivity_temperature_loading/mdea.py
+agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src .venv/bin/python analyses/permittivity_temperature_loading/mdea.py
 agent-heavy build/issue-265-venv/bin/python analyses/permittivity_temperature_loading/present.py
 ```
 

@@ -1,0 +1,425 @@
+[chemistry]
+reactions = {"aqueous" = [{"name" = "R1", "stoichiometry" = {"water" = -2.0, "hydronium-cation" = 1.0, "hydroxide-anion" = 1.0}, "correlation" = {"a" = 3.7290977365566675, "b" = -13445.9, "c" = -22.4773, "d" = 0.0, "reference_temperature" = 313.15, "temperature_min" = 273.15, "temperature_max" = 395.0, "standard_state_id" = "aqueous-mole-fraction-infinite-dilution-water-v1"}, "reference" = {"source_basis" = "RawMoleFractionInfiniteDilution"}}, {"name" = "R2", "stoichiometry" = {"carbon-dioxide" = -1.0, "water" = -2.0, "bicarbonate-anion" = 1.0, "hydronium-cation" = 1.0}, "correlation" = {"a" = 23.87092013089665, "b" = -12017.430996556475, "c" = -36.7816, "d" = 0.0, "e" = 0.0, "f" = 0.0, "reference_temperature" = 313.15, "standard_state_id" = "aqueous-molality-infinite-dilution-water-v1", "temperature_max" = 393.15, "temperature_min" = 293.15}, "reference" = {"source_basis" = "CommonMolalityInfiniteDilution"}}, {"name" = "R3", "stoichiometry" = {"water" = -1.0, "bicarbonate-anion" = -1.0, "carbonate-anion" = 1.0, "hydronium-cation" = 1.0}, "correlation" = {"a" = 12.145792981306897, "b" = -12431.7, "c" = -35.4819, "d" = 0.0, "reference_temperature" = 313.15, "temperature_min" = 273.15, "temperature_max" = 395.0, "standard_state_id" = "aqueous-mole-fraction-infinite-dilution-water-v1"}, "reference" = {"source_basis" = "RawMoleFractionInfiniteDilution"}}, {"name" = "MDEA-dissociation", "stoichiometry" = {"protonated-methyldiethanolamine" = -1, "water" = -1, "methyldiethanolamine" = 1, "hydronium-cation" = 1}, "correlation" = {"a" = -16.398914976729678, "b" = -819.7, "c" = 10.976, "d" = 0.0, "reference_temperature" = 313.15, "temperature_min" = 278.0, "temperature_max" = 395.0, "standard_state_id" = "aqueous-molality-infinite-dilution-water-v1"}, "reference" = {"source_basis" = "CommonMolalityInfiniteDilution", "reference_pressure_pa" = 100000.0}}]}
+neutral_references = {"aqueous" = {"solvent" = "water", "standard_molality_mol_per_kg" = 1.0, "solute_molality_ratios" = {"methyldiethanolamine" = 0.125, "carbon-dioxide" = 0.125, "protonated-methyldiethanolamine" = 0.125, "hydronium-cation" = 0.125, "bicarbonate-anion" = 0.125, "hydroxide-anion" = 0.0625, "carbonate-anion" = 0.03125}}}
+
+[templates]
+"loaded-liquid" = {"T" = "$T", "P" = "$P", "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = 1.0, "carbon-dioxide" = "$alpha"}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine", "carbon-dioxide", "protonated-methyldiethanolamine", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion"]}], "reaction_set" = "aqueous", "neutral_reference" = "aqueous", "row_tolerance" = 1e-10}
+"loaded-bubble" = {"T" = "$T", "P" = {"free" = true, "guess" = "$P"}, "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = 1.0, "carbon-dioxide" = "$alpha"}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine", "carbon-dioxide", "protonated-methyldiethanolamine", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion"]}, {"name" = "V", "kind" = "vapor", "support" = ["water", "methyldiethanolamine", "carbon-dioxide"], "amount" = {"status" = "pinned", "value" = 0.0}, "composition_guess" = {"water" = 0.1, "methyldiethanolamine" = 1e-05, "carbon-dioxide" = 0.9}}], "reaction_set" = "aqueous", "neutral_reference" = "aqueous", "row_tolerance" = 1e-10}
+"zero-liquid" = {"T" = "$T", "P" = "$P", "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = 1.0, "carbon-dioxide" = 0.0}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine", "carbon-dioxide", "protonated-methyldiethanolamine", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion"]}], "reaction_set" = "aqueous", "neutral_reference" = "aqueous", "row_tolerance" = 1e-10}
+"cap-bubble" = {"T" = "$T", "P" = {"free" = true, "guess" = "$P"}, "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = 1.0, "carbon-dioxide" = 0.5}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine", "carbon-dioxide", "protonated-methyldiethanolamine", "bicarbonate-anion", "carbonate-anion", "hydronium-cation", "hydroxide-anion"]}, {"name" = "V", "kind" = "vapor", "support" = ["water", "methyldiethanolamine", "carbon-dioxide"], "amount" = {"status" = "pinned", "value" = 0.0}, "composition_guess" = {"water" = 0.1, "methyldiethanolamine" = 1e-05, "carbon-dioxide" = 0.9}}], "reaction_set" = "aqueous", "neutral_reference" = "aqueous", "row_tolerance" = 1e-10}
+"binary-bubble" = {"T" = "$T", "P" = {"free" = true, "guess" = "$P"}, "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = "$amine"}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine"], "composition_guess" = {"water" = "$water", "methyldiethanolamine" = "$amine"}}, {"name" = "V", "kind" = "vapor", "support" = ["water", "methyldiethanolamine"], "amount" = {"status" = "pinned", "value" = 0.0}, "composition_guess" = {"water" = 1.0, "methyldiethanolamine" = 1e-05}}], "row_tolerance" = 1e-10}
+"water-bubble" = {"T" = "$T", "P" = {"free" = true, "guess" = "$P"}, "feed" = {"basis" = "amounts", "values" = {"water" = "$water"}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water"], "composition_guess" = {"water" = "$water"}}, {"name" = "V", "kind" = "vapor", "support" = ["water"], "amount" = {"status" = "pinned", "value" = 0.0}, "composition_guess" = {"water" = 1.0}}], "row_tolerance" = 1e-10}
+"ion-free-liquid" = {"T" = "$T", "P" = "$P", "feed" = {"basis" = "amounts", "values" = {"water" = "$water", "methyldiethanolamine" = 1.0}}, "phases" = [{"name" = "L", "kind" = "liquid", "support" = ["water", "methyldiethanolamine"]}], "row_tolerance" = 1e-10}
+
+[phase_policy]
+carbon_component = "carbon-dioxide"
+carbon_species = ["carbon-dioxide", "bicarbonate-anion", "carbonate-anion"]
+neutral_species = ["water", "methyldiethanolamine", "carbon-dioxide"]
+packing_fraction_threshold = 0.10
+ambiguity_interval = [0.05, 0.35]
+
+[phase_states]
+path = "inputs/phase-states.csv"
+sha256 = "1dd77ba96a655a5f6b6cdb94d02d67507cebf68dad4b4c44b9815eb16e927c83"
+
+[[datasets]]
+name = "calibration-Carson"
+group = "Carson"
+role = "calibration"
+path = "inputs/calibration-Carson.csv"
+sha256 = "7bd0b8e6cd945d0817bf84de66df582b17aef6ed8248aae426a7f65f44c04dfe"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "addition_enthalpy"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+initial = "zero-liquid"
+final = "loaded-liquid"
+
+[[datasets]]
+name = "calibration-Cp"
+group = "Cp"
+role = "calibration"
+path = "inputs/calibration-Cp.csv"
+sha256 = "32db9e1c6005c6285c28175a1ae02b6f89e4222de9c2a6f6a8b858655b50ec99"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "equilibrium_isobaric_heat_capacity"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Jakobsen-carbonate"
+group = "Jakobsen"
+role = "calibration"
+path = "inputs/calibration-Jakobsen-carbonate.csv"
+sha256 = "60c2f5fe1900aa462b94ac89444278b11e5e7450368dd215539846d12534b160"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "amount_ratio"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"], "denominator_phase" = "L", "denominator_species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Jakobsen-cation"
+group = "Jakobsen"
+role = "calibration"
+path = "inputs/calibration-Jakobsen-cation.csv"
+sha256 = "f5203d7c9d392bda01574df18e4f29c182958a74aa637717d6804dfb82107093"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "amount_ratio"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["protonated-methyldiethanolamine"], "denominator_phase" = "L", "denominator_species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Kim-binary"
+group = "Kim"
+role = "calibration"
+path = "inputs/calibration-Kim-binary.csv"
+sha256 = "3edc485cd34ef32cccb53b075d53b787ad2e5a6da7d92aaaae43316d75ad92e6"
+template = "binary-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "log_ratio"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Kim-water"
+group = "Kim"
+role = "calibration"
+path = "inputs/calibration-Kim-water.csv"
+sha256 = "05e9477b06e6a1283540bb5d5f7b19dceda0934822d1d061c768e774576a89d2"
+template = "water-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "log_ratio"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Kuranov"
+group = "Kuranov"
+role = "calibration"
+path = "inputs/B1-calibration-Kuranov.csv"
+sha256 = "2683f73443cada5e012ae3f5f251bdc899222ad6ad725c5d7d8c19e55c0b0690"
+template = "loaded-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "log_ratio"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-Merkley"
+group = "Merkley"
+role = "calibration"
+path = "inputs/calibration-Merkley.csv"
+sha256 = "ff5e906205a1e915ad26dba9c9b00a7c55d8df012ac2ed54fba73b8af47c428c"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "saturation_capped_addition_enthalpy"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "T" = "$T", "P" = "$P", "phase" = "vapor", "basis_amount" = 1.0, "loading_cap" = "$alpha", "loading_bounds" = [0.05, 1.5], "loading_grid" = [0.05, 0.1, 0.15000000000000002, 0.2, 0.25, 0.30000000000000004, 0.35000000000000003, 0.4, 0.45, 0.5, 0.55, 0.6000000000000001, 0.65, 0.7000000000000001, 0.75, 0.8, 0.8500000000000001, 0.9, 0.9500000000000001, 1.0, 1.05, 1.1, 1.1500000000000001, 1.2000000000000002, 1.25, 1.3, 1.35, 1.4000000000000001, 1.4500000000000002, 1.5]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+initial = "zero-liquid"
+bubble = "cap-bubble"
+
+[[datasets]]
+name = "calibration-loaded-density"
+group = "loaded-density"
+role = "calibration"
+path = "inputs/calibration-loaded-density.csv"
+sha256 = "f2f796c6c727cab46ca2ff05c955bb8120a7604d9ff6c70483bb9e9e9dd0c64d"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "phase_density"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "calibration-unloaded-density"
+group = "unloaded-density"
+role = "calibration"
+path = "inputs/calibration-unloaded-density.csv"
+sha256 = "dbbea42108c22509efa86ce0eb9d31cb7647617d78f6b2792783c191305c7e95"
+template = "ion-free-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "phase_density"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Bottinger-amine-sum-25bar"
+group = "Bottinger-amine-sum-25bar"
+role = "outside-fit"
+path = "inputs/outside-fit-Bottinger-amine-sum-25bar.csv"
+sha256 = "ca33c3fcc4057a3e74220a0cfbcc475d1275470b9acafa1f0354b523a704798a"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "mole_fraction"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Bottinger-amine-sum-5bar"
+group = "Bottinger-amine-sum-5bar"
+role = "outside-fit"
+path = "inputs/outside-fit-Bottinger-amine-sum-5bar.csv"
+sha256 = "488940ecf3fc984edeee3fa145fe6f76936396fce802b5af881bcbee70f677ef"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "mole_fraction"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["methyldiethanolamine", "protonated-methyldiethanolamine"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Bottinger-bicarbonate-25bar"
+group = "Bottinger-bicarbonate-25bar"
+role = "outside-fit"
+path = "inputs/outside-fit-Bottinger-bicarbonate-25bar.csv"
+sha256 = "a788feff21199e1fe2c9a553a133e1fd408bd390d259289b2b7ea3567cc9fbf9"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "mole_fraction"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Bottinger-bicarbonate-5bar"
+group = "Bottinger-bicarbonate-5bar"
+role = "outside-fit"
+path = "inputs/outside-fit-Bottinger-bicarbonate-5bar.csv"
+sha256 = "7ac448699c14bc898a7a8a4877afba5950c31f5f9597343316006f87b256da4a"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "mole_fraction"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "species" = ["bicarbonate-anion", "carbonate-anion"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Cp-60wt"
+group = "Cp-60wt"
+role = "outside-fit"
+path = "inputs/outside-fit-Cp-60wt.csv"
+sha256 = "bd3d8b2d2f90cdca479df34ba63c5ff369d2d2b5856a1c6765de7b643c919f98"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "equilibrium_isobaric_heat_capacity"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Ermatchkov"
+group = "Ermatchkov"
+role = "outside-fit"
+path = "inputs/outside-fit-Ermatchkov.csv"
+sha256 = "bffe5603e6ddc4c12c268226b421deaea4ea6a8397771f84aea186b4b6830ae6"
+template = "loaded-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "partial_pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "V", "species" = ["carbon-dioxide"]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Kuranov-413K"
+group = "Kuranov-413K"
+role = "outside-fit"
+path = "inputs/outside-fit-Kuranov-413K.csv"
+sha256 = "27b302f4baa8efb0af7c79ad562237f484c2e68a9f38f28e7b9fc9b05220fff4"
+template = "loaded-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Merkley-half-loading"
+group = "Merkley-half-loading"
+role = "outside-fit"
+path = "inputs/outside-fit-Merkley-half-loading.csv"
+sha256 = "b202e6844954310692593f76967abaf5ce7d483f096efa46ae8cae422d18bbee"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "addition_enthalpy"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+initial = "zero-liquid"
+final = "loaded-liquid"
+
+[[datasets]]
+name = "outside-fit-Merkley-outside"
+group = "Merkley-outside"
+role = "outside-fit"
+path = "inputs/outside-fit-Merkley-outside.csv"
+sha256 = "b88e89910d7aa60ebaf3d8535b5a913d352dc28ebdfea490bddaaba81109ec25"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "saturation_capped_addition_enthalpy"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "T" = "$T", "P" = "$P", "phase" = "vapor", "basis_amount" = 1.0, "loading_cap" = "$alpha", "loading_bounds" = [0.05, 1.5], "loading_grid" = [0.05, 0.1, 0.15000000000000002, 0.2, 0.25, 0.30000000000000004, 0.35000000000000003, 0.4, 0.45, 0.5, 0.55, 0.6000000000000001, 0.65, 0.7000000000000001, 0.75, 0.8, 0.8500000000000001, 0.9, 0.9500000000000001, 1.0, 1.05, 1.1, 1.1500000000000001, 1.2000000000000002, 1.25, 1.3, 1.35, 1.4000000000000001, 1.4500000000000002, 1.5]}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+initial = "zero-liquid"
+bubble = "cap-bubble"
+
+[[datasets]]
+name = "outside-fit-Sedighi"
+group = "Sedighi"
+role = "outside-fit"
+path = "inputs/outside-fit-Sedighi.csv"
+sha256 = "4ce05f4d475f79af355443fe6a700d25ecf3585fe16ac67a112fe33ee564690c"
+template = "loaded-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-Zheng"
+group = "Zheng"
+role = "outside-fit"
+path = "inputs/outside-fit-Zheng.csv"
+sha256 = "e255f451d0de07ad57279a6ac1b6806eb89b9aa8236f891b473108e6e0dc1b3a"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "addition_enthalpy"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "feed" = {"carbon-dioxide" = 1.0}, "amount" = "$alpha", "T" = "$T", "P" = "$P", "phase" = "vapor"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+initial = "zero-liquid"
+final = "loaded-liquid"
+
+[[datasets]]
+name = "outside-fit-corrected-Kamps"
+group = "corrected-Kamps"
+role = "outside-fit"
+path = "inputs/outside-fit-corrected-Kamps.csv"
+sha256 = "4a398d4b816bc8c807ed809c81ef12421485b94aab01b6ef874202a56a53d7a6"
+template = "loaded-bubble"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "pressure"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale"}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+[[datasets]]
+name = "outside-fit-density-60wt"
+group = "density-60wt"
+role = "outside-fit"
+path = "inputs/outside-fit-density-60wt.csv"
+sha256 = "facdc0e8649e4cad6cb58b9fb16db407b2713ddf8e7e7bf6e87bb776ff84328e"
+template = "loaded-liquid"
+columns = {"observation_order" = "observation_order", "T" = "T", "P" = "P", "water" = "water", "alpha" = "alpha", "amine" = "amine", "observed" = "observed", "scale" = "scale", "weight" = "weight"}
+constructor = "observation"
+kind = "phase_density"
+arguments = {"observed" = "$observed", "form" = "difference", "scale" = "$scale", "phase" = "L", "mass_basis" = true}
+weight = "$weight"
+filter = {}
+temperature_domain = [293.15, 395.0]
+
+
+[composition]
+basis = "analytical molar feed amounts"
+units = "mol"
+analytical_amines = ["methyldiethanolamine"]
+loading_denominator = "mol analytical MDEA"
+loading_units = "mol CO2 / mol MDEA"
+pressure_units = "Pa"
+temperature_units = "K"
+
+# Atom counts and signed charge for the species in the four declared aqueous reactions.
+[element_formulas]
+water = {H = 2, O = 1, charge = 0}
+carbon-dioxide = {C = 1, O = 2, charge = 0}
+bicarbonate-anion = {H = 1, C = 1, O = 3, charge = -1}
+carbonate-anion = {C = 1, O = 3, charge = -2}
+hydronium-cation = {H = 3, O = 1, charge = 1}
+hydroxide-anion = {H = 1, O = 1, charge = -1}
+methyldiethanolamine = {C = 5, H = 13, N = 1, O = 2, charge = 0}
+protonated-methyldiethanolamine = {C = 5, H = 14, N = 1, O = 2, charge = 1}
+
+[export_conventions]
+mass = "molar_mass is copied unchanged from the Engine parameter document, including rounded magnitudes, units and provenance. Formula masses for conservation are derived by the column; no Engine mass is altered."
+caloric = "inputs/caloric.json is the single source of ideal-gas calorics. Ionic standard thermochemistry is completed by Engine from the four K(T) laws and the aqueous neutral reference; there is no independent reaction enthalpy or second absorption-heat source."
+reaction_direction = "K is dimensionless; correlation is natural ln K: a and c dimensionless, b in K, d in 1/K, reference_temperature and temperature limits in K; reference_pressure_pa in Pa. Negative stoichiometric coefficients are reactants; positive coefficients are products. Extent unit: mol of reaction as written. Enthalpy follows the declared K(T) law and its source_basis/standard_state_id, with Engine reference conversion; it is not an independently fitted heat."
+neutral_reference = "eq.NeutralReference fields: solvent (component ID), solute_molality_ratios (dimensionless), standard_molality_mol_per_kg (mol/kg solvent), species_reference (eq.SpeciesReference enum). No per-species override is declared (empty mapping); Engine uses PureLiquid for solvent and InfiniteDilution for every solute. Enum names: PureLiquid, InfiniteDilution, PureGas; no PureGas choice is used."
+assessment = "Regions are prepared-row minima/maxima, not continuous validity domains. For saturation-capped heat observations, region records requested loading caps; evaluated_region records available native endpoint loadings from the retained results. wt_percent is unloaded aqueous analytical amine mass percent using unchanged Engine molar masses; loading is mol CO2/mol analytical MDEA. AARD_percent uses available nonzero observations only and is not experimental uncertainty. Phase search covers only the retained 751 endpoint states. Native observation values are retained by row; derivative actions were not assessed by #228."
+
+[export_property_groups]
+pressure = ["Kuranov", "Ermatchkov", "Kuranov-413K", "Sedighi", "Zheng", "corrected-Kamps"]
+speciation = ["Jakobsen", "Bottinger-amine-sum-25bar", "Bottinger-amine-sum-5bar", "Bottinger-bicarbonate-25bar", "Bottinger-bicarbonate-5bar"]
+heat = ["Carson", "Merkley", "Merkley-half-loading", "Merkley-outside"]
+Cp = ["Cp", "Cp-60wt"]
+density = ["loaded-density", "unloaded-density", "density-60wt"]
+binary_VLE = ["Kim"]
+
+# Analytical mole incidence, consistent with the declared formulas and reaction extents.
+[analytical_components]
+water = {water = 1}
+carbon-dioxide = {carbon-dioxide = 1}
+methyldiethanolamine = {methyldiethanolamine = 1}
+protonated-methyldiethanolamine = {methyldiethanolamine = 1}
+bicarbonate-anion = {carbon-dioxide = 1, water = 1}
+carbonate-anion = {carbon-dioxide = 1, water = 1}
+hydronium-cation = {water = 1}
+hydroxide-anion = {water = 1}

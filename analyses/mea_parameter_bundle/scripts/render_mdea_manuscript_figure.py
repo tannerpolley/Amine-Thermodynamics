@@ -16,19 +16,25 @@ OUT = ROOT / 'docs/scientific/latex/figures/generated'
 def main():
     apply_style()
     inputs, panels, statistics = {}, [], {}
-    for source, count, expected in [('Ermatchkov', 88, (26.208, 19.146)),
-                                     ('Xiao', 20, (20.398, 28.276))]:
+    for source, count, expected in [('Ermatchkov', 88, (26.208, 18.270562)),
+                                     ('Xiao', 20, (20.398, 28.191041))]:
         series = []
         for label, reference in zip(('A3', 'B1'), expected):
             path = RESULTS / (f'stage2-capped/{label}/comparisons.json' if source == 'Ermatchkov'
                               else f'context-sources/{label}-Xiao.json')
+            if label == 'B1':
+                path = RESULTS / 'refit-298/B1-endpoint/pressure.json'
             inputs[str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()
             rows = json.loads(path.read_text())
-            if source == 'Ermatchkov':
+            if source == 'Ermatchkov' and label == 'A3':
                 rows = [r for r in rows if r['group'] == source and r['row']['mass_fraction'] <= .49]
                 observed, predicted = 'observed', 'predicted'
             else:
                 observed, predicted = 'observed_p_CO2_Pa', 'predicted_p_CO2_Pa'
+            if label == 'B1':
+                rows = [r for r in json.loads(path.read_text()) if r['group'] == source]
+                observed, predicted = 'observed_Pa', 'predicted_Pa'
+                rows = [dict(r, status='Available' if r['success'] and r['requested_tolerance_met'] else 'Unavailable') for r in rows]
             assert len(rows) == count and all(r['status'].lower() == 'available' for r in rows)
             x, y = [r[observed] for r in rows], [r[predicted] for r in rows]
             assert all(v > 0 for v in x + y)
@@ -45,7 +51,7 @@ def main():
         values = [v for x, y, _ in series for v in x + y]
         lo, hi = min(values) * .8, max(values) * 1.25
         ax.plot([lo, hi], [lo, hi], color='0.5', lw=.7, label='Equality')
-        for (x, y, aard), name, marker, color in zip(series, ('Single-sphere', 'Charged-molecule'),
+        for (x, y, aard), name, marker, color in zip(series, ('A3 historical', 'B1 adopted refit'),
                                                   ('o', 'x'), ('#0072B2', '#D55E00')):
             ax.plot(x, y, ls='none', marker=marker, color=color, markerfacecolor='none',
                     markersize=3.5, label=f'{name}: {aard:.2f}%')
