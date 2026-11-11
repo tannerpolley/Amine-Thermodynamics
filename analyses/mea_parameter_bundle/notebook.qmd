@@ -659,7 +659,7 @@ Both sets of gates are retained in [salt/summary.json](results/carbonate-ions-28
 - **The substituted final set** has every state available, no resolved descent and every row available. It is the anchor.
 - **The substituted #255 candidate** has two unavailable CO₂-free 25 wt%, 333.15 K states. The Engine refused its initial fit evaluation at one of them, so that start gives no candidate. No other start or fallback was added.
 
-**Budget.** Under the owner's 3-core cap per job, the per-stage wall-time limit was scaled from 7200 s to 76 800 s for these two refits only. Both stages converged well inside it: 31 iterations in 6736 s, then 7 iterations in 1861 s.
+**Budget.** Under the owner's 3-core cap per job, the per-stage wall-time limit was scaled from 7200 s to 76 800 s for these two refits only. Both stages converged well inside it: 30 iterations in 6736 s, then 6 iterations in 1861 s.
 
 **The fit and retreat.** Both stages end with 6 enforced states still descending. The retreat toward the anchor gives an admissible record at t = 0.975693.
 
@@ -726,11 +726,11 @@ The salt-reference design is unchanged; under the amendment these bounds are car
 
 ## Meaning and limits
 
-A stable MEA record exists with salt-anchored water–HCO₃⁻ and water–CO₃²⁻, and it passes the #255 acceptance rules without the fitted bicarbonate–water value of 0.727. The compensation moves to MEAH⁺–HCO₃⁻, which the fit drives to its +1 bound, and several other MEA-ion coordinates move by several optimizer scales. The record costs 1.2 more than the final set and moves the shared MDEA pressures far from their data.
+A stable MEA record exists with salt-anchored water–HCO₃⁻ and water–CO₃²⁻, and it passes the #255 acceptance rules without the fitted bicarbonate–water value of 0.727. The fit drives MEAH⁺–HCO₃⁻ to its +1 bound, and several other MEA-ion coordinates move by several optimizer scales. That is consistent with the compensation being taken up by this pair together with the other changed coordinates; the run does not isolate each coordinate's share. The record costs 1.2 more than the final set and moves the shared MDEA pressures far from their data.
 
 Limits:
 - **Evidence type.** This is calibration against model-derived salt reference values (Peiper & Pitzer's Pitzer tables) and the 307 MEA rows. It is numerical verification, not validation, and it establishes no physical MEAH⁺–HCO₃⁻ value.
-- **The refit** is a local optimum from the one admissible start. The stability search is finite at declared states, and the acceptance rules are repository policy.
+- **The refit** is an admissible retreated record obtained from one converged penalty-fit run at the one admissible start. It was reached by interpolation and bisection, not optimized at that point, so local optimality is not established. The stability search is finite at declared states, and the acceptance rules are repository policy.
 - **Temperature range.** The salt laws are fitted at 278–318 K and extrapolated to 393 K.
 - **Bounds.** Every result is conditional on the two salt-fit intercepts at −1.
 - **Unchanged files.** The parameter record, the Engine pin and the manuscript are unchanged.
