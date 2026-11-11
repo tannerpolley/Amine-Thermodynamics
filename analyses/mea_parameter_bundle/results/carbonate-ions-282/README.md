@@ -1,6 +1,6 @@
 # Water–HCO₃⁻ and water–CO₃²⁻ anchored to sodium-salt osmotic data (issue 282): F1 passes as amended, F2 passes, MDEA pressures degrade
 
-**Result.** With the water–HCO₃⁻ and water–CO₃²⁻ laws held at their salt-fitted values, one stable MEA record passes the #255 acceptance rules (F2). It moves the MEA-specific bicarbonate correction to MEAH⁺–HCO₃⁻, which the optimizer drives to its +1 bound. The record costs more than both references, and the shared laws make the MDEA pressures much worse.
+**Result.** With the water–HCO₃⁻ and water–CO₃²⁻ laws held at their salt-fitted values, one stable MEA record passes the #255 acceptance rules (F2). The optimizer drives MEAH⁺–HCO₃⁻ to its +1 bound and moves several other MEA-ion coordinates at the same time, which is consistent with the MEA-specific bicarbonate correction being taken up by that pair together with the other changed coordinates. The run does not isolate each coordinate's share. The record costs more than both references, and the shared laws make the MDEA pressures much worse.
 - **F1 (salt reference).** It passes under the owner's 2026-11-09 amendment, without refitting:
   - NaHCO₃ AARD 0.163 % (≤ 1.5 %);
   - Na₂CO₃ AARD 5.111 % (≤ 6.5 %);
@@ -16,7 +16,7 @@
   - MEAH⁺–HCO₃⁻ is **0.9757** at the candidate and **+1.0, the upper bound,** at the stage-1 endpoint.
   - Carbamate–MEAH⁺ (−1) and the R5 enthalpy-shift total (+10 000 J/mol) stay on their bounds.
 - **Pool comparison (step 5).** The refit covers 17 of 19 Matin–Böttinger pool points at each of the three pressures, against 18 of 19 for the final set. The carbonate share F_C mean calc/obs rises from 0.073 to 0.103.
-- **MDEA transfer (step 6).** At fixed MDEA-specific parameters, the four pressure AARDs rise from 20.4–28.3 % to 111–172 % under either R2 law, always overpredicting. The MDEA-specific parameters were fitted with the old shared values, so this measures the mismatch, not the salt values.
+- **MDEA transfer (step 6).** At fixed MDEA-specific parameters, the four pressure AARDs rise from 19.1–28.3 % to 111–172 % under either R2 law, overpredicting at nearly every row (102–108 of 108). The MDEA-specific parameters were fitted with the old shared values, so this measures the mismatch, not the salt values.
 
 Nothing is adopted: `selected-current-best-parameters.json`, the Engine pin, `docs/scientific/latex/` and `analyses/_cse-manuscript.json` are unchanged.
 
@@ -27,7 +27,7 @@ This is calibration and numerical verification against model-derived salt refere
 - **Engine.** `main` `bc7794731e94be961d16028d3f4880c6718a93ad`, wheel SHA-256 `8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069`, installed in this worktree only. Every JSON result records the wheel.
 - **Script.** [`carbonate_ions_282.py`](../../scripts/carbonate_ions_282.py): `qualify | salt | amend | scan | leverage | anchors | fit <final|candidate> | assess <final|candidate> | select | compare | mdea`. It reuses `stable_refit_255.py` by import. This build copied two sets of lines from #283's copy of that file, with identical text:
   - **retreat screening.** `admissible(..., suspects)` first searches the states that failed at the previous step, so a rejected step costs a few searches instead of a full 1903-state grid. The admissibility decision and t are unchanged.
-  - **pool sizing.** Process pools and optimizer workers are sized from `AGENT_HEAVY_CORES`, the owner's 3-core cap per job (2026-11-09).
+  - **pool sizing.** Process pools and optimizer workers are sized from `AGENT_HEAVY_CORES`, the owner's 3-core cap per job (2026-11-09). Two retained runs did not use that sizing and asked for one worker per CPU: the salt fits, run before the cap, and the MDEA transfer, run inside `agent-heavy`'s 3-core quota (see the producer copy in `mdea-transfer/producers/`). The script now sizes both from `AGENT_HEAVY_CORES`; neither was rerun.
 
   Every step after `salt` runs only when `salt/summary.json` records F1 as passed. Each heavy step ran under `agent-heavy` at 3 cores; see [logs/](logs/).
 - **Water and electrolyte model.** The selected record (`00e77608…`) reduced to water, Na⁺, Cl⁻, HCO₃⁻, CO₃²⁻ and OH⁻.
@@ -156,8 +156,8 @@ The two states unavailable at the substituted candidate are `dense|0.25|333.15|1
 
 | Start | Stage | Status | Iterations | Wall time / s | Total cost (start → end) | 307-row cost | Enforced descent at endpoint |
 |---|---|---|---:|---:|---|---:|---:|
-| substituted final set | 0 (s = 10⁻²) | converged | 31 | 6736 | 351.479 → 149.974 | 149.9726 | 6 / 1903 |
-| substituted final set | 1 (s = 3×10⁻³) | converged | 7 | 1861 | 149.989 → 149.984 | 149.9736 | 6 / 1903 |
+| substituted final set | 0 (s = 10⁻²) | converged | 30 | 6736 | 351.479 → 149.974 | 149.9726 | 6 / 1903 |
+| substituted final set | 1 (s = 3×10⁻³) | converged | 6 | 1861 | 149.989 → 149.984 | 149.9736 | 6 / 1903 |
 | substituted #255 candidate | 0 | **initial_evaluation_failed** | 0 | 185 | — | — | — |
 
 - **The candidate start.** The Engine refused the initial evaluation with first numerical failure `Stop.left_domain`. Its message reads "stalled: residual 1.10×10⁻⁷ against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations". The failing row is the enforced state `dense|0.25|333.15|1e-05|1.05`, the same one the anchor qualification found unavailable. No stage returned an endpoint, so [candidate/retreat.json](candidate/retreat.json) records "no stage returned an available 307-row endpoint". **This start gives no candidate.** No other start, retry or fallback was added.
@@ -281,7 +281,7 @@ The 60- and 120-point grids agree with the 30-point values within 6×10⁻⁸ J/
 
   F1 passes only under the owner's 2026-11-09 amendment.
 - **The refit.**
-  - It is a local optimum from one start. The other start is refused by the Engine, so the two-start comparison has one member.
+  - It is an admissible retreated record obtained from one converged penalty-fit run. It was reached by interpolation and bisection toward the fit endpoint, not optimized at that point, so local optimality is not established. The other start is refused by the Engine, so the two-start comparison has one member.
   - Three coordinates sit on bounds at the stage-1 endpoint and two at the candidate.
   - MEAH⁺–HCO₃⁻ reaches its +1 bound, and the candidate value 0.9757 is set by the retreat factor t. F2 therefore shows that a stable record exists with salt-anchored water–anion laws. It does not establish a physical MEAH⁺–HCO₃⁻ value.
 - **Stability.** The searches are finite, at declared states, not a global certificate.

@@ -202,7 +202,7 @@ def salt_fit(name, laws, active, rows_of):
     coordinates = [reg.coordinate(parameters, [('temperature_law_coefficient', f'{LAWS[ion]}/a{p}', 1.0)], origin=laws[ion][p],
                                   scale=SCALES[p], bounds=BOUNDS[p]) for ion, p in active]
     controls = reg.FitControls(maximum_iterations=200, maximum_elapsed_time_seconds=3600., function_tolerance=1e-12,
-                               parameter_tolerance=1e-12, gradient_tolerance=1e-10, workers=os.cpu_count())
+                               parameter_tolerance=1e-12, gradient_tolerance=1e-10, workers=r.CORES)
     fit = reg.fit(parameters, coordinates, [x['item'] for x in rows], controls=controls)
     fitted = copy.deepcopy(laws)
     for (ion, p), value in zip(active, fit.physical, strict=True):
@@ -686,6 +686,7 @@ def mdea():
         ("AN / 'results/transfer-267'", f'Path({str(out)!r})'), (old_wheel, repr(str(r.WHEEL))),
         ("'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'", repr(r.SHA)),
         ("def metric(records):", inject + "def metric(records):"),
+        ("max_workers=min(os.cpu_count(), len(jobs),", f"max_workers=min({r.CORES}, len(jobs),"),  # agent-heavy's per-job core cap
         ("    frozen=copy.deepcopy(document); pair(frozen)['value']['magnitude']=pair(base)['value']['magnitude']\n"
          "    assert [p for p in frozen['pairs'] if {p['component_id_a'],p['component_id_b']}<=shared]==[p for p in base['pairs'] if {p['component_id_a'],p['component_id_b']}<=shared]",
          f"    same=lambda d:[p for p in d['pairs'] if {{p['component_id_a'],p['component_id_b']}}<=shared and {held}]\n    assert same(document)==same(base)"),
