@@ -15,18 +15,18 @@ import matplotlib.pyplot as plt
 from manuscript_style import apply_style
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "figures/a7_regression_overview/output"
-DATA = ROOT / "results/engine-3e83e19c-paper-evidence"
+DATA = ROOT / "results/adoption-297/paper-evidence"
 PRESSURE = DATA / "pressure-figure-data.csv"
 SPECIES_DATA = DATA / "species-figure-data.csv"
 POOL = DATA / "pool-figure-data.csv"
 NATIVE_FIT = DATA / "fitted-rows.csv"
-PHYSICAL = ROOT / "results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json"
+PHYSICAL = ROOT / "results/stable-refit-255/evidence/candidate-parameters.json"
 PARAM = ROOT / "results/selected-current-best-parameters.json"
 QUALIFICATION = DATA / "fit-summary.json"
 # Separate legacy diagnostic renderer reads this file; this notebook does not.
 FIT = ROOT / "results/current-best-fit-residuals.csv"
 HCO3_POOL_LABEL = "HCO3- + CO3^2-"
-ENGINE_COMMIT = "A7, Engine 3e83e19c"
+ENGINE_COMMIT = "#255, Engine 391dfe5d"
 COLORS = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9"]
 SOURCES = ["Aronu2011", "Hilliard2008", "Idris2014", "Jou1995", "Mamun2005", "Xu2011"]
 MARKERS = dict(zip(SOURCES, ["*", "o", "D", "^", "h", "v"], strict=True))
@@ -140,7 +140,7 @@ def render_isotherms(pressure, colors, title):
     legend.set_axis_off()
     handles = [Line2D([], [], linestyle='none', marker=MARKERS[s], markerfacecolor='none',
                       markeredgecolor=c, label=s) for s, c in colors.items()]
-    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='A7 at observed loading')]
+    handles += [Line2D([], [], linestyle='none', marker='+', color='black', label='#255 at observed loading')]
     legend.legend(handles=handles, loc='center', frameon=False, title='Observed (open) / calculated (+)')
     save(fig, 'pressure')
 
@@ -213,7 +213,7 @@ def render_speciation(rows):
                for s, c in species_colors.items()]
     handles += [Line2D([], [], linestyle='none', marker=m, color='black',
                        markerfacecolor='none', label=l) for m, l in
-                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', 'A7 at observed loading')]]
+                [('o', 'Observation, fitted'), ('s', 'Observation, not fitted'), ('+', '#255 at observed loading')]]
     axes.flat[-1].legend(handles=handles, loc='center', frameon=False)
     save(fig, 'speciation')
 
@@ -224,7 +224,7 @@ def render_pool(rows):
     ax.scatter([float(r['loading']) for r in rows], [float(r['observed']) for r in rows],
                marker='s', facecolors='none', edgecolors='#009E73', label='Matin observations')
     ax.scatter([float(r['loading']) for r in rows], [float(r['predicted']) for r in rows],
-               marker='+', color='black', label='A7 pool comparison')
+               marker='+', color='black', label='#255 pool comparison')
     ax.set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='HCO₃⁻ + CO₃²⁻ mole fraction',
            title='Matin pool · report-only · 20 °C')
     ax.legend(frameon=False)
@@ -245,9 +245,9 @@ def render_heat(rows):
         ax.scatter([float(r['loading']) for r in group], [float(r['observed_kJ_mol']) for r in group],
                    marker=('o', 's')[index], facecolors='none', edgecolors=COLORS[index], label=source + ' observed')
         ax.scatter([float(r['loading']) for r in group], [float(r['predicted_kJ_mol']) for r in group],
-                   marker='+', color=COLORS[index], label=source + ' A7 at measured states')
+                   marker='+', color=COLORS[index], label=source + ' #255 at measured states')
     ax.set(xlabel='CO₂ loading (mol/mol MEA)', ylabel='Integral addition enthalpy (kJ/mol CO₂)',
-           title='A7 · Vinjarapu fitted; Arcis non-fitted prediction')
+           title='#255 · Vinjarapu fitted; Arcis non-fitted prediction')
     ax.legend(frameon=False, fontsize=8)
     ax.grid(alpha=.18)
     save(fig, 'heat-of-absorption')
@@ -258,7 +258,7 @@ def render_density(rows, summary):
     rows = [r for r in rows if r['id'] in ids]
     assert len(rows) == 47 and all(r['parameter_sha256'] == digest(PARAM) for r in rows)
     failures = [r for r in rows if abs(float(r['error_over_s'])) > 2]
-    assert len(failures) == 3 and {float(r['T_K']) for r in failures} == {353.15}
+    assert len(failures) == 47 - sum(summary['density'][name]['within_2s'] for name in cohorts)
     temperatures = sorted({float(r['T_K']) for r in rows})
     fig, axes = plt.subplots(1, 2, figsize=(11, 6))
     fig.subplots_adjust(bottom=.37, top=.9, wspace=.2)
@@ -281,7 +281,7 @@ def render_density(rows, summary):
         ax.grid(alpha=.18)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='lower center', bbox_to_anchor=(.5, .21), ncol=4, frameon=False)
-    fig.text(.06, .16, 'Dashed limits: ±2s for each row, normalized by its own retained s; 44/47 within limits.', fontsize=9)
+    fig.text(.06, .16, f'Dashed limits: ±2s for each row, normalized by its own retained s; {47-len(failures)}/47 within limits.', fontsize=9)
     for i, row in enumerate(failures, 1):
         fig.text(.06, .16 - i * .04, f"{i}. {row['id']} · {float(row['error_over_s']):+.4f}s", fontsize=9)
     save(fig, 'loaded-density-errors')
@@ -303,7 +303,7 @@ def render_cp(rows):
         ax.scatter(x, [float(r['observed_kJ_kg_K']) for r in group], marker='o',
                    facecolors='none', edgecolors=COLORS[0], label='Hilliard observed')
         ax.scatter(x, [float(r['equilibrium_cp_kJ_kg_K']) for r in group], marker='+',
-                   color='black', label='A7 at measured states')
+                   color='black', label='#255 at measured states')
         for row in group:
             ax.annotate(f"{float(row['error_percent']):+.2f}%", (float(row['T_K']), float(row['equilibrium_cp_kJ_kg_K'])),
                         xytext=(0, 9), textcoords='offset points', ha='center', fontsize=9)
@@ -363,12 +363,12 @@ def main():
     species_colors = {'Bottinger2008': COLORS[0], 'Matin2012': COLORS[2]}
     MARKERS.update(Bottinger2008='o', Matin2012='s')
     render_isotherms(pressure, pressure_colors, '')
-    render_parity(pressure, pressure_colors, 'A7 pressure · all 79 retained display rows')
-    render_residuals(pressure, pressure_colors, 'A7 pressure · all displayed rows by source')
+    render_parity(pressure, pressure_colors, '#255 pressure · all 79 retained display rows')
+    render_residuals(pressure, pressure_colors, '#255 pressure · all displayed rows by source')
     strict_species = [r for r in species if not (r['source'] == 'Matin2012' and r['species'] == 'HCO3-')]
-    render_parity(strict_species, species_colors, 'A7 species · Matin pool shown separately',
+    render_parity(strict_species, species_colors, '#255 species · Matin pool shown separately',
                   'species-parity', 'mole fraction / aggregate', 1)
-    render_residuals(strict_species, species_colors, 'A7 species · Matin pool shown separately',
+    render_residuals(strict_species, species_colors, '#255 species · Matin pool shown separately',
                      'species-residuals', species=True)
     render_speciation(species)
     render_pool(pool)
@@ -380,8 +380,8 @@ def main():
     (OUT / 'provenance.json').write_text(json.dumps({
         'inputs': {str(p.relative_to(ROOT)): digest(p) for p in inputs},
         'fit_figure_wheel_sha256': qualification['engine']['wheel_sha256'],
-        'engine_commit': '3e83e19ccc771b51d8ebc038931ab25192f4c5b5', 'model_executed': False,
-        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Density limits use the retained scale s of each row, not uniform measurement uncertainty; Cp is on the complete-feed mass basis. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from A7 fitting.',
+        'engine_commit': '391dfe5d64ede5036bf160bc6ae037ad5e14af32', 'model_executed': False,
+        'series': 'Observed values are open points; model values are + markers at observed loadings. No model curves. Pressure CSV units: Pa; pressure axes: kPa. Density limits use the retained scale s of each row, not uniform measurement uncertainty; Cp is on the complete-feed mass basis. Matin HCO3- denotes the HCO3- + CO3^2- observation pool, excluded from #255 fitting.',
         'outputs': {p.name: digest(p) for p in sorted(OUT.iterdir())
                     if p.suffix in ('.csv', '.svg', '.pdf', '.png')}
     }, indent=2) + '\n')

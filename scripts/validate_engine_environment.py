@@ -63,21 +63,7 @@ def main() -> int:
         if _sha256(module_path) != expected_header:
             errors.append(f"{name} public header differs from the lock.")
 
-    signatures = {
-        "evaluate_reactive_bubble_observations": str(
-            inspect.signature(
-                modules["epcsaft.equilibrium"].evaluate_reactive_bubble_observations
-            )
-        ),
-        "certify_reactive_bubble_continuation_reference": str(
-            inspect.signature(
-                modules[
-                    "epcsaft.equilibrium"
-                ].certify_reactive_bubble_continuation_reference
-            )
-        ),
-        "regression.fit": str(inspect.signature(modules["epcsaft.regression"].fit)),
-    }
+    signatures = {name: str(inspect.signature(getattr(modules[module], function))) for name, module, function in [("solve_equilibrium", "epcsaft.equilibrium", "solve_equilibrium"), ("stability_test", "epcsaft.equilibrium", "stability_test"), ("regression.fit", "epcsaft.regression", "fit")]}
     signature_identity = (
         "sha256:"
         + hashlib.sha256(

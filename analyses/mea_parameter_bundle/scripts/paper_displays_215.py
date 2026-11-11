@@ -1,4 +1,4 @@
-"""Comparison density export and fixed-water display for issue #215; no fits or rescoring."""
+"""Historical density comparison and current adopted-record water display; no fits or rescoring."""
 import json
 from pathlib import Path
 import sys
@@ -9,17 +9,16 @@ sys.path[:0] = [str(BUNDLE / 'scripts'), str(ROOT / 'src')]
 import fit_campaign as c, fit_observations as fo, heat_evidence_170 as he
 
 BASE = BUNDLE / 'results/engine-3e83e19c-refit-chain'
-OUT = BUNDLE / 'results/engine-3e83e19c-paper-evidence'
-CANDIDATE = BASE / 'restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
+OUT = BUNDLE / 'results/adoption-297/paper-evidence'
+HISTORICAL_RECORD = BASE / 'restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 
 
 def main(mode):
-    spec_path = BASE / ('a6/spec.json' if mode == 'comparison-density' else 'restricted-2/attempt-3/spec.json')
-    spec = json.loads(spec_path.read_text())
-    runtime = c.verify(spec)
-    assert runtime['wheel_sha256'] == '0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804'
-    inputs = [spec_path, CANDIDATE]
     if mode == 'comparison-density':
+        spec_path = BASE / 'a6/spec.json'
+        spec = json.loads(spec_path.read_text())
+        runtime = dict(engine=spec['engine'], evidence_class='historical comparison; not rerun')
+        inputs = [spec_path, HISTORICAL_RECORD]
         replay_path = BASE / 'displays/comparison/full-replay.json'
         replay = {r['target']: r for r in json.loads(replay_path.read_text())}
         metadata = {r['id']: r for r in spec['direct_rows'] if r['id'] in spec['loaded_density_ids']}
@@ -30,14 +29,16 @@ def main(mode):
         inputs.extend([replay_path, BASE / 'a6/run/fit/usable-budget-endpoint.json'])
     else:
         assert mode == 'water'
+        fo.s.verify_wheel()
+        runtime = dict(wheel_sha256=fo.s.ENGINE_WHEEL_SHA256, engine_commit=fo.s.ENGINE_COMMIT)
         water_path = BUNDLE / 'results/water-124/spec.json'
-        result = fo.water_assessment(json.loads(water_path.read_text()), fo.s.parameter_mapping(CANDIDATE))
+        inputs = [fo.s.PARAMETERS, water_path]
+        result = fo.water_assessment(json.loads(water_path.read_text()), fo.s.parameter_mapping())
         rows = result['rows']
-        c.write(OUT / 'water-checks.json', result)
-        c.write(OUT / 'water-summary.json', dict(parameter_sha256=fo.s.sha256(CANDIDATE), engine=spec['engine'], metrics=result['metrics'], states=len(rows)))
+        fo.s.write_json(OUT / 'water-checks.json', result)
+        fo.s.write_json(OUT / 'water-summary.json', dict(parameter_sha256=fo.s.sha256(fo.s.PARAMETERS), engine_commit=fo.s.ENGINE_COMMIT, wheel_sha256=fo.s.ENGINE_WHEEL_SHA256, metrics=result['metrics'], states=len(rows)))
         assert len(rows) == 42 and all(r['evaluated'] and r['cp_verified'] for r in rows)
         he.table(OUT / 'water.csv', [{k:v for k,v in r.items() if k != 'enthalpy_ladder'} for r in rows])
-        inputs.append(water_path)
     c.write(OUT / (mode+'-inputs.json'), dict(runtime=runtime, files={str(p.relative_to(ROOT)):fo.s.sha256(p) for p in inputs}))
 
 

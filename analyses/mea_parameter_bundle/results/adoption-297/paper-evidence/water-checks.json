@@ -1,0 +1,2180 @@
+{
+  "metrics": [
+    {
+      "evaluated_rows": 20,
+      "grid": "primary",
+      "maximum_absolute_relative_error": 0.014902964315423817,
+      "mean_absolute_relative_error": 0.004393245068097257,
+      "quantity": "cp",
+      "requested_rows": 20
+    },
+    {
+      "evaluated_rows": 20,
+      "grid": "primary",
+      "maximum_absolute_relative_error": 0.0009544955017852796,
+      "mean_absolute_relative_error": 0.0003739791833207995,
+      "quantity": "rho",
+      "requested_rows": 20
+    },
+    {
+      "evaluated_rows": 20,
+      "grid": "primary",
+      "maximum_absolute_relative_error": 0.0009846511177791228,
+      "mean_absolute_relative_error": 0.0003629471419499319,
+      "quantity": "saturated_liquid_rho",
+      "requested_rows": 20
+    },
+    {
+      "evaluated_rows": 20,
+      "grid": "primary",
+      "maximum_absolute_relative_error": 0.0017090129795518383,
+      "mean_absolute_relative_error": 0.000754129617724647,
+      "quantity": "psat",
+      "requested_rows": 20
+    },
+    {
+      "evaluated_rows": 19,
+      "grid": "staggered",
+      "maximum_absolute_relative_error": 0.01363346186817449,
+      "mean_absolute_relative_error": 0.004150154577172628,
+      "quantity": "cp",
+      "requested_rows": 19
+    },
+    {
+      "evaluated_rows": 19,
+      "grid": "staggered",
+      "maximum_absolute_relative_error": 0.0007452354282717621,
+      "mean_absolute_relative_error": 0.0003540567052993455,
+      "quantity": "rho",
+      "requested_rows": 19
+    },
+    {
+      "evaluated_rows": 19,
+      "grid": "staggered",
+      "maximum_absolute_relative_error": 0.000779572406017337,
+      "mean_absolute_relative_error": 0.00034329806946538436,
+      "quantity": "saturated_liquid_rho",
+      "requested_rows": 19
+    },
+    {
+      "evaluated_rows": 19,
+      "grid": "staggered",
+      "maximum_absolute_relative_error": 0.0014105339586463206,
+      "mean_absolute_relative_error": 0.0007003893670657931,
+      "quantity": "psat",
+      "requested_rows": 19
+    },
+    {
+      "evaluated_rows": 3,
+      "grid": "atmospheric-controls",
+      "maximum_absolute_relative_error": 0.014878903454814019,
+      "mean_absolute_relative_error": 0.007841763480726701,
+      "quantity": "cp",
+      "requested_rows": 3
+    },
+    {
+      "evaluated_rows": 3,
+      "grid": "atmospheric-controls",
+      "maximum_absolute_relative_error": 0.0005312489676025933,
+      "mean_absolute_relative_error": 0.00037820910719998935,
+      "quantity": "rho",
+      "requested_rows": 3
+    }
+  ],
+  "rows": [
+    {
+      "P_Pa": 300000.0,
+      "T_K": 298.15,
+      "cp_J_mol_K": 74.19474505488368,
+      "cp_error_relative": -0.014902964315423817,
+      "cp_verified": true,
+      "dP_drho": 109374.28063324034,
+      "density_termination": "converged: residual 2.1931241545036784e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3851613173782233e-15, amplification 1255.0133198365033; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.19474416266894,
+          "enthalpies_J_mol": [
+            -285934.89066836215,
+            -285920.0517195296
+          ],
+          "error_relative": 1.2025309081842295e-08,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.1381015391540066e-11
+        },
+        {
+          "cp_J_mol_K": 74.194744831766,
+          "enthalpies_J_mol": [
+            -285931.1810540882,
+            -285923.76157960505
+          ],
+          "error_relative": 3.0071898304839806e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.276203078308013e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0015467113396727683,
+      "rho_error_relative": 0.000415988773121434,
+      "rho_kg_m3": 997.5520432368879,
+      "saturated_dP_drho": 109333.94769951864,
+      "saturated_liquid_rho_error_relative": 0.0005012922082687776,
+      "saturated_liquid_rho_kg_m3": 997.5031418742461,
+      "saturation_max_abs_residual": 2.8282931552325863e-14,
+      "saturation_molar_densities": [
+        55369.83837466007,
+        1.2774098421231501
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 3165.026373219481,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.8282931552325863e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.6690502825597972e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 303.15,
+      "cp_J_mol_K": 74.35218780524217,
+      "cp_error_relative": -0.012467782425540919,
+      "cp_verified": true,
+      "dP_drho": 108097.35945380207,
+      "density_termination": "converged: residual 2.1651517384535524e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.372388845212093e-15, amplification 1289.2657938797374; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.35218701750273,
+          "enthalpies_J_mol": [
+            -285563.5338494025,
+            -285548.663411999
+          ],
+          "error_relative": 1.0594704225042051e-08,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.1314565250419436e-11
+        },
+        {
+          "cp_J_mol_K": 74.35218760801945,
+          "enthalpies_J_mol": [
+            -285559.81635354174,
+            -285552.38113478094
+          ],
+          "error_relative": 2.6525476259919856e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.262913050083887e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0011276954488291802,
+      "rho_error_relative": 0.00037245747185066236,
+      "rho_kg_m3": 996.1088635554667,
+      "saturated_dP_drho": 108056.91225638981,
+      "saturated_liquid_rho_error_relative": 0.00045538736943928626,
+      "saturated_liquid_rho_kg_m3": 996.0595639519933,
+      "saturation_max_abs_residual": 2.120525977034049e-14,
+      "saturation_molar_densities": [
+        55289.70762330606,
+        1.6841208020077116
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 4242.181547149509,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.120525977034049e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.5873331480974671e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 308.15,
+      "cp_J_mol_K": 74.49781229573156,
+      "cp_error_relative": -0.0104073284253694,
+      "cp_verified": true,
+      "dP_drho": 106795.14943261676,
+      "density_termination": "converged: residual 1.8239316307289144e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3595542151174545e-15, amplification 1324.2556112196235; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.49781160568818,
+          "enthalpies_J_mol": [
+            -285191.4188112125,
+            -285176.5192488914
+          ],
+          "error_relative": 9.26259924316497e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.125335314943334e-11
+        },
+        {
+          "cp_J_mol_K": 74.49781212373637,
+          "enthalpies_J_mol": [
+            -285187.6940258167,
+            -285180.2442446043
+          ],
+          "error_relative": 2.308728208610944e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.250670629886669e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0007277488934399612,
+      "rho_error_relative": 0.00029646867900945395,
+      "rho_kg_m3": 994.4157836583851,
+      "saturated_dP_drho": 106754.62593771101,
+      "saturated_liquid_rho_error_relative": 0.00037734528127342237,
+      "saturated_liquid_rho_kg_m3": 994.3661160853694,
+      "saturation_max_abs_residual": 2.5521426486208566e-14,
+      "saturation_molar_densities": [
+        55195.70698237104,
+        2.1971516152237784
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 5624.9195964733,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.5521426486208566e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.5035922383704418e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 313.15,
+      "cp_J_mol_K": 74.63307851370726,
+      "cp_error_relative": -0.008652972882443155,
+      "cp_verified": true,
+      "dP_drho": 105468.92406788145,
+      "density_termination": "converged: residual 8.8319108970669191e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3466606974480371e-15, amplification 1360.0362427134876; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.63307791389525,
+          "enthalpies_J_mol": [
+            -284818.6010940731,
+            -284803.6744784903
+          ],
+          "error_relative": 8.036811882661254e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.1196709058585525e-11
+        },
+        {
+          "cp_J_mol_K": 74.63307836442254,
+          "enthalpies_J_mol": [
+            -284814.86953810963,
+            -284807.4062302732
+          ],
+          "error_relative": 2.000248633393653e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.239341811717105e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0003550962958478454,
+      "rho_error_relative": 0.0001954453326662442,
+      "rho_kg_m3": 992.4974799987406,
+      "saturated_dP_drho": 105428.37322890759,
+      "saturated_liquid_rho_error_relative": 0.00027452074390477144,
+      "saturated_liquid_rho_kg_m3": 992.4474879920547,
+      "saturation_max_abs_residual": 6.394884621840902e-14,
+      "saturation_molar_densities": [
+        55089.20693944555,
+        2.838065312923172
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 7382.315709599986,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 6.3948846218409017e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.4180854244120371e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 318.15,
+      "cp_J_mol_K": 74.75933865651456,
+      "cp_error_relative": -0.007152770456528401,
+      "cp_verified": true,
+      "dP_drho": 104119.91634460326,
+      "density_termination": "converged: residual 2.5817022131224832e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3337114837061151e-15, amplification 1396.6626761029463; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.75933814013842,
+          "enthalpies_J_mol": [
+            -284445.1292014743,
+            -284430.1773338463
+          ],
+          "error_relative": 6.907178939918879e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.114402131399549e-11
+        },
+        {
+          "cp_J_mol_K": 74.7593385266373,
+          "enthalpies_J_mol": [
+            -284441.3913262239,
+            -284433.91539237124
+          ],
+          "error_relative": 1.7372714378183218e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.228804262799098e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -1.6740933364345345e-05,
+      "rho_error_relative": 7.73159062734674e-05,
+      "rho_kg_m3": 990.3763061846691,
+      "saturated_dP_drho": 104079.39991786389,
+      "saturated_liquid_rho_error_relative": 0.00015478120603518164,
+      "saturated_liquid_rho_kg_m3": 990.3260492440559,
+      "saturation_max_abs_residual": 1.3935639971512399e-14,
+      "saturation_molar_densities": [
+        54971.44919446469,
+        3.631431275400856
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 9594.838214375928,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.3935639971512399e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.3310462510505254e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 323.15,
+      "cp_J_mol_K": 74.87784749210944,
+      "cp_error_relative": -0.005867615385325653,
+      "cp_verified": true,
+      "dP_drho": 102749.32075165304,
+      "density_termination": "converged: residual 2.7820627745978044e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.320709682360285e-15, amplification 1434.1915670566032; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.87784705357626,
+          "enthalpies_J_mol": [
+            -284071.04511391383,
+            -284056.0695445031
+          ],
+          "error_relative": 5.8566477223465085e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.109472981022927e-11
+        },
+        {
+          "cp_J_mol_K": 74.87784738303162,
+          "enthalpies_J_mol": [
+            -284067.3013078494,
+            -284059.8135231111
+          ],
+          "error_relative": 1.4567435036028087e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.218945962045853e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0002813045538885284,
+      "rho_error_relative": -4.986824494546127e-05,
+      "rho_kg_m3": 988.0724614658537,
+      "saturated_dP_drho": 102708.91532884268,
+      "saturated_liquid_rho_error_relative": 2.612108770261301e-05,
+      "saturated_liquid_rho_kg_m3": 988.0220181468273,
+      "saturation_max_abs_residual": 2.4868995751603507e-14,
+      "saturation_molar_densities": [
+        54843.55603392383,
+        4.605011504803094
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 12355.420496150264,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.4868995751603507e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.242685880141904e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 328.15,
+      "cp_J_mol_K": 74.98977203684032,
+      "cp_error_relative": -0.004768283221133429,
+      "cp_verified": true,
+      "dP_drho": 101358.29511429048,
+      "density_termination": "converged: residual 1.1996913878986604e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3076583151119951e-15, amplification 1472.6814108347037; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.98977167066187,
+          "enthalpies_J_mol": [
+            -283696.38475253596,
+            -283681.3867982018
+          ],
+          "error_relative": 4.8830453014403474e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.104831996815334e-11
+        },
+        {
+          "cp_J_mol_K": 74.98977194481995,
+          "enthalpies_J_mol": [
+            -283692.63534571714,
+            -283685.13636852265
+          ],
+          "error_relative": 1.227105639323156e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.209663993630668e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.000533847675047161,
+      "rho_error_relative": -0.00017818322078211324,
+      "rho_kg_m3": 985.6041526807784,
+      "saturated_dP_drho": 101318.09437690694,
+      "saturated_liquid_rho_error_relative": -0.00010359095497625148,
+      "saturated_liquid_rho_kg_m3": 985.5536241136953,
+      "saturation_max_abs_residual": 1.2878587085651816e-14,
+      "saturation_molar_densities": [
+        54706.5393440288,
+        5.789929420385305
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 15770.516107518884,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.2878587085651816e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.1531949356501756e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 333.15,
+      "cp_J_mol_K": 75.09620057004284,
+      "cp_error_relative": -0.0038331149997059555,
+      "cp_verified": true,
+      "dP_drho": 99947.96226294576,
+      "density_termination": "converged: residual 2.2594773274597912e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2945603135796193e-15, amplification 1512.1927345052227; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.09620027180063,
+          "enthalpies_J_mol": [
+            -283321.17839598545,
+            -283306.1591559311
+          ],
+          "error_relative": 3.971468709451642e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.100431738043879e-11
+        },
+        {
+          "cp_J_mol_K": 75.09620049619116,
+          "enthalpies_J_mol": [
+            -283317.4236640021,
+            -283309.9140439525
+          ],
+          "error_relative": 9.834276726294888e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.200863476087758e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0007363894304805996,
+      "rho_error_relative": -0.0002999920245094767,
+      "rho_kg_m3": 982.9877486276245,
+      "saturated_dP_drho": 99908.0794616583,
+      "saturated_liquid_rho_error_relative": -0.00022677349481814435,
+      "saturated_liquid_rho_kg_m3": 982.9372624999331,
+      "saturation_max_abs_residual": 2.6645352591003757e-14,
+      "saturation_molar_densities": [
+        54561.30920529312,
+        7.220818973434805
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 19961.12265121556,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.6645352591003757e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.0627452436642249e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 338.15,
+      "cp_J_mol_K": 75.19815101591459,
+      "cp_error_relative": -0.0030461949145330625,
+      "cp_verified": true,
+      "dP_drho": 98519.41155684298,
+      "density_termination": "converged: residual 5.8598959018496544e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2814185163644407e-15, amplification 1552.7883100126771; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.19815078092506,
+          "enthalpies_J_mol": [
+            -282945.4510537197,
+            -282930.4114235635
+          ],
+          "error_relative": 3.124937530962768e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0962283049299236e-11
+        },
+        {
+          "cp_J_mol_K": 75.19815095700324,
+          "enthalpies_J_mol": [
+            -282941.69122121553,
+            -282934.1714061198
+          ],
+          "error_relative": 7.834148885166314e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.192456609859847e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0008850294934381608,
+      "rho_error_relative": -0.0004080408913758049,
+      "rho_kg_m3": 980.2379261781169,
+      "saturated_dP_drho": 98479.9822169725,
+      "saturated_liquid_rho_error_relative": -0.0003362304561520535,
+      "saturated_liquid_rho_kg_m3": 980.1876412175983,
+      "saturation_max_abs_residual": 1.2878587085651816e-14,
+      "saturation_molar_densities": [
+        54408.68203089812,
+        8.93595247712767
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 25063.760632262027,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.2878587085651816e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.9714914638023578e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 343.15,
+      "cp_J_mol_K": 75.29657873069075,
+      "cp_error_relative": -0.0023959196642460157,
+      "cp_verified": true,
+      "dP_drho": 97073.70027901477,
+      "density_termination": "converged: residual 1.4821260538311343e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2682356664599351e-15, amplification 1594.5333887732174; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.29657855629921,
+          "enthalpies_J_mol": [
+            -282569.22279885726,
+            -282554.163483146
+          ],
+          "error_relative": 2.3160620088447104e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0921809141770245e-11
+        },
+        {
+          "cp_J_mol_K": 75.29657868784852,
+          "enthalpies_J_mol": [
+            -282565.458042664,
+            -282557.9283847952
+          ],
+          "error_relative": 5.68979752202381e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.184361828354049e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0009763944504059818,
+      "rho_error_relative": -0.0004955114965601304,
+      "rho_kg_m3": 977.3678077391359,
+      "saturated_dP_drho": 97034.8851313519,
+      "saturated_liquid_rho_error_relative": -0.00042520500482612356,
+      "saturated_liquid_rho_kg_m3": 977.3179187380042,
+      "saturation_max_abs_residual": 1.8246026383994978e-14,
+      "saturation_molar_densities": [
+        54249.388226994204,
+        10.977346178506236
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 31231.394441487806,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.8246026383994978e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.8795726110889415e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 348.15,
+      "cp_J_mol_K": 75.3923837381211,
+      "cp_error_relative": -0.00187388313978043,
+      "cp_verified": true,
+      "dP_drho": 95611.85491742527,
+      "density_termination": "converged: residual 1.1034142349819476e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2550144089640139e-15, amplification 1637.4959588461138; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.39238362020114,
+          "enthalpies_J_mol": [
+            -282192.50906343205,
+            -282177.430586708
+          ],
+          "error_relative": 1.5640830852703402e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0882515197107645e-11
+        },
+        {
+          "cp_J_mol_K": 75.39238370838575,
+          "enthalpies_J_mol": [
+            -282188.73951534135,
+            -282181.2002769705
+          ],
+          "error_relative": 3.944078397211115e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.176503039421529e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0010075826902249396,
+      "rho_error_relative": -0.0005560422591920355,
+      "rho_kg_m3": 974.3890898924556,
+      "saturated_dP_drho": 95573.84305184742,
+      "saturated_liquid_rho_error_relative": -0.00048740250382639516,
+      "saturated_liquid_rho_kg_m3": 974.3398333147819,
+      "saturation_max_abs_residual": 5.329070518200751e-15,
+      "saturation_molar_densities": [
+        54084.0793656708,
+        13.390843239899489
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 38634.283900236216,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 5.3290705182007514e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.7871134694184048e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 353.15,
+      "cp_J_mol_K": 75.4864174593317,
+      "cp_error_relative": -0.001474015792351846,
+      "cp_verified": true,
+      "dP_drho": 94134.8723452332,
+      "density_termination": "converged: residual 1.485140135870644e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2417572890528508e-15, amplification 1681.7470261190058; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.48641739529558,
+          "enthalpies_J_mol": [
+            -281815.3208987043,
+            -281800.22361522523
+          ],
+          "error_relative": 8.483133084880023e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.084404472888213e-11
+        },
+        {
+          "cp_J_mol_K": 75.48641744360793,
+          "enthalpies_J_mol": [
+            -281811.5466479027,
+            -281803.99800615833
+          ],
+          "error_relative": 2.082993777463571e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.168808945776426e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0009761212876602254,
+      "rho_error_relative": -0.0005837280538524281,
+      "rho_kg_m3": 971.3121632183198,
+      "saturated_dP_drho": 94097.88458293396,
+      "saturated_liquid_rho_error_relative": -0.0005169919107388399,
+      "saturated_liquid_rho_kg_m3": 971.2638234363208,
+      "saturation_max_abs_residual": 1.865174681370263e-14,
+      "saturation_molar_densities": [
+        53913.33487108281,
+        16.226174421819863
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 47460.75630760614,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.865174681370263e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.69422589924958e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 358.15,
+      "cp_J_mol_K": 75.57948898482209,
+      "cp_error_relative": -0.0011919290695835416,
+      "cp_verified": true,
+      "dP_drho": 92643.72091170373,
+      "density_termination": "converged: residual 6.6591697434059682e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2284667501745525e-15, amplification 1727.3609213482655; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.57948897214374,
+          "enthalpies_J_mol": [
+            -281437.6652029403,
+            -281422.54930514586
+          ],
+          "error_relative": 1.6774859279422571e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0806062171262734e-11
+        },
+        {
+          "cp_J_mol_K": 75.579488981748,
+          "enthalpies_J_mol": [
+            -281433.8862981302,
+            -281426.32834923203
+          ],
+          "error_relative": 4.067357561865492e-11,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.161212434252547e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0008799315174103928,
+      "rho_error_relative": -0.0005731049483392869,
+      "rho_kg_m3": 968.1462234421352,
+      "saturated_dP_drho": 92608.01339045164,
+      "saturated_liquid_rho_error_relative": -0.000508592291302179,
+      "saturated_liquid_rho_kg_m3": 968.0991396506764,
+      "saturation_max_abs_residual": 1.608363568559487e-14,
+      "saturation_molar_densities": [
+        53737.668226676265,
+        19.536997347948343
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 57917.890624197076,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.6083635685594871e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.6010100432931617e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 363.15,
+      "cp_J_mol_K": 75.67237093701831,
+      "cp_error_relative": -0.0010244239476490113,
+      "cp_verified": true,
+      "dP_drho": 91139.34145391874,
+      "density_termination": "converged: residual 6.0064800355696946e-17 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.215145132420973e-15, amplification 1774.4156353239036; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.67237097391626,
+          "enthalpies_J_mol": [
+            -281059.54491883545,
+            -281044.4104446407
+          ],
+          "error_relative": 4.876012926757767e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.076825012495687e-11
+        },
+        {
+          "cp_J_mol_K": 75.67237094510347,
+          "enthalpies_J_mol": [
+            -281055.7613700628,
+            -281048.1941329683
+          ],
+          "error_relative": 1.0684408913164134e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.153650024991374e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.0007173005717469039,
+      "rho_error_relative": -0.0005191246962746865,
+      "rho_kg_m3": 964.899374142795,
+      "saturated_dP_drho": 91105.20941957095,
+      "saturated_liquid_rho_error_relative": -0.0004572492286886165,
+      "saturated_liquid_rho_kg_m3": 964.8539480059945,
+      "saturation_max_abs_residual": 1.9095836023552692e-14,
+      "saturation_molar_densities": [
+        53557.53271700437,
+        23.380915768298916
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 70232.10723586545,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.9095836023552692e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.5075554347397235e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 368.15,
+      "cp_J_mol_K": 75.76580497180915,
+      "cp_error_relative": -0.0009691297579421665,
+      "cp_verified": true,
+      "dP_drho": 89622.64823820087,
+      "density_termination": "converged: residual 8.9997453933676752e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2017946710361535e-15, amplification 1822.9931848895794; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.76580505730817,
+          "enthalpies_J_mol": [
+            -280680.9592025107,
+            -280665.80604149925
+          ],
+          "error_relative": 1.1284646550535626e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.073030686343278e-11
+        },
+        {
+          "cp_J_mol_K": 75.7658049929887,
+          "enthalpies_J_mol": [
+            -280677.17098271765,
+            -280669.59440221835
+          ],
+          "error_relative": 2.795397247012943e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.146061372686556e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.000486857723752232,
+      "rho_error_relative": -0.000417122365143352,
+      "rho_kg_m3": 961.5787213322736,
+      "saturated_dP_drho": 89590.43003477715,
+      "saturated_liquid_rho_error_relative": -0.0003584045596117802,
+      "saturated_liquid_rho_kg_m3": 961.5354254215229,
+      "saturation_max_abs_residual": 4.307854465655061e-15,
+      "saturation_molar_densities": [
+        53373.32672162313,
+        27.81948070623962
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 84649.65860481838,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 4.3078544656550614e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.4139420130946024e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 373.15,
+      "cp_J_mol_K": 75.8605069671287,
+      "cp_error_relative": -0.0010242456005012945,
+      "cp_verified": true,
+      "dP_drho": 88094.52983905257,
+      "density_termination": "converged: residual 2.843645457994981e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1884174950202445e-15, amplification 1873.1800130521674; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.86050709767733,
+          "enthalpies_J_mol": [
+            -280301.9035657726,
+            -280286.73146435304
+          ],
+          "error_relative": 1.720903641810878e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0691944064486416e-11
+        },
+        {
+          "cp_J_mol_K": 75.86050699930638,
+          "enthalpies_J_mol": [
+            -280298.11061208963,
+            -280290.5245613897
+          ],
+          "error_relative": 4.241691442530282e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.138388812897283e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": 0.00018755364565370414,
+      "rho_error_relative": -0.00026277950610309464,
+      "rho_kg_m3": 958.1904602645039,
+      "saturated_dP_drho": 88064.6110890807,
+      "saturated_liquid_rho_error_relative": -0.00020786189626209595,
+      "saturated_liquid_rho_kg_m3": 958.1498473537146,
+      "saturation_max_abs_residual": 2.4970944539106754e-14,
+      "saturation_molar_densities": [
+        53185.39858129957,
+        32.91817577030044
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 101437.01797496268,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.4970944539106754e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.3202410529923741e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 378.15,
+      "cp_J_mol_K": 75.95717194608622,
+      "cp_error_relative": -0.0011883618356053338,
+      "cp_verified": true,
+      "dP_drho": 86555.84996242315,
+      "density_termination": "converged: residual 5.3813290629145527e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1750156257880227e-15, amplification 1925.0674269729013; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.95717212243471,
+          "enthalpies_J_mol": [
+            -279922.3699930872,
+            -279907.1785586627
+          ],
+          "error_relative": 2.3216832900629925e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0652884736036634e-11
+        },
+        {
+          "cp_J_mol_K": 75.95717198972125,
+          "enthalpies_J_mol": [
+            -279918.57220787986,
+            -279910.9764906809
+          ],
+          "error_relative": 5.744689168807326e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.130576947207327e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.00018135808808195097,
+      "rho_error_relative": -5.208455892846686e-05,
+      "rho_kg_m3": 954.7399548616685,
+      "saturated_dP_drho": 86528.66792894488,
+      "saturated_liquid_rho_error_relative": -1.7496847748432742e-06,
+      "saturated_liquid_rho_kg_m3": 954.7026681532111,
+      "saturation_max_abs_residual": 1.3766765505351941e-14,
+      "saturation_molar_densities": [
+        52994.05105850206,
+        38.74638922839933
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 120881.16510139003,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.3766765505351941e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.2265160115036867e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 383.15,
+      "cp_J_mol_K": 76.05647878162313,
+      "cp_error_relative": -0.0014603435575017976,
+      "cp_verified": true,
+      "dP_drho": 85007.44821922526,
+      "density_termination": "converged: residual 1.6187355275643078e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1615909758413472e-15, amplification 1978.7520782568133; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.05647900199983,
+          "enthalpies_J_mol": [
+            -279542.34703448147,
+            -279527.13573868107
+          ],
+          "error_relative": 2.8975402077691115e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.061286130828956e-11
+        },
+        {
+          "cp_J_mol_K": 76.056478836108,
+          "enthalpies_J_mol": [
+            -279538.5442861613,
+            -279530.9386382777
+          ],
+          "error_relative": 7.163738491300364e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.122572261657911e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.000620338065333792,
+      "rho_error_relative": 0.00021870834239501313,
+      "rho_kg_m3": 951.2318101616125,
+      "saturated_dP_drho": 84983.4963408532,
+      "saturated_liquid_rho_error_relative": 0.00026351696987481077,
+      "saturated_liquid_rho_kg_m3": 951.1985945253812,
+      "saturation_max_abs_residual": 4.884981308350689e-15,
+      "saturation_molar_densities": [
+        52799.54541507993,
+        45.3773756799983
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 143289.76967551047,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 4.8849813083506888e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.1328232994578921e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 388.15,
+      "cp_J_mol_K": 76.1590947292998,
+      "cp_error_relative": -0.0018392616716446097,
+      "cp_verified": true,
+      "dP_drho": 83450.1408542177,
+      "density_termination": "converged: residual 1.7730825488393442e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.148145347414858e-15, amplification 2034.3364906640757; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.1590949940728,
+          "enthalpies_J_mol": [
+            -279161.8198753542,
+            -279146.58805635537
+          ],
+          "error_relative": 3.4765776923961766e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.057161386718734e-11
+        },
+        {
+          "cp_J_mol_K": 76.15909479616676,
+          "enthalpies_J_mol": [
+            -279158.0119989628,
+            -279150.39608948317
+          ],
+          "error_relative": 8.779905691369549e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.114322773437469e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0011295772706624296,
+      "rho_error_relative": 0.0005531213933080981,
+      "rho_kg_m3": 947.6699381942703,
+      "saturated_dP_drho": 83429.97344494738,
+      "saturated_liquid_rho_error_relative": 0.00059127486874333,
+      "saturated_liquid_rho_kg_m3": 947.6416525128346,
+      "saturation_max_abs_residual": 2.6645352591003757e-15,
+      "saturation_molar_densities": [
+        52602.10513035793,
+        52.888210323855944
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 168991.27468123895,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.6645352591003757e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.0392129822197992e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 393.15,
+      "cp_J_mol_K": 76.26567983473123,
+      "cp_error_relative": -0.0023243602991352974,
+      "cp_verified": true,
+      "dP_drho": 81884.7214346554,
+      "density_termination": "converged: residual 2.3816192074033182e-13 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1346804310539377e-15, amplification 2091.9296411735872; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.2656801432604,
+          "enthalpies_J_mol": [
+            -278780.7703839426,
+            -278765.51724791393
+          ],
+          "error_relative": 4.045452195455823e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.052888850639197e-11
+        },
+        {
+          "cp_J_mol_K": 76.26567991217598,
+          "enthalpies_J_mol": [
+            -278776.9571815154,
+            -278769.3306135242
+          ],
+          "error_relative": 1.0154601604028812e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.105777701278394e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "primary",
+      "psat_error_relative": -0.0017090129795518383,
+      "rho_error_relative": 0.0009544955017852796,
+      "rho_kg_m3": 944.0576176902342,
+      "saturated_dP_drho": 81868.95854075569,
+      "saturated_liquid_rho_error_relative": 0.0009846511177791228,
+      "saturated_liquid_rho_kg_m3": 944.0352484152846,
+      "saturation_max_abs_residual": 7.993605777301127e-15,
+      "saturation_molar_densities": [
+        52401.91928270249,
+        61.35973891147447
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 198334.8833164354,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 7.9936057773011271e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 5.9457294152000482e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 300.65,
+      "cp_J_mol_K": 74.27503946973556,
+      "cp_error_relative": -0.01363346186817449,
+      "cp_verified": true,
+      "dP_drho": 108739.06238422827,
+      "density_termination": "converged: residual 4.90059381963448e-17 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3787830583894812e-15, amplification 1272.050675322442; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.2750386314583,
+          "enthalpies_J_mol": [
+            -285749.31079756154,
+            -285734.45578983525
+          ],
+          "error_relative": 1.1286123369202983e-08,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.1347091205348984e-11
+        },
+        {
+          "cp_J_mol_K": 74.27503925981,
+          "enthalpies_J_mol": [
+            -285745.5971636942,
+            -285738.16965976823
+          ],
+          "error_relative": 2.82632717230058e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.269418241069797e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.0013353893583025744,
+      "rho_error_relative": 0.0003987103902738376,
+      "rho_kg_m3": 996.8633286564823,
+      "saturated_dP_drho": 108698.66819446033,
+      "saturated_liquid_rho_error_relative": 0.00048278238877963453,
+      "saturated_liquid_rho_kg_m3": 996.8142251231563,
+      "saturation_max_abs_residual": 2.0650148258027912e-14,
+      "saturation_molar_densities": [
+        55331.59768391922,
+        1.468711003435446
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 3669.3076743142,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.0650148258027912e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.6284618094023692e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 305.65,
+      "cp_J_mol_K": 74.42638343130614,
+      "cp_error_relative": -0.011395447460950225,
+      "cp_verified": true,
+      "dP_drho": 107449.33498026532,
+      "density_termination": "converged: residual 1.1492543028346347e-16 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3659790937128462e-15, amplification 1306.665226633372; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.42638269421877,
+          "enthalpies_J_mol": [
+            -285377.56746514,
+            -285362.6821886012
+          ],
+          "error_relative": 9.903576181358176e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.128334777529087e-11
+        },
+        {
+          "cp_J_mol_K": 74.42638324748259,
+          "enthalpies_J_mol": [
+            -285373.8462552058,
+            -285366.40361688106
+          ],
+          "error_relative": 2.469870752364045e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.256669555058174e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.000924792635987326,
+      "rho_error_relative": 0.0003380738041707243,
+      "rho_kg_m3": 995.2919624005416,
+      "saturated_dP_drho": 107408.84424168526,
+      "saturated_liquid_rho_error_relative": 0.00041994149029056516,
+      "saturated_liquid_rho_kg_m3": 995.242474258243,
+      "saturation_max_abs_residual": 5.5119195149778306e-15,
+      "saturation_molar_densities": [
+        55244.352253100864,
+        1.9260667078235807
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 4891.289927762471,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 5.5119195149778306e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.5456989546561222e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 310.65,
+      "cp_J_mol_K": 74.56665327489864,
+      "cp_error_relative": -0.00949547579490051,
+      "cp_verified": true,
+      "dP_drho": 106134.96068169423,
+      "density_termination": "converged: residual 9.9078731330415337e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3531146158613499e-15, amplification 1342.0436756840886; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.56665263103787,
+          "enthalpies_J_mol": [
+            -285005.0945973929,
+            -284990.1812668667
+          ],
+          "error_relative": 8.63470117629106e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.122449961586882e-11
+        },
+        {
+          "cp_J_mol_K": 74.5666531129973,
+          "enthalpies_J_mol": [
+            -285001.36636619293,
+            -284993.90970088163
+          ],
+          "error_relative": 2.17122986256868e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.244899923173765e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.000537547564794405,
+      "rho_error_relative": 0.000248597388131655,
+      "rho_kg_m3": 993.4833352599904,
+      "saturated_dP_drho": 106094.41664046326,
+      "saturated_liquid_rho_error_relative": 0.0003285458233754923,
+      "saturated_liquid_rho_kg_m3": 993.4334990981139,
+      "saturation_max_abs_residual": 3.332012830599907e-14,
+      "saturation_molar_densities": [
+        55143.93887289644,
+        2.500160240618114
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 6452.035759160483,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 3.3320128305999069e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.4610444259523354e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 315.65,
+      "cp_J_mol_K": 74.6972537547199,
+      "cp_error_relative": -0.007873809306741753,
+      "cp_verified": true,
+      "dP_drho": 104797.19246557522,
+      "density_termination": "converged: residual 9.7027420820072763e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3401928563148784e-15, amplification 1378.2402341955931; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.69725319795543,
+          "enthalpies_J_mol": [
+            -284631.94414871227,
+            -284617.0046980727
+          ],
+          "error_relative": 7.453613504182499e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.11699067837762e-11
+        },
+        {
+          "cp_J_mol_K": 74.69725361501332,
+          "enthalpies_J_mol": [
+            -284628.2093807292,
+            -284620.7396553677
+          ],
+          "error_relative": 1.8703040227663337e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.23398135675524e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.00018123469861108799,
+      "rho_error_relative": 0.00013801508920519012,
+      "rho_kg_m3": 991.4609408478308,
+      "saturated_dP_drho": 104756.65023618653,
+      "saturated_liquid_rho_error_relative": 0.00021626518360595703,
+      "saturated_liquid_rho_kg_m3": 991.4108078230269,
+      "saturation_max_abs_residual": 3.2271737655003434e-14,
+      "saturation_molar_densities": [
+        55031.66244560322,
+        3.2140335324050806
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 8426.182458529498,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 3.2271737655003434e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.3747436825619319e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 320.65,
+      "cp_J_mol_K": 74.81948710132671,
+      "cp_error_relative": -0.006485340278009177,
+      "cp_verified": true,
+      "dP_drho": 103437.24382876253,
+      "density_termination": "converged: residual 2.6923775708898035e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3272169655529286e-15, amplification 1415.3107036977626; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.81948662461946,
+          "enthalpies_J_mol": [
+            -284258.161300082,
+            -284243.19740275707
+          ],
+          "error_relative": 6.3714317155572076e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.111898419439192e-11
+        },
+        {
+          "cp_J_mol_K": 74.81948698114138,
+          "enthalpies_J_mol": [
+            -284254.4204146138,
+            -284246.9384659157
+          ],
+          "error_relative": 1.606337285409154e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.223796838878384e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.00013766263252734667,
+      "rho_error_relative": 1.4355207140326343e-05,
+      "rho_kg_m3": 989.2460349118413,
+      "saturated_dP_drho": 103396.77231737836,
+      "saturated_liquid_rho_error_relative": 9.106922264834338e-05,
+      "saturated_liquid_rho_kg_m3": 989.1956736393824,
+      "saturation_max_abs_residual": 2.6281950860380305e-14,
+      "saturation_molar_densities": [
+        54908.70381361724,
+        4.093830024363301
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 10900.29760067906,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.6281950860380305e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.2870188408506979e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 325.65,
+      "cp_J_mol_K": 74.9345630392039,
+      "cp_error_relative": -0.005296228959484561,
+      "cp_verified": true,
+      "dP_drho": 102056.29070995121,
+      "density_termination": "converged: residual 6.9675168412608457e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3141900091003211e-15, amplification 1453.3126369151805; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.93456263764529,
+          "enthalpies_J_mol": [
+            -283883.78494737035,
+            -283868.7980348428
+          ],
+          "error_relative": 5.358790300391547e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.107119521495821e-11
+        },
+        {
+          "cp_J_mol_K": 74.93456293886993,
+          "enthalpies_J_mol": [
+            -283880.038303163,
+            -283872.54484686913
+          ],
+          "error_relative": 1.3389543918052027e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.214239042991642e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.00041356010914150865,
+      "rho_error_relative": -0.00011436979961332305,
+      "rho_kg_m3": 986.8578007064676,
+      "saturated_dP_drho": 102015.97475735363,
+      "saturated_liquid_rho_error_relative": -3.908541925379261e-05,
+      "saturated_liquid_rho_kg_m3": 986.8073005613164,
+      "saturation_max_abs_residual": 3.049472415699457e-14,
+      "saturation_molar_densities": [
+        54776.12896171008,
+        5.168972512958226
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 13973.944384988386,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 3.0494724156994572e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.1980705695412479e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 330.65,
+      "cp_J_mol_K": 75.04360812973084,
+      "cp_error_relative": -0.004281289489422746,
+      "cp_verified": true,
+      "dP_drho": 100655.47323787068,
+      "density_termination": "converged: residual 6.8894542848418894e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3011149640067106e-15, amplification 1492.3055196930713; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.04360779828858,
+          "enthalpies_J_mol": [
+            -283508.84814116056,
+            -283493.8394196009
+          ],
+          "error_relative": 4.416662147121997e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.102604598267265e-11
+        },
+        {
+          "cp_J_mol_K": 75.04360804683529,
+          "enthalpies_J_mol": [
+            -283505.09604057274,
+            -283497.59167976805
+          ],
+          "error_relative": 1.1046317194285393e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.20520919653453e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0006416255895811407,
+      "rho_error_relative": -0.0002403640264596607,
+      "rho_kg_m3": 984.3135072574536,
+      "saturated_dP_drho": 100615.4159860939,
+      "saturated_liquid_rho_error_relative": -0.00016645800919745657,
+      "saturated_liquid_rho_kg_m3": 984.2629821203276,
+      "saturation_max_abs_residual": 1.4228763565950785e-15,
+      "saturation_molar_densities": [
+        54634.89782675193,
+        6.472322344105638
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 17760.72290436846,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.4228763565950785e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.108079882897121e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 335.65,
+      "cp_J_mol_K": 75.14767446506806,
+      "cp_error_relative": -0.003421935772574325,
+      "cp_verified": true,
+      "dP_drho": 99235.89732529988,
+      "density_termination": "converged: residual 1.6670692604137116e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.287994715726292e-15, amplification 1532.35097357884; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.14767419925192,
+          "enthalpies_J_mol": [
+            -283133.3784814385,
+            -283118.34894659865
+          ],
+          "error_relative": 3.5372503814912193e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0983080356278955e-11
+        },
+        {
+          "cp_J_mol_K": 75.14767439861316,
+          "enthalpies_J_mol": [
+            -283129.62117417157,
+            -283122.1064067317
+          ],
+          "error_relative": 8.843241694478365e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.196616071255791e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0008176696472237399,
+      "rho_error_relative": -0.00035617317539271554,
+      "rho_kg_m3": 981.6286596699365,
+      "saturated_dP_drho": 99196.22281003246,
+      "saturated_liquid_rho_error_relative": -0.0002836506634080749,
+      "saturated_liquid_rho_kg_m3": 981.578252155206,
+      "saturation_max_abs_residual": 2.768591262178126e-14,
+      "saturation_molar_densities": [
+        54485.87266782453,
+        8.040318047144158
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 22389.273185596863,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.7685912621781261e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 7.0172098266969206e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 340.65,
+      "cp_J_mol_K": 75.24774774756904,
+      "cp_error_relative": -0.0027045658032678332,
+      "cp_verified": true,
+      "dP_drho": 97798.63612643162,
+      "density_termination": "converged: residual 1.4996467609385e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2748320553603868e-15, amplification 1573.5129795465109; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.24774754390819,
+          "enthalpies_J_mol": [
+            -282757.39847030066,
+            -282742.3489207919
+          ],
+          "error_relative": 2.7065374386125995e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0941875421300097e-11
+        },
+        {
+          "cp_J_mol_K": 75.24774769553915,
+          "enthalpies_J_mol": [
+            -282753.63615672366,
+            -282746.1113819541
+          ],
+          "error_relative": 6.914477879149672e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.188375084260019e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0009380632142750311,
+      "rho_error_relative": -0.0004547568639404753,
+      "rho_kg_m3": 978.8171409501869,
+      "saturated_dP_drho": 97759.49209537271,
+      "saturated_liquid_rho_error_relative": -0.0003836823825977831,
+      "saturated_liquid_rho_kg_m3": 978.7670271544072,
+      "saturation_max_abs_residual": 3.419486915845482e-14,
+      "saturation_molar_densities": [
+        54329.8259674236,
+        9.913092117248858
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 28004.226639081586,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 3.4194869158454821e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.9256070548494102e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 345.65,
+      "cp_J_mol_K": 75.34475479549741,
+      "cp_error_relative": -0.002119297095872774,
+      "cp_verified": true,
+      "dP_drho": 96344.73137321498,
+      "density_termination": "converged: residual 1.9822468319552478e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2616296772233345e-15, amplification 1615.8581237248134; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.344754649268,
+          "enthalpies_J_mol": [
+            -282380.92582565936,
+            -282365.8568747295
+          ],
+          "error_relative": 1.940804073008451e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.090203747902881e-11
+        },
+        {
+          "cp_J_mol_K": 75.34475475898944,
+          "enthalpies_J_mol": [
+            -282377.15865975956,
+            -282369.62418428366
+          ],
+          "error_relative": 4.845456258451009e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.180407495805762e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0009996748256102528,
+      "rho_error_relative": -0.0005295240077430874,
+      "rho_kg_m3": 975.891345065457,
+      "saturated_dP_drho": 96306.29232871663,
+      "saturated_liquid_rho_error_relative": -0.00046002609246376114,
+      "saturated_liquid_rho_kg_m3": 975.8417398776464,
+      "saturation_max_abs_residual": 7.716645176527684e-15,
+      "saturation_molar_densities": [
+        54167.447848584445,
+        12.134565294049757
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 34767.09367977091,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 7.7166451765276841e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.8334032968184339e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 350.65,
+      "cp_J_mol_K": 75.43957051980613,
+      "cp_error_relative": -0.0016589855307223011,
+      "cp_verified": true,
+      "dP_drho": 94875.19460451638,
+      "density_termination": "converged: residual 3.8326546797362582e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2483901766907304e-15, amplification 1659.4558663711314; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.43957042915281,
+          "enthalpies_J_mol": [
+            -282003.9737587104,
+            -281988.88584462454
+          ],
+          "error_relative": 1.2016679873383396e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.086319845799514e-11
+        },
+        {
+          "cp_J_mol_K": 75.4395704966737,
+          "enthalpies_J_mol": [
+            -282000.20185069233,
+            -281992.65789364267
+          ],
+          "error_relative": 3.0663527272878355e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.172639691599028e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0009998219967972677,
+      "rho_error_relative": -0.0005743423553986604,
+      "rho_kg_m3": 972.8623011656936,
+      "saturated_dP_drho": 94837.66506712498,
+      "saturated_liquid_rho_error_relative": -0.0005066198398954169,
+      "saturated_liquid_rho_kg_m3": 972.8134641832772,
+      "saturation_max_abs_residual": 1.961822130180023e-14,
+      "saturation_molar_densities": [
+        53999.35300385435,
+        14.752518319434337
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 42857.07667816044,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.9618221301800229e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.7407167177931128e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 355.65,
+      "cp_J_mol_K": 75.53302441903611,
+      "cp_error_relative": -0.0013184728763877551,
+      "cp_verified": true,
+      "dP_drho": 93391.00830035617,
+      "density_termination": "converged: residual 1.2817004402254639e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2351160482883939e-15, amplification 1704.3788357280632; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.5330243811477,
+          "enthalpies_J_mol": [
+            -281626.5512176895,
+            -281611.4446128133
+          ],
+          "error_relative": 5.016138615587806e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.0825012694075414e-11
+        },
+        {
+          "cp_J_mol_K": 75.53302440908737,
+          "enthalpies_J_mol": [
+            -281622.77463625144,
+            -281615.22133381054
+          ],
+          "error_relative": 1.3171375101705962e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.165002538815083e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0009362327776918367,
+      "rho_error_relative": -0.0005835300190578652,
+      "rho_kg_m3": 969.7397890443311,
+      "saturated_dP_drho": 93354.62628833402,
+      "saturated_liquid_rho_error_relative": -0.0005178600479187612,
+      "saturated_liquid_rho_kg_m3": 969.692031142103,
+      "saturation_max_abs_residual": 5.773159728050814e-15,
+      "saturation_molar_densities": [
+        53826.0871405886,
+        17.818641766529677
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 52471.79901043816,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 5.773159728050814e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.6476531748523407e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 360.65,
+      "cp_J_mol_K": 75.62590664052594,
+      "cp_error_relative": -0.0010940179187050036,
+      "cp_verified": true,
+      "dP_drho": 91893.12693203326,
+      "density_termination": "converged: residual 8.1206742719164282e-16 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2218096839803226e-15, amplification 1750.7031488143948; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.62590665271273,
+          "enthalpies_J_mol": [
+            -281248.6631002189,
+            -281233.5379188884
+          ],
+          "error_relative": 1.6114576339987252e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.078715403183038e-11
+        },
+        {
+          "cp_J_mol_K": 75.62590664369054,
+          "enthalpies_J_mol": [
+            -281244.8818745242,
+            -281237.3192838598
+          ],
+          "error_relative": 4.1845416021146775e-11,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.157430806366076e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0008070146243310816,
+      "rho_error_relative": -0.0005518345932093993,
+      "rho_kg_m3": 966.5324460309467,
+      "saturated_dP_drho": 91858.16765065514,
+      "saturated_liquid_rho_error_relative": -0.0004885824744109701,
+      "saturated_liquid_rho_kg_m3": 966.486136634572,
+      "saturation_max_abs_residual": 1.2702469532159733e-14,
+      "saturation_molar_densities": [
+        53648.132953502354,
+        21.388565095751584
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 63827.94273586699,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.2702469532159733e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.5543073733160625e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 365.65,
+      "cp_J_mol_K": 75.71897365642148,
+      "cp_error_relative": -0.0009828739620448834,
+      "cp_verified": true,
+      "dP_drho": 90382.47793764707,
+      "density_termination": "converged: residual 6.2558465352413606e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2084733716139801e-15, amplification 1798.5087616459216; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.71897371730302,
+          "enthalpies_J_mol": [
+            -280870.31043629,
+            -280855.16664154653
+          ],
+          "error_relative": 8.040459409386358e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.074931320521458e-11
+        },
+        {
+          "cp_J_mol_K": 75.71897367131896,
+          "enthalpies_J_mol": [
+            -280866.52455765504,
+            -280858.9526602879
+          ],
+          "error_relative": 1.967470630859225e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.149862641042916e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.0006106285259237509,
+      "rho_error_relative": -0.00047440386052466366,
+      "rho_kg_m3": 963.2478655930177,
+      "saturated_dP_drho": 90349.25767100074,
+      "saturated_liquid_rho_error_relative": -0.00041403492395242214,
+      "saturated_liquid_rho_kg_m3": 963.2034407135463,
+      "saturation_max_abs_residual": 2.2947020901195938e-14,
+      "saturation_molar_densities": [
+        53465.91564014249,
+        25.521866597673643
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 77161.78927382527,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 2.2947020901195938e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.4607639281198961e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 370.65,
+      "cp_J_mol_K": 75.81295360275925,
+      "cp_error_relative": -0.0009829820683450174,
+      "cp_verified": true,
+      "dP_drho": 88859.96263137081,
+      "density_termination": "converged: residual 2.7626555557103138e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.195109293481603e-15, amplification 1847.8798518624585; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.81295371026499,
+          "enthalpies_J_mol": [
+            -280491.4905436957,
+            -280476.32795295364
+          ],
+          "error_relative": 1.4180392415852339e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.071119546058625e-11
+        },
+        {
+          "cp_J_mol_K": 75.8129536290653,
+          "enthalpies_J_mol": [
+            -280487.69996701094,
+            -280480.11867164803
+          ],
+          "error_relative": 3.469862175364824e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.14223909211725e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 0.00034586688397486576,
+      "rho_error_relative": -0.00034675093964520176,
+      "rho_kg_m3": 959.8926879831428,
+      "saturated_dP_drho": 88828.84282862888,
+      "saturated_liquid_rho_error_relative": -0.0002898446188801529,
+      "saturated_liquid_rho_kg_m3": 959.8506590749714,
+      "saturation_max_abs_residual": 3.552713678800501e-15,
+      "saturation_molar_densities": [
+        53279.807978281286,
+        30.282066315667386
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 92729.65932158136,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 3.5527136788005009e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.367098335456084e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 375.65,
+      "cp_J_mol_K": 75.90855132941863,
+      "cp_error_relative": -0.001092755030100867,
+      "cp_verified": true,
+      "dP_drho": 87326.4570537619,
+      "density_termination": "converged: residual 1.3296004922058735e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1817195249565206e-15, amplification 1898.9052372668534; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.90855148329865,
+          "enthalpies_J_mol": [
+            -280112.19715748075,
+            -280097.0154471841
+          ],
+          "error_relative": 2.0271764267221215e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.067251838906261e-11
+        },
+        {
+          "cp_J_mol_K": 75.9085513674654,
+          "enthalpies_J_mol": [
+            -280108.40180237836,
+            -280100.8109472416
+          ],
+          "error_relative": 5.012186221620141e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.134503677812523e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": 1.1834028804225127e-05,
+      "rho_error_relative": -0.00016471589752364846,
+      "rho_kg_m3": 956.4726833068338,
+      "saturated_dP_drho": 87297.8486014438,
+      "saturated_liquid_rho_error_relative": -0.00011198230689113409,
+      "saturated_liquid_rho_kg_m3": 956.4336470185893,
+      "saturation_max_abs_residual": 1.9984014443252818e-14,
+      "saturation_molar_densities": [
+        53090.134986444245,
+        35.73660439752333
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 110808.25009128531,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.9984014443252818e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.2733778601418243e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 380.65,
+      "cp_J_mol_K": 76.00645320817532,
+      "cp_error_relative": -0.0013109318671855608,
+      "cp_verified": true,
+      "dP_drho": 85782.81276945991,
+      "density_termination": "converged: residual 6.5019604283955701e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1683060331637057e-15, amplification 1951.678834371241; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.00645340717165,
+          "enthalpies_J_mol": [
+            -279732.4205347424,
+            -279717.219244061
+          ],
+          "error_relative": 2.6181505852207465e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.063300993879638e-11
+        },
+        {
+          "cp_J_mol_K": 76.00645325845107,
+          "enthalpies_J_mol": [
+            -279728.6202865239,
+            -279721.01964119804
+          ],
+          "error_relative": 6.614668812687796e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.126601987759276e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.0003920714777566614,
+      "rho_error_relative": 7.557476368980076e-05,
+      "rho_kg_m3": 952.9928274084037,
+      "saturated_dP_drho": 85757.18044102572,
+      "saturated_liquid_rho_error_relative": 0.00012327542421108895,
+      "saturated_liquid_rho_kg_m3": 952.9574763045188,
+      "saturation_max_abs_residual": 1.5987211554602254e-14,
+      "saturation_molar_densities": [
+        52897.17819009855,
+        41.956807602351375
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 131694.86970200308,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 1.5987211554602254e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.1796623442467445e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 385.65,
+      "cp_J_mol_K": 76.10733174560795,
+      "cp_error_relative": -0.0016364866926764643,
+      "cp_verified": true,
+      "dP_drho": 84229.85761780263,
+      "density_termination": "converged: residual 5.6968318951078345e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1548706756439667e-15, amplification 2006.3001617089628; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.10733198845992,
+          "enthalpies_J_mol": [
+            -279352.1475358784,
+            -279336.9260694807
+          ],
+          "error_relative": 3.190914199535655e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.059240658076361e-11
+        },
+        {
+          "cp_J_mol_K": 76.1073318059789,
+          "enthalpies_J_mol": [
+            -279348.3422462112,
+            -279340.7315130306
+          ],
+          "error_relative": 7.932343670802311e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.118481316152722e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.000866173424269645,
+      "rho_error_relative": 0.0003777497912955674,
+      "rho_kg_m3": 949.4573709820254,
+      "saturated_dP_drho": 84207.72469209073,
+      "saturated_liquid_rho_error_relative": 0.0004193846020441594,
+      "saturated_liquid_rho_kg_m3": 949.4265053225039,
+      "saturation_max_abs_residual": 9.769962616701378e-15,
+      "saturation_molar_densities": [
+        52701.17951663831,
+        49.017846888499655
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 155707.57019938758,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 9.7699626167013776e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 6.0860049424715013e-11, amplification absent"
+    },
+    {
+      "P_Pa": 300000.0,
+      "T_K": 390.65,
+      "cp_J_mol_K": 76.21185004738629,
+      "cp_error_relative": -0.002068579190713682,
+      "cp_verified": true,
+      "dP_drho": 82668.39642107053,
+      "density_termination": "converged: residual 2.5928434746469442e-13 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.1414151989709061e-15, amplification 2062.8748934260939; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 76.21185033378424,
+          "enthalpies_J_mol": [
+            -278971.3616831473,
+            -278956.11931308056
+          ],
+          "error_relative": 3.757918864977228e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.05504516041931e-11
+        },
+        {
+          "cp_J_mol_K": 76.21185011870693,
+          "enthalpies_J_mol": [
+            -278967.5511705383,
+            -278959.9299855264
+          ],
+          "error_relative": 9.358209762666547e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.11009032083862e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "staggered",
+      "psat_error_relative": -0.0014105339586463206,
+      "rho_error_relative": 0.0007452354282717621,
+      "rho_kg_m3": 945.8699023144021,
+      "saturated_dP_drho": 82650.34946156589,
+      "saturated_liquid_rho_error_relative": 0.000779572406017337,
+      "saturated_liquid_rho_kg_m3": 945.8444429916357,
+      "saturation_max_abs_residual": 4.367409626096301e-15,
+      "saturation_molar_densities": [
+        52502.34484235802,
+        56.99868913463303
+      ],
+      "saturation_phase_kinds": [
+        "liquid",
+        "vapor"
+      ],
+      "saturation_pressure_Pa": 183185.18215982825,
+      "saturation_success": true,
+      "saturation_termination": "converged: residual 4.3674096260963011e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 5.99245278964339e-11, amplification absent"
+    },
+    {
+      "P_Pa": 101325.0,
+      "T_K": 298.15,
+      "cp_J_mol_K": 74.20676882934865,
+      "cp_error_relative": -0.014878903454814019,
+      "cp_verified": true,
+      "dP_drho": 109347.28618846028,
+      "density_termination": "converged: residual 1.9084343480524346e-14 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3850929574919211e-15, amplification 1255.281958265525; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.20676794281462,
+          "enthalpies_J_mol": [
+            -285938.19901772786,
+            -285923.3576641393
+          ],
+          "error_relative": 1.1946808098350914e-08,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.137593070374808e-11
+        },
+        {
+          "cp_J_mol_K": 74.20676860783715,
+          "enthalpies_J_mol": [
+            -285934.48880157084,
+            -285927.06812471006
+          ],
+          "error_relative": 2.9850578675549855e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.275186140749615e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "atmospheric-controls",
+      "rho_error_relative": 0.00047307492742709734,
+      "rho_kg_m3": 997.5193149987457
+    },
+    {
+      "P_Pa": 101325.0,
+      "T_K": 318.15,
+      "cp_J_mol_K": 74.76827510681252,
+      "cp_error_relative": -0.007146168033355771,
+      "cp_verified": true,
+      "dP_drho": 104092.19866257258,
+      "density_termination": "converged: residual 7.6621651731723084e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.3336419114265845e-15, amplification 1396.986082561702; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 74.7682745946804,
+          "enthalpies_J_mol": [
+            -284448.2295869357,
+            -284433.2759320168
+          ],
+          "error_relative": 6.849591227542362e-09,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.114029891972929e-11
+        },
+        {
+          "cp_J_mol_K": 74.76827497885097,
+          "enthalpies_J_mol": [
+            -284444.49126438797,
+            -284437.0144368901
+          ],
+          "error_relative": 1.7114418771058126e-09,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.228059783945858e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "atmospheric-controls",
+      "rho_error_relative": 0.00013030342657027738,
+      "rho_kg_m3": 990.3419259972859
+    },
+    {
+      "P_Pa": 101325.0,
+      "T_K": 353.15,
+      "cp_J_mol_K": 75.49226006893534,
+      "cp_error_relative": -0.0015002189540103128,
+      "cp_verified": true,
+      "dP_drho": 94105.77428937047,
+      "density_termination": "converged: residual 2.8212024730245311e-15 against DENSITY_ROOT_RESIDUAL 9.9999999999999998e-13 after 1 iterations, contraction absent, floor 1.2416840746573965e-15, amplification 1682.2011698298934; scalar_density rank 1/1; threshold 0",
+      "enthalpy_ladder": [
+        {
+          "cp_J_mol_K": 75.49226000788622,
+          "enthalpies_J_mol": [
+            -281818.1695624243,
+            -281803.0711104227
+          ],
+          "error_relative": 8.086805669549335e-10,
+          "step_K": 0.1,
+          "subtraction_roundoff_relative": 3.084165760056218e-11
+        },
+        {
+          "cp_J_mol_K": 75.49226005328819,
+          "enthalpies_J_mol": [
+            -281814.39501928416,
+            -281806.84579327883
+          ],
+          "error_relative": 2.0726820260108525e-10,
+          "step_K": 0.05,
+          "subtraction_roundoff_relative": 6.168331520112436e-11
+        }
+      ],
+      "evaluated": true,
+      "grid": "atmospheric-controls",
+      "rho_error_relative": -0.0005312489676025933,
+      "rho_kg_m3": 971.2741354508497
+    }
+  ]
+}

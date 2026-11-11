@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 394, in <module>
+    main()
+    ~~~~^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 376, in main
+    render_density(read(DATA / 'density.csv'), json.loads((DATA / 'summary.json').read_text()))
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 261, in render_density
+    assert len(failures) == 3 and {float(r['T_K']) for r in failures} == {353.15}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

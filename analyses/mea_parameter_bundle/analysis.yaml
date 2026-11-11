@@ -3,7 +3,7 @@ title: Nine-Species MEA ePC-SAFT Parameter Bundle
 status: active
 summary: Owner-authorized reported record from issue 212, adopted under issue 215 on Engine 3e83e19c; 307 objective rows and 16 coordinates; 44 of 47 loaded densities within twice their scales; complete 162-state reported-fit phase search with no resolved descent; conditional uncertainty; no physical validation; manuscript generation pending issue 211.
 working_record_sha256: 00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91
-working_engine_wheel_sha256: 0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804
+working_engine_wheel_sha256: 0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b
 bundle_snakemake: held_under_issue_133
 owner: Amine-Thermodynamics
 children:
@@ -96,7 +96,7 @@ inputs:
     kind: canonical_speciation_observations
   - path: data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv
     kind: canonical_vle_observations
-  - path: analyses/mea_parameter_bundle/data/input/engine/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl
+  - path: analyses/mea_parameter_bundle/data/input/engine/epcsaft-1.3.0-cp313-cp313-linux_x86_64.whl
     kind: superseded_engine_wheel_40fba7cf_heat_and_engine_comparison_only
   - uri: https://github.com/tannerpolley/ePC-SAFT/issues/80
     kind: upstream_campaign
