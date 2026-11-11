@@ -3,6 +3,21 @@ title: "MDEA transfer with saturation-capped absorption heat"
 format: html
 ---
 
+## Current B1 adoption (#302, 11 November 2026)
+
+The owner adopted the #298 **B1-endpoint** on the #255 shared values and complete R2 declaration in a [post-hoc owner amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180). The original design did not pass every gate. A3 remains unrefit in `solvent_specification_mdea/A3.toml`; its old parameters are inconsistent with the adopted shared set. The A3 refit is retained only as evidence of the MEA → MDEA transfer penalty and is not adopted.
+
+- F2 originally failed both A3 pressure comparisons. The owner treats Xiao's +0.27 percentage point as a measurement-level difference, citing ±1.5% pressure uncertainty. Ermatchkov's +5.23 percentage points remains a systematic loss. B1 passed both pressure comparisons.
+- F3 originally failed Carson for B1 (1.132420 × historical scaled RMS, above 1.10) and A3 (1.103341 ×). The owner accepted B1 at scaled RMS 1.106 versus historical 0.977, comparable to accepted A3 historical 1.075.
+- The two A3 388.71 K, 60 wt% Merkley heat failures are reported as concentration extrapolations beyond the intended ≤50 wt% domain, rather than gate failures.
+
+The adopted specification replays 278 fitted predictions with maximum relative difference **0**, and cost **374.5190788052401** versus **374.5190788051367** (relative difference **2.7600e-13**). Xiao pressure AARD is **28.1910414167%** (20 rows); Ermatchkov is **18.2705616155%** (88 rows). This is numerical verification and conditional outside-fit assessment on wheel `391dfe5d`, SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`; it does not establish new physical validation.
+
+Limits: two active bounds (protonated-MDEA–bicarbonate +1 and Born diameter 7 Å); no parameter uncertainty estimate; no F4 phase evidence at 394.94–395.00 K; Kuranov rows 28 and 72 and seven corrected-Kamps states outside the adopted R2 domain; B1 333.15 K / 60 wt% heat unavailable. The retained F4 check covers 775 required records, with zero dense-liquid, ambiguous or unresolved states. No absorber-use qualification is claimed.
+
+[Adoption replay](../solvent_specification_mdea/results/adoption-302/verification.json) and [explicit original verdicts and amendment](results/refit-298/disposition.json) retain the evidence. Independent review of #302 is required before delivery; #298 delivered evidence was Supported at `67cbbd7`. The sections below describe historical studies under their own parameter and wheel bindings.
+
+
 ## Outcome and intended use
 
 The declared comparison between gate-passing starts within 1% of the selected cost passes: A1's 88-row Ermatchkov AARD is 26.208496003%, versus 26.208406176% for A3. The absolute difference is 0.0000898275 percentage points, below the non-identification threshold of 2 percentage points or more. B1 has no qualifying alternative: B3 fails the phase gate, and B2 duplicates B1. This check concerns agreement of pressure predictions between starts; it does not establish identification of individual parameters. The [eligibility and comparison record](results/stage2-capped/equal-cost-starts.json) and [88 A1 row predictions](results/stage2-capped/A1/ermatchkov-88.json) retain the numerical evidence.

@@ -144,7 +144,7 @@ write(f'runtime-{MODE}.json',dict(wheel=str(wheel),sha256=digest,installed_files
 if MODE=='latest-heat':
     results=[]
     for case in read(OUT/'heat-reproducer.json')['cases']:
-        SPEC=SolventSpecification(AN.parent/'solvent_specification_mdea'/f"{case['label']}.toml")
+        SPEC=SolventSpecification(AN.parent/'solvent_specification_mdea'/('B1-historical.toml' if case['label']=='B1' else f"{case['label']}.toml"))
         record=copy.deepcopy(next(r for r in SPEC.inputs['observations']['comparisons'] if r['group']=='Merkley-outside' and float(r['row']['temperature_K'])==case['T_K'] and r['row']['MDEA_mass_percent']=='60'))
         record['arguments']['loading_grid']=case['grid']
         pred=reg.predict(SPEC.model,SPEC.observation(record))

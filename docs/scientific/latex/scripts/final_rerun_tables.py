@@ -200,6 +200,33 @@ def comparison_label(name):
     return name
 
 
+def mdea_table():
+    # MDEA values come from the selected declarations and endpoint documents; no model call.
+    mdea=ROOT/'analyses/mdea_mea_workflow/results/stage2-capped'
+    endpoint=[a.load(mdea/'A3/endpoint.json'), a.load(mdea.parent/'refit-298/B1-endpoint/endpoint.json')]
+    declaration=[a.load(mdea/v/'declaration.json')['coordinates'] for v in ('A3','B1')]
+    vals=[dict(a.coefficients(doc)) for doc in endpoint]
+    rows_m=[]
+    parameter_names=[r'MDEA--water $a_0$',r'MDEA--water $a_1$ (K$^{-1}$)',r'MDEAH$^+$--CO2 $k$',r'MDEAH$^+$--water $k_{\mathrm{ref}}$',r'MDEAH$^+$--water $b$ (K)',r'MDEAH$^+$--\ce{HCO3-} $k$',r'Cation $\sigma$ (\AA)',r'Cation $\epsilon/k_B$ (K)',r'Cation Born diameter (\AA)']
+    def target_value(doc,values,target):
+        family,identity,_=target
+        if family=='temperature_law_coefficient': return values[identity]['value']['magnitude']
+        if isinstance(identity,list):
+            pair=next(p for p in doc['pairs'] if {p['component_id_a'],p['component_id_b']}==set(identity))
+            return next(c['value']['magnitude'] for c in pair['coefficients'] if c['family']==family)
+        c=next(c for c in doc['components'] if c['component_id']==identity)
+        return next(x['value']['magnitude'] for x in c['coefficients'] if x['family']==family)
+    for k,name in enumerate(parameter_names):
+        results=[]
+        for doc,values,decl in zip(endpoint,vals,declaration,strict=True):
+            q=decl[k];v=target_value(doc,values,q['targets'][0]);assert q['bounds'][0]-1e-12<=v<=q['bounds'][1]+1e-12
+            results += [num(v,8),'['+', '.join(num(x,8) for x in q['bounds'])+']']
+        rows_m.append([name,*results,'MDEA joint fit'])
+    assert len(rows_m)==9
+    table('mdea_fitted_parameters.tex','MDEA fitted values and bounds: historical unrefit A3 and adopted B1 refit (issue 302). The diameter also sets the Debye--Hückel diameter; the single-sphere packing diameter is tied to 0.88 times it.',
+          ['Parameter','Single-sphere','Bounds','Charged-molecule','Bounds','Source'],rows_m,['l','r','l','r','l','l'])
+
+
 def main():
     fit, summary, document, fitted, spec, density, heat, errors, paired = a.checked()
     a.bind(Path(__file__))
@@ -629,30 +656,7 @@ def main():
     units=['mol/mol','kg/kg','K','Pa','1','1; kg/mol','J; 1',r'mol/m$^3$; 1; m$^3$',r'\AA; K','1',r'\AA','--','1; K','1; K',r'\AA','1','1','1','C; F/m; J/K; J/(mol K)','L/mol; K; mol','1','1; K; 1; 1/K; 1','1; 1; J/mol','mol/kg','J/mol','J; J/mol; J/mol','J/K; J/(kg K); kg','Observable unit; 1; 1; 1',r'kg/m$^3$; mol/mol; kg/m$^3$; kg/m$^3$','Parameter-dependent; scaled; 1','1; 1; 1','%; observable unit']
     assert len(symbols)==len(units)
     table('nomenclature.tex','Symbols and units. A unit of 1 denotes a dimensionless quantity.',['Symbol','Definition','Unit'],[r+[u] for r,u in zip(symbols,units,strict=True)],['l',.48,.22])
-    # MDEA values come from the selected declarations and endpoint documents; no model call.
-    mdea=ROOT/'analyses/mdea_mea_workflow/results/stage2-capped'
-    endpoint=[a.load(mdea/v/'endpoint.json') for v in ('A3','B1')]
-    declaration=[a.load(mdea/v/'declaration.json')['coordinates'] for v in ('A3','B1')]
-    vals=[dict(a.coefficients(doc)) for doc in endpoint]
-    rows_m=[]
-    parameter_names=[r'MDEA--water $a_0$',r'MDEA--water $a_1$ (K$^{-1}$)',r'MDEAH$^+$--CO2 $k$',r'MDEAH$^+$--water $k_{\mathrm{ref}}$',r'MDEAH$^+$--water $b$ (K)',r'MDEAH$^+$--\ce{HCO3-} $k$',r'Cation $\sigma$ (\AA)',r'Cation $\epsilon/k_B$ (K)',r'Cation Born diameter (\AA)']
-    def target_value(doc,values,target):
-        family,identity,_=target
-        if family=='temperature_law_coefficient': return values[identity]['value']['magnitude']
-        if isinstance(identity,list):
-            pair=next(p for p in doc['pairs'] if {p['component_id_a'],p['component_id_b']}==set(identity))
-            return next(c['value']['magnitude'] for c in pair['coefficients'] if c['family']==family)
-        c=next(c for c in doc['components'] if c['component_id']==identity)
-        return next(x['value']['magnitude'] for x in c['coefficients'] if x['family']==family)
-    for k,name in enumerate(parameter_names):
-        results=[]
-        for doc,values,decl in zip(endpoint,vals,declaration,strict=True):
-            q=decl[k];v=target_value(doc,values,q['targets'][0]);assert q['bounds'][0]-1e-12<=v<=q['bounds'][1]+1e-12
-            results += [num(v,8),'['+', '.join(num(x,8) for x in q['bounds'])+']']
-        rows_m.append([name,*results,'MDEA joint fit'])
-    assert len(rows_m)==9
-    table('mdea_fitted_parameters.tex','MDEA fitted values and bounds. The diameter also sets the Debye--Hückel diameter; the single-sphere packing diameter is tied to 0.88 times it.',
-          ['Parameter','Single-sphere','Bounds','Charged-molecule','Bounds','Source'],rows_m,['l','r','l','r','l','l'])
+    mdea_table()
     a.inventoried()
     for name, body in OUTPUTS.items():
         head='% Generator: docs/scientific/latex/scripts/final_rerun_tables.py; do not hand-edit.\n'
@@ -666,4 +670,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if sys.argv[1:] == ['mdea']:
+        mdea_table()
+        head = '% Generator: docs/scientific/latex/scripts/final_rerun_tables.py mdea; #302 B1 adoption, A3 historical.\n'
+        head += ''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))
+        (TABLES / 'mdea_fitted_parameters.tex').write_text(head + OUTPUTS['mdea_fitted_parameters.tex'])
+    else:
+        main()

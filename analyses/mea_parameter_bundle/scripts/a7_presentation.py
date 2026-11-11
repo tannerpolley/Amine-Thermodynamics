@@ -25,6 +25,7 @@ PINNED = {'analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-
           'ceee9107ca784936126b9f32e08af8cb1e9a7088a87b4667796d9abac94f5bcc'}
 # #244 binds the retained MDEA parameter declarations used by the supplement.
 PINNED.update({'analyses/mdea_mea_workflow/results/stage2-capped/A3/endpoint.json': '3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8', 'analyses/mdea_mea_workflow/results/stage2-capped/A3/declaration.json': '86111af51bace3d696b9963cb84a4ac811cdb962f5d851b2c90237d72e7df53b', 'analyses/mdea_mea_workflow/results/stage2-capped/B1/endpoint.json': '1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d', 'analyses/mdea_mea_workflow/results/stage2-capped/B1/declaration.json': 'b98bacbcbce32c8b508683d7ca53f66881039a1d509f393e5dd2fd2d6690b644'})
+PINNED['analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/endpoint.json'] = '2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d'
 INPUTS = {}
 
 
