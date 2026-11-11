@@ -169,14 +169,8 @@ def information(par, coords, obs, optimizer):
     )
 
 
-def calculate():
-    verify_wheel()
-    doc = document()
-    par = epcsaft.Parameters.from_mapping(doc)
-    rows = load_rows("hartono-table6.csv")
-    fitted_rows = [r for r in rows if r["role"] == "calibration"]
-    assert len(fitted_rows) == 23
-    coords = [
+def coordinates(par):
+    return [
         reg.coordinate(
             par,
             [("temperature_law_coefficient", f"pair/pz-water/k{i}", 1.0)],
@@ -186,8 +180,10 @@ def calculate():
         )
         for i, s, b in zip(range(2), SCALES, [0.5, 0.005])
     ]
-    obs = observations(par, fitted_rows)
-    controls = reg.FitControls(
+
+
+def fit_controls():
+    return reg.FitControls(
         maximum_iterations=100,
         maximum_elapsed_time_seconds=600,
         function_tolerance=1e-10,
@@ -195,36 +191,101 @@ def calculate():
         gradient_tolerance=1e-8,
         workers=int(os.environ["AGENT_HEAVY_CORES"]),
     )
-    result = reg.fit(par, coords, obs, controls=controls, singular_vectors=True)
-    log = dict(
-        wheel_sha256=SHA,
-        status=result.status,
-        usable=result.usable,
-        message=result.message,
-        optimizer=list(result.optimizer),
-        cost=result.final_cost,
-        iterations=result.iterations,
-        active_bounds=list(result.covariance.active_bounds),
-    )
-    (AN / "results/binary-fit.json").write_text(json.dumps(log, indent=2) + "\n")
-    print(
-        json.dumps(
-            {
-                k: v
-                for k, v in log.items()
-                if k not in ["initial_information", "information"]
-            }
-        ),
-        flush=True,
-    )
-    if not result.usable or result.status != "converged":
-        raise SystemExit(
-            "No fitted endpoint; diagnose the retained cause before owner continuation."
+
+
+def calculate():
+    verify_wheel()
+    doc = document()
+    par = epcsaft.Parameters.from_mapping(doc)
+    rows = load_rows("hartono-table6.csv")
+    fitted_rows = [r for r in rows if r["role"] == "calibration"]
+    assert len(fitted_rows) == 23
+    coords = coordinates(par)
+    obs = observations(par, fitted_rows)
+    controls = fit_controls()
+    log = dict(wheel_sha256=SHA, starts=[])
+    for k0 in [-0.10, -0.15]:
+        start_doc = document()
+        start_doc["pairs"][0]["coefficients"][0]["temperature_law"]["terms"][0][
+            "coefficient"
+        ]["value"]["magnitude"] = k0
+        start_model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(start_doc))
+        initial_pressures = []
+        for row in fitted_rows:
+            solved = eq.solve_equilibrium(start_model, problem(row))
+            assert solved.requested_tolerance_met and solved.pressure is not None, (
+                k0,
+                row,
+                solved.message,
+            )
+            initial_pressures.append(solved.pressure)
+        initial = [k0 / 0.05, 0.0]
+        info = information(par, coords, obs, initial)
+        # Native differentiation admits each observation only after an admissible solve.
+        result = reg.fit(
+            par, coords, obs, controls=controls, singular_vectors=True, starts=[initial]
+        )[0]
+        record = dict(
+            start=[k0, 0.0],
+            initial_pressure_Pa=initial_pressures,
+            status=result.status,
+            usable=result.usable,
+            message=result.message,
+            optimizer=list(result.optimizer),
+            cost=result.final_cost,
+            iterations=result.iterations,
+            active_bounds=list(result.covariance.active_bounds),
+            initial_information=info,
         )
-    log["initial_information"] = information(par, coords, obs, [0.0, 0.0])
-    log["information"] = information(par, coords, obs, result.optimizer)
-    log["values"] = (np.array(result.optimizer) * SCALES).tolist()
-    (AN / "results/binary-fit.json").write_text(json.dumps(log, indent=2) + "\n")
+        if result.usable:
+            record["values"] = (np.array(result.optimizer) * SCALES).tolist()
+            record["information"] = information(par, coords, obs, result.optimizer)
+        log["starts"].append(record)
+        (AN / "results/binary-calibration.json").write_text(
+            json.dumps(log, indent=2) + "\n"
+        )
+        print(
+            json.dumps(
+                {
+                    k: v
+                    for k, v in record.items()
+                    if k not in ["initial_information", "information"]
+                }
+            ),
+            flush=True,
+        )
+        if result.usable:
+            endpoint_doc = document()
+            for term, value in zip(
+                endpoint_doc["pairs"][0]["coefficients"][0]["temperature_law"]["terms"],
+                record["values"],
+                strict=True,
+            ):
+                term["coefficient"]["value"]["magnitude"] = value
+            (AN / f"results/binary-endpoint-{abs(k0):.2f}.json").write_text(
+                json.dumps(endpoint_doc, indent=2) + "\n"
+            )
+
+    log["common_pressure_sensitivity"] = []
+    for shift in [-300.0, 300.0]:
+        result = reg.fit(
+            par,
+            coords,
+            observations(par, fitted_rows, shift),
+            controls=controls,
+            starts=[log["starts"][0]["optimizer"]],
+        )[0]
+        log["common_pressure_sensitivity"].append(
+            dict(
+                shift_Pa=shift,
+                status=result.status,
+                values=(np.array(result.optimizer) * SCALES).tolist(),
+                cost=result.final_cost,
+            )
+        )
+    (AN / "results/binary-calibration.json").write_text(
+        json.dumps(log, indent=2) + "\n"
+    )
 
 
 if __name__ == "__main__":
