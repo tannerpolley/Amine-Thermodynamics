@@ -1,0 +1,106 @@
+{
+  "shared_laws": {
+    "bicarbonate-anion": {
+      "family": "k_ij",
+      "identity": "pair/bicarbonate-anion/water/k_ij",
+      "provenance": {
+        "source_id": "carbonate-ions-282",
+        "locator": "salt/summary.json"
+      },
+      "temperature_law": {
+        "form": "polynomial-plus-reciprocal-temperature",
+        "reference_temperature": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        },
+        "terms": [
+          {
+            "power": 0,
+            "coefficient": {
+              "identity": "pair/bicarbonate-anion/water/k_ij/a0",
+              "value": {
+                "magnitude": 0.1706931974036258,
+                "unit": "dimensionless"
+              }
+            }
+          },
+          {
+            "power": 1,
+            "coefficient": {
+              "identity": "pair/bicarbonate-anion/water/k_ij/a1",
+              "value": {
+                "magnitude": 0.0039311876328716865,
+                "unit": "1 / kelvin"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "carbonate-anion": {
+      "family": "k_ij",
+      "identity": "pair/carbonate-anion/water/k_ij",
+      "provenance": {
+        "source_id": "carbonate-ions-282",
+        "locator": "salt/summary.json"
+      },
+      "temperature_law": {
+        "form": "polynomial-plus-reciprocal-temperature",
+        "reference_temperature": {
+          "magnitude": 313.15,
+          "unit": "kelvin"
+        },
+        "terms": [
+          {
+            "power": 0,
+            "coefficient": {
+              "identity": "pair/carbonate-anion/water/k_ij/a0",
+              "value": {
+                "magnitude": -0.9705531093245405,
+                "unit": "dimensionless"
+              }
+            }
+          },
+          {
+            "power": 1,
+            "coefficient": {
+              "identity": "pair/carbonate-anion/water/k_ij/a1",
+              "value": {
+                "magnitude": 0.0019631260450306285,
+                "unit": "1 / kelvin"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "pressure": {
+    "Xiao": {
+      "rows": 20,
+      "available": 20,
+      "AARD_percent": 143.0421421340101,
+      "bias_percent": 143.0421421340101,
+      "mean_log_ratio": 0.873656158596544,
+      "underpredictions": 0
+    },
+    "Ermatchkov": {
+      "rows": 88,
+      "available": 88,
+      "AARD_percent": 158.6425098493752,
+      "bias_percent": 158.6425098493752,
+      "mean_log_ratio": 0.8465470554477598,
+      "underpredictions": 0
+    }
+  },
+  "phase": {
+    "states": 108,
+    "liquid_witnesses": [],
+    "vapor_witnesses": [],
+    "rounding_states": [],
+    "ambiguous": [],
+    "unresolved": [],
+    "rounding_trials": 0,
+    "passed": true
+  }
+}

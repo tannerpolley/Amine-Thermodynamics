@@ -143,13 +143,30 @@
     }
    }
   },
-  "gates": {
+  "gates_as_written": {
    "nahco3_aard_passed": true,
    "na2co3_aard_passed": false,
    "coefficients_interior": false,
    "water_bicarbonate_313": 0.1706931974036258,
    "compensation_falsified": false,
    "F1_passed": false
+  },
+  "gates": {
+   "rule": "Owner amendment to F1 (2026-11-09), issue #282 body, \"Numerical falsifier\": Na2CO3 AARD <= 6.5 % (Held 2014 Table 5, strategy 2, 298.15 K: Na2SO4 2.41 %, K2HPO4 4.95 %, Na2HPO4 6.43 %); NaHCO3 AARD <= 1.5 %; coefficients on a bound are stated limits, not gate failures; water-HCO3- >= 0.5 at 313.15 K still falsifies. No fitted number changes.",
+   "nahco3_aard_percent": 0.16297888463729926,
+   "nahco3_aard_limit": 1.5,
+   "nahco3_aard_passed": true,
+   "na2co3_aard_percent": 5.111329872572398,
+   "na2co3_aard_limit": 6.5,
+   "na2co3_aard_passed": true,
+   "coefficients_on_bound_stated_limits": [
+    "pair/sodium-cation/water/k_ij/a0",
+    "pair/carbonate-anion/water/k_ij/a0"
+   ],
+   "water_bicarbonate_313": 0.1706931974036258,
+   "compensation_falsified": false,
+   "conditional_on": "every result after F1 is conditional on water-Na+ a0 = -1 (lower bound; Held 2014 about 0.0005 at 298.15 K) and water-CO3^2- a0 = -1 (lower bound)",
+   "F1_passed": true
   },
   "on_bound": [
    {
