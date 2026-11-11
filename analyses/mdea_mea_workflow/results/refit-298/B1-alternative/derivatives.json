@@ -1,0 +1,184 @@
+{
+  "tolerance": 1e-05,
+  "observations": [
+    {
+      "group": "Kuranov",
+      "row": {
+        "source_row": "1",
+        "source_table": "Table 2",
+        "source_pdf_page": "2",
+        "source_printed_page": "1960",
+        "source_table_half": "left",
+        "source_half_row": "1",
+        "source_series": "m_MDEA 1.9938 mol/kg; isotherm about 313 K",
+        "temperature_K": "313.24",
+        "m_CO2_mol_per_kg_H2O": "1.5659",
+        "m_MDEA_mol_per_kg_H2O": "1.9938",
+        "ten_times_total_pressure_MPa": "0.740",
+        "source_key": "Kuranov1996",
+        "doi": "10.1021/ie950538r",
+        "zotero_parent_key": "9F6UM7M4",
+        "pdf_attachment_key": "QB5PV62N",
+        "pressure_basis": "total pressure at the bubble point (synthetic method); printed column 10(p) (MPa) = 10 x p/MPa",
+        "consistency_flag": "",
+        "verification": "Image reading of 600 dpi crop of PDF p.2 matched pdftotext -layout text for all four values; checked 2026-10-18"
+      },
+      "weight": 11.11111111111111,
+      "observed": 74000.0,
+      "scale": 1.0
+    },
+    {
+      "group": "Cp",
+      "row": {
+        "source_key": "Weiland1997",
+        "pdf_attachment_key": "27V9SYLA",
+        "source_locator": "Table 1, PDF p.1, printed p.1004",
+        "source_row": "1",
+        "loading": "0.00",
+        "MDEA_mass_fraction": "0.30",
+        "Cp_J_g_K": "3.787"
+      },
+      "weight": 1.0,
+      "observed": 91.53206037994445,
+      "scale": 1.8306412075988892
+    }
+  ],
+  "checks": [
+    {
+      "coordinate": 0,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        9253.729299318988,
+        0.10889676901533339
+      ],
+      "finite_difference": [
+        9253.729328818736,
+        0.10889676914160873
+      ],
+      "relative_error": 3.1878767031502993e-09,
+      "passed": true
+    },
+    {
+      "coordinate": 1,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        83.28356369390058,
+        2.6878313018343327
+      ],
+      "finite_difference": [
+        83.283562118595,
+        2.6878313006335475
+      ],
+      "relative_error": 1.8905126209902927e-08,
+      "passed": true
+    },
+    {
+      "coordinate": 2,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        60.09444255863646,
+        0.0
+      ],
+      "finite_difference": [
+        60.094446591392625,
+        0.0
+      ],
+      "relative_error": 6.710697353426647e-08,
+      "passed": true
+    },
+    {
+      "coordinate": 3,
+      "method": "inward second order",
+      "optimizer_step": 0.001,
+      "exact": [
+        -9224.175659841248,
+        -4.933816682189704e-05
+      ],
+      "finite_difference": [
+        -9224.175604322227,
+        -4.93377001475892e-05
+      ],
+      "relative_error": 6.01885998493118e-09,
+      "passed": true
+    },
+    {
+      "coordinate": 4,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        8.463313782859684,
+        -0.00017340672314747577
+      ],
+      "finite_difference": [
+        8.463308651698753,
+        -0.00017340647673336207
+      ],
+      "relative_error": 6.062827241555653e-07,
+      "passed": true
+    },
+    {
+      "coordinate": 5,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        627.2597889480531,
+        0.0
+      ],
+      "finite_difference": [
+        627.2597883144044,
+        0.0
+      ],
+      "relative_error": 1.0101854471709486e-09,
+      "passed": true
+    },
+    {
+      "coordinate": 6,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        -2385.957659789354,
+        0.00010339565455165887
+      ],
+      "finite_difference": [
+        -2385.957673432131,
+        0.00010339527278802052
+      ],
+      "relative_error": 5.717945998699275e-09,
+      "passed": true
+    },
+    {
+      "coordinate": 7,
+      "method": "centered",
+      "optimizer_step": 0.001,
+      "exact": [
+        25876.68000426529,
+        0.0001728178656705537
+      ],
+      "finite_difference": [
+        25876.68041231518,
+        0.00017281801945046027
+      ],
+      "relative_error": 1.5769020255052953e-08,
+      "passed": true
+    },
+    {
+      "coordinate": 8,
+      "method": "inward second order",
+      "optimizer_step": 0.001,
+      "exact": [
+        -58.47870191252321,
+        1.3155072777391391e-06
+      ],
+      "finite_difference": [
+        -58.478694889345206,
+        1.3143122146175301e-06
+      ],
+      "relative_error": 1.2009805072864214e-07,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

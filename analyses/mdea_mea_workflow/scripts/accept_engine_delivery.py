@@ -12,7 +12,7 @@ sys.path.insert(0,str(AN.parents[1]/'analyses/mea_parameter_bundle/scripts'))
 sys.path.insert(0,str(AN.parents[1]/'src'))
 import shared_evaluation
 # This process alone qualifies the MDEA wheel; the MEA source pin stays unchanged.
-shared_evaluation.ENGINE_WHEEL_SHA256='ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5'
+shared_evaluation.ENGINE_WHEEL_SHA256=os.environ.get('MDEA_ENGINE_WHEEL_SHA256', 'ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5')
 spec=importlib.util.spec_from_file_location('phase_diagnosis',AN/'scripts/diagnose_phase_search.py')
 n=importlib.util.module_from_spec(spec);sys.modules[spec.name]=n;spec.loader.exec_module(n)
 s=n.s

@@ -1,0 +1,736 @@
+{
+  "A3-endpoint": [
+    {
+      "coordinate": 0,
+      "quantity": "MDEA\u2013water interaction at 313.15 K",
+      "value": -0.20617154074417424,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 1,
+      "quantity": "MDEA\u2013water linear temperature slope",
+      "value": 0.001472348991130273,
+      "unit": "1/K",
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 2,
+      "quantity": "Protonated-MDEA\u2013CO2 interaction",
+      "value": 0.5,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 3,
+      "quantity": "Protonated-MDEA\u2013water interaction at 313.15 K",
+      "value": -0.5,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "lower",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 4,
+      "quantity": "Protonated-MDEA\u2013water reciprocal temperature slope",
+      "value": -84.8135791736229,
+      "unit": "K",
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 5,
+      "quantity": "Protonated-MDEA\u2013bicarbonate interaction",
+      "value": -1.0,
+      "unit": "dimensionless",
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "bound_status": "lower",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 6,
+      "quantity": "Protonated-MDEA segment diameter",
+      "value": 6.35770916106446,
+      "unit": "angstrom",
+      "bounds": [
+        3.0,
+        7.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "packing_diameter",
+          "protonated-methyldiethanolamine",
+          0.88
+        ]
+      ]
+    },
+    {
+      "coordinate": 7,
+      "quantity": "Protonated-MDEA dispersion energy / Boltzmann constant",
+      "value": 189.9261172823047,
+      "unit": "K",
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 8,
+      "quantity": "Protonated-MDEA Born diameter",
+      "value": 7.0,
+      "unit": "angstrom",
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    }
+  ],
+  "A3-alternative": [
+    {
+      "coordinate": 0,
+      "quantity": "MDEA\u2013water interaction at 313.15 K",
+      "value": -0.20617154089207285,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 1,
+      "quantity": "MDEA\u2013water linear temperature slope",
+      "value": 0.0014723489035706988,
+      "unit": "1/K",
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 2,
+      "quantity": "Protonated-MDEA\u2013CO2 interaction",
+      "value": 0.5,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 3,
+      "quantity": "Protonated-MDEA\u2013water interaction at 313.15 K",
+      "value": -0.5,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "lower",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 4,
+      "quantity": "Protonated-MDEA\u2013water reciprocal temperature slope",
+      "value": -84.81379785652187,
+      "unit": "K",
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 5,
+      "quantity": "Protonated-MDEA\u2013bicarbonate interaction",
+      "value": -1.0,
+      "unit": "dimensionless",
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "bound_status": "lower",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 6,
+      "quantity": "Protonated-MDEA segment diameter",
+      "value": 6.357708680377952,
+      "unit": "angstrom",
+      "bounds": [
+        3.0,
+        7.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "packing_diameter",
+          "protonated-methyldiethanolamine",
+          0.88
+        ]
+      ]
+    },
+    {
+      "coordinate": 7,
+      "quantity": "Protonated-MDEA dispersion energy / Boltzmann constant",
+      "value": 189.92595737608846,
+      "unit": "K",
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 8,
+      "quantity": "Protonated-MDEA Born diameter",
+      "value": 7.0,
+      "unit": "angstrom",
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    }
+  ],
+  "B1-endpoint": [
+    {
+      "coordinate": 0,
+      "quantity": "MDEA\u2013water interaction at 313.15 K",
+      "value": -0.20633734821212568,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 1,
+      "quantity": "MDEA\u2013water linear temperature slope",
+      "value": 0.001475040100864945,
+      "unit": "1/K",
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 2,
+      "quantity": "Protonated-MDEA\u2013CO2 interaction",
+      "value": 0.24818892822226704,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 3,
+      "quantity": "Protonated-MDEA\u2013water interaction at 313.15 K",
+      "value": -0.03323620782863823,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 4,
+      "quantity": "Protonated-MDEA\u2013water reciprocal temperature slope",
+      "value": -27.10492507018966,
+      "unit": "K",
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 5,
+      "quantity": "Protonated-MDEA\u2013bicarbonate interaction",
+      "value": 1.0,
+      "unit": "dimensionless",
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 6,
+      "quantity": "Protonated-MDEA segment diameter",
+      "value": 3.649407418440385,
+      "unit": "angstrom",
+      "bounds": [
+        3.0,
+        4.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 7,
+      "quantity": "Protonated-MDEA dispersion energy / Boltzmann constant",
+      "value": 623.0430272546931,
+      "unit": "K",
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 8,
+      "quantity": "Protonated-MDEA Born diameter",
+      "value": 7.0,
+      "unit": "angstrom",
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    }
+  ],
+  "B1-alternative": [
+    {
+      "coordinate": 0,
+      "quantity": "MDEA\u2013water interaction at 313.15 K",
+      "value": -0.20621478409892122,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 1,
+      "quantity": "MDEA\u2013water linear temperature slope",
+      "value": 0.0014728944294640184,
+      "unit": "1/K",
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 2,
+      "quantity": "Protonated-MDEA\u2013CO2 interaction",
+      "value": 0.3313116755574507,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 3,
+      "quantity": "Protonated-MDEA\u2013water interaction at 313.15 K",
+      "value": -0.5,
+      "unit": "dimensionless",
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "bound_status": "lower",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 4,
+      "quantity": "Protonated-MDEA\u2013water reciprocal temperature slope",
+      "value": -60.11382662358275,
+      "unit": "K",
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 5,
+      "quantity": "Protonated-MDEA\u2013bicarbonate interaction",
+      "value": 0.032121021451077,
+      "unit": "dimensionless",
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 6,
+      "quantity": "Protonated-MDEA segment diameter",
+      "value": 3.583214935473824,
+      "unit": "angstrom",
+      "bounds": [
+        3.0,
+        4.5
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 7,
+      "quantity": "Protonated-MDEA dispersion energy / Boltzmann constant",
+      "value": 170.6003700871951,
+      "unit": "K",
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "bound_status": "interior",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    },
+    {
+      "coordinate": 8,
+      "quantity": "Protonated-MDEA Born diameter",
+      "value": 7.0,
+      "unit": "angstrom",
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "bound_status": "upper",
+      "targets": [
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ]
+    }
+  ]
+}

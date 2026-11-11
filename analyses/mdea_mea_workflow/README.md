@@ -330,3 +330,7 @@ the MEA bicarbonate value. Xiao and Zhang remain unscored. Evidence is in
 and the notebook. This numerical calibration result is not physical validation,
 parameter adoption, absorber qualification or manuscript promotion.
 Independent delivered review remains open.
+
+## MDEA refits with adopted shared MEA values (#298)
+
+The [retained refit result](results/refit-298/README.md) and notebook report four converged 278-row fits on the pinned 391dfe5d wheel. B1 recovers both pressure baselines, while A3 does not. Both selected records fail the Carson group-preservation rule. The owner-amended phase checks pass within the adopted R2 domain; they exclude seven corrected-Kamps states at 394.94–395.00 K. No parameters are adopted. Independent delivered-evidence review remains pending.
