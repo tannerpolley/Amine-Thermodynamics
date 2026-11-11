@@ -18,6 +18,16 @@ resources:
   - results/stable-refit-255/evidence/comparison.csv
   - results/stable-refit-255/evidence/candidate-parameters.json
   - results/carbonate-ions-282/**
+  - results/ion-temperature-283/README.md
+  - results/ion-temperature-283/primary.json
+  - results/ion-temperature-283/*/assessment.json
+  - results/ion-temperature-283/*/extras.json
+  - results/ion-temperature-283/attribution.json
+  - results/ion-temperature-283/regression.json
+  - results/ion-temperature-283/transfer-temperature-term.png
+  - results/ion-temperature-283/transfer-temperature-term-plotted-values.csv
+  - results/ion-temperature-283/evidence/comparison.csv
+  - results/ion-temperature-283/evidence/candidate-parameters.json
 ---
 
 **Reported parameter record · adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215) · record `00e77608…` · Engine `3e83e19c` · [Download exact parameters](results/selected-current-best-parameters.json)**
@@ -729,6 +739,128 @@ Whether MDEA follows any new shared value remains the owner's decision.
 
 This section has not been independently reviewed or promoted for the manuscript route.
 
+# Unloaded heat-capacity slope: water, MEA and excess (issue 284) {#cp-slope-284}
+
+The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, while both multi-temperature sources rise by about 0.16 kJ kg⁻¹ K⁻¹. Splitting the mixture into pure water, pure MEA and the excess, $c_p^E=c_p-\sum_i w_ic_{p,i}$, puts the slope error in the **MEA–water excess**: share 1.08–1.11 of the mixture slope error for every pairing of mixture source (Hilliard 2008, Concepción 2023) and pure-MEA source (Maham et al. 1997, Chiu et al. 1999). Pure water contributes −0.10 to −0.11 (its model slope is too steep, the opposite sign). Pure MEA contributes −0.002 to +0.029: its slope matches both sources, although its level is about 8 % low. The one-coefficient temperature-law fit that this routes to did not run, because the Engine refuses the selected coefficient's heat-capacity derivative. Nothing is adopted.
+
+## Sources and basis
+
+Model MEA and mixture evaluations use 101325 Pa; pure water is also evaluated at 300000 Pa. Calculations use the final parameter set, the #260 water caloric record and Engine wheel 8b9609d4… (bc779473). Experimental sample pressures retain their source-specific descriptions. The [results README](results/cp-slope-284/README.md) records inputs and commands. Pure water is compared with IAPWS-95 (chemicals 1.5.2). Two pure liquid MEA sources were acquired for this issue and read for method and uncertainty ([sources](results/cp-slope-284/pure-mea-sources.csv), [provenance and PDF hashes](results/cp-slope-284/source-provenance.json)):
+- Maham et al. (1997), Table 1 p.1748; Table 2 and Eq. (1), p.1748, heat-flow calorimetry, 299–398 K, stated 0.9 % (primary);
+- Chiu, Liu & Li (1999), Table 2 p.633, DSC, 303–353 K, ±2 % (±3 % with impurities).
+
+The mixture is #264's unloaded state (10⁻⁶ mol CO₂/mol MEA) at Hilliard's 7 mol/kg water and at Concepción's mass fraction 0.2997. The reference excess is the measured mixture minus IAPWS-95 water minus a pure-MEA source.
+
+## Where the slope error sits
+
+| 313.15 → 353.15 K change / kJ kg⁻¹ K⁻¹ | Model | Reference |
+|---|---:|---:|
+| pure water | +0.047 | +0.017 (IAPWS-95) |
+| pure MEA | +0.181 | +0.180 (Maham), +0.200 (Chiu) |
+| mixture | −0.031 | +0.160 (Hilliard), +0.169 (Concepción) |
+| excess | −0.119 | +0.088 to +0.103 |
+
+Water and MEA slope errors are weighted by mass fraction; excess is weighted by one. The weighted errors recover the mixture slope error within 3×10⁻¹⁷ kJ kg⁻¹ K⁻¹. The maximum absolute residual-Cv closure discrepancy is approximately 4.53×10⁻⁵ J mol⁻¹ K⁻¹, and every evaluated state satisfies 10⁻⁴|Cv,res| + 10⁻⁴ J mol⁻¹ K⁻¹. Over 313–353 K, the mixture contributions are hard chain +1.034, dispersion −1.188, association −0.231, pressure–volume coupling +0.307, MEA ideal gas +0.037 and water ideal gas +0.009 kJ kg⁻¹ K⁻¹. Together they recover the approximately −0.031 total.
+
+![Heat capacity against temperature. (a) Pure water: model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA: model line, Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water: model line at Hilliard's composition with Hilliard, Concepción and Weiland points. (d) Excess heat capacity: model line and reference excess for each mixture/pure-MEA source pair. Shading marks 313.15–353.15 K. Lines are retained 5 K model evaluations; points are measurements or evaluated references.](results/cp-slope-284/heat-capacity-slope.png){#fig-cp-slope-284}
+
+## What this says about the 318 K offset
+
+Model minus Hilliard at 318.15 K is +0.206 kJ kg⁻¹ K⁻¹ (+5.53 %). It splits exactly into water −0.021, pure MEA −0.067 (Maham; −0.075 with Chiu) and excess **+0.293** (+0.301). The excess alone is too high by about 7.9 % of the mixture: the model excess is +0.251 against a reference of −0.042. The low pure-MEA and water levels hide roughly 30 % of that error. The offset shrinks with temperature because the model excess falls (+0.269 at 313 K to +0.151 at 353 K) while the reference excess rises. Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved. Against Concepción the model excess is too high below about 340 K and too low above ([level split by temperature](results/cp-slope-284/excess-by-temperature.csv)).
+
+## Why the temperature-law fit did not run
+
+The issue's rule chose $a_2$ in $k_{ij}(T)=a_0+a_2(T-313.15\,\text{K})^2+s(1/T-1/313.15\,\text{K})$: its bound-scaled effect on the 313 → 353 K change (−0.171) exceeds that of the linear term $a_1$ (+0.062). The converted record reproduces every prediction exactly at $a_2=0$. The fit stops at its first Jacobian. The Engine refuses the derivative of equilibrium heat capacity with respect to $a_2$ at 40 of the 60 #264 states: unloaded Hilliard states from 343.15 K, loaded ones from 333.15 K, two Weiland states and Concepción at 353.15 K. At unloaded Hilliard 353.15 K the refusal is a reference-completion check on reaction R3 (residual 2.74×10⁻⁸ against criterion 1.49×10⁻⁸). Where it does return them, the Engine's $a_1$ and $a_2$ derivatives agree with central differences within 3×10⁻⁷. The owner kept the selection rule. F2 (slope), F3 (level envelope) and F4 (preservation and stability) are **not run**, and an Engine request for this derivative goes to the orchestrator.
+
+Single-coefficient scans at fixed final-set parameters show what any law must contend with. These are diagnostics, not fits ([diagnosis](results/cp-slope-284/stage2/p2/diagnosis.json)). Curvature in $k_{ij}(T)$ moves the heat-capacity level far more than its slope. $a_2=-2\times10^{-7}$ K⁻² raises Cp at 313 K by 0.055 kJ kg⁻¹ K⁻¹ but the slope by only 0.002. At the bound, $a_2$ gives the needed slope only with Cp near 9.5 kJ kg⁻¹ K⁻¹. $a_1=+10^{-3}$ K⁻¹ raises both level (+0.19) and slope (+0.07). The slope must rise while the Hilliard level must fall, so whether $a_0$ and $s$ can compensate within their bounds remains the question a working fit would answer.
+
+## Limits
+
+- The Hilliard–Concepción level difference stays unresolved; Hilliard's sample pressure is assumed (101325 Pa).
+- Each reference excess combines mixture calorimetry—Hilliard's DSC or Concepción's flow calorimeter—an IAPWS-95 water calculation, and Maham's heat-flow or Chiu's DSC pure-MEA measurement.
+- The roughly 8 % low pure-MEA level is a separate discrepancy, not split here between the Zhang ideal-gas correlation and the residual model.
+- The shares decompose one fixed parameter record; they are not a fitted attribution.
+
+The evidence is numerical verification and measured comparison, not validation. This section has not been independently reviewed or promoted for the manuscript route.
+
+# Temperature-dependent carbamate interactions (issue 283) {#ion-temperature-283}
+
+Giving MEACOO⁻–water and MEAH⁺–MEACOO⁻ the reciprocal-temperature law $k_{ij}(T)=k_{ij}+b_{ij}(1/T-1/313.15\ \mathrm K)$ does not remove either target. Both slopes were fitted to the 307 calibration rows plus the 10 Böttinger 2008 353.15 K speciation rows, with the #255 stability requirement.
+
+- **353 K carbamate excess.** The largest Böttinger excess at the selected candidate is **25.35 %**, against a 10 % target. The final set gives 26.33 % and #255 variant (b) 24.94 %.
+- **15 wt% temperature term.** The loading-controlled 313 → 353 K rise in the 15 wt% transfer error is **+0.26 ± 0.13**, against a limit of 0.20 in magnitude. The final set gives +0.47 ± 0.14.
+- **45 wt% temperature term.** A rise of **+0.47 ± 0.13** appears at 45 wt%.
+- **Concentration transfer.** The 15 wt% transfer AARD rises from 29.5 % to 128.4 %.
+
+All three tests (F1–F3) fail. The candidate is not adopted; the record, Engine pin and manuscript are unchanged.
+
+## Fits and the selected candidate
+
+The fit has 19 coordinates: the 16 #255 coordinates, the R4 enthalpy shift and the two slopes, each starting at 0 K with bounds ±1000 K. It ran from two stable starts, with one 3×10⁻³ penalty stage and the #255 retreat toward the start. Both stage endpoints lower the 317-row cost by about 2 and move the slopes the same way: about −170 K for MEACOO⁻–water and +180 to +220 K for MEAH⁺–MEACOO⁻. Both endpoints have resolved descent at 313.15 K, loading 0.6, at 30 and 35 wt%.
+
+| Run | Retreat t | 307 / 317-row cost | MEACOO⁻–water b / K | MEAH⁺–MEACOO⁻ b / K | Acceptance and stability |
+|---|---:|---:|---:|---:|---|
+| final set | — | 148.883 / 153.622 | 0 | 0 | — |
+| (a) from #255 variant (b) | 0.0003 | 148.262 / 152.552 | −0.05 | +0.07 | pass |
+| **(b) from #255 primary (selected)** | **0.985** | **146.619 / 151.016** | **−164.6 ± 601.9** | **+181.3 ± 644.5** | pass |
+
+**Start (a).** That descent goes to zero only at the start, so candidate (a) is effectively #255 variant (b).
+
+**Start (b).** Its stage stopped at the 7200 s wall-time budget under the 3-core cap, so it is not converged. Its retreat keeps 98.5 % of the step.
+
+**Candidate (b).** It passes the #255 criteria against the final set, with no descent at the 1903 enforced, 576 offset or 162 census states. Its conditional standard errors exceed both slopes. The MEACOO⁻–water slope correlates −0.953 with the MEAH⁺–water slope, which moves to +159.4 K.
+
+**Bounds.** Four coordinates sit on bounds: bicarbonate–water k, MEAH⁺–MEACOO⁻ k, the MEAH⁺ Born diameter and the R5 total shift. The R2 and R4 total shifts end within 160 J/mol of +10 kJ/mol. The [results README](results/ion-temperature-283/README.md) gives qualification, every parameter move and the logs.
+
+## The 15 wt% temperature term
+
+![Loading-controlled residual against temperature for the 106 Aronu 2011 rows at each strength, for the final set, the #255 candidate and the #283 candidate. Points are each row's ln(p_calc/p_obs), moved to its strength's mean loading with the fitted loading slope. Lines are the fitted 1/T terms at that loading.](results/ion-temperature-283/transfer-temperature-term.png){#fig-ion-temperature-283}
+
+| Strength | Final set: rise; loading slope | #283 candidate: rise; loading slope | Transfer AARD, final → candidate |
+|---|---:|---:|---:|
+| 15 wt% (33 rows) | +0.470 ± 0.135; −1.62 ± 0.33 | +0.257 ± 0.128; −1.87 ± 0.31 | 29.5 → 128.4 % |
+| 30 wt% (36 rows) | −0.021 ± 0.125; −1.28 ± 0.35 | −0.012 ± 0.119; −1.34 ± 0.33 | 29.8 → 28.2 % |
+| 45 wt% (37 rows) | +0.186 ± 0.128; −2.84 ± 0.35 | +0.467 ± 0.131; −2.06 ± 0.35 | 56.0 → 47.6 % |
+
+A comparably large concentration-transfer shift already occurs without the two new slopes: #255 variant (b) gives 15 wt% AARD 121.6%, mean ln(calc/obs) +0.710, and 45 wt% mean ln(calc/obs) −0.605. Candidate (a), whose new slopes remain near zero, reproduces those values. The selected candidate instead starts from the #255 primary, whose 15 wt% AARD is 33.9%, and jointly refits the existing parameters and the two new slopes. These comparisons show that the shift can occur without the new slopes; they do not uniquely attribute the selected candidate’s shift to the pre-existing parameters or the new slopes.
+
+## Attribution and downstream consequences
+
+**Attribution.** Each slope was set back to 0 with every other candidate parameter fixed ([attribution.json](results/ion-temperature-283/attribution.json)):
+- MEACOO⁻–water slope at 0: the 307-row cost rises to 227.8 and the carbamate excess falls to 18.5 %.
+- MEAH⁺–MEACOO⁻ slope at 0: the cost is 147.8 and the excess 24.6 %.
+- Both slopes at 0: the cost is 244.9 and the excess 17.5 %.
+
+So the MEACOO⁻–water slope mostly offsets the MEAH⁺–water slope. The calibration rows, not the Böttinger rows, hold the carbamate excess near 25 %.
+
+**Downstream.** The #255 stage-3 rerun on the candidate ([comparison.csv](results/ion-temperature-283/evidence/comparison.csv)), final set → candidate:
+
+| Quantity | Final set | Candidate |
+|---|---:|---:|
+| canonical pressures (159), AARD | 20.55 % | 20.72 % |
+| packet pressures (79), AARD | 15.46 % | 17.73 % |
+| Arcis heats (14), RMSE | 8.12 kJ/mol | 7.74 kJ/mol |
+| Kim 2007 semi-differential heat, RMSE | 6.12 kJ/mol | 6.54 kJ/mol |
+| Han loaded density above 353 K, mean error | −8.84 kg/m³ | −1.73 kg/m³ |
+| Han loaded density to 353 K, RMSE | 3.23 kg/m³ | 10.44 kg/m³ |
+| #264 broad Cp, AARD | 2.44 % | 2.30 % |
+| MDEA Ermatchkov AARD (A3 / B1, shared k and R2) | 26.2 / 19.1 % | 66.1 / 60.2 % |
+
+## Meaning and limits
+
+In these two local fits, temperature dependence in the two carbamate interactions does not supply the temperature dependence that the 353 K carbamate excess needs. With slopes fitted to this calibration, it also does not remove the 15 wt% transfer temperature term. That does not exclude these pairs in a fit that includes 15 wt% rows.
+
+The issue's conditional Engine request applies, because F2 failed with both slopes interior: an ion segment-diameter temperature law as active fit parameters. Whether to file it is the orchestrator's decision.
+
+This is calibration and numerical verification:
+- The Böttinger rows are fitted.
+- The Aronu rows were accessed before.
+- The linear regression assumes linear loading dependence and independent residuals, and rests on sparse isotherms.
+- The fits are local, from two starts, and the selected stage is not converged.
+- Stability is a finite search at declared states.
+
+This section has not been independently reviewed or promoted for the manuscript route.
+
 # Where to find more
 
 | Reader question | Page / exact records |
@@ -743,6 +875,8 @@ This section has not been independently reviewed or promoted for the manuscript 
 | Bicarbonate/carbonate source spread and bounded probes | [Issue 266 result](#bicarbonate-carbonate-266) |
 | Stability-constrained refit candidate (not adopted) | [Issue 255 result](#stable-refit-255) · [Evidence README](results/stable-refit-255/README.md) |
 | Salt-anchored bicarbonate/carbonate interactions (F1 amended, F2 passed) | [Issue 282 result](#carbonate-ions-282) · [Evidence README](results/carbonate-ions-282/README.md) |
+| Unloaded heat-capacity slope: water, MEA and excess | [Issue 284 result](#cp-slope-284) · [Evidence README](results/cp-slope-284/README.md) |
+| Temperature-dependent carbamate interactions (not adopted) | [Issue 283 result](#ion-temperature-283) · [Evidence README](results/ion-temperature-283/README.md) |
 | Remaining scientific questions | [Open work](open-work/index.qmd) |
 | Formulation and earlier fitting | [Neutral MEA–water](neutral-mea-water/index.qmd) · [Association topology](association-topology/index.qmd) · [CO₂ and R4](co2-r4-calibration/index.qmd) · [Born and permittivity](born-permittivity/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](reaction-temperature-fit/index.qmd) · [Calorimetry](calorimetry/index.qmd) · [Coupling and identification](coupling-and-identification/index.qmd) |

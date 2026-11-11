@@ -1,4 +1,4 @@
-# Local Codex Instructions
+# Amine-Thermodynamics agent instructions
 
 <!-- CSE:BEGIN PROTOCOL -->
 ## CSE Protocol
@@ -45,8 +45,7 @@ CSE execution mode: direct.
 
 ## Startup Reads
 
-- For scientific work, use the installed CSE skills and read `docs/scientific/README.md` and `docs/scientific/CONTEXT.md` before choosing research, diagnosis or implementation. The scientific context map identifies established estimation research, completed studies and unresolved questions.
-- Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
+- The map in `docs/scientific/CONTEXT.md` identifies established estimation research, completed studies and unresolved questions. Before proposing a search, conversion, fit or repeated study, follow the relevant map entry to its existing source synthesis and retained results. Use Git history for retired records; distinguish an unreadable reference from absent research. Report the precise remaining gap and what new evidence the proposed work would add.
 
 - Read `docs/.codex-journal/user_preferences.md` when it exists.
 - Read `docs/.codex-journal/project_memory.md` when it exists.
@@ -72,14 +71,14 @@ CSE execution mode: direct.
 - Engine owner paths are relative to that repository:
   - Owner map: `docs/scientific/README.md` and `docs/scientific/CONTEXT.md`; accepted decisions: `docs/scientific/adr/`.
   - Budgets: `ARCHITECTURE.yaml`, explained in `docs/scientific/code-budgets.md`; equations: `engine/docs/equations.md`; algorithms: `engine/docs/science/algorithms.md`.
-  - Plans: GitHub issues in `tannerpolley/ePC-SAFT`.
+  - Plans: issues in `tannerpolley/ePC-SAFT`.
   - Code: `engine/native/<layer>/` and `engine/src/epcsaft/`; tests: `engine/tests/`; evidence: `analyses/`.
 - The Unified Engine is one `epcsaft` wheel with `epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`. Do not install split packages or use compatibility imports.
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
 - Normal and final work uses one immutable Engine wheel built from a merged Engine `main` commit and pinned by SHA-256. Never import an Engine source checkout.
 - Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in the Engine repository.
   - The Engine orchestrator owns Engine issues, their bodies and their builds. When MEA needs a generic change, open or comment on an Engine issue stating the MEA use case: the exact declaration, the quantities consumed and their acceptance criteria. After publication, communicate only through comments.
-  - The ignored Engine clone `upstream/ePC-SAFT` (GitHub `origin`) is for reading Engine source at a known commit, read-only probes, and building wheels. Sync its `main` to `origin/main` before each use. Do not edit Engine source there unless the owner hands that Engine issue to this repository.
+  - The ignored Engine clone `upstream/ePC-SAFT` is for reading Engine source at a known commit, read-only probes, and building wheels. Sync its `main` to `origin/main` before each use. Do not edit Engine source there unless the owner hands that Engine issue to this repository.
   - A wheel built from an unmerged branch is a candidate for local co-development only, recorded by SHA-256. Repeat any qualification on the merged-commit wheel before final use.
 - MEA may run direct Engine calculations against MEA-owned inputs; that does not move generic method ownership.
 - Keep MEA chemistry hypotheses, source data, model selection, parameter fitting, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
@@ -90,4 +89,4 @@ CSE execution mode: direct.
 ## Engineering Methods And Issue Tracking
 
 - Read `docs/agents/methods.md` before using Matt engineering methods or Project Truss.
-- GitHub Issues are the authoritative tracker; follow `docs/agents/issue-tracker.md`.
+- Issues on the `origin` host are the authoritative tracker; follow `docs/agents/issue-tracker.md`.
