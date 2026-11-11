@@ -184,7 +184,7 @@ def calculate():
     ax.legend(fontsize=7, ncol=2)
     ax = axes[1, 2]
     r = json.loads((AN / "results/binary-calibration.json").read_text())["starts"][0]
-    text = f"k₀ = {r['values'][0]:.7f} ± {r['information']['se'][0]:.7f}\nk₁ = {r['values'][1]:.7f} ± {r['information']['se'][1]:.7f} K⁻¹\n\nConditional local SE only.\n23/23 calibration phase trials pass.\n393.15 K Concepción state: vapor instability.\nHilliard source scales unavailable.\nFriis ± meaning unresolved.\nNo endpoint adoption or solid qualification."
+    text = f"k₀ = {r['values'][0]:.7f} ± {r['information']['se'][0]:.7f}\nk₁ = {r['values'][1]:.7f} ± {r['information']['se'][1]:.7f} K⁻¹\n\nConditional local SE only.\n23/23 calibration phase trials pass.\n393.15 K Concepción state: vapor instability.\nHilliard source scales unavailable.\nFriis ± meaning unresolved.\nConditional working set; no solid qualification."
     ax.text(0.02, 0.95, text, va="top", fontsize=10, transform=ax.transAxes)
     ax.axis("off")
     fig.suptitle(
