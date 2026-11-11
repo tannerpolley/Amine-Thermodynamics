@@ -1,0 +1,447 @@
+{
+  "schema": "epcsaft.parameters",
+  "schema_version": 1,
+  "components": [
+    {
+      "component_id": "piperazine",
+      "name": "Piperazine",
+      "coefficients": [
+        {
+          "identity": "component/piperazine/segment_count",
+          "value": {
+            "magnitude": 2.6519,
+            "unit": "dimensionless"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          },
+          "family": "segment_count"
+        },
+        {
+          "identity": "component/piperazine/segment_diameter",
+          "value": {
+            "magnitude": 3.7136,
+            "unit": "angstrom"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          },
+          "family": "segment_diameter"
+        },
+        {
+          "identity": "component/piperazine/dispersion_energy_over_k",
+          "value": {
+            "magnitude": 313.20597765826267,
+            "unit": "kelvin"
+          },
+          "provenance": {
+            "source_id": "steele-1997-energy-refit",
+            "locator": "Table 7; results/refit-fits.json"
+          },
+          "family": "dispersion_energy_over_k"
+        }
+      ],
+      "fixed": {
+        "charge_number": {
+          "identity": "component/piperazine/charge_number",
+          "value": {
+            "magnitude": 0,
+            "unit": "elementary-charge"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        },
+        "molar_mass": {
+          "identity": "component/piperazine/molar_mass",
+          "value": {
+            "magnitude": 0.08613,
+            "unit": "kilogram / mole"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        }
+      }
+    },
+    {
+      "aliases": [
+        "H2O"
+      ],
+      "coefficients": [
+        {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "family": "dispersion_energy_over_k",
+          "identity": "component/water/dispersion_energy_over_k",
+          "provenance": {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=dispersion_energy_over_k:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+          "value": {
+            "magnitude": 432.3788130932931,
+            "unit": "kelvin"
+          }
+        },
+        {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "family": "segment_count",
+          "identity": "component/water/segment_count",
+          "provenance": {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=segment_count:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+          "value": {
+            "magnitude": 1.252753837934407,
+            "unit": "dimensionless"
+          }
+        }
+      ],
+      "component_id": "water",
+      "fixed": {
+        "charge_number": {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "provenance": {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=charge_number:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+          "value": {
+            "magnitude": 0,
+            "unit": "elementary-charge"
+          }
+        },
+        "molar_mass": {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "provenance": {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=molar_mass:status=retained-literature-lineage",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+          "value": {
+            "magnitude": 0.01801528,
+            "unit": "kilogram / mole"
+          }
+        }
+      },
+      "name": "H2O"
+    }
+  ],
+  "model_families": [
+    {
+      "kind": "base",
+      "choice": "pc-saft"
+    },
+    {
+      "kind": "association",
+      "choice": "general-site"
+    },
+    {
+      "kind": "electrolyte",
+      "choice": "none"
+    },
+    {
+      "kind": "permittivity",
+      "choice": "none"
+    }
+  ],
+  "topology": {
+    "sites": [
+      {
+        "component_id": "piperazine",
+        "site_id": "a",
+        "site_role": "donor",
+        "multiplicity": 1,
+        "provenance": {
+          "source_id": "razavi-2019",
+          "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+        }
+      },
+      {
+        "component_id": "piperazine",
+        "site_id": "b",
+        "site_role": "acceptor",
+        "multiplicity": 1,
+        "provenance": {
+          "source_id": "razavi-2019",
+          "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+        }
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "component_id": "water",
+        "multiplicity": 1,
+        "provenance": {
+          "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+          "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_site_a:status=retained-literature-lineage",
+          "source_id": "mea-retained-phase-two-artifact"
+        },
+        "qualification": "candidate_extrapolation",
+        "site_id": "a",
+        "site_role": "donor",
+        "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "component_id": "water",
+        "multiplicity": 1,
+        "provenance": {
+          "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+          "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_site_b:status=retained-literature-lineage",
+          "source_id": "mea-retained-phase-two-artifact"
+        },
+        "qualification": "candidate_extrapolation",
+        "site_id": "b",
+        "site_role": "acceptor",
+        "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c"
+      }
+    ],
+    "edges": [
+      {
+        "endpoint_a": {
+          "component_id": "piperazine",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "piperazine",
+          "site_id": "b"
+        },
+        "energy_over_k": {
+          "identity": "association/piperazine/a/b/energy",
+          "value": {
+            "magnitude": 1469.820092254,
+            "unit": "kelvin"
+          },
+          "provenance": {
+            "source_id": "steele-1997-energy-refit",
+            "locator": "Table 7; results/refit-fits.json"
+          }
+        },
+        "volume": {
+          "identity": "association/piperazine/a/b/volume",
+          "value": {
+            "magnitude": 0.027229855340530382,
+            "unit": "dimensionless"
+          },
+          "provenance": {
+            "source_id": "steele-1997-energy-refit",
+            "locator": "Table 7; results/refit-fits.json"
+          }
+        },
+        "source": {
+          "kind": "explicit",
+          "provenance": [
+            {
+              "source_id": "razavi-2019",
+              "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+            }
+          ]
+        }
+      },
+      {
+        "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+        "endpoint_a": {
+          "component_id": "water",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "b"
+        },
+        "energy_over_k": {
+          "identity": "association/water/a/water/b/energy_over_k",
+          "value": {
+            "magnitude": 1756.6497964508999,
+            "unit": "kelvin"
+          }
+        },
+        "qualification": "candidate_extrapolation",
+        "source": {
+          "kind": "explicit",
+          "provenance": [
+            {
+              "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+              "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_energy_over_k:status=retained-literature-lineage",
+              "source_id": "mea-retained-phase-two-artifact"
+            },
+            {
+              "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+              "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=association_volume:status=retained-literature-lineage",
+              "source_id": "mea-retained-phase-two-artifact"
+            }
+          ]
+        },
+        "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+        "volume": {
+          "identity": "association/water/a/water/b/volume",
+          "value": {
+            "magnitude": 0.0376197279502706,
+            "unit": "dimensionless"
+          }
+        }
+      },
+      {
+        "endpoint_a": {
+          "component_id": "piperazine",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "b"
+        },
+        "source": {
+          "kind": "combining-rule",
+          "rule_id": "wolbach-sandler",
+          "inputs": {
+            "energy_over_k": [
+              "association/piperazine/a/b/energy",
+              "association/water/a/water/b/energy_over_k"
+            ],
+            "volume": [
+              "association/piperazine/a/b/volume",
+              "association/water/a/water/b/volume"
+            ]
+          }
+        }
+      },
+      {
+        "endpoint_a": {
+          "component_id": "piperazine",
+          "site_id": "b"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "a"
+        },
+        "source": {
+          "kind": "combining-rule",
+          "rule_id": "wolbach-sandler",
+          "inputs": {
+            "energy_over_k": [
+              "association/piperazine/a/b/energy",
+              "association/water/a/water/b/energy_over_k"
+            ],
+            "volume": [
+              "association/piperazine/a/b/volume",
+              "association/water/a/water/b/volume"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "correlations": [
+    {
+      "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+      "component_id": "water",
+      "constant": {
+        "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/constant",
+        "value": {
+          "magnitude": 2.780432614942962,
+          "unit": "angstrom"
+        }
+      },
+      "correlation_id": "component/water/segment_diameter/constant-plus-sum-of-exponentials",
+      "family": "segment_diameter",
+      "form": "constant-plus-sum-of-exponentials",
+      "independent_variables": [
+        "temperature"
+      ],
+      "provenance": {
+        "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+        "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=H2O:family=segment_diameter:status=retained-literature-lineage",
+        "source_id": "mea-retained-phase-two-artifact"
+      },
+      "qualification": "candidate_extrapolation",
+      "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+      "terms": [
+        {
+          "amplitude": {
+            "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/amplitude",
+            "value": {
+              "magnitude": 10.11,
+              "unit": "angstrom"
+            }
+          },
+          "exponent_coefficient": {
+            "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/exponent_coefficient",
+            "value": {
+              "magnitude": -0.01775,
+              "unit": "1 / kelvin"
+            }
+          }
+        },
+        {
+          "amplitude": {
+            "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/amplitude",
+            "value": {
+              "magnitude": -1.417,
+              "unit": "angstrom"
+            }
+          },
+          "exponent_coefficient": {
+            "identity": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-1/exponent_coefficient",
+            "value": {
+              "magnitude": -0.01146,
+              "unit": "1 / kelvin"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "component_id_a": "piperazine",
+      "component_id_b": "water",
+      "coefficients": [
+        {
+          "identity": "pair/pz-water/k",
+          "family": "k_ij",
+          "temperature_law": {
+            "form": "polynomial-plus-reciprocal-temperature",
+            "reference_temperature": {
+              "magnitude": 353.15,
+              "unit": "kelvin"
+            },
+            "terms": [
+              {
+                "power": 0,
+                "coefficient": {
+                  "identity": "pair/pz-water/k0",
+                  "value": {
+                    "magnitude": -0.19764540162608946,
+                    "unit": "dimensionless"
+                  }
+                }
+              },
+              {
+                "power": 1,
+                "coefficient": {
+                  "identity": "pair/pz-water/k1",
+                  "value": {
+                    "magnitude": 0.0011250147848721607,
+                    "unit": "1 / kelvin"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
