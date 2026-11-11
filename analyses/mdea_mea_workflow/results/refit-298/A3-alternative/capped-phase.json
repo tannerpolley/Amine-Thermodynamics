@@ -1,0 +1,2786 @@
+[
+  {
+    "index": "Merkley-capped:3",
+    "T_K": 333.15,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 1.6626700016786344e-12,
+    "residuals": [
+      1.1368683772161603e-13,
+      1.7053025658242404e-13,
+      -4.547473508864641e-13,
+      2.2737367544323206e-13,
+      0.0,
+      2.8421709430404007e-13,
+      9.521272659185342e-13,
+      1.6626700016786344e-12,
+      1.9536836243132444e-13,
+      -2.8454627978405584e-14,
+      1.485911905122331e-14,
+      1.5405123425808946e-14,
+      1.1029288366629797e-14,
+      2.731148640577885e-14
+    ],
+    "amounts": [
+      27.564155641072364
+    ],
+    "mole_fractions": [
+      0.003850169777504408,
+      0.9271154708476436,
+      0.032755074098245594,
+      2.670326609143385e-07,
+      1.7750572394341397e-08,
+      5.841498454986409e-10,
+      0.003523408912079201,
+      0.0327555909971443
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 1.5990845482611858e-10,
+          "association_residual": 9.237044049292281e-16,
+          "association_site_pivot_ratio": 13.941891244427218,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "chemical_plus_electric_contraction": -2.3450990456288485e-12,
+          "correction_l1_mol": 1.169925269279843e-12,
+          "euler_defect_over_rt": 0.0,
+          "feasibility_estimate_over_rt": 2.1335214962938543e-10,
+          "g_over_rt": -215.3277541196031,
+          "gradient_floor_max_si_columns": 1.5990496930548918e-10,
+          "normalization_residual": 4.163336342344337e-17,
+          "present_identity_defect_over_rt": -5.758094695714663e-14,
+          "pressure_row": -2.345836573725187e-12,
+          "summation_estimate_over_rt": 9.726497444490134e-13,
+          "tpd_over_rt": -5.684341886080802e-14,
+          "volume_m3_per_mol": 2.1797450351571585e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 689.0,
+        "evaluations": 339.0,
+        "hessian_calls": 189.0,
+        "iterations": 180.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 260.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.4066514519365666e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.5990496930549843e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 1.0518720540434008e-12,
+            "association_energy_estimate_over_rt": 1.5990845482612779e-10,
+            "association_residual": 9.237044049292102e-16,
+            "association_site_pivot_ratio": 13.941891244427808,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 5.35197133793803e-10,
+            "donor_capacity_mol": 27.56415564104667,
+            "donor_chemical_contraction_over_rt": -215.3277541196039,
+            "donor_correction_over_rt": -1.5256400432058506e-14,
+            "donor_pressure_row": -2.345836573725187e-12,
+            "donor_slope_over_rt": -4.3678109862462514e-14,
+            "euler_defect_over_rt": 3.552713678800501e-15,
+            "feasibility_error_estimate_over_rt": 2.1335214962938543e-10,
+            "g_over_rt": -215.3277541196016,
+            "gradient_floor_max_si_columns": 1.5990496930549838e-10,
+            "normalization_residual": 1.942890293094024e-16,
+            "pressure_row": 5.5168327259236794e-14,
+            "raw_objective_over_rt": -7.993605777301129e-15,
+            "reconstruction_l1": 2.0903452368612311e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 9.726497444490148e-13,
+            "tpd_over_rt": -2.842170943040401e-14,
+            "trial_dual_over_rt": -2.0931366441004055e-14,
+            "trial_identity_defect_over_rt": -7.490342989399953e-15,
+            "volume_m3_per_mol": 2.1797450351571483e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.503552920529728e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 18 iterations, contraction absent, floor 1.2707478754287744e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.2737541459973927e-16,
+            "association_residual": 1.3877787807814457e-17,
+            "association_site_pivot_ratio": 1.0033492441408376,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -79.56396704162728,
+            "gradient_floor_max_si_columns": 1.270747875428827e-16,
+            "normalization_residual": -1.1593876623851033e-16,
+            "pressure_row": 4.652913323956226e-14,
+            "raw_objective_over_rt": 0.012254172136090119,
+            "reconstruction_l1": 9.987412814498696e-14,
+            "summation_estimate_over_rt": 3.618385470622756e-13,
+            "tpd_over_rt": 0.012254172130298002,
+            "trial_dual_over_rt": 0.012254172130226948,
+            "trial_identity_defect_over_rt": 7.105427357601002e-14,
+            "volume_m3_per_mol": 0.0023657490417219647
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.0958388671308021e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 22 iterations, contraction absent, floor 1.5990496930549833e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.5990845482612766e-10,
+            "association_residual": 9.237044049292153e-16,
+            "association_site_pivot_ratio": 13.94189124442779,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -215.32775411960156,
+            "gradient_floor_max_si_columns": 1.5990496930549825e-10,
+            "normalization_residual": 7.632783294297951e-17,
+            "pressure_row": -1.366291172796415e-14,
+            "raw_objective_over_rt": -1.865174681370263e-14,
+            "reconstruction_l1": 6.938893903907228e-18,
+            "summation_estimate_over_rt": 9.726497444490146e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -1.9044824664046174e-14,
+            "trial_identity_defect_over_rt": 1.9044824664046174e-14,
+            "volume_m3_per_mol": 2.1797450351571473e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.0594110440781031e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 29 iterations, contraction absent, floor 1.5990496930549807e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 1.0518720540434004e-12,
+            "association_energy_estimate_over_rt": 1.5990845482612727e-10,
+            "association_residual": 9.237044049292137e-16,
+            "association_site_pivot_ratio": 13.941891244427772,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 5.351935810801237e-10,
+            "donor_capacity_mol": 27.564155641045193,
+            "donor_chemical_contraction_over_rt": -215.32775411960387,
+            "donor_correction_over_rt": 1.3165308998345501e-14,
+            "donor_pressure_row": -2.345836573725187e-12,
+            "donor_slope_over_rt": -1.5256400432058506e-14,
+            "euler_defect_over_rt": 0.0,
+            "feasibility_error_estimate_over_rt": 2.1335214962938543e-10,
+            "g_over_rt": -215.32775411960154,
+            "gradient_floor_max_si_columns": 1.5990496930549786e-10,
+            "normalization_residual": 1.457167719820518e-16,
+            "pressure_row": 1.5994788019977293e-14,
+            "raw_objective_over_rt": -2.1316282072803006e-14,
+            "reconstruction_l1": 3.4694622361833826e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 9.726497444490146e-13,
+            "tpd_over_rt": -2.842170943040401e-14,
+            "trial_dual_over_rt": -1.92904364771669e-14,
+            "trial_identity_defect_over_rt": -9.131272953237107e-15,
+            "volume_m3_per_mol": 2.179745035157152e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 3.4383163419095621e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 2.0661220019131765e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 2.06616077281055e-10,
+            "association_residual": 8.897750114546174e-16,
+            "association_site_pivot_ratio": 15.702574961850482,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -217.84336512087975,
+            "gradient_floor_max_si_columns": 2.0661220019131765e-10,
+            "normalization_residual": 8.933825901280557e-17,
+            "pressure_row": -2.637128244869637e-14,
+            "raw_objective_over_rt": 0.06339771949018934,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 9.674863288393508e-13,
+            "tpd_over_rt": 0.06339771949015471,
+            "trial_dual_over_rt": 0.06339771949019801,
+            "trial_identity_defect_over_rt": -4.3298697960381105e-14,
+            "volume_m3_per_mol": 1.8765057115532455e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.9584998013596312e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.2707478754180863e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.2737541459866272e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0033492441408327,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.3877787807814457e-17,
+            "g_over_rt": -79.5639670416075,
+            "gradient_floor_max_si_columns": 1.2707478754180865e-16,
+            "normalization_residual": -1.7507641624154354e-18,
+            "pressure_row": -2.1516362191706393e-15,
+            "raw_objective_over_rt": 0.012254172130291785,
+            "reconstruction_l1": 6.800116224352431e-16,
+            "summation_estimate_over_rt": 3.618385470621882e-13,
+            "tpd_over_rt": 0.012254172130283791,
+            "trial_dual_over_rt": 0.012254172130291995,
+            "trial_identity_defect_over_rt": -8.20350731789432e-15,
+            "volume_m3_per_mol": 0.002365749041722108
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.279883884035059e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 23 iterations, contraction absent, floor 1.2707478754180898e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.2737541459866302e-16,
+            "association_residual": 1.3877787807814457e-17,
+            "association_site_pivot_ratio": 1.0033492441408327,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -79.5639670416075,
+            "gradient_floor_max_si_columns": 1.2707478754180895e-16,
+            "normalization_residual": 5.1882488555000006e-18,
+            "pressure_row": -1.2102953732834834e-15,
+            "raw_objective_over_rt": 0.012254172130290897,
+            "reconstruction_l1": 3.40005814526344e-16,
+            "summation_estimate_over_rt": 3.618385470621882e-13,
+            "tpd_over_rt": 0.012254172130298002,
+            "trial_dual_over_rt": 0.012254172130292331,
+            "trial_identity_defect_over_rt": 5.670811042968182e-15,
+            "volume_m3_per_mol": 0.0023657490417221057
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.7729122096015108e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 18 iterations, contraction absent, floor 2.0661220019131835e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 2.066160772810557e-10,
+            "association_residual": 8.897750114546222e-16,
+            "association_site_pivot_ratio": 15.702574961850516,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -217.84336512087975,
+            "gradient_floor_max_si_columns": 2.0661220019131835e-10,
+            "normalization_residual": 1.6479873021779667e-17,
+            "pressure_row": 1.731952081541407e-14,
+            "raw_objective_over_rt": 0.06339771949018712,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 9.674863288393506e-13,
+            "tpd_over_rt": 0.06339771949015471,
+            "trial_dual_over_rt": 0.06339771949019227,
+            "trial_identity_defect_over_rt": -3.755329380794592e-14,
+            "volume_m3_per_mol": 1.8765057115532417e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.0343179109449373e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.2707478754180944e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.2737541459866359e-16,
+            "association_residual": 1.3877787807814457e-17,
+            "association_site_pivot_ratio": 1.0033492441408327,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -79.5639670416075,
+            "gradient_floor_max_si_columns": 1.270747875418095e-16,
+            "normalization_residual": 1.5596728677703752e-17,
+            "pressure_row": 4.0343179109449373e-16,
+            "raw_objective_over_rt": 0.012254172130293561,
+            "reconstruction_l1": 1.1449175603191417e-16,
+            "summation_estimate_over_rt": 3.618385470621882e-13,
+            "tpd_over_rt": 0.012254172130298002,
+            "trial_dual_over_rt": 0.012254172130292043,
+            "trial_identity_defect_over_rt": 5.958775139980332e-15,
+            "volume_m3_per_mol": 0.0023657490417221014
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  },
+  {
+    "index": "Merkley-capped:4",
+    "T_K": 333.15,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 1.9895196601282805e-13,
+    "residuals": [
+      2.842170943040401e-14,
+      2.842170943040401e-14,
+      0.0,
+      5.684341886080802e-14,
+      1.9895196601282805e-13,
+      0.0,
+      9.237055564881302e-14,
+      1.4210854715202004e-13,
+      2.33238696499255e-14,
+      1.5034125104276685e-16,
+      9.396328190172928e-18,
+      9.396328190172928e-18,
+      0.0,
+      0.0
+    ],
+    "amounts": [
+      10.98480530232229
+    ],
+    "mole_fractions": [
+      0.005739240688094881,
+      0.8276038373638788,
+      0.07562202892040969,
+      1.9417004020450574e-09,
+      5.043644811786998e-08,
+      2.388235629732433e-11,
+      0.015412858234341149,
+      0.0756219823912447
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 1.1107780449811904e-10,
+          "association_residual": 4.801704522855859e-16,
+          "association_site_pivot_ratio": 11.853464400836547,
+          "association_site_rank": 6.0,
+          "charge_residual": -1.3877787807814457e-17,
+          "chemical_plus_electric_contraction": 3.8223605414588065e-14,
+          "correction_l1_mol": 2.220446049250313e-15,
+          "euler_defect_over_rt": 3.552713678800501e-15,
+          "feasibility_estimate_over_rt": 5.715380997114361e-13,
+          "g_over_rt": -209.66966572637725,
+          "gradient_floor_max_si_columns": 1.1107478322090974e-10,
+          "normalization_residual": -2.498001805406602e-16,
+          "present_identity_defect_over_rt": -7.577107547092318e-15,
+          "pressure_row": 3.064649786749575e-14,
+          "summation_estimate_over_rt": 9.693168633204739e-13,
+          "tpd_over_rt": 0.0,
+          "volume_m3_per_mol": 2.7200388078037605e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 697.0,
+        "evaluations": 348.0,
+        "hessian_calls": 187.0,
+        "iterations": 178.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 259.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.4500118819655028e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 1.1107478322091294e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1107780449812212e-10,
+            "association_residual": 9.603409045711764e-16,
+            "association_site_pivot_ratio": 11.853464400836689,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -209.66966572637762,
+            "gradient_floor_max_si_columns": 1.1107478322091281e-10,
+            "normalization_residual": 1.1102230246251565e-16,
+            "pressure_row": 3.658376398984949e-14,
+            "raw_objective_over_rt": -1.7763568394002505e-15,
+            "reconstruction_l1": 2.0816688580551944e-16,
+            "summation_estimate_over_rt": 9.693168633204739e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -1.2528627336976059e-14,
+            "trial_identity_defect_over_rt": 1.2528627336976059e-14,
+            "volume_m3_per_mol": 2.7200388078037225e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 3.2251978865360797e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 19 iterations, contraction absent, floor 1.129429099546057e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.132101313205948e-16,
+            "association_residual": 3.469446951953614e-18,
+            "association_site_pivot_ratio": 1.0032838209288402,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -79.29734576145262,
+            "gradient_floor_max_si_columns": 1.1294290995461174e-16,
+            "normalization_residual": 4.087489835873635e-18,
+            "pressure_row": 5.043402915210221e-14,
+            "raw_objective_over_rt": 7.993605777301384e-12,
+            "reconstruction_l1": 1.2921084807281768e-13,
+            "summation_estimate_over_rt": 3.606553631668363e-13,
+            "tpd_over_rt": 3.268496584496461e-13,
+            "trial_dual_over_rt": 2.5579538487363607e-13,
+            "trial_identity_defect_over_rt": 7.105427357601002e-14,
+            "volume_m3_per_mol": 0.002365986196835419
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.5559621424124356e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 23 iterations, contraction absent, floor 1.1107478322091127e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1107780449812058e-10,
+            "association_residual": 4.801704522855873e-16,
+            "association_site_pivot_ratio": 11.85346440083662,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 3.552713678800501e-15,
+            "g_over_rt": -209.6696657263774,
+            "gradient_floor_max_si_columns": 1.1107478322091127e-10,
+            "normalization_residual": 1.1102230246251565e-16,
+            "pressure_row": -5.570825478865165e-15,
+            "raw_objective_over_rt": -8.881784197001252e-15,
+            "reconstruction_l1": 8.326675457036196e-17,
+            "summation_estimate_over_rt": 9.693168633204737e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -2.4140831631853724e-17,
+            "trial_identity_defect_over_rt": 2.4140831631853724e-17,
+            "volume_m3_per_mol": 2.7200388078037425e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 7.2231546449330326e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 30 iterations, contraction absent, floor 1.1107478322091116e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1107780449812035e-10,
+            "association_residual": 9.603409045711736e-16,
+            "association_site_pivot_ratio": 11.853464400836604,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 3.552713678800501e-15,
+            "g_over_rt": -209.6696657263774,
+            "gradient_floor_max_si_columns": 1.1107478322091104e-10,
+            "normalization_residual": -9.71445146547012e-17,
+            "pressure_row": -2.0216081914005563e-14,
+            "raw_objective_over_rt": -3.552713678800501e-15,
+            "reconstruction_l1": 3.929149095272698e-16,
+            "summation_estimate_over_rt": 9.693168633204737e-13,
+            "tpd_over_rt": 5.684341886080802e-14,
+            "trial_dual_over_rt": -1.2502550880652702e-14,
+            "trial_identity_defect_over_rt": 6.934596974146072e-14,
+            "volume_m3_per_mol": 2.720038807803743e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.9499535435223039e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 11 iterations, contraction absent, floor 1.9486423482592432e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.9486813588760524e-10,
+            "association_residual": 8.687167752677341e-16,
+            "association_site_pivot_ratio": 15.405060730345244,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -215.57002239062166,
+            "gradient_floor_max_si_columns": 1.9486423482592432e-10,
+            "normalization_residual": -4.85722573273506e-17,
+            "pressure_row": -1.8229143881890916e-14,
+            "raw_objective_over_rt": 0.14287720743809193,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 9.573951676753282e-13,
+            "tpd_over_rt": 0.14287720743809018,
+            "trial_dual_over_rt": 0.14287720743810411,
+            "trial_identity_defect_over_rt": -1.3933298959045715e-14,
+            "volume_m3_per_mol": 2.0019382645649086e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.2204460492503131e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.1294290995338432e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1321013131936449e-16,
+            "association_residual": 2.0816681711721685e-17,
+            "association_site_pivot_ratio": 1.0032838209288342,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -79.29734576142947,
+            "gradient_floor_max_si_columns": 1.1294290995338435e-16,
+            "normalization_residual": -3.926204174804575e-17,
+            "pressure_row": 2.6898148881122883e-16,
+            "raw_objective_over_rt": 3.1885605267234496e-13,
+            "reconstruction_l1": 2.255140783467645e-16,
+            "summation_estimate_over_rt": 3.6065536316673383e-13,
+            "tpd_over_rt": 3.126388037344441e-13,
+            "trial_dual_over_rt": 3.1878649395223455e-13,
+            "trial_identity_defect_over_rt": -6.147690217790464e-15,
+            "volume_m3_per_mol": 0.002365986196835569
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 6.7245372202807267e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 25 iterations, contraction absent, floor 1.129429099533841e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1321013131936431e-16,
+            "association_residual": 2.0816681711721685e-17,
+            "association_site_pivot_ratio": 1.0032838209288342,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -79.29734576142947,
+            "gradient_floor_max_si_columns": 1.1294290995338417e-16,
+            "normalization_residual": -3.2322856676562906e-17,
+            "pressure_row": -6.724537220280727e-16,
+            "raw_objective_over_rt": 3.170796958329447e-13,
+            "reconstruction_l1": 1.1449177588424887e-16,
+            "summation_estimate_over_rt": 3.6065536316673383e-13,
+            "tpd_over_rt": 3.126388037344441e-13,
+            "trial_dual_over_rt": 3.184052830916655e-13,
+            "trial_identity_defect_over_rt": -5.7664793572214046e-15,
+            "volume_m3_per_mol": 0.0023659861968355713
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.6907277438954878e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.9486423482592422e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.9486813588760513e-10,
+            "association_residual": 1.7374335505354682e-15,
+            "association_site_pivot_ratio": 15.405060730345241,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -215.57002239062166,
+            "gradient_floor_max_si_columns": 1.9486423482592422e-10,
+            "normalization_residual": 3.469446951953614e-18,
+            "pressure_row": -1.0072173824746645e-14,
+            "raw_objective_over_rt": 0.1428772074380977,
+            "reconstruction_l1": 1.1535911115245767e-16,
+            "summation_estimate_over_rt": 9.573951676753284e-13,
+            "tpd_over_rt": 0.1428772074381186,
+            "trial_dual_over_rt": 0.14287720743810012,
+            "trial_identity_defect_over_rt": 1.8485213360008856e-14,
+            "volume_m3_per_mol": 2.0019382645649086e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.1138333335903489e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.1294290995338422e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1321013131936436e-16,
+            "association_residual": 2.0816681711721685e-17,
+            "association_site_pivot_ratio": 1.0032838209288342,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -79.29734576142945,
+            "gradient_floor_max_si_columns": 1.1294290995338422e-16,
+            "normalization_residual": -5.313980308608061e-17,
+            "pressure_row": 2.6898148881122883e-16,
+            "raw_objective_over_rt": 3.179678742526448e-13,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 3.6065536316673383e-13,
+            "tpd_over_rt": 3.268496584496461e-13,
+            "trial_dual_over_rt": 3.177234191115382e-13,
+            "trial_identity_defect_over_rt": 9.126239338107889e-15,
+            "volume_m3_per_mol": 0.002365986196835569
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  },
+  {
+    "index": "Merkley-capped:5",
+    "T_K": 333.15,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 9.947598300641403e-14,
+    "residuals": [
+      -1.4210854715202004e-14,
+      0.0,
+      -5.684341886080802e-14,
+      -5.684341886080802e-14,
+      8.526512829121202e-14,
+      0.0,
+      2.842170943040401e-14,
+      9.947598300641403e-14,
+      1.131106893620017e-14,
+      -7.178619705528213e-17,
+      3.5893098527641064e-17,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "amounts": [
+      5.464498818441368
+    ],
+    "mole_fractions": [
+      0.010033367483978291,
+      0.6748824144789999,
+      0.13208474427991757,
+      5.63289316335798e-12,
+      7.467926740385932e-08,
+      1.0135036037339409e-12,
+      0.050914729458260935,
+      0.13208466961292942
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 6.923117259007373e-11,
+          "association_residual": 5.024506008334418e-16,
+          "association_site_pivot_ratio": 9.708890380769326,
+          "association_site_rank": 6.0,
+          "charge_residual": -5.551115123125783e-17,
+          "chemical_plus_electric_contraction": 4.0920247279447126e-14,
+          "correction_l1_mol": 6.175617162736911e-16,
+          "euler_defect_over_rt": 7.105427357601002e-15,
+          "feasibility_estimate_over_rt": 9.482441722049416e-14,
+          "g_over_rt": -198.68326410269577,
+          "gradient_floor_max_si_columns": 6.92286314430231e-11,
+          "normalization_residual": 2.7755575615628914e-17,
+          "present_identity_defect_over_rt": -4.307465421255839e-14,
+          "pressure_row": 2.626730249729274e-14,
+          "summation_estimate_over_rt": 9.493103959920247e-13,
+          "tpd_over_rt": -2.842170943040401e-14,
+          "volume_m3_per_mol": 3.670659086641726e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 748.0,
+        "evaluations": 396.0,
+        "hessian_calls": 211.0,
+        "iterations": 202.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 262.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.3447673730641923e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 25 iterations, contraction absent, floor 6.9228631443023533e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 6.923117259007412e-11,
+            "association_residual": 5.024506008334387e-16,
+            "association_site_pivot_ratio": 9.708890380769347,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 7.105427357601002e-15,
+            "g_over_rt": -198.68326410269583,
+            "gradient_floor_max_si_columns": 6.92286314430235e-11,
+            "normalization_residual": -1.1102230246251565e-16,
+            "pressure_row": 7.972623944884839e-15,
+            "raw_objective_over_rt": 3.552713678800502e-15,
+            "reconstruction_l1": 3.7643504723399843e-16,
+            "summation_estimate_over_rt": 9.493103959920247e-13,
+            "tpd_over_rt": 2.842170943040401e-14,
+            "trial_dual_over_rt": 4.985605134361865e-16,
+            "trial_identity_defect_over_rt": 2.792314891696782e-14,
+            "volume_m3_per_mol": 3.670659086641714e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.8485213360008856e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 17 iterations, contraction absent, floor 9.165659075584024e-17, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.18734824640476e-17,
+            "association_residual": 6.938893903907228e-18,
+            "association_site_pivot_ratio": 1.0031827898047507,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -78.88494471560857,
+            "gradient_floor_max_si_columns": 9.1656590755843e-17,
+            "normalization_residual": 1.4567431445557067e-17,
+            "pressure_row": 2.0311237668796498e-14,
+            "raw_objective_over_rt": 4.427569422205206e-12,
+            "reconstruction_l1": 7.340991911094933e-14,
+            "summation_estimate_over_rt": 3.588252475726106e-13,
+            "tpd_over_rt": 1.4210854715202004e-14,
+            "trial_dual_over_rt": -5.684341886080802e-14,
+            "trial_identity_defect_over_rt": 7.105427357601002e-14,
+            "volume_m3_per_mol": 0.002366351469283565
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.711566848835022e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 35 iterations, contraction absent, floor 6.922863144302339e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 6.923117259007403e-11,
+            "association_residual": 1.0049012016668775e-15,
+            "association_site_pivot_ratio": 9.708890380769347,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 7.105427357601002e-15,
+            "g_over_rt": -198.6832641026958,
+            "gradient_floor_max_si_columns": 6.92286314430234e-11,
+            "normalization_residual": 0.0,
+            "pressure_row": -1.3526961799185674e-14,
+            "raw_objective_over_rt": -3.552713678800501e-15,
+            "reconstruction_l1": 2.3071824877853196e-16,
+            "summation_estimate_over_rt": 9.493103959920245e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -1.3728418576824254e-15,
+            "trial_identity_defect_over_rt": 1.3728418576824254e-15,
+            "volume_m3_per_mol": 3.670659086641718e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.8121496718483407e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 39 iterations, contraction absent, floor 6.9228631443023054e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 6.923117259007364e-11,
+            "association_residual": 1.0049012016668826e-15,
+            "association_site_pivot_ratio": 9.708890380769317,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 7.105427357601002e-15,
+            "g_over_rt": -198.68326410269563,
+            "gradient_floor_max_si_columns": 6.922863144302302e-11,
+            "normalization_residual": -1.1102230246251565e-16,
+            "pressure_row": 5.034792352527401e-15,
+            "raw_objective_over_rt": 1.0658141036401503e-14,
+            "reconstruction_l1": 4.874573894042127e-16,
+            "summation_estimate_over_rt": 9.493103959920241e-13,
+            "tpd_over_rt": 2.842170943040401e-14,
+            "trial_dual_over_rt": 5.455497729465642e-15,
+            "trial_identity_defect_over_rt": 2.2966211700938365e-14,
+            "volume_m3_per_mol": 3.67065908664173e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.6711747769589426e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 10 iterations, contraction absent, floor 1.6930117867242401e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.6930514923327953e-10,
+            "association_residual": 8.258170171560123e-16,
+            "association_site_pivot_ratio": 14.710069902301612,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -209.2725183370654,
+            "gradient_floor_max_si_columns": 1.6930117867242385e-10,
+            "normalization_residual": -4.163336342344337e-17,
+            "pressure_row": 6.9709297746116744e-15,
+            "raw_objective_over_rt": 0.2877626126078765,
+            "reconstruction_l1": 1.196959198423997e-16,
+            "summation_estimate_over_rt": 9.294409723646578e-13,
+            "tpd_over_rt": 0.28776261260784963,
+            "trial_dual_over_rt": 0.2877626126078673,
+            "trial_identity_defect_over_rt": -1.765254609153999e-14,
+            "volume_m3_per_mol": 2.345264744645773e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 8.9071795940946659e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 15 iterations, contraction absent, floor 9.1656590755284709e-17, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.187348246348804e-17,
+            "association_residual": 6.938893903907228e-18,
+            "association_site_pivot_ratio": 1.003182789804748,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -78.88494471559765,
+            "gradient_floor_max_si_columns": 9.165659075528476e-17,
+            "normalization_residual": -1.473874385913925e-17,
+            "pressure_row": 8.070690464422654e-16,
+            "raw_objective_over_rt": -1.1546319456101628e-14,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 3.5882524757256244e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -9.784875910194298e-15,
+            "trial_identity_defect_over_rt": 9.784875910194298e-15,
+            "volume_m3_per_mol": 0.002366351469283625
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.2469042759417779e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 9.1656590755284537e-17, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.187348246348787e-17,
+            "association_residual": 6.938893903907228e-18,
+            "association_site_pivot_ratio": 1.003182789804748,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -78.88494471559765,
+            "gradient_floor_max_si_columns": 9.165659075528459e-17,
+            "normalization_residual": -1.3004814476550493e-17,
+            "pressure_row": 0.0,
+            "raw_objective_over_rt": -1.1546319456101628e-14,
+            "reconstruction_l1": 1.1275707887805166e-16,
+            "summation_estimate_over_rt": 3.5882524757256244e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -1.0200552795984381e-14,
+            "trial_identity_defect_over_rt": 1.0200552795984381e-14,
+            "volume_m3_per_mol": 0.002366351469283627
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.0963448212998475e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 22 iterations, contraction absent, floor 1.6930117867242352e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.693051492332791e-10,
+            "association_residual": 8.25817017156013e-16,
+            "association_site_pivot_ratio": 14.710069902301603,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -209.27251833706518,
+            "gradient_floor_max_si_columns": 1.693011786724234e-10,
+            "normalization_residual": -2.0816681711721685e-17,
+            "pressure_row": 5.0938846182427475e-15,
+            "raw_objective_over_rt": 0.2877626126078678,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 9.29440972364657e-13,
+            "tpd_over_rt": 0.28776261260787805,
+            "trial_dual_over_rt": 0.28776261260786723,
+            "trial_identity_defect_over_rt": 1.0824674490095276e-14,
+            "volume_m3_per_mol": 2.3452647446457834e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 3.5913388510016716e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 9.1656590755284635e-17, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.187348246348797e-17,
+            "association_residual": 6.938893903907228e-18,
+            "association_site_pivot_ratio": 1.003182789804748,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -78.88494471559765,
+            "gradient_floor_max_si_columns": 9.165659075528468e-17,
+            "normalization_residual": -8.609031117655895e-19,
+            "pressure_row": 0.0,
+            "raw_objective_over_rt": -1.1546319456101628e-14,
+            "reconstruction_l1": 1.1275707887805166e-16,
+            "summation_estimate_over_rt": 3.588252475725625e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -9.405839684032757e-15,
+            "trial_identity_defect_over_rt": 9.405839684032757e-15,
+            "volume_m3_per_mol": 0.002366351469283627
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  },
+  {
+    "index": "Merkley-capped:6",
+    "T_K": 388.71,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 1.1368683772161603e-13,
+    "residuals": [
+      -2.842170943040401e-14,
+      0.0,
+      0.0,
+      -1.1368683772161603e-13,
+      5.684341886080802e-14,
+      5.684341886080802e-14,
+      -7.105427357601002e-14,
+      -6.394884621840902e-14,
+      -1.6809161125439918e-14,
+      1.2721954251944602e-16,
+      -5.9634160555990315e-18,
+      0.0,
+      -7.951221407465376e-18,
+      0.0
+    ],
+    "amounts": [
+      27.53909529833788
+    ],
+    "mole_fractions": [
+      0.0029436818958136985,
+      0.9467004805748079,
+      0.014043211899673292,
+      5.779067137871098e-07,
+      1.1186043957629313e-08,
+      2.30460627593793e-08,
+      0.02226763391776487,
+      0.014044379573119657
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 9.903482880564265e-10,
+          "association_residual": 8.881784197001252e-16,
+          "association_site_pivot_ratio": 8.816436883756147,
+          "association_site_rank": 6.0,
+          "charge_residual": -3.469446951953614e-18,
+          "chemical_plus_electric_contraction": -1.2911326701506796e-15,
+          "correction_l1_mol": 4.0661953746401025e-15,
+          "euler_defect_over_rt": 0.0,
+          "feasibility_estimate_over_rt": 8.778066761448996e-13,
+          "g_over_rt": -182.34453854555125,
+          "gradient_floor_max_si_columns": 9.903258234092896e-10,
+          "normalization_residual": 1.2663481374630692e-16,
+          "present_identity_defect_over_rt": 4.561665215954333e-14,
+          "pressure_row": -1.2517899371415366e-14,
+          "summation_estimate_over_rt": 8.161155098702921e-13,
+          "tpd_over_rt": 5.684341886080802e-14,
+          "volume_m3_per_mol": 2.268409709798282e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 640.0,
+        "evaluations": 320.0,
+        "hessian_calls": 185.0,
+        "iterations": 176.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 230.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.5323724364431397e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 27 iterations, contraction absent, floor 9.9032582340929109e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.903482880564259e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 8.816436883756138,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -182.34453854555125,
+            "gradient_floor_max_si_columns": 9.90325823409289e-10,
+            "normalization_residual": -1.5439038936193583e-16,
+            "pressure_row": -2.3246053756476732e-14,
+            "raw_objective_over_rt": 6.4392935428259095e-15,
+            "reconstruction_l1": 7.017060751257815e-16,
+            "summation_estimate_over_rt": 8.161155098702922e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": 3.20222721114482e-15,
+            "trial_identity_defect_over_rt": -3.20222721114482e-15,
+            "volume_m3_per_mol": 2.268409709798281e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.6825429938194247e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 24 iterations, contraction absent, floor 7.5221653937715217e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1851228202203124e-13,
+            "association_energy_estimate_over_rt": 7.543190093510148e-16,
+            "association_residual": 6.938893903907228e-18,
+            "association_site_pivot_ratio": 1.0090786736785944,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 9.920344411028744e-10,
+            "donor_capacity_mol": 0.09606204267027806,
+            "donor_chemical_contraction_over_rt": -85.67326169838138,
+            "donor_correction_over_rt": 1.5903810058988642e-14,
+            "donor_pressure_row": -1.2517899371415366e-14,
+            "donor_slope_over_rt": -9.778302766262739e-14,
+            "euler_defect_over_rt": 3.469446951953614e-18,
+            "feasibility_error_estimate_over_rt": 8.778066761448996e-13,
+            "g_over_rt": -85.67326169838147,
+            "gradient_floor_max_si_columns": 7.522165393773774e-16,
+            "normalization_residual": 3.90583832637903e-17,
+            "pressure_row": 2.0191960797377083e-12,
+            "raw_objective_over_rt": 2.7805313607136793e-11,
+            "reconstruction_l1": 6.730645529079146e-13,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8907629982467353e-13,
+            "tpd_over_rt": -1.1368683772161603e-13,
+            "trial_dual_over_rt": -4.547473508864641e-13,
+            "trial_identity_defect_over_rt": 3.410605131648481e-13,
+            "volume_m3_per_mol": 0.002795032897545142
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.8976319663908646e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 25 iterations, contraction absent, floor 9.9032582340928675e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.903482880564223e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 8.816436883756129,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -182.34453854555122,
+            "gradient_floor_max_si_columns": 9.903258234092855e-10,
+            "normalization_residual": 6.418476861114186e-17,
+            "pressure_row": -1.9119840531453177e-14,
+            "raw_objective_over_rt": 4.440892098500627e-15,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 8.161155098702922e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": 7.61019424518123e-15,
+            "trial_identity_defect_over_rt": -7.61019424518123e-15,
+            "volume_m3_per_mol": 2.2684097097982868e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.2361967240089643e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 29 iterations, contraction absent, floor 9.9032582340929109e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.014503124350486e-09,
+            "association_residual": 1.7763568394002505e-15,
+            "association_site_pivot_ratio": 8.816436883756147,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -182.34453854555125,
+            "gradient_floor_max_si_columns": 1.0144801117851261e-09,
+            "normalization_residual": -2.6020852139652106e-17,
+            "pressure_row": 1.5375302029744206e-14,
+            "raw_objective_over_rt": 3.552713678800502e-15,
+            "reconstruction_l1": 4.371598467211732e-16,
+            "summation_estimate_over_rt": 8.161155098702924e-13,
+            "tpd_over_rt": 2.842170943040401e-14,
+            "trial_dual_over_rt": 2.6472661263721534e-16,
+            "trial_identity_defect_over_rt": 2.8156982817766792e-14,
+            "volume_m3_per_mol": 2.268409709798281e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.5563677916668973e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 15 iterations, contraction absent, floor 7.5221653934614895e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.185122820196154e-13,
+            "association_energy_estimate_over_rt": 7.543190093197039e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0090786736783335,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 9.920344411028698e-10,
+            "donor_capacity_mol": 0.0960620426698078,
+            "donor_chemical_contraction_over_rt": -85.67326169788683,
+            "donor_correction_over_rt": 1.692955343786638e-15,
+            "donor_pressure_row": -1.2517899371415366e-14,
+            "donor_slope_over_rt": -9.778302766262739e-14,
+            "euler_defect_over_rt": 3.469446951953614e-18,
+            "feasibility_error_estimate_over_rt": 8.778066761448996e-13,
+            "g_over_rt": -85.67326169788691,
+            "gradient_floor_max_si_columns": 7.522165393461489e-16,
+            "normalization_residual": -1.0069527676959122e-17,
+            "pressure_row": 3.1775845145052385e-16,
+            "raw_objective_over_rt": -1.1635137298071638e-13,
+            "reconstruction_l1": 1.3879143060530064e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.890762998224971e-13,
+            "tpd_over_rt": -9.947598300641403e-14,
+            "trial_dual_over_rt": -1.1665429762641013e-13,
+            "trial_identity_defect_over_rt": 1.71783146199961e-14,
+            "volume_m3_per_mol": 0.0027950328975515724
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 3.1775845145052385e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 7.5221653934614974e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1851228201961543e-13,
+            "association_energy_estimate_over_rt": 7.543190093197049e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0090786736783337,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 9.920344445723168e-10,
+            "donor_capacity_mol": 0.09606204266980782,
+            "donor_chemical_contraction_over_rt": -85.67326169788686,
+            "donor_correction_over_rt": 1.5903810058988642e-14,
+            "donor_pressure_row": -1.2517899371415366e-14,
+            "donor_slope_over_rt": -8.357217294742538e-14,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "feasibility_error_estimate_over_rt": 8.778066761448996e-13,
+            "g_over_rt": -85.67326169788693,
+            "gradient_floor_max_si_columns": 7.522165393461499e-16,
+            "normalization_residual": 1.769960046582586e-17,
+            "pressure_row": 4.766376771757857e-16,
+            "raw_objective_over_rt": -1.163513729807164e-13,
+            "reconstruction_l1": 0.0,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8907629982249714e-13,
+            "tpd_over_rt": -9.947598300641403e-14,
+            "trial_dual_over_rt": -1.1607991487874465e-13,
+            "trial_identity_defect_over_rt": 1.6603931872330624e-14,
+            "volume_m3_per_mol": 0.002795032897551572
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 5.5288058254272078e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 7.5221653934614796e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1851228201961543e-13,
+            "association_energy_estimate_over_rt": 7.543190093197033e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0090786736783335,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 9.920344480417637e-10,
+            "donor_capacity_mol": 0.0960620426698078,
+            "donor_chemical_contraction_over_rt": -85.67326169788684,
+            "donor_correction_over_rt": 1.692955343786638e-15,
+            "donor_pressure_row": -1.2517899371415366e-14,
+            "donor_slope_over_rt": -9.778302766262739e-14,
+            "euler_defect_over_rt": 1.0408340855860843e-17,
+            "feasibility_error_estimate_over_rt": 8.778066761448996e-13,
+            "g_over_rt": -85.67326169788693,
+            "gradient_floor_max_si_columns": 7.522165393461484e-16,
+            "normalization_residual": 7.337338202295651e-17,
+            "pressure_row": -4.766376771757862e-16,
+            "raw_objective_over_rt": -1.1546319456101625e-13,
+            "reconstruction_l1": 1.3879143060530064e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8907629982249714e-13,
+            "tpd_over_rt": -9.947598300641403e-14,
+            "trial_dual_over_rt": -1.1611834737245306e-13,
+            "trial_identity_defect_over_rt": 1.664236436603903e-14,
+            "volume_m3_per_mol": 0.0027950328975515745
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.036080424420945e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 17 iterations, contraction absent, floor 2.8164015799657526e-09, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 2.7885738334132656e-09,
+            "association_residual": 1.7763568394002505e-15,
+            "association_site_pivot_ratio": 9.377974918829823,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -184.30818485040177,
+            "gradient_floor_max_si_columns": 2.7885164158076758e-09,
+            "normalization_residual": 3.8163916471489756e-17,
+            "pressure_row": 6.465553846024966e-15,
+            "raw_objective_over_rt": 0.024792173348929573,
+            "reconstruction_l1": 1.1492543028346347e-16,
+            "summation_estimate_over_rt": 8.18556195163844e-13,
+            "tpd_over_rt": 0.02479217334899886,
+            "trial_dual_over_rt": 0.024792173348929848,
+            "trial_identity_defect_over_rt": 6.901076932130934e-14,
+            "volume_m3_per_mol": 2.0590736086071796e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.5887922572526195e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 7 iterations, contraction absent, floor 7.5221653934614875e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.185122820196154e-13,
+            "association_energy_estimate_over_rt": 7.54319009319704e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0090786736783335,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 9.920344480417637e-10,
+            "donor_capacity_mol": 0.0960620426698078,
+            "donor_chemical_contraction_over_rt": -85.67326169788684,
+            "donor_correction_over_rt": 1.5903810058988642e-14,
+            "donor_pressure_row": -1.2517899371415366e-14,
+            "donor_slope_over_rt": -8.357217294742538e-14,
+            "euler_defect_over_rt": 1.0408340855860843e-17,
+            "feasibility_error_estimate_over_rt": 8.778066761448996e-13,
+            "g_over_rt": -85.67326169788691,
+            "gradient_floor_max_si_columns": 7.52216539346149e-16,
+            "normalization_residual": 1.769960046582586e-17,
+            "pressure_row": 3.1775845145052385e-16,
+            "raw_objective_over_rt": -1.1723955140041653e-13,
+            "reconstruction_l1": 0.0,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8907629982249714e-13,
+            "tpd_over_rt": -9.947598300641403e-14,
+            "trial_dual_over_rt": -1.1644517765437444e-13,
+            "trial_identity_defect_over_rt": 1.696919464796041e-14,
+            "volume_m3_per_mol": 0.0027950328975515724
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  },
+  {
+    "index": "Merkley-capped:7",
+    "T_K": 388.71,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 5.684341886080802e-14,
+    "residuals": [
+      2.842170943040401e-14,
+      -2.842170943040401e-14,
+      5.684341886080802e-14,
+      0.0,
+      -2.842170943040401e-14,
+      -2.842170943040401e-14,
+      -2.1316282072803006e-14,
+      -7.105427357601002e-15,
+      -1.1082456341671705e-14,
+      -9.496378059917478e-16,
+      8.4082514072186e-16,
+      2.52247542216558e-16,
+      8.309330802427793e-16,
+      1.1102230246251565e-15
+    ],
+    "amounts": [
+      10.98210058243749
+    ],
+    "mole_fractions": [
+      0.005494369788743831,
+      0.8814785505010444,
+      0.02196975652254725,
+      1.4386047459899312e-08,
+      4.5378206160444614e-08,
+      2.3381133648370093e-09,
+      0.06908751883074754,
+      0.02196974225454997
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 1.1579123513149273e-10,
+          "association_residual": 8.881784197001252e-16,
+          "association_site_pivot_ratio": 8.144878562107579,
+          "association_site_rank": 6.0,
+          "charge_residual": 0.0,
+          "chemical_plus_electric_contraction": -1.2354922320441904e-13,
+          "correction_l1_mol": 1.430106047491914e-14,
+          "euler_defect_over_rt": 1.7763568394002505e-15,
+          "feasibility_estimate_over_rt": 1.1995480358217181e-12,
+          "g_over_rt": -174.99377016131888,
+          "gradient_floor_max_si_columns": 1.1578795965889373e-10,
+          "normalization_residual": -5.898059818321144e-17,
+          "present_identity_defect_over_rt": 3.591709643471709e-14,
+          "pressure_row": -1.1605383620010595e-13,
+          "summation_estimate_over_rt": 7.870712615465346e-13,
+          "tpd_over_rt": 2.842170943040401e-14,
+          "volume_m3_per_mol": 2.828854233775487e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 654.0,
+        "evaluations": 334.0,
+        "hessian_calls": 192.0,
+        "iterations": 183.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 230.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 5.3193217612086717e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 27 iterations, contraction absent, floor 1.1578795965889388e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1579123513149292e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 8.144878562107602,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -174.99377016131865,
+            "gradient_floor_max_si_columns": 1.1578795965889392e-10,
+            "normalization_residual": 4.5102810375396984e-17,
+            "pressure_row": -5.936800466258289e-15,
+            "raw_objective_over_rt": -1.0325074129013957e-14,
+            "reconstruction_l1": 2.4025935900069447e-16,
+            "summation_estimate_over_rt": 7.870712615465336e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -9.180014310531729e-15,
+            "trial_identity_defect_over_rt": 9.180014310531729e-15,
+            "volume_m3_per_mol": 2.8288542337755e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 7.7715611723760958e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 7.3059340506228223e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1651673107418333e-13,
+            "association_energy_estimate_over_rt": 7.32635677028226e-16,
+            "association_residual": 5.551115123125783e-17,
+            "association_site_pivot_ratio": 1.0088968237723341,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.1779529917543214e-10,
+            "donor_capacity_mol": 0.07121713043486354,
+            "donor_chemical_contraction_over_rt": -85.26475431178464,
+            "donor_correction_over_rt": 2.6054710951914085e-14,
+            "donor_pressure_row": -1.1605383620010595e-13,
+            "donor_slope_over_rt": -2.29740673921722e-13,
+            "euler_defect_over_rt": 3.469446951953614e-18,
+            "feasibility_error_estimate_over_rt": 1.1995480358217181e-12,
+            "g_over_rt": -85.26475431178476,
+            "gradient_floor_max_si_columns": 7.30593405062383e-16,
+            "normalization_residual": 3.867891250342037e-17,
+            "pressure_row": 9.139804292123512e-13,
+            "raw_objective_over_rt": 1.2793321957361597e-11,
+            "reconstruction_l1": 3.108077789027322e-13,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8726317191952626e-13,
+            "tpd_over_rt": -2.5579538487363607e-13,
+            "trial_dual_over_rt": -3.979039320256561e-13,
+            "trial_identity_defect_over_rt": 1.4210854715202004e-13,
+            "volume_m3_per_mol": 0.002795360527061695
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 6.2809162029272393e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 25 iterations, contraction absent, floor 1.1578795965888644e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1579123513148459e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 8.144878562107417,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -174.99377016131547,
+            "gradient_floor_max_si_columns": 1.1578795965888559e-10,
+            "normalization_residual": 6.245004513516506e-17,
+            "pressure_row": 7.392377872016472e-14,
+            "raw_objective_over_rt": -1.1879386363489175e-14,
+            "reconstruction_l1": 3.330235686448798e-14,
+            "summation_estimate_over_rt": 7.870712615465208e-13,
+            "tpd_over_rt": 2.842170943040401e-14,
+            "trial_dual_over_rt": -1.5137809738538707e-14,
+            "trial_identity_defect_over_rt": 4.3559519168942714e-14,
+            "volume_m3_per_mol": 2.828854233775729e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.7079014044362885e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 48 iterations, contraction absent, floor 1.1578795965889605e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.1579123513149486e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 8.14487856210765,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -174.99377016131922,
+            "gradient_floor_max_si_columns": 1.1578795965889586e-10,
+            "normalization_residual": 6.938893903907228e-17,
+            "pressure_row": 9.705993394998488e-15,
+            "raw_objective_over_rt": -1.354472090042691e-14,
+            "reconstruction_l1": 6.010823507199471e-16,
+            "summation_estimate_over_rt": 7.870712615465362e-13,
+            "tpd_over_rt": 0.0,
+            "trial_dual_over_rt": -1.0808814906197508e-14,
+            "trial_identity_defect_over_rt": 1.0808814906197508e-14,
+            "volume_m3_per_mol": 2.828854233775452e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 6.6192193008013344e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 15 iterations, contraction absent, floor 7.3059340504835795e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1651673107308443e-13,
+            "association_energy_estimate_over_rt": 7.326356770141639e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0088968237722156,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.177952957059831e-10,
+            "donor_capacity_mol": 0.07121713043470558,
+            "donor_chemical_contraction_over_rt": -85.26475431155967,
+            "donor_correction_over_rt": 1.1843856236712081e-14,
+            "donor_pressure_row": -1.1605383620010595e-13,
+            "donor_slope_over_rt": -2.43951528636924e-13,
+            "euler_defect_over_rt": 0.0,
+            "feasibility_error_estimate_over_rt": 1.1995480358217181e-12,
+            "g_over_rt": -85.2647543115598,
+            "gradient_floor_max_si_columns": 7.30593405048358e-16,
+            "normalization_residual": -4.675621868843738e-18,
+            "pressure_row": 1.5889784930690244e-16,
+            "raw_objective_over_rt": -2.4868995751603507e-13,
+            "reconstruction_l1": 1.3879143060530064e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8726317191853626e-13,
+            "tpd_over_rt": -2.5579538487363607e-13,
+            "trial_dual_over_rt": -2.4858302533243797e-13,
+            "trial_identity_defect_over_rt": -7.2123595411981e-15,
+            "volume_m3_per_mol": 0.0027953605270646057
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.7467985497206375e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 10 iterations, contraction absent, floor 7.3059340504835785e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1651673107308443e-13,
+            "association_energy_estimate_over_rt": 7.326356770141639e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0088968237722156,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.177952957059831e-10,
+            "donor_capacity_mol": 0.07121713043470558,
+            "donor_chemical_contraction_over_rt": -85.26475431155967,
+            "donor_correction_over_rt": 1.1843856236712081e-14,
+            "donor_pressure_row": -1.1605383620010595e-13,
+            "donor_slope_over_rt": -2.43951528636924e-13,
+            "euler_defect_over_rt": 0.0,
+            "feasibility_error_estimate_over_rt": 1.1995480358217181e-12,
+            "g_over_rt": -85.2647543115598,
+            "gradient_floor_max_si_columns": 7.30593405048358e-16,
+            "normalization_residual": -4.689174395999807e-18,
+            "pressure_row": 1.5889784930690244e-16,
+            "raw_objective_over_rt": -2.4868995751603507e-13,
+            "reconstruction_l1": 0.0,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8726317191853626e-13,
+            "tpd_over_rt": -2.5579538487363607e-13,
+            "trial_dual_over_rt": -2.4836202923037414e-13,
+            "trial_identity_defect_over_rt": -7.433355643261929e-15,
+            "volume_m3_per_mol": 0.0027953605270646057
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 2.7539066979867732e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 7.3059340504835804e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.1651673107308443e-13,
+            "association_energy_estimate_over_rt": 7.326356770141641e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0088968237722156,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.177952957059831e-10,
+            "donor_capacity_mol": 0.07121713043470558,
+            "donor_chemical_contraction_over_rt": -85.26475431155967,
+            "donor_correction_over_rt": 1.1843856236712081e-14,
+            "donor_pressure_row": -1.1605383620010595e-13,
+            "donor_slope_over_rt": -2.58162383352126e-13,
+            "euler_defect_over_rt": 0.0,
+            "feasibility_error_estimate_over_rt": 1.1995480358217181e-12,
+            "g_over_rt": -85.26475431155981,
+            "gradient_floor_max_si_columns": 7.305934050483582e-16,
+            "normalization_residual": 2.3079953746785176e-17,
+            "pressure_row": 1.5889784930690244e-16,
+            "raw_objective_over_rt": -2.4868995751603507e-13,
+            "reconstruction_l1": 1.3879143060530064e-16,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.8726317191853626e-13,
+            "tpd_over_rt": -2.7000623958883807e-13,
+            "trial_dual_over_rt": -2.4812681429227123e-13,
+            "trial_identity_defect_over_rt": -2.1879425296566843e-14,
+            "volume_m3_per_mol": 0.0027953605270646057
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.6721572475608088e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 16 iterations, contraction absent, floor 1.5195792935256309e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.5196139884238732e-10,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 9.08171569825012,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -181.0859994197521,
+            "gradient_floor_max_si_columns": 1.5195792935256314e-10,
+            "normalization_residual": -4.163336342344337e-17,
+            "pressure_row": -1.8746056497195422e-14,
+            "raw_objective_over_rt": 0.037631346545644366,
+            "reconstruction_l1": 1.1839487723541708e-16,
+            "summation_estimate_over_rt": 8.042537216753203e-13,
+            "tpd_over_rt": 0.0376313465456235,
+            "trial_dual_over_rt": 0.03763134654564893,
+            "trial_identity_defect_over_rt": -2.5431046157819992e-14,
+            "volume_m3_per_mol": 2.2831910377858983e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 5.4796207970883978e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 7 iterations, contraction absent, floor 7.3059340504835765e-16, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.165167310730844e-13,
+            "association_energy_estimate_over_rt": 7.326356770141639e-16,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0088968237722156,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.17795302644877e-10,
+            "donor_capacity_mol": 0.0712171304347056,
+            "donor_chemical_contraction_over_rt": -85.26475431155966,
+            "donor_correction_over_rt": 1.1843856236712081e-14,
+            "donor_pressure_row": -1.1605383620010595e-13,
+            "donor_slope_over_rt": -2.43951528636924e-13,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "feasibility_error_estimate_over_rt": 1.1995480358217181e-12,
+            "g_over_rt": -85.26475431155978,
+            "gradient_floor_max_si_columns": 7.30593405048358e-16,
+            "normalization_residual": -1.4343994741983224e-16,
+            "pressure_row": 3.1779569861380483e-16,
+            "raw_objective_over_rt": -2.4868995751603507e-13,
+            "reconstruction_l1": 2.778268066994105e-17,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.872631719185362e-13,
+            "tpd_over_rt": -2.5579538487363607e-13,
+            "trial_dual_over_rt": -2.4844852200187354e-13,
+            "trial_identity_defect_over_rt": -7.346862871762523e-15,
+            "volume_m3_per_mol": 0.0027953605270646053
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  },
+  {
+    "index": "Merkley-capped:8",
+    "T_K": 388.71,
+    "success": true,
+    "requested_tolerance_met": true,
+    "max_residual": 1.7053025658242404e-13,
+    "residuals": [
+      0.0,
+      0.0,
+      0.0,
+      -1.7053025658242404e-13,
+      -1.4210854715202004e-13,
+      -2.842170943040401e-14,
+      2.842170943040401e-14,
+      3.552713678800501e-14,
+      1.1188300072984247e-14,
+      0.0,
+      0.0,
+      0.0,
+      -1.9862044234270335e-17,
+      -2.220446049250313e-16
+    ],
+    "amounts": [
+      5.450572120358163
+    ],
+    "mole_fractions": [
+      0.007503914410235288,
+      0.7835088260021436,
+      0.025520141554286533,
+      2.3091699096771368e-10,
+      1.3865088171090197e-07,
+      2.879871631703287e-10,
+      0.15794697521032297,
+      0.025520003653225955
+    ],
+    "component_ids": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion",
+      "methyldiethanolamine",
+      "protonated-methyldiethanolamine"
+    ],
+    "carbon_free_trial_supports": false,
+    "stability": {
+      "completed": true,
+      "message": "no witness in the recorded trial set; unresolved trials 0",
+      "present_phases": [
+        {
+          "association_energy_estimate_over_rt": 9.148689609785582e-11,
+          "association_residual": 8.881784197001252e-16,
+          "association_site_pivot_ratio": 7.567340237352449,
+          "association_site_rank": 6.0,
+          "charge_residual": 3.469446951953614e-18,
+          "chemical_plus_electric_contraction": 4.471800783291305e-14,
+          "correction_l1_mol": 1.2073677518652752e-15,
+          "euler_defect_over_rt": 1.7763568394002505e-15,
+          "feasibility_estimate_over_rt": 2.1744045623906176e-13,
+          "g_over_rt": -162.1725904031768,
+          "gradient_floor_max_si_columns": 9.148343599431561e-11,
+          "normalization_residual": -5.204170427930421e-17,
+          "present_identity_defect_over_rt": -4.7720786714896544e-15,
+          "pressure_row": 3.994592916142339e-14,
+          "summation_estimate_over_rt": 7.317240385008603e-13,
+          "tpd_over_rt": 0.0,
+          "volume_m3_per_mol": 3.782218608852652e-05
+        }
+      ],
+      "work": {
+        "association_diagnostic_evaluations": 10.0,
+        "driver_invocations": 9.0,
+        "energy_evaluations": 663.0,
+        "evaluations": 340.0,
+        "hessian_calls": 190.0,
+        "iterations": 181.0,
+        "reconstruction_evaluations": 18.0,
+        "root_calls": 9.0,
+        "root_evaluations": 234.0,
+        "trial_driver_invocations": 9.0,
+        "trial_invocations": 9.0
+      },
+      "declared_supports": [
+        [
+          "liquid",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide",
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        ],
+        [
+          "vapor",
+          [
+            "water",
+            "methyldiethanolamine",
+            "carbon-dioxide"
+          ]
+        ]
+      ],
+      "trials": [
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.1188300072984372e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 9.1483435994314875e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.1486896097855e-11,
+            "association_residual": 8.881784197001252e-16,
+            "association_site_pivot_ratio": 7.567340237352429,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -162.1725904031762,
+            "gradient_floor_max_si_columns": 9.14834359943148e-11,
+            "normalization_residual": 1.6653345369377348e-16,
+            "pressure_row": -6.699220412647834e-15,
+            "raw_objective_over_rt": -4.884981308350689e-15,
+            "reconstruction_l1": 2.1510629557932321e-16,
+            "summation_estimate_over_rt": 7.317240385008579e-13,
+            "tpd_over_rt": 5.684341886080802e-14,
+            "trial_dual_over_rt": -5.1591416058644395e-15,
+            "trial_identity_defect_over_rt": 6.200256046667245e-14,
+            "volume_m3_per_mol": 3.7822186088526964e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 9.7144514654701197e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 24 iterations, contraction absent, floor 1.0369156655980401e-15, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0398096611094975e-15,
+            "association_residual": 2.0816681711721685e-17,
+            "association_site_pivot_ratio": 1.0113796688282344,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -90.27781157961037,
+            "gradient_floor_max_si_columns": 1.0369156655982223e-15,
+            "normalization_residual": 2.5776906650842868e-17,
+            "pressure_row": 1.4192650296799204e-12,
+            "raw_objective_over_rt": 0.2833680506046132,
+            "reconstruction_l1": 3.888238458421626e-13,
+            "summation_estimate_over_rt": 4.0951207767443827e-13,
+            "tpd_over_rt": 0.2833680505887486,
+            "trial_dual_over_rt": 0.2833680505885354,
+            "trial_identity_defect_over_rt": 2.1316282072803006e-13,
+            "volume_m3_per_mol": 0.002790965174207775
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.9444078758660654e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 26 iterations, contraction absent, floor 9.1483435994315495e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.148689609785564e-11,
+            "association_residual": 1.3322676295501878e-15,
+            "association_site_pivot_ratio": 7.567340237352452,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -162.17259040317646,
+            "gradient_floor_max_si_columns": 9.148343599431543e-11,
+            "normalization_residual": 8.326672684688674e-17,
+            "pressure_row": 9.26195171299316e-15,
+            "raw_objective_over_rt": -1.7763568394002503e-15,
+            "reconstruction_l1": 3.469473499281398e-18,
+            "summation_estimate_over_rt": 7.317240385008587e-13,
+            "tpd_over_rt": 2.842170943040401e-14,
+            "trial_dual_over_rt": -4.983572085371783e-15,
+            "trial_identity_defect_over_rt": 3.340528151577579e-14,
+            "volume_m3_per_mol": 3.782218608852672e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 1.9722338696748294e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 22 iterations, contraction absent, floor 9.1483435994315508e-11, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 9.148689609785561e-11,
+            "association_residual": 1.7763568394002505e-15,
+            "association_site_pivot_ratio": 7.567340237352444,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 1.7763568394002505e-15,
+            "g_over_rt": -162.17259040317674,
+            "gradient_floor_max_si_columns": 9.14834359943154e-11,
+            "normalization_residual": 1.6653345369377348e-16,
+            "pressure_row": 8.023584910141675e-15,
+            "raw_objective_over_rt": -8.881784197001252e-16,
+            "reconstruction_l1": 5.212854405747478e-16,
+            "summation_estimate_over_rt": 7.317240385008603e-13,
+            "tpd_over_rt": 5.684341886080802e-14,
+            "trial_dual_over_rt": -1.629003013645247e-15,
+            "trial_identity_defect_over_rt": 5.847242187445326e-14,
+            "volume_m3_per_mol": 3.782218608852657e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "liquid",
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        },
+        {
+          "seed": "positive-neutral-base",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 7.9324001211838681e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.0369156655739258e-15, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0398096610851386e-15,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0113796688280576,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 0.0,
+            "g_over_rt": -90.27781157928668,
+            "gradient_floor_max_si_columns": 1.0369156655739266e-15,
+            "normalization_residual": -6.640738306473715e-17,
+            "pressure_row": -6.345920096947093e-16,
+            "raw_objective_over_rt": 0.2833680505887264,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 4.095120776730146e-13,
+            "tpd_over_rt": 0.2833680505887344,
+            "trial_dual_over_rt": 0.2833680505887264,
+            "trial_identity_defect_over_rt": 7.993605777301127e-15,
+            "volume_m3_per_mol": 0.002790965174212292
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-0",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.7594400727103191e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 22 iterations, contraction absent, floor 1.036915665573927e-15, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0398096610851392e-15,
+            "association_residual": 5.551115123125783e-17,
+            "association_site_pivot_ratio": 1.0113796688280576,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -90.27781157928669,
+            "gradient_floor_max_si_columns": 1.0369156655739272e-15,
+            "normalization_residual": -6.638027801042501e-17,
+            "pressure_row": -6.345920096947093e-16,
+            "raw_objective_over_rt": 0.28336805058872727,
+            "reconstruction_l1": 1.388049831324567e-16,
+            "summation_estimate_over_rt": 4.0951207767301464e-13,
+            "tpd_over_rt": 0.2833680505887344,
+            "trial_dual_over_rt": 0.2833680505887267,
+            "trial_identity_defect_over_rt": 7.66053886991358e-15,
+            "volume_m3_per_mol": 0.002790965174212292
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-1",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 4.7594400727103141e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 1.0369156655739305e-15, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0398096610851422e-15,
+            "association_residual": 2.7755575615628914e-17,
+            "association_site_pivot_ratio": 1.0113796688280579,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -90.2778115792867,
+            "gradient_floor_max_si_columns": 1.0369156655739303e-15,
+            "normalization_residual": 4.461491939777851e-17,
+            "pressure_row": 4.759440072710314e-16,
+            "raw_objective_over_rt": 0.2833680505887264,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 4.095120776730148e-13,
+            "tpd_over_rt": 0.2833680505887344,
+            "trial_dual_over_rt": 0.28336805058872677,
+            "trial_identity_defect_over_rt": 7.605027718682322e-15,
+            "volume_m3_per_mol": 0.002790965174212289
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "near-pure-6",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 6.2234332281603382e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 1.0563092310929736e-10, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0563463455806213e-10,
+            "association_residual": 4.440892098500626e-16,
+            "association_site_pivot_ratio": 8.072276498476942,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 8.881784197001252e-16,
+            "g_over_rt": -163.85718327496474,
+            "gradient_floor_max_si_columns": 1.0563092310929741e-10,
+            "normalization_residual": 1.1102230246251565e-16,
+            "pressure_row": -6.22343322816034e-15,
+            "raw_objective_over_rt": 0.04570897760553105,
+            "reconstruction_l1": 0.0,
+            "summation_estimate_over_rt": 7.277803131157448e-13,
+            "tpd_over_rt": 0.04570897760555681,
+            "trial_dual_over_rt": 0.045708977605532275,
+            "trial_identity_defect_over_rt": 2.453592884421596e-14,
+            "volume_m3_per_mol": 3.513600615686686e-05
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        },
+        {
+          "seed": "ideal-gas",
+          "evidence": "no_resolved_descent",
+          "message": "converged: residual 6.3459200969470852e-16 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 7 iterations, contraction absent, floor 1.0369156655739293e-15, amplification 0",
+          "resolved_descent": false,
+          "quantities": {
+            "association_energy_estimate_over_rt": 1.0398096610851412e-15,
+            "association_residual": 5.551115123125783e-17,
+            "association_site_pivot_ratio": 1.0113796688280576,
+            "association_site_rank": 6.0,
+            "charge_residual": 0.0,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "g_over_rt": -90.27781157928669,
+            "gradient_floor_max_si_columns": 1.0369156655739293e-15,
+            "normalization_residual": -6.638027801042501e-17,
+            "pressure_row": 4.759440072710314e-16,
+            "raw_objective_over_rt": 0.28336805058872727,
+            "reconstruction_l1": 1.388049831324567e-16,
+            "summation_estimate_over_rt": 4.0951207767301464e-13,
+            "tpd_over_rt": 0.2833680505887344,
+            "trial_dual_over_rt": 0.2833680505887267,
+            "trial_identity_defect_over_rt": 7.66053886991358e-15,
+            "volume_m3_per_mol": 0.002790965174212289
+          },
+          "split_coordinates": [],
+          "phase": {
+            "kind": "vapor",
+            "support": [
+              0,
+              1,
+              6
+            ]
+          }
+        }
+      ]
+    },
+    "ion_free_check": null,
+    "density_gate": {
+      "dense_splits": [],
+      "gas_evolution": [],
+      "ambiguous": [],
+      "rounding_trials": [],
+      "other_unresolved": [],
+      "passed": true
+    },
+    "split": false
+  }
+]

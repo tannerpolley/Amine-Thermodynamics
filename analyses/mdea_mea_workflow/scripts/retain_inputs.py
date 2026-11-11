@@ -30,7 +30,8 @@ pdf=next((Path.home()/'Zotero/storage/5467GXJK').glob('*.pdf'))
 source_paths=[ROOT/f['path'] for s in manifest['sources'] for f in s['files']]
 source_paths += [ROOT/'data/reference/MDEA'/n for n in ('Hsieh_2007_MDEA_relative_permittivity.csv','Kuranov_1996_CO2_MDEA_total_pressure.csv')]
 methods=[ROOT/'analyses/mea_parameter_bundle/scripts'/n for n in ('mea_association_volume.py','fit_observations.py','fit_campaign.py','shared_evaluation.py')]
-owner=ROOT/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'
+# Historical preparation/diagnosis uses the frozen outgoing MEA record; #298 binds adopted inputs explicitly.
+owner=ROOT/'analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 assert sha(owner)=='00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
 files=source_paths+methods+[owner]+list((AN/'scripts').glob('*.py'))+list((AN/'inputs').glob('*.json'))
 (AN/'inputs/hashes.json').write_text(json.dumps({str(p.relative_to(ROOT)):sha(p) for p in sorted(set(files)) if p.name!='hashes.json'},indent=2)+'\n')

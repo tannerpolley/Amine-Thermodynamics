@@ -1,0 +1,31 @@
+import sys, os, json, hashlib, zipfile
+from pathlib import Path
+root=Path('/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b')
+sys.path.insert(0,str(root/'analyses/mdea_mea_workflow/scripts'))
+import refit_298 as r
+import refit_capped as owner
+r.s=owner.s
+wheel=Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl')
+assert r.sha(wheel)==owner.a.SHA
+import epcsaft
+with zipfile.ZipFile(wheel) as archive:
+    for name in archive.namelist():
+        if name.startswith(('epcsaft/','epcsaft.libs/')) and not name.endswith('/'):
+            assert archive.read(name)==(Path(epcsaft.__file__).parent.parent/name).read_bytes()
+results=[]
+for label in ('A3','B1'):
+    path=r.AN/f'results/stage2-capped/{label}/endpoint.json'
+    r.s.setup(r.read(path))
+    r.META,r.ITEMS,weights=r.s.j.objective(r.s.params)
+    rows=r.pool(r.predict,list(range(len(r.ITEMS))))
+    old=r.read(r.AN/f'results/stage2-capped/{label}/fit.json')
+    available=all(x['status']=='Available' and x['requested_tolerance_met'] for x in rows)
+    cost=sum(.5*w*x['residual']**2 for w,x in zip(weights,rows,strict=True)) if available else None
+    pe=max(abs(x['value']-v)/max(1.,abs(v)) for x,v in zip(rows,old['predictions'],strict=True)) if available else None
+    re=max(abs(w**.5*x['residual']-v) for w,x,v in zip(weights,rows,old['weighted_residuals'],strict=True)) if available else None
+    result=dict(record=label,wheel_sha256=r.sha(wheel),installed_files_byte_identical=True,endpoint_sha256=r.sha(path),rows=len(rows),available=available,historical_cost=old['final_cost'],replay_cost=cost,max_relative_prediction_difference=pe,max_absolute_weighted_residual_difference=re,relative_cost_difference=abs(cost/old['final_cost']-1) if cost else None)
+    result['passed']=available and pe<=1e-8 and re<=1e-8 and result['relative_cost_difference']<=1e-8
+    results.append(result)
+    Path('/tmp/mdea-298-old-wheel/results.json').write_text(json.dumps(results,indent=2)+'\n')
+    Path(f'/tmp/mdea-298-old-wheel/{label}-rows.json').write_text(json.dumps(rows,indent=2)+'\n')
+    print(result,flush=True)
