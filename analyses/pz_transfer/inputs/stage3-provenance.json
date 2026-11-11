@@ -1,0 +1,32 @@
+{
+  "sources": {
+    "Hamborg2009": {
+      "parent": "D9KXSKLR",
+      "attachment": "334KGLPV",
+      "sha256": "21c8cd7aa8f6547eb8579c90958aac4e8f97f6bc43b2af5cfdf3294cc846ac37"
+    },
+    "Hetzer1968": {
+      "parent": "XFC6H9KP",
+      "attachment": "F3YWQANV",
+      "sha256": "d2c8f1c2b17b0721b79b383eb549cf47137c5b2b7af6688102861bcd7e322739"
+    },
+    "Ermatchkov2003": {
+      "parent": "43ANFJEV",
+      "attachment": "BBMLF2KZ",
+      "sha256": "996173953003642cbb7d6ecf184bb23a5706a2a2d857c4d8e13ae1907d2bd933"
+    }
+  },
+  "input_sha256": {
+    "hamborg-table16.csv": "630e0b9136da3c97fb61b1f442ef151318e60799872d626b75573757f8fd7f55",
+    "ermatchkov-nmr.csv": "681dabe630d33a895c5551c44760a7a67a8b22744f1c1d7badb8b01b5615bdbb"
+  },
+  "read_sections": {
+    "Hamborg2009": "Theory Eqs.6\u201321, Tables9\u201310 and Table16 p.1326",
+    "Hetzer1968": "Methods and results pp.2081\u20132085; Table III; Eqs.1\u20138",
+    "Ermatchkov2003": "Sections 1\u20135, Tables1\u20135 pp.1277\u20131289"
+  },
+  "transcription": "pdftotext -layout; numeric table rows retained in CSV; blanks preserved",
+  "basis": "molality, 1 kg D2O treated as H2O per owner; no isotope correction",
+  "weighting": "design-draft-pz.md operational peak-area covariance; q=.02 and .039",
+  "roles": "Hamborg calibration; Hetzer cross-check; Ermatchkov2003 calibration; no pressure scored"
+}
