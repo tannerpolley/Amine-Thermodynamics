@@ -12,6 +12,8 @@ The owner selected the #255 wide-start primary on 2026-11-11. This change adopts
 | F4 | Normal 153 quantities: largest relative difference 8.379722527822233e-16. Normal solvent endpoint: 307/307 available and within tolerance; largest prediction difference 0, cost 148.51054565397726. Selected and endpoint bytes are identical. |
 | F5 | 4820 overlapping physical quantities agree with #255; largest relative difference 2.1015413489803645e-13, on vle_obs_0193-pco2 (absolute 1.5963451005518436e-08 Pa); limit 1e-8. Row identities and declared availability agree. |
 
+The four formerly excluded states at 25 wt% MEA and loading $10^{-5}$, at 313.15 and 323.15 K and each at pressure ratios 1.05 and 3, are now available with no descent: before, the 313.15 K pair reported “parent plane uncertainty unavailable” and the 323.15 K pair reported a failed bubble-pressure reference solve; the responsible Engine change was not isolated.
+
 These results are numerical verification and calibration-quality comparison, with fixed-parameter predictions against previously accessed observations. They are not new independent physical validation. The 307-row declaration and #260 caloric record were unchanged during qualification. `input-identity.json` compares their byte identities against accepted #255 commit `e9009a8`; `wheel.json` records installed-wheel origin and native/package byte hashes.
 
 ## Every #255 group rule
@@ -36,7 +38,7 @@ Six active bounds are listed in `conditional-uncertainty.json`. MEAH+ segment di
 
 Wheel SHA-256: `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. The existing Engine `tools/build-engine.sh --wheel` built the checked-out merged commit after synchronizing its main to origin/main. No Engine source was edited. Build and numerical commands ran under `agent-heavy`; process pools used its three-core allowance with single-threaded numerical libraries. `logs/wheel-build.log` retains the build.
 
-Identical wheel copies are at `build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl` under this worktree and `/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/`. The latter survives worktree removal. Although the rebuild matches the former #284 wheel hash, qualification checked the rebuilt bytes rather than assuming equality.
+Identical wheel copies are at `build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl` under this worktree and `/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/`. The latter survives worktree removal. The rebuilt wheel has the same SHA-256 as the wheel used by #284: the build reproduced the same bytes. Qualification checked the rebuilt bytes rather than assuming equality.
 
 Qualification commands: `adoption_297.py f1`, `f2`, `f3`, `evidence`, `extras`, `phase-export`, `f5`. The producer contains no fitting call. F2 saves each completed state separately and resumes only missing states. It uses the exact #255 native Full liquid-parent requirement and original census producer; candidate-dependent bubble pressures are recomputed. Census pressures retain the outgoing reference. State-level numerical results are in `incumbent/` and `candidate/`; native census trial diagnostics are retained in each census JSON. The phase export contains 162 fresh candidate rows and the 162 unchanged historical comparison rows, each labeled by its own wheel and parameter hash.
 
@@ -73,7 +75,7 @@ Fixed substitution into the old MDEA-specific parameters gives Xiao pressure dev
 
 ## Retained inputs and consumers
 
-`inventory.json` identifies current candidate calculations, source-only inputs and explicitly historical comparisons by file hash. `historical-display-inputs.json` retains the older comparison calculations without rerunning or relabeling them. `historical-spec/` freezes the outgoing solvent endpoint, reaction declaration and baseline reference for historical studies. All binding-file changes are accounted for in the final changed-file list.
+`inventory.json` identifies current candidate calculations, source-only inputs and explicitly historical comparisons by file hash. `historical-display-inputs.json` retains the older comparison calculations without rerunning or relabeling them. `historical-spec/` freezes the outgoing solvent endpoint, reaction declaration and baseline reference for historical studies. All binding-file changes are accounted for in `changed-files.json`, the authority for final changed-file hashes. Current-output inventory entries must differ from implementation base `e165b828624e7ddd41f3011142936fc524a51455` and lie in the explicit output paths of the #297 figure, table or normal-endpoint commands; `adoption_297.py inventory` applies that rule and records the producing command, rather than classifying any file whose path contains a figure-output directory.
 
 Historical #255 final, #261, #268, #284, #285 and AMP references now point to the immutable outgoing endpoint. The permittivity study also uses the frozen solvent specification and reference. Historical fit-check declarations retain the outgoing endpoint. No historical study was rerun or rescored.
 
