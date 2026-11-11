@@ -187,6 +187,9 @@ if __name__=='__main__':
         scores[name]=pressure_scores(r.read(r.OUT/name/'parameters.json'),name)
         if label in selection:comparisons(r.read(r.OUT/name/'parameters.json'),name,label)
         next(x for x in s.j.d.REACTIONS if x.name=='R2').correlation=original
+        name=label+'-substitution-278'
+        scores[name]=pressure_scores(r.read(r.OUT/name/'parameters.json'),name)
+        comparisons(r.read(r.OUT/name/'parameters.json'),name,label)
         if label in selection:
             name=selection[label]['name']
             scores[name]=pressure_scores(r.read(r.OUT/name/'endpoint.json'),name)

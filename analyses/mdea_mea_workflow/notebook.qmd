@@ -501,22 +501,18 @@ F4 passes on the owner-amended domain: each selected endpoint has 775 required p
 
 ### Pressure comparisons
 
-| Record or endpoint | Source | Rows available | AARD, % | Signed mean relative error, % | Mean log pressure ratio | Underpredictions |
-|---|---|---:|---:|---:|---:|---:|
-| A3-baseline-278 | Xiao | 20/20 | 20.39755091904604 | -20.39755091904604 | -0.23924106295983258 | 20 |
-| A3-baseline-278 | Ermatchkov | 88/88 | 26.20840617567598 | -18.8835160742905 | -0.2731194883934826 | 63 |
-| A3-alternative | Xiao | 20/20 | 20.663633354779623 | -20.663633354779623 | -0.24015679236652296 | 20 |
-| A3-alternative | Ermatchkov | 88/88 | 31.44168292303566 | -26.388872830526825 | -0.3878709895388074 | 74 |
-| A3-endpoint | Xiao | 20/20 | 20.662965112326965 | -20.662965112326965 | -0.2401483261724549 | 20 |
-| A3-endpoint | Ermatchkov | 88/88 | 31.441352418741413 | -26.388294079014557 | -0.38786247676140273 | 74 |
-| B1-baseline-278 | Xiao | 20/20 | 28.27641541015077 | -28.206634239681186 | -0.3539104778378324 | 19 |
-| B1-baseline-278 | Ermatchkov | 88/88 | 19.146012402859704 | 0.8938901651675738 | -0.02163202170516023 | 40 |
-| B1-endpoint | Xiao | 20/20 | 28.191041416685415 | -28.191041416685415 | -0.35300056705847915 | 20 |
-| B1-endpoint | Ermatchkov | 88/88 | 18.27056161553312 | -1.6832773991508851 | -0.046993392339662085 | 43 |
+All three cases use current caloric inputs and the pinned 391dfe5d wheel. “Historical” means the historical shared law and MDEA parameters replayed on that wheel; “fixed substitution” changes only the shared bicarbonate–water interaction and complete R2 law to #255; “refit” uses the frozen selected endpoint. Xiao and Ermatchkov remain outside the fit.
+
+| Record | Source | Rows per case | Historical AARD, % | Fixed-substitution AARD, % | Refit AARD, % |
+|---|---|---:|---:|---:|---:|
+| A3 | Xiao | 20 | 20.397550919 | 52.860207512 | 20.663633355 |
+| A3 | Ermatchkov | 88 | 26.208406176 | 52.471988578 | 31.441682923 |
+| B1 | Xiao | 20 | 28.276415410 | 58.638814923 | 28.191041417 |
+| B1 | Ermatchkov | 88 | 19.146012403 | 42.034976805 | 18.270561616 |
 
 ![B1 recovers both pressure baselines; A3 does not.](results/refit-298/pressure-comparison.png)
 
-Points compare scalar per-source AARDs on the same wheel: 20 Xiao rows and 88 primary Ermatchkov rows. No parameter or measurement uncertainty was estimated. The comparison is conditional model assessment, not new physical validation. Exact plotted values are retained in pressure-comparison.csv.
+Points compare historical, fixed-substitution and selected-refit scalar per-source AARDs on the same wheel: 20 Xiao rows and 88 primary Ermatchkov rows. No parameter or measurement uncertainty was estimated. The comparison is conditional model assessment, not new physical validation. Exact plotted values are retained in pressure-comparison.csv.
 
 The earlier current-shared-value pressure AARDs were A3 Xiao 20.397551%, A3 Ermatchkov 26.208406%, B1 Xiao 28.276415%, and B1 Ermatchkov 19.146012%. Rebased same-wheel values above are the actual comparison baselines. Pressure recovery is source specific, with 1e-6 percentage-point comparison tolerance; the older Ermatchkov 24.2% criterion remains separate.
 
@@ -550,9 +546,90 @@ Outside-fit heat checks: 12 pass, 2 fail, 12 without a historical numerical comp
 
 Outside-fit heat checks: 13 pass, 0 fail, 13 without a historical numerical comparator. Full row identities, availability and values are retained in gates.json.
 
-#### Adopted-R2 domain exclusions
+### Three-case heat comparisons
 
-The owner extended the domain-exclusion rule to the seven corrected-Kamps comparison states below on 2026-11-11. The same exclusions apply to both baselines and every refit start. All remain retained as out-of-domain, unscored comparisons; the 278 fitted observations are unchanged. **F4 phase evidence does not cover 394.94–395.00 K.**
+Scaled RMS values below use the frozen heat residual scales; they are dimensionless. The Carson and fitted Merkley rows remain calibration evidence. Heat values in the outside-fit tables are signed integral enthalpies in kJ/mol CO₂ (negative is exothermic), using the existing Neumann calorics, pressure assignments, capped loading definition and full 30-node search. The half-loading diagnostic retains its original meaning. No uncertainty was estimated.
+
+| Record | Fitted heat group | Rows | Historical scaled RMS | Fixed-substitution scaled RMS | Refit scaled RMS | Refit / historical |
+|---|---|---:|---:|---:|---:|---:|
+| A3 | Carson | 40 | 1.074985386 | 1.241034460 | 1.186075926 | 1.103341442 |
+| A3 | Merkley | 4 | 1.973902729 | 3.089343204 | 2.053175105 | 1.040160224 |
+| B1 | Carson | 40 | 0.976619829 | 1.111056735 | 1.105944013 | 1.132420191 |
+| B1 | Merkley | 4 | 1.992162010 | 3.162675978 | 2.015582148 | 1.011756141 |
+
+Both refits still fail the Carson limit of 1.10 times the historical RMS. The added substitution assessments do not change F1–F5, selection or endpoint hashes.
+
+#### A3 outside-fit heats
+
+| Group | Source row | Temperature, K | MDEA, wt% | Observed | Historical | Fixed substitution | Refit |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Merkley-half-loading | — | 288.71 | 20 | -47.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 20 | -47.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 288.71 | 40 | -49.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 40 | -49.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 288.71 | 60 | -50.800000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 60 | -50.800000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 333.15 | 20 | -53.300000 | -57.817198 | -58.446554 | -57.551526 |
+| Merkley-half-loading | — | 333.15 | 40 | -55.400000 | -66.953455 | -69.087135 | -67.230919 |
+| Merkley-half-loading | — | 333.15 | 60 | -56.800000 | -78.010068 | -81.736935 | -78.932567 |
+| Merkley-outside | — | 333.15 | 60 | -56.800000 | -76.268595 | -82.807447 | -76.567791 |
+| Merkley-half-loading | — | 388.71 | 20 | -59.200000 | -67.289475 | -69.900697 | -67.592150 |
+| Merkley-half-loading | — | 388.71 | 40 | -62.000000 | -73.833565 | -80.762448 | -75.415201 |
+| Merkley-half-loading | — | 388.71 | 60 | -63.300000 | -82.344969 | -94.396098 | -85.682725 |
+| Merkley-outside | — | 388.71 | 60 | -63.300000 | -74.141516 | -89.705250 | -77.732589 |
+| Merkley-half-loading | — | 422.04 | 20 | -63.100000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 20 | -63.100000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 422.04 | 40 | -65.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 40 | -65.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 422.04 | 60 | -67.700000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 60 | -67.700000 | outside domain | outside domain | outside domain |
+| Zheng | 1 | 323.15 | 30.0 | -53.800000 | -57.085917 | -59.165704 | -56.727511 |
+| Zheng | 2 | 323.15 | 30.0 | -53.450000 | -56.251890 | -58.326763 | -55.887409 |
+| Zheng | 3 | 323.15 | 50.0 | -55.960000 | -69.054093 | -72.884221 | -69.117316 |
+| Zheng | 4 | 323.15 | 50.0 | -52.210000 | -66.908309 | -71.614517 | -66.710191 |
+| Zheng | 5 | 323.15 | 50.0 | -48.680000 | -61.803386 | -66.016506 | -61.594171 |
+| Zheng | 6 | 323.15 | 50.0 | -47.570000 | -58.241473 | -62.010976 | -58.091294 |
+
+Available outside-fit heats: historical 14/26, fixed substitution 14/26, refit 14/26. Each column retains the same 26 row identities; 288.71 K rows remain outside the declared domain. Native refusals and full messages are retained in each case’s comparisons.json.
+
+#### B1 outside-fit heats
+
+| Group | Source row | Temperature, K | MDEA, wt% | Observed | Historical | Fixed substitution | Refit |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Merkley-half-loading | — | 288.71 | 20 | -47.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 20 | -47.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 288.71 | 40 | -49.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 40 | -49.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 288.71 | 60 | -50.800000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 288.71 | 60 | -50.800000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 333.15 | 20 | -53.300000 | -57.208494 | -57.856333 | -56.882295 |
+| Merkley-half-loading | — | 333.15 | 40 | -55.400000 | -66.030627 | -68.225366 | -66.211889 |
+| Merkley-half-loading | — | 333.15 | 60 | -56.800000 | -76.913111 | -80.690116 | -77.536120 |
+| Merkley-outside | — | 333.15 | 60 | -56.800000 | refused | refused | refused |
+| Merkley-half-loading | — | 388.71 | 20 | -59.200000 | -66.220141 | -68.941131 | -66.111096 |
+| Merkley-half-loading | — | 388.71 | 40 | -62.000000 | -69.641790 | -77.642746 | -69.877407 |
+| Merkley-half-loading | — | 388.71 | 60 | -63.300000 | -70.005790 | -86.759093 | -70.480750 |
+| Merkley-outside | — | 388.71 | 60 | -63.300000 | -64.128582 | -82.468989 | -64.490952 |
+| Merkley-half-loading | — | 422.04 | 20 | -63.100000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 20 | -63.100000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 422.04 | 40 | -65.300000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 40 | -65.300000 | outside domain | outside domain | outside domain |
+| Merkley-half-loading | — | 422.04 | 60 | -67.700000 | outside domain | outside domain | outside domain |
+| Merkley-outside | — | 422.04 | 60 | -67.700000 | outside domain | outside domain | outside domain |
+| Zheng | 1 | 323.15 | 30.0 | -53.800000 | -58.271220 | -60.413136 | -58.254683 |
+| Zheng | 2 | 323.15 | 30.0 | -53.450000 | -57.475220 | -59.616927 | -57.462589 |
+| Zheng | 3 | 323.15 | 50.0 | -55.960000 | -70.757644 | -74.251606 | -71.214352 |
+| Zheng | 4 | 323.15 | 50.0 | -52.210000 | -69.639532 | -73.999857 | -70.060827 |
+| Zheng | 5 | 323.15 | 50.0 | -48.680000 | -64.521461 | -68.218430 | -64.918633 |
+| Zheng | 6 | 323.15 | 50.0 | -47.570000 | -60.720653 | -63.980620 | -61.106770 |
+
+Available outside-fit heats: historical 13/26, fixed substitution 13/26, refit 13/26. Each column retains the same 26 row identities; 288.71 K rows remain outside the declared domain. Native refusals and full messages are retained in each case’s comparisons.json.
+
+The Wangler caloric sensitivity and alternative-pressure/saturation comparisons are also retained for each substitution under wangler-fitted-heat-cp.json, wangler-comparisons.json and saturation-and-alternative-pressure.json. B1 at 333.15 K, 60 wt% and 1.121 MPa remains refused on the original capped-heat search; no grid restriction or finite substitute is introduced.
+
+### Adopted-R2 domain exclusions
+
+The owner authorized an **F4 phase-gate exclusion** for the seven corrected-Kamps states below on 2026-11-11, applied consistently to the baseline and refit phase inventories. This exclusion does not remove historical-law pressure scores. Historical-law baseline comparisons score all 28 corrected-Kamps rows: A3 AARD 18.308014532% and B1 AARD 25.646534684%. Fixed substitutions and selected refits using the adopted R2 law have 21/28 available rows and seven domain errors, with no full-set aggregate. These unequal-coverage results are not a matched corrected-Kamps comparison; no subset AARD is presented here. The 278 fitted observations are unchanged. **F4 phase evidence does not cover 394.94–395.00 K.**
 
 | Source row | Temperature, K | Source locator |
 |---|---:|---|
