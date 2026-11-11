@@ -5,7 +5,7 @@ execute:
   enabled: false
 ---
 
-The PZ–water binary calibration converges reproducibly to two identifiable, interior interaction coordinates, but **does not reproduce Hartono vapor/liquid equilibrium or the separate aqueous-density observations on their stated scales**. All 23 calibration states pass the declared fluid-phase trials. The 393.15 K, 0.1 MPa Concepción comparison is a metastable-liquid density on this model. The [stage-2 result](#stage-2-two-start-calibration-and-independent-aqueous-comparisons) returns these misfits to the owner; the endpoint is not adopted for later stages.
+The PZ–water binary calibration converges reproducibly to two identifiable, interior interaction coordinates, but **does not reproduce Hartono vapor/liquid equilibrium or the separate aqueous-density observations on their stated scales**. All 23 calibration states pass the declared fluid-phase trials. The 393.15 K, 0.1 MPa Concepción comparison is a metastable-liquid density on this model. The owner decision of 11 November 2026 accepts the [stage-2 endpoint](#stage-2-two-start-calibration-and-independent-aqueous-comparisons) as the conditional working PZ–water set for stage 3, carrying these misfits and phase limitations. It is not a validated set; stage 3 is not started in this delivery.
 
 ## Pure-PZ energy refit
 
@@ -171,6 +171,24 @@ At the same fitted interaction values, replacing the stage-1b pure energy set by
 
 ### Decision and evidence limits
 
-The result is **conditional calibration with numerical verification and separate comparisons to physical measurements**. It does not establish a transferable or physically validated PZ parameter bundle. Hartono titration accuracy, full input covariance, Hilliard source uncertainty, Friis uncertainty interpretation, pure molten-PZ density and solid stability remain unresolved. No Engine, shared species, data roles or extra coordinates were changed. No parameters were adopted or promoted for manuscript use.
+The result is **conditional calibration with numerical verification and separate comparisons to physical measurements**. It does not establish a transferable or physically validated PZ parameter bundle. Hartono titration accuracy, full input covariance, Hilliard source uncertainty, Friis uncertainty interpretation, pure molten-PZ density and solid stability remain unresolved. No Engine, shared species, data roles or extra coordinates were changed. The owner subsequently selected the endpoint as a conditional working set, as recorded below. No physical-validation or manuscript-use status follows from that selection.
 
-The original zero-start diagnosis received independent cse:review **Supported** at `560c464` against `7b8cf21`. Independent cse:review returned **Supported for the conditional numerical calibration and negative property comparisons**, with no required defects, at scientific commit `f196746bd0cbe6a05856396ff7fb0b43778b5d94` against `7b8cf21`. The reviewer reproduced the complete calibration, endpoint files, calculated CSVs, derivatives, phase records, summaries and tables exactly, and checked the source identities, rendered notebook and figure. This verdict does not approve endpoint adoption, later reactive stages or manuscript use. The new evidence returns to the owner for a decision on the substantial calibration/density misfit and the metastable Concepción state before further model changes or later-stage adoption. The two coordinates are identifiable and interior to their bounds, and all calibration fluid trials pass; those facts do not remove the property disagreement. No new percentage acceptance criterion is proposed.
+The original zero-start diagnosis received independent cse:review **Supported** at `560c464` against `7b8cf21`. Independent cse:review returned **Supported for the conditional numerical calibration and negative property comparisons**, with no required defects, at scientific commit `f196746bd0cbe6a05856396ff7fb0b43778b5d94` against `7b8cf21`. The reviewer reproduced the complete calibration, endpoint files, calculated CSVs, derivatives, phase records, summaries and tables exactly, and checked the source identities, rendered notebook and figure. This verdict does not approve endpoint adoption, later reactive stages or manuscript use. The owner continuation decision is recorded below; the independent review establishes support for the reported evidence, while the owner supplies the authority for conditional use. The two coordinates are identifiable and interior to their bounds, and all calibration fluid trials pass; those facts do not remove the property disagreement. No new percentage acceptance criterion is proposed.
+
+
+### Owner disposition — 11 November 2026
+
+**Continue to stage 3 with limits.** The owner selects the stage-2 endpoint as the **working PZ–water set, not a validated set**:
+
+$$k(T)=-0.1976454 + (1.125015\times10^{-3}\;\mathrm{K^{-1}})(T-353.15\;\mathrm K).$$
+
+The full-precision numerical owner remains [binary-endpoint-0.10.json](results/binary-endpoint-0.10.json), obtained from the authorized first start and independently reproduced at scientific commit `f196746`. The rounded values above record the owner's stated working set; the existing full-precision endpoint is the input for later numerical work.
+
+This conditional use carries the following demonstrated limits:
+
+- Hartono pressure and vapor-PZ residual RMS values are **7.78 and 12.75 operational source scales**.
+- Hilliard PZ partial pressures have **78% mean absolute relative error**.
+- Aqueous densities are low: **Concepción by 7–10 kg/m³; Friis by up to 65 kg/m³**.
+- The **Concepción 393.15 K / 0.1 MPa** state is a **metastable liquid on this model**, with predicted bubble pressure approximately **193 kPa**.
+
+The owner permits stage 3 to use this conditional endpoint with these limits. This decision does not relabel the calibration as physical validation, remove the uncertainty and phase limits above, release additional parameters or promote results for manuscript use. **This delivery ends at stage 2.** The owner will merge draft PR #313 and dispatch stage 3 separately; no stage-3 calculation or implementation is authorized within this task.
