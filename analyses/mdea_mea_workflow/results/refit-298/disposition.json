@@ -1,7 +1,8 @@
 {
   "F1": {
-    "status": "failed",
-    "meaning": "Failure is numerical qualification, not a physical transfer penalty."
+    "status": "failed historical-wheel confirmation",
+    "meaning": "Historical-wheel confirmation failed; no fitting authorized after this result. No physical transfer penalty is established.",
+    "evidence": "F1.json: historical_wheel_confirmation"
   },
   "F2": {
     "status": "not evaluated",
@@ -17,13 +18,13 @@
   },
   "F5": {
     "status": "no admissible endpoint obtained",
-    "reason": "No fits were attempted after F1 failed; no physical transfer penalty is assigned"
+    "reason": "No fits attempted: old wheel also fails to reproduce retained costs. No physical transfer penalty assigned."
   },
   "declared_fits": [
     {
       "representation": "A3",
       "start": "historical endpoint",
-      "status": "not started: F1 failed",
+      "status": "not started: historical-wheel confirmation failed",
       "iterations": null,
       "wall_time_seconds": null,
       "cost": null,
@@ -32,7 +33,7 @@
     {
       "representation": "A3",
       "start": "amended A3",
-      "status": "not started: F1 failed",
+      "status": "not started: historical-wheel confirmation failed",
       "iterations": null,
       "wall_time_seconds": null,
       "cost": null,
@@ -41,7 +42,7 @@
     {
       "representation": "B1",
       "start": "historical endpoint",
-      "status": "not started: F1 failed",
+      "status": "not started: historical-wheel confirmation failed",
       "iterations": null,
       "wall_time_seconds": null,
       "cost": null,
@@ -50,7 +51,7 @@
     {
       "representation": "B1",
       "start": "amended B3",
-      "status": "not started: F1 failed",
+      "status": "not started: historical-wheel confirmation failed",
       "iterations": null,
       "wall_time_seconds": null,
       "cost": null,
