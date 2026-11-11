@@ -367,5 +367,59 @@ def evidence():
     shutil.copyfile(RECORDS['candidate'], package / 'reported-parameters.json')
 
 
+def inventory():
+    """Refresh hashes; current outputs require an explicit #297 producer and a change from BASE."""
+    bundle = str(r.B.relative_to(r.ROOT))
+    owners = {}
+    for stem in ('heat-capacity', 'heat-of-absorption', 'loaded-density-errors', 'matin-pool', 'pressure',
+                 'pressure-parity', 'pressure-residuals', 'speciation', 'species-parity', 'species-residuals'):
+        for suffix in ('pdf', 'png', 'svg'):
+            owners[f'{bundle}/figures/a7_regression_overview/output/{stem}.{suffix}'] = 'render_regression_overview.py'
+    for name in ('density-statistics.csv', 'pressure.csv', 'speciation.csv', 'statistics.csv', 'provenance.json'):
+        owners[f'{bundle}/figures/a7_regression_overview/output/{name}'] = 'render_regression_overview.py'
+    owners[f'{bundle}/figures/a7_regression_overview/output/parameter-table-inputs.json'] = 'render_parameter_tables.py'
+    for directory, names in [('figures/speciation/output', ('speciation-model.csv', 'speciation-observations.csv',
+                              'speciation-model-grid.csv', 'speciation-display-observations.csv')),
+                             ('figures/pressure/output', ('pressure-model.csv', 'pressure-observations.csv')),
+                             ('results', ('figure-calculation-failures.csv', 'current-best-fit-residuals.csv',
+                                          'current-best-fit-statistics.csv', 'figure-calculation-record.json'))]:
+        owners.update({f'{bundle}/{directory}/{name}': 'generate_figure_data.py' for name in names})
+    owners.update({f'analyses/solvent_specification_mea/results/{name}': 'analyses/solvent_specification_mea/run.py'
+                   for name in ('continuation.json', 'endpoint-checks.json', 'predictions.json', 'runtime.json')})
+    changed = set(subprocess.check_output(['git', 'diff', '--name-only', BASE, '--'], cwd=r.ROOT, text=True).splitlines())
+    untracked = set(subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard'], cwd=r.ROOT, text=True).splitlines())
+    excluded = {'inventory.json', 'changed-files.json'}
+    entries = {}
+    for entry in r.read(OUT/'inventory.json'):
+        path = r.ROOT/entry['path']
+        if not path.is_file() or path.name in excluded:
+            continue
+        if entry['evidence_class'] == 'current adopted record output':
+            if entry['path'] not in changed or entry['path'] not in owners:
+                continue
+            entry.update(producer_command=owners[entry['path']], changed_from_base=BASE)
+        entries[entry['path']] = entry
+    for name in changed | untracked:
+        path = r.ROOT/name
+        if path.is_file() and path.is_relative_to(OUT) and path.name not in excluded and name not in entries:
+            entries[name] = dict(path=name, evidence_class='adoption evidence or declaration', wheel_sha256=None,
+                                 parameter_sha256=None)
+    for name, entry in entries.items():
+        entry['sha256'] = sha(r.ROOT/name)
+    (OUT/'inventory.json').write_text(json.dumps(sorted(entries.values(), key=lambda x:x['path']), indent=1)+'\n')
+    previous = {x['path']:x for x in r.read(OUT/'changed-files.json')}
+    final = []
+    for name in sorted(changed | untracked):
+        path = r.ROOT/name
+        if path.is_file() and name != str((OUT/'changed-files.json').relative_to(r.ROOT)):
+            entry = previous.get(name, dict(path=name, category='retained adoption evidence' if path.is_relative_to(OUT)
+                                             else 'executable consumer or notebook'))
+            entry['sha256'] = sha(path)
+            final.append(entry)
+    (OUT/'changed-files.json').write_text(json.dumps(final, indent=1)+'\n')
+    print('inventory entries', len(entries), 'current adopted record outputs',
+          sum(x['evidence_class']=='current adopted record output' for x in entries.values()), flush=True)
+
+
 if __name__ == '__main__':
-    {'f1': f1, 'f2': f2, 'f3': f3, 'evidence': evidence, 'uncertainty': uncertainty, 'shared': shared_values, 'extras': extras, 'f5': f5, 'phase-export': phase_export}[sys.argv[1]]()
+    {'f1': f1, 'f2': f2, 'f3': f3, 'evidence': evidence, 'uncertainty': uncertainty, 'shared': shared_values, 'extras': extras, 'f5': f5, 'phase-export': phase_export, 'inventory': inventory}[sys.argv[1]]()
