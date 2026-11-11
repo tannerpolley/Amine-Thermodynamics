@@ -1,0 +1,8 @@
+# Execution staging duplicates the retained paper-evidence numbers; keep executed producer snapshots.
+/producers/candidate/*
+!/producers/candidate/producers/
+/paper-evidence/producers/
+# Regenerable solve caches, following the #255 evidence precedent.
+/paper-evidence/curve-runs/
+/paper-evidence/selected-assessment/evaluation/
+!/logs/*.log

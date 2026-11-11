@@ -10,8 +10,15 @@ resources:
   - ../results/engine-3e83e19c-adoption/comparison.json
   - ../results/engine-3e83e19c-adoption/checks.json
 ---
+## Current adoption, 11 November 2026
 
-Historical transfers: 18–19 October 2026 (F1 checks) and 23 October 2026 ([#203](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203)). The 23 October comparison used the frozen [20 October A7 record](../results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), `e234e860…`, MEA association volume 0.036287, and its original A6 comparison. Its [transfer account](../results/engine-3e83e19c-adoption/README.md) preserves those identities. The current #215 record, `00e77608…` at association volume 0.036305439, has separate [one-wheel evidence](../results/engine-3e83e19c-paper-evidence/README.md).
+[#297](https://github.com/tannerpolley/Amine-Thermodynamics/issues/297) adopts the #255 wide-start primary (`f8f64820…`) on Engine `391dfe5d…`, wheel `0962e21d…`. The [adoption account](../results/adoption-297/README.md) owns the fresh replays, finite stability searches, group rules, conditional information and current numerical package. Observation cost is 148.510545654; the same-wheel outgoing reference costs 148.883260440. Normal default replays cover 153 quantities and all 307 declared observations. This is numerical verification and calibration-quality comparison, not new independent physical validation. MDEA #298, manuscript #259 and delivered review remain separate.
+
+The chronology below retains earlier records and their original evidence. Earlier references to an adopted or reported record describe that study's record; they do not relabel it as the #297 candidate. Generated current tables are identified by their adopted-package inputs.
+
+
+
+Historical transfers: 18–19 October 2026 (F1 checks) and 23 October 2026 ([#203](https://github.com/tannerpolley/Amine-Thermodynamics/issues/203)). The 23 October comparison used the frozen [20 October A7 record](../results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), `e234e860…`, MEA association volume 0.036287, and its original A6 comparison. Its [transfer account](../results/engine-3e83e19c-adoption/README.md) preserves those identities. The historical #215 record, `00e77608…` at association volume 0.036305439, has separate [one-wheel evidence](../results/engine-3e83e19c-paper-evidence/README.md).
 
 # Question
 
@@ -19,7 +26,7 @@ Did each Engine adoption preserve the numbers it was checked against, and which 
 
 # Result
 
-All three transfers reproduced their compared quantities. The first two checked 152 F1 quantities only. The third, to Engine 3e83e19c, checked every then-current result value reported by the manuscript and changed none of them: all 4,595 compared values are bitwise equal, and the 146 phase-family states of A7 and A6 keep identical classifications and trial outcomes. The only changed values are two seeded split attempts for the A6 comparison fit in supplement Table S10; issue #203 accepted them as disclosed numerical changes. The [current #215 default-path replay](../joint-recalibration/index.qmd#numerical-reproduction) is a separate check.
+All three transfers reproduced their compared quantities. The first two checked 152 F1 quantities only. The third, to Engine 3e83e19c, checked every then-current result value reported by the manuscript and changed none of them: all 4,595 compared values are bitwise equal, and the 146 phase-family states of A7 and A6 keep identical classifications and trial outcomes. The only changed values are two seeded split attempts for the A6 comparison fit in supplement Table S10; issue #203 accepted them as disclosed numerical changes. The [current #297 default-path replay](../joint-recalibration/index.qmd#numerical-reproduction) is a separate check.
 
 # Basis and method
 

@@ -22,9 +22,9 @@ from dielectric_volume import composition, dump, scaled, specification, verify_w
 from MEA.solvent_specification import jsonable
 import phase_diagnosis_255 as phase
 f = phase.f
-BASE = json.loads((B / 'results/selected-current-best-parameters.json').read_text())
+BASE = json.loads((B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_text())
 STATES = json.loads(gzip.decompress((phase.OUT / 'final/phase-results.json.gz').read_bytes()))
-SPEC = ROOT / 'analyses/solvent_specification_mea/MEA.toml'
+SPEC = ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/MEA.toml'
 
 
 def diagnostic(spec, temperature):
@@ -145,7 +145,7 @@ def main():
     started = time.monotonic()
     wheel = next((ROOT / 'build/engine-wheels').rglob('*.whl'))
     verify_wheel(wheel, f.s.ENGINE_WHEEL_SHA256)
-    assert hashlib.sha256((B / 'results/selected-current-best-parameters.json').read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+    assert hashlib.sha256((B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
     model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(BASE))
     source_comparison(model)
     cases = [('baseline', 1., {})]

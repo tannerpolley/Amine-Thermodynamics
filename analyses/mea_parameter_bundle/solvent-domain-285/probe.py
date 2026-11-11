@@ -8,7 +8,7 @@ from epcsaft import equilibrium as e
 
 s.verify_wheel()
 base=ROOT/'analyses/mea_parameter_bundle'
-paths={'final':base/'results/selected-current-best-parameters.json','candidate':base/'results/stable-refit-255/evidence/candidate-parameters.json'}
+paths={'final':base/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json','candidate':base/'results/stable-refit-255/evidence/candidate-parameters.json'}
 template=s.load_state_packet()['observations'][0]['request']
 ids=s.COMPONENT_IDS
 feed=e.Amounts(dict(zip(ids,[.358,1,7.929776437398854,0,0,0,0,0,0])))

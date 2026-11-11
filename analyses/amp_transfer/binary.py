@@ -8,7 +8,7 @@ from pinned_engine import SHA256
 
 AN, t0 = Path(__file__).resolve().parent, time.perf_counter()
 AMP, H, C, W = 'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion', 'water'
-MEA = AN.parent / 'mea_parameter_bundle/results/selected-current-best-parameters.json'
+MEA = AN.parent / 'mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 assert hashlib.sha256(MEA.read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
 log = dict(wheel_sha256=SHA256, python=sys.version)
 def save(name, doc):

@@ -10,19 +10,19 @@ import heat_evidence_170 as he
 import shared_evaluation as s
 
 ROOT = Path(__file__).resolve().parents[3]
-BASE = ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3'
-OUT = ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-paper-evidence/default-replay'
+BASE = ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/paper-evidence'
+OUT = ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/paper-evidence/default-replay'
 
 
 def main():
-    endpoint = BASE / 'run/fit/usable-budget-endpoint.json'
+    endpoint = ROOT / 'analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json'
     assert s.PARAMETERS.read_bytes() == endpoint.read_bytes()
-    assert s.sha256(endpoint) == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+    assert s.sha256(endpoint) == 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
     s.verify_wheel()
     spec = fo.load(BASE / 'spec.json')
     mapping = s.parameter_mapping()
     inputs = [s.PARAMETERS, endpoint, BASE / 'spec.json', Path(__file__),
-              ROOT / spec['engine']['wheel_path']]
+              s.installed_wheel()]
     inputs += [ROOT / spec[k] for k in ('packet_path', 'anchors_path', 'heat_rows_path')]
     inputs += [ROOT / d['table'] for d in spec['observations']]
     inputs += [ROOT / v['path'] for v in spec['inputs']]

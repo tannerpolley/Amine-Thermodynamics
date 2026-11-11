@@ -19,8 +19,15 @@ resources:
   - ../results/joint-recalibration-170/amendment-7/gas-root/run-2/gas-root.json
   - ../results/joint-recalibration-170/amendment-7/step-ledger.json
 ---
+## Current adoption, 11 November 2026
 
-**Current record: adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215), SHA-256 `00e77608…`, MEA association volume 0.036305439.** The [one-wheel package](../results/engine-3e83e19c-paper-evidence/README.md) owns its assessments and replay evidence. The 20 October adoption and manuscript-use approval under #196 concern the frozen record `e234e860…` at association volume 0.036287; the dated sections below preserve that history.
+[#297](https://github.com/tannerpolley/Amine-Thermodynamics/issues/297) adopts the #255 wide-start primary (`f8f64820…`) on Engine `391dfe5d…`, wheel `0962e21d…`. The [adoption account](../results/adoption-297/README.md) owns the fresh replays, finite stability searches, group rules, conditional information and current numerical package. Observation cost is 148.510545654; the same-wheel outgoing reference costs 148.883260440. Normal default replays cover 153 quantities and all 307 declared observations. This is numerical verification and calibration-quality comparison, not new independent physical validation. MDEA #298, manuscript #259 and delivered review remain separate.
+
+The chronology below retains earlier records and their original evidence. Earlier references to an adopted or reported record describe that study's record; they do not relabel it as the #297 candidate. Generated current tables are identified by their adopted-package inputs.
+
+
+
+**Historical record: adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215), SHA-256 `00e77608…`, MEA association volume 0.036305439.** The [one-wheel package](../results/engine-3e83e19c-paper-evidence/README.md) owns its assessments and replay evidence. The 20 October adoption and manuscript-use approval under #196 concern the frozen record `e234e860…` at association volume 0.036287; the dated sections below preserve that history.
 
 # Question
 
@@ -28,7 +35,7 @@ Could restricting the joint fit remove the resolved phase descents while retaini
 
 # Result
 
-The record adopted under #215 has common pressure/species average absolute relative deviations (AARD) of 11.86/7.10% and fitted Vinjarapu heat root-mean-square error (RMSE) of 1.84 kJ/mol CO₂. It passes the [six computed limits and density rule](#density-free-213): 44/47 fitted loaded densities meet their $2s$ limits, and the three misses are exactly the permitted set. The [rebuilt phase search](#phase-extension-201) resolves no Gibbs-energy descent in 162 states for this record, against 54 descent states for the refitted A6 comparison. Each fit completes all 1458 trials. The finite search does not establish global stability. The [overview](../notebook.qmd) owns the current parameter and property tables; the 20 October trade-off and its source-uncertainty limits are retained below as history.
+The historical record adopted under #215 has common pressure/species average absolute relative deviations (AARD) of 11.86/7.10% and fitted Vinjarapu heat root-mean-square error (RMSE) of 1.84 kJ/mol CO₂. It passes the [six computed limits and density rule](#density-free-213): 44/47 fitted loaded densities meet their $2s$ limits, and the three misses are exactly the permitted set. The [rebuilt phase search](#phase-extension-201) resolves no Gibbs-energy descent in 162 states for this record, against 54 descent states for the refitted A6 comparison. Each fit completes all 1458 trials. The finite search does not establish global stability. The [overview](../notebook.qmd) owns the current parameter and property tables; the 20 October trade-off and its source-uncertainty limits are retained below as history.
 
 # Basis and method
 
@@ -49,7 +56,7 @@ Both fits compare pure-MEA saturation pressure and liquid molar density with Bay
 
 SciPy reports success after 25 evaluations. The native fit is usable and converged by function tolerance after three iterations, with all 42 final observations available and finite. All 722 retained saturation solves pass the $10^{-10}$ equation-residual limit; the largest absolute residual is $5.8176\times10^{-14}$. The [retained comparison](../results/engine-3e83e19c-association-volume/README.md) provides both objectives at each optimum, the full [31-temperature table](../results/engine-3e83e19c-association-volume/reporting-grid.csv), percentage average absolute deviations over both requested intervals, the exact fitting declaration and provenance. For the printed volume `0.036287`, pressure/density average absolute deviations from Baygi's model are 0.525156%/0.00253596% over 293.15–393.15 K and 0.793280%/0.00897262% over 303.15–443.15 K. A scalar table suffices for the rounding decision; the retained grid supports inspection of its temperature dependence.
 
-This is numerical reproduction against deterministic model targets, not physical validation. It applies only to pure MEA and isothermal properties; the 293.15–303.15 K portion extends below Baygi's pure-parameter fitting interval (303.15–443.15 K, §3.1, p. 792). Neither the difference between optima nor the native covariance is physical parameter uncertainty. The #210 delivered review returned Supported; the owner authorized its fixed conversion value. The #215 notebook and its current evidence still require independent delivered review and investigator promotion for manuscript use.
+This is numerical reproduction against deterministic model targets, not physical validation. It applies only to pure MEA and isothermal properties; the 293.15–303.15 K portion extends below Baygi's pure-parameter fitting interval (303.15–443.15 K, §3.1, p. 792). Neither the difference between optima nor the native covariance is physical parameter uncertainty. The #210 delivered review returned Supported; the owner authorized its fixed conversion value. The historical #215 notebook evidence still requires independent delivered review and investigator promotion for manuscript use.
 
 **Dependent refits at the fixed volume ([#212](https://github.com/tannerpolley/Amine-Thermodynamics/issues/212)): every declared calculation passes its checks; the second restricted endpoint is now the record adopted under #215.** The [refit account](../results/engine-3e83e19c-refit-chain/README.md), [numerical summary](../results/engine-3e83e19c-refit-chain/summary.json) and [validation](../results/engine-3e83e19c-refit-chain/validation.json) bind the same Engine wheel, SHA-256 `0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804`. The stage-2 neutral MEA–water refit passes both starts, selecting $k_{\mathrm{MEA,H_2O}}=-0.08439986221195522$ with serialized cost 91.80963081696862. The rebuilt stage-5 reduction passes all 14 rows, rank two, distinct positive admissible branches and native replay within $10^{-10}$. The larger-volume branch supplied to every joint start is 0.7309865858310542 L/mol and 1019.0802597119892 K.
 
@@ -86,7 +93,7 @@ The fixed Arcis addition-enthalpy errors (predicted minus observed) are positive
 
 The existing [conditional-uncertainty calculation](../results/engine-3e83e19c-refit-chain/displays/conditional/conditional-uncertainty.json) passes the asserted active set `[1,3,5,7,8,11]` and free rank ten, retaining 307 residuals and 297 degrees of freedom. Its standard errors and correlations are conditional on weights, fixed inputs, active bounds and local linearization; they establish neither measurement-error uncertainty, parameter uniqueness nor prediction intervals.
 
-These are numerical-verification results, calibration statistics and fixed-model comparisons for the declared observations and weights. The [current paper-evidence package](../results/engine-3e83e19c-paper-evidence/README.md) now retains the model curves and assessments. The [density-free comparison below](#density-free-213) owns the six cost and property limits, and the [162-state search](#phase-extension-201) records finite phase evidence for both refitted endpoints. The selected file was replaced under #215; the historical A7 results below retain their own identities. Independent delivered review and investigator promotion for manuscript use remain open.
+These are numerical-verification results, calibration statistics and fixed-model comparisons for the declared observations and weights. The [historical #215 paper-evidence package](../results/engine-3e83e19c-paper-evidence/README.md) retains the model curves and assessments. The [density-free comparison below](#density-free-213) owns the six cost and property limits, and the [162-state search](#phase-extension-201) records finite phase evidence for both refitted endpoints. The selected file was replaced under #215; the historical A7 results below retain their own identities. Independent delivered review and investigator promotion for manuscript use remain open.
 
 ## Density-free conditional reference on Engine 3e83e19c {#density-free-213}
 
@@ -105,7 +112,7 @@ The four dimensionless fitted interactions are carbamate–water −0.0049912067
 | Arcis heat RMSE, kJ/mol CO₂ | 9.070718549141134 | 8.115640714619083 | 0.9550778345220508 |
 | Cai cost | 95.85788151477473 | 91.87458520309771 | 3.983296311677023 |
 
-[The unrounded limits](../results/engine-3e83e19c-density-free/limits.json) retain definitions, hashed inputs and margins. The limits are respectively 1.10 times reference cost, reference pressure/species deviations plus two percentage points, reference heat RMSEs plus 1 kJ/mol CO₂, and 1.05 times the constant-interaction Cai cost. The adopted-record reduction selects the exact 149 base IDs from #212's 307-row replay before scoring; its Arcis and Cai quantities come from #212's displays, imported into the [current package](../results/engine-3e83e19c-paper-evidence/refit-display-summary.json). A scalar table answers this acceptance question; plotting does not clarify the comparisons.
+[The unrounded limits](../results/engine-3e83e19c-density-free/limits.json) retain definitions, hashed inputs and margins. The limits are respectively 1.10 times reference cost, reference pressure/species deviations plus two percentage points, reference heat RMSEs plus 1 kJ/mol CO₂, and 1.05 times the constant-interaction Cai cost. The adopted-record reduction selects the exact 149 base IDs from #212's 307-row replay before scoring; its Arcis and Cai quantities come from #212's displays, imported into the [historical #215 package](../results/engine-3e83e19c-paper-evidence/refit-display-summary.json). A scalar table answers this acceptance question; plotting does not clarify the comparisons.
 
 This is a comparison reference calibrated to the same 149 quantities without density data, conditional on the candidate's other parameters, rather than an independent model. These calibration statistics and numerical checks establish no physical validation, prediction uncertainty or process-use qualification. The [#215 adoption](../results/engine-3e83e19c-paper-evidence/adoption.json) binds this exact endpoint and these limits. Its remaining acceptance quantities are:
 
@@ -119,31 +126,31 @@ The [reported score](../results/engine-3e83e19c-paper-evidence/reported-score.js
 
 ## Joint fit objective groups
 
-The table preserves all 307 objective rows and their separate costs from the [fit summary](../results/engine-3e83e19c-paper-evidence/fit-summary.json). The common-149 pressure, species and heat subgroups are shown separately beneath their combined group and must not be added a second time. The added seven restored species and six Jakobsen amount ratios preserve their declared observation operators. Costs depend on the declared scales and weights; density scales are not uniformly measured uncertainties. The [historical F1–F6 comparison](../results/heat-final-170/fit-comparison.csv) remains predecessor evidence.
+The table preserves all 307 objective rows and their separate costs from the [#297 fit summary](../results/adoption-297/paper-evidence/fit-summary.json). The common-149 pressure, species and heat subgroups are shown separately beneath their combined group and must not be added a second time. The added seven restored species and six Jakobsen amount ratios preserve their declared observation operators. Costs depend on the declared scales and weights; density scales are not uniformly measured uncertainties. The [historical F1–F6 comparison](../results/heat-final-170/fit-comparison.csv) remains predecessor evidence.
 
-The objective table below reads the record adopted under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215), SHA-256 `00e77608…`, on Engine `3e83e19c`. Earlier adoption approvals and numerical records on this page retain their historical parameter and Engine identities. See the [current overview](../notebook.qmd#working-record).
+The objective table below reads the record adopted under [#297](https://github.com/tannerpolley/Amine-Thermodynamics/issues/297), SHA-256 `f8f64820…`, on Engine `391dfe5d`. Earlier adoption approvals and numerical records on this page retain their historical parameter and Engine identities. See the [current overview](../notebook.qmd#working-record).
 
 <!-- RESULTS:fits:BEGIN -->
 
 | Objective group | Rows | Cost (dimensionless) |
 | --- | --- | --- |
-| common149 | 149 | 23.8610 |
-| restored species | 7 | 2.4487 |
-| Jakobsen | 6 | 13.1222 |
+| common149 | 149 | 23.7019 |
+| restored species | 7 | 2.4269 |
+| Jakobsen | 6 | 12.9375 |
 | Kiepe | 39 | 0.0007 |
-| CO2-free density | 5 | 11.6257 |
-| Cai | 50 | 91.8746 |
-| loaded density | 47 | 0.5654 |
-| Cp | 4 | 5.3807 |
-| common149 pressure | 47 | 5.9858 |
-| common149 heat | 8 | 1.2137 |
-| common149 species | 94 | 16.6614 |
+| CO2-free density | 5 | 11.9760 |
+| Cai | 50 | 91.8554 |
+| loaded density | 47 | 0.4490 |
+| Cp | 4 | 5.1631 |
+| common149 pressure | 47 | 5.8265 |
+| common149 species | 94 | 16.6520 |
+| common149 heat | 8 | 1.2234 |
 
 <!-- RESULTS:fits:END -->
 
 ## Restricted fits
 
-**Historical decision: 20 October 2026, #196.** This subsection and the following sensitivity/assessment subsection describe the frozen [second restricted endpoint](../results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), SHA-256 `e234e860…`, with MEA association volume 0.036287, and its original A6 comparison. Their [restricted-fit account](../results/joint-recalibration-170/amendment-7/restricted/README.md) and [assessment](../results/joint-recalibration-170/amendment-7/selected-assessment/README.md) preserve the original values and limits. These are historical scores, not the current #215 acceptance comparison above.
+**Historical decision: 20 October 2026, #196.** This subsection and the following sensitivity/assessment subsection describe the frozen [second restricted endpoint](../results/joint-recalibration-170/amendment-7/restricted-2/fit/usable-budget-endpoint.json), SHA-256 `e234e860…`, with MEA association volume 0.036287, and its original A6 comparison. Their [restricted-fit account](../results/joint-recalibration-170/amendment-7/restricted/README.md) and [assessment](../results/joint-recalibration-170/amendment-7/selected-assessment/README.md) preserve the original values and limits. These are historical scores, not the #297 objective groups above.
 
 The owner [chose a restricted feasibility fit](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6283335389) with MEAH⁺ segment diameter in [5.49, 5.8] Å and MEAH⁺–water $k$ in [−0.5, −0.161]. All other bounds, rows, scales and weights were kept from A6’s Held form (Debye–Hückel diameter equal to segment diameter; see [loaded density](../loaded-density/index.qmd#basis-and-method)). That endpoint ([record](../results/joint-recalibration-170/amendment-7/restricted/README.md)) was split-free but failed density (44/47, worst 2.70$s$) on its MEAH⁺ size bound.
 
@@ -191,14 +198,14 @@ The [gas-root falsifier](../results/joint-recalibration-170/amendment-7/gas-root
 
 ## Auxiliary diagnostics
 
-These figures read the current #215 package (`00e77608…`); they are separate from the historical 20 October assessment table above.
+These figures read the current #297 package (`f8f64820…`); they are separate from the historical 20 October assessment table above.
 
 [Pressure parity](../figures/a7_regression_overview/output/pressure-parity.svg) · [Pressure residuals](../figures/a7_regression_overview/output/pressure-residuals.svg) · [Species parity](../figures/a7_regression_overview/output/species-parity.svg) · [Species residuals](../figures/a7_regression_overview/output/species-residuals.svg) · [Report-only Matin pools](../figures/a7_regression_overview/output/matin-pool.svg).
 
 # Limits and evidence type
 
-- **Phase evidence.** The [current finite search](#phase-extension-201) uses one 162-state grid at 313.15–393.15 K and α $10^{-5}$–0.6 for #212’s two endpoints. It resolves zero descending states for the reported record and 54 for the comparison. It does not certify global stability.
-- **Fit evidence.** The current #212 first and second restricted fits are each single local fits from one start. They do not show that no vector passes every gate.
+- **Phase evidence.** The [historical #214 finite search](#phase-extension-201) uses one 162-state grid at 313.15–393.15 K and α $10^{-5}$–0.6 for #212’s two endpoints. It resolves zero descending states for the reported record and 54 for the comparison. It does not certify global stability.
+- **Fit evidence.** The historical #212 first and second restricted fits are each single local fits from one start. They do not show that no vector passes every gate.
 - **Bounds.** The historical 20 October lowered size bound rested on three checked vectors, not a certified box; the #212 refit inherited it.
 - **Uncertainty.** The density scales are frozen source-local loading secants. Parameter, source-correlation and model-form uncertainty are not propagated.
 
@@ -210,7 +217,7 @@ Calibration with named non-fitted comparisons and numerical verification; not ph
 
 For that historical record, the three loaded-density failures at 353.15 K were accepted with disclosure. The owner approved that record for manuscript use on 20 October 2026 ([#170](https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6301568416)); the manuscript on `main` uses it since [#197](https://github.com/tannerpolley/Amine-Thermodynamics/issues/197) (`dfc2780`).
 
-The figures read retained [pressure](../results/engine-3e83e19c-paper-evidence/pressure-figure-data.csv), [species](../results/engine-3e83e19c-paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](../results/engine-3e83e19c-paper-evidence/pool-figure-data.csv) rows derived from the single [462-row state table](../results/engine-3e83e19c-paper-evidence/state-targets.csv). The [cohort summaries and availability](../results/engine-3e83e19c-paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access.
+The current #297 figures read retained [pressure](../results/adoption-297/paper-evidence/pressure-figure-data.csv), [species](../results/adoption-297/paper-evidence/species-figure-data.csv), and [19 report-only Matin pool](../results/adoption-297/paper-evidence/pool-figure-data.csv) rows derived from the single [462-row state table](../results/adoption-297/paper-evidence/state-targets.csv). The [cohort summaries and availability](../results/adoption-297/paper-evidence/state-summary.json) preserve canonical, Wagner and transfer comparisons, exclusions and historical data access.
 
 ## Engine wheel and phase qualification
 
@@ -231,7 +238,7 @@ No new descent appeared and no equation changed. The classification changes are 
 
 ## Numerical reproduction {#numerical-reproduction}
 
-The [fresh-process replay](../results/engine-3e83e19c-paper-evidence/default-replay/summary.json) loads the adopted selected file through the default path and reproduces **153/153 identities**: 47 pressures (Pa), 94 species mole fractions, eight Vinjarapu integral heats (J/mol CO₂), and four Hilliard heat capacities (kJ/(kg K)). Worst relative difference is **2.73 × 10⁻¹⁵**, below $10^{-10}$. [Per-row values](../results/engine-3e83e19c-paper-evidence/default-replay/comparison.json) and [input hashes](../results/engine-3e83e19c-paper-evidence/default-replay/input-hashes.json) retain the check. This verifies numerical reproduction of the adopted record only.
+The [fresh-process #297 replay](../results/adoption-297/paper-evidence/default-replay/summary.json) loads the adopted selected file through the default path and reproduces **153/153 identities**: 47 pressures (Pa), 94 species mole fractions, eight Vinjarapu integral heats (J/mol CO₂), and four Hilliard heat capacities (kJ/(kg K)). Worst relative difference is **8.38 × 10⁻¹⁶**, below $10^{-10}$. [Per-row values](../results/adoption-297/paper-evidence/default-replay/comparison.json) and [input hashes](../results/adoption-297/paper-evidence/default-replay/input-hashes.json) retain the check. This verifies numerical reproduction of the adopted record only.
 
 ## Execution record
 

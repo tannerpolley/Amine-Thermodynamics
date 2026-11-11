@@ -28,7 +28,7 @@ NEW_SHA = '83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6'
 WHEELS = {OLD_SHA: ROOT / 'build/engine-wheels/main-3e83e19ccc771b51d8ebc038931ab25192f4c5b5/epcsaft-0.2.0.dev0-cp313-cp313-manylinux_2_39_x86_64.whl',
           NEW_SHA: Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/epcsaft-1.2.0-cp313-cp313-manylinux_2_39_x86_64.whl')}
 CHAIN = B / 'results/engine-3e83e19c-refit-chain'
-STARTS = {'final': B / 'results/selected-current-best-parameters.json', 'wide': CHAIN / 'a6/run/fit/usable-budget-endpoint.json'}
+STARTS = {'final': B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json', 'wide': CHAIN / 'a6/run/fit/usable-budget-endpoint.json'}
 SHA = None
 def read(path):
     return json.loads(Path(path).read_text())

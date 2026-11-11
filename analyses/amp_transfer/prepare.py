@@ -37,7 +37,7 @@ overlap = dict(kundu_rows=len(kundu), kundu_stocks_mol_per_L=sorted({k['stock_AM
 
 # Pure-AMP starting record (D3): the adopted MEA document's neutral amine renamed, Ayad Table 5 values, effective 2B.
 import hashlib, epcsaft
-MEA = Path(__file__).resolve().parents[1] / 'mea_parameter_bundle/results/selected-current-best-parameters.json'
+MEA = Path(__file__).resolve().parents[1] / 'mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 assert hashlib.sha256(MEA.read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
 doc = json.loads(MEA.read_text().replace('monoethanolamine', 'aminomethylpropanol'))
 ayad = dict(provenance=dict(source_id='ayad-2023', locator='Ayad 2023 Table 5 p.2797; molar mass Table 1 p.2789', domain_id='mea-diagnostic-293-15-to-393-15-k'))

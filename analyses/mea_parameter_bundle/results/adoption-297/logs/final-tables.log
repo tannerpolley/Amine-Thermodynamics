@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 394, in <module>
+    main()
+    ~~~~^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 373, in main
+    render_speciation(species)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/analyses/mea_parameter_bundle/scripts/render_regression_overview.py", line 202, in render_speciation
+    ax.scatter([float(r['loading_mol_CO2_per_mol_MEA']) for r in obs],
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               [float(r['observed']) for r in obs], marker=marker,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               facecolors='none', edgecolors=color, s=24)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/_api/deprecation.py", line 453, in wrapper
+    return func(*args, **kwargs)
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/__init__.py", line 1524, in inner
+    return func(
+        ax,
+        *map(cbook.sanitize_sequence, args),
+        **{k: cbook.sanitize_sequence(v) for k, v in kwargs.items()})
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/axes/_axes.py", line 5025, in scatter
+    collection = mcoll.PathCollection(
+        (path,), scales,
+    ...<5 lines>...
+        alpha=alpha,
+    )
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/collections.py", line 1030, in __init__
+    super().__init__(**kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/collections.py", line 180, in __init__
+    self.set_edgecolor(edgecolors)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/collections.py", line 837, in set_edgecolor
+    self._set_edgecolor(c)
+    ~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/collections.py", line 816, in _set_edgecolor
+    self._edgecolors = mcolors.to_rgba_array(c, self._alpha)
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/.venv/lib/python3.13/site-packages/matplotlib/colors.py", line 499, in to_rgba_array
+    raise ValueError(f"{c!r} is not a valid color value.")
+ValueError: '#CC79#255' is not a valid color value.

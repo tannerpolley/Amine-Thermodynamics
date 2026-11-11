@@ -1,0 +1,396 @@
+Using CPython 3.13.14
+Creating virtual environment at: .venv
+Resolved 124 packages in 14ms
+Installed 47 packages in 128ms
+ + annotated-types==0.8.0
+ + ast-serialize==0.6.0
+ + auditwheel==6.8.2
+ + chemicals==1.5.2
+ + click==8.5.0
+ + contourpy==1.3.3
+ + cycler==0.12.1
+ + flexcache==0.3
+ + flexparser==0.4
+ + fluids==1.3.1
+ + fonttools==4.63.0
+ + idaes-pse==2.12.0
+ + iniconfig==2.3.0
+ + kiwisolver==1.5.0
+ + librt==0.13.0
+ + matplotlib==3.11.1
+ + meson==1.12.0
+ + meson-python==0.20.0
+ + mpmath==1.3.0
+ + mypy==2.3.0
+ + mypy-extensions==1.1.0
+ + nanobind==2.12.0
+ + networkx==3.6.1
+ + numpy==2.5.1
+ + packaging==26.3
+ + pandas==3.0.5
+ + patchelf==0.19.1.0
+ + pathspec==1.1.1
+ + pillow==12.3.0
+ + pint==0.26.1
+ + platformdirs==4.11.8
+ + pluggy==1.6.0
+ + pydantic==2.13.5
+ + pydantic-core==2.46.5
+ + pyelftools==0.33
+ + pygments==2.20.0
+ + pyomo==6.10.1
+ + pyparsing==3.3.2
+ + pyproject-metadata==0.12.1
+ + pytest==9.1.1
+ + python-dateutil==2.9.0.post0
+ + ruff==0.16.1
+ + scipy==1.18.0
+ + six==1.17.0
+ + sympy==1.14.0
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+Building wheel...
++ meson setup /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared -Dbuildtype=release -Db_ndebug=if-release -Db_vscrt=md -Dpkg_config_path=/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/pkgconfig --native-file=/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared/meson-python-native-file.ini
+The Meson build system
+Version: 1.12.0
+Source dir: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine
+Build dir: /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared
+Build type: native build
+Project name: epcsaft
+Project version: 1.3.0
+C compiler for the host machine: /usr/bin/ccache cc (gcc 13.3.0 "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0")
+C linker for the host machine: cc ld.bfd 2.42
+C++ compiler for the host machine: /usr/bin/ccache c++ (gcc 13.3.0 "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0")
+C++ linker for the host machine: c++ ld.bfd 2.42
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Program python3 found: YES (/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/.venv/bin/python)
+Library quadmath found: YES
+Compiler for C++ supports arguments -Wall: YES 
+Compiler for C++ supports arguments -Wextra: YES 
+Compiler for C++ supports arguments -Wpedantic: YES 
+Compiler for C++ supports arguments -falign-functions=64: YES 
+Compiler for C++ supports link arguments -s: YES 
+Run-time dependency threads found: YES
+Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
+Run-time dependency ipopt found: YES 3.11.9
+Run-time dependency eigen3 found: YES 3.4.0
+Found CMake: /usr/bin/cmake (3.28.3)
+WARNING: Unknown generator expression '$<LINK_ONLY:rt>'.
+WARNING: Unknown generator expression '$<LINK_ONLY:BLAS::BLAS>'.
+WARNING: Unknown generator expression '$<LINK_ONLY:LAPACK::LAPACK>'.
+WARNING: CMake: Dependency glog::glog for Ceres was not found
+Run-time dependency ceres (modules: Ceres::ceres) found: YES 2.2.0
+Found pkg-config: YES (/usr/bin/pkg-config) 1.8.1
+Run-time dependency python found: YES 3.13
+Downloading cppad source from https://github.com/coin-or/CppAD/archive/refs/tags/20250000.3.tar.gz
+Downloading file of unknown size.
+
+Executing subproject cppad for machine: host 
+
+cppad| Project name: cppad
+cppad| Project version: 20250000.3
+cppad| C++ compiler for the host machine: /usr/bin/ccache c++ (gcc 13.3.0 "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0")
+cppad| C++ linker for the host machine: c++ ld.bfd 2.42
+cppad| Checking if "CppAD mkstemp" compiles: YES
+cppad| Checking for size of "void *" : 8
+cppad| Configuring configure.hpp using configuration
+cppad| Build targets in project: 1
+cppad| Subproject cppad finished.
+
+Run-time dependency epcsaft-highs found: YES 1.15.1
+Run-time dependency python found: YES 3.13
+Build targets in project: 18
+
+epcsaft 1.3.0
+
+  Subprojects (for host machine)
+    cppad          : YES
+
+  User defined options
+    Native files   : /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared/meson-python-native-file.ini
+    b_ndebug       : if-release
+    b_vscrt        : md
+    buildtype      : release
+    pkg_config_path: /home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/pkgconfig
+
+Found locked-ninja-1.11.1 at /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/tools/locked-ninja
++ /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/tools/locked-ninja -j3
+[1/32] Compiling C++ object libnanobind_support.a.p/ba883683801610688dcffc72c87c3b1cca460e8a_python3.13_site-packages_nanobind_src_nb_combined.cpp.o
+[2/32] Compiling C++ object libepcsaft_asl.so.p/native_bindings_asl_adapter.cpp.o
+../../../engine/native/bindings/asl_adapter.cpp: In function ‘epcsaft::equilibrium::SolvedStateActionBatch {anonymous}::actions(EquilibriumContext&, const std::vector<int>&, int)’:
+../../../engine/native/bindings/asl_adapter.cpp:662:37: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::reaction_coefficients’ [-Wmissing-field-initializers]
+  662 |         request.directions.push_back({e[0], e[1], context.map.amounts({e.begin() + 2, theta}, true), {theta, e.end()}});
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../engine/native/bindings/asl_adapter.cpp:662:37: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::solid_log_k’ [-Wmissing-field-initializers]
+[3/32] Linking static target libnanobind_support.a
+[4/32] Compiling C++ object _core.cpython-313-x86_64-linux-gnu.so.p/native_bindings_module.cpp.o
+[5/32] Compiling C++ object _core.cpython-313-x86_64-linux-gnu.so.p/native_bindings_eos_bindings.cpp.o
+[6/32] Compiling C++ object _core.cpython-313-x86_64-linux-gnu.so.p/native_bindings_diagnostics_bindings.cpp.o
+[7/32] Compiling C++ object _core.cpython-313-x86_64-linux-gnu.so.p/native_bindings_equilibrium_bindings.cpp.o
+[8/32] Compiling C++ object _core.cpython-313-x86_64-linux-gnu.so.p/native_bindings_regression_bindings.cpp.o
+../../../engine/native/bindings/regression_bindings.cpp: In lambda function:
+../../../engine/native/bindings/regression_bindings.cpp:260:67: warning: missing initializer for member ‘epcsaft::regression::FitRequest::start’ [-Wmissing-field-initializers]
+  260 |                         std::move(minimax), std::move(uncertainty)};
+      |                                                                   ^
+[9/32] Generating pcsaft_superancillary with a custom command
+[10/32] Compiling C++ object libepcsaft_native.so.p/native_core_trace.cpp.o
+[11/32] Compiling C++ object libepcsaft_native.so.p/native_properties_infinite_dilution_reference.cpp.o
+../../../engine/native/properties/infinite_dilution_reference.cpp: In function ‘std::vector<epcsaft::NeutralReferenceReactionDiagnostic> epcsaft::reaction_references(const HelmholtzModel&, double, double, const NeutralReferenceDeclaration&, const std::vector<std::vector<double> >&, const std::vector<ReactionReference>&, bool, std::optional<double>, std::size_t, bool, std::size_t, std::vector<std::vector<NeutralReferenceReactionDiagnostic::Derivative> >*, const std::vector<long unsigned int>&)’:
+../../../engine/native/properties/infinite_dilution_reference.cpp:743:134: warning: missing initializer for member ‘epcsaft::NeutralReferenceReactionDiagnostic::Derivative::message’ [-Wmissing-field-initializers]
+  743 |                         if (b && reference.reference_pressure_pa) column = {d-b, b, pair_coordinates[i], pair_coordinates[j], {}, 0.0};
+      |                                                                                                                                      ^
+../../../engine/native/properties/infinite_dilution_reference.cpp:743:134: warning: missing initializer for member ‘epcsaft::NeutralReferenceReactionDiagnostic::Derivative::action_status’ [-Wmissing-field-initializers]
+[12/32] Compiling C++ object libepcsaft_native.so.p/native_properties_helmholtz_model.cpp.o
+../../../engine/native/properties/helmholtz_model.cpp: In function ‘bool epcsaft::{anonymous}::ionic_insertion_value(const epcsaft::Parameters&, const std::vector<double>&, std::size_t, bool)’:
+../../../engine/native/properties/helmholtz_model.cpp:672:39: warning: comparison of integer expressions of different signedness: ‘std::size_t’ {aka ‘long unsigned int’} and ‘std::tuple_element<1, const std::array<int, 4> >::type’ {aka ‘const int’} [-Wsign-compare]
+  672 |     return x[s] == 0.0 && ((component == i && x[i] == 0.0 && x[j] > 0.0)
+      |                             ~~~~~~~~~~^~~~
+../../../engine/native/properties/helmholtz_model.cpp:673:23: warning: comparison of integer expressions of different signedness: ‘std::size_t’ {aka ‘long unsigned int’} and ‘std::tuple_element<2, const std::array<int, 4> >::type’ {aka ‘const int’} [-Wsign-compare]
+  673 |         || (component == j && x[j] == 0.0 && x[i] > 0.0));
+      |             ~~~~~~~~~~^~~~
+../../../engine/native/properties/helmholtz_model.cpp: In member function ‘epcsaft::PropertyActionBatch epcsaft::HelmholtzModel::directional_actions(double, double, const std::vector<double>&, const std::vector<epcsaft::PropertyObservable>&, const std::vector<epcsaft::DensityActionDirection>&, const epcsaft::DensityRoot*, const std::vector<double>&, double) const’:
+../../../engine/native/properties/helmholtz_model.cpp:2023:94: warning: missing initializer for member ‘epcsaft::{anonymous}::ActionContext::paths’ [-Wmissing-field-initializers]
+ 2023 |         association_status == PropertyActionStatus::Available ? factorization.get() : nullptr};
+      |                                                                                              ^
+../../../engine/native/properties/helmholtz_model.cpp: In member function ‘std::vector<epcsaft::core::DifferenceCheck> epcsaft::HelmholtzModel::pressure_action_difference(double, double, const std::vector<double>&, epcsaft::DensityBranch, const std::vector<epcsaft::PropertyObservable>&, const epcsaft::PressureActionDirection&, double, double, double) const’:
+../../../engine/native/properties/helmholtz_model.cpp:2259:55: warning: missing initializer for member ‘epcsaft::core::DifferenceCheck::cause’ [-Wmissing-field-initializers]
+ 2259 |         for (const auto o : observables) out.push_back({"observable " + std::to_string(static_cast<int>(o)), "unsupported_direction"});
+      |                                          ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../engine/native/properties/helmholtz_model.cpp:2264:22: warning: missing initializer for member ‘epcsaft::core::DifferenceCheck::cause’ [-Wmissing-field-initializers]
+ 2264 |         out.push_back({"observable " + std::to_string(static_cast<int>(r.observable))
+      |         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2265 |             + (r.component ? "[" + std::to_string(*r.component) + "]" : ""), "nonfinite"});
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/eigen3/Eigen/LU:28,
+                 from /usr/include/eigen3/Eigen/Dense:2,
+                 from ../../../engine/native/contributions/association.hpp:14,
+                 from ../../../engine/native/properties/helmholtz_tape.hpp:3,
+                 from ../../../engine/native/properties/helmholtz_model.hpp:7,
+                 from ../../../engine/native/properties/helmholtz_model.cpp:1:
+In member function ‘Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >& Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::operator=(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&&)’,
+    inlined from ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’ at ../../../engine/native/properties/helmholtz_model.cpp:127:46:
+/usr/include/eigen3/Eigen/src/LU/FullPivLU.h:60:38: warning: ‘<anonymous>.Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::m_nonzero_pivots’ may be used uninitialized [-Wmaybe-uninitialized]
+   60 | template<typename _MatrixType> class FullPivLU
+      |                                      ^~~~~~~~~
+../../../engine/native/properties/helmholtz_model.cpp: In function ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’:
+../../../engine/native/properties/helmholtz_model.cpp:127:46: note: ‘<anonymous>’ declared here
+  127 |     if (sites_count == 0) { factorization = {}; return; }  // no association sites: no mass-action system to factor
+      |                                              ^
+In member function ‘Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >& Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::operator=(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&&)’,
+    inlined from ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’ at ../../../engine/native/properties/helmholtz_model.cpp:127:46:
+/usr/include/eigen3/Eigen/src/LU/FullPivLU.h:60:38: warning: ‘*(__vector(2) double*)((char*)&<unnamed> + offsetof(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1, 0, -1, -1> >,Eigen::FullPivLU<Eigen::Matrix<double, -1, -1, 0, -1, -1> >::m_l1_norm))’ may be used uninitialized [-Wmaybe-uninitialized]
+   60 | template<typename _MatrixType> class FullPivLU
+      |                                      ^~~~~~~~~
+../../../engine/native/properties/helmholtz_model.cpp: In function ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’:
+../../../engine/native/properties/helmholtz_model.cpp:127:46: note: ‘<anonymous>’ declared here
+  127 |     if (sites_count == 0) { factorization = {}; return; }  // no association sites: no mass-action system to factor
+      |                                              ^
+In member function ‘Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >& Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::operator=(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&&)’,
+    inlined from ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’ at ../../../engine/native/properties/helmholtz_model.cpp:127:46:
+/usr/include/eigen3/Eigen/src/LU/FullPivLU.h:60:38: warning: ‘<anonymous>.Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::m_prescribedThreshold’ may be used uninitialized [-Wmaybe-uninitialized]
+   60 | template<typename _MatrixType> class FullPivLU
+      |                                      ^~~~~~~~~
+../../../engine/native/properties/helmholtz_model.cpp: In function ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’:
+../../../engine/native/properties/helmholtz_model.cpp:127:46: note: ‘<anonymous>’ declared here
+  127 |     if (sites_count == 0) { factorization = {}; return; }  // no association sites: no mass-action system to factor
+      |                                              ^
+In member function ‘Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >& Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::operator=(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&&)’,
+    inlined from ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’ at ../../../engine/native/properties/helmholtz_model.cpp:127:46:
+/usr/include/eigen3/Eigen/src/LU/FullPivLU.h:60:38: warning: ‘<anonymous>.Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >::m_det_pq’ may be used uninitialized [-Wmaybe-uninitialized]
+   60 | template<typename _MatrixType> class FullPivLU
+      |                                      ^~~~~~~~~
+../../../engine/native/properties/helmholtz_model.cpp: In function ‘void epcsaft::properties::site_factorization(Eigen::FullPivLU<Eigen::Matrix<double, -1, -1> >&, const std::vector<double>&, const std::vector<double>&, const epcsaft::Parameters&, double, const std::vector<double>&, epcsaft::PropertyActionStatus*)’:
+../../../engine/native/properties/helmholtz_model.cpp:127:46: note: ‘<anonymous>’ declared here
+  127 |     if (sites_count == 0) { factorization = {}; return; }  // no association sites: no mass-action system to factor
+      |                                              ^
+[13/32] Compiling C++ object libepcsaft_native.so.p/native_properties_thermochemistry.cpp.o
+[14/32] Compiling C++ object libepcsaft_native.so.p/native_properties_density.cpp.o
+../../../engine/native/properties/density.cpp: In function ‘epcsaft::DensityRoot epcsaft::{anonymous}::refine(const PressureSeries<>&, double, double, const std::vector<double>&, double, PressurePoint, double, PressurePoint, epcsaft::core::Scope&, std::size_t&)’:
+../../../engine/native/properties/density.cpp:454:5: warning: missing initializer for member ‘epcsaft::core::Convergence::cause’ [-Wmissing-field-initializers]
+  454 |     };
+      |     ^
+../../../engine/native/properties/density.cpp:454:5: warning: missing initializer for member ‘epcsaft::core::Convergence::rank’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp:454:5: warning: missing initializer for member ‘epcsaft::core::Convergence::backward_error’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp:466:76: warning: missing initializer for member ‘epcsaft::DensityRoot::negative_slope_density’ [-Wmissing-field-initializers]
+  466 |                            std::nullopt, DensityBranch::Unspecified, record};
+      |                                                                            ^
+../../../engine/native/properties/density.cpp:466:76: warning: missing initializer for member ‘epcsaft::DensityRoot::first_numerical_failure’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp:466:76: warning: missing initializer for member ‘epcsaft::DensityRoot::rank_records’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp: In function ‘epcsaft::DensityRoot epcsaft::{anonymous}::anchor(const PressureSeries<>&, double, double, const std::vector<double>&, epcsaft::DensityBranch, double, double, double, std::size_t&)’:
+../../../engine/native/properties/density.cpp:1203:9: warning: missing initializer for member ‘epcsaft::core::Convergence::cause’ [-Wmissing-field-initializers]
+ 1203 |         };
+      |         ^
+../../../engine/native/properties/density.cpp:1203:9: warning: missing initializer for member ‘epcsaft::core::Convergence::rank’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp:1203:9: warning: missing initializer for member ‘epcsaft::core::Convergence::backward_error’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp: In function ‘epcsaft::DensityRoot epcsaft::solve_density(const HelmholtzModel&, double, double, const std::vector<double>&, DensityBranch, std::optional<double>, DensityRoot*)’:
+../../../engine/native/properties/density.cpp:1662:136: warning: missing initializer for member ‘epcsaft::core::Convergence::cause’ [-Wmissing-field-initializers]
+ 1662 |                     std::nullopt, std::nullopt, 0, evaluations, core::Stop::left_domain, model.solver_options().owners[policy::density]};
+      |                                                                                                                                        ^
+../../../engine/native/properties/density.cpp:1662:136: warning: missing initializer for member ‘epcsaft::core::Convergence::rank’ [-Wmissing-field-initializers]
+../../../engine/native/properties/density.cpp:1662:136: warning: missing initializer for member ‘epcsaft::core::Convergence::backward_error’ [-Wmissing-field-initializers]
+[15/32] Compiling C++ object libepcsaft_native.so.p/native_surface_parameter_builder.cpp.o
+[16/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_stoichiometry.cpp.o
+In file included from /home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h:20,
+                 from ../../../engine/native/equilibrium/stoichiometry.cpp:9:
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/lp_data/HighsRunData.h: In member function ‘void HighsRunData::initRecords()’:
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/lp_data/HighsRunData.h:150:25: warning: unused variable ‘record_int64’ [-Wunused-variable]
+  150 |     RunDataRecordInt64* record_int64;
+      |                         ^~~~~~~~~~~~
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h: In member function ‘HighsStatus Highs::setHotStart(const HotStart&)’:
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h:1563:43: warning: unused parameter ‘hot_start’ [-Wunused-parameter]
+ 1563 |   HighsStatus setHotStart(const HotStart& hot_start) {
+      |                           ~~~~~~~~~~~~~~~~^~~~~~~~~
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h: In member function ‘HighsStatus Highs::freezeBasis(HighsInt&)’:
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h:1574:37: warning: unused parameter ‘frozen_basis_id’ [-Wunused-parameter]
+ 1574 |   HighsStatus freezeBasis(HighsInt& frozen_basis_id) {
+      |                           ~~~~~~~~~~^~~~~~~~~~~~~~~
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h: In member function ‘HighsStatus Highs::unfreezeBasis(HighsInt)’:
+/home/tnnrpolley21/.cache/epcsaft/highs-1.15.1-e1f353a175b56e35/src/highs/Highs.h:1583:44: warning: unused parameter ‘frozen_basis_id’ [-Wunused-parameter]
+ 1583 |   HighsStatus unfreezeBasis(const HighsInt frozen_basis_id) {
+      |                             ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+[17/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_request_compile.cpp.o
+../../../engine/native/equilibrium/request_compile.cpp: In function ‘void epcsaft::equilibrium::{anonymous}::admit_solids(epcsaft::equilibrium::CompiledSystem&, const std::vector<bool>&)’:
+../../../engine/native/equilibrium/request_compile.cpp:1136:107: warning: missing initializer for member ‘epcsaft::equilibrium::CompiledSolid::reference’ [-Wmissing-field-initializers]
+ 1136 |                            law.ln_k + law.scale + *law.reference.terminal_contraction, std::nullopt, false};
+      |                                                                                                           ^
+In file included from ../../../engine/native/equilibrium/request_compile.cpp:1949:
+../../../engine/native/equilibrium/row_evaluation.hpp: In member function ‘std::vector<Scalar> epcsaft::equilibrium::CompiledSystem::jacobian_at(const epcsaft::equilibrium::PhasePointValues<Base>&) const [with Base = double]’:
+../../../engine/native/equilibrium/row_evaluation.hpp:567:38: warning: ‘*(std::_Optional_payload_base<long unsigned int>::_Storage<long unsigned int, true>*)((char*)&temperature + offsetof(const std::optional<long unsigned int>,std::optional<long unsigned int>::<unnamed>.std::_Optional_base<long unsigned int, true, true>::<unnamed>)).std::_Optional_payload_base<long unsigned int>::_Storage<long unsigned int, true>::_M_value’ may be used uninitialized [-Wmaybe-uninitialized]
+  567 |     const std::optional<std::size_t> temperature = problem.temperature.free
+      |                                      ^~~~~~~~~~~
+../../../engine/native/equilibrium/row_evaluation.hpp:569:38: warning: ‘*(std::_Optional_payload_base<long unsigned int>::_Storage<long unsigned int, true>*)((char*)&pressure + offsetof(const std::optional<long unsigned int>,std::optional<long unsigned int>::<unnamed>.std::_Optional_base<long unsigned int, true, true>::<unnamed>)).std::_Optional_payload_base<long unsigned int>::_Storage<long unsigned int, true>::_M_value’ may be used uninitialized [-Wmaybe-uninitialized]
+  569 |     const std::optional<std::size_t> pressure = problem.pressure.free
+      |                                      ^~~~~~~~
+[18/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_gibbs_minimizer.cpp.o
+../../../engine/native/equilibrium/gibbs_minimizer.cpp: In function ‘epcsaft::equilibrium::EquilibriumResult epcsaft::equilibrium::refine_selected_endpoint(const CompiledSystem&, EquilibriumResult, epcsaft::core::Scope&, const DriverLimits*)’:
+../../../engine/native/equilibrium/gibbs_minimizer.cpp:1496:87: warning: missing initializer for member ‘epcsaft::equilibrium::LinearSolveDiagnostics::reason’ [-Wmissing-field-initializers]
+ 1496 |     result.linear_solve_diagnostics = LinearSolveDiagnostics{"canonical_defining_rows"};
+      |                                                                                       ^
+[19/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_one_component_two_density.cpp.o
+[20/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_phase_stability.cpp.o
+../../../engine/native/equilibrium/phase_stability.cpp: In function ‘std::optional<std::pair<epcsaft::equilibrium::PhasePointValues<double>, double> > epcsaft::equilibrium::{anonymous}::tangent_plane_trial(const epcsaft::HelmholtzModel&, double, double, const epcsaft::equilibrium::PhaseSpec&, const std::vector<double>&, double, const std::vector<double>&, epcsaft::equilibrium::StabilityTrial&, Quantities&, const epcsaft::equilibrium::DriverLimits*)’:
+../../../engine/native/equilibrium/phase_stability.cpp:129:41: warning: missing initializer for member ‘epcsaft::core::Convergence::cause’ [-Wmissing-field-initializers]
+  129 |             o.evaluations, stop, nullptr};
+      |                                         ^
+../../../engine/native/equilibrium/phase_stability.cpp:129:41: warning: missing initializer for member ‘epcsaft::core::Convergence::rank’ [-Wmissing-field-initializers]
+../../../engine/native/equilibrium/phase_stability.cpp:129:41: warning: missing initializer for member ‘epcsaft::core::Convergence::backward_error’ [-Wmissing-field-initializers]
+../../../engine/native/equilibrium/phase_stability.cpp: In function ‘epcsaft::equilibrium::StabilityReport epcsaft::equilibrium::recovery_stability(const CompiledSystem&, const DriverLimits&)’:
+../../../engine/native/equilibrium/phase_stability.cpp:853:81: warning: missing initializer for member ‘epcsaft::equilibrium::PhaseSpec::support’ [-Wmissing-field-initializers]
+  853 |         single.phases = {PhaseSpec{kind == PhaseKind::Liquid ? "L1" : "V1", kind}};
+      |                                                                                 ^
+../../../engine/native/equilibrium/phase_stability.cpp:853:81: warning: missing initializer for member ‘epcsaft::equilibrium::PhaseSpec::amount’ [-Wmissing-field-initializers]
+../../../engine/native/equilibrium/phase_stability.cpp:853:81: warning: missing initializer for member ‘epcsaft::equilibrium::PhaseSpec::composition_guess’ [-Wmissing-field-initializers]
+../../../engine/native/equilibrium/phase_stability.cpp:853:81: warning: missing initializer for member ‘epcsaft::equilibrium::PhaseSpec::packing_guess’ [-Wmissing-field-initializers]
+[21/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_phase_boundary.cpp.o
+../../../engine/native/equilibrium/phase_boundary.cpp: In function ‘epcsaft::equilibrium::{anonymous}::Attempt epcsaft::equilibrium::{anonymous}::advance(const epcsaft::HelmholtzModel&, const epcsaft::equilibrium::CompiledSystem&, const epcsaft::equilibrium::CompiledSystem&, const std::vector<double>&, const epcsaft::equilibrium::CompiledSystem&, const epcsaft::equilibrium::EquilibriumProblem&, const std::function<std::vector<double>(std::optional<epcsaft::core::Convergence>*)>&, double, std::vector<double>, bool, epcsaft::core::Scope&, std::shared_ptr<const epcsaft::equilibrium::OptimizerState>, const epcsaft::equilibrium::DriverLimits*, epcsaft::equilibrium::StageWork*)’:
+../../../engine/native/equilibrium/phase_boundary.cpp:748:105: warning: unused parameter ‘problem’ [-Wunused-parameter]
+  748 |                 const std::vector<double>& y, const CompiledSystem& compiled, const EquilibriumProblem& problem,
+      |                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+[22/32] Compiling C++ object libepcsaft_native.so.p/native_equilibrium_implicit_sensitivity.cpp.o
+../../../engine/native/equilibrium/implicit_sensitivity.cpp: In function ‘epcsaft::equilibrium::SolvedStateActionBatch epcsaft::equilibrium::evaluate_action(const CompiledSystem&, const EquilibriumResult&, const SolvedStateActionRequest&, std::optional<{anonymous}::ActionCenter>&, epcsaft::core::Scope&, const {anonymous}::CaloricNeed&)’:
+../../../engine/native/equilibrium/implicit_sensitivity.cpp:949:97: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::reaction_coefficients’ [-Wmissing-field-initializers]
+  949 |                                            std::vector<double>(model.active_parameters().size())};
+      |                                                                                                 ^
+../../../engine/native/equilibrium/implicit_sensitivity.cpp:949:97: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::solid_log_k’ [-Wmissing-field-initializers]
+../../../engine/native/equilibrium/implicit_sensitivity.cpp: In function ‘std::vector<epcsaft::core::DifferenceCheck> epcsaft::equilibrium::solved_state_difference(const CompiledSystem&, const EquilibriumResult&, const std::vector<SolvedStateObservable>&, const SolvedStateActionDirection&, double, double, double)’:
+../../../engine/native/equilibrium/implicit_sensitivity.cpp:1587:52: warning: missing initializer for member ‘epcsaft::core::DifferenceCheck::cause’ [-Wmissing-field-initializers]
+ 1587 |     for (const auto& o : observables) out.push_back({solved_state_observable_id(o), "unsupported_direction"});
+      |                                       ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[23/32] Compiling C++ object libepcsaft_native.so.p/native_regression_coordinates.cpp.o
+[24/32] Compiling C++ object libepcsaft_native.so.p/native_regression_minimax.cpp.o
+[25/32] Compiling C++ object libepcsaft_native.so.p/native_regression_observations.cpp.o
+../../../engine/native/regression/observations.cpp: In function ‘void epcsaft::regression::validate(const Observation&, const epcsaft::HelmholtzModel&, const epcsaft::equilibrium::CompiledSystem*)’:
+../../../engine/native/regression/observations.cpp:222:96: warning: comparison of integer expressions of different signedness: ‘std::__iterator_traits<__gnu_cxx::__normal_iterator<const double*, std::vector<double> >, void>::difference_type’ {aka ‘long int’} and ‘long unsigned int’ [-Wsign-compare]
+  222 |             && std::count(observation.composition.begin(), observation.composition.end(), 0.0) == components - 1, "pure added feed");
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+../../../engine/native/regression/observations.cpp: In function ‘void epcsaft::regression::project_prediction(const epcsaft::HelmholtzModel&, const Observation&, Prediction&)’:
+../../../engine/native/regression/observations.cpp:616:150: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::reaction_coefficients’ [-Wmissing-field-initializers]
+  616 |         equilibrium::SolvedStateActionDirection zero{0.0, 0.0, std::vector<double>(components), std::vector<double>(model.active_parameters().size())};
+      |                                                                                                                                                      ^
+../../../engine/native/regression/observations.cpp:616:150: warning: missing initializer for member ‘epcsaft::equilibrium::SolvedStateActionDirection::solid_log_k’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘MeanIonicActivityCoefficient’ not handled in switch [-Wswitch]
+  613 |     switch (observation.kind) {
+      |            ^
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘OsmoticCoefficient’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘MixtureOsmoticCoefficient’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘SolvationGibbsEnergy’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘TransferGibbsEnergy’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘BulkRelativePermittivity’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:613:12: warning: enumeration value ‘Stability’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp: In function ‘epcsaft::regression::PredictionGradient epcsaft::regression::differentiate(const epcsaft::HelmholtzModel&, const Observation&, const Prediction&)’:
+../../../engine/native/regression/observations.cpp:683:106: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::saturation_loading_gradient’ [-Wmissing-field-initializers]
+  683 |         return {{}, prediction.status, prediction.message, {}, {}, {}, prediction.first_numerical_failure};
+      |                                                                                                          ^
+../../../engine/native/regression/observations.cpp:683:106: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::endpoint_loading_gradient’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:683:106: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::raw_minimum’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp: In function ‘std::vector<epcsaft::regression::PredictionGradient> epcsaft::regression::differentiate_group(const epcsaft::HelmholtzModel&, const std::vector<const Observation*>&, const Prediction&, const CoordinateSet&, const std::vector<ObservationInputDirection>&)’:
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::input_actions’ [-Wmissing-field-initializers]
+  934 |                         + columns[k].results[0].diagnostic_message.value_or("")}};
+      |                                                                                 ^
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::state_diagnostics’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::first_numerical_failure’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::saturation_loading_gradient’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::endpoint_loading_gradient’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:934:81: warning: missing initializer for member ‘epcsaft::regression::PredictionGradient::raw_minimum’ [-Wmissing-field-initializers]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘MeanIonicActivityCoefficient’ not handled in switch [-Wswitch]
+  984 |         switch (observation.kind) {
+      |                ^
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘OsmoticCoefficient’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘MixtureOsmoticCoefficient’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘SolvationGibbsEnergy’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘TransferGibbsEnergy’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘BulkRelativePermittivity’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp:984:16: warning: enumeration value ‘Stability’ not handled in switch [-Wswitch]
+../../../engine/native/regression/observations.cpp: In function ‘epcsaft::regression::Prediction epcsaft::regression::predict(const epcsaft::HelmholtzModel&, const Observation&, const std::optional<epcsaft::equilibrium::EquilibriumResult>&, std::optional<epcsaft::equilibrium::CompiledSystem>, ReferenceCache*, const Prediction*, const epcsaft::HelmholtzModel*, bool, std::chrono::_V2::steady_clock::time_point)’:
+../../../engine/native/regression/observations.cpp:502:19: warning: ‘*(double*)((char*)&caloric + offsetof(std::optional<double>,std::optional<double>::<unnamed>.std::_Optional_base<double, true, true>::<unnamed>))’ may be used uninitialized [-Wmaybe-uninitialized]
+  502 |             value *= mean_molar_mass(parameters, observation.composition.data(), missing_mass);
+      |             ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../engine/native/regression/observations.cpp:478:31: note: ‘*(double*)((char*)&caloric + offsetof(std::optional<double>,std::optional<double>::<unnamed>.std::_Optional_base<double, true, true>::<unnamed>))’ was declared here
+  478 |         std::optional<double> caloric = state.total_isobaric_heat_capacity;
+      |                               ^~~~~~~
+[26/32] Compiling C++ object libepcsaft_native.so.p/native_regression_fit.cpp.o
+../../../engine/native/regression/fit.cpp: In lambda function:
+../../../engine/native/regression/fit.cpp:139:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  139 |         if (!p.stability || !p.stability->minimizing_trial) return {}; return p.stability->report.trials.at(*p.stability->minimizing_trial); };
+      |         ^~
+../../../engine/native/regression/fit.cpp:139:72: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  139 |         if (!p.stability || !p.stability->minimizing_trial) return {}; return p.stability->report.trials.at(*p.stability->minimizing_trial); };
+      |                                                                        ^~~~~~
+In file included from ../../../engine/native/regression/fit.cpp:128:
+../../../engine/native/regression/fit_worker.hpp: At global scope:
+../../../engine/native/regression/fit_worker.hpp:25:29: warning: ‘auto epcsaft::regression::{anonymous}::fields(epcsaft::equilibrium::SolvedStateActionDiagnostics&)’ defined but not used [-Wunused-function]
+   25 | #define FIELDS(T, ...) auto fields(T& item) { auto& [__VA_ARGS__] = item; return std::tie(__VA_ARGS__); }
+      |                             ^~~~~~
+../../../engine/native/regression/fit_worker.hpp:73:1: note: in expansion of macro ‘FIELDS’
+   73 | FIELDS(equilibrium::SolvedStateActionDiagnostics, a, b, c, d, e, f, g, h, i, j)
+      | ^~~~~~
+[27/32] Compiling C++ object libepcsaft_native.so.p/build_subprojects_CppAD-20250000.3_cppad_lib_temp_file.cpp.o
+[28/32] Linking static target libepcsaft_native.a
+[29/32] Linking target libepcsaft_asl.so
+[30/32] Linking target libepcsaft_native.so
+[31/32] Generating symbol file libepcsaft_native.so.p/libepcsaft_native.so.symbols
+[32/32] Linking target _core.cpython-313-x86_64-linux-gnu.so
+[1/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared/libepcsaft_native.so
+[2/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared/libepcsaft_asl.so
+[3/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/build/engine-meson/shared/_core.cpython-313-x86_64-linux-gnu.so
+[4/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/__init__.py
+[5/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/_core.pyi
+[6/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/_log.py
+[7/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/eos.py
+[8/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/idaes.py
+[9/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/parameters.py
+[10/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/py.typed
+[11/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/reference.py
+[12/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/regression.py
+[13/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/equilibrium/__init__.py
+[14/14] /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/upstream/ePC-SAFT/engine/src/epcsaft/equilibrium/problem.py
+Successfully built ../../build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/unrepaired/epcsaft-1.3.0-cp313-cp313-linux_x86_64.whl
+INFO:auditwheel.main_repair:Repairing epcsaft-1.3.0-cp313-cp313-linux_x86_64.whl
+INFO:auditwheel.wheeltools:Previous filename tags: linux_x86_64
+INFO:auditwheel.wheeltools:New filename tags: manylinux_2_39_x86_64
+INFO:auditwheel.wheeltools:Previous WHEEL info tags: cp313-cp313-linux_x86_64
+INFO:auditwheel.wheeltools:New WHEEL info tags: cp313-cp313-manylinux_2_39_x86_64
+INFO:auditwheel.main_repair:
+Fixed-up wheel written to /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-297-adopt-the-255-5f8d4fc2e6c22291/build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl
+../../build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl
