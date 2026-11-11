@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_298.py", line 68, in <module>
+    import refit_capped as owner
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_capped.py", line 8, in <module>
+    a=importlib.util.module_from_spec(spec);sys.modules[spec.name]=a;spec.loader.exec_module(a)
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/accept_engine_delivery.py", line 17, in <module>
+    n=importlib.util.module_from_spec(spec);sys.modules[spec.name]=n;spec.loader.exec_module(n)
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/diagnose_phase_search.py", line 15, in <module>
+    s = importlib.util.module_from_spec(spec); sys.modules['stage2'] = s; spec.loader.exec_module(s)  # registered so pool workers can unpickle its functions
+                                                                          ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/stage2.py", line 10, in <module>
+    j=importlib.util.module_from_spec(spec);spec.loader.exec_module(j)
+                                            ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/fit_mdea.py", line 8, in <module>
+    spec=importlib.util.spec_from_file_location('kim',AN/'scripts/prefit_kim.py');k=importlib.util.module_from_spec(spec);spec.loader.exec_module(k)
+                                                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/prefit_kim.py", line 18, in <module>
+    d = importlib.util.module_from_spec(spec); spec.loader.exec_module(d)
+                                               ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/diagnose_carson_split.py", line 24, in <module>
+    import final_evidence as f
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mea_parameter_bundle/scripts/final_evidence.py", line 29, in <module>
+    import probe
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mea_parameter_bundle/calibration-misfit/probe.py", line 27, in <module>
+    shared.verify_wheel()  # the pinned Engine wheel must be installed
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mea_parameter_bundle/scripts/shared_evaluation.py", line 190, in verify_wheel
+    raise RuntimeError("installed Engine wheel does not match the pinned SHA-256")
+RuntimeError: installed Engine wheel does not match the pinned SHA-256

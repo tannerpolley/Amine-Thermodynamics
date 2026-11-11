@@ -1,0 +1,39 @@
+{'record': 'A3-historical', 'rows': 280, 'available': 280, 'cost': 403.7294403706631, 'historical_cost': 403.71498514705206, 'max_relative_prediction_difference': 2.7624949035990702e-05, 'max_absolute_weighted_residual_difference': 0.001361319496431035, 'relative_cost_difference': 3.580551662141218e-05, 'passed': False}
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 254, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 203, in _process_chunk
+    return [fn(*args) for args in chunk]
+            ~~^^^^^^^
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_298.py", line 40, in predict
+    pred = s.reg.predict(s.model, ITEMS[i])
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/.venv/lib/python3.13/site-packages/epcsaft/regression.py", line 695, in predict
+    return _core.predict(model._model, item)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+epcsaft._core.ParameterError: reference_unavailable: reaction R2 temperature outside reaction correlation; T=393.170000 K; interval=[293.150000,393.150000] K
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_298.py", line 91, in <module>
+    rows=pool(predict,list(range(len(ITEMS))))
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_298.py", line 37, in pool
+    return list(executor.map(fn, jobs))
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/process.py", line 617, in _chain_from_iterable_of_lists
+    for element in iterable:
+                   ^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 625, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 318, in _result_or_cancel
+    return fut.result(timeout)
+           ~~~~~~~~~~^^^^^^^^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 460, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/concurrent/futures/_base.py", line 402, in __get_result
+    raise self._exception
+epcsaft._core.ParameterError: reference_unavailable: reaction R2 temperature outside reaction correlation; T=393.170000 K; interval=[293.150000,393.150000] K

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-298-refit-the-mde-56b03a7c0470c18b/analyses/mdea_mea_workflow/scripts/refit_298.py", line 73, in <module>
+    original=copy.deepcopy(next(r for r in s.j.d.REACTIONS if r.name=='R2').correlation)
+  File "/home/tnnrpolley21/.local/share/uv/python/cpython-3.13.14-linux-x86_64-gnu/lib/python3.13/copy.py", line 152, in deepcopy
+    rv = reductor(4)
+TypeError: cannot pickle 'epcsaft._core.ReactionLogPolynomial' object
