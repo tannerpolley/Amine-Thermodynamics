@@ -21,12 +21,16 @@ def write_csv(name, rows):
         writer.writerows(rows)
 
 
-def calculate():
+def verify_wheel():
     assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
     with zipfile.ZipFile(WHEEL) as archive:
         for name in archive.namelist():
             if name.startswith('epcsaft/') and not name.endswith('/'):
                 assert archive.read(name) == (Path(epcsaft.__file__).parent.parent / name).read_bytes(), name
+
+
+def calculate():
+    verify_wheel()
     model = epcsaft.Pure(epcsaft.Parameters.from_mapping(json.loads((AN / 'inputs/razavi.json').read_text())))
 
     def solve(T, tolerance=None):

@@ -1,17 +1,17 @@
 ---
-title: "Frozen pure-piperazine pressure check"
+title: "Pure-piperazine energy refit to Steele liquid pressures"
 format: html
 execute:
   enabled: false
 ---
 
-The frozen Razavi 2019 pure-piperazine (PZ) PC-SAFT parameters overpredict all eight Steele 1997 liquid vapor pressures at 417.997–460.477 K. The mean absolute relative deviation is **8.96865%**, with signed bias **+15.71875 kPa**. Relative errors grow from **+6.92532% to +11.21737%**. Discrepancies are **+961.09 to +3028.35 times the source propagated pressure error**. These are real source-scale disagreements, not near-misses. No parameter was fitted or adjusted.
+The limited pure-piperazine (PZ) refit removes **99.9745% of the temperature trend in relative pressure error** with Razavi's $m=2.6519$ and $\sigma=3.7136$ Å fixed. The eight Steele 1997 pressures at **417.997–460.477 K** determine three locally identifiable energy coordinates under the diagonal source-error model. The mean absolute relative error falls from **8.96865% to 0.00345189%**. Five points lie inside their printed error scales; three outside points are reported below without a new acceptance gate.
 
-This is a frozen-parameter prediction compared with measurements, together with numerical verification of the equilibrium calculation. It does not establish physical validation of the pure-liquid model. The owner must choose whether to refit pure PZ or continue with the stated pressure and domain limits before subsequent stages. No new percentage gate is applied.
+This is **calibration to one pressure campaign**, with numerical verification, rather than independent physical validation. Pure-liquid density remains unvalidated. The energy change shifts its prediction even though size parameters are fixed. No aqueous or reactive parameters have been fitted, and this candidate has not been adopted for later stages or promoted for manuscript use.
 
-## Question and basis
+## Question, authority and source basis
 
-Stage 1 of the [accepted design](../pz_scoping/design-draft-pz.md) asks whether published pure-PZ parameters reproduce a verified liquid-pressure campaign at its reported error scale. It does not qualify aqueous PZ, reactive speciation, caloric properties, precipitation or absorber calculations. Stages 2–5 are outside this calculation.
+The [owner decision in #308](https://github.com/tannerpolley/Amine-Thermodynamics/issues/308#issuecomment-6808842683) authorizes fitting only $u/k_B$, $\epsilon_{AB}/k_B$ and/or $\kappa_{AB}$, chosen from identifiability, to Steele Table 7 with its propagated errors. Hartono is a supporting correlation only. The Stage 1 frozen-parameter check is retained in [pressure-residuals.csv](results/pressure-residuals.csv) and [summary.json](results/summary.json); its independent delivered review was Supported before merge `0a2fca9`.
 
 Razavi et al. (2019), DOI [10.1021/acs.iecr.9b01429](https://doi.org/10.1021/acs.iecr.9b01429), Table 1 p.11040, supplies $m=2.6519$, $\sigma=3.7136$ Å, $\epsilon/k_B=274.10$ K, $\epsilon_{AB}/k_B=1923.25$ K and $\kappa_{AB}=0.07275$. Section 3.1 p.11046 specifies effective 2B association: one donor and one acceptor, each multiplicity one. Equation 7 p.11045 uses
 
@@ -23,47 +23,70 @@ Steele et al. (1997), DOI [10.1021/je9700986](https://doi.org/10.1021/je9700986)
 
 The original Zotero PDFs for Razavi, Steele and Hartono were read in their relevant methods, parameter, results and limitation passages. Steele Table 7 was also checked visually. All three PDF hashes matched the design's source identities on 11 November 2026; see [inputs/provenance.json](inputs/provenance.json). The task checkout has no local literature shelf; the canonical shelf index and original Zotero PDFs supplied the readings. Yaws/HYSYS fit grids remain unavailable, so this is not a reproduction of Razavi's reported 0.33% fit deviation.
 
-## Liquid-pressure result
+The three original PDF hashes were checked again for this refit and matched [provenance.json](inputs/provenance.json). Relevant Razavi §3.1/Eq.8, Steele Table 7/footnote and melting passage, and Hartono §5/Tables 8 and 11 were read directly from the PDFs. No new source data were acquired. Razavi's original pressure/density fitting inputs remain unavailable.
 
-![Measured points and frozen model over the liquid span. Steele propagated errors are drawn but smaller than the markers. Hartono is a supporting fitted correlation, not another measurement series. The lower panel uses each point's printed propagated error.](figures/liquid-pressure.png)
+## Fit, information and parameter uncertainty
 
-Define $\Delta p=p_{model}-p_{Steele}$, relative error $100\Delta p/p_{Steele}$, and source-scale residual $\Delta p/\sigma$. The [row-level output](results/pressure-residuals.csv) also retains $\ln(p_{model}/p_{Steele})$ and each distance outside the interval $p_{Steele}\pm\sigma$, $|\Delta p|-\sigma$. These are descriptive source-scale comparisons, not statistical rejection probabilities.
+The native Engine minimizes
 
-{{< include results/tables.md >}}
+$$\frac12\sum_{i=1}^{8}\left[\frac{p_{sat}(T_i;q)-p_i}{s_i}\right]^2,$$
 
-No point is a source-scale near-miss: the smallest absolute pressure excess is **6.30038 kPa** at 417.997 K, lying **6.29638 kPa beyond** its printed ±0.004 kPa scale. The smallest scaled discrepancy is **961.09** at 428.104 K, lying **9.60088 kPa beyond** its ±0.01 kPa scale. The relative excess rises smoothly with temperature; the nonmonotonic scaled residuals reflect changes in the printed error scale.
+where $s_i$ is Steele's printed propagated pressure error. No Hartono values or densities enter the objective. All seven nonempty subsets of the three allowed energy coordinates start at Razavi. Coordinates are affine, $q_j=q_{Razavi,j}(1+x_j)$, so the reported Jacobian is $J_{ij}=\partial[(p_{sat}-p_i)/s_i]/\partial x_j$. Fitting and exact derivatives are owned by the pinned Engine; NumPy supplies the singular-value decomposition and descriptive statistics.
 
-Hartono et al. (2021), DOI [10.1016/j.fluid.2021.112992](https://doi.org/10.1016/j.fluid.2021.112992), Table 8 row 3 and Table 11 method 3 p.7, gives
+| Quantity | Refit | Local standard error | Razavi (fixed baseline) |
+|---|---:|---:|---:|
+| $u/k_B$ (K) | 313.20598 | 0.34586 | 274.10 |
+| $\epsilon_{AB}/k_B$ (K) | 1469.8201 | 11.1726 | 1923.25 |
+| $\kappa_{AB}$ | 0.02722986 | 0.00154303 | 0.07275 |
 
-$$\log_{10}(p/\mathrm{kPa})=5.9832-\frac{1215.77}{T/\mathrm{K}-113.56}.$$
+The endpoint scaled-Jacobian singular values are **459994.32, 5292.19 and 45.3999**, giving numerical rank **3** and condition number about **10132**. Strong correlation is explicit, rather than evidence of independent molecular interpretation:
 
-Table 8's explicit kPa form is used despite the general Pa label in Eq.1. Hartono's pure-pressure and binary parameters were fitted simultaneously (§5.1 p.6); Steele contributes to its pure-pressure data. Its curve therefore supplies no independent confirmation. The supporting correlation exceeds Steele by **7.34–11.53%** here and lies within **0.28–0.70%** of the frozen curve. That proximity is not a near-miss against Steele's uncertainty. No coefficient covariance or explicit validity interval was supplied; the comparison is restricted to the measured liquid span. The reported 8.8% fit deviation is not an uncertainty band.
+| Correlation | $u/k_B$ | $\epsilon_{AB}/k_B$ | $\kappa_{AB}$ |
+|---|---:|---:|---:|
+| $u/k_B$ | 1 | +0.998091 | −0.999584 |
+| $\epsilon_{AB}/k_B$ | +0.998091 | 1 | −0.999456 |
+| $\kappa_{AB}$ | −0.999584 | −0.999456 | 1 |
 
-## Diagnosis of the misfit
+In the same physical parameter order (K, K, dimensionless), the local covariance is
 
-The retained calculation resolves well-separated liquid and vapor roots at every measured state. Liquid molar densities decrease from about 9218 to 8759 mol/m³ while vapor densities increase from 28.71 to 83.19 mol/m³. These are model outputs, not density validation.
+$$C=\begin{pmatrix}0.11961953&3.85679583&-0.0005334498\\3.85679583&124.82779436&-0.0172302767\\-0.0005334498&-0.0172302767&0.000002380928\end{pmatrix}.$$
 
-The achieved maximum dimensionless equilibrium residual over the eight states is below $2\times10^{-14}$. Repeating all eight solves with row tolerance tightened from $10^{-10}$ to $10^{-12}$ changes pressure by at most **$3.98\times10^{-11}$ source-error units**. Direct EOS evaluations at the returned densities reproduce equal pressures and equal pure-component log fugacity coefficients; the retained row output gives both differences. At the measured pressures, the liquid-minus-vapor log fugacity coefficient is positive, about **0.06513–0.09965**, consistent with the higher saturation pressures returned by the model. Numerical convergence does not remove the discrepancy.
+These standard errors come from $C_x=(J^T J)^{-1}$, transformed to physical coordinates, treating the printed source scales as independent standard deviations for this calculation only. Steele does not establish that statistical interpretation or supply campaign covariance. They are **conditional local errors**, not confidence intervals, independent validation, or total model uncertainty. Multiplying by $\sqrt{6.28024/5}$ to estimate residual variance instead gives standard errors **0.38762 K, 12.5216 K and 0.00172932**. Neither calculation covers source systematics, fixed size-parameter uncertainty, model discrepancy or extrapolation uncertainty.
 
-The diagnosis checked the original parameter digits, Å/K units, neutral 2B site multiplicities, $\sigma^3$ prefactor, pressure conversion Pa to kPa, reference-table columns and liquid classification. No transcription or convention correction was indicated. The tighter-tolerance calculation was the bounded numerical correction probe; it did not change the result at source resolution. The remaining discrepancy is the frozen parameter set versus this measured campaign. Razavi fitted compiled Yaws/HYSYS references rather than an identified Steele-only dataset; the unavailable fit inputs prevent attributing the discrepancy to a particular original correlation or fitting choice. Agreement with Hartono's fitted curve is descriptive, not proof of that cause. Refitting would change the accepted frozen hypothesis and requires the owner's decision.
+**Why three coordinates:** the one-parameter fits leave source-scale squared residual sums above one million. The best two-parameter fit ($u$, $\epsilon_{AB}$) leaves **325.474**, whereas the third coordinate lowers this to **6.28024** for five residual degrees of freedom. Its smallest scaled singular value is finite and the local marginal errors are about **0.11%, 0.76%, and 5.67% of the fitted values**. Thus all three are locally resolved on the supplied error scale, despite nearly parallel sensitivities. No arbitrary condition-number or percentage gate is applied. This does not establish global uniqueness or transferability.
 
-## Low-temperature extrapolation and limits
+The first three-coordinate run stopped at 100 iterations with squared residual sum **9.66597**, while descending along the correlated valley. A bounded diagnostic continuation from that endpoint, using the same coordinates, tolerances and 100-iteration budget, converged in 25 iterations to **6.28024**. Both attempts and their iteration costs are retained; the limited attempt is not labeled converged. No physical parameter was added and no tolerance was relaxed.
 
-![The pure-liquid EOS branch extrapolated toward 283 K. Below Steele's melting point it is explicitly subcooled liquid, with no solid equilibrium declared.](figures/extrapolation.png)
+## Pressure residuals and slope
 
-At **283 K**, the model gives **0.143655 kPa (143.655 Pa)** on the **subcooled-liquid extrapolation**. The [retained extrapolation](results/extrapolation.csv) extends from 283 K toward the measured span, with the branch below 384.6 K labeled subcooled. Values from 384.6 to 417.997 K are also outside the measured pressure span, although above melting. This is neither solid-vapor pressure nor evidence of stable pure liquid at 283 K. No low-temperature Hartono references are scored. No uncertainty interval is available for the extrapolated model pressure.
+![The energy-only refit reproduces Steele pressures at source resolution, with three remaining outside-scale points. Hartono is shown only as a supporting correlation over the measured span. The lower panels show unvalidated low-temperature pressure and density changes.](figures/energy-refit.png)
 
-**Pure-liquid density remains unvalidated.** No measured molten-PZ density with usable phase, pressure basis and uncertainty was recovered in the accepted source assessment. Steele Table 9 cell densities and Table 10's other-compound saturation densities cannot fill this gap. Aqueous-density checks belong after stage 2 and cannot independently validate pure-PZ density.
+{{< include results/refit-tables.md >}}
+
+Residuals are $(p_{fit}-p_{Steele})/s_i$; relative errors are $100(p_{fit}/p_{Steele}-1)$. Positive values in the final table column mean outside $p_i\pm s_i$. At **434.490 K**, the residual is **−1.00692**, a close near-miss only **0.00006924 kPa** outside the printed ±0.01 kPa scale. At **417.997 K**, **−1.23044** is **0.00092177 kPa** outside ±0.004 kPa, a modest near-miss. At **421.772 K**, **+1.87583** is **0.00437915 kPa** beyond ±0.005 kPa: almost twice the printed scale, a larger remaining discrepancy. No point is silently rounded into agreement. The relative-error range is **−0.00703% to +0.00926%**.
+
+An unweighted linear regression of relative error on temperature over the eight source states changes from **+0.10097924 percentage points/K** (Razavi) to **−0.00002578 percentage points/K** (refit), removing **99.9745% of the absolute trend**. The endpoint relative-error difference changes from **+4.29205** to **+0.00615751 percentage points**. This is removal of a systematic temperature trend with small residual scatter, not exact reproduction of every source point. The fixed-size slope stop condition does not fire.
+
+Hartono's Table 8/Table 11 method 3 uses $\log_{10}(p/\mathrm{kPa})=5.9832-1215.77/(T/\mathrm K-113.56)$. Its pure and binary parameters were fitted simultaneously (§5.1), with Steele among its sources; it is not independent confirmation. It exceeds Steele by about **7.34–11.53%** here. No coefficient covariance or explicit validity interval was supplied, so it is evaluated only over the verified liquid-measurement span and never used as refit data.
+
+## Extrapolation and density limitation
+
+| T (K) | Razavi pressure (kPa) | Refit pressure (kPa) | Change (%) | Razavi liquid density (kg/m³) | Refit liquid density (kg/m³) | Density change (%) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 283 | 0.14365533 | 0.14274921 | −0.63076 | 900.4852 | 916.0664 | +1.73032 |
+| 393 | 43.509814 | 41.650862 | −4.27249 | 815.2159 | 822.7370 | +0.92259 |
+
+The [283–393 K comparison](results/refit-extrapolation.csv) is a pure-liquid branch extrapolation below the measured pressure span. Below **384.6 K** it is subcooled liquid, not stable-liquid or solid-vapor equilibrium. In this retained range the pressure shift is not assumed monotonic; the full CSV owns its interior variation. The largest sampled positive shift is **+0.50267% at 311 K**, with the negative extreme **−4.27249% at 393 K**. No physical validation or uncertainty band is available there.
+
+**Pure-liquid density remains unvalidated.** The measured-span saturated-liquid density shifts upward by **0.6946–0.7937%** versus Razavi (roughly **5.24–6.30 kg/m³**), and at 283 K by **15.5813 kg/m³**. These compare each model at its own saturation pressure; they are not fixed-pressure density differences or a density-fit score. Changing energy parameters changes packing and cohesion even with $m$ and $\sigma$ fixed. No verified molten-PZ density measurement with usable phase, pressure basis and uncertainty was available. Subsequent aqueous-density comparisons cannot independently validate pure-liquid density.
 
 ## Reproduction and scientific status
 
-Run from the repository root with the pinned wheel at the path in `pyproject.toml`:
-
 ```bash
-agent-heavy env UV_NO_SYNC=1 uv run python analyses/pz_transfer/run.py
+agent-heavy env UV_NO_SYNC=1 uv run python analyses/pz_transfer/refit.py
 agent-heavy env UV_NO_SYNC=1 uv run python analyses/pz_transfer/present.py
 ```
 
-`run.py` is this analysis's Engine diagnostic boundary. It verifies the complete wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b` and byte identity of installed Engine package files, then calls native pure-component saturation and state evaluation. It imports no Engine source checkout. The model curve is evaluated at 61 temperatures; rendering consumes only retained CSVs. [summary.json](results/summary.json) retains aggregate results.
+[refit.py](refit.py) is the current analysis Engine boundary and reuses Stage 1 wheel verification from [run.py](run.py). It requires Engine `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`, and checks byte identity of installed Engine files. No source checkout imports are used. The full [fit record](results/refit-fits.json) owns covariance, singular vectors, correlations, starts, fit statuses and iteration traces. [The calibration candidate](results/refit-parameters.json) is retained separately from the unchanged Razavi input. [Row residuals](results/refit-residuals.csv), [continuous liquid curve](results/refit-liquid-curve.csv) and extrapolation retain the plotted quantities. All returned branches have distinct positive liquid/vapor densities and positive pressure-density derivatives. The maximum measured-state equilibrium residual is **2.05×10⁻¹⁴**. Tightening each measured-state solve from $10^{-10}$ to $10^{-12}$ changes the pressure by at most **5.68e-11 source-error units**.
 
-Independent delivered cse:review found **Supported**, with no required scientific corrections, for commit `5ee010b5613a3b83c4c60002bb8dfba74de2561c` against base `10ca8c447681a2d8f837a25df604f00beebe50a8`. The reviewer reproduced all eight comparison rows, 61 liquid-curve rows, 75 extrapolation rows and the summary exactly on the pinned wheel. The verdict supports the frozen-model disagreement and numerical diagnosis only; it does not validate aqueous or reactive use. See the [independent review](t3-thread://v2/df61a5ad-76a1-4901-b919-31ae81c8e67d/thread:delegated-task:command%3Amcp%3A10b158f4-2109-4fb2-a9bd-db3e90d04704%3Adelegate-task%3A0ca3ac1f-18d9-4cea-a5c2-e59879e5d1d9). This notebook has not been promoted for manuscript use. The manuscript registry is intentionally untouched under the task's explicit rule, so this page is rendered directly without adding it to the registered site membership. Pure-pressure refitting versus continuation with limits remains an owner decision.
+Independent delivered cse:review returned **Supported**, with no required corrections, for scientific commit `da41fd04ce31754bdc1fe1bf746553215b6da7dc` against base `0a2fca9`. Both result and capability lenses passed. The reviewer independently reproduced all subset objectives and stopping states, the unchanged-tolerance continuation, covariance and singular values, all retained curve values, and numerical refinement. A central-difference check along the weakest Jacobian direction agreed with the native derivative within **0.0014%**. The verdict supports this limited pressure calibration and its stated model-to-model shifts only. See the [independent review](t3-thread://v2/df61a5ad-76a1-4901-b919-31ae81c8e67d/thread:delegated-task:command%3Amcp%3A8a0eddb3-c1a6-4c7e-8baf-13d3e51661af%3Adelegate-task%3A8715e3c4-1f8c-4272-a221-af6871e013a8). This notebook has not been promoted for manuscript use. Render directly with Quarto; the task prohibits changing the manuscript registry. Stages 2–5 remain outside this delivered result.
