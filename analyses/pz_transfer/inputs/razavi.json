@@ -1,0 +1,157 @@
+{
+  "schema": "epcsaft.parameters",
+  "schema_version": 1,
+  "components": [
+    {
+      "component_id": "piperazine",
+      "name": "Piperazine",
+      "coefficients": [
+        {
+          "identity": "component/piperazine/segment_count",
+          "value": {
+            "magnitude": 2.6519,
+            "unit": "dimensionless"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          },
+          "family": "segment_count"
+        },
+        {
+          "identity": "component/piperazine/segment_diameter",
+          "value": {
+            "magnitude": 3.7136,
+            "unit": "angstrom"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          },
+          "family": "segment_diameter"
+        },
+        {
+          "identity": "component/piperazine/dispersion_energy_over_k",
+          "value": {
+            "magnitude": 274.1,
+            "unit": "kelvin"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          },
+          "family": "dispersion_energy_over_k"
+        }
+      ],
+      "fixed": {
+        "charge_number": {
+          "identity": "component/piperazine/charge_number",
+          "value": {
+            "magnitude": 0,
+            "unit": "elementary-charge"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        },
+        "molar_mass": {
+          "identity": "component/piperazine/molar_mass",
+          "value": {
+            "magnitude": 0.08613,
+            "unit": "kilogram / mole"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        }
+      }
+    }
+  ],
+  "model_families": [
+    {
+      "kind": "base",
+      "choice": "pc-saft"
+    },
+    {
+      "kind": "association",
+      "choice": "general-site"
+    },
+    {
+      "kind": "electrolyte",
+      "choice": "none"
+    },
+    {
+      "kind": "permittivity",
+      "choice": "none"
+    }
+  ],
+  "topology": {
+    "sites": [
+      {
+        "component_id": "piperazine",
+        "site_id": "a",
+        "site_role": "donor",
+        "multiplicity": 1,
+        "provenance": {
+          "source_id": "razavi-2019",
+          "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+        }
+      },
+      {
+        "component_id": "piperazine",
+        "site_id": "b",
+        "site_role": "acceptor",
+        "multiplicity": 1,
+        "provenance": {
+          "source_id": "razavi-2019",
+          "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "endpoint_a": {
+          "component_id": "piperazine",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "piperazine",
+          "site_id": "b"
+        },
+        "energy_over_k": {
+          "identity": "association/piperazine/a/b/energy",
+          "value": {
+            "magnitude": 1923.25,
+            "unit": "kelvin"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        },
+        "volume": {
+          "identity": "association/piperazine/a/b/volume",
+          "value": {
+            "magnitude": 0.07275,
+            "unit": "dimensionless"
+          },
+          "provenance": {
+            "source_id": "razavi-2019",
+            "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+          }
+        },
+        "source": {
+          "kind": "explicit",
+          "provenance": [
+            {
+              "source_id": "razavi-2019",
+              "locator": "Table 1 p.11040; Eq.7 p.11045; 2B p.11046"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
