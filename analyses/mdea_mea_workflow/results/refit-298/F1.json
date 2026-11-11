@@ -232,11 +232,72 @@
       ]
     }
   ],
-  "meaning": "Failure is numerical qualification, not a physical transfer penalty.",
+  "meaning": "Historical-wheel confirmation failed; no fitting authorized after this result. No physical transfer penalty is established.",
   "remaining_checks": [
     "pressure replay",
     "balances",
     "derivatives"
   ],
-  "execution_stopped_before_fitting": true
+  "execution_stopped_before_fitting": true,
+  "historical_wheel_confirmation": {
+    "wheel": "/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-d5138209/epcsaft-1.0.0-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "python": "3.13.14",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "environment": "throwaway venv in /tmp/mdea-298-old-wheel/venv",
+    "execution_command": "agent-heavy /tmp/mdea-298-old-wheel/venv/bin/python /tmp/mdea-298-old-wheel/replay.py",
+    "records": [
+      {
+        "record": "A3",
+        "wheel_sha256": "ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5",
+        "installed_files_byte_identical": true,
+        "endpoint_sha256": "3e1a69baf8b20cfc2f7586c04aa9e2cf604e6ffda6a2bbbfcbe7d662e3dec0e8",
+        "rows": 280,
+        "available": true,
+        "historical_cost": 403.71498514705206,
+        "replay_cost": 403.72944037107754,
+        "max_relative_prediction_difference": 2.7624949044511023e-05,
+        "max_absolute_weighted_residual_difference": 0.0013613194964226527,
+        "relative_cost_difference": 3.5805517648146434e-05,
+        "passed": false,
+        "new_wheel_cost": 403.72944037066316,
+        "old_vs_new_max_relative_prediction_difference": 5.8764986152110896e-12,
+        "old_vs_new_absolute_cost_difference": 4.1438852349529043e-10,
+        "rows_path": "A3-historical/old-wheel-fitted-replay.json",
+        "rows_sha256": "1f8340401cf5af61425c506b468c58eaff4108ff6caf673b81e51fdb8ea10ad2"
+      },
+      {
+        "record": "B1",
+        "wheel_sha256": "ca7093ca721fdc80226c74d018a582f31705684c6995e80b0492c193334dd5d5",
+        "installed_files_byte_identical": true,
+        "endpoint_sha256": "1d0d80832f282cde85acab294501ca9ec8dbc34cddf8edf2eebf6e1e1d03949d",
+        "rows": 280,
+        "available": true,
+        "historical_cost": 374.45201342397434,
+        "replay_cost": 374.44674128851324,
+        "max_relative_prediction_difference": 2.732223488816478e-05,
+        "max_absolute_weighted_residual_difference": 0.0013613194962970587,
+        "relative_cost_difference": 1.407960238453132e-05,
+        "passed": false,
+        "new_wheel_cost": 374.4467412886684,
+        "old_vs_new_max_relative_prediction_difference": 2.5877617863114094e-12,
+        "old_vs_new_absolute_cost_difference": 1.5518253349000588e-10,
+        "rows_path": "B1-historical/old-wheel-fitted-replay.json",
+        "rows_sha256": "bd1d16589802be40b37a3f055ca33ef1a7d67557b923da2798635f81047e9b72"
+      }
+    ],
+    "passed": false,
+    "meaning": "Historical wheel does not reproduce retained costs. Wheel change alone cannot explain the discrepancy. Stop before fitting as instructed; cause remains unresolved."
+  },
+  "owner_amendment": {
+    "url": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6804381312",
+    "baseline": "Rebase on same-wheel 391dfe5d replays after successful historical-wheel confirmation.",
+    "excluded_Kuranov_source_rows": [
+      28,
+      72
+    ],
+    "comparison_rows": 278,
+    "adopted_R2_unchanged": true,
+    "execution": "278-row replays and all fits not started: historical-wheel confirmation failed."
+  }
 }
