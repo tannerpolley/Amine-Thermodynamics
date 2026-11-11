@@ -40,7 +40,8 @@ for r in csv.DictReader((p.DATA/'Carson2000_stage1.csv').open()):
     w = float(r['MDEA_mass_fraction']); nw = .1191622*(1-w)/w/.01801528; x = float(r['x_CO2'])
     ROWS[r['source_row']] = dict(source_row=r['source_row'], MDEA_mass_fraction=w, water=nw, alpha=x/(1-x)*(1+nw))
 
-MEA = json.loads((p.BUNDLE/'results/selected-current-best-parameters.json').read_text())
+# Historical preparation/diagnosis uses the frozen outgoing MEA record; #298 binds adopted inputs explicitly.
+MEA = json.loads((p.BUNDLE/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_text())
 mea_pair = lambda a_, b_: next(q for q in MEA['pairs'] if {q['component_id_a'], q['component_id_b']} == {a_, b_})
 mea_value = lambda pair, family: next(c for c in pair['coefficients'] if c['family'] == family)['value']['magnitude']
 K_MEA_W = mea_value(mea_pair('monoethanolamine', W), 'k_ij'), mea_value(mea_pair('monoethanolamine', W), 'k_ij_reciprocal_temperature_slope')
@@ -250,7 +251,7 @@ def shared_species(job):
 if __name__ == '__main__':
     jobs = [(name, v, row) for name, (variants, _, _) in PROBES.items() for v in variants for row in ('10', '1')]
     available = next(int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))
-    workers = min(os.cpu_count(), max(1, available//(2*268435456)), len(jobs))
+    workers = min(int(os.environ['AGENT_HEAVY_CORES']), max(1, available//(2*268435456)), len(jobs))
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('fork')) as pool:
         bins = pool.map(binary, [('k=0 (start 1)', None), ('k=start-2 MEA-water value', K_MEA_W), ('k=start-4 Bulow projection', (-0.131933125, 104.9886164))])
         scans = pool.map(mixing_scan, *zip(*[(-i/100, t) for t in (298.15, 313.15) for i in range(0, 31)]))
@@ -280,4 +281,4 @@ if __name__ == '__main__':
         BLAS_threads_per_process=1, search_owner='analyses/mea_parameter_bundle/scripts/final_evidence.py::stability',
         search_owner_sha256=p.sha(Path(f.__file__)), engine_wheel_sha256=p.shared.ENGINE_WHEEL_SHA256,
         variant_sha256={v: p.sha(AN/f'inputs/variant-{v}.json') for v in 'AB'}, start4_sha256=p.sha(AN/'inputs/variant-A-start-4.json'),
-        MEA_record_sha256=p.sha(p.BUNDLE/'results/selected-current-best-parameters.json')))
+        MEA_record_sha256=p.sha(p.BUNDLE/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json')))

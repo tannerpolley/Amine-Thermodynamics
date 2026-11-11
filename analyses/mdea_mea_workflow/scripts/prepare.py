@@ -49,8 +49,9 @@ def load_method():
 
 
 published = load_method()
-BASE = json.loads((BUNDLE/'results/selected-current-best-parameters.json').read_text())
-assert sha(BUNDLE/'results/selected-current-best-parameters.json') == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+# Historical preparation/diagnosis uses the frozen outgoing MEA record; #298 binds adopted inputs explicitly.
+BASE = json.loads((BUNDLE/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_text())
+assert sha(BUNDLE/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json') == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
 
 
 def documents(kappa):
@@ -154,7 +155,7 @@ def main():
     assert sha(wheel)==shared.ENGINE_WHEEL_SHA256
     with zipfile.ZipFile(wheel) as z:
         assert all((Path(epcsaft.__file__).parent.parent/n).read_bytes()==z.read(n) for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/'))
-    write('inputs/runtime.json',dict(wheel=str(wheel),wheel_sha256=sha(wheel),installed_files_byte_identical=True,module=epcsaft.__file__,parameter_sha256=sha(BUNDLE/'results/selected-current-best-parameters.json'),method_hashes={str(p.relative_to(ROOT)):sha(p) for p in [BUNDLE/'scripts/mea_association_volume.py',BUNDLE/'scripts/fit_observations.py',BUNDLE/'scripts/fit_campaign.py']}))
+    write('inputs/runtime.json',dict(wheel=str(wheel),wheel_sha256=sha(wheel),installed_files_byte_identical=True,module=epcsaft.__file__,parameter_sha256=sha(BUNDLE/'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'),method_hashes={str(p.relative_to(ROOT)):sha(p) for p in [BUNDLE/'scripts/mea_association_volume.py',BUNDLE/'scripts/fit_observations.py',BUNDLE/'scripts/fit_campaign.py']}))
     try:k=kappa_conversion()
     except Exception as e:
         write('results/kappa/failure.json',dict(error=f'{type(e).__name__}: {e}'))
