@@ -30,3 +30,26 @@ assert hashlib.sha256((out/'selection.json').read_bytes()).hexdigest()==read(out
 for p in Path('analyses/mdea_mea_workflow/scripts').glob('*298.py'):py_compile.compile(str(p),doraise=True)
 py_compile.compile('analyses/mdea_mea_workflow/scripts/stage2.py',doraise=True)
 print('PASS: 278-row identity, independently reconstructed costs and pressure AARDs, endpoint replay and eligibility, domain exclusions, frozen selection, and syntax.')
+
+for label in ('A3','B1'):
+ names=[label+'-baseline-278',label+'-substitution-278',sel[label]['name']]
+ cases=[read(out/name/'comparisons.json') for name in names]
+ assert all([(x['group'],x['row'],x['observed']) for x in case]==[(x['group'],x['row'],x['observed']) for x in cases[0]] for case in cases)
+ for name,case in zip(names,cases):
+  kamps=[x for x in case if x['group']=='corrected-Kamps']
+  assert len(kamps)==28
+  admitted=[x for x in kamps if 'predicted' in x]
+  if name.endswith('-baseline-278'):
+   assert len(admitted)==28
+  else:
+   assert len(admitted)==21
+   assert all(394.94<=float(x['row']['temperature_K'])<=395 and 'reaction R2 temperature outside reaction correlation' in x['message'] for x in kamps if 'predicted' not in x)
+  heats=[x for x in case if x['group'] in ('Zheng','Merkley-outside','Merkley-half-loading')]
+  assert len(heats)==26
+  assert len(read(out/name/'fitted-replay.json'))==278
+ before=read(out/names[0]/'parameters.json');after=read(out/names[1]/'parameters.json')
+ shared=read(Path('analyses/mea_parameter_bundle/results/adoption-297/shared-bicarbonate-water.json'))
+ i=next(i for i,p in enumerate(before['pairs']) if {p['component_id_a'],p['component_id_b']}=={'water','bicarbonate-anion'})
+ before['pairs'][i]=shared
+ assert before==after
+print('PASS: three-case source/row/observable identity, 26 heat rows per case, historical 28/28 versus adopted 21/28 corrected-Kamps coverage, and fixed substitution only.')
