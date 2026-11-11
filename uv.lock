@@ -109,6 +109,13 @@ wheels = [
     { filename = "epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl", hash = "sha256:0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "idaes-pse", marker = "extra == 'idaes'", specifier = "==2.12.0" },
+    { name = "pyomo", marker = "extra == 'idaes'", specifier = "==6.10.1" },
+]
+provides-extras = ["idaes"]
+
 [[package]]
 name = "flexcache"
 version = "0.3"
