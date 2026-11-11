@@ -1,6 +1,6 @@
 # PZ solid phases and the liquid window
 
-Checked 2026-11-02 for #237. Aqueous PZ precipitates solids at absorber-relevant conditions. The Engine has no solid phase. Its equilibrium problem declares only `PhaseKind { Liquid, Vapor }` (`engine/native/equilibrium/problem.hpp:29`, read-only clone at Engine `217026ab`). A liquid-only model cannot predict or report precipitation. Its results are claims only inside a declared liquid window.
+Checked 2026-11-02 for #237. Aqueous PZ precipitates solids at absorber-relevant conditions. **This assessment declares no qualified solid model.** The pinned Engine has SolidSpec; this supersedes the historical PhaseKind-only inference at `217026ab`. Source-observed liquid measurements can support comparisons at those states, but do not establish an interpolated or global liquid window.
 
 ## Unloaded PZ–water
 
@@ -24,9 +24,21 @@ Hilliard fitted a hexahydrate solubility constant on a mole-fraction basis with 
 - Dugas & Rochelle 2011, p.2189: "PZ samples (12 m) with approximately 0.40 CO2 loading were not tested due to solubility limitations." A rich-side solid exists at 12 m. Its phase identity was not established in any source read here.
 - Pérez-Salado Kamps 2003, p.2665 and Table 3 footnote, p.2666 (read in #239): one row precipitated. It is at 2 m PZ, 313 K (corrected 313.75 K), m̄_CO2 = 3.366 mol/kg (1.69 mol CO2/mol PZ, 0.84 mol/mol alkalinity), p = 4.446 MPa. The authors call the salt "probably piperazine bicarbonate", seen "only ... in a single experiment"; "the precipitate could not be analyzed". No 4 m row and no row at 333 K or above precipitated, up to 5.37 mol/kg CO2 and 9.6 MPa. Their model curve above about 4 MPa at 313 K is an extrapolation into the vapor–liquid–solid region (p.2667, Fig. 2a).
 
-## What this means for a PZ assessment
+## Row admission for #308
 
-1. Every scored state must lie inside a declared liquid window: above the unloaded hexahydrate liquidus (Hilliard I.1) for zero-loading rows; inside Freeman's 8/10 m envelope for loaded rows near those compositions. Rows a source flags as precipitating are excluded before fitting, not after.
-2. Lean, cold, concentrated states fall outside the liquid window: for example, 8 m below about 0.25 mol/mol alkalinity at 20 °C. A model "prediction" there is not a prediction of a real liquid.
-3. The rich-side limit (Dugas 12 m near 0.40) has no identified solid phase or tabulated boundary in the sources read. Kamps 2003 gives one rich-side point at 2 m and 313 K, at 0.84 mol/mol alkalinity, far richer than Dugas's 12 m limit; its solid was not analysed. Freeman's 2011 dissertation and the SINTEF crystallization work (Ma et al. 2012; abstract only) are the leads to read before claiming a rich-side boundary.
-4. A solid model (a hexahydrate solubility product evaluated with ePC-SAFT activities) is a separate capability. It belongs to the Engine and needs an Engine issue stating the MEA-repository use case. This scoping task does not open one.
+Freeze decisions before inspecting fitted residuals. Record the exact source/table/row, analytical PZ molality, loading per mole PZ, temperature, solvent isotope, reported phase and boundary comparison. Missing evidence is quarantine, not exclusion based on model error. A fluid stability calculation cannot replace solid admission.
+
+| Source/cohort | Concentration, loading and temperature | Admission evidence and action |
+|---|---|---|
+| Hartono 2013 Table 6 | 1.35–7.41 m, alpha=0, 333–373 K | Above the unloaded low-concentration liquidus maximum (Hilliard I.1 about 324 K); retain source liquid ebulliometer rows. The named outlier is separate for measurement reasons, not a solid exclusion. |
+| Hilliard D.2 | 0.89–5 m, alpha=0, 306–337 K | Compare each row with the bracketing I.1 liquidus points in unloaded mass fraction w=86.13m/(1000+86.13m). Use the larger adjacent liquidus value, including duplicate maximum, as a conservative interpolation bound; admit only T above it. Equality, missing bracket or conflict with observed phase is quarantine for owner decision. Do not extrapolate I.1. |
+| Hilliard D.5 | 0.89–5.18 m, loaded, 313/333 K | Source-observed liquid FTIR samples; admit those exact loaded states only where no precipitate is reported, label observational phase support. Zero-loading supports use I.1 as for D.2. No boundary interpolated from Freeman. |
+| Ermatchkov 2003 Tables 1–4 | 0.10–1.48 m, CO2/PZ up to about 1, 283/298/313/333 K | Liquid NMR samples in D2O (§2 pp.1278–1281). Admit exact observed loaded states with isotope/phase limitation. Do not impose an H2O unloaded liquidus on loaded D2O or treat 8/10 m Freeman as an exclusion envelope. |
+| Ermatchkov 2006 Tables 1–3 | about 1/2 m at 313 K, 2/4 m at 353/393 K, alpha 0.05–0.95 | Source liquid sampling/headspace GC (pp.1788–1789); admit exact unflagged states, no interpolation into unmeasured cold/rich region. |
+| Kamps 2003 Table 3 | 2/4 m, alpha 0–1.69, corrected 313.75–395 K | Exclude 2 m, alpha=1.69, corrected 313.75 K, 4.446 MPa precipitation row (p.2665 and Table 3 footnote). Admit other observed fluid-equilibrium rows with no reported solid, flag proximity to the excluded state and no solid-free envelope claim. Unloaded endpoints require I.1. |
+| Derks 2005 | about 0.2035/0.633 m from nominal molarity, source loading and T | Admit source observed dilute liquid rows; retain molarity-to-molality assumption. Below 313 K and alpha>1 rows each reported separately. Freeman concentrated data impose no dilute boundary. |
+| Dugas/Xu/Bishnoi secondary observations | Use each printed concentration, loading and T | Admit only actual measured liquid observations without precipitation reports; unresolved preparation or phase status stays unscored. Dugas 12 m, about 0.40 per alkalinity was not measured owing to solubility: no invented row there. |
+| Unmeasured 8/10 m loaded states | Freeman 2010 Fig.1, loadings per alkalinity | Do not manufacture numeric boundaries from the figure. No digitization authorized here. Exact observed rows can be reported, but new states remain unadmitted until a sourced boundary is bound. |
+| Any other extrapolated composition/T | outside source observed states or I.1 brackets | Quarantine for owner decision; no Freeman-to-dilute extrapolation. |
+
+This admits observed liquid measurements as conditional evidence rather than claiming that absence of a precipitation note proves global stability. Hilliard §5.3 measured unloaded SLE only; his §14.6 loaded boundary is an eNRTL prediction, not a measurement. Fosbøl 2011 abstract, introduction and Tables 1–3 concern PZ–water/AMP–water/AMP–PZ–water without CO2 and cannot supply a loaded boundary. Freeman 2011 and loaded SINTEF work remain necessary before a rich-side envelope claim, but no such claim is used in this design. Sources and locators above were checked in the current hash-matching PDFs. No solid-model fitting or figure digitization was performed.

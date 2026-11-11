@@ -95,7 +95,7 @@ Hartono gives two more: the NMR repeatability is below 2 %, and the NMR detectio
 
 ### PZ–H2O (Table 6, p.156)
 
-24 rows: 8 at 60 °C, 10 at 80 °C, 6 at 100 °C (59.95–100.03 °C). This matches the 24 points in Table 8 (p.157), the 24 points Yi fitted, and the 24-row CESAR-1 file.
+24 rows: 8 at 60 °C, 10 at 80 °C, 6 at 100 °C (59.95–100.03 °C). This matches the 24 points in Table 8 (p.157) and the 24 points Yi fitted.
 
 Hand check of the ranges:
 - x_PZ = 0.0237–0.1177, which is 1.35–7.41 mol PZ/kg water;
@@ -164,3 +164,7 @@ Freezing-point depression and solubility in PZ–water, AMP–water and AMP–PZ
 Its introduction quotes Rosso & Carbonnel: eutectics at 1 °C (ice/hexahydrate) and 33 °C (hexahydrate/hemihydrate), and a peritectic at 58 °C (hemihydrate/anhydrous PZ) (p.5088). The lab (DTU) is independent of Hilliard's DSC (App. I.1). It is a second unloaded-SLE source for the [solid gate](solid-phase.md).
 
 Its references 9 and 10 (p.5093) give the identity behind the "Bishnoi 2002 solid solubility" lead: Bishnoi's 2000 UT dissertation and Bishnoi & Rochelle 2002, Ind. Eng. Chem. Res. 41, 604. Neither was acquired or read here. The tables were not transcribed.
+
+## #308 residual clarification (11 November 2026)
+
+Use the operational residual convention in the [revised design](../design-draft-pz.md): P and y avoid algebraic pressure double-counting; any (P,yP) residual pair includes its covariance. Four-decimal y has rounding half-width 0.00005. Kim 2008 p.2528 gives <1% repeatability of standard-solution titrations, an analog scale rather than demonstrated Hartono PZ accuracy. Hartono p.152’s <2% statement is for NMR, not binary titration. Retain unknown campaign-common pressure calibration and low-concentration analysis limitations.
