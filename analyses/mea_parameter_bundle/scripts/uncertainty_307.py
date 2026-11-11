@@ -73,7 +73,11 @@ def setup(name):
 def fit(spec, indices, folder):
     path = folder/'fit.json'
     if path.exists():
-        return read(path)
+        saved = read(path)
+        if not saved['trial_failures'] or 'failures' in saved:
+            saved.setdefault('failures',[])
+            write(path,saved)
+            return saved
     rows = spec.inputs['observations']['fitted']
     controls = dict(spec.spec.get('optimizer', read(ROOT/'analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/a6/spec.json')['controls']), workers=int(os.environ['AGENT_HEAVY_CORES']))
     controls.update(maximum_iterations=40, maximum_elapsed_time_seconds=2100.)
@@ -83,6 +87,8 @@ def fit(spec, indices, folder):
     fields = ('status','message','usable','initial_cost','final_cost','optimizer','physical','predictions',
               'weighted_residuals','iterations','trial_failures','optimizer_jacobian')
     saved = {k: getattr(result,k) for k in fields}
+    saved['failures'] = [dict(trial=f.trial,observation=f.observation,identity=rows[f.observation]['identity'] if 0<=f.observation<len(rows) else None,
+        status=f.status.name,message=f.message,jacobian=f.jacobian,optimizer=list(f.optimizer)) for f in result.failures]
     saved['covariance'] = {k:getattr(result.covariance,k) for k in ('status','assumption','rank','active_bounds','optimizer','physical','variance_factor','singular_values','right_vectors')}
     saved.update(indices=indices, controls=controls)
     write(path,saved)
@@ -208,12 +214,38 @@ def main(name):
             ss,dd,_ = setup(name)
             dd[i]['origin'] += sign*fraction*(q['bounds'][1]-q['bounds'][0])
             prediction_records(ss,name)
-            chart = derivative(ss,ss.inputs['observations']['fitted'][:1]).chart
+            probe = ss.inputs['observations']['fitted'][:1]
+            chart = derivative(ss,probe).chart
+            transformations = []
+            complete = []
+            if q.get('kind')=='reaction_enthalpy_shift':
+                probe += [next(r for r in ss.inputs['observations']['fitted'] if r['constructor']=='addition_enthalpy')]
+                for j,other in enumerate(dd):
+                    if other.get('kind')=='reaction_coordinate' and other['name']==q['name']:
+                        shifted = getattr(chart.reaction_laws[q['name']],other['coefficient'])
+                        transformations.append(dict(index=j,original_origin=other['origin'],original_bounds=other['bounds'][:],offset=shifted-other['origin']))
+                for step in (0.,.25):
+                    vector = [0.]*n
+                    vector[transformations[0]['index']] = step
+                    complete.append(reg.differentiate(ss.parameters,ss.coordinates(),[ss.observation(r) for r in probe],optimizer=vector,thermochemistry=ss.thermal).predictions)
+                for t in transformations:
+                    dd[t['index']]['origin'] += t['offset']
+                    dd[t['index']]['bounds'] = [b+t['offset'] for b in t['original_bounds']]
+                    t['translated_coordinate'] = copy.deepcopy(dd[t['index']])
             ss.parameters = epcsaft.Parameters(chart.parameters, ss.parameters.component_ids, ss.parameters.site_ids)
             for problem in ss.problems.values():
                 for reaction in problem.reactions:
                     if reaction.name in chart.reaction_laws:
                         reaction.correlation = chart.reaction_laws[reaction.name]
+            if transformations:
+                reduced = []
+                for step in (0.,.25):
+                    vector = [step if j==transformations[0]['index'] else 0. for j in range(n) if j!=i]
+                    reduced.append(reg.differentiate(ss.parameters,[ss.coordinates()[j] for j in range(n) if j!=i],
+                        [ss.observation(r) for r in probe],optimizer=vector,thermochemistry=ss.thermal).predictions)
+                difference = float(np.max(np.abs(np.array(reduced)/np.array(complete)-1)))
+                write(folder/'chart-equivalence.json',dict(transformations=transformations,optimizer_steps=[0.,.25],complete=complete,reduced=reduced,max_relative_difference=difference))
+                assert difference<=1e-10  # #297 prediction-replay tolerance, not a fit-quality threshold.
             result = fit(ss,[j for j in range(n) if j!=i],folder)
             indices = [j for j in range(n) if j!=i]
             if not (folder/'predictions.json').exists():
@@ -301,7 +333,7 @@ def present(name):
         indices = np.argsort(np.abs(vectors[k]))[-4:][::-1]
         text.append(f"- Singular value {singular[k]:.6g}: "+'; '.join(f"{decl[i]['identity']} ({vectors[k,i]:+.4f})" for i in indices)+'.')
     text += ['\nThese directions include bound coordinates; their two-sided singular-vector displacements are not necessarily feasible. They describe local confounding in the declared scales, not a unique physical mechanism.\n',
-             'Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record.\n',
+             'Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record. For R5, fixing its enthalpy shift translates the remaining native b coordinate and bounds by the native chart offset; the original admissible interval is preserved. Complete/reduced chart prediction equivalence is retained at zero and a 0.25-scale b displacement. Native rejected-trial causes are retained with each fit.\n',
              '[Profile results](profiles.json), [prediction values and exact native columns](predictions.json), [bands](prediction-bands.csv), [ranked values](ranking.csv) and [input identity](inputs.json) retain the calculation. MEA ranks only pressure, heat, heat capacity, carbamate/bicarbonate and density at states already in its adopted specification. Bicarbonate is additionally resolved alone at the four states with bicarbonate+carbonate observations; this extra model quantity is not a new measured observation or a fitted target. The summed observable is retained separately; MDEA uses the 20 Xiao and 88 Ermatchkov pressure states at ≤49 wt% from #298, its adopted R2 law, and the 40 Carson heat states. Parameter units and ties are in the coordinate declarations; reaction enthalpy shifts are shown as adopted totals in J/mol, whereas refit increments are about zero.\n',
              'Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `'+SHA+'`. Run from the repository root using `agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py '+name+'`. The source base is `'+BASE+'`; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is pending.\n']
     import re
