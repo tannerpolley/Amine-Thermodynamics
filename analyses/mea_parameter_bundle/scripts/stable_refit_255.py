@@ -209,6 +209,8 @@ def coordinates(spec, shifts, held=(), extra_shifts=()):
 def endpoint_mapping(start, report, declared):
     """Parameter mapping at a fit's returned optimizer (density_268.finish_fit, all fitted reactions)."""
     ordinary = [q for q in read(A6)['information_coordinates'] if 'reaction' not in q]
+    # Untied parameter coordinates declared beyond a6 (#283 slopes) follow a6's in the physical vector.
+    ordinary += [dict(identity=q['identity']) for q in declared if 'targets' in q and q['identity'] not in {x['identity'] for x in ordinary}]
     import fit_campaign as campaign
     updates = campaign.fitted_parameter_values(ordinary, report['physical'][:sum(1 + len(q.get('ties', [])) for q in ordinary)])
     fitted = {q['name'] for q in declared if q.get('kind') in ('reaction_coordinate', 'reaction_enthalpy_shift')}
@@ -565,10 +567,11 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
         write(f'{run}/retreat.json', dict(t=0., reason='no stage returned an available 307-row endpoint', trace=trace, shifts=shifts[0]))
         write(f'{run}/candidate.json', anchor)
         return
-    passing, t = None, 1.
+    passing, t, suspects = None, 1., ()
     while t > -1e-12:
-        ok, tal, cost = admissible(segment(anchor, endpoint, t), enforced, rows)
-        trace.append(dict(t=t, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+        ok, tal, cost = admissible(segment(anchor, endpoint, t), enforced, rows, suspects)
+        suspects = tal['suspects']
+        trace.append(dict(t=t, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
         print(run, 'retreat', json.dumps(trace[-1]), flush=True)
         if ok:
             passing = t
@@ -578,8 +581,9 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
         low, high = passing, min(1., passing + .01)
         for _ in range(10):
             mid = (low + high) / 2
-            ok, tal, cost = admissible(segment(anchor, endpoint, mid), enforced, rows)
-            trace.append(dict(t=mid, admissible=ok, cost=cost, **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+            ok, tal, cost = admissible(segment(anchor, endpoint, mid), enforced, rows, suspects)
+            suspects = tal['suspects'] or suspects
+            trace.append(dict(t=mid, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
             print(run, 'refine', json.dumps(trace[-1]), flush=True)
             low, high = (mid, high) if ok else (low, mid)
         passing = low
@@ -609,7 +613,9 @@ def assess(run, rows=None):
     checks = acceptance(m, base)
     a, f = s.parameter_values(candidate), s.parameter_values(s.parameter_mapping(STARTS['final']))
     scales = {q_['identity']: q_['scale'] for q_ in read(A6)['information_coordinates']}
-    distance = {k: dict(final=f[k], candidate=a[k], scaled=(a[k] - f[k]) / scales[k] if k in scales else None) for k in a if a[k] != f[k]}
+    # A slope the final set does not declare is zero (#283).
+    distance = {k: dict(final=f.get(k, 0.), candidate=a[k], scaled=(a[k] - f.get(k, 0.)) / scales[k] if k in scales else None)
+                for k in a if a[k] != f.get(k, 0.)}
     t = result(f'{run}/retreat.json')['t']
     passed = stability_pass and all(c['passed'] for c in checks.values())
     summary = dict(run=run, t=t, cost=cost, final_cost=FINAL_COST, historical_final_cost=HISTORICAL_COST, cost_difference=cost - FINAL_COST, stability=stab, stability_passed=stability_pass,
