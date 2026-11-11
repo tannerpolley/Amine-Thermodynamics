@@ -741,7 +741,7 @@ This section has not been independently reviewed or promoted for the manuscript 
 
 # Unloaded heat-capacity slope: water, MEA and excess (issue 284) {#cp-slope-284}
 
-The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, while both multi-temperature sources rise by about 0.16 kJ kg⁻¹ K⁻¹. Splitting the mixture into pure water, pure MEA and the excess, $c_p^E=c_p-\sum_i w_ic_{p,i}$, puts the slope error in the **MEA–water excess**: share 1.08–1.11 of the mixture slope error for every pairing of mixture source (Hilliard 2008, Concepción 2023) and pure-MEA source (Maham et al. 1997, Chiu et al. 1999). Pure water contributes −0.10 to −0.11 (its model slope is too steep, the opposite sign). Pure MEA contributes −0.002 to +0.029: its slope matches both sources, although its level is about 8 % low. The one-coefficient temperature-law fit that this routes to did not run, because the Engine refuses the selected coefficient's heat-capacity derivative. Nothing is adopted.
+The model's unloaded 30 wt% MEA heat capacity is almost flat over 313–353 K, while both multi-temperature sources rise by about 0.16 kJ kg⁻¹ K⁻¹. Splitting the mixture into pure water, pure MEA and the excess, $c_p^E=c_p-\sum_i w_ic_{p,i}$, puts the slope error in the **MEA–water excess**: share 1.08–1.11 of the mixture slope error for every pairing of mixture source (Hilliard 2008, Concepción 2023) and pure-MEA source (Maham et al. 1997, Chiu et al. 1999). Pure water contributes −0.10 to −0.11 (its model slope is too steep, the opposite sign). Pure MEA contributes −0.002 to +0.029: its slope matches both sources, although its level is about 8 % low. The two authorized joint fits on the corrected Engine wheel fail the required slope, level and stability checks (below). Nothing is adopted.
 
 ## Sources and basis
 
@@ -762,17 +762,98 @@ The mixture is #264's unloaded state (10⁻⁶ mol CO₂/mol MEA) at Hilliard's 
 
 Water and MEA slope errors are weighted by mass fraction; excess is weighted by one. The weighted errors recover the mixture slope error within 3×10⁻¹⁷ kJ kg⁻¹ K⁻¹. The maximum absolute residual-Cv closure discrepancy is approximately 4.53×10⁻⁵ J mol⁻¹ K⁻¹, and every evaluated state satisfies 10⁻⁴|Cv,res| + 10⁻⁴ J mol⁻¹ K⁻¹. Over 313–353 K, the mixture contributions are hard chain +1.034, dispersion −1.188, association −0.231, pressure–volume coupling +0.307, MEA ideal gas +0.037 and water ideal gas +0.009 kJ kg⁻¹ K⁻¹. Together they recover the approximately −0.031 total.
 
-![Heat capacity against temperature. (a) Pure water: model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA: model line, Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water: model line at Hilliard's composition with Hilliard, Concepción and Weiland points. (d) Excess heat capacity: model line and reference excess for each mixture/pure-MEA source pair. Shading marks 313.15–353.15 K. Lines are retained 5 K model evaluations; points are measurements or evaluated references.](results/cp-slope-284/heat-capacity-slope.png){#fig-cp-slope-284}
+![Heat capacity against temperature. (a) Pure water: model lines and IAPWS-95 points at 0.1 and 0.3 MPa. (b) Pure liquid MEA: model line, Maham 1997 (±0.9 %) and Chiu 1999 (±2 %) points. (c) Unloaded 30 wt% MEA–water: final-set and inadmissible stage 2 retreated-record lines at Hilliard’s composition with Hilliard, Concepción and Weiland points. (d) Excess heat capacity: the same model records as lines and reference excess for each mixture/pure-MEA source pair. Shading marks 313.15–353.15 K. Lines are retained 5 K model evaluations; points are measurements or evaluated references.](results/cp-slope-284/heat-capacity-slope.png){#fig-cp-slope-284}
 
 ## What this says about the 318 K offset
 
 Model minus Hilliard at 318.15 K is +0.206 kJ kg⁻¹ K⁻¹ (+5.53 %). It splits exactly into water −0.021, pure MEA −0.067 (Maham; −0.075 with Chiu) and excess **+0.293** (+0.301). The excess alone is too high by about 7.9 % of the mixture: the model excess is +0.251 against a reference of −0.042. The low pure-MEA and water levels hide roughly 30 % of that error. The offset shrinks with temperature because the model excess falls (+0.269 at 313 K to +0.151 at 353 K) while the reference excess rises. Using common pure-component reference functions, almost all of the 0.17–0.18 kJ kg⁻¹ K⁻¹ Hilliard–Concepción difference appears in the calculated reference excess. Their slightly different compositions contribute a weighted pure-reference difference of about −0.00024 to −0.00028 kJ kg⁻¹ K⁻¹. This is an algebraic allocation under the selected references; the experimental source disagreement remains unresolved. Against Concepción the model excess is too high below about 340 K and too low above ([level split by temperature](results/cp-slope-284/excess-by-temperature.csv)).
 
-## Why the temperature-law fit did not run
+## Stage 2 on the corrected Engine wheel
 
-The issue's rule chose $a_2$ in $k_{ij}(T)=a_0+a_2(T-313.15\,\text{K})^2+s(1/T-1/313.15\,\text{K})$: its bound-scaled effect on the 313 → 353 K change (−0.171) exceeds that of the linear term $a_1$ (+0.062). The converted record reproduces every prediction exactly at $a_2=0$. The fit stops at its first Jacobian. The Engine refuses the derivative of equilibrium heat capacity with respect to $a_2$ at 40 of the 60 #264 states: unloaded Hilliard states from 343.15 K, loaded ones from 333.15 K, two Weiland states and Concepción at 353.15 K. At unloaded Hilliard 353.15 K the refusal is a reference-completion check on reaction R3 (residual 2.74×10⁻⁸ against criterion 1.49×10⁻⁸). Where it does return them, the Engine's $a_1$ and $a_2$ derivatives agree with central differences within 3×10⁻⁷. The owner kept the selection rule. F2 (slope), F3 (level envelope) and F4 (preservation and stability) are **not run**, and an Engine request for this derivative goes to the orchestrator.
+The retained sensitivity rule keeps a₂: its bound-scaled slope sensitivity is −0.1714 versus +0.0615 for a₁. The fitted law is $k_{ij}(T)=a_0+a_2(T-313.15\,\mathrm{K})^2+s(1/T-1/(313.15\,\mathrm{K}))$. The earlier bc779473 refusal is historical; its records remain under `stage2/` in the results directory.
 
-Single-coefficient scans at fixed final-set parameters show what any law must contend with. These are diagnostics, not fits ([diagnosis](results/cp-slope-284/stage2/p2/diagnosis.json)). Curvature in $k_{ij}(T)$ moves the heat-capacity level far more than its slope. $a_2=-2\times10^{-7}$ K⁻² raises Cp at 313 K by 0.055 kJ kg⁻¹ K⁻¹ but the slope by only 0.002. At the bound, $a_2$ gives the needed slope only with Cp near 9.5 kJ kg⁻¹ K⁻¹. $a_1=+10^{-3}$ K⁻¹ raises both level (+0.19) and slope (+0.07). The slope must rise while the Hilliard level must fall, so whether $a_0$ and $s$ can compensate within their bounds remains the question a working fit would answer.
+Both authorized joint fits fail F2, F3 and F4. Neither record is admissible for the issue. The selected law does not carry the required unloaded slope in these runs despite interior a₂. The two fits also refit the existing coordinates, so their changes cannot be attributed to a₂ alone. Nothing is adopted.
+
+The wheel is from merged Engine main `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`, installed only in this worktree. Step 0 passed: both 307-row replays agree within 10⁻⁸ relative, the stage 1 decomposition reproduces, and a₂ derivatives are available at all 60 Cp states and agree with centered differences within 3×10⁻⁷ at the three declared unloaded states. On takeover, zero-change replay again reproduced all 367 predictions exactly at both starts (maximum relative difference 0). See `results/cp-slope-284/stage2-391dfe5d/p2/qualification/`.
+
+Both starts use the retained #255 controls: 180 iterations, function tolerance 10⁻⁶, gradient tolerance 10⁻⁸, parameter tolerance 10⁻¹⁰, penalty scales 0.01 then 0.003, and maximum elapsed time 76,800 seconds per stage. Runs used `agent-heavy`, with three workers derived from its core allowance. Each stage was saved before continuing. Iterations below are the Engine’s `iterations`, excluding the initial history point. Wall times are single-run elapsed times, not a performance comparison.
+
+| Start | Stage | Iterations | Termination | Wall time / s | Data cost (354 rows) | Stability cost |
+|---|---:|---:|---|---:|---:|---:|
+| final | 0 | 57 | converged | 11931.811 | 183.710677 | 0.034060 |
+| final | 1 | 14 | converged | 2939.356 | 183.785421 | 0.012986 |
+| candidate | 0 | 50 | converged | 10619.032 | 183.708246 | 0.036457 |
+| candidate | 1 | 11 | converged | 2509.156 | 183.785386 | 0.013017 |
+
+The reported candidates are **admissible retreated records on the enforced grid**, not local optima. Their fresh assessment follows:
+
+| Start | Retreat fraction t | #255 307-row cost | Total 354-row cost | Enforced descent | Offset descent | Census descent |
+|---|---:|---:|---:|---:|---:|---:|
+| final | 0.984462890625 | 149.302577 | 184.110315 | 0/1903 | 0/576 | 0/162 |
+| candidate | 0.974853515625 | 149.190130 | 184.067010 | 0/1903 | 0/576 | 0/162 |
+
+All enforced and offset states are available; both censuses are complete. The five originally excluded states are available without descent at both records. The reference final-set 307-row cost is 148.883260; neither retreated record improves it.
+
+| Law coordinate | Final start | #255 candidate start | Bounds |
+|---|---:|---:|---|
+| a₀ | -0.0877559203819 | -0.0877693643621 | [-0.5, 0.5], both interior |
+| s / K | -3.31071763699 | -3.34812784186 | [-1000, 1000], both interior |
+| a₂ / K⁻² | 1.23625876088e-07 | 1.22406095462e-07 | [-2e-05, 2e-05], both interior |
+
+Coordinates on bounds at the retreated records (reporting distance ≤10⁻⁹ × max(1, |bound|), in each coordinate’s native units; Born diameter is in Å):
+
+- final: `pair/carbamate-anion/protonated-monoethanolamine/k_ij` = -1; `component/protonated-monoethanolamine/born_diameter` = 5. Total enthalpy shifts R2 = 9823.437352, R5 = 9220.786865 J/mol.
+- candidate: `pair/carbamate-anion/protonated-monoethanolamine/k_ij` = -1; `component/protonated-monoethanolamine/born_diameter` = 5. Total enthalpy shifts R2 = 9732.923398, R5 = 9233.775129 J/mol.
+
+**F2 — fail for both starts.** The accepted target is 0.164 ± 0.05 kJ kg⁻¹ K⁻¹. The unrounded source mean is 0.1644; either rounding gives the same decision.
+
+| Start | Cp change, 313.15 → 353.15 K / kJ kg⁻¹ K⁻¹ | Difference from source mean |
+|---|---:|---:|
+| final | -0.02290303 | -0.18730303 |
+| candidate | -0.02296632 | -0.18736632 |
+
+**F3 — fail for both starts.** At 353.15 K both predictions are below Hilliard’s lower envelope edge. The envelope is a source range, not an uncertainty interval. All values are kJ kg⁻¹ K⁻¹ at the declared unloaded states.
+
+| Temperature / K | Hilliard–Concepción envelope | Final start | #255 candidate start |
+|---:|---|---:|---:|
+| 313.15 | [3.6968, 3.8710] | 3.8476927 (inside) | 3.8484240 (inside) |
+| 333.15 | [3.7862, 3.9570] | 3.8298585 (inside) | 3.8305571 (inside) |
+| 353.15 | [3.8566, 4.0400] | 3.8247896 (outside) | 3.8254577 (outside) |
+
+**F4 — fail for both starts.** #255 criteria 1–3 pass, the interaction-law coefficients are interior, and broad Cp error falls below its threshold, but each record has dense-liquid descent at two of the 60 #264 states: Weiland at 298.15 K, analytical loadings 0.4 and 0.5.
+
+| Start | 60-row Cp AARD / % (limit 2.512) | Hilliard 51-row AARD / % (baseline 2.443) | #264 dense / gas / unresolved states |
+|---|---:|---:|---|
+| final | 2.139275 | 2.041159 | 2 / 13 / 0 of 60 |
+| candidate | 2.139135 | 2.042228 | 2 / 13 / 0 of 60 |
+
+AARD denotes average absolute relative deviation; RMSE denotes root-mean-square error. The #255 preservation checks against the final set are retained below. Pressure/species entries are AARD rises in percentage points (limit +2). Other entries are within-2-scale count, AARD ratio and RMSE ratio (counts must not fall; each ratio ≤1.25). Cai is reported only.
+
+| Group | Final start | #255 candidate start |
+|---|---|---|
+| fitted CO2 partial pressure | +1.111119 points; pass | +0.999480 points; pass |
+| Kiepe pressure | +0.000000 points; pass | +0.000000 points; pass |
+| fitted phase mole fraction | +0.173007 points; pass | +0.154218 points; pass |
+| restored species | +0.239663 points; pass | +0.269282 points; pass |
+| Jakobsen ratio | +0.372606 points; pass | +0.186831 points; pass |
+| loaded density | 44 → 47; 0.747241 / 0.733892; pass | 44 → 47; 0.738364 / 0.750125; pass |
+| CO2-free density | 5 → 5; 1.142214 / 1.117909; pass | 5 → 5; 1.142349 / 1.117736; pass |
+| fitted heat of absorption | 8 → 8; 0.911546 / 0.879082; pass | 8 → 8; 0.905586 / 0.874892; pass |
+| heat capacity | 3 → 4; 0.743567 / 0.701607; pass | 3 → 4; 0.743622 / 0.702843; pass |
+
+The 329-row #264 comparison table (307 original rows plus 22 integral heats) and 60 Cp rows are retained for the reference and both records as `comparison-264.json`. Every prediction is available. Cai’s two response quantities are reported separately for RMSE, since temperature and mole fraction have different units. Cai remains comparison-only.
+
+| Record | Cai within 2 scales | Cai AARD / % | Cai temperature RMSE / K | Cai vapor fraction RMSE | Integral heat AARD / % | Integral heat RMSE / kJ mol⁻¹ CO₂ | Integral heat within 2 scales |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| reference final set | 36/50 | 1.479929 | 1.787980 | 0.02037915 | 5.610977 | 6.567928 | 9/22 |
+| final | 36/50 | 1.480991 | 1.783916 | 0.02033250 | 5.304628 | 6.345912 | 10/22 |
+| candidate | 36/50 | 1.480984 | 1.783928 | 0.02033301 | 5.315508 | 6.360471 | 10/22 |
+
+Under the issue’s failure meanings, F2 with interior a₂ means the chosen law did not carry the slope in these authorized joint fits; F3 and F4 failures make the records inadmissible. No second law or a₁ substitution was tried. `select2` retains the lower-cost candidate-start record solely for illustration when neither passes F4; `selected.json` explicitly records `admissible: false`. The selected grid and figure must not be read as parameter selection for use.
+
+Evidence: calibration and numerical verification, not validation. Stability searches are finite tests at declared states, not a global guarantee. The unresolved source-level difference, assumed Hilliard pressure, mixed-source excess reference, and separate pure-MEA level discrepancy remain. This work estimates no parameter uncertainty, and joint changes do not isolate a₂. Delivered-result review is pending with the orchestrator; there is no manuscript promotion.
+
+Retained evidence: `results/cp-slope-284/stage2-391dfe5d/p2/{final,candidate}/` contains the fit stages, retreat, 307-row replay, assessment, census, and `heat-capacity.json` (all 60 rows and phase-search records); `selected.json` and `selected-grid.json` retain the illustrative choice and continuous evaluations. Logs are in `results/cp-slope-284/stage2-391dfe5d/logs/`.
 
 ## Limits
 
@@ -781,7 +862,7 @@ Single-coefficient scans at fixed final-set parameters show what any law must co
 - The roughly 8 % low pure-MEA level is a separate discrepancy, not split here between the Zhang ideal-gas correlation and the residual model.
 - The shares decompose one fixed parameter record; they are not a fitted attribution.
 
-The evidence is numerical verification and measured comparison, not validation. This section has not been independently reviewed or promoted for the manuscript route.
+Stage 1 is numerical verification and measured comparison; stage 2 is calibration and numerical verification. Neither is validation. This section has not been independently reviewed or promoted for the manuscript route.
 
 # Temperature-dependent carbamate interactions (issue 283) {#ion-temperature-283}
 

@@ -442,6 +442,17 @@ def fit2(run):
 def assess2(run):
     """#255 criteria 1-3 (307 rows, enforced/offset/census) plus F2-F4 heat-capacity checks at the run's candidate."""
     r, hc = chosen()
+    # Retain #264's original comparison rows, including integral heats excluded from fitting.
+    for name, mapping in ((run, r.result(f'{run}/candidate.json')),
+                          ('qualification', r.s.parameter_mapping(STARTS2['final']))):
+        if (r.OUT / name / 'comparison-264.json').exists():
+            continue
+        hc.SolventSpecification = lambda toml: r.bind(mapping)
+        spec, original, broad, _ = hc.setup()
+        predictions, cp_predictions = hc.evaluate(spec, original), hc.evaluate(spec, broad)
+        assert hc.available(predictions) and hc.available(cp_predictions)
+        r.write(f'{name}/comparison-264.json', dict(original=predictions, original_metrics=hc.group_metrics(original, predictions),
+                                                  broad=cp_predictions, broad_metrics=hc.group_metrics(broad, cp_predictions)))
     rows = r.RUNS[run]['rows']
     if not (r.OUT / run / 'assessment.json').exists():
         r.assess(run)
