@@ -7,13 +7,15 @@ model change minus reference change, and e_mix = w_W e_W + w_MEA e_MEA + e_E. Re
 Stage 2: k_ij(T) = a0 + a_p (T - 313.15)^p + s (1/T - 1/313.15), p = 1 or 2 chosen by bound-scaled sensitivity.
 Commands (repository root):
   reference  -- ePC-SAFT .venv (chemicals 1.5.2): IAPWS-95 water table
-  stage1 | shares                                -- worktree .venv with the bc779473 wheel (8b9609d4), agent-heavy
-  qualify2 | fit2 <final|candidate> | assess2 <run> | select2 | present
+  stage1 | shares                                -- worktree .venv, agent-heavy (retained stage 1: bc779473 wheel 8b9609d4)
+  qualify0 | qualify2 | fit2 <final|candidate> | assess2 <run> | select2 | grid2 | present
+                                                 -- stage 2 on the 391dfe5d wheel (0962e21d, #291), worktree only
 """
 import copy
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -115,13 +117,21 @@ def mixture_rows(spec, broad, masses, source, basis):
     return out
 
 
-def stage1():
-    sys.path.insert(0, str(B / 'scripts'))
+def driver():
+    """The #255 driver bound to the 391dfe5d wheel (#291); the repository's Engine pin is unchanged."""
+    sys.path[:0] = [str(B / 'scripts'), str(B / 'heat-capacity-264')]
     import stable_refit_255 as r
-    r.verify()
-    s = r.s
-    sys.path.insert(0, str(B / 'heat-capacity-264'))
     import calculate as hc
+    r.COMMIT, r.SHA = COMMIT2, SHA2
+    r.WHEEL = ROOT / f'build/engine-wheels/main-{COMMIT2}/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
+    r.s.ENGINE_WHEEL_SHA256, r.s.ENGINE_COMMIT = SHA2, COMMIT2
+    r.verify()
+    return r, hc
+
+
+def decompose():
+    r, hc = driver()
+    s = r.s
     import epcsaft
     record = r.STARTS['final']
     mapping = s.parameter_mapping(record)
@@ -152,14 +162,18 @@ def stage1():
                for x in water + mea] + [dict(part=src, T_K=o['T_K'], P_Pa=101325., closure_J_mol_K=o['closure_J_mol_K']) for src, rows in mixture.items() for o in rows]
     for x in water + mea:
         assert abs(x['closure_J_mol_K']) <= x['closure_bound_J_mol_K'], x  # mixture closure is asserted inside hc.decompose
-    (OUT / 'decomposition.json').write_text(json.dumps(r.jsonable(dict(
+    return r.jsonable(dict(
         wheel_sha256=r.SHA, engine_commit=r.COMMIT, parameter_record=str(record.relative_to(ROOT)), parameter_sha256=sha(record),
         caloric_water='#260 IAPWS-95 ideal-gas record (data/reference/MEA/thermal/physical-ideal-gas-calorics.json)',
         caloric_water_sha256=sha(ROOT / 'data/reference/MEA/thermal/physical-ideal-gas-calorics.json'), producer_sha256=sha(__file__),
         units='kJ/(kg K) of the phase or pure liquid; closure in J/(mol K)', pressure_Pa=101325., closure_rule='|sum of term residual Cv - native| <= 1e-4 + 1e-4 |Cv_res|, h = 0.025 K',
         reproduction_of_264_rows=reproduced,
         maximum_closure_J_mol_K=max(abs(x['closure_J_mol_K']) for x in closure),
-        water=water, mea=mea, mixture=mixture)), indent=1, allow_nan=False) + '\n')
+        water=water, mea=mea, mixture=mixture))
+
+
+def stage1():
+    (OUT / 'decomposition.json').write_text(json.dumps(decompose(), indent=1, allow_nan=False) + '\n')
     shares()
 
 
@@ -172,8 +186,10 @@ def mea_reference():
             'Chiu1999': lambda T: chiu[T]}  # Table 2 'this study', 303.15-353.15 K
 
 
-def shares():
-    d = json.loads((OUT / 'decomposition.json').read_text())
+def shares(d=None):
+    """Shares from the retained decomposition (written), or from a given one (returned, for the #291 reproduction)."""
+    retained = d is None
+    d = json.loads((OUT / 'decomposition.json').read_text()) if retained else d
     iapws = {(float(x['T_K']), float(x['P_Pa'])): float(x['cp_kJ_kg_K']) for x in csv.DictReader((OUT / 'iapws95-water.csv').open())}
     measured = {(x['source'], float(x['T_K'])): float(x['cp_kJ_kg_K']) for x in csv.DictReader((B / 'heat-capacity-264/sources.csv').open())
                 if float(x['loading']) == 0}
@@ -221,6 +237,8 @@ def shares():
                cases=rows, carriers_by_case={f"{r['mixture_source']}|{r['mea_source']}": r['carrier'] for r in rows},
                carrier=carrier, routing=route, primary_mea_source='Maham1997',
                primary_cases_agree=len({tuple(r['carrier']) for r in primary}) == 1)
+    if not retained:
+        return out
     (OUT / 'shares.json').write_text(json.dumps(dict(wheel_sha256=d['wheel_sha256'], result=out), indent=1, allow_nan=False) + '\n')
     table(OUT / 'excess-by-temperature.csv', excess)
     print(json.dumps(dict(carriers=out['carriers_by_case'], routing=route,
@@ -234,7 +252,11 @@ SLOPE = LAW + '/reciprocal_temperature_slope'
 # Bounds are the issue's design choices; one optimizer scale moves k by 0.01 at 353.15 K (40 K from T_r).
 NEW = {1: dict(identity=LAW + '/a1', unit='1 / kelvin', bound=1e-3, scale=.01 / 40),
        2: dict(identity=LAW + '/a2', unit='1 / kelvin ** 2', bound=2e-5, scale=.01 / 1600)}
-S2 = OUT / 'stage2'
+# Stage 2 runs on Engine main 391dfe5d (#291), which differentiates Cp with respect to a2 at every #264 state. The bc779473
+# attempt and its refusal stay in stage2/.
+COMMIT2 = '391dfe5d64ede5036bf160bc6ae037ad5e14af32'
+SHA2 = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
+S2 = OUT / 'stage2-391dfe5d'
 STARTS2 = {'final': B / 'results/selected-current-best-parameters.json', 'candidate': B / 'results/stable-refit-255/evidence/candidate-parameters.json'}
 
 
@@ -263,12 +285,10 @@ def k_of_T(mapping, T):
 
 def engine(power=None):
     """The #255 driver bound to this issue: outputs under stage2/p<power>/, converted starts, 51 Hilliard rows, A6 + 1."""
-    sys.path[:0] = [str(B / 'scripts'), str(B / 'heat-capacity-264')]
-    import stable_refit_255 as r
-    import calculate as hc
-    r.verify()
+    r, hc = driver()
     if power is None:
         return r, hc
+    r.ELAPSED = 76800.  # owner, 2026-11-09: the 7200 s stage limit was sized for 32 cores; these fits run on 3. Other controls unchanged.
     out = S2 / f'p{power}'
     out.mkdir(parents=True, exist_ok=True)
     a6 = r.read(B / 'results/engine-3e83e19c-refit-chain/a6/spec.json')
@@ -324,6 +344,53 @@ def broad_cp(r, hc, mapping):
                 unloaded_change_313_353=at[('Hilliard2008', T2, 0.)] - at[('Hilliard2008', T1, 0.)], spec=spec, broad=broad)
 
 
+def qualify0():
+    """#291 step 2 on the 391dfe5d wheel, before any fit: the 307 #255 rows at the final set and the #255 candidate against
+    their retained 8b9609d4 replays (<= 1e-8 relative), the stage-1 numbers, and the a2 Cp derivative at the 60 #264
+    states with centred differences at unloaded Hilliard 313.15/333.15/353.15 K (<= 3e-7). The zero-change replay is qualify2."""
+    new = decompose()
+    r, hc = driver()  # unconverted records: before engine() rebinds the starts
+    out = dict(replay_255={}, stage1={})
+    retained = B / 'results/stable-refit-255'
+    for name, rel in (('final', 'qualification/final-replay.json'), ('candidate', 'wide/replay.json')):
+        values, ok, cost = r.replay(r.s.parameter_mapping(STARTS2[name]))
+        old = r.read(retained / rel)
+        ref = {x['identity']: x for x in old['result']}
+        worst = max(values, key=lambda v: abs(v['value'] / ref[v['identity']]['value'] - 1))
+        out['replay_255'][name] = dict(retained=str((retained / rel).relative_to(ROOT)), retained_wheel_sha256=old['wheel_sha256'], rows=len(values),
+                                       available=ok, cost=cost, retained_cost=math.fsum(x['cost'] for x in old['result']),
+                                       maximum_relative=abs(worst['value'] / ref[worst['identity']]['value'] - 1), at=worst['identity'])
+        out['replay_255'][name]['passed'] = ok and len(values) == len(ref) == 307 and out['replay_255'][name]['maximum_relative'] <= 1e-8
+    old = json.loads((OUT / 'decomposition.json').read_text())
+
+    def numbers(d):
+        rows = [('water', x) for x in d['water']] + [('mea', x) for x in d['mea']] + [(k, x) for k, xs in d['mixture'].items() for x in xs]
+        flat = [(part, x, k, v) for part, x in rows for k, v in x.items() if k.endswith('kJ_kg_K')]  # per-term dicts are flattened
+        return {(part, x['T_K'], x.get('P_Pa', 101325.), k + (f':{j}' if isinstance(v, dict) else '')): w
+                for part, x, k, v in flat for j, w in (v.items() if isinstance(v, dict) else [(None, v)])}
+    a, b = numbers(new), numbers(old)
+    assert a.keys() == b.keys()
+    totals = [k for k in a if k[3] in ('cp_kJ_kg_K', 'equilibrium_kJ_kg_K')]
+    worst = max(totals, key=lambda k: abs(a[k] / b[k] - 1))
+    s_new, s_old = shares(new), json.loads((OUT / 'shares.json').read_text())['result']
+    share_difference = max(abs(x['share'][k] - y['share'][k]) for x, y in zip(s_new['cases'], s_old['cases'], strict=True) for k in x['share'])
+    out['stage1'] = dict(retained_wheel_sha256=old['wheel_sha256'], cp_values=len(totals), maximum_relative_cp=abs(a[worst] / b[worst] - 1), at=list(worst),
+                         maximum_absolute_any_term_kJ_kg_K=max(abs(a[k] - b[k]) for k in a), maximum_share_difference=share_difference,
+                         maximum_closure_J_mol_K=new['maximum_closure_J_mol_K'], carrier=s_new['carrier'], routing=s_new['routing'])
+    out['stage1']['passed'] = out['stage1']['maximum_relative_cp'] <= 1e-8 and s_new['carrier'] == s_old['carrier'] == 'excess'
+    r, hc = engine(2)
+    d2 = derivatives(r, hc, r.s.parameter_mapping(STARTS2['final']), 2, dict(derivatives=[], central_differences=[]))
+    refused = [dict(identity=x['identity'], status=x['status'], message=x['message']) for x in d2['derivatives'] if x['status'] != 'Available']
+    out['a2_derivative'] = dict(states=len(d2['derivatives']), available=len(d2['derivatives']) - len(refused), refused=refused,
+                                central_differences=d2['central_differences'], passed=not refused and len(d2['derivatives']) == 60
+                                and all(x['relative'] is not None and x['relative'] <= 3e-7 for x in d2['central_differences']))
+    out['derivatives'] = d2['derivatives']
+    out['passed'] = all(x['passed'] for x in out['replay_255'].values()) and out['stage1']['passed'] and out['a2_derivative']['passed']
+    r.write('qualification/step0.json', out)
+    print(json.dumps({k: v for k, v in out.items() if k != 'derivatives'}, indent=1, default=str), flush=True)
+    assert out['passed'], 'step 0 failed: see qualification/step0.json'
+
+
 def qualify2():
     """Sensitivity (choice of a1 or a2), then the zero-change replay of the chosen conversion at both starts."""
     r, hc = engine()
@@ -375,6 +442,17 @@ def fit2(run):
 def assess2(run):
     """#255 criteria 1-3 (307 rows, enforced/offset/census) plus F2-F4 heat-capacity checks at the run's candidate."""
     r, hc = chosen()
+    # Retain #264's original comparison rows, including integral heats excluded from fitting.
+    for name, mapping in ((run, r.result(f'{run}/candidate.json')),
+                          ('qualification', r.s.parameter_mapping(STARTS2['final']))):
+        if (r.OUT / name / 'comparison-264.json').exists():
+            continue
+        hc.SolventSpecification = lambda toml: r.bind(mapping)
+        spec, original, broad, _ = hc.setup()
+        predictions, cp_predictions = hc.evaluate(spec, original), hc.evaluate(spec, broad)
+        assert hc.available(predictions) and hc.available(cp_predictions)
+        r.write(f'{name}/comparison-264.json', dict(original=predictions, original_metrics=hc.group_metrics(original, predictions),
+                                                  broad=cp_predictions, broad_metrics=hc.group_metrics(broad, cp_predictions)))
     rows = r.RUNS[run]['rows']
     if not (r.OUT / run / 'assessment.json').exists():
         r.assess(run)
@@ -420,37 +498,11 @@ def select2():
 def diagnose2():
     """Why the a2 fit stops: Engine derivative of each #264 Cp row with respect to a1 and a2 at the converted final set,
     central differences (h = 1% of bound) at unloaded Hilliard 313/333/353 K, and fixed-parameter scans (diagnostic only)."""
-    import epcsaft
-    from epcsaft import regression as reg
     r, hc = chosen()
     final = r.s.parameter_mapping(STARTS2['final'])
     out = dict(derivatives=[], central_differences=[], fixed_parameter_scans=[])
     for power in NEW:
-        spec = r.bind(convert(final, power))
-        hc.SolventSpecification = lambda toml: spec
-        _, _, broad, _ = hc.setup()
-        ids = list(spec.parameters._native.temperature_law_coefficient_identities)
-        model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal, active_parameters=[
-            epcsaft.ActiveParameter(epcsaft.ParameterFamily.TemperatureLawCoefficient, [ids.index(NEW[power]['identity'])])])
-        for x in broad:
-            try:
-                d = reg.differentiate(model, spec.observation(x))
-                status, value, message = d.status.name, list(d.value), d.message
-            except epcsaft.ParameterError as error:  # the fit's 'invalid direction ... balance' stop
-                status, value, message = 'ParameterError', [], str(error)
-            out['derivatives'].append(dict(coefficient=NEW[power]['identity'], identity=x['identity'], T_K=float(x['row']['T_K']), loading=float(x['row']['loading']),
-                                           pressure_Pa=spec.problems[x['problem']].P, status=status, derivative_J_mol_K=value, message=message))
-        h = .01 * NEW[power]['bound']
-        for T in (T1, 333.15, T2):
-            ident = f'Hilliard2008-{T}-0.0'
-            values = {}
-            for a in (h, -h):
-                s2 = r.bind(convert(final, power, a))
-                values[a] = s2.prediction(next(x for x in r.RUNS['final']['rows'](s2) if x['identity'] == ident))['value']
-            engine_ = next(x for x in out['derivatives'] if x['identity'] == ident and x['coefficient'] == NEW[power]['identity'])
-            fd = (values[h] - values[-h]) / (2 * h)
-            out['central_differences'].append(dict(coefficient=NEW[power]['identity'], identity=ident, step=h, central_J_mol_K=fd, engine=engine_['derivative_J_mol_K'],
-                                                   relative=abs(engine_['derivative_J_mol_K'][0] / fd - 1) if engine_['derivative_J_mol_K'] else None))
+        derivatives(r, hc, final, power, out)
         for a in ([-2e-7, -2e-6, -1e-5, -2e-5, 2e-5] if power == 2 else [-1e-3, 1e-3]):
             x = broad_cp(r, hc, convert(final, power, a))
             at = {y['T_K']: y['predicted_kJ_kg_K'] for y in x['rows'] if y['source'] == 'Hilliard2008' and y['loading'] == 0}
@@ -461,6 +513,39 @@ def diagnose2():
     r.write('diagnosis.json', out)
     print(json.dumps({k: v for k, v in out.items() if k != 'derivatives'}, indent=1))
     print([(x['identity'], x['coefficient'][-2:], x['status'], x['message'][:100]) for x in out['derivatives'] if x['status'] != 'Available'])
+
+
+def derivatives(r, hc, final, power, out):
+    """Engine Cp derivative of each #264 row with respect to one law coefficient at the converted final set, and centred
+    differences (h = 1 % of the bound) at unloaded Hilliard 313.15/333.15/353.15 K."""
+    import epcsaft
+    from epcsaft import regression as reg
+    spec = r.bind(convert(final, power))
+    hc.SolventSpecification = lambda toml: spec
+    _, _, broad, _ = hc.setup()
+    ids = list(spec.parameters._native.temperature_law_coefficient_identities)
+    model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal, active_parameters=[
+        epcsaft.ActiveParameter(epcsaft.ParameterFamily.TemperatureLawCoefficient, [ids.index(NEW[power]['identity'])])])
+    for x in broad:
+        try:
+            d = reg.differentiate(model, spec.observation(x))
+            status, value, message = d.status.name, list(d.value), d.message
+        except epcsaft.ParameterError as error:  # the fit's 'invalid direction ... balance' stop
+            status, value, message = 'ParameterError', [], str(error)
+        out['derivatives'].append(dict(coefficient=NEW[power]['identity'], identity=x['identity'], T_K=float(x['row']['T_K']), loading=float(x['row']['loading']),
+                                       pressure_Pa=spec.problems[x['problem']].P, status=status, derivative_J_mol_K=value, message=message))
+    h = .01 * NEW[power]['bound']
+    for T in (T1, 333.15, T2):
+        ident = f'Hilliard2008-{T}-0.0'
+        values = {}
+        for a in (h, -h):
+            s2 = r.bind(convert(final, power, a))
+            values[a] = s2.prediction(next(x for x in r.RUNS['final']['rows'](s2) if x['identity'] == ident))['value']
+        engine_ = next(x for x in out['derivatives'] if x['identity'] == ident and x['coefficient'] == NEW[power]['identity'])
+        fd = (values[h] - values[-h]) / (2 * h)
+        out['central_differences'].append(dict(coefficient=NEW[power]['identity'], identity=ident, step=h, central_J_mol_K=fd, engine=engine_['derivative_J_mol_K'],
+                                               relative=abs(engine_['derivative_J_mol_K'][0] / fd - 1) if engine_['derivative_J_mol_K'] else None))
+    return out
 
 
 def grid2():
@@ -554,7 +639,7 @@ def present():
 
 
 if __name__ == '__main__':
-    commands = {'reference': reference, 'stage1': stage1, 'shares': shares, 'qualify2': qualify2, 'select2': select2, 'grid2': grid2, 'present': present, 'diagnose2': diagnose2}
+    commands = {'reference': reference, 'stage1': stage1, 'qualify0': qualify0, 'shares': shares, 'qualify2': qualify2, 'select2': select2, 'grid2': grid2, 'present': present, 'diagnose2': diagnose2}
     if sys.argv[1] in ('fit2', 'assess2'):
         {'fit2': fit2, 'assess2': assess2}[sys.argv[1]](sys.argv[2])
     else:
