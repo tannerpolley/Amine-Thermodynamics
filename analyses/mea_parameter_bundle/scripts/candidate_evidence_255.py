@@ -27,7 +27,7 @@ EV = r.OUT / 'evidence'
 A7 = RES / 'joint-recalibration-170/amendment-7/selected-assessment'
 SPEC = RES / 'engine-3e83e19c-refit-chain/restricted-2/attempt-3/spec.json'
 SCRIPTS = B / 'scripts'
-RECORDS = {'final': RES / 'selected-current-best-parameters.json', 'candidate': EV / 'candidate-parameters.json'}
+RECORDS = {'final': RES / 'engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json', 'candidate': EV / 'candidate-parameters.json'}
 MODES = ('inventory', 'cp', 'density', 'declared-density', 'calorics', 'carbonate', 'states')
 # Runs a substituted producer copy as __main__ after binding the authorized wheel and the evaluated record.
 BOOT = '''

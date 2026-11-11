@@ -37,7 +37,7 @@ import density_268 as d
 OUT = B / 'results/stable-refit-255'
 CHAIN = B / 'results/engine-3e83e19c-refit-chain'
 A6 = CHAIN / 'a6/spec.json'
-STARTS = {'final': B / 'results/selected-current-best-parameters.json', 'wide': CHAIN / 'a6/run/fit/usable-budget-endpoint.json'}
+STARTS = {'final': B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json', 'wide': CHAIN / 'a6/run/fit/usable-budget-endpoint.json'}
 START_SHA = {'final': '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91',
              'wide': 'efb2a9abe3787410734394f5ee32e6eade42d7cb6f5ad23445a357423690b2f3'}
 SHIFTS = {'final': {'R2': -1363.931574116721, 'R5': 10000.}, 'wide': {'R2': 3442.783280905225, 'R5': 10000.}}
@@ -109,7 +109,7 @@ def stability_row(spec, state, scale):
 _SPEC = None
 
 
-TOML = d.AN / 'MEA.toml'
+TOML = OUT.parent / 'adoption-297/historical-spec/MEA.toml'
 SPEC261 = OUT / 'spec-261/study.toml'
 
 

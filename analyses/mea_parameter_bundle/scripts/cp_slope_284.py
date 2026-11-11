@@ -257,7 +257,7 @@ NEW = {1: dict(identity=LAW + '/a1', unit='1 / kelvin', bound=1e-3, scale=.01 / 
 COMMIT2 = '391dfe5d64ede5036bf160bc6ae037ad5e14af32'
 SHA2 = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
 S2 = OUT / 'stage2-391dfe5d'
-STARTS2 = {'final': B / 'results/selected-current-best-parameters.json', 'candidate': B / 'results/stable-refit-255/evidence/candidate-parameters.json'}
+STARTS2 = {'final': B / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json', 'candidate': B / 'results/stable-refit-255/evidence/candidate-parameters.json'}
 
 
 def convert(mapping, power, value=0.):

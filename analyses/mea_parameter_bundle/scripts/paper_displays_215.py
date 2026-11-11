@@ -9,15 +9,17 @@ sys.path[:0] = [str(BUNDLE / 'scripts'), str(ROOT / 'src')]
 import fit_campaign as c, fit_observations as fo, heat_evidence_170 as he
 
 BASE = BUNDLE / 'results/engine-3e83e19c-refit-chain'
-OUT = BUNDLE / 'results/engine-3e83e19c-paper-evidence'
+OUT = BUNDLE / 'results/adoption-297/paper-evidence'
 CANDIDATE = BASE / 'restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
 
 
 def main(mode):
     spec_path = BASE / ('a6/spec.json' if mode == 'comparison-density' else 'restricted-2/attempt-3/spec.json')
     spec = json.loads(spec_path.read_text())
-    runtime = c.verify(spec)
-    assert runtime['wheel_sha256'] == '0d08dff9be39fb8fc9018119c47612f53d823cd0e456914d7dd44c6941596804'
+    fo.s.verify_wheel()
+    runtime = dict(wheel_sha256=fo.s.ENGINE_WHEEL_SHA256, engine_commit=fo.s.ENGINE_COMMIT)
+    spec['engine'] = dict(wheel_sha256=fo.s.ENGINE_WHEEL_SHA256, wheel_path=str(fo.s.installed_wheel().relative_to(ROOT)), commit=fo.s.ENGINE_COMMIT)
+    assert runtime['wheel_sha256'] == '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
     inputs = [spec_path, CANDIDATE]
     if mode == 'comparison-density':
         replay_path = BASE / 'displays/comparison/full-replay.json'

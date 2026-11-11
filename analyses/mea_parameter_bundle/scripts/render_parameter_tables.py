@@ -9,8 +9,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARAM = ROOT / 'results/selected-current-best-parameters.json'
-DATA = ROOT / 'results/engine-3e83e19c-paper-evidence'
-PHYSICAL = ROOT / 'results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'
+DATA = ROOT / 'results/adoption-297/paper-evidence'
+PHYSICAL = ROOT / 'results/stable-refit-255/evidence/candidate-parameters.json'
 CHEMISTRY = ROOT.parents[1] / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json'
 OUT = ROOT / 'figures/a7_regression_overview/output'
 
@@ -115,7 +115,7 @@ def main():
                 pair = pairs[frozenset((ca['component_id'], cb['component_id']))]
                 coefficient = next(c for c in pair['coefficients'] if c['family'] == 'k_ij')
                 value = cell(magnitude(coefficient), coefficient['identity'] in fitted, se=se.get(coefficient['identity']),
-                             title='A7 second restricted fit' if coefficient['identity'] in fitted else coefficient['provenance']['locator'])
+                             title='#255 stability-constrained candidate' if coefficient['identity'] in fitted else coefficient['provenance']['locator'])
             row.append(value)
         rows.append(row)
     text += table([''] + [names[c['component_id']] for c in components], rows, 'binary-interactions-table')
@@ -134,7 +134,7 @@ def main():
         label = label.replace('/k_ij', ' interaction').replace('/', '–')
         label = label.replace('segment_diameter', 'segment diameter').replace('born_diameter', 'Born diameter')
         label = label.replace('dispersion_energy_over_k', 'dispersion energy/k')
-        label = label.replace('reaction:R5:correlation:a_k', 'R5 unshifted source A')
+        label = label.replace('reaction:R5:correlation:a_k', 'R5 completed native b')
         label = label.replace('reaction:R2:enthalpy_shift', 'R2 total enthalpy shift').replace('reaction:R5:enthalpy_shift', 'R5 total enthalpy shift')
         error = se.get(identity)
         bound = ('On bound; ' if index in fit['active_bounds'] else 'Free; ') + ' to '.join(format(v, 'g') for v in coordinate['bounds'])
@@ -142,11 +142,7 @@ def main():
                      '—' if error is None else f'{error:.2g}', bound])
     text += '\n## Fitted coordinates and conditional uncertainty {#fitted-coordinates}\n'
     text += table(['Coordinate', 'Current value', 'Unit', 'Conditional standard error (same unit)', 'Bounds (same unit)'], rows, 'summary-table')
-    text += (f"\nThe ten free coordinates have rank {uncertainty['free_rank']} at the campaign cutoff "
-             f"{uncertainty['rank_relative_cutoff']:g}. The residual variance factor is {uncertainty['residual_variance']:.4g} "
-             "with 307 − 10 = 297 degrees of freedom. R5 A is the unshifted source coordinate; enthalpy shifts are totals including inherited shifts. "
-             "The errors condition on residual weights, fixed inputs, active bounds and local linearization. They do not establish "
-             "independent-error measurement uncertainty, parameter uniqueness or prediction intervals.\n")
+    text += (f"\nThe ten free coordinates have numerical rank {uncertainty['rank']}. The residual variance factor is {uncertainty['residual_variance']:.4g} with 297 degrees of freedom. The R5 coordinate above is the completed native b coefficient (K), using the exact #255 chart; enthalpy shifts are totals. Errors condition on fixed inputs, residual weights, active bounds and linearization. They are not prediction intervals or uncertainty of the stability boundary.\n")
     chemistry = json.loads(CHEMISTRY.read_text())
     overrides = {r['reaction_id']: r for r in p['reaction_correlations']}
     offsets = chemistry['common_source_standard_state']['source_to_common_ln_k_offsets']
@@ -216,7 +212,7 @@ def results():
     summary = json.loads((DATA / 'summary.json').read_text())
     groups = fit['groups']
     blocks = {'working-record': plain(['Objective', 'Rows', 'Cost (dimensionless)'],
-        [['A7 joint objective', 307, f"{fit['cost']:.4f}"],
+        [['#255 joint objective', 307, f"{fit['cost']:.4f}"],
          ['Common calibration subset', 149, f"{groups['common149']['cost']:.4f}"]])}
     blocks['fits'] = plain(['Objective group', 'Rows', 'Cost (dimensionless)'],
         [[name, r['n'], f"{r['cost']:.4f}"] for name, r in groups.items()])
@@ -235,7 +231,7 @@ def results():
         'canonical 100-120 C Xu2011 100 C': 'Xu 2011, 100 °C',
         'canonical 100-120 C Xu2011 120 C': 'Xu 2011, 120 °C',
     }
-    blocks['high-temperature'] = plain(['Cohort', 'n', 'A7 pressure AARD (%)'],
+    blocks['high-temperature'] = plain(['Cohort', 'n', '#255 pressure AARD (%)'],
         [[cohort_labels[r['cohort']], r['n_total'], f"{float(r['AARD_percent']):.2f}"]
          for r in read(DATA / 'high-temperature-comparison.csv') if r['cohort'] in cohort_labels])
     density = read(DATA / 'density.csv')

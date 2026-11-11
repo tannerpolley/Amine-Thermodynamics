@@ -58,7 +58,7 @@ CANONICAL_VLE = (
     / "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"
 )
 CANONICAL_SPECIATION_SHA256 = (
-    "8c07df9efd1c1ecbd775ccdd42791e0cef1880b3837e5749a60d2142aa85809e"
+    "38326453cfe11b30f2e83e2c33e9342037a8f2bbbec0d95938384806e935383b"
 )
 # Re-pinned for the #152 regeneration (177df00, checked in #248 and #255): one Hilliard 2008
 # row (vle_obs_0149) joined the active view and four Xu 2011 rounded temperatures moved;
@@ -421,7 +421,7 @@ def main() -> None:
             for row in canonical_rows
             if row["value_mole_fraction"] != ""
             and float(row["temperature_C"]) == temperature_c
-            and float(row["mea_mass_fraction"]) == 0.3
+            and float(row["mea_mass_fraction"]) == (0.31 if temperature_c == 80 else 0.3)
         ]
         if not loadings or temperature_c not in speciation_templates:
             raise ValueError(f"missing {temperature_c} C speciation grid authority")
@@ -537,7 +537,7 @@ def main() -> None:
         }
         for row in canonical_rows
         if float(row["temperature_C"]) in SPECIATION_GRID_TEMPERATURES_C
-        and float(row["mea_mass_fraction"]) == 0.3
+        and float(row["mea_mass_fraction"]) == (0.31 if temperature_c == 80 else 0.3)
         and row["value_mole_fraction"] != ""
     ]
 

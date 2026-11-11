@@ -57,7 +57,7 @@ def verify():
         for name in archive.namelist():
             if name.startswith('epcsaft/') and not name.endswith('/'):
                 assert archive.read(name) == (Path(epcsaft.__file__).parent.parent / name).read_bytes(), name
-    assert hashlib.sha256((AN / 'inputs/endpoint.json').read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
+    assert hashlib.sha256((ROOT / 'analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_bytes()).hexdigest() == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
 
 
 def prepare():
@@ -67,7 +67,7 @@ def prepare():
     nodes = [n for n in ast.parse(source.read_text()).body if isinstance(n, ast.FunctionDef) and n.name in ('toml', 'fields', 'equal', 'problem')]
     ns = dict(json=json, jsonable=jsonable)
     exec(compile(ast.Module(body=nodes, type_ignores=[]), str(source), 'exec'), ns)
-    base = SolventSpecification(AN / 'MEA.toml')
+    base = SolventSpecification(ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/MEA-pre-260.toml')
     ns['ids'] = base.parameters.component_ids
     declaration = copy.deepcopy(base.spec)
     declaration.pop('declarations')
@@ -136,7 +136,7 @@ def prepare():
     loaded = SolventSpecification(OUT / 'study.toml')
     for key, native in native_checks:
         ns['equal'](native, loaded.problem(key, {})._native(loaded.model))
-    write(OUT / 'preparation.json', dict(native_problems_compared=len(native_checks), unique_pressure_rows=len(metadata), original_overlap=len(overlap), exclusions=len(exclusions), inputs={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [source, AN/'MEA.toml', AN/'declarations.toml', AN/'inputs/fit-coordinates.json', CHAIN, REF/'observation-groups.json', Path(__file__)]}))
+    write(OUT / 'preparation.json', dict(native_problems_compared=len(native_checks), unique_pressure_rows=len(metadata), original_overlap=len(overlap), exclusions=len(exclusions), inputs={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [source, ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/MEA-pre-260.toml', ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/declarations.toml', AN/'inputs/fit-coordinates.json', CHAIN, REF/'observation-groups.json', Path(__file__)]}))
     print('Prepared', len(metadata), 'pressure rows and', len(native_checks), 'native problem comparisons', flush=True)
 
 
