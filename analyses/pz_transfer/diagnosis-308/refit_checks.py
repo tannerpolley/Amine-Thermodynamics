@@ -1,7 +1,7 @@
 """Bounded checks of the 12-coordinate refits (#308 review, 12 November 2026); no fitting.
 
 1. Start-1 availability: Hilliard bubble solves at the design starts with three- and four-species vapour.
-2. Missed dense splits: at the stability-enforced endpoint, the Full search finds no split at Hilliard rows 55/56,
+2. Missed dense splits: at the penalty-fit endpoint, the Full search finds no split at Hilliard rows 55/56,
    but a split exists 0.01-0.05 of a small optimizer step away. The tangent-plane distance
    tpd(w) = sum_i w_i [ln w_i + ln phi_i(w) - ln z_i - ln phi_i(z)] at that neighbour's split composition w is
    evaluated directly at both points (same T, P and parent z).
@@ -43,7 +43,7 @@ for label, support in (("three-species", [W, CO2, PZ]), ("four-species", [W, CO2
 R.VAPOR = [W, CO2, PZ, HPC]
 out["start1_availability"] = availability
 
-# 2. Missed dense splits at the stability-enforced endpoint.
+# 2. Missed dense splits at the penalty-fit endpoint.
 xs = np.array(R.read("reactive-A12s-fit.json")["optimizer"])
 step = np.array([0.00066, 0.01349, 0.0, 0.00018, 0.00038, -8e-05, -7e-05, 0.00055, -0.00039, 0.00099, 0.0072, -0.00697])
 

@@ -61,14 +61,14 @@ for name, get in [
     *[(f"Hilliard bias at ~{c} mol/kg (%)", lambda r, c=c: pct(r["hilliard"]["by_concentration"][c]["bias_percent"])) for c in ("0.9", "2.0", "2.5", "3.6", "5.0")],
     ("NMR PZCOO⁻+HPZCOO mean absolute error (fraction of PZ)", lambda r: f"{r['carbamate_MAE']['1']:.4f}"),
     ("NMR PZ(COO)₂²⁻ mean absolute error (fraction of PZ)", lambda r: f"{r['carbamate_MAE']['2']:.4f}"),
-    ("Census: states with no extra phase / 183", lambda r: str(r["census"]["no_extra_phase"])),
+    ("Census: states with no split found by the Engine search / 183 (upper bound)", lambda r: str(r["census"]["no_extra_phase"])),
     ("Census: undecided states", lambda r: str(r["census"]["undecided"])),
     ("Census: liquid splits found by the Engine search (lower bound)", lambda r: ", ".join(r["census"]["dense_split"]) or "none"),
     ("Hold-out mean absolute relative error, 52 rows (%)", lambda r: pct(r["holdout"]["MARE_percent"])),
     ("Hold-out signed bias (%)", lambda r: pct(r["holdout"]["bias_percent"])),
     ("Hold-out RMS of (calc − meas)/source uncertainty", lambda r: f"{r['holdout']['RMS_scaled_residual']:.2f}"),
     ("Hold-out rows within source uncertainty / 52", lambda r: str(r["holdout"]["within_source_uncertainty"])),
-    ("Hold-out bubble states with no extra phase / 52", lambda r: str(r["holdout"]["phase_passed"])),
+    ("Hold-out bubble states with no split found by the Engine search / 52 (upper bound)", lambda r: str(r["holdout"]["phase_passed"])),
     ("Hold-out, 313–353 K only (37 rows) (%)", lambda r: pct(r["holdout"]["excluding_393K"]["313-353 K"]["MARE_percent"])),
 ]:
     lines.append("| " + " | ".join([name] + [get(record[t]) for t in TAGS]) + " |")
