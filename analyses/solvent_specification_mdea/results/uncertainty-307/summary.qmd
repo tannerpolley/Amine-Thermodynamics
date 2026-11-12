@@ -1,0 +1,39 @@
+## Parameter uncertainty and sensitivity (#307)
+
+Pressure bands cover 108 retained states at 298.15–393.15 K. Their conditional relative standard errors range from 7.82% to 39.1%. Covariance propagation includes parameter correlations; the marginal one-SE perturbations used for ranking do not. Large local fractional changes are derivatives multiplied by SE, not nonlinear perturbed predictions.
+
+The 278-row adopted record is unchanged. Covariance and bands are local, linearized and conditional on the fixed model, observation weights, source inputs and bound coordinates. They describe parameter uncertainty under an unknown common residual variance, not model discrepancy, future measurement noise or physical validation. The native variance factor is 2.7639784.
+
+The interior-only diagnostic refit changes cost by -1.86958e-10; the largest absolute movement in units of coordinate scale is 0. Ranking uses native conditional covariance; bound coordinates fixed. [Both covariance estimates, the native correlation matrix and all movements](results/uncertainty-307/covariance.json) are retained.
+
+The ranking statistic is the maximum absolute fractional prediction change over each named retained group. Interior coordinates move by one conditional standard error with the others fixed. Bound coordinates use the first inward profile point (1% of the original bound interval), with all remaining coordinates refitted. These are different perturbation sizes; their ranks do not establish statistical significance. Near-zero predictions can dominate relative changes.
+
+| Parameter | Adopted value (physical unit) | SE (bound coordinates fixed) or profile | Largest fractional change | Most affected predictions |
+|---|---:|---|---:|---|
+| protonated-methyldiethanolamine / dispersion_energy_over_k | 623.043 kelvin | ± 36.69 (bound fixed) | 0.8759 | Ermatchkov; Xiao; Carson |
+| ['protonated-methyldiethanolamine', 'water'] / k_ij | -0.03323621 dimensionless | ± 0.00999 (bound fixed) | 0.6696 | Ermatchkov; Xiao; Carson |
+| protonated-methyldiethanolamine / segment_diameter | 3.649407 angstrom | ± 0.03061 (bound fixed) | 0.09683 | Ermatchkov; Xiao; Carson |
+| ['protonated-methyldiethanolamine', 'water'] / k_ij_reciprocal_temperature_slope | -27.10493 kelvin | ± 3.363 (bound fixed) | 0.09082 | Ermatchkov; Carson; Xiao |
+| pair/mdea-water/k_ij/a0 / temperature_law_coefficient | -0.2063373 dimensionless | ± 0.001341 (bound fixed) | 0.0442 | Ermatchkov; Xiao; Carson |
+| pair/mdea-water/k_ij/a1 / temperature_law_coefficient | 0.00147504 1 / kelvin | ± 2.563e-05 (bound fixed) | 0.04191 | Ermatchkov; Carson; Xiao |
+| ['protonated-methyldiethanolamine', 'carbon-dioxide'] / k_ij | 0.2481889 dimensionless | ± 0.02934 (bound fixed) | 0.004648 | Ermatchkov; Xiao; Carson |
+| ['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij | 1 dimensionless | 0.98: Δcost 0.142 (converged); 0.9: Δcost 0.7282 (converged); 0.8: Δcost 1.508 (converged) | 0.004214 | Ermatchkov; Xiao; Carson |
+| protonated-methyldiethanolamine / born_diameter | 7 angstrom | 6.95: Δcost 0.06927 (converged); 6.75: Δcost 0.3571 (converged); 6.5: Δcost 0.7433 (converged) | 0.001361 | Ermatchkov; Xiao; Carson |
+
+![Prediction changes per conditional SE or inward profile step.](results/uncertainty-307/sensitivity.png)
+
+![Covariance propagated to pressure predictions at the retained measured states (discrete parity comparison). Error bars are nominal ±1.96 conditional SE; the symmetric logarithmic axis preserves any negative lower limits. These are local parameter-only bands, not physical prediction intervals.](results/uncertainty-307/pressure-bands.png)
+
+The two weakest directions of the complete weighted Jacobian in the original optimizer scales are:
+
+- Singular value 0.00848001: ['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij (+0.8068); protonated-methyldiethanolamine / born_diameter (-0.5440); protonated-methyldiethanolamine / dispersion_energy_over_k (+0.2099); ['protonated-methyldiethanolamine', 'water'] / k_ij (+0.0943).
+- Singular value 0.0198683: protonated-methyldiethanolamine / born_diameter (-0.8386); ['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij (-0.5325); protonated-methyldiethanolamine / dispersion_energy_over_k (-0.1046); ['protonated-methyldiethanolamine', 'water'] / k_ij (-0.0478).
+
+These directions include bound coordinates; their two-sided singular-vector displacements are not necessarily feasible. They describe local confounding in the declared scales, not a unique physical mechanism.
+
+Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record. For R5, fixing its enthalpy shift translates the remaining native b coordinate and bounds by the native chart offset; the original admissible interval is preserved. Complete/reduced chart prediction equivalence is retained at zero and a 0.25-scale b displacement. Native rejected-trial causes are retained with each fit.
+
+[Profile results](results/uncertainty-307/profiles.json), [prediction values and exact native columns](results/uncertainty-307/predictions.json), [bands](results/uncertainty-307/prediction-bands.csv), [ranked values](results/uncertainty-307/ranking.csv) and [input identity](results/uncertainty-307/inputs.json) retain the calculation. MEA ranks only pressure, heat, heat capacity, carbamate/bicarbonate and density at states already in its adopted specification. Bicarbonate is additionally resolved alone at the four states with bicarbonate+carbonate observations; this extra model quantity is not a new measured observation or a fitted target. The summed observable is retained separately; MDEA uses the 20 Xiao and 88 Ermatchkov pressure states at ≤49 wt% from #298, its adopted R2 law, and the 40 Carson heat states. Parameter units and ties are in the coordinate declarations; reaction enthalpy shifts are shown as adopted totals in J/mol, whereas refit increments are about zero.
+
+Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. Run from the repository root using `agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py MDEA`. The source base is `79706636e8716974e045b582f1b1cbfe7e4c7009`; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is recorded in the [report](../mea_parameter_bundle/results/uncertainty-307/review.md).
+
