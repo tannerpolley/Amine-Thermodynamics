@@ -11,8 +11,9 @@ from run import AN, verify_wheel
 from speciation import PZ, PH, PH2, PC, HPC, DC, W, H, document, save
 
 
-def declarations(q=0.02, tolerance=1e-10):
-    par = epcsaft.Parameters.from_mapping(document())
+def declarations(q=0.02, tolerance=1e-10, par=None, offsets=None):
+    if par is None:
+        par = epcsaft.Parameters.from_mapping(document())
     rr = json.loads((AN / "results/speciation-reactions.json").read_text())
     # Evaluation extensions preserve source domains in the retained source declaration.
     for r in rr:
@@ -30,6 +31,9 @@ def declarations(q=0.02, tolerance=1e-10):
         )
         for r in rr[5:]
     ]
+    if offsets is not None:
+        for r, value in zip(rr[5:], offsets, strict=True):
+            r["correlation"]["a"] += float(value)
     for r in rr:
         r["correlation"] = eq.ReactionLogPolynomial(**r["correlation"])
     rows = list(csv.DictReader((AN / "inputs/ermatchkov-nmr.csv").open()))
