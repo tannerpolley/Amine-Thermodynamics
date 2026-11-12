@@ -4,7 +4,6 @@ from pathlib import Path
 import numpy as np
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
-from pinned_engine import SHA256
 from MEA.solvent_specification import SolventSpecification, jsonable, relative_error_statistic
 
 AN, t0 = Path(__file__).resolve().parent, time.perf_counter()
@@ -16,7 +15,8 @@ AMP, H, C, W, CO2 = 'aminomethylpropanol', 'protonated-aminomethylpropanol', 'ca
 DOC = json.loads((AN / 'inputs/amp-document.json').read_text())
 PURE = json.loads((AN / 'results/pure/summary.json').read_text())['frozen_endpoint']['values']
 BIN = json.loads((AN / 'results/binary-dielectric.json').read_text())['binary']
-summary = dict(wheel_sha256=SHA256, cpu_count=os.cpu_count(), script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), runs={})
+SHARED_ENDPOINT = AN.parent / 'mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json'  # #243 shared species; #306 rebinds
+summary = dict(cpu_count=os.cpu_count(), script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), runs={})
 def write(name, value):  # gzip above 5 MB
     data = (json.dumps(jsonable(value), indent=1, default=float) + '\n').encode()
     (OUT / (name + '.gz' if len(data) > 5e6 else name)).write_bytes(gzip.compress(data, mtime=0) if len(data) > 5e6 else data)
@@ -73,14 +73,15 @@ def apply_laws(spec, chart, parameters):  # completed fitted laws and fitted par
             reaction.correlation = eq.ReactionLogPolynomial(**laws[reaction.name])
     spec.model = epcsaft.Mixture(parameters, thermochemistry=spec.thermal)
     return laws
-def make_spec(run, document, coords, law=None, seconds=1200):
-    text = (AN / 'declarations.toml').read_text()
+def make_spec(run, document, coords, law=None, seconds=1200, declarations='declarations.toml'):
+    text = (AN / declarations).read_text()
     if law is not None:
+        assert '"a" = 11.555, "b" = -2546.2' in text
         text = text.replace('"a" = 11.555, "b" = -2546.2', f'"a" = {law["a"]}, "b" = {law["b"]}')
     common = record(f'inputs/redesign/{run}-declarations.toml', text)
     start = record(f'inputs/redesign/{run}-start.json', json.dumps(document, indent=1) + '\n')
     chart = record(f'inputs/redesign/{run}-coordinates.json', json.dumps(coords, indent=1) + '\n')
-    caloric = '{path = "../solvent_specification_mea/inputs/caloric.json", sha256 = "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1"}'
+    caloric = f'{{path = "../solvent_specification_mea/inputs/caloric.json", sha256 = "{hashlib.sha256((AN.parent / "solvent_specification_mea/inputs/caloric.json").read_bytes()).hexdigest()}"}}'
     record(f'{run}.toml', f'schema = "solvent-specification-1"\ndeclarations = {common}\nstart = {start}\nendpoint = {start}\ncoordinates = {chart}\ncaloric = {caloric}\n'
            f'phase_states = {{path = "inputs/no-phase-states.json", sha256 = "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"}}\n'
            f'optimizer = {{maximum_iterations = 60, function_tolerance = 1e-10, parameter_tolerance = 1e-10, gradient_tolerance = 1e-8, maximum_elapsed_time_seconds = {seconds}}}\n')
@@ -119,7 +120,7 @@ def preflight(spec):
     shared_ids = (W, CO2, 'bicarbonate-anion', 'carbonate-anion', 'hydronium-cation', 'hydroxide-anion')
     same = lambda x: [c for c in x['components'] if c['component_id'] in shared_ids]
     pairs = lambda x: [p for p in x['pairs'] if {p['component_id_a'], p['component_id_b']} <= set(shared_ids)]
-    mea = json.loads((AN.parent / 'mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json').read_text())
+    mea = json.loads(SHARED_ENDPOINT.read_text())
     unchanged = same(spec.inputs['start']) == same(mea) and pairs(spec.inputs['start']) == pairs(mea)
     spec.species_mapping(spec.spec['chemistry']['reactions'])
     row = next(r for r in rows if r['group'] == 'loaded-pressure')
@@ -181,115 +182,118 @@ def compare_starts(runs):
     return comparisons
 
 
-specs, best = {}, {}
-for setting, cation, slope, second in itertools.product((1,2), ('A','B'), (False,True), (False,True)):
-    run = f'redesign-{setting}-{cation}-{"slope" if slope else "fixed"}-{1+second}'
-    print(run, flush=True)
-    if time.perf_counter()-t0 >= LIMIT_SECONDS:
-        stop('12 hour budget reached; incomplete assessment')
-    d, qs, H0, baseline = variant(cation, second), coordinates(cation), 0., None
-    if setting == 2:
-        for c in d['components']:
-            if c['component_id'] == C:
-                for q in c['coefficients']:
-                    if q['family'] in ('segment_diameter','debye_huckel_diameter','packing_diameter'):
-                        q['value']['magnitude'] = 4.866108647520244 * (.88 if q['family'] == 'packing_diameter' else 1.)
-        qs[4] = dict(targets=[['k_ij',[AMP,CO2],1.]], origin=0., scale=.05, bounds=[-.5,.5])
-        qs[6] = dict(targets=[['k_ij',[C,W],1.]], origin=-.0036580495327475336, scale=.05, bounds=[-.5,.5])
-    if slope:
-        qs.append(dict(kind='reaction_enthalpy_shift', name='carbamate-hydrolysis', pivot_temperature=TP, origin=0., scale=1000., bounds=[-5000.,5000.]))
-    try:
-        if cation == 'B':
-            restricted = copy.deepcopy(qs)
-            if setting == 1:
-                restricted.pop(4)
-            initial = make_spec(run+'-initial', d, restricted, seconds=600)
-            start_diagnostic = preflight(initial)
-            init, fitted, rows = fit_endpoint(run+'-initial', initial)
-            write(run+'-initial.json', dict(start=start_diagnostic, endpoint=init))
-            if init['status'] != 'converged' or not init['usable'] or init['replay_cost_relative'] > 1e-8:
-                summary['runs'][run] = dict(initialization=init, disposition='initialization unavailable; Diagnose')
-                write('summary.json', summary)
+if __name__ == '__main__':
+    from pinned_engine import SHA256
+    summary['wheel_sha256'] = SHA256
+    specs, best = {}, {}
+    for setting, cation, slope, second in itertools.product((1,2), ('A','B'), (False,True), (False,True)):
+        run = f'redesign-{setting}-{cation}-{"slope" if slope else "fixed"}-{1+second}'
+        print(run, flush=True)
+        if time.perf_counter()-t0 >= LIMIT_SECONDS:
+            stop('12 hour budget reached; incomplete assessment')
+        d, qs, H0, baseline = variant(cation, second), coordinates(cation), 0., None
+        if setting == 2:
+            for c in d['components']:
+                if c['component_id'] == C:
+                    for q in c['coefficients']:
+                        if q['family'] in ('segment_diameter','debye_huckel_diameter','packing_diameter'):
+                            q['value']['magnitude'] = 4.866108647520244 * (.88 if q['family'] == 'packing_diameter' else 1.)
+            qs[4] = dict(targets=[['k_ij',[AMP,CO2],1.]], origin=0., scale=.05, bounds=[-.5,.5])
+            qs[6] = dict(targets=[['k_ij',[C,W],1.]], origin=-.0036580495327475336, scale=.05, bounds=[-.5,.5])
+        if slope:
+            qs.append(dict(kind='reaction_enthalpy_shift', name='carbamate-hydrolysis', pivot_temperature=TP, origin=0., scale=1000., bounds=[-5000.,5000.]))
+        try:
+            if cation == 'B':
+                restricted = copy.deepcopy(qs)
+                if setting == 1:
+                    restricted.pop(4)
+                initial = make_spec(run+'-initial', d, restricted, seconds=600)
+                start_diagnostic = preflight(initial)
+                init, fitted, rows = fit_endpoint(run+'-initial', initial)
+                write(run+'-initial.json', dict(start=start_diagnostic, endpoint=init))
+                if init['status'] != 'converged' or not init['usable'] or init['replay_cost_relative'] > 1e-8:
+                    summary['runs'][run] = dict(initialization=init, disposition='initialization unavailable; Diagnose')
+                    write('summary.json', summary)
+                    continue
+                d, baseline = epcsaft.parameters.document_mapping(fitted), init['law']
+                H0 = init['independent_physical'][-1] if slope else 0.
+                for q in qs:
+                    if q.get('coefficient') == 'a':
+                        q['origin'] += H0/(R*TP)
+                        q['bounds'] = [v+H0/(R*TP) for v in q['bounds']]
+                    if q.get('kind') == 'reaction_enthalpy_shift':
+                        q['bounds'] = [v-H0 for v in q['bounds']]
+            spec = specs[run] = make_spec(run, d, qs, baseline)
+            if cation == 'B':
+                restart = [spec.prediction(r) for r in spec.inputs['observations']['fitted']]
+                restart_error = abs(math.fsum(.5*r['weight']*p['residual']**2 for r,p in zip(spec.inputs['observations']['fitted'], restart))/init['cost']-1)
+                assert restart_error <= 1e-8, 'B restart changed initialization law before fitting'
+            start = preflight(spec)
+            if cation == 'B':
+                start['initialization_cost_relative'] = restart_error
+            summary['runs'][run] = pre = dict(start=start, setting=setting, cation=cation, fitted_slope=slope)
+            write('summary.json', summary)
+            if not start['passed']:
+                pre['disposition'] = 'full start gate failed; Diagnose'
                 continue
-            d, baseline = epcsaft.parameters.document_mapping(fitted), init['law']
-            H0 = init['independent_physical'][-1] if slope else 0.
-            for q in qs:
-                if q.get('coefficient') == 'a':
-                    q['origin'] += H0/(R*TP)
-                    q['bounds'] = [v+H0/(R*TP) for v in q['bounds']]
-                if q.get('kind') == 'reaction_enthalpy_shift':
-                    q['bounds'] = [v-H0 for v in q['bounds']]
-        spec = specs[run] = make_spec(run, d, qs, baseline)
-        if cation == 'B':
-            restart = [spec.prediction(r) for r in spec.inputs['observations']['fitted']]
-            restart_error = abs(math.fsum(.5*r['weight']*p['residual']**2 for r,p in zip(spec.inputs['observations']['fitted'], restart))/init['cost']-1)
-            assert restart_error <= 1e-8, 'B restart changed initialization law before fitting'
-        start = preflight(spec)
-        if cation == 'B':
-            start['initialization_cost_relative'] = restart_error
-        summary['runs'][run] = pre = dict(start=start, setting=setting, cation=cation, fitted_slope=slope)
-        write('summary.json', summary)
-        if not start['passed']:
-            pre['disposition'] = 'full start gate failed; Diagnose'
-            continue
-        if setting == 1 and cation == 'A' and not slope:
-            old = json.loads((AN/'results/reactive/summary.json').read_text())['runs'][f'A-{1+second}']
-            pre.update(old, reused_from=f'results/reactive/A-{1+second}-fit.json')
-            pre['disposition'] = 'historical endpoint on two bounds; not adopted'
-            continue
-        endpoint, fitted, replay = fit_endpoint(run, spec)
-        pre.update(endpoint)
-        if cation == 'B':
-            pre['initialization_cost_relative'] = abs(pre['initial_cost']/init['cost']-1)
-            assert pre['initialization_cost_relative'] <= 1e-8, 'B restart changed initialization law'
-        calibration_checks(pre, spec, replay, slope, H0)
-        if pre['admissible']:
-            spec.parameter_sha256 = hashlib.sha256((AN/pre['endpoint']).read_bytes()).hexdigest()
-            phases = [spec.phase(dict(identity=r['identity'], problem=r['problem'], endpoint_sha256=spec.parameter_sha256), spec.spec['phase_policy']) for r in spec.inputs['observations']['fitted']]
-            write(run+'-calibration-phases.json', phases)
-            pre['admissible'] = all(not(p.get('dense') or p.get('ambiguous') or p.get('unresolved')) for p in phases)
+            if setting == 1 and cation == 'A' and not slope:
+                old = json.loads((AN/'results/reactive/summary.json').read_text())['runs'][f'A-{1+second}']
+                pre.update(old, reused_from=f'results/reactive/A-{1+second}-fit.json')
+                pre['disposition'] = 'historical endpoint on two bounds; not adopted'
+                continue
+            endpoint, fitted, replay = fit_endpoint(run, spec)
+            pre.update(endpoint)
+            if cation == 'B':
+                pre['initialization_cost_relative'] = abs(pre['initial_cost']/init['cost']-1)
+                assert pre['initialization_cost_relative'] <= 1e-8, 'B restart changed initialization law'
+            calibration_checks(pre, spec, replay, slope, H0)
             if pre['admissible']:
-                best[run] = pre
-        print(run, 'cost', pre['cost'], 'NMR RMS', pre['nmr_rms'], 'admissible', pre['admissible'], flush=True)
-    except Exception as error:
-        summary['runs'].setdefault(run, {}).update(exception=type(error).__name__, message=str(error), disposition='execution failure; Diagnose')
-        print(run, type(error).__name__, str(error), flush=True)
-    finally:
-        write('summary.json', summary)
-summary['start_comparisons'] = compare_starts(summary['runs'])
-if not best:
-    stop('no adopted endpoint; Kundu not scored; calibration evidence requires diagnosis')
-selected = min(best, key=lambda r: (best[r]['near_bounds'], best[r]['cost'], best[r]['fitted_slope'], best[r]['setting'], best[r]['cation'], r))
-summary.update(selected=selected, adopted=dict(run=selected, parameter_sha256=specs[selected].parameter_sha256, law=best[selected]['law'], law_sha256=hashlib.sha256(json.dumps(best[selected]['law'], sort_keys=True).encode()).hexdigest()))
-write('adopted.json', summary['adopted'])
-best = {selected: selected}
-policy = specs[selected].spec['phase_policy']
-for cation, run in best.items():
-    spec = specs[run]  # already carries its fitted model and laws
-    comparisons = [spec.prediction(r) for r in spec.inputs['observations']['comparisons']]
-    kundu = [p for p in comparisons if p['group'] == 'kundu']
-    phases = [spec.phase(dict(identity=r['identity'], problem=r['problem'], endpoint_sha256=spec.parameter_sha256), policy)
-              for r in spec.inputs['observations']['fitted'] + spec.inputs['observations']['comparisons'] if 'problem' in r]
-    envelope = []
-    for r in [r for r in spec.inputs['observations']['comparisons'] if r['group'] == 'kundu']:  # alpha +/- 2 % alpha, no refit
-        base = spec.problems[r['problem']]
-        values = []
-        for f in (0.98, 1.02):
-            problem = copy.deepcopy(base)
-            problem.feed.values[CO2] = f * base.feed.values[CO2]
-            p = reg.predict(spec.model, reg.observation(spec.parameters, 'partial_pressure', problem, observed=r['arguments']['observed'], form='log_ratio', phase='V', species=[CO2]))
-            values.append(p.value if p.status.name == 'Available' else None)
-        envelope.append(dict(identity=r['identity'], low_alpha=values[0], high_alpha=values[1]))
-    summary[cation] = dict(run=run, kundu_E_p=relative_error_statistic(kundu), kundu_available=sum(p['status'] == 'Available' for p in kundu),
-        kundu_rows=[dict(identity=p['identity'], table=p['row']['table'], T=p['row']['T_K'], observed=p['observed'], predicted=p.get('value'), status=p['status'],
-                         log_ratio=math.log(p['value'] / p['observed']) if p.get('value') else None) for p in kundu],
-        comparisons={g: dict(rows=sum(p['group'] == g for p in comparisons), available=sum(p['group'] == g and p['status'] == 'Available' for p in comparisons),
-                             mean_abs_percent=relative_error_statistic([p for p in comparisons if p['group'] == g and p['status'] == 'Available']))
-                     for g in dict.fromkeys(p['group'] for p in comparisons)},
-        phase=dict(states=len(phases), dense=[p['identity'] for p in phases if p.get('dense')], unresolved=[p['identity'] for p in phases if p.get('unresolved')],
-                   ambiguous=[p['identity'] for p in phases if p.get('ambiguous')]), alpha_envelope=envelope)
-    write(f'{cation}-assessment.json', dict(comparisons=comparisons, phases=phases))
-s = summary[selected]
-summary['falsifier'] = dict(variant=selected, E_p=s['kundu_E_p'], limit=30.0, all_rows=s['kundu_available'] == 51, nmr_rms=summary['runs'][best[selected]]['nmr_rms'],
-                            nmr_limit=0.006, phase_clean=not (s['phase']['dense'] or s['phase']['unresolved'] or s['phase']['ambiguous']))
-stop('assessed')
+                spec.parameter_sha256 = hashlib.sha256((AN/pre['endpoint']).read_bytes()).hexdigest()
+                phases = [spec.phase(dict(identity=r['identity'], problem=r['problem'], endpoint_sha256=spec.parameter_sha256), spec.spec['phase_policy']) for r in spec.inputs['observations']['fitted']]
+                write(run+'-calibration-phases.json', phases)
+                pre['admissible'] = all(not(p.get('dense') or p.get('ambiguous') or p.get('unresolved')) for p in phases)
+                if pre['admissible']:
+                    best[run] = pre
+            print(run, 'cost', pre['cost'], 'NMR RMS', pre['nmr_rms'], 'admissible', pre['admissible'], flush=True)
+        except Exception as error:
+            summary['runs'].setdefault(run, {}).update(exception=type(error).__name__, message=str(error), disposition='execution failure; Diagnose')
+            print(run, type(error).__name__, str(error), flush=True)
+        finally:
+            write('summary.json', summary)
+    summary['start_comparisons'] = compare_starts(summary['runs'])
+    if not best:
+        stop('no adopted endpoint; Kundu not scored; calibration evidence requires diagnosis')
+    selected = min(best, key=lambda r: (best[r]['near_bounds'], best[r]['cost'], best[r]['fitted_slope'], best[r]['setting'], best[r]['cation'], r))
+    summary.update(selected=selected, adopted=dict(run=selected, parameter_sha256=specs[selected].parameter_sha256, law=best[selected]['law'], law_sha256=hashlib.sha256(json.dumps(best[selected]['law'], sort_keys=True).encode()).hexdigest()))
+    write('adopted.json', summary['adopted'])
+    best = {selected: selected}
+    policy = specs[selected].spec['phase_policy']
+    for cation, run in best.items():
+        spec = specs[run]  # already carries its fitted model and laws
+        comparisons = [spec.prediction(r) for r in spec.inputs['observations']['comparisons']]
+        kundu = [p for p in comparisons if p['group'] == 'kundu']
+        phases = [spec.phase(dict(identity=r['identity'], problem=r['problem'], endpoint_sha256=spec.parameter_sha256), policy)
+                  for r in spec.inputs['observations']['fitted'] + spec.inputs['observations']['comparisons'] if 'problem' in r]
+        envelope = []
+        for r in [r for r in spec.inputs['observations']['comparisons'] if r['group'] == 'kundu']:  # alpha +/- 2 % alpha, no refit
+            base = spec.problems[r['problem']]
+            values = []
+            for f in (0.98, 1.02):
+                problem = copy.deepcopy(base)
+                problem.feed.values[CO2] = f * base.feed.values[CO2]
+                p = reg.predict(spec.model, reg.observation(spec.parameters, 'partial_pressure', problem, observed=r['arguments']['observed'], form='log_ratio', phase='V', species=[CO2]))
+                values.append(p.value if p.status.name == 'Available' else None)
+            envelope.append(dict(identity=r['identity'], low_alpha=values[0], high_alpha=values[1]))
+        summary[cation] = dict(run=run, kundu_E_p=relative_error_statistic(kundu), kundu_available=sum(p['status'] == 'Available' for p in kundu),
+            kundu_rows=[dict(identity=p['identity'], table=p['row']['table'], T=p['row']['T_K'], observed=p['observed'], predicted=p.get('value'), status=p['status'],
+                             log_ratio=math.log(p['value'] / p['observed']) if p.get('value') else None) for p in kundu],
+            comparisons={g: dict(rows=sum(p['group'] == g for p in comparisons), available=sum(p['group'] == g and p['status'] == 'Available' for p in comparisons),
+                                 mean_abs_percent=relative_error_statistic([p for p in comparisons if p['group'] == g and p['status'] == 'Available']))
+                         for g in dict.fromkeys(p['group'] for p in comparisons)},
+            phase=dict(states=len(phases), dense=[p['identity'] for p in phases if p.get('dense')], unresolved=[p['identity'] for p in phases if p.get('unresolved')],
+                       ambiguous=[p['identity'] for p in phases if p.get('ambiguous')]), alpha_envelope=envelope)
+        write(f'{cation}-assessment.json', dict(comparisons=comparisons, phases=phases))
+    s = summary[selected]
+    summary['falsifier'] = dict(variant=selected, E_p=s['kundu_E_p'], limit=30.0, all_rows=s['kundu_available'] == 51, nmr_rms=summary['runs'][best[selected]]['nmr_rms'],
+                                nmr_limit=0.006, phase_clean=not (s['phase']['dense'] or s['phase']['unresolved'] or s['phase']['ambiguous']))
+    stop('assessed')

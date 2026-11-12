@@ -341,7 +341,7 @@ class SolventSpecification:
         """Fit the calibration rows plus optional (observation, weight) stability requirements."""
         coords = self.coordinates()
         records = self.inputs["observations"]["fitted"]
-        controls = reg.FitControls(**{"workers": os.cpu_count(), **self.spec["optimizer"]})
+        controls = reg.FitControls(**{"workers": int(os.environ.get("AGENT_HEAVY_CORES", os.cpu_count())), **self.spec["optimizer"]})
         result = reg.fit(
             self.parameters,
             coords,
