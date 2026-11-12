@@ -1,0 +1,41 @@
+{
+  "base": "14e08c8c114b876bb76cd498cda0ca3fcd1b3863",
+  "executable_ceiling": 650,
+  "approval": "Owner approved 650 gross added Python lines; reuse existing drivers; no new numerical method",
+  "sources": {
+    "Hilliard2008": {
+      "parent": "DNQUPRMT",
+      "attachment": "LB7LUETY",
+      "sha256": "728f506faaca36a0f5b3ec4162c1aa6f8ffc49af98871bb2da2fe573fc39df61",
+      "locators": "D.5 printed pp.916-917; low-temperature FTIR method \u00a72.3.4 printed pp.27-30",
+      "pressure_scale": "difference Pa / (0.02 observed Pa); source concentration expanded uncertainty; no Gaussian covariance inferred",
+      "input_sensitivities": "pressure 640 Pa full-scale bound at atmospheric pressure; loading 2% relative standard; T 0.1 K control and 0.01 K thermometer accuracy kept separate"
+    },
+    "Ermatchkov2003": {
+      "parent": "43ANFJEV",
+      "attachment": "BBMLF2KZ",
+      "sha256": "996173953003642cbb7d6ecf184bb23a5706a2a2d857c4d8e13ae1907d2bd933"
+    }
+  },
+  "input_sha256": {
+    "ermatchkov-nmr.csv": "681dabe630d33a895c5551c44760a7a67a8b22744f1c1d7badb8b01b5615bdbb",
+    "hilliard-d5.csv": "fe96ea6b1f96e4b8b23adb2bb59b26c1e0288af4420176b364d5ed32a5ee2b81"
+  },
+  "owner_declarations": "B cation kappa .07275 and zero self energy per approved table; neutral PZ fitted kappa .027229855340530382 and epsilon 1469.820092254 K; retain as limitation. Conditional calibration authorized from phase-unstable starts; no endpoint selection before all fitted-state phase trials pass.",
+  "holdout": "Ermatchkov 2006 not opened",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "frozen_file_sha256": {
+    "results/refit-parameters.json": "395834605f5d830d3f55579f1f2ac2507b9bbdf104a8a8e2309609770f03cecd",
+    "results/binary-endpoint-0.10.json": "f813fc23df32d05d4c1d1925895b5031a55a699f6e5466fab44da32bc720014c",
+    "results/protonation-laws.json": "cedf53605fb3a75fe2793f6e404d105c46f3c9b9201dfbe2d1937d36291c810c",
+    "results/nmr-fit.json": "bcbe4c68ac0d093cb3b45cf74db65a47b73b78b7a25cac0ea5bb72a940250052",
+    "results/speciation-reactions.json": "64a51633b7d56ce75a1246fe51eb6a39a1f0db1abc7d75b16b2fe13df9c125be"
+  },
+  "execution_source_sha256": {
+    "reactive.py": "03edc821d53248181b86f45e9a80247bea85072a62d005f0fd81ca41771f908f",
+    "fit_speciation.py": "61f37f51314fa4b79638be46789712d06b35197d18dd4798a1cefb4ee9e0c39d",
+    "present_reactive.py": "b40eb1b5bca94eabd97fd3df07846aa21ea817333c5def35b43ac6881e6fa3e5"
+  },
+  "scale_perturbations": "Native reg.evaluate_coordinates on fourteen EOS coordinates, native prediction with completed P laws at every stored optimizer vector. Each start/endpoint coordinate moved one declared scale inward where required by a bound. Native evaluate() can replay each retained vector.",
+  "refinement": "calibration(tolerance=1e-12), evaluate() at endpoint and two inward optimizer steps toward accepted starts; no solver method changed."
+}
