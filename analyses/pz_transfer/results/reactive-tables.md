@@ -1,4 +1,4 @@
-| Quantity | Frozen A | Unconstrained refit | Stability-enforced refit (record) |
+| Quantity | Frozen A | 12-coordinate refit (record) | Penalty fit (side result) |
 |---|---:|---:|---:|
 | Calibration cost (294 observations) | 28641.3 | 20698.6 | 20761.0 |
 | NMR whitened RMS, q=0.02 | 11.98 | 11.58 | 11.63 |
@@ -14,7 +14,7 @@
 | NMR PZ(COO)₂²⁻ mean absolute error (fraction of PZ) | 0.0114 | 0.0115 | 0.0116 |
 | Census: states with no extra phase / 183 | 182 | 179 | 182 |
 | Census: undecided states | 0 | 0 | 0 |
-| Census: liquid splits | Ermatchkov2003-T1-1 | 55, 56, 61, 62 | 62 |
+| Census: liquid splits found by the Engine search (lower bound) | Ermatchkov2003-T1-1 | 55, 56, 61, 62 | 62 |
 | Hold-out mean absolute relative error, 52 rows (%) | 23.3 | 21.9 | 21.7 |
 | Hold-out signed bias (%) | -0.6 | 7.8 | 7.5 |
 | Hold-out RMS of (calc − meas)/source uncertainty | 9.79 | 11.59 | 11.33 |
@@ -22,7 +22,7 @@
 | Hold-out bubble states with no extra phase / 52 | 52 | 52 | 52 |
 | Hold-out, 313–353 K only (37 rows) (%) | 19.6 | 11.2 | 11.3 |
 
-| Hold-out block | Rows | Frozen A error / bias (%) | Unconstrained refit | Stability-enforced refit (record) |
+| Hold-out block | Rows | Frozen A error / bias (%) | Refit (record) | Penalty fit (side result) |
 |---|---:|---:|---:|---:|
 | 313.1 K, ~1 mol/kg | 10 | 17.9 / 17.9 | 4.5 / -4.4 | 5.1 / -5.1 |
 | 313.1 K, ~2.75 mol/kg | 3 | 19.4 / -19.4 | 8.5 / -8.3 | 8.7 / -7.7 |
