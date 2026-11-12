@@ -1,10 +1,11 @@
 """Issue 308 stage 4/5: variant-A reactive calibration, fluid-phase census and Ermatchkov 2006 hold-out.
 
 Tags: "A" is the frozen 17-coordinate stage-4 endpoint (fitted at 6c213e0, retained results only);
-"A12" is the owner-approved 12-coordinate refit (2026-11-12). Run with agent-heavy:
+"A12" is the 12-coordinate refit (the record); "A12s" is the penalty fit, kept as a side result. Run with agent-heavy:
   reactive.py fit 1|2        native fit from start 1 (design starts) or 2 (frozen A projected)
   reactive.py score A|A12    calibration errors, 183-state census, Ermatchkov 2006 hold-out
-  reactive.py uncertainty    #307 conditional covariance, bound profiles and ranking (A12)
+  reactive.py fit-stable     #255 penalty fit (side result)
+  reactive.py conditional|ranking TAG, profile TAG K    #307 uncertainty steps
 """
 
 import csv
@@ -206,7 +207,7 @@ def tally(predictions, keys):
 
 
 def fit_stable():
-    """Stability-enforced A12 refit from the A12 endpoint: penalty scales 1e-2 then 3e-3 (#255 schedule, numerical only)."""
+    """#255 penalty fit from the A12 endpoint: scales 1e-2 then 3e-3. A finite-search penalty; see diagnosis-308/refit_checks.py."""
     sys.path.insert(0, str(AN.parents[1] / "src"))
     from MEA.solvent_specification import stability_payload
 
@@ -502,7 +503,7 @@ def ranking(tag):
     movement = dict(zip([names[i] for i in free], np.array(cond["optimizer"]) - x[free]))
     native = cond["covariance"]
     # Measurement-covariance fits return source-scaled covariance (no factor); #307 scales by the residual variance.
-    base = best.get("data_cost", best["cost"])  # stability-enforced fits: data part only
+    base = best.get("data_cost", best["cost"])  # penalty fits: data part only
     factor = native["variance_factor"] or 2 * base / (len(obs) - len(free))
     use_native = native["status"] == "available" and max(map(abs, movement.values())) <= 1e-4
     Cn = np.array(native["optimizer"]).reshape(len(free), len(free)) * factor if use_native else None

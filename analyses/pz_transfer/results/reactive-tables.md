@@ -12,14 +12,14 @@
 | Hilliard bias at ~5.0 mol/kg (%) | -43.5 | -6.4 | -5.7 |
 | NMR PZCOO⁻+HPZCOO mean absolute error (fraction of PZ) | 0.0346 | 0.0258 | 0.0262 |
 | NMR PZ(COO)₂²⁻ mean absolute error (fraction of PZ) | 0.0114 | 0.0115 | 0.0116 |
-| Census: states with no extra phase / 183 | 182 | 179 | 182 |
+| Census: states with no split found by the Engine search / 183 (upper bound) | 182 | 179 | 182 |
 | Census: undecided states | 0 | 0 | 0 |
 | Census: liquid splits found by the Engine search (lower bound) | Ermatchkov2003-T1-1 | 55, 56, 61, 62 | 62 |
 | Hold-out mean absolute relative error, 52 rows (%) | 23.3 | 21.9 | 21.7 |
 | Hold-out signed bias (%) | -0.6 | 7.8 | 7.5 |
 | Hold-out RMS of (calc − meas)/source uncertainty | 9.79 | 11.59 | 11.33 |
 | Hold-out rows within source uncertainty / 52 | 2 | 11 | 8 |
-| Hold-out bubble states with no extra phase / 52 | 52 | 52 | 52 |
+| Hold-out bubble states with no split found by the Engine search / 52 (upper bound) | 52 | 52 | 52 |
 | Hold-out, 313–353 K only (37 rows) (%) | 19.6 | 11.2 | 11.3 |
 
 | Hold-out block | Rows | Frozen A error / bias (%) | Refit (record) | Penalty fit (side result) |
