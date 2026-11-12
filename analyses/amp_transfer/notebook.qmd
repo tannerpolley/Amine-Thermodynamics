@@ -51,8 +51,9 @@ species in #304 (43.69%, +40.51%). The 21.89% baseline therefore came from
 a shared-species change that lowered predicted pressures in both data sets
 and was not yet compensated by the AMP coordinates: it made the calibration
 worse (18.85%) and happened to move Kundu toward the measurements. Once the
-AMP coordinates refit Hartono 2021, the model overpredicts Kundu at 303–313 K
-by roughly 40% whichever limits are used. Whether this is disagreement
+AMP coordinates refit Hartono 2021, the model overpredicts Kundu by roughly
+40% over all rows (bias +37.8 to +40.4% in steps 2–5), and by 44–56% at
+303 and 313 K, whichever limits are used. Whether this is disagreement
 between the two campaigns or a model-structure error is not resolved by this
 study. Widening $k$ (step 3→4) lowers cost by 7% and changes Kundu $E_p$ by
 −0.18 points; the diameter steps change cost by at most 0.2%.
@@ -69,8 +70,9 @@ issue's provision for a physically motivated floor, the owner chose to score
 the endpoint with the floor at the MEACOO⁻ value, 5.32 Å, started at the
 5.89 Å estimate. It costs 0.19% more than the 3.5 Å endpoint with nearly
 identical calibration errors, so the diameter is essentially unidentified
-below about 5.3 Å; a value at 3.5 Å reflects a model-structure error being
-absorbed, not an ion size.
+below about 5.3 Å. A value at 3.5 Å is not an ion size; it is consistent with
+the diameter absorbing a model-structure error, as #306 anticipates, but this
+study shows only that the data do not identify it.
 
 ### Parameters
 
@@ -113,9 +115,13 @@ parameter uncertainty.
 
 **Tong 2012** (total pressure, ~30 mass% AMP): 17 loaded rows at 313–353 K
 are scored and 23 rows at 373–393 K are refused because the fixed Hamborg
-AMP-dissociation law ends at 353.22 K. Error is 28.66% (bias +8.11%;
-313/333/353 K: 48.55/17.56/23.19%) for the refit and 30.04% (bias −30.04%;
-13.22/32.90/41.19%) for the #243 fit.
+AMP-dissociation law ends at 353.22 K. Error is 28.66% (bias +8.11%) for
+the refit and 30.04% (bias −30.04%) for the #243 fit. Signed errors at
+313/333/353 K are +48.55/+5.73/−23.19% for the refit and
+−13.22/−32.90/−41.19% for the #243 fit. The refit's signed error falls with
+temperature on both held-out sources (Kundu 303/313/323 K: +53.9/+43.8/−7.1%)
+while the hydrolysis enthalpy shift sits on its −5000 J/mol limit; this is
+relevant to, but does not settle, the campaign-versus-model question.
 
 ### Uncertainty and sensitivity of the scored endpoint
 
@@ -164,12 +170,14 @@ minimum.
 ### Limits and evidence type
 
 This is a calibration refit plus held-out prediction with numerical
-verification, not physical validation. The selected endpoint replays its
+verification, not physical validation. The scored endpoint replays its
 cost within 7.4×10⁻¹³; the #243-endpoint restart reproduces the old cost
 within 3×10⁻¹⁶; all calibration, Kundu, perturbed and Tong states are
-available at requested tolerance; inherited phase trials on calibration and
-Kundu states report no dense, gas, ambiguous or unresolved result (finite
-searches, not a stability proof). One old-$k$ start stopped at its iteration
+available at requested tolerance; inherited phase trials report no dense,
+ambiguous or unresolved result on the scored endpoint's calibration states
+(gas outcomes were not retained for these) and no dense, gas, ambiguous or
+unresolved result on the Kundu states (finite searches, not a stability
+proof). One old-$k$ start stopped at its iteration
 limit; step 3 uses the converged start (costs agree within 6×10⁻⁷). Bands
 exclude model discrepancy and measurement error. Kundu reports no combined
 CO₂ partial-pressure uncertainty, so no uncertainty-normalized test is made.
@@ -186,7 +194,12 @@ Reproduce from the repository root with the project interpreter:
 [uncertainty](results/refit-306/uncertainty/) and the fitted endpoints
 `inputs/redesign/refit-306-*-endpoint.json` retain the calculation. Engine
 wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
-Independent review is pending; nothing is promoted for manuscript use.
+Independent delivered-result review (cse:review, read-only reviewer) returned
+**Supported** for commit `0a6b851`: every number in this section was
+recomputed from the retained files, three Kundu rows and the 156 calibration
+predictions replayed bit-identically on the pinned wheel, and the standard
+errors and bands were recomputed from the Jacobian. Its four wording defects
+are corrected here. Nothing is adopted or promoted for manuscript use.
 
 ## Frozen #243 working fit (#304)
 

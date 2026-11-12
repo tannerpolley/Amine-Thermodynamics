@@ -74,6 +74,7 @@ def score(path, out, version, workers, group='kundu'):
     """Predict one comparison group with alpha +/- 2 % and phase trials; write states and per-row CSV."""
     initialize(path)
     records = [r for r in spec.inputs['observations']['comparisons'] if r['group']==group]
+    assert group != 'kundu' or len(records) == 51
     with ProcessPoolExecutor(max_workers=workers, initializer=initialize, initargs=(path,)) as pool:
         results = list(pool.map(evaluate, records))
     save(out / f'{version}-states.json', results)
