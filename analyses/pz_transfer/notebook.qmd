@@ -5,7 +5,13 @@ execute:
   enabled: false
 ---
 
-**Stage-4 result:** both reactive variants converge but reach bounds and fail the required fluid-phase assessment. Neither is selected or adopted; the owner has required reactive-model redesign before any refit ([decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/308#issuecomment-6810468221)). The [stage-4 account](#stage-4-conditional-reactive-calibration) retains the fitted parameters, calibration residuals and diagnosed stop.
+**Current PZ reactive record (12 November 2026):** a 12-coordinate refit. The stage-4 variant A fit is kept as the comparison, and variant B is dropped.
+
+- Calibration: 19.2 % error on the 62 fitted Hilliard CO₂ partial pressures.
+- Prediction: 21.9 % on the unfitted Ermatchkov 2006 campaign (11.2 % at 313–353 K, 48.5 % at 393 K). 11 of 52 rows fall within the source's stated uncertainty.
+- Phases: at least four false liquid splits remain at 5 mol/kg calibration states. A penalty fit did not remove them.
+
+Nothing is adopted. See [stages 4–5](#stages-45-reactive-calibration-and-ermatchkov-2006-hold-out).
 
 The preceding stages remain historical input qualifications. The PZ–water binary calibration converges reproducibly to two identifiable, interior interaction coordinates, but **does not reproduce Hartono vapor/liquid equilibrium or the separate aqueous-density observations on their stated scales**. All 23 calibration states pass the declared fluid-phase trials. The 393.15 K, 0.1 MPa Concepción comparison is a metastable-liquid density on this model. The owner decision of 11 November 2026 accepts the [stage-2 endpoint](#stage-2-two-start-calibration-and-independent-aqueous-comparisons) as the conditional working PZ–water set for stage 3, carrying these misfits and phase limitations. It is not a validated set. Stage 3 below retains protonation laws and a conditional NMR-offset diagnostic. The orchestrator accepted these as conditional working starts for a separately dispatched stage 4, carrying the fixed-variant-A NMR misfit and inherited limits.
 
@@ -280,180 +286,184 @@ agent-heavy quarto render analyses/pz_transfer/notebook.qmd --to html
 
 [Source provenance](inputs/stage3-provenance.json) binds the three Zotero PDFs and input hashes. Original PDFs were read; their current hashes match the prior source assessment. The worktree has no local literature shelf; the main checkout's shelf index was consulted and these PZ PDFs were read directly from Zotero. No private-repository material was used. No manuscript promotion is requested.
 
-## Stage 4: conditional reactive calibration
+## Stages 4–5: reactive calibration and Ermatchkov 2006 hold-out
 
-This stage compares the seventeen-coordinate cation variants A and B using the frozen stage-1b pure-PZ parameters, stage-2 PZ–water interaction, and stage-3 P1/P2 laws. P3/P4/P5 offsets remain free within [−3,3], starting at the full-precision stage-3 offsets. Neither the Ermatchkov 2006 hold-out nor secondary pressure comparisons enter calibration or selection. The numerical budget is 100 iterations and 3600 seconds per variant; this is a calculation limit, not a scientific acceptance threshold. The owner approved a ceiling of 650 gross added Python lines relative to main `14e08c8`, with reuse of existing stage-2/stage-3 and MEA/AMP numerical owners.
+**Result (12 November 2026).** This section carries out the owner's decisions of 12 November 2026 ([re-check](https://github.com/tannerpolley/Amine-Thermodynamics/issues/308#issuecomment-6835378823), [decisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/308#issuecomment-6835407150)).
 
-The objective contains 232 NMR group observations at 121 source states and 62 CO₂ partial pressures from Hilliard 2008 Appendix D.5, printed pp.916–917. NMR covariance, isotope treatment, and ten missing dicarbamate entries retain the stage-3 definitions above. Hilliard's printed loading is mol CO₂ per two mol PZ; the feed uses twice that value, with one mol analytical PZ and water from the printed molality. Each D.5 row is admitted as its exact source-observed loaded liquid state, with no reported precipitate; no solid-free envelope is inferred.
+- The **12-coordinate refit** is the current PZ reactive record.
+  - Calibration: 19.2 % mean absolute relative error on the 62 Hilliard D.5 CO₂ partial pressures (signed bias −3.2 %). The mean absolute error of the monocarbamate group is 0.026 of total PZ.
+  - Prediction: 21.9 % on the unfitted Ermatchkov 2006 campaign. That splits into 11.2 % at 313–353 K and 48.5 % at 393.15 K, where the carbamate laws are extrapolated.
+  - Phases: at least four of its Hilliard calibration states are unstable in the model (rows 55, 56, 61 and 62; about 5 mol/kg, loading 0.77–0.83). The model predicts a second liquid phase at these measured liquid states, so these are false liquid splits.
+  - It is shown with these errors and limits. Nothing is adopted.
+- A penalty fit to remove those splits is kept as a side result. It did not remove them: the Engine's finite search lost two.
+- The frozen stage-4 variant A is the comparison. Variant B is dropped from the current record because it had 38 liquid splits inside the calibration domain. Its record is in Git at `6c213e0`.
 
-The owner approved Hilliard pressure residuals $(p_\mathrm{calc}-p_\mathrm{obs})/(0.02p_\mathrm{obs})$. The 2% scale comes from vapor-concentration expanded uncertainty in §2.3.4, printed p.29, and is an operational residual scale, not a Gaussian standard deviation. The separate 2% standard loading uncertainty, ±0.1 K temperature control, ±0.01 K thermometer accuracy, and ±640 Pa total-pressure instrument bound (0.08% of an eight-bar full scale, printed pp.27–29) are input sensitivities, not an invented joint covariance. The source used atmospheric nitrogen dilution; the declared three-neutral vapor calculation follows the existing reactive-bubble driver without nitrogen. This pressure-path approximation remains a model limit.
+The evidence is calibration plus a fixed-parameter prediction test against one unfitted campaign, together with numerical phase checks at declared states. It is not physical validation of ion properties, of solid–liquid behavior or of absorber use.
 
-Variant B cations retain the approved κ=0.07275 and zero self-association energy, with cross-association only to water/PZ. Neutral PZ retains the paired stage-1b values κ=0.027229855340530382 and ε_AB/k=1469.820092254 K. The owner explicitly kept the B table rather than transferring only one of the nearly fully correlated neutral association parameters. HPZCOO remains neutral, nonassociating and liquid-only. B cation–cation association is zero because both self energies are zero; B cation–cation dispersion uses the declared zero correction. No ion or dielectric parameter is inferred from these assumptions.
+### Inputs and changes from stage 4
 
-### Pre-fit qualification and owner exception
+- **Vapor support.** The bubble-state vapor now contains water, CO₂, PZ and the zwitterion HPZCOO. HPZCOO has finite volatility in this model; the earlier three-species vapor left phase trials undecided.
+  - At the frozen endpoint this moves the 62 Hilliard CO₂ partial pressures by at most 1.2×10⁻⁸ relative, and the 232 NMR group fractions by at most 1.1×10⁻¹². It is negligible for the frozen fit.
+  - The refit uses the four-species vapor throughout.
+- **Rich 333 K NMR states.** At 0.1 MPa, three 333.15 K rich NMR states (Ermatchkov 2003 T4 rows 1, 9 and 16) sit below their own model bubble pressure. The frozen model gives 137, 117 and 123 kPa.
+  - A state is moved only when the 0.1 MPa search finds a gas-like split. It is then evaluated as liquid at 1.05 times the candidate's bubble pressure.
+  - The earlier "gas splits" came from the assumed 0.1 MPa, not from the model.
+- **12-coordinate chart** (from the [approved design](../pz_scoping/design-draft-pz.md#proposed-complete-reactive-chart-12-free-coordinates)):
+  - mono- and dicarbamate share size, energy and water interaction;
+  - the PZH⁺, PZH₂²⁺, monocarbamate and dicarbamate Born diameters are fixed at 5 Å;
+  - the search limits are widened as in the table below. They are engineering search allowances, not measured bounds.
+- **Unchanged.** Observations, covariance, the operational 2 % pressure scale, the frozen stage-1–3 inputs and the pinned Engine wheel (`391dfe5d`, SHA-256 `0962e21d…ab66b`).
+- **Hold-out input.** [Ermatchkov 2006 Tables 1–3](inputs/ermatchkov2006.csv) supplies all 52 rows, transcribed from the Zotero PDF (`R3UZX4UN`, [provenance](inputs/holdout-provenance.json)).
+  - The scoring step is the only code that reads it. No fit, start or endpoint choice uses it.
+  - Frozen A and the refit were scored before the penalty fit ran.
 
-Both declared starts solve the loaded 313.15 K, 0.1 MPa state (1 mol PZ, 0.5 mol CO₂, 55.5084 mol water), but fail its full fluid-phase trials. The resolved dense trial is rich in neutral HPZCOO; the tangent-plane values are about −4.62 RT for A and −4.78 RT for B. A low-density root is also reached by a liquid trial and is retained under the adopted dense/gas classifier. These are model fluid-instability findings, not solver nonconvergence or solid-phase predictions.
+### Fits and how they ended
 
-The owner authorized conditional homogeneous calibration from both unstable starts, with no change to starts, bounds, physics or reductions. Every fitted-state endpoint must pass full liquid/vapor trials before receiving selection status. A persistent resolved split, unresolved trial, rank failure or active bound returns to the owner with diagnosis and the ordered reduction effects. No reduction is authorized by this exception.
+1. **Start 1 (design starts) is unavailable.**
+   - With HPZCOO in the vapor, 61 of 62 Hilliard bubble solves are locally infeasible at the starting values (σ 3.7136 Å, u/k 274.10 K, no association sites). With the old three-species vapor, all 62 solve ([per-row evidence](diagnosis-308/refit-checks.json)).
+   - A too-volatile HPZCOO at this starting energy is the likely cause. That is an untested inference.
+   - No fit ran from this start.
+2. **Start 2 (the record).** The start is the frozen A endpoint projected onto the new ties, with Born diameters at 5 Å.
+   - The fit reached the 100-iteration limit with its cost flat at 20 698.6 for the last 14 iterations. The frozen fit cost 28 641.3.
+   - A conditional refit from that endpoint, with the active limit fixed, converged in 13 iterations to a cost 3×10⁻⁴ lower.
+   - The endpoint therefore stops at a near-flat point but is not formally converged.
+3. **Census of the record.** It finds resolved liquid splits at Hilliard rows 55, 56, 61 and 62 (4.96–5.02 mol/kg, loading 0.77–0.83, 313 and 333 K). Their tangent-plane distances are −0.096, −0.111, −0.0024 and −0.031 RT.
+4. **Penalty fit (side result).** The orchestrator's brief for these decisions said to add the stability penalty if splits appeared beyond the single cold rich corner state, so it was added.
+   - Method: the #255 method, using the Engine's native `regression.stability` requirement, with penalty scales 10⁻² then 3×10⁻³ from the record endpoint.
+   - Enforced states (245): the 121 NMR liquids, plus each Hilliard feed as an all-liquid parent at 1.05 and 3 times its candidate bubble pressure.
+   - The first stage converged at data cost 20 761.0, which is 0.3 % above the record. The second stage left the optimizer unchanged to 10⁻¹⁵.
+   - Its census reports a split only at row 62 (−0.0063 RT).
+   - The penalty endpoint still has the row-55 and row-56 splits; the Engine search simply misses them there:
+     - The independent review found these splits 0.01–0.05 of a 0.017-unit optimizer step away.
+     - A direct evaluation of the tangent-plane distance at the neighbour's split composition reproduces the Engine's neighbour values to 10⁻¹³.
+     - The same evaluation at the penalty endpoint gives −0.0309 RT (row 55) and −0.0437 RT (row 56).
+     - The Engine's Full search reports no descent there ([evidence](diagnosis-308/refit-checks.json)).
+   - The penalty endpoint therefore has at least three false liquid splits, not one. It is not stability-enforced in any meaningful sense, and it is retained only as this diagnosis.
+   - The missed search is an Engine phase-search case, reported on the open stability chain (ePC-SAFT #1224).
+   - After the independent review's finding, the implementor switched the record to the unconstrained refit. The orchestrator accepted that choice before merge on 12 November 2026. Nothing is adopted.
+5. **Active limit.** One limit is active: PZH⁺–water k at the new floor of −1. The design stops at a replacement limit rather than widening again. HPZCOO u/k (975 K) is near, but not on, its 1000 K limit.
 
-[Stage-4 source bindings](inputs/stage4-provenance.json), [A qualification](results/reactive-A-qualification.json) and [B qualification](results/reactive-B-qualification.json) retain the calibration Jacobians, singular vectors, derivative checks, exact replay, unchanged shared-only predictions and loaded-state refinement. The inherited eight element/charge-balanced reaction declarations and source-reference anchors remain unchanged except for the three authorized additive offsets. Shared R2 and Hamborg are extrapolated at 283.15 K; binary k is extrapolated below Hartono's measured span. All pure-liquid density, dielectric-transfer, isotope, stage-2 property-misfit and solid-stability limits above remain in force.
+| Free quantity | Search limits | Frozen A | Refit (record) ± SE | Penalty fit |
+|---|---|---:|---:|---:|
+| PZH⁺ σ (Å; PZH₂²⁺ tied) | 2–9 | 5.373 | 4.286 ± 0.323 | 4.290 |
+| PZH⁺ u/k (K) | 50–1000 | 190.2 | 102.7 ± 21.2 | 100.7 |
+| PZH⁺–water k | −1 to 0.5 | −0.5 (old limit) | −1 (limit) | −1 (limit) |
+| PZH⁺–HCO₃⁻ k | −1 to 0.5 | −0.5 (old limit) | −0.021 ± 1.031 | 0.338 |
+| Carbamate σ (Å; mono/di tied) | 2–9 | 7 (old limit) | 4.862 ± 0.356 | 4.908 |
+| Carbamate u/k (K) | 50–1000 | 282.1 | 717.6 ± 141.8 | 692.0 |
+| Carbamate–water k | −0.5 to 0.5 | 0.0069 | 0.0741 ± 0.0497 | 0.0656 |
+| HPZCOO σ (Å) | 2–6 | 3 (old limit) | 3.814 ± 0.066 | 3.839 |
+| HPZCOO u/k (K) | 50–1000 | 500 (old limit) | 975.4 ± 113.6 | 948.1 |
+| P3, P4, P5 ln K offsets | −3 to 3 | 0.523, 0.369, 0.033 | 0.157 ± 0.123, −0.019 ± 0.133, −0.262 ± 0.061 | 0.144, −0.018, −0.264 |
 
-### Endpoint calibration and identification
+Frozen A also fitted three Born diameters (all at 8 Å) and a separate dicarbamate size and energy (5.30 Å, 100 K). The refits fix or tie these.
 
-**Neither variant is selected or adopted.** A has nine active bounds and B has eight; both have resolved liquid splits and unresolved fluid trials. The native fits converged within the declared budget. Their endpoints answer the conditional calibration question but fail the owner’s phase and bound requirements. No reduced optimization or hold-out evaluation was run.
+### Calibration errors, phase census and hold-out
 
-| Quantity | A | B |
-|---|---:|---:|
-| Calibration cost | 28641.253 | 30137.24 |
-| All-observation RMS / operational scale | 13.9585 | 14.3184 |
-| NMR whitened RMS, q=0.02 | 11.9786 | 12.2517 |
-| NMR whitened RMS, q=0.039 diagnostic | 6.14287 | 6.28292 |
-| Pressure RMS / 2% concentration scale | 19.6721 | 20.2605 |
-| Numerical Jacobian rank | 17/17 | 17/17 |
+{{< include results/reactive-tables.md >}}
 
-The q=0.039 values reweight endpoint NMR diagnostics only; they are not refits of the mixed NMR/pressure objective. Replaying all 294 predictions reproduces cost to about 10⁻⁹ absolute. These residuals are substantial discrepancies, not near-misses.
+**Calibration.**
+- The refit removes most of the frozen fit's concentration drift in the Hilliard bias: from +29 % at 0.9 mol/kg and −43 % at 5.0 mol/kg to +10 % and −6 %. The 2 mol/kg cohort stays about −13 %.
+- The 19.2 % mean absolute relative error compares with 18.0 % for Yi 2024 e-NRTL fitted to the same 62 points.
+- For context only: this manuscript's MEA set misses its excluded 15 and 45 wt % pressures by 29.5 and 56.0 %. Those are concentration-transfer errors, not fitted errors.
+- The pressure RMS is still 12.9 operational 2 % scales, so the misfit is substantial against the source concentration uncertainty.
+- NMR misfits are essentially unchanged (whitened RMS 11.6 at q = 0.02).
+- The Hartono PZ–water binary error (4.9 % total pressure, stage 2) is unchanged by construction: no refit coordinate enters the binary.
 
-The following ± values are **formal full-chart local linear standard errors under the operational weights**, conditional on the fixed inputs and unit scaled residual variance. They are not symmetric confidence intervals at active bounds (marked *), and do not establish individual ion properties. No residual-variance multiplier or fixed-input covariance was added.
+**Phase census** (183 states: 121 NMR liquids and 62 Hilliard bubble states):
 
-| Reactive coordinate | A, value ± formal SE | B, value ± formal SE |
-|---|---:|---:|
-| piperazinium/sigma | 5.372769 ± 0.16514 | 3.162759 ± 0.11662 |
-| piperazinium/u | 190.2296 ± 7.4992 | 231.7277 ± 36.686 |
-| piperazinium/Born | 8 ± 5.5878 * | 8 ± 7.1477 * |
-| piperazinium/water-k | -0.5 ± 0.034493 * | -0.5 ± 0.085449 * |
-| piperazinium/bicarbonate-k | -0.5 ± 0.20036 * | -0.03465765 ± 0.13608 |
-| piperazine-carbamate/sigma | 7 ± 0.16322 * | 7 ± 0.14155 * |
-| piperazine-carbamate/u | 282.1172 ± 10.865 | 253.949 ± 10.933 |
-| piperazine-carbamate/Born | 8 ± 7.5134 * | 8 ± 8.5091 * |
-| piperazine-carbamate/water-k | 0.006880013 ± 0.0078908 | -0.005510537 ± 0.0093164 |
-| piperazine-dicarbamate/sigma | 5.295346 ± 0.39745 | 5.835455 ± 0.34376 |
-| piperazine-dicarbamate/u | 100 ± 25.456 * | 100 ± 23.847 * |
-| piperazine-dicarbamate/Born | 8 ± 2.6188 * | 8 ± 3.0155 * |
-| protonated-piperazine-carbamate/sigma | 3 ± 0.15683 * | 3 ± 0.11916 * |
-| protonated-piperazine-carbamate/u | 500 ± 5.7537 * | 500 ± 9.6277 * |
-| P3/offset | 0.523237 ± 0.013541 | 0.5950866 ± 0.014658 |
-| P4/offset | 0.3694579 ± 0.015889 | 0.3052568 ± 0.016178 |
-| P5/offset | 0.03316842 ± 0.011451 | 0.07837485 ± 0.013598 |
+| Endpoint | States with no split found | Undecided | Liquid splits found |
+|---|---:|---:|---|
+| Frozen A | 182 | 0 | Ermatchkov 2003 T1 row 1 (283.15 K, loading 0.964) |
+| Refit (record) | 179 | 0 | Hilliard rows 55, 56, 61, 62 |
+| Penalty fit (side result) | 182 found, at most 180 true | 0 | row 62 found; rows 55 and 56 shown by direct evaluation |
 
-Diameters are Å, u/k is K, pair corrections and natural-log offsets are dimensionless. PZH₂²⁺ retains all PZH⁺ ties. Dicarbamate–water k remains tied to monocarbamate–water k.
+These are finite searches at declared states. The penalty-fit diagnosis shows that the search can miss a resolved dense split, so every count of states without a split is an upper bound, and every list of splits is a lower bound. That applies to the frozen and record censuses too. The census files hold the full trial records for [frozen A](results/reactive-A-census.json), [the refit](results/reactive-A12-census.json) and [the penalty fit](results/reactive-A12s-census.json). All 52 hold-out bubble states pass their trials at every endpoint, subject to the same limit.
 
-**A:** singular values (603.165, 405.381, 238.04, 155.265, 84.5202, 44.1618, 21.2473, 8.17256, 5.48395, 3.72234, 2.71373, 2.34177, 0.74648, 0.38455, 0.311515, 0.127485, 0.0560789). Largest absolute pair correlation is 0.915658. The weakest right-vector coefficients above 0.2 in magnitude are piperazinium/Born: -0.52452, piperazine-carbamate/Born: +0.80340, piperazine-dicarbamate/Born: +0.22461. Signs of singular vectors are arbitrary; all seventeen coefficients and the covariance/correlation matrices are retained in [the A fit](results/reactive-A-fit.json).
+**Hold-out.**
+- At 313–353 K the refit predicts the unfitted Ermatchkov 2006 partial pressures with 11.2 % mean absolute relative error (37 rows; bias −8.7 %). The frozen fit gave 19.6 %.
+- At 393.15 K, outside the 283–333 K carbamate-law range, every refit prediction is too high: 48.5 % mean error at +48.5 % bias, against 32.4 % for the frozen fit.
+- Over all 52 rows: refit 21.9 %, frozen 23.3 %. Yi 2024 e-NRTL, which fitted this campaign, reports 7.8 %.
+- The refit lies inside the source's printed total uncertainty for 11 of 52 rows (8 at 313 K, 3 at 353 K, none at 393 K); frozen A does for 2. The RMS of (calculated − measured)/uncertainty is 11.6.
+- The model does not reproduce this campaign within its stated measurement uncertainty. These are prediction errors against source uncertainty, with no agent-chosen threshold.
+- Per-row values: [frozen A](results/holdout-A.csv), [refit](results/holdout-A12.csv), [penalty fit](results/holdout-A12s.csv).
 
-**B:** singular values (605.96, 391.697, 217.971, 136.849, 83.8438, 43.4163, 23.733, 7.82156, 6.50278, 3.10332, 2.479, 1.97688, 0.609031, 0.414628, 0.372532, 0.15887, 0.0452531). Largest absolute pair correlation is 0.985332. The weakest right-vector coefficients above 0.2 in magnitude are piperazinium/Born: +0.61073, piperazine-carbamate/Born: -0.74705, piperazine-dicarbamate/Born: -0.24526. Signs of singular vectors are arbitrary; all seventeen coefficients and the covariance/correlation matrices are retained in [the B fit](results/reactive-B-fit.json).
+![Hold-out relative error versus loading at the three Ermatchkov 2006 isotherms. Points are discrete model-versus-measurement comparisons. Grey bars are the source's printed total uncertainty, expressed relative to the measured pressure.](figures/holdout-ermatchkov2006.png)
 
-The weakest directions exchange the three Born diameters; their singular values are 0.05608 (A) and 0.04525 (B) per declared optimizer unit. Floating-point rank seventeen therefore does not imply source-resolution identification of all seventeen quantities. Bound-constrained curvature and strong correlation limit the formal standard errors. [Finite scale perturbations](results/reactive-A-scale-perturbations.json) and [their B counterpart](results/reactive-B-scale-perturbations.json) retain every changed optimizer vector and its observable effects.
+![Fitted Hilliard D.5 pressure errors versus PZ molality (discrete points, calibration data).](figures/calibration-hilliard.png)
 
-![](figures/reactive-identification.png)
+### Parameter uncertainty and sensitivity (#307 method)
 
-The discrete points compare endpoint singular values and calibration residual RMS under the declared scales; no continuous fit curve or experimental uncertainty band is implied.
+These follow the merged #307 method (`analyses/mea_parameter_bundle/scripts/uncertainty_307.py`), reusing its conditional-covariance helper, at the record endpoint.
 
-### Temperature-resolved calibration residuals
+- **Uncertainty with the bound fixed.** The bound coordinate is held fixed, and the other eleven get a conditional covariance scaled by the residual variance factor 146.3.
+  - The Engine reports no variance factor when a measurement covariance is supplied, so #307's residual scaling is applied here.
+  - The conditional refit moved more than 10⁻⁴ optimizer units, so #307's fallback (the endpoint conditional inverse-Jacobian) is used.
+- **Ranking.**
+  - Interior coordinates are ranked by the largest fractional change in a calibration prediction caused by one SE.
+  - The bound coordinate is ranked by the change at an inward 1 % refit step.
+  - Only calibration states are used. The hold-out is not used.
+- **Profile refits.** The 1 % profile converged. The 5 % and 10 % profiles stopped at #307's 40-iteration limit, with cost increases of 46.5 and 61.9. Those two values are upper bounds, because the refits did not converge.
+- **What the uncertainties are.** They are local, linearized and conditional on the fixed model, weights and bound. They are not confidence limits.
 
-| Variant | Source/group | Nominal T (K) | Count | Bias | RMS | Unit |
-|---|---|---:|---:|---:|---:|---|
-| A | NMR f1 | 283.15 | 33 | -0.00899383 | 0.0245091 | mol per kg source solvent |
-| A | NMR f1 | 298.15 | 33 | -0.00695104 | 0.0262945 | mol per kg source solvent |
-| A | NMR f1 | 313.15 | 33 | -0.0198123 | 0.0287602 | mol per kg source solvent |
-| A | NMR f1 | 333.15 | 22 | 0.0252596 | 0.0627726 | mol per kg source solvent |
-| A | NMR f2 | 283.15 | 33 | -0.000721243 | 0.00490013 | mol per kg source solvent |
-| A | NMR f2 | 298.15 | 30 | 0.00370673 | 0.00650664 | mol per kg source solvent |
-| A | NMR f2 | 313.15 | 29 | 0.00164904 | 0.00792958 | mol per kg source solvent |
-| A | NMR f2 | 333.15 | 19 | -0.0394239 | 0.0621255 | mol per kg source solvent |
-| A | Hilliard pressure | 313.15 | 30 | -171.804 | 994.156 | Pa |
-| A | Hilliard pressure | 333.15 | 32 | -1620.34 | 7228.43 | Pa |
-| B | NMR f1 | 283.15 | 33 | -0.00859725 | 0.0263432 | mol per kg source solvent |
-| B | NMR f1 | 298.15 | 33 | -0.00656394 | 0.0286068 | mol per kg source solvent |
-| B | NMR f1 | 313.15 | 33 | -0.0194821 | 0.0299424 | mol per kg source solvent |
-| B | NMR f1 | 333.15 | 22 | 0.0259677 | 0.0632066 | mol per kg source solvent |
-| B | NMR f2 | 283.15 | 33 | 8.28031e-05 | 0.00626278 | mol per kg source solvent |
-| B | NMR f2 | 298.15 | 30 | 0.00460154 | 0.00861932 | mol per kg source solvent |
-| B | NMR f2 | 313.15 | 29 | 0.00272702 | 0.00898781 | mol per kg source solvent |
-| B | NMR f2 | 333.15 | 19 | -0.0374176 | 0.0594373 | mol per kg source solvent |
-| B | Hilliard pressure | 313.15 | 30 | -184.976 | 919.835 | Pa |
-| B | Hilliard pressure | 333.15 | 32 | -1635.2 | 7046.24 | Pa |
+| Rank | Coordinate | Value ± SE | Largest fractional change (group) |
+|---:|---|---:|---|
+| 1 | PZH⁺ u/k | 103 ± 21 K | 1.60 (Hilliard pCO₂) |
+| 2 | HPZCOO u/k | 975 ± 114 K | 1.06 (Hilliard pCO₂) |
+| 3 | Carbamate u/k | 718 ± 142 K | 0.90 (Hilliard pCO₂) |
+| 4 | HPZCOO σ | 3.81 ± 0.07 Å | 0.81 (Hilliard pCO₂) |
+| 5 | PZH⁺–HCO₃⁻ k | −0.02 ± 1.03 | 0.79 (Hilliard pCO₂) |
+| 6 | PZH⁺ σ | 4.29 ± 0.32 Å | 0.51 (Hilliard pCO₂) |
+| 7 | Carbamate σ | 4.86 ± 0.36 Å | 0.50 (Hilliard pCO₂) |
+| 8 | P4 offset | −0.019 ± 0.133 | 0.47 (Hilliard pCO₂) |
+| 9 | Carbamate–water k | 0.074 ± 0.050 | 0.37 (Hilliard pCO₂) |
+| 10 | P3 offset | 0.157 ± 0.123 | 0.35 (Hilliard pCO₂) |
+| 11 | P5 offset | −0.262 ± 0.061 | 0.059 (NMR dicarbamate) |
+| 12 | PZH⁺–water k (at −1) | 1 % inward profile step | 0.003 (Hilliard pCO₂) |
 
-283.15/298.15 K results are the separately retained below-313 K cohorts. Hilliard rows retain actual printed temperatures; 313.15/333.15 K above label the nominal 40/60 °C cohorts only. [The summary](results/reactive-calibration-summary.csv) includes operational interval counts, pressure log ratios and intervals, and minimum outside distances. [A residuals](results/reactive-A-residuals.csv) and [B residuals](results/reactive-B-residuals.csv) preserve source identities, blanks, source-unit differences and whitened residuals.
+- **Size of the effects.** One SE of the three dispersion energies changes some Hilliard pressures by 90–160 %. At that size the linear estimate is only indicative.
+- **Unidentified quantity.** PZH⁺–HCO₃⁻ k (SE 1.03 across a 1.5-wide interval) is effectively unidentified.
+- **Weakest direction.** The weakest singular direction of the full 12-column Jacobian (singular value 0.21 per optimizer unit) is dominated by PZH⁺–HCO₃⁻ k (coefficient magnitude 0.94), with PZH⁺–water k (0.32).
+- **Pressure uncertainty.** Linearized relative standard errors of the Hilliard pressures range from 2.8 % to 34 %.
+- **Retained files.** [The ranking](results/uncertainty-A12/ranking.csv) and [its full record](results/uncertainty-A12/ranking.json) keep the covariances, singular vectors and profiles.
 
-### Full fluid trials and diagnosis
+### Limits
 
-| Fitted-state trial outcome | A | B |
-|---|---:|---:|
-| States attempted (121 NMR + 62 pressure) | 183 | 183 |
-| States with resolved dense split | 1 | 38 |
-| States with resolved gas-density split | 3 | 3 |
-| States with unresolved trials | 62 | 63 |
-| States passing all declared trials | 117 | 107 |
+- **Phases.** At least four false liquid splits remain at measured 5 mol/kg states. The finite phase search can miss resolved splits, so every census is a lower bound on splits.
+- **393 K extrapolation.** The 393.15 K over-prediction lies in carbamate-law extrapolation.
+- **Bound or unidentified coordinates.** One coordinate sits on its replacement limit, and one is effectively unidentified.
+- **Convergence.** The record endpoint reached the iteration limit on a flat cost.
+- **Inherited stage-1–3 limits:**
+  - pure-liquid PZ density is unvalidated;
+  - dielectric inputs are transferred;
+  - the D₂O isotope bias is unquantified;
+  - the stage-2 binary property misfit remains;
+  - there is no solid-phase model.
+- **Pressure path.** The pressure calculation omits the source's nitrogen dilution.
+- **Design check states.** The design's check states (1.5 times bubble pressure; T + 0.5 K) were not run.
+- **Status.** Nothing is adopted, and this notebook is not promoted for manuscript use. The independent delivered review (first pass: Not supported, for the phase claim of the penalty endpoint) is being repeated on this revision.
 
-Outcome categories overlap and must not be added. Every search used Full trials and the adopted dense/gas classifier; unresolved searches are not counted as stable. These searches concern fluid phases only.
+### Reproduction
 
-At Ermatchkov T1 row 1, 283.15 K and 0.1 MPa (1.4489 mol PZ and 1.3974 mol CO₂ per kg source solvent), A’s resolved liquid has mole fractions 0.384914 HCO₃⁻, 0.242350 water, 0.192351 PZH₂²⁺ and 0.178485 HPZCOO; its TPD is −0.133516 RT. B’s liquid has 0.347444 PZH₂²⁺, 0.313093 dicarbamate, 0.269903 water and 0.063259 monocarbamate; TPD is −0.846990 RT. Their finite split Gibbs changes are −0.00040546 and −0.0139868 RT, against numerical error estimates 1.11×10⁻⁶ and 1.30×10⁻⁶ RT. They are resolved model splits, not near-misses or numerical convergence failures. The [A full census](results/reactive-A-evidence.json) and [B full census](results/reactive-B-evidence.json) retain each composition and witness.
-
-HPZCOO has no association sites. Lowering its dispersion energy from 500 to 450 K changes the first-state TPD to −0.405818 RT for A (worse) and −0.681450 RT for B (less negative, still descending). The endpoint splits therefore cannot be attributed to HPZCOO dispersion alone: the +2 cation, carbamates and their tied/effective ion terms matter. The direct carbamate tie below removes A’s first witness and weakens B’s. This is evidence for the first listed reduction as a plausible next experiment, not proof of a stable reduced fit or a unique attribution among its three tied properties.
-
-| Counterfactual, cumulative; no refit | A TPD / RT | B TPD / RT |
-|---|---:|---:|
-| HPZCOO u/k minus 50 K; diagnostic only | -0.405818 | -0.68145 |
-| tie dicarbamate sigma/u/Born to monocarbamate | no detected descent | -0.429699 |
-| fix P4 offset at zero | no detected descent | -0.283721 |
-| fix tied carbamate Born diameters at 5 angstrom | no detected descent | -0.284292 |
-| fix HPZCOO u at 274.10 kelvin | -2.32326 | -2.20319 |
-
-The final u/k=274.10 K substitution after the preceding reductions worsens the first-state split. Simply reducing zwitterion attraction is not a supported rescue. The allowed order remains: carbamate tie; P4 offset fixed to zero; tied carbamate Born diameters fixed at 5 Å; HPZCOO u/k fixed at 274.10 K. Every reduced fit requires a separate owner decision.
-
-| Ordered cumulative substitution | Observable-change norm, A / B (scaled) | Max group-fraction change, A / B | Max pressure change, A / B (Pa) |
-|---|---:|---:|---:|
-| tie dicarbamate sigma/u/Born to monocarbamate | 225.318 / 227.831 | 0.0854133 / 0.0933141 | 13148.1 / 14360.8 |
-| fix P4 offset at zero | 288.179 / 278.019 | 0.115935 / 0.119002 | 24509.9 / 23571.9 |
-| fix tied carbamate Born diameters at 5 angstrom | 298.359 / 287.824 | 0.119861 / 0.122832 | 25024 / 24083.9 |
-| fix HPZCOO u at 274.10 kelvin | 385.065 / 366.91 | 0.168122 / 0.173261 | 27039.3 / 22598.2 |
-
-These are cumulative direct substitutions at unreduced endpoints, compared with the original endpoint. They neither optimize reduced models nor establish their rank or phase stability over all states.
-
-All 62 pressure bubble states retain an indeterminate gas-density root from a liquid trial whose support includes liquid-only HPZCOO; the declared vapor excludes that species. At the first pressure row, the liquid-trial gas root has HPZCOO mole fraction about 7.87×10⁻⁷ (A), with TPD −7.87×10⁻⁷ RT and no retained finite descending split. This is not a zero-residual equilibrium failure. The diagnostic homogeneous liquid at the same feed and assumed atmospheric 101325 Pa has no detected descent and no unresolved trials for either variant. This identifies pressure path and trial support as relevant to that indeterminate branch; it does not resolve all 62 bubble searches or authorize changing support. The resolved NMR liquid splits already independently block adoption. [A diagnosis](results/reactive-A-phase-diagnosis.json) and [B diagnosis](results/reactive-B-phase-diagnosis.json) retain both the counterfactual trials and atmospheric-pressure probe.
-
-### Numerical and input limits; owner decision
-
-Refining all 294 observation solves from 10⁻¹⁰ to 10⁻¹² changes NMR fractions by at most 3.63×10⁻¹³ (A) and 4.65×10⁻¹³ (B), and pressure by at most 1.93×10⁻⁹ Pa (A) and 1.07×10⁻⁹ Pa (B). Rank remains seventeen. [A refinement](results/reactive-A-refinement.json) and [B refinement](results/reactive-B-refinement.json) include inward derivative-step checks and singular spectra. These changes do not explain the calibration misfit. Source loading conversion, normalized NMR groups, reaction direction/reference, frozen source laws and shared inputs were checked; the joint fit exhausted several declared bounds. No automatic bound widening, new pair, new temperature coordinate or stability penalty was introduced.
-
-[A input sensitivities](results/reactive-A-input-sensitivities.csv) and [B input sensitivities](results/reactive-B-input-sensitivities.csv) keep pressure-conversion effects, ±2% loading, ±0.1 K control and ±0.01 K thermometer effects separate. Atmospheric 101325 Pa is an explicit assumed reference because D.5 does not print row total pressures. The perturbation temperatures extend the evaluation interval only; the source-law domain remains 283–333 K. No combined Gaussian covariance is inferred.
-
-**Owner decision needed:** whether to authorize the first ordered reduction (tie dicarbamate σ/u/Born to monocarbamate) as a new conditional fit, or revise the scientific design in light of the false liquid splits, active bounds and unresolved bubble trials. The counterfactual tie removes A’s first witness but does not qualify a reduced endpoint. No continuation beyond this gate is authorized by this delivery.
-
-The evidence is conditional calibration and numerical verification. It does not validate individual ionic properties, fluid stability outside the searched states, pure molten-PZ density, isotope treatment, solids or absorber use. Inherited stage-1/2 pressure and density misfits and dielectric-transfer assumptions remain. The hold-out is unopened, Engine source and the manuscript registry are untouched, and this notebook is not promoted for manuscript use. Independent delivered cse:review returned **Supported for conditional homogeneous calibration and a diagnosed STOP**, with no required scientific corrections, for scientific commit `6c213e077f009765749d9f0e709c81225e27dca6` against `14e08c8c114b876bb76cd498cda0ca3fcd1b3863`. The [independent review](t3-thread://v2/df61a5ad-76a1-4901-b919-31ae81c8e67d/thread:delegated-task:command%3Amcp%3Ad7ad7e09-6629-4b71-8666-4ad626e19285%3Adelegate-task%3A387f2fe9-95a5-483d-91ae-84f9ea4acb3d) verified all 62 Hilliard rows, independently replayed all 294 endpoint predictions per variant and their refinement, recomputed formal standard errors and sensitivity counts, audited all 366 retained state searches, and replayed the decisive phase cases. The reviewer did not rerun the optimizations or every phase search. The verdict does not select a variant, adopt parameters, authorize a reduced fit or promote manuscript use.
-
-
-The ±2% loading sensitivity envelope contains 13 of 62 measured pressures for each variant. The ±0.1 K control sensitivity contains one (A) or two (B), while ±0.01 K thermometer sensitivity contains none. The total-pressure conversion bound contributes 0.316 of the adopted 2% pressure scale at the assumed atmospheric reference. These separate effects do not explain most pressure residuals; no combined uncertainty or new continuation threshold is inferred.
-
-Delivery retains 644 gross added Python lines relative to `14e08c8`: reactive.py 615 (A/B declarations, calibration, native fits, identification, full phase trials and diagnosis), present_reactive.py 23 (retained-data figure), and six additions/two removals in fit_speciation.py (reuse the NMR declarations with a supplied parameter set and optional starts). No numerical solver, derivative or optimizer is copied from the Engine. Stage-1–3 result files and default behavior remain owned by their existing drivers. Temporary numerical probes use those same native chart/prediction actions and retain every optimizer vector; they add no numerical method.
-
-Reproduce stage 4 on the pinned wheel, after the recorded owner exception for the failed starting phase checks:
+From `analyses/pz_transfer/` on the pinned wheel. Each command runs under `agent-heavy`. The frozen stage-4 A fit is reproduced by `reactive.py` at commit `6c213e0`.
 
 ```bash
-agent-heavy uv run python analyses/pz_transfer/reactive.py A qualify
-agent-heavy uv run python analyses/pz_transfer/reactive.py B qualify
-agent-heavy uv run python analyses/pz_transfer/reactive.py A fit
-agent-heavy uv run python analyses/pz_transfer/reactive.py B fit
-agent-heavy uv run python analyses/pz_transfer/reactive.py A evidence
-agent-heavy uv run python analyses/pz_transfer/reactive.py B evidence
-agent-heavy uv run python analyses/pz_transfer/reactive.py A reductions
-agent-heavy uv run python analyses/pz_transfer/reactive.py B reductions
-agent-heavy uv run python analyses/pz_transfer/reactive.py A sensitivities
-agent-heavy uv run python analyses/pz_transfer/reactive.py B sensitivities
-agent-heavy uv run python analyses/pz_transfer/reactive.py A diagnose
-agent-heavy uv run python analyses/pz_transfer/reactive.py B diagnose
-agent-heavy uv run python analyses/pz_transfer/present_reactive.py
-agent-heavy quarto render analyses/pz_transfer/notebook.qmd --to html
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py score A          # frozen A: errors, census, hold-out
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py fit 1            # design starts (unavailable)
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py fit 2            # record
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py score A12
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py conditional A12
+for k in 0 1 2; do OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py profile A12 $k; done
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py ranking A12
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py fit-stable       # penalty side result
+OMP_NUM_THREADS=1 agent-heavy uv run python reactive.py score A12s
+OMP_NUM_THREADS=1 agent-heavy uv run python diagnosis-308/refit_checks.py
+uv run python present_reactive.py
+agent-heavy quarto render notebook.qmd --to html
 ```
 
-The root manuscript refresh is intentionally not invoked because the owner prohibits edits to `analyses/_cse-manuscript.json`; the existing notebook is rendered directly. No manuscript promotion is requested.
-
+The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.json` is not to be edited.
 
 ## Stage-4 redesign diagnosis (11 November 2026)
 
-**The 62 unresolved Hilliard bubble states reproduce a liquid-labelled trial at gas-like density; they are not 62 failed bubble solves.** Every pressure row in each frozen variant contains a successful near-pure Liquid optimizer marked indeterminate. The [row audit](diagnosis-308/bubble-audit.json) records all 124 dispositions and input hashes. [Fourteen bounded searches](diagnosis-308/probes.json) on the byte-verified stage-4 wheel separate parent refinement, one alternative liquid initialization and compressed-liquid behavior. No new optimization or hold-out evaluation ran.
-
-At source D.5 row 1, T=313.127 K, A/B bubble pressures are 7293.797309/7290.949023 Pa, with maximum parent residuals 2.42e-13/5.54e-13 against 1e-10. The indeterminate Liquid trials have TPD −7.86819e-7/−8.10134e-7 RT and volumes 0.356609955/0.356749346 m³/mol, close to the existing vapor rather than the approximately 1.93e-5 m³/mol liquid. Parent refinement to 1e-12 and a parent-composition liquid seed leave the indeterminacy. The four all-liquid searches at 1.05/3 times first-row bubble pressure complete with no descent witness. These are local finite-search observations, not stability evidence across the full domain. B also has resolved dense witnesses at D.5 rows 32/62, TPD −0.742993/−0.981877 RT: numerical search limitations coexist with model instability.
-
-[The diagnosis and unfiled Engine use case](diagnosis-308/diagnosis.md) retain the exact declaration, consumed quantities, stopping point and acceptance expectations. The causal inference is a gas-density boundary/search limitation, with its generic resolution assigned to Engine Equilibrium. No application trial is suppressed or relabelled stable; the probes do not establish an Engine implementation defect. No physical validation is claimed.
-
-[The revised design](../pz_scoping/design-draft-pz.md#stage-4-redesign-after-the-diagnosed-stop) proposes a 12-coordinate conditional chart: first carbamate tie; PZ-specific cation/carbamate Born diameters fixed at 5 Å, with shared species unchanged; P4 and HPZCOO energy retained; revised engineering ranges, stability penalties and fresh endpoint/check-state searches. Owner decisions and capability/anchor qualification precede any refit. The old counterfactual reductions are not reduced fits: lowering HPZCOO alone leaves both witnesses, and the last cumulative reduction gives −2.32326/−2.20319 RT. Neither A nor B is selected. Calibration-only selection and the untouched hold-out boundary are preserved. Transferred dielectric inputs, isotope bias, unvalidated pure-liquid density, source extrapolations and absent solid qualification remain limitations.
+[The bubble-trial diagnosis](diagnosis-308/diagnosis.md) and its Engine use case (filed as ePC-SAFT#1223) record why the stage-4 bubble searches were undecided. The 12 November re-check traced those undecided trials to the three-species vapor declaration rather than to an Engine search limit. The four-species vapor above removes them at every endpoint (0 undecided states).
