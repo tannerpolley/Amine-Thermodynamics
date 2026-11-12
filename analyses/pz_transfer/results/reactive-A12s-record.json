@@ -1,0 +1,168 @@
+{
+  "tag": "A12s",
+  "offsets": [
+    0.14381111885281328,
+    -0.017509009674972376,
+    -0.26416233893829366
+  ],
+  "fit": {
+    "start": "stage1",
+    "status": "converged",
+    "message": "Function tolerance reached. |cost_change|/cost: 5.283593e-11 <= 1.000000e-10",
+    "iterations": 8,
+    "cost": 20765.34159260421,
+    "active_bounds": [
+      2
+    ]
+  },
+  "cost": 20760.990876033906,
+  "NMR_RMS": 11.632926336986682,
+  "pressure_RMS": 12.780143062036778,
+  "hilliard": {
+    "MARE_percent": 19.300711354529835,
+    "bias_percent": -3.1888957202340587,
+    "by_concentration": {
+      "0.9": {
+        "n": 12,
+        "MARE_percent": 30.85354812072743,
+        "bias_percent": 10.135533253604995
+      },
+      "2.0": {
+        "n": 14,
+        "MARE_percent": 17.419490437815547,
+        "bias_percent": -13.465913045161162
+      },
+      "2.5": {
+        "n": 12,
+        "MARE_percent": 13.132043094056787,
+        "bias_percent": 5.483679454023882
+      },
+      "3.6": {
+        "n": 12,
+        "MARE_percent": 16.305310838958174,
+        "bias_percent": -10.64174705594079
+      },
+      "5.0": {
+        "n": 12,
+        "MARE_percent": 19.106701100543606,
+        "bias_percent": -5.743194986876034
+      }
+    },
+    "by_temperature": {
+      "40.0": {
+        "n": 30,
+        "MARE_percent": 15.534035134040222,
+        "bias_percent": -4.616883128744991
+      },
+      "60.0": {
+        "n": 32,
+        "MARE_percent": 22.831970311238845,
+        "bias_percent": -1.8501575247550588
+      }
+    }
+  },
+  "carbamate_MAE": {
+    "1": 0.02617193270591271,
+    "2": 0.011593786324262306
+  },
+  "census": {
+    "states": 183,
+    "no_extra_phase": 182,
+    "undecided": 0,
+    "dense_split": [
+      "62"
+    ],
+    "gas_split": [],
+    "ambiguous": [],
+    "failed_other": [],
+    "moved_to_bubble": [
+      {
+        "row": "Ermatchkov2003-T4-1",
+        "bubble_kPa": 128.7251335665221
+      },
+      {
+        "row": "Ermatchkov2003-T4-9",
+        "bubble_kPa": 106.40964053054137
+      },
+      {
+        "row": "Ermatchkov2003-T4-16",
+        "bubble_kPa": 117.59377202019996
+      }
+    ]
+  },
+  "holdout": {
+    "rows": 52,
+    "all_available": true,
+    "MARE_percent": 21.705672388350035,
+    "bias_percent": 7.480143567491279,
+    "RMS_scaled_residual": 11.331541210235018,
+    "within_source_uncertainty": 8,
+    "phase_passed": 52,
+    "by_temperature": {
+      "313.1": {
+        "n": 19,
+        "MARE_percent": 9.905140141289662,
+        "bias_percent": -9.099482386534659
+      },
+      "353.15": {
+        "n": 18,
+        "MARE_percent": 12.846540401708772,
+        "bias_percent": -8.188996856957521
+      },
+      "393.15": {
+        "n": 15,
+        "MARE_percent": 47.28397161859603,
+        "bias_percent": 47.28397161859603
+      }
+    },
+    "by_temperature_and_concentration": {
+      "313.1 K, ~1 mol/kg": {
+        "n": 10,
+        "MARE_percent": 5.083174233184786,
+        "bias_percent": -5.083174233184786
+      },
+      "313.1 K, ~2.75 mol/kg": {
+        "n": 3,
+        "MARE_percent": 8.74195362288459,
+        "bias_percent": -7.7045980244674945
+      },
+      "313.1 K, ~2 mol/kg": {
+        "n": 6,
+        "MARE_percent": 18.523343247333653,
+        "bias_percent": -16.490771489818027
+      },
+      "353.15 K, ~2 mol/kg": {
+        "n": 9,
+        "MARE_percent": 13.549837582577872,
+        "bias_percent": -13.540512357580006
+      },
+      "353.15 K, ~4 mol/kg": {
+        "n": 9,
+        "MARE_percent": 12.143243220839677,
+        "bias_percent": -2.8374813563350365
+      },
+      "393.15 K, ~2 mol/kg": {
+        "n": 6,
+        "MARE_percent": 34.57812378408322,
+        "bias_percent": 34.57812378408322
+      },
+      "393.15 K, ~4 mol/kg": {
+        "n": 9,
+        "MARE_percent": 55.754536841604576,
+        "bias_percent": 55.754536841604576
+      }
+    },
+    "within_by_temperature": {
+      "313.1": 6,
+      "353.15": 2,
+      "393.15": 0
+    },
+    "excluding_393K": {
+      "313-353 K": {
+        "n": 37,
+        "MARE_percent": 11.336091619331393,
+        "bias_percent": -8.65654348025389
+      }
+    }
+  }
+}
