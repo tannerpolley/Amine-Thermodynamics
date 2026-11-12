@@ -1,0 +1,205 @@
+{
+  "base": "79706636e8716974e045b582f1b1cbfe7e4c7009",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "parameter_sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d",
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ],
+      "origin": -0.20633734821212568,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "pair/mdea-water/k_ij/a0 / temperature_law_coefficient",
+      "value": -0.20633734821212568,
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ],
+      "origin": 0.001475040100864945,
+      "scale": 0.001,
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "identity": "pair/mdea-water/k_ij/a1 / temperature_law_coefficient",
+      "value": 0.001475040100864945,
+      "unit": "1 / kelvin"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.24818892822226704,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'carbon-dioxide'] / k_ij",
+      "value": 0.24818892822226704,
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.03323620782863823,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij",
+      "value": -0.03323620782863823,
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -27.10492507018966,
+      "scale": 10.0,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij_reciprocal_temperature_slope",
+      "value": -27.10492507018966,
+      "unit": "kelvin"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 1.0,
+      "scale": 0.01,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij",
+      "value": 1.0,
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 3.649407418440385,
+      "scale": 0.1,
+      "bounds": [
+        3.0,
+        4.5
+      ],
+      "identity": "protonated-methyldiethanolamine / segment_diameter",
+      "value": 3.649407418440385,
+      "unit": "angstrom"
+    },
+    {
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 623.0430272546931,
+      "scale": 10.0,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "identity": "protonated-methyldiethanolamine / dispersion_energy_over_k",
+      "value": 623.0430272546931,
+      "unit": "kelvin"
+    },
+    {
+      "targets": [
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 7.0,
+      "scale": 0.1,
+      "bounds": [
+        2.0,
+        7.0
+      ],
+      "identity": "protonated-methyldiethanolamine / born_diameter",
+      "value": 7.0,
+      "unit": "angstrom"
+    }
+  ],
+  "active": [
+    5,
+    8
+  ],
+  "free": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+  ],
+  "rows": 278,
+  "profile_fractions": [
+    0.01,
+    0.05,
+    0.1
+  ]
+}
