@@ -1,6 +1,6 @@
 # MEA heat-capacity evidence for issue 264
 
-The [bundle notebook](../notebook.qmd#broader-mea-heat-capacity-comparison) interprets the retained measurements, decomposition and bounded refits. The canonical design is [issue 264, comment 11944](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/264#issuecomment-11944), amended by comment 11949 and independently reviewed Ready. These probes do not adopt parameters.
+The [bundle notebook](../notebook.qmd#broader-mea-heat-capacity-comparison) interprets the retained measurements, decomposition and bounded refits. The canonical design is [issue 264, design comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/264#issuecomment-6699109299), amended by [the design amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/264#issuecomment-6699223997) and independently reviewed Ready. These probes do not adopt parameters.
 
 `sources.csv` preserves the measured values, source locators, composition basis, uncertainty interpretation and pressure assumption. `source-provenance.json` identifies the live Zotero PDFs and their hashes. `qualification.json` checks all 307 original observations with their original water record; subsequent calculations use the corrected water record from issue 260. Every numerical JSON carries the probe wheel SHA-256. `decomposition.json` and the probe decomposition files use kJ/(kg loaded solution K), except the explicitly labeled finite-difference checks in J/(mol phase K).
 

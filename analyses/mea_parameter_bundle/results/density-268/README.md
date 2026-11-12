@@ -1,6 +1,6 @@
 # Higher-temperature MEA density comparison
 
-Issue [268](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/268).
+Issue [268](https://github.com/tannerpolley/Amine-Thermodynamics/issues/268).
 The [research notebook](../../notebook.qmd#higher-temperature-density-probes-issue-268)
 owns interpretation, data roles, uncertainty and the recommendation for #255
 stage 2. `summary.json` and `density-summary.json` retain the reduced numbers;
