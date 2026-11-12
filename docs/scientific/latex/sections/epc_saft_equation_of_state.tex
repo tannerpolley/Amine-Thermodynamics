@@ -159,7 +159,7 @@ For either reaction the constant-enthalpy adjustment has a form that leaves $K_r
  \label{eq:reaction-shift}
 \end{equation}
 R1 and R3 remain fixed source laws; R2 and R5 are calibrated chemistry parameters rather than independent measurements of reaction enthalpy.
-The reacting calculations use a domain of 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
+The reacting calculations use a domain of 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}; independent high-temperature equilibrium-constant data are missing, so pressure and caloric comparisons test the completed model rather than validate these laws separately.
 
 \needspace{16\baselineskip}\input{tables/reaction_equilibrium_constants}
 
@@ -173,7 +173,7 @@ Total enthalpy follows the same Helmholtz energy and reaction standard states as
 \end{equation}
 Neutral ideal-gas functions supply the caloric reference; the ionic functions are completed from the five reaction laws, including $\Delta_rh^\circ=RT^2d\ln K_r/dT$ and the derivatives of the infinite-dilution reference corrections.
 Reaction enthalpies are therefore included once through the standard-state functions.
-The neutral ideal-gas coefficients follow NIST-JANAF and Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011} and are listed in the data deposit; Section~\ref{supp-sec:s-files} gives the functions and reference convention, including the extrapolation of the water Shomate function below \SI{500}{\kelvin}.
+The neutral ideal-gas coefficients follow NIST-JANAF and Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011} and are listed in the data deposit; Section~\ref{supp-sec:s-files} gives the functions and reference convention, including the water ideal-gas fit to IAPWS-95 over 273.15--\SI{400}{\kelvin}.
 Equilibrium isobaric heat capacity is $C_P=(dH_{\mathrm{eq}}/dT)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
 The objective uses $C_P/n_{\mathrm{feed}}$ per mole of complete analytical feed, with source mass-specific values converted on that same basis.
 The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}=n_{\MEA}M_{\MEA}+n_wM_w+n_{\COtwo}M_{\COtwo}$ is the complete analytical-feed mass.
