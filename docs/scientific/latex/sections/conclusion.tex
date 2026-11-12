@@ -4,13 +4,14 @@ With sixteen jointly estimated parameters, one ePC-SAFT formulation with carbama
 For nominal 30 wt\% MEA, pressure AARD is 11.79\,\% for 47 fitted and 23.82\,\% for 112 non-fitted pressures (20.27\,\% overall), 94 of the 101 fitted species fractions give 7.11\,\%, integral-heat RMSE is \SI{1.84}{\kilo\joule\per\mole} \COtwo at \SI{313.15}{\kelvin}, and loaded-density AARD is 0.162\,\% over 47 fitted values through \SI{353.15}{\kelvin}, without volume translation.
 
 % P:conclusion-02
-Similar property agreement can conceal an additional calculated liquid: the historical unstable fit has detected instability at 54 of 162 census states.
-The adopted fit uses the original wide bounds and a stability requirement during fitting, with no resolved descent at 1903 enforced, 576 offset and 162 census states.
-It lowers the same-input observation cost from 148.8833 to 148.5105 and gives 46 of 47 fitted loaded densities within twice their assigned scale.
+Similar property agreement can conceal an additional calculated liquid: a fit without a stability requirement has detected instability at 54 of 162 census states.
+Penalizing tangent-plane instability during fitting gives a final parameter set, within the original bounds, with no detected instability at 1903 penalized states, 576 unpenalized liquid states or the census states.
+Relative to a fit that avoids instability by restricting the \MEAH diameter and its water interaction, the observation cost falls from 148.8833 to 148.5105, and 46 rather than 44 of the 47 fitted loaded densities lie within twice their assigned scale.
+
 
 
 % P:conclusion-limits
-Six coordinates remain on bounds; the ten free coordinates give conditional pressure standard errors of 5.41--16.00\,\% over 47 retained calibration states.
+Six parameters lie on bounds; the ten free parameters give conditional pressure standard errors of 5.41--16.00\,\% over the 47 fitted pressure states.
 Inward profiles and sensitivity rankings quantify the parameter compensation, with no inference of unique physical ion sizes or reaction enthalpies.
 Pressure AARDs at 15 and 45 wt\% MEA are 33.89 and 44.53\,\%.
 The 51-state heat-capacity comparison gives 2.39\,\% AARD, while the unloaded \SI{318.15}{\kelvin} fitted value is 5.43\,\% high.

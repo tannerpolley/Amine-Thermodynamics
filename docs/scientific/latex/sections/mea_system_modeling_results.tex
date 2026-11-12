@@ -48,7 +48,7 @@ Table~\ref{supp-tab:supplement-fitted-parameters} gives their bounds and conditi
 
 % P:results-parameter-interpretation
 Six parameters reach bounds: the \MEAH--water, bicarbonate--water and \MEAH--\MEACOO interactions, both fitted Born diameters and the R5 enthalpy shift.
-Both Born diameters are \SI{5}{\angstrom}; the \MEAH segment diameter is \SI{4.90455}{\angstrom}, inside the original wide interval.
+Both Born diameters are \SI{5}{\angstrom}; the \MEAH segment diameter, \SI{4.90455}{\angstrom}, lies inside its 2--\SI{5.8}{\angstrom} bounds.
 The unlike-ion interaction $k_{ij}=-1$ doubles the unlike-ion dispersion energy in \cref{eq:dispersion-combining-rule}.
 Three free coordinates have conditional standard errors larger than their absolute values: the carbamate--water interaction, \MEAH--water temperature slope and R2 enthalpy shift.
 The largest one-standard-error fractional sensitivities among the retained predictions are 2.094 for \MEAH dispersion energy and 1.868 for its segment diameter, chiefly affecting pressure and bicarbonate.
@@ -69,8 +69,8 @@ Section~\ref{supp-sec:s-uncertainty} reports the inward profiles, sensitivity ra
 The AARD is 11.79\,\% for 47 fitted and 23.82\,\% for 112 non-fitted pressures (20.27\,\% overall).
 By source, the 159-pressure comparison gives 9.06\,\% for Hilliard (31 observations), 19.43\,\% for Ma'mun (19), 18.84\,\% for Jou (48), 21.10\,\% for Idris (10), 25.91\,\% for Xu (15) and 29.68\,\% for Aronu (36).
 The deviation panel exposes discrepancies that are less apparent on the logarithmic pressure axis.
-At Aronu's non-fitted \SI{40}{\degreeCelsius} observations with analytical loading 0.46--0.52, the calculated \COtwo partial pressures are 46--70\,\% below the measured values.
-The sources disagree there: at loading 0.489, Aronu reports \SI{2.86}{\kilo\pascal}, whereas Hilliard reports \SI{1.10}{\kilo\pascal} at loading 0.491; the model gives \SI{1.17}{\kilo\pascal} at Aronu's state.
+At Aronu's non-fitted \SI{40}{\degreeCelsius} observations with analytical loading 0.46--0.52, the calculated \COtwo partial pressures are 46--69\,\% below the measured values.
+The sources disagree there: at loading 0.489, Aronu reports \SI{2.86}{\kilo\pascal}, whereas Hilliard reports \SI{1.10}{\kilo\pascal} at loading 0.491; the model gives \SI{1.16}{\kilo\pascal} at Aronu's state.
 Hilliard and Jou pressures at \SI{40}{\degreeCelsius} and loading 0.46--0.52 lie within 24\,\% of the model.
 
 % P:results-pressure-02
@@ -78,7 +78,7 @@ At 100--\SI{120}{\degreeCelsius}, the 54 six-source pressures give AARD 23.67\,\
 The 23 additional Wagner pressures give AARDs of 23.72\,\% near \SI{353}{\kelvin} and 9.22\,\% near \SI{392}{\kelvin} (Section~\ref{supp-sec:s-outside}).
 For 33 Aronu states at 15 wt\% and 37 at 45 wt\%, pressure AARDs are 33.89 and 44.53\,\%, respectively.
 Their mean logarithmic biases are $-0.00215$ and $-0.0514$; the large absolute deviations therefore do not represent a uniform signed offset.
-These are fixed-parameter concentration-transfer errors, reported without a new fit-quality threshold.
+These are fixed-parameter concentration-transfer errors.
 
 
 \begin{figure}[pos=!htbp]
@@ -100,7 +100,7 @@ These are fixed-parameter concentration-transfer errors, reported without a new 
 The curves in \cref{fig:speciation} use \SI{101325}{\pascal}, nominal 30 wt\% MEA and 31 wt\% at \SI{353.15}{\kelvin}; the calculated bubble pressure exceeds the imposed pressure above loading 0.51 at \SI{353.15}{\kelvin} and 0.59 at \SI{333.15}{\kelvin}.
 The curves extend to loading 0.6, while observations end at 0.53.
 Mole fractions use total true-species liquid amount; the amine sum and bicarbonate-labeled observations follow the aggregate definitions in Section~\ref{sec:data-methods}, with the \SI{21}{\degreeCelsius} titration series approximated at \SI{20}{\degreeCelsius}.
-Matin's free MEA is compared in Fig.~\ref{supp-fig:species-parity}; at \SI{313.15}{\kelvin}, the largest retained mole fractions of carbonate and dissolved \COtwo, which are not plotted separately in panel (a), are $1.0\times10^{-5}$ and $3.7\times10^{-4}$, respectively.
+Matin's free MEA is compared in Fig.~\ref{supp-fig:species-parity}; at \SI{313.15}{\kelvin}, the largest retained mole fractions of carbonate and dissolved \COtwo along the calculated curves, which are not plotted separately in panel (a), are $2.9\times10^{-6}$ and $3.9\times10^{-4}$, respectively.
 
 % P:results-species-01
 The speciation curves show conversion of molecular MEA into protonated amine and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
@@ -172,7 +172,7 @@ The colder unloaded deviation remains visible despite inclusion in fitting; the 
 The 47 fitted loaded densities give AARD 0.162\,\%, with 46 within $2s$ (\cref{fig:density-curves}).
 The remaining observation is Amundsen at \SI{353.15}{\kelvin} and loading 0.3, with error \SI{-5.11}{\kilogram\per\cubic\metre}.
 All five fitted \COtwo-free densities lie within \SI{0.564}{\kilogram\per\cubic\metre} of measurement.
-These errors no longer arise from imposing the earlier narrowed diameter interval; Section~\ref{supp-sec:s-density} gives the source scales and complete comparison.
+Section~\ref{supp-sec:s-density} gives the source scales and complete comparison.
 
 
 % P:results-density-02
@@ -209,29 +209,24 @@ Their state-specific calibration and model-reference pressures differ from the p
 
 \FloatBarrier
 \subsection{Phase stability}\label{sec:phase-method}
+% P:results-phase-02
+The census uses six temperatures from 313.15 to \SI{393.15}{\kelvin}, nine loadings from $10^{-5}$ to 0.6 and pressures 0.50, 0.80 and 0.95 times the restricted fit's bubble pressure $P^*$.
+Both fits in \cref{tab:two-fit-comparison} are searched at these same physical states; the historical unstable fit's census retains its original calculations.
+
 % P:results-phase-04
-Instability is detected for the historical unstable fit at 54 states, whereas the final parameter set has no additional liquid detected at the 162 searched states (\cref{tab:two-fit-comparison,tab:phase-search-summary}).
+Instability is detected for the historical unstable fit at 54 of the 162 census states, whereas none is detected for the final parameter set (\cref{tab:two-fit-comparison,tab:phase-search-summary}).
 Similar property agreement accompanies these different phase predictions (\cref{tab:two-fit-comparison}).
 Separately seeded calculations confirm two liquids at 32 of the 54 detected-instability states, at every searched temperature; water mole fractions are 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich one (Section~\ref{supp-sec:s-phase}).
 
 \input{tables/two_fit_comparison}
-
-% P:results-phase-02
-The census uses six temperatures from 313.15 to \SI{393.15}{\kelvin}, nine loadings from $10^{-5}$ to 0.6 and pressures 0.50, 0.80 and 0.95 times the outgoing restricted fit's bubble pressure.
-The historical unstable comparison retains its original inputs; the adopted fit is evaluated freshly at these same physical census states.
-The enforced and offset searches additionally use candidate-dependent bubble-pressure references.
 \input{tables/phase_search_summary}
 
-
 % P:results-phase-01
-The selected fit instead enforces a native tangent-plane stability requirement during optimization within the original wide bounds.
-Its observation cost is 148.5105, compared with 148.8833 for the outgoing restricted fit on the same inputs and Engine wheel, while fitted loaded densities within $2s$ increase from 44 to 46.
-Fresh searches resolve no descent at 1903 enforced and 576 offset states, as well as the 162 census states.
-All five previously excluded states are available without resolved descent.
-Thus the earlier diameter restriction and its property trade-off are unnecessary for these retained states; finite searches do not establish global constrained optimality.
-
-
-\FloatBarrier
+The restricted fit also has no detected instability at the census, penalized or unpenalized states, but its \MEAH segment diameter rests on its \SI{5.35}{\angstrom} lower bound.
+With the stability penalty, the final parameter set reaches \SI{4.905}{\angstrom} within the original 2--\SI{5.8}{\angstrom} bounds.
+Its observation cost is 148.5105, compared with 148.8833 for the restricted fit with the same observations and ePC-SAFT implementation, and fitted loaded densities within $2s$ increase from 44 to 46 of 47.
+No instability is detected for the final parameter set at the 1903 penalized states, the 576 unpenalized liquid states or the census states, nor at the five grid states left out of the penalty.
+For these finite sets of states, the diameter restriction is therefore unnecessary; the searches do not establish a global constrained optimum.
 
 % P:results-phase-03
 The search establishes numerical phase behavior at the specified states, not global stability or physical validation of liquid splitting.
