@@ -11,8 +11,8 @@ AN = Path(__file__).resolve().parent
 R = AN / "results"
 TAGS = {
     "A": ("Frozen stage-4 A (17 coordinates)", "#0072B2", "o"),
-    "A12": ("12-coordinate refit, unconstrained", "#999999", "^"),
-    "A12s": ("12-coordinate refit, stability-enforced (record)", "#D55E00", "s"),
+    "A12": ("12-coordinate refit (record)", "#D55E00", "s"),
+    "A12s": ("12-coordinate penalty fit (side result)", "#999999", "^"),
 }
 record = {t: json.loads((R / f"reactive-{t}-record.json").read_text()) for t in TAGS}
 hold = {t: list(csv.DictReader((R / f"holdout-{t}.csv").open())) for t in TAGS}
@@ -26,7 +26,7 @@ for ax, T in zip(axes, ("313.1", "353.15", "393.15")):
     for t, (label, color, marker) in TAGS.items():
         rows = [r for r in hold[t] if r["T_K"] == T]
         ax.scatter([float(r["alpha_per_PZ"]) for r in rows], [100 * float(r["relative_error"]) for r in rows],
-                   edgecolors=color, marker=marker, s=22, label=label, facecolors="none" if t != "A12s" else color)
+                   edgecolors=color, marker=marker, s=22, label=label, facecolors="none" if t != "A12" else color)
     ax.axhline(0, color="0.3", lw=0.6)
     ax.set(title=f"{T} K", xlabel="Loading (mol CO$_2$ / mol PZ)")
     ax.grid(alpha=0.2)
@@ -39,7 +39,7 @@ fig, ax = plt.subplots(figsize=(6, 4), layout="constrained")
 for t, (label, color, marker) in TAGS.items():
     rows = [r for r in csv.DictReader((R / f"reactive-{t}-residuals.csv").open()) if r["group"] == "pressure"]
     ax.scatter([float(r["mPZ"]) for r in rows], [100 * (float(r["calculated"]) / float(r["observed_fraction"]) - 1) for r in rows],
-               edgecolors=color, marker=marker, s=18, label=label, facecolors="none" if t != "A12s" else color)
+               edgecolors=color, marker=marker, s=18, label=label, facecolors="none" if t != "A12" else color)
 ax.axhline(0, color="0.3", lw=0.6)
 ax.set(xlabel="PZ molality (mol/kg water)", ylabel="Calculated / measured pCO$_2$ − 1 (%)", title="Hilliard D.5 calibration pressures (fitted)")
 ax.grid(alpha=0.2)
@@ -51,7 +51,7 @@ def pct(x):
     return f"{x:.1f}"
 
 
-lines = ["| Quantity | Frozen A | Unconstrained refit | Stability-enforced refit (record) |", "|---|---:|---:|---:|"]
+lines = ["| Quantity | Frozen A | 12-coordinate refit (record) | Penalty fit (side result) |", "|---|---:|---:|---:|"]
 for name, get in [
     ("Calibration cost (294 observations)", lambda r: f"{r['cost']:.1f}"),
     ("NMR whitened RMS, q=0.02", lambda r: f"{r['NMR_RMS']:.2f}"),
@@ -63,7 +63,7 @@ for name, get in [
     ("NMR PZ(COO)₂²⁻ mean absolute error (fraction of PZ)", lambda r: f"{r['carbamate_MAE']['2']:.4f}"),
     ("Census: states with no extra phase / 183", lambda r: str(r["census"]["no_extra_phase"])),
     ("Census: undecided states", lambda r: str(r["census"]["undecided"])),
-    ("Census: liquid splits", lambda r: ", ".join(r["census"]["dense_split"]) or "none"),
+    ("Census: liquid splits found by the Engine search (lower bound)", lambda r: ", ".join(r["census"]["dense_split"]) or "none"),
     ("Hold-out mean absolute relative error, 52 rows (%)", lambda r: pct(r["holdout"]["MARE_percent"])),
     ("Hold-out signed bias (%)", lambda r: pct(r["holdout"]["bias_percent"])),
     ("Hold-out RMS of (calc − meas)/source uncertainty", lambda r: f"{r['holdout']['RMS_scaled_residual']:.2f}"),
@@ -72,7 +72,7 @@ for name, get in [
     ("Hold-out, 313–353 K only (37 rows) (%)", lambda r: pct(r["holdout"]["excluding_393K"]["313-353 K"]["MARE_percent"])),
 ]:
     lines.append("| " + " | ".join([name] + [get(record[t]) for t in TAGS]) + " |")
-lines += ["", "| Hold-out block | Rows | Frozen A error / bias (%) | Unconstrained refit | Stability-enforced refit (record) |", "|---|---:|---:|---:|---:|"]
+lines += ["", "| Hold-out block | Rows | Frozen A error / bias (%) | Refit (record) | Penalty fit (side result) |", "|---|---:|---:|---:|---:|"]
 for k, v in record["A"]["holdout"]["by_temperature_and_concentration"].items():
     w = [record[t]["holdout"]["by_temperature_and_concentration"][k] for t in TAGS]
     lines.append(f"| {k} | {v['n']} | " + " | ".join(f"{pct(q['MARE_percent'])} / {pct(q['bias_percent'])}" for q in w) + " |")
