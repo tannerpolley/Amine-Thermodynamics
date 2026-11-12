@@ -1,4 +1,4 @@
-"""Render the manuscript figures from the retained Engine 3e83e19c states and model curves of #212-#215 (#211); no Engine compute."""
+"""Render retained adopted MEA results (#297, Engine 391dfe5d) and explicitly historical comparisons; no Engine computation."""
 import ast
 import json
 import math
@@ -169,7 +169,7 @@ def main():
         ax.legend(fontsize=8,frameon=False,loc='upper center',bbox_to_anchor=(.5,-.18),ncol=1)
     fig.colorbar(plt.cm.ScalarMappable(norm=plt.Normalize(0,.5),cmap='viridis'),ax=list(axes[0]),label='Loading',shrink=.7)
 
-    save(fig,'loaded-density-errors','The reported and wider-bound fits share the 47 fitted loaded-density states, observed values and scales. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 reported-fit densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv','comparison-loaded-density-errors.csv'])
+    save(fig,'loaded-density-errors','The reported and historical unstable fits share the 47 fitted loaded-density states, observed values and scales. Top panels show ±2s limits only for that fitted cohort; color denotes loading, with source separated. Bottom panels cover all 210 reported-fit densities and distinguish fitted, non-fitted and excluded rows. No empirical volume translation. Scales are not uniformly measurement uncertainty; 2s is not a 95% interval.', ['density.csv','fitted-rows.csv','comparison-loaded-density-errors.csv'])
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.8), layout='constrained')
     temperatures, curves = [298.15, 313.15, 333.15, 353.15, 373.15, 393.15], a.rows(CURVES/'density.csv')
     data = [r for r in density if r['mea_mass_fraction'] == '0.3' and float(r['T_K']) in temperatures]
@@ -255,9 +255,37 @@ def main():
     axes[0].legend(handles=[Line2D([], [], marker=m, ls='none', color=COLORS[0], markerfacecolor='none', label=l) for m, l in (('o', 'Measured'), ('x', 'Calculated'))], fontsize=8, frameon=False)
     save(fig, 'mea-permittivity', 'Relative permittivity of unloaded MEA-water at 298.15 K and 101325 Pa: the 14 Agieienko-Buchner measurements and the solvent law at the equation-of-state density, with the final parameter set.', ['permittivity/rows.csv'])
     comparison = a.load(a.E/'comparison-score.json')
-    records = dict(reported=a.record_identity(fit['record_sha256'], fit['engine']), comparison=a.record_identity(comparison['parameter_sha256'], fit['engine']))
+    records = dict(reported=a.record_identity(fit['record_sha256'], fit['engine']), comparison=a.record_identity(comparison['parameter_sha256'], a.load(a.BUNDLE/'results/engine-3e83e19c-paper-evidence/fit-summary.json')['engine']))
     for name, output in OUTPUTS.items():
         output['records'] = {key: records[key] for key in (['reported', 'comparison'] if name == 'loaded-density-errors' else ['reported'])}
+    # Kim presentation consumes the adopted retained intervals and continuous curves only.
+    kim_dir = a.E/'kim2007-heat-pathways'
+    kim, curves = a.rows(kim_dir/'kim-heat.csv'), a.rows(kim_dir/'heat-curves.csv')
+    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH, 3.4), layout='constrained', sharey=True)
+    for ax, T in zip(axes, (313.15,353.15,393.15)):
+        for run, marker in ((1,'o'),(2,'^')):
+            part = [r for r in kim if float(r['T_K'])==T and int(r['run'])==run]
+            ax.errorbar([float(r['loading']) for r in part], [float(r['observed']) for r in part], yerr=[.022*abs(float(r['observed'])) for r in part], fmt=marker, ms=3, fillstyle='none', label=f'Run {run}')
+            part = [r for r in part if r['predicted']]
+            ax.scatter([float(r['loading']) for r in part], [float(r['predicted']) for r in part], marker='x', s=12)
+        part = [r for r in curves if float(r['T_K'])==T and r.get('differential')]
+        ax.plot([float(r['loading']) for r in part], [float(r['differential']) for r in part], color='black', lw=1)
+        ax.axvspan(.60,.73,color='0.9')
+        ax.set(title=f'{T:g} K',xlabel=LOADING,xlim=(0,.73))
+    axes[0].set_ylabel(r'Heat release (kJ/mol absorbed CO$_2$)')
+    axes[-1].legend(fontsize=7,frameon=False)
+    save(fig,'heat-temperature','Kim interval observations (source 2.2% bounds), adopted interval predictions (crosses) and differential curves (lines) at 1.734 MPa.', ['kim2007-heat-pathways/kim-heat.csv','kim2007-heat-pathways/heat-curves.csv'])
+    bands = [r for r in a.rows(a.BUNDLE/'results/uncertainty-307/prediction-bands.csv') if r['group']=='common149: partial_pressure']
+    pressure_rows = {r['target']:r for r in a.rows(a.E/'pressure-figure-data.csv')}
+    fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.5), layout='constrained')
+    for T, color in zip(sorted({float(pressure_rows[r['identity']]['temperature_K']) for r in bands}), COLORS):
+        part = [r for r in bands if float(pressure_rows[r['identity']]['temperature_K'])==T]
+        ax.errorbar([float(pressure_rows[r['identity']]['loading']) for r in part], [float(r['value'])/1000 for r in part],
+                    yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in part], fmt='o', ms=3, color=color, label=f'{T:g} K')
+    ax.set(yscale='log', xlabel=LOADING, ylabel=r'CO$_2$ partial pressure (kPa)')
+    ax.legend(title='Conditional 95% intervals', frameon=False)
+    ax.grid(alpha=.15)
+    save(fig, 'pressure-uncertainty', 'Local linearized pressure intervals (plus or minus 1.96 conditional SE) at 47 retained calibration states. Bounds are fixed; model discrepancy and future measurement noise are excluded. Points are retained predictions, not observations.', ['uncertainty-307/prediction-bands.csv'])
     a.inventoried()
     provenance=dict(generator=str(a.bind(a.ROOT/'analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py').relative_to(a.ROOT)),
                     records=records, inputs=dict(sorted(a.INPUTS.items())),outputs=OUTPUTS)
