@@ -70,3 +70,27 @@ if (KUNDU / 'current-pressures.csv').exists():
     fig.suptitle('Frozen AMP working fit with current shared species: held-out mean error 21.89%')
     fig.savefig(KUNDU / 'pressure-comparison.svg', metadata={'Date': None})
     plt.close(fig)
+
+# #306: widened-limit refit against held-out Kundu points, with conditional 95% parameter bands; frozen #243 fit for comparison.
+REFIT = AN / 'results/refit-306'
+if (REFIT / 'uncertainty/prediction-bands.csv').exists():
+    read = lambda path: {r['identity']: r for r in csv.DictReader(path.open())}
+    new, old, band = read(REFIT / 'kundu-pressures.csv'), read(KUNDU / 'current-pressures.csv'), read(REFIT / 'uncertainty/prediction-bands.csv')
+    summary = json.loads((REFIT / 'summary.json').read_text())
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4), constrained_layout=True)
+    for ax, stock in zip(axes, (2.0, 2.8, 3.4)):
+        for T, color in ((303, '#0072B2'), (313, '#D55E00'), (323, '#009E73')):
+            group = sorted((k for k, r in new.items() if float(r['stock_mol_L']) == stock and float(r['T_K']) == T), key=lambda k: float(new[k]['alpha']))
+            if not group:
+                continue
+            alpha = [float(new[k]['alpha']) for k in group]
+            ax.scatter(alpha, [float(new[k]['observed_Pa'])/1000 for k in group], facecolors='none', edgecolors=color, s=30, label=f'{T} K measured')
+            ax.scatter(alpha, [float(old[k]['predicted_Pa'])/1000 for k in group], marker='+', color=color, alpha=.45, s=30, label=f'{T} K #243 fit')
+            ax.errorbar(alpha, [float(new[k]['predicted_Pa'])/1000 for k in group], yerr=[1.96*float(band[k]['SE_bound_fixed'])/1000 for k in group],
+                fmt='x', color=color, ms=5, lw=.7, capsize=2, label=f'{T} K refit ±95% band')
+        ax.set(title=f'{stock:.1f} mol/L stock', xlabel='Loading / mol CO₂ per mol AMP', ylabel='CO₂ partial pressure / kPa', yscale='log')
+        ax.grid(alpha=.2); ax.legend(fontsize=6)
+    fig.suptitle(f"Held-out Kundu 2003: refit mean error {summary['kundu']['overall']['E_p']:.2f}% "
+                 f"(#243 fit {summary['old']['kundu']['overall']['E_p']:.2f}%); bands are local parameter-only, bound coordinates fixed", fontsize=10)
+    fig.savefig(REFIT / 'kundu-bands.svg', metadata={'Date': None})
+    plt.close(fig)
