@@ -21,7 +21,7 @@ import numpy as np
 s, d, reg = r.s, r.d, r.reg
 R255 = r.OUT
 OUT = r.OUT = r.B / 'results/ion-temperature-283'  # every r.write/r.result/census/retreat now targets this issue
-ISSUE = 'https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/283'
+ISSUE = 'https://github.com/tannerpolley/Amine-Thermodynamics/issues/283'
 SLOPES = (('carbamate-anion', 'water'), ('carbamate-anion', 'protonated-monoethanolamine'))
 SLOPE_IDS = [f'pair/{a}/{b}/k_ij/reciprocal_temperature_slope' for a, b in SLOPES]
 MEAH_SLOPE = 'pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope'
