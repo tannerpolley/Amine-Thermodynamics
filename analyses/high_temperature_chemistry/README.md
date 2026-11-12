@@ -1,7 +1,7 @@
 # High-temperature MEA chemistry (#263)
 
 Read [the notebook](notebook.qmd) for the scientific result and its limits.
-The Forgejo issue owns the calculation design; this folder owns source
+GitHub issue #263 owns the calculation design; this folder owns source
 assessment, immutable inputs, retained calculations and presentation.
 
 The owner authorized merged Engine e6dae5c7 only for this issue, wheel SHA-256

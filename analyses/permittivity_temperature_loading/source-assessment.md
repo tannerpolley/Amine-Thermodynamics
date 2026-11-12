@@ -1,6 +1,6 @@
 # Temperature and loading limits of aqueous-amine permittivity
 
-Research for Forgejo issue #265, read against base `30db72afad45232c36f8bfce82ea80278f3267e2` on 6 November 2026. This is a source assessment before design readiness review. It contains no new Engine calculation or parameter recommendation accepted for adoption.
+Research for GitHub issue #265, read against base `30db72afad45232c36f8bfce82ea80278f3267e2` on 6 November 2026. This is a source assessment before design readiness review. It contains no new Engine calculation or parameter recommendation accepted for adoption.
 
 ## Finding and intended use
 

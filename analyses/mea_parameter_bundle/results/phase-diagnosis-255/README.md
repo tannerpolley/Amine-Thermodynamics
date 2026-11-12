@@ -1,6 +1,6 @@
 # MEA liquid-split diagnosis at fixed parameters
 
-Stage 1 of [issue #255](https://tnnrpolley21-ms-7c95.taila72856.ts.net:3000/tannerpolley/Amine-Thermodynamics/issues/255). These are fixed-model predictions and numerical verification, not physical validation. No parameter fitting or parameter adoption is performed. Independent delivered review and investigator promotion for manuscript use remain open.
+Stage 1 of [issue #255](https://github.com/tannerpolley/Amine-Thermodynamics/issues/255). These are fixed-model predictions and numerical verification, not physical validation. No parameter fitting or parameter adoption is performed. Independent delivered review and investigator promotion for manuscript use remain open.
 
 ## Question and basis
 
