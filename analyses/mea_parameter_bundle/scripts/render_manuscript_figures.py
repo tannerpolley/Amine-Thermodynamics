@@ -278,10 +278,20 @@ def main():
     bands = [r for r in a.rows(a.BUNDLE/'results/uncertainty-307/prediction-bands.csv') if r['group']=='common149: partial_pressure']
     pressure_rows = {r['target']:r for r in a.rows(a.E/'pressure-figure-data.csv')}
     fig, ax = plt.subplots(figsize=(FULL_WIDTH, 3.5), layout='constrained')
-    for T, color in zip(sorted({float(pressure_rows[r['identity']]['temperature_K']) for r in bands}), COLORS):
-        part = [r for r in bands if float(pressure_rows[r['identity']]['temperature_K'])==T]
-        ax.errorbar([float(pressure_rows[r['identity']]['loading']) for r in part], [float(r['value'])/1000 for r in part],
-                    yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in part], fmt='o', ms=3, color=color, label=f'{T:g} K')
+    plotted = []
+    for T, color in zip((313.15, 333.15), COLORS):
+        part = [
+            r for r in bands
+            if abs(float(pressure_rows[r['identity']]['temperature_K']) - T) <= 2
+        ]
+        plotted.extend(r['identity'] for r in part)
+        ax.errorbar(
+            [float(pressure_rows[r['identity']]['loading']) for r in part],
+            [float(r['value']) / 1000 for r in part],
+            yerr=[1.96 * float(r['SE_bound_fixed']) / 1000 for r in part],
+            fmt='o', ms=3, color=color, label=f'Near {T:g} K',
+        )
+    assert len(plotted) == len(set(plotted)) == len(bands) == 47
     ax.set(yscale='log', xlabel=LOADING, ylabel=r'CO$_2$ partial pressure (kPa)')
     ax.legend(title='Conditional 95% intervals', frameon=False)
     ax.grid(alpha=.15)

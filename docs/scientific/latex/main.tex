@@ -87,9 +87,10 @@
 A thermodynamic description of reactive absorption must combine equilibrium, caloric and density properties of the loaded solvent.
 Part I jointly estimates sixteen ePC-SAFT parameters for aqueous monoethanolamine (MEA) using pressure, speciation, integral absorption heat, density, heat capacity and binary equilibrium data.
 For nominal 30 wt\% MEA, pressure average absolute relative deviations are 11.79\,\% for 47 fitted pressures and 20.27\,\% over 159 fitted and non-fitted pressures at 313.00--\SI{393.15}{\kelvin}.
-The 94 species fractions in the main calibration group deviate by 7.11\,\%; fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \ce{CO2}, and fitted loaded-density deviation is 0.162\,\% without volume translation.
-Enforcing a finite phase-stability requirement during fitting removes the need for narrower protonated-amine diameter bounds: no additional liquid is detected at 1903 enforced, 576 offset and 162 census states.
-Six parameters remain on bounds; conditional covariance gives pressure standard errors of 5.41--16.00\,\% at 47 retained calibration states.
+For 94 of the 101 fitted species fractions the deviation is 7.11\,\%; fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \ce{CO2}, and fitted loaded-density deviation is 0.162\,\% without volume translation.
+A fit without a phase-stability requirement gives similar property agreement but has detected liquid-phase instability at 54 of 162 searched states.
+Penalizing tangent-plane instability during fitting gives a parameter set with no detected instability at the 1903 penalized states or at 738 states checked outside the fit.
+Six parameters lie on bounds; conditional covariance gives pressure standard errors of 5.41--16.00\,\% at the 47 fitted pressure states.
 Pressure deviations at 15 and 45 wt\% are 33.89 and 44.53\,\%, respectively; bicarbonate/carbonate and higher-temperature caloric discrepancies are reported with their source conflicts and model assumptions.
 These comparisons describe calibration and fixed-parameter predictions; the finite searches are numerical verification of phase behavior.
 A companion Part II examines transfer of the shared parameters to other amine classes.

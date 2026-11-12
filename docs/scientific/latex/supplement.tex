@@ -141,10 +141,11 @@ Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the 
 \COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite[Table~2]{Gross2001}.
 Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite[Table~4]{Uyan2015}.
 Ion segment count one and the diameter ties are modeling assumptions.
-Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements. All other interactions are zero by assumption except the fixed water interactions listed below.
+Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements.
+All other interactions are zero by assumption except the fixed water interactions listed below.
 \Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list their exact values; they are not attributed to the cited size/dispersion source.
 Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
-The ion packing diameters, $0.88\sigma$, are 4.708, 4.2821756, 2.578048, 2.149136, 3.049552 and \SI{1.775576}{\angstrom} for \MEAH, \MEACOO, bicarbonate, carbonate, hydronium and hydroxide, respectively; their Debye--H\"uckel diameters equal the segment diameters in main-text Table~\ref{main-tab:species-parameters}.
+The ion packing diameters, $0.88\sigma$, are 4.3160023, 4.6815957, 2.578048, 2.149136, 3.049552 and \SI{1.775576}{\angstrom} for \MEAH, \MEACOO, bicarbonate, carbonate, hydronium and hydroxide, respectively; their Debye--H\"uckel diameters equal the segment diameters in main-text Table~\ref{main-tab:species-parameters}.
 
 \input{tables/supplement_species_parameters}
 \input{tables/supplement_interaction_matrix}
@@ -177,7 +178,7 @@ The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperatur
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{mea-permittivity.pdf}
-\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 measurements of Agieienko and Buchner \cite{agieienkoWhatGasStream2024a} (circles) and main-text Eq.~\ref{main-eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus measured.}
+\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 values tabulated by Agieienko and Buchner \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}, including their cited pure-water reference value (circles), and main-text Eq.~\ref{main-eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus tabulated.}
 \label{fig:mea-permittivity}
 \end{figure}
 
@@ -237,7 +238,7 @@ A minimum-norm convention fixes the charge-proportional reference freedom, which
 
 
 % P:supplement-17
-The 375 equilibrium states have maximum absolute stationarity residual $2.16\times10^{-12}$, material-balance residual $8.60\times10^{-13}$ mol and charge residual $2.11\times10^{-13}$ mol.
+The 375 equilibrium states have maximum absolute stationarity residual $3.07\times10^{-12}$, material-balance residual $1.08\times10^{-12}$ mol and charge residual $2.81\times10^{-13}$ mol.
 The heat-capacity consistency checks include equilibrium enthalpy derivatives, the $10^{-6}$ unloaded loading approximation and conversion by the complete analytical-feed mass.
 These checks verify numerical solutions rather than physical phase behavior.
 Numerical values, software identities, checksums and calculation commands accompany the electronic data.
@@ -253,7 +254,10 @@ Hartono inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 loading; the de
 Thus these scales do not uniformly represent standard uncertainties.
 
 \input{tables/density_scales}
+
+% P:supplement-density-conflict
 Amundsen exceeds interpolated Hartono by 8.5 to 9.1~\si{\kilogram\per\cubic\metre} at the five temperatures, at loading 0.4 and nominal 30 wt\% solvent; neither source is thereby established as correct.
+
 \input{tables/supplement_carbonate_density}
 
 % P:supplement-04
@@ -300,7 +304,7 @@ The short profiles locate neither confidence limits nor a global optimum and do 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{pressure-uncertainty.pdf}
-\caption{Conditional pressure intervals at 47 retained fitted states, calculated with the adopted parameters and correlated covariance. Bars are $\pm1.96$ standard errors, with six bound coordinates fixed. These local linearized intervals exclude model discrepancy and future measurement noise.}
+\caption{Conditional pressure intervals at all 47 retained fitted states, calculated at their reported temperatures with the adopted parameters and correlated covariance. Colors group temperatures near 313.15 and \SI{333.15}{\kelvin}. Bars are $\pm1.96$ standard errors, with six bound coordinates fixed. These local linearized intervals exclude model discrepancy and future measurement noise.}
 \label{fig:pressure-uncertainty}
 \end{figure}
 
@@ -326,7 +330,7 @@ Arcis heats were used to accept candidate parameter sets; Wagner pressures and p
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth,keepaspectratio]{heat-temperature.pdf}
-\caption{Heat released per mole of absorbed \COtwo for nominal 30 wt\% MEA, plotted as positive values (main-text Fig.~\ref{main-fig:heat} uses the opposite sign) \cite[Tables~1--3]{Kim2007}. Circles (run~1) and triangles (run~2) are Kim--Svendsen finite-interval observations with their $\pm2.2$\,\% source uncertainty; crosses of the same color are fixed-parameter finite-interval predictions at \SI{1.734}{\mega\pascal}, and the solid line in each panel is the limiting differential model heat. Observations in the light grey band, above loading 0.60, were not calculated or scored; The \SI{393.15}{\kelvin} run~2 points at loadings 0.078 and 0.445 are plotted but excluded from the primary statistics. Printed inconsistencies, rounded addition intervals and missing experimental pressure histories limit comparison; the model omits 2-oxazolidone and extrapolates reaction laws.}
+\caption{Heat released per mole of absorbed \COtwo for nominal 30 wt\% MEA, plotted as positive values (main-text Fig.~\ref{main-fig:heat} uses the opposite sign) \cite[Tables~1--3]{Kim2007}. Circles (run~1) and triangles (run~2) are Kim--Svendsen finite-interval observations with their $\pm2.2$\,\% source uncertainty; crosses of the same color are fixed-parameter finite-interval predictions at \SI{1.734}{\mega\pascal}, and the solid line in each panel is the limiting differential model heat. Observations in the light grey band, above loading 0.60, were not calculated or scored; the \SI{393.15}{\kelvin} run~2 points at loadings 0.078 and 0.445 are plotted but excluded from the primary statistics. Printed inconsistencies, rounded addition intervals and missing experimental pressure histories limit comparison; the model omits 2-oxazolidone and extrapolates reaction laws.}
 \label{fig:kim-heat-temperature}
 \end{figure}
 
@@ -338,7 +342,7 @@ Arcis heats were used to accept candidate parameter sets; Wagner pressures and p
 % P:supplement-05
 The complete 162-state table for both fits is supplied as CSV in the data deposit.
 The grid has six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6.
-At each temperature and loading, the reference pressure $P^*$ is the bubble pressure of the outgoing restricted fit, and the three test states are at $P/P^*=0.50$, 0.80 and 0.95.
+At each temperature and loading, the reference pressure $P^*$ is the bubble pressure of the restricted fit of main-text Section~\ref{main-sec:methods-phase}, and the three test states are at $P/P^*=0.50$, 0.80 and 0.95.
 The 54 reference pressures range from 6.4123 to \SI{1768.9}{\kilo\pascal} and are listed in the electronic data.
 Both fits are searched at the same 162 states.
 Phase calculations use 9.7292821 mol analytical MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
@@ -346,7 +350,7 @@ All extensive Gibbs differences below refer to that feed, rather than the one-mo
 
 % P:supplement-phase-summary-01
 Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
-No instability is detected for the final parameter set, and all 162 of their existing equilibria were searched with the native liquid-parent requirement; the reference pressures retain their outgoing-record basis.
+No instability is detected for the final parameter set at any of the 162 states, which were searched with the same census procedure; the reference pressures $P^*$ remain those of the restricted fit.
 Instability is detected for the historical unstable fit at 54 states, by 143 trials that lower the Gibbs energy: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin}.
 The 81 states at 353.15--\SI{393.15}{\kelvin} lie above the temperatures of the fitted \COtwo pressures.
 
@@ -411,14 +415,15 @@ These are numerical resolution rules, not experimental uncertainty bounds or a g
 
 \section{Stability-constrained fit and bounds}\label{sec:s-probes}\label{sec:s-fits}
 % P:supplement-probes-current
-The adopted fit uses the original wide bounds, including a protonated-MEA segment-diameter interval of 2--\SI{5.8}{\angstrom}.
-A native tangent-plane requirement is enforced during fitting; the observation cost is reported separately from its zero squared stability contribution at the retained enforced states.
-Two starts, from the outgoing restricted set and from the historical unstable fit, reach the retained stable solution.
-The selected diameter is \SI{4.904548}{\angstrom}; the former interval 5.35--\SI{5.8}{\angstrom} is no longer imposed.
-Its observation cost is 148.5105, compared with 148.8833 for the outgoing set on the same wheel and inputs.
-The pressure, species, caloric and density comparisons are reported as measured errors, without treating study-specific preservation tolerances as universal accuracy standards.
-The original wide-bound historical unstable fit remains a comparison only.
+The final parameter set uses the original wide bounds, including a \MEAH segment-diameter interval of 2--\SI{5.8}{\angstrom}.
+The stability penalty of main-text Section~\ref{main-sec:methods-phase} is applied during fitting; the observation cost excludes it, and the penalty is zero at the 1903 penalized states for the final parameter set.
+Fits started from the restricted fit and from the historical unstable fit reach the same stable solution.
+Its \MEAH segment diameter, \SI{4.904548}{\angstrom}, lies below the restricted fit's lower bound of \SI{5.35}{\angstrom}.
+Its observation cost is 148.5105, compared with 148.8833 for the restricted fit evaluated with the same observations and ePC-SAFT implementation.
+\Cref{tab:comparison-fit-parameters} lists the parameters of the historical unstable fit that differ from the final parameter set; that fit serves only as a comparison.
+
 \input{tables/comparison_fit_parameters}
+
 
 \FloatBarrier
 \section{Published-model comparison}\label{sec:s-literature}

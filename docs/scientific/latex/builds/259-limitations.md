@@ -27,4 +27,13 @@ The existing table and figure commands now read adoption-297/paper-evidence and 
 
 The journal metadata and existing `verification-receipt.json` remain owned by issue 206 and were not refreshed. analyses/_cse-manuscript.json was untouched. The ignored user_preferences.md and literature shelf were absent in this worktree; the main checkout's literature shelf was consulted, and the missing Zhang 2011 reading copy was inspected through its live Zotero PDF (MMAGNPIH/M3QDCZM7, §3.3, Tables 9–11). No bibliography refresh was performed.
 
-The two independent manuscript reviews are pending.
+The numbers-and-claims review of 0446815 returned Not supported: its seven confirmed defects concern incomplete pressure-interval plotting, outgoing ion packing diameters, stale literature-comparison statistics, stale numerical residual maxima, stale minor-species curve maxima, two source-conflict pressure values, and the outgoing Engine identity/MDEA sentence in Data Availability. The supplied corrections are applied in the first fix round. The reader-story review returned Revise and its required replacements are also applied, with science replacements taking precedence for overlapping numerical, interval-caption and availability changes. Methods now define the stability penalty and the 1903/576/162 state sets; the phase discussion is reordered and revision-history language is removed. The science reviewer subsequently completed verification of all 70 cited keys and confirmed the numerical and stability-method corrections. Its one remaining dielectric-caption attribution correction is applied: the pure-water entry is identified as a cited reference value. Final rebuilt-PDF acceptance and reader-story verification remain pending.
+
+## Final PDF acceptance
+
+The ordered `agent-heavy` build completes for the 24-page main paper and 22-page supplement. Both logs have no undefined references, missing figures, overfull boxes or missing characters; both PDFs have zero Type 3 fonts. All 12 included figures resolve. The generated phase-summary table has the correctly escaped `\ref{sec:methods-phase}`; the historical-fit table uses article-class float placement and is included. The main PDF is newer than all 68 manuscript inputs. The 101 paragraph identifiers are unique. All required Opus R1–R19 spans and Astra numerical/identity/attribution corrections were checked against the source.
+
+- `main.pdf` SHA-256: `a8594479feb534e33aee399840601076cae9621c5a6c95e1e863622b0f4b080a`.
+- `supplement.pdf` SHA-256: `89e4fb27d65c5296fc9b172bb318346884578c4de9ae67274f9d16984966cc43`.
+
+The obsolete interrupted LaTeX auxiliary files were preserved outside the repository and regenerated; no retained result or manuscript source was discarded. Final reviewer verification of these PDFs is pending.
