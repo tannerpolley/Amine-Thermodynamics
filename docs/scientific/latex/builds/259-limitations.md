@@ -25,6 +25,6 @@ The later owner scope comment, issuecomment-6838067984, replaces the earlier ami
 
 The existing table and figure commands now read adoption-297/paper-evidence and uncertainty-307, checking parameter and wheel identities and retained input hashes. Source-only and historical inputs remain separately bound. Supplement precedes main in the background agent-heavy build. Cross-document references require a second ordered pass on a fresh build directory.
 
-The optional journal metadata and existing verification receipt remain owned by issue 206 and were not refreshed. analyses/_cse-manuscript.json was untouched. The ignored user_preferences.md and literature shelf were absent in this worktree; the main checkout's literature shelf was consulted, and the missing Zhang 2011 reading copy was inspected through its live Zotero PDF (MMAGNPIH/M3QDCZM7, §3.3, Tables 9–11). No bibliography refresh was performed.
+The journal metadata and existing `verification-receipt.json` remain owned by issue 206 and were not refreshed. analyses/_cse-manuscript.json was untouched. The ignored user_preferences.md and literature shelf were absent in this worktree; the main checkout's literature shelf was consulted, and the missing Zhang 2011 reading copy was inspected through its live Zotero PDF (MMAGNPIH/M3QDCZM7, §3.3, Tables 9–11). No bibliography refresh was performed.
 
 The two independent manuscript reviews are pending.
