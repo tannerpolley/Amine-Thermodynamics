@@ -1,6 +1,6 @@
 """Conditional uncertainty and diagnostic bound profiles for issue 307; no adoption.
 
-Run: agent-heavy uv run --no-sync python .../uncertainty_307.py MEA|MDEA
+Run: agent-heavy uv run --no-sync python .../uncertainty_307.py MEA|MDEA|AMP (AMP: #306 refit endpoint, not adopted)
 One fit at a time; native workers use AGENT_HEAVY_CORES. Restart skips saved fits.
 """
 # ruff: noqa: E402 -- analysis paths must precede project imports.
@@ -24,6 +24,9 @@ import refit
 SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
 WHEEL = ROOT/'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
 BASE = '79706636e8716974e045b582f1b1cbfe7e4c7009'
+PROFILED = {'AMP': (4, 6, 8)}  # AMPH+-CO2 k, AMPCOO- diameter, enthalpy shift: bound in #243
+OUTPUTS = {'MEA': ROOT/'analyses/mea_parameter_bundle/results/uncertainty-307', 'MDEA': ROOT/'analyses/solvent_specification_mdea/results/uncertainty-307',
+           'AMP': ROOT/'analyses/amp_transfer/results/refit-306/uncertainty'}
 
 
 def read(path):
@@ -54,6 +57,26 @@ def setup(name):
             if q.get('kind') == 'reaction_enthalpy_shift':
                 q['bounds'] = [x-q['value'] for x in q['bounds']]
         out = ROOT/'analyses/mea_parameter_bundle/results/uncertainty-307'
+    elif name == 'AMP':
+        amp = ROOT/'analyses/amp_transfer'
+        summary = read(amp/'results/refit-306/summary.json')
+        run = summary['scored']
+        point = summary['runs'][run]
+        spec = SolventSpecification(amp/'kundu-refit-306.toml')  # endpoint document and completed fitted law
+        declared = read(amp/f'inputs/redesign/{run}-coordinates.json')
+        # #243 transport rule: the shift restarts at zero from the completed law (bounds keep total H in [-5000, 5000]);
+        # the plain a coordinate then equals the completed law's a.
+        H = point['total_shift_J_mol']
+        for q,x in zip(declared,point['independent_physical'],strict=True):
+            q['origin'] = point['law']['a'] if q.get('coefficient')=='a' else 0. if q.get('kind')=='reaction_enthalpy_shift' else x
+            if q.get('kind')=='reaction_enthalpy_shift':
+                q['bounds'] = [-5000.-H,5000.-H]
+            if q.get('coefficient')=='a':
+                q['bounds'] = [v+H/(epcsaft.GAS_CONSTANT_J_PER_MOL_K*313.15) for v in q['bounds']]
+            q['value'] = q['origin']+(H if q.get('kind')=='reaction_enthalpy_shift' else 0.)
+            q['identity'] = ('carbamate-hydrolysis/'+('total enthalpy shift' if q.get('kind')=='reaction_enthalpy_shift' else 'a')) if 'targets' not in q else str(q['targets'][0][1])+' / '+q['targets'][0][0]
+            q['unit'] = 'J / mol' if q.get('kind')=='reaction_enthalpy_shift' else 'kelvin' if 'slope' in str(q.get('targets')) else 'angstrom' if 'diameter' in str(q.get('targets')) else 'dimensionless'
+        out = amp/'results/refit-306/uncertainty'
     else:
         spec = SolventSpecification(ROOT/'analyses/solvent_specification_mdea/B1.toml')
         declared = read(ROOT/'analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/declaration.json')['coordinates']
@@ -119,6 +142,8 @@ def prediction_records(spec,name):
             predictions.append(dict(identity=key,group='Xiao',problem=key,constructor='observation',kind='partial_pressure',
                 arguments=dict(phase='V',species=['carbon-dioxide'],observed=float(row['p_CO2_kPa'])*1000,form='difference',scale=1.),
                 temperature_domain=[293.15,395.],observation_parameters=spec.parameter_sha256))
+    if name == 'AMP':  # held-out Kundu 2003 CO2 partial pressures
+        predictions = [r for r in spec.inputs['observations']['comparisons'] if r['group']=='kundu']
     if name == 'MEA':
         predictions = [r for r in predictions if r['kind'] in ('partial_pressure','equilibrium_isobaric_heat_capacity','phase_density')
             or r['constructor']=='addition_enthalpy' or (r['kind']=='mole_fraction' and
@@ -155,6 +180,9 @@ def main(name):
     residual = np.array(point['residuals'])*np.sqrt(weights)
     J = np.array(point['jacobian']).reshape(-1,n)*np.sqrt(weights)[:,None]
     cost = float(residual@residual/2)
+    if name == 'AMP':  # the evaluated point must be the fitted endpoint
+        summary = read(ROOT/'analyses/amp_transfer/results/refit-306/summary.json')
+        assert abs(cost/summary['runs'][summary['scored']]['cost']-1) <= 1e-8, cost
     conditional = fit(spec,free,out/'conditional')
     movement = {decl[i]['identity']:u for i,u in zip(free,conditional['optimizer'])}
     local = refit.identifiability(SimpleNamespace(physical=[q['origin'] for q in decl],covariance=SimpleNamespace(active_bounds=active)),
@@ -206,20 +234,23 @@ def main(name):
     table(out/'prediction-bands.csv',[dict(identity=r['identity'],group=r['group'],value=v,SE_bound_fixed=b,lower_95=v-1.96*b,upper_95=v+1.96*b) for r,v,b in zip(predictions,py,bands)])
     write(out/'interior-ranking.json',sensitivity)
     profiles = []
-    for i in active:
+    # #306: AMP also profiles its three formerly bound coordinates, two-sided where interior.
+    for i in active+[i for i in PROFILED.get(name,()) if i not in active]:
         q = decl[i]
         sign = 1 if q['origin']-q['bounds'][0] < q['bounds'][1]-q['origin'] else -1
-        for fraction in (.01,.05,.1):
-            folder = out/f'profile-{i}-{fraction}'
+        for fraction in ([sign*f for f in (.01,.05,.1)] if i in active else [s*f for s in (-1,1) for f in (.01,.05,.1)]):
+            if not q['bounds'][0] <= q['origin']+fraction*(q['bounds'][1]-q['bounds'][0]) <= q['bounds'][1]:
+                continue
+            folder = out/(f'profile-{i}-{abs(fraction)}' if i in active else f'profile-{i}-{fraction:+}')
             ss,dd,_ = setup(name)
-            dd[i]['origin'] += sign*fraction*(q['bounds'][1]-q['bounds'][0])
+            dd[i]['origin'] += fraction*(q['bounds'][1]-q['bounds'][0])
             prediction_records(ss,name)
             probe = ss.inputs['observations']['fitted'][:1]
             chart = derivative(ss,probe).chart
             transformations = []
             complete = []
             if q.get('kind')=='reaction_enthalpy_shift':
-                probe += [next(r for r in ss.inputs['observations']['fitted'] if r['constructor']=='addition_enthalpy')]
+                probe += [r for r in ss.inputs['observations']['fitted'] if r['constructor']=='addition_enthalpy'][:1]
                 for j,other in enumerate(dd):
                     if other.get('kind')=='reaction_coordinate' and other['name']==q['name']:
                         shifted = getattr(chart.reaction_laws[q['name']],other['coefficient'])
@@ -254,7 +285,7 @@ def main(name):
                 write(folder/'predictions.json',dict(values=ev.predictions))
             moved = np.array(read(folder/'predictions.json')['values'])
             changes = {g:float(np.max(np.abs(moved[[r['group']==g for r in predictions]]/py[[r['group']==g for r in predictions]]-1))) for g in groups}
-            profiles.append(dict(parameter=q['identity'],group_changes=changes,fraction=fraction,fixed_value=q.get('value',q['origin'])+dd[i]['origin']-q['origin'],
+            profiles.append(dict(parameter=q['identity'],group_changes=changes,fraction=abs(fraction) if i in active else fraction,fixed_value=q.get('value',q['origin'])+dd[i]['origin']-q['origin'],
                 cost=result['final_cost'],delta_cost=result['final_cost']-cost,status=result['status'],usable=result['usable'],
                 max_fitted_prediction_change=float(np.max(np.abs(np.array(result['predictions'])/y-1))) if result['predictions'] else None))
             write(out/'profiles.json',profiles)
@@ -273,7 +304,7 @@ def present(name):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    out = ROOT/('analyses/mea_parameter_bundle/results/uncertainty-307' if name=='MEA' else 'analyses/solvent_specification_mdea/results/uncertainty-307')
+    out = OUTPUTS[name]
     decl = read(out/'inputs.json')['coordinates']
     ranking = read(out/'ranking.json')
     covariance = read(out/'covariance.json')
@@ -295,7 +326,7 @@ def present(name):
     fig.tight_layout()
     fig.savefig(out/'sensitivity.png',dpi=170)
     plt.close(fig)
-    pressure = [(i,b) for i,b in enumerate(bands) if b['group'] in ('Xiao','Ermatchkov') or (name=='MEA' and pred['records'][i]['kind']=='partial_pressure')]
+    pressure = [(i,b) for i,b in enumerate(bands) if b['group'] in ('Xiao','Ermatchkov','kundu') or (name=='MEA' and pred['records'][i]['kind']=='partial_pressure')]
     fig,ax = plt.subplots(figsize=(9,5))
     for group in dict.fromkeys(b['group'] for _,b in pressure):
         subset = [(i,b) for i,b in pressure if b['group']==group]
@@ -312,6 +343,8 @@ def present(name):
     fig.tight_layout()
     fig.savefig(out/'pressure-bands.png',dpi=170)
     plt.close(fig)
+    if name == 'AMP':  # #306 notebook carries the AMP interpretation; the text below describes adopted MEA/MDEA records.
+        return
     pressure_se = [float(b['SE_bound_fixed'])/float(b['value']) for _,b in pressure]
     temperatures = [pred['records'][i]['conditions']['T_K'] for i,b in pressure]
     text = ['## Parameter uncertainty and sensitivity (#307)\n',
@@ -347,11 +380,14 @@ def present(name):
 
 
 def verify_results(name):
-    out = ROOT/('analyses/mea_parameter_bundle/results/uncertainty-307' if name=='MEA' else 'analyses/solvent_specification_mdea/results/uncertainty-307')
+    out = OUTPUTS[name]
     adopted = read(out/'adopted.json')
-    reference = read(ROOT/('analyses/mea_parameter_bundle/results/adoption-297/candidate/replay.json' if name=='MEA' else 'analyses/solvent_specification_mdea/results/adoption-302/replay.json'))
+    reference = read(ROOT/('analyses/mea_parameter_bundle/results/adoption-297/candidate/replay.json' if name=='MEA' else 'analyses/solvent_specification_mdea/results/adoption-302/replay.json')) if name!='AMP' else None
     if name=='MEA':
         reference = reference['rows']
+    if name=='AMP':
+        run = read(ROOT/'analyses/amp_transfer/results/refit-306/summary.json')['scored']
+        reference = read(ROOT/f'analyses/amp_transfer/results/refit-306/{run}-fit.json')['replay']
     delta = [abs(a-b['value'])/max(abs(b['value']),1e-30) for a,b in zip(adopted['predictions'],reference,strict=True)]
     errors = list(csv.DictReader((out/'standard-errors.csv').open()))
     se_difference = max(abs(float(q['native_SE_bound_fixed'])/float(q['adopted_point_SE_bound_fixed'])-1) for q in errors)
