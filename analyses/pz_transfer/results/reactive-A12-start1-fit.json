@@ -1,0 +1,295 @@
+{
+  "tag": "A12",
+  "start": 1,
+  "coordinates": [
+    {
+      "name": "piperazinium/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "piperazinium",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazinium",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazinium",
+          0.88
+        ],
+        [
+          "segment_diameter",
+          "piperazinediium",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazinediium",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazinediium",
+          0.88
+        ]
+      ],
+      "origin": 5,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        9
+      ]
+    },
+    {
+      "name": "piperazinium/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "piperazinium",
+          1
+        ],
+        [
+          "dispersion_energy_over_k",
+          "piperazinediium",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "piperazinium/water-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazinium",
+            "water"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazinediium",
+            "water"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -1,
+        0.5
+      ]
+    },
+    {
+      "name": "piperazinium/bicarbonate-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazinium",
+            "bicarbonate-anion"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazinediium",
+            "bicarbonate-anion"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -1,
+        0.5
+      ]
+    },
+    {
+      "name": "carbamate/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazine-carbamate",
+          0.88
+        ],
+        [
+          "segment_diameter",
+          "piperazine-dicarbamate",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazine-dicarbamate",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazine-dicarbamate",
+          0.88
+        ]
+      ],
+      "origin": 5,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        9
+      ]
+    },
+    {
+      "name": "carbamate/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "dispersion_energy_over_k",
+          "piperazine-dicarbamate",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "carbamate/water-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazine-carbamate",
+            "water"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazine-dicarbamate",
+            "water"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -0.5,
+        0.5
+      ]
+    },
+    {
+      "name": "protonated-piperazine-carbamate/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-piperazine-carbamate",
+          1
+        ]
+      ],
+      "origin": 3.7136,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        6
+      ]
+    },
+    {
+      "name": "protonated-piperazine-carbamate/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-piperazine-carbamate",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "P3/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ]
+    },
+    {
+      "name": "P4/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ]
+    },
+    {
+      "name": "P5/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ]
+    }
+  ],
+  "start_optimizer": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.6284378069193943,
+    0.2537146331117226,
+    -0.42467379392492505
+  ],
+  "observations": 294,
+  "status": "initial_evaluation_failed",
+  "usable": false,
+  "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.05934143313053418 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 127 iterations, contraction absent, floor 1.9836595224828886e-10, amplification 0",
+  "iterations": 0,
+  "initial_cost": 0.0,
+  "cost": 0.0,
+  "optimizer": [],
+  "physical": [],
+  "active_bounds": [],
+  "iteration_costs": []
+}
