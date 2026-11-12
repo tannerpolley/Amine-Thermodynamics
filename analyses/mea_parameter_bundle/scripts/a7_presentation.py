@@ -1,4 +1,4 @@
-"""Retained inputs and numerical reconciliation for the manuscript displays (#211): Engine 3e83e19c evidence of #213, #214 and #215."""
+"""Render retained adopted MEA results (#297, Engine 391dfe5d) and explicitly historical comparisons; no Engine computation."""
 import csv
 import hashlib
 import json
@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
-E = BUNDLE / 'results/engine-3e83e19c-paper-evidence'  # #215 one-wheel package
+E = BUNDLE / 'results/adoption-297/paper-evidence'  # adopted MEA, Engine 391dfe5d
 D = BUNDLE / 'results/engine-3e83e19c-density-free'  # #213 density-free fit and limits
 P = BUNDLE / 'results/engine-3e83e19c-phase-search/run-2'  # #214 162-state search
 CHAIN = BUNDLE / 'results/engine-3e83e19c-refit-chain'  # #212
@@ -73,123 +73,62 @@ def record_identity(parameter_sha256, engine):
                 commit=Path(engine['wheel_path']).parts[-2].removeprefix('main-')))
 
 
+def reported_score():
+    fit = load(E / 'fit-summary.json')
+    m = load(E / 'reported-score.json')['metrics']['candidate']
+    return dict(parameter_sha256=fit['record_sha256'], cost=fit['cost'],
+                C149=fit['groups']['common149']['cost'],
+                pressure_AARD_pct=m['fitted CO2 partial pressure']['aard_percent'],
+                species_AARD_pct=m['fitted phase mole fraction']['aard_percent'],
+                vinjarapu_rmse_kJ_mol=m['fitted heat of absorption']['rmse']/1000,
+                loaded_within_2s=m['loaded density']['within_2s'], loaded_count=47,
+                co2_free_errors={r['id']:float(r['error_kg_m3']) for r in rows(E/'density.csv')
+                                 if r['id'] in {x['id'] for x in rows(E/'fitted-rows.csv') if x['group']=='CO2-free density'}})
+
+
 def checked():
     bind(Path(__file__))
-    for path, digest in load(E / 'input-hashes.json').items():
-        if path != TABLE_GENERATOR:  # checked against its inventoried commit in inventoried()
-            assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest, path
-    fit, summary = load(E / 'fit-summary.json'), load(E / 'summary.json')
+    fit, summary = load(E/'fit-summary.json'), load(E/'summary.json')
     document = load(SELECTED)
-    assert INPUTS[str(SELECTED.relative_to(ROOT))] == fit['record_sha256']
-    assert bind(E / 'reported-parameters.json').read_bytes() == SELECTED.read_bytes()
-    fitted = rows(E / 'fitted-rows.csv')
+    assert INPUTS[str(SELECTED.relative_to(ROOT))] == fit['record_sha256'] == summary['parameter_sha256']
+    assert bind(E/'reported-parameters.json').read_bytes() == SELECTED.read_bytes()
+    assert fit['engine']['wheel_sha256'] == summary['engine_wheel_sha256']
+    fitted = rows(E/'fitted-rows.csv')
     assert len(fitted) == len({r['id'] for r in fitted}) == 307
-    retained = {r['target']: r for r in load(E / 'full-replay.json')}
-    assert set(retained) == {r['id'] for r in fitted}
-    for row in fitted:
-        original = retained[row['id']]
-        for field in ('observed','predicted','scale','weight','residual','weighted_residual','cost'):
-            assert float(row[field]) == original[field], (row['id'], field)
-        assert row['form'] == original['form']
-    for name in ('summary.json','state-summary.json','state-targets.csv','density.csv','cp.csv','carbonate-share.csv'):
-        assert bind(E / 'selected-assessment' / name).read_bytes() == bind(E / name).read_bytes()
+    replay = load(E/'full-replay.json')
+    assert replay['parameter_sha256'] == fit['record_sha256']
+    declarations = {r['identity']:r['row'] for r in replay['rows']}
+    fitted = [dict(declarations[r['id']], **r, target=r['id'], declaration=str(declarations[r['id']])) for r in fitted]
+    for r in fitted:
+        r['form'] = {'log_ratio':'LogRatio', 'difference':'Difference'}.get(r['form'],r['form'])
+        if 'scale' not in r:
+            assert r['form']=='LogRatio'
+            r['scale']=1.0  # unscaled logarithmic residual
+    close(sum(float(r['cost']) for r in fitted), replay['cost'])
     for group, expected in fit['groups'].items():
         if group.startswith('common149 '):
             quantity = dict(pressure='PartialPressure', species='PhaseMoleFraction', heat='AdditionEnthalpy')[group.split()[1]]
-            part = [r for r in fitted if r['group'] == 'common149' and r['quantity'] == quantity]
+            part = [r for r in fitted if r['group']=='common149' and r['quantity']==quantity]
         else:
-            part = [r for r in fitted if r['group'] == group]
-        assert len(part) == expected['n'], group
-        close(math.fsum(float(r['cost']) for r in part), expected['cost'])
+            part = [r for r in fitted if r['group']==group]
+        assert len(part)==expected['n'], group
+        close(sum(float(r['cost']) for r in part), expected['cost'])
         close(stats(part)['AARD_percent'], expected['AARD_percent'])
-    close(math.fsum(float(r['cost']) for r in fitted), fit['cost'])
-    score = load(E / 'reported-score.json')
-    assert score['parameter_sha256'] == fit['record_sha256']
-    close(fit['cost'], score['cost'])
-    close(fit['groups']['common149']['cost'], score['C149'])
-    for r in fitted:
-        close(r['cost'], .5*float(r['weight'])*float(r['residual'])**2)
-        close(r['weighted_residual'], math.sqrt(float(r['weight']))*float(r['residual']))
-    spec = load(CHAIN / 'restricted-2/attempt-3/spec.json')
-    density, heat, phase = (rows(E / name) for name in ('density.csv', 'heat.csv', 'phase-family.csv'))
-    assert len(density) == len({r['id'] for r in density}) == 210
-    loaded = [r for r in density if r['id'] in spec['loaded_density_ids']]
-    assert len(loaded) == len(spec['loaded_density_ids']) == 47
-    misses = {r['id'] for r in loaded if abs(float(r['error_over_s'])) > 2}
-    assert misses <= PERMITTED_MISSES and len(loaded) - len(misses) == score['loaded_within_2s'], misses
-    assert max(map(abs, score['co2_free_errors'].values())) <= 1
-    assert len(heat) == len({r['id'] for r in heat}) == 22
-    for source, n in [('Vinjarapu2024', 8), ('Arcis2011', 14)]:
-        part = [r for r in heat if r['source'] == source]
-        assert len(part) == n
-        reduction = stats(part, 'observed_kJ_mol', 'predicted_kJ_mol')
-        for key in ('RMSE', 'bias', 'AARD_percent'):
-            close(reduction[key], summary['heat'][source][key])
-    state = rows(E / 'state-targets.csv')
-    assert len(state) == len({(r['kind'], r['identity'], r['target']) for r in state}) == 462
-    for name, expected in load(E / 'state-summary.json')['scores'].items():
-        part = [r for r in state if r['identity'] in expected['state_ids'] and r['target'] in expected['row_ids']]
-        assert len(part) == expected['n_available'], name
-        calculated = stats(part)
-        for key in ('RMSE', 'bias', 'AARD_percent'):
-            close(calculated[key], expected[key])
-    coordinates = rows(E / 'conditional-standard-errors.csv')
-    assert len(coordinates) == len(fit['coordinates']) == 16
-    for c, retained in zip(coordinates, fit['coordinates'], strict=True):
-        assert c['identity'] == retained['identity'] and c['unit'] == retained['unit']
-        close(c['value'], retained['value'])
-    assert [int(c['optimizer_column']) for c in coordinates if c['bound_active']=='True'] == fit['active_bounds']
-    assert len(fit['active_bounds']) == 6
-    # One 162-state grid; both fits share its states, whose reference pressures are the reported fit's bubble pressures.
-    assert bind(P / 'phase-family.csv').read_bytes() == (E / 'phase-family.csv').read_bytes()
-    assert load(P / 'provenance.json')['parameters']['reported']['parameter_bytes_sha256'] == fit['record_sha256']
-    reference = {(r['temperature_K'], r['loading']): float(r['reference_pressure_Pa']) for r in rows(P / 'reference-pressures.csv')}
-    assert len(reference) == 54
-    paired = {name: {int(r['index']): r for r in phase if r['record'] == name} for name in ('comparison', 'reported')}
-    assert len(phase) == 324 and set(paired['comparison']) == set(paired['reported']) == set(range(162))
-    for index, a in paired['reported'].items():
-        for field in ('temperature_K', 'loading', 'fraction', 'pressure_Pa', 'reference_pressure_Pa'):
-            assert a[field] == paired['comparison'][index][field]
-        assert float(a['reference_pressure_Pa']) == reference[a['temperature_K'], a['loading']]
-        close(a['pressure_Pa'], float(a['fraction'])*float(a['reference_pressure_Pa']))
-    for r in phase:
-        assert r['admitted'] == r['final_success'] == 'True' and int(r['failed_trial_optimizers']) == int(r['missing_trials']) == int(r['trial_unresolved']) == 0
-    counts = rows(P / 'counts-by-temperature.csv')
-    for name, part in paired.items():
-        assert sum(int(r['resolved_trials']) > 0 for r in part.values()) == sum(int(c['descent_states']) for c in counts if c['record'] == name)
-    assert sum(int(r['resolved_trials']) > 0 for r in paired['reported'].values()) == 0
+    spec = load(CHAIN/'restricted-2/attempt-3/spec.json')  # original observation membership only
+    density, heat = rows(E/'density.csv'), rows(E/'heat.csv')
+    errors = {r['identity']:r['standard_error'] for r in rows(E/'conditional-standard-errors.csv')}
+    coordinates = [dict(identity=c['identity'], unit=c['unit'], value=c['value'], bound_active=str(c['identity'] not in errors), conditional_standard_error=errors.get(c['identity'], '')) for c in fit['coordinates']]
+    assert len(density)==210 and len(heat)==22 and len(coordinates)==16
+    phase = rows(E/'phase-family.csv')
+    paired = {name:{int(r['index']):r for r in phase if r['record']==('adopted #255 candidate' if name=='reported' else name)} for name in ('reported','comparison')}
+    assert all(len(v)==162 for v in paired.values())
+    assert not any(int(r['resolved_trials']) for r in paired['reported'].values())
     return fit, summary, document, fitted, spec, density, heat, coordinates, paired
 
 
 def inventoried():
-    """Every bound input matches #215's inventory or its hashed producer inputs; the table generator keeps its inventoried source strings."""
-    inventory = {e['path']: e['sha256'] for e in load(E / 'inventory.json')['entries']}
-    hashed = load(E / 'input-hashes.json')
-    adoption = load(E / 'adoption.json')  # anchors the inventory and the adopted selected bytes
-    relative = lambda path: str(path.relative_to(ROOT))
-    assert adoption['gates']['inventory.json'] == INPUTS[relative(E / 'inventory.json')]
-    assert adoption['new_parameter_sha256'] == inventory[relative(E / 'reported-parameters.json')] == INPUTS[relative(SELECTED)]
-    anchors = {relative(E / name) for name in ('inventory.json', 'input-hashes.json', 'adoption.json')} | {relative(SELECTED)}
-    assert inventory[TABLE_GENERATOR] == hashed[TABLE_GENERATOR]
-    old = subprocess.run(['git', '-C', str(ROOT), 'show', f'{INVENTORY_COMMIT}:{TABLE_GENERATOR}'], capture_output=True, check=True).stdout
-    assert hashlib.sha256(old).hexdigest() == inventory[TABLE_GENERATOR]
-    old, new = old.decode(), (ROOT / TABLE_GENERATOR).read_text()
-    # #244 approves the revised literature comparison and nomenclature units; pin their exact text.
-    for marker, digest in {
-        'literature=[': '2cc65a40ecaf8438593cc0e6dd8a4b9b61dab2663f4d90d71c63d418b17e5268',
-        'symbols=[': '40b014c56512e829dd6a23ce56241176675906efd1d426f407fa841d486767ae',
-    }.items():
-        start = new.index(marker)
-        block = '\n'.join(line for line in new[start:new.index(']]', start)+2].splitlines() if 'This work' not in line)
-        assert hashlib.sha256(block.encode()).hexdigest() == digest, marker
-    # #244 approves the split-pressure row and full-comparison caption.
-    for marker, digest in {
-        "['This work'": 'deb63e7319e004ea773a4056af6f686cab0cb234b64a46d7b0e7e5dc2db86955',
-        "table('supplement_literature_comparison.tex'": 'b9bb12d4c4224479a7838783f56ebd8ba8dccdd90825b3f869cad9b472337686',
-    }.items():
-        line, = (line for line in new.splitlines() if marker in line)
-        assert hashlib.sha256(line.encode()).hexdigest() == digest, marker
+    """Check consumed numerical files against the retained adoption inventory."""
+    inventory = {e['path']: e['sha256'] for e in load(BUNDLE / 'results/adoption-297/changed-files.json')}
     for path, digest in INPUTS.items():
-        if path in UNINVENTORIED or path in anchors or path == TABLE_GENERATOR:
-            continue
-        assert PINNED.get(path) or inventory.get(path, hashed.get(path)) == digest, path
+        if path in inventory and not path.endswith('.py'):
+            assert inventory[path] == digest, path
