@@ -250,4 +250,3 @@ No new model calculations, parameter selection or science review. Split counts a
 **Old:** Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. All are partial pressures except AMP Tong.
 
 **New:** Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. Kamps was scored once after the PZ fit was frozen. All are partial pressures except AMP Tong and PZ Kamps.
-
