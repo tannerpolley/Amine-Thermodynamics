@@ -1,5 +1,16 @@
-\section{Results: extent and limits of transfer}\label{sec:p2-results}
-\subsection{What amine-specific calibration recovers}
+\section{Results and discussion}\label{sec:p2-results}
+\subsection{Subsystems}
+% P:p2-results-subsystems
+Part I reports the shared water, \COtwo and inorganic-ion description \cite[Sect.~4.1]{PolleyPartI}; Table~\ref{tab:p2-origins} and Supplementary Section~S1 distinguish inherited inputs from amine pure-component and binary fits.
+The MDEA binary-pressure result appears in Table~\ref{tab:p2-calibration}; the water--DEA excess-enthalpy failure is discussed in Section~\ref{sec:p2-caloric-results} and Fig.~\ref{fig:p2-dea-properties}(c).
+
+% P:p2-results-calibration-02-binary
+The separately fitted PZ--water binary properties (Supplementary Sections~S1 and S3) also retain their discrepancies; they are unchanged by the reactive refit.
+
+% P:p2-results-other-03-binary
+Cai binary data \cite{caiBinaryIsobaricVaporLiquid1996} give 40.82\,\% pressure AARD at 6.66 kPa, far from the fitted binary isotherm.
+
+\subsection{Loaded aqueous amines}\label{sec:p2-loaded}
 % P:p2-results-calibration-01
 Amine-specific fitting recovers parts of the targeted behavior, but the remaining deviations are larger than several of the assigned observation scales (Table~\ref{tab:p2-calibration}).
 MDEA fitted Kuranov total-pressure AARD is 20.44\,\%, while binary-pressure AARD is 3.23\,\%.
@@ -9,19 +20,15 @@ This compromise accompanies recovery of held-out pressures rather than uniformly
 
 \input{tables/part2/calibration}
 
+\subsubsection{\ce{CO2} solubility}\label{sec:p2-unfitted}
 % P:p2-results-calibration-02
-AMP fitted total-pressure AARD is 10.33\,\%, with bias $-0.90$\,\%, and carbamate-fraction RMS is 0.00631.
+AMP fitted total-pressure AARD is 10.33\,\%, with bias $-0.90$\,\%.
 The fitted PZ Hilliard partial pressures give 19.16\,\% AARD and $-3.23$\,\% bias, but RMS is 12.9 times the operational pressure scale.
-Its mean absolute monocarbamate- and dicarbamate-group errors are 0.0258 and 0.0115 per total PZ, and the NMR whitened RMS remains 11.58 under the assumed area-error model.
-Thus a moderate mean relative pressure error does not mean agreement at source resolution or an adequate species fit.
-The separately fitted PZ--water binary properties also retain their discrepancies; they are unchanged by the reactive refit.
 
 % P:p2-results-calibration-03
 DEA fitted pressure AARD is 28.63\,\%, with bias $-0.76$\,\%, whereas integral-heat AARD is 0.977\,\%.
 Only 10 of 30 Lawson pressures satisfy $|\ln(p^c/p^o)|\leq 2(0.09)$, twice the assigned log-pressure residual scale, and each isotherm's highest-loading pressure is 31--58\,\% low.
 The small aggregate bias therefore conceals loading-shape error (Fig.~\ref{fig:p2-calibration}).
-Forty-six of the fifty Carson heats lie within the assigned 2\,\% scale.
-Heat agreement is restricted to these 298.15 K measurements and does not resolve the independent mixing-heat discrepancy below.
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=\linewidth]{calibration.pdf}
@@ -29,7 +36,6 @@ Heat agreement is restricted to these 298.15 K measurements and does not resolve
 \label{fig:p2-calibration}
 \end{figure}
 
-\subsection{Unfitted pressures and reaction-law extrapolation}\label{sec:p2-unfitted}
 % P:p2-results-unfitted-01
 Unfitted pressure errors change with source and temperature; the largest occur in extrapolated blocks, but for MDEA, AMP and DEA they already reach 28--52\,\% AARD at conditions inside the measured law ranges.
 Held-out MDEA partial-pressure AARD is 28.19\,\% over twenty Xiao observations at 23.5 wt\% and 298.15--313.15 K, all inside the dissociation law's measured range.
@@ -40,6 +46,7 @@ Fitted Kuranov total pressures exhibit the same sign reversal: 11.80\,\% AARD wi
 This is an observation about the calculated results, not a diagnosis of the dissociation law; no calculation isolates its contribution from the other temperature-dependent terms.
 
 \input{tables/part2/mdea-range}
+
 \input{tables/part2/unfitted}
 
 % P:p2-results-unfitted-02
@@ -85,14 +92,77 @@ These are not matched states: temperature, concentration and loading differ.
 They do not isolate experimental bias or establish which source is correct, and the model retains a loading-shape error within its own fitted source.
 Across amines, unmatched pressure types, source uncertainties, concentrations, temperatures and selection histories prevent comparison of their error percentages as an accuracy ranking.
 
+% P:p2-results-other-03
+DEA comparison-only pressure AARD is 41.74\,\% for Lawson Table VIII, nominally 50 wt\% but 54.5 wt\% at 77 $^{\circ}$F.
+
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=\linewidth]{unfitted-pressure.pdf}
 \caption{Relative partial-pressure errors at measured loadings. All panels use held-out sets; the MDEA set was previously accessed. MDEA at 393.15 K exceeds its dissociation measurements; PZ at 353.15 K exceeds its carbamate measurements and at 393.15 K also its protonation measurements; AMP at 303 K extrapolates the hydrolysis source slope. DEA marker shapes distinguish 40, 60, 80 and 100 $^{\circ}$C. Points from different stocks are shown without interpolating a continuous relation.}
 \label{fig:p2-unfitted}
 \end{figure}
+
 \FloatBarrier
 
-\subsection{Conditional parameter uncertainty beside the unfitted errors}\label{sec:p2-uncertainty}
+% P:p2-discussion-03
+Temperature-range separation narrows the interpretation without assigning cause.
+MDEA and PZ have larger positive errors in high-temperature blocks that extrapolate measured reaction laws, but MDEA Xiao and DEA's low-temperature held-out subsets already show substantial errors inside those law ranges.
+AMP's decreasing signed error with temperature occurs while its fitted hydrolysis enthalpy correction is on a limit.
+These observations indicate conditions where the thermodynamic description is inaccurate; they do not isolate a law slope from an interaction, a solvent-property extrapolation or source disagreement.
+
+% P:p2-discussion-04
+The source comparisons also remain incomplete.
+AMP lacks sufficient matched experimental states to separate the Kundu/Hartono difference from concentration-dependent model error, especially at its coldest isotherm.
+DEA source values near one loading suggest laboratory disagreement, but those states differ in temperature and concentration and cannot determine which source is correct.
+Gas dilution, assumed cell pressures, PZ heavy-water treatment and omitted byproduct chemistry have distinct origins and should not be collapsed into one explanation for all pressure errors.
+The wrong water--DEA mixing-enthalpy sign adds an independent thermodynamic limitation that fitted absorption heats do not erase.
+
+\subsubsection{Liquid speciation}
+% P:p2-results-calibration-02-species
+AMP carbamate-fraction RMS is 0.00631.
+PZ mean absolute monocarbamate- and dicarbamate-group errors are 0.0258 and 0.0115 per total PZ, and the NMR whitened RMS remains 11.58 under the assumed area-error model.
+Thus a moderate mean relative pressure error does not mean agreement at source resolution or an adequate species fit.
+
+% P:p2-results-other-01
+DEA shows that close agreement in fitted absorption heats and in comparison-only species fractions does not extend to every property: the water--DEA mixing enthalpy has the wrong sign.
+At nine B\"ottinger states without the oxazolidone byproduct, mean absolute true-mole-fraction differences are 0.001749 for DEA plus DEAH$^+$, 0.001301 for carbamate and 0.001274 for the bicarbonate-labeled sum.
+The latter is compared with model bicarbonate plus carbonate.
+Sixteen byproduct-containing states remain separate because that chemistry is omitted, and no NMR mole-fraction measurement uncertainty is reported.
+The pressure assumption and aggregate species definitions condition the comparison (Fig.~\ref{fig:p2-dea-properties}(b)).
+
+\subsubsection{Absorption heat and heat capacity}\label{sec:p2-caloric-results}
+% P:p2-results-other-03-heat
+The MDEA held-out capped absorption heat at 388.71 K and 60 wt\% is $-64.491$ kJ/mol \COtwo, against $-63.3$ kJ/mol; this extrapolates the dissociation measurements and solvent concentration.
+The corresponding 333.15 K, 60 wt\% capped heat could not be calculated.
+PZ has no comparable reactive heat assessment; the four amines have not been checked equally across caloric properties.
+
+% P:p2-results-calibration-03-heat
+Forty-six of the fifty Carson heats lie within the assigned 2\,\% scale (Fig.~\ref{fig:p2-dea-properties}(a)).
+Heat agreement is restricted to these 298.15 K measurements and does not resolve the independent mixing-heat discrepancy below.
+
+% P:p2-results-other-02
+At 363.15 K and 1.75 MPa, all fourteen water--DEA excess-enthalpy calculations \cite{horstmannPhaseEquilibriumExcess2002} have the wrong sign: approximately $+86$ to $+758$ J/mol, against measured values from $-93$ to $-1707$ J/mol.
+None lies within twice the source scale.
+This error concerns heat of mixing per mole of water--DEA mixture, whereas Carson's fitted heats concern absorption per mole of added \COtwo at 298.15 K.
+Agreement with the latter cannot establish a correct mixing enthalpy at another temperature.
+No corresponding excess-enthalpy comparison is available for MEA, MDEA, AMP or PZ, so the sign error has not been shown to be DEA-specific.
+Cancellation of mixing contributions during absorption is possible but was not calculated.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{dea-properties.pdf}
+\caption{DEA properties at the measured coordinates: (a) fitted Carson integral absorption heats at 298.15 K against the source \ce{CO2} mole fraction, with the source heat-release magnitude converted to negative enthalpy for exothermic absorption; (b) comparison-only carbamate mole fractions in the nine B\"ottinger states without byproduct, at assumed 2.5 MPa; (c) comparison-only water--DEA excess enthalpy at 363.15 K and 1.75 MPa. Circles are measurements and crosses calculations. The different enthalpy bases and temperatures separate the successful absorption-heat calibration from the wrong-sign mixing prediction.}
+\label{fig:p2-dea-properties}
+\end{figure}
+
+\subsubsection{Density}
+% P:p2-results-other-03-density
+Forty-three loaded DEA densities at 298 K give 0.445\,\% AARD.
+Those properties use different data, conditions and measurement scales (Supplementary Section~S4).
+PZ has no comparable reactive density assessment; the four amines have not been checked equally across volumetric properties.
+
+\FloatBarrier
+
+\subsection{Fitted parameters, conditional uncertainty and sensitivity to the shared description}\label{sec:p2-parameters}
+\subsubsection{Conditional parameter uncertainty}\label{sec:p2-uncertainty}
 % P:p2-results-uncertainty-01
 For AMP and DEA, conditional parameter bands are far smaller than the observed unfitted-pressure errors (Fig.~\ref{fig:p2-bands}).
 AMP Kundu relative SEs range from 3.2 to 13.5\,\%, with median 6.7\,\%; only eight of fifty-one observations fall within the nominal $\pm1.96$ SE intervals.
@@ -127,7 +197,7 @@ None includes shared-input uncertainty, experimental systematic errors, uncertai
 \label{fig:p2-bands}
 \end{figure}
 
-\subsection{Sensitivity of unfitted pressures to the shared description}\label{sec:p2-shared-sensitivity}
+\subsubsection{Sensitivity to the shared description}\label{sec:p2-shared-sensitivity}
 % P:p2-results-sensitivity-01
 Unfitted pressures depend on the shared description as well as on the amine fit: substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP errors by 22--26 percentage points in opposite directions before the amine parameters are refitted (Table~\ref{tab:p2-shared-sensitivity}).
 Table~\ref{tab:p2-shared-sensitivity} follows the same data through the earlier shared description, substitution of the Part I bicarbonate--water interaction and fitted R2 law, and amine-specific refitting.
@@ -149,12 +219,31 @@ Lowering the floor to 3.5 \AA\ gives a slightly smaller calibration cost but 43.
 Supplementary Section~S7 gives the complete sequence.
 A model-free comparison of the Hartono and Kundu measurements lacks sufficient matched conditions, especially at 303 K, to decide whether Hartono and Kundu disagree or whether the model misses their concentration dependence.
 Its interpolation and vapor-baseline assumptions do not establish that either source is erroneous.
+
+% P:p2-discussion-01
+The common equation of state, reference conventions and frozen water/carbonate description can be used with different amine reaction networks while fitting only amine-specific quantities.
+What transfers is that thermodynamic description and a conditional ability to fit selected properties; uniform pressure, caloric and phase accuracy does not follow.
+MDEA and AMP illustrate how changing the same shared quantities can move unfitted errors in opposite directions before refitting, and how amine-specific compensation can restore an earlier pressure pattern.
+The alternative MDEA ion description (A3) shows that recovery is not automatic even within MDEA.
+Substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP unfitted errors in opposite directions by 22--26 percentage points before refitting, and the fitted MDEA cation--bicarbonate interaction ends on its $+1$ bound; this bicarbonate-related pattern is an observation across these calculations, not proof of a uniquely defective bicarbonate parameter or Born term.
+
+% P:p2-discussion-02
+The different parameter freedoms and observations also matter.
+PZ needs a more extensive species network, retains a weak cation--bicarbonate interaction and large local energy sensitivities, and predicts false additional liquids.
+DEA's four reactive parameters have small conditional errors and no active bounds, yet large unfitted-pressure errors remain.
+AMP's carbamate diameter and enthalpy correction reach limits with nearly flat inward profiles (Supplementary Section S6).
+A diameter at a bound is evidence about this constrained fit, not a measurement of an ion size.
+One solute per chemical class, different data objectives and different phase grids do not distinguish an intrinsic class effect from those other changes.
+
 \FloatBarrier
 
+\Needspace{15\baselineskip}
 \subsection{Comparison with published models}\label{sec:p2-literature}
 \input{tables/part2/published-comparisons}
+
 % P:p2-results-literature-opening
 Only the Hilliard PZ pressures are fitted both here and in a published model, where the e-NRTL deviation of Yi et al. is similar (18.0 against 19.16\,\%); every other published comparison differs in which observations were fitted.
+
 % P:p2-results-literature-01
 Yi et al.'s e-NRTL model provides two same-source PZ comparisons: 18.0\,\% partial-pressure AARD for the same sixty-two Hilliard observations, fitted in both models, and 7.8\,\% for fifty-two Ermatchkov observations, fitted by Yi but held out here \cite[Table~3, p.~2]{yiOpenAccessThermodynamically2024}.
 For AMP, Yi reports 15.4\,\% on the fifty-one Kundu partial pressures, fitted there and held out here \cite[Table~4, p.~5]{yiOpenAccessThermodynamically2024}.
@@ -175,40 +264,10 @@ Its DEA comparisons include Lal pressures and B\"ottinger species, with pressure
 Nasrifar and Tafazzol's DEA acid-gas curves are predictions after pure and binary estimation, with ideal-activity chemistry and no explicit electrolyte activity coefficients \cite[Sects.~2--6, Figs.~13--14]{Nasrifar2010}.
 These qualitative comparisons distinguish fitting policies and chemistry; they supply no matched-row ranking against the present DEA fit.
 
-\subsection{Species, heats, density and binary properties}\label{sec:p2-other}
-% P:p2-results-other-01
-DEA shows that close agreement in fitted absorption heats and in comparison-only species fractions does not extend to every property: the water--DEA mixing enthalpy has the wrong sign.
-At nine B\"ottinger states without the oxazolidone byproduct, mean absolute true-mole-fraction differences are 0.001749 for DEA plus DEAH$^+$, 0.001301 for carbamate and 0.001274 for the bicarbonate-labeled sum.
-The latter is compared with model bicarbonate plus carbonate.
-Sixteen byproduct-containing states remain separate because that chemistry is omitted, and no NMR mole-fraction measurement uncertainty is reported.
-The pressure assumption and aggregate species definitions condition the comparison (Fig.~\ref{fig:p2-dea-properties}).
-
-% P:p2-results-other-02
-At 363.15 K and 1.75 MPa, all fourteen water--DEA excess-enthalpy calculations \cite{horstmannPhaseEquilibriumExcess2002} have the wrong sign: approximately $+86$ to $+758$ J/mol, against measured values from $-93$ to $-1707$ J/mol.
-None lies within twice the source scale.
-This error concerns heat of mixing per mole of water--DEA mixture, whereas Carson's fitted heats concern absorption per mole of added \COtwo at 298.15 K.
-Agreement with the latter cannot establish a correct mixing enthalpy at another temperature.
-No corresponding excess-enthalpy comparison is available for MEA, MDEA, AMP or PZ, so the sign error has not been shown to be DEA-specific.
-Cancellation of mixing contributions during absorption is possible but was not calculated.
-
-\begin{figure}[pos=!htbp]
-\centering\includegraphics[width=\linewidth]{dea-properties.pdf}
-\caption{DEA properties at the measured coordinates: (a) fitted Carson integral absorption heats at 298.15 K against the source \ce{CO2} mole fraction, with the source heat-release magnitude converted to negative enthalpy for exothermic absorption; (b) comparison-only carbamate mole fractions in the nine B\"ottinger states without byproduct, at assumed 2.5 MPa; (c) comparison-only water--DEA excess enthalpy at 363.15 K and 1.75 MPa. Circles are measurements and crosses calculations. The different enthalpy bases and temperatures separate the successful absorption-heat calibration from the wrong-sign mixing prediction.}
-\label{fig:p2-dea-properties}
-\end{figure}
-
-% P:p2-results-other-03
-DEA comparison-only pressure AARD is 41.74\,\% for Lawson Table VIII, nominally 50 wt\% but 54.5 wt\% at 77 $^{\circ}$F.
-Cai binary data \cite{caiBinaryIsobaricVaporLiquid1996} give 40.82\,\% pressure AARD at 6.66 kPa, far from the fitted binary isotherm, while forty-three loaded densities at 298 K give 0.445\,\% AARD.
-Those properties use different data, conditions and measurement scales (Supplementary Section~S4).
-The MDEA held-out capped absorption heat at 388.71 K and 60 wt\% is $-64.491$ kJ/mol \COtwo, against $-63.3$ kJ/mol; this extrapolates the dissociation measurements and solvent concentration.
-The corresponding 333.15 K, 60 wt\% capped heat could not be calculated.
-PZ has no comparable reactive heat or density assessment; the four amines have not been checked equally across properties.
-\FloatBarrier
-
-\subsection{Phase behavior limits the apparent fit}\label{sec:p2-phases}
+\subsection{Phase stability}\label{sec:p2-phases}
 % P:p2-results-phase-opening
 Small property residuals do not exclude false liquid phases: the reported PZ fit has at least forty across calibration and comparison states, and a separate fit with the Part I stability penalty still has at least three, two of which the routine search missed.
+
 % P:p2-results-phase-02
 Four false liquid splits are detected for the reported PZ fit at Hilliard rows 55, 56, 61 and 62, near 4.96--5.02 mol PZ/kg water, loading 0.77--0.83 and 313 or 333 K.
 The calculated additional liquids contradict the measured liquid states despite the moderate pressure AARD.
@@ -220,6 +279,13 @@ Thirty-six additional false liquid splits occur at Kamps states, at 313--354 K a
 The second liquids are rich in bicarbonate and doubly protonated PZ.
 Pressures at these states belong to a single liquid that is not the stable state of this model; the split count is a lower bound.
 At 1.5 times bubble pressure all four Hilliard splits persist, although the routine search misses two; all 121 NMR states pass the finite search at $T+0.5$ K, with rich states moved above bubble pressure as specified in the supplement.
+
+% P:p2-discussion-kamps
+The Kamps comparison extends the detected PZ false splits to at least forty states and shows underprediction inside both PZ law ranges.
+At the thirty-six Kamps split states, doubly protonated PZ accounts for 2--29\,\% of total PZ in the calculated parent liquid, whereas the source's model describes it as present ``only in very small amounts'' at 353 K and about 4 mol/kg \cite[p.~2666]{kampsSolubilityCO2H2O+piperazine2003a}.
+This is a model-speciation observation, not a measured fraction.
+Candidate causes, without ranking, are physical \COtwo solubility at MPa pressure, PZH$^+$--bicarbonate and zwitterion interactions, second protonation through its law and tied PZH$_2^{2+}$ parameters, and the shared MEA \COtwo--water description.
+This comparison cannot separate them.
 
 % P:p2-results-phase-03
 The separate PZ penalty fit does not remove the false liquid splitting.
@@ -234,7 +300,17 @@ AMP has no detected liquid, gas, ambiguous or unresolved outcome at the fifty-on
 Its calibration searches retain no detected liquid, ambiguous or unresolved outcome, but their gas outcomes were not stored.
 DEA searches the 140 fitted and held-out states without detecting an additional phase or an unresolved result.
 
-
 \input{tables/part2/phase-searches}
 
 \FloatBarrier
+
+\subsection{Scope of the evidence}\label{sec:p2-discussion}
+% P:p2-discussion-05
+Within the tested conditions, AARD is 0.98\,\% for fitted DEA integral absorption heats at 298.15 K, 0.445\,\% for comparison-only loaded DEA densities at 298.15 K, and 9.32\,\% for held-out PZ partial pressures at 313.1 K.
+Tests at the PZ false splits (Hilliard loading 0.77--0.83 and Kamps loading 0.96--1.64), for the water--DEA mixing enthalpy and above reaction-law measurement ranges reveal the limitations reported here; conditions beyond the measured and searched states were not tested.
+The comparisons support statements about the specified equilibrium and property calculations at their measured and searched states.
+They combine calibration, fixed-parameter prediction of observations outside the objective, comparison-only properties and numerical phase verification.
+Previously accessed held-out results do not become blind validation merely because their residuals are absent from the objective.
+Finite phase searches do not establish a continuous phase boundary, and the PZ counterexample shows that the search may miss a resolved split.
+The results do not qualify absorber or stripper design, kinetic or transport coefficients, solvent blends, degradation or solid equilibrium.
+These limits define the demonstrated transfer.
