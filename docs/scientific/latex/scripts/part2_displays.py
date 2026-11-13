@@ -178,6 +178,7 @@ for amine,path in [('mdea','analyses/solvent_specification_mdea/results/uncertai
         name=name.replace('[','').replace(']','').replace("'",'').replace('_',r'\_').replace(' / ',': ').replace('k\\_ij\\_reciprocal\\_temperature\\_slope','water interaction slope')
         name=name.replace('dispersion\\_energy\\_over\\_k',r'$\epsilon/k_B$').replace('segment\\_diameter',r'$\sigma$').replace('temperature\\_law\\_coefficient','coefficient').replace('pair/mdea-water/k\\_ij/','MDEA--water ')
         name=name.replace(r'k\_ij',r'$k_{ij}$').replace('carbamate-hydrolysis/a',r'carbamate hydrolysis $a$').replace('carbamate-hydrolysis/total enthalpy shift',r'carbamate hydrolysis $\delta h$ / J mol$^{-1}$')
+        for old,new in [('water: water interaction slope',r'water: $b_{ij}$ / K'),('MDEA--water a0: coefficient',r'MDEA--water: $k_{ij}$ at 313.15 K'),('MDEA--water a1: coefficient',r'MDEA--water: $k_{ij}$ slope / K$^{-1}$'),(r'born\_diameter',r'$d^{\mathrm{Born}}$'),('/sigma',r': $\sigma$'),('/u',r': $\epsilon/k_B$'),('/water-k',r', water: $k_{ij}$'),('/bicarbonate-k',r', \ce{HCO3-}: $k_{ij}$'),('/offset',r' offset to $\ln K$')]:name=name.replace(old,new)
         vals=[]
         for key in ['value','SE_bound_fixed','max_fractional_change']:
             s=r.get(key,''); vals.append('--' if s=='' else f'{float(s):.5g}')
