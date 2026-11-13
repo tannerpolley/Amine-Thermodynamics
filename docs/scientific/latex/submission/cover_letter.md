@@ -1,6 +1,6 @@
 Dear Editors of Fluid Phase Equilibria,
 
-Please consider “Thermodynamics of CO₂-loaded aqueous monoethanolamine with ePC-SAFT. Part I: phase equilibria, speciation, absorption heat, density and phase stability” for publication as a research article.
+Please consider “Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability” for publication as a research article.
 
 Part I jointly estimates sixteen ePC-SAFT parameters for aqueous MEA from pressure, speciation, integral absorption heat, density, heat capacity and binary equilibrium data. The work calculates absorption heat and density from the same Helmholtz energy and compares the phase behavior of parameter sets with similar property agreement.
 

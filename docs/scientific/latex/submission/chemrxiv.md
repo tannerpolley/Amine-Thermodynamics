@@ -2,7 +2,7 @@
 
 ## Title
 
-Thermodynamics of CO₂-loaded aqueous monoethanolamine with ePC-SAFT. Part I: phase equilibria, speciation, absorption heat, density and phase stability
+Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability
 
 ## Author and affiliation
 
