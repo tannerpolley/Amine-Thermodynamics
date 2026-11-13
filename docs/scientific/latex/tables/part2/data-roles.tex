@@ -39,7 +39,7 @@
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/prediction-bands.csv SHA256 96fc9352b6f30dae38805b799344404528d6e49b3b45eaa42002daa8523ac0cd
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/predictions.json SHA256 8fd82d94b500a2b8985ea9979e4ceb653fbfb781dc66a3d047ee68bdec0f46ba
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/ranking.csv SHA256 16b4ed6165c0cc7bad4d938567c8f8e8d88bdddb3de4eb8b53c43b372f7c8e7e
-% Input: docs/scientific/latex/references.bib SHA256 7dc97086df08bf802d25d2a588158a9ad3881648729bb9a5da84741ef50acd9c
+% Input: docs/scientific/latex/references.bib SHA256 9ac4ac1c25d01550aa5e9a9df066b7a49e96212687fb4c6f9c826ee81cea4252
 % Input: docs/scientific/latex/supplement.tex SHA256 b90143f6a0711b9a7437b4845c8a5db430f8b301ff21d8f402821b105da3d5f8
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.48\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}@{}}
@@ -47,15 +47,15 @@
 \toprule Amine / role & Observations & Scored before final fit chosen? \\ \midrule\endfirsthead
 \toprule Amine / role & Observations & Scored before final fit chosen? \\ \midrule\endhead
 \bottomrule\endfoot
-MDEA fitted & 67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures & Fitted; 278 entries \\
-MDEA outside-fit & 20 Xiao and 88 Ermatchkov partial pressures & Yes; previously accessed in model development \\
-MDEA exclusions & Kuranov source rows 28 and 72; seven corrected-Kamps states above shared-law interval & Not counted as available predictions \\
-AMP fitted & 47 Hartono loaded total pressures; 52 Hartono binary entries; 57 Ciftja fractions & Fitted; 156 entries \\
+MDEA fitted & 278 entries: 67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures & --- \\
+MDEA held-out & 20 Xiao and 88 Ermatchkov partial pressures & Yes; previously accessed in model development \\
+MDEA exclusions & Kuranov source rows 28 and 72; seven states above the 393.15 K R2 limit & Not counted as available predictions \\
+AMP fitted & 156 entries: 47 Hartono loaded total pressures; 52 Hartono binary entries; 57 Ciftja fractions & --- \\
 AMP held-out & 51 Kundu partial pressures & Yes; scored during the sequence preceding final diameter choice \\
-AMP outside-fit comparison & 17 Tong total pressures scored; 23 refused & Earlier fits had been compared; no blind test claimed \\
-PZ fitted & 62 Hilliard pressures; 232 NMR group observations at 121 states & Fitted; 294 entries \\
+AMP held-out comparison & 17 Tong total pressures scored; 23 not calculated & Earlier fits had been compared; no blind test claimed \\
+PZ fitted & 294 entries: 62 Hilliard pressures; 232 NMR group observations at 121 states & --- \\
 PZ held-out & 52 Ermatchkov partial pressures & Yes; unconstrained refit scored before penalty alternative and final choice \\
-DEA fitted & 30 Lawson pressures at 25 wt\%; 50 Carson heats & Fitted; 80 entries \\
+DEA fitted & 80 entries: 30 Lawson pressures at 25 wt\%; 50 Carson heats & --- \\
 DEA held-out & 16 Seo and Hong; 44 Lal partial pressures & Yes; first selected start, then numerically tied second start \\
 DEA comparison-only & Lawson Table VIII; Cai binary; Böttinger species; Horstmann excess heat; Weiland densities & No; added after fit selection \\
 \end{longtable}\endgroup

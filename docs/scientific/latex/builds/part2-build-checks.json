@@ -1,54 +1,71 @@
 {
-  "scope": "First manuscript draft; mechanical build and page inspection only. Independent science and story reviews remain for the orchestrator.",
-  "source_baseline": "a6c348d7f19a98409e4c39fcc7b8c3d51b742122",
+  "scope": "Apply Astra and Opus reviews of da5f953; mechanical checks and layout inspection; no re-review.",
+  "source_baseline": "da5f95382f787f8ca5ade7506b5fe3f93f76e858",
   "commands": [
-    "uv run --no-project --with matplotlib python scripts/part2_displays.py",
-    "agent-heavy latexmk -pdf -interaction=nonstopmode -halt-on-error part2_supplement.tex",
-    "agent-heavy latexmk -pdf -interaction=nonstopmode -halt-on-error part2.tex",
-    "agent-heavy python <cse-plugin>/scripts/visualize/latex_visual_qa.py builds/<pdf> --profile article --output-dir builds/part2-qa/<name> --contact-sheet",
-    "agent-heavy python <cse-plugin>/scripts/workflow/check_prose.py --root . docs/scientific/latex/part2.tex docs/scientific/latex/part2_supplement.tex docs/scientific/latex/sections/part2 docs/scientific/latex/tables/part2"
+    "agent-heavy uv run --no-project --with matplotlib python docs/scientific/latex/scripts/part2_displays.py",
+    "agent-heavy bash: latexmk -pdf -interaction=nonstopmode -halt-on-error, supplement/main/supplement/main",
+    "agent-heavy python <cse>/scripts/workflow/check_prose.py --root . <Part II sources>",
+    "agent-heavy python <cse>/scripts/visualize/latex_visual_qa.py <each PDF> --profile article --contact-sheet"
   ],
   "outputs": [
     {
       "path": "docs/scientific/latex/builds/part2.pdf",
-      "pages": 16,
-      "sha256": "c0d93f4947333adcc9dcf7a88530b6bb5bff934b64b418a4dfd5f3deea4a43e5",
+      "pages": 17,
+      "sha256": "822f5328e9115d9c701df501df19bcfd24078ed6e7d4f6127eabc39404a4ba16",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 31,
-        "text_graphic_overlap": 15,
+        "tight_text_clearance": 28,
+        "text_graphic_overlap": 18,
         "tight_text_graphic_clearance": 2
       },
-      "visual_disposition": {
-        "scientific_display_logic": "exact: retained values, with explicit loading, ratio, error and signed-enthalpy transformations in the display script",
-        "decision": "keep",
-        "inspection": "Every color page inspected at full size; complete grayscale contact sheets and all figure pages checked. Conservative warnings arise at chemical subscripts/superscripts, equation components, intentional plot axes/markers and table rules; no clipping or unreadable overlap found. This is layout inspection, not independent scientific acceptance."
-      }
+      "visual_disposition": "Complete contact sheets and enlarged changed table/figure pages inspected; conservative clearance warnings occur at headings, table rules, chemical notation and plotted marks. No clipping found."
     },
     {
       "path": "docs/scientific/latex/builds/part2_supplement.pdf",
-      "pages": 16,
-      "sha256": "d5732d3defff58b88c9b8b6634561517e0e25dc4012ada575307322aafa6da87",
+      "pages": 17,
+      "sha256": "eacc0c4d487c2cde98e369f9e6656a83ad7fd1ed28a52bb0cb5285e3e19241e5",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 75,
+        "tight_text_clearance": 74,
         "text_graphic_overlap": 2
       },
-      "visual_disposition": {
-        "scientific_display_logic": "exact: retained values, with explicit loading, ratio, error and signed-enthalpy transformations in the display script",
-        "decision": "keep",
-        "inspection": "Every color page inspected at full size; complete grayscale contact sheets and all figure pages checked. Conservative warnings arise at chemical subscripts/superscripts, equation components, intentional plot axes/markers and table rules; no clipping or unreadable overlap found. This is layout inspection, not independent scientific acceptance."
-      }
+      "visual_disposition": "Complete contact sheets and enlarged changed table/figure pages inspected; conservative clearance warnings occur at headings, table rules, chemical notation and plotted marks. No clipping found."
     }
   ],
-  "prose_check": "passed; no configured banned-language findings",
-  "unchanged": "Part I sources and shared bibliography/macros/styles; all analyses and analyses/_cse-manuscript.json"
+  "prose_check": "passed plugin-wide and scoped rules",
+  "numeric_map": "478 entries regenerated; 331 JSON-addressed entries checked exactly against retained fields",
+  "bibliography_entries_added": [
+    "bowerAcidicDissociationConstant1962",
+    "ciftjaExperimentalStudyCarbamate2014a",
+    "ermatchkovSolubilityCarbonDioxide2006a",
+    "hamborgDissociationConstantsThermodynamic2009",
+    "hartonoBinaryTernaryVLE2013",
+    "hartonoNewSolubilityHeat2021",
+    "horstmannPhaseEquilibriumExcess2002",
+    "kunduVaporLiquidEquilibriumCO22003",
+    "lalSolubilityH2SCO21985",
+    "lawsonGasSweeteningData1976",
+    "perez-saladokampsDissociationConstantNMethyldiethanolamine1996",
+    "seoSolubilitiesCarbonDioxide1996",
+    "steeleThermodynamicPropertiesIdealGas1997",
+    "ermatchkovChemicalEquilibriumConstants2003"
+  ],
+  "bibliography_missing": [],
+  "unchanged": "Part I files and analyses/_cse-manuscript.json; all scientific calculations",
+  "source_based_deviations": {
+    "Opus 14": "Astra exact calibration caption retains its cross-amine ranking sentence.",
+    "Opus 19": "PZ temperature is 313.1 K from the retained isotherm; use guidance is expressed as tested conditions and untested scope.",
+    "Opus 21": "R2 293.15--393.15 K is declared; no measured interval is invented."
+  },
+  "owner_directed_adjustment": {
+    "Opus 10": "No unsupported reason for absence of the penalty is supplied; post-fit searches are stated."
+  }
 }

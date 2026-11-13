@@ -39,33 +39,32 @@
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/prediction-bands.csv SHA256 96fc9352b6f30dae38805b799344404528d6e49b3b45eaa42002daa8523ac0cd
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/predictions.json SHA256 8fd82d94b500a2b8985ea9979e4ceb653fbfb781dc66a3d047ee68bdec0f46ba
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/ranking.csv SHA256 16b4ed6165c0cc7bad4d938567c8f8e8d88bdddb3de4eb8b53c43b372f7c8e7e
-% Input: docs/scientific/latex/references.bib SHA256 7dc97086df08bf802d25d2a588158a9ad3881648729bb9a5da84741ef50acd9c
+% Input: docs/scientific/latex/references.bib SHA256 9ac4ac1c25d01550aa5e9a9df066b7a49e96212687fb4c6f9c826ee81cea4252
 % Input: docs/scientific/latex/supplement.tex SHA256 b90143f6a0711b9a7437b4845c8a5db430f8b301ff21d8f402821b105da3d5f8
 \begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.06\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}@{}}
-\caption{Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. Reaction-law extrapolations are identified in the text and Table~\ref{tab:p2-laws}. All are partial pressures except AMP Tong.}\label{tab:p2-unfitted}\\
-\toprule Amine and source & Conditions & $n$ & AARD / \% & Bias / \% \\ \midrule\endfirsthead
-\toprule Amine and source & Conditions & $n$ & AARD / \% & Bias / \% \\ \midrule\endhead
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.04\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}@{}}
+\caption{Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. All are partial pressures except AMP Tong.}\label{tab:p2-unfitted}\\
+\toprule Amine and source & Conditions & $n$ & AARD / \% & Bias / \% & Measured-law range \\ \midrule\endfirsthead
+\toprule Amine and source & Conditions & $n$ & AARD / \% & Bias / \% & Measured-law range \\ \midrule\endhead
 \bottomrule\endfoot
-MDEA Xiao & all & $20$ & $28.19$ & $-28.19$ \\
-MDEA Xiao & 278--368 K & $20$ & $28.19$ & $-28.19$ \\
-MDEA Ermatchkov & all & $88$ & $18.27$ & $-1.68$ \\
-MDEA Ermatchkov & 278--368 K & $62$ & $16.31$ & $-11.59$ \\
-MDEA Ermatchkov & above 368 K & $26$ & $22.94$ & $21.93$ \\
-AMP Kundu & all & $51$ & $42.85$ & $37.79$ \\
-AMP Kundu & 303.0 K & $25$ & $53.94$ & $53.94$ \\
-AMP Kundu & 313.0 K & $15$ & $43.78$ & $43.78$ \\
-AMP Kundu & 323.0 K & $11$ & $16.35$ & $-7.09$ \\
-AMP Tong (total) & 313--353 K & $17$ & $28.66$ & $8.11$ \\
-PZ Ermatchkov & all & $52$ & $21.94$ & $7.82$ \\
-PZ Ermatchkov & 313.1 K & $19$ & $9.32$ & $-8.70$ \\
-PZ Ermatchkov & 353.15 K & $18$ & $13.12$ & $-8.64$ \\
-PZ Ermatchkov & 393.15 K & $15$ & $48.52$ & $48.52$ \\
-DEA Seo \& Hong & all & $16$ & $79.54$ & $77.80$ \\
-DEA Seo \& Hong & 40$\,^{\circ}$C & $5$ & $28.51$ & $22.95$ \\
-DEA Seo \& Hong & 60$\,^{\circ}$C & $6$ & $59.82$ & $59.82$ \\
-DEA Seo \& Hong & 80$\,^{\circ}$C & $5$ & $154.22$ & $154.22$ \\
-DEA Lal & all & $44$ & $44.17$ & $-22.93$ \\
-DEA Lal & 40$\,^{\circ}$C & $17$ & $52.25$ & $-48.61$ \\
-DEA Lal & 100$\,^{\circ}$C & $27$ & $39.09$ & $-6.76$ \\
+MDEA Xiao & all & $20$ & $28.19$ & $-28.19$ & inside \\
+MDEA Ermatchkov & all & $88$ & $18.27$ & $-1.68$ & mixed \\
+MDEA Ermatchkov & 278--368 K & $62$ & $16.31$ & $-11.59$ & inside \\
+MDEA Ermatchkov & above 368 K & $26$ & $22.94$ & $21.93$ & dissociation extrapolated \\
+AMP Kundu & all & $51$ & $42.85$ & $37.79$ & mixed \\
+AMP Kundu & 303.0 K & $25$ & $53.94$ & $53.94$ & hydrolysis slope extrapolated \\
+AMP Kundu & 313.0 K & $15$ & $43.78$ & $43.78$ & inside \\
+AMP Kundu & 323.0 K & $11$ & $16.35$ & $-7.09$ & inside \\
+AMP Tong (total) & 313--353 K & $17$ & $28.66$ & $8.11$ & inside \\
+PZ Ermatchkov & all & $52$ & $21.94$ & $7.82$ & mixed \\
+PZ Ermatchkov & 313.1 K & $19$ & $9.32$ & $-8.70$ & inside \\
+PZ Ermatchkov & 353.15 K & $18$ & $13.12$ & $-8.64$ & carbamate extrapolated \\
+PZ Ermatchkov & 393.15 K & $15$ & $48.52$ & $48.52$ & carbamate and protonation extrapolated \\
+DEA Seo \& Hong & all & $16$ & $79.54$ & $77.80$ & mixed \\
+DEA Seo \& Hong & 40$\,^{\circ}$C & $5$ & $28.51$ & $22.95$ & inside \\
+DEA Seo \& Hong & 60$\,^{\circ}$C & $6$ & $59.82$ & $59.82$ & protonation extrapolated \\
+DEA Seo \& Hong & 80$\,^{\circ}$C & $5$ & $154.22$ & $154.22$ & protonation extrapolated \\
+DEA Lal & all & $44$ & $44.17$ & $-22.93$ & mixed \\
+DEA Lal & 40$\,^{\circ}$C & $17$ & $52.25$ & $-48.61$ & inside \\
+DEA Lal & 100$\,^{\circ}$C & $27$ & $39.09$ & $-6.76$ & protonation extrapolated \\
 \end{longtable}\endgroup
