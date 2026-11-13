@@ -19,7 +19,7 @@
     "max_lnQ_minus_lnK": 1.2576606422953773e-12,
     "equilibrium_residual": 1.1368683772161603e-13
    },
-   "seconds": 16.30585784700088,
+   "seconds": 14.399527006997232,
    "status": "converged",
    "message": "Function tolerance reached. |cost_change|/cost: 1.769359e-11 <= 1.000000e-10",
    "usable": true,
@@ -163,7 +163,7 @@
     "max_lnQ_minus_lnK": 9.592326932761353e-13,
     "equilibrium_residual": 1.7053025658242404e-13
    },
-   "seconds": 11.890233318998071,
+   "seconds": 10.907161145998543,
    "status": "converged",
    "message": "Function tolerance reached. |cost_change|/cost: 3.774298e-11 <= 1.000000e-10",
    "usable": true,
@@ -307,7 +307,7 @@
     "max_lnQ_minus_lnK": 7.744915819785092e-13,
     "equilibrium_residual": 1.4210854715202004e-13
    },
-   "seconds": 15.809732832000009,
+   "seconds": 14.959280613002193,
    "status": "converged",
    "message": "Function tolerance reached. |cost_change|/cost: 6.273165e-11 <= 1.000000e-10",
    "usable": true,
@@ -435,12 +435,150 @@
   "B-2": {
    "form": "B",
    "start": 2,
-   "exception": "ParameterError",
-   "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.010616291313612518 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 144 iterations, contraction absent, floor 1.2471646314951153e-08, amplification 0"
+   "start_information": {
+    "singular_values": [
+     9.178001103650296,
+     3.6356872127174773,
+     0.7991603422033414,
+     0.3769462324919469
+    ],
+    "s_min_over_s_max": 0.04107062401006108,
+    "rank": 4
+   },
+   "start_checks": {
+    "shared_unchanged": true,
+    "shared_laws_unchanged": true,
+    "max_lnQ_minus_lnK": 1.2150280781497713e-12,
+    "equilibrium_residual": 1.4210854715202004e-13
+   },
+   "seconds": 10.431005489001109,
+   "status": "converged",
+   "message": "Function tolerance reached. |cost_change|/cost: 3.406762e-12 <= 1.000000e-10",
+   "usable": true,
+   "initial_cost": 28.61345913763084,
+   "final_cost": 7.970699889948329,
+   "iterations": 7,
+   "physical": [
+    -0.2151637014268124,
+    0.005714802739846051,
+    6.393391767018024,
+    -1216.0717965297702
+   ],
+   "optimizer": [
+    -0.30327402853624785,
+    0.11429605479692102,
+    -1.5210445941825852,
+    -1.21607179652977
+   ],
+   "active_bounds": [],
+   "endpoint_singular_values": [
+    7.783340635109966,
+    3.784697762535619,
+    0.9794902155627921,
+    0.2663715679290777
+   ],
+   "covariance_rank": 4,
+   "law": {
+    "a": 5.926331831301357,
+    "b": -2631.6483262827346,
+    "c": 0.0,
+    "d": 0.0,
+    "e": 0.0,
+    "f": 0.0,
+    "reference_temperature": 313.15,
+    "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+    "temperature_min": 293.15,
+    "temperature_max": 393.15
+   },
+   "lnK_313": -2.477462919721268,
+   "enthalpy_J_mol": 21880.741633003337,
+   "coordinates": {
+    "k_ij protonated-diethanolamine-water": -0.2151637014268124,
+    "k_ij carbamate-anion-water": 0.005714802739846051
+   },
+   "reload_cost": 7.97069988994228,
+   "reload_cost_relative": 7.58948459633757e-13,
+   "reload_rows_max_difference": 1.2624415401951694e-11,
+   "available": 80,
+   "rows": 80,
+   "endpoint_checks": {
+    "shared_unchanged": true,
+    "shared_laws_unchanged": true,
+    "max_lnQ_minus_lnK": 1.3002932064409833e-12,
+    "equilibrium_residual": 1.7053025658242404e-13
+   },
+   "errors": {
+    "Lawson": {
+     "n": 30,
+     "mean_abs_percent": 28.63499370088635,
+     "bias_percent": -0.7585653512842105,
+     "mean_log_ratio": -0.06679743830661428,
+     "per_temperature": {
+      "100": {
+       "n": 7,
+       "mean_abs_percent": 47.9694974523256,
+       "bias_percent": 24.07270322911281,
+       "mean_log_ratio": 0.1220562564215686
+      },
+      "150": {
+       "n": 9,
+       "mean_abs_percent": 27.516060552673093,
+       "bias_percent": 1.4779705516279003,
+       "mean_log_ratio": -0.0421519231285948
+      },
+      "175": {
+       "n": 3,
+       "mean_abs_percent": 23.21535060100554,
+       "bias_percent": -4.647302067684408,
+       "mean_log_ratio": -0.07959423163644513
+      },
+      "200": {
+       "n": 8,
+       "mean_abs_percent": 18.276849434819063,
+       "bias_percent": -16.358471912403676,
+       "mean_log_ratio": -0.1913856163717077
+      },
+      "225": {
+       "n": 3,
+       "mean_abs_percent": 19.9193122015615,
+       "bias_percent": -19.9193122015615,
+       "mean_log_ratio": -0.23636067003635272
+      }
+     }
+    },
+    "Carson": {
+     "n": 50,
+     "mean_abs_percent": 0.9772871590612424,
+     "bias_percent": -0.13755349722603905,
+     "mean_log_ratio": null,
+     "per_temperature": {
+      "0.10": {
+       "n": 10,
+       "mean_abs_percent": 0.608436501530103,
+       "bias_percent": -0.005882664762815182,
+       "mean_log_ratio": null
+      },
+      "0.20": {
+       "n": 20,
+       "mean_abs_percent": 1.210256838124794,
+       "bias_percent": 0.3136532967023681,
+       "mean_log_ratio": null
+      },
+      "0.30": {
+       "n": 20,
+       "mean_abs_percent": 0.9287428087632604,
+       "bias_percent": -0.6545957073860581,
+       "mean_log_ratio": null
+      }
+     }
+    }
+   },
+   "endpoint_sha256": "91c2384ef9f7b2a035962aafb72d97435a18a94595c5f16c64c9e2ac18785cdd",
+   "law_sha256": "7efd8bb196a85904eeee8ef5723d2d7155cba0224fd50a412d43045071f66552"
   }
  },
  "per_form": {
-  "B": "B-1",
+  "B": "B-2",
   "A": "A-1"
  },
  "start_differences": {
@@ -448,15 +586,20 @@
    "cost_difference": 2.3638335733267013e-10,
    "max_scaled_coordinate_difference": 0.00011023501227924726,
    "max_relative_prediction_difference": 4.292324697896532e-06
+  },
+  "B": {
+   "cost_difference": 4.760840610629202e-10,
+   "max_scaled_coordinate_difference": 5.3119699146009225e-05,
+   "max_relative_prediction_difference": 2.4703145833360196e-06
   }
  },
  "selection": {
-  "run": "B-1",
-  "endpoint": "inputs/runs/B-1-endpoint-document.json",
-  "endpoint_sha256": "660583b005f7541977a92fed280e2613a758c4c6b3cd1bc8bafa815e9b0bd52b",
+  "run": "B-2",
+  "endpoint": "inputs/runs/B-2-endpoint-document.json",
+  "endpoint_sha256": "91c2384ef9f7b2a035962aafb72d97435a18a94595c5f16c64c9e2ac18785cdd",
   "law": {
-   "a": 5.9263333490960095,
-   "b": -2631.64193745142,
+   "a": 5.926331831301357,
+   "b": -2631.6483262827346,
    "c": 0.0,
    "d": 0.0,
    "e": 0.0,
@@ -466,9 +609,9 @@
    "temperature_min": 293.15,
    "temperature_max": 393.15
   },
-  "law_sha256": "7f8f21879761be684ee72885ca4b366aa23c1e38693fafd579c73cafea410716",
-  "declarations_sha256": "4dc42544d475d6ab857afb97c1e3ec8de5a06b868c2b0b8e45fcaeb6cf6cb73a",
-  "specification": "runs/B-1-endpoint.toml",
-  "frozen_at": "2026-11-12T17:54:09-0700"
+  "law_sha256": "7efd8bb196a85904eeee8ef5723d2d7155cba0224fd50a412d43045071f66552",
+  "declarations_sha256": "a0e6cd9a5a7796d892130fc71f756480465898fa28cb0fc8cd371e9f4b730b72",
+  "specification": "runs/B-2-endpoint.toml",
+  "frozen_at": "2026-11-12T18:31:32-0700"
  }
 }

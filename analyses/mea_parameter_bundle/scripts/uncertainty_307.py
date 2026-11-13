@@ -83,7 +83,7 @@ def setup(name):
         point = read(dea/'results/fits.json')['runs'][frozen['run']]
         spec = SolventSpecification(dea/frozen['specification'])
         assert spec.parameter_sha256 == frozen['endpoint_sha256']
-        declared = read(dea/f"inputs/runs/{frozen['run']}-endpoint-coordinates.json")
+        declared = read(dea/f"inputs/runs/{frozen['run'][0]}-1-coordinates.json")  # start-1 chart: the same physical limits as start 2, measured from the Aroua law
         H = point['enthalpy_J_mol']-epcsaft.GAS_CONSTANT_J_PER_MOL_K*4100.9040506223955  # total shift from the Aroua start
         for q,x in zip(declared,[*point['coordinates'].values(),None,None],strict=True):
             q['origin'] = frozen['law']['a'] if q.get('coefficient')=='a' else 0. if q.get('kind')=='reaction_enthalpy_shift' else x

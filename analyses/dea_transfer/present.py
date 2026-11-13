@@ -1,4 +1,4 @@
-"""#317 figure from retained rows only (no Engine call): measured CO2 pressures and heats against the frozen B-1 predictions."""
+"""#317 figure from retained rows only (no Engine call): measured CO2 pressures and heats against the frozen selected predictions."""
 import csv, json
 import matplotlib
 matplotlib.use('Agg')
@@ -33,7 +33,7 @@ for ax, name in zip(axes.flat, dict.fromkeys(r['set'] for r in rows)):
     for color, label in zip(colors, dict.fromkeys(r['T_label'] for r in group)):
         g = sorted((r for r in group if r['T_label'] == label), key=lambda r: r['alpha'])
         ax.plot([r['alpha'] for r in g], [r['observed'] for r in g], 'o', mfc='none', color=color, label=f'{label} measured')
-        ax.plot([r['alpha'] for r in g], [r['predicted'] for r in g], '-', color=color, lw=1.2, label=f'{label} model')
+        ax.plot([r['alpha'] for r in g], [r['predicted'] for r in g], 'x', color=color, label=f'{label} model')
     heat = group[0]['unit'] == 'kJ/mol'
     ax.set(title=name, xlabel='CO₂ mole fraction x₁' if heat else 'Loading α (mol CO₂/mol DEA)',
            ylabel='Integral heat of solution −ΔH (kJ/mol CO₂)' if heat else 'CO₂ partial pressure (kPa)', yscale='linear' if heat else 'log')

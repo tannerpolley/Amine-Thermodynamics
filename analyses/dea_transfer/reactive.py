@@ -2,7 +2,7 @@
 
 Run with agent-heavy env OMP_NUM_THREADS=1 uv run --no-sync python analyses/dea_transfer/reactive.py fit|score
 """
-import copy, hashlib, json, math, sys, time, tomllib
+import copy, csv, hashlib, json, math, sys, time, tomllib
 import numpy as np
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
@@ -10,6 +10,9 @@ from pinned import AN, ROOT, MEA, DEA, H, C, W, CO2, SHARED, verify_wheel, save
 from MEA.solvent_specification import SolventSpecification, jsonable
 
 R, TP = epcsaft.GAS_CONSTANT_J_PER_MOL_K, 313.15
+# Owner decision 2026-11-12: the design's form-B start 2 (DEAH+-water k = -0.5) has no bubble point at Lawson row 7
+# (results/fit-runs/B-2-k-0.5-start-rows.json); form B start 2 uses -0.2 with the other start-2 offsets unchanged.
+B2_HW = -0.2
 A0, B0 = 11.789235676129515, -4100.9040506223955  # Aroua 1997 Eq. 14 inverse (declarations.toml)
 DECL = (AN / 'declarations.toml').read_text()
 ln_k = lambda law, T: law['a'] + law['b'] / T + law['c'] * math.log(T / law['reference_temperature']) + law['d'] * T
@@ -38,15 +41,15 @@ def variant(form, start):  # D2 form A record, form B charged chain cation; star
     for p in d['pairs'] if start == 2 else []:
         ids = {p['component_id_a'], p['component_id_b']}
         if ids in ({H, W}, {C, W}):
-            next(i for i in p['coefficients'] if i['family'] == 'k_ij')['value']['magnitude'] = -0.5 if H in ids else 0.0
+            next(i for i in p['coefficients'] if i['family'] == 'k_ij')['value']['magnitude'] = (B2_HW if form == 'B' else -0.5) if H in ids else 0.0
     return d
 
 
-def coordinates(start):  # D5: four coordinates; start 2 moves ln K(313.15 K) by +0.35 and the enthalpy by -11 kJ/mol inside the same physical limits
+def coordinates(start, form):  # D5: four coordinates; start 2 moves ln K(313.15 K) by +0.35 and the enthalpy by -11 kJ/mol inside the same physical limits
     s = -11000.0 if start == 2 else 0.0
     a = A0 + (0.35 if start == 2 else 0.0) + s / (R * TP)
     q = lambda pair, origin: dict(targets=[['k_ij', pair, 1.0]], origin=origin, scale=0.05, bounds=[-1.0, 1.0])
-    return [q([H, W], -0.5 if start == 2 else 0.0), q([C, W], 0.0 if start == 2 else -0.013004788810687472),
+    return [q([H, W], (B2_HW if form == 'B' else -0.5) if start == 2 else 0.0), q([C, W], 0.0 if start == 2 else -0.013004788810687472),
             dict(kind='reaction_coordinate', name='carbamate-hydrolysis', coefficient='a', origin=a, scale=1.0, bounds=[A0 - 3 + s / (R * TP), A0 + 3 + s / (R * TP)]),
             dict(kind='reaction_enthalpy_shift', name='carbamate-hydrolysis', pivot_temperature=TP, origin=0.0, scale=1000.0, bounds=[-30000.0 - s, 10000.0 - s])], dict(a=a, b=B0 - s / R)
 
@@ -110,7 +113,7 @@ def errors(pred, group):
 
 
 def fit(run, form, start):
-    coords, law = coordinates(start)
+    coords, law = coordinates(start, form)
     spec = make_spec(run, variant(form, start), coords, law)
     out = dict(form=form, start=start, start_information=weighted(spec, spec.inputs['observations']['fitted']), start_checks=checks(spec))
     t = time.perf_counter()
@@ -227,6 +230,34 @@ def main_score():
     out['comparisons'] = dict(lawson_394K=[{k: p.get(k) for k in ('identity', 'status', 'message')} for p in comps if p['group'] == 'Lawson-394K'],
                               weiland=dict(n=len(weiland), mean_abs_percent=float(np.mean([abs(p['value'] / p['observed'] - 1) * 100 for p in weiland])),
                                            bias_percent=float(np.mean([(p['value'] / p['observed'] - 1) * 100 for p in weiland])), rows=[p for p in comps if p['group'] == 'Weiland']))
+    # Comparison-only sets on the frozen selection (owner decision 2026-11-12); none enters the fit.
+    rel = lambda ps: dict(n=len(ps), mean_abs_percent=float(np.mean([abs(p['value'] / p['observed'] - 1) * 100 for p in ps])), bias_percent=float(np.mean([(p['value'] / p['observed'] - 1) * 100 for p in ps])))
+    viii = [spec.prediction(r) for r in spec.inputs['observations']['comparisons'] if r['group'] == 'Lawson-VIII']
+    out['comparisons']['lawson_viii'] = dict(rel([p for p in viii if p.get('status') == 'Available']), per_T={T: rel([p for p in viii if p['row']['T_F'] == T and p.get('status') == 'Available']) for T in ('77', '100', '200')}, rows=viii)
+    for q in ('DEA_plus_DEAH', 'DEACOO', 'HCO3'):
+        ps = [spec.prediction(r) for r in spec.inputs['observations']['comparisons'] if r['group'] == f'Bottinger-{q}']
+        diff = lambda sel: dict(n=len(sel), mean_abs_difference=float(np.mean([abs(p['value'] - p['observed']) for p in sel])), bias=float(np.mean([p['value'] - p['observed'] for p in sel])))
+        ok = [p for p in ps if p.get('status') == 'Available']
+        out['comparisons'][f'bottinger_{q}'] = dict(available=len(ok), clean=diff([p for p in ok if float(p['row']['x_HEOD']) == 0]), byproduct=diff([p for p in ok if float(p['row']['x_HEOD']) > 0]), rows=ps)
+    cai, model = [], spec.model
+    for r in csv.DictReader((ROOT / 'data/reference/DEA/Cai1996_Table4_water_DEA.csv').open()):  # bubble pressure at the measured T and x
+        x = float(r['x_water'])
+        feed = {c: n for c, n in ((W, x), (DEA, 1 - x)) if n > 0}
+        prob = eq.problem_from_mapping(dict(T=float(r['T_K']), P=dict(free=True, guess=6660.0), feed=dict(basis='amounts', values=feed), row_tolerance=1e-10,
+            phases=[dict(name='L', kind='liquid', support=list(feed)), dict(name='V', kind='vapor', support=list(feed), amount=dict(status='pinned', value=0.0))]))
+        s = eq.solve_equilibrium(model, prob)
+        y = s.mole_fractions[len(model.component_ids) + model.component_ids.index(W)] if s.requested_tolerance_met else None
+        cai.append(dict(r, P_model_kPa=s.pressure / 1e3 if s.requested_tolerance_met else None, y_water_model=y, message=s.message))
+    ok = [r for r in cai if r['P_model_kPa']]
+    out['comparisons']['cai'] = dict(n=len(ok), mean_abs_P_percent=float(np.mean([abs(r['P_model_kPa'] / 6.66 - 1) * 100 for r in ok])),
+                                     mean_abs_y=float(np.mean([abs(r['y_water_model'] - float(r['y_water'])) for r in ok])), rows=cai)
+    he, hr = [], lambda T, x: model.state(T, P=1.75e6, x={W: x, DEA: 1 - x}, phase='liquid').residual_enthalpy  # ideal-gas enthalpy is linear in x and cancels
+    for r in csv.DictReader((ROOT / 'data/reference/DEA/Horstmann2002_Table6_water_DEA_HE.csv').open()):
+        x = float(r['x_water'])
+        he.append(dict(r, HE_model=hr(363.15, x) - x * hr(363.15, 1.0) - (1 - x) * hr(363.15, 0.0), sigma=2 + 0.01 * abs(float(r['HE_J_per_mol']))))
+    out['comparisons']['excess_enthalpy'] = dict(n=len(he), mean_abs_J_mol=float(np.mean([abs(r['HE_model'] - float(r['HE_J_per_mol'])) for r in he])),
+        mean_abs_percent=float(np.mean([abs(r['HE_model'] / float(r['HE_J_per_mol']) - 1) * 100 for r in he])), within_2sigma=sum(abs(r['HE_model'] - float(r['HE_J_per_mol'])) <= 2 * r['sigma'] for r in he),
+        water_residual_enthalpy_J_mol=hr(363.15, 1.0), rows=he)
     # Phase census at every fitted and held-out state (fitted heat rows: the loaded final liquid).
     policy = spec.spec['phase_policy']
     states = [r for r in spec.inputs['observations']['fitted'] + spec.inputs['observations']['comparisons'] if r['group'] in ('Lawson', 'Carson', 'SeoHong', 'Lal')]
@@ -255,5 +286,13 @@ def main_score():
         print(g, json.dumps({k: v for k, v in out[g].items() if k != 'table'}, default=float), flush=True)
 
 
+def start_rows(form, start):  # diagnosis of an unavailable start: every fitted row evaluated at the declared start, no fit
+    verify_wheel()
+    coords, law = coordinates(start, form)
+    spec = make_spec(f'{form}-{start}', variant(form, start), coords, law)
+    rows = [dict({k: p.get(k) for k in ('identity', 'status', 'message', 'value', 'observed')}, row=p.get('row')) for p in map(spec.prediction, spec.inputs['observations']['fitted'])]
+    save(f'results/fit-runs/{form}-{start}-start-rows.json', dict(available=sum(r['status'] == 'Available' for r in rows), rows=rows))
+
+
 if __name__ == '__main__':
-    {'fit': main_fit, 'score': main_score}[sys.argv[1]]()
+    {'fit': main_fit, 'score': main_score, 'start-rows': lambda: start_rows(sys.argv[2], int(sys.argv[3]))}[sys.argv[1]]()
