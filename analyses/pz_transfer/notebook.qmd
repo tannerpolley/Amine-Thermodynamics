@@ -468,7 +468,7 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
 
 ## Kamps 2003 high-loading comparison and design check states (#327)
 
-**Result (12 November 2026).** On the frozen 12-coordinate refit, the Kamps 2003 total pressures have a mean absolute relative error (AARD) of 42.5 % and a signed bias of −40.3 % over 94 rows; 88 rows are underpredicted. The underprediction grows with loading above about 1 mol CO₂/mol PZ and reaches −89 % at 334 K, 4 mol/kg. At 36 of these source-liquid states, the model's own phase search finds a second liquid. Only the two unloaded 395 K rows (water and PZ volatility) agree within ±4 kPa. Seven rows lie within ±10 kPa: the two unloaded rows and rows 1, 9, 23, 36 and 69, all below 0.2 MPa. This is a fixed-parameter prediction against one unfitted campaign. It is not validation, and nothing is fitted, selected or adopted.
+**Result (12 November 2026).** On the frozen 12-coordinate refit, the Kamps 2003 total pressures have a mean absolute relative error (AARD) of 42.5 % and a signed bias of −40.3 % over 94 rows; 88 rows are underpredicted. The underprediction grows with loading above about 1 mol CO₂/mol PZ and reaches −89 % at 334 K, 4 mol/kg. At 36 of these source-liquid states, the model's own phase search finds a second liquid. Only the two unloaded 395 K rows (water and PZ volatility) agree within ±4 kPa. Seven rows lie within ±10 kPa: the two unloaded rows and the loaded rows 1, 9, 23, 36 and 69, which are all below 0.2 MPa. This is a fixed-parameter prediction against one unfitted campaign. It is not validation, and nothing is fitted, selected or adopted.
 
 ### Data and basis
 
@@ -512,9 +512,9 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
 - **Loaded rows at 0.2 MPa and above.** All 82 lie outside both pressure bounds.
   - The 374–395 K blocks give 37.1 % AARD (bias −35.2 %). The 313–354 K rest gives 53.0 % (bias −53.0 %).
   - The underprediction grows steadily with loading, and more steeply at 4 mol/kg.
-  - Above 1 mol/mol, the source describes the liquid as PIPH₃HCO₃ with physically dissolved CO₂ and zwitterion. Its own model has the doubly protonated cation "only in very small amounts" (pp.2665–2666).
+  - Above 1 mol/mol, the source describes the liquid as PIPH₃HCO₃ with physically dissolved CO₂ and zwitterion. Its own model calculation at 353 K and about 4 mol/kg has the doubly protonated cation present "only in very small amounts" (p.2666).
   - This model's liquid differs. At the 36 states where it splits, PZH₂²⁺ holds 2.1–28.8 % of the PZ, against 0.05–8.1 % at the other loaded rows. For example, row 7 (313.75 K, 1.557 mol/mol) has 28.8 % PZH₂²⁺, 56 % of the CO₂ as bicarbonate and 17.5 % as molecular CO₂ (per-row columns in the CSV).
-  - In 35 of the 36 splits, the deepest split phase is mostly water, bicarbonate (0.25–0.37 mole fraction) and PZH₂²⁺ (0.07–0.18), in that order.
+  - In 35 of the 36 splits, the deepest split phase is mostly water, bicarbonate (0.28–0.37 mole fraction) and PZH₂²⁺ (0.10–0.18), in that order. The exception is row 71 (354.35 K, the shallowest split): water 0.56, bicarbonate 0.25, PZH⁺ 0.10 and PZH₂²⁺ 0.07.
   - The candidate causes are therefore: CO₂ physical solubility at MPa pressure; the PZH⁺–bicarbonate and zwitterion interactions; the second protonation (the P2 law and the PZH₂²⁺ parameters, tied to PZH⁺); and the shared MEA CO₂–water record. This comparison cannot separate them.
   - The block inside both law ranges (313.75 K) still shows −32.1 % bias, so leaving the law ranges is not the only cause.
 - **Input sensitivity.** The ±0.7 % solvent-mass bound moves the calculated pressure by up to −10.8 % / +11.7 % (row 2).
@@ -568,7 +568,7 @@ The 10 rows of Kamps Table 4, p.2667 (353.14 K as printed, 1.975 mol/kg MDEA, 1.
 
 - **Evidence.** This is comparison-only prediction on a non-adopted endpoint, and it carries every stage-1–5 limit above.
 - **Pressure path.** The total pressure includes model water, PZ and HPZCOO volatility. No vapour composition was measured, so the CO₂ and water contributions cannot be separated against data.
-- **Not independently reviewed yet.** This section has not been promoted for manuscript use.
+- **Review.** An independent delivered-result review first returned Not supported, for five wording and sensitivity defects at `e8f72d0`. After the corrections, the re-check returned **Supported** with one range correction, now applied. This section has not been promoted for manuscript use.
 
 ```bash
 OMP_NUM_THREADS=1 agent-heavy uv run python kamps.py kamps
