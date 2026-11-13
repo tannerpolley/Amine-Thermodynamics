@@ -382,10 +382,13 @@ def phase_payload(model, problem, result):
     return row
 
 
-def stability(model, problem, result):
+def stability(model, problem, result, supplied=None):
     options = eq.StabilityOptions()
     trials = copy.copy(problem)
     trials.phases = [eq.Phase('trial-L',kind='liquid',support=s.COMPONENT_IDS),eq.Phase('trial-V',kind='vapor',support=s.COMPONENT_IDS[:3])]
+    if supplied is not None:
+        trials.phases = supplied
+        options.evaluate_supplied_trials = True
     options.trials = trials._native(model).phases
     report = eq.stability_test(eq.compile_problem(model,problem),result,options)
     payload = {k:s._jsonable(getattr(report,k)) for k in

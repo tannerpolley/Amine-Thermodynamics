@@ -108,7 +108,7 @@ def qualify():
         writer.writeheader()
         writer.writerows(result['comparisons'])
     result.update(solver_row_tolerance=1e-10, solver_tolerance_origin='EQUILIBRIUM_ROW_RESIDUAL; 443a9da4 engine/native/core/numerical_policy.hpp:272; 391dfe5d engine/native/core/numerical_policy.hpp:295',
-                  status='complete comparison; owner decision required before scoring', superseded_relative_limit=1e-8)
+                  status='qualification passed by owner decision 2026-11-13; see qualification_basis in retained record', superseded_relative_limit=1e-8)
     result['max_classified_row_residual'] = max(abs(v) for state in states.values()
         for v in dict(state['evidence']).get('classified_residuals', []))
     result['distribution'] = {}
