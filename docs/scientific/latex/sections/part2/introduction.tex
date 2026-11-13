@@ -26,9 +26,12 @@ Silkenb\"aumer et al. combine single-amine AMP and MDEA parameters to predict bl
 P\'erez-Salado Kamps et al. fit PZ solubility and predict MDEA/PZ mixtures; Ermatchkov et al. extend the PZ model with low-loading pressures \cite[Modeling, pp.~2663--2664]{kampsSolubilityCO2H2O+piperazine2003a}\cite[Thermodynamic Modeling, pp.~1790--1793]{ermatchkovSolubilityCarbonDioxide2006a}.
 B\"ottinger et al. refit DEA pressure interactions and constrain carbamate chemistry with species observations \cite[Sects.~5--7, Tables~7--8, Fig.~8]{Bottinger2008}.
 Extended UNIQUAC modeling of AMP retains water, \COtwo and inorganic-ion inputs, fits AMP interactions in stages, and combines speciation, calorimetry and computational chemistry; the carbamate constant remains model-dependent \cite[Sects.~4.1--4.4, 5.1--5.3]{mehdizadehAMPCO2Water2013}.
-% pending: Zhang & Chen, DOI 10.1021/ie1006855; read Zotero PDF before adding the MDEA eNRTL comparison.
-% pending: Sadegh et al., DOI 10.1016/j.fuel.2014.12.002; read Zotero PDF before adding MDEA extended UNIQUAC.
-% pending: Biget et al., DOI 10.1002/cjce.22109; read Zotero PDF before adding the chosen multi-amine estimation comparison.
+Zhang and Chen fit MDEA--water eNRTL interactions to vapor--liquid equilibrium, excess enthalpy and heat capacity, then fit molecule--electrolyte interactions and MDEAH$^+$ standard-state properties to reactive pressures, absorption heats, heat capacities and NMR species data \cite[Sects.~3.2--3.3, Tables~12--15]{zhangThermodynamicModelingCO22011}.
+Their reactive-pressure fit spans 313--413 K and approximately 2--8 mol MDEA per kg water; source-specific average relative deviations distinguish fitted observations from pressure predictions for excluded sources, whose inconsistencies prevent agreement with all datasets \cite[Sect.~3.3, Tables~14, 16]{zhangThermodynamicModelingCO22011}.
+Sadegh et al. estimate extended UNIQUAC MDEA parameters first from binary data and then from reactive data, using vapor pressures, freezing points, excess enthalpies, heat capacities and absorption heats; their ternary-pressure data cover 5--75 wt\% MDEA and extend to 200~$^\circ$C, and agreement is reported by data source and property \cite[Sects.~7--9.1, Tables~5--7]{sadeghThermodynamicModelingCO22015}.
+NMR species fractions at 20 and 40~$^\circ$C in 23 wt\% MDEA remain outside fitting and are assessed by absolute mole-fraction deviations \cite[Sect.~9.2, Table~8]{sadeghThermodynamicModelingCO22015}.
+Biget et al. apply staged extended UNIQUAC estimation to MEA, MDEA and AMP, fitting binary excess enthalpies and phase-equilibrium data before reactive solubilities and total pressures over a stated 40--150~$^\circ$C and 15--60 mass\% range, using a genetic algorithm followed by a quasi-Newton method \cite[pp.~298--300, Fig.~1, Eq.~3]{bigetDevelopmentThermodynamicIdentification2015a}.
+Their property-specific AARDs and parameter confidence intervals describe the fits; the binary enthalpy and phase-envelope comparisons also use estimation data \cite[pp.~300--302, Table~1, Figs.~2, 4, 6, Eqs.~4--5]{bigetDevelopmentThermodynamicIdentification2015a}.
 
 % P:p2-introduction-03
 Published SAFT amine models distinguish parameter estimation from predictions to different extents.
@@ -69,7 +72,8 @@ Part I gives the common-potential argument for combining equilibrium, caloric an
 Species evidence adds distinct constraints: AMP peak splitting requires additional relations, PZ constants are inferred with activity assumptions, and DEA measurements combine molecular and protonated amine and identify byproducts \cite[Sects.~2.5--3.2, Figs.~5, 7]{ciftjaExperimentalStudyCarbamate2014a}\cite[Sects.~2--3, Table~5]{ermatchkovChemicalEquilibriumConstants2003}\cite[Sects.~3, 5--7, Fig.~8]{Bottinger2008}.
 Hartono's unfitted AMP heat comparison retains high-loading disagreement \cite[Sect.~5.2, Fig.~8]{hartonoSolubilityCO201M2020}.
 Thus species and caloric comparisons test more than pressure agreement; assigned residual scales and conditional parameter errors describe different uncertainties.
-% pending: Sadegh et al., DOI 10.1016/j.fuel.2014.12.002, and Biget et al., DOI 10.1002/cjce.22109; read before discussing their multi-property constraints.
+Sadegh et al.'s objective assigns separate residual scales to equilibrium and caloric properties, reduces the weight of low-pressure data through a pressure offset, and leaves two absorption-heat datasets outside fitting \cite[Sect.~7, Eq.~20, Sect.~9.1.2, Figs.~8--9]{sadeghThermodynamicModelingCO22015}.
+Biget et al. instead minimize squared relative residuals in stages and estimate parameter confidence intervals from the objective Hessian and an estimated measurement variance; their multi-property fitting constraints differ from an unfitted-property test \cite[pp.~298--302, Eqs.~3--5, Table~1]{bigetDevelopmentThermodynamicIdentification2015a}.
 
 % P:p2-introduction-review-11
 Part I reviews reactive-amine phase assessment separately from property fitting \cite[Sect.~1.2]{PolleyPartI}.
