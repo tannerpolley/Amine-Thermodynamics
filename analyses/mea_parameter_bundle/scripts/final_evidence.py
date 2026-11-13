@@ -382,7 +382,7 @@ def phase_payload(model, problem, result):
     return row
 
 
-def stability(model, problem, result):
+def stability(model, problem, result, supplied=()):
     options = eq.StabilityOptions()
     trials = copy.copy(problem)
     trials.phases = [eq.Phase('trial-L',kind='liquid',support=s.COMPONENT_IDS),eq.Phase('trial-V',kind='vapor',support=s.COMPONENT_IDS[:3])]
@@ -397,12 +397,19 @@ def stability(model, problem, result):
         record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
             optimizer=phase_payload(None,None,trial.optimizer))
         payload['trials'].append(record)
+    if supplied:
+        trials.phases = [eq.Phase('previous-split',kind=w['kind'],support=[s.COMPONENT_IDS[i] for i in w['support']],
+                         composition_guess=w['composition'],packing_guess=w['packing']) for w in supplied]
+        options.trials = trials._native(model).phases
+        options.evaluate_supplied_trials = True
+        checked = eq.stability_test(eq.compile_problem(model,problem),result,options)
+        payload['supplied_trials'] = [dict(evidence=t.evidence,quantities=s._jsonable(t.quantities),message=t.message) for t in checked.trials]
     return payload
 
 
 def phase_classification(row):
     state, reports = row.get('final'), row.get('stability',[])
-    if any(t['resolved_descent'] for r in reports for t in r['trials']):
+    if any(t['resolved_descent'] for r in reports for t in r['trials']) or any(t['evidence']=='evaluated' and t['quantities'].get('tpd_over_rt',0)<0 for r in reports for t in r.get('supplied_trials',[])):
         return 'failed'
     if state is None or not state['success'] or not state['requested_tolerance_met']:
         return 'failed'
@@ -410,7 +417,8 @@ def phase_classification(row):
         or state['reduced_hessian_minimum']<0 or any(v<=0 for v in state['pressure_density_derivatives'])
         or any(v<0 for v in state['amounts'])):
         return 'failed'
-    if (len(reports)!=1 or not reports[0]['completed'] or not reports[0]['trials']
+    if (any(t['evidence']!='evaluated' for r in reports for t in r.get('supplied_trials',[]))
+        or len(reports)!=1 or not reports[0]['completed'] or not reports[0]['trials']
         or {t['phase']['kind'] for t in reports[0]['trials']}!={'liquid','vapor'}
         or any(not t['optimizer']['success'] or t['evidence'] in ('unresolved','indeterminate','negative_plane_without_positive_donor') for t in reports[0]['trials'])
         or 'raw_residuals' not in state or row.get('bubble_pressure_Pa') is None or row.get('pressure_uncertainty_Pa') is None):

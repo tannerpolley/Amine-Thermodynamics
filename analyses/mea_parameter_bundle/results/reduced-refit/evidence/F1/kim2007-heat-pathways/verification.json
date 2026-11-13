@@ -1,0 +1,6397 @@
+{
+  "integral_failure_check": {
+    "case": "heat(313.15, 0, 0.084)",
+    "finite_interval_preserved": true,
+    "unavailable": {
+      "integral_co2": {
+        "count": 11,
+        "counts": {
+          "undefined": 0,
+          "outside_domain": 10,
+          "not_evaluated": 0,
+          "numerical_failure": 1
+        },
+        "predictions": [
+          {
+            "identity": "kim2007_source_40_r1_0.084",
+            "reason": "injected heat failure: 313.15, 0, 0.084",
+            "kind": "numerical_failure"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.608",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.640",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.662",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.684",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.704",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.715",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.604",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.634",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.651",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.678",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          }
+        ]
+      },
+      "integral_mea": {
+        "count": 11,
+        "counts": {
+          "undefined": 0,
+          "outside_domain": 10,
+          "not_evaluated": 0,
+          "numerical_failure": 1
+        },
+        "predictions": [
+          {
+            "identity": "kim2007_source_40_r1_0.084",
+            "reason": "injected heat failure: 313.15, 0, 0.084",
+            "kind": "numerical_failure"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.608",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.640",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.662",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.684",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.704",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r1_0.715",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.604",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.634",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.651",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          },
+          {
+            "identity": "kim2007_source_40_r2_0.678",
+            "reason": "above_ceiling",
+            "kind": "outside_domain"
+          }
+        ]
+      },
+      "curve_integral": {
+        "count": 1,
+        "counts": {
+          "undefined": 0,
+          "outside_domain": 0,
+          "not_evaluated": 0,
+          "numerical_failure": 1
+        },
+        "predictions": [
+          {
+            "identity": "313.15K/loading=0.084",
+            "reason": "injected heat failure: 313.15, 0, 0.084",
+            "kind": "numerical_failure"
+          }
+        ]
+      }
+    },
+    "passed": true
+  },
+  "heat_references": [
+    {
+      "family": "heat",
+      "identity": "vinjarapu2024_source_table4_01",
+      "quantity": "integral heat of absorption",
+      "retained": -80.57396060145862,
+      "replayed": -80.57396060145862,
+      "difference": 0.0,
+      "passed": true
+    },
+    {
+      "family": "heat",
+      "identity": "10.1021/je2002946/table5/T322.5K/p0.51MPa/row01",
+      "quantity": "integral heat of absorption",
+      "retained": -82.0356409244833,
+      "replayed": -82.0356409244833,
+      "difference": 0.0,
+      "passed": true
+    },
+    {
+      "family": "heat",
+      "identity": "10.1021/je2002946/table5/T322.5K/p1.03MPa/row01",
+      "quantity": "integral heat of absorption",
+      "retained": -82.33580323398823,
+      "replayed": -82.33580323398823,
+      "difference": 0.0,
+      "passed": true
+    }
+  ],
+  "study_feed_reference": [
+    {
+      "identity": "vinjarapu2024_source_table4_01",
+      "error_kJ_mol": 0.0,
+      "status": "available",
+      "passed": true
+    }
+  ],
+  "nmr_references": [
+    {
+      "identity": "Bottinger2008_state_042",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_042",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_043",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_043",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_044",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_044",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_045",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_045",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_046",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_046",
+      "species": "MEACOO-",
+      "relative_error": 9.408093966370393e-16,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_047",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_047",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_048",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_048",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_049",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_049",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_049",
+      "species": "HCO3-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_050",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_050",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_050",
+      "species": "HCO3-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_055",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_055",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_056",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_056",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_057",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_057",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_058",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_058",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_058",
+      "species": "HCO3-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_059",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_059",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_059",
+      "species": "HCO3-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_063",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_063",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_064",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_064",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_065",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_065",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_066",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_066",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_067",
+      "species": "MEA + MEAH+",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_067",
+      "species": "MEACOO-",
+      "relative_error": 0.0,
+      "passed": true
+    },
+    {
+      "identity": "Bottinger2008_state_067",
+      "species": "HCO3-",
+      "relative_error": 0.0,
+      "passed": true
+    }
+  ],
+  "differential_halving": [
+    {
+      "T_K": 313.15,
+      "loading": 0.1,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.01124611416093,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.01124532207108,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.11,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.13880517020083,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.1388045583219,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.12000000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.26832043717808,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.26831996686018,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.13,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.39932805032662,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.39932770620293,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.14,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.53143000475323,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.53142977751052,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.15000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.66426977248123,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.66426964814967,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.16,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.79751439823961,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.79751437216258,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.17,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.93084071030101,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.93084078806645,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.18,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.06392370595789,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.06392388849711,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.19,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.19642622129253,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.19642650767422,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.2,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.32798895671225,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.32798936835682,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.21000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.45822028455517,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.45822083729512,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.22,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.58668517845875,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.58668588253862,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.23,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.71289275971434,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.7128936346919,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.24000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.83628176071873,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.83628284338123,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.9562032233291,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 82.95620454164262,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.26,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.07189944771311,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.07190104079328,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.27,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.18247810716933,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.18248003599129,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.28,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.28688011842972,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.28688236669532,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.29000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.38383880176774,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.38384159718535,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.30000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.47182942333824,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.47183279198495,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.54900323006517,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.54900729999778,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.32,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.61310415820411,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.61310908821312,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.33,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.66136102809763,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.66136703145591,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.33999999999999997,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.69034808653599,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.69035541050968,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.35,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.6958041131795,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.69581309677002,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.36,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.67239748419455,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.6724086205372,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.37,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.61342231615639,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.61343601875839,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.38,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.51040650823346,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.51042368885962,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.3526164103598,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.35263768088899,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.4,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.12644421274966,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.12647084583423,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.41000000000000003,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.81468870782486,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.81472205434815,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.42000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.39578749205178,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.39582914271281,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.43000000000000005,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.84316333721584,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 81.84321493719588,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.44000000000000006,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.12503945839784,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 81.1251023949018,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.45000000000000007,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.20538627089194,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.20546098862636,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.45999999999999996,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 79.04704081325984,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 79.04712573782389,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.47,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 77.61823381775251,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 77.61832404200756,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.48,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 75.9031308457554,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 75.90321731072665,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.49,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 73.91468684760115,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 73.91475724399817,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999999454,
+          "heat": 71.70422998225298,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 71.70427241799189,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.51,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 69.35970402945509,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 69.359712202742,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.52,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 66.98836080421408,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 66.98833715886524,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.53,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 64.68999963131425,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 64.68995396856842,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.54,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 62.534394589426405,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 62.534339301927425,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 60.552885241048585,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 60.55283085600118,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.56,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.74364960071258,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.74360276263766,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5700000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 57.08352311857586,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 57.083486761605194,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.58,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 55.5396941156924,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 55.53966849733668,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.59,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 54.0782067060335,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 54.07819053035736,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.6,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0004999999999999449,
+          "heat": 52.703820119318785,
+          "status": "available"
+        },
+        {
+          "width": 0.00024999999999997247,
+          "heat": 52.686417874587,
+          "status": "available"
+        },
+        {
+          "width": 0.00012500000000004174,
+          "heat": 52.677718984403185,
+          "status": "available"
+        },
+        {
+          "width": 6.249999999996536e-05,
+          "heat": 52.67337011443271,
+          "status": "available"
+        },
+        {
+          "width": 3.125000000003819e-05,
+          "heat": 52.67119569149514,
+          "status": "available"
+        },
+        {
+          "width": 1.5624999999963585e-05,
+          "heat": 52.67010862356908,
+          "status": "available"
+        },
+        {
+          "width": 7.812500000037303e-06,
+          "heat": 52.66956514524727,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.041,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.34571852081648,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 80.3457135815472,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.084,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.81268733519322,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 80.81268616358942,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.124,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.32056786132237,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.32056744828081,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.167,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.89085343538976,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.89085348009324,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.211,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.47115388152382,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.47115444357699,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.256,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.026181737084,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.02618322026811,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.54900323006517,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.54900729999778,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.352,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.6936244118326,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.69363377959368,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.397,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.20242193353555,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.20244668767683,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.451,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.10088773410028,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.10096359037655,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.494,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 73.05292563338956,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 73.05298607487947,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.535,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 63.59150267828867,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 63.59145068906859,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.576,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 56.14549090171762,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 56.14546107192122,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.037,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.311922182452,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 80.3119161572606,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.081,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.77642186184606,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 80.77642058733112,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.124,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.32056786132237,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.32056744828081,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.165,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.86418748798972,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 81.86418750941014,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.21,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.45822028455517,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 82.45822083729512,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.9562032233291,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 82.95620454164262,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.29,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.38383880176774,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.38384159718535,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.337,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.68391047942644,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.68391737964836,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.375,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.56803073280683,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.568046007947,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.417,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.53418764158344,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.53422662307398,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.463,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 78.64793766209117,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 78.64802488096832,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.507,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 70.07086250995036,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 70.07088111684408,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.543,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 61.92119767441077,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 61.92114170704631,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.576,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 56.14549090171762,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 56.14546107192122,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.1,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.37675350776094,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.3767526337147,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.11,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.49002293927747,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.49002228967997,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.12000000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.60539032763022,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.60538985684666,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.13,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.7222625581749,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.72226224851015,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.14,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.84012667706388,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.84012651641073,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.15000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.95851955993253,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 83.95851953338983,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.16,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.07700571475702,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.07700581953081,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.17,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.19516000768321,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.1951602484301,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.18,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.31255323404598,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.31255361169728,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.19,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.4287392251395,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.42873975180241,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.2,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.54324246209266,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.5432432062194,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.21000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.65554576657864,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.65554663270864,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.22,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.76507627789083,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.76507734332385,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.23,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.87119099136594,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.87119228776696,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.24000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.97315922670218,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 84.97316078387352,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.07014239497634,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 85.07014425206003,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.26,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.16116978705081,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.16117199620098,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.27,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.24510929186049,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.24511191451788,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.28,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.32063173327747,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.32063484301662,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.29000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.38616699317622,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.38617068545764,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.30000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.43984994769248,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.43985433613753,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.47945337847027,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.4794585995177,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.32,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.50230472313392,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.50231094768142,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.33,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.505182522928,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.50518996098882,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.33999999999999997,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.48418789461407,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.48419680649286,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.35,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.4345855453253,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.43459625651931,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.36,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.35060867538827,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.35062157565599,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.37,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.22522271389293,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.22523829264432,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.38,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.04984547721374,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.04986430814355,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.81402766902151,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.81405044922471,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.4,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.50511058896932,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.50513811053568,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.41000000000000003,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.10790197841975,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.10793510654796,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.42000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.60445153584855,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.60449106635375,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.43000000000000005,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.97407052910107,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.97411744126893,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.44000000000000006,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.1938241954163,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.19387853255333,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.45000000000000007,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.23981061589124,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 81.23987206833263,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.45999999999999996,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.08957095641794,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.08963787758536,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.47,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 78.7258302896485,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 78.72589967416395,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.48,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 77.1413087440856,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 77.1413758165926,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.49,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 75.34351988753455,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 75.34357913600043,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.5,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999999454,
+          "heat": 73.35759929860883,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 73.35764538047573,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.51,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 71.22504822274385,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 71.2250779039943,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.52,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 68.99758319899131,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 68.99759621003334,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.53,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 66.72774412685668,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 66.72774314524268,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.54,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 64.45984734657792,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 64.45983675231797,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 62.22464051859069,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 62.224624792277694,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.56,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 60.03883837552334,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 60.03882092440094,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.5700000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 57.90838105434121,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 57.90836374105455,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.58,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 55.8332057536348,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 55.833189050830086,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.59,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 53.81161769356101,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 53.81160114256188,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 333.15,
+      "loading": 0.6,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0004999999999999449,
+          "heat": 51.89176696834585,
+          "status": "available"
+        },
+        {
+          "width": 0.00024999999999997247,
+          "heat": 51.867483880533484,
+          "status": "available"
+        },
+        {
+          "width": 0.00012500000000004174,
+          "heat": 51.85534664612508,
+          "status": "available"
+        },
+        {
+          "width": 6.249999999996536e-05,
+          "heat": 51.849279117199245,
+          "status": "available"
+        },
+        {
+          "width": 3.125000000003819e-05,
+          "heat": 51.84624561997003,
+          "status": "available"
+        },
+        {
+          "width": 1.5624999999963585e-05,
+          "heat": 51.8447289962644,
+          "status": "available"
+        },
+        {
+          "width": 7.812500000037303e-06,
+          "heat": 51.843970881628515,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.1,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.03581517967471,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.03581422553474,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.11,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.13379493854085,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.133794261935,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.12000000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.23395718527102,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.23395674103016,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.13,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.33555756448844,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.33555732094759,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.14,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.43794727358112,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.4379472088542,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.15000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.54053612365463,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.540536235879,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.16,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.64276538216585,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.6427655824002,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.17,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.74408658067772,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.74408704028541,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.18,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.84394383882248,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.84394447770977,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.19,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.94175804811606,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.94175887932145,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.2,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.03691179850215,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.03691283320153,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.21000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.12873407206574,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.12873534471804,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.22,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.21648404686788,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.21648557283991,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.23,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.29933312940487,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.2993349478122,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.24000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.37634460660705,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.37634675842786,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.44645004100242,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 87.44645257376077,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.26,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.50842147260049,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.50842445148895,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.27,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.5608384030413,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.56084189555416,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.28,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.60204821904266,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.60205231691519,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.29000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.63011854593718,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.63012335068355,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.30000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.64277974781656,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.64278538144002,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.63735537123942,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.63736200137804,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.32,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.61067815856153,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.61068595657865,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.33,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.55898881643155,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.55899800537894,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.33999999999999997,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.47781479763874,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.47782564620296,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.35,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.361826424348,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.36183925802628,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.36,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.2046686656315,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.20468385974685,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.37,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.99876879374573,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.99878679486724,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.38,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.73512421627605,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.7351455380282,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.40308162602672,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.40310685793665,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.4,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.99013004670927,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.99015981322876,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.41000000000000003,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.4817479791593,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.4817829280232,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.42000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.86136931912118,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.86141004032234,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.43000000000000005,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.11056358679274,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.11061051479314,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.44000000000000006,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 83.20955645744765,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 83.20960971331917,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.45000000000000007,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.1382327157546,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.13829192138027,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.45999999999999996,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.87773785539979,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.8778019341707,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.47,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 79.41269337791094,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 79.41276042061578,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.48,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 77.73384161978105,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 77.73390888507181,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.49,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 75.84066572072992,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 75.84072982604295,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999999454,
+          "heat": 73.7433023460941,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 73.74335976215667,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.51,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 71.46305594398274,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 71.46310352525308,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.52,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 69.03115621619462,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 69.03119170750095,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.53,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 66.48598651579157,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 66.48600879209623,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.54,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 63.86953295805038,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 63.86954199420766,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 61.223947057877496,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 61.22394366926031,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.56,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.588837775778494,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.58882334074425,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5700000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 55.99946731552872,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 55.99944352722186,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.58,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 53.485712361432554,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 53.48568107458198,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.59,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 51.07157259518618,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 51.07153568035329,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.6,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0004999999999999449,
+          "heat": 48.8309012790242,
+          "status": "available"
+        },
+        {
+          "width": 0.00024999999999997247,
+          "heat": 48.802946410051895,
+          "status": "available"
+        },
+        {
+          "width": 0.00012500000000004174,
+          "heat": 48.78897915658844,
+          "status": "available"
+        },
+        {
+          "width": 6.249999999996536e-05,
+          "heat": 48.781998030015735,
+          "status": "available"
+        },
+        {
+          "width": 3.125000000003819e-05,
+          "heat": 48.77850813257781,
+          "status": "available"
+        },
+        {
+          "width": 1.5624999999963585e-05,
+          "heat": 48.77676334227808,
+          "status": "available"
+        },
+        {
+          "width": 7.812500000037303e-06,
+          "heat": 48.77589096556598,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.047,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.60439357427025,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 85.60438808598632,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.09,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.94091126634815,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 85.94090996389353,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.159,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.63257426614949,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.63257461679244,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.203,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.06484048939386,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.06484159161413,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.242,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.39095498328173,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.39095721100533,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.282,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.60878081233317,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.60878504059086,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.333,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.53795702927822,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.53796668900917,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.378,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.79295853558072,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.79297915465,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.423,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.65070291548112,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.65074546254019,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.464,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.31695122025052,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.31701676259475,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.504,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 72.85159923406894,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 72.85165304868127,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.545,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 62.547820978243834,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 62.54782365439925,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.583,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 52.75007595112903,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 52.75004278021289,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.043,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.58404520605767,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 85.58403867562377,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.092,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.95959621886799,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 85.95959498998785,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.137,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.40718341837713,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.40718330149615,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.181,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.85382703538129,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 86.85382769336069,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.225,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.25857695271337,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 87.25857862443739,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.276,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.58702593376005,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.5870297764502,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.326,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.5829347077299,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.58294330808143,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.375,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.87478916705662,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.87480876399937,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.424,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.57778375302517,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.57782692081074,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.472,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 79.09418525253498,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 79.09425258441543,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.518,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 69.52790120095555,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 69.5279392422231,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.57,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 55.99946731552872,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 55.99944352722186,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.594,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 50.13804398887186,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 50.13800533479406,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.1,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.91628360250499,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 88.91628262228798,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.11,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.99619572903495,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 88.99619509852957,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.12000000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.07814395721536,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.07814365546685,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.13,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.16118283863645,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.16118279393297,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.14,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.2444760204805,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.2444761853246,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.15000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.32725103353616,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.32725142236333,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.16,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.40876580928918,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.40876643187832,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.17,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.48828200963791,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.48828287437092,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.18,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.56504248516168,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.56504359296989,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.19,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.63825079580303,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.63825216903817,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.2,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.70705136019271,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.70705302446615,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.21000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.77050911556464,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.77051110486966,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.22,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.82758775647264,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.82759010806214,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.23,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.8771255720919,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.87712833951693,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.24000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.91780803180765,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 89.91781126070302,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.94813608672004,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 89.94813985674048,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.26,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.96638905317988,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.9663934383656,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.27,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.97058083457406,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.97058593967213,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.28,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.95840803175699,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.95841397085442,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.29000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.92718814514112,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.92719506492122,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.30000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.87378616552334,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.87379422989889,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.79452729006763,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.794536697876,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.32,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.68509370708372,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.6851047037284,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.33,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.540403385791,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.54041624834039,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.33999999999999997,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.35446931249928,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.35448437203863,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.35,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.12023879508953,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.12025644556829,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.36,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.82941471613478,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 88.8294353999311,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.37,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.47226442783605,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 88.47228865624604,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.38,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.03742848816793,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 88.037456831161,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.51175138508435,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.51178443451599,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.4,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.8801706672227,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.88020901960502,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.41000000000000003,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.12572065522428,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.12576485444966,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.42000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.22973064394202,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.22978107744059,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.43000000000000005,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.17232150552329,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.17237828039715,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.44000000000000006,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.93332014154177,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.93338291925518,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.45000000000000007,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 81.49370127977338,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 81.49376907219302,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.45999999999999996,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 79.83760879482608,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 79.83767983895831,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.47,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 77.95488236393314,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 77.95495401249349,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.48,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 75.84381718901452,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 75.8438859872619,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.49,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 73.51365482914727,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 73.5137168385185,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.5,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999999454,
+          "heat": 70.98613705549627,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 70.98618831598206,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.51,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 68.29547885778337,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 68.2955160403715,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.52,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 65.48641320290923,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 65.48643415906415,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.53,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 62.610477287516986,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 62.610481367641185,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.54,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.7212459288619,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.72123402935336,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 56.869521064412254,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 56.869495309152114,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.56,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 54.099421101350394,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 54.09938439094281,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.5700000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 51.44594382514036,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 51.44589930978394,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.58,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 48.934104151285716,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 48.934054843343326,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.59,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 46.579374236713335,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 46.57932270710094,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 373.15,
+      "loading": 0.6,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0004999999999999449,
+          "heat": 44.4416619494622,
+          "status": "available"
+        },
+        {
+          "width": 0.00024999999999997247,
+          "heat": 44.41526576243987,
+          "status": "available"
+        },
+        {
+          "width": 0.00012500000000004174,
+          "heat": 44.40208057220961,
+          "status": "available"
+        },
+        {
+          "width": 6.249999999996536e-05,
+          "heat": 44.39549119716004,
+          "status": "available"
+        },
+        {
+          "width": 3.125000000003819e-05,
+          "heat": 44.39219739156216,
+          "status": "available"
+        },
+        {
+          "width": 1.5624999999963585e-05,
+          "heat": 44.390550561477546,
+          "status": "available"
+        },
+        {
+          "width": 7.812500000037303e-06,
+          "heat": 44.389727269227556,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.1,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.90625479649997,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.90625404957926,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.11,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.95827471250912,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.95827442612743,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.12000000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.01122326236462,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.01122337877995,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.13,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.06380282035342,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.06380330790078,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.14,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.1148245015206,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.11482534483319,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.15000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.16315055098629,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.16315174307918,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.16,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.20765014989546,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.20765170380717,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.17,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.24716296298674,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.24716489780938,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.18,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.28046674439928,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.28046908807254,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.19,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.30624656351527,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.30624936167395,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.2,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.3230637765514,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.32306707296765,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.21000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.32932331757864,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.32932716906315,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.22,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.3232379585529,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.32324244380241,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.23,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.30278839655465,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.30279359519726,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.24000000000000002,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.26567791886872,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.26568393986916,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.25,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.2092804724375,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999727,
+          "heat": 92.2092874294439,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.26,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.13058088459319,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 92.13058893034247,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.27,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.02610608255735,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 92.02611537488183,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.28,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.8918461219432,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 91.891856858749,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.29000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.72316427035501,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 91.72317668074747,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.30000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.51469582757225,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 91.51471017790958,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.26023630956432,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 91.2602528941445,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.32,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 90.95262124082318,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 90.95264039864757,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.33,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 90.58360231453797,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 90.58362442092964,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.33999999999999997,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 90.14372838307416,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 90.14375384921196,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.35,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.6222452802608,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.6222745359501,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.36,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 89.0070358502703,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 89.00706931600324,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.37,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.28463121708727,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 88.28466928401927,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.38,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 87.44033571956923,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 87.4403786819983,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.45851932158938,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.45856732154212,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.4,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 85.32313980506977,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 85.3231927186803,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.41000000000000003,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.01855631703755,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.01861367398791,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.42000000000000004,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 82.53067803867405,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 82.53073890065676,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.43000000000000005,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 80.84844718100747,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 80.84851005138712,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.44000000000000006,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 78.96557824937871,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 78.96564106853545,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.45000000000000007,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 76.88236960228777,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 76.8824298048935,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.45999999999999996,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 74.6072913284438,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 74.60734602646716,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.47,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 72.15797807714215,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 72.15802435228392,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.48,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 69.56127038058138,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 69.56130568055197,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.49,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 66.85208792072034,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 66.85211041500524,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.5,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999999454,
+          "heat": 64.07116970813804,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 64.07117851754353,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.51,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 61.26200260338973,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 61.26199793373834,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.52,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.46747115091991,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.46745415987086,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.53,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 55.72681162669865,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 55.72678419319523,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.54,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 53.07332934323279,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 53.07329374854965,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 50.53310474870278,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 50.533063374697406,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.56,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 48.12466935092106,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 48.124624432301964,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.5700000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 45.85945628933108,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 45.85940975067636,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.58,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 43.742752639813695,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 43.74270602805016,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.59,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 41.77488804771949,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 41.77484253072564,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.6,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0004999999999999449,
+          "heat": 39.996241090124414,
+          "status": "available"
+        },
+        {
+          "width": 0.00024999999999997247,
+          "heat": 39.974302922612,
+          "status": "available"
+        },
+        {
+          "width": 0.00012500000000004174,
+          "heat": 39.9633447444521,
+          "status": "available"
+        },
+        {
+          "width": 6.249999999996536e-05,
+          "heat": 39.95786838183092,
+          "status": "available"
+        },
+        {
+          "width": 3.125000000003819e-05,
+          "heat": 39.9551309483485,
+          "status": "available"
+        },
+        {
+          "width": 1.5624999999963585e-05,
+          "heat": 39.95376235272689,
+          "status": "available"
+        },
+        {
+          "width": 7.812500000037303e-06,
+          "heat": 39.95307805854612,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.051,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.72876193719229,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.72875564750528,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.105,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.93206131709984,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.93206082955247,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.152,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.17239307817316,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.17239434104657,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.228,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.30813329639157,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.30813834369427,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.271,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.01409169957286,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 92.01410112554213,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.339,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 90.19120017318299,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 90.19122528588387,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.39,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 86.45851932158938,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 86.45856732154212,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.439,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 79.16294484278431,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 79.1630077792877,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.489,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 67.12693898212409,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 67.1269628091316,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.514,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 60.140125916578164,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 60.14011613024055,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.036,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.74549975916987,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.74548703078425,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.078,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.8028752018722,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 91.80287302024907,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.121,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.01651807055121,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.01651822794473,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.163,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.2200817458356,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.22008341104036,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.211,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.32930166246614,
+          "status": "available"
+        },
+        {
+          "width": 0.0005000000000000004,
+          "heat": 92.32930557355529,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.261,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 92.12135497173539,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 92.12136312691507,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.31,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 91.26023630956432,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 91.2602528941445,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.365,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 88.66012512212863,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 88.66016084259347,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.41,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 84.01855631703755,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 84.01861367398791,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 393.15,
+      "loading": 0.445,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0010000000000000009,
+          "heat": 77.94869402302673,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 77.9487558829211,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 60.552885241048585,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 60.55283085600118,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.55,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 61.223947057877496,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 61.22394366926031,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.555,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.62782991648285,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.62777873006283,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.555,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.90276172422309,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.90275261449133,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5575000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.180828914685236,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.180779783694135,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5575000000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.244618202005164,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.24460637653677,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5587500000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.96103919594176,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.96099118859134,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5587500000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.916399472304214,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.91638632575475,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5581250000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.070630474189294,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.070581897800785,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5581250000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.08043079628103,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.08041830910795,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5581250000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.070630474189294,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.070581897800785,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5581250000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 59.08043079628103,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 59.08041830910795,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 313.15,
+      "loading": 0.5587500000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.96103919594176,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.96099118859134,
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "T_K": 353.15,
+      "loading": 0.5587500000000001,
+      "passed": true,
+      "ladder": [
+        {
+          "width": 0.0009999999999998899,
+          "heat": 58.916399472304214,
+          "status": "available"
+        },
+        {
+          "width": 0.0004999999999999449,
+          "heat": 58.91638632575475,
+          "status": "available"
+        }
+      ]
+    }
+  ],
+  "nmr_passed": true,
+  "differential_passed": true
+}
