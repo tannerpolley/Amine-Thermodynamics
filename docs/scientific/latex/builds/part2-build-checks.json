@@ -1,16 +1,15 @@
 {
-  "scope": "Apply the three science-review defects and story fixes R1\u2013R16 to PR 336 at 94fa22d; optional O1\u2013O8 excluded.",
-  "source_baseline": "94fa22d51a3302703893e1070ebf3565dc53ef7a",
+  "scope": "Replace the two pointer-only sentences from the PR 336 science re-check; verify units and rebuild Part II only.",
+  "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
   "commands": [
-    "agent-heavy bash /tmp/336-build.sh: regenerate tables and figures using uv, then pdflatex/BibTeX convergence passes",
-    "agent-heavy bash /tmp/336-final-qa.sh: Part II PDF builds, exact displayed-value and numerical-cell checks, per-document freshness receipts, prose check, article visual QA"
+    "agent-heavy bash /tmp/336-final-qa.sh: Part II pdflatex/BibTeX passes, numerical-value checks, per-document freshness receipts, scoped prose check, article visual QA."
   ],
   "outputs": [
     {
       "path": "docs/scientific/latex/builds/part2.pdf",
       "pages": 28,
       "pages_before": 28,
-      "sha256": "43bfdc2c837808cf4fc62467af3424a522409458a9a721351beb853349a3f99c",
+      "sha256": "4a2ebaca4ced1560b683e5fd80e1b40cbe9db749c6be5a30b92c668e9afe08e0",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
@@ -26,20 +25,20 @@
         "tight_text_graphic_clearance"
       ],
       "new_layout_warning_categories": [],
-      "visual_disposition": "Color and grayscale renderings and contact sheets checked for flow, with enlarged page inspection of equations and tables. Conservative geometry warnings remain; independent acceptance remains with the parent."
+      "visual_disposition": "Text comparison of all 42 pages identifies changes only on main p.8 and supplement p.9; both changed pages visually inspected with no overlap or clipping. Existing conservative geometry warnings remain."
     },
     {
       "path": "docs/scientific/latex/builds/part2_supplement.pdf",
       "pages": 14,
-      "pages_before": 17,
-      "sha256": "4f5c6cb4167ebebc8bbd7e97e5a56b3749fd9f086dab62644d1450eeadf0b4c4",
+      "pages_before": 14,
+      "sha256": "70e7e03910dd64753f0a6a20303eb1b24c646c3d7b0366b32ae7d201b2b56e32",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 35,
+        "tight_text_clearance": 36,
         "text_graphic_overlap": 2
       },
       "baseline_visual_warning_categories": [
@@ -47,7 +46,7 @@
         "tight_text_clearance"
       ],
       "new_layout_warning_categories": [],
-      "visual_disposition": "Color and grayscale renderings and contact sheets checked for flow, with enlarged page inspection of equations and tables. Conservative geometry warnings remain; independent acceptance remains with the parent."
+      "visual_disposition": "Text comparison of all 42 pages identifies changes only on main p.8 and supplement p.9; both changed pages visually inspected with no overlap or clipping. Existing conservative geometry warnings remain."
     }
   ],
   "manuscript_input_sha256": {
@@ -65,10 +64,10 @@
     "docs/scientific/latex/sections/part2/endmatter.tex": "2c98ccfd258668686465f59b37608c7988b1852ce03b2f8530597e4e2aff5e9e",
     "docs/scientific/latex/sections/part2/introduction.tex": "183126d4bf8d087018e5f3f32afb4f3e2b4b1f789b826ae99a3971472a598643",
     "docs/scientific/latex/sections/part2/methods.tex": "4cb8a44be3e3d9294e9c92bb4ef6d00dda769b46f51b87e78c107cc33d75dfd1",
-    "docs/scientific/latex/sections/part2/model.tex": "7d194bcf2eac8665f6be926d881de4b66af1ed0b8676cc954d2b84f5aa47b668",
+    "docs/scientific/latex/sections/part2/model.tex": "9a90eb59950059b64065f693d7a2e0eafc950da0a36995a61eebeed4920f31be",
     "docs/scientific/latex/sections/part2/pz-reaction-directions.tex": "d833ffb506ff58041cf32ac75796eddd376fa33d139002f5c03a55de62e7b946",
     "docs/scientific/latex/sections/part2/results.tex": "b6812205ba541c4de3eaf6e928bfdefb421946f1757300d746d2ee96d4e0106b",
-    "docs/scientific/latex/sections/part2/supplement.tex": "640b6c59a898bb21d456ec71b782a7f1f63255ffd98dd16e71afc57ea66d62cf",
+    "docs/scientific/latex/sections/part2/supplement.tex": "fa6aba1600a0097f33189c7eb67cabd55655c56be8423b182478b24d584c2686",
     "docs/scientific/latex/styles/cas-common.sty": "99223246fe1f0c85e957b7d5edf8e581a1bef3216e1772cc130579e9c2ed292d",
     "docs/scientific/latex/styles/cas-sc.cls": "d135f82db43b004a0fb6f4505e97b11bb675078668d33c8f170beb398ef43d45",
     "docs/scientific/latex/styles/model1-num-names.bst": "b87650629c103f61e031bd6216e8de34c953c34cbe9d8914dd5b41fb24a3384c",
@@ -108,29 +107,12 @@
     "docs/scientific/latex/tables/part2/unfitted.tex": "06f68c45aab891b66623e718bdee2c455743e0fb230a8cfd0a36ce9bc4b00b87"
   },
   "numeric_preservation": {
-    "baseline": "94fa22d",
-    "numerical_table_cells_identical": true,
-    "original_displayed_values_identical": 548,
+    "baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+    "all_Part_II_tables_and_displayed_values_byte_identical": true,
     "displayed_values_rows": 550,
-    "added_retained_PZ_binary_deviations": [
-      {
-        "display": "7.78290",
-        "source_file": "analyses/pz_transfer/results/binary-summary.json",
-        "field": "[\"P_source_units\", \"rms\"]",
-        "retained_value": "7.782900034629231"
-      },
-      {
-        "display": "12.75239",
-        "source_file": "analyses/pz_transfer/results/binary-summary.json",
-        "field": "[\"y_source_units\", \"rms\"]",
-        "retained_value": "12.752394951649443"
-      }
-    ],
-    "abstract_byte_identical": true,
-    "conclusions_byte_identical": true,
     "protected_inputs_unchanged": true,
     "Part_I_not_rebuilt": true,
-    "shared_bibliography_change": "Bower title only"
+    "model_calculations": false
   },
   "displayed_values_sha256": "56b96f45d55c4a32ccb8abd5b5b4f2f59f6e836c323e3cf38c895ff7cdb20a21",
   "self_contained_audit": {
@@ -343,7 +325,31 @@
           "text": "The earlier bicarbonate--water interaction is 0.72705584775, compared with one in Part I."
         }
       ],
-      "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition."
+      "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition.",
+      "pointer_only_recheck": {
+        "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+        "strict_pointer_only_at_baseline": 2,
+        "prior_strict_pointer_only_after_was_incorrect": true,
+        "corrected_sentences": [
+          {
+            "file": "model.tex",
+            "baseline_lines": [
+              252,
+              253
+            ],
+            "correction": "Combine the interval definition and its table reference in one substantive sentence."
+          },
+          {
+            "file": "supplement.tex",
+            "baseline_lines": [
+              219
+            ],
+            "correction": "State the units of every parameter type in the four following uncertainty tables directly."
+          }
+        ],
+        "strict_pointer_only_after": 0,
+        "units_check": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+      }
     },
     "model_equations": {
       "before": 1,
@@ -395,8 +401,8 @@
   "reading_shelf": "Ignored literature reading copies and index rows retained in the worktree and reconciled into the canonical main-checkout literature shelf. Copyrighted source copies are not committed.",
   "prose_check": "Passed installed plugin-wide and scoped rules for all Part II manuscript sources and the updated numerical-source index.",
   "freshness": "Per-document receipts include actual recorder inputs plus BibTeX databases/style. Both current PDF and input hashes pass. Part I default remains available; its PDF was not rebuilt.",
-  "unchanged": "Part I sources and PDFs unchanged except the shared Bower bibliography title; analyses/_cse-manuscript.json, abstract and conclusions unchanged. All original 548 displayed values and numerical table cells identical. Two existing PZ binary deviations added. No model calculations.",
-  "remaining_review": "Independent scientific and prose acceptance by the parent; implementor page inspection and automated checks do not substitute for it.",
+  "unchanged": "All Part II tables, displayed-values data, retained analysis files, analyses/_cse-manuscript.json and Part I files are byte-identical to 46d46c4. Only two scientific prose sentences changed; no model calculations.",
+  "remaining_review": "Parent acceptance of this correction; no new independent science review performed.",
   "required_fixes": {
     "Astra 1": "applied",
     "Astra 2": "applied",
@@ -439,5 +445,18 @@
     "limits": "descriptive calibration deviations; unknown total titration uncertainty; binary parameters unchanged in reactive refit",
     "new_calculation": false
   },
-  "bibliography": "Only the authorized Bower title encoding corrected; no Part I build."
+  "bibliography": "No bibliography changes or refresh.",
+  "pointer_only_fix": {
+    "sentences_verbatim": true,
+    "units_list_extended": false,
+    "units_sources": [
+      "tables/part2/{mdea,amp,pz,dea}-uncertainty.tex",
+      "analyses/solvent_specification_mdea/inputs/B1-coordinates.json",
+      "analyses/amp_transfer/inputs/redesign/refit-306-floor-coordinates.json",
+      "analyses/pz_transfer/reactive.py: laws_at and chart12",
+      "analyses/dea_transfer/inputs/runs/B-2-coordinates.json",
+      "sections/part2/model.tex: temperature interaction laws"
+    ],
+    "units_findings": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+  }
 }
