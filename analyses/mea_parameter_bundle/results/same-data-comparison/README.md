@@ -380,7 +380,7 @@ These are numerical predictions against measurements and a bounded numerical
 stability assessment, not physical validation, a propagated uncertainty analysis,
 a parameter adoption, or permission for manuscript use. The result informs
 #339's comparison and the later owner adoption checkpoint; it chooses no record.
-Independent delivered review of this continuation is pending.
+Independent delivered review returned **Supported** for commit `a5204b9bba625f744e263887dd54841c565cea5d`, with no required corrections. `part1-scoring-review.md` retains the review, including its independent recomputation of all 21 score groups and producer-duplication check. Manuscript promotion still requires the owner’s confirmation.
 
 ### Reproduction, implementation and review
 
