@@ -11,6 +11,8 @@ execute:
 - Prediction: 21.9 % on the unfitted Ermatchkov 2006 campaign (11.2 % at 313–353 K, 48.5 % at 393 K). 11 of 52 rows fall within the source's stated uncertainty.
 - Phases: at least four false liquid splits remain at 5 mol/kg calibration states. A penalty fit did not remove them.
 
+- Secondary comparison (#327): on 94 Kamps 2003 total pressures, the mean absolute relative error is 42.5 % and the signed bias −40.3 %. The underprediction grows above 1 mol CO₂/mol PZ. The model finds a second liquid at 36 of these measured liquid states. See [Kamps 2003](#kamps-2003-high-loading-comparison-and-design-check-states-327).
+
 Nothing is adopted. See [stages 4–5](#stages-45-reactive-calibration-and-ermatchkov-2006-hold-out).
 
 The preceding stages remain historical input qualifications. The PZ–water binary calibration converges reproducibly to two identifiable, interior interaction coordinates, but **does not reproduce Hartono vapor/liquid equilibrium or the separate aqueous-density observations on their stated scales**. All 23 calibration states pass the declared fluid-phase trials. The 393.15 K, 0.1 MPa Concepción comparison is a metastable-liquid density on this model. The owner decision of 11 November 2026 accepts the [stage-2 endpoint](#stage-2-two-start-calibration-and-independent-aqueous-comparisons) as the conditional working PZ–water set for stage 3, carrying these misfits and phase limitations. It is not a validated set. Stage 3 below retains protonation laws and a conditional NMR-offset diagnostic. The orchestrator accepted these as conditional working starts for a separately dispatched stage 4, carrying the fixed-variant-A NMR misfit and inherited limits.
@@ -110,7 +112,7 @@ Independent delivered cse:review returned **Supported**, with no required correc
 
 The design specifies $k(T)=k_0+k_1(T-353.15\,\mathrm K)$, with initial values zero, coordinate scales 0.05 and 0.001 K$^{-1}$ and bounds ±0.5 and ±0.005 K$^{-1}$. The pinned Engine native polynomial temperature-law declaration represents this law directly, without substituting the reciprocal-temperature coordinate used in earlier AMP work. The fit attempts 23 Hartono Table 6 rows as paired total pressure and vapor mole fraction observations. The designated 79.97 °C, $x=0.0472$ row is retained separately and excluded before the fit.
 
-The original [zero-start fit attempt](results/binary-fit.json) stopped at its initial evaluation, before any optimization iteration. The first source row, $T=333.15$ K, $x_{PZ}=0.0324$, has liquid composition-stability eigenvalue **−0.2700101917**, compared with the Engine rounding band **−3.09011 × 10⁻¹⁴**. Although equation residuals are at most **8.90 × 10⁻¹⁴** and the solver reports SUCCESS, it returns no physical pressure or density endpoint because of local phase instability. A success flag is therefore not a usable bubble calculation.
+The original [zero-start fit attempt](results/binary-fit.json) stopped at its initial evaluation, before any optimization iteration. The first source row, $T=333.15$ K, $x_{PZ}=0.0324$, has liquid composition-stability eigenvalue **−0.2700101917**, compared with the Engine rounding band **−3.09011 × 10⁻¹⁴**. Although equation residuals are at most **8.90 × 10⁻¹⁴** and the solver reports SUCCESS, it returns no physical pressure or density endpoint because of local phase instability. A SUCCESS return is therefore not a usable bubble calculation.
 
 The [bounded diagnosis](results/binary-phase-diagnosis.csv) evaluates all 23 rows, preserves each message and tests a tighter row tolerance. It also tests negative constant interaction values within the approved coordinate bounds, solely to locate the initialization problem:
 
@@ -159,7 +161,7 @@ Refitting under campaign-common pressure shifts of ±0.3 kPa gives $k_0$ from **
 
 ### Fluid-phase checks and separate comparisons
 
-**All 23 calibration states pass the Full native liquid/vapor trial set at the first endpoint:** no resolved dense or gas descent, ambiguity or unresolved trial. The [complete phase record](results/binary-calibration-phases.json) includes every trial, status and numerical quantity. Classification uses the existing solvent-specification driver and its retained `phase_policy` in `analyses/solvent_specification_mdea/B1-declarations.toml` (packing threshold 0.1, ambiguity interval 0.05–0.35); these are existing classifier values, not new fit gates. The comparisons explicitly refuse to proceed if a calibration phase check fails or either fit ends on a bound. These finite fluid trials provide no solid-stability qualification or proof beyond their trial set.
+**All 23 calibration states pass the Full native liquid/vapor trial set at the first endpoint:** no resolved dense or gas descent, ambiguity or unresolved trial. The [complete phase record](results/binary-calibration-phases.json) includes every trial, its outcome and its numerical quantities. Classification uses the existing solvent-specification driver and its retained `phase_policy` in `analyses/solvent_specification_mdea/B1-declarations.toml` (packing threshold 0.1, ambiguity interval 0.05–0.35); these are existing classifier values, not new fit gates. The comparisons explicitly refuse to proceed if a calibration phase check fails or either fit ends on a bound. These finite fluid trials provide no solid-stability qualification or proof beyond their trial set.
 
 The [Hilliard comparison](results/binary-hilliard.csv) is independent of the Hartono calibration. Across all 46 D.2 observations at **305.872–336.561 K**, mean signed PZ partial-pressure error is **−3.55478 Pa** and mean absolute relative error is **78.3271%**. For the 36 observations at or above 2 Pa, the corresponding values are **−4.21538 Pa and 73.7116%**. For the ten observations below 2 Pa, they are **−1.17661 Pa and 94.9428%**; the low-signal limitation remains explicit. The ten rows below 313.15 K have bias **−1.56513 Pa** and mean absolute relative error **90.8445%**. All 46 states pass the declared fluid trials. No uncertainty-normalized Hilliard score is claimed because its source uncertainty is unresolved here.
 
@@ -179,7 +181,7 @@ At the same fitted interaction values, replacing the stage-1b pure energy set by
 
 ### Decision and evidence limits
 
-The result is **conditional calibration with numerical verification and separate comparisons to physical measurements**. It does not establish a transferable or physically validated PZ parameter bundle. Hartono titration accuracy, full input covariance, Hilliard source uncertainty, Friis uncertainty interpretation, pure molten-PZ density and solid stability remain unresolved. No Engine, shared species, data roles or extra coordinates were changed. The owner subsequently selected the endpoint as a conditional working set, as recorded below. No physical-validation or manuscript-use status follows from that selection.
+The result is **conditional calibration with numerical verification and separate comparisons to physical measurements**. It does not establish a transferable or physically validated PZ parameter bundle. Hartono titration accuracy, full input covariance, Hilliard source uncertainty, Friis uncertainty interpretation, pure molten-PZ density and solid stability remain unresolved. No Engine, shared species, data roles or extra coordinates were changed. The owner subsequently selected the endpoint as a conditional working set, as recorded below. Neither physical validation nor manuscript use follows from that selection.
 
 The original zero-start diagnosis received independent cse:review **Supported** at `560c464` against `7b8cf21`. Independent cse:review returned **Supported for the conditional numerical calibration and negative property comparisons**, with no required defects, at scientific commit `f196746bd0cbe6a05856396ff7fb0b43778b5d94` against `7b8cf21`. The reviewer reproduced the complete calibration, endpoint files, calculated CSVs, derivatives, phase records, summaries and tables exactly, and checked the source identities, rendered notebook and figure. This verdict does not approve endpoint adoption, later reactive stages or manuscript use. The owner continuation decision is recorded below; the independent review establishes support for the reported evidence, while the owner supplies the authority for conditional use. The two coordinates are identifiable and interior to their bounds, and all calibration fluid trials pass; those facts do not remove the property disagreement. No new percentage acceptance criterion is proposed.
 
@@ -365,7 +367,7 @@ Frozen A also fitted three Born diameters (all at 8 Å) and a separate dicarbama
 **Calibration.**
 - The refit removes most of the frozen fit's concentration drift in the Hilliard bias: from +29 % at 0.9 mol/kg and −43 % at 5.0 mol/kg to +10 % and −6 %. The 2 mol/kg cohort stays about −13 %.
 - The 19.2 % mean absolute relative error compares with 18.0 % for Yi 2024 e-NRTL fitted to the same 62 points.
-- For context only: this manuscript's MEA set misses its excluded 15 and 45 wt % pressures by 29.5 and 56.0 %. Those are concentration-transfer errors, not fitted errors.
+- For comparison only: this manuscript's MEA set misses its excluded 15 and 45 wt % pressures by 29.5 and 56.0 %. Those are concentration-transfer errors, not fitted errors.
 - The pressure RMS is still 12.9 operational 2 % scales, so the misfit is substantial against the source concentration uncertainty.
 - NMR misfits are essentially unchanged (whitened RMS 11.6 at q = 0.02).
 - The Hartono PZ–water binary error (4.9 % total pressure, stage 2) is unchanged by construction: no refit coordinate enters the binary.
@@ -440,7 +442,7 @@ These follow the merged #307 method (`analyses/mea_parameter_bundle/scripts/unce
   - the stage-2 binary property misfit remains;
   - there is no solid-phase model.
 - **Pressure path.** The pressure calculation omits the source's nitrogen dilution.
-- **Design check states.** The design's check states (1.5 times bubble pressure; T + 0.5 K) were not run.
+- **Design check states.** Run after this record under #327; see [Kamps 2003 and design check states](#kamps-2003-high-loading-comparison-and-design-check-states-327).
 - **Status.** Nothing is adopted, and this notebook is not promoted for manuscript use. The independent delivered review (first pass: Not supported, for the phase claim of the penalty endpoint) is being repeated on this revision.
 
 ### Reproduction
@@ -463,6 +465,117 @@ agent-heavy quarto render notebook.qmd --to html
 ```
 
 The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.json` is not to be edited.
+
+## Kamps 2003 high-loading comparison and design check states (#327)
+
+**Result (12 November 2026).** On the frozen 12-coordinate refit, the Kamps 2003 total pressures have a mean absolute relative error (AARD) of 42.5 % and a signed bias of −40.3 % over 94 rows; 88 rows are underpredicted. The underprediction grows with loading above about 1 mol CO₂/mol PZ and reaches −89 % at 334 K, 4 mol/kg. At 36 of these source-liquid states, the model's own phase search finds a second liquid. Only the two unloaded 395 K rows (water and PZ volatility) agree within ±4 kPa. Seven rows lie within ±10 kPa: the two unloaded rows and the loaded rows 1, 9, 23, 36 and 69, which are all below 0.2 MPa. This is a fixed-parameter prediction against one unfitted campaign. It is not validation, and nothing is fitted, selected or adopted.
+
+### Data and basis
+
+- **Source.** Pérez-Salado Kamps, Xia & Maurer 2003, Table 3 p.2666 (Zotero `H7EYIXSK`/`VSVC3FEB`): total pressure at the bubble point of a known overall composition, measured by a synthetic method with no phase sampled (p.2664).
+  - The 95 rows were transcribed to [kamps2003-table3.csv](inputs/kamps2003-table3.csv) and checked against the rendered page.
+  - Temperatures are the corrected values of Ermatchkov 2006 Table 6, p.1794 (`R3UZX4UN`), 0.6–1.8 K above the printed ones.
+  - All 95 (m̄_CO₂, p) pairs were matched against the reprint. The one difference, 5.063 versus 5.062 MPa, is kept in both columns. See [provenance](inputs/kamps2003-provenance.json).
+- **Excluded row.** The precipitation row (313.75 K, 1.995 mol/kg, 1.69 mol/mol, 4.446 MPa) is excluded.
+- **Scored once.** All 94 remaining rows are scored once on the record endpoint, using the stage-5 hold-out's pressure problem. The bubble pressure equals the model's total pressure, with vapour of water, CO₂, PZ and HPZCOO.
+- **Uncertainty (p.2664, p.2667).**
+  - Pressure: ±0.1 % of the transducer's maximum reading, which is ±4 kPa or ±10 kPa. The paper does not say which transducer measured each row, so both bounds are counted. Rows above 4 MPa must be ±10 kPa.
+  - Below 0.1 MPa, the uncertainty "can reach up to 10 %".
+  - Solvent mass: up to ±0.7 % relative. The solvent is the prepared PZ solution, whose PZ molality is known to ±0.1 %. At fixed charged CO₂, a solvent-mass error therefore changes the CO₂ molality and the loading by 1/(1 ± 0.007). Each row is re-solved at both shifted loadings, and the pressure change is reported as a sensitivity.
+  - The charged CO₂ mass uncertainty (±0.008 g of up to about 5 g) is not propagated, because the paper does not print each row's charged mass.
+- **Groups.** These follow the design.
+  - Unloaded rows (2).
+  - Loaded rows below 0.2 MPa (10).
+  - The 374–395 K blocks at 0.2 MPa and above (35).
+  - The rest: 313–354 K at 0.2 MPa and above (47).
+- **Law ranges.** Each row is labelled inside or outside the measured temperature range of each PZ law, and of the shared CO₂ first-dissociation law R2.
+  - Carbamate laws: Ermatchkov 2003 NMR tables, 283.15–333.15 K.
+  - Protonation laws: Hamborg Table 16 runs, 293.14–353.42 K.
+  - Shared R2: 293.15–393.15 K. Its 19 rows at 395.0 K are evaluated 1.85 K above that interval.
+  - Only the 313.75 K block lies inside both PZ laws. The 334.05 K blocks are 0.9 K above the carbamate range.
+
+### Errors by group, temperature and law range
+
+{{< include results/kamps2003-tables.md >}}
+
+![Kamps 2003 total-pressure errors against loading, by corrected temperature, on the 12-coordinate refit. Points are discrete comparisons at source states; hollow points are states where the model's phase search finds a second liquid. The dotted line marks 1 mol CO₂/mol PZ.](figures/kamps2003.png)
+
+[Per-row values](results/kamps2003-A12.csv) keep the observed and calculated pressures, signed differences, both bounds, the two solvent-mass sensitivities, the three law labels, the model liquid's speciation and the phase outcome. [The record](results/kamps2003-A12.json) holds every phase trial.
+
+**What the errors show.**
+
+- **Unloaded rows.** At 395.0 K and 2.035 / 3.950 mol/kg the model gives 0.2002 / 0.1897 MPa against 0.2021 / 0.1876 MPa (−0.9 % and +1.1 %, differences −1.9 and +2.1 kPa). Both lie within ±4 kPa.
+  - These rows test the PZ–water binary and water volatility, not CO₂ chemistry.
+- **Below 0.2 MPa.** AARD is 20.4 % with a signed bias of −6.0 %, and the signs are mixed.
+  - Five rows lie within the ±10 kPa full-scale bound, but that bound is loose at these pressures.
+  - The four rows below 0.1 MPa carry the source's "up to 10 %" scale. Their errors are −32.6 % (row 1), −21.3 % (row 9), −6.7 % (row 23) and +56.6 % (row 56), so only row 23 lies within 10 %.
+- **Loaded rows at 0.2 MPa and above.** All 82 lie outside both pressure bounds.
+  - The 374–395 K blocks give 37.1 % AARD (bias −35.2 %). The 313–354 K rest gives 53.0 % (bias −53.0 %).
+  - The underprediction grows steadily with loading, and more steeply at 4 mol/kg.
+  - Above 1 mol/mol, the source describes the liquid as PIPH₃HCO₃ with physically dissolved CO₂ and zwitterion. Its own model calculation at 353 K and about 4 mol/kg has the doubly protonated cation present "only in very small amounts" (p.2666).
+  - This model's liquid differs. At the 36 states where it splits, PZH₂²⁺ holds 2.1–28.8 % of the PZ, against 0.05–8.1 % at the other loaded rows. For example, row 7 (313.75 K, 1.557 mol/mol) has 28.8 % PZH₂²⁺, 56 % of the CO₂ as bicarbonate and 17.5 % as molecular CO₂ (per-row columns in the CSV).
+  - In 35 of the 36 splits, the deepest split phase is mostly water, bicarbonate (0.28–0.37 mole fraction) and PZH₂²⁺ (0.10–0.18), in that order. The exception is row 71 (354.35 K, the shallowest split): water 0.56, bicarbonate 0.25, PZH⁺ 0.10 and PZH₂²⁺ 0.07.
+  - The candidate causes are therefore: CO₂ physical solubility at MPa pressure; the PZH⁺–bicarbonate and zwitterion interactions; the second protonation (the P2 law and the PZH₂²⁺ parameters, tied to PZH⁺); and the shared MEA CO₂–water record. This comparison cannot separate them.
+  - The block inside both law ranges (313.75 K) still shows −32.1 % bias, so leaving the law ranges is not the only cause.
+- **Input sensitivity.** The ±0.7 % solvent-mass bound moves the calculated pressure by up to −10.8 % / +11.7 % (row 2).
+  - Over all 94 rows, the median ratio of this sensitivity to the misfit is 0.07, with a maximum of 0.88 (row 2).
+  - Five rows exceed 6.9 %, all at 0.96–1.05 mol/mol: row 2 (−10.8 / +11.7 % against −13.3 %), row 3 (9.1 % against −12.1 %), row 11 (8.0 % against −19.9 %), row 17 (8.7 % against −27.5 %) and row 57 (8.0 % against −40.6 %). Near 1 mol/mol at low pressure, the stated composition uncertainty is comparable to the misfit.
+  - For the 30 rows above 1.2 mol/mol at 0.2 MPa and above, the sensitivity is at most 3.2 % against misfits of at least 34.9 %, so it does not explain the high-loading underprediction.
+- **Comparison with other models of these rows.**
+  - Kamps's own Pitzer model was fitted to these rows and reports 4 % average deviation (p.2667). Ermatchkov 2006 refits the corrected rows above 0.2 MPa to 3.0 % (p.1795).
+  - Yi 2024 e-NRTL rejected this campaign by its screening rule.
+  - On the same endpoint, the primary Ermatchkov 2006 hold-out gives 21.9 %.
+
+### Phase census at the scored states
+
+At each bubble state (liquid with zero vapour), the Engine's Full liquid and vapour trials were run with the existing `phase_policy`:
+
+| Outcome | States | Rows |
+|---|---:|---|
+| No split found (upper bound) | 56 | all 35 loaded 374–395 K rows at 0.2 MPa and above, all 10 loaded rows below 0.2 MPa, and 11 of the 47 rest (rows 11, 12, 17, 25–31, 70) |
+| Resolved dense liquid split | 36 | 3–7, 13–16, 18–22, 32–35, 57–68, 71–76 |
+| Undecided | 2 | unloaded rows 46 and 87 |
+| Gas split, ambiguous | 0 | — |
+
+- **Where the splits are.** All 36 splits are at 313–354 K and 0.96–1.64 mol CO₂/mol PZ. Their minimum tangent-plane distances run from −0.026 to −0.554 RT, deepest at 313.75 K, 1.557 mol/mol. None appears at 374–395 K.
+  - At these states the model predicts two liquids where the source observed one (only the excluded row precipitated). The reported bubble pressure there belongs to a single liquid that is not the stable state on this model. Whether it is metastable or locally unstable was not retained per row.
+  - These splits extend the four false liquid splits the record census found at 5 mol/kg Hilliard states into the high-loading region.
+- **Undecided rows.** At the two unloaded rows, 11 trials end as `negative_plane_without_positive_donor` with no witness, so they are undecided, not passed.
+- **Bound on the counts.** As in stages 4–5, a finite search can miss a split. The no-split count is an upper bound and the split list a lower bound.
+
+### Design check states
+
+The design's check states (["Stability in the objective"](../pz_scoping/design-draft-pz.md)) were evaluated on the record endpoint. They are not part of any fit. Results are in [check-states-A12.json](results/check-states-A12.json).
+
+| Check | States | No split found | Splits found | Undecided |
+|---|---:|---:|---|---:|
+| Each Hilliard D.5 feed as a liquid at 1.5 × its model bubble pressure | 62 | 60 | rows 55, 62 | 0 |
+| Each NMR liquid at T + 0.5 K, 0.1 MPa (1.05 × bubble where that exceeds 0.1 MPa) | 121 | 121 | none | 0 |
+
+- **Hilliard at 1.5 × bubble.** The search finds the row-55 and row-62 splits at the same depth as the record census (−0.0957 and −0.0306 RT). It reports rows 56 and 61 clean.
+  - A direct tangent-plane evaluation at the record split composition, same parent and 1.5 × pressure, gives −0.1107 RT (row 56) and −0.0024 RT (row 61). This uses the [refit_checks](diagnosis-308/refit_checks.py) form. Rows 55 and 62 evaluated the same way agree with the search's own 1.5 × values (−0.0957 and −0.0306 RT) to 2×10⁻⁹ RT ([direct check](results/check-states-A12-direct.json)).
+  - So all four record splits persist under 50 % compression, and the search missed two of them. This repeats the missed-search case already reported on ePC-SAFT #1224.
+  - The compressed liquid does not remove a split. That is expected, because the compression step adds only 5.8–19 kPa to the bubble pressure, and a liquid's fugacities change little over that.
+- **NMR at T + 0.5 K.** All 121 states pass. As in the record census, three 333.65 K rich states sit below their model bubble pressure (134, 110 and 120 kPa) and are evaluated at 1.05 times it.
+  - The cold-corner and NMR liquids therefore show no new split in this 0.5 K neighbourhood, within the search's limits.
+  - At 333.65 K the evaluation crosses the 333.15 K carbamate measurement limit by 0.5 K. To allow it, the evaluation interval in `reactive.laws_at` was widened from 333.3 to 333.7 K; law values are unchanged.
+
+### Kamps Table 4 (MDEA + PZ), recorded only
+
+The 10 rows of Kamps Table 4, p.2667 (353.14 K as printed, 1.975 mol/kg MDEA, 1.966 mol/kg PZ, 0.64–1.14 mol CO₂/mol amine, 0.1807–6.400 MPa) are in [kamps2003-table4.csv](inputs/kamps2003-table4.csv) for later blend work. They are not scored, and no temperature correction has been published for them.
+
+### Limits and reproduction
+
+- **Evidence.** This is comparison-only prediction on a non-adopted endpoint, and it carries every stage-1–5 limit above.
+- **Pressure path.** The total pressure includes model water, PZ and HPZCOO volatility. No vapour composition was measured, so the CO₂ and water contributions cannot be separated against data.
+- **Review.** An independent delivered-result review first returned Not supported, for five wording and sensitivity defects at `e8f72d0`. After the corrections, the re-check returned **Supported** with one range correction, now applied. This section has not been promoted for manuscript use.
+
+```bash
+OMP_NUM_THREADS=1 agent-heavy uv run python kamps.py kamps
+OMP_NUM_THREADS=1 agent-heavy uv run python kamps.py checks
+OMP_NUM_THREADS=1 agent-heavy uv run python kamps.py direct
+uv run python present_kamps.py
+```
 
 ## Stage-4 redesign diagnosis (11 November 2026)
 
