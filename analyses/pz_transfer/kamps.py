@@ -16,12 +16,14 @@ import numpy as np
 from epcsaft import equilibrium as eq
 from binary_evidence import jsonable
 from fit_speciation import declarations
+from speciation import DC, HC, HPC, PC, PH, PH2
 from reactive import AN, CO2, PZ, W, endpoint, laws_at, nmr_phases, phases, pressure_problem, problem, summarize_census
 from run import verify_wheel, write_csv
 from speciation import save
 
 CARBAMATE_LAW_K = (283.15, 333.15)  # Ermatchkov 2003 NMR tabulated temperatures
 PROTONATION_LAW_K = (293.14, 353.42)  # Hamborg 2009 Table 16 run temperatures
+R2_LAW_K = (293.15, 393.15)  # shared CO2 first-dissociation law interval (results/speciation-reactions.json)
 SOLVENT_MASS = 0.007  # Kamps p.2664: solvent mass at most +-0.7 % relative
 
 
@@ -51,11 +53,16 @@ def kamps_row(r):
         state = phases(PAR, prob)
     except Exception as error:
         state = dict(passed=False, exception=type(error).__name__, message=str(error), pressure_Pa=float("nan"), requested_tolerance_met=False)
-    wet = pressure_problem(PAR, row, OFFSETS)
-    feed = dict(wet.feed.values)
-    feed[W] *= 1 + SOLVENT_MASS
-    wet.feed.values = feed
-    wet_sol = eq.solve_equilibrium(MODEL, wet)
+    # The source solvent is the prepared PZ solution (mPZ known to 0.1 %), so a solvent-mass error d at fixed charged CO2
+    # changes the CO2 molality and the loading by 1/(1+d), not the water alone.
+    shifted = {}
+    for d in (SOLVENT_MASS, -SOLVENT_MASS):
+        s = eq.solve_equilibrium(MODEL, pressure_problem(PAR, dict(row, alpha_per_PZ=row["alpha_per_PZ"] / (1 + d)), OFFSETS))
+        shifted[d] = s.pressure if s.requested_tolerance_met else float("nan")
+    liquid = eq.solve_equilibrium(MODEL, prob)
+    x = dict(zip(PAR.component_ids, liquid.mole_fractions[: len(PAR.component_ids)]))
+    pz_total = sum(x[i] for i in (PZ, PH, PH2, PC, HPC, DC))
+    co2_total = x[CO2] + x[HC] + x["carbonate-anion"] + x[PC] + x[HPC] + 2 * x[DC]
     p, obs = state["pressure_Pa"] / 1e6, float(r["p_MPa"])
     u_high = 0.010
     u_low = 0.004 if obs <= 4 else 0.010
@@ -64,8 +71,11 @@ def kamps_row(r):
         mCO2=float(r["mCO2"]), alpha_per_PZ=float(r["alpha_per_PZ"]), group=group(r), observed_MPa=obs, calculated_MPa=p,
         available=bool(state.get("requested_tolerance_met")), relative_error=p / obs - 1, difference_kPa=1000 * (p - obs),
         within_4kPa_bound=abs(p - obs) <= u_low, within_10kPa_bound=abs(p - obs) <= u_high,
-        solvent_plus_0p7pct_relative_change=wet_sol.pressure / state["pressure_Pa"] - 1 if wet_sol.requested_tolerance_met else float("nan"),
-        carbamate_law=law_label(float(r["T_K"]), CARBAMATE_LAW_K), protonation_law=law_label(float(r["T_K"]), PROTONATION_LAW_K),
+        solvent_mass_plus_0p7pct_relative_change=shifted[SOLVENT_MASS] / state["pressure_Pa"] - 1,
+        solvent_mass_minus_0p7pct_relative_change=shifted[-SOLVENT_MASS] / state["pressure_Pa"] - 1,
+        PZH2_share_of_PZ=x[PH2] / pz_total, PZH_share_of_PZ=x[PH] / pz_total, bicarbonate_share_of_CO2=x[HC] / co2_total if co2_total else float("nan"),
+        molecular_CO2_share_of_CO2=x[CO2] / co2_total if co2_total else float("nan"),
+        carbamate_law=law_label(float(r["T_K"]), CARBAMATE_LAW_K), protonation_law=law_label(float(r["T_K"]), PROTONATION_LAW_K), shared_R2_law=law_label(float(r["T_K"]), R2_LAW_K),
         phase_passed=bool(state["passed"]), undecided=bool(state.get("unresolved")), dense=bool(state.get("dense")), gas=bool(state.get("gas")),
         phase_message=state.get("message", ""),
     ), state

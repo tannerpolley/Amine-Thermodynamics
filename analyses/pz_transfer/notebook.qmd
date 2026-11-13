@@ -11,7 +11,7 @@ execute:
 - Prediction: 21.9 % on the unfitted Ermatchkov 2006 campaign (11.2 % at 313–353 K, 48.5 % at 393 K). 11 of 52 rows fall within the source's stated uncertainty.
 - Phases: at least four false liquid splits remain at 5 mol/kg calibration states. A penalty fit did not remove them.
 
-- Secondary comparison (#327): Kamps 2003 total pressures are underpredicted by 42.5 % on average (94 rows, bias −40.3 %), increasingly above 1 mol CO₂/mol PZ. The model finds a second liquid at 36 of these measured liquid states. See [Kamps 2003](#kamps-2003-high-loading-comparison-and-design-check-states-327).
+- Secondary comparison (#327): on 94 Kamps 2003 total pressures, the mean absolute relative error is 42.5 % and the signed bias −40.3 %. The underprediction grows above 1 mol CO₂/mol PZ. The model finds a second liquid at 36 of these measured liquid states. See [Kamps 2003](#kamps-2003-high-loading-comparison-and-design-check-states-327).
 
 Nothing is adopted. See [stages 4–5](#stages-45-reactive-calibration-and-ermatchkov-2006-hold-out).
 
@@ -468,7 +468,7 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
 
 ## Kamps 2003 high-loading comparison and design check states (#327)
 
-**Result (12 November 2026).** On the frozen 12-coordinate refit, the model underpredicts the Kamps 2003 total pressures by 42.5 % on average, with a signed bias of −40.3 % over 94 rows. The underprediction grows with loading above about 1 mol CO₂/mol PZ and reaches −89 % at 334 K, 4 mol/kg. At 36 of these source-liquid states, the model's own phase search finds a second liquid. Only the two unloaded 395 K rows (water and PZ volatility) agree within the source's pressure bound. This is a fixed-parameter prediction against one unfitted campaign. It is not validation, and nothing is fitted, selected or adopted.
+**Result (12 November 2026).** On the frozen 12-coordinate refit, the Kamps 2003 total pressures have a mean absolute relative error (AARD) of 42.5 % and a signed bias of −40.3 % over 94 rows; 88 rows are underpredicted. The underprediction grows with loading above about 1 mol CO₂/mol PZ and reaches −89 % at 334 K, 4 mol/kg. At 36 of these source-liquid states, the model's own phase search finds a second liquid. Only the two unloaded 395 K rows (water and PZ volatility) agree within ±4 kPa. Seven rows lie within ±10 kPa: the two unloaded rows and rows 1, 9, 23, 36 and 69, all below 0.2 MPa. This is a fixed-parameter prediction against one unfitted campaign. It is not validation, and nothing is fitted, selected or adopted.
 
 ### Data and basis
 
@@ -481,16 +481,18 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
 - **Uncertainty (p.2664, p.2667).**
   - Pressure: ±0.1 % of the transducer's maximum reading, which is ±4 kPa or ±10 kPa. The paper does not say which transducer measured each row, so both bounds are counted. Rows above 4 MPa must be ±10 kPa.
   - Below 0.1 MPa, the uncertainty "can reach up to 10 %".
-  - Solvent mass: up to ±0.7 % relative. Its effect is reported as a sensitivity: each row is re-solved with 0.7 % more water.
+  - Solvent mass: up to ±0.7 % relative. The solvent is the prepared PZ solution, whose PZ molality is known to ±0.1 %. At fixed charged CO₂, a solvent-mass error therefore changes the CO₂ molality and the loading by 1/(1 ± 0.007). Each row is re-solved at both shifted loadings, and the pressure change is reported as a sensitivity.
+  - The charged CO₂ mass uncertainty (±0.008 g of up to about 5 g) is not propagated, because the paper does not print each row's charged mass.
 - **Groups.** These follow the design.
   - Unloaded rows (2).
   - Loaded rows below 0.2 MPa (10).
   - The 374–395 K blocks at 0.2 MPa and above (35).
   - The rest: 313–354 K at 0.2 MPa and above (47).
-- **Law ranges.** Each row is labelled inside or outside the measured temperature range of each law.
+- **Law ranges.** Each row is labelled inside or outside the measured temperature range of each PZ law, and of the shared CO₂ first-dissociation law R2.
   - Carbamate laws: Ermatchkov 2003 NMR tables, 283.15–333.15 K.
   - Protonation laws: Hamborg Table 16 runs, 293.14–353.42 K.
-  - Only the 313.75 K block lies inside both. The 334.05 K blocks are 0.9 K above the carbamate range.
+  - Shared R2: 293.15–393.15 K. Its 19 rows at 395.0 K are evaluated 1.85 K above that interval.
+  - Only the 313.75 K block lies inside both PZ laws. The 334.05 K blocks are 0.9 K above the carbamate range.
 
 ### Errors by group, temperature and law range
 
@@ -498,7 +500,7 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
 
 ![Kamps 2003 total-pressure errors against loading, by corrected temperature, on the 12-coordinate refit. Points are discrete comparisons at source states; hollow points are states where the model's phase search finds a second liquid. The dotted line marks 1 mol CO₂/mol PZ.](figures/kamps2003.png)
 
-[Per-row values](results/kamps2003-A12.csv) keep the observed and calculated pressures, signed differences, both bounds, the solvent-mass sensitivity, both law labels and the phase outcome. [The record](results/kamps2003-A12.json) holds every phase trial.
+[Per-row values](results/kamps2003-A12.csv) keep the observed and calculated pressures, signed differences, both bounds, the two solvent-mass sensitivities, the three law labels, the model liquid's speciation and the phase outcome. [The record](results/kamps2003-A12.json) holds every phase trial.
 
 **What the errors show.**
 
@@ -509,9 +511,16 @@ The root manuscript refresh is not invoked, because `analyses/_cse-manuscript.js
   - The four rows below 0.1 MPa carry the source's "up to 10 %" scale. Their errors are −32.6 % (row 1), −21.3 % (row 9), −6.7 % (row 23) and +56.6 % (row 56), so only row 23 lies within 10 %.
 - **Loaded rows at 0.2 MPa and above.** All 82 lie outside both pressure bounds.
   - The 374–395 K blocks give 37.1 % AARD (bias −35.2 %). The 313–354 K rest gives 53.0 % (bias −53.0 %).
-  - The underprediction grows steadily with loading, and more steeply at 4 mol/kg. Above 1 mol/mol the source describes the liquid as PIPH₃HCO₃ with physically dissolved CO₂ and zwitterion (pp.2665–2666). The misfit therefore implicates CO₂ physical solubility at MPa pressure, the PZH⁺–bicarbonate and zwitterion interactions, and the shared MEA CO₂–water record. This comparison cannot separate those causes.
+  - The underprediction grows steadily with loading, and more steeply at 4 mol/kg.
+  - Above 1 mol/mol, the source describes the liquid as PIPH₃HCO₃ with physically dissolved CO₂ and zwitterion. Its own model has the doubly protonated cation "only in very small amounts" (pp.2665–2666).
+  - This model's liquid differs. At the 36 states where it splits, PZH₂²⁺ holds 2.1–28.8 % of the PZ, against 0.05–8.1 % at the other loaded rows. For example, row 7 (313.75 K, 1.557 mol/mol) has 28.8 % PZH₂²⁺, 56 % of the CO₂ as bicarbonate and 17.5 % as molecular CO₂ (per-row columns in the CSV).
+  - In 35 of the 36 splits, the deepest split phase is mostly water, bicarbonate (0.25–0.37 mole fraction) and PZH₂²⁺ (0.07–0.18), in that order.
+  - The candidate causes are therefore: CO₂ physical solubility at MPa pressure; the PZH⁺–bicarbonate and zwitterion interactions; the second protonation (the P2 law and the PZH₂²⁺ parameters, tied to PZH⁺); and the shared MEA CO₂–water record. This comparison cannot separate them.
   - The block inside both law ranges (313.75 K) still shows −32.1 % bias, so leaving the law ranges is not the only cause.
-- **Input sensitivity.** Adding 0.7 % solvent changes the calculated pressure by −0.39 % to +2.59 %. That is one to two orders of magnitude below the misfit, so the stated composition uncertainty does not explain it.
+- **Input sensitivity.** The ±0.7 % solvent-mass bound moves the calculated pressure by up to −10.8 % / +11.7 % (row 2).
+  - Over all 94 rows, the median ratio of this sensitivity to the misfit is 0.07, with a maximum of 0.88 (row 2).
+  - Five rows exceed 6.9 %, all at 0.96–1.05 mol/mol: row 2 (−10.8 / +11.7 % against −13.3 %), row 3 (9.1 % against −12.1 %), row 11 (8.0 % against −19.9 %), row 17 (8.7 % against −27.5 %) and row 57 (8.0 % against −40.6 %). Near 1 mol/mol at low pressure, the stated composition uncertainty is comparable to the misfit.
+  - For the 30 rows above 1.2 mol/mol at 0.2 MPa and above, the sensitivity is at most 3.2 % against misfits of at least 34.9 %, so it does not explain the high-loading underprediction.
 - **Comparison with other models of these rows.**
   - Kamps's own Pitzer model was fitted to these rows and reports 4 % average deviation (p.2667). Ermatchkov 2006 refits the corrected rows above 0.2 MPa to 3.0 % (p.1795).
   - Yi 2024 e-NRTL rejected this campaign by its screening rule.
@@ -529,7 +538,7 @@ At each bubble state (liquid with zero vapour), the Engine's Full liquid and vap
 | Gas split, ambiguous | 0 | — |
 
 - **Where the splits are.** All 36 splits are at 313–354 K and 0.96–1.64 mol CO₂/mol PZ. Their minimum tangent-plane distances run from −0.026 to −0.554 RT, deepest at 313.75 K, 1.557 mol/mol. None appears at 374–395 K.
-  - At these states the model predicts two liquids where the source observed one (only the excluded row precipitated). The reported bubble pressure there belongs to a metastable single liquid on this model.
+  - At these states the model predicts two liquids where the source observed one (only the excluded row precipitated). The reported bubble pressure there belongs to a single liquid that is not the stable state on this model. Whether it is metastable or locally unstable was not retained per row.
   - These splits extend the four false liquid splits the record census found at 5 mol/kg Hilliard states into the high-loading region.
 - **Undecided rows.** At the two unloaded rows, 11 trials end as `negative_plane_without_positive_donor` with no witness, so they are undecided, not passed.
 - **Bound on the counts.** As in stages 4–5, a finite search can miss a split. The no-split count is an upper bound and the split list a lower bound.
@@ -544,9 +553,9 @@ The design's check states (["Stability in the objective"](../pz_scoping/design-d
 | Each NMR liquid at T + 0.5 K, 0.1 MPa (1.05 × bubble where that exceeds 0.1 MPa) | 121 | 121 | none | 0 |
 
 - **Hilliard at 1.5 × bubble.** The search finds the row-55 and row-62 splits at the same depth as the record census (−0.0957 and −0.0306 RT). It reports rows 56 and 61 clean.
-  - A direct tangent-plane evaluation at the record split composition, same parent and 1.5 × pressure, gives −0.1107 RT (row 56) and −0.0024 RT (row 61). This uses the [refit_checks](diagnosis-308/refit_checks.py) form. Rows 55 and 62 evaluated the same way agree with the Engine to 3×10⁻⁵ RT ([direct check](results/check-states-A12-direct.json)).
+  - A direct tangent-plane evaluation at the record split composition, same parent and 1.5 × pressure, gives −0.1107 RT (row 56) and −0.0024 RT (row 61). This uses the [refit_checks](diagnosis-308/refit_checks.py) form. Rows 55 and 62 evaluated the same way agree with the search's own 1.5 × values (−0.0957 and −0.0306 RT) to 2×10⁻⁹ RT ([direct check](results/check-states-A12-direct.json)).
   - So all four record splits persist under 50 % compression, and the search missed two of them. This repeats the missed-search case already reported on ePC-SAFT #1224.
-  - The compressed liquid does not remove a split. That is expected, because a liquid's fugacities change little over 12–58 kPa.
+  - The compressed liquid does not remove a split. That is expected, because the compression step adds only 5.8–19 kPa to the bubble pressure, and a liquid's fugacities change little over that.
 - **NMR at T + 0.5 K.** All 121 states pass. As in the record census, three 333.65 K rich states sit below their model bubble pressure (134, 110 and 120 kPa) and are evaluated at 1.05 times it.
   - The cold-corner and NMR liquids therefore show no new split in this 0.5 K neighbourhood, within the search's limits.
   - At 333.65 K the evaluation crosses the 333.15 K carbamate measurement limit by 0.5 K. To allow it, the evaluation interval in `reactive.laws_at` was widened from 333.3 to 333.7 K; law values are unchanged.
