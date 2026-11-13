@@ -1,83 +1,30 @@
 \section{Shared and amine-specific inputs}\label{sec:p2-s-inputs}
 % P:p2-s-inputs-01
-The common Helmholtz-energy contributions, combining rules, solvent permittivity expression and reference conversions are defined in the companion Part I \cite{PolleyPartI}.
-The tables here reproduce scalar inputs from the actual parameter files used for these calculations.
+Main-text Section~\ref{main-sec:p2-model} defines the equation of state, combining rules, relative permittivity, Born term, reaction conditions and caloric functions; this section lists the shared scalar inputs and the reaction-law coefficients.
+
 The complete electronic files also retain temperature-dependent coefficients, association-site multiplicities, correlations and the parameter ties.
+The electronic parameter files specify the neutral donor--acceptor multiplicities, the charged MDEA and DEA chains, the single-sphere AMP and PZ ions and carbamates, and the nonassociating HPZCOO zwitterion.
 Shared component and pair values remain fixed; an interaction between a new amine species and a shared component can be fitted without changing the shared component itself.
 No fitted ionic size is interpreted as an independent molecular measurement.
 
 % P:p2-s-inputs-02
-Water has a temperature-dependent segment diameter,
-\begin{equation}
- \sigma_w(T)=2.7804326+10.11\exp(-0.01775T)-1.417\exp(-0.01146T)\quad\text{in \AA, with }T\text{ in K}.
-\end{equation}
-Only the constant term in that law was fitted in Part I; the exponential coefficients were fixed.
-Water's segment number, dispersion and association parameters were independently fitted to IAPWS-95; \COtwo size and dispersion follow Gross and Sadowski \cite[Table~2]{Gross2001}.
-Inorganic-ion size and energy follow Uyan et al., with their hydrogen-ion description used for hydronium \cite[Table~4]{Uyan2015}.
-The shared Born diameters and the water interactions other than the fitted bicarbonate term are assumptions specified in Part I, rather than inorganic-ion size measurements.
+The shared Born diameters and the water interactions other than the fitted bicarbonate term are assumed fixed inputs transferred from the MEA parameter set \cite{PolleyPartI}, rather than inorganic-ion size measurements.
 The bicarbonate--water interaction is fixed at the MEA fit's upper bound.
 The MEA joint-fit R2 coefficients retain their conditional uncertainty in Part I, but no uncertainty of those shared inputs is propagated here.
 
 \input{tables/part2/shared-parameters}
 \input{tables/part2/shared-interactions}
 
-\subsection{Amine-specific species and association}
-% P:p2-s-inputs-03
-MDEA retains its neutral pure-component and caloric description, its dielectric correlation and the fixed dissociation law.
-Its final fit releases the neutral--water interaction and linear temperature slope, cation interactions with water, \COtwo and bicarbonate, a reciprocal-temperature slope for cation--water, and cation segment diameter, dispersion energy and Born diameter.
-The segment and Debye--H\"uckel diameters are tied.
-The neutral--water law is $k(T)=k_0+k_1(T-313.15\,\mathrm K)$, with $k_0=-0.2063373482$ and $k_1=0.0014750401$ K$^{-1}$.
-The cation--water law is $k(T)=k_0+b_k(1/T-1/313.15\,\mathrm K)$ with $k_0=-0.03323620783$ and $b_k=-27.10492507$ K.
-The nine fitted parameters do not include a fitted dissociation constant.
-
-\input{tables/part2/mdea-parameters}
-\input{tables/part2/mdea-interactions}
-
-% P:p2-s-inputs-04
-AMP uses its neutral association description with explicit carbamate chemistry and a fixed Hamborg dissociation law \cite{hamborgDissociationConstantsThermodynamic2009}.
-The two temperature-dependent AMP--water and AMPH$^+$--water interactions have the reciprocal-temperature form above, with slopes $-55.96106619$ and $-274.1548086$ K, respectively.
-Its final nine fitted parameters include those four interaction quantities, cation--\COtwo interaction, cation and carbamate diameters, hydrolysis level and hydrolysis enthalpy correction.
-Ion Debye--H\"uckel diameters equal segment diameters and packing diameters equal $0.88\sigma$.
-The fitted hydrolysis level and enthalpy correction are completed together about 313.15 K, so the tabulated completed-law level differs from the fitted parameter's level.
-The carbamate diameter is fixed at its lower bound for the conditional uncertainty calculation.
-
-\input{tables/part2/amp-parameters}
-\input{tables/part2/amp-interactions}
-
-% P:p2-s-inputs-05
-PZ uses an effective two-site neutral association description; the pure fit holds segment count 2.6519 and diameter 3.7136 \AA\ fixed while fitting its three energy/association quantities to Steele pressures \cite{steeleThermodynamicPropertiesIdealGas1997}.
-Pure-liquid density and the liquid extrapolation below the melting region remain unvalidated.
-The neutral PZ--water interaction has the linear-temperature form anchored at 353.15 K, with $k_0=-0.1976454016$ and $k_1=0.0011250148$ K$^{-1}$; its two fitted parameters were fitted separately to binary pressure and vapor composition, then fixed during the reactive fit.
-The reactive fit with twelve fitted parameters ties the singly and doubly protonated cation sizes and energies; mono- and dicarbamate share size, energy and water interaction.
-Four charged PZ species have fixed 5 \AA\ Born diameters.
-The neutral HPZCOO zwitterion has independent size and energy and no association sites.
-The remaining fitted quantities are the cation--water and cation--bicarbonate interactions and three carbamate-law offsets.
-PZ and HPZCOO dielectric inputs are transferred from MEA as an assumption.
-
-\input{tables/part2/pz-parameters}
-\input{tables/part2/pz-interactions}
-
-% P:p2-s-inputs-06
-DEA neutral pure parameters use Nasrifar and Tafazzol's four-site scheme, with two donor and two acceptor sites \cite[Table~2, Eq.~34]{Nasrifar2010}.
-Their association strength uses $\sigma^3\kappa$, consistent with the present implementation.
-The fitted neutral DEA--water interaction is temperature independent, $k=-0.0636$, and the dielectric coefficients were fitted separately to unloaded permittivity observations before reactive estimation.
-The reported reactive fit represents DEAH$^+$ as a charged chain carrying DEA's segment count, diameter, dispersion energy and four sites, with zero self-association energy.
-The carbamate retains a single-sphere representation.
-Only the two ion--water interactions and hydrolysis level and enthalpy correction are fitted in the final objective with four fitted parameters.
-The alternative single-sphere cation fit is retained only as a comparison.
-
-\input{tables/part2/dea-parameters}
-\input{tables/part2/dea-interactions}
-
 \subsection{Reaction directions, coefficients and reference states}
 % P:p2-s-inputs-07
-The shared reactions are water autoprotolysis, \ce{CO2 + 2H2O <=> HCO3- + H3O+}, and \ce{HCO3- + H2O <=> CO3^{2-} + H3O+}.
-Amine dissociation is written \ce{AH+ + H2O <=> A + H3O+}; carbamate hydrolysis is written \ce{ACOO- + H2O <=> A + HCO3-}.
-PZ adds successive protonation, monocarbamate and dicarbamate reactions and zwitterion proton transfer, as specified in the electronic stoichiometric file.
 The R1 and R3 source constants have a mole-fraction infinite-dilution basis, while R2 and the amine laws have a common-molality basis.
 The tables retain those source coefficients rather than silently substituting a different basis.
-The thermodynamic standard-state conversion uses water as pure-liquid solvent and neutral solutes at infinite dilution, following Part I.
-For a fitted enthalpy correction $H$ about $T_p$, the native completed-law correction is $\delta a=H/(RT_p)$ and $\delta b=-H/R$, preserving $\ln K(T_p)$.
+
+The dissociation sources are Kamps and Maurer for MDEA, Hamborg et al. for AMP and PZ protonation, Ermatchkov et al. for PZ carbamate and Bower et al. for DEA \cite[p.~1509]{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}\cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}\cite[Table~5]{ermatchkovChemicalEquilibriumConstants2003}\cite{bowerAcidicDissociationConstant1962}.
+The AMP hydrolysis starting law is inferred from Xu et al.'s model-derived carbamate constants, and the DEA starting law is the inverse of Aroua et al.'s formation law \cite[Table~2, Eqs.~7--11]{xuRepresentationEquilibriumSolubility1992}\cite[Eq.~14]{arouaTemperatureDependencyEquilibrium1997}.
+Their fitted shifts are included in the completed coefficients; these are not independent measurements of the fitted reaction laws.
+
+For a fitted enthalpy correction $H$ about $T_p$, the correction added to the tabulated coefficients is $\delta a=H/(RT_p)$ and $\delta b=-H/R$, preserving $\ln K(T_p)$.
 This correction is part of the reaction law and is not an independently added absorption-heat term.
 
 \input{tables/part2/mdea-laws}
@@ -85,17 +32,10 @@ This correction is part of the reaction law and is not an independently added ab
 \input{tables/part2/pz-laws}
 \input{tables/part2/dea-laws}
 
-% P:p2-s-inputs-08
-MDEA's Kamps--Maurer measurements span 278--368 K (printed p.~1509); the higher computational declaration does not extend the measurements.
-PZ carbamate measurements are at 283.15--333.15 K, even though their rounded source-law interval is written 283--333 K.
-DEA's Bower law is measured only to approximately 323 K, while its computational declaration reaches 393.15 K.
-The AMP hydrolysis slope is fitted, while the independent fixed dissociation declaration refuses temperatures above 353.22 K.
-All coefficient tables must be read together with these source ranges and main-text Table~\ref{main-tab:p2-laws}.
 \FloatBarrier
 
 \section{Observation inventory and fitting objectives}\label{sec:p2-s-objectives}
 % P:p2-s-objectives-01
-The observation roles in main-text Table~\ref{main-tab:p2-data-roles} apply throughout this supplement.
 No pressure set labeled held out enters any objective, including earlier fits shown for sensitivity.
 Prior scoring is nonetheless material: MDEA held-out sets were already inspected, AMP Kundu was available before final diameter choice, PZ Ermatchkov before the penalty alternative and final fit choice, and DEA holdouts before a numerically tied second-start choice.
 Comparison-only DEA properties were added after selection.
@@ -104,29 +44,17 @@ A datum's absence from a final objective is not evidence of complete blindness d
 \input{tables/part2/source-locators}
 
 % P:p2-s-objectives-02
-For MDEA, Kuranov total pressures use natural-log ratios, scale one and weight $100/9$; Kim binary total pressures use natural-log ratios with unit scale and weight.
-Jakobsen protonated fractions use differences scaled by 10\,\% of the observed fraction, with unit weight.
-Carson and Merkley heat differences use 3000 J/mol \COtwo scales and unit weights.
-Weiland heat capacities use 2\,\% of the observed heat capacity and unit weights.
-Loaded-density differences use the stored row-specific scales and weight $1/33$, whereas unloaded densities use 0.5 kg/m$^3$ and weight ten.
 Thus the dimensionless Kuranov scaled RMS is not its physical pressure AARD, and these group costs are not common physical accuracy measures.
 The stored rows preserve loading caps for integral heat, source amount bases for heat capacity and density, and unavailability of capped states.
 
 % P:p2-s-objectives-03
-AMP loaded total pressures use log ratios with unit scale and weight $100/[9(47)\max(u_P/P,0.05)^2]$.
-The fifty-two binary entries comprise twenty-six pressures and twenty-six vapor AMP fractions; binary log pressures use 0.05 scale through their weight, while vapor fractions use $\max(10^{-4},0.05y)$.
-The binary group is averaged over its fifty-two entries.
-Ciftja carbamate fractions are mapped to carbamate per total amine, with difference scale 0.003 and group weight $1/57$.
 The pressure, binary and species groups are not pooled when reporting their physical deviations.
 Kundu's 18, 25 and 30 mass-percent stocks correspond nominally to 2.0, 2.8 and 3.4 mol/L and span loading 0.412--0.966.
 Kundu's loading uncertainty is not a combined partial-pressure uncertainty, so it cannot supply an uncertainty-normalized pressure test.
 
 % P:p2-s-objectives-04
-PZ pressure differences use an assigned scale 0.02 times observed pressure.
-NMR normalization propagates independent area errors with $q=0.02$ into correlated group-fraction blocks; complete-state areas reconstruct the monocarbamate pair and free/dicarbamate groups before normalization.
-Blank dicarbamate observations are not zeros and do not create additional residuals.
 The resulting 232 observations come from 121 source states and use a full block covariance.
-The assumed area scale is not a source-validated independent species standard deviation.
+
 Source group fractions are per total PZ, while source loading per twice the PZ amount is converted to the per-PZ convention before the bubble calculation.
 
 % P:p2-s-objectives-05
@@ -137,8 +65,7 @@ DEA minimizes
 \end{equation}
 Lawson pressures cover 310.93--380.37 K and loading no lower than 0.376 at a single fitted concentration.
 Carson heats cover mass fractions 0.10, 0.20 and 0.30 at 298.15 K.
-Integral absorption enthalpy is $(H_f-H_i-\Delta n_{\COtwo}h_{\COtwo}^{feed})/\Delta n_{\COtwo}$, with equilibrium liquids and feed evaluated at the same temperature and pressure; negative values are exothermic.
-It is not a differential heat and is not the excess enthalpy per mole of binary mixture.
+
 \FloatBarrier
 
 \section{Starts, selected parameters and calibration residuals}\label{sec:p2-s-selection}
@@ -146,7 +73,7 @@ It is not a differential heat and is not the excess enthalpy per mole of binary 
 \input{tables/part2/fit-starts}
 % P:p2-s-selection-01
 The reported MDEA fit retains the fit with nine fitted parameters under fixed shared inputs.
-Its selected cost is 374.5190788 for 278 objective rows, with two active bounds; the second declared start converges to a larger cost, so agreement of two starts is not claimed.
+Its selected cost is 374.5190788 for 278 objective rows, with two active bounds; the second start converges to a larger cost, so agreement of two starts is not claimed.
 The A3 alternative is the same-data sensitivity counter-case, with no replacement of the reported MDEA fit.
 Its Carson scaled RMS increases from 0.97662 to 1.10594.
 Its selected parameter-file SHA-256 is \texttt{2a5341be\allowbreak{}176829d0\allowbreak{}87133a14\allowbreak{}67828f76\allowbreak{}2a655f92\allowbreak{}a586eb10\allowbreak{}62a5719a\allowbreak{}58142d9d}.
@@ -171,31 +98,29 @@ DEA compares two cation representations with two starts each.
 The two single-sphere starts give cost 10.13954, and the two charged-chain starts give 7.97070, all without active bounds.
 The charged-chain starts differ in cost by $4.8\times10^{-10}$, below the function tolerance, and their largest relative prediction difference is $2.5\times10^{-6}$.
 The selected second start therefore represents the same numerical optimum as the first to the stated resolution.
-Its held-out sets were first scored on the first start and then on this tied second start, whose endpoint was frozen before rescoring.
+Its held-out sets were first scored on the first start and then on this tied second start, whose parameters were fixed before the held-out sets were evaluated again.
 An unavailable more negative cation--water start is not counted as a converged solution.
 
 % P:p2-s-selection-05
-Main-text Fig.~\ref{main-fig:p2-calibration} displays the fitted-pressure residual shapes.
-The electronic row files retain all fitted pressure, heat and species predictions, including zeros and the actual observed-value denominators.
+The electronic data files contain all fitted pressure, heat and species predictions, including zeros and the actual observed-value denominators.
 PZ NMR error is reported in group fraction and whitened residual units; DEA NMR below is in true mole fraction.
 The same percentage formula does not make these different species observables comparable.
 \FloatBarrier
 
 \section{Unfitted and comparison-only properties by source and range}\label{sec:p2-s-unfitted}
 % P:p2-s-unfitted-01
-Main-text Tables~\ref{main-tab:p2-unfitted} and \ref{main-tab:p2-mdea-range} retain source, pressure type, temperature blocks and error signs.
 The Ermatchkov MDEA total is a mixed-range summary, while every Xiao row is within the 278--368 K dissociation measurements.
 Kuranov's thirty extrapolated fitted rows are at 373.14--373.17 K and 393.12--393.15 K.
 The fitted Merkley heats give 10.36\,\% AARD at 333.15 K and 6.56\,\% at 388.71 K, each over two observations; signed errors are $-5725$ and $-3989$ J/mol \COtwo, respectively.
 The latter is a dissociation-law extrapolation.
-Stored Carson, heat-capacity and loaded-density rows do not carry temperature fields sufficient for a law-range aggregate.
+The Carson, heat-capacity and loaded-density records lack the temperatures needed to group them by reaction-law range.
 Binary pressure and unloaded density do not depend on the reactive dissociation calculation.
 
 % P:p2-s-unfitted-02
 AMP Kundu temperature blocks are 303, 313 and 323 K, with twenty-five, fifteen and eleven observations.
 Their pressure biases are $+53.94$, $+43.78$ and $-7.09$\,\%, respectively, whereas Tong's seventeen total-pressure observations span approximately 313, 333 and 353 K.
-Tong's twenty-three higher-temperature loaded rows are outside the fixed dissociation declaration and have no finite score here.
-The source-law temperature basis of hydrolysis is extrapolated for the Kundu cold block even though the fitted completed hydrolysis law is computationally declared there.
+Tong's twenty-three higher-temperature loaded rows are above the dissociation law's 353.22 K calculation limit and are not calculated.
+The source-law temperature basis of hydrolysis is extrapolated for the Kundu cold block even though the fitted hydrolysis law is evaluated there.
 These distinct law limits preclude one blanket in-range label for AMP.
 
 % P:p2-s-unfitted-03
@@ -203,7 +128,7 @@ PZ Ermatchkov has nineteen partial pressures at 313.1 K, eighteen at 353.15 K an
 Only the first block lies within the measured carbamate interval; the middle block already extrapolates carbamate.
 At the hottest temperature all fifteen calculated pressures are high.
 Eight observations at the lowest temperature, three at the middle and none at the highest lie within the printed uncertainty.
-The fifty-two stored pointwise source uncertainties are distinct from parameter uncertainty.
+The fifty-two pointwise source uncertainties are distinct from parameter uncertainty.
 
 % P:p2-s-unfitted-04
 DEA Seo and Hong has five, six and five pressures at 40, 60 and 80 $^{\circ}$C; Lal has seventeen and twenty-seven at 40 and 100 $^{\circ}$C.
@@ -230,7 +155,7 @@ No uncertainty for the NMR mole fractions is supplied, so these absolute errors 
 The fourteen Horstmann excess enthalpies are at 363.15 K and 1.75 MPa, with source scale $s=2\ \mathrm{J/mol}+0.01|H^E|$.
 The model gives positive mixing heat at every state while all observations are negative.
 The ideal-gas enthalpy contribution is linear in composition and cancels in excess enthalpy, which is calculated from the liquid residual enthalpies.
-The stored pure-water residual enthalpy is about $-41.4$ kJ/mol as a unit check.
+The pure-water residual enthalpy is about $-41.4$ kJ/mol as a unit check.
 This is a comparison-only binary caloric result, separate from Carson's fitted absorption heats.
 No analogous assessment for the other amines establishes whether the error is specific to DEA.
 \FloatBarrier
@@ -247,7 +172,7 @@ The two unloaded rows are included in the block and overall scores but separated
 % P:p2-s-phases-01
 Main-text Table~\ref{main-tab:p2-phase-searches} reports the finite state inventories rather than a phase diagram.
 For MDEA, distinct observation identities can represent repeated physical states; 775 records should not be described as 775 independent experiments.
-The thirty-seven gas witnesses are not dense-liquid splits, and all seven states above the 393.15 K R2 limit remain outside the phase evidence.
+The thirty-seven gas-like phases are not dense-liquid splits, and all seven states above the 393.15 K R2 limit remain outside the phase evidence.
 Kuranov source rows 28 and 72 exceed shared R2's 393.15 K upper limit and are excluded from the 278-row fit.
 
 The capped MDEA heat at 333.15 K, 60 wt\% and 1.121 MPa could not be calculated.
@@ -281,7 +206,7 @@ Penalty scales are $10^{-2}$ followed by $3\times10^{-3}$.
 Its standard finite search reports one split, but direct distance calculations at split compositions recovered near the fit show two further negative values at rows 55 and 56.
 Those direct values, $-0.0309\,RT$ and $-0.0437\,RT$, demonstrate that the finite search missed resolved splits.
 The penalty did not establish a single-liquid fit.
-Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched inventory, not proof of global stability.
+Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched states, not proof of global stability.
 \FloatBarrier
 
 \section{Conditional covariance, sensitivity and bound profiles}\label{sec:p2-s-uncertainty}
@@ -291,7 +216,7 @@ They exclude experimental systematic errors, future measurement noise, model dis
 Covariance propagation includes parameter correlations, while the maximum one-SE sensitivity in the tables moves one parameter marginally with the others fixed.
 For a bound parameter, the last column instead uses the first inward profile step with other parameters refitted.
 Those perturbation sizes are different; their common display is not a statistical significance ranking.
-Parameter units are those of Section~S1, and enthalpy shifts are J/mol.
+Parameter values and standard errors use \AA\ for diameters, K for dispersion energies divided by $k_B$ and reciprocal-temperature interaction slopes, K$^{-1}$ for linear-temperature interaction slopes, and J mol$^{-1}$ for hydrolysis enthalpy shifts; interaction constants, hydrolysis $a$ coefficients and P3--P5 offsets are dimensionless.
 
 \input{tables/part2/mdea-uncertainty}
 \input{tables/part2/amp-uncertainty}
@@ -316,10 +241,10 @@ Nearly flat bound profiles restrict molecular interpretation even when covarianc
 
 % P:p2-s-uncertainty-04
 PZ holds one bound fitted parameter fixed and uses eleven interior fitted parameters with variance factor 146.3.
-The conditional refit moves enough that the endpoint inverse-Jacobian calculation is used rather than identifying its covariance with the original fit without qualification.
+The conditional refit moves enough that the inverse Jacobian at the refitted parameters is used rather than identifying its covariance with the original fit without qualification.
 The 1\,\% inward profile converges; 5 and 10\,\% profiles stop at their forty-iteration budget, with cost changes 46.5 and 61.9.
 Those two changes are upper bounds on minimized profile cost.
-The weakest full-chart singular direction has singular value about 0.21 per optimizer unit and is dominated by cation--bicarbonate and cation--water interactions.
+The weakest full twelve-parameter Jacobian singular direction has singular value about 0.21 per optimizer unit and is dominated by cation--bicarbonate and cation--water interactions.
 Large marginal pressure sensitivities make its linear estimates indicative rather than reliable finite-displacement predictions.
 
 % P:p2-s-uncertainty-05
@@ -357,17 +282,17 @@ The source-versus-model question for the 42.85\,\% Kundu error remains open.
 The four studies use the merged ePC-SAFT source commit \texttt{391dfe5d\allowbreak{}64ede503\allowbreak{}6bf160bc\allowbreak{}6ae037ad\allowbreak{}5e14af32} and immutable wheel SHA-256 \texttt{0962e21d\allowbreak{}2fa7a8ba\allowbreak{}1ed4622f\allowbreak{}1110b3e8\allowbreak{}053bacd8\allowbreak{}78fa41c9\allowbreak{}99d85e8b\allowbreak{}9afab66b}.
 The common MEA parameter input has SHA-256 \texttt{f8f64820\allowbreak{}b161377a\allowbreak{}0d97d1e4\allowbreak{}ad4f6cea\allowbreak{}764cd055\allowbreak{}8dc63231\allowbreak{}d58e2096\allowbreak{}988eef97}.
 The electronic input index binds the exact amine-specific files and laws to those shared inputs.
-Stored replay checks verify numerical reproduction and balance; they are not physical validation.
+Recalculation checks verify numerical reproduction and balance; they are not physical validation.
 
 % P:p2-s-provenance-02
-MDEA replay reproduces all 278 fitted predictions with zero stored prediction difference and relative cost difference $2.76\times10^{-13}$.
-AMP's scored fit replays cost within $7.4\times10^{-13}$ relative.
-DEA cold reload reproduces cost within $8\times10^{-13}$ relative and weighted residuals within $1.3\times10^{-11}$.
+MDEA recalculation from the parameter file reproduces all 278 fitted predictions with zero stored prediction difference and relative cost difference $2.76\times10^{-13}$.
+Recalculation from the AMP parameter file reproduces the scored cost within $7.4\times10^{-13}$ relative.
+DEA recalculation from the parameter file reproduces cost within $8\times10^{-13}$ relative and weighted residuals within $1.3\times10^{-11}$.
 PZ retains its iteration-limited fit, conditional diagnostic, residuals and all phase trials, including the direct split witnesses missed in the penalty fit's search.
 Numerical precision does not account for the larger experimental discrepancies.
 
 % P:p2-s-provenance-03
-The presentation script reads stored JSON and CSV values without importing the thermodynamic model.
+The presentation script reads JSON and CSV values without importing the thermodynamic model.
 
 The accompanying numerical-source index maps table cells and manuscript paragraph values to source files and fields; figure values and parameter-only bands remain separate from experimental uncertainties.
 All plots use discrete observations and model evaluations at the measured states; no interpolated model sweep or new phase boundary is introduced.

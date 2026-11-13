@@ -24,7 +24,36 @@ UNDEFINED_PATTERNS = (
 )
 
 
-def manuscript_inputs() -> list[Path]:
+def manuscript_inputs(document: str = "main") -> list[Path]:
+    if document != "main":
+        # The recorder lists TeX inputs; BibTeX reads its databases separately.
+        recorder = BUILD_DIR / f"{document}.fls"
+        if not recorder.is_file():
+            raise RuntimeError(f"Missing {recorder.name}; build with pdflatex -recorder first.")
+        paths = set()
+        for line in recorder.read_text().splitlines():
+            if not line.startswith("INPUT "):
+                continue
+            path = Path(line[6:])
+            if not path.is_absolute():
+                path = LATEX_DIR / path
+            path = path.resolve()
+            if path.is_relative_to(LATEX_DIR) and not path.is_relative_to(BUILD_DIR) and path.suffix.lower() in INPUT_SUFFIXES:
+                paths.add(path)
+        if not paths:
+            raise RuntimeError(f"No manuscript inputs recorded for {document}.")
+        for source in tuple(paths):
+            if source.suffix != ".tex":
+                continue
+            for command, suffix in (("bibliography", ".bib"), ("bibliographystyle", ".bst")):
+                for match in re.finditer(r"\\" + command + r"\{([^}]+)\}", source.read_text()):
+                    for name in match[1].split(","):
+                        path = (LATEX_DIR / name.strip()).with_suffix(suffix)
+                        if not path.is_file():
+                            raise RuntimeError(f"Missing bibliography input: {path}")
+                        paths.add(path)
+        return sorted(paths)
+
     completed = subprocess.run(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", "docs/scientific/latex"],
         cwd=ROOT,
@@ -70,7 +99,7 @@ def validate_build(paths: list[Path]) -> dict[str, object]:
 
     newest_input = max(path.stat().st_mtime_ns for path in paths)
     if PDF_PATH.stat().st_mtime_ns < newest_input:
-        raise RuntimeError("docs/scientific/latex/builds/main.pdf is older than a manuscript input.")
+        raise RuntimeError(f"{PDF_PATH.relative_to(ROOT)} is older than a manuscript input.")
 
     logs = LOG_PATH.read_text(encoding="utf-8", errors="replace")
     if BLG_PATH.exists():
@@ -89,10 +118,17 @@ def validate_build(paths: list[Path]) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify that the manuscript PDF matches current tracked inputs.")
+    parser.add_argument("--document", choices=("main", "part2", "part2_supplement"), default="main")
     parser.add_argument("--write-receipt", action="store_true", help="Record the current successful build hashes.")
     args = parser.parse_args()
 
-    build = validate_build(manuscript_inputs())
+    global PDF_PATH, LOG_PATH, BLG_PATH, RECEIPT_PATH
+    if args.document != "main":
+        PDF_PATH = BUILD_DIR / f"{args.document}.pdf"
+        LOG_PATH = BUILD_DIR / f"{args.document}.log"
+        BLG_PATH = BUILD_DIR / f"{args.document}.blg"
+        RECEIPT_PATH = BUILD_DIR / f"{args.document}-verification-receipt.json"
+    build = validate_build(manuscript_inputs(args.document))
     if args.write_receipt:
         BUILD_DIR.mkdir(parents=True, exist_ok=True)
         RECEIPT_PATH.write_text(json.dumps(build, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -104,7 +140,7 @@ def main() -> int:
     recorded = json.loads(RECEIPT_PATH.read_text(encoding="utf-8"))
     for key in ("input_count", "input_sha256", "pdf_sha256", "pdf_size_bytes"):
         if recorded.get(key) != build[key]:
-            raise RuntimeError(f"Manuscript build receipt mismatch for {key}; rebuild with scripts/build_manuscript.sh.")
+            raise RuntimeError(f"Manuscript build receipt mismatch for {key}; rebuild the selected document and write a new verification receipt.")
     print(f"Manuscript PDF is current: {PDF_PATH.relative_to(ROOT)} ({build['pdf_sha256']})")
     return 0
 

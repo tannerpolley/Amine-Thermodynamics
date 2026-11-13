@@ -1,0 +1,241 @@
+{
+  "part2": {
+    "before": 49,
+    "after": 72,
+    "added": [
+      "Austgen1991",
+      "Cameretti2005",
+      "Figiel2025",
+      "Figiel2026Correction",
+      "Gross2002",
+      "Held2014",
+      "Kleiner2007",
+      "Pabsch2020",
+      "Pahlavanzadeh2013",
+      "Schick2023",
+      "Yang2024",
+      "arouaTemperatureDependencyEquilibrium1997",
+      "ayadMeasurementsModelingThermodynamic2023",
+      "belabbaciInvestigationIsothermalVapour2010",
+      "chaseNISTJANAFThermochemicalTables1998",
+      "hsiehDielectricConstantsAqueous2007",
+      "internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018",
+      "klepacovaVaporPressuresSeveral2011",
+      "mahamMolarHeatCapacities1997",
+      "neumannThermodynamicPropertiesMethyl2022",
+      "razaviPhaseBehaviorModeling2019",
+      "steeleThermodynamicPropertiesIdealGas1997",
+      "xuRepresentationEquilibriumSolubility1992"
+    ]
+  },
+  "part2_supplement": {
+    "before": 27,
+    "after": 27,
+    "added": [
+      "arouaTemperatureDependencyEquilibrium1997",
+      "bowerAcidicDissociationConstant1962",
+      "perez-saladokampsDissociationConstantNMethyldiethanolamine1996",
+      "xuRepresentationEquilibriumSolubility1992"
+    ]
+  },
+  "part2_supplement_direct_prose": {
+    "before": 7,
+    "after": 8
+  },
+  "pointers": {
+    "owner_reported_external_pointer_sentences": 47,
+    "external_pointer_source_lines_before": 49,
+    "external_pointer_source_lines_after": 25,
+    "strict_pointer_only_before": 21,
+    "strict_pointer_only_after": 0,
+    "strict_before_locations": {
+      "introduction.tex": [
+        38,
+        61,
+        71,
+        79
+      ],
+      "methods.tex": [
+        31,
+        45,
+        62
+      ],
+      "model.tex": [
+        16,
+        24,
+        28,
+        35,
+        71
+      ],
+      "results.tex": [
+        5,
+        6,
+        190,
+        227
+      ],
+      "supplement.tex": [
+        3,
+        93,
+        98,
+        178,
+        186
+      ]
+    },
+    "remaining_references": [
+      {
+        "file": "conclusions.tex",
+        "line": 6,
+        "text": "For MDEA, which tests the shared inorganic-carbon description without an amine-carbamate pathway, substituting Part I's bound bicarbonate--water interaction and R2 law moves the unfitted error in the direction opposite to AMP before refitting, and the MDEA cation--bicarbonate interaction reaches its bound; this pattern does not identify a uniquely defective bicarbonate parameter."
+      },
+      {
+        "file": "endmatter.tex",
+        "line": 6,
+        "text": "The compiled \\texttt{epcsaft} library evaluates the equation of state and its equilibrium derivatives; Supplementary Section~S8 records the immutable file identity used in the calculations."
+      },
+      {
+        "file": "introduction.tex",
+        "line": 4,
+        "text": "Part I fitted an explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) description of loaded aqueous monoethanolamine (MEA), in which every ion is a separate species and equilibrium, caloric and density properties follow from one Helmholtz energy \\cite{PolleyPartI}."
+      },
+      {
+        "file": "introduction.tex",
+        "line": 83,
+        "text": "Here the water, \\COtwo and inorganic-ion parameters from Part I remain fixed while only amine-specific quantities are fitted."
+      },
+      {
+        "file": "introduction.tex",
+        "line": 86,
+        "text": "The four amines test the shared inorganic-carbon description, whose bicarbonate--water interaction lies on its upper bound in Part I \\cite{PolleyPartI}, without an amine-carbamate pathway in MDEA and alongside different carbamate pathways in AMP, PZ and DEA."
+      },
+      {
+        "file": "methods.tex",
+        "line": 97,
+        "text": "The selected parameters remain fixed for the reported comparisons; Supplementary Section~S3 lists the starting points, bounds and alternative fits."
+      },
+      {
+        "file": "methods.tex",
+        "line": 111,
+        "text": "Unlike the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting."
+      },
+      {
+        "file": "model.tex",
+        "line": 3,
+        "text": "The water and \\COtwo component descriptions, hydronium, hydroxide, bicarbonate and carbonate, all interactions among these six shared species, and the reaction laws of Part I, R1 (water autoprotolysis), R2 (\\ce{CO2 + 2H2O <=> HCO3- + H3O+}) and R3 (\\ce{HCO3- + H2O <=> CO3^{2-} + H3O+}), including Part I's fitted R2 corrections, are held fixed \\cite{PolleyPartI}."
+      },
+      {
+        "file": "model.tex",
+        "line": 9,
+        "text": "The MDEA and AMP fits were first developed against an earlier MEA fit whose bicarbonate--water interaction was 0.727 rather than Part I's bound value $+1$ and whose R2 coefficients differed slightly (Supplementary Section~S7); Section~\\ref{sec:p2-shared-sensitivity} tests that difference."
+      },
+      {
+        "file": "model.tex",
+        "line": 63,
+        "text": "Water retains the exponential temperature dependence tabulated by Pabsch et al. \\cite[Table~2]{Pabsch2020}, with its constant term fitted to IAPWS-95 in Part I \\cite{PolleyPartI}:"
+      },
+      {
+        "file": "model.tex",
+        "line": 191,
+        "text": "MDEA, AMP and DEA coefficients use Hsieh et al.'s unloaded measurements at model liquid densities \\cite[Tables~1--2, 5]{hsiehDielectricConstantsAqueous2007}; PZ and HPZCOO use the MEA coefficients fitted in Part I as an assumption \\cite{PolleyPartI}."
+      },
+      {
+        "file": "results.tex",
+        "line": 14,
+        "text": "For Carson heat, scaled RMS increases from 0.977 with the earlier shared description to 1.106 after refitting to the Part I shared description."
+      },
+      {
+        "file": "results.tex",
+        "line": 67,
+        "text": "Only that block lies inside both PZ laws; the 395.0 K rows also exceed the shared R2 interval (Supplementary Table~\\ref{supp-tab:p2-kamps-blocks})."
+      },
+      {
+        "file": "results.tex",
+        "line": 81,
+        "text": "Lal's low-pressure observations, which the source reports as less accurate, remain in the AARD (Supplementary Section~S4)."
+      },
+      {
+        "file": "results.tex",
+        "line": 152,
+        "text": "Forty-three comparison-only loaded DEA densities at 298.15 K give 0.445\\,\\% AARD (Supplementary Section~S4); the fitted MDEA density groups are given in Table~\\ref{tab:p2-calibration}."
+      },
+      {
+        "file": "results.tex",
+        "line": 190,
+        "text": "AMP's carbamate diameter and enthalpy correction reach limits with nearly flat inward profiles (Supplementary Section S6)."
+      },
+      {
+        "file": "results.tex",
+        "line": 202,
+        "text": "Unfitted pressures depend on the shared description as well as on the amine fit: substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP errors by 22--26 percentage points in opposite directions before the amine parameters are refitted (Table~\\ref{tab:p2-shared-sensitivity})."
+      },
+      {
+        "file": "results.tex",
+        "line": 203,
+        "text": "Table~\\ref{tab:p2-shared-sensitivity} follows the same data through the earlier shared description, substitution of the Part I bicarbonate--water interaction and fitted R2 law, and amine-specific refitting."
+      },
+      {
+        "file": "results.tex",
+        "line": 251,
+        "text": "Small property residuals do not exclude false liquid phases: the reported PZ fit has at least forty across calibration and comparison states, and a separate fit with the Part I stability penalty still has at least three, two of which the standard finite search missed."
+      },
+      {
+        "file": "results.tex",
+        "line": 276,
+        "text": "This counterexample demonstrates a missed finite search, so every split count in this paper is a lower bound, and the absence of detected instability, here and for the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, does not prove stability."
+      },
+      {
+        "file": "supplement.tex",
+        "line": 13,
+        "text": "The MEA joint-fit R2 coefficients retain their conditional uncertainty in Part I, but no uncertainty of those shared inputs is propagated here."
+      },
+      {
+        "file": "supplement.tex",
+        "line": 204,
+        "text": "The separate penalty fit uses the Part I tangent-plane requirement at 245 states: the 121 NMR liquids and each Hilliard feed as an all-liquid parent at 1.05 and three times its candidate bubble pressure."
+      },
+      {
+        "file": "supplement.tex",
+        "line": 209,
+        "text": "Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched states, not proof of global stability."
+      },
+      {
+        "file": "supplement.tex",
+        "line": 261,
+        "text": "Substituting Part I's shared bicarbonate--water interaction and R2 without refitting gives 21.89\\,\\% and $-15.10$\\,\\%, while worsening the fitted total pressures."
+      },
+      {
+        "file": "supplement.tex",
+        "line": 268,
+        "text": "The earlier bicarbonate--water interaction is 0.72705584775, compared with one in Part I."
+      }
+    ],
+    "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition.",
+    "pointer_only_recheck": {
+      "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+      "strict_pointer_only_at_baseline": 2,
+      "prior_strict_pointer_only_after_was_incorrect": true,
+      "corrected_sentences": [
+        {
+          "file": "model.tex",
+          "baseline_lines": [
+            252,
+            253
+          ],
+          "correction": "Combine the interval definition and its table reference in one substantive sentence."
+        },
+        {
+          "file": "supplement.tex",
+          "baseline_lines": [
+            219
+          ],
+          "correction": "State the units of every parameter type in the four following uncertainty tables directly."
+        }
+      ],
+      "strict_pointer_only_after": 0,
+      "units_check": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+    }
+  },
+  "model_equations": {
+    "before": 1,
+    "after": 24
+  }
+}
