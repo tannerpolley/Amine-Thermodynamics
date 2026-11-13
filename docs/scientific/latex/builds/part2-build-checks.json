@@ -1,5 +1,5 @@
 {
-  "scope": "Part II restructure and literature introduction from merged issue 320 plan; retained results only; no model calculations or independent science/story review.",
+  "scope": "Apply Astra science findings 1\u20133 and Opus story findings 1\u201322 to Part II at bd4e5a3; retained results only; no model calculations or self-review.",
   "source_baseline": "cb2bd6cbe545e449411082b2e0a6b7b88ef0bf6c",
   "governing_plan_comments": [
     6847123610,
@@ -7,18 +7,18 @@
   ],
   "notebook_promotion": "The investigator promoted the PZ notebook at 7ba38e8 for the Kamps pressure comparison and design checks subject to its source-uncertainty, reaction-range and finite-search limits (explicit manuscript-use approval, comment 6843957628).",
   "commands": [
-    "agent-heavy bash /tmp/320-build.sh: render-only part2_displays.py, latexmk supplement/main/supplement/main; waited on captured PID",
-    "agent-heavy bash /tmp/320-qa.sh: latexmk and latex_visual_qa.py for both PDFs; waited on captured PID",
-    "agent-heavy bash /tmp/320-final-render.sh: final main-text panel references and layout; waited on captured PID",
+    "agent-heavy bash /tmp/332-build.sh (display regeneration and four-pass supplement/main build); waited on captured PID",
+    "agent-heavy bash /tmp/332-final.sh (final supplement/main builds with exact accepted figure PDFs); waited on captured PID",
+    "agent-heavy bash /tmp/332-qa.sh (both PDF layout/font checks); waited on captured PID",
     "agent-heavy python <cse>/scripts/workflow/check_prose.py --root . <Part II sources and number-sources.md>; waited on captured PID",
-    "texcount -brief docs/scientific/latex/sections/part2/introduction.tex",
-    "Exact numerical-token, paragraph-ID, table-body and JSON-field checks; git diff --check"
+    "Exact table-body, displayed-value, source-hash and protected-path checks; git diff --check",
+    "agent-heavy bash /tmp/332-check.sh: final two-PDF visual/font QA and final prose check; waited on captured PID"
   ],
   "outputs": [
     {
       "path": "docs/scientific/latex/builds/part2.pdf",
-      "pages": 20,
-      "sha256": "2a9b1828c2ab17350cbd8ffe002bd3a347b525dfa48012d5b0010ea0bed869a6",
+      "pages": 19,
+      "sha256": "b2a60e1620cc5fff5604b871a5486a8ac2e0ea68671b3a3c3b8a41b877ab4a92",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
@@ -29,12 +29,12 @@
         "text_graphic_overlap": 18,
         "tight_text_graphic_clearance": 2
       },
-      "visual_disposition": "Keep. All pages inspected in color; grayscale figure pages and document flow inspected. Warnings concern class heading spacing, table rules, chemical notation and plotted marks. No clipping found; comparison heading kept with its table."
+      "visual_disposition": "Keep. Contact-sheet flow inspected for both PDFs; main pages 8, 12, 14, 16 and 17 inspected at full render size. No clipping found in inspected pages. Remaining conservative geometry warnings concern class heading spacing, table rules, chemical notation and plotted marks; no independent science/story review performed."
     },
     {
       "path": "docs/scientific/latex/builds/part2_supplement.pdf",
       "pages": 19,
-      "sha256": "675040a6e69603ee58ae0e08cd55b00d6341e2aeecb6dda5c4269aa10854047e",
+      "sha256": "b06a28d1161ca82dfba3e64a70be081889139e59dfa06d26be44f531e088a6b2",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
@@ -44,94 +44,83 @@
         "tight_text_clearance": 75,
         "text_graphic_overlap": 2
       },
-      "visual_disposition": "Keep. All pages inspected in color; grayscale figure pages and document flow inspected. Warnings concern class heading spacing, table rules, chemical notation and plotted marks. No clipping found; comparison heading kept with its table."
+      "visual_disposition": "Keep. Contact-sheet flow inspected for both PDFs; main pages 8, 12, 14, 16 and 17 inspected at full render size. No clipping found in inspected pages. Remaining conservative geometry warnings concern class heading spacing, table rules, chemical notation and plotted marks; no independent science/story review performed."
     }
   ],
-  "introduction": {
-    "body_words": 1285,
-    "amine_sentence_word_coverage_nonexclusive": {
-      "MDEA": 391,
-      "AMP": 346,
-      "PZ": 290,
-      "DEA": 297
-    },
-    "shared_only_words": 555,
-    "method": "texcount body words; sentences assigned manually by subject, including antecedents. Multi-amine sentences count for each amine, so coverage overlaps. Shared-only includes Part I opening, general methods, phase analogs and aim."
-  },
   "citations_read": {
     "Uyan2015": [
       "Sect. 3",
-      "Sects. 4.1–4.3, Tables 3–5"
+      "Sects. 4.1\u20134.3, Tables 3\u20135"
     ],
     "ciftjaExperimentalStudyCarbamate2014a": [
-      "Sects. 3.1–3.2, Fig. 5",
-      "Sects. 2.5–3.2, Figs. 5, 7"
+      "Sects. 3.1\u20133.2, Fig. 5",
+      "Sects. 2.5\u20133.2, Figs. 5, 7"
     ],
     "Bottinger2008": [
-      "Sects. 2–3, Fig. 8",
-      "Sects. 5–7, Tables 7–8, Fig. 8",
-      "Sects. 3, 5–7, Fig. 8"
+      "Sects. 2\u20133, Fig. 8",
+      "Sects. 5\u20137, Tables 7\u20138, Fig. 8",
+      "Sects. 3, 5\u20137, Fig. 8"
     ],
     "ermatchkovChemicalEquilibriumConstants2003": [
-      "Sects. 2–3, Table 5",
-      "Sects. 2–3, Table 5"
+      "Sects. 2\u20133, Table 5",
+      "Sects. 2\u20133, Table 5"
     ],
     "Hessen2010": [
-      "Sects. 4.1, 4.4–4.5"
+      "Sects. 4.1, 4.4\u20134.5"
     ],
     "hartonoSolubilityCO201M2020": [
-      "Sect. 5.2, Figs. 7–8",
+      "Sect. 5.2, Figs. 7\u20138",
       "Sect. 5.2, Fig. 8"
     ],
     "hartonoSolubilityDataNitrous2021": [
-      "Sects. 2.1–2.3, 5.3–5.4, Tables 14–15"
+      "Sects. 2.1\u20132.3, 5.3\u20135.4, Tables 14\u201315"
     ],
     "yiOpenAccessThermodynamically2024": [
-      "Sects. 2.1–2.3, 3.1–3.2"
+      "Sects. 2.1\u20132.3, 3.1\u20133.2"
     ],
     "silkenbaumerSolubilityCarbonDioxide1998": [
-      "pp. 3135–3140, Tables 5, 9"
+      "pp. 3135\u20133140, Tables 5, 9"
     ],
     "kampsSolubilityCO2H2O+piperazine2003a": [
-      "Modeling, pp. 2663–2664"
+      "Modeling, pp. 2663\u20132664"
     ],
     "ermatchkovSolubilityCarbonDioxide2006a": [
-      "Thermodynamic Modeling, pp. 1790–1793"
+      "Thermodynamic Modeling, pp. 1790\u20131793"
     ],
     "mehdizadehAMPCO2Water2013": [
-      "Sects. 4.1–4.4, 5.1–5.3"
+      "Sects. 4.1\u20134.4, 5.1\u20135.3"
     ],
     "Nasrifar2010": [
-      "Sects. 2–6",
-      "Sect. 6, Figs. 13–17"
+      "Sects. 2\u20136",
+      "Sect. 6, Figs. 13\u201317"
     ],
     "Rodriguez2012": [
-      "Sects. 2.3, 3–5",
-      "Sects. 5.2–5.4, Figs. 10–12"
+      "Sects. 2.3, 3\u20135",
+      "Sects. 5.2\u20135.4, Figs. 10\u201312"
     ],
     "pereiraSystematicApproachThermodynamic2018": [
-      "Sects. 3.2–3.4, 4.1.1–4.1.2"
+      "Sects. 3.2\u20133.4, 4.1.1\u20134.1.2"
     ],
     "wangImprovementPRCPAEquation2018": [
       "Sects. 3.2.2, 4.1.2, 4.2, Fig. 15"
     ],
     "perdomoPredictiveGroupcontributionFramework2023": [
       "Sect. 4.2, Fig. 4",
-      "Sect. 4.3.3, Figs. 13–15",
-      "Sects. 4.4.1–4.4.2, Figs. 16–18"
+      "Sect. 4.3.3, Figs. 13\u201315",
+      "Sects. 4.4.1\u20134.4.2, Figs. 16\u201318"
     ],
     "Wangler2018": [
-      "Sects. 6.1–6.2.1",
-      "Sect. 6.3, Figs. 19–21"
+      "Sects. 6.1\u20136.2.1, Table 11 footnote b",
+      "Sect. 6.3, Figs. 19\u201321"
     ],
     "Cleeton2020": [
-      "Sects. 3.1–3.3.2, Figs. 7–8"
+      "Sects. 3.1\u20133.3.2, Figs. 7\u20138"
     ],
     "raeispourshiraziApplicationEPC_SAFTMBEoS2020": [
-      "Eq. 12, Sect. 5.3, Tables 3–4"
+      "Eq. 12, Sect. 5.3, Tables 3\u20134"
     ],
     "Tsanas2022": [
-      "Sects. 2.5–2.7, 3.1, 3.3"
+      "Sects. 2.5\u20132.7, 3.1, 3.3"
     ]
   },
   "new_bibliography_entries": [
@@ -143,7 +132,7 @@
     "silkenbaumerSolubilityCarbonDioxide1998"
   ],
   "bibliography": "Six entries copied verbatim from the existing path-sanitized Zotero Better BibTeX export; no full-library export refresh or library mutation.",
-  "source_verification": "Seven reading-shelf papers checked against index and current Zotero companion hashes. Other cited methods/results read from live-resolved Zotero PDFs; Kamps Modeling locator checked in PDF pp.2663–2664. No supplements treated as read.",
+  "source_verification": "Checked changed claims against retained notebooks/results, Part I Section 2 and Supplement S2, and cited methods/results passages in Uyan, Wangler, Cleeton, Nasrifar, Mehdizadeh, Pereira and Perdomo. Current Zotero companion hashes checked for Uyan, Wangler, Cleeton and Nasrifar; Mehdizadeh and Pereira PDF hashes match the prior source identities. Wangler Table 11 footnote b supports the re-determined Uyan deviation. No new literature claims for pending papers.",
   "pdf_reading_identities": [
     {
       "name": "Hartono2020",
@@ -217,40 +206,30 @@
     }
   ],
   "pending_sources": {
-    "10.1021/ie1006855": "No Zotero match at final check; comment-only placeholder in P4.",
-    "10.1016/j.fuel.2014.12.002": "No Zotero match at final check; comment-only placeholders in P4/P10.",
-    "10.1002/cjce.22109": "No Zotero match at final check; comment-only placeholders in P4/P10."
-  },
-  "connecting_paragraph_word_budgets": {
-    "p2-model-dispersion": 30,
-    "p2-model-association": 35,
-    "p2-model-born": 30,
-    "p2-model-permittivity": 35,
-    "p2-model-caloric": 30,
-    "p2-methods-05-caloric": "Moved sign conventions plus at most 30 new words pointing to S2.",
-    "p2-results-subsystems": 65
+    "10.1021/ie1006855": "Live exact-DOI Zotero search returned zero matches during this revision; comment-only placeholder retained.",
+    "10.1016/j.fuel.2014.12.002": "Live exact-DOI Zotero search returned zero matches during this revision; comment-only placeholder retained.",
+    "10.1002/cjce.22109": "Live exact-DOI Zotero search returned zero matches during this revision; comment-only placeholder retained."
   },
   "numeric_map": {
     "entries": 548,
     "exact_json_field_checks": 378,
     "regenerated_csv_byte_identical_to_baseline": true,
-    "all_original_named_paragraph_ids_preserved": true,
-    "all_numerical_tokens_in_model_methods_results_discussion_conclusions_preserved": true,
     "main_tables": 9,
     "supplement_tables": 25,
     "table_bodies_unchanged": true,
     "figure_pdfs_byte_identical_to_baseline": true,
-    "displayed_values_sha256": "82eac4e9185d0eedc5a52db0fcf36c2194e617f8637b9fd8dd53eac8b115d72d"
+    "displayed_values_sha256": "82eac4e9185d0eedc5a52db0fcf36c2194e617f8637b9fd8dd53eac8b115d72d",
+    "revision_exceptions": "Only authorized DEA density temperature precision (298 to 298.15 K) and integral-heat AARD rounding (0.977 to 0.98%) changed. Duplicate numerical mentions removed by the requested condensation; no result value added."
   },
-  "prose_check": "Passed plugin-wide and scoped rules.",
-  "unchanged": "Part I source and outputs, analyses/_cse-manuscript.json and all calculation inputs/results. Shared references.bib has only the six requested Zotero entry additions.",
+  "prose_check": "Passed plugin-wide and scoped rules on final Part II sources and refreshed numerical-source index.",
+  "unchanged": "Part I files, analyses/_cse-manuscript.json, bibliography, all calculation inputs/results, table bodies, displayed-values.csv and four accepted figure PDFs.",
   "plan_variations": [
     "Pending papers omitted as explicitly directed; no scientific claim made about them.",
     "Baygi MEA sentence retired and Part I cited, as merged plan directs.",
     "Optional combined model sentence was not used: all seven Part I model subsection roles retained.",
     "Optional Austgen/Chremos/Neerup citations not added; no new claim requires them."
   ],
-  "remaining_review": "Orchestrator Astra science and Opus story checks; not self-reviewed.",
+  "remaining_review": "Independent acceptance by the parent; this implementor did no self-review.",
   "generated_table_changes": "Only references.bib SHA-256 comments changed; all 34 table bodies are byte-identical after removing provenance comments.",
   "new_citations_in_part2": [
     "Hessen2010",
@@ -265,14 +244,42 @@
     "wangImprovementPRCPAEquation2018"
   ],
   "manuscript_source_sha256": {
-    "docs/scientific/latex/part2.tex": "318774f338db972e204442570d309054a5e6f965473df6035cf9b29bc8d9ff09",
+    "docs/scientific/latex/part2.tex": "18e84f822fc55090e15147eea5073e757a7d88043df75f174c1aa51600eaf443",
     "docs/scientific/latex/part2_supplement.tex": "e91723ca13b84f3af878649491b9d7b822b1296ec322c32017d9f13d103c576a",
-    "docs/scientific/latex/sections/part2/conclusions.tex": "e8f41659294da4d4e9afa727f7b0fbecdaefa2beb6fa25c5b6a0a22d6e04cb7e",
+    "docs/scientific/latex/sections/part2/introduction.tex": "b89447b9f6e725e945a52c5e65314cbecb65faa6c1280fcaa274e08d5ee3410b",
+    "docs/scientific/latex/sections/part2/model.tex": "7592aaf674d6556509028f20198285daf9c5adef89f3cabfcd459b9276b84c8b",
+    "docs/scientific/latex/sections/part2/supplement.tex": "9f86551f6ebc7447ac6a9c7af7c68d3055953aa9bb29e2ac7321eb0273de6042",
     "docs/scientific/latex/sections/part2/endmatter.tex": "44a6465b9783d256de6fe5316f28f30a7ae37cc3dab86acd803b152101805f09",
-    "docs/scientific/latex/sections/part2/introduction.tex": "bc9f38fe47134f831d7ac2b6f81e203e18484f42e1814bc945a459dc03124da5",
-    "docs/scientific/latex/sections/part2/methods.tex": "238eef37e1bd641d2efbfecfc26e676914fee193e18a6e4559331acf2f5f196a",
-    "docs/scientific/latex/sections/part2/model.tex": "04ca61ca4773b91fc213fda0103acdec0547d4ee2a07a3697328e88d2f3276a7",
-    "docs/scientific/latex/sections/part2/results.tex": "859ba0aaf4ff88396fd7087fe2e2238757ba009002bd7a0871a0a5f28fa11334",
-    "docs/scientific/latex/sections/part2/supplement.tex": "769da67449d55ee4e716311af1919a01d737d9fa9028aace94f271ae3c3c0325"
+    "docs/scientific/latex/sections/part2/methods.tex": "158b69ca439ae41daf9417feabf717963690a9edaf05ad02cbd229d9e9394973",
+    "docs/scientific/latex/sections/part2/results.tex": "75cf2c9e3ed19e50ff0f54b4b9b1012376e657fbd92029a9a60ba51a2df43ddf",
+    "docs/scientific/latex/sections/part2/conclusions.tex": "afbb4f21cf6a564c6c3bf06f6eab4681897623afed24c38bd3e1f34b117094b3"
+  },
+  "revision_baseline": "bd4e5a34af530c90a85b2278d0c6a5b340b555e8",
+  "findings": {
+    "Astra 1": "Applied as given.",
+    "Astra 2": "Applied as given.",
+    "Astra 3": "Applied as given.",
+    "Opus 1": "Applied as given.",
+    "Opus 2": "Applied as given.",
+    "Opus 3": "Applied as given.",
+    "Opus 4": "Applied as given.",
+    "Opus 5": "Applied with science-check deviation: MDEA tests the shared inorganic-carbon description without an amine-carbamate pathway.",
+    "Opus 6": "Applied as given: species-group antecedent made explicit; repeated Part I sentence reworded.",
+    "Opus 7": "Applied as given.",
+    "Opus 8": "Applied with science-check deviation: Astra water\u2013DEA comparison-only Cai sentence retained with Cai citation; other two edits applied.",
+    "Opus 9": "Applied as given, using the follow-up correction naming AMP, PZ and DEA; repeated sentence removed.",
+    "Opus 10": "Applied as given.",
+    "Opus 11": "Applied required deletions as given; optional Hartono/Kundu consolidation not requested and left unchanged.",
+    "Opus 12": "Applied as given.",
+    "Opus 13": "Applied as given.",
+    "Opus 14": "Applied with science-check deviation: retained Weiland DEA rows all use 298.15 K; DEA integral-heat AARD consistently 0.98% to match Table 4.",
+    "Opus 15": "Applied with science-check deviation: MDEA tests the shared inorganic-carbon description without an amine-carbamate pathway.",
+    "Opus 16": "Applied as given.",
+    "Opus 17": "Applied as given, including optional Cleeton condensation.",
+    "Opus 18": "Applied as given.",
+    "Opus 19": "Applied with science-check deviation: retained Weiland DEA rows all use 298.15 K; DEA integral-heat AARD consistently 0.98% to match Table 4.",
+    "Opus 20": "Applied with science-check deviation: MDEA tests the shared inorganic-carbon description without an amine-carbamate pathway.",
+    "Opus 21": "Applied as given.",
+    "Opus 22": "Applied as given."
   }
 }
