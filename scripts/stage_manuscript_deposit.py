@@ -102,7 +102,7 @@ def stage():
         assert not name.endswith('.pdf') or 'figures' in name, name  # generated figures only, never source papers
         assert (ROOT / name).is_file() and not (ROOT / name).is_symlink(), name
     if DEST.exists() and any(DEST.iterdir()):  # replace cleanly; the old staging stays for review
-        stamp = datetime.date.fromtimestamp(DEST.stat().st_mtime).isoformat()
+        stamp = datetime.datetime.fromtimestamp(DEST.stat().st_mtime).strftime('%Y-%m-%dT%H%M%S')
         DEST.rename(DEST.with_name(f'{DEST.name}-{stamp}-superseded'))
     DEST.mkdir(parents=True, exist_ok=True)
     for name in sorted(selected):
