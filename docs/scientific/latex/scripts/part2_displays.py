@@ -50,6 +50,7 @@ def table(name, caption, headers, rows, widths):
 M = 'analyses/solvent_specification_mdea/results/retained-statistics-320.json'
 A = 'analyses/amp_transfer/results/refit-306/summary.json'
 P = 'analyses/pz_transfer/results/reactive-A12-record.json'
+K = 'analyses/pz_transfer/results/kamps2003-A12.json'
 D = 'analyses/dea_transfer/results/score.json'
 DF = 'analyses/dea_transfer/results/fits.json'
 W = 'analyses/mdea_mea_workflow/results/refit-298/pressure-scores.json'
@@ -96,7 +97,8 @@ for row in rows:
     elif amine.startswith('PZ') and condition == '393.15 K': domain = 'carbamate and protonation extrapolated'
     elif amine.startswith('DEA') and condition != 'all' and not condition.startswith('40'): domain = 'protonation extrapolated'
     row.append(domain)
-table('unfitted','Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. All are partial pressures except AMP Tong.', ['Amine and source','Conditions','$n$',r'AARD / \%',r'Bias / \%','Measured-law range'],rows,[.20,.15,.04,.10,.10,.29])
+rows.append(['PZ Kamps (total)','all',value(K,['summary','overall','n'],0),value(K,['summary','overall','AARD_percent'],1),value(K,['summary','overall','bias_percent'],1),'mixed; comparison-only'])
+table('unfitted','Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. Kamps was scored once after the PZ fit was frozen. All are partial pressures except AMP Tong and PZ Kamps.', ['Amine and source','Conditions','$n$',r'AARD / \%',r'Bias / \%','Measured-law range'],rows,[.20,.15,.04,.10,.10,.29])
 rows=[]
 for group in ['inside_278_368K','outside_278_368K']:
     k=['B1_fitted_by_source','Kuranov_by_law_range',group]
@@ -121,6 +123,35 @@ for key,title in [('old','Shared substitution; no AMP refit')]+[(k,lab) for k,la
  k=['old'] if key=='old' else ['steps',key]
  rows.append([title,value(A,k+['calibration','cost']),value(A,k+['calibration','loaded_pressure','mean_abs_percent']),value(A,k+['calibration','nmr_rms'],5),value(A,k+['kundu','overall','E_p']),value(A,k+['kundu','overall','bias_percent'])])
 table('amp-chain','AMP same-data sequence. Calibration uses total pressure and carbamate fraction; Kundu uses partial pressure and remains outside every objective. The fourth row is the reported fit.', ['Change','Cost',r'Fitted $P$ AARD / \%','Species RMS',r'Kundu AARD / \%',r'Bias / \%'],rows,[.35,.09,.13,.11,.13,.09])
+
+# Kamps summaries use the frozen-fit comparison and row-level law labels.
+krows=read('analyses/pz_transfer/results/kamps2003-A12.csv')
+assert len(krows)==read(K)['summary']['overall']['n']==94
+rows=[]
+for group in ['below 0.2 MPa','374-395 K','313-354 K, 0.2 MPa and above','unloaded']:
+ k=['summary','by_group',group]
+ rows.append([group.replace('-', '--'),value(K,k+['n'],0),value(K,k+['AARD_percent'],1),value(K,k+['bias_percent'],1)])
+table('kamps-groups',r'Kamps total-pressure groups. Loaded high-temperature groups exclude unloaded rows and pressures below 0.2 MPa. Overall: 94 rows, 42.5\,\% AARD, $-40.3$\,\% bias.', ['Group','$n$',r'AARD / \%',r'Bias / \%'],rows,[.52,.08,.15,.15])
+rows=[]
+for block in read(K)['summary']['by_block']:
+ t,m=block.split(' K, ');m=m.split()[0]
+ b=[r for r in krows if r['T_K']==t and float(r['mPZ'])==float(m)]
+ assert len(b)==read(K)['summary']['by_block'][block]['n']
+ for field,shown in [('T_K',t),('mPZ',m)]:
+  NUMBERS.append((shown,'analyses/pz_transfer/results/kamps2003-A12.csv','row '+b[0]['row']+', '+field,b[0][field]))
+ labels=[b[0][f] for f in ['carbamate_law','protonation_law','shared_R2_law']]
+ rows.append([t,m,*labels,value(K,['summary','by_block',block,'n'],0),value(K,['summary','by_block',block,'AARD_percent'],1),value(K,['summary','by_block',block,'bias_percent'],1)])
+table('kamps-blocks',r'Kamps total-pressure blocks at corrected temperatures. Law labels: carbamate measurements 283.15--333.15 K; protonation measurements 293.14--353.42 K; shared R2 interval 293.15--393.15 K. Unloaded rows are included. Labels describe temperature ranges, not phase stability.', ['$T$ / K',r'$m_{PZ}$ / mol kg$^{-1}$','Carbamate','Protonation','R2','$n$',r'AARD / \%',r'Bias / \%'],rows,[.10,.12,.13,.14,.10,.04,.10,.10])
+c=read(K)['summary']['census']
+table('kamps-census','Kamps phase census at 94 scored bubble states. Split counts are lower bounds; states without a detected split do not prove stability.', ['Outcome','States'],[
+ ['No additional phase found',value(K,['summary','census','no_extra_phase'],0)],
+ ['Resolved dense-liquid split',str(len(c['dense_split']))],
+ ['Undecided (unloaded rows)',value(K,['summary','census','undecided'],0)],
+ ['Gas split',str(len(c['gas_split']))],['Ambiguous',str(len(c['ambiguous']))]], [.65,.20])
+for field in ['dense_split','gas_split','ambiguous']:
+ NUMBERS.append((str(len(c[field])),K,'len(summary.census.'+field+')',str(len(c[field]))))
+for path in ['analyses/pz_transfer/results/check-states-A12.json','analyses/pz_transfer/results/check-states-A12-direct.json']:
+ read(path)
 
 # Full scalar input tables retain units from the parameter documents.
 shared={'water','carbon-dioxide','hydronium-cation','hydroxide-anion','bicarbonate-anion','carbonate-anion'}
@@ -173,10 +204,10 @@ table('laws',"Reaction-law measurement intervals and use. A calculation inside a
  ['MDEA dissociation','278--368','278--395','393.15 K pressure and 388.71 K heat extrapolate measurements'],
  ['AMP dissociation','to 353.22','to 353.22','Tong 373--393 K rows not calculated (outside declared interval)'],
  ['AMP hydrolysis','source estimates: 313--373','includes 303--353','Not direct law measurements; slope extrapolated below 313 K; level and slope fitted'],
- ['PZ protonation','approximately 293--353','includes 283.15--393.15','283.15 and 393.15 K extrapolate'],
- ['PZ carbamate','283.15--333.15 (rounded 283--333)','includes 353.15 and 393.15','353.15 and 393.15 K extrapolate'],
+ ['PZ protonation','293.14--353.42','includes 283.15--395.0','283.15 K and above 353.42 K extrapolate'],
+ ['PZ carbamate','283.15--333.15 (rounded 283--333)','includes 353.15--395.0','Above 333.15 K extrapolates'],
  ['DEA protonation','to approximately 323','to 393.15','23/30 fitted Lawson rows above measured range'],
- ['Shared R2','not established here','293.15--393.15','Seven Lawson rows at 394.26 K not calculated (outside declared interval); PZ 283.15 K extrapolates below lower limit'],
+ ['Shared R2','not established here','293.15--393.15','Seven Lawson rows at 394.26 K not calculated (outside declared interval); PZ 283.15 K extrapolates below lower limit; Kamps 395.0 K above upper limit'],
  ],[.18,.23,.22,.28])
 table('data-roles','Observation roles and prior access. Held out means never in any fitting objective. Comparison-only means calculated after parameter selection without entering that selection. Prior scoring is stated even when no held-out value determined the objective.', ['Amine / role','Observations','Scored before final fit chosen?'],[
  ['MDEA fitted','278 entries: 67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures','---'],
@@ -187,6 +218,7 @@ table('data-roles','Observation roles and prior access. Held out means never in 
  ['AMP held-out comparison','17 Tong total pressures scored; 23 not calculated','Earlier fits had been compared; no blind test claimed'],
  ['PZ fitted','294 entries: 62 Hilliard pressures; 232 NMR group observations at 121 states','---'],
  ['PZ held-out','52 Ermatchkov partial pressures','Yes; unconstrained refit scored before penalty alternative and final choice'],
+ ['PZ comparison-only','94 Kamps total pressures; precipitation row excluded','No; scored once on frozen twelve-coordinate fit'],
  ['DEA fitted','80 entries: 30 Lawson pressures at 25 wt%; 50 Carson heats','---'],
  ['DEA held-out','16 Seo and Hong; 44 Lal partial pressures','Yes; first selected start, then numerically tied second start'],
  ['DEA comparison-only','Lawson Table VIII; Cai binary; Böttinger species; Horstmann excess heat; Weiland densities','No; added after fit selection'],
@@ -196,6 +228,9 @@ table('phase-searches','Finite phase-search results. Detected liquid-split count
  ['AMP: 51 Kundu states','0 found','No gas, ambiguous or unresolved result; calibration gas outcomes not stored'],
  ['PZ: 183 calibration states','at least 4','No ambiguous or unresolved result; three rich NMR pressures moved above bubble pressure'],
  ['PZ: 52 held-out bubble states','0 found','Finite search only'],
+ ['PZ: 94 Kamps bubble states','at least 36','56 without detected split; 2 unloaded undecided; no gas or ambiguous split'],
+ ['PZ: compressed Hilliard states','at least 4','At 1.5 times bubble pressure; routine search misses two'],
+ ['PZ: 121 NMR states at $T+0.5$ K','0 found','Three rich states above 0.1 MPa evaluated at 1.05 times bubble pressure'],
  ['PZ penalty alternative','at least 3','One found routinely; two additional splits resolved by direct distance evaluation'],
  ['DEA: 140 fitted/held-out states','0 found','No gas, ambiguous or unresolved result'],
  ],[.30,.20,.43])
@@ -256,6 +291,7 @@ rows.extend([
 rows.extend([
  ['PZ fitted partial pressure',r'Hilliard (2008) \cite{Hilliard2008}','Appendix D.5, printed pp. 916--917'],
  ['PZ NMR groups',r'Ermatchkov et al. (2003) \cite{ermatchkovChemicalEquilibriumConstants2003}','Tables 1--4; 121 states'],
+ ['PZ comparison-only total pressure',r'Kamps et al. (2003) \cite{kampsSolubilityCO2H2O+piperazine2003a}',r'Table 3, p. 2666; corrected temperatures: Ermatchkov (2006), Table 6, p. 1794; excludes precipitation row (313.75 K, 1.995 mol/kg, loading 1.69, 4.446 MPa)'],
  ['PZ held-out partial pressure',r'Ermatchkov et al. (2006) \cite{ermatchkovSolubilityCarbonDioxide2006a}','Tables 1--3, printed p. 1789'],
  ['DEA fitted partial pressure',r'Lawson and Garst (1976) \cite{lawsonGasSweeteningData1976}','Table II, PDF p. 4; 30 fitted rows'],
  ['DEA fitted integral heat',r'Carson et al. (2000) \cite{carsonEnthalpySolutionCarbon2000}','Table 2; 50 rows at 298.15 K'],
