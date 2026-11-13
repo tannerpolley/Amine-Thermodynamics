@@ -39,19 +39,19 @@
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/prediction-bands.csv SHA256 96fc9352b6f30dae38805b799344404528d6e49b3b45eaa42002daa8523ac0cd
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/predictions.json SHA256 8fd82d94b500a2b8985ea9979e4ceb653fbfb781dc66a3d047ee68bdec0f46ba
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/ranking.csv SHA256 16b4ed6165c0cc7bad4d938567c8f8e8d88bdddb3de4eb8b53c43b372f7c8e7e
-% Input: docs/scientific/latex/references.bib SHA256 7dc97086df08bf802d25d2a588158a9ad3881648729bb9a5da84741ef50acd9c
+% Input: docs/scientific/latex/references.bib SHA256 9ac4ac1c25d01550aa5e9a9df066b7a49e96212687fb4c6f9c826ee81cea4252
 % Input: docs/scientific/latex/supplement.tex SHA256 b90143f6a0711b9a7437b4845c8a5db430f8b301ff21d8f402821b105da3d5f8
 \begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.46\linewidth}@{}}
-\caption{Reaction-law measurement intervals and use. An admitted calculation can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.}\label{tab:p2-laws}\\
-\toprule Law & Measured source interval / K & Use and limitation \\ \midrule\endfirsthead
-\toprule Law & Measured source interval / K & Use and limitation \\ \midrule\endhead
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}@{}}
+\caption{Reaction-law measurement intervals and use. A calculation inside a declared interval can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.}\label{tab:p2-laws}\\
+\toprule Law & Measured interval / K & Declared interval / K & Use and limitation \\ \midrule\endfirsthead
+\toprule Law & Measured interval / K & Declared interval / K & Use and limitation \\ \midrule\endhead
 \bottomrule\endfoot
-MDEA dissociation & 278--368 & Declared to 395; 393.15 K pressure block and 388.71 K heat extrapolate measurements \\
-AMP dissociation & to 353.22 & Fixed; Tong 373--393 K rows refused \\
-AMP carbamate hydrolysis & source slope extrapolated below 313 & Level and temperature dependence fitted; correction at lower bound \\
-PZ protonation & approximately 293--353 & NMR at 283.15 K and pressure at 393.15 K extrapolate \\
-PZ carbamate laws & 283.15--333.15 (rounded law: 283--333) & 353.15 and 393.15 K pressure blocks extrapolate \\
-DEA protonation & to approximately 323 & 23/30 fitted Lawson rows above measured range; declared to 393.15 \\
-Shared R2 & 293.15--393.15 declared & Seven Lawson rows at 394.26 K refused; PZ 283.15 K extrapolates below lower limit \\
+MDEA dissociation & 278--368 & 278--395 & 393.15 K pressure and 388.71 K heat extrapolate measurements \\
+AMP dissociation & to 353.22 & to 353.22 & Tong 373--393 K rows not calculated (outside declared interval) \\
+AMP hydrolysis & source slope: 313--353 & includes 303--353 & Slope extrapolated below 313 K; level and slope fitted \\
+PZ protonation & approximately 293--353 & includes 283.15--393.15 & 283.15 and 393.15 K extrapolate \\
+PZ carbamate & 283.15--333.15 (rounded 283--333) & includes 353.15 and 393.15 & 353.15 and 393.15 K extrapolate \\
+DEA protonation & to approximately 323 & to 393.15 & 23/30 fitted Lawson rows above measured range \\
+Shared R2 & not established here & 293.15--393.15 & Seven Lawson rows at 394.26 K not calculated (outside declared interval); PZ 283.15 K extrapolates below lower limit \\
 \end{longtable}\endgroup

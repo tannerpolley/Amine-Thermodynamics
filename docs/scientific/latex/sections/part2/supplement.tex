@@ -34,7 +34,7 @@ The nine coordinates do not include a fitted dissociation constant.
 \input{tables/part2/mdea-interactions}
 
 % P:p2-s-inputs-04
-AMP uses its neutral association description with explicit carbamate chemistry and a fixed Hamborg dissociation law.
+AMP uses its neutral association description with explicit carbamate chemistry and a fixed Hamborg dissociation law \cite{hamborgDissociationConstantsThermodynamic2009}.
 The two temperature-dependent AMP--water and AMPH$^+$--water interactions have the reciprocal-temperature form above, with slopes $-55.96106619$ and $-274.1548086$ K, respectively.
 Its final nine coordinates include those four interaction quantities, cation--\COtwo interaction, cation and carbamate diameters, hydrolysis level and hydrolysis enthalpy correction.
 Ion Debye--H\"uckel diameters equal segment diameters and packing diameters equal $0.88\sigma$.
@@ -45,7 +45,7 @@ The carbamate diameter is fixed at its lower bound for the conditional uncertain
 \input{tables/part2/amp-interactions}
 
 % P:p2-s-inputs-05
-PZ uses an effective two-site neutral association description; the pure fit holds segment count 2.6519 and diameter 3.7136 \AA\ fixed while fitting its three energy/association quantities to Steele pressures.
+PZ uses an effective two-site neutral association description; the pure fit holds segment count 2.6519 and diameter 3.7136 \AA\ fixed while fitting its three energy/association quantities to Steele pressures \cite{steeleThermodynamicPropertiesIdealGas1997}.
 Pure-liquid density and the liquid extrapolation below the melting region remain unvalidated.
 The neutral PZ--water interaction has the linear-temperature form anchored at 353.15 K, with $k_0=-0.1976454016$ and $k_1=0.0011250148$ K$^{-1}$; its two coordinates were fitted separately to binary pressure and vapor composition, then fixed during the reactive fit.
 The reactive twelve-coordinate fit ties the singly and doubly protonated cation sizes and energies; mono- and dicarbamate share size, energy and water interaction.
@@ -97,7 +97,7 @@ All coefficient tables must be read together with these source ranges and main-t
 % P:p2-s-objectives-01
 The observation roles in main-text Table~\ref{main-tab:p2-data-roles} apply throughout this supplement.
 No pressure set labeled held out enters any objective, including earlier fits shown for sensitivity.
-Prior scoring is nonetheless material: MDEA outside-fit sets were already inspected, AMP Kundu was available before final diameter choice, PZ Ermatchkov before the penalty alternative and final fit choice, and DEA holdouts before a numerically tied second-start choice.
+Prior scoring is nonetheless material: MDEA held-out sets were already inspected, AMP Kundu was available before final diameter choice, PZ Ermatchkov before the penalty alternative and final fit choice, and DEA holdouts before a numerically tied second-start choice.
 Comparison-only DEA properties were added after selection.
 A datum's absence from a final objective is not evidence of complete blindness during model development.
 
@@ -145,10 +145,10 @@ It is not a differential heat and is not the excess enthalpy per mole of binary 
 \input{tables/part2/bounds}
 \input{tables/part2/fit-starts}
 % P:p2-s-selection-01
-MDEA B1 retains the nine-coordinate fit under fixed shared inputs.
+The reported MDEA fit retains the nine-coordinate fit under fixed shared inputs.
 Its selected cost is 374.5190788 for 278 objective rows, with two active bounds; the second declared start converges to a larger cost, so agreement of two starts is not claimed.
-The A3 alternative is the same-data sensitivity counter-case, with no replacement of the reported B1 fit.
-B1's Carson scaled RMS increases from 0.97662 to 1.10594, a documented caloric compromise rather than a hidden failure relabeled as improved agreement.
+The A3 alternative is the same-data sensitivity counter-case, with no replacement of the reported MDEA fit.
+Its Carson scaled RMS increases from 0.97662 to 1.10594.
 Its selected parameter-file SHA-256 is \texttt{2a5341be\allowbreak{}176829d0\allowbreak{}87133a14\allowbreak{}67828f76\allowbreak{}2a655f92\allowbreak{}a586eb10\allowbreak{}62a5719a\allowbreak{}58142d9d}.
 
 % P:p2-s-selection-02
@@ -159,11 +159,11 @@ Neither estimate is a measured ionic diameter.
 The completed hydrolysis enthalpy correction reaches $-5000$ J/mol in every refit of the sequence.
 
 % P:p2-s-selection-03
-PZ's reported twelve-coordinate fit starts from the earlier fit projected onto the new ties.
+PZ's reported twelve-coordinate fit starts from a previous PZ fit mapped onto these ties.
 The independent proposed start is unavailable with HPZCOO included in the vapor; no successful fit from that start is implied.
 The reported fit reaches 100 iterations with cost 20698.6 nearly flat over its final fourteen iterations.
 A conditional diagnostic with the bound coordinate fixed converges at a cost lower by approximately $3\times10^{-4}$, but does not retroactively label the original termination converged.
-PZH$^+$--water reaches the replacement lower bound $-1$.
+PZH$^+$--water reaches the lower bound $-1$.
 The separate penalty alternative is not substituted for this reported fit.
 
 % P:p2-s-selection-04
@@ -188,7 +188,7 @@ The Ermatchkov MDEA total is a mixed-range summary, while every Xiao row is with
 Kuranov's thirty extrapolated fitted rows are at 373.14--373.17 K and 393.12--393.15 K.
 The fitted Merkley heats give 10.36\,\% AARD at 333.15 K and 6.56\,\% at 388.71 K, each over two observations; signed errors are $-5725$ and $-3989$ J/mol \COtwo, respectively.
 The latter is a dissociation-law extrapolation.
-Stored Carson, heat-capacity and loaded-density rows do not carry temperature fields sufficient for a law-range aggregate, so none is fabricated.
+Stored Carson, heat-capacity and loaded-density rows do not carry temperature fields sufficient for a law-range aggregate.
 Binary pressure and unloaded density do not depend on the reactive dissociation calculation.
 
 % P:p2-s-unfitted-02
@@ -210,7 +210,7 @@ DEA Seo and Hong has five, six and five pressures at 40, 60 and 80 $^{\circ}$C; 
 Only the 40 $^{\circ}$C blocks are within the Bower measured range.
 Lal states an accuracy of $\pm15$\,\% above 0.05 kPa and much larger uncertainty below that pressure; five of twenty-eight higher-pressure rows fall within that stated interval.
 The sixteen lower-pressure observations remain in the overall AARD.
-At 100 $^{\circ}$C, four very-low-loading values are described by Lal as probably in error (printed p.~684); their exclusion is not used to improve the reported overall score.
+At 100 $^{\circ}$C, four very-low-loading values are described by Lal as probably in error (printed p.~684); they remain in the overall score.
 
 % P:p2-s-unfitted-05
 DEA comparison-only Lawson Table VIII contains ten observations: two at 77 $^{\circ}$F, four at 100 $^{\circ}$F and four at 200 $^{\circ}$F.
@@ -239,10 +239,10 @@ No analogous assessment for the other amines establishes whether the error is sp
 % P:p2-s-phases-01
 Main-text Table~\ref{main-tab:p2-phase-searches} reports the finite state inventories rather than a phase diagram.
 For MDEA, distinct observation identities can represent repeated physical states; 775 records should not be described as 775 independent experiments.
-The thirty-seven gas witnesses are not dense-liquid splits, and all seven corrected-Kamps domain exclusions remain outside the phase evidence.
+The thirty-seven gas witnesses are not dense-liquid splits, and all seven states above the 393.15 K R2 limit remain outside the phase evidence.
 Kuranov source rows 28 and 72 exceed shared R2's 393.15 K upper limit and are excluded from the 278-row fit.
-Neither historical computational templates ending at 395 K nor older-law calculations extend the current R2 interval.
-The capped MDEA heat at 333.15 K, 60 wt\% and 1.121 MPa remains unavailable on the original search, with no restricted loading grid used to manufacture a value.
+
+The capped MDEA heat at 333.15 K, 60 wt\% and 1.121 MPa could not be calculated.
 
 % P:p2-s-phases-02
 AMP nominal Kundu states are searched at their calculated bubble states; loading-perturbed pressure evaluations do not supply additional phase evidence.
@@ -264,7 +264,7 @@ Penalty scales are $10^{-2}$ followed by $3\times10^{-3}$.
 Its routine search reports one split, but direct distance calculations at split compositions recovered near the fit show two further negative values at rows 55 and 56.
 Those direct values, $-0.0309\,RT$ and $-0.0437\,RT$, demonstrate that the finite search missed resolved splits.
 The penalty did not establish a single-liquid fit.
-Consequently detected-split counts are lower bounds throughout both papers' interpretation here, and a count of states without detected instability is an upper bound on stability within the searched inventory, not proof of global stability.
+Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched inventory, not proof of global stability.
 \FloatBarrier
 
 \section{Conditional covariance, sensitivity and bound profiles}\label{sec:p2-s-uncertainty}
@@ -332,7 +332,7 @@ The comparisons are same-data parameter substitutions, not an independent physic
 A separate data-only comparison of Hartono and Kundu lacks sufficient overlap to decide whether the systematic Kundu error reflects experiment or the model.
 There is no adequate 303 K overlap, and the exploratory interpolation requires concentration and vapor-pressure-baseline assumptions.
 Its exploratory ratios are therefore not used as independent quantitative evidence in this paper.
-The open source-versus-model question remains alongside the measured forty-three-percent error, rather than being replaced by a favorable earlier score.
+The source-versus-model question for the 42.85\,\% Kundu error remains open.
 \FloatBarrier
 
 \section{Numerical identities and display provenance}\label{sec:p2-s-provenance}
@@ -351,7 +351,6 @@ Numerical precision does not account for the larger experimental discrepancies.
 
 % P:p2-s-provenance-03
 The presentation script reads stored JSON and CSV values without importing the thermodynamic model.
-Every generated table records input SHA-256 values in its source comments.
+
 The accompanying numerical-source index maps table cells and manuscript paragraph values to source files and fields; figure values and parameter-only bands remain separate from experimental uncertainties.
 All plots use discrete observations and model evaluations at the measured states; no interpolated model sweep or new phase boundary is introduced.
-The bibliography snapshot is shared with Part I, with a separate entry for the unpublished companion manuscript.

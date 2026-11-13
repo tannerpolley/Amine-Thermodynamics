@@ -39,24 +39,24 @@
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/prediction-bands.csv SHA256 96fc9352b6f30dae38805b799344404528d6e49b3b45eaa42002daa8523ac0cd
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/predictions.json SHA256 8fd82d94b500a2b8985ea9979e4ceb653fbfb781dc66a3d047ee68bdec0f46ba
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/ranking.csv SHA256 16b4ed6165c0cc7bad4d938567c8f8e8d88bdddb3de4eb8b53c43b372f7c8e7e
-% Input: docs/scientific/latex/references.bib SHA256 7dc97086df08bf802d25d2a588158a9ad3881648729bb9a5da84741ef50acd9c
+% Input: docs/scientific/latex/references.bib SHA256 9ac4ac1c25d01550aa5e9a9df066b7a49e96212687fb4c6f9c826ee81cea4252
 % Input: docs/scientific/latex/supplement.tex SHA256 b90143f6a0711b9a7437b4845c8a5db430f8b301ff21d8f402821b105da3d5f8
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.48\linewidth}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}@{}}
-\caption{Calibration deviations. AARD uses each observable separately; scaled RMS uses the original assigned scales and weights, which differ across studies. These are not cross-amine accuracy scores.}\label{tab:p2-calibration}\\
+\caption{Calibration deviations. AARD uses each observable separately. Scaled RMS is the root mean square of residuals divided by their assigned observation scales, before applying additional objective weights. Pressure residuals are logarithmic for MDEA and relative differences for PZ. These statistics do not provide a cross-amine accuracy ranking.}\label{tab:p2-calibration}\\
 \toprule Observable and fitted source & $n$ & AARD / \% & Scaled RMS \\ \midrule\endfirsthead
 \toprule Observable and fitted source & $n$ & AARD / \% & Scaled RMS \\ \midrule\endhead
 \bottomrule\endfoot
-MDEA: Kuranov total pressure & $67$ & $20.440$ & $0.223$ \\
-MDEA: protonated fraction & $16$ & $13.580$ & $1.639$ \\
-MDEA: Carson heat & $40$ & $5.449$ & $1.106$ \\
-MDEA: Merkley heat & $4$ & $8.460$ & $2.016$ \\
-MDEA: $C_P$ & $33$ & $2.594$ & $1.760$ \\
-MDEA: loaded density & $33$ & $0.185$ & $1.588$ \\
-MDEA: unloaded density & $24$ & $0.057$ & $1.442$ \\
-MDEA: binary pressure & $61$ & $3.232$ & $0.044$ \\
+MDEA: Kuranov total pressure & $67$ & $20.44$ & $0.22$ \\
+MDEA: protonated fraction & $16$ & $13.58$ & $1.64$ \\
+MDEA: Carson heat & $40$ & $5.45$ & $1.11$ \\
+MDEA: Merkley heat & $4$ & $8.46$ & $2.02$ \\
+MDEA: $C_P$ & $33$ & $2.59$ & $1.76$ \\
+MDEA: loaded density & $33$ & $0.18$ & $1.59$ \\
+MDEA: unloaded density & $24$ & $0.06$ & $1.44$ \\
+MDEA: binary pressure & $61$ & $3.23$ & $0.04$ \\
 AMP: Hartono total pressure & $47$ & $10.33$ & -- \\
 PZ: Hilliard partial pressure & $62$ & $19.16$ & $12.90$ \\
-DEA: Lawson partial pressure & $30$ & $28.635$ & -- \\
-DEA: Carson integral heat & $50$ & $0.977$ & -- \\
+DEA: Lawson partial pressure & $30$ & $28.63$ & -- \\
+DEA: Carson integral heat & $50$ & $0.98$ & -- \\
 \end{longtable}\endgroup

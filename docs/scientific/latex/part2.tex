@@ -1,5 +1,6 @@
 \PassOptionsToPackage{hyperfootnotes=false}{hyperref}
 \documentclass[a4paper,fleqn]{cas-sc}
+\DeclareUnicodeCharacter{2062}{}
 \usepackage[pagewise]{lineno}
 % \linenumbers
 
@@ -74,12 +75,12 @@
 \begin{abstract}
 % P:p2-abstract-01
 The shared water, carbon dioxide and inorganic-ion description established for monoethanolamine in Part I is held fixed while amine-specific parameters are estimated for methyldiethanolamine (MDEA), 2-amino-2-methyl-1-propanol (AMP), piperazine (PZ) and diethanolamine (DEA).
-The same equation of state accommodates their different reaction networks, but substantial shape errors remain in fitted pressures and species fractions.
-Outside the fitting objective, MDEA partial-pressure average absolute relative deviations are 28.19\,\% for Xiao and 18.27\,\% for Ermatchkov; the latter mixes conditions inside and outside the dissociation law's measured temperature range.
-Held-out pressure deviations are 42.85\,\% for AMP against Kundu, 21.94\,\% for PZ against Ermatchkov, and 79.54 and 44.17\,\% for DEA against Seo and Hong and Lal, respectively.
+The same equation of state accommodates their different reaction networks, but fitted pressures retain loading- and temperature-dependent errors, and PZ species residuals remain large relative to their assumed measurement scale.
+Held-out partial-pressure average absolute relative deviations (AARD) are 28.19 and 18.27\,\% for MDEA against Xiao and Ermatchkov, the latter mixing conditions inside and outside the dissociation law's measured temperature range; 42.85\,\% for AMP against Kundu; 21.94\,\% for PZ against Ermatchkov; and 79.54 and 44.17\,\% for DEA against Seo and Hong and Lal.
+
 The data sets and fitting histories differ, so these percentages do not rank the amines.
 For AMP and DEA, local conditional parameter bands are much smaller than the unfitted-pressure discrepancies; MDEA bands overlap the errors, and PZ sensitivities limit the linear approximation.
-At least four false liquid splits remain for PZ, and a stability penalty misses resolved splits in a separate fit.
+At least four false liquid splits remain for PZ; a separate fit with Part I's stability penalty still has at least three, two of which the routine phase search missed.
 DEA reproduces fitted integral absorption heats within 0.98\,\% AARD but predicts the wrong sign of water--DEA excess enthalpy.
 The results establish the extent and limitations of amine-specific calibration under a frozen shared description, rather than uniform predictive accuracy across amine classes.
 \end{abstract}

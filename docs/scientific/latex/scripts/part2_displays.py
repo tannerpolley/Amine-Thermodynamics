@@ -59,19 +59,19 @@ assert sum(x['rows'] for k, x in read(M)['B1_fitted_by_source'].items() if 'rows
 assert read(P)['holdout']['rows'] == 52
 rows = []
 for key, name in [('Kuranov','MDEA: Kuranov total pressure'),('Jakobsen','MDEA: protonated fraction'),('Carson','MDEA: Carson heat'),('Merkley','MDEA: Merkley heat'),('Cp',r'MDEA: $C_P$'),('loaded-density','MDEA: loaded density'),('unloaded-density','MDEA: unloaded density'),('Kim','MDEA: binary pressure')]:
-    rows.append([name, value(M,['B1_fitted_by_source',key,'rows'],0),value(M,['B1_fitted_by_source',key,'AARD_percent'],3),value(M,['B1_fitted_by_source',key,'scaled_RMS'],3)])
+    rows.append([name, value(M,['B1_fitted_by_source',key,'rows'],0),value(M,['B1_fitted_by_source',key,'AARD_percent']),value(M,['B1_fitted_by_source',key,'scaled_RMS'])])
 for name, keys in [('AMP: Hartono total pressure',['steps','4 k widened, floor 5.32 A','calibration','loaded_pressure']),('PZ: Hilliard partial pressure',['hilliard'])]:
     if name.startswith('AMP'):
         rows.append([name,value(A,keys+['rows'],0),value(A,keys+['mean_abs_percent']), '--'])
     else: rows.append([name,'62',value(P,keys+['MARE_percent']),value(P,['pressure_RMS'])])
 for key, name in [('Lawson','DEA: Lawson partial pressure'),('Carson','DEA: Carson integral heat')]:
-    rows.append([name,value(DF,['runs','B-2','errors',key,'n'],0),value(DF,['runs','B-2','errors',key,'mean_abs_percent'],3),'--'])
-table('calibration','Calibration deviations. AARD uses each observable separately; scaled RMS uses the original assigned scales and weights, which differ across studies. These are not cross-amine accuracy scores.', ['Observable and fitted source','$n$',r'AARD / \%','Scaled RMS'],rows,[.48,.07,.16,.17])
+    rows.append([name,value(DF,['runs','B-2','errors',key,'n'],0),value(DF,['runs','B-2','errors',key,'mean_abs_percent']),'--'])
+table('calibration','Calibration deviations. AARD uses each observable separately. Scaled RMS is the root mean square of residuals divided by their assigned observation scales, before applying additional objective weights. Pressure residuals are logarithmic for MDEA and relative differences for PZ. These statistics do not provide a cross-amine accuracy ranking.', ['Observable and fitted source','$n$',r'AARD / \%','Scaled RMS'],rows,[.48,.07,.16,.17])
 
 rows=[]
 for source in ['Xiao','Ermatchkov']:
     for block,label in [('overall','all'),('inside_278_368K','278--368 K'),('outside_278_368K','above 368 K')]:
-        if read(M)['ermatchkov_xiao_pressure'][source][block] is None: continue
+        if read(M)['ermatchkov_xiao_pressure'][source][block] is None or (source == 'Xiao' and block != 'overall'): continue
         keys=['ermatchkov_xiao_pressure',source,block]
         rows.append(['MDEA '+source,label,value(M,keys+['rows'],0),value(M,keys+['AARD_percent']),value(M,keys+['bias_percent'])])
 for block,label in [('overall','all'),('isotherms','')]:
@@ -86,14 +86,24 @@ for extra,label in [([],'all'),(['by_temperature','313.1'],'313.1 K'),(['by_temp
 for source in ['SeoHong','Lal']:
     for k,label in [(['overall'],'all')]+[(['per_temperature',t],t+r'$\,^{\circ}$C') for t in read(D)[source]['per_temperature']]:
         rows.append(['DEA '+(r'Seo \& Hong' if source=='SeoHong' else source),label,value(D,[source]+k+['n'],0),value(D,[source]+k+['mean_abs_percent']),value(D,[source]+k+['bias_percent'])])
-table('unfitted','Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. Reaction-law extrapolations are identified in the text and Table~\\ref{tab:p2-laws}. All are partial pressures except AMP Tong.', ['Amine and source','Conditions','$n$',r'AARD / \%',r'Bias / \%'],rows,[.31,.23,.06,.13,.13])
+for row in rows:
+    amine, condition = row[:2]
+    domain = 'mixed' if condition == 'all' else 'inside'
+    if amine == 'MDEA Xiao': domain = 'inside'
+    elif amine.startswith('MDEA') and condition == 'above 368 K': domain = 'dissociation extrapolated'
+    elif amine == 'AMP Kundu' and condition == '303.0 K': domain = 'hydrolysis slope extrapolated'
+    elif amine.startswith('PZ') and condition == '353.15 K': domain = 'carbamate extrapolated'
+    elif amine.startswith('PZ') and condition == '393.15 K': domain = 'carbamate and protonation extrapolated'
+    elif amine.startswith('DEA') and condition != 'all' and not condition.startswith('40'): domain = 'protonation extrapolated'
+    row.append(domain)
+table('unfitted','Unfitted pressure errors by source and temperature. MDEA sets were previously accessed; AMP Kundu and PZ Ermatchkov were scored before final parameter selection, and DEA was first scored on a numerically tied fit. All are partial pressures except AMP Tong.', ['Amine and source','Conditions','$n$',r'AARD / \%',r'Bias / \%','Measured-law range'],rows,[.20,.15,.04,.10,.10,.29])
 rows=[]
 for group in ['inside_278_368K','outside_278_368K']:
     k=['B1_fitted_by_source','Kuranov_by_law_range',group]
     rows.append(['Kuranov total pressure','inside' if group.startswith('inside') else 'outside',value(M,k+['rows'],0),value(M,k+['AARD_percent']),value(M,k+['bias_percent'])])
 for t in ['333.15','388.71']:
     k=['B1_fitted_by_source','Merkley_by_temperature_K',t]
-    rows.append(['Merkley heat',t+' K',value(M,k+['rows'],0),value(M,k+['AARD_percent']),value(M,k+['mean_signed_error_predicted_minus_observed'],0)+r' J/mol'])
+    rows.append([r'Merkley heat (20 and 40 wt\%)',('inside (' if t=='333.15' else 'outside (')+t+' K)',value(M,k+['rows'],0),value(M,k+['AARD_percent']),value(M,k+['mean_signed_error_predicted_minus_observed'],0)+r' J/mol'])
 table('mdea-range','Fitted MDEA errors separated against the 278--368 K dissociation measurements. Heat signed errors are calculated minus measured; they are not relative biases.', ['Observable','Law range / $T$','$n$',r'AARD / \%','Bias / signed error'],rows,[.31,.19,.07,.14,.18])
 rows=[]
 path='analyses/mdea_mea_workflow/results/refit-298/pressure-comparison.csv'
@@ -102,10 +112,10 @@ for i,r in enumerate(read(path)):
  vals=[]
  for field in ['rebased_baseline_AARD_percent','fixed_substitution_AARD_percent','refit_AARD_percent']:
   vals.append(f"{float(r[field]):.2f}"); NUMBERS.append((vals[-1],path,f'row {i}, {field}',r[field]))
- rows.append(['MDEA '+r['record']+(' (counter-case)' if r['record']=='A3' else ''),*vals])
+ rows.append(['MDEA alternative ion description A3 (Ermatchkov)' if r['record']=='A3' else 'MDEA reported fit (Ermatchkov)',*vals])
 historical=read('analyses/amp_transfer/results/kundu/summary.json')
-rows.append(['AMP Kundu',value('analyses/amp_transfer/results/kundu/summary.json',['variants','historical','overall','E_p']),value(A,['old','kundu','overall','E_p']),value(A,['steps','2 #243 limits','kundu','overall','E_p'])])
-table('shared-sensitivity','Same-data pressure AARD (\\%). Each row compares the earlier shared inputs, substitution of the Part I bicarbonate--water interaction and R2 law without refitting the amine, then amine-specific refitting. A3 is a counter-case, not the selected MDEA description. AMP here uses the original bounds; its final bounded fit is reported separately.', ['Description','Earlier','Substituted','Refitted'],rows,[.48,.13,.13,.13])
+rows.append(['AMP (Kundu)',value('analyses/amp_transfer/results/kundu/summary.json',['variants','historical','overall','E_p']),value(A,['old','kundu','overall','E_p']),value(A,['steps','2 #243 limits','kundu','overall','E_p'])])
+table('shared-sensitivity','Same-data pressure AARD (\\%). Each row compares the earlier shared inputs, substitution of the Part I bicarbonate--water interaction and R2 law without refitting the amine, then amine-specific refitting. A3 is a counter-case, not the selected MDEA description. AMP here uses the original bounds; its final bounded fit is reported separately.', ['Amine fit (unfitted source)','Earlier','Substituted','Refitted'],rows,[.48,.13,.13,.13])
 rows=[]
 for key,title in [('old','Shared substitution; no AMP refit')]+[(k,lab) for k,lab in zip(amp['steps'],['Original AMP limits','Carbamate diameter floor raised','Cation--CO2 interaction widened','Carbamate diameter floor lowered'])]:
  k=['old'] if key=='old' else ['steps',key]
@@ -154,37 +164,37 @@ table('origins','Transferred quantities and their origins. All shared quantities
  ['Inorganic-ion segment sizes and energies',r'Uyan et al., Table 4 \cite{Uyan2015}','Fixed; hydrogen-ion values used for hydronium'],
  ['Inorganic Born sizes and remaining water--ion terms','Assumed inputs in Part I','Fixed; not independently measured in MEA'],
  ['Bicarbonate--water interaction','MEA joint fit, upper bound $+1$','Fixed at bound; conditional SE excludes this direction'],
- ['Completed R2 reaction level and enthalpy correction','MEA joint fit; interior with conditional errors','Fixed; source-law correction, not a new measurement'],
+ ['R2 level and enthalpy correction','MEA joint fit; interior with conditional errors','Fixed; source-law correction, not a new measurement'],
  ['R1 and R3 water/carbonate laws','Literature laws as mapped in Part I','Fixed with source-reference conversion'],
  ['Solvation and dielectric descriptions','Literature coefficients and assumptions in Part I','Water/CO2 inputs fixed; amine coefficients specified separately'],
  ['Reactive coordinates (MDEA / AMP / PZ / DEA)','Amine-specific fits: 9 / 9 / 12 / 4','Not totals of earlier pure and binary fitting'],
  ],[.32,.36,.25])
-table('laws','Reaction-law measurement intervals and use. An admitted calculation can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.', ['Law','Measured source interval / K','Use and limitation'],[
- ['MDEA dissociation','278--368','Declared to 395; 393.15 K pressure block and 388.71 K heat extrapolate measurements'],
- ['AMP dissociation','to 353.22','Fixed; Tong 373--393 K rows refused'],
- ['AMP carbamate hydrolysis','source slope extrapolated below 313','Level and temperature dependence fitted; correction at lower bound'],
- ['PZ protonation','approximately 293--353','NMR at 283.15 K and pressure at 393.15 K extrapolate'],
- ['PZ carbamate laws','283.15--333.15 (rounded law: 283--333)','353.15 and 393.15 K pressure blocks extrapolate'],
- ['DEA protonation','to approximately 323','23/30 fitted Lawson rows above measured range; declared to 393.15'],
- ['Shared R2','293.15--393.15 declared','Seven Lawson rows at 394.26 K refused; PZ 283.15 K extrapolates below lower limit'],
- ],[.23,.24,.46])
+table('laws',"Reaction-law measurement intervals and use. A calculation inside a declared interval can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.", ['Law','Measured interval / K','Declared interval / K','Use and limitation'],[
+ ['MDEA dissociation','278--368','278--395','393.15 K pressure and 388.71 K heat extrapolate measurements'],
+ ['AMP dissociation','to 353.22','to 353.22','Tong 373--393 K rows not calculated (outside declared interval)'],
+ ['AMP hydrolysis','source slope: 313--353','includes 303--353','Slope extrapolated below 313 K; level and slope fitted'],
+ ['PZ protonation','approximately 293--353','includes 283.15--393.15','283.15 and 393.15 K extrapolate'],
+ ['PZ carbamate','283.15--333.15 (rounded 283--333)','includes 353.15 and 393.15','353.15 and 393.15 K extrapolate'],
+ ['DEA protonation','to approximately 323','to 393.15','23/30 fitted Lawson rows above measured range'],
+ ['Shared R2','not established here','293.15--393.15','Seven Lawson rows at 394.26 K not calculated (outside declared interval); PZ 283.15 K extrapolates below lower limit'],
+ ],[.18,.23,.22,.28])
 table('data-roles','Observation roles and prior access. Held out means never in any fitting objective. Comparison-only means calculated after parameter selection without entering that selection. Prior scoring is stated even when no held-out value determined the objective.', ['Amine / role','Observations','Scored before final fit chosen?'],[
- ['MDEA fitted','67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures','Fitted; 278 entries'],
- ['MDEA outside-fit','20 Xiao and 88 Ermatchkov partial pressures','Yes; previously accessed in model development'],
- ['MDEA exclusions','Kuranov source rows 28 and 72; seven corrected-Kamps states above shared-law interval','Not counted as available predictions'],
- ['AMP fitted','47 Hartono loaded total pressures; 52 Hartono binary entries; 57 Ciftja fractions','Fitted; 156 entries'],
+ ['MDEA fitted','278 entries: 67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures','---'],
+ ['MDEA held-out','20 Xiao and 88 Ermatchkov partial pressures','Yes; previously accessed in model development'],
+ ['MDEA exclusions','Kuranov source rows 28 and 72; seven states above the 393.15 K R2 limit','Not counted as available predictions'],
+ ['AMP fitted','156 entries: 47 Hartono loaded total pressures; 52 Hartono binary entries; 57 Ciftja fractions','---'],
  ['AMP held-out','51 Kundu partial pressures','Yes; scored during the sequence preceding final diameter choice'],
- ['AMP outside-fit comparison','17 Tong total pressures scored; 23 refused','Earlier fits had been compared; no blind test claimed'],
- ['PZ fitted','62 Hilliard pressures; 232 NMR group observations at 121 states','Fitted; 294 entries'],
+ ['AMP held-out comparison','17 Tong total pressures scored; 23 not calculated','Earlier fits had been compared; no blind test claimed'],
+ ['PZ fitted','294 entries: 62 Hilliard pressures; 232 NMR group observations at 121 states','---'],
  ['PZ held-out','52 Ermatchkov partial pressures','Yes; unconstrained refit scored before penalty alternative and final choice'],
- ['DEA fitted','30 Lawson pressures at 25 wt%; 50 Carson heats','Fitted; 80 entries'],
+ ['DEA fitted','80 entries: 30 Lawson pressures at 25 wt%; 50 Carson heats','---'],
  ['DEA held-out','16 Seo and Hong; 44 Lal partial pressures','Yes; first selected start, then numerically tied second start'],
  ['DEA comparison-only','Lawson Table VIII; Cai binary; Böttinger species; Horstmann excess heat; Weiland densities','No; added after fit selection'],
  ],[.20,.48,.25])
-table('phase-searches','Finite phase-search results. Detected liquid-split counts are lower bounds; no-detection counts do not establish stability. No count ranks physical stability across the unequal state sets.', ['Fit / states','Detected liquid splits','Other outcomes and omissions'],[
- ['MDEA: 775 required records','0 found','37 gas witnesses; no ambiguous or unresolved result; seven domain exclusions'],
+table('phase-searches','Finite phase-search results. Detected liquid-split counts are lower bounds.', ['Fit / states','Detected liquid splits','Other outcomes and omissions'],[
+ ['MDEA: 775 searched states','0 found','37 gas-like phases; no ambiguous or unresolved result; seven states above the R2 interval not calculated'],
  ['AMP: 51 Kundu states','0 found','No gas, ambiguous or unresolved result; calibration gas outcomes not stored'],
- ['PZ: 183 calibration states','at least 4','No undecided result; three rich NMR pressures moved above bubble pressure'],
+ ['PZ: 183 calibration states','at least 4','No ambiguous or unresolved result; three rich NMR pressures moved above bubble pressure'],
  ['PZ: 52 held-out bubble states','0 found','Finite search only'],
  ['PZ penalty alternative','at least 3','One found routinely; two additional splits resolved by direct distance evaluation'],
  ['DEA: 140 fitted/held-out states','0 found','No gas, ambiguous or unresolved result'],
@@ -238,14 +248,32 @@ for r in read('analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/fitted-r
  if any(z[0]=='MDEA '+g for z in rows):continue
  loc=q.get('source_locator',q.get('source_table','')+', printed p. '+q.get('source_printed_page',''))
  rows.append(['MDEA '+g,q.get('source_key',''),loc])
-for r in read('analyses/amp_transfer/results/refit-306/refit-306-floor-fit.json')['replay']:
- g=r['group'];q=r['row']
- if any(z[0]=='AMP '+g for z in rows):continue
- rows.append(['AMP '+g,'Hartono' if g!='nmr' else 'Ciftja 2014',q.get('source_locator','Source rows and definitions in electronic data')])
+rows.extend([
+ ['AMP loaded total pressure',r'Hartono et al. (2021) \cite{hartonoNewSolubilityHeat2021}','Table 7; 47 fitted rows at 313, 333 and 353 K'],
+ ['AMP binary pressure and vapor composition',r'Hartono et al. (2013) \cite{hartonoBinaryTernaryVLE2013}','Table 3; 26 pressure and 26 vapor-composition observations'],
+ ['AMP carbamate fraction',r'Ciftja et al. (2014) \cite{ciftjaExperimentalStudyCarbamate2014a}','Supporting Information, Tables S1--S3; 57 observations'],
+])
+rows.extend([
+ ['PZ fitted partial pressure',r'Hilliard (2008) \cite{Hilliard2008}','Appendix D.5, printed pp. 916--917'],
+ ['PZ NMR groups',r'Ermatchkov et al. (2003) \cite{ermatchkovChemicalEquilibriumConstants2003}','Tables 1--4; 121 states'],
+ ['PZ held-out partial pressure',r'Ermatchkov et al. (2006) \cite{ermatchkovSolubilityCarbonDioxide2006a}','Tables 1--3, printed p. 1789'],
+ ['DEA fitted partial pressure',r'Lawson and Garst (1976) \cite{lawsonGasSweeteningData1976}','Table II, PDF p. 4; 30 fitted rows'],
+ ['DEA fitted integral heat',r'Carson et al. (2000) \cite{carsonEnthalpySolutionCarbon2000}','Table 2; 50 rows at 298.15 K'],
+])
 for group in ['SeoHong','Lal']:
  q=read(D)[group]['table'][0]['row'];rows.append(['DEA '+group,q['source_key'],q['source_locator']])
 for group in ['weiland','lawson_viii','bottinger_DEACOO','cai','excess_enthalpy']:
  q=read(D)['comparisons'][group]['rows'][0];q=q.get('row',q);rows.append(['DEA '+group.replace('_',' '),q.get('source_key',''),q.get('source_locator','')])
+source_citations = {
+ 'Kuranov1996':'kuranovSolubilitySingleGases1996', 'Jakobsen2005':'Jakobsen2005',
+ 'Carson2000':'carsonEnthalpySolutionCarbon2000','Merkley1987':'merkleyEnthalpiesAbsorptionCarbon1987',
+ 'Weiland1997':'weilandHeatCapacityAqueous1997','Weiland1998':'Weiland1998',
+ 'Sobrino2016':'sobrinoViscosityDensityMeasurements2016','Kim2008':'kimEbulliometricDeterminationVaporLiquid2008',
+ 'SeoHong1996':'seoSolubilitiesCarbonDioxide1996','Lal1985':'lalSolubilityH2SCO21985',
+ 'LawsonGarst1976':'lawsonGasSweeteningData1976','Bottinger2008':'Bottinger2008',
+ 'Cai1996':'caiBinaryIsobaricVaporLiquid1996','Horstmann2002':'horstmannPhaseEquilibriumExcess2002'}
+for row in rows:
+ if row[1] in source_citations: row[1] += r' \cite{' + source_citations[row[1]] + '}'
 table('source-locators','Measurement locators preserved with the calculation inputs. Source row identities and original-observable columns accompany the electronic numerical files; fitted and unfitted roles are in the main paper.', ['Observation','Source','Locator'],rows,[.25,.23,.45])
 
 
@@ -313,7 +341,12 @@ for i,t in enumerate(sorted({r['T_K'] for r in p})):
  # Column names are quantity-specific and checked by a failed-key exception.
  x=[float(r['alpha_per_PZ']) for r in b];y=[100*float(r['relative_error']) for r in b];axs[1,0].scatter(x,y,s=13,color=colors[i],marker=['o','x','^'][i],label=t+' K');plotrows.extend([['PZ',t,xx,yy] for xx,yy in zip(x,y)])
 for i,source in enumerate(['Seo','Lal']):
- b=[r for r in d if source in r['set']];x=[float(r['alpha']) for r in b];y=[100*(float(r['predicted'])/float(r['observed'])-1) for r in b];axs[1,1].scatter(x,y,s=13,color=colors[i],marker=['o','x'][i],label='Seo & Hong' if i==0 else 'Lal');plotrows.extend([['DEA '+source,r['T_K'],xx,yy] for r,xx,yy in zip(b,x,y)])
+ for t,marker in zip([313.15,333.15,353.15,373.15],['o','x','^','s']):
+  b=[r for r in d if source in r['set'] and abs(float(r['T_K'])-t)<.2]
+  if not b: continue
+  x=[float(r['alpha']) for r in b];y=[100*(float(r['predicted'])/float(r['observed'])-1) for r in b]
+  axs[1,1].scatter(x,y,s=13,color=colors[i],marker=marker,label=('Seo & Hong' if i==0 else 'Lal')+f' {t-273.15:.0f} C')
+  plotrows.extend([['DEA '+source,r['T_K'],xx,yy] for r,xx,yy in zip(b,x,y)])
 for ax,title in zip(axs.flat,['(a) MDEA: Ermatchkov','(b) AMP: Kundu','(c) PZ: Ermatchkov','(d) DEA: held-out sources']):ax.set_title(title);ax.legend(fontsize=7,frameon=False)
 fig.savefig(FIGURES/'unfitted-pressure.pdf');plt.close(fig)
 with (FIGURES/'unfitted-pressure.csv').open('w') as f:

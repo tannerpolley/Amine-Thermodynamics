@@ -39,7 +39,7 @@
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/prediction-bands.csv SHA256 96fc9352b6f30dae38805b799344404528d6e49b3b45eaa42002daa8523ac0cd
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/predictions.json SHA256 8fd82d94b500a2b8985ea9979e4ceb653fbfb781dc66a3d047ee68bdec0f46ba
 % Input: analyses/solvent_specification_mdea/results/uncertainty-307/ranking.csv SHA256 16b4ed6165c0cc7bad4d938567c8f8e8d88bdddb3de4eb8b53c43b372f7c8e7e
-% Input: docs/scientific/latex/references.bib SHA256 7dc97086df08bf802d25d2a588158a9ad3881648729bb9a5da84741ef50acd9c
+% Input: docs/scientific/latex/references.bib SHA256 9ac4ac1c25d01550aa5e9a9df066b7a49e96212687fb4c6f9c826ee81cea4252
 % Input: docs/scientific/latex/supplement.tex SHA256 b90143f6a0711b9a7437b4845c8a5db430f8b301ff21d8f402821b105da3d5f8
 \begingroup\small\setlength{\tabcolsep}{3pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.45\linewidth}@{}}
@@ -47,22 +47,27 @@
 \toprule Observation & Source & Locator \\ \midrule\endfirsthead
 \toprule Observation & Source & Locator \\ \midrule\endhead
 \bottomrule\endfoot
-MDEA Kuranov & Kuranov1996 & Table 2, printed p. 1960 \\
-MDEA Jakobsen & Jakobsen2005 & Table A5, PDF p.9, printed p.9902 \\
-MDEA Carson & Carson2000 & Table 3, PDF p.9, printed p.1293 \\
-MDEA Merkley & Merkley1987 & Figure 3; PDF p.5 printed p.441 \\
-MDEA Cp & Weiland1997 & Table 1, PDF p.1, printed p.1004 \\
-MDEA loaded-density & Weiland1998 & Table 1, PDF p.2, printed p.379 \\
-MDEA unloaded-density & Sobrino2016 & Table 5, PDF p.4, printed p.234 \\
-MDEA Kim & Kim2008 & Table 8, PDF p.4, printed p.2524 \\
-AMP loaded-pressure & Hartono & Source rows and definitions in electronic data \\
-AMP binary & Hartono & Source rows and definitions in electronic data \\
-AMP nmr & Ciftja 2014 & Source rows and definitions in electronic data \\
-DEA SeoHong & SeoHong1996 & Table 1 (DEA/AMP = 30/0), PDF p.2, printed p.259 \\
-DEA Lal & Lal1985 & Table 2, PDF p.2, printed p.682 \\
-DEA weiland & Weiland1998 & Table 2, PDF p.2, printed p.379 \\
-DEA lawson viii & LawsonGarst1976 & Table VIII (CO2 only; 77 F rows 54.5 wt\% per footnote a), PDF p.10, printed p.29 \\
-DEA bottinger DEACOO & Bottinger2008 & Table 4, PDF p.8, printed p.138 \\
-DEA cai & Cai1996 & Table 4, PDF p.2, printed p.1102 \\
-DEA excess enthalpy & Horstmann2002 & Table 6, PDF p.3, printed p.1498 \\
+MDEA Kuranov & Kuranov1996 \cite{kuranovSolubilitySingleGases1996} & Table 2, printed p. 1960 \\
+MDEA Jakobsen & Jakobsen2005 \cite{Jakobsen2005} & Table A5, PDF p.9, printed p.9902 \\
+MDEA Carson & Carson2000 \cite{carsonEnthalpySolutionCarbon2000} & Table 3, PDF p.9, printed p.1293 \\
+MDEA Merkley & Merkley1987 \cite{merkleyEnthalpiesAbsorptionCarbon1987} & Figure 3; PDF p.5 printed p.441 \\
+MDEA Cp & Weiland1997 \cite{weilandHeatCapacityAqueous1997} & Table 1, PDF p.1, printed p.1004 \\
+MDEA loaded-density & Weiland1998 \cite{Weiland1998} & Table 1, PDF p.2, printed p.379 \\
+MDEA unloaded-density & Sobrino2016 \cite{sobrinoViscosityDensityMeasurements2016} & Table 5, PDF p.4, printed p.234 \\
+MDEA Kim & Kim2008 \cite{kimEbulliometricDeterminationVaporLiquid2008} & Table 8, PDF p.4, printed p.2524 \\
+AMP loaded total pressure & Hartono et al. (2021) \cite{hartonoNewSolubilityHeat2021} & Table 7; 47 fitted rows at 313, 333 and 353 K \\
+AMP binary pressure and vapor composition & Hartono et al. (2013) \cite{hartonoBinaryTernaryVLE2013} & Table 3; 26 pressure and 26 vapor-composition observations \\
+AMP carbamate fraction & Ciftja et al. (2014) \cite{ciftjaExperimentalStudyCarbamate2014a} & Supporting Information, Tables S1--S3; 57 observations \\
+PZ fitted partial pressure & Hilliard (2008) \cite{Hilliard2008} & Appendix D.5, printed pp. 916--917 \\
+PZ NMR groups & Ermatchkov et al. (2003) \cite{ermatchkovChemicalEquilibriumConstants2003} & Tables 1--4; 121 states \\
+PZ held-out partial pressure & Ermatchkov et al. (2006) \cite{ermatchkovSolubilityCarbonDioxide2006a} & Tables 1--3, printed p. 1789 \\
+DEA fitted partial pressure & Lawson and Garst (1976) \cite{lawsonGasSweeteningData1976} & Table II, PDF p. 4; 30 fitted rows \\
+DEA fitted integral heat & Carson et al. (2000) \cite{carsonEnthalpySolutionCarbon2000} & Table 2; 50 rows at 298.15 K \\
+DEA SeoHong & SeoHong1996 \cite{seoSolubilitiesCarbonDioxide1996} & Table 1 (DEA/AMP = 30/0), PDF p.2, printed p.259 \\
+DEA Lal & Lal1985 \cite{lalSolubilityH2SCO21985} & Table 2, PDF p.2, printed p.682 \\
+DEA weiland & Weiland1998 \cite{Weiland1998} & Table 2, PDF p.2, printed p.379 \\
+DEA lawson viii & LawsonGarst1976 \cite{lawsonGasSweeteningData1976} & Table VIII (CO2 only; 77 F rows 54.5 wt\% per footnote a), PDF p.10, printed p.29 \\
+DEA bottinger DEACOO & Bottinger2008 \cite{Bottinger2008} & Table 4, PDF p.8, printed p.138 \\
+DEA cai & Cai1996 \cite{caiBinaryIsobaricVaporLiquid1996} & Table 4, PDF p.2, printed p.1102 \\
+DEA excess enthalpy & Horstmann2002 \cite{horstmannPhaseEquilibriumExcess2002} & Table 6, PDF p.3, printed p.1498 \\
 \end{longtable}\endgroup
