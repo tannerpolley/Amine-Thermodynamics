@@ -12,23 +12,36 @@ CO₃²⁻, every shared pair and reactions R1–R3 keep the adopted MEA record
 unchanged. Only four DEA coordinates are fitted. The design is in
 [comment 6836480110](https://github.com/tannerpolley/Amine-Thermodynamics/issues/317#issuecomment-6836480110),
 and the owner decisions are in
-[comment 6836628626](https://github.com/tannerpolley/Amine-Thermodynamics/issues/317#issuecomment-6836628626).
-This is a transfer case for the amine-general paper. Nothing is adopted.
+[comment 6836628626](https://github.com/tannerpolley/Amine-Thermodynamics/issues/317#issuecomment-6836628626)
+and in the owner's 2026-11-12 build decisions. This is a transfer case for the
+amine-general paper. Nothing is adopted.
 
 - **Fit (80 rows).** Integral heats (Carson 2000) fit within their stated
   1–2%: 0.98% mean absolute error, and 46 of 50 rows within 2%. CO₂ pressures
   (Lawson & Garst 1976, 25 wt%) do not reach the source's 9% scatter: 28.6% mean
-  absolute error, and 10 of 30 rows within twice that scale. The pressure error
-  is a temperature trend. At 100 °F the model is 24% high, and at 200–225 °F it
-  is 16–20% low.
+  absolute error, and 10 of 30 rows within twice that scale. The error is
+  mainly in the shape of pressure against loading. At high loading the
+  model-to-measured ratio falls on every isotherm, ending 31–58% low at each
+  isotherm's highest loading. A smaller temperature effect sits on top: near
+  loading 0.4 the ratio runs from 1.26 at 100 °F to 0.88 at 225 °F.
 - **Held out, Seo & Hong 1996 (30 wt%, 16 rows).** 79.5% mean absolute error,
   with a bias of +77.8%. The error grows with temperature: 28.5% at 40 °C,
   59.8% at 60 °C and 154% at 80 °C. 9 of 16 rows lie within twice their stated
   uncertainty components.
 - **Held out, Lal 1985 (2.0 kmol/m³, 44 CO₂-only rows).** 44.2% mean absolute
-  error, with a bias of −22.9%. At 40 °C the model is 49% low through the
-  carbamate region (loading 0.04–0.20). Above 0.05 kPa, where Lal states ±15%,
-  5 of 28 rows fall within that band.
+  error, with a bias of −22.9%. At 40 °C and loading 0.04–0.20 (the carbamate
+  region, below any fitted pressure) the model is 46–70% low, 59% on average.
+  Above 0.05 kPa, where Lal states ±15%, 5 of 28 rows fall within that band.
+- **Comparisons (predictions, never fitted).**
+
+  | Set | Rows | Error |
+  |:--|--:|:--|
+  | Lawson Table VIII (50 wt%) | 10 | 41.7% mean absolute error (bias −33.0%) |
+  | Böttinger 2008 speciation, clean states | 9 | within 0.0013–0.0017 in true mole fraction |
+  | Cai 1996 bubble pressure | 9 | 40.8% error against 6.66 kPa |
+  | Horstmann 2002 excess enthalpy | 14 | wrong sign: +89 to +759 J/mol against −93 to −1707 J/mol measured |
+  | Weiland 1998 loaded density | 43 | 0.45% mean absolute error |
+
 - **Phase census.** All 140 fitted and held-out states are single stable
   liquids: no dense split, gas phase, ambiguous or unresolved state.
 - **Uncertainty.** Parameter uncertainty bands on the held-out pressures are
@@ -37,10 +50,10 @@ This is a transfer case for the amine-general paper. Nothing is adopted.
   not from poorly determined coordinates.
 
 Evidence type: a calibration, plus two held-out physical comparisons scored
-once on a frozen endpoint. No pass or fail rule is applied to the held-out
-numbers (owner decision 2).
+once on a frozen endpoint, plus comparison-only predictions. No pass or fail
+rule is applied to the held-out numbers (owner decision 2).
 
-![Measured points (circles) and model predictions at the same states (lines joining predictions at the measured loadings, not continuous curves). Lawson and Carson are fitted; Seo & Hong and Lal are held out. Selected endpoint B-1. Values: [figure-values.csv](results/figure-values.csv).](results/measured-vs-model.png)
+![Measured points (circles) and model predictions at the same states (crosses). Lawson and Carson are fitted; Seo & Hong and Lal are held out. Selected endpoint B-2. Values: [figure-values.csv](results/figure-values.csv).](results/measured-vs-model.png)
 
 ## Model and data
 
@@ -57,9 +70,11 @@ fit, so the set is used as published.
 
 - **DEA–water k_ij.** The temperature-independent value is **−0.0636** on the
   44 Horstmann 2002 Table 4 rows at 365.15 K: 1.16% mean absolute error, no
-  limit active. Nasrifar's value is −0.04. The fit starts at −0.04 because
-  k_ij = 0 makes Table 4 row 22 locally unstable (a liquid–liquid split),
-  as AMP's start did.
+  limit active. Nasrifar's value is −0.04.
+  - The fit starts at −0.04. At k_ij = 0 the Engine reported Table 4 row 22 as
+    locally unstable (a liquid–liquid split), as AMP's start was. That message
+    came from a probe and is not retained.
+  - A start carries no data into the converged value.
 - **DEA dielectric coefficients.** Fitted on Hsieh 2007's 30 values at fixed
   EOS densities: volume 0.7575 L/mol, temperature 1155.8 K, 3.05% mean absolute
   error. A second admissible branch (0.2925 L/mol) has a 2.3% higher cost.
@@ -87,7 +102,7 @@ fit, so the set is used as published.
 minus the Engine's residual Cp of pure DEA at 1 bar:
 Cp = 141.34 + 0.7642 (T − 313.15) J/(mol K), with fit residuals within
 ±1.8 J/(mol K). Changing it by ±10% moves the 50 isothermal Carson heats by at
-most 8.8 × 10⁻¹³ (relative). CO₂ and water records are copied from
+most 8.9 × 10⁻¹³ (relative). CO₂ and water records are copied from
 `solvent_specification_mea/inputs/caloric.json`.
 
 **Data and objective (D4, D6).**
@@ -107,7 +122,8 @@ Source transcriptions with PDF hashes and locators are in
 - The other tables come from typeset text layers.
 - Lal's 2.0 kmol/m³ is converted to mass fraction 0.2058 (22.52 mol water per
   mol DEA) with Weiland 1998's unloaded densities at 298 K (linear between 20
-  and 30 mass%). Böttinger 2008 quotes 0.20 g/g.
+  and 30 mass%). Böttinger 2008 quotes 0.20 g/g; the effect of that difference
+  on the Lal scores is not computed.
 
 ## Fits (two forms, two starts each)
 
@@ -115,24 +131,43 @@ Source transcriptions with PDF hashes and locators are in
 |:--|--:|--:|--:|--:|--:|--:|--:|:--|
 | A-1 | 10.140 | −2.786 | 22.72 | −0.384 | −0.047 | 30.55 / +0.75 | 1.14 / −0.12 | none |
 | A-2 | 10.140 | −2.786 | 22.72 | −0.384 | −0.047 | 30.55 / +0.75 | 1.14 / −0.12 | none |
-| **B-1 (selected)** | **7.971** | **−2.477** | **21.88** | **−0.215** | **+0.006** | **28.64 / −0.76** | **0.98 / −0.14** | none |
-| B-2 | — | — | — | — | — | — | — | start unavailable |
+| B-1 | 7.971 | −2.477 | 21.88 | −0.215 | +0.006 | 28.64 / −0.76 | 0.98 / −0.14 | none |
+| **B-2 (selected)** | **7.971** | **−2.477** | **21.88** | **−0.215** | **+0.006** | **28.63 / −0.76** | **0.98 / −0.14** | none |
 
-- **Starts.** A-1 and A-2 reach the same endpoint: cost difference 2 × 10⁻¹⁰,
-  largest scaled-coordinate difference 1.1 × 10⁻⁴, largest prediction
-  difference 4.3 × 10⁻⁶.
-- **B-2 failure.** The B-2 start (DEAH⁺–water −0.5, DEACOO⁻–water 0,
-  ln K + 0.35, ΔH − 11 kJ/mol) cannot solve one of the 80 rows: Lawson row 7,
-  100 °F, loading 1.167, 3.6 MPa CO₂. The equilibrium is locally infeasible
-  (residual 0.011 after 144 iterations;
-  [B-2-start-rows.json](results/fit-runs/B-2-start-rows.json)). B-2 has no
-  endpoint, so form B keeps B-1.
-- **Selection rule (D7).** Neither form has a coordinate on a limit, so the
-  lower cost decides: B-1. The selection was written and hashed before any
-  held-out row was evaluated: [selection.json](results/selection.json), SHA-256
-  `95de0614…b455f`, endpoint `660583b0…bd52b`, law `7f8f2187…10716`.
+**The form-B second start.**
 
-**Per isotherm, B-1 (Lawson).**
+- The design's start 2 for form B (DEAH⁺–water k = −0.5, DEACOO⁻–water 0,
+  ln K + 0.35, ΔH − 11 kJ/mol) is unavailable. On Lawson's 100 °F isotherm it
+  predicts 14 to 330 times the measured pressures, for example 4.67 MPa against
+  0.32 MPa at loading 0.873. At loading 1.167 (3.6 MPa measured) it has no
+  bubble point: the equilibrium is locally infeasible, with residual 0.011
+  after 144 iterations.
+  [B-2-k-0.5-start-rows.json](results/fit-runs/B-2-k-0.5-start-rows.json)
+  holds all 80 rows at that start, from `reactive.py start-rows B 2`.
+- The owner authorized a different second start for form B (2026-11-12):
+  DEAH⁺–water k = −0.2, with the design's other start-2 offsets. It solves all
+  80 rows ([B-2-start-rows.json](results/fit-runs/B-2-start-rows.json)) while
+  differing from start 1 in every coordinate. Form A keeps the design's start 2.
+
+**Starts agree.**
+
+| Form | Cost difference | Largest scaled-coordinate difference | Largest prediction difference |
+|:--|--:|--:|--:|
+| A | 2.4 × 10⁻¹⁰ | 1.1 × 10⁻⁴ | 4.3 × 10⁻⁶ |
+| B | 4.8 × 10⁻¹⁰ | 5.3 × 10⁻⁵ | 2.5 × 10⁻⁶ |
+
+**Selection (D7).**
+
+- Neither form has a coordinate on a limit, so the lower cost decides, and
+  B-2 is lower than B-1 by 4.8 × 10⁻¹⁰. The selection was written and hashed
+  before any held-out row was evaluated: [selection.json](results/selection.json),
+  SHA-256 `9bcb4115…5d39609`, endpoint `91c2384e…18785cdd`.
+- An earlier freeze, made before the new start existed, selected B-1. Its
+  held-out scores, retained in [score-B-1.json](results/score-B-1.json), agree
+  with B-2's to four significant figures. Every held-out number below is the
+  same for both.
+
+**Per isotherm, B-2 (Lawson).**
 
 | °F | 100 | 150 | 175 | 200 | 225 |
 |:--|--:|--:|--:|--:|--:|
@@ -140,19 +175,23 @@ Source transcriptions with PDF hashes and locators are in
 | Bias (%) | +24.1 | +1.5 | −4.6 | −16.4 | −19.9 |
 | Within 2 × 9% | 0/7 | 4/9 | 1/3 | 3/8 | 2/3 |
 
-Carson per mass fraction (0.10, 0.20, 0.30): mean absolute error 0.61, 1.21
-and 0.93%.
+The isotherms cover different loading ranges: 0.41–1.17 at 100 °F, but only
+0.38–0.95 at 200 °F. Their biases therefore mix the loading-shape error with
+temperature. Within each isotherm the ratio runs from 1.26–1.65 at low and
+middle loading down to 0.42 at 100 °F (loading 1.167), and from 1.12–1.60 down
+to 0.52 at 150 °F (loading 1.072). Carson per mass fraction (0.10, 0.20,
+0.30): mean absolute error 0.61, 1.21 and 0.93%.
 
-**Numerical checks (B-1 and every converged endpoint).**
+**Numerical checks (every converged endpoint).**
 
 - A cold reload of the written endpoint and law reproduces the cost within
-  8 × 10⁻¹³ (relative), and every weighted residual within 1 × 10⁻¹¹.
+  8 × 10⁻¹³ (relative), and every weighted residual within 1.3 × 10⁻¹¹.
 - The shared components, shared pairs, the water diameter correlation and
   R1–R3 are identical to the adopted MEA record.
 - At a loaded Lawson state, |ln Q − ln K| ≤ 1.3 × 10⁻¹² for every reaction.
 - The weighted, scaled 80 × 4 Jacobian has rank 4 at every start and
-  endpoint. For B-1 the singular values run from 11.39 to 0.427 at the start
-  (smallest-to-largest ratio 0.038), and from 7.78 to 0.266 at the endpoint.
+  endpoint. For B-2 the singular values run from 9.18 to 0.377 at the start
+  (smallest-to-largest ratio 0.041), and from 7.78 to 0.266 at the endpoint.
 - Results: [fits.json](results/fits.json).
 
 **Physical reading.**
@@ -162,12 +201,15 @@ and 0.93%.
   stable than in any published law. The fitted enthalpy, 21.9 kJ/mol, lies
   inside the literature spread (12.3–34.1 kJ/mol).
 - The constants are not directly comparable: these are ePC-SAFT activity-based
-  laws, not the concentration-based or Pitzer laws of the sources.
-- The Lawson temperature trend survives the fit. With the Carson heat fixed
-  near 70 kJ/mol, the model cannot reproduce Lawson's steeper rise of pressure
-  with temperature. That conflict may involve the Bower protonation law,
-  which is used above its 323 K measured range in 23 of 30 Lawson rows (150 °F
-  and up). This is a hypothesis; this study does not resolve the cause.
+  laws, not the concentration-based or Pitzer laws of the sources. Böttinger's
+  speciation (below) puts the model's carbamate high in 7 of 9 clean states,
+  consistent with the low constant.
+- The pressure misfit is largest where loading exceeds about 0.9, the
+  bicarbonate and physically dissolved CO₂ region. All six such Lawson rows
+  are 25–58% low, and there the carbamate law has least influence.
+- The smaller temperature effect may involve the Bower protonation law, used
+  above its 323 K measured range in 23 of 30 Lawson rows. This study tests
+  neither cause.
 
 ## Held-out pressures (frozen endpoint, scored once)
 
@@ -182,11 +224,16 @@ components; the gas-chromatograph composition uncertainty is not stated.
 | Bias (%) | +77.8 | +22.9 | +59.8 | +154.2 |
 | Mean ln(p_calc/p_obs) | 0.481 | 0.185 | 0.407 | 0.865 |
 
-9 of 16 rows have |z| ≤ 2. The root mean square of z is 3.75, and Σz² = 224.8.
-At 80 °C the model overpredicts all five rows, by 1.4–4.2 times. Lawson's
-nearby 175 °F (79.4 °C) isotherm at 25 wt% is fitted at −4.6% bias. The model
-therefore does not carry its 25 wt% fit to 30 wt% at 60–80 °C, or the two
-laboratories disagree; this study does not separate the two.
+- 9 of 16 rows have |z| ≤ 2. The root mean square of z is 3.75, and
+  Σz² = 224.8.
+- At 80 °C the model overpredicts all five rows, by 1.4 to 4.2 times.
+- **The source tables disagree with each other here.** At loading about 0.41,
+  Lawson reads 16.0–16.7 kPa at 65.6 °C and 25 wt%. Seo & Hong reads 11.6 kPa
+  at 80 °C and 30 wt%: hotter and more concentrated, yet lower. These are the
+  transcribed rows themselves, not a model result.
+- This points to disagreement between the two laboratories as part of the
+  held-out miss. With one 30 wt% source, it cannot be separated from a
+  concentration-transfer error in the model.
 
 **Lal 1985 (2.0 kmol/m³, CO₂-only Table 2).** The source's stated accuracy is
 ±15% above 0.05 kPa, and "much larger" below.
@@ -198,11 +245,13 @@ laboratories disagree; this study does not separate the two.
 | Bias (%) | −22.9 | −48.6 | −6.8 | −29.2 | −12.0 |
 
 - **Within the stated ±15%:** 5 of 28 rows above 0.05 kPa.
-- **At 40 °C:** the model is 46–70% low for loadings 0.04–0.20, the carbamate
-  region, where no fitted pressure exists (the fit starts at loading 0.376).
+- **At 40 °C:** the model is 46–70% low (59% on average) for loadings
+  0.04–0.20, where no fitted pressure exists (the fit starts at loading 0.376).
+  Lawson's 100 °F rows at loading 0.41–0.87 are instead 26–65% high: the same
+  loading-shape error seen from the other side.
 - **At 100 °C:** the four lowest-loading rows (α ≤ 0.006, p ≤ 0.0074 kPa) are
-  43–166% high, inside the region where Lal says the accuracy is much worse.
-  The rest are 3–51% low.
+  43–166% high. Lal says these four points are "probably in error" (PDF p.4,
+  printed p.684). The other 23 are 3–51% low.
 
 **Form A on the same rows (comparison only; it does not change the selection).**
 
@@ -211,21 +260,82 @@ laboratories disagree; this study does not separate the two.
 - Lal: 44.6% mean absolute error (bias −26.7%), and 4 of 28 rows above
   0.05 kPa within ±15%.
 - The two ion forms' overall held-out errors and biases differ by at most 4
-  points; by isotherm the largest difference is 8.8 points (Seo & Hong 80 °C).
+  points. By isotherm the largest difference is 8.8 points (Seo & Hong, 80 °C).
 
-**Comparison only.**
+## Comparison-only predictions (frozen B-2, never fitted)
 
-- Weiland 1998 loaded densities at 298 K: 0.45% mean absolute error (bias
-  −0.19%) on 43 rows. The misprinted 20 mass%, loading 0.50 value is excluded.
-- Lawson's seven 394.26 K rows are not computable, as declared.
+These four sets were run by owner decision (2026-11-12).
+
+**Lawson & Garst Table VIII (same laboratory, 50 wt%; 54.5 wt% at 77 °F; 10
+CO₂-only rows).** 41.7% mean absolute error, with a bias of −33.0%.
+
+| °F | Rows | Mean absolute error (%) | Bias (%) |
+|:--|--:|--:|--:|
+| 77 | 2 | 36.6 | −5.4 |
+| 100 | 4 | 29.5 | −23.4 |
+| 200 | 4 | 56.5 | −56.5 |
+
+At 200 °F the four rows (loading 0.19–0.41) are 31–77% low. At the same
+laboratory and double the concentration, the model is low at low loading, as
+it is against Lal at 40 °C, rather than high, as it is against Seo & Hong.
+
+**Böttinger 2008 Table 4 speciation (true mole fractions).**
+
+- Conditions: 293–333 K, 0.20–0.23 g/g, at an assumed 2.5 MPa. The cell ran
+  at 5–25 bar and the per-row pressure is not tabulated.
+- Clean states are the 9 without the oxazolidone byproduct.
+- The model omits the byproduct, so the 16 byproduct states are shown apart.
+
+| Quantity | Clean: mean absolute difference (bias) | Byproduct: mean absolute difference (bias) |
+|:--|--:|--:|
+| DEA + DEAH⁺ | 0.0017 (−0.0016) | 0.0032 (−0.0031) |
+| DEACOO⁻ | 0.0013 (+0.0012) | 0.0050 (+0.0050) |
+| HCO₃⁻ (model HCO₃⁻ + CO₃²⁻) | 0.0013 (−0.0009) | 0.0053 (−0.0048) |
+
+- In the clean states the model's carbamate runs from 6% low to 27% high, and
+  is high in 7 of 9 rows.
+- The model's bicarbonate is lower than measured where it is measured: for
+  example 0.0006 against 0.0025, and 0.0032 against 0.0065, at 293 K.
+- Gravimetric composition is stated to better than 1%. No uncertainty is
+  given for the NMR mole fractions.
+
+**Cai 1996 Table 4 (water + DEA at 6.66 kPa, 9 rows).** The model bubble
+pressure at the measured T and x is compared with 6.66 kPa.
+
+- **Pure components:** within 7% (pure DEA −7%, pure water 0%).
+- **DEA-rich mixtures** (water mole fraction 0.010–0.052, 399–456 K): 20–101%
+  high. The vapour water fraction is off by up to 0.27.
+- **Mean absolute pressure error:** 40.8%.
+- These compositions lie far from absorber conditions, and the DEA–water k_ij
+  was fitted to Horstmann's 365 K isotherm.
+
+**Horstmann 2002 Table 6 (water + DEA excess enthalpy, 363.15 K, 1.75 MPa, 14
+rows).** Computed from Engine residual enthalpies of the liquid. The
+ideal-gas part is linear in composition and cancels. As a units check, the
+residual enthalpy of water is −41.4 kJ/mol, close to its vaporization enthalpy.
+
+- **Measured:** exothermic, −93 to −1707 J/mol.
+- **Model:** endothermic, +89 to +759 J/mol. None of the 14 rows lies within
+  twice the stated σ = 2 J/mol + 1% of the value.
+- **Meaning:** the model has the wrong sign for the DEA–water mixing heat. The
+  cross-association by combining rule, with a k_ij fitted only to pressures,
+  does not carry the unlike hydrogen-bond energy.
+- **Why the reactive heats still fit:** Carson's are at 298 K and small CO₂
+  mole fraction, where this term largely cancels between the initial and
+  final liquids.
+
+**Weiland 1998 loaded densities at 298 K.** 0.45% mean absolute error (bias
+−0.19%) on 43 rows. The misprinted 20 mass%, loading 0.50 value is excluded.
+
+Lawson's seven 394.26 K rows are not computable, as declared.
 
 Results: [score.json](results/score.json), [phases.json](results/phases.json).
 
 ## Uncertainty and sensitivity (#307 method)
 
-B-1 has no coordinate on a limit. The #307 script
+B-2 has no coordinate on a limit. The #307 script
 (`mea_parameter_bundle/scripts/uncertainty_307.py DEA`) refits from the
-endpoint without moving (cost change 5 × 10⁻¹²) and uses the native
+endpoint without moving (cost change 4 × 10⁻¹²) and uses the native
 covariance. The variance factor is 0.210. These are local, linearized standard
 errors conditional on the model, weights and inputs. They describe parameter
 uncertainty, not model discrepancy.
@@ -260,23 +370,22 @@ uncertainty, not model discrepancy.
 
 - **Composition coverage.** One fitted pressure source at one concentration
   (25 wt%), with no fitted pressure below loading 0.376 or above 380 K. The
-  held-out sets test 30 wt% and about 20.6 wt%; neither result establishes
+  held-out sets and Table VIII test 20.6–54.5 wt%, and none of them supports
   transfer across DEA concentrations.
 - **Temperature extrapolation.** The Bower law is used to 380 K in the fit
   (measured to 323 K). The model omits the oxazolidone byproduct and DEA
   degradation.
 - **Unreported quantities.** The methane pressure in Lawson's cell is
   unreported, and its effect on the CO₂ fugacity is a source limit.
+- **Mixing heat.** The DEA–water excess enthalpy has the wrong sign. Any use
+  that needs heats away from Carson's conditions inherits that error.
 - **Use.** The working fit is not qualified for absorber design.
 - **Budget.**
-  - Computation: under 15 minutes of admitted time against 3 hours (each fit
-    converged in 6–8 iterations and under 20 s).
-  - Code: **536 gross executable lines** against the approved 450. That is 509
-    in this folder plus 27 in the shared #307 script for its DEA branch. The
-    design had placed all lines in this folder.
-- **Comparisons not run:** Böttinger 2008 speciation, Cai 1996, Horstmann
-  excess enthalpy and Lawson Table VIII. They are outside the required outputs
-  and are left for a later pass.
+  - Computation: under 15 minutes of admitted time against 3 hours. Each fit
+    converged in 6–8 iterations and under 20 s.
+  - Code: the size exceeds the 450 approved lines. The owner approved the
+    overrun on 2026-11-12, including the B-2 restart and the four comparison
+    sets. A DEA branch is added to the shared #307 script.
 
 ## Reproduce
 
@@ -288,9 +397,15 @@ agent-heavy env OMP_NUM_THREADS=1 uv run --no-sync python analyses/dea_transfer/
 uv run --no-sync python analyses/dea_transfer/prepare.py
 agent-heavy env OMP_NUM_THREADS=1 uv run --no-sync python analyses/dea_transfer/reactive.py fit
 agent-heavy env OMP_NUM_THREADS=1 uv run --no-sync python analyses/dea_transfer/reactive.py score
+agent-heavy env OMP_NUM_THREADS=1 uv run --no-sync python analyses/dea_transfer/reactive.py start-rows B 2
 agent-heavy env OMP_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py DEA
 uv run --no-sync python analyses/dea_transfer/present.py
 ```
 
+`B-2-k-0.5-start-rows.json` came from the same `start-rows` command run with
+the design's k = −0.5 before the owner decision.
+
 This report has not been promoted for the manuscript's LaTeX route.
-Independent delivered-result review: pending.
+Independent delivered-result review: the first pass was Not supported; its
+findings are corrected here, and the re-review result is recorded on the pull
+request.

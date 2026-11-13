@@ -31,7 +31,13 @@ files = dict(
     seo=packet('seo-hong-1996', rows('SeoHong1996_Table1_DEA30.csv'), lambda r: pressure(float(r['T_C']) + 273.15, 1e3 * float(r['p_CO2_kPa']), 0.30, float(r['alpha_mol_CO2_per_mol_amine']))),
     lal=packet('lal-1985', rows('Lal1985_Table2_CO2.csv'), lambda r: pressure(float(r['T_C']) + 273.15, 1e3 * float(r['p_CO2_kPa']), w_lal, float(r['alpha_mol_CO2_per_mol_DEA']))),
     weiland=packet('weiland-1998', rows('Weiland1998_Table2_DEA_density.csv'), lambda r: dict(T=298.15, P=101325.0, water=water(float(r['DEA_mass_percent']) / 100),
-        alpha=float(r['alpha_mol_CO2_per_mol_DEA']), observed=1e3 * float(r['density_g_per_mL']), scale=1.0, weight=1.0)))
+        alpha=float(r['alpha_mol_CO2_per_mol_DEA']), observed=1e3 * float(r['density_g_per_mL']), scale=1.0, weight=1.0)),
+    lawson8=packet('lawson-1976-viii', rows('LawsonGarst1976_TableVIII_CO2.csv'), lambda r: pressure((float(r['T_F']) - 32) / 1.8 + 273.15, 133.322368 * float(r['p_CO2_mmHg']),
+        float(r['DEA_mass_percent']) / 100, float(r['alpha_mol_CO2_per_mol_DEA']))))
+# Boettinger 2008 Table 4 true mole fractions at 2.5 MPa (cell 5-25 bar; per-row pressure not tabulated), one packet per measured quantity.
+for q in ('x_DEA_plus_DEAH', 'x_DEACOO', 'x_HCO3'):
+    files[q] = packet(f'bottinger-2008-{q[2:]}', rows('Bottinger2008_Table4_DEA_NMR.csv'), lambda r: dict(T=float(r['T_K']), P=2.5e6, water=water(float(r['DEA_mass_fraction'])),
+        alpha=float(r['alpha_mol_CO2_per_mol_DEA']), observed=float(r[q]), scale=0.001, weight=1.0))
 
 # Chemistry (D1): R1-R3 from the adopted MEA declarations; Bower 1962 Eq. 7 fixed; Aroua 1997 Eq. 14 inverse as the carbamate start.
 mea = tomllib.loads((ROOT / 'analyses/solvent_specification_mea/declarations.toml').read_text())
@@ -62,7 +68,11 @@ datasets = [
     dict(name='seo-hong-1996', group='SeoHong', role='comparison', **files['seo'], **partial, columns=columns, filter={}, temperature_domain=D),
     dict(name='lal-1985', group='Lal', role='comparison', **files['lal'], **partial, columns=columns, filter={}, temperature_domain=D),
     dict(name='weiland-1998', group='Weiland', role='comparison', **files['weiland'], template='loaded-liquid', constructor='observation', kind='phase_density', columns=dict(columns, scale='scale'),
-         arguments=dict(observed='$observed', form='difference', scale='$scale', phase='L', mass_basis=True), weight='$weight', filter={}, temperature_domain=D)]
+         arguments=dict(observed='$observed', form='difference', scale='$scale', phase='L', mass_basis=True), weight='$weight', filter={}, temperature_domain=D),
+    dict(name='lawson-1976-viii', group='Lawson-VIII', role='comparison', **files['lawson8'], **partial, columns=columns, filter={}, temperature_domain=D)] + [
+    dict(name=f'bottinger-2008-{q[2:]}', group=f'Bottinger-{q[2:]}', role='comparison', **files[q], template='loaded-liquid', constructor='observation', kind='mole_fraction',
+         columns=dict(columns, scale='scale'), arguments=dict(observed='$observed', form='difference', scale='$scale', phase='L', species=species, mass_basis=False),
+         weight='$weight', filter={}, temperature_domain=D) for q, species in (('x_DEA_plus_DEAH', [DEA, H]), ('x_DEACOO', [C]), ('x_HCO3', ['bicarbonate-anion', 'carbonate-anion']))]
 formulas = {CO2: dict(C=1, O=2, charge=0), W: dict(H=2, O=1, charge=0), 'bicarbonate-anion': dict(H=1, C=1, O=3, charge=-1), 'carbonate-anion': dict(C=1, O=3, charge=-2),
             'hydronium-cation': dict(H=3, O=1, charge=1), 'hydroxide-anion': dict(H=1, O=1, charge=-1), DEA: dict(C=4, H=11, N=1, O=2, charge=0),
             H: dict(C=4, H=12, N=1, O=2, charge=1), C: dict(C=5, H=10, N=1, O=4, charge=-1)}
