@@ -28,7 +28,23 @@ These assumptions are part of the compared states, not corrections inferred from
 \subsection{Caloric and density calculations}
 % P:p2-methods-05-caloric
 For negative absorption heats, the signed difference $y^c-y^o$ states directly whether absorption is more or less exothermic.
-Supplementary Section~S2 gives the caloric and density definitions, including the stock and loading bases used in each comparison.
+For an initial stock $i$ and final loaded equilibrium liquid $f$, the integral molar absorption enthalpy is
+\begin{equation}
+ \Delta h_{\mathrm{abs,int}}=\frac{H_f-H_i-\Delta n_{\COtwo}h_{\COtwo}^{\mathrm{feed}}}{\Delta n_{\COtwo}}.
+ \label{eq:p2-integral-heat}
+\end{equation}
+The feed and both liquids are evaluated at the comparison temperature and pressure; $\Delta n_{\COtwo}$ is the absorbed amount and negative heat denotes exothermic absorption.
+A differential absorption heat is $(\partial H_{\mathrm{eq}}/\partial n_{\COtwo})_{T,P,n_A,n_w}-h_{\COtwo}^{\mathrm{feed}}$; it is distinct from the finite-loading integral.
+Each integral comparison retains its initial stock, final loading and any imposed liquid-loading cap.
+For an unloaded binary mixture, excess enthalpy per mole of mixture is
+\begin{equation}
+ H^E=h_{\mathrm{mix}}-x_w h_w^{*}-x_A h_A^{*},
+ \qquad \rho_{\mathrm{mass}}=\frac{m_{\mathrm{feed}}}{V_{\mathrm{eq}}}.
+ \label{eq:p2-excess-density}
+\end{equation}
+The superscript $*$ denotes the pure-component liquid at the same temperature and pressure as the mixture; the ideal-gas enthalpies cancel in $H^E$.
+Density uses the complete analytical mass, including added \COtwo for loaded solutions, and the equilibrium liquid volume.
+Heat capacities use the same complete-feed molar or mass basis as their source observations.
 
 \subsection{Parameters and fitting}
 % P:p2-methods-04
@@ -42,10 +58,27 @@ Here $s_j$ denotes the assigned observation scale and $W$ includes group weights
 The objectives use different observations and scales, so their costs do not measure relative physical accuracy across amines.
 For DEA, pressure log ratios use scale 0.09 and heat differences use 0.02 times the magnitude of measured heat, with each group's squared residuals averaged.
 For PZ, pressure uses an assigned 2\,\% scale and NMR uses correlated area-normalization errors with assumed area scale $q=0.02$.
-Supplementary Section~S2 specifies the other residuals and their data definitions.
+% P:p2-methods-residual-02
+For MDEA, Kuranov total pressures use natural-log ratios, scale one and weight $100/9$; Kim binary total pressures use natural-log ratios with unit scale and weight.
+Jakobsen protonated fractions use differences scaled by 10\,\% of the observed fraction, with unit weight.
+Carson and Merkley heat differences use 3000 J/mol \COtwo scales and unit weights.
+Weiland heat capacities use 2\,\% of the observed heat capacity and unit weights.
+Loaded-density differences use the stored row-specific scales and weight $1/33$, whereas unloaded densities use 0.5 kg/m$^3$ and weight ten.
+
+% P:p2-methods-residual-03
+AMP loaded total pressures use log ratios with unit scale and weight $100/[9(47)\max(u_P/P,0.05)^2]$.
+The fifty-two binary entries comprise twenty-six pressures and twenty-six vapor AMP fractions; binary log pressures use 0.05 scale through their weight, while vapor fractions use $\max(10^{-4},0.05y)$.
+The binary group is averaged over its fifty-two entries.
+Ciftja carbamate fractions are mapped to carbamate per total amine, with difference scale 0.003 and group weight $1/57$.
+
+% P:p2-methods-residual-04
+PZ pressure differences use an assigned scale 0.02 times observed pressure.
+NMR normalization propagates independent area errors with $q=0.02$ into correlated group-fraction blocks; complete-state areas reconstruct the monocarbamate pair and free/dicarbamate groups before normalization.
+Blank dicarbamate observations are not zeros and do not create additional residuals.
+The assumed area scale is not a source-validated independent species standard deviation.
 
 % P:p2-methods-05
-The pressure AARD definition is identical to Part I,
+The average absolute relative deviation and signed bias are
 \begin{equation}
  \operatorname{AARD}=\frac{100\,\%}{n}\sum_{j=1}^n\left|y_j^c/y_j^o-1\right|,
  \qquad \operatorname{bias}=\frac{100\,\%}{n}\sum_{j=1}^n(y_j^c/y_j^o-1).
@@ -59,7 +92,7 @@ The AMP results use the fit whose carbamate diameter is bounded below by the MEA
 The PZ fit stops at its 100-iteration limit with nearly flat cost and is not labeled formally converged.
 DEA's two charged-chain starts differ in cost below the optimizer tolerance and represent a numerical tie rather than distinct physical optima.
 The selected MDEA fit was chosen partly for its held-out pressures and gives poorer agreement with Carson's heats than the earlier fit (scaled RMS 1.106 against 0.977).
-Supplementary Section~S3 reports these selections and their parameter identities.
+The selected parameters remain fixed for the reported comparisons; the start and bound inventory records the alternatives (Supplementary Section~S3).
 
 % P:p2-methods-08
 Local covariance holds shared inputs, model choices, residual weights and bound fitted parameters fixed.
@@ -71,7 +104,8 @@ Those displacements have different meanings and sizes; none quantifies source sy
 
 \subsection{Phase-stability search}
 % P:p2-methods-07
-Reacting charge-neutral tangent-plane searches follow Part I, requiring a negative distance and a material-conserving Gibbs-energy decrease to identify an additional phase \cite[Sect.~3]{PolleyPartI}.
+At each parent liquid, a trial phase minimizes the tangent-plane distance $\sum_i n_i^{\mathrm{trial}}(\mu_i^{\mathrm{trial}}-\mu_i^{\mathrm{parent}})/(RT)$ under reaction equilibrium and electroneutrality.
+A negative distance is followed by a material-conserving split calculation; only a Gibbs-energy decrease identifies an additional phase.
 Unlike the penalized MEA fit of Part I \cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting.
 A separate PZ fit applies that penalty and is reported only to show its remaining false liquid splits and the finite search's missed solutions.
 All split counts are lower bounds; absence of a detected split is not proof of stability.
