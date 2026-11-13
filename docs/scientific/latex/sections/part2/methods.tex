@@ -1,5 +1,4 @@
-\section{Data, parameter estimation and numerical assessment}\label{sec:p2-methods}
-\subsection{Observation roles and composition basis}
+\section{Data and parameter estimation}\label{sec:p2-methods}
 % P:p2-methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, per mole of amine molecules, including for PZ.
 Unloaded mass fraction is $w_A=m_A/(m_A+m_w)$; solute-free stock compositions are retained for pressure calculations.
@@ -26,7 +25,13 @@ B\"ottinger DEA comparisons \cite{Bottinger2008} use 2.5 MPa because source cell
 PZ NMR solvent masses reported for heavy water are treated as water, leaving isotope effects unquantified.
 These assumptions are part of the compared states, not corrections inferred from the pressure errors.
 
-\subsection{Objectives, selection and reported deviations}
+\subsection{Caloric and density calculations}
+% P:p2-methods-05-caloric
+A negative pressure bias means underprediction.
+For negative absorption heats, the signed difference $y^c-y^o$ instead states directly whether absorption is more or less exothermic.
+Supplementary Section~S2 gives the caloric and density definitions, including the stock and loading bases used in each comparison.
+
+\subsection{Parameters and fitting}
 % P:p2-methods-04
 Each bounded least-squares fit minimizes its original weighted sum,
 \begin{equation}
@@ -48,9 +53,6 @@ The pressure AARD definition is identical to Part I,
  \label{eq:p2-aard}
 \end{equation}
 The same reporting formula is applied separately to nonzero heats and other properties; species differences and root-mean-square errors retain their observable units.
-A negative pressure bias means underprediction.
-For negative absorption heats, the signed difference $y^c-y^o$ instead states directly whether absorption is more or less exothermic.
-
 
 % P:p2-methods-06
 The AMP results use the fit whose carbamate diameter is bounded below by the MEA carbamate diameter, 5.32~\AA; a fit allowed down to 3.5~\AA\ lowers the cost only slightly, so the data identify the diameter only weakly below about 5.3~\AA, and that fit is a sensitivity case.
@@ -59,14 +61,6 @@ DEA's two charged-chain starts differ in cost below the optimizer tolerance and 
 The selected MDEA fit was chosen partly for its held-out pressures and gives poorer agreement with Carson's heats than the earlier fit (scaled RMS 1.106 against 0.977).
 Supplementary Section~S3 reports these selections and their parameter identities.
 
-\subsection{Phase searches and conditional uncertainty}
-% P:p2-methods-07
-Reacting charge-neutral tangent-plane searches follow Part I, requiring a negative distance and a material-conserving Gibbs-energy decrease to identify an additional phase \cite[Sect.~3]{PolleyPartI}.
-Unlike the penalized MEA fit of Part I \cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting.
-A separate PZ fit applies that penalty and is reported only to show its remaining false liquid splits and the finite search's missed solutions.
-All split counts are lower bounds; absence of a detected split is not proof of stability.
-The sampled states and unavailable states remain distinct from a continuous phase boundary.
-
 % P:p2-methods-08
 Local covariance holds shared inputs, model choices, residual weights and bound coordinates fixed.
 For interior coordinates, the covariance is the local inverse weighted information matrix multiplied by the retained residual-variance factor.
@@ -74,3 +68,11 @@ At a prediction with parameter derivative $g$, the conditional variance is $g^{\
 Separate sensitivities displace one marginal SE at a time and do not include correlation compensation.
 Inward profiles fix a bound coordinate 1, 5 or 10\,\% of its original interval inside the bound and refit the remaining coordinates.
 Those displacements have different meanings and sizes; none quantifies source systematics or model-form error.
+
+\subsection{Phase-stability search}
+% P:p2-methods-07
+Reacting charge-neutral tangent-plane searches follow Part I, requiring a negative distance and a material-conserving Gibbs-energy decrease to identify an additional phase \cite[Sect.~3]{PolleyPartI}.
+Unlike the penalized MEA fit of Part I \cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting.
+A separate PZ fit applies that penalty and is reported only to show its remaining false liquid splits and the finite search's missed solutions.
+All split counts are lower bounds; absence of a detected split is not proof of stability.
+The sampled states and unavailable states remain distinct from a continuous phase boundary.

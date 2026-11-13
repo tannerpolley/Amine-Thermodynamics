@@ -1,5 +1,5 @@
-\section{Thermodynamic model and transferred parameters}\label{sec:p2-model}
-\subsection{Shared terms and amine-specific chemistry}
+\section{Thermodynamic model}\label{sec:p2-model}
+\subsection{Residual Helmholtz energy}
 % P:p2-model-01
 The residual Helmholtz energy retains the hard-chain, dispersion, association, Debye--H\"uckel and Born contributions of Part I \cite[Sect.~2]{PolleyPartI}.
 The water and \COtwo component descriptions, hydronium, hydroxide, bicarbonate and carbonate, all interactions among these six shared species, and the reaction laws of Part I, R1 (water autoprotolysis), R2 (\ce{CO2 + 2H2O <=> HCO3- + H3O+}) and R3 (\ce{HCO3- + H2O <=> CO3^{2-} + H3O+}), including Part I's fitted R2 corrections, are held fixed.
@@ -10,6 +10,23 @@ The MDEA and AMP fits were first developed against an earlier MEA fit whose bica
 
 \input{tables/part2/origins}
 
+\subsection{Segment diameters and dispersion interactions}
+% P:p2-model-dispersion
+Segment diameters and dispersion combining rules follow Part I \cite[Sect.~2.2]{PolleyPartI}; Supplementary Section~S1 specifies the amine parameters and diameter ties.
+
+\subsection{Association scheme}
+% P:p2-model-association
+The amine association sites are specified in Supplementary Section~S1 and use Part I's combining rules \cite[Sect.~2.3]{PolleyPartI}; association sites do not replace the explicit reactive species.
+
+\subsection{Born contribution with solvation shell and dielectric saturation}
+% P:p2-model-born
+The Born formulation follows Part I \cite[Sect.~2.4]{PolleyPartI}, with the fixed and fitted amine-specific solvation quantities given in Supplementary Section~S1.
+
+\subsection{Relative permittivity}
+% P:p2-model-permittivity
+Amine permittivity correlations enter the mixture rule of Part I \cite[Sect.~2.5]{PolleyPartI}; Supplementary Section~S1 distinguishes their separate fits from the assumed PZ inputs.
+
+\subsection{Reactions and phase equilibrium}\label{sec:p2-laws}
 % P:p2-model-02
 Each liquid contains the shared species and its molecular amine and protonated forms.
 AMP and DEA also contain carbamate; PZ contains singly and doubly protonated PZ, mono- and dicarbamate, and the neutral zwitterion HPZCOO.
@@ -24,7 +41,6 @@ Allowing this neutral zwitterion in the vapor resolves otherwise undecided phase
 This numerical change is negligible for those pressures, but the vapor composition space matters to the phase search.
 PZ has no solid-phase description, and its pure-liquid density is unvalidated.
 
-\subsection{Reaction conventions and measured temperature ranges}\label{sec:p2-laws}
 % P:p2-model-04
 A state can lie inside a reaction law's declared calculation interval yet outside the temperatures at which that law was measured; Table~\ref{tab:p2-laws} separates the two.
 The pure-liquid solvent and infinite-dilution solute conventions follow Part I.
@@ -48,3 +64,7 @@ This fitted hydrolysis slope is distinct from the fixed dissociation law and doe
 PZ carbamate source measurements span 283.15--333.15 K, and its protonation measurements approximately 293--353 K.
 DEA uses the fixed Bower protonation law \cite{bowerAcidicDissociationConstant1962} above the approximately 323 K upper measurement limit, including 23 of its 30 fitted pressures.
 A fitted offset does not turn an extrapolated temperature dependence into a measured one.
+
+\subsection{Enthalpy and heat capacity}
+% P:p2-model-caloric
+Enthalpy and heat capacity follow the common-potential treatment of Part I \cite[Sect.~2.7]{PolleyPartI}; Supplementary Section~S2 defines the absorption observables and their bases.
