@@ -1134,26 +1134,39 @@ Zhang obtains absorption heat from reaction, dissolution and excess-enthalpy
 contributions. Pakravesh treats nonreactive pure fluids and mixtures. These
 choices and fitting roles differ from the present explicit-ion ePC-SAFT record.
 
-**Published 2026 model: evaluation unavailable.** The original record
-`868a5018…` matches the checked Appendix B ion/pair values and reaction laws
-([source check](results/same-data-comparison/appendix-check.json)). The historical
-Engine Born equations and MEA caller give dimensionless $c_{\rm shell}=1$ and
-$c_{\rm dielectric}=1$, matching Eq.9 and Appendix B Eqs.122–123. Adding only
-these declarations gives translated hash `cbf97278…`. Pinned wheel `391dfe5d…`
-then refuses the record: `missing cross association or no_cross_association:
-carbon-dioxide/monoethanolamine`. Construction stops before a numerical quantity
-can differ; no pressure, species, heat, density, heat-capacity or stability
-observations were scored. No association choice was added to bypass the stop.
-The [qualification receipt](results/same-data-comparison/translation-qualification.json)
-retains both hashes and the refusal. Exact-record per-observation references and
-their original packet were recovered from commit `8d6e261`; no historical wheel
-was run. The pressure/species limit remains $10^{-8}$ relative; heats do not
-gate, but no heat difference could be evaluated.
+**Published 2026 model: qualification fails at the first pressure.** The
+original record `868a5018…` matches the checked Appendix B inputs
+([source check](results/same-data-comparison/appendix-check.json)). Inspection of
+the pinned loader's required declarations found three omissions before filling:
+$c_{\rm shell}=1$, $c_{\rm dielectric}=1$ and inactive CO2–MEA cross association.
+The historical Engine and MEA caller apply these values; Appendix B p.17,
+Eqs.122–123 and Table 10 agree. The
+[translation table](results/same-data-comparison/translation-table.json) gives
+all source locators and hashes. The full translated record is `be66f6cf…`.
 
-The **adoption receipt's aggregate statistics used five reaction shifts**;
-the published record retains **R2/R4/R5 only**. Those aggregates are not an
-exact-record reference. The [study record](results/same-data-comparison/README.md)
-explains this distinction and the remaining association declaration refusal.
+The translated mapping loads on pinned wheel `391dfe5d…`. At the first state,
+`vle_obs_0119` (Hilliard2008; 313.15 K; loading 0.1529030581 mol/mol), CO2 partial
+pressure is **4.394810386862543 Pa**, against **4.394811538107617 Pa** in the
+exact-record historical reference. The relative difference is
+**$2.6195550451\times10^{-7}$**, above the **$10^{-8}$** limit from #339/#255.
+The [qualification comparison](results/same-data-comparison/translation-qualification.json)
+and [state](results/same-data-comparison/qualification-state.json) retain these
+numbers. This is numerical reproduction evidence, not a model-to-measurement
+deviation or physical validation. The cause of the difference remains unresolved.
+
+The reference CSV's 371 `adopted` rows use the original parameter hash and
+historical wheel `b66c7b96…`, Engine `443a9da4…`; MEA commit `8d6e261` first
+retained them. Its original packet is reused with its verified decompressed
+hash. No historical wheel was built or run here. The adoption receipt's
+five-shift aggregates remain excluded because the published record keeps only
+R2/R4/R5. The [study record](results/same-data-comparison/README.md) gives the
+complete provenance and translation table.
+
+The owner's stop rule prevents further comparisons or scoring: no species,
+heats or heat capacities were compared, no Part I observation groups were
+scored, and no stability search was run. There are no 2026-model deviations
+beside the current `f8f64820…` record. The first differing scalar is tabulated
+in the study record; plotting it would not reveal a trend.
 
 The common-data table contains four scalar model comparisons, so a plot would
 not add information about a continuous trend. Published deviations retain each

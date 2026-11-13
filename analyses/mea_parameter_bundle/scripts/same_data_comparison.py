@@ -1,4 +1,4 @@
-"""Issue 339: qualify explicit Born declaration against retained exact-record predictions."""
+"""Issue 339: qualify explicit historical declarations against exact-record predictions."""
 import csv
 import gzip
 import hashlib
@@ -35,7 +35,11 @@ def qualify():
     family = next(f for f in mapping['model_families'] if f['kind'] == 'electrolyte')
     assert 'c_shell' not in family and 'c_dielectric' not in family
     family.update(c_shell=1.0, c_dielectric=1.0)
-    translated = OUT / 'polley-2026-explicit-born.json'
+    mapping['topology']['no_cross_association'] = [dict(
+        component_id_a='carbon-dioxide', component_id_b='monoethanolamine',
+        provenance=dict(locator='Polley and Hedengren (2026), Appendix B Table 10; '
+                        'Engine f2d1e01f4 parameter_builder.cpp:161 (inactive omitted edges)'))]
+    translated = OUT / 'polley-2026-explicit-defaults.json'
     translated.write_text(json.dumps(mapping, sort_keys=True, separators=(',', ':')) + '\n')
     raw = historical('analyses/mea_parameter_bundle/data/input/state-packet.json.gz')
     packet_bytes = gzip.decompress(raw)
@@ -49,6 +53,9 @@ def qualify():
     result = dict(original_sha256=digest(original.read_bytes()), translated_sha256=digest(translated.read_bytes()),
                   engine_commit=s.ENGINE_COMMIT, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256,
                   reference_commit=REFERENCE_COMMIT, reference_sha256=digest(reference_bytes),
+                  reference_engine_commit='443a9da492fd5ac7724525945d108c6a2a854d51',
+                  reference_wheel_sha256=refs[0]['engine_wheel_sha256'],
+                  reference_rows=len(refs), reference_variant='adopted',
                   original_input_sha256=digest(packet_bytes), relative_limit=1e-8,
                   limit_origin='issue #339; cross-wheel replay #255', scored_observations=0,
                   heat_gate=False, status='not qualified', comparisons=[])
