@@ -177,3 +177,14 @@ The main-text order follows the merged plan in issue comment 6847310751. Split p
 ## Review corrections (PR #332)
 
 Applied the two reviews of bd4e5a3 without recalculation. DEA density conditions use the retained 298.15 K; integral-heat AARD uses Table 4 rounding (0.98%). Moved and condensed paragraphs retain the source fields above. The new shared-history paragraph uses the same sources as `p2-model-01`.
+
+## Introduction literature fill (#320)
+
+Only the four pending introduction slots were filled. Literature conditions and locators below describe the cited authors' data and methods, not new calculations. No model ranking or comparison of AARDs across different data selections is made.
+
+| Paragraph | Added conditions and quantities | Source |
+|---|---|---|
+| `p2-introduction-review-04` | Zhang and Chen: reactive-pressure fit at 313–413 K, approximately 2–8 mol MDEA/kg water; fitted binary and reactive properties versus excluded pressure sources | DOI 10.1021/ie1006855, §§3.2–3.3, Tables 12–16 |
+| `p2-introduction-review-04` | Sadegh et al.: ternary pressure fit 5–75 wt% MDEA, temperatures up to 200 °C; unfitted NMR at 20 and 40 °C, 23 wt% MDEA | DOI 10.1016/j.fuel.2014.12.002, §§7–9.2, Tables 5–8; stated conditions are data coverage, not a rectangular validation domain |
+| `p2-introduction-review-04` | Biget et al.: stated identification range 40–150 °C, 15–60 mass%; property-specific fitting comparisons | DOI 10.1002/cjce.22109, pp. 298–302, Figure 1, Table 1, Figures 2, 4, 6, Equations 3–5 |
+| `p2-introduction-review-10` | Sadegh objective weights and low-pressure offset; two unfitted heat datasets; Biget relative-residual objective and conditional parameter intervals | Sadegh §7, Equation 20, §9.1.2, Figures 8–9; Biget pp. 298–302, Equations 3–5, Table 1 |
