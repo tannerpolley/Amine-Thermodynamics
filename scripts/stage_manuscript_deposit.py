@@ -1,23 +1,32 @@
-"""Stage #206's retained manuscript evidence; never upload or reserve a DOI."""
+"""Stage #206's retained Part I manuscript evidence; never upload or reserve a DOI.
+
+Use: stage (moves any old staging aside, copies Part I evidence), rebuild (compiles both PDFs from the
+staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums).
+"""
 import csv
+import datetime
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = Path('/home/tnnrpolley21/Workspaces/External/mea-manuscript-deposit')
 B = 'analyses/mea_parameter_bundle'
-E = f'{B}/results/engine-3e83e19c-paper-evidence'
-P = f'{B}/results/engine-3e83e19c-phase-search/run-2'
-M = 'analyses/mdea_mea_workflow'
+A = f'{B}/results/adoption-297'
+E = f'{A}/paper-evidence'
 L = 'docs/scientific/latex'
-SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'c84ef77'], text=True).strip()
-NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'f138561'], text=True).strip()
-MDEA_NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '209da68'], text=True).strip()
+PARAMETER = 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
+# The accepted PDFs were compiled on the real clock; rebuilds use this fixed time (main.pdf's creation instant).
+SOURCE_DATE_EPOCH = '1794527621'
+SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '7db3ea9'], text=True).strip()
+NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'log', '-1', '--format=%H', SOURCE, '--', f'{B}/notebook.qmd'], text=True).strip()
+INVENTORY_COMMIT = '771410a94f7729915bfe6457bfe7a5a0746f1611'  # a7_presentation.py checks the table generator at this commit
 
 
 def sha(path):
@@ -32,31 +41,40 @@ def write(path, value):
     (DEST / path).write_text(json.dumps(value, indent=2) + '\n')
 
 
+def pdf_pages(pdf):
+    return int(re.search(r'Pages:\s+(\d+)', subprocess.check_output(['pdfinfo', str(pdf)], text=True))[1])
+
+
+def pdf_content(pdf):
+    """Text plus the hash of every rendered page: equal when two builds differ only in dates and file ID."""
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(['pdftoppm', '-r', '60', '-png', str(pdf), f'{tmp}/p'], check=True)
+        pages = [sha(p) for p in sorted(Path(tmp).glob('p-*.png'))]
+    return subprocess.check_output(['pdftotext', str(pdf), '-'], text=True), pages
+
+
 def stage():
-    # Rebuild only in an empty destination; preserve any existing staging for review.
-    DEST.mkdir(parents=True, exist_ok=True)
-    assert not list(DEST.iterdir()), 'Destination must be empty; do not overwrite an existing deposit.'
+    receipt = json.loads((ROOT / L / 'builds/verification-receipt.json').read_text())
+    accepted = {n: ROOT / L / f'builds/{n}.pdf' for n in ('main', 'supplement')}
+    assert sha(accepted['main']) == receipt['pdf_sha256'], 'main.pdf does not match builds/verification-receipt.json'
     tracked = subprocess.check_output(['git', '-C', str(ROOT), 'ls-files'], text=True).splitlines()
-    prefixes = [f'{E}/', f'{P}/', f'{B}/results/engine-3e83e19c-density-free/',
-                f'{B}/results/engine-3e83e19c-refit-chain/', f'{B}/data/', f'{B}/scripts/',
-                f'{B}/calibration-misfit/', f'{M}/inputs/', f'{M}/scripts/',
-                f'{M}/results/stage2-capped/', f'{M}/results/item-l/',
-                f'{M}/results/stage2-density/', f'{M}/results/dielectric/', f'{M}/results/context-sources/',
-                'data/reference/MEA/', 'data/reference/MDEA/', 'src/', f'{L}/']
+    prefixes = [f'{A}/', f'{B}/results/uncertainty-307/', f'{B}/results/engine-3e83e19c-phase-search/run-2/',
+                f'{B}/results/engine-3e83e19c-density-free/', f'{B}/results/engine-3e83e19c-refit-chain/',
+                f'{B}/results/engine-3e83e19c-paper-evidence/', f'{B}/data/', f'{B}/scripts/', f'{B}/calibration-misfit/',
+                'data/reference/MEA/', 'src/', f'{L}/']
     selected = {p for p in tracked if any(p.startswith(q) for q in prefixes)
-                and '/builds/' not in p and '/submission/' not in p}
+                and '/builds/' not in p and '/submission/' not in p and not p.endswith('submission_metadata.yml')
+                and 'mdea' not in p.lower()}  # MDEA files belong to Part II
     selected.update(['LICENSE', 'pyproject.toml', 'uv.lock', f'{B}/notebook.qmd',
-                     f'{M}/notebook.qmd', f'{M}/README.md',
                      f'{B}/results/selected-current-best-parameters.json',
                      f'{B}/results/temperature-reanchor-140/never-accessed-vle-admission.csv',
                      'scripts/stage_manuscript_deposit.py'])
-    selected.update(json.loads((ROOT / E / 'input-hashes.json').read_text()))
-    selected.update(e['path'] for e in json.loads((ROOT / E / 'inventory.json').read_text())['entries'])
-    selected.update(p for p in tracked if p.startswith(f'{M}/results/') and len(Path(p).parts) == 5)
-    # Shared fitting code imports these declarations; keep their application-owned sources.
-    selected.update(p for p in tracked if p.startswith(f'{B}/') and p.endswith(('.py', '.py.txt')))
+    # Every file the table and figure generators read is named in their outputs.
+    selected.update(json.loads((ROOT / L / 'figures/generated/provenance.json').read_text())['inputs'])
+    for table in (ROOT / L / 'tables').glob('*.tex'):
+        selected.update(re.findall(r'^% Input: (\S+) SHA256', table.read_text(), re.M))
     # Keep the actual file dependencies of retained fit declarations, not whole retired studies.
-    pending = [p for p in selected if p.endswith('spec.json') or p.startswith(f'{M}/inputs/') and p.endswith('.json')]
+    pending = [p for p in selected if p.endswith('spec.json')]
     seen = set()
     def references(value):
         if isinstance(value, dict):
@@ -79,23 +97,26 @@ def stage():
             if dependency.endswith('.json'):
                 pending.append(dependency)
     selected = {p for p in selected if not p.endswith('.whl')}
+    for name in sorted(selected):  # check everything before copying, so a failure leaves no half-staged folder
+        assert not any(q in name.lower() for q in ('cesar', 'a7-paper-evidence/', 'mdea')), name  # MDEA belongs to Part II
+        assert not name.endswith('.pdf') or 'figures' in name, name  # generated figures only, never source papers
+        assert (ROOT / name).is_file() and not (ROOT / name).is_symlink(), name
+    if DEST.exists() and any(DEST.iterdir()):  # replace cleanly; the old staging stays for review
+        stamp = datetime.date.fromtimestamp(DEST.stat().st_mtime).isoformat()
+        DEST.rename(DEST.with_name(f'{DEST.name}-{stamp}-superseded'))
+    DEST.mkdir(parents=True, exist_ok=True)
     for name in sorted(selected):
-        assert not any(q in name.lower() for q in ('cesar', 'a7-paper-evidence/'))
-        assert not name.endswith('.whl')
-        assert not name.endswith('.pdf') or name.startswith(f'{L}/figures/generated/')
-        source = ROOT / name
-        assert source.is_file() and not source.is_symlink(), name
-        target = DEST / name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, target)
+        (DEST / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, DEST / name)
+    (DEST / L / 'builds').mkdir()
+    for name, pdf in accepted.items():
+        shutil.copy2(pdf, DEST / L / f'builds/{name}.pdf')
     # Exact historical table source needed by the generator's Git provenance check.
     history = DEST / 'provenance'
     history.mkdir()
     (history / 'inventoried-table-generator.py').write_bytes(subprocess.check_output(
-        ['git', '-C', str(ROOT), 'show', f'771410a94f7729915bfe6457bfe7a5a0746f1611:{L}/scripts/final_rerun_tables.py']))
-    # Save source versions without requiring a wheel installation for presentation.
-    write('provenance/source.json', dict(manuscript_commit=SOURCE, mea_notebook_commit=NOTEBOOK,
-          mdea_notebook_commit=MDEA_NOTEBOOK, source_date_epoch=1792750003))
+        ['git', '-C', str(ROOT), 'show', f'{INVENTORY_COMMIT}:{L}/scripts/final_rerun_tables.py']))
+    write('provenance/source.json', dict(manuscript_commit=SOURCE, mea_notebook_commit=NOTEBOOK, source_date_epoch=int(SOURCE_DATE_EPOCH)))
     subprocess.run(['uv', 'export', '--frozen', '--no-dev', '--no-emit-project',
                     '--no-emit-package', 'epcsaft', '--no-emit-package', 'pcsaft',
                     '--format', 'requirements-txt', '--output-file',
@@ -104,52 +125,73 @@ def stage():
     print(f'Staged {len(selected)} source files at {DEST}')
 
 
+def rebuild():
+    """Compile both PDFs from the staged copy only, as a reader of the README would, and compare with the accepted PDFs."""
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.copytree(DEST / L, Path(tmp) / 'latex', ignore=shutil.ignore_patterns('builds'))
+        work = Path(tmp) / 'latex'
+        env = {**os.environ, 'SOURCE_DATE_EPOCH': SOURCE_DATE_EPOCH, 'FORCE_SOURCE_DATE': '1', 'TEXINPUTS': './styles//:'}
+        for name in ('main', 'supplement', 'main', 'supplement'):  # each file reads the other's cross-references
+            subprocess.run(['latexmk', '-g', '-pdf', '-interaction=nonstopmode', '-halt-on-error', '-outdir=builds', f'{name}.tex'],
+                           cwd=work, env=env, check=True, stdout=subprocess.DEVNULL)
+        result = {}
+        for name in ('main', 'supplement'):
+            new, old = work / f'builds/{name}.pdf', DEST / L / f'builds/{name}.pdf'
+            text_new, pages_new = pdf_content(new)
+            text_old, pages_old = pdf_content(old)
+            result[name] = dict(pages=pdf_pages(new), text_identical=text_new == text_old, rendered_pages_identical=pages_new == pages_old,
+                                byte_identical=sha(new) == sha(old), rebuilt_sha256=sha(new), accepted_sha256=sha(old))
+            assert pdf_pages(new) == pdf_pages(old) and result[name]['text_identical'] and result[name]['rendered_pages_identical'], result
+    write('provenance/rebuild-check.json', result)
+    print(json.dumps(result, indent=2))
+
+
 def seal():
-    mapping = {name: f'{P}/{name}' for name in ('split-confirmations.csv', 'reference-pressures.csv')}
-    mapping['carbonate-share.csv'] = f'{E}/carbonate-share.csv'
-    mapping['source-only/physical-ideal-gas-calorics.json'] = f'{E}/source-only/physical-ideal-gas-calorics.json'
-    cited = set()
-    for source in (DEST / L).rglob('*.tex'):
-        cited.update(re.findall(r'\\path\{([^}]+\.(?:csv|json|py|qmd))\}', source.read_text()))
-    assert cited == set(mapping), (cited, mapping)
-    for path in mapping.values():
+    paths = dict(density=f'{E}/density.csv', phase_states=f'{E}/phase-family.csv',
+                 ideal_gas_calorics=f'{E}/source-only/physical-ideal-gas-calorics.json')
+    for path in paths.values():
         assert (DEST / path).is_file(), path
+    with (DEST / paths['density']).open() as stream:
+        assert len(list(csv.DictReader(stream))) == 210
+    with (DEST / paths['phase_states']).open() as stream:
+        phase = list(csv.DictReader(stream))
+    adopted = {(r['engine_wheel_sha256'], r['parameter_sha256']) for r in phase if r['record'] == 'adopted #255 candidate'}
+    comparison = {(r['engine_wheel_sha256'], r['parameter_sha256']) for r in phase if r['record'] == 'comparison'}
+    assert len(phase) == 324 and sum(r['record'] == 'comparison' for r in phase) == 162 and len(adopted) == len(comparison) == 1
     parameter = sha(DEST / B / 'results/selected-current-best-parameters.json')
-    assert parameter == '00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91'
-    engine = load(f'{L}/figures/generated/provenance.json')['records']['reported']['engine']
-    mdea = load(f'{M}/results/stage2-capped/authority.json')['runtime']
-    endpoints = {v: sha(DEST / M / f'results/stage2-capped/{v}/endpoint.json') for v in ('A3', 'B1')}
-    selected = load(f'{M}/results/stage2-capped/selection.json')
-    assert endpoints == {v['label']: v['endpoint_sha256'] for v in selected.values()}
+    assert parameter == PARAMETER
+    records = load(f'{L}/figures/generated/provenance.json')['records']
+    engine, historical = records['reported']['engine'], records['comparison']
+    assert (engine['wheel_sha256'], parameter) in adopted
+    assert (historical['engine']['wheel_sha256'], historical['parameter_sha256']) in comparison
+    rebuilt = load('provenance/rebuild-check.json')
     pdfs = {}
-    for name, pages in [('main', 25), ('supplement', 20)]:
+    for name, pages in [('main', 24), ('supplement', 22)]:
         path = DEST / L / f'builds/{name}.pdf'
-        info = subprocess.check_output(['pdfinfo', str(path)], text=True)
-        assert int(re.search(r'Pages:\s+(\d+)', info)[1]) == pages
+        assert pdf_pages(path) == pages == rebuilt[name]['pages'] and sha(path) == rebuilt[name]['accepted_sha256']
         pdfs[name] = dict(pages=pages, sha256=sha(path))
-    with (DEST / mapping['carbonate-share.csv']).open() as stream:
-        carbonate = list(csv.DictReader(stream))
-    readme = f'''# MEA manuscript deposit: preparation only
+    readme = f'''# MEA manuscript deposit, Part I: preparation only
 
-Nothing has been uploaded or published. No DOI has been reserved. This staging represents manuscript commit `{SOURCE}` (main 25 pages, supplement 20 pages). Owner review and all publication actions remain separate gates.
+Nothing has been uploaded or published. No DOI has been reserved. This staging represents manuscript commit `{SOURCE}` (Part I, main 24 pages, supplement 22 pages). Owner review and all publication actions remain separate gates. The MDEA evidence belongs to Part II and is not included.
 
-Scientific basis: the adopted MEA notebook at `{NOTEBOOK}` and the owner-promoted MDEA #222 notebook at `{MDEA_NOTEBOOK}`. Notebook text and historical receipts retain their status at authoring; the owner's later promotion is the authority for S12 use. No calculations were rerun in preparing this deposit.
+Scientific basis: the adopted MEA notebook at `{NOTEBOOK}`. Notebook text and historical receipts retain their status at authoring. No calculations were rerun in preparing this deposit.
 
-- MEA selected parameters: `{B}/results/selected-current-best-parameters.json`, SHA-256 `{parameter}`.
-- MEA Engine source: `{engine['commit']}`; immutable wheel SHA-256 `{engine['wheel_sha256']}`; package versions `{engine['packages']}`.
-- MDEA Engine source: `{mdea['engine_commit']}`; immutable wheel SHA-256 `{mdea['wheel_sha256']}` (epcsaft 1.0.0).
-- MDEA A3 endpoint SHA-256 `{endpoints['A3']}`; B1 endpoint SHA-256 `{endpoints['B1']}`. Selection and runtime receipts are under `{M}/results/stage2-capped/`.
+- Adopted MEA parameters: `{B}/results/selected-current-best-parameters.json`, SHA-256 `{parameter}`.
+- Adopted-record Engine source: `{engine['commit']}`; immutable wheel `{Path(engine['wheel_path']).name}`, SHA-256 `{engine['wheel_sha256']}`. This wheel produced every adopted result and the 162 adopted phase states.
+- Historical comparison fit (the fit without a phase-stability requirement, parameter SHA-256 `{historical['parameter_sha256']}`): Engine source `{historical['engine']['commit']}`; wheel SHA-256 `{historical['engine']['wheel_sha256']}`. Only its comparison calculations and its 162 comparison phase states need this second wheel.
 
 Both wheels are omitted. Referee access to the compiled library is to be arranged by the corresponding author. HSL MA57 is separately licensed and is not redistributed. No source-paper PDFs or private CESAR-1 material are included. Analysis code is supplied under the MIT license (`LICENSE`); third-party measurements retain their source terms.
 
-## Names cited in the manuscript
+## Data the manuscript says the deposit supplies
 
-Each cited name resolves to exactly one deposited file below. Other same-named records are provenance or intermediate records, not alternate mappings.
-
-| Cited name | Deposited file |
+| Statement in the manuscript | Deposited file |
 |---|---|
+| complete 210-observation density table (supplement) | `{paths['density']}` |
+| complete 162-state table for both fits (supplement); the `record` column names the fit and `engine_wheel_sha256` its wheel | `{paths['phase_states']}` |
+| neutral ideal-gas caloric coefficients (main text) | `{paths['ideal_gas_calorics']}` |
+
+Other same-named records in the repository are provenance or intermediate records, not alternate mappings.
 '''
-    readme += ''.join(f'| `{name}` | `{path}` |\n' for name, path in mapping.items())
     figure_names = sorted({name for source in (DEST / L).rglob('*.tex')
                            for name in re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', source.read_text())
                            if name.endswith('.pdf')})
@@ -158,78 +200,66 @@ Each cited name resolves to exactly one deposited file below. Other same-named r
     readme += '\nLaTeX figure filenames resolve as follows:\n\n' + ''.join(
         f'- `{name}`: `{L}/figures/generated/{name}`\n' for name in figure_names)
     readme += f'''
-S12 cites no additional filenames. Its retained basis is `{M}/results/stage2-capped/`: `selection.json`, `reported-statistics.json`, `equal-cost-starts.json`, the A3/B1 endpoint, fit, assessment and saturation-cap records, and compressed phase evidence. `transfer-test.csv` and `transfer-test.png` give its pressure comparison. Inputs and code retain repository-relative paths.
-
 ## Contents and limits
 
-The MEA current evidence directory `{E}/` supplies processed observations, retained predictions, 307 objective rows, 210 densities, {len(carbonate)} carbonate comparisons, uncertainty tables and five model-curve families. The phase mapping above uses run-2: 54 reference pressures, 162 states per fit. The wider-bound fit has 54 resolved-descent states and the reported fit has zero in that finite search. This is numerical verification and conditional calibration, not independent physical validation or a global stability proof.
+`{A}/` holds the adopted record's retained evidence: the 307-row replay, the 162-state phase searches of the adopted and comparison fits, conditional uncertainty, the paper-evidence tables and the retained wheel and input identities (`wheel.json`, `input-identity.json`, `inventory.json`). `{B}/results/uncertainty-307/` holds the covariance, profiles and prediction bands. The `engine-3e83e19c-*` directories under `{B}/results/` retain the historical comparison fit and its phase search. The phase searches are numerical verification and conditional calibration, not independent physical validation or a global stability proof.
 
-`data/reference/MEA/` and `data/reference/MDEA/` retain processed measurements, provenance, source locators and data-role declarations. Current tables, vector figure PDFs, PNG previews and rendering code are under `{L}/` and `{B}/scripts/`. Application calculation code is under `src/` and the analysis script directories. Source-only and historical input records preserve declared starts, affine scaling, fixed caloric inputs and qualification; their identities do not replace the selected MEA or MDEA records. The obsolete `a7-paper-evidence/` package is excluded.
+`data/reference/MEA/` retains processed measurements, provenance, source locators and data-role declarations. Current tables, vector figure PDFs, PNG previews and rendering code are under `{L}/` and `{B}/scripts/`. Application calculation code is under `src/`. The obsolete `a7-paper-evidence/` package is excluded.
 
 ## Reproduction
 
-Start at the deposit root. Run `sha256sum -c SHA256SUMS` before doing anything else. Preserve an untouched copy because generators overwrite displays and receipts. Python 3.13 is required. `pyproject.toml` and `uv.lock` are byte-identical snapshots of the manuscript environment; the MEA wheel path is intentionally unresolved until supplied through referee access. The MDEA wheel must be installed in a separate environment; do not replace the MEA pin.
+Start at the deposit root. Run `sha256sum -c SHA256SUMS` before doing anything else. Preserve an untouched copy because generators overwrite displays and receipts. Python 3.13 is required. `pyproject.toml` and `uv.lock` are byte-identical snapshots of the manuscript environment; the adopted wheel path is intentionally unresolved until supplied through referee access.
 
-For rendering retained MEA values, only matplotlib and its dependencies are required. Exact package pins are recorded in `uv.lock`. The existing table generator also checks a historical source using `git show`. In a copied deposit, obtain that Git object with:
+For rendering retained values, only matplotlib and its dependencies are required. Exact package pins are recorded in `uv.lock`. The table generator also checks a historical source using `git show`. In a copied deposit, obtain that Git object with:
 
 ```bash
 git init
-git fetch --depth=1 https://github.com/tannerpolley/Amine-Thermodynamics.git 771410a94f7729915bfe6457bfe7a5a0746f1611
+git fetch --depth=1 https://github.com/tannerpolley/Amine-Thermodynamics.git {INVENTORY_COMMIT}
 ```
 
-The matching historical source is also retained as `provenance/inventoried-table-generator.py` and checked against the retained inventory. This Git fetch is a reproduction prerequisite, not a publication action.
+The matching historical source is also retained as `provenance/inventoried-table-generator.py`. This Git fetch is a reproduction prerequisite, not a publication action.
 
 ```bash
 uv venv --python 3.13 .venv-presentation
 uv pip sync --python .venv-presentation/bin/python provenance/presentation-requirements.txt
 nice -n 10 .venv-presentation/bin/python docs/scientific/latex/scripts/final_rerun_tables.py
 nice -n 10 .venv-presentation/bin/python analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py
-nice -n 10 .venv-presentation/bin/python analyses/mdea_mea_workflow/scripts/summarize_capped.py
 ```
 
-The MDEA summary refresh rewrites its notebook from retained numbers; preserve the promoted source copy. S12 is authored LaTeX, with values retained in `reported-statistics.json` and the cap records.
-
-Build both PDFs using pdfLaTeX/latexmk and BibTeX, with the supplied CAS class and styles, after installing the TeX packages named in the preamble. From `{L}/`:
+Build both PDFs using pdfLaTeX/latexmk and BibTeX, with the supplied CAS class and styles, after installing the TeX packages named in the preamble. The two documents read each other's cross-references, so build main, supplement, main, supplement. From `{L}/`:
 
 ```bash
-SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 TEXINPUTS='./styles//:' nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds supplement.tex
-SOURCE_DATE_EPOCH=1792750003 FORCE_SOURCE_DATE=1 TEXINPUTS='./styles//:' nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex
+mkdir -p builds
+for name in main supplement main supplement; do
+  SOURCE_DATE_EPOCH={SOURCE_DATE_EPOCH} FORCE_SOURCE_DATE=1 TEXINPUTS='./styles//:' nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds $name.tex
+done
 ```
 
-For calculation replay, obtain the two matching wheels and licensed solver first. Place each wheel at the path identified by its retained runtime receipt, relative to a fresh copy of this deposit. MEA uses the wheel path in `pyproject.toml`; run `uv sync --locked`, then use `UV_NO_SYNC=1 uv run python` for the retained scripts. `{B}/scripts/association_volume_refit_chain.py`, `engine_3e83e19c_refits.py`, `paper_displays_215.py` and the phase/model-curve scripts record the original calculation sequence and command options; see their retained execution receipts and READMEs. For example, recompute the five retained MEA model-curve families with:
+The PDFs in `{L}/builds/` are the accepted builds, compiled on the real clock. A rebuild with the command above from this deposit alone gave the same page counts, text and rendered pages (`provenance/rebuild-check.json`); only the creation date and file identifier differ, so its SHA-256 differs.
 
-```bash
-UV_NO_SYNC=1 nice -n 10 uv run python analyses/mea_parameter_bundle/scripts/model_curves.py
-```
-
-These are expensive calculation reruns, separate from rendering retained results.
-
-For MDEA, create a separate Python 3.13 environment with the d5138209 wheel, numpy and scipy; use that interpreter with `-I` for `{M}/scripts/refit_capped.py`, then `assess_capped.py` and `compare_capped_starts.py`. Their input declarations and precondition receipts are retained under `inputs/`, `results/item-l/` and `results/stage2-density/`. These scripts refit and overwrite results; use a disposable copy. Native calculation replay was not attempted here because the wheels and HSL are omitted. Retained unavailable comparisons remain unavailable.
+For calculation replay, obtain the matching wheels and the licensed solver first. Place each wheel at the path identified by its retained runtime receipt, relative to a fresh copy of this deposit. The adopted wheel uses the path in `pyproject.toml`; run `uv sync --locked`, then use `UV_NO_SYNC=1 uv run python` for the retained scripts. `{B}/scripts/adoption_297.py` records the qualification sequence and command options (`f1`, `f2`, `f3`, `evidence`, `extras`, `phase-export`, `f5`); see its retained execution logs under `{A}/logs/`. These are expensive calculation reruns, separate from rendering retained results, and were not attempted for this deposit because the wheels and HSL are omitted.
 
 ## Build identities and inventories
 
-- Main PDF: SHA-256 `{pdfs['main']['sha256']}` (25 pages).
-- Supplement PDF: SHA-256 `{pdfs['supplement']['sha256']}` (20 pages).
+- Main PDF: SHA-256 `{pdfs['main']['sha256']}` (24 pages).
+- Supplement PDF: SHA-256 `{pdfs['supplement']['sha256']}` (22 pages).
 
-`manifest.json` lists each payload file's role, byte size and SHA-256, plus manuscript, parameter, Engine and PDF identities. As in the earlier staging approach, it excludes itself and `SHA256SUMS` to avoid a recursive checksum. `SHA256SUMS` covers all final files except itself, including the manifest. `provenance/verification.json` records the cited-name and endpoint checks. These checks establish file identity and staging completeness; they add no new scientific result.
+`manifest.json` lists each payload file's role, byte size and SHA-256, plus manuscript, parameter, Engine and PDF identities. It excludes itself and `SHA256SUMS` to avoid a recursive checksum. `SHA256SUMS` covers all final files except itself, including the manifest. `provenance/verification.json` records the data-file and wheel-label checks. These checks establish file identity and staging completeness; they add no new scientific result.
 '''
     (DEST / 'README.md').write_text(readme)
-    write('provenance/verification.json', dict(cited_name_mapping=mapping, cited_names_complete=True,
-          mea_parameter_sha256=parameter, mdea_endpoint_sha256=endpoints, pdfs=pdfs))
+    write('provenance/verification.json', dict(deposited_data=paths, density_rows=210, phase_state_rows=324,
+          adopted_wheel_labels=sorted(adopted), comparison_wheel_labels=sorted(comparison), mea_parameter_sha256=parameter, pdfs=pdfs))
     files = sorted(p for p in DEST.rglob('*') if p.is_file() and p not in (DEST / 'manifest.json', DEST / 'SHA256SUMS'))
     entries = [dict(path=str(p.relative_to(DEST)), role=('manuscript source or display' if str(p.relative_to(DEST)).startswith(L) else 'retained data, provenance, environment or application code'), bytes=p.stat().st_size, sha256=sha(p)) for p in files]
-    write('manifest.json', dict(publication='preparation only; nothing published', manuscript_commit=SOURCE,
-          mea_notebook_commit=NOTEBOOK, mdea_notebook_commit=MDEA_NOTEBOOK,
-          mea_parameter_sha256=parameter, mea_engine=engine, mdea_engine=mdea, pdfs=pdfs, files=entries))
+    write('manifest.json', dict(publication='preparation only; nothing published', manuscript_commit=SOURCE, mea_notebook_commit=NOTEBOOK,
+          mea_parameter_sha256=parameter, adopted_engine=engine, comparison_engine=historical, pdfs=pdfs, files=entries))
     files = sorted(p for p in DEST.rglob('*') if p.is_file() and p != DEST / 'SHA256SUMS')
     (DEST / 'SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.relative_to(DEST)}\n' for p in files))
     print(json.dumps(dict(path=str(DEST), files=len(files)+1, bytes=sum(p.stat().st_size for p in files)+(DEST/'SHA256SUMS').stat().st_size)))
 
 
 if __name__ == '__main__':
-    if sys.argv[1:] == ['stage']:
-        stage()
-    elif sys.argv[1:] == ['seal']:
-        seal()
-    else:
-        raise SystemExit('Use stage (empty destination), then render PDFs there, then seal.')
+    steps = dict(stage=stage, rebuild=rebuild, seal=seal)
+    if len(sys.argv) != 2 or sys.argv[1] not in steps:
+        raise SystemExit('Use: stage, then rebuild, then seal.')
+    steps[sys.argv[1]]()
