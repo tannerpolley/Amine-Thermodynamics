@@ -12,7 +12,16 @@
     "OPENBLAS_NUM_THREADS": "1",
     "MKL_NUM_THREADS": "1"
   },
-  "status": "refused",
+  "status": "qualification passed by owner decision 2026-11-13",
   "exception_type": "ParameterError",
-  "message": "missing electrolyte/c_shell"
+  "message": "missing electrolyte/c_shell",
+  "historical_status": "refused",
+  "owner_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/339#issuecomment-6866843138",
+  "qualification_basis": {
+    "named_limit": "EQUILIBRIUM_ROW_RESIDUAL",
+    "limit": 1e-10,
+    "origin": "443a9da4 numerical_policy.hpp:272; 391dfe5d numerical_policy.hpp:295",
+    "restored_reference_max_relative_difference": 2.708155921737898e-11,
+    "explanation": "Owner accepts qualification. The 21 leftover row differences, up to 2.7081559217e-11 after restoring the finite reference, are not individually explained. EQUILIBRIUM_ROW_RESIDUAL=1e-10 bounds equation residuals, not output differences; passing supports qualification but does not prove solver precision is the cause."
+  }
 }
