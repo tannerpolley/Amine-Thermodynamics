@@ -37,45 +37,82 @@ were not fitted but informed retaining zero interaction (§3.2).
 verification and unresolved source detail. Missing fitted-parameter totals are
 reported as unknown rather than inferred. No full paper text is published.
 
-## Published 2026 model: qualification stopped
+## Published 2026 model: qualification fails at the first pressure
 
-`polley-2026-parameters.json` is the unchanged record from commit 7035362,
-SHA-256 868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be.
-`appendix-check.json` confirms the specified ion, pair and reaction values against
-Polley and Hedengren (2026), Appendix B, Tables 7–9 and Eqs.124–126. The historical
-Engine Born implementations (hashes retained there) and MEA's historical caller
-supply the shell and dielectric-saturation form with dimensionless coefficients
-(1,1), matching Eq.9 and Appendix B Eqs.122–123. Engine accepts explicit values;
-MEA's caller supplied them, rather than the Engine silently defaulting them.
+The original record from MEA commit `7035362` has SHA-256
+`868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be`.
+The complete translation has SHA-256
+`be66f6cf9df77201a632d73a3c3e341f66ce7fc77b69c3d657288f4c1899a76b`.
+`polley-2026-explicit-born.json` preserves the earlier two-field translation;
+`polley-2026-explicit-defaults.json` is the complete translation used here.
 
-The translated record adds only `c_shell=1.0` and `c_dielectric=1.0` and has SHA-256
-cbf9727810cb76ecf6ae6702a5e4285d2e8ba731acb4c7d90925dbc620872dc1.
-Wheel 391dfe5d then refuses it with:
+Before filling, inspection of the pinned wheel's source at `391dfe5d`
+(`engine/src/epcsaft/parameters.py` and
+`engine/native/surface/parameter_builder.cpp`, required-field checks and cross
+association check) found exactly these three missing required declarations.
+The nine components have their required scalar or temperature-law inputs;
+all 29 consumed unlike dispersion pairs are explicit, while seven same-sign
+ion pairs are excluded by the declared model. Water's diameter is a correlation.
+The only site-bearing component pair without an edge is CO2–MEA.
 
-> missing cross association or no_cross_association: carbon-dioxide/monoethanolamine
+| Declaration | Filled value | Original Engine source locator | Paper locator |
+|---|---|---|---|
+| electrolyte `c_shell` | 1, dimensionless | `f2d1e01f4:engine/native/contributions/born.hpp`; MEA `7035362:analyses/mea_parameter_bundle/scripts/shared_evaluation.py:MODEL_RUNTIME_DEFAULTS` supplies 1 | Appendix B p.17, extension coefficients; Eqs.122–123 |
+| electrolyte `c_dielectric` | 1, dimensionless | Same Born implementation and MEA caller as above | Appendix B p.17, extension coefficients; Eqs.122–123 |
+| `topology.no_cross_association`, CO2–MEA | all cross site edges inactive, native value 0 | `f2d1e01f4:engine/native/surface/parameter_builder.cpp:161,297–298,425–426`; reference Engine `443a9da4`, lines 165,342–343,481–482 | Appendix B p.17 and Table 10: only listed pairs active; no CO2–MEA pair |
 
-This is the first refusal after the authorized Born translation. The association
-model was not changed to bypass it. Zero pressure, species, heat, density,
-heat-capacity or stability observations were scored for the published model.
-No first differing numerical quantity exists, because mapping construction stops
-before evaluation. `qualification.json` preserves the earlier missing-c_shell
-refusal; `translation-qualification.json` records the new refusal and both hashes.
+The Born values are explicit MEA caller inputs, not silent Engine defaults.
+The historical Engine initializes the association matrix to zero and activates
+only declared edges and combining rules. The new declaration preserves that
+behavior. The paper PDF (Zotero attachment `QHI67GZ8`) was checked directly;
+its SHA-256 remains `c3d35ca54f7f4ac54727d790f18e6c4a90e271bb3f01d5a4d146b85755489459`.
+Appendix B, Tables 7–10, Eqs.122–126 and the parameter-provenance paragraphs
+were read. No disagreement was found. `translation-table.json` retains the
+full table, hashes and source-file hashes; `appendix-check.json` owns the prior
+ion, pair and reaction-value checks.
 
-Retained exact-record per-observation references exist in
-`calibration-misfit/variant-states.csv` and `speciation-states.csv` under 868a5018.
-The reference CSV and original state packet were retrieved with `git show` from
-8d6e261, which first wrote the pressure reference; their hashes are retained in
-`translation-qualification.json`. The decompressed packet matches its recorded
-86f60041… hash. `qualification-reference.csv` preserves the full variant table;
-only its `adopted` rows qualify as references. Refusal prevented comparing those
-values. No historical wheel was built or run. The pressure/species pass limit
-remains 1e-8 relative (#339/#255); heats do not gate, but no heat differences
-could be evaluated here.
+### Exact-record reference and first difference
 
-The adoption receipt's aggregate statistics were scored with five reaction
-shifts, whereas the published record retains only R2/R4/R5. Those aggregates
-are **not an exact-record reference**. R1 and R3 shifts omitted from the published
-record are -0.000679939316315813 and -0.21602074127857132 kJ/mol.
+The retained `qualification-reference.csv` is reused, not regenerated. Its 371
+`adopted` rows name the original `868a5018…` record and wheel SHA-256
+`b66c7b962541a586f5ec50043a5e8b4e62cf52e24eaec02ef33f43e558762a58`.
+MEA commit `8d6e261` first retained these values through
+`analyses/mea_parameter_bundle/calibration-misfit/compare.py`, consuming the
+read-only adopted `probe.py` evaluations. The shared evaluator in that commit
+identifies Engine `443a9da492fd5ac7724525945d108c6a2a854d51`.
+The original packet was retrieved from that same commit. Its decompressed
+SHA-256 is `86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448`;
+the reference CSV SHA-256 is
+`8242648f41c087d1a9acf810b3f9e35c21bbb021bad20ace38968a31ac8a9916`.
+No historical wheel was built or run for this continuation.
+
+One qualification replay used pinned Engine `391dfe5d`, wheel SHA-256
+`0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+The fully translated mapping loads. The first comparison fails:
+
+| Quantity and state | Historical reference | Pinned-wheel translation | Relative difference | Required limit |
+|---|---:|---:|---:|---:|
+| CO2 partial pressure / Pa, `vle_obs_0119`, Hilliard2008, 313.15 K, loading 0.1529030581 mol/mol | 4.394811538107617 | 4.394810386862543 | 2.6195550451 × 10⁻⁷ | 10⁻⁸ |
+
+The absolute difference is −1.151245074 × 10⁻⁶ Pa. The relative limit is from
+#339/#255. This numerical reproduction failure does not measure disagreement
+with experiment. It is the first and only compared quantity, not a maximum
+over all reference pressures or species. The retained `qualification-state.json`
+and `translation-qualification.json` contain the state and comparison.
+
+The owner's stop rule applies: no species or later pressures were compared,
+no heat or heat-capacity differences were obtained, and zero Part I observations
+were scored. There is no 2026-model deviation beside `f8f64820…` for any Part I
+group and no stability-search result. No historical-wheel fallback was used.
+A scalar first difference is shown as a table because a plot adds no trend.
+The cause of the cross-wheel difference is unresolved; translation acceptance
+alone does not establish numerical equivalence or physical validation.
+
+The adoption receipt's five-shift aggregates are not an exact-record reference;
+the published record retains R2/R4/R5 only. The omitted R1 and R3 shifts were
+−0.000679939316315813 and −0.21602074127857132 kJ/mol.
+The notebook and this result await independent delivered review and are not
+promoted for manuscript use.
 
 ## Reproduction and scope
 
@@ -86,7 +123,7 @@ uv run --no-project --python <pinned-environment-python> analyses/mea_parameter_
 uv run --no-project --python <pinned-environment-python> analyses/mea_parameter_bundle/scripts/same_data_comparison.py tables
 ```
 
-The first command preserves the explicit-Born refusal and reference provenance;
+The first command reproduces the full translation and stops at the first failed comparison;
 the second rebuilds the matched score and property tables from retained values.
 There is no process pool; evaluation uses a single worker with BLAS/OpenMP
 threads set to one. The script reuses the existing MEA evaluator and does not
