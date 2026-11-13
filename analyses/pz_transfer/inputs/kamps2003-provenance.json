@@ -1,0 +1,30 @@
+{
+  "sources": {
+    "Kamps2003": {
+      "citation": "Pérez-Salado Kamps, Xia & Maurer 2003, AIChE J. 49, 2662",
+      "doi": "10.1002/aic.690491019",
+      "zotero_parent": "H7EYIXSK",
+      "zotero_attachment": "VSVC3FEB",
+      "pdf_sha256": "a6538ac98dd5b5442a9620389ce16f6e9ed40a1e74f7a71c999671f69d0a3c8d",
+      "locators": "Table 3 p.2666 (PZ + CO2 + H2O, total pressure, synthetic bubble-point method p.2664); Table 4 p.2667 (MDEA + PZ + CO2 + H2O); precipitation footnote Table 3 and text p.2665; uncertainty p.2664 and p.2667"
+    },
+    "Ermatchkov2006": {
+      "citation": "Ermatchkov, Pérez-Salado Kamps, Speyer & Maurer 2006, J. Chem. Eng. Data 51, 1788",
+      "doi": "10.1021/je0601917",
+      "zotero_parent": "62PA5LDF",
+      "zotero_attachment": "R3UZX4UN",
+      "pdf_sha256": "f953f73f5115dec6566ffb69bc4cf5d23bd1a4be9fbb32821f07f8b02898418e",
+      "locators": "Appendix Table 6 p.1794 (corrected temperatures, all 95 rows reprinted); correction ΔT p.1792"
+    }
+  },
+  "transcription": "2026-11-12. Kamps Table 3 and Table 4 from the PDF text layer, checked against rendered page images. All 95 (mCO2, p) pairs were matched against the Ermatchkov 2006 Table 6 text layer; the only difference is 5.063 MPa (Kamps) vs 5.062 MPa (reprint) at 354.35 K, 1.995 mol/kg, mCO2 2.606. Column p_MPa is the Kamps value; p_reprint_MPa keeps the reprint. T_K is the Ermatchkov 2006 corrected temperature of the same block, row order identical. Table 6 lies on printed p.1794 and Kamps Table 4 on p.2667 (the PZ data map gave p.1795 and p.2666).",
+  "uncertainty": "Pressure: ±0.1 % of the maximum reading of the transducer used, 4 MPa or 10 MPa (±4 or ±10 kPa); the paper does not say which transducer measured each row, so a row above 4 MPa is ±10 kPa and a row at or below 4 MPa is ±4 or ±10 kPa. Below 0.1 MPa the uncertainty 'can reach up to 10 %' (p.2667), which is below 10 kPa there. Inputs: mPZ < ±0.1 % relative; charged CO2 ±0.008 g of up to ~5 g; solvent mass ≤ ±0.7 % relative (p.2664). Printed temperatures ±0.1 K but 0.6–1.8 K low (Ermatchkov 2006 p.1792).",
+  "roles": {
+    "kamps2003-table3.csv": "Secondary high-loading comparison (owner decision 2026-11-11, #308; issue #327). Scored once on the frozen 12-coordinate refit (A12); never used for fitting, start choice or selection. Precipitation row excluded.",
+    "kamps2003-table4.csv": "MDEA + PZ blend rows, recorded for later blend work only. Not scored. Printed 353.14 K; no published temperature correction exists for this table."
+  },
+  "input_sha256": {
+    "kamps2003-table3.csv": "b2f21edbc4cd958a7b2fee874c1795fb1c21369d2786992ab8096665a5e64b83",
+    "kamps2003-table4.csv": "3531e9b7279b77b48199b4767e38eba16c01683e2c69b32f9d44a9354b5e4aeb"
+  }
+}
