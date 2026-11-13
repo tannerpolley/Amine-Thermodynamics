@@ -1090,15 +1090,19 @@ and source loadings 0.155–0.4182 mol/mol. The retained analytical-feed convers
 uses loadings 0.1549031–0.4181084; other authors' composition conversions were not
 independently reproduced.
 
-| Model | Fitted parameter count and scope | Role of these rows | n | Pressure AARD / % |
+| Model | Fitted parameter count and scope | Role of these rows | n | Reported pressure deviation / % |
 |---|---|---|---:|---:|
 | This work, `f8f64820…` | 16 in reported fit | not fitted | 19 | 19.432074704 |
 | Baygi–Pahlavanzadeh (2015), PC-SAFT | 6 pure/binary values | not fitted | 19 | 21.03 |
-| Najafloo–Zarei (2018), SAFT-HR | 5 pure-MEA values | not fitted in detailed methods; conclusion ambiguous | 19 | 39.96 |
+| Najafloo–Zarei (2018), SAFT-HR | 5 pure-MEA values | not fitted in detailed methods; conclusion ambiguous | 19 | 39.96 (reported AAD%) |
 | Zhang et al. (2011), eNRTL | 12 in ternary stage | fitted | 19 | 13.5 |
 
 Here $\mathrm{AARD}=100n^{-1}\sum_i|p_i^{\rm calc}-p_i^{\rm obs}|/p_i^{\rm obs}$.
 Published locators are Baygi Table 5, Najafloo Tables 4–5 and Zhang Table 9.
+Najafloo Table 5 and §3.3 report pressure AAD% without defining the averaging
+formula or denominator. Its equivalence to the mean absolute relative deviation
+above is inferred, not verified; Eq. 2 is the pure-component fitting objective.
+The exact 19-row match and reported 39.96% remain unchanged.
 These are different fitting roles, so the table does not rank models under an
 identical assessment. The current comparison recalculates deviations from
 retained wheel `391dfe5d…` predictions; it does not fit parameters. Full hashes,
@@ -1108,6 +1112,10 @@ row identities and observed/predicted pressures in Pa are in the
 
 The [property tables](results/same-data-comparison/property-tables.md) retain
 published scores, parameter-count scopes, conditions and source locators.
+Entry-specific role notes distinguish parameter origin, mixed fitted/predicted
+membership and prior use in model choices. Membership not established by the
+paper is explicitly unresolved; Najafloo’s binary observations informed retaining
+zero interaction even though they were not fitted (§3.2).
 Pressure subsets for Jou, Hilliard and Xu are larger than Part I's selected
 subsets. Their published aggregate deviations cannot be assigned to the reduced
 Part I rows. Zhang's heat, heat-capacity and species tables also do not specify

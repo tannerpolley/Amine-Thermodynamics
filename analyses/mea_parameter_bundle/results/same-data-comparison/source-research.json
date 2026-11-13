@@ -58,7 +58,7 @@
         "calculation": "Mean of the 19 absolute row-wise relative pressure errors in adoption-297/paper-evidence/state-targets.csv, using the same denominator as the published AARD."
       }
     ],
-    "common_deviation_definition": "100/n \u00d7 \u03a3 |pCO2,calc \u2212 pCO2,exp| / pCO2,exp. Baygi Table 5 gives this explicitly in its footnote; Zhang Table 9 labels the quantity average relative deviation |\u03b4Y/Y|. Najafloo Table 5 reports AAD% for partial pressure in the same row structure."
+    "common_deviation_definition": "100/n \u00d7 \u03a3 |pCO2,calc \u2212 pCO2,exp| / pCO2,exp. Baygi Table 5 gives this explicitly in its footnote; Zhang Table 9 labels the quantity average relative deviation |\u03b4Y/Y|. Najafloo Table 5 and \u00a73.3 report pressure AAD% but define neither averaging formula nor denominator. Equivalence of Najafloo AAD% to this formula is inferred, not verified; Eq. 2 is the pure-component fitting objective."
   },
   "published_model_inventory": [
     {
@@ -82,7 +82,7 @@
       "formulation": "SAFT-HR with ideal-activity reaction speciation",
       "reported_fit_count": "Five pure-MEA parameters; CO2\u2013MEA and water\u2013MEA binary parameters are set to zero for ternary predictions.",
       "pressure_result": "34.71% AAD over 691 observations; Ma'mun subset 39.96% (19), Table 5.",
-      "deviation": "AAD% of partial pressure; same mean absolute relative form used by the other Table 5 entries.",
+      "deviation": "Paper-reported pressure AAD%, Table 5 and \u00a73.3. Equivalence to the mean absolute relative deviation is inferred; averaging formula and denominator are not defined there. Eq. 2 defines only the pure-component fitting objective.",
       "conditions": "Broad source-specific ternary ranges in Table 4; Ma'mun subset 393 K and 30 mass% MEA.",
       "source": "Zotero key 7MICDGGJ; indexed Markdown hash f28f1111908691af507e702bc26ddecd02d297d8982d87f7d26d83802f3cf4ef"
     },
@@ -160,6 +160,7 @@
   "provenance": {
     "workflow": "cse:research and cse:zotero read-only source queries",
     "zotero_companion": "cse-zotero doctor reported Zotero local API and project corpus available. The indexed Baygi, Najafloo, Nasrifar, Zhang and Pakravesh reading copies were consulted; original Zotero PDFs were used for Ma'mun, Aronu, Hessen, T\u00e9llez-Arredondo, Lloret and Akula.",
-    "publisher_si": "[ACS Supporting Information for Pakravesh and Zarei 2025](https://pubs.acs.org/doi/10.1021/acs.jced.4c00390)"
+    "publisher_si": "[ACS Supporting Information for Pakravesh and Zarei 2025](https://pubs.acs.org/doi/10.1021/acs.jced.4c00390)",
+    "role_correction_source_check": "2026-11-13: read Pakravesh \u00a7\u00a72.1\u20132.3, 3.1, Baygi \u00a73.2.1 and Najafloo \u00a7\u00a73.1\u20133.3. Main-checkout reading copies match their literature/index.csv hashes and current Zotero Markdown files byte-for-byte; original parameter-fit membership remains unresolved where noted per entry."
   }
 }

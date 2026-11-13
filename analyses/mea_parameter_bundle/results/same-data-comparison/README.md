@@ -3,14 +3,19 @@
 The exact common-data result is the 19 Ma'mun et al. (2005) Table 2 pressures
 at 393.15 K and 30 mass% MEA. Current-record pressure AARD is **19.432074704%**,
 against published **21.03%** (Baygi–Pahlavanzadeh PC-SAFT), **39.96%**
-(Najafloo–Zarei SAFT-HR), and **13.5%** (Zhang eNRTL). The first three
+(Najafloo–Zarei SAFT-HR, reported pressure AAD%), and **13.5%** (Zhang eNRTL).
+The first three
 comparisons use observations not fitted in the corresponding ternary pressure
 objective; Zhang fitted them. Najafloo's methods describe prediction but its
 conclusion says ternary data determined parameters; this ambiguity remains.
 These different data roles do not rank accuracy under identical assessment.
 
-The deviation is 100/n times the sum of absolute pressure errors divided by
-measured pressure. Pressures in `matched-pressure-rows.csv` are Pa; the original
+For this work, Baygi and Zhang, the deviation is 100/n times the sum of absolute
+pressure errors divided by measured pressure. Najafloo Table 5 and §3.3 report
+pressure AAD% without defining its averaging formula or denominator. Its
+equivalence to the mean absolute relative deviation is inferred, not verified;
+Eq. 2 defines the pure-component fitting objective, not this pressure metric.
+Pressures in `matched-pressure-rows.csv` are Pa; the original
 Ma'mun table and source CSV use kPa. All 19 source pressures, their order and
 temperatures are checked, including two distinct observations at loading 0.3424.
 Source loadings 0.155–0.4182 mol CO2/mol MEA map to 0.1549031–0.4181084 in the
@@ -23,6 +28,11 @@ source rows by hash. They were evaluated with wheel 391dfe5d, SHA-256
 The comparison recalculates deviations only; it neither refits nor reruns an EOS.
 `published-deviations.json` owns transcribed published source/property scores;
 `property-tables.md` presents them without estimating missing subsets or counts.
+Each entry separates observation role from parameter origin and prior data use
+in its role note. Unresolved entries identify missing membership evidence;
+Baygi’s combined binary entries retain fitted Cai and predicted Park–Lee
+membership without inventing separate scores. Najafloo’s binary observations
+were not fitted but informed retaining zero interaction (§3.2).
 `source-research.json` records primary-source identities, methods, exact-match
 verification and unresolved source detail. Missing fitted-parameter totals are
 reported as unknown rather than inferred. No full paper text is published.
