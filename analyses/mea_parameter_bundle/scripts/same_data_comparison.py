@@ -121,7 +121,7 @@ def tables():
                       wheel_sha256='0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b')
     (OUT / 'matched-score.json').write_text(json.dumps(dict(n=19, pressure_aard_percent=aard,
         evidence='retained fixed-parameter predictions against measurements', provenance=provenance), indent=2)+'\n')
-    columns = ['model', 'source', 'fitted_parameters', 'data_role', 'n', 'deviation_percent', 'conditions', 'locator', 'comparison']
+    columns = ['model', 'source', 'fitted_parameters', 'data_role', 'role_note', 'n', 'deviation_percent', 'conditions', 'locator', 'comparison']
     groups = sorted({r['property'] for r in published})
     text = []
     for prop in groups:
