@@ -1,26 +1,24 @@
 {
-  "scope": "Make Part II and its supplement self-contained for model, amine inputs, reference states, caloric/density observables and fitting residuals; restore source coverage without changing accepted numerical results.",
-  "source_baseline": "22af628426bfb38b650e2c1b80c2010230a4d7c1",
+  "scope": "Apply the three science-review defects and story fixes R1\u2013R16 to PR 336 at 94fa22d; optional O1\u2013O8 excluded.",
+  "source_baseline": "94fa22d51a3302703893e1070ebf3565dc53ef7a",
   "commands": [
-    "agent-heavy bash /tmp/320-final-build.sh: pdflatex -recorder, BibTeX and convergence passes for part2 and part2_supplement, TEXINPUTS=./styles//:",
-    "agent-heavy bash /tmp/320-layout.sh: final PDF passes, both freshness receipts, CSE prose and article visual checks",
-    "agent-heavy bash /tmp/320-verify.sh: preservation of all 548 displayed values, table/figure bytes and protected inputs; final source census, receipt checks, CSE prose checks, Python compile and git diff --check"
+    "agent-heavy bash /tmp/336-build.sh: regenerate tables and figures using uv, then pdflatex/BibTeX convergence passes",
+    "agent-heavy bash /tmp/336-final-qa.sh: Part II PDF builds, exact displayed-value and numerical-cell checks, per-document freshness receipts, prose check, article visual QA"
   ],
   "outputs": [
     {
       "path": "docs/scientific/latex/builds/part2.pdf",
       "pages": 28,
-      "pages_before": 20,
-      "sha256": "a42ed57a672c0093a0003bf81aa628172d5bf2220b480db6d6fcf1e13636f39e",
+      "pages_before": 28,
+      "sha256": "43bfdc2c837808cf4fc62467af3424a522409458a9a721351beb853349a3f99c",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 65,
-        "text_graphic_overlap": 19,
-        "tight_text_graphic_clearance": 2
+        "tight_text_clearance": 142,
+        "text_graphic_overlap": 23
       },
       "baseline_visual_warning_categories": [
         "text_graphic_overlap",
@@ -28,20 +26,20 @@
         "tight_text_graphic_clearance"
       ],
       "new_layout_warning_categories": [],
-      "visual_disposition": "All pages inspected at full-page resolution. Color and grayscale renderings produced; main figures also inspected in grayscale. No new clipping or overlapping content found. Conservative geometry warnings concern existing heading/caption spacing, math superscripts and figure strokes; report status remains review. Existing compact table headings and the shared Bower bibliography-title encoding predate this rewrite. Independent acceptance remains with the parent."
+      "visual_disposition": "Color and grayscale renderings and contact sheets checked for flow, with enlarged page inspection of equations and tables. Conservative geometry warnings remain; independent acceptance remains with the parent."
     },
     {
       "path": "docs/scientific/latex/builds/part2_supplement.pdf",
-      "pages": 17,
-      "pages_before": 19,
-      "sha256": "ed5176b031feac29f310dc9c783ff49b29f73d42622c024349d744a5b14ca20b",
+      "pages": 14,
+      "pages_before": 17,
+      "sha256": "4f5c6cb4167ebebc8bbd7e97e5a56b3749fd9f086dab62644d1450eeadf0b4c4",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 76,
+        "tight_text_clearance": 35,
         "text_graphic_overlap": 2
       },
       "baseline_visual_warning_categories": [
@@ -49,76 +47,92 @@
         "tight_text_clearance"
       ],
       "new_layout_warning_categories": [],
-      "visual_disposition": "All pages inspected at full-page resolution. Color and grayscale renderings produced; main figures also inspected in grayscale. No new clipping or overlapping content found. Conservative geometry warnings concern existing heading/caption spacing, math superscripts and figure strokes; report status remains review. Existing compact table headings and the shared Bower bibliography-title encoding predate this rewrite. Independent acceptance remains with the parent."
+      "visual_disposition": "Color and grayscale renderings and contact sheets checked for flow, with enlarged page inspection of equations and tables. Conservative geometry warnings remain; independent acceptance remains with the parent."
     }
   ],
   "manuscript_input_sha256": {
     "docs/scientific/latex/chemistry_macros.tex": "7ae0aa3ce81f004eef2ae91f92035d659fef1663532f037841c856dfc1e90f25",
-    "docs/scientific/latex/figures/part2/calibration.pdf": "eac80e98a87437540edee0948cb11768000c19a7982dd2827d39e501bf5b878c",
-    "docs/scientific/latex/figures/part2/dea-properties.pdf": "d8fa6d6497fbefdbfd4636e8cbb3626d0b1f27024743174818464ffa381c6d4a",
-    "docs/scientific/latex/figures/part2/pressure-bands.pdf": "854f40202a7c2e80e48233a258aaea810d7933e66f91c270f0cf3726d33e4645",
-    "docs/scientific/latex/figures/part2/unfitted-pressure.pdf": "5e5d671a2f8cfc000d12a11bce2ba7d4fdd669e2ee554f9578310322a3078638",
+    "docs/scientific/latex/figures/part2/calibration.pdf": "769ef374b6254d1fd3e445b4ab6f66953bab30d7b9f7d0140aa82e66b90dbee5",
+    "docs/scientific/latex/figures/part2/dea-properties.pdf": "f5174cb382c064010438fa345302394edc490c9648febd08068223e502ef4d2d",
+    "docs/scientific/latex/figures/part2/pressure-bands.pdf": "49fe4ef1504096ea41cfd9fab205791eaef340c86d1c262e7cdd27d3aa6c1f3c",
+    "docs/scientific/latex/figures/part2/unfitted-pressure.pdf": "9f8aeb6a8f0123be2b31f91e8c7e886f64c3b49cc0b717f643e7217764160585",
     "docs/scientific/latex/part2.tex": "dd7f5d0c9cd67937d0c9ef4abdce89e33709617dfcd6fc6b2e54cc6022ff377b",
     "docs/scientific/latex/part2_companion.bib": "5444368c00d54af770fcb004b1a5f693b8cc472cadd5738613b583dc8a7eeb6f",
     "docs/scientific/latex/part2_sources.bib": "4f9350719f3d4fbf74431b95e15b16a711f07289373251bd93e8e94d8f21a5e1",
     "docs/scientific/latex/part2_supplement.tex": "06e087b6c71a7a4c9f2fc1ea2cd1ba6abf62e122af3a66a53c9d6aa30c202997",
-    "docs/scientific/latex/references.bib": "dc2b40df7e47ccd8bc493e8d407c79d79bc8a302924bbd2d5f8cdf4320759e17",
+    "docs/scientific/latex/references.bib": "1c20594263df85d34d1f0ecca5be144732d5582a199be9ce1ecb4e6cd3eb3cc5",
     "docs/scientific/latex/sections/part2/conclusions.tex": "afbb4f21cf6a564c6c3bf06f6eab4681897623afed24c38bd3e1f34b117094b3",
     "docs/scientific/latex/sections/part2/endmatter.tex": "2c98ccfd258668686465f59b37608c7988b1852ce03b2f8530597e4e2aff5e9e",
-    "docs/scientific/latex/sections/part2/introduction.tex": "f38e466c6775b9e9a62e7bc4d791b1851924e6df6f928ef48e64e66d2365c93d",
-    "docs/scientific/latex/sections/part2/methods.tex": "62fca3539c1efd328db4a57422f13a5a7354c852c6a5e7079aea5e414819eb85",
-    "docs/scientific/latex/sections/part2/model.tex": "b84a6eabd359f9319053ef0cca7c166617b45fa13c434d98815a19b5b14ed257",
+    "docs/scientific/latex/sections/part2/introduction.tex": "183126d4bf8d087018e5f3f32afb4f3e2b4b1f789b826ae99a3971472a598643",
+    "docs/scientific/latex/sections/part2/methods.tex": "4cb8a44be3e3d9294e9c92bb4ef6d00dda769b46f51b87e78c107cc33d75dfd1",
+    "docs/scientific/latex/sections/part2/model.tex": "7d194bcf2eac8665f6be926d881de4b66af1ed0b8676cc954d2b84f5aa47b668",
     "docs/scientific/latex/sections/part2/pz-reaction-directions.tex": "d833ffb506ff58041cf32ac75796eddd376fa33d139002f5c03a55de62e7b946",
-    "docs/scientific/latex/sections/part2/results.tex": "5b67762b245fda5ec16112b4ebd18bbf59f9ae99a71e53b72ffa93085d4198be",
-    "docs/scientific/latex/sections/part2/supplement.tex": "41b8a20466ac9b58ec25259e76ec9d857741fb5919b539d42c2069dccaf6eba4",
+    "docs/scientific/latex/sections/part2/results.tex": "b6812205ba541c4de3eaf6e928bfdefb421946f1757300d746d2ee96d4e0106b",
+    "docs/scientific/latex/sections/part2/supplement.tex": "640b6c59a898bb21d456ec71b782a7f1f63255ffd98dd16e71afc57ea66d62cf",
     "docs/scientific/latex/styles/cas-common.sty": "99223246fe1f0c85e957b7d5edf8e581a1bef3216e1772cc130579e9c2ed292d",
     "docs/scientific/latex/styles/cas-sc.cls": "d135f82db43b004a0fb6f4505e97b11bb675078668d33c8f170beb398ef43d45",
     "docs/scientific/latex/styles/model1-num-names.bst": "b87650629c103f61e031bd6216e8de34c953c34cbe9d8914dd5b41fb24a3384c",
-    "docs/scientific/latex/tables/part2/amp-chain.tex": "1057acc82eae70135fac4232f3f97efd02f5f66afd6546c642b4cdddd169c0b2",
-    "docs/scientific/latex/tables/part2/amp-interactions.tex": "158263c00a84bf66da34a9ba4afcdef15749b00833e15752c9a86a5175f1b0ca",
-    "docs/scientific/latex/tables/part2/amp-laws.tex": "d73569ff62dc0d8c57820b854f89e1694543e3cc6ca8144d22f9b1ccbb8c31ba",
-    "docs/scientific/latex/tables/part2/amp-parameters.tex": "4577aa59ad8ddc44fa3c34547d6bb73e5105c6224511504af91ff1cb64a67810",
-    "docs/scientific/latex/tables/part2/amp-uncertainty.tex": "a92605d45aad4106111d348ee0c25bc7c2e5ac8f9e45c7de61cdca7afc31df83",
-    "docs/scientific/latex/tables/part2/bounds.tex": "a3dae9523c66cb55ba1a4a3675b3639c721dad56afba0154886afa9d84607c8a",
-    "docs/scientific/latex/tables/part2/calibration.tex": "98551589b439707ea2d4933f32faa5c98c182719958166ea2d2f8466bacced35",
-    "docs/scientific/latex/tables/part2/data-roles.tex": "c63eca9ac9b19fbf321ba102d6b12bc089c948ffa119f7acf00c3352fab0f959",
-    "docs/scientific/latex/tables/part2/dea-interactions.tex": "0ebd4d7cae19475fa5dc0199e7ea679ad5fe1a7237d5a607bb2a950abf40ca5a",
-    "docs/scientific/latex/tables/part2/dea-laws.tex": "bf04b53629cf03645614c7e5a9115cac6e451a94f1b6b1bfeaa966ecd3091835",
-    "docs/scientific/latex/tables/part2/dea-parameters.tex": "491f09b60d8af471ff8ef356a290036257a16b22e60463ff0f3c77b153760e2d",
-    "docs/scientific/latex/tables/part2/dea-uncertainty.tex": "dbd2c07b88a79f12cde8099c981397432cdd096de568520d0937a3500f8757d4",
-    "docs/scientific/latex/tables/part2/fit-starts.tex": "2cd0fa9ca3d7f19b152457f60b67fa177ba9b97819ad11b6a2441adc499afa7b",
-    "docs/scientific/latex/tables/part2/kamps-blocks.tex": "22d9add8f4a20cc8cb7f6af7bf5958293d215b7a19d46d3485c8fff33b3223d2",
-    "docs/scientific/latex/tables/part2/kamps-census.tex": "4aac125f2c043c61b2b69246804d6bbb8ab550970e16da2f3634f4f0d04ecab0",
-    "docs/scientific/latex/tables/part2/kamps-groups.tex": "4fd32f47243bf28c0cd96faccdf59026c79184a96343b68974ccc1818cb56b80",
-    "docs/scientific/latex/tables/part2/laws.tex": "b0bf4a9ea7b81e7cdef9c5013a64bac583630d14713264e88dc350d752d6f83a",
-    "docs/scientific/latex/tables/part2/mdea-interactions.tex": "ce33afff4ddf29c7b74a41b0150bb8d0049913065a4cb9624e28bdb284ae9a62",
-    "docs/scientific/latex/tables/part2/mdea-laws.tex": "cea7f32be2c8b792ccd34ab071374e67c8535ba0fdca4614c3ed933b52dba6a2",
-    "docs/scientific/latex/tables/part2/mdea-parameters.tex": "9bfa0b97170acb7627d7f8b549f5ba990682d5412c41a4a002eeb444e4049d19",
-    "docs/scientific/latex/tables/part2/mdea-range.tex": "97d2d7dc3758bac867573b401b4c4d706af132eeb1bd68cc6d6984c5f8dce411",
-    "docs/scientific/latex/tables/part2/mdea-uncertainty.tex": "4b8635cdfe635b3a357f82827ad559fc0e88b9ea5e23d1f91ab0193e4ae6367d",
-    "docs/scientific/latex/tables/part2/origins.tex": "777621e6cc4ebee9051d19d5d7112822e01f27bb3556d3f93acecdf20f94e88b",
-    "docs/scientific/latex/tables/part2/phase-searches.tex": "1d6c43882bed87d86a452e69dc5873653bb52424180a4c401667e108455a485c",
-    "docs/scientific/latex/tables/part2/published-comparisons.tex": "caed184b0e8d33249a5c9d79e40d2578ecc9ab0948e8b92b3ce1651475d6604a",
-    "docs/scientific/latex/tables/part2/pz-interactions.tex": "6c5d367bc8961dffe31ffcb0bf864d337c7c857edcf0af8a1cbeac9bf60c189d",
-    "docs/scientific/latex/tables/part2/pz-laws.tex": "2bf724c02f6083afabbebc55107bce92a01418ba032a6cdebe3050e56388509c",
-    "docs/scientific/latex/tables/part2/pz-parameters.tex": "534552aca2be93622c44800af05191dda400b53af785758ad90b62a7e7aa123e",
-    "docs/scientific/latex/tables/part2/pz-uncertainty.tex": "4c02adf7da56f495fc646ccdb7302fda0757b25e7e887469b5443a52be6265ea",
-    "docs/scientific/latex/tables/part2/shared-interactions.tex": "1d0563734ff67636b39c57e696615c839187fb0d0285ab2c85bd17fdc008e920",
-    "docs/scientific/latex/tables/part2/shared-parameters.tex": "39e1937bdef07f587b5d06e1295606cd715d6707b7b97db9546f7ee81a375c45",
-    "docs/scientific/latex/tables/part2/shared-sensitivity.tex": "8d8d8df4de8b87f021940d7474fd8c263b57d013696e84b0c0e2a9d4d6c8ba79",
-    "docs/scientific/latex/tables/part2/source-locators.tex": "b956608bba5cb66cf5693c26792b6d3fb0b6a798f06772f105ab86c409dffbfc",
-    "docs/scientific/latex/tables/part2/unfitted.tex": "146683b232eeb4629209fa024c7573b38ba6c86952bbb3a622e5382203b2388c"
+    "docs/scientific/latex/tables/part2/amp-chain.tex": "11a018d48fb0067e1ab54f0c14f489ecc630aa4e981f91c7bc6ebc6c5295f31d",
+    "docs/scientific/latex/tables/part2/amp-interactions.tex": "b125fec3446ad2d51ef069aeae2d06484f7b644bfdc8f14374a75c7d2be7dcb0",
+    "docs/scientific/latex/tables/part2/amp-laws.tex": "cd834942fa51651d3b4e5fe90f03476594a7391f79f97a6620f5d988efbd31ed",
+    "docs/scientific/latex/tables/part2/amp-parameters.tex": "8e6adeafab01e09c5f8749652263823b99f8b65974c0a8617f7e96b4d96d6f0d",
+    "docs/scientific/latex/tables/part2/amp-uncertainty.tex": "475bba19216934141e077d60573fd06b8b2b04db7bc4cd35d9a63f0433e27817",
+    "docs/scientific/latex/tables/part2/bounds.tex": "6ad272718667bd70e60954a15999d2c9b9df3d901e175f32c8ef1ba02ab99a67",
+    "docs/scientific/latex/tables/part2/calibration.tex": "2f8bb4bbbdbbef820562f045f33b9a4c8da0aa148f7c331648189aa35f889b3a",
+    "docs/scientific/latex/tables/part2/data-roles.tex": "ed88b61b9ff36ccf029f2639b632b20c20efb071cf9b5b278cbf7c5355229b6a",
+    "docs/scientific/latex/tables/part2/dea-interactions.tex": "23fe3b0d1c7b56bcdcc11e6c36ab146a822c313752f45e4a57ec5b1aad1f1126",
+    "docs/scientific/latex/tables/part2/dea-laws.tex": "5b76861c4d3280c83b2bd4efc5efaa84b42e24de8f565808c4a70288a08a4b12",
+    "docs/scientific/latex/tables/part2/dea-parameters.tex": "baa52b1d37925e57d5a084339c9127a3ceaa2a26771c39859d75d8b41070f231",
+    "docs/scientific/latex/tables/part2/dea-uncertainty.tex": "4e588dcb68880039405e87de9c55c6c4157d3cca618e6ddd0aab960ae08e8251",
+    "docs/scientific/latex/tables/part2/fit-starts.tex": "b31e9c296e7b79c117b8489e227cc83cdc9ab757977a98836ab8cc13ffabec50",
+    "docs/scientific/latex/tables/part2/kamps-blocks.tex": "7db19d78662bc75e99db41a657b3a14d0987653203d5489f86df60e85617645a",
+    "docs/scientific/latex/tables/part2/kamps-census.tex": "39fd2cfd537561af23707e79e43912af4809a7848c0daf547ab470534361b097",
+    "docs/scientific/latex/tables/part2/kamps-groups.tex": "e2c33b71bf0d69684dbfb0f468c38c85165fb48f9bc226d796659bcd1295a53d",
+    "docs/scientific/latex/tables/part2/laws.tex": "9ab82a26ac18851d6e7a3934d93232c79140b96ee6ae91709a1e051a4b696325",
+    "docs/scientific/latex/tables/part2/mdea-interactions.tex": "70db869301f99455776ed43c67c34cae6022a1d489dc9bbe4ba775dfa2908865",
+    "docs/scientific/latex/tables/part2/mdea-laws.tex": "b3b469808eda5334acc449539be789ab293c9e5e84b8e1c0393f2dfac55f2145",
+    "docs/scientific/latex/tables/part2/mdea-parameters.tex": "68bc225fdd1647fa61fbf493c7b1b708f689059e080e08e45a28ba916d43e3f9",
+    "docs/scientific/latex/tables/part2/mdea-range.tex": "78411af753418a531d33e306477e4b57bfc3c2d769b2df542180c74c544828b2",
+    "docs/scientific/latex/tables/part2/mdea-uncertainty.tex": "db594ab363b919251a47a44c6fd404dc2383c9fdaa2d9b1d26e3e6bf9db6e89d",
+    "docs/scientific/latex/tables/part2/origins.tex": "2f9b68d0217f39df8ed437ebf91f12bbd3ed69268e0acd2be23460a48f0ce5e9",
+    "docs/scientific/latex/tables/part2/phase-searches.tex": "81d2b6d079e8d5a7b4cd02074125ff9bb200cdca404d3eaccf38701d08e1d453",
+    "docs/scientific/latex/tables/part2/published-comparisons.tex": "70e09eb81cf535cca84904d4ce9a74e29a50b350668e412993bae8beb1f2b865",
+    "docs/scientific/latex/tables/part2/pz-interactions.tex": "ad6ac4b9a217fc310ba13cc4c69d0ac161d99c12f3534318dc6ca24af6b38f20",
+    "docs/scientific/latex/tables/part2/pz-laws.tex": "0698644e5ed98a5770132f0114e292628b4ae596c73e2401952e8873177d6322",
+    "docs/scientific/latex/tables/part2/pz-parameters.tex": "6c73c01f940ec5d4dd8085c18a37bdf4cda91d0f81fdafb73d3f716716cec84a",
+    "docs/scientific/latex/tables/part2/pz-uncertainty.tex": "796719b61df1c5f555bf844b6c77769bc5abcf8f402a4008ee972ed585b642b2",
+    "docs/scientific/latex/tables/part2/shared-interactions.tex": "13422a5f4cc1259a9a07c5b6a7337663590f343cd456a4c1d380ac3ff948f2a2",
+    "docs/scientific/latex/tables/part2/shared-parameters.tex": "58cb1be1f846c045ec1eb05255de53d06eacf20fe4b1f9eb64abae647bd9536f",
+    "docs/scientific/latex/tables/part2/shared-sensitivity.tex": "ec842fe417e6baf45b7e36b47adf0cd81d8257965e7146668da4034691c24c8e",
+    "docs/scientific/latex/tables/part2/source-locators.tex": "dfc5e9d4521a0be5d4dca3138c1e14ce61075c02f019cc2a08104509e82d41e6",
+    "docs/scientific/latex/tables/part2/unfitted.tex": "06f68c45aab891b66623e718bdee2c455743e0fb230a8cfd0a36ce9bc4b00b87"
   },
   "numeric_preservation": {
-    "baseline": "22af628",
-    "table_files_byte_identical": 34,
-    "figure_files_byte_identical": 9,
-    "displayed_values_rows": 548,
+    "baseline": "94fa22d",
+    "numerical_table_cells_identical": true,
+    "original_displayed_values_identical": 548,
+    "displayed_values_rows": 550,
+    "added_retained_PZ_binary_deviations": [
+      {
+        "display": "7.78290",
+        "source_file": "analyses/pz_transfer/results/binary-summary.json",
+        "field": "[\"P_source_units\", \"rms\"]",
+        "retained_value": "7.782900034629231"
+      },
+      {
+        "display": "12.75239",
+        "source_file": "analyses/pz_transfer/results/binary-summary.json",
+        "field": "[\"y_source_units\", \"rms\"]",
+        "retained_value": "12.752394951649443"
+      }
+    ],
     "abstract_byte_identical": true,
     "conclusions_byte_identical": true,
-    "protected_inputs_unchanged": true
+    "protected_inputs_unchanged": true,
+    "Part_I_not_rebuilt": true,
+    "shared_bibliography_change": "Bower title only"
   },
-  "displayed_values_sha256": "82eac4e9185d0eedc5a52db0fcf36c2194e617f8637b9fd8dd53eac8b115d72d",
+  "displayed_values_sha256": "56b96f45d55c4a32ccb8abd5b5b4f2f59f6e836c323e3cf38c895ff7cdb20a21",
   "self_contained_audit": {
     "part2": {
       "before": 49,
@@ -151,39 +165,22 @@
     },
     "part2_supplement": {
       "before": 27,
-      "after": 48,
+      "after": 27,
       "added": [
-        "Austgen1991",
-        "Cameretti2005",
-        "Figiel2025",
-        "Figiel2026Correction",
-        "Gross2002",
-        "Held2014",
-        "Pahlavanzadeh2013",
-        "Yang2024",
         "arouaTemperatureDependencyEquilibrium1997",
-        "ayadMeasurementsModelingThermodynamic2023",
-        "belabbaciInvestigationIsothermalVapour2010",
         "bowerAcidicDissociationConstant1962",
-        "chaseNISTJANAFThermochemicalTables1998",
-        "hsiehDielectricConstantsAqueous2007",
-        "internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018",
-        "klepacovaVaporPressuresSeveral2011",
-        "mahamMolarHeatCapacities1997",
-        "neumannThermodynamicPropertiesMethyl2022",
         "perez-saladokampsDissociationConstantNMethyldiethanolamine1996",
-        "razaviPhaseBehaviorModeling2019",
         "xuRepresentationEquilibriumSolubility1992"
       ]
     },
     "part2_supplement_direct_prose": {
       "before": 7,
-      "after": 32
+      "after": 8
     },
     "pointers": {
       "owner_reported_external_pointer_sentences": 47,
       "external_pointer_source_lines_before": 49,
-      "external_pointer_source_lines_after": 27,
+      "external_pointer_source_lines_after": 25,
       "strict_pointer_only_before": 21,
       "strict_pointer_only_after": 0,
       "strict_before_locations": {
@@ -233,126 +230,116 @@
         {
           "file": "introduction.tex",
           "line": 4,
-          "text": "The monoethanolamine (MEA) fit in Part I supplies the frozen water, carbon dioxide and inorganic-ion parameters for the present electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) calculations \\cite{PolleyPartI}."
+          "text": "Part I fitted an explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) description of loaded aqueous monoethanolamine (MEA), in which every ion is a separate species and equilibrium, caloric and density properties follow from one Helmholtz energy \\cite{PolleyPartI}."
         },
         {
           "file": "introduction.tex",
-          "line": 82,
+          "line": 83,
           "text": "Here the water, \\COtwo and inorganic-ion parameters from Part I remain fixed while only amine-specific quantities are fitted."
         },
         {
           "file": "introduction.tex",
           "line": 86,
-          "text": "Part I's bicarbonate--water interaction lies on its upper bound, so MDEA tests the shared inorganic-carbon description without an amine-carbamate pathway \\cite{PolleyPartI}."
+          "text": "The four amines test the shared inorganic-carbon description, whose bicarbonate--water interaction lies on its upper bound in Part I \\cite{PolleyPartI}, without an amine-carbamate pathway in MDEA and alongside different carbamate pathways in AMP, PZ and DEA."
         },
         {
           "file": "methods.tex",
-          "line": 95,
-          "text": "The selected parameters remain fixed for the reported comparisons; the start and bound inventory records the alternatives (Supplementary Section~S3)."
+          "line": 97,
+          "text": "The selected parameters remain fixed for the reported comparisons; Supplementary Section~S3 lists the starting points, bounds and alternative fits."
         },
         {
           "file": "methods.tex",
-          "line": 109,
+          "line": 111,
           "text": "Unlike the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting."
         },
         {
           "file": "model.tex",
-          "line": 20,
+          "line": 3,
           "text": "The water and \\COtwo component descriptions, hydronium, hydroxide, bicarbonate and carbonate, all interactions among these six shared species, and the reaction laws of Part I, R1 (water autoprotolysis), R2 (\\ce{CO2 + 2H2O <=> HCO3- + H3O+}) and R3 (\\ce{HCO3- + H2O <=> CO3^{2-} + H3O+}), including Part I's fitted R2 corrections, are held fixed \\cite{PolleyPartI}."
         },
         {
           "file": "model.tex",
-          "line": 26,
+          "line": 9,
           "text": "The MDEA and AMP fits were first developed against an earlier MEA fit whose bicarbonate--water interaction was 0.727 rather than Part I's bound value $+1$ and whose R2 coefficients differed slightly (Supplementary Section~S7); Section~\\ref{sec:p2-shared-sensitivity} tests that difference."
         },
         {
           "file": "model.tex",
-          "line": 64,
+          "line": 63,
           "text": "Water retains the exponential temperature dependence tabulated by Pabsch et al. \\cite[Table~2]{Pabsch2020}, with its constant term fitted to IAPWS-95 in Part I \\cite{PolleyPartI}:"
         },
         {
           "file": "model.tex",
-          "line": 249,
-          "text": "MDEA, AMP and DEA coefficients use Hsieh et al.'s unloaded measurements at model liquid densities \\cite[Tables~1--2, 4--5, 7]{hsiehDielectricConstantsAqueous2007}; PZ and HPZCOO use the MEA coefficients fitted in Part I as an assumption \\cite{PolleyPartI}."
+          "line": 191,
+          "text": "MDEA, AMP and DEA coefficients use Hsieh et al.'s unloaded measurements at model liquid densities \\cite[Tables~1--2, 5]{hsiehDielectricConstantsAqueous2007}; PZ and HPZCOO use the MEA coefficients fitted in Part I as an assumption \\cite{PolleyPartI}."
         },
         {
           "file": "results.tex",
-          "line": 7,
-          "text": "The separately fitted PZ--water binary properties retain discrepancies that the reactive refit leaves unchanged (Supplementary Sections~S1 and S3)."
-        },
-        {
-          "file": "results.tex",
-          "line": 17,
+          "line": 14,
           "text": "For Carson heat, scaled RMS increases from 0.977 with the earlier shared description to 1.106 after refitting to the Part I shared description."
         },
         {
           "file": "results.tex",
-          "line": 70,
+          "line": 67,
           "text": "Only that block lies inside both PZ laws; the 395.0 K rows also exceed the shared R2 interval (Supplementary Table~\\ref{supp-tab:p2-kamps-blocks})."
         },
         {
           "file": "results.tex",
-          "line": 84,
+          "line": 81,
           "text": "Lal's low-pressure observations, which the source reports as less accurate, remain in the AARD (Supplementary Section~S4)."
         },
         {
           "file": "results.tex",
-          "line": 156,
+          "line": 152,
           "text": "Forty-three comparison-only loaded DEA densities at 298.15 K give 0.445\\,\\% AARD (Supplementary Section~S4); the fitted MDEA density groups are given in Table~\\ref{tab:p2-calibration}."
         },
         {
           "file": "results.tex",
-          "line": 194,
+          "line": 190,
           "text": "AMP's carbamate diameter and enthalpy correction reach limits with nearly flat inward profiles (Supplementary Section S6)."
         },
         {
           "file": "results.tex",
-          "line": 206,
+          "line": 202,
           "text": "Unfitted pressures depend on the shared description as well as on the amine fit: substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP errors by 22--26 percentage points in opposite directions before the amine parameters are refitted (Table~\\ref{tab:p2-shared-sensitivity})."
         },
         {
           "file": "results.tex",
-          "line": 207,
+          "line": 203,
           "text": "Table~\\ref{tab:p2-shared-sensitivity} follows the same data through the earlier shared description, substitution of the Part I bicarbonate--water interaction and fitted R2 law, and amine-specific refitting."
         },
         {
           "file": "results.tex",
-          "line": 255,
+          "line": 251,
           "text": "Small property residuals do not exclude false liquid phases: the reported PZ fit has at least forty across calibration and comparison states, and a separate fit with the Part I stability penalty still has at least three, two of which the standard finite search missed."
         },
         {
           "file": "results.tex",
-          "line": 280,
+          "line": 276,
           "text": "This counterexample demonstrates a missed finite search, so every split count in this paper is a lower bound, and the absence of detected instability, here and for the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, does not prove stability."
         },
         {
           "file": "supplement.tex",
-          "line": 18,
-          "text": "Only the constant term in that law was fitted in Part I; the exponential coefficients were fixed."
-        },
-        {
-          "file": "supplement.tex",
-          "line": 23,
+          "line": 13,
           "text": "The MEA joint-fit R2 coefficients retain their conditional uncertainty in Part I, but no uncertainty of those shared inputs is propagated here."
         },
         {
           "file": "supplement.tex",
-          "line": 256,
+          "line": 204,
           "text": "The separate penalty fit uses the Part I tangent-plane requirement at 245 states: the 121 NMR liquids and each Hilliard feed as an all-liquid parent at 1.05 and three times its candidate bubble pressure."
         },
         {
           "file": "supplement.tex",
-          "line": 261,
-          "text": "Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched inventory, not proof of global stability."
+          "line": 209,
+          "text": "Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched states, not proof of global stability."
         },
         {
           "file": "supplement.tex",
-          "line": 312,
+          "line": 261,
           "text": "Substituting Part I's shared bicarbonate--water interaction and R2 without refitting gives 21.89\\,\\% and $-15.10$\\,\\%, while worsening the fitted total pressures."
         },
         {
           "file": "supplement.tex",
-          "line": 319,
+          "line": 268,
           "text": "The earlier bicarbonate--water interaction is 0.72705584775, compared with one in Part I."
         }
       ],
@@ -379,7 +366,7 @@
     "ayadMeasurementsModelingThermodynamic2023": "Experimental density method, Table 2, Section 3.1, Tables 5-6, Section 4.5; density fitting and pressure-data provenance",
     "belabbaciInvestigationIsothermalVapour2010": "Section 2 Experimental, Table 2 pure pressures, Section 3 Results and discussion; Antoine fit and measurement conditions",
     "chaseNISTJANAFThermochemicalTables1998": "Applied CO2 gas Shomate table on the official NIST Chemistry WebBook, 298-1200 K; not the entire JANAF volume",
-    "hsiehDielectricConstantsAqueous2007": "Experimental Section and Results and Discussion, Tables 1-2,4-5,7; unloaded DEA/MDEA/AMP permittivity measurements",
+    "hsiehDielectricConstantsAqueous2007": "Experimental Section and Results and Discussion; Tables 1 and 2, printed p.620, for pure DEA/MDEA/AMP, and Table 5, printed p.622, for aqueous DEA/MDEA/AMP permittivity measurements.",
     "internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018": "IAPWS R6-95(2018), Section 3, Eq.5 and Table 1 ideal-gas Helmholtz function",
     "klepacovaVaporPressuresSeveral2011": "Experimental vapor-pressure method, AMP discussion and Table 10",
     "mahamMolarHeatCapacities1997": "Experimental calorimetry, Table 1 and Results; liquid heat-capacity basis and uncertainties",
@@ -408,16 +395,49 @@
   "reading_shelf": "Ignored literature reading copies and index rows retained in the worktree and reconciled into the canonical main-checkout literature shelf. Copyrighted source copies are not committed.",
   "prose_check": "Passed installed plugin-wide and scoped rules for all Part II manuscript sources and the updated numerical-source index.",
   "freshness": "Per-document receipts include actual recorder inputs plus BibTeX databases/style. Both current PDF and input hashes pass. Part I default remains available; its PDF was not rebuilt.",
-  "unchanged": "Part I files and shared bibliography, analyses/_cse-manuscript.json, the abstract and conclusions, all 34 original table files, all nine figure/provenance files, and every one of 548 recorded displayed values. No Engine edits or new numerical calculations.",
+  "unchanged": "Part I sources and PDFs unchanged except the shared Bower bibliography title; analyses/_cse-manuscript.json, abstract and conclusions unchanged. All original 548 displayed values and numerical table cells identical. Two existing PZ binary deviations added. No model calculations.",
   "remaining_review": "Independent scientific and prose acceptance by the parent; implementor page inspection and automated checks do not substitute for it.",
-  "final_render_comparison": {
-    "images_compared": 90,
-    "byte_identical_images": 86,
-    "changed_main_pages": [
-      5,
-      27
+  "required_fixes": {
+    "Astra 1": "applied",
+    "Astra 2": "applied",
+    "Astra 3": "applied",
+    "R1": "applied",
+    "R2": "applied",
+    "R3": "applied",
+    "R4": "applied",
+    "R5": "applied",
+    "R6": "applied",
+    "R7": "applied",
+    "R8": "applied",
+    "R9": "adapted: uses retained scaled RMS pressure and vapor-composition deviations with explicit scales, rather than calculating a new percentage aggregate.",
+    "R10": "applied",
+    "R11": "applied",
+    "R12": "applied",
+    "R13": "applied",
+    "R14": "applied: duplicated supplement charged-chain sentences removed; all three corrected rules retained in main text.",
+    "R15": "applied",
+    "R16": "applied"
+  },
+  "R3_verification": {
+    "outcome": "requested definitions confirmed; no scientific adaptation",
+    "AMP": "analyses/amp_transfer/inputs/redesign/refit-306-floor-coordinates.json; coefficient a and enthalpy shift",
+    "DEA": "analyses/dea_transfer/inputs/runs/B-2-endpoint-coordinates.json; coefficient a, pivot 313.15 K",
+    "PZ": "analyses/pz_transfer/reactive.py laws_at adds P3\u2013P5 offsets to correlation.a; reactive-A12-start2-endpoint.json and reactive-A12-record.json retain the selected parameters",
+    "bounds": "tables/part2/bounds.tex hydrolysis a rows"
+  },
+  "R9_verification": {
+    "source": "analyses/pz_transfer/results/binary-summary.json",
+    "fields": [
+      "P_source_units.rms",
+      "y_source_units.rms"
     ],
-    "cause": "Final BibTeX convergence reordered Pabsch, Kleiner and Schick by first citation; body citation numbers and bibliography now agree. Extracted supplement text is byte-identical.",
-    "disposition": "Both changed main pages reinspected at full-page resolution; no clipping or overlap. No physical value changed."
-  }
+    "displayed": [
+      "7.78290",
+      "12.75239"
+    ],
+    "basis": "23 calibration states; pressure scale 0.3 kPa; conditional vapor scale sqrt((0.01y)^2+(0.00005/sqrt(3))^2)",
+    "limits": "descriptive calibration deviations; unknown total titration uncertainty; binary parameters unchanged in reactive refit",
+    "new_calculation": false
+  },
+  "bibliography": "Only the authorized Bower title encoding corrected; no Part I build."
 }
