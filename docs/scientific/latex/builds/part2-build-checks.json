@@ -1,0 +1,54 @@
+{
+  "scope": "First manuscript draft; mechanical build and page inspection only. Independent science and story reviews remain for the orchestrator.",
+  "source_baseline": "a6c348d7f19a98409e4c39fcc7b8c3d51b742122",
+  "commands": [
+    "uv run --no-project --with matplotlib python scripts/part2_displays.py",
+    "agent-heavy latexmk -pdf -interaction=nonstopmode -halt-on-error part2_supplement.tex",
+    "agent-heavy latexmk -pdf -interaction=nonstopmode -halt-on-error part2.tex",
+    "agent-heavy python <cse-plugin>/scripts/visualize/latex_visual_qa.py builds/<pdf> --profile article --output-dir builds/part2-qa/<name> --contact-sheet",
+    "agent-heavy python <cse-plugin>/scripts/workflow/check_prose.py --root . docs/scientific/latex/part2.tex docs/scientific/latex/part2_supplement.tex docs/scientific/latex/sections/part2 docs/scientific/latex/tables/part2"
+  ],
+  "outputs": [
+    {
+      "path": "docs/scientific/latex/builds/part2.pdf",
+      "pages": 16,
+      "sha256": "c0d93f4947333adcc9dcf7a88530b6bb5bff934b64b418a4dfd5f3deea4a43e5",
+      "undefined_references_or_citations": 0,
+      "overfull_boxes": 0,
+      "type3_fonts": 0,
+      "fonts_embedded": true,
+      "automated_visual_errors": 0,
+      "automated_visual_warnings": {
+        "tight_text_clearance": 31,
+        "text_graphic_overlap": 15,
+        "tight_text_graphic_clearance": 2
+      },
+      "visual_disposition": {
+        "scientific_display_logic": "exact: retained values, with explicit loading, ratio, error and signed-enthalpy transformations in the display script",
+        "decision": "keep",
+        "inspection": "Every color page inspected at full size; complete grayscale contact sheets and all figure pages checked. Conservative warnings arise at chemical subscripts/superscripts, equation components, intentional plot axes/markers and table rules; no clipping or unreadable overlap found. This is layout inspection, not independent scientific acceptance."
+      }
+    },
+    {
+      "path": "docs/scientific/latex/builds/part2_supplement.pdf",
+      "pages": 16,
+      "sha256": "d5732d3defff58b88c9b8b6634561517e0e25dc4012ada575307322aafa6da87",
+      "undefined_references_or_citations": 0,
+      "overfull_boxes": 0,
+      "type3_fonts": 0,
+      "fonts_embedded": true,
+      "automated_visual_errors": 0,
+      "automated_visual_warnings": {
+        "tight_text_clearance": 75,
+        "text_graphic_overlap": 2
+      },
+      "visual_disposition": {
+        "scientific_display_logic": "exact: retained values, with explicit loading, ratio, error and signed-enthalpy transformations in the display script",
+        "decision": "keep",
+        "inspection": "Every color page inspected at full size; complete grayscale contact sheets and all figure pages checked. Conservative warnings arise at chemical subscripts/superscripts, equation components, intentional plot axes/markers and table rules; no clipping or unreadable overlap found. This is layout inspection, not independent scientific acceptance."
+      }
+    }
+  ],
+  "prose_check": "passed; no configured banned-language findings",
+  "unchanged": "Part I sources and shared bibliography/macros/styles; all analyses and analyses/_cse-manuscript.json"
+}
