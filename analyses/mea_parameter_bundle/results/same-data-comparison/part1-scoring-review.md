@@ -1,0 +1,25 @@
+# Independent delivered review — issue 339 Part I
+
+Reviewed commit: `a5204b9bba625f744e263887dd54841c565cea5d`.
+
+**Supported** for the requested #339 Part I fixed-parameter comparison at frozen commit `a5204b9bba625f744e263887dd54841c565cea5d`, against accounting base `13bb6fbb7aebfb2ca642e6061f6f32f9167d6f35`.
+
+**Required corrections: none. Optional changes: none required for this scope.** This is an ordinary independent delivered review, not manuscript promotion.
+
+I independently recomputed all **21 score groups** from retained numerical rows; their values agree with the JSON, and the displayed table reproduces exactly. The main comparison is supported: six-source pressure AARD decreases from **52.341322% to 20.266707%**, species-fraction RMSE from **0.0076606122 to 0.0030522712 mol/mol**, and full-Han density RMSE from **135.26509 to 5.2322266 kg/m³**. Improvement is not universal: the 45 wt% Aronu pressure AARD increases from **32.127884% to 44.526266%**. [Retained score table](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-339-part-i-score--d215f51826e2713a-3/analyses/mea_parameter_bundle/results/same-data-comparison/part1-table.md)
+
+The review supports these specific conclusions:
+
+- **Coverage and data roles:** the scores include all 67 Han rows, 131 fractions, six ratios, 159 six-source pressures, four fitted Cp observations plus 60 broader Cp observations, and Kim counts of 27/26/20. The 13 excluded Kim rows retain the existing loading-ceiling explanation. Current fitted/comparison roles agree with Part I Methods and retained fitting identities; the broad Hilliard set explicitly includes two fitted measurements. Earlier exact fitting membership remains qualified rather than invented. No comparison is represented as blind.
+- **Qualification:** the maximum normal-reference difference is **3.6865179709×10⁻⁷**, with uniform signs within each quantity. Finite-reference restoration reduces the maximum to **2.7081559217×10⁻¹¹**; 21 rows exceed 10⁻¹² and remain individually unexplained. Nine historical reference values are blank. The notebook correctly treats `EQUILIBRIUM_ROW_RESIDUAL = 1e-10` as an equation-residual bound and the qualification pass as the owner’s decision—not proof of an output-error bound or solver-precision cause.
+- **Stability:** raw reports confirm **25/162 versus 0/162** resolved descents. For 2026, 13 parents are not admitted, all 149 returned searches are incomplete, and 262 liquid optimizers are unsuccessful. Supplied compositions were evaluated at 32 states per record; negative distances at indices 55, 58 and 92 are already within the 25 and have `resolved_descent = false`. No unavailable case is counted stable, and neither record receives global stability certification.
+- **Historical calorics:** 109 of 113 heat intervals have comparable references, with maximum absolute difference **2.7927943×10⁻⁶ kJ/mol CO₂**. All three Cp references are compared, with maximum absolute difference **9.1211964×10⁻⁵ kJ/(kg K)**. These remain non-gating comparisons with unresolved attribution between reference and caloric changes.
+
+**Producer duplication and accounting are acceptable within the approved scope.** I compared the retained producer copies with their owners. They preserve the existing assessment, caloric and stability methods; substitutions bind records, paths, hashes, worker limits and provenance. The reducer truncation removes checks tied to the original fit, rather than introducing another numerical method. The added entry coordinates existing producers and assembles comparisons. Independent Git accounting confirms **347 gross executable additions and three deletions**: 177 + 161 + 4 + 4 + 1, within the approved 350-line ceiling. The archived assessment JSON is readable directly from the tarball. [Implementation](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-339-part-i-score--d215f51826e2713a-3/analyses/mea_parameter_bundle/scripts/same_data_part1.py)
+
+The local literature shelf is absent in this worktree. I checked the supplied original Zotero PDF directly, verified its stated SHA-256, and read Appendix B’s parameter and calibration statements. The EOS comparisons remain distinct from empirical column correlations.
+
+The rendered HTML contains the final scores and qualifications, its pressure SVG is present, and the render log records successful output. Protected `analyses/_cse-manuscript.json` is unchanged; the managed-refresh limitation remains disclosed. [Final notebook section](/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-339-part-i-score--d215f51826e2713a-3/analyses/mea_parameter_bundle/notebook.qmd:1278)
+
+These results support numerical prediction against measurements and bounded numerical stability assessment. They do not establish physical validation, propagated uncertainty, parameter adoption or manuscript authorization. **Next stage: stop at the owner’s adoption/promotion checkpoint.** No files were changed, no campaigns rerun, and no delegation or parent contact occurred.
+
