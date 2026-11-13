@@ -28,7 +28,7 @@ Its final fit releases the neutral--water interaction and linear temperature slo
 The segment and Debye--H\"uckel diameters are tied.
 The neutral--water law is $k(T)=k_0+k_1(T-313.15\,\mathrm K)$, with $k_0=-0.2063373482$ and $k_1=0.0014750401$ K$^{-1}$.
 The cation--water law is $k(T)=k_0+b_k(1/T-1/313.15\,\mathrm K)$ with $k_0=-0.03323620783$ and $b_k=-27.10492507$ K.
-The nine coordinates do not include a fitted dissociation constant.
+The nine fitted parameters do not include a fitted dissociation constant.
 
 \input{tables/part2/mdea-parameters}
 \input{tables/part2/mdea-interactions}
@@ -36,9 +36,9 @@ The nine coordinates do not include a fitted dissociation constant.
 % P:p2-s-inputs-04
 AMP uses its neutral association description with explicit carbamate chemistry and a fixed Hamborg dissociation law \cite{hamborgDissociationConstantsThermodynamic2009}.
 The two temperature-dependent AMP--water and AMPH$^+$--water interactions have the reciprocal-temperature form above, with slopes $-55.96106619$ and $-274.1548086$ K, respectively.
-Its final nine coordinates include those four interaction quantities, cation--\COtwo interaction, cation and carbamate diameters, hydrolysis level and hydrolysis enthalpy correction.
+Its final nine fitted parameters include those four interaction quantities, cation--\COtwo interaction, cation and carbamate diameters, hydrolysis level and hydrolysis enthalpy correction.
 Ion Debye--H\"uckel diameters equal segment diameters and packing diameters equal $0.88\sigma$.
-The fitted hydrolysis level and enthalpy correction are completed together about 313.15 K, so the tabulated completed-law level differs from the fitting coordinate's level.
+The fitted hydrolysis level and enthalpy correction are completed together about 313.15 K, so the tabulated completed-law level differs from the fitted parameter's level.
 The carbamate diameter is fixed at its lower bound for the conditional uncertainty calculation.
 
 \input{tables/part2/amp-parameters}
@@ -47,8 +47,8 @@ The carbamate diameter is fixed at its lower bound for the conditional uncertain
 % P:p2-s-inputs-05
 PZ uses an effective two-site neutral association description; the pure fit holds segment count 2.6519 and diameter 3.7136 \AA\ fixed while fitting its three energy/association quantities to Steele pressures \cite{steeleThermodynamicPropertiesIdealGas1997}.
 Pure-liquid density and the liquid extrapolation below the melting region remain unvalidated.
-The neutral PZ--water interaction has the linear-temperature form anchored at 353.15 K, with $k_0=-0.1976454016$ and $k_1=0.0011250148$ K$^{-1}$; its two coordinates were fitted separately to binary pressure and vapor composition, then fixed during the reactive fit.
-The reactive twelve-coordinate fit ties the singly and doubly protonated cation sizes and energies; mono- and dicarbamate share size, energy and water interaction.
+The neutral PZ--water interaction has the linear-temperature form anchored at 353.15 K, with $k_0=-0.1976454016$ and $k_1=0.0011250148$ K$^{-1}$; its two fitted parameters were fitted separately to binary pressure and vapor composition, then fixed during the reactive fit.
+The reactive fit with twelve fitted parameters ties the singly and doubly protonated cation sizes and energies; mono- and dicarbamate share size, energy and water interaction.
 Four charged PZ species have fixed 5 \AA\ Born diameters.
 The neutral HPZCOO zwitterion has independent size and energy and no association sites.
 The remaining fitted quantities are the cation--water and cation--bicarbonate interactions and three carbamate-law offsets.
@@ -63,7 +63,7 @@ Their association strength uses $\sigma^3\kappa$, consistent with the present im
 The fitted neutral DEA--water interaction is temperature independent, $k=-0.0636$, and the dielectric coefficients were fitted separately to unloaded permittivity observations before reactive estimation.
 The reported reactive fit represents DEAH$^+$ as a charged chain carrying DEA's segment count, diameter, dispersion energy and four sites, with zero self-association energy.
 The carbamate retains a single-sphere representation.
-Only the two ion--water interactions and hydrolysis level and enthalpy correction are fitted in the final four-coordinate objective.
+Only the two ion--water interactions and hydrolysis level and enthalpy correction are fitted in the final objective with four fitted parameters.
 The alternative single-sphere cation fit is retained only as a comparison.
 
 \input{tables/part2/dea-parameters}
@@ -122,7 +122,7 @@ Kundu's 18, 25 and 30 mass-percent stocks correspond nominally to 2.0, 2.8 and 3
 Kundu's loading uncertainty is not a combined partial-pressure uncertainty, so it cannot supply an uncertainty-normalized pressure test.
 
 % P:p2-s-objectives-04
-PZ pressure differences use an operational scale 0.02 times observed pressure.
+PZ pressure differences use an assigned scale 0.02 times observed pressure.
 NMR normalization propagates independent area errors with $q=0.02$ into correlated group-fraction blocks; complete-state areas reconstruct the monocarbamate pair and free/dicarbamate groups before normalization.
 Blank dicarbamate observations are not zeros and do not create additional residuals.
 The resulting 232 observations come from 121 source states and use a full block covariance.
@@ -145,7 +145,7 @@ It is not a differential heat and is not the excess enthalpy per mole of binary 
 \input{tables/part2/bounds}
 \input{tables/part2/fit-starts}
 % P:p2-s-selection-01
-The reported MDEA fit retains the nine-coordinate fit under fixed shared inputs.
+The reported MDEA fit retains the fit with nine fitted parameters under fixed shared inputs.
 Its selected cost is 374.5190788 for 278 objective rows, with two active bounds; the second declared start converges to a larger cost, so agreement of two starts is not claimed.
 The A3 alternative is the same-data sensitivity counter-case, with no replacement of the reported MDEA fit.
 Its Carson scaled RMS increases from 0.97662 to 1.10594.
@@ -159,10 +159,10 @@ Neither estimate is a measured ionic diameter.
 The completed hydrolysis enthalpy correction reaches $-5000$ J/mol in every refit of the sequence.
 
 % P:p2-s-selection-03
-PZ's reported twelve-coordinate fit starts from a previous PZ fit mapped onto these ties.
+PZ's reported fit with twelve fitted parameters starts from a previous PZ fit mapped onto these ties.
 The independent proposed start is unavailable with HPZCOO included in the vapor; no successful fit from that start is implied.
 The reported fit reaches 100 iterations with cost 20698.6 nearly flat over its final fourteen iterations.
-A conditional diagnostic with the bound coordinate fixed converges at a cost lower by approximately $3\times10^{-4}$, but does not retroactively label the original termination converged.
+A conditional diagnostic with the bound fitted parameter fixed converges at a cost lower by approximately $3\times10^{-4}$, but does not retroactively label the original termination converged.
 PZH$^+$--water reaches the lower bound $-1$.
 The separate penalty alternative is not substituted for this reported fit.
 
@@ -216,7 +216,7 @@ At 100 $^{\circ}$C, four very-low-loading values are described by Lal as probabl
 DEA comparison-only Lawson Table VIII contains ten observations: two at 77 $^{\circ}$F, four at 100 $^{\circ}$F and four at 200 $^{\circ}$F.
 The nominally fifty-mass-percent solution is 54.5 wt\% in its coldest block.
 Cai's nine binary observations compare the model bubble pressure at measured liquid composition and temperature with 6.66 kPa.
-Weiland's forty-three loaded densities at 298 K exclude the documented misprinted twenty-mass-percent, loading-0.50 value.
+Weiland's forty-three loaded densities at 298.15 K exclude the documented misprinted twenty-mass-percent, loading-0.50 value.
 These comparisons did not enter the reactive objective or final parameter selection.
 
 % P:p2-s-unfitted-06
@@ -236,7 +236,7 @@ No analogous assessment for the other amines establishes whether the error is sp
 \FloatBarrier
 
 % P:p2-s-kamps
-Kamps total pressures are comparison-only, scored once after the twelve-coordinate fit was frozen.
+Kamps total pressures are comparison-only, scored once after the fit with twelve fitted parameters was frozen.
 The temperatures use the correction in Ermatchkov et al., Table~6, p.~1794 \cite{ermatchkovSolubilityCarbonDioxide2006a}; the precipitation row at 313.75 K, 1.995 mol PZ/kg water, loading 1.69 and 4.446 MPa is excluded.
 The block comparison labels both PZ measurement intervals and the shared R2 computational interval; all 395.0 K rows exceed the latter.
 The two unloaded rows are included in the block and overall scores but separated from the loaded pressure groups.
@@ -254,7 +254,7 @@ The capped MDEA heat at 333.15 K, 60 wt\% and 1.121 MPa could not be calculated.
 
 % P:p2-s-phases-02
 AMP nominal Kundu states are searched at their calculated bubble states; loading-perturbed pressure evaluations do not supply additional phase evidence.
-Its calibration gas outcomes were not stored and cannot be reconstructed as zero from the absence of a reported value.
+Its calibration gas outcomes were not recorded and cannot be reconstructed as zero from the absence of a reported value.
 DEA's 140 searched fitted/held-out states comprise thirty pressures, fifty heats, sixteen Seo and Hong and forty-four Lal states.
 The additional comparison-only sets are not included in that count.
 No additional liquid or gas phase was detected in those DEA searches, and no global-stability conclusion follows.
@@ -269,7 +269,7 @@ Solid equilibrium is absent, including at temperatures below the pure-PZ melting
 % P:p2-s-phases-kamps
 At Kamps bubble states the search detects thirty-six dense-liquid splits, finds no additional phase at fifty-six states, and leaves two unloaded states undecided; no gas or ambiguous split is found.
 The thirty-six detected splits are a lower bound; the fifty-six states without detected splitting are not proven stable, and the two unloaded states remain undecided.
-At 1.5 times bubble pressure the routine search finds splits at Hilliard rows 55 and 62 but misses rows 56 and 61.
+At 1.5 times bubble pressure the standard finite search finds splits at Hilliard rows 55 and 62 but misses rows 56 and 61.
 Direct tangent-plane distances at the known split compositions are $-0.0957$, $-0.1107$, $-0.0024$ and $-0.0306\,RT$ at rows 55, 56, 61 and 62, respectively.
 All 121 NMR states pass at $T+0.5$ K and 0.1 MPa, except that three rich states are evaluated at 1.05 times bubble pressure where it exceeds 0.1 MPa.
 These checks do not establish a continuous stable region.
@@ -278,7 +278,7 @@ These checks do not establish a continuous stable region.
 % P:p2-s-phases-04
 The separate penalty fit uses the Part I tangent-plane requirement at 245 states: the 121 NMR liquids and each Hilliard feed as an all-liquid parent at 1.05 and three times its candidate bubble pressure.
 Penalty scales are $10^{-2}$ followed by $3\times10^{-3}$.
-Its routine search reports one split, but direct distance calculations at split compositions recovered near the fit show two further negative values at rows 55 and 56.
+Its standard finite search reports one split, but direct distance calculations at split compositions recovered near the fit show two further negative values at rows 55 and 56.
 Those direct values, $-0.0309\,RT$ and $-0.0437\,RT$, demonstrate that the finite search missed resolved splits.
 The penalty did not establish a single-liquid fit.
 Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched inventory, not proof of global stability.
@@ -304,10 +304,10 @@ The inward cation--bicarbonate interaction profiles give cost increases 0.142, 0
 Born-diameter profiles at 6.95, 6.75 and 6.50 \AA\ give increases 0.06927, 0.3571 and 0.7433.
 All converge, but this limited grid does not locate a confidence limit or a global minimum.
 The two weakest full-Jacobian directions include both bound parameters, with singular values 0.00848001 and 0.0198683 in the original optimizer units.
-Their inclusion of constrained coordinates limits interpretation of two-sided displacements.
+Their inclusion of constrained fitted parameters limits interpretation of two-sided displacements.
 
 % P:p2-s-uncertainty-03
-AMP has two bound coordinates and variance factor 0.829.
+AMP has two bound fitted parameters and variance factor 0.829.
 The AMPH$^+$ diameter and cation--water interaction have correlation about 0.96; cation--water interaction and slope have correlation about 0.98.
 Inward carbamate diameter steps of 1, 5 and 10\,\% of the original interval give cost changes 0.0009, 0.0044 and 0.0087.
 The corresponding enthalpy-correction steps give changes 0.0063, 0.032 and 0.064.
@@ -315,7 +315,7 @@ The twelve retained AMP profile fits, including the interior cation--\COtwo inte
 Nearly flat bound profiles restrict molecular interpretation even when covariance bands are comparatively small.
 
 % P:p2-s-uncertainty-04
-PZ holds one bound coordinate fixed and uses eleven interior coordinates with variance factor 146.3.
+PZ holds one bound fitted parameter fixed and uses eleven interior fitted parameters with variance factor 146.3.
 The conditional refit moves enough that the endpoint inverse-Jacobian calculation is used rather than identifying its covariance with the original fit without qualification.
 The 1\,\% inward profile converges; 5 and 10\,\% profiles stop at their forty-iteration budget, with cost changes 46.5 and 61.9.
 Those two changes are upper bounds on minimized profile cost.
