@@ -208,7 +208,31 @@
         "text": "The earlier bicarbonate--water interaction is 0.72705584775, compared with one in Part I."
       }
     ],
-    "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition."
+    "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition.",
+    "pointer_only_recheck": {
+      "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+      "strict_pointer_only_at_baseline": 2,
+      "prior_strict_pointer_only_after_was_incorrect": true,
+      "corrected_sentences": [
+        {
+          "file": "model.tex",
+          "baseline_lines": [
+            252,
+            253
+          ],
+          "correction": "Combine the interval definition and its table reference in one substantive sentence."
+        },
+        {
+          "file": "supplement.tex",
+          "baseline_lines": [
+            219
+          ],
+          "correction": "State the units of every parameter type in the four following uncertainty tables directly."
+        }
+      ],
+      "strict_pointer_only_after": 0,
+      "units_check": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+    }
   },
   "model_equations": {
     "before": 1,
