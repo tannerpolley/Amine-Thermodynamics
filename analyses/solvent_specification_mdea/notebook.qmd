@@ -16,6 +16,62 @@ The [MDEA workflow disposition](../mdea_mea_workflow/notebook.qmd) records the p
 
 {{< include results/uncertainty-307/summary.qmd >}}
 
+## B1 errors by temperature, law range and source (#320)
+
+This section aggregates retained rows. It evaluates no model, fits nothing and adopts nothing. [`retained_statistics.py`](retained_statistics.py) reads the stored observed and predicted values and writes [`retained-statistics-320.json`](results/retained-statistics-320.json). It has not been independently reviewed or promoted.
+
+**Definitions.** For pressures, AARD = mean(|predicted − observed| / observed) × 100, the average absolute relative deviation used for Part I's pressures. Bias is the mean of (predicted − observed) / observed × 100, so a negative bias is underprediction. For heat, heat capacity and density the natural measure is the absolute error in the property's unit, so the tables give the mean absolute error and the mean signed error (predicted − observed) with units. Percent values for those properties are shown only for comparison with the pressure rows.
+
+**Law range.** The MDEAH⁺ dissociation law of Kamps & Maurer (b = −819.7, c = 10.976) was measured over 278–368 K ([reaction-basis-kamps-maurer.json](../mdea_mea_workflow/results/reaction-basis-kamps-maurer.json), `source_findings.range_K`; printed p. 1509). B1 declares the law to 395 K, so any B1 state above 368 K uses the law outside its measured range.
+
+### CO₂ partial pressure, Ermatchkov and Xiao
+
+| Group | Condition | Rows | AARD (%) | Bias (%) |
+|---|---|---|---|---|
+| Ermatchkov | 313.15 K | 37 | 19.57 | −14.45 |
+| Ermatchkov | 353.15 K | 25 | 11.49 | −7.36 |
+| Ermatchkov | 393.15 K (outside range) | 26 | 22.94 | +21.93 |
+| Ermatchkov | inside 278–368 K | 62 | 16.31 | −11.59 |
+| Ermatchkov | outside 278–368 K | 26 | 22.94 | +21.93 |
+| Ermatchkov | all rows (mixed range) | 88 | 18.27 | −1.68 |
+| Xiao | 298.15 K | 5 | 35.90 | −35.90 |
+| Xiao | 303.15 K | 5 | 32.98 | −32.98 |
+| Xiao | 308.15 K | 5 | 25.45 | −25.45 |
+| Xiao | 313.15 K | 5 | 18.43 | −18.43 |
+| Xiao | all rows (all inside range) | 20 | 28.19 | −28.19 |
+
+The totals reproduce the retained [pressure summary](results/adoption-302/B1/pressure-summary.json) (Ermatchkov 18.2705616 %, Xiao 28.1910414 %). The Ermatchkov aggregate mixes in-range and extrapolated conditions: inside the range B1 underpredicts (bias −11.59 %), and at 393.15 K, outside it, B1 overpredicts (+21.93 %), so the small overall bias (−1.68 %) comes from cancellation. All Xiao rows are inside the range and are underpredicted at every temperature.
+
+### Fitted rows by source (278 rows)
+
+| Source | Property | Rows | AARD (%) | Mean absolute error | Mean signed error | Scaled RMS |
+|---|---|---|---|---|---|---|
+| Kuranov, all rows | CO₂-loaded total pressure | 67 | 20.44 | — | bias +9.61 % | 0.223 |
+| Kuranov, 313–353 K (inside law range) | CO₂-loaded total pressure | 37 | 11.80 | — | bias −7.80 % | (67 rows: 0.223) |
+| Kuranov, 373–393 K (outside law range) | CO₂-loaded total pressure | 30 | 31.09 | — | bias +31.09 % | (67 rows: 0.223) |
+| Kim | water–MDEA total pressure | 61 | 3.23 | — | bias +1.25 % | 0.044 |
+| Jakobsen | protonated MDEA fraction | 16 | 13.58 | 0.0435 (dimensionless) | +0.0435 | 1.639 |
+| Carson | heat of solution | 40 | 5.45 | 2699 J/mol CO₂ | +1048 J/mol CO₂ | 1.106 |
+| Merkley, 333.15 K | heat | 2 | 10.36 | 5725 J/mol CO₂ | −5725 J/mol CO₂ | (4 rows: 2.016) |
+| Merkley, 388.71 K (outside law range) | heat | 2 | 6.56 | 3989 J/mol CO₂ | −3989 J/mol CO₂ | (4 rows: 2.016) |
+| Weiland | heat capacity | 33 | 2.59 | 2.547 J/(mol-feed K) | +0.403 J/(mol-feed K) | 1.760 |
+| Weiland | loaded density | 33 | 0.185 | 1.994 kg/m³ | +0.603 kg/m³ | 1.588 |
+| Sobrino | unloaded density | 24 | 0.057 | 0.566 kg/m³ | +0.216 kg/m³ | 1.442 |
+
+Scaled RMS is the retained [replay summary](../mdea_mea_workflow/results/refit-298/B1-endpoint/replay-summary.json) value. Heat values are negative, so a negative signed error means the model heat is more exothermic than the measured heat. The Merkley 388.71 K heat comparison lies above 368 K and is outside the dissociation law's measured range; the model result there is an extrapolation of the law. The 30 Kuranov rows outside the range lie at 373.14–373.17 K and 393.12–393.15 K. The Carson, heat-capacity and loaded-density rows carry no temperature field in the retained rows, so they are not split by law range. The Kim (water–MDEA) and unloaded-density rows contain no CO₂, so the MDEAH⁺ dissociation law does not enter them. The percent bias is given for pressures only: heats are negative, so a percent bias on a heat reverses its sign relative to the signed error.
+
+The current B1 record has 278 fitted rows (67 Kuranov, with Kuranov rows 28 and 72 excluded); the 280-row counts in the historical section below belong to the earlier record.
+
+### Files used
+
+| File | SHA-256 |
+|---|---|
+| `results/adoption-302/B1/pressure.json` | `b81bfeb21d211d64211a2bda07b5e07af2a897f828a750f01aac6142340a7820` |
+| `../mdea_mea_workflow/results/refit-298/B1-endpoint/fitted-replay.json` | `6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2` |
+| `../mdea_mea_workflow/results/refit-298/B1-endpoint/replay-summary.json` | `9abcae66205879bb545cfcb865bb5ad8d6ca6507867574529e12c7925c2cb705` |
+| `results/adoption-302/replay.json` (same 278 predictions as the fitted replay; endpoint `2a5341be…`) | `f10e1323317330e7f49b1d04de40cc85f31414ed218ea400bd89990ebb9434f1` |
+| `../mdea_mea_workflow/results/reaction-basis-kamps-maurer.json` | `c9ff18893f67b0fa023817e94dedebef5e4fa3fe31a0214c4c42601d5c54fc1d` |
+
 ## Historical specification reproduction
 
 The remainder records earlier wheels and endpoints. `B1-historical.toml` preserves their old B1 binding; the old R2 fit and R4 execution commands below are historical, superseded by the fixed replay above. Their retained outputs are not relabeled as the current record.
