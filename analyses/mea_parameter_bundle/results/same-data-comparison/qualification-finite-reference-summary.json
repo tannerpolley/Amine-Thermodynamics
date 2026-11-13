@@ -1,0 +1,26 @@
+{
+  "n": 362,
+  "available": 362,
+  "max_abs": 2.708155921737898e-11,
+  "median_abs": 2.7255975254547593e-13,
+  "largest": {
+    "identity": "canonical:vle_obs_0171",
+    "target": "vle_obs_0171-pco2",
+    "reference": 1228.0644953749538,
+    "finite_reference_prediction": 1228.0644953416959,
+    "signed_relative_difference": -2.708155921737898e-11
+  },
+  "rows_within_1e12": 341,
+  "rows_above_1e12": 21,
+  "first_above_1e12": {
+    "identity": "vle_obs_0129",
+    "target": "vle_obs_0129-pco2",
+    "reference": "133.56624086787454",
+    "finite_reference_prediction": "133.56624086903426",
+    "signed_relative_difference": "8.682832230988424e-12"
+  },
+  "status": "stop before scoring: not every row reproduces at about 1e-12 relative",
+  "row_sha256": "8cd2889779209bc25d638d11ab64caeefe739614303b327b317b335331ebe884",
+  "method": "Disposable /tmp/339-all-finite-probe.py, agent-heavy uv run --no-project --python /home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.venv/bin/python; single worker, OMP/OPENBLAS/MKL threads 1. Reuse original packet and canonical CSV. At each state and each reaction reference pressure, compute the 1e-14 mol/kg finite reference using original neutral ratios, subtract analytic diagnostic contraction, add delta to source lnK coefficient a, and rerun pinned solver. No fitting or Engine edits. Reference-pressure delta evaluated at normal analytic endpoint. All-row finite run uses isolated disposable cache; no historical wheel run.",
+  "probe_sha256": "0769cef1f09a5e1508bf468da06f02cbbc39897c01042a8bea261c621cfc19df"
+}

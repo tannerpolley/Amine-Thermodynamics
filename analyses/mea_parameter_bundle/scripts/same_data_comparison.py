@@ -1,5 +1,8 @@
 """Issue 339: qualify explicit historical declarations against exact-record predictions."""
 import csv
+import copy
+import math
+import statistics
 import gzip
 import hashlib
 import io
@@ -56,8 +59,7 @@ def qualify():
                   reference_engine_commit='443a9da492fd5ac7724525945d108c6a2a854d51',
                   reference_wheel_sha256=refs[0]['engine_wheel_sha256'],
                   reference_rows=len(refs), reference_variant='adopted',
-                  original_input_sha256=digest(packet_bytes), relative_limit=1e-8,
-                  limit_origin='issue #339; cross-wheel replay #255', scored_observations=0,
+                  original_input_sha256=digest(packet_bytes), scored_observations=0,
                   heat_gate=False, status='not qualified', comparisons=[])
     s.RUNS = OUT / 'qualification-cache'
     try:
@@ -67,22 +69,53 @@ def qualify():
         s.write_json(OUT / 'translation-qualification.json', result)
         print(json.dumps(result, indent=2), flush=True)
         return
+    canonical_path = 'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv'
+    canonical_bytes = historical(canonical_path)
+    (OUT / 'qualification-canonical-inputs.csv').write_bytes(canonical_bytes)
+    result['canonical_input_sha256'] = digest(canonical_bytes)
+    for row in csv.DictReader(io.StringIO(canonical_bytes.decode('utf-8-sig'))):
+        if row['active_view_member'] != 'yes':
+            continue
+        temperature, loading = round(float(row['temperature_canonical_C'])), float(row['CO2_loading'])
+        templates = [o for o in observations if o['request']['pressure']['role'] == 'solved'
+                     and round(o['request']['temperature']['value'] - 273.15) == temperature]
+        request = copy.deepcopy(min(templates, key=lambda o: abs(o['request']['reaction_system']['feed_amounts_mol'][0] - loading))['request'])
+        system = request['reaction_system']
+        system['feed_amounts_mol'][0] = loading
+        system['conserved_totals'] = [math.fsum(c * a for c, a in zip(b, system['feed_amounts_mol'], strict=True)) for b in system['balance_matrix']]
+        observations.append(dict(identity='canonical:' + row['observation_id'], request=request,
+                                 targets=[dict(identity=row['observation_id'] + '-pco2', prediction_identity='co2-partial-pressure')]))
+    states = {}
     for ref in refs:
         observation = next(o for o in observations if o['identity'] == ref['identity'])
-        state = s.evaluate_state(model, observation['request'], s.reaction_values(mapping), ref['identity'], [],
+        if ref['identity'] not in states:
+            states[ref['identity']] = s.evaluate_state(model, observation['request'], s.reaction_values(mapping), ref['identity'], [],
                                  mapping=mapping, parameter_path=translated, model_fingerprint=s.parameter_fingerprint(mapping))
-        s.write_json(OUT / 'qualification-state.json', state)
-        prediction = state['predictions'].get('co2-partial-pressure')
-        expected = float(ref['predicted'])
-        error = abs(prediction / expected - 1) if prediction is not None else None
-        row = dict(identity=ref['identity'], quantity='CO2 partial pressure', unit='Pa',
-                   reference=expected, translated=prediction, relative_error=error, status=state['status'])
-        result['comparisons'].append(row)
-        if error is None or error > 1e-8:
-            result.update(status='stopped: first differing quantity', first_difference=row)
-            break
-    else:
-        result['status'] = 'pressures pass; species and heat qualification still required'
+            print(f"{len(states)} states: {ref['identity']}", flush=True)
+        state = states[ref['identity']]
+        target = next(t for t in observation['targets'] if t['identity'] == ref['target'])
+        prediction = state['predictions'].get(target['prediction_identity'])
+        if ref['target'].endswith('::HCO3-') and state.get('anchor'):
+            prediction = sum(state['anchor']['mole_fractions'][5:7])
+        expected = float(ref['predicted']) if ref['predicted'] else None
+        error = prediction / expected - 1 if prediction is not None and expected is not None else None
+        result['comparisons'].append(dict(identity=ref['identity'], target=ref['target'], quantity=ref['target'].split('::')[-1] if '::' in ref['target'] else 'co2-partial-pressure',
+                   reference=expected, translated=prediction, signed_relative_difference=error, status=state['status']))
+    assert len(result['comparisons']) == 371
+    result['missing_reference_rows'] = sum(not r['predicted'] for r in refs)
+    with (OUT / 'qualification-all-rows.csv').open('w') as handle:
+        writer = csv.DictWriter(handle, result['comparisons'][0].keys())
+        writer.writeheader()
+        writer.writerows(result['comparisons'])
+    result.update(solver_row_tolerance=1e-10, solver_tolerance_origin='EQUILIBRIUM_ROW_RESIDUAL; 443a9da4 engine/native/core/numerical_policy.hpp:272; 391dfe5d engine/native/core/numerical_policy.hpp:295',
+                  status='complete comparison; owner decision required before scoring', superseded_relative_limit=1e-8)
+    result['max_classified_row_residual'] = max(abs(v) for state in states.values()
+        for v in dict(state['evidence']).get('classified_residuals', []))
+    result['distribution'] = {}
+    for quantity in sorted({r['quantity'] for r in result['comparisons']}):
+        values = [r['signed_relative_difference'] for r in result['comparisons'] if r['quantity'] == quantity and r['signed_relative_difference'] is not None]
+        result['distribution'][quantity] = dict(n=len(values), max_abs=max(map(abs, values)), median_abs=statistics.median(map(abs, values)),
+            min_signed=min(values), max_signed=max(values), positive=sum(v > 0 for v in values), negative=sum(v < 0 for v in values), zero=values.count(0))
     s.write_json(OUT / 'translation-qualification.json', result)
     print(json.dumps(result, indent=2), flush=True)
 
