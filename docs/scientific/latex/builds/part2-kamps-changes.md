@@ -3,7 +3,7 @@
 ## Outputs
 
 - `docs/scientific/latex/builds/part2.pdf`: 17 pages; SHA-256 `bed84e720052a6d76f2afe59a99e812b545bcb2daf2fc8ed789dd22ce711b1e0`.
-- `docs/scientific/latex/builds/part2_supplement.pdf`: 19 pages; SHA-256 `2d9e0f509cf57d35b49e7b131c0906919db8417a8cc0172b124a221223e739ae`.
+- `docs/scientific/latex/builds/part2_supplement.pdf`: 19 pages; SHA-256 `2b30aa3414a2a12b07b8b1f5c84ed60a9c5df0b6afe207fef49f3edfe53933dc`.
 
 ## Changed or added manuscript sentences (old → new)
 
