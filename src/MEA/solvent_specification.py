@@ -224,6 +224,7 @@ class SolventSpecification:
 
     def problem(self, template, row):
         declaration = self.bind(self.spec["templates"][template], row)
+        declaration.pop("solver_options", None)  # retained historical declarations still carry the key the Engine removed
         if "reaction_set" in declaration:
             reactions = copy.deepcopy(self.spec["chemistry"]["reactions"][declaration.pop("reaction_set")])
             for reaction in reactions:
