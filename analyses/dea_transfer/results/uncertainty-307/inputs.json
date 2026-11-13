@@ -1,0 +1,90 @@
+{
+  "base": "79706636e8716974e045b582f1b1cbfe7e4c7009",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "parameter_sha256": "660583b005f7541977a92fed280e2613a758c4c6b3cd1bc8bafa815e9b0bd52b",
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-diethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.21516378242441947,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "value": -0.21516378242441947,
+      "identity": "['protonated-diethanolamine', 'water'] / k_ij",
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "carbamate-anion",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.005717023681936988,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "value": 0.005717023681936988,
+      "identity": "['carbamate-anion', 'water'] / k_ij",
+      "unit": "dimensionless"
+    },
+    {
+      "kind": "reaction_coordinate",
+      "name": "carbamate-hydrolysis",
+      "coefficient": "a",
+      "origin": 5.9263333490960095,
+      "scale": 1.0,
+      "bounds": [
+        4.097356023659527,
+        10.097356023659527
+      ],
+      "value": 5.9263333490960095,
+      "identity": "carbamate-hydrolysis/a",
+      "unit": "dimensionless"
+    },
+    {
+      "kind": "reaction_enthalpy_shift",
+      "name": "carbamate-hydrolysis",
+      "pivot_temperature": 313.15,
+      "origin": 0.0,
+      "scale": 1000.0,
+      "bounds": [
+        -17783.875083771083,
+        22216.124916228917
+      ],
+      "value": -12216.124916228917,
+      "identity": "carbamate-hydrolysis/total enthalpy shift",
+      "unit": "J / mol"
+    }
+  ],
+  "active": [],
+  "free": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "rows": 80,
+  "profile_fractions": [
+    0.01,
+    0.05,
+    0.1
+  ]
+}
