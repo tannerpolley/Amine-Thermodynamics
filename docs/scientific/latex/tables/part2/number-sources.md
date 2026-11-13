@@ -188,3 +188,41 @@ Only the four pending introduction slots were filled. Literature conditions and 
 | `p2-introduction-review-04` | Sadegh et al.: ternary pressure fit 5–75 wt% MDEA, temperatures up to 200 °C; unfitted NMR at 20 and 40 °C, 23 wt% MDEA | DOI 10.1016/j.fuel.2014.12.002, §§7–9.2, Tables 5–8; stated conditions are data coverage, not a rectangular validation domain |
 | `p2-introduction-review-04` | Biget et al.: stated identification range 40–150 °C, 15–60 mass%; property-specific fitting comparisons | DOI 10.1002/cjce.22109, pp. 298–302, Figure 1, Table 1, Figures 2, 4, 6, Equations 3–5 |
 | `p2-introduction-review-10` | Sadegh objective weights and low-pressure offset; two unfitted heat datasets; Biget relative-residual objective and conditional parameter intervals | Sadegh §7, Equation 20, §9.1.2, Figures 8–9; Biget pp. 298–302, Equations 3–5, Table 1 |
+
+## Self-contained Part II revision (13 November 2026, refs #320)
+
+All 548 existing displayed-value entries were checked against their current JSON fields, CSV row fields or explicit inventory lengths. All 34 original table files and all nine figure-directory files remain byte-identical to main `22af628`; the eight amine species/interaction tables are included in the model instead of S1. The abstract and conclusions remain byte-identical. These checks are recorded in `builds/part2-preservation-checks.json`.
+
+The model equations are adapted from Part I's `sections/epc_saft_equation_of_state.tex` and `supplement.tex`, with Part II labels and species definitions. They restate the existing model; no calculation or parameter value was changed. Gross and Sadowski Appendix A supplies the hard-chain, dispersion, contact and diameter expressions; Gross (2002) and Kleiner supply association; Cameretti supplies finite-size Debye–Huckel; Figiel's original paper and correction supply the Born shell; Yang supplies the solvent permittivity rule. The water diameter repeats the exact S1 coefficients, whose constant was fitted in Part I. Amine reaction directions are transcribed from the retained stoichiometries, including PZ P1–P5 in `analyses/pz_transfer/results/speciation-reactions.json`. The reaction reference and caloric equations retain Part I's conventions.
+
+MDEA's neutral association volume conversion is retained from `analyses/mdea_mea_workflow/results/kappa/summary.json`, reproducing Pahlavanzadeh's diameter-based association convention with the present segment-diameter convention. AMP's pure refit is identified by `analyses/amp_transfer/inputs/pure-amp.csv` and `inputs/amp-pure-endpoint.json`; the final reactive endpoint is `inputs/redesign/refit-306-floor-endpoint.json`. PZ's energy-only refit uses Steele Table 7, retaining Razavi's segment count and diameter. DEA's pure parameters are Nasrifar Table 2, and its binary, dielectric and caloric preparation is defined by `analyses/dea_transfer/binary.py`. New source passages and exact Zotero/PDF identities are in `builds/part2-source-readings.json`; full-paper reading copies and index rows are retained only in the ignored local shelf.
+
+The main bibliography grows from 49 to 72 entries. The compiled supplement grows from 27 to 48 entries; direct supplement-prose citations, excluding its input tables, grow from seven to 32. `builds/part2-self-contained-audit.json` lists every added citation and each remaining content-bearing external reference. The supplied starting census was 47 external-pointer sentences; a reproducible search over all section source lines finds 49 before and 27 after. The separate semantic census finds 21 sentences that only defer content, all removed or replaced; none remains. Remaining references identify transferred MEA inputs, source ranges, conditional uncertainty, selection history or finite-search limits alongside local statements of those facts.
+
+### Newly cited source passages read
+
+| Citation key | Passages read |
+|---|---|
+| `Austgen1991` | Chemical equilibrium and reference-state discussion, Eq.3 and Table V; fitted equilibrium constants and Results discussion |
+| `Cameretti2005` | Debye-Huckel derivation, Eqs.5,13-17; Section 2 model and ion parameter assumptions |
+| `Figiel2025` | ePC-SAFT model, Eqs.1-10; Table 2; Results and Conclusion; supporting solvation-shell alternatives |
+| `Figiel2026Correction` | Entire one-page correction, p.7782, corrected Eq.7 |
+| `Gross2002` | Sections 2-4, Eqs.2-3; association parameter estimation and limitations of two-site descriptions |
+| `Held2014` | Section 2 modeling strategies, Eqs.15-16; contrast of ion-ion dispersion choices |
+| `Kleiner2007` | Section 2 Theory, Eqs.4-8 and induced-association assumptions |
+| `Pabsch2020` | ePC-SAFT: Modeling with ePC-SAFT, Eqs.6-18 and Table 2; parameter inheritance and physical-absorption scope |
+| `Pahlavanzadeh2013` | Sections 2,3.1-3.2; Eqs.4,9-10; Tables 1-2; pure-property fitting and binary-water comparison |
+| `Schick2023` | Section 2.4.2, Table 1; induced CO2-water association and inherited ion parameters |
+| `Yang2024` | Section 2.1, Eqs.1a,2a-2b; neutral solvent averages and alternative ion composition treatments |
+| `arouaTemperatureDependencyEquilibrium1997` | Experimental procedure, Table 2, results on molality-scale formation constant and Eq.14, Conclusion |
+| `ayadMeasurementsModelingThermodynamic2023` | Experimental density method, Table 2, Section 3.1, Tables 5-6, Section 4.5; density fitting and pressure-data provenance |
+| `belabbaciInvestigationIsothermalVapour2010` | Section 2 Experimental, Table 2 pure pressures, Section 3 Results and discussion; Antoine fit and measurement conditions |
+| `chaseNISTJANAFThermochemicalTables1998` | Applied CO2 gas Shomate table on the official NIST Chemistry WebBook, 298-1200 K; not the entire JANAF volume |
+| `hsiehDielectricConstantsAqueous2007` | Experimental Section and Results and Discussion, Tables 1-2,4-5,7; unloaded DEA/MDEA/AMP permittivity measurements |
+| `internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018` | IAPWS R6-95(2018), Section 3, Eq.5 and Table 1 ideal-gas Helmholtz function |
+| `klepacovaVaporPressuresSeveral2011` | Experimental vapor-pressure method, AMP discussion and Table 10 |
+| `mahamMolarHeatCapacities1997` | Experimental calorimetry, Table 1 and Results; liquid heat-capacity basis and uncertainties |
+| `neumannThermodynamicPropertiesMethyl2022` | Ideal-part formulation, Eq.5 and Table 8, comparison with Joback, and Conclusion |
+| `razaviPhaseBehaviorModeling2019` | Section 3.1 pure parameter estimation, Eqs.5-8 and Table 1 PZ row; two-site scheme and parameter data use |
+| `steeleThermodynamicPropertiesIdealGas1997` | Vapor-pressure experimental procedure; Tables 7-8, piperazine ebulliometry, source error definition and melting passage |
+| `xuRepresentationEquilibriumSolubility1992` | Mathematical modelling, Eqs.3-14; Table 2 carbamate constants and Results discussion; constants derived from pressure/loading balance rather than direct titration |
