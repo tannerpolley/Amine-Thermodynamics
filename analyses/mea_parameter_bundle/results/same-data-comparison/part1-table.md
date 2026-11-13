@@ -4,7 +4,8 @@
 | 47 current-fitted pressures | 47/47 | fitted / not fitted; see role note | fitted | AARD (%) | 68.89211 | 11.787972 |
 | 112 current-not-fitted pressures | 112/112 | fitted / not fitted; see role note | not fitted | AARD (%) | 45.395902 | 23.824748 |
 | Species fractions | 131/131 | fitted / not fitted; see role note | 101 fitted / 30 not fitted | RMSE (mole fraction) | 0.0076606122 | 0.0030522712 |
-| Species ratios | 6/6 | not fitted | fitted | AARD (%) | 155.36527 | 17.036068 |
+| Species ratios | 6/6 | formulation not fitted; measurements used in earlier ion fit | fitted | AARD (%) | 155.36527 | 17.036068 |
+| Jakobsen carbonate share | 10/10 | formulation not fitted; measurements used in earlier ion fit | not fitted; previously assessed | AARD (%) | 540.47677 | 97.873939 |
 | Vinjarapu2024 heats | 8/8 | not fitted | fitted | RMSE (kJ/mol CO2) | 2.2836622 | 1.836893 |
 | Arcis2011 heats | 14/14 | not fitted | not fitted | RMSE (kJ/mol CO2) | 9.1281762 | 8.0901918 |
 | Amundsen2009 loaded | 68/68 | not fitted | fitted / not fitted | RMSE (kg/m3) | 142.95354 | 6.7088345 |
