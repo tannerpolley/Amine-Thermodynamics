@@ -24,7 +24,7 @@ L = 'docs/scientific/latex'
 PARAMETER = 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
 # The accepted PDFs were compiled on the real clock; rebuilds use this fixed time (main.pdf's creation instant).
 SOURCE_DATE_EPOCH = '1794527621'
-SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '7db3ea9'], text=True).strip()
+SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
 NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'log', '-1', '--format=%H', SOURCE, '--', f'{B}/notebook.qmd'], text=True).strip()
 INVENTORY_COMMIT = '771410a94f7729915bfe6457bfe7a5a0746f1611'  # a7_presentation.py checks the table generator at this commit
 

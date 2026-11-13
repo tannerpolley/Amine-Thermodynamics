@@ -2302,7 +2302,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 )) {"Symbol"in self&&"iterator"in Symbol&&"function"==typeof Array.prototype[Symbol.iterator]?CreateMethodProperty(Array.prototype,"values",Array.prototype[Symbol.iterator]):CreateMethodProperty(Array.prototype,"values",function r(){var r=ToObject(this);return new ArrayIterator(r,"value")});}if (!("Symbol"in self&&"iterator"in self.Symbol&&!!Array.prototype[self.Symbol.iterator]
 )) {CreateMethodProperty(Array.prototype,Symbol.iterator,Array.prototype.values);}var StringIterator=function(){var t=function(e){if(!(this instanceof t))return new t(e);e=String(e),Iterator.call(this,e),Object.defineProperty(this,"__length__",{value:e.length,configurable:!1,enumerable:!1,writable:!1})};return Object.setPrototypeOf&&Object.setPrototypeOf(t,Iterator),t.prototype=Object.create(Iterator.prototype,{constructor:{value:t,configurable:!0,enumerable:!1,writable:!0},_next:{value:function(){if(this.__list__)return this.__nextIndex__<this.__length__?this.__nextIndex__++:void this._unBind()},configurable:!0,enumerable:!1,writable:!0},_resolve:{value:function(t){var e,r=this.__list__[t];return this.__nextIndex__===this.__length__?r:(e=r.charCodeAt(0),e>=55296&&e<=56319?r+this.__list__[this.__nextIndex__++]:r)},configurable:!0,enumerable:!1,writable:!0},toString:{value:function(){return"[object String Iterator]"},configurable:!0,enumerable:!1,writable:!0}}),t}();if (!("Symbol"in self&&"iterator"in self.Symbol&&!!String.prototype[self.Symbol.iterator]
 )) {CreateMethodProperty(String.prototype,Symbol.iterator,function(){var r=RequireObjectCoercible(this),t=ToString(r);return new StringIterator(t)});}})('object' === typeof window && window || 'object' === typeof self && self || 'object' === typeof global && global || {});</script>
-
+  
   <script>
     (function () {
       var script = document.createElement("script");
@@ -2357,17 +2357,17 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
-
+    
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
       <p class="date">October 29, 2026</p>
     </div>
   </div>
-
-
+  
+    
   </div>
-
+  
 
 
 </header>
@@ -2488,6 +2488,271 @@ window.Quarto = {
 <p>Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record. For R5, fixing its enthalpy shift translates the remaining native b coordinate and bounds by the native chart offset; the original admissible interval is preserved. Complete/reduced chart prediction equivalence is retained at zero and a 0.25-scale b displacement. Native rejected-trial causes are retained with each fit.</p>
 <p><a href="results/uncertainty-307/profiles.json">Profile results</a>, <a href="results/uncertainty-307/predictions.json">prediction values and exact native columns</a>, <a href="results/uncertainty-307/prediction-bands.csv">bands</a>, <a href="results/uncertainty-307/ranking.csv">ranked values</a> and <a href="results/uncertainty-307/inputs.json">input identity</a> retain the calculation. MEA ranks only pressure, heat, heat capacity, carbamate/bicarbonate and density at states already in its adopted specification. Bicarbonate is additionally resolved alone at the four states with bicarbonate+carbonate observations; this extra model quantity is not a new measured observation or a fitted target. The summed observable is retained separately; MDEA uses the 20 Xiao and 88 Ermatchkov pressure states at ≤49 wt% from #298, its adopted R2 law, and the 40 Carson heat states. Parameter units and ties are in the coordinate declarations; reaction enthalpy shifts are shown as adopted totals in J/mol, whereas refit increments are about zero.</p>
 <p>Engine commit <code>391dfe5d64ede5036bf160bc6ae037ad5e14af32</code>, wheel SHA-256 <code>0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b</code>. Run from the repository root using <code>agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py MDEA</code>. The source base is <code>79706636e8716974e045b582f1b1cbfe7e4c7009</code>; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is recorded in the <a href="../mea_parameter_bundle/results/uncertainty-307/review.md">report</a>.</p>
+</section>
+<section id="b1-errors-by-temperature-law-range-and-source-320" class="level2">
+<h2 class="anchored" data-anchor-id="b1-errors-by-temperature-law-range-and-source-320">B1 errors by temperature, law range and source (#320)</h2>
+<p>This section aggregates retained rows. It evaluates no model, fits nothing and adopts nothing. <a href="retained_statistics.py"><code>retained_statistics.py</code></a> reads the stored observed and predicted values and writes <a href="results/retained-statistics-320.json"><code>retained-statistics-320.json</code></a>. It has not been independently reviewed or promoted.</p>
+<p><strong>Definitions.</strong> For pressures, AARD = mean(|predicted − observed| / observed) × 100, the average absolute relative deviation used for Part I’s pressures. Bias is the mean of (predicted − observed) / observed × 100, so a negative bias is underprediction. For heat, heat capacity and density the natural measure is the absolute error in the property’s unit, so the tables give the mean absolute error and the mean signed error (predicted − observed) with units. Percent values for those properties are shown only for comparison with the pressure rows.</p>
+<p><strong>Law range.</strong> The MDEAH⁺ dissociation law of Kamps &amp; Maurer (b = −819.7, c = 10.976) was measured over 278–368 K (<a href="../mdea_mea_workflow/results/reaction-basis-kamps-maurer.json">reaction-basis-kamps-maurer.json</a>, <code>source_findings.range_K</code>; printed p. 1509). B1 declares the law to 395 K, so any B1 state above 368 K uses the law outside its measured range.</p>
+<section id="co₂-partial-pressure-ermatchkov-and-xiao" class="level3">
+<h3 class="anchored" data-anchor-id="co₂-partial-pressure-ermatchkov-and-xiao">CO₂ partial pressure, Ermatchkov and Xiao</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Condition</th>
+<th>Rows</th>
+<th>AARD (%)</th>
+<th>Bias (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ermatchkov</td>
+<td>313.15 K</td>
+<td>37</td>
+<td>19.57</td>
+<td>−14.45</td>
+</tr>
+<tr class="even">
+<td>Ermatchkov</td>
+<td>353.15 K</td>
+<td>25</td>
+<td>11.49</td>
+<td>−7.36</td>
+</tr>
+<tr class="odd">
+<td>Ermatchkov</td>
+<td>393.15 K (outside range)</td>
+<td>26</td>
+<td>22.94</td>
+<td>+21.93</td>
+</tr>
+<tr class="even">
+<td>Ermatchkov</td>
+<td>inside 278–368 K</td>
+<td>62</td>
+<td>16.31</td>
+<td>−11.59</td>
+</tr>
+<tr class="odd">
+<td>Ermatchkov</td>
+<td>outside 278–368 K</td>
+<td>26</td>
+<td>22.94</td>
+<td>+21.93</td>
+</tr>
+<tr class="even">
+<td>Ermatchkov</td>
+<td>all rows (mixed range)</td>
+<td>88</td>
+<td>18.27</td>
+<td>−1.68</td>
+</tr>
+<tr class="odd">
+<td>Xiao</td>
+<td>298.15 K</td>
+<td>5</td>
+<td>35.90</td>
+<td>−35.90</td>
+</tr>
+<tr class="even">
+<td>Xiao</td>
+<td>303.15 K</td>
+<td>5</td>
+<td>32.98</td>
+<td>−32.98</td>
+</tr>
+<tr class="odd">
+<td>Xiao</td>
+<td>308.15 K</td>
+<td>5</td>
+<td>25.45</td>
+<td>−25.45</td>
+</tr>
+<tr class="even">
+<td>Xiao</td>
+<td>313.15 K</td>
+<td>5</td>
+<td>18.43</td>
+<td>−18.43</td>
+</tr>
+<tr class="odd">
+<td>Xiao</td>
+<td>all rows (all inside range)</td>
+<td>20</td>
+<td>28.19</td>
+<td>−28.19</td>
+</tr>
+</tbody>
+</table>
+<p>The totals reproduce the retained <a href="results/adoption-302/B1/pressure-summary.json">pressure summary</a> (Ermatchkov 18.2705616 %, Xiao 28.1910414 %). The Ermatchkov aggregate mixes in-range and extrapolated conditions: inside the range B1 underpredicts (bias −11.59 %), and at 393.15 K, outside it, B1 overpredicts (+21.93 %), so the small overall bias (−1.68 %) comes from cancellation. All Xiao rows are inside the range and are underpredicted at every temperature.</p>
+</section>
+<section id="fitted-rows-by-source-278-rows" class="level3">
+<h3 class="anchored" data-anchor-id="fitted-rows-by-source-278-rows">Fitted rows by source (278 rows)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Property</th>
+<th>Rows</th>
+<th>AARD (%)</th>
+<th>Mean absolute error</th>
+<th>Mean signed error</th>
+<th>Scaled RMS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Kuranov, all rows</td>
+<td>CO₂-loaded total pressure</td>
+<td>67</td>
+<td>20.44</td>
+<td>—</td>
+<td>bias +9.61 %</td>
+<td>0.223</td>
+</tr>
+<tr class="even">
+<td>Kuranov, 313–353 K (inside law range)</td>
+<td>CO₂-loaded total pressure</td>
+<td>37</td>
+<td>11.80</td>
+<td>—</td>
+<td>bias −7.80 %</td>
+<td>(67 rows: 0.223)</td>
+</tr>
+<tr class="odd">
+<td>Kuranov, 373–393 K (outside law range)</td>
+<td>CO₂-loaded total pressure</td>
+<td>30</td>
+<td>31.09</td>
+<td>—</td>
+<td>bias +31.09 %</td>
+<td>(67 rows: 0.223)</td>
+</tr>
+<tr class="even">
+<td>Kim</td>
+<td>water–MDEA total pressure</td>
+<td>61</td>
+<td>3.23</td>
+<td>—</td>
+<td>bias +1.25 %</td>
+<td>0.044</td>
+</tr>
+<tr class="odd">
+<td>Jakobsen</td>
+<td>protonated MDEA fraction</td>
+<td>16</td>
+<td>13.58</td>
+<td>0.0435 (dimensionless)</td>
+<td>+0.0435</td>
+<td>1.639</td>
+</tr>
+<tr class="even">
+<td>Carson</td>
+<td>heat of solution</td>
+<td>40</td>
+<td>5.45</td>
+<td>2699 J/mol CO₂</td>
+<td>+1048 J/mol CO₂</td>
+<td>1.106</td>
+</tr>
+<tr class="odd">
+<td>Merkley, 333.15 K</td>
+<td>heat</td>
+<td>2</td>
+<td>10.36</td>
+<td>5725 J/mol CO₂</td>
+<td>−5725 J/mol CO₂</td>
+<td>(4 rows: 2.016)</td>
+</tr>
+<tr class="even">
+<td>Merkley, 388.71 K (outside law range)</td>
+<td>heat</td>
+<td>2</td>
+<td>6.56</td>
+<td>3989 J/mol CO₂</td>
+<td>−3989 J/mol CO₂</td>
+<td>(4 rows: 2.016)</td>
+</tr>
+<tr class="odd">
+<td>Weiland</td>
+<td>heat capacity</td>
+<td>33</td>
+<td>2.59</td>
+<td>2.547 J/(mol-feed K)</td>
+<td>+0.403 J/(mol-feed K)</td>
+<td>1.760</td>
+</tr>
+<tr class="even">
+<td>Weiland</td>
+<td>loaded density</td>
+<td>33</td>
+<td>0.185</td>
+<td>1.994 kg/m³</td>
+<td>+0.603 kg/m³</td>
+<td>1.588</td>
+</tr>
+<tr class="odd">
+<td>Sobrino</td>
+<td>unloaded density</td>
+<td>24</td>
+<td>0.057</td>
+<td>0.566 kg/m³</td>
+<td>+0.216 kg/m³</td>
+<td>1.442</td>
+</tr>
+</tbody>
+</table>
+<p>Scaled RMS is the retained <a href="../mdea_mea_workflow/results/refit-298/B1-endpoint/replay-summary.json">replay summary</a> value. Heat values are negative, so a negative signed error means the model heat is more exothermic than the measured heat. The Merkley 388.71 K heat comparison lies above 368 K and is outside the dissociation law’s measured range; the model result there is an extrapolation of the law. The 30 Kuranov rows outside the range lie at 373.14–373.17 K and 393.12–393.15 K. The Carson, heat-capacity and loaded-density rows carry no temperature field in the retained rows, so they are not split by law range. The Kim (water–MDEA) and unloaded-density rows contain no CO₂, so the MDEAH⁺ dissociation law does not enter them. The percent bias is given for pressures only: heats are negative, so a percent bias on a heat reverses its sign relative to the signed error.</p>
+<p>The current B1 record has 278 fitted rows (67 Kuranov, with Kuranov rows 28 and 72 excluded); the 280-row counts in the historical section below belong to the earlier record.</p>
+</section>
+<section id="files-used" class="level3">
+<h3 class="anchored" data-anchor-id="files-used">Files used</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>results/adoption-302/B1/pressure.json</code></td>
+<td><code>b81bfeb21d211d64211a2bda07b5e07af2a897f828a750f01aac6142340a7820</code></td>
+</tr>
+<tr class="even">
+<td><code>../mdea_mea_workflow/results/refit-298/B1-endpoint/fitted-replay.json</code></td>
+<td><code>6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2</code></td>
+</tr>
+<tr class="odd">
+<td><code>../mdea_mea_workflow/results/refit-298/B1-endpoint/replay-summary.json</code></td>
+<td><code>9abcae66205879bb545cfcb865bb5ad8d6ca6507867574529e12c7925c2cb705</code></td>
+</tr>
+<tr class="even">
+<td><code>results/adoption-302/replay.json</code> (same 278 predictions as the fitted replay; endpoint <code>2a5341be…</code>)</td>
+<td><code>f10e1323317330e7f49b1d04de40cc85f31414ed218ea400bd89990ebb9434f1</code></td>
+</tr>
+<tr class="odd">
+<td><code>../mdea_mea_workflow/results/reaction-basis-kamps-maurer.json</code></td>
+<td><code>c9ff18893f67b0fa023817e94dedebef5e4fa3fe31a0214c4c42601d5c54fc1d</code></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="historical-specification-reproduction" class="level2">
 <h2 class="anchored" data-anchor-id="historical-specification-reproduction">Historical specification reproduction</h2>
