@@ -112,7 +112,11 @@ The adoption receipt's five-shift aggregates are not an exact-record reference;
 the published record retains R2/R4/R5 only. The omitted R1 and R3 shifts were
 −0.000679939316315813 and −0.21602074127857132 kJ/mol.
 The notebook and this result await independent delivered review and are not
-promoted for manuscript use.
+promoted for manuscript use. Notebook HTML rendered with `--no-execute` and
+contains the retained first difference. The site home-page refresh could not
+complete because `snakemake` is unavailable. Standard refresh would alter the
+protected site metadata, so direct Quarto rendering was used; the metadata
+was not changed.
 
 ## Reproduction and scope
 
