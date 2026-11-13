@@ -114,7 +114,9 @@ def scores():
         add(label, [[r for r in rr if selected(r)] for rr in records], 'predicted', 'observed',
             'AARD (%)' if 'pressure' in label else 'RMSE (mole fraction)', ['fitted / not fitted; see role note', 'fitted' if label.startswith('47') else 'not fitted' if label.startswith('112') else '101 fitted / 30 not fitted' if label=='Species fractions' else '47 fitted / 112 not fitted'])
     add('Species ratios', [e.r.read(e.EV/'published/ratios.json'), [r for r in e.r.read(a.OUT/'candidate/replay.json')['rows'] if r['group']=='Jakobsen']],
-        'value', 'observed', 'AARD (%)', ['not fitted', 'fitted'])
+        'value', 'observed', 'AARD (%)', ['formulation not fitted; measurements used in earlier ion fit', 'fitted'])
+    add('Jakobsen carbonate share', [e.rows(d/'carbonate-share.csv') for d in directories],
+        'predicted_share', 'observed_share', 'AARD (%)', ['formulation not fitted; measurements used in earlier ion fit', 'not fitted; previously assessed'])
     for source in ('Vinjarapu2024','Arcis2011'):
         add(source+' heats', [[r for r in e.rows(d/'heats.csv' if i==0 else d/'heat.csv') if r['source']==source] for i,d in enumerate(directories)],
             'predicted_kJ_mol', 'observed_kJ_mol', 'RMSE (kJ/mol CO2)', ['not fitted', 'fitted' if source=='Vinjarapu2024' else 'not fitted'])

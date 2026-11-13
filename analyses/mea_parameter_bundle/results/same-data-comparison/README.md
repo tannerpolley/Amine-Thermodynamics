@@ -274,6 +274,22 @@ inventing fitted counts. All Xu rows in the present six-source set are not
 fitted in the 2026 model; they informed model selection. The 15/45 wt% pressure
 comparisons are outside that model's 30 wt% reactive calibration.
 
+The six-ratio formulation was not fitted by the 2026 record, but underlying
+Jakobsen measurements informed its earlier ion-parameter fit. At commit
+`897bb6e`, `analyses/epcsaft_ionic_regression/results/ion_parameter_regression/ion_parameter_fit_summary.json`
+reports eight Jakobsen residuals; `ion_parameter_speciation_fit_data.csv` in
+that directory identifies `cheq_0015` and `cheq_0054`, corresponding to present
+states 011 and 022. That objective used log10 model/observed transformed mole
+fractions (MEAH+, MEACOO−, HCO3− and CO3²−), with older loading and composition
+conventions, rather than today's six ratios. The fitted ion parameters were
+carried into Appendix B. Thus “formulation not fitted” does not mean unused
+measurements or independent prediction. The same two measurements also inform
+the ten-row carbonate-share comparison below; that share formulation was not
+fitted. Inspection of this historical fit's target sources (Böttinger,
+Jakobsen and Matin) and 22 residuals found no heats, densities, heat capacities,
+Wagner pressures or Aronu transfer pressures from the other 2026 not-fitted
+groups. Its pressure-parity output is not an ion-fit objective.
+
 The current record fitted 47 six-source pressures, 101 of the 131 fractions,
 six Jakobsen ratios, eight Vinjarapu heats, 15 loaded Amundsen and 32 Hartono
 densities, five CO2-free Amundsen densities and four Hilliard heat capacities.
@@ -302,7 +318,8 @@ and endpoint differential definitions remain in each Kim summary.
 | 47 current-fitted pressures | 47/47 | fitted / not fitted; see role note | fitted | AARD (%) | 68.89211 | 11.787972 |
 | 112 current-not-fitted pressures | 112/112 | fitted / not fitted; see role note | not fitted | AARD (%) | 45.395902 | 23.824748 |
 | Species fractions | 131/131 | fitted / not fitted; see role note | 101 fitted / 30 not fitted | RMSE (mole fraction) | 0.0076606122 | 0.0030522712 |
-| Species ratios | 6/6 | not fitted | fitted | AARD (%) | 155.36527 | 17.036068 |
+| Species ratios | 6/6 | formulation not fitted; measurements used in earlier ion fit | fitted | AARD (%) | 155.36527 | 17.036068 |
+| Jakobsen carbonate share | 10/10 | formulation not fitted; measurements used in earlier ion fit | not fitted; previously assessed | AARD (%) | 540.47677 | 97.873939 |
 | Vinjarapu2024 heats | 8/8 | not fitted | fitted | RMSE (kJ/mol CO2) | 2.2836622 | 1.836893 |
 | Arcis2011 heats | 14/14 | not fitted | not fitted | RMSE (kJ/mol CO2) | 9.1281762 | 8.0901918 |
 | Amundsen2009 loaded | 68/68 | not fitted | fitted / not fitted | RMSE (kg/m3) | 142.95354 | 6.7088345 |
@@ -320,6 +337,21 @@ and endpoint differential definitions remain in each Kim summary.
 | Kim heat 353.15 K | 26/26 | fitted / not fitted | not fitted | RMSE (kJ/mol CO2) | 10.178328 | 7.5347705 |
 | Kim heat 393.15 K | 20/20 | not fitted | not fitted | RMSE (kJ/mol CO2) | 29.488588 | 29.226834 |
 
+The ten Jakobsen carbonate observations use the dimensionless share
+$x_{\mathrm{CO_3^{2-}}}/(x_{\mathrm{CO_2}}+x_{\mathrm{MEACOO^-}}+x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}})$,
+with the identical sum of carbon-bearing species in the measured denominator.
+The existing `carbonate-share.csv` producer uses NMR loading (`loadNMR`),
+MEA mass fraction 0.2714274817259226, and the source states and temperatures
+listed per row; it does not interpolate. Calculated/observed shares range
+**0.5303–11.9872** (mean **6.31082**) for 2026 and
+**0.001952–0.074924** (mean **0.0212606**) for the current record.
+These are ratios of shares, not carbonate mole fractions. The current record
+did not fit these ten shares, but earlier comparisons accessed them; the
+2026 measurement reuse is disclosed above. Neither is a blind comparison.
+No measurement uncertainty is propagated. Exact values and source locators
+remain in each record's `selected-assessment/carbonate-share.csv` or
+`adoption-297/paper-evidence/carbonate-share.csv`.
+
 ### Stability: lower bounds on split states
 
 The finite #255 search found resolved tangent-plane descent at **25/162**
@@ -332,6 +364,31 @@ charged trials outside the condensed domain of density-independent permittivity
 and stalled trials. No unavailable search is counted stable. The current
 record has 162 complete searches and no resolved descent in this finite set;
 this does not prove global stability.
+
+The bounded recovery diagnosis found a nonroot chemical-equilibrium closure
+attractor for all 13 parents: two neighboring converged starts per parent
+recovered **0/13**, leaving **13 unresolved**. At index 108 (313.15 K,
+loading 0.4, 3276.642223 Pa), the liquid and 6926.027603 Pa bubble solves
+converge, while the two-phase solve retains a classified chemical-row
+residual of 7.76186471e-5 against 1e-10. Full rank and a 6.14e-18 estimated
+floor do not explain that finite residual; the generic driver's inability
+to escape this nonroot point remains an Engine question, not a physical
+no-solution finding.
+
+The 262 unsuccessful trials comprise 149 explicit domain exclusions and
+113 stalled optimizers. All 113 stalled end points also have a condensed-domain
+exclusion: the charged point lies outside the liquid side allowed by the
+permittivity correlation. Dense trial guesses recovered no stalled optimizer;
+the native optimized search ignores those guesses. Direct native liquid-root
+reclosure then excluded **110/110** tested stalled compositions; central
+restoration failed for the other three (states 47 and 98). Thus **0/113**
+optimizers recovered and **113 remain unresolved**. This does not rule out
+other admitted condensed minima. The public producer exposes supplied-point
+evaluation, not a custom optimized-start recovery. The exact cases, residuals,
+recovery limits, raw outputs and Engine request for owner routing are retained
+in `stability-diagnosis/README.md`, `summary.json` and
+`recovery-results.json.gz` under this comparison's results. The original
+census and valid descent evidence have not been replaced by these probes.
 
 Earlier confirmed split compositions were supplied directly through the same
 #255 stability producer at 32 states for each model. For the 2026 record,
@@ -380,7 +437,7 @@ These are numerical predictions against measurements and a bounded numerical
 stability assessment, not physical validation, a propagated uncertainty analysis,
 a parameter adoption, or permission for manuscript use. The result informs
 #339's comparison and the later owner adoption checkpoint; it chooses no record.
-Independent delivered review returned **Supported** for commit `a5204b9bba625f744e263887dd54841c565cea5d`, with no required corrections. `part1-scoring-review.md` retains the review, including its independent recomputation of all 21 score groups and producer-duplication check. Manuscript promotion still requires the owner’s confirmation.
+The earlier delivered review at `a5204b9bba625f744e263887dd54841c565cea5d` returned **Supported** (`part1-scoring-review.md`). The subsequent independent review of PR #350 returned **Not supported**, requiring prior-fit disclosure, bounded stability diagnosis and the omitted carbonate-share comparison. Those corrections are included here; a new independent delivered review remains open. Verified pressure, density and ratio deviations and producer reuse are preserved. Manuscript promotion still requires the owner’s confirmation.
 
 ### Reproduction, implementation and review
 
@@ -400,12 +457,12 @@ raw reports as `census-raw.json.gz` for each model. Failed temporary Kim
 runs and numerical caches were removed after their causes were fixed.
 
 Executable additions from base `13bb6fbb7aebfb2ca642e6061f6f32f9167d6f35`
-are **347/350 gross lines**, with three removed lines:
+are **349/350 gross lines**, with three removed lines:
 
 | Responsibility | File | Gross added executable lines |
 |---|---|---:|
 | Existing qualification and published-model table entry, including earlier work | `same_data_comparison.py` | 177 |
-| Record bindings, producer calls, historical comparison and score presentation | `same_data_part1.py` | 161 |
+| Record bindings, producer calls, historical comparison and score presentation | `same_data_part1.py` | 163 |
 | Optional supplied phases in the existing stability reporter | `final_evidence.py` | 4 |
 | Read only the requested property family's reference inputs | `model_curves.py` | 4 |
 | Record a wheel path outside the task worktree in Kim provenance | `kim2007_heat_pathways.py` | 1 |
