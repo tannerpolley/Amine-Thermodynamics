@@ -1,121 +1,462 @@
 {
-  "scope": "Fill the four pending Part II introduction slots from three owner-added Zotero papers; no model calculations or result/conclusion edits.",
-  "source_baseline": "d850a315af866c97c84777b50e17f0d8dbf24220",
+  "scope": "Replace the two pointer-only sentences from the PR 336 science re-check; verify units and rebuild Part II only.",
+  "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
   "commands": [
-    "agent-heavy bash /tmp/320-build.sh (pdflatex, BibTeX, two further passes; main and supplement)",
-    "agent-heavy bash /tmp/320-final.sh (final main pass, scoped prose check, both PDF visual checks)",
-    "Exact retained JSON-field, table-body, source-hash, bibliography-preservation and protected-path checks; git diff --check"
+    "agent-heavy bash /tmp/336-final-qa.sh: Part II pdflatex/BibTeX passes, numerical-value checks, per-document freshness receipts, scoped prose check, article visual QA."
   ],
   "outputs": [
     {
       "path": "docs/scientific/latex/builds/part2.pdf",
-      "pages": 20,
-      "sha256": "d9006783be49b90e00d364a4dd9dd74378c4c42228f14f17d2387467051eea22",
+      "pages": 28,
+      "pages_before": 28,
+      "sha256": "4a2ebaca4ced1560b683e5fd80e1b40cbe9db749c6be5a30b92c668e9afe08e0",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 34,
-        "text_graphic_overlap": 18,
-        "tight_text_graphic_clearance": 2
+        "tight_text_clearance": 142,
+        "text_graphic_overlap": 23
       },
-      "visual_disposition": "Contact-sheet flow inspected for both PDFs; main introduction pages 2 and 3 inspected enlarged. No clipping found in those pages. Conservative geometry warnings remain; complete full-size page inspection and independent acceptance remain with the parent."
+      "baseline_visual_warning_categories": [
+        "text_graphic_overlap",
+        "tight_text_clearance",
+        "tight_text_graphic_clearance"
+      ],
+      "new_layout_warning_categories": [],
+      "visual_disposition": "Text comparison of all 42 pages identifies changes only on main p.8 and supplement p.9; both changed pages visually inspected with no overlap or clipping. Existing conservative geometry warnings remain."
     },
     {
       "path": "docs/scientific/latex/builds/part2_supplement.pdf",
-      "pages": 19,
-      "sha256": "d3779049c82ef5afb82f7fce2c8b93d81cbf8699644e0ee275f8f3dda8f12625",
+      "pages": 14,
+      "pages_before": 14,
+      "sha256": "70e7e03910dd64753f0a6a20303eb1b24c646c3d7b0366b32ae7d201b2b56e32",
       "undefined_references_or_citations": 0,
       "overfull_boxes": 0,
       "type3_fonts": 0,
       "fonts_embedded": true,
       "automated_visual_errors": 0,
       "automated_visual_warnings": {
-        "tight_text_clearance": 75,
+        "tight_text_clearance": 36,
         "text_graphic_overlap": 2
       },
-      "visual_disposition": "Contact-sheet flow inspected for both PDFs; main introduction pages 2 and 3 inspected enlarged. No clipping found in those pages. Conservative geometry warnings remain; complete full-size page inspection and independent acceptance remain with the parent."
+      "baseline_visual_warning_categories": [
+        "text_graphic_overlap",
+        "tight_text_clearance"
+      ],
+      "new_layout_warning_categories": [],
+      "visual_disposition": "Text comparison of all 42 pages identifies changes only on main p.8 and supplement p.9; both changed pages visually inspected with no overlap or clipping. Existing conservative geometry warnings remain."
     }
   ],
-  "manuscript_source_sha256": {
-    "docs/scientific/latex/part2.tex": "18e84f822fc55090e15147eea5073e757a7d88043df75f174c1aa51600eaf443",
-    "docs/scientific/latex/part2_supplement.tex": "e91723ca13b84f3af878649491b9d7b822b1296ec322c32017d9f13d103c576a",
-    "docs/scientific/latex/references.bib": "dc2b40df7e47ccd8bc493e8d407c79d79bc8a302924bbd2d5f8cdf4320759e17",
+  "manuscript_input_sha256": {
+    "docs/scientific/latex/chemistry_macros.tex": "7ae0aa3ce81f004eef2ae91f92035d659fef1663532f037841c856dfc1e90f25",
+    "docs/scientific/latex/figures/part2/calibration.pdf": "769ef374b6254d1fd3e445b4ab6f66953bab30d7b9f7d0140aa82e66b90dbee5",
+    "docs/scientific/latex/figures/part2/dea-properties.pdf": "f5174cb382c064010438fa345302394edc490c9648febd08068223e502ef4d2d",
+    "docs/scientific/latex/figures/part2/pressure-bands.pdf": "49fe4ef1504096ea41cfd9fab205791eaef340c86d1c262e7cdd27d3aa6c1f3c",
+    "docs/scientific/latex/figures/part2/unfitted-pressure.pdf": "9f8aeb6a8f0123be2b31f91e8c7e886f64c3b49cc0b717f643e7217764160585",
+    "docs/scientific/latex/part2.tex": "dd7f5d0c9cd67937d0c9ef4abdce89e33709617dfcd6fc6b2e54cc6022ff377b",
     "docs/scientific/latex/part2_companion.bib": "5444368c00d54af770fcb004b1a5f693b8cc472cadd5738613b583dc8a7eeb6f",
+    "docs/scientific/latex/part2_sources.bib": "4f9350719f3d4fbf74431b95e15b16a711f07289373251bd93e8e94d8f21a5e1",
+    "docs/scientific/latex/part2_supplement.tex": "06e087b6c71a7a4c9f2fc1ea2cd1ba6abf62e122af3a66a53c9d6aa30c202997",
+    "docs/scientific/latex/references.bib": "1c20594263df85d34d1f0ecca5be144732d5582a199be9ce1ecb4e6cd3eb3cc5",
     "docs/scientific/latex/sections/part2/conclusions.tex": "afbb4f21cf6a564c6c3bf06f6eab4681897623afed24c38bd3e1f34b117094b3",
-    "docs/scientific/latex/sections/part2/endmatter.tex": "44a6465b9783d256de6fe5316f28f30a7ae37cc3dab86acd803b152101805f09",
-    "docs/scientific/latex/sections/part2/introduction.tex": "03364e9d457af199f8d80e2a698e3bbc321bad59f0ff3ebedba2d9c3e9adb07d",
-    "docs/scientific/latex/sections/part2/methods.tex": "158b69ca439ae41daf9417feabf717963690a9edaf05ad02cbd229d9e9394973",
-    "docs/scientific/latex/sections/part2/model.tex": "7592aaf674d6556509028f20198285daf9c5adef89f3cabfcd459b9276b84c8b",
-    "docs/scientific/latex/sections/part2/results.tex": "75cf2c9e3ed19e50ff0f54b4b9b1012376e657fbd92029a9a60ba51a2df43ddf",
-    "docs/scientific/latex/sections/part2/supplement.tex": "9f86551f6ebc7447ac6a9c7af7c68d3055953aa9bb29e2ac7321eb0273de6042"
+    "docs/scientific/latex/sections/part2/endmatter.tex": "2c98ccfd258668686465f59b37608c7988b1852ce03b2f8530597e4e2aff5e9e",
+    "docs/scientific/latex/sections/part2/introduction.tex": "183126d4bf8d087018e5f3f32afb4f3e2b4b1f789b826ae99a3971472a598643",
+    "docs/scientific/latex/sections/part2/methods.tex": "4cb8a44be3e3d9294e9c92bb4ef6d00dda769b46f51b87e78c107cc33d75dfd1",
+    "docs/scientific/latex/sections/part2/model.tex": "9a90eb59950059b64065f693d7a2e0eafc950da0a36995a61eebeed4920f31be",
+    "docs/scientific/latex/sections/part2/pz-reaction-directions.tex": "d833ffb506ff58041cf32ac75796eddd376fa33d139002f5c03a55de62e7b946",
+    "docs/scientific/latex/sections/part2/results.tex": "b6812205ba541c4de3eaf6e928bfdefb421946f1757300d746d2ee96d4e0106b",
+    "docs/scientific/latex/sections/part2/supplement.tex": "fa6aba1600a0097f33189c7eb67cabd55655c56be8423b182478b24d584c2686",
+    "docs/scientific/latex/styles/cas-common.sty": "99223246fe1f0c85e957b7d5edf8e581a1bef3216e1772cc130579e9c2ed292d",
+    "docs/scientific/latex/styles/cas-sc.cls": "d135f82db43b004a0fb6f4505e97b11bb675078668d33c8f170beb398ef43d45",
+    "docs/scientific/latex/styles/model1-num-names.bst": "b87650629c103f61e031bd6216e8de34c953c34cbe9d8914dd5b41fb24a3384c",
+    "docs/scientific/latex/tables/part2/amp-chain.tex": "11a018d48fb0067e1ab54f0c14f489ecc630aa4e981f91c7bc6ebc6c5295f31d",
+    "docs/scientific/latex/tables/part2/amp-interactions.tex": "b125fec3446ad2d51ef069aeae2d06484f7b644bfdc8f14374a75c7d2be7dcb0",
+    "docs/scientific/latex/tables/part2/amp-laws.tex": "cd834942fa51651d3b4e5fe90f03476594a7391f79f97a6620f5d988efbd31ed",
+    "docs/scientific/latex/tables/part2/amp-parameters.tex": "8e6adeafab01e09c5f8749652263823b99f8b65974c0a8617f7e96b4d96d6f0d",
+    "docs/scientific/latex/tables/part2/amp-uncertainty.tex": "475bba19216934141e077d60573fd06b8b2b04db7bc4cd35d9a63f0433e27817",
+    "docs/scientific/latex/tables/part2/bounds.tex": "6ad272718667bd70e60954a15999d2c9b9df3d901e175f32c8ef1ba02ab99a67",
+    "docs/scientific/latex/tables/part2/calibration.tex": "2f8bb4bbbdbbef820562f045f33b9a4c8da0aa148f7c331648189aa35f889b3a",
+    "docs/scientific/latex/tables/part2/data-roles.tex": "ed88b61b9ff36ccf029f2639b632b20c20efb071cf9b5b278cbf7c5355229b6a",
+    "docs/scientific/latex/tables/part2/dea-interactions.tex": "23fe3b0d1c7b56bcdcc11e6c36ab146a822c313752f45e4a57ec5b1aad1f1126",
+    "docs/scientific/latex/tables/part2/dea-laws.tex": "5b76861c4d3280c83b2bd4efc5efaa84b42e24de8f565808c4a70288a08a4b12",
+    "docs/scientific/latex/tables/part2/dea-parameters.tex": "baa52b1d37925e57d5a084339c9127a3ceaa2a26771c39859d75d8b41070f231",
+    "docs/scientific/latex/tables/part2/dea-uncertainty.tex": "4e588dcb68880039405e87de9c55c6c4157d3cca618e6ddd0aab960ae08e8251",
+    "docs/scientific/latex/tables/part2/fit-starts.tex": "b31e9c296e7b79c117b8489e227cc83cdc9ab757977a98836ab8cc13ffabec50",
+    "docs/scientific/latex/tables/part2/kamps-blocks.tex": "7db19d78662bc75e99db41a657b3a14d0987653203d5489f86df60e85617645a",
+    "docs/scientific/latex/tables/part2/kamps-census.tex": "39fd2cfd537561af23707e79e43912af4809a7848c0daf547ab470534361b097",
+    "docs/scientific/latex/tables/part2/kamps-groups.tex": "e2c33b71bf0d69684dbfb0f468c38c85165fb48f9bc226d796659bcd1295a53d",
+    "docs/scientific/latex/tables/part2/laws.tex": "9ab82a26ac18851d6e7a3934d93232c79140b96ee6ae91709a1e051a4b696325",
+    "docs/scientific/latex/tables/part2/mdea-interactions.tex": "70db869301f99455776ed43c67c34cae6022a1d489dc9bbe4ba775dfa2908865",
+    "docs/scientific/latex/tables/part2/mdea-laws.tex": "b3b469808eda5334acc449539be789ab293c9e5e84b8e1c0393f2dfac55f2145",
+    "docs/scientific/latex/tables/part2/mdea-parameters.tex": "68bc225fdd1647fa61fbf493c7b1b708f689059e080e08e45a28ba916d43e3f9",
+    "docs/scientific/latex/tables/part2/mdea-range.tex": "78411af753418a531d33e306477e4b57bfc3c2d769b2df542180c74c544828b2",
+    "docs/scientific/latex/tables/part2/mdea-uncertainty.tex": "db594ab363b919251a47a44c6fd404dc2383c9fdaa2d9b1d26e3e6bf9db6e89d",
+    "docs/scientific/latex/tables/part2/origins.tex": "2f9b68d0217f39df8ed437ebf91f12bbd3ed69268e0acd2be23460a48f0ce5e9",
+    "docs/scientific/latex/tables/part2/phase-searches.tex": "81d2b6d079e8d5a7b4cd02074125ff9bb200cdca404d3eaccf38701d08e1d453",
+    "docs/scientific/latex/tables/part2/published-comparisons.tex": "70e09eb81cf535cca84904d4ce9a74e29a50b350668e412993bae8beb1f2b865",
+    "docs/scientific/latex/tables/part2/pz-interactions.tex": "ad6ac4b9a217fc310ba13cc4c69d0ac161d99c12f3534318dc6ca24af6b38f20",
+    "docs/scientific/latex/tables/part2/pz-laws.tex": "0698644e5ed98a5770132f0114e292628b4ae596c73e2401952e8873177d6322",
+    "docs/scientific/latex/tables/part2/pz-parameters.tex": "6c73c01f940ec5d4dd8085c18a37bdf4cda91d0f81fdafb73d3f716716cec84a",
+    "docs/scientific/latex/tables/part2/pz-uncertainty.tex": "796719b61df1c5f555bf844b6c77769bc5abcf8f402a4008ee972ed585b642b2",
+    "docs/scientific/latex/tables/part2/shared-interactions.tex": "13422a5f4cc1259a9a07c5b6a7337663590f343cd456a4c1d380ac3ff948f2a2",
+    "docs/scientific/latex/tables/part2/shared-parameters.tex": "58cb1be1f846c045ec1eb05255de53d06eacf20fe4b1f9eb64abae647bd9536f",
+    "docs/scientific/latex/tables/part2/shared-sensitivity.tex": "ec842fe417e6baf45b7e36b47adf0cd81d8257965e7146668da4034691c24c8e",
+    "docs/scientific/latex/tables/part2/source-locators.tex": "dfc5e9d4521a0be5d4dca3138c1e14ce61075c02f019cc2a08104509e82d41e6",
+    "docs/scientific/latex/tables/part2/unfitted.tex": "06f68c45aab891b66623e718bdee2c455743e0fb230a8cfd0a36ce9bc4b00b87"
   },
-  "pdf_reading_identities": [
-    {
-      "citation_key": "zhangThermodynamicModelingCO22011",
-      "doi": "10.1021/ie1006855",
-      "zotero_parent_key": "MJQQS342",
-      "zotero_attachment_key": "2KHILX2X",
-      "pdf_attachment_keys": "2KHILX2X",
-      "sha256": "78005386ba85d089c42c5db898f677ed67834646a64b2abfa83fa274fdddbdb9",
-      "source_sha256": "33543e7cf55cbd86477e461e11aef3faf28e969567585476892faec6e2eed7f6",
-      "conversion_method": "pdftotext -layout (local; no upload)",
-      "qa_note": "Full-paper layout-text reading copy; PDF-derived page breaks retained. Methods, estimation, results and conclusions read; cited prose/property roles checked. Equations are not a verified mathematical transcription."
+  "numeric_preservation": {
+    "baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+    "all_Part_II_tables_and_displayed_values_byte_identical": true,
+    "displayed_values_rows": 550,
+    "protected_inputs_unchanged": true,
+    "Part_I_not_rebuilt": true,
+    "model_calculations": false
+  },
+  "displayed_values_sha256": "56b96f45d55c4a32ccb8abd5b5b4f2f59f6e836c323e3cf38c895ff7cdb20a21",
+  "self_contained_audit": {
+    "part2": {
+      "before": 49,
+      "after": 72,
+      "added": [
+        "Austgen1991",
+        "Cameretti2005",
+        "Figiel2025",
+        "Figiel2026Correction",
+        "Gross2002",
+        "Held2014",
+        "Kleiner2007",
+        "Pabsch2020",
+        "Pahlavanzadeh2013",
+        "Schick2023",
+        "Yang2024",
+        "arouaTemperatureDependencyEquilibrium1997",
+        "ayadMeasurementsModelingThermodynamic2023",
+        "belabbaciInvestigationIsothermalVapour2010",
+        "chaseNISTJANAFThermochemicalTables1998",
+        "hsiehDielectricConstantsAqueous2007",
+        "internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018",
+        "klepacovaVaporPressuresSeveral2011",
+        "mahamMolarHeatCapacities1997",
+        "neumannThermodynamicPropertiesMethyl2022",
+        "razaviPhaseBehaviorModeling2019",
+        "steeleThermodynamicPropertiesIdealGas1997",
+        "xuRepresentationEquilibriumSolubility1992"
+      ]
     },
-    {
-      "citation_key": "sadeghThermodynamicModelingCO22015",
-      "doi": "10.1016/j.fuel.2014.12.002",
-      "zotero_parent_key": "L7EHVQTJ",
-      "zotero_attachment_key": "QSEMBJSR",
-      "pdf_attachment_keys": "QSEMBJSR",
-      "sha256": "e00e737216e34c2bae4f64bbb6005685ed63d15a7bf30954e8af95fa83f8b23d",
-      "source_sha256": "5409c200a0821299b5930e3796d05ef3e545d5b0d831f480a25bd5cc7c8aca4a",
-      "conversion_method": "pdftotext -layout (local; no upload)",
-      "qa_note": "Full-paper layout-text reading copy; PDF-derived page breaks retained. Methods, estimation, results and conclusions read; cited prose/property roles checked. Equations are not a verified mathematical transcription."
+    "part2_supplement": {
+      "before": 27,
+      "after": 27,
+      "added": [
+        "arouaTemperatureDependencyEquilibrium1997",
+        "bowerAcidicDissociationConstant1962",
+        "perez-saladokampsDissociationConstantNMethyldiethanolamine1996",
+        "xuRepresentationEquilibriumSolubility1992"
+      ]
     },
-    {
-      "citation_key": "bigetDevelopmentThermodynamicIdentification2015a",
-      "doi": "10.1002/cjce.22109",
-      "zotero_parent_key": "DL5VV4UU",
-      "zotero_attachment_key": "FVBPPTCW",
-      "pdf_attachment_keys": "FVBPPTCW",
-      "sha256": "875bd7e2aacbd4356e936a4a5d1a77b6bf95e3d31b723c00c026a5ebce6f6a51",
-      "source_sha256": "21e9728ac71c3090770f8e566cda713c60b8be0e537c13270ddebea15d5068c7",
-      "conversion_method": "pdftotext -layout (local; no upload)",
-      "qa_note": "Full-paper layout-text reading copy; PDF-derived page breaks retained. Methods, estimation, results and conclusions read; cited prose/property roles checked. Equations are not a verified mathematical transcription."
+    "part2_supplement_direct_prose": {
+      "before": 7,
+      "after": 8
+    },
+    "pointers": {
+      "owner_reported_external_pointer_sentences": 47,
+      "external_pointer_source_lines_before": 49,
+      "external_pointer_source_lines_after": 25,
+      "strict_pointer_only_before": 21,
+      "strict_pointer_only_after": 0,
+      "strict_before_locations": {
+        "introduction.tex": [
+          38,
+          61,
+          71,
+          79
+        ],
+        "methods.tex": [
+          31,
+          45,
+          62
+        ],
+        "model.tex": [
+          16,
+          24,
+          28,
+          35,
+          71
+        ],
+        "results.tex": [
+          5,
+          6,
+          190,
+          227
+        ],
+        "supplement.tex": [
+          3,
+          93,
+          98,
+          178,
+          186
+        ]
+      },
+      "remaining_references": [
+        {
+          "file": "conclusions.tex",
+          "line": 6,
+          "text": "For MDEA, which tests the shared inorganic-carbon description without an amine-carbamate pathway, substituting Part I's bound bicarbonate--water interaction and R2 law moves the unfitted error in the direction opposite to AMP before refitting, and the MDEA cation--bicarbonate interaction reaches its bound; this pattern does not identify a uniquely defective bicarbonate parameter."
+        },
+        {
+          "file": "endmatter.tex",
+          "line": 6,
+          "text": "The compiled \\texttt{epcsaft} library evaluates the equation of state and its equilibrium derivatives; Supplementary Section~S8 records the immutable file identity used in the calculations."
+        },
+        {
+          "file": "introduction.tex",
+          "line": 4,
+          "text": "Part I fitted an explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) description of loaded aqueous monoethanolamine (MEA), in which every ion is a separate species and equilibrium, caloric and density properties follow from one Helmholtz energy \\cite{PolleyPartI}."
+        },
+        {
+          "file": "introduction.tex",
+          "line": 83,
+          "text": "Here the water, \\COtwo and inorganic-ion parameters from Part I remain fixed while only amine-specific quantities are fitted."
+        },
+        {
+          "file": "introduction.tex",
+          "line": 86,
+          "text": "The four amines test the shared inorganic-carbon description, whose bicarbonate--water interaction lies on its upper bound in Part I \\cite{PolleyPartI}, without an amine-carbamate pathway in MDEA and alongside different carbamate pathways in AMP, PZ and DEA."
+        },
+        {
+          "file": "methods.tex",
+          "line": 97,
+          "text": "The selected parameters remain fixed for the reported comparisons; Supplementary Section~S3 lists the starting points, bounds and alternative fits."
+        },
+        {
+          "file": "methods.tex",
+          "line": 111,
+          "text": "Unlike the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting."
+        },
+        {
+          "file": "model.tex",
+          "line": 3,
+          "text": "The water and \\COtwo component descriptions, hydronium, hydroxide, bicarbonate and carbonate, all interactions among these six shared species, and the reaction laws of Part I, R1 (water autoprotolysis), R2 (\\ce{CO2 + 2H2O <=> HCO3- + H3O+}) and R3 (\\ce{HCO3- + H2O <=> CO3^{2-} + H3O+}), including Part I's fitted R2 corrections, are held fixed \\cite{PolleyPartI}."
+        },
+        {
+          "file": "model.tex",
+          "line": 9,
+          "text": "The MDEA and AMP fits were first developed against an earlier MEA fit whose bicarbonate--water interaction was 0.727 rather than Part I's bound value $+1$ and whose R2 coefficients differed slightly (Supplementary Section~S7); Section~\\ref{sec:p2-shared-sensitivity} tests that difference."
+        },
+        {
+          "file": "model.tex",
+          "line": 63,
+          "text": "Water retains the exponential temperature dependence tabulated by Pabsch et al. \\cite[Table~2]{Pabsch2020}, with its constant term fitted to IAPWS-95 in Part I \\cite{PolleyPartI}:"
+        },
+        {
+          "file": "model.tex",
+          "line": 191,
+          "text": "MDEA, AMP and DEA coefficients use Hsieh et al.'s unloaded measurements at model liquid densities \\cite[Tables~1--2, 5]{hsiehDielectricConstantsAqueous2007}; PZ and HPZCOO use the MEA coefficients fitted in Part I as an assumption \\cite{PolleyPartI}."
+        },
+        {
+          "file": "results.tex",
+          "line": 14,
+          "text": "For Carson heat, scaled RMS increases from 0.977 with the earlier shared description to 1.106 after refitting to the Part I shared description."
+        },
+        {
+          "file": "results.tex",
+          "line": 67,
+          "text": "Only that block lies inside both PZ laws; the 395.0 K rows also exceed the shared R2 interval (Supplementary Table~\\ref{supp-tab:p2-kamps-blocks})."
+        },
+        {
+          "file": "results.tex",
+          "line": 81,
+          "text": "Lal's low-pressure observations, which the source reports as less accurate, remain in the AARD (Supplementary Section~S4)."
+        },
+        {
+          "file": "results.tex",
+          "line": 152,
+          "text": "Forty-three comparison-only loaded DEA densities at 298.15 K give 0.445\\,\\% AARD (Supplementary Section~S4); the fitted MDEA density groups are given in Table~\\ref{tab:p2-calibration}."
+        },
+        {
+          "file": "results.tex",
+          "line": 190,
+          "text": "AMP's carbamate diameter and enthalpy correction reach limits with nearly flat inward profiles (Supplementary Section S6)."
+        },
+        {
+          "file": "results.tex",
+          "line": 202,
+          "text": "Unfitted pressures depend on the shared description as well as on the amine fit: substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP errors by 22--26 percentage points in opposite directions before the amine parameters are refitted (Table~\\ref{tab:p2-shared-sensitivity})."
+        },
+        {
+          "file": "results.tex",
+          "line": 203,
+          "text": "Table~\\ref{tab:p2-shared-sensitivity} follows the same data through the earlier shared description, substitution of the Part I bicarbonate--water interaction and fitted R2 law, and amine-specific refitting."
+        },
+        {
+          "file": "results.tex",
+          "line": 251,
+          "text": "Small property residuals do not exclude false liquid phases: the reported PZ fit has at least forty across calibration and comparison states, and a separate fit with the Part I stability penalty still has at least three, two of which the standard finite search missed."
+        },
+        {
+          "file": "results.tex",
+          "line": 276,
+          "text": "This counterexample demonstrates a missed finite search, so every split count in this paper is a lower bound, and the absence of detected instability, here and for the penalized MEA fit of Part I \\cite[Sect.~4.5]{PolleyPartI}, does not prove stability."
+        },
+        {
+          "file": "supplement.tex",
+          "line": 13,
+          "text": "The MEA joint-fit R2 coefficients retain their conditional uncertainty in Part I, but no uncertainty of those shared inputs is propagated here."
+        },
+        {
+          "file": "supplement.tex",
+          "line": 204,
+          "text": "The separate penalty fit uses the Part I tangent-plane requirement at 245 states: the 121 NMR liquids and each Hilliard feed as an all-liquid parent at 1.05 and three times its candidate bubble pressure."
+        },
+        {
+          "file": "supplement.tex",
+          "line": 209,
+          "text": "Consequently detected-split counts are lower bounds in both Part I and this paper, and a count of states without detected instability is an upper bound on stability within the searched states, not proof of global stability."
+        },
+        {
+          "file": "supplement.tex",
+          "line": 261,
+          "text": "Substituting Part I's shared bicarbonate--water interaction and R2 without refitting gives 21.89\\,\\% and $-15.10$\\,\\%, while worsening the fitted total pressures."
+        },
+        {
+          "file": "supplement.tex",
+          "line": 268,
+          "text": "The earlier bicarbonate--water interaction is 0.72705584775, compared with one in Part I."
+        }
+      ],
+      "remaining_reason": "Each retained reference accompanies a local statement about a frozen input, assumption, numerical result, range qualification, parameter selection or finite-search limit; none delegates the model or observable definition.",
+      "pointer_only_recheck": {
+        "source_baseline": "46d46c41c4e2774f4b9fd132302063151ad94e35",
+        "strict_pointer_only_at_baseline": 2,
+        "prior_strict_pointer_only_after_was_incorrect": true,
+        "corrected_sentences": [
+          {
+            "file": "model.tex",
+            "baseline_lines": [
+              252,
+              253
+            ],
+            "correction": "Combine the interval definition and its table reference in one substantive sentence."
+          },
+          {
+            "file": "supplement.tex",
+            "baseline_lines": [
+              219
+            ],
+            "correction": "State the units of every parameter type in the four following uncertainty tables directly."
+          }
+        ],
+        "strict_pointer_only_after": 0,
+        "units_check": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+      }
+    },
+    "model_equations": {
+      "before": 1,
+      "after": 24
     }
-  ],
+  },
   "citations_read": {
-    "zhangThermodynamicModelingCO22011": [
-      "Sects. 2.1–2.3, 3.1–3.3, 4; Tables 9–16; Figs. 7–21"
-    ],
-    "sadeghThermodynamicModelingCO22015": [
-      "Sects. 3–10; Tables 1–9; Figs. 1–10"
-    ],
-    "bigetDevelopmentThermodynamicIdentification2015a": [
-      "Thermodynamic Framework and Model Parameters; parameter estimation methodology, all subsections; Results and Discussion, MEA and Other Amines; Conclusion; pp. 298–302, Eqs. 3–5, Tables 1–5, Figs. 1–7"
-    ]
+    "Austgen1991": "Chemical equilibrium and reference-state discussion, Eq.3 and Table V; fitted equilibrium constants and Results discussion",
+    "Cameretti2005": "Debye-Huckel derivation, Eqs.5,13-17; Section 2 model and ion parameter assumptions",
+    "Figiel2025": "ePC-SAFT model, Eqs.1-10; Table 2; Results and Conclusion; supporting solvation-shell alternatives",
+    "Figiel2026Correction": "Entire one-page correction, p.7782, corrected Eq.7",
+    "Gross2002": "Sections 2-4, Eqs.2-3; association parameter estimation and limitations of two-site descriptions",
+    "Held2014": "Section 2 modeling strategies, Eqs.15-16; contrast of ion-ion dispersion choices",
+    "Kleiner2007": "Section 2 Theory, Eqs.4-8 and induced-association assumptions",
+    "Pabsch2020": "ePC-SAFT: Modeling with ePC-SAFT, Eqs.6-18 and Table 2; parameter inheritance and physical-absorption scope",
+    "Pahlavanzadeh2013": "Sections 2,3.1-3.2; Eqs.4,9-10; Tables 1-2; pure-property fitting and binary-water comparison",
+    "Schick2023": "Section 2.4.2, Table 1; induced CO2-water association and inherited ion parameters",
+    "Yang2024": "Section 2.1, Eqs.1a,2a-2b; neutral solvent averages and alternative ion composition treatments",
+    "arouaTemperatureDependencyEquilibrium1997": "Experimental procedure, Table 2, results on molality-scale formation constant and Eq.14, Conclusion",
+    "ayadMeasurementsModelingThermodynamic2023": "Experimental density method, Table 2, Section 3.1, Tables 5-6, Section 4.5; density fitting and pressure-data provenance",
+    "belabbaciInvestigationIsothermalVapour2010": "Section 2 Experimental, Table 2 pure pressures, Section 3 Results and discussion; Antoine fit and measurement conditions",
+    "chaseNISTJANAFThermochemicalTables1998": "Applied CO2 gas Shomate table on the official NIST Chemistry WebBook, 298-1200 K; not the entire JANAF volume",
+    "hsiehDielectricConstantsAqueous2007": "Experimental Section and Results and Discussion; Tables 1 and 2, printed p.620, for pure DEA/MDEA/AMP, and Table 5, printed p.622, for aqueous DEA/MDEA/AMP permittivity measurements.",
+    "internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018": "IAPWS R6-95(2018), Section 3, Eq.5 and Table 1 ideal-gas Helmholtz function",
+    "klepacovaVaporPressuresSeveral2011": "Experimental vapor-pressure method, AMP discussion and Table 10",
+    "mahamMolarHeatCapacities1997": "Experimental calorimetry, Table 1 and Results; liquid heat-capacity basis and uncertainties",
+    "neumannThermodynamicPropertiesMethyl2022": "Ideal-part formulation, Eq.5 and Table 8, comparison with Joback, and Conclusion",
+    "razaviPhaseBehaviorModeling2019": "Section 3.1 pure parameter estimation, Eqs.5-8 and Table 1 PZ row; two-site scheme and parameter data use",
+    "steeleThermodynamicPropertiesIdealGas1997": "Vapor-pressure experimental procedure; Tables 7-8, piperazine ebulliometry, source error definition and melting passage",
+    "xuRepresentationEquilibriumSolubility1992": "Mathematical modelling, Eqs.3-14; Table 2 carbamate constants and Results discussion; constants derived from pressure/loading balance rather than direct titration"
   },
+  "source_reading_identities": "builds/part2-source-readings.json",
   "new_bibliography_entries": [
-    "zhangThermodynamicModelingCO22011",
-    "sadeghThermodynamicModelingCO22015",
-    "bigetDevelopmentThermodynamicIdentification2015a"
+    "arouaTemperatureDependencyEquilibrium1997",
+    "ayadMeasurementsModelingThermodynamic2023",
+    "belabbaciInvestigationIsothermalVapour2010",
+    "klepacovaVaporPressuresSeveral2011",
+    "mahamMolarHeatCapacities1997",
+    "Pahlavanzadeh2013",
+    "razaviPhaseBehaviorModeling2019",
+    "xuRepresentationEquilibriumSolubility1992"
   ],
-  "bibliography": "Three entries generated through cited_bibliography.py from the existing canonical Zotero export and added without modifying existing entries; no export refresh, attachment-path fields or library mutation.",
-  "pending_sources": {},
-  "slots_filled": 4,
-  "added_sentences": 8,
-  "numeric_map": {
-    "entries": 548,
-    "exact_json_field_checks": 378,
-    "main_and_supplement_table_bodies_unchanged": 34,
-    "figure_pdfs_byte_identical_to_baseline": true,
-    "displayed_values_sha256": "82eac4e9185d0eedc5a52db0fcf36c2194e617f8637b9fd8dd53eac8b115d72d"
+  "missing_from_zotero": [],
+  "source_limitations": [
+    "NIST entry uses the applied CO2 gas table, not a reading of the full JANAF volume.",
+    "IAPWS has a registered Zotero item but no attached PDF; its official release was read and retained locally.",
+    "Figiel correction has duplicate Zotero metadata records; PDF QS7QHR5L belongs to YEENX35P and was resolved directly."
+  ],
+  "reading_shelf": "Ignored literature reading copies and index rows retained in the worktree and reconciled into the canonical main-checkout literature shelf. Copyrighted source copies are not committed.",
+  "prose_check": "Passed installed plugin-wide and scoped rules for all Part II manuscript sources and the updated numerical-source index.",
+  "freshness": "Per-document receipts include actual recorder inputs plus BibTeX databases/style. Both current PDF and input hashes pass. Part I default remains available; its PDF was not rebuilt.",
+  "unchanged": "All Part II tables, displayed-values data, retained analysis files, analyses/_cse-manuscript.json and Part I files are byte-identical to 46d46c4. Only two scientific prose sentences changed; no model calculations.",
+  "remaining_review": "Parent acceptance of this correction; no new independent science review performed.",
+  "required_fixes": {
+    "Astra 1": "applied",
+    "Astra 2": "applied",
+    "Astra 3": "applied",
+    "R1": "applied",
+    "R2": "applied",
+    "R3": "applied",
+    "R4": "applied",
+    "R5": "applied",
+    "R6": "applied",
+    "R7": "applied",
+    "R8": "applied",
+    "R9": "adapted: uses retained scaled RMS pressure and vapor-composition deviations with explicit scales, rather than calculating a new percentage aggregate.",
+    "R10": "applied",
+    "R11": "applied",
+    "R12": "applied",
+    "R13": "applied",
+    "R14": "applied: duplicated supplement charged-chain sentences removed; all three corrected rules retained in main text.",
+    "R15": "applied",
+    "R16": "applied"
   },
-  "prose_check": "Passed plugin-wide and scoped rules on introduction, numerical-source index and source log.",
-  "freshness": "Final source hashes recorded here; every generated-input hash checked against current bytes; generated table bibliography hashes refreshed. scripts/check_manuscript_freshness.py targets Part I main.pdf and was not rewritten or used to claim Part II freshness.",
-  "unchanged": "Results, conclusions, analyses/_cse-manuscript.json, all numerical values and accepted figure PDFs.",
-  "remaining_review": "Independent acceptance by the parent; no new independent science/story review performed."
+  "R3_verification": {
+    "outcome": "requested definitions confirmed; no scientific adaptation",
+    "AMP": "analyses/amp_transfer/inputs/redesign/refit-306-floor-coordinates.json; coefficient a and enthalpy shift",
+    "DEA": "analyses/dea_transfer/inputs/runs/B-2-endpoint-coordinates.json; coefficient a, pivot 313.15 K",
+    "PZ": "analyses/pz_transfer/reactive.py laws_at adds P3\u2013P5 offsets to correlation.a; reactive-A12-start2-endpoint.json and reactive-A12-record.json retain the selected parameters",
+    "bounds": "tables/part2/bounds.tex hydrolysis a rows"
+  },
+  "R9_verification": {
+    "source": "analyses/pz_transfer/results/binary-summary.json",
+    "fields": [
+      "P_source_units.rms",
+      "y_source_units.rms"
+    ],
+    "displayed": [
+      "7.78290",
+      "12.75239"
+    ],
+    "basis": "23 calibration states; pressure scale 0.3 kPa; conditional vapor scale sqrt((0.01y)^2+(0.00005/sqrt(3))^2)",
+    "limits": "descriptive calibration deviations; unknown total titration uncertainty; binary parameters unchanged in reactive refit",
+    "new_calculation": false
+  },
+  "bibliography": "No bibliography changes or refresh.",
+  "pointer_only_fix": {
+    "sentences_verbatim": true,
+    "units_list_extended": false,
+    "units_sources": [
+      "tables/part2/{mdea,amp,pz,dea}-uncertainty.tex",
+      "analyses/solvent_specification_mdea/inputs/B1-coordinates.json",
+      "analyses/amp_transfer/inputs/redesign/refit-306-floor-coordinates.json",
+      "analyses/pz_transfer/reactive.py: laws_at and chart12",
+      "analyses/dea_transfer/inputs/runs/B-2-coordinates.json",
+      "sections/part2/model.tex: temperature interaction laws"
+    ],
+    "units_findings": "All four uncertainty tables and their coordinate declarations checked. Born diameter is included under diameters; PZ u denotes dispersion_energy_over_k. No association energy, association volume or segment number appears in these tables. No extension of the requested sentence is needed."
+  }
 }

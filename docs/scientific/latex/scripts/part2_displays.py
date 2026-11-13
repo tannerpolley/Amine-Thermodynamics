@@ -177,6 +177,8 @@ for amine,path in [('mdea','analyses/solvent_specification_mdea/results/uncertai
         for old,new in sorted(short.items(),key=lambda x:-len(x[0])):name=name.replace(old,new)
         name=name.replace('[','').replace(']','').replace("'",'').replace('_',r'\_').replace(' / ',': ').replace('k\\_ij\\_reciprocal\\_temperature\\_slope','water interaction slope')
         name=name.replace('dispersion\\_energy\\_over\\_k',r'$\epsilon/k_B$').replace('segment\\_diameter',r'$\sigma$').replace('temperature\\_law\\_coefficient','coefficient').replace('pair/mdea-water/k\\_ij/','MDEA--water ')
+        name=name.replace(r'k\_ij',r'$k_{ij}$').replace('carbamate-hydrolysis/a',r'carbamate hydrolysis $a$').replace('carbamate-hydrolysis/total enthalpy shift',r'carbamate hydrolysis $\delta h$ / J mol$^{-1}$')
+        for old,new in [('water: water interaction slope',r'water: $b_{ij}$ / K'),('MDEA--water a0: coefficient',r'MDEA--water: $k_{ij}$ at 313.15 K'),('MDEA--water a1: coefficient',r'MDEA--water: $k_{ij}$ slope / K$^{-1}$'),(r'born\_diameter',r'$d^{\mathrm{Born}}$'),('/sigma',r': $\sigma$'),('/u',r': $\epsilon/k_B$'),('/water-k',r', water: $k_{ij}$'),('/bicarbonate-k',r', \ce{HCO3-}: $k_{ij}$'),('/offset',r' offset to $\ln K$')]:name=name.replace(old,new)
         vals=[]
         for key in ['value','SE_bound_fixed','max_fractional_change']:
             s=r.get(key,''); vals.append('--' if s=='' else f'{float(s):.5g}')
@@ -198,16 +200,16 @@ table('origins','Transferred quantities and their origins. All shared quantities
  ['R2 level and enthalpy correction','MEA joint fit; interior with conditional errors','Fixed; source-law correction, not a new measurement'],
  ['R1 and R3 water/carbonate laws','Literature laws as mapped in Part I','Fixed with source-reference conversion'],
  ['Solvation and dielectric descriptions','Literature coefficients and assumptions in Part I','Water/CO2 inputs fixed; amine coefficients specified separately'],
- ['Reactive coordinates (MDEA / AMP / PZ / DEA)','Amine-specific fits: 9 / 9 / 12 / 4','Not totals of earlier pure and binary fitting'],
+ ['Fitted reactive parameters (MDEA / AMP / PZ / DEA)','Amine-specific fits: 9 / 9 / 12 / 4','Not totals of earlier pure and binary fitting'],
  ],[.32,.36,.25])
-table('laws',"Reaction-law measurement intervals and use. A calculation inside a declared interval can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.", ['Law','Measured interval / K','Declared interval / K','Use and limitation'],[
+table('laws',"Reaction-law measurement intervals and use. A calculation inside a calculation interval can still extrapolate the measurements. Rounded source limits are distinguished from actual tabulated temperatures.", ['Law','Measured interval / K','Calculation interval / K','Use and limitation'],[
  ['MDEA dissociation','278--368','278--395','393.15 K pressure and 388.71 K heat extrapolate measurements'],
- ['AMP dissociation','to 353.22','to 353.22','Tong 373--393 K rows not calculated (outside declared interval)'],
+ ['AMP dissociation','to 353.22','to 353.22','Tong 373--393 K rows not calculated (outside calculation interval)'],
  ['AMP hydrolysis','source estimates: 313--373','includes 303--353','Not direct law measurements; slope extrapolated below 313 K; level and slope fitted'],
  ['PZ protonation','293.14--353.42','includes 283.15--395.0','283.15 K and above 353.42 K extrapolate'],
  ['PZ carbamate','283.15--333.15 (rounded 283--333)','includes 353.15--395.0','Above 333.15 K extrapolates'],
  ['DEA protonation','to approximately 323','to 393.15','23/30 fitted Lawson rows above measured range'],
- ['Shared R2','not established here','293.15--393.15','Seven Lawson rows at 394.26 K not calculated (outside declared interval); PZ 283.15 K extrapolates below lower limit; Kamps 395.0 K above upper limit'],
+ ['Shared R2','not established here','293.15--393.15','Seven Lawson rows at 394.26 K not calculated (outside calculation interval); PZ 283.15 K extrapolates below lower limit; Kamps 395.0 K above upper limit'],
  ],[.18,.23,.22,.28])
 table('data-roles','Observation roles and prior access. Held out means never in any fitting objective. Comparison-only means calculated after parameter selection without entering that selection. Prior scoring is stated even when no held-out value determined the objective.', ['Amine / role','Observations','Scored before final fit chosen?'],[
  ['MDEA fitted','278 entries: 67 Kuranov; 16 Jakobsen; 40 Carson; 4 Merkley; 33 heat capacities; 33 loaded and 24 unloaded densities; 61 Kim binary pressures','---'],
@@ -218,14 +220,14 @@ table('data-roles','Observation roles and prior access. Held out means never in 
  ['AMP held-out comparison','17 Tong total pressures scored; 23 not calculated','Earlier fits had been compared; no blind test claimed'],
  ['PZ fitted','294 entries: 62 Hilliard pressures; 232 NMR group observations at 121 states','---'],
  ['PZ held-out','52 Ermatchkov partial pressures','Yes; unconstrained refit scored before penalty alternative and final choice'],
- ['PZ comparison-only','94 Kamps total pressures; precipitation row excluded','No; scored once on frozen twelve-coordinate fit'],
+ ['PZ comparison-only','94 Kamps total pressures; precipitation row excluded','No; scored once on the fixed twelve-parameter fit'],
  ['DEA fitted','80 entries: 30 Lawson pressures at 25 wt%; 50 Carson heats','---'],
  ['DEA held-out','16 Seo and Hong; 44 Lal partial pressures','Yes; first selected start, then numerically tied second start'],
  ['DEA comparison-only','Lawson Table VIII; Cai binary; Böttinger species; Horstmann excess heat; Weiland densities','No; added after fit selection'],
  ],[.20,.48,.25])
 table('phase-searches','Finite phase-search results. Detected liquid-split counts are lower bounds.', ['Fit / states','Detected liquid splits','Other outcomes and omissions'],[
  ['MDEA: 775 searched states','0 found','37 gas-like phases; no ambiguous or unresolved result; seven states above the R2 interval not calculated'],
- ['AMP: 51 Kundu states','0 found','No gas, ambiguous or unresolved result; calibration gas outcomes not stored'],
+ ['AMP: 51 Kundu states','0 found','No gas, ambiguous or unresolved result; calibration gas outcomes not recorded'],
  ['PZ: 183 calibration states','at least 4','No ambiguous or unresolved result; three rich NMR pressures moved above bubble pressure'],
  ['PZ: 52 held-out bubble states','0 found','Finite search only'],
  ['PZ: 94 Kamps bubble states','at least 36','56 without detected split; 2 unloaded undecided; no gas or ambiguous split'],
@@ -245,15 +247,15 @@ for amine,path in endpoints.items():
    if amine!='shared' and not any(cmp not in shared for cmp in ident.split('/')[1:3]):continue
    if amine=='shared' and not all(cmp in shared for cmp in ident.split('/')[1:3]):continue
    parts=ident.split('/');nm='--'.join(short.get(cmp,cmp.replace('-',' ')) for cmp in parts[1:3])
-   family=c['family'].replace('_',' ')
+   family={'k_ij':r'$k_{ij}$','k_ij_reciprocal_temperature_slope':r'$b_{ij}$ / K'}.get(c['family'],c['family'].replace('_',' '))
    rows.append([nm,family,value(path,['pairs',i,'coefficients',j,'value','magnitude'],7)])
  for i,edge in enumerate(doc['topology'].get('edges',[])):
   a=edge['endpoint_a']['component_id'];b=edge['endpoint_b']['component_id']
   if (amine=='shared') != (a in shared and b in shared):continue
   nm=short.get(a,a)+'--'+short.get(b,b)
-  for field,title in [('energy_over_k','association energy / K'),('volume','association volume')]:
+  for field,title in [('energy_over_k',r'$\epsilon^{AB}/k_B$ / K'),('volume',r'$\kappa^{AB}$')]:
    if field in edge and 'value' in edge[field]:rows.append([nm,title,value(path,['topology','edges',i,field,'value','magnitude'],7)])
- if rows:table(amine+'-interactions',('Shared' if amine=='shared' else amine.upper())+' nonzero constant pair coefficients and explicit association edges. Unlisted constant pair corrections are zero. Temperature-law coefficients are stated separately.', ['Pair','Quantity','Value'],rows,[.40,.33,.19])
+ if rows:table(amine+'-interactions',('Shared' if amine=='shared' else amine.upper())+' nonzero constant pair coefficients and association parameters. Unlisted constant pair corrections are zero. Temperature-law coefficients are stated separately.', ['Pair','Quantity','Value'],rows,[.40,.33,.19])
 
 # Complete source-state law coefficients. Logarithms use T/T0, T0=313.15 K.
 import tomllib
@@ -273,7 +275,7 @@ for r in lawsets['amp']:
 for amine,laws in lawsets.items():
  rows=[]
  for r in laws:
-  c=r['correlation'];name=r['name'].replace('-',' ')
+  c=r['correlation'];name=r['name'].replace('-',' ').replace('endpoint','fit').replace('B1 ','')
   rows.append([name,*[f'{c.get(k,0):.7g}' for k in ['a','b','c','d']], 'molality' if 'molality' in c.get('standard_state_id','') else 'mole fraction'])
  table(amine+'-laws',amine.upper()+r' reaction coefficients in $\ln K=a+b/T+c\ln(T/313.15\,\mathrm K)+dT$. Coefficients $a,c$ are dimensionless, $b$ is K and $d$ is K$^{-1}$. Source-reference basis is retained, not silently interchanged. PZ P3--P5 include the fitted offsets.', ['Reaction','$a$','$b$','$c$','$d$','Basis'],rows,[.22,.13,.13,.13,.15,.14])
 # Source locators copied from the numerical rows keep transcription identities explicit.
@@ -335,14 +337,16 @@ for amine,path in [('MDEA','analyses/solvent_specification_mdea/inputs/B1-coordi
    for old,new in sorted(short.items(),key=lambda x:-len(x[0])):target=target.replace(old,new)
    name=target.replace('_',r'\_')+': '+kind.replace('_',' ')
   else:name=c['name'].replace('-',' ')+' '+c.get('coefficient','enthalpy increment / J mol$^{-1}$')
+  name=name.replace(r'pair/mdea-water/k\_ij/a0',r'MDEA--water: $k_{ij}$ at 313.15 K').replace(r'pair/mdea-water/k\_ij/a1',r'MDEA--water: $k_{ij}$ slope / K$^{-1}$').replace('k ij',r'$k_{ij}$')
+  if amine=='MDEA' and 'MDEA--water:' in name:name=name.removesuffix(': temperature law coefficient')
   lo,hi=c['bounds'];rows.append([amine,name,f'{lo:.6g}',f'{hi:.6g}'])
   for j,v in enumerate([lo,hi]):NUMBERS.append((f'{v:.6g}',path,f'[{i}].bounds[{j}]',str(v)))
 for name,lo,hi in [('Cation diameter / '+r'\AA',2,9),('Cation dispersion / K',50,1000),('Cation--water interaction',-1,.5),('Cation--bicarbonate interaction',-1,.5),('Carbamate diameter / '+r'\AA',2,9),('Carbamate dispersion / K',50,1000),('Carbamate--water interaction',-.5,.5),('HPZCOO diameter / '+r'\AA',2,6),('HPZCOO dispersion / K',50,1000),('P3, P4 and P5 offsets (each)',-3,3)]:rows.append(['PZ',name,str(lo),str(hi)])
-table('bounds','Original search bounds of the reported reactive fits. Reaction-level bounds refer to the fitted coordinate before the coupled enthalpy completion; DEA enthalpy bounds are refit increments. PZ values and ties follow the complete twelve-coordinate chart. Bounds are not measured molecular intervals.', ['Amine','Coordinate','Lower','Upper'],rows,[.09,.59,.10,.10])
+table('bounds','Original search bounds of the reported reactive fits. Reaction-level bounds refer to the fitted constant $a$ before the enthalpy correction is added; DEA enthalpy bounds are refit increments. PZ values and ties follow the complete twelve-parameter fit. Bounds are not measured molecular intervals.', ['Amine','Parameter','Lower','Upper'],rows,[.09,.59,.10,.10])
 rows=[]
 path='analyses/mdea_mea_workflow/results/refit-298/attempts.json'
 for i,r in enumerate(read(path)):
- rows.append(['MDEA '+r['name'].replace('-',' '),value(path,[i,'cost'],5),value(path,[i,'iterations'],0),str(len(r['active_bounds'])),'converged'])
+ rows.append(['MDEA '+r['name'].replace('-',' ').replace('endpoint','fit').replace('B1 ',''),value(path,[i,'cost'],5),value(path,[i,'iterations'],0),str(len(r['active_bounds'])),'converged'])
 for name in ['refit-306-floor','refit-306-1','refit-306-2','refit-306-243']:
  r=read(A)['runs'][name];rows.append(['AMP '+('reported floor' if name=='refit-306-floor' else '3.5 '+r'\AA\ start '+name.rsplit('-',1)[-1]),value(A,['runs',name,'cost'],5),value(A,['runs',name,'iterations'],0),str(len(r['active_bounds'])),r['status'].replace('_',' ')])
 rows.append(['PZ reported',value(P,['fit','cost'],3),value(P,['fit','iterations'],0),'1','iteration limit'])
@@ -456,6 +460,8 @@ for ax,amine,path in zip(axs,['MDEA','AMP','DEA'],['analyses/solvent_specificati
 fig.savefig(FIGURES/'pressure-bands.pdf');plt.close(fig)
 with (FIGURES/'pressure-bands.csv').open('w') as f:
  w=csv.writer(f, lineterminator="\n");w.writerow(['amine','identity','observed','calculated','SE','ratio','relative_SE']);w.writerows(bandrows)
+value('analyses/pz_transfer/results/binary-summary.json',['P_source_units','rms'],5)
+value('analyses/pz_transfer/results/binary-summary.json',['y_source_units','rms'],5)
 # Final provenance comments bind every generated table to exact input bytes.
 for out in TABLES.glob('*.tex'):
  header='% Generator: docs/scientific/latex/scripts/part2_displays.py; no model evaluation.\n'
