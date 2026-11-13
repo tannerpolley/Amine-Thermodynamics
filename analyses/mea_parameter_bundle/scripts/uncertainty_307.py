@@ -26,7 +26,7 @@ WHEEL = ROOT/'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/
 BASE = '79706636e8716974e045b582f1b1cbfe7e4c7009'
 PROFILED = {'AMP': (4, 6, 8)}  # AMPH+-CO2 k, AMPCOO- diameter, enthalpy shift: bound in #243
 OUTPUTS = {'MEA': ROOT/'analyses/mea_parameter_bundle/results/uncertainty-307', 'MDEA': ROOT/'analyses/solvent_specification_mdea/results/uncertainty-307',
-           'AMP': ROOT/'analyses/amp_transfer/results/refit-306/uncertainty'}
+           'AMP': ROOT/'analyses/amp_transfer/results/refit-306/uncertainty', 'DEA': ROOT/'analyses/dea_transfer/results/uncertainty-307'}
 
 
 def read(path):
@@ -77,6 +77,24 @@ def setup(name):
             q['identity'] = ('carbamate-hydrolysis/'+('total enthalpy shift' if q.get('kind')=='reaction_enthalpy_shift' else 'a')) if 'targets' not in q else str(q['targets'][0][1])+' / '+q['targets'][0][0]
             q['unit'] = 'J / mol' if q.get('kind')=='reaction_enthalpy_shift' else 'kelvin' if 'slope' in str(q.get('targets')) else 'angstrom' if 'diameter' in str(q.get('targets')) else 'dimensionless'
         out = amp/'results/refit-306/uncertainty'
+    elif name == 'DEA':  # #317 frozen selection; same transport as AMP: the shift restarts at zero from the completed law
+        dea = ROOT/'analyses/dea_transfer'
+        frozen = read(dea/'results/selection.json')
+        point = read(dea/'results/fits.json')['runs'][frozen['run']]
+        spec = SolventSpecification(dea/frozen['specification'])
+        assert spec.parameter_sha256 == frozen['endpoint_sha256']
+        declared = read(dea/f"inputs/runs/{frozen['run'][0]}-1-coordinates.json")  # start-1 chart: the same physical limits as start 2, measured from the Aroua law
+        H = point['enthalpy_J_mol']-epcsaft.GAS_CONSTANT_J_PER_MOL_K*4100.9040506223955  # total shift from the Aroua start
+        for q,x in zip(declared,[*point['coordinates'].values(),None,None],strict=True):
+            q['origin'] = frozen['law']['a'] if q.get('coefficient')=='a' else 0. if q.get('kind')=='reaction_enthalpy_shift' else x
+            if q.get('kind')=='reaction_enthalpy_shift':
+                q['bounds'] = [b-H for b in q['bounds']]
+            if q.get('coefficient')=='a':
+                q['bounds'] = [b+H/(epcsaft.GAS_CONSTANT_J_PER_MOL_K*313.15) for b in q['bounds']]
+            q['value'] = q['origin']+(H if q.get('kind')=='reaction_enthalpy_shift' else 0.)
+            q['identity'] = ('carbamate-hydrolysis/'+('total enthalpy shift' if q.get('kind')=='reaction_enthalpy_shift' else 'a')) if 'targets' not in q else str(q['targets'][0][1])+' / k_ij'
+            q['unit'] = 'J / mol' if q.get('kind')=='reaction_enthalpy_shift' else 'dimensionless'
+        out = dea/'results/uncertainty-307'
     else:
         spec = SolventSpecification(ROOT/'analyses/solvent_specification_mdea/B1.toml')
         declared = read(ROOT/'analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/declaration.json')['coordinates']
@@ -144,6 +162,8 @@ def prediction_records(spec,name):
                 temperature_domain=[293.15,395.],observation_parameters=spec.parameter_sha256))
     if name == 'AMP':  # held-out Kundu 2003 CO2 partial pressures
         predictions = [r for r in spec.inputs['observations']['comparisons'] if r['group']=='kundu']
+    if name == 'DEA':  # fitted Lawson/Carson rows plus held-out Seo & Hong and Lal pressures, after the freeze
+        predictions = list(rows)+[r for r in spec.inputs['observations']['comparisons'] if r['group'] in ('SeoHong','Lal')]
     if name == 'MEA':
         predictions = [r for r in predictions if r['kind'] in ('partial_pressure','equilibrium_isobaric_heat_capacity','phase_density')
             or r['constructor']=='addition_enthalpy' or (r['kind']=='mole_fraction' and
@@ -234,6 +254,7 @@ def main(name):
     table(out/'prediction-bands.csv',[dict(identity=r['identity'],group=r['group'],value=v,SE_bound_fixed=b,lower_95=v-1.96*b,upper_95=v+1.96*b) for r,v,b in zip(predictions,py,bands)])
     write(out/'interior-ranking.json',sensitivity)
     profiles = []
+    write(out/'profiles.json',profiles)  # an endpoint with no bound coordinate has no profiles
     # #306: AMP also profiles its three formerly bound coordinates, two-sided where interior.
     for i in active+[i for i in PROFILED.get(name,()) if i not in active]:
         q = decl[i]
@@ -326,7 +347,7 @@ def present(name):
     fig.tight_layout()
     fig.savefig(out/'sensitivity.png',dpi=170)
     plt.close(fig)
-    pressure = [(i,b) for i,b in enumerate(bands) if b['group'] in ('Xiao','Ermatchkov','kundu') or (name=='MEA' and pred['records'][i]['kind']=='partial_pressure')]
+    pressure = [(i,b) for i,b in enumerate(bands) if b['group'] in ('Xiao','Ermatchkov','kundu','Lawson','SeoHong','Lal') or (name=='MEA' and pred['records'][i]['kind']=='partial_pressure')]
     fig,ax = plt.subplots(figsize=(9,5))
     for group in dict.fromkeys(b['group'] for _,b in pressure):
         subset = [(i,b) for i,b in pressure if b['group']==group]
@@ -343,7 +364,7 @@ def present(name):
     fig.tight_layout()
     fig.savefig(out/'pressure-bands.png',dpi=170)
     plt.close(fig)
-    if name == 'AMP':  # #306 notebook carries the AMP interpretation; the text below describes adopted MEA/MDEA records.
+    if name in ('AMP','DEA'):  # the transfer notebooks carry the interpretation; the text below describes adopted MEA/MDEA records.
         return
     pressure_se = [float(b['SE_bound_fixed'])/float(b['value']) for _,b in pressure]
     temperatures = [pred['records'][i]['conditions']['T_K'] for i,b in pressure]
@@ -382,12 +403,14 @@ def present(name):
 def verify_results(name):
     out = OUTPUTS[name]
     adopted = read(out/'adopted.json')
-    reference = read(ROOT/('analyses/mea_parameter_bundle/results/adoption-297/candidate/replay.json' if name=='MEA' else 'analyses/solvent_specification_mdea/results/adoption-302/replay.json')) if name!='AMP' else None
+    reference = read(ROOT/('analyses/mea_parameter_bundle/results/adoption-297/candidate/replay.json' if name=='MEA' else 'analyses/solvent_specification_mdea/results/adoption-302/replay.json')) if name not in ('AMP','DEA') else None
     if name=='MEA':
         reference = reference['rows']
     if name=='AMP':
         run = read(ROOT/'analyses/amp_transfer/results/refit-306/summary.json')['scored']
         reference = read(ROOT/f'analyses/amp_transfer/results/refit-306/{run}-fit.json')['replay']
+    if name=='DEA':
+        reference = read(ROOT/f"analyses/dea_transfer/results/fit-runs/{read(ROOT/'analyses/dea_transfer/results/selection.json')['run']}-replay.json")
     delta = [abs(a-b['value'])/max(abs(b['value']),1e-30) for a,b in zip(adopted['predictions'],reference,strict=True)]
     errors = list(csv.DictReader((out/'standard-errors.csv').open()))
     se_difference = max(abs(float(q['native_SE_bound_fixed'])/float(q['adopted_point_SE_bound_fixed'])-1) for q in errors)
