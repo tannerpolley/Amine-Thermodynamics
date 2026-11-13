@@ -1,0 +1,101 @@
+\PassOptionsToPackage{hyperfootnotes=false}{hyperref}
+\documentclass[a4paper,fleqn]{cas-sc}
+\DeclareUnicodeCharacter{2062}{}
+\usepackage[pagewise]{lineno}
+% \linenumbers
+
+\usepackage[numbers]{natbib}
+\usepackage[version=4]{mhchem}
+\usepackage[capitalise]{cleveref}
+\usepackage{xr}
+\externaldocument[supp-]{builds/part2_supplement}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{placeins}
+\usepackage{needspace}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{xspace}
+\renewcommand\cellalign{rb}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\usepackage{xcolor}
+\usepackage{siunitx}
+\usepackage{xurl}
+\graphicspath{{figures/part2/}}
+
+% Typography. cas-sc sets floats, captions, header and footer in \sffamily
+% (bitmap EC sans here) and its Inconsolata check fails, leaving bitmap EC
+% typewriter. Set all of them in the STIX body serif, use Type 1 Inconsolata,
+% and route the class's caption makers through the caption package.
+\renewcommand{\sfdefault}{\rmdefault}
+\usepackage[scaled=0.95]{inconsolata}
+\captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
+\setlength{\tabcolsep}{4pt}
+\makeatletter
+\ExplSyntaxOn
+\cs_set_eq:NN \__make_fig_caption:nn \caption@makecaption
+\cs_set_eq:NN \__make_tbl_caption:nn \caption@makecaption
+\ExplSyntaxOff
+\makeatother
+
+\newcommand{\Ha}{\text{Ha}}
+\input{chemistry_macros}
+
+\newcommand{\A}{\text{A}}
+\newcommand{\B}{\text{B}}
+\newcommand{\C}{\text{C}}
+\newcommand{\D}{\text{D}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\liq}{\ell}
+\newcommand{\vap}{v}
+
+% Suppress the class's submission footer; journal pagination remains.
+\ExplSyntaxOn
+\cs_set:Npn \__first_footerline: {}
+\ExplSyntaxOff
+
+\setlength{\emergencystretch}{3em}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+\shorttitle{Transfer of ePC-SAFT parameters to aqueous amines}
+\shortauthors{Polley}
+\title[mode=title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part II: transfer to MDEA, AMP, piperazine and DEA}{Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part II: transfer to MDEA, AMP, piperazine and DEA}}
+\author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
+\cormark[1]
+\ead{tpolley3@byu.edu}
+\affiliation[1]{organization={Department of Chemical Engineering, Brigham Young University},city={Provo},state={UT},postcode={84602},country={United States}}
+\cortext[cor1]{Corresponding author.}
+\begin{abstract}
+% P:p2-abstract-01
+The shared water, carbon dioxide and inorganic-ion description established for monoethanolamine in Part I is held fixed while amine-specific parameters are estimated for methyldiethanolamine (MDEA), 2-amino-2-methyl-1-propanol (AMP), piperazine (PZ) and diethanolamine (DEA).
+The same equation of state accommodates their different reaction networks, but fitted pressures retain loading- and temperature-dependent errors, and PZ species residuals remain large relative to their assumed measurement scale.
+Held-out partial-pressure average absolute relative deviations (AARD) are 28.19 and 18.27\,\% for MDEA against Xiao and Ermatchkov, the latter mixing conditions inside and outside the dissociation law's measured temperature range; 42.85\,\% for AMP against Kundu; 21.94\,\% for PZ against Ermatchkov; and 79.54 and 44.17\,\% for DEA against Seo and Hong and Lal.
+
+The data sets and fitting histories differ, so these percentages do not rank the amines.
+For AMP and DEA, local conditional parameter bands are much smaller than the unfitted-pressure discrepancies; MDEA bands overlap the errors, and PZ sensitivities limit the linear approximation.
+At least four false liquid splits remain for PZ; a separate fit with Part I's stability penalty still has at least three, two of which the routine phase search missed.
+DEA reproduces fitted integral absorption heats within 0.98\,\% AARD but predicts the wrong sign of water--DEA excess enthalpy.
+The results establish the extent and limitations of amine-specific calibration under a frozen shared description, rather than uniform predictive accuracy across amine classes.
+\end{abstract}
+\begin{keywords}
+ePC-SAFT\sep{}aqueous amines\sep{}carbon dioxide\sep{}parameter transfer\sep{}phase stability
+\end{keywords}
+\maketitle
+\input{sections/part2/introduction}
+\input{sections/part2/model}
+\input{sections/part2/methods}
+\input{sections/part2/results}
+\input{sections/part2/discussion}
+\input{sections/part2/conclusions}
+\input{sections/part2/endmatter}
+\FloatBarrier
+\bibliographystyle{styles/model1-num-names}
+\bibliography{references,part2_companion}
+\end{document}

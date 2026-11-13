@@ -1,0 +1,220 @@
+\section{Results: extent and limits of transfer}\label{sec:p2-results}
+\subsection{What amine-specific calibration recovers}
+% P:p2-results-calibration-01
+Amine-specific fitting recovers parts of the targeted behavior, but the remaining deviations are larger than several of the assigned observation scales (Table~\ref{tab:p2-calibration}).
+MDEA fitted Kuranov total-pressure AARD is 20.44\,\%, while binary-pressure AARD is 3.23\,\%.
+Its source-scaled RMS exceeds unity for protonation fraction, both heat sources, heat capacity and both density groups.
+For Carson heat, scaled RMS increases from 0.977 with the earlier shared description to 1.106 after refitting to the Part I shared description.
+This compromise accompanies recovery of held-out pressures rather than uniformly improved properties.
+
+\input{tables/part2/calibration}
+
+% P:p2-results-calibration-02
+AMP fitted total-pressure AARD is 10.33\,\%, with bias $-0.90$\,\%, and carbamate-fraction RMS is 0.00631.
+The fitted PZ Hilliard partial pressures give 19.16\,\% AARD and $-3.23$\,\% bias, but RMS is 12.9 times the operational pressure scale.
+Its mean absolute monocarbamate- and dicarbamate-group errors are 0.0258 and 0.0115 per total PZ, and the NMR whitened RMS remains 11.58 under the assumed area-error model.
+Thus a moderate mean relative pressure error does not mean agreement at source resolution or an adequate species fit.
+The separately fitted PZ--water binary properties also retain their discrepancies; they are unchanged by the reactive refit.
+
+% P:p2-results-calibration-03
+DEA fitted pressure AARD is 28.63\,\%, with bias $-0.76$\,\%, whereas integral-heat AARD is 0.977\,\%.
+Only 10 of 30 Lawson pressures satisfy $|\ln(p^c/p^o)|\leq 2(0.09)$, twice the assigned log-pressure residual scale, and each isotherm's highest-loading pressure is 31--58\,\% low.
+The small aggregate bias therefore conceals loading-shape error (Fig.~\ref{fig:p2-calibration}).
+Forty-six of the fifty Carson heats lie within the assigned 2\,\% scale.
+Heat agreement is restricted to these 298.15 K measurements and does not resolve the independent mixing-heat discrepancy below.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{calibration.pdf}
+\caption{Fitted pressure errors against analytical loading. MDEA and AMP use total pressure; PZ and DEA use \COtwo partial pressure. Each point is a calculation at a measured state. Colors distinguish source temperatures within each panel; no model curve is inferred from the discrete points. MDEA points at 373 and 393 K lie above the 368 K limit of the dissociation measurements.}
+\label{fig:p2-calibration}
+\end{figure}
+
+\subsection{Unfitted pressures and reaction-law extrapolation}\label{sec:p2-unfitted}
+% P:p2-results-unfitted-01
+Unfitted pressure errors change with source and temperature; the largest occur in extrapolated blocks, but for MDEA, AMP and DEA they already reach 28--52\,\% AARD at conditions inside the measured law ranges.
+Held-out MDEA partial-pressure AARD is 28.19\,\% over twenty Xiao observations at 23.5 wt\% and 298.15--313.15 K, all inside the dissociation law's measured range.
+Every Xiao pressure is underpredicted.
+The Ermatchkov aggregate, 18.27\,\% over eighty-eight observations at no more than 49 wt\%, mixes measured-law and extrapolated conditions.
+Inside 278--368 K, its sixty-two pressures give 16.31\,\% AARD and $-11.59$\,\% bias; the twenty-six pressures at 393.15 K give 22.94\,\% and $+21.93$\,\%, respectively.
+Fitted Kuranov total pressures exhibit the same sign reversal: 11.80\,\% AARD with $-7.80$\,\% bias inside the range, and 31.09\,\% with $+31.09$\,\% bias above it (Table~\ref{tab:p2-mdea-range}).
+This is an observation about the calculated results, not a diagnosis of the dissociation law; no calculation isolates its contribution from the other temperature-dependent terms.
+
+\input{tables/part2/mdea-range}
+\input{tables/part2/unfitted}
+
+% P:p2-results-unfitted-02
+The reported AMP fit gives Kundu AARD 42.85\,\% and bias $+37.79$\,\% over all fifty-one observations.
+The signed error decreases with temperature: $+53.94$\,\% at 303 K, $+43.78$\,\% at 313 K and $-7.09$\,\% at 323 K.
+The 303 K set extrapolates the source basis of the hydrolysis slope below 313 K; all three temperatures are within the fixed dissociation law's interval.
+Tong's seventeen total pressures \cite{Tong2012} at 313--353 K give 28.66\,\% AARD and $+8.11$\,\% bias, while twenty-three rows at 373--393 K lie above the dissociation law's declared 353.22 K limit and are not calculated.
+The Tong biases also decrease with temperature, from $+48.55$ through $+5.73$ to $-23.19$\,\% at approximately 313, 333 and 353 K.
+The decreasing signed errors and bound hydrolysis enthalpy correction are relevant to temperature dependence, but do not distinguish model error from disagreement between experiments.
+
+% P:p2-results-unfitted-03
+PZ Ermatchkov partial pressures \cite{ermatchkovSolubilityCarbonDioxide2006a} give 21.94\,\% AARD overall, with strong temperature dependence.
+At 313.1 K, within the carbamate measurements, AARD is 9.32\,\%; at 353.15 K, above those measurements, it is 13.12\,\%; at 393.15 K, above both carbamate and protonation measurements, it reaches 48.52\,\%.
+
+Only eleven of fifty-two pressures lie within the printed source uncertainty, and the uncertainty-scaled RMS is 11.59.
+The mean error consequently understates the disagreement relative to the source's measurement resolution.
+
+% P:p2-results-unfitted-04
+DEA predicts Seo and Hong's thirty-mass-percent solution \cite{seoSolubilitiesCarbonDioxide1996} with 79.54\,\% AARD and $+77.80$\,\% bias; the 80 $^{\circ}$C subset reaches 154.22\,\%.
+Lal's more dilute stock \cite{lalSolubilityH2SCO21985} instead gives 44.17\,\% AARD and $-22.93$\,\% bias.
+Even the 40 $^{\circ}$C subsets, within the Bower measured temperature range, have AARDs 28.51\,\% against Seo and Hong and 52.25\,\% against Lal.
+The higher-temperature subsets extrapolate that law, with the source-specific errors listed in Table~\ref{tab:p2-unfitted}.
+Lal's low-pressure observations, which the source reports as less accurate, remain in the AARD (Supplementary Section~S4).
+
+% P:p2-results-unfitted-05
+The source tables indicate a possible contribution from laboratory disagreement in DEA.
+At loading about 0.41, Lawson reports 16.0--16.7 kPa at 65.6 $^{\circ}$C and 25 wt\%, while Seo and Hong report 11.6 kPa at 80 $^{\circ}$C and 30 wt\%.
+These are not matched states: temperature, concentration and loading differ.
+They do not isolate experimental bias or establish which source is correct, and the model retains a loading-shape error within its own fitted source.
+Across amines, unmatched pressure types, source uncertainties, concentrations, temperatures and selection histories prevent comparison of their error percentages as an accuracy ranking.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{unfitted-pressure.pdf}
+\caption{Relative partial-pressure errors at measured loadings. All panels use held-out sets; the MDEA set was previously accessed. MDEA at 393.15 K exceeds its dissociation measurements; PZ at 353.15 K exceeds its carbamate measurements and at 393.15 K also its protonation measurements; AMP at 303 K extrapolates the hydrolysis source slope. DEA marker shapes distinguish 40, 60, 80 and 100 $^{\circ}$C. Points from different stocks are shown without interpolating a continuous relation.}
+\label{fig:p2-unfitted}
+\end{figure}
+\FloatBarrier
+
+\subsection{Conditional parameter uncertainty beside the unfitted errors}\label{sec:p2-uncertainty}
+% P:p2-results-uncertainty-01
+For AMP and DEA, conditional parameter bands are far smaller than the observed unfitted-pressure errors (Fig.~\ref{fig:p2-bands}).
+AMP Kundu relative SEs range from 3.2 to 13.5\,\%, with median 6.7\,\%; only eight of fifty-one observations fall within the nominal $\pm1.96$ SE intervals.
+DEA relative pressure SEs are 5.4--11.6\,\% for Seo and Hong and 12.3--19.1\,\% for Lal, compared with their much larger measured deviations.
+These comparisons show that uncertainty within the selected local parameter fit does not encompass the discrepancies.
+They do not identify which experiment or model term causes a miss.
+
+% P:p2-results-uncertainty-02
+MDEA bands at the 108 Xiao and Ermatchkov pressure states have relative SEs of 7.82--39.1\,\%, overlapping the magnitude of the held-out errors.
+Its cation--bicarbonate interaction and cation Born diameter lie at $+1$ and 7 \AA, respectively, and remain fixed in this covariance.
+For AMP, the carbamate diameter and hydrolysis enthalpy correction are fixed at their limits, 5.32 \AA\ and $-5000$ J/mol.
+The corresponding residual-variance factors are 2.7639784 for MDEA and 0.829 for AMP.
+The band size therefore depends on both the fitted information and the conditional error model, not just the parameter count.
+
+% P:p2-results-uncertainty-03
+PZ's local linear uncertainty is less reliable: one marginal SE of a fitted dispersion energy changes some Hilliard calibration pressures by 90--160\,\% in the linear estimate.
+Its cation--bicarbonate interaction is $-0.02\pm1.03$ across an allowed interval of width 1.5, indicating weak identification.
+With the PZH$^+$--water interaction fixed at its $-1$ limit, eleven interior coordinates use variance factor 146.3; calibration-pressure relative SEs range from 2.8 to 34\,\%.
+No PZ held-out pressure band was calculated, and the calibration band cannot substitute for it.
+The inward 5 and 10\,\% profile refits did not converge, so their costs are upper bounds.
+
+% P:p2-results-uncertainty-04
+DEA has no active parameter bounds, but its hydrolysis-law level and carbamate--water interaction have correlation 0.972.
+Its residual-variance factor is 0.210, and relative SEs at fitted Lawson and Carson states are 3.3--10.3\,\% and 0.9--1.9\,\%, respectively.
+Small conditional errors coexist with compensation between parameters.
+Supplementary Section~S6 reports all parameter SEs, sensitivity definitions and inward profiles.
+None includes shared-input uncertainty, experimental systematic errors, uncertainty in the omitted chemistry or model discrepancy.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{pressure-bands.pdf}
+\caption{Calculated-to-measured partial-pressure ratios with nominal $\pm1.96$ conditional parameter-SE intervals, at stored measured states. Separate panels show MDEA Xiao/Ermatchkov, AMP Kundu and DEA Seo and Hong/Lal; the horizontal axis numbers the observations within each panel and is not a temperature or loading axis. The horizontal line is equality. Intervals are linear parameter propagation, conditional on fixed shared inputs and active bounds; they exclude measurement noise and model discrepancy. PZ held-out bands are unavailable.}
+\label{fig:p2-bands}
+\end{figure}
+
+\subsection{Sensitivity of unfitted pressures to the shared description}\label{sec:p2-shared-sensitivity}
+% P:p2-results-sensitivity-01
+Unfitted pressures depend on the shared description as well as on the amine fit: substituting Part I's bicarbonate--water interaction and R2 law moves the MDEA and AMP errors by 22--26 percentage points in opposite directions before the amine parameters are refitted (Table~\ref{tab:p2-shared-sensitivity}).
+Table~\ref{tab:p2-shared-sensitivity} follows the same data through the earlier shared description, substitution of the Part I bicarbonate--water interaction and fitted R2 law, and amine-specific refitting.
+For AMP, Kundu AARD changes from 43.69 to 21.89\,\% upon substitution without refitting, then returns to 43.51\,\% when the original AMP coordinates and limits are refitted.
+The substitution worsens fitted total-pressure AARD to 18.85\,\%, while refitting recovers 9.93\,\%.
+The favorable 21.89\,\% score thus reflects cancelling changes in this comparison, not a jointly improved calibration and independent pressure description.
+
+\input{tables/part2/shared-sensitivity}
+
+% P:p2-results-sensitivity-02
+For the reported MDEA fit, the same sequence changes Ermatchkov AARD from 19.15 to 42.03 and then 18.27\,\%.
+An alternative MDEA ion description, A3, changes from 26.21 to 52.47 and then 31.44\,\%, so refitting does not recover its earlier error.
+A3 is a counter-case, not an additional selected model.
+These same-source interventions demonstrate parameter compensation but do not uniquely assign the discrepancy to bicarbonate, Born solvation or a reaction constant.
+
+% P:p2-results-sensitivity-03
+The reported AMP fit widens the cation--\COtwo interaction and retains the 5.32 \AA\ carbamate floor, giving 42.85\,\% Kundu AARD.
+Lowering the floor to 3.5 \AA\ gives a slightly smaller calibration cost but 43.95\,\% Kundu AARD; it is not the reported result.
+Supplementary Section~S7 gives the complete sequence.
+A model-free comparison of the Hartono and Kundu measurements lacks sufficient matched conditions, especially at 303 K, to decide whether Hartono and Kundu disagree or whether the model misses their concentration dependence.
+Its interpolation and vapor-baseline assumptions do not establish that either source is erroneous.
+\FloatBarrier
+
+\subsection{Comparison with published models}\label{sec:p2-literature}
+\input{tables/part2/published-comparisons}
+% P:p2-results-literature-opening
+Only the Hilliard PZ pressures are fitted both here and in a published model, where the e-NRTL deviation of Yi et al. is similar (18.0 against 19.16\,\%); every other published comparison differs in which observations were fitted.
+% P:p2-results-literature-01
+Yi et al.'s e-NRTL model provides two same-source PZ comparisons: 18.0\,\% partial-pressure AARD for the same sixty-two Hilliard observations, fitted in both models, and 7.8\,\% for fifty-two Ermatchkov observations, fitted by Yi but held out here \cite[Table~3, p.~2]{yiOpenAccessThermodynamically2024}.
+For AMP, Yi reports 15.4\,\% on the fifty-one Kundu partial pressures, fitted there and held out here \cite[Table~4, p.~5]{yiOpenAccessThermodynamically2024}.
+Yi neglects AMP carbamate \cite[Sect.~2.1.2, p.~3]{yiOpenAccessThermodynamically2024}, whereas the present fit includes carbamate and fits its species fraction.
+Yi's 8.0\,\% Tong result is total-pressure AARD on forty-five fitted observations, compared with seventeen unfitted total pressures scored here.
+That unequal coverage is not a matched-data performance comparison.
+
+% P:p2-results-literature-02
+Wangler et al. report MDEA pressure ARD 19.7\,\% over their eighty-two ternary observations and correct Uyan's result to 34.4\,\% on that set \cite[Table~11]{Wangler2018}.
+Both are ternary predictions after lower-order estimation, including osmotic data for the ion--water interactions in Wangler's work; neither fits those ternary pressures.
+The present MDEA fit includes reactive total pressures, and its held-out partial-pressure subsets are different, so those percentages cannot establish relative accuracy.
+Cleeton et al. likewise predict MDEA ternary pressures from pure and binary inputs and discuss larger concentrated-solution and low-loading discrepancies \cite[Sect.~3.3.2, Figs.~7--8]{Cleeton2020}.
+Their separation of data roles and condition-dependent errors is more informative here than a pooled score from unmatched sets.
+
+% P:p2-results-literature-03
+Perdomo et al.'s SAFT-$\gamma$ Mie model represents reactions implicitly through association, with selected PZ concentration data used to estimate group interactions and other concentrations predicted \cite[Sect.~4.2, Fig.~4]{perdomoPredictiveGroupcontributionFramework2023}.
+Its DEA comparisons include Lal pressures and B\"ottinger species, with pressure and species predictions after the specified group-interaction estimation rather than an independent explicit-ion parameter test \cite[Sect.~4.3.3, Figs.~13--14]{perdomoPredictiveGroupcontributionFramework2023}.
+Nasrifar and Tafazzol's DEA acid-gas curves are predictions after pure and binary estimation, with ideal-activity chemistry and no explicit electrolyte activity coefficients \cite[Sects.~2--6, Figs.~13--14]{Nasrifar2010}.
+These qualitative comparisons distinguish fitting policies and chemistry; they supply no matched-row ranking against the present DEA fit.
+
+\subsection{Species, heats, density and binary properties}\label{sec:p2-other}
+% P:p2-results-other-01
+DEA shows that close agreement in fitted absorption heats and in comparison-only species fractions does not extend to every property: the water--DEA mixing enthalpy has the wrong sign.
+At nine B\"ottinger states without the oxazolidone byproduct, mean absolute true-mole-fraction differences are 0.001749 for DEA plus DEAH$^+$, 0.001301 for carbamate and 0.001274 for the bicarbonate-labeled sum.
+The latter is compared with model bicarbonate plus carbonate.
+Sixteen byproduct-containing states remain separate because that chemistry is omitted, and no NMR mole-fraction measurement uncertainty is reported.
+The pressure assumption and aggregate species definitions condition the comparison (Fig.~\ref{fig:p2-dea-properties}).
+
+% P:p2-results-other-02
+At 363.15 K and 1.75 MPa, all fourteen water--DEA excess-enthalpy calculations \cite{horstmannPhaseEquilibriumExcess2002} have the wrong sign: approximately $+86$ to $+758$ J/mol, against measured values from $-93$ to $-1707$ J/mol.
+None lies within twice the source scale.
+This error concerns heat of mixing per mole of water--DEA mixture, whereas Carson's fitted heats concern absorption per mole of added \COtwo at 298.15 K.
+Agreement with the latter cannot establish a correct mixing enthalpy at another temperature.
+No corresponding excess-enthalpy comparison is available for MEA, MDEA, AMP or PZ, so the sign error has not been shown to be DEA-specific.
+Cancellation of mixing contributions during absorption is possible but was not calculated.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{dea-properties.pdf}
+\caption{DEA properties at the measured coordinates: (a) fitted Carson integral absorption heats at 298.15 K against the source \ce{CO2} mole fraction, with the source heat-release magnitude converted to negative enthalpy for exothermic absorption; (b) comparison-only carbamate mole fractions in the nine B\"ottinger states without byproduct, at assumed 2.5 MPa; (c) comparison-only water--DEA excess enthalpy at 363.15 K and 1.75 MPa. Circles are measurements and crosses calculations. The different enthalpy bases and temperatures separate the successful absorption-heat calibration from the wrong-sign mixing prediction.}
+\label{fig:p2-dea-properties}
+\end{figure}
+
+% P:p2-results-other-03
+DEA comparison-only pressure AARD is 41.74\,\% for Lawson Table VIII, nominally 50 wt\% but 54.5 wt\% at 77 $^{\circ}$F.
+Cai binary data \cite{caiBinaryIsobaricVaporLiquid1996} give 40.82\,\% pressure AARD at 6.66 kPa, far from the fitted binary isotherm, while forty-three loaded densities at 298 K give 0.445\,\% AARD.
+Those properties use different data, conditions and measurement scales (Supplementary Section~S4).
+The MDEA held-out capped absorption heat at 388.71 K and 60 wt\% is $-64.491$ kJ/mol \COtwo, against $-63.3$ kJ/mol; this extrapolates the dissociation measurements and solvent concentration.
+The corresponding 333.15 K, 60 wt\% capped heat could not be calculated.
+PZ has no comparable reactive heat or density assessment; the four amines have not been checked equally across properties.
+\FloatBarrier
+
+\subsection{Phase behavior limits the apparent fit}\label{sec:p2-phases}
+% P:p2-results-phase-opening
+Small property residuals do not exclude false liquid phases: the reported PZ fit has at least four, and a separate fit with the Part I stability penalty still has at least three, two of which the routine search missed.
+% P:p2-results-phase-02
+At least four false liquid splits remain for the reported PZ fit at Hilliard rows 55, 56, 61 and 62, near 4.96--5.02 mol PZ/kg water, loading 0.77--0.83 and 313 or 333 K.
+The calculated additional liquids contradict the measured liquid states despite the moderate pressure AARD.
+The search examines 183 calibration states, comprising 121 NMR states and sixty-two bubble states, and finds no split at the fifty-two held-out bubble states.
+Rich NMR states below their calculated bubble pressure are assessed as liquids at 1.05 times that pressure; those moved states do not demonstrate single-liquid behavior at the original assumed 0.1 MPa.
+
+% P:p2-results-phase-03
+The separate PZ penalty fit does not remove the false liquid splitting.
+Its routine census detects only one split, but direct tangent-plane evaluations at known split compositions show two further negative distances, $-0.0309\,RT$ and $-0.0437\,RT$, at rows 55 and 56.
+The penalty fit therefore has at least three false liquid splits.
+This counterexample demonstrates a missed finite search, so every split count in this paper is a lower bound, and the absence of detected instability, here and for the penalized MEA fit of Part I \cite[Sect.~4.5]{PolleyPartI}, does not prove stability.
+
+% P:p2-results-phase-01
+The MDEA searches cover 775 calculated states, some repeating a physical state; none detects an additional liquid, 37 detect a gas-like phase, and none is ambiguous or unresolved.
+Seven source states above the shared R2 interval are excluded, and there is no phase evidence at 394.94--395.00 K.
+AMP has no detected liquid, gas, ambiguous or unresolved outcome at the fifty-one Kundu states.
+Its calibration searches retain no detected liquid, ambiguous or unresolved outcome, but their gas outcomes were not stored.
+DEA searches the 140 fitted and held-out states without detecting an additional phase or an unresolved result.
+
+
+\input{tables/part2/phase-searches}
+
+\FloatBarrier

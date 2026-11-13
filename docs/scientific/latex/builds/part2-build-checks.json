@@ -1,0 +1,71 @@
+{
+  "scope": "Apply Astra and Opus reviews of da5f953; mechanical checks and layout inspection; no re-review.",
+  "source_baseline": "da5f95382f787f8ca5ade7506b5fe3f93f76e858",
+  "commands": [
+    "agent-heavy uv run --no-project --with matplotlib python docs/scientific/latex/scripts/part2_displays.py",
+    "agent-heavy bash: latexmk -pdf -interaction=nonstopmode -halt-on-error, supplement/main/supplement/main",
+    "agent-heavy python <cse>/scripts/workflow/check_prose.py --root . <Part II sources>",
+    "agent-heavy python <cse>/scripts/visualize/latex_visual_qa.py <each PDF> --profile article --contact-sheet"
+  ],
+  "outputs": [
+    {
+      "path": "docs/scientific/latex/builds/part2.pdf",
+      "pages": 17,
+      "sha256": "eb1b6720951a22dd9485e195f26689a3a984bc8b343883a26c3f8967979099b1",
+      "undefined_references_or_citations": 0,
+      "overfull_boxes": 0,
+      "type3_fonts": 0,
+      "fonts_embedded": true,
+      "automated_visual_errors": 0,
+      "automated_visual_warnings": {
+        "tight_text_clearance": 28,
+        "text_graphic_overlap": 18,
+        "tight_text_graphic_clearance": 2
+      },
+      "visual_disposition": "Complete contact sheets and enlarged changed table/figure pages inspected; conservative clearance warnings occur at headings, table rules, chemical notation and plotted marks. No clipping found."
+    },
+    {
+      "path": "docs/scientific/latex/builds/part2_supplement.pdf",
+      "pages": 17,
+      "sha256": "eacc0c4d487c2cde98e369f9e6656a83ad7fd1ed28a52bb0cb5285e3e19241e5",
+      "undefined_references_or_citations": 0,
+      "overfull_boxes": 0,
+      "type3_fonts": 0,
+      "fonts_embedded": true,
+      "automated_visual_errors": 0,
+      "automated_visual_warnings": {
+        "tight_text_clearance": 74,
+        "text_graphic_overlap": 2
+      },
+      "visual_disposition": "Complete contact sheets and enlarged changed table/figure pages inspected; conservative clearance warnings occur at headings, table rules, chemical notation and plotted marks. No clipping found."
+    }
+  ],
+  "prose_check": "passed plugin-wide and scoped rules",
+  "numeric_map": "478 entries regenerated; 331 JSON-addressed entries checked exactly against retained fields",
+  "bibliography_entries_added": [
+    "bowerAcidicDissociationConstant1962",
+    "ciftjaExperimentalStudyCarbamate2014a",
+    "ermatchkovSolubilityCarbonDioxide2006a",
+    "hamborgDissociationConstantsThermodynamic2009",
+    "hartonoBinaryTernaryVLE2013",
+    "hartonoNewSolubilityHeat2021",
+    "horstmannPhaseEquilibriumExcess2002",
+    "kunduVaporLiquidEquilibriumCO22003",
+    "lalSolubilityH2SCO21985",
+    "lawsonGasSweeteningData1976",
+    "perez-saladokampsDissociationConstantNMethyldiethanolamine1996",
+    "seoSolubilitiesCarbonDioxide1996",
+    "steeleThermodynamicPropertiesIdealGas1997",
+    "ermatchkovChemicalEquilibriumConstants2003"
+  ],
+  "bibliography_missing": [],
+  "unchanged": "Part I files and analyses/_cse-manuscript.json; all scientific calculations",
+  "source_based_deviations": {
+    "Opus 14": "Astra exact calibration caption retains its cross-amine ranking sentence.",
+    "Opus 19": "PZ temperature is 313.1 K from the retained isotherm; use guidance is expressed as tested conditions and untested scope.",
+    "Opus 21": "R2 293.15--393.15 K is declared; no measured interval is invented."
+  },
+  "owner_directed_adjustment": {
+    "Opus 10": "No unsupported reason for absence of the penalty is supplied; post-fit searches are stated."
+  }
+}

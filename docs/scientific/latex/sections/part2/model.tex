@@ -1,0 +1,50 @@
+\section{Thermodynamic model and transferred parameters}\label{sec:p2-model}
+\subsection{Shared terms and amine-specific chemistry}
+% P:p2-model-01
+The residual Helmholtz energy retains the hard-chain, dispersion, association, Debye--H\"uckel and Born contributions of Part I \cite[Sect.~2]{PolleyPartI}.
+The water and \COtwo component descriptions, hydronium, hydroxide, bicarbonate and carbonate, all interactions among these six shared species, and the reaction laws of Part I, R1 (water autoprotolysis), R2 (\ce{CO2 + 2H2O <=> HCO3- + H3O+}) and R3 (\ce{HCO3- + H2O <=> CO3^{2-} + H3O+}), including Part I's fitted R2 corrections, are held fixed.
+Table~\ref{tab:p2-origins} distinguishes independent fits, literature values, parameters estimated jointly with MEA, and assumptions.
+Free interactions between an amine-specific ion and a shared species remain amine-specific parameters; freezing bicarbonate does not freeze every interaction involving bicarbonate.
+
+The MDEA and AMP fits were first developed against an earlier MEA fit whose bicarbonate--water interaction was 0.727 rather than Part I's bound value $+1$ and whose R2 coefficients differed slightly (Supplementary Section~S7); Section~\ref{sec:p2-shared-sensitivity} tests that difference.
+
+\input{tables/part2/origins}
+
+% P:p2-model-02
+Each liquid contains the shared species and its molecular amine and protonated forms.
+AMP and DEA also contain carbamate; PZ contains singly and doubly protonated PZ, mono- and dicarbamate, and the neutral zwitterion HPZCOO.
+The final reactive fits have nine free coordinates for MDEA, nine for AMP, twelve for PZ and four for DEA, excluding earlier pure-component, binary and dielectric fits.
+Supplementary Section~S1 gives species parameters, site descriptions, diameter ties and temperature laws.
+The fitted ion diameters and reaction-law corrections are effective model parameters, not independently measured molecular sizes or equilibrium constants.
+
+% P:p2-model-03
+Charged species remain liquid-only.
+The vapor contains water, \COtwo and molecular amine, and for PZ also HPZCOO.
+Allowing this neutral zwitterion in the vapor resolves otherwise undecided phase searches; with the PZ parameters held fixed, the relative change in fitted partial pressures is at most $1.2\times10^{-8}$.
+This numerical change is negligible for those pressures, but the vapor composition space matters to the phase search.
+PZ has no solid-phase description, and its pure-liquid density is unvalidated.
+
+\subsection{Reaction conventions and measured temperature ranges}\label{sec:p2-laws}
+% P:p2-model-04
+A state can lie inside a reaction law's declared calculation interval yet outside the temperatures at which that law was measured; Table~\ref{tab:p2-laws} separates the two.
+The pure-liquid solvent and infinite-dilution solute conventions follow Part I.
+The amine laws and shared R2 retain their source molality standard state; R1 and R3 retain the source mole-fraction basis.
+Explicit water activity and the same hydronium reference are used, with the conversions described in Part I.
+For a reaction written with stoichiometric coefficients $\nu_i$ positive for products, equilibrium requires
+\begin{equation}
+ \sum_i\nu_i\mu_i=0,\qquad \ln K(T)=a+b/T+c\ln(T/T_0)+dT+\cdots .
+ \label{eq:p2-law}
+\end{equation}
+Source constants are mapped to this reference once; mole-fraction and molality constants are not interchanged without their standard-state conversion.
+Declared calculation intervals and measured source intervals answer different questions, as shown in Table~\ref{tab:p2-laws}.
+
+\input{tables/part2/laws}
+
+% P:p2-model-05
+The MDEA dissociation coefficients are those of Kamps and Maurer \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}, measured over 278--368 K, although the declared calculation interval extends to 395 K.
+The fixed AMP dissociation law \cite{hamborgDissociationConstantsThermodynamic2009} ends at 353.22 K.
+Its carbamate-hydrolysis temperature dependence is fitted: the fitted $b$ is $-1944.8$ K, compared with the starting source slope $-2546.2$ K, while the enthalpy correction reaches its $-5000$ J/mol limit.
+This fitted hydrolysis slope is distinct from the fixed dissociation law and does not extend that law's admissible interval.
+PZ carbamate source measurements span 283.15--333.15 K, and its protonation measurements approximately 293--353 K.
+DEA uses the fixed Bower protonation law \cite{bowerAcidicDissociationConstant1962} above the approximately 323 K upper measurement limit, including 23 of its 30 fitted pressures.
+A fitted offset does not turn an extrapolated temperature dependence into a measured one.
