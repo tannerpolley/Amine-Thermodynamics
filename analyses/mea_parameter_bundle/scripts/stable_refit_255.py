@@ -148,8 +148,9 @@ def bind(mapping):
         d.AN = saved
 
 
-def _init(mapping):
-    global _SPEC
+def _init(mapping, trials=None):
+    global _SPEC, _TRIALS
+    _TRIALS = trials or {}
     verify()
     _SPEC = bind(mapping)
 
@@ -157,35 +158,63 @@ def _init(mapping):
 def _measure(state):
     started = time.monotonic()
     try:
-        out = stability_payload(reg.predict(_SPEC.model, stability_row(_SPEC, state, 1.)))
+        item = stability_row(_SPEC, state, 1.)
+        supplied = []
+        for witness in _TRIALS.get(state['key'], []):
+            phase = type(item.problem.phases[0])()
+            phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
+            phase.support, phase.composition_guess, phase.packing_guess = witness['support'], witness['composition'], witness['packing']
+            supplied.append(phase)
+        prediction = reg.predict(_SPEC.model, item)
+        out = stability_payload(prediction)
+        if prediction.stability is not None:
+            out['witnesses'] = [dict(kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
+                                for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
+        if supplied:
+            item.stability_options.trials = supplied
+            item.stability_options.evaluate_supplied_trials = True
+            checked = reg.predict(_SPEC.model,item)
+            out['supplied_trials'] = [] if checked.stability is None else [dict(evidence=t.evidence,quantities=jsonable(t.quantities),message=t.message) for t in checked.stability.report.trials]
+            out['supplied_available'] = len(out['supplied_trials'])==len(supplied) and all(t['evidence']=='evaluated' for t in out['supplied_trials'])
+            out['available'] = out['available'] and out['supplied_available']
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
-def grid(mapping, chosen):
+def grid(mapping, chosen, trials=None):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
-    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping,)) as pool:
-        return list(pool.map(_measure, chosen, chunksize=4))
+    trials = globals().get('GRID_TRIALS') if trials is None else trials
+    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping, trials)) as pool:
+        measured = list(pool.map(_measure, chosen, chunksize=4))
+    if trials is not None:
+        for row in measured:
+            trials.setdefault(row['key'], []).extend(w for w in row.get('witnesses',[]) if w not in trials.get(row['key'],[]))
+    return measured
 
 
 def descent(row):
-    return bool(row.get('available')) and row['value'] < 0
+    return (bool(row.get('available')) and row['value'] < 0) or any(t['evidence']=='evaluated' and t['quantities'].get('tpd_over_rt',0)<0 for t in row.get('supplied_trials',[]))
 
 
 def tally(rows):
     return dict(states=len(rows), available=sum(bool(r.get('available')) for r in rows), descent=sum(map(descent, rows)),
                 unavailable=[r['key'] for r in rows if not r.get('available')],
-                minimum_tau=min((r['value'] for r in rows if descent(r)), default=None))
+                minimum_tau=min((r['value'] for r in rows if r.get('available') and r['value']<0), default=None),
+                supplied_minimum_tpd=min((t['quantities']['tpd_over_rt'] for r in rows for t in r.get('supplied_trials',[]) if t['evidence']=='evaluated'),default=None))
 
 
 # ---------------------------------------------------------------- coordinates and mappings
 
-def coordinates(spec, shifts, held=(), extra_shifts=()):
+def coordinates(spec, shifts, held=(), extra_shifts=(), fitted=None, fixed=None, ties=None):
     """The 16 a6 coordinates and wide bounds about this spec's mapping; enthalpy totals stay in [-1e4, 1e4] J/mol."""
     values, out = s.parameter_values(spec.inputs['endpoint']), []
-    for q in read(A6)['information_coordinates']:
+    identities = None if fitted is None else {q if isinstance(q, str) else q['identity'] for q in fitted}
+    extra = [] if fitted is None else [q for q in fitted if isinstance(q, dict)]
+    for q in read(A6)['information_coordinates'] + extra:
+        if (identities is not None and q['identity'] not in identities) or q['identity'] in (fixed or {}):
+            continue
         scale, bounds = q['scale'], q['bounds']
         if 'coefficient' in q:
             scale *= abs(q['source_to_native_factor'])
@@ -200,6 +229,8 @@ def coordinates(spec, shifts, held=(), extra_shifts=()):
         else:
             origin = values[q['identity']]
             args = dict(targets=[[t['family'], t['target'], t['factor']] for t in q.get('targets', [dict(q, factor=1.)])])
+        if q['identity'] in (ties or {}):
+            args['targets'] += ties[q['identity']]
         out.append(dict(args, identity=q['identity'], origin=origin, scale=scale, bounds=bounds))
     for name in extra_shifts:
         out.append(dict(kind='reaction_enthalpy_shift', name=name, pivot_temperature=313.15, identity=f'reaction:{name}:enthalpy_shift',
@@ -209,11 +240,13 @@ def coordinates(spec, shifts, held=(), extra_shifts=()):
 
 def endpoint_mapping(start, report, declared):
     """Parameter mapping at a fit's returned optimizer (density_268.finish_fit, all fitted reactions)."""
-    ordinary = [q for q in read(A6)['information_coordinates'] if 'reaction' not in q]
-    # Untied parameter coordinates declared beyond a6 (#283 slopes) follow a6's in the physical vector.
-    ordinary += [dict(identity=q['identity']) for q in declared if 'targets' in q and q['identity'] not in {x['identity'] for x in ordinary}]
-    import fit_campaign as campaign
-    updates = campaign.fitted_parameter_values(ordinary, report['physical'][:sum(1 + len(q.get('ties', [])) for q in ordinary)])
+    updates, index = {}, 0
+    for q in declared:
+        for family, target, factor in q.get('targets', []):
+            identity = (f'component/{target}/{family}' if isinstance(target, str)
+                        else f"pair/{'/'.join(sorted(target))}/" + ('k_ij/reciprocal_temperature_slope' if family == 'k_ij_reciprocal_temperature_slope' else family))
+            updates[identity] = report['physical'][index]
+            index += 1
     fitted = {q['name'] for q in declared if q.get('kind') in ('reaction_coordinate', 'reaction_enthalpy_shift')}
     for entry in report['reactions']['aqueous']:
         name, law = entry['name'], eq.ReactionLogPolynomial(**entry['correlation'])
@@ -297,27 +330,39 @@ def acceptance(candidate, baseline):
 
 def _census(task):
     import phase_diagnosis_255 as p255
-    mapping, state, path = task
+    mapping, state, path, *previous = task
+    if previous and previous[0]:
+        original = p255.f.stability
+        p255.f.stability = lambda model, problem, result: original(model, problem, result, supplied=previous[0])
     row = {k: state[k] for k in ('index', 'temperature_K', 'loading', 'pressure_Pa')}
-    p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
+    try:
+        p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
+    finally:
+        if previous and previous[0]:
+            p255.f.stability = original
     raw = read(path)
     path.unlink()
-    return raw, p255.reduce_state(raw)
+    reduced = p255.reduce_state(raw)
+    supplied = [t for report in raw.get('stability',[]) for t in report.get('supplied_trials',[])]
+    if previous and previous[0]:
+        reduced['supplied_negative'] = sum(t.get('quantities',{}).get('tpd_over_rt',0.)<0 for t in supplied)
+        reduced['complete'] = reduced['complete'] and len(supplied)==len(previous[0]) and all(t['evidence']=='evaluated' for t in supplied)
+    return raw, reduced
 
 
-def census(mapping, name):
+def census(mapping, name, trials=None):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
     tmp = OUT / name / 'census-tmp'
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json') for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), [])) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]
-    summary = dict(states=len(rows), descent=sum(r['resolved'] > 0 for r in rows), incomplete=sum(not r['complete'] for r in rows),
-                   descent_indices=[r['index'] for r in rows if r['resolved'] > 0], incomplete_indices=[r['index'] for r in rows if not r['complete']])
+    summary = dict(states=len(rows), descent=sum(r['resolved'] > 0 or r.get('supplied_negative',0)>0 for r in rows), incomplete=sum(not r['complete'] for r in rows),
+                   descent_indices=[r['index'] for r in rows if r['resolved'] > 0 or r.get('supplied_negative',0)>0], incomplete_indices=[r['index'] for r in rows if not r['complete']])
     write(f'{name}/census.json', dict(summary=summary, rows=rows))
     return summary
 
@@ -479,12 +524,14 @@ def select():
     write('primary.json', dict(outcome='A' if run else 'B', run=run, runs={r: {k: a[k] for k in ('t', 'cost', 'passed', 'outcome_A', 'near_final', 'stability_passed')} for r, a in runs.items()}))
 
 
-def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None):
+def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None):
     rel = f'{run}/stage-{index}'
     if (OUT / rel / 'fit.json').exists():
         return result(f'{rel}/fit.json')
     spec = bind(start)
-    declared = coordinates(spec, shifts, held, extra_shifts)
+    if fitted is not None:
+        spec.inputs['endpoint'] = start
+    declared = coordinates(spec, shifts, held, extra_shifts, fitted=fitted, fixed=fixed, ties=ties)
     spec.inputs['coordinates'] = declared
     if rows is not None:
         spec.inputs['observations']['fitted'] = rows(spec)
@@ -511,7 +558,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
                       endpoint_shifts=shift_totals(shifts, declared, report))
         write(f'{rel}/replay.json', values)
         write(f'{rel}/parameters.json', endpoint)
-    measured = report['stability_predictions'][-len(enforced):]  # stability rows are the last observations
+    measured = report['stability_predictions'][-len(enforced):] if enforced else []  # stability rows are the last observations
     report['stability_tally'] = tally([dict(key=k, **(p or dict(available=False))) for k, p in zip(report['enforced'], measured, strict=True)])
     write(f'{rel}/fit.json', report)
     print(run, index, report['status'], report['data_cost'], report['stability_cost'], json.dumps(report['stability_tally'])[:300], flush=True)
@@ -566,7 +613,9 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
     trace = []
     if endpoint is None:
         write(f'{run}/retreat.json', dict(t=0., reason='no stage returned an available 307-row endpoint', trace=trace, shifts=shifts[0]))
-        write(f'{run}/candidate.json', anchor)
+        ok, _, _ = admissible(anchor, enforced, rows)
+        if ok:
+            write(f'{run}/candidate.json', anchor)
         return
     passing, t, suspects = None, 1., ()
     while t > -1e-12:
@@ -589,7 +638,8 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
             low, high = (mid, high) if ok else (low, mid)
         passing = low
     t = 0. if passing is None else passing
-    write(f'{run}/candidate.json', segment(anchor, endpoint, t))
+    if passing is not None:
+        write(f'{run}/candidate.json', segment(anchor, endpoint, t))
     a, e = shifts
     write(f'{run}/retreat.json', dict(t=t, trace=trace, shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
 
