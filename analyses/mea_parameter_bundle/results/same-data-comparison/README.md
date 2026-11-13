@@ -194,7 +194,8 @@ nor the old 1e-8 output limit is asserted as a cross-version error bound.
 This is numerical verification and a bounded diagnosis, not physical validation
 or a parameter-adoption decision. No manuscript promotion is requested here.
 The earlier Supported review covered only the earlier translation and stop;
-this continuation's delivered review is pending. The normal replay's maximum
+this continuation's independent delivered review returned **Supported** at
+`e3fdf0f`, with no required defects (`part1-review.md`). The normal replay's maximum
 classified row residual is 5.1159076975e-13, below its 1e-10 solver tolerance.
 Executable additions total 177/200 from base 13bb6fbb (144 previously used).
 Notebook HTML rendered from retained numbers; home-page refresh still fails
