@@ -1,0 +1,195 @@
+{
+  "note": "Aggregation of retained rows; no model evaluation. AARD and bias definitions in the script docstring.",
+  "dissociation_law_range_K": [
+    278,
+    368
+  ],
+  "ermatchkov_xiao_pressure": {
+    "Xiao": {
+      "per_temperature_K": {
+        "298.15": {
+          "rows": 5,
+          "AARD_percent": 35.904320302521874,
+          "bias_percent": -35.904320302521874
+        },
+        "303.15": {
+          "rows": 5,
+          "AARD_percent": 32.980715265870145,
+          "bias_percent": -32.980715265870145
+        },
+        "308.15": {
+          "rows": 5,
+          "AARD_percent": 25.452687045932375,
+          "bias_percent": -25.452687045932375
+        },
+        "313.15": {
+          "rows": 5,
+          "AARD_percent": 18.42644305241727,
+          "bias_percent": -18.42644305241727
+        }
+      },
+      "inside_278_368K": {
+        "rows": 20,
+        "AARD_percent": 28.191041416685415,
+        "bias_percent": -28.191041416685415
+      },
+      "outside_278_368K": null,
+      "overall": {
+        "rows": 20,
+        "AARD_percent": 28.191041416685415,
+        "bias_percent": -28.191041416685415
+      }
+    },
+    "Ermatchkov": {
+      "per_temperature_K": {
+        "313.15": {
+          "rows": 37,
+          "AARD_percent": 19.56978220270488,
+          "bias_percent": -14.445493370144863
+        },
+        "353.15": {
+          "rows": 25,
+          "AARD_percent": 11.486616068229662,
+          "bias_percent": -7.35658466975437
+        },
+        "393.15": {
+          "rows": 26,
+          "AARD_percent": 22.944695344657404,
+          "bias_percent": 21.933440781305436
+        }
+      },
+      "inside_278_368K": {
+        "rows": 62,
+        "AARD_percent": 16.310441019448742,
+        "bias_percent": -11.587062442568051
+      },
+      "outside_278_368K": {
+        "rows": 26,
+        "AARD_percent": 22.944695344657404,
+        "bias_percent": 21.933440781305436
+      },
+      "overall": {
+        "rows": 88,
+        "AARD_percent": 18.270561615533122,
+        "bias_percent": -1.6832773991508851
+      }
+    }
+  },
+  "B1_fitted_by_source": {
+    "Kuranov": {
+      "rows": 67,
+      "AARD_percent": 20.43995291987306,
+      "bias_percent": 9.61272604655073,
+      "scaled_RMS": 0.22343818843576949,
+      "fitted_unit_in_replay": "Pa"
+    },
+    "Jakobsen": {
+      "rows": 16,
+      "AARD_percent": 13.5799737061702,
+      "mean_abs_error": 0.043479628809000935,
+      "mean_signed_error_predicted_minus_observed": 0.043479628809000935,
+      "unit": "dimensionless (protonated fraction)",
+      "scaled_RMS": 1.6394774522139601,
+      "fitted_unit_in_replay": "1"
+    },
+    "Carson": {
+      "rows": 40,
+      "AARD_percent": 5.449344222557771,
+      "mean_abs_error": 2698.688297086976,
+      "mean_signed_error_predicted_minus_observed": 1047.6246433208362,
+      "unit": "J/mol CO2",
+      "scaled_RMS": 1.1059440131666023,
+      "fitted_unit_in_replay": "J/mol"
+    },
+    "Merkley": {
+      "rows": 4,
+      "AARD_percent": 8.460443247616029,
+      "mean_abs_error": 4856.694031264255,
+      "mean_signed_error_predicted_minus_observed": -4856.694031264255,
+      "unit": "J/mol CO2",
+      "scaled_RMS": 2.0155821484030754,
+      "fitted_unit_in_replay": "J/mol"
+    },
+    "Cp": {
+      "rows": 33,
+      "AARD_percent": 2.593970850950113,
+      "mean_abs_error": 2.547342595858993,
+      "mean_signed_error_predicted_minus_observed": 0.40319577679597424,
+      "unit": "J/(mol-feed K)",
+      "scaled_RMS": 1.7601330015290446,
+      "fitted_unit_in_replay": "J/(mol-feed K)"
+    },
+    "loaded-density": {
+      "rows": 33,
+      "AARD_percent": 0.1847055333774555,
+      "mean_abs_error": 1.9942503506852338,
+      "mean_signed_error_predicted_minus_observed": 0.6026302877443702,
+      "unit": "kg/m^3",
+      "scaled_RMS": 1.5882883802281909,
+      "fitted_unit_in_replay": "kg/m^3"
+    },
+    "unloaded-density": {
+      "rows": 24,
+      "AARD_percent": 0.056759873972290424,
+      "mean_abs_error": 0.5656887811272355,
+      "mean_signed_error_predicted_minus_observed": 0.2163958221638372,
+      "unit": "kg/m^3",
+      "scaled_RMS": 1.4416628928213397,
+      "fitted_unit_in_replay": "kg/m^3"
+    },
+    "Kim": {
+      "rows": 61,
+      "AARD_percent": 3.232156711011758,
+      "bias_percent": 1.2459930718600831,
+      "scaled_RMS": 0.04400639779298538,
+      "fitted_unit_in_replay": "Pa"
+    },
+    "Merkley_by_temperature_K": {
+      "333.15": {
+        "rows": 2,
+        "AARD_percent": 10.35991266374043,
+        "mean_abs_error": 5724.535853807756,
+        "mean_signed_error_predicted_minus_observed": -5724.535853807756,
+        "unit": "J/mol CO2",
+        "inside_278_368K": true
+      },
+      "388.71": {
+        "rows": 2,
+        "AARD_percent": 6.560973831491628,
+        "mean_abs_error": 3988.852208720753,
+        "mean_signed_error_predicted_minus_observed": -3988.852208720753,
+        "unit": "J/mol CO2",
+        "inside_278_368K": false
+      }
+    },
+    "Kuranov_by_law_range": {
+      "inside_278_368K": {
+        "rows": 37,
+        "AARD_percent": 11.804613217564425,
+        "bias_percent": -7.801446255748982
+      },
+      "outside_278_368K": {
+        "rows": 30,
+        "AARD_percent": 31.09020521938704,
+        "bias_percent": 31.09020521938704
+      },
+      "outside_temperatures_K": [
+        373.14,
+        373.15,
+        373.16,
+        373.17,
+        393.12,
+        393.13,
+        393.14,
+        393.15
+      ]
+    }
+  },
+  "files": {
+    "analyses/solvent_specification_mdea/results/adoption-302/B1/pressure.json": "b81bfeb21d211d64211a2bda07b5e07af2a897f828a750f01aac6142340a7820",
+    "analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/fitted-replay.json": "6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2",
+    "analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/replay-summary.json": "9abcae66205879bb545cfcb865bb5ad8d6ca6507867574529e12c7925c2cb705",
+    "analyses/solvent_specification_mdea/results/adoption-302/replay.json": "f10e1323317330e7f49b1d04de40cc85f31414ed218ea400bd89990ebb9434f1",
+    "analyses/mdea_mea_workflow/results/reaction-basis-kamps-maurer.json": "c9ff18893f67b0fa023817e94dedebef5e4fa3fe31a0214c4c42601d5c54fc1d"
+  }
+}
