@@ -39,7 +39,8 @@ def laws_at(offsets):
         r["correlation"]["a"] += float(v)
     for r in rr:
         r["correlation"]["temperature_min"] = 283.15
-        r["correlation"]["temperature_max"] = max(333.3, r["correlation"]["temperature_max"])
+        # Evaluation interval only (covers the 333.65 K T+0.5 K check states); law values are unchanged.
+        r["correlation"]["temperature_max"] = max(333.7, r["correlation"]["temperature_max"])
     return rr
 
 
