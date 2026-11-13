@@ -2,17 +2,14 @@
 \subsection{Subsystems}
 % P:p2-results-subsystems
 The binary subsystems agree closely for MDEA but retain discrepancies for PZ and DEA.
-
-% P:p2-results-calibration-02-binary
-The separately fitted PZ--water binary properties retain discrepancies that the reactive refit leaves unchanged (Supplementary Sections~S1 and S3).
-
-% P:p2-results-other-03-binary
-For water--DEA, the comparison-only Cai binary data \cite{caiBinaryIsobaricVaporLiquid1996} give 40.82\,\% pressure AARD at 6.66 kPa, far from the fitted binary isotherm.
+MDEA binary-pressure AARD is 3.23\,\% (Table~\ref{tab:p2-calibration}).
+The separately fitted PZ--water binary pressures and vapor compositions give scaled root-mean-square residuals of 7.78290 and 12.75239, respectively, using a pressure scale of 0.3 kPa and the conditional vapor-composition scale $\sqrt{(0.01y)^2+(0.00005/\sqrt{3})^2}$; these discrepancies are unchanged by the reactive refit.
+For water--DEA, the comparison-only Cai binary data \cite{caiBinaryIsobaricVaporLiquid1996} give 40.82\,\% pressure AARD at 6.66 kPa, far from the fitted binary isotherm, and the calculated water--DEA excess enthalpy has the wrong sign (Section~\ref{sec:p2-caloric-results}).
 
 \subsection{Loaded aqueous amines}\label{sec:p2-loaded}
 % P:p2-results-calibration-01
 Amine-specific fitting recovers parts of the targeted behavior, but the remaining deviations are larger than several of the assigned observation scales (Table~\ref{tab:p2-calibration}).
-MDEA fitted Kuranov total-pressure AARD is 20.44\,\%, while binary-pressure AARD is 3.23\,\%.
+MDEA fitted Kuranov total-pressure AARD is 20.44\,\%.
 Its source-scaled RMS exceeds unity for protonation fraction, both heat sources, heat capacity and both density groups.
 For Carson heat, scaled RMS increases from 0.977 with the earlier shared description to 1.106 after refitting to the Part I shared description.
 This compromise accompanies recovery of held-out pressures rather than uniformly improved properties.
@@ -52,7 +49,7 @@ This is an observation about the calculated results, not a diagnosis of the diss
 The reported AMP fit gives Kundu AARD 42.85\,\% and bias $+37.79$\,\% over all fifty-one observations.
 The signed error decreases with temperature: $+53.94$\,\% at 303 K, $+43.78$\,\% at 313 K and $-7.09$\,\% at 323 K.
 The 303 K set extrapolates the source basis of the hydrolysis slope below 313 K; all three temperatures are within the fixed dissociation law's interval.
-Tong's seventeen total pressures \cite{Tong2012} at 313--353 K give 28.66\,\% AARD and $+8.11$\,\% bias, while twenty-three rows at 373--393 K lie above the dissociation law's declared 353.22 K limit and are not calculated.
+Tong's seventeen total pressures \cite{Tong2012} at 313--353 K give 28.66\,\% AARD and $+8.11$\,\% bias, while twenty-three rows at 373--393 K lie above the dissociation law's 353.22 K calculation limit and are not calculated.
 The Tong biases also decrease with temperature, from $+48.55$ through $+5.73$ to $-23.19$\,\% at approximately 313, 333 and 353 K.
 The decreasing signed errors and bound hydrolysis enthalpy correction are relevant to temperature dependence, but do not distinguish model error from disagreement between experiments.
 
@@ -90,7 +87,6 @@ At loading about 0.41, Lawson reports 16.0--16.7 kPa at 65.6 $^{\circ}$C and 25 
 These are not matched states: temperature, concentration and loading differ.
 They do not isolate experimental bias or establish which source is correct, and the model retains a loading-shape error within its own fitted source.
 Across amines, unmatched pressure types, source uncertainties, concentrations, temperatures and selection histories prevent comparison of their error percentages as an accuracy ranking.
-
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=\linewidth]{unfitted-pressure.pdf}
@@ -141,7 +137,7 @@ Cancellation of mixing contributions during absorption is possible but was not c
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=\linewidth]{dea-properties.pdf}
-\caption{DEA properties at the measured coordinates: (a) fitted Carson integral absorption heats at 298.15 K against the source \ce{CO2} mole fraction, with the source heat-release magnitude converted to negative enthalpy for exothermic absorption; (b) comparison-only carbamate mole fractions in the nine B\"ottinger states without byproduct, at assumed 2.5 MPa; (c) comparison-only water--DEA excess enthalpy at 363.15 K and 1.75 MPa. Circles are measurements and crosses calculations. The different enthalpy bases and temperatures separate the successful absorption-heat calibration from the wrong-sign mixing prediction.}
+\caption{DEA properties at the measured states: (a) fitted Carson integral absorption heats at 298.15 K against the source \ce{CO2} mole fraction, with the source heat-release magnitude converted to negative enthalpy for exothermic absorption; (b) comparison-only carbamate mole fractions in the nine B\"ottinger states without byproduct, at assumed 2.5 MPa; (c) comparison-only water--DEA excess enthalpy at 363.15 K and 1.75 MPa. Circles are measurements and crosses calculations. The different enthalpy bases and temperatures separate the successful absorption-heat calibration from the wrong-sign mixing prediction.}
 \label{fig:p2-dea-properties}
 \end{figure}
 
@@ -231,10 +227,10 @@ Its interpolation and vapor-baseline assumptions do not establish that either so
 \input{tables/part2/published-comparisons}
 
 % P:p2-results-literature-opening
-Only the Hilliard PZ pressures are fitted both here and in a published model, where the e-NRTL deviation of Yi et al. is similar (18.0 against 19.16\,\%); every other published comparison differs in which observations were fitted.
+Only the Hilliard PZ pressures are fitted both here and in a published model, where the eNRTL deviation of Yi et al. is similar (18.0 against 19.16\,\%); every other published comparison differs in which observations were fitted.
 
 % P:p2-results-literature-01
-Yi et al.'s e-NRTL model provides two same-source PZ comparisons: 18.0\,\% partial-pressure AARD for the same sixty-two Hilliard observations, fitted in both models, and 7.8\,\% for fifty-two Ermatchkov observations, fitted by Yi but held out here \cite[Table~3, p.~2]{yiOpenAccessThermodynamically2024}.
+Yi et al.'s eNRTL model provides two same-source PZ comparisons: 18.0\,\% partial-pressure AARD for the same sixty-two Hilliard observations, fitted in both models, and 7.8\,\% for fifty-two Ermatchkov observations, fitted by Yi but held out here \cite[Table~3, p.~2]{yiOpenAccessThermodynamically2024}.
 For AMP, Yi reports 15.4\,\% on the fifty-one Kundu partial pressures, fitted there and held out here \cite[Table~4, p.~5]{yiOpenAccessThermodynamically2024}.
 Yi neglects AMP carbamate \cite[Sect.~2.1.2, p.~3]{yiOpenAccessThermodynamically2024}, whereas the present fit includes carbamate and fits its species fraction.
 Yi's 8.0\,\% Tong result is total-pressure AARD on forty-five fitted observations, compared with seventeen unfitted total pressures scored here.

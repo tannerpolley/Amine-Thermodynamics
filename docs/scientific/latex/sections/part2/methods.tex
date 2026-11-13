@@ -2,7 +2,7 @@
 % P:p2-methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, per mole of amine molecules, including for PZ.
 Unloaded mass fraction is $w_A=m_A/(m_A+m_w)$; solute-free stock compositions are retained for pressure calculations.
-True liquid mole fractions use the total number of molecular and ionic species, whereas PZ nuclear magnetic resonance (NMR) group fractions use total PZ as denominator.
+True liquid mole fractions use the total number of molecular and ionic species, whereas PZ NMR group fractions use total PZ as denominator.
 The protonated-carbamate group and dicarbamate group are therefore not directly comparable to DEA true mole fractions.
 Total pressure and \COtwo partial pressure are separate observables.
 
@@ -27,13 +27,13 @@ These assumptions are part of the compared states, not corrections inferred from
 
 \subsection{Caloric and density calculations}
 % P:p2-methods-05-caloric
-For negative absorption heats, the signed difference $y^c-y^o$ states directly whether absorption is more or less exothermic.
 For an initial stock $i$ and final loaded equilibrium liquid $f$, the integral molar absorption enthalpy is
 \begin{equation}
  \Delta h_{\mathrm{abs,int}}=\frac{H_f-H_i-\Delta n_{\COtwo}h_{\COtwo}^{\mathrm{feed}}}{\Delta n_{\COtwo}}.
  \label{eq:p2-integral-heat}
 \end{equation}
-The feed and both liquids are evaluated at the comparison temperature and pressure; $\Delta n_{\COtwo}$ is the absorbed amount and negative heat denotes exothermic absorption.
+The feed and both liquids are evaluated at the comparison temperature and pressure; $\Delta n_{\COtwo}$ is the absorbed amount; $h_{\COtwo}^{\mathrm{feed}}$ is the molar enthalpy of the \COtwo feed; negative heat denotes exothermic absorption.
+For these negative heats, the signed difference $y^c-y^o$ between calculated and observed values states directly whether calculated absorption is more or less exothermic than measured.
 A differential absorption heat is $(\partial H_{\mathrm{eq}}/\partial n_{\COtwo})_{T,P,n_A,n_w}-h_{\COtwo}^{\mathrm{feed}}$; it is distinct from the finite-loading integral.
 Each integral comparison retains its initial stock, final loading and any imposed liquid-loading cap.
 For an unloaded binary mixture, excess enthalpy per mole of mixture is
@@ -54,16 +54,15 @@ Each bounded least-squares fit minimizes its original weighted sum,
  \qquad r_j=(y_j^c-y_j^o)/s_j\quad\text{or}\quad r_j=\ln(y_j^c/y_j^o)/s_j .
  \label{eq:p2-objective}
 \end{equation}
-Here $s_j$ denotes the assigned observation scale and $W$ includes group weights or correlations.
+Here $y_j^c$ and $y_j^o$ are calculated and observed values, $s_j$ denotes the assigned observation scale and $W$ includes group weights or correlations.
 The objectives use different observations and scales, so their costs do not measure relative physical accuracy across amines.
-For DEA, pressure log ratios use scale 0.09 and heat differences use 0.02 times the magnitude of measured heat, with each group's squared residuals averaged.
-For PZ, pressure uses an assigned 2\,\% scale and NMR uses correlated area-normalization errors with assumed area scale $q=0.02$.
+
 % P:p2-methods-residual-02
 For MDEA, Kuranov total pressures use natural-log ratios, scale one and weight $100/9$; Kim binary total pressures use natural-log ratios with unit scale and weight.
 Jakobsen protonated fractions use differences scaled by 10\,\% of the observed fraction, with unit weight.
 Carson and Merkley heat differences use 3000 J/mol \COtwo scales and unit weights.
 Weiland heat capacities use 2\,\% of the observed heat capacity and unit weights.
-Loaded-density differences use the stored row-specific scales and weight $1/33$, whereas unloaded densities use 0.5 kg/m$^3$ and weight ten.
+Loaded-density differences use the observation-specific scales and weight $1/33$, whereas unloaded densities use 0.5 kg/m$^3$ and weight ten.
 
 % P:p2-methods-residual-03
 AMP loaded total pressures use log ratios with unit scale and weight $100/[9(47)\max(u_P/P,0.05)^2]$.
@@ -76,6 +75,9 @@ PZ pressure differences use an assigned scale 0.02 times observed pressure.
 NMR normalization propagates independent area errors with $q=0.02$ into correlated group-fraction blocks; complete-state areas reconstruct the monocarbamate pair and free/dicarbamate groups before normalization.
 Blank dicarbamate observations are not zeros and do not create additional residuals.
 The assumed area scale is not a source-validated independent species standard deviation.
+
+% P:p2-methods-residual-05
+For DEA, pressure log ratios use scale 0.09 and heat differences use 0.02 times the magnitude of measured heat, with each group's squared residuals averaged.
 
 % P:p2-methods-05
 The average absolute relative deviation and signed bias are
@@ -91,8 +93,8 @@ A negative pressure bias means underprediction.
 The AMP results use the fit whose carbamate diameter is bounded below by the MEA carbamate diameter, 5.32~\AA; a fit allowed down to 3.5~\AA\ lowers the cost only slightly, so the data identify the diameter only weakly below about 5.3~\AA, and that fit is a sensitivity case.
 The PZ fit stops at its 100-iteration limit with nearly flat cost and is not labeled formally converged.
 DEA's two charged-chain starts differ in cost below the optimizer tolerance and represent a numerical tie rather than distinct physical optima.
-The selected MDEA fit was chosen partly for its held-out pressures and gives poorer agreement with Carson's heats than the earlier fit (scaled RMS 1.106 against 0.977).
-The selected parameters remain fixed for the reported comparisons; the start and bound inventory records the alternatives (Supplementary Section~S3).
+The selected MDEA fit was chosen partly for its held-out pressures and gives poorer agreement with Carson's heats than the earlier fit (scaled root-mean-square (RMS) residual 1.106 against 0.977).
+The selected parameters remain fixed for the reported comparisons; Supplementary Section~S3 lists the starting points, bounds and alternative fits.
 
 % P:p2-methods-08
 Local covariance holds shared inputs, model choices, residual weights and bound fitted parameters fixed.
