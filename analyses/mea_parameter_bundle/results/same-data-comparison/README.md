@@ -111,8 +111,9 @@ alone does not establish numerical equivalence or physical validation.
 The adoption receipt's five-shift aggregates are not an exact-record reference;
 the published record retains R2/R4/R5 only. The omitted R1 and R3 shifts were
 −0.000679939316315813 and −0.21602074127857132 kJ/mol.
-The notebook and this result await independent delivered review and are not
-promoted for manuscript use. Notebook HTML rendered with `--no-execute` and
+Independent delivered review returned **Supported** at commit `e429df4` for
+the translation and qualification stop, with no required corrections
+(`part1-review.md`). This does not qualify scoring or promote manuscript use. Notebook HTML rendered with `--no-execute` and
 contains the retained first difference. The site home-page refresh could not
 complete because `snakemake` is unavailable. Standard refresh would alter the
 protected site metadata, so direct Quarto rendering was used; the metadata
