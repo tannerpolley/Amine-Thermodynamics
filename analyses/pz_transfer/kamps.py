@@ -16,10 +16,9 @@ import numpy as np
 from epcsaft import equilibrium as eq
 from binary_evidence import jsonable
 from fit_speciation import declarations
-from speciation import DC, HC, HPC, PC, PH, PH2
 from reactive import AN, CO2, PZ, W, endpoint, laws_at, nmr_phases, phases, pressure_problem, problem, summarize_census
 from run import verify_wheel, write_csv
-from speciation import save
+from speciation import DC, HC, HPC, PC, PH, PH2, save
 
 CARBAMATE_LAW_K = (283.15, 333.15)  # Ermatchkov 2003 NMR tabulated temperatures
 PROTONATION_LAW_K = (293.14, 353.42)  # Hamborg 2009 Table 16 run temperatures
