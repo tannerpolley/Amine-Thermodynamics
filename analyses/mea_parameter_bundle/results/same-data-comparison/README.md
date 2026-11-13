@@ -37,7 +37,7 @@ were not fitted but informed retaining zero interaction (§3.2).
 verification and unresolved source detail. Missing fitted-parameter totals are
 reported as unknown rather than inferred. No full paper text is published.
 
-## Published 2026 model: qualification fails at the first pressure
+## Published 2026 model: cross-version qualification and diagnosis
 
 The original record from MEA commit `7035362` has SHA-256
 `868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be`.
@@ -86,38 +86,119 @@ the reference CSV SHA-256 is
 `8242648f41c087d1a9acf810b3f9e35c21bbb021bad20ace38968a31ac8a9916`.
 No historical wheel was built or run for this continuation.
 
-One qualification replay used pinned Engine `391dfe5d`, wheel SHA-256
-`0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
-The fully translated mapping loads. The first comparison fails:
+### Full cross-version comparison, owner decision 2026-11-13
 
-| Quantity and state | Historical reference | Pinned-wheel translation | Relative difference | Required limit |
-|---|---:|---:|---:|---:|
-| CO2 partial pressure / Pa, `vle_obs_0119`, Hilliard2008, 313.15 K, loading 0.1529030581 mol/mol | 4.394811538107617 | 4.394810386862543 | 2.6195550451 × 10⁻⁷ | 10⁻⁸ |
+The former $10^{-8}$ relative-output limit is superseded openly. It assumed
+identical equations across Engine versions and has no valid origin for this
+comparison. Both versions name `EQUILIBRIUM_ROW_RESIDUAL = 1e-10`:
+`443a9da4:engine/native/core/numerical_policy.hpp:272–277` and
+`391dfe5d:engine/native/core/numerical_policy.hpp:295–300`.
+This is the dimensionless classified equation-row infinity norm, not a relative
+pressure or composition error bound. The caller supplies this same tolerance
+in `shared_evaluation.py:279`. The policy did not loosen between commits.
+The newer `MIXTURE_FORWARD_ERROR = 1e-7` at the latter file's line 339 is a
+refinement target for relative pressure, log density, **absolute** mole fractions
+and feed-scaled amounts; it cannot be used as one relative-output limit here.
 
-The absolute difference is −1.151245074 × 10⁻⁶ Pa. The relative limit is from
-#339/#255. This numerical reproduction failure does not measure disagreement
-with experiment. It is the first and only compared quantity, not a maximum
-over all reference pressures or species. The retained `qualification-state.json`
-and `translation-qualification.json` contain the state and comparison.
+All 371 adopted reference rows from MEA commit `8d6e261` were evaluated with
+translated record `be66f6cf…` on the pinned `391dfe5d` wheel, using the original
+packet and canonical CSV from that same MEA commit. Of these, **362** have
+historical values: **239 pressures and 123 species quantities**. Nine historical
+values are blank (`non_evaluable`): one pressure and eight species targets.
+The pinned wheel returned values for all 371, but the nine blanks have no
+relative difference and are excluded from distribution statistics. The retained
+`qualification-all-rows.csv` contains every row; `qualification-canonical-inputs.csv`
+retains the additional original pressure inputs. Signed difference is
+$(q_{391dfe5d}/q_{443a9da4})-1$; reported maxima and medians use its absolute value.
 
-The owner's stop rule applies: no species or later pressures were compared,
-no heat or heat-capacity differences were obtained, and zero Part I observations
-were scored. There is no 2026-model deviation beside `f8f64820…` for any Part I
-group and no stability-search result. No historical-wheel fallback was used.
-A scalar first difference is shown as a table because a plot adds no trend.
-The cause of the cross-wheel difference is unresolved; translation acceptance
-alone does not establish numerical equivalence or physical validation.
+| Quantity | Comparable n | Max absolute relative difference | Median absolute relative difference | Sign (new − historical) |
+|---|---:|---:|---:|---|
+| HCO3- | 23 | 3.6865179709e-07 | 2.9666346957e-07 | 23 positive / 0 negative |
+| MEA | 18 | 1.1066876238e-07 | 2.5842215590e-09 | 0 positive / 18 negative |
+| MEA + MEAH+ | 23 | 5.3243650155e-08 | 9.3614960228e-09 | 23 positive / 0 negative |
+| MEACOO- | 41 | 1.4203497167e-07 | 6.2631123843e-08 | 0 positive / 41 negative |
+| MEAH+ | 18 | 7.4604015632e-08 | 6.4684448575e-08 | 18 positive / 0 negative |
+| co2-partial-pressure | 239 | 3.0491072822e-07 | 2.5672845194e-07 | 0 positive / 239 negative |
 
-The adoption receipt's five-shift aggregates are not an exact-record reference;
-the published record retains R2/R4/R5 only. The omitted R1 and R3 shifts were
-−0.000679939316315813 and −0.21602074127857132 kJ/mol.
-Independent delivered review returned **Supported** at commit `e429df4` for
-the translation and qualification stop, with no required corrections
-(`part1-review.md`). This does not qualify scoring or promote manuscript use. Notebook HTML rendered with `--no-execute` and
-contains the retained first difference. The site home-page refresh could not
-complete because `snakemake` is unavailable. Standard refresh would alter the
-protected site metadata, so direct Quarto rendering was used; the metadata
-was not changed.
+Signs are uniform within each quantity. Magnitudes vary with composition and
+quantity; they are not a constant offset or randomly alternating signs.
+Pressure magnitudes span 1.2941315664e-7–3.0491072822e-7. The overall maximum,
+3.6865179709e-7, is `Matin2012_state_001::HCO3-` (historical 0.0015561964247065652,
+new 0.0015561969984011737). These are numerical cross-version differences,
+not deviations from experiment or propagated measurement uncertainties.
+
+The explicit owner rule stops scoring when a relative difference exceeds the
+named tolerance. The owner subsequently clarified that 1e-10 remains only a
+solver-residual tolerance and required restoration of the old finite reference
+on all 362 comparable rows before scoring. No Part I group has yet been scored.
+
+### Bounded reference diagnosis
+
+Historical `443a9da4:engine/native/properties/infinite_dilution_reference.cpp:318–352`
+uses the last finite reference contraction; `engine/native/core/numerical_policy.hpp:191–194`
+sets its witness molality to 1e-14 mol/kg. Engine commit **3b893fc2c** replaces
+this finite-dilution calculation with analytic solvent insertion. The old code
+itself describes a square-root ionic-strength bias at that finite molality.
+The new implementation is documented in `391dfe5d:engine/docs/science/algorithms.md`
+in its reference-calculation section.
+
+A disposable read-only probe on the pinned wheel evaluated that finite composition
+using the original neutral solute ratios (including their 0.125 scale), at each
+reaction's reference pressure and 313.15 K. It compared the finite contraction
+with the normal analytic-reference diagnostic, then added that difference to
+the source log-equilibrium constant for this one isothermal solve. This restores
+the old reference numerically without editing the Engine or retained producer.
+`reference-limit-probe.json` retains the five contraction differences and pressure.
+R1/R2 changes are about -2.257755e-7 and R3 about -4.515509e-7 in dimensionless
+log-equilibrium units; R4/R5 differences are roundoff. The restored pressure is
+4.394811538110804 Pa, versus historical 4.394811538107617 Pa, about 7.25e-13 relative.
+This identifies the reference change as the cause at the first state; the owner
+requires its confirmation over every comparable row before scoring.
+
+### All-row finite-reference check: stop before Part I scoring
+
+The owner required the same disposable finite-reference probe on all **362**
+comparable rows, with reproduction to roundoff, about $10^{-12}$ relative,
+before scoring. The probe completed with 362 returned values. Median absolute
+relative difference is **2.7255975255e-13**, and maximum is
+**2.7081559217e-11**. **341 rows** are within $10^{-12}$;
+**21** exceed it. The largest is `canonical:vle_obs_0171`,
+CO2 partial pressure: historical **1228.0644953749538 Pa**, restored finite
+reference **1228.0644953416959 Pa**. The signed difference is
+$-2.7081559217\times10^{-11}$ relative (about $-3.33\times10^{-8}$ Pa).
+
+`qualification-finite-reference-rows.csv` retains all 362 comparisons;
+`qualification-finite-reference-summary.json` records the distribution, first
+row above $10^{-12}$, input method and disposable-script hash. The calculation
+used one worker in an `agent-heavy` background shell with numerical-library
+threads set to one, reusing the historical packet and canonical CSV. For each
+state it evaluated the finite reference at each reaction's reference pressure,
+subtracted the analytic contraction and added that difference to the source
+log-equilibrium coefficient. Pressure-dependent corrections were evaluated at
+the normal analytic endpoint. The pinned wheel then solved that isothermal
+state with the restored finite reference. No Engine source changed; no
+historical wheel was run. Probe code and caches are disposable and excluded
+from the retained implementation, as the owner requested.
+
+The finite-reference change explains the leading cross-version difference and
+reduces the maximum to 2.71e-11, but **not every row reproduces near 1e-12**.
+The remaining discrepancy has not been isolated between historical solver
+termination, arithmetic and other Engine changes. The owner's explicit stop
+therefore applies. No Part I observation group was scored; no heat or
+heat-capacity difference or 162-state stability result is claimed. The original
+analytic cross-version maximum remains 3.6865179709e-7 (pressures 3.0491072822e-7),
+with uniform signs by quantity and nine blank historical reference values.
+Both Engine solver residual tolerances remain 1e-10; neither this tolerance
+nor the old 1e-8 output limit is asserted as a cross-version error bound.
+
+This is numerical verification and a bounded diagnosis, not physical validation
+or a parameter-adoption decision. No manuscript promotion is requested here.
+The earlier Supported review covered only the earlier translation and stop;
+this continuation's delivered review is pending. The normal replay's maximum
+classified row residual is 5.1159076975e-13, below its 1e-10 solver tolerance.
+Executable additions total 177/200 from base 13bb6fbb (144 previously used).
+Notebook HTML rendered from retained numbers; home-page refresh still fails
+because `snakemake` is unavailable. Protected site metadata was not changed.
 
 ## Reproduction and scope
 
@@ -128,7 +209,7 @@ uv run --no-project --python <pinned-environment-python> analyses/mea_parameter_
 uv run --no-project --python <pinned-environment-python> analyses/mea_parameter_bundle/scripts/same_data_comparison.py tables
 ```
 
-The first command reproduces the full translation and stops at the first failed comparison;
+The first command reproduces the full translation and evaluates every retained reference row;
 the second rebuilds the matched score and property tables from retained values.
 There is no process pool; evaluation uses a single worker with BLAS/OpenMP
 threads set to one. The script reuses the existing MEA evaluator and does not
