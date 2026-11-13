@@ -27,8 +27,7 @@ These assumptions are part of the compared states, not corrections inferred from
 
 \subsection{Caloric and density calculations}
 % P:p2-methods-05-caloric
-A negative pressure bias means underprediction.
-For negative absorption heats, the signed difference $y^c-y^o$ instead states directly whether absorption is more or less exothermic.
+For negative absorption heats, the signed difference $y^c-y^o$ states directly whether absorption is more or less exothermic.
 Supplementary Section~S2 gives the caloric and density definitions, including the stock and loading bases used in each comparison.
 
 \subsection{Parameters and fitting}
@@ -42,7 +41,7 @@ Each bounded least-squares fit minimizes its original weighted sum,
 Here $s_j$ denotes the assigned observation scale and $W$ includes group weights or correlations.
 The objectives use different observations and scales, so their costs do not measure relative physical accuracy across amines.
 For DEA, pressure log ratios use scale 0.09 and heat differences use 0.02 times the magnitude of measured heat, with each group's squared residuals averaged.
-For PZ, pressure uses an operational 2\,\% scale and NMR uses correlated area-normalization errors with assumed area scale $q=0.02$.
+For PZ, pressure uses an assigned 2\,\% scale and NMR uses correlated area-normalization errors with assumed area scale $q=0.02$.
 Supplementary Section~S2 specifies the other residuals and their data definitions.
 
 % P:p2-methods-05
@@ -53,6 +52,7 @@ The pressure AARD definition is identical to Part I,
  \label{eq:p2-aard}
 \end{equation}
 The same reporting formula is applied separately to nonzero heats and other properties; species differences and root-mean-square errors retain their observable units.
+A negative pressure bias means underprediction.
 
 % P:p2-methods-06
 The AMP results use the fit whose carbamate diameter is bounded below by the MEA carbamate diameter, 5.32~\AA; a fit allowed down to 3.5~\AA\ lowers the cost only slightly, so the data identify the diameter only weakly below about 5.3~\AA, and that fit is a sensitivity case.
@@ -62,11 +62,11 @@ The selected MDEA fit was chosen partly for its held-out pressures and gives poo
 Supplementary Section~S3 reports these selections and their parameter identities.
 
 % P:p2-methods-08
-Local covariance holds shared inputs, model choices, residual weights and bound coordinates fixed.
-For interior coordinates, the covariance is the local inverse weighted information matrix multiplied by the retained residual-variance factor.
+Local covariance holds shared inputs, model choices, residual weights and bound fitted parameters fixed.
+For interior fitted parameters, the covariance is the local inverse weighted information matrix multiplied by the retained residual-variance factor.
 At a prediction with parameter derivative $g$, the conditional variance is $g^{\mathsf T}C_\theta g$; displayed intervals use $\pm1.96$ conditional standard errors (SE), not total prediction intervals.
 Separate sensitivities displace one marginal SE at a time and do not include correlation compensation.
-Inward profiles fix a bound coordinate 1, 5 or 10\,\% of its original interval inside the bound and refit the remaining coordinates.
+Inward profiles fix a bound fitted parameter 1, 5 or 10\,\% of its original interval inside the bound and refit the remaining fitted parameters.
 Those displacements have different meanings and sizes; none quantifies source systematics or model-form error.
 
 \subsection{Phase-stability search}
