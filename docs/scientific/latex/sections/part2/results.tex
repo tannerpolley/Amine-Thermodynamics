@@ -57,6 +57,20 @@ At 313.1 K, within the carbamate measurements, AARD is 9.32\,\%; at 353.15 K, ab
 Only eleven of fifty-two pressures lie within the printed source uncertainty, and the uncertainty-scaled RMS is 11.59.
 The mean error consequently understates the disagreement relative to the source's measurement resolution.
 
+% P:p2-results-kamps-01
+The comparison-only total pressures of P\'erez-Salado Kamps et al. \cite[Table~3, p.~2666]{kampsSolubilityCO2H2O+piperazine2003a} were scored once on the frozen twelve-coordinate PZ fit and never fitted or used to select it.
+The ninety-four rows give 42.5\,\% AARD and $-40.3$\,\% bias.
+Loaded rows below 0.2 MPa give 20.4\,\% AARD and $-6.0$\,\% bias; the loaded 374--395 K rows at or above 0.2 MPa give 37.1\,\% and $-35.2$\,\%, and the remaining loaded 313--354 K rows give 53.0\,\% and $-53.0$\,\%.
+The 313.75 K block, inside both the 283.15--333.15 K carbamate and 293.14--353.42 K protonation measurements, still has $-32.1$\,\% bias, so leaving those ranges is not the only cause.
+Only that block lies inside both PZ laws; the 395.0 K rows also exceed the shared R2 interval (Supplementary Table~\ref{supp-tab:p2-kamps-blocks}).
+
+% P:p2-results-kamps-02
+The source gives pressure bounds of $\pm4$ or $\pm10$ kPa, without assigning the transducer to each row, and uncertainty up to 10\,\% below 0.1 MPa \cite[pp.~2664, 2667]{kampsSolubilityCO2H2O+piperazine2003a}.
+All eighty-two loaded rows at or above 0.2 MPa lie outside both pressure bounds.
+The $\pm0.7$\,\% solvent-mass bound moves calculated pressure by up to $-10.8$\,\% / $+11.7$\,\%; the median ratio of sensitivity to misfit is 0.07 and the maximum is 0.88.
+Near 1 mol/mol at low pressure this sensitivity can be comparable to the misfit, but for thirty rows above 1.2 mol/mol and at or above 0.2 MPa it is at most 3.2\,\% against misfits of at least 34.9\,\%.
+These are input sensitivities, not propagated total uncertainties; the individual charged \COtwo masses needed to propagate their uncertainty were not reported.
+
 % P:p2-results-unfitted-04
 DEA predicts Seo and Hong's thirty-mass-percent solution \cite{seoSolubilitiesCarbonDioxide1996} with 79.54\,\% AARD and $+77.80$\,\% bias; the 80 $^{\circ}$C subset reaches 154.22\,\%.
 Lal's more dilute stock \cite{lalSolubilityH2SCO21985} instead gives 44.17\,\% AARD and $-22.93$\,\% bias.
@@ -194,12 +208,18 @@ PZ has no comparable reactive heat or density assessment; the four amines have n
 
 \subsection{Phase behavior limits the apparent fit}\label{sec:p2-phases}
 % P:p2-results-phase-opening
-Small property residuals do not exclude false liquid phases: the reported PZ fit has at least four, and a separate fit with the Part I stability penalty still has at least three, two of which the routine search missed.
+Small property residuals do not exclude false liquid phases: the reported PZ fit has at least forty across calibration and comparison states, and a separate fit with the Part I stability penalty still has at least three, two of which the routine search missed.
 % P:p2-results-phase-02
-At least four false liquid splits remain for the reported PZ fit at Hilliard rows 55, 56, 61 and 62, near 4.96--5.02 mol PZ/kg water, loading 0.77--0.83 and 313 or 333 K.
+Four false liquid splits are detected for the reported PZ fit at Hilliard rows 55, 56, 61 and 62, near 4.96--5.02 mol PZ/kg water, loading 0.77--0.83 and 313 or 333 K.
 The calculated additional liquids contradict the measured liquid states despite the moderate pressure AARD.
 The search examines 183 calibration states, comprising 121 NMR states and sixty-two bubble states, and finds no split at the fifty-two held-out bubble states.
 Rich NMR states below their calculated bubble pressure are assessed as liquids at 1.05 times that pressure; those moved states do not demonstrate single-liquid behavior at the original assumed 0.1 MPa.
+
+% P:p2-results-phase-kamps
+Thirty-six additional false liquid splits occur at Kamps states, at 313--354 K and loading 0.96--1.64 mol \COtwo/mol PZ, with tangent-plane distances from $-0.026$ to $-0.554\,RT$.
+The second liquids are rich in bicarbonate and doubly protonated PZ.
+Pressures at these states belong to a single liquid that is not the stable state of this model; the split count is a lower bound.
+At 1.5 times bubble pressure all four Hilliard splits persist, although the routine search misses two; all 121 NMR states pass the finite search at $T+0.5$ K, with rich states moved above bubble pressure as specified in the supplement.
 
 % P:p2-results-phase-03
 The separate PZ penalty fit does not remove the false liquid splitting.
