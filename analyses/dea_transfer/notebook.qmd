@@ -37,9 +37,9 @@ amine-general paper. Nothing is adopted.
   | Set | Rows | Error |
   |:--|--:|:--|
   | Lawson Table VIII (50 wt%) | 10 | 41.7% mean absolute error (bias −33.0%) |
-  | Böttinger 2008 speciation, clean states | 9 | within 0.0013–0.0017 in true mole fraction |
+  | Böttinger 2008 speciation, clean states | 9 | mean absolute difference 0.0013–0.0017 in true mole fraction |
   | Cai 1996 bubble pressure | 9 | 40.8% error against 6.66 kPa |
-  | Horstmann 2002 excess enthalpy | 14 | wrong sign: +89 to +759 J/mol against −93 to −1707 J/mol measured |
+  | Horstmann 2002 excess enthalpy | 14 | wrong sign: +86 to +759 J/mol against −93 to −1707 J/mol measured |
   | Weiland 1998 loaded density | 43 | 0.45% mean absolute error |
 
 - **Phase census.** All 140 fitted and held-out states are single stable
@@ -50,7 +50,8 @@ amine-general paper. Nothing is adopted.
   not from poorly determined coordinates.
 
 Evidence type: a calibration, plus two held-out physical comparisons scored
-once on a frozen endpoint, plus comparison-only predictions. No pass or fail
+on a frozen endpoint (first on the B-1 freeze, then once more on the B-2
+re-freeze), plus comparison-only predictions. No pass or fail
 rule is applied to the held-out numbers (owner decision 2).
 
 ![Measured points (circles) and model predictions at the same states (crosses). Lawson and Carson are fitted; Seo & Hong and Lal are held out. Selected endpoint B-2. Values: [figure-values.csv](results/figure-values.csv).](results/measured-vs-model.png)
@@ -138,7 +139,7 @@ Source transcriptions with PDF hashes and locators are in
 
 - The design's start 2 for form B (DEAH⁺–water k = −0.5, DEACOO⁻–water 0,
   ln K + 0.35, ΔH − 11 kJ/mol) is unavailable. On Lawson's 100 °F isotherm it
-  predicts 14 to 330 times the measured pressures, for example 4.67 MPa against
+  predicts 5.5 to 327 times the measured pressures at its six solvable rows, for example 4.67 MPa against
   0.32 MPa at loading 0.873. At loading 1.167 (3.6 MPa measured) it has no
   bubble point: the equilibrium is locally infeasible, with residual 0.011
   after 144 iterations.
@@ -159,8 +160,10 @@ Source transcriptions with PDF hashes and locators are in
 **Selection (D7).**
 
 - Neither form has a coordinate on a limit, so the lower cost decides, and
-  B-2 is lower than B-1 by 4.8 × 10⁻¹⁰. The selection was written and hashed
-  before any held-out row was evaluated: [selection.json](results/selection.json),
+  B-2 is lower than B-1 by 4.8 × 10⁻¹⁰. That gap is below the optimizer's
+  function tolerance (about 8 × 10⁻¹⁰), so the two starts are a numerical tie
+  at one endpoint. The B-2 selection was written and hashed before the
+  held-out rows were re-scored on it: [selection.json](results/selection.json),
   SHA-256 `9bcb4115…5d39609`, endpoint `91c2384e…18785cdd`.
 - An earlier freeze, made before the new start existed, selected B-1. Its
   held-out scores, retained in [score-B-1.json](results/score-B-1.json), agree
@@ -206,12 +209,14 @@ to 0.52 at 150 °F (loading 1.072). Carson per mass fraction (0.10, 0.20,
   consistent with the low constant.
 - The pressure misfit is largest where loading exceeds about 0.9, the
   bicarbonate and physically dissolved CO₂ region. All six such Lawson rows
-  are 25–58% low, and there the carbamate law has least influence.
+  are 25–58% low. The carbamate level still moves them 10–17% per standard
+  error there, less than at loading 0.4 or 0.8 (its influence changes sign
+  near loading 0.5).
 - The smaller temperature effect may involve the Bower protonation law, used
   above its 323 K measured range in 23 of 30 Lawson rows. This study tests
   neither cause.
 
-## Held-out pressures (frozen endpoint, scored once)
+## Held-out pressures (frozen endpoint, re-scored once on B-2)
 
 **Seo & Hong 1996 (30 mass% DEA).** The row scale is
 s² = (0.69 kPa/p)² + [½ ln(p(1.03α)/p(0.97α))]². It covers only the stated
@@ -315,14 +320,15 @@ ideal-gas part is linear in composition and cancels. As a units check, the
 residual enthalpy of water is −41.4 kJ/mol, close to its vaporization enthalpy.
 
 - **Measured:** exothermic, −93 to −1707 J/mol.
-- **Model:** endothermic, +89 to +759 J/mol. None of the 14 rows lies within
+- **Model:** endothermic, +86 to +759 J/mol. None of the 14 rows lies within
   twice the stated σ = 2 J/mol + 1% of the value.
-- **Meaning:** the model has the wrong sign for the DEA–water mixing heat. The
-  cross-association by combining rule, with a k_ij fitted only to pressures,
-  does not carry the unlike hydrogen-bond energy.
-- **Why the reactive heats still fit:** Carson's are at 298 K and small CO₂
-  mole fraction, where this term largely cancels between the initial and
-  final liquids.
+- **Meaning:** the model has the wrong sign for the DEA–water mixing heat.
+  One possible cause, not tested here, is that the combining-rule
+  cross-association, with a k_ij fitted only to pressures, does not carry the
+  unlike hydrogen-bond energy.
+- **Why the reactive heats can still fit:** Carson's heats are at 298 K and
+  small CO₂ mole fraction, where this term may largely cancel between the
+  initial and final liquids. That cancellation is argued, not computed.
 
 **Weiland 1998 loaded densities at 298 K.** 0.45% mean absolute error (bias
 −0.19%) on 43 rows. The misprinted 20 mass%, loading 0.50 value is excluded.
@@ -357,7 +363,7 @@ uncertainty, not model discrepancy.
   | Lawson | 3.3–10.3% |
   | Carson | 0.9–1.9% |
   | Seo & Hong | 5.4–11.6% |
-  | Lal | 12.4–19.1% |
+  | Lal | 12.3–19.1% |
 
 - Files: [ranking](results/uncertainty-307/ranking.csv),
   [covariance](results/uncertainty-307/covariance.json),
