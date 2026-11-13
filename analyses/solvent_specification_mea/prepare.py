@@ -55,8 +55,7 @@ def problem(p, chemistry):
         feed=dict(basis='amounts', values=dict(zip(ids, p.feed.values))), phases=[dict(name=q.name, kind=q.kind.name.lower(), support=[ids[i] for i in q.support],
         amount=dict(status=q.amount.kind.name.lower(), **({'value':q.amount.fraction} if q.amount.kind.name == 'Pinned' else {})),
         composition_guess=list(q.composition_guess), packing_guess=q.packing_guess) for q in p.phases],
-        topology_declared=p.topology_declared, row_tolerance=p.row_tolerance, standard_gibbs_j_per_mol=list(p.standard_gibbs_j_per_mol),
-        solver_options={q['name']:q['value'] for q in p.solver_options if q['name'] != 'EQUILIBRIUM_ROW_RESIDUAL'})
+        topology_declared=p.topology_declared, row_tolerance=p.row_tolerance, standard_gibbs_j_per_mol=list(p.standard_gibbs_j_per_mol))
 
 spec = read(C / 'spec.json')
 mapping = read(E / 'reported-parameters.json')
