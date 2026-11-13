@@ -1,0 +1,67 @@
+{
+  "paper_attachment": "QHI67GZ8",
+  "paper_sha256": "c3d35ca54f7f4ac54727d790f18e6c4a90e271bb3f01d5a4d146b85755489459",
+  "checks": [
+    {
+      "component": "protonated-monoethanolamine",
+      "quantities": [
+        "segment diameter / angstrom",
+        "dispersion energy over k / kelvin",
+        "Born diameter / angstrom"
+      ],
+      "values": [
+        3.48508556586,
+        232.687201645,
+        3.53322927146
+      ],
+      "locator": "Appendix B Tables 7-8; printed values rounded"
+    },
+    {
+      "component": "carbamate-anion",
+      "quantities": [
+        "segment diameter / angstrom",
+        "dispersion energy over k / kelvin",
+        "Born diameter / angstrom"
+      ],
+      "values": [
+        3.53543525721,
+        453.265244384,
+        3.54107030822
+      ],
+      "locator": "Appendix B Tables 7-8; printed values rounded"
+    }
+  ],
+  "reaction_coefficients": {
+    "R2": {
+      "a": 232.33141533884407,
+      "b_k": -11105.640030520277,
+      "c": -36.7816,
+      "d_per_k": 0.0
+    },
+    "R4": {
+      "a": 1.505015374192114,
+      "b_k": -1317.0489707842564
+    },
+    "R5": {
+      "a_k": 3037.6399534696106,
+      "b": -1.0173150837285996,
+      "c_per_k": 0.0004277
+    }
+  },
+  "reaction_locator": "Appendix B Eqs.124-126",
+  "MEA_water_kij": -0.07352749874985018,
+  "printed_MEA_water_kij": -0.07352749875,
+  "agreement": "rounding within last printed digit",
+  "pair_locator": "Appendix B Table 9",
+  "c_shell": 1.0,
+  "c_dielectric": 1.0,
+  "coefficient_unit": "dimensionless",
+  "Born_locator": "Eq.9; Appendix B Eqs.122-123, p.16",
+  "Engine_source_sha256": {
+    "f2d1e01f4:engine/native/contributions/born.hpp": "298fa94b22aec8fd65add361b48e797b9b96be69bbfe717639f0dde053d11cbc",
+    "443a9da492fd5ac7724525945d108c6a2a854d51:engine/native/contributions/born.hpp": "298fa94b22aec8fd65add361b48e797b9b96be69bbfe717639f0dde053d11cbc",
+    "a9638c2bccb25383f788ab7ab18fda62b36c76ff:engine/src/epcsaft/_native/born.hpp": "4ad03d6fc2dd9975fd52a71931e4d8004972d69df7f83bbe696610fdcf3211cb"
+  },
+  "interpretation": "Engine sources expose explicit coefficients rather than defaults. Shell diameter and two-region work equal the paper at (1,1). MEA commit 7035362 shared_evaluation.py MODEL_RUNTIME_DEFAULTS supplies (1,1). Translation adds only these fields. No disagreement in checked equations or coefficients.",
+  "limit": "No numerical equivalence: mapping refused before state evaluation."
+}

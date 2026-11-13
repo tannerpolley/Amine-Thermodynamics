@@ -1078,3 +1078,79 @@ Keep Matin's pooled minor-species observations as source-disagreement diagnostic
 For stage 2, retain the consistently pooled Matin mapping and both explicitly named carbonate denominators. Carry forward the empirical envelopes and this bounded result: most points are consistent with inter-source spread, but neither of the two declared probes reconciles the last point while representing the carbonate split. The near-identical probe endpoints and active bounds warrant no parameter adoption. This is a local diagnostic comparison with measured data and numerical replay/phase verification, not independent physical validation, parameter identification, absorber qualification or evidence that every admissible model would fail.
 
 The result uses parameter record `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91` and the worktree-only merged Engine wheel `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6` (`e6dae5c7`). The 307-row qualification cost is 148.87893934556408, within 6.58 × 10⁻¹⁴ relative of the retained reference. Its residual comparison allows 10⁻⁸ absolute below unit residual magnitude and 10⁻⁸ relative otherwise; predictions and total cost use 10⁻⁸ relative. The repository pin remains unchanged. [Qualification](results/bicarbonate-carbonate-266/qualification-replay.json), [source/coordinate inputs](results/bicarbonate-carbonate-266/inputs.json), [native probe 1](results/bicarbonate-carbonate-266/fit1-executed-native.json), [native probe 2](results/bicarbonate-carbonate-266/fit2-native.json), and the [diagnosis](results/bicarbonate-carbonate-266/diagnosis.md) preserve the exact inputs, wheel identities, initial refusals and owner-authorized recovery. No manuscript file or adopted parameter record was changed. Independent delivered review is pending; this notebook has not been promoted for manuscript use.
+
+## Published MEA models on the same observations {#same-data-comparison}
+
+On the **19 Ma'mun et al. (2005), Table 2 pressures**, at **393.15 K and
+30 mass% MEA**, the current record gives **19.432074704%** average absolute
+relative deviation in CO₂ partial pressure. All 19 original source pairs,
+including two distinct measurements at loading 0.3424 mol CO₂/mol MEA, match
+Part I rows `vle_obs_0246`–`vle_obs_0264`. Source pressures span 7.354–191.9 kPa
+and source loadings 0.155–0.4182 mol/mol. The retained analytical-feed conversion
+uses loadings 0.1549031–0.4181084; other authors' composition conversions were not
+independently reproduced.
+
+| Model | Fitted parameter count and scope | Role of these rows | n | Pressure AARD / % |
+|---|---|---|---:|---:|
+| This work, `f8f64820…` | 16 in reported fit | not fitted | 19 | 19.432074704 |
+| Baygi–Pahlavanzadeh (2015), PC-SAFT | 6 pure/binary values | not fitted | 19 | 21.03 |
+| Najafloo–Zarei (2018), SAFT-HR | 5 pure-MEA values | not fitted in detailed methods; conclusion ambiguous | 19 | 39.96 |
+| Zhang et al. (2011), eNRTL | 12 in ternary stage | fitted | 19 | 13.5 |
+
+Here $\mathrm{AARD}=100n^{-1}\sum_i|p_i^{\rm calc}-p_i^{\rm obs}|/p_i^{\rm obs}$.
+Published locators are Baygi Table 5, Najafloo Tables 4–5 and Zhang Table 9.
+These are different fitting roles, so the table does not rank models under an
+identical assessment. The current comparison recalculates deviations from
+retained wheel `391dfe5d…` predictions; it does not fit parameters. Full hashes,
+row identities and observed/predicted pressures in Pa are in the
+[matched rows](results/same-data-comparison/matched-pressure-rows.csv) and
+[score receipt](results/same-data-comparison/matched-score.json).
+
+The [property tables](results/same-data-comparison/property-tables.md) retain
+published scores, parameter-count scopes, conditions and source locators.
+Pressure subsets for Jou, Hilliard and Xu are larger than Part I's selected
+subsets. Their published aggregate deviations cannot be assigned to the reduced
+Part I rows. Zhang's heat, heat-capacity and species tables also do not specify
+an identical Part I target set. Pure-MEA and binary results from Nasrifar,
+Baygi, Najafloo and Pakravesh are recorded separately from loaded-mixture
+properties. Pakravesh's supporting information does not establish matched loaded
+MEA density or heat-capacity rows. Source gaps and the other MEA models inspected
+are retained in the [primary-source inventory](results/same-data-comparison/source-research.json).
+No unreported subset score, observation count or parameter total is estimated.
+
+The ideal-activity PC-SAFT/SAFT-HR comparisons use literature reaction laws;
+Zhang uses eNRTL liquid activities, PC-SAFT vapor fugacity and fitted amine-ion
+standard-state properties. Baygi selects 3B MEA/4C water, Nasrifar 2B water, and
+Najafloo 2B MEA/3B water. Their SAFT densities come from the equation of state;
+Zhang obtains absorption heat from reaction, dissolution and excess-enthalpy
+contributions. Pakravesh treats nonreactive pure fluids and mixtures. These
+choices and fitting roles differ from the present explicit-ion ePC-SAFT record.
+
+**Published 2026 model: evaluation unavailable.** The original record
+`868a5018…` matches the checked Appendix B ion/pair values and reaction laws
+([source check](results/same-data-comparison/appendix-check.json)). The historical
+Engine Born equations and MEA caller give dimensionless $c_{\rm shell}=1$ and
+$c_{\rm dielectric}=1$, matching Eq.9 and Appendix B Eqs.122–123. Adding only
+these declarations gives translated hash `cbf97278…`. Pinned wheel `391dfe5d…`
+then refuses the record: `missing cross association or no_cross_association:
+carbon-dioxide/monoethanolamine`. Construction stops before a numerical quantity
+can differ; no pressure, species, heat, density, heat-capacity or stability
+observations were scored. No association choice was added to bypass the stop.
+The [qualification receipt](results/same-data-comparison/translation-qualification.json)
+retains both hashes and the refusal. Exact-record per-observation references and
+their original packet were recovered from commit `8d6e261`; no historical wheel
+was run. The pressure/species limit remains $10^{-8}$ relative; heats do not
+gate, but no heat difference could be evaluated.
+
+The **adoption receipt's aggregate statistics used five reaction shifts**;
+the published record retains **R2/R4/R5 only**. Those aggregates are not an
+exact-record reference. The [study record](results/same-data-comparison/README.md)
+explains this distinction and the remaining association declaration refusal.
+
+The common-data table contains four scalar model comparisons, so a plot would
+not add information about a continuous trend. Published deviations retain each
+paper's processing and rounding. They are model-to-measurement comparisons,
+not uncertainty intervals or independent physical validation. Source uncertainty
+and correlated measurements are not propagated here. These results await
+independent delivered review and owner promotion before manuscript use; #341
+owns any replay on a later adopted record, and #246 owns the Hong comparison.
