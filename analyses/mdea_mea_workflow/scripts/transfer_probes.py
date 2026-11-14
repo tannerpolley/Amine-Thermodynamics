@@ -200,7 +200,7 @@ elif MODE!='mea':
                 s.search_document(candidate,label+'-bounds')
     else: raise ValueError(MODE)
 else:
-    mea=ROOT/'analyses/solvent_specification_mea'
+    mea=ROOT/'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
     values={pair(read(AN/'results/stage2-capped/A3/endpoint.json'))['value']['magnitude']}
     base=next(iter(values)); values.update((base-.1,base+.1))
     values.update(pair(read(AN/f'results/stage2-capped/{label}/followup-bicarbonate/endpoint.json'))['value']['magnitude'] for label in ('A3','B1'))

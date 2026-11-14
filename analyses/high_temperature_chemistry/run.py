@@ -201,7 +201,7 @@ def assessment(name, spec, declarations, laws):
 
 def fit_case(name, holdout):
     started = time.perf_counter()
-    spec = SolventSpecification(ROOT / 'analyses/solvent_specification_mea/MEA.toml')
+    spec = SolventSpecification(ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
     declarations = inputs(spec)
     pressure, species, problems, measured, _, _ = declarations
     records = spec.inputs['observations']['fitted']
@@ -240,7 +240,7 @@ if __name__ == '__main__':
     if case in ('all-five', 'holdout'):
         fit_case(case, case == 'holdout')
     else:
-        spec = SolventSpecification(ROOT / 'analyses/solvent_specification_mea/MEA.toml')
+        spec = SolventSpecification(ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
         laws = {r.name: law_fields(r.correlation) for r in next(iter(spec.problems.values())).reactions if r.name in ('R4', 'R5')}
         if case == 'hamborg':
             laws['R5'].update(source_law())

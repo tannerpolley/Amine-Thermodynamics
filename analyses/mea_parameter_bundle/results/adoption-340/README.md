@@ -41,6 +41,38 @@ agent-heavy uv run --no-sync python -u analyses/mea_parameter_bundle/scripts/ado
 
 Adopt checks replay and stability evidence before replacing the defaults. The code remains in `adoption_297.py`; no replacement adoption script or numerical algorithm is copied. Change accounting is measured against branch-creation main `dbe0db0bf5b065a55d4a52bcd346dcb67182e530`, with a 150 gross executable-line ceiling. The final accounting is retained in `change-accounting.json`. New code generalizes record identities, reuses #338's search and supplied-trial evaluation, coordinates defaults, exports inherited values, and checks the normal command. Superseded hard-coded assumptions remain only in the original #297 mode; configured adoption does not use its cost-improvement gate, which #340 explicitly excludes.
 
-Final executable accounting: **99 gross additions / 150 allowed**, with **16 removals**, across ten executable files. `adoption_297.py` accounts for 87 additions; the remaining 12 bind historical consumers explicitly to F0. Tests have 0 additions/removals. JSON/CSV/TOML and figure files are retained inputs or generated numerical evidence, classified as other files by the accounting tool.
+Initial adoption commit executable accounting: **99 gross additions / 150 allowed**, with **16 removals**, across ten executable files. `adoption_297.py` accounts for 87 additions; the remaining 12 bind historical consumers explicitly to F0. Tests have 0 additions/removals. JSON/CSV/TOML and figure files are retained inputs or generated numerical evidence, classified as other files by the accounting tool.
 
 The populated notebook rendered to `analyses/_site/mea_parameter_bundle/notebook.html` using Quarto HTML, presentation profile, with execution disabled. The standard refresh entry was not used because it can rewrite the excluded manuscript registry; `analyses/_cse-manuscript.json` is untouched. No scientific calculation ran during rendering. Independent review and manuscript promotion remain pending.
+
+
+## Historical-reader correction after independent review
+
+The delivered review found mixed records: PZ and DEA law readers used the live F2 declaration alongside F0 parameters, while AMP's #304/#306 shared-input readers used both live files. These readers now use `historical-spec/` for their endpoint and R1–R3 laws. At 353.15 K, F0's R2 gives ln K = -14.579871440000895; F2 gives -14.552898662714009. These are dimensionless aqueous-molality infinite-dilution constants. The difference is preserved, rather than substituting F2 into the earlier studies.
+
+The full source audit is in [historical-declaration-identity.json](historical-declaration-identity.json), with code hashes and the single frozen R1–R3 declaration. The newly bound files are:
+
+- PZ: `analyses/pz_transfer/speciation.py` (reaction-source generation).
+- AMP: `analyses/amp_transfer/kundu.py` (shared substitution and endpoint provenance), `refit_306.py` (shared endpoint).
+- DEA: `analyses/dea_transfer/prepare.py` (declaration generation), `reactive.py` (shared-law check).
+- MDEA workflow: `analyses/mdea_mea_workflow/scripts/transfer_probes.py` (its MEA comparison branch; the MDEA-specific declarations are unchanged).
+- Historical MEA diagnostics: `analyses/high_temperature_chemistry/{qualify,run,check_heat_domain}.py`; `analyses/mea_parameter_bundle/water-ideal-gas/compare.py`, `heat-capacity-264/calculate.py`, `parameter-identifiability/calculate.py`, `solvent-domain-285/calibration.py`, and `scripts/{bicarbonate_carbonate_266,bicarbonate_carbonate_266_prepare,density_268,pressure_transfer_attribution_261}.py`.
+
+The #261 pressure-transfer producer already uses `adoption-297/historical-spec/MEA-pre-260.toml`; its remaining reference read now uses that existing historical owner too. It is not moved to F0. Historical diagnostics with older wheel or calibration restrictions retain those restrictions; binding the source file freezes their pre-adoption default, and does not qualify or rerun those older campaigns.
+
+Existing F0 readers retained from the first adoption commit are PZ `binary.py` and `speciation.py` parameter construction, DEA `pinned.py`, MDEA `refit_298.py`, and bundle `a7_presentation.py`, `check_a7_selected.py`, `reduce_a7_evidence.py`, `render_parameter_tables.py`, and `render_regression_overview.py`. Existing #255/#338 fixed-record binds remain unchanged. The remaining live readers are the authorized default/adoption commands, unchanged hash-pinned caloric and observation inputs, and the permittivity presentation's component identifiers (identical in F0 and F2); none supplies changing endpoint values or reaction laws to a historical calculation.
+
+Representative checks ran through `agent-heavy` with OMP/OpenBLAS/MKL threads set to one, using the pinned wheel. The JSON files retain source conditions, identities, reference hashes and producing functions:
+
+| Amine | Representative retained output | Reproduced pressure / Pa | Absolute difference / Pa |
+|---|---|---:|---:|
+| PZ | Hilliard 2008 D.5 row 1, A12 | 66.24863229244855 | 0 |
+| AMP | Kundu 2003 row 0, current #304 record | 3483.3663636642273 | 0 |
+| DEA | Lawson–Garst 1976 row 0, frozen B-2 | 2519.623568138359 | 0 |
+| MDEA | Kuranov row `fit:0`, B1 #302 adoption | 74002.65996087721 | 0 |
+
+PZ's check regenerates source reactions through `speciation.reactions`, supplies those R1–R3 declarations to `reactive.pressure_problem`, and uses the retained A12 endpoint and offsets. AMP's check applies `kundu.current_shared` in memory and verifies unchanged current endpoint and R1–R3 laws before prediction. DEA's native `checks` confirms the shared-law identity before prediction from the frozen selection. Each representative prediction equals its retained value exactly. MDEA B1's own declaration is preserved: R1/R3 have their existing narrower intervals and omitted zero e/f fields; the newly frozen MEA-side reader has exact F0 declarations. No MDEA domain is altered to force structural equality.
+
+The repeated normal F2 command still gives 307 predictions, cost 150.76290287953717, and zero maximum relative prediction difference. Its fresh runtime is retained separately in `historical-freeze-default-runtime.json`; the original supported outputs and pins are preserved. These are finite numerical identity checks, not new fits or physical validation. Part II remains for #343–#346.
+
+The correction adds 22 executable lines and removes 22; complete-branch accounting is **121 gross executable additions / 150 allowed**, with **38 removals**, against the original branch base. [historical-freeze-change-accounting.json](historical-freeze-change-accounting.json) retains the accounting. The original 99-line accounting remains historical. No persistent test, model equation, fit control, Engine source, manuscript file, or manuscript registry is added or changed. Independent delivered review of the corrected head remains pending.

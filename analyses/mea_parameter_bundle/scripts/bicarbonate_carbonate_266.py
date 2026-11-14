@@ -19,7 +19,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / 'analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266'
-PACKET = ROOT / 'analyses/solvent_specification_mea'
+PACKET = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
 WHEEL = Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/epcsaft-1.2.0-cp313-cp313-manylinux_2_39_x86_64.whl')
 WHEEL_SHA = '83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6'
 def read(name):

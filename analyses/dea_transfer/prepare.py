@@ -40,7 +40,7 @@ for q in ('x_DEA_plus_DEAH', 'x_DEACOO', 'x_HCO3'):
         alpha=float(r['alpha_mol_CO2_per_mol_DEA']), observed=float(r[q]), scale=0.001, weight=1.0))
 
 # Chemistry (D1): R1-R3 from the adopted MEA declarations; Bower 1962 Eq. 7 fixed; Aroua 1997 Eq. 14 inverse as the carbamate start.
-mea = tomllib.loads((ROOT / 'analyses/solvent_specification_mea/declarations.toml').read_text())
+mea = tomllib.loads((ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/declarations.toml').read_text())
 shared = [dict(r, stoichiometry={k: v for k, v in r['stoichiometry'].items() if v}) for r in mea['chemistry']['reactions']['aqueous'] if r['name'] in ('R1', 'R2', 'R3')]
 law = lambda a, b, d=0.0: dict(a=a, b=b, c=0.0, d=d, e=0.0, f=0.0, reference_temperature=313.15, standard_state_id='aqueous-molality-infinite-dilution-water-v1', temperature_min=293.15, temperature_max=393.15)
 ln10 = math.log(10)

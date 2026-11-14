@@ -7,7 +7,7 @@ from MEA.solvent_specification import SolventSpecification
 from pressure_transfer_261 import OUT,verify,write,WHEEL_SHA
 from epcsaft import equilibrium as eq
 verify()
-S=SolventSpecification('analyses/solvent_specification_mea/MEA.toml')
+S=SolventSpecification('analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
 R=next(r for r in S.inputs['observations']['fitted'] if r['kind']=='partial_pressure')
 TERMS=['hard_chain','dispersion','association','debye_huckel','born']
 def job(args):

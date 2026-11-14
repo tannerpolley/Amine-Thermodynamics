@@ -64,7 +64,7 @@ def verify():
 
 
 def fresh():
-    s = SolventSpecification(ROOT/'analyses/solvent_specification_mea/MEA.toml')
+    s = SolventSpecification(ROOT/'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
     s.inputs['coordinates'] = copy.deepcopy(COORDS)
     return s
 
