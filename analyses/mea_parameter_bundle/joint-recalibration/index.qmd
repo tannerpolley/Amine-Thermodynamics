@@ -1,6 +1,7 @@
 ---
 title: "A7 joint recalibration and adoption"
 resources:
+  - ../results/reduced-refit/
   - ../results/phase-diagnosis-255/
   - ../results/engine-3e83e19c-density-free/
   - ../results/engine-3e83e19c-refit-chain/
@@ -26,6 +27,84 @@ resources:
 The chronology below retains earlier records and their original evidence. Earlier references to an adopted or reported record describe that study's record; they do not relabel it as the #297 candidate. Generated current tables are identified by their adopted-package inputs.
 
 
+
+## Literature constants and fewer fitted parameters, 13 November 2026 {#reduced-refit-338}
+
+**Holding R2 and R5 at their literature laws gives F1 cost 150.5320236, 2.0214779 above the 16-parameter current record, with 13 fitted parameters.** Further cumulative fixes give the candidates below; none is adopted. The [complete issue #338 account](../results/reduced-refit/README.md) owns full per-dataset costs, deviations and biases, parameter errors and correlations, native stopping histories, phase-search evidence and record fingerprints. This section supplies the evidence for the owner's #340 choice.
+
+| Fit | Fitted parameters | Cost | Change from F0 | On bound | Conditional SE > \|value\| |
+|---|---|---|---|---|---|
+| F0 | 16 | 148.5105 | 0 | 6 | 3 |
+| F1 | 13 | 150.532 | 2.021478 | 2 | 3 |
+| F2 | 11 | 150.7629 | 2.252357 | 1 | 3 |
+| F3 | 9 | 169.1381 | 20.6276 | 1 | 1 |
+| F4 | 9 | 174.4514 | 25.94085 | 2 | 0 |
+| F4-0 | 8 | 176.0491 | 27.53852 | 1 | 0 |
+| F5 | 8 | 186.6151 | 38.10455 | 3 | 0 |
+
+![307-row fitted-cost changes against F0. Separate points represent cumulative parameter fixes; F4-0 is the required separate zero-interaction alternative.](../results/reduced-refit/cost-comparison.png)
+
+F1 replaces both laws completely: Austgen Table V R2 plus the Part I molality conversion, and Bates–Pinching Eq.(10) R5. F2 ties each amine ion's Born diameter to its segment diameter, which the pinned wheel accepts. F3 fixes carbamate–water interaction and MEAH⁺–water reciprocal-temperature slope at zero. F4 imports the #282 salt water-ion laws and fits MEAH⁺–HCO₃⁻; its bound endpoint triggers F4-0 with that interaction fixed at zero. F5 instead continues F4 and fixes MEAH⁺–carbamate at zero. The same 307 observations, residual definitions, scales, weights and remaining bounds apply throughout.
+
+All twelve unpenalized starts converge on optimizer tolerances without continuations. Selection uses fitted cost only; relative-tolerance ties are disclosed. Each endpoint completes the 1908 grid, 576 offset and 162 liquid–vapor state searches, with zero split states found and no unavailable state. Earlier census split compositions are checked as supplied trials separately from the optimized Full search. No penalty stage is triggered; penalty cost is zero and penalized-search counts are not run. Counts are lower bounds and do not prove global stability. F0's searches are retained same-wheel #297 evidence; F0 itself is replayed, not refitted. The supplied-trial correction below augments this evidence without repeating fitted or optimized-search results.
+
+### Supplied-trial recovery
+
+The last-round correction at `6da9167` reads the explicit composition and native optimizer packing fraction retained without `split_coordinates` in `same-data-comparison/stability-diagnosis/recovery-results.json.gz`. Its documented phase declaration is a liquid trial over the nine MEA species. The [registry](../results/reduced-refit/split-registry.json) now contains **4129 occurrences and 3507 exact-distinct trials**, from 1070 files: 72 additional occurrences representing 36 new trials. The separate explicit composition is preserved even when it lies within 1.5×10⁻¹⁴ of another registered composition. Exact phase kind, ordered support, full composition and packing fraction determine identity, without rounding; support-length arrays are zero-padded outside support. Trial-content SHA-256: `72a1956398e09da220aed6756d2aa347bcef987943b85c55890ff6160bdaf65a`.
+
+**Admission, owner decision 2026-11-13:** a “split found earlier” is a **native resolved descent**, the Engine admission used by #255 and Engine #1224. A negative scalar alone does not establish an admitted split. `split-registry.json` is the single owner of these MEA trials: #341 and #342 read it and append their new resolved splits. Part II amines keep separate records.
+
+The [completeness report](../results/reduced-refit/split-completeness.json) scans all 66422 tracked MEA files. Its occurrence accounting counts every source file, including exact duplicates. For files with split indicators and zero yielded occurrences, it reports:
+
+| Class | Files | Reason |
+|---|---:|---|
+| (a) split-indicating record without a retained associated composition | 2132 | Scalar or reduced split evidence cannot supply a composition. |
+| (b) Negative-distance composition, descent not resolved | 22271 | Native optimizer iterates are unconverged or rejected as descents. Excluded by the owner's native-admission decision. |
+| (c) Unread resolved split composition | 0 | None: the unread-split list is empty. |
+
+Class (a) examples: `heat-capacity-264/baseline-stability.json`, `heat-capacity-264/probe-A-stability.json`. Class (b) examples: `parameter-identifiability/results/interrupted-1/profile-01-03/phase-point-1.json.gz` and `phase-point-11.json.gz` in the same directory. Class (c) has no examples. Class (b) contains **95,429 `no_resolved_descent` and 1,835 `indeterminate` negative-distance trial records**, across 22,271 files; they were not evaluated here. The negative-distance records comprise 95,429 successful optimizers labelled `no_resolved_descent`, 1,727 successful optimizers labelled `indeterminate`, and 108 unsuccessful optimizers labelled `indeterminate`. Optimizer success alone is not native descent admission. The completeness report retains each explained file and the reason.
+
+The CSV source comparison retains duplicate split evidence: the two phase-search `split-confirmations.csv` files hold **278 confirmed phase compositions**, and `descending-trials.csv` holds **29 negative-distance trial compositions**, all exactly present in the registry. The **19 malformed JSON files are non-empty**: 17 contain timing output mixed with non-JSON text, and two contain derivative-error messages. Other non-JSON composition/tangent-plane references remain explicitly listed in the completeness report.
+
+**Falsifying check:** independent enumeration of the git-tracked MEA files for retained, explicitly composed resolved split records finds nothing outside the registry. The [disposable enumeration result](../results/reduced-refit/split-enumeration-check.json) finds 4129 occurrences and zero outside. The explained classes above are excluded under the owner's definition; scalar signs and unresolved negative iterates are not silently claimed as admitted splits. Probe code is not committed.
+
+Only the **36 new resolved trials** were evaluated at all 162 census states of the 13 endpoints: **75,816 new native supplied evaluations**. The previous 3,471 trials were not reevaluated. [The byte comparison](../results/reduced-refit/retained-distance-check.json) verifies all **7,309,926 earlier distances**, extracted in their prior order, are byte-identical under the same serialization; maximum numerical difference is zero RT. It retains the original compressed-file SHA-256 values and Git base `6da9167`. Expanded vectors necessarily have new file bytes. Parent coordinates, parent records and optimized-search evidence remain unchanged.
+
+| Endpoint | Evaluated | Minimum / RT | Liquid minimum / RT | Negative | Unavailable |
+|---|---|---|---|---|---|
+| F0 | 568134 | 2.159602900064783e-06 | 0.0001790543912818521 | 0 | 0 |
+| F1/previous/unpenalized | 568134 | 5.402977336643744e-06 | 2.535660055968947e-05 | 0 | 0 |
+| F1/current/unpenalized | 568134 | 5.40293612516507e-06 | 2.53541980157479e-05 | 0 | 0 |
+| F2/previous/unpenalized | 568134 | 4.815477097963594e-06 | 3.065092460019514e-05 | 0 | 0 |
+| F2/current/unpenalized | 568134 | 4.751837451522078e-06 | 3.210939303244231e-05 | 0 | 0 |
+| F3/previous/unpenalized | 568134 | 1.136039097104913e-05 | 0.000196470078094535 | 0 | 0 |
+| F3/current/unpenalized | 568134 | 1.134502116428848e-05 | 0.0001960879055786791 | 0 | 0 |
+| F4/previous/unpenalized | 568134 | 1.158027180281351e-05 | 8.235760802222103e-05 | 0 | 0 |
+| F4/current/unpenalized | 568134 | 1.158823226887762e-05 | 8.242620791065747e-05 | 0 | 0 |
+| F4-0/previous/unpenalized | 568134 | 1.021214094976131e-05 | 0.0001171217211037856 | 0 | 0 |
+| F4-0/current/unpenalized | 568134 | 1.021592373717795e-05 | 0.0001170882502492532 | 0 | 0 |
+| F5/previous/unpenalized | 568134 | 1.028898375921017e-05 | 0.0002063773691816095 | 0 | 0 |
+| F5/current/unpenalized | 568134 | 1.028897418109409e-05 | 0.000206374489010841 | 0 | 0 |
+
+All **7,385,742 cumulative distances** are available and positive. Liquid minima refer to historical split-liquid trials; none has exact composition/packing identity with a retained parent liquid. No new composition-distance cutoff was imposed. No fits, objective replays, optimized searches or numerical method changes were run; no penalized refit is triggered. These are finite numerical-verification results at the retained 30 wt% MEA census states (313.15–393.15 K, loading 10⁻⁵–0.6 mol CO₂/mol MEA, retained reference pressures). They establish neither global stability nor physical validation. Independent review of this last-round correction remains pending.
+
+Both supplied callers remain unchanged: #350's native `Phase` route returns the full supplied report, while #338 appends witness evaluations to preserved optimized evidence. [The retained #350 caller check](../results/reduced-refit/same-data-caller-check.json) reproduces both state-37 distances and parent coordinates exactly. The cache checks trial-content identity before reuse; the incremental merge reuses prior distances only with the matching previous-registry hash.
+
+[agreement.csv](../results/reduced-refit/agreement.csv) reports every fitted group and the identical 112 six-source, 23 Wagner, 33/37 Aronu, 14 Arcis, 53 Kim, 67 Han, 19 Matin, five Böttinger states (ten quantities) and 51 broad heat capacities. It gives cost, average absolute relative deviation, root-mean-square error, signed prediction-minus-observation bias, and numeric #255 comparisons without agreement thresholds. Cai temperature and mole-fraction units are separated. These not-fitted data were previously inspected and informed the selected fixes; their errors are comparisons, not independent physical validation. Qualified same-row published-model scores were unavailable when this #338 agreement table was frozen; #339 now retains its separate [same-data comparison](../results/same-data-comparison/README.md).
+
+F0 replays all 307 predictions and cost exactly. The salt replay reproduces 0.16297888463729926% NaHCO₃ and 5.111329872572398% Na₂CO₃ deviations exactly. Every reduced endpoint reload reproduces fitted cost within the issue's 10⁻⁸ relative limit, with exact fixed values. Bates–Pinching Eq.(10) returns ln K5(298.15 K) = −21.865746172917778. The owner corrected the original source-table check because Eq.(10) is a correlation: its mean absolute residual against measured Table 2 is 0.0009073164433412793 pK, beside the paper's stated 0.0010. Exact conversion of the equation agrees within floating-point rounding.
+
+| Temperature / K | Bates–Pinching ln K5 | Hamborg-derived ln K5 | Bates minus Hamborg |
+|---|---|---|---|
+| 313.15 | -20.88988 | -20.79712 | -0.09276316 |
+| 323.15 | -20.29039 | -20.20875 | -0.08163974 |
+| 333.15 | -19.72749 | -19.65099 | -0.07650184 |
+| 343.15 | -19.19796 | -19.12128 | -0.0766884 |
+| 353.15 | -18.69899 | -18.61737 | -0.08162103 |
+
+The second law is the #263 correlation derived from Hamborg measurements; it is not another fit here. [parameter-details.csv](../results/reduced-refit/parameter-details.csv) reports values, bounds, conditional errors and their ratios. [part-ii-inherited-values.json](../results/reduced-refit/part-ii-inherited-values.json) records each alternative's completed R1–R3 laws and water-carbonate-ion interactions. Local conditional errors condition on fixed laws, active bounds, assigned weights and linearization; they are not physical prediction intervals.
+
+The evidence is calibration and numerical verification on Engine `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. Only two starts and finite phase searches are examined. Cost changes depend on cumulative order. F4/F4-0/F5 inherit two bound salt-fit values and extrapolate the 278–318 K salt laws to MEA states up to 393 K. Nothing is adopted or promoted for manuscript use by this notebook update. The delivered review and render are recorded in the [delivery checks](../results/reduced-refit/delivery-checks.json).
 
 **Historical record: adopted 24 October 2026 under [#215](https://github.com/tannerpolley/Amine-Thermodynamics/issues/215), SHA-256 `00e77608…`, MEA association volume 0.036305439.** The [one-wheel package](../results/engine-3e83e19c-paper-evidence/README.md) owns its assessments and replay evidence. The 20 October adoption and manuscript-use approval under #196 concern the frozen record `e234e860…` at association volume 0.036287; the dated sections below preserve that history.
 
