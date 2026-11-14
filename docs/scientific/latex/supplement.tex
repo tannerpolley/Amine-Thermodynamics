@@ -35,106 +35,12 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\theequation}{S\arabic{equation}}
 
-\title{Supplementary Material for ``Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability''}
+\title{Supplementary Material for ``Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability''}
 \author{Tanner W. Polley}
 \date{}
 \begin{document}
 \maketitle
 
-\section{ePC-SAFT contribution equations}\label{sec:s-epcsaft}
-% P:supplement-epcsaft-01
-This section gives the hard-chain, dispersion, association and Debye--H\"uckel contributions to main-text Eq.~\ref{main-eq:epcsaft-residual-split}.
-Here $\rho_N=N_{\mathrm A}\rho$ is the number density, $\mathcal I$ is the set of ions, and the hard-sphere, ion and Debye--H\"uckel diameters are those of main-text Section~2.2.
-
-\subsection{Hard-chain contribution}
-% P:supplement-epcsaft-02
-The hard-chain term, from Wertheim's first-order perturbation theory with the hard-sphere mixture expressions of Boubl\'ik and Mansoori et al., is \cite[Eqs.~A.4--A.8]{Gross2001}:
-\begin{equation}
-    a^{\mathrm{hc}}=\bar m\,a^{\mathrm{hs}}-\sum_i x_i\left(m_i^{\mathrm{seg}}-1\right)\ln g_{ii}^{\mathrm{hs}},
-    \qquad
-    \bar m=\sum_i x_im_i^{\mathrm{seg}},
-    \label{eq:hard-chain}
-\end{equation}
-\begin{equation}
-    a^{\mathrm{hs}}=\frac{1}{\zeta_0}\left[
-    \frac{3\zeta_1\zeta_2}{1-\zeta_3}
-    +\frac{\zeta_2^3}{\zeta_3\left(1-\zeta_3\right)^2}
-    +\left(\frac{\zeta_2^3}{\zeta_3^2}-\zeta_0\right)\ln\left(1-\zeta_3\right)
-    \right],
-    \label{eq:hard-sphere}
-\end{equation}
-\begin{equation}
-    g_{ij}^{\mathrm{hs}}=\frac{1}{1-\zeta_3}
-    +\frac{d_id_j}{d_i+d_j}\frac{3\zeta_2}{\left(1-\zeta_3\right)^2}
-    +\left(\frac{d_id_j}{d_i+d_j}\right)^2\frac{2\zeta_2^2}{\left(1-\zeta_3\right)^3},
-    \qquad
-    \zeta_n=\frac{\pi}{6}\rho_N\sum_i x_im_i^{\mathrm{seg}}d_i^n,
-    \quad n=0,\dots,3.
-    \label{eq:hard-sphere-contact}
-\end{equation}
-Here $d_i$ is the hard-sphere diameter, $g_{ij}^{\mathrm{hs}}$ is the hard-sphere pair distribution function at contact, and $\eta=\zeta_3$ is the packing fraction.
-
-\subsection{Dispersion contribution}
-% P:supplement-epcsaft-03
-The dispersion term is Gross and Sadowski's second-order perturbation expansion \cite[Eqs.~A.10--A.19, Table~1]{Gross2001}:
-\begin{equation}
-    a^{\mathrm{disp}}
-    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{\epsilon_{ij}}{k_BT}\sigma_{ij}^3
-    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{\epsilon_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
-    \label{eq:dispersion}
-\end{equation}
-\begin{equation}
-    C_1=\left[1+\bar m\frac{8\eta-2\eta^2}{\left(1-\eta\right)^4}
-    +\left(1-\bar m\right)\frac{20\eta-27\eta^2+12\eta^3-2\eta^4}{\left[\left(1-\eta\right)\left(2-\eta\right)\right]^2}\right]^{-1},
-    \label{eq:dispersion-compressibility}
-\end{equation}
-\begin{equation}
-    I_1=\sum_{k=0}^{6}a_k(\bar m)\,\eta^k,\qquad
-    I_2=\sum_{k=0}^{6}b_k(\bar m)\,\eta^k,\qquad
-    a_k(\bar m)=a_{0k}+\frac{\bar m-1}{\bar m}a_{1k}+\frac{\bar m-1}{\bar m}\frac{\bar m-2}{\bar m}a_{2k},
-    \label{eq:dispersion-integrals}
-\end{equation}
-where $C_1$ comes from the hard-chain compressibility, and $b_k(\bar m)$ has the same form as $a_k(\bar m)$.
-The coefficients $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are Gross and Sadowski's universal constants.
-The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and $\epsilon_{ij}$ is the pair dispersion energy of main-text Eq.~\ref{main-eq:dispersion-combining-rule}.
-
-\subsection{Association contribution}
-% P:supplement-epcsaft-04
-Hydrogen bonding is described by Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}:
-\begin{equation}
-    a^{\mathrm{assoc}}=\sum_i x_i\sum_{A\in i}\left(\ln X_A-\frac{X_A}{2}+\frac12\right),
-    \qquad
-    X_A=\left[1+\rho_N\sum_j x_j\sum_{B\in j}X_B\Delta^{AB}\right]^{-1},
-    \label{eq:association}
-\end{equation}
-\begin{equation}
-    \Delta^{AB}=g_{ij}^{\mathrm{hs}}\,\sigma_{ij}^3\,\kappa^{AB}\left[\exp\!\left(\frac{\epsilon^{AB}}{k_BT}\right)-1\right],
-    \label{eq:association-strength}
-\end{equation}
-where $X_A$ is the fraction of molecules $i$ not bonded at site $A$, $B$ runs over the sites on molecule $j$, and $\Delta^{AB}$ is the strength of an $A$--$B$ bond between molecules $i$ and $j$.
-The site fractions are solved at every state.
-The site scheme and the \MEA--water combining rule are given in main-text Section~2.3.
-
-\subsection{Debye--H\"uckel contribution}
-% P:supplement-epcsaft-05
-The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$ \cite[Eqs.~5, 13 and 14]{Cameretti2005}:
-\begin{equation}
-    a^{\mathrm{DH}}=-\frac{\kappa_{\mathrm D}e^2}{12\pi\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2\chi_i,
-    \qquad
-    \kappa_{\mathrm D}^2=\frac{e^2\rho_N}{\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2,
-    \label{eq:debye-huckel}
-\end{equation}
-\begin{equation}
-    \chi_i=\frac{3}{\left(\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^3}
-    \left[\frac32+\ln\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
-    -2\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)
-    +\frac12\left(1+\kappa_{\mathrm D}d_i^{\mathrm{DH}}\right)^2\right].
-    \label{eq:debye-huckel-chi}
-\end{equation}
-Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ in SI units, and $\chi_i$ accounts for the finite ion size; $\chi_i\to1$ as $\kappa_{\mathrm D}d_i^{\mathrm{DH}}\to0$, which recovers the Debye--H\"uckel limiting law.
-
-
-\FloatBarrier
 \section{Model inputs and fixed-parameter provenance}\label{sec:s-parameters}
 % P:supplement-18
 Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite[Table~2]{Baygi2015}.
@@ -145,7 +51,7 @@ Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and th
 All other interactions are zero by assumption except the fixed water interactions listed below.
 \Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list their exact values; they are not attributed to the cited size/dispersion source.
 Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
-The ion packing diameters, $0.88\sigma$, are 4.3160023, 4.6815957, 2.578048, 2.149136, 3.049552 and \SI{1.775576}{\angstrom} for \MEAH, \MEACOO, bicarbonate, carbonate, hydronium and hydroxide, respectively; their Debye--H\"uckel diameters equal the segment diameters in main-text Table~\ref{main-tab:species-parameters}.
+The ion packing and Debye--H\"uckel diameters follow the ties stated in the main text.
 
 \input{tables/supplement_species_parameters}
 \input{tables/supplement_interaction_matrix}
@@ -156,278 +62,129 @@ The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.
 The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}.
 The value used here, 0.036305439, is the constant fitted by least squares, with the ePC-SAFT library's fitter, to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{water-iapws.pdf}
-\caption{Relative deviations of pure water from IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}: (a) saturated-liquid density, (b) saturation pressure and (c) isobaric heat capacity at \SI{0.3}{\mega\pascal} (circles) and \SI{0.101}{\mega\pascal} (triangles). Filled markers are the fitted states and open markers the interleaved temperatures that were not fitted.}
-\label{fig:water-iapws}
-\end{figure}
+
 
 % P:supplement-19
 The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA dielectric coefficients to permittivities.
 In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
-The objective scales were relative 0.0004885 for saturated density, 0.006187 for saturation pressure and 0.03 for heat capacity, with heat-capacity weight 0.1 relative to the other property groups.
 
 % P:supplement-20
 In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo dielectric volume $10^{-8}$ L/mol and temperature 1403 K are assumptions \cite[Table~6]{Yang2024}.
-At 298.15 K the quadratic composition dependence gives two coefficient pairs with identical permittivities at any density: $(d_V,d_T)=(0.24645\ \mathrm{L/mol},2436.44\ \mathrm{K})$ or $(0.73099\ \mathrm{L/mol},1019.08\ \mathrm{K})$.
+At the measurement temperature, two coefficient pairs give identical permittivities at any density.
 The larger-volume solution is used here; the permittivity data alone do not distinguish these solutions, so that selection is a model assumption.
 The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperature or loading dependence; direct static-permittivity data over the reacting domain are missing from this calibration, so extrapolation remains a model assumption.
 
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{mea-permittivity.pdf}
-\caption{Relative permittivity of unloaded \MEA--water at \SI{298.15}{\kelvin} and \SI{101325}{\pascal}: (a) the 14 values tabulated by Agieienko and Buchner \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}, including their cited pure-water reference value (circles), and main-text Eq.~\ref{main-eq:solvent-permittivity} at the equation-of-state density (crosses), and (b) calculated minus tabulated.}
-\label{fig:mea-permittivity}
-\end{figure}
 
-\section{Objective and data roles}\label{sec:s-objective}
+
+\section{Objective scales and weights}\label{sec:s-objective}
 % P:supplement-objective-00
-Eight disjoint groups contain 307 objective entries, including 39 checks on the separately fitted and subsequently fixed \COtwo--water inputs.
-The pressure--species--heat group contains 47 pressures, 94 species fractions and eight integral heats; seven additional species observations and six Jakobsen ratios enter separately.
-The remaining groups are 47 loaded densities, five carbon-free densities, 50 Cai binary quantities, 39 Kiepe pressures and four heat capacities.
-
-% P:supplement-objective-01
-The bounded least-squares objective is main-text Eq.~\ref{main-eq:fit-objective}, with residuals
-\begin{equation}
- r_j=\begin{cases}(y_{c,j}-y_{o,j})/s_j,&\text{difference},\\[4pt]
- \ln(y_{c,j}/y_{o,j})/s_j,&\text{log ratio}.
- \end{cases}\label{eq:fit-residuals}
-\end{equation}
-Here $y_{c,j}$ and $y_{o,j}$ denote calculated and observed values.
-Loaded densities have weight $1/47$, so their group contributes a mean scaled squared error rather than a sum growing with its observation count.
-They contribute 0.449 of total cost 148.5105, or 0.302\,\%; individual departures from $2s$ are reported separately.
-Carbon-free densities have scale \SI{0.5}{\kilogram\per\cubic\metre} and weight 10; Cai temperature and vapor-fraction scales are \SI{1}{\kelvin} and 0.01 with unit weight, and Kiepe \COtwo--water pressures have weight $1/39$ \cite{kiepeExperimentalDeterminationPrediction2002}.
-These weights set fitting priorities; the heat scales are not measured standard uncertainties.
-\Cref{tab:objective-groups} specifies every group.
+Table~\ref{tab:objective-groups} gives the scales, weights and contributions to the joint objective of main-text Eq.~\ref{main-eq:fit-objective}.
+Pressure residuals are log ratios with unit scale; other residuals divide a difference by a scale in the observable's units.
+Species fractions and amount ratios use the assigned scale $0.1y^{\mathrm{obs}}+0.001$.
+The fitted heat-capacity scale is $0.02C_P^{\mathrm{obs}}/n_{\mathrm{feed}}$ in J/(mol feed K), not a mass-specific heat capacity.
 
 \input{tables/objective_groups}
 
 % P:supplement-objective-02
-Cai's binary quantities contribute 91.86 of the total cost 148.5105, approximately 62\,\%; this describes the chosen objective rather than relative physical accuracy.
-The Kiepe pressure contribution is approximately 0.0007 and checks fixed \COtwo--water inputs.
-Main-text Table~2 distinguishes fitted and compared observations and their use in parameter selection; observations from the same prepared solution need not be statistically independent.
+Vinjarapu heat scales use the printed uncertainty converted to J/mol \COtwo \cite[Table~4]{HemaBhavya2025}.
+The species relative allowances and floors, log-pressure allowance, carbon-free-density allowance, Cai allowances and group weights are assigned choices without a statistical derivation.
+Cai's reported temperature resolution and maximum composition error differ from the fitting allowances \cite[Tables~2--3]{caiBinaryIsobaricVaporLiquid1996}.
+The near-unit residual variance factor is not a statistical justification for these weights.
+Scales inherited from source accuracy statements and assigned residual scales remain distinct.
 
-\section{Source conventions and reaction parameters}\label{sec:s-corrections}
-% P:supplement-13
-Hilliard and Xu pressures use measured molality and temperature; the three Xu states above 393.15 K are excluded \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
-B\"ottinger compositions follow Table~3, including the 31 wt\% high-temperature series \cite{Bottinger2008}.
-Matin bicarbonate-labeled values are compared with calculated bicarbonate plus carbonate as the approximation explained in the main text \cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}.
-Both printed Jakobsen loadings are preserved, while calculations use the NMR rather than maximum loading \cite[Tables~A1--A2]{Jakobsen2005}.
+\section{Source conventions and density scales}\label{sec:s-corrections}\label{sec:s-density}
+% P:supplement-density-01
+Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series, with unresolved high-temperature/loading applicability of the density estimate \cite[pp.~3099--3100]{Amundsen2009}.
+Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the printed expanded uncertainty with coverage factor two and is used without division by that factor \cite[Table~3, p.~1810]{Hartono2014}.
+The calculations adopt Table~3's printed loading $\alpha$.
+The accompanying printed \COtwo mole fractions imply different loadings under the stated solvent composition; that source inconsistency remains unresolved.
+The density comparisons and conditional parameter errors therefore depend on the adopted printed-loading convention.
+The secant construction in main-text Eq.~\ref{main-eq:density-scale} combines these with loading uncertainty.
+These scales therefore do not uniformly represent standard uncertainties.
 
-% P:supplement-14
-R2 starts from Austgen's source correlation and the molality conversion; R5 starts from Bates--Pinching \cite[Table~V]{Austgen1991}\cite[Eq.~10, p.~351]{batesAcidicDissociationConstant1951}.
-The source R5 is $\mathrm{p}K=2677.91/T+0.3869+0.0004277T$.
-The adopted R5 coefficients in the main reaction table already include the fitted reciprocal-temperature coefficient and total enthalpy shift.
-The R5 enthalpy shift is \SI{+10}{\kilo\joule\per\mole}, at its bound.
-The uncertainty calculation uses the completed native $b_5$ coordinate, $-7583.807$ K, with conditional standard error 265.2 K; it is not the unshifted source $A_5$.
-Full transformations and source constants are supplied with the electronic data.
+% P:supplement-sources
+All density observations, including the excluded Amundsen loading-0.4 series, remain in the electronic data with source pressure, composition and calculated value.
+The source comparison does not identify one experiment as correct.
+For Jakobsen NMR calculations, dilution changes the solvent composition, and the reported NMR loading is used instead of the maximum loading \cite[Sample preparation, Tables~A1--A2]{Jakobsen2005}.
+The carbonate-share comparison differs from the fitted species-to-total-amine ratios.
 
+\section{Caloric functions and reproduction values}\label{sec:s-files}
+% P:supplement-calorics
+Neutral caloric functions use NIST-JANAF for \COtwo, the MEA heat-capacity function tabulated by Zhang et al., and an ideal-gas water fit to IAPWS-95 \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011,internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
+The ionic functions are completed from the reaction laws and their infinite-dilution reference corrections.
+A charge-proportional reference freedom cancels in electroneutral phases; no independent ionic heat-capacity functions are fitted.
+The reaction enthalpy is included once through these completed standard states.
+Table~\ref{tab:supplement-check-values} expands the main-text reproduction states with the nonzero energy terms and liquid fractions.
 
-\section{Caloric inputs and numerical checks}\label{sec:s-files}
-% P:supplement-16
-The neutral ideal-gas caloric functions use the \COtwo Shomate correlation from NIST-JANAF and the MEA heat-capacity polynomial tabulated by Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011}.
-Water uses a fit to the ideal-gas part of IAPWS-95 over 273.15--\SI{400}{\kelvin} \cite[Eq.~5, Table~1]{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
-On 10001 verification points, the maximum relative water ideal-gas heat-capacity error is $6.50\times10^{-7}$, a numerical fit error rather than physical uncertainty.
-At \SI{298.15}{\kelvin}, water is anchored to $h^\circ=-241826$ J/mol and $s^\circ=188.834$ J/(mol K), at standard pressure 100 kPa \cite{chaseNISTJANAFThermochemicalTables1998}.
-MEA enthalpy and entropy are zero at \SI{313.15}{\kelvin} as a conserved-component reference convention.
-The ionic reference functions are completed from the five reaction constraints and temperature-dependent infinite-dilution corrections.
-A minimum-norm convention fixes the charge-proportional reference freedom, which cancels in electroneutral phases; no additional ionic heat-capacity functions are fitted.
+\input{tables/supplement_check_values}
 
+% P:supplement-kim
+The primary common-row Kim comparison includes calculated intervals whose final loading is at most 0.60 mol \COtwo/mol total MEA.
+It includes the two inconsistent printed observations at \SI{393.15}{\kelvin}, run 2, with final loadings 0.078 and 0.445 mol/mol.
+The source-consistent alternative omits those two observations, and a further diagnostic also omits the first interval of each run at that temperature.
+Table~\ref{tab:kim-alternatives} reports these alternatives without choosing a parameter set from them.
+All use the same imposed-pressure approximation and finite-addition definition as the main comparison.
 
+\input{tables/kim_alternatives}
 
-% P:supplement-17
-The 375 equilibrium states have maximum absolute stationarity residual $3.07\times10^{-12}$, material-balance residual $1.08\times10^{-12}$ mol and charge residual $2.81\times10^{-13}$ mol.
-The heat-capacity consistency checks include equilibrium enthalpy derivatives, the $10^{-6}$ unloaded loading approximation and conversion by the complete analytical-feed mass.
-These checks verify numerical solutions rather than physical phase behavior.
-Numerical values, software identities, checksums and calculation commands accompany the electronic data.
-Data availability and access to the compiled ePC-SAFT library are specified in the main-text Data and Code Availability statement.
-
-\section{Density scales, source differences and carbonate shares}\label{sec:s-density}
-% P:supplement-03
-The complete 210-observation density table is supplied as CSV in the data deposit, including the five excluded Amundsen loading-0.4 observations.
-The source summary below retains all observations and applies no volume translation.
-Departures from $2s$ are reported for the 47 fitted loaded densities.
-Amundsen density and loading inputs to the scale are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading; the exact high-temperature/loading applicability of the density estimate remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
-Hartono inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 loading; the density value is reported as expanded uncertainty with coverage factor two and was used in the assigned scale without division by that factor \cite[Table~3]{Hartono2014}.
-Thus these scales do not uniformly represent standard uncertainties.
-
-\input{tables/density_scales}
-
-% P:supplement-density-conflict
-Amundsen exceeds interpolated Hartono by 8.5 to 9.1~\si{\kilogram\per\cubic\metre} at the five temperatures, at loading 0.4 and nominal 30 wt\% solvent; neither source is thereby established as correct.
-
-\input{tables/supplement_carbonate_density}
-
-% P:supplement-04
-All ten Jakobsen carbonate shares use the NMR loading and unloaded MEA mass fraction 0.2714, accounting for dilution during NMR sample preparation \cite[Tables~A1--A2; Sample preparation]{Jakobsen2005}.
-Their calculated/observed ratios have mean 0.0213 and range 0.00195--0.0749.
-These shares of dissolved carbon differ from the six ratios to total amine used for fitting.
-All ten comparisons are listed in the electronic data.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{loaded-density-errors.pdf}
-\caption{Density errors without volume translation. Upper panels compare the final parameter set (circles) and historical unstable fit (crosses) at the same 47 fitted loaded states; color denotes loading. Dashed lines mark $\pm2s$, with $s$ defined by $s_\rho=[u_\rho^2+(g u_\alpha)^2]^{1/2}$. Lower panels show the final parameter set for all 210 densities, including compositions outside 30 wt\%, with source-specific markers and fitted, non-fitted and excluded observations distinguished. Amundsen, Hartono and Han source data are from Refs.~\cite{Amundsen2009,Hartono2014,hanDensityWater12012}.}
-\label{fig:density-errors}
-\end{figure}
-
-
-
-\FloatBarrier
-
-\section{Conditional parameter errors and correlations}\label{sec:s-uncertainty}
+\section{Conditional parameter uncertainty}\label{sec:s-uncertainty}
 % P:supplement-covariance-01
-For the ten parameters free of active bounds, the weighted residual Jacobian $J_I$ gives
-\begin{equation}
- \operatorname{cov}(\boldsymbol\theta_I)=s_C^2(J_I^{\mathsf T}J_I)^{-1},\qquad s_C^2=\frac{2C}{307-10}.
- \label{eq:conditional-covariance}
-\end{equation}
-The Jacobian has rank ten, 297 degrees of freedom and variance factor 1.000071.
-The six parameters at bounds are held fixed for this covariance.
-The unknown common residual variance, weights, source inputs and local linearization condition these errors; dependence within an experimental campaign is not propagated.
-\Cref{tab:supplement-correlations} gives the parameter order and correlations.
+The ten interior parameters have local covariance from main-text Eq.~\ref{main-eq:conditional-covariance}; the ion--ion interaction at its active lower bound remains fixed.
+The weighted Jacobian has rank ten, and the variance factor is 1.01523840323.
+Table~\ref{tab:supplement-fitted-parameters} gives values, bounds and conditional standard errors, and Table~\ref{tab:supplement-correlations} gives the correlations in the same interior-parameter order.
+Correlated errors within one experimental source, model discrepancy, source-law uncertainty and future measurement noise are not included.
 
+\input{tables/supplement_fitted_parameters}
+\input{tables/supplement_correlations}
 
 % P:supplement-covariance-02
-Covariance propagation includes parameter correlations and gives relative pressure standard errors of 5.41--16.00\,\% over the 47 retained fitted pressure states.
-These quantify local parameter uncertainty, excluding model discrepancy and future measurement noise.
-For sensitivity ranking, each free coordinate moves by one conditional standard error with other coordinates fixed; the reported fractional changes are derivative estimates.
-Each bound coordinate is fixed at 1\,\%, 5\,\% and 10\,\% of its original interval inward, with the other coordinates refitted.
-The ranking uses the first inward step; these perturbations differ in size from the one-standard-error changes and do not establish statistical significance.
-The two weakest scaled-Jacobian directions have singular values 0.001578 and 0.004922: the former is dominated by the bicarbonate--water interaction (coefficient $-0.949$), the latter by opposing carbamate and \MEAH Born diameters (0.766 and $-0.602$).
-They include bound coordinates, so two-sided motion need not be feasible.
-The short profiles locate neither confidence limits nor a global optimum and do not requalify phase stability.
-\input{tables/parameter_sensitivity}
-\input{tables/bound_profiles}
+The pressure intervals propagate the full correlated covariance rather than independent marginal parameter errors (\cref{fig:pressure-uncertainty}).
+They use the local Gaussian approximation and may extend below zero pressure.
+The inward scans in Table~\ref{tab:bound-profiles} fix the bound interaction at successive fractions of its feasible interval and refit the remaining parameters.
+They converge as numerical diagnostic calculations but have no renewed stability qualification and do not locate confidence limits or a global optimum.
+
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{pressure-uncertainty.pdf}
-\caption{Conditional pressure intervals at all 47 retained fitted states, calculated at their reported temperatures with the adopted parameters and correlated covariance. Colors group temperatures near 313.15 and \SI{333.15}{\kelvin}. Bars are $\pm1.96$ standard errors, with six bound coordinates fixed. These local linearized intervals exclude model discrepancy and future measurement noise.}
+\caption{All fitted pressure states with the adopted calculated pressure (points) and correlated conditional intervals (bars). The interval is $\pm1.96$ conditional standard errors with the active-bound parameter fixed; it is not an interval for a new observation. Values are ordered by observation identity.}
 \label{fig:pressure-uncertainty}
 \end{figure}
+\input{tables/bound_profiles}
 
+\section{Phase-search conditions and split interpretation}\label{sec:s-phase}\label{sec:s-probes}\label{sec:s-fits}
+% P:supplement-phase-grid
+The liquid grid contains 1800 states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at both pressure ratios stated in the main text.
+Another 108 states use the liquid--vapor-search feed at those two ratios.
+The separate 576-state liquid check uses 20, 30 and 40 wt\%, 318.15--\SI{388.15}{\kelvin} and loadings 0.0125--0.5875, at 1.5 times bubble pressure.
 
-\input{tables/supplement_fitted_parameters}
+% P:supplement-phase-census
+The liquid--vapor search contains six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6 mol/mol.
+Each uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure from the comparison calculation.
+Every compared parameter set is evaluated at these same physical states.
+The feed is 9.7292821 mol MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
+Thus extensive split-energy changes divided by $RT$ are in mol on this feed basis.
 
-\input{tables/supplement_correlations}
+% P:supplement-phase-method
+Charge-neutral liquid starts include a uniform composition and near-pure neutral-species compositions; vapor starts contain only the three neutral species.
+The optimized search and the evaluations at split compositions resolved for other MEA parameter sets are reported separately.
+Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
+Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
+The raw state results identify incomplete or unavailable cases explicitly.
 
-\section{Source-specific deviations}\label{sec:s-outside}
-% P:supplement-02
-The tables report fitted observations by source and property and comparisons outside the objective; deviations by data group are in the main text.
-Fitted observations are removed from each comparison set separately, so the overlapping pressure sets are not additive.
-Arcis heats were used to accept candidate parameter sets; Wagner pressures and pressures at 15 and 45 wt\% MEA were compared with intermediate parameter sets during model development.
-\Cref{fig:species-parity} compares calculated and measured liquid species mole fractions at each B\"ottinger and Matin state.
+% P:supplement-phase-cause
+The split-energy figure evaluates the same phase compositions under two parameter sets and closes density at the imposed pressure for each.
+It does not relax the frozen F2 phases to equilibrium, nor identify a microscopic interaction uniquely.
+The isolated segment-diameter change leaves the other diameter definitions unchanged and is outside F2's fitted diameter ties.
+The alternative sufficient interaction change also lacks fitted-property evidence.
+Neither probe can be compared with F2's covariance as if it were an uncertainty interval for liquid splitting.
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{species-parity.pdf}
-\caption{Calculated against measured true-species liquid mole fractions at the B\"ottinger NMR and Matin titration states \cite{Bottinger2008,matinFacileMethodDetermination2012}, from fixed-parameter calculations at the measured states. (a) \ce{MEA + MEAH+}, \MEACOO, \MEAH and \MEA on linear axes; (b) bicarbonate plus carbonate totals on logarithmic axes. The solid line marks equality and the dotted lines $\pm10$\,\%. Marker shape identifies the species, color the temperature and fill the source (filled, NMR; open, titration), as in main-text Fig.~\ref{main-fig:speciation}. All observations were fitted except the B\"ottinger states at \SI{353.15}{\kelvin} and Matin's bicarbonate plus carbonate totals.}
-\label{fig:species-parity}
-\end{figure}
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{heat-temperature.pdf}
-\caption{Heat released per mole of absorbed \COtwo for nominal 30 wt\% MEA, plotted as positive values (main-text Fig.~\ref{main-fig:heat} uses the opposite sign) \cite[Tables~1--3]{Kim2007}. Circles (run~1) and triangles (run~2) are Kim--Svendsen finite-interval observations with their $\pm2.2$\,\% source uncertainty; crosses of the same color are fixed-parameter finite-interval predictions at \SI{1.734}{\mega\pascal}, and the solid line in each panel is the limiting differential model heat. Observations in the light grey band, above loading 0.60, were not calculated or scored; the \SI{393.15}{\kelvin} run~2 points at loadings 0.078 and 0.445 are plotted but excluded from the primary statistics. Printed inconsistencies, rounded addition intervals and missing experimental pressure histories limit comparison; the model omits 2-oxazolidone and extrapolates reaction laws.}
-\label{fig:kim-heat-temperature}
-\end{figure}
-
-\input{tables/supplement_source_aard}
-\input{tables/supplement_outside_fit}
-
-\FloatBarrier
-\section{Phase-search definition and confirmed splits}\label{sec:s-phase}
-% P:supplement-05
-The complete 162-state table for both fits is supplied as CSV in the data deposit.
-The grid has six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6.
-At each temperature and loading, the reference pressure $P^*$ is the bubble pressure of the restricted fit of main-text Section~\ref{main-sec:methods-phase}, and the three test states are at $P/P^*=0.50$, 0.80 and 0.95.
-The 54 reference pressures range from 6.4123 to \SI{1768.9}{\kilo\pascal} and are listed in the electronic data.
-Both fits are searched at the same 162 states.
-Phase calculations use 9.7292821 mol analytical MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
-All extensive Gibbs differences below refer to that feed, rather than the one-mole total-amine property basis.
-
-% P:supplement-phase-summary-01
-Nine trial phases per state give 1458 trials for each fit; every trial optimization completes, and none is unresolved.
-No instability is detected for the final parameter set at any of the 162 states, which were searched with the same census procedure; the reference pressures $P^*$ remain those of the restricted fit.
-Instability is detected for the historical unstable fit at 54 states, by 143 trials that lower the Gibbs energy: ten states each at 313.15 and \SI{318.15}{\kelvin}, nine each at 333.15, 353.15 and \SI{373.15}{\kelvin} and seven at \SI{393.15}{\kelvin}.
-The 81 states at 353.15--\SI{393.15}{\kelvin} lie above the temperatures of the fitted \COtwo pressures.
-
-% P:supplement-phase-confirmation-01
-At each state with detected instability, the trials that lower the Gibbs energy are grouped by phase kind, supported species and composition, with maximum composition difference $10^{-6}$ within a group, and one representative of each group seeds one split calculation of at most 400 iterations.
-A split is confirmed when it converges to the requested tolerance with negative $\Delta G/(RT)$, raw residuals at most $10^{-10}$, positive reduced-Hessian minimum, positive phase amounts and positive pressure--density derivatives.
-The 91 attempts confirm 51 distinct two-liquid paths at 32 of the 54 states with detected instability, at every temperature (\Cref{tab:phase-splits}).
-The water mole fraction is 0.40--0.74 in the water-poor liquid and 0.68--0.97 in the water-rich liquid.
-The 40 unsuccessful attempts end with vanished or coincident phases or a nonpositive reduced Hessian; failure to confirm does not remove a detected instability.
-The homogeneous-liquid density comparisons discussed by Neumann et al.\ do not test phase splitting at the states searched here \cite[Sect.~4.2]{neumannNewModelCombining2022}.
-The table below lists every confirmed split; full compositions, amounts, densities and all 40 failed attempts are in the electronic data.
-
-% P:supplement-06
-Four liquid starts and five vapor starts are used at each converged equilibrium state.
-The liquid starts are a uniform positive composition and three compositions with 0.99 assigned to \COtwo, MEA or water, distributing 0.01 among the other species in proportion to an existing full-support phase.
-Each liquid start is charge-balanced.
-Vapor starts are uniform, nearly pure \COtwo, nearly pure MEA, nearly pure water, and the ideal-gas estimate $w_i\propto\exp(\pi_i-s_i)$, where $\pi_i=(B^{\mathsf T}\boldsymbol\lambda)_i$ and $s_i$ is the dimensionless standard chemical potential in the density representation.
-Only the three neutral species enter a vapor start.
-
-% P:supplement-07
-A Newton procedure and an Ipopt minimization use exact first and second derivatives, with MA57 linear algebra and a tolerance of $10^{-10}$ on the recomputed residuals used to decide convergence, after the solver's row scaling.
-The final state must satisfy material and charge balances, positive compressibility and nonnegative reduced-Hessian curvature.
-
-% P:supplement-08
-For each optimized trial, the tangent-plane distance $D$ is main-text Eq.~\ref{main-eq:tpd}; the multipliers refer to the existing reacting equilibrium.
-A donor phase $d$ with positive amounts of every supported trial species has transfer capacity $\beta_{\max}=\min_i(N_dx_{di}/w_i)$.
-The donor with greatest capacity is used.
-The transfer slope is
-\begin{equation}
- S=g_w/(RT)-\sum_iw_i\mu_{di}/(RT)+r_{P,d},\qquad
- r_{P,d}=1-v_d F_{v,d}-Pv_d/(RT),\qquad F=A^{\mathrm{res}}/(RT),
- \label{eq:donor-slope}
-\end{equation}
-where $v_d$ is molar volume and $F$ is evaluated on a one-mole phase basis.
-The term $r_{P,d}$ corrects for the small pressure residual of the existing phase.
-A negative $D$ and $S<-E_S$ trigger finite transfers at $\beta=\beta_{\max}/2,\ldots,\beta_{\max}/512$.
-Each transfer conserves every species amount: $x'_{di}=(N_dx_{di}-\beta w_i)/(N_d-\beta)$, leaving the other phases unchanged.
-Both phase densities are closed at the specified pressure.
-A trial detects instability only if $\Delta G/(RT)<-E_{\Delta G}$ for an admitted transfer; a negative value within that error estimate remains unresolved as a decrease.
-
-% P:supplement-09
-The numerical-error estimate combines association-solver derivative error, the Euler identity defect, floating-point summation and the correction applied to restore the material balance.
-For a one-mole phase define
-\begin{align}
- E(w)&=(1+|v|)f+\left|F-vF_v-\sum_iw_iF_{n_i}\right|+\gamma_{2N+4}M,\\
- E_S&=E(w)+(1+|v_d|)f_d+E_{\mathrm{feas}}+\gamma_{N+3}M_S,\\
- E_{\Delta G}&=(N_d-\beta)E(x'_d)+\beta E(w)+N_dE(x_d)+E_{\mathrm{feas}}+\gamma_{N+3}M_G.
- \label{eq:phase-error}
-\end{align}
-Here $f$ is the reported residual-Helmholtz gradient error estimate in the SI volume and amount columns, $N=9$, $\gamma_m=m\epsilon/(1-m\epsilon)$ and $\epsilon$ is machine precision.
-The sum magnitude is $M=|F|+\sum_i|w_i[\ln(w_i/v)-1+s_i]|+|Pv/(RT)|$.
-$M_S=|g_w/(RT)|+\sum_i|w_i\mu_{di}/(RT)|+|r_{P,d}|$ and $M_G$ sums absolute values of the three extensive Gibbs terms in the transfer difference.
-The feasibility estimate is $E_{\mathrm{feas}}=\sum_{p,i}(|\delta n_{pi}|+|\delta n^{\mathrm{intended}}_{pi}-\delta n_{pi}|)|\mu_{pi}/(RT)|$, where the correction solves the balance and charge defects with amount-weighted linear algebra.
-No uncertainty in the supplied standard-state functions is included in this numerical estimate.
-Finite-transfer compositions must normalize and be charge-neutral to $10^{-12}$; species and conserved-quantity amount errors must be at most $10^{-12}\max(1,n_{\mathrm{feed}})$ mol.
-These are numerical resolution rules, not experimental uncertainty bounds or a global stability proof.
-
-\input{tables/supplement_phase_family}
-
-
-
-
-\section{Stability-constrained fit and bounds}\label{sec:s-probes}\label{sec:s-fits}
-% P:supplement-probes-current
-The final parameter set uses the original wide bounds, including a \MEAH segment-diameter interval of 2--\SI{5.8}{\angstrom}.
-The stability penalty of main-text Section~\ref{main-sec:methods-phase} is applied during fitting; the observation cost excludes it, and the penalty is zero at the 1903 penalized states for the final parameter set.
-Fits started from the restricted fit and from the historical unstable fit reach the same stable solution.
-Its \MEAH segment diameter, \SI{4.904548}{\angstrom}, lies below the restricted fit's lower bound of \SI{5.35}{\angstrom}.
-Its observation cost is 148.5105, compared with 148.8833 for the restricted fit evaluated with the same observations and ePC-SAFT implementation.
-\Cref{tab:comparison-fit-parameters} lists the parameters of the historical unstable fit that differ from the final parameter set; that fit serves only as a comparison.
-
-\input{tables/comparison_fit_parameters}
-
-
-\FloatBarrier
-\section{Published-model comparison}\label{sec:s-literature}
-\input{tables/supplement_literature_comparison}
+\section{Shared inputs for Part II}\label{sec:s-shared}
+% P:supplement-shared
+The shared coefficient table in the main text lists the adopted F2 values.
+Part II also keeps the shared component charges, segment counts, association topology, electrostatic model choices, standard states and R1--R3 reaction definitions fixed.
+The water--bicarbonate interaction is the MEA-fitted value, whereas the carbonate--water interaction is an assumed fixed value.
+The weakly determined bicarbonate interaction and the dielectric and source-law extrapolations limit the strength of a transfer claim before amine-specific comparisons.
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}

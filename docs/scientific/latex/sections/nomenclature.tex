@@ -1,1 +1,57 @@
-\input{tables/nomenclature}
+\section*{Nomenclature}
+\begingroup\small
+\begin{longtable}{@{}p{.21\linewidth}p{.43\linewidth}p{.14\linewidth}p{.15\linewidth}@{}}
+\toprule
+Symbol & Meaning & Unit & First equation \\
+\midrule\endfirsthead
+\toprule Symbol & Meaning & Unit & First equation \\
+\midrule\endhead
+\bottomrule\endfoot
+$A,a^{\mathrm{res}}$ & Extensive and reduced residual Helmholtz energy & J; 1 & \ref{eq:epcsaft-residual-split} \\
+$n,n_i$ & Total and species amount & mol & \ref{eq:epcsaft-residual-split} \\
+$R,k_B$ & Gas and Boltzmann constants & J/(mol K); J/K & \ref{eq:epcsaft-residual-split} \\
+$T,T_{\mathrm{ref}}$ & Temperature and reference temperature & K & \ref{eq:hard-sphere-diameter} \\
+$m_i^{\mathrm{seg}},\bar m$ & Segment count and mixture average & 1 & \ref{eq:hard-chain} \\
+$x_i,y_i$ & True-species liquid and vapor mole fraction & 1 & \ref{eq:hard-chain}; text Sect.~2 \\
+$\sigma_i,\sigma_{ij},d_i$ & Segment, pair and packing diameter & \AA & \ref{eq:hard-sphere-diameter} \\
+$\epsilon_i,\epsilon_{ij}$ & Segment and pair dispersion energy & J & \ref{eq:hard-sphere-diameter}, \ref{eq:dispersion} \\
+$k_{ij},b_{ij}$ & Interaction intercept and temperature slope & 1; K & \ref{eq:dispersion-combining-rule}, \ref{eq:kij-temperature} \\
+$\epsilon^{AB},\kappa^{AB}$ & Association energy and volume factor & J; 1 & \ref{eq:association-strength} \\
+$\rho,\rho_N$ & Molar and molecular number density & mol/m$^3$; m$^{-3}$ & \ref{eq:hard-sphere-contact} \\
+$\zeta_n,\eta$ & Hard-sphere moments; packing fraction & m$^{n-3}$; 1 & \ref{eq:hard-sphere-contact} \\
+$g_{ij}^{\mathrm{hs}}$ & Hard-sphere contact value & 1 & \ref{eq:hard-sphere-contact} \\
+$I_1,I_2,C_1$ & Dispersion integrals and compressibility factor & 1 & \ref{eq:dispersion}, \ref{eq:dispersion-compressibility} \\
+$a_k,b_k$ & Dispersion polynomial coefficients & 1 & \ref{eq:dispersion-integrals} \\
+$X_A,\Delta^{AB}$ & Unbonded site fraction and bond strength & 1; m$^3$ & \ref{eq:association}, \ref{eq:association-strength} \\
+$e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m & \ref{eq:debye-huckel} \\
+$z_i,\mathcal I$ & Charge number and ion set & 1 & \ref{eq:debye-huckel} \\
+$\kappa_D,\chi_i$ & Inverse screening length and finite-size factor & m$^{-1}$; 1 & \ref{eq:debye-huckel}, \ref{eq:debye-huckel-chi} \\
+$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 & \ref{eq:debye-huckel}, \ref{eq:born-ssm-ds} \\
+$d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA & \ref{eq:born-ssm-ds} \\
+$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 & \ref{eq:born-ssm-ds}, \ref{eq:born-shell-diameter} \\
+$f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 & \ref{eq:born-shell-diameter} \\
+$d_{V,i},d_{T,i}$ & Dielectric-volume and temperature coefficients & L/mol; K & \ref{eq:solvent-permittivity} \\
+$n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol; m$^3$ & \ref{eq:solvent-permittivity} \\
+$\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 & \ref{eq:activity-reaction-equilibrium} \\
+$a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol & \ref{eq:activities}; text Sect.~2 \\
+$P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa & \ref{eq:activities}; text Sect.~2 \\
+$Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg & \ref{eq:activities} \\
+$K_{m,r},K_{x,r}$ & Molality- and mole-fraction-basis constant & 1 & \ref{eq:molality-conversion} \\
+$A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 & \ref{eq:reaction-equilibrium-constant-temperature} \\
+$H,C_P,c_P$ & Enthalpy, extensive and mass heat capacity & J; J/K; J/(kg K) & \ref{eq:total-enthalpy}; text Sect.~2 \\
+$\alpha,w_{\MEA}$ & Loading and unloaded-solvent mass fraction & mol/mol; kg/kg & text Sect.~3.1 \\
+$\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol & \ref{eq:addition-heat} \\
+$u_\rho,u_\alpha,g_j,s_\rho$ & Density/loading scale inputs and density secant & kg/m$^3$; mol/mol; kg/m$^3$; kg/m$^3$ & \ref{eq:density-scale} \\
+$\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable & \ref{eq:fit-objective} \\
+$J_I,s_C^2,I,N$ & Interior weighted Jacobian, variance factor, interior set, count & various; 1; 1; 1 & \ref{eq:conditional-covariance} \\
+$g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 & \ref{eq:tpd} \\
+$B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 & \ref{eq:tpd} \\
+$\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Descending distance, penalty scale/weight and cost & 1 & \ref{eq:stability-penalty} \\
+\end{longtable}
+\endgroup
+% P:nomenclature-conventions
+Subscripts $i,j$ identify species, $r$ reactions, $w$ water and $k$ polynomial or search indices; superscripts res, ig, hs, hc, disp, assoc, DH and Born identify residual, ideal-gas, hard-sphere, hard-chain, dispersion, association and electrostatic terms.
+Superscripts calc and obs mean calculated and observed; pure and $\infty,w$ mean pure solvent and infinite dilution in water; $\circ$ denotes the source standard state.
+
+% P:nomenclature-acronyms
+AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; MDEA: N-methyldiethanolamine; NMR: nuclear magnetic resonance; VLE: vapor--liquid equilibrium; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; SSM+DS: solvation-shell model with dielectric saturation.

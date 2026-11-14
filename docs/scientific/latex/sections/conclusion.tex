@@ -1,23 +1,19 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-01
-With sixteen jointly estimated parameters, one ePC-SAFT formulation with carbamate chemistry represents the equilibrium, caloric and density properties of loaded aqueous MEA from a common Helmholtz energy and reaction standard states.
-For nominal 30 wt\% MEA, pressure AARD is 11.79\,\% for 47 fitted and 23.82\,\% for 112 non-fitted pressures (20.27\,\% overall), 94 of the 101 fitted species fractions give 7.11\,\%, integral-heat RMSE is \SI{1.84}{\kilo\joule\per\mole} \COtwo at \SI{313.15}{\kelvin}, and loaded-density AARD is 0.162\,\% over 47 fitted values through \SI{353.15}{\kelvin}, without volume translation.
-
-% P:conclusion-02
-Similar property agreement can conceal an additional calculated liquid: a fit without a stability requirement has detected instability at 54 of 162 census states.
-Penalizing tangent-plane instability during fitting gives a final parameter set, within the original bounds, with no detected instability at 1903 penalized states, 576 unpenalized liquid states or the census states.
-Relative to a fit that avoids instability by restricting the \MEAH diameter and its water interaction, the observation cost falls from 148.8833 to 148.5105, and 46 rather than 44 of the 47 fitted loaded densities lie within twice their assigned scale.
-
-
+An ePC-SAFT calibration with literature reaction laws and tied amine-ion Born diameters describes pressure, speciation, heat, heat capacity and density through one Helmholtz energy without detected additional-liquid instability in the specified finite searches.
+The reduced parameter freedom has a measured cost, including worse agreement with the Ma'mun pressures, while concentration transfer, carbonate partition and high-temperature absorption heat remain inaccurate.
+The false split of the unpenalized comparison fit reflects opposing energy terms with a prominent dispersion change; the evidence does not identify one microscopic cause.
 
 % P:conclusion-limits
-Six parameters lie on bounds; the ten free parameters give conditional pressure standard errors of 5.41--16.00\,\% over the 47 fitted pressure states.
-Inward profiles and sensitivity rankings quantify the parameter compensation, with no inference of unique physical ion sizes or reaction enthalpies.
-Pressure AARDs at 15 and 45 wt\% MEA are 33.89 and 44.53\,\%.
-The 51-state heat-capacity comparison gives 2.39\,\% AARD, while the unloaded \SI{318.15}{\kelvin} fitted value is 5.43\,\% high.
-Higher-temperature heat, minor-species and density errors are reported directly; source conflicts, missing pressure histories and extrapolated reaction and dielectric laws bound their interpretation.
-The comparisons were accessed during development, and finite phase searches provide numerical verification rather than independent physical validation.
+These are calibration and fixed-parameter comparisons against data seen during development, not independent validation.
+Local uncertainty remains conditional on the fitted model and inputs, and finite searches do not establish global stability.
+The common thermodynamic property calculation is useful for consistent assessment, but its remaining discrepancies preclude an unqualified process-use claim.
 
+% P:conclusion-shared
+Table~\ref{tab:shared-parameters} specifies exactly the shared coefficient set held fixed in Part II; the associated fixed fields, topology and standard states are defined in the model section and supplement.
+It includes water, \COtwo, hydronium, hydroxide, bicarbonate and carbonate, their shared interactions and R1--R3 laws.
+The poorly determined water--bicarbonate interaction, assumed dielectric behavior in loaded solutions and source-correlation extrapolation are the shared inputs most likely to limit transfer.
+Part II assesses the consequences with other amines rather than assuming that MEA agreement establishes their accuracy.
 
-% P:conclusion-03
-A companion Part II examines transfer of the shared parameters to other amine classes.
+\needspace{18\baselineskip}
+\input{tables/shared_parameters}

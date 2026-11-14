@@ -1,11 +1,12 @@
 """Issue #320: aggregate retained B1 rows into AARD and signed bias. No model evaluation.
 
-Run from the repository root: python3 analyses/solvent_specification_mdea/retained_statistics.py
+Run from the repository root: uv run --no-sync python analyses/solvent_specification_mdea/retained_statistics.py
 AARD = mean(|predicted - observed| / observed) x 100; bias = mean((predicted - observed) / observed) x 100,
 the definitions used for the pressure summaries (Part I, MEA fitted/non-fitted pressures).
 """
 import hashlib
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -19,18 +20,8 @@ OUT = ROOT / "analyses/solvent_specification_mdea/results/retained-statistics-32
 RANGE_K = json.loads(REACTION.read_text())["source_findings"]["range_K"]
 
 
-def stats(pairs, unit=None):
-    """pairs: (observed, predicted). Relative errors in percent; absolute error in the property's unit."""
-    n = len(pairs)
-    rel = [(p - o) / o * 100 for o, p in pairs]
-    out = {"rows": n, "AARD_percent": sum(abs(r) for r in rel) / n}
-    if not unit:
-        out["bias_percent"] = sum(rel) / n
-    if unit:
-        out["mean_abs_error"] = sum(abs(p - o) for o, p in pairs) / n
-        out["mean_signed_error_predicted_minus_observed"] = sum(p - o for o, p in pairs) / n
-        out["unit"] = unit
-    return out
+sys.path.insert(0,str(ROOT/'src'))
+from MEA.solvent_specification import deviation_statistics as stats
 
 
 def in_range(t):
