@@ -21,7 +21,7 @@
     "mole_fraction": "Assigned scale 0.01, weight 1; reason not recorded (source reports maximum composition error 0.001). Source: joint-added-rows.json F1 Cai mole_fraction rows; Cai_1996_MEA_H2O_VLE.csv Tables 2-3 composition_max_error_mole_fraction."
   },
   "loaded density": {
-    "phase_density": "Scale sqrt(u_rho^2+(g*u_alpha)^2), g the neighboring-loading secant; source density/loading uncertainties: Amundsen Table 3 pp.3099-3100. Repository group weight 1/47, reason for group balance not recorded. Sources: density-scales.json; fit_campaign.py density_scales/stage6_weights (density_weight=1)."
+    "phase_density": "Scale sqrt(u_rho^2+(g*u_alpha)^2), g the neighboring-loading secant; source density/loading uncertainties: 15 Amundsen observations (Table 3 pp.3099-3100) and 32 Hartono observations (Table 3 p.1810), retaining Hartono u_rho=0.02 kg/m3 and u_alpha=0.01 mol/mol on the adopted printed-loading basis (printed_alpha_adopted_fitting_assumption_x3_sensitivity). Repository group weight 1/47, reason for group balance not recorded. Sources: density-scales.json; fit_campaign.py density_scales/stage6_weights (density_weight=1)."
   },
   "Cp": {
     "equilibrium_isobaric_heat_capacity": "Scale 0.02*Cp_obs on molar-feed basis, J/(mol feed K); source kJ/(kg K) multiplied by 1000*feed_mass_kg/feed_amount_mol. Hilliard Appendix G.2 p.937/PDF994, accuracy +/-2% in section 4.6 pp.78-80; 2% fitting policy, weight 1 (weight rationale not recorded). Sources: a6/spec.json direct_rows; objective-declarations.json Cp rows, mass_basis=false; #338 comment 6867366135."
