@@ -1,0 +1,64 @@
+[
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "protonated-diethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "origin": -0.2,
+    "scale": 0.05,
+    "bounds": [
+      -1.0,
+      1.0
+    ],
+    "identity": "k-DEAH-water"
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "carbamate-anion",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "origin": 0.0,
+    "scale": 0.05,
+    "bounds": [
+      -1.0,
+      1.0
+    ],
+    "identity": "k-DEACOO-water"
+  },
+  {
+    "kind": "reaction_coordinate",
+    "name": "carbamate-hydrolysis",
+    "coefficient": "a",
+    "origin": 7.914436361200609,
+    "scale": 1.0,
+    "bounds": [
+      4.56443636120061,
+      10.56443636120061
+    ],
+    "identity": "hydrolysis-a"
+  },
+  {
+    "kind": "reaction_enthalpy_shift",
+    "name": "carbamate-hydrolysis",
+    "pivot_temperature": 313.15,
+    "origin": 0.0,
+    "scale": 1000.0,
+    "bounds": [
+      -19000.0,
+      21000.0
+    ],
+    "identity": "hydrolysis-enthalpy-shift"
+  }
+]
