@@ -1,0 +1,141 @@
+{
+  "owner_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/340#issuecomment-6871176306",
+  "parameter_sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
+  "part_ii_rule": "Each Part II amine ion's Born diameter is tied to its segment diameter; water\u2013bicarbonate follows the adopted MEA record.",
+  "reactions": [
+    {
+      "correlation": {
+        "a": 3.7290977365566675,
+        "b": -13445.9,
+        "c": -22.4773,
+        "d": 0.0,
+        "e": 0.0,
+        "f": 0.0,
+        "reference_temperature": 313.15,
+        "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+        "temperature_max": 498.15,
+        "temperature_min": 273.15
+      },
+      "name": "R1",
+      "reference": {
+        "source_basis": "RawMoleFractionInfiniteDilution"
+      },
+      "stoichiometry": {
+        "bicarbonate-anion": 0.0,
+        "carbamate-anion": 0.0,
+        "carbon-dioxide": 0.0,
+        "carbonate-anion": 0.0,
+        "hydronium-cation": 1.0,
+        "hydroxide-anion": 1.0,
+        "monoethanolamine": 0.0,
+        "protonated-monoethanolamine": 0.0,
+        "water": -2.0
+      }
+    },
+    {
+      "correlation": {
+        "a": 24.109329984336796,
+        "b": -12092.1,
+        "c": -36.7816,
+        "d": 0.0,
+        "e": 0.0,
+        "f": 0.0,
+        "reference_temperature": 313.15,
+        "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+        "temperature_max": 393.15,
+        "temperature_min": 293.15
+      },
+      "name": "R2",
+      "reference": {
+        "source_basis": "CommonMolalityInfiniteDilution"
+      },
+      "stoichiometry": {
+        "bicarbonate-anion": 1.0,
+        "carbamate-anion": 0.0,
+        "carbon-dioxide": -1.0,
+        "carbonate-anion": 0.0,
+        "hydronium-cation": 1.0,
+        "hydroxide-anion": 0.0,
+        "monoethanolamine": 0.0,
+        "protonated-monoethanolamine": 0.0,
+        "water": -2.0
+      }
+    },
+    {
+      "correlation": {
+        "a": 12.145792981306897,
+        "b": -12431.7,
+        "c": -35.4819,
+        "d": 0.0,
+        "e": 0.0,
+        "f": 0.0,
+        "reference_temperature": 313.15,
+        "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+        "temperature_max": 498.15,
+        "temperature_min": 273.15
+      },
+      "name": "R3",
+      "reference": {
+        "source_basis": "RawMoleFractionInfiniteDilution"
+      },
+      "stoichiometry": {
+        "bicarbonate-anion": -1.0,
+        "carbamate-anion": 0.0,
+        "carbon-dioxide": 0.0,
+        "carbonate-anion": 1.0,
+        "hydronium-cation": 1.0,
+        "hydroxide-anion": 0.0,
+        "monoethanolamine": 0.0,
+        "protonated-monoethanolamine": 0.0,
+        "water": -1.0
+      }
+    }
+  ],
+  "water_ion_pairs": [
+    {
+      "coefficients": [
+        {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "family": "k_ij",
+          "identity": "pair/bicarbonate-anion/water/k_ij",
+          "provenance": {
+            "domain_id": "mea-working-313-15-to-353-15-k",
+            "locator": "analyses/mea_parameter_bundle/model-d/born-form-diagnosis/p5conv-a-11-results.json; producing wheel 28181e72e429c6e87fc6361082af1a7b21c8747e76bda65a1c30abb4a97402f2; ancestry analyses/mea_parameter_bundle/model-d/1-1-S1-40-80C-multistart.json",
+            "source_id": "mea-model-d-p5conv-a-11-28181e72"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+          "value": {
+            "magnitude": 0.7650000233694618,
+            "unit": "dimensionless"
+          }
+        }
+      ],
+      "component_id_a": "bicarbonate-anion",
+      "component_id_b": "water"
+    },
+    {
+      "coefficients": [
+        {
+          "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+          "family": "k_ij",
+          "identity": "pair/carbonate-anion/water/k_ij",
+          "provenance": {
+            "domain_id": "mea-diagnostic-293-15-to-393-15-k",
+            "locator": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=H2O:column=CO3^2-:status=explicit-diagnostic",
+            "source_id": "mea-retained-phase-two-artifact"
+          },
+          "qualification": "candidate_extrapolation",
+          "source_sha256": "sha256:670123adfda293c6bb60afe57b457534cabae65849d5731b5509d5723e69f38c",
+          "value": {
+            "magnitude": -0.25,
+            "unit": "dimensionless"
+          }
+        }
+      ],
+      "component_id_a": "carbonate-anion",
+      "component_id_b": "water"
+    }
+  ],
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+}
