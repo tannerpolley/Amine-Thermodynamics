@@ -12,4 +12,6 @@ Repeat that command with `evidence`, `uncertainty`, `comparison`, `weights`, `sh
 
 The wheel is verified by its archive hash and installed module bytes. Workers derive their counts from `AGENT_HEAVY_CORES`; numerical-library threads are one. Stability reads the committed MEA registry and never discovers trials from the tree. Every new native resolved descent must be appended before accepting a later result.
 
+Before running `inventory`, stage the intended retained files. Its manifest hashes only `git ls-files` entries under this results directory and excludes the manifest itself; ignored caches are not delivered evidence. The four removed producer-copy hashes in `producer-bindings.json` are labelled execution provenance only, not retained-file references.
+
 The retained paper-evidence package includes the producer outputs and diagnostics. Repeated runtime caches and duplicate producer bindings are temporary; the row tables and diagnostic summaries own the calculation evidence. Presentation reads retained values and does not run the thermodynamic model. Manuscript promotion is a separate owner decision under #337; no manuscript inputs are changed.
