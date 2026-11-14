@@ -48,3 +48,17 @@ data or fitted observations.
 273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage.
 PZ source ranges and the distinct 283.15–395 K calculation interval remain
 those of phase 1. Range marks never exclude a temperature.
+
+`source-curves.json` adds the final figure sweeps at every exact source
+temperature and stock composition. It uses the unchanged point selected by
+`campaign.json`, in a separate output directory. Hilliard and Ermatchkov
+nominal stock levels serve only as color groups in those figures; neither
+temperatures nor compositions are rounded for the model calculations.
+
+The complete first search is retained losslessly in four ordered gzip-stream
+parts, indexed by `results/retransfer-345/first-search-archive.json`. Concatenate
+the parts before decompression; the index records compressed and original-byte
+SHA-256 values. The original 1,509,424,661-byte JSON is also kept locally.
+The campaign resumed on shared-route main `2e5b2d4`, with the full expanded
+PZ registry (1,860 native resolved descents plus the two composition-only
+supplied trials). No trial was dropped to reduce resource use.
