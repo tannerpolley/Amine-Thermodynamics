@@ -1,0 +1,435 @@
+{
+  "amine": "methyldiethanolamine",
+  "specification": "../../solvent_specification_mdea/stage-b.toml",
+  "output": "../results/stage-b-f2",
+  "reference": {
+    "path": "../results/refit-298/B1-endpoint/endpoint.json",
+    "sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
+  },
+  "reference_predictions": {
+    "path": "../results/refit-298/B1-endpoint/fitted-replay.json",
+    "sha256": "6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2"
+  },
+  "reference_cost": 374.5190788051367,
+  "coordinates": {
+    "path": "part-ii-replay-coordinates.json",
+    "sha256": "df53f164a7029e4e33cf987b750927434890fccde6280eeae0d2e342e9935b7e"
+  },
+  "species": [
+    "carbon-dioxide",
+    "water",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion",
+    "methyldiethanolamine",
+    "protonated-methyldiethanolamine"
+  ],
+  "vapor_species": [
+    "water",
+    "methyldiethanolamine",
+    "carbon-dioxide"
+  ],
+  "born_ties": [
+    "protonated-methyldiethanolamine"
+  ],
+  "calculation_interval_K": [
+    288.71,
+    422.04
+  ],
+  "reaction_ranges_K": {
+    "R1": [
+      273.15,
+      498.15
+    ],
+    "R2": [
+      273.15,
+      498.15
+    ],
+    "R3": [
+      273.15,
+      498.15
+    ],
+    "MDEA-dissociation": [
+      278,
+      368
+    ]
+  },
+  "optimizer": {
+    "maximum_iterations": 40,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 2100
+  },
+  "starts": [
+    {
+      "path": "../results/refit-298/B1-endpoint/endpoint.json",
+      "sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
+    },
+    {
+      "path": "../results/refit-298/B1-alternative/start.json",
+      "sha256": "f10ce345c5cccf093f0314c8388ec38d243b51b87d0612e5b66f736013c42ec9"
+    }
+  ],
+  "stocks": [
+    {
+      "water": 1.7987685418415897,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.1308703819661865,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.26477309826967,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.284072249589491,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.4458993797381114,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.4482758620689657,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.8138825324180017,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 2.846153846153846,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 3.2863266180882977,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 3.3917435221783045,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 3.420866489832007,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 3.553734061930783,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 3.8899755501222497,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 4.136106831022085,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 4.313496280552603,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 4.356186395286556,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 4.737234652897303,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 5.506180871828237,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 5.756756756756757,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 6.1890726096333575,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 6.524454477050414,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 6.614507240520268,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 8.31098696461825,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 8.551098376313275,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 8.615384615384617,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 9.090817356205854,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 9.111223458038422,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 9.277492291880781,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 9.9217608607804,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 10.074197120708748,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 10.389521640091116,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 10.76470588235294,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 12.21003963011889,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 12.280212483399733,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 12.477088948787062,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 12.831258644536652,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 13.30615164520744,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 13.43001443001443,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 13.979508666429593,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 15.433850227880626,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 17.281535648994517,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 17.51851851851852,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 17.6219739292365,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 17.76172607879925,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 20.05263157894737,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 20.691973969631235,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 22.144219892176555,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 23.813895781637715,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 24.64102564102564,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 26.424989465375184,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 26.458028962081073,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 27.840523152669267,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 28.476086319084793,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 33.24657534246575,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 40.84100418410041,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 42.10344827586207,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 45.08294930875576,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 52.191489361702125,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 58.1715976331361,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 59.53056516468242,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 69.4225352112676,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 82.33333333333333,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 87.49557522123895,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 130.57894736842104,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 168.4915254237288,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 177.57142857142856,
+      "methyldiethanolamine": 1.0
+    },
+    {
+      "water": 211.7659574468085,
+      "methyldiethanolamine": 1.0
+    }
+  ],
+  "loadings": [
+    1e-05,
+    0.025,
+    0.05,
+    0.075,
+    0.1,
+    0.125,
+    0.15,
+    0.175,
+    0.2,
+    0.225,
+    0.25,
+    0.275,
+    0.3,
+    0.325,
+    0.35,
+    0.375,
+    0.4,
+    0.425,
+    0.45,
+    0.475,
+    0.5,
+    0.525,
+    0.55,
+    0.575,
+    0.6,
+    0.625,
+    0.65,
+    0.675,
+    0.7,
+    0.725,
+    0.75,
+    0.775,
+    0.8,
+    0.825,
+    0.85,
+    0.875,
+    0.9,
+    0.925,
+    0.95,
+    0.975,
+    1.0,
+    1.025,
+    1.05,
+    1.075,
+    1.1,
+    1.125,
+    1.15,
+    1.175,
+    1.2,
+    1.225,
+    1.25,
+    1.275,
+    1.3,
+    1.325,
+    1.35,
+    1.368
+  ],
+  "roles": {
+    "Carson": "fitted",
+    "Cp": "fitted",
+    "Jakobsen": "fitted",
+    "Kim": "fitted",
+    "Kuranov": "fitted",
+    "Merkley": "fitted",
+    "loaded-density": "fitted",
+    "unloaded-density": "fitted",
+    "Bottinger-amine-sum-25bar": "not fitted",
+    "Bottinger-amine-sum-5bar": "not fitted",
+    "Bottinger-bicarbonate-25bar": "not fitted",
+    "Bottinger-bicarbonate-5bar": "not fitted",
+    "Cp-60wt": "not fitted",
+    "Ermatchkov": "not fitted",
+    "Kuranov-413K": "not fitted",
+    "Merkley-half-loading": "not fitted",
+    "Merkley-outside": "not fitted",
+    "Sedighi": "not fitted",
+    "Zheng": "not fitted",
+    "corrected-Kamps": "not fitted",
+    "density-60wt": "not fitted",
+    "Xiao": "not fitted"
+  },
+  "split_record": {
+    "path": "stage-b-split-record.json",
+    "sha256": "53e9dcc81c899095595c5ea42a50231af02cfe16c18b27246b761c7a8fde4f7b"
+  },
+  "curve_rows": {
+    "path": "stage-b-curve-rows.json",
+    "sha256": "71e001764a55880000bf2e543ca3398829c0ef77f80c46090021ca130aeb37b2"
+  }
+}

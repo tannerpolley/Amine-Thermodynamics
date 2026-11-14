@@ -1,0 +1,27 @@
+schema = "solvent-specification-1"
+[start]
+path = "inputs/B1-start.json"
+sha256 = "87ccd90fd6219395b24dceaec61d5c2ed03edacceeb41c81876488115498bb50"
+
+[endpoint]
+path = "../mdea_mea_workflow/results/refit-298/B1-endpoint/endpoint.json"
+sha256 = "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
+
+[coordinates]
+path = "inputs/B1-coordinates.json"
+sha256 = "0bca9af202313b2bd8325ccaa37a72f32a1b326099c957c5ebf35f630506c8be"
+
+[caloric]
+path = "inputs/caloric.json"
+sha256 = "145a67eb14ef9b55116820e920d64e542713552072c9f83c3df0df5a795bb6c1"
+
+[optimizer]
+maximum_iterations = 40
+function_tolerance = 1e-10
+parameter_tolerance = 1e-10
+gradient_tolerance = 1e-8
+maximum_elapsed_time_seconds = 2100.0
+
+[declarations]
+path = "stage-b-declarations.toml"
+sha256 = "f53dc2a8cb3c0510cd3dbeecec07f7e23eb6ccbdf4f23771b42e07efd404d474"
