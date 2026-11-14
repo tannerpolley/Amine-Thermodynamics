@@ -27,7 +27,8 @@ def main():
     source = ROOT / 'analyses/solvent_specification_mea'
     spec = SolventSpecification(source / 'MEA-pre-260-340.toml')
     rows = spec.inputs['observations']['fitted']
-    reference = json.loads((ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json').read_text())
+    reference_path = ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json'
+    reference = json.loads(reference_path.read_text())
     predictions, differences = [], []
     for row, ref in zip(rows, reference, strict=True):
         assert row['identity'] == ref['target']
@@ -64,7 +65,8 @@ def main():
                   metric='abs(actual-reference)/max(abs(reference),1)', limit=1e-10,
                   near_zero_absolute_tolerance=1e-10, paired_checks=pair_checks, coordinate_admission=admission,
                   input_hashes={str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                                for p in [source / 'MEA-pre-260-340.toml', ROOT/'analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml', *sorted((source / 'inputs').iterdir())]},
+                                for p in [spec.path, *((spec.path.parent/spec.spec[k]['path']).resolve() for k in ('endpoint','declarations','caloric')), reference_path,
+                                          *(p for p in sorted((source/'inputs').iterdir()) if p.name not in ('endpoint.json','caloric.json','reference.json'))]},
                   law_domains={k: {r['name']: [r['correlation']['temperature_min'], r['correlation']['temperature_max']]
                                   for r in group} for k, group in spec.spec['chemistry']['reactions'].items()},
                   wall_seconds=time.perf_counter() - started, cpu_count=os.cpu_count())
