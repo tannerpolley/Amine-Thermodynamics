@@ -85,7 +85,7 @@ def weights():
     a.write('objective-declarations.json',observations)
     groups = {}
     for x,o in zip(values,observations,strict=True):
-        key = (x['group'],o['kind'],str(o['arguments'].get('species')),str(o['arguments'].get('scale',o['row'].get('scale',1.))),o['weight'])
+        key = (x['group'],o['constructor'] if o['constructor']=='addition_enthalpy' else o['kind'],str(o['arguments'].get('species')),str(o['arguments'].get('scale',o['row'].get('scale',1.))),o['weight'])
         groups.setdefault(key,[]).append(x['cost'])
     e.table(OUT/'objective-groups.csv',[dict(group=k[0],quantity=k[1],species=k[2],scale=k[3],weight=k[4],n=len(v),cost=sum(v),cost_percent=100*sum(v)/sum(x['cost'] for x in values),rule='Frozen objective declarations; see objective-declarations.json and #255/#338') for k,v in groups.items()])
 
