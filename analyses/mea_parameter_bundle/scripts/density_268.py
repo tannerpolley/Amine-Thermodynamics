@@ -18,7 +18,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 
 ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
-AN = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
+AN = ROOT / 'analyses/solvent_specification_mea'
 OUT = B / 'results/density-268'
 sys.path.insert(0, str(Path(__file__).parent))
 import shared_evaluation as s
@@ -53,8 +53,8 @@ def verify():
                 s.ENGINE_COMMIT = 'e6dae5c7' if digest == NEW_SHA else '3e83e19ccc771b51d8ebc038931ab25192f4c5b5'
                 return
     raise RuntimeError('Installed Engine differs from both authorized immutable wheels')
-def bind(mapping):
-    spec = SolventSpecification(AN / 'MEA.toml')
+def bind(mapping, specification='MEA-pre-260-340.toml'):
+    spec = SolventSpecification(AN / specification)
     spec.parameters = epcsaft.Parameters.from_mapping(mapping)
     spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
     packet = s.load_state_packet()['observations'][0]['request']
@@ -348,7 +348,7 @@ def present():
             original307_cost=math.fsum(v['cost'] for v in replay[:307]),within_2s=sum(abs(v['residual'])<=2 for v in loaded),loaded_rows=len(loaded),phase=retained(f'{name}/phase-summary.json'))
         assert len(loaded) == 47
     write('summary.json', fits)
-    paths = [Path(__file__), ROOT/'src/MEA/solvent_specification.py', AN/'MEA.toml', AN/'declarations.toml',
+    paths = [Path(__file__), ROOT/'src/MEA/solvent_specification.py', AN/'MEA-pre-260-340.toml', AN/'declarations.toml',
              *sorted((AN/'inputs').iterdir()), *STARTS.values(), ROOT/'data/reference/MEA/observations/density_viscosity/Sobrino_2016_density.csv',
              ROOT/'data/reference/MEA/observations/density_viscosity/Han_2012_loaded_density.csv', B/'results/engine-3e83e19c-paper-evidence/density.csv']
     write('provenance.json',dict(base='30db72afad45232c36f8bfce82ea80278f3267e2',python=sys.version, CPU_count=os.cpu_count(), installed_wheel_bytes_verified=True,

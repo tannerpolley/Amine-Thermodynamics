@@ -48,31 +48,52 @@ The populated notebook rendered to `analyses/_site/mea_parameter_bundle/notebook
 
 ## Historical-reader correction after independent review
 
-The delivered review found mixed records: PZ and DEA law readers used the live F2 declaration alongside F0 parameters, while AMP's #304/#306 shared-input readers used both live files. These readers now use `historical-spec/` for their endpoint and R1–R3 laws. At 353.15 K, F0's R2 gives ln K = -14.579871440000895; F2 gives -14.552898662714009. These are dimensionless aqueous-molality infinite-dilution constants. The difference is preserved, rather than substituting F2 into the earlier studies.
+The first correction wrongly treated a route's pre-adoption default as its retained scientific input. That assumption is withdrawn. F0 is the owner for the PZ, AMP Kundu/#306, DEA, and MDEA #298 shared substitutions only. Older diagnostic campaigns name their own inputs. The recorded 00e77608 endpoint, 7fccfe8b declaration, and pre/post-260 calorics distinguish those records directly; the older MEA cost is 148.87893934557388, rather than F0's 148.51054565397726.
 
-The full source audit is in [historical-declaration-identity.json](historical-declaration-identity.json), with code hashes and the single frozen R1–R3 declaration. The newly bound files are:
+[older-route-identities.json](older-route-identities.json) gives every bound route's full parameter, declaration and caloric hashes, its evidence file, and verified input hashes. The source declaration was recovered byte-for-byte from its recorded campaign commit b0b1cba: SHA-256 `7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64`. It is retained as `pre-F0-declarations.toml`. The existing #297 declaration has relocated dataset paths and SHA-256 39a5d568…; it is not claimed to equal 7fccfe8b…. No equation or unrecorded input was reconstructed.
 
-- PZ: `analyses/pz_transfer/speciation.py` (reaction-source generation).
-- AMP: `analyses/amp_transfer/kundu.py` (shared substitution and endpoint provenance), `refit_306.py` (shared endpoint).
-- DEA: `analyses/dea_transfer/prepare.py` (declaration generation), `reactive.py` (shared-law check).
-- MDEA workflow: `analyses/mdea_mea_workflow/scripts/transfer_probes.py` (its MEA comparison branch; the MDEA-specific declarations are unchanged).
-- Historical MEA diagnostics: `analyses/high_temperature_chemistry/{qualify,run,check_heat_domain}.py`; `analyses/mea_parameter_bundle/water-ideal-gas/compare.py`, `heat-capacity-264/calculate.py`, `parameter-identifiability/calculate.py`, `solvent-domain-285/calibration.py`, and `scripts/{bicarbonate_carbonate_266,bicarbonate_carbonate_266_prepare,density_268,pressure_transfer_attribution_261}.py`.
+The two explicit configurations, `analyses/solvent_specification_mea/MEA-pre-260-340.toml` and `MEA-post-260-340.toml`, reference that exact declaration and the immutable endpoint at `results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json`, SHA-256 `00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91`. Keeping the configuration at the original solvent-input directory lets every unchanged CSV and explicit construction-parameter reference resolve with its recorded hash. All 307 dataset hashes and the explicit construction-parameter hashes were checked. Pre-260 calorics reuse #297's retained `pre-260-caloric.json`, SHA-256 `71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1`; post-260 calorics remain `inputs/caloric.json`, SHA-256 `d371e5102e6368a51e7db0def4010ac67fa26875b31ee358077ebb904de41efb`.
 
-The #261 pressure-transfer producer already uses `adoption-297/historical-spec/MEA-pre-260.toml`; its remaining reference read now uses that existing historical owner too. It is not moved to F0. Historical diagnostics with older wheel or calibration restrictions retain those restrictions; binding the source file freezes their pre-adoption default, and does not qualify or rerun those older campaigns.
+| Bound route | Endpoint | Declaration | Calorics | Retained evidence |
+|---|---|---|---|---|
+| #264 calculate: qualification, setup, probe and replay-only | 00e77608… | 7fccfe8b… | post-260; qualification explicitly substitutes old water | `heat-capacity-264/provenance.json` |
+| High-temperature `qualify.py`, `run.py`, `check_heat_domain.py` | 00e77608… | 7fccfe8b… | pre-260 | `high_temperature_chemistry/results/qualification.json` |
+| MDEA workflow `transfer_probes.py`, MEA comparison branch | 00e77608… | 7fccfe8b… | pre-260 | `transfer-267/input-hashes.json`, `runtime-mea.json`, retained script's baseline assertion |
+| Water ideal-gas `compare.py` | 00e77608… | 7fccfe8b… | pre-260; explicit old/new water substitutions retained | `water-ideal-gas/provenance.json`, base commit 30db72af |
+| #266 `bicarbonate_carbonate_266.py` and `_prepare.py` | 00e77608… | 7fccfe8b… | pre-260 | `bicarbonate-carbonate-266/baseline-runtime.json` |
+| #268 standalone `density_268.bind` | 00e77608… | 7fccfe8b… | pre-260 | `density-268/provenance.json` |
+| #261 `pressure_transfer_attribution_261.py` | 00e77608… | 7fccfe8b… | pre-260 | producer commit 0d7d31e's configuration and `pressure-transfer-261/matched-attribution.json` |
+| Existing #261 pressure-transfer specification/reference | 00e77608… | 39a5d568… relocated declaration | pre-260 | existing #297 `MEA-pre-260.toml`, #261 `preparation.json`; supported binding preserved |
 
-Existing F0 readers retained from the first adoption commit are PZ `binary.py` and `speciation.py` parameter construction, DEA `pinned.py`, MDEA `refit_298.py`, and bundle `a7_presentation.py`, `check_a7_selected.py`, `reduce_a7_evidence.py`, `render_parameter_tables.py`, and `render_regression_overview.py`. Existing #255/#338 fixed-record binds remain unchanged. The remaining live readers are the authorized default/adoption commands, unchanged hash-pinned caloric and observation inputs, and the permittivity presentation's component identifiers (identical in F0 and F2); none supplies changing endpoint values or reaction laws to a historical calculation.
+The #264 fit-coordinate file is deliberately separate from the specification: `analyses/solvent_specification_mea/inputs/fit-coordinates.json`, SHA-256 `ea65e392c34484f2c54b8f61cc465f25c8d6a9377a5b51a1f0db5e60585251af`. Its hash is checked before loading on the common probe/replay-only path. Neither route looks for coordinates inside a frozen directory. The density helper accepts an explicit specification filename; #255's existing snapshot consumer passes `MEA.toml` to preserve its original binding, rather than adopting the standalone #268 configuration.
 
-Representative checks ran through `agent-heavy` with OMP/OpenBLAS/MKL threads set to one, using the pinned wheel. The JSON files retain source conditions, identities, reference hashes and producing functions:
+### Not frozen, needs its recorded snapshot or restoration
 
-| Amine | Representative retained output | Reproduced pressure / Pa | Absolute difference / Pa |
-|---|---|---:|---:|
-| PZ | Hilliard 2008 D.5 row 1, A12 | 66.24863229244855 | 0 |
-| AMP | Kundu 2003 row 0, current #304 record | 3483.3663636642273 | 0 |
-| DEA | Lawson–Garst 1976 row 0, frozen B-2 | 2519.623568138359 | 0 |
-| MDEA | Kuranov row `fit:0`, B1 #302 adoption | 74002.65996087721 | 0 |
+- `parameter-identifiability/calculate.py` is restored byte-for-byte to main dbe0db0. Its retained record is 00e77608 / 7fccfe8b with original calorics and the original source module. Its existing guards remain. The documented five-file b0b1cba restoration remains necessary; because later adoptions also changed the endpoint, declaration and reference, a current restoration must additionally restore those three files from b0b1cba. [parameter-identifiability-restoration-check.json](parameter-identifiability-restoration-check.json) supplies the exact eight-file command and verifies all six existing input guards plus loaded endpoint, declaration and caloric hashes against the Git bytes. No historical campaign was executed. The older wheel and environment requirements remain in force.
+- `solvent-domain-285/calibration.py` is restored byte-for-byte to main dbe0db0. No own retained snapshot identity was established for this auxiliary feed inventory; none is guessed. It remains a live dependency, not a frozen historical calculation.
 
-PZ's check regenerates source reactions through `speciation.reactions`, supplies those R1–R3 declarations to `reactive.pressure_problem`, and uses the retained A12 endpoint and offsets. AMP's check applies `kundu.current_shared` in memory and verifies unchanged current endpoint and R1–R3 laws before prediction. DEA's native `checks` confirms the shared-law identity before prediction from the frozen selection. Each representative prediction equals its retained value exactly. MDEA B1's own declaration is preserved: R1/R3 have their existing narrower intervals and omitted zero e/f fields; the newly frozen MEA-side reader has exact F0 declarations. No MDEA domain is altered to force structural equality.
+The retained `parameter-identifiability/results/complete-inputs.json` describes the restoration used for the original campaign completion. It has not been rewritten to pretend that the additional files were restored in that historical run.
 
-The repeated normal F2 command still gives 307 predictions, cost 150.76290287953717, and zero maximum relative prediction difference. Its fresh runtime is retained separately in `historical-freeze-default-runtime.json`; the original supported outputs and pins are preserved. These are finite numerical identity checks, not new fits or physical validation. Part II remains for #343–#346.
+### Older dependencies with their own guards or restoration requirements
 
-The correction adds 22 executable lines and removes 22; complete-branch accounting is **121 gross executable additions / 150 allowed**, with **38 removals**, against the original branch base. [historical-freeze-change-accounting.json](historical-freeze-change-accounting.json) retains the accounting. The original 99-line accounting remains historical. No persistent test, model equation, fit control, Engine source, manuscript file, or manuscript registry is added or changed. Independent delivered review of the corrected head remains pending.
+The following are listed without changes: `analyses/solvent_specification_mea/fit.py` (#235); `analyses/mea_parameter_bundle/model-d/born-form-diagnosis/born_form_diagnosis.py`; retained #137 `results/concentration-transfer-137/experiment.py`, #140 `results/temperature-reanchor-140/phase-a.py`, and #161 `results/cp-unloaded-161/evaluate.py`; and historical Engine comparisons such as `scripts/compare_engines.py`. Their existing record, Engine, input or restoration requirements remain their owners. This correction does not claim these older dependencies run against current defaults.
+
+### Numerical checks and preserved adoption
+
+[older-route-replay-checks.json](older-route-replay-checks.json) retains source identities, actual/reference values, units and errors. The checks used wheel 391dfe5d through `agent-heavy` with OMP/OpenBLAS/MKL threads set to one. Most retained older values were calculated on earlier wheels, so finite differences are reported rather than called bitwise identity. No fit or historical result file was regenerated.
+
+| Replayed quantity | Actual | Retained reference | Relative difference |
+|---|---:|---:|---:|
+| MDEA #267 MEA branch (dimensionless) | 148.87893934554421 | 148.87893934557388 | 1.99305e-13 |
+| #266 calculation and preparation (Pa) | 5.0076514042935587 | 5.0076514042933677 | 3.81333e-14 |
+| high-temperature qualification/run/check_heat_domain (Pa) | 5.0076514042935587 | 5.0076514042933677 | 3.81333e-14 |
+| water ideal-gas comparison (J/(mol feed K)) | 89.642948734753958 | 89.642948734754114 | 1.7438e-15 |
+| #264 corrected-caloric baseline (J/(mol feed K)) | 89.800759056476281 | 89.800759056475798 | 5.38046e-15 |
+| #261 attribution (Pa) | 6977.0072960659973 | 6977.0072960659891 | 1.1732e-15 |
+| #268 density helper (kg/m3) | 1029.7326223072268 | 1029.7326223072262 | 6.62425e-16 |
+
+The #267 cost is compared with its existing 1e-10 relative baseline assertion. Other tabulated differences are numerical reproduction evidence on the adopted wheel, not new physical validation or newly selected scientific tolerances. The exact record/declaration/caloric identities, not agreement alone, justify the bindings.
+
+The repeated PZ, AMP and DEA representative predictions remain at zero difference in `older-route-amine-replays/`. Their F0 source bindings and the MDEA #298 shared substitutions are unchanged. The repeated normal F2 command returns 307 predictions, cost 150.76290287953717, and zero relative differences for predictions, residuals, weighted residuals and costs. Fresh default runtime is retained separately; the original accepted adoption evidence, history row, Part II shared values and checkpoint figure remain unchanged. Manuscript files and the manuscript registry are untouched. Independent review of this corrected head remains pending.
+
+Current branch accounting is **134 gross executable additions / 150 allowed**, with **49 removals**, recorded in `older-route-change-accounting.json`. The earlier 99- and 121-line reports describe their original commits, not this corrected tree. Both updated notebooks rendered as HTML with execution disabled. The preserved #255 binder also reproduces one retained F0 and F2 pressure exactly through the shared density helper; `older-route-caller-checks.json` retains those caller checks.

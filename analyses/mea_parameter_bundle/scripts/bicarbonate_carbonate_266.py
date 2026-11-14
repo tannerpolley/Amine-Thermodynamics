@@ -19,7 +19,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / 'analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266'
-PACKET = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
+PACKET = ROOT / 'analyses/solvent_specification_mea'
 WHEEL = Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/epcsaft-1.2.0-cp313-cp313-manylinux_2_39_x86_64.whl')
 WHEEL_SHA = '83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6'
 def read(name):
@@ -100,7 +100,7 @@ if __name__ == '__main__':
         assert all(archive.read(n)==(Path(epcsaft.__file__).parent.parent/n).read_bytes() for n in archive.namelist() if n.startswith('epcsaft/') and not n.endswith('/'))
     inputs = read('inputs.json')
     assert all(hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==digest for p,digest in inputs['sources'].items())
-    spec = SolventSpecification(PACKET / 'MEA.toml')
+    spec = SolventSpecification(PACKET / 'MEA-pre-260-340.toml')
     fitted = list(spec.inputs['observations']['fitted'])
     comparisons = inputs['records']
     spec.spec['templates'].update(inputs['problems'])
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     baseline_metrics = read('baseline.json')['groups'] if mode!='baseline' else None
     if mode=='baseline':
         results = predictions(fitted)
-        reference = json.loads((PACKET/'inputs/reference.json').read_text())
+        reference = json.loads((ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json').read_text())
         differences = [dict(identity=r['identity'], available=valid(p), prediction=None if not valid(p) else abs(p['value']/q['predicted']-1),
             residual=None if not valid(p) else abs(p['residual']-q['residual'])/max(abs(q['residual']),1)) for r,p,q in zip(fitted,results,reference,strict=True)]
         groups = metrics(fitted,results)
@@ -189,4 +189,4 @@ if __name__ == '__main__':
         wheel_sha256=hashlib.sha256(WHEEL.read_bytes()).hexdigest(),installed_files_byte_identical=True,
         inputs_sha256=hashlib.sha256((OUT/'inputs.json').read_bytes()).hexdigest(),
         packages={k:importlib.metadata.version(k) for k in ('epcsaft','numpy','scipy','matplotlib')},
-        sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(__file__),Path(__file__).with_name('bicarbonate_carbonate_266_prepare.py'),ROOT/'src/MEA/solvent_specification.py',PACKET/'MEA.toml',PACKET/'declarations.toml',*sorted((PACKET/'inputs').iterdir())]}))
+        sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(__file__),Path(__file__).with_name('bicarbonate_carbonate_266_prepare.py'),ROOT/'src/MEA/solvent_specification.py',PACKET/'MEA-pre-260-340.toml',ROOT/'analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml',*sorted((PACKET/'inputs').iterdir())]}))

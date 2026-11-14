@@ -1,0 +1,78 @@
+{
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "pre_caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+  "post_caloric_sha256": "d371e5102e6368a51e7db0def4010ac67fa26875b31ee358077ebb904de41efb",
+  "coordinates_sha256": "ea65e392c34484f2c54b8f61cc465f25c8d6a9377a5b51a1f0db5e60585251af",
+  "rows": [
+    {
+      "route": "MDEA #267 MEA branch",
+      "identity": "307-row weighted cost",
+      "actual": 148.8789393455442,
+      "reference": 148.87893934557388,
+      "unit": "dimensionless",
+      "absolute_difference": 2.9672264645341784e-11,
+      "relative_difference": 1.9930464829862403e-13,
+      "evidence_file": "analyses/mdea_mea_workflow/scripts/transfer_probes.py:baseline assertion"
+    },
+    {
+      "route": "#266 calculation and preparation",
+      "identity": "vle_obs_0119-pco2",
+      "actual": 5.007651404293559,
+      "reference": 5.007651404293368,
+      "unit": "Pa",
+      "absolute_difference": 1.9095836023552692e-13,
+      "relative_difference": 3.813331736146795e-14,
+      "evidence_file": "analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266/baseline.json"
+    },
+    {
+      "route": "high-temperature qualification/run/check_heat_domain",
+      "identity": "vle_obs_0119-pco2",
+      "actual": 5.007651404293559,
+      "reference": 5.007651404293368,
+      "unit": "Pa",
+      "absolute_difference": 1.9095836023552692e-13,
+      "relative_difference": 3.813331736146795e-14,
+      "evidence_file": "analyses/high_temperature_chemistry/results/qualification.json"
+    },
+    {
+      "route": "water ideal-gas comparison",
+      "identity": "Hilliard2008_Cp_318.15_0.0",
+      "actual": 89.64294873475396,
+      "reference": 89.64294873475411,
+      "unit": "J/(mol feed K)",
+      "absolute_difference": 1.5631940186722204e-13,
+      "relative_difference": 1.7438003108282158e-15,
+      "evidence_file": "analyses/mea_parameter_bundle/water-ideal-gas/comparison.json"
+    },
+    {
+      "route": "#264 corrected-caloric baseline",
+      "identity": "Hilliard2008-313.15-0.0",
+      "actual": 89.80075905647628,
+      "reference": 89.8007590564758,
+      "unit": "J/(mol feed K)",
+      "absolute_difference": 4.831690603168681e-13,
+      "relative_difference": 5.380456305642138e-15,
+      "evidence_file": "analyses/mea_parameter_bundle/heat-capacity-264/baseline.json"
+    },
+    {
+      "route": "#261 attribution",
+      "identity": "313.15 K, loading 0.1, 15 mass%",
+      "actual": 6977.007296065997,
+      "reference": 6977.007296065989,
+      "unit": "Pa",
+      "absolute_difference": 8.185452315956354e-12,
+      "relative_difference": 1.1732039209091471e-15,
+      "evidence_file": "analyses/mea_parameter_bundle/results/pressure-transfer-261/matched-attribution.json"
+    },
+    {
+      "route": "#268 density helper",
+      "identity": "Amundsen2009_state_060",
+      "actual": 1029.7326223072268,
+      "reference": 1029.7326223072262,
+      "unit": "kg/m3",
+      "absolute_difference": 6.821210263296962e-13,
+      "relative_difference": 6.624253826214911e-16,
+      "evidence_file": "analyses/mea_parameter_bundle/results/density-268/final/baseline.json"
+    }
+  ]
+}
