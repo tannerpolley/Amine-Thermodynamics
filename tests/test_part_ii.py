@@ -103,9 +103,9 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     route.load = lambda reference: copy.deepcopy(registry)
     route.verify, route.bind = lambda: None, lambda point: SimpleNamespace(model=model)
     route.stability_row = lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)
-    measured = route.grid(None,[dict(key='pz')])[0]
+    measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
     assert len(measured['supplied_trials'])==102
-    measured = route.grid(None,[dict(key='pz')])[0]
+    measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
     retained = route.result('split-record.json')
     assert len(retained['trials'])==100 and all(w['resolved_descent'] for w in retained['trials'])
     assert retained['supplied_trials']==registry['trials'][-2:]
@@ -324,17 +324,26 @@ def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_p
 
 
 def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path):
-    """#368: a large grid must not copy trials before evaluating its states."""
+    """#368: retain one inventory and submit at most four states per worker."""
+    import concurrent.futures
     class Trial(dict):
         def __deepcopy__(self, memo):
             pytest.fail('grid copied a supplied trial before state evaluation')
     trial = Trial(kind='Liquid', support=[0], composition=[1.], packing=.4)
     route = p.Route.__new__(p.Route)
-    route.out, route.config = tmp_path, dict(amine='test', species=['test'], split_record=None)
+    route.out, route.config, route.workers = tmp_path, dict(amine='test', species=['test'], split_record=None), 3
     route.load = lambda reference:dict(amine='test', species=['test'], trials=[trial])
-    def measure(point, states, trials, *, route):
-        assert len(states)==67536
-        assert trials==[trial]
-        return []
-    monkeypatch.setattr(p.stable, 'grid', measure)
-    assert route.grid(None, [dict(key=str(i)) for i in range(67536)])==[]
+    class Pool:
+        def __init__(self, workers, *, initializer, initargs):
+            assert workers==3 and initargs[1]==[trial]
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def map(self, function, states, chunksize):
+            assert len(states)<=12
+            return map(function, states)
+    monkeypatch.setattr(concurrent.futures, 'ProcessPoolExecutor', Pool)
+    monkeypatch.setattr(p.stable, '_measure', lambda state:dict(key=state['key']))
+    measured = route.grid(None, [dict(key=str(i)) for i in range(67536)])
+    assert [row['key'] for row in measured]==[str(i) for i in range(67536)]

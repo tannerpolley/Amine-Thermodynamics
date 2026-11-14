@@ -64,7 +64,7 @@ class Route:
         path.write_text(json.dumps(jsonable(value), indent=2, allow_nan=False)+'\n')
 
     def result(self, name):
-        return json.loads((self.out/name).read_text())
+        return stable.read(self.out/name)
 
     def start(self, reference, *, adopt=True):
         mapping = self.load(reference)
@@ -222,6 +222,11 @@ class Route:
         registry['trials'] = [w for w in registry['trials'] if w.get('resolved_descent')]
         witnesses = registry['trials']
         trials = witnesses+supplied
+        identity = json.dumps(jsonable([point, states, trials, self.config]), sort_keys=True)
+        if getattr(self, '_last_grid', (None,))[0]==identity:
+            return self._last_grid[1]
+        self.details = self.out/('search-'+str(len(list(self.out.glob('search-*.json')))))
+        self.details.mkdir(parents=True, exist_ok=True)
         measured = stable.grid(point, states, trials, route=self)
         for row in measured:
             for witness in row.get('witnesses',[]):
@@ -229,6 +234,7 @@ class Route:
                     witnesses.append(witness)
         self.write('split-record.json',registry)
         self.write('search-'+str(len(list(self.out.glob('search-*.json'))))+'.json',measured)
+        self._last_grid = identity, measured
         return measured
 
     def segment(self, anchor, endpoint, t):
