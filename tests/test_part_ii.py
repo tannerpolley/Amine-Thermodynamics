@@ -301,15 +301,23 @@ def test_completed_reaction_chart_preserves_bounds_through_continuation(monkeypa
 
 
 def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_path):
-    route = p.Route.__new__(p.Route)
+    """A failed rerun must invalidate uncertainty from a transported endpoint."""
+    monkeypatch.setenv('AGENT_HEAVY_CORES','3')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
     route.out = tmp_path
-    rows = [dict(identity='pressure')]
-    spec = SimpleNamespace(parameters=None,thermal=None,inputs=dict(observations=dict(fitted=rows)),
-                           coordinates=lambda:[],observation=lambda r:r)
-    monkeypatch.setattr(route,'bind',lambda point:spec)
-    monkeypatch.setattr(route,'replay',lambda point:([dict(identity='pressure',value=2.)],True,0.))
-    monkeypatch.setattr(p.reg,'differentiate',lambda *a,**kw:SimpleNamespace(
-        statuses=[SimpleNamespace(name='Available')],predictions=[1.]))
+    point = route.start(route.config['reference'],adopt=False)
+    reactions = p.copy.deepcopy(point['reactions'])
+    law = next(r['correlation'] for group in reactions.values() for r in group if r['name']=='MDEA-dissociation')
+    point['coordinates'] = [dict(kind='reaction_coordinate',name='MDEA-dissociation',
+        coefficient='a',identity='dissociation-a',origin=law['a'],scale=1.,bounds=[law['a']-3.,law['a']+3.])]
+    law['a'] += .5
+    report = dict(optimizer=[.5],physical=[],reactions=reactions)
+    endpoint = route.endpoint_mapping(point,report,point['coordinates'])
+    route.uncertainty(endpoint)
+    result = route.result('conditional-uncertainty.json')
+    assert np.isfinite(result['conditional_standard_error']['dissociation-a'])
+    inconsistent = p.copy.deepcopy(endpoint)
+    inconsistent['coordinates'][0]['origin'] += .1
     with pytest.raises(AssertionError,match='Differentiation/replay row mismatch'):
-        route.uncertainty(dict(coordinates=[]))
+        route.uncertainty(inconsistent)
     assert not (tmp_path/'conditional-uncertainty.json').exists()

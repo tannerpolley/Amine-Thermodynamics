@@ -88,7 +88,10 @@ errors of 0.0034855873154973523 for DEAH–water interaction,
 hydrolysis enthalpy shift. These are conditional on the fitted model,
 residual scales and local linearization. No new fit, scientific assessment,
 parameter adoption, or physical uncertainty claim follows from chart identity.
-The regression test confirms an identity failure writes no standard-error file.
+At method entry, any previous uncertainty file is removed. A failed rerun
+therefore leaves no stale standard-error file. The regression test first
+computes finite uncertainty for an endpoint returned by `endpoint_mapping`,
+then reruns an inconsistent chart in the same directory and verifies removal.
 
 ## Checks and delivery boundary
 
