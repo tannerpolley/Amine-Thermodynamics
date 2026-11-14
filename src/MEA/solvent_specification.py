@@ -10,6 +10,7 @@ import tomllib
 from pathlib import Path
 
 import epcsaft
+import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 
 
@@ -335,7 +336,6 @@ class SolventSpecification:
         return reactions
 
     def whiten(self, values, records=None):
-        import numpy as np
         covariance = self.spec.get('measurement_covariance')
         if covariance is not None:
             return np.linalg.solve(np.linalg.cholesky(covariance), values)
@@ -511,7 +511,6 @@ def conditional_information(result, J, r, ids, lower, upper):
     """Column-normalized singular values; the cost gradient at the final point (an active-bound coordinate whose
     gradient points out of the box is held there); and, for coordinates off their bounds, the covariance
     conditional on the active-bound coordinates held fixed (the Engine withholds the full covariance there)."""
-    import numpy as np
     free = [k for k in range(len(ids)) if k not in set(result.covariance.active_bounds)]
     s2 = float(r @ r / (len(r) - len(free)))
     cov = s2 * np.linalg.inv(J[:, free].T @ J[:, free])
@@ -533,7 +532,6 @@ def supplied_negative(trial):
 
 def output_uncertainty(C, extra=0):
     """PZ's normalized-area measurement covariance, passed unchanged to Engine."""
-    import numpy as np
     if C is None:
         return None
     u = reg.MeasurementUncertainty()

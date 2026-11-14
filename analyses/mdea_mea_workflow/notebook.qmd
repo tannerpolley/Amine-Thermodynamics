@@ -93,14 +93,24 @@ are retained, and no new error threshold is introduced.
 
 The production-whitening test now compares `SolventSpecification.whiten`
 against the independent quadratic form. All **8 Part II tests pass**; the
-MDEA replay above is unchanged. The complete suite has **101 passed and
-13 failed**, with 17 passing subtests. A read-only source comparison at
-`7bfd0769` gives the same 13 failing test identities (99 passed, with 17
-passing subtests). These older wheel/source/reaction-fixture failures remain
-an open verification limit; the [verification record](results/part-ii-route-replay/correction-2/verification.json)
-retains their identities. This is numerical capability evidence, not a new
-PZ fit or physical validation. The owner has not ratified a code ceiling above
-400; this correction keeps the existing 487-line executable surface.
+MDEA replay above is unchanged. Correction round 3 moves the historical
+#255 pin assignment into its explicit CLI entry point. Importing the shared
+calculation preserves Engine `391dfe5d`; all six historical CLI commands still
+select `bc779473` before dispatch. The historical selection check runs the
+actual dispatch block with calculation callbacks stubbed; it does not rerun a
+historical study or install a historical wheel.
+
+The complete corrected suite has **103 passed and 11 failed**, with 17 passing
+subtests. Main `fdce917` has **95 passed and the same 11 failures**, with 17
+passing subtests; the eight additional passing tests are the Part II module.
+The previous 13 failures included two native-feed failures introduced by this
+PR's import-time pin assignment. Both now pass, together with all eight Part II
+tests. The [pin and suite verification](results/part-ii-route-replay/correction-3/verification.json)
+retains the comparison. The remaining 11 failures are an open verification
+limit shared with main. This is numerical capability evidence, not a new
+PZ fit or physical validation. The [#343 ceiling decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/343#issuecomment-6875906180)
+records 487 gross added executable lines against `673bceb`; this correction
+stays within that ceiling.
 
 ## Current B1 adoption (#302, 11 November 2026)
 
