@@ -432,7 +432,7 @@ def calculate():
     write_json(STAGING/'inputs.json', dict(parameter_sha256=PARAMETER_HASH, engine_wheel_sha256=c.s.ENGINE_WHEEL_SHA256,
         engine_commit=c.s.ENGINE_COMMIT, pressure_Pa=PRESSURE, loading_ceiling=CEILING, python=sys.version,
         commands=[f'agent-heavy uv run --no-sync python {Path(__file__).relative_to(ROOT)} {action}' for action in ('calculate', 'present')],
-        files={str(p.relative_to(ROOT)): digest(p) for p in inputs}, design_comment=10718,
+        files={os.path.relpath(p, ROOT): digest(p) for p in inputs}, design_comment=10718,
         interpretation='Fixed-parameter prediction; previously accessed data; missing experimental pressures; no process validation.'))
     for directory in STAGING.glob('runtime*'):
         if directory.is_dir():

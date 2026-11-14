@@ -48,25 +48,54 @@ F1 replaces both laws completely: Austgen Table V R2 plus the Part I molality co
 
 All twelve unpenalized starts converge on optimizer tolerances without continuations. Selection uses fitted cost only; relative-tolerance ties are disclosed. Each endpoint completes the 1908 grid, 576 offset and 162 liquid–vapor state searches, with zero split states found and no unavailable state. Earlier census split compositions are checked as supplied trials separately from the optimized Full search. No penalty stage is triggered; penalty cost is zero and penalized-search counts are not run. Counts are lower bounds and do not prove global stability. F0's searches are retained same-wheel #297 evidence; F0 itself is replayed, not refitted. The supplied-trial correction below augments this evidence without repeating fitted or optimized-search results.
 
-The delivered review at `0184aa9` identified incomplete supplied-trial coverage. The expanded registry contains **2681 occurrences, 2111 after exact phase-kind/support/composition/packing deduplication**, from the 8 source families listed in the [corrected account](../results/reduced-refit/README.md#supplied-trial-coverage-correction). All 2111 trials are evaluated at all 162 census states for each endpoint below. All return native `evaluated` evidence; none has a negative distance. No penalized refit is triggered. The former 143-trial coverage claim is superseded. Independent re-review of this correction is pending.
+### Supplied-trial recovery
 
-| Endpoint | Supplied evaluations | Minimum distance / RT | Negative distances |
-|---|---:|---:|---:|
-| F0 | 341982 | 2.159602900064783e-06 | 0 |
-| F1/previous/unpenalized | 341982 | 5.402977336643744e-06 | 0 |
-| F1/current/unpenalized | 341982 | 5.40293612516507e-06 | 0 |
-| F2/previous/unpenalized | 341982 | 4.815477097963594e-06 | 0 |
-| F2/current/unpenalized | 341982 | 4.751837451522078e-06 | 0 |
-| F3/previous/unpenalized | 341982 | 1.136039097104913e-05 | 0 |
-| F3/current/unpenalized | 341982 | 1.134502116428848e-05 | 0 |
-| F4/previous/unpenalized | 341982 | 1.158027180281351e-05 | 0 |
-| F4/current/unpenalized | 341982 | 1.158823226887762e-05 | 0 |
-| F4-0/previous/unpenalized | 341982 | 1.021214094976131e-05 | 0 |
-| F4-0/current/unpenalized | 341982 | 1.021592373717795e-05 | 0 |
-| F5/previous/unpenalized | 341982 | 1.028898375921017e-05 | 0 |
-| F5/current/unpenalized | 341982 | 1.028897418109409e-05 | 0 |
+The recovery from the Not supported review at `269f085` replaces folder enumeration with discovery over **all 66417 git-tracked files under `analyses/mea_parameter_bundle`**. The [registry](../results/reduced-refit/split-registry.json) contains **4057 occurrences before deduplication and 3471 distinct trials**, from 1069 files. Compared with 2111 trials, it adds the 1320 omissions identified by review and 40 distinct trials from the newly merged #350 MEA evidence.
 
-The [coverage summary](../results/reduced-refit/coverage-summary.json) and compressed per-state distance vectors preserve the results. The review's #255 state-155 witness is included; its old negative distance refers to the historical vector, not an F candidate. The registry hash now guards each cached search result. Existing calibration values, agreement tables and optimized-search records are unchanged. Finite supplied distances do not establish global stability.
+| Source family | Occurrences |
+|---|---|
+| parameter-identifiability/results | 1296 |
+| results/engine-3e83e19c-adoption | 49 |
+| results/engine-3e83e19c-phase | 165 |
+| results/engine-3e83e19c-phase-search | 564 |
+| results/joint-recalibration-170 | 432 |
+| results/phase-diagnosis-255 | 1044 |
+| results/phase-extension-201 | 176 |
+| results/reduced-refit | 148 |
+| results/same-data-comparison | 40 |
+| results/stable-refit-255 | 143 |
+
+Deduplication uses exact phase kind, ordered support, full nine-component composition and packing fraction, without rounding. Support-length arrays are expanded with zeros outside support. The trial-content SHA-256 is `e9c9a4d9e1f30fbf8689202edc5bb226b4b5453ec2cfcd9b7c96a929602df4f2`. It guards the search cache. When it changes, all supplied distances are reevaluated; the objective and optimized searches are preserved.
+
+`split-registry.json` is the single owner of MEA split compositions found earlier. Later MEA searches (#341, #342) read it and append new split compositions; they do not rediscover them by scanning folders. Part II amines (#343–#346) keep their own records because their component systems differ.
+
+The [completeness report](../results/reduced-refit/split-completeness.json) (14,802,204 bytes) lists **47598 files with composition or tangent-plane terms but no split yielded**, with fields and a reason per file. **271 non-JSON formats remain explicitly listed as unread formats**; they are source code, retained code/timing text, documents, settings, logs, figures, CSV observation/state/score summaries, and one TAR collection of assessment rows. The 48 JSONL files were read and contain observation or parameter-iteration records, without split trials. The **19 malformed JSON files** are historical empty timing files or interrupted derivative diagnostics, not retained split compositions. The disposable inspection of non-JSON structured records found only homogeneous-state mole fractions or data/score metadata, without a split trial. These lists are not silently treated as parsed formats.
+
+**Falsifying check:** an independent enumeration of git-tracked MEA files for negative-distance or split records finds nothing outside the registry. The [disposable enumeration result](../results/reduced-refit/split-enumeration-check.json) found 4057 JSON/gzip occurrences and zero outside it; a separate inspection covered the non-JSON references listed above. Probe code is not retained.
+
+All 3471 trials are evaluated at each of the 162 census states of all 13 endpoints. The native evaluator does the numerics, without optimization. Reconstructed parent coordinates must match the retained coordinates exactly. Liquid trials here are historical split liquids, with no exact composition/packing identity to any retained parent liquid (checked at all endpoints); no new composition-distance cutoff is imposed.
+
+| Endpoint | Evaluated | Minimum / RT | Nontrivial liquid minimum / RT | Negative | Unavailable |
+|---|---|---|---|---|---|
+| F0 | 562302 | 2.159602900064783e-06 | 0.0001790543912818521 | 0 | 0 |
+| F1/previous/unpenalized | 562302 | 5.402977336643744e-06 | 2.535660055968947e-05 | 0 | 0 |
+| F1/current/unpenalized | 562302 | 5.40293612516507e-06 | 2.53541980157479e-05 | 0 | 0 |
+| F2/previous/unpenalized | 562302 | 4.815477097963594e-06 | 3.065092460019514e-05 | 0 | 0 |
+| F2/current/unpenalized | 562302 | 4.751837451522078e-06 | 3.210939303244231e-05 | 0 | 0 |
+| F3/previous/unpenalized | 562302 | 1.136039097104913e-05 | 0.000196470078094535 | 0 | 0 |
+| F3/current/unpenalized | 562302 | 1.134502116428848e-05 | 0.0001960879055786791 | 0 | 0 |
+| F4/previous/unpenalized | 562302 | 1.158027180281351e-05 | 8.235760802222103e-05 | 0 | 0 |
+| F4/current/unpenalized | 562302 | 1.158823226887762e-05 | 8.242620791065747e-05 | 0 | 0 |
+| F4-0/previous/unpenalized | 562302 | 1.021214094976131e-05 | 0.0001171217211037856 | 0 | 0 |
+| F4-0/current/unpenalized | 562302 | 1.021592373717795e-05 | 0.0001170882502492532 | 0 | 0 |
+| F5/previous/unpenalized | 562302 | 1.028898375921017e-05 | 0.0002063773691816095 | 0 | 0 |
+| F5/current/unpenalized | 562302 | 1.028897418109409e-05 | 0.000206374489010841 | 0 | 0 |
+
+All 7309926 distances are available and nonnegative, so no penalized refit is triggered. These are finite numerical-verification results, not proof of global stability or physical validation. No fits, objective replays, or optimized searches were run for the recovery. Independent delivered review remains pending.
+
+The merge with `origin/main` at `b926e16` preserves both callers of `final_evidence.stability`: native `Phase` objects return a full supplied report, and witness dictionaries append `supplied_trials` while preserving the retained optimized report. The unchanged #350 `same_data_part1.supplied_census` call at state 37 reproduces both retained supplied distances exactly (minimum 0.010452367161576603 RT, maximum difference zero) and identical parent coordinates; [caller check](../results/reduced-refit/same-data-caller-check.json) retains the comparison. No force push is used.
+
+Reproduce supplied evaluation only with `agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/reduced_refit_338.py coverage`.
 
 [agreement.csv](../results/reduced-refit/agreement.csv) reports every fitted group and the identical 112 six-source, 23 Wagner, 33/37 Aronu, 14 Arcis, 53 Kim, 67 Han, 19 Matin, five Böttinger states (ten quantities) and 51 broad heat capacities. It gives cost, average absolute relative deviation, root-mean-square error, signed prediction-minus-observation bias, and numeric #255 comparisons without agreement thresholds. Cai temperature and mole-fraction units are separated. These not-fitted data were previously inspected and informed the selected fixes; their errors are comparisons, not independent physical validation. No qualified same-row published-model scores are yet available from the ongoing #339 work.
 

@@ -1,0 +1,166 @@
+{
+  "scope": "Read-only research for Part 2 of issue #339. No Engine calculations were run and no files were edited.",
+  "mamun_2005_exact_match": {
+    "source": {
+      "citation": "Ma'mun et al. (2005), Table 2, printed p. 632",
+      "title": "Solubility of carbon dioxide in 30 mass % monoethanolamine and 50 mass % methyldiethanolamine solutions",
+      "doi": "10.1021/je0496490",
+      "zotero_parent": "P9ZHYA8L",
+      "zotero_pdf": "EH7EB7EM",
+      "pdf_sha256": "9bc949d7d9fcc3c58ab0517d75bc10339a895eab42b471005094009d1f623746"
+    },
+    "conditions": {
+      "temperature": "120 \u00b0C (393.15 K)",
+      "MEA": "30 mass%; papers express this as mole fraction about 0.11",
+      "loading_mol_CO2_per_mol_MEA": [
+        0.155,
+        0.4182
+      ],
+      "pCO2_kPa": [
+        7.354,
+        191.9
+      ]
+    },
+    "row_set": {
+      "n": 19,
+      "Part_I_ids": "vle_obs_0246 through vle_obs_0264, inclusive",
+      "match": "Exact complete set, including the two distinct measurements at loading 0.3424",
+      "evidence": "The source's 19 Table 2 pairs match the 19 ordered rows in Mamun_2005_VLE.csv and the 19 canonical Part I pressure targets. Baygi Table 5 reports n=19 and the exact pressure/loading endpoints; Najafloo Table 4 lists the same conditions and Table 5 reports n=19; Zhang Table 9 reports n=19 at 393 K with rounded ranges. The matching count, endpoints, and complete original source table establish the same set; this is not inferred from ranges alone."
+    },
+    "comparison": [
+      {
+        "model": "Baygi and Pahlavanzadeh 2015 PC-SAFT",
+        "published_deviation_percent": 21.03,
+        "n": 19,
+        "role": "Predicted; authors state no ternary VLE regression",
+        "locator": "Table 5; Ma'mun et al. row"
+      },
+      {
+        "model": "Najafloo and Zarei 2018 SAFT-HR",
+        "published_deviation_percent": 39.96,
+        "n": 19,
+        "role": "Predicted; pure-MEA parameters were fitted, while the ternary CO2\u2013MEA interaction was set to zero",
+        "locator": "Table 5; Ma'mun et al. row; methods \u00a7\u00a73.1\u20133.3"
+      },
+      {
+        "model": "Zhang et al. 2011 eNRTL",
+        "published_deviation_percent": 13.5,
+        "n": 19,
+        "role": "Fitted",
+        "locator": "Table 9; Ma'mun et al. row"
+      },
+      {
+        "model": "Part I current parameter record",
+        "deviation_percent": 19.4320747,
+        "n": 19,
+        "role": "not fitted; verified against fitted-rows.csv",
+        "parameter_sha256": "f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97",
+        "calculation": "Mean of the 19 absolute row-wise relative pressure errors in adoption-297/paper-evidence/state-targets.csv, using the same denominator as the published AARD."
+      }
+    ],
+    "common_deviation_definition": "100/n \u00d7 \u03a3 |pCO2,calc \u2212 pCO2,exp| / pCO2,exp. Baygi Table 5 gives this explicitly in its footnote; Zhang Table 9 labels the quantity average relative deviation |\u03b4Y/Y|. Najafloo Table 5 and \u00a73.3 report pressure AAD% but define neither averaging formula nor denominator. Equivalence of Najafloo AAD% to this formula is inferred, not verified; Eq. 2 is the pure-component fitting objective."
+  },
+  "published_model_inventory": [
+    {
+      "model": "Baygi and Pahlavanzadeh 2015",
+      "formulation": "PC-SAFT with ideal-activity reaction speciation; selected 3B MEA and 4C water",
+      "reported_fit_count": "6 adjusted values overall: five pure-MEA parameters plus one MEA\u2013water binary parameter; no ternary VLE regression",
+      "pressure_result": "36.42% AAD over 691 observations, Table 5; Ma'mun subset 21.03% (19)",
+      "deviation": "100/n \u03a3 |pcalc\u2212pexp|/pexp",
+      "conditions": "Ternary sources span the Table 5 source-specific conditions; the Ma'mun subset is 393 K, xMEA\u22480.11, loading 0.155\u20130.4182.",
+      "source": "Zotero key B8EJJPCJ; indexed Markdown hash f28ed7ca19317eb9f5e017f9a34d31cd35419117da2b012a7a750388f9a83cbe"
+    },
+    {
+      "model": "Nasrifar and Tafazzol 2010",
+      "formulation": "PC-SAFT with ideal-activity reaction speciation",
+      "reported_fit_count": "Six MEA-related values in the repository comparison inventory: five pure-MEA values and one MEA\u2013water parameter",
+      "pressure_result": "No aggregate ternary MEA deviation suitable for a same-row comparison was located; Table 2 reports pure-component deviations instead.",
+      "source": "Zotero key CBRPAXQG; shelf copy Nasrifar2010--FVFWT3P9.md"
+    },
+    {
+      "model": "Najafloo and Zarei 2018",
+      "formulation": "SAFT-HR with ideal-activity reaction speciation",
+      "reported_fit_count": "Five pure-MEA parameters; CO2\u2013MEA and water\u2013MEA binary parameters are set to zero for ternary predictions.",
+      "pressure_result": "34.71% AAD over 691 observations; Ma'mun subset 39.96% (19), Table 5.",
+      "deviation": "Paper-reported pressure AAD%, Table 5 and \u00a73.3. Equivalence to the mean absolute relative deviation is inferred; averaging formula and denominator are not defined there. Eq. 2 defines only the pure-component fitting objective.",
+      "conditions": "Broad source-specific ternary ranges in Table 4; Ma'mun subset 393 K and 30 mass% MEA.",
+      "source": "Zotero key 7MICDGGJ; indexed Markdown hash f28f1111908691af507e702bc26ddecd02d297d8982d87f7d26d83802f3cf4ef"
+    },
+    {
+      "model": "Zhang et al. 2011",
+      "formulation": "Electrolyte NRTL liquid model with PC-SAFT vapor",
+      "reported_fit_count": "12 ternary parameters, as reported in the comparative literature inventory",
+      "pressure_result": "Table 9 includes fitted source-specific deviations; Ma'mun 13.5% (19). Table 11 contains additional-source comparisons, not Ma'mun.",
+      "other_properties": "Table 9 reports absorption heat 10.9% (84), Hilliard heat capacity 2.4% (102), Weiland heat capacity 2.0% (20), and Jakobsen species 35.7% (24).",
+      "source": "Zotero key MMAGNPIH; Table 9 printed p. 72; Table 11 printed p. 74"
+    },
+    {
+      "model": "Aronu et al. 2011",
+      "formulation": "Extended UNIQUAC",
+      "reported_fit_count": "The paper presents staged and simultaneous adjustment across volume, surface-area, and interaction-energy values; I did not establish a defensible single total fitted-parameter count from the tables.",
+      "pressure_result": "24.3% AARD for CO2 partial pressures and 11.7% for total pressure; the paper describes these as model fits to its VLE data. Physical CO2 solubility AARD is 2.7%.",
+      "deviation": "Eq. 21: 100/n \u03a3 |xmodel\u2212xexp|/xexp, where x is partial pressure, total pressure, or apparent Henry constant.",
+      "data": "Partial-pressure data at 15, 30, 45 and 60 mass% MEA, 40\u201380 \u00b0C; total-pressure data at 60\u2013120 \u00b0C; N2O-derived physical-solubility data also entered regression.",
+      "source": "Zotero PDF key W2NNU9H6; PDF SHA-256 205cc977ae7c737f61195b85d01e74caa68dcc9d876aa1e88fc0d22c707dc7e9"
+    },
+    {
+      "model": "Hessen et al. 2010",
+      "formulation": "Refined eNRTL",
+      "reported_fit_count": "Temperature-dependent interaction parameters are listed in Table 2; a single total count was not established in this pass.",
+      "pressure_result": "No aggregate MEA pressure deviation located. The paper says the MEA interactions were regressed to pressure, binary properties and freezing-point data.",
+      "overlap": "The fitted pressure sources include Jou, Aronu, Ma'mun, Hilliard and others, so its Ma'mun use is calibration, but no comparable source-specific error was found.",
+      "source": "Zotero PDF key PMT4R63N; PDF SHA-256 b5824fc81b485569c9778730a3bfab13d5f1bd51dccbdd192510e60854209a49"
+    },
+    {
+      "model": "T\u00e9llez-Arredondo and Medeiros 2013",
+      "formulation": "Electrolyte cubic two-state association model (eCTS)",
+      "reported_fit_count": "Seven MEA ternary parameters, per the project comparison inventory; the paper\u2019s Table 5 describes staged adjustment.",
+      "pressure_result": "12.5% AAD for the water\u2013MEA\u2013CO2 case, Table 8; the paper summarizes ternary pressure deviations as around 10%.",
+      "conditions": "Methods \u00a74.3.3 gives the MEA regression interval as 298.15\u2013366.68 K and 15.2\u201330.0 wt%; this differs from wider conditions shown elsewhere in the paper.",
+      "deviation": "Table 8 labels %AAD; exact common-row membership and denominator transcription need checking against the original table if used for scoring.",
+      "source": "Zotero PDF key 562Y8VTS; PDF SHA-256 7be19703560a4f2e77269c6cc4ce08c3153dffe1bc80a204e23956067cce8277"
+    },
+    {
+      "model": "Lloret et al. 2017",
+      "formulation": "soft-SAFT with reactive association sites",
+      "reported_fit_count": "Two reactive CO2\u2013MEA association parameters (association energy and volume) fitted to ternary data.",
+      "pressure_result": "No aggregate pressure deviation reported in the inspected article sections. The paper describes the 30 wt% MEA VLE representation at 313.15\u2013373.15 K as fitted; the absorption heat calculated from the pressure derivative is reported as underpredicted.",
+      "source": "Zotero PDF key M9UK6V4P; PDF SHA-256 521f933bf8b40d8dd896be94d1bcfdb62909c8f5ac80b27adbe82fff70b08c2a"
+    },
+    {
+      "model": "Akula et al. 2023",
+      "formulation": "Modified electrolyte NRTL",
+      "reported_fit_count": "10 ternary parameters in Table 6",
+      "pressure_result": "40.5% MAPE for 30 wt% MEA over 40\u2013120 \u00b0C and loading 0.003\u20130.5; reported n for this restricted MAPE subset is not stated. The full fitted pressure set is 263 rows; 93 differential-heat rows were also fitted.",
+      "deviation": "Eq. 36: 100/n \u03a3 |estimate\u2212experiment|/experiment. Eq. 34 minimizes squared log-pressure residuals plus weighted squared heat residuals.",
+      "data": "Table 3 identifies Aronu (138), Hilliard (55), Jou (38), Xu (25), and Kim (7) pressure observations; Kim et al. (27) and Kim\u2013Svendsen (66) heat observations.",
+      "source": "Zotero PDF key IIYKTEG7; PDF SHA-256 08f429473719f766ea5d8fb370de310d7e81da94039bf23ce779d92a131d68d3"
+    },
+    {
+      "model": "Pakravesh and Zarei 2025",
+      "formulation": "P\u03c1T-SAFT-HR, PC-SAFT, and SAFT-HR comparisons for pure and nonreactive mixtures",
+      "pressure_result": "Not a CO2-loaded MEA reactive-VLE comparison. Its SI\u2019s MEA density table is pure MEA, and its MEA Cp table is pure MEA at 0.1 MPa; these do not match Part I\u2019s loaded density and loaded heat-capacity observations.",
+      "supporting_information": "Official SI DOI 10.1021/acs.jced.4c00390.s001; SHA-256 96a0e25ce0b975372b6261a1df36a5f13d3c8c77e2a9fedb43273b1d4f36bc82. Tables S3\u2013S4 cover pure-MEA density; Table S10 lists calculated pure-MEA Cp from 303.15\u2013353.15 K at 0.1 MPa. No exact loaded-MEA density or Cp dataset shared with Part I was identified.",
+      "source": "Zotero parent ABY3LIRG; main-paper indexed Markdown hash 4fd7013414a22b1601176932bef040ec120c24753292494632ce3c84e4b4c7fd"
+    }
+  ],
+  "classification_notes": {
+    "Neumann2022": "Excluded as an MEA model: the indexed paper is Thermodynamic Properties of Methyl Diethanolamine, an MDEA pure-fluid model, not a reactive MEA model.",
+    "Akula2021": "Excluded from the thermodynamic-property model inventory: the available record is a process-model paper and supplement, not a standalone MEA equilibrium-property model.",
+    "B\u00f6ttinger2008": "Relevant Pitzer/speciation model with six coefficients in two MEA reaction laws, but no aggregate MEA deviation was found; its VLE comparisons use earlier VLE-fitted interactions."
+  },
+  "source_gaps": [
+    "Aronu 2011: one unambiguous total fitted-parameter count and exact row identities for the Part I overlap were not established.",
+    "Hessen 2010: a source-specific Ma'mun deviation and a single fitted-parameter total were not located.",
+    "T\u00e9llez-Arredondo 2013: its differing temperature limits need resolution from exact paper data/table context before using 12.5% as a strictly comparable score; exact sample count for that aggregate is not reported in the inspected table.",
+    "Akula 2023: n for the reported 40.5% restricted 30 wt% MAPE subset is not stated, preventing an exact row-for-row comparison.",
+    "Pakravesh 2025: SI is available from the publisher, but its pure-MEA density/Cp content does not establish overlap with Part I\u2019s loaded-state data.",
+    "No model-agreement scores here establish physical validation. They are published model-to-measurement deviations or retained fixed-parameter comparisons; source uncertainty and between-source disagreement remain separate limits."
+  ],
+  "provenance": {
+    "workflow": "cse:research and cse:zotero read-only source queries",
+    "zotero_companion": "cse-zotero doctor reported Zotero local API and project corpus available. The indexed Baygi, Najafloo, Nasrifar, Zhang and Pakravesh reading copies were consulted; original Zotero PDFs were used for Ma'mun, Aronu, Hessen, T\u00e9llez-Arredondo, Lloret and Akula.",
+    "publisher_si": "[ACS Supporting Information for Pakravesh and Zarei 2025](https://pubs.acs.org/doi/10.1021/acs.jced.4c00390)",
+    "role_correction_source_check": "2026-11-13: read Pakravesh \u00a7\u00a72.1\u20132.3, 3.1, Baygi \u00a73.2.1 and Najafloo \u00a7\u00a73.1\u20133.3. Main-checkout reading copies match their literature/index.csv hashes and current Zotero Markdown files byte-for-byte; original parameter-fit membership remains unresolved where noted per entry."
+  }
+}

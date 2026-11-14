@@ -145,7 +145,10 @@ def run(family, state):
     return [dict(row, quantity=q, value=values.get(q), unit=u, **IDENTITY) for q, u in QUANTITIES[family].items()]
 
 def references(families):  # check 1: the curve calls at each reference's source declaration against its retained prediction
-    E = {n: list(csv.DictReader((EVIDENCE / f'{n}.csv').open())) for n in ('canonical-pressure', 'wagner-pressure', 'species-figure-data', 'heat', 'density', 'fitted-rows')}
+    needed = {'pressure': ('canonical-pressure', 'wagner-pressure'), 'species': ('species-figure-data',),
+              'heat': ('heat',), 'density': ('density',), 'mea-water': ('fitted-rows',)}
+    E = {n: list(csv.DictReader((EVIDENCE / f'{n}.csv').open())) if any(n in needed[f] for f in families) else []
+         for names in needed.values() for n in names}
     o = {o['identity']: o for o in PACKET + GROUPS['canonical'] + GROUPS['wagner']}
     m = {r['state_id']: dict(MEA_weight_fraction=r['mea_mass_fraction'], CO2_loading=r['co2_loading_mol_per_mol_mea'])
          for r in csv.DictReader((BUNDLE.parents[1] / 'data/reference/MEA/manifests/speciation_target_membership.csv').open())}

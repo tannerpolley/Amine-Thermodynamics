@@ -1,0 +1,27 @@
+{
+  "parameter_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+  "engine_wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "engine_commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+  "parameter_commit": "7035362",
+  "parameter_git_path": "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json",
+  "operation": "epcsaft.Parameters.from_mapping(unchanged_historical_document)",
+  "scored_observations": 0,
+  "thread_environment": {
+    "AGENT_HEAVY_CORES": "3",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "status": "qualification passed by owner decision 2026-11-13",
+  "exception_type": "ParameterError",
+  "message": "missing electrolyte/c_shell",
+  "historical_status": "refused",
+  "owner_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/339#issuecomment-6866843138",
+  "qualification_basis": {
+    "named_limit": "EQUILIBRIUM_ROW_RESIDUAL",
+    "limit": 1e-10,
+    "origin": "443a9da4 numerical_policy.hpp:272; 391dfe5d numerical_policy.hpp:295",
+    "restored_reference_max_relative_difference": 2.708155921737898e-11,
+    "explanation": "Owner accepts qualification. The 21 leftover row differences, up to 2.7081559217e-11 after restoring the finite reference, are not individually explained. EQUILIBRIUM_ROW_RESIDUAL=1e-10 bounds equation residuals, not output differences; passing supports qualification but does not prove solver precision is the cause."
+  }
+}
