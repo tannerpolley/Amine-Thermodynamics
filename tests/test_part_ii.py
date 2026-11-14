@@ -168,3 +168,9 @@ def test_horstmann_residual_excess_enthalpy():
     assert result['role'] == 'comparison only'
     with pytest.raises(ValueError, match='Unsupported observation constructor'):
         spec.observation(record)
+    route = p.Route.__new__(p.Route)
+    route.config = dict(stocks=[], loadings=[])
+    spec.inputs['observations']['comparisons'] = [record]
+    enforced = route.states(spec)
+    spec.inputs['observations']['comparisons'] = []
+    assert route.states(spec) == enforced

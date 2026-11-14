@@ -171,6 +171,8 @@ class Route:
         states = []
         for role in ('fitted','comparisons'):
             for row in spec.inputs['observations'][role]:
+                if row['constructor']=='residual_excess_enthalpy':
+                    continue
                 if row['constructor']=='saturation_capped_addition_enthalpy':
                     states.append(dict(key=row['identity']+':cap',cap_record=row['identity']))
                 for field in ('problem','initial','final','bubble'):
