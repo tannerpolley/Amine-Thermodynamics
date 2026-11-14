@@ -159,10 +159,16 @@ def _init(mapping, trials=None, route=None):
 
 def _measure(state):
     started = time.monotonic()
+    supplied, not_applicable = [], []
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
-        supplied = []
+        support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
+        support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
         for witness in _TRIALS.get(state['key'], []):
+            outside = sorted(set(witness['support']) - support)
+            if outside:
+                not_applicable.append(dict(witness, evidence='not applicable', support_difference=outside))
+                continue
             phase = type(item.problem.phases[0])()
             phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
             phase.support, phase.composition_guess, phase.packing_guess = witness['support'], witness['composition'], witness['packing']
@@ -191,6 +197,10 @@ def _measure(state):
             out['available'] = out['optimized_available'] and out['supplied_available']
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
+    if supplied or not_applicable:
+        out['not_applicable_supplied_trials'] = not_applicable
+        available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
+        out['supplied_trial_counts'] = dict(available=available, unavailable=len(supplied)-available, not_applicable=len(not_applicable))
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
@@ -211,7 +221,8 @@ def descent(row):
 
 
 def tally(rows):
-    return dict(states=len(rows), available=sum(bool(r.get('available')) for r in rows), descent=sum(map(descent, rows)),
+    return dict(supplied_trial_counts={key:sum(r.get('supplied_trial_counts',{}).get(key,0) for r in rows) for key in ('available','unavailable','not_applicable')},
+                states=len(rows), available=sum(bool(r.get('available')) for r in rows), descent=sum(map(descent, rows)),
                 unavailable=[r['key'] for r in rows if not r.get('available')],
                 minimum_tau=min((r['value'] for r in rows if r.get('available') and r['value']<0), default=None),
                 supplied_minimum_tpd=min((t['quantities']['tpd_over_rt'] for r in rows for t in r.get('supplied_trials',[]) if t['evidence']=='evaluated'),default=None))

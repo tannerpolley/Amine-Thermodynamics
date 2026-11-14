@@ -7,7 +7,7 @@ import numpy as np
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
 from pinned import AN, ROOT, MEA, DEA, H, C, W, CO2, SHARED, verify_wheel, save
-from MEA.solvent_specification import SolventSpecification, jsonable
+from MEA.solvent_specification import SolventSpecification, jsonable, residual_excess_enthalpy
 
 R, TP = epcsaft.GAS_CONSTANT_J_PER_MOL_K, 313.15
 # Owner decision 2026-11-12: the design's form-B start 2 (DEAH+-water k = -0.5) has no bubble point at Lawson row 7
@@ -254,7 +254,7 @@ def main_score():
     he, hr = [], lambda T, x: model.state(T, P=1.75e6, x={W: x, DEA: 1 - x}, phase='liquid').residual_enthalpy  # ideal-gas enthalpy is linear in x and cancels
     for r in csv.DictReader((ROOT / 'data/reference/DEA/Horstmann2002_Table6_water_DEA_HE.csv').open()):
         x = float(r['x_water'])
-        he.append(dict(r, HE_model=hr(363.15, x) - x * hr(363.15, 1.0) - (1 - x) * hr(363.15, 0.0), sigma=2 + 0.01 * abs(float(r['HE_J_per_mol']))))
+        he.append(dict(r, HE_model=residual_excess_enthalpy(model, 363.15, 1.75e6, {W: x, DEA: 1 - x}), sigma=2 + 0.01 * abs(float(r['HE_J_per_mol']))))
     out['comparisons']['excess_enthalpy'] = dict(n=len(he), mean_abs_J_mol=float(np.mean([abs(r['HE_model'] - float(r['HE_J_per_mol'])) for r in he])),
         mean_abs_percent=float(np.mean([abs(r['HE_model'] / float(r['HE_J_per_mol']) - 1) * 100 for r in he])), within_2sigma=sum(abs(r['HE_model'] - float(r['HE_J_per_mol'])) <= 2 * r['sigma'] for r in he),
         water_residual_enthalpy_J_mol=hr(363.15, 1.0), rows=he)
