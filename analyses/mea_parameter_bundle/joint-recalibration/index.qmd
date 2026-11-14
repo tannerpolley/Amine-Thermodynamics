@@ -50,28 +50,30 @@ All twelve unpenalized starts converge on optimizer tolerances without continuat
 
 ### Supplied-trial recovery
 
-The recovery from the Not supported review at `269f085` replaces folder enumeration with discovery over **all 66417 git-tracked files under `analyses/mea_parameter_bundle`**. The [registry](../results/reduced-refit/split-registry.json) contains **4057 occurrences before deduplication and 3471 distinct trials**, from 1069 files. Compared with 2111 trials, it adds the 1320 omissions identified by review and 40 distinct trials from the newly merged #350 MEA evidence.
+The recovery from the Not supported review at `269f085` replaces folder enumeration with discovery over **all 66422 git-tracked files under `analyses/mea_parameter_bundle`**. The [registry](../results/reduced-refit/split-registry.json) contains **4057 occurrences before deduplication and 3471 distinct trials**, from 1069 files. Compared with 2111 trials, it adds the 1320 omissions identified by review and 40 distinct trials from the newly merged #350 MEA evidence.
 
-| Source family | Occurrences |
-|---|---|
-| parameter-identifiability/results | 1296 |
-| results/engine-3e83e19c-adoption | 49 |
-| results/engine-3e83e19c-phase | 165 |
-| results/engine-3e83e19c-phase-search | 564 |
-| results/joint-recalibration-170 | 432 |
-| results/phase-diagnosis-255 | 1044 |
-| results/phase-extension-201 | 176 |
-| results/reduced-refit | 148 |
-| results/same-data-comparison | 40 |
-| results/stable-refit-255 | 143 |
+| Source family | Occurrences | Distinct within family |
+|---|---|---|
+| parameter-identifiability/results | 1296 | 1296 |
+| results/engine-3e83e19c-adoption | 49 | 40 |
+| results/engine-3e83e19c-phase | 165 | 158 |
+| results/engine-3e83e19c-phase-search | 564 | 282 |
+| results/joint-recalibration-170 | 432 | 432 |
+| results/phase-diagnosis-255 | 1044 | 1041 |
+| results/phase-extension-201 | 176 | 129 |
+| results/reduced-refit | 148 | 148 |
+| results/same-data-comparison | 40 | 40 |
+| results/stable-refit-255 | 143 | 143 |
+
+Distinct counts overlap between families; only the global total removes those overlaps.
 
 Deduplication uses exact phase kind, ordered support, full nine-component composition and packing fraction, without rounding. Support-length arrays are expanded with zeros outside support. The trial-content SHA-256 is `e9c9a4d9e1f30fbf8689202edc5bb226b4b5453ec2cfcd9b7c96a929602df4f2`. It guards the search cache. When it changes, all supplied distances are reevaluated; the objective and optimized searches are preserved.
 
 `split-registry.json` is the single owner of MEA split compositions found earlier. Later MEA searches (#341, #342) read it and append new split compositions; they do not rediscover them by scanning folders. Part II amines (#343–#346) keep their own records because their component systems differ.
 
-The [completeness report](../results/reduced-refit/split-completeness.json) (14,802,204 bytes) lists **47598 files with composition or tangent-plane terms but no split yielded**, with fields and a reason per file. **271 non-JSON formats remain explicitly listed as unread formats**; they are source code, retained code/timing text, documents, settings, logs, figures, CSV observation/state/score summaries, and one TAR collection of assessment rows. The 48 JSONL files were read and contain observation or parameter-iteration records, without split trials. The **19 malformed JSON files** are historical empty timing files or interrupted derivative diagnostics, not retained split compositions. The disposable inspection of non-JSON structured records found only homogeneous-state mole fractions or data/score metadata, without a split trial. These lists are not silently treated as parsed formats.
+The [completeness report](../results/reduced-refit/split-completeness.json) (14,802,183 bytes) lists **47598 files with composition or tangent-plane terms but no split yielded**, with fields and a reason per file. **271 non-JSON formats remain explicitly listed as unread formats**; they are source code, retained code/timing text, documents, settings, logs, figures, CSV observation/state/score summaries, and one TAR collection of assessment rows. The 48 JSONL files were read and contain observation or parameter-iteration records, without split trials. The **19 malformed JSON files** are historical empty timing files or interrupted derivative diagnostics, not retained split compositions. The disposable inspection of non-JSON structured records found only homogeneous-state mole fractions or data/score metadata, without a split trial. These lists are not silently treated as parsed formats.
 
-**Falsifying check:** an independent enumeration of git-tracked MEA files for negative-distance or split records finds nothing outside the registry. The [disposable enumeration result](../results/reduced-refit/split-enumeration-check.json) found 4057 JSON/gzip occurrences and zero outside it; a separate inspection covered the non-JSON references listed above. Probe code is not retained.
+**Falsifying check:** an independent enumeration of git-tracked MEA files for negative-distance or split records finds nothing outside the registry. The [disposable enumeration result](../results/reduced-refit/split-enumeration-check.json) found 4057 occurrences and zero outside it; a separate inspection covered the non-JSON references listed above. Probe code is not retained.
 
 All 3471 trials are evaluated at each of the 162 census states of all 13 endpoints. The native evaluator does the numerics, without optimization. Reconstructed parent coordinates must match the retained coordinates exactly. Liquid trials here are historical split liquids, with no exact composition/packing identity to any retained parent liquid (checked at all endpoints); no new composition-distance cutoff is imposed.
 
@@ -90,6 +92,8 @@ All 3471 trials are evaluated at each of the 162 census states of all 13 endpoin
 | F4-0/current/unpenalized | 562302 | 1.021592373717795e-05 | 0.0001170882502492532 | 0 | 0 |
 | F5/previous/unpenalized | 562302 | 1.028898375921017e-05 | 0.0002063773691816095 | 0 | 0 |
 | F5/current/unpenalized | 562302 | 1.028897418109409e-05 | 0.000206374489010841 | 0 | 0 |
+
+The [retained-distance comparison](../results/reduced-refit/retained-distance-check.json) reproduces all 4,445,766 previously included distances exactly (maximum difference zero RT); optimized-search summaries and parent records are identical.
 
 All 7309926 distances are available and nonnegative, so no penalized refit is triggered. These are finite numerical-verification results, not proof of global stability or physical validation. No fits, objective replays, or optimized searches were run for the recovery. Independent delivered review remains pending.
 
