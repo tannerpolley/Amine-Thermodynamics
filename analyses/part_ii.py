@@ -154,6 +154,14 @@ class Route:
                 updates[identity] = next(values)
         point['parameters'] = stable.s.with_parameter_values(start['parameters'], updates)
         point['reactions'] = report['reactions']
+        for coordinate in point['coordinates']:
+            if coordinate.get('kind') == 'reaction_coordinate':
+                law = next(r['correlation'] for group in point['reactions'].values() for r in group if r['name']==coordinate['name'])
+                origin = law.get(coordinate['coefficient'], 0.)
+                # Transport only the completion offset, not the fitted displacement.
+                delta = origin-coordinate['origin']
+                coordinate['bounds'] = [v+delta for v in coordinate['bounds']]
+                coordinate['origin'] = origin
         return point
 
     def replay(self, point, rows=None):
@@ -255,6 +263,7 @@ class Route:
         return {name: 'reaction not used' if name not in used else 'source range unknown' if self.config['reaction_ranges_K'].get(name) is None else not self.config['reaction_ranges_K'][name][0]<=T<=self.config['reaction_ranges_K'][name][1] for name in used|set(self.config['reaction_ranges_K'])}
 
     def uncertainty(self, point):
+        (self.out/'conditional-uncertainty.json').unlink(missing_ok=True)
         spec = self.bind(point)
         declared = point['coordinates']
         rows = spec.inputs['observations']['fitted']
