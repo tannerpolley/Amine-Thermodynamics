@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import sys
 import zipfile
+import tomllib
 
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
@@ -348,8 +349,12 @@ def present():
             original307_cost=math.fsum(v['cost'] for v in replay[:307]),within_2s=sum(abs(v['residual'])<=2 for v in loaded),loaded_rows=len(loaded),phase=retained(f'{name}/phase-summary.json'))
         assert len(loaded) == 47
     write('summary.json', fits)
-    paths = [Path(__file__), ROOT/'src/MEA/solvent_specification.py', AN/'MEA-pre-260-340.toml', AN/'declarations.toml',
-             *sorted((AN/'inputs').iterdir()), *STARTS.values(), ROOT/'data/reference/MEA/observations/density_viscosity/Sobrino_2016_density.csv',
+    configuration = AN/'MEA-pre-260-340.toml'
+    inputs = tomllib.loads(configuration.read_text())
+    paths = [Path(__file__), ROOT/'src/MEA/solvent_specification.py', configuration,
+             *((configuration.parent/inputs[k]['path']).resolve() for k in ('endpoint','declarations','caloric')),
+             *(B/f'results/phase-diagnosis-255/{name}/replay.json' for name in STARTS),
+             *(p for p in sorted((AN/'inputs').iterdir()) if p.name not in ('endpoint.json','caloric.json','reference.json')), *STARTS.values(), ROOT/'data/reference/MEA/observations/density_viscosity/Sobrino_2016_density.csv',
              ROOT/'data/reference/MEA/observations/density_viscosity/Han_2012_loaded_density.csv', B/'results/engine-3e83e19c-paper-evidence/density.csv']
     write('provenance.json',dict(base='30db72afad45232c36f8bfce82ea80278f3267e2',python=sys.version, CPU_count=os.cpu_count(), installed_wheel_bytes_verified=True,
         inputs={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
