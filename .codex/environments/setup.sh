@@ -12,12 +12,12 @@ for required_command in git python3 realpath sha256sum uv; do
 done
 
 git_common_dir="$(realpath "$(git rev-parse --git-common-dir)")"
-workspace_root="$(dirname "$(dirname "$git_common_dir")")"
+main_checkout="$(dirname "$git_common_dir")"
 engine_wheel="${EPCSAFT_ENGINE_WHEEL:-}"
 expected_engine_sha256="${EPCSAFT_ENGINE_SHA256:-}"
 if [[ -z "$engine_wheel" ]]; then
-    engine_wheel="$workspace_root/ePC-SAFT/build/wheels/main-026b3031/epcsaft-0.2.0.dev0-cp313-cp313-linux_x86_64.whl"
-    expected_engine_sha256="${expected_engine_sha256:-94b55dfcf72f21b43010c7125d71f103f41fd56f7a6b6fe0774903eef71cc72a}"
+    engine_wheel="$main_checkout/build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl"
+    expected_engine_sha256="${expected_engine_sha256:-0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b}"
 fi
 engine_wheel="$(realpath "$engine_wheel")"
 if [[ -n "$expected_engine_sha256" ]]; then
