@@ -414,13 +414,20 @@ def candidate(name, start, fixed, fitted, ties, route=None):
     fit_call = fit if route is None else partial(fit,route=route)
     search_call = search if route is None else lambda name,mapping: route.search(mapping)
     write_call, folder = (write,OUT) if route is None else (route.write,route.out)
+    endpoints = []
+    def retain(mapping, report, searched):
+        rows, ok, cost = route.replay(mapping)
+        if ok:
+            endpoints.append(dict(name=name,cost=cost,parameters=mapping,declared=report['declared'],optimizer_converged=report['status']=='converged',stable=searched['stable'],search=searched,split_counts='lower bounds',disposition='not converged' if report['status']!='converged' else 'converged and stable' if searched['stable'] else 'converged but still splitting' if any(searched[g]['descent'] for g in ('grid','offset','census')) else f"no split found in the available searches; {len(searched['grid']['unavailable'])} searches unavailable",optimizer_report=report))
+            route.write(f'{name}/endpoints.json',endpoints)
     mapping, report = fit_call(name+'/unpenalized',start,fixed,fitted,ties)
     if mapping is None:
         return None
     unpenalized = search_call(name+'/unpenalized',mapping)
+    if route: retain(mapping,report,unpenalized)
     if report['status'] != 'converged':
         write_call(f'{name}/finding.json',dict(reason='unpenalized start not converged after permitted continuations',cost=report['final_cost'],unpenalized=unpenalized))
-        return None
+        return endpoints[-1] if route and endpoints else None
     chosen, final_report = mapping, report
     if report.get('earlier_split') or any(unpenalized[g]['descent'] for g in ('grid','offset','census')):
         stable_anchor = None
@@ -431,6 +438,8 @@ def candidate(name, start, fixed, fitted, ties, route=None):
             if chosen is None:
                 break
             searched = search_call(name+f'/penalized-{index}',chosen)
+            if route:
+                retain(chosen,final_report,searched)
             if searched['stable']:
                 stable_anchor = chosen
         if chosen is not None and not searched['stable']:
@@ -446,6 +455,9 @@ def candidate(name, start, fixed, fitted, ties, route=None):
                 chosen = (route.result if route else r.result)(f'{name}/candidate.json') if path.exists() else None
             else:
                 chosen = None
+    if route:
+        converged = [point for point in endpoints if point['optimizer_converged']]
+        return min([point for point in converged if point['stable']] or converged or endpoints,key=lambda point:point['cost'])
     if chosen is None:
         write_call(f'{name}/finding.json',dict(reason='no stability-enforced candidate',unpenalized=unpenalized))
         return None

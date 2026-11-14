@@ -73,7 +73,7 @@ def test_zero_observation_and_correlated_information():
 
 
 @pytest.mark.parametrize('source_index',[0,1])
-def test_pz_evaluated_negative_trial(source_index,monkeypatch):
+def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     """#308 Hilliard 55/56 direct-distance references, checked within native numerical error."""
     import copy
     import csv
@@ -97,12 +97,19 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch):
     parent = copy.copy(problem)
     parent.P,parent.phases = bubble.pressure,[copy.copy(problem.phases[0])]
     parent.phases[0].amount = p.eq.Free()
-    witness = dict(kind='Liquid',support=list(range(12)),composition=record['split_composition'],packing=None)
-    monkeypatch.setattr(p.stable,'_ROUTE',SimpleNamespace(stability_row=lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)),raising=False)
-    monkeypatch.setattr(p.stable,'_SPEC',SimpleNamespace(model=model))
-    monkeypatch.setattr(p.stable,'_TRIALS',{'pz':[witness]},raising=False)
-    measured = p.stable._measure(dict(key='pz'))
-    trial = measured['supplied_trials'][0]
+    route = p.Route.__new__(p.Route)
+    registry = json.loads((ROOT/'tests/fixtures/pz-supplied-trials.json').read_text())
+    route.out, route.config, route.workers = tmp_path, dict(amine=registry['amine'],species=registry['species'],split_record=None), 1
+    route.load = lambda reference: copy.deepcopy(registry)
+    route.verify, route.bind = lambda: None, lambda point: SimpleNamespace(model=model)
+    route.stability_row = lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)
+    measured = route.grid(None,[dict(key='pz')])[0]
+    assert len(measured['supplied_trials'])==102
+    measured = route.grid(None,[dict(key='pz')])[0]
+    retained = route.result('split-record.json')
+    assert len(retained['trials'])==100 and all(w['resolved_descent'] for w in retained['trials'])
+    assert retained['supplied_trials']==registry['trials'][-2:]
+    trial = measured['supplied_trials'][100+source_index]
     assert measured['supplied_available'] and trial['evidence']=='evaluated'
     assert trial['quantities']['tpd_over_rt']==pytest.approx(record['endpoint_direct_tpd'],rel=0.,abs=trial['quantities']['descent_error_estimate_over_rt'])
     assert not trial['resolved_descent'] and measured['witnesses']==[]
@@ -152,3 +159,28 @@ def test_retained_fit_endpoint_transport(monkeypatch):
     actual = route.endpoint_mapping(point,report,point['coordinates'])
     expected = route.load(route.config['reference'])
     assert p.stable.s.parameter_values(actual['parameters'])==p.stable.s.parameter_values(expected)
+
+
+@pytest.mark.parametrize('status,unavailable',[('converged',False),('limit_reached',False),('converged',True)])
+def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
+    import reduced_refit_338 as reduced
+    route = p.Route.__new__(p.Route)
+    route.out,route.config,route.controls = tmp_path,dict(starts=[1.,2.],loadings=[1e-5]),dict(function_tolerance=1e-8)
+    route.start,route.replay = lambda ref:ref,lambda point: ([],True,point)
+    route.search = lambda point: dict(stable=False,grid=dict(descent=2),offset=dict(descent=0),census=dict(descent=0))
+    if unavailable:
+        native = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+        p.stable._init(native.start(native.config['reference']),route=native)
+        row = p.stable._measure(dict(key='comparison:362:cap',cap_record='comparison:362'))
+        monkeypatch.setattr(route,'grid',lambda *args:[row]); route.bind,route.states = lambda point:None,lambda spec:[]
+        route.search = lambda point:p.Route.search(route,point)
+        assert 'thermochemistry_unavailable: outside_interval: record excludes temperature' in route.search(None)['grid']['unavailable_searches'][0]['message']
+    monkeypatch.setattr(reduced,'fit',lambda name,start,*args,**kwargs:(start,dict(status=status,final_cost=start,stability_cost=1.,declared=[],cost_history=[3.,start])))
+    chosen = route.campaign()
+    selection = route.result('selection.json')
+    assert len(selection['candidates'])==2
+    assert (chosen['cost']==1. and not chosen['stable']) if status=='converged' else chosen is None
+    endpoints = route.result('start-0/endpoints.json')
+    assert len(endpoints)==(3 if status=='converged' and not unavailable else 1)
+    assert all(e['split_counts']=='lower bounds' and e['optimizer_report']['cost_history']==[3.,1.] for e in endpoints)
+    assert endpoints[0]['disposition']==('no split found in the available searches; 1 searches unavailable' if unavailable else 'converged but still splitting' if status=='converged' else 'not converged')

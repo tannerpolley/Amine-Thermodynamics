@@ -41,7 +41,7 @@ Python callbacks are required. The JSON adds:
 | `roles` | Optional group-to-role map: `fitted`, `not fitted`, `comparison only`. Objective membership must agree with the specification. Earlier access to observations remains the amine notebook's responsibility. |
 | `stocks` | List of analytical feed-amount dictionaries, in mol, for every fitted concentration (water and analytical amine components). |
 | `loadings` | Explicit ordered loading nodes in mol CO2 per mol analytical amine, starting at `1e-5` and reaching the data maximum. |
-| `split_record` | Hashed initial record with `amine`, `species`, and `trials`. Each trial has `resolved_descent: true`, native phase `kind`, native index `support`, full-width `composition`, and `packing`. The amine owner must initialize it from its own prior native resolved descents with their provenance. An empty record is appropriate only when none exists. |
+| `split_record` | Hashed initial record with `amine`, `species`, and `trials`. Native split trials have `resolved_descent: true`, native phase `kind`, native index `support`, full-width `composition`, and `packing`. The amine owner must initialize it from its own prior native resolved descents with their provenance. Composition-only historical trials may be included with `resolved_descent: false` (or absent), their provenance, and null or recovered packing; the route preserves them separately as `supplied_trials`. That optional list may also be supplied directly. An empty record is appropriate only when none exists. |
 | `curve_rows` | Hashed JSON list, described below. |
 | `optimizer` | Existing Engine fit controls, unchanged between continuations. The route supplies the worker count. |
 | `output` | Separate retained directory for this immutable declaration. Changing its hash requires a new output directory. |
@@ -75,11 +75,10 @@ becomes an unavailable search with the native message.
 The route calls #338 `candidate` and `fit`, which call the existing #255 fit stage; it has no second continuation or penalty loop. A limit permits two continuations
 with unchanged controls. Every returned, replayable endpoint is searched.
 A discovered split invokes stages `1e-2` and `3e-3` and the existing #255
-retreat, including its 0.01 steps and ten bisections. Optimizer convergence and retreat disposition are separate: the retreat file keeps the fraction, optimizer cost, retreat cost, and whether the selected point itself terminated on an optimizer tolerance. An interpolated point never inherits that termination. The selection file keeps
-available candidates; each start directory keeps its convergence and stability counts, and chooses the lowest
+retreat, including its 0.01 steps and ten bisections. Optimizer convergence and retreat disposition are separate: the retreat file keeps the fraction, optimizer cost, retreat cost, and whether the selected point itself terminated on an optimizer tolerance. An interpolated point never inherits that termination. Each start keeps all replayable optimizer endpoints in `endpoints.json`, including their optimizer reports and cost histories; stage files retain every continuation. After an unsuccessful penalty or retreat, the converged unpenalized endpoint remains reportable with lower-bound split counts. A nonconverged endpoint retains that disposition and never enters the converged-start choice. The selection file keeps
+reportable candidates and chooses the lowest
 fitted cost among converged, available starts; costs within the optimizer's
-function tolerance are reported as ties. The retained fit attempts contain
-cost histories when convergence is not reached. A finite search gives a
+function tolerance are reported as ties. Stability accompanies the choice and never chooses between starts. Unavailable searches retain their state and native cause in `search.grid.unavailable_searches`; no interval is extended and no state is excluded. When there is no observed split, the disposition states “no split found in the available searches; N searches unavailable”. Such a candidate remains reportable without a stable claim. If neither start converges, `chosen` remains null and both endpoints and their cost histories remain in the selection and start records. A finite search gives a
 lower bound on split counts, never a proof of global stability.
 
 `report` consumes the selected point. `data-rows.json` keeps native numerical
@@ -154,3 +153,17 @@ callback is required by the inspected observation constructors.
 Born-target insertion is idempotent, so an amine declaration can already
 contain each Born/segment tie without duplicating its native active target.
 No Engine capability request is needed for the inspected paths.
+
+## #359 correction evidence
+
+The [verification record](mdea_mea_workflow/results/part-ii-route-replay/issue-359/verification.json)
+compares this correction with `a561ab7`: 11 Part II tests pass; the full
+`tests analyses` suite retains precisely main's 11 failing test identities
+(106 passes versus 103). MDEA B1 reproduces all 278 predictions exactly, with
+relative fitted-cost difference 2.7622348852673895e-13. Twelve fitted rows each
+from #338 F0 and #341 F2 replay exactly. These are numerical regression checks,
+not new fits or physical validation. The PZ test fixture retains the 100
+native records' source hashes and JSON pointers and the two composition-only
+records separately; both Hilliard reference distances pass within the native
+numerical error estimate. The unavailable capped-heat check uses the pinned
+Engine and preserves its interval refusal without changing its temperature.
