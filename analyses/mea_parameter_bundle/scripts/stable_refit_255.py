@@ -31,7 +31,7 @@ WHEEL = ROOT / f'build/engine-wheels/main-{COMMIT}/epcsaft-1.3.0-cp313-cp313-man
 s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = SHA, COMMIT
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
-from MEA.solvent_specification import jsonable, stability_payload
+from MEA.solvent_specification import jsonable, stability_payload, supplied_negative
 import density_268 as d
 
 OUT = B / 'results/stable-refit-255'
@@ -209,7 +209,7 @@ def grid(mapping, chosen, trials=None, *, route=None):
 
 
 def descent(row):
-    return (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(t['evidence']=='evaluated' and t.get('resolved_descent',False) for t in row.get('supplied_trials',[]))
+    return (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(map(supplied_negative,row.get('supplied_trials',[])))
 
 
 def tally(rows):

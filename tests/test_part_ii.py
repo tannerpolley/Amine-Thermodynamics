@@ -56,15 +56,59 @@ def test_shared_values_tie_and_range_marks(monkeypatch):
 
 
 def test_zero_observation_and_correlated_information():
-    from MEA.solvent_specification import deviation_statistics, output_uncertainty
+    from MEA.solvent_specification import SolventSpecification, deviation_statistics, output_uncertainty
     result = deviation_statistics([(0.,2.),(4.,5.)],'Pa')
     assert result['relative_undefined']==1 and result['AARD_percent']==25.
     assert result['mean_abs_error']==1.5
     C = np.array([[4.,1.],[1.,9.]])
     residual = np.array([2.,3.])
-    whitened = np.linalg.solve(np.linalg.cholesky(C),residual)
+    spec = SolventSpecification.__new__(SolventSpecification)
+    spec.spec = {'measurement_covariance':C.tolist()}
+    whitened = spec.whiten(residual)
     assert whitened@whitened==pytest.approx(residual@np.linalg.solve(C,residual))
     assert output_uncertainty(C).covariance==C.ravel().tolist()
+    assert output_uncertainty(C,1).output_sigma==[2.,3.,1.]
+    assert output_uncertainty(C,1).covariance==C.ravel().tolist()
+    assert output_uncertainty(None) is None
+
+
+@pytest.mark.parametrize('source_index',[0,1])
+def test_pz_evaluated_negative_trial(source_index,monkeypatch):
+    """#308 Hilliard 55/56 direct-distance references, checked within native numerical error."""
+    import copy
+    import csv
+    import hashlib
+    monkeypatch.syspath_prepend(str(ROOT/'analyses/pz_transfer'))
+    import reactive as pz
+    pz.verify_wheel()
+    path = ROOT/'analyses/pz_transfer/diagnosis-308/refit-checks.json'
+    assert hashlib.sha256(path.read_bytes()).hexdigest()=='d9c7054033bb58771491900f6689ce70a345ce8f4d4d03e59722f0f821481099'
+    source = json.loads(path.read_text())['missed_dense_splits']
+    record = source['rows'][source_index]
+    row = next(r for r in csv.DictReader((pz.AN/'inputs/hilliard-d5.csv').open()) if r['row']==record['row'])
+    start = p.epcsaft.Parameters.from_mapping(pz.document())
+    chart,_ = pz.chart(start,[])
+    native = p.reg.evaluate_coordinates(start,chart,source['endpoint_optimizer'][:9],[])
+    parameters = p.epcsaft.Parameters(native.parameters,start.component_ids,start.site_ids)
+    problem = pz.pressure_problem(parameters,row,source['endpoint_optimizer'][9:])
+    model = p.epcsaft.Mixture(parameters)
+    bubble = p.eq.solve_equilibrium(model,problem)
+    assert bubble.requested_tolerance_met
+    parent = copy.copy(problem)
+    parent.P,parent.phases = bubble.pressure,[copy.copy(problem.phases[0])]
+    parent.phases[0].amount = p.eq.Free()
+    witness = dict(kind='Liquid',support=list(range(12)),composition=record['split_composition'],packing=None)
+    monkeypatch.setattr(p.stable,'_ROUTE',SimpleNamespace(stability_row=lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)),raising=False)
+    monkeypatch.setattr(p.stable,'_SPEC',SimpleNamespace(model=model))
+    monkeypatch.setattr(p.stable,'_TRIALS',{'pz':[witness]},raising=False)
+    measured = p.stable._measure(dict(key='pz'))
+    trial = measured['supplied_trials'][0]
+    assert measured['supplied_available'] and trial['evidence']=='evaluated'
+    assert trial['quantities']['tpd_over_rt']==pytest.approx(record['endpoint_direct_tpd'],rel=0.,abs=trial['quantities']['descent_error_estimate_over_rt'])
+    assert not trial['resolved_descent'] and measured['witnesses']==[]
+    assert p.stable.descent(measured)
+    assert p.stable.tally([measured])['descent']==1
+    assert not measured['optimized_available'] and not measured['available']
 
 
 def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path,monkeypatch):

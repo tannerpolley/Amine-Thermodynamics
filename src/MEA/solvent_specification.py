@@ -334,14 +334,6 @@ class SolventSpecification:
                     reaction["correlation"].update({key: getattr(law, key) for key in fields})
         return reactions
 
-    def measurement_uncertainty(self, extra=0):
-        covariance = self.spec.get('measurement_covariance')
-        if covariance is None:
-            return None
-        uncertainty = output_uncertainty(covariance)
-        uncertainty.output_sigma = list(uncertainty.output_sigma)+[1.]*extra
-        return uncertainty
-
     def whiten(self, values, records=None):
         import numpy as np
         covariance = self.spec.get('measurement_covariance')
@@ -363,7 +355,7 @@ class SolventSpecification:
             thermochemistry=self.thermal,
             controls=controls,
             singular_vectors=True,
-            uncertainty=self.measurement_uncertainty(len(stability)),
+            uncertainty=output_uncertainty(self.spec.get('measurement_covariance'),len(stability)),
         )
         # data_cost/stability_cost/acceptance exist only on Engine wheels with stability requirements.
         report = {
@@ -535,9 +527,16 @@ def conditional_information(result, J, r, ids, lower, upper):
             'conditional_correlation': (cov / np.outer(se, se)).tolist()}
 
 
-def output_uncertainty(C):
+def supplied_negative(trial):
+    return trial['evidence']=='evaluated' and trial['quantities']['tpd_over_rt']<0
+
+
+def output_uncertainty(C, extra=0):
     """PZ's normalized-area measurement covariance, passed unchanged to Engine."""
     import numpy as np
+    if C is None:
+        return None
     u = reg.MeasurementUncertainty()
     u.output_sigma, u.covariance = np.sqrt(np.diag(C)).tolist(), np.asarray(C).ravel().tolist()
+    u.output_sigma = list(u.output_sigma)+[1.]*extra
     return u

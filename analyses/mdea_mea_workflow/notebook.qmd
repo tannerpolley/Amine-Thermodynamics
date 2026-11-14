@@ -78,6 +78,30 @@ source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards
 problem receive distinct marks; neither is classified inside or outside.
 These marks never exclude a calculation state.
 
+Correction round 2 checks the supplied-negative decision on the frozen PZ
+#308 A12s endpoint. Hilliard rows 55 and 56 give TPD/(RT)
+**-0.030909497986954193** and **-0.043726732681022895**, with native descent
+error estimates **2.4419377891537167e-10** and **2.428577955203585e-10**.
+The temperatures are 313.179 and 313.201 K; the parent pressures are
+11463.926167364934 and 11982.433005315248 Pa. Their supplied evaluations are
+available. The optimized searches remain unavailable, and evaluation-only
+`resolved_descent` remains false. The [retained comparison](results/part-ii-route-replay/correction-2/supplied-classification.json)
+changes the negative supplied count from **0 to 2**, without admitting new
+historical split records or claiming stable parents. The shared predicate is
+extracted from #338's evaluated-negative-distance decision; the error estimates
+are retained, and no new error threshold is introduced.
+
+The production-whitening test now compares `SolventSpecification.whiten`
+against the independent quadratic form. All **8 Part II tests pass**; the
+MDEA replay above is unchanged. The complete suite has **101 passed and
+13 failed**, with 17 passing subtests. A read-only source comparison at
+`7bfd0769` gives the same 13 failing test identities (99 passed, with 17
+passing subtests). These older wheel/source/reaction-fixture failures remain
+an open verification limit; the [verification record](results/part-ii-route-replay/correction-2/verification.json)
+retains their identities. This is numerical capability evidence, not a new
+PZ fit or physical validation. The owner has not ratified a code ceiling above
+400; this correction keeps the existing 487-line executable surface.
+
 ## Current B1 adoption (#302, 11 November 2026)
 
 The owner adopted the #298 **B1-endpoint** on the #255 shared values and complete R2 declaration in a [post-hoc owner amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180). The original design did not pass every gate. A3 remains unrefit in `solvent_specification_mdea/A3.toml`; its old parameters are inconsistent with the adopted shared set. The A3 refit is retained only as evidence of the MEA → MDEA transfer penalty and is not adopted.

@@ -276,7 +276,7 @@ def supplied_census(task):
     supplied = report['supplied_trials']
     assert len(supplied)==len(witnesses) and all(t['evidence']=='evaluated' for t in supplied), (raw['index'], [(i,t) for i,t in enumerate(supplied) if t['evidence']!='evaluated'][:2])
     print('supplied',raw['index'],len(supplied),min(t['quantities']['tpd_over_rt'] for t in supplied),flush=True)
-    return dict(index=raw['index'], evaluated=len(supplied), negative=sum(t['quantities']['tpd_over_rt']<0 for t in supplied),
+    return dict(index=raw['index'], evaluated=len(supplied), negative=sum(map(r.supplied_negative,supplied)),
                 minimum_tpd=min(t['quantities']['tpd_over_rt'] for t in supplied),
                 minimum_liquid_tpd=min(t['quantities']['tpd_over_rt'] for t,w in zip(supplied,witnesses,strict=True) if w['kind']=='liquid'), unavailable=sum(t['evidence']!='evaluated' for t in supplied),
                 distances=[t['quantities']['tpd_over_rt'] for t in supplied])

@@ -60,7 +60,7 @@ meaning. Calculation intervals are distinct from both.
 
 The #255 producer now accepts an optional route in its grid, fit-stage,
 admissibility and retreat functions. Existing MEA calls retain their defaults.
-Its finite optimized search and penalty stay in `reg.stability`; supplied compositions go to native `eq.stability_test` at the same parent pressure. Both results and their separate availability are retained. Only native resolved descents count as splits; unavailable searches are reported separately. The route records those
+Its finite optimized search and penalty stay in `reg.stability`; supplied compositions go to native `eq.stability_test` at the same parent pressure. Both results and their separate availability are retained. Only native resolved descents enter the historical split record. Supplied evaluations use the existing #338 evaluated-negative-distance decision, shared with its census producer; distances and their error estimates remain in the evidence, without relabelling evaluation-only trials as native resolved descents. Unavailable optimized searches remain unavailable even when a supplied negative distance is found. The route records admitted historical
 trials per amine and supplies every recorded composition at every subsequent
 state. A record with a different amine or component order is refused.
 
@@ -121,9 +121,11 @@ callback is required by the inspected observation constructors.
   second start H0 = 0). Supply identities, units/bases, roles, stocks, loading
   nodes, curve rows, and the amine/species envelope around its own split
   record. Both retained carbamate segment diameters, 5.31999516340193 and
-  5.3 Å, are below the F2-moved 5.34799141560911 Å floor. Start admission
-  remains the owner's decision; the calculation rejects these bounds as
-  declared and never projects them.
+  5.3 Å, are below the F2-moved 5.34799141560911 Å floor. The #344 decision
+  projects both starts onto that floor, records the projection, and replays
+  each moved start before fitting, preserving other coordinates and each
+  completed law. This projection belongs in AMP's declaration; the shared
+  calculation raises on out-of-bound origins and never clips them.
 - **PZ, `460d00e`:** materialize its two optimizer starts as complete parameter
   and reaction-law documents, preserving the declared total P3–P5 offsets.
   Create the solvent specification for 232 normalized-area NMR observations,
@@ -134,8 +136,13 @@ callback is required by the inspected observation constructors.
   units/bases, source ranges, the 283.15–395 K calculation interval, stocks,
   loading nodes and curve rows. Convert the PZ split compositions to native
   support/composition/packing entries with resolved-descent provenance and
-  a PZ/species envelope; composition-only entries need their retained native
-  parent evidence, never a borrowed MEA composition.
+  a PZ/species envelope. The reviewer reproduced the two composition-only
+  neighbour compositions exactly, recovering packing fractions
+  0.4128283021108707 and 0.41196189417630624. The native supplied evaluator
+  also accepts `packing: null`. Preserve the composition-only historical
+  provenance: recovered packing values are a reproduction, not invented
+  historical fields. Never borrow a MEA composition or relabel a supplied
+  evaluation as a native resolved descent.
 - **DEA, `294bebc`:** materialize its datasets/templates and role table in the
   solvent specification; export the two complete hydrolysis laws and their
   transported charts, including the second start's declared pair overrides.

@@ -1,0 +1,44 @@
+{
+  "part_ii": {
+    "passed": 8,
+    "failed": 0
+  },
+  "full_suite": {
+    "passed": 101,
+    "failed": 13,
+    "subtests_passed": 17
+  },
+  "baseline": {
+    "head": "7bfd0769eb7f7a4bbbf3b8dee475aa0ce00734d5",
+    "passed": 99,
+    "failed": 13,
+    "subtests_passed": 17,
+    "method": "Read-only source overlay for changed Python files and prior tests, pytest --assert=plain; unchanged source data and pinned wheel"
+  },
+  "identical_failure_ids": [
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_cache_records_model_identity_and_separates_candidate",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[evaluation_timeout-False]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[engine_exception-False]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[infeasible-True]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+    "tests/test_solvent_specification.py::test_R1_R3_R5",
+    "tests/test_source_corrections_152.py::test_actual_native_temperature_and_analytical_feed[Hilliard2008]",
+    "tests/test_source_corrections_152.py::test_actual_native_temperature_and_analytical_feed[Xu2011]",
+    "tests/test_source_corrections_152.py::test_public_views_refuse_execution_and_stale_hash",
+    "tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows"
+  ],
+  "replay": {
+    "rows": 278,
+    "cost": 374.51907880524016,
+    "reference_cost": 374.5190788051367,
+    "maximum_relative_prediction_error": 0.0,
+    "relative_cost_error": 2.7622348852673895e-13
+  },
+  "budget": {
+    "current_ceiling": 487,
+    "owner_ratification_above_400": "pending; not selected or raised in correction round 2"
+  }
+}
