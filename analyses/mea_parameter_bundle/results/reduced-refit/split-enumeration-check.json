@@ -1,5 +1,5 @@
 {
-  "occurrences": 4057,
+  "occurrences": 4129,
   "outside_registry": [],
   "by_family": {
     "parameter-identifiability/results": {
@@ -35,8 +35,8 @@
       "distinct": 148
     },
     "results/same-data-comparison": {
-      "occurrences": 40,
-      "distinct": 40
+      "occurrences": 112,
+      "distinct": 76
     },
     "results/stable-refit-255": {
       "occurrences": 143,
@@ -46,9 +46,57 @@
   "non_json_inspection": {
     "jsonl_files": 48,
     "csv_files": 63,
-    "csv_meaning": "homogeneous state mole fractions or observation/score metadata; no split trial",
+    "csv_meaning": "duplicate split evidence: phase-search split-confirmations CSVs contain 278 confirmed phase compositions; descending-trials CSV contains 29 negative-distance compositions, all exactly registered; other CSVs contain observations, homogeneous-state compositions or score metadata",
     "tar_files": 1,
     "tar_split_members": 0,
-    "malformed_json": 19
+    "malformed_json": 19,
+    "csv_source_comparison": [
+      {
+        "file": "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/run-2/split-confirmations.csv",
+        "split_compositions": 139,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase-search/split-confirmations.csv",
+        "split_compositions": 139,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/extension-81/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/engine-3e83e19c-phase/original-73/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-6/selected-checks/phase-diagnosis/descending-trials.csv",
+        "split_compositions": 29,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/phase-extension-201/diagnosis/run-2-corrections/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/phase-extension-201/run-2/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/phase-extension-201/run-3/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      },
+      {
+        "file": "analyses/mea_parameter_bundle/results/phase-extension-201/split-confirmations.csv",
+        "split_compositions": 0,
+        "outside_registry": []
+      }
+    ],
+    "malformed_json_meaning": "17 timing-output files mixed with non-JSON text and two derivative-error messages; none empty"
   }
 }
