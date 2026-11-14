@@ -127,7 +127,7 @@ class Route:
         for role in ('fitted','comparisons'):
             for row in spec.inputs['observations'][role]:
                 row['temperature_domain'] = interval
-                row['role'] = self.config.get('roles',{}).get(row['group'], 'fitted' if role=='fitted' else 'not fitted')
+                row['role'] = row.get('role',self.config.get('roles',{}).get(row['group'], 'fitted' if role=='fitted' else 'not fitted'))
                 assert row['role'] in ('fitted','not fitted','comparison only')
                 assert (row['role']=='fitted') == (role=='fitted')
         spec.inputs['coordinates'] = copy.deepcopy(point['coordinates'])
