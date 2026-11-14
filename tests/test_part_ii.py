@@ -236,3 +236,29 @@ def test_horstmann_residual_excess_enthalpy():
     enforced = route.states(spec)
     spec.inputs['observations']['comparisons'] = []
     assert route.states(spec) == enforced
+
+
+def test_amp_supplied_trial_component_support(monkeypatch, tmp_path):
+    """#363: the reactive split from #344 e627a6f cannot enter binary Hartono."""
+    spec = p.SolventSpecification(ROOT/'analyses/amp_transfer/refit-306-1.toml')
+    trial = dict(kind='Liquid', support=list(range(9)), packing=.42127619395874333,
+                 composition=[.0006382983819095918,.0775682901129986,.7438684616339758,
+                              .0889625710887081,.0009575541611874242,.0880046145898001,
+                              1.9816127717360009e-7,2.9274884923942357e-9,8.94265471074361e-9])
+    route = p.Route.__new__(p.Route)
+    route.out, route.config = tmp_path, {}
+    route.verify, route.bind = lambda: None, lambda point: spec
+    keys = ['hartono-2013-P:0:problem','hartono-2021:0:problem']
+    monkeypatch.setattr(p.stable, '_SPEC', None)
+    monkeypatch.setattr(p.stable, '_TRIALS', {})
+    monkeypatch.setattr(p.stable, '_ROUTE', None)
+    p.stable._init(None, {key:[trial] for key in keys}, route)
+    binary, loaded = [p.stable._measure(dict(key=key,problem=key)) for key in keys]
+    assert binary['available'] and binary['optimized_available']
+    assert binary['not_applicable_supplied_trials']==[dict(trial,evidence='not applicable',support_difference=[0,3,4,5,6,7,8])]
+    assert not binary.get('supplied_trials') and not p.stable.descent(binary)
+    assert binary['supplied_trial_counts']==dict(available=0,unavailable=0,not_applicable=1)
+    assert loaded['supplied_available'] and loaded['supplied_trials'][0]['evidence']=='evaluated'
+    assert loaded['not_applicable_supplied_trials']==[]
+    assert loaded['supplied_trial_counts']==dict(available=1,unavailable=0,not_applicable=0)
+    assert p.stable.tally([binary,loaded])['supplied_trial_counts']==dict(available=1,unavailable=0,not_applicable=1)
