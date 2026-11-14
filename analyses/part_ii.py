@@ -68,8 +68,7 @@ class Route:
 
     def start(self, reference, *, adopt=True):
         mapping = self.load(reference)
-        spec = SolventSpecification(self.path.parent/self.config['specification'])
-        laws = self.load(reference['reactions']) if 'reactions' in reference else spec.spec['chemistry']['reactions']
+        laws = self.load(reference['reactions']) if 'reactions' in reference else SolventSpecification(self.path.parent/self.config['specification']).spec['chemistry']['reactions']
         declared = self.load(reference.get('coordinates',self.config['coordinates']))
         if adopt:
             shared = json.loads(SHARED.read_text())
@@ -160,7 +159,7 @@ class Route:
     def replay(self, point, rows=None):
         spec = self.bind(point)
         records = spec.inputs['observations']['fitted'] if rows is None else rows(spec)
-        values = stable.d.evaluate(spec, records)
+        values = [spec.prediction(record) for record in records]
         ok = all(r['status']=='Available' and r.get('requested_tolerance_met') for r in values)
         if ok:
             residuals = spec.whiten(np.array([r['residual'] for r in values]),records)
