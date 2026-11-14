@@ -38,7 +38,18 @@ flat = [dict(model='F2', identity=r['identity'], group=r['group'], role=r['role'
 write_csv('paper-data.csv', flat)
 write_csv('horstmann.csv', [dict(identity=r['identity'], x_water=r['row']['x_water'], T_K=r['T_K'], P_MPa=r['row']['P_MPa'], observed_J_mol=r['observed'], F2_J_mol=r['value'], F0_J_mol=next(x['value'] for x in old if x['identity']==r['identity']), role=r['role'], reaction_ranges='reaction not used') for r in rows if r['group']=='Horstmann'])
 selection = read(OUT / 'selection.json')
-paper = dict(selected_start=selection['chosen']['name'], cost=selection['chosen']['cost'], fitted_parameters=4, conditional_standard_errors='blocked by shared issue 365', stability=selection['chosen']['search'], pressure={})
+uncertainty = read(OUT / 'conditional-uncertainty.json')
+parameters = []
+for index, coordinate in enumerate(uncertainty['coordinates']):
+    identity = coordinate['identity']
+    parameters.append(dict(parameter=identity, value=coordinate['origin'],
+        unit='J/mol' if coordinate.get('kind')=='reaction_enthalpy_shift' else 'dimensionless',
+        lower=coordinate['bounds'][0], upper=coordinate['bounds'][1],
+        on_bound=index in uncertainty['active_bounds'],
+        conditional_SE=uncertainty['conditional_standard_error'][identity],
+        basis='completed-law endpoint chart; enthalpy is an increment about the completed law'))
+write_csv('parameter-values.csv', parameters)
+paper = dict(selected_start=selection['chosen']['name'], cost=selection['chosen']['cost'], fitted_parameters=4, conditional_standard_errors=uncertainty['conditional_standard_error'], active_bounds=uncertainty['active_bounds'], stability=selection['chosen']['search'], pressure={})
 for role in ('fitted', 'not fitted'):
     ps = [r for r in rows if r['role']==role and r['unit']=='Pa']
     paper['pressure'][role] = deviation_statistics([(r['observed'],r['value']) for r in ps], 'Pa')
