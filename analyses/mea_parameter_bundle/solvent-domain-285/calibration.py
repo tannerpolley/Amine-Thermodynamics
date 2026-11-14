@@ -4,7 +4,7 @@ ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/'src'))
 from MEA.solvent_specification import SolventSpecification
 SolventSpecification.continue_groups=lambda self: None
-s=SolventSpecification(ROOT/'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
+s=SolventSpecification(ROOT/'analyses/solvent_specification_mea/MEA.toml')
 rows=[]
 for r in s.inputs['observations']['fitted']:
  p=s.problems[r.get('problem',r.get('initial'))]; d=p.feed.values

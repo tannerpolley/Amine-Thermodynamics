@@ -9,7 +9,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 
 OUT = Path(__file__).resolve().parent
 ROOT = OUT.parents[2]
-AN = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
+AN = ROOT / 'analyses/solvent_specification_mea'
 SHA = '83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6'
 WHEEL = Path('/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/build/wheels/main-e6dae5c7/epcsaft-1.2.0-cp313-cp313-manylinux_2_39_x86_64.whl')
 M, W, C = 'monoethanolamine', 'water', 'carbon-dioxide'
@@ -70,11 +70,11 @@ def qualify():
     assert hashlib.sha256(WHEEL.read_bytes()).hexdigest()==SHA
     with zipfile.ZipFile(WHEEL) as z:
         assert all(z.read(n)==(Path(epcsaft.__file__).parent.parent/n).read_bytes() for n in z.namelist() if n.startswith('epcsaft/') and not n.endswith('/'))
-    spec = SolventSpecification(AN/'MEA.toml')
+    spec = SolventSpecification(AN/'MEA-post-260-340.toml')
     thermal(spec, corrected=False)  # reference.json predates the #260 water correction
     rows = spec.inputs['observations']['fitted']
     pred = evaluate(spec, rows)
-    refs = json.loads((AN/'inputs/reference.json').read_text())
+    refs = json.loads((ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json').read_text())
     differences = []
     for r,p,q in zip(rows,pred,refs,strict=True):
         assert r['identity']==q['target']
@@ -87,7 +87,7 @@ def qualify():
 
 def setup():
     assert all(d['passed'] for d in load('qualification.json')['differences'])
-    spec = SolventSpecification(AN/'MEA.toml')
+    spec = SolventSpecification(AN/'MEA-post-260-340.toml')
     intervals = thermal(spec)
     original = spec.inputs['observations']['fitted']
     template = spec.problems[original[-4]['problem']]
@@ -175,7 +175,9 @@ def stability(spec,rows):
 
 def probe(name, replay_only=False):
     spec,original,broad,intervals=setup()
-    coords=json.loads((AN/'inputs/fit-coordinates.json').read_text())
+    coordinate_path = ROOT/'analyses/solvent_specification_mea/inputs/fit-coordinates.json'
+    assert hashlib.sha256(coordinate_path.read_bytes()).hexdigest() == 'ea65e392c34484f2c54b8f61cc465f25c8d6a9377a5b51a1f0db5e60585251af'
+    coords=json.loads(coordinate_path.read_text())
     for q in coords:q['origin']=q['base']
     if name=='B':
         pair=next(p for p in spec.inputs['endpoint']['pairs'] if {p['component_id_a'],p['component_id_b']}=={M,W})

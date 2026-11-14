@@ -1,0 +1,144 @@
+{
+  "declaration_source_commit": "b0b1cba",
+  "declaration_source_path": "analyses/solvent_specification_mea/declarations.toml",
+  "routes": [
+    {
+      "route": "analyses/mea_parameter_bundle/heat-capacity-264/calculate.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-post-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "d371e5102e6368a51e7db0def4010ac67fa26875b31ee358077ebb904de41efb",
+      "evidence_file": "analyses/mea_parameter_bundle/heat-capacity-264/provenance.json",
+      "origin": "d09c7004 configuration at a475758^; qualification replaces water with old-water.json, while baseline and probes use the corrected calorics",
+      "input_hashes_verified": true,
+      "source_sha256": "21240381f91c09cb1e155ca1a323be3ee92b6dff0417b3e0005a02ad14d734b1",
+      "configuration_sha256": "985cebdd6517be5137c32776716bb71fc0a1fccfc393aa9485315cbc54088198"
+    },
+    {
+      "route": "analyses/high_temperature_chemistry/qualify.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/high_temperature_chemistry/results/qualification.json",
+      "origin": "input_hashes: endpoint, declaration and caloric hashes; same campaign declaration for run and endpoint domain checks",
+      "input_hashes_verified": true,
+      "source_sha256": "35d28d0c5a0cd20b86eb05d5e17c43aa3e2d6d2d4c5ae4e100f677b9204997c8",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/high_temperature_chemistry/run.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/high_temperature_chemistry/results/qualification.json",
+      "origin": "input_hashes: endpoint, declaration and caloric hashes; same campaign declaration for run and endpoint domain checks",
+      "input_hashes_verified": true,
+      "source_sha256": "54722514e13d80b7d44560bec44c85c50dabd984c0a8b000fda798dcbe8910df",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/high_temperature_chemistry/check_heat_domain.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/high_temperature_chemistry/results/qualification.json",
+      "origin": "input_hashes: endpoint, declaration and caloric hashes; same campaign declaration for run and endpoint domain checks",
+      "input_hashes_verified": true,
+      "source_sha256": "34e6e15eccb52d158496a418622237daf5d672c9937484f0ccd4499797ea2cb1",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mdea_mea_workflow/scripts/transfer_probes.py:MEA branch",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mdea_mea_workflow/results/transfer-267/input-hashes.json",
+      "origin": "MEA.toml hash 6fb9dded, retained at b0b1cba; script baseline 148.87893934557388 and runtime-mea.json identify the earlier-wheel calculation",
+      "input_hashes_verified": true,
+      "source_sha256": "d0d849ba73bdc0cc2377727eb2684eb182343d608f503b8625453d42e6653b21",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/water-ideal-gas/compare.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mea_parameter_bundle/water-ideal-gas/provenance.json",
+      "origin": "base_commit 30db72af and recorded endpoint; that commit retains MEA.toml 6fb9dded and declaration 7fccfe8b; old/new thermal substitutions remain explicit",
+      "input_hashes_verified": true,
+      "source_sha256": "a0982acc14ff7f743a030f71d034e71ef72a5667b2848843bf9a2b26c9c6ff7b",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/scripts/bicarbonate_carbonate_266.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266/baseline-runtime.json",
+      "origin": "sources includes MEA.toml 6fb9dded, declaration, caloric, endpoint and reference hashes",
+      "input_hashes_verified": true,
+      "source_sha256": "0ebdfa37d297837317f0f21af58cfae9a48533e87bb114c18a72cbe0105d6f26",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/scripts/bicarbonate_carbonate_266_prepare.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266/baseline-runtime.json",
+      "origin": "sources includes MEA.toml 6fb9dded, declaration, caloric, endpoint and reference hashes",
+      "input_hashes_verified": true,
+      "source_sha256": "3224ffeb93ddb7752e41849ce907bbed4ba65a20a21fb4b3aee2e6466c152413",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/scripts/density_268.py:standalone bind",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mea_parameter_bundle/results/density-268/provenance.json",
+      "origin": "recorded base 30db72af and all endpoint/declaration/caloric hashes; callers with their own snapshot keep explicit specification filename",
+      "input_hashes_verified": true,
+      "source_sha256": "faab9a9cdb9b5f97ffaefaa9670651357c89808538424387c45ef314394b348f",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/scripts/pressure_transfer_attribution_261.py",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "parameter_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "caloric_sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1",
+      "evidence_file": "analyses/mea_parameter_bundle/results/pressure-transfer-261/matched-attribution.json",
+      "origin": "producer first retained in Git 0d7d31e, with MEA.toml 6fb9dded / endpoint 00e77608 / declaration 7fccfe8b / old calorics; retained pressure and density checked",
+      "input_hashes_verified": true,
+      "source_sha256": "2055dee20bddfc0c4961f781f12fbcca7bb5a838b2dbe51479c389707e79d7c6",
+      "configuration_sha256": "d158ea6d0be69678861102928d4a2cbb5bf815aea8305e4da430baadf3847267"
+    }
+  ],
+  "not_frozen": [
+    {
+      "route": "analyses/mea_parameter_bundle/parameter-identifiability/calculate.py",
+      "record_sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91",
+      "declaration_sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64",
+      "evidence": "analyses/mea_parameter_bundle/parameter-identifiability/results/complete-inputs.json",
+      "reason": "Restored to main byte-for-byte; keep the original five-file b0b1cba restoration and restore the subsequently changed declaration, endpoint and reference as well. parameter-identifiability-restoration-check.json verifies the exact eight-file plan against every recorded input guard; no historical campaign ran."
+    },
+    {
+      "route": "analyses/mea_parameter_bundle/solvent-domain-285/calibration.py",
+      "record_sha256": null,
+      "declaration_sha256": null,
+      "evidence": null,
+      "reason": "No own retained snapshot identity established for this auxiliary feed inventory; restored to main byte-for-byte rather than assign F0 by assumption."
+    }
+  ],
+  "reference_file": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json",
+  "reference_sha256": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560"
+}

@@ -2,7 +2,7 @@
 import json
 from run import AN, ROOT, OUT, SHA, SolventSpecification, fo, eq, assign, write
 
-spec = SolventSpecification(ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/MEA.toml')
+spec = SolventSpecification(ROOT / 'analyses/solvent_specification_mea/MEA-pre-260-340.toml')
 reference = next(iter(spec.problems.values()))
 request = json.loads((OUT / 'comparison-inputs.json').read_text())['species'][0]['request']
 checks = []
