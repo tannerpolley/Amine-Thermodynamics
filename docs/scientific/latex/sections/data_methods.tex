@@ -1,95 +1,141 @@
 \section{Data and parameter estimation}\label{sec:data-methods}
+\subsection{Experimental data and their use in fitting}
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and unloaded-solvent mass fraction is $w_{\MEA}=m_{\MEA}/(m_{\MEA}+m_{\HtwoO})$.
-\Cref{tab:current-data-inventory} summarizes the fitted and compared observations.
-The 307 objective entries are 47 \COtwo pressures, 101 species fractions, six species ratios, eight integral heats, 52 densities, 50 binary MEA--water quantities, 39 \COtwo--water pressures and four heat capacities; the 39 \COtwo--water pressures check the fixed \COtwo--water inputs.
-The species ratios are \MEAH, \MEACOO and \ce{HCO3- + CO3^{2-}} relative to \ce{MEA + MEAH+ + MEACOO-} at each of two Jakobsen states \cite{Jakobsen2005}.
-The \COtwo--water pressures check the interaction fitted separately in \cref{sec:results-co2-water} and held fixed here \cite{kiepeExperimentalDeterminationPrediction2002}.
-
-% P:methods-02
-Each calculated species observable follows its analytical definition.
-B\"ottinger et al.\ observe \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate, noting that carbonate is practically absent \cite[p.~134, Table~3]{Bottinger2008}; their bicarbonate-labeled values are compared here with calculated \ce{HCO3- + CO3^{2-}}.
-Matin et al.\ infer bicarbonate from titration and carbon balance after neglecting carbonate in their working balances \cite[pp.~6615--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}.
-Comparing those observations with calculated \ce{HCO3- + CO3^{2-}} is an observation approximation; all 19 such values remain outside the objective.
-Their figures label \SI{21}{\degreeCelsius}, approximated here by \SI{20}{\degreeCelsius}.
+Three data-role terms are used throughout: \emph{fitted} means an observation enters the objective of the reported fit; \emph{not fitted} means it is outside that objective; \emph{comparison only} means a different quantity or different conditions from those the model was built for, never used to choose a fit.
+Prior inspection or use in choosing parameters is disclosed separately in \cref{tab:current-data-inventory}.
+The objective contains 307 quantities; the binary \COtwo--water pressures remain in it as checks on a previously fitted, fixed interaction.
+All subsequent property calculations use the adopted parameters without adjustment.
 
 \input{tables/current_data_inventory}
 
-% P:methods-03
-Pressure and species calculations use each source's reported solvent composition, including measured molalities and temperatures for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}; Section~\ref{supp-sec:s-corrections} gives the source conventions.
-Three Xu observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
-The fitted pressures cover absorber temperatures (313--\SI{333}{\kelvin}); higher temperatures and the other pressure observations were kept out of the fit for comparison.
-The six-source pressure comparison includes 159 observations from Aronu, Hilliard, Idris, Jou, Ma'mun and Xu \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011}.
-Arcis heats were not fitted but were used to accept or reject candidate parameter sets, and the 112 non-fitted six-source pressures, the Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} and the 15 and 45 wt\% Aronu pressures were compared with candidate parameter sets during model development without serving as acceptance limits.
-No comparison in this work is therefore a blind test.
-Experimental carrier gas is omitted: the three-neutral-species bubble calculation compares $y_{\COtwo}P$ with the measured \COtwo partial pressure rather than imposing the experimental total pressure.
-This approximation may matter at low \COtwo pressure; Neumann et al.\ include nitrogen in such comparisons \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
+% P:methods-02
+Each species observable follows its experimental definition.
+B\"ottinger et al.\ report \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate while noting practically absent carbonate \cite[p.~134, Table~3]{Bottinger2008}.
+Their bicarbonate-labeled observations are compared with calculated \ce{HCO3- + CO3^{2-}}.
+Matin et al.\ neglect carbonate when inferring bicarbonate from titration and carbon balance \cite[pp.~6615--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}; the same aggregate comparison is an observation approximation, and these bicarbonate values are not fitted.
+The Matin series labeled \SI{294.15}{\kelvin} is calculated at \SI{293.15}{\kelvin}.
+Jakobsen species-to-total-amine ratios enter the objective, whereas their carbonate shares of dissolved carbon do not; the calculation accounts for dilution during NMR preparation \cite[Tables~A1--A2, Sample preparation]{Jakobsen2005}.
 
-\subsection{Caloric and density calculations}\label{sec:heat-method}
+% P:methods-03
+Pressure and species point calculations use each source's solvent composition, including reported molality and temperature for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
+Three Xu pressure observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
+The pressure sources are Aronu, Hilliard, Idris, Jou, Ma'mun and Xu, with Wagner assessed separately \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011,wagnerSolubilityCarbonDioxide2013}.
+Carrier gas is omitted from the bubble calculation: calculated $y_{\COtwo}P$ is compared with measured \COtwo partial pressure rather than imposing the experimental total pressure.
+This approximation can matter at low \COtwo pressure; Neumann et al.\ instead include nitrogen \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
+
+\subsection{Absorption heat, heat capacity and density}\label{sec:heat-method}
 % P:methods-heat-01
-Eight Vinjarapu integral heats are fitted at \SI{313.15}{\kelvin} and \SI{1.734}{\mega\pascal}, from initially carbon-free 30 wt\% solvent \cite[Sects.~1.1.1 and 2.2, Table~4]{HemaBhavya2025}.
-The signed heat per mole of added \COtwo is
+Vinjarapu integral heats are fitted at \SI{313.15}{\kelvin} and \SI{1.734}{\mega\pascal} from initially carbon-free 30 wt\% solvent \cite[Sects.~1.1.1 and 2.2, Table~4]{HemaBhavya2025}.
+Signed heat per mole of added \COtwo is
 \begin{equation}
  \Delta h=\frac{H_{\mathrm{final}}-H_{\mathrm{initial}}-\Delta n_{\COtwo}h_{\COtwo}^{\mathrm{feed}}}{\Delta n_{\COtwo}},
  \label{eq:addition-heat}
 \end{equation}
-where both equilibrium liquid enthalpies and the pure-\COtwo feed enthalpy are evaluated at the stated temperature and pressure; negative values denote exothermic absorption.
-Fourteen Arcis heats at \SI{322.5}{\kelvin} and \SI{0.51}{\mega\pascal} or \SI{1.03}{\mega\pascal} are compared \cite[Sect.~2.4, Table~5]{arcisEnthalpySolutionCarbon2011}.
+where both equilibrium liquids and the pure-\COtwo feed are evaluated at the same temperature and pressure; negative values denote exothermic absorption.
+Arcis integral heats use \SI{322.5}{\kelvin} and the reported pressures \cite[Sect.~2.4, Table~5]{arcisEnthalpySolutionCarbon2011}.
+Kim--Svendsen semi-differential calorimetry measures finite additions; the corresponding calculation uses the liquid enthalpy at each interval endpoint, rather than the cumulative heat from zero loading \cite[Tables~1--3]{Kim2007}.
+A \SI{1.734}{\mega\pascal} isobar approximates these intervals because their experimental pressure histories are unavailable.
 
 % P:methods-heat-conditions
-The four fitted Hilliard heat capacities use 7 mol \MEA/kg water, calculation pressure \SI{101325}{\pascal} and a $10^{-6}$ loading approximation for the nominally unloaded states \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
+The fitted Hilliard heat capacities use 7 mol MEA/kg water.
+Calculations assign \SI{101325}{\pascal}; Hilliard used sealed sample pans and did not report their internal pressure \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
+The loading $10^{-6}$ represents nominally unloaded states numerically.
+The broader Hilliard heat-capacity comparisons use the same assigned-pressure convention.
+The objective uses molar-feed heat capacity, while comparisons with the broader heat-capacity data use the source mass basis.
+The feed basis includes added \COtwo in both conversions.
 
-% P:methods-heat-03
-Densities are calculated directly from the equation of state, without volume translation, so the density data constrain the same parameters that set the phase and reaction equilibria.
-The fitted loaded observations comprise 15 Amundsen and 32 Hartono densities; five carbon-free densities use exactly zero analytical carbon, and all 67 Han densities are comparisons \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
-Five Amundsen densities at loading 0.4 are excluded after comparison with Hartono values interpolated to the same loading, temperature and solvent composition; all five remain in the complete comparison.
-The calculations use \SI{100000}{\pascal} for Amundsen where source pressure is unreported; other pressures follow the individual observations.
-The loaded-density scale is
+% P:methods-density
+Densities come directly from the equation of state, without volume translation.
+The fitted loaded observations comprise Amundsen and Hartono data, while Han densities are not fitted \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
+Five Amundsen observations at loading 0.4 are excluded from fitting after comparison with interpolated Hartono values; they remain in the displayed density comparisons.
+The loaded-density residual scale is
 \begin{equation}
  s_{\rho,j}=\left[u_{\rho,j}^2+(g_j u_{\alpha,j})^2\right]^{1/2},
  \label{eq:density-scale}
 \end{equation}
-where $g_j$ is the density--loading secant between neighboring observations at the same source temperature and solvent composition, using a one-sided secant at the ends.
-Section~\ref{supp-sec:s-density} gives the source-specific scales and qualifications.
-The scales combine heterogeneous uncertainty information; $2s$ is not uniformly a 95\,\% interval, and Amundsen's precise high-temperature/loading uncertainty boundary remains unresolved \cite[pp.~3099--3100]{Amundsen2009}.
+where $g_j$ is the secant between neighboring loadings at the same source temperature and composition, with a one-sided secant at either end.
+These heterogeneous scales are not uniformly standard measurement uncertainties, so twice a scale does not uniformly define a confidence interval.
+Section~\ref{supp-sec:s-density} gives the source inputs and their qualifications.
 
-
-\subsection{Parameters and fitting}\label{sec:parameters}
+\subsection{Parameter estimation}\label{sec:parameters}
 % P:methods-04
-Parameters were estimated in four fits, holding the earlier values fixed: five pure-water parameters to IAPWS-95, the \COtwo--water interaction and slope to Kiepe pressures, the MEA dielectric coefficients to unloaded-solution permittivities, then sixteen parameters jointly to \cref{tab:current-data-inventory}.
-The joint bounded least-squares objective is
+Estimation proceeds from pure water against IAPWS-95, through the \COtwo--water interaction against Kiepe pressures and the MEA dielectric coefficients against unloaded-solution permittivities, to the joint MEA fit.
+Earlier subsystem coefficients remain fixed in the joint fit.
+The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights.
+F0 allows reaction-law shifts and separate amine-ion Born diameters; F1 fixes R2 and R5 to their literature laws, and F2 additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
+F3 also fixes the carbamate--water interaction and \MEAH--water temperature slope to zero.
+F4 fixes the water--bicarbonate and water--carbonate laws to sodium-salt values and frees the \MEAH--bicarbonate interaction; F4-0 fixes that new interaction to zero, whereas F5 instead adds zero \MEAH--carbamate interaction to F4.
+For the adopted set, F2, eleven remaining parameters minimize
 \begin{equation}
- C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,
+ C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
+ r_j=\frac{y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}}}{s_j}
+ \quad\text{or}\quad
+ r_j=\frac{\ln(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}})}{s_j},
  \label{eq:fit-objective}
 \end{equation}
-where $r_j$ is a property-scaled difference or log ratio and $w_j$ its weight; Section~\ref{supp-sec:s-objective} defines every residual, scale and weight, and \cref{sec:methods-phase} describes the stability penalty added during fitting, which $C$ excludes.
-Loaded densities have weight $1/47$, carbon-free densities weight 10, binary MEA--water quantities unit weight and \COtwo--water pressures weight $1/39$.
-At the final parameter set, binary MEA--water quantities contribute 61.85\,\% of the objective and loaded densities 0.3023\,\%; these shares describe fitting priorities rather than relative physical accuracy.
-The solver uses bounded Levenberg--Marquardt least squares with exact equation-of-state and implicit equilibrium derivatives.
+with the residual form, scale and weight specified by quantity in Table~\ref{supp-tab:objective-groups}.
+Bounded Levenberg--Marquardt least squares uses exact equation-of-state and implicit equilibrium derivatives.
+Two starts are examined for each restriction; the lower-cost converged start is reported, with convergence determined by the optimizer tolerance rather than an iteration limit.
+These are local solutions, not a global parameter search.
 
+% P:methods-weights
+Pressure uses a log-ratio residual with an assigned relative allowance; species fractions and ratios use relative-plus-floor scales.
+Vinjarapu heat scales come from the reported heat uncertainty, density scales combine density and loading information, and the heat-capacity scale uses Hilliard's stated accuracy on the molar-feed basis \cite[Table~4]{HemaBhavya2025}\cite[Sect.~4.6]{Hilliard2008}.
+The binary-temperature, vapor-fraction and carbon-free-density allowances, together with the group weights, are assigned without a statistical derivation and are not sampling variances.
+The objective therefore specifies relative fitting priorities, and its value is not an absolute measure of physical accuracy.
 
 % P:methods-06
-Agreement is reported as average absolute relative deviation (AARD),
+Agreement is reported as average absolute relative deviation (AARD) and root-mean-square error (RMSE),
 \begin{equation}
- \operatorname{AARD}=\frac{100\,\%}{n}\sum_{j=1}^{n}\left|y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1\right|,
+ \operatorname{AARD}=\frac{100\,\%}{n}\sum_j\operatorname{abs}\!\left(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1\right),
+ \qquad \operatorname{RMSE}=\sqrt{\frac1n\sum_j(y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}})^2}.
  \label{eq:aard}
 \end{equation}
-and root-mean-square error (RMSE) in the observable's units.
-The solution checks for the fitted and compared pressure and species states are reported in Section~\ref{supp-sec:s-files}; they establish numerical convergence rather than physical validation.
+AARD describes error relative to observations; it is not an uncertainty interval.
+For the interior parameters, local covariance is
+\begin{equation}
+ \operatorname{cov}(\boldsymbol\theta_I)=s_C^2(J_I^{\mathsf T}J_I)^{-1},\qquad
+ s_C^2=\frac{2C}{N-|I|},
+ \label{eq:conditional-covariance}
+\end{equation}
+where $J_I$ is the weighted residual Jacobian and active-bound parameters remain fixed.
+These errors condition on the fitted model, source laws, scales, weights and local linearization.
 
-\subsection{Phase-stability search}\label{sec:methods-phase}
+% P:methods-checks
+Table~\ref{tab:check-values} supplies reproduction values with the adopted parameters for a \COtwo--water, an MEA--water and a loaded-MEA state.
+Bubble-pressure solutions started from two initial pressures agree at the displayed precision; Section~\ref{supp-sec:s-files} lists the corresponding energy contributions and species fractions.
+These are numerical reproduction checks, not additional measurements or physical validation.
+\input{tables/check_values}
+
+\subsection{Phase-stability analysis and stability penalty}\label{sec:methods-phase}
 % P:methods-phase-01
-The tangent-plane criterion \cite[Sect.~2]{Michelsen1982} is applied to reacting, charge-neutral trials, with reduced distance
+The reacting tangent-plane criterion tests charge-neutral trial phases \cite[Sect.~2]{Michelsen1982}:
 \begin{equation}
  D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
- \qquad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0,
+ \quad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0.
  \label{eq:tpd}
 \end{equation}
-where $B$ represents conserved component combinations and $\boldsymbol\lambda$ their chemical-potential multipliers in the existing equilibrium.
-Instability is detected only when a negative distance is accompanied by a material-conserving finite transfer that lowers Gibbs energy beyond its numerical-error estimate; Section~\ref{supp-sec:s-phase} gives the method details and the searched states.
+Here $g$ is molar Gibbs energy, $B$ describes conserved component combinations, and $\boldsymbol\lambda$ contains their chemical-potential multipliers in the parent equilibrium.
+A negative distance must be accompanied by a material-conserving finite transfer that lowers Gibbs energy beyond its numerical error estimate before instability is counted.
+An unavailable or incomplete search supplies no evidence of stability.
 
 % P:methods-phase-02
-The joint fit penalizes the most negative resolved distance at 1903 single-liquid states held at 1.05 and 3.0 times the bubble pressure calculated with the parameters being fitted: 15, 25, 35 and 45 wt\% MEA at 313.15--\SI{393.15}{\kelvin} and loadings $10^{-5}$ and 0.025--0.6, together with the 30 wt\% census temperatures and loadings.
-Five further grid states, whose search could not be evaluated at the starting parameters, are left out of the penalty and evaluated at the final parameter set.
-Two sets of states never enter the fit: 576 single-liquid states at 20, 30 and 40 wt\% MEA, 318.15--\SI{388.15}{\kelvin} and loadings 0.0125--0.5875, held at 1.5 times the bubble pressure, and a census of 162 liquid--vapor states at 30 wt\% (\cref{sec:phase-method}).
-Two fits without the penalty serve as comparisons: an earlier fit within the same bounds, called the historical unstable fit, and a restricted fit with the \MEAH segment diameter bounded to 5.35--\SI{5.8}{\angstrom} and the \MEAH--water interaction to $-0.5$ to $-0.161$ (Section~\ref{supp-sec:s-probes}).
+Each fitted set is searched on the liquid-state grid and on liquid--vapor states defined in Section~\ref{supp-sec:s-phase}.
+The liquid grids use 1.05 and 3.0 times the candidate's bubble pressure; separate checks use 1.5 times that pressure and intermediate compositions and temperatures.
+At each liquid--vapor state, trial compositions taken from Gibbs decreases resolved for other MEA parameter sets are evaluated in addition to optimized trials.
+These supplied-composition distances are separate checks, not newly resolved phase splits.
+
+% P:methods-penalty
+If a split is detected, the whole searched liquid-state set enters the penalized objective:
+\begin{equation}
+ r_k^{\mathrm{stab}}=\sqrt{w_{\mathrm{stab}}}\frac{\tau_k}{s_{\mathrm{stab}}},\qquad
+ C_{\mathrm{pen}}=C+\frac12\sum_k(r_k^{\mathrm{stab}})^2,
+ \quad w_{\mathrm{stab}}=1,
+ \quad s_{\mathrm{stab}}\in\{10^{-2},3\times10^{-3}\}.
+ \label{eq:stability-penalty}
+\end{equation}
+The two scales are successive numerical penalty strengths; $\tau_k$ is the most negative distance on a resolved descending branch, or zero when a completed search finds none.
+No zero is assigned to an unavailable search.
+If needed, the parameter segment from a separately admissible parameter set to the penalized solution is shortened in 0.01 steps, then refined by ten bisections, to recover an admissible endpoint.
+F0 is the stability-penalized calibration of the restriction sequence; the adopted F2 fit required neither a penalty stage nor this segment shortening.
