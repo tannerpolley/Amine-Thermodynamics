@@ -111,7 +111,7 @@ def coefficient(cid, family, value, unit):
 
 def document():
     path = (
-        AN.parent / "mea_parameter_bundle/results/selected-current-best-parameters.json"
+        AN.parent / "mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json"
     )
     assert (
         hashlib.sha256(path.read_bytes()).hexdigest()
@@ -246,7 +246,7 @@ def document():
 
 def reactions(fits):
     decl = tomllib.loads(
-        (AN.parent / "solvent_specification_mea/declarations.toml").read_text()
+        (AN.parent / "mea_parameter_bundle/results/adoption-340/historical-spec/declarations.toml").read_text()
     )
     rows = copy.deepcopy(decl["chemistry"]["reactions"]["aqueous"][:3])
     for r in rows:

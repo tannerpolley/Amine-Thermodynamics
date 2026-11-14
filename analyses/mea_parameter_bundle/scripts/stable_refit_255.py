@@ -138,7 +138,7 @@ def bind(mapping):
     try:
         d.AN = TOML.parent
         if TOML.name == 'MEA.toml':
-            return d.bind(mapping)
+            return d.bind(mapping, 'MEA.toml')
         d.SolventSpecification, original = (lambda path: original(TOML)), d.SolventSpecification
         try:
             return d.bind(mapping)

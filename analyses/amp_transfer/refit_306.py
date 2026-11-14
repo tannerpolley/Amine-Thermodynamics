@@ -14,7 +14,7 @@ from MEA.solvent_specification import SolventSpecification, relative_error_stati
 OUT = r.OUT = AN / 'results/refit-306'
 OUT.mkdir(exist_ok=True)
 (AN / 'inputs/refit-306').mkdir(exist_ok=True)
-r.SHARED_ENDPOINT = AN.parent / 'solvent_specification_mea/inputs/endpoint.json'  # adopted #255/#297 shared species
+r.SHARED_ENDPOINT = AN.parent / 'mea_parameter_bundle/results/adoption-340/historical-spec/inputs/endpoint.json'  # adopted #255/#297 shared species
 WIDE = {4: [-1.0, 1.0], 6: [3.5, 6.5]}  # owner 2026-11-11: AMPH+-CO2 k and AMPCOO- diameter; all other bounds as #243
 MEACOO = 5.31999516340193  # adopted MEACOO- segment diameter, owner-requested comparison floor (2026-11-12)
 SIZE_ESTIMATE = 5.888119745589194  # MEACOO- x cube root of (m sigma^3 AMP + CO2)/(MEA + CO2), adopted pure parameters

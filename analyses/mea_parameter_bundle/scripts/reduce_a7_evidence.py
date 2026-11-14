@@ -11,7 +11,7 @@ OUT = BUNDLE/'results/adoption-297/paper-evidence'
 
 def main():
     qualified = json.loads((OUT.parent/'candidate/replay.json').read_text())
-    selected = BUNDLE/'results/selected-current-best-parameters.json'
+    selected = BUNDLE/'results/stable-refit-255/evidence/candidate-parameters.json'
     assert hashlib.sha256(selected.read_bytes()).hexdigest()==qualified['parameter_sha256']
     rows = [dict(id=x['identity'],group=x['group'],quantity=x['row'].get('quantity') or x['row'].get('kind'),
                  observed=x['observed'],predicted=x['value'],residual=x['residual'],weighted_residual=x['weighted_residual'],

@@ -85,7 +85,7 @@ def checks(spec):  # shared record unchanged; |ln Q - ln K| at one loaded Lawson
     doc = spec.inputs['endpoint']
     same = lambda d: ([c for c in d['components'] if c['component_id'] in SHARED], [p for p in d['pairs'] if {p['component_id_a'], p['component_id_b']} <= set(SHARED)], d['correlations'])
     laws = {r['name']: r['correlation'] for r in spec.spec['chemistry']['reactions']['aqueous']}
-    mea_laws = {r['name']: r['correlation'] for r in tomllib.loads((ROOT / 'analyses/solvent_specification_mea/declarations.toml').read_text())['chemistry']['reactions']['aqueous']}
+    mea_laws = {r['name']: r['correlation'] for r in tomllib.loads((ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec/declarations.toml').read_text())['chemistry']['reactions']['aqueous']}
     row = next(r for r in spec.inputs['observations']['fitted'] if r['group'] == 'Lawson')
     prob = spec.problems[row['problem']]
     state = eq.solve_equilibrium(spec.model, prob)

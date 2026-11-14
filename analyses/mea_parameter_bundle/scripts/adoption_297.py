@@ -39,7 +39,7 @@ def relative(a, b):
 
 def verify():
     r.verify()
-    assert r.s.installed_wheel() == WHEEL
+    assert r.s.installed_wheel().resolve() == WHEEL.resolve()
     subprocess.check_output(['git', '-C', str(r.ROOT / 'upstream/ePC-SAFT'), 'merge-base', '--is-ancestor', COMMIT, 'origin/main'])
     with zipfile.ZipFile(WHEEL) as z:
         files = {n: hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist()
@@ -55,7 +55,7 @@ def f1():
     verify()
     # Byte identity against the accepted study covers every input field, including roles,
     # physical templates, row scales/weights, reaction references and the #260 caloric record.
-    paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', ACCEPTED,
+    paths = [] if CONFIG else subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', ACCEPTED,
         'analyses/solvent_specification_mea', 'analyses/mea_parameter_bundle/data/input',
         'src/MEA/common/mea_source_contracts.py'], cwd=r.ROOT, text=True).splitlines()
     inventory = []
@@ -63,11 +63,15 @@ def f1():
         path = r.ROOT / name
         old = subprocess.check_output(['git', 'show', f'{ACCEPTED}:{name}'], cwd=r.ROOT)
         inventory.append(dict(path=name, sha256=sha(path), identical=old == path.read_bytes()))
+    if CONFIG:
+        inventory = [dict(path=name, sha256=sha(r.ROOT/name), identical=sha(r.ROOT/name)==digest)
+                     for name, digest in CONFIG['input_sha256'].items()]
     write('input-identity.json', inventory)
     assert all(x['identical'] for x in inventory), 'F1: frozen physical input changed'
     summary = {}
     for name, path in RECORDS.items():
-        ref = r.read(OLD / ('qualification/final-replay.json' if name == 'incumbent' else 'wide/replay.json'))['result']
+        ref = (r.read(r.ROOT / CONFIG['references'][name])['rows'] if CONFIG else
+               r.read(OLD / ('qualification/final-replay.json' if name == 'incumbent' else 'wide/replay.json'))['result'])
         values, ok, cost = r.replay(r.s.parameter_mapping(path))
         write(f'{name}/replay.json', dict(wheel_sha256=SHA, engine_commit=COMMIT, parameter_sha256=sha(path), rows=values, cost=cost))
         declarations = [{k: x[k] for k in ('identity', 'group', 'observed', 'row')} for x in values]
@@ -84,6 +88,18 @@ def f1():
 
 
 def f2():
+    if CONFIG:
+        import reduced_refit_338 as reduced
+        reduced.OUT = OUT
+        reduced.split_registry = lambda: r.read(r.ROOT / CONFIG['registry'])
+        result = reduced.search('candidate', r.s.parameter_mapping(RECORDS['candidate']))
+        reference = r.read(r.ROOT / CONFIG['search_reference'])
+        fields = {'grid': ('states', 'available', 'descent'), 'offset': ('states', 'available', 'descent'),
+                  'census': ('states', 'descent', 'incomplete'),
+                  'supplied': ('compositions', 'evaluated', 'negative', 'unavailable')}
+        assert all(result[g][k] == reference[g][k] for g, keys in fields.items() for k in keys)
+        write('f2.json', dict(result=result, passed=True))
+        return
     from concurrent.futures import ProcessPoolExecutor, as_completed
     import phase_diagnosis_255 as p
     verify()
@@ -421,5 +437,72 @@ def inventory():
           sum(x['evidence_class']=='current adopted record output' for x in entries.values()), flush=True)
 
 
+def adopt():
+    """Replace the selected document and its solvent declaration in the adoption commit."""
+    import shutil
+    import tomllib
+    assert all(x['passed'] for x in r.read(OUT/'f1.json').values())
+    assert r.read(OUT/'f2.json')['passed']
+    mapping = r.s.parameter_mapping(RECORDS['candidate'])
+    spec = r.bind(mapping)
+    an = r.ROOT/'analyses/solvent_specification_mea'
+    declaration = an/'declarations.toml'
+    text = declaration.read_text()
+    chemistry = tomllib.loads(text)['chemistry']
+    laws = {x['name']: x['correlation'] for x in spec.spec['chemistry']['reactions']['aqueous']}
+    for group in chemistry['reactions'].values():
+        for reaction in group:
+            if reaction['name'] in ('R2', 'R5'):
+                for key in ('a', 'b', 'c', 'd', 'e', 'f', 'reference_temperature'):
+                    reaction['correlation'][key] = laws[reaction['name']][key]
+    def toml(value):
+        if isinstance(value, dict):
+            return '{' + ', '.join(json.dumps(k)+' = '+toml(v) for k, v in value.items()) + '}'
+        if isinstance(value, list):
+            return '[' + ', '.join(map(toml, value)) + ']'
+        return json.dumps(value)
+    lines = text.splitlines()
+    lines = ['chemistry = '+toml(chemistry) if line.startswith('chemistry = ') else line for line in lines]
+    declaration.write_text('\n'.join(lines)+'\n')
+    for destination in (r.B/'results/selected-current-best-parameters.json', an/'inputs/endpoint.json'):
+        shutil.copyfile(RECORDS['candidate'], destination)
+    config = an/'MEA.toml'
+    text = config.read_text()
+    old = tomllib.loads(text)
+    text = text.replace(old['declarations']['sha256'], sha(declaration))
+    text = text.replace(old['endpoint']['sha256'], sha(RECORDS['candidate']))
+    config.write_text(text)
+    replay = r.read(OUT/'candidate/replay.json')
+    reference = [dict(target=x['identity'], predicted=x['value'], residual=x['residual'],
+                      weighted_residual=x['weighted_residual'], cost=x['cost']) for x in replay['rows']]
+    r.s.write_json(an/'inputs/reference.json', reference)
+    inherited = r.read(r.ROOT/CONFIG['inherited_values'])[CONFIG['inherited_record']]
+    inherited.update(parameter_sha256=sha(RECORDS['candidate']), wheel_sha256=SHA,
+        owner_decision=CONFIG['owner_decision'],
+        part_ii_rule="Each Part II amine ion's Born diameter is tied to its segment diameter; water–bicarbonate follows the adopted MEA record.")
+    write('part-ii-shared-values.json', inherited)
+    write('shared-hashes.json', {'part-ii-shared-values.json': sha(OUT/'part-ii-shared-values.json'),
+                               'parameter_document': sha(RECORDS['candidate']), 'engine_wheel': SHA})
+
+
+def default_check():
+    subprocess.run([sys.executable, str(r.ROOT/'analyses/solvent_specification_mea/run.py')], check=True)
+    an = r.ROOT/'analyses/solvent_specification_mea'
+    values = r.read(an/'results/predictions.json')
+    reference = r.read(OUT/'candidate/replay.json')['rows']
+    differences = [relative(x['value'], y['value']) for x, y in zip(values, reference, strict=True)]
+    assert [x['identity'] for x in values] == [x['identity'] for x in reference]
+    assert len(values) == 307 and max(differences) <= 1e-10
+    write('default-path.json', dict(rows=len(values), maximum_relative_prediction_difference=max(differences),
+        parameter_sha256=sha(an/'inputs/endpoint.json'), declarations_sha256=sha(an/'declarations.toml'),
+        cost=math.fsum(x['cost'] for x in values), passed=True))
+
+
+CONFIG = {}
 if __name__ == '__main__':
-    {'f1': f1, 'f2': f2, 'f3': f3, 'evidence': evidence, 'uncertainty': uncertainty, 'shared': shared_values, 'extras': extras, 'f5': f5, 'phase-export': phase_export, 'inventory': inventory}[sys.argv[1]]()
+    if len(sys.argv) > 2:
+        CONFIG = r.read(sys.argv[2])
+        OUT = r.ROOT / CONFIG['output']
+        BASE = CONFIG['base']
+        RECORDS = {k: r.ROOT / v for k, v in CONFIG['records'].items()}
+    {'adopt': adopt, 'default': default_check, 'f1': f1, 'f2': f2, 'f3': f3, 'evidence': evidence, 'uncertainty': uncertainty, 'shared': shared_values, 'extras': extras, 'f5': f5, 'phase-export': phase_export, 'inventory': inventory}[sys.argv[1]]()

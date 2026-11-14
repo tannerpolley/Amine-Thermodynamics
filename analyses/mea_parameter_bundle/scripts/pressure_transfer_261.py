@@ -158,7 +158,7 @@ def baseline():
     s = SolventSpecification(OUT / 'study.toml')
     fitted = s.inputs['observations']['fitted']
     values = predictions(s, fitted)
-    ref = read(AN / 'inputs/reference.json')
+    ref = read(ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json')
     differences = []
     for r,p,q in zip(fitted, values, ref, strict=True):
         assert r['identity'] == q['target']
