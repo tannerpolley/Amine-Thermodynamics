@@ -66,7 +66,7 @@
 \shorttitle{Thermodynamics of loaded aqueous MEA with ePC-SAFT}
 \shortauthors{Polley}
 
-\title[mode = title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability}{Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability}}
+\title[mode = title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability}{Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability}}
 
 \author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
 \cormark[1]
@@ -82,19 +82,17 @@
 
 \cortext[cor1]{Corresponding author.}
 
+\hyphenation{mono-ethanolamine}
 \begin{abstract}
 % P:abstract-01
-A thermodynamic description of reactive absorption must combine equilibrium, caloric and density properties of the loaded solvent.
-Part I jointly estimates sixteen ePC-SAFT parameters for aqueous monoethanolamine (MEA) using pressure, speciation, integral absorption heat, density, heat capacity and binary equilibrium data.
-For nominal 30 wt\% MEA, pressure average absolute relative deviations are 11.79\,\% for 47 fitted pressures and 20.27\,\% over 159 fitted and non-fitted pressures at 313.00--\SI{393.15}{\kelvin}.
-For 94 of the 101 fitted species fractions the deviation is 7.11\,\%; fitted integral-heat root-mean-square error is \SI{1.84}{\kilo\joule\per\mole} \ce{CO2}, and fitted loaded-density deviation is 0.162\,\% without volume translation.
-A fit without a phase-stability requirement gives similar property agreement but has detected liquid-phase instability at 54 of 162 searched states.
-Penalizing tangent-plane instability during fitting gives a parameter set with no detected instability at the 1903 penalized states or at 738 states checked outside the fit.
-Six parameters lie on bounds; conditional covariance gives pressure standard errors of 5.41--16.00\,\% at the 47 fitted pressure states.
-Pressure deviations at 15 and 45 wt\% are 33.89 and 44.53\,\%, respectively; bicarbonate/carbonate and higher-temperature caloric discrepancies are reported with their source conflicts and model assumptions.
-These comparisons describe calibration and fixed-parameter predictions; the finite searches are numerical verification of phase behavior.
-A companion Part II examines transfer of the shared parameters to other amine classes.
-
+Can one electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) Helmholtz energy describe the equilibrium, caloric and density properties of loaded aqueous monoethanolamine with literature reaction constants and fewer adjustable parameters, without predicting an additional liquid?
+A joint calibration with eleven adjustable parameters, fixed literature reaction constants and amine-ion Born diameters tied to their segment diameters describes these properties, and finite phase searches detect no additional liquid although no stability penalty entered the fit.
+For nominal 30 wt\% monoethanolamine, fitted carbon-dioxide pressure average absolute relative deviation is 11.64\,\%, integral absorption-heat root-mean-square error is \SI{1.98}{\kilo\joule\per\mole} carbon dioxide, and fitted loaded-density deviation is 0.152\,\% without volume translation.
+The restrictions have a measured cost: on the Ma'mun observations, which are not fitted, pressure deviation rises from 19.43\,\% for a 16-parameter calibration that also shifts two of those constants and fits separate amine-ion Born diameters to 33.47\,\%.
+An unpenalized comparison fit instead predicts an ion-rich, water-poor liquid through a coupled energy balance with a prominent dispersion change; no unique microscopic cause is identified.
+Pressures at 15 and 45 wt\% monoethanolamine, carbonate shares and high-temperature absorption heat remain inaccurate.
+All comparisons use data seen during development, so they describe a calibration rather than independent validation, and parameter uncertainty is conditional on the fit.
+Part I supplies the equations and shared inputs for the companion study of other amines.
 
 \end{abstract}
 
@@ -105,7 +103,7 @@ monoethanolamine\sep{}ePC-SAFT\sep{}chemical speciation\sep{}absorption heat\sep
 \maketitle
 
 \hypersetup{
-    pdftitle={Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine benchmark for phase equilibria, speciation, absorption heat, density and phase stability},
+    pdftitle={Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability},
     pdfauthor={Tanner W. Polley},
     pdfsubject={Equilibrium, caloric and density properties of loaded aqueous monoethanolamine with ePC-SAFT},
     pdfkeywords={monoethanolamine, ePC-SAFT, chemical speciation, absorption heat, phase stability}
