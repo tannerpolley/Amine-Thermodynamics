@@ -159,9 +159,9 @@ def _init(mapping, trials=None, route=None):
 
 def _measure(state):
     started = time.monotonic()
+    supplied, not_applicable = [], []
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
-        supplied, not_applicable = [], []
         support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
         support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
         for witness in _TRIALS.get(state['key'], []):
@@ -195,12 +195,12 @@ def _measure(state):
             except Exception as error:
                 out['supplied_error'] = f'{type(error).__name__}: {error}'
             out['available'] = out['optimized_available'] and out['supplied_available']
-        if supplied or not_applicable:
-            out['not_applicable_supplied_trials'] = not_applicable
-            available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
-            out['supplied_trial_counts'] = dict(available=available, unavailable=len(supplied)-available, not_applicable=len(not_applicable))
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
+    if supplied or not_applicable:
+        out['not_applicable_supplied_trials'] = not_applicable
+        available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
+        out['supplied_trial_counts'] = dict(available=available, unavailable=len(supplied)-available, not_applicable=len(not_applicable))
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
