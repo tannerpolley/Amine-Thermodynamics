@@ -85,23 +85,7 @@ def observations(params, o, prob, pco2_max_c=None):
     return rows
 
 
-def identifiability(result, J, r, ids, lower, upper):
-    """Column-normalized singular values; the cost gradient at the final point (an active-bound coordinate whose
-    gradient points out of the box is held there); and, for coordinates off their bounds, the covariance
-    conditional on the active-bound coordinates held fixed (the Engine withholds the full covariance there)."""
-    free = [k for k in range(len(ids)) if k not in set(result.covariance.active_bounds)]
-    s2 = float(r @ r / (len(r) - len(free)))
-    cov = s2 * np.linalg.inv(J[:, free].T @ J[:, free])
-    se = np.sqrt(np.diag(cov))
-    gradient = J.T @ r  # d(0.5 sum r^2)/d(theta), physical units
-    return {'column_normalized_singular_values': list(np.linalg.svd(J / np.linalg.norm(J, axis=0), compute_uv=False)),
-            'cost_gradient': dict(zip(ids, gradient)),
-            'active_bound_outward_descent': {  # outward is +1 at the upper bound, -1 at the lower
-                ids[k]: bool(-gradient[k] * (1 if upper[k] - result.physical[k] < result.physical[k] - lower[k] else -1) > 0)
-                for k in result.covariance.active_bounds},
-            'free_coordinates': [ids[k] for k in free], 'residual_variance': s2,
-            'conditional_standard_error': dict(zip((ids[k] for k in free), se)),
-            'conditional_correlation': (cov / np.outer(se, se)).tolist()}
+from MEA.solvent_specification import conditional_information as identifiability
 
 
 def write_rows(path, start, rows):

@@ -27,11 +27,9 @@ import shared_evaluation as s
 COMMIT = 'bc7794731e94be961d16028d3f4880c6718a93ad'
 SHA = '8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069'
 WHEEL = ROOT / f'build/engine-wheels/main-{COMMIT}/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
-# Owner-authorized candidate wheel for this process only; the repository pin stays 0d08dff9.
-s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = SHA, COMMIT
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
-from MEA.solvent_specification import jsonable, stability_payload
+from MEA.solvent_specification import jsonable, stability_payload, supplied_negative
 import density_268 as d
 
 OUT = B / 'results/stable-refit-255'
@@ -79,8 +77,11 @@ def verify():
 
 # ---------------------------------------------------------------- states
 
-def states():
+def states(stocks=None, loadings=None):
     """Enforced liquid-parent grid (dense block + census nodes) and the held-out offset grid."""
+    if stocks is not None:
+        return [dict(key=f'grid:{stock}:{T}:{a}:{c}', T=round(313.15+10*i,2), stock=stock, a=a, c=c)
+                for stock in stocks for i in range(9) for T in [round(313.15+10*i,2)] for a in loadings for c in (1.05,3.)]
     dense = [dict(block='dense', wt=w, T=round(313.15 + 10 * i, 2), a=a, c=c)
              for w in (.15, .25, .35, .45) for i in range(9) for a in [1e-5] + [round(.025 * k, 4) for k in range(1, 25)] for c in (1.05, 3.)]
     census = [dict(block='census', wt=None, T=T, a=a, c=c) for T in CENSUS_T for a in CENSUS_A for c in (1.05, 3.)]
@@ -148,17 +149,18 @@ def bind(mapping):
         d.AN = saved
 
 
-def _init(mapping, trials=None):
-    global _SPEC, _TRIALS
+def _init(mapping, trials=None, route=None):
+    global _SPEC, _TRIALS, _ROUTE
+    _ROUTE = route
     _TRIALS = trials or {}
-    verify()
-    _SPEC = bind(mapping)
+    (route.verify if route else verify)()
+    _SPEC = (route.bind if route else bind)(mapping)
 
 
 def _measure(state):
     started = time.monotonic()
     try:
-        item = stability_row(_SPEC, state, 1.)
+        item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
         supplied = []
         for witness in _TRIALS.get(state['key'], []):
             phase = type(item.problem.phases[0])()
@@ -168,25 +170,35 @@ def _measure(state):
         prediction = reg.predict(_SPEC.model, item)
         out = stability_payload(prediction)
         if prediction.stability is not None:
-            out['witnesses'] = [dict(kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
+            out['witnesses'] = [dict(resolved_descent=True, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
                                 for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
+        out['optimized_available'] = out['available']
         if supplied:
-            item.stability_options.trials = supplied
-            item.stability_options.evaluate_supplied_trials = True
-            checked = reg.predict(_SPEC.model,item)
-            out['supplied_trials'] = [] if checked.stability is None else [dict(evidence=t.evidence,quantities=jsonable(t.quantities),message=t.message) for t in checked.stability.report.trials]
-            out['supplied_available'] = len(out['supplied_trials'])==len(supplied) and all(t['evidence']=='evaluated' for t in out['supplied_trials'])
-            out['available'] = out['available'] and out['supplied_available']
+            out['supplied_available'], out['supplied_trials'] = False, []
+            try:
+                parent = item.problem
+                if prediction.pressure_reference is not None:
+                    parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
+                result = eq.solve_equilibrium(_SPEC.model,parent)
+                options = eq.StabilityOptions()
+                options.trials, options.evaluate_supplied_trials = supplied, True
+                report = eq.stability_test(eq.compile_problem(_SPEC.model,parent),result,options)
+                out['supplied_parent_pressure_Pa'] = result.pressure
+                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=jsonable(t.quantities),message=t.message) for t in report.trials]
+                out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
+            except Exception as error:
+                out['supplied_error'] = f'{type(error).__name__}: {error}'
+            out['available'] = out['optimized_available'] and out['supplied_available']
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
-def grid(mapping, chosen, trials=None):
+def grid(mapping, chosen, trials=None, *, route=None):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
-    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping, trials)) as pool:
+    with ProcessPoolExecutor(min(route.workers if route else CORES, len(chosen)), initializer=_init, initargs=(mapping, trials, route)) as pool:
         measured = list(pool.map(_measure, chosen, chunksize=4))
     if trials is not None:
         for row in measured:
@@ -195,7 +207,7 @@ def grid(mapping, chosen, trials=None):
 
 
 def descent(row):
-    return (bool(row.get('available')) and row['value'] < 0) or any(t['evidence']=='evaluated' and t['quantities'].get('tpd_over_rt',0)<0 for t in row.get('supplied_trials',[]))
+    return (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(map(supplied_negative,row.get('supplied_trials',[])))
 
 
 def tally(rows):
@@ -524,21 +536,25 @@ def select():
     write('primary.json', dict(outcome='A' if run else 'B', run=run, runs={r: {k: a[k] for k in ('t', 'cost', 'passed', 'outcome_A', 'near_final', 'stability_passed')} for r, a in runs.items()}))
 
 
-def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None):
+def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None, route=None):
+    if route is not None:
+        OUT, bind, write, result, replay, endpoint_mapping, stability_row = (route.out, route.bind, route.write, route.result, route.replay, route.endpoint_mapping, route.stability_row)
+    else:
+        OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (globals()[k] for k in ("OUT", "bind", "coordinates", "write", "result", "replay", "endpoint_mapping", "stability_row"))
     rel = f'{run}/stage-{index}'
     if (OUT / rel / 'fit.json').exists():
         return result(f'{rel}/fit.json')
     spec = bind(start)
     if fitted is not None:
         spec.inputs['endpoint'] = start
-    declared = coordinates(spec, shifts, held, extra_shifts, fitted=fitted, fixed=fixed, ties=ties)
+    declared = spec.inputs['coordinates'] if route else coordinates(spec, shifts, held, extra_shifts, fitted=fitted, fixed=fixed, ties=ties)
     spec.inputs['coordinates'] = declared
     if rows is not None:
         spec.inputs['observations']['fitted'] = rows(spec)
-    controls = read(A6)['controls']
+    controls = route.controls if route else read(A6)['controls']
     # Workers sized by free memory (about 0.35 GB each, 7 GB kept for the parent and other work); the result does not depend on it.
     available = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) / 1e6
-    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=ELAPSED, workers=max(1, min(CORES, int((available - 7) / .35))))
+    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=controls.get('maximum_elapsed_time_seconds', ELAPSED), workers=route.workers if route else max(1, min(CORES, int((available - 7) / .35))))
     added = extra(spec, start) if extra else []
     if (OUT / rel / 'fit-native.json').exists():  # resume after an interrupted reduction without refitting
         report = result(f'{rel}/fit-native.json')
@@ -546,7 +562,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         stability = added + [(stability_row(spec, x, scale), 1.) for x in enforced]
         started = time.monotonic()
         native, report, _ = spec.fit(stability)
-        report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=ELAPSED, scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
+        report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=spec.spec['optimizer']['maximum_elapsed_time_seconds'], scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
                       enforced=[x['key'] for x in enforced], first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
         write(f'{rel}/fit-native.json', report)
     endpoint = None
@@ -593,21 +609,28 @@ def run_fit(run):
     retreat(run, anchor, endpoint, enforced, rows_of(cfg), (anchor_shifts, endpoint_shifts))
 
 
-def admissible(mapping, enforced, rows=None, suspects=()):
+def admissible(mapping, enforced, rows=None, suspects=(), *, route=None):
     """Admissibility on the full grid. States that failed at the previous point are searched first: any failure
     among them rejects the point without the full grid (same decision, a few searches instead of all of them)."""
+    grid_call = grid if route is None else route.grid
+    replay_call = replay if route is None else route.replay
     if suspects:
-        tal = tally(grid(mapping, suspects))
+        tal = tally(grid_call(mapping, suspects))
         if tal['descent'] or tal['unavailable']:
             return False, dict(tal, screened=True, suspects=list(suspects)), None
-    measured = grid(mapping, enforced)
+    measured = grid_call(mapping, enforced)
     tal = tally(measured)
     failed = {r['key'] for r in measured if descent(r) or not r.get('available')}
-    _, ok, cost = replay(mapping, rows)
+    _, ok, cost = replay_call(mapping, rows)
     return tal['descent'] == 0 and not tal['unavailable'] and ok, dict(tal, suspects=[x for x in enforced if x['key'] in failed]), cost
 
 
-def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
+def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=None, optimizer_report=None):
+    if route is not None:
+        OUT, write, segment = route.out, route.write, route.segment
+        admissible = lambda *args: globals()["admissible"](*args, route=route)
+    else:
+        OUT, write, segment, admissible = (globals()[k] for k in ("OUT", "write", "segment", "admissible"))
     if (OUT / run / 'retreat.json').exists():
         return
     trace = []
@@ -641,7 +664,8 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
     if passing is not None:
         write(f'{run}/candidate.json', segment(anchor, endpoint, t))
     a, e = shifts
-    write(f'{run}/retreat.json', dict(t=t, trace=trace, shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
+    disposition = 'no candidate' if passing is None else 'optimizer endpoint' if t==1 else 'interpolated'
+    write(f'{run}/retreat.json', dict(t=t, trace=trace, disposition=disposition,optimizer_converged=optimizer_report['status']=='converged' if optimizer_report else None,optimizer_cost=optimizer_report.get('data_cost',optimizer_report['final_cost']) if optimizer_report else None,retreat_cost=next((row['cost'] for row in reversed(trace) if row['admissible']),None),point_terminated_on_optimizer_tolerance=bool(t==1 and optimizer_report and optimizer_report['status']=='converged'), shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
 
 
 def assess(run, rows=None):
@@ -680,6 +704,8 @@ def assess(run, rows=None):
 
 
 if __name__ == '__main__':
+    # Historical #255 commands select their wheel; importing preserves the active pin.
+    s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = SHA, COMMIT
     command = sys.argv[1]
     spec_261()
     if command == 'qualify':
