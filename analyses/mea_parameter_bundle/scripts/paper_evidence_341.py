@@ -2,6 +2,7 @@
 # ruff: noqa: E402 -- bind the adopted wheel before using historical producers.
 import copy
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -56,7 +57,6 @@ def uncertainty():
 
 
 def comparison():
-    # Run the unchanged #339 score producer with only its current-record directory rebound.
     source = (r.B/'scripts/same_data_part1.py').read_text()
     source = source[:source.index("if __name__ == '__main__':")]
     source = source.replace("e.B / 'results/adoption-297/paper-evidence'", "Path("+repr(str(OUT/'paper-evidence'))+")")
@@ -79,7 +79,7 @@ def comparison():
 
 def weights():
     spec = r.bind(r.s.parameter_mapping(RECORD))
-    values = r.read(OUT/'candidate/replay.json')['rows']
+    values, origins = r.read(OUT/'candidate/replay.json')['rows'], r.read(OUT/'objective-origins.json')
     observations = spec.inputs['observations']['fitted']
     e.table(OUT/'objective-weights.csv',[dict(identity=x['identity'],group=x['group'],scale=o['row'].get('scale'),form=o['row'].get('form'),weight=o['weight'],cost=x['cost']) for x,o in zip(values,observations,strict=True)])
     a.write('objective-declarations.json',observations)
@@ -87,7 +87,7 @@ def weights():
     for x,o in zip(values,observations,strict=True):
         key = (x['group'],o['constructor'] if o['constructor']=='addition_enthalpy' else o['kind'],str(o['arguments'].get('species')),str(o['arguments'].get('scale',o['row'].get('scale',1.))),o['weight'])
         groups.setdefault(key,[]).append(x['cost'])
-    e.table(OUT/'objective-groups.csv',[dict(group=k[0],quantity=k[1],species=k[2],scale=k[3],weight=k[4],n=len(v),cost=sum(v),cost_percent=100*sum(v)/sum(x['cost'] for x in values),rule='Frozen objective declarations; see objective-declarations.json and #255/#338') for k,v in groups.items()])
+    e.table(OUT/'objective-groups.csv',[dict(group=k[0],quantity=k[1],species=k[2],scale=k[3],weight=k[4],n=len(v),cost=sum(v),cost_percent=100*sum(v)/sum(x['cost'] for x in values),rule=origins[k[0]][k[1]]) for k,v in groups.items()])
 
 
 def stability():
@@ -101,7 +101,7 @@ def stability():
 
 
 def inventory():
-    a.write('file-hashes.json',{str(p.relative_to(r.ROOT)):a.sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and p.name!='file-hashes.json'})
+    a.write('file-hashes.json',{name:a.sha(r.ROOT/name) for name in subprocess.check_output(['git','ls-files','--',str(OUT.relative_to(r.ROOT))],cwd=r.ROOT,text=True).splitlines() if Path(name).name!='file-hashes.json'})
 
 
 def shared():
