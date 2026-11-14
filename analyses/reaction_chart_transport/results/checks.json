@@ -1,0 +1,114 @@
+{
+  "base": "781d8c2b90ee65e70f47c4f7a0f811bdc0736044",
+  "focused": {
+    "command": "agent-heavy uv run --active --no-sync pytest tests/test_part_ii.py -q",
+    "passed": 17
+  },
+  "main": {
+    "command": "agent-heavy uv run --active --no-sync pytest -q --ignore=upstream",
+    "passed": 110,
+    "subtests_passed": 17,
+    "failed": [
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_campaigns_use_candidate_reactions_and_retain_failures",
+        "message": "ValueError: min() iterable argument is empty"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_failed_comparison_retains_failures_without_selecting_candidate",
+        "message": "epcsaft._core.ParameterError: unconsumed component/carbon-dioxide/dielectric_volume"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_cache_records_model_identity_and_separates_candidate",
+        "message": "TypeError: test_cache_records_model_identity_and_separates_candidate.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[evaluation_timeout-False]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[engine_exception-False]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[infeasible-True]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_pinned_engine_state_and_cached_replay",
+        "message": "epcsaft._core.ParameterError: missing cross association or no_cross_association: carbon-dioxide/monoethanolamine"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+        "message": "assert 24.109329984336796 == 20.959245323180852 \u00b1 2.1e-05\n  \n  comparison failed\n  Obtained: 24.109329984336796\n  Expected: 20.959245323180852 \u00b1 2.1e-05"
+      },
+      {
+        "test": "tests.test_solvent_specification::test_R1_R3_R5",
+        "message": "AssertionError: R1 STOP: residual 129: actual 1.5247547065133156, expected 1.5260514342522322\nassert 129 is None"
+      },
+      {
+        "test": "tests.test_source_corrections_152::test_public_views_refuse_execution_and_stale_hash",
+        "message": "RuntimeError: Regression readiness source hash drift for data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json: expected f2ac84cef7a792151f7b3d68ec45c05440720960d94b1c910ddba01dd93b71f6, actual 8266a9e7a0a8e3e3a867ddfac5f0e9d6bb40db1f0273d9e040eae16f9d55568d"
+      },
+      {
+        "test": "tests.test_source_corrections_152::test_declared_domain_pre_dispatch_and_protected_rows",
+        "message": "AssertionError: assert 'ae17803e1bcb...0b0401dedefed' == 'f8f64820b161...e2096988eef97'\n  \n  - f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97\n  + ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+      }
+    ],
+    "failures": 11,
+    "errors": 0
+  },
+  "changed": {
+    "command": "agent-heavy uv run --active --no-sync pytest -q",
+    "passed": 112,
+    "subtests_passed": 17,
+    "failed": [
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_campaigns_use_candidate_reactions_and_retain_failures",
+        "message": "ValueError: min() iterable argument is empty"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_failed_comparison_retains_failures_without_selecting_candidate",
+        "message": "epcsaft._core.ParameterError: unconsumed component/carbon-dioxide/dielectric_volume"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_cache_records_model_identity_and_separates_candidate",
+        "message": "TypeError: test_cache_records_model_identity_and_separates_candidate.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[evaluation_timeout-False]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[engine_exception-False]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[infeasible-True]",
+        "message": "TypeError: test_failed_state_cache_policy.<locals>.<lambda>() takes 0 positional arguments but 1 was given"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_pinned_engine_state_and_cached_replay",
+        "message": "epcsaft._core.ParameterError: missing cross association or no_cross_association: carbon-dioxide/monoethanolamine"
+      },
+      {
+        "test": "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+        "message": "assert 24.109329984336796 == 20.959245323180852 \u00b1 2.1e-05\n  \n  comparison failed\n  Obtained: 24.109329984336796\n  Expected: 20.959245323180852 \u00b1 2.1e-05"
+      },
+      {
+        "test": "tests.test_solvent_specification::test_R1_R3_R5",
+        "message": "AssertionError: R1 STOP: residual 129: actual 1.5247547065133156, expected 1.5260514342522322\nassert 129 is None"
+      },
+      {
+        "test": "tests.test_source_corrections_152::test_public_views_refuse_execution_and_stale_hash",
+        "message": "RuntimeError: Regression readiness source hash drift for data/reference/MEA/manifests/homogeneous_speciation_sentinel_contract.json: expected f2ac84cef7a792151f7b3d68ec45c05440720960d94b1c910ddba01dd93b71f6, actual 8266a9e7a0a8e3e3a867ddfac5f0e9d6bb40db1f0273d9e040eae16f9d55568d"
+      },
+      {
+        "test": "tests.test_source_corrections_152::test_declared_domain_pre_dispatch_and_protected_rows",
+        "message": "AssertionError: assert 'ae17803e1bcb...0b0401dedefed' == 'f8f64820b161...e2096988eef97'\n  \n  - f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97\n  + ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+      }
+    ],
+    "failures": 11,
+    "errors": 0
+  },
+  "identical_failure_identities_and_messages": true
+}
