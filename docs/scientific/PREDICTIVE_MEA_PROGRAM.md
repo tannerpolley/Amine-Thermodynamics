@@ -26,8 +26,8 @@ model selection and replay it through one immutable installed Engine wheel.
 Only a candidate that meets preregistered numerical and independent-comparison
 criteria may support predictive manuscript claims or column-side transfer.
 
-The Engine source repository is
-`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`. MEA requests generic
+The Engine source repository is `tannerpolley/epcsaft`
+(`/home/tnnrpolley21/Workspaces/Engineering/epcsaft`). MEA requests generic
 calculation methods through Engine issues, then may reproduce an accepted
 pinned method with an immutable packet and MEA-owned inputs. Engine Issue #80
 owns the current upstream bundle campaign; MEA Issues #83–#86 describe separate
