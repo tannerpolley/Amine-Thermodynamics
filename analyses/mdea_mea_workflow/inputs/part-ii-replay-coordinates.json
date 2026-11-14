@@ -1,0 +1,163 @@
+[
+  {
+    "targets": [
+      [
+        "temperature_law_coefficient",
+        "pair/mdea-water/k_ij/a0",
+        1.0
+      ]
+    ],
+    "origin": -0.20633734821212568,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      0.5
+    ],
+    "identity": "pair/mdea-water/k_ij/a0 / temperature_law_coefficient"
+  },
+  {
+    "targets": [
+      [
+        "temperature_law_coefficient",
+        "pair/mdea-water/k_ij/a1",
+        1.0
+      ]
+    ],
+    "origin": 0.001475040100864945,
+    "scale": 0.001,
+    "bounds": [
+      -0.01,
+      0.01
+    ],
+    "identity": "pair/mdea-water/k_ij/a1 / temperature_law_coefficient"
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "protonated-methyldiethanolamine",
+          "carbon-dioxide"
+        ],
+        1.0
+      ]
+    ],
+    "origin": 0.24818892822226704,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      0.5
+    ],
+    "identity": "['protonated-methyldiethanolamine', 'carbon-dioxide'] / k_ij"
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "protonated-methyldiethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "origin": -0.03323620782863823,
+    "scale": 0.01,
+    "bounds": [
+      -0.5,
+      0.5
+    ],
+    "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij"
+  },
+  {
+    "targets": [
+      [
+        "k_ij_reciprocal_temperature_slope",
+        [
+          "protonated-methyldiethanolamine",
+          "water"
+        ],
+        1.0
+      ]
+    ],
+    "origin": -27.10492507018966,
+    "scale": 10.0,
+    "bounds": [
+      -1000.0,
+      1000.0
+    ],
+    "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij_reciprocal_temperature_slope"
+  },
+  {
+    "targets": [
+      [
+        "k_ij",
+        [
+          "protonated-methyldiethanolamine",
+          "bicarbonate-anion"
+        ],
+        1.0
+      ]
+    ],
+    "origin": 1.0,
+    "scale": 0.01,
+    "bounds": [
+      -1.0,
+      1.0
+    ],
+    "identity": "['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij"
+  },
+  {
+    "targets": [
+      [
+        "segment_diameter",
+        "protonated-methyldiethanolamine",
+        1.0
+      ],
+      [
+        "debye_huckel_diameter",
+        "protonated-methyldiethanolamine",
+        1.0
+      ]
+    ],
+    "origin": 3.649407418440385,
+    "scale": 0.1,
+    "bounds": [
+      3.0,
+      4.5
+    ],
+    "identity": "protonated-methyldiethanolamine / segment_diameter"
+  },
+  {
+    "targets": [
+      [
+        "dispersion_energy_over_k",
+        "protonated-methyldiethanolamine",
+        1.0
+      ]
+    ],
+    "origin": 623.0430272546931,
+    "scale": 10.0,
+    "bounds": [
+      50.0,
+      950.0
+    ],
+    "identity": "protonated-methyldiethanolamine / dispersion_energy_over_k"
+  },
+  {
+    "targets": [
+      [
+        "born_diameter",
+        "protonated-methyldiethanolamine",
+        1.0
+      ]
+    ],
+    "origin": 7.0,
+    "scale": 0.1,
+    "bounds": [
+      2.0,
+      7.0
+    ],
+    "identity": "protonated-methyldiethanolamine / born_diameter"
+  }
+]
