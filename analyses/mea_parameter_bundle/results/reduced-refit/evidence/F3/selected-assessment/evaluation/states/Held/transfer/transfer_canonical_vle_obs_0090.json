@@ -1,0 +1,321 @@
+{
+  "T": 333.15,
+  "check": {
+    "balance_errors": [],
+    "failure_code": "",
+    "max_abs_stationarity": 5.684341886080802e-14,
+    "solver_status": "SUCCESS",
+    "tolerance_met": true
+  },
+  "evidence": [
+    [
+      "success",
+      true
+    ],
+    [
+      "message",
+      "converged: residual 5.6843418860808015e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.2031092266965045e-10, amplification 0"
+    ],
+    [
+      "solver_status",
+      "SUCCESS"
+    ],
+    [
+      "requested_tolerance_met",
+      true
+    ],
+    [
+      "residuals",
+      [
+        2.842170943040401e-14,
+        0.0,
+        0.0,
+        -7.105427357601002e-15,
+        0.0,
+        -5.684341886080802e-14,
+        0.0,
+        5.684341886080802e-14,
+        -2.842170943040401e-14,
+        -2.873247615974536e-15,
+        2.842170943040401e-14,
+        1.4210854715202004e-14,
+        0.0,
+        1.4973689704716518e-16,
+        0.0,
+        0.0,
+        0.0,
+        -2.051091686361139e-17,
+        0.0,
+        0.0
+      ]
+    ],
+    [
+      "classified_residuals",
+      [
+        2.842170943040401e-14,
+        0.0,
+        0.0,
+        -7.105427357601002e-15,
+        0.0,
+        -5.684341886080802e-14,
+        0.0,
+        5.684341886080802e-14,
+        -2.842170943040401e-14,
+        -2.873247615974536e-15,
+        2.842170943040401e-14,
+        1.4210854715202004e-14,
+        0.0,
+        1.4973689704716518e-16,
+        0.0,
+        0.0,
+        0.0,
+        -2.051091686361139e-17,
+        0.0,
+        0.0
+      ]
+    ],
+    [
+      "iterations/evaluations/hessian_calls",
+      [
+        15,
+        22,
+        17
+      ]
+    ],
+    [
+      "jacobian_rank/generic_nullity",
+      [
+        20,
+        0
+      ]
+    ],
+    [
+      "reduced_hessian_minimum",
+      0.0
+    ],
+    [
+      "topology_event",
+      "None_"
+    ],
+    [
+      "neutral_reference_diagnostics",
+      [
+        {
+          "message": "",
+          "observed_terminal_change": null,
+          "reaction_index": 0,
+          "reference_pressure_pa": 16402.997125900933,
+          "status": "Available",
+          "terminal_contraction": -542.0483593860808,
+          "terminal_contraction_pressure_derivative": -5.990605732925621e-09,
+          "terminal_contraction_pressure_second_derivative": 3.632236672986712e-18
+        },
+        {
+          "message": "",
+          "observed_terminal_change": null,
+          "reaction_index": 1,
+          "reference_pressure_pa": 16402.997125900933,
+          "status": "Available",
+          "terminal_contraction": -543.1658134740378,
+          "terminal_contraction_pressure_derivative": -1.2991673450847054e-08,
+          "terminal_contraction_pressure_second_derivative": 3.876227453469921e-18
+        },
+        {
+          "message": "",
+          "observed_terminal_change": null,
+          "reaction_index": 2,
+          "reference_pressure_pa": 16402.997125900933,
+          "status": "Available",
+          "terminal_contraction": -880.3436356591,
+          "terminal_contraction_pressure_derivative": -4.263143648252331e-09,
+          "terminal_contraction_pressure_second_derivative": 5.493631651040065e-18
+        },
+        {
+          "message": "",
+          "observed_terminal_change": null,
+          "reaction_index": 3,
+          "reference_pressure_pa": 100000.0,
+          "status": "Available",
+          "terminal_contraction": -45.650921493123654,
+          "terminal_contraction_pressure_derivative": 0.0,
+          "terminal_contraction_pressure_second_derivative": 0.0
+        },
+        {
+          "message": "",
+          "observed_terminal_change": null,
+          "reaction_index": 4,
+          "reference_pressure_pa": 100000.0,
+          "status": "Available",
+          "terminal_contraction": -313.6759668276602,
+          "terminal_contraction_pressure_derivative": 0.0,
+          "terminal_contraction_pressure_second_derivative": 0.0
+        }
+      ]
+    ],
+    [
+      "compiled_point_evaluation",
+      {
+        "floor": 1.2031092266965045e-10,
+        "objective": -1002.754730343591,
+        "raw_stationarity": [
+          2.842170943040401e-14,
+          0.0,
+          0.0,
+          -7.105427357601002e-15,
+          0.0,
+          -5.684341886080802e-14,
+          0.0,
+          5.684341886080802e-14,
+          -2.842170943040401e-14,
+          -2.873247615974536e-15,
+          2.842170943040401e-14,
+          1.4210854715202004e-14,
+          0.0,
+          1.4973689704716518e-16,
+          0.0,
+          0.0,
+          0.0,
+          -2.051091686361139e-17,
+          0.0,
+          0.0
+        ],
+        "raw_stationarity_max_abs": 5.684341886080802e-14
+      }
+    ]
+  ],
+  "feed": [
+    0.26890000000000003,
+    0.99998,
+    4.143729572251468,
+    1e-05,
+    1e-05,
+    8e-05,
+    1e-05,
+    0.00011,
+    1e-05
+  ],
+  "identity": "transfer:canonical:vle_obs_0090",
+  "kind": "transfer",
+  "liquid": {
+    "amount_mol": 5.143945356925031,
+    "identity": "mea-nine-species-liquid",
+    "mechanical_class": "mechanical_class_unavailable",
+    "molar_density_mol_m3": 37242.473371289045,
+    "molar_volume_m3_per_mol": 2.6851063033072334e-05,
+    "mole_fractions": [
+      1.1245596838428786e-06,
+      0.0909031650762565,
+      0.8044868864636958,
+      0.05231523967826695,
+      0.05118490449792629,
+      0.001086805577053718,
+      2.1655554245161575e-05,
+      4.9037577172725487e-11,
+      2.185438341926654e-07
+    ],
+    "packing_fraction": 0.4521001740164579,
+    "pressure_pa": 16402.997125900933,
+    "role": "liquid",
+    "support": [
+      "carbon-dioxide",
+      "monoethanolamine",
+      "water",
+      "protonated-monoethanolamine",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ]
+  },
+  "numerical_checks": {
+    "balance_errors": [],
+    "charge_residual_mol": 1.0113584246961886e-18,
+    "complete": true,
+    "failure_code": "",
+    "material_residuals_mol": [
+      -4.440892098500626e-16,
+      -2.220446049250313e-16
+    ],
+    "max_abs_stationarity": 5.684341886080802e-14,
+    "solver_status": null,
+    "tolerance_met": true
+  },
+  "phases": [
+    {
+      "amount_mol": 5.143945356925031,
+      "identity": "mea-nine-species-liquid",
+      "mechanical_class": "mechanical_class_unavailable",
+      "molar_density_mol_m3": 37242.473371289045,
+      "molar_volume_m3_per_mol": 2.6851063033072334e-05,
+      "mole_fractions": [
+        1.1245596838428786e-06,
+        0.0909031650762565,
+        0.8044868864636958,
+        0.05231523967826695,
+        0.05118490449792629,
+        0.001086805577053718,
+        2.1655554245161575e-05,
+        4.9037577172725487e-11,
+        2.185438341926654e-07
+      ],
+      "packing_fraction": 0.4521001740164579,
+      "pressure_pa": 16402.997125900933,
+      "role": "liquid",
+      "support": [
+        "carbon-dioxide",
+        "monoethanolamine",
+        "water",
+        "protonated-monoethanolamine",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ]
+    },
+    {
+      "amount_mol": 0.0,
+      "identity": "mea-neutral-incipient-vapor",
+      "mechanical_class": "mechanical_class_unavailable",
+      "molar_density_mol_m3": 5.931593596602716,
+      "molar_volume_m3_per_mol": 0.16858875843630688,
+      "mole_fractions": [
+        0.004999471043042181,
+        0.0023995870704434175,
+        0.9926009418865144
+      ],
+      "packing_fraction": 5.018181469783928e-05,
+      "pressure_pa": 16402.997125900933,
+      "role": "vapor",
+      "support": [
+        "carbon-dioxide",
+        "monoethanolamine",
+        "water"
+      ]
+    }
+  ],
+  "predictions": {
+    "co2-partial-pressure": 82.00630915004584,
+    "system-pressure": 16402.997125900933,
+    "vapor-y-co2": 0.004999471043042181,
+    "vapor-y-mea": 0.0023995870704434175,
+    "vapor-y-water": 0.9926009418865144
+  },
+  "problem": "Held",
+  "record_sha256": "d32d4fc44ceccad977f6a34878c5d6dda21bfc0732ff0e64950b682cf9a07c87",
+  "sets": {},
+  "status": "evaluated",
+  "targets": [
+    {
+      "basis": "true-species-vapor-partial-pressure",
+      "identity": "vle_obs_0090-pco2",
+      "observed": 128.39999999999998,
+      "prediction_identity": "co2-partial-pressure",
+      "scale": null,
+      "source_identity": "Aronu2011"
+    }
+  ],
+  "wall_s": 0.12644522700065863,
+  "wheel": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+}
