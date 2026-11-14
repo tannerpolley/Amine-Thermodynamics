@@ -1,9 +1,9 @@
 {
   "base": "a561ab7",
   "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
-  "part_ii_tests": "12 passed",
+  "part_ii_tests": "13 passed",
   "main_suite": "11 failed, 103 passed, 17 subtests passed",
-  "branch_suite": "11 failed, 107 passed, 17 subtests passed",
+  "branch_suite": "11 failed, 108 passed, 17 subtests passed",
   "suite_command": "agent-heavy env PYTHONPATH=src uv run --no-sync pytest -q tests analyses",
   "same_failure_identities": [
     "FAILED tests/test_solvent_specification.py::test_R1_R3_R5",
@@ -40,12 +40,28 @@
     "max_relative_prediction_error": 0.0,
     "relative_cost_error": 2.7622348852673895e-13
   },
-  "gross_added_executable_lines": {
-    "production": 28,
-    "tests": 39,
-    "total": 67
-  },
   "unavailable_search_cause": "comparison:362:cap: ValueError: initial:thermochemistry_unavailable: outside_interval: record excludes temperature",
-  "budget_decision": "Native question response allowed 67 lines after review; owner away instruction to proceed.",
-  "penalty_refusal": "Native ValueError retained under penalized-N/unavailable.json; cost-based selection continues."
+  "penalty_refusal": "Native ValueError retained under penalized-N/unavailable.json; cost-based selection continues.",
+  "line_accounting": {
+    "base": "a561ab7",
+    "production_gross_added_executable_lines": 32,
+    "production_ceiling": 60,
+    "test_gross_added_lines": 69,
+    "test_lines_include": "blank lines and comments",
+    "tests_outside_production_ceiling": true
+  },
+  "correction_round_1": {
+    "base_head": "89ae28f",
+    "continuation_loop_test": "test_failed_continuation_retains_nonconverged_endpoint: passed; reproduced candidates=[] before correction",
+    "preceding_endpoint": {
+      "status": "limit_reached",
+      "cost_history": [
+        3.0,
+        1.0
+      ],
+      "disposition": "not converged"
+    },
+    "unavailable_continuation": "stage-1/unavailable.json retains the failed attempt report and message separately",
+    "review": "corrected-head independent review pending"
+  }
 }
