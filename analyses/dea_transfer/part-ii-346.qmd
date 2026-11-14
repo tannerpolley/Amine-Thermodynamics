@@ -12,7 +12,7 @@ This notebook reports issue [#346](https://github.com/tannerpolley/Amine-Thermod
 
 Start 0 has the lowest fitted cost. The two starts are numerically tied at the optimizer's function-tolerance scale. F2 gives 28.46% mean absolute relative deviation for fitted pressures and 0.947% for fitted integral heats. The previous F0 model gives 28.63% and 0.977%, respectively. The change does not remove the pressure-shape discrepancy or the positive excess-enthalpy predictions against negative Horstmann measurements.
 
-The evidence is calibration and comparisons against previously seen observations, plus numerical replay and finite stability searches. It does not establish independent physical validation or absorber suitability. Conditional standard errors are unavailable pending the shared chart correction [#365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365). This partial result has not been independently reviewed or promoted for manuscript use.
+The evidence is calibration and comparisons against previously seen observations, plus numerical replay and finite stability searches. It does not establish independent physical validation or absorber suitability. Conditional standard errors are unavailable pending the shared chart correction [#365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365). Independent CSE review supports the bounded partial result at commit 6840ca8fa1ec1d89e54476c1c852c97c51d3badf against main 781d8c2. It does not establish full issue completion, parameter adoption or manuscript readiness. The convergence-table delimiter correction changes presentation only. The result has not been promoted for manuscript use.
 
 ## Inputs, conditions and numerical method
 
@@ -26,8 +26,8 @@ All 299 observations remain: 80 fitted, 67 not fitted, 152 comparison only. All 
 
 | Start | Native fitted cost | Replay cost | Iterations | Continuations | Termination |
 | --- | --- | --- | --- | --- | --- |
-| start-0 | 8.03397189312412 | 8.03397189312541 | 7 | 0 | Function tolerance reached. |cost_change|/cost: 3.741329e-12 <= 1.000000e-10 |
-| start-1 | 8.03397189322422 | 8.03397189322451 | 7 | 0 | Function tolerance reached. |cost_change|/cost: 1.429271e-11 <= 1.000000e-10 |
+| start-0 | 8.03397189312412 | 8.03397189312541 | 7 | 0 | Function tolerance reached. abs(cost_change)/cost: 3.741329e-12 <= 1.000000e-10 |
+| start-1 | 8.03397189322422 | 8.03397189322451 | 7 | 0 | Function tolerance reached. abs(cost_change)/cost: 1.429271e-11 <= 1.000000e-10 |
 
 **start-0 cost history:** 15.57500734521 → 8.410963110298 → 8.038196149461 → 8.034038137164 → 8.033973531592 → 8.033971934709 → 8.03397189416 → 8.033971893124.
 
