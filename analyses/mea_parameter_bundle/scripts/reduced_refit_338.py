@@ -172,39 +172,43 @@ def split_registry():
                          composition=raw['composition'], packing=math.exp(raw['split_coordinates'][-1])), source)
             result = raw.get('result', {})
             if (isinstance(result, dict) and result.get('success') and
-                (raw.get('confirmed') or raw.get('delta_G_over_RT', 0) < 0)):
+                (raw.get('confirmed') or any(raw.get(k,0)<0 for k in ('delta_G_over_RT','delta_G_over_RT_vs_original','delta_G_over_RT_vs_single_liquid')))):
                 phases = result.get('phases', [])
                 if sum(p['role']=='liquid' for p in phases) >= 2:
                     for phase in phases:
                         add(dict(kind=phase['role'], support=[r.s.COMPONENT_IDS.index(i) for i in phase['support']],
                                  composition=phase['mole_fractions'], packing=phase['packing_fraction']), source)
             for key, value in raw.items():
-                if key == 'witnesses' and isinstance(value,list) and all(isinstance(w,dict) and {'support','composition','packing'} <= w.keys() for w in value):
+                if isinstance(value,list) and all(isinstance(w,dict) and {'support','composition','packing'} <= w.keys() for w in value):
                     for witness in value:
                         add(witness, source)
                 elif isinstance(value, (dict, list)):
                     scan(value, source)
-    for path in sorted((r.B/'results').rglob('*')):
-        if not (path.name.endswith('.json') or path.name.endswith('.json.gz')):
+    import subprocess
+    import gzip
+    import re
+    omitted, unread_formats = [], []
+    paths = subprocess.check_output(['git','ls-files','-z','--','analyses/mea_parameter_bundle'],cwd=r.ROOT).decode().split('\0')
+    for source in filter(None, paths):
+        path = r.ROOT/source
+        if path.name in ('split-registry.json','split-completeness.json'):
             continue
+        data = gzip.decompress(path.read_bytes()) if path.suffix=='.gz' else path.read_bytes()
+        fields = bool(re.search(rb'composition|mole_fractions|tangent.plane|tpd_over_rt|delta_G_over_RT|witnesses',data))
         try:
-            scan(r.read(path), str(path.relative_to(r.ROOT)))
-        except json.JSONDecodeError:
-            unreadable.append(str(path.relative_to(r.ROOT)))
-    prior = r.read(OUT/'split-trials.json')
-    for key, witnesses in prior.items():
-        if key.startswith(('dense|','offset|','census|')):
-            for witness in witnesses:
-                add(witness, 'previous split-trials.json grid')
-    for witnesses in prior.get('census', {}).values():
-        for witness in witnesses:
-            add(witness, 'previous split-trials.json census')
-    old = r.read(OUT/'split-registry.json') if (OUT/'split-registry.json').exists() else {}
+            raw = r.read(path) if path.name.endswith(('.json','.json.gz')) else [json.loads(line) for line in data.splitlines() if line.strip()] if path.suffix=='.jsonl' else None
+            scan(raw,source)
+            if fields and raw is None:
+                unread_formats.append(source)
+            if fields and source not in sources:
+                omitted.append(dict(file=source, fields=sorted(set(x.decode() for x in re.findall(rb'composition[a-z_]*|mole_fractions|tangent.plane[a-z_]*|tpd_over_rt|delta_G_over_RT[a-z_]*|witnesses',data))), reason='no resolved descent, confirmed two-liquid split, or retained witness' if raw is not None else 'non-JSON composition or tangent-plane reference; not parsed'))
+        except (ValueError, UnicodeDecodeError) as exc:
+            unreadable.append(dict(file=source,reason=str(exc)))
     registry = dict(trials=[pool[k] for k in sorted(pool)], sources=sources,
-                    before_dedup=sum(sources.values()), after_dedup=len(pool), unreadable=unreadable)
+                    before_dedup=sum(sources.values()), after_dedup=len(pool), unreadable=unreadable,
+                    dedup_rule='exact kind, ordered support, full component composition and packing; no rounding')
     registry['sha256'] = a.hashlib.sha256(json.dumps(registry['trials'],sort_keys=True).encode()).hexdigest()
-    previous = old if old.get('sha256') != registry['sha256'] else dict(trials=old.get('previous_trials',[]),sha256=old.get('previous_sha256'))
-    registry.update(previous_trials=previous.get('trials',[]),previous_sha256=previous.get('sha256'))
+    write('split-completeness.json',dict(tracked_files=len(paths)-1, without_split=omitted, unreadable=unreadable, unread_formats=unread_formats))
     globals()['SPLITS'] = registry
     write('split-registry.json', registry)
     return registry
@@ -232,6 +236,7 @@ def supplied_census(task):
     print('supplied',raw['index'],len(supplied),min(t['quantities']['tpd_over_rt'] for t in supplied),flush=True)
     return dict(index=raw['index'], evaluated=len(supplied), negative=sum(t['quantities']['tpd_over_rt']<0 for t in supplied),
                 minimum_tpd=min(t['quantities']['tpd_over_rt'] for t in supplied),
+                minimum_liquid_tpd=min(t['quantities']['tpd_over_rt'] for t,w in zip(supplied,witnesses,strict=True) if w['kind']=='liquid'), unavailable=sum(t['evidence']!='evaluated' for t in supplied),
                 distances=[t['quantities']['tpd_over_rt'] for t in supplied])
 
 
@@ -245,24 +250,15 @@ def search(name, mapping):
     if path.exists():
         from concurrent.futures import ProcessPoolExecutor
         raw = r.result(f'{name}/census-raw.json.gz')
-        previous = registry.get('previous_trials',[])
-        retained = r.result(f'{name}/supplied.json.gz') if (OUT/name/'supplied.json.gz').exists() and r.read(path).get('registry_sha256')==registry.get('previous_sha256') else None
-        trials = [w for w in registry['trials'] if retained is None or w not in previous]
+        trials = registry['trials']
         with ProcessPoolExecutor(r.CORES,initializer=r.verify) as pool:
-            supplied = list(pool.map(supplied_census,[(mapping,row,trials) for row in raw])) if trials else [dict(row,distances=[]) for row in retained]
-        if retained is not None:
-            indices = [previous.index(w) if w in previous else None for w in registry['trials']]
-            for row, old in zip(supplied,retained,strict=True):
-                assert row['index']==old['index']
-                values = row['distances']
-                row['distances'] = [old['distances'][i] if i is not None else values[trials.index(w)] for w,i in zip(registry['trials'],indices,strict=True)]
-                row.update(evaluated=len(row['distances']),negative=sum(v<0 for v in row['distances']),minimum_tpd=min(row['distances']))
+            supplied = list(pool.map(supplied_census,[(mapping,row,trials) for row in raw]))
         r.write(f'{name}/supplied.json.gz',supplied)
         out = r.read(path)
         out['census']['descent_indices'] = sorted(set(out['census']['descent_indices']) | {row['index'] for row in supplied if row['negative']})
         out['census']['descent'] = len(out['census']['descent_indices'])
         out['supplied'] = dict(evaluated=sum(row['evaluated'] for row in supplied), negative=sum(row['negative'] for row in supplied),
-                               minimum_tpd=min(row['minimum_tpd'] for row in supplied), compositions=len(registry['trials']))
+                               minimum_tpd=min(row['minimum_tpd'] for row in supplied), minimum_liquid_tpd=min(row['minimum_liquid_tpd'] for row in supplied), unavailable=sum(row['unavailable'] for row in supplied), compositions=len(registry['trials']))
     else:
         chosen, offset = r.states()
         memory = r.read(OUT/'split-trials.json')

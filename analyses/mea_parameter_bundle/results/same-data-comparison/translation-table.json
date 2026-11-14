@@ -1,0 +1,32 @@
+{
+  "original_sha256": "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be",
+  "translated_sha256": "be66f6cf9df77201a632d73a3c3e341f66ce7fc77b69c3d657288f4c1899a76b",
+  "paper_attachment": "QHI67GZ8",
+  "paper_sha256": "c3d35ca54f7f4ac54727d790f18e6c4a90e271bb3f01d5a4d146b85755489459",
+  "audit": "Before filling: inspected pinned 391dfe5d parameters.py selected model fields and parameter_builder.cpp required component, pair, scalar and topology fields. Exactly three omissions in original record; no other required declarations absent.",
+  "declarations": [
+    {
+      "declaration": "model_families[kind=electrolyte].c_shell",
+      "value": 1.0,
+      "engine_source": "f2d1e01f4:engine/native/contributions/born.hpp; MEA 7035362:analyses/mea_parameter_bundle/scripts/shared_evaluation.py:MODEL_RUNTIME_DEFAULTS",
+      "paper_locator": "Appendix B p.17, both extension coefficients are one; Eqs.122-123"
+    },
+    {
+      "declaration": "model_families[kind=electrolyte].c_dielectric",
+      "value": 1.0,
+      "engine_source": "f2d1e01f4:engine/native/contributions/born.hpp; MEA 7035362:analyses/mea_parameter_bundle/scripts/shared_evaluation.py:MODEL_RUNTIME_DEFAULTS",
+      "paper_locator": "Appendix B p.17, both extension coefficients are one; Eqs.122-123"
+    },
+    {
+      "declaration": "topology.no_cross_association: carbon-dioxide/monoethanolamine",
+      "value": "all cross site edges inactive (native value 0)",
+      "engine_source": "f2d1e01f4:engine/native/surface/parameter_builder.cpp:161,297-298,425-426; reference 443a9da4:engine/native/surface/parameter_builder.cpp:165,342-343,481-482",
+      "paper_locator": "Appendix B p.17 and Table 10: only listed site pairs active; no CO2-MEA pair"
+    }
+  ],
+  "source_sha256": {
+    "f2d1e01f4:engine/native/surface/parameter_builder.cpp": "27c2f117c94c01ac0bc95b685c8e42291bd51e3fe03dd0852aaa8b83dd846617",
+    "443a9da4:engine/native/surface/parameter_builder.cpp": "909438c3c645267b12430f15eff18396938a61f28564a9a5c9f6a56480a691f6",
+    "391dfe5d:engine/native/surface/parameter_builder.cpp": "1ffa8d104a24e4a02c2c11bd95a7f76d500a737d3056403ca55f9a74381b4fd9"
+  }
+}

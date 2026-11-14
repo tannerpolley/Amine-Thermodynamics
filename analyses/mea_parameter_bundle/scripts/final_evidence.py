@@ -382,30 +382,33 @@ def phase_payload(model, problem, result):
     return row
 
 
-def stability(model, problem, result, supplied=(), retained=None):
+def stability(model, problem, result, supplied=None, retained=None):
+    if retained is None and supplied and isinstance(supplied[0],dict):
+        return stability(model,problem,result,supplied=supplied,retained=stability(model,problem,result))
     options = eq.StabilityOptions()
     trials = copy.copy(problem)
     trials.phases = [eq.Phase('trial-L',kind='liquid',support=s.COMPONENT_IDS),eq.Phase('trial-V',kind='vapor',support=s.COMPONENT_IDS[:3])]
-    payload = copy.deepcopy(retained)
-    if retained is None:
-        options.trials = trials._native(model).phases
-        report = eq.stability_test(eq.compile_problem(model,problem),result,options)
-        payload = {k:s._jsonable(getattr(report,k)) for k in
-            ('completed message candidate_coordinates standard_over_rt plane_over_rt present_phases work').split()}
-        payload['trials'] = []
-        for trial in report.trials:
-            record = {k:s._jsonable(getattr(trial,k)) for k in ('seed evidence message raw_coordinates raw_residuals '
-                'composition split_coordinates basis row_transformation quantities split_checks donor resolved_descent').split()}
-            record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
-                optimizer=phase_payload(None,None,trial.optimizer))
-            payload['trials'].append(record)
-    if supplied:
+    if retained is not None:
         trials.phases = [eq.Phase('previous-split',kind=w['kind'],support=[s.COMPONENT_IDS[i] for i in w['support']],
                          composition_guess=w['composition'],packing_guess=w['packing']) for w in supplied]
-        options.trials = trials._native(model).phases
-        options.evaluate_supplied_trials = True
-        checked = eq.stability_test(eq.compile_problem(model,problem),result,options)
-        payload['supplied_trials'] = [dict(evidence=t.evidence,quantities=s._jsonable(t.quantities),message=t.message) for t in checked.trials]
+    elif supplied is not None:
+        trials.phases = supplied
+    options.evaluate_supplied_trials = supplied is not None
+    options.trials = trials._native(model).phases
+    report = eq.stability_test(eq.compile_problem(model,problem),result,options)
+    if retained is not None:
+        payload = copy.deepcopy(retained)
+        payload['supplied_trials'] = [dict(evidence=t.evidence,quantities=s._jsonable(t.quantities),message=t.message) for t in report.trials]
+        return payload
+    payload = {k:s._jsonable(getattr(report,k)) for k in
+        ('completed message candidate_coordinates standard_over_rt plane_over_rt present_phases work').split()}
+    payload['trials'] = []
+    for trial in report.trials:
+        record = {k:s._jsonable(getattr(trial,k)) for k in ('seed evidence message raw_coordinates raw_residuals '
+            'composition split_coordinates basis row_transformation quantities split_checks donor resolved_descent').split()}
+        record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
+            optimizer=phase_payload(None,None,trial.optimizer))
+        payload['trials'].append(record)
     return payload
 
 
