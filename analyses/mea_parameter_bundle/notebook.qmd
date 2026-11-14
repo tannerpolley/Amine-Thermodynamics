@@ -6,6 +6,7 @@ resources:
   - results/density-268/**
   - results/adoption-297/**
   - results/adoption-340/**
+  - results/paper-evidence-341/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
   - results/bicarbonate-carbonate-266/**
@@ -34,6 +35,133 @@ resources:
 ---
 
 **The owner selected F2 on 13 November 2026 under [#340](https://github.com/tannerpolley/Amine-Thermodynamics/issues/340#issuecomment-6871176306).**
+
+# Paper evidence on F2 {#paper-evidence-341}
+
+The adopted F2 parameter record has 11 fitted coordinates, literature R2 and R5, and MEAH⁺ and carbamate Born diameters tied to their segment diameters. This calculation uses parameter SHA-256 `ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed` and Engine wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`, built at `391dfe5d64ede5036bf160bc6ae037ad5e14af32`.
+
+The 307 fitted predictions reproduce the adoption replay exactly (maximum relative difference zero), with data cost **150.76290287953717**. All point and curve producers are rerun on F2. Earlier studies remain frozen. The comparison is calibration quality and fixed-parameter prediction against data seen during development, with data roles stated below; it establishes no independent predictive validation.
+
+![F2 pressure curves (lines) and six-source measurements (open circles) for 30 wt% MEA. Observation temperatures within 1 K of each nominal curve are shown; source temperatures remain in the retained CSV.](results/paper-evidence-341/pressure-comparison.png)
+
+## Comparisons with the 2026 record
+
+Average absolute relative deviation is abbreviated AARD; root mean square error is RMSE. The 2026 columns retain #339's qualified published-model calculations. “Current” means F2 in this rerun. Its prior data-use disclosures remain those in the [#339 account](results/same-data-comparison/README.md): those rows are not independent validation data. The three pressure rows above 393.15 K remain excluded, as Part I requires. No agreement threshold is applied.
+
+| Observation group | n (2026/current) | 2026 role | Current role | Metric | 2026 | Current |
+|---|---:|---|---|---|---:|---:|
+| Six-source pressures | 159/159 | fitted / not fitted; see role note | 47 fitted / 112 not fitted | AARD (%) | 52.341322 | 20.971795 |
+| 47 current-fitted pressures | 47/47 | fitted / not fitted; see role note | fitted | AARD (%) | 68.89211 | 11.641589 |
+| 112 current-not-fitted pressures | 112/112 | fitted / not fitted; see role note | not fitted | AARD (%) | 45.395902 | 24.88715 |
+| Species fractions | 131/131 | fitted / not fitted; see role note | 101 fitted / 30 not fitted | RMSE (mole fraction) | 0.0076606122 | 0.0030596329 |
+| Species ratios | 6/6 | formulation not fitted; measurements used in earlier ion fit | fitted | AARD (%) | 155.36527 | 17.066944 |
+| Jakobsen carbonate share | 10/10 | formulation not fitted; measurements used in earlier ion fit | not fitted; previously assessed | AARD (%) | 540.47677 | 95.010505 |
+| Vinjarapu2024 heats | 8/8 | not fitted | fitted | RMSE (kJ/mol CO2) | 2.2836622 | 1.9789992 |
+| Arcis2011 heats | 14/14 | not fitted | not fitted | RMSE (kJ/mol CO2) | 9.1281762 | 9.0263173 |
+| Amundsen2009 loaded | 68/68 | not fitted | fitted / not fitted | RMSE (kg/m3) | 142.95354 | 6.6659521 |
+| Amundsen2009 CO2-free | 35/35 | not fitted | fitted / not fitted | RMSE (kg/m3) | 6.2346556 | 2.4407437 |
+| Hartono2014 loaded | 40/40 | not fitted | fitted / not fitted | RMSE (kg/m3) | 153.07611 | 2.0464743 |
+| Han2012 all | 67/67 | not fitted | not fitted | RMSE (kg/m3) | 135.26509 | 4.8965586 |
+| Four Hilliard heat capacities | 4/4 | not fitted | fitted | AARD (%) | 11.411425 | 2.8348269 |
+| broad Cp | 51/51 | not fitted | 2 fitted / 49 not fitted | AARD (%) | 11.394887 | 2.5396569 |
+| Weiland1997 comparison | 6/6 | not fitted | not fitted | AARD (%) | 9.2582937 | 4.8241174 |
+| Concepcion2023 comparison | 3/3 | not fitted | not fitted | AARD (%) | 14.386487 | 2.1739279 |
+| Wagner pressures | 23/23 | not fitted | not fitted | AARD (%) | 33.440199 | 25.032821 |
+| Aronu 15 wt% pressures | 33/33 | comparison only | not fitted | AARD (%) | 90.262409 | 45.079645 |
+| Aronu 45 wt% pressures | 37/37 | comparison only | not fitted | AARD (%) | 32.127884 | 45.858913 |
+| Kim heat 313.15 K | 27/27 | fitted / not fitted | not fitted | RMSE (kJ/mol CO2) | 5.8021264 | 4.9770923 |
+| Kim heat 353.15 K | 26/26 | fitted / not fitted | not fitted | RMSE (kJ/mol CO2) | 10.178328 | 9.6120074 |
+| Kim heat 393.15 K | 20/20 | not fitted | not fitted | RMSE (kJ/mol CO2) | 29.488588 | 31.773547 |
+
+
+The [published-model property tables](results/paper-evidence-341/same-data-comparison/property-tables.md) retain comparison conditions and source locators. On the identical 19 Mamun pressure rows, F2 has AARD **33.46595354%**. Published aggregate errors have only their stated dataset overlap; they are not converted into rowwise comparisons.
+
+## Conditional uncertainty
+
+The 10 interior-coordinate errors condition on the active ion–ion interaction at its lower bound, the chosen model, fixed source laws, observation weights and scales. The local covariance uses the weighted residual variance $2C/(307-10)$; its value is 1.01523840323. No residual scale or weight is selected from this factor. Conditional standard errors do not cover model-form or source-law uncertainty. The native conditional fit changes cost by only $-5.97\times10^{-12}$ and has zero displayed optimizer displacement.
+
+| Interior parameter | Unit | Conditional standard error |
+| --- | --- | --- |
+| pair/carbamate-anion/water/k_ij | dimensionless | 0.5092321367 |
+| pair/protonated-monoethanolamine/water/k_ij | dimensionless | 0.5819521734 |
+| pair/bicarbonate-anion/water/k_ij | dimensionless | 2.965245243 |
+| pair/protonated-monoethanolamine/water/k_ij/reciprocal_temperature_slope | kelvin | 32.2644922 |
+| component/protonated-monoethanolamine/segment_diameter | angstrom | 0.9514252409 |
+| component/carbamate-anion/segment_diameter | angstrom | 0.8393399223 |
+| pair/monoethanolamine/water/k_ij | dimensionless | 0.002234030766 |
+| pair/monoethanolamine/water/k_ij/reciprocal_temperature_slope | kelvin | 2.885449419 |
+| component/protonated-monoethanolamine/dispersion_energy_over_k | kelvin | 80.29506222 |
+| component/carbamate-anion/dispersion_energy_over_k | kelvin | 59.45055161 |
+
+Inward scans fix the bound ion–ion interaction independently at −0.98, −0.9 and −0.8 (1%, 5%, 10% of its interval). All converge; costs are 150.8914320876019, 151.4346686583477 and 152.16158111692508. They are diagnostic scans, without stability requalification or confidence-limit claims. The [correlations](results/paper-evidence-341/uncertainty/covariance.json), [ranking](results/paper-evidence-341/uncertainty/ranking.csv) and [linear Gaussian 95% pressure bands](results/paper-evidence-341/uncertainty/prediction-bands.csv) retain the exact values. Bands use 1.96 conditional standard errors and are not constrained to positive pressure.
+
+![Conditional sensitivity: blue points represent one conditional standard error; the active-bound coordinate represents a 1% inward step with refit.](results/paper-evidence-341/conditional-sensitivity.png)
+
+## Objective scales and weights
+
+| Group | Quantity | n | Scale range | Weights | Cost | Share | Scale and weight origin |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| common149 | partial_pressure | 47 | 1–1 | 11.1111111 | 5.962553355 | 3.954921% | Assigned log-ratio residual (scale 1), weight 1/0.3^2; reason for that allowance not recorded. Source: target-rows.json, vle_obs_* rows; objective-declarations.json common149/partial_pressure. |
+| common149 | mole_fraction | 94 | 0.0014–0.01154 | 1 | 16.48672967 | 10.93553% | Assigned scale 0.1*x_obs+0.001, weight 1; reason for relative/floor allowance and weight not recorded. Source: target-rows.json, Bottinger/Matin rows; objective-declarations.json common149/mole_fraction. |
+| common149 | addition_enthalpy | 8 | 3000–6000 | 1 | 1.386479966 | 0.9196427% | Scale uH_J_per_mol_CO2, from Vinjarapu Table 4 rows 1-8 (kJ/mol CO2 converted to J/mol CO2); weight 1, rationale not recorded. Source: heat-rows.json source_row/uH_J_per_mol_CO2; fit_observations.py heat_items. |
+| restored species | mole_fraction | 7 | 0.00244–0.01109 | 1 | 2.405564349 | 1.595594% | Assigned scale 0.1*x_obs+0.001, weight 1; reason for allowance and weight not recorded. Source: joint-added-rows.json F1 Bottinger rows, source-corrected state-packet locators. |
+| Jakobsen | amount_ratio | 6 | 0.00172793449–0.0548869258 | 1 | 12.74574985 | 8.454169% | Assigned scale 0.1*ratio_obs+0.001, weight 1; reason for allowance and weight not recorded. Ratios use printed species/total amine, Tables A1-A2 p.9902. Source: joint-added-rows.json F1 Jakobsen source_locator/denominator_species. |
+| Kiepe | pressure | 39 | 1–1 | 0.0256410256 | 0.0006790194987 | 0.000450389% | Assigned log-ratio residual (scale 1), weight 1/39 for 39 rows (unit total group weight); reason for group balance not recorded. Source: joint-added-rows.json F1 kiepe rows; Kiepe PDF p.2 Table 1. |
+| CO2-free density | phase_density | 5 | 0.5–0.5 | 10 | 13.11676589 | 8.700261% | Assigned scale 0.5 kg/m3 and weight 10; reason for these choices not recorded. Source observations: Amundsen Table 1, uncertainty pp.3099-3100; assignments: joint-added-rows.json F1 AMU-DENS rows. |
+| Cai | temperature | 25 | 1–1 | 1 | 39.82390854 | 26.41493% | Assigned scale 1 K, weight 1; reason not recorded (source reports 0.1 K resolution). Source: joint-added-rows.json F1 Cai temperature rows; Cai_1996_MEA_H2O_VLE.csv Tables 2-3 temperature_resolution_k. |
+| Cai | mole_fraction | 25 | 0.01–0.01 | 1 | 51.80738006 | 34.36348% | Assigned scale 0.01, weight 1; reason not recorded (source reports maximum composition error 0.001). Source: joint-added-rows.json F1 Cai mole_fraction rows; Cai_1996_MEA_H2O_VLE.csv Tables 2-3 composition_max_error_mole_fraction. |
+| loaded density | phase_density | 47 | 1.79111167–2.41634766 | 0.0212765957 | 0.378742865 | 0.2512175% | Scale sqrt(u_rho^2+(g*u_alpha)^2), g the neighboring-loading secant; source density/loading uncertainties: 15 Amundsen observations (Table 3 pp.3099-3100) and 32 Hartono observations (Table 3 p.1810), retaining Hartono u_rho=0.02 kg/m3 and u_alpha=0.01 mol/mol on the adopted printed-loading basis (printed_alpha_adopted_fitting_assumption_x3_sensitivity). Repository group weight 1/47, reason for group balance not recorded. Sources: density-scales.json; fit_campaign.py density_scales/stage6_weights (density_weight=1). |
+| Cp | equilibrium_isobaric_heat_capacity | 4 | 1.59309443–1.76153137 | 1 | 6.648349312 | 4.409805% | Scale 0.02*Cp_obs on molar-feed basis, J/(mol feed K); source kJ/(kg K) multiplied by 1000*feed_mass_kg/feed_amount_mol. Hilliard Appendix G.2 p.937/PDF994, accuracy +/-2% in section 4.6 pp.78-80; 2% fitting policy, weight 1 (weight rationale not recorded). Sources: a6/spec.json direct_rows; objective-declarations.json Cp rows, mass_basis=false; #338 comment 6867366135. |
+
+The fitted Cp observations and residual scales are on the **molar-feed basis, J/(mol feed K)** (`mass_basis=false`), rather than the mass basis used for the broad Cp comparisons.
+
+The [complete row declarations](results/paper-evidence-341/objective-declarations.json) and [group table](results/paper-evidence-341/objective-groups.csv) give every individual scale, weight, form and source row. Log-ratio pressure residuals have scale one; their weights are repository choices in the frozen #255/#338 objective. Difference residuals divide by the declared scale in the quantity’s unit; species fractions are dimensionless, heat is J/mol CO₂, density kg/m³, fitted heat capacity J/(mol feed K) (molar-feed basis; mass_basis=false), temperature K, and ratios dimensionless. The [group-specific origins](results/paper-evidence-341/objective-origins.json) distinguish assigned allowances from source uncertainty and explicitly mark unrecorded rationales. The declaration owner is unchanged. “target-rows.json” and “heat-rows.json” are in `data/input/fit-campaigns/`; “joint-added-rows.json” is in `results/joint-recalibration-170/amendment-6/inputs/joint-mea-water/`; “density-scales.json” is in `results/joint-recalibration-170/amendment-6/inputs/without-amundsen-0p4/`. #255 [accepted plan, Data](https://github.com/tannerpolley/Amine-Thermodynamics/issues/255#issuecomment-6718908878) preserves the a6 objective; #338 [body](https://github.com/tannerpolley/Amine-Thermodynamics/issues/338) and [result comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/338#issuecomment-6867366135) preserve its scales/weights and state the Cp molar-feed units. #339 supplies comparisons, not new weighting decisions. Density scales include source density and loading uncertainty combined in the #170 density-scale table; fixed source uncertainties and repository residual scales are not inferred sampling variances. The #255/#338 declarations also own the density group weights and the Cai weights. No weights have changed here. [Objective-weights.csv](results/paper-evidence-341/objective-weights.csv) retains the per-row cost accounting.
+
+## Reproduction check values
+
+Each state is evaluated from two different initial pressures (a factor of 1.5 apart). Every listed quantity agrees to the printed ten significant figures. Species outside a phase support are zero. Densities are equilibrium liquid mass densities; Helmholtz contributions are reduced residual molar quantities, $A_i^{res}/(nRT)$.
+
+| State | T / K | Bubble P / Pa | Liquid density / kg m⁻³ |
+| --- | --- | --- | --- |
+| Kiepe | 313.2 | 96620.50005 | 992.6594988 |
+| Cai | 350.0 | 3983.444831 | 972.7825398 |
+| common149 | 313.15 | 6639.529794 | 1060.792115 |
+
+The loaded state is 30 wt% MEA at loading 0.3 mol/mol. The CO₂–water liquid has mole fraction 0.00036 CO₂. The MEA–water liquid has mole fraction 0.9264 MEA at 350 K. [Check-values.json](results/paper-evidence-341/check-values.json) gives the full feeds, both evaluations and exact liquid species fractions.
+
+| Quantity | CO₂–water | MEA–water | Loaded 30 wt% MEA |
+| --- | --- | --- | --- |
+| association | -2.914216572 | -3.283777415 | -2.548146614 |
+| born | 0 | 0 | -6.794645267 |
+| cation_mixing | 0 | 0 | 0 |
+| debye_huckel | 0 | 0 | -0.03722854572 |
+| dipolar | 0 | 0 | 0 |
+| dispersion | -10.8483615 | -12.82081511 | -10.56887359 |
+| hard_chain | 4.893585711 | 7.127203367 | 4.784395775 |
+| residual_helmholtz | -8.868992357 | -8.977389156 | -15.16449824 |
+| x_bicarbonate-anion | 0 | 0 | 0.001204998998 |
+| x_carbamate-anion | 0 | 0 | 0.0324533626 |
+| x_carbon-dioxide | 0.00036 | 0 | 3.760071054e-07 |
+| x_carbonate-anion | 0 | 0 | 7.270063478e-06 |
+| x_hydronium-cation | 0 | 0 | 5.901616356e-11 |
+| x_hydroxide-anion | 0 | 0 | 8.380416379e-08 |
+| x_monoethanolamine | 0 | 0.9264 | 0.04609367749 |
+| x_protonated-monoethanolamine | 0 | 0 | 0.03367298547 |
+| x_water | 0.99964 | 0.0736 | 0.8865672455 |
+
+## Stability and penalty
+
+The [penalty equation and retreat method](results/paper-evidence-341/stability-penalty.md) identify the native resolved-descent definition, the weights, both stages and state/pressure rules. F2 required no penalty stage or retreat: its data cost is 150.76290287953717 and penalty cost is zero. The fresh search finds zero resolved descents at all 1908 grid, 576 offset and 162 census states, with no unavailable grid/offset cases or incomplete census states. All 568134 supplied distances (3507 registry trials at each census state) are nonnegative and available. Their minimum is 4.815477097963594e-6 RT, with liquid minimum 3.065092460019514e-5 RT. These quantities exactly reproduce the adoption search. The grid, offset, census and supplied-trial results are in [the search export](results/paper-evidence-341/stability/candidate/search.json). The supplied compositions come exclusively from the MEA registry. No new resolved descent is found, so no registry append is needed. Finite split counts are lower bounds; unavailable searches never count as stable.
+
+## Shared parameters and reaction-source ranges
+
+[Shared-parameters.json](results/paper-evidence-341/shared-parameters.json) retains the exact water, CO₂, hydronium, hydroxide, bicarbonate and carbonate declarations, their shared interactions, source records and R1–R3 laws generated from F2. [Shared-coefficients.csv](results/paper-evidence-341/shared-coefficients.csv) gives coefficient values, units and provenance. Fixed fields, topology and domain declarations remain available in the complete parameter document; the coefficient table alone is not a complete model declaration.
+
+All three source correlations have the stated range **273.15–498.15 K (0–225 °C)**: Austgen et al. (1991), Table V, p. 547, reactions 1a (R1), 4a (R2) and 5a (R3), citing Edwards et al. (1978). The current Zotero attachment `UNTA6KIT` was read at that table and its equation/standard-state discussion; PDF SHA-256 `8c0a6a57e5bf9e28b1f9da8022d54290506fe04b4286b6494ef8a44fd924f8db` matches the reading index. This records Austgen’s source-correlation range, not a new verification of every underlying Edwards measurement. F2’s R2 calculation declaration remains 293.15–393.15 K; that interval differs from the source range and does not replace it for the Part II flags. Part I selection is unchanged.
+
+## Evidence and limits
+
+[File hashes](results/paper-evidence-341/file-hashes.json) bind every retained numeric file. The result is numerical reproduction, conditional uncertainty and comparison with measurements seen during model development. It is not physical validation or a process-use qualification. Model curves, balances, availability, source exclusions, density checks and heat-pathway checks retain the original producers’ diagnostics. Earlier parameter records and their results have not been rerun or relabelled. Independent delivered review and investigator promotion are pending; no manuscript prose or generated manuscript tables are changed.
 
 # Adopted F2 record {#working-record-340}
 
