@@ -37,9 +37,48 @@ The literature R2/R5 fit F1 has fitted cost **150.5320235704**, **2.0214779164 a
 
 F1's previous start is F0 and its second start is #255's R2-held result, each with the literature laws substituted. Later previous starts use the preceding selected candidate and current starts use F0, each with the cumulative fixes substituted. F4-0 uses the same two prepared starts as F4. Both starts of every fit use the unchanged bounds, 307 observations, residual definitions, scales, weights and optimizer controls of the current record. Native stopping messages and full iteration histories are in each start's `unpenalized/attempt-0.json`. No continuation or enlarged iteration/time allowance was needed. The smallest fitted cost identifies the reported start; starts within the native relative function tolerance, 10⁻⁶ times cost, are reported as ties in [summary.json](summary.json). Ties occur for F1, F3, F4, F4-0, F5. Data outside the objective never select a start.
 
-The dense block covers 15, 25, 35 and 45 wt% MEA, 313.15–393.15 K in 10 K steps, and loading 10⁻⁵ plus 0.025–0.6 mol CO₂/mol MEA, with 108 additional census-feed grid states. The offset block covers 20, 30 and 40 wt%, 318.15–388.15 K and loading 0.0125–0.5875. The single-liquid grid uses 1.05 and 3.0 times each record's own bubble pressure; offset states use 1.5 times bubble pressure. The 162-state liquid–vapor census retains #255's 30 wt% feed and reference pressures. Each search has 1908/1908 single-liquid grid states, 576/576 offset states and 162/162 liquid–vapor census states available. Supplied trials at the earlier recorded census split compositions are evaluated separately from the Full search; `split-trials.json` retains their compositions and original phase supports. Zero split states is a lower bound on discovered splits, not proof of global stability. No penalized refit or retreat is triggered for F1–F5 or F4-0: penalized split counts are **not run**, and the penalty evaluated on their searched states is zero. F0's same-wheel #297 search is retained evidence (1908/576/162, zero splits), not relabelled as a new fit.
+The dense block covers 15, 25, 35 and 45 wt% MEA, 313.15–393.15 K in 10 K steps, and loading 10⁻⁵ plus 0.025–0.6 mol CO₂/mol MEA, with 108 additional census-feed grid states. The offset block covers 20, 30 and 40 wt%, 318.15–388.15 K and loading 0.0125–0.5875. The single-liquid grid uses 1.05 and 3.0 times each record's own bubble pressure; offset states use 1.5 times bubble pressure. The 162-state liquid–vapor census retains #255's 30 wt% feed and reference pressures. Each search has 1908/1908 single-liquid grid states, 576/576 offset states and 162/162 liquid–vapor census states available. Supplied trials at the earlier recorded census split compositions are evaluated separately from the Full search; `split-trials.json` retains the earlier state-specific record; `split-registry.json` now owns complete supplied-trial coverage, as described below. Zero split states is a lower bound on discovered splits, not proof of global stability. No penalized refit or retreat is triggered for F1–F5 or F4-0: penalized split counts are **not run**, and the penalty evaluated on their searched states is zero. F0's same-wheel #297 search is retained evidence (1908/576/162, zero splits), not relabelled as a new fit.
 
 The failure checks use actual historical unstable inputs. [supplied-trial-check.json](supplied-trial-check.json) retains state 38 with two Full-search descents and one separately evaluated supplied negative tangent-plane distance, −0.08481153988131496 RT. The supplied check does not replace search optimization. [retreat-no-endpoint-check/measured.json](retreat-no-endpoint-check/measured.json) has negative native stability measure −0.3883303218713934 at `dense|0.15|313.15|0.6|1.05`; the retreat writes no candidate when that unstable anchor has no endpoint.
+
+## Supplied-trial coverage correction
+
+The independent review at `0184aa9` found that the former 143-trial registry omitted distinct earlier MEA split compositions. The expanded [registry](split-registry.json) lists every contributing retained file: 577 files in the 8 families below, plus the previous 143 registry occurrences. The complete scan reads native trial records, successful finite-split phase records, and retained grid witnesses through the existing JSON/gzip loader. Other-amine transfers and isolated salt systems are outside this MEA mixture census. The MEA permittivity and earlier reactive-parameter result folders contain no additional native resolved split-composition records.
+
+| Retained result family | Witness occurrences |
+|---|---:|
+| `engine-3e83e19c-adoption` | 29 |
+| `engine-3e83e19c-phase` | 154 |
+| `engine-3e83e19c-phase-search` | 564 |
+| `joint-recalibration-170` | 423 |
+| `phase-diagnosis-255` | 1044 |
+| `phase-extension-201` | 176 |
+| `reduced-refit` | 5 |
+| `stable-refit-255` | 143 |
+
+There are **2681 witness occurrences before deduplication and 2111 distinct trials afterward**, against the previous 143 supplied trials. Deduplication uses exact equality of phase kind (lowercase), ordered component support, full nine-component mole-fraction vector, and packing fraction, with no rounding or tolerance. Legacy grid records without a phase kind use the existing #255 support rule: all nine components identify liquid, and the three neutral components identify vapor. Support-length finite-phase arrays are expanded by component identity with zeros outside support; native full-component arrays are preserved. Identical compositions with distinct packing remain separate. The registry also lists 19 unreadable historical JSON files: empty timing files and interrupted derivative diagnostics, which contain no retained compositions.
+
+Every trial is evaluated at **all 162 census states** of F0 and both starts of F1–F5 and F4-0, a conservative extension of the earlier state-specific checks. The existing #255 parent producer repeats its parent-state solve on the same declaration, with exact identity against the retained coordinates required; this does not repeat the 307-row objective or optimized tangent-plane searches. Native supplied-trial evaluations must all return `evaluated`. The [endpoint summary](coverage-summary.json) records the counts and minima; each endpoint's compressed `supplied.json.gz` stores all distances in registry-trial order for each census state.
+
+| Endpoint | Supplied evaluations | Minimum distance / RT | Negative distances |
+|---|---:|---:|---:|
+| F0 | 341982 | 2.159602900064783e-06 | 0 |
+| F1/previous/unpenalized | 341982 | 5.402977336643744e-06 | 0 |
+| F1/current/unpenalized | 341982 | 5.40293612516507e-06 | 0 |
+| F2/previous/unpenalized | 341982 | 4.815477097963594e-06 | 0 |
+| F2/current/unpenalized | 341982 | 4.751837451522078e-06 | 0 |
+| F3/previous/unpenalized | 341982 | 1.136039097104913e-05 | 0 |
+| F3/current/unpenalized | 341982 | 1.134502116428848e-05 | 0 |
+| F4/previous/unpenalized | 341982 | 1.158027180281351e-05 | 0 |
+| F4/current/unpenalized | 341982 | 1.158823226887762e-05 | 0 |
+| F4-0/previous/unpenalized | 341982 | 1.021214094976131e-05 | 0 |
+| F4-0/current/unpenalized | 341982 | 1.021592373717795e-05 | 0 |
+| F5/previous/unpenalized | 341982 | 1.028898375921017e-05 | 0 |
+| F5/current/unpenalized | 341982 | 1.028897418109409e-05 | 0 |
+
+No negative distance was found, so no penalized refit or retreat was triggered. The review's exact #255 `wide-pair-0.0`, state 155 composition is included. Its historical −0.019911979525488732 RT value belongs to its historical parameter vector; it is not a negative result at any F endpoint. Existing objective values, selected starts, fixed values, convergence evidence, optimized searches, agreement tables, Kiepe explanation, source-law checks and salt replay are preserved. `search.json` returns a cached result only when its registry SHA-256 matches the current trial content. When the registry expands, stored distances are reused only against their matching previous registry hash; only missing trials are evaluated, then the vectors are merged by exact trial identity. This is finite numerical verification, not proof of global stability or physical validation. Independent re-review of the correction remains pending.
+
+Reproduce only these checks, with the pinned environment, using `agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/reduced_refit_338.py coverage`.
 
 ## Agreement on identical inputs
 
@@ -168,11 +207,11 @@ agent-heavy uv run --no-sync python -u analyses/mea_parameter_bundle/scripts/red
 
 The driver resumes retained attempts and searches; delete no result to force a different optimization. The numerical campaign initially ran before the final reduction fields were completed; the final command reuses its unchanged attempts and refreshes the summaries, exact endpoint checks and conditional information without choosing a new fit. An assessment shell received SIGTERM before F5 Kim results were written; [assessment-interruption.json](assessment-interruption.json) records the exact interruption, with no numerical exception. The assessment was resumed from its retained cache without repeating a fit or changing controls. Intermediate F1 diagnostic directories were moved to ignored scratch after their native attempts were copied into the two canonical start directories.
 
-[code-accounting.json](code-accounting.json) counts **597 gross added executable lines** from `13bb6fb`, within the owner's amended 600-line ceiling. The #255 fit, search and retreat, #307 conditional-information calculation and adoption assessment producers are reused by import; no new numerical method or copied executable assessment producer is retained. Exact responsibility accounting:
+[code-accounting.json](code-accounting.json) counts **729 gross added executable lines** from `13bb6fb`, within the owner's approved **750-line** ceiling (raised for this correction from 600). The former count was 597. Existing #255, #307 and adoption producers remain the numerical owners; the optional retained report in `final_evidence.stability` reuses its supplied-trial evaluator while preserving optimized evidence. Exact accounting by responsibility:
 
 | File / responsibility | Gross added executable lines |
-|---|---|
-| final_evidence.py / stability | 8 |
+|---|---:|
+| final_evidence.py / stability | 21 |
 | final_evidence.py / phase_classification | 3 |
 | stable_refit_255.py / _init | 3 |
 | stable_refit_255.py / _measure | 19 |
@@ -185,14 +224,17 @@ The driver resumes retained attempts and searches; delete no result to force a d
 | stable_refit_255.py / census | 4 |
 | stable_refit_255.py / stage_fit | 5 |
 | stable_refit_255.py / retreat | 5 |
-| reduced_refit_338.py / module declarations and separators | 51 |
+| reduced_refit_338.py / module declarations and separators | 57 |
 | reduced_refit_338.py / write | 2 |
 | reduced_refit_338.py / table | 2 |
 | reduced_refit_338.py / laws | 43 |
 | reduced_refit_338.py / salt | 13 |
 | reduced_refit_338.py / replay | 15 |
 | reduced_refit_338.py / fit | 46 |
-| reduced_refit_338.py / search | 35 |
+| reduced_refit_338.py / split_registry | 59 |
+| reduced_refit_338.py / supplied_census | 23 |
+| reduced_refit_338.py / search | 49 |
+| reduced_refit_338.py / coverage | 17 |
 | reduced_refit_338.py / information | 26 |
 | reduced_refit_338.py / evidence | 28 |
 | reduced_refit_338.py / candidate | 44 |

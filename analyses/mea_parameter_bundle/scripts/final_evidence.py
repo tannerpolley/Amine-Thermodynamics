@@ -382,21 +382,23 @@ def phase_payload(model, problem, result):
     return row
 
 
-def stability(model, problem, result, supplied=()):
+def stability(model, problem, result, supplied=(), retained=None):
     options = eq.StabilityOptions()
     trials = copy.copy(problem)
     trials.phases = [eq.Phase('trial-L',kind='liquid',support=s.COMPONENT_IDS),eq.Phase('trial-V',kind='vapor',support=s.COMPONENT_IDS[:3])]
-    options.trials = trials._native(model).phases
-    report = eq.stability_test(eq.compile_problem(model,problem),result,options)
-    payload = {k:s._jsonable(getattr(report,k)) for k in
-        ('completed message candidate_coordinates standard_over_rt plane_over_rt present_phases work').split()}
-    payload['trials'] = []
-    for trial in report.trials:
-        record = {k:s._jsonable(getattr(trial,k)) for k in ('seed evidence message raw_coordinates raw_residuals '
-            'composition split_coordinates basis row_transformation quantities split_checks donor resolved_descent').split()}
-        record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
-            optimizer=phase_payload(None,None,trial.optimizer))
-        payload['trials'].append(record)
+    payload = copy.deepcopy(retained)
+    if retained is None:
+        options.trials = trials._native(model).phases
+        report = eq.stability_test(eq.compile_problem(model,problem),result,options)
+        payload = {k:s._jsonable(getattr(report,k)) for k in
+            ('completed message candidate_coordinates standard_over_rt plane_over_rt present_phases work').split()}
+        payload['trials'] = []
+        for trial in report.trials:
+            record = {k:s._jsonable(getattr(trial,k)) for k in ('seed evidence message raw_coordinates raw_residuals '
+                'composition split_coordinates basis row_transformation quantities split_checks donor resolved_descent').split()}
+            record.update(phase=dict(name=trial.phase.name,kind=trial.phase.kind.name.lower(),support=list(trial.phase.support)),
+                optimizer=phase_payload(None,None,trial.optimizer))
+            payload['trials'].append(record)
     if supplied:
         trials.phases = [eq.Phase('previous-split',kind=w['kind'],support=[s.COMPONENT_IDS[i] for i in w['support']],
                          composition_guess=w['composition'],packing_guess=w['packing']) for w in supplied]
