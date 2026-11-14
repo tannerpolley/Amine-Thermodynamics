@@ -79,8 +79,11 @@ def verify():
 
 # ---------------------------------------------------------------- states
 
-def states():
+def states(stocks=None, loadings=None):
     """Enforced liquid-parent grid (dense block + census nodes) and the held-out offset grid."""
+    if stocks is not None:
+        return [dict(key=f'grid:{stock}:{T}:{a}:{c}', T=round(313.15+10*i,2), stock=stock, a=a, c=c)
+                for stock in stocks for i in range(9) for T in [round(313.15+10*i,2)] for a in loadings for c in (1.05,3.)]
     dense = [dict(block='dense', wt=w, T=round(313.15 + 10 * i, 2), a=a, c=c)
              for w in (.15, .25, .35, .45) for i in range(9) for a in [1e-5] + [round(.025 * k, 4) for k in range(1, 25)] for c in (1.05, 3.)]
     census = [dict(block='census', wt=None, T=T, a=a, c=c) for T in CENSUS_T for a in CENSUS_A for c in (1.05, 3.)]
@@ -148,17 +151,18 @@ def bind(mapping):
         d.AN = saved
 
 
-def _init(mapping, trials=None):
-    global _SPEC, _TRIALS
+def _init(mapping, trials=None, route=None):
+    global _SPEC, _TRIALS, _ROUTE
+    _ROUTE = route
     _TRIALS = trials or {}
-    verify()
-    _SPEC = bind(mapping)
+    (route.verify if route else verify)()
+    _SPEC = (route.bind if route else bind)(mapping)
 
 
 def _measure(state):
     started = time.monotonic()
     try:
-        item = stability_row(_SPEC, state, 1.)
+        item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
         supplied = []
         for witness in _TRIALS.get(state['key'], []):
             phase = type(item.problem.phases[0])()
@@ -168,7 +172,7 @@ def _measure(state):
         prediction = reg.predict(_SPEC.model, item)
         out = stability_payload(prediction)
         if prediction.stability is not None:
-            out['witnesses'] = [dict(kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
+            out['witnesses'] = [dict(resolved_descent=True, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
                                 for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
         if supplied:
             item.stability_options.trials = supplied
@@ -182,11 +186,11 @@ def _measure(state):
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
-def grid(mapping, chosen, trials=None):
+def grid(mapping, chosen, trials=None, *, route=None):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
-    with ProcessPoolExecutor(min(CORES, len(chosen)), initializer=_init, initargs=(mapping, trials)) as pool:
+    with ProcessPoolExecutor(min(route.workers if route else CORES, len(chosen)), initializer=_init, initargs=(mapping, trials, route)) as pool:
         measured = list(pool.map(_measure, chosen, chunksize=4))
     if trials is not None:
         for row in measured:
@@ -524,7 +528,11 @@ def select():
     write('primary.json', dict(outcome='A' if run else 'B', run=run, runs={r: {k: a[k] for k in ('t', 'cost', 'passed', 'outcome_A', 'near_final', 'stability_passed')} for r, a in runs.items()}))
 
 
-def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None):
+def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None, route=None):
+    if route is not None:
+        OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (route.out, route.bind, route.coordinates, route.write, route.result, route.replay, route.endpoint_mapping, route.stability_row)
+    else:
+        OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (globals()[k] for k in ("OUT", "bind", "coordinates", "write", "result", "replay", "endpoint_mapping", "stability_row"))
     rel = f'{run}/stage-{index}'
     if (OUT / rel / 'fit.json').exists():
         return result(f'{rel}/fit.json')
@@ -535,10 +543,10 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     spec.inputs['coordinates'] = declared
     if rows is not None:
         spec.inputs['observations']['fitted'] = rows(spec)
-    controls = read(A6)['controls']
+    controls = route.controls if route else read(A6)['controls']
     # Workers sized by free memory (about 0.35 GB each, 7 GB kept for the parent and other work); the result does not depend on it.
     available = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1]) / 1e6
-    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=ELAPSED, workers=max(1, min(CORES, int((available - 7) / .35))))
+    spec.spec['optimizer'] = dict(controls, maximum_elapsed_time_seconds=controls.get('maximum_elapsed_time_seconds', ELAPSED), workers=route.workers if route else max(1, min(CORES, int((available - 7) / .35))))
     added = extra(spec, start) if extra else []
     if (OUT / rel / 'fit-native.json').exists():  # resume after an interrupted reduction without refitting
         report = result(f'{rel}/fit-native.json')
@@ -546,7 +554,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         stability = added + [(stability_row(spec, x, scale), 1.) for x in enforced]
         started = time.monotonic()
         native, report, _ = spec.fit(stability)
-        report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=ELAPSED, scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
+        report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=spec.spec['optimizer']['maximum_elapsed_time_seconds'], scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
                       enforced=[x['key'] for x in enforced], first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
         write(f'{rel}/fit-native.json', report)
     endpoint = None
@@ -593,21 +601,28 @@ def run_fit(run):
     retreat(run, anchor, endpoint, enforced, rows_of(cfg), (anchor_shifts, endpoint_shifts))
 
 
-def admissible(mapping, enforced, rows=None, suspects=()):
+def admissible(mapping, enforced, rows=None, suspects=(), *, route=None):
     """Admissibility on the full grid. States that failed at the previous point are searched first: any failure
     among them rejects the point without the full grid (same decision, a few searches instead of all of them)."""
+    grid_call = grid if route is None else route.grid
+    replay_call = replay if route is None else route.replay
     if suspects:
-        tal = tally(grid(mapping, suspects))
+        tal = tally(grid_call(mapping, suspects))
         if tal['descent'] or tal['unavailable']:
             return False, dict(tal, screened=True, suspects=list(suspects)), None
-    measured = grid(mapping, enforced)
+    measured = grid_call(mapping, enforced)
     tal = tally(measured)
     failed = {r['key'] for r in measured if descent(r) or not r.get('available')}
-    _, ok, cost = replay(mapping, rows)
+    _, ok, cost = replay_call(mapping, rows)
     return tal['descent'] == 0 and not tal['unavailable'] and ok, dict(tal, suspects=[x for x in enforced if x['key'] in failed]), cost
 
 
-def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None):
+def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=None):
+    if route is not None:
+        OUT, write, segment = route.out, route.write, route.segment
+        admissible = lambda *args: globals()["admissible"](*args, route=route)
+    else:
+        OUT, write, segment, admissible = (globals()[k] for k in ("OUT", "write", "segment", "admissible"))
     if (OUT / run / 'retreat.json').exists():
         return
     trace = []

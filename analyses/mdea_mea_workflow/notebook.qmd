@@ -3,6 +3,34 @@ title: "MDEA transfer with saturation-capped absorption heat"
 format: html
 ---
 
+## Shared Part II route qualification (#343 Stage A, 14 November 2026)
+
+The shared [declaration-driven route](../part-ii-route.md) reproduces all
+**278 frozen B1 fitted predictions exactly** on Engine `391dfe5d`.
+Its dimensionless weighted least-squares cost is **374.51907880524016**,
+against the retained **374.5190788051367**: relative difference
+**2.7622348852673895e-13**, below the owner-set replay tolerance **1e-8**.
+The [replay record](results/part-ii-route-replay/replay.json) retains every
+prediction, quantity unit, source row, residual and contribution to the cost;
+the [declaration](inputs/part-ii-replay.json) binds the reference by hash.
+The wheel and F2 shared-values hashes were verified.
+
+This is numerical verification of historical B1 transport through the shared
+route. It provides no new physical validation, uncertainty estimate, F2 MDEA
+fit, stability count, or model curve. The replay retains B1's fitted 7 Å Born
+diameter and previous shared R2 law; it is not an F2 prediction. The separate
+declaration checks verify F2 binding, the Born/segment tie, source-range marks
+and grid declaration. A linear-information reference checks the reused
+conditional-standard-error calculation. The full fit, penalty, supplied-trial
+and retreat campaign remains for Stage B after independent review and merge.
+The notebook evidence is not promoted for manuscript use.
+
+The one calculation interval needed by the existing MDEA data declaration is
+**288.71–422.04 K**. For shared R1–R3, **273.15–498.15 K is the
+source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards
+1978), not verified measured coverage**. MDEA dissociation uses the Part II
+278–368 K range. These source-range marks do not exclude calculation states.
+
 ## Current B1 adoption (#302, 11 November 2026)
 
 The owner adopted the #298 **B1-endpoint** on the #255 shared values and complete R2 declaration in a [post-hoc owner amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/298#issuecomment-6806627180). The original design did not pass every gate. A3 remains unrefit in `solvent_specification_mdea/A3.toml`; its old parameters are inconsistent with the adopted shared set. The A3 refit is retained only as evidence of the MEA → MDEA transfer penalty and is not adopted.
