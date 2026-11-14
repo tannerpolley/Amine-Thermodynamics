@@ -1,0 +1,126 @@
+---
+title: "Shared Part II supplied-trial memory and execution time"
+format: html
+---
+
+Issue [#368](https://github.com/tannerpolley/Amine-Thermodynamics/issues/368)
+changes when supplied trials are constructed. It does not change the
+thermodynamic model, search tolerances, supplied compositions or parameter
+adoption. The comparison base is `1cb771e`.
+
+## Ownership and replacement
+
+`Route.grid()` supplies one shared inventory to `stable_refit_255.grid()`.
+The state worker constructs native phases as it evaluates that state. The
+removed dictionary copied every trial for every state before starting any
+worker. Existing state-specific inventories remain supported for Part I.
+
+Within a state, equal kind, ordered support, full composition and packing
+identify the same input. No rounding or tolerance enters that comparison.
+Repeated inputs share an Engine evaluation; expansion to the original order
+preserves the recorded counts and classifications. Witness accumulation
+still happens after the search, so earlier states do not change later states'
+input inventories during that search.
+
+## Measured MDEA slice
+
+This is a computational feasibility measurement, not physical validation.
+The wheel is Engine `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, SHA-256
+`0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+`Route.verify()` compared installed Engine files with the pinned wheel.
+
+The #343 Stage B preparation declaration supplied 67 stocks, 56 loading
+nodes, nine temperatures (313.15–393.15 K) and both bubble-pressure multipliers
+(1.05 and 3.0). This gives 67,536 grid states plus 1,563 data states.
+The unoptimized first declared start was bound to the already adopted shared
+F2 values. No fit or new adoption was performed.
+
+The frozen provisional inventory is `/tmp/issue368/provisional-registry.json`,
+SHA-256 `985a1e64fb443620770460466bbe96ba4b98eadc0b3175be517dea50a0b40af1`.
+It was copied from #343's `/tmp/issue343-mdea-registry/candidate-registry.json`:
+2,789 records, eight species in the declaration order. Each record's named
+support was converted to indices in that order, `packing_fraction` to
+`packing`, and `liquid` to `Liquid`. Compositions were unchanged. This remains
+provisional evidence, not an adopted split record. #343 owns its corrections.
+The exact transformed measurement inventory is retained in
+[provisional-trials.json.gz](results/provisional-trials.json.gz).
+
+Both runs used `agent-heavy /usr/bin/time -v uv run --no-sync python
+/tmp/issue368/bench.py N`. The script timed `Route.grid()` and each native
+`eq.stability_test()` call; it counted returned trials with `evidence ==
+'evaluated'`. Native timing excludes parent solution, optimized search,
+process initialization, output writing and Python trial construction.
+
+| Measurement | First slice | Broader slice |
+|---|---:|---:|
+| States | 1 | 15 |
+| `Route.grid()` elapsed time, s | 4.7413 | 26.9123 |
+| Maximum resident set, KiB | 267,460 | 474,032 |
+| Supplied trials evaluated | 2,789 | 39,046 |
+| Supplied trials unavailable | 0 | 2,789 |
+| Supplied trials not applicable | 0 | 0 |
+
+The broader slice selected 12 equally spaced indices across the declared grid,
+including both ends, and data-state indices 0, 781 and 1562. Exact keys,
+classifications and timing records are retained in
+[the slice result](results/bench-12.json), [native timings](results/native-12.jsonl)
+and [time output](results/bench-12.log.gz). Thirteen state searches were available;
+one state had a supplied-parent failure, and another had an unavailable
+optimized search while all supplied trials were evaluated. One state showed
+descent. These counts do not establish the full-grid split count.
+
+`/usr/bin/time -v` reports maximum process resident memory, not the simultaneous
+sum of parent and workers. The measured 463 MiB maximum therefore does not
+certify an aggregate memory bound for a full campaign. Input trial copies no
+longer grow with grid size. Retained result records still grow with the number
+of states and trials; the slice does not qualify keeping the full MDEA result
+in memory. Never launch the full campaign based solely on this measurement.
+
+## Wall-time projection
+
+The 14 completed native calls each evaluated 2,789 trials. Their pooled mean
+was **1.15872 ms per supplied-trial evaluation**, with call-average values
+between **1.06335 and 1.24579 ms**. These are elapsed times under concurrent
+execution on a busy shared machine, not isolated CPU costs or a statistical
+confidence interval. There was one measurement run at each slice size.
+
+The requested three-core projection uses observed complete-slice throughput:
+26.9123 s / 15 states × 69,099 states = **34.44 hours per complete search**.
+The 67,536 grid states already include both pressure multipliers; they must
+not be doubled again. With 2,789 inputs per state, nominal full coverage is
+192,717,111 supplied inputs. The native-only ideal division by three gives
+20.68 hours, excluding the costs listed above, and is not the end-to-end
+projection. Exact retained arithmetic is in [projection.json](results/projection.json).
+
+The slice's failures, chunk scheduling and initialization influence the
+34.44-hour projection. Different stocks, parameters, corrections to the split
+record, new witnesses, parent failures and optimized searches can change it.
+No campaign runtime or full-grid peak memory was measured. The result supports
+planning a search that takes approximately a day or longer, subject to the
+remaining result-memory limitation; it does not support claiming the full
+campaign is ready to run safely.
+
+## Numerical identity checks
+
+The comparison executes the `1cb771e` and changed implementations against the
+same installed pinned wheel, removes only `seconds` fields, and compares
+complete result structures. The [retained verification report](results/verification.json) records the
+caller identities and exact suite failure sets. The final focused suite has
+18 passes; the new lazy-construction test fails against the base. The changed
+full suite has 113 passes and 11 failures; the baseline has 112 passes and
+the same 11 named failures. Six MEA F2 states compare exactly, covering both
+pressure multipliers at the selected grid indices 0, 1, 900, 901, 1798 and 1799.
+The duplicate check observes one native evaluation for two equal AMP loaded
+inputs and two equal retained output records. PZ rows 55 and 56, including both repeated searches and all 102 supplied
+trials per search, match exactly. AMP binary, loaded and deliberately failed
+optimized-search outputs match exactly, including support differences and
+not-applicable counts. The full DEA start-0 search matches exactly: 3,791
+states, 3,736 available, 55 unavailable and zero splits. Complete compared
+values are retained in [caller-results.json.gz](results/caller-results.json.gz)
+and [mea-F2-results.json.gz](results/mea-F2-results.json.gz).
+These checks verify preserved
+calculations; they do not validate the physical model.
+
+Independent delivered review remains a gate before merge. This notebook is
+not promoted for manuscript use. It is retained without site registration
+because this task prohibits changing `analyses/_cse-manuscript.json`.
