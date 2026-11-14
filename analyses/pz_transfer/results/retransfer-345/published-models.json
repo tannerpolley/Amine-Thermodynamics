@@ -1,0 +1,59 @@
+[
+  {
+    "dataset": "Ermatchkov",
+    "rows": 52,
+    "model": "Ermatchkov et al. 2006 Pitzer parameter set I",
+    "role_in_published_model": "not fitted",
+    "AARD_percent": 18.4,
+    "mean_absolute_error_kPa": 3.7,
+    "signed_bias_percent": null,
+    "source": "10.1021/je0601917 Table 5 p.1793",
+    "note": "Previous published model, prediction on the same 52 low-loading partial pressures; bias not reported."
+  },
+  {
+    "dataset": "Ermatchkov",
+    "rows": 52,
+    "model": "Ermatchkov et al. 2006 Pitzer parameter set II",
+    "role_in_published_model": "fitted",
+    "AARD_percent": 5.1,
+    "mean_absolute_error_kPa": 0.72,
+    "signed_bias_percent": null,
+    "source": "10.1021/je0601917 Table 5 p.1793",
+    "note": "Refitted to these data; not independent validation."
+  },
+  {
+    "dataset": "Kamps",
+    "model": "Ermatchkov et al. 2006 Pitzer parameter set I",
+    "role_in_published_model": "fitted",
+    "AARD_percent": 3.0,
+    "mean_absolute_error_kPa": 100.0,
+    "signed_bias_percent": null,
+    "source": "10.1021/je0601917 Table 5 p.1793 and footnote b",
+    "selection": "p > 0.2 MPa; no solid precipitation",
+    "note": "Published aggregate on corrected Kamps data. Our input retains original 5.063 MPa versus reprint 5.062 MPa at one row; therefore the compared input is not byte-identical."
+  },
+  {
+    "dataset": "Kamps",
+    "model": "Ermatchkov et al. 2006 Pitzer parameter set II",
+    "role_in_published_model": "fitted",
+    "AARD_percent": 3.0,
+    "mean_absolute_error_kPa": 86.0,
+    "signed_bias_percent": null,
+    "source": "10.1021/je0601917 Table 5 p.1793 and footnote b",
+    "selection": "p > 0.2 MPa; no solid precipitation",
+    "note": "Published aggregate, with the same single-row 0.001 MPa input difference stated for set I."
+  },
+  {
+    "dataset": "Hilliard",
+    "model": null,
+    "source": "No published aggregate on these exact 62 retained D.5 rows identified in the retained PZ evidence",
+    "signed_bias_percent": null
+  },
+  {
+    "dataset": "NMR",
+    "model": "Ermatchkov et al. 2003 Debye-Huckel model",
+    "role_in_published_model": "fitted",
+    "source": "10.1016/S0021-9614(03)00076-4 Sections 3-5 and Table 5",
+    "note": "Source laws fitted to these NMR data; no same-group-fraction aggregate error asserted here."
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "format": "Concatenated parts of one lossless gzip stream; decompress to the original JSON array",
+  "uncompressed_sha256": "55e9d3594af50c50c6b16efd8f0a1e44c8972740d8352480ff63c0932e484369",
+  "uncompressed_bytes": 1509424661,
+  "compressed_sha256": "2c12bb68e3b2449771e96e7a2459b0ec3f01e335db0880f6d5cb4340f28c486d",
+  "parts": [
+    {
+      "path": "search-0.json.gz.part-00",
+      "bytes": 50331648,
+      "sha256": "838bf8338d7c99bb128ebe3ca481f5b0a660b873f3cf72fbf5145ff3eadfe170"
+    },
+    {
+      "path": "search-0.json.gz.part-01",
+      "bytes": 50331648,
+      "sha256": "820866410fc6e11b683a90d9736a11d5df34be8735134d800eefe1d224893f16"
+    },
+    {
+      "path": "search-0.json.gz.part-02",
+      "bytes": 50331648,
+      "sha256": "1a581c55b572bd3eba2ef5686a78416030714d9c31624a75faf3059b046dcfbb"
+    },
+    {
+      "path": "search-0.json.gz.part-03",
+      "bytes": 21599594,
+      "sha256": "065c74255d70ea556e226e82518476bebb4bc982f4c7bae7340392d5b7eddd61"
+    }
+  ],
+  "reconstruct": "cat search-0.json.gz.part-* | gzip -dc > search-0.json",
+  "full_json_retained_locally": true
+}
