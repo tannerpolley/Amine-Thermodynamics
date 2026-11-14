@@ -113,15 +113,18 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
         if not ok:
             return None, None
     split_found = False
+    previous_endpoint = None
     for attempt in range(3):
         if route:
             report = r.stage_fit(name,attempt,scale,mapping,{},enforced if scale else [],route=route)
             if not report.get('endpoint_replay_available'):
-                return None, report
+                route.write(f'{name}/stage-{attempt}/unavailable.json',report)
+                return previous_endpoint if previous_endpoint is not None else (None, report)
             mapping = route.result(f'{name}/stage-{attempt}/parameters.json')
             assert abs(report['endpoint_replay_cost']/(report['data_cost'] if report['data_cost'] is not None else report['final_cost'])-1)<=1e-8
             split_found = any(map(r.descent,route.grid(mapping,enforced))) or split_found
             report['earlier_split'] = split_found
+            previous_endpoint = mapping, report
             if report['status']!='limit_reached':
                 break
             continue

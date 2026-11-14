@@ -186,3 +186,31 @@ def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
     assert len(endpoints)==(3 if status=='converged' and not unavailable else 1)
     assert endpoints[0]['optimizer_report']['cost_history']==[3.,1.] and all(e['split_counts']=='lower bounds' for e in endpoints)
     assert endpoints[0]['disposition']==('no split found in the available searches; 1 searches unavailable' if unavailable=='only' else 'converged but still splitting' if status=='converged' else 'not converged')
+
+
+# #359 continuation failure: exercise fit() rather than replacing its loop.
+def test_failed_continuation_retains_nonconverged_endpoint(tmp_path,monkeypatch):
+    import reduced_refit_338 as reduced
+    route = p.Route.__new__(p.Route)
+    route.out,route.config,route.controls = tmp_path,dict(starts=[1.,2.],loadings=[1e-5]),dict(function_tolerance=1e-8)
+    route.start,route.bind,route.states = lambda ref:ref,lambda point:None,lambda spec:[]
+    route.replay,route.grid = lambda point:([],True,point),lambda *args:[]
+    attempts = []
+    def stage(name,attempt,scale,mapping,*args,**kwargs):
+        attempts.append((name,attempt,mapping))
+        if attempt==1:
+            return dict(status='failed',endpoint_replay_available=False,message='continuation thermochemistry unavailable')
+        route.write(f'{name}/stage-{attempt}/parameters.json',mapping)
+        return dict(status='limit_reached',endpoint_replay_available=True,endpoint_replay_cost=mapping,data_cost=mapping,final_cost=mapping,declared=[],cost_history=[3.,mapping])
+    monkeypatch.setattr(reduced.r,'stage_fit',stage)
+    assert route.campaign() is None
+    selection = route.result('selection.json')
+    assert len(selection['candidates'])==2 and selection['chosen'] is None
+    assert [attempt for name,attempt,mapping in attempts]==[0,1,0,1]
+    for i,cost in enumerate((1.,2.)):
+        endpoint = route.result(f'start-{i}/endpoints.json')[0]
+        assert endpoint['parameters']==cost and endpoint['cost']==cost
+        assert endpoint['disposition']=='not converged' and not endpoint['optimizer_converged']
+        assert endpoint['optimizer_report']['cost_history']==[3.,cost]
+        failure = route.result(f'start-{i}/unpenalized/stage-1/unavailable.json')
+        assert failure['message']=='continuation thermochemistry unavailable' and not failure['endpoint_replay_available']
