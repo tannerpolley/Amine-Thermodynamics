@@ -1,0 +1,24 @@
+{
+  "purpose": "Correction round 1 numerical capability probes; no Stage B amine campaign",
+  "engine_commit": "391dfe5d",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "shared_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+  "frozen_parameters": {
+    "path": "../results/refit-298/B1-endpoint/endpoint.json",
+    "sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
+  },
+  "frozen_predictions": {
+    "path": "../results/refit-298/B1-endpoint/fitted-replay.json",
+    "sha256": "6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2"
+  },
+  "conditional_information_basis": "Frozen B1, 278 fitted rows, 9 coordinates, 2 active bounds held fixed",
+  "reporting_basis": "Unrefitted F2 binding on frozen B1; all 710 rows of the existing specification; native refusals retained",
+  "continuation_basis": "One real Kuranov fitted row, eight F2-tied coordinates, one native searched state at 313.15 K and loading 0.3 mol/mol; maximum_iterations=1 per attempt, at most two continuations",
+  "correlated_basis": "Three real Kuranov pressure rows, one F2 coordinate, covariance documented in correlated-cost-probe.json, one stability observation",
+  "transport_basis": "Two synthetic MDEA completed-law perturbations for declaration transport only; not adopted starts",
+  "tests_command": "PYTHONPATH=src agent-heavy uv run --no-sync pytest -q tests/test_part_ii.py",
+  "replay_command": "agent-heavy uv run --no-sync python analyses/part_ii.py analyses/mdea_mea_workflow/inputs/part-ii-replay.json replay",
+  "unit_owner": "analyses/solvent_specification_mdea/B1-declarations.toml",
+  "unit_declaration_sha256": "bc22707595e6a7fc0dfb81bb60d378efa6d49688e1592592bd32a037511ffb87",
+  "fixture": "analyses/mdea_mea_workflow/inputs/part-ii-replay.json"
+}

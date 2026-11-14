@@ -1,0 +1,349 @@
+{
+  "status": "limit_reached",
+  "message": "iteration limit reached",
+  "usable": true,
+  "acceptance": "pass",
+  "initial_cost": 0.9543734601960275,
+  "final_cost": 0.5675959520293671,
+  "data_cost": 0.5675959520293671,
+  "stability_cost": 0.0,
+  "physical": [
+    -0.20737010182120388,
+    -0.01,
+    0.1925628560458338,
+    -0.03273334156510654,
+    -348.0042998779966,
+    0.9919581706083427,
+    3.64260151915328,
+    3.64260151915328,
+    3.64260151915328,
+    620.2680993570551
+  ],
+  "optimizer": [
+    -0.1032753609078208,
+    -11.475040100864945,
+    -5.562607217643322,
+    0.050286626353169106,
+    -32.08993748078069,
+    -0.8041829391657291,
+    -0.0680589928710539,
+    -0.27749278976380126
+  ],
+  "predictions": [
+    101870.38275293192
+  ],
+  "residuals": [
+    0.3196361546591469
+  ],
+  "weighted_residuals": [
+    1.065453848863823
+  ],
+  "iterations": 1,
+  "iteration_costs": [
+    0.9543734601960275,
+    0.5675959520293671
+  ],
+  "iteration_seconds": [
+    1.5020370483398438e-05,
+    0.060929059982299805
+  ],
+  "trial_failures": 0,
+  "residual_evaluations": 1,
+  "jacobian_evaluations": 2,
+  "reactions": {
+    "aqueous": [
+      {
+        "name": "R1",
+        "stoichiometry": {
+          "water": -2.0,
+          "hydronium-cation": 1.0,
+          "hydroxide-anion": 1.0
+        },
+        "correlation": {
+          "a": 3.7290977365566675,
+          "b": -13445.9,
+          "c": -22.4773,
+          "d": 0.0,
+          "e": 0.0,
+          "f": 0.0,
+          "reference_temperature": 313.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+          "temperature_max": 422.04,
+          "temperature_min": 288.71
+        },
+        "reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution"
+        }
+      },
+      {
+        "name": "R2",
+        "stoichiometry": {
+          "carbon-dioxide": -1.0,
+          "water": -2.0,
+          "bicarbonate-anion": 1.0,
+          "hydronium-cation": 1.0
+        },
+        "correlation": {
+          "a": 24.109329984336796,
+          "b": -12092.1,
+          "c": -36.7816,
+          "d": 0.0,
+          "e": 0.0,
+          "f": 0.0,
+          "reference_temperature": 313.15,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+          "temperature_max": 422.04,
+          "temperature_min": 288.71
+        },
+        "reference": {
+          "source_basis": "CommonMolalityInfiniteDilution"
+        }
+      },
+      {
+        "name": "R3",
+        "stoichiometry": {
+          "water": -1.0,
+          "bicarbonate-anion": -1.0,
+          "carbonate-anion": 1.0,
+          "hydronium-cation": 1.0
+        },
+        "correlation": {
+          "a": 12.145792981306897,
+          "b": -12431.7,
+          "c": -35.4819,
+          "d": 0.0,
+          "e": 0.0,
+          "f": 0.0,
+          "reference_temperature": 313.15,
+          "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+          "temperature_max": 422.04,
+          "temperature_min": 288.71
+        },
+        "reference": {
+          "source_basis": "RawMoleFractionInfiniteDilution"
+        }
+      },
+      {
+        "name": "MDEA-dissociation",
+        "stoichiometry": {
+          "protonated-methyldiethanolamine": -1,
+          "water": -1,
+          "methyldiethanolamine": 1,
+          "hydronium-cation": 1
+        },
+        "correlation": {
+          "a": -16.398914976729678,
+          "b": -819.7,
+          "c": 10.976,
+          "d": 0.0,
+          "reference_temperature": 313.15,
+          "temperature_min": 288.71,
+          "temperature_max": 422.04,
+          "standard_state_id": "aqueous-molality-infinite-dilution-water-v1"
+        },
+        "reference": {
+          "source_basis": "CommonMolalityInfiniteDilution",
+          "reference_pressure_pa": 100000.0
+        }
+      }
+    ]
+  },
+  "stability_predictions": [],
+  "stability_transitions": [],
+  "covariance": {
+    "status": "not_converged",
+    "rank": 1,
+    "singular_values": [
+      1.0884412597561124
+    ],
+    "active_bounds": [
+      1
+    ],
+    "projected_gradient_norm": 0.868940865954541,
+    "right_vectors": [
+      -0.3674472875826629,
+      -0.003307025588245137,
+      -0.007377283529926167,
+      0.7492911162028099,
+      -0.0006874853715917523,
+      -0.04705806541886375,
+      -0.5318357085375468,
+      -0.13570482034339168
+    ]
+  },
+  "failures": [],
+  "workers": 3,
+  "maximum_elapsed_time_seconds": 35,
+  "scale": null,
+  "declared": [
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ],
+      "origin": -0.20633734821212568,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "pair/mdea-water/k_ij/a0 / temperature_law_coefficient"
+    },
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ],
+      "origin": 0.001475040100864945,
+      "scale": 0.001,
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "identity": "pair/mdea-water/k_ij/a1 / temperature_law_coefficient"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.24818892822226704,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'carbon-dioxide'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.03323620782863823,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -27.10492507018966,
+      "scale": 10.0,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij_reciprocal_temperature_slope"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 1.0,
+      "scale": 0.01,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 3.649407418440385,
+      "scale": 0.1,
+      "bounds": [
+        3.0,
+        4.5
+      ],
+      "identity": "protonated-methyldiethanolamine / segment_diameter"
+    },
+    {
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 623.0430272546931,
+      "scale": 10.0,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "identity": "protonated-methyldiethanolamine / dispersion_energy_over_k"
+    }
+  ],
+  "start_shifts": {},
+  "wall_s": 0.1267180799986818,
+  "statuses": [
+    "Available"
+  ],
+  "enforced": [],
+  "first_numerical_failure": "Stop.left_domain",
+  "endpoint_replay_available": true,
+  "endpoint_replay_cost": 0.5675959520287617,
+  "endpoint_prediction_difference": 1.7041690036196518e-13,
+  "endpoint_shifts": {},
+  "stability_tally": {
+    "states": 0,
+    "available": 0,
+    "descent": 0,
+    "unavailable": [],
+    "minimum_tau": null,
+    "supplied_minimum_tpd": null
+  }
+}

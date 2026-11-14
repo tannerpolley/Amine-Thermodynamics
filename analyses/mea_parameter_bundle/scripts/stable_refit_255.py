@@ -174,13 +174,23 @@ def _measure(state):
         if prediction.stability is not None:
             out['witnesses'] = [dict(resolved_descent=True, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
                                 for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
+        out['optimized_available'] = out['available']
         if supplied:
-            item.stability_options.trials = supplied
-            item.stability_options.evaluate_supplied_trials = True
-            checked = reg.predict(_SPEC.model,item)
-            out['supplied_trials'] = [] if checked.stability is None else [dict(evidence=t.evidence,quantities=jsonable(t.quantities),message=t.message) for t in checked.stability.report.trials]
-            out['supplied_available'] = len(out['supplied_trials'])==len(supplied) and all(t['evidence']=='evaluated' for t in out['supplied_trials'])
-            out['available'] = out['available'] and out['supplied_available']
+            out['supplied_available'], out['supplied_trials'] = False, []
+            try:
+                parent = item.problem
+                if prediction.pressure_reference is not None:
+                    parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
+                result = eq.solve_equilibrium(_SPEC.model,parent)
+                options = eq.StabilityOptions()
+                options.trials, options.evaluate_supplied_trials = supplied, True
+                report = eq.stability_test(eq.compile_problem(_SPEC.model,parent),result,options)
+                out['supplied_parent_pressure_Pa'] = result.pressure
+                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=jsonable(t.quantities),message=t.message) for t in report.trials]
+                out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
+            except Exception as error:
+                out['supplied_error'] = f'{type(error).__name__}: {error}'
+            out['available'] = out['optimized_available'] and out['supplied_available']
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
@@ -199,7 +209,7 @@ def grid(mapping, chosen, trials=None, *, route=None):
 
 
 def descent(row):
-    return (bool(row.get('available')) and row['value'] < 0) or any(t['evidence']=='evaluated' and t['quantities'].get('tpd_over_rt',0)<0 for t in row.get('supplied_trials',[]))
+    return (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(t['evidence']=='evaluated' and t.get('resolved_descent',False) for t in row.get('supplied_trials',[]))
 
 
 def tally(rows):
@@ -530,7 +540,7 @@ def select():
 
 def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=(), rows=None, extra=None, fitted=None, fixed=None, ties=None, route=None):
     if route is not None:
-        OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (route.out, route.bind, route.coordinates, route.write, route.result, route.replay, route.endpoint_mapping, route.stability_row)
+        OUT, bind, write, result, replay, endpoint_mapping, stability_row = (route.out, route.bind, route.write, route.result, route.replay, route.endpoint_mapping, route.stability_row)
     else:
         OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (globals()[k] for k in ("OUT", "bind", "coordinates", "write", "result", "replay", "endpoint_mapping", "stability_row"))
     rel = f'{run}/stage-{index}'
@@ -539,7 +549,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     spec = bind(start)
     if fitted is not None:
         spec.inputs['endpoint'] = start
-    declared = coordinates(spec, shifts, held, extra_shifts, fitted=fitted, fixed=fixed, ties=ties)
+    declared = spec.inputs['coordinates'] if route else coordinates(spec, shifts, held, extra_shifts, fitted=fitted, fixed=fixed, ties=ties)
     spec.inputs['coordinates'] = declared
     if rows is not None:
         spec.inputs['observations']['fitted'] = rows(spec)
@@ -617,7 +627,7 @@ def admissible(mapping, enforced, rows=None, suspects=(), *, route=None):
     return tal['descent'] == 0 and not tal['unavailable'] and ok, dict(tal, suspects=[x for x in enforced if x['key'] in failed]), cost
 
 
-def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=None):
+def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=None, optimizer_report=None):
     if route is not None:
         OUT, write, segment = route.out, route.write, route.segment
         admissible = lambda *args: globals()["admissible"](*args, route=route)
@@ -656,7 +666,8 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
     if passing is not None:
         write(f'{run}/candidate.json', segment(anchor, endpoint, t))
     a, e = shifts
-    write(f'{run}/retreat.json', dict(t=t, trace=trace, shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
+    disposition = 'no candidate' if passing is None else 'optimizer endpoint' if t==1 else 'interpolated'
+    write(f'{run}/retreat.json', dict(t=t, trace=trace, disposition=disposition,optimizer_converged=optimizer_report['status']=='converged' if optimizer_report else None,optimizer_cost=optimizer_report.get('data_cost',optimizer_report['final_cost']) if optimizer_report else None,retreat_cost=next((row['cost'] for row in reversed(trace) if row['admissible']),None),point_terminated_on_optimizer_tolerance=bool(t==1 and optimizer_report and optimizer_report['status']=='converged'), shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
 
 
 def assess(run, rows=None):

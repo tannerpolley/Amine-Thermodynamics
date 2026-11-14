@@ -129,11 +129,8 @@ def chart(par, rc):
     return coords, decl
 
 
-def uncertainty(C):
-    u = reg.MeasurementUncertainty()
-    u.output_sigma = np.sqrt(np.diag(C)).tolist()
-    u.covariance = C.ravel().tolist()
-    return u
+sys.path.insert(0,str(AN.parents[1]/'src'))
+from MEA.solvent_specification import output_uncertainty as uncertainty
 
 
 def controls(iterations=100, seconds=3600):

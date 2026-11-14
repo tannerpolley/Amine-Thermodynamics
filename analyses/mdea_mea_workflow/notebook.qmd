@@ -5,31 +5,78 @@ format: html
 
 ## Shared Part II route qualification (#343 Stage A, 14 November 2026)
 
-The shared [declaration-driven route](../part-ii-route.md) reproduces all
+The shared [declaration-driven calculation](../part-ii-route.md) reproduces all
 **278 frozen B1 fitted predictions exactly** on Engine `391dfe5d`.
 Its dimensionless weighted least-squares cost is **374.51907880524016**,
 against the retained **374.5190788051367**: relative difference
-**2.7622348852673895e-13**, below the owner-set replay tolerance **1e-8**.
-The [replay record](results/part-ii-route-replay/replay.json) retains every
-prediction, quantity unit, source row, residual and contribution to the cost;
-the [declaration](inputs/part-ii-replay.json) binds the reference by hash.
-The wheel and F2 shared-values hashes were verified.
+**2.7622348852673895e-13**, below the owner-set numerical replay tolerance **1e-8**.
+The [replay record](results/part-ii-route-replay/replay.json) now retains each
+prediction's unit and declared constructor/arguments basis, source row,
+residual and cost contribution. The original Stage A claim that units were
+retained was incorrect; correction round 1 adds their propagation and declares
+units in the existing MDEA dataset owner. The
+[declaration](inputs/part-ii-replay.json) binds the frozen reference by hash.
+The wheel and F2 shared-values hashes were verified; no Engine source changed.
 
-This is numerical verification of historical B1 transport through the shared
-route. It provides no new physical validation, uncertainty estimate, F2 MDEA
-fit, stability count, or model curve. The replay retains B1's fitted 7 Å Born
-diameter and previous shared R2 law; it is not an F2 prediction. The separate
-declaration checks verify F2 binding, the Born/segment tie, source-range marks
-and grid declaration. A linear-information reference checks the reused
-conditional-standard-error calculation. The full fit, penalty, supplied-trial
-and retreat campaign remains for Stage B after independent review and merge.
-The notebook evidence is not promoted for manuscript use.
+The correction addresses the independent review's **Not supported** finding
+for the shared capability. The original frozen replay was supported. The
+following bounded numerical checks are retained for a new independent review;
+they are not an F2 MDEA fit or an amine stability campaign.
+
+| Check | Numerical evidence and limit |
+|---|---|
+| Supplied composition | At 313.15 K, feed water:MDEA:CO2 = 10:1:0.3 mol and parent pressure 26406.39096483641 Pa (1.05 times the bubble pressure), optimized and supplied evaluations are separately available. Native supplied TPD/(RT) is 2.842170943040401e-14, with a descent error estimate 3.461382351678598e-8; no resolved descent is found in this one supplied trial. |
+| Full reduction | All 710 rows are retained, 697 predictions are available and 13 native refusals remain explicit. Both zero observations remain in absolute-error statistics and counts; their relative errors are undefined. Every record carries unit and basis, including unavailable predictions. |
+| Curve export | One source-bound pressure point at 313.24 K and loading 0.7853846925468954 mol CO2/mol MDEA gives 112004.30580404977 Pa with unit, basis and range marks. This checks export, not the shape or agreement of a fitted model curve. |
+| Correlated errors | A three-pressure-row, one-coordinate MDEA probe with one stability observation gives native initial cost 5.238594760243741, replay cost 5.238594760243742 and direct quadratic-form cost 5.238594760243740. Diagonal weighting would give 6.766184472178929. The bounded fit stops at the iteration limit. |
+| Continuation and retreat | The #338 calls make three one-iteration attempts on one real MDEA fitted row, with costs 0.5675959520293671, 0.12580000389323778 and 3.852589529149623e-5. The optimizer remains not converged. The one-state native retreat accepts fraction 1, with replay cost 3.8525895292959595e-5; optimizer convergence and termination at an optimizer tolerance both remain false. A separate prescribed-interval decision test checks fraction 0.875 and prevents an interpolated point from inheriting convergence. |
+| Complete starts | Two hashed MDEA dissociation laws retain distinct `a` values (-16.398914976729678 and -16.19891497672968), giving distinct source-bound predictions. The native chart accepts pre-existing Born ties once; a deliberately out-of-bound origin is rejected explicitly. These perturbations test transport and are not new scientific starts. |
+
+The [diagnosis](results/part-ii-route-replay/correction-1/supplied-trial-diagnosis.json)
+finds the rejected supplied-trial observation call already on main at
+`673bceb`. None of the inspected 12 retained #338 grids or the #341 grid
+(2484 rows each) entered that branch. Supplied census compositions used the
+separate native `eq.stability_test` path. The rejected call raises; the inspected
+records contain no silent numerical value from it.
+
+The real **278-row historical B1** conditional-information calculation gives
+seven finite conditional standard errors, holding the protonated-MDEA–bicarbonate
+interaction at +1 and Born diameter at 7 Å fixed at their active bounds.
+The fitted residual variance is 2.763978441367086. These are local conditional
+errors under the declared residual model, not parameter-identification or
+physical-validation evidence.
+
+| Free coordinate | Conditional standard error | Unit |
+|---|---:|---|
+| MDEA–water interaction level | 0.00134116789491 | dimensionless |
+| MDEA–water linear temperature slope | 0.0000256313289279 | 1/K |
+| Protonated-MDEA–CO2 interaction | 0.0293447002312 | dimensionless |
+| Protonated-MDEA–water interaction level | 0.00998986339847 | dimensionless |
+| Protonated-MDEA–water reciprocal temperature slope | 3.36279114196 | K |
+| Protonated-MDEA segment diameter | 0.0306149636367 | Å |
+| Protonated-MDEA dispersion energy / Boltzmann constant | 36.6855163738 | K |
+
+Exact values, coordinates and bound conditions are in the
+[conditional-information record](results/part-ii-route-replay/correction-1/historical-conditional-uncertainty.json).
+The [data rows](results/part-ii-route-replay/correction-1/data-rows.json),
+[range-separated deviations](results/part-ii-route-replay/correction-1/deviations.json),
+[curve point](results/part-ii-route-replay/correction-1/curve-data.json),
+[correlated cost](results/part-ii-route-replay/correction-1/correlated-cost-probe.json),
+[continuation and retreat](results/part-ii-route-replay/correction-1/continuation-retreat-probe.json)
+and [complete-start check](results/part-ii-route-replay/correction-1/complete-start-probe.json)
+retain the evidence. The bounded F2-bound reporting points are unrefitted;
+no comparison against published models or measurement uncertainty is inferred
+from them. A finite search gives only a lower bound on splits. No full amine
+campaign or physical validation is claimed. Stage B still waits for independent
+review and merge; these notebook results are not promoted for manuscript use.
 
 The one calculation interval needed by the existing MDEA data declaration is
 **288.71–422.04 K**. For shared R1–R3, **273.15–498.15 K is the
 source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards
 1978), not verified measured coverage**. MDEA dissociation uses the Part II
-278–368 K range. These source-range marks do not exclude calculation states.
+278–368 K range. Used laws with unknown source ranges and laws not used in a
+problem receive distinct marks; neither is classified inside or outside.
+These marks never exclude a calculation state.
 
 ## Current B1 adoption (#302, 11 November 2026)
 
