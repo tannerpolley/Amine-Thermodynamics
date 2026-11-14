@@ -157,9 +157,9 @@ No Engine capability request is needed for the inspected paths.
 ## #359 correction evidence
 
 The [verification record](mdea_mea_workflow/results/part-ii-route-replay/issue-359/verification.json)
-compares this correction with `a561ab7`: 11 Part II tests pass; the full
+compares this correction with `a561ab7`: 12 Part II tests pass; the full
 `tests analyses` suite retains precisely main's 11 failing test identities
-(106 passes versus 103). MDEA B1 reproduces all 278 predictions exactly, with
+(107 passes versus 103). MDEA B1 reproduces all 278 predictions exactly, with
 relative fitted-cost difference 2.7622348852673895e-13. Twelve fitted rows each
 from #338 F0 and #341 F2 replay exactly. These are numerical regression checks,
 not new fits or physical validation. The PZ test fixture retains the 100
@@ -167,3 +167,9 @@ native records' source hashes and JSON pointers and the two composition-only
 records separately; both Hilliard reference distances pass within the native
 numerical error estimate. The unavailable capped-heat check uses the pinned
 Engine and preserves its interval refusal without changing its temperature.
+
+The #359 correction uses 67 gross added executable lines (28 production,
+39 test), under the owner’s revised 67-line ceiling. Penalty construction
+refusals are retained in `penalized-N/unavailable.json`; they do not prevent
+cost-based selection of an already reportable endpoint. Stability never
+prioritizes an endpoint over one with a lower fitted cost.

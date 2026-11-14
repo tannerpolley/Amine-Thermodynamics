@@ -1,9 +1,9 @@
 {
   "base": "a561ab7",
   "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
-  "part_ii_tests": "11 passed",
+  "part_ii_tests": "12 passed",
   "main_suite": "11 failed, 103 passed, 17 subtests passed",
-  "branch_suite": "11 failed, 106 passed, 17 subtests passed",
+  "branch_suite": "11 failed, 107 passed, 17 subtests passed",
   "suite_command": "agent-heavy env PYTHONPATH=src uv run --no-sync pytest -q tests analyses",
   "same_failure_identities": [
     "FAILED tests/test_solvent_specification.py::test_R1_R3_R5",
@@ -41,9 +41,11 @@
     "relative_cost_error": 2.7622348852673895e-13
   },
   "gross_added_executable_lines": {
-    "production": 23,
-    "tests": 37,
-    "total": 60
+    "production": 28,
+    "tests": 39,
+    "total": 67
   },
-  "unavailable_search_cause": "comparison:362:cap: ValueError: initial:thermochemistry_unavailable: outside_interval: record excludes temperature"
+  "unavailable_search_cause": "comparison:362:cap: ValueError: initial:thermochemistry_unavailable: outside_interval: record excludes temperature",
+  "budget_decision": "Native question response allowed 67 lines after review; owner away instruction to proceed.",
+  "penalty_refusal": "Native ValueError retained under penalized-N/unavailable.json; cost-based selection continues."
 }

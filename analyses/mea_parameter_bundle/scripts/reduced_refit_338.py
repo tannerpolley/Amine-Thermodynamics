@@ -416,10 +416,8 @@ def candidate(name, start, fixed, fitted, ties, route=None):
     write_call, folder = (write,OUT) if route is None else (route.write,route.out)
     endpoints = []
     def retain(mapping, report, searched):
-        rows, ok, cost = route.replay(mapping)
-        if ok:
-            endpoints.append(dict(name=name,cost=cost,parameters=mapping,declared=report['declared'],optimizer_converged=report['status']=='converged',stable=searched['stable'],search=searched,split_counts='lower bounds',disposition='not converged' if report['status']!='converged' else 'converged and stable' if searched['stable'] else 'converged but still splitting' if any(searched[g]['descent'] for g in ('grid','offset','census')) else f"no split found in the available searches; {len(searched['grid']['unavailable'])} searches unavailable",optimizer_report=report))
-            route.write(f'{name}/endpoints.json',endpoints)
+        endpoints.append(dict(name=name,cost=report['endpoint_replay_cost'],parameters=mapping,declared=report['declared'],optimizer_converged=report['status']=='converged',stable=searched['stable'],search=searched,split_counts='lower bounds',disposition='not converged' if report['status']!='converged' else 'converged and stable' if searched['stable'] else 'converged but still splitting' if any(searched[g]['descent'] for g in ('grid','offset','census')) else f"no split found in the available searches; {len(searched['grid']['unavailable'])} searches unavailable",optimizer_report=report))
+        route.write(f'{name}/endpoints.json',endpoints)
     mapping, report = fit_call(name+'/unpenalized',start,fixed,fitted,ties)
     if mapping is None:
         return None
@@ -434,7 +432,13 @@ def candidate(name, start, fixed, fitted, ties, route=None):
         for index, scale in enumerate(r.STAGES):
             if final_report['status'] != 'converged':
                 break
-            chosen, final_report = fit_call(name+f'/penalized-{index}',chosen,fixed,fitted,ties,scale)
+            try:
+                chosen, final_report = fit_call(name+f'/penalized-{index}',chosen,fixed,fitted,ties,scale)
+            except ValueError as error:
+                if route is None: raise
+                route.write(name+f'/penalized-{index}/unavailable.json',dict(cause=str(error)))
+                chosen = None
+                break
             if chosen is None:
                 break
             searched = search_call(name+f'/penalized-{index}',chosen)
@@ -457,7 +461,7 @@ def candidate(name, start, fixed, fitted, ties, route=None):
                 chosen = None
     if route:
         converged = [point for point in endpoints if point['optimizer_converged']]
-        return min([point for point in converged if point['stable']] or converged or endpoints,key=lambda point:point['cost'])
+        return min(converged or endpoints,key=lambda point:point['cost'])
     if chosen is None:
         write_call(f'{name}/finding.json',dict(reason='no stability-enforced candidate',unpenalized=unpenalized))
         return None
