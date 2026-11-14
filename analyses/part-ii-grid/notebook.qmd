@@ -1,0 +1,156 @@
+---
+title: "Shared Part II supplied-trial memory and execution time"
+format: html
+---
+
+Issue [#368](https://github.com/tannerpolley/Amine-Thermodynamics/issues/368)
+changes result retention as well as supplied-trial construction. The comparison
+base is `1cb771e`. No equation, tolerance, supplied composition, Engine source,
+parameter adoption or manuscript changes.
+
+## Bounded work and complete disk records
+
+`Route.grid()` passes one supplied inventory to the state workers. The executor
+submits windows of at most four states per worker: 12 states with three workers.
+Each worker constructs native trials for its current state. Exact equal kind,
+ordered support, full composition and packing share an Engine evaluation;
+expansion restores the original trial order and counts, without rounding.
+
+Before returning, each worker writes its complete state record incrementally
+through gzip to `search-N/<SHA-256 of state key>.json.gz`. This preserves every
+supplied-trial record, Engine cause and support difference in the original
+order. The existing `jsonable` conversion applies to one state, including its
+established nonfinite diagnostic representation. It never copies or formats
+the full detailed search in the parent.
+
+`search-N.json` contains ordered state summaries: counts, minima, availability,
+descent classification, required resolved witnesses and a relative `details`
+reference. Neither negative nor unavailable supplied-trial lists remain in
+memory. Memory still holds state summaries and the required witness registry;
+the removed term is the product of states and full supplied-trial records.
+Part I's existing state-specific inputs remain supported.
+
+Penalty and retreat consume the same `descent()` and `tally()` quantities from
+summaries. Reporting retains unavailable-state causes and detail references.
+`Route.result(row['details'])` explicitly reads one complete state when needed.
+The next search loads only `split-record.json`, never the detailed search.
+
+## Endpoint search reuse
+
+`fit()` searches the endpoint before `candidate()` asks for its search. Reuse
+requires exact equality of the endpoint, ordered states, ordered supplied
+inventory and complete route declaration, including controls. The immutable
+wheel and the native search scale remain unchanged. Only the last matching
+result is reused. The signature and summaries do not contain detailed results.
+
+The full DEA endpoint has identical inputs: its repeated request reused the
+first result, with exactly one detailed search and identical summaries. Its
+start-state inventory was also checked against the endpoint-state inventory.
+A changed supplied inventory invalidated reuse. New resolved witnesses can
+therefore make PZ's second search different on purpose; that search still runs.
+No unconditional removal of the second search was made.
+
+## Numerical identity and failure preservation
+
+Complete decoded records, excluding `seconds` only, match the retained baseline:
+PZ Hilliard 55/56 with all 102 trials each, AMP binary/loaded/failed cases,
+six MEA F2 states and all 3,791 DEA states. DEA remains 3,736 available,
+55 unavailable and zero splits. Counts, minima and descent classification
+also agree between each streamed record and its summary in both memory slices.
+The baseline values remain in [caller-results.json.gz](results/caller-results.json.gz)
+and [mea-F2-results.json.gz](results/mea-F2-results.json.gz).
+
+The final full suite reports `11 failed, 113 passed, 17 subtests passed in 140.21s (0:02:20)`. Its 11 failure
+names exactly match the baseline; the 18 Part II tests pass. The single new test
+checks a 67,536-state inventory without eager copying or an unbounded executor
+submission. PZ's existing tests read complete records through their references.
+A separate streamed probe preserves exact duplicates, support differences and
+individual errors. A serialization-only probe preserves the established
+`nan`/`inf` strings; these synthetic diagnostics are not physical results.
+See [verification.json](results/round1/verification.json).
+
+## Measured memory and compressed disk use
+
+These are computational feasibility measurements, not physical validation.
+The installed wheel was compared byte for byte with Engine main
+`391dfe5d64ede5036bf160bc6ae037ad5e14af32`, SHA-256
+`0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+Every job used `agent-heavy`, three workers and its three-core quota.
+
+MDEA uses the provisional 2,789-trial record and unoptimized first Stage B start
+bound to adopted F2 shared values. PZ uses its own grown record (1,860 resolved
+trials plus two composition-only trials) and its retained first F2 fit endpoint.
+The source #343 and #345 worktrees were read without editing them. MDEA's
+transformed snapshot is [provisional-trials.json.gz](results/provisional-trials.json.gz);
+PZ's exact snapshot is [pz-input-trials.json.gz](results/round1/pz-input-trials.json.gz).
+Neither is a new adoption.
+
+| Measured quantity | MDEA | Piperazine |
+|---|---:|---:|
+| Slice states | 123 | 63 |
+| Supplied trials per state | 2,789 | 1,862 |
+| Supplied records evaluated | 331,891 | 117,306 |
+| Supplied records unavailable | 11,156 | 0 |
+| Supplied records not applicable | 0 | 0 |
+| Peak summed RSS, KiB | 548,908 | 397,200 |
+| Peak summed RSS, MiB | 536.04 | 387.89 |
+| Compressed detail bytes | 55,179,906 | 16,545,358 |
+| Mean compressed detail bytes/state | 448617.12 | 262624.73 |
+| Summary file bytes | 129,208 | 70,439 |
+| Complete search elapsed time, s | 151.9803 | 101.4032 |
+
+The slices select 120 MDEA grid indices or 60 PZ grid indices equally spaced
+across each complete grid, including both ends, plus the first, middle and last
+data states. Exact keys, classifications and file hashes are retained in the
+[measurement results](results/round1/mdea-120.json),
+[PZ results](results/round1/pz-60.json) and their `*-files.json` inventories.
+All full detailed files remain at the recorded `detail_root` paths; one complete
+state for each amine is also retained beside those inventories.
+
+The monitor samples `/proc` every approximately 50 ms, summing parent and
+recursive worker RSS and excluding the monitor itself. Shared resident pages
+are counted for each process, as requested by summed RSS. These are sampled
+maxima, not a continuous peak, a confidence interval or a full-campaign bound.
+The monitor spans `Route.grid()`, including worker initialization, compressed
+writes, registry update and summary serialization. There was one final run per
+slice on a busy shared machine. Preliminary runs are superseded by these final
+measurements, which include the per-state `jsonable` conversion.
+
+MDEA's 123-state slice has 118 available searches, five unavailable and one
+state with descent. PZ's 63 searches are available and three show descent.
+These are finite-search classifications at the named records, not full-grid
+split counts or evidence of physical validity. No unavailable search is stable.
+
+## Registry growth and planning consequence
+
+MDEA grew from 2,789 to 2,793 distinct resolved trials; the next search received
+all 2,793. The grown PZ slice retained all 1,862 supplied inputs and its eight
+resolved-witness occurrences were already in the registry. A separate PZ state
+starting from the original inventory grew 100 resolved trials to 104; the next
+search received 106 inputs including the two composition-only trials. A guarded
+reader recorded only `split-record.json` during that next-search setup.
+See [pz-growth.json](results/round1/pz-growth.json).
+
+The complete MDEA inventory is 67,536 grid states, already including both
+pressure multipliers, plus 1,563 data states. PZ has 8,640 grid plus 440 data
+states. Scaling each final slice's elapsed time and compressed detail bytes by
+its complete state count gives the following planning projections:
+
+| Per complete search | MDEA | Piperazine |
+|---|---:|---:|
+| Wall time at observed three-worker throughput, h | 23.72 | 4.06 |
+| Compressed detailed output, GiB | 28.87 | 2.22 |
+
+These are projections, not measured full searches. Failures, domain coverage,
+new witnesses, corrected inventories, parameter changes, compression and disk
+speed can change them. Earlier native-only batch timing averaged 1.15872 ms
+per evaluation on the same pinned wheel; it excludes disk writing and does not
+replace the complete-path measurement above. No before/after speed claim is
+made from different slices. Reused identical searches avoid another complete
+search; new inventories require their own search and disk allocation.
+
+The input and detailed-result Cartesian allocations are removed. The retained
+state summaries and required registry still grow with their own cardinalities.
+No full MDEA or PZ campaign was launched. Independent re-review remains a merge
+gate. The notebook is not promoted for manuscript use and is retained without
+site registration because `_cse-manuscript.json` is outside this task.
