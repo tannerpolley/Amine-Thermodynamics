@@ -110,5 +110,33 @@
     "failures": 11,
     "errors": 0
   },
-  "identical_failure_identities_and_messages": true
+  "identical_failure_identities_and_messages": true,
+  "correction_round_1": {
+    "previous_head": "fd471049bd37ccd18704a288febb3006279e620c",
+    "regression_before_fix": {
+      "passed": 1,
+      "failed": 1,
+      "failure": "standard-error file survives successful-then-failed rerun"
+    },
+    "two_tests_after_fix": {
+      "passed": 2,
+      "failed": 0
+    },
+    "part_ii_after_fix": {
+      "passed": 17,
+      "failed": 0
+    },
+    "commands": [
+      "agent-heavy uv run --active --no-sync pytest tests/test_part_ii.py::test_completed_reaction_chart_preserves_bounds_through_continuation tests/test_part_ii.py::test_uncertainty_identity_failure_writes_no_standard_error -q",
+      "agent-heavy uv run --active --no-sync pytest tests/test_part_ii.py -q"
+    ],
+    "dea_standard_errors_unchanged": {
+      "k_DEAH_water": 0.0034855873154973523,
+      "k_DEACOO_water": 0.054321087209096015,
+      "hydrolysis_a": 0.6151039779186511,
+      "hydrolysis_enthalpy_shift_J_mol": 1346.321881855986
+    },
+    "dea_successful_then_failed_rerun_removes_file": true,
+    "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+  }
 }

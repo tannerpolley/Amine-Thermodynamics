@@ -263,6 +263,7 @@ class Route:
         return {name: 'reaction not used' if name not in used else 'source range unknown' if self.config['reaction_ranges_K'].get(name) is None else not self.config['reaction_ranges_K'][name][0]<=T<=self.config['reaction_ranges_K'][name][1] for name in used|set(self.config['reaction_ranges_K'])}
 
     def uncertainty(self, point):
+        (self.out/'conditional-uncertainty.json').unlink(missing_ok=True)
         spec = self.bind(point)
         declared = point['coordinates']
         rows = spec.inputs['observations']['fitted']
