@@ -1,0 +1,1326 @@
+{
+  "issue": 346,
+  "parent": 337,
+  "stage": "DEA-specific inputs only; shared route interface awaits issue 343",
+  "path_basis": "repository root",
+  "units": {
+    "temperature": "K",
+    "pressure": "Pa",
+    "diameter": "angstrom",
+    "loading": "mol CO2/mol analytical DEA",
+    "heat": "J/mol CO2"
+  },
+  "shared_values": {
+    "path": "analyses/mea_parameter_bundle/results/adoption-340/part-ii-shared-values.json",
+    "sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334"
+  },
+  "shared_parameters": {
+    "path": "analyses/solvent_specification_mea/inputs/endpoint.json",
+    "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+  },
+  "parameters": {
+    "path": "analyses/dea_transfer/inputs/part-ii-346/parameters.json",
+    "sha256": "69622d9f0789a804018cadfd80f0c476cc5c91353070af57775b1701bb51b142"
+  },
+  "historical_endpoint": {
+    "path": "analyses/dea_transfer/inputs/runs/B-2-endpoint-document.json",
+    "sha256": "91c2384ef9f7b2a035962aafb72d97435a18a94595c5f16c64c9e2ac18785cdd"
+  },
+  "historical_specification": {
+    "path": "analyses/dea_transfer/runs/B-2-endpoint.toml",
+    "sha256": "e31d336f8b04203fd35c5e58a8d91056500e4cbc25f24a2b7a1fb6fd0aa7c74b"
+  },
+  "caloric": {
+    "path": "analyses/dea_transfer/inputs/caloric.json",
+    "sha256": "57f23739a599a722ff3c3d725a23331c0f0b745121ddaf950a5d06f84c0a2ea4"
+  },
+  "calculation_interval_K": [
+    293.15,
+    458.64
+  ],
+  "chemistry": {
+    "reactions": {
+      "aqueous": [
+        {
+          "name": "R1",
+          "stoichiometry": {
+            "water": -2.0,
+            "hydronium-cation": 1.0,
+            "hydroxide-anion": 1.0
+          },
+          "correlation": {
+            "a": 3.7290977365566675,
+            "b": -13445.9,
+            "c": -22.4773,
+            "d": 0.0,
+            "e": 0.0,
+            "f": 0.0,
+            "reference_temperature": 313.15,
+            "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+            "temperature_max": 458.64,
+            "temperature_min": 293.15
+          },
+          "reference": {
+            "source_basis": "RawMoleFractionInfiniteDilution"
+          }
+        },
+        {
+          "name": "R2",
+          "stoichiometry": {
+            "carbon-dioxide": -1.0,
+            "water": -2.0,
+            "bicarbonate-anion": 1.0,
+            "hydronium-cation": 1.0
+          },
+          "correlation": {
+            "a": 24.109329984336796,
+            "b": -12092.1,
+            "c": -36.7816,
+            "d": 0.0,
+            "e": 0.0,
+            "f": 0.0,
+            "reference_temperature": 313.15,
+            "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+            "temperature_max": 458.64,
+            "temperature_min": 293.15
+          },
+          "reference": {
+            "source_basis": "CommonMolalityInfiniteDilution"
+          }
+        },
+        {
+          "name": "R3",
+          "stoichiometry": {
+            "water": -1.0,
+            "bicarbonate-anion": -1.0,
+            "carbonate-anion": 1.0,
+            "hydronium-cation": 1.0
+          },
+          "correlation": {
+            "a": 12.145792981306897,
+            "b": -12431.7,
+            "c": -35.4819,
+            "d": 0.0,
+            "e": 0.0,
+            "f": 0.0,
+            "reference_temperature": 313.15,
+            "standard_state_id": "aqueous-mole-fraction-infinite-dilution-water-v1",
+            "temperature_max": 458.64,
+            "temperature_min": 293.15
+          },
+          "reference": {
+            "source_basis": "RawMoleFractionInfiniteDilution"
+          }
+        },
+        {
+          "name": "DEA-dissociation",
+          "stoichiometry": {
+            "protonated-diethanolamine": -1.0,
+            "water": -1.0,
+            "diethanolamine": 1.0,
+            "hydronium-cation": 1.0
+          },
+          "correlation": {
+            "a": -9.279878441784604,
+            "b": -4214.076107943053,
+            "c": 0.0,
+            "d": 0.009961213370801542,
+            "e": 0.0,
+            "f": 0.0,
+            "reference_temperature": 313.15,
+            "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+            "temperature_min": 293.15,
+            "temperature_max": 458.64
+          },
+          "reference": {
+            "reference_pressure_pa": 100000.0,
+            "source_basis": "CommonMolalityInfiniteDilution"
+          }
+        },
+        {
+          "name": "carbamate-hydrolysis",
+          "stoichiometry": {
+            "carbamate-anion": -1.0,
+            "water": -1.0,
+            "diethanolamine": 1.0,
+            "bicarbonate-anion": 1.0
+          },
+          "correlation": {
+            "a": 5.926331831301357,
+            "b": -2631.6483262827346,
+            "c": 0.0,
+            "d": 0.0,
+            "e": 0.0,
+            "f": 0.0,
+            "reference_temperature": 313.15,
+            "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+            "temperature_min": 293.15,
+            "temperature_max": 458.64
+          },
+          "reference": {
+            "reference_pressure_pa": 100000.0,
+            "source_basis": "CommonMolalityInfiniteDilution"
+          }
+        }
+      ]
+    },
+    "neutral_references": {
+      "aqueous": {
+        "solvent": "water",
+        "solute_molality_ratios": {
+          "carbon-dioxide": 0.125,
+          "diethanolamine": 0.125,
+          "protonated-diethanolamine": 0.625,
+          "carbamate-anion": 0.25,
+          "bicarbonate-anion": 0.125,
+          "carbonate-anion": 0.125,
+          "hydronium-cation": 0.125,
+          "hydroxide-anion": 0.125
+        },
+        "standard_molality_mol_per_kg": 1.0,
+        "species_reference": {}
+      }
+    }
+  },
+  "templates": {
+    "loaded-liquid": {
+      "T": "$T",
+      "P": "$P",
+      "feed": {
+        "basis": "amounts",
+        "values": {
+          "water": "$water",
+          "diethanolamine": 1.0,
+          "carbon-dioxide": "$alpha"
+        }
+      },
+      "phases": [
+        {
+          "name": "L",
+          "kind": "liquid",
+          "support": [
+            "water",
+            "diethanolamine",
+            "carbon-dioxide",
+            "protonated-diethanolamine",
+            "carbamate-anion",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        }
+      ],
+      "reaction_set": "aqueous",
+      "neutral_reference": "aqueous",
+      "row_tolerance": 1e-10
+    },
+    "zero-liquid": {
+      "T": "$T",
+      "P": "$P",
+      "feed": {
+        "basis": "amounts",
+        "values": {
+          "water": "$water",
+          "diethanolamine": 1.0,
+          "carbon-dioxide": 0.0
+        }
+      },
+      "phases": [
+        {
+          "name": "L",
+          "kind": "liquid",
+          "support": [
+            "water",
+            "diethanolamine",
+            "carbon-dioxide",
+            "protonated-diethanolamine",
+            "carbamate-anion",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        }
+      ],
+      "reaction_set": "aqueous",
+      "neutral_reference": "aqueous",
+      "row_tolerance": 1e-10
+    },
+    "loaded-bubble": {
+      "T": "$T",
+      "P": {
+        "free": true,
+        "guess": "$P"
+      },
+      "feed": {
+        "basis": "amounts",
+        "values": {
+          "water": "$water",
+          "diethanolamine": 1.0,
+          "carbon-dioxide": "$alpha"
+        }
+      },
+      "phases": [
+        {
+          "name": "L",
+          "kind": "liquid",
+          "support": [
+            "water",
+            "diethanolamine",
+            "carbon-dioxide",
+            "protonated-diethanolamine",
+            "carbamate-anion",
+            "bicarbonate-anion",
+            "carbonate-anion",
+            "hydronium-cation",
+            "hydroxide-anion"
+          ]
+        },
+        {
+          "name": "V",
+          "kind": "vapor",
+          "support": [
+            "water",
+            "diethanolamine",
+            "carbon-dioxide"
+          ],
+          "amount": {
+            "status": "pinned",
+            "value": 0.0
+          },
+          "composition_guess": {
+            "water": 0.1,
+            "diethanolamine": 1e-05,
+            "carbon-dioxide": 0.9
+          }
+        }
+      ],
+      "reaction_set": "aqueous",
+      "neutral_reference": "aqueous",
+      "row_tolerance": 1e-10
+    }
+  },
+  "element_formulas": {
+    "carbon-dioxide": {
+      "C": 1,
+      "O": 2,
+      "charge": 0
+    },
+    "water": {
+      "H": 2,
+      "O": 1,
+      "charge": 0
+    },
+    "bicarbonate-anion": {
+      "H": 1,
+      "C": 1,
+      "O": 3,
+      "charge": -1
+    },
+    "carbonate-anion": {
+      "C": 1,
+      "O": 3,
+      "charge": -2
+    },
+    "hydronium-cation": {
+      "H": 3,
+      "O": 1,
+      "charge": 1
+    },
+    "hydroxide-anion": {
+      "H": 1,
+      "O": 1,
+      "charge": -1
+    },
+    "diethanolamine": {
+      "C": 4,
+      "H": 11,
+      "N": 1,
+      "O": 2,
+      "charge": 0
+    },
+    "protonated-diethanolamine": {
+      "C": 4,
+      "H": 12,
+      "N": 1,
+      "O": 2,
+      "charge": 1
+    },
+    "carbamate-anion": {
+      "C": 5,
+      "H": 10,
+      "N": 1,
+      "O": 4,
+      "charge": -1
+    }
+  },
+  "analytical_components": {
+    "carbon-dioxide": {
+      "carbon-dioxide": 1
+    },
+    "diethanolamine": {
+      "diethanolamine": 1
+    },
+    "water": {
+      "water": 1
+    },
+    "protonated-diethanolamine": {
+      "diethanolamine": 1
+    },
+    "carbamate-anion": {
+      "diethanolamine": 1,
+      "carbon-dioxide": 1
+    },
+    "bicarbonate-anion": {
+      "carbon-dioxide": 1,
+      "water": 1
+    },
+    "carbonate-anion": {
+      "carbon-dioxide": 1,
+      "water": 1
+    },
+    "hydronium-cation": {
+      "water": 1
+    },
+    "hydroxide-anion": {
+      "water": 1
+    }
+  },
+  "phase_policy": {
+    "carbon_component": "carbon-dioxide",
+    "carbon_species": [
+      "carbon-dioxide",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "carbamate-anion"
+    ],
+    "neutral_species": [
+      "water",
+      "diethanolamine",
+      "carbon-dioxide"
+    ],
+    "packing_fraction_threshold": 0.1,
+    "ambiguity_interval": [
+      0.05,
+      0.35
+    ]
+  },
+  "ion_diameter_ties": [
+    {
+      "component": "protonated-diethanolamine",
+      "target": "born_diameter",
+      "source": "segment_diameter",
+      "multiplier": 1.0
+    },
+    {
+      "component": "carbamate-anion",
+      "target": "born_diameter",
+      "source": "segment_diameter",
+      "multiplier": 1.0
+    }
+  ],
+  "cation_bicarbonate_interaction": "Fixed at its retained zero value; not fitted.",
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-diethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.2,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ]
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "carbamate-anion",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.0,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ]
+    },
+    {
+      "kind": "reaction_coordinate",
+      "name": "carbamate-hydrolysis",
+      "coefficient": "a",
+      "origin": 7.914436361200609,
+      "scale": 1.0,
+      "bounds": [
+        4.56443636120061,
+        10.56443636120061
+      ]
+    },
+    {
+      "kind": "reaction_enthalpy_shift",
+      "name": "carbamate-hydrolysis",
+      "pivot_temperature": 313.15,
+      "origin": 0.0,
+      "scale": 1000.0,
+      "bounds": [
+        -19000.0,
+        21000.0
+      ]
+    }
+  ],
+  "coordinate_chart": {
+    "source": {
+      "path": "analyses/dea_transfer/inputs/runs/B-2-coordinates.json",
+      "sha256": "7402f93dd3334eae251b38df951d2fdc310a730bf0045871bb83482524e75beb"
+    },
+    "carbamate_hydrolysis_anchor": {
+      "a": 7.914436361200609,
+      "b": -2777.908145152409,
+      "c": 0.0,
+      "d": 0.0,
+      "e": 0.0,
+      "f": 0.0,
+      "reference_temperature": 313.15,
+      "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+      "temperature_min": 293.15,
+      "temperature_max": 458.64
+    },
+    "note": "Retain the B-2 chart bounds and enthalpy pivot. Endpoint native chart values are relative to this anchor, not a recentered enthalpy bound."
+  },
+  "starts": [
+    {
+      "name": "retained endpoint",
+      "parameters": {
+        "path": "analyses/dea_transfer/inputs/part-ii-346/parameters.json",
+        "sha256": "69622d9f0789a804018cadfd80f0c476cc5c91353070af57775b1701bb51b142"
+      },
+      "carbamate_hydrolysis": {
+        "a": 5.926331831301357,
+        "b": -2631.6483262827346,
+        "c": 0.0,
+        "d": 0.0,
+        "e": 0.0,
+        "f": 0.0,
+        "reference_temperature": 313.15,
+        "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+        "temperature_min": 293.15,
+        "temperature_max": 458.64
+      },
+      "retained_physical": [
+        -0.2151637014268124,
+        0.005714802739846051,
+        6.393391767018024,
+        -1216.0717965297702
+      ],
+      "retained_optimizer": [
+        -0.30327402853624785,
+        0.11429605479692102,
+        -1.5210445941825852,
+        -1.21607179652977
+      ],
+      "source": {
+        "path": "analyses/dea_transfer/results/fit-runs/B-2-fit.json",
+        "sha256": "1ac170dd8c146b939d604cb53ae963570c8f3116857133aa6711caea3d43cdc9"
+      }
+    },
+    {
+      "name": "retained second start",
+      "source": {
+        "path": "analyses/dea_transfer/inputs/runs/B-2-document.json",
+        "sha256": "b71d37c8fc92866737355e7caf6f7afa6c4a730762d24a4bf756a4cdb2178531"
+      },
+      "pair_overrides": [
+        {
+          "coefficients": [
+            {
+              "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+              "family": "k_ij",
+              "identity": "pair/carbamate-anion/water/k_ij",
+              "provenance": {
+                "source_id": "joint-recalibration-170",
+                "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+              },
+              "qualification": "candidate_extrapolation",
+              "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+              "value": {
+                "magnitude": 0.0,
+                "unit": "dimensionless"
+              }
+            }
+          ],
+          "component_id_a": "carbamate-anion",
+          "component_id_b": "water"
+        },
+        {
+          "coefficients": [
+            {
+              "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+              "family": "k_ij",
+              "identity": "pair/protonated-diethanolamine/water/k_ij",
+              "provenance": {
+                "source_id": "joint-recalibration-170",
+                "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+              },
+              "qualification": "candidate_extrapolation",
+              "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+              "value": {
+                "magnitude": -0.2,
+                "unit": "dimensionless"
+              }
+            },
+            {
+              "candidate_domain_id": "mea-candidate-293-15-to-393-15-k",
+              "family": "k_ij_reciprocal_temperature_slope",
+              "identity": "pair/protonated-diethanolamine/water/k_ij/reciprocal_temperature_slope",
+              "provenance": {
+                "source_id": "joint-recalibration-170",
+                "locator": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594"
+              },
+              "qualification": "candidate_extrapolation",
+              "reference_temperature": {
+                "magnitude": 313.15,
+                "unit": "kelvin"
+              },
+              "source_sha256": "sha256:bec9ff29d0200d7bcb0b522a4a012800471c05fc4a5292d74f77a375b48037f7",
+              "value": {
+                "magnitude": 0.0,
+                "unit": "kelvin"
+              }
+            }
+          ],
+          "component_id_a": "protonated-diethanolamine",
+          "component_id_b": "water"
+        }
+      ],
+      "carbamate_hydrolysis": {
+        "a": 7.914436361200609,
+        "b": -2777.908145152409,
+        "c": 0.0,
+        "d": 0.0,
+        "e": 0.0,
+        "f": 0.0,
+        "reference_temperature": 313.15,
+        "standard_state_id": "aqueous-molality-infinite-dilution-water-v1",
+        "temperature_min": 293.15,
+        "temperature_max": 458.64
+      },
+      "retained_optimizer": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "datasets": [
+    {
+      "name": "lawson-1976",
+      "group": "Lawson",
+      "role": "fitted",
+      "path": "analyses/dea_transfer/inputs/lawson-1976.csv",
+      "sha256": "6d1b4add2a7c7279842048ba517ba3e60950d697f7b87f3ba0db797170e4f632",
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "template": "loaded-bubble",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "lawson-1976:0",
+        "lawson-1976:1",
+        "lawson-1976:2",
+        "lawson-1976:3",
+        "lawson-1976:4",
+        "lawson-1976:5",
+        "lawson-1976:6",
+        "lawson-1976:7",
+        "lawson-1976:8",
+        "lawson-1976:9",
+        "lawson-1976:10",
+        "lawson-1976:11",
+        "lawson-1976:12",
+        "lawson-1976:13",
+        "lawson-1976:14",
+        "lawson-1976:15",
+        "lawson-1976:16",
+        "lawson-1976:17",
+        "lawson-1976:18",
+        "lawson-1976:19",
+        "lawson-1976:20",
+        "lawson-1976:21",
+        "lawson-1976:22",
+        "lawson-1976:23",
+        "lawson-1976:24",
+        "lawson-1976:25",
+        "lawson-1976:26",
+        "lawson-1976:27",
+        "lawson-1976:28",
+        "lawson-1976:29"
+      ]
+    },
+    {
+      "name": "lawson-1976-394K",
+      "group": "Lawson-394K",
+      "role": "not fitted",
+      "path": "analyses/dea_transfer/inputs/lawson-1976.csv",
+      "sha256": "6d1b4add2a7c7279842048ba517ba3e60950d697f7b87f3ba0db797170e4f632",
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "template": "loaded-bubble",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "lawson-1976:30",
+        "lawson-1976:31",
+        "lawson-1976:32",
+        "lawson-1976:33",
+        "lawson-1976:34",
+        "lawson-1976:35",
+        "lawson-1976:36"
+      ]
+    },
+    {
+      "name": "carson-2000",
+      "group": "Carson",
+      "role": "fitted",
+      "path": "analyses/dea_transfer/inputs/carson-2000.csv",
+      "sha256": "d0c9f65285296e888264b6a5c00986164fc9c5eea1f02dff383785c3c1fda16b",
+      "template": "loaded-liquid",
+      "initial": "zero-liquid",
+      "final": "loaded-liquid",
+      "constructor": "addition_enthalpy",
+      "kind": "pressure",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight",
+        "scale": "scale"
+      },
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "feed": {
+          "carbon-dioxide": 1.0
+        },
+        "amount": "$alpha",
+        "T": "$T",
+        "P": "$P",
+        "phase": "vapor"
+      },
+      "weight": "$weight",
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "carson-2000:0",
+        "carson-2000:1",
+        "carson-2000:2",
+        "carson-2000:3",
+        "carson-2000:4",
+        "carson-2000:5",
+        "carson-2000:6",
+        "carson-2000:7",
+        "carson-2000:8",
+        "carson-2000:9",
+        "carson-2000:10",
+        "carson-2000:11",
+        "carson-2000:12",
+        "carson-2000:13",
+        "carson-2000:14",
+        "carson-2000:15",
+        "carson-2000:16",
+        "carson-2000:17",
+        "carson-2000:18",
+        "carson-2000:19",
+        "carson-2000:20",
+        "carson-2000:21",
+        "carson-2000:22",
+        "carson-2000:23",
+        "carson-2000:24",
+        "carson-2000:25",
+        "carson-2000:26",
+        "carson-2000:27",
+        "carson-2000:28",
+        "carson-2000:29",
+        "carson-2000:30",
+        "carson-2000:31",
+        "carson-2000:32",
+        "carson-2000:33",
+        "carson-2000:34",
+        "carson-2000:35",
+        "carson-2000:36",
+        "carson-2000:37",
+        "carson-2000:38",
+        "carson-2000:39",
+        "carson-2000:40",
+        "carson-2000:41",
+        "carson-2000:42",
+        "carson-2000:43",
+        "carson-2000:44",
+        "carson-2000:45",
+        "carson-2000:46",
+        "carson-2000:47",
+        "carson-2000:48",
+        "carson-2000:49"
+      ]
+    },
+    {
+      "name": "seo-hong-1996",
+      "group": "SeoHong",
+      "role": "not fitted",
+      "path": "analyses/dea_transfer/inputs/seo-hong-1996.csv",
+      "sha256": "54ec5a687ec4b8f72381ee109a02ba1439ab3fc054af042f7ea0ef512cb4afae",
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "template": "loaded-bubble",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "seo-hong-1996:0",
+        "seo-hong-1996:1",
+        "seo-hong-1996:2",
+        "seo-hong-1996:3",
+        "seo-hong-1996:4",
+        "seo-hong-1996:5",
+        "seo-hong-1996:6",
+        "seo-hong-1996:7",
+        "seo-hong-1996:8",
+        "seo-hong-1996:9",
+        "seo-hong-1996:10",
+        "seo-hong-1996:11",
+        "seo-hong-1996:12",
+        "seo-hong-1996:13",
+        "seo-hong-1996:14",
+        "seo-hong-1996:15"
+      ]
+    },
+    {
+      "name": "lal-1985",
+      "group": "Lal",
+      "role": "not fitted",
+      "path": "analyses/dea_transfer/inputs/lal-1985.csv",
+      "sha256": "6e483446a46a80e6edc2dbbb1ff4c506dcd586d40ef361fed6a2c03ed0990e99",
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "template": "loaded-bubble",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "lal-1985:0",
+        "lal-1985:1",
+        "lal-1985:2",
+        "lal-1985:3",
+        "lal-1985:4",
+        "lal-1985:5",
+        "lal-1985:6",
+        "lal-1985:7",
+        "lal-1985:8",
+        "lal-1985:9",
+        "lal-1985:10",
+        "lal-1985:11",
+        "lal-1985:12",
+        "lal-1985:13",
+        "lal-1985:14",
+        "lal-1985:15",
+        "lal-1985:16",
+        "lal-1985:17",
+        "lal-1985:18",
+        "lal-1985:19",
+        "lal-1985:20",
+        "lal-1985:21",
+        "lal-1985:22",
+        "lal-1985:23",
+        "lal-1985:24",
+        "lal-1985:25",
+        "lal-1985:26",
+        "lal-1985:27",
+        "lal-1985:28",
+        "lal-1985:29",
+        "lal-1985:30",
+        "lal-1985:31",
+        "lal-1985:32",
+        "lal-1985:33",
+        "lal-1985:34",
+        "lal-1985:35",
+        "lal-1985:36",
+        "lal-1985:37",
+        "lal-1985:38",
+        "lal-1985:39",
+        "lal-1985:40",
+        "lal-1985:41",
+        "lal-1985:42",
+        "lal-1985:43"
+      ]
+    },
+    {
+      "name": "weiland-1998",
+      "group": "Weiland",
+      "role": "comparison only",
+      "path": "analyses/dea_transfer/inputs/weiland-1998.csv",
+      "sha256": "863cb85930f51df2bc04558752d751cccc9da8e71fb98c944553fe5574ebc65b",
+      "template": "loaded-liquid",
+      "constructor": "observation",
+      "kind": "phase_density",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight",
+        "scale": "scale"
+      },
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "L",
+        "mass_basis": true
+      },
+      "weight": "$weight",
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "weiland-1998:0",
+        "weiland-1998:1",
+        "weiland-1998:2",
+        "weiland-1998:3",
+        "weiland-1998:4",
+        "weiland-1998:5",
+        "weiland-1998:6",
+        "weiland-1998:7",
+        "weiland-1998:8",
+        "weiland-1998:9",
+        "weiland-1998:10",
+        "weiland-1998:11",
+        "weiland-1998:12",
+        "weiland-1998:13",
+        "weiland-1998:14",
+        "weiland-1998:15",
+        "weiland-1998:16",
+        "weiland-1998:17",
+        "weiland-1998:18",
+        "weiland-1998:19",
+        "weiland-1998:20",
+        "weiland-1998:21",
+        "weiland-1998:22",
+        "weiland-1998:23",
+        "weiland-1998:24",
+        "weiland-1998:25",
+        "weiland-1998:26",
+        "weiland-1998:27",
+        "weiland-1998:28",
+        "weiland-1998:29",
+        "weiland-1998:30",
+        "weiland-1998:31",
+        "weiland-1998:32",
+        "weiland-1998:33",
+        "weiland-1998:34",
+        "weiland-1998:35",
+        "weiland-1998:36",
+        "weiland-1998:37",
+        "weiland-1998:38",
+        "weiland-1998:39",
+        "weiland-1998:40",
+        "weiland-1998:41",
+        "weiland-1998:42",
+        "weiland-1998:43"
+      ]
+    },
+    {
+      "name": "lawson-1976-viii",
+      "group": "Lawson-VIII",
+      "role": "comparison only",
+      "path": "analyses/dea_transfer/inputs/lawson-1976-viii.csv",
+      "sha256": "def0747c85a585eb23aa70ddcdbc8273ba8df42220af92af8d711d46a7b2048b",
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "template": "loaded-bubble",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "lawson-1976-viii:0",
+        "lawson-1976-viii:1",
+        "lawson-1976-viii:2",
+        "lawson-1976-viii:3",
+        "lawson-1976-viii:4",
+        "lawson-1976-viii:5",
+        "lawson-1976-viii:6",
+        "lawson-1976-viii:7",
+        "lawson-1976-viii:8",
+        "lawson-1976-viii:9"
+      ]
+    },
+    {
+      "name": "bottinger-2008-DEA_plus_DEAH",
+      "group": "Bottinger-DEA_plus_DEAH",
+      "role": "comparison only",
+      "path": "analyses/dea_transfer/inputs/bottinger-2008-DEA_plus_DEAH.csv",
+      "sha256": "252becdcb82ae7bfba72085731dd6d75c79d1b4c6205710061f86e6a230249ba",
+      "template": "loaded-liquid",
+      "constructor": "observation",
+      "kind": "mole_fraction",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight",
+        "scale": "scale"
+      },
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "L",
+        "species": [
+          "diethanolamine",
+          "protonated-diethanolamine"
+        ],
+        "mass_basis": false
+      },
+      "weight": "$weight",
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "bottinger-2008-DEA_plus_DEAH:0",
+        "bottinger-2008-DEA_plus_DEAH:1",
+        "bottinger-2008-DEA_plus_DEAH:2",
+        "bottinger-2008-DEA_plus_DEAH:3",
+        "bottinger-2008-DEA_plus_DEAH:4",
+        "bottinger-2008-DEA_plus_DEAH:5",
+        "bottinger-2008-DEA_plus_DEAH:6",
+        "bottinger-2008-DEA_plus_DEAH:7",
+        "bottinger-2008-DEA_plus_DEAH:8",
+        "bottinger-2008-DEA_plus_DEAH:9",
+        "bottinger-2008-DEA_plus_DEAH:10",
+        "bottinger-2008-DEA_plus_DEAH:11",
+        "bottinger-2008-DEA_plus_DEAH:12",
+        "bottinger-2008-DEA_plus_DEAH:13",
+        "bottinger-2008-DEA_plus_DEAH:14",
+        "bottinger-2008-DEA_plus_DEAH:15",
+        "bottinger-2008-DEA_plus_DEAH:16",
+        "bottinger-2008-DEA_plus_DEAH:17",
+        "bottinger-2008-DEA_plus_DEAH:18",
+        "bottinger-2008-DEA_plus_DEAH:19",
+        "bottinger-2008-DEA_plus_DEAH:20",
+        "bottinger-2008-DEA_plus_DEAH:21",
+        "bottinger-2008-DEA_plus_DEAH:22",
+        "bottinger-2008-DEA_plus_DEAH:23",
+        "bottinger-2008-DEA_plus_DEAH:24"
+      ]
+    },
+    {
+      "name": "bottinger-2008-DEACOO",
+      "group": "Bottinger-DEACOO",
+      "role": "comparison only",
+      "path": "analyses/dea_transfer/inputs/bottinger-2008-DEACOO.csv",
+      "sha256": "122c99e49d12e2ffcdb3688c292454c12db4d12ecb0529c92e316ca29dbbe4ea",
+      "template": "loaded-liquid",
+      "constructor": "observation",
+      "kind": "mole_fraction",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight",
+        "scale": "scale"
+      },
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "L",
+        "species": [
+          "carbamate-anion"
+        ],
+        "mass_basis": false
+      },
+      "weight": "$weight",
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "bottinger-2008-DEACOO:0",
+        "bottinger-2008-DEACOO:1",
+        "bottinger-2008-DEACOO:2",
+        "bottinger-2008-DEACOO:3",
+        "bottinger-2008-DEACOO:4",
+        "bottinger-2008-DEACOO:5",
+        "bottinger-2008-DEACOO:6",
+        "bottinger-2008-DEACOO:7",
+        "bottinger-2008-DEACOO:8",
+        "bottinger-2008-DEACOO:9",
+        "bottinger-2008-DEACOO:10",
+        "bottinger-2008-DEACOO:11",
+        "bottinger-2008-DEACOO:12",
+        "bottinger-2008-DEACOO:13",
+        "bottinger-2008-DEACOO:14",
+        "bottinger-2008-DEACOO:15",
+        "bottinger-2008-DEACOO:16",
+        "bottinger-2008-DEACOO:17",
+        "bottinger-2008-DEACOO:18",
+        "bottinger-2008-DEACOO:19",
+        "bottinger-2008-DEACOO:20",
+        "bottinger-2008-DEACOO:21",
+        "bottinger-2008-DEACOO:22",
+        "bottinger-2008-DEACOO:23",
+        "bottinger-2008-DEACOO:24"
+      ]
+    },
+    {
+      "name": "bottinger-2008-HCO3",
+      "group": "Bottinger-HCO3",
+      "role": "comparison only",
+      "path": "analyses/dea_transfer/inputs/bottinger-2008-HCO3.csv",
+      "sha256": "50474fd0958db9b2677165e9ca6395e4f887a6242135b351fdc3c40999455831",
+      "template": "loaded-liquid",
+      "constructor": "observation",
+      "kind": "mole_fraction",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight",
+        "scale": "scale"
+      },
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "L",
+        "species": [
+          "bicarbonate-anion",
+          "carbonate-anion"
+        ],
+        "mass_basis": false
+      },
+      "weight": "$weight",
+      "temperature_domain": [
+        293.15,
+        458.64
+      ],
+      "prior_access": "seen during development",
+      "row_identities": [
+        "bottinger-2008-HCO3:0",
+        "bottinger-2008-HCO3:1",
+        "bottinger-2008-HCO3:2",
+        "bottinger-2008-HCO3:3",
+        "bottinger-2008-HCO3:4",
+        "bottinger-2008-HCO3:5",
+        "bottinger-2008-HCO3:6",
+        "bottinger-2008-HCO3:7",
+        "bottinger-2008-HCO3:8",
+        "bottinger-2008-HCO3:9",
+        "bottinger-2008-HCO3:10",
+        "bottinger-2008-HCO3:11",
+        "bottinger-2008-HCO3:12",
+        "bottinger-2008-HCO3:13",
+        "bottinger-2008-HCO3:14",
+        "bottinger-2008-HCO3:15",
+        "bottinger-2008-HCO3:16",
+        "bottinger-2008-HCO3:17",
+        "bottinger-2008-HCO3:18",
+        "bottinger-2008-HCO3:19",
+        "bottinger-2008-HCO3:20",
+        "bottinger-2008-HCO3:21",
+        "bottinger-2008-HCO3:22",
+        "bottinger-2008-HCO3:23",
+        "bottinger-2008-HCO3:24"
+      ]
+    },
+    {
+      "name": "Cai",
+      "group": "Cai",
+      "role": "comparison only",
+      "prior_access": "seen during development",
+      "path": "data/reference/DEA/Cai1996_Table4_water_DEA.csv",
+      "sha256": "0f40dd2b7f34b27560dc9bcc85c8c22e3670c2e2d69c10d93fa27b8fbdc9cc65",
+      "reactions_used": false,
+      "conditions": "binary water/DEA; use the retained comparison in reactive.py main_score"
+    },
+    {
+      "name": "Horstmann",
+      "group": "Horstmann",
+      "role": "comparison only",
+      "prior_access": "seen during development",
+      "path": "data/reference/DEA/Horstmann2002_Table6_water_DEA_HE.csv",
+      "sha256": "069f1519a2b65baa621f41927ea297038485b35fde2c1b394cebb6b01a594b9f",
+      "reactions_used": false,
+      "conditions": "binary water/DEA; use the retained comparison in reactive.py main_score"
+    }
+  ],
+  "data_roles": {
+    "path": "analyses/dea_transfer/inputs/part-ii-346/data-roles.csv",
+    "sha256": "8d4a6cb63fe4704f9b863b41b1d59eb039a68d345018c0a87ff5bf5914dd2716"
+  },
+  "reaction_ranges": {
+    "R1_R2_R3": {
+      "interval_K": [
+        273.15,
+        498.15
+      ],
+      "wording": "273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
+    },
+    "DEA_dissociation": {
+      "interval_K": [
+        273.15,
+        323.15
+      ],
+      "source": "Bower et al. 1962, Eq. 7 and 0–50 degrees Celsius measurements; modern Celsius-to-Kelvin conversion; approximately 323 K upper limit in Part II"
+    },
+    "carbamate_hydrolysis": {
+      "interval_K": null,
+      "note": "Fitted law; Part II reaction-range table does not establish separate measured coverage. Do not infer coverage from its calculation interval."
+    }
+  },
+  "range_policy": "Mark every applicable range in outputs; never exclude a state for temperature. Binary comparisons use no reaction constants.",
+  "optimizer": {
+    "maximum_iterations": 60,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 1200.0
+  }
+}
