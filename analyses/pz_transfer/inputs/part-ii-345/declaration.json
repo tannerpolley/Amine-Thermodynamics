@@ -1,0 +1,527 @@
+{
+  "issue": 345,
+  "parent": 337,
+  "phase": "PZ-specific inputs only; adapt to the merged #343 interface before execution",
+  "base_commit": "673bceba7e7fa103d28bc054850160687b27e92e",
+  "engine": {
+    "commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+    "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+  },
+  "shared_values": {
+    "path": "analyses/mea_parameter_bundle/results/adoption-340/part-ii-shared-values.json",
+    "sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334"
+  },
+  "shared_parameter_document": {
+    "path": "analyses/mea_parameter_bundle/results/reduced-refit/F2/previous/parameters.json",
+    "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+  },
+  "pz_parameter_document": {
+    "path": "analyses/pz_transfer/results/speciation-start-parameters.json",
+    "sha256": "dbea846431495d578430de97040c323ae30c6082941f45bc33234556fad0d32f"
+  },
+  "parameter_binding": {
+    "shared_components": [
+      "carbon-dioxide",
+      "water",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "pz_components": [
+      "piperazine",
+      "piperazinium",
+      "piperazinediium",
+      "piperazine-carbamate",
+      "piperazine-dicarbamate",
+      "protonated-piperazine-carbamate"
+    ],
+    "shared_rule": "Use F2 components, shared-shared pairs, topology and model settings; use only PZ components and pairs/topology involving PZ species from pz_parameter_document. Exclude all MEA species. Check water_ion_pairs and R1-R3 against shared_values.",
+    "water_bicarbonate_k_ij": 0.7650000233694618,
+    "water_carbonate_k_ij": -0.25,
+    "born_diameter_equals_segment_diameter": [
+      "piperazinium",
+      "piperazinediium",
+      "piperazine-carbamate",
+      "piperazine-dicarbamate"
+    ],
+    "neutral_zwitterion": "protonated-piperazine-carbamate has charge zero and no Born diameter"
+  },
+  "reaction_binding": {
+    "pz_laws": {
+      "path": "analyses/pz_transfer/results/speciation-reactions.json",
+      "sha256": "64a51633b7d56ce75a1246fe51eb6a39a1f0db1abc7d75b16b2fe13df9c125be"
+    },
+    "shared_laws": "Replace R1-R3 with shared_values.reactions; remove zero stoichiometric entries for absent MEA species.",
+    "pz_laws_selection": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5"
+    ],
+    "calculation_interval_K": [
+      283.15,
+      395.0
+    ],
+    "interval_rule": "Apply this interval to every reaction, without changing coefficients or standard states. Mark states outside source ranges; never exclude them for temperature.",
+    "source_ranges_K": {
+      "R1": [
+        273.15,
+        498.15
+      ],
+      "R2": [
+        273.15,
+        498.15
+      ],
+      "R3": [
+        273.15,
+        498.15
+      ],
+      "P1": [
+        293.14,
+        353.42
+      ],
+      "P2": [
+        293.14,
+        353.42
+      ],
+      "P3": [
+        283.15,
+        333.15
+      ],
+      "P4": [
+        283.15,
+        333.15
+      ],
+      "P5": [
+        283.15,
+        333.15
+      ]
+    },
+    "R1_R2_R3_range_basis": "273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage",
+    "P1_P2_range_basis": "Hamborg 2009 Table 16; Part II reaction-range table",
+    "P3_P4_P5_range_basis": "Ermatchkov 2003 Tables 1-5; Part II reaction-range table"
+  },
+  "coordinates": [
+    {
+      "name": "piperazinium/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "piperazinium",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazinium",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazinium",
+          0.88
+        ],
+        [
+          "segment_diameter",
+          "piperazinediium",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazinediium",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazinediium",
+          0.88
+        ],
+        [
+          "born_diameter",
+          "piperazinium",
+          1
+        ],
+        [
+          "born_diameter",
+          "piperazinediium",
+          1
+        ]
+      ],
+      "origin": 5,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        9
+      ]
+    },
+    {
+      "name": "piperazinium/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "piperazinium",
+          1
+        ],
+        [
+          "dispersion_energy_over_k",
+          "piperazinediium",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "piperazinium/water-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazinium",
+            "water"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazinediium",
+            "water"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -1,
+        0.5
+      ]
+    },
+    {
+      "name": "piperazinium/bicarbonate-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazinium",
+            "bicarbonate-anion"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazinediium",
+            "bicarbonate-anion"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -1,
+        0.5
+      ]
+    },
+    {
+      "name": "carbamate/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazine-carbamate",
+          0.88
+        ],
+        [
+          "segment_diameter",
+          "piperazine-dicarbamate",
+          1
+        ],
+        [
+          "debye_huckel_diameter",
+          "piperazine-dicarbamate",
+          1
+        ],
+        [
+          "packing_diameter",
+          "piperazine-dicarbamate",
+          0.88
+        ],
+        [
+          "born_diameter",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "born_diameter",
+          "piperazine-dicarbamate",
+          1
+        ]
+      ],
+      "origin": 5,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        9
+      ]
+    },
+    {
+      "name": "carbamate/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "piperazine-carbamate",
+          1
+        ],
+        [
+          "dispersion_energy_over_k",
+          "piperazine-dicarbamate",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "carbamate/water-k",
+      "targets": [
+        [
+          "k_ij",
+          [
+            "piperazine-carbamate",
+            "water"
+          ],
+          1
+        ],
+        [
+          "k_ij",
+          [
+            "piperazine-dicarbamate",
+            "water"
+          ],
+          1
+        ]
+      ],
+      "origin": 0,
+      "scale": 0.05,
+      "bounds": [
+        -0.5,
+        0.5
+      ]
+    },
+    {
+      "name": "protonated-piperazine-carbamate/sigma",
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-piperazine-carbamate",
+          1
+        ]
+      ],
+      "origin": 3.7136,
+      "scale": 0.25,
+      "bounds": [
+        2,
+        6
+      ]
+    },
+    {
+      "name": "protonated-piperazine-carbamate/u",
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-piperazine-carbamate",
+          1
+        ]
+      ],
+      "origin": 274.1,
+      "scale": 50,
+      "bounds": [
+        50,
+        1000
+      ]
+    },
+    {
+      "name": "P3/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ],
+      "reaction": "P3",
+      "coefficient": "a",
+      "operation": "add to unshifted source law"
+    },
+    {
+      "name": "P4/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ],
+      "reaction": "P4",
+      "coefficient": "a",
+      "operation": "add to unshifted source law"
+    },
+    {
+      "name": "P5/offset",
+      "origin": 0,
+      "scale": 1,
+      "bounds": [
+        -3,
+        3
+      ],
+      "reaction": "P5",
+      "coefficient": "a",
+      "operation": "add to unshifted source law"
+    }
+  ],
+  "coordinate_source": {
+    "path": "analyses/pz_transfer/results/reactive-A12-start2-fit.json",
+    "sha256": "848e94ed02a4361bf89db329ef7a8e93f2d56d3fdad1e539b7bf0a901176aec1"
+  },
+  "starts": [
+    {
+      "name": "retained A12 endpoint",
+      "source_pointer": "/optimizer",
+      "optimizer": [
+        -2.8575554872515374,
+        -3.427438826767259,
+        -20.0,
+        -0.42070932000008854,
+        -0.5501200101440518,
+        8.869755522941587,
+        1.4814047039953402,
+        0.402694839146674,
+        14.026551431281518,
+        0.15703708529383245,
+        -0.01932596527947208,
+        -0.26155409597206813
+      ]
+    },
+    {
+      "name": "retained second start",
+      "source_pointer": "/start_optimizer",
+      "optimizer": [
+        1.491075240828164,
+        -1.6774079227517056,
+        -10.0,
+        -10.0,
+        8.0,
+        0.16034387218612042,
+        0.13760026838545994,
+        -2.8544,
+        4.518,
+        0.5232370230578598,
+        0.3694578980692535,
+        0.03316842027509145
+      ]
+    }
+  ],
+  "fitting": {
+    "producer_reference": {
+      "path": "analyses/pz_transfer/reactive.py",
+      "sha256": "b33bf98df300dc0874676620aebac4915977bb03376b1f2e5210bd1295f7ca28"
+    },
+    "NMR_declaration_reference": {
+      "path": "analyses/pz_transfer/fit_speciation.py",
+      "sha256": "61f37f51314fa4b79638be46789712d06b35197d18dd4798a1cefb4ee9e0c39d"
+    },
+    "residual": "difference",
+    "NMR_peak_area_relative_scale": 0.02,
+    "NMR_covariance": "Retain full normalized-area covariance and group definitions from fit_speciation.declarations; do not score dependent f0.",
+    "pressure_scale": "pressure_scale_Pa in Hilliard source CSV, once",
+    "feed_basis": "molality per kg water; NMR 1 kg D2O treated as H2O without isotope correction",
+    "vapor_support": [
+      "water",
+      "carbon-dioxide",
+      "piperazine",
+      "protonated-piperazine-carbamate"
+    ],
+    "NMR_pressure_Pa": 100000
+  },
+  "datasets": [
+    {
+      "source": {
+        "path": "analyses/pz_transfer/inputs/ermatchkov-nmr.csv",
+        "sha256": "681dabe630d33a895c5551c44760a7a67a8b22744f1c1d7badb8b01b5615bdbb"
+      },
+      "role": "fitted",
+      "states": 121,
+      "observations": 232,
+      "selection": "all rows",
+      "seen_during_development": true,
+      "observed_groups": "n1/pz for mono-carbamate (piperazine-carbamate + protonated-piperazine-carbamate), and n2/pz for dicarbamate where n2 is present; blank n2 is not an observed zero."
+    },
+    {
+      "source": {
+        "path": "analyses/pz_transfer/inputs/hilliard-d5.csv",
+        "sha256": "fe96ea6b1f96e4b8b23adb2bb59b26c1e0288af4420176b364d5ed32a5ee2b81"
+      },
+      "role": "fitted",
+      "states": 62,
+      "observations": 62,
+      "selection": "all rows",
+      "seen_during_development": true
+    },
+    {
+      "source": {
+        "path": "analyses/pz_transfer/inputs/ermatchkov2006.csv",
+        "sha256": "94783cc543b9102fa461cf7af1a1068ef97e9da725ef58e9bea3cf53c6480620"
+      },
+      "role": "not fitted",
+      "states": 52,
+      "observations": 52,
+      "selection": "all rows",
+      "seen_during_development": true
+    },
+    {
+      "source": {
+        "path": "analyses/pz_transfer/inputs/kamps2003-table3.csv",
+        "sha256": "b2f21edbc4cd958a7b2fee874c1795fb1c21369d2786992ab8096665a5e64b83"
+      },
+      "role": "comparison only",
+      "states": 94,
+      "observations": 94,
+      "selection": "decision starts with score; one solid-precipitation row outside fluid-only model",
+      "seen_during_development": true
+    }
+  ],
+  "state_table": {
+    "path": "analyses/pz_transfer/inputs/part-ii-345/data-roles.csv",
+    "sha256": "2e16559b3336aeb2a91a060ebde2a5cebca6cef37c466d502ef0a66e037662bf"
+  },
+  "split_record": {
+    "path": "analyses/pz_transfer/inputs/part-ii-345/split-compositions.json",
+    "sha256": "7f2fc5d4f45151abc948ac5b5d161fb3a0ed12e6f672b698b9e8aa01f4abf203"
+  },
+  "split_rule": "PZ-only; evaluate all retained compositions as supplied trials in every later search and append newly resolved descents. Never read the MEA split registry.",
+  "historical_replay": {
+    "path": "analyses/pz_transfer/results/part-ii-345/replay.json",
+    "sha256": "2696aeab58d57bf4745f8258e707b4cf973d03bc766fb7788039ab45c4a58883"
+  },
+  "phase_2": "Use #343 only after its shared calculation code is reviewed and merged; no fits or searches were run in phase 1.",
+  "coordinate_convention": "EOS physical values are origin + scale * optimizer. P3-P5 optimizer values are total additive offsets to the unshifted source a coefficients, not increments on nmr-fit.json offsets."
+}
