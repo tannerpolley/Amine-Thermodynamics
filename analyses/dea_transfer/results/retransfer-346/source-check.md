@@ -60,3 +60,18 @@ not agreement thresholds: Lawson 9 percent scatter, Carson approximately
 15 percent partial-pressure accuracy above 0.05 kPa with much larger errors
 below it. The data transformations and detailed source identities remain in
 `data/reference/DEA/sources.json`.
+
+
+## Hydrolysis source measurement interval (correction round 1)
+
+Aroua, Amor and Haji-Sulaiman (1997), *Journal of Chemical & Engineering Data* 42, 692–696, DOI 10.1021/je970004s, Zotero parent JRPVZLDC, PDF LGT7MKKL, was checked against the live Zotero PDF. The experimental procedure on p. 692 specifies equilibration at 303, 313, 323 and 331 K, each within 0.5 K. Table 3 on p. 695 tabulates the corresponding formation constants. Equation 14 on that page correlates the formation constant as log10 K1 = −5.12 + 1781 K/T. The discussion explicitly calls 1/K1 the hydrolysis constant. `prepare.py:42–51` therefore uses the inverse correlation as the original hydrolysis seed, with natural-log coefficients 5.12 ln(10) and −1781 ln(10) K.
+
+The source measurement interval is **303–331 K**. It is distinct from the calibration domain of the subsequently re-fitted DEA law and does not establish that fitted law's validity. The 293.15–458.64 K calculation interval remains unchanged. Both F0 and F2 report all states inside and outside 303–331 K, without exclusion: 60 reactive observations inside and 216 outside, including 73 fitted observations outside; 23 binary observations use no reaction laws.
+
+## Horstmann published-model comparison (correction round 1)
+
+Horstmann et al. (2002), *Journal of Chemical & Engineering Data* 47, 1496–1501, DOI 10.1021/je020085e, Zotero parent 5ERMBRC9, PDF 89LVDPBS, was checked against the live Zotero PDF. Table 6 (p. 1498) contains the same 14 water–DEA excess enthalpies at 363.15 K and 1.75 MPa. The methods on p. 1496 state that binary VLE and excess-enthalpy data were fitted simultaneously. Figure 4(b) (p. 1499) shows the measured water–DEA heats against the fitted NRTL correlation; Table 7 (p. 1500) supplies its linear temperature-dependent water–DEA interaction parameters. The published comparison's data role is **fitted in Horstmann's NRTL; comparison only here**. No same-row scalar deviation is reported; none is inferred or digitized from the figure.
+
+The calorimeter uncertainty on p. 1497 is stated as sigma(T) = 0.03 K, sigma(HE) = 2 J/mol + 0.01(HE/(J/mol)), and sigma(x_i) = 0.0001. The printed HE term has no absolute-value bars despite the negative heats in Table 6. This record preserves the stated expression; it does not compute negative uncertainties or use the expression to construct an agreement threshold. The intended engineering scale is an absolute 2 J/mol term plus a 1% enthalpy term, with the sign convention of that term left explicit as a source limitation.
+
+The local literature shelf is absent in this worktree. Source verification used the live Zotero PDFs and their text layers; Aroua p. 695 and Horstmann p. 1497 were also visually checked. The full PDFs and local attachment paths are not published.

@@ -1,22 +1,36 @@
 """Render retained DEA Part II values; no model calculation."""
 import csv
 import json
+import hashlib
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
+sys.path.insert(0, str(ROOT / 'analyses'))
+from part_ii import Route
 from MEA.solvent_specification import deviation_statistics
 AN = Path(__file__).resolve().parent
-OUT = AN / 'results/retransfer-346/f2-current'
+FITS = AN / 'results/retransfer-346/f2-current'
+OUT = AN / 'results/retransfer-346/f2-report-1'
+OUT.mkdir(parents=True, exist_ok=True)
 read = lambda p: json.loads(p.read_text())
-rows = read(OUT / 'data-rows.json')
+rows = read(FITS / 'data-rows.json')
 old = read(AN / 'results/retransfer-346/previous-current/data-rows.json')
-curves = read(OUT / 'curve-data.json')
+curves = read(FITS / 'curve-data.json')
 assert len(rows) == len(old) == 299 and {r['identity'] for r in rows} == {r['identity'] for r in old}
 assert all(r['status'] == 'Available' for r in rows + old + curves)
+for model, source, name, directory in [('F2', rows, 'route-current', OUT), ('F0', old, 'previous-route-current', AN / 'results/retransfer-346/previous-report-1')]:
+    marker = SimpleNamespace(config=read(AN / f'inputs/part-ii-346/{name}.json'))
+    for r in source + (curves if model=='F2' else []):
+        used = [SimpleNamespace(name=k) for k,v in r['outside_ranges'].items() if v!='reaction not used']
+        r['outside_ranges'] = Route.marks(marker, r['T_K'], SimpleNamespace(reactions=used))
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / 'data-rows.json').write_text(json.dumps(source, indent=2)+'\n')
+(OUT / 'curve-data.json').write_text(json.dumps(curves, indent=2)+'\n')
 def write_csv(name, records):
     with (OUT / name).open('w') as f:
         w = csv.DictWriter(f, list(records[0]), lineterminator='\n')
@@ -29,16 +43,24 @@ for model, source in [('F2', rows), ('F0', old)]:
         summary.append(dict(model=model, group=group, role=ps[0]['role'], **deviation_statistics([(r['observed'], r['value']) for r in ps], ps[0]['unit'])))
 write_csv('group-deviations.csv', summary)
 range_rows = []
-for model, path in [('F2', OUT), ('F0', AN / 'results/retransfer-346/previous-current')]:
-    for r in read(path / 'deviations.json'):
-        if r['rows']:
-            range_rows.append(dict(model=model, group=r['group'], role=r['role'], law=r['range_name'], outside_range=r['outside_range'], count=r['rows'], available=r['available'], **(r['statistics'] or {})))
+for model, source in [('F2', rows), ('F0', old)]:
+    reductions = []
+    for group, role, unit in sorted({(r['group'],r['role'],r['unit']) for r in source}):
+        for law in rows[0]['outside_ranges']:
+            for outside in (False, True, 'source range unknown', 'reaction not used'):
+                ps = [r for r in source if (r['group'],r['role'],r['outside_ranges'][law])==(group,role,outside)]
+                statistics = deviation_statistics([(r['observed'],r['value']) for r in ps],unit) if ps else None
+                reductions.append(dict(group=group, role=role, unit=unit, range_name=law, outside_range=outside, rows=len(ps), available=len(ps), statistics=statistics))
+                if ps:
+                    range_rows.append(dict(model=model, group=group, role=role, law=law, outside_range=outside, count=len(ps), available=len(ps), **statistics))
+    directory = OUT if model=='F2' else AN / 'results/retransfer-346/previous-report-1'
+    (directory / 'deviations.json').write_text(json.dumps(reductions, indent=2)+'\n')
 write_csv('range-deviations.csv', range_rows)
 flat = [dict(model='F2', identity=r['identity'], group=r['group'], role=r['role'], T_K=r['T_K'], observed=r['observed'], predicted=r['value'], unit=r['unit'], outside_ranges=json.dumps(r['outside_ranges'], sort_keys=True)) for r in rows]
 write_csv('paper-data.csv', flat)
 write_csv('horstmann.csv', [dict(identity=r['identity'], x_water=r['row']['x_water'], T_K=r['T_K'], P_MPa=r['row']['P_MPa'], observed_J_mol=r['observed'], F2_J_mol=r['value'], F0_J_mol=next(x['value'] for x in old if x['identity']==r['identity']), role=r['role'], reaction_ranges='reaction not used') for r in rows if r['group']=='Horstmann'])
-selection = read(OUT / 'selection.json')
-uncertainty = read(OUT / 'conditional-uncertainty.json')
+selection = read(FITS / 'selection.json')
+uncertainty = read(FITS / 'conditional-uncertainty.json')
 parameters = []
 for index, coordinate in enumerate(uncertainty['coordinates']):
     identity = coordinate['identity']
@@ -47,9 +69,19 @@ for index, coordinate in enumerate(uncertainty['coordinates']):
         lower=coordinate['bounds'][0], upper=coordinate['bounds'][1],
         on_bound=index in uncertainty['active_bounds'],
         conditional_SE=uncertainty['conditional_standard_error'][identity],
-        basis='completed-law endpoint chart; enthalpy is an increment about the completed law'))
+        basis='completed-law endpoint chart; enthalpy is an increment about the completed law', fitted_or_fixed='fitted', source='issue #346 selected fit; conditional-uncertainty.json'))
+table = read(AN / 'inputs/part-ii-346/parameter-table-declarations.json')
+assert hashlib.sha256((FITS / 'endpoint-completed-365.json').read_bytes()).hexdigest()==table['endpoint_sha256']
+point = read(FITS / 'endpoint-completed-365.json')
+for declaration in table['rows']:
+    value = point
+    for key in declaration['path']:
+        value = value[key]
+    parameters.append(dict(parameter=declaration['parameter'], value=value['magnitude'] if isinstance(value,dict) else value,
+        unit=declaration['unit'], lower='', upper='', on_bound='', conditional_SE='', basis=declaration['basis'], fitted_or_fixed=declaration['fitted_or_fixed'], source=declaration['source']))
 write_csv('parameter-values.csv', parameters)
 paper = dict(selected_start=selection['chosen']['name'], cost=selection['chosen']['cost'], fitted_parameters=4, conditional_standard_errors=uncertainty['conditional_standard_error'], active_bounds=uncertainty['active_bounds'], stability=selection['chosen']['search'], pressure={})
+paper['range_counts'] = {law: {str(flag): sum(r['outside_ranges'][law]==flag for r in rows) for flag in (False,True,'reaction not used')} for law in rows[0]['outside_ranges']}
 for role in ('fitted', 'not fitted'):
     ps = [r for r in rows if r['role']==role and r['unit']=='Pa']
     paper['pressure'][role] = deviation_statistics([(r['observed'],r['value']) for r in ps], 'Pa')
@@ -74,14 +106,16 @@ for ax, groups, title in zip(axes.flat, [('Lawson','Lawson-394K'),('SeoHong',),(
         caption = f"{line[0]['T_K']:.2f} K"
         if groups==('Carson',):
             caption = f"{float(line[0]['row']['DEA_mass_fraction'])*100:g} wt%"
-        ax.plot([r['loading'] for r in line], [r['value']/1000 for r in line], '--' if outside else '-', color=color, label=caption)
+        hydrolysis_outside = line[0]['outside_ranges']['carbamate-hydrolysis'] is True
+        caption += ' (H out)' if hydrolysis_outside else ' (H in)'
+        ax.plot([r['loading'] for r in line], [r['value']/1000 for r in line], '--' if outside else (':' if hydrolysis_outside else '-'), color=color, label=caption)
         obs = [r for r in rows if r['group'] in groups and abs(r['T_K']-line[0]['T_K'])<1e-8]
         if groups==('Carson',):
             obs = [r for r in obs if r['row']['DEA_mass_fraction']==line[0]['row']['DEA_mass_fraction']]
-        ax.scatter([loading(r) for r in obs], [r['observed']/1000 for r in obs], marker='^' if outside else 'o', facecolors='none', edgecolors=color, s=25)
+        ax.scatter([loading(r) for r in obs], [r['observed']/1000 for r in obs], marker='^' if outside else ('s' if hydrolysis_outside else 'o'), facecolors='none', edgecolors=color, s=25)
     ax.set(title=title, xlabel='Loading (mol CO₂/mol DEA)', ylabel='Integral heat (kJ/mol CO₂)' if groups==('Carson',) else 'CO₂ partial pressure (kPa)', yscale='linear' if groups==('Carson',) else 'log')
     ax.legend(fontsize=7, ncol=2)
-fig.suptitle('DEA on F2: measurements and model curves\nTriangles and dashed curves exceed the Bower dissociation range; hydrolysis source range unknown', fontsize=11)
+fig.suptitle('DEA on F2: measurements and model curves\nTriangles/dashes: outside DEA dissociation range; H: hydrolysis 303–331 K; squares/dots: H out only', fontsize=10)
 fig.savefig(OUT / 'measured-model.png', dpi=170)
 plt.close(fig)
 fig, axes = plt.subplots(1, 2, figsize=(10, 4), constrained_layout=True)
