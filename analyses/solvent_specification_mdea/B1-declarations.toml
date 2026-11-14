@@ -25,6 +25,7 @@ sha256 = "1dd77ba96a655a5f6b6cdb94d02d67507cebf68dad4b4c44b9815eb16e927c83"
 [[datasets]]
 name = "calibration-Carson"
 group = "Carson"
+unit = "J/mol"
 role = "calibration"
 path = "inputs/calibration-Carson.csv"
 sha256 = "7bd0b8e6cd945d0817bf84de66df582b17aef6ed8248aae426a7f65f44c04dfe"
@@ -42,6 +43,7 @@ final = "loaded-liquid"
 [[datasets]]
 name = "calibration-Cp"
 group = "Cp"
+unit = "J/(mol-feed K)"
 role = "calibration"
 path = "inputs/calibration-Cp.csv"
 sha256 = "32db9e1c6005c6285c28175a1ae02b6f89e4222de9c2a6f6a8b858655b50ec99"
@@ -57,6 +59,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Jakobsen-carbonate"
 group = "Jakobsen"
+unit = "1"
 role = "calibration"
 path = "inputs/calibration-Jakobsen-carbonate.csv"
 sha256 = "60c2f5fe1900aa462b94ac89444278b11e5e7450368dd215539846d12534b160"
@@ -72,6 +75,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Jakobsen-cation"
 group = "Jakobsen"
+unit = "1"
 role = "calibration"
 path = "inputs/calibration-Jakobsen-cation.csv"
 sha256 = "f5203d7c9d392bda01574df18e4f29c182958a74aa637717d6804dfb82107093"
@@ -87,6 +91,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Kim-binary"
 group = "Kim"
+unit = "Pa"
 role = "calibration"
 path = "inputs/calibration-Kim-binary.csv"
 sha256 = "3edc485cd34ef32cccb53b075d53b787ad2e5a6da7d92aaaae43316d75ad92e6"
@@ -102,6 +107,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Kim-water"
 group = "Kim"
+unit = "Pa"
 role = "calibration"
 path = "inputs/calibration-Kim-water.csv"
 sha256 = "05e9477b06e6a1283540bb5d5f7b19dceda0934822d1d061c768e774576a89d2"
@@ -117,6 +123,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Kuranov"
 group = "Kuranov"
+unit = "Pa"
 role = "calibration"
 path = "inputs/B1-calibration-Kuranov.csv"
 sha256 = "2683f73443cada5e012ae3f5f251bdc899222ad6ad725c5d7d8c19e55c0b0690"
@@ -132,6 +139,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-Merkley"
 group = "Merkley"
+unit = "J/mol"
 role = "calibration"
 path = "inputs/calibration-Merkley.csv"
 sha256 = "ff5e906205a1e915ad26dba9c9b00a7c55d8df012ac2ed54fba73b8af47c428c"
@@ -149,6 +157,7 @@ bubble = "cap-bubble"
 [[datasets]]
 name = "calibration-loaded-density"
 group = "loaded-density"
+unit = "kg/m^3"
 role = "calibration"
 path = "inputs/calibration-loaded-density.csv"
 sha256 = "f2f796c6c727cab46ca2ff05c955bb8120a7604d9ff6c70483bb9e9e9dd0c64d"
@@ -164,6 +173,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "calibration-unloaded-density"
 group = "unloaded-density"
+unit = "kg/m^3"
 role = "calibration"
 path = "inputs/calibration-unloaded-density.csv"
 sha256 = "dbbea42108c22509efa86ce0eb9d31cb7647617d78f6b2792783c191305c7e95"
@@ -179,6 +189,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Bottinger-amine-sum-25bar"
 group = "Bottinger-amine-sum-25bar"
+unit = "1"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-amine-sum-25bar.csv"
 sha256 = "ca33c3fcc4057a3e74220a0cfbcc475d1275470b9acafa1f0354b523a704798a"
@@ -194,6 +205,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Bottinger-amine-sum-5bar"
 group = "Bottinger-amine-sum-5bar"
+unit = "1"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-amine-sum-5bar.csv"
 sha256 = "488940ecf3fc984edeee3fa145fe6f76936396fce802b5af881bcbee70f677ef"
@@ -209,6 +221,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Bottinger-bicarbonate-25bar"
 group = "Bottinger-bicarbonate-25bar"
+unit = "1"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-bicarbonate-25bar.csv"
 sha256 = "a788feff21199e1fe2c9a553a133e1fd408bd390d259289b2b7ea3567cc9fbf9"
@@ -224,6 +237,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Bottinger-bicarbonate-5bar"
 group = "Bottinger-bicarbonate-5bar"
+unit = "1"
 role = "outside-fit"
 path = "inputs/outside-fit-Bottinger-bicarbonate-5bar.csv"
 sha256 = "7ac448699c14bc898a7a8a4877afba5950c31f5f9597343316006f87b256da4a"
@@ -239,6 +253,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Cp-60wt"
 group = "Cp-60wt"
+unit = "J/(mol-feed K)"
 role = "outside-fit"
 path = "inputs/outside-fit-Cp-60wt.csv"
 sha256 = "bd3d8b2d2f90cdca479df34ba63c5ff369d2d2b5856a1c6765de7b643c919f98"
@@ -254,6 +269,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Ermatchkov"
 group = "Ermatchkov"
+unit = "Pa"
 role = "outside-fit"
 path = "inputs/outside-fit-Ermatchkov.csv"
 sha256 = "bffe5603e6ddc4c12c268226b421deaea4ea6a8397771f84aea186b4b6830ae6"
@@ -269,6 +285,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Kuranov-413K"
 group = "Kuranov-413K"
+unit = "Pa"
 role = "outside-fit"
 path = "inputs/outside-fit-Kuranov-413K.csv"
 sha256 = "27b302f4baa8efb0af7c79ad562237f484c2e68a9f38f28e7b9fc9b05220fff4"
@@ -284,6 +301,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Merkley-half-loading"
 group = "Merkley-half-loading"
+unit = "J/mol"
 role = "outside-fit"
 path = "inputs/outside-fit-Merkley-half-loading.csv"
 sha256 = "b202e6844954310692593f76967abaf5ce7d483f096efa46ae8cae422d18bbee"
@@ -301,6 +319,7 @@ final = "loaded-liquid"
 [[datasets]]
 name = "outside-fit-Merkley-outside"
 group = "Merkley-outside"
+unit = "J/mol"
 role = "outside-fit"
 path = "inputs/outside-fit-Merkley-outside.csv"
 sha256 = "b88e89910d7aa60ebaf3d8535b5a913d352dc28ebdfea490bddaaba81109ec25"
@@ -318,6 +337,7 @@ bubble = "cap-bubble"
 [[datasets]]
 name = "outside-fit-Sedighi"
 group = "Sedighi"
+unit = "Pa"
 role = "outside-fit"
 path = "inputs/outside-fit-Sedighi.csv"
 sha256 = "4ce05f4d475f79af355443fe6a700d25ecf3585fe16ac67a112fe33ee564690c"
@@ -333,6 +353,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-Zheng"
 group = "Zheng"
+unit = "J/mol"
 role = "outside-fit"
 path = "inputs/outside-fit-Zheng.csv"
 sha256 = "e255f451d0de07ad57279a6ac1b6806eb89b9aa8236f891b473108e6e0dc1b3a"
@@ -350,6 +371,7 @@ final = "loaded-liquid"
 [[datasets]]
 name = "outside-fit-corrected-Kamps"
 group = "corrected-Kamps"
+unit = "Pa"
 role = "outside-fit"
 path = "inputs/outside-fit-corrected-Kamps.csv"
 sha256 = "4a398d4b816bc8c807ed809c81ef12421485b94aab01b6ef874202a56a53d7a6"
@@ -365,6 +387,7 @@ temperature_domain = [293.15, 395.0]
 [[datasets]]
 name = "outside-fit-density-60wt"
 group = "density-60wt"
+unit = "kg/m^3"
 role = "outside-fit"
 path = "inputs/outside-fit-density-60wt.csv"
 sha256 = "facdc0e8649e4cad6cb58b9fb16db407b2713ddf8e7e7bf6e87bb776ff84328e"

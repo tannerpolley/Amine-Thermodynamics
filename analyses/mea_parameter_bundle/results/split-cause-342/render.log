@@ -1,0 +1,58 @@
+pandoc
+  to: html
+  output-file: notebook.html
+  standalone: true
+  embed-resources: true
+  title-prefix: Analyses
+  section-divs: true
+  html-math-method: mathjax
+  wrap: none
+  default-image-extension: png
+  css:
+    - ../site.css
+  toc: false
+
+metadata
+  document-css: false
+  link-citations: true
+  date-format: long
+  lang: en
+  page-layout: full
+  theme: cosmo
+  fontsize: 16px
+  title: MEA parameter bundle
+  resources:
+    - results/split-cause-342/**
+    - results/uncertainty-307/**
+    - heat-capacity-264/**
+    - results/density-268/**
+    - results/adoption-297/**
+    - results/adoption-340/**
+    - results/engine-3e83e19c-paper-evidence/**
+    - figures/a7_regression_overview/output/**
+    - results/bicarbonate-carbonate-266/**
+    - results/selected-current-best-parameters.json
+    - results/adoption-297/paper-evidence/model-curves/**
+    - results/stable-refit-255/README.md
+    - results/stable-refit-255/primary.json
+    - results/stable-refit-255/design-probe/design.md
+    - results/stable-refit-255/*/assessment.json
+    - results/stable-refit-255/*/extras.json
+    - results/stable-refit-255/evidence/candidate-comparison.png
+    - results/stable-refit-255/evidence/candidate-comparison-plotted-values.csv
+    - results/stable-refit-255/evidence/comparison.csv
+    - results/stable-refit-255/evidence/candidate-parameters.json
+    - results/carbonate-ions-282/**
+    - results/ion-temperature-283/README.md
+    - results/ion-temperature-283/primary.json
+    - results/ion-temperature-283/*/assessment.json
+    - results/ion-temperature-283/*/extras.json
+    - results/ion-temperature-283/attribution.json
+    - results/ion-temperature-283/regression.json
+    - results/ion-temperature-283/transfer-temperature-term.png
+    - results/ion-temperature-283/transfer-temperature-term-plotted-values.csv
+    - results/ion-temperature-283/evidence/comparison.csv
+    - results/ion-temperature-283/evidence/candidate-parameters.json
+  latex-auto-install: false
+
+Output created: ../_site/mea_parameter_bundle/notebook.html

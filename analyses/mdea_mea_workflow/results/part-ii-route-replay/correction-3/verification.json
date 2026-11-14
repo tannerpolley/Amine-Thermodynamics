@@ -1,0 +1,105 @@
+{
+  "previous_head": "4e8717d560df8df90e3e727734f8dcb1822030ef",
+  "main": "fdce917",
+  "current_suite": {
+    "passed": 103,
+    "failed": 11,
+    "subtests_passed": 17
+  },
+  "main_suite": {
+    "passed": 95,
+    "failed": 11,
+    "subtests_passed": 17
+  },
+  "identical_failure_ids": [
+    "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "analyses.mea_parameter_bundle.tests.test_campaign_routing::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_cache_records_model_identity_and_separates_candidate",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[engine_exception-False]",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[evaluation_timeout-False]",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_failed_state_cache_policy[infeasible-True]",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_pinned_engine_state_and_cached_replay",
+    "analyses.mea_parameter_bundle.tests.test_shared_evaluation::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+    "tests.test_solvent_specification::test_R1_R3_R5",
+    "tests.test_source_corrections_152::test_declared_domain_pre_dispatch_and_protected_rows",
+    "tests.test_source_corrections_152::test_public_views_refuse_execution_and_stale_hash"
+  ],
+  "new_failures": [],
+  "additional_passing_tests": "Eight Part II tests",
+  "native_feed_tests": [
+    {
+      "identity": "tests.test_source_corrections_152::test_actual_native_temperature_and_analytical_feed[Hilliard2008]",
+      "passed": true
+    },
+    {
+      "identity": "tests.test_source_corrections_152::test_actual_native_temperature_and_analytical_feed[Xu2011]",
+      "passed": true
+    }
+  ],
+  "focused_tests": {
+    "part_ii": 8,
+    "native_feed": 2,
+    "passed": 10,
+    "failed": 0
+  },
+  "main_method": "Isolated copy of retained fdce917 snapshot; five test-generated result files restored to fdce917 bytes before the suite; source/wheel imported from that snapshot and pinned immutable wheel",
+  "import_and_historical_pin": {
+    "import_before": {
+      "commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+      "sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+    },
+    "import_after": {
+      "commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+      "sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+    },
+    "active_wheel_verified": true,
+    "historical_dispatch": [
+      {
+        "command": "qualify",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "qualify"
+      },
+      {
+        "command": "old-wheel-replay",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "old_wheel_replay"
+      },
+      {
+        "command": "fit",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "run_fit"
+      },
+      {
+        "command": "assess",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "assess"
+      },
+      {
+        "command": "extras",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "extras"
+      },
+      {
+        "command": "select",
+        "commit": "bc7794731e94be961d16028d3f4880c6718a93ad",
+        "sha256": "8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069",
+        "dispatch": "select"
+      }
+    ],
+    "historical_check": "Actual CLI block executed with calculation callbacks stubbed; no historical wheel installed or historical study rerun"
+  },
+  "replay": {
+    "rows": 278,
+    "available": true,
+    "cost": 374.51907880524016,
+    "max_relative_prediction_error": 0.0,
+    "relative_cost_error": 2.7622348852673895e-13,
+    "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+    "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334"
+  }
+}

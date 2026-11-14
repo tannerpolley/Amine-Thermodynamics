@@ -1,0 +1,67 @@
+{
+  "amine": "methyldiethanolamine",
+  "specification": "../../solvent_specification_mdea/B1.toml",
+  "output": "../results/part-ii-route-replay",
+  "reference": {
+    "path": "../results/refit-298/B1-endpoint/endpoint.json",
+    "sha256": "2a5341be176829d087133a1467828f762a655f92a586eb1062a5719a58142d9d"
+  },
+  "reference_predictions": {
+    "path": "../results/refit-298/B1-endpoint/fitted-replay.json",
+    "sha256": "6690d0b7baf4bb3f08a9437743857d965d7a4a4fd1529d4e6f8e5d234f4059e2"
+  },
+  "reference_cost": 374.5190788051367,
+  "coordinates": {
+    "path": "part-ii-replay-coordinates.json",
+    "sha256": "df53f164a7029e4e33cf987b750927434890fccde6280eeae0d2e342e9935b7e"
+  },
+  "species": [
+    "carbon-dioxide",
+    "water",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion",
+    "methyldiethanolamine",
+    "protonated-methyldiethanolamine"
+  ],
+  "vapor_species": [
+    "water",
+    "methyldiethanolamine",
+    "carbon-dioxide"
+  ],
+  "born_ties": [
+    "protonated-methyldiethanolamine"
+  ],
+  "calculation_interval_K": [
+    288.71,
+    422.04
+  ],
+  "reaction_ranges_K": {
+    "R1": [
+      273.15,
+      498.15
+    ],
+    "R2": [
+      273.15,
+      498.15
+    ],
+    "R3": [
+      273.15,
+      498.15
+    ],
+    "MDEA-dissociation": [
+      278,
+      368
+    ]
+  },
+  "optimizer": {
+    "maximum_iterations": 40,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 2100
+  },
+  "purpose": "Frozen B1 replay only; not an F2 fit declaration",
+  "replay_only": true
+}
