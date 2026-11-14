@@ -321,3 +321,20 @@ def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_p
     with pytest.raises(AssertionError,match='Differentiation/replay row mismatch'):
         route.uncertainty(inconsistent)
     assert not (tmp_path/'conditional-uncertainty.json').exists()
+
+
+def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path):
+    """#368: a large grid must not copy trials before evaluating its states."""
+    class Trial(dict):
+        def __deepcopy__(self, memo):
+            pytest.fail('grid copied a supplied trial before state evaluation')
+    trial = Trial(kind='Liquid', support=[0], composition=[1.], packing=.4)
+    route = p.Route.__new__(p.Route)
+    route.out, route.config = tmp_path, dict(amine='test', species=['test'], split_record=None)
+    route.load = lambda reference:dict(amine='test', species=['test'], trials=[trial])
+    def measure(point, states, trials, *, route):
+        assert len(states)==67536
+        assert trials==[trial]
+        return []
+    monkeypatch.setattr(p.stable, 'grid', measure)
+    assert route.grid(None, [dict(key=str(i)) for i in range(67536)])==[]

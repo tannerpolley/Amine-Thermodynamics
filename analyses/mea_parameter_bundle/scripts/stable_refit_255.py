@@ -159,15 +159,19 @@ def _init(mapping, trials=None, route=None):
 
 def _measure(state):
     started = time.monotonic()
-    supplied, not_applicable = [], []
+    supplied, not_applicable, repeated, unique = [], [], [], {}
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
         support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
         support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
-        for witness in _TRIALS.get(state['key'], []):
+        for witness in (_TRIALS.get(state['key'], []) if isinstance(_TRIALS, dict) else _TRIALS):
             outside = sorted(set(witness['support']) - support)
             if outside:
                 not_applicable.append(dict(witness, evidence='not applicable', support_difference=outside))
+                continue
+            identity = (witness.get('kind'), tuple(witness['support']), tuple(witness['composition']), witness['packing'])
+            repeated.append(unique.setdefault(identity, len(supplied)))
+            if repeated[-1] < len(supplied):
                 continue
             phase = type(item.problem.phases[0])()
             phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
@@ -192,6 +196,8 @@ def _measure(state):
                 out['supplied_parent_pressure_Pa'] = result.pressure
                 out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=jsonable(t.quantities),message=t.message) for t in report.trials]
                 out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
+                if len(report.trials)==len(supplied):
+                    out['supplied_trials'] = [out['supplied_trials'][i] for i in repeated]
             except Exception as error:
                 out['supplied_error'] = f'{type(error).__name__}: {error}'
             out['available'] = out['optimized_available'] and out['supplied_available']
@@ -200,7 +206,7 @@ def _measure(state):
     if supplied or not_applicable:
         out['not_applicable_supplied_trials'] = not_applicable
         available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
-        out['supplied_trial_counts'] = dict(available=available, unavailable=len(supplied)-available, not_applicable=len(not_applicable))
+        out['supplied_trial_counts'] = dict(available=available, unavailable=len(repeated)-available, not_applicable=len(not_applicable))
     return dict(key=state['key'], seconds=time.monotonic() - started, **out)
 
 
@@ -210,7 +216,7 @@ def grid(mapping, chosen, trials=None, *, route=None):
     trials = globals().get('GRID_TRIALS') if trials is None else trials
     with ProcessPoolExecutor(min(route.workers if route else CORES, len(chosen)), initializer=_init, initargs=(mapping, trials, route)) as pool:
         measured = list(pool.map(_measure, chosen, chunksize=4))
-    if trials is not None:
+    if isinstance(trials, dict):
         for row in measured:
             trials.setdefault(row['key'], []).extend(w for w in row.get('witnesses',[]) if w not in trials.get(row['key'],[]))
     return measured

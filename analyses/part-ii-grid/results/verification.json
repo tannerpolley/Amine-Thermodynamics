@@ -1,0 +1,49 @@
+{
+  "base": "1cb771e",
+  "failure_names": [
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_cache_records_model_identity_and_separates_candidate",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[evaluation_timeout-False]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[engine_exception-False]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[infeasible-True]",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay",
+    "analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+    "tests/test_solvent_specification.py::test_R1_R3_R5",
+    "tests/test_source_corrections_152.py::test_public_views_refuse_execution_and_stale_hash",
+    "tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows"
+  ],
+  "baseline_summary": "11 failed, 112 passed, 1 deselected, 17 subtests passed in 160.18s (0:02:40)",
+  "changed_summary": "11 failed, 113 passed, 17 subtests passed in 146.14s (0:02:26)",
+  "mea_F2": {
+    "states": 6,
+    "exact": true,
+    "result_sha256": "88120a9276e71c68336d3b9bcb67a7355ef40bd622270dfd6e40b0535d7b076f"
+  },
+  "duplicate_check": "2 exact duplicate supplied inputs; 1 native evaluation; 2 identical retained results",
+  "eager_test_baseline": "1 failed in 0.39s",
+  "callers": {
+    "pz": {
+      "exact": true,
+      "sha256": "a05110db5b443dc23061e436aad31bae272f48189bbacca0228c590664ee3d39",
+      "records": 4,
+      "supplied_trials_per_state": 102
+    },
+    "amp": {
+      "exact": true,
+      "sha256": "5a65acf34c9f59bf8b85b0c1a142e46838fe8d7044d86ef0215d9f68d323c1f5",
+      "records": 3
+    },
+    "dea": {
+      "exact": true,
+      "sha256": "df1e4562031091bb9023321137e4d2e90ef3ebd3d1db6b5751752888142deabb",
+      "records": 3791,
+      "states": 3791,
+      "available": 3736,
+      "unavailable": 55,
+      "splits": 0
+    }
+  },
+  "focused_summary": "18 passed in 127.66s (0:02:07)",
+  "identity_comparison": "Complete result structures equal, excluding seconds fields only"
+}

@@ -221,7 +221,7 @@ class Route:
         supplied.extend(w for w in registry['trials'] if not w.get('resolved_descent') and w not in supplied)
         registry['trials'] = [w for w in registry['trials'] if w.get('resolved_descent')]
         witnesses = registry['trials']
-        trials = {r['key']:copy.deepcopy(witnesses+supplied) for r in states}
+        trials = witnesses+supplied
         measured = stable.grid(point, states, trials, route=self)
         for row in measured:
             for witness in row.get('witnesses',[]):
