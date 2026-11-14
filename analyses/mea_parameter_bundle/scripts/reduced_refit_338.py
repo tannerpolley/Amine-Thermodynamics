@@ -149,41 +149,160 @@ def fit(name, start, fixed, fitted, ties=None, scale=None):
     return mapping if ok else None, report
 
 
+def split_registry():
+    """Exact phase-kind/support/composition/packing deduplication; no rounding."""
+    if 'SPLITS' in globals():
+        return globals()['SPLITS']
+    import json
+    pool, sources, unreadable = {}, {}, []
+    def add(witness, source):
+        witness = dict(witness, kind=witness.get('kind','liquid' if len(witness['support'])==len(r.s.COMPONENT_IDS) else 'vapor').lower())
+        if len(witness['composition']) != len(r.s.COMPONENT_IDS):
+            witness['composition'] = [dict(zip(witness['support'],witness['composition'],strict=True)).get(i,0.) for i in range(len(r.s.COMPONENT_IDS))]
+        key = json.dumps(witness, sort_keys=True)
+        pool.setdefault(key, witness)
+        sources[source] = sources.get(source, 0) + 1
+    def scan(raw, source):
+        if isinstance(raw, list):
+            for value in raw:
+                scan(value, source)
+        elif isinstance(raw, dict):
+            if raw.get('resolved_descent') and raw.get('split_coordinates') and 'composition' in raw:
+                add(dict(kind=raw['phase']['kind'], support=raw['phase']['support'],
+                         composition=raw['composition'], packing=math.exp(raw['split_coordinates'][-1])), source)
+            result = raw.get('result', {})
+            if (isinstance(result, dict) and result.get('success') and
+                (raw.get('confirmed') or raw.get('delta_G_over_RT', 0) < 0)):
+                phases = result.get('phases', [])
+                if sum(p['role']=='liquid' for p in phases) >= 2:
+                    for phase in phases:
+                        add(dict(kind=phase['role'], support=[r.s.COMPONENT_IDS.index(i) for i in phase['support']],
+                                 composition=phase['mole_fractions'], packing=phase['packing_fraction']), source)
+            for key, value in raw.items():
+                if key == 'witnesses' and isinstance(value,list) and all(isinstance(w,dict) and {'support','composition','packing'} <= w.keys() for w in value):
+                    for witness in value:
+                        add(witness, source)
+                elif isinstance(value, (dict, list)):
+                    scan(value, source)
+    for path in sorted((r.B/'results').rglob('*')):
+        if not (path.name.endswith('.json') or path.name.endswith('.json.gz')):
+            continue
+        try:
+            scan(r.read(path), str(path.relative_to(r.ROOT)))
+        except json.JSONDecodeError:
+            unreadable.append(str(path.relative_to(r.ROOT)))
+    prior = r.read(OUT/'split-trials.json')
+    for key, witnesses in prior.items():
+        if key.startswith(('dense|','offset|','census|')):
+            for witness in witnesses:
+                add(witness, 'previous split-trials.json grid')
+    for witnesses in prior.get('census', {}).values():
+        for witness in witnesses:
+            add(witness, 'previous split-trials.json census')
+    old = r.read(OUT/'split-registry.json') if (OUT/'split-registry.json').exists() else {}
+    registry = dict(trials=[pool[k] for k in sorted(pool)], sources=sources,
+                    before_dedup=sum(sources.values()), after_dedup=len(pool), unreadable=unreadable)
+    registry['sha256'] = a.hashlib.sha256(json.dumps(registry['trials'],sort_keys=True).encode()).hexdigest()
+    previous = old if old.get('sha256') != registry['sha256'] else dict(trials=old.get('previous_trials',[]),sha256=old.get('previous_sha256'))
+    registry.update(previous_trials=previous.get('trials',[]),previous_sha256=previous.get('sha256'))
+    globals()['SPLITS'] = registry
+    write('split-registry.json', registry)
+    return registry
+
+
+def supplied_census(task):
+    """Reconstitute the retained parent; evaluate trials without optimizing them."""
+    mapping, raw, witnesses = task
+    import phase_diagnosis_255 as p
+    import tempfile
+    original = p.f.stability
+    p.f.stability = lambda model,problem,result: original(model,problem,result,supplied=witnesses,retained=raw['stability'][0])
+    row = {k:raw[k] for k in ('index','temperature_K','loading','pressure_Pa')}
+    with tempfile.TemporaryDirectory(dir=r.ROOT/'.venv') as temporary:
+        path = Path(temporary)/'parent.json'
+        try:
+            p.f.family_job(mapping,p.e.request(mapping,313.15,.11),row,[],path)
+        finally:
+            p.f.stability = original
+        checked = r.read(path)
+    assert checked['final']['coordinates']==raw['final']['coordinates'], f"parent changed at {raw['index']}"
+    report = checked['stability'][0]
+    supplied = report['supplied_trials']
+    assert len(supplied)==len(witnesses) and all(t['evidence']=='evaluated' for t in supplied), (raw['index'], [(i,t) for i,t in enumerate(supplied) if t['evidence']!='evaluated'][:2])
+    print('supplied',raw['index'],len(supplied),min(t['quantities']['tpd_over_rt'] for t in supplied),flush=True)
+    return dict(index=raw['index'], evaluated=len(supplied), negative=sum(t['quantities']['tpd_over_rt']<0 for t in supplied),
+                minimum_tpd=min(t['quantities']['tpd_over_rt'] for t in supplied),
+                distances=[t['quantities']['tpd_over_rt'] for t in supplied])
+
+
 def search(name, mapping):
     r.OUT = OUT
-    chosen, offset = r.states()
-    registry = r.read(OUT/'split-trials.json') if (OUT/'split-trials.json').exists() else {'census':{}}
-    registry.setdefault('census',{})
-    if not registry.get('historical_sources_loaded'):
-        sources=list((r.B/'results/engine-3e83e19c-phase-search/run-2/comparison').glob('point-*.json'))
-        for source in sources:
-            raw=r.read(source)
-            for report in raw.get('stability',[]):
+    registry = split_registry()
+    r.GRID_TRIALS = r.read(OUT/'split-trials.json')
+    path = OUT/name/'search.json'
+    if path.exists() and r.read(path).get('registry_sha256') == registry['sha256']:
+        return r.read(path)
+    if path.exists():
+        from concurrent.futures import ProcessPoolExecutor
+        raw = r.result(f'{name}/census-raw.json.gz')
+        previous = registry.get('previous_trials',[])
+        retained = r.result(f'{name}/supplied.json.gz') if (OUT/name/'supplied.json.gz').exists() and r.read(path).get('registry_sha256')==registry.get('previous_sha256') else None
+        trials = [w for w in registry['trials'] if retained is None or w not in previous]
+        with ProcessPoolExecutor(r.CORES,initializer=r.verify) as pool:
+            supplied = list(pool.map(supplied_census,[(mapping,row,trials) for row in raw])) if trials else [dict(row,distances=[]) for row in retained]
+        if retained is not None:
+            indices = [previous.index(w) if w in previous else None for w in registry['trials']]
+            for row, old in zip(supplied,retained,strict=True):
+                assert row['index']==old['index']
+                values = row['distances']
+                row['distances'] = [old['distances'][i] if i is not None else values[trials.index(w)] for w,i in zip(registry['trials'],indices,strict=True)]
+                row.update(evaluated=len(row['distances']),negative=sum(v<0 for v in row['distances']),minimum_tpd=min(row['distances']))
+        r.write(f'{name}/supplied.json.gz',supplied)
+        out = r.read(path)
+        out['census']['descent_indices'] = sorted(set(out['census']['descent_indices']) | {row['index'] for row in supplied if row['negative']})
+        out['census']['descent'] = len(out['census']['descent_indices'])
+        out['supplied'] = dict(evaluated=sum(row['evaluated'] for row in supplied), negative=sum(row['negative'] for row in supplied),
+                               minimum_tpd=min(row['minimum_tpd'] for row in supplied), compositions=len(registry['trials']))
+    else:
+        chosen, offset = r.states()
+        memory = r.read(OUT/'split-trials.json')
+        rows = r.grid(mapping,chosen+offset,memory)
+        write(f'{name}/grid.json',rows)
+        census = r.census(mapping,name)
+        for raw in r.result(f'{name}/census-raw.json.gz'):
+            for report in raw.get('stability', []):
                 for trial in report['trials']:
                     if trial['resolved_descent'] and trial['split_coordinates']:
-                        registry['census'].setdefault(str(raw['index']),[]).append(dict(kind=trial['phase']['kind'],support=trial['phase']['support'],
-                            composition=trial['composition'],packing=math.exp(trial['split_coordinates'][-1])))
-        registry['historical_sources_loaded']=[str(x.relative_to(r.ROOT)) for x in sources]
-    path = OUT/name/'search.json'
-    if path.exists():
-        return r.read(path)
-    r.GRID_TRIALS = registry
-    rows = r.grid(mapping, chosen+offset, registry)
-    write(f'{name}/grid.json',rows)
-    previous = registry.setdefault('census', {})
-    census = r.census(mapping,name,previous)
-    for raw in r.result(f'{name}/census-raw.json.gz'):
-        for report in raw.get('stability', []):
-            for t in report['trials']:
-                if t['resolved_descent'] and t['split_coordinates']:
-                    previous.setdefault(str(raw['index']), []).append(dict(kind=t['phase']['kind'], support=t['phase']['support'],
-                        composition=t['composition'], packing=math.exp(t['split_coordinates'][-1])))
-    write('split-trials.json',registry)
-    out = dict(grid=r.tally(rows[:1908]),offset=r.tally(rows[1908:]),census=census)
-    out['stable'] = all(out[g]['descent']==0 for g in ('grid','offset','census')) and not out['grid']['unavailable'] and not out['offset']['unavailable'] and census['incomplete']==0
+                        memory.setdefault('census', {}).setdefault(str(raw['index']), []).append(dict(kind=trial['phase']['kind'],
+                            support=trial['phase']['support'], composition=trial['composition'], packing=math.exp(trial['split_coordinates'][-1])))
+        write('split-trials.json',memory)
+        write(f'{name}/search.json',dict(grid=r.tally(rows[:1908]),offset=r.tally(rows[1908:]),census=census))
+        globals().pop('SPLITS',None)
+        return search(name,mapping)
+    out['registry_sha256'] = registry['sha256']
+    out['stable'] = all(out[g]['descent']==0 for g in ('grid','offset','census')) and not out['grid']['unavailable'] and not out['offset']['unavailable'] and out['census']['incomplete']==0
     write(f'{name}/search.json',out)
     print(name,out,flush=True)
     return out
+
+
+def coverage():
+    """Complete earlier split-composition checks without repeating fitted evidence."""
+    r.OUT = OUT
+    r.verify()
+    if not (OUT/'F0/census-raw.json.gz').exists():
+        r.write('F0/census-raw.json.gz',[r.read(a.OUT/f'candidate/census/{i}.json')['raw'] for i in range(162)])
+    if not (OUT/'F0/search.json').exists():
+        previous = r.read(a.OUT/'f2.json')['records']['candidate']
+        write('F0/search.json',dict(grid=dict(states=1908,available=1908,descent=0,unavailable=[]),offset=previous['offset'],
+              census=dict(states=162,descent=0,incomplete=0,descent_indices=[],incomplete_indices=[])))
+    results = {}
+    names = ['F0']+[f'{fit}/{start}/unpenalized' for fit in ('F1','F2','F3','F4','F4-0','F5') for start in ('previous','current')]
+    for name in names:
+        path = OUT/'F0/parameters.json' if name=='F0' else sorted((OUT/name).glob('parameters-*.json'))[-1]
+        results[name] = search(name,r.s.parameter_mapping(path))
+        write('coverage-summary.json',results)
+        assert results[name]['stable'], f'{name}: prescribed stability-enforced route required'
 
 
 def information(name, mapping, declared):
@@ -506,4 +625,4 @@ def present():
 
 if __name__ == '__main__':
     OUT.mkdir(parents=True, exist_ok=True)
-    {'laws': laws, 'replay': replay, 'salt': salt, 'campaign': campaign, 'assess': assess_all, 'present': present, 'check-retreat': check_retreat}[sys.argv[1]]()
+    {'coverage': coverage, 'laws': laws, 'replay': replay, 'salt': salt, 'campaign': campaign, 'assess': assess_all, 'present': present, 'check-retreat': check_retreat}[sys.argv[1]]()

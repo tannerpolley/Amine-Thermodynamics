@@ -46,7 +46,27 @@ The chronology below retains earlier records and their original evidence. Earlie
 
 F1 replaces both laws completely: Austgen Table V R2 plus the Part I molality conversion, and Bates–Pinching Eq.(10) R5. F2 ties each amine ion's Born diameter to its segment diameter, which the pinned wheel accepts. F3 fixes carbamate–water interaction and MEAH⁺–water reciprocal-temperature slope at zero. F4 imports the #282 salt water-ion laws and fits MEAH⁺–HCO₃⁻; its bound endpoint triggers F4-0 with that interaction fixed at zero. F5 instead continues F4 and fixes MEAH⁺–carbamate at zero. The same 307 observations, residual definitions, scales, weights and remaining bounds apply throughout.
 
-All twelve unpenalized starts converge on optimizer tolerances without continuations. Selection uses fitted cost only; relative-tolerance ties are disclosed. Each endpoint completes the 1908 grid, 576 offset and 162 liquid–vapor state searches, with zero split states found and no unavailable state. Earlier census split compositions are checked as supplied trials separately from the optimized Full search. No penalty stage is triggered; penalty cost is zero and penalized-search counts are not run. Counts are lower bounds and do not prove global stability. F0's searches are retained same-wheel #297 evidence; F0 itself is replayed, not refitted.
+All twelve unpenalized starts converge on optimizer tolerances without continuations. Selection uses fitted cost only; relative-tolerance ties are disclosed. Each endpoint completes the 1908 grid, 576 offset and 162 liquid–vapor state searches, with zero split states found and no unavailable state. Earlier census split compositions are checked as supplied trials separately from the optimized Full search. No penalty stage is triggered; penalty cost is zero and penalized-search counts are not run. Counts are lower bounds and do not prove global stability. F0's searches are retained same-wheel #297 evidence; F0 itself is replayed, not refitted. The supplied-trial correction below augments this evidence without repeating fitted or optimized-search results.
+
+The delivered review at `0184aa9` identified incomplete supplied-trial coverage. The expanded registry contains **2681 occurrences, 2111 after exact phase-kind/support/composition/packing deduplication**, from the 8 source families listed in the [corrected account](../results/reduced-refit/README.md#supplied-trial-coverage-correction). All 2111 trials are evaluated at all 162 census states for each endpoint below. All return native `evaluated` evidence; none has a negative distance. No penalized refit is triggered. The former 143-trial coverage claim is superseded. Independent re-review of this correction is pending.
+
+| Endpoint | Supplied evaluations | Minimum distance / RT | Negative distances |
+|---|---:|---:|---:|
+| F0 | 341982 | 2.159602900064783e-06 | 0 |
+| F1/previous/unpenalized | 341982 | 5.402977336643744e-06 | 0 |
+| F1/current/unpenalized | 341982 | 5.40293612516507e-06 | 0 |
+| F2/previous/unpenalized | 341982 | 4.815477097963594e-06 | 0 |
+| F2/current/unpenalized | 341982 | 4.751837451522078e-06 | 0 |
+| F3/previous/unpenalized | 341982 | 1.136039097104913e-05 | 0 |
+| F3/current/unpenalized | 341982 | 1.134502116428848e-05 | 0 |
+| F4/previous/unpenalized | 341982 | 1.158027180281351e-05 | 0 |
+| F4/current/unpenalized | 341982 | 1.158823226887762e-05 | 0 |
+| F4-0/previous/unpenalized | 341982 | 1.021214094976131e-05 | 0 |
+| F4-0/current/unpenalized | 341982 | 1.021592373717795e-05 | 0 |
+| F5/previous/unpenalized | 341982 | 1.028898375921017e-05 | 0 |
+| F5/current/unpenalized | 341982 | 1.028897418109409e-05 | 0 |
+
+The [coverage summary](../results/reduced-refit/coverage-summary.json) and compressed per-state distance vectors preserve the results. The review's #255 state-155 witness is included; its old negative distance refers to the historical vector, not an F candidate. The registry hash now guards each cached search result. Existing calibration values, agreement tables and optimized-search records are unchanged. Finite supplied distances do not establish global stability.
 
 [agreement.csv](../results/reduced-refit/agreement.csv) reports every fitted group and the identical 112 six-source, 23 Wagner, 33/37 Aronu, 14 Arcis, 53 Kim, 67 Han, 19 Matin, five Böttinger states (ten quantities) and 51 broad heat capacities. It gives cost, average absolute relative deviation, root-mean-square error, signed prediction-minus-observation bias, and numeric #255 comparisons without agreement thresholds. Cai temperature and mole-fraction units are separated. These not-fitted data were previously inspected and informed the selected fixes; their errors are comparisons, not independent physical validation. No qualified same-row published-model scores are yet available from the ongoing #339 work.
 
