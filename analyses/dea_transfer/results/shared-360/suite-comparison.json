@@ -1,0 +1,24 @@
+{
+  "commands": {
+    "main": "PYTHONPATH=src agent-heavy uv run --active --no-sync pytest -q --ignore=upstream",
+    "changed": "PYTHONPATH=src agent-heavy uv run --active --no-sync pytest -q"
+  },
+  "summaries": {
+    "main": "11 failed, 103 passed, 17 subtests passed in 36.54s",
+    "changed": "11 failed, 104 passed, 17 subtests passed in 33.77s"
+  },
+  "same_failure_identities": true,
+  "failures": [
+    "FAILED analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "FAILED analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_cache_records_model_identity_and_separates_candidate",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[evaluation_timeout-False]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[engine_exception-False]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[infeasible-True]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form",
+    "FAILED tests/test_solvent_specification.py::test_R1_R3_R5",
+    "FAILED tests/test_source_corrections_152.py::test_public_views_refuse_execution_and_stale_hash",
+    "FAILED tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows"
+  ]
+}

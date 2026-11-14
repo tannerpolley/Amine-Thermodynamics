@@ -154,3 +154,18 @@ callback is required by the inspected observation constructors.
 Born-target insertion is idempotent, so an amine declaration can already
 contain each Born/segment tie without duplicating its native active target.
 No Engine capability request is needed for the inspected paths.
+
+## Residual excess-enthalpy comparisons (#360)
+
+A dataset may declare `constructor = "residual_excess_enthalpy"` with
+`role = "comparison only"`, a reaction-free `template`, and arguments
+`observed` (J/mol mixture) and `x` (component IDs to mole fractions).
+The template supplies the common temperature and pressure. The reporting
+owner evaluates liquid residual enthalpy minus the composition-weighted
+pure-liquid residual enthalpies at that same temperature and pressure.
+Output units are `J/mol mixture`; source identity and source row are retained.
+The constructor is rejected by the fit-facing observation method. The constructor retains
+its comparison-only role when the route binds it. Reaction-free templates
+produce `reaction not used` marks for every reaction law. Engine exceptions
+retain their class and message for each row; numerical absence never removes
+a source row. This comparison supplies no fitting or start-selection evidence.
