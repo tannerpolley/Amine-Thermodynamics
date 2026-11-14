@@ -12,7 +12,7 @@ E = BUNDLE / 'results/adoption-297/paper-evidence'  # adopted MEA, Engine 391dfe
 D = BUNDLE / 'results/engine-3e83e19c-density-free'  # #213 density-free fit and limits
 P = BUNDLE / 'results/engine-3e83e19c-phase-search/run-2'  # #214 162-state search
 CHAIN = BUNDLE / 'results/engine-3e83e19c-refit-chain'  # #212
-SELECTED = BUNDLE / 'results/selected-current-best-parameters.json'
+SELECTED = BUNDLE / 'results/stable-refit-255/evidence/candidate-parameters.json'
 # #212's density rule (association_volume_refit_chain.py:126): misses beyond 2s may only be these rows.
 PERMITTED_MISSES = {'Amundsen2009_state_081', 'Hartono2014_density_80C_alpha0.29', 'Hartono2014_density_80C_alpha0.39'}
 # #215's inventory binds this generator's literature and nomenclature strings at its merge commit; #211 edits the rest.

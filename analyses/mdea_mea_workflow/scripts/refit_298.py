@@ -52,7 +52,7 @@ def identities():
                 'shared-R2-declaration.json':'05faae944ed26746a292389368ccd6b712849c92ed1de9822288523d009963fd'}
     hashes={str(ADOPTION/name):sha(ADOPTION/name) for name in expected}
     assert all(sha(ADOPTION/name)==value for name,value in expected.items())
-    selected=ROOT/'analyses/mea_parameter_bundle/results/selected-current-best-parameters.json'
+    selected=ROOT/'analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json'
     assert sha(selected)=='f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
     assert sha(WHEEL)==SHA
     import epcsaft

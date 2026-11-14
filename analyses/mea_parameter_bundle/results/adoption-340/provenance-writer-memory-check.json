@@ -1,0 +1,114 @@
+{
+  "scope": "Actual writer input-dictionary expressions evaluated in memory by AST extraction; no study modules imported, no calculation performed, and writes forbidden during evaluation.",
+  "worktree_status_unchanged_by_probe": true,
+  "probe_side_effect_files": [],
+  "writers": [
+    {
+      "writer": "analyses/high_temperature_chemistry/qualify.py",
+      "source_sha256": "3739221fb1200ed3d98712b5712c34ccde4165709bfd89eabaa089b90bbaa41c",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "entries": {
+        "endpoint": {
+          "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json",
+          "sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+        },
+        "declarations": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml",
+          "sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64"
+        },
+        "caloric": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/pre-260-caloric.json",
+          "sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1"
+        }
+      },
+      "references": [
+        {
+          "path": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json",
+          "sha256": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560"
+        }
+      ],
+      "observation_csv_files_unchanged": 307,
+      "observation_inventory_sha256": "bfa5a00ea9c0f0146b20f56b31b25aa806a22b9d720122321a73180f297fa736",
+      "provenance_entries": 319,
+      "old_writer_missing_or_wrong_loaded_entries": [
+        "endpoint",
+        "caloric"
+      ]
+    },
+    {
+      "writer": "analyses/mea_parameter_bundle/scripts/bicarbonate_carbonate_266.py",
+      "source_sha256": "271041c7cc5b5817c50c8731bc63e9e493550599281120d259e75993a634508e",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "entries": {
+        "endpoint": {
+          "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json",
+          "sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+        },
+        "declarations": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml",
+          "sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64"
+        },
+        "caloric": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/pre-260-caloric.json",
+          "sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1"
+        }
+      },
+      "references": [
+        {
+          "path": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json",
+          "sha256": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560"
+        }
+      ],
+      "observation_csv_files_unchanged": 307,
+      "observation_inventory_sha256": "bfa5a00ea9c0f0146b20f56b31b25aa806a22b9d720122321a73180f297fa736",
+      "provenance_entries": 322,
+      "old_writer_missing_or_wrong_loaded_entries": [
+        "endpoint",
+        "caloric"
+      ]
+    },
+    {
+      "writer": "analyses/mea_parameter_bundle/scripts/density_268.py",
+      "source_sha256": "d605c9955f6264807ad2e1d31decfdec338b622285aa679496c16699f9212dc7",
+      "configuration": "analyses/solvent_specification_mea/MEA-pre-260-340.toml",
+      "entries": {
+        "endpoint": {
+          "path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-refit-chain/restricted-2/attempt-3/run/fit/usable-budget-endpoint.json",
+          "sha256": "00e77608a8489fc9e03a7d2a86c08cb5ff782bb441368a62fa6390b8bfe9cc91"
+        },
+        "declarations": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml",
+          "sha256": "7fccfe8b6e3ee1d14789940c4238a32a60d9af7e30cef53dd5b59175d4099e64"
+        },
+        "caloric": {
+          "path": "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/pre-260-caloric.json",
+          "sha256": "71c0f65204de5f10a22099db8ee6a939895bf280c725292e2cc46c0b1ebe9ef1"
+        }
+      },
+      "references": [
+        {
+          "path": "analyses/mea_parameter_bundle/results/phase-diagnosis-255/final/replay.json",
+          "sha256": "aeb3331cf95cb174faa9cfa5891e887dbae0829448b5c67a2da17727ed386560"
+        },
+        {
+          "path": "analyses/mea_parameter_bundle/results/phase-diagnosis-255/wide/replay.json",
+          "sha256": "2887a71f05ef70647af232964b1aeef538555cd079b5acf66c8330f45ba795a7"
+        }
+      ],
+      "observation_csv_files_unchanged": 307,
+      "observation_inventory_sha256": "bfa5a00ea9c0f0146b20f56b31b25aa806a22b9d720122321a73180f297fa736",
+      "provenance_entries": 326,
+      "old_writer_missing_or_wrong_loaded_entries": [
+        "declarations",
+        "caloric"
+      ]
+    }
+  ],
+  "code_accounting": {
+    "base": "dbe0db0bf5b065a55d4a52bcd346dcb67182e530",
+    "additions": 145,
+    "binary_files": 0,
+    "files": 26,
+    "removals": 50
+  }
+}

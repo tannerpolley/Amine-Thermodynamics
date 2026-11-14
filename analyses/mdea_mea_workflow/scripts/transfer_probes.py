@@ -205,14 +205,14 @@ else:
     base=next(iter(values)); values.update((base-.1,base+.1))
     values.update(pair(read(AN/f'results/stage2-capped/{label}/followup-bicarbonate/endpoint.json'))['value']['magnitude'] for label in ('A3','B1'))
     for k in [base,*sorted(values-{base})]:
-        SPEC=SolventSpecification(mea/'MEA.toml')
+        SPEC=SolventSpecification(mea/'MEA-pre-260-340.toml')
         document=copy.deepcopy(SPEC.inputs['endpoint']); pair(document)['value']['magnitude']=k
         SPEC.parameters=epcsaft.Parameters.from_mapping(document)
         SPEC.model=epcsaft.Mixture(SPEC.parameters,thermochemistry=SPEC.thermal)
         rows=SPEC.inputs['observations']['fitted']; assert len(rows)==307
         records=pool(prediction,rows)
         if k==base:
-            reference=read(mea/'inputs/reference.json')
+            reference=read(ROOT/'analyses/mea_parameter_bundle/results/adoption-297/historical-spec/inputs/reference.json')
             assert all(p['status']=='Available' and p['requested_tolerance_met'] and abs(p['value']-r['predicted'])<=1e-10*max(1,abs(r['predicted'])) for p,r in zip(records,reference,strict=True))
             assert abs(sum(.5*r['weight']*p['residual']**2 for r,p in zip(rows,records,strict=True))/148.87893934557388-1)<=1e-10
         write(f'mea/{k:.17g}.json',records)

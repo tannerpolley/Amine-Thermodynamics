@@ -25,14 +25,14 @@ NEW = dict(OLD, coefficients=FIT['coefficients'], range_k=[273.15, 400.0], sourc
 
 def main():
     c.s.verify_wheel()
-    assert c.s.sha256(c.s.PARAMETERS) == kim.PARAMETER_HASH == c.s.sha256(c.RECORD)
-    spec = SolventSpecification(ROOT/'analyses/solvent_specification_mea/MEA.toml')
+    assert kim.PARAMETER_HASH == c.s.sha256(c.RECORD)
+    spec = SolventSpecification(ROOT/'analyses/solvent_specification_mea/MEA-pre-260-340.toml')
     cp_rows = [r for r in spec.inputs['observations']['fitted'] if r['group'] == 'Cp']
     assert len(cp_rows) == 4
     heat_rows = c.fo.load(c.SPEC['heat_rows_path'])
     assert len(heat_rows) == 22
     packet = {o['identity']: o['request'] for o in c.s.load_state_packet()['observations']}
-    base = c.s.corrected_request(packet['vle_obs_0130'], c.s._selected_reactions())
+    base = c.s.corrected_request(packet['vle_obs_0130'], c.s._selected_reactions(c.MAPPING))
     outputs = {}
     runtime = Path(tempfile.mkdtemp(prefix='water-ideal-gas-'))
     kim.c = c
@@ -51,7 +51,7 @@ def main():
         form = epcsaft.IdealShomate(water['coefficients'], water['formation_enthalpy_j_per_mol'])
         interval = epcsaft.IdealInterval(*water['range_k'], True, True, epcsaft.IdealCorrelation(form, p0))
         pure = epcsaft.Pure(params, thermochemistry=epcsaft.ThermochemistryRecord(p0, [[interval]]))
-        reactions = tomllib.loads((ROOT/'analyses/solvent_specification_mea/declarations.toml').read_text())['chemistry']['reactions']['aqueous']
+        reactions = tomllib.loads((ROOT/'analyses/mea_parameter_bundle/results/adoption-340/pre-F0-declarations.toml').read_text())['chemistry']['reactions']['aqueous']
         for T in (273.15, 298.15, 313.15, 318.15, 353.15, 393.15, 400.0):
             state = pure.state(T, rho=p0/(8.31446261815324*T))
             for prop, unit in [('ideal_enthalpy', 'J/mol'), ('ideal_entropy', 'J/mol/K'), ('ideal_isobaric_heat_capacity', 'J/mol/K')]:

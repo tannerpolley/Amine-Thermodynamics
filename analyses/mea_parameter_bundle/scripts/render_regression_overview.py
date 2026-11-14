@@ -21,7 +21,7 @@ SPECIES_DATA = DATA / "species-figure-data.csv"
 POOL = DATA / "pool-figure-data.csv"
 NATIVE_FIT = DATA / "fitted-rows.csv"
 PHYSICAL = ROOT / "results/stable-refit-255/evidence/candidate-parameters.json"
-PARAM = ROOT / "results/selected-current-best-parameters.json"
+PARAM = ROOT / "results/stable-refit-255/evidence/candidate-parameters.json"
 QUALIFICATION = DATA / "fit-summary.json"
 # Separate legacy diagnostic renderer reads this file; this notebook does not.
 FIT = ROOT / "results/current-best-fit-residuals.csv"

@@ -11,7 +11,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / 'analyses/mea_parameter_bundle/results/bicarbonate-carbonate-266'
 OUT.mkdir(exist_ok=True)
-spec = SolventSpecification(ROOT / 'analyses/solvent_specification_mea/MEA.toml')
+spec = SolventSpecification(ROOT / 'analyses/solvent_specification_mea/MEA-pre-260-340.toml')
 sources = {}
 for path in [Path(f.__file__), Path(f.s.__file__), ROOT/'analyses/mea_parameter_bundle/data/input/state-packet.json.gz']:
     sources[str(path.relative_to(ROOT))] = hashlib.sha256(path.read_bytes()).hexdigest()

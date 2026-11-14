@@ -21,7 +21,7 @@ def load_rows(name):
 
 def document():
     shared_path = (
-        AN.parent / "mea_parameter_bundle/results/selected-current-best-parameters.json"
+        AN.parent / "mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json"
     )
     assert (
         hashlib.sha256(shared_path.read_bytes()).hexdigest()

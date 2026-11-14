@@ -1,4 +1,4 @@
-"""Reproduce 153 retained A7 quantities through the default parameter path (#196)."""
+"""Reproduce 153 retained A7 quantities from the frozen F0 parameter record (#196, #340)."""
 import csv
 import hashlib
 import json
@@ -16,12 +16,12 @@ OUT = ROOT / 'analyses/mea_parameter_bundle/results/adoption-297/paper-evidence/
 
 def main():
     endpoint = ROOT / 'analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json'
-    assert s.PARAMETERS.read_bytes() == endpoint.read_bytes()
+    assert (BASE / 'reported-parameters.json').read_bytes() == endpoint.read_bytes()
     assert s.sha256(endpoint) == 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
     s.verify_wheel()
     spec = fo.load(BASE / 'spec.json')
-    mapping = s.parameter_mapping()
-    inputs = [s.PARAMETERS, endpoint, BASE / 'spec.json', Path(__file__),
+    mapping = s.parameter_mapping(endpoint)
+    inputs = [endpoint, BASE / 'spec.json', Path(__file__),
               s.installed_wheel()]
     inputs += [ROOT / spec[k] for k in ('packet_path', 'anchors_path', 'heat_rows_path')]
     inputs += [ROOT / d['table'] for d in spec['observations']]

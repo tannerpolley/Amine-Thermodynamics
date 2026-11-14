@@ -8,7 +8,7 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PARAM = ROOT / 'results/selected-current-best-parameters.json'
+PARAM = ROOT / 'results/stable-refit-255/evidence/candidate-parameters.json'
 DATA = ROOT / 'results/adoption-297/paper-evidence'
 PHYSICAL = ROOT / 'results/stable-refit-255/evidence/candidate-parameters.json'
 CHEMISTRY = ROOT.parents[1] / 'data/reference/MEA/manifests/chemical_reaction_source_contract.json'
