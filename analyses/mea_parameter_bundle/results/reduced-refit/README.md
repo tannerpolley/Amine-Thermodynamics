@@ -51,7 +51,7 @@ The [completeness report](split-completeness.json) scans all 66422 tracked MEA f
 
 | Class | Files | Reason |
 |---|---:|---|
-| (a) No retained explicit trial composition | 2132 | Scalar or reduced split evidence cannot supply a composition. |
+| (a) split-indicating record without a retained associated composition | 2132 | Scalar or reduced split evidence cannot supply a composition. |
 | (b) Negative-distance composition, descent not resolved | 22271 | Native optimizer iterates are unconverged or rejected as descents. Excluded by the owner's native-admission decision. |
 | (c) Unread resolved split composition | 0 | None: the unread-split list is empty. |
 

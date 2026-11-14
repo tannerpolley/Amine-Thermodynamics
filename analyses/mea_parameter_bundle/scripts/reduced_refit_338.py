@@ -230,8 +230,8 @@ def split_registry():
         elif row['file'] in unresolved:
             row['reason'] = 'negative-distance composition; descent not resolved'
         elif row['file'] in scalar:
-            row['reason'] = 'split indicator without retained trial composition'
-    write('split-completeness.json',dict(tracked_files=len(paths)-1, without_split=omitted, unreadable=unreadable, unread_formats=unread_formats, unread_split=unread_split, classification_counts=dict(scalar=len(scalar),unresolved_negative=len(unresolved),unread_split=len(unread_split)), explained_scalar=scalar, explained_unresolved_negative=unresolved, admission='A split found earlier is a native resolved descent (#255, Engine #1224; owner 2026-11-13).', class_reasons=dict(explained_scalar='No retained explicit trial composition; cannot supply a trial.', explained_unresolved_negative='Unconverged or rejected optimizer iterates; native descent not resolved.'), excluded_negative_records={state:sum(value==state for source in unresolved for value in negative_records[source]) for state in ('no_resolved_descent','indeterminate')}))
+            row['reason'] = 'split-indicating record without a retained associated composition'
+    write('split-completeness.json',dict(tracked_files=len(paths)-1, without_split=omitted, unreadable=unreadable, unread_formats=unread_formats, unread_split=unread_split, classification_counts=dict(scalar=len(scalar),unresolved_negative=len(unresolved),unread_split=len(unread_split)), explained_scalar=scalar, explained_unresolved_negative=unresolved, admission='A split found earlier is a native resolved descent (#255, Engine #1224; owner 2026-11-13).', class_reasons=dict(explained_scalar='split-indicating record without a retained associated composition', explained_unresolved_negative='Unconverged or rejected optimizer iterates; native descent not resolved.'), excluded_negative_records={state:sum(value==state for source in unresolved for value in negative_records[source]) for state in ('no_resolved_descent','indeterminate')}))
     globals()['SPLITS'] = registry
     write('split-registry.json', registry)
     return registry
