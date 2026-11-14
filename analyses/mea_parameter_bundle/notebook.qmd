@@ -5,6 +5,7 @@ resources:
   - heat-capacity-264/**
   - results/density-268/**
   - results/adoption-297/**
+  - results/adoption-340/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
   - results/bicarbonate-carbonate-266/**
@@ -32,11 +33,29 @@ resources:
   - results/ion-temperature-283/evidence/candidate-parameters.json
 ---
 
-**MEA record adopted by the owner on 11 November 2026 under [#297](https://github.com/tannerpolley/Amine-Thermodynamics/issues/297): #255 wide-start primary, `f8f64820…`, Engine `391dfe5d…`. [Exact parameters](results/selected-current-best-parameters.json) · [adoption evidence and inventory](results/adoption-297/README.md).**
+**The owner selected F2 on 13 November 2026 under [#340](https://github.com/tannerpolley/Amine-Thermodynamics/issues/340#issuecomment-6871176306).**
 
-The record describes nine liquid species and reactions R1–R5 for aqueous MEA–water–CO₂ with the existing electrolyte PC-SAFT formulation. The owner selected the completed #255 candidate; adoption performs fixed-parameter evaluations only. Earlier A7, #212 and #215 results remain historical. MDEA fitting belongs to #298 and manuscript updates to #259. Delivered-result review and investigator promotion remain pending.
+# Adopted F2 record {#working-record-340}
 
-# Adopted record and result {#working-record}
+F2 (`F2/previous`, SHA-256 `ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed`) has 11 fitted parameters and a 307-row cost of **150.76290287953717**, compared with F0's **148.51054565397726** on the same wheel and inputs. The cost is dimensionless, half the sum of squared weighted residuals. The adoption performs no parameter fitting. [Adoption checks and inherited values](results/adoption-340/README.md) retain the numerical evidence. Independent delivered review and investigator promotion remain pending.
+
+Outgoing and incoming adoption replays have zero maximum relative prediction and cost differences. The normal solvent command returns all **307 F2 predictions**, with **zero relative prediction difference** and cost **150.76290287953717**.
+
+Fresh adoption searches return **0 splits at all 1908 enforced, 576 offset, and 162 census states**, with no unavailable grid/offset states or incomplete census states. The **568134 supplied distances** from 3507 registry compositions are available and nonnegative. Minimum supplied TPD/RT is **4.815477097963594e-06**, and the minimum for liquid trials is **3.065092460019514e-05**.
+
+The [#338 comparison](results/reduced-refit/README.md) owns fitted and not-fitted errors, uncertainty, and source-law checks. F2's fitted CO₂-pressure average absolute relative deviation is **11.64159%**, fitted heat deviation **1.968941%**, and six-source not-fitted pressure deviation **24.88715%**. The pressure deviations at 15 and 45 mass% MEA are **45.07964%** and **45.85891%**. One fitted parameter is on a bound and three conditional standard errors exceed the corresponding absolute parameter values. Those errors condition on fixed laws, weights, bounds, and local linearization; they do not estimate physical prediction uncertainty. These already-seen comparisons informed the owner's choice and are not independent validation.
+
+![Owner checkpoint: measured CO₂ pressures and candidate model curves. Points preserve source conditions; curves use nominal 30 mass% MEA and the five labelled temperatures.](results/adoption-340/checkpoint-figure/fig340.png)
+
+The [figure values and identity check](results/adoption-340/checkpoint-figure/README.md) retain 159 measurements, the curve values, and 1,113 exact same-state comparisons. The figure was retained from the owner's checkpoint without recomputation. Finite phase searches cannot certify global stability. No absorber qualification or manuscript revision is made here.
+
+The [shared-value file](results/adoption-340/part-ii-shared-values.json) supplies R1–R3 and the water-ion pairs for #343–#346. Water–bicarbonate has $k_{ij}=0.7650000233694618$ and water–carbonate has $k_{ij}=-0.25$. Per the owner's decision, each Part II amine ion's Born diameter equals its segment diameter, and water–bicarbonate follows the adopted MEA record.
+
+# Historical F0 adoption and comparisons
+
+The sections below retain #297's F0 calculations and subsequent studies at their original parameter and Engine identities. They were not rerun or relabelled as F2. The parameter table and adjacent figures below retain F0 identities. The exact adopted F2 values are in the [selected document](results/selected-current-best-parameters.json).
+
+## F0 record and result {#working-record}
 
 The 307-row observation cost is **148.510545654**, compared with **148.883260440** for the outgoing record on identical current inputs and wheel. The largest replay difference against #255 is $2.102\times10^{-13}$ relative. All five pressure/species preservation rules and all four density/caloric rules pass. Loaded densities within twice row scale increase from 44/47 to 46/47. These row scales are not uniformly measurement uncertainties.
 
@@ -59,7 +78,7 @@ Fixed substitution of the new shared bicarbonate–water interaction and R2 law 
 
 The [parameter-profile and source-block bootstrap study](parameter-identifiability/notebook.qmd) retains #262's sensitivity and conditional-uncertainty calculations for the outgoing #215 record. Its delivered result was reviewed Supported; it adopts no parameter vector.
 
-The [current one-wheel evidence package](results/adoption-297/README.md) retains exact parameter and Engine identities, input hashes, adoption evidence and the displayed-input inventory. The figures show calibration and named comparison evidence.
+The [F0 one-wheel evidence package](results/adoption-297/README.md) retains exact parameter and Engine identities, input hashes, adoption evidence and the displayed-input inventory. The figures show calibration and named comparison evidence.
 
 {{< include results/uncertainty-307/summary.qmd >}}
 
