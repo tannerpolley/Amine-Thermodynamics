@@ -26,6 +26,14 @@ def jsonable(value):
     return [jsonable(v) for v in value]
 
 
+def residual_excess_enthalpy(model, T, P, x):
+    """J/mol mixture at common T and P; linear ideal-gas enthalpies cancel."""
+    value = model.state(T, P=P, x=x, phase="liquid").residual_enthalpy
+    for cid, fraction in x.items():
+        value -= fraction * model.state(T, P=P, x={cid: 1.0}, phase="liquid").residual_enthalpy
+    return value
+
+
 class SolventSpecification:
     def __init__(self, path, parameter="endpoint"):
         self.path = Path(path)
@@ -73,7 +81,7 @@ class SolventSpecification:
                 )
                 names = (
                     ("problem",)
-                    if record["constructor"] == "observation"
+                    if record["constructor"] in ("observation", "residual_excess_enthalpy")
                     else ("initial", "bubble" if "bubble" in dataset else "final")
                 )
                 for name in names:
@@ -81,6 +89,10 @@ class SolventSpecification:
                     key = source["identity"] + ":" + name
                     self.problems[key] = self.problem(template, row)
                     record[name] = key
+                if record["constructor"] == "residual_excess_enthalpy":
+                    if dataset["role"] != "comparison only" or self.problems[record["problem"]].reactions:
+                        raise ValueError("Residual excess enthalpy requires comparison only and no reactions")
+                    record["role"], record["unit"] = "comparison only", "J/mol mixture"
                 target = "fitted" if dataset["role"] == "calibration" else "comparisons"
                 self.inputs["observations"][target].append(record)
         for key in ("fitted", "comparisons"):
@@ -269,6 +281,11 @@ class SolventSpecification:
                 value=None,
             )
         try:
+            if record["constructor"] == "residual_excess_enthalpy":
+                value = residual_excess_enthalpy(self.model, problem.T, problem.P, record["arguments"]["x"])
+                if not math.isfinite(value):
+                    raise ValueError(f"Nonfinite residual excess enthalpy: {value}")
+                return dict(metadata, role="comparison only", status="Available", value=value)
             prediction = reg.predict(self.model, self.observation(record))
             if prediction.status.name == "Available" and not all(math.isfinite(v) for v in (prediction.value, prediction.residual)):
                 raise ValueError(f"Nonfinite native prediction: {prediction.value}, {prediction.residual}; {prediction.message}")
