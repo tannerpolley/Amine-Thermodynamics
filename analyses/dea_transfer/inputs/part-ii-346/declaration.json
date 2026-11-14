@@ -1293,7 +1293,7 @@
   ],
   "data_roles": {
     "path": "analyses/dea_transfer/inputs/part-ii-346/data-roles.csv",
-    "sha256": "8d4a6cb63fe4704f9b863b41b1d59eb039a68d345018c0a87ff5bf5914dd2716"
+    "sha256": "8c6168fb58a1ee5d4ee2198d9bc7a7ead0256f75e941fba4d8dcf34a5b269b6a"
   },
   "reaction_ranges": {
     "R1_R2_R3": {
@@ -1301,18 +1301,21 @@
         273.15,
         498.15
       ],
-      "wording": "273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
+      "wording": "273.15\u2013498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
     },
     "DEA_dissociation": {
       "interval_K": [
         273.15,
         323.15
       ],
-      "source": "Bower et al. 1962, Eq. 7 and 0–50 degrees Celsius measurements; modern Celsius-to-Kelvin conversion; approximately 323 K upper limit in Part II"
+      "source": "Bower et al. 1962, Eq. 7 and 0\u201350 degrees Celsius measurements; modern Celsius-to-Kelvin conversion; approximately 323 K upper limit in Part II"
     },
     "carbamate_hydrolysis": {
-      "interval_K": null,
-      "note": "Fitted law; Part II reaction-range table does not establish separate measured coverage. Do not infer coverage from its calculation interval."
+      "interval_K": [
+        303.0,
+        331.0
+      ],
+      "source": "Aroua 1997 experimental procedure p.692; Table 3 and Eq.14 p.695; source measurement interval, not fitted-law calibration or validity"
     }
   },
   "range_policy": "Mark every applicable range in outputs; never exclude a state for temperature. Binary comparisons use no reaction constants.",

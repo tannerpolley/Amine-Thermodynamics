@@ -1,0 +1,142 @@
+{
+  "scope": "reporting-only correction; original numerical checks retained; no fits, stability searches or thermodynamic predictions rerun",
+  "historical_checks": {
+    "historical_replay": {
+      "maximum_relative_prediction_error": 0.0,
+      "relative_cost_error": 7.58948459633757e-13,
+      "tolerance": 1e-08
+    },
+    "shared_inputs": {
+      "sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+      "components_equal": true,
+      "pairs_equal": true,
+      "reaction_coefficients_equal": true,
+      "calculation_interval_override_K": [
+        293.15,
+        458.64
+      ]
+    },
+    "endpoint": {
+      "native_cost": 8.033971893124118,
+      "replayed_cost": 8.03397189312541,
+      "relative_cost_error": 1.6076029396572267e-13,
+      "maximum_relative_prediction_error": 1.496448066534629e-12,
+      "tolerance": 1e-08
+    },
+    "range_marks": {
+      "observations_checked": 299,
+      "curve_points_checked": 750,
+      "all_matched": true
+    },
+    "conditional_standard_errors": {
+      "available": true,
+      "route_main": "1cb771e",
+      "reference_exactly_reproduced": true,
+      "active_bounds": [],
+      "identity_check": "endpoint-identity-365.json"
+    }
+  },
+  "models": {
+    "F2": {
+      "rows": 299,
+      "retained_numerical_fields_exact": true,
+      "range_counts": {
+        "carbamate-hydrolysis": {
+          "fitted": {
+            "False": 7,
+            "True": 73,
+            "reaction not used": 0
+          },
+          "not fitted": {
+            "False": 22,
+            "True": 45,
+            "reaction not used": 0
+          },
+          "comparison only": {
+            "False": 31,
+            "True": 98,
+            "reaction not used": 23
+          }
+        },
+        "DEA-dissociation": {
+          "fitted": {
+            "False": 57,
+            "True": 23,
+            "reaction not used": 0
+          },
+          "not fitted": {
+            "False": 22,
+            "True": 45,
+            "reaction not used": 0
+          },
+          "comparison only": {
+            "False": 104,
+            "True": 25,
+            "reaction not used": 23
+          }
+        }
+      },
+      "declaration_sha256": "bc743240dffe80462dc958a9ba6664e3c02d2721b312a3f61f54a59a7b0f6173"
+    },
+    "F0": {
+      "rows": 299,
+      "retained_numerical_fields_exact": true,
+      "range_counts": {
+        "carbamate-hydrolysis": {
+          "fitted": {
+            "False": 7,
+            "True": 73,
+            "reaction not used": 0
+          },
+          "not fitted": {
+            "False": 22,
+            "True": 45,
+            "reaction not used": 0
+          },
+          "comparison only": {
+            "False": 31,
+            "True": 98,
+            "reaction not used": 23
+          }
+        },
+        "DEA-dissociation": {
+          "fitted": {
+            "False": 57,
+            "True": 23,
+            "reaction not used": 0
+          },
+          "not fitted": {
+            "False": 22,
+            "True": 45,
+            "reaction not used": 0
+          },
+          "comparison only": {
+            "False": 104,
+            "True": 25,
+            "reaction not used": 23
+          }
+        }
+      },
+      "declaration_sha256": "34d2c542e82c478ec584ec6cac041fee147a5f57c0a16f45e10e3686a3258fae"
+    }
+  },
+  "curve_points": 750,
+  "campaign_files_byte_identical_to": "ceaf06d",
+  "source_pdf_hashes": {
+    "LGT7MKKL": "5d797b3a2a710d182ba5d8ae36e68697d9a4f3dbde66e3b6945d7fca8327367d",
+    "89LVDPBS": "05f1d5b38937295c398bdc543da7b6fead25ce45df12777e8dd85ccdab9f4e6e"
+  },
+  "existing_tests_passed": 17,
+  "range_reductions_independently_checked": true,
+  "parameter_rows": 68,
+  "parameter_record_values_exact": true,
+  "conditional_uncertainty_reference_exact": true,
+  "endpoint_identity_exact": true,
+  "original_fits_and_searches_unchanged": true,
+  "existing_tests": "tests/test_part_ii.py; see existing-checks.txt",
+  "line_accounting": {
+    "active_base": "1cb771e",
+    "production_gross_added_lines": 130,
+    "test_gross_added_lines": 0
+  }
+}

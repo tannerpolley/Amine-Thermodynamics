@@ -34,8 +34,7 @@ also lie outside it.
 The R1–R3 coefficients, reference temperatures and standard states follow the
 adopted file. Their calculation limits are changed explicitly to the common
 interval; source-range marks are independent of those calculation limits.
-The Part II reaction-range table does not establish separate measured coverage
-for the fitted DEA hydrolysis law; its range is recorded as unknown. Binary
+Aroua 1997 p. 692 and Table 3/Eq. 14 p. 695 establish 303–331 K as the source measurement interval for the inverse hydrolysis seed. This is separate from the subsequently fitted law's calibration and validity. The current declarations use that interval for reporting marks; the preserved campaign declarations retain their original metadata. Binary
 Cai and Horstmann comparisons use no reactions, so reaction-range marks are
 not applicable to them.
 

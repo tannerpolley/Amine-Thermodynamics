@@ -1,0 +1,949 @@
+{
+  "endpoint_sha256": "80d60d35c6354fdc3606777ad767f86246637bf6fd25911623a9d263c142aa8d",
+  "rows": [
+    {
+      "parameter": "diethanolamine/dispersion_energy_over_k",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/segment_count",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/segment_diameter",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        2,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/solvation_factor",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        3,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=solvation_factor:status=retained-literature-lineage",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/dielectric_volume",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        4,
+        "value"
+      ],
+      "unit": "liter / mole",
+      "source": "issue 317 Hsieh 2007 dielectric fit",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/dielectric_temperature",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "coefficients",
+        5,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "issue 317 Hsieh 2007 dielectric fit",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/charge_number",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "fixed",
+        "charge_number",
+        "value"
+      ],
+      "unit": "elementary-charge",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=charge_number:status=retained-literature-lineage",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/molar_mass",
+      "path": [
+        "parameters",
+        "components",
+        1,
+        "fixed",
+        "molar_mass",
+        "value"
+      ],
+      "unit": "kilogram / mole",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEA:family=molar_mass:status=retained-literature-lineage",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/born_diameter",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/340#issuecomment-6871176306; Born diameter tied to segment diameter",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/debye_huckel_diameter",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "design D2: MEA ion diameter x (m sigma^3 DEA / MEA)^(1/3)",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/dispersion_energy_over_k",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        2,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/segment_count",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        3,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEAH+:family=segment_count:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/segment_diameter",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        4,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "design D2: MEA ion diameter x (m sigma^3 DEA / MEA)^(1/3)",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/solvation_factor",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "coefficients",
+        5,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEAH+:family=solvation_factor:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/charge_number",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "fixed",
+        "charge_number",
+        "value"
+      ],
+      "unit": "elementary-charge",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEAH+:family=charge_number:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/molar_mass",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "fixed",
+        "molar_mass",
+        "value"
+      ],
+      "unit": "kilogram / mole",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEAH+:family=molar_mass:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/charged_molecule_ion",
+      "path": [
+        "parameters",
+        "components",
+        3,
+        "fixed",
+        "charged_molecule_ion",
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "design D2 form B",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/born_diameter",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/340#issuecomment-6871176306; Born diameter tied to segment diameter",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/debye_huckel_diameter",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "design D2: MEA ion diameter x (m sigma^3 DEA / MEA)^(1/3)",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/dispersion_energy_over_k",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        2,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/packing_diameter",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        3,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "design D2: MEA ion diameter x (m sigma^3 DEA / MEA)^(1/3)",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/segment_count",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        4,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEACOO-:family=segment_count:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/segment_diameter",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        5,
+        "value"
+      ],
+      "unit": "angstrom",
+      "source": "design D2: MEA ion diameter x (m sigma^3 DEA / MEA)^(1/3)",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/solvation_factor",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "coefficients",
+        6,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEACOO-:family=solvation_factor:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/charge_number",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "fixed",
+        "charge_number",
+        "value"
+      ],
+      "unit": "elementary-charge",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEACOO-:family=charge_number:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/molar_mass",
+      "path": [
+        "parameters",
+        "components",
+        4,
+        "fixed",
+        "molar_mass",
+        "value"
+      ],
+      "unit": "kilogram / mole",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/pure/any_solvent.csv:component=MEACOO-:family=molar_mass:status=provisional-historical-evaluation",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/diethanolamine/a/diethanolamine/b/energy_over_k",
+      "path": [
+        "parameters",
+        "topology",
+        "edges",
+        0,
+        "energy_over_k",
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/diethanolamine/a/diethanolamine/b/volume",
+      "path": [
+        "parameters",
+        "topology",
+        "edges",
+        0,
+        "volume",
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/protonated-diethanolamine/a/protonated-diethanolamine/b/energy_over_k",
+      "path": [
+        "parameters",
+        "topology",
+        "edges",
+        3,
+        "energy_over_k",
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/protonated-diethanolamine/a/protonated-diethanolamine/b/volume",
+      "path": [
+        "parameters",
+        "topology",
+        "edges",
+        3,
+        "volume",
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "Nasrifar & Tafazzol 2010 Table 2 (Zotero CBRPAXQG), DEA 4C",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/diethanolamine/a/multiplicity",
+      "path": [
+        "parameters",
+        "topology",
+        "sites",
+        0,
+        "multiplicity"
+      ],
+      "unit": "dimensionless",
+      "source": "selected parameter record topology/sites",
+      "basis": "fixed association topology",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/diethanolamine/b/multiplicity",
+      "path": [
+        "parameters",
+        "topology",
+        "sites",
+        1,
+        "multiplicity"
+      ],
+      "unit": "dimensionless",
+      "source": "selected parameter record topology/sites",
+      "basis": "fixed association topology",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/protonated-diethanolamine/a/multiplicity",
+      "path": [
+        "parameters",
+        "topology",
+        "sites",
+        2,
+        "multiplicity"
+      ],
+      "unit": "dimensionless",
+      "source": "selected parameter record topology/sites",
+      "basis": "fixed association topology",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "association/protonated-diethanolamine/b/multiplicity",
+      "path": [
+        "parameters",
+        "topology",
+        "sites",
+        3,
+        "multiplicity"
+      ],
+      "unit": "dimensionless",
+      "source": "selected parameter record topology/sites",
+      "basis": "fixed association topology",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/hydronium-cation/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        1,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEACOO-:column=H3O+:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/carbon-dioxide/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        3,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEACOO-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbon-dioxide/diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        7,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbon-dioxide/diethanolamine/k_ij_reciprocal_temperature_slope",
+      "path": [
+        "parameters",
+        "pairs",
+        7,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbon-dioxide/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        8,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=CO2:column=MEAH+:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "bicarbonate-anion/diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        12,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=HCO3-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        13,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEACOO-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbonate-anion/diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        14,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=CO3^2-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/hydronium-cation/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        15,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=H3O+:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/hydroxide-anion/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        16,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=OH-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        17,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEA:column=MEAH+:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/water/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        18,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "diethanolamine/water/k_ij_reciprocal_temperature_slope",
+      "path": [
+        "parameters",
+        "pairs",
+        18,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "tmp/joint-design/amendment-6-paper-candidate.md \u00a70b Revision 3, Stage 2b",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "bicarbonate-anion/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        19,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=HCO3-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-anion/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        20,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbonate-anion/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        21,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=CO3^2-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "hydroxide-anion/protonated-diethanolamine/k_ij",
+      "path": [
+        "parameters",
+        "pairs",
+        22,
+        "coefficients",
+        0,
+        "value"
+      ],
+      "unit": "dimensionless",
+      "source": "data/reference/epcsaft_datasets/MEA_CO2_H2O_phase2/mixed/binary_interaction/k_ij.csv:row=MEAH+:column=OH-:status=explicit-diagnostic",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "protonated-diethanolamine/water/k_ij_reciprocal_temperature_slope",
+      "path": [
+        "parameters",
+        "pairs",
+        28,
+        "coefficients",
+        1,
+        "value"
+      ],
+      "unit": "kelvin",
+      "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/170#issuecomment-6158000594",
+      "basis": "fixed retained model quantity",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/a",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "a"
+      ],
+      "unit": "dimensionless",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/b",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "b"
+      ],
+      "unit": "K",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/c",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "c"
+      ],
+      "unit": "dimensionless",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/d",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "d"
+      ],
+      "unit": "1/K",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/e",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "e"
+      ],
+      "unit": "K^2",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "DEA-dissociation/f",
+      "path": [
+        "reactions",
+        "aqueous",
+        3,
+        "correlation",
+        "f"
+      ],
+      "unit": "1/K^2",
+      "source": "Bower 1962 Eq. 7 p.73; retained law",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/a",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "a"
+      ],
+      "unit": "dimensionless",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fitted"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/b",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "b"
+      ],
+      "unit": "K",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fitted"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/c",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "c"
+      ],
+      "unit": "dimensionless",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/d",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "d"
+      ],
+      "unit": "1/K",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/e",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "e"
+      ],
+      "unit": "K^2",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    },
+    {
+      "parameter": "carbamate-hydrolysis/f",
+      "path": [
+        "reactions",
+        "aqueous",
+        4,
+        "correlation",
+        "f"
+      ],
+      "unit": "1/K^2",
+      "source": "issue #346 selected fit; inverse Aroua 1997 Eq.14 used as original seed",
+      "basis": "completed reaction-law coefficient; not a chart increment",
+      "fitted_or_fixed": "fixed"
+    }
+  ]
+}
