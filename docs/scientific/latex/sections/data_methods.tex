@@ -38,7 +38,10 @@ Kim--Svendsen semi-differential calorimetry measures finite additions; the corre
 A \SI{1.734}{\mega\pascal} isobar approximates these intervals because their experimental pressure histories are unavailable.
 
 % P:methods-heat-conditions
-The fitted Hilliard heat capacities use 7 mol MEA/kg water at \SI{101325}{\pascal}, with loading $10^{-6}$ for nominally unloaded states \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
+The fitted Hilliard heat capacities use 7 mol MEA/kg water.
+Calculations assign \SI{101325}{\pascal}; Hilliard used sealed sample pans and did not report their internal pressure \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
+The loading $10^{-6}$ represents nominally unloaded states numerically.
+The broader Hilliard heat-capacity comparisons use the same assigned-pressure convention.
 The objective uses molar-feed heat capacity, while comparisons with the broader heat-capacity data use the source mass basis.
 The feed basis includes added \COtwo in both conversions.
 
@@ -59,8 +62,11 @@ Section~\ref{supp-sec:s-density} gives the source inputs and their qualification
 % P:methods-04
 Estimation proceeds from pure water against IAPWS-95, through the \COtwo--water interaction against Kiepe pressures and the MEA dielectric coefficients against unloaded-solution permittivities, to the joint MEA fit.
 Earlier subsystem coefficients remain fixed in the joint fit.
-The adopted set, labeled F2 for the parameter-choice comparison, fixes R2 and R5 to their literature laws and ties the \MEAH and \MEACOO Born diameters to their segment diameters.
-Eleven remaining parameters minimize
+The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights.
+F0 allows reaction-law shifts and separate amine-ion Born diameters; F1 fixes R2 and R5 to their literature laws, and F2 additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
+F3 also fixes the carbamate--water interaction and \MEAH--water temperature slope to zero.
+F4 fixes the water--bicarbonate and water--carbonate laws to sodium-salt values and frees the \MEAH--bicarbonate interaction; F4-0 fixes that new interaction to zero, whereas F5 instead adds zero \MEAH--carbamate interaction to F4.
+For the adopted set, F2, eleven remaining parameters minimize
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
  r_j=\frac{y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}}}{s_j}
@@ -76,9 +82,8 @@ These are local solutions, not a global parameter search.
 % P:methods-weights
 Pressure uses a log-ratio residual with an assigned relative allowance; species fractions and ratios use relative-plus-floor scales.
 Vinjarapu heat scales come from the reported heat uncertainty, density scales combine density and loading information, and the heat-capacity scale uses Hilliard's stated accuracy on the molar-feed basis \cite[Table~4]{HemaBhavya2025}\cite[Sect.~4.6]{Hilliard2008}.
-The binary-temperature, vapor-fraction and carbon-free-density allowances, together with the group weights, are assigned fitting choices.
-The reasons for their particular magnitudes were not recorded; they are not reconstructed as statistical sampling variances.
-Thus the objective specifies relative fitting priorities, and its value is not an absolute measure of physical accuracy.
+The binary-temperature, vapor-fraction and carbon-free-density allowances, together with the group weights, are assigned without a statistical derivation and are not sampling variances.
+The objective therefore specifies relative fitting priorities, and its value is not an absolute measure of physical accuracy.
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD) and root-mean-square error (RMSE),
@@ -97,6 +102,12 @@ For the interior parameters, local covariance is
 where $J_I$ is the weighted residual Jacobian and active-bound parameters remain fixed.
 These errors condition on the fitted model, source laws, scales, weights and local linearization.
 
+% P:methods-checks
+Table~\ref{tab:check-values} supplies reproduction values with the adopted parameters for a \COtwo--water, an MEA--water and a loaded-MEA state.
+Bubble-pressure solutions started from two initial pressures agree at the displayed precision; Section~\ref{supp-sec:s-files} lists the corresponding energy contributions and species fractions.
+These are numerical reproduction checks, not additional measurements or physical validation.
+\input{tables/check_values}
+
 \subsection{Phase-stability analysis and stability penalty}\label{sec:methods-phase}
 % P:methods-phase-01
 The reacting tangent-plane criterion tests charge-neutral trial phases \cite[Sect.~2]{Michelsen1982}:
@@ -112,7 +123,7 @@ An unavailable or incomplete search supplies no evidence of stability.
 % P:methods-phase-02
 Each fitted set is searched on the liquid-state grid and on liquid--vapor states defined in Section~\ref{supp-sec:s-phase}.
 The liquid grids use 1.05 and 3.0 times the candidate's bubble pressure; separate checks use 1.5 times that pressure and intermediate compositions and temperatures.
-At each liquid--vapor state, trial compositions that previously produced a resolved Gibbs decrease are evaluated in addition to optimized trials.
+At each liquid--vapor state, trial compositions taken from Gibbs decreases resolved for other MEA parameter sets are evaluated in addition to optimized trials.
 These supplied-composition distances are separate checks, not newly resolved phase splits.
 
 % P:methods-penalty
@@ -126,11 +137,5 @@ If a split is detected, the whole searched liquid-state set enters the penalized
 \end{equation}
 The two scales are successive numerical penalty strengths; $\tau_k$ is the most negative distance on a resolved descending branch, or zero when a completed search finds none.
 No zero is assigned to an unavailable search.
-If needed, a parameter segment from a separately admissible anchor to the penalized solution is shortened in 0.01 steps, then refined by ten bisections to recover an admissible endpoint.
-The adopted F2 fit required neither a penalty stage nor this retreat.
-
-% P:methods-checks
-Table~\ref{tab:check-values} supplies reproduction values for a \COtwo--water, an MEA--water and a loaded-MEA state.
-The two initial-pressure solutions agree at the displayed precision; Section~\ref{supp-sec:s-files} lists the corresponding energy contributions and species fractions.
-These are numerical reproduction checks, not additional measurements or physical validation.
-\input{tables/check_values}
+If needed, the parameter segment from a separately admissible parameter set to the penalized solution is shortened in 0.01 steps, then refined by ten bisections, to recover an admissible endpoint.
+F0 is the stability-penalized calibration of the restriction sequence; the adopted F2 fit required neither a penalty stage nor this segment shortening.

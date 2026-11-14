@@ -88,7 +88,7 @@ The fitted heat-capacity scale is $0.02C_P^{\mathrm{obs}}/n_{\mathrm{feed}}$ in 
 
 % P:supplement-objective-02
 Vinjarapu heat scales use the printed uncertainty converted to J/mol \COtwo \cite[Table~4]{HemaBhavya2025}.
-The species relative allowances and floors, log-pressure allowance, carbon-free-density allowance, Cai allowances and group weights are assigned choices whose detailed rationale was not recorded.
+The species relative allowances and floors, log-pressure allowance, carbon-free-density allowance, Cai allowances and group weights are assigned choices without a statistical derivation.
 Cai's reported temperature resolution and maximum composition error differ from the fitting allowances \cite[Tables~2--3]{caiBinaryIsobaricVaporLiquid1996}.
 The near-unit residual variance factor is not a statistical justification for these weights.
 Scales inherited from source accuracy statements and assigned residual scales remain distinct.
@@ -96,7 +96,10 @@ Scales inherited from source accuracy statements and assigned residual scales re
 \section{Source conventions and density scales}\label{sec:s-corrections}\label{sec:s-density}
 % P:supplement-density-01
 Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series, with unresolved high-temperature/loading applicability of the density estimate \cite[pp.~3099--3100]{Amundsen2009}.
-Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is an expanded uncertainty with coverage factor two and is used without division by that factor \cite[Table~3]{Hartono2014}.
+Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the printed expanded uncertainty with coverage factor two and is used without division by that factor \cite[Table~3, p.~1810]{Hartono2014}.
+The calculations adopt Table~3's printed loading $\alpha$.
+The accompanying printed \COtwo mole fractions imply different loadings under the stated solvent composition; that source inconsistency remains unresolved.
+The density comparisons and conditional parameter errors therefore depend on the adopted printed-loading convention.
 The secant construction in main-text Eq.~\ref{main-eq:density-scale} combines these with loading uncertainty.
 These scales therefore do not uniformly represent standard uncertainties.
 
@@ -117,8 +120,9 @@ Table~\ref{tab:supplement-check-values} expands the main-text reproduction state
 \input{tables/supplement_check_values}
 
 % P:supplement-kim
-The primary common-row Kim comparison includes every calculated interval below the stated loading ceiling, including the two conflicting printed high-temperature intervals.
-The source-consistent alternative omits those intervals, and a further diagnostic omits the first high-temperature interval of each run.
+The primary common-row Kim comparison includes calculated intervals whose final loading is at most 0.60 mol \COtwo/mol total MEA.
+It includes the two inconsistent printed observations at \SI{393.15}{\kelvin}, run 2, with final loadings 0.078 and 0.445 mol/mol.
+The source-consistent alternative omits those two observations, and a further diagnostic also omits the first interval of each run at that temperature.
 Table~\ref{tab:kim-alternatives} reports these alternatives without choosing a parameter set from them.
 All use the same imposed-pressure approximation and finite-addition definition as the main comparison.
 
@@ -129,7 +133,7 @@ All use the same imposed-pressure approximation and finite-addition definition a
 The ten interior parameters have local covariance from main-text Eq.~\ref{main-eq:conditional-covariance}; the ion--ion interaction at its active lower bound remains fixed.
 The weighted Jacobian has rank ten, and the variance factor is 1.01523840323.
 Table~\ref{tab:supplement-fitted-parameters} gives values, bounds and conditional standard errors, and Table~\ref{tab:supplement-correlations} gives the correlations in the same interior-parameter order.
-Campaign dependence, model discrepancy, source-law uncertainty and future measurement noise are not included.
+Correlated errors within one experimental source, model discrepancy, source-law uncertainty and future measurement noise are not included.
 
 \input{tables/supplement_fitted_parameters}
 \input{tables/supplement_correlations}
@@ -163,7 +167,7 @@ Thus extensive split-energy changes divided by $RT$ are in mol on this feed basi
 
 % P:supplement-phase-method
 Charge-neutral liquid starts include a uniform composition and near-pure neutral-species compositions; vapor starts contain only the three neutral species.
-The optimized search and the evaluations at earlier resolved split compositions are reported separately.
+The optimized search and the evaluations at split compositions resolved for other MEA parameter sets are reported separately.
 Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
 Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
 The raw state results identify incomplete or unavailable cases explicitly.
@@ -177,7 +181,7 @@ Neither probe can be compared with F2's covariance as if it were an uncertainty 
 
 \section{Shared inputs for Part II}\label{sec:s-shared}
 % P:supplement-shared
-The shared coefficient table in the main text is generated from the adopted parameter document, not from a sodium-salt substitution.
+The shared coefficient table in the main text lists the adopted F2 values.
 Part II also keeps the shared component charges, segment counts, association topology, electrostatic model choices, standard states and R1--R3 reaction definitions fixed.
 The water--bicarbonate interaction is the MEA-fitted value, whereas the carbonate--water interaction is an assumed fixed value.
 The weakly determined bicarbonate interaction and the dielectric and source-law extrapolations limit the strength of a transfer claim before amine-specific comparisons.

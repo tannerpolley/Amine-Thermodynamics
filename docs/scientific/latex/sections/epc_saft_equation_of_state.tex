@@ -26,7 +26,7 @@ Because the permittivity in the two electrostatic terms depends on density, temp
 Dispersion energies $\epsilon_i$ and $\epsilon_{ij}$ are distinct from the association energies $\epsilon^{AB}$; relative permittivities use $\varepsilon$.
 Below, $\mathcal I$ is the set of ions and $\rho_N=N_{\mathrm A}\rho$ is number density, with $N_{\mathrm A}$ the Avogadro constant.
 
-\subsubsection{Segment diameters and dispersion interactions}
+\subsubsection{Segment and ion diameters}
 % P:theory-02a
 For the neutral species the hard-sphere diameter depends on temperature \cite[Eq.~A.9]{Gross2001},
 \begin{equation}
@@ -38,36 +38,9 @@ The ion packing diameter is the temperature-independent value $d_i=0.88\sigma_i$
 The other four Born diameters remain fixed inputs.
 These diameter choices define the present parameterization; they are not independently measured ion sizes.
 
-% P:theory-02b
-The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the dispersion energy of a pair is
-\begin{equation}
-    \epsilon_{ij}=\sqrt{\epsilon_i\epsilon_j}\,\left(1-k_{ij}\right).
-    \label{eq:dispersion-combining-rule}
-\end{equation}
-Dispersion between ions of the same charge sign, including an ion with itself, is excluded ($\epsilon_{ij}=0$ for $z_iz_j>0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
-The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal-temperature form
-\begin{equation}
- k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(T^{-1}-T_{\mathrm{ref}}^{-1}),
- \qquad T_{\mathrm{ref}}=\SI{313.15}{\kelvin},
- \label{eq:kij-temperature}
-\end{equation}
-with $b_{ij}$ in kelvin.
-The \COtwo--water coefficients are fixed inputs, whereas the \MEA--water and \MEAH--water intercepts and slopes enter the joint fit.
 
-\subsubsection{Association scheme}
-% P:theory-03
-Water and \MEA each carry one donor and one acceptor site (2B), and only donor--acceptor pairs bond.
-\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
-This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
-\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eqs.~6 and 7]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
-\begin{equation}
-    \epsilon^{AB}_{ij}=\tfrac12\left(\epsilon^{AB}_i+\epsilon^{AB}_j\right),
-    \qquad
-    \kappa^{AB}_{ij}=\sqrt{\kappa^{AB}_i\kappa^{AB}_j}\left(\frac{\sqrt{\sigma_i\sigma_j}}{\sigma_{ij}}\right)^3 ,
-    \label{eq:wolbach-sandler}
-\end{equation}
-and \MEA and \COtwo do not bond with each other.
-The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (Eq.~\ref{eq:association-strength} and Section~\ref{supp-sec:s-parameters}).
+
+
 
 \subsubsection{Hard-chain contribution}
 % P:theory-contributions-02
@@ -119,7 +92,23 @@ The dispersion term is Gross and Sadowski's second-order perturbation expansion 
 \end{equation}
 where $C_1$ comes from the hard-chain compressibility, and $b_k(\bar m)$ has the same form as $a_k(\bar m)$.
 The coefficients $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are Gross and Sadowski's universal constants.
-The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and $\epsilon_{ij}$ is the pair dispersion energy of Eq.~\ref{eq:dispersion-combining-rule}.
+
+% P:theory-02b
+The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the dispersion energy of a pair is
+\begin{equation}
+    \epsilon_{ij}=\sqrt{\epsilon_i\epsilon_j}\,\left(1-k_{ij}\right).
+    \label{eq:dispersion-combining-rule}
+\end{equation}
+Dispersion between ions of the same charge sign, including an ion with itself, is excluded ($\epsilon_{ij}=0$ for $z_iz_j>0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}.
+The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal-temperature form
+\begin{equation}
+ k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(T^{-1}-T_{\mathrm{ref}}^{-1}),
+ \qquad T_{\mathrm{ref}}=\SI{313.15}{\kelvin},
+ \label{eq:kij-temperature}
+\end{equation}
+with $b_{ij}$ in kelvin.
+The \COtwo--water coefficients are fixed inputs, whereas the \MEA--water and \MEAH--water intercepts and slopes enter the joint fit.
+
 
 \subsubsection{Association contribution}
 % P:theory-contributions-04
@@ -136,7 +125,21 @@ Hydrogen bonding is described by Wertheim's first-order theory in the form used 
 \end{equation}
 where $X_A$ is the fraction of molecules $i$ not bonded at site $A$, $B$ runs over the sites on molecule $j$, and $\Delta^{AB}$ is the strength of an $A$--$B$ bond between molecules $i$ and $j$.
 The site fractions are solved at every state.
-The site scheme and the \MEA--water combining rule are given in the association scheme above.
+
+% P:theory-03
+Water and \MEA each carry one donor and one acceptor site (2B), and only donor--acceptor pairs bond.
+\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
+This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
+\MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eqs.~6 and 7]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
+\begin{equation}
+    \epsilon^{AB}_{ij}=\tfrac12\left(\epsilon^{AB}_i+\epsilon^{AB}_j\right),
+    \qquad
+    \kappa^{AB}_{ij}=\sqrt{\kappa^{AB}_i\kappa^{AB}_j}\left(\frac{\sqrt{\sigma_i\sigma_j}}{\sigma_{ij}}\right)^3 ,
+    \label{eq:wolbach-sandler}
+\end{equation}
+and \MEA and \COtwo do not bond with each other.
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (Eq.~\ref{eq:association-strength} and Section~\ref{supp-sec:s-parameters}).
+
 
 \subsubsection{Debye--H\"uckel contribution}
 % P:theory-contributions-05
@@ -240,8 +243,7 @@ R1--R3 use the Austgen correlation form \cite[Table~V]{Austgen1991},
 \end{equation}
 where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; R5 is Bates and Pinching \cite[Eq.~10, Table~2, p.~351]{batesAcidicDissociationConstant1951}, also tabulated by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
-All five reaction laws remain fixed in the joint fit.
-R2 uses Austgen's correlation with its molality conversion, and R5 uses Bates--Pinching's published dissociation correlation; no fitted reaction-enthalpy adjustment is added.
+All five reaction laws, including their temperature dependence, remain fixed at these literature forms in the adopted parameter set; no fitted reaction-enthalpy adjustment is added.
 The R1--R3 correlation range is 273.15--\SI{498.15}{\kelvin}, as stated by Austgen et al.\ \cite[Table~V, p.~547, citing Edwards et al.\ (1978)]{Austgen1991}.
 This is the source-correlation range, not verified measurement coverage of the underlying experiments.
 The reacting calculations in this paper use 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
