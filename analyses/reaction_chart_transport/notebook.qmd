@@ -1,0 +1,104 @@
+---
+title: "Completed reaction laws and endpoint coordinates"
+format: html
+execute:
+  enabled: false
+---
+
+The shared Part II endpoint now represents the same model point for replay,
+differentiation and continuation. At the retained DEA start-0 endpoint, the
+maximum relative difference between differentiated and replayed predictions
+falls from 0.04738229639939395 to exactly zero across 80 fitted rows. The
+replay cost remains 8.03397189312541. This is numerical verification on one
+Engine wheel, not physical validation or parameter adoption.
+
+## Coordinate transport
+
+[Issue #365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365)
+owns this correction and its same-wheel relative identity limit of $10^{-8}$.
+The scope and wheel follow the series rules in
+[issue #337](https://github.com/tannerpolley/Amine-Thermodynamics/issues/337).
+The shared owner is `Route.endpoint_mapping` in `analyses/part_ii.py`.
+
+For a coordinate with origin $o$, scale $s$ and returned optimizer value $u$,
+the fitted value is $x=o+su$. If completing the reaction law gives coefficient
+$c$, the replacement origin is $c$ and both bounds are translated by $c-x$.
+The fit displacement $su$ does not translate the bounds. The enthalpy shift
+is already incorporated in the completed law, so its origin resets to zero
+and its bounds retain the existing translation by the absorbed shift.
+Applying this mapping again with zero optimizer displacement and the same
+completed law leaves the endpoint unchanged. A later continuation transports
+only its additional completion offset.
+
+The old path completed the laws and reset enthalpy shifts while leaving the
+reaction coefficient in the previous chart. The correction replaces that
+incomplete transport in the shared owner. Endpoint reuse and continuation
+consume this mapping through `stable_refit_255.stage_fit`; uncertainty
+consumes its output without a separate amine correction.
+
+## Same-wheel evidence
+
+The [retained verification](results/verification.json) contains all DEA replay
+and differentiated predictions, coordinate origins and bounds, source hashes,
+and caller checks. Calculations used Engine main `391dfe5d64ede5036bf160bc6ae037ad5e14af32`,
+wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+`Route.verify` checked installed package bytes against that wheel.
+The DEA inputs were read from the #346 task checkout; their exact input hashes
+are retained. Its running campaign and branch were not modified.
+
+| Quantity | Previous chart | Completed chart |
+|---|---:|---:|
+| DEA cost, dimensionless half-sum of weighted squared residuals | 8.03397189312541 | 8.03397189312541 |
+| First replayed CO2 partial pressure, Pa | 2476.6125757577397 | 2476.6125757577397 |
+| First differentiated CO2 partial pressure, Pa | 2359.26498462672 | 2476.6125757577397 |
+| Maximum relative prediction difference, 80 rows | 0.04738229639939395 | 0 |
+| Carbamate-hydrolysis coefficient a origin | 5.778214151903766 | 5.869410673201805 |
+| Coefficient a lower bound | 4.097376425483943 | 4.188572946781981 |
+| Coefficient a upper bound | 10.097376425483944 | 10.188572946781981 |
+
+The bound translation is +0.09119652129803857. Repeating transport with zero
+displacement gives an identical endpoint, including bounds. The regression
+test also checks a nonzero continuation with an offset of opposite sign.
+These few scalar identity checks use tables because a plot would add no
+information about the exact equality being checked.
+
+Existing MEA callers retain their own chart owner. Using the #340 frozen
+`historical-spec/MEA.toml`, `stable_refit_255.replay` gives:
+
+| Caller | Rows | Replayed cost | Maximum relative prediction difference from retained reference |
+|---|---:|---:|---:|
+| MEA F0 | 307 | 148.51054565397726 | 0 |
+| MEA F2 | 307 | 150.76290287953717 | 0 |
+| MDEA B1, shared Part II route | 278 | 374.51907880524016 | 0 cost difference from #365's required reference |
+
+The MEA references and parameter inputs are those named by
+`analyses/mea_parameter_bundle/results/adoption-340/inputs.json`.
+MDEA uses `analyses/mdea_mea_workflow/inputs/part-ii-replay.json`, with
+`adopt=False` to replay B1 rather than transfer it to F2.
+
+## Conditional uncertainty and limits
+
+On the old DEA chart, `Route.uncertainty` rejects the point with
+`Differentiation/replay row mismatch` before calculating standard errors.
+The corrected chart passes that same assertion. The
+[conditional information](results/conditional-uncertainty.json) retains standard
+errors of 0.0034855873154973523 for DEAH–water interaction,
+0.054321087209096015 for DEACOO–water interaction,
+0.6151039779186511 for hydrolysis a, and 1346.321881855986 J/mol for the
+hydrolysis enthalpy shift. These are conditional on the fitted model,
+residual scales and local linearization. No new fit, scientific assessment,
+parameter adoption, or physical uncertainty claim follows from chart identity.
+At method entry, any previous uncertainty file is removed. A failed rerun
+therefore leaves no stale standard-error file. The regression test first
+computes finite uncertainty for an endpoint returned by `endpoint_mapping`,
+then reruns an inconsistent chart in the same directory and verifies removal.
+
+## Checks and delivery boundary
+
+The [check summary](results/checks.json) records focused and complete-suite
+results and the identities of the pre-existing failures. Exactly two new
+tests cover continuation/repeated transport and uncertainty rejection.
+Independent delivered review remains with the parent task before final DEA
+use. This notebook has not been independently reviewed or promoted for
+manuscript use. Site registration is deferred because this task expressly
+forbids modifying `analyses/_cse-manuscript.json`.
