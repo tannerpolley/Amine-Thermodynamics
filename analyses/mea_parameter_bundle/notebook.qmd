@@ -1,6 +1,7 @@
 ---
 title: "MEA parameter bundle"
 resources:
+  - results/split-cause-342/**
   - results/uncertainty-307/**
   - heat-capacity-264/**
   - results/density-268/**
@@ -1517,3 +1518,72 @@ The managed root refresh refuses the new section list because it would alter
 protected `analyses/_cse-manuscript.json`. That file was not changed. Direct
 Quarto rendering uses retained outputs and does not run the model. Root
 registration and manuscript promotion remain outside this task.
+
+**Physical origin of the earlier liquid split — issue #342**
+
+The fixed-model comparison is the historical wide-bound record `efb2a9ab…` against adopted F2 `ae17803e…dedefed`. This is the fallback required by [#342](https://github.com/tannerpolley/Amine-Thermodynamics/issues/342): none of #338's fits split without a penalty, and F2 needed no penalty. The new calculations use Engine `391dfe5d`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`. Earlier records remain frozen. These calculations are numerical attribution for Part I, without fitting or parameter adoption.
+
+![The wide-record split is a water-poor, ion-rich liquid, and its removal involves opposing energy contributions. (a) Projection of every retained searched state onto temperature and loading: a colored cross means a resolved descent was found for at least one concentration/pressure at that coordinate. Concentrations and pressures remain separate in the plotted-value table. The broad grid/offset map is frozen #255 location evidence on wheel bc779473; the new 162-state census and all energy and parameter calculations use 391dfe5d. Unavailable states establish no stability. (b) Extensive split-minus-parent energy contributions for the strongest retained split: both records keep phase amounts and compositions fixed, while each liquid/vapor density is obtained from its native pressure root at the imposed temperature and pressure. The total is included; zero dipolar and cation-mixing terms are omitted. (c) The five largest reported liquid species; all nine species and the vapor remain in the composition table. Calculated states are points; no coexistence curve or uncertainty interval is inferred.](results/split-cause-342/split-cause.png)
+
+At 333.15 K, loading 0.5 mol CO₂/mol MEA and 21.175719 kPa, the strongest confirmed wide-record split lowers $G/(RT)$ by **2.729554 mol**. The feed basis is 9.7292821 mol MEA, 76.9751925 mol water and 4.86464105 mol CO₂ (30 mass% MEA before loading). The water-poor liquid has water mole fraction **0.590900**, MEAH⁺ **0.194442** and carbamate **0.158032**, compared with **0.973235**, **0.00749671** and **0.00649627** in the water-rich liquid. Their amounts are 21.7501 and 63.0573 mol, respectively; 2.06071 mol remains vapor. These are model compositions, not measured second-liquid compositions.
+
+| Contribution to split minus parent, $G/(RT)$ (mol) | Wide record | F2 at fixed compositions and pressure | F2 minus wide |
+|---|---:|---:|---:|
+| Hard chain | 29.937183 | 27.939220 | −1.997963 |
+| Dispersion | −57.868858 | −47.791607 | 10.077251 |
+| Association | −18.231820 | −17.790206 | 0.441615 |
+| Debye–Hückel | −10.349017 | −10.156383 | 0.192633 |
+| Born | −106.233888 | −107.111500 | −0.877612 |
+| PV | −5.696099 | −5.696005 | 0.000094 |
+| Ideal and completed standard states | 165.712944 | 167.792809 | 2.079865 |
+| **Total** | **−2.729554** | **7.186328** | **9.915882** |
+
+The numerical evidence distinguishes a large favorable term from the change that removes a split. Born is the most negative explicit contribution at this state, but becomes **more** favorable on F2. Dispersion supplies the largest upward change. Across all 51 retained confirmed configurations, dispersion has the largest absolute change in 49 and Born in two (states 74 and 98). Thus the table supports a coupled energy balance with a prominent dispersion change; calling Born alone the cause of removal would contradict the calculated sign. A dispersion interaction interpretation is consistent with the standard unlike-energy combining rule (Baygi and Pahlavanzadeh 2015, Section 3.2, Eq. 11, p. 795); the parameter-move evidence below determines how far that interpretation can be narrowed.
+
+The single-coefficient move of MEAH⁺ segment diameter from **4.1553574304 to 4.8558297718 Å** gives **0/162 native-descent states, 0/162 negative-supplied-distance states and 0/162 incomplete states**. This already establishes that a group of one coefficient can remove all descents detected in this census; the unchanged wide record rules out a group of size zero. This is conditional numerical attribution in the expanded coefficient space: Debye–Hückel, packing and Born diameters remain at the wide values for this probe. F2 ties size coordinates during fitting, so the isolated move is not an adopted fit or a property-agreement result. A second sufficient move changes only the MEAH⁺–water interaction constant from **0.0258101179 to −0.3577254318**, also giving **0/162 native descents, 0/162 negative supplied distances and 0/162 incomplete states**. Thus the sufficient parameter change is not unique. Decreasing this constant strengthens the unlike dispersion attraction under the combining rule cited above; this is an interpretation consistent with the computed sensitivity, not identification of a unique microscopic cause. Other single-coefficient moves are assessed independently from the same wide record.
+
+
+
+All 21 differing stored coefficients were assessed independently. The following counts are out of 162 states; a state may have both a native descent and a negative supplied distance. “Either” is their union. The exact coefficient names, values and registry-prefix lengths are in [parameter-moves.csv](results/split-cause-342/parameter-moves.csv) and [parameter-changes.json](results/split-cause-342/parameter-changes.json). The final R5 coefficient differs only in its stored floating-point representation and is included literally.
+
+| Wide-to-F2 single-coefficient move | Native descent | Negative supplied distance | Either | Incomplete |
+|---|---:|---:|---:|---:|
+| MEAH⁺ Born diameter | 52 | 53 | 53 | 0 |
+| MEAH⁺ Debye–Hückel diameter | 44 | 45 | 45 | 0 |
+| MEAH⁺ dispersion energy | 71 | 69 | 72 | 0 |
+| MEAH⁺ packing diameter | 89 | 84 | 89 | 16 |
+| MEAH⁺ segment diameter | 0 | 0 | 0 | 0 |
+| Carbamate Born diameter | 56 | 54 | 56 | 0 |
+| Carbamate Debye–Hückel diameter | 56 | 56 | 56 | 0 |
+| Carbamate dispersion energy | 35 | 30 | 35 | 0 |
+| Carbamate packing diameter | 36 | 21 | 36 | 0 |
+| Carbamate segment diameter | 78 | 77 | 78 | 0 |
+| MEA–water interaction constant | 54 | 54 | 54 | 0 |
+| MEA–water reciprocal-temperature slope | 53 | 54 | 54 | 0 |
+| Bicarbonate–water interaction constant | 56 | 54 | 56 | 0 |
+| Carbamate–water interaction constant | 68 | 68 | 68 | 0 |
+| MEAH⁺–water interaction constant | 0 | 0 | 0 | 0 |
+| MEAH⁺–water reciprocal-temperature slope | 42 | 42 | 42 | 0 |
+| R2 a | 51 | 49 | 51 | 0 |
+| R2 b | 55 | 56 | 56 | 0 |
+| R5 a | 50 | 50 | 50 | 0 |
+| R5 b | 56 | 56 | 56 | 0 |
+| R5 c (rounding difference) | 54 | 54 | 54 | 0 |
+
+The packing-diameter move has 16 incomplete states. In each, the parent solver succeeds on its requested tolerance, its maximum equation residual is at most 3.4106051e-13, all nine native trial optimizers succeed and the reports complete. The negative reduced-Hessian minimum (-1.0541658e-13 to -3.4670704e-15) fails the existing exact nonnegative-parent check in `phase_diagnosis_255.reduce_state`; positive pressure-density derivatives do not remove that separate failure. These states are retained as incomplete, without attributing the negative eigenvalue to rounding or changing its admission limit. [The per-state diagnostics](results/split-cause-342/incomplete-parent-diagnostics.json) identify this remaining admission gap. It does not affect either sufficient move or the wide/F2 count-identity checks, all of which have zero incomplete states.
+
+Only the segment-diameter and MEAH⁺–water constant moves satisfy the complete zero-descent condition among the singles. The smallest sufficient group therefore has cardinality **one**, with two distinct solutions in the tested expanded coefficient space. This is not a unique parameter identification.
+
+The registry grew from **3507 to 6121 distinct native-resolved compositions**. Its original trial list remains an exact prefix, every own native-resolved witness is present and all final entries are distinct. The final fingerprint is `f7f02b1ef565690efb466dd6d3d73bc9c74c708116725b2b0d931486cdc1b666`. F2 and both sufficient moves were additionally checked at every one of these final registry compositions at all 162 states: **zero negative supplied distances and zero unavailable evaluations** in each case. Their minimum supplied distances are F2: 4.815477098e-06, move-1-04: 1.995179912e-05, move-1-14: 6.545944123e-05 RT, respectively. Previously evaluated prefixes and newly evaluated suffixes are retained separately; the suffix check reuses `reduced_refit_338.supplied_census` and asserts identical parent coordinates. These are evaluated trial distances, not newly resolved descents. [The append audit](results/split-cause-342/registry-append-check.json) records the native-only registry update.
+
+The fixed-composition isobaric configurations under F2 must not be confused with its chemically equilibrated phases. Four of the 51 still lie below the *old* parent evaluated under F2, with a minimum difference of −0.162127 mol. After F2's parent is equilibrated on the same feed, temperature and pressure, **all 51 frozen split configurations lie above it**, by **0.314759–8.260848 mol** in $G/(RT)$. This reference comparison is retained in [F2-parent-comparison.csv](results/split-cause-342/F2-parent-comparison.csv). The fresh finite search independently reproduces **54/162** resolved-descent states for the wide record and **0/162** for F2; both have zero incomplete states. The registry prefixes available before those searches give negative supplied distances at 54/162 wide-record states and 0/162 F2 states. Counts are lower bounds, and zero is not global stability proof.
+
+The two Born-largest isobaric cases trigger the conditional fixed-parameter probe of #342. Reusing #285's **solvent-only permittivity rule** without fitting changes the wide-record isobaric split-minus-old-parent differences to **−10.054496 to −0.039354 mol**, all 51 negative, versus **−2.729554 to −0.000299663 mol** for the adopted solvent-density-temperature rule on the same wide parameters. With F2 parameters, 23/51 isobaric solvent-only comparisons against the old parent composition are negative, versus 4/51 with its adopted rule. No phase search or parameter fit is inferred for the alternative rule: these are energy evaluations of existing configurations. The alternative does not isolate a unique physical mechanism or supply an adopted correction.
+
+The energy decomposition sums to its native total within a maximum **3.67×10⁻¹³ relative** (issue limit 10⁻¹², floating-point closure from #255). The ideal-and-standard-state remainder is defined by subtraction, as in the earlier producer: this verifies bookkeeping, not an independent implementation of that remainder. The explicit residual Helmholtz sum is also checked against the native homogeneous-state value. The pressure roots have positive pressure-density derivatives throughout; the maximum absolute pressure error is **3.56×10⁻⁵ Pa** across 908 phase evaluations. The minimum derivative is 2599.50 Pa m³/mol. The supplementary fixed-density controls change packing coordinates to preserve density; their off-pressure states are not the primary Gibbs comparison. No parameter or experimental uncertainty is propagated; native equilibrium residuals and trial admission are retained separately from the algebraic closure check.
+
+The experimental evidence has a narrower meaning than a universal single-liquid assertion. **Böttinger et al. (2008), Section 3 and Table 3**, explicitly describe a homogeneous mixture in the view-cell/online nuclear magnetic resonance apparatus, for measured subsets at 20/30 mass% MEA, 293–353 K and loadings up to 1.01. **Aronu et al. (2011), Sections 2.1–2.2, pp. 6394–6395; Tables 3–5, pp. 6397–6398; Section 4.2 and Conclusions**, report vapor–liquid measurements across 15/30/45 mass% and 313–393 K without reporting a second liquid. That is absence of a reported split, not an explicit homogeneous-liquid statement for every state. **Amundsen et al. (2009), Experimental Section, Tables 2–4 and Discussion**, likewise report no second liquid, while describing gas-bubble limitations and difficulty obtaining homogeneous samples at high loading/temperature. The illustrated 21.18 kPa state differs from Böttinger’s 5–25 bar measurements and Aronu’s atmospheric low-temperature apparatus; these citations bound the experimental basis rather than directly validating that individual two-liquid-and-vapor prediction. The [source reading](results/split-cause-342/literature.md) distinguishes measurement evidence from the one-liquid convention in published models and records the actual methods and limitations read. Current Zotero companion/PDF hashes are retained in [source-hashes.json](results/split-cause-342/source-hashes.json).
+
+[The calculation account](results/split-cause-342/README.md), [all contribution values](results/split-cause-342/contributions.csv), [contribution changes](results/split-cause-342/contribution-changes.csv), [all compositions](results/split-cause-342/compositions.csv), [map coordinates](results/split-cause-342/split-map.csv), [figure contribution values](results/split-cause-342/figure-contributions.csv) and [figure composition values](results/split-cause-342/figure-compositions.csv) retain the evidence. This result supports fixed-model numerical interpretation, without a global stability certificate, independent physical validation, absorber qualification or a quantified parameter-uncertainty interval. It has not yet been independently reviewed or promoted for manuscript use.
+
+The two new producers add **200/200 gross physical lines** (153 calculation, 47 figure), conservatively including imports, docstrings and blanks; [code-accounting.json](results/split-cause-342/code-accounting.json) retains their hashes. The protected manuscript metadata and manuscript sources are unchanged. Guarded Quarto rendering uses retained values with execution disabled; managed root refresh remains gated by its pre-existing request to change protected metadata.
