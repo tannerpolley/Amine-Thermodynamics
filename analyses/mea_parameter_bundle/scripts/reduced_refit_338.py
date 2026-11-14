@@ -101,13 +101,30 @@ def replay():
     assert report['passed'], '#338 stop: F0 replay failed'
 
 
-def fit(name, start, fixed, fitted, ties=None, scale=None):
+def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
     """One start, with at most two same-control continuations after a limit."""
-    mapping = r.s.with_parameter_values(start, fixed)
-    enforced, _ = r.states()
-    excluded = set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
+    mapping = start if route else r.s.with_parameter_values(start, fixed)
+    enforced = route.states(route.bind(start)) if route else r.states()[0]
+    excluded = set() if route else set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
     enforced = [x for x in enforced if x['key'] not in excluded]
+    if route:
+        values, ok, cost = route.replay(mapping)
+        route.write(name+'/start-replay.json',dict(rows=values,available=ok,cost=cost))
+        if not ok:
+            return None, None
+    split_found = False
     for attempt in range(3):
+        if route:
+            report = r.stage_fit(name,attempt,scale,mapping,{},enforced if scale else [],route=route)
+            if not report.get('endpoint_replay_available'):
+                return None, report
+            mapping = route.result(f'{name}/stage-{attempt}/parameters.json')
+            assert abs(report['endpoint_replay_cost']/(report['data_cost'] if report['data_cost'] is not None else report['final_cost'])-1)<=1e-8
+            split_found = any(map(r.descent,route.grid(mapping,enforced))) or split_found
+            report['earlier_split'] = split_found
+            if report['status']!='limit_reached':
+                break
+            continue
         path = OUT/name/f'attempt-{attempt}.json'
         legacy = {'F1/previous/unpenalized':'F1/current','F1/current/unpenalized':'F1/r2-held'}.get(name)
         if not path.exists() and legacy and (OUT/legacy/f'attempt-{attempt}.json').exists():
@@ -137,6 +154,8 @@ def fit(name, start, fixed, fitted, ties=None, scale=None):
         print(name,attempt,report['status'],report['final_cost'],flush=True)
         if report['status'] != 'limit_reached':
             break
+    if route:
+        return mapping, report
     rows, ok, cost = r.replay(mapping)
     write(f'{name}/replay.json',dict(rows=rows,available=ok,cost=cost))
     assert not ok or a.relative(cost,report['data_cost'] if report['data_cost'] is not None else report['final_cost'])<=1e-8
@@ -390,50 +409,56 @@ def evidence(name, path):
         e.copy_of, r.OUT = original, OUT
 
 
-def candidate(name, start, fixed, fitted, ties):
-    mapping, report = fit(name+'/unpenalized',start,fixed,fitted,ties)
+def candidate(name, start, fixed, fitted, ties, route=None):
+    from functools import partial
+    fit_call = fit if route is None else partial(fit,route=route)
+    search_call = search if route is None else lambda name,mapping: route.search(mapping)
+    write_call, folder = (write,OUT) if route is None else (route.write,route.out)
+    mapping, report = fit_call(name+'/unpenalized',start,fixed,fitted,ties)
     if mapping is None:
         return None
-    unpenalized = search(name+'/unpenalized',mapping)
+    unpenalized = search_call(name+'/unpenalized',mapping)
     if report['status'] != 'converged':
-        write(f'{name}/finding.json',dict(reason='unpenalized start not converged after permitted continuations',cost=report['final_cost'],unpenalized=unpenalized))
+        write_call(f'{name}/finding.json',dict(reason='unpenalized start not converged after permitted continuations',cost=report['final_cost'],unpenalized=unpenalized))
         return None
     chosen, final_report = mapping, report
-    if any(unpenalized[g]['descent'] for g in ('grid','offset','census')):
+    if report.get('earlier_split') or any(unpenalized[g]['descent'] for g in ('grid','offset','census')):
         stable_anchor = None
         for index, scale in enumerate(r.STAGES):
             if final_report['status'] != 'converged':
                 break
-            chosen, final_report = fit(name+f'/penalized-{index}',chosen,fixed,fitted,ties,scale)
+            chosen, final_report = fit_call(name+f'/penalized-{index}',chosen,fixed,fitted,ties,scale)
             if chosen is None:
                 break
-            searched = search(name+f'/penalized-{index}',chosen)
+            searched = search_call(name+f'/penalized-{index}',chosen)
             if searched['stable']:
                 stable_anchor = chosen
         if chosen is not None and not searched['stable']:
-            anchor = stable_anchor if stable_anchor is not None else r.s.with_parameter_values(start,fixed)
-            if stable_anchor is not None or search(name+'/anchor',anchor)['stable']:
-                enforced,_ = r.states()
-                excluded = set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
+            anchor = stable_anchor if stable_anchor is not None else (start if route else r.s.with_parameter_values(start,fixed))
+            if stable_anchor is not None or search_call(name+'/anchor',anchor)['stable']:
+                enforced = route.states(route.bind(start)) if route else r.states()[0]
+                excluded = set() if route else set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
                 r.OUT = OUT
-                r.retreat(name,anchor,chosen,[x for x in enforced if x['key'] not in excluded],shifts=({},{}))
-                write('split-trials.json',r.GRID_TRIALS)
-                path = OUT/name/'candidate.json'
-                chosen = r.result(f'{name}/candidate.json') if path.exists() else None
+                r.retreat(name,anchor,chosen,[x for x in enforced if x['key'] not in excluded],shifts=({},{}),route=route,optimizer_report=final_report)
+                if route is None:
+                    write_call('split-trials.json',r.GRID_TRIALS)
+                path = folder/name/'candidate.json'
+                chosen = (route.result if route else r.result)(f'{name}/candidate.json') if path.exists() else None
             else:
                 chosen = None
     if chosen is None:
-        write(f'{name}/finding.json',dict(reason='no stability-enforced candidate',unpenalized=unpenalized))
+        write_call(f'{name}/finding.json',dict(reason='no stability-enforced candidate',unpenalized=unpenalized))
         return None
-    final_search = unpenalized if chosen is mapping else search(name+'/candidate',chosen)
-    rows, ok, cost = r.replay(chosen)
+    final_search = unpenalized if chosen is mapping else search_call(name+'/candidate',chosen)
+    rows, ok, cost = (route.replay if route else r.replay)(chosen)
     converged = final_report['status']=='converged'
-    write(f'{name}/finding.json',dict(cost=cost,converged=converged,stable=final_search['stable'],unpenalized=unpenalized,penalty_cost=0. if final_search['stable'] else None,endpoint_penalty_cost=final_report['stability_cost']))
+    retreat = (route.result(f'{name}/retreat.json') if route and (folder/name/'retreat.json').exists() else None)
+    write_call(f'{name}/finding.json',dict(cost=cost,optimizer_converged=converged,retreat=retreat,stable=final_search['stable'],unpenalized=unpenalized,penalty_cost=0. if final_search['stable'] else None,endpoint_penalty_cost=final_report['stability_cost']))
     if not (ok and converged and final_search['stable']):
         return None
-    write(f'{name}/parameters.json',chosen)
-    write(f'{name}/replay.json',dict(rows=rows,cost=cost))
-    return dict(name=name,cost=cost,parameters=chosen,declared=final_report['declared'])
+    write_call(f'{name}/parameters.json',chosen)
+    write_call(f'{name}/replay.json',dict(rows=rows,cost=cost))
+    return dict(name=name,cost=cost,parameters=chosen,declared=final_report['declared'],optimizer_converged=converged,optimizer_cost=final_report.get('data_cost',final_report['final_cost']),retreat=retreat)
 
 
 def campaign():

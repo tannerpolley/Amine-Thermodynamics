@@ -67,6 +67,7 @@ class SolventSpecification:
                     constructor=dataset["constructor"],
                     arguments=self.bind(dataset["arguments"], row),
                     kind=dataset["kind"],
+                    unit=dataset.get("unit"), basis=dataset.get("basis", dict(constructor=dataset["constructor"], kind=dataset["kind"], arguments=self.bind(dataset["arguments"],row))),
                     temperature_domain=dataset["temperature_domain"],
                 )
                 names = (
@@ -253,30 +254,25 @@ class SolventSpecification:
         raise ValueError(f"Unsupported observation constructor: {constructor}")
 
     def prediction(self, record):
+        metadata = dict(identity=record['identity'],group=record['group'],observed=record['arguments']['observed'],row=record['row'],unit=record.get('unit'),basis=record.get('basis'))
         domain = record["temperature_domain"]
         problem = self.problems[record.get("problem", record.get("initial"))]
         continuation = self.continuation.get(record["identity"], {})
         if continuation.get("status", "Available") != "Available":
-            return dict(identity=record["identity"], group=record["group"], **continuation)
+            return dict(metadata, **continuation)
         if not isinstance(problem.T, eq.Free) and not domain[0] <= problem.T <= domain[1]:
             return dict(
-                identity=record["identity"],
-                group=record["group"],
+                metadata,
                 status="OutsideDeclaredDomain",
                 message="Temperature outside declared assessment domain",
                 value=None,
-                observed=record["arguments"]["observed"],
-                row=record["row"],
             )
         try:
             prediction = reg.predict(self.model, self.observation(record))
             if prediction.status.name == "Available" and not all(math.isfinite(v) for v in (prediction.value, prediction.residual)):
                 raise ValueError(f"Nonfinite native prediction: {prediction.value}, {prediction.residual}; {prediction.message}")
             return dict(
-                identity=record["identity"],
-                group=record["group"],
-                row=record["row"],
-                observed=record["arguments"]["observed"],
+                metadata, unit=record.get("unit") or prediction.unit,
                 convergence=None if prediction.convergence is None else {
                     k: jsonable(getattr(prediction.convergence, k))
                     for k in ("residual", "floor", "amplification", "contraction", "iterations", "stop")},
@@ -297,7 +293,7 @@ class SolventSpecification:
                 },
             )
         except Exception as error:
-            return dict(identity=record["identity"], group=record["group"], status="Exception", exception=type(error).__name__, message=str(error))
+            return dict(metadata, status="Exception", exception=type(error).__name__, message=str(error))
 
     def coordinates(self):
         coordinates = []
@@ -338,6 +334,22 @@ class SolventSpecification:
                     reaction["correlation"].update({key: getattr(law, key) for key in fields})
         return reactions
 
+    def measurement_uncertainty(self, extra=0):
+        covariance = self.spec.get('measurement_covariance')
+        if covariance is None:
+            return None
+        uncertainty = output_uncertainty(covariance)
+        uncertainty.output_sigma = list(uncertainty.output_sigma)+[1.]*extra
+        return uncertainty
+
+    def whiten(self, values, records=None):
+        import numpy as np
+        covariance = self.spec.get('measurement_covariance')
+        if covariance is not None:
+            return np.linalg.solve(np.linalg.cholesky(covariance), values)
+        weights = np.sqrt([r['weight'] for r in (self.inputs['observations']['fitted'] if records is None else records)])
+        return weights*np.asarray(values) if np.ndim(values)==1 else weights[:,None]*values
+
     def fit(self, stability=()):
         """Fit the calibration rows plus optional (observation, weight) stability requirements."""
         coords = self.coordinates()
@@ -351,6 +363,7 @@ class SolventSpecification:
             thermochemistry=self.thermal,
             controls=controls,
             singular_vectors=True,
+            uncertainty=self.measurement_uncertainty(len(stability)),
         )
         # data_cost/stability_cost/acceptance exist only on Engine wheels with stability requirements.
         report = {
@@ -493,18 +506,13 @@ def relative_error_statistic(records):
 
 
 def deviation_statistics(pairs, unit=None):
-    """pairs: (observed, predicted). Relative errors in percent; absolute error in the property's unit."""
-    n = len(pairs)
-    rel = [(p - o) / o * 100 for o, p in pairs]
-    out = {"rows": n, "AARD_percent": sum(abs(r) for r in rel) / n}
-    if not unit:
-        out["bias_percent"] = sum(rel) / n
-    if unit:
-        out["mean_abs_error"] = sum(abs(p - o) for o, p in pairs) / n
-        out["mean_signed_error_predicted_minus_observed"] = sum(p - o for o, p in pairs) / n
-        out["unit"] = unit
-    return out
-
+    """Relative errors use nonzero observations; absolute errors retain every pair."""
+    rel = [(p-o)/o*100 for o,p in pairs if o != 0]
+    return dict(rows=len(pairs),relative_rows=len(rel),relative_undefined=len(pairs)-len(rel),
+                AARD_percent=sum(map(abs,rel))/len(rel) if rel else None,
+                bias_percent=sum(rel)/len(rel) if rel else None,
+                mean_abs_error=sum(abs(p-o) for o,p in pairs)/len(pairs),
+                mean_signed_error_predicted_minus_observed=sum(p-o for o,p in pairs)/len(pairs),unit=unit)
 
 
 def conditional_information(result, J, r, ids, lower, upper):
@@ -525,3 +533,11 @@ def conditional_information(result, J, r, ids, lower, upper):
             'free_coordinates': [ids[k] for k in free], 'residual_variance': s2,
             'conditional_standard_error': dict(zip((ids[k] for k in free), se)),
             'conditional_correlation': (cov / np.outer(se, se)).tolist()}
+
+
+def output_uncertainty(C):
+    """PZ's normalized-area measurement covariance, passed unchanged to Engine."""
+    import numpy as np
+    u = reg.MeasurementUncertainty()
+    u.output_sigma, u.covariance = np.sqrt(np.diag(C)).tolist(), np.asarray(C).ravel().tolist()
+    return u

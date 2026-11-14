@@ -69,7 +69,7 @@ class Route:
     def start(self, reference, *, adopt=True):
         mapping = self.load(reference)
         spec = SolventSpecification(self.path.parent/self.config['specification'])
-        laws = spec.spec['chemistry']['reactions']
+        laws = self.load(reference['reactions']) if 'reactions' in reference else spec.spec['chemistry']['reactions']
         declared = self.load(reference.get('coordinates',self.config['coordinates']))
         if adopt:
             shared = json.loads(SHARED.read_text())
@@ -94,12 +94,18 @@ class Route:
                 next(c for c in component['coefficients'] if c['family']=='born_diameter')['value']['magnitude'] = sigma
                 declared = [q for q in declared if q.get('targets') != [['born_diameter',ion,1.0]]]
                 coordinate = next((q for q in declared if ['segment_diameter',ion,1.0] in q.get('targets',[])),None)
-                if coordinate is not None:
+                if coordinate is not None and ['born_diameter',ion,1.0] not in coordinate['targets']:
                     coordinate['targets'].append(['born_diameter',ion,1.0])
         for q in declared:
             if q.get('targets'):
                 family,target,factor = q['targets'][0]
                 q['origin'] = stable.s.parameter_values(mapping)[target_identity(mapping,family,target)]/factor
+        for q in declared:
+            if q.get('kind')=='reaction_coordinate':
+                law = next(r['correlation'] for group in laws.values() for r in group if r['name']==q['name'])
+                assert q['origin']==law.get(q['coefficient'],0.), f"Start {reference['path']}: reaction coordinate does not match completed law"
+            if not q['bounds'][0]<=q['origin']<=q['bounds'][1]:
+                raise ValueError(f"Start {reference['path']}: {q.get('identity',q.get('name'))} origin {q['origin']} outside bounds {q['bounds']}")
         return dict(parameters=mapping, reactions=laws, coordinates=declared)
 
     def bind(self, point):
@@ -110,7 +116,6 @@ class Route:
         spec.inputs['endpoint'] = point
         spec.construction_parameters = {k:spec.parameters for k in spec.construction_parameters}
         spec.spec['chemistry']['reactions'] = copy.deepcopy(point['reactions'])
-        assert {r['name'] for group in point['reactions'].values() for r in group}==set(self.config['reaction_ranges_K'])
         interval = self.config['calculation_interval_K']
         for problem in spec.problems.values():
             assert interval[0] <= problem.T <= interval[1], problem.T
@@ -127,10 +132,13 @@ class Route:
                 assert row['role'] in ('fitted','not fitted','comparison only')
                 assert (row['role']=='fitted') == (role=='fitted')
         spec.inputs['coordinates'] = copy.deepcopy(point['coordinates'])
+        if 'covariance' in self.config:
+            covariance = self.load(self.config['covariance'])
+            rows = spec.inputs['observations']['fitted']
+            assert covariance['identities']==[r['identity'] for r in rows]
+            assert all(r['weight']==1 and r['arguments']['form']=='difference' and r['arguments']['scale']==1 for r in rows), 'Covariance uses raw difference observations, as in PZ'
+            spec.spec['measurement_covariance'] = covariance['covariance']
         return spec
-
-    def coordinates(self, spec, *args, **kwargs):
-        return spec.inputs['coordinates']
 
     def endpoint_mapping(self, start, report, declared):
         point, values = copy.deepcopy(start), iter(report['physical'])
@@ -154,6 +162,10 @@ class Route:
         records = spec.inputs['observations']['fitted'] if rows is None else rows(spec)
         values = stable.d.evaluate(spec, records)
         ok = all(r['status']=='Available' and r.get('requested_tolerance_met') for r in values)
+        if ok:
+            residuals = spec.whiten(np.array([r['residual'] for r in values]),records)
+            for row, residual in zip(values,residuals,strict=True):
+                row.update(weighted_residual=float(residual),cost=.5*float(residual)**2)
         return values, ok, math.fsum(r['cost'] for r in values) if ok else None
 
     def states(self, spec):
@@ -220,59 +232,35 @@ class Route:
                     dest['correlation'][key] = left['correlation'].get(key,0.)+t*(right['correlation'].get(key,0.)-left['correlation'].get(key,0.))
         return point
 
-    def fit(self, name, point, states, scale=None):
-        split_found = False
-        for attempt in range(3):
-            report = stable.stage_fit(name,attempt,scale,point,{},states if scale else [],route=self)
-            if not report.get('endpoint_replay_available'):
-                return None, report
-            point = self.result(f'{name}/stage-{attempt}/parameters.json')
-            expected = report['data_cost'] if report['data_cost'] is not None else report['final_cost']
-            assert abs(report['endpoint_replay_cost']/expected-1)<=1e-8
-            split_found |= bool(stable.tally(self.grid(point,states))['descent'])
-            report['split_found'] = split_found
-            if report['status'] != 'limit_reached':
-                break
-        return point, report
+    def search(self, point):
+        tally = stable.tally(self.grid(point,self.states(self.bind(point))))
+        return dict(grid=tally,offset=dict(descent=0),census=dict(descent=0),stable=not tally['descent'] and not tally['unavailable'])
 
     def campaign(self):
-        assert len(self.config['starts'])==2
-        candidates = []
-        for i, reference in enumerate(self.config['starts']):
-            anchor = self.start(reference)
-            assert self.config['loadings'][0]==1e-5
-            states = self.states(self.bind(anchor))
-            point, report = self.fit(f'start-{i}/unpenalized',anchor,states)
-            if point is None:
-                continue
-            search = stable.tally(self.grid(point,states))
-            if search['descent'] or report['split_found']:
-                for stage, scale in enumerate(stable.STAGES):
-                    point, report = self.fit(f'start-{i}/penalized-{stage}',point,states,scale)
-                    if point is None:
-                        break
-                stable.retreat(f'start-{i}',anchor,point,states,shifts=({},{}),route=self)
-                point = self.result(f'start-{i}/candidate.json') if (self.out/f'start-{i}/candidate.json').exists() else None
-            if point is not None:
-                _, available, cost = self.replay(point)
-                candidates.append(dict(start=i,cost=cost,converged=report['status']=='converged',available=available,stability=stable.tally(self.grid(point,states)),point=point))
-        converged = [r for r in candidates if r['converged'] and r['available']]
-        chosen = min(converged,key=lambda r:r['cost']) if converged else None
-        self.write('selection.json',dict(candidates=candidates,chosen=chosen,ties=[r['start'] for r in converged if chosen and abs(r['cost']-chosen['cost'])<=self.controls['function_tolerance']]))
+        import reduced_refit_338 as reduced
+        assert len(self.config['starts'])==2 and self.config['loadings'][0]==1e-5, 'Part II requires two complete starts and loadings from 1e-5 mol/mol'
+        candidates = [reduced.candidate(f'start-{i}',self.start(ref),{},[],{},route=self) for i,ref in enumerate(self.config['starts'])]
+        candidates = [r for r in candidates if r is not None]
+        chosen = min(candidates,key=lambda r:r['cost']) if candidates else None
+        self.write('selection.json',dict(candidates=candidates,chosen=chosen,ties=[r['name'] for r in candidates if chosen and abs(r['cost']-chosen['cost'])<=self.controls['function_tolerance']]))
         return chosen
 
-    def marks(self, T):
-        return {name:not low<=T<=high for name,(low,high) in self.config['reaction_ranges_K'].items()}
+    def marks(self, T, problem=None):
+        used = {r.name for r in problem.reactions} if problem is not None else set(self.config['reaction_ranges_K'])
+        return {name: 'reaction not used' if name not in used else 'source range unknown' if self.config['reaction_ranges_K'].get(name) is None else not self.config['reaction_ranges_K'][name][0]<=T<=self.config['reaction_ranges_K'][name][1] for name in used|set(self.config['reaction_ranges_K'])}
 
     def uncertainty(self, point):
         spec = self.bind(point)
         declared = point['coordinates']
         rows = spec.inputs['observations']['fitted']
         ev = reg.differentiate(spec.parameters,spec.coordinates(),[spec.observation(r) for r in rows],optimizer=[0.]*len(declared),thermochemistry=spec.thermal)
-        weights = np.sqrt([r['weight'] for r in rows])
-        J = np.array(ev.residual_optimizer_gradient).reshape(-1,len(declared))*weights[:,None]/np.array([q['scale'] for q in declared])
+        replay, available, _ = self.replay(point)
+        assert all(status.name=='Available' for status in ev.statuses)
+        assert available and [r['identity'] for r in replay]==[r['identity'] for r in rows]
+        assert np.allclose(ev.predictions,[r['value'] for r in replay],rtol=1e-8,atol=0.), 'Differentiation/replay row mismatch'
+        J = spec.whiten(np.array(ev.residual_optimizer_gradient).reshape(-1,len(declared)))/np.array([q['scale'] for q in declared])
         active = [i for i,q in enumerate(declared) if min(q['origin']-q['bounds'][0],q['bounds'][1]-q['origin'])<=1e-6*q['scale']]
-        result = conditional_information(SimpleNamespace(physical=[q['origin'] for q in declared],covariance=SimpleNamespace(active_bounds=active)),J,np.array(ev.residuals)*weights,[q['identity'] for q in declared],[q['bounds'][0] for q in declared],[q['bounds'][1] for q in declared])
+        result = conditional_information(SimpleNamespace(physical=[q['origin'] for q in declared],covariance=SimpleNamespace(active_bounds=active)),J,spec.whiten(np.array([r['residual'] for r in replay])),[q['identity'] for q in declared],[q['bounds'][0] for q in declared],[q['bounds'][1] for q in declared])
         self.write('conditional-uncertainty.json',dict(result,coordinates=declared,active_bounds=active))
 
     def reduce(self, point):
@@ -280,12 +268,12 @@ class Route:
         for role in ('fitted','comparisons'):
             for record in spec.inputs['observations'][role]:
                 T = spec.problems[record.get('problem',record.get('initial'))].T
-                output.append(dict(spec.prediction(record), role=record['role'], T_K=T, outside_ranges=self.marks(T)))
+                output.append(dict(spec.prediction(record), role=record['role'], T_K=T, outside_ranges=self.marks(T,spec.problems[record.get('problem',record.get('initial'))])))
         summary = []
-        for group,role,unit in sorted({(r['group'],r['role'],r.get('unit','unavailable')) for r in output}):
-            for name in self.config['reaction_ranges_K']:
-                for outside in (False,True):
-                    rows = [r for r in output if (r['group'],r['role'],r.get('unit','unavailable'),r['outside_ranges'][name])==(group,role,unit,outside)]
+        for group,role,unit in sorted({(r['group'],r['role'],r.get('unit') or 'unit unspecified') for r in output}):
+            for name in {name for r in output for name in r['outside_ranges']}:
+                for outside in (False,True,'source range unknown','reaction not used'):
+                    rows = [r for r in output if (r['group'],r['role'],r.get('unit') or 'unit unspecified',r['outside_ranges'].get(name,'reaction not used'))==(group,role,unit,outside)]
                     pairs = [(r['observed'],r['value']) for r in rows if r.get('value') is not None and r.get('status')=='Available']
                     summary.append(dict(group=group,role=role,unit=unit,range_name=name,outside_range=outside,rows=len(rows),available=len(pairs),statistics=deviation_statistics(pairs,unit) if pairs else None))
         self.write('data-rows.json',output)
@@ -300,7 +288,7 @@ class Route:
             record.update(observation_parameters=spec.parameter_sha256,temperature_domain=self.config['calculation_interval_K'])
             T = spec.problems[record.get('problem',record.get('initial'))].T
             assert self.config['calculation_interval_K'][0]<=T<=self.config['calculation_interval_K'][1]
-            output.append(dict(spec.prediction(record),curve=row['curve'],loading=row['loading'],T_K=T,outside_ranges=self.marks(T)))
+            output.append(dict(spec.prediction(record),curve=row['curve'],loading=row['loading'],T_K=T,outside_ranges=self.marks(T,spec.problems[record.get('problem',record.get('initial'))])))
         self.write('curve-data.json',output)
 
 
@@ -310,7 +298,7 @@ if __name__ == '__main__':
     if sys.argv[2] == 'fit':
         route.campaign()
     elif sys.argv[2] == 'report':
-        point = route.result('selection.json')['chosen']['point']
+        point = route.result('selection.json')['chosen']['parameters']
         route.reduce(point)
         route.uncertainty(point)
         route.curves(point)

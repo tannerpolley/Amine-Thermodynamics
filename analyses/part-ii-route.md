@@ -33,10 +33,11 @@ Python callbacks are required. The JSON adds:
 | `species`, `vapor_species` | Full Engine component order and neutral vapor support, respectively. |
 | `specification` | Existing solvent-specification TOML, including all fitted and comparison rows. |
 | `coordinates` | Hashed JSON coordinate declarations accepted by `SolventSpecification.coordinates`: identity, targets or reaction coordinate, origin, scale, bounds. |
-| `starts` | Exactly two hashed parameter documents. A start may also supply its own hashed `coordinates`; EOS origins are transported to that start. Reaction origins and total-shift bounds belong to the declaration. |
+| `starts` | Exactly two hashed parameter documents. Each may supply hashed `reactions` (the complete grouped laws) and `coordinates`. EOS origins are transported; reaction origins must match the completed law. Reaction enthalpy coordinates describe increments about that law, with transported total-shift bounds, following `refit_306.py coordinates(H0)`. No completed law is reset. Every complete start is replayed before fitting; out-of-bound origins raise an error and are never clipped. |
 | `born_ties` | Amine ion IDs whose Born diameter equals their segment diameter. The route removes independent Born coordinates and adds the Born target to a fitted segment coordinate. Fixed segment diameters remain fixed. |
 | `calculation_interval_K` | One interval covering every problem in the specification. Every reaction law and observation uses it; states are never excluded for being outside a source range. |
-| `reaction_ranges_K` | A pair of limits for every named reaction, including each amine-specific law from the Part II range table. |
+| `reaction_ranges_K` | Known source limits for named reactions; `null` or an absent limit means source range unknown. A law absent from a problem is marked reaction not used. Inside/outside statistics use only applicable laws with known limits. |
+| `covariance` | Optional hashed JSON with `identities` in the exact fitted-row order and the full `covariance` matrix. Use raw difference observations, scale 1, weight 1, as in PZ. |
 | `roles` | Optional group-to-role map: `fitted`, `not fitted`, `comparison only`. Objective membership must agree with the specification. Earlier access to observations remains the amine notebook's responsibility. |
 | `stocks` | List of analytical feed-amount dictionaries, in mol, for every fitted concentration (water and analytical amine components). |
 | `loadings` | Explicit ordered loading nodes in mol CO2 per mol analytical amine, starting at `1e-5` and reaching the data maximum. |
@@ -59,8 +60,7 @@ meaning. Calculation intervals are distinct from both.
 
 The #255 producer now accepts an optional route in its grid, fit-stage,
 admissibility and retreat functions. Existing MEA calls retain their defaults.
-Its finite search admits only native resolved descents, evaluates supplied
-trials, and reports unavailable searches separately. The route records those
+Its finite optimized search and penalty stay in `reg.stability`; supplied compositions go to native `eq.stability_test` at the same parent pressure. Both results and their separate availability are retained. Only native resolved descents count as splits; unavailable searches are reported separately. The route records those
 trials per amine and supplies every recorded composition at every subsequent
 state. A record with a different amine or component order is refused.
 
@@ -72,11 +72,11 @@ initial/final states and declared phase states are included. Saturation-capped
 heat endpoints use the Engine's current `endpoint_loading`; a refused heat
 becomes an unavailable search with the native message.
 
-Each fit uses the existing #255 fit stage. A limit permits two continuations
+The route calls #338 `candidate` and `fit`, which call the existing #255 fit stage; it has no second continuation or penalty loop. A limit permits two continuations
 with unchanged controls. Every returned, replayable endpoint is searched.
 A discovered split invokes stages `1e-2` and `3e-3` and the existing #255
-retreat, including its 0.01 steps and ten bisections. The selection file keeps
-all starts, their convergence and stability counts, and chooses the lowest
+retreat, including its 0.01 steps and ten bisections. Optimizer convergence and retreat disposition are separate: the retreat file keeps the fraction, optimizer cost, retreat cost, and whether the selected point itself terminated on an optimizer tolerance. An interpolated point never inherits that termination. The selection file keeps
+available candidates; each start directory keeps its convergence and stability counts, and chooses the lowest
 fitted cost among converged, available starts; costs within the optimizer's
 function tolerance are reported as ties. The retained fit attempts contain
 cost histories when convergence is not reached. A finite search gives a
@@ -86,9 +86,9 @@ lower bound on split counts, never a proof of global stability.
 availability, temperatures, roles, units and every source-range mark.
 `deviations.json` separates inside/outside counts for each law, including
 available counts, without dropping unavailable rows from coverage counts.
-It reuses the MDEA retained-statistics reduction, moved to its shared owner.
+At an observed zero, relative error is undefined; absolute errors and counts retain the row. It reuses the MDEA retained-statistics reduction, moved to its shared owner. Declare dataset `unit` and `basis` for every quantity, including unavailable predictions. Historical declarations without these fields retain their constructor/arguments as basis and use the native unit when a prediction supplies it; absent unit declarations remain explicit rather than being inferred from another row.
 `conditional-uncertainty.json` reuses #307's conditional information calculation
-with active-bound coordinates held fixed. Rank deficiency remains an explicit
+with active-bound coordinates held fixed. PZ uses its existing measurement-uncertainty constructor, now shared with `SolventSpecification`: full covariance is preserved in native fitting, replay, and differentiated residuals. Only output sigmas are extended for stability observations; the native covariance matrix spans data observations. Prediction availability and fitted-row ordering are checked before pairing replay residuals with derivative columns. Rank deficiency remains an explicit
 numerical error; no finite standard error is invented.
 
 `curve_rows` uses the same observation constructors as data rows. Each entry
@@ -107,3 +107,43 @@ an older specification), stocks, loading nodes, historical split record and
 curve rows. It also supplies published-model comparisons, measurement
 uncertainties, the compact parameter table and summary row, then renders the
 requested figures. None of those new MDEA results is claimed by Stage A.
+
+
+## Data-only adaptation checked at the delegated amine commits
+
+These declarations were inspected, not run as new amine campaigns. Each needs
+ordinary JSON/TOML/CSV materialization into the interface above; no new amine
+callback is required by the inspected observation constructors.
+
+- **AMP, `c65b2ba`:** turn its dataset and template declarations into the
+  solvent-specification file; materialize each hashed complete hydrolysis law
+  and its own `coordinates(H0)` chart (retained endpoint H0 = -5000 J/mol,
+  second start H0 = 0). Supply identities, units/bases, roles, stocks, loading
+  nodes, curve rows, and the amine/species envelope around its own split
+  record. Both retained carbamate segment diameters, 5.31999516340193 and
+  5.3 Å, are below the F2-moved 5.34799141560911 Å floor. Start admission
+  remains the owner's decision; the calculation rejects these bounds as
+  declared and never projects them.
+- **PZ, `460d00e`:** materialize its two optimizer starts as complete parameter
+  and reaction-law documents, preserving the declared total P3–P5 offsets.
+  Create the solvent specification for 232 normalized-area NMR observations,
+  62 pressure observations and all other role-table rows. Export the full
+  normalized-area covariance from `fit_speciation.declarations`, append the
+  existing pressure variances, and supply the exact fitted identity order,
+  raw difference form, scale 1 and weight 1. Supply chart identities,
+  units/bases, source ranges, the 283.15–395 K calculation interval, stocks,
+  loading nodes and curve rows. Convert the PZ split compositions to native
+  support/composition/packing entries with resolved-descent provenance and
+  a PZ/species envelope; composition-only entries need their retained native
+  parent evidence, never a borrowed MEA composition.
+- **DEA, `294bebc`:** materialize its datasets/templates and role table in the
+  solvent specification; export the two complete hydrolysis laws and their
+  transported charts, including the second start's declared pair overrides.
+  Supply coordinate identities, units/bases, stocks, loading nodes, curve
+  rows and the DEA split record. Use its 293.15–458.64 K calculation interval;
+  keep the hydrolysis source range unknown, the 273.15–323.15 K dissociation
+  range separate, and binary Cai/Horstmann rows marked reaction not used.
+
+Born-target insertion is idempotent, so an amine declaration can already
+contain each Born/segment tie without duplicating its native active target.
+No Engine capability request is needed for the inspected paths.
