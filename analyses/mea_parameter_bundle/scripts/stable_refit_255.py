@@ -207,15 +207,26 @@ def _measure(state):
         out['not_applicable_supplied_trials'] = not_applicable
         available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
         out['supplied_trial_counts'] = dict(available=available, unavailable=len(repeated)-available, not_applicable=len(not_applicable))
-    return dict(key=state['key'], seconds=time.monotonic() - started, **out)
+    row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
+    if _ROUTE is not None and hasattr(_ROUTE, 'details'):
+        path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
+        with gzip.open(path, 'wt') as stream:
+            json.dump(jsonable(row), stream, allow_nan=False)
+        row.update(details=str(path.relative_to(_ROUTE.out)), descent=descent(row), supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
+        for field in ('supplied_trials', 'not_applicable_supplied_trials'):
+            row.pop(field, None)
+    return row
 
 
 def grid(mapping, chosen, trials=None, *, route=None):
     """Fresh Full searches at one parameter mapping, one process per core."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
-    with ProcessPoolExecutor(min(route.workers if route else CORES, len(chosen)), initializer=_init, initargs=(mapping, trials, route)) as pool:
-        measured = list(pool.map(_measure, chosen, chunksize=4))
+    workers = min(route.workers if route else CORES, len(chosen))
+    with ProcessPoolExecutor(workers, initializer=_init, initargs=(mapping, trials, route)) as pool:
+        measured = []
+        for offset in range(0, len(chosen), 4*workers):
+            measured.extend(pool.map(_measure, chosen[offset:offset+4*workers], chunksize=4))
     if isinstance(trials, dict):
         for row in measured:
             trials.setdefault(row['key'], []).extend(w for w in row.get('witnesses',[]) if w not in trials.get(row['key'],[]))
@@ -223,7 +234,7 @@ def grid(mapping, chosen, trials=None, *, route=None):
 
 
 def descent(row):
-    return (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(map(supplied_negative,row.get('supplied_trials',[])))
+    return row.get('descent', (bool(row.get('optimized_available',row.get('available'))) and row['value'] < 0) or any(map(supplied_negative,row.get('supplied_trials',[]))))
 
 
 def tally(rows):
@@ -231,7 +242,8 @@ def tally(rows):
                 states=len(rows), available=sum(bool(r.get('available')) for r in rows), descent=sum(map(descent, rows)),
                 unavailable=[r['key'] for r in rows if not r.get('available')],
                 minimum_tau=min((r['value'] for r in rows if r.get('available') and r['value']<0), default=None),
-                supplied_minimum_tpd=min((t['quantities']['tpd_over_rt'] for r in rows for t in r.get('supplied_trials',[]) if t['evidence']=='evaluated'),default=None))
+                supplied_minimum_tpd=min((v for r in rows for v in
+                    [r.get('supplied_minimum_tpd', min((t['quantities']['tpd_over_rt'] for t in r.get('supplied_trials',[]) if t['evidence']=='evaluated'),default=None))] if v is not None),default=None))
 
 
 # ---------------------------------------------------------------- coordinates and mappings
