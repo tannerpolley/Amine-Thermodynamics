@@ -24,12 +24,12 @@ The dielectric coefficients were estimated from unloaded solutions at \SI{298.15
 Loaded aqueous MEA is observed as a homogeneous liquid in B\"ottinger et al.'s measured subset \cite[Sect.~3]{Bottinger2008}.
 That observation motivates checking the model for a spurious additional liquid, although it does not establish experimental homogeneity over the entire numerical search domain.
 The adopted F2 parameters give no detected instability at 1908 liquid-grid states, 576 intermediate liquid states and 162 liquid--vapor states, with no unavailable or incomplete search in these sets.
-Trial compositions from previously resolved descents also give no negative distance; the final check covers 6121 such compositions at every liquid--vapor state.
-These results required no stability penalty during F2 fitting.
+Trial compositions taken from Gibbs decreases resolved for other MEA parameter sets also give no negative distance for F2; 6121 such compositions are evaluated at every liquid--vapor state.
+No stability penalty entered the F2 fit.
 
 % P:results-phase-split
-The unpenalized 16-parameter comparison fit gives a resolved Gibbs decrease at 54 of the same 162 liquid--vapor states.
-It is distinct from F0, the stability-penalized calibration in the parameter-choice comparison.
+A 16-parameter comparison fit obtained without the stability penalty shows what the search detects: it gives a resolved Gibbs decrease at 54 of the same 162 liquid--vapor states.
+It is distinct from F0, the stability-penalized calibration of the restriction sequence.
 Its strongest confirmed split, at \SI{333.15}{\kelvin}, loading 0.5 mol/mol and \SI{21.175719}{\kilo\pascal}, produces a water-poor, ion-rich liquid alongside a water-rich liquid and vapor.
 The calculated water mole fractions are 0.590900 and 0.973235 in the two liquids; these are model compositions, not measured second-liquid compositions.
 Figure~\ref{fig:split-energy} compares the energy balance for this split under the unpenalized parameters and F2.
@@ -46,7 +46,7 @@ Phase amounts and compositions remain frozen for this comparison, while densitie
 The Born contribution is strongly favorable to the illustrated split and becomes more favorable with F2, while dispersion supplies the largest upward change.
 Across the confirmed configurations, dispersion has the largest absolute change in 49 of 51 cases; Born has the largest change in the other two.
 The split therefore reflects a coupled energy balance with a prominent dispersion change, rather than one uniquely identified microscopic cause.
-A negative energy change relative to the old parent is not itself an F2 instability test because that parent is not an equilibrated F2 state.
+A negative energy change of F2 relative to the frozen parent liquid is not itself an F2 instability test, because that parent is not an equilibrated F2 state.
 
 % P:results-phase-probes
 Two distinct isolated changes remove all detected descents in the finite liquid--vapor search: replacing only the \MEAH segment diameter by its F2 value, or replacing only the \MEAH--water interaction constant.
@@ -58,10 +58,8 @@ They show that the sufficient parameter change is not unique; they do not identi
 \subsection{\texorpdfstring{\COtwo}{CO2}--MEA--water at 30 wt\%}\label{sec:results-loaded}
 \subsubsection{Pressure and speciation}\label{sec:results-pressure}
 % P:results-pressure-01
-Figure~\ref{fig:pressure} shows the pressure--loading relation with source observations, and \cref{tab:pressure-sources} gives the source-specific errors.
-The fitted pressures constrain the lower-temperature part of this comparison; the higher-temperature pressures are calculated without further fitting.
-The deviations therefore describe distinct data roles even where the observations appear on the same curve.
-Source differences and the strong loading dependence remain visible despite agreement over the broad logarithmic pressure range.
+At nominal 30 wt\% MEA, the F2 bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while source differences and the strong loading dependence remain visible (\cref{fig:pressure}); \cref{tab:pressure-sources} gives the error for each source.
+The fitted pressures constrain the lower-temperature part of this comparison, and the higher-temperature pressures are calculated without further fitting, so observations on the same curve can have different data roles.
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -89,7 +87,9 @@ The fitted pressures do not determine that minor-species partition uniquely.
 Carbonate formation depends on its reaction constant and relative ionic activities, so a small carbonate share cannot be attributed to a single parameter from these comparisons.
 Titration-derived bicarbonate totals also differ from the NMR observations, as Matin et al.\ discuss \cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
 The experimental observable approximations and model discrepancy both matter; the available evidence does not isolate their contributions.
-Table~\ref{tab:same-data} reports carbonate and species errors on the same observations as the predecessor model.
+Table~\ref{tab:same-data} gives these species errors, and the F2 comparisons for the heat, heat-capacity, density and concentration results below, beside those of the Polley--Hedengren (2026) parameters on identical observations \cite{polleyReactiveEPCSAFTModeling2026}; \cref{sec:results-literature} discusses that model comparison.
+
+\input{tables/same_data}
 \FloatBarrier
 
 \subsubsection{Absorption heat and heat capacity}\label{sec:results-heat}
@@ -101,20 +101,20 @@ The measurements themselves differ between those series at nearby loadings \cite
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{heat-of-absorption.pdf}
-\caption{Integral absorption heat from initially carbon-free nominal 30 wt\% MEA, per mole of added \COtwo. Lines are F2 calculations at the labeled temperature and pressure; circles are fitted Vinjarapu and Arcis observations that are not fitted \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011}. Negative values denote exothermic absorption; initial liquid, final liquid and pure-\COtwo feed use the same temperature and pressure.}
+\caption{Integral absorption heat from initially carbon-free nominal 30 wt\% MEA, per mole of added \COtwo. Lines are F2 calculations at the labeled temperature and pressure; circles are Vinjarapu observations, which are fitted, and Arcis observations, which are not fitted \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011}. Negative values denote exothermic absorption; initial liquid, final liquid and pure-\COtwo feed use the same temperature and pressure.}
 \label{fig:heat}
 \end{figure}
 
 % P:results-heat-kim
 The Kim--Svendsen comparison deteriorates at \SI{393.15}{\kelvin} (\cref{tab:same-data}).
-At that temperature its finite-interval heat RMSE exceeds the 2026 model's on the common intervals; Table~\ref{tab:same-data} gives both errors and the shared count.
-Both calculations include the inconsistent printed intervals in this common-row comparison; alternative source exclusions are reported separately in the supplement.
+At that temperature its finite-interval heat RMSE exceeds that of the Polley--Hedengren parameters on the common intervals (\cref{tab:same-data}).
+Both calculations include the inconsistent printed intervals in this comparison; Table~\ref{supp-tab:kim-alternatives} reports alternative source exclusions.
 Reaction-law extrapolation, approximated pressure histories and missing chemistry can affect the calculated heat, but this result does not identify a unique cause.
 The discrepancy prevents interpreting the common enthalpy formulation as demonstrated high-temperature caloric accuracy.
 
 % P:results-cp
 The heat-capacity comparison extends beyond the fitted Hilliard states, with the same feed-mass convention used for all mass-specific values.
-Its error and the source subsets are included in \cref{tab:same-data}.
+Table~\ref{tab:same-data} also reports the Weiland heat capacities at \SI{298.15}{\kelvin}, 30 wt\% unloaded-solvent MEA and loadings from zero to 0.5 mol/mol, and the Concepci\'on unloaded-solution heat capacities at MEA mass fraction 0.2997, \SI{0.100}{\mega\pascal}, and 313.15, 333.15 and \SI{353.15}{\kelvin}.
 The broader comparison supplies information on temperature dependence without establishing independent validation, since the data were inspected during development.
 
 \subsubsection{Density}\label{sec:results-density}
@@ -136,7 +136,7 @@ The Amundsen--Hartono difference at the excluded loading does not establish whic
 % P:results-transfer
 Calculations at 15 and 45 wt\% MEA expose concentration dependence beyond the nominal-30-wt\% pressure fit (\cref{fig:concentration-pressure}).
 The pressure deviations in \cref{tab:same-data} remain substantial at both concentrations, and the parameter reduction does not remove this weakness.
-These observations are not fitted but informed the adopted choice, not independent tests of transfer.
+These observations are not fitted, but they were seen during parameter selection, so they are not independent tests of transfer to other concentrations.
 No additional concentration-specific parameters are estimated here.
 
 \begin{figure}[pos=!htbp]
@@ -149,12 +149,11 @@ No additional concentration-specific parameters are estimated here.
 
 \subsection{Parameter choices and conditional uncertainty}\label{sec:results-joint}
 % P:results-joint-01
-Tables~\ref{tab:species-parameters} and \ref{tab:interaction-matrix} identify the adopted species and interaction values; the reaction laws are in \cref{tab:reaction-equilibrium-constants}.
-Table~\ref{tab:choice-cost} gives the measured cost of each cumulative restriction on the same observations and weights.
-F0 allows reaction-law shifts and separate amine-ion Born diameters; F1 fixes R2 and R5 to literature, and F2 additionally ties those Born diameters to segment diameters.
-F3 also fixes the carbamate--water interaction and \MEAH--water temperature slope to zero.
-F4 fixes the water--bicarbonate and water--carbonate laws to sodium-salt values and frees \MEAH--bicarbonate interaction; F4-0 fixes that new interaction to zero, whereas F5 instead adds zero \MEAH--carbamate interaction to F4.
+Table~\ref{tab:choice-cost} gives the measured cost of each cumulative restriction defined in \cref{sec:parameters}.
+From F0 to F2, five fewer adjustable parameters leave the objective value and the fitted pressure and density deviations nearly unchanged and reduce the number of parameters at bounds, while the deviation of the pressures that are not fitted rises slightly.
+F2 is the most restricted set whose fitted pressure and density deviations do not exceed those of F0; every set beyond it, F3 to F5, has larger fitted and not-fitted pressure deviations than F2.
 The cumulative changes quantify the cost of the selected assumptions, not the isolated physical effect of each restriction.
+Tables~\ref{tab:species-parameters} and \ref{tab:interaction-matrix} list the adopted species and interaction values; the reaction laws are in \cref{tab:reaction-equilibrium-constants}.
 
 \input{tables/choice_cost}
 \input{tables/species_parameters}
@@ -165,33 +164,33 @@ Only the \MEAH--\MEACOO interaction is at a bound for F2; its lower-bound value 
 The other parameters have conditional standard errors listed beside their values in Table~\ref{supp-tab:supplement-fitted-parameters}.
 The water--bicarbonate interaction and the opposing amine-ion size changes are weakly determined; their large conditional errors preclude identifying the fitted values as unique molecular properties.
 Correlated covariance propagation describes local pressure sensitivity, while inward bound scans test short feasible changes with the other parameters refitted.
-Neither calculation includes model discrepancy, reaction-law uncertainty, campaign dependence or uncertainty of a phase boundary.
+Neither calculation includes model discrepancy, reaction-law uncertainty, correlated errors within one experimental source or uncertainty of a phase boundary.
 \FloatBarrier
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:results-literature-01
 Table~\ref{tab:same-data} compares the adopted formulation with the 2026 Polley--Hedengren parameters on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
-The predecessor's equation-of-state calorics are calculated here from its published thermodynamic specification; its empirical column enthalpy correlations are not substituted.
+The Polley--Hedengren equation-of-state calorics are calculated here from their published thermodynamic specification; their empirical column enthalpy correlations are not substituted.
 The comparison shows gains in pressure and density agreement alongside remaining and worsened quantities, including high-temperature heat and the more concentrated pressure series.
 Because the fitting roles differ, these values do not define an across-role model ranking.
-The predecessor's published fitting account does not establish exact membership for every pressure and species row; its mixed-role labels preserve that uncertainty rather than asserting all rows were fitted.
+Their published fitting account does not establish whether every pressure and species observation was fitted; the mixed-role labels in \cref{tab:same-data} preserve that uncertainty.
 
-\input{tables/same_data}
+
 
 % P:results-literature-matched
-The Ma'mun observations provide an exact published-data match (\cref{tab:matched-pressure}) \cite{Mamun2005}.
-On the identical rows, pressure AARD worsens from F0 to F2, as the table shows.
+On the 19 identical Ma'mun observations (\cref{tab:matched-pressure}) \cite{Mamun2005}, F2 has a larger pressure deviation than F0 and than the PC-SAFT calculation of Baygi and Pahlavanzadeh, and a smaller one than the SAFT-HR calculation of Najafloo and Zarei.
 Zhang fitted these data, whereas Baygi and Najafloo describe ternary calculations outside their fitting objectives \cite[Table~9]{Zhang2011}\cite[Table~5]{Baygi2015,Najafloo2018}.
 Najafloo's detailed methods and conclusion differ in their fitting description, and equivalence of its pressure AAD formula is inferred rather than explicitly defined.
-Published aggregate errors on other datasets are not converted into common-row comparisons when their row selection or property basis cannot be reconstructed.
+Published aggregate errors on other datasets are not converted into comparisons on common observations when their observation selection or property basis cannot be reconstructed.
 
 \input{tables/matched_pressure}
 
 \subsection{Scope and limitations}\label{sec:limits}
 % P:results-limits
-The adopted set is a calibration with calculations at fixed parameters against data seen during development; no comparison establishes independent validation.
-Its uncertainty is conditional on the fit, and its phase behavior is supported by finite searches rather than a global proof.
-Concentration-dependent pressures, carbonate shares and the highest-temperature heat remain inaccurate despite improved agreement with other properties.
-R1--R3 have a source-correlation range rather than verified measurement coverage, and R4/R5 and the unloaded dielectric law are extrapolated beyond their direct source constraints.
-Missing pressure histories, source inconsistencies, observable approximations, omitted carrier gas and omitted oxazolidone further limit interpretation.
+These results support F2 as a calibration, with calculations at fixed parameters, against data seen during development; no comparison establishes independent validation.
+The adopted calibration also has measured weaknesses: on the 19 Ma'mun observations, the restrictions raise the pressure AARD from 19.43\,\% for F0 to 33.47\,\% for F2, and at \SI{393.15}{\kelvin} the Kim--Svendsen heat RMSE of F2, \SI{31.77}{\kilo\joule\per\mole} \COtwo, exceeds the \SI{29.49}{\kilo\joule\per\mole} \COtwo of the Polley--Hedengren parameters.
+The parameter uncertainty is conditional on this fit and therefore excludes model discrepancy and reaction-law uncertainty.
+The absence of an additional liquid rests on finite searches rather than a global proof, and the false split of the comparison fit has no unique microscopic cause, so the stability of F2 cannot be attributed to one restricted parameter.
+The R1--R3 temperature range is Austgen's correlation range, not demonstrated measurement coverage, and R4, R5 and the unloaded dielectric law are extrapolated beyond their direct source constraints.
+Pressures at other MEA concentrations, carbonate shares and the highest-temperature heats remain the weakest parts of the calibration, and missing pressure histories, source inconsistencies, observable approximations, omitted carrier gas and omitted oxazolidone further limit interpretation.
 No absorber or stripper operating prediction is qualified by the property comparisons alone.
