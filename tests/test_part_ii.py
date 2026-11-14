@@ -161,26 +161,28 @@ def test_retained_fit_endpoint_transport(monkeypatch):
     assert p.stable.s.parameter_values(actual['parameters'])==p.stable.s.parameter_values(expected)
 
 
-@pytest.mark.parametrize('status,unavailable',[('converged',False),('limit_reached',False),('converged',True)])
+@pytest.mark.parametrize('status,unavailable',[('converged',False),('limit_reached',False),('converged','only'),('converged','split')])
 def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
     import reduced_refit_338 as reduced
     route = p.Route.__new__(p.Route)
     route.out,route.config,route.controls = tmp_path,dict(starts=[1.,2.],loadings=[1e-5]),dict(function_tolerance=1e-8)
     route.start,route.replay = lambda ref:ref,lambda point: ([],True,point)
-    route.search = lambda point: dict(stable=False,grid=dict(descent=2),offset=dict(descent=0),census=dict(descent=0))
+    route.search = lambda point: dict(stable=point>10.,grid=dict(descent=int(point<=10.)),offset=dict(descent=0),census=dict(descent=0))
     if unavailable:
         native = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
         p.stable._init(native.start(native.config['reference']),route=native)
         row = p.stable._measure(dict(key='comparison:362:cap',cap_record='comparison:362'))
-        monkeypatch.setattr(route,'grid',lambda *args:[row]); route.bind,route.states = lambda point:None,lambda spec:[]
+        monkeypatch.setattr(route,'grid',lambda *args:[row]+([dict(key='split',available=True,value=-1.)] if unavailable=='split' else [])); route.bind,route.states = lambda point:None,lambda spec:[]
         route.search = lambda point:p.Route.search(route,point)
         assert 'thermochemistry_unavailable: outside_interval: record excludes temperature' in route.search(None)['grid']['unavailable_searches'][0]['message']
-    monkeypatch.setattr(reduced,'fit',lambda name,start,*args,**kwargs:(start,dict(status=status,final_cost=start,stability_cost=1.,declared=[],cost_history=[3.,start])))
+    def fitted(name,start,*args,**kwargs):
+        if unavailable and '/penalized-' in name: raise ValueError(row['message'])
+        return (endpoint := start+(10. if '/penalized-' in name else 0.)),dict(status=status,final_cost=endpoint,endpoint_replay_cost=endpoint,stability_cost=1.,declared=[],cost_history=[3.,endpoint])
+    monkeypatch.setattr(reduced,'fit',fitted)
     chosen = route.campaign()
-    selection = route.result('selection.json')
-    assert len(selection['candidates'])==2
+    if unavailable=='split': assert route.result('start-0/penalized-0/unavailable.json')['cause']==row['message']
     assert (chosen['cost']==1. and not chosen['stable']) if status=='converged' else chosen is None
     endpoints = route.result('start-0/endpoints.json')
     assert len(endpoints)==(3 if status=='converged' and not unavailable else 1)
-    assert all(e['split_counts']=='lower bounds' and e['optimizer_report']['cost_history']==[3.,1.] for e in endpoints)
-    assert endpoints[0]['disposition']==('no split found in the available searches; 1 searches unavailable' if unavailable else 'converged but still splitting' if status=='converged' else 'not converged')
+    assert endpoints[0]['optimizer_report']['cost_history']==[3.,1.] and all(e['split_counts']=='lower bounds' for e in endpoints)
+    assert endpoints[0]['disposition']==('no split found in the available searches; 1 searches unavailable' if unavailable=='only' else 'converged but still splitting' if status=='converged' else 'not converged')
