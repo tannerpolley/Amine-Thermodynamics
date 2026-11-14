@@ -154,7 +154,7 @@ def split_registry():
     if 'SPLITS' in globals():
         return globals()['SPLITS']
     import json
-    pool, sources, unreadable = {}, {}, []
+    pool, sources, unreadable, split_evidence, composed_resolved, composed_unresolved, negative_records = {}, {}, [], set(), set(), set(), {}
     def add(witness, source):
         witness = dict(witness, kind=witness.get('kind','liquid' if len(witness['support'])==len(r.s.COMPONENT_IDS) else 'vapor').lower())
         if len(witness['composition']) != len(r.s.COMPONENT_IDS):
@@ -167,9 +167,20 @@ def split_registry():
             for value in raw:
                 scan(value, source)
         elif isinstance(raw, dict):
+            negative = any(isinstance(v,(float,int)) and v<0 and ('tpd' in k.lower() or k.startswith('delta_G_over_RT')) for values in (raw,raw.get('quantities',{})) if isinstance(values,dict) for k,v in values.items())
+            if raw.get('resolved_descent') is True or negative:
+                split_evidence.add(source)
+            if raw.get('composition') and negative and raw.get('resolved_descent') is not True:
+                negative_records.setdefault(source,[]).append(raw.get('evidence','indeterminate'))
+            if raw.get('composition') and (raw.get('resolved_descent') is True or negative):
+                (composed_resolved if raw.get('resolved_descent') is True else composed_unresolved).add(source)
             if raw.get('resolved_descent') and raw.get('split_coordinates') and 'composition' in raw:
                 add(dict(kind=raw['phase']['kind'], support=raw['phase']['support'],
                          composition=raw['composition'], packing=math.exp(raw['split_coordinates'][-1])), source)
+            elif raw.get('resolved_descent') and raw.get('composition') and raw.get('optimizer',{}).get('success') and raw['optimizer'].get('packing_fractions'):
+                # stability-diagnosis/README.md: one liquid trial with all nine species.
+                add(dict(kind='liquid',support=list(range(len(r.s.COMPONENT_IDS))),composition=raw['composition'],
+                         packing=raw['optimizer']['packing_fractions'][0]),source)
             result = raw.get('result', {})
             if (isinstance(result, dict) and result.get('success') and
                 (raw.get('confirmed') or any(raw.get(k,0)<0 for k in ('delta_G_over_RT','delta_G_over_RT_vs_original','delta_G_over_RT_vs_single_liquid')))):
@@ -204,11 +215,23 @@ def split_registry():
                 omitted.append(dict(file=source, fields=sorted(set(x.decode() for x in re.findall(rb'composition[a-z_]*|mole_fractions|tangent.plane[a-z_]*|tpd_over_rt|delta_G_over_RT[a-z_]*|witnesses',data))), reason='no resolved descent, confirmed two-liquid split, or retained witness' if raw is not None else 'non-JSON composition or tangent-plane reference; not parsed'))
         except (ValueError, UnicodeDecodeError) as exc:
             unreadable.append(dict(file=source,reason=str(exc)))
+    old = r.read(OUT/'split-registry.json')
     registry = dict(trials=[pool[k] for k in sorted(pool)], sources=sources,
                     before_dedup=sum(sources.values()), after_dedup=len(pool), unreadable=unreadable,
                     dedup_rule='exact kind, ordered support, full component composition and packing; no rounding')
     registry['sha256'] = a.hashlib.sha256(json.dumps(registry['trials'],sort_keys=True).encode()).hexdigest()
-    write('split-completeness.json',dict(tracked_files=len(paths)-1, without_split=omitted, unreadable=unreadable, unread_formats=unread_formats))
+    registry.update(previous_trials=old['trials'] if old['sha256']!=registry['sha256'] else old['previous_trials'], previous_sha256=old['sha256'] if old['sha256']!=registry['sha256'] else old['previous_sha256'])
+    unread_split = sorted(composed_resolved-sources.keys())
+    unresolved = sorted(composed_unresolved-sources.keys()-set(unread_split))
+    scalar = sorted(split_evidence-sources.keys()-set(unread_split)-set(unresolved))
+    for row in omitted:
+        if row['file'] in unread_split:
+            row['reason'] = 'unread split'
+        elif row['file'] in unresolved:
+            row['reason'] = 'negative-distance composition; descent not resolved'
+        elif row['file'] in scalar:
+            row['reason'] = 'split indicator without retained trial composition'
+    write('split-completeness.json',dict(tracked_files=len(paths)-1, without_split=omitted, unreadable=unreadable, unread_formats=unread_formats, unread_split=unread_split, classification_counts=dict(scalar=len(scalar),unresolved_negative=len(unresolved),unread_split=len(unread_split)), explained_scalar=scalar, explained_unresolved_negative=unresolved, admission='A split found earlier is a native resolved descent (#255, Engine #1224; owner 2026-11-13).', class_reasons=dict(explained_scalar='No retained explicit trial composition; cannot supply a trial.', explained_unresolved_negative='Unconverged or rejected optimizer iterates; native descent not resolved.'), excluded_negative_records={state:sum(value==state for source in unresolved for value in negative_records[source]) for state in ('no_resolved_descent','indeterminate')}))
     globals()['SPLITS'] = registry
     write('split-registry.json', registry)
     return registry
@@ -250,9 +273,17 @@ def search(name, mapping):
     if path.exists():
         from concurrent.futures import ProcessPoolExecutor
         raw = r.result(f'{name}/census-raw.json.gz')
-        trials = registry['trials']
+        previous = registry['previous_trials'] if r.read(path).get('registry_sha256')==registry['previous_sha256'] else []
+        trials = [w for w in registry['trials'] if w not in previous]
         with ProcessPoolExecutor(r.CORES,initializer=r.verify) as pool:
             supplied = list(pool.map(supplied_census,[(mapping,row,trials) for row in raw]))
+        if previous:
+            indices = [previous.index(w) if w in previous else None for w in registry['trials']]
+            for row,old in zip(supplied,r.result(f'{name}/supplied.json.gz'),strict=True):
+                assert row['index']==old['index']
+                values = row['distances']
+                row['distances'] = [old['distances'][i] if i is not None else values[trials.index(w)] for w,i in zip(registry['trials'],indices,strict=True)]
+                row.update(evaluated=len(row['distances']),negative=sum(v<0 for v in row['distances']),minimum_tpd=min(row['distances']),minimum_liquid_tpd=min(v for v,w in zip(row['distances'],registry['trials'],strict=True) if w['kind']=='liquid'),unavailable=old['unavailable']+row['unavailable'])
         r.write(f'{name}/supplied.json.gz',supplied)
         out = r.read(path)
         out['census']['descent_indices'] = sorted(set(out['census']['descent_indices']) | {row['index'] for row in supplied if row['negative']})
