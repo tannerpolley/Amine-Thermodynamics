@@ -1,0 +1,175 @@
+{
+  "amine": "diethanolamine",
+  "species": [
+    "carbon-dioxide",
+    "diethanolamine",
+    "water",
+    "protonated-diethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "vapor_species": [
+    "water",
+    "diethanolamine",
+    "carbon-dioxide"
+  ],
+  "specification": "DEA.toml",
+  "coordinates": {
+    "path": "start-0-coordinates.json",
+    "sha256": "c1b30c83bcb0ddb15b9023c320624b42b65600526a48e486d0e36df2393c7e60"
+  },
+  "starts": [
+    {
+      "path": "start-0-parameters.json",
+      "sha256": "421ec0783520367b563b8765924dfa4953bec961fa5ac2f42a7927b8252aa250",
+      "reactions": {
+        "path": "start-0-reactions.json",
+        "sha256": "0d9cabad6969879de66d101935b27f0c3b4ae2a579631a7235c6f0d79f759fa8"
+      },
+      "coordinates": {
+        "path": "start-0-coordinates.json",
+        "sha256": "c1b30c83bcb0ddb15b9023c320624b42b65600526a48e486d0e36df2393c7e60"
+      }
+    },
+    {
+      "path": "start-1-parameters.json",
+      "sha256": "a57ab4b5d7def2ea4e4889c625e99ebd57f8d3157fad8e0f2247e0c8844a2a27",
+      "reactions": {
+        "path": "start-1-reactions.json",
+        "sha256": "97ba9c26436b3e4f920a952a3366e9b4ff70a62d948cc8d3891ff649d8e3dc92"
+      },
+      "coordinates": {
+        "path": "start-1-coordinates.json",
+        "sha256": "e143839fd37c66d6e1370a7d54bc745ddb80c4c89823b0f2388278ded516a6c9"
+      }
+    }
+  ],
+  "born_ties": [
+    "protonated-diethanolamine",
+    "carbamate-anion"
+  ],
+  "calculation_interval_K": [
+    293.15,
+    458.64
+  ],
+  "reaction_ranges_K": {
+    "R1": [
+      273.15,
+      498.15
+    ],
+    "R2": [
+      273.15,
+      498.15
+    ],
+    "R3": [
+      273.15,
+      498.15
+    ],
+    "DEA-dissociation": [
+      273.15,
+      323.15
+    ],
+    "carbamate-hydrolysis": null
+  },
+  "roles": {
+    "Lawson": "fitted",
+    "Lawson-394K": "not fitted",
+    "Carson": "fitted",
+    "SeoHong": "not fitted",
+    "Lal": "not fitted",
+    "Weiland": "comparison only",
+    "Lawson-VIII": "comparison only",
+    "Bottinger-DEA_plus_DEAH": "comparison only",
+    "Bottinger-DEACOO": "comparison only",
+    "Bottinger-HCO3": "comparison only",
+    "Cai": "comparison only",
+    "Horstmann": "comparison only"
+  },
+  "stocks": [
+    {
+      "water": 17.50797101127487,
+      "diethanolamine": 1.0
+    },
+    {
+      "water": 52.52391303382461,
+      "diethanolamine": 1.0
+    },
+    {
+      "water": 23.343961348366495,
+      "diethanolamine": 1.0
+    },
+    {
+      "water": 13.617310786547122,
+      "diethanolamine": 1.0
+    }
+  ],
+  "loadings": [
+    1e-05,
+    0.025,
+    0.05,
+    0.075,
+    0.1,
+    0.125,
+    0.15,
+    0.175,
+    0.2,
+    0.225,
+    0.25,
+    0.275,
+    0.3,
+    0.325,
+    0.35,
+    0.375,
+    0.4,
+    0.425,
+    0.45,
+    0.475,
+    0.5,
+    0.525,
+    0.55,
+    0.575,
+    0.6,
+    0.625,
+    0.65,
+    0.675,
+    0.7,
+    0.725,
+    0.75,
+    0.775,
+    0.8,
+    0.825,
+    0.85,
+    0.875,
+    0.9,
+    0.925,
+    0.95,
+    0.975,
+    1.0,
+    1.025,
+    1.05,
+    1.075,
+    1.1,
+    1.125,
+    1.15,
+    1.167
+  ],
+  "split_record": {
+    "path": "split-record.json",
+    "sha256": "adb0cb0d3b9bbdbdd5d2da530d0a53792a730627c520edc3878d06f438527839"
+  },
+  "curve_rows": {
+    "path": "curve-rows.json",
+    "sha256": "6d6c70eb33b4c776c605ca3350a978eb387dfc1c96814517913ef883636dc0d6"
+  },
+  "optimizer": {
+    "maximum_iterations": 60,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 1200.0
+  },
+  "output": "../../results/retransfer-346/f2"
+}
