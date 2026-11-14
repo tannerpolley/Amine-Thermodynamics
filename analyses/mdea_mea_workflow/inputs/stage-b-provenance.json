@@ -1,0 +1,75 @@
+{
+  "status": "Start 0 optimizer converged; full stability search running; no selection or penalty",
+  "main": "2e5b2d413fe8177ac27a7a1cf4a546bf674a4d1f",
+  "Xiao_source": "data/reference/MDEA/Xiao2018_context.csv",
+  "Xiao_source_sha256": "8ad79e32a1998c55e1765321bc107ec959e3a49bc188907a39230796d6fd5b42",
+  "Xiao_rows": 20,
+  "Xiao_earlier_access": "Seen during development and used in earlier selection, together with Ermatchkov; not fitted and excluded from Stage B selection",
+  "fitted_rows": 278,
+  "stocks": 67,
+  "stock_rule": "Every exact fitted positive-MDEA stock ratio, normalized to one mol analytical MDEA. Pure-water observations remain data search states; CO2/MDEA grid loading is undefined for zero MDEA.",
+  "loading_nodes": 56,
+  "maximum_loading_mol_per_mol": 1.368,
+  "loading_rule": "The existing #338 0.025 mol/mol grid spacing, starting at 1e-5 and including the data maximum",
+  "restrictions": "Pause before penalty stages when any resolved split is found; no parameter adoption; no executable additions",
+  "unoptimized_start_replays": [
+    {
+      "start": 0,
+      "cost": 436.67602868289833,
+      "available": true,
+      "fitted_rows": 278
+    },
+    {
+      "start": 1,
+      "cost": 2393.0256195358056,
+      "available": true,
+      "fitted_rows": 278
+    }
+  ],
+  "executed": "Two declared-start F2 replays; frozen B1 replay and full 730-row comparison reduction; start0 unpenalized optimizer; start0 search running",
+  "grid_memory_preflight": {
+    "status": "Do not launch campaign with the current eager deep-copy path",
+    "route": "analyses/part_ii.py:Route.grid",
+    "candidate_compositions_provisional": 2789,
+    "grid_states_excluding_data": 67536,
+    "copies": 188357904,
+    "minimal_native_witness_dictionary_bytes": 184,
+    "eight_entry_composition_list_bytes": 120,
+    "empty_support_list_bytes": 56,
+    "container_lower_bound_bytes": 67808845440,
+    "interpretation": "Container-size lower bound for the current candidate count, not measured process memory. Excludes metadata, registry, data-state copies, workers and results. Candidate inventory remains under correction.",
+    "question_tool_decision": "shared_route_memory_fix; recommended choice returned in Dont-ask mode; no code change authorized or made here"
+  },
+  "launch_method": "Existing reduced_refit_338.fit(..., route=Route(...)), unpenalized only; shared implementation owns up to two continuations and every endpoint search",
+  "disk_preflight": {
+    "free_bytes": 397554647040,
+    "required_planning_allowance_GiB": 60,
+    "adequate": true
+  },
+  "registry_trials": 2789,
+  "curve_rows": 10024,
+  "grid_memory_preflight_disposition": "Superseded by reviewed #368 / PR #370; historical estimate retained as diagnosis evidence",
+  "start_0_optimizer_result": {
+    "status": "converged",
+    "message": "Function tolerance reached. |cost_change|/cost: 5.147725e-11 <= 1.000000e-10",
+    "iterations": 9,
+    "initial_cost": 436.67602868289816,
+    "final_cost": 382.06387056074306,
+    "iteration_costs": [
+      436.6760286828984,
+      1.7976931348623157e+308,
+      1.7976931348623157e+308,
+      1.7976931348623157e+308,
+      383.422686965294,
+      382.0674332806697,
+      382.0639988293863,
+      382.0638775289407,
+      382.06387092349996,
+      382.0638705604147
+    ],
+    "endpoint_replay_cost": 382.06387056091006,
+    "endpoint_replay_available": true,
+    "endpoint_relative_cost_difference": 4.3720582709738665e-13,
+    "endpoint_check_limit": 1e-08
+  }
+}
