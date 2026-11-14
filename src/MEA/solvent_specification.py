@@ -490,3 +490,38 @@ def relative_error_statistic(records):
     ):
         return None
     return 100 * sum(abs(r["value"] / r["observed"] - 1) for r in records) / len(records)
+
+
+def deviation_statistics(pairs, unit=None):
+    """pairs: (observed, predicted). Relative errors in percent; absolute error in the property's unit."""
+    n = len(pairs)
+    rel = [(p - o) / o * 100 for o, p in pairs]
+    out = {"rows": n, "AARD_percent": sum(abs(r) for r in rel) / n}
+    if not unit:
+        out["bias_percent"] = sum(rel) / n
+    if unit:
+        out["mean_abs_error"] = sum(abs(p - o) for o, p in pairs) / n
+        out["mean_signed_error_predicted_minus_observed"] = sum(p - o for o, p in pairs) / n
+        out["unit"] = unit
+    return out
+
+
+
+def conditional_information(result, J, r, ids, lower, upper):
+    """Column-normalized singular values; the cost gradient at the final point (an active-bound coordinate whose
+    gradient points out of the box is held there); and, for coordinates off their bounds, the covariance
+    conditional on the active-bound coordinates held fixed (the Engine withholds the full covariance there)."""
+    import numpy as np
+    free = [k for k in range(len(ids)) if k not in set(result.covariance.active_bounds)]
+    s2 = float(r @ r / (len(r) - len(free)))
+    cov = s2 * np.linalg.inv(J[:, free].T @ J[:, free])
+    se = np.sqrt(np.diag(cov))
+    gradient = J.T @ r  # d(0.5 sum r^2)/d(theta), physical units
+    return {'column_normalized_singular_values': list(np.linalg.svd(J / np.linalg.norm(J, axis=0), compute_uv=False)),
+            'cost_gradient': dict(zip(ids, gradient)),
+            'active_bound_outward_descent': {  # outward is +1 at the upper bound, -1 at the lower
+                ids[k]: bool(-gradient[k] * (1 if upper[k] - result.physical[k] < result.physical[k] - lower[k] else -1) > 0)
+                for k in result.covariance.active_bounds},
+            'free_coordinates': [ids[k] for k in free], 'residual_variance': s2,
+            'conditional_standard_error': dict(zip((ids[k] for k in free), se)),
+            'conditional_correlation': (cov / np.outer(se, se)).tolist()}
