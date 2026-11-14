@@ -62,8 +62,8 @@ def statistics(rows):
 
 def current_shared(document, decl):
     """Substitute the adopted #255/#297 shared species, pairs and R1-R3 laws (in place)."""
-    mea = json.loads((AN.parent / 'solvent_specification_mea/inputs/endpoint.json').read_text())
-    current = tomllib.loads((AN.parent / 'solvent_specification_mea/declarations.toml').read_text())
+    mea = json.loads((AN.parent / 'mea_parameter_bundle/results/adoption-340/historical-spec/inputs/endpoint.json').read_text())
+    current = tomllib.loads((AN.parent / 'mea_parameter_bundle/results/adoption-340/historical-spec/declarations.toml').read_text())
     document['components'] = [next(x for x in mea['components'] if x['component_id']==c['component_id']) if c['component_id'] in SHARED else c for c in document['components']]
     document['pairs'] = [next(x for x in mea['pairs'] if {x['component_id_a'],x['component_id_b']}=={p['component_id_a'],p['component_id_b']}) if {p['component_id_a'],p['component_id_b']}<=SHARED else p for p in document['pairs']]
     for r in decl['chemistry']['reactions']['aqueous']:
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     declarations = tomllib.loads((AN / 'inputs/redesign' / f'{run}-declarations.toml').read_text())
     summary = dict(wheel_sha256=SHA256, workers=int(os.environ['AGENT_HEAVY_CORES']),
         starts=old['start_comparisons']['redesign-1-A-slope'], scored='current',
-        mea_endpoint=bind(AN.parent / 'solvent_specification_mea/inputs/endpoint.json'), variants={})
+        mea_endpoint=bind(AN.parent / 'mea_parameter_bundle/results/adoption-340/historical-spec/inputs/endpoint.json'), variants={})
     for version in ('historical', 'current'):
         document, decl = copy.deepcopy(original), copy.deepcopy(declarations)
         next(r for r in decl['chemistry']['reactions']['aqueous'] if r['name']=='carbamate-hydrolysis')['correlation'] = old['runs'][run]['law']

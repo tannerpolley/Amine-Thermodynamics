@@ -24,7 +24,7 @@ def main():
         for name in archive.namelist():
             if name.startswith('epcsaft/') and not name.endswith('/'):
                 assert archive.read(name) == (Path(epcsaft.__file__).parent.parent / name).read_bytes(), name
-    source = ROOT / 'analyses/solvent_specification_mea'
+    source = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
     spec = SolventSpecification(source / 'MEA.toml')
     rows = spec.inputs['observations']['fitted']
     reference = json.loads((source / 'inputs/reference.json').read_text())

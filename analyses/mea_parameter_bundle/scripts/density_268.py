@@ -18,7 +18,7 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 
 ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
-AN = ROOT / 'analyses/solvent_specification_mea'
+AN = ROOT / 'analyses/mea_parameter_bundle/results/adoption-340/historical-spec'
 OUT = B / 'results/density-268'
 sys.path.insert(0, str(Path(__file__).parent))
 import shared_evaluation as s
