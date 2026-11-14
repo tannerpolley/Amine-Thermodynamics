@@ -27,8 +27,6 @@ import shared_evaluation as s
 COMMIT = 'bc7794731e94be961d16028d3f4880c6718a93ad'
 SHA = '8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069'
 WHEEL = ROOT / f'build/engine-wheels/main-{COMMIT}/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
-# Owner-authorized candidate wheel for this process only; the repository pin stays 0d08dff9.
-s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = SHA, COMMIT
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
 from MEA.solvent_specification import jsonable, stability_payload, supplied_negative
@@ -706,6 +704,8 @@ def assess(run, rows=None):
 
 
 if __name__ == '__main__':
+    # Historical #255 commands select their wheel; importing preserves the active pin.
+    s.ENGINE_WHEEL_SHA256, s.ENGINE_COMMIT = SHA, COMMIT
     command = sys.argv[1]
     spec_261()
     if command == 'qualify':
