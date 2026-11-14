@@ -15,8 +15,8 @@ Paths in the JSON files are relative to the repository root.
   CSV files. Each row carries a separate range mark for all eight reactions.
   One Kamps solid-precipitation row retains its existing exclusion from the
   fluid-only comparison; no row is excluded for temperature.
-- `split-compositions.json` retains 102 distinct liquid trial compositions
-  admitted by native resolved descent, with source hashes and JSON pointers.
+- `split-compositions.json` retains 100 native resolved-descent liquid trial compositions and two
+  composition-only historical supplied trials, with source hashes and JSON pointers.
   It includes the known Hilliard rows 55/56 neighbours whose supplied trials
   at A12s gave -0.030909497986794147 and -0.04372673268093612 RT.
   Its coverage table enumerates the tracked PZ JSON files inspected at the
