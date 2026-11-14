@@ -68,22 +68,24 @@ CSE execution mode: direct.
 ## ePC-SAFT Cross-Repo Integration
 
 - This is an official downstream application under ePC-SAFT Governance D-038.
-- The Engine repository is `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`.
+- The Engine repository is the public `tannerpolley/epcsaft`, checked out at `/home/tnnrpolley21/Workspaces/Engineering/epcsaft`. It owns current Engine source, issues and new requests.
+- Historical Engine commits, including `391dfe5d` behind the pinned wheel, live in `tannerpolley/epcsaft-validation` (formerly the private `tannerpolley/ePC-SAFT`). Its issues are read-only history.
 - Engine owner paths are relative to that repository:
-  - Owner map: `docs/scientific/README.md` and `docs/scientific/CONTEXT.md`; accepted decisions: `docs/scientific/adr/`.
+  - Owner map: `docs/scientific/README.md` and `docs/scientific/CONTEXT.md`; accepted decisions: `docs/scientific/decisions/`.
   - Budgets: `ARCHITECTURE.yaml`, explained in `docs/scientific/code-budgets.md`; equations: `engine/docs/equations.md`; algorithms: `engine/docs/science/algorithms.md`.
-  - Plans: issues in `tannerpolley/ePC-SAFT`.
-  - Code: `engine/native/<layer>/` and `engine/src/epcsaft/`; tests: `engine/tests/`; evidence: `analyses/`.
+  - Plans: issues in `tannerpolley/epcsaft`.
+  - Code: `engine/native/<layer>/` and `engine/src/epcsaft/`; tests: `engine/tests/`; evidence: `tannerpolley/epcsaft-validation`.
 - The Unified Engine is one `epcsaft` wheel with `epcsaft`, `epcsaft.equilibrium`, and `epcsaft.regression`. Do not install split packages or use compatibility imports.
 - Prefer uv-managed workflows. Use `.venv/bin/python` only for interpreter-specific debugging or repo-local troubleshooting.
 - Normal and final work uses one immutable Engine wheel built from a merged Engine `main` commit and pinned by SHA-256. Never import an Engine source checkout.
 - Keep Engine equations, generic equilibrium compilation, exact derivatives, and generic parameter fitting mechanics in the Engine repository.
   - The Engine orchestrator owns Engine issues, their bodies and their builds. When MEA needs a generic change, open or comment on an Engine issue stating the MEA use case: the exact declaration, the quantities consumed and their acceptance criteria. After publication, communicate only through comments.
-  - The ignored Engine clone `upstream/ePC-SAFT` is for reading Engine source at a known commit, read-only probes, and building wheels. Sync its `main` to `origin/main` before each use. Do not edit Engine source there unless the owner hands that Engine issue to this repository.
+  - The ignored clone `upstream/epcsaft` of `https://github.com/tannerpolley/epcsaft.git` is for reading current Engine source, read-only probes, and building wheels from merged `main`. Sync its `main` to `origin/main` before each use. Do not edit Engine source there unless the owner hands that Engine issue to this repository.
+  - The ignored clone `upstream/ePC-SAFT`, with remote `https://github.com/tannerpolley/epcsaft-validation.git`, is read-only: use it only to read Engine source at historical commits such as `391dfe5d`. Do not delete, re-clone or move it.
   - A wheel built from an unmerged branch is a candidate for local co-development only, recorded by SHA-256. Repeat any qualification on the merged-commit wheel before final use.
 - MEA may run direct Engine calculations against MEA-owned inputs; that does not move generic method ownership.
 - Keep MEA chemistry hypotheses, source data, model selection, parameter fitting, validation, parameter adoption, figures, and the thermodynamics manuscript in this repository.
-- `upstream/ePC-SAFT` is the only nested repository. No submodules, other nested repositories, or sibling-source runtime imports.
+- `upstream/epcsaft` and `upstream/ePC-SAFT` are the only nested repositories. No submodules, other nested repositories, or sibling-source runtime imports.
 - Reusable scientific packets are materialized from Data by exact commit, packet path/version, fingerprint, and file hashes. Do not discover sibling repositories at runtime.
 - Keep Engine interactions behind the approved runtime and diagnostic modules. Unsupported scientific capabilities must fail explicitly; do not restore old APIs or local equation copies.
 

@@ -261,14 +261,18 @@ or evidence. Update the existing owning record when that answer changes.
 
 The installed Engine wheel owns generic equations, equilibrium compilation,
 exact derivatives, and parameter-fitting mechanics. Its source repository is
-`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT`. Its owner map is at
-`/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/docs/scientific/README.md`
-and `/home/tnnrpolley21/Workspaces/Engineering/ePC-SAFT/docs/scientific/CONTEXT.md`;
-accepted decisions are in `docs/scientific/adr/`, budgets in
+the public `tannerpolley/epcsaft`, checked out at
+`/home/tnnrpolley21/Workspaces/Engineering/epcsaft`. Its owner map is at
+`/home/tnnrpolley21/Workspaces/Engineering/epcsaft/docs/scientific/README.md`
+and `/home/tnnrpolley21/Workspaces/Engineering/epcsaft/docs/scientific/CONTEXT.md`;
+accepted decisions are in `docs/scientific/decisions/`, budgets in
 `ARCHITECTURE.yaml` and `docs/scientific/code-budgets.md`, equations in
 `engine/docs/equations.md`, algorithms in `engine/docs/science/algorithms.md`,
-plans in Engine GitHub issues, code in `engine/native/<layer>/` and
-`engine/src/epcsaft/`, tests in `engine/tests/`, and evidence in `analyses/`.
+plans in `tannerpolley/epcsaft` issues, code in `engine/native/<layer>/` and
+`engine/src/epcsaft/`, and tests in `engine/tests/`. Validation evidence and
+historical Engine commits, including `391dfe5d` behind the pinned wheel, are in
+`tannerpolley/epcsaft-validation` (formerly the private `tannerpolley/ePC-SAFT`),
+whose issues are read-only history.
 
 Amine-Thermodynamics may call those public Engine methods directly to reproduce
 an accepted calculation, evaluate MEA observations, and generate retained
