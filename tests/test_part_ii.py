@@ -152,3 +152,25 @@ def test_retained_fit_endpoint_transport(monkeypatch):
     actual = route.endpoint_mapping(point,report,point['coordinates'])
     expected = route.load(route.config['reference'])
     assert p.stable.s.parameter_values(actual['parameters'])==p.stable.s.parameter_values(expected)
+
+
+def test_horstmann_residual_excess_enthalpy():
+    """#360 same-wheel F0 reference; owner-set relative tolerance 1e-8."""
+    from MEA.solvent_specification import SolventSpecification
+    spec = SolventSpecification(ROOT/'analyses/dea_transfer/runs/B-2-endpoint.toml')
+    spec.problems['binary'] = SimpleNamespace(T=363.15, P=1.75e6, reactions=[])
+    record = dict(identity='Horstmann:1', group='Horstmann', row={'source_row': '1'},
+                  observation_parameters=spec.parameter_sha256, constructor='residual_excess_enthalpy',
+                  problem='binary', temperature_domain=[363.15,363.15], unit='J/mol mixture',
+                  arguments=dict(observed=-232., x={'water':.0636, 'diethanolamine':.9364}))
+    result = spec.prediction(record)
+    assert result['value'] == pytest.approx(88.58956892024435, rel=1e-8)
+    assert result['role'] == 'comparison only'
+    with pytest.raises(ValueError, match='Unsupported observation constructor'):
+        spec.observation(record)
+    route = p.Route.__new__(p.Route)
+    route.config = dict(stocks=[], loadings=[])
+    spec.inputs['observations']['comparisons'] = [record]
+    enforced = route.states(spec)
+    spec.inputs['observations']['comparisons'] = []
+    assert route.states(spec) == enforced
