@@ -269,3 +269,47 @@ def test_amp_supplied_trial_component_support(monkeypatch, tmp_path):
     assert not failed['available'] and failed['message']=='ValueError: optimized search failed'
     assert failed['not_applicable_supplied_trials']==binary['not_applicable_supplied_trials']
     assert p.stable.tally([failed])['supplied_trial_counts']==binary['supplied_trial_counts']
+
+
+def test_completed_reaction_chart_preserves_bounds_through_continuation(monkeypatch):
+    """#365: fit displacement keeps bounds; law completion translates the chart."""
+    monkeypatch.setenv('AGENT_HEAVY_CORES','3')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    point = route.start(route.config['reference'],adopt=False)
+    point['coordinates'] = [
+        dict(kind='reaction_coordinate',name='R',coefficient='a',origin=5.,scale=2.,bounds=[2.,8.]),
+        dict(kind='reaction_enthalpy_shift',name='R',origin=0.,scale=1000.,bounds=[-10000.,10000.])]
+    point['reactions'] = dict(aqueous=[dict(name='R',correlation=dict(a=5.))])
+    original = p.copy.deepcopy(point)
+    # A fitted a displacement of +1 and an independent completion offset of +.25.
+    report = dict(optimizer=[.5,.25],physical=[],reactions=dict(aqueous=[dict(name='R',correlation=dict(a=6.25))]))
+    endpoint = route.endpoint_mapping(point,report,point['coordinates'])
+    assert point==original
+    assert endpoint['coordinates'][0]['origin']==6.25
+    assert endpoint['coordinates'][0]['bounds']==[2.25,8.25]
+    assert endpoint['coordinates'][1]['bounds']==[-10250.,9750.]
+    # Reusing an already completed law adds no further translation.
+    zero = dict(optimizer=[0.,0.],physical=[],reactions=endpoint['reactions'])
+    assert route.endpoint_mapping(endpoint,zero,endpoint['coordinates'])==endpoint
+    # A continuation moves a by -.5 and completes with a further -.125 offset.
+    report.update(optimizer=[-.25,-.125],reactions=dict(aqueous=[dict(name='R',correlation=dict(a=5.625))]))
+    continued = route.endpoint_mapping(endpoint,report,endpoint['coordinates'])
+    assert continued['coordinates'][0]['origin']==5.625
+    assert continued['coordinates'][0]['bounds']==[2.125,8.125]
+    assert continued['coordinates'][1]['bounds']==[-10125.,9875.]
+    assert continued['coordinates'][1]['origin']==0.
+
+
+def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_path):
+    route = p.Route.__new__(p.Route)
+    route.out = tmp_path
+    rows = [dict(identity='pressure')]
+    spec = SimpleNamespace(parameters=None,thermal=None,inputs=dict(observations=dict(fitted=rows)),
+                           coordinates=lambda:[],observation=lambda r:r)
+    monkeypatch.setattr(route,'bind',lambda point:spec)
+    monkeypatch.setattr(route,'replay',lambda point:([dict(identity='pressure',value=2.)],True,0.))
+    monkeypatch.setattr(p.reg,'differentiate',lambda *a,**kw:SimpleNamespace(
+        statuses=[SimpleNamespace(name='Available')],predictions=[1.]))
+    with pytest.raises(AssertionError,match='Differentiation/replay row mismatch'):
+        route.uncertainty(dict(coordinates=[]))
+    assert not (tmp_path/'conditional-uncertainty.json').exists()

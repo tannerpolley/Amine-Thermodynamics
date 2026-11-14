@@ -154,6 +154,14 @@ class Route:
                 updates[identity] = next(values)
         point['parameters'] = stable.s.with_parameter_values(start['parameters'], updates)
         point['reactions'] = report['reactions']
+        for coordinate in point['coordinates']:
+            if coordinate.get('kind') == 'reaction_coordinate':
+                law = next(r['correlation'] for group in point['reactions'].values() for r in group if r['name']==coordinate['name'])
+                origin = law.get(coordinate['coefficient'], 0.)
+                # Transport only the completion offset, not the fitted displacement.
+                delta = origin-coordinate['origin']
+                coordinate['bounds'] = [v+delta for v in coordinate['bounds']]
+                coordinate['origin'] = origin
         return point
 
     def replay(self, point, rows=None):
