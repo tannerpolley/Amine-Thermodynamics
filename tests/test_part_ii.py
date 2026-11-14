@@ -262,3 +262,10 @@ def test_amp_supplied_trial_component_support(monkeypatch, tmp_path):
     assert loaded['not_applicable_supplied_trials']==[]
     assert loaded['supplied_trial_counts']==dict(available=1,unavailable=0,not_applicable=0)
     assert p.stable.tally([binary,loaded])['supplied_trial_counts']==dict(available=1,unavailable=0,not_applicable=1)
+    def failed_search(*args):
+        raise ValueError('optimized search failed')
+    monkeypatch.setattr(p.reg, 'predict', failed_search)
+    failed = p.stable._measure(dict(key=keys[0],problem=keys[0]))
+    assert not failed['available'] and failed['message']=='ValueError: optimized search failed'
+    assert failed['not_applicable_supplied_trials']==binary['not_applicable_supplied_trials']
+    assert p.stable.tally([failed])['supplied_trial_counts']==binary['supplied_trial_counts']
