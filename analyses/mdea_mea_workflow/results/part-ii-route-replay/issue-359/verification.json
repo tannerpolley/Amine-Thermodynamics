@@ -1,0 +1,67 @@
+{
+  "base": "a561ab7",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "part_ii_tests": "13 passed",
+  "main_suite": "11 failed, 103 passed, 17 subtests passed",
+  "branch_suite": "11 failed, 108 passed, 17 subtests passed",
+  "suite_command": "agent-heavy env PYTHONPATH=src uv run --no-sync pytest -q tests analyses",
+  "same_failure_identities": [
+    "FAILED tests/test_solvent_specification.py::test_R1_R3_R5",
+    "FAILED tests/test_source_corrections_152.py::test_public_views_refuse_execution_and_stale_hash",
+    "FAILED tests/test_source_corrections_152.py::test_declared_domain_pre_dispatch_and_protected_rows",
+    "FAILED analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_campaigns_use_candidate_reactions_and_retain_failures",
+    "FAILED analyses/mea_parameter_bundle/tests/test_campaign_routing.py::test_failed_comparison_retains_failures_without_selecting_candidate",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_cache_records_model_identity_and_separates_candidate",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[evaluation_timeout-False]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[engine_exception-False]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_failed_state_cache_policy[infeasible-True]",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_pinned_engine_state_and_cached_replay",
+    "FAILED analyses/mea_parameter_bundle/tests/test_shared_evaluation.py::test_source_normalizer_keeps_common_r2_and_converts_only_log10_form"
+  ],
+  "mea_sample_replays": {
+    "338-F0": {
+      "rows": 12,
+      "available": true,
+      "cost": 0.5274723288139819,
+      "max_relative_prediction_error": 0.0
+    },
+    "341-F2": {
+      "rows": 12,
+      "available": true,
+      "cost": 0.516793459623042,
+      "max_relative_prediction_error": 0.0
+    }
+  },
+  "mdea_B1": {
+    "rows": 278,
+    "available": true,
+    "cost": 374.51907880524016,
+    "reference_cost": 374.5190788051367,
+    "max_relative_prediction_error": 0.0,
+    "relative_cost_error": 2.7622348852673895e-13
+  },
+  "unavailable_search_cause": "comparison:362:cap: ValueError: initial:thermochemistry_unavailable: outside_interval: record excludes temperature",
+  "penalty_refusal": "Native ValueError retained under penalized-N/unavailable.json; cost-based selection continues.",
+  "line_accounting": {
+    "base": "a561ab7",
+    "production_gross_added_executable_lines": 32,
+    "production_ceiling": 60,
+    "test_gross_added_lines": 69,
+    "test_lines_include": "blank lines and comments",
+    "tests_outside_production_ceiling": true
+  },
+  "correction_round_1": {
+    "base_head": "89ae28f",
+    "continuation_loop_test": "test_failed_continuation_retains_nonconverged_endpoint: passed; reproduced candidates=[] before correction",
+    "preceding_endpoint": {
+      "status": "limit_reached",
+      "cost_history": [
+        3.0,
+        1.0
+      ],
+      "disposition": "not converged"
+    },
+    "unavailable_continuation": "stage-1/unavailable.json retains the failed attempt report and message separately",
+    "review": "corrected-head independent review pending"
+  }
+}
