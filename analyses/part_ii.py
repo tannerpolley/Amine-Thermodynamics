@@ -127,7 +127,7 @@ class Route:
         for role in ('fitted','comparisons'):
             for row in spec.inputs['observations'][role]:
                 row['temperature_domain'] = interval
-                row['role'] = self.config.get('roles',{}).get(row['group'], 'fitted' if role=='fitted' else 'not fitted')
+                row['role'] = row.get('role',self.config.get('roles',{}).get(row['group'], 'fitted' if role=='fitted' else 'not fitted'))
                 assert row['role'] in ('fitted','not fitted','comparison only')
                 assert (row['role']=='fitted') == (role=='fitted')
         spec.inputs['coordinates'] = copy.deepcopy(point['coordinates'])
@@ -171,6 +171,8 @@ class Route:
         states = []
         for role in ('fitted','comparisons'):
             for row in spec.inputs['observations'][role]:
+                if row['constructor']=='residual_excess_enthalpy':
+                    continue
                 if row['constructor']=='saturation_capped_addition_enthalpy':
                     states.append(dict(key=row['identity']+':cap',cap_record=row['identity']))
                 for field in ('problem','initial','final','bubble'):
@@ -207,13 +209,15 @@ class Route:
     def grid(self, point, states):
         registry = self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record'])
         assert registry['amine']==self.config['amine'] and registry['species']==self.config['species']
+        supplied = registry.setdefault('supplied_trials',[])
+        supplied.extend(w for w in registry['trials'] if not w.get('resolved_descent') and w not in supplied)
+        registry['trials'] = [w for w in registry['trials'] if w.get('resolved_descent')]
         witnesses = registry['trials']
-        assert all(w['resolved_descent'] for w in witnesses), 'Only native resolved descents enter the record'
-        trials = {r['key']:copy.deepcopy(witnesses) for r in states}
+        trials = {r['key']:copy.deepcopy(witnesses+supplied) for r in states}
         measured = stable.grid(point, states, trials, route=self)
         for row in measured:
             for witness in row.get('witnesses',[]):
-                if witness not in witnesses:
+                if witness.get('resolved_descent') and witness not in witnesses:
                     witnesses.append(witness)
         self.write('split-record.json',registry)
         self.write('search-'+str(len(list(self.out.glob('search-*.json'))))+'.json',measured)
@@ -232,7 +236,8 @@ class Route:
         return point
 
     def search(self, point):
-        tally = stable.tally(self.grid(point,self.states(self.bind(point))))
+        measured = self.grid(point,self.states(self.bind(point)))
+        tally = dict(stable.tally(measured),unavailable_searches=[row for row in measured if not row.get('available')])
         return dict(grid=tally,offset=dict(descent=0),census=dict(descent=0),stable=not tally['descent'] and not tally['unavailable'])
 
     def campaign(self):
@@ -240,8 +245,9 @@ class Route:
         assert len(self.config['starts'])==2 and self.config['loadings'][0]==1e-5, 'Part II requires two complete starts and loadings from 1e-5 mol/mol'
         candidates = [reduced.candidate(f'start-{i}',self.start(ref),{},[],{},route=self) for i,ref in enumerate(self.config['starts'])]
         candidates = [r for r in candidates if r is not None]
-        chosen = min(candidates,key=lambda r:r['cost']) if candidates else None
-        self.write('selection.json',dict(candidates=candidates,chosen=chosen,ties=[r['name'] for r in candidates if chosen and abs(r['cost']-chosen['cost'])<=self.controls['function_tolerance']]))
+        converged = [r for r in candidates if r['optimizer_converged']]
+        chosen = min(converged,key=lambda r:r['cost']) if converged else None
+        self.write('selection.json',dict(candidates=candidates,chosen=chosen,ties=[r['name'] for r in converged if chosen and abs(r['cost']-chosen['cost'])<=self.controls['function_tolerance']]))
         return chosen
 
     def marks(self, T, problem=None):
