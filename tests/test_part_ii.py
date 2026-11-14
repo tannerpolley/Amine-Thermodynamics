@@ -250,8 +250,8 @@ def test_amp_supplied_trial_component_support(monkeypatch, tmp_path):
     route.verify, route.bind = lambda: None, lambda point: spec
     keys = ['hartono-2013-P:0:problem','hartono-2021:0:problem']
     monkeypatch.setattr(p.stable, '_SPEC', None)
-    monkeypatch.setattr(p.stable, '_TRIALS', {})
-    monkeypatch.setattr(p.stable, '_ROUTE', None)
+    monkeypatch.setattr(p.stable, '_TRIALS', {}, raising=False)
+    monkeypatch.setattr(p.stable, '_ROUTE', None, raising=False)
     p.stable._init(None, {key:[trial] for key in keys}, route)
     binary, loaded = [p.stable._measure(dict(key=key,problem=key)) for key in keys]
     assert binary['available'] and binary['optimized_available']
