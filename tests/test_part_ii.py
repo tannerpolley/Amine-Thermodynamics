@@ -108,7 +108,7 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
     retained = route.result('split-record.json')
     assert len(retained['trials'])==100 and all(w['resolved_descent'] for w in retained['trials'])
-    assert retained['supplied_trials']==registry['trials'][-2:]
+    assert retained['supplied_trials']==[dict(w, density_side=None, branch='unresolved') for w in registry['trials'][-2:]]
     trial = measured['supplied_trials'][100+source_index]
     assert measured['supplied_available'] and trial['evidence']=='evaluated'
     assert trial['quantities']['tpd_over_rt']==pytest.approx(record['endpoint_direct_tpd'],rel=0.,abs=trial['quantities']['descent_error_estimate_over_rt'])
@@ -172,7 +172,7 @@ def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
         native = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
         p.stable._init(native.start(native.config['reference']),route=native)
         row = p.stable._measure(dict(key='comparison:362:cap',cap_record='comparison:362'))
-        monkeypatch.setattr(route,'grid',lambda *args:[row]+([dict(key='split',available=True,value=-1.)] if unavailable=='split' else [])); route.bind,route.states = lambda point:None,lambda spec:[]
+        monkeypatch.setattr(route,'grid',lambda *args:[row]+([dict(key='split',available=True,value=-1.,native_liquid_descent=True)] if unavailable=='split' else [])); route.bind,route.states = lambda point:None,lambda spec:[]
         route.search = lambda point:p.Route.search(route,point)
         assert 'thermochemistry_unavailable: outside_interval: record excludes temperature' in route.search(None)['grid']['unavailable_searches'][0]['message']
     def fitted(name,start,*args,**kwargs):
@@ -347,3 +347,35 @@ def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path)
     monkeypatch.setattr(p.stable, '_measure', lambda state:dict(key=state['key']))
     measured = route.grid(None, [dict(key=str(i)) for i in range(67536)])
     assert [row['key'] for row in measured]==[str(i) for i in range(67536)]
+
+
+def test_density_branch_overrides_seed_label():
+    """#373: a liquid seed may converge to vapor; only native liquid triggers."""
+    vapor = dict(kind='Liquid', density_side=1., resolved_descent=True)
+    liquid = dict(kind='Vapor', density_side=2., resolved_descent=True)
+    row = dict(parent_kind='Liquid', witnesses=[vapor], supplied_trials=[
+        dict(evidence='evaluated', quantities=dict(density_side=2., tpd_over_rt=-.03))])
+    assert p.branch_counts(row)==dict(native_branch='vapor', supplied_branch='liquid', native_liquid_descent=False, liquid_liquid_split=False)
+    row['witnesses'] = [liquid]
+    assert p.branch_counts(row)['native_liquid_descent'] and p.branch_counts(row)['liquid_liquid_split']
+    assert p.density_branch([vapor, liquid])=='mixed'
+    assert p.density_branch([dict(kind='Liquid')])=='unresolved'
+    route = p.Route.__new__(p.Route)
+    spec = SimpleNamespace(problems={'NMR':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
+                                    'sibling':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
+                                    'different':dict(T=333.15,feed=[1.,2.],reactions=['R2'])})
+    route.stability_row = lambda spec,state,scale: SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    states = [dict(key=name,problem=name) for name in spec.problems]
+    copies = route.penalty_states(states,spec)
+    assert len(copies)==4 and all(s['compressed'] for s in copies)
+    assert {s['c'] for s in copies}=={1.05,3.}
+    assert [s['sources'] for s in copies]==[['NMR','sibling'],['NMR','sibling'],['different'],['different']]
+    item = SimpleNamespace(problem=SimpleNamespace(pressure=SimpleNamespace(value=1e5)),pressure_reference=object(),pressure_ratio=3.)
+    prediction = SimpleNamespace(pressure_reference=SimpleNamespace(value=2101051.3059414467))
+    basis = route.pressure_basis(spec,{},item,prediction)
+    assert basis['search_pressure_Pa']==6303153.91782434 and basis['pressure_ratio']==3.
+    assert basis['declared_pressure_Pa'] is None
+    item.pressure_reference = prediction.pressure_reference = None
+    basis = route.pressure_basis(spec,{},item,prediction)
+    assert basis['declared_pressure_Pa']==basis['search_pressure_Pa']==1e5
+    assert basis['pressure_ratio'] is None

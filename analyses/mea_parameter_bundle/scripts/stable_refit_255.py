@@ -180,8 +180,9 @@ def _measure(state):
         prediction = reg.predict(_SPEC.model, item)
         out = stability_payload(prediction)
         if prediction.stability is not None:
-            out['witnesses'] = [dict(resolved_descent=True, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
+            out['witnesses'] = [dict(resolved_descent=True, kind=t.phase.kind.name, density_side=t.quantities.get('density_side'), support=list(t.phase.support), composition=list(t.composition), packing=math.exp(t.split_coordinates[-1]))
                                 for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
+        out['parent_kind'] = item.problem.phases[0].kind.name
         out['optimized_available'] = out['available']
         if supplied:
             out['supplied_available'], out['supplied_trials'] = False, []
@@ -207,6 +208,10 @@ def _measure(state):
         out['not_applicable_supplied_trials'] = not_applicable
         available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
         out['supplied_trial_counts'] = dict(available=available, unavailable=len(repeated)-available, not_applicable=len(not_applicable))
+    if _ROUTE is not None:
+        out.update(_ROUTE.branch_counts(out))
+        if out['native_branch']=='vapor':
+            out['pressure_basis'] = _ROUTE.pressure_basis(_SPEC, state, item, prediction)
     row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
     if _ROUTE is not None and hasattr(_ROUTE, 'details'):
         path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
@@ -592,7 +597,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         started = time.monotonic()
         native, report, _ = spec.fit(stability)
         report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=spec.spec['optimizer']['maximum_elapsed_time_seconds'], scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
-                      enforced=[x['key'] for x in enforced], first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
+                      enforced=[x['key'] for x in enforced], enforced_sources={x['key']:x['sources'] for x in enforced if 'sources' in x}, first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
         write(f'{rel}/fit-native.json', report)
     endpoint = None
     if report['physical'] and report['reactions']:
