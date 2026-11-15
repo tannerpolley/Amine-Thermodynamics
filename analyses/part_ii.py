@@ -1,5 +1,6 @@
 """Declaration-driven Part II calculations (#337); Engine owns numerical methods."""
 import copy
+import dataclasses
 import hashlib
 import json
 import math
@@ -31,6 +32,15 @@ def target_identity(mapping, family, target):
     return next(c['identity'] for block in (mapping['components'] if isinstance(target,str) else mapping['pairs']) if (block.get('component_id')==target if isinstance(target,str) else {block['component_id_a'],block['component_id_b']}==set(target)) for c in block['coefficients'] if c['family']==family)
 
 
+def calculation_declaration(value):
+    if dataclasses.is_dataclass(value): return {f.name: calculation_declaration(getattr(value,f.name)) for f in dataclasses.fields(value)}
+    if isinstance(value, dict): return {k: calculation_declaration(v) for k,v in value.items()}
+    if isinstance(value, (list,tuple)): return [calculation_declaration(v) for v in value]
+    if hasattr(value,'name') and hasattr(value,'value'): return value.name
+    if type(value).__module__.startswith('epcsaft'):
+        return {k: calculation_declaration(getattr(value,k)) for k in dir(value) if not k.startswith('_') and not callable(getattr(value,k))}
+    return value
+
 def density_branch(trials):
     sides = {t.get('density_side') for t in trials}
     if not sides:
@@ -38,7 +48,6 @@ def density_branch(trials):
     if len(sides)>1:
         return 'mixed'
     return {1: 'vapor', 2: 'liquid'}.get(next(iter(sides)), 'unresolved')
-
 
 def branch_counts(row):
     native = row.get('witnesses', [])
@@ -51,7 +60,6 @@ def branch_counts(row):
 
 class Route:
     branch_counts = staticmethod(branch_counts)
-
     def __init__(self, declaration):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
@@ -238,22 +246,28 @@ class Route:
             bubble.phases = list(parent.phases)+[eq.Phase('V',kind='vapor',support=self.config['vapor_species'],amount=eq.Pinned(0.))]
         return reg.stability(spec.parameters, parent, scale=scale, **(dict(pressure_reference=bubble,pressure_ratio=state.get('c',1.05)) if bubble else {}))
 
-    def pressure_basis(self, spec, state):
-        try:
-            item = self.stability_row(spec, dict(state, compressed=True, c=1.05), 1.)
-            bubble = eq.solve_equilibrium(spec.model, item.pressure_reference)
-            return dict(declared_pressure_Pa=item.problem.pressure.value,
-                        model_bubble_pressure_Pa=bubble.pressure if bubble.requested_tolerance_met else None,
-                        message=bubble.message)
-        except Exception as error:
-            return dict(model_bubble_pressure_Pa=None, message=str(error))
+    def pressure_basis(self, spec, state, item, prediction):
+        reference = prediction.pressure_reference
+        out = dict(declared_pressure_Pa=item.problem.pressure.value if item.pressure_reference is None else None,
+                   search_pressure_Pa=reference.value*item.pressure_ratio if reference else item.problem.pressure.value if item.pressure_reference is None else None,
+                   pressure_ratio=item.pressure_ratio if item.pressure_reference is not None else None,
+                   model_bubble_pressure_Pa=reference.value if reference else None)
+        if item.pressure_reference is None:
+            try:
+                bubble = eq.solve_equilibrium(spec.model, self.stability_row(spec, dict(state, compressed=True), 1.).pressure_reference)
+                out.update(model_bubble_pressure_Pa=bubble.pressure if bubble.requested_tolerance_met else None, message=bubble.message)
+            except Exception as error: out['message'] = str(error)
+        return out
 
-    def penalty_states(self, states):
+    def penalty_states(self, states, spec):
         copies = {}
         for state in states:
-            key = state['key'].rsplit(':',1)[0] if state['key'].startswith('grid:') else state['key']
             for ratio in (1.05, 3.):
-                copies[key, ratio] = dict(state, key=f'compressed:{key}:{ratio}', c=ratio, compressed=True)
+                candidate = dict(state, key=f"compressed:{state['key']}:{ratio}", c=ratio, compressed=True)
+                item = self.stability_row(spec,candidate,1.)
+                identity = json.dumps(calculation_declaration([item.problem,item.pressure_reference,ratio]),sort_keys=True)
+                row = copies.setdefault(identity, dict(candidate, sources=[]))
+                if state['key'] not in row['sources']: row['sources'].append(state['key'])
         return list(copies.values())
 
     def grid(self, point, states):
