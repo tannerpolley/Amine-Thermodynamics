@@ -1,5 +1,5 @@
 {
-  "status": "Unpenalized start0; diagnostic search completed; density branches unresolved; owner decision pending",
+  "status": "Unpenalized start0; targeted native classification completed; penalty and start1 held for owner",
   "selected_start": null,
   "parameter_record_adopted": false,
   "fitted_parameters": 8,
@@ -39,7 +39,7 @@
     "native_descent_states_available": 25,
     "native_descent_states_unavailable": 70
   },
-  "stability_status": "Paused: all 479 native resolved witnesses at 95 states lack density_side; no classified liquid/vapor conclusion",
+  "stability_status": "95 native-descent states classified: 15 liquid, 30 vapor, 50 mixed; 65 have native liquid-side descent. All 81 prior supplied-negative states remain not stable; supplied density branches remain unknown.",
   "pressure_deviations": {
     "previous_B1": {
       "fitted:combined pressure observables": {
@@ -203,10 +203,23 @@
   "source_uncertainties": "../../inputs/stage-b-source-comparisons.json",
   "native_resolved_descent_state_count_lower_bound": 95,
   "liquid_split_count_lower_bound": null,
-  "classification_rerun_started": false,
+  "classification_rerun_started": true,
   "penalty_started": false,
   "descent_state_table": "../stage-b-f2/search-0-descent-states.csv",
   "descent_witnesses": "../stage-b-f2/search-0-native-witnesses.json",
   "detail_manifest": "../stage-b-f2/search-0-detail-manifest.csv",
-  "compressed_search_summary": "../stage-b-f2/search-0-summary.json.gz"
+  "compressed_search_summary": "../stage-b-f2/search-0-summary.json.gz",
+  "current_native_branch_state_counts": {
+    "liquid": 15,
+    "vapor": 30,
+    "mixed": 50,
+    "unresolved": 0,
+    "none": 0
+  },
+  "any_native_liquid_descent_states": 65,
+  "supplied_negative_states_not_stable": 81,
+  "supplied_any_negative_liquid_identified_states": 0,
+  "supplied_any_negative_liquid_presence_unresolved_states": 81,
+  "classification_summary": "../stage-b-start-0-classification/classification-summary.json",
+  "start1_started": false
 }

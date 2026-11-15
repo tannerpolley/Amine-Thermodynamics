@@ -1,0 +1,85 @@
+{
+  "native_requested_states": 95,
+  "supplied_requested_states": 81,
+  "union_states": 95,
+  "native_branch_state_counts": {
+    "liquid": 15,
+    "vapor": 30,
+    "mixed": 50,
+    "unresolved": 0,
+    "none": 0
+  },
+  "supplied_most_negative_branch_state_counts": {
+    "liquid": 0,
+    "vapor": 0,
+    "unknown": 81
+  },
+  "counts": {
+    "native_vapor_states": 30,
+    "native_witnesses": 479,
+    "native_witnesses_missing_density_side": 0,
+    "available_states": 25,
+    "unavailable_states": 70,
+    "became_available": 0,
+    "became_unavailable": 0,
+    "native_descent_lost": 0,
+    "any_instability_evidence_on_rerun": 95,
+    "route_descent_on_rerun": 95,
+    "any_native_liquid_descent_states": 65,
+    "new_supplied_negative_states_in_union": 95,
+    "old_81_any_negative_liquid_states": 0,
+    "old_81_negative_trials": 78799,
+    "old_81_negative_liquid_trials": 0,
+    "old_81_negative_unknown_branch_trials": 78799,
+    "old_81_no_longer_supplied_negative": 0,
+    "native_mixed_states": 50,
+    "native_liquid_states": 15,
+    "additional_supplied_negative_states_outside_old_81": 14,
+    "old_81_any_negative_liquid_presence_unresolved_states": 81
+  },
+  "native_and_supplied_state_counts_overlap": true,
+  "all_old_81_supplied_negative_states_not_stable": true,
+  "penalty_trigger_decision": "held for both native and supplied counts and owner series decision; no penalty or start1",
+  "penalty_started": false,
+  "start1_started": false,
+  "measured_runtime": {
+    "status": "targeted diagnostic rerun complete",
+    "states": 95,
+    "native_requested_states": 95,
+    "supplied_requested_states": 81,
+    "union_states": 95,
+    "workers": 3,
+    "grid_wall_seconds": 116.10615857600351,
+    "pressure_reporting_wall_seconds": 2.689664347009966,
+    "python_elapsed_seconds": 119.42813754401868,
+    "timing_basis": "perf_counter; grid includes worker verification/binding, native optimized and supplied searches and streamed output; total includes parent setup and additional existing Route.pressure_basis calls; excludes agent-heavy admission",
+    "source_route_commit": "a6aebfa5bbf47aa0535f21cf11048fb593906db6",
+    "local_head": "7f1f0e2d538de93529ef3b20a1d344d3794fb25f",
+    "declaration_sha256": "c8fb3f4e17c71a7139ea29e5cd08960d7195dbf74bbcfe9684aab0d4e83e35e6",
+    "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+    "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+    "detail_directory": "search-0",
+    "summary_file": "search-0.json",
+    "started_at_utc": "2026-11-15T12:36:38.581222+00:00",
+    "finished_at_utc": "2026-11-15T12:38:37.379745+00:00",
+    "penalty_started": false,
+    "start1_started": false
+  },
+  "classification_basis": "Existing Route native density-side classification; supplied trials use existing supplied_negative predicate and density_side, never seed labels. Each retained old negative is instability evidence in the fixed declared model, not physical validation.",
+  "limitations": "Finite targeted subset; old unavailable searches are retained. Unknown density_side is not inferred; no local numerical thresholds or new Engine evaluation method.",
+  "supplied_density_side_limit": "All negative supplied evaluations lack density_side on the pinned wheel; zero identified liquid-side states is not evidence of absence. Liquid-side presence is unknown for all 81 requested supplied-negative states.",
+  "comparison_inventory": {
+    "old_full_search_trials": 2789,
+    "targeted_rerun_trials": 2990,
+    "basis": "Rerun includes the native endpoint witnesses retained by the first full search; expanded supplied inventory can expose more negative supplied trials."
+  },
+  "native_witness_density_side_counts": {
+    "1": 318,
+    "2": 161
+  },
+  "supplied_pressure_reporting": {
+    "states": 81,
+    "bubble_available": 81,
+    "bubble_unavailable": 0
+  }
+}

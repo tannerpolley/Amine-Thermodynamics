@@ -1,5 +1,5 @@
 ---
-title: "MDEA transfer onto F2: first endpoint and unresolved descent branches"
+title: "MDEA transfer onto F2: native liquid descents and supplied branch limits"
 format: html
 execute:
   enabled: false
@@ -11,11 +11,13 @@ The first unpenalized MDEA start converged in **9 optimizer iterations** at
 weighted fitted cost **382.06387056074306**. The previous B1 fit gives
 **374.51907880524016** on the same 278 fitted observations and residual definitions.
 The first F2 endpoint therefore has a higher fitted cost. It is not a selected
-parameter record: its full stability search retained 479 native resolved
-witnesses at 95 states, but every witness lacks the resolved density-side
-field. All 479 therefore remain branch unresolved. The campaign paused before
-penalties, and the second start has not yet been fitted. No parameter record
-is adopted.
+parameter record: the full stability search retained 479 native resolved
+witnesses at 95 states. A targeted rerun at the same endpoint classifies these
+states as **15 liquid-only, 30 vapor-only and 50 mixed**: **65 states have at
+least one native liquid descent**. The 81 states with earlier negative supplied
+trials remain **not stable** in the declared model; their supplied density
+branches remain unknown. Penalties and the second start are held for the
+owner's decision. No parameter record is adopted.
 
 These results are calibration, comparisons on previously accessed data, and
 numerical verification. They do not establish independent physical validation,
@@ -67,7 +69,7 @@ source's nitrogen carrier gas.
 
 | Start | Initial F2 cost | Endpoint cost | Iterations | Disposition |
 |---|---:|---:|---:|---|
-| Retained B1 endpoint (start 0) | 436.67602868289833 | 382.06387056074306 | 9 | Optimizer converged; search complete; descent branches unresolved |
+| Retained B1 endpoint (start 0) | 436.67602868289833 | 382.06387056074306 | 9 | Optimizer converged; 65 searched states have native liquid descents; penalties held |
 | Retained second start (start 1) | 2393.0256195358056 | — | — | Complete start replayed; fit pending |
 
 Start 0 ends on the native function tolerance:
@@ -331,7 +333,7 @@ Supplied trials outside a state's fed/reacting component set are counted
 as not applicable, separately from unavailable evaluations. Evaluation-only
 negative evidence will not be relabelled as a native resolved descent.
 
-The first search completed on the pre-#373 route with streamed gzip output and
+The first search completed on the pre-#373 calculation with streamed gzip output and
 three single-threaded workers under `agent-heavy`. Its filesystem interval,
 from detail-directory creation to completed-summary timestamp, is approximately
 **21 h 46 min**; this is not a separately instrumented Engine timer. The launch
@@ -344,10 +346,10 @@ allowance with margin.
 | Available states | 64,979 | Native optimized and applicable supplied searches available |
 | Unavailable states | 4,120 | Retained with causes; never stable |
 | States with native resolved witnesses | 95 | Lower bound over the finite search; includes repeated physical states under different declaration keys |
-| Native resolved witnesses classified liquid | 0 | No witness contains a resolved density side; this does not establish absence of liquid descents |
-| Native resolved witnesses classified vapor | 0 | Same missing-field limit |
-| Native resolved witnesses with unresolved branch | 479 | All 479 lack `density_side`; seed labels are not branch evidence |
-| States with negative supplied evidence | 81 | Overlap native-descent states; evaluation-only evidence is separate |
+| Native resolved witnesses classified liquid in the old file | 0 | The old writer omitted density side; the targeted rerun below resolves this |
+| Native resolved witnesses classified vapor in the old file | 0 | Same historical missing-field limit |
+| Native resolved witnesses with unresolved branch in the old file | 479 | All 479 lack `density_side` in the old file; seed labels are not branch evidence |
+| States with negative supplied evidence | 81 | All are not stable in the declared model; they overlap native-descent states |
 | Negative supplied evaluations at those states | 73,117 | Repeated retained supplied trials included; not native resolved descents |
 | Available supplied evaluations | 181,222,570 | Recorded trial counts over the full search |
 | Unavailable supplied evaluations | 11,139,164 | Distinct from not applicable |
@@ -361,6 +363,14 @@ over the full grid. Of the 95 states retaining native resolved witnesses,
 25 have available full searches and 70 have unavailable full searches.
 Retained resolved witnesses and full-search availability are separate facts;
 their counts overlap.
+
+A negative tangent-plane distance at an evaluated admissible trial supplies
+instability evidence for the declared single-phase model, whether or not the
+search resolves a minimum. Every one of the 81 supplied-negative states is
+therefore reported as **not stable**. Evaluation-only results are kept distinct
+from native resolved minima for provenance and branch classification; that
+distinction does not remove their instability evidence. This is a numerical
+model result, not an experimentally observed phase split.
 
 The [count and branch record](results/stage-b-f2/search-0-counts-and-branches.json),
 [descent-state table](results/stage-b-f2/search-0-descent-states.csv), and
@@ -383,11 +393,11 @@ optimizer log describes its empty enforced-penalty set, not the completed
 69,099-state diagnostic search. The complete endpoint result is present at
 `start-0/unpenalized-result.json`; no second start was launched.
 
-Under the amended #337 rule, only native resolved **liquid** descents trigger
-penalties, on compressed-liquid copies at 1.05 and 3.0 times model bubble
-pressure. Missing density-side fields cannot establish that trigger. The
-branch is rebased onto merged route `a6aebfa`, but classification and penalty
-reruns remain stopped for the owner's decision.
+The 15 November #337 amendment defines compressed-liquid copies at 1.05 and
+3.0 times model bubble pressure for penalty fitting. The subsequent instruction
+holds the penalty decision until both native and supplied classifications are
+reported. The branch is rebased onto merged calculation `a6aebfa`. The targeted
+rerun below is complete, but no penalty or second-start calculation has begun.
 
 A rerun of just the 95 unresolved states through that route has a planning
 estimate of **about 2–5 min on three workers**. Their existing per-state times
@@ -395,9 +405,9 @@ sum to 277.372 s; the same four-state chunks and twelve-state batches imply
 102.608 s of state work. The extra allowance is unmeasured setup, output and
 new branch-reporting work, including the inventory's increase to 2,990 supplied
 trials. Those prior timings include the 70 unavailable full searches; they
-do not time 95 uniformly successful searches. This is an estimate from one
-completed old-route search, not a measured new-route duration or a guaranteed
-ceiling. No rerun has been launched.
+do not time 95 uniformly successful searches. This was an estimate from one
+completed old calculation, not a measured new duration or a guaranteed ceiling.
+The observed rerun timing is retained below.
 
 Detailed per-state records remain outside git, with a path/size/SHA-256
 file inventory. The completed detail directory was moved to the main checkout's
@@ -413,6 +423,97 @@ untracked in its original location. The exact 8,447,368-byte
 in git. Its decompressed SHA-256 equals the native summary's SHA-256. This
 preserves the summary and route numbering while excluding per-state detail
 files and oversized files from git.
+
+## Targeted native and supplied classification at the fixed endpoint
+
+The [target declaration](inputs/stage-b-start-0-classification.json) binds the
+same complete start-0 endpoint and a frozen 2,990-record MDEA split-history
+input. The 81 supplied-negative states are all members of the 95 native-descent
+states, so their union contains exactly **95 states**. The calculation calls the
+existing `Route.grid` and `Route.pressure_basis` on merged commit `a6aebfa`,
+with the same verified Engine wheel and F2 shared values. It performs no fit,
+parameter change, penalty or second-start calculation.
+
+| Native resolved density branch | States |
+|---|---:|
+| Liquid only (2) | 15 |
+| Vapor only (1) | 30 |
+| Mixed (both 1 and 2) | 50 |
+| Unresolved | 0 |
+| No native descent on rerun | 0 |
+| Total requested native-descent states | 95 |
+
+There are **161 liquid-side and 318 vapor-side native witnesses**, 479 in total.
+The mixed states count in both side-presence totals: **65 states have at least
+one native liquid descent**. These are declared state keys and retained witness
+records; repeated physical states and repeated compositions are not claimed as
+distinct physical phase splits. The [per-state comparison](results/stage-b-start-0-classification/native-state-comparison.csv)
+and [native witness values](results/stage-b-start-0-classification/native-witnesses.json)
+retain the classifications and canonical mole fractions.
+
+All 95 states still have native resolved descents. **No native descent was lost**.
+Availability is unchanged: **25 available and 70 unavailable**, with no newly
+available or newly unavailable states. A full search can remain unavailable
+while retaining a resolved descent at one of its trials; such a state is not
+counted as stable. The prior unavailable states are all retained.
+
+| Supplied classification for the original 81 states | Count |
+|---|---:|
+| Most-negative evaluated trial: liquid | 0 |
+| Most-negative evaluated trial: vapor | 0 |
+| Most-negative evaluated trial: unknown | 81 |
+| States with any identified negative liquid-side trial | 0 |
+| States where any-negative-liquid presence is unknown | 81 |
+| States reported not stable from negative supplied TPD/RT | 81 |
+
+The pinned wheel's evaluation-only trial quantities contain TPD/RT, density
+and error estimates but omit `density_side` in all the negative supplied
+records examined. No branch is inferred from a seed label or density magnitude.
+Consequently, **zero identified liquid-side supplied negatives does not establish
+their absence**. In the per-state records, liquid-side presence is unknown,
+rather than false, when negative trials lack a branch.
+
+All original 81 states still have negative supplied trials. The rerun contains
+**78,799** negative supplied evaluations for those states, versus **73,117** in
+the old full search. The supplied inventory increased from 2,789 to 2,990 records
+by retaining the first endpoint's native witnesses. A further **14 states** that
+already had native descents now also have negative supplied evaluations. This
+is additional supplied evidence at already unstable states, not 14 new physical
+phase-split observations.
+
+The [81-state supplied table](results/stage-b-start-0-classification/supplied-negative-state-classification.csv)
+records each most-negative TPD/RT (dimensionless), density-side availability,
+any-negative-liquid presence, temperature, declared/search pressure and model
+bubble pressure in Pa. Bubble pressures are available for **all 81 states**
+through the existing pressure calculation. The [full trial quantities](results/stage-b-start-0-classification/supplied-negative-state-classification.json)
+retain error estimates and availability without inventing a supplied branch.
+For example, at `fit:199:problem`, **373.15 K** and **100,000 Pa**, the model
+bubble pressure is **100,039.55032173102 Pa** and the most-negative supplied
+TPD/RT is **−0.000392536626824036**; its density branch is unknown.
+
+The [measured runtime](results/stage-b-start-0-classification/measured-runtime.json)
+is **116.106 s for the targeted search** and **119.428 s including parent setup
+and additional pressure reporting**, on **three workers**. The latter includes
+2.690 s of additional pressure reporting, excludes `agent-heavy` admission and
+subsequent table preparation, and is one measured run, not a timing distribution.
+All 95 requested states were evaluated and written inside the timed search.
+
+The **95 detailed gzip files**, totaling **43,834,341 bytes**, were moved after
+completion to the main checkout's ignored
+`analyses/mdea/results/runs/343/stage-b-start-0-classification/search-0/`.
+Every detail hash was verified after the move. The [file inventory](results/stage-b-start-0-classification/detail-file-manifest.csv)
+and [retention record](results/stage-b-start-0-classification/retention.json)
+bind the retained files; the new native `search-0.json` summary stays in its
+original location and is small enough for git. The MDEA history output retains
+all new native records for any later search. No MEA split record is used.
+
+**Penalty fitting and start 1 remain held.** Native liquid descents are present;
+the supplied liquid-side question is unresolved because the evaluation-only
+field is absent. The owner receives both counts before deciding the next
+series step. The [classification summary](results/stage-b-start-0-classification/classification-summary.json)
+retains the complete counts and comparison. The model curves and conditional
+standard errors above still describe the unpenalized endpoint; they do not
+establish a stable parameter record.
 
 ## Required numerical checks and remaining limits
 
@@ -430,9 +531,11 @@ The replay, shared-binding and range checks are retained in the
 [first-endpoint replay](results/stage-b-f2/start-0/unpenalized/stage-0/replay.json),
 and [range audit](results/stage-b-start-0-report/range-checks.json).
 
-Density-branch classification, the second fit and fitted-cost selection remain
-pending. Available and unavailable states, not-applicable supplied trials,
-native resolved witnesses and negative supplied evaluations remain distinct.
+The native density branches are classified. Supplied density branches, the
+penalty decision, the second fit and fitted-cost selection remain pending.
+Available and unavailable states and not-applicable supplied trials remain
+distinct. Native resolved witnesses and negative supplied evaluations both
+retain instability evidence without being relabelled as one another.
 A finite search
 cannot prove global single-phase stability. The local standard errors do not
 resolve parameter nonuniqueness or uncertain fixed shared values. Previously
@@ -442,4 +545,4 @@ This Stage B change retains data and declarations only: **0 added executable
 lines**; it does not change the shared route or Engine. The notebook contains
 no model-executing cells. The report has not yet received its independent
 internal result review and has not been promoted for manuscript use. The next
-calculation awaits the owner's unresolved-branch decision.
+calculation awaits the owner's penalty and supplied-branch decision.
