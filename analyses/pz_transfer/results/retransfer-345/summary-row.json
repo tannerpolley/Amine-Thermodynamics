@@ -1,0 +1,92 @@
+{
+  "selected_start": "start-0",
+  "cost": 20610.126936433648,
+  "converged": true,
+  "fitted_parameters": 12,
+  "parameters_on_bounds": 1,
+  "stability": {
+    "supplied_trial_counts": {
+      "available": 16903236,
+      "unavailable": 3724,
+      "not_applicable": 0
+    },
+    "states": 9080,
+    "available": 9074,
+    "descent": 499,
+    "minimum_tau": -0.32980698991838153,
+    "supplied_minimum_tpd": -0.3298069899183247
+  },
+  "unavailable_searches": 6,
+  "pressure_deviations": {
+    "Ermatchkov": {
+      "role": "not fitted",
+      "rows": 52,
+      "available": 52,
+      "statistics": {
+        "rows": 52,
+        "relative_rows": 52,
+        "relative_undefined": 0,
+        "AARD_percent": 20.965346617924997,
+        "bias_percent": 6.042371201693628,
+        "mean_abs_error": 4406.666591720715,
+        "mean_signed_error_predicted_minus_observed": 997.846653892922,
+        "unit": "Pa"
+      }
+    },
+    "Hilliard": {
+      "role": "fitted",
+      "rows": 62,
+      "available": 62,
+      "statistics": {
+        "rows": 62,
+        "relative_rows": 62,
+        "relative_undefined": 0,
+        "AARD_percent": 19.000265357961176,
+        "bias_percent": -3.139360132811243,
+        "mean_abs_error": 1493.7490618693337,
+        "mean_signed_error_predicted_minus_observed": -783.4597067991037,
+        "unit": "Pa"
+      }
+    },
+    "Kamps": {
+      "role": "comparison only",
+      "rows": 94,
+      "available": 94,
+      "statistics": {
+        "rows": 94,
+        "relative_rows": 94,
+        "relative_undefined": 0,
+        "AARD_percent": 39.56076508165073,
+        "bias_percent": -37.39352953618035,
+        "mean_abs_error": 1756798.8845802667,
+        "mean_signed_error_predicted_minus_observed": -1754024.2180542839,
+        "unit": "Pa"
+      }
+    }
+  },
+  "split_counts_are_lower_bounds": true,
+  "route_absolute_tolerance_ties": [
+    "start-0"
+  ],
+  "unpenalized_start_comparison": {
+    "fit": "unpenalized",
+    "native_costs": [
+      20610.12693643562,
+      20610.126937095058
+    ],
+    "absolute_difference": 6.594382284674793e-07,
+    "relative_difference_over_lower_cost": 3.1995835372643495e-11,
+    "optimizer_relative_function_tolerance": 1e-10,
+    "tied_at_optimizer_relative_function_tolerance": true,
+    "relative_tolerance_ties": [
+      "start-0",
+      "start-1"
+    ],
+    "shared_route_absolute_tolerance": 1e-10,
+    "shared_route_absolute_tolerance_ties": [
+      "start-0"
+    ],
+    "numerically_lower_cost_start": "start-0",
+    "decision": "Native question response: report a relative-function-tolerance tie, retain the route absolute-tolerance flag and both differences; choose the numerical minimum. No shared-route selection code changed."
+  }
+}

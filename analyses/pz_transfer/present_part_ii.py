@@ -146,7 +146,7 @@ for group in sorted({r['group'] for r in rows}):
             ax.scatter([a],[r['observed']],marker='x' if outside else 'o',s=17,**marker_style,zorder=3)
             if group=='Ermatchkov':
                 ax.errorbar(a,r['observed'],yerr=float(source['pCO2_total_uncertainty_kPa'])*1000,color=color,lw=.5)
-        ax.set(title=f'Near {T:g} K (source temperatures)' if group=='Hilliard' else f'{T:g} K',xlabel='Loading (mol CO₂ / mol PZ)',ylabel='Carbamate group fraction (mol/mol)' if group.startswith('NMR') else 'Total pressure (Pa)' if group=='Kamps' else 'CO₂ partial pressure (Pa)')
+        ax.set(title=f'Near {T:g} K (source temperatures)' if group=='Hilliard' else f'{T:g} K',xlabel='Loading (mol CO₂ / mol PZ)',ylabel=('Monocarbamate fraction (mol/mol PZ)' if group=='NMR-mono' else 'Dicarbamate fraction (mol/mol PZ)') if group.startswith('NMR') else 'Total pressure (Pa)' if group=='Kamps' else 'CO₂ partial pressure (Pa)')
         if data[0]['unit']=='Pa':
             ax.set_yscale('log')
         handles, labels = ax.get_legend_handles_labels()

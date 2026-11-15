@@ -7,7 +7,7 @@ execute:
 
 The F2 calibration reproduces the 62 fitted Hilliard CO₂ partial pressures with a mean absolute relative deviation of **19.0003%** and signed relative bias **−3.13936%**. On 52 Ermatchkov pressures that were not fitted, these quantities are **20.9653%** and **+6.04237%**. On 94 Kamps total pressures used for comparison only, they are **39.5608%** and **−37.3935%**. These are single-liquid calculations. Liquid-descent trials remain at measured and grid states, so the pressure deviations do not qualify this parameter set for stable-liquid process calculations. Nothing is adopted.
 
-**Campaign completion pending:** both unpenalized fits have converged. The start 1 repeat search and its conditional penalty attempt are running. The reported numerical tables and curve calculations currently use the converged start 0 point; its SHA-256 is recorded in [report-point.json](results/retransfer-345/report-point.json). They become the selected snapshot only after exact identity with the completed campaign selection is checked. This page has not received the independent delivered review for #345.
+**Retained snapshot:** start 0, selected by the lowest fitted cost. Its native cost is **20610.12693643562**, and its written-and-reloaded cost is **20610.126936433648**. Both starts reach relative function tolerance; both penalty attempts fail before their first iteration. All tables and curves use the exact selected parameter file; its SHA-256 is recorded in [report-point.json](results/retransfer-345/report-point.json). The independent delivered review for #345 is pending. This is not a parameter adoption or a manuscript promotion.
 
 ## Question and evidence
 
@@ -28,7 +28,7 @@ The immutable Engine is commit `391dfe5d`, wheel SHA-256 `0962e21d2fa7a8ba1ed462
 | Kamps 2003 total pressure | comparison only | 94 | 94 |
 | Total | | 440 | 329 |
 
-The fitted vector contains 294 observations. NMR groups use the full normalized-area covariance exported in the exact original fitted-row order; Hilliard pressure variances follow those rows. With raw prediction-minus-observation vector $r$ and retained covariance $C$, the data cost is $\tfrac12 r^T C^{-1}r$. No diagonal replacement is made. The operational 2% normalized-area model induces correlation through the common normalization. It does not establish complete experimental uncertainty. Measured temperature and composition are held fixed. NMR D₂O is represented as H₂O; isotope effects are omitted. The existing source-marked precipitation exclusion is retained, with no temperature-based exclusion.
+The fitted vector contains 294 observations. The NMR mono group is $(n_{PC^-}+n_{HPC})/n_{PZ,total}$; the di group is $n_{DC^{2-}}/n_{PZ,total}$. Each denominator counts all six PZ-containing molecular species once. Thus the di fraction is not twice the dicarbamate molecular fraction.  NMR groups use the full normalized-area covariance exported in the exact original fitted-row order; Hilliard pressure variances follow those rows. With raw prediction-minus-observation vector $r$ and retained covariance $C$, the data cost is $\tfrac12 r^T C^{-1}r$. No diagonal replacement is made. The operational 2% normalized-area model induces correlation through the common normalization. It does not establish complete experimental uncertainty. Measured temperature and composition are held fixed. NMR D₂O is represented as H₂O; isotope effects are omitted. The existing source-marked precipitation exclusion is retained, with no temperature-based exclusion.
 
 The fitted coordinates, complete starts, source-row identities, model specification, pressure conventions and covariance are in [inputs/part-ii-345/shared](inputs/part-ii-345/shared/README.md). The specification keeps the adopted species and reaction stoichiometry. NMR liquid states use the declared fixed pressure **100000 Pa**; the source does not supply a measured pressure uncertainty. Reactive bubble calculations retain the declared vapor species and omit N₂ according to the retained model variant.
 
@@ -67,7 +67,7 @@ The retained endpoint and retained second start use the same 12 coordinates, bou
 
 The native cost difference is **$6.594382284674793\times10^{-7}$**, or **$3.1995835372643495\times10^{-11}$** relative to the lower cost. Following the owner's explicit decision, these starts are reported as tied at the optimizer's relative function tolerance. Start 0 is numerically lower. The shared selector separately compares an absolute difference with $10^{-10}$, for which only start 0 appears in its tie list. Both definitions and both differences are preserved in [unpenalized-start-cost-comparison.json](results/retransfer-345/unpenalized-start-cost-comparison.json); the selector is unchanged.
 
-Complete native iteration histories, including rejected high-cost trial values, remain in the start-specific `unpenalized/stage-0` fit records. Start 0 has 44 native history entries and start 1 has 98. The fitted costs are not reduced to an apparent monotonic trace. Reaching the same local cost from these two starts is evidence of numerical reproducibility at the declared controls, not proof of a global optimum.
+Complete native iteration histories, including rejected high-cost trial values, remain in [fit-histories.json](results/retransfer-345/fit-histories.json) and the start-specific `unpenalized/stage-0` fit records. Start 0 has 44 native history entries and start 1 has 98. The fitted costs are not reduced to an apparent monotonic trace. Reaching the same local cost from these two starts is evidence of numerical reproducibility at the declared controls, not proof of a global optimum.
 
 ## Finite phase searches and penalty attempt
 
@@ -80,19 +80,21 @@ The initial PZ record contains **100 native resolved descents and two compositio
 | 0 | start 0 | 102 | 9074 / 6 | 0 | 454 | 1993.714 | 172594538 |
 | 1 | start 0, expanded record | 1862 | 9074 / 6 | 0 | 499 | 12761.706 | 2383682514 |
 | 2 | start 1 | 1862 | 9075 / 5 | 0 | 499 | 12852.560 | 2384672170 |
-| 3 | start 1, expanded record | 3614 | pending | pending | pending | pending | pending |
+| 3 | start 1, expanded record | 3614 | 9075 / 5 | 0 | 499 | 26301.780 | 4576340295 |
 
-Elapsed windows include setup, calculation, reduction and writing, inferred from retained filesystem timestamps at approximately one-second resolution. They are observations of these runs, not performance guarantees. Search 0 was written as a 1509424661-byte JSON and is losslessly retained in ordered gzip-stream parts, with round-trip SHA-256 verified. Later complete ordered per-state records are streamed to gzip. No trials or results were removed to save memory.
+Elapsed windows include setup, calculation, reduction and writing, inferred from retained filesystem timestamps at approximately one-second resolution. They are observations of these runs, not performance guarantees. Search 0 was written as a 1509424661-byte JSON and is losslessly retained in ordered gzip-stream parts, with round-trip SHA-256 verified. Later complete ordered per-state records are streamed to gzip. The streamed searches also retain summary JSONs of 10500862, 10497872 and 10496509 bytes for searches 1, 2 and 3. Their total native output sizes (gzip details plus summary) are 2394183376, 2395170042 and 4586836804 bytes. No trials or results were removed to save memory.
 
 Search 0's shared aggregate reports 451 descent entries. Its complete phase records give **454 liquid-descent entries**: three otherwise unavailable NMR searches also contain resolved native liquid witnesses. The phase-specific result includes these witnesses. Search 1 has 499 entries with negative supplied liquid trials: 37 data entries (3 NMR, 3 Hilliard, 31 Kamps) and 462 grid entries. Three NMR searches, two Kamps searches and one grid search remain unavailable overall. The unavailable classification and the observed negative trial are both reported.
 
 The three NMR cases are at 333.15 K and the declared 100000 Pa, with stock molalities 1.4489, 0.9998 and 0.499 mol/kg water and loadings 0.964456, 0.965293 and 1.01002 mol/mol. Their minimum supplied distances are −0.276000, −0.0766140 and −0.166874 $RT$. They are within the declared amine temperature ranges. These model liquid descents therefore cannot be attributed solely to reaction-law extrapolation. The finite search still provides only a lower bound on split incidence.
 
+Search 3 retains 499 entries with negative supplied liquid trials (37 data entries and 462 grid entries), 57 entries with negative supplied vapor trials, 609048 negative liquid-trial results and 16984 negative vapor-trial results. Its 32807892 available supplied results, 7228 unavailable results and zero not-applicable results cover all ordered declarations. There are 9075 available and five unavailable overall searches. The PZ record remains 3612 native descents plus two composition-only trials.
+
 After search 0, the PZ record expanded to 1860 native descents plus the two composition-only trials. Search 2 added native witnesses, yielding 3612 native descents plus two composition-only trials and requiring search 3. Exact repeated endpoint searches are reused only if point, states, supplied trials and settings are identical. Negative-result counts include ordered logical records, even where exact duplicate trial declarations share an evaluation.
 
-The first Part I penalty attempt at start 0 failed at its initial evaluation, before any optimizer iteration: **“distinct stationary minima have overlapping value intervals”**, `CentralSolveUnavailable` at `Ermatchkov2003-T4-1-group1:problem`. It produced no endpoint and no valid fitted cost. Zero-valued native cost placeholders are not interpreted as cost zero. Its elapsed time was 1826.674 s. No continuation applies to this domain failure, and no retreat can be evaluated from a nonexistent penalty endpoint. The completed unpenalized fit and all split evidence are retained.
+The first Part I penalty attempt at start 0 failed at its initial evaluation, before any optimizer iteration: **“distinct stationary minima have overlapping value intervals”**, `CentralSolveUnavailable` at `Ermatchkov2003-T4-1-group1:problem`. It produced no endpoint and no valid fitted cost. Zero-valued native cost placeholders are not interpreted as cost zero. Its elapsed time was 1826.674 s. Start 1’s first penalty attempt fails at the same initial state and with the same message after 1850.743 s, also with zero iterations and an empty cost history. Neither attempt has a valid fitted cost. No continuation applies to these domain failures, and no retreat or new post-penalty point can be evaluated from a nonexistent endpoint. The supplied checks at the unchanged unpenalized points remain the available evidence; no post-penalty endpoint is invented. The completed unpenalized fit and all split evidence are retained.
 
-An earlier expanded search received SIGTERM (exit 143) with no traceback or completed summary. All 1542 complete per-state files are preserved separately and are not counted as a complete phase search. The sender is unknown; the rerun kept the scientific controls unchanged. The interruption is recorded in [interruption-after368.json](results/retransfer-345/interruption-after368.json).
+An earlier expanded search received SIGTERM (exit 143) with no traceback or completed summary. All 1542 complete per-state files are preserved separately and are not counted as a complete phase search. The partial window from directory creation to the reported termination is approximately 2154 s (one-second timestamps), with 403226945 retained gzip bytes. It is not a completed-search duration. The sender is unknown; the rerun kept the scientific controls unchanged. The interruption is recorded in [interruption-after368.json](results/retransfer-345/interruption-after368.json).
 
 ### Hilliard rows 55 and 56: supplied-trial reference
 
@@ -100,7 +102,9 @@ The retained reactive-A12s reference is evaluated at its original bubble-pressur
 
 At the F2 start 0 point and 1.05 times bubble pressure, all **1862 supplied results** at each of rows 55 and 56 are available, with zero unavailable or not applicable. Their minima are **−0.02110737699 and −0.03016696503 $RT$**, with 5 and 8 negative supplied results. The change in point and pressure means these are not a direct same-state model difference from A12s. See [the F2 row records](results/retransfer-345/expanded-search-1-Hilliard-55-56.json) and [the historical reference check](results/retransfer-345-known-A12s/reference-check.json).
 
-The historical Engine issue was migrated to [tannerpolley/epcsaft#10](https://github.com/tannerpolley/epcsaft/issues/10). Search incompleteness and overlapping-minimum intervals remain limitations; #345 reports them without an Engine change.
+At the converged start 1 point, the two complete expanded-search state records each contain 3614 available supplied results, with zero unavailable or not applicable. Their minima are −0.02111301908 and −0.03017265058 $RT$, with 9 and 12 negative results. These are a different fitted point and a larger trial set than the start 0 check; [their records](results/retransfer-345/expanded-search-3-Hilliard-55-56.json) are reported separately from the whole-search completion counts.
+
+The dependency named by #345, historical Engine #1224, is now open at [tannerpolley/epcsaft#10](https://github.com/tannerpolley/epcsaft/issues/10). It concerns finite-descent resolution for vapor-side minima with extra neutral protonated-carbamate support. That is distinct from this campaign’s reported overlapping-minimum evaluation failure; no cause of the latter is assigned here. Search incompleteness and unavailable evaluations remain limitations, reported without an Engine change.
 
 ## Deviations and the previous model on the same rows
 
@@ -114,7 +118,7 @@ Mean absolute relative deviation is $100\langle|p_{model}/p_{obs}-1|\rangle$; si
 | NMR mono-carbamate group | fitted | 121 | 9.45734 / −1.89921 | 9.39454 / −1.95212 |
 | NMR dicarbamate group | fitted | 111 | 21.0626 / −7.69531 | 21.1797 / −7.80136 |
 
-All 440 predictions are available at the prepared start 0 point. The F0 replay uses its original independent Born diameters, its original shared values and the same full covariance, roles and rows; its cost is **20698.62019479619**. F2 changes the shared parameters and imposes the Part II Born ties, with piperazine coordinates refitted. The cost reduction alone cannot separate these contributions. Source-condition plots and the complete range-separated tables are prepared from retained predictions; no comparison row is refitted.
+All 440 predictions are available at the selected start 0 point. The F0 replay uses its original independent Born diameters, its original shared values and the same full covariance, roles and rows; its cost is **20698.62019479619**. F2 changes the shared parameters and imposes the Part II Born ties, with piperazine coordinates refitted. The cost reduction alone cannot separate these contributions. Source-condition plots and the complete range-separated tables are prepared from retained predictions; no comparison row is refitted.
 
 ### Published comparisons and their data roles
 
@@ -154,6 +158,41 @@ The neutral PZ–water interaction is $k(T)=-0.19764540162608946+0.0011250147848
 
 Curve values are native single-liquid calculations at 21 loading nodes for each exact source temperature and stock composition, retained separately from the observed points. Nominal Hilliard and Ermatchkov stock labels group colors only; the model calculations use actual source conditions. There are 3570 source-condition curve entries. Crosses and dashed lines mark states outside at least one declared source range. The source-condition curves add no phase-stability qualification; the finite phase searches are reported separately above.
 
-Final figures and generated complete parameter/deviation tables are inserted after campaign selection and exact point verification. The notebook does not run the model during rendering.
+The notebook does not run the model during rendering. [summary-row.json](results/retransfer-345/summary-row.json) supplies the compact Part II summary; [parameters.csv](results/retransfer-345/parameters.csv) and [fixed-pz-parameters.csv](results/retransfer-345/fixed-pz-parameters.csv) supply values and roles. The full declared fixed ion properties and ties remain in the selected point document. Historical pure/binary errors above are separate from the reactive conditional errors.
+
+{{< include results/retransfer-345/parameters.md >}}
+
+<details>
+<summary>Complete same-row deviations for F2 and previous F0, inside and outside every reaction range</summary>
+
+{{< include results/retransfer-345/deviations.md >}}
+
+</details>
+
+The corresponding [CSV](results/retransfer-345/deviations.csv) retains empty-range counts and physical signed errors. The R1–R3 partitions refer to the source-correlation interval, not verified measured coverage.
+
+![Hilliard fitted partial pressures and continuous F2 curves at source temperatures and compositions. Nominal stock labels group colors. Crosses and dashed curves mark source-range extrapolation.](figures/part-ii-345/Hilliard.png)
+
+![Ermatchkov pressures, not fitted, against continuous F2 curves. Error bars are the source’s stated propagated pressure uncertainties; no confidence coverage is inferred.](figures/part-ii-345/Ermatchkov.png)
+
+![Kamps total pressures, comparison only. The single-liquid model underpredicts pressures at higher loading; these curves do not establish stable equilibrium.](figures/part-ii-345/Kamps.png)
+
+![Fitted NMR monocarbamate molecular-group fractions and continuous curves at source stock compositions. The 283.15 K states are marked outside P1–P2 coverage.](figures/part-ii-345/NMR-mono.png)
+
+![Fitted NMR dicarbamate molecular-group fractions and continuous curves. Fractions count dicarbamate molecules per analytical PZ molecule.](figures/part-ii-345/NMR-di.png)
+
+## Numerical checks and reproduction
+
+[correctness-checks.json](results/retransfer-345/correctness-checks.json) records all four required checks. Frozen F0 cost and all 294 fitted predictions reproduce exactly. Shared-value SHA-256, six common components, twelve common pairs, shared correlations and association topology, R1–R3 coefficients and references, and four PZ Born ties pass identity checks. The selected endpoint’s cost recomputed independently from the full 294-by-294 covariance differs from native cost by $9.57012\times10^{-14}$ relative; maximum fitted-prediction difference is $3.49076\times10^{-12}$ relative. Both are below the $10^{-8}$ reproducibility limit specified by #345/#255, not a physical-agreement threshold. All 3520 data marks, 18312 nominal-curve marks and 28560 source-curve marks equal the declared interval comparisons. Two existing focused native reference-case checks also passed (15 unrelated cases deselected).
+
+All fits and searches used `agent-heavy`, three workers from `AGENT_HEAVY_CORES`, and single-threaded numerical workers. The resumed campaign log is retained as [campaign.log.gz](results/retransfer-345/campaign.log.gz). Reproduction uses the pinned environment and the immutable declarations:
+
+```bash
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 agent-heavy uv run --no-sync python analyses/part_ii.py analyses/pz_transfer/inputs/part-ii-345/shared/campaign.json fit
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 agent-heavy uv run --no-sync python analyses/part_ii.py analyses/pz_transfer/inputs/part-ii-345/shared/campaign.json report
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 agent-heavy uv run --no-sync python analyses/pz_transfer/present_part_ii.py
+```
+
+The final figures read [3570 exact-source curve values](results/retransfer-345-source-curves/curve-data.json), produced by the shared `Route.curves` method with [source-curves.json](inputs/part-ii-345/shared/source-curves.json) and the selected mapping. The nominal 2289-row curve output is also retained, with separately checked range marks. Presentation code adds 161 gross lines, counting blanks; added test lines are zero. Shared implementation imported from reviewed main `2e5b2d4` is outside #345’s code contribution.
 
 The scientific consequence is a converged calibration on F2 with modest changes in average pressure deviations and persistent false-liquid-split evidence. It does not establish stable equilibrium across the data or the declared grid. Unavailable penalty evaluations leave the constrained stable-liquid calibration unresolved. No solid–liquid equilibrium is qualified, no global optimum is proved, and no record is adopted or promoted to the manuscript. Comparisons seen during development, calculation outside source ranges and conditional local standard errors do not establish absorber-design uncertainty.
