@@ -50,6 +50,24 @@ def test_shared_values_tie_and_range_marks(monkeypatch):
     prediction = p.reg.predict(spec.model,route.stability_row(spec,dict(key='reference',stock={'water':10.,route.config['amine']:1.},T=313.15,a=.3,c=1.05),1e-2))
     assert prediction.status.name=='Available'
     assert prediction.value==0. and prediction.residual==0.
+    native_stability = p.reg.stability
+    original = []
+    def stability(*args, **kwargs):
+        item = native_stability(*args, **kwargs)
+        original.append(p.calculation_declaration(item))
+        return item
+    monkeypatch.setattr(p.reg, 'stability', stability)
+    loaded = dict(key='loaded',stock={'water':10.,route.config['amine']:1.},T=313.15,a=.3,c=1.05)
+    item = route.stability_row(spec,loaded,1e-2)
+    assert p.calculation_declaration(item)==original[-1]
+    zero = route.stability_row(spec,dict(loaded,key='zero',a=0.),1e-2)
+    removed = set(p.eq.compile_problem(spec.model,zero.problem).removed_species)
+    assert removed
+    assert [t.kind.name for t in zero.stability_options.trials]==['Liquid','Liquid','Vapor']
+    assert [list(t.support) for t in zero.stability_options.trials]==[[1,4,5,6,7],[1,6],[1,6]]
+    assert all(not removed.intersection(t.support) for t in zero.stability_options.trials)
+    assert route.stability_metadata(spec,item)=={}
+    assert route.stability_metadata(spec,zero)==dict(restricted_trial_families=True,removed_species=sorted(removed))
     route.config['reaction_ranges_K']['MDEA-dissociation'] = None
     assert route.marks(313.15)['MDEA-dissociation']=='source range unknown'
     assert set(route.marks(313.15,SimpleNamespace(reactions=[])).values())=={'reaction not used'}
