@@ -261,10 +261,15 @@ class Route:
 
     def penalty_states(self, states, spec):
         copies = {}
+        self.penalty_unavailable = []
         for state in states:
             for ratio in (1.05, 3.):
                 candidate = dict(state, key=f"compressed:{state['key']}:{ratio}", c=ratio, compressed=True)
-                item = self.stability_row(spec,candidate,1.)
+                try:
+                    item = self.stability_row(spec,candidate,1.)
+                except Exception as error:
+                    self.penalty_unavailable.append(dict(source=state['key'],pressure_ratio=ratio,message=str(error)))
+                    continue
                 identity = json.dumps(calculation_declaration([item.problem,item.pressure_reference,ratio]),sort_keys=True)
                 row = copies.setdefault(identity, dict(candidate, sources=[]))
                 if state['key'] not in row['sources']: row['sources'].append(state['key'])

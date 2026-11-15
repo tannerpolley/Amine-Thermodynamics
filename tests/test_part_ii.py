@@ -364,9 +364,15 @@ def test_density_branch_overrides_seed_label():
     spec = SimpleNamespace(problems={'NMR':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'sibling':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'different':dict(T=333.15,feed=[1.,2.],reactions=['R2'])})
-    route.stability_row = lambda spec,state,scale: SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    def stability_row(spec, state, scale):
+        if state['key'].startswith('compressed:comparison:362:cap:'):
+            raise ValueError('ThermochemistryUnavailable, initial:thermochemistry_unavailable: outside_interval: record excludes temperature')
+        return SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    route.stability_row = stability_row
     states = [dict(key=name,problem=name) for name in spec.problems]
+    states.append(dict(key='comparison:362:cap',cap_record='comparison:362'))
     copies = route.penalty_states(states,spec)
+    assert route.penalty_unavailable==[dict(source='comparison:362:cap',pressure_ratio=ratio,message='ThermochemistryUnavailable, initial:thermochemistry_unavailable: outside_interval: record excludes temperature') for ratio in (1.05,3.)]
     assert len(copies)==4 and all(s['compressed'] for s in copies)
     assert {s['c'] for s in copies}=={1.05,3.}
     assert [s['sources'] for s in copies]==[['NMR','sibling'],['NMR','sibling'],['different'],['different']]
