@@ -1,0 +1,110 @@
+{
+  "status": "Campaign resumed at expanded search 67 after owner clarification; storage counter restored with data only; results partial, no adoption or push",
+  "base": "2e5b2d413fe8177ac27a7a1cf4a546bf674a4d1f",
+  "shared_input_hash": "passed",
+  "retained_F0_replay": "campaign/previous-replay-check.json",
+  "fit_endpoint_checks": [
+    {
+      "file": "campaign/start-0/penalized-0/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 17,
+      "fitted_cost": 61.84618517254758,
+      "relative_reload_cost_error": 7.365219545363288e-13,
+      "check": "passed"
+    },
+    {
+      "file": "campaign/start-0/unpenalized/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 55,
+      "fitted_cost": 61.70003837320343,
+      "relative_reload_cost_error": 6.238343175368755e-13,
+      "check": "passed"
+    },
+    {
+      "file": "campaign/start-1/unpenalized/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 52,
+      "fitted_cost": 61.70003837448462,
+      "relative_reload_cost_error": 4.2588155224621005e-13,
+      "check": "passed"
+    },
+    {
+      "file": "sensitivity-3.5/start-0/unpenalized/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 29,
+      "fitted_cost": 61.803541499830104,
+      "relative_reload_cost_error": 2.849942504212777e-13,
+      "check": "passed"
+    },
+    {
+      "file": "sensitivity-3.5/start-1/unpenalized/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 52,
+      "fitted_cost": 61.70003837447983,
+      "relative_reload_cost_error": 4.969358258222201e-13,
+      "check": "passed"
+    },
+    {
+      "file": "campaign/start-0/penalized-1/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 7,
+      "fitted_cost": 61.89656079885186,
+      "relative_reload_cost_error": 5.0182080713057076e-14,
+      "check": "passed"
+    },
+    {
+      "file": "campaign/start-1/penalized-0/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 17,
+      "fitted_cost": 61.846185174838574,
+      "relative_reload_cost_error": 2.0816681711721685e-13,
+      "check": "passed"
+    },
+    {
+      "file": "campaign/start-1/penalized-1/stage-0/fit.json",
+      "status": "converged",
+      "iterations": 7,
+      "fitted_cost": 61.89656079884663,
+      "relative_reload_cost_error": 1.0513812043200232e-13,
+      "check": "passed"
+    }
+  ],
+  "range_marks": "output-range-checks.json",
+  "conditional_uncertainty": "Provisional main start 0 and sensitivity start 1 passed differentiation/replay identity on 1cb771e; exact point hashes in each uncertainty-point.json",
+  "focused_tests": {
+    "command": "agent-heavy bash: PYTHONPATH=src uv run --no-sync pytest -q tests/test_part_ii.py",
+    "passed": 18,
+    "failed": 0,
+    "shared_route_base": "2e5b2d413fe8177ac27a7a1cf4a546bf674a4d1f"
+  },
+  "presentation": "Both cases rendered from retained rows and curves; current main figure has all 213 reactive measurements and all 620 curve evaluations",
+  "line_accounting": {
+    "base": "1cb771ea2a87829f08a4d4a542324278a18adb5c",
+    "production_gross_added_lines": 137,
+    "blank_lines_included": true,
+    "production_cap": 150,
+    "test_gross_added_lines": 0,
+    "source": "analyses/amp_transfer/present_retransfer.py",
+    "excluded": "Shared code already merged on main; local full raw search files not delivered",
+    "status": "Current presenter physical line count; final change-accounting report pending"
+  },
+  "remaining": [
+    "Complete start-1 and sensitivity stability, penalty and retreat series",
+    "Choose final lowest fitted cost and regenerate the final report, summary row, parameter table, curves and figure",
+    "Check final endpoint identities, range marks and conditional standard errors",
+    "Review the completed campaign independently and deliver the authorized draft PR"
+  ],
+  "source_measurement_uncertainty": "source-measurement-uncertainties.json: all five PDF hashes verified; source statements distinguished from fitting scales and from unavailable combined observable uncertainties",
+  "representative_stream_identity": "campaign/representative-native-checks.json: 15 representative records from completed searches 4\u20138 match exact file hashes, compact values and native supplied-trial counts/minima",
+  "main_start_0_penalty_stages": "campaign/start-0-penalty-stages.json: both stages converged; all 1710 enforced keys match the searched set; 97 then 52 descending grid entries after full supplied checks",
+  "main_start_0_retreat": "campaign/start-0/retreat-identity.json: exact shared-segment identity, all 156 replay rows available, cost 107.53137398629858 reproduced exactly; interpolated point not terminated on optimizer tolerance",
+  "main_start_0_retreat_searches": "campaign/start-0/retreat-searches.json: all 45 trace rows and 54 native searches associated; final search 61 has 1710 available, zero unavailable and no descents found; seven intermediate screening entry evaluations unavailable",
+  "main_start_1_unpenalized_recheck": "campaign/search-assessments/search-63.json and start-1/unpenalized-search-checks.json: 1710 available, zero unavailable, 303 descending entries; supplied counts 5200338 available, zero unavailable, 179322 not applicable from 3146 earlier AMP compositions",
+  "main_start_1_first_penalty": "campaign/start-1/penalized-0/stage-0/checks.json and postfit-search-checks.json: 17 iterations to function tolerance; initial and expanded checks complete, latest with 1710 available, zero unavailable, 97 descending grid entries, 3385 earlier AMP compositions",
+  "main_start_1_second_penalty": "campaign/start-1/penalized-1/stage-0/checks.json and postfit-search-checks.json: 7 iterations to function tolerance; whole 1710-key enforced set matches; initial search 66 has 1710 available, zero unavailable, 52 descending grid entries; expanded earlier-composition check pending",
+  "storage_move": "search-storage-manifests/summary.json: 36976 files, 22181568587 bytes, every post-move size and SHA-256 verified; 35977 existing manifest hashes matched",
+  "previously_committed_detailed_records": "search-storage-manifests/previously-committed-records.json: 171 gzip files, 80028867 bytes, in 16 local commits; still in history; no push",
+  "interruption": "campaign/storage-interruption.json: search 67 interrupted; current Route.grid search counter must be handled before any resume",
+  "search_counter_restoration": "search-counter-restoration.json: compact historical summaries 2 and 3 restore next index 67 without collision; route code unchanged",
+  "delivery_policy": "Only a new issue-344-amp-f2 branch cut from current main may be pushed; exclude all per-state detail files and new files over 20 MB; run both owner push guards immediately before every push"
+}

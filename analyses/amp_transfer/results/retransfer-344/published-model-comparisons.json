@@ -1,0 +1,36 @@
+[
+  {
+    "source": "Kundu, Mandal and Bandyopadhyay 2003, DOI 10.1021/je0201626",
+    "model": "Simplified Clegg–Pitzer activity-coefficient model",
+    "locator": "Table 10 p.794 and Results and Discussion pp.793–795",
+    "reported_AAD_percent": 14.3,
+    "reported_rows": 56,
+    "reported_conditions": "2.0, 2.8 and 3.4 mol/L AMP; 303, 313 and 323 K",
+    "model_data_role": "mixed fitted / not fitted: Table 7 includes this study at 2.8 mol/L and 303 K",
+    "comparison_role": "comparison only",
+    "same_rows_as_AMP": false,
+    "reason": "The retained AMP comparison has 51 rows; the published aggregate has 56. This is not a same-row error comparison.",
+    "source_pdf_sha256": "48a126350a42180b20cb0fad319c92317112288efdcfa487148cd3a477d87556"
+  },
+  {
+    "source": "Kundu et al. 2003",
+    "model": "Same model fitted with Levenberg–Marquardt",
+    "locator": "Table 11 p.794",
+    "reported_AAD_percent": 18.0,
+    "reported_rows": 56,
+    "model_data_role": "mixed fitted / not fitted",
+    "comparison_role": "comparison only",
+    "same_rows_as_AMP": false,
+    "reason": "Published 56-row aggregate; not the exact 51-row retained subset."
+  },
+  {
+    "source": "Hartono et al. 2021, DOI 10.1016/j.fluid.2021.113235",
+    "model": "eNRTL",
+    "locator": "Section 5.2 and Figure 6 p.11",
+    "comparison_role": "comparison only",
+    "model_data_role": "not fitted in this paper: existing single-AMP model reused",
+    "same_dataset": "3.0 mol/L AMP total-pressure measurements, Table 7",
+    "reported_same_row_AARD_percent": null,
+    "reason": "Figure 6 reports model curves against the AMP measurements, but no numerical AARD for the exact AMP subset was found. The 13.1% Table 24 aggregate concerns AMP/PZ blends and is not an AMP-only comparator."
+  }
+]

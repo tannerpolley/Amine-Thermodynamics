@@ -1,0 +1,24 @@
+{
+  "pid": 2780097,
+  "AGENT_HEAVY_CORES": "3",
+  "child_processes": [
+    2780123,
+    2780124,
+    2780125
+  ],
+  "scope": "0::/user.slice/user-1000.slice/user@1000.service/agents.slice/agents-jobs.slice/heavy-2780089-1794796211464780.scope",
+  "basis": "Single observation during the active shared grid; no peak-memory measurement",
+  "worker_thread_counts_observed": {
+    "2780123": 1,
+    "2780124": 1,
+    "2780125": 1
+  },
+  "single_thread_configuration": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "configuration_owner": "analyses/part_ii.py: module initialization before Engine and NumPy imports",
+  "configuration_source_sha256": "da22f6e7a2dfe835495e90d84ebb771595923e2b3fa2bd355ed30f9ffb4c47ec",
+  "environment_limit": "The /proc startup environment does not verify Python os.environ updates made after process start; thread counts are one observation."
+}

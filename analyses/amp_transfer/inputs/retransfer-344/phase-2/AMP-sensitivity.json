@@ -1,0 +1,182 @@
+{
+  "amine": "aminomethylpropanol",
+  "species": [
+    "carbon-dioxide",
+    "aminomethylpropanol",
+    "water",
+    "protonated-aminomethylpropanol",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "vapor_species": [
+    "water",
+    "aminomethylpropanol",
+    "carbon-dioxide"
+  ],
+  "specification": "specification.toml",
+  "coordinates": {
+    "path": "coordinates-sensitivity-0.json",
+    "sha256": "c233fc8a4fcdc6cf978db9f3c4d20f55b92824c1186fbbaaa682d112a1546401"
+  },
+  "starts": [
+    {
+      "path": "start-0.json",
+      "sha256": "8f0c3b0613bb7f9200c5662670ae64afaa3fc8e9f8b119f46e331e685862392c",
+      "reactions": {
+        "path": "reactions-0.json",
+        "sha256": "7bf1db764f0525a443f299e1e042914cf988dcecee5a589ac036559fd470d7c3"
+      },
+      "coordinates": {
+        "path": "coordinates-sensitivity-0.json",
+        "sha256": "c233fc8a4fcdc6cf978db9f3c4d20f55b92824c1186fbbaaa682d112a1546401"
+      }
+    },
+    {
+      "path": "start-1.json",
+      "sha256": "7962c8f845e0efcfbc43042c755fccdbf6ac55d0ce187aeef56bb518571540a6",
+      "reactions": {
+        "path": "reactions-1.json",
+        "sha256": "49927819776419438aa14dbb5ce2947e959a7557d18da447c7406e2b2bbcfe15"
+      },
+      "coordinates": {
+        "path": "coordinates-sensitivity-1.json",
+        "sha256": "fb07678f833a3dcac535acdda58211c7b05e49fae8c5fe7031ccc6ea6589cee8"
+      }
+    }
+  ],
+  "born_ties": [
+    "protonated-aminomethylpropanol",
+    "carbamate-anion"
+  ],
+  "calculation_interval_K": [
+    298.15,
+    393.2
+  ],
+  "reaction_ranges_K": {
+    "R1": [
+      273.15,
+      498.15
+    ],
+    "R2": [
+      273.15,
+      498.15
+    ],
+    "R3": [
+      273.15,
+      498.15
+    ],
+    "AMP-dissociation": [
+      293.12,
+      353.22
+    ],
+    "carbamate-hydrolysis": [
+      313.15,
+      373.15
+    ]
+  },
+  "roles": {
+    "loaded-pressure": "fitted",
+    "binary": "fitted",
+    "nmr": "fitted",
+    "kundu": "not fitted",
+    "tong": "not fitted",
+    "tong-baseline": "not fitted",
+    "hartono-2021-supplemental": "not fitted"
+  },
+  "stocks": [
+    {
+      "water": 11.545384436618988,
+      "aminomethylpropanol": 1.0
+    },
+    {
+      "water": 13.514746387428197,
+      "aminomethylpropanol": 1.0
+    }
+  ],
+  "loadings": [
+    1e-05,
+    0.025,
+    0.05,
+    0.075,
+    0.1,
+    0.125,
+    0.15,
+    0.175,
+    0.2,
+    0.225,
+    0.25,
+    0.275,
+    0.3,
+    0.325,
+    0.35,
+    0.375,
+    0.4,
+    0.425,
+    0.45,
+    0.475,
+    0.5,
+    0.525,
+    0.55,
+    0.575,
+    0.6,
+    0.625,
+    0.65,
+    0.675,
+    0.7,
+    0.725,
+    0.75,
+    0.775,
+    0.8,
+    0.825,
+    0.85,
+    0.875,
+    0.9,
+    0.925,
+    0.95,
+    0.966
+  ],
+  "split_record": {
+    "path": "split-record.json",
+    "sha256": "ad6b2534522758abb28a9071f10b928bf567ea556b5863e6eae24f4e7c7c6fe1"
+  },
+  "curve_rows": {
+    "path": "curve-rows.json",
+    "sha256": "c6f63e49199ebc882c249dbcd149839ad3229bb9d26f624304fb407a7ea26bd9"
+  },
+  "optimizer": {
+    "maximum_iterations": 60,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 4500
+  },
+  "output": "../../../results/retransfer-344/sensitivity-3.5",
+  "range_meanings": {
+    "AMP_dissociation": {
+      "interval_K": [
+        293.12,
+        353.22
+      ],
+      "basis": "Measured dissociation constants",
+      "source": "Hamborg and Versteeg 2009, Table 16; Zotero D9KXSKLR/334KGLPV"
+    },
+    "AMP_hydrolysis": {
+      "interval_K": [
+        313.15,
+        373.15
+      ],
+      "basis": "Model-derived source estimates, not direct reaction-law measurements",
+      "source": "Xu et al. 1992, Table 2 and Eqs.7–11; Part II reaction-range table"
+    },
+    "R1_R2_R3": {
+      "interval_K": [
+        273.15,
+        498.15
+      ],
+      "basis": "273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
+    }
+  }
+}

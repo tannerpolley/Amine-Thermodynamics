@@ -1,372 +1,281 @@
 ---
-title: "AMP widened-limit refit and held-out CO₂ pressure prediction"
-subtitle: "Refit improves calibration but held-out Kundu error rises from 21.9% to 42.8%"
+title: "AMP re-transfer onto the adopted MEA shared record"
+subtitle: "Native liquid descents trigger the amended compressed-liquid penalty series"
 ---
 
-## Widened-limit refit (#306): calibration better, held-out worse
+## Result and remaining calculation
 
-[#306](https://github.com/tannerpolley/Amine-Thermodynamics/issues/306) refits
-cation A, set 1, fitted slope, under the adopted #255/#297 shared species with
-the two limits that had no physical basis widened: AMPH⁺–CO₂ $k$ to $[-1,1]$
-and the AMPCOO⁻ diameter floor to 3.5 Å. The enthalpy-shift band stays
-$[-5000,5000]$ J/mol. Calibration data, weights, the other coordinates and
-bounds, the two declared starts, the pinned Engine wheel and the phase trials
-are unchanged. No endpoint is selected or adopted here; the owner decides
-adoption and manuscript use (#259).
+The second execution attempt stopped during search 108 on 16 November 2026, before the shared calculation wrote a final retreat point or final diagnostic result. Searches 57–107 completed on `ce4f3c6`; eight of ten refinement steps completed. The latest passing full search is 106, at interpolation fraction 0.6624609375 and fitted-data cost 107.53548140093777: 1,906 entries are available, zero unavailable, and no descents are found. Supplied trials total 10,870,380 available, zero unavailable and 365,490 not applicable. This is an intermediate interpolated point, without optimizer convergence or a conditional standard error; it is not a completed retreat or final start selection.
 
-**Result.** Refitting makes the Hartono calibration fit much better, but the
-held-out Kundu 2003 error is about twice the #304 baseline: $E_p$ =
-**42.85%** (bias **+37.79%**) for the scored refit, against **21.89%**
-(bias −15.10%) for the frozen #243 fit. The registered target
-$E_p\le30\%$ is not met. On Tong 2012 total pressure (17 rows ≤353.22 K),
-error is 28.66% against 30.04% for the #243 fit.
+Search 108 has no summary. Its 1,845 partial files (1,934,846,987 bytes) were moved only after the job scope became inactive, then hash-verified in ignored storage. The [partial-file inventory](results/retransfer-344/campaign-373/search-file-inventories/interrupted-search-108-attempt-2.json) supplies no complete search count. The [updated run record](results/retransfer-344/campaign-373/start-0/retreat-restart-378/run.json) records the stopping point. No missing trace point is reconstructed, and no third replay has been launched.
 
-**Where the held-out loss enters.** Each step below changes one thing.
-Calibration is the 47 Hartono 2021 loaded total pressures (mean absolute
-relative error) and 57 Ciftja 2014 carbamate fractions (RMS); the cost also
-includes 52 Hartono 2013 binary rows. Kundu is all 51
-rows. The first refit step accounts for the whole change in Kundu error:
+The [memory sample summary](results/retransfer-344/campaign-373/start-0/retreat-restart-378/memory-guard/summary.json) retains 8,391 five-second samples. The maximum sampled aggregate resident memory plus swap is 702,636,032 bytes (0.654381 GiB), below the 11.5 GiB guard threshold. Sampling began partway through the execution. The [unit journal](results/retransfer-344/campaign-373/start-0/retreat-restart-378/attempt-2-unit-journal.txt) separately reports a 2.5G cgroup memory peak and no termination sender or cause; this is a different memory quantity. No numerical optimizer was running during this retreat, so no new optimizer evaluation count is reported. This interruption is not evidence of physical instability or of an AMP penalty-fit memory leak. The [system-journal evidence](results/retransfer-344/campaign-373/start-0/retreat-restart-378/reboot-evidence.json) identifies a host reboot: systemd-logind announced reboot at 11:41:44 MST on 16 November 2026, followed by the AMP scope ending at 11:41:45 MST. The initiating actor and per-process termination signal are not identified by this record. This diagnosis requires no shared checkpoint capability or Engine change. Another replay remains projected at 22.66 hours from the retained stage inputs; it has not been launched.
 
-| Step | Change | Cost | Pressure error / % (bias) | Carbamate RMS | Kundu $E_p$ / % (bias) |
-|:--|:--|--:|--:|--:|--:|
-| 1 | #243 fit, adopted shared species, not refitted | 238.38 | 18.85 (−18.84) | 0.01386 | 21.89 (−15.10) |
-| 2 | Refit, #243 limits ($k\le0.5$, diameter ≥4.5 Å) | 66.28 | 9.93 (−0.20) | 0.00614 | 43.51 (+40.35) |
-| 3 | Diameter floor raised to 5.32 Å | 66.42 | 9.93 (−0.25) | 0.00637 | 43.03 (+39.77) |
-| 4 | $k$ widened to $[-1,1]$ (scored endpoint) | 61.73 | 10.33 (−0.90) | 0.00631 | 42.85 (+37.79) |
-| 5 | Diameter floor lowered to 3.5 Å | 61.62 | 10.34 (−0.80) | 0.00586 | 43.95 (+39.09) |
+The delivery branch is rebased onto `ce4f3c6`, which includes #378. The restricted-family re-searches at the retained unpenalized endpoint, both amended penalty endpoints and the declared anchor change no classification. Each diagnostic subset has 57 available entries, zero unavailable entries and zero descents. The compressed endpoint subset has 62 available entries with zero unavailable entries and zero descents. The remaining loaded entries retain their prior results; intermediate retreat points still need the shared restart work below.
+The `a6aebfa` retreat was interrupted during search 52: its scope was killed by `systemd-oomd` at 19:09:33 local time on 15 November 2026, with exit code 137. The requested safe-stop guard did not send a signal. Searches 0–51 completed; the interrupted search had no summary and supplies no complete result. Its 1,122 partial detail files (1,161,639,381 bytes) were moved and hash-verified after all scope processes exited. The [interruption inventory](results/retransfer-344/campaign-373/search-file-inventories/interrupted-search-52.json) and [unit journal](results/retransfer-344/campaign-373/interruption-before-378.txt) retain this evidence. This is a resource interruption, not an AMP peak-memory measurement or a thermodynamic finding.
+The shared calculation writes its retreat trace only at the end and retains search-point reuse only in memory. An away-mode question default was incorrectly treated as an owner decision to add shared restart support in [#382](https://github.com/tannerpolley/Amine-Thermodynamics/issues/382). The orchestrator rejected that additional capability and instead authorized restarting from the retained stage inputs if the projected duration is at most about 24 hours. The interrupted trace is superseded history; no missing trace point is reconstructed and no final retreat fraction, retreat endpoint or start selection is claimed here.
 
-| Kundu group | Step 1 | Step 2 | Step 3 | Step 4 | Step 5 |
-|:--|--:|--:|--:|--:|--:|
-| 303 K | 14.90 | 53.72 | 52.72 | 53.94 | 56.16 |
-| 313 K | 19.22 | 48.12 | 47.98 | 43.78 | 44.12 |
-| 323 K | 41.41 | 14.01 | 14.24 | 16.35 | 15.97 |
-| 2.0 mol/L | 9.44 | 40.51 | 37.43 | 42.40 | 49.48 |
-| 2.8 mol/L | 17.86 | 53.97 | 53.61 | 54.04 | 54.70 |
-| 3.4 mol/L | 31.77 | 30.85 | 31.15 | 28.29 | 27.77 |
+A fresh retreat was started on `ce4f3c6` from the [retained stage inputs](results/retransfer-344/campaign-373/start-0/retreat-restart-378/inputs.json): the projected declared start-0 anchor, converged scale-0.003 penalty endpoint, exact optimizer report and all 1,906 compressed entries. The enforced declarations match the retained coverage exactly, including all 3,420 source-to-ratio assignments; no copy is unavailable at construction. The [restart projection](results/retransfer-344/campaign-373/start-0/retreat-restart-378/restart-estimate.json) is 21.66 hours plus a one-hour allowance, 22.66 hours in total. It uses the maximum retained full-search time of 5,020.67 s and maximum 52-entry screen time of 161.29 s, two full searches during the initial scan as previously observed, a budget of 100 scan screens, and ten full bisections with screens. This is a workload projection, not an upper bound: more full scans, more supplied trials or resource pressure can extend it.
+The first execution attempt ended with exit code 143 before completing search 57. The examined unit journal does not identify the termination sender. Its 831 partial files (853,565,467 bytes) were moved and hash-verified after all captured processes exited; they provide no complete search count. The [attempt record](results/retransfer-344/campaign-373/start-0/retreat-restart-378/attempt-1-run.json) and [partial-file inventory](results/retransfer-344/campaign-373/search-file-inventories/interrupted-search-57-attempt-1.json) retain the interruption. A [retained-witness check](results/retransfer-344/campaign-373/start-0/retreat-restart-378/partial-native-witness-recovery.json) found no native resolved witnesses in either interrupted partial directory, so the 5,895-trial AMP record is unchanged. A second execution attempt adds periodic console progress, with no thermodynamic or shared calculation changes. Its [revised projection](results/retransfer-344/campaign-373/start-0/retreat-restart-378/retry2-estimate.json) is 23.46 hours including elapsed time from the first attempt; this remains a projection rather than an upper bound.
+The [run record](results/retransfer-344/campaign-373/start-0/retreat-restart-378/run.json) identifies the new calculation. The [interrupted retreat history](results/retransfer-344/campaign-373/superseded-retreat-before-378.json) supplies no final endpoint. No shared calculation code is changed.
 
-Refitting under the adopted shared species (step 1→2) cuts calibration cost
-by 72% and doubles the Kundu error, flipping its bias from −15% to +40%.
-Step 2 nearly reproduces the #243 fit scored with its *historical* shared
-species in #304 (43.69%, +40.51%). The 21.89% baseline therefore came from
-a shared-species change that lowered predicted pressures in both data sets
-and was not yet compensated by the AMP coordinates: it made the calibration
-worse (18.85%) and happened to move Kundu toward the measurements. Once the
-AMP coordinates refit Hartono 2021, the model overpredicts Kundu by roughly
-40% over all rows (bias +37.8 to +40.4% in steps 2–5), and by 44–56% at
-303 and 313 K, whichever limits are used. Whether this is disagreement
-between the two campaigns or a model-structure error is not resolved by this
-study. Widening $k$ (step 3→4) lowers cost by 7% and changes Kundu $E_p$ by
-−0.18 points; the diameter steps change cost by at most 0.2%.
+The restarted scan reaches an admissible compressed-set point at interpolation fraction 0.66, with fitted-data cost 108.05355206195117. Search 92 has 1,906 available entries, zero unavailable and no descents found; supplied evaluations total 10,870,380 available, zero unavailable and 365,490 not applicable. The [completed search summary](results/retransfer-344/campaign-373/search-92.json) and [verified detail inventory](results/retransfer-344/campaign-373/search-file-inventories/search-92.json) retain the result. Refinement subsequently stopped as described above; this is an intermediate interpolated point, without optimizer convergence or a conditional standard error. Following the Engine penalty-memory warning in `tannerpolley/epcsaft#25`, a separate guard now samples aggregate job resident memory (RSS) plus swap every five seconds and interrupts the job at 11.5 GiB. Its [sample trace](results/retransfer-344/campaign-373/start-0/retreat-restart-378/memory-guard/rss-swap.jsonl) starts partway through this execution and therefore cannot establish its earlier memory peak. An interrupted search supplies no complete result.
 
-**New limit.** With the 3.5 Å floor, all three starts (two declared, one from
-the #243 endpoint) reach the same endpoint (cost differences ≤4.0×10⁻⁹,
-largest scaled-coordinate difference 2.1×10⁻⁴) with the carbamate diameter
-on the new 3.5 Å limit. Per #306 step 2 the limit was not widened further.
-The size check recorded before fitting gives a larger, not smaller, AMPCOO⁻:
-the adopted MEACOO⁻ diameter is 5.32 Å, and scaling by the cube root of the
-PC-SAFT segment-volume ratio $\sum m\sigma^3$ of AMP+CO₂ over MEA+CO₂
-(1.356) gives 5.89 Å (6.15 Å from the parent amines alone). Following the
-issue's provision for a physically motivated floor, the owner chose to score
-the endpoint with the floor at the MEACOO⁻ value, 5.32 Å, started at the
-5.89 Å estimate. It costs 0.19% more than the 3.5 Å endpoint with nearly
-identical calibration errors, so the diameter is essentially unidentified
-below about 5.3 Å. A value at 3.5 Å is not an ion size; it is consistent with
-the diameter absorbing a model-structure error, as #306 anticipates, but this
-study shows only that the data do not identify it.
+The amended series rule from #373 is now authoritative. All pre-#373 witnesses without `density_side` are **branch unresolved**; trial labels do not establish liquid or vapor.
+The earlier penalty fits and retreats below are retained as **superseded history**, because they used the former penalty set. They do not satisfy the amended series.
+The fresh diagnostic rerun on `a6aebfa` is complete: all 1,710 state entries are available, with native liquid-branch descents at 303 entries (12 data and 291 grid), and no native vapor, mixed or unresolved descent states.
+All 752 new native witnesses have `density_side = 2`; the 303 descending identities match the historical set exactly. These new records do not relabel the older unresolved witnesses.
+Negative supplied-trial results occur at 303 entries and remain branch unresolved in the returned records. Supplied evaluations total 5,790,459 available, zero unavailable and 199,671 not applicable.
+The [new diagnostic result](results/retransfer-344/campaign-373/start-0/unpenalized-branch-search.json) reports `penalty_trigger = true`; the [identity check](results/retransfer-344/classification-373-checks.json) records the comparison.
+The amended campaign is incomplete. Its main penalty set contains 1,906 unique compressed entries, preserving all 3,420 source-to-ratio assignments from the 1,710 searched entries.
+The first amended start-0 penalty fit converges in 12 iterations without continuation, on relative function tolerance $10^{-10}$ for the penalized objective. Its dimensionless fitted-data cost is 61.84617081361874, penalty cost 0.0220032695971885 and total objective 61.868174083215926.
+All 156 fitted rows are available on reload, with relative cost error $6.50\times10^{-13}$. The [endpoint check](results/retransfer-344/campaign-373/start-0/penalized-0/stage-0/checks.json) records the native termination message and the complete 1,906-entry compressed coverage.
+Its initial post-fit diagnostic search has 1,710 available entries, zero unavailable and 97 native liquid-branch grid descents, with none in the data entries. Expanded search 3 also returns 1,710 available entries, zero unavailable and 97 native liquid-branch grid descents, with no data descents. Optimizer convergence does not establish stability.
 
-### Parameters
+The second amended start-0 penalty fit converges in seven iterations without continuation, on relative function tolerance $10^{-10}$. Its fitted-data cost is 61.89656079614774, penalty cost 0.013200707270384287 and total objective 61.90976150341812. Endpoint reload is available for all 156 fitted rows, with relative cost error $7.06\times10^{-13}$.
+The [second amended endpoint check](results/retransfer-344/campaign-373/start-0/penalized-1/stage-0/checks.json) records the native tolerance and point identity. Initial post-fit search 4 returns 1,710 available entries, zero unavailable and 52 native liquid-branch grid descents, with none in the data entries; expanded search 5 also returns 1,710 available entries, zero unavailable and 52 native liquid grid descents. Anchor search 6 returns 1,710 available entries with no descents; the compressed-set retreat is interrupted as described above.
 
-| Coordinate | #243 fit | Step 2 | Step 3 | Step 4 (scored) | Step 5 |
-|:--|--:|--:|--:|--:|--:|
-| AMP–water $k$ | −0.1341 | −0.1343 | −0.1349 | −0.1307 | −0.1297 |
-| AMP–water $k$ slope / K | −62.97 | −63.34 | −65.04 | −55.96 | −52.97 |
-| AMPH⁺–water $k$ | −0.2879 | −0.3447 | −0.3406 | −0.3136 | −0.3201 |
-| AMPH⁺–water $k$ slope / K | −305.1 | −307.7 | −301.2 | −274.2 | −286.5 |
-| AMPH⁺–CO₂ $k$ | **0.5** | **0.5** | **0.5** | 0.7550 | 0.7599 |
-| AMPH⁺ diameter / Å | 5.278 | 5.216 | 5.263 | 5.415 | 5.319 |
-| AMPCOO⁻ diameter / Å | **4.5** | **4.5** | **5.32** | **5.32** | **3.5** |
-| Hydrolysis $\delta=a-11.555-H/(RT_p)$ | −1.491 | −2.090 | −1.226 | −1.424 | −2.918 |
-| Hydrolysis enthalpy shift $H$ / J mol⁻¹ | **−5000** | **−5000** | **−5000** | **−5000** | **−5000** |
+The [restricted-family results](results/retransfer-344/campaign-373/restricted-378/summary.json) retain the changed declarations, current AMP trial record, original search identities and classification comparisons. Only compiler-removed-species parents were searched. The combined counts below reuse loaded rows from each named original search; those rows retain their original supplied-trial counts, while the restricted rows use 5,895 trials per state. They are not a new simultaneous full-set search.
 
-Bold values sit on a limit. The enthalpy shift is on its kept −5000 J/mol
-limit in every refit; with the widened $k$ the AMPH⁺–CO₂ interaction is
-interior for the first time.
+| Point | New subset search | Available / unavailable | Supplied not applicable | Combined native liquid descents, lower bound |
+|:--|--:|:--|--:|--:|
+| Unpenalized start 0 | 52 | 57 / 0 | 336,015 | 303 |
+| Penalty scale 0.01 | 53 | 57 / 0 | 336,015 | 97 |
+| Penalty scale 0.003 | 54 | 57 / 0 | 336,015 | 52 |
+| Declared start-0 anchor | 55 | 57 / 0 | 336,015 | 0 |
+| Penalty endpoint, compressed set | 56 | 62 / 0 | 365,490 | 52 |
 
-### Held-out comparison with uncertainty bands
+All five restricted subsets have zero native or supplied descents and zero available or unavailable supplied evaluations: their supplied trials are all not applicable. No native vapor descent is introduced. The liquid penalty remains triggered at the unpenalized endpoint. Loaded-state results were not repeated.
 
-![Kundu 2003 measured CO₂ partial pressures (open circles), the frozen #243 fit (+) and the scored refit (×) at the measured loadings, by stock and temperature. Error bars are ±1.96 local parameter standard errors propagated through the conditional covariance with the diameter and enthalpy shift fixed; they are not measurement uncertainty or prediction intervals. Discrete points; no curve was evaluated.](results/refit-306/kundu-bands.svg)
+Every state with a negative supplied trial is reported as **not stable**, even when the trial does not resolve a minimum. The [supplied-negative summary](results/retransfer-344/supplied-negative-summary-373.json) and per-state tables retain the most negative trial, its density branch, TPD/RT, actual search pressure and model bubble pressure. They separately count states with any negative liquid-side trial.
+The retained reports cover completed searches 0–51. In searches 0–4, supplied negatives occur at 303, 303, 97, 97 and 52 state entries. Every most-negative supplied branch is unknown in the returned records. Zero states have an identified side-2 negative, while every affected state has negative trials with unknown branch; zero identified liquid-side trials does not establish their absence.
+Native liquid descents occur in all five initial searches. None of the completed supplied-negative reports identifies a liquid-side supplied trial that would require the additional owner decision.
+The [runtime estimate](results/retransfer-344/rerun-373-estimate.json) for the first rerun was about 0.85 hours, excluding admission waits; it was not an upper bound. Its per-state timers omit gzip writing. The [retained filesystem timing record](results/retransfer-344/retained-wall-times-373.json) gives a 0.879-hour interval from search-directory creation to the completed search-0 summary; it is one observational run on a shared machine, not a controlled performance comparison.
 
-The refit overpredicts 303 and 313 K and fits 323 K better than the #243
-fit did. Only 8 of 51 measurements lie inside the ±1.96 SE parameter band
-and 10 of 51 inside the α ±2% loading envelope (20 for the #243 fit). The
-relative parameter SE of the predicted pressures is 3.2–13.5% (median 6.7%),
-small beside the ~40% systematic bias: the held-out discrepancy is not
-parameter uncertainty.
+The two declared AMP starts converge on the F2 shared inputs at weighted fitted costs of 61.7000383732 and 61.7000383745. The lower-cost unpenalized start 0 supplies the provisional comparisons below.
+Final start selection remains open; no AMP parameter record is adopted. The amended start-1, retreat and sensitivity stability series are not yet complete.
+The [superseded penalty record](results/retransfer-344/superseded-penalties-373.json) identifies all earlier penalty fits and retreats, which used the former penalty set. None counts as an amended-series result.
+The older sensitivity search interrupted by system-wide memory pressure supplies no stability count; #368 subsequently changed the shared route to bound memory.
 
-| Group (scored refit) | Rows | $E_p$ / % | Bias / % |
-|:--|--:|--:|--:|
-| All | 51 | 42.85 | +37.79 |
-| 303 K | 25 | 53.94 | +53.94 |
-| 313 K | 15 | 43.78 | +43.78 |
-| 323 K | 11 | 16.35 | −7.09 |
-| 2.0 mol/L stock | 7 | 42.40 | +42.40 |
-| 2.8 mol/L stock | 25 | 54.04 | +50.72 |
-| 3.4 mol/L stock | 19 | 28.29 | +19.08 |
+Historical pre-#373 `campaign/search-67` left no summary and supplies no complete result. Its partial details are preserved in ignored storage. This is distinct from search 67 in the new `campaign-373` restart. The [counter check](results/retransfer-344/search-counter-restoration.json) records the earlier data-only restoration of the two oversized historical summary filenames, without changing the shared calculation code.
+The amended campaign began in separate output directories on `a6aebfa`; restricted-family subset searches 52–56 were produced on `ce4f3c6`. The interrupted pre-#378 search 52 had no summary, so the new subset search 52 overwrites no completed search. Exact point and state declarations for these subset searches are retained under `restricted-378/inputs/`. Every completed `search-N.json` summary stays in place. Completed per-state detail directories move to the main checkout's ignored `analyses/amp/results/runs/344/` directory, with sizes and SHA-256 hashes verified after each move. The earlier [storage inventory](results/retransfer-344/search-storage-manifests/summary.json) records the historical move to its previously approved ignored folder.
+Delivery uses the clean `issue-344-amp-f2` branch cut from main, excluding every detailed per-state file and every new file over 20 MB. The old branch and its previously committed detailed records remain local and unpushed.
+The shared fit-chart correction [#365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365) is merged at `1cb771e`; completed endpoints are reconstructed through that shared mapping before reuse.
 
-**Tong 2012** (total pressure, ~30 mass% AMP): 17 loaded rows at 313–353 K
-are scored and 23 rows at 373–393 K are refused because the fixed Hamborg
-AMP-dissociation law ends at 353.22 K. Error is 28.66% (bias +8.11%) for
-the refit and 30.04% (bias −30.04%) for the #243 fit. Signed errors at
-313/333/353 K are +48.55/+5.73/−23.19% for the refit and
-−13.22/−32.90/−41.19% for the #243 fit. The refit's signed error falls with
-temperature on both held-out sources (Kundu 303/313/323 K: +53.9/+43.8/−7.1%)
-while the hydrolysis enthalpy shift sits on its −5000 J/mol limit; this is
-relevant to, but does not settle, the campaign-versus-model question.
+This is calibration, fixed-parameter prediction against measurements seen during development, and numerical verification.
+It does not establish physical validation or qualification for an absorber calculation.
+The retained partial evidence at commit `dfd04f3` was independently reviewed as Supported; the [review record](results/retransfer-344/partial-review-dfd04f3.json) states its scope and open requirements.
+The completed campaign still requires review and has not been promoted for manuscript use.
 
-### Uncertainty and sensitivity of the scored endpoint
+## Model, data roles and domain
 
-The accepted #307 method was rerun on this endpoint
-(`uncertainty_307.py AMP`). Covariance is the native conditional covariance
-with the two bound coordinates (AMPCOO⁻ diameter at 5.32 Å, enthalpy shift at
-−5000 J/mol) fixed; the interior-only refit from the endpoint moved no
-coordinate and changed cost by 4×10⁻¹¹, and native and inverse-Jacobian
-standard errors agree to 4×10⁻¹³. The variance factor is 0.829. These are
-local, linearized and conditional on the model, weights and fixed
-coordinates.
+Only the nine AMP coordinates are fitted.
+Cost is half the sum of squared whitened residuals, using the retained residual scales and weights in the [solvent specification](inputs/retransfer-344/phase-2/specification.toml).
+Shared components, R1–R3 and water–inorganic-ion interactions inherit the adopted MEA F2 record from #340.
+Water–bicarbonate has $k_{ij}=0.7650000233694618$ and water–carbonate has $k_{ij}=-0.25$.
+Each AMP ion's Born diameter equals its segment diameter; no fitted cation–bicarbonate interaction is introduced.
+Pressure predictions use the declared bubble problems, with water, AMP and CO₂ in the vapor support.
+NMR calculations use a single liquid at the declared 101.325 kPa; carbamate amount is divided by the sum of free AMP, protonated AMP and carbamate amounts.
+The historical #304/#306 and `kundu.py` calculations remain frozen on F0.
+Their files preserve their original model, bounds, data selection and interpretation; this notebook reports the current #344 calculation.
 
-| Parameter | Value | SE | Largest Kundu change per SE / % |
-|:--|--:|--:|--:|
-| AMPH⁺ diameter / Å | 5.415 | 0.433 | 62.4 |
-| AMPH⁺–water $k$ | −0.3136 | 0.0382 | 52.6 |
-| AMPH⁺–water $k$ slope / K | −274.2 | 85.9 | 12.7 |
-| AMP–water $k$ | −0.1307 | 0.00605 | 11.8 |
-| AMP–water $k$ slope / K | −55.96 | 15.87 | 3.3 |
-| AMPH⁺–CO₂ $k$ | 0.7550 | 0.0873 | 3.0 |
-| Hydrolysis $a$ (completed law) | 8.2105 | 0.291 | 2.1 |
-| AMPCOO⁻ diameter / Å (bound; 1% profile step) | 5.320 | — | 0.04 |
-| Enthalpy shift / J mol⁻¹ (bound; 1% profile step) | −5000 | — | 0.004 |
+| Dataset and quantity | Role | Rows |
+|:--|:--|--:|
+| Hartono 2021 loaded total pressure | fitted | 47 |
+| Hartono 2013 binary total pressure | fitted | 26 |
+| Hartono 2013 vapor AMP mole fraction | fitted | 26 |
+| Ciftja 2014 carbamate / analytical AMP | fitted | 57 |
+| Kundu 2003 CO₂ partial pressure | not fitted | 51 |
+| Tong 2012 loaded total pressure | not fitted | 40 |
+| Tong 2012 unloaded baseline pressure | not fitted | 5 |
+| Hartono 2021 supplemental total pressure | not fitted | 18 |
 
-The ranking is the maximum absolute fractional change of a Kundu pressure
-for a one-SE marginal move (bound coordinates: the first inward profile step
-with the rest refitted); the two perturbation types are not on a common
-scale. The AMPH⁺ diameter and AMPH⁺–water $k$ dominate but are strongly
-correlated (0.96), as are the AMPH⁺–water $k$ and its slope (0.98) and the
-AMP–water $k$ and its slope (0.93).
+The [270-row input table](inputs/retransfer-344/observation-rows.csv) retains source identities, conditions, roles and range marks.
+No row is excluded for temperature.
+All reaction laws use the calculation interval 298.15–393.20 K, covering every observation, including the 23 loaded Tong rows above the AMP dissociation range.
+The range marks mean the following:
 
-Profiles (fix one coordinate, refit the rest; Δcost from 61.730):
+| Law | Source range / K | Evidence meaning |
+|:--|:--|:--|
+| AMP dissociation | 293.12–353.22 | Measured dissociation constants; Hamborg and Versteeg 2009, Table 16 |
+| Carbamate hydrolysis | 313.15–373.15 | Model-derived source estimates; Xu et al. 1992, Table 2 and Eqs. 7–11, not direct reaction-law measurements |
+| Shared R1–R3 | 273.15–498.15 | Source-correlation range |
 
-| Fixed coordinate | Step (fraction of interval) | Fixed value | Δcost |
-|:--|--:|--:|--:|
-| AMPCOO⁻ diameter / Å | +0.01 / +0.05 / +0.10 | 5.332 / 5.379 / 5.438 | 0.0009 / 0.0044 / 0.0087 |
-| Enthalpy shift / J mol⁻¹ | +0.01 / +0.05 / +0.10 | −4900 / −4500 / −4000 | 0.0063 / 0.032 / 0.064 |
-| AMPH⁺–CO₂ $k$ | −0.10 / −0.05 / −0.01 | 0.555 / 0.655 / 0.735 | 2.81 / 0.66 / 0.025 |
-| AMPH⁺–CO₂ $k$ | +0.01 / +0.05 / +0.10 | 0.775 / 0.855 / 0.955 | 0.024 / 0.56 / 1.98 |
+273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage.
+The shared flags follow the source-range record from [#341](https://github.com/tannerpolley/Amine-Thermodynamics/issues/341), merged in PR #355; they do not use Part I’s narrower calculation declaration as a measured range.
+The exact declared limits apply to the retained source temperatures: for example, 313.0 K lies below 313.15 K and 373.2 K lies above 373.15 K.
+The hydrolysis flags therefore must not be described as fractions outside a measured range.
 
-All 12 profile fits converged. The diameter and enthalpy shift are almost
-flat inward from their limits (Δcost <0.07 over 10% of the interval); the
-AMPH⁺–CO₂ $k$ is the only formerly bound coordinate with a clear interior
-minimum.
+Of 213 reactive observation entries, AMP dissociation has 172 inside (80.75%) and 41 outside (19.25%); shared R1–R3 have all 213 inside their source-correlation range.
+Hydrolysis has 87 inside (40.85%) and 126 outside (59.15%) its source-estimate range.
+The remaining 57 binary entries do not use reaction laws.
+The [range coverage record](results/retransfer-344/campaign/range-coverage.json) also separates fitted, not fitted and grid entries.
+The 1,440 grid entries have 800 inside (55.56%) and 640 outside (44.44%) the measured AMP dissociation range.
+Across all 1,653 reactive searched entries, the corresponding counts are 972 inside (58.80%) and 681 outside (41.20%); the 57 binary entries remain in the search with reaction not used.
 
-### Limits and evidence type
+## Fits, projection and sensitivity
 
-This is a calibration refit plus held-out prediction with numerical
-verification, not physical validation. The scored endpoint replays its
-cost within 7.4×10⁻¹³; the #243-endpoint restart reproduces the old cost
-within 3×10⁻¹⁶; all calibration, Kundu, perturbed and Tong states are
-available at requested tolerance; inherited phase trials report no dense,
-ambiguous or unresolved result on the scored endpoint's calibration states
-(gas outcomes were not retained for these) and no dense, gas, ambiguous or
-unresolved result on the Kundu states (finite searches, not a stability
-proof). One old-$k$ start stopped at its iteration
-limit; step 3 uses the converged start (costs agree within 6×10⁻⁷). Bands
-exclude model discrepancy and measurement error. Kundu reports no combined
-CO₂ partial-pressure uncertainty, so no uncertainty-normalized test is made.
-Files named `adopted` under `results/refit-306/uncertainty/` follow the #307
-script's naming; nothing is adopted.
+Both original carbamate starts, 5.31999516340193 and 5.3 Å, were projected onto the owner's F2 floor of 5.34799141560911 Å before fitting.
+The projection preserves every other coordinate and each completed reaction law.
+Its replay costs are 229.2372090370 and 3663.1057795347, each with all 156 fitted rows available.
+The 3.5 Å sensitivity changes the lower bound and retains these projected starts.
 
-Reproduce from the repository root with the project interpreter:
-`agent-heavy env PYTHONPATH=src OMP_NUM_THREADS=1 python analyses/amp_transfer/refit_306.py`
-(then `old-k` and `kundu-steps` arguments), then
-`python analyses/mea_parameter_bundle/scripts/uncertainty_307.py AMP` and
-`python analyses/amp_transfer/present.py`. [Summary](results/refit-306/summary.json),
-[Kundu rows](results/refit-306/kundu-pressures.csv),
-[per-step Kundu rows](results/refit-306/steps/),
-[uncertainty](results/refit-306/uncertainty/) and the fitted endpoints
-`inputs/redesign/refit-306-*-endpoint.json` retain the calculation. Engine
-wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
-Independent delivered-result review (cse:review, read-only reviewer) returned
-**Supported** for commit `0a6b851`: every number in this section was
-recomputed from the retained files, three Kundu rows and the 156 calibration
-predictions replayed bit-identically on the pinned wheel, and the standard
-errors and bands were recomputed from the Jacobian. Its four wording defects
-are corrected here. Nothing is adopted or promoted for manuscript use.
+| Case | Start | Weighted fitted cost | Iterations | Termination | Carbamate segment and Born diameter / Å |
+|:--|--:|--:|--:|:--|--:|
+| campaign | 0 | 61.700038373203 | 55 | function tolerance | 6.5 |
+| campaign | 1 | 61.700038374485 | 52 | function tolerance | 6.5 |
+| sensitivity-3.5 | 0 | 61.803541499830 | 29 | function tolerance | 3.5 |
+| sensitivity-3.5 | 1 | 61.700038374480 | 52 | function tolerance | 6.5 |
 
-## Frozen #243 working fit (#304)
+Each fit ended on the native relative function tolerance $10^{-10}$ without a continuation.
+The two main costs differ by $1.28\times10^{-9}$ and are reported as tied within the native relative stopping tolerance: cost × $10^{-10}$ is $6.17\times10^{-9}$.
+The reporting decision retains the lower-cost ordering and does not change the shared route.
+Both main endpoints put the carbamate diameter at its 6.5 Å upper bound and the total hydrolysis enthalpy shift at its −5000 J/mol lower bound.
+The sensitivity start 0 reaches the 3.5 Å lower bound at higher cost; sensitivity start 1 reaches 6.5 Å with essentially the main cost.
+These local solutions do not establish a global optimum or identify a physical ion size.
+Full [cost histories and termination messages](results/retransfer-344/declared-start-fit-summary.json) are retained.
+Final selection awaits the required penalty series.
+Conditional standard errors below apply specifically to the provisional unpenalized start-0 endpoint.
 
-### Result and intended use
+## Measured observations and provisional model curves
 
-The frozen cation-A, set-1, fitted-slope working fit predicts all **51 Kundu
-2003 CO₂ partial pressures** with mean absolute relative error **21.886%**
-using the currently adopted #255 shared records. It meets the registered
-$E_p\le30\%$ overall target. Mean signed relative error is **−15.101%**:
-pressure is underpredicted on average. The 323 K isotherm remains poorly
-represented, and the 3.4 mol/L stock is a near-miss at **31.768%**, only
-1.768 percentage points above the reference target. The registered test is
-overall; subgroup errors are descriptive and introduce no new acceptance rules.
+![All 213 reactive observations against 620 model curve evaluations across 20 source-temperature/stock series. Open circles and solid lines are inside all applicable declared ranges; diamonds and dashed lines are outside at least one range. Pressure axes are logarithmic and in kPa; carbamate fraction is dimensionless. Curves use the unpenalized start-0 homogeneous solution. Finite searches detect liquid descents, so the curves do not establish stable phase equilibrium. No uncertainty bands are shown.](results/retransfer-344/campaign/measured-model.png)
 
-This is a frozen-parameter prediction against a held-out experimental campaign,
-with numerical verification. It is a working fit, not a validated parameter set
-or an absorber qualification. The owner authorized this test in
-[#304](https://github.com/tannerpolley/Amine-Thermodynamics/issues/304), overriding
-#243's earlier adoption stop. No refit, bound change or manuscript promotion
-was made. Issue #259 owns any manuscript decision.
+The [curve values](results/retransfer-344/campaign/curve-values.csv) retain units and each law's range mark.
+The [prediction rows](results/retransfer-344/campaign/data-rows.json) retain all 270 observation predictions, including the 57 binary entries that are not plotted against loading.
+All 270 predictions and all 620 curve evaluations are available.
 
-### Method, inputs and shared records
+Relative deviation is $100\langle |y_\mathrm{calc}/y_\mathrm{obs}-1|\rangle$; signed bias drops the absolute value.
+The following table separates AMP dissociation coverage and compares the same rows with the previous F0 model, without refitting F0.
+That previous model is the retained `refit-306-floor` endpoint on F0, with its original Born and shared parameters; this comparison widens its calculation interval to score the full table without changing the frozen historical studies.
+Positive bias means overprediction.
+NMR fraction errors are also shown in absolute dimensionless units because relative errors emphasize small fractions.
 
-Kundu, Mandal and Bandyopadhyay (2003), DOI
-[10.1021/je0201626](https://doi.org/10.1021/je0201626), Tables 1–3 p.790,
-reports 18, 25 and 30 mass% stocks (nominal 2.0, 2.8 and 3.4 mol/L),
-303–323 K, loading 0.412–0.966 mol CO₂/mol AMP and measured partial pressures
-3.20–94.0 kPa. The 2.0 mol/L stock has only a 303 K isotherm. The existing
-[source admission](source-admission.md) establishes zero identical calibration
-rows. The nine-species reacting bubble calculation, stock water/AMP feeds,
-Hamborg protonation and Hsieh dielectric inputs are reused unchanged.
+| Set / unit | Role | AMP dissociation mark | Rows | F2 relative deviation / % | F2 bias / % | F0 relative deviation / % | F0 bias / % |
+|:--|:--|:--|--:|--:|--:|--:|--:|
+| binary / Pa | fitted | reaction not used | 26 | 1.143 | +1.099 | 1.146 | +1.095 |
+| binary / dimensionless | fitted | reaction not used | 26 | 3.681 | +2.008 | 3.728 | +1.938 |
+| hartono-2021-supplemental / Pa | not fitted | outside | 18 | 28.131 | -28.131 | 27.922 | -27.922 |
+| kundu / Pa | not fitted | inside | 51 | 44.070 | +38.166 | 42.847 | +37.791 |
+| loaded-pressure / Pa | fitted | inside | 47 | 10.364 | -1.214 | 10.333 | -0.900 |
+| nmr / dimensionless | fitted | inside | 57 | 27.442 | +4.887 | 26.302 | +5.066 |
+| tong / Pa | not fitted | inside | 17 | 29.169 | +8.406 | 28.663 | +8.114 |
+| tong / Pa | not fitted | outside | 23 | 27.418 | -27.418 | 27.365 | -27.365 |
+| tong-baseline / Pa | not fitted | reaction not used | 5 | 3.646 | +2.473 | 3.624 | +2.466 |
 
-The [#243 design](https://github.com/tannerpolley/Amine-Thermodynamics/issues/243)
-defines $E_p=100\,N^{-1}\sum_i|p_{i,calc}/p_{i,obs}-1|$. Signed bias uses the
-same relative errors without the absolute value. Every row has equal weight
-in these reporting metrics. The loading envelope evaluates $0.98\alpha$ and
-$1.02\alpha$ at fixed temperature and unloaded stock, without refitting or
-subtracting the sensitivity from $E_p$.
+For all 57 fitted NMR fractions, mean absolute error is 0.00556917 and mean signed error is −0.000450594; F0 gives 0.00531616 and −0.000447815.
+Kundu pressure deviation rises from 42.85% on F0 to 44.07% on this unpenalized F2 endpoint, with bias +38.17%.
+No agreement threshold is attached to these deviations.
+The [complete range-separated table](results/retransfer-344/campaign/range-deviations.csv) reports every nonempty set separately against each of R1, R2, R3, AMP dissociation and hydrolysis, with counts, available counts, absolute deviation and signed bias for both models.
+Repeated rows across range names are different partitions of the same observations, not independent data.
 
-Both #243 starts reached the same local endpoint: cost difference
-$1.63\times10^{-9}$, largest scaled-coordinate difference $1.05\times10^{-4}$,
-and largest relative calibration prediction difference $1.10\times10^{-5}$.
-Start 1 (`inputs/redesign/redesign-1-A-slope-1-endpoint.json`) and its completed
-carbamate-hydrolysis law are used. These differences do not establish a global
-optimum. The historical fit has 9.919% mean total-pressure error on 47 Hartono
-calibration rows and carbamate-fraction RMS 0.0063738; these are historical
-calibration metrics and were not recomputed under the updated shared records.
+Published comparisons have the role **comparison only**.
+Kundu et al. 2003 reports 14.3% average absolute deviation for its simplified Clegg–Pitzer model with simulated annealing (Table 10 p.794), and 18.0% with Levenberg–Marquardt (Table 11 p.794).
+Those 56-row aggregates mix fitted and not-fitted rows and differ from the 51 retained AMP rows, so they are not same-row scores.
+Hartono et al. 2021 Section 5.2/Figure 6 p.11 compares an existing single-AMP eNRTL model with its 3.0 mol/L AMP pressures, with those measurements not fitted in that paper.
+No numerical deviation for the exact AMP subset was found; the 13.1% Table 24 aggregate concerns AMP/PZ blends and is not used as an AMP-only comparison.
+The [published-model record](results/retransfer-344/published-model-comparisons.json) retains locators, roles and the missing same-row quantities.
 
-The scored version freezes the shared species at the normal MEA endpoint
-SHA-256 `f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97`
-(#255, adopted through #297). All six shared component records are identical
-to #243. Two shared quantities changed:
+The source uncertainty statements provide comparison scales, with observable and basis limits kept explicit:
 
-| Quantity | Historical #243 | Scored current records |
-|:--|--:|--:|
-| HCO₃⁻–water dispersion correction $k$ | 0.72705584775 | 1.0 |
-| Completed R2 coefficient $a$ | 23.58551614210 | 23.87092013090 |
-| Completed R2 coefficient $b$ / K | −11928.05673746 | −12017.43099656 |
+| Observations | Source statement | Limit on this comparison |
+|:--|:--|:--|
+| Hartono 2021 loaded pressures | Table 7: $u(P_T)=0.15$ or 0.20 kPa; $u(\alpha)=0.01$–0.03 mol CO₂/mol AMP | Coverage level for these VLE columns is not established; the factor of two stated for heat tables is not assumed here. The fit retains its project-selected 5% pressure residual floor. |
+| Hartono 2013 binary pressure and vapor AMP fraction | No uncertainty for the retained Table 3 VLE observables was found | The Experimental section's NMR precision and detection statements do not establish uncertainty for these VLE quantities. |
+| Ciftja 2014 NMR | §2.6 pp.321–322: ±0.0002 mole fraction for species-concentration determination from the detection limit; ±0.1% propagated uncertainty in species moles | Neither statement supplies uncertainty or covariance for carbamate / analytical AMP. They are not directly substituted for that ratio's error or fitting scale. |
+| Kundu 2003 CO₂ partial pressures | Experimental section p.790: total-pressure accuracy ±0.2 kPa, temperature ±0.1 K and approximately ±2% solubility error | Combined uncertainty for the derived CO₂ partial pressure and gas-composition uncertainty were not found. Solubility error is a different quantity. |
+| Tong 2012 total pressures | Experimental section p.38: 0.03% of full-scale transducer specification. §2.3 p.41: pressure uncertainty inputs 0.06 kPa below 200 kPa and 1 kPa above 200 kPa; loading uncertainty approximately ±0.006 mol/mol | Instrument specifications and the pressure inputs to loading propagation are not a full uncertainty budget for every pressure row. |
 
-R2 retains $c=-36.7816$, reference temperature 313.15 K and its original
-molality standard state. Shared R1 and R3, shared association records, AMP
-parameters and completed AMP reaction laws remain fixed. The historical
-shared-record version is evaluated separately on the same pinned wheel;
-it gives **43.693%** overall error and **+40.515%** bias. The current version
-was specified before scoring; the two versions were not selected using Kundu.
+The [measurement-uncertainty record](results/retransfer-344/source-measurement-uncertainties.json) retains source attachment hashes, conditions and missing quantities for all 270 rows.
+Residual scales used to fit the model are distinct from these source statements.
+The deviations above are not turned into acceptance thresholds or normalized errors where the observable's combined uncertainty is unavailable.
 
-### Pressure errors
+## Finite stability searches
 
-| Group | Rows | Current $E_p$ / % | Signed bias / % | Historical $E_p$ / % |
-|:--|--:|--:|--:|--:|
-| All | 51 | 21.886 | −15.101 | 43.693 |
-| 303 K | 25 | 14.895 | −5.015 | 53.936 |
-| 313 K | 15 | 19.222 | −12.617 | 48.323 |
-| 323 K | 11 | 41.408 | −41.408 | 14.098 |
-| 2.0 mol/L stock | 7 | 9.441 | −0.808 | 39.596 |
-| 2.8 mol/L stock | 25 | 17.860 | −6.435 | 54.185 |
-| 3.4 mol/L stock | 19 | 31.768 | −31.768 | 31.396 |
+The diagnostic search includes all 270 data entries and 1,440 grid entries. Bubble-observation states use 1.05 times the model bubble pressure; the prescribed-pressure NMR liquids retain 101.325 kPa.
+The grid uses both reactive fitted stocks, water/AMP = 11.5453844366 and 13.5147463874 mol/mol, nine temperatures from 313.15 to 393.15 K in 10 K steps, and 40 loadings from $10^{-5}$ to 0.966 mol CO₂/mol AMP. Each grid composition is searched at 1.05 and 3.0 times its bubble pressure.
+Counts refer to state entries, including repeated observations at identical physical states such as paired binary pressure and vapor-fraction observations.
 
-![Kundu observations (open circles) and frozen predictions (crosses) at measured loadings, separated by stock and colored by temperature. Vertical intervals on predictions are the α ±2% sensitivity, not pressure measurement error bars or confidence intervals. The log scale exposes relative discrepancies at low pressure; no continuous curve was evaluated.](results/kundu/pressure-comparison.svg)
+| Amended main search | Point | Available entries | Unavailable | Native liquid descents, lower bound | Available supplied trials | Unavailable supplied trials | Not-applicable supplied trials |
+|--:|:--|--:|--:|--:|--:|--:|--:|
+| 0 | Start 0 unpenalized, branch rerun | 1710 | 0 | 303 | 5790459 | 0 | 199671 |
+| 1 | Start 0 unpenalized, expanded trials | 1710 | 0 | 303 | 7033515 | 0 | 242535 |
+| 2 | Start 0 penalty 0.01 | 1710 | 0 | 97 | 7033515 | 0 | 242535 |
+| 3 | Start 0 penalty 0.01, expanded trials | 1710 | 0 | 97 | 7431888 | 0 | 256272 |
+| 4 | Start 0 penalty 0.003 | 1710 | 0 | 52 | 7431888 | 0 | 256272 |
+| 5 | Start 0 penalty 0.003, expanded trials | 1710 | 0 | 52 | 7626942 | 0 | 262998 |
+| 6 | Declared start-0 anchor | 1710 | 0 | 0 | 7626942 | 0 | 262998 |
 
-The largest errors all occur at 323 K:
+Every native descent in diagnostic searches 0–6 resolves on the liquid branch; none resolves on the vapor branch. Supplied-negative state counts equal the native descent counts in each search, and all supplied branches are unknown. This overlap does not justify inferring a supplied trial's branch.
+For unpenalized start 0, the 303 native descending entries comprise 12 data and 291 grid entries; every one lies above the 353.22 K measured AMP dissociation limit. The lowest temperature is 363.15 K. Their interpretation is conditional on the extrapolated dissociation law; their location does not establish extrapolation as the cause.
+The [branch identity check](results/retransfer-344/classification-373-checks.json) reproduces the historical 303 state keys without relabelling old witnesses that lack a resolved branch.
 
-| Row identity | Stock / mol L⁻¹ | Loading | Observed / kPa | Predicted / kPa | Signed error / % |
-|:--|--:|--:|--:|--:|--:|
-| kundu-2003:46 | 3.4 | 0.412 | 5.250 | 1.972 | −62.439 |
-| kundu-2003:50 | 3.4 | 0.781 | 88.200 | 42.825 | −51.445 |
-| kundu-2003:26 | 2.8 | 0.430 | 4.620 | 2.254 | −51.206 |
-| kundu-2003:48 | 3.4 | 0.623 | 22.300 | 10.986 | −50.735 |
-| kundu-2003:47 | 3.4 | 0.532 | 9.890 | 5.274 | −46.673 |
+Supplied reactive compositions at the 57 binary entries are not applicable rather than unavailable. Those entries' optimized searches are available; an inapplicable trial supplies no stability evidence.
+Every later search evaluates earlier native resolved AMP split compositions from AMP's own [amended split record](results/retransfer-344/campaign-373/split-record.json), shared with the sensitivity case. No MEA split record is used.
+A negative supplied TPD/RT is sufficient to mark its state not stable, regardless of whether a minimum is resolved. The [per-search supplied-negative reports](results/retransfer-344/supplied-negative-summary-373.json) retain the most negative trial at each affected state, its unknown branch, dimensionless TPD/RT and the actual pressure against the model bubble pressure in Pa. They also count states with any identified liquid-side negative, separately from the branch of the most negative trial.
 
-### Loading sensitivity and measurement uncertainty
+Only native resolved liquid descents trigger the amended penalty. Its deduplicated compressed set contains 1,906 entries, at both 1.05 and 3.0 times model bubble pressure for every searched composition and temperature. All 3,420 source-to-ratio assignments are retained in the [coverage record](results/retransfer-344/campaign-373/compressed-set-coverage.json).
+The 0.01 and 0.003 start-0 penalty fits converge in 12 and seven iterations respectively, but their initial post-fit searches retain 97 and 52 liquid descents. The expanded checks retain all 97 and 52 respectively. The declared anchor has no descents in its 1,710-entry diagnostic search. The interrupted retreat searched the 1,906-entry compressed set, with intervening screens restricted to earlier affected entries. Its final result remains unavailable.
+The [complete per-search count table](results/retransfer-344/campaign-373/stability-search-counts.csv) reports each completed search separately, including supplied availability, not-applicable trials, descent lower bounds and all reaction-range counts. The [unavailable-evaluation table](results/retransfer-344/campaign-373/unavailable-evaluations.json) preserves six intermediate entry failures and their native causes; negative supplied distances still mark the affected entries not stable. Intermediate search results do not establish a final retreat point.
+Full compressed search 42 returns all 1,906 entries available, zero unavailable and no descents found. Supplied counts are 10,864,848 available, zero unavailable and 365,304 not applicable; the detail inventory verifies every moved file. The route has not yet returned its final retreat point.
+An unavailable search is never counted stable. No finite search proves global phase stability, and an interpolated retreat point does not inherit optimizer convergence or a conditional standard error from an optimized endpoint.
+The [superseded penalty history](results/retransfer-344/superseded-penalties-373.json) preserves earlier whole-set penalty runs and retreats solely as history. They do not satisfy the amended compressed-liquid rule.
 
-For current shared records, **20/51** measured pressures lie inside the
-α ±2% envelope (historical: 8/51). Mean pressure shifts from the nominal
-predictions are −14.744% and +19.105%; individual shifts extend to −30.587%
-and +51.878%. The mean pressure errors with every row at low and high α are
-29.270% and 25.000%, respectively. These are sensitivity summaries, not
-adjusted scores or uncertainty limits. All 102 perturbed predictions per
-version are available and meet their requested numerical tolerance.
+## Retained pure and binary fits
 
-Kundu's Experimental section pp.789–790 reports temperature measurement
-uncertainty ±0.1 K, temperature control ±0.2 K and total-pressure accuracy
-±0.2 kPa. Loading measurement accuracy and reproducibility are within 2%,
-and estimated experimental solubility error is about ±2%. Gas composition
-was measured by chromatography, but the paper supplies no combined CO₂
-partial-pressure uncertainty. The ±2% solubility statement cannot be read
-as a ±2% pressure uncertainty. The original PDF was read and its current
-SHA-256 `48a126350a42180b20cb0fad319c92317112288efdcfa487148cd3a477d87556`
-matches the retained source identity (Zotero parent BRW2JUBY, attachment
-33276JDA).
+The separate pure-AMP and AMP–water prefits are retained and have not been rerun.
+The joint 156-row re-transfer fits the AMP–water intercept and slope among its nine coordinates.
+Pure AMP has $m=4.0761317993$, $\sigma=3.18704540482$ Å, $\epsilon/k_B=237.059921899$ K, $\epsilon^{AB}/k_B=2385.18933647$ K and $\kappa^{AB}=0.03662113158$.
+Retained vapor-pressure deviations are 1.8853% on 15 Klepáčová rows, 1.7698% on nine Belabbaci rows and 1.1848% on 23 Pappa rows.
+The three density residuals are +0.011923, −0.030034 and +0.018162 kg/m³.
+The retained binary fit has $k_\mathrm{ref}=-0.130667483993$ and slope −54.137591524 K.
+Its interaction reference temperature is 313.15 K.
+Its 26 total-pressure rows have relative deviation 1.0462% and bias +0.9834%; its 26 vapor-fraction rows have relative deviation 3.6328% and bias +0.5515%.
+The [binary record](results/binary-dielectric.json) retains these predictions and source observations.
+The [pure summary](results/pure/summary.json) and binary record retain the producing wheel SHA-256 `83ede7d2722d3581603f6e4139c614b8bbfc903ce90609c90b802d46eea77dd6`.
+These are historical fit records; the five pure-AMP parameters remain fixed in this campaign.
+The F0 and provisional F2 binary deviations on the same 52 rows are in the table above.
 
-Loading uncertainty can therefore produce appreciable pressure movement,
-especially near high loading. It helps contextualize near-misses but does
-not remove the systematic 323 K underprediction: even the upper envelopes
-of the five worst rows remain below their measurements. Missing combined
-pressure uncertainty prevents a formal uncertainty-normalized error test.
-The 30% target is the registered engineering criterion, not a measurement
-uncertainty or a published universal accuracy standard.
+## Numerical checks, uncertainty and retained evidence
 
-### Numerical verification, phase trials and limits
+All new re-transfer calculations use Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+The shared file SHA-256 is `4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334`.
+The [input verification](results/retransfer-344/campaign/input-verification.json) checks shared identities, projection-only changes and Born ties.
+F0 reproduces all 156 fitted predictions exactly and its cost to $7.36\times10^{-13}$ relative.
+The four new unpenalized endpoints reload to relative cost errors between $2.85\times10^{-13}$ and $6.24\times10^{-13}$, within the issue's $10^{-8}$ reproducibility limit.
+Input and output range marks follow the declared limits, including every high-temperature row.
+The corrected shared mapping transports the reaction chart with its completed law; cached physical parameters and complete laws are preserved identically.
+The [reconstruction record](results/retransfer-344/campaign/chart-365-reconstruction.json) retains the old and corrected charts and replay checks.
 
-Both versions use Engine merged commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`,
-wheel SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
-The driver checks installed wheel bytes, including native libraries. Runs use
-`agent-heavy` and a process pool sized from `AGENT_HEAVY_CORES`.
+Conditional standard errors at the converged main start-0 unpenalized endpoint were recalculated on `a6aebfa` and passed the differentiation/replay identity check. This point has the lowest fitted-data cost among the three completed start-0 optimizer endpoints; global start selection remains pending.
+At the provisional main start-0 endpoint the residual-variance factor is 0.828188, with seven free coordinates and two active-bound coordinates held fixed.
+They are local linearized quantities conditional on fixed shared parameters, fixed pure-AMP parameters, model structure, residual weights and active bounds.
+The table gives completed-law $a$ in its transported chart and the total hydrolysis enthalpy shift about the original source law.
+Interaction intercepts refer to 313.15 K; their reciprocal-temperature slopes have units K.
+The hydrolysis coefficient $a$ is dimensionless in $\ln K(T)=a+b/T$, with $T$ in K and $b$ in K.
 
-All 51 nominal predictions per version meet the requested tolerance. The
-inherited tangent-plane phase trials ran at all 51 nominal Kundu states
-per version, with 459 trials per version. There was no reported dense descent,
-gas descent, ambiguity or unresolved search. The largest current-state
-equilibrium residual is $4.55\times10^{-13}$. These are finite searches,
-not a global phase-stability proof; perturbed α states were pressure evaluations
-only. The earlier driver deepcopy failure was a Python transport error on a
-native reaction-law object, corrected by copying only the perturbed feed.
-No numerical setting or physical model was changed to recover it.
+| Fitted coordinate | Value | Conditional SE | Unit | Bounds | On bound |
+|:--|--:|--:|:--|:--|:--|
+| AMP-water-k | -0.13040209 | 0.00616473 | dimensionless | [-0.5, 0.5] | no |
+| AMP-water-slope | -55.107523 | 16.2546 | K | [-1000, 1000] | no |
+| AMPH-water-k | -0.25635217 | 0.0215499 | dimensionless | [-0.5, 0.5] | no |
+| AMPH-water-slope | -215.47264 | 82.6918 | K | [-1000, 1000] | no |
+| AMPH-CO2-k | 0.75840445 | 0.0760056 | dimensionless | [-1, 1] | no |
+| AMPH-segment-diameter | 5.7729841 | 0.656281 | angstrom | [4.5, 6.5] | no |
+| AMPCOO-segment-diameter | 6.5 | — | angstrom | [5.3479914, 6.5] | yes |
+| AMP-hydrolysis-a | 11.114486 | 0.245682 | dimensionless | [6.6346367, 11.634637] | no |
+| AMP-hydrolysis-enthalpy-increment | -5000 | — | J/mol | [-5000, 5000] | yes |
 
-Three AMP coordinates remain on their #243 bounds: cation–CO₂ $k=+0.5$,
-carbamate diameter 4.5 Å and enthalpy shift −5000 J/mol. No covariance or
-parameter-confidence interval is available. Fixed pure-AMP, ion analog,
-dielectric and reaction-law assumptions condition these predictions. The
-Xu/Silkenbäumer hydrolysis slope is extrapolated below 313 K under the accepted
-design. Source systematic errors and correlations within stocks/isotherms
-remain; 51 rows are not 51 independent experiments. The loading envelope
-propagates only the specified α perturbation. Tong and supplemental Hartono
-comparisons are outside #304 and were not evaluated.
+The [current conditional information](results/retransfer-344/campaign-373/start-0/uncertainty/conditional-uncertainty.json) and [point identity](results/retransfer-344/campaign-373/start-0/uncertainty/point.json) retain the exact basis, correlations and point hash. No standard errors were computed at an interpolated retreat point.
+The [parameter table](results/retransfer-344/campaign/parameter-table.csv) also includes the five retained pure-AMP values as fixed, with no fitted uncertainty in this campaign.
+These errors do not give uncertainty in a stable two-liquid solution.
+They do not include source systematic error, dependence within a stock or isotherm, reaction-law extrapolation, model discrepancy or competing phase solutions.
+The finite search is not a proof of global phase stability.
+The current evidence supports comparisons of homogeneous solutions and both main start-0 penalty stages, including their full supplied-trial checks.
+Final campaign selection and review of the completed campaign remain open.
+No AMP parameter record has been adopted or promoted for manuscript use.
 
-### Reproduction and evidence
-
-Run `PYTHONPATH=src agent-heavy <project-venv-python> analyses/amp_transfer/kundu.py`
-from this checkout; `present.py` renders retained data without calling Engine.
-
-- [Numerical summary](results/kundu/summary.json): both versions, group errors,
-  bias, envelope counts, phase outcomes and parameter/declaration identities.
-- [Current pressure rows](results/kundu/current-pressures.csv) and
-  [historical pressure rows](results/kundu/historical-pressures.csv): exact plotted
-  and scored pressures plus both α perturbations, all in Pa.
-- `results/kundu/*-states.json`: native prediction diagnostics, phase trials
-  and perturbation statuses/messages, including unavailability if encountered.
-- `inputs/kundu/` and `kundu-*.toml`: immutable per-version parameter and completed
-  reaction-law records bound by hashes; original #243 evidence is unchanged.
-- [Verification](results/kundu/verification.json): frozen-coordinate/shared-record
-  comparisons, independent score reconstruction and numerical availability checks.
-
-Independent cse:review returned **Supported** for commit
-`f6ddef0824f4662b6924d83623406f71015e9b64` against base `79706636`:
-all aggregates and source rows were independently reconstructed, and cold
-replay of the highest-loading and worst-error rows under both versions
-agreed within $10^{-10}$ relative tolerance. The subsequent CSV line-ending
-normalization preserves every parsed value. This notebook has not been
-promoted for manuscript use.
+The canonical declarations are [AMP.json](inputs/retransfer-344/phase-2/AMP.json) and [AMP-sensitivity.json](inputs/retransfer-344/phase-2/AMP-sensitivity.json).
+The shared calculation is `analyses/part_ii.py` from merged main `a6aebfa`; the cached fits and earlier completed searches retain their producing versions.
+`present_retransfer.py` renders retained tables and curves without Engine calls.
+Full old `search-1.json.gz` and the large new raw search files are preserved locally and remain uncommitted.

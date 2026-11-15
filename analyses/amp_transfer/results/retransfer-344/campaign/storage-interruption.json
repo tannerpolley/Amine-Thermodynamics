@@ -1,0 +1,22 @@
+{
+  "reason": "Owner storage-policy stop; no numerical failure inferred from interruption",
+  "terminal_exit_code": 130,
+  "head_before_storage_move": "9a4bef2a9c629f92600083b8d68dc7b326077fd0",
+  "last_completed_search": "campaign/search-66.json",
+  "last_completed_search_sha256": "cb22f6795cdc77dd8868e6136dc0e2c9cfb5a56ec7bac89b0b8df4136ce08b48",
+  "interrupted_search": "campaign/search-67",
+  "interrupted_detailed_files_preserved": 996,
+  "interrupted_search_has_no_complete_state_count": true,
+  "main_start_1_second_penalty_expanded_check": "not completed",
+  "campaign_restarted_after_move": false,
+  "storage_manifest": "search-storage-manifests/summary.json",
+  "local_history_contains_detailed_records": true,
+  "nothing_pushed": true,
+  "shared_route_resume_gap": {
+    "owner": "analyses/part_ii.py:Route.grid",
+    "mechanism": "Search numbering uses len(out.glob(search-*.json)); moving the two oversized historical search JSON files reduces that count",
+    "next_index_under_current_route": 65,
+    "existing_summary_at_that_index": true,
+    "consequence": "Do not resume this route unchanged: it can overwrite an existing search summary. No local workaround or route edit made."
+  }
+}

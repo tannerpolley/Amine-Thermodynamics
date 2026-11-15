@@ -1,0 +1,433 @@
+{
+  "amine": "AMP",
+  "issue": 344,
+  "parent": 337,
+  "phase": "AMP inputs only; execution requires the reviewed and merged #343 shared Part II implementation.",
+  "path_basis": "All paths are relative to the repository root.",
+  "engine": {
+    "commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+    "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
+  },
+  "shared_values": {
+    "path": "analyses/mea_parameter_bundle/results/adoption-340/part-ii-shared-values.json",
+    "sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334"
+  },
+  "shared_parameters": {
+    "path": "analyses/solvent_specification_mea/inputs/endpoint.json",
+    "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+  },
+  "shared_component_ids": [
+    "water",
+    "carbon-dioxide",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "binding": "Replace shared components and pairs between shared components from F2; replace R1–R3 correlations and references from shared_values. Preserve AMP chemistry stoichiometry and standard states. Declare every reaction over calculation_interval_K. Both water-ion pairs must equal shared_values.",
+  "AMP_cation_bicarbonate": "No fitted interaction; do not add one.",
+  "base_declarations": {
+    "path": "analyses/amp_transfer/declarations.toml",
+    "sha256": "0c61cb52945971f980830c0c7b4a889a924efe87cb804d365c90d01bb51726d7"
+  },
+  "caloric": {
+    "path": "analyses/solvent_specification_mea/inputs/caloric.json",
+    "sha256": "d371e5102e6368a51e7db0def4010ac67fa26875b31ee358077ebb904de41efb"
+  },
+  "fitted_coordinates": {
+    "path": "analyses/amp_transfer/inputs/retransfer-344/fitted-coordinates.json",
+    "sha256": "5b7a35e516b4c816e5ed7481af04f744a76a1978043e0faaad142d06030d3b0b"
+  },
+  "starts": [
+    {
+      "name": "retained-endpoint",
+      "parameters": {
+        "path": "analyses/amp_transfer/inputs/redesign/refit-306-floor-endpoint.json",
+        "sha256": "6d26e1e15c89217c7e29ce1d0772aa44285158071fdf4cc1bd0f6e7fb8fb2107"
+      },
+      "reaction_declarations": {
+        "path": "analyses/amp_transfer/inputs/refit-306/kundu-refit-306-declarations.toml",
+        "sha256": "2debcd6983a4729ee02a9f0216a0232b3b3098def2dc9c394f180a6efd127115"
+      },
+      "carbamate_hydrolysis_enthalpy_shift_J_per_mol": -5000.0,
+      "carbamate_segment_diameter_angstrom": 5.31999516340193,
+      "below_F2_floor": true
+    },
+    {
+      "name": "retained-second-start",
+      "parameters": {
+        "path": "analyses/amp_transfer/inputs/redesign/refit-306-2-start.json",
+        "sha256": "5f9512069a491f76c9220e4f48c815a847088e4fa7ee3dfc2110ed3beb753ca8"
+      },
+      "reaction_declarations": {
+        "path": "analyses/amp_transfer/inputs/redesign/refit-306-2-declarations.toml",
+        "sha256": "7ea53dc75a4a337be0213a7c9aa0d45d9306f366787b52518fe4601292c65089"
+      },
+      "carbamate_hydrolysis_enthalpy_shift_J_per_mol": 0.0,
+      "carbamate_segment_diameter_angstrom": 5.3,
+      "below_F2_floor": true
+    }
+  ],
+  "start_admission": "Historical starts are preserved. Both carbamate diameters are below the adopted floor; phase 2 must resolve bound admission before fitting. No projection or new start selected in phase 1.",
+  "reaction_coordinate_basis": "Original hydrolysis law. For completed-law restarts, transport hydrolysis level and enthalpy bounds using each start’s total enthalpy shift, as refit_306.py coordinates(H0) does; never reset the completed law.",
+  "carbamate_floor": {
+    "value_angstrom": 5.34799141560911,
+    "source_component": "carbamate-anion",
+    "source_family": "segment_diameter",
+    "source": {
+      "path": "analyses/solvent_specification_mea/inputs/endpoint.json",
+      "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+    }
+  },
+  "sensitivity": {
+    "carbamate_lower_bound_angstrom": 3.5,
+    "other_coordinates": "Unchanged; repeat both starts."
+  },
+  "ion_diameters": "For each AMP ion, Born and Debye–Hückel diameters equal segment diameter; packing diameter is 0.88 times segment diameter. Tied targets are in fitted-coordinates.json.",
+  "calculation_interval_K": [
+    298.15,
+    393.2
+  ],
+  "reaction_ranges": {
+    "AMP_dissociation": {
+      "interval_K": [
+        293.12,
+        353.22
+      ],
+      "basis": "Measured dissociation constants",
+      "source": "Hamborg and Versteeg 2009, Table 16; Zotero D9KXSKLR/334KGLPV"
+    },
+    "AMP_hydrolysis": {
+      "interval_K": [
+        313.15,
+        373.15
+      ],
+      "basis": "Model-derived source estimates, not direct reaction-law measurements",
+      "source": "Xu et al. 1992, Table 2 and Eqs.7–11; Part II reaction-range table"
+    },
+    "R1_R2_R3": {
+      "interval_K": [
+        273.15,
+        498.15
+      ],
+      "basis": "273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
+    }
+  },
+  "range_marks": "Mark states, never exclude them for temperature. Unloaded binary states do not use the reaction laws. Report each reaction range separately.",
+  "datasets": [
+    {
+      "name": "hartono-2021-calibration",
+      "group": "loaded-pressure",
+      "role": "fitted",
+      "path": "analyses/amp_transfer/inputs/hartono-2021.csv",
+      "sha256": "d1a4173fb586e09ca94eecb197ecd7b7b7e768ec31ab04cbf8ad938a9e57a50c",
+      "template": "loaded-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {
+        "T": [
+          300.0,
+          353.5
+        ]
+      },
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 47
+    },
+    {
+      "name": "hartono-2013-P",
+      "group": "binary",
+      "role": "fitted",
+      "path": "analyses/amp_transfer/inputs/hartono-2013-P.csv",
+      "sha256": "8463c9e43dbcf620a68054f7794c9242b4a99e44fa9a02f439e7ab34e1f69dbf",
+      "template": "binary-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "scale": "scale",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {},
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 26
+    },
+    {
+      "name": "hartono-2013-y",
+      "group": "binary",
+      "role": "fitted",
+      "path": "analyses/amp_transfer/inputs/hartono-2013-y.csv",
+      "sha256": "b97697db2e9279c8e75826cb05f41aea3322db0a429fd3fe8d6ee91a19038717",
+      "template": "binary-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "scale": "scale",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "mole_fraction",
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "V",
+        "species": [
+          "aminomethylpropanol"
+        ]
+      },
+      "weight": "$weight",
+      "filter": {},
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 26
+    },
+    {
+      "name": "ciftja-2014",
+      "group": "nmr",
+      "role": "fitted",
+      "path": "analyses/amp_transfer/inputs/ciftja-2014.csv",
+      "sha256": "943a26cb1bc9c6ea591894d9cc01232690dbd4d6e325fc8ef20d1b16edced327",
+      "template": "loaded-liquid",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "scale": "scale",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "amount_ratio",
+      "arguments": {
+        "observed": "$observed",
+        "form": "difference",
+        "scale": "$scale",
+        "phase": "L",
+        "species": [
+          "carbamate-anion"
+        ],
+        "denominator_phase": "L",
+        "denominator_species": [
+          "aminomethylpropanol",
+          "protonated-aminomethylpropanol",
+          "carbamate-anion"
+        ]
+      },
+      "weight": "$weight",
+      "filter": {},
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 57
+    },
+    {
+      "name": "kundu-2003",
+      "group": "kundu",
+      "role": "not fitted",
+      "path": "analyses/amp_transfer/inputs/kundu-2003.csv",
+      "sha256": "7d8d6e40dfd1dacbb76c5e14166bb93c81f597160e9bceb97e86805ab531044b",
+      "template": "loaded-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "partial_pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio",
+        "phase": "V",
+        "species": [
+          "carbon-dioxide"
+        ]
+      },
+      "weight": "$weight",
+      "filter": {},
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 51,
+      "prior_access": "Seen during development; not independent validation."
+    },
+    {
+      "name": "tong-2012-loaded",
+      "group": "tong",
+      "role": "not fitted",
+      "path": "analyses/amp_transfer/inputs/tong-2012.csv",
+      "sha256": "5855f9b2c6c47d8bcf8cacb30d606f6e0f5cd0338fb070cc75776f84f147dfdf",
+      "template": "loaded-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {
+        "alpha": [
+          1e-06,
+          2.0
+        ]
+      },
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 40,
+      "prior_access": "Seen during development; not independent validation."
+    },
+    {
+      "name": "tong-2012-baseline",
+      "group": "tong-baseline",
+      "role": "not fitted",
+      "path": "analyses/amp_transfer/inputs/tong-2012.csv",
+      "sha256": "5855f9b2c6c47d8bcf8cacb30d606f6e0f5cd0338fb070cc75776f84f147dfdf",
+      "template": "binary-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {
+        "alpha": [
+          0.0,
+          0.0
+        ]
+      },
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 5,
+      "prior_access": "Seen during development; not independent validation."
+    },
+    {
+      "name": "hartono-2021-supplemental",
+      "group": "hartono-2021-supplemental",
+      "role": "not fitted",
+      "path": "analyses/amp_transfer/inputs/hartono-2021.csv",
+      "sha256": "d1a4173fb586e09ca94eecb197ecd7b7b7e768ec31ab04cbf8ad938a9e57a50c",
+      "template": "loaded-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "observed": "observed",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {
+        "T": [
+          353.5,
+          400.0
+        ]
+      },
+      "temperature_domain": [
+        298.15,
+        393.2
+      ],
+      "row_count": 18,
+      "prior_access": "Seen during development; not independent validation."
+    }
+  ],
+  "observation_rows": {
+    "path": "analyses/amp_transfer/inputs/retransfer-344/observation-rows.csv",
+    "sha256": "1793b7941744dbf0de3ed63f3d0e87fc65b370e0d605bb4558c628fa79a9cd1e"
+  },
+  "split_record_path": "analyses/amp_transfer/inputs/retransfer-344/split-record.json",
+  "retained_F0_replay": {
+    "path": "analyses/amp_transfer/results/retransfer-344/F0-replay.json",
+    "sha256": "e1e422a364c1ee3c31e076fe0aa6a4be92ca06e8d32d8b21e638aab778b18bae"
+  },
+  "optimizer": {
+    "maximum_iterations": 60,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 4500
+  },
+  "fixed_pure_and_binary": {
+    "pure": {
+      "path": "analyses/amp_transfer/results/pure/summary.json",
+      "sha256": "ec4564ab5495f8f8cb11b7673ff8163e19dcc39fc349a7550860724d592457ba"
+    },
+    "binary": {
+      "path": "analyses/amp_transfer/results/binary-dielectric.json",
+      "sha256": "0f77379dafd6fb8edd036feb0ae77593062884e18b6497ee09b5b9b2763a9e24"
+    },
+    "use": "Retain pure-AMP and AMP–water fit deviations; do not refit these studies. AMP–water coordinates in the reactive objective remain fitted as in #306."
+  }
+}

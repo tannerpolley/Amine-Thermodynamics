@@ -1,0 +1,86 @@
+{
+  "source": "search-58.json",
+  "source_sha256": "b0664da2f99c4ef5c229f3d661ea3bf2d7685b9cafafaf35a0e5d629c5a2b5c5",
+  "conditions": "stability-state-ranges.json",
+  "meaning": "Finite-search split counts are lower bounds; retreat screening subsets do not establish full-set stability",
+  "units": {
+    "T_K": "K",
+    "value": "dimensionless tangent-plane distance divided by RT",
+    "raw_minimum": "dimensionless tangent-plane distance divided by RT",
+    "uncertainty": "native numerical error estimate in the normalized distance; not measurement or model uncertainty",
+    "pressure_Pa": "Pa; native pressure reference (bubble pressure where present), not the scaled search-parent pressure",
+    "supplied_parent_pressure_Pa": "Pa; supplied-trial evaluation parent pressure where present"
+  },
+  "counts": {
+    "available": 1,
+    "unavailable": 0,
+    "descents_lower_bound": 0,
+    "supplied_available": 3146,
+    "supplied_unavailable": 0,
+    "supplied_not_applicable": 0
+  },
+  "descending_entries_by_source_range": {},
+  "descending_entry_temperature_interval_K": null,
+  "rows": [
+    {
+      "key": "grid:{'water': 11.545384436618988, 'aminomethylpropanol': 1.0}:393.15:0.65:1.05",
+      "state": {
+        "key": "grid:{'water': 11.545384436618988, 'aminomethylpropanol': 1.0}:393.15:0.65:1.05",
+        "T": 393.15,
+        "stock": {
+          "water": 11.545384436618988,
+          "aminomethylpropanol": 1.0
+        },
+        "a": 0.65,
+        "c": 1.05
+      },
+      "T_K": 393.15,
+      "outside_ranges": {
+        "carbamate-hydrolysis": true,
+        "R1": false,
+        "AMP-dissociation": true,
+        "R2": false,
+        "R3": false
+      },
+      "data_role": null,
+      "seconds": 4.782541460997891,
+      "status": "Available",
+      "message": "SUCCESS: converged: residual 2.3548714908916519e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.0743676095335394e-10, amplification 0",
+      "available": true,
+      "value": 0.0,
+      "raw_minimum": 2.842170943040401e-14,
+      "uncertainty": 2.1983115427493655e-10,
+      "cause": "",
+      "event": "",
+      "no_descent_in_trial_set": true,
+      "completed": true,
+      "pressure_Pa": 1010239.9295846691,
+      "optimized_available": true,
+      "supplied_available": true,
+      "supplied_parent_pressure_Pa": 1060751.9260639027,
+      "supplied_trial_counts": {
+        "available": 3146,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "details": "search-58/393c6572d302fcbeac450c072bb08994c7435eb0b0a9b5618808ac8abdb96239.json.gz",
+      "descent": false,
+      "supplied_minimum_tpd": 1.1456819493105286e-08
+    }
+  ],
+  "point_definition": {
+    "kind": "shared Route.segment from declared projected start 0 to second penalty endpoint",
+    "anchor_declaration": "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP.json",
+    "anchor_declaration_sha256": "945b3062720230cbce0a3b99749aa1ef8e054aef25a6b2ce6f615643a461e2b7",
+    "anchor_start_index": 0,
+    "endpoint_file": "start-0/penalized-1/stage-0/parameters.json",
+    "endpoint_sha256": "a9e4bea603f7abaf404f056b53a0c58bdf4e738be81e3a4e28f3e2fc84e9e57f",
+    "fraction": 0.6624609375000001
+  },
+  "point_association": "Verified from the completed native start-0 retreat trace and the shared interpolation method; see start-0/retreat-searches.json",
+  "supplied_input_trial_count": 3146,
+  "native_resolved_witness_phase_kind_counts": {},
+  "native_trace_sha256": "137ef2f04a90f9acb59b034eedefa790b032cdc5d0ab839e8a0938f50110f29c",
+  "native_trace_index": 42,
+  "search_scope": "screening subset"
+}

@@ -1,0 +1,24 @@
+{
+  "scope": "One bounded process-state inspection after prolonged absence of visible completion messages; later inspection of retained summaries established that searches had continued completing. No interruption.",
+  "parent_pid": 245107,
+  "workers": [
+    {
+      "pid": 1221992,
+      "state": "R",
+      "cpu_ticks": 172273
+    },
+    {
+      "pid": 1221993,
+      "state": "R",
+      "cpu_ticks": 172806
+    },
+    {
+      "pid": 1221996,
+      "state": "R",
+      "cpu_ticks": 173092
+    }
+  ],
+  "kernel_wait_channel": "0 for each inspected worker",
+  "interpretation": "All three workers were runnable at inspection; no evidence of a fully blocked worker pool. This is not a throughput measurement or evidence of numerical convergence.",
+  "action": "Continue the existing job unchanged"
+}
