@@ -1,0 +1,116 @@
+{
+  "diagnosis": "native trial optimizer converged; stability evidence unresolved because no positive donor was available",
+  "retained_mapping": {
+    "stability_prediction_entries": 9592,
+    "compressed_declaration_entries": 9298,
+    "leading_fitted_prediction_entries": 294,
+    "failed_absolute_prediction_index": 838,
+    "correct_compressed_declaration_index": 544,
+    "correct_declaration_key": "compressed:Kamps--46:problem:1.05",
+    "unoffset_grid_declaration_838": "compressed:grid:{'piperazine': 1.0, 'water': 256.9832103617275}:313.15:1e-05:1.05:1.05",
+    "fresh_prediction_on_unoffset_grid_declaration": false
+  },
+  "condition": {
+    "temperature_K": 395.0,
+    "parent_feed_mol": {
+      "water": 27.276841984340606,
+      "piperazine": 1.0,
+      "carbon-dioxide": 0.0
+    },
+    "CO2_loading_mol_per_mol_PZ": 0.0,
+    "parent_pressure": {
+      "guess": 212100.0
+    },
+    "bubble_pressure_reference_Pa": 200242.6926331956,
+    "stability_pressure_ratio": 1.05,
+    "trial_pressure_Pa": 210254.82726485538,
+    "declared_vapor_support": [
+      "water",
+      "carbon-dioxide",
+      "piperazine",
+      "protonated-piperazine-carbamate"
+    ]
+  },
+  "prediction": {
+    "status": "CentralSolveUnavailable",
+    "message": "failed final trial optimizer or undetermined evidence: 15",
+    "stability_available": false,
+    "stability_raw_minimum": -149.25114781341796,
+    "stability_uncertainty": null,
+    "stability_cause": "failed final trial optimizer or undetermined evidence: 15",
+    "unresolved_trials": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "optimizer_success_count": 16
+  },
+  "trial_15": {
+    "seed": "ideal-gas",
+    "phase_classification": "declared trial-vapor; resolved density side unavailable",
+    "density_side_field_exposed": false,
+    "molar_density_mol_m3": 64.30734510915102,
+    "molar_volume_m3_mol": 0.015550323190961567,
+    "optimizer_status": "SUCCESS",
+    "optimizer_message": "converged: residual 2.8421709430400906e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 21 iterations, contraction absent, floor 6.8832352377179386e-19, amplification 0",
+    "optimizer_iterations": 21,
+    "optimizer_max_abs_row_residual": 2.842170943040401e-14,
+    "evidence": "negative_plane_without_positive_donor",
+    "donor": null,
+    "resolved_descent": false,
+    "finite_split_checks": [],
+    "composition": {
+      "carbon-dioxide": 0.9999999999998849,
+      "water": 1.4414067779759087e-65,
+      "bicarbonate-anion": 0.0,
+      "carbonate-anion": 0.0,
+      "hydronium-cation": 0.0,
+      "hydroxide-anion": 0.0,
+      "piperazine": 2.051987044936781e-68,
+      "piperazinium": 0.0,
+      "piperazinediium": 0.0,
+      "piperazine-carbamate": 0.0,
+      "piperazine-dicarbamate": 0.0,
+      "protonated-piperazine-carbamate": 1.152133159363973e-13
+    },
+    "quantities": {
+      "association_energy_estimate_over_rt": 6.990271770263866e-19,
+      "association_residual": 1.6472184286297693e-83,
+      "association_site_pivot_ratio": 1.0002583945475916,
+      "association_site_rank": 6.0,
+      "charge_residual": 0.0,
+      "euler_defect_over_rt": 0.0,
+      "g_over_rt": -107.44802673015468,
+      "gradient_floor_max_si_columns": 6.883235237717938e-19,
+      "normalization_residual": 8.31882827685594e-17,
+      "pressure_row": -1.7236703924012918e-14,
+      "raw_objective_over_rt": -149.25114781341884,
+      "reconstruction_l1": 5.995204332976527e-15,
+      "summation_estimate_over_rt": 6.804100389727431e-13,
+      "tpd_over_rt": -149.25114781341796,
+      "trial_dual_over_rt": -149.25114781341793,
+      "trial_identity_defect_over_rt": -2.842170943040401e-14,
+      "volume_m3_per_mol": 0.015550323190961567
+    },
+    "resolved_density_branch": "unknown"
+  },
+  "issue_10_comparison": {
+    "overlap": "Both have a converged Vapor-labelled trial with trace neutral protonated carbamate and unavailable stability; this is a declared trial kind, not an established density branch.",
+    "difference": "This case has no donor and no finite-split checks. Issue #10 describes a resolved donor slope and inconclusive finite-Gibbs split checks. Mechanistic identity is not established.",
+    "source": "https://github.com/tannerpolley/epcsaft/issues/10"
+  },
+  "source_native_prediction_sha256": "73f2b4e1bc8d7253308b8bdf34c4ccc39685c4780310e77d6b881c78657ee48b"
+}
