@@ -6,15 +6,54 @@
   "parameters_on_bounds": 1,
   "stability": {
     "supplied_trial_counts": {
-      "available": 16903236,
-      "unavailable": 3724,
+      "available": 32807892,
+      "unavailable": 7228,
       "not_applicable": 0
     },
     "states": 9080,
     "available": 9074,
     "descent": 499,
     "minimum_tau": -0.32980698991838153,
-    "supplied_minimum_tpd": -0.3298069899183247
+    "supplied_minimum_tpd": -0.3298069899183247,
+    "branches": {
+      "data": {
+        "native": {
+          "liquid": 29,
+          "vapor": 3,
+          "mixed": 0,
+          "unresolved": 0,
+          "none": 408
+        },
+        "supplied": {
+          "liquid": 0,
+          "vapor": 0,
+          "mixed": 0,
+          "unresolved": 37,
+          "none": 403
+        }
+      },
+      "grid": {
+        "native": {
+          "liquid": 405,
+          "vapor": 0,
+          "mixed": 0,
+          "unresolved": 0,
+          "none": 8235
+        },
+        "supplied": {
+          "liquid": 0,
+          "vapor": 0,
+          "mixed": 0,
+          "unresolved": 462,
+          "none": 8178
+        }
+      }
+    },
+    "liquid_liquid_splits": {
+      "data": 29,
+      "grid": 405
+    },
+    "count_basis": "Route-keyed entries, not distinct physical states"
   },
   "unavailable_searches": 6,
   "pressure_deviations": {
@@ -65,9 +104,10 @@
     }
   },
   "split_counts_are_lower_bounds": true,
-  "resolved_density_branch": "unresolved; archived witnesses omit density_side",
-  "penalty_acceptance": "incomplete; rerun on the #373 compressed-liquid set",
-  "open_engine_dependency": "to be filed; separate numerical identity limit",
+  "supplied_negative_entries_not_stable": 499,
+  "resolved_density_branch": "native branches retained; supplied-negative branches unknown",
+  "penalty_acceptance": "incomplete: initial evaluation unavailable; no optimized endpoint",
+  "open_engine_dependency": "https://github.com/tannerpolley/epcsaft/issues/23; conditional dependency",
   "route_absolute_tolerance_ties": [
     "start-0"
   ],

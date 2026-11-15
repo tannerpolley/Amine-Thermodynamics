@@ -82,9 +82,12 @@ summary['pressure_deviations'] = {r['group']: dict(role=r['role'],rows=r['rows']
                                   for r in read(OUT / 'deviations.json')
                                   if r['unit']=='Pa' and r['range_name']=='R1' and r['outside_range'] is False}
 summary['split_counts_are_lower_bounds'] = True
-summary['resolved_density_branch'] = 'unresolved; archived witnesses omit density_side'
-summary['penalty_acceptance'] = 'incomplete; rerun on the #373 compressed-liquid set'
-summary['open_engine_dependency'] = 'to be filed; separate numerical identity limit'
+summary['stability'] = {k:v for k,v in read(OUT / 'classified-start-0-summary.json')['grid'].items() if k not in ('unavailable','unavailable_searches')}
+summary['stability']['count_basis'] = 'Route-keyed entries, not distinct physical states'
+summary['supplied_negative_entries_not_stable'] = len(read(OUT / 'classified-start-0-supplied-negative.json')['states'])
+summary['resolved_density_branch'] = 'native branches retained; supplied-negative branches unknown'
+summary['penalty_acceptance'] = read(OUT / 'compressed-penalty-outcome.json')['penalty_acceptance']
+summary['open_engine_dependency'] = 'https://github.com/tannerpolley/epcsaft/issues/23; conditional dependency'
 summary['route_absolute_tolerance_ties'] = summary.pop('ties')
 summary['unpenalized_start_comparison'] = read(OUT / 'unpenalized-start-cost-comparison.json')
 (OUT / 'summary-row.json').write_text(json.dumps(summary,indent=2)+'\n')
