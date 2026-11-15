@@ -407,11 +407,12 @@ ignored `analyses/mdea/results/runs/343/search-0/`: 69,099 files containing
 [retention record](results/stage-b-f2/search-0-retention.json) retain that check.
 `search-N.json` summaries stay in their original location to preserve route
 numbering. The native
-`search-0.json` is 71,195,725 bytes, above the 20 MB push limit. Its publication
-format awaits the owner's decision; it has not been added to git. An exact
-8,447,368-byte gzip summary copy is prepared but also remains untracked pending
-that decision. It is a compressed search summary, separate from per-state
-detail files.
+`search-0.json` is 71,195,725 bytes, above the 20 MB push limit, and remains
+untracked in its original location. The exact 8,447,368-byte
+[compressed summary](results/stage-b-f2/search-0-summary.json.gz) is retained
+in git. Its decompressed SHA-256 equals the native summary's SHA-256. This
+preserves the summary and route numbering while excluding per-state detail
+files and oversized files from git.
 
 ## Required numerical checks and remaining limits
 
