@@ -124,7 +124,19 @@ All 440 predictions are available at the selected start 0 point. The F0 replay u
 
 Ermatchkov et al. 2006, DOI [10.1021/je0601917](https://doi.org/10.1021/je0601917), Table 5 p.1793, reports Pitzer set I on the same 52 partial pressures as **not fitted**: 18.4% AARD and 3.7 kPa mean absolute error. Set II uses these rows as **fitted**: 5.1% and 0.72 kPa. Signed bias is not reported. The F2 values are 20.9653% and 4.40667 kPa; previous F0 gives 21.9428%. These differing data roles prevent treating the set II score as an independent prediction comparison.
 
-On corrected Kamps data with $p>0.2$ MPa and no solids, that table reports 3.0% AARD for both fitted Pitzer sets, and mean absolute errors 100 and 86 kPa. The published aggregate has its own selection, and its reprint changes one pressure from the original 5.063 to 5.062 MPa. It is not asserted to be byte-identical to the 94-row retained comparison. No published aggregate on the exact 62 Hilliard rows was identified. Ermatchkov 2003 fitted its Debye–Hückel source laws to the NMR data; no same-group-fraction aggregate is invented. [published-models.json](results/retransfer-345/published-models.json) retains these qualifications.
+On corrected Kamps data with $p>0.2$ MPa and no solids, that table reports 3.0% AARD for both fitted Pitzer sets, and mean absolute errors 100 and 86 kPa. The published aggregate has its own selection, and its reprint changes one pressure from the original 5.063 to 5.062 MPa. It is not asserted to be byte-identical to the 94-row retained comparison. No published aggregate on the exact 62 Hilliard rows was identified.
+
+The same paper reports numerical NMR comparisons. Its opening paragraph on p.1792 gives the earlier Debye–Hückel model’s amount deviations; the speciation paragraph below Figure 4 on p.1793 gives both Pitzer sets. The quantities are the amount of (piperazine carbamate + protonated piperazine carbamate) and the amount of piperazine dicarbamate in a solution based on 1 kg water.
+
+| Published model | NMR data role in the model | Mono mean absolute relative deviation (%) | Di mean absolute relative deviation (%) | Mono mean absolute amount error (mol per 1 kg water) | Di mean absolute amount error (mol per 1 kg water) |
+|---|---|---:|---:|---:|---:|
+| Debye–Hückel, Ermatchkov 2003, quoted in 2006 p.1792 | fitted reaction constants | 9.9 | 25.5 | 0.024 | 0.014 |
+| Pitzer set I, 2006 p.1793 | fitted through inherited NMR reaction constants | 14.6 | 24.5 | 0.036 | 0.014 |
+| Pitzer set II, 2006 p.1793 | fitted through inherited NMR reaction constants | 11.4 | 25.8 | 0.031 | 0.014 |
+
+Pages 1791–1792 explain that the carbamate reaction constants were determined from the earlier NMR speciation measurements with the modified Debye–Hückel term and zero interaction parameters, and adopted in the Pitzer models without re-evaluation. Set I’s interaction parameters use corrected high-loading gas-solubility data; set II uses low- and high-loading gas-solubility data. Neither interaction-parameter adjustment is a new fit to NMR, but both models retain NMR-fitted reaction constants. These NMR comparisons are therefore not independent validation.
+
+The published percentages concern species-group amounts; this analysis reports group fractions per analytical PZ. The retained F2 mono/di fraction AARDs are 9.45734% / 21.0626%, and the previous F0 values are 9.39454% / 21.1797%, on 121 / 111 observations. The published passages do not identify the exact aggregate row selection or handling of missing/zero group values, so these are reported as available literature aggregates, not asserted to be identical-row reductions. Their absolute errors remain on the original mol per 1 kg water basis; they are not converted into fraction errors or compared numerically with the retained fraction MAEs. [published-models.json](results/retransfer-345/published-models.json) retains all six group/model records, their data-use qualifications, page locators and the verified source PDF hash.
 
 ## Parameter values and conditional uncertainty
 
