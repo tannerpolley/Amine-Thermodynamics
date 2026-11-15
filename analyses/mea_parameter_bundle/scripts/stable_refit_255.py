@@ -160,8 +160,10 @@ def _init(mapping, trials=None, route=None):
 def _measure(state):
     started = time.monotonic()
     supplied, not_applicable, repeated, unique = [], [], [], {}
+    metadata = {}
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
+        if _ROUTE: metadata = _ROUTE.stability_metadata(_SPEC,item)
         support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
         support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
         for witness in (_TRIALS.get(state['key'], []) if isinstance(_TRIALS, dict) else _TRIALS):
@@ -204,6 +206,7 @@ def _measure(state):
             out['available'] = out['optimized_available'] and out['supplied_available']
     except Exception as error:
         out = dict(status='Exception', message=f'{type(error).__name__}: {error}', available=False)
+    out.update(metadata)
     if supplied or not_applicable:
         out['not_applicable_supplied_trials'] = not_applicable
         available = sum(t['evidence']=='evaluated' for t in out.get('supplied_trials',[]))
@@ -596,6 +599,9 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         stability = added + [(stability_row(spec, x, scale), 1.) for x in enforced]
         started = time.monotonic()
         native, report, _ = spec.fit(stability)
+        if route and stability:
+            for payload,(item,_) in zip(report['stability_predictions'][-len(stability):],stability,strict=True):
+                if payload is not None: payload.update(route.stability_metadata(spec,item))
         report.update(workers=spec.spec['optimizer']['workers'], maximum_elapsed_time_seconds=spec.spec['optimizer']['maximum_elapsed_time_seconds'], scale=scale, declared=declared, start_shifts=shifts, wall_s=time.monotonic() - started, statuses=[x.name for x in native.statuses],
                       enforced=[x['key'] for x in enforced], enforced_sources={x['key']:x['sources'] for x in enforced if 'sources' in x}, penalty_unavailable=getattr(route,'penalty_unavailable',[]), first_numerical_failure=None if native.first_numerical_failure is None else str(native.first_numerical_failure.stop))
         write(f'{rel}/fit-native.json', report)
