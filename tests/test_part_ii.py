@@ -361,8 +361,21 @@ def test_density_branch_overrides_seed_label():
     assert p.density_branch([vapor, liquid])=='mixed'
     assert p.density_branch([dict(kind='Liquid')])=='unresolved'
     route = p.Route.__new__(p.Route)
-    states = [dict(key='NMR', problem='NMR'), dict(key='grid:stock:333.15:.6:1.05', T=333.15),
-              dict(key='grid:stock:333.15:.6:3.0', T=333.15)]
-    copies = route.penalty_states(states)
+    spec = SimpleNamespace(problems={'NMR':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
+                                    'sibling':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
+                                    'different':dict(T=333.15,feed=[1.,2.],reactions=['R2'])})
+    route.stability_row = lambda spec,state,scale: SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    states = [dict(key=name,problem=name) for name in spec.problems]
+    copies = route.penalty_states(states,spec)
     assert len(copies)==4 and all(s['compressed'] for s in copies)
-    assert {(s.get('problem'),s['c']) for s in copies if 'problem' in s}=={('NMR',1.05),('NMR',3.)}
+    assert {s['c'] for s in copies}=={1.05,3.}
+    assert [s['sources'] for s in copies]==[['NMR','sibling'],['NMR','sibling'],['different'],['different']]
+    item = SimpleNamespace(problem=SimpleNamespace(pressure=SimpleNamespace(value=1e5)),pressure_reference=object(),pressure_ratio=3.)
+    prediction = SimpleNamespace(pressure_reference=SimpleNamespace(value=2101051.3059414467))
+    basis = route.pressure_basis(spec,{},item,prediction)
+    assert basis['search_pressure_Pa']==6303153.91782434 and basis['pressure_ratio']==3.
+    assert basis['declared_pressure_Pa'] is None
+    item.pressure_reference = prediction.pressure_reference = None
+    basis = route.pressure_basis(spec,{},item,prediction)
+    assert basis['declared_pressure_Pa']==basis['search_pressure_Pa']==1e5
+    assert basis['pressure_ratio'] is None

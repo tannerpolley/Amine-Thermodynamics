@@ -116,7 +116,7 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
     previous_endpoint = None
     for attempt in range(3):
         if route:
-            report = r.stage_fit(name,attempt,scale,mapping,{},route.penalty_states(enforced) if scale else [],route=route)
+            report = r.stage_fit(name,attempt,scale,mapping,{},route.penalty_states(enforced,route.bind(start)) if scale else [],route=route)
             if not report.get('endpoint_replay_available'):
                 route.write(f'{name}/stage-{attempt}/unavailable.json',report)
                 return previous_endpoint if previous_endpoint is not None else (None, report)
@@ -455,7 +455,7 @@ def candidate(name, start, fixed, fitted, ties, route=None):
                 enforced = route.states(route.bind(start)) if route else r.states()[0]
                 excluded = set() if route else set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
                 r.OUT = OUT
-                r.retreat(name,anchor,chosen,route.penalty_states(enforced) if route else [x for x in enforced if x['key'] not in excluded],shifts=({},{}),route=route,optimizer_report=final_report)
+                r.retreat(name,anchor,chosen,route.penalty_states(enforced,route.bind(start)) if route else [x for x in enforced if x['key'] not in excluded],shifts=({},{}),route=route,optimizer_report=final_report)
                 if route is None:
                     write_call('split-trials.json',r.GRID_TRIALS)
                 path = folder/name/'candidate.json'
