@@ -1,0 +1,73 @@
+{
+  "disposition": "One complete objective-and-derivative evaluation is infeasible with the current required set; stop without penalty fitting.",
+  "required_source_states": 69099,
+  "complete_deduplicated_penalty_rows": null,
+  "complete_penalty_source_count": null,
+  "constructed_prefix_rows": 988,
+  "constructed_prefix_source_count": 689,
+  "construction_wall_seconds": 38.39333623298444,
+  "objective_derivative_evaluation_attempted": false,
+  "objective_derivative_seconds": null,
+  "full_penalty_series_projected_seconds": null,
+  "projection_unavailability": "Required capped state comparison:362 at 288.71 K cannot be converted to a penalty observation; no cost or derivative evaluation ran, so historical counts cannot supply a measured per-evaluation time.",
+  "history_summary": {
+    "#255": {
+      "residual_evaluations": {
+        "records": 5,
+        "median": 24,
+        "minimum": 15,
+        "maximum": 95
+      },
+      "jacobian_evaluations": {
+        "records": 5,
+        "median": 14,
+        "minimum": 10,
+        "maximum": 53
+      },
+      "iterations": {
+        "records": 5,
+        "median": 22,
+        "minimum": 14,
+        "maximum": 90
+      }
+    },
+    "MDEA Part I #298": {
+      "residual_evaluations": {
+        "records": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null
+      },
+      "jacobian_evaluations": {
+        "records": 0,
+        "median": null,
+        "minimum": null,
+        "maximum": null
+      },
+      "iterations": {
+        "records": 4,
+        "median": 11.0,
+        "minimum": 10,
+        "maximum": 17
+      }
+    }
+  },
+  "historical_retreat_trace_points": [
+    1,
+    13,
+    1,
+    1,
+    1
+  ],
+  "historical_full_search": {
+    "observed_filesystem_interval_seconds": 78354,
+    "source": "analyses/mdea_mea_workflow/results/stage-b-f2/search-0-completion.json",
+    "source_sha256": "8b9221830acc1fea1e2013e005f30f8d6a6fa90110805d0107cca44dee51c18e",
+    "supplied_trials": 2789,
+    "workers": 3,
+    "basis": "Old full start0 search; an observation, not a forecast after penalty or at the enlarged history."
+  },
+  "new_full_search_projected_seconds": null,
+  "penalty_started": false,
+  "start1_started": false
+}
