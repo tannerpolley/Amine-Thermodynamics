@@ -171,6 +171,10 @@ The optimized search and the evaluations at split compositions resolved for othe
 Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
 Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
 The raw state results identify incomplete or unavailable cases explicitly.
+For the earlier unpenalized comparison record (parameter SHA-256 prefix \texttt{efb2a9}), the 54-state liquid-instability count comprises 53 states with resolved liquid search witnesses and one supported by a retained two-liquid path.
+Of these, 46 states have both liquid and vapor search witnesses; state 44, at \SI{333.15}{\kelvin} and loading 0.1 mol/mol, has only vapor search witnesses and counts through its retained two-liquid path, which re-evaluates as two liquids.
+The other seven states have only liquid search witnesses.
+This recheck used the census wheel (SHA-256 prefix \texttt{8b9609d4}), because the original census wheel (\texttt{0d08dff9}) is not available locally.
 
 % P:supplement-phase-cause
 The split-energy figure evaluates the same phase compositions under two parameter sets and closes density at the imposed pressure for each.
