@@ -1,5 +1,6 @@
 """Declaration-driven Part II calculations (#337); Engine owns numerical methods."""
 import copy
+import dataclasses
 import hashlib
 import json
 import math
@@ -31,7 +32,34 @@ def target_identity(mapping, family, target):
     return next(c['identity'] for block in (mapping['components'] if isinstance(target,str) else mapping['pairs']) if (block.get('component_id')==target if isinstance(target,str) else {block['component_id_a'],block['component_id_b']}==set(target)) for c in block['coefficients'] if c['family']==family)
 
 
+def calculation_declaration(value):
+    if dataclasses.is_dataclass(value): return {f.name: calculation_declaration(getattr(value,f.name)) for f in dataclasses.fields(value)}
+    if isinstance(value, dict): return {k: calculation_declaration(v) for k,v in value.items()}
+    if isinstance(value, (list,tuple)): return [calculation_declaration(v) for v in value]
+    if hasattr(value,'name') and hasattr(value,'value'): return value.name
+    if type(value).__module__.startswith('epcsaft'):
+        return {k: calculation_declaration(getattr(value,k)) for k in dir(value) if not k.startswith('_') and not callable(getattr(value,k))}
+    return value
+
+def density_branch(trials):
+    sides = {t.get('density_side') for t in trials}
+    if not sides:
+        return 'none'
+    if len(sides)>1:
+        return 'mixed'
+    return {1: 'vapor', 2: 'liquid'}.get(next(iter(sides)), 'unresolved')
+
+def branch_counts(row):
+    native = row.get('witnesses', [])
+    supplied = [dict(density_side=t.get('quantities', {}).get('density_side'))
+                for t in row.get('supplied_trials', []) if stable.supplied_negative(t)]
+    return dict(native_branch=density_branch(native), supplied_branch=density_branch(supplied),
+                native_liquid_descent=any(t.get('density_side')==2 for t in native),
+                liquid_liquid_split=row.get('parent_kind')=='Liquid' and any(t.get('density_side')==2 for t in native))
+
+
 class Route:
+    branch_counts = staticmethod(branch_counts)
     def __init__(self, declaration):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
@@ -198,8 +226,8 @@ class Route:
                 raise ValueError(prediction.message)
             parent, args = copy.copy(spec.problems[record['initial']]), record['arguments']
             parent.feed = eq.Amounts({c:parent.feed.values.get(c,0.)+prediction.endpoint_loading*args['basis_amount']*args['feed'].get(c,0.) for c in spec.parameters.component_ids})
-            return reg.stability(spec.parameters,parent,scale=scale)
-        if 'problem' in state:
+            bubble = None
+        elif 'problem' in state:
             parent = copy.copy(spec.problems[state['problem']])
             bubble = copy.copy(parent) if isinstance(parent.P, eq.Free) else None
             parent.phases = [copy.copy(parent.phases[0])]
@@ -212,7 +240,35 @@ class Route:
             bubble = copy.copy(parent)
             bubble.P = eq.Free(1e5)
             bubble.phases = list(parent.phases)+[eq.Phase('V',kind='vapor',support=self.config['vapor_species'],amount=eq.Pinned(0.))]
+        if state.get('compressed'):
+            bubble = copy.copy(parent)
+            bubble.P = eq.Free(1e5)
+            bubble.phases = list(parent.phases)+[eq.Phase('V',kind='vapor',support=self.config['vapor_species'],amount=eq.Pinned(0.))]
         return reg.stability(spec.parameters, parent, scale=scale, **(dict(pressure_reference=bubble,pressure_ratio=state.get('c',1.05)) if bubble else {}))
+
+    def pressure_basis(self, spec, state, item, prediction):
+        reference = prediction.pressure_reference
+        out = dict(declared_pressure_Pa=item.problem.pressure.value if item.pressure_reference is None else None,
+                   search_pressure_Pa=reference.value*item.pressure_ratio if reference else item.problem.pressure.value if item.pressure_reference is None else None,
+                   pressure_ratio=item.pressure_ratio if item.pressure_reference is not None else None,
+                   model_bubble_pressure_Pa=reference.value if reference else None)
+        if item.pressure_reference is None:
+            try:
+                bubble = eq.solve_equilibrium(spec.model, self.stability_row(spec, dict(state, compressed=True), 1.).pressure_reference)
+                out.update(model_bubble_pressure_Pa=bubble.pressure if bubble.requested_tolerance_met else None, message=bubble.message)
+            except Exception as error: out['message'] = str(error)
+        return out
+
+    def penalty_states(self, states, spec):
+        copies = {}
+        for state in states:
+            for ratio in (1.05, 3.):
+                candidate = dict(state, key=f"compressed:{state['key']}:{ratio}", c=ratio, compressed=True)
+                item = self.stability_row(spec,candidate,1.)
+                identity = json.dumps(calculation_declaration([item.problem,item.pressure_reference,ratio]),sort_keys=True)
+                row = copies.setdefault(identity, dict(candidate, sources=[]))
+                if state['key'] not in row['sources']: row['sources'].append(state['key'])
+        return list(copies.values())
 
     def grid(self, point, states):
         registry = self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record'])
@@ -221,6 +277,9 @@ class Route:
         supplied.extend(w for w in registry['trials'] if not w.get('resolved_descent') and w not in supplied)
         registry['trials'] = [w for w in registry['trials'] if w.get('resolved_descent')]
         witnesses = registry['trials']
+        for witness in witnesses+supplied:
+            witness.setdefault('density_side', None)
+            witness.setdefault('branch', density_branch([witness]))
         trials = witnesses+supplied
         identity = json.dumps(jsonable([point, states, trials, self.config]), sort_keys=True)
         if getattr(self, '_last_grid', (None,))[0]==identity:
@@ -230,6 +289,7 @@ class Route:
         measured = stable.grid(point, states, trials, route=self)
         for row in measured:
             for witness in row.get('witnesses',[]):
+                witness.setdefault('branch', density_branch([witness]))
                 if witness.get('resolved_descent') and witness not in witnesses:
                     witnesses.append(witness)
         self.write('split-record.json',registry)
@@ -252,7 +312,13 @@ class Route:
     def search(self, point):
         measured = self.grid(point,self.states(self.bind(point)))
         tally = dict(stable.tally(measured),unavailable_searches=[row for row in measured if not row.get('available')])
-        return dict(grid=tally,offset=dict(descent=0),census=dict(descent=0),stable=not tally['descent'] and not tally['unavailable'])
+        tally['branches'] = {
+            group: {source: {branch: sum(row.get(source+'_branch', 'unresolved' if stable.descent(row) else 'none')==branch
+                                        for row in measured if row['key'].startswith('grid:')==(group=='grid'))
+                             for branch in ('liquid','vapor','mixed','unresolved','none')}
+                    for source in ('native','supplied')} for group in ('data','grid')}
+        tally['liquid_liquid_splits'] = {group: sum(row.get('liquid_liquid_split',False) for row in measured if row['key'].startswith('grid:')==(group=='grid')) for group in ('data','grid')}
+        return dict(grid=tally,offset=dict(descent=0),census=dict(descent=0),penalty_trigger=any(row.get('native_liquid_descent',False) for row in measured),stable=not tally['descent'] and not tally['unavailable'])
 
     def campaign(self):
         import reduced_refit_338 as reduced
