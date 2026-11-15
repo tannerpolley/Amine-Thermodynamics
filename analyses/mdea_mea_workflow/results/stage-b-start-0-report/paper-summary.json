@@ -1,5 +1,5 @@
 {
-  "status": "Interim unpenalized start0; full search and start choice pending",
+  "status": "Unpenalized start0; diagnostic search completed; density branches unresolved; owner decision pending",
   "selected_start": null,
   "parameter_record_adopted": false,
   "fitted_parameters": 8,
@@ -11,8 +11,35 @@
   "endpoint_replay_cost": 382.06387056091006,
   "endpoint_relative_cost_difference": 4.3720582709738665e-13,
   "split_count_lower_bound": null,
-  "stability_counts": null,
-  "stability_status": "Full search running; counts pending",
+  "stability_counts": {
+    "states": 69099,
+    "available": 64979,
+    "optimized_available": 64979,
+    "supplied_trials_available": 181222570,
+    "supplied_trials_unavailable": 11139164,
+    "supplied_trials_not_applicable": 335854,
+    "native_vapor_states": 0,
+    "native_liquid_states": 0,
+    "native_resolved_witnesses": 479,
+    "native_vapor_witnesses": 0,
+    "native_liquid_witnesses": 0,
+    "native_branch_unresolved_witnesses": 479,
+    "resolved_witnesses_missing_density_side": 479,
+    "native_descent_states": 95,
+    "native_branch_unresolved_states": 95,
+    "supplied_negative_states": 81,
+    "retained_descent_states": 95,
+    "unavailable": 4120,
+    "optimized_unavailable": 4120,
+    "states_without_reported_supplied_trial_counts": 7,
+    "grid_states": 67536,
+    "grid_available": 63646,
+    "grid_unavailable": 3890,
+    "grid_retained_descent_states": 0,
+    "native_descent_states_available": 25,
+    "native_descent_states_unavailable": 70
+  },
+  "stability_status": "Paused: all 479 native resolved witnesses at 95 states lack density_side; no classified liquid/vapor conclusion",
   "pressure_deviations": {
     "previous_B1": {
       "fitted:combined pressure observables": {
@@ -173,5 +200,12 @@
   "parameter_values": "parameter-values.csv",
   "curve_data": "curve-data.json",
   "figure": "measured-model.png",
-  "source_uncertainties": "../../inputs/stage-b-source-comparisons.json"
+  "source_uncertainties": "../../inputs/stage-b-source-comparisons.json",
+  "native_resolved_descent_state_count_lower_bound": 95,
+  "liquid_split_count_lower_bound": null,
+  "classification_rerun_started": false,
+  "penalty_started": false,
+  "descent_state_table": "../stage-b-f2/search-0-descent-states.csv",
+  "descent_witnesses": "../stage-b-f2/search-0-native-witnesses.json",
+  "detail_manifest": "../stage-b-f2/search-0-detail-manifest.csv"
 }
