@@ -1,0 +1,154 @@
+{
+  "stage": "first compressed-liquid penalty only",
+  "fit_name": "start-0/compressed-penalized-0",
+  "start_path": "analyses/pz_transfer/results/retransfer-345/start-0/unpenalized/stage-0/parameters.json",
+  "start_sha256": "b0310ca2b03027a6fde35fcaede754a2f91e40dc8fc506a2fce6ad012ba6dbd8",
+  "declaration_path": "compressed-penalty-declarations.json",
+  "input_state_count": 9080,
+  "compressed_declaration_count": 9298,
+  "source_coverage_links": 18160,
+  "split_registry": {
+    "path": "split-record.json",
+    "native_resolved_witnesses": 5372,
+    "supplied_composition_only": 2,
+    "sha256": "bd2490a0629c9292d999a24d65ad5542d59ce456782be9e7e4c1a60ad1ffebd0",
+    "copied_from": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/analyses/pz_transfer/results/runs/345/rerun-start-0-a6aebfa-restart-1/split-record.json"
+  },
+  "controls": {
+    "maximum_iterations": 100,
+    "maximum_elapsed_time_seconds": 3600.0,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08
+  },
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "engine_commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+  "attempts": [
+    {
+      "attempt": 0,
+      "status": "initial_evaluation_failed",
+      "iterations": 0,
+      "cost_history": [],
+      "valid_fitted_cost": null,
+      "endpoint": null,
+      "report": "compressed-penalty-fit.json"
+    }
+  ],
+  "search": null,
+  "elapsed_seconds": 1928.335904535983,
+  "files_before_result": [
+    {
+      "path": "compressed-penalty-declarations.json",
+      "bytes": 3941721,
+      "sha256": "3c73bf6ce63e3c30a60633a7bf4b63cede3d24c6ddee326e2e3e9fc42d090568"
+    },
+    {
+      "path": "identity.json",
+      "bytes": 275,
+      "sha256": "0815e13a27802589b54c18ad3565de978531fc78fd87add49b7166ca2b5f3143"
+    },
+    {
+      "path": "split-record.json",
+      "bytes": 3671948,
+      "sha256": "bd2490a0629c9292d999a24d65ad5542d59ce456782be9e7e4c1a60ad1ffebd0"
+    },
+    {
+      "path": "start-0/compressed-penalized-0/stage-0/fit-native.json",
+      "bytes": 3705824,
+      "sha256": "ae14209b7c46a03ed10e262fe3922e1f2b172a485cfda074e5d604dfd2d83249"
+    },
+    {
+      "path": "start-0/compressed-penalized-0/stage-0/fit.json",
+      "bytes": 4530986,
+      "sha256": "16de3fa91dc13e78a9d8dd43a42c9fd71383d932222b04234b78def5fa3d76a6"
+    },
+    {
+      "path": "start-0/compressed-penalized-0/stage-0/unavailable.json",
+      "bytes": 4530986,
+      "sha256": "16de3fa91dc13e78a9d8dd43a42c9fd71383d932222b04234b78def5fa3d76a6"
+    },
+    {
+      "path": "start-0/compressed-penalized-0/start-replay.json",
+      "bytes": 449102,
+      "sha256": "1c8d2ec29748408c86dabf3ddbd0222271b8ef4290b160950309ad4c0674f32f"
+    }
+  ],
+  "self_inventory_note": "This result file is excluded from its embedded files_before_result list; sha256-inventory.json records its hash.",
+  "failure_attribution": {
+    "first_offending_state": {
+      "key": "compressed:Kamps--46:problem:1.05",
+      "problem": "Kamps--46:problem",
+      "c": 1.05,
+      "compressed": true,
+      "sources": [
+        "Kamps--46:problem"
+      ],
+      "compressed_declaration_index": 544,
+      "actual_search_pressure_Pa": 210254.82726485538,
+      "model_bubble_pressure_Pa": 200242.6926331956,
+      "temperature_K": 395.0,
+      "loading_mol_per_mol_amine": 0.0,
+      "feed_mol": {
+        "water": 27.276841984340606,
+        "amine": 1.0,
+        "co2": 0.0
+      }
+    },
+    "numerical_cause": {
+      "optimizer_status": "initial_evaluation_failed",
+      "optimizer_message": "failed final trial optimizer or undetermined evidence: 15",
+      "first_numerical_failure": "Stop.left_domain",
+      "failed_trial": {
+        "trial": 1,
+        "observation": 838,
+        "status": "CentralSolveUnavailable",
+        "message": "failed final trial optimizer or undetermined evidence: 15",
+        "jacobian": true
+      },
+      "stability_prediction": {
+        "status": "CentralSolveUnavailable",
+        "message": "failed final trial optimizer or undetermined evidence: 15",
+        "available": false,
+        "value": null,
+        "raw_minimum": -149.2511478134175,
+        "uncertainty": null,
+        "cause": "failed final trial optimizer or undetermined evidence: 15",
+        "event": "",
+        "no_descent_in_trial_set": false,
+        "completed": true,
+        "pressure_Pa": 200242.6926332009
+      },
+      "raw_minimum_is_not_confirmed_descent": true,
+      "iterations": 0,
+      "iteration_costs": [],
+      "residual_evaluations": 0,
+      "jacobian_evaluations": 1,
+      "valid_fitted_cost": null,
+      "reported_zero_cost_fields_are_placeholders": true,
+      "absolute_observation_index": 838,
+      "compressed_declaration_index": 544
+    },
+    "issue_23_cross_support_coincidence_match": false,
+    "issue_23_match_basis": "This failure is at a compressed grid state and reports CentralSolveUnavailable / Stop.left_domain with no cross-support coincidence refusal. It is not the prior fixed-pressure NMR refusal.",
+    "original_child_state_identification_was_incorrect": true,
+    "index_mapping": {
+      "absolute_observation_index": 838,
+      "fitted_observation_prefix": 294,
+      "compressed_declaration_index": 544
+    }
+  },
+  "fit_report": "compressed-penalty-fit.json",
+  "valid_fitted_cost": null,
+  "endpoint": null,
+  "iterations": 0,
+  "cost_history": [],
+  "penalty_triggered": true,
+  "penalty_acceptance": "incomplete: initial evaluation unavailable; no optimized endpoint",
+  "waits_on_epcsaft_23": false,
+  "diagnostic": "failed final trial optimizer or undetermined evidence: 15",
+  "first_numerical_failure": "Stop.left_domain",
+  "result_basis": "Actual first-stage evaluation on the #373 compressed-liquid set. Raw unavailable minimum is not counted as confirmed descent. No continuation, second scale, retreat or endpoint search from a nonexistent endpoint.",
+  "diagnosis": "All 16 trial optimizers converged; evidence unresolved with no positive donor and no finite-split checks at a carbon-free parent. The disjunctive failure message reflects undetermined evidence, not final optimizer failure.",
+  "native_diagnostic": "compressed-penalty-diagnosis.json",
+  "pressure_field_correction": "fit stability_prediction.pressure_Pa is the bubble reference, not the effective compressed pressure"
+}
