@@ -1,0 +1,259 @@
+{
+  "base": "467f366",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "profile": {
+    "states": 52,
+    "worker_seconds": 424.9147807530003,
+    "min_state_seconds": 7.224044043000049,
+    "max_state_seconds": 10.83130049600004,
+    "available": 51,
+    "descent": 22,
+    "serialization_seconds": 6.325792394000018,
+    "gzip_1": {
+      "seconds": [
+        1.4261329399996612,
+        1.4095658480000566,
+        1.3873201790001986,
+        1.4348930320002182,
+        1.3952003149997836
+      ],
+      "bytes": 74334786
+    },
+    "gzip_9": {
+      "seconds": [
+        11.057296292000046,
+        11.216158627000368,
+        11.57463154900006,
+        11.133831029999783,
+        11.316206047999913
+      ],
+      "bytes": 55681066
+    }
+  },
+  "components": {
+    "startup": 0.272065585999826,
+    "compile": 0.003901764000147523,
+    "native": 0.28890106000017113,
+    "parent": 0.013755665000189765,
+    "supplied": 8.605672846999823,
+    "state_total": 9.010588644999643,
+    "own_state_proxy_100": 0.03024780900022961,
+    "serialization": 0.13476770300030694,
+    "gzip_1": 0.031767723000029946,
+    "gzip_1_bytes": 1402367,
+    "gzip_9": 0.2397644739999123,
+    "gzip_9_bytes": 1056627
+  },
+  "registry": {
+    "amp": {
+      "states": 1906,
+      "trials": 5895,
+      "exact_unique": 5143,
+      "rounded_1e12_unique": 3309
+    },
+    "pz": {
+      "states": 9080,
+      "trials": 5374,
+      "exact_unique": 3614,
+      "rounded_1e12_unique": 1581
+    },
+    "dea": {
+      "states": 3791,
+      "trials": 0,
+      "exact_unique": 0,
+      "rounded_1e12_unique": 0
+    },
+    "mdea": {
+      "states": 69099,
+      "trials": 2789,
+      "exact_unique": 2789,
+      "rounded_1e12_unique": 2300
+    }
+  },
+  "pressure_groups": {
+    "pz": {
+      "rows": 9080,
+      "known_rows": 9080,
+      "unique_TP": 8852,
+      "reusable_rows": 228,
+      "unknown": 0,
+      "largest_groups": [
+        66,
+        63,
+        62,
+        41,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "mdea": {
+      "rows": 69099,
+      "known_rows": 65197,
+      "unique_TP": 63990,
+      "reusable_rows": 1207,
+      "unknown": 3902,
+      "largest_groups": [
+        326,
+        84,
+        84,
+        76,
+        76,
+        72,
+        72,
+        24,
+        24,
+        16
+      ]
+    }
+  },
+  "amp_pressure_groups": {
+    "states": 1906,
+    "known": 1844,
+    "unknown": 62,
+    "unique_TP": 1844,
+    "reusable": 0,
+    "largest": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "correctness": [
+    {
+      "amine": "amp106",
+      "compared": 64,
+      "max_absolute_tpd_error": 0.0,
+      "mismatches": [],
+      "tolerance_origin": "Maximum of the two Engine native Full-search uncertainty estimates; exact equality also reported. Supplied values should be bitwise identical under unchanged numerical calls."
+    },
+    {
+      "amine": "dea",
+      "compared": 80,
+      "max_absolute_tpd_error": 0.0,
+      "mismatches": [],
+      "tolerance_origin": "Maximum of the two Engine native Full-search uncertainty estimates; exact equality also reported. Supplied values should be bitwise identical under unchanged numerical calls."
+    }
+  ],
+  "timings": [
+    {
+      "amine": "amp106",
+      "subset_states": 64,
+      "full_states": 1906,
+      "before_seconds": 167.925191326,
+      "after_seconds": 174.31712961799985,
+      "projected_full_hours": 1.442050560121127,
+      "retreat_search_work_hours_21_to_44": [
+        30.28306176254367,
+        63.4502246453296
+      ],
+      "counts": {
+        "supplied_trial_counts": {
+          "available": 365490,
+          "unavailable": 0,
+          "not_applicable": 11790
+        },
+        "states": 64,
+        "available": 64,
+        "descent": 0,
+        "unavailable": 0,
+        "minimum_tau": null,
+        "supplied_minimum_tpd": 1.0990169698743557e-06
+      }
+    },
+    {
+      "amine": "pz",
+      "subset_states": 64,
+      "full_states": 9080,
+      "before_seconds": 185.83171051299996,
+      "after_seconds": 174.54603619099998,
+      "projected_full_hours": 6.878810801277256,
+      "retreat_search_work_hours_21_to_44": [
+        144.45502682682238,
+        302.66767525619923
+      ],
+      "counts": {
+        "supplied_trial_counts": {
+          "available": 343936,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 64,
+        "available": 64,
+        "descent": 4,
+        "unavailable": 0,
+        "minimum_tau": -0.3228683384684814,
+        "supplied_minimum_tpd": -0.3228683384684814
+      }
+    },
+    {
+      "amine": "mdea",
+      "subset_states": 64,
+      "full_states": 69099,
+      "before_seconds": 80.04400527999996,
+      "after_seconds": 74.345680765,
+      "projected_full_hours": 22.296927930471938,
+      "retreat_search_work_hours_21_to_44": [
+        468.2354865399107,
+        981.0648289407652
+      ],
+      "counts": {
+        "supplied_trial_counts": {
+          "available": 165394,
+          "unavailable": 11156,
+          "not_applicable": 1946
+        },
+        "states": 64,
+        "available": 60,
+        "descent": 0,
+        "unavailable": 4,
+        "minimum_tau": null,
+        "supplied_minimum_tpd": 0.002124296755226851
+      }
+    }
+  ],
+  "timing_limits": "One matched subset pair per amine, same host, three agent-heavy processes, includes worker initialization and detailed output; setup and verification before the pool excluded. Busy shared host. Full-search and retreat-work projections scale linearly; they are not completed campaigns or measured full searches. Fits and later registry growth excluded. No statistically established end-to-end speedup.",
+  "startup": {
+    "workers": 3,
+    "seconds": [
+      0.29099908100033645,
+      0.2927168630003507,
+      0.27275839499998256,
+      0.270153616999778,
+      0.2709032239999942
+    ],
+    "basis": "Fork, all worker initializers including wheel verification and model binding, barrier, trivial task dispatch and pool shutdown; parent imports/setup excluded."
+  },
+  "retreat_reference": [
+    {
+      "method": "old",
+      "states": 1,
+      "seconds": 327.89747156700014,
+      "t": 0.7115624999999999,
+      "non_monotone": null,
+      "upper_t": null,
+      "checks": 40,
+      "full_search_calls": 40
+    },
+    {
+      "method": "new",
+      "states": 1,
+      "seconds": 279.5539270569998,
+      "t": 0.7115631103515625,
+      "non_monotone": false,
+      "upper_t": 0.7115707397460938,
+      "checks": 21,
+      "full_search_calls": 24
+    }
+  ]
+}

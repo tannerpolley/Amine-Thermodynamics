@@ -5,6 +5,7 @@ Commands (repository root, worktree .venv with the bc779473 wheel, `--no-sync`):
   qualify | old-wheel-replay | fit <run> | assess <run> | select | extras <run>
 """
 # ruff: noqa: E402 -- numerical-library threads and the wheel identity are set before Engine imports.
+import copy
 import csv
 import gzip
 import hashlib
@@ -218,8 +219,7 @@ def _measure(state):
     row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
     if _ROUTE is not None and hasattr(_ROUTE, 'details'):
         path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
-        with gzip.open(path, 'wt') as stream:
-            json.dump(jsonable(row), stream, allow_nan=False)
+        path.write_bytes(gzip.compress(json.dumps(jsonable(row), allow_nan=False).encode(), compresslevel=1, mtime=0))
         row.update(details=str(path.relative_to(_ROUTE.out)), descent=descent(row), supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
         for field in ('supplied_trials', 'not_applicable_supplied_trials'):
             row.pop(field, None)
@@ -672,40 +672,66 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
     else:
         OUT, write, segment, admissible = (globals()[k] for k in ("OUT", "write", "segment", "admissible"))
     if (OUT / run / 'retreat.json').exists():
+        assert (route.result if route else result)(f'{run}/retreat.json').get('method')=='bisection', 'Use a new output directory for the changed retreat method'
         return
     trace = []
     if endpoint is None:
-        write(f'{run}/retreat.json', dict(t=0., reason='no stage returned an available 307-row endpoint', trace=trace, shifts=shifts[0]))
+        write(f'{run}/retreat.json', dict(method='bisection', t=0., reason='no stage returned an available 307-row endpoint', trace=trace, shifts=shifts[0]))
         ok, _, _ = admissible(anchor, enforced, rows)
         if ok:
             write(f'{run}/candidate.json', anchor)
         return
-    passing, t, suspects = None, 1., ()
-    while t > -1e-12:
-        ok, tal, cost = admissible(segment(anchor, endpoint, t), enforced, rows, suspects)
-        suspects = tal['suspects']
-        trace.append(dict(t=t, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
+    # Seed both ends before freezing the shared retreat trials (#385 owner decision).
+    for point in (anchor, endpoint):
+        admissible(point, enforced, rows)
+    registry = route.result('split-record.json') if route else globals().get('GRID_TRIALS', {})
+    base = (registry['trials'] + registry.get('supplied_trials', []) if route else
+            [w for group in registry.values() for trials in (group.values() if isinstance(group, dict) else [group]) for w in trials])
+    base = copy.deepcopy([w for w in base if isinstance(w, dict)])
+    for witness in base:
+        if witness.get('kind') in ('liquid', 'vapor'):
+            witness['kind'] = witness['kind'].title()
+    def check(t):
+        local, point = copy.deepcopy(base), segment(anchor, endpoint, t)
+        while True:
+            measured = route.grid(point, enforced, trial_set=local) if route else grid(point, enforced, local)
+            before = len(local)
+            for row in measured:
+                local.extend(w for w in row.get('witnesses', []) if w not in local)
+            if len(local)==before:
+                break
+        tal = tally(measured)
+        _, ok, cost = (route.replay if route else replay)(point, rows)
+        ok = ok and not tal['descent'] and not tal['unavailable']
+        trace.append(dict(t=t, admissible=ok, cost=cost, trials=len(local),
+                          **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
         print(run, 'retreat', json.dumps(trace[-1]), flush=True)
-        if ok:
-            passing = t
-            break
-        t = round(t - .01, 10)
-    if passing is not None and passing < 1.:
-        low, high = passing, min(1., passing + .01)
-        for _ in range(10):
-            mid = (low + high) / 2
-            ok, tal, cost = admissible(segment(anchor, endpoint, mid), enforced, rows, suspects)
-            suspects = tal['suspects'] or suspects
-            trace.append(dict(t=mid, admissible=ok, cost=cost, screened=tal.get('screened', False), **{k: tal[k] for k in ('descent', 'available', 'minimum_tau')}, unavailable=len(tal['unavailable'])))
-            print(run, 'refine', json.dumps(trace[-1]), flush=True)
-            low, high = (mid, high) if ok else (low, mid)
-        passing = low
+        return ok
+    anchor_ok, endpoint_ok = check(0.), check(1.)
+    passing, upper = None, 1.
+    if anchor_ok:
+        low, high = 0., 1.
+        if endpoint_ok:
+            low = 1.
+        else:
+            # Single crossing is assumed; retain the upper neighbour and all observed inversions.
+            while high-low > .01/2**10:
+                mid = (low+high)/2
+                if check(mid): low = mid
+                else: high = mid
+        passing, upper = low, high
+        check(passing)
+        if passing < 1.:
+            check(upper)
+    non_monotone = any(not a['admissible'] and b['admissible'] and a['t']<b['t'] for a in trace for b in trace)
     t = 0. if passing is None else passing
     if passing is not None:
         write(f'{run}/candidate.json', segment(anchor, endpoint, t))
     a, e = shifts
     disposition = 'no candidate' if passing is None else 'optimizer endpoint' if t==1 else 'interpolated'
-    write(f'{run}/retreat.json', dict(t=t, trace=trace, disposition=disposition,optimizer_converged=optimizer_report['status']=='converged' if optimizer_report else None,optimizer_cost=optimizer_report.get('data_cost',optimizer_report['final_cost']) if optimizer_report else None,retreat_cost=next((row['cost'] for row in reversed(trace) if row['admissible']),None),point_terminated_on_optimizer_tolerance=bool(t==1 and optimizer_report and optimizer_report['status']=='converged'), shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
+    if non_monotone:
+        print(run, 'non-monotone retreat', json.dumps(dict(t=t,upper_t=upper,disposition=disposition)), flush=True)
+    write(f'{run}/retreat.json', dict(method='bisection', t=t, trace=trace, upper_t=upper, non_monotone=non_monotone, base_trials=len(base), disposition=disposition,optimizer_converged=optimizer_report['status']=='converged' if optimizer_report else None,optimizer_cost=optimizer_report.get('data_cost',optimizer_report['final_cost']) if optimizer_report else None,retreat_cost=next((row['cost'] for row in reversed(trace) if row['admissible'] and row['t']==t),None),point_terminated_on_optimizer_tolerance=bool(t==1 and optimizer_report and optimizer_report['status']=='converged'), shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
 
 
 def assess(run, rows=None):
