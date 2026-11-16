@@ -834,3 +834,77 @@ and rows; `sections/part2/model.tex` and `pz-reaction-directions.tex` still use
 mhchem equilibrium arrows. These are reported for the owner's separate review.
 The ignored literature shelf is absent from this worktree; this pass makes no
 new literature-backed scientific judgment and changes no citation or equation.
+
+## Issue 347 visual fix round 1 (2026-11-16)
+
+This section supersedes the naming and precision presentation in the preceding
+visual-pass entry. The owner selected all four science corrections, all three
+visual corrections and the ten required story corrections, with science taking
+precedence. Judgment calls and optional suggestions remain outside this pass.
+The scientific inputs and investigator promotion remain unchanged.
+
+The owning mapping is `scripts/final_rerun_tables.py`. Exact reader names are:
+
+| Internal record | Table name | Meaning and source |
+| --- | --- | --- |
+| F0 | Earlier shared set (this study) | The 16-parameter stability-penalized calibration of this study; shifted R2/R5 laws and separate amine-ion Born diameters. `reduced-refit/fit-comparison.csv`, F0 row; existing phase-method account. |
+| F1 | Literature R2/R5 laws; separate Born diameters | R2/R5 fixed to literature forms, separate amine-ion Born diameters retained. `reduced_refit_338.py`, initial LITERATURE assignment and step 1. |
+| F2 | Present model | Adopted eleven-parameter set; amine-ion Born diameters tied to segment diameters. Restriction step 2 and `born-tie-outcome.json`. |
+| F3 | Zero carbamate--water interaction and protonated-MEA--water slope | Two different water-pair coordinates fixed to zero. Restriction step 3. |
+| F4 | Sodium-salt water--anion laws | Water--bicarbonate/carbonate temperature laws held at their sodium-salt fitted values; protonated-MEA--bicarbonate interaction freed. Restriction step 4. |
+| F4-0 | Zero protonated-MEA--bicarbonate interaction | Branch from the sodium-salt water--anion calibration, fixing the new interaction to zero. The F4-0 alternatives within step 4. |
+| F5 | Zero protonated-MEA--carbamate interaction | Alternative branch from the sodium-salt water--anion calibration, keeping protonated-MEA--bicarbonate free. Step 5 does not use the selected F4-0 record as its initial parameter record. |
+
+Restriction producer:
+`analyses/mea_parameter_bundle/scripts/reduced_refit_338.py`, `campaign()`.
+Retained records:
+`analyses/mea_parameter_bundle/results/reduced-refit/`.
+The text uses italic names at first definition and explicitly identifies the
+present model as the adopted parameter set used throughout the paper.
+
+The sodium-salt sentence follows the science correction verbatim, apart from
+italic markup: Peiper and Pitzer (1982, Table 6) tabulate model-derived osmotic
+coefficients for sodium bicarbonate and sodium carbonate. The retained source
+account is `results/carbonate-ions-282/README.md`, Data and Cascade entries,
+with exact input rows in `inputs/peiper-pitzer-1982-table6.csv` under that result
+directory. No new bibliography entry or source metadata is written in this pass.
+
+Confirmations from retained rows:
+
+- The 159-pressure comparison contains Aronu 36, Hilliard 31, Idris 10, Jou 48,
+  Ma'mun 19 and Xu--Rochelle 15 observations. Joining the fitted observation
+  identifiers gives Hilliard 30 plus Jou 17 for the 47 fitted rows. The 112
+  rows not fitted span all six sources. Table 6 therefore names Hilliard and
+  Jou for its fitted subset instead of implying six fitted sources.
+- The seven further-species quantities are four Böttinger and three Matin
+  rows, from `paper-evidence-341/paper-evidence/fitted-rows.csv`, group
+  `restored species`. `objective-groups.csv` has seven corresponding quantities
+  and scales, but its rule strings call all seven Böttinger. The actual row
+  identifiers resolve the discrepancy. The display says “Further Böttinger
+  and Matin species”; retained files are unchanged.
+- The heat figure contains exactly eight observations at 313.15 K and
+  1.734 MPa, eight at 322.5 K and 0.51 MPa, and six at 322.5 K and 1.03 MPa,
+  grouped by `T_K` and `P_Pa` in the retained `heat.csv`. Open circles denote
+  the first two conditions; filled circles denote 322.5 K and 1.03 MPa.
+- The abstract retains the 53 + 1 basis of the 54-state instability count.
+  Section S6 identifies the additional case by 333.15 K and loading 0.1 mol/mol:
+  it has resolved vapor trial phases and a descent ending in two liquids,
+  confirmed on re-evaluation. This is a numerical phase-search classification,
+  not an observation of a second liquid. The existing library SHA-256 prefixes
+  remain in S6, with reader-facing compiled-library wording.
+
+The owner selected the existing nine-significant-figure rule for Table 1.
+The caption says “at most nine significant figures” because some source
+coefficients have fewer digits. Superfluous alignment zeros were removed;
+all 20 decimal values remain equal to the preceding displays. No full-precision
+reconstructed coefficient is substituted.
+
+The shared 393.15 K color is darkened to `#007DA8`; the comparison bars use
+`#B54D00`, dark outlines and a hatch on the present-model series. Their contrast
+against white is checked numerically. Temperature-sized circles and matching
+legend circles distinguish pressure and species observations. Dotted species
+branches keep their below-bubble meaning and have direct temperature labels.
+The three heat conditions use their temperature colors/sizes and distinct
+open/filled circle meaning. Numerical coordinates, interval lengths and bar
+values were captured from the old and new producers in memory and compared
+exactly for all eight figures. No model calculation ran.
