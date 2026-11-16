@@ -244,7 +244,25 @@ class Route:
             bubble = copy.copy(parent)
             bubble.P = eq.Free(1e5)
             bubble.phases = list(parent.phases)+[eq.Phase('V',kind='vapor',support=self.config['vapor_species'],amount=eq.Pinned(0.))]
-        return reg.stability(spec.parameters, parent, scale=scale, **(dict(pressure_reference=bubble,pressure_ratio=state.get('c',1.05)) if bubble else {}))
+        item = reg.stability(spec.parameters, parent, scale=scale, **(dict(pressure_reference=bubble,pressure_ratio=state.get('c',1.05)) if bubble else {}))
+        removed = set(eq.compile_problem(spec.model,item.problem).removed_species)
+        if removed:
+            # ponytail: remove when tannerpolley/epcsaft#24 excludes compiler-certified absent species.
+            support = {i for i,v in enumerate(item.problem.feed.values) if v>0}
+            support.update(i for rx in item.problem.reactions for i,v in enumerate(rx.stoichiometry) if v!=0)
+            support = sorted(support-removed)
+            charges = {c['component_id']:c['fixed']['charge_number']['value']['magnitude'] for c in epcsaft.parameters.document_mapping(spec.parameters)['components']}
+            neutral = [i for i in support if charges[spec.parameters.component_ids[i]]==0]
+            trials = []
+            for ids,kind in ((support,'Liquid'),(neutral,'Liquid'),(neutral,'Vapor')):
+                phase = type(item.problem.phases[0])()
+                phase.name, phase.kind, phase.support, phase.support_declared = 'feasible', getattr(type(phase.kind),kind), ids, True
+                trials.append(phase)
+            item.stability_options.trials = trials
+        return item
+
+    def stability_metadata(self, spec, item):
+        return dict(restricted_trial_families=True,removed_species=list(eq.compile_problem(spec.model,item.problem).removed_species)) if item.stability_options.trials else {}
 
     def pressure_basis(self, spec, state, item, prediction):
         reference = prediction.pressure_reference
@@ -261,10 +279,15 @@ class Route:
 
     def penalty_states(self, states, spec):
         copies = {}
+        self.penalty_unavailable = []
         for state in states:
             for ratio in (1.05, 3.):
                 candidate = dict(state, key=f"compressed:{state['key']}:{ratio}", c=ratio, compressed=True)
-                item = self.stability_row(spec,candidate,1.)
+                try:
+                    item = self.stability_row(spec,candidate,1.)
+                except Exception as error:
+                    self.penalty_unavailable.append(dict(source=state['key'],pressure_ratio=ratio,message=str(error)))
+                    continue
                 identity = json.dumps(calculation_declaration([item.problem,item.pressure_reference,ratio]),sort_keys=True)
                 row = copies.setdefault(identity, dict(candidate, sources=[]))
                 if state['key'] not in row['sources']: row['sources'].append(state['key'])

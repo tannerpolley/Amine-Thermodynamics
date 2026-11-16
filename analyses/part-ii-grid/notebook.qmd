@@ -32,14 +32,14 @@ Part I's existing state-specific inputs remain supported.
 
 Penalty and retreat consume the same `descent()` and `tally()` quantities from
 summaries. Reporting retains unavailable-state causes and detail references.
-`Route.result(row['details'])` explicitly reads one complete state when needed.
+A complete state is read only when its details are requested.
 The next search loads only `split-record.json`, never the detailed search.
 
 ## Endpoint search reuse
 
 `fit()` searches the endpoint before `candidate()` asks for its search. Reuse
 requires exact equality of the endpoint, ordered states, ordered supplied
-inventory and complete route declaration, including controls. The immutable
+inventory and complete calculation declaration, including controls. The immutable
 wheel and the native search scale remain unchanged. Only the last matching
 result is reused. The signature and summaries do not contain detailed results.
 
@@ -154,3 +154,84 @@ state summaries and required registry still grow with their own cardinalities.
 No full MDEA or PZ campaign was launched. Independent re-review remains a merge
 gate. The notebook is not promoted for manuscript use and is retained without
 site registration because `_cse-manuscript.json` is outside this task.
+
+## Penalty construction and certified-absent species (#377, #379)
+
+At the retained start-0 endpoints, the shared route now returns the constructible
+compressed copies and records each refusal with its source key, pressure ratio
+and exact message. It uses the pinned `391dfe5d` wheel, SHA-256
+`0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`.
+Only a non-empty parent-compiler `removed_species` certificate changes trial
+families: full liquid, neutral liquid and neutral vapor use fed species plus
+reaction participants minus certified-absent species. This is an adapter for
+[tannerpolley/epcsaft#24](https://github.com/tannerpolley/epcsaft/issues/24).
+Loaded reference states retain identical declarations and numerical results.
+
+The complete construction with both fixes gave:
+
+| Quantity | MDEA | Piperazine |
+|---|---:|---:|
+| Source states processed | 69,099 | 9,080 |
+| Deduplicated penalty rows | 68,734 | 9,298 |
+| Sources represented in returned rows | 69,092 | 9,080 |
+| Refused construction copies | 14 | 0 |
+| Construction wall time, s | 292.606844 | 36.067765 |
+
+The seven refused MDEA sources are `comparison:362:cap`, `364:cap`, `366:cap`,
+`370:cap`, `376:cap`, `378:cap` and `380:cap`, each at both 1.05 and 3.0 pressure
+ratios. Four sources exceed the thermochemistry temperature interval; `364`
+refuses an equilibrium solve during saturation, and `366` and `370` refuse the
+vapor-root search during saturation. Exact messages are retained in
+[PR #378](https://github.com/tannerpolley/Amine-Thermodynamics/pull/378).
+A refused copy is not counted as stable or available.
+
+At 1.05 times the model bubble pressure, the PZ `Kamps--46`, MDEA `fit:61`
+and DEA `carson-2000:0` single-state checks reproduce the design-probe minima
+of $5.684341886080802\times10^{-14}$, $-2.842170943040401\times10^{-14}$
+and $0$ in units of $RT$. All three are available and show no descent in the
+specified trial set. Their reported numerical uncertainties are
+$3.0486533251618187\times10^{-10}$, $3.6263767483374273\times10^{-10}$ and
+$5.782903655011868\times10^{-10}\,RT$, respectively. The AMP
+`hartono-2013-P:0` result is identical to the baseline result. Its binary
+certificate also restricts families; its declaration therefore changes.
+Loaded examples from all four amines retain identical declarations and results.
+These are fixed reference checks, not physical validation.
+
+No parameters were optimized. At penalty scale 0.01, the PZ coordinate point
+reader completed all 9,592 rows (294 data plus 9,298 penalty) as available,
+including four restricted penalty rows. This single sequential point evaluation
+took 5,044.318232 s and reached 7,386,528 KiB peak process RSS. Its data costs
+are not reported as the weighted fit objective because the point call does not
+supply the fit's observation weights or uncertainty declaration.
+
+The MDEA sweeps used three processes under `agent-heavy`, with 278 data rows
+plus 68,734 penalty rows at the retained start-0 endpoint and scale 0.01:
+
+| Sweep | Before #379: wall time, s | With both fixes: wall time, s | With both fixes: largest worker peak RSS, KiB |
+|---|---:|---:|---:|
+| Objective point sweep | 8,218.332507 | 8,044.850095 | 149,012 |
+| Coordinate derivative sweep | 9,952.746262 | 9,998.689920 | 239,016 |
+
+Both original sweeps had 65,066 available rows and 3,946 refusals; both repeated
+sweeps had 65,122 available rows and 3,890 refusals. The 56-row availability
+increase equals the predicted zero-loading exposure. No complete penalized
+objective or gradient is available while the other 3,890 rows remain refused.
+Derivative refusals are point-reader exceptions; no missing derivative is
+replaced with zero. The largest process peak across the repeated sweeps was
+239,020 KiB, not aggregate concurrent memory.
+
+These are single runs on a shared machine. They do not establish a speed
+change or a full-fit cost. The MDEA sweeps call the same observation constructors,
+parameters and coordinates as `stage_fit`, but use `predict` and `differentiate`
+point readers, include Python observation construction and omit the native fit
+driver's state grouping and cache reuse. Numerical verification of this adapter
+supports returning to the owner's penalty-campaign decision; it does not
+qualify a parameter set or establish physical phase stability.
+
+The measurements used code commits `7739b5c` (before #379) and `dcb7644`
+(both fixes). Detailed local records remain under `/tmp/issue377/` and
+`/tmp/issue379/`; none are tracked. The final 19 Part II tests passed in
+104.14 s. Independent delivered review supported code commit `dcb7644` and
+this notebook addition for the bounded construction and trial-family capabilities.
+It found no blocking implementation or evidence defects. This section is not
+promoted for manuscript use. The protected manuscript registry is unchanged.
