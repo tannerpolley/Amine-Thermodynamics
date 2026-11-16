@@ -1,6 +1,6 @@
 ---
 title: "DEA re-transfer onto the adopted F2 shared parameters"
-subtitle: "Two converged starts; conditional uncertainty available; finite searches incomplete"
+subtitle: "Reviewed Supported; not adopted; provisional until the re-pin re-check"
 format: html
 execute:
   enabled: false
@@ -12,7 +12,7 @@ This notebook reports issue [#346](https://github.com/tannerpolley/Amine-Thermod
 
 Start 0 has the lowest fitted cost. The two starts are numerically tied at the optimizer's function-tolerance scale. F2 gives 28.46% mean absolute relative deviation for fitted pressures and 0.947% for fitted integral heats. The previous F0 model gives 28.63% and 0.977%, respectively. The change does not remove the pressure-shape discrepancy or the positive excess-enthalpy predictions against negative Horstmann measurements.
 
-The evidence is calibration and comparisons against previously seen observations, plus numerical replay and finite stability searches. It does not establish independent physical validation or absorber suitability. Conditional standard errors use the corrected shared chart from [#365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365), merged in main 1cb771e. Independent CSE review supports the fit, comparisons and finite searches at commit 6840ca8fa1ec1d89e54476c1c852c97c51d3badf, and the completed uncertainty increment at commit 7dba15cdb56841e477b895721fd50b7fe9497ec5. A subsequent orchestrator review identified four reporting corrections; this revision supplies the source intervals, published NRTL comparison, current notebook entry point and complete parameter-table provenance. The numerical quantities were independently reproduced; the reporting correction awaits the orchestrator's review. The reviews do not authorize parameter adoption, manuscript promotion or merging. The result has not been promoted for manuscript use.
+The evidence is calibration and comparisons against previously seen observations, plus numerical replay and finite stability searches. It does not establish independent physical validation or absorber suitability. Conditional standard errors use the corrected shared chart from [#365](https://github.com/tannerpolley/Amine-Thermodynamics/issues/365), merged in main 1cb771e. Independent CSE review supports the fit, comparisons and finite searches at commit 6840ca8fa1ec1d89e54476c1c852c97c51d3badf, and the completed uncertainty increment at commit 7dba15cdb56841e477b895721fd50b7fe9497ec5. A subsequent orchestrator review identified four reporting corrections; this revision supplies the source intervals, published NRTL comparison, current notebook entry point and complete parameter-table provenance. The numerical quantities and reporting corrections are reviewed Supported, including the stability refresh at d5889b1. The owner confirmed manuscript use of notebook commit fe4ee08 for calibration on the F2 shared parameters, comparisons, numerical replay and finite stability searches, subject to the stated limitations. The record is not adopted and all numbers remain provisional until the re-check on the re-pinned Engine wheel.
 
 ## Inputs, conditions and numerical method
 
@@ -249,7 +249,7 @@ Every one of the 3,728 other declarations was compared with the pre-#379 constru
 
 The sole remaining refusal is `CentralSolveUnavailable`, “failed final trial optimizer or undetermined evidence: 1”, at `lawson-1976-viii:1:problem`. Its declaration is unchanged and it was not re-searched. The original start-1 census remains historical at 3,736 available / 55 unavailable; the refreshed census applies only to the selected start-0 endpoint.
 
-Detailed records are in the main checkout's ignored `analyses/dea_transfer/results/runs/380/`: `restricted-states.json`, `comparison.csv`, `new-results.json`, `combined-search.json`, compressed declarations and the per-search gzip files. [manifest.json](results/research-380/manifest.json) gives each file's path, size and SHA-256. Only the aggregate summary and manifest accompany this notebook in git. The #380 result has not been independently reviewed or promoted for manuscript use. The notebook is rendered in isolation without changing the protected site registry.
+Detailed records are in the main checkout's ignored `analyses/dea_transfer/results/runs/380/`: `restricted-states.json`, `comparison.csv`, `new-results.json`, `combined-search.json`, compressed declarations and the per-search gzip files. [manifest.json](results/research-380/manifest.json) gives each file's path, size and SHA-256. Only the aggregate summary and manifest accompany this notebook in git. The #380 result was independently reviewed Supported at d5889b1; the owner confirmed its limited manuscript use with notebook commit fe4ee08. The record is not adopted and remains provisional until the re-check on the re-pinned Engine wheel. The notebook is rendered in isolation without changing the protected site registry.
 
 ## Correctness checks and retained paper values
 
