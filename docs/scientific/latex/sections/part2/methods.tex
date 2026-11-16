@@ -78,7 +78,7 @@ The parent liquids are the measured states, with bubble observations compressed 
 Trial phases obey reaction equilibrium and electroneutrality.
 The search optimizes its own trial phases and records the density branch of each resolved descent as liquid or vapor when that classification is available; otherwise the branch remains unresolved.
 It also evaluates trial compositions supplied from earlier searches, which can show that a state is not stable but do not establish its branch.
-Only a liquid descent found by the search's own trials triggers the stability penalty, because the penalty targets the false second liquid that Part I found in an MEA fit without the penalty \cite[Sect.~4.2]{PolleyPartI}; vapor descents and negative distances from supplied trials are reported without triggering it.
+Only a liquid descent found by the search's own trials triggers the stability penalty, because the penalty targets a calculated second liquid \cite[Sect.~3.4]{PolleyPartI}; vapor descents and negative distances from supplied trials are reported without triggering it.
 A search that does not complete is reported as unavailable, even when a supplied trial gives a negative distance, and is never counted as stable.
 
 % P:p2-methods-penalty

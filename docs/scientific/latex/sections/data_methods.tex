@@ -7,6 +7,7 @@ Prior inspection or use in choosing parameters is disclosed separately in \cref{
 The objective contains 307 quantities; the binary \COtwo--water pressures remain in it as checks on a previously fitted, fixed interaction.
 All subsequent property calculations use the adopted parameters without adjustment.
 
+\needspace{36\baselineskip}
 \input{tables/current_data_inventory}
 
 % P:methods-02
@@ -62,11 +63,14 @@ Section~\ref{supp-sec:s-density} gives the source inputs and their qualification
 % P:methods-04
 Estimation proceeds from pure water against IAPWS-95, through the \COtwo--water interaction against Kiepe pressures and the MEA dielectric coefficients against unloaded-solution permittivities, to the joint MEA fit.
 Earlier subsystem coefficients remain fixed in the joint fit.
-The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights.
-F0 allows reaction-law shifts and separate amine-ion Born diameters; F1 fixes R2 and R5 to their literature laws, and F2 additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
-F3 also fixes the carbamate--water interaction and \MEAH--water temperature slope to zero.
-F4 fixes the water--bicarbonate and water--carbonate laws to sodium-salt values and frees the \MEAH--bicarbonate interaction; F4-0 fixes that new interaction to zero, whereas F5 instead adds zero \MEAH--carbamate interaction to F4.
-For the adopted set, F2, eleven remaining parameters minimize
+The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights; \cref{tab:choice-cost} uses the calibration names set in italics here.
+The \emph{earlier shared set}, the 16-parameter stability-penalized calibration of this study, allows shifts of the R2 and R5 laws and separate amine-ion Born diameters.
+The next calibration, \emph{literature R2/R5 laws; separate Born diameters}, fixes R2 and R5 to their literature forms, and the \emph{present model}, the adopted parameter set used throughout this paper, additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
+The \emph{zero carbamate--water interaction and protonated-MEA--water slope} calibration also fixes the carbamate--water interaction and the \MEAH--water temperature slope to zero.
+The \emph{sodium-salt water--anion laws} calibration retains the preceding restrictions, fixes the water--bicarbonate and water--carbonate temperature laws at values fitted to the model-derived osmotic coefficients for aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and frees the protonated-MEA--bicarbonate interaction.
+The \emph{zero protonated-MEA--bicarbonate interaction} calibration additionally fixes that interaction to zero.
+Alternatively, the \emph{zero protonated-MEA--carbamate interaction} calibration fixes the protonated-MEA--carbamate interaction to zero while retaining the free protonated-MEA--bicarbonate interaction.
+For the present model, eleven remaining parameters minimize
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
  r_j=\frac{y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}}}{s_j}
@@ -76,7 +80,7 @@ For the adopted set, F2, eleven remaining parameters minimize
 \end{equation}
 with the residual form, scale and weight specified by quantity in Table~\ref{supp-tab:objective-groups}.
 Bounded Levenberg--Marquardt least squares uses exact equation-of-state and implicit equilibrium derivatives.
-Two starts are examined for each restriction; the lower-cost converged start is reported, with convergence determined by the optimizer tolerance rather than an iteration limit.
+Two initial parameter vectors are examined for each restriction; the lower-cost converged solution is reported, with convergence determined by the optimizer tolerance rather than an iteration limit.
 These are local solutions, not a global parameter search.
 
 % P:methods-weights
@@ -138,4 +142,4 @@ If a split is detected, the whole searched liquid-state set enters the penalized
 The two scales are successive numerical penalty strengths; $\tau_k$ is the most negative distance on a resolved descending branch, or zero when a completed search finds none.
 No zero is assigned to an unavailable search.
 If needed, the parameter segment from a separately admissible parameter set to the penalized solution is shortened in 0.01 steps, then refined by ten bisections, to recover an admissible endpoint.
-F0 is the stability-penalized calibration of the restriction sequence; the adopted F2 fit required neither a penalty stage nor this segment shortening.
+The earlier shared set is the stability-penalized calibration of the restriction sequence; the fit of the present model required neither the stability penalty nor this segment shortening.

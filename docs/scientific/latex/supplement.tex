@@ -152,7 +152,7 @@ They converge as numerical diagnostic calculations but have no renewed stability
 \end{figure}
 \input{tables/bound_profiles}
 
-\section{Phase-search conditions and split interpretation}\label{sec:s-phase}\label{sec:s-probes}\label{sec:s-fits}
+\section{Phase-search conditions}\label{sec:s-phase}
 % P:supplement-phase-grid
 The liquid grid contains 1800 states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at both pressure ratios stated in the main text.
 Another 108 states use the liquid--vapor-search feed at those two ratios.
@@ -160,32 +160,19 @@ The separate 576-state liquid check uses 20, 30 and 40 wt\%, 318.15--\SI{388.15}
 
 % P:supplement-phase-census
 The liquid--vapor search contains six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6 mol/mol.
-Each uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure from the comparison calculation.
-Every compared parameter set is evaluated at these same physical states.
+Each temperature--loading pair uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure retained as a search input.
+The adopted parameter set is evaluated at these 162 prescribed physical states, without recomputing their pressures from its own bubble pressures.
 The feed is 9.7292821 mol MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
-Thus extensive split-energy changes divided by $RT$ are in mol on this feed basis.
 
 % P:supplement-phase-method
-Charge-neutral liquid starts include a uniform composition and near-pure neutral-species compositions; vapor starts contain only the three neutral species.
+Charge-neutral initial liquid compositions include a uniform composition and near-pure neutral-species compositions; initial vapor compositions contain only the three neutral species.
 The optimized search and the evaluations at split compositions resolved for other MEA parameter sets are reported separately.
 Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
 Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
 The raw state results identify incomplete or unavailable cases explicitly.
-For the earlier unpenalized comparison record (parameter SHA-256 prefix \texttt{efb2a9}), the 54-state liquid-instability count comprises 53 states with resolved liquid search witnesses and one supported by a retained two-liquid path.
-Of these, 46 states have both liquid and vapor search witnesses; state 44, at \SI{333.15}{\kelvin} and loading 0.1 mol/mol, has only vapor search witnesses and counts through its retained two-liquid path, which re-evaluates as two liquids.
-The other seven states have only liquid search witnesses.
-This recheck used the census wheel (SHA-256 prefix \texttt{8b9609d4}); the original census used wheel \texttt{0d08dff9}.
-
-% P:supplement-phase-cause
-The split-energy figure evaluates the same phase compositions under two parameter sets and closes density at the imposed pressure for each.
-It does not relax the frozen F2 phases to equilibrium, nor identify a microscopic interaction uniquely.
-The isolated segment-diameter change leaves the other diameter definitions unchanged and is outside F2's fitted diameter ties.
-The alternative sufficient interaction change also lacks fitted-property evidence.
-Neither probe can be compared with F2's covariance as if it were an uncertainty interval for liquid splitting.
-
 \section{Shared inputs for Part II}\label{sec:s-shared}
 % P:supplement-shared
-The shared coefficient table in the main text lists the adopted F2 values.
+The shared coefficient table in the main text lists the present model values.
 Part II also keeps the shared component charges, segment counts, association topology, electrostatic model choices, standard states and R1--R3 reaction definitions fixed.
 The water--bicarbonate interaction is the MEA-fitted value, whereas the carbonate--water interaction is an assumed fixed value.
 The weakly determined bicarbonate interaction and the dielectric and source-law extrapolations limit the strength of a transfer claim before amine-specific comparisons.
