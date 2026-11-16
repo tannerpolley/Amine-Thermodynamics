@@ -20,18 +20,18 @@
 % Input: analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json SHA256 af4bf26170275833023dd58d085c955b15971f50744adc4da44d621f540f3cff
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Cumulative restrictions and their measured cost on identical observations. P: 47 fitted pressures; U: 112 pressures not fitted; L: 47 fitted loaded densities. Deviations are AARD (percent). No across-role ranking is implied.}\label{tab:choice-cost}
-\begin{tabular}{@{}lrrrrrr@{}}
+\caption{Cumulative restrictions and their measured cost on identical observations. P: 47 fitted pressures; U: 112 pressures not fitted; L: 47 fitted loaded densities. Deviations are AARD (percent). The calibration names refer to the cumulative restrictions in Section~\ref{sec:parameters}. No across-role ranking is implied.}\label{tab:choice-cost}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.3100\linewidth}rrrrrr@{}}
 \toprule
-Set & Parameters & On bounds & $C$ & P & U & L \\
+Calibration & Parameters & On bounds & $C$ & P & U & L \\
 \midrule
-F0 & $16$ & $6$ & $148.511$ & $11.79$ & $23.82$ & $0.162$ \\
-F1 & $13$ & $2$ & $150.532$ & $11.96$ & $24.18$ & $0.1463$ \\
-F2 & $11$ & $1$ & $150.763$ & $11.64$ & $24.89$ & $0.1523$ \\
-F3 & $9$ & $1$ & $169.138$ & $13.98$ & $33.16$ & $0.2027$ \\
-F4 & $9$ & $2$ & $174.451$ & $15.46$ & $38.48$ & $0.2129$ \\
-F4-0 & $8$ & $1$ & $176.049$ & $15.59$ & $38.53$ & $0.2065$ \\
-F5 & $8$ & $3$ & $186.615$ & $20.09$ & $39.7$ & $0.2281$ \\
+Earlier shared set & $16$ & $6$ & $148.511$ & $11.79$ & $23.82$ & $0.162$ \\
+Literature laws & $13$ & $2$ & $150.532$ & $11.96$ & $24.18$ & $0.1463$ \\
+Present model & $11$ & $1$ & $150.763$ & $11.64$ & $24.89$ & $0.1523$ \\
+Zero carbamate--water terms & $9$ & $1$ & $169.138$ & $13.98$ & $33.16$ & $0.2027$ \\
+Salt-derived interactions & $9$ & $2$ & $174.451$ & $15.46$ & $38.48$ & $0.2129$ \\
+Zero amine--bicarbonate & $8$ & $1$ & $176.049$ & $15.59$ & $38.53$ & $0.2065$ \\
+Zero amine--carbamate & $8$ & $3$ & $186.615$ & $20.09$ & $39.7$ & $0.2281$ \\
 \bottomrule
 \end{tabular}
 \end{table}

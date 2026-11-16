@@ -770,3 +770,67 @@ substitution. Both PDFs have 0 Type 3 fonts. Visual QA reports 21 main-paper
 and 2 supplement tight-text-clearance warnings, all around ordinary adjacent
 text or math rows; inspection found no overlap or clipping. The focused
 independent science re-check remains open. No result adoption is implied.
+
+## Part I visual and reader-name pass (2026-11-16, issue 347)
+
+Presentation only, based on `7f6e29e`. No new scientific result, parameter fit,
+model evaluation or bibliography refresh. The existing investigator promotion
+of `d73b90cc6ae00962dc34f77252bbcf54eeff430e` remains the basis for manuscript
+use with its recorded limitations. The owner authorized removal of development
+names and display rounding in this pass.
+
+The names below describe the cumulative restrictions, not isolated physical
+effects. Sources: `sections/data_methods.tex`, parameter-estimation paragraph
+at `7f6e29e`; `analyses/mea_parameter_bundle/scripts/reduced_refit_338.py`,
+`campaign()` (especially number 2--5 and the F4-0 alternative);
+`analyses/mea_parameter_bundle/results/reduced-refit/fit-comparison.csv`
+(counts and parameter hashes); and the corresponding retained parameter files
+under that result directory. These records were read without executing their
+calculation producer. Part II's read-only `sections/part2/model.tex` identifies
+the earlier shared set by its shifted laws and separate Born diameters;
+Part II figures call the adopted parameters “Present model.”
+
+| Old label | Reader name | Fixed and free quantities | Source locator |
+|---|---|---|---|
+| F0 | Earlier shared set | 16 adjustable parameters, including shifted R2/R5 laws and separate amine-ion Born diameters; stability-penalized calibration, distinct from the unpenalized comparison | Parameter-estimation and phase-method paragraphs; fit-comparison.csv F0 |
+| F1 | Literature laws / literature-law calibration | 13 parameters; fixes R2/R5 to literature laws, retains separate amine-ion Born diameters | campaign(), initial LITERATURE assignment; F1 row |
+| F2 | Present model | 11 parameters; additionally ties both amine-ion Born diameters to segment diameters | campaign(), number 2; F2 row; born-tie-outcome.json |
+| F3 | Zero carbamate--water terms | 9 parameters; additionally sets carbamate--water interaction and protonated-MEA--water reciprocal-temperature slope to zero | campaign(), number 3; F3 row |
+| F4 | Salt-derived interactions | 9 parameters; additionally fixes water--bicarbonate/carbonate laws to sodium-salt values and frees protonated-MEA--bicarbonate interaction | campaign(), number 4 and number >=4; F4 row |
+| F4-0 | Zero amine--bicarbonate | 8 parameters; fixes the newly introduced protonated-MEA--bicarbonate interaction of the salt-derived calibration to zero | campaign(), F4-0 alternatives; F4-0 row |
+| F5 | Zero amine--carbamate | 8 parameters; fixes protonated-MEA--carbamate interaction of the salt-derived calibration to zero, retaining the free amine--bicarbonate interaction | campaign(), number 5; F5 row |
+
+Names are mapped by `scripts/final_rerun_tables.py` for generated tables.
+Reaction labels R1--R5 and cited source table labels remain scientific locators.
+Kim “run 2” is a source experiment identifier, not an internal calculation run.
+Package and exact source-commit identifiers in Data and Code Availability remain
+reproduction information. No script paths or issue numbers appear in the
+assembled scientific text. Historical source comments remain unchanged.
+
+Table 1 uses one math `rightleftharpoons` glyph between separately typeset
+chemical expressions. A separate coefficient panel allows readable decimal
+alignment with siunitx; trailing zeros add no information and change no value.
+Decimal equality is checked against all 20 pre-pass coefficient displays,
+which were already generated from the promoted source. The existing 9-significant-
+figure source-to-display rule is retained; this does not claim that rounded
+printed coefficients carry every binary digit of the underlying calculation.
+Table 4 displays AARD to three significant figures, calculated directly from
+retained source rows (one decimal above ten percent, two below ten percent in
+this table). No other table numbers change.
+
+All eight figures use STIX serif text and mathematics; chemical subscripts use
+math text because STIXGeneral lacks the Unicode subscript-two glyph.
+Continuous model curves remain lines; observations and source-state predictions
+remain discrete circles/crosses. Temperature colors are assigned consistently
+across the reacting-system plots. Different dashes distinguish model curves
+with dotted portions reserved for below-bubble-pressure species calculations. Symbol sizes also distinguish the three concentration-plot temperatures. The energy
+contributions remain categorical bars: their categories are distinct Gibbs
+energy terms, not samples of a continuous function. No TikZ or PGFPlots source
+is included in Part I, so no diagram was regenerated.
+
+Part II and shared chemistry/bibliography files are unchanged. Read-only matches:
+`tables/part2/fit-starts.tex` and `shared-sensitivity.tex` retain “A3” in captions
+and rows; `sections/part2/model.tex` and `pz-reaction-directions.tex` still use
+mhchem equilibrium arrows. These are reported for the owner's separate review.
+The ignored literature shelf is absent from this worktree; this pass makes no
+new literature-backed scientific judgment and changes no citation or equation.
