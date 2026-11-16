@@ -162,6 +162,11 @@ def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
         return re.sub(r'\\+ref\{(sec:s-[^}]+)\}', lambda m: sections[m[1]], str(value))
     caption = section_refs(caption)
     data = [row if isinstance(row, str) else [section_refs(value) for value in row] for row in data]
+    main_tables = set(re.findall(r'\\input\{tables/([^}]+)\}', ''.join(p.read_text() for p in (ROOT/'docs/scientific/latex/sections').glob('*.tex'))))
+    if name.removesuffix('.tex') in main_tables:
+        def rounded(value):
+            return re.sub(r'(?<![\w.])[-+]?\d+\.\d{5,}(?:[eE][-+]?\d+)?', lambda m: (f'{float(m[0]):.4e}' if 0 < abs(float(m[0])) < .001 else f'{float(m[0]):.4f}'), str(value))
+        data = [rounded(row) if isinstance(row, str) else [rounded(v) for v in row] for row in data]
     caption = display(caption.replace('CO₂', r'\ce{CO2}')).replace("Ma\\'mun", "Ma'mun")
     caption = caption[:1].upper() + caption[1:]
     caption = re.sub(r'(?<!\\)%', r'\%', caption).replace("\\'s", "'s")
@@ -230,7 +235,7 @@ def main():
         shown.add(identity)
         v = float(values[identity])
         # Main-text Table 3 rounds to at most four decimal places; the supplement species table carries eight significant figures.
-        text = f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS)
+        text = f'{v:.4f}' if decimals is not None and identity in coords and identity.endswith(('segment_diameter', 'born_diameter')) else (f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS))
         return text
     species = [n['component_id'] for n in document['components']]
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
@@ -306,13 +311,14 @@ def main():
         if r['reaction_id']=='R5': values = dict(zip(('a','b_k','c','d_per_k'),[-math.log(10)*values['b'],-math.log(10)*values['a_k'],0,-math.log(10)*values['c_per_k']]))
         lhs, rhs = r['equation'].replace('CO3--','CO3^{2-}').split(' <=> ')
         rr.append([r['reaction_id'],r'\ce{'+lhs+r'} $\rightleftharpoons$ \ce{'+rhs+'}',*[num(values.get(k,0),9) for k in ('a','b_k','c','d_per_k')]])
+    table('supplement_reaction_coefficients.tex', r'Completed molality-based reaction coefficients to nine significant figures, for $\ln K=A+B/T+C\ln T+DT$ with $T$ in kelvin. Reactions are defined in the main text.', ['Reaction','$A$','$B$ (K)','$C$','$D$ (K$^{-1}$)'], [[r[0], *r[2:]] for r in rr], ['l']+['r']*4)
     # Separate stoichiometry and coefficients to preserve every printed digit at readable size.
     reaction_rows = [[r[0], r[1]] for r in rr]
-    table('reaction_equilibrium_constants.tex', r'Aqueous reaction stoichiometry and completed molality-based constants, $\ln K=A+B/T+C\ln T+DT$, with $T$ in kelvin. Source-to-molality offsets are included once. R1--R3: Austgen Table V; R4: Tong Table 5; R5: Bates--Pinching Eq. (10). All laws are fixed in the joint fit. Coefficients are shown to at most nine significant figures.', ['Reaction', 'Stoichiometry'], reaction_rows, ['l','l'])
+    table('reaction_equilibrium_constants.tex', r'Aqueous reaction stoichiometry and completed molality-based constants, $\ln K=A+B/T+C\ln T+DT$, with $T$ in kelvin. Source-to-molality offsets are included once. R1--R3: Austgen Table V; R4: Tong Table 5; R5: Bates--Pinching Eq. (10). All laws are fixed in the joint fit. Coefficients are rounded to at most four decimal places; small coefficients use scientific notation. Supplementary Table~\ref{supp-tab:supplement-reaction-coefficients} retains nine significant figures.', ['Reaction', 'Stoichiometry'], reaction_rows, ['l','l'])
     body = OUTPUTS['reaction_equilibrium_constants.tex']
-    coefficients = [r'\par\medskip', r'\begin{tabular}{@{}l S[group-digits=false,table-format=-3.9] S[group-digits=false,table-format=-5.5] S[group-digits=false,table-format=-2.4] S[group-digits=false,table-format=-1.12]@{}}', r'\toprule', r'Reaction & {$A$} & {$B$ (K)} & {$C$} & {$D$ (K$^{-1}$)} \\', r'\midrule']
+    coefficients = [r'\par\medskip', r'\begin{tabular}{@{}l S[group-digits=false,table-format=-3.4] S[group-digits=false,table-format=-5.4] S[group-digits=false,table-format=-2.4] S[group-digits=false,table-format=-1.4e-1]@{}}', r'\toprule', r'Reaction & {$A$} & {$B$ (K)} & {$C$} & {$D$ (K$^{-1}$)} \\', r'\midrule']
     for row in rr:
-        coefficients.append(' & '.join([row[0]] + [v for v in row[2:]]) + r' \\')
+        coefficients.append(' & '.join([row[0]] + [(f'{float(v):.4e}' if 0 < abs(float(v)) < .001 else f'{float(v):.4f}') for v in row[2:]]) + r' \\')
     coefficients += [r'\bottomrule', r'\end{tabular}']
     OUTPUTS['reaction_equilibrium_constants.tex'] = body.replace(r'\end{table}', '\n'.join(coefficients) + '\n' + r'\end{table}')
     groups = {}
@@ -340,11 +346,11 @@ def main():
     weights = a.rows(E/'objective-groups.csv')
     table('objective_groups.tex', r'Assigned objective scales and weights. Rows with identical group and quantity are combined by range; the weight and scale are distinct. Origins and unrecorded rationales are described in the text.', ['Group; quantity','n','Scale range','Weight range','Cost'], [[groupname[g]+'; '+{'partial_pressure':'CO2 pressure','mole_fraction':'mole fraction','addition_enthalpy':'integral heat','amount_ratio':'amount ratio','pressure':'pressure','phase_density':'density','temperature':'temperature','equilibrium_isobaric_heat_capacity':'equilibrium heat capacity'}[q],sum(int(r['n']) for r in weights if (r['group'],r['quantity'])==(g,q)),span(float(r['scale']) for r in weights if (r['group'],r['quantity'])==(g,q)),span(float(r['weight']) for r in weights if (r['group'],r['quantity'])==(g,q)),num(sum(float(r['cost']) for r in weights if (r['group'],r['quantity'])==(g,q)),6)] for g,q in dict.fromkeys((r['group'],r['quantity']) for r in weights)], [.45,'r','l','l','r'])
     checks = a.load(E/'check-values.json')
-    table('check_values.tex', r'Bubble-state reproduction values. Inputs: $x_{\ce{CO2}}=0.00036$ in water; $x_{\MEA}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each was solved from two initial pressures; printed values agree. Density is liquid mass density.', ['System','$T$ (K)','$P$ (Pa)',r'$\rho$ (kg/m$^3$)'], [[name,num(r['T_K'],7),num(r['answers'][0]['bubble_pressure_Pa'],10),num(r['answers'][0]['density_kg_m3'],10)] for name,r in zip([r'\ce{CO2}--water','MEA--water','Loaded MEA'],checks)], ['l','r','r','r'])
+    table('check_values.tex', r'Bubble-state reproduction values. Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\MEA}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each was solved from two initial pressures; printed values agree. Density is liquid mass density.', ['System','$T$ (K)','$P$ (Pa)',r'$\rho$ (kg/m$^3$)'], [[name,num(r['T_K'],7),num(r['answers'][0]['bubble_pressure_Pa'],10),num(r['answers'][0]['density_kg_m3'],10)] for name,r in zip([r'\ce{CO2}--water','MEA--water','Loaded MEA'],checks)], ['l','r','r','r'])
     contribution_names = dict(association='Association', born='Born', hard_chain='Hard chain', dispersion='Dispersion', debye_huckel=r'Debye--H\"uckel', residual_helmholtz='Total residual')
     table('supplement_check_values.tex', r'Reduced residual molar Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions at the three main-text reproduction states. Zero terms are omitted.', ['Contribution or species',r'\ce{CO2}--water','MEA--water','Loaded MEA'], [[('$x_{'+symbol[key[2:]]+'}$') if key.startswith('x_') else contribution_names[key],*[num(r['answers'][0][key],10) for r in checks]] for key in checks[0]['answers'][0] if key not in ('bubble_pressure_Pa','density_kg_m3','molar_density_mol_m3') and any(r['answers'][0][key] for r in checks)], ['l','r','r','r'])
     shared = a.rows(E/'shared-coefficients.csv')
-    table('shared_parameters.tex', r'Exact shared coefficient set held fixed in Part II, grouped by physical quantity. Water, \ce{CO2}, \ce{H3O+}, \ce{OH-}, \ce{HCO3-}, \ce{CO3^{2-}}, their shared interactions and R1--R3 laws are included. Topology, fixed fields and standard states also transfer as specified in the text.', ['Parameter','Value','Unit'], [[label(r['identity']),num(r['value'],10),r['unit']] for r in shared]+[['R1--R3 laws','Table~\\ref{tab:reaction-equilibrium-constants}','1']], [.66,'r','l'])
+    table('shared_parameters.tex', r'Shared coefficient set held fixed in Part II, grouped by physical quantity. Displayed values are rounded; the electronic data retain the numerical inputs. Water, \ce{CO2}, \ce{H3O+}, \ce{OH-}, \ce{HCO3-}, \ce{CO3^{2-}}, their shared interactions and R1--R3 laws are included. Topology, fixed fields and standard states also transfer as specified in the text.', ['Parameter','Value','Unit'], [[label(r['identity']),num(r['value'],10),r['unit']] for r in shared]+[['R1--R3 laws','Table~\\ref{tab:reaction-equilibrium-constants}','1']], [.66,'r','l'])
     table('pressure_sources.tex', r'Pressure errors by experimental source at nominal 30 wt\% MEA; source subsets contain both fitted observations and observations that are not fitted.', ['Source','Observations','AARD (percent)'], [[SOURCE_NAMES.get(s,s),len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
     a.load(E/'candidate/replay.json'); a.load(E/'uncertainty/covariance.json'); a.load(E/'stability/candidate/search.json'); a.load(a.BUNDLE/'results/split-cause-342/final-supplied-F2-summary.json')
     for name, body in OUTPUTS.items():

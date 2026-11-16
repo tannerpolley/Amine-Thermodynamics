@@ -13,7 +13,12 @@ if ! command -v latexmk >/dev/null 2>&1; then
 fi
 
 cd "$latex_dir"
-latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds main.tex
+# Build supplements first so main-text cross-references use current labels.
+for document in supplement part2_supplement main part2; do
+    latexmk -g -pdf -recorder -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
+done
 
 cd "$repo_root"
-uv run python scripts/check_manuscript_freshness.py --write-receipt
+for document in main supplement part2 part2_supplement; do
+    uv run python scripts/check_manuscript_freshness.py --document "$document" --write-receipt
+done

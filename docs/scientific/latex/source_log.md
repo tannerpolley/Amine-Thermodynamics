@@ -604,23 +604,23 @@ The provisional abstract states the DEA answer without claiming the other result
   source-correlation interval, not verified measured coverage.
 - 3: amended native-descent, supplied-negative and unavailable-search rules
   stated; DEA outcome reported. Other amine outcomes remain pending.
-- 4: PZ convergence deferred with its results.
+- 4: removed from the paper scope by the owner on 2026-11-16.
 - 5: reviewed DEA pressure/loading and heat curves used with measured points,
   role labels and source-range marks. Other amine figures remain pending.
 - 6: compact DEA fixed-species and fitted-coordinate tables in the main paper;
   detailed scalar values in the supplement. Other species remain pending.
-- 7: AMP/PZ pure/binary deviations deferred with their final parameters.
+- 7: AMP pure-component and binary deviations deferred with its final parameters.
 - 8: DEA deviations, bound disposition and descent counts reported; the
-  four-amine summary table is pending the remaining results.
+  three-amine summary table is pending the remaining results.
 - 9: no observation-index axis; calculated-minus-measured signs stated;
   compact main tables stay together and the long scalar list is supplementary.
 - 10: transfer question and conditional DEA answer in abstract and introduction;
-  the final four-amine answer remains pending.
+  the final three-amine answer remains pending.
 - 11: standard contribution equations removed; Part I citations identify the
   formulation, parameters or calculations taken from it. Final equation/table
   numbering awaits the companion revision (#347).
-- 12: order is MDEA, AMP, PZ, DEA throughout the current framing.
-- 13: DEA limitations are collected in one results paragraph. Four-amine
+- 12: order is DEA, MDEA, AMP throughout the current framing (owner, 2026-11-16).
+- 13: DEA limitations are collected in one results paragraph. Three-amine
   synthesis and conclusions remain pending.
 - 14: conventional model, estimation and results sections used for authorized
   material; other amine subsections remain pending.
@@ -932,3 +932,162 @@ key `Held2014`; the current companion and the main checkout's ignored
 The supporting passages are Markdown lines 268 and 403--405. Sections 2.3--2.4,
 3.1 and 4 were read; this is an aqueous-salt modeling precedent, not measured
 MEA phase separation or a global stability proof.
+
+## Combined manuscript round: issues 348 and 387 (2026-11-16)
+
+The owner authorized piperazine removal, standing editorial decisions, reader-facing identifiers, display rounding and one four-document build. No model calculation or refit ran. Retained analysis and `analyses/_cse-manuscript.json` are unchanged.
+
+### Page changes
+
+| PDF | Page | Change |
+| --- | --- | --- |
+| `main.pdf` | 6 | Table 1 coefficients rounded; nine-significant-figure values moved to supplementary Table S1. |
+| `main.pdf` | 8 | Objective-table cross-reference renumbered to S4. |
+| `main.pdf` | 9 | Table 3 pressure and density display rounding; small input fraction written in scientific notation. |
+| `main.pdf` | 12 | Table 5 small residual values rounded. |
+| `main.pdf` | 13 | Table 6 species-fraction RMSE values rounded. |
+| `main.pdf` | 16 | Conditional-parameter-table cross-reference renumbered to S7. |
+| `main.pdf` | 17 | Species-input cross-reference renumbered to S2; fitted diameters remain five significant figures. |
+| `main.pdf` | 19 | Table 11 shared values rounded; caption identifies rounding and electronic numerical inputs. |
+| `main.pdf` | 20 | Table 11 continuation reflows; source-commit prefix replaced by package version. |
+| `supplement.pdf` | 1 | New Table S1 retains completed reaction coefficients to nine significant figures; species table becomes S2. |
+| `supplement.pdf` | 2 | Species table continuation reflows. |
+| `supplement.pdf` | 3 | Species continuation and interaction table reflow; interaction table becomes S3. |
+| `supplement.pdf` | 4 | Objective table becomes S4; subsequent text reflows. |
+| `supplement.pdf` | 5 | Reproduction and Kim tables become S5 and S6; uncertainty text reflows. |
+| `supplement.pdf` | 6 | Parameter and correlation tables become S7 and S8. |
+| `supplement.pdf` | 7 | Bound scans become S9; figure and search conditions reflow. |
+| `supplement.pdf` | 8 | Search conditions and shared-input text reflow; references begin earlier. |
+| `supplement.pdf` | 9 | Remaining references reflow. |
+| `part2.pdf` | 1 | DEA, MDEA and AMP title, abstract and introduction; amine classes stated; piperazine removed. |
+| `part2.pdf` | 2 | Introduction closes on three amines. |
+| `part2.pdf` | 3 | Pending model notice covers MDEA and AMP. |
+| `part2.pdf` | 5 | Pending methods/results notices cover MDEA and AMP; final calculations replaces final runs. |
+| `part2.pdf` | 8 | Three-amine summary notice; provisional package-version wording. |
+| `part2.pdf` | 9 | Three-amine conclusions notice; epcsaft version 1.3.0 availability; nomenclature reflows. |
+| `part2.pdf` | 10 | Nomenclature reflows; companion title corrected to calibration. |
+| `part2_supplement.pdf` | 1 | Three-amine title. |
+| `part2_supplement.pdf` | 4 | S4 commit, SHA-256 and data-row identifier removed; epcsaft version 1.3.0 and DOI placeholder; pending results limited to MDEA and AMP. References reflow. |
+| `part2_supplement.pdf` | 5 | References reflow after the shorter S4 paragraph. |
+
+All other extracted-text pages are unchanged. Page counts remain main 23, supplement 9, Part II 10 and Part II supplement 5.
+
+### Removed piperazine passages and files
+
+The following exact old source lines were removed or rewritten; the replacement scope is DEA, MDEA and AMP.
+
+`docs/scientific/latex/part2.tex`:
+
+```tex
+69: \title[mode=title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part II: transfer to MDEA, AMP, piperazine and DEA}{Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT. Part II: transfer to MDEA, AMP, piperazine and DEA}}
+78: For diethanolamine (DEA), with 4 fitted amine-specific quantities, the shared parameters describe integral absorption heats and solution densities closely but \ce{CO2} partial pressures only approximately, and they give water--DEA excess enthalpies of the wrong sign; results for methyldiethanolamine (MDEA), 2-amino-2-methyl-1-propanol (AMP) and piperazine are pending.
+83: \textit{Draft note: DEA values are provisional until recalculated with the final calculation-library build. Pending: MDEA, AMP and piperazine results.}
+```
+
+`docs/scientific/latex/part2_supplement.tex`:
+
+```tex
+40: \title{Supplementary material for ``Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT. Part II: transfer to MDEA, AMP, piperazine and DEA''}
+```
+
+`docs/scientific/latex/sections/part2/introduction.tex`:
+
+```tex
+6: The present study considers methyldiethanolamine (MDEA), 2-amino-2-methyl-1-propanol (AMP), piperazine (PZ) and diethanolamine (DEA), in that order.
+26: Results for MDEA, AMP and PZ are pending; a conclusion across all 4 amines awaits them.
+```
+
+`docs/scientific/latex/sections/part2/model.tex`:
+
+```tex
+58: \textit{Pending: amine-specific model descriptions and parameter tables for MDEA, AMP and PZ await their final results.}
+```
+
+`docs/scientific/latex/sections/part2/supplement.tex`:
+
+```tex
+47: \textit{Pending: supplementary results for MDEA, AMP and PZ await their final runs.}
+```
+
+`docs/scientific/latex/sections/part2/methods.tex`:
+
+```tex
+102: \textit{Pending: data inventories, objective details and amine-specific search outcomes for MDEA, AMP and PZ await their final results.}
+```
+
+`docs/scientific/latex/sections/part2/results.tex`:
+
+```tex
+3: \textit{Pending: MDEA, AMP and PZ results, figures and tables await their final runs.}
+91: \textit{Pending: the four-amine summary and comparisons await MDEA, AMP and PZ final results.}
+```
+
+`docs/scientific/latex/sections/part2/conclusions.tex`:
+
+```tex
+3: \textit{Pending: conclusions across MDEA, AMP, PZ and DEA await the remaining amine results and their review.}
+```
+
+`docs/scientific/latex/sections/part2/pz-reaction-directions.tex`:
+
+```tex
+3:  \mathrm{P1:}\quad &\ce{PZH+ + H2O <=> PZ + H3O+},\\
+4:  \mathrm{P2:}\quad &\ce{PZH2^{2+} + H2O <=> PZH+ + H3O+},\\
+5:  \mathrm{P3:}\quad &\ce{PZCOO- + H2O <=> PZ + HCO3-},\\
+6:  \mathrm{P4:}\quad &\ce{HPZCOO + H2O <=> PZCOO- + H3O+},\\
+7:  \mathrm{P5:}\quad &\ce{PZ(COO)2^{2-} + H2O <=> PZCOO- + HCO3-}.
+```
+
+Deleted only `sections/part2/pz-reaction-directions.tex`: all five piperazine reactions, already unincluded. `tables/part2/fit-starts.tex` contains several amines; `shared-sensitivity.tex` contains MDEA and AMP. Neither is included in any current document; both stay. No analysis record was deleted. The deferred-deviation list now contains AMP pure-component and binary deviations only; piperazine convergence is no longer pending paper work.
+
+### Reader-facing identifier changes
+
+| Source | Removed or replaced | Replacement |
+| --- | --- | --- |
+| `sections/data_code_availability.tex` | Source commit prefix `391dfe5d` | `epcsaft`, version 1.3.0; existing Zenodo DOI placeholder retained. |
+| `sections/part2/supplement.tex`, S4 | Full commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`; SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`; package-build wording | `epcsaft`, version 1.3.0; Zenodo DOI placeholder. |
+| `sections/part2/supplement.tex`, S4 | `lawson-1976-viii:1` | Existing physical locator: second Lawson and Garst Table VIII state. |
+| `sections/part2/endmatter.tex` | Pointer to immutable file identity | Named package version beside the existing DOI placeholder. |
+| Part II abstract, results and supplement pending notices | Final build, final runs, re-pinned wheel wording | Final package version or final calculations; provisional result qualification preserved. |
+
+The pinned wheel metadata reports `Name: epcsaft`, `Version: 1.3.0`. Only its metadata were read. No bibliography refresh occurred; the explicitly authorized companion-title correction was made. The Figure 2 legend and descriptive calibration labels were already corrected on the supplied main commit, so figure files were not regenerated. Published source locators Tables A1–A2 are retained: they identify Jakobsen source tables, not development parameter sets. The active source graph and extracted text contain no internal F/A labels, engine wording, package hashes, issue numbers or run/stage identifiers.
+
+### Table precision
+
+The existing displayed-number checks verify generated bytes and retained source identities, not decimal-place policy. The Part I generator now rounds active main-text table cells to at most four decimal places, uses scientific notation for small nonzero values and explicitly preserves the five-significant-figure fitted diameters. A manual source-table scan additionally checked captions and the separately generated reaction-coefficient block. The Part II generator already complies.
+
+| Part | Table | Precision result |
+| --- | --- | --- |
+| I | 1, reaction constants | Rounded to four decimal places; small nonzero coefficient uses scientific notation. Extra precision retained in supplementary S1. |
+| I | 2, data inventory | Already compliant. |
+| I | 3, reproduction states | Pressure and density rounded to four decimal places; small input fraction uses scientific notation. |
+| I | 4, pressure sources | Already compliant. |
+| I | 5, fitted deviations | Small residual values rounded to four decimal places. |
+| I | 6, published comparisons | Species-fraction RMSE values rounded to four decimal places. |
+| I | 7, restrictions | Already compliant. |
+| I | 8, species parameters | Already compliant; fitted diameters 4.8558 and 5.3480 angstrom, five significant figures, including Born ties. This is the parameter table formerly called Table 3 in the precision decision. |
+| I | 9, interactions | Already compliant. |
+| I | 10, matched pressures | Already compliant. |
+| I | 11, shared coefficients | Rounded to four decimal places; caption no longer calls the displayed values exact. |
+| II | 1, fixed species | Already compliant: at most four decimal places. |
+| II | 2, data roles | Already compliant: two decimal places for temperatures. |
+| II | 3, fitted quantities | Already compliant: three decimal places; no fitted diameters. |
+| II | 4, deviations | Already compliant: two decimal places. |
+
+### Build and checks
+
+`scripts/build_manuscript.sh` now builds supplement, Part II supplement, main and Part II with the recorder enabled, then checks freshness for all four documents and writes their individual verification files. The freshness checker accepts `supplement`. Final build ran through `agent-heavy` in a background shell. No second build script was added.
+
+Displayed-number checks: Part I 20 generated tables against 20 investigator-commit-verified inputs; DEA 10 displays against 10 retained input files. Prose check passed for active prose, generated tables and STYLE. Four freshness checks passed. All four PDFs have zero Type 3 fonts, no undefined references/citations and no overfull boxes.
+
+TeX underfull-box warnings: main 2, supplement 2, Part II 2, Part II supplement 1. No font-substitution warnings.
+
+All 47 pages were rendered at 150 dpi in colour and grayscale in `builds/visual-348-387/`; every changed page was inspected in both forms. Automated geometry results are recorded separately from visual judgment:
+- `main.pdf`: automated outcome `fail`; 145 warning tight_text_clearance, 3 warning text_graphic_overlap, 1 error text_overlap, 1 warning tight_text_graphic_clearance.
+- `supplement.pdf`: automated outcome `review`; 33 warning tight_text_clearance.
+- `part2.pdf`: automated outcome `review`; 21 warning tight_text_clearance.
+- `part2_supplement.pdf`: automated outcome `review`; 2 warning tight_text_clearance.
+
+The main-text error is the bounding-box intersection between the unchanged calc/obs superscripts and the absolute-value expression in Eq. 27 on page 8; print-size inspection shows separated glyphs. Tight-clearance and equation/graphic notices were inspected as layout warnings, not scientific failures. No clipping or unreadable new content was found on changed pages. Keep the rounded tables and shortened text; the scientific meaning of this round is unchanged apart from the owner-selected amine scope. Independent science, story and visual checks follow.
+
+The standing-decision rows and each exact quotation or marked paraphrase are owned by `docs/scientific/writing/STYLE.md`, with project-wide rows and four document sections. The ignored local preference journal now points there; it is not committed.

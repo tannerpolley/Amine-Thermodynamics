@@ -118,7 +118,7 @@ def validate_build(paths: list[Path]) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify that the manuscript PDF matches current tracked inputs.")
-    parser.add_argument("--document", choices=("main", "part2", "part2_supplement"), default="main")
+    parser.add_argument("--document", choices=("main", "supplement", "part2", "part2_supplement"), default="main")
     parser.add_argument("--write-receipt", action="store_true", help="Record the current successful build hashes.")
     args = parser.parse_args()
 
