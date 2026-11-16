@@ -462,16 +462,19 @@ def candidate(name, start, fixed, fitted, ties, route=None):
                 chosen = (route.result if route else r.result)(f'{name}/candidate.json') if path.exists() else None
             else:
                 chosen = None
+    retreat = (route.result(f'{name}/retreat.json') if route and (folder/name/'retreat.json').exists() else None)
     if route:
         converged = [point for point in endpoints if point['optimizer_converged']]
-        return min(converged or endpoints,key=lambda point:point['cost'])
+        selected = min(converged or endpoints,key=lambda point:point['cost'])
+        selected['retreat'] = retreat
+        write_call(f'{name}/finding.json',dict(cost=selected['cost'],optimizer_converged=selected['optimizer_converged'],retreat=retreat,stable=selected['stable'],unpenalized=unpenalized))
+        return selected
     if chosen is None:
         write_call(f'{name}/finding.json',dict(reason='no stability-enforced candidate',unpenalized=unpenalized))
         return None
     final_search = unpenalized if chosen is mapping else search_call(name+'/candidate',chosen)
     rows, ok, cost = (route.replay if route else r.replay)(chosen)
     converged = final_report['status']=='converged'
-    retreat = (route.result(f'{name}/retreat.json') if route and (folder/name/'retreat.json').exists() else None)
     write_call(f'{name}/finding.json',dict(cost=cost,optimizer_converged=converged,retreat=retreat,stable=final_search['stable'],unpenalized=unpenalized,penalty_cost=0. if final_search['stable'] else None,endpoint_penalty_cost=final_report['stability_cost']))
     if not (ok and converged and final_search['stable']):
         return None

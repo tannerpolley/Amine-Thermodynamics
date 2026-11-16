@@ -221,9 +221,13 @@ def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
         if unavailable and '/penalized-' in name: raise ValueError(row['message'])
         return (endpoint := start+(10. if '/penalized-' in name else 0.)),dict(status=status,final_cost=endpoint,endpoint_replay_cost=endpoint,stability_cost=1.,declared=[],cost_history=[3.,endpoint])
     monkeypatch.setattr(reduced,'fit',fitted)
+    retreat = dict(disposition='no candidate',t=0.,upper_t=1.,non_monotone=True,
+                   trace=[dict(t=0.,admissible=False),dict(t=1.,admissible=True)])
+    route.write('start-0/retreat.json',retreat)
     chosen = route.campaign()
     if unavailable=='split': assert route.result('start-0/penalized-0/unavailable.json')['cause']==row['message']
     assert (chosen['cost']==1. and not chosen['stable']) if status=='converged' else chosen is None
+    if chosen: assert chosen['retreat']==route.result('selection.json')['chosen']['retreat']==route.result('start-0/finding.json')['retreat']==retreat
     endpoints = route.result('start-0/endpoints.json')
     assert len(endpoints)==(3 if status=='converged' and not unavailable else 1)
     assert endpoints[0]['optimizer_report']['cost_history']==[3.,1.] and all(e['split_counts']=='lower bounds' for e in endpoints)

@@ -729,6 +729,8 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
         write(f'{run}/candidate.json', segment(anchor, endpoint, t))
     a, e = shifts
     disposition = 'no candidate' if passing is None else 'optimizer endpoint' if t==1 else 'interpolated'
+    if non_monotone:
+        print(run, 'non-monotone retreat', json.dumps(dict(t=t,upper_t=upper,disposition=disposition)), flush=True)
     write(f'{run}/retreat.json', dict(method='bisection', t=t, trace=trace, upper_t=upper, non_monotone=non_monotone, base_trials=len(base), disposition=disposition,optimizer_converged=optimizer_report['status']=='converged' if optimizer_report else None,optimizer_cost=optimizer_report.get('data_cost',optimizer_report['final_cost']) if optimizer_report else None,retreat_cost=next((row['cost'] for row in reversed(trace) if row['admissible'] and row['t']==t),None),point_terminated_on_optimizer_tolerance=bool(t==1 and optimizer_report and optimizer_report['status']=='converged'), shifts={k: a.get(k, 0.) + t * (e.get(k, 0.) - a.get(k, 0.)) for k in a.keys() | e.keys()}))
 
 
