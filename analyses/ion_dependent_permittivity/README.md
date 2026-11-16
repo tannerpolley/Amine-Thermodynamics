@@ -3,7 +3,7 @@
 Issue [#388](https://github.com/tannerpolley/Amine-Thermodynamics/issues/388),
 2026-11-16. **The probe stopped before observation replay or liquid-split
 searches.** The pinned Engine exposes ion suppression as a replacement for
-the adopted density–temperature law, but cannot combine the two. The owner
+the adopted density–temperature law, but cannot combine the two. The orchestrator
 selected the issue's capability stop after inspecting the numerical check
 below. This is a declaration limitation, not a negative sensitivity result.
 
@@ -86,4 +86,4 @@ The wheel-verified direct evaluations ran through `agent-heavy` using
 block took 0.01366 s, excluding imports, wheel verification and admission wait.
 No campaign runtime was projected because the capability stop precedes the
 campaign timing gate. No fit, parameter adoption, manuscript change or Engine
-issue was made. The owner will file the combined-law use case separately.
+issue was made. The combined-law use case is filed as Engine issue tannerpolley/epcsaft#38.
