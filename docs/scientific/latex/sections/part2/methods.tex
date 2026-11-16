@@ -76,7 +76,8 @@ Each fitted parameter set is searched for a phase split with the reacting tangen
 A negative distance confirmed by a finite, material-conserving Gibbs-energy decrease is a descent and shows that the parent liquid is not stable.
 The parent liquids are the measured states, with bubble observations compressed to 1.05 times their calculated bubble pressure and liquids measured at a stated pressure kept at that pressure, and a grid of temperature, amine concentration and loading at 1.05 and 3.0 times the calculated bubble pressure.
 Trial phases obey reaction equilibrium and electroneutrality.
-The search optimizes its own trial phases and classifies each descent it resolves by density as liquid or vapor; it also evaluates trial compositions supplied from descents found for other parameter sets, which can show that a state is not stable but cannot assign its branch.
+The search optimizes its own trial phases and records the density branch of each resolved descent as liquid or vapor when that classification is available; otherwise the branch remains unresolved.
+It also evaluates trial compositions supplied from earlier searches, which can show that a state is not stable but do not establish its branch.
 Only a liquid descent found by the search's own trials triggers the stability penalty, because the penalty targets the false second liquid that Part I found in an MEA fit without the penalty \cite[Sect.~4.2]{PolleyPartI}; vapor descents and negative distances from supplied trials are reported without triggering it.
 A search that does not complete is reported as unavailable, even when a supplied trial gives a negative distance, and is never counted as stable.
 
@@ -86,12 +87,15 @@ Later fitting stages keep the compositions of liquid descents already found as s
 If neither the penalty nor the retreat below removes the split, the converged unpenalized solution is reported, with its detected split counts as lower bounds.
 
 % P:p2-methods-retreat
-If the penalized solution still shows a liquid descent, a retreat selects the parameter point closest to it at which none is detected.
-Points are interpolated linearly between a reference parameter set with no detected descent, at interpolation fraction $t=0$, and the penalized solution, at $t=1$; bisection on $t$ narrows the bracket to $0.01/2^{10}$, the resolution of Part I's 0.01 steps followed by 10 bisections \cite[Sect.~3.4]{PolleyPartI}.
-Every point is searched with one trial set fixed before the retreat from the 2 endpoint searches, plus the descent compositions found at that point, and its search is repeated until no new descent appears.
-Because no point uses trials found at other interpolated points, the decision at each $t$, and hence the selected point, does not depend on the order in which points are searched.
-Bisection assumes that a descent, once present, persists at larger $t$; the point one bracket width above the selected point is therefore also searched, and any return to stability there is reported.
-The selected point is an interpolation and carries no optimizer convergence claim.
+If the penalized solution has a detected descent or an unavailable search, a retreat is attempted from a reference parameter set with no detected descent and no unavailable search.
+A point is admissible for retreat only when its fitted predictions can be recalculated, all required searches are available, and neither an optimized trial nor a supplied composition indicates a descent.
+Points are interpolated linearly between the reference set at $t=0$ and the penalized solution at $t=1$; bisection narrows the bracket to at most $0.01/2^{10}$, the resolution of Part I's 0.01 steps followed by 10 bisections \cite[Sect.~3.4]{PolleyPartI}.
+Every point is searched with a copy of the trial set fixed after the 2 endpoint searches, plus only the descent compositions found at that point; its search is repeated until no new descent composition is found.
+Thus trials discovered at other interpolated points do not change the decision at a given $t$.
+Bisection assumes a single transition from admissible to inadmissible as $t$ increases.
+The selected point is checked again; when it lies below $t=1$, the upper end of the final bracket is also checked, and all observed reversals of admissibility are reported.
+No candidate is returned if the reference point fails these checks.
+An interpolated point does not inherit optimizer convergence; if the selected point is the optimizer endpoint at $t=1$, its own optimizer convergence disposition is retained.
 Finite searches report detected descents and unavailable searches; they do not prove global stability.
 
 % P:p2-methods-pending
