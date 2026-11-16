@@ -886,12 +886,9 @@ Confirmations from retained rows:
   1.734 MPa, eight at 322.5 K and 0.51 MPa, and six at 322.5 K and 1.03 MPa,
   grouped by `T_K` and `P_Pa` in the retained `heat.csv`. Open circles denote
   the first two conditions; filled circles denote 322.5 K and 1.03 MPa.
-- The abstract retains the 53 + 1 basis of the 54-state instability count.
-  Section S6 identifies the additional case by 333.15 K and loading 0.1 mol/mol:
-  it has resolved vapor trial phases and a descent ending in two liquids,
-  confirmed on re-evaluation. This is a numerical phase-search classification,
-  not an observation of a second liquid. The existing library SHA-256 prefixes
-  remain in S6, with reader-facing compiled-library wording.
+- The discarded unpenalized comparison fit is excluded from the manuscript by
+  the owner's 2026-11-16 decision. Its retained phase-search and split-energy
+  records remain unchanged. This supersedes the earlier classification wording.
 
 The owner selected the existing nine-significant-figure rule for Table 1.
 The caption says “at most nine significant figures” because some source
@@ -908,3 +905,30 @@ The three heat conditions use their temperature colors/sizes and distinct
 open/filled circle meaning. Numerical coordinates, interval lengths and bar
 values were captured from the old and new producers in memory and compared
 exactly for all eight figures. No model calculation ran.
+
+## Issue 347 visual fix round 2 (2026-11-16)
+
+The owner removed the discarded unpenalized comparison fit from Part I,
+including its abstract and conclusion sentences, phase-result paragraphs,
+energy figure, isolated probes and supplementary split interpretation.
+The generated split-energy figure, its producer and all retained calculation
+records remain in the repository. The adopted-model searches and restriction
+comparison remain unchanged.
+
+The numbered Peiper--Pitzer citation uses Zotero parent `2WXLNT7C`, PDF
+attachment `X8GEDSJ2`, DOI `10.1016/0021-9614(82)90078-7`, and Better BibTeX
+key `peiperThermodynamicsAqueousCarbonate1982`. The selected entry was copied
+verbatim from the existing canonical Zotero export; other entries were not
+refreshed. The live Zotero metadata agrees with the exported identity. The
+Companion has no indexed Markdown evidence for this paper; Table 6 and its surrounding
+discussion were checked directly in the local Zotero PDF (pp. 628--633).
+
+The stability rationale cites Held et al. (2014), Section 2.4, whose ion-parameter
+estimation discussion identifies inconsistent liquid--liquid demixing in aqueous
+salt solutions. Zotero parent `3DIW87Q5`, Markdown attachment `TZJJENHW`, citation
+key `Held2014`; the current companion and the main checkout's ignored
+`literature/Held2014--TZJJENHW.md` have SHA-256
+`b8b1e46bf870224de5de68b5989f9cb377d17445d87109a5462a94f1efaafbda`.
+The supporting passages are Markdown lines 268 and 403--405. Sections 2.3--2.4,
+3.1 and 4 were read; this is an aqueous-salt modeling precedent, not measured
+MEA phase separation or a global stability proof.

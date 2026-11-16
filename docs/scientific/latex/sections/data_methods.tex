@@ -64,11 +64,11 @@ Estimation proceeds from pure water against IAPWS-95, through the \COtwo--water 
 Earlier subsystem coefficients remain fixed in the joint fit.
 The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights; \cref{tab:choice-cost} uses the calibration names set in italics here.
 The \emph{earlier shared set}, the 16-parameter stability-penalized calibration of this study, allows shifts of the R2 and R5 laws and separate amine-ion Born diameters.
-The \emph{literature R2/R5 laws; separate Born diameters} calibration fixes R2 and R5 to their literature forms, and the \emph{present model}, the adopted parameter set used throughout this paper, additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
+The next calibration, \emph{literature R2/R5 laws; separate Born diameters}, fixes R2 and R5 to their literature forms, and the \emph{present model}, the adopted parameter set used throughout this paper, additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
 The \emph{zero carbamate--water interaction and protonated-MEA--water slope} calibration also fixes the carbamate--water interaction and the \MEAH--water temperature slope to zero.
-The \emph{sodium-salt water--anion} calibration retains the preceding restrictions, fixes the water--bicarbonate and water--carbonate temperature laws at values fitted to the model-derived osmotic coefficients for aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer (1982, Table 6), and frees the protonated-MEA--bicarbonate interaction.
-The \emph{zero protonated-MEA--bicarbonate} calibration additionally fixes that interaction to zero.
-Alternatively, the \emph{zero protonated-MEA--carbamate} calibration fixes the protonated-MEA--carbamate interaction to zero while retaining the free protonated-MEA--bicarbonate interaction.
+The \emph{sodium-salt water--anion laws} calibration retains the preceding restrictions, fixes the water--bicarbonate and water--carbonate temperature laws at values fitted to the model-derived osmotic coefficients for aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and frees the protonated-MEA--bicarbonate interaction.
+The \emph{zero protonated-MEA--bicarbonate interaction} calibration additionally fixes that interaction to zero.
+Alternatively, the \emph{zero protonated-MEA--carbamate interaction} calibration fixes the protonated-MEA--carbamate interaction to zero while retaining the free protonated-MEA--bicarbonate interaction.
 For the present model, eleven remaining parameters minimize
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad

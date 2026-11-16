@@ -22,37 +22,11 @@ The dielectric coefficients were estimated from unloaded solutions at \SI{298.15
 \subsection{Phase stability of the fitted models}\label{sec:phase-method}
 % P:results-phase-opening
 Loaded aqueous MEA is observed as a homogeneous liquid in B\"ottinger et al.'s measured subset \cite[Sect.~3]{Bottinger2008}.
-That observation motivates checking the model for a spurious additional liquid, although it does not establish experimental homogeneity over the entire numerical search domain.
+Stability is checked because ePC-SAFT ion-parameter choices can predict inconsistent liquid--liquid demixing in aqueous salt solutions \cite[Sect.~2.4]{Held2014}.
 The adopted parameters give no detected instability at 1908 liquid-grid states, 576 intermediate liquid states and 162 liquid--vapor states, with no unavailable or incomplete search in these sets.
 Trial compositions taken from Gibbs decreases resolved for other MEA parameter sets also give no negative distance for the present model; 6121 such compositions are evaluated at every liquid--vapor state.
 No stability penalty entered the fit of the present model.
 
-% P:results-phase-split
-A 16-parameter comparison fit obtained without the stability penalty shows liquid-phase instability at 54 of the same 162 states: 53 have a liquid trial phase that satisfies the criterion of Section~\ref{sec:methods-phase}, and one counts because its vapor-trial descent ends in two liquids (Section~\ref{supp-sec:s-phase}).
-It is distinct from the earlier shared set, the stability-penalized calibration of the restriction sequence.
-Its strongest confirmed split, at \SI{333.15}{\kelvin}, loading 0.5 mol/mol and \SI{21.175719}{\kilo\pascal}, produces a water-poor, ion-rich liquid alongside a water-rich liquid and vapor.
-The calculated water mole fractions are 0.590900 and 0.973235 in the two liquids; these are model compositions, not measured second-liquid compositions.
-Figure~\ref{fig:split-energy} compares the energy balance for this split under the unpenalized parameters and the present model.
-Phase amounts and compositions remain frozen for this comparison, while densities are recalculated at the imposed pressure.
-
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth]{split-energy.pdf}
-\caption{The false liquid split involves opposing energy contributions. Extensive split-minus-parent Gibbs contributions at \SI{333.15}{\kelvin}, loading 0.5 mol/mol and \SI{21.175719}{\kilo\pascal}, for the unpenalized comparison fit and the present model evaluated at the same frozen phase amounts and compositions. Densities satisfy the imposed pressure separately for each parameter set. $G/(RT)$ has units of mol on the feed basis of 9.7292821 mol MEA, 76.9751925 mol water and 4.86464105 mol \COtwo. The bars for the present model are diagnostic evaluations, not equilibrated split phases of the present model.}
-\label{fig:split-energy}
-\end{figure}
-
-% P:results-phase-cause
-The Born contribution is strongly favorable to the illustrated split and becomes more favorable with the present model, while dispersion supplies the largest upward change.
-Across the confirmed configurations, dispersion has the largest absolute change in 49 of 51 cases; Born has the largest change in the other two.
-The split therefore reflects a coupled energy balance with a prominent dispersion change, rather than one uniquely identified microscopic cause.
-A negative energy change of the present model relative to the frozen parent liquid is not itself a present-model instability test, because that parent is not an equilibrated state of the present model.
-
-% P:results-phase-probes
-Two distinct isolated changes remove all detected descents in the finite liquid--vapor search: replacing only the \MEAH segment diameter by its value in the present model, or replacing only the \MEAH--water interaction constant.
-In the segment-diameter probe, the Debye--H\"uckel, packing and Born diameters remain at the unpenalized fit's values.
-These probes lie outside the tied parameterization of the present model, and neither is a fitted parameter set with assessed property agreement.
-They show that the sufficient parameter change is not unique; they do not identify a molecular mechanism or uncertainty in a stability boundary.
 \FloatBarrier
 
 \subsection{\texorpdfstring{\COtwo}{CO2}--MEA--water at 30 wt\%}\label{sec:results-loaded}
@@ -191,7 +165,7 @@ Published aggregate errors on other datasets are not converted into comparisons 
 These results support the present model as a calibration, with calculations at fixed parameters, against data seen during development; no comparison establishes independent validation.
 The adopted calibration also has measured weaknesses: on the 19 Ma'mun observations, the restrictions raise the pressure AARD from 19.43\,\% for the earlier shared set to 33.47\,\% for the present model, and at \SI{393.15}{\kelvin} the Kim--Svendsen heat RMSE of the present model, \SI{31.77}{\kilo\joule\per\mole} \COtwo, exceeds the \SI{29.49}{\kilo\joule\per\mole} \COtwo of the Polley--Hedengren parameters.
 The parameter uncertainty is conditional on this fit and therefore excludes model discrepancy and reaction-law uncertainty.
-The absence of an additional liquid rests on finite searches rather than a global proof, and the false split of the comparison fit has no unique microscopic cause, so the stability of the present model cannot be attributed to one restricted parameter.
+The absence of an additional liquid rests on finite searches rather than a global proof.
 The R1--R3 temperature range is Austgen's correlation range, not demonstrated measurement coverage, and R4, R5 and the unloaded dielectric law are extrapolated beyond their direct source constraints.
 Pressures at other MEA concentrations, carbonate shares and the highest-temperature heats remain the weakest parts of the calibration, and missing pressure histories, source inconsistencies, observable approximations, omitted carrier gas and omitted oxazolidone further limit interpretation.
 No absorber or stripper operating prediction is qualified by the property comparisons alone.

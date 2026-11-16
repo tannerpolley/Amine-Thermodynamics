@@ -152,7 +152,7 @@ They converge as numerical diagnostic calculations but have no renewed stability
 \end{figure}
 \input{tables/bound_profiles}
 
-\section{Phase-search conditions and split interpretation}\label{sec:s-phase}\label{sec:s-probes}\label{sec:s-fits}
+\section{Phase-search conditions}\label{sec:s-phase}
 % P:supplement-phase-grid
 The liquid grid contains 1800 states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at both pressure ratios stated in the main text.
 Another 108 states use the liquid--vapor-search feed at those two ratios.
@@ -163,7 +163,6 @@ The liquid--vapor search contains six temperatures, 313.15, 318.15, 333.15, 353.
 Each uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure from the comparison calculation.
 Every compared parameter set is evaluated at these same physical states.
 The feed is 9.7292821 mol MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
-Thus extensive split-energy changes divided by $RT$ are in mol on this feed basis.
 
 % P:supplement-phase-method
 Charge-neutral initial liquid compositions include a uniform composition and near-pure neutral-species compositions; initial vapor compositions contain only the three neutral species.
@@ -171,18 +170,6 @@ The optimized search and the evaluations at split compositions resolved for othe
 Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
 Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
 The raw state results identify incomplete or unavailable cases explicitly.
-For the unpenalized comparison fit (parameter SHA-256 prefix \texttt{efb2a9}), the 54-state liquid-instability count comprises 53 states with resolved liquid trial phases and one whose vapor-trial descent ends in two liquids.
-Of these, 46 states have resolved liquid and vapor trial phases; the state at \SI{333.15}{\kelvin} and loading 0.1 mol/mol has only resolved vapor trial phases and counts because its descent ends in two liquids, confirmed on re-evaluation.
-The other seven states have only resolved liquid trial phases.
-This numerical recheck used the compiled ePC-SAFT library with SHA-256 prefix \texttt{8b9609d4}; the original liquid--vapor phase search used the library with SHA-256 prefix \texttt{0d08dff9}.
-
-% P:supplement-phase-cause
-The split-energy figure evaluates the same phase compositions under two parameter sets and closes density at the imposed pressure for each.
-It does not relax these phases to equilibrium under the present model, nor identify a microscopic interaction uniquely.
-The isolated segment-diameter change leaves the other diameter definitions unchanged and is outside the present model's fitted diameter ties.
-The alternative sufficient interaction change also lacks fitted-property evidence.
-Neither probe can be compared with the present model's covariance as if it were an uncertainty interval for liquid splitting.
-
 \section{Shared inputs for Part II}\label{sec:s-shared}
 % P:supplement-shared
 The shared coefficient table in the main text lists the present model values.
