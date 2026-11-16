@@ -293,8 +293,9 @@ class Route:
                 if state['key'] not in row['sources']: row['sources'].append(state['key'])
         return list(copies.values())
 
-    def grid(self, point, states):
-        registry = self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record'])
+    def grid(self, point, states, *, trial_set=None):
+        registry = (dict(amine=self.config['amine'],species=self.config['species'],trials=list(trial_set)) if trial_set is not None else
+                    self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record']))
         assert registry['amine']==self.config['amine'] and registry['species']==self.config['species']
         supplied = registry.setdefault('supplied_trials',[])
         supplied.extend(w for w in registry['trials'] if not w.get('resolved_descent') and w not in supplied)
@@ -304,9 +305,10 @@ class Route:
             witness.setdefault('density_side', None)
             witness.setdefault('branch', density_branch([witness]))
         trials = witnesses+supplied
-        identity = json.dumps(jsonable([point, states, trials, self.config]), sort_keys=True)
-        if getattr(self, '_last_grid', (None,))[0]==identity:
-            return self._last_grid[1]
+        identity = hashlib.sha256(json.dumps(jsonable([point, states, trials, self.config, trial_set is None]), sort_keys=True).encode()).hexdigest()
+        cache = getattr(self, '_grid_cache', {})
+        if identity in cache:
+            return cache[identity]
         self.details = self.out/('search-'+str(len(list(self.out.glob('search-*.json')))))
         self.details.mkdir(parents=True, exist_ok=True)
         measured = stable.grid(point, states, trials, route=self)
@@ -315,9 +317,13 @@ class Route:
                 witness.setdefault('branch', density_branch([witness]))
                 if witness.get('resolved_descent') and witness not in witnesses:
                     witnesses.append(witness)
-        self.write('split-record.json',registry)
+        if trial_set is None:
+            self.write('split-record.json',registry)
         self.write('search-'+str(len(list(self.out.glob('search-*.json'))))+'.json',measured)
-        self._last_grid = identity, measured
+        if len(cache)==4:
+            cache.pop(next(iter(cache)))
+        cache[identity] = measured
+        self._grid_cache = cache
         return measured
 
     def segment(self, anchor, endpoint, t):
