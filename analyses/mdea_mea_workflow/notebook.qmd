@@ -10,14 +10,17 @@ execute:
 The first unpenalized MDEA start converged in **9 optimizer iterations** at
 weighted fitted cost **382.06387056074306**. The previous B1 fit gives
 **374.51907880524016** on the same 278 fitted observations and residual definitions.
-The first F2 endpoint therefore has a higher fitted cost. It is not a selected
-parameter record: the full stability search retained 479 native resolved
-witnesses at 95 states. A targeted rerun at the same endpoint classifies these
-states as **15 liquid-only, 30 vapor-only and 50 mixed**: **65 states have at
-least one native liquid descent**. The 81 states with earlier negative supplied
-trials remain **not stable** in the declared model; their supplied density
-branches remain unknown. Penalties and the second start are held for the
-owner's decision. No parameter record is adopted.
+The first F2 endpoint therefore has a higher fitted cost. It remains unselected
+while start 1 runs. After the #379 restricted-declaration refresh, the combined
+search retains **529 native witnesses at 103 states**: **23 liquid-only,
+30 vapor-only and 50 mixed**. Thus **73 states have native liquid descent evidence**.
+There are **95 supplied-negative states**, reported **not stable** within the
+fixed declared model, with supplied density branches unknown. These include the
+original 81 and 14 already-native-unstable states exposed by the expanded
+supplied history; they are not 14 new physical phase observations.
+The penalty is **triggered by the rule, not run**, under the reversible
+partial-result decision recorded on #343. Start 1 is running unpenalized with
+its full search. No parameter record is adopted.
 
 These results are calibration, comparisons on previously accessed data, and
 numerical verification. They do not establish independent physical validation,
@@ -69,8 +72,8 @@ source's nitrogen carrier gas.
 
 | Start | Initial F2 cost | Endpoint cost | Iterations | Disposition |
 |---|---:|---:|---:|---|
-| Retained B1 endpoint (start 0) | 436.67602868289833 | 382.06387056074306 | 9 | Optimizer converged; 65 searched states have native liquid descents; penalties held |
-| Retained second start (start 1) | 2393.0256195358056 | — | — | Complete start replayed; fit pending |
+| Retained B1 endpoint (start 0) | 436.67602868289833 | 382.06387056074306 | 9 | Converged; refreshed search has 73 native-liquid-descent states; penalty not run |
+| Retained second start (start 1) | 2393.0256195358056 | — | — | Unpenalized fit and full endpoint searches running |
 
 Start 0 ends on the native function tolerance:
 `|cost_change|/cost: 5.147725e-11 <= 1.000000e-10`.
@@ -517,18 +520,68 @@ bind the retained files; the new native `search-0.json` summary stays in its
 original location and is small enough for git. The MDEA history output retains
 all new native records for any later search. No MEA split record is used.
 
-**The native-liquid penalty criterion is met at 65 states. Penalty fitting and
-start 1 remain held.** The owner confirmed that the earlier decision requires
-a pause before penalty runs. The supplied liquid-side question remains unknown
-because the evaluation-only field is absent. The [classification summary](results/stage-b-start-0-classification/classification-summary.json)
+**The targeted classification meets the native-liquid criterion at 65 states.**
+The later restricted-declaration refresh below raises the count to 73. The
+earlier instruction required a pause before penalties; the subsequent partial
+result decision defers the penalty and authorizes start 1 unpenalized. The
+supplied liquid-side question remains unknown because the evaluation-only
+field is absent. The [classification summary](results/stage-b-start-0-classification/classification-summary.json)
 retains the complete counts and comparison. The model curves and conditional
 standard errors above still describe the unpenalized endpoint; they do not
 establish a stable parameter record.
 
+## Start-0 refresh for compiler-certified absent species
+
+Merged main `ce4f3c6` includes the #379 adapter. An audit of all **69,099**
+start-0 source declarations identified **319** whose native `removed_species`
+certificate restricts the trial families: **273 fitted-state keys and 46
+comparison-state keys**, including binary and zero-loading parents. None is a
+loading-grid key. Only these 319 were re-searched; loaded declarations stand.
+The [restriction inventory](results/stage-b-start-0-restricted/restriction-inventory.json)
+retains each certificate and the seven separately unbuildable capped sources.
+
+The refresh retains **170 available and 149 unavailable searches**, exactly
+the prior availability for those same keys. No unavailable search is counted
+as stable. It finds native witnesses at **eight additional liquid-only state
+keys**, adding **50 liquid-side native witnesses**. The ten vapor-descent states
+within this subset remain vapor-side. The corrected families change the finite
+search; the counts are not new measured phase splits. The trigger remains met,
+and the authorized penalty disposition remains **triggered by the rule, not run**.
+
+The [combined counts](results/stage-b-start-0-refreshed/counts.json) replace
+these keys in the full search, after incorporating the earlier 95-state branch
+classification. They retain **69,099 states**, **64,979 available**, **4,120
+unavailable**, **103 native-descent states** and **529 native witnesses**:
+**211 liquid-side and 318 vapor-side witnesses**. State branches are **23
+liquid-only, 30 vapor-only, 50 mixed and zero unresolved**. Mixed states count
+in both side-presence totals, so **73 states have native liquid evidence**.
+The grid's **3,890 unavailable states** are unchanged.
+
+The combined supplied counts are **181,252,175 available**, **11,193,102
+unavailable**, and **397,634 not applicable** evaluations. The **95 states with
+negative supplied evidence** remain not stable and branch-unknown. A missing
+branch is never labelled liquid or vapor. Counts retain repeated trials and
+state aliases; native split counts are lower bounds.
+
+The [combined compressed summary](results/stage-b-start-0-refreshed/combined-search-summary.json.gz)
+retains every state, its source summary and detailed-record path. The
+[source coverage](results/stage-b-start-0-refreshed/source-coverage.json) records
+replacement order and source hashes; this is not a concatenation of searches.
+The refresh took **373.011 s** including certificate inspection, search and
+retention on three workers. Its **319 detail files**, **100,745,887 bytes**,
+were moved after completion to ignored
+`analyses/mdea/results/runs/343/stage-b-start-0-restricted/search-0/`.
+All file hashes were checked after the move; the native `search-0.json` stays
+in place. The [file inventory](results/stage-b-start-0-restricted/detail-file-inventory.csv)
+and [retention record](results/stage-b-start-0-restricted/retention.json) preserve
+that check. The refreshed MDEA history is frozen by hash for start 1; no MEA
+split record is used.
+
 ## Compressed-liquid penalty availability and cost
 
-The native-liquid trigger remains met at **65 states**, but penalty fitting
-and start 1 remain held. At the fixed start-0 endpoint, the shared
+The diagnosis below used the earlier 65-native-liquid-state count; the refresh
+above raises that count to 73. Penalty fitting is deferred while start 1 runs
+unpenalized. At the fixed start-0 endpoint, the shared
 route in [PR #378](https://github.com/tannerpolley/Amine-Thermodynamics/pull/378)
 (#377 and #379) constructs **68,734 deduplicated compressed-liquid rows** from
 **69,092 of 69,099 sources**. Its 14 refused construction copies are seven
@@ -707,8 +760,8 @@ interval or a claim that a complete objective is available. Successful solves
 could take different time from current refusals; MDEA may need different
 callback counts. The four retained Part I #298 fits have 10–17 iterations,
 median 11, but no evaluation counters and are not substituted for #255 counts.
-The native-liquid trigger remains met; the owner decision, unresolved penalty
-rows, penalty series and start 1 remain held. This numerical diagnosis is not
+The native-liquid trigger remains met; the penalty series is deferred and
+the reference failures remain unresolved. This numerical diagnosis is not
 physical validation or acceptance of Stage B.
 
 ## Required numerical checks and remaining limits
@@ -727,8 +780,9 @@ The replay, shared-binding and range checks are retained in the
 [first-endpoint replay](results/stage-b-f2/start-0/unpenalized/stage-0/replay.json),
 and [range audit](results/stage-b-start-0-report/range-checks.json).
 
-The native density branches are classified. Supplied density branches, the
-penalty decision, the second fit and fitted-cost selection remain pending.
+The native density branches are classified. Supplied density branches remain
+unknown. The penalty is deferred; the second fit and fitted-cost selection are
+not yet complete.
 Available and unavailable states and not-applicable supplied trials remain
 distinct. Native resolved witnesses and negative supplied evaluations both
 retain instability evidence without being relabelled as one another.
@@ -739,7 +793,15 @@ accessed not-fitted datasets cannot provide an untouched validation set.
 
 This Stage B change retains data and declarations only: **0 added executable
 lines**; it does not change the shared route or Engine. The notebook contains
-no model-executing cells. The classification and original cost-refusal report at `2e20595` received an
-independent Supported review for that limited use. The new penalty-row
-diagnosis awaits independent review and has not been promoted for manuscript
-use. The next calculation awaits the owner's penalty and supplied-branch decision.
+no model-executing cells. The classification and original cost-refusal report at `2e20595`, and the
+penalty-row diagnosis at frozen `e0a0fd2`, received independent Supported
+reviews for those limited uses. The diagnosis review found no required
+corrections. Neither verdict accepts the unfinished two-start campaign or
+promotes the notebook for manuscript use. Under the subsequent #343 decision,
+penalties are deferred, the start-0 declarations changed by #379 are refreshed,
+and start 1 proceeds unpenalized.
+
+The native question tool selected merging the published branch history into
+the rebased branch in Don't-ask mode. Both histories are preserved and the
+intended file tree is unchanged; subsequent publication can use a normal push.
+No force-push was performed.
