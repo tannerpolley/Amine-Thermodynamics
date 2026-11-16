@@ -528,14 +528,16 @@ establish a stable parameter record.
 ## Compressed-liquid penalty availability and cost
 
 The native-liquid trigger remains met at **65 states**, but penalty fitting
-and start 1 remain held. At the fixed start-0 endpoint, the candidate shared
+and start 1 remain held. At the fixed start-0 endpoint, the shared
 route in [PR #378](https://github.com/tannerpolley/Amine-Thermodynamics/pull/378)
 (#377 and #379) constructs **68,734 deduplicated compressed-liquid rows** from
 **69,092 of 69,099 sources**. Its 14 refused construction copies are seven
 capped sources at both pressure ratios. The [construction record](results/stage-b-f2/penalty-refusal-diagnosis/construction.json)
 retains every cause. These 14 construction refusals are separate from the
-3,890 evaluation refusals below. No candidate route code was merged into this
-Stage B branch for the diagnosis.
+3,890 evaluation refusals below. The point measurements and three reproducing
+probes used the PR #378 route before its merge. After the diagnosis, the Stage B
+branch was rebased onto merged main `ce4f3c6`; the route source is identical
+to the source used for those probes. No new numerical run followed the rebase.
 
 The earlier merged-route attempt stopped at `comparison:362:cap`, **288.71 K**,
 with `ThermochemistryUnavailable` and the exact cause
@@ -620,7 +622,7 @@ searches available.
 
 The existing `Route.stability_row(spec, state, 0.01)` and native
 `reg.predict(spec.model, item)` calls reproduce the three largest
-message families. They use the PR #378 route read-only and the verified pinned
+message families. They used the PR #378 route read-only and the verified pinned
 wheel, with one single-threaded process per case under a three-worker
 `agent-heavy` job. The [probe records](results/stage-b-f2/penalty-refusal-diagnosis/probes.json)
 retain each declaration, full native prediction and pressure-reference
@@ -676,7 +678,7 @@ their own thermochemistry/equilibrium causes.
 
 ### Projected cost of one penalty stage
 
-The candidate point measurements on three workers are **8,044.850095 s** for
+The point measurements on three workers are **8,044.850095 s** for
 one objective sweep and **9,998.689920 s** for one coordinate derivative sweep.
 Each is one run on a shared machine and includes Python observation construction.
 They omit full-fit state grouping and cache reuse, and include 3,890 refusals.
