@@ -1,0 +1,11 @@
+name: Private-source check
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/test_check_private_source.py
+      - run: python3 scripts/check_private_source.py
+        env:
+          PRIVATE_SOURCE_PATTERNS: ${{ secrets.PRIVATE_SOURCE_PATTERNS }}
