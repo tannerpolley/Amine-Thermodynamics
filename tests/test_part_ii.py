@@ -137,19 +137,43 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
 
 
 def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path,monkeypatch):
-    """A prescribed admissible interval checks retreat decisions, not phase stability."""
-    monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    """#385: the finite search at t must not inherit another midpoint's split."""
+    route = p.Route.__new__(p.Route)
     route.out = tmp_path
-    monkeypatch.setattr(route,'segment',lambda anchor,endpoint,t:t)
-    def prescribed(t,*args,**kwargs):
-        return t<=.875,dict(suspects=[],descent=int(t>.875),available=1,minimum_tau=None,unavailable=[]),10.+t
-    monkeypatch.setattr(p.stable,'admissible',prescribed)
-    p.stable.retreat('decision',None,1.,[],shifts=({},{}),route=route,optimizer_report=dict(status='converged',data_cost=11.,final_cost=11.))
-    result = route.result('decision/retreat.json')
-    assert result['t']==.875 and result['disposition']=='interpolated'
-    assert result['optimizer_converged'] and not result['point_terminated_on_optimizer_tolerance']
-    assert result['optimizer_cost']==11. and result['retreat_cost']==10.875
+    route.segment = lambda anchor, endpoint, t: t
+    registry, calls = [], []
+    route.result = lambda name: dict(trials=registry)
+    route.replay = lambda point, rows: ([], True, 10.+point)
+    def grid(point, states, *, trial_set=None):
+        witness = dict(kind='Liquid', support=[0], composition=[point], packing=.4,
+                       resolved_descent=True)
+        if trial_set is None:
+            if point>.875 and witness not in registry:
+                registry.append(witness)
+        else:
+            assert all(w in registry or w['composition']==[point] for w in trial_set)
+            calls.append((point, len(trial_set)))
+        return [dict(key='reference', available=True, value=-1. if point>.875 else 0.,
+                     witnesses=[witness] if point>.875 else [])]
+    route.grid = grid
+    p.stable.retreat('reference', 0., 1., [dict(key='reference')], shifts=({}, {}), route=route,
+                     optimizer_report=dict(status='converged', data_cost=11., final_cost=11.))
+    report = json.loads((tmp_path/'reference/retreat.json').read_text())
+    resolution = .01/2**10  # #385 retains the old .01 interval / ten refinements.
+    assert 0 <= .875-report['t'] <= resolution
+    assert report['t']==.875 < report['upper_t']
+    assert report['upper_t']-report['t'] <= resolution
+    assert not report['non_monotone'] and report['base_trials']==1
+    assert json.loads((tmp_path/'reference/candidate.json').read_text())==report['t']
+    assert len(registry)==1 and registry[0]['composition']==[1.]
+    # A newly discovered midpoint trial must be evaluated again at that point.
+    assert any(a[0]==b[0] and b[1]==a[1]+1 for a,b in zip(calls,calls[1:]))
+    assert report['optimizer_converged'] and not report['point_terminated_on_optimizer_tolerance']
+    assert report['optimizer_cost']==11. and report['retreat_cost']==10.875
+    assert report['method']=='bisection'
+    route.result = lambda name: dict(t=.875)  # A retained old-walk result has no method.
+    with pytest.raises(AssertionError,match='new output directory'):
+        p.stable.retreat('reference',0.,1.,[],shifts=({},{}),route=route)
 
 
 def test_missing_range_reduction(tmp_path,monkeypatch):
