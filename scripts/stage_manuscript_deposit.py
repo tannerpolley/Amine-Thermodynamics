@@ -54,6 +54,8 @@ def pdf_content(pdf):
 
 
 def stage():
+    from check_private_source import path_is_blocked
+
     receipt = json.loads((ROOT / L / 'builds/verification-receipt.json').read_text())
     accepted = {n: ROOT / L / f'builds/{n}.pdf' for n in ('main', 'supplement')}
     assert sha(accepted['main']) == receipt['pdf_sha256'], 'main.pdf does not match builds/verification-receipt.json'
@@ -98,6 +100,7 @@ def stage():
                 pending.append(dependency)
     selected = {p for p in selected if not p.endswith('.whl')}
     for name in sorted(selected):  # check everything before copying, so a failure leaves no half-staged folder
+        assert not path_is_blocked(name), "private-source identifier in deposit path"
         assert not any(q in name.lower() for q in ('a7-paper-evidence/', 'mdea')), name  # MDEA belongs to Part II
         assert not name.endswith('.pdf') or 'figures' in name, name  # generated figures only, never source papers
         assert (ROOT / name).is_file() and not (ROOT / name).is_symlink(), name
