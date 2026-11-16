@@ -50,6 +50,24 @@ def test_shared_values_tie_and_range_marks(monkeypatch):
     prediction = p.reg.predict(spec.model,route.stability_row(spec,dict(key='reference',stock={'water':10.,route.config['amine']:1.},T=313.15,a=.3,c=1.05),1e-2))
     assert prediction.status.name=='Available'
     assert prediction.value==0. and prediction.residual==0.
+    native_stability = p.reg.stability
+    original = []
+    def stability(*args, **kwargs):
+        item = native_stability(*args, **kwargs)
+        original.append(p.calculation_declaration(item))
+        return item
+    monkeypatch.setattr(p.reg, 'stability', stability)
+    loaded = dict(key='loaded',stock={'water':10.,route.config['amine']:1.},T=313.15,a=.3,c=1.05)
+    item = route.stability_row(spec,loaded,1e-2)
+    assert p.calculation_declaration(item)==original[-1]
+    zero = route.stability_row(spec,dict(loaded,key='zero',a=0.),1e-2)
+    removed = set(p.eq.compile_problem(spec.model,zero.problem).removed_species)
+    assert removed
+    assert [t.kind.name for t in zero.stability_options.trials]==['Liquid','Liquid','Vapor']
+    assert [list(t.support) for t in zero.stability_options.trials]==[[1,4,5,6,7],[1,6],[1,6]]
+    assert all(not removed.intersection(t.support) for t in zero.stability_options.trials)
+    assert route.stability_metadata(spec,item)=={}
+    assert route.stability_metadata(spec,zero)==dict(restricted_trial_families=True,removed_species=sorted(removed))
     route.config['reaction_ranges_K']['MDEA-dissociation'] = None
     assert route.marks(313.15)['MDEA-dissociation']=='source range unknown'
     assert set(route.marks(313.15,SimpleNamespace(reactions=[])).values())=={'reaction not used'}
@@ -364,9 +382,15 @@ def test_density_branch_overrides_seed_label():
     spec = SimpleNamespace(problems={'NMR':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'sibling':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'different':dict(T=333.15,feed=[1.,2.],reactions=['R2'])})
-    route.stability_row = lambda spec,state,scale: SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    def stability_row(spec, state, scale):
+        if state['key'].startswith('compressed:comparison:362:cap:'):
+            raise ValueError('ThermochemistryUnavailable, initial:thermochemistry_unavailable: outside_interval: record excludes temperature')
+        return SimpleNamespace(problem=spec.problems[state['problem']],pressure_reference=None)
+    route.stability_row = stability_row
     states = [dict(key=name,problem=name) for name in spec.problems]
+    states.append(dict(key='comparison:362:cap',cap_record='comparison:362'))
     copies = route.penalty_states(states,spec)
+    assert route.penalty_unavailable==[dict(source='comparison:362:cap',pressure_ratio=ratio,message='ThermochemistryUnavailable, initial:thermochemistry_unavailable: outside_interval: record excludes temperature') for ratio in (1.05,3.)]
     assert len(copies)==4 and all(s['compressed'] for s in copies)
     assert {s['c'] for s in copies}=={1.05,3.}
     assert [s['sources'] for s in copies]==[['NMR','sibling'],['NMR','sibling'],['different'],['different']]
