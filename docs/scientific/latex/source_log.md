@@ -577,3 +577,106 @@ Live Companion exact-DOI searches and child reads resolved all three items, incl
 All three keys already existed in the canonical Zotero Better BibTeX export. The existing `scripts/cited_bibliography.py` generated the requested entries; only those three generated entries were copied into the snapshot, preserving every pre-existing entry byte-for-byte. The export was not refreshed. Generated table and figure-provenance bibliography hashes were refreshed; numerical bodies, figure PDFs, results and conclusions were unchanged. The supplement was rebuilt because those bibliography provenance comments affect its sources.
 
 The additions distinguish fitted NMR in Zhang and Chen from unfitted NMR in Sadegh, and fitted binary enthalpy/phase data in Biget from independent predictions. No cross-paper model ranking or comparison of AARDs from different selections is introduced. All four slots were filled.
+
+## 2026-11-16 — #348 authorized partial revision
+
+The owner confirmed manuscript use of `analyses/dea_transfer/part-ii-346.qmd`
+at `fe4ee08` for DEA calibration on the F2 shared parameters, comparisons,
+numerical replay and finite searches, with conditional errors, no adoption,
+and all results provisional until the re-pin re-check. The fit/comparison,
+uncertainty and refreshed-search reviews were Supported at `6840ca8`,
+`7dba15c` and `d5889b1`, respectively. The separate evidence correction updates
+only review and intended-use prose and `checks.independent_review`; it changes
+no retained numerical result.
+
+The active introduction, model, methods and DEA results now use that evidence.
+The old four-amine results and displays are no longer included by the manuscript
+or supplement. Existing inactive historical display files were not regenerated.
+Pending notices retain places for the other amines, their model/data details,
+the cross-amine summary, conclusions, and their supplementary results.
+The provisional abstract states the DEA answer without claiming the other results.
+
+### Issue item disposition at this scope
+
+- 1: DEA evidence updated; other amines deferred by the owner until final runs.
+- 2: one extrapolation rule; D and H intervals separated in data/deviation
+  displays; binary observations explicitly use no reactions. R1–R3 are a
+  source-correlation interval, not verified measured coverage.
+- 3: amended native-descent, supplied-negative and unavailable-search rules
+  stated; DEA outcome reported. Other amine outcomes remain pending.
+- 4: PZ convergence deferred with its results.
+- 5: reviewed DEA pressure/loading and heat curves used with measured points,
+  role labels and source-range marks. Other amine figures remain pending.
+- 6: compact DEA fixed-species and fitted-coordinate tables in the main paper;
+  detailed scalar values in the supplement. Other species remain pending.
+- 7: AMP/PZ pure/binary deviations deferred with their final parameters.
+- 8: DEA deviations, bound disposition and descent counts reported; the
+  four-amine summary table is pending the remaining results.
+- 9: no observation-index axis; calculated-minus-measured signs stated;
+  compact main tables stay together and the long scalar list is supplementary.
+- 10: transfer question and conditional DEA answer in abstract and introduction;
+  the final four-amine answer remains pending.
+- 11: standard contribution equations removed; Part I citations identify the
+  formulation, parameters or calculations taken from it. Final equation/table
+  numbering awaits the companion revision (#347).
+- 12: order is MDEA, AMP, PZ, DEA throughout the current framing.
+- 13: DEA limitations are collected in one results paragraph. Four-amine
+  synthesis and conclusions remain pending.
+- 14: conventional model, estimation and results sections used for authorized
+  material; other amine subsections remain pending.
+- 15: Horstmann NRTL and present DEA data roles stated together; no unreported
+  same-observation scalar deviation invented for the published comparisons.
+- 16–18: fitted / not fitted / comparison only; correlation for the temperature
+  expression; observation for a measured value; temperatures in K, mass
+  percentages in wt%, and counts as numerals in the revised sections.
+  Original source titles in the bibliography retain their published units.
+- 19: current provisional abstract is below 250 words and names fitted source
+  authors and years; the final abstract awaits all results.
+- 20: existing keywords retained; final Part II highlights deferred until the
+  paper's complete findings are known.
+- 21: nomenclature converted to a table; final completeness awaits all sections.
+- 22: existing companion citation and DOI/access placeholders retained for #206;
+  no bibliography refresh or outward delivery performed.
+- 23: acknowledgements moved immediately before references.
+
+### Numerical and source checks
+
+`python docs/scientific/latex/scripts/dea_displays.py --check` compares every
+new generated table and both copied figures with a fresh presentation from the
+retained files, without model calls. `dea-number-sources.json` gives input hashes.
+The executable addition is confined to that display script, below the 250-line
+budget. Main-text pressure and heat AARDs come from `f2-report-1/group-deviations.csv`;
+search counts come from `research-380/summary.json`; parameter values, errors and
+bounds come from `f2-report-1/parameter-values.csv`; source-interval statistics
+come from `f2-report-1/range-deviations.csv`. Method scales and bisection controls
+are declared methods, not new numerical findings. No untraceable result number
+was introduced. The display check does not automatically parse handwritten prose;
+its numeric statements were checked against these same retained values.
+
+The literature shelf was read from the main checkout because it is ignored and
+absent from this worktree. Nasrifar (2010), Uyan (2015), Böttinger (2008),
+Horstmann (2002), Aroua (1997) and Austgen (1991) copies and current Zotero
+sources matched their indexed hashes. Methods/results passages were read;
+source locators accompany the corresponding claims. Bower, Seo/Hong, Lal and
+Carson original PDF text was also inspected using their retained attachment
+identities. Lawson's scanned source and exact subset comparisons rely on the
+reviewed DEA source-check record; no new scalar model deviation was inferred.
+The committed bibliography snapshot was not edited.
+
+Both documents were built under `agent-heavy` using `latexmk -pdf
+-interaction=nonstopmode -halt-on-error -outdir=builds`, main/supplement/main/
+supplement, with the existing local TeX style path. The plugin-wide and scoped
+prose check passed for revised manuscript sections, generated DEA tables and
+the corrected notebook. This deterministic check is not the independent science
+or story review, which remains the next orchestrator step.
+
+Final build: Part II 10 pages; supplement 5 pages. Neither PDF has a Type 3
+font, undefined citation, unresolved reference or overfull box. Remaining TeX
+messages are 2 underfull abstract lines and 1 underfull supplementary prose
+paragraph. Automated visual QA reports 17 tight-text-clearance warnings in
+Part II and none in the supplement, with no errors. Inspected pages show
+ordinary closely spaced math subscripts, text and bibliography lines, without
+clipping or overlap; the retained curve plot also remains interpretable in
+grayscale through its line styles, markers and series labels. Layout is kept
+for independent review. Scientific-support and story reviews are still open;
+no final scientific endorsement is implied by these build checks.

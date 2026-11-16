@@ -1,96 +1,26 @@
 \section{Introduction}\label{sec:p2-introduction}
 % P:p2-introduction-01
-A shared electrolyte description is useful only to the extent that it describes observations beyond those used to estimate it.
-Part I fitted an explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) description of loaded aqueous monoethanolamine (MEA), in which every ion is a separate species and equilibrium, caloric and density properties follow from one Helmholtz energy \cite{PolleyPartI}.
-That fit supplies the frozen water, carbon dioxide and inorganic-ion parameters used here.
-Its pressure average absolute relative deviations (AARDs) at unfitted MEA concentrations are 33.89\,\% at 15 wt\% and 44.53\,\% at 45 wt\%, despite closer agreement at the fitted concentration.
-Those errors motivate a test of the shared description across other amines; they do not supply a common accuracy standard for different experimental data.
+Can a water, carbon dioxide and inorganic-ion description estimated with monoethanolamine (MEA) support reactive thermodynamic calculations for other aqueous amines when only amine-specific quantities are fitted?
+This transfer question concerns both agreement with measurements and the existence of lower-Gibbs-energy phases in the model.
+Part I supplies the explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation and the fixed shared parameters used here \cite{PolleyPartI}.
+The present study considers methyldiethanolamine (MDEA), 2-amino-2-methyl-1-propanol (AMP), piperazine (PZ) and diethanolamine (DEA), in that order.
+They offer different reaction networks through which to examine the same shared description.
 
-% P:p2-introduction-review-02
-Methyldiethanolamine (MDEA) is a tertiary amine whose reaction network contains bicarbonate formation without amine carbamate \cite[Sect.~3]{Uyan2015}.
-2-Amino-2-methyl-1-propanol (AMP) is a sterically hindered primary amine, diethanolamine (DEA) a secondary amine, and piperazine (PZ) a cyclic diamine with mono- and dicarbamate chemistry.
-AMP nevertheless forms measurable carbamate \cite[Sects.~3.1--3.2, Fig.~5]{ciftjaExperimentalStudyCarbamate2014a}.
-DEA forms carbamate alongside bicarbonate \cite[Sects.~2--3, Fig.~8]{Bottinger2008}; PZ also has protonated forms and protonated carbamate \cite[Sects.~2--3, Table~5]{ermatchkovChemicalEquilibriumConstants2003}.
-Measured species groups for these amines need not resolve each model species separately.
-
-\subsection{Thermodynamic descriptions of reactive MDEA, AMP, PZ and DEA}\label{sec:p2-review}
-% P:p2-introduction-review-03
-Activity-coefficient models combine reaction equilibria with nonideal liquid activities.
-Hessen et al. fit electrolyte non-random two-liquid (eNRTL) MDEA binary parameters to vapor--liquid equilibrium, excess enthalpy and freezing-point data, then fit reactive pressures and compare species \cite[Sects.~4.1, 4.4--4.5]{Hessen2010}.
-Hartono et al.'s AMP eNRTL model includes carbamate, leaving species and absorption heat outside fitting \cite[Sect.~5.2, Figs.~7--8]{hartonoSolubilityCO201M2020}; their PZ model includes doubly protonated PZ and sequential pure, binary and reactive estimation \cite[Sects.~2.1--2.3, 5.3--5.4, Tables~14--15]{hartonoSolubilityDataNitrous2021}.
-Yi et al. instead omit AMP carbamate and doubly protonated PZ, and use pressure, heat-capacity constraints, parameter uncertainty and heat/species comparisons during optimization \cite[Sects.~2.1--2.3, 3.1--3.2]{yiOpenAccessThermodynamically2024}.
-Their species comparisons therefore do not constitute blind validation.
-
-% P:p2-introduction-review-04
-Modified Pitzer and extended universal quasi-chemical (UNIQUAC) models provide other explicit-species descriptions.
-Silkenb\"aumer et al. combine single-amine AMP and MDEA parameters to predict blend solubility \cite[pp.~3135--3140, Tables~5, 9]{silkenbaumerSolubilityCarbonDioxide1998}.
-P\'erez-Salado Kamps et al. fit PZ solubility and predict MDEA/PZ mixtures; Ermatchkov et al. extend the PZ model with low-loading pressures \cite[Modeling, pp.~2663--2664]{kampsSolubilityCO2H2O+piperazine2003a}\cite[Thermodynamic Modeling, pp.~1790--1793]{ermatchkovSolubilityCarbonDioxide2006a}.
-B\"ottinger et al. refit DEA pressure interactions and constrain carbamate chemistry with species observations \cite[Sects.~5--7, Tables~7--8, Fig.~8]{Bottinger2008}.
-Extended UNIQUAC modeling of AMP retains water, \COtwo and inorganic-ion inputs, fits AMP interactions in stages, and combines speciation, calorimetry and computational chemistry; the carbamate constant remains model-dependent \cite[Sects.~4.1--4.4, 5.1--5.3]{mehdizadehAMPCO2Water2013}.
-Zhang and Chen fit MDEA--water eNRTL interactions to vapor--liquid equilibrium, excess enthalpy and heat capacity, then fit molecule--electrolyte interactions and MDEAH$^+$ standard-state properties to reactive pressures, absorption heats, heat capacities and nuclear magnetic resonance (NMR) species data \cite[Sects.~3.2--3.3, Tables~12--15]{zhangThermodynamicModelingCO22011}.
-Their reactive-pressure fit spans 313--413 K and approximately 2--8 mol MDEA per kg water; source-specific average relative deviations distinguish fitted observations from pressure predictions for excluded sources, whose inconsistencies prevent agreement with all datasets \cite[Sect.~3.3, Tables~14, 16]{zhangThermodynamicModelingCO22011}.
-Sadegh et al. estimate extended UNIQUAC MDEA parameters first from binary data and then from reactive data, using vapor pressures, freezing points, excess enthalpies, heat capacities and absorption heats; their ternary-pressure data cover 5--75 wt\% MDEA and extend to 200~$^\circ$C, and agreement is reported by data source and property \cite[Sects.~7--9.1, Tables~5--7]{sadeghThermodynamicModelingCO22015}.
-NMR species fractions at 20 and 40~$^\circ$C in 23 wt\% MDEA remain outside fitting and are assessed by absolute mole-fraction deviations \cite[Sect.~9.2, Table~8]{sadeghThermodynamicModelingCO22015}.
-Biget et al. apply staged extended UNIQUAC estimation to MEA, MDEA and AMP, fitting binary excess enthalpies and phase-equilibrium data before reactive solubilities and total pressures over a stated 40--150~$^\circ$C and 15--60 mass\% range, using a genetic algorithm followed by a quasi-Newton method \cite[pp.~298--300, Fig.~1, Eq.~3]{bigetDevelopmentThermodynamicIdentification2015a}.
-Their property-specific AARDs and parameter confidence intervals describe the fits; the binary enthalpy and phase-envelope comparisons also use estimation data \cite[pp.~300--302, Table~1, Figs.~2, 4, 6, Eqs.~4--5]{bigetDevelopmentThermodynamicIdentification2015a}.
+% P:p2-introduction-02
+Published amine models separate parameter estimation from subsequent property calculations in different ways.
+Nasrifar and Tafazzol estimate pure-component PC-SAFT parameters and binary interactions before calculating acid-gas solubility, using ideal liquid activities for chemical equilibrium and grouping ions with water in phase calculations \cite[Sects.~2, 5--6, Tables~2--3]{Nasrifar2010}.
+Uyan et al. instead use explicit-ion ePC-SAFT for MDEA, transfer neutral and inorganic-ion inputs, and derive protonated-amine inputs from molecular MDEA before calculating reactive pressures \cite[Sects.~4.1--4.3, Tables~3--5]{Uyan2015}.
+These approaches motivate examining what is retained, what is fitted and which observations inform each comparison, rather than assigning a predictive meaning to every calculation outside a final fitting objective.
 
 % P:p2-introduction-03
-Published SAFT amine models distinguish parameter estimation from predictions to different extents.
-Nasrifar and Tafazzol organize MEA, DEA and MDEA around pure properties, binary interactions and subsequent acid-gas comparisons, using an ideal-activity treatment rather than explicit electrolyte activity coefficients \cite[Sects.~2--6]{Nasrifar2010}.
-They lump ions with water for molecular PC-SAFT phase calculations; DEA species and acid-gas predictions follow the lower-order fits \cite[Sect.~6, Figs.~13--17]{Nasrifar2010}.
-
-% P:p2-introduction-review-07
-Reactive-association models describe reaction products as molecular association complexes.
-Rodriguez et al.'s SAFT for potentials of variable range (SAFT-VR) transfers functional-group association information for AMP, DEA and MDEA, while reactive ternary data determine remaining \COtwo--amine parameters \cite[Sects.~2.3, 3--5]{Rodriguez2012}.
-Its MDEA concentration prediction uses observations outside estimation, whereas the AMP and DEA curves include fitted conditions \cite[Sects.~5.2--5.4, Figs.~10--12]{Rodriguez2012}.
-Transfer of molecular interactions thus coexists with reactive-data fitting.
-
-% P:p2-introduction-review-08
-Pereira and Vega's soft-SAFT treatment covers all four amines with implicit reactions, estimating association energies at fixed amine concentrations before testing other concentrations and predicting blends from single-amine interactions \cite[Sects.~3.2--3.4, 4.1.1--4.1.2]{pereiraSystematicApproachThermodynamic2018}.
-They compare alternative AMP association schemes, but do not resolve the complete PZ ionic network.
-Wang et al.'s Peng--Robinson cubic-plus-association (PR-CPA) treatment fits MDEA reaction-association and dispersion parameters to ternary data, then compares additional conditions and species inferred from bonded fractions \cite[Sects.~3.2.2, 4.1.2, 4.2, Fig.~15]{wangImprovementPRCPAEquation2018}.
-These association models differ in both chemistry resolution and data use.
-
-% P:p2-introduction-review-09
-Group-contribution SAFT-$\gamma$ Mie also transfers amine interactions while describing reactions implicitly.
-Perdomo et al. use lower-concentration PZ pressures to estimate cyclic-amine interactions and test a higher concentration \cite[Sect.~4.2, Fig.~4]{perdomoPredictiveGroupcontributionFramework2023}.
-Their DEA pressure and species predictions follow group-interaction estimation; MDEA pressures also enter estimation of tertiary-alkanolamine interactions \cite[Sect.~4.3.3, Figs.~13--15]{perdomoPredictiveGroupcontributionFramework2023}.
-These comparisons support transfer of group descriptions, but do not independently test explicit-ion parameters.
-
-% P:p2-introduction-review-06
-Uyan et al. inherit neutral and inorganic-ion parameters and derive MDEAH$^+$ inputs from molecular MDEA before predicting reactive pressures \cite[Sects.~4.1--4.3, Tables~3--5]{Uyan2015}.
-Wangler et al. estimate MDEA ion--water interactions using osmotic data before predicting reactive ternary equilibria, and re-determine the ternary-pressure deviation of Uyan et al. on the same data \cite[Sects.~6.1--6.2.1, Table~11]{Wangler2018}.
-Their absorption-heat predictions overstate temperature dependence at low loading \cite[Sect.~6.3, Figs.~19--21]{Wangler2018}.
-Cleeton et al. inherit inorganic-ion inputs and estimate pure and binary MDEA quantities, with larger concentrated-solution and low-loading pressure errors \cite[Sects.~3.1--3.3.2, Figs.~7--8]{Cleeton2020}.
-Raeispour Shirazi and Lotfollahi combine mean spherical approximation and Born terms with PC-SAFT and reactive-pressure fitting; their improvement also involves adjusted interactions \cite[Eq.~12, Sect.~5.3, Tables~3--4]{raeispourshiraziApplicationEPC_SAFTMBEoS2020}.
-Among the studies reviewed here, explicit-ion PC-SAFT has been applied only to MDEA; AMP, PZ and DEA have been described by activity-coefficient, implicit-association or group-contribution models.
-
-\subsection{Property constraints and phase stability}
-% P:p2-introduction-review-10
-Species evidence adds distinct constraints: AMP peak splitting requires additional relations, PZ constants are inferred with activity assumptions, and DEA measurements combine molecular and protonated amine and identify byproducts \cite[Sects.~2.5--3.2, Figs.~5, 7]{ciftjaExperimentalStudyCarbamate2014a}\cite[Sects.~2--3, Table~5]{ermatchkovChemicalEquilibriumConstants2003}\cite[Sects.~3, 5--7, Fig.~8]{Bottinger2008}.
-Hartono's unfitted AMP heat comparison retains high-loading disagreement \cite[Sect.~5.2, Fig.~8]{hartonoSolubilityCO201M2020}.
-Thus species and caloric comparisons test more than pressure agreement; assigned residual scales and conditional parameter errors describe different uncertainties.
-Sadegh et al.'s objective assigns separate residual scales to equilibrium and caloric properties, reduces the weight of low-pressure data through a pressure offset, and leaves two absorption-heat datasets outside fitting \cite[Sect.~7, Eq.~20, Sect.~9.1.2, Figs.~8--9]{sadeghThermodynamicModelingCO22015}.
-Biget et al. instead minimize squared relative residuals in stages and estimate parameter confidence intervals from the objective Hessian and an estimated measurement variance; their multi-property fitting constraints differ from an unfitted-property test \cite[pp.~298--302, Eqs.~3--5, Table~1]{bigetDevelopmentThermodynamicIdentification2015a}.
-
-% P:p2-introduction-review-11
-The SAFT-$\gamma$ Mie phase-changing cyclohexylamine examples and Tsanas et al.'s electroneutral liquid-phase searches for 2-(diethylamino)ethanol/3-(methylamino)propylamine (DEEA/MAPA) are analogs, not measured phase boundaries for MDEA, AMP, PZ or DEA \cite[Sects.~4.4.1--4.4.2, Figs.~16--18]{perdomoPredictiveGroupcontributionFramework2023}\cite[Sects.~2.5--2.7, 3.1, 3.3]{Tsanas2022}.
-Tsanas et al. identify Gibbs--Duhem inconsistency in their eNRTL implementation.
-The present finite liquid-phase searches exclude solid equilibrium and cannot establish global stability.
-
-\subsection{Aim of this work}
-% P:p2-introduction-02
-Here the water, \COtwo and inorganic-ion parameters from Part I remain fixed while only amine-specific quantities are fitted.
-The question is how far that description supports amine-specific calibration across these four structures when assessed against unfitted properties and searches for additional liquid phases.
-Each close precedent covers part of this combination: explicit-ion ePC-SAFT treats one tertiary amine, MDEA \cite{Uyan2015,Wangler2018,Cleeton2020}; extended UNIQUAC retains shared water, \COtwo and inorganic-ion inputs for AMP \cite{mehdizadehAMPCO2Water2013}; and soft-SAFT and SAFT-$\gamma$ Mie transfer interactions across amines but describe reactions implicitly \cite{pereiraSystematicApproachThermodynamic2018,perdomoPredictiveGroupcontributionFramework2023}.
-The four amines test the shared inorganic-carbon description, whose bicarbonate--water interaction lies on its upper bound in Part I \cite{PolleyPartI}, without an amine-carbamate pathway in MDEA and alongside different carbamate pathways in AMP, PZ and DEA.
-One example per class cannot isolate chemical class from differences in observation coverage, species representation or fitting freedom.
+Pressure, calorimetry and species measurements constrain different aspects of reactive thermodynamics.
+B\"ottinger et al. use online nuclear magnetic resonance (NMR) measurements in MEA and DEA solutions to resolve carbamate and bicarbonate while reporting molecular and protonated amine together; their DEA thermodynamic treatment also adjusts pressure interactions \cite[Sects.~3, 5--7, Tables~7--8, Fig.~8]{Bottinger2008}.
+Horstmann et al. fit aqueous DEA vapor--liquid equilibria and excess enthalpies simultaneously with a non-random two-liquid (NRTL) model \cite[pp.~1496--1500, Tables~6--7, Fig.~4(b)]{horstmannPhaseEquilibriumExcess2002}.
+Thus pressure agreement alone does not establish the corresponding caloric or species description.
+A search for an additional liquid phase adds a separate numerical check on the model's calculated liquids.
 
 % P:p2-introduction-04
-The present fits include amine-specific reactive observations, so agreement with those observations is calibration.
-In this paper, held-out observations never enter a fitting objective.
-That term does not imply that the data remained unseen throughout selection of the final fit.
-Previously accessed observations outside the fit and comparisons made after selecting the parameters are identified separately.
-Finite searches for additional phases provide numerical evidence about the calculated liquids, while experimental pressure and property comparisons measure agreement with the named observations.
-Neither form of evidence alone establishes independent validation of ion parameters or qualification for absorber design.
-The results follow the properties being tested, so fitted pressures, unfitted pressures, other thermodynamic properties and phase behavior each constrain the same transfer hypothesis.
+This work retains the shared species and inorganic-carbon chemistry, estimates amine-specific interactions and reaction coefficients, and compares calculated pressures, heats, densities and species with measurements whose fitting roles are stated explicitly.
+Numerical replay checks reproduction of the selected parameters, and finite phase searches test for detected descents in Gibbs energy.
+The present DEA calibration answers the transfer question conditionally: the shared description permits fitting reactive DEA observations, but the remaining pressure-shape discrepancy and incorrect excess-enthalpy sign limit the property description.
+Results for MDEA, AMP and PZ are pending; a conclusion across all amine structures awaits them.
