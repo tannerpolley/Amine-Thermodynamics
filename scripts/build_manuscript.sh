@@ -13,8 +13,8 @@ if ! command -v latexmk >/dev/null 2>&1; then
 fi
 
 cd "$latex_dir"
-# Build supplements first so main-text cross-references use current labels.
-for document in supplement part2_supplement main part2; do
+# Part I and its supplement cite each other; repeat them after both have labels.
+for document in supplement part2_supplement main part2 supplement main; do
     latexmk -g -pdf -recorder -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
 done
 
