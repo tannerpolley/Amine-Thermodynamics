@@ -1,114 +1,98 @@
 \section{Data and parameter estimation}\label{sec:p2-methods}
+\subsection{Data and their roles}
 % P:p2-methods-01
-Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, per mole of amine molecules, including for PZ.
-Unloaded mass fraction is $w_A=m_A/(m_A+m_w)$; solute-free stock compositions are retained for pressure calculations.
-True liquid mole fractions use the total number of molecular and ionic species, whereas PZ NMR group fractions use total PZ as denominator.
-The protonated-carbamate group and dicarbamate group are therefore not directly comparable to DEA true mole fractions.
-Total pressure and \COtwo partial pressure are separate observables.
-
-\input{tables/part2/data-roles}
+Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, per mole of analytical amine molecules.
+Unloaded amine mass fraction is $w_A=m_A/(m_A+m_w)$; mass percentages are written as wt\%.
+Liquid species mole fractions use the total amount of true molecular and ionic species.
+Calculated \COtwo partial pressure is $y_{\COtwo}P$, distinct from total bubble pressure $P$.
 
 % P:p2-methods-02
-MDEA uses 278 objective rows: Kuranov et al. total pressures \cite{kuranovSolubilitySingleGases1996}, Jakobsen et al. protonation fractions \cite{Jakobsen2005}, Carson et al. \cite{carsonEnthalpySolutionCarbon2000} and Merkley et al. \cite{merkleyEnthalpiesAbsorptionCarbon1987} heats, Weiland et al. heat capacities \cite{weilandHeatCapacityAqueous1997} and loaded densities \cite{Weiland1998}, Sobrino et al. unloaded densities \cite{sobrinoViscosityDensityMeasurements2016} and Kim et al. binary pressures \cite{kimEbulliometricDeterminationVaporLiquid2008}.
-Its Xiao \cite{xiaoCO2AbsorptionAqueous2018a} and Ermatchkov \cite{ermatchkovSolubilityCarbonDioxide2006} pressure sets had been accessed during earlier development and are held-out assessments rather than new blind tests.
-AMP uses 47 loaded total pressures \cite{hartonoNewSolubilityHeat2021}, 52 binary observations \cite{hartonoBinaryTernaryVLE2013} and 57 carbamate fractions \cite{ciftjaExperimentalStudyCarbamate2014a}; its Kundu set \cite{kunduVaporLiquidEquilibriumCO22003} was scored before the final diameter restriction was chosen.
-PZ uses 62 Hilliard partial pressures \cite{Hilliard2008} and 232 NMR group observations from 121 source states \cite{ermatchkovChemicalEquilibriumConstants2003}.
-Its Ermatchkov pressure set was scored on the unconstrained refit before the penalty alternative was examined and the reported fit was finalized.
-DEA uses 30 Lawson partial pressures \cite{lawsonGasSweeteningData1976} at 25 wt\% and 50 Carson integral heats at 298.15 K; its held-out sets were first scored on one start and then on a numerically tied second start.
-Thus held-out here has the same objective-exclusion meaning for every amine, with prior access reported explicitly.
+The data-role terms follow Part I's definitions: \emph{fitted} observations enter the reported objective; \emph{not fitted} observations remain outside it; \emph{comparison only} denotes other quantities or conditions, never used to choose a fit \cite[Sect.~3]{PolleyPartI}.
+All DEA observations had been seen previously.
+The pressure comparisons were accessed before the choice between numerically tied fits; their absence from the objective does not make them blind tests.
+Table~\ref{tab:p2-dea-data-current} states roles, temperature ranges and reaction-correlation range marks.
+Concentration and loading ranges on the original source basis are retained in the supplementary observation inventory.
+
+\input{tables/part2/dea-data-current}
 
 % P:p2-methods-03
-Carrier gases are omitted from the bubble calculations: the model compares $y_{\COtwo}P$ with measured partial pressure rather than imposing a nitrogen- or methane-containing experimental gas.
-This affects the MDEA and PZ nitrogen qualifications and the unreported methane pressure in the Lawson DEA cell.
-Lal's DEA stock, 2.0 kmol/m$^3$, is represented by mass fraction 0.2058 using unloaded-solution densities.
-B\"ottinger DEA comparisons \cite{Bottinger2008} use 2.5 MPa because source cell pressures span 5--25 bar without individual values.
-PZ NMR solvent masses reported for heavy water are treated as water, leaving isotope effects unquantified.
-These assumptions are part of the compared states, not corrections inferred from the pressure errors.
+DEA fitting uses Lawson and Garst partial pressures at 25 wt\% DEA and Carson et al. integral absorption heats at 298.15 K \cite{lawsonGasSweeteningData1976,carsonEnthalpySolutionCarbon2000}.
+The higher-temperature Lawson set, Seo and Hong pressures and Lal et al. pressures are not fitted \cite{seoSolubilitiesCarbonDioxide1996,lalSolubilityH2SCO21985}; Lawson Table VIII pressures, Weiland densities, B\"ottinger species, Cai binary pressures and Horstmann excess enthalpies are comparison only \cite{Weiland1998,Bottinger2008,caiBinaryIsobaricVaporLiquid1996,horstmannPhaseEquilibriumExcess2002}.
+Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson cell is not reconstructed.
+Lal's concentration is converted using unloaded-solution density, and B\"ottinger species use an assigned pressure because individual cell pressures are unavailable; the retained observation inventory gives these state assumptions.
+
+% P:p2-methods-range
+Every declared state is calculated; a state outside a source interval remains in its data group, carries a range mark in each display and is reported separately in the range-separated deviations.
+The DEA dissociation measurement interval is 273.15--323.15 K \cite[experimental section, p.~71; Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}.
+The hydrolysis source measurements span 303--331 K \cite[experimental procedure, p.~692; Table~3 and Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}; this interval does not establish the validity of the subsequently fitted correlation.
+For R1--R3, 273.15--498.15 K is the source-correlation interval stated by Austgen et al., rather than verified measured coverage \cite[Table~V, p.~547]{Austgen1991}.
+Binary comparisons do not use reaction correlations.
+The calculation interval, 293.15--458.64 K, is distinct from all these source intervals.
 
 \subsection{Caloric and density calculations}
-% P:p2-methods-05-caloric
-For an initial stock $i$ and final loaded equilibrium liquid $f$, the integral molar absorption enthalpy is
+% P:p2-methods-caloric
+An integral absorption heat is the final equilibrium-liquid enthalpy minus the initial-liquid enthalpy and the absorbed \COtwo feed enthalpy, divided by absorbed moles of \COtwo.
+All terms use the comparison temperature and pressure; negative heat denotes exothermic absorption.
+A finite-loading integral is distinct from the derivative defining a differential absorption heat.
+Binary excess enthalpy subtracts the mole-fraction-weighted pure-liquid enthalpies at the same temperature and pressure from the mixture molar enthalpy.
+Density divides total analytical-feed mass, including added \COtwo, by equilibrium liquid volume.
+These calculations use Part I's Helmholtz-energy derivatives and reaction standard-state completion, including the equilibrium change of species \cite[Sects.~2--3]{PolleyPartI}.
+
+\subsection{Objective functions and fitted parameters}
+% P:p2-methods-objective
+Bounded least squares minimizes
 \begin{equation}
- \Delta h_{\mathrm{abs,int}}=\frac{H_f-H_i-\Delta n_{\COtwo}h_{\COtwo}^{\mathrm{feed}}}{\Delta n_{\COtwo}}.
- \label{eq:p2-integral-heat}
+ C=\frac12\sum_j w_jr_j^2,\qquad
+ r_j=\frac{\ln(p_j^c/p_j^o)}{0.09}\ \text{(pressure)},\quad
+ r_j=\frac{h_j^c-h_j^o}{0.02|h_j^o|}\ \text{(integral heat)}.
 \end{equation}
-The feed and both liquids are evaluated at the comparison temperature and pressure; $\Delta n_{\COtwo}$ is the absorbed amount; $h_{\COtwo}^{\mathrm{feed}}$ is the molar enthalpy of the \COtwo feed; negative heat denotes exothermic absorption.
-For these negative heats, the signed difference $y^c-y^o$ between calculated and observed values states directly whether calculated absorption is more or less exothermic than measured.
-A differential absorption heat is $(\partial H_{\mathrm{eq}}/\partial n_{\COtwo})_{T,P,n_A,n_w}-h_{\COtwo}^{\mathrm{feed}}$; it is distinct from the finite-loading integral.
-Each integral comparison retains its initial stock, final loading and any imposed liquid-loading cap.
-For an unloaded binary mixture, excess enthalpy per mole of mixture is
+Superscripts $c$ and $o$ denote calculated and observed values.
+Each data group's squared residuals are averaged through its weights $w_j$.
+The fitted quantities are the cation--water and carbamate--water dispersion interactions, hydrolysis correlation level and hydrolysis enthalpy increment.
+2 complete initial parameter sets are replayed before fitting; all returned numerical endpoints and their convergence dispositions are retained.
+The lowest fitted cost selects between converged available solutions, with costs within the optimizer's function tolerance reported as ties.
+Stability accompanies that choice and does not select between initial parameter sets.
+
+% P:p2-methods-deviation
+Mean absolute relative deviation, denoted AARD, and relative bias are
 \begin{equation}
- H^E=h_{\mathrm{mix}}-x_w h_w^{*}-x_A h_A^{*},
- \qquad \rho_{\mathrm{mass}}=\frac{m_{\mathrm{feed}}}{V_{\mathrm{eq}}}.
- \label{eq:p2-excess-density}
+ \mathrm{AARD}=\frac{100\,\%}{N}\sum_j|y_j^c/y_j^o-1|,\qquad
+ \mathrm{bias}=\frac{100\,\%}{N}\sum_j(y_j^c/y_j^o-1).
 \end{equation}
-The superscript $*$ denotes the pure-component liquid at the same temperature and pressure as the mixture; the ideal-gas enthalpies cancel in $H^E$.
-Density uses the complete analytical mass, including added \COtwo for loaded solutions, and the equilibrium liquid volume.
-Heat capacities use the same complete-feed molar or mass basis as their source observations.
+Only nonzero observations enter relative statistics; zero observations remain in absolute-error statistics and total counts.
+Signed physical-unit errors always use calculated minus measured, including for negative heats.
 
-\subsection{Parameters and fitting}
-% P:p2-methods-04
-Each bounded least-squares fit minimizes its original weighted sum,
-\begin{equation}
- C=\frac12\boldsymbol r^{\mathsf T}W\boldsymbol r,
- \qquad r_j=(y_j^c-y_j^o)/s_j\quad\text{or}\quad r_j=\ln(y_j^c/y_j^o)/s_j .
- \label{eq:p2-objective}
-\end{equation}
-Here $y_j^c$ and $y_j^o$ are calculated and observed values, $s_j$ denotes the assigned observation scale and $W$ includes group weights or correlations.
-The objectives use different observations and scales, so their costs do not measure relative physical accuracy across amines.
-
-% P:p2-methods-residual-02
-For MDEA, Kuranov total pressures use natural-log ratios, scale one and weight $100/9$; Kim binary total pressures use natural-log ratios with unit scale and weight.
-Jakobsen protonated fractions use differences scaled by 10\,\% of the observed fraction, with unit weight.
-Carson and Merkley heat differences use 3000 J/mol \COtwo scales and unit weights.
-Weiland heat capacities use 2\,\% of the observed heat capacity and unit weights.
-Loaded-density differences use the observation-specific scales and weight $1/33$, whereas unloaded densities use 0.5 kg/m$^3$ and weight ten.
-
-% P:p2-methods-residual-03
-AMP loaded total pressures use log ratios with unit scale and weight $100/[9(47)\max(u_P/P,0.05)^2]$.
-The fifty-two binary entries comprise twenty-six pressures and twenty-six vapor AMP fractions; binary log pressures use 0.05 scale through their weight, while vapor fractions use $\max(10^{-4},0.05y)$.
-The binary group is averaged over its fifty-two entries.
-Ciftja carbamate fractions are mapped to carbamate per total amine, with difference scale 0.003 and group weight $1/57$.
-
-% P:p2-methods-residual-04
-PZ pressure differences use an assigned scale 0.02 times observed pressure.
-NMR normalization propagates independent area errors with $q=0.02$ into correlated group-fraction blocks; complete-state areas reconstruct the monocarbamate pair and free/dicarbamate groups before normalization.
-Blank dicarbamate observations are not zeros and do not create additional residuals.
-The assumed area scale is not a source-validated independent species standard deviation.
-
-% P:p2-methods-residual-05
-For DEA, pressure log ratios use scale 0.09 and heat differences use 0.02 times the magnitude of measured heat, with each group's squared residuals averaged.
-
-% P:p2-methods-05
-The average absolute relative deviation and signed bias are
-\begin{equation}
- \operatorname{AARD}=\frac{100\,\%}{n}\sum_{j=1}^n\left|y_j^c/y_j^o-1\right|,
- \qquad \operatorname{bias}=\frac{100\,\%}{n}\sum_{j=1}^n(y_j^c/y_j^o-1).
- \label{eq:p2-aard}
-\end{equation}
-The same reporting formula is applied separately to nonzero heats and other properties; species differences and root-mean-square errors retain their observable units.
-A negative pressure bias means underprediction.
-
-% P:p2-methods-06
-The AMP results use the fit whose carbamate diameter is bounded below by the MEA carbamate diameter, 5.32~\AA; a fit allowed down to 3.5~\AA\ lowers the cost only slightly, so the data identify the diameter only weakly below about 5.3~\AA, and that fit is a sensitivity case.
-The PZ fit stops at its 100-iteration limit with nearly flat cost and is not labeled formally converged.
-DEA's two charged-chain starts differ in cost below the optimizer tolerance and represent a numerical tie rather than distinct physical optima.
-The selected MDEA fit was chosen partly for its held-out pressures and gives poorer agreement with Carson's heats than the earlier fit (scaled root-mean-square (RMS) residual 1.106 against 0.977).
-The selected parameters remain fixed for the reported comparisons; Supplementary Section~S3 lists the starting points, bounds and alternative fits.
-
-% P:p2-methods-08
-Local covariance holds shared inputs, model choices, residual weights and bound fitted parameters fixed.
-For interior fitted parameters, the covariance is the local inverse weighted information matrix multiplied by the retained residual-variance factor.
-At a prediction with parameter derivative $g$, the conditional variance is $g^{\mathsf T}C_\theta g$; displayed intervals use $\pm1.96$ conditional standard errors (SE), not total prediction intervals.
-Separate sensitivities displace one marginal SE at a time and do not include correlation compensation.
-Inward profiles fix a bound fitted parameter 1, 5 or 10\,\% of its original interval inside the bound and refit the remaining fitted parameters.
-Those displacements have different meanings and sizes; none quantifies source systematics or model-form error.
+\subsection{Parameter uncertainty}
+% P:p2-methods-uncertainty
+Conditional standard errors follow the local inverse information matrix of the whitened residual Jacobian, multiplied by the retained residual-variance estimate.
+The degrees of freedom subtract free fitted coordinates from fitted observations.
+Active-bound coordinates are held fixed; an unavailable or rank-deficient information calculation does not receive a finite standard error.
+The completed reaction coefficients, coordinate origins and bounds are transported together before differentiation, and differentiated predictions are checked against replay at that same physical point.
 
 \subsection{Phase-stability search}
-% P:p2-methods-07
-At each parent liquid, a trial phase minimizes the tangent-plane distance $\sum_i n_i^{\mathrm{trial}}(\mu_i^{\mathrm{trial}}-\mu_i^{\mathrm{parent}})/(RT)$ under reaction equilibrium and electroneutrality.
-A negative distance is followed by a material-conserving split calculation; only a Gibbs-energy decrease identifies an additional phase.
-Unlike the penalized MEA fit of Part I \cite[Sect.~4.5]{PolleyPartI}, the reported MDEA, AMP, PZ and DEA fits contain no stability penalty; their phases were searched after fitting.
-A separate PZ fit applies that penalty and is reported only to show its remaining false liquid splits and the finite search's missed solutions.
-All split counts are lower bounds; absence of a detected split is not proof of stability.
-The sampled states and unavailable states remain distinct from a continuous phase boundary.
+% P:p2-methods-search
+Finite searches examine measured-state liquids and a declared temperature--concentration--loading grid, including compressed-liquid copies at $1.05P_{\mathrm{bubble}}$ and $3.0P_{\mathrm{bubble}}$.
+Bubble observations use a compressed parent at $1.05P_{\mathrm{bubble}}$; prescribed-pressure liquids retain their declared pressures.
+Trial phases obey reaction equilibrium and electroneutrality.
+Native resolved descents retain their density-branch classification separately from evaluations of supplied trial compositions.
+Only native resolved liquid-branch descents trigger the stability penalty; vapor descents and supplied-negative distances do not trigger it.
+A supplied-negative state is reported as not stable with branch unknown.
+An unavailable native search remains unavailable even if a supplied trial has a negative distance, and is never counted as stable.
+
+% P:p2-methods-penalty
+Where a native liquid descent is found, the penalty uses compressed-liquid copies at both stated bubble-pressure factors.
+It applies the frozen split-state Gibbs-energy comparison of Part I, which recalculates densities at imposed pressure while holding split amounts and compositions fixed \cite[Sect.~4]{PolleyPartI}.
+Subsequent searches retain discovered native liquid trials so that previously detected descents remain examinable.
+An unsuccessful penalty or retreat leaves a converged unpenalized solution reportable with detected split counts as lower bounds.
+
+% P:p2-methods-retreat
+Retreat interpolates between a reference parameter point and a penalized endpoint using a fixed catalog of trials from the two endpoint searches.
+Each intermediate point adds only its own newly discovered splits and repeats its search until no new split is found; trials discovered at other intermediate points do not alter that point's catalog.
+Bisection narrows the interpolation-fraction bracket to at most $0.01/2^{10}$.
+The selected point and the next point above it are checked, and any observed non-monotone stability finding is reported with the retreat results.
+An interpolated point does not inherit an optimizer convergence claim from an endpoint.
+This order-independent procedure prevents earlier intermediate searches from changing later decisions.
+Finite searches provide detected phase descents and explicit unavailable states, never proof of global stability.
+
+% P:p2-methods-pending
+\textit{Pending: data inventories, objective details and amine-specific search outcomes for MDEA, AMP and PZ await their final results.}
