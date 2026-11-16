@@ -577,3 +577,196 @@ Live Companion exact-DOI searches and child reads resolved all three items, incl
 All three keys already existed in the canonical Zotero Better BibTeX export. The existing `scripts/cited_bibliography.py` generated the requested entries; only those three generated entries were copied into the snapshot, preserving every pre-existing entry byte-for-byte. The export was not refreshed. Generated table and figure-provenance bibliography hashes were refreshed; numerical bodies, figure PDFs, results and conclusions were unchanged. The supplement was rebuilt because those bibliography provenance comments affect its sources.
 
 The additions distinguish fitted NMR in Zhang and Chen from unfitted NMR in Sadegh, and fitted binary enthalpy/phase data in Biget from independent predictions. No cross-paper model ranking or comparison of AARDs from different selections is introduced. All four slots were filled.
+
+## 2026-11-16 — #348 authorized partial revision
+
+The owner confirmed manuscript use of `analyses/dea_transfer/part-ii-346.qmd`
+at `fe4ee08` for DEA calibration on the F2 shared parameters, comparisons,
+numerical replay and finite searches, with conditional errors, no adoption,
+and all results provisional until the re-pin re-check. The fit/comparison,
+uncertainty and refreshed-search reviews were Supported at `6840ca8`,
+`7dba15c` and `d5889b1`, respectively. The separate evidence correction updates
+only review and intended-use prose and `checks.independent_review`; it changes
+no retained numerical result.
+
+The active introduction, model, methods and DEA results now use that evidence.
+The old four-amine results and displays are no longer included by the manuscript
+or supplement. Existing inactive historical display files were not regenerated.
+Pending notices retain places for the other amines, their model/data details,
+the cross-amine summary, conclusions, and their supplementary results.
+The provisional abstract states the DEA answer without claiming the other results.
+
+### Issue item disposition at this scope
+
+- 1: DEA evidence updated; other amines deferred by the owner until final runs.
+- 2: one extrapolation rule; D and H intervals separated in data/deviation
+  displays; binary observations explicitly use no reactions. R1–R3 are a
+  source-correlation interval, not verified measured coverage.
+- 3: amended native-descent, supplied-negative and unavailable-search rules
+  stated; DEA outcome reported. Other amine outcomes remain pending.
+- 4: PZ convergence deferred with its results.
+- 5: reviewed DEA pressure/loading and heat curves used with measured points,
+  role labels and source-range marks. Other amine figures remain pending.
+- 6: compact DEA fixed-species and fitted-coordinate tables in the main paper;
+  detailed scalar values in the supplement. Other species remain pending.
+- 7: AMP/PZ pure/binary deviations deferred with their final parameters.
+- 8: DEA deviations, bound disposition and descent counts reported; the
+  four-amine summary table is pending the remaining results.
+- 9: no observation-index axis; calculated-minus-measured signs stated;
+  compact main tables stay together and the long scalar list is supplementary.
+- 10: transfer question and conditional DEA answer in abstract and introduction;
+  the final four-amine answer remains pending.
+- 11: standard contribution equations removed; Part I citations identify the
+  formulation, parameters or calculations taken from it. Final equation/table
+  numbering awaits the companion revision (#347).
+- 12: order is MDEA, AMP, PZ, DEA throughout the current framing.
+- 13: DEA limitations are collected in one results paragraph. Four-amine
+  synthesis and conclusions remain pending.
+- 14: conventional model, estimation and results sections used for authorized
+  material; other amine subsections remain pending.
+- 15: Horstmann NRTL and present DEA data roles stated together; no unreported
+  same-observation scalar deviation invented for the published comparisons.
+- 16–18: fitted / not fitted / comparison only; correlation for the temperature
+  expression; observation for a measured value; temperatures in K, mass
+  percentages in wt%, and counts as numerals in the revised sections.
+  Original source titles in the bibliography retain their published units.
+- 19: current provisional abstract is below 250 words and names fitted source
+  authors and years; the final abstract awaits all results.
+- 20: existing keywords retained; final Part II highlights deferred until the
+  paper's complete findings are known.
+- 21: nomenclature converted to a table; final completeness awaits all sections.
+- 22: existing companion citation and DOI/access placeholders retained for #206;
+  no bibliography refresh or outward delivery performed.
+- 23: acknowledgements moved immediately before references.
+
+### Numerical and source checks
+
+`python docs/scientific/latex/scripts/dea_displays.py --check` compares every
+new generated table and both copied figures with a fresh presentation from the
+retained files, without model calls. `dea-number-sources.json` gives input hashes.
+The executable addition is confined to that display script, below the 250-line
+budget. Main-text pressure and heat AARDs come from `f2-report-1/group-deviations.csv`;
+search counts come from `research-380/summary.json`; parameter values, errors and
+bounds come from `f2-report-1/parameter-values.csv`; source-interval statistics
+come from `f2-report-1/range-deviations.csv`. Method scales and bisection controls
+are declared methods, not new numerical findings. No untraceable result number
+was introduced. The display check does not automatically parse handwritten prose;
+its numeric statements were checked against these same retained values.
+
+The literature shelf was read from the main checkout because it is ignored and
+absent from this worktree. Nasrifar (2010), Uyan (2015), Böttinger (2008),
+Horstmann (2002), Aroua (1997) and Austgen (1991) copies and current Zotero
+sources matched their indexed hashes. Methods/results passages were read;
+source locators accompany the corresponding claims. Bower, Seo/Hong, Lal and
+Carson original PDF text was also inspected using their retained attachment
+identities. Lawson's scanned source and exact subset comparisons rely on the
+reviewed DEA source-check record; no new scalar model deviation was inferred.
+The committed bibliography snapshot was not edited.
+
+Both documents were built under `agent-heavy` using `latexmk -pdf
+-interaction=nonstopmode -halt-on-error -outdir=builds`, main/supplement/main/
+supplement, with the existing local TeX style path. The plugin-wide and scoped
+prose check passed for revised manuscript sections, generated DEA tables and
+the corrected notebook. This deterministic check is not the independent science
+or story review, which remains the next orchestrator step.
+
+Final build: Part II 10 pages; supplement 5 pages. Neither PDF has a Type 3
+font, undefined citation, unresolved reference or overfull box. Remaining TeX
+messages are 2 underfull abstract lines and 1 underfull supplementary prose
+paragraph. Automated visual QA reports 17 tight-text-clearance warnings in
+Part II and none in the supplement, with no errors. Inspected pages show
+ordinary closely spaced math subscripts, text and bibliography lines, without
+clipping or overlap; the retained curve plot also remains interpretable in
+grayscale through its line styles, markers and series labels. Layout is kept
+for independent review. Scientific-support and story reviews are still open;
+no final scientific endorsement is implied by these build checks.
+
+## 2026-11-16 — #348 fix round 1
+
+Read the science review and the story review, including the story follow-up
+correcting items 2, 8, 11 and 14. Applied the required changes only; contextual
+judgement calls, optional suggestions and the optional covariance-diagonal
+clarification were not work orders. The sole authorized additional comparison
+is one sentence identifying the fitting roles in Böttinger's DEA treatment.
+No thermodynamic calculation, fit, uncertainty calculation or phase search was
+rerun. Notebook figures and `analyses/dea_transfer/present_current.py` are unchanged.
+The manuscript display script now makes its own figures from retained values.
+
+### Required science corrections
+
+| Item | Disposition |
+|---|---|
+| 1 | Applied verbatim: no fitted R2 correction in the transferred set. |
+| 2 | Applied verbatim: the reported bicarbonate observation is compared with calculated bicarbonate plus carbonate, with the source qualification. |
+| 3 | Applied: exact DEA correlation form and 313.15 K reference temperature; the science supplement sentences supersede the conflicting story replacement. |
+| 4 | Applied: Lawson printed p. 26 and Bower Sect. 2, p. 71; the DEA source-check locator is corrected without changing values. |
+| 5 | Applied verbatim: actual wheel commit and SHA-256, with results provisional until the re-check. |
+| 6 | Applied: Present model legend, DEA figure title, manuscript-specific plots and 2 endpoint searches. |
+
+### Required story corrections
+
+| Item | Disposition |
+|---|---|
+| 1 | Applied: define tangent-plane searches, descents, branch assignment, penalty trigger and unavailable searches. |
+| 2 | Overridden by the corrected review and inspected code: half the squared scaled distance; compressed copies of the whole searched set, including measured-state and grid states, deduplicated. |
+| 3 | Applied: purpose, interpolation fraction, fixed endpoint trials, point-local closure, bisection and next-point check. |
+| 4 | Applied with the science qualification: abstract names calculated bicarbonate plus carbonate rather than treating the comparison as bicarbonate alone. Heat AARD is 0.95%. |
+| 5 | Applied: positive contributions, stability motivation and the DEA answer at the introduction's end. |
+| 6 | Applied after source confirmation: fixed binary/permittivity origins, Cai deviation and data-role disclosure. |
+| 7 | Applied after checking each fitted Lawson isotherm's highest-loading observations. |
+| 8 | Overridden in naming only: adopted shared parameters of Part I and Part I's earlier shared parameter set; no internal fit names in the paper. |
+| 9 | Applied: separate scope/limitations subsection and reduced repetition; the science wheel sentences remain in S4. |
+| 10 | Applied with the science qualification on bicarbonate plus carbonate; density/species get a subsection, Nasrifar comparison is added, and 1 supported Böttinger comparison sentence is added. |
+| 11 | Applied after confirming correlation and earlier-set identity; internal parameter-set names replaced by descriptive terms. |
+| 12 | Applied: measured/grid counts, grid definition and named unavailable observation in reader terms. |
+| 13 | Applied: D and H defined in methods and table caption. |
+| 14 | Overridden where conflicting: DEA uses a + b/T + dT with c, e and f zero; science reference-temperature and supplement sentences retained. Story's absorption of the increment into a and b and compact table caption applied. |
+| 15 | Applied except naming and temperature scope: no internal fit names; calculated temperatures extend beyond both DEA source intervals but remain within the R1–R3 source-correlation interval. |
+| 16 | Applied caption, placement and removal of H legend suffixes; science-required figure title retained rather than deleted. |
+| 17 | Overridden by science: Present model, not Calculated. |
+| 18 | Applied: unambiguous source citation in fixed-species caption. |
+| 19 | Applied: not used, source-interval terminology and full Böttinger name. |
+| 20 | Applied: 0.95% fitted-heat AARD in abstract, prose and table. |
+| 21 | Applied: generic observed quantity q in deviation equations. |
+| 22 | Applied: DEA–water binary system heading. |
+| 23 | Applied: Part I-style nomenclature table and equation labels. |
+| 24 | Applied: singleton values, mass compositions consistently rendered as wt%, source precision and no zero-AMP entry. Original molar-concentration and binary mole-fraction bases remain explicit. |
+| 25 | Applied S4 and scalar quantity/unit formatting; science wheel identity retained. Packing and permittivity coefficients are explained with a Part I citation. |
+
+### Scientific confirmation of claims marked SC
+
+| Claim | Outcome and source |
+|---|---|
+| Vapor descents do not trigger the liquid penalty | Applied. Part I Sect. 3.4 defines the penalty and Sect. 4.2 identifies the false second liquid; `analyses/mdea_mea_workflow/results/item-l/README.md`, liquid-miscibility discussion, keeps vapor witnesses separate. `reduced_refit_338.py::fit` triggers on `native_liquid_descent`. No claim that vapor descents are physically irrelevant is made. |
+| Which states are penalized | Reworded. `Route.states` includes observation problem/initial/final/bubble states, explicit phase states and the grid; `reduced_refit_338.py::fit` passes that whole set to `Route.penalty_states`. The latter forms copies at both pressure factors and deduplicates identical declarations. Part I Sect. 3.4 likewise says the whole searched liquid-state set. The frozen-split contribution comparison is a results diagnostic, not the penalty definition. |
+| Highest-loading pressure-shape direction | Applied. `f2-report-1/data-rows.json`, Lawson group: each of the 5 fitted isotherms underpredicts its highest-loading pressure, and its final measured pressure increment is steeper than the calculated increment. No new model curve was calculated. |
+| Earlier-set column identity | Applied with descriptive naming. `part-ii-346.qmd` identifies the earlier DEA result, `results/retransfer-346/README.md` identifies its original-fit replay, and `previous-current/replay.json` reproduces the earlier fitted cost 7.97069988994228. `present_current.py` takes the earlier column from those same-observation retained predictions. The column is a separately fitted DEA result on the earlier shared set, not substitution without refitting. |
+| Conditional correlation 0.974 | Applied. `f2-current/conditional-uncertainty.json`, free-coordinate ordering and conditional_correlation[1][2] = 0.9738975305783889; standard errors and values come from `f2-report-1/parameter-values.csv`. The claim remains local and conditional. |
+| DEA–water and permittivity fit origins | Applied. `results/binary.json` has 44 binary observations at 365.15 K and the Hsieh fit coefficients; `historical-f0.qmd`, binary/dielectric section, records the data roles. Horstmann Table 4 and Hsieh Tables 1 and 5 confirm the measured quantities; current Zotero PDF text and indexed Markdown were checked. |
+| All observations examined before the reported fit | Applied for the reported re-transfer, not for every earlier development step. `inputs/part-ii-346/README.md` and `data-roles.csv` identify all 299 as previously seen; `historical-f0.qmd` already contains the pressure/property comparisons, and the reviewed current notebook states that comparisons were accessed before the choice between tied solutions. |
+| Grid makeup | Applied. `route-current.json`: 4 feed concentrations, 48 loadings from 1e-5 to 1.167. Notebook finite-search section and `research-380/summary.json`: 3456 grid states, 335 measured-state liquids; 313.15–393.15 K in 10 K steps and both pressure factors. The concentrations are those fitted through pressure or heat observations. |
+| Nasrifar Table 3 / Figure 5 | Applied. Read the indexed Markdown and Zotero PDF attachment 3G4FGGY4: Sect. 6, Table 3 and Fig. 5 use Cai's 6.66 kPa and Horstmann's 365.15 K data with k = -0.04. The retained `binary.json` also records `nasrifar_k_ij = -0.04`. No same-observation scalar deviation was invented. |
+| Species cannot form from the feed | Applied in the scope of compiler-certified absence. `Route.stability_row` uses `eq.compile_problem(...).removed_species`; the #380 notebook identifies carbon-free parents and only the certified-absent species removed from trial support. No low-concentration approximation is introduced. |
+| Outside both marker grouping | Applied. Checked all retained observation and curve marks plotted in Figure 2: only inside/inside, outside/outside and inside-dissociation/outside-hydrolysis combinations occur. The manuscript generator asserts these assignments for each series and its observations. |
+| Deviations and biases in story 6 and 10 | Applied. `f2-report-1/group-deviations.csv`: Cai 40.816649%, not-fitted pressure AARD range 23.118629–84.946669%, biases +83.088640%, -23.118629% and -31.629587%, Table VIII 37.787164%, density 0.629528%, carbamate +58.354149%, bicarbonate aggregate -33.080830%, DEA aggregate 7.464591%. Quoted values use the requested rounding. |
+| Böttinger comparison exception | Applied as 1 sentence. Indexed Markdown and Zotero PDF TJCRKTFQ, Sects. 5–7, Table 7 and Fig. 11: the extended Pitzer model fitted the Lal pressure observations and the study's own DEA NMR observations. These roles differ from the present not-fitted Lal pressures and comparison-only NMR. No scalar ranking is inferred. |
+
+Other checks: the Lawson locator was checked in original PDF APKXH9KU
+(Results and Accuracy of data, printed p. 26), and Bower in HBS9XN4Q
+(Sect. 2, Method, printed p. 71). The current DEA endpoint and conditional
+coordinates confirm the correlation form and 313.15 K reference temperature.
+All source-number changes are wording, rounding, labels or presentation of
+retained values. No new physical validation or adoption is asserted.
+
+Fix-round checks: numeric/figure reconstruction passes for 10 outputs from 10
+retained source files. The manuscript display script is 169 total lines,
+including blank lines and comments, entirely within the authorized script
+folder and below the 250-line limit. The plugin-wide and scoped prose check
+passes on the revised manuscript, generated DEA tables and source-check record.
+Both PDFs build through `agent-heavy`: Part II 10 pages, supplement 5 pages.
+Final TeX messages are 2 underfull abstract lines and 1 underfull supplementary
+paragraph, with no undefined citations/references, overfull boxes or font
+substitution. Both PDFs have 0 Type 3 fonts. Visual QA reports 21 main-paper
+and 2 supplement tight-text-clearance warnings, all around ordinary adjacent
+text or math rows; inspection found no overlap or clipping. The focused
+independent science re-check remains open. No result adoption is implied.

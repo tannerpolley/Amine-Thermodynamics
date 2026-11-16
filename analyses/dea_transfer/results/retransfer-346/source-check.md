@@ -32,7 +32,7 @@ no such law is substituted or assigned a zero difference.
 
 ## Published models on the same observations
 
-- Lawson and Garst (1976), results and accuracy discussion, printed p. 25:
+- Lawson and Garst (1976), results and accuracy discussion, printed p. 26:
   Table II supplies the fitted DEA observations; the stated 9 percent scatter
   is against smoothed data curves, not a reported thermodynamic model error.
   No same-row published-model scalar deviation is reported there.
