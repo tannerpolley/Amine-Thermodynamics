@@ -801,7 +801,10 @@ promotes the notebook for manuscript use. Under the subsequent #343 decision,
 penalties are deferred, the start-0 declarations changed by #379 are refreshed,
 and start 1 proceeds unpenalized.
 
-The native question tool selected merging the published branch history into
-the rebased branch in Don't-ask mode. Both histories are preserved and the
-intended file tree is unchanged; subsequent publication can use a normal push.
+The initial native question-tool choice was superseded by the user's Git
+instruction: retain published `2e20595`, merge main `ce4f3c6`, then cherry-pick
+the local diagnosis, provenance and restricted-state refresh commits. The
+rebuilt tree was verified identical to saved `f10e8e2` before changing the
+active branch, preserving the running calculation's source and inputs. The
+saved history remains at local tag `archive/issue-343-before-history-rebuild-f10e8e2`.
 No force-push was performed.
