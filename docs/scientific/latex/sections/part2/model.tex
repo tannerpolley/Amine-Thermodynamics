@@ -13,10 +13,10 @@ The standard contribution equations are used without modification.
 
 \subsection{Parameters transferred from Part I}
 % P:p2-model-02
-Water, molecular \COtwo, hydronium, hydroxide, bicarbonate and carbonate retain the shared component parameters and interactions of the MEA parameter set supplied by Part I \cite{PolleyPartI}.
-The water autoprotolysis reaction (R1), carbon dioxide hydration to bicarbonate (R2), and bicarbonate dissociation to carbonate (R3) retain that set's reaction coefficients and reference conventions, including its fitted R2 corrections.
-Amine-specific interactions with these species may be estimated without changing the shared species themselves.
-The exact shared input file and its checksum are supplied with the numerical results.
+Water, molecular \COtwo, hydronium, hydroxide, bicarbonate and carbonate retain the adopted shared parameters of Part I \cite[Sect.~3.3]{PolleyPartI}; these are the shared parameters of this work.
+Part I's earlier shared parameter set, which also allowed reaction-correlation shifts and separate amine-ion Born diameters, serves only as a sensitivity comparison (Section~\ref{sec:p2-results}).
+The water autoprotolysis reaction (R1), carbon dioxide hydration to bicarbonate (R2), and bicarbonate dissociation to carbonate (R3) retain the source correlations and reference conventions of the transferred MEA parameter set; no fitted R2 correction is included.
+Interactions of amine species with these shared species are amine-specific and may be fitted; the shared parameters themselves are not refitted.
 
 \subsection{Amine-specific quantities}
 % P:p2-model-03
@@ -24,7 +24,7 @@ DEA uses a molecular chain with the four-site association description of Nasrifa
 The protonated DEA cation retains the neutral segment count, diameter and dispersion energy, with zero self-association energy; DEA carbamate is represented by a single sphere.
 The cation retains its charged-chain self-dispersion, an explicit choice of this model.
 Each DEA ion's Born diameter equals its segment diameter.
-The molecular DEA--water interaction and the coefficients describing unloaded DEA permittivity remain fixed during reactive estimation; their values and origins are retained in the electronic parameter table.
+The molecular DEA--water interaction, fitted beforehand to the 365.15~K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, and the unloaded DEA permittivity coefficients, fitted to the permittivities of Hsieh et al.\ \cite{hsiehDielectricConstantsAqueous2007}, remain fixed during reactive estimation; Table~\ref{supp-tab:p2-dea-all-current} lists their values.
 The permittivity expression uses the neutral-species mixture, with ions affecting volume and equilibrium composition but excluded from its mixing average, as in Part I \cite[Sect.~2]{PolleyPartI}.
 Table~\ref{tab:p2-dea-fixed-current} places the fixed species quantities side by side.
 
@@ -39,6 +39,7 @@ Amine dissociation and carbamate hydrolysis are written as
  \ce{DEACOO- + H2O &<=> DEA + HCO3-}.
 \end{align}
 The fixed dissociation correlation is from Bower et al.; the hydrolysis correlation was initialized from the inverse formation correlation of Aroua et al. and subsequently fitted \cite[Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}\cite[Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}.
+For DEA, $\ln K=a+b/T+dT$ on the common-molality reference basis, with $T$ in K and the coefficients $c$, $e$ and $f$ zero; the hydrolysis fit adjusts the level $a$ and, through Eq.~\eqref{eq:p2-reaction-shift}, the temperature coefficient $b$.
 Chemical equilibrium uses charge-neutral reaction combinations, explicit water activity and the standard-state transformations of Part I, which convert source equilibrium constants to the common reference convention \cite[Sect.~2]{PolleyPartI}.
 R1 and R3 retain their source mole-fraction basis; R2 and the amine correlations retain their common-molality basis.
 Vapor--liquid equilibrium equates chemical potentials for vapor-allowed species while retaining elemental balances and liquid electroneutrality.
@@ -49,9 +50,8 @@ A hydrolysis enthalpy increment changes the temperature dependence through
  \delta\ln K(T)=-\frac{\delta h}{R}\left(\frac1T-\frac1{T_{\mathrm{ref}}}\right),
  \label{eq:p2-reaction-shift}
 \end{equation}
-where $T_{\mathrm{ref}}$ is the reference temperature specified with the parameter coordinates.
-The completed correlation absorbs this increment into its coefficients.
-Reporting a zero increment about the completed correlation does not mean that its temperature dependence was fixed during fitting.
+where $T_{\mathrm{ref}}=313.15$ K for the DEA hydrolysis coordinate.
+After fitting, the increment is absorbed into $a$ and $b$, so Table~\ref{tab:p2-dea-fitted-current} reports it as zero about the completed correlation, with its conditional standard error.
 Reaction standard-state derivatives supply the corresponding caloric functions once; no separate absorption-heat term is added.
 
 % P:p2-model-pending

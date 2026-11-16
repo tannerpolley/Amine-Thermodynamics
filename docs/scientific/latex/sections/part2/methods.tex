@@ -8,10 +8,9 @@ Calculated \COtwo partial pressure is $y_{\COtwo}P$, distinct from total bubble 
 
 % P:p2-methods-02
 The data-role terms follow Part I's definitions: \emph{fitted} observations enter the reported objective; \emph{not fitted} observations remain outside it; \emph{comparison only} denotes other quantities or conditions, never used to choose a fit \cite[Sect.~3]{PolleyPartI}.
-All DEA observations had been seen previously.
-The pressure comparisons were accessed before the choice between numerically tied fits; their absence from the objective does not make them blind tests.
-Table~\ref{tab:p2-dea-data-current} states roles, temperature ranges and reaction-correlation range marks.
-Concentration and loading ranges on the original source basis are retained in the supplementary observation inventory.
+All DEA observations had been examined in an earlier DEA fit on Part I's earlier shared parameter set, and the pressures not fitted were inspected before the choice between the 2 numerically tied fits; they are therefore comparisons, not blind tests.
+Table~\ref{tab:p2-dea-data-current} states roles, temperature ranges and source-interval marks.
+Table~\ref{supp-tab:p2-dea-inventory-current} gives concentration and loading ranges on each source's basis.
 
 \input{tables/part2/dea-data-current}
 
@@ -19,15 +18,16 @@ Concentration and loading ranges on the original source basis are retained in th
 DEA fitting uses Lawson and Garst partial pressures at 25 wt\% DEA and Carson et al. integral absorption heats at 298.15 K \cite{lawsonGasSweeteningData1976,carsonEnthalpySolutionCarbon2000}.
 The higher-temperature Lawson set, Seo and Hong pressures and Lal et al. pressures are not fitted \cite{seoSolubilitiesCarbonDioxide1996,lalSolubilityH2SCO21985}; Lawson Table VIII pressures, Weiland densities, B\"ottinger species, Cai binary pressures and Horstmann excess enthalpies are comparison only \cite{Weiland1998,Bottinger2008,caiBinaryIsobaricVaporLiquid1996,horstmannPhaseEquilibriumExcess2002}.
 Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson cell is not reconstructed.
-Lal's concentration is converted using unloaded-solution density, and B\"ottinger species use an assigned pressure because individual cell pressures are unavailable; the retained observation inventory gives these state assumptions.
+Lal's concentration is converted using unloaded-solution density, and B\"ottinger species use an assigned pressure because individual cell pressures are unavailable; Section S3 of the supplement gives these state assumptions.
+B\"ottinger's molecular-plus-protonated DEA quantity is compared as the measured sum.
 
 % P:p2-methods-range
-Every declared state is calculated; a state outside a source interval remains in its data group, carries a range mark in each display and is reported separately in the range-separated deviations.
-The DEA dissociation measurement interval is 273.15--323.15 K \cite[experimental section, p.~71; Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}.
-The hydrolysis source measurements span 303--331 K \cite[experimental procedure, p.~692; Table~3 and Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}; this interval does not establish the validity of the subsequently fitted correlation.
+Every observation is calculated, including those outside a reaction correlation's source interval; such observations stay in their data group, are marked in every table and figure, and are reported separately in Table~\ref{supp-tab:p2-dea-ranges-current}.
+The DEA dissociation measurement interval, D, is 273.15--323.15 K \cite[Sect.~2, p.~71; Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}.
+The hydrolysis source measurements span 303--331 K, the interval H, \cite[experimental procedure, p.~692; Table~3 and Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}; this interval does not establish the validity of the subsequently fitted correlation.
 For R1--R3, 273.15--498.15 K is the source-correlation interval stated by Austgen et al., rather than verified measured coverage \cite[Table~V, p.~547]{Austgen1991}.
 Binary comparisons do not use reaction correlations.
-The calculation interval, 293.15--458.64 K, is distinct from all these source intervals.
+Calculated states span 293.15--458.64 K, beyond both DEA source intervals but within the R1--R3 source-correlation interval.
 
 \subsection{Caloric and density calculations}
 % P:p2-methods-caloric
@@ -45,54 +45,54 @@ Bounded least squares minimizes
  C=\frac12\sum_j w_jr_j^2,\qquad
  r_j=\frac{\ln(p_j^c/p_j^o)}{0.09}\ \text{(pressure)},\quad
  r_j=\frac{h_j^c-h_j^o}{0.02|h_j^o|}\ \text{(integral heat)}.
+ \label{eq:p2-objective}
 \end{equation}
 Superscripts $c$ and $o$ denote calculated and observed values.
 Each data group's squared residuals are averaged through its weights $w_j$.
 The fitted quantities are the cation--water and carbamate--water dispersion interactions, hydrolysis correlation level and hydrolysis enthalpy increment.
-2 complete initial parameter sets are replayed before fitting; all returned numerical endpoints and their convergence dispositions are retained.
-The lowest fitted cost selects between converged available solutions, with costs within the optimizer's function tolerance reported as ties.
-Stability accompanies that choice and does not select between initial parameter sets.
+Fitting starts from 2 complete initial parameter sets, and the converged solution from each is reported.
+The lower-cost solution is selected; solutions whose costs differ by less than the optimizer's function tolerance are reported as tied.
+Phase stability is assessed for the selected solution but does not choose between the initial sets.
 
 % P:p2-methods-deviation
-Mean absolute relative deviation, denoted AARD, and relative bias are
+Mean absolute relative deviation, denoted AARD, and relative bias of an observed quantity $q$ are
 \begin{equation}
- \mathrm{AARD}=\frac{100\,\%}{N}\sum_j|y_j^c/y_j^o-1|,\qquad
- \mathrm{bias}=\frac{100\,\%}{N}\sum_j(y_j^c/y_j^o-1).
+ \mathrm{AARD}=\frac{100\,\%}{N}\sum_j|q_j^c/q_j^o-1|,\qquad
+ \mathrm{bias}=\frac{100\,\%}{N}\sum_j(q_j^c/q_j^o-1).
+ \label{eq:p2-deviation}
 \end{equation}
 Only nonzero observations enter relative statistics; zero observations remain in absolute-error statistics and total counts.
 Signed physical-unit errors always use calculated minus measured, including for negative heats.
 
 \subsection{Parameter uncertainty}
 % P:p2-methods-uncertainty
-Conditional standard errors follow the local inverse information matrix of the whitened residual Jacobian, multiplied by the retained residual-variance estimate.
+Conditional standard errors follow the local inverse information matrix of the whitened residual Jacobian, multiplied by the residual-variance estimate.
 The degrees of freedom subtract free fitted coordinates from fitted observations.
 Active-bound coordinates are held fixed; an unavailable or rank-deficient information calculation does not receive a finite standard error.
-The completed reaction coefficients, coordinate origins and bounds are transported together before differentiation, and differentiated predictions are checked against replay at that same physical point.
 
 \subsection{Phase-stability search}
 % P:p2-methods-search
-Finite searches examine measured-state liquids and a declared temperature--concentration--loading grid, including compressed-liquid copies at $1.05P_{\mathrm{bubble}}$ and $3.0P_{\mathrm{bubble}}$.
-Bubble observations use a compressed parent at $1.05P_{\mathrm{bubble}}$; prescribed-pressure liquids retain their declared pressures.
+Each fitted parameter set is searched for a phase split with the reacting tangent-plane distance of Part I, which compares the Gibbs energy of a charge-neutral trial phase with the tangent plane of the parent liquid at fixed temperature and pressure \cite[Sect.~3.4]{PolleyPartI}.
+A negative distance confirmed by a finite, material-conserving Gibbs-energy decrease is a descent and shows that the parent liquid is not stable.
+The parent liquids are the measured states, with bubble observations compressed to 1.05 times their calculated bubble pressure and liquids measured at a stated pressure kept at that pressure, and a grid of temperature, amine concentration and loading at 1.05 and 3.0 times the calculated bubble pressure.
 Trial phases obey reaction equilibrium and electroneutrality.
-Native resolved descents retain their density-branch classification separately from evaluations of supplied trial compositions.
-Only native resolved liquid-branch descents trigger the stability penalty; vapor descents and supplied-negative distances do not trigger it.
-A supplied-negative state is reported as not stable with branch unknown.
-An unavailable native search remains unavailable even if a supplied trial has a negative distance, and is never counted as stable.
+The search optimizes its own trial phases and classifies each descent it resolves by density as liquid or vapor; it also evaluates trial compositions supplied from descents found for other parameter sets, which can show that a state is not stable but cannot assign its branch.
+Only a liquid descent found by the search's own trials triggers the stability penalty, because the penalty targets the false second liquid that Part I found in an MEA fit without the penalty \cite[Sect.~4.2]{PolleyPartI}; vapor descents and negative distances from supplied trials are reported without triggering it.
+A search that does not complete is reported as unavailable, even when a supplied trial gives a negative distance, and is never counted as stable.
 
 % P:p2-methods-penalty
-Where a native liquid descent is found, the penalty uses compressed-liquid copies at both stated bubble-pressure factors.
-It applies the frozen split-state Gibbs-energy comparison of Part I, which recalculates densities at imposed pressure while holding split amounts and compositions fixed \cite[Sect.~4]{PolleyPartI}.
-Subsequent searches retain discovered native liquid trials so that previously detected descents remain examinable.
-An unsuccessful penalty or retreat leaves a converged unpenalized solution reportable with detected split counts as lower bounds.
+Where a liquid descent is found, the fit is repeated with Part I's stability penalty, which adds half the squared, scaled most negative tangent-plane distance of each penalized state to the cost \cite[Sect.~3.4]{PolleyPartI}; the penalized states are compressed-liquid copies of the whole searched liquid-state set, including measured-state liquids and grid states, at both pressure factors, with identical copies counted once.
+Later fitting stages keep the compositions of liquid descents already found as supplied trials, so a detected descent is tested again.
+If neither the penalty nor the retreat below removes the split, the converged unpenalized solution is reported, with its detected split counts as lower bounds.
 
 % P:p2-methods-retreat
-Retreat interpolates between a reference parameter point and a penalized endpoint using a fixed catalog of trials from the two endpoint searches.
-Each intermediate point adds only its own newly discovered splits and repeats its search until no new split is found; trials discovered at other intermediate points do not alter that point's catalog.
-Bisection narrows the interpolation-fraction bracket to at most $0.01/2^{10}$.
-The selected point and the next point above it are checked, and any observed non-monotone stability finding is reported with the retreat results.
-An interpolated point does not inherit an optimizer convergence claim from an endpoint.
-This order-independent procedure prevents earlier intermediate searches from changing later decisions.
-Finite searches provide detected phase descents and explicit unavailable states, never proof of global stability.
+If the penalized solution still shows a liquid descent, a retreat selects the parameter point closest to it at which none is detected.
+Points are interpolated linearly between a reference parameter set with no detected descent, at interpolation fraction $t=0$, and the penalized solution, at $t=1$; bisection on $t$ narrows the bracket to $0.01/2^{10}$, the resolution of Part I's 0.01 steps followed by 10 bisections \cite[Sect.~3.4]{PolleyPartI}.
+Every point is searched with one trial set fixed before the retreat from the 2 endpoint searches, plus the descent compositions found at that point, and its search is repeated until no new descent appears.
+Because no point uses trials found at other interpolated points, the decision at each $t$, and hence the selected point, does not depend on the order in which points are searched.
+Bisection assumes that a descent, once present, persists at larger $t$; the point one bracket width above the selected point is therefore also searched, and any return to stability there is reported.
+The selected point is an interpolation and carries no optimizer convergence claim.
+Finite searches report detected descents and unavailable searches; they do not prove global stability.
 
 % P:p2-methods-pending
 \textit{Pending: data inventories, objective details and amine-specific search outcomes for MDEA, AMP and PZ await their final results.}

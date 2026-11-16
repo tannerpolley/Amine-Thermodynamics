@@ -1,9 +1,10 @@
 \section{DEA parameters and source basis}
 % P:p2-s-parameters
 The electronic parameter table retains the value, unit, fitted or fixed role, bounds, conditional standard error and source for each quantity.
+For the DEA dissociation and carbamate-hydrolysis correlations, the retained coefficients give $\ln K(T)=a+b/T+dT$ on the common-molality reference basis, with $T$ in K; the listed coefficients $c$, $e$ and $f$ are zero.
 The main-text fitted table uses increments about the completed hydrolysis correlation; the completed coefficients below already include the fitted enthalpy change.
-A zero increment about that correlation is therefore not an additional physical constraint.
 Fixed ionic quantities are inherited model assumptions, not independent measurements of ionic size.
+Packing diameter is the hard-sphere diameter used in the repulsive contribution; dielectric volume and dielectric temperature are the coefficients $d_V$ and $d_T$ in the relative-permittivity expression transferred from Part I \cite[Sect.~2.1]{PolleyPartI}.
 
 \input{tables/part2/dea-all-current}
 
@@ -27,20 +28,20 @@ Source measurement uncertainties are not agreement thresholds.
 \input{tables/part2/dea-inventory-current}
 
 % P:p2-s-published
-Lawson and Garst report scatter against smoothed curves, without a same-observation scalar thermodynamic-model deviation \cite[p.~25, results and accuracy discussion]{lawsonGasSweeteningData1976}.
+Lawson and Garst report scatter against smoothed curves, without a same-observation scalar thermodynamic-model deviation \cite[p.~26, Results and Accuracy of data]{lawsonGasSweeteningData1976}.
 Seo and Hong's graphical smoothed comparison is for AMP, not the DEA subset used here \cite[Table~1, Results and Discussion, p.~259]{seoSolubilitiesCarbonDioxide1996}.
 Lal et al. compare the Kent--Eisenberg treatment graphically with observations not used to fit those earlier constants; no scalar deviation on the present subset is reported \cite[pp.~683--684, Eqs.~9--13, Fig.~3]{lalSolubilityH2SCO21985}.
 Carson's infinite-dilution comparison concerns a different quantity from the finite-loading integral heats fitted here \cite[Tables~2, 5--6, pp.~1289--1295]{carsonEnthalpySolutionCarbon2000}.
 Horstmann fits binary vapor--liquid equilibrium and excess enthalpy simultaneously; the same heat observations are comparison only here \cite[pp.~1496--1500, Tables~6--7, Fig.~4(b)]{horstmannPhaseEquilibriumExcess2002}.
 The source's excess-enthalpy uncertainty expression has no absolute-value bars on its enthalpy-dependent term despite negative measured heats; it is not used to compute a negative uncertainty.
 
-\section{DEA numerical reproduction and finite searches}
+\section{DEA reproducibility and phase-stability searches}
 % P:p2-s-numerical
-The electronic results retain immutable parameter and input identities, observation predictions, conditional information matrices and search declarations.
-The source index lists hashes of every retained file read by the manuscript display generator.
-The stability refresh retains the original grid and loaded-state calculations while restricting trial families only where the equilibrium compiler certifies absent species.
-The remaining unavailable Lawson state reports a failed final trial optimizer or undetermined evidence and retains its unavailable disposition.
-The calculation-library identity remains provisional pending the re-pin re-check.
+The electronic data contain the parameter and input files with their checksums, the calculated value of every observation, the conditional information matrices and the definition of every searched state.
+Trial phases exclude species that cannot form from the feed at the searched state.
+The search at the second Lawson and Garst Table VIII state, identified as \texttt{lawson-1976-viii:1} in the electronic data, did not complete because its final trial optimization failed or returned an undetermined result; the state is reported as unavailable, not stable.
+The retained DEA calculations used the \texttt{epcsaft} wheel built from commit \nolinkurl{391dfe5d64ede5036bf160bc6ae037ad5e14af32}, with SHA-256 \nolinkurl{0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b}.
+The results remain provisional until rechecking on the re-pinned wheel.
 
 % P:p2-s-pending
 \textit{Pending: supplementary results for MDEA, AMP and PZ await their final runs.}

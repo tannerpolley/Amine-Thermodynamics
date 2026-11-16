@@ -25,18 +25,33 @@ During preparation of this manuscript, OpenAI Codex and Claude (Anthropic) were 
 The author reviewed and edited the content and takes responsibility for the final manuscript.
 
 \section*{Nomenclature}
-\begin{tabular}{@{}ll@{}}\toprule
-Symbol & Meaning \\ \midrule
-$\alpha$ & Added carbon dioxide per analytical amine, mol/mol \\
-$w_A$ & Unloaded amine mass fraction \\
-$x_i,y_i$ & True-species liquid and vapor mole fractions \\
-$P,p_{\COtwo}$ & Total and carbon dioxide partial pressures \\
-$K$ & Equilibrium constant on the stated reference basis \\
-$C$ & Weighted least-squares cost \\
-$k_{ij}$ & Unlike-pair dispersion interaction \\
-AARD & Mean absolute relative deviation \\
-SE & Conditional standard error \\
-\bottomrule\end{tabular}
+\begingroup\small
+\begin{longtable}{@{}p{.21\linewidth}p{.43\linewidth}p{.14\linewidth}p{.15\linewidth}@{}}
+\toprule
+Symbol & Meaning & Unit & First equation \\
+\midrule\endfirsthead
+\toprule Symbol & Meaning & Unit & First equation \\
+\midrule\endhead
+\bottomrule\endfoot
+$A^{\mathrm{res}},a^{\mathrm{res}}$ & Extensive and reduced residual Helmholtz energy & J; 1 & \ref{eq:p2-epcsaft-residual-split} \\
+$n$ & Total amount of molecular and ionic species & mol & \ref{eq:p2-epcsaft-residual-split} \\
+$R$ & Gas constant & J/(mol K) & \ref{eq:p2-epcsaft-residual-split} \\
+$T,T_{\mathrm{ref}}$ & Temperature and correlation reference temperature & K & \ref{eq:p2-epcsaft-residual-split} \\
+$K$ & Equilibrium constant on the stated reference basis & 1 & \ref{eq:p2-reaction-shift} \\
+$\delta h$ & Hydrolysis enthalpy increment & J/mol & \ref{eq:p2-reaction-shift} \\
+$C$ & Weighted least-squares cost & 1 & \ref{eq:p2-objective} \\
+$w_j,r_j$ & Weight and scaled residual of observation $j$ & 1 & \ref{eq:p2-objective} \\
+$q_j^c,q_j^o$ & Calculated and observed values of observation $j$ & varies & \ref{eq:p2-deviation} \\
+$N$ & Number of observations with a defined relative error & 1 & \ref{eq:p2-deviation} \\
+$\alpha$ & Added carbon dioxide per analytical amine & mol/mol & -- \\
+$w_A$ & Unloaded amine mass fraction & 1 & -- \\
+$x_i,y_i$ & True-species liquid and vapor mole fractions & 1 & -- \\
+$P,p_{\COtwo}$ & Total and carbon dioxide partial pressures & Pa & -- \\
+$\sigma,\epsilon/k_B$ & Segment diameter; dispersion energy over Boltzmann constant & \AA; K & -- \\
+$d^{\mathrm{Born}}$ & Born diameter & \AA & -- \\
+$k_{ij}$ & Unlike-pair dispersion interaction & 1 & -- \\
+AARD & Mean absolute relative deviation & \% & \ref{eq:p2-deviation} \\
+\end{longtable}\endgroup
 
 \section*{Acknowledgements}
 % P:p2-acknowledgements-01

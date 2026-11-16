@@ -2,11 +2,11 @@
 % P:p2-results-pending
 \textit{Pending: MDEA, AMP and PZ results, figures and tables await their final runs.}
 
-\subsection{DEA pure component and binary systems}
+\subsection{DEA--water binary system}
 % P:p2-results-dea-binary
-The fixed neutral DEA description is inherited rather than re-estimated with reactive observations.
-Binary comparisons therefore test quantities not constrained by the present reactive objective.
-Figure~\ref{fig:p2-dea-binary} shows positive excess-enthalpy predictions against Horstmann's negative measurements and substantial disagreement with Cai pressures.
+The neutral DEA parameters and the DEA--water interaction are set before the reactive fit (Section~\ref{sec:p2-model}) and are not re-estimated with reactive observations.
+The Cai pressures and Horstmann excess enthalpies therefore test binary quantities outside the reactive objective; the DEA--water interaction itself was fitted to Horstmann's vapor--liquid equilibria, not to these sets.
+Figure~\ref{fig:p2-dea-binary} shows positive excess-enthalpy predictions against Horstmann's negative measurements and Cai bubble pressures with 40.82\,\% AARD (Table~\ref{tab:p2-dea-deviations-current}).
 The sign error indicates that the model describes binary mixing enthalpy incorrectly even though absorption heats enter the reactive fit.
 It does not identify a unique interaction or reaction coefficient as the cause.
 
@@ -20,44 +20,45 @@ It does not identify a unique interaction or reaction coefficient as the cause.
 % P:p2-results-dea-fit
 Both initial parameter sets converge and are numerically tied at the function-tolerance scale; the lower-cost solution supplies the reported parameters.
 None of the fitted quantities is on a bound (Table~\ref{tab:p2-dea-fitted-current}).
-The hydrolysis coefficients are effective fitted quantities conditional on the fixed shared description, rather than independent measurements of an equilibrium constant.
-The supplement gives completed coefficients and fixed quantities separately from the fitted-coordinate increments.
+The hydrolysis coefficients are effective fitted quantities conditional on the fixed shared parameters, rather than independent measurements of an equilibrium constant.
+Table~\ref{supp-tab:p2-dea-all-current} lists the completed correlation coefficients and all fixed quantities.
 
 \input{tables/part2/dea-fitted-current}
 
 \subsection{Loaded DEA: fitted solubility and absorption heat}
 % P:p2-results-dea-fitted
-Fitted DEA partial pressures have 28.46\,\% AARD, with the pressure-shape discrepancy unresolved.
-The near-zero aggregate bias in Table~\ref{tab:p2-dea-deviations-current} therefore does not describe uniform agreement along the loading curves.
-Fitted integral heats have 0.947\,\% AARD, showing closer agreement for this measured quantity on its own basis.
-Figure~\ref{fig:p2-dea-pressure} distinguishes measurements from continuous model calculations and marks source-interval extrapolation.
+Fitted DEA partial pressures have 28.46\,\% AARD but a bias of only $-0.66$\,\% (Table~\ref{tab:p2-dea-deviations-current}): the error lies mainly in the shape of pressure against loading rather than in a uniform offset.
+Along each Lawson isotherm the calculated pressure rises less steeply than the measured pressure at the highest loadings, so the highest-loading pressures are underpredicted (Figure~\ref{fig:p2-dea-pressure}).
+The fit does not identify which interaction or reaction coefficient causes this shape error.
+Fitted integral heats have 0.95\,\% AARD.
 
-\begin{figure}[pos=p]
+\begin{figure}[pos=!tbp]
 \centering\includegraphics[width=\linewidth]{dea-current-measured-model.png}
-\caption{DEA measurements (points) and retained model curves (lines) against loading in mol \COtwo/mol DEA. Lawson pressures are fitted except the explicitly marked higher-temperature set; Seo and Hong and Lal pressures are not fitted; Carson integral heats are fitted. Triangles and dashed curves lie outside the DEA dissociation measurement interval. H in/out independently marks the hydrolysis source interval; squares and dotted curves are outside H only. All reactive states lie inside the R1--R3 source-correlation interval, whose measured coverage is unverified. H coverage does not establish validity of the fitted correlation.}
+\caption{DEA measurements (points) and calculated curves (lines) against loading in mol \COtwo/mol DEA. Lawson pressures at 310.93--380.37~K and Carson integral heats are fitted; the 394.26~K Lawson isotherm and the Seo and Hong and Lal pressures are not fitted. Circles and solid lines lie inside both the DEA dissociation (D) and hydrolysis (H) source intervals, triangles and dashed lines lie outside both, and squares and dotted lines lie outside H only (Section~\ref{sec:p2-methods}).}
 \label{fig:p2-dea-pressure}
 \end{figure}
 
 \subsection{Loaded DEA: solubility not fitted}
 % P:p2-results-dea-not-fitted
-Table~\ref{tab:p2-dea-deviations-current} separates the higher-temperature Lawson, Seo and Hong, and Lal pressure comparisons from fitted observations.
-The source-specific deviations differ appreciably and retain different signed biases.
-Replacing the earlier shared inputs and refitting DEA slightly improves the fitted pressure and heat deviations but increases the Seo and Hong and Lal deviations.
-This comparison demonstrates parameter compensation under different fixed shared descriptions; it does not isolate a physical cause for the residual errors.
+The pressures not fitted deviate by 23.12--84.95\,\% AARD, and the sign of the error depends on the source: calculated pressures exceed Seo and Hong's 30 wt\% measurements (bias $+83.09$\,\%) and fall below the higher-temperature Lawson and the Lal measurements (biases $-23.12$ and $-31.63$\,\%) (Table~\ref{tab:p2-dea-deviations-current}).
+The Lawson Table VIII pressures at 50--54.5 wt\% DEA, above the fitted concentrations, are comparison only and deviate by 37.79\,\%.
 
 \input{tables/part2/dea-deviations-current}
 
+\subsection{Loaded DEA: density and species}
 % P:p2-results-dea-species
-The density comparison is closer than the carbamate and bicarbonate relative comparisons.
-Zero species observations remain in absolute-error statistics but cannot enter relative errors, as the differing counts in Table~\ref{tab:p2-dea-deviations-current} show.
+Weiland densities, which are comparison only, deviate by 0.63\,\% AARD.
+Calculated carbamate exceeds B\"ottinger's NMR values (bias $+58.35$\,\%) and calculated bicarbonate plus carbonate falls below them (bias $-33.08$\,\%), so the model places too much absorbed \COtwo in carbamate relative to the inorganic-carbon species; the summed molecular and protonated DEA deviates by 7.46\,\%.
 The molecular-plus-protonated DEA quantity is compared as the measured aggregate, without treating it as separately resolved molecular DEA.
+For the observations labelled bicarbonate, the retained calculation compares $x_{\ce{HCO3-}}+x_{\ce{CO3^2-}}$ with the reported bicarbonate mole fraction.
+This is an observation approximation: B\"ottinger et al. report carbonate as practically absent in their solutions, but that statement does not establish that calculated carbonate is negligible \cite[Sect.~3]{Bottinger2008}.
 
 \subsection{DEA parameter uncertainty and shared-parameter sensitivity}
 % P:p2-results-dea-uncertainty
-The fitted-coordinate standard errors in Table~\ref{tab:p2-dea-fitted-current} are conditional on model form, fixed shared parameters, data roles and residual scales.
-They do not propagate source systematic uncertainty, shared-parameter uncertainty or model discrepancy, and do not define total prediction intervals.
-The earlier-shared-input comparison in Table~\ref{tab:p2-dea-deviations-current} changes the fixed shared description and refits DEA; it is a sensitivity comparison rather than an uncertainty distribution.
-Numerical replay reproduces the retained selected solution; this checks the calculation rather than validating its physical description.
+The standard errors in Table~\ref{tab:p2-dea-fitted-current} are conditional on the model form, the fixed shared parameters, the data roles and the residual scales; they exclude source systematic uncertainty, shared-parameter uncertainty and model discrepancy, and do not define prediction intervals.
+The cation--water interaction is well determined, whereas the carbamate--water interaction is not resolved from zero and is strongly correlated with the hydrolysis level (conditional correlation 0.974), so the data constrain their combination rather than each separately.
+Refitting DEA on Part I's earlier shared parameter set (Earlier-set column of Table~\ref{tab:p2-dea-deviations-current}) gives nearly the same fitted deviations but lower Seo and Hong and Lal deviations: the fitted DEA quantities compensate for the change in shared parameters without identifying a physical cause of the remaining errors.
+Recalculating every reported value from the stored parameters reproduces the selected solution, which checks the numerical calculation rather than the physical description.
 
 \subsection{DEA comparison with published models}
 % P:p2-results-dea-published
@@ -66,20 +67,23 @@ The published fitted curve follows negative mixing enthalpies while the present 
 No scalar deviation on these same observations is reported for that NRTL curve, so no numerical ranking is inferred from its figure.
 The inspected Lawson, Seo and Hong, Lal and Carson source passages likewise provide no published-model scalar deviation on the exact present subsets; the supplementary source comparison records the quantities and data roles that can be compared.
 
+% P:p2-results-dea-published-fits
+Nasrifar and Tafazzol, whose neutral DEA parameters are used here, correlated the same Cai isobaric equilibria, together with Horstmann's 365.15~K equilibria, with a temperature-independent DEA--water interaction of $-0.04$ and report agreement graphically, without a scalar deviation \cite[Table~3, Fig.~5]{Nasrifar2010}; those data were fitted there, whereas the Cai pressures are comparison only here.
+B\"ottinger et al.'s extended Pitzer treatment fits the Lal pressure observations and their own DEA NMR observations, whereas the Lal pressures are not fitted and the NMR quantities are comparison only here \cite[Sects.~5--7, Table~7, Fig.~11]{Bottinger2008}.
+
 \subsection{DEA phase stability}
 % P:p2-results-dea-stability
-The refreshed finite search has 3790 available searches and 1 unavailable search out of 3791 states.
-It detects 0 native liquid descents, 0 native vapor descents and 0 supplied-negative states.
-The unavailable state is the second Lawson Table VIII observation, retained as \texttt{lawson-1976-viii:1}; it is never counted as stable.
-No native liquid descent triggered a penalty, so the penalty and retreat methods are not exercised by this DEA fit.
-The refreshed search changes no fitted parameter or prediction.
+The search covers 335 measured-state liquids and 3456 grid states, the latter spanning the 4 fitted DEA concentrations, 313.15--393.15~K in 10~K steps and 48 loadings up to 1.167 at both pressure factors.
+Of the 3791 searches, 3790 complete and none detects a liquid or vapor descent; no supplied trial composition gives a negative distance.
+The search at the second observation of Lawson and Garst's Table VIII did not complete, so that state is reported as unavailable rather than stable.
+No liquid descent triggered the penalty, so the DEA fit does not use the penalty or the retreat.
 
+\subsection{Scope and limitations of the DEA results}
 % P:p2-results-dea-limits
-The DEA evidence supports calibration on the shared parameters, comparisons, numerical replay and finite phase searches.
-It is provisional until rechecking with the re-pinned calculation library, and the parameter set has not been adopted.
-The unresolved pressure-shape error, incorrect binary excess-enthalpy sign, use of reaction correlations beyond their source intervals, 1 unavailable stability state and conditional parameter errors limit the interpretation.
-These results establish neither independent physical validation nor suitability for absorber design, and the finite searches do not establish global phase stability.
-
+These DEA results are a calibration on the shared parameters, with comparisons to observations outside the fit, a numerical recalculation check and finite phase-stability searches, all on observations examined before the fit.
+Their interpretation is limited by the unresolved shape error in fitted pressures, the wrong sign of the binary excess enthalpy, reaction correlations evaluated outside their source intervals, 1 unavailable stability search and standard errors conditional on the fixed shared parameters.
+They establish neither physical validation nor suitability for absorber design, and the finite searches do not prove global phase stability.
+\textit{Draft note: these values are provisional until recalculated with the final calculation-library build, and the DEA parameter set is not yet adopted.}
 \FloatBarrier
 
 \subsection{Summary across the amines}
