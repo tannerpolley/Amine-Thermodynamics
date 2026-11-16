@@ -1,0 +1,127 @@
+{
+  "total_rows": 69012,
+  "penalty_rows": 68734,
+  "fitted_rows": 278,
+  "unavailable": 3890,
+  "available": 65122,
+  "all_unavailable_penalty": true,
+  "message_family": {
+    "infeasible residual": 3392,
+    "phase L vanished": 298,
+    "budget exhausted": 192,
+    "phases coalesced": 4,
+    "restoration stalled / nonfinite third derivative": 4
+  },
+  "engine_cause": {
+    "LOCAL_INFEASIBILITY": 3652,
+    "MAXITER_EXCEEDED": 234,
+    "RESTORATION_FAILURE": 4
+  },
+  "category": {
+    "grid": 3890
+  },
+  "temperature_K": {
+    "313.15": 762,
+    "323.15": 634,
+    "333.15": 658,
+    "343.15": 670,
+    "353.15": 636,
+    "363.15": 464,
+    "373.15": 66
+  },
+  "loading_band": {
+    "[0.5, 1)": 384,
+    "[1, infinity)": 3506
+  },
+  "pressure_ratio": {
+    "1.05": 1945,
+    "3.0": 1945
+  },
+  "distinct_exact_messages": 1814,
+  "objective_derivative_same_rows_and_messages": true,
+  "unique_source_keys": 3890,
+  "old_unavailable_source_keys": 3890,
+  "old_available_source_keys": 0,
+  "old_grid_unavailable_source_keys": 3890,
+  "old_grid_unavailable_missing_from_current": 0,
+  "native_descent_sources": 95,
+  "native_descent_old_unavailable": 70,
+  "native_descent_overlap": 0,
+  "native_descent_old_unavailable_overlap": 0,
+  "temperature_range": [
+    313.15,
+    373.15
+  ],
+  "loading_range": [
+    0.75,
+    1.368
+  ],
+  "objective_wall_s": 8044.850095098984,
+  "derivative_wall_s": 9998.689919837983,
+  "source_files": [
+    {
+      "path": "/tmp/issue379/mdea/construction.json",
+      "size": 4305,
+      "sha256": "c3ccf9ba90337f9c70dd156c56db23102f679f79db3d7a9fc9e1e8ca7c1b80dd"
+    },
+    {
+      "path": "/tmp/issue379/mdea/copies.json",
+      "size": 27930186,
+      "sha256": "7f86a9fbbc4b666ae79d8fcf0224e8dfe786d1e5d3c7131a1a15029cdd51caff"
+    },
+    {
+      "path": "/tmp/issue379/mdea/objective.json",
+      "size": 18349104,
+      "sha256": "c5ed474eefdc29957c89fe7c1ef5621756d817a913acc1481a5c7fcbfe8fbcfe"
+    },
+    {
+      "path": "/tmp/issue379/mdea/derivative.json",
+      "size": 18357285,
+      "sha256": "749b6f8248cd85e77102d3688bf375b56b64e418102abfae3312a14c969a712f"
+    },
+    {
+      "path": "/tmp/issue379-repeat.py",
+      "size": 4004,
+      "sha256": "cea4d648f9d60a49ffac6f085b83be01e2a86d3aaec668fd1176d909bfd66802"
+    }
+  ],
+  "native_descent_old_unavailable_sources_represented_in_penalty": 70,
+  "native_descent_old_unavailable_penalty_copies": 48,
+  "native_descent_old_unavailable_penalty_copies_unavailable": 0,
+  "unique_physical_grid_conditions": 1945,
+  "stocks": 35,
+  "cause_by_family": [
+    {
+      "message_family": "infeasible residual",
+      "engine_cause": "LOCAL_INFEASIBILITY",
+      "count": 3392
+    },
+    {
+      "message_family": "phase L vanished",
+      "engine_cause": "LOCAL_INFEASIBILITY",
+      "count": 256
+    },
+    {
+      "message_family": "phase L vanished",
+      "engine_cause": "MAXITER_EXCEEDED",
+      "count": 42
+    },
+    {
+      "message_family": "budget exhausted",
+      "engine_cause": "MAXITER_EXCEEDED",
+      "count": 192
+    },
+    {
+      "message_family": "phases coalesced",
+      "engine_cause": "LOCAL_INFEASIBILITY",
+      "count": 4
+    },
+    {
+      "message_family": "restoration stalled / nonfinite third derivative",
+      "engine_cause": "RESTORATION_FAILURE",
+      "count": 4
+    }
+  ],
+  "loading_band_basis": "[0,0.01), [0.01,0.1), [0.1,0.5), [0.5,1), [1,infinity), mol CO2/mol MDEA. Empty bands count zero.",
+  "all_refusals_precede_compressed_pressure_and_stability_evaluation": true
+}

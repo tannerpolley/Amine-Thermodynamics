@@ -525,65 +525,189 @@ retains the complete counts and comparison. The model curves and conditional
 standard errors above still describe the unpenalized endpoint; they do not
 establish a stable parameter record.
 
-## Penalty-cost probe: complete objective unavailable
+## Compressed-liquid penalty availability and cost
 
-The authorized short probe attempted the existing `Route.penalty_states` on
-all **69,099** required source-state declarations at the fixed start-0 endpoint.
-It did not restrict the penalty set to the 65 states where native liquid
-descents were found. Construction stopped at the first compressed copy of
-**`comparison:362:cap`, 288.71 K**, at the requested pressure ratio **1.05**.
-The existing capped-state construction calls the native capped-heat prediction
-to obtain the endpoint composition. The Engine returned:
+The native-liquid trigger remains met at **65 states**, but penalty fitting
+and start 1 remain held. At the fixed start-0 endpoint, the candidate shared
+route in [PR #378](https://github.com/tannerpolley/Amine-Thermodynamics/pull/378)
+(#377 and #379) constructs **68,734 deduplicated compressed-liquid rows** from
+**69,092 of 69,099 sources**. Its 14 refused construction copies are seven
+capped sources at both pressure ratios. The [construction record](results/stage-b-f2/penalty-refusal-diagnosis/construction.json)
+retains every cause. These 14 construction refusals are separate from the
+3,890 evaluation refusals below. No candidate route code was merged into this
+Stage B branch for the diagnosis.
 
-> initial:thermochemistry_unavailable: outside_interval: record excludes temperature
+The earlier merged-route attempt stopped at `comparison:362:cap`, **288.71 K**,
+with `ThermochemistryUnavailable` and the exact cause
+`initial:thermochemistry_unavailable: outside_interval: record excludes temperature`.
+Its **988 rows from 689 sources** were only a construction prefix; **38.393 s**
+measured construction, not an objective evaluation. The [earlier result](results/stage-b-f2/penalty-cost-probe/construction.json)
+is retained. PR #378 records that capped refusal and continues construction;
+it does not make the state available or stable.
 
-The native status is `ThermochemistryUnavailable`, and `Route.stability_row`
-raises `ValueError` before a complete deduplicated set is returned. This is
-the same required capped state, with data role **not fitted**, retained as
-unavailable in the diagnostic search. It was not dropped or moved into a
-stable category. The native cause concerns thermochemistry in the capped-heat
-prediction; the reaction calculation interval remains 288.71–422.04 K.
+The new point measurements use the same fixed endpoint, F2 shared inputs and
+pinned `391dfe5d` wheel (SHA-256 `0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b`).
+At penalty scale **0.01**, their **69,012 rows** comprise **278 fitted data
+rows plus 68,734 penalty rows**. Both sweeps cover every row once. The objective
+reader reports **65,122 available and 3,890 `CentralSolveUnavailable` rows**;
+the coordinate derivative reader refuses exactly the same row indices with
+exactly the same messages. An unavailable derivative is not replaced by zero.
+All 278 fitted rows are available; **64,844 penalty rows** are available.
+A complete penalized objective and gradient remain unavailable.
 
-| Requested quantity | Observed result |
-|---|---|
-| Required source-state declarations | 69,099 |
-| Complete deduplicated compressed-liquid row count | Unavailable: construction did not complete |
-| Complete penalty-set source count | Unavailable: construction did not complete |
-| Constructed prefix only | 988 rows from 689 sources; not the complete set |
-| Construction wall time | 38.393 s, one attempt under `agent-heavy` |
-| One complete objective-and-derivative evaluation | Not attempted because the required set could not be constructed |
-| Evaluation wall time on three workers | Unavailable; three workers were requested, but no objective evaluation ran |
-| Full penalty-series plus retreat forecast | Unavailable; no measured per-evaluation time exists |
-| Penalty fitting / start 1 | Not started |
+### Causes and conditions
 
-The [construction result](results/stage-b-f2/penalty-cost-probe/construction.json)
-retains the fixed endpoint and wheel hashes, failed state, native cause and
-incomplete-prefix counts. The 38.393 s measurement is **not** a penalized
-objective cost. No incomplete objective was evaluated, and no production code
-or thermochemistry interval was changed to make it run.
+Every refused row begins with `pressure reference:`. The Engine attempts the
+reactive bubble-pressure reference before assigning the compressed pressure or
+running the stability penalty. Thus neither a bubble pressure nor a valid
+compressed pressure is returned for these rows. The factors **1.05 and 3.0**
+are requested pressure ratios, not successfully calculated pressures.
+The [row table](results/stage-b-f2/penalty-refusal-diagnosis/rows.csv) retains
+all 3,890 rows, exact messages, conditions, source aliases and old-search
+availability. The [exact-message counts](results/stage-b-f2/penalty-refusal-diagnosis/exact-messages.csv)
+retain all **1,814 distinct message strings**, including numerical residuals
+and secondary diagnostics. The [joint counts](results/stage-b-f2/penalty-refusal-diagnosis/counts.csv)
+separate message family, Engine cause, data/grid origin, pressure ratio,
+temperature and loading band.
 
-The [history extraction](results/stage-b-f2/penalty-cost-probe/history.json)
-retains native counters from five converged #255 stages. Their median is
-**24 residual evaluations** (range **15–95**) and **14 Jacobian evaluations**
-(range **10–53**). These counters are different from optimizer iterations and
-are not added together as if every call did the same work. The four retained
-MDEA Part I #298 fits have **10–17 iterations**, median **11**, but do not retain
-residual- or Jacobian-evaluation counters; those evaluation counts remain
-unknown. Iteration-cost history length is not substituted for them.
+| Message family | Engine cause | Refused penalty rows |
+|---|---|---:|
+| Infeasible residual | `LOCAL_INFEASIBILITY` | 3,392 |
+| Liquid phase vanished | `LOCAL_INFEASIBILITY` | 256 |
+| Liquid phase vanished | `MAXITER_EXCEEDED` | 42 |
+| Iteration budget exhausted | `MAXITER_EXCEEDED` | 192 |
+| Declared liquid and vapor coalesced | `LOCAL_INFEASIBILITY` | 4 |
+| Restoration stalled; nonfinite third directional energy contraction | `RESTORATION_FAILURE` | 4 |
+| Total | | 3,890 |
 
-The retained #255 retreats contain **1–13 checked fractions**. The existing
-series uses scales **0.01 and 0.003**, with at most two continuations per stage
-and the #255 retreat. These historical counts describe work already done;
-they cannot supply the missing duration for this complete Part II objective.
-No penalty-series or retreat wall-time forecast is asserted.
+Cause totals are **3,652 `LOCAL_INFEASIBILITY`**, **234 `MAXITER_EXCEEDED`**
+and **4 `RESTORATION_FAILURE`**. Every refused penalty row comes from the grid;
+none comes from a fitted or not-fitted data-state declaration. The refusals
+cover **35 stocks**, **1,945 distinct temperature/stock/loading combinations**,
+and two compressed copies per combination: **1,945 rows at each ratio**.
+The loading is mol CO2 per mol MDEA and spans **0.75–1.368**.
 
-A full diagnostic search is still required after a future penalized fit. The
-closest full-search observation is approximately **21 h 46 min** for the old
-start-0 search with 2,789 supplied records on three workers. That is not a
-forecast at a penalized parameter point or with the enlarged history, and is
-not presented as a measured post-penalty duration. The [cost summary](results/stage-b-f2/penalty-cost-probe/summary.json)
-leaves the combined series-plus-search projection unavailable. The owner must
-receive the construction refusal before any penalty fitting is authorized.
+| Temperature, K | Refused penalty rows, both ratios |
+|---|---:|
+| 313.15 | 762 |
+| 323.15 | 634 |
+| 333.15 | 658 |
+| 343.15 | 670 |
+| 353.15 | 636 |
+| 363.15 | 464 |
+| 373.15 | 66 |
+| 383.15 | 0 |
+| 393.15 | 0 |
+
+Loading bands below **0.5** contain no refused rows; **[0.5, 1)** contains
+**384**, and **[1, infinity)** contains **3,506**. These bands summarize the
+specified grid, not a fitted physical boundary. A table is used because the
+result is an exact categorical refusal inventory, rather than a continuous
+physical relation.
+
+The union of refused rows' source aliases is exactly the **3,890 unavailable
+grid keys in the original diagnostic search**: every such source was also
+unavailable there, and none was available. Both old ratio aliases are retained
+by each deduplicated compressed condition; source links must not be counted as
+additional penalty rows. There is **zero overlap** with the **95 native-descent
+states**, including the **70** with unavailable full diagnostic searches. All
+70 are represented by **48 deduplicated compressed penalty rows**, and all 48
+are available in this point evaluation. Availability of these compressed copies
+does not remove their native instability evidence or make the old diagnostic
+searches available.
+
+### Three reproducing single-state probes
+
+The existing `Route.stability_row(spec, state, 0.01)` and native
+`reg.predict(spec.model, item)` calls reproduce the three largest
+message families. They use the PR #378 route read-only and the verified pinned
+wheel, with one single-threaded process per case under a three-worker
+`agent-heavy` job. The [probe records](results/stage-b-f2/penalty-refusal-diagnosis/probes.json)
+retain each declaration, full native prediction and pressure-reference
+convergence record. All three reproduce the full original message exactly.
+
+Each feed has **1 mol MDEA and 1.7987685418415897 mol water**, with CO2 added
+as listed below. Each requests **1.05 times model bubble pressure**. The bubble
+reference declares free pressure starting from **100,000 Pa**, a liquid phase
+and a zero-amount vapor phase; the initial pressure is not a solved bubble
+pressure.
+
+| Family | Temperature, K | CO2 feed, mol | Reproduced stopping evidence |
+|---|---:|---:|---|
+| Infeasible residual | 313.15 | 0.800 | Residual 0.25956535927447344 versus `EQUILIBRIUM_ROW_RESIDUAL` 1e-10 after 106 iterations |
+| Liquid phase vanished | 313.15 | 0.975 | `LOCAL_INFEASIBILITY`; free liquid amount at most `PHASE_DISAPPEARANCE_AMOUNT` of feed; declared split rejected |
+| Budget exhausted | 333.15 | 0.875 | Residual 1.4322582718135948 versus 1e-10 after 200 iterations; trial preparation stalled; polish trial invalid composition |
+
+The individual wall times were **2.541, 3.018 and 5.643 s**, with **5.685 s**
+for the parallel probe region after setup. These are single-run reproduction
+timings, not throughput or successful-solve measurements. No solver tolerance,
+iteration budget, coordinate, parameter, loading or phase declaration was
+changed to conceal a refusal.
+
+### Ownership and interpretation
+
+At Engine commit `391dfe5d`, `observations.cpp:520–539`
+predicts the bubble reference first and returns `CentralSolveUnavailable`
+when that prediction lacks a value. Target pressure assignment and stability
+evaluation come later. `engine/native/equilibrium/gibbs_minimizer.cpp:1750–1760`
+owns the residual and budget stopping classifications; lines 900–901 and
+2009–2014 own the vanished-phase check. The [source trace](results/stage-b-f2/penalty-refusal-diagnosis/source-trace.json)
+binds the exact Engine commit and source hashes.
+
+The **3,392 residual**, **192 budget** and **4 restoration/nonfinite-derivative**
+cases identify limitations of the generic Engine's numerical reference solve
+at these declared conditions. The **298 vanished-phase** and **4 coalesced-phase**
+cases are Engine phase-topology rejections of the attempted reference branch.
+A coalesced solution can have a physical critical-limit interpretation, but
+the native message explicitly calls that explanation untested. Neither a
+vanished phase nor the word `infeasible` establishes physical nonexistence of
+a bubble point. No genuine physical-domain refusal is established by this
+inventory.
+
+The route's dependence on a solved bubble reference explains why both pressure
+ratios fail together. The declarations contain positive feed amounts, the
+required species and the established calculation interval; no missing field
+or out-of-interval reaction declaration is identified as the cause of these
+3,890 refusals. This is not proof that no different admissible initialization
+or generic solver improvement could succeed. Repairs, changed declarations
+and expanded budgets are outside this read-only task. No Engine issue was
+filed. The seven capped-source construction refusals remain separate, with
+their own thermochemistry/equilibrium causes.
+
+### Projected cost of one penalty stage
+
+The candidate point measurements on three workers are **8,044.850095 s** for
+one objective sweep and **9,998.689920 s** for one coordinate derivative sweep.
+Each is one run on a shared machine and includes Python observation construction.
+They omit full-fit state grouping and cache reuse, and include 3,890 refusals.
+No speed comparison or timing distribution is inferred.
+
+The [five-stage #255 history](results/stage-b-f2/penalty-cost-probe/history.json)
+has medians of **24 residual-only callbacks** (range 15–95) and **14 Jacobian
+callbacks** (range 10–53). At Engine `fit.cpp:327–346`, a cache miss increments
+exactly one counter. The coordinate derivative reader calls the same
+Jacobian-mode evaluator (`regression_bindings.cpp:279–288`), which already
+includes prediction/residual work (`fit.cpp:616–669`); an extra objective sweep
+is not added for each Jacobian callback.
+
+The conditional planning projection is therefore
+
+$$
+24(8{,}044.850095\ \mathrm{s}) + 14(9{,}998.689920\ \mathrm{s})
+=333{,}058.061\ \mathrm{s}
+=92.516\ \mathrm{h}=3.855\ \mathrm{days}
+$$
+
+for **one stage**, before continuation, retreat or a required post-fit full
+search. The [projection record](results/stage-b-f2/penalty-refusal-diagnosis/stage-time-projection.json)
+states the assumptions. It is not a measured optimizer duration, a confidence
+interval or a claim that a complete objective is available. Successful solves
+could take different time from current refusals; MDEA may need different
+callback counts. The four retained Part I #298 fits have 10–17 iterations,
+median 11, but no evaluation counters and are not substituted for #255 counts.
+The native-liquid trigger remains met; the owner decision, unresolved penalty
+rows, penalty series and start 1 remain held. This numerical diagnosis is not
+physical validation or acceptance of Stage B.
 
 ## Required numerical checks and remaining limits
 
@@ -613,6 +737,7 @@ accessed not-fitted datasets cannot provide an untouched validation set.
 
 This Stage B change retains data and declarations only: **0 added executable
 lines**; it does not change the shared route or Engine. The notebook contains
-no model-executing cells. The report has not yet received its independent
-internal result review and has not been promoted for manuscript use. The next
-calculation awaits the owner's penalty and supplied-branch decision.
+no model-executing cells. The classification and original cost-refusal report at `2e20595` received an
+independent Supported review for that limited use. The new penalty-row
+diagnosis awaits independent review and has not been promoted for manuscript
+use. The next calculation awaits the owner's penalty and supplied-branch decision.

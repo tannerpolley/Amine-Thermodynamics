@@ -1,0 +1,483 @@
+{
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "candidate_commit": "c883d50748fb6aded29ee74fb2cc2d0e6ff0fc9d",
+  "endpoint_sha256": "706d9ee18dbc5f40e21c8a02f15a1b6d7fe97366fe8d46b73f0ad28dba53e65d",
+  "workers": 3,
+  "wall_s": 5.6848369170038495,
+  "probes": [
+    {
+      "message_family": "infeasible residual",
+      "row_index": 1544,
+      "declaration": {
+        "key": "compressed:grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.8:1.05:1.05",
+        "T": 313.15,
+        "stock": {
+          "water": 1.7987685418415897,
+          "methyldiethanolamine": 1.0
+        },
+        "a": 0.8,
+        "c": 1.05,
+        "compressed": true,
+        "sources": [
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.8:1.05",
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.8:3.0"
+        ]
+      },
+      "temperature_K": 313.15,
+      "loading_mol_CO2_per_mol_MDEA": 0.8,
+      "feed_moles": {
+        "water": 1.7987685418415897,
+        "methyldiethanolamine": 1.0,
+        "carbon-dioxide": 0.8
+      },
+      "pressure_ratio": 1.05,
+      "model_bubble_pressure_Pa": null,
+      "compressed_pressure_Pa": null,
+      "status": "CentralSolveUnavailable",
+      "message": "pressure reference: LOCAL_INFEASIBILITY: infeasible: residual 0.25956535927447344 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 106 iterations, contraction absent, floor 8.9132404642790045e-11, amplification 0",
+      "exact_message_reproduced": true,
+      "wall_s": 2.5409268199873623,
+      "native_prediction": {
+        "added_amount": null,
+        "branch": null,
+        "cap_branch": "",
+        "convergence": null,
+        "endpoint_loading": null,
+        "endpoint_loading_gradient": [],
+        "first_numerical_failure": {
+          "amplification": null,
+          "backward_error": null,
+          "cause": "prediction solve: pressure reference: LOCAL_INFEASIBILITY: infeasible: residual 0.25956535927447344 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 106 iterations, contraction absent, floor 8.9132404642790045e-11, amplification 0",
+          "contraction": null,
+          "criterion": null,
+          "evaluations": 0,
+          "floor": null,
+          "iterations": 0,
+          "rank": null,
+          "residual": NaN,
+          "residual_over_criterion": null,
+          "residual_over_floor": null,
+          "stop": "stalled"
+        },
+        "message": "pressure reference: LOCAL_INFEASIBILITY: infeasible: residual 0.25956535927447344 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 106 iterations, contraction absent, floor 8.9132404642790045e-11, amplification 0",
+        "pressure_reference": {
+          "added_amount": null,
+          "branch": null,
+          "cap_branch": "",
+          "convergence": {
+            "amplification": 0.0,
+            "backward_error": null,
+            "cause": "",
+            "contraction": null,
+            "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+            "evaluations": 109,
+            "floor": 8.913240464279005e-11,
+            "iterations": 106,
+            "rank": null,
+            "residual": 0.25956535927447344,
+            "residual_over_criterion": 2595653592.7447343,
+            "residual_over_floor": 2912132353.1516523,
+            "stop": "infeasible"
+          },
+          "endpoint_loading": null,
+          "endpoint_loading_gradient": [],
+          "first_numerical_failure": {
+            "amplification": 0.0,
+            "backward_error": null,
+            "cause": "",
+            "contraction": null,
+            "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+            "evaluations": 109,
+            "floor": 8.913240464279005e-11,
+            "iterations": 106,
+            "rank": null,
+            "residual": 0.25956535927447344,
+            "residual_over_criterion": 2595653592.7447343,
+            "residual_over_floor": 2912132353.1516523,
+            "stop": "infeasible"
+          },
+          "message": "LOCAL_INFEASIBILITY: infeasible: residual 0.25956535927447344 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 106 iterations, contraction absent, floor 8.9132404642790045e-11, amplification 0",
+          "pressure_reference": null,
+          "requested_tolerance_met": false,
+          "residual": null,
+          "saturation": null,
+          "saturation_loading": null,
+          "saturation_loading_gradient": [],
+          "solver_options": [
+            {
+              "name": "ASSOCIATION_RESIDUAL",
+              "value": 2e-13,
+              "unit": "1 (mass action)",
+              "default": 2e-13
+            },
+            {
+              "name": "DENSITY_ROOT_RESIDUAL",
+              "value": 1e-12,
+              "unit": "1 (reduced pressure)",
+              "default": 1e-12
+            },
+            {
+              "name": "EQUILIBRIUM_ROW_RESIDUAL",
+              "value": 1e-10,
+              "unit": "1 (classified rows)",
+              "default": 1e-10
+            }
+          ],
+          "stability": null,
+          "stability_raw_gradient": [],
+          "stable_root_count": null,
+          "status": "CentralSolveUnavailable",
+          "unit": "",
+          "value": null
+        },
+        "requested_tolerance_met": null,
+        "residual": null,
+        "saturation": null,
+        "saturation_loading": null,
+        "saturation_loading_gradient": [],
+        "solver_options": [
+          {
+            "name": "ASSOCIATION_RESIDUAL",
+            "value": 2e-13,
+            "unit": "1 (mass action)",
+            "default": 2e-13
+          },
+          {
+            "name": "DENSITY_ROOT_RESIDUAL",
+            "value": 1e-12,
+            "unit": "1 (reduced pressure)",
+            "default": 1e-12
+          },
+          {
+            "name": "EQUILIBRIUM_ROW_RESIDUAL",
+            "value": 1e-10,
+            "unit": "1 (classified rows)",
+            "default": 1e-10
+          }
+        ],
+        "stability": null,
+        "stability_raw_gradient": [],
+        "stable_root_count": null,
+        "status": "CentralSolveUnavailable",
+        "unit": "",
+        "value": null
+      }
+    },
+    {
+      "message_family": "phase L vanished",
+      "row_index": 1558,
+      "declaration": {
+        "key": "compressed:grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.975:1.05:1.05",
+        "T": 313.15,
+        "stock": {
+          "water": 1.7987685418415897,
+          "methyldiethanolamine": 1.0
+        },
+        "a": 0.975,
+        "c": 1.05,
+        "compressed": true,
+        "sources": [
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.975:1.05",
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:313.15:0.975:3.0"
+        ]
+      },
+      "temperature_K": 313.15,
+      "loading_mol_CO2_per_mol_MDEA": 0.975,
+      "feed_moles": {
+        "water": 1.7987685418415897,
+        "methyldiethanolamine": 1.0,
+        "carbon-dioxide": 0.975
+      },
+      "pressure_ratio": 1.05,
+      "model_bubble_pressure_Pa": null,
+      "compressed_pressure_Pa": null,
+      "status": "CentralSolveUnavailable",
+      "message": "pressure reference: LOCAL_INFEASIBILITY: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; Michelsen deficit -0.000000",
+      "exact_message_reproduced": true,
+      "wall_s": 3.017982535995543,
+      "native_prediction": {
+        "added_amount": null,
+        "branch": null,
+        "cap_branch": "",
+        "convergence": null,
+        "endpoint_loading": null,
+        "endpoint_loading_gradient": [],
+        "first_numerical_failure": {
+          "amplification": null,
+          "backward_error": null,
+          "cause": "prediction solve: pressure reference: LOCAL_INFEASIBILITY: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; Michelsen deficit -0.000000",
+          "contraction": null,
+          "criterion": null,
+          "evaluations": 0,
+          "floor": null,
+          "iterations": 0,
+          "rank": null,
+          "residual": NaN,
+          "residual_over_criterion": null,
+          "residual_over_floor": null,
+          "stop": "stalled"
+        },
+        "message": "pressure reference: LOCAL_INFEASIBILITY: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; Michelsen deficit -0.000000",
+        "pressure_reference": {
+          "added_amount": null,
+          "branch": null,
+          "cap_branch": "",
+          "convergence": {
+            "amplification": 0.0,
+            "backward_error": null,
+            "cause": "",
+            "contraction": null,
+            "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+            "evaluations": 114,
+            "floor": 2.1885477270329697e-10,
+            "iterations": 107,
+            "rank": null,
+            "residual": 0.2649871047767022,
+            "residual_over_criterion": 2649871047.7670217,
+            "residual_over_floor": 1210789700.8759646,
+            "stop": "infeasible"
+          },
+          "endpoint_loading": null,
+          "endpoint_loading_gradient": [],
+          "first_numerical_failure": {
+            "amplification": 0.0,
+            "backward_error": null,
+            "cause": "",
+            "contraction": null,
+            "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+            "evaluations": 114,
+            "floor": 2.1885477270329697e-10,
+            "iterations": 107,
+            "rank": null,
+            "residual": 0.2649871047767022,
+            "residual_over_criterion": 2649871047.7670217,
+            "residual_over_floor": 1210789700.8759646,
+            "stop": "infeasible"
+          },
+          "message": "LOCAL_INFEASIBILITY: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; Michelsen deficit -0.000000",
+          "pressure_reference": null,
+          "requested_tolerance_met": false,
+          "residual": null,
+          "saturation": null,
+          "saturation_loading": null,
+          "saturation_loading_gradient": [],
+          "solver_options": [
+            {
+              "name": "ASSOCIATION_RESIDUAL",
+              "value": 2e-13,
+              "unit": "1 (mass action)",
+              "default": 2e-13
+            },
+            {
+              "name": "DENSITY_ROOT_RESIDUAL",
+              "value": 1e-12,
+              "unit": "1 (reduced pressure)",
+              "default": 1e-12
+            },
+            {
+              "name": "EQUILIBRIUM_ROW_RESIDUAL",
+              "value": 1e-10,
+              "unit": "1 (classified rows)",
+              "default": 1e-10
+            }
+          ],
+          "stability": null,
+          "stability_raw_gradient": [],
+          "stable_root_count": null,
+          "status": "TopologyEvent",
+          "unit": "",
+          "value": null
+        },
+        "requested_tolerance_met": null,
+        "residual": null,
+        "saturation": null,
+        "saturation_loading": null,
+        "saturation_loading_gradient": [],
+        "solver_options": [
+          {
+            "name": "ASSOCIATION_RESIDUAL",
+            "value": 2e-13,
+            "unit": "1 (mass action)",
+            "default": 2e-13
+          },
+          {
+            "name": "DENSITY_ROOT_RESIDUAL",
+            "value": 1e-12,
+            "unit": "1 (reduced pressure)",
+            "default": 1e-12
+          },
+          {
+            "name": "EQUILIBRIUM_ROW_RESIDUAL",
+            "value": 1e-10,
+            "unit": "1 (classified rows)",
+            "default": 1e-10
+          }
+        ],
+        "stability": null,
+        "stability_raw_gradient": [],
+        "stable_root_count": null,
+        "status": "CentralSolveUnavailable",
+        "unit": "",
+        "value": null
+      }
+    },
+    {
+      "message_family": "budget exhausted",
+      "row_index": 1774,
+      "declaration": {
+        "key": "compressed:grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:333.15:0.875:1.05:1.05",
+        "T": 333.15,
+        "stock": {
+          "water": 1.7987685418415897,
+          "methyldiethanolamine": 1.0
+        },
+        "a": 0.875,
+        "c": 1.05,
+        "compressed": true,
+        "sources": [
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:333.15:0.875:1.05",
+          "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:333.15:0.875:3.0"
+        ]
+      },
+      "temperature_K": 333.15,
+      "loading_mol_CO2_per_mol_MDEA": 0.875,
+      "feed_moles": {
+        "water": 1.7987685418415897,
+        "methyldiethanolamine": 1.0,
+        "carbon-dioxide": 0.875
+      },
+      "pressure_ratio": 1.05,
+      "model_bubble_pressure_Pa": null,
+      "compressed_pressure_Pa": null,
+      "status": "CentralSolveUnavailable",
+      "message": "pressure reference: MAXITER_EXCEEDED: budget_exhausted: residual 1.4322582718135948 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.1261747727596771e-10, amplification 0; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition",
+      "exact_message_reproduced": true,
+      "wall_s": 5.642580423009349,
+      "native_prediction": {
+        "added_amount": null,
+        "branch": null,
+        "cap_branch": "",
+        "convergence": null,
+        "endpoint_loading": null,
+        "endpoint_loading_gradient": [],
+        "first_numerical_failure": {
+          "amplification": null,
+          "backward_error": null,
+          "cause": "prediction solve: pressure reference: MAXITER_EXCEEDED: budget_exhausted: residual 1.4322582718135948 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.1261747727596771e-10, amplification 0; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition",
+          "contraction": null,
+          "criterion": null,
+          "evaluations": 0,
+          "floor": null,
+          "iterations": 0,
+          "rank": null,
+          "residual": NaN,
+          "residual_over_criterion": null,
+          "residual_over_floor": null,
+          "stop": "stalled"
+        },
+        "message": "pressure reference: MAXITER_EXCEEDED: budget_exhausted: residual 1.4322582718135948 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.1261747727596771e-10, amplification 0; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition",
+        "pressure_reference": {
+          "added_amount": null,
+          "branch": null,
+          "cap_branch": "",
+          "convergence": {
+            "amplification": 0.0,
+            "backward_error": null,
+            "cause": "",
+            "contraction": null,
+            "criterion": "EQUILIBRIUM_ROW_RESIDUAL",
+            "evaluations": 691,
+            "floor": 2.1261747727596771e-10,
+            "iterations": 200,
+            "rank": null,
+            "residual": 1.4322582718135948,
+            "residual_over_criterion": 14322582718.135946,
+            "residual_over_floor": 6736314860.676243,
+            "stop": "budget_exhausted"
+          },
+          "endpoint_loading": null,
+          "endpoint_loading_gradient": [],
+          "first_numerical_failure": {
+            "amplification": null,
+            "backward_error": null,
+            "cause": "polish trial: invalid composition",
+            "contraction": null,
+            "criterion": null,
+            "evaluations": 0,
+            "floor": null,
+            "iterations": 0,
+            "rank": null,
+            "residual": NaN,
+            "residual_over_criterion": null,
+            "residual_over_floor": null,
+            "stop": "stalled"
+          },
+          "message": "MAXITER_EXCEEDED: budget_exhausted: residual 1.4322582718135948 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.1261747727596771e-10, amplification 0; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition",
+          "pressure_reference": null,
+          "requested_tolerance_met": false,
+          "residual": null,
+          "saturation": null,
+          "saturation_loading": null,
+          "saturation_loading_gradient": [],
+          "solver_options": [
+            {
+              "name": "ASSOCIATION_RESIDUAL",
+              "value": 2e-13,
+              "unit": "1 (mass action)",
+              "default": 2e-13
+            },
+            {
+              "name": "DENSITY_ROOT_RESIDUAL",
+              "value": 1e-12,
+              "unit": "1 (reduced pressure)",
+              "default": 1e-12
+            },
+            {
+              "name": "EQUILIBRIUM_ROW_RESIDUAL",
+              "value": 1e-10,
+              "unit": "1 (classified rows)",
+              "default": 1e-10
+            }
+          ],
+          "stability": null,
+          "stability_raw_gradient": [],
+          "stable_root_count": null,
+          "status": "CentralSolveUnavailable",
+          "unit": "",
+          "value": null
+        },
+        "requested_tolerance_met": null,
+        "residual": null,
+        "saturation": null,
+        "saturation_loading": null,
+        "saturation_loading_gradient": [],
+        "solver_options": [
+          {
+            "name": "ASSOCIATION_RESIDUAL",
+            "value": 2e-13,
+            "unit": "1 (mass action)",
+            "default": 2e-13
+          },
+          {
+            "name": "DENSITY_ROOT_RESIDUAL",
+            "value": 1e-12,
+            "unit": "1 (reduced pressure)",
+            "default": 1e-12
+          },
+          {
+            "name": "EQUILIBRIUM_ROW_RESIDUAL",
+            "value": 1e-10,
+            "unit": "1 (classified rows)",
+            "default": 1e-10
+          }
+        ],
+        "stability": null,
+        "stability_raw_gradient": [],
+        "stable_root_count": null,
+        "status": "CentralSolveUnavailable",
+        "unit": "",
+        "value": null
+      }
+    }
+  ]
+}

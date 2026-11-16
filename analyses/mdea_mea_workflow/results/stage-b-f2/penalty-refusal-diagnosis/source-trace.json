@@ -1,0 +1,32 @@
+{
+  "engine_commit": "391dfe5d64ede5036bf160bc6ae037ad5e14af32",
+  "wheel_sha256": "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b",
+  "point_measurement_code_commit": "dcb7644",
+  "single_state_probe_code_commit": "c883d50748fb6aded29ee74fb2cc2d0e6ff0fc9d",
+  "probe_route_unchanged_since_point_measurement": true,
+  "engine_source_files": [
+    {
+      "path": "engine/native/regression/observations.cpp",
+      "sha256": "346af270fcb6b91b4663479e765df53f10140fb44248e747689c5b22be6b1f96"
+    },
+    {
+      "path": "engine/native/regression/fit.cpp",
+      "sha256": "f60d80d145fb79cbe6917d767053eb1e456c6a73d5546d33de75eec566420c8f"
+    },
+    {
+      "path": "engine/native/equilibrium/gibbs_minimizer.cpp",
+      "sha256": "85e2a771fafd0c7dae33aa91bb40824eae59e197ec83c6567c11a96902b84651"
+    },
+    {
+      "path": "engine/native/bindings/regression_bindings.cpp",
+      "sha256": "24f3b9f25f63f100bfbb73ae57143541a88b45dc7a3964cf8e48493cc449973d"
+    }
+  ],
+  "source_trace": {
+    "pressure_reference": "observations.cpp:520-539: reference predict occurs before setting target pressure and stability solve; absence of value returns CentralSolveUnavailable.",
+    "phase_topology": "gibbs_minimizer.cpp:900-901,2009-2014: rejected declared split when free phase amount vanishes.",
+    "counter_semantics": "fit.cpp:327-346: cache hits do not increment; cache miss increments exactly one of residual_evaluations/jacobian_evaluations.",
+    "jacobian_work": "fit.cpp:616-669 and regression_bindings.cpp:279-288: coordinate differentiate uses FitEvaluator.evaluate(...,true), including prediction/residual and differentiation. The measured derivative sweep therefore includes its own prediction work."
+  },
+  "scope": "Numerical diagnosis at the fixed start-0 endpoint. No fit, root-cause repair, Engine issue, parameter adoption or physical infeasibility claim."
+}
