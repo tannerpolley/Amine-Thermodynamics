@@ -33,7 +33,7 @@ def num(value, digits=3):
 def table(name, caption, headers, rows, widths, long=False):
     columns = ''.join(r'>{\raggedright\arraybackslash}p{' + str(w) + r'\linewidth}' for w in widths)
     head = ' & '.join(headers) + r' \\ \midrule' + '\n'
-    body = '\n'.join(' & '.join(map(str, row)) + r' \\' for row in rows)
+    body = '\n'.join(' & '.join(map(str, row)) + r' \\' + ('*' if name == 'dea-all-current' and row[0] in [f'Carbamate hydrolysis, ${c}$' for c in 'abcde'] else '') for row in rows)
     if long:
         text = r'\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}' + columns + '@{}}\n'
         text += r'\caption{' + caption + r'}\label{tab:p2-' + name + r'}\\' + '\n'
@@ -72,13 +72,24 @@ rows = [[esc(r['group']), 'D' if r['law']=='DEA-dissociation' else 'H', 'outside
 assert not any(row[0] in ['Cai','Horstmann'] for row in rows), 'Binary comparisons use no reaction correlation'
 table('dea-ranges-current','DEA deviations separated by dissociation measurement interval (D) and hydrolysis source measurement interval (H). Binary comparisons do not use reactions and are omitted here.', ['Source / quantity','Interval','Position',r'$n$',r'$n_{rel}$',r'AARD / \%'],rows,[.33,.12,.14,.08,.08,.14],long=True)
 def quantity(key):
+    if key == 'hydrolysis-a': return fitted_names[2]
+    if key == 'hydrolysis-enthalpy-shift': return fitted_names[3]
+    if key == 'protonated-diethanolamine/charged_molecule_ion':
+        return 'DEA cation, charged-chain self-dispersion retained (1 = yes)'
+    parts = key.split('/')
+    if parts[0] == 'association':
+        species = 'DEA cation' if parts[1] == 'protonated-diethanolamine' else 'DEA'
+        if parts[-1] == 'multiplicity': return f'{species}, number of type-{parts[2]} sites'
+        return f'{species} site {parts[2]}--site {parts[4]} ' + {'energy_over_k': 'association energy / Boltzmann constant', 'volume': 'association volume'}[parts[-1]]
+    if parts[0] in ['DEA-dissociation', 'carbamate-hydrolysis']:
+        return ('DEA dissociation' if parts[0] == 'DEA-dissociation' else 'Carbamate hydrolysis') + ', $' + parts[-1] + '$'
     if key in ['k-DEAH-water','k-DEACOO-water']: return fitted_names[['k-DEAH-water','k-DEACOO-water'].index(key)]
     replacements = {'protonated-diethanolamine': 'DEA cation', 'diethanolamine': 'DEA', 'carbamate-anion': 'DEA carbamate', 'bicarbonate-anion': 'bicarbonate', 'carbonate-anion': 'carbonate', 'hydronium-cation': 'hydronium', 'hydroxide-anion': 'hydroxide', 'carbon-dioxide': 'carbon dioxide', 'dispersion_energy_over_k': 'dispersion energy / Boltzmann constant', 'k_ij_reciprocal_temperature_slope': 'reciprocal-temperature interaction slope', 'k_ij': 'dispersion interaction', 'charged_molecule_ion': 'charged-chain indicator', 'energy_over_k': 'association energy / Boltzmann constant', 'DEA-dissociation': 'DEA dissociation', 'hydrolysis-enthalpy-shift': 'hydrolysis enthalpy increment', 'born': 'Born', 'debye_huckel': r'Debye--H\"uckel'}
     for old, new in replacements.items(): key = key.replace(old,new)
     return esc(key.replace('_',' ').replace('/',' / '))
 units = {'K^2': r'K$^2$', '1/K^2': r'K$^{-2}$', 'kelvin': 'K', 'angstrom': r'\AA', 'liter / mole': 'L/mol', 'kilogram / mole': 'kg/mol', 'dimensionless': '1', 'elementary-charge': '$e$'}
-rows = [[quantity(r['parameter']),f"${float(r['value']):.8g}$",units.get(r['unit'],r['unit']),r['fitted_or_fixed']] for r in params]
-table('dea-all-current','Complete DEA parameter values. Fitted-coordinate errors and bounds are in the main text; reaction coefficients are completed coefficients, not additional independent fitted quantities. The electronic parameter table retains each value\'s source and basis.', ['Quantity','Value','Unit','Role'],rows,[.46,.21,.19,.09],long=True)
+rows = [[quantity(r['parameter']),'$' + repr(float(r['value'])).removesuffix('.0') + '$',units.get(r['unit'],r['unit']),r['fitted_or_fixed']] for r in params]
+table('dea-all-current','Complete DEA parameter values. Fitted-coordinate errors and bounds are in the main text; reaction coefficients are completed coefficients, not additional independent fitted quantities. The electronic parameter table retains each value\'s source and basis.', ['Quantity','Value','Unit','Role'],rows,[.42,.30,.14,.09],long=True)
 data = read(BASE + 'data-rows.json')
 rows = []
 for group in dict.fromkeys(r['group'] for r in data):
@@ -122,11 +133,14 @@ def loading(row):
     return x/(1-x)*(1+water)
 def figure(fig,name):
     buffer = BytesIO()
-    fig.savefig(buffer,format='png',dpi=170)
+    fig.savefig(buffer, format='pdf', metadata={'CreationDate': None, 'ModDate': None})
     outputs[LATEX/'figures/part2'/name] = buffer.getvalue()
     plt.close(fig)
+plt.rcParams.update({'font.family': 'STIXGeneral', 'mathtext.fontset': 'stix', 'pdf.fonttype': 42,
+                     'font.size': 8, 'legend.fontsize': 8, 'xtick.labelsize': 8, 'ytick.labelsize': 8,
+                     'axes.labelsize': 9, 'axes.titlesize': 9})
 colors = ['#0072B2','#D55E00','#009E73','#CC79A7','#E69F00','#56B4E9']
-fig,axes=plt.subplots(2,2,figsize=(12,9),constrained_layout=True)
+fig,axes=plt.subplots(2,2,figsize=(6.48,5.8),constrained_layout=True)
 for ax, groups, title in zip(axes.flat,[('Lawson','Lawson-394K'),('SeoHong',),('Lal',),('Carson',)],['Lawson: fitted; 394.26 K not fitted','Seo and Hong: not fitted','Lal: not fitted','Carson: fitted']):
     cs=[r for r in curves if r['group'] in groups]
     for index,label in enumerate(dict.fromkeys(r['curve'] for r in cs)):
@@ -142,18 +156,18 @@ for ax, groups, title in zip(axes.flat,[('Lawson','Lawson-394K'),('SeoHong',),('
         if groups==('Carson',): obs=[r for r in obs if r['row']['DEA_mass_fraction']==line[0]['row']['DEA_mass_fraction']]
         assert all((r['outside_ranges']['DEA-dissociation'],r['outside_ranges']['carbamate-hydrolysis'])==(outside,hydrolysis) for r in obs)
         ax.scatter([loading(r['row']) for r in obs],[r['observed']/1000 for r in obs],marker='^' if outside else 's' if hydrolysis else 'o',facecolors='none',edgecolors=color,s=25)
-    ax.set(title=title,xlabel='Loading (mol CO₂/mol DEA)',ylabel='Integral heat (kJ/mol CO₂)' if groups==('Carson',) else 'CO₂ partial pressure (kPa)',yscale='linear' if groups==('Carson',) else 'log')
-    ax.legend(fontsize=7,ncol=2)
-fig.suptitle('DEA: measurements and model curves',fontsize=10)
-figure(fig,'dea-current-measured-model.png')
-fig,axes=plt.subplots(1,2,figsize=(10,4),constrained_layout=True)
+    ax.set(title=title,xlabel='Loading (mol CO$_2$/mol DEA)',ylabel='Integral heat (kJ/mol CO$_2$)' if groups==('Carson',) else 'CO$_2$ partial pressure (kPa)',yscale='linear' if groups==('Carson',) else 'log')
+    ax.legend(ncol=2, columnspacing=.7, handlelength=1.8, handletextpad=.4)
+fig.suptitle('DEA: measurements and model curves',fontsize=9)
+figure(fig,'dea-current-measured-model.pdf')
+fig,axes=plt.subplots(1,2,figsize=(6.48,3.0),constrained_layout=True)
 for ax,group,scale in [(axes[0],'Horstmann',1),(axes[1],'Cai',0.001)]:
     ps=[r for r in data if r['group']==group]
     ax.scatter([float(r['row']['x_water']) for r in ps],[r['observed']*scale for r in ps],facecolors='none',edgecolors=colors[0],label='Measured')
     ax.scatter([float(r['row']['x_water']) for r in ps],[r['value']*scale for r in ps],marker='x',color=colors[1],label='Present model')
-    ax.set(title=f'{group}: comparison only; reactions not used',xlabel='Water mole fraction',ylabel='Excess enthalpy (J/mol mixture)' if group=='Horstmann' else 'Bubble pressure (kPa)')
-    ax.legend(fontsize=8)
-figure(fig,'dea-current-binary-comparisons.png')
+    ax.set(title=f'{group}: comparison only;\nreactions not used',xlabel='Water mole fraction',ylabel='Excess enthalpy (J/mol mixture)' if group=='Horstmann' else 'Bubble pressure (kPa)')
+    ax.legend(fontsize=8, loc='center' if group=='Horstmann' else 'upper right')
+figure(fig,'dea-current-binary-comparisons.pdf')
 read('analyses/dea_transfer/results/research-380/summary.json')
 read(BASE + 'reporting-checks.json')
 read('analyses/dea_transfer/results/binary.json')

@@ -1,6 +1,6 @@
 \section{Results and discussion}\label{sec:p2-results}
 % P:p2-results-pending
-\textit{Pending: MDEA, AMP and PZ results, figures and tables await their final runs.}
+\textit{Pending: MDEA and AMP results, figures and tables await their final calculations.}
 
 \subsection{DEA--water binary system}
 % P:p2-results-dea-binary
@@ -11,7 +11,7 @@ The sign error indicates that the model describes binary mixing enthalpy incorre
 It does not identify a unique interaction or reaction coefficient as the cause.
 
 \begin{figure}[pos=htbp]
-\centering\includegraphics[width=\linewidth]{dea-current-binary-comparisons.png}
+\centering\includegraphics[width=\linewidth]{dea-current-binary-comparisons.pdf}
 \caption{DEA binary comparisons: measured circles and calculated crosses at the retained compositions. These are discrete calculations, not curves. Both groups are comparison only, and neither uses reaction correlations. Horstmann excess enthalpies are per mole of mixture.}
 \label{fig:p2-dea-binary}
 \end{figure}
@@ -20,8 +20,7 @@ It does not identify a unique interaction or reaction coefficient as the cause.
 % P:p2-results-dea-fit
 Both initial parameter sets converge and are numerically tied at the function-tolerance scale; the lower-cost solution supplies the reported parameters.
 None of the fitted quantities is on a bound (Table~\ref{tab:p2-dea-fitted-current}).
-The hydrolysis coefficients are effective fitted quantities conditional on the fixed shared parameters, rather than independent measurements of an equilibrium constant.
-Table~\ref{supp-tab:p2-dea-all-current} lists the completed correlation coefficients and all fixed quantities.
+The hydrolysis coefficients, listed in completed form with all fixed quantities in Table~\ref{supp-tab:p2-dea-all-current}, are effective fitted quantities conditional on the fixed shared parameters rather than independent measurements of an equilibrium constant.
 
 \input{tables/part2/dea-fitted-current}
 
@@ -33,7 +32,7 @@ The fit does not identify which interaction or reaction coefficient causes this 
 Fitted integral heats have 0.95\,\% AARD.
 
 \begin{figure}[pos=!tbp]
-\centering\includegraphics[width=\linewidth]{dea-current-measured-model.png}
+\centering\includegraphics[width=\linewidth]{dea-current-measured-model.pdf}
 \caption{DEA measurements (points) and calculated curves (lines) against loading in mol \COtwo/mol DEA. Lawson pressures at 310.93--380.37~K and Carson integral heats are fitted; the 394.26~K Lawson isotherm and the Seo and Hong and Lal pressures are not fitted. Circles and solid lines lie inside both the DEA dissociation (D) and hydrolysis (H) source intervals, triangles and dashed lines lie outside both, and squares and dotted lines lie outside H only (Section~\ref{sec:p2-methods}).}
 \label{fig:p2-dea-pressure}
 \end{figure}
@@ -65,7 +64,7 @@ Recalculating the 80 fitted predictions from the stored parameters reproduces th
 Horstmann's NRTL correlation uses the same excess-enthalpy observations as fitting data, whereas they are comparison only here \cite[pp.~1496--1500, Tables~6--7, Fig.~4(b)]{horstmannPhaseEquilibriumExcess2002}.
 The published fitted curve follows negative mixing enthalpies while the present predictions have the opposite sign.
 No scalar deviation on these same observations is reported for that NRTL curve, so no numerical ranking is inferred from its figure.
-The inspected Lawson, Seo and Hong, Lal and Carson source passages likewise provide no published-model scalar deviation on the exact present subsets; the supplementary source comparison records the quantities and data roles that can be compared.
+The inspected Lawson, Seo and Hong, Lal and Carson source passages likewise provide no published-model scalar deviation on the exact present subsets; Section S3 of the supplement records the quantities and data roles that can be compared.
 
 % P:p2-results-dea-published-fits
 Nasrifar and Tafazzol, whose neutral DEA parameters are used here, correlated the same Cai isobaric equilibria, together with Horstmann's 365.15~K equilibria, with a temperature-independent DEA--water interaction of $-0.04$ and report agreement graphically, without a scalar deviation \cite[Table~3, Fig.~5]{Nasrifar2010}; those data were fitted there, whereas the Cai pressures are comparison only here.
@@ -83,9 +82,9 @@ No liquid descent triggered the penalty, so the DEA fit does not use the penalty
 These DEA results are a calibration on the shared parameters, with comparisons to observations outside the fit, a numerical recalculation check and finite phase-stability searches, all on observations examined before the fit.
 Their interpretation is limited by the unresolved shape error in fitted pressures, the wrong sign of the binary excess enthalpy, reaction correlations evaluated outside their source intervals, 1 unavailable stability search and standard errors conditional on the fixed shared parameters.
 They establish neither physical validation nor suitability for absorber design, and the finite searches do not prove global phase stability.
-\textit{Draft note: these values are provisional until recalculated with the final calculation-library build, and the DEA parameter set is not yet adopted.}
+\textit{Draft note: these values are provisional until recalculated with the single calculation build selected for the final Part II results, and the DEA parameter set is not yet adopted.}
 \FloatBarrier
 
 \subsection{Summary across the amines}
 % P:p2-results-summary-pending
-\textit{Pending: the four-amine summary and comparisons await MDEA, AMP and PZ final results.}
+\textit{Pending: the three-amine summary and comparisons await MDEA and AMP final results.}

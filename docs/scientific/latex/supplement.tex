@@ -53,6 +53,8 @@ All other interactions are zero by assumption except the fixed water interaction
 Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
 The ion packing and Debye--H\"uckel diameters follow the ties stated in the main text.
 
+\input{tables/supplement_reaction_coefficients}
+
 \input{tables/supplement_species_parameters}
 \input{tables/supplement_interaction_matrix}
 
@@ -60,7 +62,7 @@ The ion packing and Debye--H\"uckel diameters follow the ties stated in the main
 The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the fitted water self-association energy, with the same association volume as water.
 The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}.
 The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}.
-The value used here, 0.036305439, is the constant fitted by least squares, with the ePC-SAFT library's fitter, to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
+The value used here, 0.036305439, is the constant fitted by least squares with the epcsaft package to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
 
 
 
@@ -97,7 +99,7 @@ Scales inherited from source accuracy statements and assigned residual scales re
 % P:supplement-density-01
 Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series, with unresolved high-temperature/loading applicability of the density estimate \cite[pp.~3099--3100]{Amundsen2009}.
 Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the printed expanded uncertainty with coverage factor two and is used without division by that factor \cite[Table~3, p.~1810]{Hartono2014}.
-The calculations adopt Table~3's printed loading $\alpha$.
+The calculations adopt the loading $\alpha$ printed in Hartono's Table~3.
 The accompanying printed \COtwo mole fractions imply different loadings under the stated solvent composition; that source inconsistency remains unresolved.
 The density comparisons and conditional parameter errors therefore depend on the adopted printed-loading convention.
 The secant construction in main-text Eq.~\ref{main-eq:density-scale} combines these with loading uncertainty.
@@ -172,10 +174,12 @@ Search completion, residual convergence and positive pressure--density derivativ
 The raw state results identify incomplete or unavailable cases explicitly.
 \section{Shared inputs for Part II}\label{sec:s-shared}
 % P:supplement-shared
-The shared coefficient table in the main text lists the present model values.
+Main-text Table~\ref{main-tab:shared-parameters} lists the shared coefficient values rounded for display; Tables~\ref{tab:supplement-reaction-coefficients}--\ref{tab:supplement-interaction-matrix} and \ref{tab:supplement-shared-remaining} give their unrounded values.
 Part II also keeps the shared component charges, segment counts, association topology, electrostatic model choices, standard states and R1--R3 reaction definitions fixed.
 The water--bicarbonate interaction is the MEA-fitted value, whereas the carbonate--water interaction is an assumed fixed value.
 The weakly determined bicarbonate interaction and the dielectric and source-law extrapolations limit the strength of a transfer claim before amine-specific comparisons.
+
+\input{tables/supplement_shared_remaining}
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references}
