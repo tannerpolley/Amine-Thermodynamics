@@ -1196,3 +1196,37 @@ Invoked `agent-heavy bash scripts/build_manuscript.sh` exactly once for this fix
 - `git diff --check` passed. Retained analyses, data, package pin and lockfile are unchanged.
 
 The archive DOI and referee-access placeholders remain owned by the existing submission task (#206). DEA results remain provisional. Focused independent science, story and visual re-checks follow this Writer handoff.
+
+
+## Combined manuscript fix round 2: issues 348 and 387 (2026-11-16)
+
+Applied only R-A–R-E, the required figure-legibility correction, and the owner's question-tool answer to update Part II Table S1 value precision. Based on `c3fc65e`; no model calculation or refit, retained-value changes, or edits to `analyses/_cse-manuscript.json`.
+
+| Item | Applied change | Source |
+| --- | --- | --- |
+| R-A | Exact story replacement names main Table 11 and supplementary Tables S1–S3/S10. Table S10 input now follows the paragraph with a blank line before it. All five labels exist and resolve to the intended tables. | `supplement.tex` |
+| R-B | Only the derived shared packing diameters use `:.15g`; fitted values retain their previous precision. | `scripts/final_rerun_tables.py`; generated `tables/supplement_shared_remaining.tex` |
+| R-C | Table 9 caption points to unrounded S3 values and fixed-input sources in Section S1, using resolving references. | `scripts/final_rerun_tables.py`; generated `tables/interaction_matrix.tex` |
+| R-D | Table 11 caption points to supplementary Tables S1–S3 and S10, using resolving references. | `scripts/final_rerun_tables.py`; generated `tables/shared_parameters.tex` |
+| R-E | Precision examples now include Part II Tables 1 and 3, verified as fixed-species and fitted-parameter tables. Their quantities are covered by Part II supplement S1. | `docs/scientific/writing/STYLE.md` |
+| R-E owner clarification | S1 had eight significant figures, rather than full retained digits. The owner selected “Update S1 value precision too (Recommended)” through the question tool. All 68 value cells now round-trip exactly to the retained CSV; the value column is wider to fit them. | `scripts/dea_displays.py`; generated `tables/part2/dea-all-current.tex` |
+| Visual | Both figures now use final placement width, 6.48 inches. Figure 2 is 5.8 inches high; Figure 1 is 3.0 inches high. Figure 1 required the conditional correction because its previous composed legends were about 5.18 pt. Legends are arranged to fit and Figure 1's two-line titles preserve the same text. | `scripts/dea_displays.py`; two generated figure PDFs in `figures/part2/` |
+
+R-B checks against `shared-coefficients.csv`: every retained packing diameter equals `0.88 * segment_diameter` exactly as floating-point values. The four displays are bicarbonate **2.578048 Å** from 2.9296 Å, carbonate **2.149136 Å** from 2.4422 Å, hydronium **3.049552 Å** from 3.4654 Å and hydroxide **1.775576 Å** from 2.0177 Å. This verifies the defined tie; it is not a new size measurement.
+
+Font sizes measured from the composed `part2.pdf` with MuPDF structured-text output: both figures' legends and tick base characters are **8.0008 pt**, axis labels and panel titles **9.0009 pt**. The Figure 2 overall title is also 9.0009 pt. Chemical subscripts and tick exponents retain normal smaller mathematical typesetting. Figure PDFs retain embedded STIXGeneral serif fonts and `pdf.fonttype=42`. An in-memory comparison to the `c3fc65e` generator confirms identical line and scatter coordinates, axis scales, line styles, marker paths, colours and series labels; only dimensions, typography and legend placement changed.
+
+| PDF | Page count | Changed pages relative to c3fc65e | Change |
+| --- | --- | --- | --- |
+| main | 23 | 17–19 | Table 9 caption and following text reflow; Table 11 caption. |
+| supplement | 9 | 8 | Shared-input paragraph and Table S10 placement; packing-diameter display. |
+| Part II | 10 | 6–10 | Figures 1 and 2 typography and ensuing text/table/nomenclature reflow. |
+| Part II supplement | 5 | 1–5 | S1 value precision and column widths; its last row continues on page 3, shifting the following sections and references. |
+
+All other pages match the corresponding `c3fc65e` image at 150 dpi. All 47 pages were rendered in colour and grayscale in `builds/visual-348-387-fix2/`, and every one of the 14 changed pages was inspected in both forms. No clipping or overlapping new content was found.
+
+Build: invoked `scripts/build_manuscript.sh` exactly once through `agent-heavy` in a background shell; all four freshness checks passed. Displayed-number checks passed: Part I **21 tables / 20 verified retained inputs**, DEA **10 displays / 10 retained sources**. The separate S1 comparison checked all **68** displayed values against `parameter-values.csv`. Prose terminology checks passed on **47 active TeX inputs** plus STYLE; the four A1/A2 advisories remain published Jakobsen table locators, and STYLE's editorial-approval advisory was inspected against the owner brief.
+
+Final TeX logs: no overfull boxes, undefined citations/references or font-substitution warnings. Underfull-box counts remain main **2**, supplement **2**, Part II **5**, Part II supplement **1**. All fonts are embedded and vector; zero Type 3 fonts; no raster images in Part II. Automated visual findings: main **150**, supplement **42**, Part II **24**, Part II supplement **2**. The main scan still marks the previously inspected bounding-box intersection in Eq. 27 (page 9) as an error; the glyphs remain separated and that page is unchanged this round. The other findings are clearance/overlap advisories. `git diff --check` passed. Retained analyses, data, package pin and lockfile are unchanged.
+
+Focused story and visual confirmation follows; the science confirmation is limited to R-B and R-E. Existing DOI/access placeholders and provisional DEA qualification remain.
