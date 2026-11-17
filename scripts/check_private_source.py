@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import tempfile
 
 PUBLISHED_PATH = "docs/scientific/latex/references.bib"
 PUBLISHED_LINE_HASH = "248491963d1ff382cd0ce4c72665e02d099d27b575caed9e9fe920c63e68d507"
@@ -30,34 +31,45 @@ def path_is_blocked(path):
     return any(value in path.lower() for value in patterns())
 
 
-def violations(path, data):
-    label = hashlib.sha256(path.encode()).hexdigest()[:12]
-    if path_is_blocked(path):
-        yield f"tracked path {label}: private-source identifier"
-    if b"\0" in data:
-        return
-    for number, line in enumerate(data.decode("utf-8", errors="replace").splitlines(), 1):
-        if path == PUBLISHED_PATH and hashlib.sha256(line.encode()).hexdigest() == PUBLISHED_LINE_HASH:
-            continue
-        if any(value in line.lower() for value in patterns()):
-            yield f"tracked path {label}, line {number}: private-source identifier"
+def search(command, root, data=None):
+    result = subprocess.run(command, cwd=root, input=data, capture_output=True)
+    if result.returncode not in (0, 1):
+        raise SystemExit("Private-source search failed.")
+    return result.stdout
+
+
+def scan(root):
+    values = patterns()
+    if any(any(char in value for char in "\r\n\0") for value in values):
+        raise SystemExit("Invalid private-source check configuration.")
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as pattern_file:
+        pattern_file.write("\n".join(values) + "\n")
+        pattern_file.flush()
+        git = ["git"]
+        if cores := os.environ.get("AGENT_HEAVY_CORES"):
+            git.extend(["-c", f"grep.threads={int(cores)}"])
+        matches = search(git + ["grep", "-I", "-i", "-n", "-z", "-F", "-f", pattern_file.name, "--"], root)
+        failures = []
+        while matches:
+            path, separator, matches = matches.partition(b"\0")
+            number, second_separator, matches = matches.partition(b"\0")
+            if not separator or not second_separator or not number.isdigit():
+                raise SystemExit("Invalid private-source search output.")
+            line, _, matches = matches.partition(b"\n")
+            if path == PUBLISHED_PATH.encode() and hashlib.sha256(line).hexdigest() == PUBLISHED_LINE_HASH:
+                continue
+            label = hashlib.sha256(path).hexdigest()[:12]
+            failures.append(f"tracked path {label}, line {int(number)}: private-source identifier")
+        tracked = subprocess.run(["git", "ls-files", "-z"], cwd=root, capture_output=True)
+        if tracked.returncode:
+            raise SystemExit("Private-source tracked-path search failed.")
+        paths = search(["grep", "-z", "-i", "-F", "-f", pattern_file.name], root, tracked.stdout)
+        failures.extend(f"tracked path {hashlib.sha256(path).hexdigest()[:12]}: private-source identifier"
+                        for path in paths.split(b"\0") if path)
+    return failures
 
 
 if __name__ == "__main__":
-    root = Path(__file__).resolve().parents[1]
-    patterns()
-    paths = subprocess.check_output(["git", "ls-files", "-z"], cwd=root).decode().split("\0")
-    failures = []
-    for path in paths:
-        if not path:
-            continue
-        file = root / path
-        if file.is_symlink():
-            data = os.readlink(file).encode()
-        elif file.is_file():
-            data = file.read_bytes()
-        else:
-            continue
-        failures.extend(violations(path, data))
+    failures = scan(Path(__file__).resolve().parents[1])
     if failures:
         raise SystemExit("\n".join(failures))
