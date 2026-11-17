@@ -33,7 +33,7 @@ def num(value, digits=3):
 def table(name, caption, headers, rows, widths, long=False):
     columns = ''.join(r'>{\raggedright\arraybackslash}p{' + str(w) + r'\linewidth}' for w in widths)
     head = ' & '.join(headers) + r' \\ \midrule' + '\n'
-    body = '\n'.join(' & '.join(map(str, row)) + r' \\' for row in rows)
+    body = '\n'.join(' & '.join(map(str, row)) + r' \\' + ('*' if name == 'dea-all-current' and row[0] in [f'Carbamate hydrolysis, ${c}$' for c in 'abcde'] else '') for row in rows)
     if long:
         text = r'\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}' + columns + '@{}}\n'
         text += r'\caption{' + caption + r'}\label{tab:p2-' + name + r'}\\' + '\n'
