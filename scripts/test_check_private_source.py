@@ -49,6 +49,27 @@ class PrivateSourceCheck(unittest.TestCase):
             self.assertIn(b"private-source identifier", path_result.stderr)
             self.assertNotIn(b"private-test.csv", path_result.stderr.lower())
             private_path.unlink()
+            attribute_file = root / ".gitattributes"
+            attribute_file.write_text("*.svg -diff\n")
+            svg = root / "figure.svg"
+            svg.write_text("<title>PRIVATE-TEST.CSV</title>\n")
+            attribute_result = scan()
+            self.assertEqual(attribute_result.returncode, 1)
+            self.assertNotIn(b"private-test.csv", attribute_result.stderr.lower())
+            svg.unlink()
+            link = root / "link"
+            link.symlink_to("data/private-test.csv")
+            link_result = scan()
+            self.assertEqual(link_result.returncode, 1)
+            self.assertNotIn(b"private-test.csv", link_result.stderr.lower())
+            link.unlink()
+            invalid_path = os.fsencode(root) + b"/\xff-private-test.csv"
+            with open(invalid_path, "wb") as file:
+                file.write(b"Ordinary content.\n")
+            invalid_result = scan()
+            self.assertEqual(invalid_result.returncode, 1)
+            self.assertNotIn(b"private-test.csv", invalid_result.stderr.lower())
+            os.unlink(invalid_path)
             note.write_bytes(published_line + b"\n")
             self.assertEqual(scan().returncode, 1)  # The allowance applies only at its published path.
 

@@ -32,7 +32,7 @@ def path_is_blocked(path):
 
 
 def search(command, root, data=None):
-    result = subprocess.run(command, cwd=root, input=data, capture_output=True)
+    result = subprocess.run(command, cwd=root, input=data, capture_output=True, env={**os.environ, "GIT_ATTR_NOSYSTEM": "1"})
     if result.returncode not in (0, 1):
         raise SystemExit("Private-source search failed.")
     return result.stdout
@@ -45,7 +45,11 @@ def scan(root):
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as pattern_file:
         pattern_file.write("\n".join(values) + "\n")
         pattern_file.flush()
-        git = ["git"]
+        empty = subprocess.run(["git", "mktree"], cwd=root, input=b"", capture_output=True)
+        if empty.returncode:
+            raise SystemExit("Private-source attribute isolation failed.")
+        git = ["git", "--attr-source=" + empty.stdout.decode("ascii").strip(),
+               "-c", "core.attributesFile=/dev/null"]
         if cores := os.environ.get("AGENT_HEAVY_CORES"):
             git.extend(["-c", f"grep.threads={int(cores)}"])
         matches = search(git + ["grep", "-I", "-i", "-n", "-z", "-F", "-f", pattern_file.name, "--"], root)
@@ -63,9 +67,22 @@ def scan(root):
         tracked = subprocess.run(["git", "ls-files", "-z"], cwd=root, capture_output=True)
         if tracked.returncode:
             raise SystemExit("Private-source tracked-path search failed.")
-        paths = search(["grep", "-z", "-i", "-F", "-f", pattern_file.name], root, tracked.stdout)
+        paths = search(["grep", "-a", "-z", "-i", "-F", "-f", pattern_file.name], root, tracked.stdout)
         failures.extend(f"tracked path {hashlib.sha256(path).hexdigest()[:12]}: private-source identifier"
                         for path in paths.split(b"\0") if path)
+        staged = subprocess.run(["git", "ls-files", "--stage", "-z"], cwd=root, capture_output=True)
+        if staged.returncode:
+            raise SystemExit("Private-source link listing failed.")
+        for entry in staged.stdout.split(b"\0"):
+            if not entry.startswith(b"120000 "):
+                continue
+            metadata, path = entry.split(b"\t", 1)
+            target = subprocess.run(["git", "cat-file", "blob", metadata.split()[1]],
+                                    cwd=root, capture_output=True)
+            if target.returncode:
+                raise SystemExit("Private-source link search failed.")
+            if search(["grep", "-a", "-i", "-F", "-f", pattern_file.name], root, target.stdout):
+                failures.append(f"tracked path {hashlib.sha256(path).hexdigest()[:12]}: private-source identifier")
     return failures
 
 
