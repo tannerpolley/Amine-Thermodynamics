@@ -68,8 +68,12 @@ def tex(value):
     return re.sub(r'[a-f0-9]{64}', lambda m: r'\allowbreak{}'.join(m.group()[i:i+8] for i in range(0,64,8)), escaped)
 
 
-# Parameters print 8 significant figures.
+# Default parameter formatting before the main-text rounding rule.
 PARAMETER_DIGITS = 8
+
+
+def full_precision(value):
+    return '--' if value is None or value == '' else repr(float(value)).removesuffix('.0')
 WORDS = 'no one two three four five six seven eight nine ten'.split()
 
 
@@ -234,9 +238,9 @@ def main():
             return '--'
         shown.add(identity)
         v = float(values[identity])
-        # Main-text Table 3 rounds to at most four decimal places; the supplement species table carries eight significant figures.
+        # Main-text species inputs round to at most four decimal places; the supplement retains all parameter digits.
         text = f'{v:.4f}' if decimals is not None and identity in coords and identity.endswith(('segment_diameter', 'born_diameter')) else (f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS))
-        return text
+        return full_precision(v) if decimals is None else text
     species = [n['component_id'] for n in document['components']]
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
     symbol = {**NAMES, 'water': r'\ce{H2O}'}
@@ -263,7 +267,7 @@ def main():
                r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed']
     # Charge, solvation and dielectric inputs are specified with their sources in S2.
     main_indices = [0,1,2,3,4,5,7]
-    table('species_parameters.tex', r'Segment, association and Born parameters of the adopted parameter set. Sources identify fitted quantities and transferred inputs; Table~\ref{supp-tab:supplement-species-parameters} gives eight-significant-figure values and the remaining inputs. A dash denotes an unused input.',
+    table('species_parameters.tex', r'Segment, association and Born parameters of the adopted parameter set. Sources identify fitted quantities and transferred inputs; Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs. A dash denotes an unused input.',
           [species_headings[i] for i in main_indices]+['Source'],
           [[row[i] for i in main_indices]+[source] for row,source in zip(species_rows(4),sources,strict=True)],
           ['l']+['r']*6+[.25],sep=3)
@@ -278,8 +282,11 @@ def main():
             elif i==8: origin=r'Water: \cite[Table~2]{Figiel2025}; others: assumed' if row[0]==r'\ce{H2O}' else 'Assumed'
             elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite[Table~6]{Yang2024}' if row[0]==r'\ce{H2O}' else 'Assumed')
             full.append([row[0],inline_headings[i],row[i],origin])
+    water_law = next(c for c in document['correlations'] if c.get('component_id') == 'water' and c.get('family') == 'segment_diameter')
+    for coefficient in [water_law['constant'], *[c for term in water_law['terms'] for c in term.values()]]:
+        full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), full_precision(coefficient['value']['magnitude']), 'Water fit' if coefficient is water_law['constant'] else 'Fixed'])
     table('supplement_species_parameters.tex', 'Complete species inputs of the adopted parameter set. CO2 association entries apply only to induced bonding with water. The water diameter law and the MEA association-volume conversion are specified in the text.',
-          ['Species','Quantity (unit)','Value','Source'],full,['l',.25,'r',.4])
+          ['Species','Quantity (unit)','Value','Source'],full,['l',.22,'r',.36])
     def pair(s, t, quantity='', decimals=None):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
             return '--'
@@ -299,9 +306,9 @@ def main():
         return [[symbol[s]+'--'+symbol[u],pair(s,u,decimals=decimals),pair(s,u,'/reciprocal_temperature_slope',decimals),source] for s,u,source in pair_specs]
     table('interaction_matrix.tex', r'Nonzero or fitted binary interactions, $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. An absent slope is zero. Sources of fixed inputs are in Section~\ref{supp-sec:s-parameters}.',
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(4),['l','r','r','l'])
-    table('supplement_interaction_matrix.tex', 'Binary interactions to eight significant figures. All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.',
+    table('supplement_interaction_matrix.tex', 'Binary interactions at retained numerical precision. All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.',
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(),['l','r','r','l'])
-    table('supplement_fitted_parameters.tex', 'Jointly fitted parameters, bounds and conditional standard errors. A dash marks the active bound. Born diameters of the two amine ions equal their segment diameters.', ['Parameter','Value','Lower','Upper','SE'], [[label(r['identity']),num(r['value'],8),num(r['lower']),num(r['upper']),num(r['conditional_SE'])] for r in params], ['l','r','r','r','r'])
+    table('supplement_fitted_parameters.tex', 'Jointly fitted parameters, bounds and conditional standard errors. A dash marks the active bound. Born diameters of the two amine ions equal their segment diameters.', ['Parameter','Value','Lower','Upper','SE'], [[label(r['identity']),full_precision(r['value']),num(r['lower']),num(r['upper']),num(r['conditional_SE'])] for r in params], [.29,'r','r','r','r'])
     reaction = a.load(a.BUNDLE/'results/adoption-297/paper-evidence/source-only/chemical_reaction_source_contract.json')
     rr = []
     for r in reaction['reactions']:
@@ -310,11 +317,11 @@ def main():
         if not law: values['a'] += reaction['common_source_standard_state']['source_to_common_ln_k_offsets'][int(r['reaction_id'][1:])-1]
         if r['reaction_id']=='R5': values = dict(zip(('a','b_k','c','d_per_k'),[-math.log(10)*values['b'],-math.log(10)*values['a_k'],0,-math.log(10)*values['c_per_k']]))
         lhs, rhs = r['equation'].replace('CO3--','CO3^{2-}').split(' <=> ')
-        rr.append([r['reaction_id'],r'\ce{'+lhs+r'} $\rightleftharpoons$ \ce{'+rhs+'}',*[num(values.get(k,0),9) for k in ('a','b_k','c','d_per_k')]])
-    table('supplement_reaction_coefficients.tex', r'Completed molality-based reaction coefficients to nine significant figures, for $\ln K=A+B/T+C\ln T+DT$ with $T$ in kelvin. Reactions are defined in the main text.', ['Reaction','$A$','$B$ (K)','$C$','$D$ (K$^{-1}$)'], [[r[0], *r[2:]] for r in rr], ['l']+['r']*4)
+        rr.append([r['reaction_id'],r'\ce{'+lhs+r'} $\rightleftharpoons$ \ce{'+rhs+'}',*[full_precision(values.get(k,0)) for k in ('a','b_k','c','d_per_k')]])
+    table('supplement_reaction_coefficients.tex', r'Completed molality-based reaction coefficients at retained numerical precision, for $\ln K=A+B/T+C\ln T+DT$ with $T$ in kelvin. Reactions are defined in the main text.', ['Reaction','$A$','$B$ (K)','$C$','$D$ (K$^{-1}$)'], [[r[0], *r[2:]] for r in rr], ['l']+['r']*4)
     # Separate stoichiometry and coefficients to preserve every printed digit at readable size.
     reaction_rows = [[r[0], r[1]] for r in rr]
-    table('reaction_equilibrium_constants.tex', r'Aqueous reaction stoichiometry and completed molality-based constants, $\ln K=A+B/T+C\ln T+DT$, with $T$ in kelvin. Source-to-molality offsets are included once. R1--R3: Austgen Table V; R4: Tong Table 5; R5: Bates--Pinching Eq. (10). All laws are fixed in the joint fit. Coefficients are rounded to at most four decimal places; small coefficients use scientific notation. Supplementary Table~\ref{supp-tab:supplement-reaction-coefficients} retains nine significant figures.', ['Reaction', 'Stoichiometry'], reaction_rows, ['l','l'])
+    table('reaction_equilibrium_constants.tex', r'Aqueous reaction stoichiometry and completed molality-based constants, $\ln K=A+B/T+C\ln T+DT$, with $T$ in kelvin. Source-to-molality offsets are included once. R1--R3: Austgen Table V; R4: Tong Table 5; R5: Bates--Pinching Eq. (10). All laws are fixed in the joint fit. Coefficients are rounded to at most four decimal places; small coefficients use scientific notation. Supplementary Table~\ref{supp-tab:supplement-reaction-coefficients} retains the unrounded coefficients.', ['Reaction', 'Stoichiometry'], reaction_rows, ['l','l'])
     body = OUTPUTS['reaction_equilibrium_constants.tex']
     coefficients = [r'\par\medskip', r'\begin{tabular}{@{}l S[group-digits=false,table-format=-3.4] S[group-digits=false,table-format=-5.4] S[group-digits=false,table-format=-2.4] S[group-digits=false,table-format=-1.4e-1]@{}}', r'\toprule', r'Reaction & {$A$} & {$B$ (K)} & {$C$} & {$D$ (K$^{-1}$)} \\', r'\midrule']
     for row in rr:
@@ -346,11 +353,15 @@ def main():
     weights = a.rows(E/'objective-groups.csv')
     table('objective_groups.tex', r'Assigned objective scales and weights. Rows with identical group and quantity are combined by range; the weight and scale are distinct. Origins and unrecorded rationales are described in the text.', ['Group; quantity','n','Scale range','Weight range','Cost'], [[groupname[g]+'; '+{'partial_pressure':'CO2 pressure','mole_fraction':'mole fraction','addition_enthalpy':'integral heat','amount_ratio':'amount ratio','pressure':'pressure','phase_density':'density','temperature':'temperature','equilibrium_isobaric_heat_capacity':'equilibrium heat capacity'}[q],sum(int(r['n']) for r in weights if (r['group'],r['quantity'])==(g,q)),span(float(r['scale']) for r in weights if (r['group'],r['quantity'])==(g,q)),span(float(r['weight']) for r in weights if (r['group'],r['quantity'])==(g,q)),num(sum(float(r['cost']) for r in weights if (r['group'],r['quantity'])==(g,q)),6)] for g,q in dict.fromkeys((r['group'],r['quantity']) for r in weights)], [.45,'r','l','l','r'])
     checks = a.load(E/'check-values.json')
-    table('check_values.tex', r'Bubble-state reproduction values. Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\MEA}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each was solved from two initial pressures; printed values agree. Density is liquid mass density.', ['System','$T$ (K)','$P$ (Pa)',r'$\rho$ (kg/m$^3$)'], [[name,num(r['T_K'],7),num(r['answers'][0]['bubble_pressure_Pa'],10),num(r['answers'][0]['density_kg_m3'],10)] for name,r in zip([r'\ce{CO2}--water','MEA--water','Loaded MEA'],checks)], ['l','r','r','r'])
+    table('check_values.tex', r'Bubble-state reproduction values. Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\MEA}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each was solved from two initial pressures; printed values agree. Density is liquid mass density.', ['System','$T$ (K)','$P$ (Pa)',r'$\rho$ (kg/m$^3$)'], [[name,num(r['T_K'],7),f"{r['answers'][0]['bubble_pressure_Pa']:.4f}",num(r['answers'][0]['density_kg_m3'],10)] for name,r in zip([r'\ce{CO2}--water','MEA--water','Loaded MEA'],checks)], ['l','r','r','r'])
     contribution_names = dict(association='Association', born='Born', hard_chain='Hard chain', dispersion='Dispersion', debye_huckel=r'Debye--H\"uckel', residual_helmholtz='Total residual')
     table('supplement_check_values.tex', r'Reduced residual molar Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions at the three main-text reproduction states. Zero terms are omitted.', ['Contribution or species',r'\ce{CO2}--water','MEA--water','Loaded MEA'], [[('$x_{'+symbol[key[2:]]+'}$') if key.startswith('x_') else contribution_names[key],*[num(r['answers'][0][key],10) for r in checks]] for key in checks[0]['answers'][0] if key not in ('bubble_pressure_Pa','density_kg_m3','molar_density_mol_m3') and any(r['answers'][0][key] for r in checks)], ['l','r','r','r'])
     shared = a.rows(E/'shared-coefficients.csv')
-    table('shared_parameters.tex', r'Shared coefficient set held fixed in Part II, grouped by physical quantity. Displayed values are rounded; the electronic data retain the numerical inputs. Water, \ce{CO2}, \ce{H3O+}, \ce{OH-}, \ce{HCO3-}, \ce{CO3^{2-}}, their shared interactions and R1--R3 laws are included. Topology, fixed fields and standard states also transfer as specified in the text.', ['Parameter','Value','Unit'], [[label(r['identity']),num(r['value'],10),r['unit']] for r in shared]+[['R1--R3 laws','Table~\\ref{tab:reaction-equilibrium-constants}','1']], [.66,'r','l'])
+    table('shared_parameters.tex', r'Shared coefficient set held fixed in Part II, grouped by physical quantity. Displayed values are rounded to at most four decimal places; the electronic data retain the unrounded values. Water, \ce{CO2}, \ce{H3O+}, \ce{OH-}, \ce{HCO3-}, \ce{CO3^{2-}}, their shared interactions and R1--R3 laws are included. Charges, segment counts, association topology, electrostatic model choices and standard states also transfer (Section~2 and Supplementary Section~\ref{supp-sec:s-shared}).', ['Parameter','Value','Unit'], [[label(r['identity']),num(r['value'],10),r['unit']] for r in shared]+[['R1--R3 laws','Table~\\ref{tab:reaction-equilibrium-constants}','1']], [.66,'r','l'])
+    # S2 and S3 already list species fields and the explicitly retained pairs.
+    covered_pairs = {tuple(sorted((x, y))) for x, y, _ in pair_specs}
+    missing = [r for r in shared if (r['identity'].startswith('component/') and r['identity'].rsplit('/', 1)[-1] in ('packing_diameter', 'debye_huckel_diameter')) or (r['identity'].startswith('pair/') and tuple(sorted(r['identity'].split('/')[1:3])) not in covered_pairs)]
+    table('supplement_shared_remaining.tex', r'Shared inputs not already listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at retained numerical precision. Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded inputs corresponding to main-text Table~\ref{main-tab:shared-parameters}.', ['Parameter','Value','Unit'], [[label(r['identity']), full_precision(r['value']), r['unit']] for r in missing], [.55,'r','l'])
     table('pressure_sources.tex', r'Pressure errors by experimental source at nominal 30 wt\% MEA; source subsets contain both fitted observations and observations that are not fitted.', ['Source','Observations','AARD (percent)'], [[SOURCE_NAMES.get(s,s),len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
     a.load(E/'candidate/replay.json'); a.load(E/'uncertainty/covariance.json'); a.load(E/'stability/candidate/search.json'); a.load(a.BUNDLE/'results/split-cause-342/final-supplied-F2-summary.json')
     for name, body in OUTPUTS.items():
