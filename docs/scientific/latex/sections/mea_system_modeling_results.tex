@@ -1,7 +1,7 @@
 \section{Results and discussion}\label{sec:mea-system-modeling-results}
 \subsection{Model parameters and subsystem fits}\label{sec:results-water}\label{sec:results-co2-water}\label{sec:results-permittivity}\label{sec:results-binary}
 % P:results-parameters
-\Cref{tab:species-parameters,tab:interaction-matrix} list the species and interaction parameters of the present model, which every result below uses; the reaction laws are in \cref{tab:reaction-equilibrium-constants}.
+\Cref{tab:species-parameters,tab:interaction-matrix} list the species and interaction parameters of the present model, which every result below uses; the equilibrium-constant correlations are in \cref{tab:reaction-equilibrium-constants}.
 
 \input{tables/species_parameters}
 \input{tables/interaction_matrix}
@@ -64,7 +64,7 @@ The fitted pressures do not determine that minor-species partition uniquely.
 \end{figure}
 
 % P:results-species-02
-Carbonate formation depends on its reaction constant and relative ionic activities, so a small carbonate share cannot be attributed to a single parameter from these comparisons.
+Carbonate formation depends on its equilibrium constant and relative ionic activities, so a small carbonate share cannot be attributed to a single parameter from these comparisons.
 Titration-derived bicarbonate totals also differ from the NMR observations, as Matin et al.\ discuss \cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
 The experimental observable approximations and model discrepancy both matter; the available evidence does not isolate their contributions.
 \Cref{tab:same-data} gives these species errors, and the present-model comparisons for the heat, heat-capacity, density and concentration results below, beside those of the Polley--Hedengren (2026) parameters on identical observations \cite{polleyReactiveEPCSAFTModeling2026}; \cref{sec:results-literature} discusses that model comparison.
@@ -88,7 +88,7 @@ The measurements themselves differ between those series at nearby loadings \cite
 % P:results-heat-kim
 The Kim--Svendsen comparison deteriorates at \SI{393.15}{\kelvin}, where its finite-interval heat RMSE exceeds that of the Polley--Hedengren parameters on the common intervals (\cref{tab:same-data}).
 Both calculations include the inconsistent printed intervals in this comparison; Table~\ref{supp-tab:kim-alternatives} reports alternative source exclusions.
-Reaction-law extrapolation, approximated pressure histories and missing chemistry can affect the calculated heat, but this result does not identify a unique cause.
+Extrapolation of the equilibrium-constant correlations, approximated pressure histories and missing chemistry can affect the calculated heat, but this result does not identify a unique cause.
 The discrepancy prevents interpreting the common enthalpy formulation as demonstrated high-temperature caloric accuracy.
 
 % P:results-cp
@@ -139,7 +139,7 @@ Only the \MEAH--\MEACOO interaction is at a bound for the present model; its low
 The other parameters have conditional standard errors listed beside their values in Table~\ref{supp-tab:supplement-fitted-parameters}.
 The water--bicarbonate interaction and the opposing amine-ion size changes are weakly determined; their large conditional errors preclude identifying the fitted values as unique molecular properties.
 Correlated covariance propagation describes local pressure sensitivity, while inward bound scans test short feasible changes with the other parameters refitted.
-Neither calculation includes model discrepancy, reaction-law uncertainty, correlated errors within one experimental source or uncertainty of a phase boundary.
+Neither calculation includes model discrepancy, uncertainty of the equilibrium-constant correlations, correlated errors within one experimental source or uncertainty of a phase boundary.
 \FloatBarrier
 
 \subsection{Comparison with published models}\label{sec:results-literature}
@@ -161,7 +161,7 @@ Published aggregate errors on other datasets are not converted into comparisons 
 \subsection{Parameters shared with Part II}\label{sec:results-shared}
 % P:results-shared
 \Cref{tab:shared-parameters} lists, rounded for display, the shared coefficient set held fixed in Part II; the component charges, segment counts, association topology, electrostatic model choices and standard states that transfer with it are defined in \cref{sec:theory} and Section~\ref{supp-sec:s-shared}.
-It includes water, \COtwo, hydronium, hydroxide, bicarbonate and carbonate, their shared interactions and R1--R3 laws.
+It includes water, \COtwo, hydronium, hydroxide, bicarbonate and carbonate, their shared interactions and the R1--R3 equilibrium-constant correlations.
 The poorly determined water--bicarbonate interaction, assumed dielectric behavior in loaded solutions and source-correlation extrapolation are the shared inputs most likely to limit transfer.
 
 \needspace{8\baselineskip}
@@ -171,7 +171,7 @@ The poorly determined water--bicarbonate interaction, assumed dielectric behavio
 % P:results-limits
 These results support the present model as a calibration, with calculations at fixed parameters, against data seen during development; no comparison establishes independent validation.
 The present model also has measured weaknesses: on the 19 Ma'mun observations, the restrictions raise the pressure AARD from 19.43\,\% for the 16-parameter calibration to 33.47\,\% for the present model, and at \SI{393.15}{\kelvin} the Kim--Svendsen heat RMSE of the present model, \SI{31.77}{\kilo\joule\per\mole} \COtwo, exceeds the \SI{29.49}{\kilo\joule\per\mole} \COtwo of the Polley--Hedengren parameters.
-The parameter uncertainty is conditional on this fit and therefore excludes model discrepancy and reaction-law uncertainty.
+The parameter uncertainty is conditional on this fit and therefore excludes model discrepancy and the uncertainty of the equilibrium-constant correlations.
 The absence of an additional liquid rests on finite searches rather than a global proof.
 The R1--R3 temperature range is Austgen's correlation range, not demonstrated measurement coverage, and R4, R5 and the unloaded dielectric law are extrapolated beyond their direct source constraints.
 Pressures at other MEA concentrations, carbonate shares and the highest-temperature heats remain the weakest parts of the calibration, and missing pressure histories, source inconsistencies, observable approximations, omitted carrier gas and omitted oxazolidone further limit interpretation.

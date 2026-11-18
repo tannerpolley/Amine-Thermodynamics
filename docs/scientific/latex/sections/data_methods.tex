@@ -64,11 +64,11 @@ These heterogeneous scales are not uniformly standard measurement uncertainties,
 Estimation proceeds from pure water against IAPWS-95, through the \COtwo--water interaction against Kiepe pressures and the MEA dielectric coefficients against unloaded-solution permittivities, to the joint MEA fit.
 Earlier subsystem coefficients remain fixed in the joint fit.
 The joint fit is repeated for a sequence of cumulative restrictions on the same observations and weights; \cref{sec:results-joint} reports the cost of each.
-The least restricted calibration has 16 parameters, is stability-penalized (\cref{sec:methods-phase}), and allows shifts of the R2 and R5 laws and separate amine-ion Born diameters.
+The least restricted calibration has 16 parameters, is stability-penalized (\cref{sec:methods-phase}), and allows shifts of the R2 and R5 correlations and separate amine-ion Born diameters.
 Fixing R2 and R5 to their literature forms gives the next calibration, and the \emph{present model}, which is used throughout this paper, additionally ties the \MEAH and \MEACOO Born diameters to their segment diameters.
 Four further restrictions are examined.
 The first also fixes the carbamate--water interaction and the \MEAH--water temperature slope to zero.
-The second retains the preceding restrictions, fixes the water--bicarbonate and water--carbonate temperature laws at values fitted to the model-derived osmotic coefficients for aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and frees the protonated-MEA--bicarbonate interaction.
+The second retains the preceding restrictions, fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the model-derived osmotic coefficients for aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and frees the protonated-MEA--bicarbonate interaction.
 The third additionally fixes that interaction to zero.
 Alternatively, the fourth fixes the protonated-MEA--carbamate interaction to zero while retaining the free protonated-MEA--bicarbonate interaction.
 For the present model, eleven remaining parameters minimize
@@ -105,7 +105,7 @@ For the interior parameters, local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and active-bound parameters remain fixed.
-These errors condition on the fitted model, source laws, scales, weights and local linearization.
+These errors condition on the fitted model, source correlations, scales, weights and local linearization.
 
 % P:methods-checks
 \Cref{tab:check-values} supplies reproduction values with the present model for a \COtwo--water, an MEA--water and a loaded-MEA state.

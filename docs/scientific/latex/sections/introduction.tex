@@ -6,7 +6,7 @@ Agreement with one property alone does not establish agreement with the others o
 
 % P:introduction-03
 Activity-coefficient models combine reaction equilibria with a description of nonideal liquid activities.
-B\"ottinger et al.\ fitted a Pitzer model to species observations while keeping the Bates--Pinching MEA dissociation law \cite[Sects.~4--6, Table~5]{Bottinger2008}.
+B\"ottinger et al.\ fitted a Pitzer model to species observations while keeping the Bates--Pinching correlation for the MEA dissociation constant \cite[Sects.~4--6, Table~5]{Bottinger2008}.
 Zhang et al.\ jointly estimated electrolyte non-random two-liquid (eNRTL) parameters from pressure, heat, heat capacity and nuclear magnetic resonance (NMR) data, and compared additional pressure sources separately \cite[Sect.~3.3, Tables~9--11]{Zhang2011}.
 These studies establish multi-property fitting and explicit accounting of data use as relevant precedents.
 
@@ -27,7 +27,7 @@ MDEA does not form carbamate, so this experience does not determine the MEA-ion 
 Polley and Hedengren already describe the explicit MEA ions, including carbamate, with ePC-SAFT \cite[Sect.~2.2, App.~B]{polleyReactiveEPCSAFTModeling2026}.
 Their parameters were estimated in separate steps, and their column calculations used empirical caloric properties.
 The present work therefore concerns joint property estimation and phase assessment with one thermodynamic property calculation, rather than the first introduction of explicit MEA ions.
-A joint fit can also shift reaction constants or fit separate amine-ion Born diameters; such freedom can lower the objective, but shifted constants depart from the source reaction laws, and the \COtwo hydrolysis constant is shared with other amines.
+A joint fit can also shift equilibrium constants or fit separate amine-ion Born diameters; such freedom can lower the objective, but shifted constants depart from the source correlations, and the \COtwo hydrolysis constant is shared with other amines.
 
 % P:introduction-10
 Pressure, species and caloric measurements constrain different combinations of reaction equilibria and physical interactions.
@@ -42,8 +42,8 @@ For reacting electrolytes the trial must also satisfy charge neutrality and the 
 Phase searches therefore supply a separate numerical check on a calibration, with a finite search giving no global proof.
 
 % P:introduction-13
-This work asks whether one equation of state can describe the equilibrium, caloric and density properties of loaded aqueous MEA with literature reaction constants and fewer adjustable parameters, without predicting an additional liquid.
-It finds that fixed literature reaction laws and Born diameters tied to the amine-ion segment diameters permit a reduced joint calibration with no detected additional-liquid instability in the specified searches.
+This work asks whether one equation of state can describe the equilibrium, caloric and density properties of loaded aqueous MEA with literature equilibrium-constant correlations and fewer adjustable parameters, without predicting an additional liquid.
+It finds that fixing these correlations and tying the Born diameters to the amine-ion segment diameters permit a reduced joint calibration with no detected additional-liquid instability in the specified searches.
 The restrictions leave the objective value and the fitted pressure and density deviations of a less restricted 16-parameter calibration nearly unchanged, but they worsen some pressure comparisons outside the fit and leave discrepancies in pressures at other MEA concentrations, minor species and high-temperature heats.
 \Cref{sec:theory} reviews the ePC-SAFT contributions and the reaction and caloric relations, \cref{sec:data-methods} describes the data and the parameter estimation, and \cref{sec:mea-system-modeling-results} reports the results, the cost of each parameter restriction, and comparisons with the Polley--Hedengren (2026) parameters and published models on identical observations.
 Part I establishes the MEA formulation and the exact shared inputs; Part II examines their use with other amines.
