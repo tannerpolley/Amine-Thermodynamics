@@ -1,14 +1,22 @@
 \section{Results and discussion}\label{sec:mea-system-modeling-results}
-\subsection{Pure water and binary subsystems}\label{sec:results-water}\label{sec:results-co2-water}\label{sec:results-permittivity}\label{sec:results-binary}
+\subsection{Model parameters and subsystem fits}\label{sec:results-water}\label{sec:results-co2-water}\label{sec:results-permittivity}\label{sec:results-binary}
+% P:results-parameters
+\Cref{tab:species-parameters,tab:interaction-matrix} list the species and interaction parameters of the present model, which every result below uses; the reaction laws are in \cref{tab:reaction-equilibrium-constants}.
+
+\input{tables/species_parameters}
+\input{tables/interaction_matrix}
+
 % P:results-water-01
 The pure-water fit reproduces IAPWS-95 saturation density, vapor pressure and heat capacity over the fitted interval, with interleaved temperatures providing a numerical check of the correlation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
 The water inputs remain fixed during MEA estimation; the comparison is with a reference equation rather than independent measurements.
 
 % P:results-binary-01
 The \COtwo--water interaction remains fixed after estimation against Kiepe pressures, while the MEA--water interaction is jointly estimated with the amine-ion parameters \cite{kiepeExperimentalDeterminationPrediction2002,caiBinaryIsobaricVaporLiquid1996}.
-Their errors are reported by observable in \cref{tab:residual-summary}.
+\Cref{tab:residual-summary} reports the deviations of all fitted observations by quantity.
 The MEA--water temperature--composition curves show the binary constraint on that interaction before the reacting ternary mixture is considered (\cref{fig:mea-water}).
 The dielectric coefficients were estimated from unloaded solutions at \SI{298.15}{\kelvin}; these observations do not determine the temperature or loading dependence used in the reacting mixture \cite[ESI Tables~S1--S2]{agieienkoWhatGasStream2024a}.
+
+\input{tables/residual_summary}
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -41,7 +49,6 @@ The fitted pressures constrain the lower-temperature part of this comparison, an
 \label{fig:pressure}
 \end{figure}
 \input{tables/pressure_sources}
-\input{tables/residual_summary}
 
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}, with the aggregates defined in \cref{sec:data-methods}).
@@ -118,17 +125,14 @@ These observations are not fitted, and no additional concentration-specific para
 \end{figure}
 \FloatBarrier
 
-\subsection{Parameter choices and conditional uncertainty}\label{sec:results-joint}
+\subsection{Cost of the parameter restrictions and conditional uncertainty}\label{sec:results-joint}
 % P:results-joint-01
 \Cref{tab:choice-cost} gives the measured cost of each cumulative restriction defined in \cref{sec:parameters}.
-From the earlier shared set to the present model, five fewer adjustable parameters leave the objective value and the fitted pressure and density deviations nearly unchanged and reduce the number of parameters at bounds, while the deviation of the pressures that are not fitted rises slightly.
-The present model is the most restricted set whose fitted pressure and density deviations do not exceed those of the earlier shared set; every further restriction in \cref{tab:choice-cost} has larger fitted and not-fitted pressure deviations than the present model.
+From the 16-parameter calibration to the present model, five fewer adjustable parameters leave the objective value and the fitted pressure and density deviations nearly unchanged and reduce the number of parameters at bounds, while the deviation of the pressures that are not fitted rises slightly.
+The present model is the most restricted set whose fitted pressure and density deviations do not exceed those of the 16-parameter calibration; every further restriction in \cref{tab:choice-cost} has larger fitted and not-fitted pressure deviations than the present model.
 The cumulative changes quantify the cost of the selected assumptions, not the isolated physical effect of each restriction.
-Tables~\ref{tab:species-parameters} and \ref{tab:interaction-matrix} list the adopted species and interaction values; the reaction laws are in \cref{tab:reaction-equilibrium-constants}.
 
 \input{tables/choice_cost}
-\input{tables/species_parameters}
-\input{tables/interaction_matrix}
 
 % P:results-parameter-interpretation
 Only the \MEAH--\MEACOO interaction is at a bound for the present model; its lower-bound value doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}.
@@ -147,17 +151,26 @@ Because the fitting roles differ, these values do not define an across-role mode
 Their published fitting account does not establish whether every pressure and species observation was fitted; the mixed-role labels in \cref{tab:same-data} preserve that uncertainty.
 
 % P:results-literature-matched
-On the 19 identical Ma'mun observations (\cref{tab:matched-pressure}) \cite{Mamun2005}, the present model has a larger pressure deviation than the earlier shared set and than the PC-SAFT calculation of Baygi and Pahlavanzadeh, and a smaller one than the SAFT-HR calculation of Najafloo and Zarei.
+On the 19 identical Ma'mun observations (\cref{tab:matched-pressure}) \cite{Mamun2005}, the present model has a larger pressure deviation than the 16-parameter calibration and than the PC-SAFT calculation of Baygi and Pahlavanzadeh, and a smaller one than the SAFT-HR calculation of Najafloo and Zarei.
 Zhang fitted these data, whereas Baygi and Najafloo describe ternary calculations outside their fitting objectives \cite[Table~9]{Zhang2011}\cite[Table~5]{Baygi2015,Najafloo2018}.
 Najafloo's detailed methods and conclusion differ in their fitting description, and equivalence of its pressure AAD formula is inferred rather than explicitly defined.
 Published aggregate errors on other datasets are not converted into comparisons on common observations when their observation selection or property basis cannot be reconstructed.
 
 \input{tables/matched_pressure}
 
+\subsection{Parameters shared with Part II}\label{sec:results-shared}
+% P:results-shared
+\Cref{tab:shared-parameters} lists, rounded for display, the shared coefficient set held fixed in Part II; the component charges, segment counts, association topology, electrostatic model choices and standard states that transfer with it are defined in \cref{sec:theory} and Section~\ref{supp-sec:s-shared}.
+It includes water, \COtwo, hydronium, hydroxide, bicarbonate and carbonate, their shared interactions and R1--R3 laws.
+The poorly determined water--bicarbonate interaction, assumed dielectric behavior in loaded solutions and source-correlation extrapolation are the shared inputs most likely to limit transfer.
+
+\needspace{8\baselineskip}
+\input{tables/shared_parameters}
+
 \subsection{Scope and limitations}\label{sec:limits}
 % P:results-limits
 These results support the present model as a calibration, with calculations at fixed parameters, against data seen during development; no comparison establishes independent validation.
-The present model also has measured weaknesses: on the 19 Ma'mun observations, the restrictions raise the pressure AARD from 19.43\,\% for the earlier shared set to 33.47\,\% for the present model, and at \SI{393.15}{\kelvin} the Kim--Svendsen heat RMSE of the present model, \SI{31.77}{\kilo\joule\per\mole} \COtwo, exceeds the \SI{29.49}{\kilo\joule\per\mole} \COtwo of the Polley--Hedengren parameters.
+The present model also has measured weaknesses: on the 19 Ma'mun observations, the restrictions raise the pressure AARD from 19.43\,\% for the 16-parameter calibration to 33.47\,\% for the present model, and at \SI{393.15}{\kelvin} the Kim--Svendsen heat RMSE of the present model, \SI{31.77}{\kilo\joule\per\mole} \COtwo, exceeds the \SI{29.49}{\kilo\joule\per\mole} \COtwo of the Polley--Hedengren parameters.
 The parameter uncertainty is conditional on this fit and therefore excludes model discrepancy and reaction-law uncertainty.
 The absence of an additional liquid rests on finite searches rather than a global proof.
 The R1--R3 temperature range is Austgen's correlation range, not demonstrated measurement coverage, and R4, R5 and the unloaded dielectric law are extrapolated beyond their direct source constraints.
