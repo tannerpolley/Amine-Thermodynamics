@@ -64,8 +64,6 @@ The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.
 The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}.
 The value used here, 0.036305439, is the constant fitted by least squares with the epcsaft package to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
 
-
-
 % P:supplement-19
 The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA dielectric coefficients to permittivities.
 In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
@@ -76,12 +74,9 @@ At the measurement temperature, two coefficient pairs give identical permittivit
 The larger-volume solution is used here; the permittivity data alone do not distinguish these solutions, so that selection is a model assumption.
 The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperature or loading dependence; direct static-permittivity data over the reacting domain are missing from this calibration, so extrapolation remains a model assumption.
 
-
-
-
 \section{Objective scales and weights}\label{sec:s-objective}
 % P:supplement-objective-00
-Table~\ref{tab:objective-groups} gives the scales, weights and contributions to the joint objective of main-text Eq.~\ref{main-eq:fit-objective}.
+Table~\ref{tab:objective-groups} gives the scales, weights and contributions to the joint objective of main-text Eq.~(\ref{main-eq:fit-objective}).
 Pressure residuals are log ratios with unit scale; other residuals divide a difference by a scale in the observable's units.
 Species fractions and amount ratios use the assigned scale $0.1y^{\mathrm{obs}}+0.001$.
 The fitted heat-capacity scale is $0.02C_P^{\mathrm{obs}}/n_{\mathrm{feed}}$ in J/(mol feed K), not a mass-specific heat capacity.
@@ -102,7 +97,7 @@ Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loadi
 The calculations adopt the loading $\alpha$ printed in Hartono's Table~3.
 The accompanying printed \COtwo mole fractions imply different loadings under the stated solvent composition; that source inconsistency remains unresolved.
 The density comparisons and conditional parameter errors therefore depend on the adopted printed-loading convention.
-The secant construction in main-text Eq.~\ref{main-eq:density-scale} combines these with loading uncertainty.
+The secant construction in main-text Eq.~(\ref{main-eq:density-scale}) combines these with loading uncertainty.
 These scales therefore do not uniformly represent standard uncertainties.
 
 % P:supplement-sources
@@ -122,7 +117,7 @@ Table~\ref{tab:supplement-check-values} expands the main-text reproduction state
 \input{tables/supplement_check_values}
 
 % P:supplement-kim
-The primary common-row Kim comparison includes calculated intervals whose final loading is at most 0.60 mol \COtwo/mol total MEA.
+The primary Kim comparison on common intervals includes calculated intervals whose final loading is at most 0.60 mol \COtwo/mol total MEA.
 It includes the two inconsistent printed observations at \SI{393.15}{\kelvin}, run 2, with final loadings 0.078 and 0.445 mol/mol.
 The source-consistent alternative omits those two observations, and a further diagnostic also omits the first interval of each run at that temperature.
 Table~\ref{tab:kim-alternatives} reports these alternatives without choosing a parameter set from them.
@@ -132,7 +127,7 @@ All use the same imposed-pressure approximation and finite-addition definition a
 
 \section{Conditional parameter uncertainty}\label{sec:s-uncertainty}
 % P:supplement-covariance-01
-The ten interior parameters have local covariance from main-text Eq.~\ref{main-eq:conditional-covariance}; the ion--ion interaction at its active lower bound remains fixed.
+The ten interior parameters have local covariance from main-text Eq.~(\ref{main-eq:conditional-covariance}); the ion--ion interaction at its active lower bound remains fixed.
 The weighted Jacobian has rank ten, and the variance factor is 1.01523840323.
 Table~\ref{tab:supplement-fitted-parameters} gives values, bounds and conditional standard errors, and Table~\ref{tab:supplement-correlations} gives the correlations in the same interior-parameter order.
 Correlated errors within one experimental source, model discrepancy, source-law uncertainty and future measurement noise are not included.
@@ -144,26 +139,26 @@ Correlated errors within one experimental source, model discrepancy, source-law 
 The pressure intervals propagate the full correlated covariance rather than independent marginal parameter errors (\cref{fig:pressure-uncertainty}).
 They use the local Gaussian approximation and may extend below zero pressure.
 The inward scans in Table~\ref{tab:bound-profiles} fix the bound interaction at successive fractions of its feasible interval and refit the remaining parameters.
-They converge as numerical diagnostic calculations but have no renewed stability qualification and do not locate confidence limits or a global optimum.
+They converge as numerical diagnostic calculations, but their phase stability was not searched again, and they do not locate confidence limits or a global optimum.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{pressure-uncertainty.pdf}
-\caption{All fitted pressure states with the adopted calculated pressure (points) and correlated conditional intervals (bars). The interval is $\pm1.96$ conditional standard errors with the active-bound parameter fixed; it is not an interval for a new observation. Values are ordered by observation identity.}
+\caption{Calculated pressure of the present model at all fitted pressure states (points) with correlated conditional intervals of $\pm1.96$ conditional standard errors (bars), ordered by observation identity. The active-bound parameter is fixed; the interval is not an interval for a new observation.}
 \label{fig:pressure-uncertainty}
 \end{figure}
 \input{tables/bound_profiles}
 
 \section{Phase-search conditions}\label{sec:s-phase}
 % P:supplement-phase-grid
-The liquid grid contains 1800 states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at both pressure ratios stated in the main text.
+The liquid grid contains 1800 states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at 1.05 and 3.0 times the bubble pressure of the parameter set being searched.
 Another 108 states use the liquid--vapor-search feed at those two ratios.
 The separate 576-state liquid check uses 20, 30 and 40 wt\%, 318.15--\SI{388.15}{\kelvin} and loadings 0.0125--0.5875, at 1.5 times bubble pressure.
 
 % P:supplement-phase-census
 The liquid--vapor search contains six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6 mol/mol.
-Each temperature--loading pair uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure retained as a search input.
-The adopted parameter set is evaluated at these 162 prescribed physical states, without recomputing their pressures from its own bubble pressures.
+Each temperature--loading pair uses three pressure fractions, 0.50, 0.80 and 0.95, of a fixed reference bubble pressure supplied as a search input.
+The present model is evaluated at these 162 prescribed physical states, without recomputing their pressures from its own bubble pressures.
 The feed is 9.7292821 mol MEA, 76.9751925 mol water and $9.7292821\alpha$ mol \COtwo.
 
 % P:supplement-phase-method
@@ -171,7 +166,7 @@ Charge-neutral initial liquid compositions include a uniform composition and nea
 The optimized search and the evaluations at split compositions resolved for other MEA parameter sets are reported separately.
 Only a negative tangent-plane distance followed by a material-conserving finite transfer beyond the numerical energy-error estimate counts as a resolved descent.
 Search completion, residual convergence and positive pressure--density derivatives are numerical checks rather than physical measurements.
-The raw state results identify incomplete or unavailable cases explicitly.
+The state-by-state results identify incomplete or unavailable searches explicitly.
 \section{Shared inputs for Part II}\label{sec:s-shared}
 % P:supplement-shared
 Main-text Table~\ref{main-tab:shared-parameters} lists the shared coefficient values rounded for display; Tables~\ref{tab:supplement-reaction-coefficients}--\ref{tab:supplement-interaction-matrix} and \ref{tab:supplement-shared-remaining} give their unrounded values.
