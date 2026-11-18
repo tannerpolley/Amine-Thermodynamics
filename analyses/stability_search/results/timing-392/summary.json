@@ -1,0 +1,177 @@
+{
+ "case": "MDEA Stage B start-0 search",
+ "wheel_sha256": "8daa31a0535c817c6cf97e0ba2aed637ecbf1b6cdce5e949bd08f82ec2916849",
+ "split_before": {
+  "states": 450,
+  "temperature_K": 353.15,
+  "group_states": 7580,
+  "seed": 392,
+  "mean_seconds": 0.5562954061933528,
+  "engine_seconds": 0.442269383979874,
+  "downstream_seconds": 0.11402602221347884,
+  "available": 419,
+  "unavailable": 31,
+  "mean_available_seconds": 0.4075739157996089,
+  "mean_unavailable_seconds": 2.5664342602249235,
+  "steps": {
+   "predict": {
+    "seconds": 0.3923295114841797,
+    "percent": 70.5253912069547
+   },
+   "measure (trial list and record assembly)": {
+    "seconds": 0.0358089033929961,
+    "percent": 6.437030217098345
+   },
+   "json_dumps": {
+    "seconds": 0.03495828895553132,
+    "percent": 6.284123249326417
+   },
+   "jsonable": {
+    "seconds": 0.02949333734102159,
+    "percent": 5.3017402287824265
+   },
+   "supplied_test": {
+    "seconds": 0.026661994171332075,
+    "percent": 4.792776261406895
+   },
+   "solve": {
+    "seconds": 0.011588596346361252,
+    "percent": 2.083173115819939
+   },
+   "gzip": {
+    "seconds": 0.01128906630013565,
+    "percent": 2.02932941283572
+   },
+   "prepare": {
+    "seconds": 0.009744217475559303,
+    "percent": 1.751626450097358
+   },
+   "tally": {
+    "seconds": 0.0012305866533683406,
+    "percent": 0.22121100402195717
+   },
+   "construct/compile": {
+    "seconds": 0.0010039889535498028,
+    "percent": 0.18047766391240777
+   },
+   "compile": {
+    "seconds": 0.0009410755488918059,
+    "percent": 0.16916831209005423
+   },
+   "branch_counts": {
+    "seconds": 0.0007411151821563383,
+    "percent": 0.13322331514971153
+   }
+  },
+  "predict_parts_available_states": {
+   "bubble_solve": 0.04398472499750279,
+   "parent_solve": 0.012625337095503576,
+   "compile": 0.001007512637260809,
+   "full_search": 0.1588700366943475
+  },
+  "predict_parts_value_matches": true
+ },
+ "split_after": {
+  "states": 450,
+  "temperature_K": 353.15,
+  "group_states": 7580,
+  "seed": 392,
+  "mean_seconds": 0.49943930313345236,
+  "engine_seconds": 0.4260085662160418,
+  "downstream_seconds": 0.07343073691741059,
+  "available": 419,
+  "unavailable": 31,
+  "mean_available_seconds": 0.35639333463016803,
+  "mean_unavailable_seconds": 2.4328670709681672,
+  "steps": {
+   "predict": {
+    "seconds": 0.3774895028735692,
+    "percent": 75.58265849428
+   },
+   "json_dumps": {
+    "seconds": 0.034399921457677715,
+    "percent": 6.887708124261479
+   },
+   "supplied_test": {
+    "seconds": 0.025979271515469818,
+    "percent": 5.201687442793832
+   },
+   "measure (trial list and record assembly)": {
+    "seconds": 0.02571751992085612,
+    "percent": 5.149278352645845
+   },
+   "solve": {
+    "seconds": 0.01130301432241039,
+    "percent": 2.2631407363209006
+   },
+   "gzip": {
+    "seconds": 0.010841116269051175,
+    "percent": 2.170657415432598
+   },
+   "prepare": {
+    "seconds": 0.009408181702229842,
+    "percent": 1.8837487645052102
+   },
+   "tally": {
+    "seconds": 0.0012516241043502103,
+    "percent": 0.25060584869824926
+   },
+   "construct/compile": {
+    "seconds": 0.0009523917245678604,
+    "percent": 0.19069218593583073
+   },
+   "compile": {
+    "seconds": 0.0008762040777946823,
+    "percent": 0.17543755012819978
+   },
+   "branch_counts": {
+    "seconds": 0.0007327167777596818,
+    "percent": 0.14670787284113612
+   }
+  },
+  "predict_parts_available_states": {
+   "bubble_solve": 0.04228915879235471,
+   "parent_solve": 0.012202114694407138,
+   "compile": 0.0009597319495959512,
+   "full_search": 0.15417035931753906
+  },
+  "predict_parts_value_matches": true
+ },
+ "equivalence": {
+  "states": 1863,
+  "same_order": true,
+  "copies": 955,
+  "row_mismatch": [],
+  "detail_mismatch": [],
+  "details_compared": 1863,
+  "supplied_trial_entries": 4754071,
+  "split_record_identical": true,
+  "worker_seconds": {
+   "base": 759.8932149587708,
+   "new": 483.6008410540235
+  },
+  "identical": true
+ },
+ "projection_before": {
+  "available_states": 64979,
+  "unavailable_states": 4120,
+  "worker_seconds": 37057.45462686947,
+  "wall_hours_3_workers": 3.4312457987842104
+ },
+ "projection_after": {
+  "available_states": 64191,
+  "unavailable_states": 3953,
+  "worker_seconds": 32494.36807478228,
+  "wall_hours_3_workers": 3.0087377847020633
+ },
+ "projection_basis": "353.15 K sample means for available and unavailable states x the retained full search availability per key (origin/issue-343-mdea-f2 e3d1cd8, wheel 0962e21d; 0 availability mismatches on the sample) / 3 workers; temperature-group dispatch adds about 2 %",
+ "owner_hours_after": {
+  "Engine: optimized Full search": 0.9163286606437174,
+  "Engine: failed bubble-pressure reference solves (unavailable states)": 0.8635973915280223,
+  "Engine: successful bubble-pressure reference solve": 0.2513503140777816,
+  "Engine: parent solve inside predict": 0.07252462447673043,
+  "Engine: supplied-trial evaluation": 0.1544106868379188,
+  "Downstream: second parent solve for the supplied trials": 0.06718072151572642,
+  "Downstream: Python and per-state output": 0.4633207533796321
+ }
+}

@@ -1,0 +1,241 @@
+{
+ "issue": [
+  391,
+  392
+ ],
+ "engine_commit": "05e94210fa64cf69725e45babc0411d32139df5a",
+ "engine_tree": "2722c912416d745ea24b87cedfec643ff82c731f",
+ "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+ "public_api_signature_identity": "sha256:2966b921979aa7d2e2d843cbcdcc7cb8e7be19bd46f77adccf4daf759ca66afd (unchanged); epcsaft.regression header 5196f1cc",
+ "host": "3 workers under agent-heavy (3-core quota) on a shared host, load average about 14; two qualification shells overlapped",
+ "projection": {
+  "basis": "150 seeded MDEA 353.15 K coarse-grid states timed per state on this wheel against the same keys on e1063366 (instrumented split mode)",
+  "seconds_new": 86.91,
+  "seconds_e1063366": 79.56,
+  "ratio": 1.092,
+  "availability_same": true,
+  "projected": {
+   "amp_search_106_s": 464,
+   "mdea_full_s": 2180,
+   "dea_command_s": 415,
+   "part_i_stability_s": "about 1,440 (#396 estimate)"
+  },
+  "limit_s": 3600,
+  "launched": true,
+  "run": "analyses/stability_search/results/runs/repin-05e94210-split"
+ },
+ "step_1": {
+  "part_i_replay": {
+   "cost": 150.76290287955263,
+   "maximum_relative_difference_from_retained_rows": 2e-12
+  },
+  "part_ii_tests": "19 passed",
+  "prepared_smoke": "analyses/stability_search/results/timing-391/prepared-smoke-05e94210.json: 9 states, all quantities equal, TPD/RT difference 0"
+ },
+ "amp_search_106": {
+  "wall_seconds": 369.3,
+  "reference_seconds": 600,
+  "e1063366_seconds": 425.3,
+  "passed": true,
+  "states": 1906,
+  "available": 1905,
+  "descents": 0,
+  "unavailable": {
+   "key": "compressed:grid:{'water': 13.514746387428197, 'aminomethylpropanol': 1.0}:393.15:0.9:1.05:1.05",
+   "cause": "CentralSolveUnavailable. Trial 1 (no_resolved_descent) stalled at residual 1.349e-10 against EQUILIBRIUM_ROW_RESIDUAL 1e-10.",
+   "engine_issue": "https://github.com/tannerpolley/epcsaft/issues/87"
+  },
+  "versus_e1063366": "all other states and values identical",
+  "versus_retained": "same one state; max |supplied min TPD/RT| difference 8.5e-14, max |pressure| difference 2.2e-7 Pa",
+  "record": "amp-search-106.json"
+ },
+ "mdea_full": {
+  "wall_seconds": 1898.2,
+  "whole_command_seconds": 1948.2,
+  "limit_seconds": 3600,
+  "e1063366_seconds": "1,673 (all workers busy) to 1,995 (sum of three part runs)",
+  "peak_rss_total_MB": 582.46,
+  "states": 11823,
+  "grid_states": 10260,
+  "copies": 955,
+  "available": 10815,
+  "unavailable": 1008,
+  "split": {
+   "data": 103,
+   "grid": 0,
+   "basis": "resolved native or supplied descent (stable.descent)"
+  },
+  "indeterminate": {
+   "data": 74,
+   "grid": 2,
+   "basis": "Full search unavailable for its trial evidence: 54 distinct stationary minima with overlapping value intervals, 20 trial indeterminate, 2 grid trial 1 stalled"
+  },
+  "unavailable_by_part": {
+   "grid": {
+    "bubble_pressure_reference": 776,
+    "trial_stalled": 2
+   },
+   "data": {
+    "supplied_trials_without_positive_donor": 149,
+    "full_search_indeterminate": 74,
+    "engine_exception": 7
+   }
+  },
+  "supplied_trials_without_positive_donor": "149 data states with species 0, 2, 3 removed from the parent: 1,946 of 2,789 supplied trials per state evaluated_without_positive_donor (no_positive_full_support_donor); unchanged from e1063366",
+  "engine_exceptions": "7 cap rows: 4 initial thermochemistry_unavailable (record excludes temperature; rows 362, 376, 378, 380), 3 saturation infeasible (rows 364, 366, 370)",
+  "record": "mdea-full-search.json"
+ },
+ "failed_bubble_solves": {
+  "count": 776,
+  "e1063366": 776,
+  "all_grid": true,
+  "by_cause": {
+   "CentralSolveUnavailable: pressure reference: LOCAL_INFEASIBILITY: infeasible: residual # against EQUILIBRIUM_ROW_RESIDUAL # after # iterations, contraction absent, floor #, amplificatio": 674,
+   "CentralSolveUnavailable: pressure reference: LOCAL_INFEASIBILITY: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected": 56,
+   "CentralSolveUnavailable: pressure reference: MAXITER_EXCEEDED: budget_exhausted: residual # against EQUILIBRIUM_ROW_RESIDUAL # after # iterations, contraction absent, floor #, amplifica": 38,
+   "CentralSolveUnavailable: pressure reference: MAXITER_EXCEEDED: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected": 4,
+   "CentralSolveUnavailable: pressure reference: MAXITER_EXCEEDED: phase L vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; tria": 2,
+   "CentralSolveUnavailable: pressure reference: RESTORATION_FAILURE: stalled: residual # against EQUILIBRIUM_ROW_RESIDUAL # after # iterations, contraction absent, floor #, amplification #": 2
+  },
+  "engine_issues": "epcsaft#9, #71"
+ },
+ "mdea_descents": {
+  "data": 103,
+  "e1063366": 103,
+  "retained_391dfe5d": 95,
+  "gained_since_retained": [
+   "comparison:375:initial",
+   "comparison:376:initial",
+   "comparison:377:initial",
+   "comparison:378:initial",
+   "comparison:379:initial",
+   "comparison:380:initial",
+   "comparison:398:problem",
+   "comparison:405:problem"
+  ],
+  "attribution": "the 8 gained keys are #397's MDEA-water liquid-liquid descents (rows 375-380 at 422.04 K, 398 and 405 at 413.15 K; native branch liquid); each failed on the retained wheel"
+ },
+ "stability_393": {
+  "mdea_vs_e1063366": {
+   "shared": 11823,
+   "changed": 6,
+   "changes": [
+    "2 grid states became unavailable (CentralSolveUnavailable). Trial 1 (no_resolved_descent) stalled at residuals of 1.404e-10 (383.15 K/0.9/1.05x) and 6.228e-10 (373.15 K/1.2/1.05x) against EQUILIBRIUM_ROW_RESIDUAL 1e-10. Engine issue https://github.com/tannerpolley/epcsaft/issues/87",
+    "4 data keys (comparison 163, 164; phase and problem) keep descent and unavailability; native branch label vapor -> none"
+   ],
+   "unchanged_values": "identical",
+   "record": "mdea-search-vs-e1063366.json"
+  },
+  "mdea_vs_retained": {
+   "shared": 11823,
+   "changed": 155,
+   "counts": {
+    "old": {
+     "data": {
+      "states": 1563,
+      "available": 1333,
+      "descent": 95
+     },
+     "grid": {
+      "states": 10260,
+      "available": 9488,
+      "descent": 0
+     }
+    },
+    "new": {
+     "data": {
+      "states": 1563,
+      "available": 1333,
+      "descent": 103
+     },
+     "grid": {
+      "states": 10260,
+      "available": 9482,
+      "descent": 0
+     }
+    }
+   },
+   "changes": [
+    "8 data keys gain a descent (#397)",
+    "141 data keys stay unavailable; Engine status CentralSolveUnavailable -> Available with supplied trials lacking a positive donor",
+    "6 grid keys available -> unavailable: the 2 stalled trials and 4 bubble-pressure failures (313.15 K/0.8, 323.15 K/1.2; both ratios), as on e1063366"
+   ],
+   "record": "mdea-search-vs-retained.json"
+  },
+  "dea_vs_e1063366": {
+   "shared": 1271,
+   "changed": 0,
+   "values": "identical",
+   "record": "dea-search-vs-e1063366.json"
+  },
+  "amp_vs_e1063366": "1 of 1,906 changed (the stalled trial above); see amp-search-106.json"
+ },
+ "part_i": {
+  "run": "analyses/mea_parameter_bundle/results/runs/part-i-05e94210 (ignored)",
+  "law": "solvent-density-temperature (adopted record selected-current-best-parameters.json)",
+  "action_seconds": {
+   "replay": 24,
+   "evidence": 524,
+   "uncertainty": 75,
+   "comparison": 148,
+   "weights": 60,
+   "shared": 41,
+   "checks": 40,
+   "stability": 711
+  },
+  "census": {
+   "states": 162,
+   "incomplete": 0,
+   "descent": 0,
+   "expected": "162/162 complete",
+   "passed": true
+  },
+  "grid": {
+   "states": 1908,
+   "available": 1908,
+   "descent": 0
+  },
+  "offset": {
+   "states": 576,
+   "available": 576,
+   "descent": 0
+  },
+  "supplied": {
+   "compositions": 6121,
+   "evaluated": 991602,
+   "minimum_liquid_tpd": 3.065092460019514e-05,
+   "minimum_tpd": 4.815477097963594e-06,
+   "negative": 0,
+   "unavailable": 0
+  },
+  "stable": true,
+  "versus_e1063366": "all numeric values outside the stability census bit-identical; census: the 37 states incomplete on e1063366 complete, work counters differ (part-i-vs-e1063366.json)",
+  "versus_retained": "differences of the kinds #391 recorded: numerical noise, supplied minima from registry growth 3,507 -> 6,121 (#342), census optimizer endpoints and work without descent (part-i-vs-retained.json)",
+  "c2_baseline": "analyses/mea_parameter_bundle/results/wheel-recheck-05e94210/stability-adopted-law/{census,grid,search}.json: per-state census classification and completeness (162) and grid rows (1,908 dense + 576 offset) for #396 check C2"
+ },
+ "dea": {
+  "whole_command_seconds": 220.9,
+  "e1063366_whole_command_seconds": 380.35,
+  "grid_states": 936,
+  "data_states": 335,
+  "available": 1270,
+  "descents": 0,
+  "unavailable": {
+   "key": "lawson-1976-viii:1:problem",
+   "cause": "CentralSolveUnavailable: trial 1 (unresolved): converged ... reconstruction destroys support; unavailable on e1063366 too"
+  },
+  "replay_cost": 8.033971893129763,
+  "retained_replay_cost": 8.03397189312541,
+  "versus_e1063366": "replay, data rows, curves, conditional uncertainty and keyed deviations bit-identical (44,267 values); search 0 changed states, values identical",
+  "deviations_versus_retained": {
+   "groups": 240,
+   "count_mismatches": 0,
+   "max_relative": 1.709997810167433e-09
+  },
+  "records": "analyses/dea_transfer/results/wheel-recheck-05e94210/"
+ },
+ "not_rerun": [
+  "Part I conditional fit and inward profiles (fits)",
+  "piperazine (out of Part II scope since 2026-11-16)"
+ ]
+}

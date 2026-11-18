@@ -156,9 +156,40 @@ def _init(mapping, trials=None, route=None):
     _TRIALS = trials or {}
     (route.verify if route else verify)()
     _SPEC = (route.bind if route else bind)(mapping)
+    _APPLICABLE.clear()
 
 
 _HELD = None  # (temperature, applicable trials) and its prepared set; one set per worker at a time
+_APPLICABLE = {}  # parent species support -> supplied phases for one worker's shared trial list
+
+
+def _applicable(item, witnesses, support):
+    """Supplied phases, their repeat map and the not-applicable records for one parent species support."""
+    supplied, not_applicable, repeated, unique = [], [], [], {}
+    for witness in witnesses:
+        outside = sorted(set(witness['support']) - support)
+        if outside:
+            not_applicable.append(dict(witness, evidence='not applicable', support_difference=outside))
+            continue
+        identity = (witness.get('kind'), tuple(witness['support']), tuple(witness['composition']), witness['packing'])
+        repeated.append(unique.setdefault(identity, len(supplied)))
+        if repeated[-1] < len(supplied):
+            continue
+        phase = type(item.problem.phases[0])()
+        phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
+        phase.support, phase.composition_guess, phase.packing_guess = witness['support'], witness['composition'], witness['packing']
+        supplied.append(phase)
+    return supplied, not_applicable, repeated, tuple(unique)
+
+
+def _quantities(values):
+    """jsonable(values) for a native map of finite numbers, without one call per value."""
+    try:
+        if type(values) is dict and math.isfinite(sum(values.values())):
+            return values
+    except TypeError:
+        pass
+    return jsonable(values)
 
 
 def _supplied_report(parent, result, supplied, identities):
@@ -179,26 +210,20 @@ def _measure_group(states):
 
 def _measure(state):
     started = time.monotonic()
-    supplied, not_applicable, repeated, unique = [], [], [], {}
+    supplied, not_applicable, repeated, unique = [], [], [], ()
     metadata = {}
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
         if _ROUTE: metadata = _ROUTE.stability_metadata(_SPEC,item)
         support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
         support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
-        for witness in (_TRIALS.get(state['key'], []) if isinstance(_TRIALS, dict) else _TRIALS):
-            outside = sorted(set(witness['support']) - support)
-            if outside:
-                not_applicable.append(dict(witness, evidence='not applicable', support_difference=outside))
-                continue
-            identity = (witness.get('kind'), tuple(witness['support']), tuple(witness['composition']), witness['packing'])
-            repeated.append(unique.setdefault(identity, len(supplied)))
-            if repeated[-1] < len(supplied):
-                continue
-            phase = type(item.problem.phases[0])()
-            phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
-            phase.support, phase.composition_guess, phase.packing_guess = witness['support'], witness['composition'], witness['packing']
-            supplied.append(phase)
+        if isinstance(_TRIALS, dict):
+            supplied, not_applicable, repeated, unique = _applicable(item, _TRIALS.get(state['key'], []), support)
+        else:
+            key = frozenset(support)
+            if key not in _APPLICABLE:
+                _APPLICABLE[key] = _applicable(item, _TRIALS, support)
+            supplied, not_applicable, repeated, unique = _APPLICABLE[key]
         prediction = reg.predict(_SPEC.model, item)
         out = stability_payload(prediction)
         if prediction.stability is not None:
@@ -213,9 +238,9 @@ def _measure(state):
                 if prediction.pressure_reference is not None:
                     parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
                 result = eq.solve_equilibrium(_SPEC.model,parent)
-                report = _supplied_report(parent, result, supplied, tuple(unique))
+                report = _supplied_report(parent, result, supplied, unique)
                 out['supplied_parent_pressure_Pa'] = result.pressure
-                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=jsonable(t.quantities),message=t.message) for t in report.trials]
+                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=_quantities(t.quantities),message=t.message) for t in report.trials]
                 out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
                 if len(report.trials)==len(supplied):
                     out['supplied_trials'] = [out['supplied_trials'][i] for i in repeated]
@@ -236,7 +261,9 @@ def _measure(state):
     row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
     if _ROUTE is not None and hasattr(_ROUTE, 'details'):
         path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
-        path.write_bytes(gzip.compress(json.dumps(jsonable(row), allow_nan=False).encode(), compresslevel=1, mtime=0))
+        plain = jsonable({k: v for k, v in row.items() if k != 'supplied_trials'})  # supplied trials are built JSON-ready
+        plain = {k: row[k] if k == 'supplied_trials' else plain[k] for k in row}
+        path.write_bytes(gzip.compress(json.dumps(plain, allow_nan=False).encode(), compresslevel=1, mtime=0))
         row.update(details=str(path.relative_to(_ROUTE.out)), descent=descent(row), supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
         for field in ('supplied_trials', 'not_applicable_supplied_trials'):
             row.pop(field, None)

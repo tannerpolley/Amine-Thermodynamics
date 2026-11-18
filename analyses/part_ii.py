@@ -215,8 +215,25 @@ class Route:
                     if field in row:
                         states.append(dict(key=row[field], problem=row[field]))
         states.extend(dict(key=r['problem'],problem=r['problem']) for r in spec.inputs['observations']['phase_states'])
-        states.extend(stable.states(self.config['stocks'],self.config['loadings']))
+        states.extend(stable.states(*self.grid_axes(spec)))
         return list({r['key']:r for r in states}.values())
+
+    def grid_axes(self, spec):
+        """#337 rule (b) grid from the declared fitted stocks and data loadings: 0.1 mol/mol loading steps from 1e-5 to the
+        largest data loading, and fitted concentrations within 1 wt% of the lowest of their group searched once, at that lowest."""
+        loadings = self.config['loadings']
+        if not self.config['stocks']:
+            return [], []
+        assert loadings[0]==1e-5, 'Part II grid loadings start at 1e-5 mol/mol'
+        top = loadings[-1]
+        loadings = [1e-5]+[round(.1*k,4) for k in range(1,math.ceil(top/.1-1e-9))]+[top]
+        masses = {c['component_id']:c['fixed']['molar_mass']['value']['magnitude'] for c in epcsaft.parameters.document_mapping(spec.parameters)['components']}
+        weight = lambda stock: 100*masses[self.config['amine']]*stock[self.config['amine']]/math.fsum(masses[c]*n for c,n in stock.items())
+        stocks = []
+        for stock in sorted(self.config['stocks'], key=weight):
+            if not stocks or weight(stock)-weight(stocks[-1])>1.:
+                stocks.append(stock)
+        return stocks, loadings
 
     def stability_row(self, spec, state, scale):
         if 'cap_record' in state:
@@ -298,6 +315,20 @@ class Route:
                 if state['key'] not in row['sources']: row['sources'].append(state['key'])
         return list(copies.values())
 
+    def same_calculations(self, point, states):
+        """Data-state key -> the first key whose search the Engine receives identically; grid keys differ by construction."""
+        spec, first, same = self.bind(point), {}, {}
+        for state in states:
+            if state['key'].startswith('grid:'):
+                continue
+            try:
+                item = self.stability_row(spec, state, 1.)
+            except Exception:
+                continue  # measured on its own, where the refusal is recorded
+            identity = json.dumps(calculation_declaration([item.problem, item.pressure_reference, item.pressure_ratio if item.pressure_reference is not None else None, item.stability_options.trials]), sort_keys=True)
+            same[state['key']] = first.setdefault(identity, state['key'])
+        return {key: source for key, source in same.items() if key != source}
+
     def grid(self, point, states, *, trial_set=None):
         registry = (dict(amine=self.config['amine'],species=self.config['species'],trials=list(trial_set)) if trial_set is not None else
                     self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record']))
@@ -316,7 +347,9 @@ class Route:
             return cache[identity]
         self.details = self.out/('search-'+str(len(list(self.out.glob('search-*.json')))))
         self.details.mkdir(parents=True, exist_ok=True)
-        measured = stable.grid(point, states, trials, route=self)
+        copies = self.same_calculations(point, states)
+        rows = {r['key']: r for r in stable.grid(point, [s for s in states if s['key'] not in copies], trials, route=self)}
+        measured = [rows[s['key']] if s['key'] not in copies else dict(rows[copies[s['key']]], key=s['key'], seconds=0., same_calculation_as=copies[s['key']]) for s in states]
         for row in measured:
             for witness in row.get('witnesses',[]):
                 witness.setdefault('branch', density_branch([witness]))
