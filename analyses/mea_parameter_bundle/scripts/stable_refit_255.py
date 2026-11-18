@@ -150,8 +150,9 @@ def bind(mapping):
         d.AN = saved
 
 
-def _init(mapping, trials=None, route=None):
-    global _SPEC, _TRIALS, _ROUTE, _HELD
+def _init(mapping, trials=None, route=None, capture=False):
+    global _SPEC, _TRIALS, _ROUTE, _HELD, _CAPTURE
+    _CAPTURE = capture
     _ROUTE, _HELD = route, None  # a forked worker must not inherit a set prepared for the parent's model
     _TRIALS = trials or {}
     (route.verify if route else verify)()
@@ -231,6 +232,19 @@ def _measure(state):
                                 for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates]
         out['parent_kind'] = item.problem.phases[0].kind.name
         out['optimized_available'] = out['available']
+        if _CAPTURE:
+            out['optimized_trials'] = [] if prediction.stability is None else [
+                dict(composition=list(t.composition), evidence=t.evidence, message=t.message, seed=t.seed,
+                     resolved_descent=t.resolved_descent, quantities=_quantities(t.quantities),
+                     optimizer_success=t.optimizer.success) for t in prediction.stability.report.trials]
+            if prediction.pressure_reference is not None and prediction.pressure_reference.value is not None:
+                parent = item.problem
+                parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
+                solved = eq.solve_equilibrium(_SPEC.model, parent)
+                out['parent'] = dict(success=solved.requested_tolerance_met, message=solved.message,
+                                     temperature=solved.temperature, pressure=solved.pressure,
+                                     x=list(solved.phase_mole_fractions(0)) if solved.requested_tolerance_met else [],
+                                     rho=solved.molar_densities[0] if solved.requested_tolerance_met else None)
         if supplied:
             out['supplied_available'], out['supplied_trials'] = False, []
             try:
@@ -270,7 +284,7 @@ def _measure(state):
     return row
 
 
-def grid(mapping, chosen, trials=None, *, route=None):
+def grid(mapping, chosen, trials=None, *, route=None, capture=False):
     """Fresh Full searches at one parameter mapping; each worker task is one temperature's states, largest first."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
@@ -281,7 +295,7 @@ def grid(mapping, chosen, trials=None, *, route=None):
     groups = sorted(groups.values(), key=len, reverse=True)
     workers = min(route.workers if route else CORES, len(groups))
     measured = [None]*len(chosen)
-    with ProcessPoolExecutor(workers, initializer=_init, initargs=(mapping, trials, route)) as pool:
+    with ProcessPoolExecutor(workers, initializer=_init, initargs=(mapping, trials, route, capture)) as pool:
         for indices, rows in zip(groups, pool.map(_measure_group, [[chosen[i] for i in g] for g in groups])):
             for i, row in zip(indices, rows, strict=True):
                 measured[i] = row
@@ -344,7 +358,7 @@ def endpoint_mapping(start, report, declared):
         for family, target, factor in q.get('targets', []):
             identity = (f'component/{target}/{family}' if isinstance(target, str)
                         else f"pair/{'/'.join(sorted(target))}/" + ('k_ij/reciprocal_temperature_slope' if family == 'k_ij_reciprocal_temperature_slope' else family))
-            updates[identity] = report['physical'][index]
+            updates[identity.replace('/ion_suppression_coefficient', '/ion_specific_suppression_coefficient')] = report['physical'][index]
             index += 1
     fitted = {q['name'] for q in declared if q.get('kind') in ('reaction_coordinate', 'reaction_enthalpy_shift')}
     for entry in report['reactions']['aqueous']:
@@ -430,12 +444,19 @@ def acceptance(candidate, baseline):
 def _census(task):
     import phase_diagnosis_255 as p255
     mapping, state, path, *previous = task
+    keep_refusals = len(previous) > 1 and previous[1]
     if previous and previous[0]:
         original = p255.f.stability
-        p255.f.stability = lambda model, problem, result: original(model, problem, result, supplied=previous[0])
+        p255.f.stability = lambda model, problem, result: original(
+            model, problem, result, supplied=previous[0], retained=original(model, problem, result))
     row = {k: state[k] for k in ('index', 'temperature_K', 'loading', 'pressure_Pa')}
     try:
         p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
+    except epcsaft.EosError as error:
+        if not keep_refusals:
+            raise
+        raw = read(path) if path.exists() else row
+        s.write_json(path, dict(raw, classification='unavailable', failure=str(error)))
     finally:
         if previous and previous[0]:
             p255.f.stability = original
@@ -449,14 +470,16 @@ def _census(task):
     return raw, reduced
 
 
-def census(mapping, name, trials=None):
+def census(mapping, name, trials=None, *, indices=None, keep_refusals=False):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
+    if indices is not None:
+        chosen = [x for x in chosen if x['index'] in indices]
     tmp = OUT / name / 'census-tmp'
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), [])) for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]

@@ -1,0 +1,32 @@
+# Hajj, Pré and Curet (2024), p. 9, Table 1, Zotero DEU5G2C5
+# PDF SHA-256 ffbaa92067f598d8b808a5becc934e62d76748918be57c2de28d59f9af86e30f
+# #265 source-values.csv SHA-256 5053e2d8dabbb5177a2c096dd113d652758f0ccc649d90e74b388d2b4170cdff
+[[datasets]]
+name = "Hajj 2024 loaded MEA"
+group = "Hajj"
+role = "calibration"
+constructor = "observation"
+kind = "bulk_relative_permittivity"
+unit = "dimensionless"
+arguments = { observed = "$epsilon", form = "difference", phase = "L", scale = 3.2 }
+weight = 0.03571428571428571
+filter = {}
+temperature_domain = [293.15, 353.15]
+template = "256-problem"
+path = "../mea_parameter_bundle/results/permittivity-refit/hajj-table-1.csv"
+sha256 = "935ad380a0b7c4e1d5bf311ac6129e1c3d8b9269c0e2f14d4c3c903d7fc647c7"
+[ datasets.columns ]
+observation_order = "observation_order"
+v3 = "T_K"
+v5 = "carbon"
+epsilon = "epsilon"
+v4 = "P"
+v6 = "amine"
+v7 = "water"
+v8 = "zero"
+v9 = "zero"
+v10 = "zero"
+v11 = "zero"
+v12 = "zero"
+v13 = "zero"
+v14 = "tolerance"

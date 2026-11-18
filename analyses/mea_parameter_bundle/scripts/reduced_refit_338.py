@@ -165,7 +165,8 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
     assert all(r.s.parameter_values(mapping)[k]==v for k,v in fixed.items())
     declared = report['declared']
     changed = {q['identity'] for q in declared}
-    changed.update(f'component/{target}/{family}' for q in declared for family,target,_ in q.get('targets',[]) if isinstance(target,str))
+    changed.update(f'component/{target}/{family}'.replace('/ion_suppression_coefficient', '/ion_specific_suppression_coefficient')
+                   for q in declared for family,target,_ in q.get('targets',[]) if isinstance(target,str))
     assert all(v == r.s.parameter_values(mapping)[k] for k,v in r.s.parameter_values(start).items() if k not in changed and k not in fixed)
     write(f'{name}/checks.json',dict(endpoint_replay_relative_difference=a.relative(cost,report['data_cost'] if report['data_cost'] is not None else report['final_cost']) if ok else None,fixed_values_identical=True,other_parameters_unchanged=True))
     return mapping if ok else None, report
@@ -590,8 +591,8 @@ def campaign():
         write('summary.json',summaries)
 
 
-def scores(name, mapping):
-    root=a.OUT/'paper-evidence' if name=='F0' else OUT/'evidence'/name
+def scores(name, mapping, *, root=None, groups_only=False):
+    root=root or (a.OUT/'paper-evidence' if name=='F0' else OUT/'evidence'/name)
     fitted=r.read(OUT/name/'replay.json')['rows']
     groups={}
     for label,group,quantity,_ in r.GROUPS:
@@ -609,6 +610,8 @@ def scores(name, mapping):
     kim_ids={x['record_id'] for x in e.rows(a.OUT/'paper-evidence/kim2007-heat-pathways/kim-heat.csv') if float(x['T_K']) in (313.15,353.15) and x['interval_status']=='available'}
     groups['not fitted: Kim heats']=[dict(observed=x['observed'],predicted=x['predicted'],cost=.5*float(x['scaled_residual'])**2 if x['scaled_residual'] else None) for x in e.rows(root/'kim2007-heat-pathways/kim-heat.csv') if x['record_id'] in kim_ids]
     groups['not fitted: Han densities']=[dict(observed=x['observed'],predicted=x['value'],cost=.5*x['residual']**2) for x in r.read(root/'density-268/density.json')['result'] if x['row']['source']=='Han2012']
+    if groups_only:
+        return {k.removeprefix('not fitted: '):v for k,v in groups.items() if k.startswith('not fitted: ')}
     groups['not fitted: broad heat capacities']=[dict(observed=x['observed_kJ_kg_K'],predicted=x['predicted_kJ_kg_K'],cost=.5*x['residual']**2) for x in r.read(root/'heat-capacity-264.json')['rows'] if x['group']=='broad Cp']
     spec=r.bind(mapping)
     bottinger=[]
