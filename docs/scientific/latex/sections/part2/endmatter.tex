@@ -1,8 +1,8 @@
 \section*{Data and code availability}
 % P:p2-availability-01
 Processed observations, parameter files, numerical results and presentation scripts are provided with the public electronic data at \url{https://github.com/tannerpolley/Amine-Thermodynamics}.
-Presentation code reads the stored calculations without evaluating the thermodynamic model again.
-Input checksums and the source of every displayed numerical result are listed in the accompanying numerical-source index.
+Presentation code reads the archived results without evaluating the thermodynamic model again.
+An accompanying index lists the checksum of each input file and the source file of every displayed number.
 The calculations use the \texttt{epcsaft} package, version 1.3.0; the software index in the archive deposit identifies the exact calculation build.
 Deposit identifier: \textit{[Zenodo DOI supplied in the final submission]}. Referee access to the compiled epcsaft package: \textit{[access arrangement supplied in the final submission]}.
 Third-party measurements retain their source terms.
@@ -19,7 +19,7 @@ The author declares no known competing financial interests or personal relations
 % P:p2-credit-01
 Tanner W. Polley: Conceptualization, methodology, software, formal analysis, investigation, data curation, writing--original draft, writing--review and editing, visualization.
 
-\section*{Declaration of generative AI and AI-assisted technologies}
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 % P:p2-ai-01
 During preparation of this manuscript, OpenAI Codex and Claude (Anthropic) were used to draft and revise manuscript text, check computational consistency, and assist with source checking.
 The author reviewed and edited the content and takes responsibility for the final manuscript.
@@ -38,19 +38,31 @@ $n$ & Total amount of molecular and ionic species & mol & \ref{eq:p2-epcsaft-res
 $R$ & Gas constant & J/(mol K) & \ref{eq:p2-epcsaft-residual-split} \\
 $T,T_{\mathrm{ref}}$ & Temperature and correlation reference temperature & K & \ref{eq:p2-epcsaft-residual-split} \\
 $K$ & Equilibrium constant on the stated reference basis & 1 & \ref{eq:p2-reaction-shift} \\
-$\delta h$ & Hydrolysis enthalpy increment & J/mol & \ref{eq:p2-reaction-shift} \\
+$a,b,d$ & Coefficients of the equilibrium-constant correlation $\ln K=a+b/T+dT$ & 1; K; 1/K & text Sect.~\ref{sec:p2-reactions} \\
+$\delta h$ & Enthalpy increment of carbamate hydrolysis (R4) & J/mol & \ref{eq:p2-reaction-shift} \\
 $C$ & Weighted least-squares cost & 1 & \ref{eq:p2-objective} \\
 $w_j,r_j$ & Weight and scaled residual of observation $j$ & 1 & \ref{eq:p2-objective} \\
-$q_j^c,q_j^o$ & Calculated and observed values of observation $j$ & varies & \ref{eq:p2-deviation} \\
-$N$ & Number of observations with a defined relative error & 1 & \ref{eq:p2-deviation} \\
-$\alpha$ & Added carbon dioxide per analytical amine & mol/mol & -- \\
-$w_A$ & Unloaded amine mass fraction & 1 & -- \\
+$p_j,h_j$ & \COtwo partial pressure and integral absorption heat of observation $j$ & Pa; J/mol & \ref{eq:p2-objective} \\
+$y_j^{\mathrm{calc}},y_j^{\mathrm{obs}}$ & Calculated and observed values of observation $j$ & varies & \ref{eq:p2-deviation} \\
+$N,N_{\mathrm{rel}}$ & Number of observations; number with a defined relative deviation & 1 & \ref{eq:p2-deviation} \\
+$\alpha$ & Added carbon dioxide per analytical amine & mol/mol & text Sect.~\ref{sec:p2-data} \\
+$w_A,m_A,m_w$ & Unloaded amine mass fraction; amine and water masses & 1; kg & text Sect.~\ref{sec:p2-data} \\
 $x_i,y_i$ & True-species liquid and vapor mole fractions & 1 & -- \\
 $P,p_{\COtwo}$ & Total and carbon dioxide partial pressures & Pa & -- \\
 $\sigma,\epsilon/k_B$ & Segment diameter; dispersion energy over Boltzmann constant & \AA; K & -- \\
 $d^{\mathrm{Born}}$ & Born diameter & \AA & -- \\
 $k_{ij}$ & Unlike-pair dispersion interaction & 1 & -- \\
-AARD & Mean absolute relative deviation & \% & \ref{eq:p2-deviation} \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Abbreviations}} \\
+AARD & \multicolumn{3}{@{}l}{Average absolute relative deviation, Eq.~\eqref{eq:p2-deviation}} \\
+AMP & \multicolumn{3}{@{}l}{2-Amino-2-methyl-1-propanol} \\
+DEA & \multicolumn{3}{@{}l}{Diethanolamine} \\
+ePC-SAFT & \multicolumn{3}{@{}l}{Electrolyte perturbed-chain statistical associating fluid theory} \\
+MDEA & \multicolumn{3}{@{}l}{Methyldiethanolamine} \\
+MEA & \multicolumn{3}{@{}l}{Monoethanolamine} \\
+NMR & \multicolumn{3}{@{}l}{Nuclear magnetic resonance} \\
+NRTL & \multicolumn{3}{@{}l}{Non-random two-liquid model} \\
+R1--R5 & \multicolumn{3}{@{}p{.74\linewidth}}{Reactions: water autoprotolysis, \COtwo hydration, bicarbonate dissociation, carbamate hydrolysis, amine dissociation} \\
 \end{longtable}\endgroup
 
 \section*{Acknowledgements}

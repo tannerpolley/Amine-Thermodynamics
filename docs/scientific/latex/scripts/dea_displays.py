@@ -23,105 +23,143 @@ def read(name):
 def emit(name, text):
     outputs[LATEX / name] = text
 
-def esc(text):
-    text = str(text).replace('Lawson-394K','Lawson, higher temperature').replace('Lawson-VIII','Lawson, Table VIII').replace('SeoHong','Seo and Hong').replace('Bottinger-DEA_plus_DEAH',r'B\"ottinger, DEA + cation').replace('Bottinger-DEACOO',r'B\"ottinger, carbamate').replace('Bottinger-HCO3',r'B\"ottinger, bicarbonate')
-    return str(text).replace('&', r'\&').replace('_', r'\_').replace('%', r'\%').replace('^', r'\textasciicircum{}')
+# Data sets: display name, citation key and measured property.
+SETS = {
+    'Lawson': ('Lawson and Garst', 'lawsonGasSweeteningData1976', r'$p_{\COtwo}$'),
+    'Carson': ('Carson et al.', 'carsonEnthalpySolutionCarbon2000', 'integral heat'),
+    'Lawson-394K': ('Lawson and Garst, highest temperature', 'lawsonGasSweeteningData1976', r'$p_{\COtwo}$'),
+    'SeoHong': ('Seo and Hong', 'seoSolubilitiesCarbonDioxide1996', r'$p_{\COtwo}$'),
+    'Lal': ('Lal et al.', 'lalSolubilityH2SCO21985', r'$p_{\COtwo}$'),
+    'Weiland': ('Weiland et al.', 'Weiland1998', 'density'),
+    'Lawson-VIII': ('Lawson and Garst, Table VIII', 'lawsonGasSweeteningData1976', r'$p_{\COtwo}$'),
+    'Bottinger-DEA_plus_DEAH': (r'B\"ottinger et al., DEA + DEAH$^+$', 'Bottinger2008', 'mole fraction'),
+    'Bottinger-DEACOO': (r'B\"ottinger et al., carbamate', 'Bottinger2008', 'mole fraction'),
+    'Bottinger-HCO3': (r'B\"ottinger et al., bicarbonate', 'Bottinger2008', 'mole fraction'),
+    'Cai': ('Cai et al.', 'caiBinaryIsobaricVaporLiquid1996', 'bubble pressure'),
+    'Horstmann': ('Horstmann et al.', 'horstmannPhaseEquilibriumExcess2002', 'excess enthalpy'),
+}
+LAWS = {'carbamate-hydrolysis': 'R4', 'DEA-dissociation': 'R5'}  # reaction numbers as in Part I
+RANGE_NOTE = 'in, out or mixed relative to the measured temperature range of the carbamate hydrolysis constant (R4) and of the DEA dissociation constant (R5); ---: the calculation uses no reaction'
+
+def name(group, cite=False):
+    return SETS[group][0] + (r' \cite{' + SETS[group][1] + '}' if cite else '')
 
 def num(value, digits=3):
     return f'${float(value):.{digits}f}$'
 
-def table(name, caption, headers, rows, widths, long=False):
+def span(values, fmt):
+    return fmt(min(values)) if min(values) == max(values) else fmt(min(values)) + '--' + fmt(max(values))
+
+def table(name, caption, headers, rows, widths, long=False, notes=''):
     columns = ''.join(r'>{\raggedright\arraybackslash}p{' + str(w) + r'\linewidth}' for w in widths)
     head = ' & '.join(headers) + r' \\ \midrule' + '\n'
-    body = '\n'.join(' & '.join(map(str, row)) + r' \\' + ('*' if name == 'dea-all-current' and row[0] in [f'Carbamate hydrolysis, ${c}$' for c in 'abcde'] else '') for row in rows)
+    keep = lambda row: row[0].startswith(r'\addlinespace') or (row[0].startswith('R4, ') and not row[0].endswith('$f$'))
+    body = '\n'.join(' & '.join(map(str, row)) + r' \\' + ('*' if keep(row) else '') for row in rows)
     if long:
         text = r'\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}' + columns + '@{}}\n'
         text += r'\caption{' + caption + r'}\label{tab:p2-' + name + r'}\\' + '\n'
-        text += r'\toprule ' + head + r'\endfirsthead\toprule ' + head + r'\endhead\bottomrule\endfoot' + '\n'
-        text += body + '\n' + r'\end{longtable}\endgroup' + '\n'
+        text += r'\toprule ' + head + r'\endfirsthead\toprule ' + head + r'\endhead\bottomrule\endfoot'
+        if notes:
+            text += r'\bottomrule\multicolumn{' + str(len(widths)) + r'}{@{}p{0.95\linewidth}@{}}{\footnotesize ' + notes + r'}\\\endlastfoot'
+        text += '\n' + body + '\n' + r'\end{longtable}\endgroup' + '\n'
     else:
         text = r'\begin{table}[htbp]\small\setlength{\tabcolsep}{2pt}\caption{' + caption + r'}\label{tab:p2-' + name + '}\n'
         text += r'\begin{tabular}{@{}' + columns + '@{}}\n' + r'\toprule ' + head
-        text += body + '\n' + r'\bottomrule\end{tabular}\end{table}' + '\n'
+        text += body + '\n' + r'\bottomrule\end{tabular}'
+        if notes:
+            text += '\n' + r'\par\smallskip{\footnotesize\raggedright ' + notes + r'\par}'
+        text += r'\end{table}' + '\n'
     emit('tables/part2/' + name + '.tex', text)
 
 params = read(BASE + 'parameter-values.csv')
 p = {r['parameter']: r for r in params}
-fitted_names = [r'$k_{\mathrm{DEAH^+,w}}$', r'$k_{\mathrm{DEACOO^-,w}}$', r'Hydrolysis $a$', r'Hydrolysis $\delta h$ / (J/mol)']
-rows = [[name, num(r['value']), num(r['conditional_SE']), '['+num(r['lower'])+', '+num(r['upper'])+']'] for name, r in zip(fitted_names, params[:4])]
-table('dea-fitted-current', 'DEA fitted parameters with conditional standard errors and bounds. None is on a bound. The hydrolysis level and enthalpy increment refer to the completed correlation (Section~\\ref{sec:p2-model}).', ['Quantity','Value','Standard error','Bounds'], rows, [.28,.15,.17,.32])
+fitted_names = [r'$k_{\mathrm{DEAH^+,w}}$', r'$k_{\mathrm{DEACOO^-,w}}$', r'R4 constant term $a$', r'R4 enthalpy increment $\delta h$']
+rows = [[label + (' / (J/mol)' if r['unit'] == 'J/mol' else ''), num(r['value']), num(r['conditional_SE']), '['+num(r['lower'])+', '+num(r['upper'])+']'] for label, r in zip(fitted_names, params[:4])]
+table('dea-fitted-current', 'Fitted DEA parameters with conditional standard errors and bounds.', ['Parameter','Value','Standard error','Bounds'], rows, [.34,.15,.17,.28],
+      notes='No parameter is on a bound. $a$ and $\\delta h$ refer to the final R4 correlation (Section~\\ref{sec:p2-reactions}).')
 rows = []
 for label, key, digits in [('Segment count','segment_count',4), (r'$\sigma$ / \AA','segment_diameter',4), (r'$\epsilon/k_B$ / K','dispersion_energy_over_k',3), (r'$d^{\mathrm{Born}}$ / \AA','born_diameter',4)]:
     vals = [num(p[s+'/'+key]['value'],digits) if s+'/'+key in p else '---' for s in ['diethanolamine','protonated-diethanolamine','carbamate-anion']]
     rows.append([label,*vals])
-table('dea-fixed-current', 'Fixed DEA species quantities. Neutral DEA values are from Nasrifar and Tafazzol \\cite[Table~2]{Nasrifar2010}; the cation keeps the neutral chain values, and the carbamate is a single sphere (Section~\\ref{sec:p2-model}). Born diameters equal segment diameters. Fixed quantities have no standard error or bounds.', ['Quantity','DEA',r'DEAH$^+$',r'DEACOO$^-$'],rows,[.30,.20,.20,.20])
+table('dea-fixed-current', 'Fixed ePC-SAFT parameters of the DEA species.', ['Parameter','DEA',r'DEAH$^+$',r'DEACOO$^-$'],rows,[.30,.20,.20,.20],
+      notes='Neutral DEA values are from Nasrifar and Tafazzol \\cite[Table~2]{Nasrifar2010}; DEAH$^+$ keeps the neutral-chain values and DEACOO$^-$ is a single sphere (Section~\\ref{sec:p2-species}). Born diameters equal segment diameters.')
 data = read(BASE + 'data-rows.json')
 groups = read(BASE + 'group-deviations.csv')
-rows = []
-for r in groups:
-    if r['model'] != 'F2': continue
-    old = next(x for x in groups if x['model']=='F0' and x['group']==r['group'])
-    marks = []
-    for law in ['DEA-dissociation','carbamate-hydrolysis']:
-        flags = {x['outside_ranges'][law] for x in data if x['group']==r['group']}
-        marks.append('mixed' if len(flags)>1 else ('out' if True in flags else 'in' if False in flags else 'not used'))
-    rows.append([esc(r['group']),r['role'],r['rows']+'/'+r['relative_rows'],num(r['AARD_percent'],2),num(r['bias_percent'],2),num(old['AARD_percent'],2),'/'.join(marks)])
-table('dea-deviations-current', 'DEA deviations by data source and role. Counts are all observations / observations with defined relative error. Bias is calculated minus measured, divided by measured. The Earlier-set column reports DEA refitted on Part I\'s earlier shared parameter set; it is a sensitivity comparison. D/H marks dissociation and hydrolysis source intervals separately.', ['Source / quantity','Role',r'$n/n_{rel}$',r'AARD / \%',r'Bias / \%',r'Earlier-set AARD / \%','D/H'],rows,[.24,.12,.08,.10,.10,.11,.15])
-ranges = read(BASE + 'range-deviations.csv')
-rows = [[esc(r['group']), 'D' if r['law']=='DEA-dissociation' else 'H', 'outside' if r['outside_range']=='True' else 'inside',r['rows'],r['relative_rows'],num(r['AARD_percent'],2)] for r in ranges if r['model']=='F2' and r['law'] in ['DEA-dissociation','carbamate-hydrolysis'] and r['outside_range'] in ['False','True']]
-assert not any(row[0] in ['Cai','Horstmann'] for row in rows), 'Binary comparisons use no reaction correlation'
-table('dea-ranges-current','DEA deviations separated by dissociation measurement interval (D) and hydrolysis source measurement interval (H). Binary comparisons do not use reactions and are omitted here.', ['Source / quantity','Interval','Position',r'$n$',r'$n_{rel}$',r'AARD / \%'],rows,[.33,.12,.14,.08,.08,.14],long=True)
-def quantity(key):
-    if key == 'hydrolysis-a': return fitted_names[2]
-    if key == 'hydrolysis-enthalpy-shift': return fitted_names[3]
-    if key == 'protonated-diethanolamine/charged_molecule_ion':
-        return 'DEA cation, charged-chain self-dispersion retained (1 = yes)'
-    parts = key.split('/')
-    if parts[0] == 'association':
-        species = 'DEA cation' if parts[1] == 'protonated-diethanolamine' else 'DEA'
-        if parts[-1] == 'multiplicity': return f'{species}, number of type-{parts[2]} sites'
-        return f'{species} site {parts[2]}--site {parts[4]} ' + {'energy_over_k': 'association energy / Boltzmann constant', 'volume': 'association volume'}[parts[-1]]
-    if parts[0] in ['DEA-dissociation', 'carbamate-hydrolysis']:
-        return ('DEA dissociation' if parts[0] == 'DEA-dissociation' else 'Carbamate hydrolysis') + ', $' + parts[-1] + '$'
-    if key in ['k-DEAH-water','k-DEACOO-water']: return fitted_names[['k-DEAH-water','k-DEACOO-water'].index(key)]
-    replacements = {'protonated-diethanolamine': 'DEA cation', 'diethanolamine': 'DEA', 'carbamate-anion': 'DEA carbamate', 'bicarbonate-anion': 'bicarbonate', 'carbonate-anion': 'carbonate', 'hydronium-cation': 'hydronium', 'hydroxide-anion': 'hydroxide', 'carbon-dioxide': 'carbon dioxide', 'dispersion_energy_over_k': 'dispersion energy / Boltzmann constant', 'k_ij_reciprocal_temperature_slope': 'reciprocal-temperature interaction slope', 'k_ij': 'dispersion interaction', 'charged_molecule_ion': 'charged-chain indicator', 'energy_over_k': 'association energy / Boltzmann constant', 'DEA-dissociation': 'DEA dissociation', 'hydrolysis-enthalpy-shift': 'hydrolysis enthalpy increment', 'born': 'Born', 'debye_huckel': r'Debye--H\"uckel'}
-    for old, new in replacements.items(): key = key.replace(old,new)
-    return esc(key.replace('_',' ').replace('/',' / '))
-units = {'K^2': r'K$^2$', '1/K^2': r'K$^{-2}$', 'kelvin': 'K', 'angstrom': r'\AA', 'liter / mole': 'L/mol', 'kilogram / mole': 'kg/mol', 'dimensionless': '1', 'elementary-charge': '$e$'}
-rows = [[quantity(r['parameter']),'$' + repr(float(r['value'])).removesuffix('.0') + '$',units.get(r['unit'],r['unit']),r['fitted_or_fixed']] for r in params]
-table('dea-all-current','Complete DEA parameter values. Fitted-coordinate errors and bounds are in the main text; reaction coefficients are completed coefficients, not additional independent fitted quantities. The electronic parameter table retains each value\'s source and basis.', ['Quantity','Value','Unit','Role'],rows,[.42,.30,.14,.09],long=True)
-data = read(BASE + 'data-rows.json')
+
+def marks(group):
+    out = []
+    for law in LAWS:
+        flags = {x['outside_ranges'][law] for x in data if x['group']==group}
+        out.append('mixed' if len(flags)>1 else ('out' if True in flags else 'in' if False in flags else '---'))
+    return out
+
+def composition(group):
+    rs = [r for r in data if r['group']==group]
+    def get(key, scale=1):
+        values = []
+        for r in rs:
+            try: values.append(scale*float(r['row'][key]))
+            except (KeyError, ValueError, TypeError): pass
+        return values
+    g, f4 = (lambda v: f'${v:g}$'), (lambda v: num(v,4))
+    if get('x_water'): return r'$x_{\mathrm{w}}=\,$' + span(get('x_water'), f4), '---'
+    if get('DEA_kmol_per_m3'): amine = span(get('DEA_kmol_per_m3'), f4) + r' kmol/m$^3$'
+    else: amine = span(get('DEA_mass_percent') or get('DEA_mass_fraction', 100), g) + r' wt\%'
+    if group == 'Carson': return amine, span(get('x_CO2'), f4) + r'\textsuperscript{a}'
+    return amine, span(get('alpha_mol_CO2_per_mol_DEA') or get('alpha_mol_CO2_per_mol_amine'), f4)
+
 rows = []
 for group in dict.fromkeys(r['group'] for r in data):
     rs = [r for r in data if r['group']==group]
     t = [r['T_K'] for r in rs]
-    d = ['out' if r['outside_ranges']['DEA-dissociation'] is True else 'in' for r in rs]
-    h = ['out' if r['outside_ranges']['carbamate-hydrolysis'] is True else 'in' for r in rs]
-    mark = lambda v: 'mixed' if len(set(v))>1 else v[0]
-    if all(r['outside_ranges']['R1']=='reaction not used' for r in rs): d=h=['not used']
-    rows.append([esc(group),rs[0]['role'],str(len(rs)),num(min(t),2) if min(t)==max(t) else num(min(t),2)+'--'+num(max(t),2),mark(d),mark(h)])
-table('dea-data-current', "DEA data roles and temperature ranges. D and H give each set's position relative to the DEA dissociation and hydrolysis source intervals (Section~\\ref{sec:p2-methods}): in, out or mixed; binary sets use no reactions. All reactive observations lie inside the R1--R3 source-correlation interval, whose measured coverage is unverified. The DEA--water interaction was fitted beforehand to Horstmann's 365.15 K vapor--liquid equilibria, which are not listed.", ['Source / quantity','Role',r'$n$',r'$T$ / K','D','H'],rows,[.29,.15,.06,.22,.10,.10])
+    rows.append([name(group, cite=True), SETS[group][2], rs[0]['role'], str(len(rs)), span(t, lambda v: num(v,2)), *composition(group), *marks(group)])
+table('dea-data-current', 'Experimental data for the DEA system and their use in fitting.', ['Data set','Property','Role',r'$N$',r'$T$ / K','Composition',r'$\alpha$ / (mol/mol)','R4','R5'],rows,[.195,.095,.10,.035,.13,.12,.13,.06,.06],
+      notes="$N$: number of points. Composition: DEA content of the unloaded solution, or water mole fraction $x_{\\mathrm{w}}$ for the binary sets. R4 and R5: " + RANGE_NOTE + " (Section~\\ref{sec:p2-data}). All data for loaded solutions lie inside the correlation range of R1--R3, whose measured coverage is unverified. The water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\\ \\cite{horstmannPhaseEquilibriumExcess2002}, which are not listed. \\textsuperscript{a}Mole fraction of added \\COtwo.")
+rows = []
+for r in groups:
+    if r['model'] != 'F2': continue
+    old = next(x for x in groups if x['model']=='F0' and x['group']==r['group'])
+    m = marks(r['group'])
+    rows.append([name(r['group']),r['role'],r['rows']+'/'+r['relative_rows'],num(r['AARD_percent'],2),num(r['bias_percent'],2),num(old['AARD_percent'],2),'---' if m == ['---','---'] else '/'.join(m)])
+table('dea-deviations-current', 'Deviations of the present model from the DEA data, by data set and role.', ['Data set','Role',r'$N/N_{\mathrm{rel}}$',r'AARD / \%',r'Bias / \%',r'AARD, less restricted shared set / \%','R4/R5'],rows,[.27,.14,.08,.09,.09,.15,.11],
+      notes="$N/N_{\\mathrm{rel}}$: all points / points with a defined relative deviation. AARD and bias follow Eq.~\\eqref{eq:p2-deviation}; bias is calculated minus measured, divided by measured. Less restricted shared set: DEA refitted on Part I's less restricted calibration (Section~\\ref{sec:p2-shared}), a sensitivity comparison. R4/R5: " + RANGE_NOTE + '.')
+ranges = read(BASE + 'range-deviations.csv')
 rows = []
 for group in dict.fromkeys(r['group'] for r in data):
-    rs = [r for r in data if r['group']==group]
-    fields = {}
-    for r in rs:
-        for key, v in r['row'].items():
-            if key == 'x_CO2' and group != 'Carson': continue
-            if any(t in key.lower() for t in ['fraction','alpha','loading','molality','mass_percent','kmol_per_m3','x_water','x_co2']):
-                try: fields.setdefault(key, []).append(float(v))
-                except (ValueError, TypeError): pass
-    compositions = []
-    labels = {'DEA_mass_percent': r'DEA / wt\%', 'DEA_mass_fraction': r'DEA / wt\%', 'DEA_kmol_per_m3': 'DEA / (kmol per cubic metre)', 'alpha_mol_CO2_per_mol_DEA': 'loading / (mol per mol DEA)', 'alpha_mol_CO2_per_mol_amine': 'loading / (mol per mol amine)', 'x_water': 'water mole fraction', 'x_CO2': 'added carbon dioxide mole fraction'}
-    for key, values in fields.items():
-        if key == 'AMP_mass_percent': continue
-        if key == 'DEA_mass_fraction': values = [100*v for v in values]
-        fmt = (lambda v: f'${v:g}$') if key in ['DEA_mass_percent','DEA_mass_fraction'] else (lambda v:num(v,4))
-        bounds = fmt(min(values)) if min(values)==max(values) else fmt(min(values))+'--'+fmt(max(values))
-        compositions.append(labels[key]+': '+bounds)
-    basis = '; '.join(compositions)
-    rows.append([esc(group),basis or 'See source observation record'])
-table('dea-inventory-current','DEA source composition and loading ranges. Column names preserve each source transformation; mass fractions are dimensionless and loadings are mol/mol.', ['Source / quantity','Retained composition and loading basis'],rows,[.28,.66],long=True)
+    cells = []
+    for law in LAWS:
+        for outside in ['False','True']:
+            hit = [r for r in ranges if r['model']=='F2' and r['group']==group and r['law']==law and r['outside_range']==outside]
+            cells += [hit[0]['rows']+'/'+hit[0]['relative_rows'], num(hit[0]['AARD_percent'],2)] if hit else ['---','---']
+    if set(cells) != {'---'}: rows.append([name(group),*cells])
+    else: assert group in ['Cai','Horstmann'], 'Only the binary comparisons use no reaction correlation'
+top = ' & ' + ' & '.join(r'\multicolumn{2}{@{}l}{' + law + ', ' + side + '}' for law in LAWS.values() for side in ['inside','outside']) + r' \\ '
+table('dea-ranges-current','Deviations of the present model inside and outside the measured temperature ranges of the carbamate hydrolysis constant (R4) and the DEA dissociation constant (R5).', [top + 'Data set',*[r'$N/N_{\mathrm{rel}}$',r'AARD / \%']*4],rows,[.26,.075,.085,.075,.085,.075,.085,.075,.085],
+      notes='$N/N_{\\mathrm{rel}}$: all points / points with a defined relative deviation; ---: no points. The binary sets use no reaction and are omitted. All data for loaded solutions lie inside the correlation range of R1--R3, whose measured coverage is unverified.')
+SPECIES = {'diethanolamine': 'DEA', 'protonated-diethanolamine': r'DEAH$^+$', 'carbamate-anion': r'DEACOO$^-$', 'bicarbonate-anion': r'HCO$_3^-$', 'carbonate-anion': r'CO$_3^{2-}$', 'hydronium-cation': r'H$_3$O$^+$', 'hydroxide-anion': r'OH$^-$', 'carbon-dioxide': r'CO$_2$', 'water': r'H$_2$O'}
+QUANTITY = {'dispersion_energy_over_k': r'dispersion energy $\epsilon/k_B$', 'segment_count': 'segment count', 'segment_diameter': r'segment diameter $\sigma$', 'solvation_factor': 'solvation factor', 'dielectric_volume': r'dielectric volume $d_V$', 'dielectric_temperature': r'dielectric temperature $d_T$', 'charge_number': 'charge number', 'molar_mass': 'molar mass', 'born_diameter': r'Born diameter $d^{\mathrm{Born}}$', 'debye_huckel_diameter': r'Debye--H\"uckel diameter', 'packing_diameter': 'packing diameter', 'charged_molecule_ion': 'charged-chain self-dispersion retained (1 = yes)', 'k_ij': r'$k_{ij}$', 'k_ij_reciprocal_temperature_slope': r'reciprocal-temperature slope of $k_{ij}$'}
+FITTED = dict(zip([r['parameter'] for r in params[:4]], fitted_names))
+
+def quantity(key):
+    """Return the table group and the row label of one parameter key."""
+    parts = key.split('/')
+    if key in FITTED: return 'Fitted parameters', FITTED[key]
+    if parts[0] == 'association':
+        if parts[-1] == 'multiplicity': return 'Association', f'{SPECIES[parts[1]]}, number of type-{parts[2]} sites'
+        return 'Association', f'{SPECIES[parts[1]]}, site {parts[2]}--site {parts[4]} ' + {'energy_over_k': r'association energy $\epsilon^{AB}/k_B$', 'volume': r'association volume $\kappa^{AB}$'}[parts[-1]]
+    if parts[0] in LAWS: return 'Equilibrium-constant correlations', LAWS[parts[0]] + ', $' + parts[1] + '$'
+    return ('Binary dispersion interactions' if len(parts) == 3 else 'Species parameters'), '--'.join(SPECIES[s] for s in parts[:-1]) + ', ' + QUANTITY[parts[-1]]
+
+units = {'K^2': r'K$^2$', '1/K^2': r'K$^{-2}$', 'kelvin': 'K', 'angstrom': r'\AA', 'liter / mole': 'L/mol', 'kilogram / mole': 'kg/mol', 'dimensionless': '1', 'elementary-charge': '$e$'}
+rows, heading = [], None
+for r in params:
+    group, label = quantity(r['parameter'])
+    if group != heading:
+        heading = group
+        rows.append([r'\addlinespace\multicolumn{4}{@{}l}{\textit{' + group + '}}'])
+    rows.append([label,'$' + repr(float(r['value'])).removesuffix('.0') + '$',units.get(r['unit'],r['unit']),r['fitted_or_fixed']])
+table('dea-all-current','Amine-specific parameter values of the DEA model at full precision.', ['Parameter','Value','Unit','Role'],rows,[.44,.30,.12,.09],long=True,
+      notes='Standard errors and bounds of the fitted parameters are in Table~\\ref{main-tab:p2-dea-fitted-current} of the main text. The R4 coefficients $a$ and $b$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: DEA dissociation. The archived parameter file gives the source and basis of each value.')
 # Manuscript figures use only retained observation/curve values and range marks.
 curves = read(BASE + 'curve-data.json')
 def loading(row):

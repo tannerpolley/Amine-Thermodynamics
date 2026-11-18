@@ -1,16 +1,17 @@
-\begin{table}[htbp]\small\setlength{\tabcolsep}{2pt}\caption{DEA data roles and temperature ranges. D and H give each set's position relative to the DEA dissociation and hydrolysis source intervals (Section~\ref{sec:p2-methods}): in, out or mixed; binary sets use no reactions. All reactive observations lie inside the R1--R3 source-correlation interval, whose measured coverage is unverified. The DEA--water interaction was fitted beforehand to Horstmann's 365.15 K vapor--liquid equilibria, which are not listed.}\label{tab:p2-dea-data-current}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.06\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}@{}}
-\toprule Source / quantity & Role & $n$ & $T$ / K & D & H \\ \midrule
-Lawson & fitted & 30 & $310.93$--$380.37$ & mixed & mixed \\
-Carson & fitted & 50 & $298.15$ & in & out \\
-Lawson, higher temperature & not fitted & 7 & $394.26$ & out & out \\
-Seo and Hong & not fitted & 16 & $313.15$--$353.15$ & mixed & mixed \\
-Lal & not fitted & 44 & $313.15$--$373.15$ & mixed & mixed \\
-Weiland & comparison only & 44 & $298.15$ & in & out \\
-Lawson, Table VIII & comparison only & 10 & $298.15$--$366.48$ & mixed & mixed \\
-B\"ottinger, DEA + cation & comparison only & 25 & $293.15$--$333.15$ & mixed & mixed \\
-B\"ottinger, carbamate & comparison only & 25 & $293.15$--$333.15$ & mixed & mixed \\
-B\"ottinger, bicarbonate & comparison only & 25 & $293.15$--$333.15$ & mixed & mixed \\
-Cai & comparison only & 9 & $311.29$--$458.64$ & not used & not used \\
-Horstmann & comparison only & 14 & $363.15$ & not used & not used \\
-\bottomrule\end{tabular}\end{table}
+\begin{table}[htbp]\small\setlength{\tabcolsep}{2pt}\caption{Experimental data for the DEA system and their use in fitting.}\label{tab:p2-dea-data-current}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.195\linewidth}>{\raggedright\arraybackslash}p{0.095\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.035\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.06\linewidth}>{\raggedright\arraybackslash}p{0.06\linewidth}@{}}
+\toprule Data set & Property & Role & $N$ & $T$ / K & Composition & $\alpha$ / (mol/mol) & R4 & R5 \\ \midrule
+Lawson and Garst \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & fitted & 30 & $310.93$--$380.37$ & $25$ wt\% & $0.3760$--$1.1670$ & mixed & mixed \\
+Carson et al. \cite{carsonEnthalpySolutionCarbon2000} & integral heat & fitted & 50 & $298.15$ & $10$--$30$ wt\% & $0.0012$--$0.0049$\textsuperscript{a} & out & in \\
+Lawson and Garst, highest temperature \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & not fitted & 7 & $394.26$ & $25$ wt\% & $0.3210$--$0.7600$ & out & out \\
+Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} & $p_{\COtwo}$ & not fitted & 16 & $313.15$--$353.15$ & $30$ wt\% & $0.4040$--$0.7270$ & mixed & mixed \\
+Lal et al. \cite{lalSolubilityH2SCO21985} & $p_{\COtwo}$ & not fitted & 44 & $313.15$--$373.15$ & $2.0000$ kmol/m$^3$ & $0.0047$--$0.3670$ & mixed & mixed \\
+Weiland et al. \cite{Weiland1998} & density & comparison only & 44 & $298.15$ & $10$--$40$ wt\% & $0.0000$--$0.5000$ & out & in \\
+Lawson and Garst, Table VIII \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & comparison only & 10 & $298.15$--$366.48$ & $50$--$54.5$ wt\% & $0.1860$--$0.7450$ & mixed & mixed \\
+B\"ottinger et al., DEA + DEAH$^+$ \cite{Bottinger2008} & mole fraction & comparison only & 25 & $293.15$--$333.15$ & $20$--$23$ wt\% & $0.0570$--$1.0600$ & mixed & mixed \\
+B\"ottinger et al., carbamate \cite{Bottinger2008} & mole fraction & comparison only & 25 & $293.15$--$333.15$ & $20$--$23$ wt\% & $0.0570$--$1.0600$ & mixed & mixed \\
+B\"ottinger et al., bicarbonate \cite{Bottinger2008} & mole fraction & comparison only & 25 & $293.15$--$333.15$ & $20$--$23$ wt\% & $0.0570$--$1.0600$ & mixed & mixed \\
+Cai et al. \cite{caiBinaryIsobaricVaporLiquid1996} & bubble pressure & comparison only & 9 & $311.29$--$458.64$ & $x_{\mathrm{w}}=\,$$0.0000$--$1.0000$ & --- & --- & --- \\
+Horstmann et al. \cite{horstmannPhaseEquilibriumExcess2002} & excess enthalpy & comparison only & 14 & $363.15$ & $x_{\mathrm{w}}=\,$$0.0636$--$0.9903$ & --- & --- & --- \\
+\bottomrule\end{tabular}
+\par\smallskip{\footnotesize\raggedright $N$: number of points. Composition: DEA content of the unloaded solution, or water mole fraction $x_{\mathrm{w}}$ for the binary sets. R4 and R5: in, out or mixed relative to the measured temperature range of the carbamate hydrolysis constant (R4) and of the DEA dissociation constant (R5); ---: the calculation uses no reaction (Section~\ref{sec:p2-data}). All data for loaded solutions lie inside the correlation range of R1--R3, whose measured coverage is unverified. The water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, which are not listed. \textsuperscript{a}Mole fraction of added \COtwo.\par}\end{table}

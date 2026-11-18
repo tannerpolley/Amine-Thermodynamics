@@ -1,15 +1,20 @@
 \section{Introduction}\label{sec:p2-introduction}
 % P:p2-introduction-01
-Can water, carbon dioxide and inorganic-ion parameters estimated with monoethanolamine (MEA) support reactive thermodynamic calculations for other aqueous amines when only amine-specific quantities are fitted?
-This transfer question concerns both agreement with measurements and the existence of lower-Gibbs-energy phases in the model.
-Part I supplies the explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation and the fixed shared parameters used here \cite{PolleyPartI}.
-The present study considers diethanolamine (DEA, secondary), methyldiethanolamine (MDEA, tertiary) and 2-amino-2-methyl-1-propanol (AMP, hindered primary), in that order.
-They offer different reaction networks through which to examine the same shared parameters.
+Aqueous amines of different classes absorb carbon dioxide through different reactions.
+Primary and secondary amines, such as monoethanolamine (MEA) and diethanolamine (DEA), form carbamate, whereas steric hindrance inhibits carbamate formation in 2-amino-2-methyl-1-propanol (AMP), so that bicarbonate formation dominates \cite[Introduction, p.~1; Abstract]{xuRepresentationEquilibriumSolubility1992}.
+The tertiary amine methyldiethanolamine (MDEA) forms no carbamate, and its liquid-phase reactions are amine protonation and the water and inorganic-carbon equilibria \cite[Sect.~3]{Uyan2015}.
+A thermodynamic model of these solvents therefore shares water, carbon dioxide and the inorganic ions and differs in the amine species and their reactions.
+Part I estimated the parameters of those shared species in a calibration for MEA with the explicit-ion electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) \cite{PolleyPartI}.
+The present study transfers them to DEA (secondary), MDEA (tertiary) and AMP (hindered primary), in that order.
 
 % P:p2-introduction-02
 Published amine models separate parameter estimation from subsequent property calculations in different ways.
-Nasrifar and Tafazzol estimate pure-component PC-SAFT parameters and binary interactions before calculating acid-gas solubility, using ideal liquid activities for chemical equilibrium and grouping ions with water in phase calculations \cite[Sects.~2, 5--6, Tables~2--3]{Nasrifar2010}.
+Nasrifar and Tafazzol estimate pure-component PC-SAFT parameters and binary interactions for MEA, DEA and MDEA before calculating acid-gas solubility, using ideal liquid activities for chemical equilibrium and grouping ions with water in phase calculations \cite[Sects.~2, 5--6, Tables~2--3]{Nasrifar2010}.
+Pahlavanzadeh et al. also use PC-SAFT for MDEA, fit a temperature-dependent MDEA--water interaction to excess enthalpies and then calculate the phase equilibria of the loaded solution \cite[Sects.~3.2.2--3.3]{Pahlavanzadeh2013}.
 Uyan et al. instead use explicit-ion ePC-SAFT for MDEA, transfer neutral and inorganic-ion inputs, and derive protonated-amine inputs from molecular MDEA before calculating reactive pressures \cite[Sects.~4.1--4.3, Tables~3--5]{Uyan2015}.
+Wangler et al. add ion--water interactions fitted to osmotic coefficients, adjust no parameter to gas solubilities in aqueous MDEA, and also calculate the enthalpy of absorption \cite[Sects.~6.1--6.3]{Wangler2018}.
+Cleeton et al. apply ePC-SAFT to simultaneous \COtwo and hydrogen sulfide absorption in aqueous MDEA and find that agreement deteriorates at high MDEA mass fractions \cite[Sects.~3--4]{Cleeton2020}.
+For AMP, Xu et al. represent \COtwo solubility with an extended Debye--H\"uckel activity model and estimate the reaction equilibrium constants and the carbamate stability constant with it \cite[Abstract]{xuRepresentationEquilibriumSolubility1992}.
 These approaches motivate examining what is retained, what is fitted and which observations inform each comparison, rather than assigning a predictive meaning to every calculation outside a final fitting objective.
 
 % P:p2-introduction-03
@@ -20,7 +25,10 @@ Thus pressure agreement alone does not establish the corresponding caloric or sp
 Because ePC-SAFT ion-parameter choices can predict inconsistent liquid--liquid demixing \cite[Sect.~2.4]{Held2014}, each transferred model is also searched for an additional liquid phase, as in Part I \cite[Sect.~3.4]{PolleyPartI}.
 
 % P:p2-introduction-04
-This work retains the shared species and inorganic-carbon chemistry, estimates amine-specific interactions and reaction coefficients, and compares calculated pressures, heats, densities and species with measurements whose fitting roles are stated explicitly.
-Recalculating the 80 fitted predictions from the stored DEA parameters checks numerical reproduction of the fitted solution, and finite phase-stability searches test each fitted model for a lower-Gibbs-energy phase split.
+This work asks whether the water, carbon dioxide and inorganic-ion parameters estimated with MEA can support reactive thermodynamic calculations for other aqueous amines when only amine-specific quantities are fitted.
+This transfer question concerns both agreement with measurements and the existence of lower-Gibbs-energy phases in the model.
+The work retains the shared species and inorganic-carbon chemistry of Part I, estimates amine-specific interactions and reaction coefficients, and compares calculated pressures, heats, densities and species with measurements whose fitting roles are stated explicitly.
+Finite phase-stability searches test each fitted model for a lower-Gibbs-energy phase split.
 For DEA, the shared parameters support the calculation with 4 fitted amine-specific quantities: they describe integral absorption heats and loaded-solution densities closely, and finite searches detect no phase split, but they reproduce \ce{CO2} partial pressures only approximately, with an error in the shape of pressure against loading, and give binary excess enthalpies of the wrong sign.
 Results for MDEA and AMP are pending; a conclusion across all 3 amines awaits them.
+Section~\ref{sec:p2-model} states the Helmholtz energy, the parameters transferred from Part I and the amine species and reactions, Section~\ref{sec:p2-methods} describes the data and the parameter estimation, and Section~\ref{sec:p2-results} reports the results.

@@ -1,74 +1,79 @@
-\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}@{}}
-\caption{Complete DEA parameter values. Fitted-coordinate errors and bounds are in the main text; reaction coefficients are completed coefficients, not additional independent fitted quantities. The electronic parameter table retains each value's source and basis.}\label{tab:p2-dea-all-current}\\
-\toprule Quantity & Value & Unit & Role \\ \midrule
-\endfirsthead\toprule Quantity & Value & Unit & Role \\ \midrule
-\endhead\bottomrule\endfoot
+\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.44\linewidth}>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}@{}}
+\caption{Amine-specific parameter values of the DEA model at full precision.}\label{tab:p2-dea-all-current}\\
+\toprule Parameter & Value & Unit & Role \\ \midrule
+\endfirsthead\toprule Parameter & Value & Unit & Role \\ \midrule
+\endhead\bottomrule\endfoot\bottomrule\multicolumn{4}{@{}p{0.95\linewidth}@{}}{\footnotesize Standard errors and bounds of the fitted parameters are in Table~\ref{main-tab:p2-dea-fitted-current} of the main text. The R4 coefficients $a$ and $b$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: DEA dissociation. The archived parameter file gives the source and basis of each value.}\\\endlastfoot
+\addlinespace\multicolumn{4}{@{}l}{\textit{Fitted parameters}} \\*
 $k_{\mathrm{DEAH^+,w}}$ & $-0.18825647117690014$ & 1 & fitted \\
 $k_{\mathrm{DEACOO^-,w}}$ & $-0.03854869916532117$ & 1 & fitted \\
-Hydrolysis $a$ & $5.869410673201805$ & 1 & fitted \\
-Hydrolysis $\delta h$ / (J/mol) & $0$ & J/mol & fitted \\
-DEA / dispersion energy  /  Boltzmann constant & $269$ & K & fixed \\
-DEA / segment count & $5.2048$ & 1 & fixed \\
-DEA / segment diameter & $2.9477$ & \AA & fixed \\
-DEA / solvation factor & $1$ & 1 & fixed \\
-DEA / dielectric volume & $0.7574830286731348$ & L/mol & fixed \\
-DEA / dielectric temperature & $1155.7835085836484$ & K & fixed \\
-DEA / charge number & $0$ & $e$ & fixed \\
-DEA / molar mass & $0.105137$ & kg/mol & fixed \\
-DEA cation / Born diameter & $2.9477$ & \AA & fixed \\
-DEA cation / Debye--H\"uckel diameter & $2.9477$ & \AA & fixed \\
-DEA cation / dispersion energy  /  Boltzmann constant & $269$ & K & fixed \\
-DEA cation / segment count & $5.2048$ & 1 & fixed \\
-DEA cation / segment diameter & $2.9477$ & \AA & fixed \\
-DEA cation / solvation factor & $1$ & 1 & fixed \\
-DEA cation / charge number & $1$ & $e$ & fixed \\
-DEA cation / molar mass & $0.106145$ & kg/mol & fixed \\
-DEA cation, charged-chain self-dispersion retained (1 = yes) & $1$ & 1 & fixed \\
-DEA carbamate / Born diameter & $6.167209298821595$ & \AA & fixed \\
-DEA carbamate / Debye--H\"uckel diameter & $6.167209298821595$ & \AA & fixed \\
-DEA carbamate / dispersion energy  /  Boltzmann constant & $183.00063128808972$ & K & fixed \\
-DEA carbamate / packing diameter & $5.427144182963003$ & \AA & fixed \\
-DEA carbamate / segment count & $1$ & 1 & fixed \\
-DEA carbamate / segment diameter & $6.167209298821595$ & \AA & fixed \\
-DEA carbamate / solvation factor & $1$ & 1 & fixed \\
-DEA carbamate / charge number & $-1$ & $e$ & fixed \\
-DEA carbamate / molar mass & $0.148139$ & kg/mol & fixed \\
-DEA site a--site b association energy / Boltzmann constant & $1517.6$ & K & fixed \\
-DEA site a--site b association volume & $0.1014$ & 1 & fixed \\
-DEA cation site a--site b association energy / Boltzmann constant & $0$ & K & fixed \\
-DEA cation site a--site b association volume & $0.1014$ & 1 & fixed \\
+R4 constant term $a$ & $5.869410673201805$ & 1 & fitted \\
+R4 enthalpy increment $\delta h$ & $0$ & J/mol & fitted \\
+\addlinespace\multicolumn{4}{@{}l}{\textit{Species parameters}} \\*
+DEA, dispersion energy $\epsilon/k_B$ & $269$ & K & fixed \\
+DEA, segment count & $5.2048$ & 1 & fixed \\
+DEA, segment diameter $\sigma$ & $2.9477$ & \AA & fixed \\
+DEA, solvation factor & $1$ & 1 & fixed \\
+DEA, dielectric volume $d_V$ & $0.7574830286731348$ & L/mol & fixed \\
+DEA, dielectric temperature $d_T$ & $1155.7835085836484$ & K & fixed \\
+DEA, charge number & $0$ & $e$ & fixed \\
+DEA, molar mass & $0.105137$ & kg/mol & fixed \\
+DEAH$^+$, Born diameter $d^{\mathrm{Born}}$ & $2.9477$ & \AA & fixed \\
+DEAH$^+$, Debye--H\"uckel diameter & $2.9477$ & \AA & fixed \\
+DEAH$^+$, dispersion energy $\epsilon/k_B$ & $269$ & K & fixed \\
+DEAH$^+$, segment count & $5.2048$ & 1 & fixed \\
+DEAH$^+$, segment diameter $\sigma$ & $2.9477$ & \AA & fixed \\
+DEAH$^+$, solvation factor & $1$ & 1 & fixed \\
+DEAH$^+$, charge number & $1$ & $e$ & fixed \\
+DEAH$^+$, molar mass & $0.106145$ & kg/mol & fixed \\
+DEAH$^+$, charged-chain self-dispersion retained (1 = yes) & $1$ & 1 & fixed \\
+DEACOO$^-$, Born diameter $d^{\mathrm{Born}}$ & $6.167209298821595$ & \AA & fixed \\
+DEACOO$^-$, Debye--H\"uckel diameter & $6.167209298821595$ & \AA & fixed \\
+DEACOO$^-$, dispersion energy $\epsilon/k_B$ & $183.00063128808972$ & K & fixed \\
+DEACOO$^-$, packing diameter & $5.427144182963003$ & \AA & fixed \\
+DEACOO$^-$, segment count & $1$ & 1 & fixed \\
+DEACOO$^-$, segment diameter $\sigma$ & $6.167209298821595$ & \AA & fixed \\
+DEACOO$^-$, solvation factor & $1$ & 1 & fixed \\
+DEACOO$^-$, charge number & $-1$ & $e$ & fixed \\
+DEACOO$^-$, molar mass & $0.148139$ & kg/mol & fixed \\
+\addlinespace\multicolumn{4}{@{}l}{\textit{Association}} \\*
+DEA, site a--site b association energy $\epsilon^{AB}/k_B$ & $1517.6$ & K & fixed \\
+DEA, site a--site b association volume $\kappa^{AB}$ & $0.1014$ & 1 & fixed \\
+DEAH$^+$, site a--site b association energy $\epsilon^{AB}/k_B$ & $0$ & K & fixed \\
+DEAH$^+$, site a--site b association volume $\kappa^{AB}$ & $0.1014$ & 1 & fixed \\
 DEA, number of type-a sites & $2$ & 1 & fixed \\
 DEA, number of type-b sites & $2$ & 1 & fixed \\
-DEA cation, number of type-a sites & $2$ & 1 & fixed \\
-DEA cation, number of type-b sites & $2$ & 1 & fixed \\
-DEA carbamate / hydronium / dispersion interaction & $0$ & 1 & fixed \\
-DEA carbamate / carbon dioxide / dispersion interaction & $0$ & 1 & fixed \\
-carbon dioxide / DEA / dispersion interaction & $0$ & 1 & fixed \\
-carbon dioxide / DEA / reciprocal-temperature interaction slope & $0$ & K & fixed \\
-carbon dioxide / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-bicarbonate / DEA / dispersion interaction & $0$ & 1 & fixed \\
-DEA carbamate / DEA / dispersion interaction & $0$ & 1 & fixed \\
-carbonate / DEA / dispersion interaction & $0$ & 1 & fixed \\
-DEA / hydronium / dispersion interaction & $0$ & 1 & fixed \\
-DEA / hydroxide / dispersion interaction & $0$ & 1 & fixed \\
-DEA / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-DEA / water / dispersion interaction & $-0.06363352262762448$ & 1 & fixed \\
-DEA / water / reciprocal-temperature interaction slope & $0$ & K & fixed \\
-bicarbonate / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-DEA carbamate / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-carbonate / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-hydroxide / DEA cation / dispersion interaction & $0$ & 1 & fixed \\
-DEA cation / water / reciprocal-temperature interaction slope & $0$ & K & fixed \\
-DEA dissociation, $a$ & $-9.279878441784604$ & 1 & fixed \\
-DEA dissociation, $b$ & $-4214.076107943053$ & K & fixed \\
-DEA dissociation, $c$ & $0$ & 1 & fixed \\
-DEA dissociation, $d$ & $0.009961213370801542$ & 1/K & fixed \\
-DEA dissociation, $e$ & $0$ & K$^2$ & fixed \\
-DEA dissociation, $f$ & $0$ & K$^{-2}$ & fixed \\
-Carbamate hydrolysis, $a$ & $5.869410673201805$ & 1 & fitted \\*
-Carbamate hydrolysis, $b$ & $-2660.2065169272155$ & K & fitted \\*
-Carbamate hydrolysis, $c$ & $0$ & 1 & fixed \\*
-Carbamate hydrolysis, $d$ & $0$ & 1/K & fixed \\*
-Carbamate hydrolysis, $e$ & $0$ & K$^2$ & fixed \\*
-Carbamate hydrolysis, $f$ & $0$ & K$^{-2}$ & fixed \\
+DEAH$^+$, number of type-a sites & $2$ & 1 & fixed \\
+DEAH$^+$, number of type-b sites & $2$ & 1 & fixed \\
+\addlinespace\multicolumn{4}{@{}l}{\textit{Binary dispersion interactions}} \\*
+DEACOO$^-$--H$_3$O$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEACOO$^-$--CO$_2$, $k_{ij}$ & $0$ & 1 & fixed \\
+CO$_2$--DEA, $k_{ij}$ & $0$ & 1 & fixed \\
+CO$_2$--DEA, reciprocal-temperature slope of $k_{ij}$ & $0$ & K & fixed \\
+CO$_2$--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+HCO$_3^-$--DEA, $k_{ij}$ & $0$ & 1 & fixed \\
+DEACOO$^-$--DEA, $k_{ij}$ & $0$ & 1 & fixed \\
+CO$_3^{2-}$--DEA, $k_{ij}$ & $0$ & 1 & fixed \\
+DEA--H$_3$O$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEA--OH$^-$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEA--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEA--H$_2$O, $k_{ij}$ & $-0.06363352262762448$ & 1 & fixed \\
+DEA--H$_2$O, reciprocal-temperature slope of $k_{ij}$ & $0$ & K & fixed \\
+HCO$_3^-$--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEACOO$^-$--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+CO$_3^{2-}$--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+OH$^-$--DEAH$^+$, $k_{ij}$ & $0$ & 1 & fixed \\
+DEAH$^+$--H$_2$O, reciprocal-temperature slope of $k_{ij}$ & $0$ & K & fixed \\
+\addlinespace\multicolumn{4}{@{}l}{\textit{Equilibrium-constant correlations}} \\*
+R5, $a$ & $-9.279878441784604$ & 1 & fixed \\
+R5, $b$ & $-4214.076107943053$ & K & fixed \\
+R5, $c$ & $0$ & 1 & fixed \\
+R5, $d$ & $0.009961213370801542$ & 1/K & fixed \\
+R5, $e$ & $0$ & K$^2$ & fixed \\
+R5, $f$ & $0$ & K$^{-2}$ & fixed \\
+R4, $a$ & $5.869410673201805$ & 1 & fitted \\*
+R4, $b$ & $-2660.2065169272155$ & K & fitted \\*
+R4, $c$ & $0$ & 1 & fixed \\*
+R4, $d$ & $0$ & 1/K & fixed \\*
+R4, $e$ & $0$ & K$^2$ & fixed \\*
+R4, $f$ & $0$ & K$^{-2}$ & fixed \\
 \end{longtable}\endgroup
