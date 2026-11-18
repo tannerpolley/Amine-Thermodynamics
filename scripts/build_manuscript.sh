@@ -13,8 +13,8 @@ if ! command -v latexmk >/dev/null 2>&1; then
 fi
 
 cd "$latex_dir"
-# Part I and its supplement cite each other; repeat them after both have labels.
-for document in supplement part2_supplement main part2 supplement main; do
+# Each part and its supplement cite each other; repeat the supplements, and Part I, after both have labels.
+for document in supplement part2_supplement main part2 supplement part2_supplement main; do
     latexmk -g -pdf -recorder -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
 done
 
