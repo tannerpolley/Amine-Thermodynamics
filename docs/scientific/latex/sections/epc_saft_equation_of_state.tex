@@ -33,14 +33,10 @@ For the neutral species the hard-sphere diameter depends on temperature \cite[Eq
     d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3\epsilon_i}{k_BT}\right)\right],
     \label{eq:hard-sphere-diameter}
 \end{equation}
-with the temperature-dependent water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$; only $\sigma_0$ is fitted, and Section~\ref{supp-sec:s-parameters} gives the coefficients.
+with the temperature-dependent water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$; only $\sigma_0$ is fitted, and Section~\ref{supp-sec:s-parameters} of the Supplementary Material gives the coefficients.
 The ion packing diameter is the temperature-independent value $d_i=0.88\sigma_i$; the Debye--H\"uckel diameter equals $\sigma_i$ for all six ions, and the Born diameter equals the segment diameter for \MEAH and \MEACOO.
 The other four Born diameters remain fixed inputs.
 These diameter choices define the present parameterization; they are not independently measured ion sizes.
-
-
-
-
 
 \subsubsection{Hard-chain contribution}
 % P:theory-contributions-02
@@ -109,7 +105,6 @@ The \COtwo--water, \MEA--water and \MEAH--water interactions have the reciprocal
 with $b_{ij}$ in kelvin.
 The \COtwo--water coefficients are fixed inputs, whereas the \MEA--water and \MEAH--water intercepts and slopes enter the joint fit.
 
-
 \subsubsection{Association contribution}
 % P:theory-contributions-04
 Hydrogen bonding is described by Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}:
@@ -128,7 +123,7 @@ The site fractions are solved at every state.
 
 % P:theory-03
 Water and \MEA each carry one donor and one acceptor site (2B), and only donor--acceptor pairs bond.
-\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$ (\cref{tab:species-parameters}).
+\COtwo carries one donor and one acceptor induced-association site, each bonding only with the water site of the opposite role: it does not self-associate, and the \COtwo--water bonds use $\epsilon^{AB}=\epsilon_w^{AB}/2$ and $\kappa^{AB}=\kappa_w^{AB}$.
 This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}, with water inputs fitted to IAPWS-95 (\cref{sec:results-water}).
 \MEA--water cross-association uses the Wolbach--Sandler rule \cite[Eqs.~6 and 7]{Baygi2015}\cite[Eqs.~7 and 8]{Kleiner2007},
 \begin{equation}
@@ -138,8 +133,7 @@ This induced-association topology \cite{Kleiner2007} follows Schick et al.\ and 
     \label{eq:wolbach-sandler}
 \end{equation}
 and \MEA and \COtwo do not bond with each other.
-The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (Eq.~\ref{eq:association-strength} and Section~\ref{supp-sec:s-parameters}).
-
+The \MEA parameters use Baygi and Pahlavanzadeh's 2B model, with its association volume fitted to their model for the $\sigma_{ij}^3$ convention of the association strength used here (\cref{eq:association-strength} and Section~\ref{supp-sec:s-parameters}).
 
 \subsubsection{Debye--H\"uckel contribution}
 % P:theory-contributions-05
@@ -158,8 +152,6 @@ The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\
     \label{eq:debye-huckel-chi}
 \end{equation}
 Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ in SI units, and $\chi_i$ accounts for the finite ion size; $\chi_i\to1$ as $\kappa_{\mathrm D}d_i^{\mathrm{DH}}\to0$, which recovers the Debye--H\"uckel limiting law.
-
-
 
 \subsubsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
@@ -243,7 +235,7 @@ R1--R3 use the Austgen correlation form \cite[Table~V]{Austgen1991},
 \end{equation}
 where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; R5 is Bates and Pinching \cite[Eq.~10, Table~2, p.~351]{batesAcidicDissociationConstant1951}, also tabulated by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
-All five reaction laws, including their temperature dependence, remain fixed at these literature forms in the adopted parameter set; no fitted reaction-enthalpy adjustment is added.
+All five reaction laws, including their temperature dependence, remain fixed at these literature forms in the present model; no fitted reaction-enthalpy adjustment is added.
 The R1--R3 correlation range is 273.15--\SI{498.15}{\kelvin}, as stated by Austgen et al.\ \cite[Table~V, p.~547, citing Edwards et al.\ (1978)]{Austgen1991}.
 This is the source-correlation range, not verified measurement coverage of the underlying experiments.
 The reacting calculations in this paper use 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.

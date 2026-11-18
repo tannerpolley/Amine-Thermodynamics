@@ -1,7 +1,6 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-00
-Can one equation of state describe the equilibrium, caloric and density properties of loaded aqueous monoethanolamine (MEA) with literature reaction constants and fewer adjustable parameters, without predicting an additional liquid?
-This question matters because absorption pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}.
+In the absorption of carbon dioxide (\COtwo) by aqueous monoethanolamine (MEA), absorption pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}.
 A common Helmholtz energy relates these properties through composition, temperature and volume derivatives.
 Agreement with one property alone does not establish agreement with the others or the correct number of phases.
 
@@ -28,7 +27,7 @@ MDEA does not form carbamate, so this experience does not determine the MEA-ion 
 % P:introduction-prior-mea
 Polley and Hedengren already describe the explicit MEA ions, including carbamate, with ePC-SAFT \cite[Sect.~2.2, App.~B]{polleyReactiveEPCSAFTModeling2026}.
 Their parameters were estimated in separate steps, and their column calculations used empirical caloric properties.
-The present question concerns joint property estimation and phase assessment with one thermodynamic property calculation, rather than the first introduction of explicit MEA ions.
+The present work therefore concerns joint property estimation and phase assessment with one thermodynamic property calculation, rather than the first introduction of explicit MEA ions.
 A joint fit can also shift reaction constants or fit separate amine-ion Born diameters; such freedom can lower the objective, but shifted constants depart from the source reaction laws, and the \COtwo hydrolysis constant is shared with other amines.
 
 \subsection{Property constraints and phase stability}
@@ -46,8 +45,8 @@ Phase searches therefore supply a separate numerical check on a calibration, wit
 
 \subsection{Aim and scope of the series}
 % P:introduction-13
-This work finds that fixed literature reaction laws and Born diameters tied to the amine-ion segment diameters permit a reduced joint calibration with no detected additional-liquid instability in the specified searches.
+This work asks whether one equation of state can describe the equilibrium, caloric and density properties of loaded aqueous MEA with literature reaction constants and fewer adjustable parameters, without predicting an additional liquid.
+It finds that fixed literature reaction laws and Born diameters tied to the amine-ion segment diameters permit a reduced joint calibration with no detected additional-liquid instability in the specified searches.
 The restrictions leave the objective value and the fitted pressure and density deviations of a less restricted 16-parameter calibration nearly unchanged, but they worsen some pressure comparisons outside the fit and leave discrepancies in pressures at other MEA concentrations, minor species and high-temperature heats.
-The paper reviews the ePC-SAFT contributions, reports the cost of each parameter restriction, and compares the adopted parameters with the Polley--Hedengren (2026) parameters and published models on identical observations.
-Because all comparison data were seen during development, these comparisons describe a calibration and calculations at fixed parameters, not independent validation.
+\Cref{sec:theory} reviews the ePC-SAFT contributions and the reaction and caloric relations, \cref{sec:data-methods} describes the data and the parameter estimation, and \cref{sec:mea-system-modeling-results} reports the results, the cost of each parameter restriction, and comparisons with the Polley--Hedengren (2026) parameters and published models on identical observations.
 Part I establishes the MEA formulation and the exact shared inputs; Part II examines their use with other amines.
