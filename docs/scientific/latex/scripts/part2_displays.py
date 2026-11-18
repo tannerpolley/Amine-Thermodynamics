@@ -117,7 +117,7 @@ for i,r in enumerate(read(path)):
  rows.append(['MDEA alternative ion description A3 (Ermatchkov)' if r['record']=='A3' else 'MDEA reported fit (Ermatchkov)',*vals])
 historical=read('analyses/amp_transfer/results/kundu/summary.json')
 rows.append(['AMP (Kundu)',value('analyses/amp_transfer/results/kundu/summary.json',['variants','historical','overall','E_p']),value(A,['old','kundu','overall','E_p']),value(A,['steps','2 #243 limits','kundu','overall','E_p'])])
-table('shared-sensitivity','Same-data pressure AARD (\\%). Each row compares the earlier shared inputs, substitution of the Part I bicarbonate--water interaction and R2 law without refitting the amine, then amine-specific refitting. A3 is a counter-case, not the selected MDEA description. AMP here uses the original bounds; its final bounded fit is reported separately.', ['Amine fit (unfitted source)','Earlier','Substituted','Refitted'],rows,[.48,.13,.13,.13])
+table('shared-sensitivity','Same-data pressure AARD (\\%). Each row compares the shared parameters of an earlier calibration, substitution of the Part I bicarbonate--water interaction and R2 equilibrium-constant correlation without refitting the amine, then amine-specific refitting. A3 is a counter-case, not the selected MDEA description. AMP here uses the original bounds; its final bounded fit is reported separately.', ['Amine fit (unfitted source)','Earlier','Substituted','Refitted'],rows,[.48,.13,.13,.13])
 rows=[]
 for key,title in [('old','Shared substitution; no AMP refit')]+[(k,lab) for k,lab in zip(amp['steps'],['Original AMP limits','Carbamate diameter floor raised','Cation--CO2 interaction widened','Carbamate diameter floor lowered'])]:
  k=['old'] if key=='old' else ['steps',key]

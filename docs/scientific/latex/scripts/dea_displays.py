@@ -121,8 +121,8 @@ for r in groups:
     old = next(x for x in groups if x['model']=='F0' and x['group']==r['group'])
     m = marks(r['group'])
     rows.append([name(r['group']),r['role'],r['rows']+'/'+r['relative_rows'],num(r['AARD_percent'],2),num(r['bias_percent'],2),num(old['AARD_percent'],2),'---' if m == ['---','---'] else '/'.join(m)])
-table('dea-deviations-current', 'Deviations of the present model from the DEA data, by data set and role.', ['Data set','Role',r'$N/N_{\mathrm{rel}}$',r'AARD / \%',r'Bias / \%',r'AARD, less restricted shared set / \%','R4/R5'],rows,[.27,.14,.08,.09,.09,.15,.11],
-      notes="$N/N_{\\mathrm{rel}}$: all points / points with a defined relative deviation. AARD and bias follow Eq.~\\eqref{eq:p2-deviation}; bias is calculated minus measured, divided by measured. Less restricted shared set: DEA refitted on Part I's less restricted calibration (Section~\\ref{sec:p2-shared}), a sensitivity comparison. R4/R5: " + RANGE_NOTE + '.')
+table('dea-deviations-current', 'Deviations of the present model from the DEA data, by data set and role.', ['Data set','Role',r'$N/N_{\mathrm{rel}}$',r'AARD / \%',r'Bias / \%',r'AARD, less restricted calibration / \%','R4/R5'],rows,[.27,.14,.08,.09,.09,.15,.11],
+      notes="$N/N_{\\mathrm{rel}}$: all points / points with a defined relative deviation. AARD and bias follow Eq.~\\eqref{eq:p2-deviation}; bias is calculated minus measured, divided by measured. Less restricted calibration: the Part I calibration described in Section~\\ref{sec:p2-shared}, on which DEA is refitted as a sensitivity comparison. R4/R5: " + RANGE_NOTE + '.')
 ranges = read(BASE + 'range-deviations.csv')
 rows = []
 for group in dict.fromkeys(r['group'] for r in data):
