@@ -16,8 +16,8 @@ main_checkout="$(dirname "$git_common_dir")"
 engine_wheel="${EPCSAFT_ENGINE_WHEEL:-}"
 expected_engine_sha256="${EPCSAFT_ENGINE_SHA256:-}"
 if [[ -z "$engine_wheel" ]]; then
-    engine_wheel="$main_checkout/build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl"
-    expected_engine_sha256="${expected_engine_sha256:-0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b}"
+    engine_wheel="$main_checkout/build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl"
+    expected_engine_sha256="${expected_engine_sha256:-c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb}"
 fi
 engine_wheel="$(realpath "$engine_wheel")"
 if [[ -n "$expected_engine_sha256" ]]; then

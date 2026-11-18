@@ -22,8 +22,8 @@ import stable_refit_255 as stable
 
 SHARED = ROOT/'analyses/mea_parameter_bundle/results/adoption-340/part-ii-shared-values.json'
 SHARED_SHA = '4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334'
-WHEEL = ROOT/'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
-SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
+WHEEL = ROOT/'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
 
 
 def target_identity(mapping, family, target):
@@ -60,10 +60,10 @@ def branch_counts(row):
 
 class Route:
     branch_counts = staticmethod(branch_counts)
-    def __init__(self, declaration):
+    def __init__(self, declaration, out=None):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
-        self.out = self.path.parent/self.config['output']
+        self.out = Path(out) if out else self.path.parent/self.config['output']
         available = int(next(x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')).split()[1])/1e6
         self.workers = max(1, min(int(os.environ['AGENT_HEAVY_CORES']), int((available-7)/.35)))
         self.controls = self.config['optimizer']
@@ -260,6 +260,11 @@ class Route:
                 trials.append(phase)
             item.stability_options.trials = trials
         return item
+
+    def temperature(self, spec, state):
+        if 'cap_record' in state:
+            return spec.problems[next(r for role in ('fitted','comparisons') for r in spec.inputs['observations'][role] if r['identity']==state['cap_record'])['initial']].T
+        return spec.problems[state['problem']].T if 'problem' in state else state['T']
 
     def stability_metadata(self, spec, item):
         return dict(restricted_trial_families=True,removed_species=list(eq.compile_problem(spec.model,item.problem).removed_species)) if item.stability_options.trials else {}

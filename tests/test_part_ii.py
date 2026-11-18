@@ -21,9 +21,9 @@ def test_conditional_linear_information():
     assert result['conditional_standard_error']['a']==pytest.approx(np.sqrt(2/3))
 
 
-def test_shared_values_tie_and_range_marks(monkeypatch):
+def test_shared_values_tie_and_range_marks(monkeypatch,tmp_path):
     monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
     point = route.start(route.config['reference'])
     spec = route.bind(point)
     ion = next(c for c in point['parameters']['components'] if c['component_id']==route.config['born_ties'][0])
@@ -121,6 +121,7 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     route.load = lambda reference: copy.deepcopy(registry)
     route.verify, route.bind = lambda: None, lambda point: SimpleNamespace(model=model)
     route.stability_row = lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)
+    route.temperature = lambda spec,state:problem.T
     measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
     assert len(measured['supplied_trials'])==102
     measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
@@ -178,7 +179,7 @@ def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path,monkeyp
 
 def test_missing_range_reduction(tmp_path,monkeypatch):
     monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
     route.out,route.config['reaction_ranges_K'] = tmp_path,{}
     records = [dict(identity=str(i),problem=str(i),role='fitted') for i in range(2)]
     spec = SimpleNamespace(inputs={'observations':{'fitted':records,'comparisons':[]}},problems={str(i):SimpleNamespace(T=313.15,reactions=[SimpleNamespace(name='unknown-law')] if i==0 else []) for i in range(2)},prediction=lambda r:dict(identity=r['identity'],group='pressure',observed=0.,value=1.,status='Available',unit='Pa'))
@@ -189,11 +190,11 @@ def test_missing_range_reduction(tmp_path,monkeypatch):
     assert sum(s['statistics']['relative_undefined'] for s in summaries if s['statistics'])==2
 
 
-def test_retained_fit_endpoint_transport(monkeypatch):
+def test_retained_fit_endpoint_transport(monkeypatch,tmp_path):
     import hashlib
     import json
     monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
     path = ROOT/'analyses/mdea_mea_workflow/results/refit-298/B1-endpoint/start.json'
     point = route.start(dict(path=str(path),sha256=hashlib.sha256(path.read_bytes()).hexdigest()),adopt=False)
     report = json.loads(path.with_name('fit.json').read_text())
@@ -211,7 +212,7 @@ def test_reportable_splitting_endpoint(status,unavailable,tmp_path,monkeypatch):
     route.start,route.replay = lambda ref:ref,lambda point: ([],True,point)
     route.search = lambda point: dict(stable=point>10.,grid=dict(descent=int(point<=10.)),offset=dict(descent=0),census=dict(descent=0))
     if unavailable:
-        native = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+        native = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
         p.stable._init(native.start(native.config['reference']),route=native)
         row = p.stable._measure(dict(key='comparison:362:cap',cap_record='comparison:362'))
         monkeypatch.setattr(route,'grid',lambda *args:[row]+([dict(key='split',available=True,value=-1.,native_liquid_descent=True)] if unavailable=='split' else [])); route.bind,route.states = lambda point:None,lambda spec:[]
@@ -317,10 +318,10 @@ def test_amp_supplied_trial_component_support(monkeypatch, tmp_path):
     assert p.stable.tally([failed])['supplied_trial_counts']==binary['supplied_trial_counts']
 
 
-def test_completed_reaction_chart_preserves_bounds_through_continuation(monkeypatch):
+def test_completed_reaction_chart_preserves_bounds_through_continuation(monkeypatch,tmp_path):
     """#365: fit displacement keeps bounds; law completion translates the chart."""
     monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
     point = route.start(route.config['reference'],adopt=False)
     point['coordinates'] = [
         dict(kind='reaction_coordinate',name='R',coefficient='a',origin=5.,scale=2.,bounds=[2.,8.]),
@@ -349,7 +350,7 @@ def test_completed_reaction_chart_preserves_bounds_through_continuation(monkeypa
 def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_path):
     """A failed rerun must invalidate uncertainty from a transported endpoint."""
     monkeypatch.setenv('AGENT_HEAVY_CORES','3')
-    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json')
+    route = p.Route(ROOT/'analyses/mdea_mea_workflow/inputs/part-ii-replay.json',tmp_path)
     route.out = tmp_path
     point = route.start(route.config['reference'],adopt=False)
     reactions = p.copy.deepcopy(point['reactions'])
@@ -370,7 +371,7 @@ def test_uncertainty_identity_failure_writes_no_standard_error(monkeypatch,tmp_p
 
 
 def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path):
-    """#368: retain one inventory and submit at most four states per worker."""
+    """#368/#391: retain one inventory; each worker task holds one temperature's states, returned in input order."""
     import concurrent.futures
     class Trial(dict):
         def __deepcopy__(self, memo):
@@ -379,6 +380,7 @@ def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path)
     route = p.Route.__new__(p.Route)
     route.out, route.config, route.workers = tmp_path, dict(amine='test', species=['test'], split_record=None), 3
     route.load = lambda reference:dict(amine='test', species=['test'], trials=[trial])
+    route.bind = lambda point: None
     class Pool:
         def __init__(self, workers, *, initializer, initargs):
             assert workers==3 and initargs[1]==[trial]
@@ -386,12 +388,12 @@ def test_grid_builds_supplied_trials_only_in_state_worker(monkeypatch, tmp_path)
             return self
         def __exit__(self, *args):
             pass
-        def map(self, function, states, chunksize):
-            assert len(states)<=12
-            return map(function, states)
+        def map(self, function, groups):
+            assert len(groups)==9 and all(len({state['T'] for state in group})==1 for group in groups)
+            return map(function, groups)
     monkeypatch.setattr(concurrent.futures, 'ProcessPoolExecutor', Pool)
     monkeypatch.setattr(p.stable, '_measure', lambda state:dict(key=state['key']))
-    measured = route.grid(None, [dict(key=str(i)) for i in range(67536)])
+    measured = route.grid(None, [dict(key=str(i), T=300.+i%9) for i in range(67536)])
     assert [row['key'] for row in measured]==[str(i) for i in range(67536)]
 
 

@@ -6,7 +6,7 @@ import copy, json, math, os, sys, tomllib
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import numpy as np
-import kundu  # asserts the pinned Engine wheel 391dfe5d
+import kundu  # asserts the pinned Engine wheel
 import reactive as r
 from kundu import AN, bind, current_shared, save, score, toml_value
 from MEA.solvent_specification import SolventSpecification, relative_error_statistic

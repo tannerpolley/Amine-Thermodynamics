@@ -151,11 +151,30 @@ def bind(mapping):
 
 
 def _init(mapping, trials=None, route=None):
-    global _SPEC, _TRIALS, _ROUTE
-    _ROUTE = route
+    global _SPEC, _TRIALS, _ROUTE, _HELD
+    _ROUTE, _HELD = route, None  # a forked worker must not inherit a set prepared for the parent's model
     _TRIALS = trials or {}
     (route.verify if route else verify)()
     _SPEC = (route.bind if route else bind)(mapping)
+
+
+_HELD = None  # (temperature, applicable trials) and its prepared set; one set per worker at a time
+
+
+def _supplied_report(parent, result, supplied, identities):
+    """Engine supplied-point evaluation; the prepared set is reused while parents share the bit-identical T and trial list."""
+    global _HELD
+    key = (parent.temperature.value, identities)
+    if _HELD is None or _HELD[0] != key:
+        _HELD = None
+        _HELD = key, eq.prepare_supplied_trials(_SPEC.model, key[0], supplied)
+    options = eq.StabilityOptions()
+    options.prepared_trials = _HELD[1]
+    return eq.stability_test(eq.compile_problem(_SPEC.model, parent), result, options)
+
+
+def _measure_group(states):
+    return [_measure(state) for state in states]
 
 
 def _measure(state):
@@ -194,9 +213,7 @@ def _measure(state):
                 if prediction.pressure_reference is not None:
                     parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
                 result = eq.solve_equilibrium(_SPEC.model,parent)
-                options = eq.StabilityOptions()
-                options.trials, options.evaluate_supplied_trials = supplied, True
-                report = eq.stability_test(eq.compile_problem(_SPEC.model,parent),result,options)
+                report = _supplied_report(parent, result, supplied, tuple(unique))
                 out['supplied_parent_pressure_Pa'] = result.pressure
                 out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=jsonable(t.quantities),message=t.message) for t in report.trials]
                 out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
@@ -227,14 +244,20 @@ def _measure(state):
 
 
 def grid(mapping, chosen, trials=None, *, route=None):
-    """Fresh Full searches at one parameter mapping, one process per core."""
+    """Fresh Full searches at one parameter mapping; each worker task is one temperature's states, largest first."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
-    workers = min(route.workers if route else CORES, len(chosen))
+    spec = route.bind(mapping) if route else None
+    groups = {}
+    for index, state in enumerate(chosen):
+        groups.setdefault(route.temperature(spec, state) if route else state['T'], []).append(index)
+    groups = sorted(groups.values(), key=len, reverse=True)
+    workers = min(route.workers if route else CORES, len(groups))
+    measured = [None]*len(chosen)
     with ProcessPoolExecutor(workers, initializer=_init, initargs=(mapping, trials, route)) as pool:
-        measured = []
-        for offset in range(0, len(chosen), 4*workers):
-            measured.extend(pool.map(_measure, chosen[offset:offset+4*workers], chunksize=4))
+        for indices, rows in zip(groups, pool.map(_measure_group, [[chosen[i] for i in g] for g in groups])):
+            for i, row in zip(indices, rows, strict=True):
+                measured[i] = row
     if isinstance(trials, dict):
         for row in measured:
             trials.setdefault(row['key'], []).extend(w for w in row.get('witnesses',[]) if w not in trials.get(row['key'],[]))

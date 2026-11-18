@@ -6,8 +6,8 @@ import epcsaft
 AN = Path(__file__).resolve().parent
 ROOT = AN.parents[1]
 REF = ROOT / 'data/reference/DEA'
-WHEEL = ROOT / 'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
-SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
+WHEEL = ROOT / 'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
 MEA = ROOT / 'analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json'
 MEA_SHA = 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
 DEA, H, C, W, CO2 = 'diethanolamine', 'protonated-diethanolamine', 'carbamate-anion', 'water', 'carbon-dioxide'

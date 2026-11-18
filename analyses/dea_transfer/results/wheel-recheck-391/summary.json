@@ -1,0 +1,68 @@
+{
+ "issue": 391,
+ "wheel_sha256": "8daa31a0535c817c6cf97e0ba2aed637ecbf1b6cdce5e949bd08f82ec2916849",
+ "declaration": "analyses/dea_transfer/inputs/part-ii-346/route-current.json",
+ "point": "results/retransfer-346/f2-current/report-point.json",
+ "command": "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py dea analyses/dea_transfer/results/runs/dea-391",
+ "calls": "Route.replay, reduce, uncertainty, curves and search at the selected endpoint",
+ "retained": {
+  "report": "results/retransfer-346/f2-report-1 (data-rows, deviations, curve-data)",
+  "uncertainty": "results/retransfer-346/f2-current/conditional-uncertainty.json",
+  "search": "main checkout ignored analyses/dea_transfer/results/runs/380/combined-search.json, summarized by results/research-380/summary.json"
+ },
+ "results": {
+  "replay": {
+   "cost": 8.033971893129763,
+   "retained": 8.03397189312541,
+   "relative_difference": 5.4e-13,
+   "available": true
+  },
+  "data_rows": {
+   "rows": 299,
+   "status_changes": 0,
+   "max_relative_prediction_difference": 1.9e-12
+  },
+  "deviations": {
+   "groups": 240,
+   "keyed_by": "group, role, unit, range_name, outside_range (row order follows a set and differs between runs)",
+   "count_mismatches": 0,
+   "statistics": 518,
+   "max_relative": 1.71e-09,
+   "at": "SeoHong not fitted carbamate-hydrolysis inside: mean signed error 5.7473756334 vs 5.7473756236 Pa",
+   "producer": "analyses/wheel_recheck_391.py deviations analyses/dea_transfer/results/runs/dea-391/deviations.json analyses/dea_transfer/results/retransfer-346/f2-report-1/deviations.json deviations-by-group.json"
+  },
+  "curves": {
+   "points": 750,
+   "value_fields_compared_with_data_rows": 1049,
+   "max_relative_value": 3e-12,
+   "solver_messages": "converged successes with different residual digits"
+  },
+  "conditional_uncertainty": {
+   "standard_errors_max_relative": 4.6e-13,
+   "residual_variance_relative": 5.4e-13,
+   "correlation_max_absolute": 6.1e-14,
+   "cost_gradient": "components differ by at most 6.3e-10 absolute at the endpoint",
+   "active_bounds": "none, as retained"
+  },
+  "search": {
+   "states": 3791,
+   "available": 3790,
+   "unavailable": [
+    "lawson-1976-viii:1:problem"
+   ],
+   "descent": 0,
+   "per_state_mismatches": {
+    "available": 0,
+    "status": 0,
+    "descent": 0
+   },
+   "value_max_abs": 0.0,
+   "raw_minimum_max_abs": 1.7e-13,
+   "uncertainty_max_abs": 3.6e-10,
+   "pressure_Pa_max_abs": 2.2e-06,
+   "whole_command_wall_seconds": 380.35,
+   "whole_command_basis": "replay, reductions, uncertainty, curves and search together; shared host"
+  }
+ },
+ "report_by_field_validity": "report-by-field.json pairs rows by position; that is valid for data-rows and curve-data but not for deviations.json (144 of 240 rows mis-paired). Use deviations-by-group.json"
+}

@@ -10,7 +10,7 @@ from pinned import AN, REF, MEA, DEA, H, C, W, M_DEA, M_W, verify_wheel, save
 
 verify_wheel()
 rows = lambda name: list(csv.DictReader((REF / name).open()))
-log = dict(wheel='391dfe5d', mea_record=str(MEA.relative_to(AN.parents[1])))
+log = dict(wheel='05e94210', mea_record=str(MEA.relative_to(AN.parents[1])))
 def stop(disposition):
     log['disposition'] = disposition
     save('results/binary.json', log)

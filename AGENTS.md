@@ -69,7 +69,7 @@ CSE execution mode: direct.
 
 - This is an official downstream application under ePC-SAFT Governance D-038.
 - The Engine repository is the public `tannerpolley/epcsaft`, checked out at `/home/tnnrpolley21/Workspaces/Engineering/epcsaft`. It owns current Engine source, issues and new requests.
-- Historical Engine commits, including `391dfe5d` behind the pinned wheel, live in `tannerpolley/epcsaft-validation` (formerly the private `tannerpolley/ePC-SAFT`). Its issues are read-only history.
+- Historical Engine commits, including `391dfe5d` behind the retained Part I results, live in `tannerpolley/epcsaft-validation` (formerly the private `tannerpolley/ePC-SAFT`). Its issues are read-only history.
 - Engine owner paths are relative to that repository:
   - Owner map: `docs/scientific/README.md` and `docs/scientific/CONTEXT.md`; accepted decisions: `docs/scientific/decisions/`.
   - Budgets: `ARCHITECTURE.yaml`, explained in `docs/scientific/code-budgets.md`; equations: `engine/docs/equations.md`; algorithms: `engine/docs/science/algorithms.md`.

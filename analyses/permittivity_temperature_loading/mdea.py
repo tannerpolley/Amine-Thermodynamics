@@ -17,8 +17,8 @@ AN = Path(__file__).resolve().parent
 SOURCE = AN.parent / 'solvent_specification_mdea'
 OUT = AN / 'results/mdea'
 SPEC = SOURCE / 'B1.toml'
-WHEEL = ROOT / 'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
-SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
+WHEEL = ROOT / 'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
 REFERENCE = json.loads((SOURCE / 'results/adoption-302/comparisons.json').read_text()) + [r for r in json.loads(
     (SOURCE / 'results/adoption-302/replay.json').read_text()) if r['identity'] in {f'fit:{i}' for i in range(125, 129)}]
 
@@ -83,7 +83,7 @@ def main():
         summaries = [baseline, *pool.map(evaluate, cases)]
     files = [Path(__file__), AN / 'dielectric_volume.py', ROOT / 'src/MEA/solvent_specification.py', SPEC,
         SOURCE / 'B1-declarations.toml', *sorted((SOURCE / 'inputs').iterdir()), SOURCE / 'results/adoption-302/comparisons.json', SOURCE / 'results/adoption-302/replay.json']
-    dump(OUT / 'summary.json', dict(scenarios=summaries, engine_wheel_sha256=SHA, engine_commit='391dfe5d64ede5036bf160bc6ae037ad5e14af32',
+    dump(OUT / 'summary.json', dict(scenarios=summaries, engine_wheel_sha256=SHA, engine_commit='05e94210fa64cf69725e45babc0411d32139df5a',
         module=epcsaft.__file__, workers=int(os.environ['AGENT_HEAVY_CORES']), threads={k: os.environ.get(k) for k in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS')},
         inputs={str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}))
 

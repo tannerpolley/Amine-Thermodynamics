@@ -33,8 +33,8 @@ ANALYSIS = Path(__file__).resolve().parents[1]
 INPUT = ANALYSIS / "data/input"
 PARAMETERS = ANALYSIS / "results/selected-current-best-parameters.json"
 # Identity of the immutable published wheel pinned in pyproject.toml and uv.lock.
-ENGINE_WHEEL_SHA256 = "0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b"
-ENGINE_COMMIT = "391dfe5d64ede5036bf160bc6ae037ad5e14af32"
+ENGINE_WHEEL_SHA256 = "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb"
+ENGINE_COMMIT = "05e94210fa64cf69725e45babc0411d32139df5a"
 STATE_PACKET = INPUT / "state-packet.json.gz"
 STATE_PACKET_SHA256 = "86f60041b28ec4493729b04c0238f44e86fba4becf33d6ddf47d86b7efb82448"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"

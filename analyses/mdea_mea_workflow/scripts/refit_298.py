@@ -15,8 +15,8 @@ AN = Path(__file__).resolve().parents[1]
 ROOT = AN.parents[1]
 OUT = AN / 'results/refit-298'
 ADOPTION = ROOT / 'analyses/mea_parameter_bundle/results/adoption-297'
-SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
-WHEEL = ROOT / 'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
+WHEEL = ROOT / 'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
 
 def read(path):
     path = Path(path)

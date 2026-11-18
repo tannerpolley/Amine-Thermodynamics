@@ -1,0 +1,157 @@
+{
+ "issue": 391,
+ "wheel_sha256": "8daa31a0535c817c6cf97e0ba2aed637ecbf1b6cdce5e949bd08f82ec2916849",
+ "engine_commit": "e1063366aaca69d0ad5299efccf62f00ac006dba",
+ "retained": "analyses/mea_parameter_bundle/results/paper-evidence-341 (wheel 0962e21d, Engine 391dfe5d)",
+ "entry_point": "analyses/mea_parameter_bundle/scripts/paper_evidence_341.py, unchanged; output moved to an ignored run directory and the #297 wheel binding replaced by the current pin",
+ "commands": [
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i replay analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i evidence analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i uncertainty analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i comparison analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i weights analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i shared analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i checks analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "agent-heavy env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src uv run --no-sync python -u analyses/wheel_recheck_391.py part-i stability analyses/mea_parameter_bundle/results/runs/part-i-391",
+  "python analyses/wheel_recheck_391.py compare <run subtree> <retained subtree> <by-field JSON>"
+ ],
+ "not_rerun": [
+  "uncertainty conditional fit and inward profiles (fits; out of scope)",
+  "inventory (hashes delivered files only)"
+ ],
+ "inputs_copied": [
+  "objective-origins.json from the retained directory: weights reads it and no action writes it"
+ ],
+ "comparison_basis": "Every JSON/CSV value present in both trees, aggregated by field; pairs with both magnitudes below 1e-12 counted as numerical zero; wall-clock fields counted separately",
+ "results": {
+  "replay": {
+   "rows": 307,
+   "available": 307,
+   "cost": 150.76290287955263,
+   "retained_cost": 150.76290287953717,
+   "cost_relative_difference": 1.03e-13,
+   "max_relative_prediction_difference": 2.02e-12,
+   "bit_identical_predictions": 113
+  },
+  "evidence": {
+   "files": 1105,
+   "values": 511440,
+   "status_or_availability_changes": 0,
+   "solver_messages": "all converged successes",
+   "largest_relative_differences": [
+    "density row cost 1.25e-6 on 2.39e-12",
+    "density residual 6.2e-7 on 2.19e-6 kg/m3 (1.4e-12 kg/m3 absolute)",
+    "Kim 2007 limiting-crossing endpoint difference 8.6e-8 on 0.0216 kJ/mol",
+    "solver diagnostic floor up to 0.25 (8e-11 absolute)"
+   ],
+   "ordinary_magnitude_quantities": "heat, pressure, Cp, density statistics, mole fractions, predictions: <= 3e-9 relative, mostly 1e-11 to 1e-13",
+   "not_from_wheel": [
+    "heat.csv: 14 role labels now \"not fitted\" (retained \"non-fitted prediction\")",
+    "density-268/density.json: per-row unit and basis fields added by later producer code",
+    "wheel/commit labels and dependent file hashes"
+   ]
+  },
+  "uncertainty_fit_free": {
+   "residuals_max_relative": 4e-11,
+   "predictions_max_relative": 2e-12,
+   "jacobian_max_absolute": 2.4e-11,
+   "jacobian_max_relative": "1.3e-4 on an entry of 8.6e-11",
+   "prediction_band_derivatives_values_max_relative": 5.4e-13,
+   "conditional_standard_error_proxy_max_relative": 1.8e-11,
+   "proxy": "unweighted inverse-Jacobian standard errors of the 10 free coordinates; both sides share the row weights"
+  },
+  "comparison": {
+   "mamun_pressure_AARD_percent": 33.465953535725646,
+   "retained": 33.465953535725156,
+   "matched_rows": 19,
+   "max_relative": 3.8e-12
+  },
+  "weights": {
+   "objective_cost_and_share_max_relative": 8.1e-11,
+   "note": "declaration records carry fields added after the retained run; all shared fields equal"
+  },
+  "shared": "identical files",
+  "checks": {
+   "states": 3,
+   "max_relative": 1e-13
+  },
+  "stability": {
+   "grid": {
+    "states": 1908,
+    "available": 1908,
+    "descent": 0,
+    "unchanged": true
+   },
+   "offset": {
+    "states": 576,
+    "available": 576,
+    "descent": 0,
+    "unchanged": true
+   },
+   "supplied": {
+    "registry_compositions": 6121,
+    "retained_compositions": 3507,
+    "minimum_tpd": 4.815477097963594e-06,
+    "minimum_liquid_tpd": 3.065092460019514e-05,
+    "negative": 0,
+    "minima_unchanged": "overall minima only; per-state minima changed (below)",
+    "registry_note": "the current reduced-refit registry adds 2,614 compositions from #342 commit 03768d2d4, so the supplied comparison mixes that registry change with the wheel change",
+    "per_state_minimum_tpd": {
+     "max_abs_change": 0.0114,
+     "max_relative_change": 0.93,
+     "at_state": 34,
+     "cause": "compositions added to the registry by #342 commit 03768d2d4, not the wheel"
+    },
+    "shared_prefix": {
+     "entries": 3507,
+     "same_entries_in_order": true,
+     "shared_distances": 568134,
+     "max_abs_difference": 2.1e-10
+    }
+   },
+   "census": {
+    "states": 162,
+    "descent": 0,
+    "incomplete": 37,
+    "retained_incomplete": 0,
+    "stable": false,
+    "retained_stable": true,
+    "cause": "trial index 1 (full-support liquid) is now indeterminate in each of the 37 states; 35 report the reaction-relaxed split trial phase vanished (PHASE_DISAPPEARANCE_AMOUNT), 2 another message; retained evidence was no_resolved_descent",
+    "engine_change": "diagnosed: Engine 69d9dc3c (old repository #1235) applies a strict tpd_over_rt < 0.0 test on the reaction-relaxed path; these trials have TPD/RT from -1.4e-14 to -5.7e-14, 13-46 times smaller than its error estimate. Engine request: tannerpolley/epcsaft#50",
+    "affected_temperatures_K": {
+     "313.15": 4,
+     "318.15": 8,
+     "333.15": 6,
+     "353.15": 8,
+     "373.15": 6,
+     "393.15": 5
+    },
+    "parent_solves": {
+     "states": [
+      36,
+      125,
+      140,
+      143,
+      161
+     ],
+     "of_complete_states": 125,
+     "change": "first attempt now succeeds where the retained run hit MAXITER_EXCEEDED; state 36 final status changed",
+     "final_coordinates_max_abs_difference": 8.5e-12
+    },
+    "trial_optimizer_endpoints": {
+     "coordinates_and_multipliers_max_abs_difference": 0.057,
+     "iteration_count_max_difference": 236,
+     "scope": "trials with no descent"
+    }
+   }
+  }
+ },
+ "decision_affected": "The retained Part I census completeness (0 incomplete) does not reproduce on e1063366; owner decision before relying on it with the new pin.",
+ "differences_beyond_numerical_noise": [
+  "census completeness (37 incomplete; Engine 69d9dc3c)",
+  "per-state supplied minimum TPD up to 0.0114 (registry change, #342 03768d2d4)",
+  "census parent first-attempt outcome in 5 states; state 36 final status",
+  "census trial optimizer endpoints up to 0.057, iterations up to 236 (no descent)"
+ ],
+ "review": "#391 Checker review 2026-11-17 supplied the per-state, shared-prefix, parent-solve, endpoint and census-cause entries"
+}

@@ -21,8 +21,8 @@ from MEA.solvent_specification import SolventSpecification, jsonable
 from dielectric_volume import verify_wheel
 import refit
 
-SHA = '0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b'
-WHEEL = ROOT/'build/engine-wheels/main-391dfe5d64ede5036bf160bc6ae037ad5e14af32/epcsaft-1.3.0-cp313-cp313-manylinux_2_39_x86_64.whl'
+SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
+WHEEL = ROOT/'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
 BASE = '79706636e8716974e045b582f1b1cbfe7e4c7009'
 PROFILED = {'AMP': (4, 6, 8)}  # AMPH+-CO2 k, AMPCOO- diameter, enthalpy shift: bound in #243
 OUTPUTS = {'MEA': ROOT/'analyses/mea_parameter_bundle/results/uncertainty-307', 'MDEA': ROOT/'analyses/solvent_specification_mdea/results/uncertainty-307',
@@ -389,7 +389,7 @@ def present(name):
     text += ['\nThese directions include bound coordinates; their two-sided singular-vector displacements are not necessarily feasible. They describe local confounding in the declared scales, not a unique physical mechanism.\n',
              'Each bound scan fixes the coordinate at 1%, 5% and 10% of its original interval inward from the adopted bound, independently starting the other coordinates at the adopted point. Native fits have at most 40 iterations and 2100 seconds per point, using the existing stopping tolerances. Returned cost changes and terminations are reported without new fit-quality thresholds. The bound endpoint is the adopted constrained fit. The limited inward grid does not locate a confidence limit or a global optimum. Profiles do not requalify phase stability or change the adopted record. For R5, fixing its enthalpy shift translates the remaining native b coordinate and bounds by the native chart offset; the original admissible interval is preserved. Complete/reduced chart prediction equivalence is retained at zero and a 0.25-scale b displacement. Native rejected-trial causes are retained with each fit.\n',
              '[Profile results](profiles.json), [prediction values and exact native columns](predictions.json), [bands](prediction-bands.csv), [ranked values](ranking.csv) and [input identity](inputs.json) retain the calculation. MEA ranks only pressure, heat, heat capacity, carbamate/bicarbonate and density at states already in its adopted specification. Bicarbonate is additionally resolved alone at the four states with bicarbonate+carbonate observations; this extra model quantity is not a new measured observation or a fitted target. The summed observable is retained separately; MDEA uses the 20 Xiao and 88 Ermatchkov pressure states at ≤49 wt% from #298, its adopted R2 law, and the 40 Carson heat states. Parameter units and ties are in the coordinate declarations; reaction enthalpy shifts are shown as adopted totals in J/mol, whereas refit increments are about zero.\n',
-             'Engine commit `391dfe5d64ede5036bf160bc6ae037ad5e14af32`, wheel SHA-256 `'+SHA+'`. Run from the repository root using `agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py '+name+'`. The source base is `'+BASE+'`; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is pending.\n']
+             'Engine commit `05e94210fa64cf69725e45babc0411d32139df5a`, wheel SHA-256 `'+SHA+'`. Run from the repository root using `agent-heavy env PYTHONPATH=src uv run --no-sync python analyses/mea_parameter_bundle/scripts/uncertainty_307.py '+name+'`. The source base is `'+BASE+'`; the approved ceiling is 400 gross added executable lines. No manuscript promotion is claimed. Independent delivered review is pending.\n']
     import re
     summary = re.sub(r'\]\((?!https?:)([^)]+)\)',r'](results/uncertainty-307/\1)', '\n'.join(text)+'\n')
     review = ROOT/'analyses/mea_parameter_bundle/results/uncertainty-307/review.md'

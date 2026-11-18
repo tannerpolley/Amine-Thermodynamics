@@ -270,7 +270,7 @@ accepted decisions are in `docs/scientific/decisions/`, budgets in
 `engine/docs/equations.md`, algorithms in `engine/docs/science/algorithms.md`,
 plans in `tannerpolley/epcsaft` issues, code in `engine/native/<layer>/` and
 `engine/src/epcsaft/`, and tests in `engine/tests/`. Validation evidence and
-historical Engine commits, including `391dfe5d` behind the pinned wheel, are in
+historical Engine commits, including `391dfe5d` behind the retained Part I results, are in
 `tannerpolley/epcsaft-validation` (formerly the private `tannerpolley/ePC-SAFT`),
 whose issues are read-only history.
 
