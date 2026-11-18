@@ -43,6 +43,8 @@ Sources: `docs/scientific/latex/part2.tex`; `docs/scientific/latex/sections/part
 | --- | --- | --- |
 | Series role and literature | Transfer Part I's workflow with the same overall structure and an amine-focused literature review. | 2026-11-12 and 2026-11-13, [#387](https://github.com/tannerpolley/Amine-Thermodynamics/issues/387): paraphrase of the recorded owner decision. |
 | Amine scope and order | Cover DEA (secondary), MDEA (tertiary) and AMP (hindered primary), after Part I's MEA; remove piperazine from the paper and retain its analyses. | 2026-11-16, [#337 owner decisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/337#issuecomment-6932434220): “Piperazine is dropped from Part II.” Classes are recorded in the same-day #345 decision. |
+| Title | Keep “DEA, MDEA and AMP” in the Part II title; do not spell the amine names out. | owner answer on the Part II Writer's question prompt, 2026-11-17, as recorded in the [#348 completion comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/348#issuecomment-6965576845) and relayed by the repository orchestrator (paraphrase). |
+| Phase-stability method | The main text keeps a self-contained summary of the phase-stability method; the stability-penalty and retreat procedure detail goes in the Part II supplement. | owner answer on the Part II Writer's question prompt, 2026-11-17, as recorded in the [#348 completion comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/348#issuecomment-6965576845) and relayed by the repository orchestrator (paraphrase). |
 
 ## Part II supplement
 
@@ -51,3 +53,4 @@ Sources: `docs/scientific/latex/part2_supplement.tex`; `docs/scientific/latex/se
 | Scope | Standing owner decision | Authority |
 | --- | --- | --- |
 | Amine scope | Supplement the DEA, MDEA and AMP paper; exclude piperazine material. | 2026-11-16, [#337 owner decisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/337#issuecomment-6932434220): “The #348 Part II text loses its piperazine placeholder and mentions in the same manuscript round as #387.” Scope to both supplements is paraphrased from the owner brief. |
+| Recalculation check | The recalculation check of the fitted predictions is stated once, in the Part II supplement only. | owner answer on the Part II Writer's question prompt, 2026-11-17, as recorded in the [#348 completion comment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/348#issuecomment-6965576845) and relayed by the repository orchestrator (paraphrase). |
