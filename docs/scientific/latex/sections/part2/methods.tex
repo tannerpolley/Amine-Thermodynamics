@@ -56,11 +56,12 @@ Phase stability is assessed for the selected solution but does not choose betwee
 % P:p2-methods-deviation
 Average absolute relative deviation (AARD) and relative bias of an observed quantity $y$ are
 \begin{equation}
- \mathrm{AARD}=\frac{100\,\%}{N}\sum_j|y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1|,\qquad
- \mathrm{bias}=\frac{100\,\%}{N}\sum_j(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1).
+ \mathrm{AARD}=\frac{100\,\%}{N_{\mathrm{rel}}}\sum_j|y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1|,\qquad
+ \mathrm{bias}=\frac{100\,\%}{N_{\mathrm{rel}}}\sum_j(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}}-1).
  \label{eq:p2-deviation}
 \end{equation}
-Only nonzero observations enter relative statistics; zero observations remain in absolute-error statistics and total counts.
+The sums run over the $N_{\mathrm{rel}}$ observations with a defined relative deviation.
+Only nonzero observations enter relative statistics; zero observations remain in absolute-error statistics and in the total count $N$.
 Signed physical-unit errors always use calculated minus measured, including for negative heats.
 
 % P:p2-methods-uncertainty
