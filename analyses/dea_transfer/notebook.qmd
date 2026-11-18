@@ -1,10 +1,246 @@
 ---
-title: "DEA: current Part II F2 record"
+title: "Diethanolamine equilibrium and calorimetry on the adopted shared record"
 format: html
 execute:
   enabled: false
 ---
 
-The current DEA analysis is [**Part II: re-transfer onto the adopted F2 shared parameters (#346)**](part-ii-346.qmd). That report owns the two-start selection, deviations and signed bias for every data role, source-range marks, finite stability searches, conditional standard errors, compact parameter table and figures. No parameter record is adopted.
+Both starts converged to tied costs. The selected fit differs from #346 by
+less than $4\times10^{-11}$ relative in every retained observation prediction.
+Each coarse-grid search returned 1,270 available states out of 1,271,
+with zero resolved liquid splits found. One Lawson Table VIII stability
+trial remained unavailable.
 
-The [earlier F0 working fit (#317)](historical-f0.qmd) is historical. Its results and phase-search interpretation do not describe the current F2 record. Current observation roles are **fitted**, **not fitted** and **comparison only**.
+## Conditions and data
+
+[#398](https://github.com/tannerpolley/Amine-Thermodynamics/issues/398)
+repeats the [#346 DEA transfer](part-ii-346.qmd) with the adopted aqueous
+monoethanolamine shared values and ePC-SAFT 1.3.1, Engine commit
+`05e94210fa64cf69725e45babc0411d32139df5a`. The wheel SHA-256 is
+`c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`.
+[#340](https://github.com/tannerpolley/Amine-Thermodynamics/issues/340)
+adopted the shared record `ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed`.
+[#396](https://github.com/tannerpolley/Amine-Thermodynamics/issues/396)
+retained it. The fixed water, CO₂ and inorganic-ion values and the R1–R3
+laws come from that record. The [declaration](inputs/part-ii-346/route-current.json)
+binds both starts and the existing chemistry, bounds and objective.
+The objective is one-half the sum of squared weighted residuals.
+
+The 299 observations comprise 80 fitted, 67 not fitted and 152 comparison only.
+The objective includes 30 Lawson CO₂ partial pressures at 25 wt% DEA and 50
+Carson integral heats at 298.15 K. The same-row comparison uses retained #346
+predictions on Engine `391dfe5d`. Observations outside the objective were
+available during study development. The comparisons assess calibration and
+fixed-parameter predictions under the measured conditions. They provide no
+independent validation. No agreement limit applies.
+
+All reaction laws use the declared calculation interval of 293.15–458.64 K.
+Bower's DEA dissociation measurements span 273.15–323.15 K (1962, p. 71
+and Eq. 7, p. 73). The hydrolysis seed is the inverse of Aroua's carbamate
+formation law (1997, p. 692 and Table 3 and Eq. 14, p. 695). Its 303–331 K
+measurement range refers to the source, and the fitted law's validity remains
+unestablished. The R1–R3 marks refer to the 273.15–498.15 K correlation range
+in Austgen 1991, Table V, p. 547. The experimental coverage of that correlation
+was unverified. Binary Cai and Horstmann comparisons use no reactions.
+
+The bounded [#346 source check](results/retransfer-346/source-check.md) found
+no DEA dissociation measurements above Bower's 323.15 K upper limit in the
+inspected Zotero library. Hamborg and Versteeg (2009, Table 11, p. 1322 and
+reference 32, p. 1328) cite Bower for DEA. All eight PDF hashes in the
+[#346 source inventory](results/retransfer-346/source-hashes.json) matched
+the corresponding Zotero attachments for #398.
+
+## Fits and selected endpoint
+
+Both starts reached the Engine's relative function-change tolerance of
+$10^{-10}$ after seven iterations, with no continuation. Start 0 has the
+lower fitted cost. The native costs differ by $9.45\times10^{-11}$, a tie
+under the [#337](https://github.com/tannerpolley/Amine-Thermodynamics/issues/337)
+start-selection rule.
+
+| Start | Initial cost | Native fitted cost | Replayed cost | Final relative function change | Native fit wall time (s) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0 (selected) | 15.5750073452 | 8.03397189312992 | 8.03397189313348 | $3.0451\times10^{-12}$ | 11.10 |
+| 1 | 14.8039521182 | 8.03397189322442 | 8.03397189322409 | $1.4255\times10^{-11}$ | 13.03 |
+
+| Start | Protonated DEA–water interaction | Carbamate–water interaction | Hydrolysis coefficient $a$ before law completion | Hydrolysis enthalpy increment (J/mol) |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | -0.188256471177 | -0.038548699161 | 5.778214151955 | 237.4460085 |
+| 1 | -0.188256554598 | -0.038546398165 | 6.245297213818 | -978.6801028 |
+
+The two ionic interaction coefficients are dimensionless. The two starts
+use different initial reaction laws. The tabulated enthalpy increments
+are relative to those laws. Law completion absorbs each increment into
+its endpoint reaction coefficients and transports the original bounds.
+[Selection and optimizer histories](results/retransfer-398/selection.json)
+retain both completed endpoints, original optimizer coordinates, bounds
+and full cost histories.
+
+| Selected parameter | Completed-law value | Bounds | Conditional standard error |
+| --- | ---: | ---: | ---: |
+| Protonated DEA–water interaction | -0.188256471177 | [-1, 1] | 0.003486 |
+| Carbamate–water interaction | -0.038548699161 | [-1, 1] | 0.05432 |
+| Hydrolysis coefficient $a$ | 5.869410673218 | [4.188573, 10.188573] | 0.6151 |
+| Hydrolysis enthalpy increment (J/mol) | 0 | [-18021.37, 21978.63] | 1346.32 |
+
+No fitted coordinate is on a bound. The enthalpy origin is zero in the
+completed chart because the fit's increment is included in the law.
+The [parameter table](results/retransfer-398/parameter-values.csv) retains
+full-precision values, units, bounds and provenance for the fitted and
+fixed quantities. The [conditional information](results/retransfer-398/conditional-uncertainty.json)
+uses the whitened residual Jacobian and 76 residual degrees of freedom.
+These local standard errors are conditional on the fixed shared record,
+objective and model. The correlation between the carbamate–water
+interaction and hydrolysis coefficient $a$ is 0.974. Shared-input
+uncertainty, source systematic errors and model discrepancy are outside this
+calculation.
+
+## Finite stability search
+
+Both endpoints used the same declared 335 data states and 936 grid states.
+The grid uses 10, 20, 25 and 30 wt% DEA, 313.15–393.15 K at 10 K increments,
+and loadings of $10^{-5}$, 0.1 through 1.1 at 0.1 increments, and 1.167
+mol CO₂/mol DEA. Liquid pressure is 1.05 or 3.0 times the model's bubble
+pressure. The shared route reuses 101 identical data-state calculations
+within each endpoint search.
+
+| Start | Data states available / total | Grid states available / total | Liquid splits found, lower bound | Search wall time (s) |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 334 / 335 | 936 / 936 | 0 | 107.16 |
+| 1 | 334 / 335 | 936 / 936 | 0 | 99.34 |
+
+Both searches have one unavailable state, `lawson-1976-viii:1:problem`
+(Table VIII row 2, 298.15 K, 54.5 wt% DEA, loading 0.602 mol/mol).
+The Engine's first trial returned `CentralSolveUnavailable` because its
+reconstruction destroys support. The pressure observation itself was
+calculated. The unavailable phase search contributes no stability evidence.
+DEA's earlier registry contains zero resolved split compositions, so there
+were zero applicable supplied trials. No liquid split triggered a penalty.
+The lower bounds describe numerical search results over the declared trial
+families and states. Global stability and physical validation remain
+unestablished.
+
+The [#392 qualification](../stability_search/results/repin-05e94210/summary.json)
+had 1,270 available out of 1,271 at the old selected endpoint on this same
+wheel, with the same unavailable state and cause. The original #398 run
+reused the qualified replay. The reproduction command now recomputes that
+replay from the checked-in #346 endpoint. Fitting produced numerically
+different endpoint parameters and completed laws, so both new endpoints
+needed their own searches. The
+[#346 selected endpoint after #380](part-ii-346.qmd#finite-stability-searches)
+had 334 of 335 data states and all 3,456 finer-grid states available,
+with a lower bound of zero splits. The grid-size change accounts for
+2,520 fewer states.
+
+## Correctness checks
+
+| Check | Result | Limit and origin |
+| --- | --- | --- |
+| Retained #346 endpoint replay on the pinned wheel | Pass. Maximum relative prediction difference $1.94\times10^{-12}$ over 80 rows. Relative cost difference $5.42\times10^{-13}$. | $10^{-8}$ relative for replay, specified by #346 following #255. |
+| Shared inputs | Pass. Adoption and shared-values hashes match. Both starts and the selected endpoint match the shared components, pair values, R1–R3 coefficients and reference states. | Exact identity to #340, with the declared DEA calculation interval verified on the serialized laws. |
+| Selected endpoint reload | Pass. Native cost 8.03397189312992 and reloaded cost 8.03397189313348 differ by $4.43\times10^{-13}$ relative. Maximum relative prediction difference $1.17\times10^{-12}$. | $10^{-8}$ relative, same #346 and #255 replay criterion. |
+| Reaction-range marks | Pass. All 299 observation marks and 750 retained curve-point marks match their declared ranges. | Exact identity to the declaration under #337 and #346. |
+
+The first reporting pass compared completed-law temperature bounds directly
+against the source bounds in the adoption file. The comparison was corrected
+to verify the documented 293.15–458.64 K override explicitly. Its replay and
+reporting resumed from the saved selection. [Checks](results/retransfer-398/checks.json)
+retain the errors and hashes from the original run. The run on three
+cores took 244.66 seconds for preflight, fits and searches, and 43.44 seconds
+for endpoint verification, uncertainty and reporting calculations. These are
+single-run wall times with the host shared. The run waited for admission
+before timing began. [Timings](results/retransfer-398/timings.json) record the
+same stages. The 220.90-second #392 qualification and the two #346 native
+fit timings provided the pre-run estimates.
+
+## Deviations from measurements
+
+Fitted Lawson pressure deviation is 28.464%, and the 67 not-fitted pressure
+observations have 54.187% deviation. Fitted Carson heat deviation is 0.947%.
+The largest paired prediction change from #346 across the 299 observations
+is $3.63\times10^{-11}$ relative. The maximum difference in mean absolute
+relative deviation across the 74 populated dataset/range groups is
+$1.86\times10^{-9}$ percentage points. Signed relative bias changes by
+at most $1.27\times10^{-9}$ percentage points. Those differences are
+negligible compared with the deviations from the measurements.
+
+These are mean absolute relative deviation and mean signed relative error
+(predicted minus observed, divided by the observation). Relative statistics
+exclude observed zeros. Absolute deviations keep those rows.
+
+| Observations | Role | DEA dissociation range | Count | Deviation / bias (%) on 05e94210 | Deviation / bias (%) on 391dfe5d |
+| --- | --- | --- | ---: | ---: | ---: |
+| Lawson CO₂ pressure | Fitted | Inside | 7 | 46.908 / +21.829 | 46.908 / +21.829 |
+| Lawson CO₂ pressure | Fitted | Outside | 23 | 22.850 / −7.506 | 22.850 / −7.506 |
+| Lawson CO₂ pressure at 394.26 K | Not fitted | Outside | 7 | 23.119 / −23.119 | 23.119 / −23.119 |
+| Seo and Hong CO₂ pressure | Not fitted | Inside | 5 | 31.126 / +25.181 | 31.126 / +25.181 |
+| Seo and Hong CO₂ pressure | Not fitted | Outside | 11 | 109.410 / +109.410 | 109.410 / +109.410 |
+| Lal CO₂ pressure | Not fitted | Inside | 17 | 56.298 / −53.383 | 56.298 / −53.383 |
+| Lal CO₂ pressure | Not fitted | Outside | 27 | 42.685 / −17.933 | 42.685 / −17.933 |
+| Carson integral heat | Fitted | Inside | 50 | 0.947 / −0.115 | 0.947 / −0.115 |
+
+All pressure rows shown in the table have the same classifications for
+the hydrolysis source interval. All 50 Carson heats are outside it.
+Overall, 183 reactive observations are inside the DEA dissociation range
+and 93 outside, including 23 fitted outside. For the hydrolysis source
+interval, 60 are inside and 216 outside, including 73 fitted outside.
+All 276 reactive observations are within each shared R1–R3 correlation
+range. All seven extrapolated Lawson rows at 394.26 K and every other
+observation returned a value.
+
+[Range-separated deviations](results/retransfer-398/range-deviations.csv)
+include both wheels for every dataset and law, with counts, signed bias
+and errors in source units. [Dataset deviations](results/retransfer-398/group-deviations.csv)
+give the unstratified comparison. The [observation table](results/retransfer-398/paper-data.csv)
+carries every source identity and mark. The
+[curve data](results/retransfer-398/curve-data.json) retain 750 available
+points with loading, temperatures, units, series identities and marks.
+
+![Measured values and model curves for fitted and not-fitted pressure data and fitted heats. The legend marks curves outside the DEA dissociation and hydrolysis source intervals.](results/retransfer-398/measured-model.png)
+
+At 363.15 K and 1.75 MPa, Horstmann's 14 water–DEA excess enthalpies are
+negative. The model predicts +86.24 to +758.49 J/mol mixture, for a mean
+signed error of +1,313.14 J/mol on both wheels. This sign disagreement
+remains much larger than the reported calorimeter uncertainty scale of
+2 J/mol plus a 1% heat term (Horstmann 2002, p. 1497). The printed formula
+leaves the sign of that term ambiguous. The same observations were fitted
+by Horstmann's temperature-dependent NRTL correlation (Table 6, Fig. 4b,
+and Table 7). They are comparison only here. The paper gives no scalar
+deviation for these exact rows.
+
+![Binary water–DEA comparisons from Horstmann and Cai. Both measurements and separate prediction points are at the original source conditions.](results/retransfer-398/binary-comparisons.png)
+
+The [source comparison record](results/retransfer-346/source-check.md)
+preserves paper locators, data roles and source uncertainties. Lawson's
+9% scatter is against smoothed measurements, Carson reports approximately
+1–2% heat uncertainty, and Seo and Hong report 2–3% loading uncertainty.
+Lal reports approximately 15% pressure accuracy above 0.05 kPa with
+larger errors below it. The available publications give no same-row scalar
+model deviation for the fitted Lawson and Carson sets or for the exact
+Seo and Hong and Lal sets. Lal's Figure 3 is a graphical comparison with
+Kent–Eisenberg constants fitted to earlier data. No agreement threshold
+was applied to these comparisons.
+
+## Retained files and review
+
+The [paper summary](results/retransfer-398/paper-summary.json) records the
+selected start, bound count, pressure deviations and stability result.
+The [run identity](results/retransfer-398/identity.json) binds the declaration
+and wheel. [#346 on 391dfe5d](part-ii-346.qmd) and the
+[earlier B-2 fit](historical-f0.qmd) remain available as historical results.
+
+From the repository root with the locked environment and pinned wheel, choose
+fresh output directories to preserve completed runs. The preflight compares
+80 recomputed predictions and their cost with the checked-in #346 replay.
+
+```bash
+run=analyses/dea_transfer/results/runs/398-reproduce
+out=analyses/dea_transfer/results/runs/398-reproduce-paper
+agent-heavy timeout 1800s uv run --no-sync python -u \
+  analyses/dea_transfer/rerun.py "$run"
+agent-heavy uv run --no-sync python analyses/dea_transfer/present_current.py "$run" "$out"
+```
+
+Raw solver rows, per-state stability files and logs are in the ignored run
+directory `analyses/dea_transfer/results/runs/398/`. Independent delivered
+review and owner confirmation for manuscript use are pending.

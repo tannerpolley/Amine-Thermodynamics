@@ -1,0 +1,119 @@
+{
+  "column_normalized_singular_values": [
+    1.4095649560851402,
+    1.1140523523640773,
+    0.8663491581789285,
+    0.1464688598010675
+  ],
+  "cost_gradient": {
+    "k-DEAH-water": 0.0002361588743706733,
+    "k-DEACOO-water": -0.00014050896005224356,
+    "hydrolysis-a": 9.696767282268114e-06,
+    "hydrolysis-enthalpy-shift": 9.320232368135528e-10
+  },
+  "active_bound_outward_descent": {},
+  "free_coordinates": [
+    "k-DEAH-water",
+    "k-DEACOO-water",
+    "hydrolysis-a",
+    "hydrolysis-enthalpy-shift"
+  ],
+  "residual_variance": 0.21142031297719677,
+  "conditional_standard_error": {
+    "k-DEAH-water": 0.0034855873154980735,
+    "k-DEACOO-water": 0.054321087208849414,
+    "hydrolysis-a": 0.6151039779153501,
+    "hydrolysis-enthalpy-shift": 1346.3218818496987
+  },
+  "conditional_correlation": [
+    [
+      0.9999999999999999,
+      -0.46768916806198313,
+      -0.4913468404030616,
+      0.32237066605995984
+    ],
+    [
+      -0.4676891680619833,
+      1.0000000000000002,
+      0.9738975305779894,
+      -0.8721621228435387
+    ],
+    [
+      -0.4913468404030616,
+      0.9738975305779894,
+      1.0,
+      -0.8435477218740545
+    ],
+    [
+      0.3223706660599599,
+      -0.8721621228435387,
+      -0.8435477218740545,
+      0.9999999999999999
+    ]
+  ],
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-diethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.188256471177024,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "k-DEAH-water"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "carbamate-anion",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.03854869916071153,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "k-DEACOO-water"
+    },
+    {
+      "kind": "reaction_coordinate",
+      "name": "carbamate-hydrolysis",
+      "coefficient": "a",
+      "origin": 5.86941067321772,
+      "scale": 1.0,
+      "bounds": [
+        4.188572946746493,
+        10.188572946746493
+      ],
+      "identity": "hydrolysis-a"
+    },
+    {
+      "kind": "reaction_enthalpy_shift",
+      "name": "carbamate-hydrolysis",
+      "pivot_temperature": 313.15,
+      "origin": 0.0,
+      "scale": 1000.0,
+      "bounds": [
+        -18021.37421193346,
+        21978.62578806654
+      ],
+      "identity": "hydrolysis-enthalpy-shift"
+    }
+  ],
+  "active_bounds": []
+}

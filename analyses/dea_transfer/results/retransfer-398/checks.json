@@ -1,0 +1,128 @@
+{
+  "retained_replay": {
+    "max_relative_prediction_error": 1.935118731921648e-12,
+    "relative_cost_error": 5.420108806220014e-13,
+    "cost": 8.033971893129763,
+    "reference_cost": 8.03397189312541,
+    "limit": 1e-08,
+    "rows": 80
+  },
+  "shared_inputs": {
+    "adopted_sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
+    "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+    "both_starts": true
+  },
+  "qualification": {
+    "files": {
+      "identity.json": "4c22966db84cb8c223b173fdafac641094fa243049fcaeb1158c3bf8a0dc2747",
+      "replay.json": "6f55215b3ad368183063f8651bd525ec54815c2326d8d7628a4e39650234772c",
+      "search-0.json": "d8bc2d3339b732d0c58a8805550ac2945268a07f7bb9cff1fc33cb8890ded4a3",
+      "search-summary.json": "cd2e875cf164ae892f04919d52d5c6710e260b922d6005a71dafaaac001e935c"
+    },
+    "search": {
+      "grid": {
+        "supplied_trial_counts": {
+          "available": 0,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 1271,
+        "available": 1270,
+        "descent": 0,
+        "unavailable": [
+          "lawson-1976-viii:1:problem"
+        ],
+        "minimum_tau": null,
+        "supplied_minimum_tpd": null,
+        "unavailable_searches": [
+          {
+            "key": "lawson-1976-viii:1:problem",
+            "seconds": 0.2684653179894667,
+            "status": "CentralSolveUnavailable",
+            "message": "trial 1 (unresolved): converged: residual 1.7486012637846216e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 3.5281910091903921e-18, amplification 0; reconstruction destroys support",
+            "available": false,
+            "value": null,
+            "raw_minimum": 0.0,
+            "uncertainty": null,
+            "cause": "trial 1 (unresolved): converged: residual 1.7486012637846216e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 3.5281910091903921e-18, amplification 0; reconstruction destroys support",
+            "event": "",
+            "no_descent_in_trial_set": false,
+            "completed": true,
+            "pressure_Pa": 89184.14830731536,
+            "witnesses": [],
+            "parent_kind": "Liquid",
+            "optimized_available": false,
+            "native_branch": "none",
+            "supplied_branch": "none",
+            "native_liquid_descent": false,
+            "liquid_liquid_split": false,
+            "details": "search-0/ebf4874e8948f8533ffe5f13762a8e3824ca05de0edde06e6eaee732ff86ea7d.json.gz",
+            "descent": false,
+            "supplied_minimum_tpd": null
+          }
+        ],
+        "branches": {
+          "data": {
+            "native": {
+              "liquid": 0,
+              "vapor": 0,
+              "mixed": 0,
+              "unresolved": 0,
+              "none": 335
+            },
+            "supplied": {
+              "liquid": 0,
+              "vapor": 0,
+              "mixed": 0,
+              "unresolved": 0,
+              "none": 335
+            }
+          },
+          "grid": {
+            "native": {
+              "liquid": 0,
+              "vapor": 0,
+              "mixed": 0,
+              "unresolved": 0,
+              "none": 936
+            },
+            "supplied": {
+              "liquid": 0,
+              "vapor": 0,
+              "mixed": 0,
+              "unresolved": 0,
+              "none": 936
+            }
+          }
+        },
+        "liquid_liquid_splits": {
+          "data": 0,
+          "grid": 0
+        }
+      },
+      "offset": {
+        "descent": 0
+      },
+      "census": {
+        "descent": 0
+      },
+      "penalty_trigger": false,
+      "stable": false
+    },
+    "engine_wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+    "earlier_split_compositions": 0
+  },
+  "endpoint": {
+    "max_relative_prediction_error": 1.1739498262386405e-12,
+    "relative_cost_error": 4.4297898682543746e-13,
+    "cost": 8.033971893133478,
+    "reference_cost": 8.03397189312992,
+    "limit": 1e-08,
+    "selected_shared_inputs_equal": true
+  },
+  "range_marks": {
+    "observations": 299,
+    "curve_points": 750,
+    "all_matched": true
+  }
+}

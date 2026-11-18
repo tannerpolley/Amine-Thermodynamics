@@ -1,0 +1,151 @@
+{
+  "selected_start": "start-0",
+  "cost": 8.033971893133478,
+  "fitted_parameters": 4,
+  "conditional_standard_errors": {
+    "k-DEAH-water": 0.0034855873154980735,
+    "k-DEACOO-water": 0.054321087208849414,
+    "hydrolysis-a": 0.6151039779153501,
+    "hydrolysis-enthalpy-shift": 1346.3218818496987
+  },
+  "active_bounds": [],
+  "stability": {
+    "grid": {
+      "supplied_trial_counts": {
+        "available": 0,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "states": 1271,
+      "available": 1270,
+      "descent": 0,
+      "unavailable": [
+        "lawson-1976-viii:1:problem"
+      ],
+      "minimum_tau": null,
+      "supplied_minimum_tpd": null,
+      "unavailable_searches": [
+        {
+          "key": "lawson-1976-viii:1:problem",
+          "seconds": 0.2527062669978477,
+          "status": "CentralSolveUnavailable",
+          "message": "trial 1 (unresolved): converged: residual 1.7486012637846216e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 3.5281910092792591e-18, amplification 0; reconstruction destroys support",
+          "available": false,
+          "value": null,
+          "raw_minimum": -2.842170943040401e-14,
+          "uncertainty": null,
+          "cause": "trial 1 (unresolved): converged: residual 1.7486012637846216e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 20 iterations, contraction absent, floor 3.5281910092792591e-18, amplification 0; reconstruction destroys support",
+          "event": "",
+          "no_descent_in_trial_set": false,
+          "completed": true,
+          "pressure_Pa": 89184.148309415,
+          "witnesses": [],
+          "parent_kind": "Liquid",
+          "optimized_available": false,
+          "native_branch": "none",
+          "supplied_branch": "none",
+          "native_liquid_descent": false,
+          "liquid_liquid_split": false,
+          "details": "search-0/ebf4874e8948f8533ffe5f13762a8e3824ca05de0edde06e6eaee732ff86ea7d.json.gz",
+          "descent": false,
+          "supplied_minimum_tpd": null
+        }
+      ],
+      "branches": {
+        "data": {
+          "native": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 335
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 335
+          }
+        },
+        "grid": {
+          "native": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 936
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 936
+          }
+        }
+      },
+      "liquid_liquid_splits": {
+        "data": 0,
+        "grid": 0
+      }
+    },
+    "offset": {
+      "descent": 0
+    },
+    "census": {
+      "descent": 0
+    },
+    "penalty_trigger": false,
+    "stable": false
+  },
+  "pressure": {
+    "fitted": {
+      "rows": 30,
+      "relative_rows": 30,
+      "relative_undefined": 0,
+      "AARD_percent": 28.463540039881487,
+      "bias_percent": -0.6613855244576713,
+      "mean_abs_error": 370131.5398591412,
+      "mean_signed_error_predicted_minus_observed": -314657.84324468265,
+      "unit": "Pa"
+    },
+    "not fitted": {
+      "rows": 67,
+      "relative_rows": 67,
+      "relative_undefined": 0,
+      "AARD_percent": 54.18699200788535,
+      "bias_percent": -3.3449848625021517,
+      "mean_abs_error": 50002.75218330196,
+      "mean_signed_error_predicted_minus_observed": -33695.7118241837,
+      "unit": "Pa"
+    }
+  },
+  "range_counts": {
+    "DEA-dissociation": {
+      "False": 183,
+      "True": 93,
+      "reaction not used": 23
+    },
+    "R2": {
+      "False": 276,
+      "True": 0,
+      "reaction not used": 23
+    },
+    "R1": {
+      "False": 276,
+      "True": 0,
+      "reaction not used": 23
+    },
+    "R3": {
+      "False": 276,
+      "True": 0,
+      "reaction not used": 23
+    },
+    "carbamate-hydrolysis": {
+      "False": 60,
+      "True": 216,
+      "reaction not used": 23
+    }
+  }
+}
