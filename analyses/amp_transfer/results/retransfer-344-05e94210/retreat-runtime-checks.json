@@ -1,0 +1,122 @@
+{
+  "retreat_baseline": {
+    "projected_s": 4396.505143380171,
+    "compressed_states": 862,
+    "measured_one_search_s": 209.35738778000814,
+    "first_compressed_anchor": {
+      "supplied_trial_counts": {
+        "available": 5720000,
+        "unavailable": 0,
+        "not_applicable": 443300
+      },
+      "states": 862,
+      "available": 862,
+      "descent": 0,
+      "unavailable": [],
+      "minimum_tau": null,
+      "supplied_minimum_tpd": 7.456314767750882e-05
+    },
+    "nominal_searches": 21
+  },
+  "compact_validation": {
+    "same_all_fields_except_time_and_raw_path": true,
+    "available_anchor_states": 862,
+    "available_branch_cases": 18,
+    "anchor_trial_counts": {
+      "available": 5720000,
+      "unavailable": 0,
+      "not_applicable": 443300
+    },
+    "negative_subset_native_and_supplied": {
+      "supplied_trial_counts": {
+        "available": 128700,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "states": 18,
+      "available": 18,
+      "descent": 17,
+      "unavailable": [],
+      "minimum_tau": -0.000243690288613152,
+      "supplied_minimum_tpd": -0.000243690288613152
+    },
+    "saved_raw_output": "skipped full JSON and gzip per-state writing in a disposable probe; all summary fields retained",
+    "compact_anchor_seconds": 156.7721972069994,
+    "negative_reference_seconds": 14.357374086990603,
+    "negative_compact_seconds": 11.90522747200157,
+    "baseline_seconds": 209.35738778000814,
+    "stage_projected_seconds": 3292.2161413469876,
+    "original_search": "campaign/search-11.json",
+    "original_search_sha256": "4387bc282ac1efd89eb31573d76a13a610e74af879fbbf8c6ff998fa395e7bd9",
+    "trial_list_sha256": "d3f9bddf5208ed660c0f422ab6d5a069e443307b52dae495cbce341cf3c6285b",
+    "trial_count": 7150
+  },
+  "bisection_decision_checks": [
+    {
+      "negative_or_unavailable": "negative",
+      "same_decisions": true,
+      "full_sweeps_before": 33,
+      "full_sweeps_after": 21,
+      "last_admissible": 0.6623992919921875,
+      "first_rejected": 0.6624069213867188
+    },
+    {
+      "negative_or_unavailable": "unavailable",
+      "same_decisions": true,
+      "full_sweeps_before": 33,
+      "full_sweeps_after": 21,
+      "last_admissible": 0.6623992919921875,
+      "first_rejected": 0.6624069213867188
+    }
+  ],
+  "before": {
+    "rows": 1018,
+    "columns": 9,
+    "workers": 3,
+    "source_files_sha256": {
+      "part_ii.py": "6472a9f215342cde526aaf88bb71a57244bc947cd2be81b5bfd98563e77f4d01",
+      "stable_refit_255.py": "3fe4f79e9a4cce7036ec1ce1699463c48d83141beb734e9b5dcfef68a8a6e041"
+    },
+    "predictions_sha256": "5f30800087494da9199377f6c728463d03ecac5a066da9937c5639b34e11110f",
+    "weighted_jacobian_sha256": "6553c3b26b568600e1d267d3230557483a63e6b264bd1f01acdeb97c1b7d8b56",
+    "wall_seconds": 73.85693491499114
+  },
+  "after": {
+    "rows": 1018,
+    "columns": 9,
+    "workers": 3,
+    "source_files_sha256": {
+      "part_ii.py": "caffcb8f23b074ada2e3dca20c677a50ef1390d2df0162166e01742f6ade1d3b",
+      "stable_refit_255.py": "f7582ccbaf991775f772f8e3d552aa2640f379bc567060bfc7ef684759a616c5"
+    },
+    "predictions_sha256": "5f30800087494da9199377f6c728463d03ecac5a066da9937c5639b34e11110f",
+    "weighted_jacobian_sha256": "6553c3b26b568600e1d267d3230557483a63e6b264bd1f01acdeb97c1b7d8b56",
+    "wall_seconds": 76.00431869500608
+  },
+  "description": "Retreat keeps the same state searches and supplied-trial summary. It skips detailed intermediate serialization and extra expansions once a tested state already rules out acceptance. Repeated evaluations of the same coordinate with the fixed trial list reuse the prior decision. Final diagnostics retain complete trial details.",
+  "one_iteration_fit_equality": {
+    "equal_fields": [
+      "predictions",
+      "residuals",
+      "weighted_residuals",
+      "optimizer",
+      "physical",
+      "data_cost",
+      "stability_cost",
+      "status",
+      "failures"
+    ],
+    "rows": 1018,
+    "residual_sha256": "afdf903e6e335c2a4d8ca6581cbe2e768e5ca5700120c58b778b02f69d56fc85",
+    "weighted_residual_sha256": "1cfc399b2cc0c60182ba30d0098903d0fb591c32e9526f5151eed1959cef4648",
+    "data_cost": 61.70003837319344,
+    "penalty_cost": 2.5238141023015808
+  },
+  "production_compact_case": {
+    "rows": 18,
+    "equal_all_retained_fields": true,
+    "elapsed_s": 14.489416602998972,
+    "descents_lower_bound": 17,
+    "raw_details_written": false
+  }
+}

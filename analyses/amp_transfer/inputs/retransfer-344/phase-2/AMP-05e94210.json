@@ -1,0 +1,170 @@
+{
+  "amine": "aminomethylpropanol",
+  "species": [
+    "carbon-dioxide",
+    "aminomethylpropanol",
+    "water",
+    "protonated-aminomethylpropanol",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "vapor_species": [
+    "water",
+    "aminomethylpropanol",
+    "carbon-dioxide"
+  ],
+  "specification": "specification.toml",
+  "coordinates": {
+    "path": "coordinates-0.json",
+    "sha256": "fdf127e66f1f6d8e0439260c8bd01b2a49623346615b80aff52caa30476f09cc"
+  },
+  "starts": [
+    {
+      "path": "start-0.json",
+      "sha256": "8f0c3b0613bb7f9200c5662670ae64afaa3fc8e9f8b119f46e331e685862392c",
+      "reactions": {
+        "path": "reactions-0.json",
+        "sha256": "7bf1db764f0525a443f299e1e042914cf988dcecee5a589ac036559fd470d7c3"
+      },
+      "coordinates": {
+        "path": "coordinates-0.json",
+        "sha256": "fdf127e66f1f6d8e0439260c8bd01b2a49623346615b80aff52caa30476f09cc"
+      }
+    },
+    {
+      "path": "start-1.json",
+      "sha256": "7962c8f845e0efcfbc43042c755fccdbf6ac55d0ce187aeef56bb518571540a6",
+      "reactions": {
+        "path": "reactions-1.json",
+        "sha256": "49927819776419438aa14dbb5ce2947e959a7557d18da447c7406e2b2bbcfe15"
+      },
+      "coordinates": {
+        "path": "coordinates-1.json",
+        "sha256": "719c086a9a16b9117f55e41be421eb015d5b0f62bc78dd72b6e09ed0447598f6"
+      }
+    }
+  ],
+  "born_ties": [
+    "protonated-aminomethylpropanol",
+    "carbamate-anion"
+  ],
+  "calculation_interval_K": [
+    298.15,
+    393.2
+  ],
+  "reaction_ranges_K": {
+    "R1": [
+      273.15,
+      498.15
+    ],
+    "R2": [
+      273.15,
+      498.15
+    ],
+    "R3": [
+      273.15,
+      498.15
+    ],
+    "AMP-dissociation": [
+      293.12,
+      353.22
+    ],
+    "carbamate-hydrolysis": [
+      313.15,
+      373.15
+    ]
+  },
+  "roles": {
+    "loaded-pressure": "fitted",
+    "binary": "fitted",
+    "nmr": "fitted",
+    "kundu": "not fitted",
+    "tong": "not fitted",
+    "tong-baseline": "not fitted",
+    "hartono-2021-supplemental": "not fitted"
+  },
+  "stocks": [
+    {
+      "water": 11.545384436618988,
+      "aminomethylpropanol": 1.0
+    },
+    {
+      "water": 13.514746387428197,
+      "aminomethylpropanol": 1.0
+    }
+  ],
+  "loadings": [
+    1e-05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    0.966
+  ],
+  "split_record": {
+    "path": "../search-106/split-record-initial.json",
+    "sha256": "f491960a006cf7fd5a7eab11da32509ec0b111095fda10513d77cf8e5f234356"
+  },
+  "curve_rows": {
+    "path": "curve-rows.json",
+    "sha256": "c6f63e49199ebc882c249dbcd149839ad3229bb9d26f624304fb407a7ea26bd9"
+  },
+  "optimizer": {
+    "maximum_iterations": 60,
+    "function_tolerance": 1e-10,
+    "parameter_tolerance": 1e-10,
+    "gradient_tolerance": 1e-08,
+    "maximum_elapsed_time_seconds": 4500
+  },
+  "output": "../../../results/runs/344-05e94210/campaign",
+  "range_meanings": {
+    "AMP_dissociation": {
+      "interval_K": [
+        293.12,
+        353.22
+      ],
+      "basis": "Measured dissociation constants",
+      "source": "Hamborg and Versteeg 2009, Table 16; Zotero D9KXSKLR/334KGLPV"
+    },
+    "AMP_hydrolysis": {
+      "interval_K": [
+        313.15,
+        373.15
+      ],
+      "basis": "Model-derived source estimates, not direct reaction-law measurements",
+      "source": "Xu et al. 1992, Table 2 and Eqs.7\u201311; Part II reaction-range table"
+    },
+    "R1_R2_R3": {
+      "interval_K": [
+        273.15,
+        498.15
+      ],
+      "basis": "273.15\u2013498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage"
+    }
+  },
+  "reference": {
+    "path": "previous-parameters.json",
+    "sha256": "27d89649ca8c65314b16029e87b2b6b44d494f6717614337c819df7ffb29b57a",
+    "reactions": {
+      "path": "previous-reactions.json",
+      "sha256": "7bf1db764f0525a443f299e1e042914cf988dcecee5a589ac036559fd470d7c3"
+    },
+    "coordinates": {
+      "path": "previous-coordinates.json",
+      "sha256": "b1dacd84571c029b12f063622ea8d6027bd5b89ffc0c0edaf05fda1769331f70"
+    }
+  },
+  "reference_predictions": {
+    "path": "refit-306-floor-predictions.json",
+    "sha256": "6ac208a471fec62414af6b7a4364330d12aab3e24fb5a0b8a3b3f5dcb3e85d42"
+  },
+  "reference_cost": 61.730298293437194
+}

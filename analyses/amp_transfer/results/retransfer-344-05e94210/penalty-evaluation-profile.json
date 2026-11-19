@@ -1,0 +1,213 @@
+{
+  "engine_pin": "05e94210fa64cf69725e45babc0411d32139df5a",
+  "profile_case": {
+    "main_start": 0,
+    "native_scale": 0.01,
+    "observations": 156,
+    "diagnostic_states": 666,
+    "enforced_compressed_states": 862,
+    "workers": 3,
+    "native_iterations": 1,
+    "residual_evaluations": 1,
+    "jacobian_evaluations": 2,
+    "point_sha256": "85ef51fde890ac0788e50a0040dbce15002058de35d18929faa008fd3e5e9429"
+  },
+  "old_wrapper_seconds": 344.59076060701045,
+  "old_optimizer_timer_seconds": 56.563233852386475,
+  "perf_wrapper_seconds": 332.4401106419973,
+  "numerical_equality": {
+    "fields": [
+      "predictions",
+      "residuals",
+      "weighted_residuals",
+      "optimizer",
+      "physical",
+      "data_cost",
+      "stability_cost",
+      "status",
+      "failures"
+    ],
+    "all_equal": true,
+    "predictions_and_residuals": 1018,
+    "data_cost": 61.70003837319344,
+    "stability_cost": 2.5238141023015808
+  },
+  "native_phase_timing": {
+    "native_wall": 334.4291077259986,
+    "ceres_wall": 55.04620868100028,
+    "phase_boundary_offsets_seconds": {
+      "ceres_enter": [
+        66.6735035879974
+      ],
+      "ceres_exit": [
+        121.71971226899768
+      ],
+      "replay_first": [
+        187.2490040989942
+      ]
+    },
+    "other_phase_gaps_seconds": 0.14572613399650436
+  },
+  "projection_inputs": {
+    "fixed_native_s": 149.52681832500093,
+    "residual_s": 55.0333471299964,
+    "initial_jacobian_s": 64.43177739199018,
+    "next_jacobian_s": 65.4371648790111,
+    "construction_s": 2.613541147002252,
+    "diagnostic_search_s": 147.6333668231964,
+    "diagnostic_searches": 2
+  },
+  "projection": [
+    {
+      "case": "Main start 0, scale 0.01",
+      "reference": "campaign-373/start-0/penalized-0/stage-0/fit-native.json",
+      "reference_sha256": "aaef440e920e8fc340f026b5339d0476d6ae55bb116a79e55c89602f9be20613",
+      "reference_iterations": 12,
+      "residual_evaluations": 13,
+      "jacobian_evaluations": 13,
+      "native_fit_s": 1714.6380869550776,
+      "with_construction_and_two_diagnostic_searches_s": 2012.5183617484727
+    },
+    {
+      "case": "Main start 1, scale 0.01",
+      "reference": "campaign/start-1/penalized-0/stage-0/fit-native.json",
+      "reference_sha256": "586ce9493aa8bd9f343decb08949403fa95ebe4fb16f22569c1118eade0b67e5",
+      "reference_iterations": 17,
+      "residual_evaluations": 18,
+      "jacobian_evaluations": 13,
+      "native_fit_s": 1989.8048226050596,
+      "with_construction_and_two_diagnostic_searches_s": 2287.6850973984547
+    },
+    {
+      "case": "Scale 0.003",
+      "reference": "campaign-373/start-0/penalized-1/stage-0/fit-native.json",
+      "reference_sha256": "cd152263498746d1b6ce13ccf35bd26f3625b082312465bea7bdf1613a4f8b67",
+      "reference_iterations": 7,
+      "residual_evaluations": 8,
+      "jacobian_evaluations": 9,
+      "native_fit_s": 1177.7226917890512,
+      "with_construction_and_two_diagnostic_searches_s": 1475.6029665824462
+    }
+  ],
+  "gate_seconds": 3600,
+  "full_breakdown": {
+    "native_wall": 343.7528323669976,
+    "ceres_wall": 56.90087626100285,
+    "profile": [
+      {
+        "label": "native setup",
+        "wall": 2.420946254991577,
+        "native_stability": 0,
+        "supplied_trials": 0.0,
+        "bubble_reference": 0,
+        "worker_startup": 0.4583119099988835,
+        "serialization": 0.010485583989066072,
+        "worker_receive_wait_and_transfer": 0,
+        "rest": 1.9521487610036274,
+        "stability_search_calls_on_parent": 0,
+        "bubble_solves_on_parent": 0,
+        "bubble_derivatives_on_parent": 0
+      },
+      {
+        "label": "initial Jacobian",
+        "wall": 67.00808968199999,
+        "native_stability": 43.6496238008549,
+        "supplied_trials": 0.0,
+        "bubble_reference": 10.136471449237433,
+        "worker_startup": 0,
+        "serialization": 0.04178452200721949,
+        "worker_receive_wait_and_transfer": 0.004187380007351749,
+        "rest": 13.176022529893089,
+        "stability_search_calls_on_parent": 288,
+        "bubble_solves_on_parent": 144,
+        "bubble_derivatives_on_parent": 288
+      },
+      {
+        "label": "residual",
+        "wall": 56.89006236399291,
+        "native_stability": 43.988540360020124,
+        "supplied_trials": 0.0,
+        "bubble_reference": 7.5829366740217665,
+        "worker_startup": 0,
+        "serialization": 0.03438167000422254,
+        "worker_receive_wait_and_transfer": 0.0028216689970577136,
+        "rest": 5.28138199094974,
+        "stability_search_calls_on_parent": 288,
+        "bubble_solves_on_parent": 144,
+        "bubble_derivatives_on_parent": 0
+      },
+      {
+        "label": "endpoint Jacobian",
+        "wall": 67.3257550039998,
+        "native_stability": 43.746640600889805,
+        "supplied_trials": 0.0,
+        "bubble_reference": 10.15922893511015,
+        "worker_startup": 0,
+        "serialization": 0.035448205991997384,
+        "worker_receive_wait_and_transfer": 0.0021878489933442324,
+        "rest": 13.382249413014506,
+        "stability_search_calls_on_parent": 288,
+        "bubble_solves_on_parent": 144,
+        "bubble_derivatives_on_parent": 288
+      },
+      {
+        "label": "serial endpoint replay",
+        "wall": 149.96645503600303,
+        "native_stability": 120.01460187467455,
+        "supplied_trials": 0.0,
+        "bubble_reference": 19.43915391601331,
+        "worker_startup": 0,
+        "serialization": 0,
+        "worker_receive_wait_and_transfer": 0,
+        "rest": 10.512699245315162,
+        "stability_search_calls_on_parent": 862,
+        "bubble_solves_on_parent": 431,
+        "bubble_derivatives_on_parent": 0
+      }
+    ],
+    "phase_boundary_offsets_seconds": {
+      "ceres_enter": [
+        69.46573238799465
+      ],
+      "ceres_exit": [
+        126.3666086489975
+      ],
+      "replay_first": [
+        193.78637733099458
+      ]
+    },
+    "other_phase_gaps_seconds": 0.1415240260103019
+  },
+  "measurement_notes": [
+    "Native elapsed intervals from matched GNU debugger breakpoints at pinned wheel symbol offsets.",
+    "The complete breakdown records intervals in the main fit process. Two fit workers compute in parallel, so these wall-time categories are not aggregate CPU time. The endpoint replay uses the main process only.",
+    "Worker receive includes waiting for ongoing worker computation. Copying and reconstruction on the parent are timed separately under serialization.",
+    "The fitted rows include native stability trial families. The split-record supplied composition bank is only used by the separate diagnostic searches.",
+    "The first profiler used perf DWARF stack samples. The stack snapshots rarely reached the regression callers; matched breakpoints gave direct phase timings instead.",
+    "The detailed breakpoint run overlapped the normal penalty stage on the shared host. The prior lighter breakpoint run supplies the projected evaluation costs.",
+    "Counts come from completed historical AMP penalized fits on wider grids and an earlier wheel. The projection is conditional on comparable evaluation counts and solve cost.",
+    "No solver, penalty, trial-family or stopping-control changes were made."
+  ],
+  "ignored_trace_paths": {
+    "iteration.log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/penalty-diagnosis/iteration.log",
+      "sha256": "8d53fdfbd6f23c786459641ffa8966449b0939fa44fff4c79da8ee5e1e106769"
+    },
+    "phase-timing/iteration.log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/penalty-diagnosis/phase-timing/iteration.log",
+      "sha256": "58913a479bcc7886c39f9ba11434a5b98d6e2844e14b1b215fd08c630ae55b8d"
+    },
+    "phase-timing/native-markers.tsv": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/penalty-diagnosis/phase-timing/native-markers.tsv",
+      "sha256": "52b8edc3c9c7697a2c8bce184535bd537e481e55d2b4b9fa44fe7903224eed10"
+    },
+    "full-breakdown/iteration.log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/penalty-diagnosis/full-breakdown/iteration.log",
+      "sha256": "48b01f5c697db7694fc1c76341b533dd1ef07cfe00ee7e7744d1de9aaf8ce41f"
+    },
+    "full-breakdown/native-markers.tsv": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/penalty-diagnosis/full-breakdown/native-markers.tsv",
+      "sha256": "885ccb23807492d92076bdcd313cef43c3d56c5ec87b3edb9718e8d19f766f26"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "checked_endpoint": {
+    "name": "unpenalized 3.5 Å start 1",
+    "path": "start-1/unpenalized/stage-0/fit.json",
+    "cost": 61.70003837444439
+  },
+  "reporting_status": "ORCHESTRATOR DECISION 2026-11-19, pending the owner's confirmation",
+  "reporting_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-7002669137",
+  "cost_scope": "#337 compares starts within one fit. The recorded costs are reference values across distinct fits.",
+  "recorded_fit_costs": [
+    {
+      "path": "start-0/penalized-0/stage-0/fit.json",
+      "cost": 62.58003861672481
+    },
+    {
+      "path": "start-0/penalized-1/stage-0/fit.json",
+      "cost": 61.8710531825798
+    },
+    {
+      "path": "start-0/unpenalized/stage-0/fit.json",
+      "cost": 61.80354149981403
+    },
+    {
+      "path": "start-1/penalized-0/stage-0/fit.json",
+      "cost": 61.80748795278069
+    },
+    {
+      "path": "start-1/penalized-1/stage-0/fit.json",
+      "cost": 61.87105115754235
+    },
+    {
+      "path": "start-1/unpenalized/stage-0/fit.json",
+      "cost": 61.70003837444439
+    }
+  ],
+  "unpenalized_starts_within_cost_tolerance": [
+    "start-1/unpenalized/stage-0/fit.json"
+  ],
+  "parameters_sha256": "cd0453c2e5de5d830d249ecac50128de38609c848c87fdb193b03997851e07db",
+  "first_search": 13,
+  "last_search": 13,
+  "started_split_record_sha256": "2d014d72d318d38863a3f2ff1833768a3e906e035916a7911ec68b7534b26345",
+  "search": {
+    "grid": {
+      "supplied_trial_counts": {
+        "available": 6266001,
+        "unavailable": 0,
+        "not_applicable": 586473
+      },
+      "states": 666,
+      "available": 666,
+      "descent": 90,
+      "unavailable": [],
+      "minimum_tau": -0.005224576957829186,
+      "supplied_minimum_tpd": -0.005224576957886029,
+      "unavailable_searches": [],
+      "branches": {
+        "data": {
+          "native": {
+            "liquid": 12,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 258
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 12,
+            "none": 258
+          }
+        },
+        "grid": {
+          "native": {
+            "liquid": 78,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 318
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 78,
+            "none": 318
+          }
+        }
+      },
+      "liquid_liquid_splits": {
+        "data": 12,
+        "grid": 78
+      }
+    },
+    "offset": {
+      "descent": 0
+    },
+    "census": {
+      "descent": 0
+    },
+    "penalty_trigger": true,
+    "stable": false
+  },
+  "elapsed_s": 194.86018044200318
+}

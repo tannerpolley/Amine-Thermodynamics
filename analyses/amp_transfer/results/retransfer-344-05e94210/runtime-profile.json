@@ -1,0 +1,102 @@
+{
+  "status": "limit_reached",
+  "message": "Maximum number of iterations reached. Number of iterations: 1.",
+  "iterations": 1,
+  "iteration_seconds": [
+    0.0005061626434326172,
+    56.563233852386475
+  ],
+  "residual_evaluations": 1,
+  "jacobian_evaluations": 2,
+  "data_cost": 61.70003837319344,
+  "stability_cost": 2.5238141023015808,
+  "failures": [],
+  "states": 666,
+  "compressed_states": 862,
+  "workers": 3,
+  "construction_seconds": 2.635630526012392,
+  "wall_seconds": 344.59076060701045,
+  "purpose": "One-iteration timing probe, never a campaign endpoint",
+  "penalty_construction_unavailable": [],
+  "projection_basis": "Old AMP scale-0.01 fit took 12 optimizer iterations; 13 times the entire one-iteration probe is a conservative planning estimate, subject to observed failure below",
+  "projected_seconds": 4482.315518417148,
+  "limit_seconds": 3600,
+  "limit_origin": "Owner instruction for #344, 2026-11-18",
+  "projection_method": "Conservative stage planning: multiply measured whole one-iteration probe by 13, the residual and Jacobian count individually seen in the old 12-iteration AMP scale-0.01 fit. This repeatedly charges startup, counts two Jacobians per probe and is not a measured full-fit time.",
+  "overlapping_job": "Start-1 expanded diagnostic completed during the first part of the probe; sensitivity start 0 overlapped the second part. Each heavy job was capped at three cores on a shared host.",
+  "profiling_user_cpu_seconds": 674.76,
+  "profiling_system_cpu_seconds": 44.14,
+  "profiling_whole_command_wall_seconds": 347.81,
+  "native_last_iteration_seconds": 56.563233852386475,
+  "unassigned_native_wall_seconds": 288.02702059198054,
+  "termination": "Full penalty campaign paused before launch under the one-hour runtime rule.",
+  "conclusion": "The main fits converge and the available state searches detect liquid descents. The compressed-liquid penalty is required. The timed penalty probe projects 74.7 minutes under the conservative planning model, exceeding the one-hour execution limit. The full penalty fit and retreat remain incomplete.",
+  "reference_qualification": "analyses/stability_search/results/repin-05e94210/amp-search-106.json",
+  "historical_penalty": {
+    "states": 1906,
+    "native_wall_seconds": 2812.5961285250087,
+    "iterations": 12,
+    "residual_evaluations": 13,
+    "jacobian_evaluations": 13,
+    "source": "AMP campaign-373 scale-0.01 on the prior 391dfe5d pin, local retained fit report"
+  },
+  "interruption": {
+    "exit_code": 143,
+    "scope": "heavy-1887052-1795043025853893.scope",
+    "cause": "SIGTERM; sender unestablished. Both main fit and four search summaries completed before process exit. Sensitivity launched separately."
+  },
+  "complete_search_wall_intervals": {
+    "campaign/search-0": {
+      "elapsed_seconds": 141.56569981575012,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    },
+    "campaign/search-1": {
+      "elapsed_seconds": 140.8582742214203,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    },
+    "campaign/search-2": {
+      "elapsed_seconds": 141.08508944511414,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    },
+    "campaign/search-3": {
+      "elapsed_seconds": 147.6333668231964,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    },
+    "sensitivity-3.5/search-0": {
+      "elapsed_seconds": 141.5608048439026,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    },
+    "sensitivity-3.5/search-1": {
+      "elapsed_seconds": 144.47552156448364,
+      "basis": "Directory birth through search JSON write; includes worker startup, row evaluation and detail gzip writing; excludes any earlier identity preparation",
+      "entries": 666,
+      "available": 666,
+      "unique_calculations": 630
+    }
+  },
+  "stage_elapsed_seconds": {
+    "campaign/start-0/unpenalized": 371.57713968299504,
+    "campaign/start-1/unpenalized": 370.77420532699034,
+    "sensitivity-3.5/start-0/unpenalized": 331.63603250200686
+  },
+  "not_executed_under_stop": [
+    "main penalty fits and retreat",
+    "3.5 \u00c5 second start and any sensitivity penalty fit"
+  ],
+  "projection_superseded_by": "penalty-evaluation-profile.json"
+}

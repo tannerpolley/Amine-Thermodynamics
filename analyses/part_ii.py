@@ -340,7 +340,7 @@ class Route:
             same[state['key']] = first.setdefault(identity, state['key'])
         return {key: source for key, source in same.items() if key != source}
 
-    def grid(self, point, states, *, trial_set=None):
+    def grid(self, point, states, *, trial_set=None, retain_details=True):
         registry = (dict(amine=self.config['amine'],species=self.config['species'],trials=list(trial_set)) if trial_set is not None else
                     self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record']))
         assert registry['amine']==self.config['amine'] and registry['species']==self.config['species']
@@ -352,12 +352,14 @@ class Route:
             witness.setdefault('density_side', None)
             witness.setdefault('branch', density_branch([witness]))
         trials = witnesses+supplied
-        identity = hashlib.sha256(json.dumps(jsonable([point, states, trials, self.config, trial_set is None]), sort_keys=True).encode()).hexdigest()
+        identity = hashlib.sha256(json.dumps(jsonable([point, states, trials, self.config, trial_set is None, retain_details]), sort_keys=True).encode()).hexdigest()
         cache = getattr(self, '_grid_cache', {})
         if identity in cache:
             return cache[identity]
         self.details = self.out/('search-'+str(len(list(self.out.glob('search-*.json')))))
-        self.details.mkdir(parents=True, exist_ok=True)
+        self.retain_details = retain_details
+        if retain_details:
+            self.details.mkdir(parents=True, exist_ok=True)
         copies = self.same_calculations(point, states)
         rows = {r['key']: r for r in stable.grid(point, [s for s in states if s['key'] not in copies], trials, route=self)}
         measured = [rows[s['key']] if s['key'] not in copies else dict(rows[copies[s['key']]], key=s['key'], seconds=0., same_calculation_as=copies[s['key']]) for s in states]

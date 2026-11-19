@@ -1,0 +1,285 @@
+{
+  "correction_round": 2,
+  "base_commit": "6345900da7ff55439b31bd6ed8421387ed8b9c1e",
+  "engine": "05e94210fa64cf69725e45babc0411d32139df5a",
+  "owner_limit_seconds": 3600,
+  "cutoff_origin": "Owner instruction for #344, 2026-11-18",
+  "retreat": {
+    "initial_split_bank": {
+      "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/baseline/split-record.json",
+      "size_bytes": 5820881,
+      "sha256": "10f2ae975db1afdd1999ad316020634a2a8db1aa8d0d08edd0b496edccc33745"
+    },
+    "states": 862,
+    "distinct_worker_count": 3,
+    "nominal_sweeps_including_seeding": 21,
+    "earlier_selected_search_states": 666,
+    "earlier_selected_search_applicable_trial_evaluations": 6230070,
+    "profiled_case": {
+      "mode": "profile",
+      "workers": 3,
+      "trials": 10230,
+      "replay_seconds": 2.693574956996599,
+      "sweep_seconds": 193.4131419059995,
+      "supplied_trial_counts": {
+        "available": 8184000,
+        "unavailable": 0,
+        "not_applicable": 634260
+      },
+      "states": 862,
+      "available": 862,
+      "descent": 0,
+      "unavailable": [],
+      "minimum_tau": null,
+      "supplied_minimum_tpd": 7.456314767750882e-05
+    },
+    "worker_elapsed_seconds": 574.5833720370001,
+    "worker_breakdown": {
+      "supplied_trial_preparation": {
+        "calls": 24,
+        "worker_elapsed_seconds": 212.418895285
+      },
+      "native_search_with_bubble_pressure": {
+        "calls": 862,
+        "worker_elapsed_seconds": 158.19238289600003
+      },
+      "supplied_trial_tests_excluding_preparation": {
+        "calls": 800,
+        "worker_elapsed_seconds": 101.36176601
+      },
+      "supplied_parent_solve": {
+        "calls": 800,
+        "worker_elapsed_seconds": 8.456481047
+      },
+      "stability_declaration": {
+        "calls": 862,
+        "worker_elapsed_seconds": 19.599669200999998
+      },
+      "other": {
+        "worker_elapsed_seconds": 74.55417759800008
+      }
+    },
+    "aggregate_cpu_percent": 294,
+    "before_seconds": 4117.057597212202,
+    "candidate_seconds": 4013.1112736609357,
+    "timing_basis": "One matched pass per implementation at the same three-core quota; the cProfile run was separate.",
+    "candidate": "Extract a native supplied trial report once; retain only the compact summary and negative trials needed to classify branches. Parallelize fitted-data replay and keep its original row order.",
+    "equivalence": {
+      "anchor": {
+        "before": {
+          "mode": "baseline",
+          "workers": 3,
+          "trials": 10230,
+          "replay_seconds": 2.800895070002298,
+          "sweep_seconds": 193.24946670200734,
+          "supplied_trial_counts": {
+            "available": 8184000,
+            "unavailable": 0,
+            "not_applicable": 634260
+          },
+          "states": 862,
+          "available": 862,
+          "descent": 0,
+          "unavailable": [],
+          "minimum_tau": null,
+          "supplied_minimum_tpd": 7.456314767750882e-05
+        },
+        "after": {
+          "mode": "anchor-fast",
+          "workers": 3,
+          "trials": 10230,
+          "replay_seconds": 1.2901677150075557,
+          "sweep_seconds": 189.81036912598938,
+          "supplied_trial_counts": {
+            "available": 8184000,
+            "unavailable": 0,
+            "not_applicable": 634260
+          },
+          "states": 862,
+          "available": 862,
+          "descent": 0,
+          "unavailable": [],
+          "minimum_tau": null,
+          "supplied_minimum_tpd": 7.456314767750882e-05
+        },
+        "summary_sha256": "01e371406773442675b5e22ff29c4f3fce0cba0eb5823bb6786c9790d0a060a6",
+        "replay_sha256": "b7b5794f0a999ce518f7d1e7657c47f9a81795830b6267d7d133f86f9f5da0f1"
+      },
+      "penalty endpoint subset": {
+        "before": {
+          "mode": "subset-baseline",
+          "workers": 3,
+          "trials": 10230,
+          "replay_seconds": 2.55726505300845,
+          "sweep_seconds": 15.458211006000056,
+          "supplied_trial_counts": {
+            "available": 184140,
+            "unavailable": 0,
+            "not_applicable": 0
+          },
+          "states": 18,
+          "available": 18,
+          "descent": 17,
+          "unavailable": [],
+          "minimum_tau": -0.000243690288613152,
+          "supplied_minimum_tpd": -0.000243690288613152
+        },
+        "after": {
+          "mode": "subset-fast",
+          "workers": 3,
+          "trials": 10230,
+          "replay_seconds": 1.1947361439961242,
+          "sweep_seconds": 15.354334103991278,
+          "supplied_trial_counts": {
+            "available": 184140,
+            "unavailable": 0,
+            "not_applicable": 0
+          },
+          "states": 18,
+          "available": 18,
+          "descent": 17,
+          "unavailable": [],
+          "minimum_tau": -0.000243690288613152,
+          "supplied_minimum_tpd": -0.000243690288613152
+        },
+        "summary_sha256": "5a7157b2af63951dc1c6b89806a28e1f151d9f6fbc070012eeecf6f0af9663cf",
+        "replay_sha256": "b6e2d8b4a5b2d4a51b87f0178a5ec3204df97afa44598ba025d592fbed3f16ed"
+      }
+    },
+    "numeric_identity": {
+      "before": {
+        "rows": 1018,
+        "columns": 9,
+        "workers": 3,
+        "source_files_sha256": {
+          "part_ii.py": "caffcb8f23b074ada2e3dca20c677a50ef1390d2df0162166e01742f6ade1d3b",
+          "stable_refit_255.py": "f7582ccbaf991775f772f8e3d552aa2640f379bc567060bfc7ef684759a616c5"
+        },
+        "predictions_sha256": "5f30800087494da9199377f6c728463d03ecac5a066da9937c5639b34e11110f",
+        "penalty_residuals_sha256": "fc4b5b8d68da66406a2a855ebf4f377643945e8ddb6e65be3723b11be23e7ade",
+        "weighted_jacobian_sha256": "6553c3b26b568600e1d267d3230557483a63e6b264bd1f01acdeb97c1b7d8b56",
+        "wall_seconds": 68.9818512990023
+      },
+      "after": {
+        "rows": 1018,
+        "columns": 9,
+        "workers": 3,
+        "source_files_sha256": {
+          "part_ii.py": "b8968fdee796a87cdf4f6de107cbae26add88e125dd721213f60fd0b2dc31454",
+          "stable_refit_255.py": "f8f41546241ce33bfbe98241d7537db1b2c150bbd074078b773b3e23c43bb901"
+        },
+        "predictions_sha256": "5f30800087494da9199377f6c728463d03ecac5a066da9937c5639b34e11110f",
+        "penalty_residuals_sha256": "fc4b5b8d68da66406a2a855ebf4f377643945e8ddb6e65be3723b11be23e7ade",
+        "weighted_jacobian_sha256": "6553c3b26b568600e1d267d3230557483a63e6b264bd1f01acdeb97c1b7d8b56",
+        "wall_seconds": 68.93101036599546
+      },
+      "fitted_residuals_in_replay_sha256": true,
+      "dimensionless_penalty_residuals_in_native_penalty_sha256": true
+    },
+    "disposition": "The trial cut misses the one-hour gate and was not applied to the shared route. No bisection or final retreat search was launched.",
+    "raw_references": [
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/equivalence.log",
+        "size_bytes": 1446,
+        "sha256": "b6850872b4ed08429d3407acc1d3e345d432e9d01bd12f08a7abea4861200dfd"
+      },
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/comparisons.json",
+        "size_bytes": 2358,
+        "sha256": "de8c603866aab83f55a3b0dc1824428c3eef2da5f4f48eef430684d1cbab4f01"
+      },
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/anchor-profile.log",
+        "size_bytes": 1189,
+        "sha256": "279510a12e1f6433a41680e53cdc385db6233b1eea2cf18edc57f93ec9edb855"
+      }
+    ]
+  },
+  "sensitivity": {
+    "input_point": {
+      "path": "analyses/amp_transfer/results/runs/344-05e94210/sensitivity-3.5/start-0/penalized-0/stage-0/parameters.json",
+      "size_bytes": 135863,
+      "sha256": "bc0ab463173f7c1eca649b36fd488b764f50c5474a70fe1eb294c6f145242259"
+    },
+    "scale": 0.003,
+    "rows": 1018,
+    "worker_count": 3,
+    "probe_status": "limit_reached",
+    "probe_iterations": 1,
+    "elapsed_seconds": 317.28754426199885,
+    "construction_seconds": 2.5034164680109825,
+    "native_setup_seconds": 2.344631825,
+    "initial_jacobian_seconds": 59.785263751,
+    "residual_seconds": 51.035514384,
+    "endpoint_jacobian_seconds": 63.16752956,
+    "serial_native_replay_seconds": 140.792939675,
+    "raw_native_evaluations": [
+      {
+        "kind": "jacobian",
+        "seconds": 59.785263751
+      },
+      {
+        "kind": "jacobian",
+        "seconds": 0.01469327
+      },
+      {
+        "kind": "jacobian",
+        "seconds": 0.000846107
+      },
+      {
+        "kind": "jacobian",
+        "seconds": 0.000616197
+      },
+      {
+        "kind": "residual",
+        "seconds": 51.035514384
+      },
+      {
+        "kind": "jacobian",
+        "seconds": 63.16752956
+      },
+      {
+        "kind": "jacobian",
+        "seconds": 0.001547063
+      }
+    ],
+    "diagnostic_reference_seconds_each": 215.10038600000553,
+    "conditional_projections": [
+      {
+        "reference": "start-1/penalized-1/stage-0/fit.json",
+        "residual_evaluations": 9,
+        "jacobian_evaluations": 8,
+        "conditional_seconds": 1537.119360095022
+      },
+      {
+        "reference": "start-0/penalized-0/stage-0/fit.json",
+        "residual_evaluations": 17,
+        "jacobian_evaluations": 10,
+        "conditional_seconds": 2071.738534287022
+      }
+    ],
+    "prior_timeout_seconds": 3450,
+    "prior_native_endpoint_available": false,
+    "old_elapsed_with_two_diagnostics_seconds": 3880.200772000011,
+    "peak_sampled_rss_plus_swap_GiB": 1.2527618408203125,
+    "rss_samples": 107,
+    "disposition": "One-iteration timing only. Sibling evaluation counts do not predict convergence on this start. The pinned Engine owns the unchanged serial replay. The identical-input attempt reached the time limit without its native report; a full fit was not relaunched.",
+    "raw_references": [
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/sensitivity-probe/native-markers.tsv",
+        "size_bytes": 706,
+        "sha256": "02e2d69ca86f974b6fdecc3601f7e53650ef499f68e1fb435163d9543ec3add8"
+      },
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/sensitivity-probe/fit-report.json",
+        "size_bytes": 526843,
+        "sha256": "2f378a8460962b936907ebe4566230ecdd6d1e9c7662ec9abd7b90445298ea9c"
+      },
+      {
+        "path": "analyses/amp_transfer/results/runs/344-05e94210/round-2/sensitivity-probe/rss-swap.jsonl",
+        "size_bytes": 8758,
+        "sha256": "fb3ad4a6d23ecc9c390b618f888560dce3d5bd85cd1cb944cdc626e6fec8c4b8"
+      }
+    ]
+  }
+}

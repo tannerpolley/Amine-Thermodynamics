@@ -1,0 +1,309 @@
+{
+  "column_normalized_singular_values": [
+    1.9218484737272963,
+    1.659962660452262,
+    1.1298645342869256,
+    0.7985745582895558,
+    0.5785507352355369,
+    0.5242275217632418,
+    0.15472465355648632,
+    0.055333773932276176,
+    0.013047075464254043
+  ],
+  "cost_gradient": {
+    "AMP-water-k": -0.012241857598592532,
+    "AMP-water-slope": 5.5000466083975595e-06,
+    "AMPH-water-k": 0.007720947534297917,
+    "AMPH-water-slope": -2.6283013725466753e-06,
+    "AMPH-CO2-k": 0.0002501864382162246,
+    "AMPH-segment-diameter": -0.00010055788196849935,
+    "AMPCOO-segment-diameter": -0.14842362101537976,
+    "AMP-hydrolysis-a": -4.541881221920008e-05,
+    "AMP-hydrolysis-enthalpy-increment": 7.668498705885688e-05
+  },
+  "active_bound_outward_descent": {
+    "AMPCOO-segment-diameter": true,
+    "AMP-hydrolysis-enthalpy-increment": true
+  },
+  "free_coordinates": [
+    "AMP-water-k",
+    "AMP-water-slope",
+    "AMPH-water-k",
+    "AMPH-water-slope",
+    "AMPH-CO2-k",
+    "AMPH-segment-diameter",
+    "AMP-hydrolysis-a"
+  ],
+  "residual_variance": 0.8281884345563006,
+  "conditional_standard_error": {
+    "AMP-water-k": 0.0061647230769210975,
+    "AMP-water-slope": 16.254645062158545,
+    "AMPH-water-k": 0.02155202943136903,
+    "AMPH-water-slope": 82.69265070265082,
+    "AMPH-CO2-k": 0.07600779354703506,
+    "AMPH-segment-diameter": 0.6562295030953869,
+    "AMP-hydrolysis-a": 0.24567395590503227
+  },
+  "conditional_correlation": [
+    [
+      1.0,
+      0.9287159006725132,
+      0.4735294217249892,
+      0.3419279748110287,
+      0.09055753800921323,
+      0.12722797619949497,
+      -0.5567760668903783
+    ],
+    [
+      0.9287159006725134,
+      1.0,
+      0.4381933037627327,
+      0.34908493648535815,
+      0.07102619889234825,
+      0.11661588710848232,
+      -0.5350030133550636
+    ],
+    [
+      0.47352942172499307,
+      0.4381933037627358,
+      1.0000000000000002,
+      0.9775014037098712,
+      0.01813149667927105,
+      0.9234225597257085,
+      0.2594274084638058
+    ],
+    [
+      0.3419279748110331,
+      0.34908493648536193,
+      0.9775014037098722,
+      0.9999999999999999,
+      -0.08921939843900852,
+      0.9594508575122586,
+      0.36449770566917583
+    ],
+    [
+      0.0905575380092131,
+      0.07102619889234826,
+      0.018131496679270952,
+      -0.08921939843900856,
+      1.0,
+      -0.082855304297828,
+      -0.10638949113176543
+    ],
+    [
+      0.12722797619950021,
+      0.11661588710848711,
+      0.9234225597257102,
+      0.9594508575122593,
+      -0.0828553042978279,
+      1.0,
+      0.5331241966854284
+    ],
+    [
+      -0.5567760668903752,
+      -0.5350030133550615,
+      0.25942740846381007,
+      0.3644977056691798,
+      -0.10638949113176545,
+      0.5331241966854321,
+      1.0
+    ]
+  ],
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "aminomethylpropanol",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.13040184329619456,
+      "scale": 0.05,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "AMP-water-k",
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "aminomethylpropanol",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -55.10677346195859,
+      "scale": 100.0,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "identity": "AMP-water-slope",
+      "unit": "K"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-aminomethylpropanol",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.2563537480484319,
+      "scale": 0.05,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "AMPH-water-k",
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-aminomethylpropanol",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -215.48006725530246,
+      "scale": 100.0,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "identity": "AMPH-water-slope",
+      "unit": "K"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-aminomethylpropanol",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.7584093619947072,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "AMPH-CO2-k",
+      "unit": "dimensionless"
+    },
+    {
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-aminomethylpropanol",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-aminomethylpropanol",
+          1.0
+        ],
+        [
+          "packing_diameter",
+          "protonated-aminomethylpropanol",
+          0.88
+        ],
+        [
+          "born_diameter",
+          "protonated-aminomethylpropanol",
+          1.0
+        ]
+      ],
+      "origin": 5.772915612137712,
+      "scale": 0.25,
+      "bounds": [
+        4.5,
+        6.5
+      ],
+      "identity": "AMPH-segment-diameter",
+      "unit": "angstrom"
+    },
+    {
+      "targets": [
+        [
+          "segment_diameter",
+          "carbamate-anion",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "carbamate-anion",
+          1.0
+        ],
+        [
+          "packing_diameter",
+          "carbamate-anion",
+          0.88
+        ],
+        [
+          "born_diameter",
+          "carbamate-anion",
+          1.0
+        ]
+      ],
+      "origin": 6.5,
+      "scale": 0.25,
+      "bounds": [
+        3.5,
+        6.5
+      ],
+      "identity": "AMPCOO-segment-diameter",
+      "unit": "angstrom"
+    },
+    {
+      "kind": "reaction_coordinate",
+      "name": "carbamate-hydrolysis",
+      "coefficient": "a",
+      "origin": 11.114461815245232,
+      "scale": 1.0,
+      "bounds": [
+        6.634636675032315,
+        11.634636675032315
+      ],
+      "identity": "AMP-hydrolysis-a",
+      "unit": "dimensionless"
+    },
+    {
+      "kind": "reaction_enthalpy_shift",
+      "name": "carbamate-hydrolysis",
+      "pivot_temperature": 313.15,
+      "origin": 0.0,
+      "scale": 1000.0,
+      "bounds": [
+        0.0,
+        10000.0
+      ],
+      "identity": "AMP-hydrolysis-enthalpy-increment",
+      "unit": "J/mol"
+    }
+  ],
+  "active_bounds": [
+    6,
+    8
+  ],
+  "parameters_sha256": "cd0453c2e5de5d830d249ecac50128de38609c848c87fdb193b03997851e07db"
+}

@@ -1,0 +1,271 @@
+{
+  "reporting_status": "ORCHESTRATOR DECISION 2026-11-19, pending the owner's confirmation",
+  "reporting_point": "unpenalized main start 0",
+  "sensitivity_reporting_point": "unpenalized 3.5 Å start 1",
+  "classification_method": {
+    "reference": "https://github.com/tannerpolley/Amine-Thermodynamics/commit/755d24ae5",
+    "owner_decision": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-7002428266",
+    "method": "Request both density branches at fixed composition and parent pressure. Match the candidate density within the pinned Engine log-density anchor window; if both requests return one unspecified root, check its fixed-composition isotherm toward the dilute gas. Re-evaluate the retained supplied minimum at the matched root. Confirm local liquid\u2013liquid equilibrium independently at the same feed, temperature, pressure and model from the native split or parent and trial initialization. For the remaining cases try up to three nearby confirmed phases as guesses.",
+    "pressure_row_tolerance": 1e-10,
+    "native_density_anchor_log_window": 0.009950330853168083,
+    "native_phase_coincidence_distance": 1e-06,
+    "G_difference_basis": "mol, total G/(RT) on the same feed basis; numerical estimate sums the Engine association, feasibility and summation estimates weighted by phase amount",
+    "raw_detail_policy": "Raw per-state search records and diagnostic drivers are stored in the ignored results/runs/344-05e94210 directory."
+  },
+  "cases": {
+    "main start 0": {
+      "workers": 3,
+      "species": [
+        "carbon-dioxide",
+        "aminomethylpropanol",
+        "water",
+        "protonated-aminomethylpropanol",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "point_sha256": "85ef51fde890ac0788e50a0040dbce15002058de35d18929faa008fd3e5e9429",
+      "point_path": "analyses/amp_transfer/results/retransfer-344-05e94210/campaign/start-0/unpenalized/stage-0/parameters.json",
+      "search_sha256": "c3712f2d6d36f6997d3c388c61f5a001320f0a8430ac20987e413a4736fab4a5",
+      "search_path": "analyses/amp_transfer/results/runs/344-05e94210/campaign/search-15.json",
+      "split_record_sha256": "2d014d72d318d38863a3f2ff1833768a3e906e035916a7911ec68b7534b26345",
+      "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+      "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+      "reference": "755d24ae5",
+      "reference_runner_sha256": "88c08c59465f725c25e396d753aff4baf0961cb273cd424c366aa8a3aa9f402c",
+      "records": 90,
+      "distinct_calculations": 90,
+      "probe": {
+        "wall_seconds": 1.0107540099998005,
+        "driver_sha256": "4312941563d44155a408682f82bfd3fe0273747af0911fb2f9b178e557b51b0b",
+        "completed_calculations": 6
+      },
+      "full_diagnosis": {
+        "wall_seconds": 15.590256722003687,
+        "driver_sha256": "4312941563d44155a408682f82bfd3fe0273747af0911fb2f9b178e557b51b0b",
+        "completed_calculations": 90
+      },
+      "followup": {
+        "wall_seconds": 5.591670088993851,
+        "driver_sha256": "04e095f97cdbc3b701632d855deeb932a9fc6241414d8546b6e1981ff54502bc",
+        "completed_calculations": 19
+      },
+      "projected_worker_wall_seconds": 17.14303814980667,
+      "source_counts": {
+        "(a) data": {
+          "records": 12,
+          "distinct_calculations": 12,
+          "liquid_root_descents": 12,
+          "confirmed_liquid_liquid": 9,
+          "vapor_directed": 0,
+          "density_branch_unresolved": 0,
+          "liquid_directed_equilibrium_unresolved": 3
+        },
+        "(b) grid": {
+          "records": 78,
+          "distinct_calculations": 78,
+          "liquid_root_descents": 78,
+          "confirmed_liquid_liquid": 65,
+          "vapor_directed": 0,
+          "density_branch_unresolved": 0,
+          "liquid_directed_equilibrium_unresolved": 13
+        }
+      },
+      "outside_applicable_ranges": {
+        "carbamate-hydrolysis": 64,
+        "AMP-dissociation": 90
+      },
+      "reclosed_tpd_over_rt_range": [
+        -0.005223247504176243,
+        -2.2560508938340718e-05
+      ],
+      "max_abs_reclosed_pressure_row": 2.519721465392664e-13,
+      "max_abs_log_density_correction": 0.0004382929716567581,
+      "confirmed_conditions": {
+        "temperature_K": [
+          373.0,
+          393.2
+        ],
+        "AMP_wt_percent_unloaded": [
+          26.799999999999997,
+          29.999999999999996
+        ],
+        "loading_mol_CO2_per_mol_AMP": [
+          0.4,
+          0.966
+        ],
+        "search_pressure_Pa": [
+          167987.31011519008,
+          12521790.462734679
+        ],
+        "pressure_ratios": [
+          1.05,
+          3.0
+        ],
+        "G_two_minus_G_parent_over_RT_mol": [
+          -0.016733555841710768,
+          -0.00011932738289033296
+        ],
+        "G_difference_numerical_estimate_mol": [
+          2.6337489909242293e-09,
+          4.8920888798512926e-09
+        ],
+        "max_abs_classified_equilibrium_row": 4.4379547294311226e-14
+      },
+      "largest_G_decrease": {
+        "key": "grid:{'water': 11.545384436618988, 'aminomethylpropanol': 1.0}:393.15:0.7:1.05",
+        "T_K": 393.15,
+        "AMP_wt_percent_unloaded": 29.999999999999996,
+        "loading_mol_CO2_per_mol_AMP": 0.7,
+        "pressure": {
+          "declared_pressure_Pa": null,
+          "search_pressure_Pa": 1214759.510236927,
+          "pressure_ratio": 1.05,
+          "model_bubble_pressure_Pa": 1156913.819273264
+        },
+        "G_two_minus_G_parent_over_RT_mol": -0.016733555841710768,
+        "G_difference_numerical_estimate_mol": 2.802401562157468e-09,
+        "parent_feed_total_mol": 13.245384436618988,
+        "phase_densities_mol_m3": [
+          44685.296665363916,
+          31704.24114940415
+        ],
+        "phase_amounts_mol": [
+          8.305872233425573,
+          4.281240084654848
+        ]
+      }
+    },
+    "3.5 \u00c5 sensitivity start 1": {
+      "workers": 3,
+      "species": [
+        "carbon-dioxide",
+        "aminomethylpropanol",
+        "water",
+        "protonated-aminomethylpropanol",
+        "carbamate-anion",
+        "bicarbonate-anion",
+        "carbonate-anion",
+        "hydronium-cation",
+        "hydroxide-anion"
+      ],
+      "point_sha256": "cd0453c2e5de5d830d249ecac50128de38609c848c87fdb193b03997851e07db",
+      "point_path": "analyses/amp_transfer/results/retransfer-344-05e94210/sensitivity-3.5/start-1/unpenalized/stage-0/parameters.json",
+      "search_sha256": "2ec632d262361830f38567697ace53539a76db0a39792c27dfe57c311fa4d4e8",
+      "search_path": "analyses/amp_transfer/results/runs/344-05e94210/sensitivity-3.5/search-13.json",
+      "split_record_sha256": "2d014d72d318d38863a3f2ff1833768a3e906e035916a7911ec68b7534b26345",
+      "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+      "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+      "reference": "755d24ae5",
+      "reference_runner_sha256": "88c08c59465f725c25e396d753aff4baf0961cb273cd424c366aa8a3aa9f402c",
+      "records": 90,
+      "distinct_calculations": 90,
+      "probe": {
+        "wall_seconds": 0.9679381280147936,
+        "driver_sha256": "4312941563d44155a408682f82bfd3fe0273747af0911fb2f9b178e557b51b0b",
+        "completed_calculations": 6
+      },
+      "full_diagnosis": {
+        "wall_seconds": 14.580757888994412,
+        "driver_sha256": "4312941563d44155a408682f82bfd3fe0273747af0911fb2f9b178e557b51b0b",
+        "completed_calculations": 90
+      },
+      "followup": {
+        "wall_seconds": 5.838401554996381,
+        "driver_sha256": "04e095f97cdbc3b701632d855deeb932a9fc6241414d8546b6e1981ff54502bc",
+        "completed_calculations": 18
+      },
+      "projected_worker_wall_seconds": 15.588215969328303,
+      "source_counts": {
+        "(a) data": {
+          "records": 12,
+          "distinct_calculations": 12,
+          "liquid_root_descents": 12,
+          "confirmed_liquid_liquid": 10,
+          "vapor_directed": 0,
+          "density_branch_unresolved": 0,
+          "liquid_directed_equilibrium_unresolved": 2
+        },
+        "(b) grid": {
+          "records": 78,
+          "distinct_calculations": 78,
+          "liquid_root_descents": 78,
+          "confirmed_liquid_liquid": 66,
+          "vapor_directed": 0,
+          "density_branch_unresolved": 0,
+          "liquid_directed_equilibrium_unresolved": 12
+        }
+      },
+      "outside_applicable_ranges": {
+        "carbamate-hydrolysis": 64,
+        "AMP-dissociation": 90
+      },
+      "reclosed_tpd_over_rt_range": [
+        -0.005224576957886029,
+        -2.2658961313481996e-05
+      ],
+      "max_abs_reclosed_pressure_row": 2.5476370288533404e-13,
+      "max_abs_log_density_correction": 0.00043708858010915323,
+      "confirmed_conditions": {
+        "temperature_K": [
+          363.15,
+          393.2
+        ],
+        "AMP_wt_percent_unloaded": [
+          26.799999999999997,
+          29.999999999999996
+        ],
+        "loading_mol_CO2_per_mol_AMP": [
+          0.4,
+          0.966
+        ],
+        "search_pressure_Pa": [
+          167987.08343724345,
+          12521771.431500992
+        ],
+        "pressure_ratios": [
+          1.05,
+          3.0
+        ],
+        "G_two_minus_G_parent_over_RT_mol": [
+          -0.01673798519277625,
+          -0.00011675957193801878
+        ],
+        "G_difference_numerical_estimate_mol": [
+          2.643577228590289e-09,
+          7.601444946564855e-09
+        ],
+        "max_abs_classified_equilibrium_row": 4.335843023339103e-14
+      },
+      "largest_G_decrease": {
+        "key": "grid:{'water': 11.545384436618988, 'aminomethylpropanol': 1.0}:393.15:0.7:1.05",
+        "T_K": 393.15,
+        "AMP_wt_percent_unloaded": 29.999999999999996,
+        "loading_mol_CO2_per_mol_AMP": 0.7,
+        "pressure": {
+          "declared_pressure_Pa": null,
+          "search_pressure_Pa": 1214750.9505723573,
+          "pressure_ratio": 1.05,
+          "model_bubble_pressure_Pa": 1156905.6672117687
+        },
+        "G_two_minus_G_parent_over_RT_mol": -0.01673798519277625,
+        "G_difference_numerical_estimate_mol": 2.798388987594775e-09,
+        "parent_feed_total_mol": 13.245384436618988,
+        "phase_densities_mol_m3": [
+          44685.760483430924,
+          31704.017510445716
+        ],
+        "phase_amounts_mol": [
+          8.305976923745698,
+          4.28113444855811
+        ]
+      }
+    }
+  },
+  "retained_sha256": {
+    "descent-states.csv": "bdb7cc7c728bf46eb432490da85e2d9a1901c59fcfce269b6bb277a23eb2347d",
+    "phase-witnesses.jsonl": "21929549148d6f40be8039324fedc4053292290e9fa977c1141fed85ec396907"
+  }
+}

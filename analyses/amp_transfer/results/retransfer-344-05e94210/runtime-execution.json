@@ -1,0 +1,117 @@
+{
+  "decision": {
+    "date": "2026-11-19",
+    "source": "https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-6999006070",
+    "limit_s": 4500,
+    "scope": [
+      "main start 0 retreat",
+      "3.5 \u00c5 start 0 penalty scale 0.003"
+    ],
+    "other_stage_limit_s": 3600
+  },
+  "engine": "05e94210fa64cf69725e45babc0411d32139df5a",
+  "workers": 3,
+  "retreat": {
+    "disposition": "interpolated",
+    "bisection_elapsed_s": 4081.8071182330023,
+    "searches_including_anchor_eligibility": 22,
+    "compressed_sweeps": 21,
+    "timing": {
+      "sweeps_s": [
+        188.00731198501308,
+        188.16769879398635,
+        193.51321681399713,
+        195.0808939020062,
+        195.40253298300377,
+        193.63202026300132,
+        192.53177601999778,
+        193.71111387699784,
+        193.70175897699664,
+        193.63595526000427,
+        192.96922769700177,
+        192.58071454800665,
+        192.4231750350009,
+        193.86406773500494,
+        193.20199798900285,
+        192.66136858299433,
+        193.86535718700907,
+        193.91016972900252,
+        193.9105646500102,
+        194.33563504900667,
+        194.26390700798947
+      ],
+      "searches_per_nominal_bracket": 21,
+      "projected_s": 4080.5119079870055,
+      "elapsed_s": 4080.5119273570017,
+      "replay_probe_s": 1.3495051420031814
+    },
+    "memory": {
+      "samples": 1427,
+      "last_elapsed_s": 4279.11174432699,
+      "sample_interval_s": 3,
+      "max_rss_plus_swap_GiB": 1.1145477294921875,
+      "raw_trace": {
+        "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/main-retreat-rss.jsonl",
+        "size_bytes": 116685,
+        "sha256": "4e035edf569b224fcd3d05e196317cd9686d9f2ea8e2501add8cfaedc748fa9c"
+      }
+    },
+    "log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/main-retreat.log",
+      "size_bytes": 4722,
+      "sha256": "997d6a635cd57587c83f023dd76d26ad07358cb7b7c20ddcb65bec720e6fdfa6"
+    },
+    "exact_stage_inputs": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/main-retreat/inputs.json",
+      "size_bytes": 586576,
+      "sha256": "7960bda8c7c2f23d933e07b6a84c97711cdee9c3cb467b2ca793277694bbdfdb"
+    },
+    "tested_cut_sources": [
+      {
+        "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/round-2/compact-stable.py",
+        "size_bytes": 54088,
+        "sha256": "f8f41546241ce33bfbe98241d7537db1b2c150bbd074078b773b3e23c43bb901"
+      },
+      {
+        "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/round-2/parallel-part-ii.py",
+        "size_bytes": 32762,
+        "sha256": "b8968fdee796a87cdf4f6de107cbae26add88e125dd721213f60fd0b2dc31454"
+      }
+    ]
+  },
+  "sensitivity": {
+    "native_wall_s": 3876.8546331000107,
+    "iterations": 55,
+    "residual_evaluations": 57,
+    "jacobian_evaluations": 38,
+    "optimizer_message": "Function tolerance reached. |cost_change|/cost: 9.935683e-11 <= 1.000000e-10",
+    "memory": {
+      "samples": 1295,
+      "last_elapsed_s": 3882.872098729,
+      "sample_interval_s": 3,
+      "max_rss_plus_swap_GiB": 1.624359130859375,
+      "raw_trace": {
+        "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/sensitivity/rss-swap.jsonl",
+        "size_bytes": 106718,
+        "sha256": "7ed90afefa0edba24783787799c417c69b27a5b9605dca96fa077242724674c0"
+      }
+    },
+    "log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/sensitivity/run.log",
+      "size_bytes": 935,
+      "sha256": "762eb31e70ead3f36b092a8230c3fd0277d75455593addb31c2fae683be61be5"
+    },
+    "trace": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/sensitivity/native-markers.tsv",
+      "size_bytes": 9830,
+      "sha256": "5462f4f387fc3581d849acb5eecd0be733e8db8b402325b086ad97e1950e9a7b"
+    }
+  },
+  "followup": {
+    "log": {
+      "path": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/issue-344-amp-05e94210/analyses/amp_transfer/results/runs/344-05e94210/75-minute-stages/followup.log",
+      "size_bytes": 1185,
+      "sha256": "adb25b58115b08c8f579f80454efbd16f8d7a24265dfddebbcdd54f29d593220"
+    }
+  }
+}

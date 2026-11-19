@@ -1,0 +1,194 @@
+{
+  "evidence": "Source-reported measurement uncertainty, accuracy and detection statements; not adopted residual scales",
+  "method": "Read-only source examination by delegated investigator; implementor independently hash-verified all five PDFs and checked the relevant uncertainty passages. Ciftja concentration/amount basis and Figure 5 were additionally inspected.",
+  "missing_companions": "Hartono 2021 and Ciftja 2014 supplements are not Zotero attachments; existing source-admission.md retains their archive lineage. No new source acquisition or corpus edits.",
+  "records": [
+    {
+      "source": "Hartono et al. 2021",
+      "groups": [
+        "loaded-pressure",
+        "hartono-2021-supplemental"
+      ],
+      "roles": [
+        "fitted",
+        "not fitted"
+      ],
+      "rows": [
+        47,
+        18
+      ],
+      "zotero_parent": "JJXAM5ET",
+      "zotero_pdf": "MTJ4JDPP",
+      "pdf_sha256": "44b95c71116322b024070b17f21c85bbb2c140c5b824639fdb1494caea4da6ef",
+      "locator": "Table 7, PDF pp.5–6; Section 3.2.4, PDF p.4",
+      "stated": [
+        {
+          "quantity": "total pressure u(P_T)",
+          "values": [
+            0.15,
+            0.2
+          ],
+          "unit": "kPa",
+          "basis": "row-specific table values"
+        },
+        {
+          "quantity": "loading u(alpha)",
+          "interval": [
+            0.01,
+            0.03
+          ],
+          "unit": "mol CO2/mol AMP"
+        }
+      ],
+      "limit": "The VLE table does not establish standard versus expanded coverage. The supporting-information coverage factor of 2 is explicit for heat tables; applying it to VLE is an inference, not a verified source statement. The retained fit uses the project-selected 5% pressure residual floor."
+    },
+    {
+      "source": "Hartono et al. 2013",
+      "groups": [
+        "binary pressure",
+        "binary vapor AMP fraction"
+      ],
+      "roles": [
+        "fitted",
+        "fitted"
+      ],
+      "rows": [
+        26,
+        26
+      ],
+      "zotero_parent": "5KUR8PRH",
+      "zotero_pdf": "SEPZQIPE",
+      "pdf_sha256": "4ee0fb70ba4e10feb63aef269dc5e270819a889b79a21780fc1bbae58ca247ad",
+      "locator": "Experimental section, journal p.152; binary VLE Table 3 p.154",
+      "stated": [],
+      "limit": "No source-stated uncertainty found for the binary total pressures or vapor AMP fractions. The less-than-2% parallel-sample uncertainty and 0.0001 detection limit refer to proton NMR analyses, not established uncertainties for these binary VLE observables."
+    },
+    {
+      "source": "Ciftja et al. 2014",
+      "groups": [
+        "nmr"
+      ],
+      "roles": [
+        "fitted"
+      ],
+      "rows": [
+        57
+      ],
+      "zotero_parent": "PUUFV6NX",
+      "zotero_pdf": "FBQ5R6DR",
+      "pdf_sha256": "a48f48fcc37293daa87cfe54f63315e003169ccc7582f8887b118afad557c40d",
+      "locator": "Section 2.6, journal pp.321–322; Section 2.2 p.318; Eqs.16–18 p.323",
+      "conditions": "30 mass% AMP, 25/35/45 degrees Celsius",
+      "stated": [
+        {
+          "quantity": "NMR species-concentration determination uncertainty from carbon-13 detection limit",
+          "value": 0.0002,
+          "unit": "mole fraction",
+          "coverage": "not specified"
+        },
+        {
+          "quantity": "propagated relative uncertainty in moles of each species, Eq.15",
+          "value": 0.1,
+          "unit": "percent",
+          "coverage": "not specified"
+        }
+      ],
+      "limit": "The fitted observable is carbamate moles divided by analytical AMP moles. The source statements do not supply a row-specific covariance or uncertainty on that ratio. The mole-fraction detection limit is not directly substituted for the ratio error or the fitting scale. Concentration integration and inferred species splitting are distinct."
+    },
+    {
+      "source": "Kundu et al. 2003",
+      "groups": [
+        "kundu"
+      ],
+      "roles": [
+        "not fitted"
+      ],
+      "rows": [
+        51
+      ],
+      "zotero_parent": "BRW2JUBY",
+      "zotero_pdf": "33276JDA",
+      "pdf_sha256": "48a126350a42180b20cb0fad319c92317112288efdcfa487148cd3a477d87556",
+      "locator": "Experimental section, journal p.790 (PDF p.2); data Tables 1–3",
+      "conditions": "Atmospheric total pressure; 303–323 K; 2.0, 2.8 and 3.4 mol/L AMP stocks",
+      "stated": [
+        {
+          "quantity": "total-pressure measurement accuracy",
+          "value": 0.2,
+          "unit": "kPa"
+        },
+        {
+          "quantity": "temperature uncertainty",
+          "value": 0.1,
+          "unit": "K"
+        },
+        {
+          "quantity": "experimental solubility error",
+          "value": 2,
+          "unit": "percent",
+          "qualifier": "approximately"
+        },
+        {
+          "quantity": "loading-method accuracy and reproducibility",
+          "value": 2,
+          "unit": "percent",
+          "qualifier": "within"
+        }
+      ],
+      "limit": "The retained CO2 partial pressure is derived from gas composition and total pressure. No combined CO2 partial-pressure uncertainty or gas-composition measurement uncertainty was found; solubility error is not a partial-pressure error."
+    },
+    {
+      "source": "Tong et al. 2012",
+      "groups": [
+        "tong",
+        "tong-baseline"
+      ],
+      "roles": [
+        "not fitted",
+        "not fitted"
+      ],
+      "rows": [
+        40,
+        5
+      ],
+      "zotero_parent": "5FB2UHQZ",
+      "zotero_pdf": "2SVMJQ58",
+      "pdf_sha256": "78af3d67d58ff610dcc7c34fd55a75763470b7cd5bac0f3e39c256c7d7ffd61c",
+      "locator": "Experimental section p.38; Section 2.3 p.41; Table 4 p.43",
+      "conditions": "Retained AMP total-pressure observations at 313.2–393.2 K",
+      "stated": [
+        {
+          "quantity": "pressure-transducer specification",
+          "value": 0.03,
+          "unit": "percent of full scale",
+          "instrument_ranges_MPa": [
+            [
+              0,
+              0.2
+            ],
+            [
+              0,
+              3.5
+            ]
+          ]
+        },
+        {
+          "quantity": "u(P) used in loading propagation",
+          "values": [
+            0.06,
+            1.0
+          ],
+          "unit": "kPa",
+          "basis": "respectively below and above 200 kPa"
+        },
+        {
+          "quantity": "combined standard uncertainty of loading",
+          "value": 0.006,
+          "unit": "mol CO2/mol amine",
+          "qualifier": "approximately"
+        }
+      ],
+      "limit": "The transducer specification is not a complete uncertainty budget for each pressure row. Pressure uncertainties in Section 2.3 are inputs to the loading propagation, not a supplied per-row covariance for this campaign."
+    }
+  ]
+}

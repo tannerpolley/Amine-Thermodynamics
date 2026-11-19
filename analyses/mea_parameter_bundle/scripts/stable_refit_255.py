@@ -212,6 +212,7 @@ def _measure_group(states):
 def _measure(state):
     started = time.monotonic()
     supplied, not_applicable, repeated, unique = [], [], [], ()
+    retain_details = _ROUTE is None or getattr(_ROUTE, 'retain_details', True)
     metadata = {}
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
@@ -254,7 +255,10 @@ def _measure(state):
                 result = eq.solve_equilibrium(_SPEC.model,parent)
                 report = _supplied_report(parent, result, supplied, unique)
                 out['supplied_parent_pressure_Pa'] = result.pressure
-                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=_quantities(t.quantities),message=t.message) for t in report.trials]
+                if retain_details:
+                    out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=_quantities(t.quantities),message=t.message) for t in report.trials]
+                else:
+                    out['supplied_trials'] = [dict(evidence=t.evidence, quantities=_quantities(t.quantities)) for t in report.trials]
                 out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
                 if len(report.trials)==len(supplied):
                     out['supplied_trials'] = [out['supplied_trials'][i] for i in repeated]
@@ -274,11 +278,13 @@ def _measure(state):
             out['pressure_basis'] = _ROUTE.pressure_basis(_SPEC, state, item, prediction)
     row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
     if _ROUTE is not None and hasattr(_ROUTE, 'details'):
-        path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
-        plain = jsonable({k: v for k, v in row.items() if k != 'supplied_trials'})  # supplied trials are built JSON-ready
-        plain = {k: row[k] if k == 'supplied_trials' else plain[k] for k in row}
-        path.write_bytes(gzip.compress(json.dumps(plain, allow_nan=False).encode(), compresslevel=1, mtime=0))
-        row.update(details=str(path.relative_to(_ROUTE.out)), descent=descent(row), supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
+        if retain_details:
+            path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
+            plain = jsonable({k: v for k, v in row.items() if k != 'supplied_trials'})  # supplied trials are built JSON-ready
+            plain = {k: row[k] if k == 'supplied_trials' else plain[k] for k in row}
+            path.write_bytes(gzip.compress(json.dumps(plain, allow_nan=False).encode(), compresslevel=1, mtime=0))
+            row['details'] = str(path.relative_to(_ROUTE.out))
+        row.update(descent=descent(row),supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
         for field in ('supplied_trials', 'not_applicable_supplied_trials'):
             row.pop(field, None)
     return row
@@ -756,7 +762,10 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
         return
     # Seed both ends before freezing the shared retreat trials (#385 owner decision).
     for point in (anchor, endpoint):
-        admissible(point, enforced, rows)
+        if route is None:
+            admissible(point, enforced, rows)
+        else:
+            route.grid(point, enforced, retain_details=False)
     registry = route.result('split-record.json') if route else globals().get('GRID_TRIALS', {})
     base = (registry['trials'] + registry.get('supplied_trials', []) if route else
             [w for group in registry.values() for trials in (group.values() if isinstance(group, dict) else [group]) for w in trials])
@@ -765,15 +774,23 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
         if witness.get('kind') in ('liquid', 'vapor'):
             witness['kind'] = witness['kind'].title()
     def check(t):
+        if route is not None:
+            previous = next((row for row in trace if row['t'] == t), None)
+            if previous is not None:
+                trace.append(dict(previous, reused=True))
+                return previous['admissible']
         local, point = copy.deepcopy(base), segment(anchor, endpoint, t)
         while True:
-            measured = route.grid(point, enforced, trial_set=local) if route else grid(point, enforced, local)
+            measured = route.grid(point, enforced, trial_set=local, retain_details=False) if route else grid(point, enforced, local)
+            tal = tally(measured)
+            # An existing descent or unavailable row rejects this point on the frozen trial set.
+            if route is not None and (tal['descent'] or tal['unavailable']):
+                break
             before = len(local)
             for row in measured:
                 local.extend(w for w in row.get('witnesses', []) if w not in local)
             if len(local)==before:
                 break
-        tal = tally(measured)
         _, ok, cost = (route.replay if route else replay)(point, rows)
         ok = ok and not tal['descent'] and not tal['unavailable']
         trace.append(dict(t=t, admissible=ok, cost=cost, trials=len(local),
