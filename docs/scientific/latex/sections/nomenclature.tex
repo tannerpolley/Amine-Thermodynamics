@@ -30,7 +30,7 @@ $\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region r
 $d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA & \ref{eq:born-ssm-ds} \\
 $c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 & \ref{eq:born-ssm-ds}, \ref{eq:born-shell-diameter} \\
 $f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 & \ref{eq:born-shell-diameter} \\
-$d_{V,i},d_{T,i}$ & Dielectric-volume and temperature coefficients & L/mol; K & \ref{eq:solvent-permittivity} \\
+$d_{V,i},d_{T,i}$ & Permittivity coefficients & L/mol; K & \ref{eq:solvent-permittivity} \\
 $n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol; m$^3$ & \ref{eq:solvent-permittivity} \\
 $\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 & \ref{eq:activity-reaction-equilibrium} \\
 $a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol & \ref{eq:activities}; Section~\ref{sec:theory} \\
@@ -43,10 +43,10 @@ $\alpha,w_{\MEA}$ & Loading and unloaded-solvent mass fraction & mol/mol; kg/kg 
 $\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol & \ref{eq:addition-heat} \\
 $u_\rho,u_\alpha,g_j,s_\rho$ & Density/loading scale inputs and density secant & kg/m$^3$; mol/mol; kg/m$^3$; kg/m$^3$ & \ref{eq:density-scale} \\
 $\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable & \ref{eq:fit-objective} \\
-$J_I,s_C^2,I,N$ & Interior weighted Jacobian, variance factor, interior set, count & various; 1; 1; 1 & \ref{eq:conditional-covariance} \\
+$J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 & \ref{eq:conditional-covariance}, \ref{eq:aard} \\
 $g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 & \ref{eq:tpd} \\
 $B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 & \ref{eq:tpd} \\
-$\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Descending distance, penalty scale/weight and cost & 1 & \ref{eq:stability-penalty} \\
+$\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative tangent-plane distance, penalty scale and weight, penalized objective & 1 & \ref{eq:stability-penalty} \\
 \end{longtable}
 \endgroup
 % P:nomenclature-conventions
@@ -54,4 +54,4 @@ Subscripts $i,j$ identify species, $r$ reactions, $w$ water and $k$ polynomial o
 Superscripts calc and obs mean calculated and observed; pure and $\infty,w$ mean pure solvent and infinite dilution in water; $\circ$ denotes the source standard state.
 
 % P:nomenclature-acronyms
-AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; MDEA: N-methyldiethanolamine; NMR: nuclear magnetic resonance; VLE: vapor--liquid equilibrium; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; SSM+DS: solvation-shell model with dielectric saturation.
+AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; MDEA: N-methyldiethanolamine; NMR: nuclear magnetic resonance; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; ePC-SAFT: electrolyte PC-SAFT; SAFT-HR: Huang--Radosz statistical associating fluid theory.

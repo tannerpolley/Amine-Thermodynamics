@@ -20,10 +20,10 @@
 % Input: analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json SHA256 af4bf26170275833023dd58d085c955b15971f50744adc4da44d621f540f3cff
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Cumulative parameter restrictions and their measured cost on identical observations.}\label{tab:choice-cost}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.3900\linewidth}rrrrrr@{}}
+\caption{Cumulative parameter restrictions and the resulting deviations on identical observations.}\label{tab:choice-cost}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.3600\linewidth}rrrrrr@{}}
 \toprule
-Calibration & Parameters & On bounds & $C$ & P & U & L \\
+Calibration & Parameters & On bounds & $C$ & \makecell[rb]{Fitted\\pressure\\AARD (\%)} & \makecell[rb]{Not-fitted\\pressure\\AARD (\%)} & \makecell[rb]{Fitted\\density\\AARD (\%)} \\
 \midrule
 Shifted R2/\allowbreak{}R5 correlations; separate Born diameters & $16$ & $6$ & $148.511$ & $11.79$ & $23.82$ & $0.162$ \\
 Literature R2/\allowbreak{}R5 correlations; separate Born diameters & $13$ & $2$ & $150.532$ & $11.96$ & $24.18$ & $0.1463$ \\
@@ -34,5 +34,5 @@ Zero protonated-MEA--bicarbonate interaction & $8$ & $1$ & $176.049$ & $15.59$ &
 Zero protonated-MEA--carbamate interaction & $8$ & $3$ & $186.615$ & $20.09$ & $39.7$ & $0.2281$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $C$: objective value. P: 47 fitted pressures; U: 112 pressures not fitted; L: 47 fitted loaded densities; deviations are AARD (\%). Each row adds its restriction to the row above, except Zero protonated-MEA--carbamate interaction, which modifies Sodium-salt water--anion interactions instead of Zero protonated-MEA--bicarbonate interaction. No ranking across data roles is implied.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $C$: objective value. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.}
 \end{table}

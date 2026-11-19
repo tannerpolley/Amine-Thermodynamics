@@ -21,22 +21,21 @@
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Assigned objective scales and weights.}\label{tab:objective-groups}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.4500\linewidth}rllr@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.4200\linewidth}rllr@{}}
 \toprule
-Group; quantity & n & Scale range & Weight range & Cost \\
+Quantity & $N$ & Scale range & Weight range & Contribution to $C$ \\
 \midrule
-Pressure, species and heat; \ce{CO2} pressure & $47$ & 1 & 11.1111 & $5.96255$ \\
-Pressure, species and heat; mole fraction & $94$ & 0.0014--0.01154 & 1 & $16.4867$ \\
-Pressure, species and heat; integral heat & $8$ & 3000--6000 & 1 & $1.38648$ \\
-Further B\"ottinger and Matin species; mole fraction & $7$ & 0.00244--0.01109 & 1 & $2.40556$ \\
-Jakobsen ratios; amount ratio & $6$ & 0.00172793--0.0548869 & 1 & $12.7457$ \\
-\ce{CO2}--water; pressure & $39$ & 1 & 0.025641 & $0.000679019$ \\
-\ce{CO2}-free density; density & $5$ & 0.5 & 10 & $13.1168$ \\
-MEA--water; temperature & $25$ & 1 & 1 & $39.8239$ \\
-MEA--water; mole fraction & $25$ & 0.01 & 1 & $51.8074$ \\
-Loaded density; density & $47$ & 1.79111--2.41635 & 0.0212766 & $0.378743$ \\
-Heat capacity; equilibrium heat capacity & $4$ & 1.59309--1.76153 & 1 & $6.64835$ \\
+\ce{CO2} partial pressure, Hilliard and Jou & $47$ & 1 & 11.1111 & $5.96255$ \\
+Species mole fraction, B\"ottinger and Matin & $101$ & 0.0014--0.01154 & 1 & $18.8923$ \\
+Integral absorption heat, Vinjarapu & $8$ & 3000--6000 & 1 & $1.38648$ \\
+Species per total amine, Jakobsen & $6$ & 0.00172793--0.0548869 & 1 & $12.7457$ \\
+\ce{CO2}--water pressure, Kiepe & $39$ & 1 & 0.025641 & $0.000679019$ \\
+\ce{CO2}-free solution density, Amundsen & $5$ & 0.5 & 10 & $13.1168$ \\
+MEA--water bubble temperature, Cai & $25$ & 1 & 1 & $39.8239$ \\
+MEA--water vapor water mole fraction, Cai & $25$ & 0.01 & 1 & $51.8074$ \\
+Loaded-solution density, Amundsen and Hartono & $47$ & 1.79111--2.41635 & 0.0212766 & $0.378743$ \\
+Heat capacity per mole of apparent components, Hilliard & $4$ & 1.59309--1.76153 & 1 & $6.64835$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Entries with identical group and quantity are combined by range; the weight and scale are distinct. The text describes their origins and states where no rationale was recorded.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Scales are in the unit of the quantity, and unity for the logarithmic pressure residuals. The text gives the origin of each scale and weight.}
 \end{table}

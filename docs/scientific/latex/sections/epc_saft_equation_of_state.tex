@@ -155,7 +155,7 @@ Here $\kappa_{\mathrm D}$ is the inverse Debye screening length, with $\rho_N$ i
 
 \subsubsection{Born contribution with solvation shell and dielectric saturation}
 % P:theory-04
-The Born term follows the solvation-shell and dielectric-saturation (SSM+DS) form of Figiel et al.\ \cite[Eqs.~5--10]{Figiel2025}, with its Eq.~7 as corrected in 2026 \cite{Figiel2026Correction}:
+The Born term follows the solvation-shell and dielectric-saturation form of Figiel et al.\ \cite[Eqs.~5--10]{Figiel2025}, with its Eq.~7 as corrected in 2026 \cite{Figiel2026Correction}:
 \begin{equation}
     a^{\mathrm{Born}}
     =
@@ -191,11 +191,11 @@ The bulk permittivity in the Debye--H\"uckel and Born terms depends on solvent d
  \label{eq:solvent-permittivity}
 \end{equation}
 Here $n_s=\sum_{i\in\mathcal S}n_i$, $V$ is the phase volume, and the neutral set $\mathcal S$ comprises water, \MEA and molecular \COtwo.
-The dielectric-volume and dielectric-temperature coefficients have units of volume per mole and kelvin, respectively, using consistent units for $n_s/V$.
+The coefficients $d_{V,i}$ and $d_{T,i}$ have units of volume per mole and kelvin, respectively, using consistent units for $n_s/V$.
 The ion amounts do not enter the neutral mixing averages; their presence affects the phase density and neutral amounts.
-This law approaches unity as the phase density approaches zero at fixed composition.
+This correlation approaches unity as the phase density approaches zero at fixed composition.
 Its \MEA coefficients were fitted to unloaded \MEA--water permittivities using equation-of-state densities (\cref{sec:results-permittivity}); the water and assumed \COtwo coefficients remain fixed.
-Use of the dielectric law at other temperatures and in loaded solutions is a model assumption.
+Use of the permittivity correlation at other temperatures and in loaded solutions is a model assumption.
 
 \subsection{Reactions and phase equilibrium}
 % P:theory-06
@@ -237,7 +237,7 @@ where $\Delta_r$ converts the source to the common aqueous-molality basis.
 R4 follows Tong et al.\ \cite[Table~5]{Tong2012}, via Aroua et al.\ \cite{arouaEquilibriumConstantCarbamate1999}; R5 is Bates and Pinching \cite[Eq.~10, Table~2, p.~351]{batesAcidicDissociationConstant1951}, also tabulated by B\"ottinger et al.\ \cite[Table~5]{Bottinger2008}.
 All five equilibrium-constant correlations, including their temperature dependence, remain fixed at these literature forms in the present model; no fitted reaction-enthalpy adjustment is added.
 The R1--R3 correlation range is 273.15--\SI{498.15}{\kelvin}, as stated by Austgen et al.\ \cite[Table~V, p.~547, citing Edwards et al.\ (1978)]{Austgen1991}.
-This is the source-correlation range, not verified measurement coverage of the underlying experiments.
+This is the range stated for the correlation, which is not necessarily the range of the underlying measurements.
 The reacting calculations in this paper use 293.15--\SI{393.15}{\kelvin}; R4 and R5 are extrapolated above their source upper limit of \SI{323.15}{\kelvin}.
 
 \needspace{16\baselineskip}\input{tables/reaction_equilibrium_constants}
@@ -250,9 +250,9 @@ Total enthalpy follows the same Helmholtz energy and reaction standard states as
  A=A^{\mathrm{ig}}+A^{\mathrm{res}}.
  \label{eq:total-enthalpy}
 \end{equation}
-Neutral ideal-gas functions supply the caloric reference; the ionic functions are completed from the five equilibrium-constant correlations, including $\Delta_rh^\circ=RT^2d\ln K_r/dT$ and the derivatives of the infinite-dilution reference corrections.
-Reaction enthalpies are therefore included once through the standard-state functions.
+Neutral ideal-gas functions supply the caloric reference; the ionic functions follow from the five equilibrium-constant correlations, including $\Delta_rh^\circ=RT^2d\ln K_r/dT$ and the derivatives of the infinite-dilution reference corrections.
+The reaction enthalpies therefore enter through the standard-state functions, and no separate reaction-enthalpy term is added.
 The neutral ideal-gas coefficients follow NIST-JANAF and Zhang et al.\ \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011} and are listed in the data deposit; Section~\ref{supp-sec:s-files} gives the functions and reference convention, including the water ideal-gas fit to IAPWS-95 over 273.15--\SI{400}{\kelvin}.
 Equilibrium isobaric heat capacity is $C_P=(dH_{\mathrm{eq}}/dT)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
-The objective uses $C_P/n_{\mathrm{feed}}$ per mole of complete analytical feed, with source mass-specific values converted on that same basis.
-The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}=n_{\MEA}M_{\MEA}+n_wM_w+n_{\COtwo}M_{\COtwo}$ is the complete analytical-feed mass.
+The objective uses $C_P/n_{\mathrm{feed}}$, the heat capacity per mole of apparent components (MEA, water and added \COtwo), with source mass-specific values converted on that same basis.
+The mass-specific value is $c_P=C_P/m_{\mathrm{feed}}$, where $m_{\mathrm{feed}}=n_{\MEA}M_{\MEA}+n_wM_w+n_{\COtwo}M_{\COtwo}$ is the total mass of the apparent components.

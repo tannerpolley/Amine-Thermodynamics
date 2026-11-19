@@ -19,70 +19,19 @@
 % Input: analyses/mea_parameter_bundle/results/reduced-refit/parameter-details.csv SHA256 a391a1d04ae64ba7c5a9b57c2e0fd7b08290d1c81a907daa64e5a5d8c5272b0a
 % Input: analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json SHA256 af4bf26170275833023dd58d085c955b15971f50744adc4da44d621f540f3cff
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
-\begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.6600\linewidth}rl@{}}
-\caption{Shared coefficient set held fixed in Part II, grouped by physical quantity.}\label{tab:shared-parameters}\\
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Shared parameters held fixed in Part II, by species.}\label{tab:shared-parameters}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-Parameter & Value & Unit \\
-\midrule\endfirsthead
-\toprule
-Parameter & Value & Unit \\
-\midrule\endhead
-\bottomrule\endfoot
+Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$\epsilon/k_B$\\(K)} & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & $f$ & $k_{i,w}$ \\
+\midrule
+\ce{CO2} & $2.0729$ & $2.7852$ & $169.21$ & -- & $1$ & $-0.0464$ \\
+\ce{H2O} & $1.2528$ & $\sigma_w(T)$ & $432.3788$ & -- & $1.5$ & -- \\
+\ce{HCO3-} & $1$ & $2.9296$ & $70$ & $3$ & $1$ & $0.7650$ \\
+\ce{CO3^{2-}} & $1$ & $2.4422$ & $249.26$ & $3$ & $1$ & $-0.25$ \\
+\ce{H3O+} & $1$ & $3.4654$ & $500$ & $1.218$ & $1$ & $0.25$ \\
+\ce{OH-} & $1$ & $2.0177$ & $650$ & $3.0811$ & $1$ & $-0.25$ \\
 \bottomrule
-\multicolumn{3}{@{}p{\linewidth}@{}}{\footnotesize\raggedright Displayed values are rounded to at most four decimal places; Tables~\ref{supp-tab:supplement-reaction-coefficients}--\ref{supp-tab:supplement-interaction-matrix} and \ref{supp-tab:supplement-shared-remaining} give the unrounded values.}\\
-\endlastfoot
-\ce{CO2} dispersion energy/\allowbreak{}k & $169.21$ & kelvin \\
-\ce{CO2} segment count & $2.0729$ & 1 \\
-\ce{CO2} segment diameter & $2.7852$ & \AA \\
-\ce{CO2} solvation factor & $1$ & 1 \\
-\ce{CO2} dielectric volume & $1\times10^{-8}$ & liter /\allowbreak{} mole \\
-\ce{CO2} dielectric temperature & $1403$ & kelvin \\
-water dispersion energy/\allowbreak{}k & $432.3788$ & kelvin \\
-water segment count & $1.2528$ & 1 \\
-water solvation factor & $1.5$ & 1 \\
-water dielectric volume & $0.3777$ & liter /\allowbreak{} mole \\
-water dielectric temperature & $1403$ & kelvin \\
-\ce{HCO3-} Born diameter & $3$ & \AA \\
-\ce{HCO3-} Debye–Hückel diameter & $2.9296$ & \AA \\
-\ce{HCO3-} dispersion energy/\allowbreak{}k & $70$ & kelvin \\
-\ce{HCO3-} packing diameter & $2.5780$ & \AA \\
-\ce{HCO3-} segment count & $1$ & 1 \\
-\ce{HCO3-} segment diameter & $2.9296$ & \AA \\
-\ce{HCO3-} solvation factor & $1$ & 1 \\
-\ce{CO3^{2-}} Born diameter & $3$ & \AA \\
-\ce{CO3^{2-}} Debye–Hückel diameter & $2.4422$ & \AA \\
-\ce{CO3^{2-}} dispersion energy/\allowbreak{}k & $249.26$ & kelvin \\
-\ce{CO3^{2-}} packing diameter & $2.1491$ & \AA \\
-\ce{CO3^{2-}} segment count & $1$ & 1 \\
-\ce{CO3^{2-}} segment diameter & $2.4422$ & \AA \\
-\ce{CO3^{2-}} solvation factor & $1$ & 1 \\
-\ce{H3O+} Born diameter & $1.218$ & \AA \\
-\ce{H3O+} Debye–Hückel diameter & $3.4654$ & \AA \\
-\ce{H3O+} dispersion energy/\allowbreak{}k & $500$ & kelvin \\
-\ce{H3O+} packing diameter & $3.0496$ & \AA \\
-\ce{H3O+} segment count & $1$ & 1 \\
-\ce{H3O+} segment diameter & $3.4654$ & \AA \\
-\ce{H3O+} solvation factor & $1$ & 1 \\
-\ce{OH-} Born diameter & $3.0811$ & \AA \\
-\ce{OH-} Debye–Hückel diameter & $2.0177$ & \AA \\
-\ce{OH-} dispersion energy/\allowbreak{}k & $650$ & kelvin \\
-\ce{OH-} packing diameter & $1.7756$ & \AA \\
-\ce{OH-} segment count & $1$ & 1 \\
-\ce{OH-} segment diameter & $2.0177$ & \AA \\
-\ce{OH-} solvation factor & $1$ & 1 \\
-\ce{HCO3-}–\ce{H3O+} $k_{ij}$ & $0$ & 1 \\
-\ce{HCO3-}–\ce{CO2} $k_{ij}$ & $0$ & 1 \\
-\ce{CO2}–\ce{CO3^{2-}} $k_{ij}$ & $0$ & 1 \\
-\ce{CO2}–\ce{H3O+} $k_{ij}$ & $0$ & 1 \\
-\ce{CO2}–\ce{OH-} $k_{ij}$ & $0$ & 1 \\
-\ce{CO2}–water $k_{ij}$ & $-0.0464$ & 1 \\
-\ce{CO2}–water $k_{ij}$ temperature slope & $-35.6651$ & kelvin \\
-\ce{CO3^{2-}}–\ce{H3O+} $k_{ij}$ & $0$ & 1 \\
-\ce{H3O+}–\ce{OH-} $k_{ij}$ & $0$ & 1 \\
-\ce{HCO3-}–water $k_{ij}$ & $0.7650$ & 1 \\
-\ce{CO3^{2-}}–water $k_{ij}$ & $-0.25$ & 1 \\
-\ce{H3O+}–water $k_{ij}$ & $0.25$ & 1 \\
-\ce{OH-}–water $k_{ij}$ & $-0.25$ & 1 \\
-R1--R3 correlations & Table~\ref{tab:reaction-equilibrium-constants} & 1 \\
-\end{longtable}\endgroup
+\end{tabular}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $k_{i,w}$: interaction with water at 313.15 K. The \ce{CO2}--water interaction has the temperature slope $b_{ij}=-35.6651$ K; the other interactions with water do not depend on temperature, and every interaction among these species that is not listed is zero. Permittivity coefficients: water $d_V=0.3777$ L/mol and $d_T=1403$ K; \ce{CO2} $d_V=10^{-8}$ L/mol and $d_T=1403$ K. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. The association parameters of water and of the \ce{CO2}--water pair are in Table~\ref{tab:species-parameters}, the water diameter $\sigma_w(T)$ is in Section~\ref{supp-sec:s-parameters}, and the R1--R3 correlations are in Table~\ref{tab:reaction-equilibrium-constants}. A dash denotes an unused input. Tables~\ref{supp-tab:supplement-reaction-coefficients}--\ref{supp-tab:supplement-interaction-matrix} and \ref{supp-tab:supplement-shared-remaining} give the unrounded values.}
+\end{table}

@@ -14,15 +14,15 @@ The standard contribution equations are used without modification.
 
 \subsection{Parameters transferred from Part I}\label{sec:p2-shared}
 % P:p2-model-02
-Water, molecular \COtwo, hydronium, hydroxide, bicarbonate and carbonate retain the adopted shared parameters of Part I \cite[Table~11]{PolleyPartI}; these are the shared parameters of this work.
-The water autoprotolysis reaction (R1), carbon dioxide hydration to bicarbonate (R2), and bicarbonate dissociation to carbonate (R3) retain the source correlations and reference conventions of the transferred MEA parameter set; no fitted R2 correction is included.
+Water, molecular \COtwo, hydronium, hydroxide, bicarbonate and carbonate keep the shared parameters of Part I \cite[Table~10]{PolleyPartI}.
+The water autoprotolysis reaction (R1), carbon dioxide hydration to bicarbonate (R2), and bicarbonate dissociation to carbonate (R3) keep the source correlations and reference conventions of Part I.
 Interactions of amine species with these shared species are amine-specific and may be fitted; the shared parameters themselves are not refitted.
 
 \subsection{Amine species}\label{sec:p2-species}
 % P:p2-model-03
 DEA uses a molecular chain with the four-site association description of Nasrifar and Tafazzol \cite[Table~2, Sect.~6]{Nasrifar2010}.
 The protonated DEA cation retains the neutral segment count, diameter and dispersion energy, with zero self-association energy; DEA carbamate is represented by a single sphere.
-The cation retains its charged-chain self-dispersion, an explicit choice of this model.
+Dispersion between the segments of the cation is kept, a choice of this model.
 Each DEA ion's Born diameter equals its segment diameter (Table~\ref{tab:p2-dea-fixed-current}).
 The molecular DEA--water interaction, fitted beforehand to the 365.15~K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, and the unloaded DEA permittivity coefficients, fitted to the permittivities of Hsieh et al.\ \cite{hsiehDielectricConstantsAqueous2007}, remain fixed during reactive estimation; Table~\ref{supp-tab:p2-dea-all-current} lists their values.
 The permittivity expression uses the neutral-species mixture, with ions affecting volume and equilibrium composition but excluded from its mixing average, as in Part I \cite[Sect.~2]{PolleyPartI}.
@@ -41,14 +41,11 @@ The unloaded MDEA permittivity coefficients are fitted to the permittivities of 
 \input{tables/part2/mdea-species-current}
 
 % P:p2-model-amp
-Five pure-AMP parameters were estimated before the reactive fit using a two-site association model.
-The fit used 15 vapor pressures of Klep\'a\v{c}ov\'a et al.\ \cite[Table~10]{klepacovaVaporPressuresSeveral2011}, 9 of Belabbaci et al.\ \cite[Table~2]{belabbaciInvestigationIsothermalVapour2010} and 3 liquid densities of Ayad et al.\ \cite[Table~2]{ayadMeasurementsModelingThermodynamic2023}.
-The parameters of Ayad et al.\ (Table~5) supplied one initial set.
-The 23 pure-AMP vapor pressures of Pappa et al.\ \cite[Table~1]{pappaMeasurementThermodynamicModeling2006} were not fitted.
-Table~\ref{tab:p2-amp-species-current} gives the deviations of the fixed pure-AMP parameters from these 4 data sets; they are comparisons with the named observations at fixed parameters, not an independent validation.
+Five pure-AMP parameters of a two-site association model were fitted beforehand to the vapor pressures of Klep\'a\v{c}ov\'a et al.\ \cite[Table~10]{klepacovaVaporPressuresSeveral2011} and Belabbaci et al.\ \cite[Table~2]{belabbaciInvestigationIsothermalVapour2010} and the liquid densities of Ayad et al.\ \cite[Table~2]{ayadMeasurementsModelingThermodynamic2023}.
+Table~\ref{tab:p2-amp-species-current} gives the deviations of the fixed pure-AMP parameters from these data and from the vapor pressures of Pappa et al.\ \cite[Table~1]{pappaMeasurementThermodynamicModeling2006}, which are not fitted.
 The protonated AMP cation and AMP carbamate are single spheres with fixed dispersion energies; their segment diameters are fitted, and each ion's Born diameter equals its segment diameter (Table~\ref{tab:p2-amp-species-current}).
 The AMP--water and cation--water interactions are linear in reciprocal temperature, in the form given for the MDEA cation, and are fitted together with a temperature-independent cation--\COtwo interaction.
-The AMP permittivity coefficients, $d_V=0.322902$ L/mol and $d_T=2055.88$ K, were fitted beforehand to 6 pure-AMP and 24 aqueous-AMP permittivities of Hsieh et al.\ \cite[Tables~2 and 5]{hsiehDielectricConstantsAqueous2007} and held fixed during the reactive fit.
+The AMP permittivity coefficients, $d_V=0.322902$ L/mol and $d_T=2055.88$ K, were fitted beforehand to six pure-AMP and 24 aqueous-AMP permittivities of Hsieh et al.\ \cite[Tables~2 and 5]{hsiehDielectricConstantsAqueous2007} and held fixed during the reactive fit.
 
 \input{tables/part2/amp-species-current}
 
@@ -62,12 +59,12 @@ Carbamate hydrolysis (R4) and amine dissociation (R5), numbered as their MEA cou
  \ce{AH+ + H2O &<=> A + H3O+}.\tag{R5}\label{eq:p2-r5}
 \end{align}
 The MDEA model has no R4.
-The fixed R5 correlations are from Bower et al.\ for DEA, P\'erez-Salado Kamps and Maurer for MDEA and a fit of Eq.~21 of Hamborg and Versteeg to their 24 Table~16 measurements for AMP \cite[Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}\cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}\cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}.
+The fixed R5 correlations are from Bower et al.\ for DEA, P\'erez-Salado Kamps and Maurer for MDEA and a fit of Eq.~21 of Hamborg and Versteeg to the 24 measurements in their Table~16 for AMP \cite[Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}\cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}\cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}.
 The DEA R4 correlation was initialized from the inverse formation correlation of Aroua et al., and the AMP R4 correlation from the carbamate constants that Xu et al.\ estimated with their solubility model; both were subsequently fitted \cite[Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}\cite[Table~2, Eqs.~7--11]{xuRepresentationEquilibriumSolubility1992}.
-For DEA, $\ln K=a+b/T+dT$ on the common-molality reference basis, with $T$ in K and the coefficients $c$, $e$ and $f$ zero.
+For DEA, $\ln K=a+b/T+dT$ on the common-molality reference basis, with $T$ in K.
 Each R4 fit adjusts the constant term $a$ and, through Eq.~\eqref{eq:p2-reaction-shift}, the temperature coefficient $b$.
 Chemical equilibrium uses charge-neutral reaction combinations, explicit water activity and the standard-state transformations of Part I, which convert source equilibrium constants to the common reference convention \cite[Sect.~2]{PolleyPartI}.
-R1 and R3 retain their source mole-fraction basis; R2 and the amine correlations retain their common-molality basis.
+R1--R3 are the correlations of Part I, converted from the mole-fraction basis of their source to the same common-molality reference basis \cite[Table~1]{PolleyPartI}, so every equilibrium constant is applied on one basis.
 Vapor--liquid equilibrium equates chemical potentials for vapor-allowed species while retaining elemental balances and liquid electroneutrality.
 
 % P:p2-model-05
@@ -77,6 +74,6 @@ An enthalpy increment $\delta h$ of R4 changes the temperature dependence throug
  \label{eq:p2-reaction-shift}
 \end{equation}
 where $T_{\mathrm{ref}}=313.15$ K for DEA and AMP.
-After fitting, the DEA increment is absorbed into $a$ and $b$, so Table~\ref{tab:p2-dea-fitted-current} lists it as zero relative to the final correlation, with its conditional standard error.
+After fitting, the DEA increment is absorbed into $a$ and $b$, so Table~\ref{tab:p2-dea-fitted-current} lists it as zero relative to the final correlation, with the standard error and bounds of the fit.
 Table~\ref{tab:p2-amp-fitted-current} lists the final constant term of the AMP correlation and the increment relative to the initial correlation.
-Reaction standard-state derivatives supply the corresponding caloric functions once; no separate absorption-heat term is added.
+Each reaction enthalpy enters through the standard-state functions, and no separate absorption-heat term is added.

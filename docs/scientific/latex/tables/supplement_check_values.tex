@@ -20,11 +20,14 @@
 % Input: analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json SHA256 af4bf26170275833023dd58d085c955b15971f50744adc4da44d621f540f3cff
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Reduced residual molar Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions at the three main-text reproduction states.}\label{tab:supplement-check-values}
+\caption{Reference values of the present model at three bubble states, for checking an implementation: temperature, bubble pressure, liquid mass density, reduced residual Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions.}\label{tab:supplement-check-values}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Contribution or species & \ce{CO2}--water & MEA--water & Loaded MEA \\
+Quantity & \ce{CO2}--water & MEA--water & Loaded MEA \\
 \midrule
+$T$ (K) & $313.2$ & $350$ & $313.15$ \\
+Bubble pressure (Pa) & $96620.50005$ & $3983.444831$ & $6639.529794$ \\
+Liquid density (kg/\allowbreak{}m$^3$) & $992.6594988$ & $972.7825398$ & $1060.792115$ \\
 Association & $-2.914216572$ & $-3.283777415$ & $-2.548146614$ \\
 Born & $0$ & $0$ & $-6.794645267$ \\
 Debye--H\"uckel & $0$ & $0$ & $-0.03722854572$ \\
@@ -42,5 +45,5 @@ $x_{\ce{MEAH+}}$ & $0$ & $0$ & $0.03367298547$ \\
 $x_{\ce{H2O}}$ & $0.99964$ & $0.0736$ & $0.8865672455$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Zero terms are omitted.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\ce{MEA}}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each bubble pressure was solved from two initial pressures, which agree to the digits shown. Zero terms are omitted. These values check the numerical calculation; they are not measurements.}
 \end{table}

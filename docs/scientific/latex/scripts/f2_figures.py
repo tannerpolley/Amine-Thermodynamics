@@ -47,7 +47,7 @@ def main():
             sub=[r for r in part if r['temperature_K']==T]
             ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['observed'])/1000 for r in sub],s=temperature_size(T),facecolors='none',edgecolors=color,label=f'{float(T):g} K')
             ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['predicted'])/1000 for r in sub],s=temperature_size(T),color=color,marker='x')
-        ax.set(title=f'{100*w:g} wt% MEA',yscale='log',xlabel='Loading (mol/mol)',ylabel='CO$_2$ partial pressure (kPa)'); ax.legend(fontsize=9)
+        ax.set(title=f'{100*w:g} wt% MEA',yscale='log',xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)'); ax.legend(fontsize=9)
     save(fig,'concentration-pressure')
     rows=a.rows(F/'model-curves/species.csv'); obs=list({r['target']:r for r in a.rows(F/'species-figure-data.csv')}.values()); membership={r['membership_id'].replace('|','::'):r['co2_loading_mol_per_mol_mea'] for r in a.rows(t.ROOT/'data/reference/MEA/manifests/speciation_target_membership.csv')}
     names=['MEA + MEAH+','MEACOO-','MEAH+','HCO3- + CO3^2-']; fig,axes=plt.subplots(2,2,figsize=(6.8,5.4))
@@ -106,7 +106,7 @@ def main():
     rows=a.rows(a.BUNDLE/'results/split-cause-342/figure-contributions.csv'); fig,ax=plt.subplots(figsize=(6.8,4)); names=['hard_chain','dispersion','association','debye_huckel','born','pv','ideal_and_standard','delta_g_over_rt']
     for i,r in enumerate(rows): ax.barh([k+i*.35 for k in range(len(names))],[float(r[n]) for n in names],height=.35,color=['#0072B2','#B54D00'][i],edgecolor='#222222',linewidth=.6,hatch='' if i==0 else '///',label='Unpenalized comparison' if i==0 else 'Present model, frozen compositions')
     ax.set(yticks=[k+.175 for k in range(len(names))],yticklabels=['Hard chain','Dispersion','Association','Debye–Hückel','Born','PV','Ideal + standard','Total'],xlabel='Split minus parent G/(RT) (mol)'); ax.axvline(0,color='black',lw=.7); ax.legend(); save(fig,'split-energy')
-    rows=[r for r in a.rows(E/'uncertainty/prediction-bands.csv') if r['group']=='common149: partial_pressure']; assert len(rows)==47; fig,ax=plt.subplots(figsize=(6.8,3.4)); ax.errorbar(range(len(rows)),[float(r['value'])/1000 for r in rows],yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in rows],fmt='o',ms=3); ax.set(xlabel='Observation order',ylabel='CO$_2$ partial pressure (kPa)'); save(fig,'pressure-uncertainty')
+    rows=[r for r in a.rows(E/'uncertainty/prediction-bands.csv') if r['group']=='common149: partial_pressure']; assert len(rows)==47; rows.sort(key=lambda r:(float(meta[r['identity'].removesuffix('-pco2')]['temperature_reported_C']),float(meta[r['identity'].removesuffix('-pco2')]['CO2_loading']))); fig,ax=plt.subplots(figsize=(6.8,3.4)); ax.errorbar(range(len(rows)),[float(r['value'])/1000 for r in rows],yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in rows],fmt='o',ms=3); ax.set(xlabel='Fitted pressure observations, ordered by temperature and loading',ylabel='CO$_2$ partial pressure (kPa)'); save(fig,'pressure-uncertainty')
     (t.ROOT/'docs/scientific/latex/builds/347-figure-hashes.json').write_text(json.dumps({'commit':t.BASE,'files':a.INPUTS},indent=2)+'\n')
 
 if __name__=='__main__': main()
