@@ -7,25 +7,39 @@ Table~\ref{tab:p2-dea-all-current} lists the value, unit and fitted or fixed rol
 For the carbamate hydrolysis (R4) and DEA dissociation (R5) correlations, the coefficients give $\ln K(T)=a+b/T+dT$ on the common-molality reference basis, with $T$ in K; the listed coefficients $c$, $e$ and $f$ are zero.
 The fitted-parameter table of the main text uses increments relative to the final R4 correlation; the final coefficients below already include the fitted enthalpy change.
 Fixed ionic parameters are inherited model assumptions, not independent measurements of ionic size.
+The fitted MDEA and AMP parameters and the parameters of their species are in Tables~\ref{main-tab:p2-mdea-species-current}, \ref{main-tab:p2-mdea-fitted-current}, \ref{main-tab:p2-amp-species-current} and \ref{main-tab:p2-amp-fitted-current} of the main text; the archived parameter files give every fixed and fitted value at full precision.
 Packing diameter is the hard-sphere diameter used in the repulsive contribution; dielectric volume and dielectric temperature are the coefficients $d_V$ and $d_T$ in the relative-permittivity expression transferred from Part I \cite[Sect.~2.1]{PolleyPartI}.
 
 \input{tables/part2/dea-all-current}
 
 \section{Source conventions of the data}\label{sec:p2-s-observations}
 % P:p2-s-observations
-Table~\ref{main-tab:p2-dea-data-current} of the main text gives the composition and loading ranges of each data set on the source's own basis.
+Tables~\ref{main-tab:p2-dea-data-current}, \ref{main-tab:p2-mdea-data-current} and \ref{main-tab:p2-amp-data-current} of the main text give the composition and loading ranges of each data set; the DEA and MDEA tables use the source's own basis, and the AMP table gives the unloaded AMP content in wt\% used in the calculation.
 The 2.0 kmol/m$^3$ DEA concentration of Lal et al.\ is represented by unloaded mass fraction 0.2058 using solution density.
 The species calculations for B\"ottinger et al.\ use 2.5 MPa because the source gives a 0.5--2.5 MPa cell-pressure interval without individual values.
 All observations of Weiland et al.\ are kept, including the suspected source misprint identified in the archived observation file.
+The \COtwo-free pressures of Kuranov et al.\ are read from a printed column that is 10 times the total pressure in MPa \cite[Table~2, p.~1960]{kuranovSolubilitySingleGases1996}.
+The MDEA species calculations for B\"ottinger et al.\ are made at 0.5 and at 2.5 MPa, the ends of the reported cell-pressure interval, and both are reported.
+The heats are read from Fig.~3 of Merkley et al.\ and the loading points from Fig.~4.
+The assigned pressure is 1.121 MPa, or 1.466 MPa at 422.04 K.
+The reading allowance for the loading point is 0.02 mol/mol.
 Source measurement uncertainties are not agreement thresholds.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:p2-s-ranges}
 % P:p2-s-ranges
-Table~\ref{tab:p2-dea-ranges-current} separates the deviations of each data set by its position relative to the measured temperature range of the carbamate hydrolysis constant (R4) and of the DEA dissociation constant (R5); the main text gives both ranges and the rule that every observation is calculated.
+Tables~\ref{tab:p2-dea-ranges-current}, \ref{tab:p2-mdea-ranges-current} and \ref{tab:p2-amp-ranges-current} separate the deviations of each data set by its position relative to the measured temperature range of the carbamate hydrolysis constant (R4) and of the amine dissociation constant (R5); the main text gives the ranges and the rule that every observation is calculated.
+MDEA has no R4, and the AMP R4 range is that of model-derived estimates.
 Each range is assessed independently.
 Counts include zero-valued species observations, while relative deviations use only nonzero observations.
 
 \input{tables/part2/dea-ranges-current}
+\input{tables/part2/mdea-ranges-current}
+\input{tables/part2/amp-ranges-current}
+
+% P:p2-s-ranges-alternative
+For the stability-constrained AMP alternative, the pressure AARDs inside and outside R4, respectively, are 19.78 and 20.60\,\% for the fitted Hartono data, 21.55 and 28.92\,\% for the higher-temperature Hartono data, 30.91 and 111.59\,\% for Kundu, and 52.99 and 24.73\,\% for Tong.
+All fitted Hartono and Kundu pressures lie inside R5 (20.04 and 94.19\,\%), and all higher-temperature Hartono pressures lie outside it (24.42\,\%).
+For Tong, the R5 groups coincide with the R4 groups.
 
 \section{Published comparisons on the same data}\label{sec:p2-s-published}
 % P:p2-s-published
@@ -52,16 +66,35 @@ Thus trials discovered at other interpolated points do not change the decision a
 Bisection assumes a single transition from admissible to inadmissible as $t$ increases.
 The selected point is checked again; when it lies below $t=1$, the upper end of the final bracket is also checked, and all observed reversals of admissibility are reported.
 No candidate is returned if the reference point fails these checks.
-An interpolated point does not inherit optimizer convergence; if the selected point is the optimizer endpoint at $t=1$, its own optimizer convergence disposition is retained.
+An interpolated point is not a converged fit.
+If the selected point is the fitted endpoint at $t=1$, its convergence result applies.
+
+% P:p2-s-penalty-amines
 The DEA fit used neither the penalty nor the retreat.
+For MDEA, the penalized states are 78 \COtwo-free MDEA--water liquids at 1.466 MPa: the temperatures 393, 403, 413, 413.15, 422.04 and 423 K, each at MDEA mole fractions of 0.01, 0.02, 0.04, 0.06, 0.07, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20 and 0.24.
+The penalty scales are 0.01 and then 0.003, and the retreat interpolates between each initial parameter set, which shows no descent at these states, and its penalized solution.
+The accepted points lie at $t=0.8690$ and $t=0.8688$ for the 2 initial sets; at each, all 78 searches complete without a descent, and the next point above has 1 unavailable search.
+No penalized fit was made with the compressed-liquid copies of the loaded MDEA states; one fitting stage on the full set of 11542 penalized states was projected from measured evaluation times to take 14.1--20.2 h.
+For AMP, the penalized states are the 862 compressed-liquid copies of the searched states, the penalty scales are 0.01 and 0.003, and the accepted retreat point lies at $t=0.5699$; the next point above has 1 unavailable search.
 
 \section{Phase-search conditions and reproducibility}\label{sec:p2-s-numerical}
 % P:p2-s-numerical
-The electronic data contain the parameter and input files with their checksums, the calculated value of every observation, the conditional information matrices and the definition of every searched state.
+The electronic data contain the parameter and input files with their checksums, the calculated value or reason for unavailability for each observation, the conditional information matrices and the definition of every searched state.
 Trial phases exclude species that cannot form from the feed at the searched state.
-The search at the second Lawson and Garst Table VIII state did not complete because its final trial optimization failed or returned an undetermined result; the state is reported as unavailable, not stable.
+At the second observation in Table VIII of Lawson and Garst (298.15 K, 54.5 wt\% DEA, loading 0.602 mol/mol), the first trial converged but its reconstructed composition did not preserve the required species.
+The phase search was unavailable; the pressure observation was calculated.
 Recalculating the 80 fitted predictions from the archived DEA parameters reproduces the selected solution, which checks the numerical calculation rather than the physical description.
-The DEA calculations used one build of the \texttt{epcsaft} package, version 1.3.0, identified by the software index in the archive deposit \textit{[Zenodo DOI supplied in the final submission]}.
 
-% P:p2-s-pending
-\draftnote{the DEA results remain provisional until recalculated with the single calculation build selected for the final Part II results. Supplementary results for MDEA and AMP are added with their final calculations.}
+% P:p2-s-numerical-mdea
+Of the 1039 MDEA search requests with incomplete results, 810 are grid requests without a calculated bubble-pressure reference.
+The MDEA liquid--liquid split at 363.15 K has a tangent-plane distance of $-0.00262$ in units of $RT$.
+The 27 MDEA calculations with a descent toward a vapor are distinct calculations at conditions assigned to measurements, whose assigned pressure is 0.1733--0.9990 times the calculated bubble pressure: 4 densities of Sobrino et al., 11 species states of B\"ottinger et al.\ at 0.5 MPa and 2 at 2.5 MPa, 5 heats of Zheng et al.\ and 5 heats of Merkley et al.
+At 3 of the 11 species states at 0.5 MPa the descent is shown only by a supplied trial composition.
+
+% P:p2-s-numerical-amp
+For AMP, each of the 90 descents was classified by solving for the density of the trial phase at the pressure of the parent liquid; every parent and trial phase is liquid.
+A liquid--liquid split is counted as confirmed when a separate equilibrium calculation at fixed feed, temperature and pressure returns 2 distinct liquids with positive amounts and a Gibbs-energy decrease larger than its estimated numerical error.
+The largest decrease occurs at 393.15 K, 30.0 wt\% AMP and a loading of 0.700, at 1.215 MPa, where the 2 liquid densities are 44685 and 31704 mol/m$^3$.
+
+% P:p2-s-software
+The calculations for the 3 amines used one build of the \texttt{epcsaft} package, version 1.3.1, identified by the software index in the archive deposit \textit{[Zenodo DOI supplied in the final submission]}.

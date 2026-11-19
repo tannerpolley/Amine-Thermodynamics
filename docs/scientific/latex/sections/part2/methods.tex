@@ -8,8 +8,10 @@ Calculated \COtwo partial pressure is $y_{\COtwo}P$, distinct from total bubble 
 
 % P:p2-methods-02
 The data-role terms follow Part I's definitions: \emph{fitted} observations enter the reported objective; \emph{not fitted} observations remain outside it; \emph{comparison only} denotes other quantities or conditions, never used to choose a fit \cite[Sect.~3]{PolleyPartI}.
-All DEA observations had been examined in an earlier DEA fit on Part I's less restricted calibration, and the pressures not fitted were inspected before the choice between the 2 numerically tied fits; they are therefore comparisons, not blind tests.
-Table~\ref{tab:p2-dea-data-current} lists each data set with its role and its temperature, composition and loading ranges.
+All observations of the 3 amines had been examined in earlier fits of the same amines, and the DEA pressures not fitted were inspected before the choice between the 2 numerically tied DEA fits; the observations not fitted are therefore comparisons, not blind tests.
+The Xiao and Ermatchkov pressures informed the earlier choice of the MDEA parameter set used to initialize the present fit.
+They did not enter the present objective or select between its initial sets.
+Tables~\ref{tab:p2-dea-data-current}, \ref{tab:p2-mdea-data-current} and \ref{tab:p2-amp-data-current} list each data set with its role and its temperature, composition and loading ranges.
 
 \input{tables/part2/dea-data-current}
 
@@ -20,13 +22,30 @@ Carrier gases are omitted from bubble calculations, so the unreported methane pr
 The concentration of Lal et al.\ is converted using unloaded-solution density, and the species of B\"ottinger et al.\ use an assigned pressure because individual cell pressures are unavailable; Section~\ref{supp-sec:p2-s-observations} of the supplement gives these state assumptions.
 The molecular-plus-protonated DEA quantity of B\"ottinger et al.\ is compared as the measured sum.
 
+% P:p2-methods-mdea-data
+MDEA fitting uses 281 observations: the total pressures of Kuranov et al.\ at 313--393 K and 4 of their \COtwo-free bubble pressures at 393.15--413.15 K, the protonated-MDEA and bicarbonate-plus-carbonate amounts per mole of total MDEA derived from the 8 NMR states of Jakobsen et al., the integral absorption heats of Carson et al.\ and 4 of those of Merkley et al., the heat capacities and densities of Weiland et al.\ at 30--50 wt\% MDEA, the densities of Sobrino et al.\ and the binary bubble pressures of Kim et al.\ \cite{kuranovSolubilitySingleGases1996,Jakobsen2005,carsonEnthalpySolutionCarbon2000,merkleyEnthalpiesAbsorptionCarbon1987,weilandHeatCapacityAqueous1997,Weiland1998,sobrinoViscosityDensityMeasurements2016,kimEbulliometricDeterminationVaporLiquid2008}.
+The \COtwo partial pressures of Ermatchkov et al.\ and of Xiao et al., the total pressures of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al., of Sedighi et al.\ and of Kuranov et al.\ at 413 K, the species mole fractions of B\"ottinger et al., the integral heats of Zheng et al., the remaining heats of Merkley et al.\ and the 60 wt\% heat capacities and densities of Weiland et al.\ are not fitted \cite{ermatchkovSolubilityCarbonDioxide2006,xiaoCO2AbsorptionAqueous2018a,sedighiExperimentalMeasurementThermodynamic2024,bottingerOnlineNMRSpectroscopic2008,zhengCO2HeatAbsorption2020}.
+Because individual cell pressures are unavailable, the species of B\"ottinger et al.\ are calculated at both ends of the reported cell-pressure interval, 0.5 and 2.5 MPa.
+For the heats of Merkley et al., the final loading is the smaller of the loading point read from their Fig.~4 and the calculated saturation loading at the assigned pressure.
+A separate comparison evaluates the same measured heat at half the digitized loading point.
+
+\input{tables/part2/mdea-data-current}
+
+% P:p2-methods-amp-data
+AMP fitting uses 156 observations: the total pressures of Hartono et al.\ (2021) at 26.8 wt\% AMP and 313--353 K, the binary bubble pressures and vapor AMP mole fractions of Hartono et al.\ (2013), and the carbamate fractions of Ciftja et al.\ at 30 wt\% AMP, taken as carbamate per total AMP \cite{hartonoNewSolubilityHeat2021,hartonoBinaryTernaryVLE2013,ciftjaExperimentalStudyCarbamate2014a}.
+The total pressures of Hartono et al.\ (2021) at 373--393 K, the \COtwo partial pressures of Kundu et al.\ and the total and \COtwo-free bubble pressures of Tong et al.\ are not fitted \cite{kunduVaporLiquidEquilibriumCO22003,Tong2012}.
+
+\input{tables/part2/amp-data-current}
+
 % P:p2-methods-range
-Every observation is calculated, including those outside the measured temperature range of an equilibrium-constant correlation; such observations stay in their data set, are marked in every table and figure, and are reported separately in Table~\ref{supp-tab:p2-dea-ranges-current}.
-The R5 measurements for DEA span 273.15--323.15 K \cite[Sect.~2, p.~71; Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}.
-The R4 source measurements span 303--331 K \cite[experimental procedure, p.~692; Table~3 and Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}; this range does not establish the validity of the subsequently fitted correlation.
+A calculation is attempted for every observation, including those outside the measured temperature range of an equilibrium-constant correlation; such observations stay in their data set, are marked in every table and figure, and are reported separately in Tables~\ref{supp-tab:p2-dea-ranges-current}, \ref{supp-tab:p2-mdea-ranges-current} and \ref{supp-tab:p2-amp-ranges-current}.
+The R5 measurements span 273.15--323.15 K for DEA \cite[Sect.~2, p.~71; Eq.~7, p.~73]{bowerAcidicDissociationConstant1962}, 278--368 K for MDEA \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996} and 293.12--353.22 K for AMP \cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}.
+The DEA R4 source measurements span 303--331 K \cite[experimental procedure, p.~692; Table~3 and Eq.~14, p.~695]{arouaTemperatureDependencyEquilibrium1997}.
+The AMP R4 range, 313.15--373.15 K, is that of the estimates that Xu et al.\ derived with their solubility model, not of a measured equilibrium constant \cite[Table~2, Eqs.~7--11]{xuRepresentationEquilibriumSolubility1992}.
+Neither R4 range establishes the validity of the subsequently fitted correlation.
 For R1--R3, 273.15--498.15 K is the correlation range stated by Austgen et al., rather than verified measured coverage \cite[Table~V, p.~547]{Austgen1991}.
 Binary comparisons do not use reaction correlations.
-Calculated states span 293.15--458.64 K, beyond both DEA measured ranges but within the R1--R3 correlation range.
+Calculated states span 293.15--458.64 K for DEA, 288.71--422.04 K for MDEA and 298.15--393.20 K for AMP; each interval extends above the measured R5 range of its amine and lies within the R1--R3 correlation range.
 
 \subsection{Absorption heat, excess enthalpy and density}\label{sec:p2-caloric}
 % P:p2-methods-caloric
@@ -35,20 +54,30 @@ All terms use the comparison temperature and pressure; negative heat denotes exo
 A finite-loading integral is distinct from the derivative defining a differential absorption heat.
 Binary excess enthalpy subtracts the mole-fraction-weighted pure-liquid enthalpies at the same temperature and pressure from the mixture molar enthalpy.
 Density divides total analytical-feed mass, including added \COtwo, by equilibrium liquid volume.
-These calculations use Part I's Helmholtz-energy derivatives and reaction standard-state completion, including the equilibrium change of species \cite[Sects.~2--3]{PolleyPartI}.
+The MDEA calculations use the ideal-gas heat-capacity correlation of Neumann et al.\ \cite{neumannThermodynamicPropertiesMethyl2022}.
+These calculations use Part I's Helmholtz-energy derivatives and reaction standard-state functions, which include each reaction enthalpy once, and include the change of the equilibrium species amounts \cite[Sects.~2--3]{PolleyPartI}.
 
 \subsection{Parameter estimation}\label{sec:p2-estimation}
 % P:p2-methods-objective
 Bounded least squares minimizes
 \begin{equation}
  C=\frac12\sum_j w_jr_j^2,\qquad
- r_j=\frac{\ln(p_j^{\mathrm{calc}}/p_j^{\mathrm{obs}})}{0.09}\ \text{(pressure)},\quad
- r_j=\frac{h_j^{\mathrm{calc}}-h_j^{\mathrm{obs}}}{0.02\,|h_j^{\mathrm{obs}}|}\ \text{(integral heat)}.
+ r_j=\frac{\ln(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}})}{s_j}\ \text{(pressures)},\quad
+ r_j=\frac{y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}}}{s_j}\ \text{(other properties)}.
  \label{eq:p2-objective}
 \end{equation}
-Superscripts calc and obs denote calculated and observed values of the \COtwo partial pressure $p$ and the integral absorption heat $h$.
-Each data set's squared residuals are averaged through its weights $w_j$.
-The fitted parameters are the cation--water and carbamate--water dispersion interactions, the constant term of the R4 correlation and the R4 enthalpy increment.
+Superscripts calc and obs denote calculated and observed values of the quantity $y$, $s_j$ is the residual scale and $w_j$ the weight of observation $j$.
+For DEA, $s_j=0.09$ for \COtwo partial pressures and $s_j=0.02\,|y_j^{\mathrm{obs}}|$ for integral absorption heats, and each data set's squared residuals are averaged through its weights.
+For MDEA, all pressure residuals use $s_j=1$ on the logarithmic scale.
+The weights are $100/9$ for each loaded Kuranov pressure, $1/2$ for each of the 4 \COtwo-free Kuranov pressures, $1/58$ for each of the 58 Kim mixture pressures and 1 for each of the 3 Kim pure-water pressures.
+The 2 Jakobsen species ratios use $s_j=0.10\,|y_j^{\mathrm{obs}}|$, heat capacities use $0.02\,|y_j^{\mathrm{obs}}|$, and integral heats use the larger of 3000 J/mol and $0.05\,|y_j^{\mathrm{obs}}|$, all with unit weight.
+For loaded densities, $s_j=[(0.001\rho_j)^2+(0.01g_j)^2]^{1/2}$, where $\rho_j$ is the measured density and $g_j$ is the local secant slope of measured density against loading at fixed amine concentration, and $w_j=1/33$.
+Unloaded densities use $s_j=0.5$ kg/m$^{3}$ and $w_j=10$.
+For AMP, $s_j=0.015$ for the loaded total pressures, 0.05 for the binary bubble pressures, $\max(10^{-4},0.05\,y_j^{\mathrm{obs}})$ for the vapor AMP mole fractions and 0.003 for the carbamate fractions; the squared residuals are averaged over the 47 loaded pressures, over the 52 binary observations and over the 57 carbamate fractions.
+The 3 objectives use different observations and scales, so their costs do not compare accuracy across the amines.
+The fitted DEA parameters are the cation--water and carbamate--water dispersion interactions, the constant term of the R4 correlation and the R4 enthalpy increment.
+The 8 fitted MDEA parameters and the 9 fitted AMP parameters are those of Section~\ref{sec:p2-species}, with the constant term and enthalpy increment of R4 for AMP (Tables~\ref{tab:p2-mdea-fitted-current} and \ref{tab:p2-amp-fitted-current}).
+The lower bound of the AMP carbamate segment diameter is the MEA carbamate diameter of Part I.
 Fitting starts from 2 complete initial parameter sets, and the converged solution from each is reported.
 The lower-cost solution is selected; solutions whose costs differ by less than the optimizer's function tolerance are reported as tied.
 Phase stability is assessed for the selected solution but does not choose between the initial sets.
@@ -75,6 +104,7 @@ The standard errors are conditional on the model form, the fixed shared paramete
 Each fitted parameter set is searched for a phase split with the reacting tangent-plane distance of Part I, which compares the Gibbs energy of a charge-neutral trial phase with the tangent plane of the parent liquid at fixed temperature and pressure \cite[Sect.~3.4]{PolleyPartI}.
 A negative distance confirmed by a finite, material-conserving Gibbs-energy decrease is a descent and shows that the parent liquid is not stable.
 The parent liquids are the measured states, with bubble observations compressed to 1.05 times their calculated bubble pressure and liquids measured at a stated pressure kept at that pressure, and a grid of temperature, amine concentration and loading at 1.05 and 3.0 times the calculated bubble pressure.
+The grid spans 313.15--393.15 K in 10 K steps and loadings of $10^{-5}$ and then 0.1 upward in steps of 0.1 to the largest loading in the data of the amine, which is added; its amine concentrations are those of the fitted data, with concentrations within 1 wt\% of each other searched once (Section~\ref{sec:p2-results-stability}).
 Trial phases obey reaction equilibrium and electroneutrality.
 The search optimizes its own trial phases and records the density branch of each resolved descent as liquid or vapor when that classification is available; otherwise the branch remains unresolved.
 It also evaluates trial compositions supplied from earlier searches, which can show that a state is not stable but do not establish its branch.
@@ -87,3 +117,7 @@ If the penalized solution has a detected descent or an unavailable search, a ret
 If neither the penalty nor the retreat removes the split, the converged unpenalized solution is reported, with its detected split counts as lower bounds.
 Section~\ref{supp-sec:p2-s-retreat} of the supplement gives the penalized states and the retreat procedure in full.
 Finite searches report detected descents and unavailable searches; they do not prove global stability.
+
+% P:p2-methods-exceptions
+For MDEA, the penalty is applied to the \COtwo-free MDEA--water liquid at 78 states at 1.466 MPa, 393--423 K and MDEA mole fractions of 0.01--0.24, with the retreat applied to those states; no penalized fit is made for the loaded states, so a liquid--liquid split found there is reported as a limitation.
+For AMP, the converged unpenalized solution is reported although the retreat yields a parameter set with no detected descent; that set is reported beside it as the stability-constrained alternative.
