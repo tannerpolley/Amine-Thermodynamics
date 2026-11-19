@@ -3,6 +3,664 @@ title: "MDEA transfer with saturation-capped absorption heat"
 format: html
 ---
 
+## Fixed-pressure CO₂-free stability penalty (#343)
+
+The [18 November owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/343#issuecomment-6995164177)
+adds CO₂-free MDEA–water to the #255 stability penalty. The four Kuranov
+binary pressures and their group weights remain as described in the
+unpenalized study below. The full #337 search and its loaded-state penalty
+remain separate from the initial binary fit.
+
+The added set contains **78 single-liquid parents** at **1.466 MPa**. The
+temperatures are 393, 403, 413, 413.15, 422.04 and 423 K. The 10 K steps
+cover the requested interval. The additional temperatures align with the
+hot Kuranov data and the hottest declared Merkley state. MDEA mole fractions
+are 0.01, 0.02, 0.04, 0.06, 0.07, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18,
+0.20 and 0.24. The 0.07 point samples the narrow gap found at 413.15 K in
+the previous calculation, and 0.24 brackets its predecessor's upper contact
+near 0.236 at 422.04 K. Each native Full-search observation has unit weight.
+The #255 penalty scales are 0.01 and 0.003. The fixed binary pressures use
+no bubble-pressure reference and the binary has no reactions.
+[Binary penalty declaration](inputs/retransfer-343-binary-penalty.json).
+
+The untouched fitted B1 endpoint still refuses the two 413.15 K Kuranov
+pressures at the revised objective. Under the **19 November orchestrator
+decision**, the substituted start is **B1 with k(MDEA-water) taken from start 2**.
+It uses intercept −0.1797272203 at 313.15 K and slope
+6.168324014e−4 K⁻¹. Every other value in the source parameter document
+was verified equal to B1 before applying the unchanged shared-input binding
+and Born-diameter tie. B1 remains the frozen comparison model.
+[Repair provenance](results/retransfer-343/binary-penalty/repaired-start-provenance.json).
+
+### Runtime check before the first fit
+
+Both starts evaluated all 359 observations, consisting of 281 fitted data
+rows and 78 penalty observations, with three single-threaded workers at scale
+0.01. The initial binary penalty cost was zero at both starts. The timings
+cover one residual sweep and one assembled Jacobian sweep. The residual
+sweep used the Engine predictor on every row. The Jacobian sweep evaluated
+disjoint row batches at the same zero optimizer vector and preserved the
+native row order within each batch.
+
+| Start | Residual wall time (s) | Jacobian wall time (s) | Projected seconds per stage at 40 residual and 15 Jacobian evaluations |
+|---|---:|---:|---:|
+| B1 with k(MDEA-water) taken from start 2 | 12.334 | 11.963 | 672.8 |
+| Retained second start | 11.961 | 11.688 | 653.8 |
+
+The counts 40 and 15 come from the previous MDEA fit on this wheel. Two
+stages at both starts project to **44.2 min**, excluding continuations,
+retreat and the post-fit search. For the historical #255 median counts of
+24 residual and 14 Jacobian sweeps, the corresponding stage projections
+are 463.5 and 450.7 s. These are estimates from start-point sweeps. Individual
+optimizer trials can change the numerical work. The binary rows used
+1.08 and 0.99 accumulated worker seconds in the residual sweeps and
+1.40 and 1.34 in the derivative sweeps.
+[Repaired start profile](results/retransfer-343/binary-penalty/profile-start-0.json) ·
+[Second start profile](results/retransfer-343/binary-penalty/profile-start-1.json).
+
+### Optimizer endpoints and retreat
+
+Both starts terminated on optimizer tolerances at each penalty scale after
+the continuations listed below. Costs are dimensionless weighted least-squares
+costs. The fitted-data and binary-penalty contributions are shown separately.
+
+| Start | Scale | Attempt | Iterations | Fitted-data cost | Penalty cost | Time (s) | Stop |
+|---|---:|---:|---:|---:|---:|---:|---|
+| B1 with k(MDEA-water) taken from start 2 | 0.01 | Initial | 40 | 555.182336 | 0.440599 | 472.5 | Iteration limit |
+| B1 with k(MDEA-water) taken from start 2 | 0.01 | Continuation 1 | 33 | 555.180950 | 0.440619 | 373.7 | Tolerance |
+| B1 with k(MDEA-water) taken from start 2 | 0.003 | Initial | 29 | 504.474694 | 6.103995 | 328.9 | Tolerance |
+| Retained second start | 0.01 | Initial | 40 | 575.418156 | 0.444030 | 471.9 | Iteration limit |
+| Retained second start | 0.01 | Continuation 1 | 33 | 575.416631 | 0.444051 | 374.4 | Tolerance |
+| Retained second start | 0.003 | Initial | 40 | 522.110888 | 6.151683 | 480.2 | Iteration limit |
+| Retained second start | 0.003 | Continuation 1 | — | — | — | — | Combined shell deadline |
+| Retained second start | 0.003 | Continuation 2 | 31 | 522.107731 | 6.151918 | 310.3 | Tolerance |
+
+The 3,590 s deadline on the combined shell interrupted the first continuation
+at scale 0.003 for the retained second start before it wrote a checkpoint.
+The interruption counts as one of the two allowed continuations. The final
+continuation ran from the last saved endpoint with the same controls. No
+completed fit was repeated. The recorded optimizer times sum to 1,175.2 s
+and 1,636.8 s per start, excluding the interrupted work, replays and retreats.
+[Cost histories and stop records](results/retransfer-343/binary-penalty/fit-and-binary-summary.json) ·
+[Interrupted continuation](results/retransfer-343/binary-penalty/start-1/binary-1/stage-1/interrupted.json).
+
+At scale 0.003 the two optimizer endpoints each gave 14 negative binary
+stability observations. For **B1 with k(MDEA-water) taken from start 2**,
+the search at 413.15 K and $x_{\mathrm{MDEA}}=0.07$ was unavailable because
+distinct stationary minima had overlapping value intervals. The retained
+second start had all 78 searches available. The most negative dimensionless
+tangent-plane distances were −0.005644 and −0.005667, respectively.
+These counts are lower bounds on the observed instability. Before retreat,
+the repaired start had the lower optimizer fitted-data cost of 504.474694
+versus 522.107731.
+
+The #255 retreat then searched the fixed binary states and the supplied
+trial compositions on the segment connecting each start to its optimizer
+endpoint. It retained the following interpolated points. Each had 78 of 78
+binary searches available and zero detected descents. Both upper neighbours
+had one unavailable binary search.
+
+| Start | Fraction along segment | Fitted-data cost | Water–MDEA intercept at 313.15 K | Water–MDEA slope (K⁻¹) |
+|---|---:|---:|---:|---:|
+| B1 with k(MDEA-water) taken from start 2 | 0.8690261841 | 605.013011 | −0.1938787231 | 0.00115490654 |
+| Retained second start | 0.8688201904 | 622.497382 | −0.1939812211 | 0.00115583850 |
+
+An independent lower-convex-envelope calculation used 1,041 compositions
+at each of 32 sampled temperatures up to 422.04 K at 1.466 MPa. It showed
+no sampled gap and no unavailable point for either retreat. The binary
+points are interpolated between their respective starts and converged
+optimizer endpoints. The finite check covers the sampled CO₂-free
+compositions and temperatures at 1.466 MPa.
+
+**Selected for reporting under the #337 fitted-cost rule.** The retreated
+point from **B1 with k(MDEA-water) taken from start 2** has the lower
+fitted-data cost, 605.013011 versus 622.497382. The difference exceeds the
+optimizer's $10^{-10}$ function tolerance used for ties. Both starts
+converged before their retreats. The parameter table, conditional standard
+errors, deviations and pressure figures use this same interpolated point.
+[Selection record](results/retransfer-343/binary-penalty/start-selection.json).
+[First retreat and binary scan](results/retransfer-343/binary-penalty/start-0/retreat.json) ·
+[Second retreat and binary scan](results/retransfer-343/binary-penalty/start-1/retreat.json).
+
+### Full stability search and loaded-penalty timing
+
+The full diagnostic search at the selected retreated point took **2,097.84 s**
+on three workers. It completed all 11,824 requested records after the
+reporting shell disconnected. The final summary and 10,870 distinct
+per-state files were present. The tables and figures ran in a separate
+shell. The search reused identical calculations for 954 requested records.
+
+| Stability outcome | Data states | Grid states | Total states |
+|---|---:|---:|---:|
+| Requested | 1,564 | 10,260 | 11,824 |
+| Available | 1,339 | 9,446 | 10,785 |
+| Unavailable | 225 | 814 | 1,039 |
+| Native liquid-only descent | 0 | 1 | 1 |
+| Native vapor-only descent | 12 | 0 | 12 |
+| Native descents labelled mixed before the density-root check | 52 | 0 | 52 |
+| Negative supplied trial, density branch unknown | 76 | 0 | 76 |
+
+There are 77 distinct requested records with descent evidence from either
+source after accounting for overlap. The counts are lower bounds from a
+finite search. The available/unavailable counts describe completion of the
+native and supplied work. For 68 unavailable records at least one descent
+was still retained. All 76 states with a negative supplied trial have
+numerical evidence of instability. The original evaluation-only calls omit
+the density branch, which is checked separately below.
+The supplied-trial totals are 30,774,833 evaluated, 2,595,046 unavailable and
+344,022 not applicable. Trials come from this campaign's MDEA split record.
+Neither unavailability nor lack of an observed descent establishes stability.
+[Search summary](results/retransfer-343/binary-penalty/post-binary-stability.json) ·
+[Descent evidence and witnesses](results/retransfer-343/binary-penalty/descent-states.json).
+
+Among the unavailable grid states, 810 lacked a solved bubble-pressure
+reference and four had other native search refusals. The data states had
+146 incomplete supplied evaluations, 56 overlapping-minimum refusals,
+16 other native search refusals and seven capped-state exceptions. The
+288.71 K capped state's Engine cause is
+`initial:thermochemistry_unavailable: outside_interval: record excludes temperature`.
+The sole grid liquid descent occurred at 363.15 K, 1.368 mol CO₂/mol MDEA
+and 1.05 times bubble pressure, with dimensionless tangent-plane distance
+−0.00262223. Some trials seeded on the vapor side resolved to liquid.
+The density-root checks below establish the split count.
+
+The deduplicated combined penalty has **11,464 compressed-liquid rows**
+at 1.05 and 3.0 times bubble pressure and the **78 fixed binary rows**.
+Construction took 109.8 s. It recorded 14 unavailable copies of seven
+capped sources. Four sources are outside a thermochemical interval.
+At the others, saturation evaluation failed at loading 1.35 or 1.15,
+or the vapor root was refused at loading 1.40. Each cause is retained
+for both pressure ratios.
+
+The native residual and Jacobian were profiled on 130 compressed rows,
+stratified by data or grid, pressure ratio and 20 K temperature band.
+Three workers completed the probe in 44.0 s, including the fixed-pressure
+timing check. Of the 130 rows, 127 provided both residual and Jacobian, and
+three refused the bubble-pressure reference with `LOCAL_INFEASIBILITY`.
+Weighted expansion of the sample to all compressed rows projects about
+1,270 s for a residual sweep and 1,459 s for a Jacobian sweep on three
+workers. This is a sample-based projection of calculation time. A complete
+objective at the selected point also requires the refused rows.
+
+| Evaluation counts per stage | Projected stage time |
+|---|---:|
+| Historical #255 medians, 24 residual and 14 Jacobian | 14.14 h |
+| Previous MDEA fit, 40 residual and 15 Jacobian | 20.19 h |
+
+The native optimizer already puts rows with identical pressure references
+on the same worker and caches the solved reference. To estimate work
+remaining after eliminating pressure-reference solves altogether, the probe
+repeated the 127 available samples at their resolved pressures. The residual
+values and statuses were identical. The frozen-pressure Jacobians omit the
+bubble-pressure derivative and serve only as a timing diagnostic.
+The corresponding projected stage times were 7.38 h and 10.54 h.
+The compression and exact reference reuse available on the pinned wheel
+leave the projected stage above the task's one-hour limit.
+The loaded penalty was triggered and no loaded-penalty optimization began.
+[Measured sample and projections](results/retransfer-343/binary-penalty/loaded-penalty-profile.json) ·
+[Native worker assignment](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/native/regression/fit.cpp#L235) ·
+[Pressure reference reuse](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/native/regression/observations.cpp#L578).
+
+
+### Density roots of the loaded-state descents
+
+At the retreated point from **B1 with k(MDEA-water) taken from start 2**,
+the 77 records with descent evidence represent 28 distinct calculations.
+The 27 distinct rule (a) cases descend toward vapor. One rule (b) grid case
+has a resolved liquid–liquid split. The search summary preserves the 52
+preliminary data-state labels based on trial seeds and records the final
+counts separately under the density-root classification.
+
+| Source | Trial phase identified at the parent pressure | Requested records | Distinct calculations |
+|---|---|---:|---:|
+| Rule (a) data, native and supplied | Vapor | 64 | 24 |
+| Rule (a) data, supplied only | Vapor | 12 | 3 |
+| Rule (b) grid, native | Second liquid | 1 | 1 |
+
+Replaying the native search reproduced the stored witness compositions.
+For the 52 records labelled mixed in the original search, the density
+solver's `root_density_side` was unspecified. The recorded `density_side`
+fell back to the trial seed label. For each liquid-labelled witness, a
+vapor-labelled witness matches its composition and log density within
+$3.07\times10^{-12}$, below the Engine's `PHASE_COINCIDENCE_DISTANCE` of
+$10^{-6}$. Requesting both density branches returned the same root.
+On a 33-point isotherm at each trial composition, from $10^{-4}$ times
+that root density to the root, pressure increased monotonically and every
+sampled pressure derivative was positive. This identifies a
+vapor-connected root at the sampled conditions. The rule (a) parent
+pressures were 0.1733 to 0.9990 times their model bubble pressures.
+[Native branch identification](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/native/equilibrium/phase_stability.cpp#L165).
+
+The evaluation-only supplied trials preserve their trial density and can be
+off pressure. Across the 76 rule (a) records, 12,142 of 77,491 negative
+evaluations already met the $10^{-10}$ parent pressure-row tolerance.
+All 12,142 were vapor-side or connected to dilute gas at fixed composition.
+The other 65,349 values retain negative evidence at the evaluated points.
+Their original densities do not establish a pressure-equilibrated phase.
+For each state's most negative trial, closing pressure at unchanged
+composition gave a vapor-side root (24 records) or a vapor-connected
+single root (52 records). Ten of those original trial densities needed
+pressure closure. All density corrections remained within the native
+`DENSITY_ANCHOR_LOG_WINDOW` of 0.00995033, with a maximum absolute log
+density change of 0.00173223. At the closed roots the dimensionless
+tangent-plane distances ranged from −1.61176 to −0.000992521. Each
+negative magnitude exceeded its native numerical error estimate by at
+least $7.54\times10^{6}$. These trials add vapor-side evidence and leave
+the number of observed liquid–liquid splits at one.
+The per-state `outside_ranges` field uses the #337 convention. A false
+mark means the applicable law is within its source range, a true mark
+means it is outside, and an unused reaction is identified explicitly.
+The two 388.71 K states, `comparison:374:1:phase` and
+`Merkley-capped:8:phase`, lie above the 368 K MDEA dissociation limit.
+[All 77 records with temperatures, pressures, tangent-plane distances and range marks](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/descent-states.csv) ·
+[Pressure-root checks and witness compositions](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/phase-witnesses.json).
+
+The grid split is a predicted liquid–liquid equilibrium at 363.15 K,
+78.620 wt% MDEA on the unloaded stock basis, 1.368 mol CO₂ per mol MDEA,
+and 262.862 MPa (1.05 times the model bubble pressure). The native
+liquid-side tangent-plane distance was −0.00262223. The seed yielded a
+finite Gibbs decrease of $-2.89\times10^{-5}$ mol in $G/(RT)$, with
+estimated numerical error $7.66\times10^{-10}$ mol on that feed basis.
+A separate two-liquid equilibrium solve at the same conditions gave
+molar densities of 22,332 and 24,983 mol/m³ and CO₂ mole fractions of
+0.282 and 0.726. The second liquid accounts for 0.874% of the equilibrium
+fluid moles. The maximum classified equilibrium residual was
+$2.92\times10^{-14}$ against the Engine's $10^{-10}$ row tolerance.
+Bulk $G/(RT)$ fell by $4.51\times10^{-5}$ mol on 3.918 mol feed.
+This establishes a local model equilibrium at a highly concentrated,
+high-pressure grid point. No measured coexistence was used to verify it.
+The 1,039 unavailable searches remain unavailable and the split count
+remains a lower bound.
+[Two-liquid equilibrium calculation](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/two-liquid-equilibrium.json).
+
+### Pressure interpretation at the vapor-directed data states
+
+At the 24 distinct data-state calculations with native vapor-directed
+descent, the declared pressure was below the model bubble pressure.
+The negative tangent-plane distance rules out the homogeneous liquid
+as the stable equilibrium **at that declared pressure**. This is
+consistent with vapor formation below the model bubble pressure.
+The reported bubble pressures are local incipient-vapor roots solved
+at higher pressures. The descents at the data pressures neither verify
+nor rule out stability of those roots at their own pressures. Stability
+of the reported bubble roots remains unverified. These searches concern
+density, speciation and heat declarations. They identified no affected
+Kuranov, Xiao or Ermatchkov pressure-observation rows.
+
+| Data declaration | Distinct native-descent calculations | Affected rows or search records |
+|---|---:|---|
+| Sobrino unloaded density, fitted | 4 | `fit:200`, `fit:206`, `fit:212`, `fit:218` |
+| Böttinger speciation at 5 bar, not fitted | 8 | `comparison:221–222`, `225–226`, `249–250`, `305–306`, `321–322`, `325–326`, `353–354`, `357–358` |
+| Böttinger speciation at 25 bar, not fitted | 2 | `comparison:163–164`, `227–228` |
+| Zheng integral heat, not fitted | 5 | Final states of `comparison:411`, `413–416` |
+| Merkley heat and capped states, fitted and not fitted | 5 | `fit:126` (also `Merkley-capped:4:phase`), `comparison:370`, `comparison:374`, `Merkley-capped:5:phase`, `Merkley-capped:8:phase` |
+
+Three further Böttinger calculations at 5 bar have vapor-directed
+evidence from supplied trials only. They correspond to
+`comparison:157–158`, `161–162` and `201–202`.
+[Exact state keys, pressures and tangent-plane distances](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/descent-states.csv).
+
+### Penalty evaluation time by state set
+
+| Set | Deduplicated rows | Residual sweep (s) | Jacobian sweep (s) | Projected stage, 24 residual + 14 Jacobian (h) | Projected stage, 40 residual + 15 Jacobian (h) |
+|---|---:|---:|---:|---:|---:|
+| Rule (a) data, both ratios | 1,206 | 88.54 | 107.69 | 1.009 | 1.432 |
+| Rule (b) grid, 1.05 times bubble pressure | 5,129 | 582.32 | 664.34 | 6.466 | 9.238 |
+| Rule (b) grid, 3.0 times bubble pressure | 5,129 | 598.98 | 687.45 | 6.667 | 9.520 |
+| Fixed-pressure CO₂-free binary | 78 | 0.41 | 0.50 | 0.00468 | 0.00664 |
+| Total | 11,542 | 1,270.25 | 1,459.97 | 14.146 | 20.197 |
+
+These three-worker projections use the retained stratified compressed-row
+sample and the measured 78 binary rows at the same endpoint. A row shared
+by data and grid belongs to the data set in this accounting. Seven capped
+sources still have no constructed compressed copies at either ratio. The
+table estimates penalty evaluation time at a fixed parameter point.
+Parameter-dependent work, optimizer cache reuse, fitted-data evaluations,
+retreat and endpoint searching are outside the time calculation.
+
+On the 127 available compressed sample rows, timings averaged 46.2 ms
+per worker for the bubble reference solve, 62.2 ms for that solve with its
+derivatives, 9.2 ms for the fixed-pressure reacting parent solve and
+118.8 ms for its native tangent-plane search. The native fixed-pressure
+row took 128.8 ms with 152.0 ms for prediction and derivatives together.
+Independent call timings have distinct compilation and warm-up costs.
+At the grid split, freezing pressure changes a dimensionless prediction
+derivative by 0.1534 per optimizer unit, even though the central value
+matches. Sharing an identical bubble-pressure reference between the
+two ratios preserves both the predictions and residual Jacobian exactly.
+Across 36 timed pair repetitions, separate evaluations took 13.273 worker
+seconds and paired evaluations took 11.502 worker seconds, a 13.3%
+reduction. The pinned fit already assigns identical references to the same
+worker and reuses the solve. The measured gain applies to these pairs.
+[Timed calls and stage projections](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/timing.json).
+
+All three original pressure-reference failures occur before applying the
+compression ratio. Their largest classified residuals are material
+balances. Four alternate pressure guesses per case still refused. At
+313.15 K, neighboring converged starts also failed for the 78.620 wt%
+stock at loading 0.8 and the approximately 43.4 wt% stock at loading 1.3.
+The neighboring attempts reached a packing-domain or vapor-root
+refusal. At 373.15 K and approximately 65.1 wt% MDEA at loading 1.3,
+two neighboring seeds independently recovered a bubble pressure of
+106.826642 MPa with residual $2.27\times10^{-13}$. This establishes a
+start-sensitive solve for that row. The other two bubble references
+remain unavailable under the tested starts.
+[Exact refusal messages and independent starts](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/bubble-pressure-refusals.json).
+
+The #255 MEA records give 1,367 and 4,314 s for whole fits with 1,903
+penalty parents and 32 requested workers. Normalizing those whole-fit
+times by the penalty-row count and by the sum of the reported residual and
+Jacobian evaluations gives 15.3–20.5 ms wall time per row per evaluation.
+The same normalization gives 64.4–97.8 ms for the later #282 MEA stages
+on three workers with the same enforced set. MDEA's weighted sample gives
+110.8 ms per loaded row for residual evaluation and 127.3 ms for the
+Jacobian on three workers. The MEA whole-fit records include the fitted
+data and optimizer work. They cannot isolate native per-row time or a
+same-wheel speed ratio. Adopted F2 in #338 needed no penalized stage.
+[Historical fit references and accounting](results/retransfer-343/binary-penalty/descent-and-penalty-diagnosis/timing.json).
+
+### OWNER DECISION 2026-11-19
+
+The owner answered through the question tool to report the one
+liquid–liquid split and retain the binary-penalty result without a
+loaded-penalty refit. The split is outside the measured domain at
+363.15 K, 78.620 wt% unloaded MDEA, 1.368 mol CO₂ per mol MDEA and
+262.862 MPa, with TPD/$RT$ of −0.00262. The sample timings project
+**14.1–20.2 h per stage** for the whole penalty set and **1.0–1.4 h**
+for the data states alone (1.009–1.432 h before rounding).
+Both exceed the one-hour limit. No loaded-penalty refit was run.
+This is an owner-approved exception for MDEA only. The #337 series
+penalty rule remains in force for the other amines.
+[Owner decision on #343](https://github.com/tannerpolley/Amine-Thermodynamics/issues/343#issuecomment-6998481156).
+
+### Same-row comparisons against the retained B1 model
+
+The retreated point evaluated 718 of 731 data observations, including all
+281 fitted ones. B1 evaluated 716 of those observations under the same
+declarations and pinned wheel. All 718 available values at the retreated
+point and all 716 B1 values remain in the row records. The comparison
+statistics below use only rows available at both points, and the table
+records the resulting denominator. The complete reduction gives fitted
+and not-fitted deviations and signed biases for every dataset and each
+reaction law, including absolute errors in the observed units.
+[Same-row reduction](results/retransfer-343/binary-penalty/same-row-deviations.json) ·
+[Retreated point data](results/retransfer-343/binary-penalty/post-binary/data-rows.json) ·
+[B1 data](results/retransfer-343/binary-penalty/same-data-B1/data-rows.json).
+
+| Pressure data | Role | MDEA dissociation range | Paired / declared | Retreated point absolute / signed deviation (%) | B1 absolute / signed deviation (%) |
+|---|---|---|---:|---:|---:|
+| Kim binary and pure water | Fitted | Reaction not used | 61 / 61 | 2.20 / +1.29 | 3.23 / +1.25 |
+| Kuranov CO₂-free | Fitted | Reaction not used | 2 / 4 | 2.30 / +2.30 | 3.09 / +3.09 |
+| Kuranov loaded | Fitted | Inside | 37 / 37 | 11.49 / −0.95 | 11.80 / −7.80 |
+| Kuranov loaded | Fitted | Outside | 29 / 29 | 32.21 / +32.21 | 32.02 / +32.02 |
+| Kuranov loaded at 413 K | Not fitted | Outside | 11 / 11 | 18.97 / +18.97 | 20.96 / +20.96 |
+| Xiao | Not fitted | Inside | 20 / 20 | 20.68 / −19.77 | 28.19 / −28.19 |
+| Ermatchkov | Not fitted | Inside | 69 / 69 | 15.52 / −7.19 | 18.77 / −14.53 |
+| Ermatchkov | Not fitted | Outside | 32 / 32 | 15.01 / +11.11 | 21.33 / +19.90 |
+| Corrected Kamps | Not fitted | Inside | 21 / 21 | 25.06 / +15.27 | 26.72 / −13.17 |
+| Corrected Kamps | Not fitted | Outside | 7 / 7 | 25.99 / +25.99 | 22.66 / +22.66 |
+
+Xiao and Ermatchkov influenced the earlier B1 selection and did not enter
+this fit or choose its start. All four CO₂-free Kuranov rows evaluate at
+the retreated point, with mean absolute relative deviation 2.63%.
+B1 refuses the two hot binary rows on their binary declaration. Kuranov's
+pressure uncertainty of 0.1% of transducer full scale is a measurement
+specification. No transducer range was assigned here to an individual row.
+
+The 333.15 K, 60 wt% MDEA heat at 1.121 MPa
+(`comparison:370`, not fitted) remains unavailable. The
+Engine's saturation solve at 1.40 mol CO₂/mol MDEA reports no locally
+unique anchored vapor root. The sole stable root, 34,051 mol/m³, lies
+above the negative-slope sample at 10,595 mol/m³, and the saturation
+interval is unexamined. The row retains the original Engine message.
+
+![Kuranov bubble pressures and Xiao CO₂ partial pressures against the retreated model. Kuranov's CO₂-free pressures appear as separate observations and calculations at zero loading. Loaded pressures at 413 K and all Xiao pressures are not fitted. Hollow circles and dashed lines mark temperatures outside the MDEA dissociation measurement range.](results/retransfer-343/binary-penalty/kuranov-xiao-pressure.png)
+
+![Ermatchkov CO₂ partial pressures against the retreated model at approximately 2, 4 and 8 mol MDEA per kg water. All observations are not fitted. Hollow circles and dashed lines mark temperatures outside the MDEA dissociation measurement range.](results/retransfer-343/binary-penalty/ermatchkov-pressure.png)
+
+The pressure figures use 23 loading curves with 21 evaluations each.
+Curve temperatures follow the source isotherms. Curve stocks use the
+median water amount for each source isotherm and stock. The observed
+points and same-row comparisons retain their individual temperatures
+and stock amounts. All 483 curve predictions evaluated. The curve records
+retain pressures in Pa and carry the reaction applicability and range marks.
+[Curves and marked results](results/retransfer-343/binary-penalty/curves/curve-data.json) ·
+[Measured-point locations](results/retransfer-343/binary-penalty/curves/data-points.json).
+
+### Published pressure comparisons
+
+Ermatchkov et al. (2006), *Industrial & Engineering Chemistry Research*,
+[doi:10.1021/ie0604270](https://doi.org/10.1021/ie0604270), Table 5
+(printed p. 6086, PDF p. 6), reports mean absolute relative pressure
+deviations. The selected point uses the same statistic, evaluated over
+all available observations in each of the paper's two sets.
+
+| Observations and pressure basis | Selected MDEA point, not fitted | Published set I | Published set II |
+|---|---:|---:|---:|
+| Ermatchkov Tables 1–3, 101 CO₂ partial pressures | 15.36% | 16.8% (predicted) | 3.9% (fitted) |
+| Pérez-Salado Kamps, 28 corrected total pressures in Ermatchkov Table 6 | 25.29% | 1.9% (fitted) | 3.5% (fitted) |
+
+The 101-row set uses CO₂ partial pressure from headspace gas
+chromatography. The Kamps set uses total pressure and the corrected
+temperatures printed in Table 6 (p. 6088, PDF p. 8). Each comparison
+uses its own pressure basis. Both published models used the corrected
+Kamps rows in their correlations. Only set II used the 101 Ermatchkov
+rows in its fit. The four published percentages were checked in the
+Zotero PDF (parent `NM9K6UKR`, attachment `UD6X5RGU`).
+[Published and same-row statistics](results/retransfer-343/binary-penalty/published-pressure-comparisons.json).
+
+### Parameter values, conditional information and checks
+
+No parameter is on a bound at either final optimizer endpoint or the
+selected retreated point. The standard errors below use the weighted
+Jacobian of the 281 fitted data observations at the retreated point and
+residual variance 4.43233. They describe local conditional linearized
+information. The reported point is interpolated, so these numbers do not
+give intervals for a converged estimator or account for the stability
+decision.
+
+| Fitted quantity | Unit | Retreated value | Lower and upper bounds | Conditional standard error |
+|---|---|---:|---:|---:|
+| MDEA–water intercept at 313.15 K | 1 | −0.19387872 | −0.5, 0.5 | 0.00169 |
+| MDEA–water linear slope | K⁻¹ | 0.00115490654 | −0.01, 0.01 | 0.0000324 |
+| MDEAH⁺–CO₂ interaction | 1 | 0.255340 | −0.5, 0.5 | 0.0435 |
+| MDEAH⁺–water intercept | 1 | −0.025506 | −0.5, 0.5 | 0.1596 |
+| MDEAH⁺–water reciprocal-temperature coefficient | K | −18.2352 | −1,000, 1,000 | 4.48 |
+| MDEAH⁺–bicarbonate interaction | 1 | 0.891185 | −1, 1 | 1.42 |
+| MDEAH⁺ segment diameter, tied to Born diameter | Å | 3.64302 | 3.0, 4.5 | 0.0781 |
+| MDEAH⁺ dispersion energy divided by Boltzmann's constant | K | 596.464 | 50, 950 | 345.3 |
+
+The same 278-row B1 replay on the pinned wheel retains a maximum relative
+prediction difference of $2.58\times10^{-12}$, below #343's $10^{-8}$ limit
+from #255. The source hashes bind the adopted #340 shared values and the
+`05e94210` wheel. The reloaded optimizer endpoints reproduce their
+fitted-data costs within $5.30\times10^{-13}$ and $3.51\times10^{-13}$
+relative, below the same limit. The retreated point reproduces its cost
+exactly after reload.
+
+All 2,924 reaction-range marks on measured data match the declaration.
+The additional 1,932 marks on the curve grid match the same ranges, with
+189 curve nodes outside 278–368 K for MDEA dissociation. All seven
+restored corrected-Kamps observations above 393.15 K evaluated and are
+marked outside the MDEA dissociation measurement range. The 273.15–498.15 K
+limits for R1–R3 are Austgen et al.'s source-correlation range (1991,
+Table V, p. 547, citing Edwards 1978). Measured coverage of those limits
+has not been verified. [Conditional information](results/retransfer-343/binary-penalty/post-binary/conditional-uncertainty.json) ·
+[First optimizer reload](results/retransfer-343/binary-penalty/start-0/optimizer-reload-check.json) ·
+[Second optimizer reload](results/retransfer-343/binary-penalty/start-1/optimizer-reload-check.json) ·
+[Retreated reload](results/retransfer-343/binary-penalty/post-binary/retreated-reload-check.json).
+
+The numerical checks and the retained files for the paper tables are kept
+with this analysis. The compressed per-state records stay in the ignored
+run directory. Their inventory lists each path, size and SHA-256.
+[Verification](results/retransfer-343/binary-penalty/verification.json) ·
+[Summary row](results/retransfer-343/binary-penalty/summary-row.json) ·
+[Parameter table](results/retransfer-343/binary-penalty/parameter-table.json) ·
+[Per-state inventory](results/retransfer-343/binary-penalty/stability-detail-manifest.json).
+
+## Previous unpenalized MDEA fit with CO₂-free Kuranov pressures (#343, 18 November 2026)
+
+The fit stopped at the binary miscibility check. At the only fitted endpoint,
+a liquid–liquid gap first appeared between **413.052 and 413.150 K** in the
+sampled liquid Gibbs-energy calculation at **1.466 MPa**. At **422 K** the
+sampled contact compositions were **0.029 and 0.140 mol MDEA/mol mixture**.
+The optimizer reached its 40-iteration limit. The stop condition in the
+[owner's decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/343#issuecomment-6961718041)
+takes precedence over continuations and the full stability search. No endpoint
+was selected.
+
+### Measurements and weights
+
+The four CO₂-free pressures below come from Kuranov et al. (1996), Table 2,
+printed p. 1960, checked against the current Zotero attachment. The printed
+column is ten times the total pressure in MPa. The source states maximum
+pressure uncertainty of 0.1% of the transducer full scale (Experimental
+Section, p. 1959) and temperature uncertainty of 0.1 K. The fit evaluates
+all four as nonreactive binary bubble pressures. The two 413.15 K rows were
+previously not fitted, the 393.17 K row exceeded B1's calculation interval,
+and the 393.15 K row moved from the loaded-state declaration. Each Kuranov
+stock has two rows at weight 0.5 each. The 58 Kim MDEA–water mixture rows use
+weight 1/58 each, replacing their unit row weights. The three separate Kim
+pure-water rows retain unit row weights. This gives each of the two Kuranov
+stocks and the Kim mixture series total weight 1. Other weights and the
+pressure log-ratio residual definition follow the retained declarations.
+[Source transcription and weights](results/retransfer-343/kuranov-transcription.json).
+
+| T (K) | MDEA (mol/kg water) | Measured pressure (kPa) | Predicted pressure at the stopped endpoint (kPa) |
+|---:|---:|---:|---:|
+| 393.17 | 1.9493 | 190.9 | 194.396 |
+| 393.15 | 3.9707 | 186.2 | 192.482 |
+| 413.15 | 1.9493 | 346.4 | 354.144 |
+| 413.15 | 3.9707 | 338.6 | 353.477 |
+
+At 413.15 K the two fitted homogeneous-liquid pressure predictions differ by
+0.667 kPa. The measurements differ by 7.8 kPa. The bubble calculations follow
+each specified liquid composition. The Gibbs-energy calculation below tests
+whether two liquids can lower the energy at fixed temperature and pressure.
+Neither calculation supplies experimental liquid–liquid coexistence data.
+[Source and phase-rule interpretation](https://github.com/tannerpolley/Amine-Thermodynamics/issues/397#issuecomment-6961702192).
+
+### Starts, fit and binary miscibility
+
+| Start | Cost at start | Final fitted cost | Iterations | Disposition |
+|---|---:|---:|---:|---|
+| Retained B1 endpoint on the common inputs | Unavailable | — | — | Both 413.15 K binary pressures refused at the start. |
+| Retained second start on the common inputs | 2393.02474254 | 578.66533392 | 40 | Iteration limit. Binary gap at the endpoint halted continuations. |
+
+The Engine refused the B1 start with liquid curvature eigenvalues
+−1.69456e−4 and −0.108859 at 1.9493 and 3.9707 mol/kg water, respectively.
+Their negative rounding bands were approximately −2.11e−14 and −1.95e−14.
+All 281 fitted rows replayed at the second start. Its initial binary screen
+found no gap through 422.04 K at 1.466 MPa on the stated grid. The fit used
+40 residual evaluations and 15 Jacobian evaluations. The retained history
+includes 26 rejected trial costs represented by the largest finite double.
+Of the recorded evaluation refusals, 24 report local liquid instability and
+two report an infeasible saturation solve at a loading of 1.05 mol CO₂/mol MDEA.
+[First start](results/retransfer-343/start-0/diagnosis.json),
+[second start](results/retransfer-343/start-1/diagnosis.json),
+[fit history and refusals](results/retransfer-343/start-1/unpenalized/stage-0/fit.json).
+
+At the fitted endpoint the water–MDEA interaction is
+$k=-0.1925744674 + (1.201976\times10^{-3}\;\mathrm{K}^{-1})(T-313.15\;\mathrm{K})$.
+At 422 K, $k=-0.0617394$. The earlier estimate of a maximum slope near
+$1.27\times10^{-3}\;\mathrm{K}^{-1}$ used the B1 intercept −0.20633735.
+The endpoint has a less negative intercept. A slope bound for a revised fit
+requires a corresponding intercept condition. [Previous diagnosis](https://github.com/tannerpolley/Amine-Thermodynamics/issues/397#issuecomment-6961702192).
+
+The numerical miscibility check evaluates the homogeneous liquid branch at
+1.466 MPa, the declared hot Merkley pressure, on 1,041 composition points
+per temperature. It compares $\sum_i x_i[\ln x_i+\ln\phi_i]$ to its lower
+convex envelope. Subtraction of pure-component reference terms would add a
+linear function of composition and leave the comparison unchanged. The
+central composition step is 0.001, with refined points near the pure ends.
+An onset bracket narrowed the first detected gap to 0.1 K in temperature.
+The contact values below are sampled compositions. Coexistence at other
+pressures and intervals between the sampled temperatures remain unexamined.
+[Binary miscibility calculation](results/retransfer-343/start-1/unpenalized/stage-0/binary-mixing.json).
+
+| T (K) | Sampled MDEA mole fractions at contact | Maximum homogeneous liquid Gibbs excess above the chord, divided by RT |
+|---:|---:|---:|
+| 413.150 | 0.066–0.074 | 3.81e−8 |
+| 415.000 | 0.047–0.099 | 5.01e−5 |
+| 420.000 | 0.032–0.131 | 6.10e−4 |
+| 422.000 | 0.029–0.140 | 9.84e−4 |
+| 422.040 | 0.029–0.140 | 9.92e−4 |
+
+This sampled Gibbs-energy gap is a numerical prediction of the model even
+though the parameters had not converged. None of the eight fitted quantities
+was on a bound at this endpoint. Conditional standard errors and a selected
+parameter record remain unavailable. [Parameter values and bounds](results/retransfer-343/start-1/unpenalized/stage-0/parameters.json).
+
+### Same-row fitted deviations and range checks
+
+The table compares the fitted predictions available at the stopped endpoint
+against the frozen previous B1 model on **277 common observations**, replayed
+on the same wheel. Each pair is unweighted mean absolute relative deviation
+and signed mean relative deviation in percent, using $(p-o)/o$ for prediction
+$p$ and observation $o$. The four CO₂-free Kuranov rows use the new binary
+observation declaration and are shown separately above. Absolute deviations
+in each quantity's unit and the results by individual reaction law are retained.
+[Same-row statistics](results/retransfer-343/fitted-same-row-deviations.json).
+
+| Fitted data | MDEA dissociation range | Rows | Stopped endpoint absolute / signed (%) | Previous B1 absolute / signed (%) |
+|---|---|---:|---:|---:|
+| Carson heat | Inside | 40 | 6.30 / −0.36 | 5.45 / −2.05 |
+| Heat capacity | Inside | 33 | 2.35 / −0.09 | 2.59 / +0.39 |
+| Jakobsen protonated fraction | Inside | 16 | 13.41 / +13.41 | 13.58 / +13.58 |
+| Kim pressure | Reaction not used | 61 | 2.49 / +1.88 | 3.23 / +1.25 |
+| Kuranov loaded pressure | Inside | 37 | 19.44 / −11.11 | 11.80 / −7.80 |
+| Kuranov loaded pressure | Outside | 29 | 42.38 / +42.19 | 32.02 / +32.02 |
+| Merkley heat | Inside | 2 | 8.91 / +8.91 | 10.36 / +10.36 |
+| Merkley heat | Outside | 2 | 2.61 / −0.65 | 6.56 / +6.56 |
+| Loaded density | Inside | 33 | 0.26 / +0.09 | 0.18 / +0.05 |
+| Unloaded density | Reaction not used | 24 | 0.073 / −0.001 | 0.057 / +0.022 |
+
+All 2,924 marks on 731 declared observations match the reaction applicability
+and interval checks. For MDEA dissociation (278–368 K measured), the fitted
+declarations have 161 inside, 31 outside and 89 without that reaction. The
+450 not-fitted declarations have 390 inside and 60 outside. The seven
+corrected-Kamps rows above 393.15 K are declared, marked and still await
+calculation. All states with R1–R3 are within 273.15–498.15 K, the
+source-correlation range stated by Austgen (1991), Table V, p. 547, citing
+Edwards (1978). Measured coverage of that interval has not been verified.
+The calculation interval is 288.71–422.04 K.
+[Row-level range checks](results/retransfer-343/range-mark-verification.json),
+[range sources](results/retransfer-343/reaction-ranges.json).
+
+Xiao and Ermatchkov remain not fitted. Their pressures were accessed during
+development and informed the earlier B1 selection. The earlier B1 results
+were 28.19% mean absolute relative deviation for Xiao (20 rows) and 18.27%
+for Ermatchkov (88 rows). Those B1 results cover an earlier comparison
+inventory. The stop leaves the revised not-fitted predictions and
+same-row comparison unavailable, including the declared 333.15 K,
+60 wt% MDEA, 1.121 MPa heat. [Historical pressure comparison](../solvent_specification_mdea/notebook.qmd).
+
+### Numerical checks and work left at the stop
+
+| Check | Evidence and origin of limit |
+|---|---|
+| Frozen B1 replay | All 278 rows replayed on Engine `05e94210` in 18.75 s. Maximum relative prediction and cost differences are 2.58e−12 and 7.96e−13. The 1e−8 limit is the #343 numerical replay requirement inherited from #255. |
+| Shared inputs | The fit used the #340 parameter record with SHA-256 beginning `ae17803e`, the shared values with SHA-256 beginning `4c27d47e`, and the pinned wheel with SHA-256 beginning `c9fbf898`. Identity follows #340 and the pin retained by #396. The MDEAH⁺ Born diameter was tied to its segment diameter. |
+| Endpoint cost | The retained fit re-evaluated all 281 rows at cost 578.6653339161983, relative difference 1.85e−13 from native cost. This passes the 1e−8 numerical difference limit in #343. The cost evaluation preceded writing the endpoint file. No additional cost calculation after reload was run after the binary stop. |
+| Range marks | All 2,924 declarations checked against the stated ranges. Output checks for the unfitted evaluation, curves and stability search are pending their calculations. |
+| Runtime and miscibility | The second start's serial derivative sweep took 22.61 s. The screening projection was 904 s for 40 sweeps. The native fit took 420.49 s on three workers and the endpoint binary scan 3.21 s. The task's one-hour runtime boundary was respected. The owner's check through 422 K found a gap and stopped the campaign. |
+
+[Replay](results/retransfer-343/baseline-replay-05e94210.json),
+[run identity](results/retransfer-343/identity.json),
+[fit timing](results/retransfer-343/start-1/fit-profile.json).
+
+No post-fit #337 search, penalty or supplied-trial re-evaluation ran. The
+revised search declaration contains 1,564 data states and 10,260 grid states.
+The older #392 run found 103 descent states at its previous MDEA endpoint
+(a finite-search lower bound). It recorded 1,008 unavailable results, including
+776 grid bubble-pressure failures and two stalled grid searches. Those counts
+describe that older endpoint. The revised endpoint has no full-search split or
+availability tally. The modeled binary gap, the pressure differences and the
+fit history support taking a slope-bound proposal back for the owner's decision.
+The stopped result supplies calibration and numerical evidence. Parameter
+adoption, experimental validation and absorber-use assessment remain open.
+[Previous search record](../stability_search/results/repin-05e94210/summary.json).
+
 ## Shared Part II route qualification (#343 Stage A, 14 November 2026)
 
 The shared [declaration-driven calculation](../part-ii-route.md) reproduces all

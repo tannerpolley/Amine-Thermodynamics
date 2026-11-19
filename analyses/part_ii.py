@@ -136,7 +136,8 @@ class Route:
         return dict(parameters=mapping, reactions=laws, coordinates=declared)
 
     def bind(self, point):
-        spec = SolventSpecification(self.path.parent/self.config['specification'])
+        datasets = self.load(self.config['dataset_changes']) if 'dataset_changes' in self.config else {}
+        spec = SolventSpecification(self.path.parent/self.config['specification'], **datasets)
         spec.parameters = epcsaft.Parameters.from_mapping(point['parameters'])
         spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
         assert list(spec.parameters.component_ids)==self.config['species']
@@ -244,6 +245,12 @@ class Route:
             parent, args = copy.copy(spec.problems[record['initial']]), record['arguments']
             parent.feed = eq.Amounts({c:parent.feed.values.get(c,0.)+prediction.endpoint_loading*args['basis_amount']*args['feed'].get(c,0.) for c in spec.parameters.component_ids})
             bubble = None
+        elif 'binary_x' in state:
+            water, amine = 'water', self.config['amine']
+            feed = {water:1-state['binary_x'], amine:state['binary_x']}
+            parent = eq.Problem(T=state['T'], P=state['P'], feed=eq.Amounts(feed),
+                                phases=[eq.Phase('L',kind='liquid',support=list(feed))], row_tolerance=1e-10)
+            bubble = None
         elif 'problem' in state:
             parent = copy.copy(spec.problems[state['problem']])
             bubble = copy.copy(parent) if isinstance(parent.P, eq.Free) else None
@@ -292,7 +299,7 @@ class Route:
                    search_pressure_Pa=reference.value*item.pressure_ratio if reference else item.problem.pressure.value if item.pressure_reference is None else None,
                    pressure_ratio=item.pressure_ratio if item.pressure_reference is not None else None,
                    model_bubble_pressure_Pa=reference.value if reference else None)
-        if item.pressure_reference is None:
+        if item.pressure_reference is None and 'binary_x' not in state:
             try:
                 bubble = eq.solve_equilibrium(spec.model, self.stability_row(spec, dict(state, compressed=True), 1.).pressure_reference)
                 out.update(model_bubble_pressure_Pa=bubble.pressure if bubble.requested_tolerance_met else None, message=bubble.message)
@@ -313,7 +320,11 @@ class Route:
                 identity = json.dumps(calculation_declaration([item.problem,item.pressure_reference,ratio]),sort_keys=True)
                 row = copies.setdefault(identity, dict(candidate, sources=[]))
                 if state['key'] not in row['sources']: row['sources'].append(state['key'])
-        return list(copies.values())
+        binary = self.config.get('binary_penalty', {})
+        return list(copies.values()) + [
+            dict(key=f'binary:{T}:{x}', T=T, P=binary['pressure_Pa'], binary_x=x)
+            for T in binary.get('temperatures_K',[]) for x in binary['x_MDEA']
+        ]
 
     def same_calculations(self, point, states):
         """Data-state key -> the first key whose search the Engine receives identically; grid keys differ by construction."""

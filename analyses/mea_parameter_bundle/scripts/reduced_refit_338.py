@@ -101,8 +101,11 @@ def replay():
     assert report['passed'], '#338 stop: F0 replay failed'
 
 
-def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
-    """One start, with at most two same-control continuations after a limit."""
+def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalty_rows=None):
+    """Use at most two same-control continuations after a limit.
+
+    A caller supplying penalty_rows controls the endpoint search.
+    """
     mapping = start if route else r.s.with_parameter_values(start, fixed)
     enforced = route.states(route.bind(start)) if route else r.states()[0]
     excluded = set() if route else set(r.read(r.B/'results/stable-refit-255/qualification/summary.json')['result']['excluded'])
@@ -116,14 +119,18 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None):
     previous_endpoint = None
     for attempt in range(3):
         if route:
-            report = r.stage_fit(name,attempt,scale,mapping,{},route.penalty_states(enforced,route.bind(start)) if scale else [],route=route)
+            if attempt and (route.out/name/f'stage-{attempt}/interrupted.json').is_file():
+                continue
+            rows = penalty_rows if penalty_rows is not None else route.penalty_states(enforced,route.bind(start)) if scale else []
+            report = r.stage_fit(name,attempt,scale,mapping,{},rows,route=route)
             if not report.get('endpoint_replay_available'):
                 route.write(f'{name}/stage-{attempt}/unavailable.json',report)
                 return previous_endpoint if previous_endpoint is not None else (None, report)
             mapping = route.result(f'{name}/stage-{attempt}/parameters.json')
             assert abs(report['endpoint_replay_cost']/(report['data_cost'] if report['data_cost'] is not None else report['final_cost'])-1)<=1e-8
-            split_found = any(row.get('native_liquid_descent',False) for row in route.grid(mapping,enforced)) or split_found
-            report['earlier_split'] = split_found
+            if penalty_rows is None:
+                split_found = any(row.get('native_liquid_descent',False) for row in route.grid(mapping,enforced)) or split_found
+                report['earlier_split'] = split_found
             previous_endpoint = mapping, report
             if report['status']!='limit_reached':
                 break

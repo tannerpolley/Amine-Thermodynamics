@@ -1,0 +1,54 @@
+{
+  "dataset_replacements": [
+    {
+      "name": "calibration-Kim-binary",
+      "path": "inputs/343-Kim-binary.csv",
+      "sha256": "0c498284e4dba09d3ba75da30e93b530b5e41033dcd21b5f94f4fc239b187c62"
+    },
+    {
+      "name": "calibration-Kuranov",
+      "path": "inputs/343-Kuranov.csv",
+      "sha256": "e8c02ad3d1dc7055d4b7ed33ad5bbce605bc5f383dbe29fbda36a562a856581e"
+    },
+    {
+      "name": "outside-fit-Kuranov-413K",
+      "path": "inputs/343-Kuranov-413K.csv",
+      "sha256": "0f0f132cada607720f8ee9760fde4d5e2f6ef4a93d1a64559cfd4c513b188e95"
+    }
+  ],
+  "additional_datasets": [
+    {
+      "name": "calibration-Kuranov-binary",
+      "group": "Kuranov-binary",
+      "unit": "Pa",
+      "role": "calibration",
+      "path": "inputs/343-Kuranov-binary.csv",
+      "sha256": "762081ac4d51154dbd5cbc0d9d0ae528572ebd621019167b647f1cfb4358c1ee",
+      "template": "binary-bubble",
+      "columns": {
+        "observation_order": "observation_order",
+        "T": "T",
+        "P": "P",
+        "water": "water",
+        "alpha": "alpha",
+        "amine": "amine",
+        "observed": "observed",
+        "scale": "scale",
+        "weight": "weight"
+      },
+      "constructor": "observation",
+      "kind": "pressure",
+      "arguments": {
+        "observed": "$observed",
+        "form": "log_ratio"
+      },
+      "weight": "$weight",
+      "filter": {},
+      "temperature_domain": [
+        288.71,
+        422.04
+      ],
+      "basis": "CO2-free MDEA\u2013water bubble pressure, Pa; stock basis mol MDEA/kg water (Kuranov et al. 1996, Table 2, p. 1960)"
+    }
+  ]
+}

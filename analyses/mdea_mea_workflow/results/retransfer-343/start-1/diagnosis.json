@@ -1,0 +1,280 @@
+{
+  "index": 1,
+  "start": {
+    "path": "../results/refit-298/B1-alternative/start.json",
+    "sha256": "f10ce345c5cccf093f0314c8388ec38d243b51b87d0612e5b66f736013c42ec9"
+  },
+  "cost": 2393.0247425378057,
+  "available": true,
+  "rows": 281,
+  "refused": [],
+  "replay_seconds": 18.683065952995094,
+  "shared_values_sha256": "4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334",
+  "shared_parameter_sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a0",
+          1.0
+        ]
+      ],
+      "origin": -0.17972722027839907,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "pair/mdea-water/k_ij/a0 / temperature_law_coefficient"
+    },
+    {
+      "targets": [
+        [
+          "temperature_law_coefficient",
+          "pair/mdea-water/k_ij/a1",
+          1.0
+        ]
+      ],
+      "origin": 0.000616832401403298,
+      "scale": 0.001,
+      "bounds": [
+        -0.01,
+        0.01
+      ],
+      "identity": "pair/mdea-water/k_ij/a1 / temperature_law_coefficient"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "carbon-dioxide"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.0,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'carbon-dioxide'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.5,
+      "scale": 0.01,
+      "bounds": [
+        -0.5,
+        0.5
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "k_ij_reciprocal_temperature_slope",
+          [
+            "protonated-methyldiethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -41.61963413672365,
+      "scale": 10.0,
+      "bounds": [
+        -1000.0,
+        1000.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'water'] / k_ij_reciprocal_temperature_slope"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-methyldiethanolamine",
+            "bicarbonate-anion"
+          ],
+          1.0
+        ]
+      ],
+      "origin": 0.0,
+      "scale": 0.01,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "['protonated-methyldiethanolamine', 'bicarbonate-anion'] / k_ij"
+    },
+    {
+      "targets": [
+        [
+          "segment_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "debye_huckel_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ],
+        [
+          "born_diameter",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 3.563,
+      "scale": 0.1,
+      "bounds": [
+        3.0,
+        4.5
+      ],
+      "identity": "protonated-methyldiethanolamine / segment_diameter"
+    },
+    {
+      "targets": [
+        [
+          "dispersion_energy_over_k",
+          "protonated-methyldiethanolamine",
+          1.0
+        ]
+      ],
+      "origin": 177.89333334239393,
+      "scale": 10.0,
+      "bounds": [
+        50.0,
+        950.0
+      ],
+      "identity": "protonated-methyldiethanolamine / dispersion_energy_over_k"
+    }
+  ],
+  "binary_pressure_derivatives": {
+    "fit:61": {
+      "T_K": 393.15,
+      "source": {
+        "consistency_flag": "",
+        "doi": "10.1021/ie950538r",
+        "m_CO2_mol_per_kg_H2O": "0",
+        "m_MDEA_mol_per_kg_H2O": "3.9707",
+        "pdf_attachment_key": "QB5PV62N",
+        "pressure_basis": "total pressure at the bubble point (synthetic method); printed column 10(p) (MPa) = 10 x p/MPa",
+        "source_half_row": "28",
+        "source_key": "Kuranov1996",
+        "source_pdf_page": "2",
+        "source_printed_page": "1960",
+        "source_row": "69",
+        "source_series": "m_MDEA 3.9707 mol/kg; isotherm about 393 K",
+        "source_table": "Table 2",
+        "source_table_half": "right",
+        "temperature_K": "393.15",
+        "ten_times_total_pressure_MPa": "1.862",
+        "verification": "Image reading of 600 dpi crop of PDF p.2 matched pdftotext -layout text for all four values; checked 2026-10-18",
+        "zotero_parent_key": "9F6UM7M4"
+      },
+      "weight": 0.5,
+      "status": {
+        "status": "Available",
+        "prediction": 187056.7653340812
+      }
+    },
+    "fit:500": {
+      "T_K": 393.17,
+      "source": {
+        "consistency_flag": "",
+        "doi": "10.1021/ie950538r",
+        "m_CO2_mol_per_kg_H2O": "0",
+        "m_MDEA_mol_per_kg_H2O": "1.9493",
+        "pdf_attachment_key": "QB5PV62N",
+        "pressure_basis": "total pressure at the bubble point (synthetic method); printed column 10(p) (MPa) = 10 x p/MPa",
+        "source_half_row": "28",
+        "source_key": "Kuranov1996",
+        "source_pdf_page": "2",
+        "source_printed_page": "1960",
+        "source_row": "28",
+        "source_series": "m_MDEA 1.9493 mol/kg; isotherm about 393 K",
+        "source_table": "Table 2",
+        "source_table_half": "left",
+        "temperature_K": "393.17",
+        "ten_times_total_pressure_MPa": "1.909",
+        "verification": "Image reading of 600 dpi crop of PDF p.2 matched pdftotext -layout text for all four values; checked 2026-10-18",
+        "zotero_parent_key": "9F6UM7M4"
+      },
+      "weight": 0.5,
+      "status": {
+        "status": "Available",
+        "prediction": 192457.27921486358
+      }
+    },
+    "fit:501": {
+      "T_K": 413.15,
+      "source": {
+        "consistency_flag": "",
+        "doi": "10.1021/ie950538r",
+        "m_CO2_mol_per_kg_H2O": "0",
+        "m_MDEA_mol_per_kg_H2O": "1.9493",
+        "pdf_attachment_key": "QB5PV62N",
+        "pressure_basis": "total pressure at the bubble point (synthetic method); printed column 10(p) (MPa) = 10 x p/MPa",
+        "source_half_row": "35",
+        "source_key": "Kuranov1996",
+        "source_pdf_page": "2",
+        "source_printed_page": "1960",
+        "source_row": "35",
+        "source_series": "m_MDEA 1.9493 mol/kg; isotherm about 413 K",
+        "source_table": "Table 2",
+        "source_table_half": "left",
+        "temperature_K": "413.15",
+        "ten_times_total_pressure_MPa": "3.464",
+        "verification": "Image reading of 600 dpi crop of PDF p.2 matched pdftotext -layout text for all four values; checked 2026-10-18",
+        "zotero_parent_key": "9F6UM7M4"
+      },
+      "weight": 0.5,
+      "status": {
+        "status": "Available",
+        "prediction": 349436.3080922314
+      }
+    },
+    "fit:502": {
+      "T_K": 413.15,
+      "source": {
+        "consistency_flag": "",
+        "doi": "10.1021/ie950538r",
+        "m_CO2_mol_per_kg_H2O": "0",
+        "m_MDEA_mol_per_kg_H2O": "3.9707",
+        "pdf_attachment_key": "QB5PV62N",
+        "pressure_basis": "total pressure at the bubble point (synthetic method); printed column 10(p) (MPa) = 10 x p/MPa",
+        "source_half_row": "36",
+        "source_key": "Kuranov1996",
+        "source_pdf_page": "2",
+        "source_printed_page": "1960",
+        "source_row": "77",
+        "source_series": "m_MDEA 3.9707 mol/kg; isotherm about 413 K",
+        "source_table": "Table 2",
+        "source_table_half": "right",
+        "temperature_K": "413.15",
+        "ten_times_total_pressure_MPa": "3.386",
+        "verification": "Image reading of 600 dpi crop of PDF p.2 matched pdftotext -layout text for all four values; checked 2026-10-18",
+        "zotero_parent_key": "9F6UM7M4"
+      },
+      "weight": 0.5,
+      "status": {
+        "status": "Available",
+        "prediction": 340697.08370347624
+      }
+    }
+  }
+}

@@ -35,7 +35,7 @@ def residual_excess_enthalpy(model, T, P, x):
 
 
 class SolventSpecification:
-    def __init__(self, path, parameter="endpoint", *, additional_datasets=()):
+    def __init__(self, path, parameter="endpoint", *, additional_datasets=(), dataset_replacements=()):
         self.path = Path(path)
         self.spec = tomllib.loads(self.path.read_text())
         if self.spec["schema"] != "solvent-specification-1":
@@ -56,7 +56,10 @@ class SolventSpecification:
             "comparisons": [],
             "phase_states": self.load_record(self.spec["phase_states"]),
         }
-        for dataset in (*self.spec["datasets"], *additional_datasets):
+        datasets = {dataset["name"]: dataset for dataset in self.spec["datasets"]}
+        for replacement in dataset_replacements:
+            datasets[replacement["name"]] = {**datasets[replacement["name"]], **replacement}
+        for dataset in (*datasets.values(), *additional_datasets):
             document = dataset.get("observation_parameters", self.spec[parameter])
             if document["sha256"] not in self.construction_parameters:
                 self.construction_parameters[document["sha256"]] = epcsaft.Parameters.from_mapping(self.load_record(document))

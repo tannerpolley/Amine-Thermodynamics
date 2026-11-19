@@ -263,6 +263,21 @@ def test_failed_continuation_retains_nonconverged_endpoint(tmp_path,monkeypatch)
         assert failure['message']=='continuation thermochemistry unavailable' and not failure['endpoint_replay_available']
 
 
+def test_interrupted_mdea_continuation_is_counted(monkeypatch):
+    from unittest.mock import Mock
+    import reduced_refit_338 as reduced
+    root = ROOT/'analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty'
+    name = 'start-1/binary-1'
+    read = lambda path: json.loads((root/path).read_text())
+    route = SimpleNamespace(out=root, bind=lambda point: None, states=lambda spec: [], replay=lambda point: ([],True,0.),
+                            write=lambda *args: None, result=read)
+    stage = Mock(side_effect=[read(f'{name}/stage-{i}/fit.json') for i in (0,2)])
+    monkeypatch.setattr(reduced.r,'stage_fit',stage)
+    point, report = reduced.fit(name,None,{},None,scale=.003,route=route,penalty_rows=[])
+    assert [call.args[1] for call in stage.call_args_list]==[0,2]
+    assert report['status']=='converged' and point==read(f'{name}/stage-2/parameters.json')
+
+
 def test_horstmann_residual_excess_enthalpy():
     """#360 same-wheel F0 reference; owner-set relative tolerance 1e-8."""
     from MEA.solvent_specification import SolventSpecification
@@ -409,6 +424,7 @@ def test_density_branch_overrides_seed_label():
     assert p.density_branch([vapor, liquid])=='mixed'
     assert p.density_branch([dict(kind='Liquid')])=='unresolved'
     route = p.Route.__new__(p.Route)
+    route.config = {}
     spec = SimpleNamespace(problems={'NMR':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'sibling':dict(T=333.15,feed=[1.,2.],reactions=['R1']),
                                     'different':dict(T=333.15,feed=[1.,2.],reactions=['R2'])})
@@ -424,6 +440,10 @@ def test_density_branch_overrides_seed_label():
     assert len(copies)==4 and all(s['compressed'] for s in copies)
     assert {s['c'] for s in copies}=={1.05,3.}
     assert [s['sources'] for s in copies]==[['NMR','sibling'],['NMR','sibling'],['different'],['different']]
+    route.config['binary_penalty'] = dict(pressure_Pa=1466000., temperatures_K=[413.15], x_MDEA=[.07])
+    assert route.penalty_states(states,spec) == copies + [
+        dict(key='binary:413.15:0.07', T=413.15, P=1466000., binary_x=.07)
+    ]
     item = SimpleNamespace(problem=SimpleNamespace(pressure=SimpleNamespace(value=1e5)),pressure_reference=object(),pressure_ratio=3.)
     prediction = SimpleNamespace(pressure_reference=SimpleNamespace(value=2101051.3059414467))
     basis = route.pressure_basis(spec,{},item,prediction)
