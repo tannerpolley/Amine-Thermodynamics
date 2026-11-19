@@ -137,40 +137,47 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     assert not measured['optimized_available'] and not measured['available']
 
 
-def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path,monkeypatch):
-    """#385: the finite search at t must not inherit another midpoint's split."""
+def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path):
+    """#385: evaluate a new trial locally before accepting a midpoint."""
     route = p.Route.__new__(p.Route)
     route.out = tmp_path
     route.segment = lambda anchor, endpoint, t: t
     registry, calls = [], []
     route.result = lambda name: dict(trials=registry)
     route.replay = lambda point, rows: ([], True, 10.+point)
-    def grid(point, states, *, trial_set=None):
+    def grid(point, states, *, trial_set=None, retain_details=True):
+        assert not retain_details
+        native_descent = point > .875
         witness = dict(kind='Liquid', support=[0], composition=[point], packing=.4,
-                       resolved_descent=True)
+                       resolved_descent=native_descent)
         if trial_set is None:
-            if point>.875 and witness not in registry:
+            if native_descent:
                 registry.append(witness)
         else:
             assert all(w in registry or w['composition']==[point] for w in trial_set)
             calls.append((point, len(trial_set)))
-        return [dict(key='reference', available=True, value=-1. if point>.875 else 0.,
-                     witnesses=[witness] if point>.875 else [])]
+        row = dict(key='reference', available=True, value=-1. if native_descent else 0.,
+                   witnesses=[witness] if native_descent else [])
+        if point == .875:
+            # Discovery alone leaves the first sweep admissible.
+            if witness in trial_set:
+                row['supplied_trials'] = [dict(evidence='evaluated', quantities=dict(tpd_over_rt=-1.))]
+            else:
+                row['witnesses'] = [witness]
+        return [row]
     route.grid = grid
     p.stable.retreat('reference', 0., 1., [dict(key='reference')], shifts=({}, {}), route=route,
                      optimizer_report=dict(status='converged', data_cost=11., final_cost=11.))
     report = json.loads((tmp_path/'reference/retreat.json').read_text())
     resolution = .01/2**10  # #385 retains the old .01 interval / ten refinements.
-    assert 0 <= .875-report['t'] <= resolution
-    assert report['t']==.875 < report['upper_t']
+    assert report['t'] < report['upper_t'] == .875
     assert report['upper_t']-report['t'] <= resolution
     assert not report['non_monotone'] and report['base_trials']==1
     assert json.loads((tmp_path/'reference/candidate.json').read_text())==report['t']
     assert len(registry)==1 and registry[0]['composition']==[1.]
-    # A newly discovered midpoint trial must be evaluated again at that point.
-    assert any(a[0]==b[0] and b[1]==a[1]+1 for a,b in zip(calls,calls[1:]))
+    assert [n for point, n in calls if point == .875] == [1, 2]
     assert report['optimizer_converged'] and not report['point_terminated_on_optimizer_tolerance']
-    assert report['optimizer_cost']==11. and report['retreat_cost']==10.875
+    assert report['optimizer_cost']==11. and report['retreat_cost']==10.+report['t']
     assert report['method']=='bisection'
     route.result = lambda name: dict(t=.875)  # A retained old-walk result has no method.
     with pytest.raises(AssertionError,match='new output directory'):
