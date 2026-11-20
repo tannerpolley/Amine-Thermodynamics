@@ -28,11 +28,10 @@ retrievals, rather than presenting them as the current plan.
 | Parameter and Engine history | [Joint recalibration history](joint-recalibration-history/index.qmd) · [Heat F1 predecessor](heat-f1/index.qmd) · [Engine transfers](engine-adoptions/index.qmd) |
 | Remaining questions | [Open work](open-work/index.qmd) |
 
-From `analyses/`, validate and render the uncertified working view with:
+From the repository root, render the uncertified working view with:
 
 ```bash
-python3 manuscript.py validate .
-bash render.sh
+bash analyses/render.sh
 ```
 
 The overview is `analyses/_site/mea_parameter_bundle/notebook.html`; each child
@@ -61,21 +60,6 @@ pages, `analyses/_quarto.yml` and `analyses/_cse-manuscript.json`, runs
 render, and then stamps the rendered bundle HTML in
 `results/notebook-render-record.json`. `build_absorption_handoff.py` packages
 that stamped overview.
-
-For an automatically refreshing local view while editing, from `analyses/`:
-
-```bash
-python3 manuscript.py preview . --port <free port>
-```
-
-The owner's installed `mea-parameter-bundle-preview.service`
-(`systemd/mea-parameter-bundle-preview.service`, port 8770) runs
-`analyses/preview.sh`, which starts the same manuscript preview.
-`python3 analyses/manuscript.py service analyses/` would install the CSE
-always-on preview unit instead; it is not installed, and it requires an
-interpreter that imports `jupyter_core`, `nbformat`, `nbclient`, `ipykernel`,
-`jupyter_client`, `jupyter_cache` and `yaml`, which the project environment
-does not provide.
 
 ## Claude experiment checkpoint — 3 September 2026
 

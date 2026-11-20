@@ -24,9 +24,7 @@ that approved dependency with `uv pip install --python
 `~/.local/bin/uv run --no-sync` in the project environment, preserving its installed Engine
 and dependency lock. Each workflow plans one `present` job, verifies retained
 inputs before rendering, and checks them again afterward. It has no numerical
-calculation entry. Root preparation and the existing preview use these same
-local workflows. The installed uv executable is addressed directly because the
-preview service's PATH contains the presentation interpreter and system tools.
+calculation entry.
 
 Each `retained-results.sha256` selects the existing input set from base commit
 `2a01cdc4b4d5a62eea2fa2e1556c40128c548a9d`; existing producing identities and
@@ -39,8 +37,8 @@ generator. This file checking establishes presentation integrity, not a new
 calculation or physical validation.
 
 [Issue #90](https://github.com/tannerpolley/Amine-Thermodynamics/issues/90) still
-owns the required source-data calculation, coherent result delivery, notebook
-refresh and preview experiments. Presentation installation does not complete
+owns the required source-data calculation, coherent result delivery and notebook
+refresh experiments. Presentation installation does not complete
 its calculation, unchanged-run or dependency-rebuild requirements.
 
 From the repository root, check refusal and preservation in a disposable copy:
@@ -52,31 +50,30 @@ PATH="$HOME/.cache/cse-quarto-demo/.venv/bin:$PATH" python3 tests/check_presenta
 ## Root Quarto analysis website
 
 `analyses/` is one root Quarto analysis website managed by the CSE
-`manuscript.py`. [`index.qmd`](index.qmd) is its home page; `_quarto.yml` holds
-the shared HTML presentation; `_cse-manuscript.json` owns the 15 published
-reports and their sidebar groups. These include the MEA parameter bundle
-overview and nine study pages, four reference and decision pages, and the MEA
-evidence map. From the repository root:
+`manuscript.py`. [`index.qmd`](index.qmd) is its home page. `_quarto.yml` holds
+the shared HTML settings. `_cse-manuscript.json` records the published pages
+and their sidebar groups. The sidebar links to pages, and each page has its own
+table of contents.
+
+From the repository root, set `CSE_PLUGIN` to the installed plugin directory
+when installing or updating the tooling. Use `include` to register a report,
+`render.sh` to render the site, and `refresh` to update one report and the home
+page.
 
 ```bash
-python3 analyses/manuscript.py validate analyses
-(cd analyses && bash render.sh)
-python3 analyses/manuscript.py refresh analyses analyses/mea_parameter_bundle/notebook.qmd
-python3 analyses/manuscript.py preview analyses --port <free port>
+python3 "$CSE_PLUGIN/assets/visualize/project/quarto/manuscript.py" init analyses/
+python3 analyses/manuscript.py include analyses/ analyses/ideal_reaction_equilibrium/index.qmd \
+  --title "Ideal reaction-equilibrium reference" --group "Reference and comparison"
+bash analyses/render.sh
+python3 analyses/manuscript.py refresh analyses/ analyses/mea_parameter_bundle/notebook.qmd
 ```
 
-`render.sh` syncs the sidebar, validates the site and passes `--no-execute`;
-HTML is the default. The home page is `analyses/_site/index.html`; a registered
-`case/result.qmd` renders to `analyses/_site/case/result.html`. Register a new
-report with `python3 analyses/manuscript.py include analyses <report.qmd>
---title <title> [--group <group>]`; an unregistered `.qmd` is not rendered.
-`refresh` and `preview` use the presentation profile
-(`_quarto-presentation.yml`), which only prepares presentation views and never
-solves the model. The strict bundle
-certification is `result_freshness.py --certify` (see the bundle README).
-`python3 analyses/manuscript.py service analyses/` installs the CSE always-on
-preview unit; it is not installed here (see the bundle README for the
-interpreter requirement and the existing port-8770 preview service).
+Omit `--group` to list a report at the top level. `render.sh` renders HTML by
+default with document execution disabled. Open `analyses/_site/index.html` for
+the home page. A registered `case/result.qmd` renders to
+`analyses/_site/case/result.html`. If the report directory has a Snakefile,
+`refresh` first runs its `present` rule. For strict bundle certification, see
+the [bundle README](mea_parameter_bundle/README.md).
 
 ```text
 analyses/
