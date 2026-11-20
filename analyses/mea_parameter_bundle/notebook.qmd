@@ -8,6 +8,7 @@ resources:
   - results/adoption-297/**
   - results/adoption-340/**
   - results/paper-evidence-341/**
+  - results/same-data-comparison/hong-2027/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
   - results/bicarbonate-carbonate-266/**
@@ -1302,6 +1303,151 @@ checks. The [translation table](results/same-data-comparison/translation-table.j
 retains their source locators. The owner's 2026-11-13 decision supersedes the
 former $10^{-8}$ relative limit because the two Engine versions do not use the
 same numerical reference calculation.
+
+### Hong et al. (2027) at nominal 30 wt% MEA {#hong-2027-same-observations}
+
+On 132 six-source CO₂ partial pressures inside Hong's fitted loading and
+temperature range, Hong, the adopted MEA record, and Polley–Hedengren (2026)
+give average absolute relative deviations of **24.77%, 22.59%, and 50.93%**,
+respectively. The single liquid fails the local stability test at fixed weight
+at **131 of 132** states. With the 13 Hilliard rows at 313.00–313.147 K included,
+the deviations are **26.27%, 21.25%, and 53.83%**, with **144 of 145** states
+locally unstable. The six-source observations span 0.102–0.689 mol CO₂ per
+mol MEA and 1.6 Pa–2.804 MPa. Wagner's 23 observations are a separate block.
+[Issue #246 and accepted disposition](https://github.com/tannerpolley/Amine-Thermodynamics/issues/246#issuecomment-7050459649)
+
+| Measurements | $N$ | Deviation | Hong | Adopted MEA | Polley–Hedengren 2026 | Hong stable / locally unstable |
+|---|---:|---|---:|---:|---:|---:|
+| Six-source pressures, strict grid | 132 | AARD (%) | 24.77 | 22.59 | 50.93 | 1 / 131 |
+| Six-source pressures, including the 13 Hilliard edge rows | 145 | AARD (%) | 26.27 | 21.25 | 53.83 | 1 / 144 |
+| Wagner pressures | 23 | AARD (%) | 13.51 | 25.03 | 33.44 | 0 / 23 |
+| Kim and Svendsen, 313.15 K, warmer side | 21 | RMSE (kJ/mol CO₂) | 8.53 | 5.46 | 6.43 | 0 / 21 |
+| Kim and Svendsen, 353.15 K, cooler side | 20 | RMSE (kJ/mol CO₂) | 12.84 | 10.29 | 11.31 | 0 / 20 |
+| Kim and Svendsen, 353.15 K, warmer side | 20 | RMSE (kJ/mol CO₂) | 11.38 | 10.29 | 11.31 | 0 / 20 |
+| Kim and Svendsen, 393.15 K, cooler side | 15 | RMSE (kJ/mol CO₂) | 25.25 | 26.57 | 25.14 | 0 / 15 |
+| Amundsen loaded density | 18 | RMSE (kg/m³) | 41.25 | 6.16 | 135.82 | — |
+| Hartono loaded density | 25 | RMSE (kg/m³) | 39.00 | 1.96 | 148.86 | — |
+| Han loaded density | 45 | RMSE (kg/m³) | 50.21 | 5.59 | 154.38 | — |
+
+AARD is average absolute relative deviation. RMSE is root mean square error.
+The counts refer to identical observation IDs in all three columns. The
+adopted record fitted 45 of the 145 six-source pressure observations, including
+all 13 edge observations, and 32 of the 88 density observations (12 Amundsen,
+20 Hartono). Every row was examined before selecting the adopted parameters.
+Polley and Hedengren used a mixture of fitted and unfitted six-source pressures
+and 313.15/353.15 K heat measurements. Exact membership in every earlier
+pressure fitting stage remains unresolved (Appendix B). The other rows in the
+table were outside their fitting objectives for these properties. Hong fitted
+the loaded ternary pressure model to Aspen HYSYS output at 30 wt% MEA.
+[Supplement table data](results/same-data-comparison/hong-2027/supplement-table.csv) ·
+[Scores by fit role, edge inclusion and stability](results/same-data-comparison/hong-2027/scores.csv) ·
+[Polley and Hedengren (2026), Appendix B](https://doi.org/10.1016/j.nxcen.2026.100132) ·
+[Hong et al. (2027), §2.3](https://doi.org/10.1016/j.seppur.2026.140522)
+
+![Calculated and observed CO₂ partial pressures for the 145 six-source rows, including the 13 Hilliard edge rows, and 23 Wagner rows. Each point is one observation. The gray line marks exact agreement. Crosses identify Hong states at which the liquid fails the local stability test at fixed weight.](results/same-data-comparison/hong-2027/pressure-comparison.svg)
+
+Hong's three-component perturbed-chain statistical associating fluid theory
+(PC-SAFT) model blends two MEA–CO₂ association pathways. The implementation
+uses Tables 1–3 and S1, including the symmetric-site correction in Eq. 10,
+with bilinear interpolation of the weight. Each state holds its weight fixed.
+The calculations use the retained analytical solvent amounts and measured
+temperatures. Source molalities set the Hilliard and Xu water amounts, and
+Wagner's source stock compositions are preserved. The Hilliard edge rows use
+the 313.15 K weights at their measured temperatures. Density was calculated
+at the stated pressure in the retained row tables, 0.1 MPa for Amundsen and
+Hartono and 0.1–0.7 MPa for Han, without a phase equilibrium calculation.
+[Parameter and source file](results/same-data-comparison/hong-2027/parameters.json) ·
+[Frozen admission and exclusions](results/same-data-comparison/hong-2027/admission.csv)
+
+The 167 flagged pressure values, including all 23 Wagner rows, are
+*equal-fugacity calculations for a liquid that fails our local stability test
+at fixed weight*. They are not equilibrium pressures of that model. The same
+test flagged 62 of Hong's 90 weight-table nodes. The lowest scaled liquid
+composition Hessian eigenvalues ranged from −1.0923 to −0.01846 at those nodes.
+The calculation does not determine which phases would replace the locally
+unstable liquid. The MEA–water parameters switch at liquid MEA mole fraction
+0.20. The single ordinary pressure solution in the measured rows passed the
+local test, which does not certify global phase stability.
+[Results at the 90 grid nodes](results/same-data-comparison/hong-2027/grid.csv)
+
+For the heats, the positive released heat is the negative of Hong's Eq. 17
+pressure slope. The weight is reevaluated as temperature changes. Simpson
+integration gives a mean over each interval between successive reported
+loadings in the same Kim run. The scores use a 0.01 K temperature step and
+two half intervals. Reducing the step from 0.1 K changed an interval result
+by at most 0.0168 kJ/mol CO₂. Halving the loading interval changed the mean
+by at most 0.157 kJ/mol CO₂. The two slopes at 353.15 K differed by as much
+as 3.51 kJ/mol CO₂. All 69 evaluated intervals include at least one locally
+unstable pressure state. The 13 Hong-only intervals above 0.60 mol/mol have
+root mean square errors of 4.58 kJ/mol CO₂ across ten intervals at 313.15 K,
+and 6.47 (cooler side) and 6.67 (warmer side) across three at 353.15 K. Both
+comparison records mark these intervals above their loading ceiling. The
+17 intervals starting below 0.1 mol/mol were excluded before evaluation.
+[Kim intervals at 313.15 K](results/same-data-comparison/hong-2027/Kim%20313.15%20K.csv) ·
+[353.15 K](results/same-data-comparison/hong-2027/Kim%20353.15%20K.csv) ·
+[393.15 K](results/same-data-comparison/hong-2027/Kim%20393.15%20K.csv)
+
+On the 54 admitted Kim observations at 313.15 and 353.15 K, Hong's
+end-loading convention gives 11.66% and 11.09% AARD with the cooler and
+warmer slopes at 353.15 K, respectively. Hong reported 9.48% without
+listing the exact rows (§3.2, pp. 9–10). The pressure-slope heat differs
+from a calorimetric quantity and is compared with the interval measurements
+as in Hong's assessment. Kim's source estimate for the calorimetric heat is
+±2.2%. Measurement uncertainty was not propagated into the deviations.
+
+#### Numerical and published-output checks
+
+| Check | Result |
+|---|---|
+| Retained comparison replay | All 159 six-source pressure observations reproduce 20.971795% for the adopted record and 52.341322% for Polley–Hedengren. IDs are unique and observed values agree before each paired score. |
+| Weight-table knots and limits | All 90 weights reproduced exactly. At weights zero and one, the relative residual Helmholtz energy differences from the corresponding isolated pathway were both zero, within the package limit of $10^{-10}$. |
+| Three refused states | Independent equal-fugacity pressures were 1.539633 Pa, 2502.019 Pa, and 134289.998 Pa to the readiness precision. The fixed-vapor calculation differed by at most $4.27\times10^{-8}$ relative, below the $5\times10^{-8}$ readiness limit. |
+| Fig. 4(b) pressure | At 313.15 K and 0.50 mol/mol, the calculated 2.502 kPa falls within the digitized 2.339–2.896 kPa reading interval (2.603 kPa center, ±3 pixels on the log axis). A narrower color mask gave 2.592 kPa. |
+| Fig. 5 fractions | For 90 values per pathway, the median, 90th percentile and maximum absolute differences were 0.000210, 0.000750 and 0.001177 for carbamate and 0.002252, 0.005676 and 0.006430 for bicarbonate. Printing precision is ±0.00005. This is a measured implementation difference. |
+| Five finite-difference Hessians | At 313.15 K/loadings 0.1 and 0.5, 333.15 K/0.7, 363.15 K/0.3 and 393.15 K/0.4, both step sizes gave the same negative eigenvalues as the package to four significant digits. The largest change from halving the step was $1.90\times10^{-8}$. |
+| Ordinary and fixed-vapor pressure | All 31 ordinary pressure states, including the stable grid, measurement and heat-slope states, converged with the fixed amount in a separate check. The maximum relative difference was $5.45\times10^{-8}$, far below the pressure deviations. |
+| Cold replay | The 11 result tables and all numerical checks were identical in a new process, within the $10^{-10}$ relative replay requirement. The two runs took 28.05 s and 27.72 s on the pinned wheel. |
+
+Fig. 5 supports the implemented pathway fractions and does not indicate
+which stability tests Hong used. At 393.15 K, where the largest fraction
+differences occur, the 0.50 and 0.90 loading pressures differed from the
+digitized Fig. 4(b) line by −0.91% and +3.92%, respectively. Both fall
+within the approximately 11% graphical reading precision, and the readings
+cannot isolate how much of either difference comes from the pathway
+fractions. Hong's reported 1.53% pressure AARD uses simulator output
+that was unavailable for direct replay.
+[Fig. 4(b) calibration and precision](results/same-data-comparison/hong-2027/figure-4b-calibration.json) ·
+[Secondary readings](results/same-data-comparison/hong-2027/figure-4b-secondary.json) ·
+[Checks, times and file hashes](results/same-data-comparison/hong-2027/checks.json)
+
+This evaluates the published parameters through our implementation. The
+same-data deviations do not rank the models as predictors, establish a need
+for ions, validate either model physically, or qualify either for process
+use. The models differ in parameters, association sites and data history.
+Species fractions, ratios and carbonate share have no corresponding
+species in Hong's model. With weight reset between states there is no
+single enthalpy for integral heats or heat capacity. Other MEA
+concentrations and unloaded binary observations are outside Table S1.
+
+No required row failed in the retained runs. The default fixed-vapor start
+failed at nine locally unstable grid nodes during diagnosis. A start from
+the liquid's fugacities evaluated at 1 bar resolved all nine while leaving
+the fixed fraction at $10^{-9}$ and the named equilibrium row residual limit
+at $10^{-10}$. The largest final classified pressure-solver residual was
+$2.60\times10^{-13}$. Both retained runs used ePC-SAFT 1.3.1 from Engine commit
+`05e94210`, wheel SHA-256 `c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`.
+The adopted record `ae17803e…` and the 2026 record were scored from their
+retained rows. Independent review of these delivered results and owner
+confirmation are still required for manuscript use.
+The admission table was committed before any Hong calculation in
+`cdc1d4ddf`. Its producer is in that commit. From the repository root with
+the pinned wheel installed, run the following command twice with different
+new directories under `tmp/`. Compare the CSV files byte for byte and the
+check values after removing the elapsed time. [Reproduction script](scripts/hong_2027.py)
+
+```bash
+agent-heavy timeout 900s python analyses/mea_parameter_bundle/scripts/hong_2027.py tmp/hong-2027/replay
+```
 
 ### Qualification distribution
 

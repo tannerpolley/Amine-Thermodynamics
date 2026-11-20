@@ -1,0 +1,286 @@
+{
+  "weight_knots_exact": 90,
+  "residual_helmholtz_limit_relative": {
+    "0": 0.0,
+    "1": 0.0
+  },
+  "independent": [
+    {
+      "loading": 0.1,
+      "T_K": 313.15,
+      "reference_Pa": 1.539633,
+      "independent_Pa": 1.539633008410364,
+      "pinned_Pa": 1.539632999636526,
+      "relative_difference": 5.698655547448084e-09,
+      "residual": 8.439429710627167e-16
+    },
+    {
+      "loading": 0.5,
+      "T_K": 313.15,
+      "reference_Pa": 2502.019,
+      "independent_Pa": 2502.0185561883363,
+      "pinned_Pa": 2502.0184493520674,
+      "relative_difference": 4.270003062245564e-08,
+      "residual": 3.8337388819087437e-16
+    },
+    {
+      "loading": 0.4,
+      "T_K": 393.15,
+      "reference_Pa": 134289.998,
+      "independent_Pa": 134289.99790988254,
+      "pinned_Pa": 134289.9932619377,
+      "relative_difference": 3.461125119841313e-08,
+      "residual": 1.0547118733938987e-15
+    }
+  ],
+  "hessian": [
+    {
+      "loading": 0.1,
+      "T_K": 313.15,
+      "engine": -0.35794109986503536,
+      "step": -0.35794110800711154,
+      "half_step": -0.3579411270370288
+    },
+    {
+      "loading": 0.5,
+      "T_K": 313.15,
+      "engine": -1.0923382407408189,
+      "step": -1.092338247211087,
+      "half_step": -1.0923382509401067
+    },
+    {
+      "loading": 0.7,
+      "T_K": 333.15,
+      "engine": -0.26698581260641513,
+      "step": -0.26698581680863376,
+      "half_step": -0.26698581380196346
+    },
+    {
+      "loading": 0.3,
+      "T_K": 363.15,
+      "engine": -0.5152016459012991,
+      "step": -0.5152016436979936,
+      "half_step": -0.515201649402548
+    },
+    {
+      "loading": 0.4,
+      "T_K": 393.15,
+      "engine": -0.2603398617870232,
+      "step": -0.26033986058846603,
+      "half_step": -0.26033987161257605
+    }
+  ],
+  "figure_4b": {
+    "doi": "10.1016/j.seppur.2026.140522",
+    "source_page": 7,
+    "panel": "Fig. 4(b), embedded JPEG object 78, 805 by 643 pixels",
+    "pdf_sha256": "cf4a28d3e4300adc1fda98a90775a50e4b999235a989e5a7b09615172f2473ea",
+    "extraction": "pdfimages -j -f 7 -l 7",
+    "x_unit": "mol CO2/mol MEA",
+    "y_unit": "kPa",
+    "reference_loading": 0.5,
+    "reference_temperature_K": 313.15,
+    "reading_precision_pixels": 3,
+    "reading_precision_basis": "Two pixels for half the solid line width and one for axis and column placement. The primary color mask isolates the dark blue model line. Offset columns and a narrower mask test sensitivity to the plotted reference symbol.",
+    "axis": {
+      "x1_pixel": [
+        174,
+        538
+      ],
+      "x1_value": 0.1,
+      "x2_pixel": [
+        782,
+        538
+      ],
+      "x2_value": 1.0,
+      "y1_pixel": [
+        157,
+        538
+      ],
+      "y1_value": 0.001,
+      "y2_pixel": [
+        157,
+        21
+      ],
+      "y2_value": 100000,
+      "x_scale": "linear",
+      "y_scale": "log10"
+    },
+    "roi": [
+      432,
+      302,
+      458,
+      334
+    ],
+    "series": [
+      {
+        "name": "313.15 K line",
+        "mode": "curve",
+        "hsv_lower": [
+          111,
+          125,
+          80
+        ],
+        "hsv_upper": [
+          123,
+          255,
+          255
+        ]
+      },
+      {
+        "name": "313.15 K line, narrower mask",
+        "mode": "curve",
+        "hsv_lower": [
+          114,
+          165,
+          150
+        ],
+        "hsv_upper": [
+          119,
+          255,
+          230
+        ]
+      }
+    ],
+    "reading_Pa": 2602.740708646133,
+    "reading_interval_Pa": [
+      2338.887007292393,
+      2896.3601812838237
+    ],
+    "two_masks_Pa": {
+      "313.15 K line": 2602.740708646133,
+      "313.15 K line, narrower mask": 2592.4571329044534
+    },
+    "panel_image_sha256": "3c7a506074a92fcef3771bb3cd615ba6190a4a007fcc6239ec156011a7c6c98c",
+    "extraction_interpolation": "Linear interpolation of log pressure between the two calibrated columns bracketing loading 0.50.",
+    "model_Pa": 2502.0184493520674,
+    "passed": true
+  },
+  "figure_5": {
+    "carbamate": {
+      "bias": 0.00029003924646710743,
+      "rmse": 0.00041310741073742895,
+      "abs_quantiles": {
+        "0": 0.0,
+        "50": 0.00020956736978433588,
+        "90": 0.0007502144500560417,
+        "100": 0.0011772851189186806
+      }
+    },
+    "bicarbonate": {
+      "bias": 0.0025622689999818555,
+      "rmse": 0.0033652258616704545,
+      "abs_quantiles": {
+        "0": 0.0,
+        "50": 0.0022523928380253078,
+        "90": 0.005675875024772054,
+        "100": 0.006429882826140876
+      }
+    }
+  },
+  "grid_stability": {
+    "locally unstable": 62,
+    "stable": 28
+  },
+  "full_pressure_replay_AARD_percent": {
+    "adopted": 20.97179543037637,
+    "polley_hedengren_2026": 52.34132185442889
+  },
+  "stable_fixed_vapor": {
+    "tried": 31,
+    "converged": 31,
+    "max_relative_difference": 5.446351236670921e-08,
+    "failures": []
+  },
+  "engine_commit": "05e94210fa64cf69725e45babc0411d32139df5a",
+  "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+  "admission_sha256": "c42272f012c986669f7126d98a43c7923ccf4cf2b681c97ade7213a54bb8882b",
+  "pressure_states": 1250,
+  "run_seconds": 28.051880643000004,
+  "cold_replay_seconds": 27.71838415000002,
+  "cold_replay_max_relative_difference": 0,
+  "cold_replay_byte_identical": [
+    "Amundsen2009.csv",
+    "Han2012.csv",
+    "Hartono2014.csv",
+    "Kim 313.15 K.csv",
+    "Kim 353.15 K.csv",
+    "Kim 393.15 K.csv",
+    "canonical.csv",
+    "grid.csv",
+    "scores.csv",
+    "supplement-table.csv",
+    "wagner.csv"
+  ],
+  "result_sha256": {
+    "Amundsen2009.csv": "f67019fe61f51a797d1092e144d4786dd2831c7dc1b3599f8ebd0924923eacd8",
+    "Han2012.csv": "54888c26ab91733a002b601e31f37a2914ecd5faf50418e99ff8ef6c3e098b53",
+    "Hartono2014.csv": "8e759271d79400f38ad8b127120a1cb391a1e05b307eec7dad470a3fbcacd591",
+    "Kim 313.15 K.csv": "050cb722c9ebe0a113c81b250e004c4471ee52c4f45a6c68e89c1d19c1852606",
+    "Kim 353.15 K.csv": "e65c2581ae4fed92035f46c860bce23aebc1dff8b653e32f620f027c222ab814",
+    "Kim 393.15 K.csv": "e40d55025e17e86d485769d946afab19526fb7efb70d51c9afd187f2fbc19465",
+    "canonical.csv": "c3cd263f792e9eef4d3ef448f26dcac0c326b448d788f4011c74f8449ef51328",
+    "grid.csv": "9ad41dc5568bb8c0ea3e447fa0f209c8082de180d6f143ca33a2c2fdfc962339",
+    "scores.csv": "af07766279d4883db2cd8a6257d173bc537d0a6522ae45ee30a88239ddae5d97",
+    "supplement-table.csv": "c6fb5116537a3737574896bcdd0b63994cef0b3744925b23e5f1d5983e7e1e8b",
+    "wagner.csv": "5b9199511a4925e90016b779fed7112d72a63405fe3c2e3067e79a925735bf21"
+  },
+  "heat_refinement": [
+    {
+      "T_K": 313.15,
+      "side": "warm",
+      "n": 31,
+      "max_step_difference_kJ_mol": 0.009675603219548634,
+      "max_halving_difference_kJ_mol": 0.1567825828053202
+    },
+    {
+      "T_K": 353.15,
+      "side": "cool",
+      "n": 23,
+      "max_step_difference_kJ_mol": 0.013530770231469091,
+      "max_halving_difference_kJ_mol": 0.12203064340152991
+    },
+    {
+      "T_K": 353.15,
+      "side": "warm",
+      "n": 23,
+      "max_step_difference_kJ_mol": 0.014466352556269158,
+      "max_halving_difference_kJ_mol": 0.14415166078119057
+    },
+    {
+      "T_K": 393.15,
+      "side": "cool",
+      "n": 15,
+      "max_step_difference_kJ_mol": 0.016796385595455376,
+      "max_halving_difference_kJ_mol": 0.07170265223814454
+    }
+  ],
+  "kim_endpoint_AARD_313_353": {
+    "cool": {
+      "n": 54,
+      "AARD_percent": 11.664250531072396
+    },
+    "warm": {
+      "n": 54,
+      "AARD_percent": 11.087015034466548
+    }
+  },
+  "kim_353_max_one_sided_difference_kJ_mol": 3.5050812064205985,
+  "inputs_sha256": {
+    "parameters.json": "bf3223c8185806e0757ed9e036b4a20740f32b9cf7eb0e280a3981e170969e63",
+    "figure-4b-calibration.json": "b2f2afe0cfe81974bf48ee73c47808e8afad6c4134117f5f4aae5c17d2de2b90",
+    "figure-4b.csv": "743b8a12243ba7547349a598ab9865720baf42a71c02dad9a5b0cea7e3c8b3d7",
+    "figure-4b-secondary.json": "a753e7df5589ab03cab2cd75e90d750dce37e193bbf02154991ac6f1b6960807",
+    "figure-5-printed.csv": "ee70fc95ee1b4b4206bd2a7d7a6b70906ce04458c38865ea205e5e06fe3be827"
+  },
+  "comparison_inputs_sha256": {
+    "selected-current-best-parameters.json": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
+    "same-data-comparison/polley-2026-explicit-defaults.json": "be66f6cf9df77201a632d73a3c3e341f66ce7fc77b69c3d657288f4c1899a76b",
+    "paper-evidence-341/paper-evidence/kim2007-heat-pathways/kim-heat.csv": "4c36f73fa727fa6163b9eb76ae95292fc84f0cf01541bd7b6501b747b0930804",
+    "same-data-comparison/part1/published/kim2007-heat-pathways/kim-heat.csv": "f471457017db64cf167385726c7778e374b6ff3d261f0cae2e34e42c74bcab01",
+    "paper-evidence-341/paper-evidence/density.csv": "63c3517f30760bad51dc86e2e95faf47e5c4180064bd5556e0428f51335fc439",
+    "paper-evidence-341/paper-evidence/state-targets.csv": "f2f0ba4e5e80b8cb87f29a0b6080c1119e04fdec942172873d2af450e2016567",
+    "same-data-comparison/part1/published/selected-assessment/density.csv": "d7a7a6fdb42bbcae46a24ba6d39d1a975f9bbeeb953885f880854e8c4f02be9a",
+    "same-data-comparison/part1/published/selected-assessment/state-targets.csv": "0b2b754d0a1c9dd85b3f0c0cebcc92712a35f52a4c46fce45b8addac33ac7466"
+  }
+}

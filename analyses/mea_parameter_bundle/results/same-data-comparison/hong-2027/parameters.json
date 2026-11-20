@@ -1,0 +1,710 @@
+{
+  "source": {
+    "doi": "10.1016/j.seppur.2026.140522",
+    "paper": {
+      "zotero": "5MFM84GS",
+      "attachment": "HVTYZCDS",
+      "sha256": "cf4a28d3e4300adc1fda98a90775a50e4b999235a989e5a7b09615172f2473ea",
+      "locators": {
+        "pure": "Table 1 p. 5, m, sigma (angstrom), epsilon/k (K), kappa, association epsilon/k (K)",
+        "binary": "Table 2 p. 5, linear slopes per K and intercepts, MEA-water x_MEA <= 0.20",
+        "pathways": "Table 3 p. 6, kij slope per K and intercept, kappa, association epsilon/k slope and intercept (K), CO2 site multiplicity from Fig. 1 p. 3",
+        "association": "Eqs. 5\u201312 pp. 2\u20133, Fig. 1 p. 3",
+        "temperature_laws": "The stored constant coefficient is the printed intercept plus the slope times 298.15 K. The linear coefficient is the printed slope.",
+        "cross": "MEA\u2013water cross association is computed by applying Eqs. 5\u20136 to the two pure association energies and volumes and the low-MEA branch alpha_HB."
+      }
+    },
+    "supplement": {
+      "attachment": "KLFFL22X",
+      "sha256": "4b48d2c14c0ce4de89a72d4c7bcf6beb1b412114710f8c8aab1b5014db00194e",
+      "locator": "Table S1 PDF pp. 1\u20132; rows 313.15\u2013393.15 K in 10 K steps, columns 0.1\u20131.0 mol/mol in 0.1 steps"
+    },
+    "molar_mass": "Masses of neutral components used in the #246 readiness checks, in kg/mol. The measured-row feed uses the retained analytical conversion masses, separately."
+  },
+  "weights": [
+    [
+      1.0,
+      0.9941,
+      1.0,
+      1.0,
+      0.9735,
+      0.6899,
+      0.4379,
+      0.2318,
+      0.0658,
+      0.0
+    ],
+    [
+      1.0,
+      0.9906,
+      1.0,
+      1.0,
+      0.9459,
+      0.6775,
+      0.4279,
+      0.2265,
+      0.0697,
+      0.0
+    ],
+    [
+      0.9987,
+      0.984,
+      0.9901,
+      0.9996,
+      0.9152,
+      0.6618,
+      0.4174,
+      0.223,
+      0.0757,
+      0.0
+    ],
+    [
+      0.9934,
+      0.9742,
+      0.975,
+      0.9738,
+      0.8813,
+      0.6429,
+      0.4068,
+      0.2212,
+      0.0839,
+      0.0
+    ],
+    [
+      0.9851,
+      0.9608,
+      0.9557,
+      0.9433,
+      0.8441,
+      0.6207,
+      0.3962,
+      0.2212,
+      0.0946,
+      0.0159
+    ],
+    [
+      0.9734,
+      0.9437,
+      0.9319,
+      0.9082,
+      0.8039,
+      0.5958,
+      0.3858,
+      0.2231,
+      0.1078,
+      0.0427
+    ],
+    [
+      0.9584,
+      0.9226,
+      0.9033,
+      0.8686,
+      0.761,
+      0.5687,
+      0.3757,
+      0.2268,
+      0.1237,
+      0.07
+    ],
+    [
+      0.9396,
+      0.8971,
+      0.8698,
+      0.8249,
+      0.7157,
+      0.54,
+      0.366,
+      0.2321,
+      0.1419,
+      0.0975
+    ],
+    [
+      0.9168,
+      0.867,
+      0.8315,
+      0.7775,
+      0.6689,
+      0.5106,
+      0.3569,
+      0.2388,
+      0.1617,
+      0.1252
+    ]
+  ],
+  "mea_water_alpha_HB": 1.0374,
+  "neutral_association": {
+    "sites": [
+      {
+        "component_id": "mea",
+        "site_id": "a",
+        "multiplicity": 1
+      },
+      {
+        "component_id": "mea",
+        "site_id": "b",
+        "multiplicity": 1
+      },
+      {
+        "component_id": "water",
+        "site_id": "a",
+        "multiplicity": 2
+      },
+      {
+        "component_id": "water",
+        "site_id": "b",
+        "multiplicity": 2
+      }
+    ],
+    "edges": [
+      {
+        "endpoint_a": {
+          "component_id": "mea",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "mea",
+          "site_id": "b"
+        },
+        "source": {
+          "kind": "explicit"
+        },
+        "energy_over_k": {
+          "identity": "mea",
+          "value": {
+            "magnitude": 2355.03,
+            "unit": "kelvin"
+          }
+        },
+        "volume": {
+          "identity": "mea/volume",
+          "value": {
+            "magnitude": 0.0313,
+            "unit": "dimensionless"
+          }
+        }
+      },
+      {
+        "endpoint_a": {
+          "component_id": "water",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "b"
+        },
+        "source": {
+          "kind": "explicit"
+        },
+        "energy_over_k": {
+          "identity": "water",
+          "value": {
+            "magnitude": 1804.17,
+            "unit": "kelvin"
+          }
+        },
+        "volume": {
+          "identity": "water/volume",
+          "value": {
+            "magnitude": 0.2039,
+            "unit": "dimensionless"
+          }
+        }
+      },
+      {
+        "endpoint_a": {
+          "component_id": "mea",
+          "site_id": "a"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "b"
+        },
+        "source": {
+          "kind": "explicit"
+        }
+      },
+      {
+        "endpoint_a": {
+          "component_id": "mea",
+          "site_id": "b"
+        },
+        "endpoint_b": {
+          "component_id": "water",
+          "site_id": "a"
+        },
+        "source": {
+          "kind": "explicit"
+        }
+      }
+    ]
+  },
+  "parameters": {
+    "schema": "epcsaft.parameters",
+    "schema_version": 1,
+    "model_families": [
+      {
+        "kind": "base",
+        "choice": "pc-saft"
+      },
+      {
+        "kind": "association",
+        "choice": "general-site"
+      },
+      {
+        "kind": "electrolyte",
+        "choice": "none"
+      },
+      {
+        "kind": "permittivity",
+        "choice": "none"
+      }
+    ],
+    "components": [
+      {
+        "component_id": "mea",
+        "fixed": {
+          "charge_number": {
+            "value": {
+              "magnitude": 0,
+              "unit": "elementary-charge"
+            }
+          },
+          "molar_mass": {
+            "value": {
+              "magnitude": 0.06108352,
+              "unit": "kilogram / mole"
+            }
+          }
+        },
+        "coefficients": [
+          {
+            "identity": "mea/segment_count",
+            "value": {
+              "magnitude": 3.12,
+              "unit": "dimensionless"
+            },
+            "family": "segment_count"
+          },
+          {
+            "identity": "mea/segment_diameter",
+            "value": {
+              "magnitude": 3.0229,
+              "unit": "angstrom"
+            },
+            "family": "segment_diameter"
+          },
+          {
+            "identity": "mea/dispersion_energy_over_k",
+            "value": {
+              "magnitude": 287.94,
+              "unit": "kelvin"
+            },
+            "family": "dispersion_energy_over_k"
+          }
+        ]
+      },
+      {
+        "component_id": "water",
+        "fixed": {
+          "charge_number": {
+            "value": {
+              "magnitude": 0,
+              "unit": "elementary-charge"
+            }
+          },
+          "molar_mass": {
+            "value": {
+              "magnitude": 0.01801528,
+              "unit": "kilogram / mole"
+            }
+          }
+        },
+        "coefficients": [
+          {
+            "identity": "water/segment_count",
+            "value": {
+              "magnitude": 2.1945,
+              "unit": "dimensionless"
+            },
+            "family": "segment_count"
+          },
+          {
+            "identity": "water/segment_diameter",
+            "value": {
+              "magnitude": 2.229,
+              "unit": "angstrom"
+            },
+            "family": "segment_diameter"
+          },
+          {
+            "identity": "water/dispersion_energy_over_k",
+            "value": {
+              "magnitude": 141.66,
+              "unit": "kelvin"
+            },
+            "family": "dispersion_energy_over_k"
+          }
+        ]
+      },
+      {
+        "component_id": "co2",
+        "fixed": {
+          "charge_number": {
+            "value": {
+              "magnitude": 0,
+              "unit": "elementary-charge"
+            }
+          },
+          "molar_mass": {
+            "value": {
+              "magnitude": 0.0440095,
+              "unit": "kilogram / mole"
+            }
+          }
+        },
+        "coefficients": [
+          {
+            "identity": "co2/segment_count",
+            "value": {
+              "magnitude": 2.0729,
+              "unit": "dimensionless"
+            },
+            "family": "segment_count"
+          },
+          {
+            "identity": "co2/segment_diameter",
+            "value": {
+              "magnitude": 2.7852,
+              "unit": "angstrom"
+            },
+            "family": "segment_diameter"
+          },
+          {
+            "identity": "co2/dispersion_energy_over_k",
+            "value": {
+              "magnitude": 169.21,
+              "unit": "kelvin"
+            },
+            "family": "dispersion_energy_over_k"
+          }
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "component_id_a": "mea",
+        "component_id_b": "water",
+        "coefficients": [
+          {
+            "identity": "mea/water",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "mea/water/a0",
+                    "value": {
+                      "magnitude": -0.033466499999999996,
+                      "unit": "dimensionless"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "mea/water/a1",
+                    "value": {
+                      "magnitude": 9e-05,
+                      "unit": "1 / kelvin"
+                    }
+                  }
+                }
+              ]
+            },
+            "family": "k_ij"
+          }
+        ]
+      },
+      {
+        "component_id_a": "water",
+        "component_id_b": "co2",
+        "coefficients": [
+          {
+            "identity": "water/co2",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "water/co2/a0",
+                    "value": {
+                      "magnitude": 0.01004490000000001,
+                      "unit": "dimensionless"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "water/co2/a1",
+                    "value": {
+                      "magnitude": 0.000246,
+                      "unit": "1 / kelvin"
+                    }
+                  }
+                }
+              ]
+            },
+            "family": "k_ij"
+          }
+        ]
+      },
+      {
+        "component_id_a": "mea",
+        "component_id_b": "co2",
+        "coefficients": [
+          {
+            "identity": "mea/co2/sym",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "mea/co2/sym/a0",
+                    "value": {
+                      "magnitude": -1.30239875,
+                      "unit": "dimensionless"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "mea/co2/sym/a1",
+                    "value": {
+                      "magnitude": 0.003675,
+                      "unit": "1 / kelvin"
+                    }
+                  }
+                }
+              ]
+            },
+            "family": "k_ij"
+          },
+          {
+            "identity": "mea/co2/single",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "mea/co2/single/a0",
+                    "value": {
+                      "magnitude": -0.20708715000000022,
+                      "unit": "dimensionless"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "mea/co2/single/a1",
+                    "value": {
+                      "magnitude": 0.005939,
+                      "unit": "1 / kelvin"
+                    }
+                  }
+                }
+              ]
+            },
+            "family": "k_ij_complement"
+          }
+        ]
+      }
+    ],
+    "topology": {
+      "sites": [
+        {
+          "component_id": "co2",
+          "site_id": "r/sym",
+          "multiplicity": 2,
+          "pathway": "weighted",
+          "symmetric_reactive_site_correction": true
+        },
+        {
+          "component_id": "co2",
+          "site_id": "r/single",
+          "multiplicity": 1,
+          "pathway": "complement"
+        }
+      ],
+      "edges": [
+        {
+          "endpoint_a": {
+            "component_id": "co2",
+            "site_id": "r/sym"
+          },
+          "endpoint_b": {
+            "component_id": "mea",
+            "site_id": "b/sym"
+          },
+          "source": {
+            "kind": "explicit"
+          },
+          "energy_over_k": {
+            "identity": "reactive/sym",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "reactive/sym/a0",
+                    "value": {
+                      "magnitude": 4773.7354,
+                      "unit": "kelvin"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "reactive/sym/a1",
+                    "value": {
+                      "magnitude": 4.116,
+                      "unit": "dimensionless"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "volume": {
+            "identity": "reactive/sym/volume",
+            "value": {
+              "magnitude": 0.001555,
+              "unit": "dimensionless"
+            }
+          }
+        },
+        {
+          "endpoint_a": {
+            "component_id": "co2",
+            "site_id": "r/single"
+          },
+          "endpoint_b": {
+            "component_id": "mea",
+            "site_id": "b/single"
+          },
+          "source": {
+            "kind": "explicit"
+          },
+          "energy_over_k": {
+            "identity": "reactive/single",
+            "temperature_law": {
+              "form": "polynomial-plus-reciprocal-temperature",
+              "reference_temperature": {
+                "magnitude": 298.15,
+                "unit": "kelvin"
+              },
+              "terms": [
+                {
+                  "power": 0,
+                  "coefficient": {
+                    "identity": "reactive/single/a0",
+                    "value": {
+                      "magnitude": 4936.16137,
+                      "unit": "kelvin"
+                    }
+                  }
+                },
+                {
+                  "power": 1,
+                  "coefficient": {
+                    "identity": "reactive/single/a1",
+                    "value": {
+                      "magnitude": 12.5398,
+                      "unit": "dimensionless"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "volume": {
+            "identity": "reactive/single/volume",
+            "value": {
+              "magnitude": 6.5e-05,
+              "unit": "dimensionless"
+            }
+          }
+        }
+      ],
+      "no_cross_association": [
+        {
+          "component_id_a": "water",
+          "component_id_b": "co2",
+          "provenance": {
+            "locator": "Hong 2027 \u00a72.2"
+          }
+        }
+      ]
+    },
+    "pathway_weight": {
+      "loading": {
+        "numerator": "co2",
+        "denominator": "mea"
+      },
+      "coefficients": [
+        {
+          "identity": "w/intercept",
+          "value": {
+            "magnitude": 0.0,
+            "unit": "dimensionless"
+          },
+          "family": "intercept"
+        },
+        {
+          "identity": "w/loading_slope",
+          "value": {
+            "magnitude": 0,
+            "unit": "dimensionless"
+          },
+          "family": "loading_slope"
+        },
+        {
+          "identity": "w/temperature_slope",
+          "value": {
+            "magnitude": 0,
+            "unit": "dimensionless"
+          },
+          "family": "temperature_slope"
+        }
+      ]
+    }
+  }
+}
