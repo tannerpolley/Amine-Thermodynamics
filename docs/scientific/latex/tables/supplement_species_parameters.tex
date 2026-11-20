@@ -20,7 +20,7 @@
 % Input (working tree): analyses/dea_transfer/inputs/part-ii-346/route-current.json SHA256 bc743240dffe80462dc958a9ba6664e3c02d2721b312a3f61f54a59a7b0f6173
 % Input (working tree): analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json SHA256 ed92c0ea44f184995323bbe5b004dc3cf22b3b2ed9d8d5a6b4667580b7f4f6fd
 \begingroup\small\setlength{\tabcolsep}{3pt}
-\begin{longtable}{@{}l>{\raggedright\arraybackslash}p{0.1600\linewidth}r>{\raggedright\arraybackslash}p{0.4400\linewidth}@{}}
+\begin{longtable}{@{}l>{\raggedright\arraybackslash}p{0.2000\linewidth}r>{\raggedright\arraybackslash}p{0.3600\linewidth}@{}}
 \caption{Complete species inputs of the MEA model.}\label{tab:supplement-species-parameters}\\
 \toprule
 Species & Quantity (unit) & Value & Source \\
@@ -32,70 +32,70 @@ Species & Quantity (unit) & Value & Source \\
 \bottomrule
 \multicolumn{4}{@{}p{\linewidth}@{}}{\footnotesize\raggedright Bold values were fitted in this work. \ce{CO2} association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.}\\
 \endlastfoot
-\ce{CO2} & $m^{\mathrm{seg}}$ & $2.0729$ & Segments: \cite{Gross2001}; association energy: half the water value \\
-\ce{CO2} & $\sigma$ (\AA) & $2.7852$ & Segments: \cite{Gross2001}; association energy: half the water value \\
-\ce{CO2} & $\epsilon/k_B$ (K) & $169.21$ & Segments: \cite{Gross2001}; association energy: half the water value \\
-\ce{CO2} & $\epsilon^{AB}/k_B$ (K) & $878.3248982254499$ & Segments: \cite{Gross2001}; association energy: half the water value \\
-\ce{CO2} & $\kappa^{AB}$ & $0.0376197279502706$ & Segments: \cite{Gross2001}; association energy: half the water value \\
+\ce{CO2} & $m^{\mathrm{seg}}$ & $2.0729$ & \cite{Gross2001} \\
+\ce{CO2} & $\sigma$ (\AA) & $2.7852$ & \cite{Gross2001} \\
+\ce{CO2} & $\epsilon/k_B$ (K) & $169.21$ & \cite{Gross2001} \\
+\ce{CO2} & $\epsilon^{AB}/k_B$ (K) & $878.3248982254499$ & Half the water value \\
+\ce{CO2} & $\kappa^{AB}$ & $0.0376197279502706$ & Water value \\
 \ce{CO2} & $z$ & $0$ & By definition \\
 \ce{CO2} & $f$ & $1$ & Assumed \\
 \ce{CO2} & $d_V$ (L/\allowbreak{}mol) & $1\times10^{-8}$ & Assumed \\
 \ce{CO2} & $d_T$ (K) & $1403$ & Assumed \\
-\ce{MEA} & $m^{\mathrm{seg}}$ & $3.0353$ & Segments, energy: \cite{Baygi2015}; association volume converted here \\
-\ce{MEA} & $\sigma$ (\AA) & $3.0435$ & Segments, energy: \cite{Baygi2015}; association volume converted here \\
-\ce{MEA} & $\epsilon/k_B$ (K) & $277.174$ & Segments, energy: \cite{Baygi2015}; association volume converted here \\
-\ce{MEA} & $\epsilon^{AB}/k_B$ (K) & $2586.3$ & Segments, energy: \cite{Baygi2015}; association volume converted here \\
-\ce{MEA} & $\kappa^{AB}$ & $0.036305439$ & Segments, energy: \cite{Baygi2015}; association volume converted here \\
+\ce{MEA} & $m^{\mathrm{seg}}$ & $3.0353$ & \cite{Baygi2015} \\
+\ce{MEA} & $\sigma$ (\AA) & $3.0435$ & \cite{Baygi2015} \\
+\ce{MEA} & $\epsilon/k_B$ (K) & $277.174$ & \cite{Baygi2015} \\
+\ce{MEA} & $\epsilon^{AB}/k_B$ (K) & $2586.3$ & \cite{Baygi2015} \\
+\ce{MEA} & $\kappa^{AB}$ & $0.036305439$ & Converted from \cite{Baygi2015} \\
 \ce{MEA} & $z$ & $0$ & By definition \\
 \ce{MEA} & $f$ & $1$ & Assumed \\
 \ce{MEA} & $d_V$ (L/\allowbreak{}mol) & $\boldsymbol{0.7309865858310542}$ & Permittivity fit \\
 \ce{MEA} & $d_T$ (K) & $\boldsymbol{1019.0802597119892}$ & Permittivity fit \\
-\ce{H2O} & $m^{\mathrm{seg}}$ & $\boldsymbol{1.252753837934407}$ & Water fit \\
-\ce{H2O} & $\sigma$ (\AA) & $\sigma_w(T)$ & Water fit \\
-\ce{H2O} & $\epsilon/k_B$ (K) & $\boldsymbol{432.3788130932931}$ & Water fit \\
-\ce{H2O} & $\epsilon^{AB}/k_B$ (K) & $\boldsymbol{1756.6497964508999}$ & Water fit \\
-\ce{H2O} & $\kappa^{AB}$ & $\boldsymbol{0.0376197279502706}$ & Water fit \\
+\ce{H2O} & $m^{\mathrm{seg}}$ & $\boldsymbol{1.252753837934407}$ & This work \\
+\ce{H2O} & $\sigma$ (\AA) & $\sigma_w(T)$ & Coefficients below \\
+\ce{H2O} & $\epsilon/k_B$ (K) & $\boldsymbol{432.3788130932931}$ & This work \\
+\ce{H2O} & $\epsilon^{AB}/k_B$ (K) & $\boldsymbol{1756.6497964508999}$ & This work \\
+\ce{H2O} & $\kappa^{AB}$ & $\boldsymbol{0.0376197279502706}$ & This work \\
 \ce{H2O} & $z$ & $0$ & By definition \\
-\ce{H2O} & $f$ & $1.5$ & Water: \cite{Figiel2025}; others: assumed \\
+\ce{H2O} & $f$ & $1.5$ & \cite{Figiel2025} \\
 \ce{H2O} & $d_V$ (L/\allowbreak{}mol) & $0.3777$ & \cite{Yang2024} \\
 \ce{H2O} & $d_T$ (K) & $1403$ & \cite{Yang2024} \\
-\ce{MEAH+} & $m^{\mathrm{seg}}$ & $1$ & Joint fit; segment count assumed \\
-\ce{MEAH+} & $\sigma$ (\AA) & $\boldsymbol{4.855829771843951}$ & Joint fit; segment count assumed \\
-\ce{MEAH+} & $\epsilon/k_B$ (K) & $\boldsymbol{208.73556871118413}$ & Joint fit; segment count assumed \\
+\ce{MEAH+} & $m^{\mathrm{seg}}$ & $1$ & Assumed \\
+\ce{MEAH+} & $\sigma$ (\AA) & $\boldsymbol{4.855829771843951}$ & This work \\
+\ce{MEAH+} & $\epsilon/k_B$ (K) & $\boldsymbol{208.73556871118413}$ & This work \\
 \ce{MEAH+} & $z$ & $+1$ & By definition \\
-\ce{MEAH+} & $d^\mathrm{Born}$ (\AA) & $4.855829771843951$ & Joint fit; segment count assumed \\
+\ce{MEAH+} & $d^\mathrm{Born}$ (\AA) & $4.855829771843951$ & Equal to $\sigma$ \\
 \ce{MEAH+} & $f$ & $1$ & Assumed \\
-\ce{MEACOO-} & $m^{\mathrm{seg}}$ & $1$ & Joint fit; segment count assumed \\
-\ce{MEACOO-} & $\sigma$ (\AA) & $\boldsymbol{5.34799141560911}$ & Joint fit; segment count assumed \\
-\ce{MEACOO-} & $\epsilon/k_B$ (K) & $\boldsymbol{179.85787428794876}$ & Joint fit; segment count assumed \\
+\ce{MEACOO-} & $m^{\mathrm{seg}}$ & $1$ & Assumed \\
+\ce{MEACOO-} & $\sigma$ (\AA) & $\boldsymbol{5.34799141560911}$ & This work \\
+\ce{MEACOO-} & $\epsilon/k_B$ (K) & $\boldsymbol{179.85787428794876}$ & This work \\
 \ce{MEACOO-} & $z$ & $-1$ & By definition \\
-\ce{MEACOO-} & $d^\mathrm{Born}$ (\AA) & $5.34799141560911$ & Joint fit; segment count assumed \\
+\ce{MEACOO-} & $d^\mathrm{Born}$ (\AA) & $5.34799141560911$ & Equal to $\sigma$ \\
 \ce{MEACOO-} & $f$ & $1$ & Assumed \\
-\ce{HCO3-} & $m^{\mathrm{seg}}$ & $1$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{HCO3-} & $\sigma$ (\AA) & $2.9296$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{HCO3-} & $\epsilon/k_B$ (K) & $70$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{HCO3-} & $m^{\mathrm{seg}}$ & $1$ & \cite{Uyan2015} \\
+\ce{HCO3-} & $\sigma$ (\AA) & $2.9296$ & \cite{Uyan2015} \\
+\ce{HCO3-} & $\epsilon/k_B$ (K) & $70$ & \cite{Uyan2015} \\
 \ce{HCO3-} & $z$ & $-1$ & By definition \\
-\ce{HCO3-} & $d^\mathrm{Born}$ (\AA) & $3$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{HCO3-} & $d^\mathrm{Born}$ (\AA) & $3$ & Assumed \\
 \ce{HCO3-} & $f$ & $1$ & Assumed \\
-\ce{CO3^{2-}} & $m^{\mathrm{seg}}$ & $1$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{CO3^{2-}} & $\sigma$ (\AA) & $2.4422$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{CO3^{2-}} & $\epsilon/k_B$ (K) & $249.26$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{CO3^{2-}} & $m^{\mathrm{seg}}$ & $1$ & \cite{Uyan2015} \\
+\ce{CO3^{2-}} & $\sigma$ (\AA) & $2.4422$ & \cite{Uyan2015} \\
+\ce{CO3^{2-}} & $\epsilon/k_B$ (K) & $249.26$ & \cite{Uyan2015} \\
 \ce{CO3^{2-}} & $z$ & $-2$ & By definition \\
-\ce{CO3^{2-}} & $d^\mathrm{Born}$ (\AA) & $3$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{CO3^{2-}} & $d^\mathrm{Born}$ (\AA) & $3$ & Assumed \\
 \ce{CO3^{2-}} & $f$ & $1$ & Assumed \\
-\ce{H3O+} & $m^{\mathrm{seg}}$ & $1$ & Size, energy transferred: \cite{Uyan2015}; Born: assumed \\
-\ce{H3O+} & $\sigma$ (\AA) & $3.4654$ & Size, energy transferred: \cite{Uyan2015}; Born: assumed \\
-\ce{H3O+} & $\epsilon/k_B$ (K) & $500$ & Size, energy transferred: \cite{Uyan2015}; Born: assumed \\
+\ce{H3O+} & $m^{\mathrm{seg}}$ & $1$ & Hydrogen-ion value of \cite{Uyan2015} \\
+\ce{H3O+} & $\sigma$ (\AA) & $3.4654$ & Hydrogen-ion value of \cite{Uyan2015} \\
+\ce{H3O+} & $\epsilon/k_B$ (K) & $500$ & Hydrogen-ion value of \cite{Uyan2015} \\
 \ce{H3O+} & $z$ & $+1$ & By definition \\
-\ce{H3O+} & $d^\mathrm{Born}$ (\AA) & $1.218$ & Size, energy transferred: \cite{Uyan2015}; Born: assumed \\
+\ce{H3O+} & $d^\mathrm{Born}$ (\AA) & $1.218$ & Assumed \\
 \ce{H3O+} & $f$ & $1$ & Assumed \\
-\ce{OH-} & $m^{\mathrm{seg}}$ & $1$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{OH-} & $\sigma$ (\AA) & $2.0177$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{OH-} & $\epsilon/k_B$ (K) & $650$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{OH-} & $m^{\mathrm{seg}}$ & $1$ & \cite{Uyan2015} \\
+\ce{OH-} & $\sigma$ (\AA) & $2.0177$ & \cite{Uyan2015} \\
+\ce{OH-} & $\epsilon/k_B$ (K) & $650$ & \cite{Uyan2015} \\
 \ce{OH-} & $z$ & $-1$ & By definition \\
-\ce{OH-} & $d^\mathrm{Born}$ (\AA) & $3.08107689400404$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{OH-} & $d^\mathrm{Born}$ (\AA) & $3.08107689400404$ & Assumed \\
 \ce{OH-} & $f$ & $1$ & Assumed \\
-\ce{H2O} & $\sigma_0$ (\AA) & $\boldsymbol{2.780432614942962}$ & Water fit \\
+\ce{H2O} & $\sigma_0$ (\AA) & $\boldsymbol{2.780432614942962}$ & This work \\
 \ce{H2O} & $a_1$ (\AA) & $10.11$ & Fixed \\
 \ce{H2O} & $b_1$ (K$^{-1}$) & $-0.01775$ & Fixed \\
 \ce{H2O} & $a_2$ (\AA) & $-1.417$ & Fixed \\

@@ -19,22 +19,22 @@
 % Input (working tree): analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json SHA256 c05f53790a49cbc46361cba6d896bc65af7c5269596c92f796eeb3792b04ce83
 % Input (working tree): analyses/dea_transfer/inputs/part-ii-346/route-current.json SHA256 bc743240dffe80462dc958a9ba6664e3c02d2721b312a3f61f54a59a7b0f6173
 % Input (working tree): analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json SHA256 ed92c0ea44f184995323bbe5b004dc3cf22b3b2ed9d8d5a6b4667580b7f4f6fd
-\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{5pt}\centering
 \caption{Segment, association and Born parameters of the MEA model.}\label{tab:species-parameters}
-\begin{tabular}{@{}lrrrrrr>{\raggedright\arraybackslash}p{0.2500\linewidth}@{}}
+\begin{tabular}{@{}lrrrrrrl@{}}
 \toprule
-Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$\epsilon/k_B$\\(K)} & \makecell[rb]{$\epsilon^{AB}/k_B$\\(K)} & $\kappa^{AB}$ & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & Source \\
+Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$\epsilon/k_B$\\(K)} & \makecell[rb]{$\epsilon^{AB}/k_B$\\(K)} & $\kappa^{AB}$ & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & Ref. \\
 \midrule
-\ce{CO2}$^{\mathrm{s}}$ & $2.0729$ & $2.7852$ & $169.21$ & $878.3249$ & $0.0376$ & -- & Segments: \cite{Gross2001}; association energy: half the water value \\
-\ce{MEA} & $3.0353$ & $3.0435$ & $277.174$ & $2586.3$ & $0.0363$ & -- & Segments, energy: \cite{Baygi2015}; association volume converted here \\
-\ce{H2O}$^{\mathrm{s}}$ & $\boldsymbol{1.2528}$ & $\sigma_w(T)$ & $\boldsymbol{432.3788}$ & $\boldsymbol{1756.6498}$ & $\boldsymbol{0.0376}$ & -- & Water fit \\
-\ce{MEAH+} & $1$ & $\boldsymbol{4.8558}$ & $\boldsymbol{208.7356}$ & -- & -- & $4.8558$ & Joint fit; segment count assumed \\
-\ce{MEACOO-} & $1$ & $\boldsymbol{5.3480}$ & $\boldsymbol{179.8579}$ & -- & -- & $5.3480$ & Joint fit; segment count assumed \\
-\ce{HCO3-}$^{\mathrm{s}}$ & $1$ & $2.9296$ & $70$ & -- & -- & $3$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{CO3^{2-}}$^{\mathrm{s}}$ & $1$ & $2.4422$ & $249.26$ & -- & -- & $3$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
-\ce{H3O+}$^{\mathrm{s}}$ & $1$ & $3.4654$ & $500$ & -- & -- & $1.218$ & Size, energy transferred: \cite{Uyan2015}; Born: assumed \\
-\ce{OH-}$^{\mathrm{s}}$ & $1$ & $2.0177$ & $650$ & -- & -- & $3.0811$ & Size, energy: \cite{Uyan2015}; Born: assumed \\
+\ce{CO2}$^{\mathrm{a}}$ & $2.0729$ & $2.7852$ & $169.21$ & $878.3249$ & $0.0376$ & -- & \cite{Gross2001}$^{\mathrm{b}}$ \\
+\ce{MEA} & $3.0353$ & $3.0435$ & $277.174$ & $2586.3$ & $0.0363$ & -- & \cite{Baygi2015}$^{\mathrm{c}}$ \\
+\ce{H2O}$^{\mathrm{a}}$ & $\boldsymbol{1.2528}$ & $\sigma_w(T)$ & $\boldsymbol{432.3788}$ & $\boldsymbol{1756.6498}$ & $\boldsymbol{0.0376}$ & -- & This work \\
+\ce{MEAH+} & $1$ & $\boldsymbol{4.8558}$ & $\boldsymbol{208.7356}$ & -- & -- & $4.8558$ & This work$^{\mathrm{d}}$ \\
+\ce{MEACOO-} & $1$ & $\boldsymbol{5.3480}$ & $\boldsymbol{179.8579}$ & -- & -- & $5.3480$ & This work$^{\mathrm{d}}$ \\
+\ce{HCO3-}$^{\mathrm{a}}$ & $1$ & $2.9296$ & $70$ & -- & -- & $3$ & \cite{Uyan2015}$^{\mathrm{e}}$ \\
+\ce{CO3^{2-}}$^{\mathrm{a}}$ & $1$ & $2.4422$ & $249.26$ & -- & -- & $3$ & \cite{Uyan2015}$^{\mathrm{e}}$ \\
+\ce{H3O+}$^{\mathrm{a}}$ & $1$ & $3.4654$ & $500$ & -- & -- & $1.218$ & \cite{Uyan2015}$^{\mathrm{e,f}}$ \\
+\ce{OH-}$^{\mathrm{a}}$ & $1$ & $2.0177$ & $650$ & -- & -- & $3.0811$ & \cite{Uyan2015}$^{\mathrm{e}}$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Bold values were fitted in this work; the others are transferred or assumed, as the sources state. A dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Bold: fitted in this work; --: not used. $^{\mathrm{a}}$Shared species, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Cross-association with water; its energy is half that of water. $^{\mathrm{c}}$Association volume converted in this work (Section~\ref{supp-sec:s-parameters}). $^{\mathrm{d}}$Segment count assumed. $^{\mathrm{e}}$Born diameter assumed. $^{\mathrm{f}}$Hydrogen-ion parameters of Ref.~\cite{Uyan2015}, used for hydronium. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs.}
 \end{table}
