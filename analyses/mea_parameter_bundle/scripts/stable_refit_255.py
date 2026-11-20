@@ -173,8 +173,8 @@ def _applicable(item, witnesses, support):
             not_applicable.append(dict(witness, evidence='not applicable', support_difference=outside))
             continue
         identity = (witness.get('kind'), tuple(witness['support']), tuple(witness['composition']), witness['packing'])
-        repeated.append(unique.setdefault(identity, len(supplied)))
-        if repeated[-1] < len(supplied):
+        repeated.append((unique.setdefault(identity, len(supplied)), witness))
+        if repeated[-1][0] < len(supplied):
             continue
         phase = type(item.problem.phases[0])()
         phase.name, phase.kind, phase.support_declared = 'previous-split', getattr(type(item.problem.phases[0].kind), witness.get('kind','Liquid' if len(witness['support'])==len(s.COMPONENT_IDS) else 'Vapor')), True
@@ -212,7 +212,7 @@ def _measure_group(states):
 def _measure(state):
     started = time.monotonic()
     supplied, not_applicable, repeated, unique = [], [], [], ()
-    retain_details = _ROUTE is None or getattr(_ROUTE, 'retain_details', True)
+    short_rows = getattr(_ROUTE, 'short_rows', False)
     metadata = {}
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
@@ -255,13 +255,18 @@ def _measure(state):
                 result = eq.solve_equilibrium(_SPEC.model,parent)
                 report = _supplied_report(parent, result, supplied, unique)
                 out['supplied_parent_pressure_Pa'] = result.pressure
-                if retain_details:
-                    out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=_quantities(t.quantities),message=t.message) for t in report.trials]
-                else:
-                    out['supplied_trials'] = [dict(evidence=t.evidence, quantities=_quantities(t.quantities)) for t in report.trials]
+                out['supplied_trials'] = [dict(evidence=t.evidence,resolved_descent=t.resolved_descent,quantities=_quantities(t.quantities),message=t.message) for t in report.trials]
                 out['supplied_available'] = result.requested_tolerance_met and len(report.trials)==len(supplied) and all(t.evidence=='evaluated' for t in report.trials)
                 if len(report.trials)==len(supplied):
-                    out['supplied_trials'] = [out['supplied_trials'][i] for i in repeated]
+                    out['supplied_trials'] = [out['supplied_trials'][i] for i, _ in repeated]
+                    if short_rows:
+                        selected = {}
+                        for (_, phase), trial in zip(repeated, out['supplied_trials'], strict=True):
+                            distance = trial['quantities']['tpd_over_rt'] if trial['evidence']=='evaluated' else -math.inf
+                            side = _ROUTE.density_branch([trial['quantities']]) if distance < 0 and trial['evidence']=='evaluated' else 'unavailable'
+                            if distance < 0 and (side not in selected or distance < selected[side][0]):
+                                selected[side] = distance, dict(trial, phase=phase)
+                        if selected: out['supplied_trial_evidence'] = [trial for _, trial in selected.values()]
             except Exception as error:
                 out['supplied_error'] = f'{type(error).__name__}: {error}'
             out['available'] = out['optimized_available'] and out['supplied_available']
@@ -277,13 +282,7 @@ def _measure(state):
         if out['native_branch']=='vapor':
             out['pressure_basis'] = _ROUTE.pressure_basis(_SPEC, state, item, prediction)
     row = dict(key=state['key'], seconds=time.monotonic() - started, **out)
-    if _ROUTE is not None and hasattr(_ROUTE, 'details'):
-        if retain_details:
-            path = _ROUTE.details/(hashlib.sha256(state['key'].encode()).hexdigest()+'.json.gz')
-            plain = jsonable({k: v for k, v in row.items() if k != 'supplied_trials'})  # supplied trials are built JSON-ready
-            plain = {k: row[k] if k == 'supplied_trials' else plain[k] for k in row}
-            path.write_bytes(gzip.compress(json.dumps(plain, allow_nan=False).encode(), compresslevel=1, mtime=0))
-            row['details'] = str(path.relative_to(_ROUTE.out))
+    if short_rows:
         row.update(descent=descent(row),supplied_minimum_tpd=tally([row])['supplied_minimum_tpd'])
         for field in ('supplied_trials', 'not_applicable_supplied_trials'):
             row.pop(field, None)
@@ -659,7 +658,9 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
         OUT, bind, coordinates, write, result, replay, endpoint_mapping, stability_row = (globals()[k] for k in ("OUT", "bind", "coordinates", "write", "result", "replay", "endpoint_mapping", "stability_row"))
     rel = f'{run}/stage-{index}'
     if (OUT / rel / 'fit.json').exists():
-        return result(f'{rel}/fit.json')
+        report = result(f'{rel}/fit.json')
+        if route is not None: (OUT / rel / 'fit-native.json').unlink(missing_ok=True)
+        return report
     spec = bind(start)
     if fitted is not None:
         spec.inputs['endpoint'] = start
@@ -696,6 +697,7 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     measured = report['stability_predictions'][-len(enforced):] if enforced else []  # stability rows are the last observations
     report['stability_tally'] = tally([dict(key=k, **(p or dict(available=False))) for k, p in zip(report['enforced'], measured, strict=True)])
     write(f'{rel}/fit.json', report)
+    if route is not None: (OUT / rel / 'fit-native.json').unlink(missing_ok=True)
     print(run, index, report['status'], report['data_cost'], report['stability_cost'], json.dumps(report['stability_tally'])[:300], flush=True)
     return report
 
@@ -765,7 +767,7 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
         if route is None:
             admissible(point, enforced, rows)
         else:
-            route.grid(point, enforced, retain_details=False)
+            route.grid(point, enforced)
     registry = route.result('split-record.json') if route else globals().get('GRID_TRIALS', {})
     base = (registry['trials'] + registry.get('supplied_trials', []) if route else
             [w for group in registry.values() for trials in (group.values() if isinstance(group, dict) else [group]) for w in trials])
@@ -781,7 +783,7 @@ def retreat(run, anchor, endpoint, enforced, rows=None, shifts=None, *, route=No
                 return previous['admissible']
         local, point = copy.deepcopy(base), segment(anchor, endpoint, t)
         while True:
-            measured = route.grid(point, enforced, trial_set=local, retain_details=False) if route else grid(point, enforced, local)
+            measured = route.grid(point, enforced, trial_set=local) if route else grid(point, enforced, local)
             tal = tally(measured)
             # An existing descent or unavailable row rejects this point on the frozen trial set.
             if route is not None and (tal['descent'] or tal['unavailable']):

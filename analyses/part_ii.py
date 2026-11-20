@@ -6,6 +6,7 @@ import json
 import math
 import os
 from pathlib import Path
+import subprocess
 import sys
 import zipfile
 from types import SimpleNamespace
@@ -24,6 +25,7 @@ SHARED = ROOT/'analyses/mea_parameter_bundle/results/adoption-340/part-ii-shared
 SHARED_SHA = '4c27d47ea7b6e018b0603efb8a29fc2f3fe3c6f8fdc12ccc12cb10bb4b315334'
 WHEEL = ROOT/'build/engine-wheels/main-05e94210fa64cf69725e45babc0411d32139df5a/epcsaft-1.3.1-cp313-cp313-manylinux_2_39_x86_64.whl'
 SHA = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
+RUN_BYTES = 99_338_608  # #402: retained piperazine run, retransfer-345
 
 
 def target_identity(mapping, family, target):
@@ -60,6 +62,7 @@ def branch_counts(row):
 
 class Route:
     branch_counts = staticmethod(branch_counts)
+    density_branch = staticmethod(density_branch)
     def __init__(self, declaration, out=None):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
@@ -88,8 +91,17 @@ class Route:
 
     def write(self, name, value):
         path = self.out/name
+        data = (json.dumps(jsonable(value), indent=2, allow_nan=False)+'\n').encode()
+        projected = sum(f.stat().st_size for f in self.out.rglob('*') if f != path and f.is_file()) + len(data)
+        if projected > RUN_BYTES:
+            raise RuntimeError(f'{path}: run folder would reach {projected} bytes (limit {RUN_BYTES})')
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(jsonable(value), indent=2, allow_nan=False)+'\n')
+        path.write_bytes(data)
+
+    def check_run_output(self):
+        path = f'{self.out.resolve()}/'
+        if path.startswith(f'{ROOT}/') and (subprocess.run(['git', 'check-ignore', '-q', '--', path], cwd=ROOT).returncode or subprocess.check_output(['git', 'ls-files', '--', path], cwd=ROOT)):
+            raise RuntimeError(f'{path}: choose a run folder ignored by Git or outside the repository')
 
     def result(self, name):
         return stable.read(self.out/name)
@@ -340,7 +352,8 @@ class Route:
             same[state['key']] = first.setdefault(identity, state['key'])
         return {key: source for key, source in same.items() if key != source}
 
-    def grid(self, point, states, *, trial_set=None, retain_details=True):
+    def grid(self, point, states, *, trial_set=None):
+        self.check_run_output()
         registry = (dict(amine=self.config['amine'],species=self.config['species'],trials=list(trial_set)) if trial_set is not None else
                     self.result('split-record.json') if (self.out/'split-record.json').exists() else self.load(self.config['split_record']))
         assert registry['amine']==self.config['amine'] and registry['species']==self.config['species']
@@ -352,14 +365,11 @@ class Route:
             witness.setdefault('density_side', None)
             witness.setdefault('branch', density_branch([witness]))
         trials = witnesses+supplied
-        identity = hashlib.sha256(json.dumps(jsonable([point, states, trials, self.config, trial_set is None, retain_details]), sort_keys=True).encode()).hexdigest()
+        identity = hashlib.sha256(json.dumps(jsonable([point, states, trials, self.config, trial_set is None]), sort_keys=True).encode()).hexdigest()
         cache = getattr(self, '_grid_cache', {})
         if identity in cache:
             return cache[identity]
-        self.details = self.out/('search-'+str(len(list(self.out.glob('search-*.json')))))
-        self.retain_details = retain_details
-        if retain_details:
-            self.details.mkdir(parents=True, exist_ok=True)
+        self.short_rows = True
         copies = self.same_calculations(point, states)
         rows = {r['key']: r for r in stable.grid(point, [s for s in states if s['key'] not in copies], trials, route=self)}
         measured = [rows[s['key']] if s['key'] not in copies else dict(rows[copies[s['key']]], key=s['key'], seconds=0., same_calculation_as=copies[s['key']]) for s in states]
@@ -401,6 +411,7 @@ class Route:
         return dict(grid=tally,offset=dict(descent=0),census=dict(descent=0),penalty_trigger=any(row.get('native_liquid_descent',False) for row in measured),stable=not tally['descent'] and not tally['unavailable'])
 
     def campaign(self):
+        self.check_run_output()
         import reduced_refit_338 as reduced
         assert len(self.config['starts'])==2 and self.config['loadings'][0]==1e-5, 'Part II requires two complete starts and loadings from 1e-5 mol/mol'
         candidates = [reduced.candidate(f'start-{i}',self.start(ref),{},[],{},route=self) for i,ref in enumerate(self.config['starts'])]

@@ -9,7 +9,7 @@ split: exclusive time of each step of stable_refit_255._measure for a seeded ran
 Route.grid unchanged; the Engine's predict is decomposed afterwards by repeating its bubble-pressure, parent and Full-search calls
 on the same item (excluded from the per-state total). subset: every non-grid state plus 300 seeded 353.15 K grid states.
 The retained search is origin/issue-343-mdea-f2 (e3d1cd8) analyses/mdea_mea_workflow/results/stage-b-f2/search-0-summary.json.gz,
-wheel 0962e21d, the source of this case's inputs. Per-state records stay in the ignored run directories.
+wheel 0962e21d, the source of this case's inputs. For searches, use a Git-ignored run directory inside the repository.
 """
 import collections
 import gzip
@@ -168,7 +168,7 @@ def mdea_full(out):
     descents = [r for r in measured if part_ii.stable.descent(r)]
     summary = dict(case='MDEA Stage B start-0 search, #337 rule (b) grid', wheel_sha256=part_ii.SHA, states=len(states),
                    grid_states=sum(s['key'].startswith('grid:') for s in states), copies=sum('same_calculation_as' in r for r in measured),
-                   workers=route.workers, wall_seconds=seconds, wall_basis='Route.grid call: binding, duplicate detection, worker start, all states, per-state records and search JSON',
+                   workers=route.workers, wall_seconds=seconds, wall_basis='Route.grid call: binding, duplicate detection, worker start, all states, split record and search JSON',
                    peak_rss_total_MB=peak['total_kb']/1e3, peak_rss_largest_process_MB=peak['process_kb']/1e3,
                    rss_basis='VmRSS of the timing process plus descendants sampled every 0.5 s',
                    available=len(measured)-len(unavailable), unavailable=len(unavailable),
@@ -219,27 +219,16 @@ def stability_changes(old_path, new_path):
 
 
 def compare(base, new):
-    """Only timing ('seconds') and the copy marker may differ; copies are checked against the baseline's own measurement."""
     base, new = Path(base), Path(new)
     B, N = (json.loads((root/'search-0.json').read_text()) for root in (base, new))
-    detail = lambda root, row: part_ii.stable.read(root/row['details'])
-    skip = {'seconds', 'details', 'same_calculation_as', 'key'}
-    strip = lambda row: {k: v for k, v in row.items() if k not in skip}
-    out = dict(states=len(B), same_order=[r['key'] for r in B] == [r['key'] for r in N], copies=0, row_mismatch=[], detail_mismatch=[],
-               details_compared=0, supplied_trial_entries=0)
+    strip = lambda row: json.dumps({k: v for k, v in row.items() if k not in {'seconds', 'details', 'supplied_trial_evidence', 'same_calculation_as'}}, sort_keys=True)
+    out = dict(states=len(B), same_order=[r['key'] for r in B] == [r['key'] for r in N], copies=0, row_mismatch=[])
     for b, n in zip(B, N):
         out['copies'] += 'same_calculation_as' in n
         out['row_mismatch'] += [b['key']]*(strip(b) != strip(n))
-        db, dn = detail(base, b), detail(new, n)
-        out['details_compared'] += 1
-        out['supplied_trial_entries'] += len(db.get('supplied_trials', []))
-        same = list(strip(db).items()) == list(strip(dn).items())  # values and key order
-        if 'same_calculation_as' not in n:
-            same &= json.dumps({k: v for k, v in db.items() if k != 'seconds'}) == json.dumps({k: v for k, v in dn.items() if k != 'seconds'})
-        out['detail_mismatch'] += [b['key']]*(not same)
     out['split_record_identical'] = (base/'split-record.json').read_bytes() == (new/'split-record.json').read_bytes()
     out['worker_seconds'] = dict(base=math.fsum(r['seconds'] for r in B), new=math.fsum(r['seconds'] for r in N))
-    out['identical'] = out['same_order'] and not out['row_mismatch'] and not out['detail_mismatch'] and out['split_record_identical']
+    out['identical'] = out['same_order'] and not out['row_mismatch'] and out['split_record_identical']
     return out
 
 

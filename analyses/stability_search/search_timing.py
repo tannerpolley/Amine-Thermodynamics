@@ -8,7 +8,7 @@
 The AMP case is campaign-373 search 106: retreat point t = 0.6624609375000001 between the retained anchor and
 endpoint, the 1,906 enforced states and the 5,895-entry initial trial record (archive/issue-344-amp-f2-f3d87a8).
 The MDEA case is one temperature group of the 69,099-state Stage B search at the start-0 unpenalized endpoint, with
-the declared 2,789-entry trial record (archive/issue-343-stage-b-mdea-f2). Detailed per-state records stay in the ignored run directory; only the summary is retained.
+the declared 2,789-entry trial record (archive/issue-343-stage-b-mdea-f2). The search rows and split record stay in the ignored run directory.
 """
 import json
 import math
@@ -79,7 +79,7 @@ def amp():
             witness['kind'] = witness['kind'].title()
     measured, seconds, peak = timed_search(route, point, load('enforced.json'), trials)
     summary = dict(case='AMP campaign-373 search 106', t=T106, trials=len(trials), workers=route.workers,
-                   wall_seconds=seconds, wall_basis='route.grid call: parent binding, temperature grouping, worker start, all states, gzip detail files and search JSON',
+                   wall_seconds=seconds, wall_basis='route.grid call: parent binding, temperature grouping, worker start, all states, and search JSON',
                    peak_rss_total_MB=peak['total_kb']/1e3, peak_rss_largest_process_MB=peak['process_kb']/1e3,
                    rss_basis='VmRSS of the timing process plus descendants sampled every 0.5 s',
                    wheel_sha256=part_ii.SHA, run=str(run.relative_to(ROOT)), **counts(measured))

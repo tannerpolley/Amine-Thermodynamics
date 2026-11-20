@@ -122,9 +122,10 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     route.verify, route.bind = lambda: None, lambda point: SimpleNamespace(model=model)
     route.stability_row = lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)
     route.temperature = lambda spec,state:problem.T
-    measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
+    states = [dict(key='pz')]
+    measured, = p.stable.grid(None, states, registry['trials'], route=route)
     assert len(measured['supplied_trials'])==102
-    measured = route.result(route.grid(None,[dict(key='pz')])[0]['details'])
+    short, = route.grid(None, states)
     retained = route.result('split-record.json')
     assert len(retained['trials'])==100 and all(w['resolved_descent'] for w in retained['trials'])
     assert retained['supplied_trials']==[dict(w, density_side=None, branch='unresolved') for w in registry['trials'][-2:]]
@@ -135,6 +136,49 @@ def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
     assert p.stable.descent(measured)
     assert p.stable.tally([measured])['descent']==1
     assert not measured['optimized_available'] and not measured['available']
+    assert short['supplied_trial_counts']==measured['supplied_trial_counts']
+    assert short['descent']==p.stable.descent(measured)
+    assert 'supplied_trials' not in short
+    index, lowest = min(enumerate(measured['supplied_trials']), key=lambda pair: pair[1]['quantities']['tpd_over_rt'])
+    phase = (retained['trials']+retained['supplied_trials'])[index]
+    assert dict(lowest, phase=phase) in short['supplied_trial_evidence']
+
+
+def test_run_storage_limit_preserves_replaced_file(tmp_path):
+    route = p.Route.__new__(p.Route)
+    route.out = tmp_path
+    route.write('search-0.json', [])
+    search = tmp_path/'search-0.json'
+    before = search.read_bytes()
+    with (tmp_path/'prior-run.json').open('wb') as prior:
+        prior.truncate(99_338_608-len(before))
+    with pytest.raises(RuntimeError, match=r'search-0\.json:.*99338608'):
+        route.write('search-0.json', [1])
+    assert search.read_bytes()==before
+
+
+def test_search_refuses_tracked_results_folder():
+    route = p.Route.__new__(p.Route)
+    route.out = ROOT/'analyses/pz_transfer/results/retransfer-345'
+    with pytest.raises(RuntimeError, match='ignored by Git'):
+        route.grid(None, [])
+
+
+def test_timing_comparison_accepts_reused_calculations(tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT/'analyses/stability_search'))
+    from search_profile import compare
+
+    base, changed = tmp_path/'base', tmp_path/'changed'
+    row = dict(key='hartono-2013-y:0:problem', seconds=1., value=0.)
+    copied = dict(row, same_calculation_as='hartono-2013-y:1:problem')
+    for folder, measured in ((base, row), (changed, copied)):
+        folder.mkdir()
+        (folder/'search-0.json').write_text(json.dumps([measured]))
+        (folder/'split-record.json').write_text('{"trials": []}')
+    matching = compare(base, changed)
+    assert matching['identical'] and matching['copies']==1
+    (changed/'search-0.json').write_text(json.dumps([dict(copied, value=-.01)]))
+    assert compare(base, changed)['row_mismatch']==[row['key']]
 
 
 def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path):
@@ -145,8 +189,7 @@ def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path):
     registry, calls = [], []
     route.result = lambda name: dict(trials=registry)
     route.replay = lambda point, rows: ([], True, 10.+point)
-    def grid(point, states, *, trial_set=None, retain_details=True):
-        assert not retain_details
+    def grid(point, states, *, trial_set=None):
         native_descent = point > .875
         witness = dict(kind='Liquid', support=[0], composition=[point], packing=.4,
                        resolved_descent=native_descent)
