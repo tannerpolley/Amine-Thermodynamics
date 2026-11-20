@@ -4,7 +4,7 @@
 \usepackage[pagewise]{lineno}
 % \linenumbers
 
-\usepackage[numbers,sort]{natbib}
+\usepackage[numbers,sort&compress]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage[capitalise]{cleveref}
 \usepackage{xr}
@@ -34,6 +34,7 @@
 \renewcommand{\sfdefault}{\rmdefault}
 \usepackage[scaled=0.95]{inconsolata}
 \captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[figure]{name=Fig.,labelsep=period}
 \captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
 \setlength{\tabcolsep}{4pt}
 \makeatletter

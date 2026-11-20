@@ -8,10 +8,11 @@
 \usepackage{graphicx}
 \graphicspath{{figures/generated/}}
 \captionsetup{font=small,labelfont=bf,labelsep=colon,justification=justified}
+\captionsetup[figure]{name=Fig.,labelsep=period}
 \captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
 \AddToHook{env/table/begin}{\small}
 \setlength{\tabcolsep}{4pt}
-\usepackage[numbers,sort]{natbib}
+\usepackage[numbers,sort&compress]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}
 \sisetup{per-mode=symbol,group-digits=integer}

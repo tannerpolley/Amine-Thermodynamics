@@ -1,45 +1,45 @@
 \section*{Nomenclature}
 \begingroup\small
-\begin{longtable}{@{}p{.21\linewidth}p{.43\linewidth}p{.14\linewidth}p{.15\linewidth}@{}}
+\begin{longtable}{@{}p{.21\linewidth}p{.56\linewidth}p{.18\linewidth}@{}}
 \toprule
-Symbol & Meaning & Unit & First equation \\
+Symbol & Meaning & Unit \\
 \midrule\endfirsthead
-\toprule Symbol & Meaning & Unit & First equation \\
+\toprule Symbol & Meaning & Unit \\
 \midrule\endhead
 \bottomrule\endfoot
-$A,a^{\mathrm{res}}$ & Extensive and reduced residual Helmholtz energy & J; 1 & \ref{eq:epcsaft-residual-split} \\
-$n,n_i$ & Total and species amount & mol & \ref{eq:epcsaft-residual-split} \\
-$R,k_B$ & Gas and Boltzmann constants & J/(mol K); J/K & \ref{eq:epcsaft-residual-split} \\
-$T,T_{\mathrm{ref}}$ & Temperature and reference temperature & K & \ref{eq:kij-temperature} \\
-$m_i^{\mathrm{seg}}$ & Segment count & 1 & Section~\ref{sec:contributions} \\
-$x_i,y_i$ & True-species liquid and vapor mole fraction & 1 & \ref{eq:born-ssm-ds}; Section~\ref{sec:theory} \\
-$\sigma_i,\sigma_{ij},d_i$ & Segment, pair and packing diameter & \AA & Section~\ref{sec:contributions} \\
-$\epsilon_i,\epsilon_{ij}$ & Segment and pair dispersion energy & J & \ref{eq:dispersion-combining-rule} \\
-$k_{ij},b_{ij}$ & Interaction intercept and temperature slope & 1; K & \ref{eq:dispersion-combining-rule}, \ref{eq:kij-temperature} \\
-$\epsilon^{AB},\kappa^{AB}$ & Association energy and volume factor & J; 1 & Table~\ref{tab:species-parameters} \\
-$\rho$ & Molar density & mol/m$^3$ & Section~\ref{sec:reactions} \\
-$e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m & \ref{eq:born-ssm-ds} \\
-$z_i,\mathcal I$ & Charge number and ion set & 1 & \ref{eq:born-ssm-ds} \\
-$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 & \ref{eq:born-ssm-ds} \\
-$d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA & \ref{eq:born-ssm-ds} \\
-$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 & \ref{eq:born-ssm-ds}, \ref{eq:born-shell-diameter} \\
-$f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 & \ref{eq:born-shell-diameter} \\
-$d_{V,i},d_{T,i}$ & Permittivity coefficients & L/mol; K & \ref{eq:solvent-permittivity} \\
-$n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol; m$^3$ & \ref{eq:solvent-permittivity} \\
-$\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 & \ref{eq:activity-reaction-equilibrium} \\
-$a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol & \ref{eq:activities}; Section~\ref{sec:theory} \\
-$P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa & \ref{eq:activities}; Section~\ref{sec:theory} \\
-$Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg & \ref{eq:activities} \\
-$A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 & \ref{eq:reaction-equilibrium-constant-temperature} \\
-$\delta h$ & Fitted enthalpy increment of a carbamate hydrolysis correlation & J/mol & \ref{eq:reaction-shift} \\
-$H,C_P,c_P$ & Enthalpy, extensive and mass heat capacity & J; J/K; J/(kg K) & \ref{eq:total-enthalpy}; Section~\ref{sec:theory} \\
-$\alpha$ & Loading, moles of added \COtwo per mole of amine & mol/mol & Section~\ref{sec:data-roles} \\
-$\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol & \ref{eq:addition-heat} \\
-$\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable & \ref{eq:fit-objective} \\
-$J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 & \ref{eq:conditional-covariance}, \ref{eq:aard} \\
-$g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 & \ref{eq:tpd} \\
-$B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 & \ref{eq:tpd} \\
-$\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative tangent-plane distance, penalty scale and weight, penalized objective & 1 & \ref{eq:stability-penalty} \\
+$A,a^{\mathrm{res}}$ & Extensive and reduced residual Helmholtz energy & J; 1 \\
+$n,n_i$ & Total and species amount & mol \\
+$R,k_B$ & Gas and Boltzmann constants & J/(mol K); J/K \\
+$T,T_{\mathrm{ref}}$ & Temperature and reference temperature & K \\
+$m_i^{\mathrm{seg}}$ & Segment count & 1 \\
+$x_i,y_i$ & True-species liquid and vapor mole fraction & 1 \\
+$\sigma_i,\sigma_{ij},d_i$ & Segment, pair and packing diameter & \AA \\
+$\epsilon_i,\epsilon_{ij}$ & Segment and pair dispersion energy & J \\
+$k_{ij},b_{ij}$ & Interaction intercept and temperature slope & 1; K \\
+$\epsilon^{AB},\kappa^{AB}$ & Association energy and volume factor & J; 1 \\
+$\rho$ & Molar density & mol/m$^3$ \\
+$e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m \\
+$z_i,\mathcal I$ & Charge number and ion set & 1 \\
+$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 \\
+$d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA \\
+$c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 \\
+$f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 \\
+$d_{V,i},d_{T,i}$ & Permittivity coefficients & L/mol; K \\
+$n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol; m$^3$ \\
+$\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 \\
+$a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol \\
+$P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa \\
+$Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg \\
+$A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 \\
+$\delta h$ & Fitted enthalpy increment of a carbamate hydrolysis correlation & J/mol \\
+$H,C_P,c_P$ & Enthalpy, extensive and mass heat capacity & J; J/K; J/(kg K) \\
+$\alpha$ & Loading, moles of added \COtwo per mole of amine & mol/mol \\
+$\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol \\
+$\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable \\
+$J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 \\
+$g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 \\
+$B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 \\
+$\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative tangent-plane distance, penalty scale and weight, penalized objective & 1 \\
 \end{longtable}
 \endgroup
 % P:nomenclature-conventions
