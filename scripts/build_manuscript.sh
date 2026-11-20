@@ -13,12 +13,12 @@ if ! command -v latexmk >/dev/null 2>&1; then
 fi
 
 cd "$latex_dir"
-# Each part and its supplement cite each other; repeat the supplements, and Part I, after both have labels.
-for document in supplement part2_supplement main part2 supplement part2_supplement main; do
+# The manuscript and its supplement cite each other; repeat both after each has labels.
+for document in supplement main supplement main; do
     latexmk -g -pdf -recorder -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
 done
 
 cd "$repo_root"
-for document in main supplement part2 part2_supplement; do
+for document in main supplement; do
     uv run python scripts/check_manuscript_freshness.py --document "$document" --write-receipt
 done

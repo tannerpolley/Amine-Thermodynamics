@@ -10,23 +10,17 @@ Symbol & Meaning & Unit & First equation \\
 $A,a^{\mathrm{res}}$ & Extensive and reduced residual Helmholtz energy & J; 1 & \ref{eq:epcsaft-residual-split} \\
 $n,n_i$ & Total and species amount & mol & \ref{eq:epcsaft-residual-split} \\
 $R,k_B$ & Gas and Boltzmann constants & J/(mol K); J/K & \ref{eq:epcsaft-residual-split} \\
-$T,T_{\mathrm{ref}}$ & Temperature and reference temperature & K & \ref{eq:hard-sphere-diameter} \\
-$m_i^{\mathrm{seg}},\bar m$ & Segment count and mixture average & 1 & \ref{eq:hard-chain} \\
-$x_i,y_i$ & True-species liquid and vapor mole fraction & 1 & \ref{eq:hard-chain}; Section~\ref{sec:theory} \\
-$\sigma_i,\sigma_{ij},d_i$ & Segment, pair and packing diameter & \AA & \ref{eq:hard-sphere-diameter} \\
-$\epsilon_i,\epsilon_{ij}$ & Segment and pair dispersion energy & J & \ref{eq:hard-sphere-diameter}, \ref{eq:dispersion} \\
+$T,T_{\mathrm{ref}}$ & Temperature and reference temperature & K & \ref{eq:kij-temperature} \\
+$m_i^{\mathrm{seg}}$ & Segment count & 1 & Section~\ref{sec:contributions} \\
+$x_i,y_i$ & True-species liquid and vapor mole fraction & 1 & \ref{eq:born-ssm-ds}; Section~\ref{sec:theory} \\
+$\sigma_i,\sigma_{ij},d_i$ & Segment, pair and packing diameter & \AA & Section~\ref{sec:contributions} \\
+$\epsilon_i,\epsilon_{ij}$ & Segment and pair dispersion energy & J & \ref{eq:dispersion-combining-rule} \\
 $k_{ij},b_{ij}$ & Interaction intercept and temperature slope & 1; K & \ref{eq:dispersion-combining-rule}, \ref{eq:kij-temperature} \\
-$\epsilon^{AB},\kappa^{AB}$ & Association energy and volume factor & J; 1 & \ref{eq:association-strength} \\
-$\rho,\rho_N$ & Molar and molecular number density & mol/m$^3$; m$^{-3}$ & \ref{eq:hard-sphere-contact} \\
-$\zeta_n,\eta$ & Hard-sphere moments; packing fraction & m$^{n-3}$; 1 & \ref{eq:hard-sphere-contact} \\
-$g_{ij}^{\mathrm{hs}}$ & Hard-sphere contact value & 1 & \ref{eq:hard-sphere-contact} \\
-$I_1,I_2,C_1$ & Dispersion integrals and compressibility factor & 1 & \ref{eq:dispersion}, \ref{eq:dispersion-compressibility} \\
-$a_k,b_k$ & Dispersion polynomial coefficients & 1 & \ref{eq:dispersion-integrals} \\
-$X_A,\Delta^{AB}$ & Unbonded site fraction and bond strength & 1; m$^3$ & \ref{eq:association}, \ref{eq:association-strength} \\
-$e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m & \ref{eq:debye-huckel} \\
-$z_i,\mathcal I$ & Charge number and ion set & 1 & \ref{eq:debye-huckel} \\
-$\kappa_D,\chi_i$ & Inverse screening length and finite-size factor & m$^{-1}$; 1 & \ref{eq:debye-huckel}, \ref{eq:debye-huckel-chi} \\
-$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 & \ref{eq:debye-huckel}, \ref{eq:born-ssm-ds} \\
+$\epsilon^{AB},\kappa^{AB}$ & Association energy and volume factor & J; 1 & Table~\ref{tab:species-parameters} \\
+$\rho$ & Molar density & mol/m$^3$ & Section~\ref{sec:reactions} \\
+$e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m & \ref{eq:born-ssm-ds} \\
+$z_i,\mathcal I$ & Charge number and ion set & 1 & \ref{eq:born-ssm-ds} \\
+$\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 & \ref{eq:born-ssm-ds} \\
 $d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA & \ref{eq:born-ssm-ds} \\
 $c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 & \ref{eq:born-ssm-ds}, \ref{eq:born-shell-diameter} \\
 $f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 & \ref{eq:born-shell-diameter} \\
@@ -36,12 +30,11 @@ $\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 & \ref{eq:a
 $a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol & \ref{eq:activities}; Section~\ref{sec:theory} \\
 $P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa & \ref{eq:activities}; Section~\ref{sec:theory} \\
 $Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg & \ref{eq:activities} \\
-$K_{m,r},K_{x,r}$ & Molality- and mole-fraction-basis constant & 1 & \ref{eq:molality-conversion} \\
 $A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 & \ref{eq:reaction-equilibrium-constant-temperature} \\
+$\delta h$ & Fitted enthalpy increment of a carbamate hydrolysis correlation & J/mol & \ref{eq:reaction-shift} \\
 $H,C_P,c_P$ & Enthalpy, extensive and mass heat capacity & J; J/K; J/(kg K) & \ref{eq:total-enthalpy}; Section~\ref{sec:theory} \\
-$\alpha,w_{\MEA}$ & Loading and unloaded-solvent mass fraction & mol/mol; kg/kg & Section~\ref{sec:data-roles} \\
+$\alpha$ & Loading, moles of added \COtwo per mole of amine & mol/mol & Section~\ref{sec:data-roles} \\
 $\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol & \ref{eq:addition-heat} \\
-$u_\rho,u_\alpha,g_j,s_\rho$ & Density/loading scale inputs and density secant & kg/m$^3$; mol/mol; kg/m$^3$; kg/m$^3$ & \ref{eq:density-scale} \\
 $\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable & \ref{eq:fit-objective} \\
 $J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 & \ref{eq:conditional-covariance}, \ref{eq:aard} \\
 $g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 & \ref{eq:tpd} \\
@@ -50,8 +43,8 @@ $\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative ta
 \end{longtable}
 \endgroup
 % P:nomenclature-conventions
-Subscripts $i,j$ identify species, $r$ reactions, $w$ water and $k$ polynomial or search indices; superscripts res, ig, hs, hc, disp, assoc, DH and Born identify residual, ideal-gas, hard-sphere, hard-chain, dispersion, association and electrostatic terms.
+Subscripts $i,j$ identify species, $r$ reactions, $w$ water and $k$ searched states; superscripts res, ig, hc, disp, assoc, DH and Born identify residual, ideal-gas, hard-chain, dispersion, association and electrostatic terms.
 Superscripts calc and obs mean calculated and observed; pure and $\infty,w$ mean pure solvent and infinite dilution in water; $\circ$ denotes the source standard state.
 
 % P:nomenclature-acronyms
-AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; MDEA: N-methyldiethanolamine; NMR: nuclear magnetic resonance; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; ePC-SAFT: electrolyte PC-SAFT; SAFT-HR: Huang--Radosz statistical associating fluid theory.
+AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; DEA: diethanolamine; MDEA: methyldiethanolamine; AMP: 2-amino-2-methyl-1-propanol; NMR: nuclear magnetic resonance; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; ePC-SAFT: electrolyte PC-SAFT; SAFT-HR: Huang--Radosz statistical associating fluid theory.

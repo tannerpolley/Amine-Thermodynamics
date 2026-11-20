@@ -57,7 +57,7 @@ def display(value):
 CALIBRATION_NAMES = {
     'F0': 'Shifted R2/R5 correlations; separate Born diameters',
     'F1': 'Literature R2/R5 correlations; separate Born diameters',
-    'F2': 'Tied amine-ion Born diameters (present model)',
+    'F2': 'Tied amine-ion Born diameters (MEA model)',
     'F3': 'Zero carbamate--water interaction and protonated-MEA--water slope',
     'F4': 'Sodium-salt water--anion interactions',
     'F4-0': 'Zero protonated-MEA--bicarbonate interaction',
@@ -97,6 +97,8 @@ def full_precision(value):
     return '--' if value is None or value == '' else repr(float(value)).removesuffix('.0')
 WORDS = 'no one two three four five six seven eight nine ten'.split()
 
+
+GROUP = re.compile(r'(?<![\w.{-])-?\d{5,}(?:\.\d+)?(?![\w}])')  # numbers with five or more integer digits get a thin-space digit group
 
 def num(value, digits=4):
     return '--' if value is None or value == '' else f'{float(value):.{digits}g}'
@@ -206,7 +208,7 @@ def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
     blocked = any(isinstance(row, str) and r'\multicolumn' in row for row in data)
     rows = [row if isinstance(row, str) else ' & '.join(cell(x, c) for x, c in zip(row, cols, strict=True)) + (r' \\*' if blocked and isinstance(after, list) else r' \\')
             for row, after in zip(data, [*data[1:], None])]
-    if len(data) <= 32 and not landscape and name not in ('supplement_literature_comparison.tex','same_data.tex','current_data_inventory.tex'):  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
+    if len(data) <= 32 and not landscape and name != 'supplement_literature_comparison.tex':  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
         # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
         place = '[!htbp]' if '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
         OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{' + str(sep) + r'pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
@@ -240,6 +242,12 @@ def verified(path):
     return path
 
 a.bind = verified
+OTHER = {}
+
+
+def other(path):  # DEA, MDEA and AMP files postdate BASE: hashed into the table headers, not compared with BASE
+    OTHER[path] = hashlib.sha256((ROOT/path).read_bytes()).hexdigest()
+    return json.loads((ROOT/path).read_text())
 
 
 
@@ -268,6 +276,7 @@ def main():
         text = f'{v:.4f}' if decimals is not None and identity in coords and identity.endswith(('segment_diameter', 'born_diameter')) else (f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS))
         return full_precision(v) if decimals is None else text
     species = [n['component_id'] for n in document['components']]
+    shared_species, mark = ['carbon-dioxide','water','bicarbonate-anion','carbonate-anion','hydronium-cation','hydroxide-anion'], r'$^{\mathrm{s}}$'
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
     symbol = {**NAMES, 'water': r'\ce{H2O}'}
     def species_rows(decimals=None):
@@ -293,9 +302,9 @@ def main():
                r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed']
     # Charge, solvation and dielectric inputs are specified with their sources in S2.
     main_indices = [0,1,2,3,4,5,7]
-    table('species_parameters.tex', r"Segment, association and Born parameters of the present model. || Sources identify fitted quantities and transferred inputs. A dash denotes an unused input. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs.",
+    table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Sources identify fitted quantities and transferred inputs; a dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.",
           [species_headings[i] for i in main_indices]+['Source'],
-          [[row[i] for i in main_indices]+[source] for row,source in zip(species_rows(4),sources,strict=True)],
+          [[row[0]+mark*(s in shared_species), *[row[i] for i in main_indices[1:]], source] for row,source,s in zip(species_rows(4),sources,species,strict=True)],
           ['l']+['r']*6+[.25],sep=3)
     # Full parameter listing in the supplement: one quantity per row, with provenance.
     inline_headings = ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', '$z$', r'$d^\mathrm{Born}$ (\AA)', '$f$', r'$d_V$ (L/mol)', r'$d_T$ (K)']
@@ -311,8 +320,8 @@ def main():
     water_law = next(c for c in document['correlations'] if c.get('component_id') == 'water' and c.get('family') == 'segment_diameter')
     for coefficient in [water_law['constant'], *[c for term in water_law['terms'] for c in term.values()]]:
         full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), full_precision(coefficient['value']['magnitude']), 'Water fit' if coefficient is water_law['constant'] else 'Fixed'])
-    table('supplement_species_parameters.tex', r"Complete species inputs of the present model. || CO2 association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.",
-          ['Species','Quantity (unit)','Value','Source'],full,['l',.22,'r',.36])
+    table('supplement_species_parameters.tex', r"Complete species inputs of the MEA model. || CO2 association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.",
+          ['Species','Quantity (unit)','Value','Source'],full,['l',.16,'r',.44])
     def pair(s, t, quantity='', decimals=None):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
             return '--'
@@ -328,10 +337,12 @@ def main():
                   ('water','protonated-monoethanolamine','Joint fit'),('water','carbamate-anion','Joint fit'),
                   ('water','bicarbonate-anion','Joint fit'),('protonated-monoethanolamine','carbamate-anion','Joint fit'),
                   ('water','carbonate-anion','Assumed'),('water','hydronium-cation','Assumed'),('water','hydroxide-anion','Assumed')]
-    def pair_rows(decimals=None):
-        return [[symbol[s]+'--'+symbol[u],pair(s,u,decimals=decimals),pair(s,u,'/reciprocal_temperature_slope',decimals),source] for s,u,source in pair_specs]
-    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the present model, $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. An absent slope is zero. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values; sources of fixed inputs are in Section~\ref{supp-sec:s-parameters}.",
-          ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(4),['l','r','r','l'])
+    def pair_se(s, u, quantity=''):  # conditional standard error of a fitted interaction; none for a fixed value or one on its bound
+        return num(next((coords[i+quantity]['conditional_SE'] for i in (f'pair/{s}/{u}/k_ij', f'pair/{u}/{s}/k_ij') if i+quantity in coords), None), 3)
+    def pair_rows(decimals=None, errors=False):
+        return [[symbol[s]+'--'+symbol[u]+mark*(errors and {s,u} <= set(shared_species)),pair(s,u,decimals=decimals),*[pair_se(s,u)]*errors,pair(s,u,'/reciprocal_temperature_slope',decimals),*[pair_se(s,u,'/reciprocal_temperature_slope')]*errors,source] for s,u,source in pair_specs]
+    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || $^{\mathrm{s}}$Shared interaction, held fixed for DEA, MDEA and AMP. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. An absent slope is zero. A standard error is given for the jointly fitted values that are not on a bound; the \ce{MEAH+}--\ce{MEACOO-} interaction is on its lower bound. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values; sources of fixed inputs are in Section~\ref{supp-sec:s-parameters}.",
+          ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$','s.e.',r'$b_{ij}$ (K)','s.e.','Source'],pair_rows(4,True),['l','r','r','r','r','l'])
     table('supplement_interaction_matrix.tex', r"Binary interactions at full precision. || All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.",
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(),['l','r','r','l'])
     table('supplement_fitted_parameters.tex', r"Jointly fitted parameters, bounds and conditional standard errors. || A dash marks the active bound. Born diameters of the two amine ions equal their segment diameters.", ['Parameter','Value','Lower','Upper','Standard error'], [[label(r['identity']),full_precision(r['value']),num(r['lower']),num(r['upper']),num(r['conditional_SE'])] for r in params], [.27,'r','r','r','r'])
@@ -346,35 +357,57 @@ def main():
         rr.append([r['reaction_id'],r'\ce{'+lhs+r'} $\rightleftharpoons$ \ce{'+rhs+'}',*[full_precision(values.get(k,0)) for k in ('a','b_k','c','d_per_k')]])
     table('supplement_reaction_coefficients.tex', r"Coefficients of the equilibrium constants on the molality basis at full precision, for $\ln K=A+B/T+C\ln T+DT$ with $T$ in kelvin. || Reactions R1--R5 are defined in main-text Table~\ref{main-tab:reaction-equilibrium-constants}.", ['Reaction','$A$','$B$ (K)','$C$','$D$ (K$^{-1}$)'], [[r[0], *r[2:]] for r in rr], ['l']+['r']*4)
     # Separate stoichiometry and coefficients to preserve every printed digit at readable size.
-    reaction_names = dict(R1='Water autoprotolysis', R2=r'\ce{CO2} hydration', R3='Bicarbonate dissociation', R4='Carbamate hydrolysis', R5='MEA dissociation')
-    reaction_rows = [[r[0], reaction_names[r[0]], r[1]] for r in rr]
-    table('reaction_equilibrium_constants.tex', r"Aqueous reactions and their equilibrium constants on the molality basis, $\ln K=A+B/T+C\ln T+DT$, with $T$ in kelvin. || The coefficients include the conversion from each source basis to the molality basis. R1--R3: Austgen Table V; R4: Tong Table 5; R5: Bates--Pinching Eq. (10). All correlations are fixed in the joint fit. Coefficients are rounded to at most four decimal places; small coefficients use scientific notation. Table~\ref{supp-tab:supplement-reaction-coefficients} gives the unrounded coefficients.", ['Reaction', 'Name', 'Stoichiometry'], reaction_rows, ['l','l','l'])
-    body = OUTPUTS['reaction_equilibrium_constants.tex']
-    coefficients = [r'\par\medskip', r'\begin{tabular}{@{}l S[group-digits=false,table-format=-3.4] S[group-digits=false,table-format=-5.4] S[group-digits=false,table-format=-2.4] S[group-digits=false,table-format=-1.4e-1]@{}}', r'\toprule', r'Reaction & {$A$} & {$B$ (K)} & {$C$} & {$D$ (K$^{-1}$)} \\', r'\midrule']
-    for row in rr:
-        coefficients.append(' & '.join([row[0]] + [(f'{float(v):.4e}' if 0 < abs(float(v)) < .001 else f'{float(v):.4f}') for v in row[2:]]) + r' \\')
-    coefficients += [r'\bottomrule', r'\end{tabular}']
-    OUTPUTS['reaction_equilibrium_constants.tex'] = body.replace(r'\end{table}', '\n'.join(coefficients) + '\n' + r'\end{table}')
+    reaction_names = dict(R1='Water autoprotolysis', R2=r'\ce{CO2} hydration', R3='Bicarbonate dissociation', R4='Carbamate hydrolysis', R5='Amine dissociation')
+    reaction_rows = [[r[0], reaction_names[r[0]], r[1].replace('MEACOO-', 'ACOO-').replace('MEAH+', 'AH+').replace('MEA', 'A')] for r in rr]
+    table('reaction_equilibrium_constants.tex', r"Aqueous reactions of an amine A, with the source and measured temperature range of each equilibrium constant. || MDEA forms no carbamate and has no R4. $^{\mathrm{a}}$Range stated for the correlation, not verified measured coverage. $^{\mathrm{b}}$Range of estimates made with a solubility model, not of measurements. $^{\mathrm{c}}$Starting correlation; its constant term and an enthalpy increment are then fitted (Table~\ref{tab:transfer-fitted}). Table~\ref{supp-tab:supplement-reaction-coefficients} gives the coefficients of R1--R3 and of the MEA correlations on the molality basis, and Table~\ref{supp-tab:supplement-transfer-parameters} those of R4 and R5 for DEA, MDEA and AMP.", ['Reaction', 'Name', 'Stoichiometry'], reaction_rows, ['l','l','l'])
+    ranges = {'MEA': {r['reaction_id']: r['temperature_range_k'] for r in reaction['reactions']}, 'DEA': other('analyses/dea_transfer/inputs/part-ii-346/route-current.json')['reaction_ranges_K'],
+              'MDEA': other('analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json')['source_ranges_K'], 'AMP': other('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']}
+    assert all(ranges[amine][r] == [273.15, 498.15] for amine in ranges for r in ('R1', 'R2', 'R3'))
+    # (reaction, amine, name of its range in that amine's file, source, note mark on the range, use in the fit)
+    origins = [('R1--R3', 'all four', 'R1', r'Austgen et al.\ \cite[Table~V]{Austgen1991}', 'a', 'fixed'),
+               ('R4', 'MEA', 'R4', r'Tong et al.\ \cite[Table~5]{Tong2012}', '', 'fixed'),
+               ('R4', 'DEA', 'carbamate-hydrolysis', r'Aroua et al.\ \cite[Eq.~14]{arouaTemperatureDependencyEquilibrium1997}', '', r'fitted$^{\mathrm{c}}$'),
+               ('R4', 'AMP', 'carbamate-hydrolysis', r'Xu et al.\ \cite[Table~2]{xuRepresentationEquilibriumSolubility1992}', 'b', r'fitted$^{\mathrm{c}}$'),
+               ('R5', 'MEA', 'R5', r'Bates and Pinching \cite[Eq.~10]{batesAcidicDissociationConstant1951}', '', 'fixed'),
+               ('R5', 'DEA', 'DEA-dissociation', r'Bower et al.\ \cite[Eq.~7]{bowerAcidicDissociationConstant1962}', '', 'fixed'),
+               ('R5', 'MDEA', 'MDEA-dissociation', r'P\'erez-Salado Kamps and Maurer \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}', '', 'fixed'),
+               ('R5', 'AMP', 'AMP-dissociation', r'Hamborg and Versteeg \cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}', '', 'fixed')]
+    extra = [r'\par\medskip', r'\begin{tabular}{@{}llllr@{}}', r'\toprule', r'Constant & Amine & Source & In the fit & Measured range (K) \\', r'\midrule',
+             *[f"{name} & {amine} & {source} & {use} & {ranges[amine if amine in ranges else 'MEA'][key][0]:g}--{ranges[amine if amine in ranges else 'MEA'][key][1]:g}" + (r'$^{\mathrm{' + note + '}}$' if note else '') + r' \\' for name, amine, key, source, note, use in origins],
+             r'\bottomrule', r'\end{tabular}']
+    OUTPUTS['reaction_equilibrium_constants.tex'] = OUTPUTS['reaction_equilibrium_constants.tex'].replace(r'\par\smallskip\parbox', '\n'.join(extra) + '\n' + r'\par\smallskip\parbox')
     groups = {}
     for r in fitrows: groups.setdefault(rowkey(r['group'],r['quantity']),[]).append(r)
     assert set(groups) == set(ROWS) and len(groups[('species','mole_fraction')]) == 101
-    table('residual_summary.tex', r"Deviations of the present model from the fitted observations, by quantity. || AARD is in percent; RMSE uses the stated unit. The rows do not overlap.", ['Quantity (unit)','$N$','AARD','RMSE'], [[rowlabel(key),len(rows),num(a.stats(rows)['AARD_percent']),num(a.stats(rows)['RMSE']/(1000 if key[1]=='addition_enthalpy' else 1))] for key,rows in groups.items()], [.60,'r','r','r'])
     compare = a.rows(a.BUNDLE/'results/reduced-refit/fit-comparison.csv')
     agreement = a.rows(a.BUNDLE/'results/reduced-refit/agreement.csv')
     score = lambda fit, dataset: next(r for r in agreement if r['fit']==fit and r['dataset']==dataset)['aard_percent']
     table('choice_cost.tex', r"Cumulative parameter restrictions and the resulting deviations on identical observations. || $C$: objective value. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.", ['Calibration','Parameters','On bounds','$C$',r'\makecell[rb]{Fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Not-fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Fitted\\density\\AARD (\%)}'], [[r['fit'],r['fitted_parameters'],r['on_bound'],num(r['cost'],6),*[num(score(r['fit'],d)) for d in ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: loaded density')]] for r in compare], [.36]+['r']*6)
     cp = a.load(E/'same-data-comparison/part1-scores.json')
-    heat_capacity_labels = {'Weiland1997 comparison': 'Weiland et al.\\ heat capacities \\cite[Table~3]{weilandHeatCapacityAqueous1997}; AARD (%)', 'Concepcion2023 comparison': "Concepci\\'on et al.\\ heat capacities \\cite[Table~3]{concepcionHeatCapacitiesDifferent2023}; AARD (%)"}
-    same_names = {'Six-source pressures':'Pressures at 30 wt% MEA, six sources', '47 current-fitted pressures':'Hilliard and Jou pressures fitted in this work', '112 current-not-fitted pressures':'Pressures not fitted in this work, six sources', 'broad Cp':'Hilliard heat capacities at 313.15--393.15 K'}
+    heat_capacity_labels = {'Weiland1997 comparison': 'Weiland et al.\\ heat capacities \\cite[Table~3]{weilandHeatCapacityAqueous1997}', 'Concepcion2023 comparison': "Concepci\\'on et al.\\ heat capacities \\cite[Table~3]{concepcionHeatCapacitiesDifferent2023}"}
+    same_names = {'Six-source pressures':'Pressures at 30 wt% MEA, six sources', '112 current-not-fitted pressures':'Pressures not fitted, six sources', 'broad Cp':'Hilliard heat capacities at 313.15--393.15 K'}
     # The published fitting account of the earlier model does not give the role of each pressure and species observation.
-    earlier_role = lambda role: 'not stated per observation' if 'see role note' in role else role.split(';')[0].replace('formulation ','')
-    table('same_data.tex', r"Deviations of the model of Polley and Hedengren CITE14 and of the present model on identical observations. || The role columns give the data role of each observation set for each model; deviations on fitted and not-fitted data are not directly comparable. Ref.~CITE14 does not state for every pressure and species observation whether it was fitted. For that model, the species-ratio and carbonate-share measurements informed an earlier fit of the ion parameters but were not in the objective of the published parameters.".replace('CITE14', CITE14), ['Quantity; metric','$N$','Role in '+CITE14,'Role in this work','Ref.~'+CITE14,'This work'], [[heat_capacity_labels.get(r['group'], same_names.get(r['group'], r['group'])+'; '+r['metric']),r['n'][0],earlier_role(r['roles'][0]),r['roles'][1].split(';')[0],num(r['deviations'][0],5),num(r['deviations'][1],5)] for r in cp], [.27,'r',.18,.18,'r','r'])
-    published = [r for r in a.load(E/'same-data-comparison/published-deviations.json') if r['comparison'].startswith('exact:')]
-    table('matched_pressure.tex', r"Pressure deviations of published models and of this work on identical Ma'mun observations. || Published deviations and parameter counts are those reported in each source. Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~(\ref{eq:aard}). Their methods and conclusions describe the fitting differently.", ['Model','$N$','Role','Parameters','Deviation (%)'], [[r['model'],r['n'],r['data_role'],r['fitted_parameters'],num(r['deviation_percent'])] for r in published]+[['This work: shifted R2/R5 correlations; separate Born diameters',19,'not fitted',16,num(a.load(a.BUNDLE/'results/same-data-comparison/matched-score.json')['pressure_aard_percent'])],['This work: present model',19,'not fitted',11,num(a.load(E/'same-data-comparison/matched-score.json')['pressure_aard_percent'])]], [.56,'r','l','r','r'])
-    inventory = [[rowlabel(key),len(rows),'fitted','--'] for key,rows in groups.items()]
-    examined = 'Examined before the parameters were selected'
-    inventory += [[r'\ce{CO2} partial pressures at 30 wt% MEA, six sources',159,'47 fitted; 112 not fitted','Observations not fitted were examined before the parameters were selected'],['Aronu pressures at 15 and 45 wt% MEA',70,'not fitted',examined],['Wagner pressures',23,'not fitted',examined],['Matin bicarbonate totals',19,'not fitted',examined],['Jakobsen carbonate shares',10,'not fitted',examined],['Arcis heats',14,'not fitted','Used to select the parameters'],['Kim finite-interval heats',73,'not fitted','Used in earlier fitting and examined before the parameters were selected'],['All density observations',210,'52 fitted; 158 not fitted','Comparison between sources informed the choice of fitted observations'],['Hilliard heat capacities at 313.15--393.15 K',51,'2 fitted; 49 not fitted',examined]]
-    table('current_data_inventory.tex', r"Data used in the joint fit and in comparisons, with their roles and prior use. || Roles refer to the joint fit of the present model (Section~\ref{sec:parameters}). Prior use is given for the observations that are not fitted. Comparison sets overlap and their counts are not additive. The fixed \ce{CO2}--water interaction was fitted separately to the pressures of Kiepe et al.", ['Quantity (unit)','$N$','Role','Prior use'],inventory,[.37,'r',.21,.30])
+    earlier_role = lambda role: 'not stated' if 'see role note' in role else role.split(';')[0].replace('formulation ','')
+    # Fitted quantities that the earlier model was scored on with identical observations, and the prior use of the comparison sets.
+    same = {('common149','partial_pressure'): '47 current-fitted pressures', ('Jakobsen','amount_ratio'): 'Species ratios', ('common149','addition_enthalpy'): 'Vinjarapu2024 heats', ('Cp','equilibrium_isobaric_heat_capacity'): 'Four Hilliard heat capacities'}
+    prior = {'Arcis2011': 'a', 'Kim heat 313': 'b', 'Kim heat 353': 'b', 'Amundsen2009': 'c', 'Hartono2014': 'c', 'Han2012': 'c'}
+    earlier = {r['group']: r for r in cp}
+    both = lambda r, value: [num(value, 5), '--'] if r['metric'].startswith('AARD') else ['--', num(value, 5)]
+    data = [block(8, 'Fitted', True)]
+    for key, rows in groups.items():
+        r = earlier.get(same.get(key))
+        data.append([rowlabel(key), len(rows), 'fitted', num(a.stats(rows)['AARD_percent']), num(a.stats(rows)['RMSE']/(1000 if key[1]=='addition_enthalpy' else 1)), *([earlier_role(r['roles'][0]), *both(r, r['deviations'][0])] if r else ['--']*3)])
+    data.append(block(8, 'Not fitted, or fitted in part'))
+    aside = []  # the sets of this block that are not pressures are listed in the supplement
+    for r in cp:
+        if r['group'] in same.values(): continue
+        unit = r['metric'].partition('(')[2].rstrip(')')
+        (data if 'pressures' in r['group'] or r['group'] == 'Species fractions' else aside).append([heat_capacity_labels.get(r['group'], same_names.get(r['group'], r['group'])) + ('' if r['metric'].startswith('AARD') else f' ({unit})'), r['n'][0],
+                     r['roles'][1].split(';')[0] + next((r'$^{\mathrm{' + m + '}}$' for k, m in prior.items() if r['group'].startswith(k)), ''), *both(r, r['deviations'][1]), earlier_role(r['roles'][0]), *both(r, r['deviations'][0])])
+    table('mea_data.tex', r"Data for MEA with their roles in the joint fit of the MEA model, the deviations of that model, and the deviations of the model of Polley and Hedengren CITE14 on identical observations. || Roles refer to the objective of each model; ``not stated'': Ref.~CITE14 does not state for every pressure and species observation whether it was fitted. For that model, the species-ratio and carbonate-share measurements informed an earlier fit of the ion parameters but were not in the objective of the published parameters. All observations not fitted here were examined before the parameters were selected. The sets of the lower block overlap with each other and with the fitted observations, so their counts are not additive; Table~\ref{supp-tab:supplement-mea-comparison} lists the sets of that block that are not pressures. The fixed \ce{CO2}--water interaction was fitted separately to the pressures of Kiepe et al. Deviations on fitted and not-fitted data are not directly comparable.".replace('CITE14', CITE14),
+          ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}'], data, [.31,'r',.15,'r','r',.10,'r','r'])
+    table('supplement_mea_comparison.tex', r"Data for MEA that are not fitted, or fitted in part, and are not pressures, with the deviations of the MEA model and of the model of Polley and Hedengren CITE14 on identical observations. || The columns are those of main-text Table~\ref{main-tab:mea-data}. $^{\mathrm{a}}$Also used to select the parameters; $^{\mathrm{b}}$three of these intervals were fitted during earlier model development, in the objective of Ref.~CITE14; no interval of Kim and Svendsen is in the reported fit; $^{\mathrm{c}}$the comparison between density sources informed the choice of fitted density observations. These sets overlap with each other and with the fitted observations, so their counts are not additive.".replace('CITE14', CITE14),
+          ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}'], aside, [.31,'r',.15,'r','r',.10,'r','r'])
     covariance = a.load(E/'uncertainty/covariance.json')
     interior = [label(r['identity']) for r in params if r['conditional_SE'] not in (None, '')]
     assert len(interior) == 10 == len(covariance['native_correlation'])
@@ -382,7 +415,7 @@ def main():
     profiles = a.load(E/'uncertainty/profiles.json')
     table('bound_profiles.tex', r"Refits with the \ce{MEAH+}--\ce{MEACOO-} interaction fixed inside its lower bound. || The other parameters are refitted. Phase stability was not searched for these refits.", ['Distance from the bound (% of range)','Fixed interaction','$C$','Change in $C$'], [[num(100*r['fraction']),num(r['fixed_value']),num(r['cost'],9),num(r['delta_cost'],7)] for r in profiles], ['r']*4)
     kim = a.load(F/'kim2007-heat-pathways/summary.json')['temperatures']
-    table('kim_alternatives.tex', r"Kim finite-interval heat comparisons at 393.15 K for alternative source exclusions. || RMSE is kJ/mol absorbed CO2; AARD is percent. All alternatives use the present model.", ['Intervals','$N$','RMSE','AARD'], [[name,kim['393.15']['metrics']['semi_differential'][key]['n'],num(kim['393.15']['metrics']['semi_differential'][key]['rmse'],6),num(kim['393.15']['metrics']['semi_differential'][key]['aard_percent'],6)] for key,name in [('all_printed','All tabulated intervals'),('source_consistent','Without the two inconsistent intervals'),('without_first120','Also without first intervals')]], ['l','r','r','r'])
+    table('kim_alternatives.tex', r"Kim finite-interval heat comparisons at 393.15 K for alternative source exclusions. || RMSE is kJ/mol absorbed CO2; AARD is percent. All alternatives use the MEA model.", ['Intervals','$N$','RMSE','AARD'], [[name,kim['393.15']['metrics']['semi_differential'][key]['n'],num(kim['393.15']['metrics']['semi_differential'][key]['rmse'],6),num(kim['393.15']['metrics']['semi_differential'][key]['aard_percent'],6)] for key,name in [('all_printed','All tabulated intervals'),('source_consistent','Without the two inconsistent intervals'),('without_first120','Also without first intervals')]], ['l','r','r','r'])
     weights = a.rows(E/'objective-groups.csv')
     weight_groups = {}
     for r in weights: weight_groups.setdefault(rowkey(r['group'],r['quantity']),[]).append(r)
@@ -393,12 +426,10 @@ def main():
     state = [('$T$ (K)', lambda r, k: num(r['T_K'],7)), ('Bubble pressure (Pa)', lambda r, k: num(r['answers'][k]['bubble_pressure_Pa'],10)), (r'Liquid density (kg/m$^3$)', lambda r, k: num(r['answers'][k]['density_kg_m3'],10))]
     assert all(get(r,0) == get(r,1) for _, get in state for r in checks)
     contribution_names = dict(association='Association', born='Born', hard_chain='Hard chain', dispersion='Dispersion', debye_huckel=r'Debye--H\"uckel', residual_helmholtz='Total residual')
-    table('supplement_check_values.tex', r"Reference values of the present model at three bubble states, for checking an implementation: temperature, bubble pressure, liquid mass density, reduced residual Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions. || Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\ce{MEA}}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each bubble pressure was solved from two initial pressures, which agree to the digits shown. Zero terms are omitted. These values check the numerical calculation; they are not measurements.", ['Quantity',r'\ce{CO2}--water','MEA--water','Loaded MEA'], [[name,*[get(r,0) for r in checks]] for name,get in state]+[[('$x_{'+symbol[key[2:]]+'}$') if key.startswith('x_') else contribution_names[key],*[num(r['answers'][0][key],10) for r in checks]] for key in checks[0]['answers'][0] if key not in ('bubble_pressure_Pa','density_kg_m3','molar_density_mol_m3') and any(r['answers'][0][key] for r in checks)], ['l','r','r','r'])
+    table('supplement_check_values.tex', r"Reference values of the MEA model at three bubble states, for checking an implementation: temperature, bubble pressure, liquid mass density, reduced residual Helmholtz contributions $A_i/(nRT)$ and true liquid species fractions. || Inputs: $x_{\ce{CO2}}=3.6\times10^{-4}$ in water; $x_{\ce{MEA}}=0.9264$ in MEA--water; 30 wt\% MEA at loading 0.3 mol/mol. Each bubble pressure was solved from two initial pressures, which agree to the digits shown. Zero terms are omitted. These values check the numerical calculation; they are not measurements.", ['Quantity',r'\ce{CO2}--water','MEA--water','Loaded MEA'], [[name,*[get(r,0) for r in checks]] for name,get in state]+[[('$x_{'+symbol[key[2:]]+'}$') if key.startswith('x_') else contribution_names[key],*[num(r['answers'][0][key],10) for r in checks]] for key in checks[0]['answers'][0] if key not in ('bubble_pressure_Pa','density_kg_m3','molar_density_mol_m3') and any(r['answers'][0][key] for r in checks)], ['l','r','r','r'])
     shared = a.rows(E/'shared-coefficients.csv')
     # One row per shared species; every other shared value follows from a rule stated in the note, which the checks below hold to the retained list.
     sv = {r['identity']: float(r['value']) for r in shared}
-    shared_species = ['carbon-dioxide','water','bicarbonate-anion','carbonate-anion','hydronium-cation','hydroxide-anion']
-    sh = lambda identity: num(sv[identity], PARAMETER_DIGITS) if identity in sv else '--'
     water_pair = lambda s: next((i for i in (f'pair/{s}/water/k_ij', f'pair/water/{s}/k_ij') if i in sv), '')
     used = {f'component/{s}/{q}' for s in shared_species for q in ('segment_count','segment_diameter','dispersion_energy_over_k','born_diameter','solvation_factor')} | {water_pair(s) for s in shared_species}
     for s in shared_species[2:]:
@@ -408,17 +439,15 @@ def main():
     slope, dielectric = 'pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope', [f'component/{s}/dielectric_{q}' for s in shared_species[:2] for q in ('volume','temperature')]
     assert [sv[i] for i in dielectric] == [1e-08, 1403.0, 0.3777, 1403.0]
     assert all(sv[i] == 0 for i in set(sv) - used - {slope, *dielectric})
-    table('shared_parameters.tex', r"Shared parameters held fixed in Part II, by species. || $k_{i,w}$: interaction with water at 313.15 K. The \ce{CO2}--water interaction has the temperature slope $b_{ij}=SLOPE$ K; the other interactions with water do not depend on temperature, and every interaction among these species that is not listed is zero. Permittivity coefficients: water $d_V=0.3777$ L/mol and $d_T=1403$ K; \ce{CO2} $d_V=10^{-8}$ L/mol and $d_T=1403$ K. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. The association parameters of water and of the \ce{CO2}--water pair are in Table~\ref{tab:species-parameters}, the water diameter $\sigma_w(T)$ is in Section~\ref{supp-sec:s-parameters}, and the R1--R3 correlations are in Table~\ref{tab:reaction-equilibrium-constants}. A dash denotes an unused input. Tables~\ref{supp-tab:supplement-reaction-coefficients}--\ref{supp-tab:supplement-interaction-matrix} and \ref{supp-tab:supplement-shared-remaining} give the unrounded values.".replace('SLOPE', f'{sv[slope]:.4f}'),
-          ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$\epsilon/k_B$\\(K)}', r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', '$k_{i,w}$'],
-          [[symbol[s], sh(f'component/{s}/segment_count'), r'$\sigma_w(T)$' if s == 'water' else sh(f'component/{s}/segment_diameter'), sh(f'component/{s}/dispersion_energy_over_k'), sh(f'component/{s}/born_diameter'), sh(f'component/{s}/solvation_factor'), sh(water_pair(s))] for s in shared_species], ['l']+['r']*6)
     # S2 and S3 already list species fields and the explicitly retained pairs.
     covered_pairs = {tuple(sorted((x, y))) for x, y, _ in pair_specs}
     missing = [r for r in shared if (r['identity'].startswith('component/') and r['identity'].rsplit('/', 1)[-1] in ('packing_diameter', 'debye_huckel_diameter')) or (r['identity'].startswith('pair/') and tuple(sorted(r['identity'].split('/')[1:3])) not in covered_pairs)]
-    table('supplement_shared_remaining.tex', r"Shared parameters not listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at full precision. || Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded values of main-text Table~\ref{main-tab:shared-parameters}.", ['Parameter','Value','Unit'], [[label(r['identity']), f"{float(r['value']):.15g}" if r['identity'].endswith('/packing_diameter') else full_precision(r['value']), r['unit']] for r in missing], [.55,'r','l'])
-    table('pressure_sources.tex', r"Pressure deviations of the present model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[SOURCE_NAMES.get(s,s),len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
+    table('supplement_shared_remaining.tex', r"Shared parameters not listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at full precision. || Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded values of the shared parameters marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}.", ['Parameter','Value','Unit'], [[label(r['identity']), f"{float(r['value']):.15g}" if r['identity'].endswith('/packing_diameter') else full_precision(r['value']), r['unit']] for r in missing], [.55,'r','l'])
+    table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[SOURCE_NAMES.get(s,s),len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
     a.load(E/'candidate/replay.json'); a.load(E/'uncertainty/covariance.json'); a.load(E/'stability/candidate/search.json'); a.load(a.BUNDLE/'results/split-cause-342/final-supplied-F2-summary.json')
     for name, body in OUTPUTS.items():
-        header = '% Generated from '+BASE+'; F2 ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))
+        body = GROUP.sub(r'\\num{\g<0>}', body)
+        header = '% Generated from '+BASE+'; F2 ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))+''.join('% Input (working tree): '+p+' SHA256 '+h+'\n' for p,h in sorted(OTHER.items()))
         if '--check' in sys.argv: assert (TABLES/name).read_text()==header+body, name
         else: (TABLES/name).write_text(header+body)
     print(json.dumps({'tables_checked':len(OUTPUTS),'inputs_verified_at_commit':len(a.INPUTS),'commit':BASE}))

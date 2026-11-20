@@ -1,159 +1,104 @@
-\section{Results and discussion}\label{sec:mea-system-modeling-results}
-\subsection{Model parameters, their uncertainty and subsystem fits}\label{sec:results-water}\label{sec:results-co2-water}\label{sec:results-permittivity}\label{sec:results-binary}
+\section{Results and discussion}\label{sec:results}
+\subsection{MEA calibration}\label{sec:results-mea}
+\subsubsection{Parameters and their uncertainty}\label{sec:results-parameters}
 % P:results-parameters
-\Cref{tab:species-parameters,tab:interaction-matrix} list the species and interaction parameters of the present model, which every result below uses, and \cref{tab:residual-summary} gives its deviations from all fitted observations by quantity; the equilibrium-constant correlations are in \cref{tab:reaction-equilibrium-constants}.
+\Cref{tab:species-parameters,tab:interaction-matrix} list the parameters of the MEA model, and \cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} give its deviations from every data set, beside those of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/species_parameters}
 \input{tables/interaction_matrix}
 
-% P:results-water-01
-The pure-water fit reproduces IAPWS-95 saturation density, vapor pressure and heat capacity over the fitted interval, with interleaved temperatures providing a numerical check of the correlation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
-The water inputs remain fixed during MEA estimation; the comparison is with a reference equation rather than independent measurements.
-
-% P:results-binary-01
-The \COtwo--water interaction remains fixed after estimation against Kiepe pressures, while the MEA--water interaction is jointly estimated with the amine-ion parameters \cite{kiepeExperimentalDeterminationPrediction2002,caiBinaryIsobaricVaporLiquid1996}.
-\Cref{fig:mea-water} compares the resulting MEA--water bubble temperatures with the fitted observations of Cai et al.
-The permittivity coefficients of MEA were estimated from unloaded solutions at \SI{298.15}{\kelvin}; these observations do not determine the temperature or loading dependence used in the reacting mixture \cite[Supporting Information, Tables~S1--S2]{agieienkoWhatGasStream2024a}.
-
 % P:results-parameter-interpretation
-Only the \MEAH--\MEACOO interaction is at a bound for the present model; its lower-bound value doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}.
-The other parameters have conditional standard errors listed beside their values in Table~\ref{supp-tab:supplement-fitted-parameters}.
-The water--bicarbonate interaction and the opposing amine-ion size changes are weakly determined; their large conditional standard errors preclude identifying the fitted values as unique molecular properties.
-Section~\ref{supp-sec:s-uncertainty} gives the correlations, the propagated pressure intervals and refits with the bound interaction fixed slightly inside its bound, which test whether the fit depends on the bound; none includes model discrepancy, uncertainty of the equilibrium-constant correlations, correlated errors within one experimental source or uncertainty of a phase boundary.
+Only the \MEAH--\MEACOO interaction is on a bound; its lower-bound value doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}.
+The MEA--water interaction is well determined (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (\cref{fig:mea-water}), with an RMSE of \SI{1.785}{\kelvin} (\cref{tab:mea-data}).
+The water--bicarbonate interaction and the opposing size changes of the two MEA ions are weakly determined, and their large conditional standard errors preclude reading the fitted values as unique molecular properties.
+Section~\ref{supp-sec:s-uncertainty} gives the standard errors of the ion parameters, the correlations and refits that hold the bound interaction slightly inside its bound.
 
-\input{tables/residual_summary}
+\FloatBarrier
+\input{tables/mea_data}
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{mea-water.pdf}
-\caption{Bubble temperature of MEA--water against liquid MEA mole fraction at the labeled pressures: fitted observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (circles) and the present model (lines).}
+\caption{Bubble temperature of MEA--water against liquid MEA mole fraction at the labeled pressures: fitted observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (circles) and the MEA model (lines).}
 \label{fig:mea-water}
 \end{figure}
-\FloatBarrier
 
-\subsection{Phase stability of the present model}\label{sec:phase-method}
+\subsubsection{Phase stability}\label{sec:phase-method}
 % P:results-phase-opening
-Stability is checked because ePC-SAFT ion-parameter choices can predict inconsistent liquid--liquid demixing in aqueous salt solutions \cite[Sect.~2.4]{Held2014}.
-For loaded aqueous MEA, B\"ottinger et al.\ observe a homogeneous liquid in their measured subset \cite[Sect.~3]{Bottinger2008}, although that observation does not establish homogeneity over the entire searched domain.
-With the searches of \cref{sec:methods-phase}, the present model shows no detected instability at any of the 2484 liquid states or 162 liquid--vapor states, and every search finished (Section~\ref{supp-sec:s-phase} gives the states by pressure ratio).
-Phase stability was not imposed in the fit of the present model.
+For loaded aqueous MEA, B\"ottinger et al.\ observe a homogeneous liquid in their measured subset \cite[Sect.~3]{Bottinger2008}, which does not establish homogeneity over the whole searched domain.
+The MEA model shows no detected instability at any of the 2484 liquid states or 162 liquid--vapor states searched, and every search finished.
+Phase stability was not imposed in this fit.
 
-\FloatBarrier
-
-\subsection{\texorpdfstring{\COtwo}{CO2}--MEA--water at 30 wt\%}\label{sec:results-loaded}
-\subsubsection{Pressure and speciation}\label{sec:results-pressure}
+\subsubsection{Pressure and speciation at 30 wt\%}\label{sec:results-pressure}
 % P:results-pressure-01
-At nominal 30 wt\% MEA, the bubble curves of the present model follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while source differences and the strong loading dependence remain visible (\cref{fig:pressure}); \cref{tab:pressure-sources} gives the error for each source.
-The fitted pressures constrain the lower-temperature part of this comparison, and the higher-temperature pressures are calculated without further fitting, so observations on the same curve can have different data roles (\cref{tab:current-data-inventory}).
+At nominal 30 wt\% MEA the bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while differences between sources remain visible (\cref{fig:pressure}).
+The fitted pressures constrain the lower-temperature part of this comparison, and the higher-temperature pressures are calculated without further fitting (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{pressure.pdf}
-\caption{\COtwo partial pressure over nominal 30 wt\% MEA against loading: observations from six sources assigned to the labeled nominal temperature within \SI{2}{\kelvin} (circles) and reactive-bubble calculations with the present model at the nominal composition (lines). Colors and circle sizes identify temperature.}
+\caption{\COtwo partial pressure over nominal 30 wt\% MEA against loading: observations from six sources assigned to the labeled nominal temperature within \SI{2}{\kelvin} (circles) and reactive-bubble calculations with the MEA model at the nominal composition (lines). Colors and circle sizes identify temperature.}
 \label{fig:pressure}
 \end{figure}
-\input{tables/pressure_sources}
 
 % P:results-species-01
-The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}, with the aggregates defined in \cref{sec:data-methods}).
+The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
-The carbonate share remains far below Jakobsen's observations, even though the total-amine ratios are fitted; the two observables constrain different combinations of species.
-The fitted pressures do not determine that minor-species partition uniquely.
+The carbonate share of dissolved carbon remains far below the observations of Jakobsen et al., even though their species-to-total-amine ratios are fitted \cite[Tables~A1--A2]{Jakobsen2005}.
+The small share cannot be attributed to a single parameter, and the fitted pressures do not determine this minor-species partition.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{speciation.pdf}
-\caption{Species and aggregate liquid mole fractions against loading at the labeled temperatures: B\"ottinger NMR and Matin titration observations \cite{Bottinger2008,matinFacileMethodDetermination2012} (circles) and single-liquid calculations with the present model at \SI{101325}{\pascal} (lines; dotted and labeled by temperature where that pressure lies below the calculated bubble pressure). Colors and circle sizes identify temperature. The highest-temperature NMR series uses 31 wt\% MEA and the others nominal 30 wt\%; that series and the Matin bicarbonate totals are not fitted.}
+\caption{Liquid mole fractions of species and species sums against loading: B\"ottinger NMR and Matin titration observations \cite{Bottinger2008,matinFacileMethodDetermination2012} (circles) and single-liquid calculations with the MEA model at \SI{101325}{\pascal} (lines; dotted where that pressure lies below the calculated bubble pressure). Colors and circle sizes identify temperature. The highest-temperature NMR series, at 31 wt\% MEA, and the Matin bicarbonate totals are not fitted.}
 \label{fig:speciation}
 \end{figure}
 
-% P:results-species-02
-Carbonate formation depends on its equilibrium constant and relative ionic activities, so a small carbonate share cannot be attributed to a single parameter from these comparisons.
-Titration-derived bicarbonate totals also differ from the NMR observations, as Matin et al.\ discuss \cite[pp.~6616--6617]{matinFacileMethodDetermination2012}.
-The approximations made in comparing with the reported quantities and model discrepancy both matter; the available evidence does not isolate their contributions.
-\Cref{tab:same-data} gives these species errors, and the present-model comparisons for the heat, heat-capacity, density and concentration results below, beside those of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}; \cref{sec:results-literature} discusses that comparison.
-
-\input{tables/same_data}
-
-\subsubsection{Absorption heat and heat capacity}\label{sec:results-heat}
+\subsubsection{Absorption heat, heat capacity and density}\label{sec:results-heat}
 % P:results-heat-01
-The fitted integral heats and the Arcis comparison probe different temperature and pressure conditions (\cref{fig:heat}).
-The calculated Arcis absorption is less exothermic than measured, with a larger discrepancy in the lower-pressure series.
-The measurements themselves differ between those series at nearby loadings \cite[Table~5]{arcisEnthalpySolutionCarbon2011}; neither a pressure-only explanation nor a unique model contribution is isolated by this comparison.
+The integral heats of Vinjarapu et al.\ at \SI{313.15}{\kelvin} are fitted \cite[Table~4]{HemaBhavya2025}; those of Arcis et al.\ at \SI{322.5}{\kelvin} are not, although they were used to select the parameters \cite[Table~5]{arcisEnthalpySolutionCarbon2011}.
+The calculated absorption at the Arcis conditions is less exothermic than measured, with the larger discrepancy in the lower-pressure series (\cref{fig:heat}).
+The measurements themselves differ between the two series at nearby loadings, so this comparison isolates neither a pressure effect nor a model contribution.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{heat-of-absorption.pdf}
-\caption{Integral absorption heat per mole of added \COtwo from initially \COtwo-free nominal 30 wt\% MEA against loading: fitted Vinjarapu observations and Arcis observations, which are not fitted \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011} (circles), and calculations with the present model at the labeled temperature and pressure (lines). Colors and circle sizes identify temperature; at \SI{322.5}{\kelvin}, open and filled circles identify \SI{0.51}{\mega\pascal} and \SI{1.03}{\mega\pascal}, respectively. Negative values denote exothermic absorption.}
+\caption{Integral absorption heat per mole of added \COtwo in nominal 30 wt\% MEA against loading: fitted Vinjarapu observations and Arcis observations, which are not fitted \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011} (circles), and the MEA model at the labeled temperature and pressure (lines). At \SI{322.5}{\kelvin}, open and filled circles are \SI{0.51}{\mega\pascal} and \SI{1.03}{\mega\pascal}.}
 \label{fig:heat}
 \end{figure}
 
 % P:results-heat-kim
-At \SI{393.15}{\kelvin}, the Kim--Svendsen finite-interval heats deviate more than with the model of Polley and Hedengren (\cref{tab:same-data}; Table~\ref{supp-tab:kim-alternatives} gives alternative source exclusions).
-Extrapolated equilibrium constants, approximated pressure histories and missing chemistry may contribute, but the comparison does not isolate a cause, and high-temperature caloric accuracy is not demonstrated.
+The semi-differential heats of Kim and Svendsen deviate most at \SI{393.15}{\kelvin}, with an RMSE of \SI{31.77}{\kilo\joule\per\mole} of \COtwo (Table~\ref{supp-tab:supplement-mea-comparison}).
+Extrapolated equilibrium constants, pressure histories that had to be approximated and chemistry missing from the model may all contribute; the comparison isolates no cause, and caloric accuracy at high temperature is not demonstrated.
+Heat capacities outside the fitted states, from Weiland et al.\ and from Concepci\'on et al., deviate by less than 5\,\% (Table~\ref{supp-tab:supplement-mea-comparison}).
 
-% P:results-cp
-Heat capacities outside the fitted Hilliard states, from Weiland et al.\ at \SI{298.15}{\kelvin} and 30 wt\% MEA up to loading 0.5 mol/mol and from Concepci\'on et al.\ for unloaded MEA at mass fraction 0.2997 and 313.15--\SI{353.15}{\kelvin}, are described with smaller deviations than with the model of Polley and Hedengren; neither model fitted them (\cref{tab:same-data}).
-
-\subsubsection{Density}\label{sec:results-density}
 % P:results-density-01
-Without volume translation, the model describes the fitted Amundsen and Hartono loaded densities more closely than the full source ranges, which include other compositions and conditions, and the Han densities, which are not fitted (\cref{fig:density-curves}, \cref{tab:same-data}); the five excluded Amundsen observations remain in these comparisons.
-The Amundsen--Hartono difference at the excluded loading does not establish which source is more accurate.
+Without volume translation, the model describes the fitted loaded densities of Amundsen et al.\ and Hartono et al.\ more closely than the full ranges of those sources and the densities of Han et al., which are not fitted (\cref{fig:density-curves}) \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{density-curves.pdf}
-\caption{Liquid density of nominal 30 wt\% MEA against loading at the labeled temperatures: Amundsen, Hartono and Han observations \cite{Amundsen2009,Hartono2014,hanDensityWater12012} (circles) and calculations with the present model without volume translation (lines), at \SI{0.1}{\mega\pascal} through \SI{353.15}{\kelvin} and \SI{0.7}{\mega\pascal} at higher temperatures.}
+\caption{Liquid density of nominal 30 wt\% MEA against loading at the labeled temperatures: Amundsen, Hartono and Han observations \cite{Amundsen2009,Hartono2014,hanDensityWater12012} (circles) and calculations with the MEA model without volume translation (lines), at \SI{0.1}{\mega\pascal} through \SI{353.15}{\kelvin} and \SI{0.7}{\mega\pascal} at higher temperatures.}
 \label{fig:density-curves}
 \end{figure}
 \FloatBarrier
 
-\subsection{Other MEA concentrations}\label{sec:results-transfer}
+\subsubsection{Other MEA concentrations}\label{sec:results-concentration}
 % P:results-transfer
-Calculations at 15 and 45 wt\% MEA expose concentration dependence beyond the nominal-30-wt\% pressure fit (\cref{fig:concentration-pressure}).
-The pressure deviations in \cref{tab:same-data} remain substantial at both concentrations, and the parameter reduction does not remove this weakness.
-These observations are not fitted, and no additional concentration-specific parameters are estimated here.
+At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressure deviations are about four times that of the fitted pressures at 30 wt\% (\cref{fig:concentration-pressure}, \cref{tab:mea-data}).
+The concentration dependence of the pressure is thus a weakness of the calibration.
 
 \begin{figure}[pos=!htbp]
 \centering
 \includegraphics[width=\linewidth]{concentration-pressure.pdf}
-\caption{\COtwo partial pressure at 15 and 45 wt\% MEA against loading: Aronu observations \cite{Aronu2011}, which are not fitted (open circles), and calculations with the present model at each observation's composition, loading and temperature (crosses). Colors and symbol sizes identify temperature.}
+\caption{\COtwo partial pressure at 15 and 45 wt\% MEA against loading: Aronu observations \cite{Aronu2011}, which are not fitted (open circles), and calculations with the MEA model at each observation's composition, loading and temperature (crosses). Colors and symbol sizes identify temperature.}
 \label{fig:concentration-pressure}
 \end{figure}
 
-\subsection{Effect of the parameter restrictions}\label{sec:results-joint}
+\subsubsection{Cost of the two restrictions}\label{sec:results-restrictions}
 % P:results-joint-01
-\Cref{tab:choice-cost} gives the effect of each cumulative restriction defined in \cref{sec:parameters}.
-From the 16-parameter calibration to the present model, five fewer adjustable parameters leave the objective value and the fitted pressure and density deviations nearly unchanged and reduce the number of parameters at bounds, while the deviation of the pressures that are not fitted rises slightly.
-The present model is the most restricted set whose fitted pressure and density deviations do not exceed those of the 16-parameter calibration; every further restriction in \cref{tab:choice-cost} has larger fitted and not-fitted pressure deviations than the present model.
-The cumulative changes quantify the combined effect of the selected assumptions, not the isolated physical effect of each restriction.
-
-\input{tables/choice_cost}
-
-\subsection{Comparison with published models}\label{sec:results-literature}
-% P:results-literature-01
-\Cref{tab:same-data} compares the present model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026}, whose equation-of-state calorics are calculated here from their published specification.
-The present model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures and the Kim heats at \SI{393.15}{\kelvin}.
-Because the two models were fitted to different data, these deviations do not rank the models.
-
-% P:results-literature-matched
-On the 19 identical Ma'mun observations (\cref{tab:matched-pressure}) \cite{Mamun2005}, the present model has a larger pressure deviation than the 16-parameter calibration and than the PC-SAFT calculation of Baygi and Pahlavanzadeh, and a smaller one than the SAFT-HR calculation of Najafloo and Zarei.
-Zhang et al.\ fitted their eNRTL model to these data, whereas the calculations of Baygi and Pahlavanzadeh and of Najafloo and Zarei lie outside their fitting objectives \cite[Table~9]{Zhang2011}\cite[Table~5]{Baygi2015}\cite[Table~5]{Najafloo2018}.
-
-\input{tables/matched_pressure}
-
-\subsection{Parameters shared with Part II}\label{sec:results-shared}
-% P:results-shared
-\Cref{tab:shared-parameters} lists the shared parameters held fixed in Part II: those of water, \COtwo, hydronium, hydroxide, bicarbonate and carbonate, and their interactions with water.
-The R1--R3 correlations (\cref{tab:reaction-equilibrium-constants}) and the model definitions of \cref{sec:theory} transfer with them; Section~\ref{supp-sec:s-shared} gives the unrounded values.
-
-\needspace{8\baselineskip}
-\input{tables/shared_parameters}
-
-\subsection{Scope and limitations}\label{sec:limits}
-% P:results-limits
-These results support the present model as a calibration against data examined during development, not as an independently validated model.
-Its weakest results are the pressures at 15 and 45 wt\% MEA and the Ma'mun pressures, the carbonate shares and the absorption heats at \SI{393.15}{\kelvin}.
-The parameter uncertainty excludes model discrepancy and the uncertainty of the equilibrium-constant correlations; the R1--R3 range is the range stated for the correlation rather than verified measurement coverage; R4, R5 and the permittivity correlation are extrapolated beyond their source data; and the absence of an additional liquid phase rests on finite searches.
-Missing pressure histories, source inconsistencies, approximations in the comparisons, omitted carrier gas and omitted oxazolidone further limit interpretation.
-The property comparisons alone do not justify using the model to predict absorber or stripper operation.
+From the 16-parameter calibration to the MEA model, five fewer adjustable parameters leave the objective value and the fitted pressure and density deviations nearly unchanged, and the number of parameters on bounds falls from six to one.
+Deviations outside the fit rise.
+On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin}, which neither fit includes, the deviation rises from 19.43\,\% to 33.47\,\% (\cref{tab:published-models}).
+That change is the combined cost of fixing R2 and R5 and of tying the Born diameters, not the isolated effect of either.
+Section~\ref{supp-sec:s-restrictions} gives the full sequence of restrictions; every more restricted set in that sequence has larger fitted and not-fitted pressure deviations than the MEA model.

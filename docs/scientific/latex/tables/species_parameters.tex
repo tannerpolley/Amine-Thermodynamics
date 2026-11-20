@@ -7,9 +7,7 @@
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/fitted-rows.csv SHA256 34ddf3e64b33d4d06a22e40d4bd6b0bd49e8655b4ddd2bd134b21f5f336685f3
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/kim2007-heat-pathways/summary.json SHA256 f6635fd4b5cef66327ae2782f045eff508c27af728a4cd414db6f0b21f6cab3d
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/reported-parameters.json SHA256 ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed
-% Input: analyses/mea_parameter_bundle/results/paper-evidence-341/same-data-comparison/matched-score.json SHA256 1749c2a91cb25a0575acb555f56875f9c25ffa056068503cfc56c9b11e6cc4d6
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/same-data-comparison/part1-scores.json SHA256 a7d6e76fe1b972d781d5a26649f9f11ba953fccda28fcf9cdfd5552e8b29cdcc
-% Input: analyses/mea_parameter_bundle/results/paper-evidence-341/same-data-comparison/published-deviations.json SHA256 11064a89503035737abcb9e6e7181cffc9f1d40f6d543e14da7305e805bd51d4
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/shared-coefficients.csv SHA256 df912c29bf43b91a02c6d23cb0cc59145d0558b89eca42efc8ff0771fd962694
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/stability/candidate/search.json SHA256 d0522ec1caf90e9b9b78793fcac6d224612ea7740e076bd5a850cedab4bd1bd4
 % Input: analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json SHA256 12f71b586ab33c043c185bb2e5606427b7b088de59e700973b406bc084d0e18a
@@ -17,24 +15,26 @@
 % Input: analyses/mea_parameter_bundle/results/reduced-refit/agreement.csv SHA256 3ddfc075d4f97a5b155804daa3feb72ba930d48c30c7ee226d8ae4103a559bcc
 % Input: analyses/mea_parameter_bundle/results/reduced-refit/fit-comparison.csv SHA256 e2e6c7ceb9d99db174c24f7ac3b9c0d45dcee7602b6840f6b2a39d742f6ba034
 % Input: analyses/mea_parameter_bundle/results/reduced-refit/parameter-details.csv SHA256 a391a1d04ae64ba7c5a9b57c2e0fd7b08290d1c81a907daa64e5a5d8c5272b0a
-% Input: analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json SHA256 af4bf26170275833023dd58d085c955b15971f50744adc4da44d621f540f3cff
 % Input: analyses/mea_parameter_bundle/results/split-cause-342/final-supplied-F2-summary.json SHA256 98a1a46eaa43342bb120ee0577ada02d6eed01d56b56380b9c37a733e04999d1
+% Input (working tree): analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json SHA256 c05f53790a49cbc46361cba6d896bc65af7c5269596c92f796eeb3792b04ce83
+% Input (working tree): analyses/dea_transfer/inputs/part-ii-346/route-current.json SHA256 bc743240dffe80462dc958a9ba6664e3c02d2721b312a3f61f54a59a7b0f6173
+% Input (working tree): analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json SHA256 ed92c0ea44f184995323bbe5b004dc3cf22b3b2ed9d8d5a6b4667580b7f4f6fd
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Segment, association and Born parameters of the present model.}\label{tab:species-parameters}
+\caption{Segment, association and Born parameters of the MEA model.}\label{tab:species-parameters}
 \begin{tabular}{@{}lrrrrrr>{\raggedright\arraybackslash}p{0.2500\linewidth}@{}}
 \toprule
 Species & $m^{\mathrm{seg}}$ & \makecell[rb]{$\sigma$\\(\AA)} & \makecell[rb]{$\epsilon/k_B$\\(K)} & \makecell[rb]{$\epsilon^{AB}/k_B$\\(K)} & $\kappa^{AB}$ & \makecell[rb]{$d^\mathrm{Born}$\\(\AA)} & Source \\
 \midrule
-\ce{CO2} & $2.0729$ & $2.7852$ & $169.21$ & $878.3249$ & $0.0376$ & -- & Segments: \cite[Table~2]{Gross2001}; association energy: half the water value \\
+\ce{CO2}$^{\mathrm{s}}$ & $2.0729$ & $2.7852$ & $169.21$ & $878.3249$ & $0.0376$ & -- & Segments: \cite[Table~2]{Gross2001}; association energy: half the water value \\
 \ce{MEA} & $3.0353$ & $3.0435$ & $277.174$ & $2586.3$ & $0.0363$ & -- & Segments, energy: \cite[Table~2]{Baygi2015}; association volume converted here \\
-\ce{H2O} & $1.2528$ & $\sigma_w(T)$ & $432.3788$ & $1756.6498$ & $0.0376$ & -- & Water fit \\
+\ce{H2O}$^{\mathrm{s}}$ & $1.2528$ & $\sigma_w(T)$ & $432.3788$ & $1756.6498$ & $0.0376$ & -- & Water fit \\
 \ce{MEAH+} & $1$ & $4.8558$ & $208.7356$ & -- & -- & $4.8558$ & Joint fit; segment count assumed \\
 \ce{MEACOO-} & $1$ & $5.3480$ & $179.8579$ & -- & -- & $5.3480$ & Joint fit; segment count assumed \\
-\ce{HCO3-} & $1$ & $2.9296$ & $70$ & -- & -- & $3$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
-\ce{CO3^{2-}} & $1$ & $2.4422$ & $249.26$ & -- & -- & $3$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
-\ce{H3O+} & $1$ & $3.4654$ & $500$ & -- & -- & $1.218$ & Size, energy transferred: \cite[Table~4]{Uyan2015}; Born: assumed \\
-\ce{OH-} & $1$ & $2.0177$ & $650$ & -- & -- & $3.0811$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
+\ce{HCO3-}$^{\mathrm{s}}$ & $1$ & $2.9296$ & $70$ & -- & -- & $3$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
+\ce{CO3^{2-}}$^{\mathrm{s}}$ & $1$ & $2.4422$ & $249.26$ & -- & -- & $3$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
+\ce{H3O+}$^{\mathrm{s}}$ & $1$ & $3.4654$ & $500$ & -- & -- & $1.218$ & Size, energy transferred: \cite[Table~4]{Uyan2015}; Born: assumed \\
+\ce{OH-}$^{\mathrm{s}}$ & $1$ & $2.0177$ & $650$ & -- & -- & $3.0811$ & Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Sources identify fitted quantities and transferred inputs. A dash denotes an unused input. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Sources identify fitted quantities and transferred inputs; a dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.}
 \end{table}

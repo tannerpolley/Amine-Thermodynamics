@@ -1,0 +1,48 @@
+\begingroup\footnotesize\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.185\linewidth}>{\raggedright\arraybackslash}p{0.085\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.05\linewidth}>{\raggedright\arraybackslash}p{0.115\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.095\linewidth}>{\raggedright\arraybackslash}p{0.045\linewidth}>{\raggedright\arraybackslash}p{0.045\linewidth}>{\raggedright\arraybackslash}p{0.05\linewidth}>{\raggedright\arraybackslash}p{0.06\linewidth}@{}}
+\caption{Data for DEA, MDEA and AMP with their roles in the fit of each model, their ranges, and the deviations of the DEA, MDEA and AMP models.}\label{tab:transfer-data}\\
+\toprule Data set & Property & Role & $N$ & $T$ (K) & Amine content & $\alpha$ (mol/mol) & R4 & R5 & AARD (\%) & Bias (\%) \\ \midrule
+\endfirsthead\toprule Data set & Property & Role & $N$ & $T$ (K) & Amine content & $\alpha$ (mol/mol) & R4 & R5 & AARD (\%) & Bias (\%) \\ \midrule
+\endhead\bottomrule\endfoot\bottomrule\multicolumn{11}{@{}p{0.95\linewidth}@{}}{\footnotesize $N$: number of observations. Amine content: that of the unloaded solution, or a mole fraction for the \COtwo-free binary sets ($x_{\mathrm{w}}$: water; $x_{\mathrm{A}}$: amine). R4 and R5: in, out or mixed relative to the measured temperature range of that equilibrium constant (Table~\ref{tab:reaction-equilibrium-constants}, Section~\ref{sec:data-roles}); ---: not reported in the source, or the calculation uses no such reaction. AARD and bias follow Eq.~\eqref{eq:aard}. Tables~\ref{supp-tab:supplement-dea-ranges}--\ref{supp-tab:supplement-amp-ranges} give the deviations inside and outside each range, Table~\ref{supp-tab:supplement-dea-comparison} lists the DEA and MDEA sets that are neither fitted nor pressures, and Section~\ref{supp-sec:s-corrections} gives the source conventions. \textsuperscript{a}Mole fraction of added \COtwo. DEA: the water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, which are not listed; the pressures not fitted were inspected before the choice between the two DEA solutions whose objective values agree within the optimizer tolerance. MDEA: the Xiao et al.\ and Ermatchkov et al.\ pressures were used to choose the initial MDEA parameter set but are not in the objective. Pure component: deviations at the fixed pure-AMP parameters, whose fit preceded the reactive fit; \textsuperscript{b}the errors of the three fitted densities are $0.012$, $-0.030$, $0.018$ kg/m$^3$. Stability-constrained alternative: the alternative AMP parameter set of Table~\ref{tab:transfer-fitted}, on the same loaded-solution pressures.}\\\endlastfoot
+\addlinespace\multicolumn{11}{@{}l}{\textit{DEA}} \\*
+Lawson and Garst \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & fitted & 30 & $310.93$--$380.37$ & $25$ wt\% & $0.376$--$1.167$ & mixed & mixed & $28.46$ & $-0.66$ \\
+Carson et al. \cite{carsonEnthalpySolutionCarbon2000} & integral heat & fitted & 50 & $298.15$ & $10$--$30$ wt\% & $0.0012$--$0.0049$\textsuperscript{a} & out & in & $0.95$ & $-0.12$ \\
+Lawson and Garst, highest temperature \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & not fitted & 7 & $394.26$ & $25$ wt\% & $0.321$--$0.76$ & out & out & $23.12$ & $-23.12$ \\
+Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} & $p_{\COtwo}$ & not fitted & 16 & $313.15$--$353.15$ & $30$ wt\% & $0.404$--$0.727$ & mixed & mixed & $84.95$ & $83.09$ \\
+Lal et al. \cite{lalSolubilityH2SCO21985} & $p_{\COtwo}$ & not fitted & 44 & $313.15$--$373.15$ & $2.0$ kmol/m$^3$ & $0.0047$--$0.367$ & mixed & mixed & $47.94$ & $-31.63$ \\
+Lawson and Garst, 50--54.5 wt\% \cite{lawsonGasSweeteningData1976} & $p_{\COtwo}$ & comparison only & 10 & $298.15$--$366.48$ & $50$--$54.5$ wt\% & $0.186$--$0.745$ & mixed & mixed & $37.79$ & $-20.77$ \\
+Cai et al. \cite{caiBinaryIsobaricVaporLiquid1996} & bubble pressure & comparison only & 9 & $311.29$--$458.64$ & $x_{\mathrm{w}}=\,$$0$--$1$ & --- & --- & --- & $40.82$ & $33.59$ \\
+\addlinespace\multicolumn{11}{@{}l}{\textit{MDEA}} \\*
+Kuranov et al. \cite{kuranovSolubilitySingleGases1996} & total pressure & fitted & 66 & $313.11$--$393.15$ & $1.95$--$3.97$ mol/kg & $0.195$--$1.32$ & --- & mixed & $20.59$ & $13.62$ \\
+Kuranov et al., \COtwo-free \cite{kuranovSolubilitySingleGases1996} & bubble pressure & fitted & 4 & $393.15$--$413.15$ & $1.95$--$3.97$ mol/kg & $0$ & --- & --- & $2.63$ & $2.63$ \\
+Jakobsen et al. \cite{Jakobsen2005} & species ratios & fitted & 16 & $293.15$--$313.15$ & $23$ wt\% & $0.1$--$0.79$ & --- & in & $13.62$ & $13.62$ \\
+Carson et al. \cite{carsonEnthalpySolutionCarbon2000} & integral heat & fitted & 40 & $298.15$ & $10$--$30$ wt\% & $0.00136$--$0.0051$\textsuperscript{a} & --- & in & $5.54$ & $-4.62$ \\
+Merkley et al. \cite{merkleyEnthalpiesAbsorptionCarbon1987} & integral heat & fitted & 4 & $333.15$--$388.71$ & $20$--$40$ wt\% & --- & --- & mixed & $6.46$ & $5.68$ \\
+Weiland et al. \cite{weilandHeatCapacityAqueous1997} & heat capacity & fitted & 33 & $298.15$ & $30$--$50$ wt\% & $0$--$0.5$ & --- & in & $2.29$ & $-0.15$ \\
+Weiland et al. \cite{Weiland1998} & density & fitted & 33 & $298.15$ & $30$--$50$ wt\% & $0$--$0.5$ & --- & in & $0.22$ & $0.02$ \\
+Sobrino et al. \cite{sobrinoViscosityDensityMeasurements2016} & density & fitted & 24 & $293.15$--$393.15$ & $10$--$40$ wt\% & --- & --- & --- & $0.08$ & $0.02$ \\
+Kim et al. \cite{kimEbulliometricDeterminationVaporLiquid2008} & bubble pressure & fitted & 61 & $312.99$--$373.25$ & $x_{\mathrm{A}}=\,$$0$--$0.357$ & --- & --- & --- & $2.20$ & $1.29$ \\
+Ermatchkov et al. \cite{ermatchkovSolubilityCarbonDioxide2006} & $p_{\COtwo}$ & not fitted & 101 & $313.15$--$393.15$ & $18.5$--$50.1$ wt\% & $0.00282$--$0.784$ & --- & mixed & $15.36$ & $-1.39$ \\
+P\'erez-Salado Kamps et al., corrected temperatures \cite{ermatchkovSolubilityCarbonDioxide2006} & total pressure & not fitted & 28 & $313.69$--$395.00$ & $3.95$--$7.99$ mol/kg & $0.126$--$1.24$ & --- & mixed & $25.29$ & $17.95$ \\
+Kuranov et al., 413 K \cite{kuranovSolubilitySingleGases1996} & total pressure & not fitted & 11 & $413.13$--$413.16$ & $1.95$--$3.97$ mol/kg & $0.105$--$0.686$ & --- & out & $18.97$ & $18.97$ \\
+Sedighi et al. \cite{sedighiExperimentalMeasurementThermodynamic2024} & total pressure & not fitted & 15 & $303.15$--$323.15$ & $10$--$50$ wt\% & $0.391$--$1.09$ & --- & in & $71.37$ & $31.06$ \\
+Xiao et al. \cite{xiaoCO2AbsorptionAqueous2018a} & $p_{\COtwo}$ & not fitted & 20 & $298.15$--$313.15$ & $23.5$ wt\% & $0.362$--$0.783$ & --- & in & $20.68$ & $-19.77$ \\
+\addlinespace\multicolumn{11}{@{}l}{\textit{AMP}} \\*
+Hartono et al. (2021), 313--353 K \cite{hartonoNewSolubilityHeat2021} & total pressure & fitted & 47 & $313.00$--$353.00$ & $26.8$ wt\% & $0.07$--$0.96$ & mixed & in & $10.36$ & $-1.21$ \\
+Hartono et al. (2013) \cite{hartonoBinaryTernaryVLE2013} & bubble pressure & fitted & 26 & $333.12$--$373.17$ & $x_{\mathrm{A}}=\,$$0.0228$--$0.302$ & --- & --- & --- & $1.14$ & $1.10$ \\
+Hartono et al. (2013) \cite{hartonoBinaryTernaryVLE2013} & vapor AMP mole fraction & fitted & 26 & $333.12$--$373.17$ & $x_{\mathrm{A}}=\,$$0.0228$--$0.302$ & --- & --- & --- & $3.68$ & $2.01$ \\
+Ciftja et al. \cite{ciftjaExperimentalStudyCarbamate2014a} & carbamate fraction & fitted & 57 & $298.15$--$318.15$ & $30$ wt\% & $0.08$--$0.72$ & mixed & in & $27.44$ & $4.89$ \\
+Hartono et al. (2021), 373--393 K \cite{hartonoNewSolubilityHeat2021} & total pressure & not fitted & 18 & $373.00$--$393.00$ & $26.8$ wt\% & $0.07$--$0.69$ & mixed & out & $28.13$ & $-28.13$ \\
+Kundu et al. \cite{kunduVaporLiquidEquilibriumCO22003} & $p_{\COtwo}$ & not fitted & 51 & $303.00$--$323.00$ & $18$--$30$ wt\% & $0.412$--$0.966$ & mixed & in & $44.07$ & $38.17$ \\
+Tong et al., \COtwo-free \cite{Tong2012} & bubble pressure & not fitted & 5 & $313.20$--$393.20$ & $30$ wt\% & $0$ & --- & --- & $3.65$ & $2.47$ \\
+Tong et al. \cite{Tong2012} & total pressure & not fitted & 40 & $313.20$--$393.20$ & $30$ wt\% & $0.0446$--$0.965$ & mixed & mixed & $28.16$ & $-12.19$ \\
+\addlinespace\multicolumn{11}{@{}l}{\textit{AMP, pure component}} \\*
+Klep\'a\v{c}ov\'a et al.\ \cite{klepacovaVaporPressuresSeveral2011} & vapor pressure & fitted & 15 & $347.50$--$452.00$ & pure AMP & --- & --- & --- & $1.89$ & $0.81$ \\
+Belabbaci et al.\ \cite{belabbaciInvestigationIsothermalVapour2010} & vapor pressure & fitted & 9 & $293.29$--$373.00$ & pure AMP & --- & --- & --- & $1.77$ & $-1.07$ \\
+Pappa et al.\ \cite{pappaMeasurementThermodynamicModeling2006} & vapor pressure & not fitted & 23 & $373.25$--$436.85$ & pure AMP & --- & --- & --- & $1.18$ & $1.18$ \\
+Ayad et al.\ \cite{ayadMeasurementsModelingThermodynamic2023} & liquid density & fitted & 3 & $303.15$--$323.15$ & pure AMP & --- & --- & --- & ---\textsuperscript{b} & --- \\
+\addlinespace\multicolumn{11}{@{}l}{\textit{AMP, stability-constrained alternative}} \\*
+Hartono et al. (2021), 313--353 K & total pressure & fitted & 47 &  &  &  &  &  & $20.04$ & $13.90$ \\
+Hartono et al. (2021), 373--393 K & total pressure & not fitted & 18 &  &  &  &  &  & $24.42$ & $-24.42$ \\
+Kundu et al. & $p_{\COtwo}$ & not fitted & 51 &  &  &  &  &  & $94.19$ & $92.90$ \\
+Tong et al. & total pressure & not fitted & 40 &  &  &  &  &  & $36.74$ & $3.68$ \\
+\end{longtable}\endgroup
