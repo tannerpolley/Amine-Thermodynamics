@@ -173,5 +173,46 @@ def tables():
     print(f'Mamun2005: {len(matched)} rows; pressure AARD {aard:.9f}%; not fitted', flush=True)
 
 
+def hong_scores(rows):
+    from kim2007_heat_pathways import metrics
+
+    output = []
+    for block in dict.fromkeys(r['block'] for r in rows):
+        selected = [r for r in rows if r['block']==block and r['three_model_eligible']]
+        groups = [('all',selected)]
+        unmatched = [r for r in rows if r['block']==block and not r['three_model_eligible']]
+        if unmatched:
+            groups.append(('above 0.60, Hong only',unmatched))
+        if block=='canonical':
+            for domain, base in [('all',selected),('strict grid',[r for r in selected if r['inside_hong_grid']])]:
+                if domain!='all':
+                    groups.append((domain,base))
+                for field,labels in [('adopted_role',('fitted','not fitted')),('stability',('stable','locally unstable'))]:
+                    groups.extend((f'{domain}, {label}',[r for r in base if r[field]==label]) for label in labels)
+        kim_block = block.startswith('Kim ')
+        sides = ('cool','warm') if block=='Kim 353.15 K' else ('cool',) if block=='Kim 393.15 K' else ('warm',) if kim_block else ('',)
+        metric = 'aard_percent' if block in ('canonical','wagner') else 'rmse'
+        for (group,data) in groups:
+            for side in sides:
+                key = f'{side}_0.01_halved' if side else 'predicted'
+                models = [('hong',key),('adopted','adopted'),('polley_hedengren_2026','polley_hedengren_2026')]
+                if data is unmatched:
+                    models = models[:1]
+                n = len(data)
+                assert len({r['record_id'] for r in data})==n
+                assert all(r.get(k) is not None and math.isfinite(r[k]) for r in data for _,k in models), (block,group)
+                values = {m:metrics(data,predicted=k) for m,k in models} if n else {}
+                assert all(v['n']==n for v in values.values())
+                role_2026 = ('fitted / not fitted' if block in ('canonical','Kim 313.15 K','Kim 353.15 K')
+                             else 'not fitted')
+                output.append(dict(block=block,subset=group,side=side,n=n,metric=metric,
+                    adopted_fitted=sum(r['adopted_role']=='fitted' for r in data),
+                    polley_hedengren_2026_role=role_2026 if data is not unmatched else 'above_ceiling',
+                    hong_role='not fitted',
+                    stable=sum(r.get('stability')=='stable' for r in data), locally_unstable=sum(r.get('stability')=='locally unstable' for r in data),
+                    **{m:values[m][metric] if values else None for m,_ in models}))
+    return output
+
+
 if __name__ == '__main__' and sys.argv[1:] == ['tables']:
     tables()

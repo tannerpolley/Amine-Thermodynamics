@@ -1,0 +1,84 @@
+{
+  "doi": "10.1016/j.seppur.2026.140522",
+  "source_page": 7,
+  "panel": "Fig. 4(b), embedded JPEG object 78, 805 by 643 pixels",
+  "pdf_sha256": "cf4a28d3e4300adc1fda98a90775a50e4b999235a989e5a7b09615172f2473ea",
+  "extraction": "pdfimages -j -f 7 -l 7",
+  "x_unit": "mol CO2/mol MEA",
+  "y_unit": "kPa",
+  "reference_loading": 0.5,
+  "reference_temperature_K": 313.15,
+  "reading_precision_pixels": 3,
+  "reading_precision_basis": "Two pixels for half the solid line width and one for axis and column placement. The primary color mask isolates the dark blue model line. Offset columns and a narrower mask test sensitivity to the plotted reference symbol.",
+  "axis": {
+    "x1_pixel": [
+      174,
+      538
+    ],
+    "x1_value": 0.1,
+    "x2_pixel": [
+      782,
+      538
+    ],
+    "x2_value": 1.0,
+    "y1_pixel": [
+      157,
+      538
+    ],
+    "y1_value": 0.001,
+    "y2_pixel": [
+      157,
+      21
+    ],
+    "y2_value": 100000,
+    "x_scale": "linear",
+    "y_scale": "log10"
+  },
+  "roi": [
+    432,
+    302,
+    458,
+    334
+  ],
+  "series": [
+    {
+      "name": "313.15 K line",
+      "mode": "curve",
+      "hsv_lower": [
+        111,
+        125,
+        80
+      ],
+      "hsv_upper": [
+        123,
+        255,
+        255
+      ]
+    },
+    {
+      "name": "313.15 K line, narrower mask",
+      "mode": "curve",
+      "hsv_lower": [
+        114,
+        165,
+        150
+      ],
+      "hsv_upper": [
+        119,
+        255,
+        230
+      ]
+    }
+  ],
+  "reading_Pa": 2602.740708646133,
+  "reading_interval_Pa": [
+    2338.887007292393,
+    2896.3601812838237
+  ],
+  "two_masks_Pa": {
+    "313.15 K line": 2602.740708646133,
+    "313.15 K line, narrower mask": 2592.4571329044534
+  },
+  "panel_image_sha256": "3c7a506074a92fcef3771bb3cd615ba6190a4a007fcc6239ec156011a7c6c98c",
+  "extraction_interpolation": "Linear interpolation of log pressure between the two calibrated columns bracketing loading 0.50."
+}

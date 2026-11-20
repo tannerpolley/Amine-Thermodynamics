@@ -25,11 +25,15 @@ def indexed(rows, key):
     return result
 
 
+def heat_solvent(mapping):
+    masses = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
+    return {'monoethanolamine': 1., 'water': masses['monoethanolamine']*.7/(.3*masses['water'])}
+
+
 def heat_items(mapping, params, sources, request):
     request = s.corrected_request(request, s.reaction_values(mapping), mapping=mapping)
     reactions = s._problem_from_request(request).reactions
-    masses = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in mapping['components']}
-    solvent = {'monoethanolamine': 1., 'water': masses['monoethanolamine']*.7/(.3*masses['water'])}
+    solvent = heat_solvent(mapping)
     items = []
     for row in sources:
         T, P, alpha = row['temperature_K'], row['system_pressure_Pa'], row['alpha_final']
