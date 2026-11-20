@@ -16,12 +16,14 @@ def temperature_style(temperature):
     index = TEMPERATURES.index(float(temperature)) if float(temperature) in TEMPERATURES else 0
     return COLORS[index % len(COLORS)], STYLES[index % len(STYLES)]
 
-def temperature_size(temperature):
-    return {293.15: 8, 313.15: 14, 322.5: 22, 333.15: 28, 353.15: 46, 373.15: 64, 393.15: 84}[float(temperature)]
+# Temperature is shown by marker shape at one size, with the color and line style of the same temperature.
+SIZE = 26
+def temperature_marker(temperature):
+    return {293.15: 'v', 313.15: 'o', 322.5: 's', 333.15: 's', 353.15: '^', 373.15: 'D', 393.15: 'P'}[float(temperature)]
 
 def temperature_legend(temperatures):
     return [Line2D([], [], color=temperature_style(T)[0], linestyle=temperature_style(T)[1],
-                   marker='o', markerfacecolor='none', markersize=temperature_size(T)**0.5,
+                   marker=temperature_marker(T), markerfacecolor='none', markersize=SIZE**0.5,
                    label=f'{T:g} K') for T in temperatures]
 
 def save(fig,name):
@@ -37,7 +39,7 @@ def main():
     for T,color in zip([313.15,333.15,353.15,373.15,393.15],COLORS):
         color, style = temperature_style(T)
         part=[r for r in curves if float(r['temperature_K'])==T and r['status']=='available']; part.sort(key=lambda r: float(r['analytical_loading'])); ax.plot([float(r['analytical_loading']) for r in part],[float(r['value'])/1000 for r in part],color=color,linestyle=style,label=f'{T:g} K')
-        part=[r for r in canonical if abs(float(r['temperature_K'])-T)<2]; ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in part],[float(r['observed'])/1000 for r in part],s=temperature_size(T),facecolors='none',edgecolors=color)
+        part=[r for r in canonical if abs(float(r['temperature_K'])-T)<2]; ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in part],[float(r['observed'])/1000 for r in part],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color)
     ax.set(xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)',yscale='log'); ax.legend(handles=temperature_legend([313.15,333.15,353.15,373.15,393.15]),ncol=2); save(fig,'pressure')
     fig,axes=plt.subplots(1,2,figsize=(6.8,3.4)); rows=a.rows(F/'transfer.csv')
     for ax,w in zip(axes,[.15,.45]):
@@ -45,8 +47,8 @@ def main():
         for T,color in zip(sorted({r['temperature_K'] for r in part},key=float),COLORS):
             color, style = temperature_style(T)
             sub=[r for r in part if r['temperature_K']==T]
-            ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['observed'])/1000 for r in sub],s=temperature_size(T),facecolors='none',edgecolors=color,label=f'{float(T):g} K')
-            ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['predicted'])/1000 for r in sub],s=temperature_size(T),color=color,marker='x')
+            ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['observed'])/1000 for r in sub],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color,label=f'{float(T):g} K')
+            ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['predicted'])/1000 for r in sub],s=SIZE,color=color,marker='x')
         ax.set(title=f'{100*w:g} wt% MEA',yscale='log',xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)'); ax.legend(fontsize=9)
     save(fig,'concentration-pressure')
     rows=a.rows(F/'model-curves/species.csv'); obs=list({r['target']:r for r in a.rows(F/'species-figure-data.csv')}.values()); membership={r['membership_id'].replace('|','::'):r['co2_loading_mol_per_mol_mea'] for r in a.rows(t.ROOT/'data/reference/MEA/manifests/speciation_target_membership.csv')}
@@ -65,7 +67,7 @@ def main():
                                 xytext=(12, offset), textcoords='offset points', fontsize=8,
                                 ha='left', va='center', color='#222222',
                                 arrowprops=dict(arrowstyle='-', color=color, linewidth=.7))
-            sub=[r for r in obs if r['species']==('HCO3-' if name.startswith('HCO3') else name) and float(r['temperature_K'])==T]; ax.scatter([float(membership[r['target']]) for r in sub],[float(r['observed']) for r in sub],s=temperature_size(T),facecolors='none',edgecolors=color)
+            sub=[r for r in obs if r['species']==('HCO3-' if name.startswith('HCO3') else name) and float(r['temperature_K'])==T]; ax.scatter([float(membership[r['target']]) for r in sub],[float(r['observed']) for r in sub],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color)
         ax.set(title={'MEA + MEAH+':r'MEA + MEAH$^+$','MEACOO-':r'MEACOO$^-$','MEAH+':r'MEAH$^+$','HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}[name],xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='Liquid mole fraction')
         ax.set_xlim(-.03,.83)
         if name.startswith('HCO3'): ax.set(yscale='log')
@@ -88,9 +90,9 @@ def main():
                 if T == 322.5: style = ':' if P==510000. else '-.'
                 face = color if P==1030000. else 'none'
                 ax.scatter([float(r['loading']) for r in sub], [float(r['observed_kJ_mol']) for r in sub],
-                           s=temperature_size(T), facecolors=face, edgecolors=color, zorder=3)
-                legend.append(Line2D([], [], color=color, linestyle=style, marker='o',
-                                     markerfacecolor=face, markersize=temperature_size(T)**0.5,
+                           s=SIZE, marker=temperature_marker(T), facecolors=face, edgecolors=color, zorder=3)
+                legend.append(Line2D([], [], color=color, linestyle=style, marker=temperature_marker(T),
+                                     markerfacecolor=face, markersize=SIZE**0.5,
                                      label=f'{T:g} K, {P/1e6:g} MPa'))
             ax.legend(handles=legend, fontsize=9)
         else:
