@@ -17,12 +17,12 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
     \label{eq:epcsaft-residual-split}
 \end{equation}
 A neutral species is a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $\epsilon_i$; an ion is a single charged sphere, except the DEA and MDEA cations, which keep the chain of their amine.
-Pressure and chemical potentials follow from the density and composition derivatives of $a^{\mathrm{res}}$ \cite[Eqs.~A.22, A.32 and A.33]{Gross2001} and caloric properties from its temperature derivatives; all include the variation of the relative permittivity (\cref{eq:solvent-permittivity}).
+Pressure and chemical potentials follow from the density and composition derivatives of $a^{\mathrm{res}}$ \cite{Gross2001} and caloric properties from its temperature derivatives; all include the variation of the relative permittivity (\cref{eq:solvent-permittivity}).
 Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative permittivity, as distinct from the energies $\epsilon$.
 
 % P:theory-02a
-The hard-chain and dispersion terms are those of Gross and Sadowski \cite[Eqs.~A.4--A.19]{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite[Eqs.~5, 13 and 14]{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
-The hard-sphere diameter $d_i$ of a neutral species or chain cation depends on temperature \cite[Eq.~A.9]{Gross2001}, with the water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$ (Section~\ref{supp-sec:s-parameters}).
+The hard-chain and dispersion terms are those of Gross and Sadowski \cite{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
+The hard-sphere diameter $d_i$ of a neutral species or chain cation depends on temperature \cite{Gross2001}, with the water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$ (Section~\ref{supp-sec:s-parameters}).
 A single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.
 
 % P:theory-contributions-03
@@ -41,11 +41,11 @@ A temperature-dependent interaction is linear in reciprocal temperature,
 except the MDEA--water interaction, which is linear in temperature, $k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+(\mathrm{d}k_{ij}/\mathrm{d}T)(T-T_{\mathrm{ref}})$.
 
 % P:theory-contributions-04
-Only donor--acceptor pairs bond, and cross-association between an amine species and water uses the Wolbach--Sandler rule \cite[Eqs.~7 and 8]{Kleiner2007}.
+Only donor--acceptor pairs bond, and cross-association between an amine species and water uses the Wolbach--Sandler rule \cite{Kleiner2007}.
 The Debye--H\"uckel term describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$.
 
 % P:theory-04
-The Born term has the solvation-shell and dielectric-saturation form of Figiel et al.\ \cite[Eqs.~5--10]{Figiel2025}, with its Eq.~7 as corrected in 2026 \cite{Figiel2026Correction}:
+The Born term has the solvation-shell and dielectric-saturation form of Figiel et al.\ \cite{Figiel2025}, with its Eq.~7 as corrected in 2026 \cite{Figiel2026Correction}:
 \begin{equation}
     a^{\mathrm{Born}}
     =
@@ -65,11 +65,11 @@ The Born term has the solvation-shell and dielectric-saturation form of Figiel e
     \label{eq:born-shell-diameter}
 \end{equation}
 Here \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell, \(\varepsilon_{\mathrm{ion}}=8\) is the permittivity of the region between them, and \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\).
-The solvation factor is \(f_k=1.5\) for water \cite[Table~2]{Figiel2025} and 1 for every other component.
+The solvation factor is \(f_k=1.5\) for water \cite{Figiel2025} and 1 for every other component.
 Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\) and the shell diameter changes with loading.
 
 % P:theory-05
-The bulk permittivity has the Schreckenberg form reported by Yang et al.\ \cite[Sect.~2.1, Eqs.~1a, 2a and 2b]{Yang2024}:
+The bulk permittivity has the Schreckenberg form reported by Yang et al.\ \cite{Yang2024}:
 \begin{equation}
  \varepsilon_{\mathrm{bulk}}=1+\frac{n_s}{V}d_{V,\mathrm{mix}}
  \left(\frac{d_{T,\mathrm{mix}}}{T}-1\right),\qquad
@@ -85,7 +85,7 @@ Ions affect the permittivity only through the phase volume and the neutral amoun
 Six species are common to the four amines: \COtwo, water and the four inorganic ions.
 Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are determined once, with MEA, and are held fixed for DEA, MDEA and AMP; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
 Interactions of an amine species with a shared species are amine-specific.
-Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007}\cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}.
+Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007,Schick2023,Pabsch2020}.
 
 % P:theory-amine-species
 MEA and AMP are two-site chains and DEA and MDEA four-site chains; the MEA, DEA and MDEA parameters are taken from the literature, and the five pure-component parameters of AMP were fitted here to vapor pressures and liquid densities (\cref{tab:species-parameters,tab:transfer-species,tab:transfer-data}).
@@ -95,7 +95,7 @@ For every amine ion the Debye--H\"uckel and Born diameters equal the segment dia
 These diameters define the parameterization and are not measured ion sizes.
 
 % P:theory-permittivity-inputs
-The permittivity coefficients of each amine were fitted beforehand to measured permittivities without \COtwo: for MEA those of the aqueous solution at \SI{298.15}{\kelvin} \cite[Supporting Information, Tables~S1--S2]{agieienkoWhatGasStream2024a}, and for DEA, MDEA and AMP those of Hsieh et al.\ \cite{hsiehDielectricConstantsAqueous2007}.
+The permittivity coefficients of each amine were fitted beforehand to measured permittivities without \COtwo: for MEA those of the aqueous solution at \SI{298.15}{\kelvin} \cite{agieienkoWhatGasStream2024a}, and for DEA, MDEA and AMP those of Hsieh et al.\ \cite{hsiehDielectricConstantsAqueous2007}.
 The water and assumed \COtwo coefficients are fixed.
 Use of \cref{eq:solvent-permittivity} at other temperatures and in loaded solutions is a model assumption for all four amines.
 
@@ -119,7 +119,7 @@ The infinite-dilution reference is evaluated along a charge-neutral dilution pat
 Every constant is applied on one aqueous-molality basis (Section~\ref{supp-sec:s-parameters}).
 
 % P:theory-07
-The correlations of R1--R3 and of MEA have the form \cite[Table~V]{Austgen1991}
+The correlations of R1--R3 and of MEA have the form \cite{Austgen1991}
 \begin{equation}
  \ln K_r=A_r+B_r/T+C_r\ln T+D_rT+\Delta_r,
  \label{eq:reaction-equilibrium-constant-temperature}

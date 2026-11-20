@@ -65,7 +65,7 @@ CALIBRATION_NAMES = {
 }
 
 CITE14 = r'\cite{polleyReactiveEPCSAFTModeling2026}'
-SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite[Table~V, 1a]{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite[Table~V, 4a]{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite[Table~V, 5a]{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite[Table~5]{Tong2012}', 'BatesPinching1951_equation_7': r'\cite[Eq.~10]{batesAcidicDissociationConstant1951}'}
+SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite{Tong2012}', 'BatesPinching1951_equation_7': r'\cite{batesAcidicDissociationConstant1951}'}
 
 def scientific(value):
     mantissa, exponent = re.split('[eE]', value) if re.search('[eE]', value) else (value, None)
@@ -293,13 +293,13 @@ def main():
                  v(f'component/{s}/dielectric_volume'), v(f'component/{s}/dielectric_temperature')] for s in species]
     species_headings = ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$\epsilon/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
                         r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}']
-    sources = [r'Segments: \cite[Table~2]{Gross2001}; association energy: half the water value',
-               r'Segments, energy: \cite[Table~2]{Baygi2015}; association volume converted here',
+    sources = [r'Segments: \cite{Gross2001}; association energy: half the water value',
+               r'Segments, energy: \cite{Baygi2015}; association volume converted here',
                'Water fit', 'Joint fit; segment count assumed', 'Joint fit; segment count assumed',
-               r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed',
-               r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed',
-               r'Size, energy transferred: \cite[Table~4]{Uyan2015}; Born: assumed',
-               r'Size, energy: \cite[Table~4]{Uyan2015}; Born: assumed']
+               r'Size, energy: \cite{Uyan2015}; Born: assumed',
+               r'Size, energy: \cite{Uyan2015}; Born: assumed',
+               r'Size, energy transferred: \cite{Uyan2015}; Born: assumed',
+               r'Size, energy: \cite{Uyan2015}; Born: assumed']
     # Charge, solvation and dielectric inputs are specified with their sources in S2.
     main_indices = [0,1,2,3,4,5,7]
     table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Sources identify fitted quantities and transferred inputs; a dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.",
@@ -314,8 +314,8 @@ def main():
             if row[i]=='--': continue
             origin=source
             if i==6: origin='By definition'
-            elif i==8: origin=r'Water: \cite[Table~2]{Figiel2025}; others: assumed' if row[0]==r'\ce{H2O}' else 'Assumed'
-            elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite[Table~6]{Yang2024}' if row[0]==r'\ce{H2O}' else 'Assumed')
+            elif i==8: origin=r'Water: \cite{Figiel2025}; others: assumed' if row[0]==r'\ce{H2O}' else 'Assumed'
+            elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite{Yang2024}' if row[0]==r'\ce{H2O}' else 'Assumed')
             full.append([row[0],inline_headings[i],row[i],origin])
     water_law = next(c for c in document['correlations'] if c.get('component_id') == 'water' and c.get('family') == 'segment_diameter')
     for coefficient in [water_law['constant'], *[c for term in water_law['terms'] for c in term.values()]]:
@@ -364,14 +364,14 @@ def main():
               'MDEA': other('analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json')['source_ranges_K'], 'AMP': other('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']}
     assert all(ranges[amine][r] == [273.15, 498.15] for amine in ranges for r in ('R1', 'R2', 'R3'))
     # (reaction, amine, name of its range in that amine's file, source, note mark on the range, use in the fit)
-    origins = [('R1--R3', 'all four', 'R1', r'Austgen et al.\ \cite[Table~V]{Austgen1991}', 'a', 'fixed'),
-               ('R4', 'MEA', 'R4', r'Tong et al.\ \cite[Table~5]{Tong2012}', '', 'fixed'),
-               ('R4', 'DEA', 'carbamate-hydrolysis', r'Aroua et al.\ \cite[Eq.~14]{arouaTemperatureDependencyEquilibrium1997}', '', r'fitted$^{\mathrm{c}}$'),
-               ('R4', 'AMP', 'carbamate-hydrolysis', r'Xu et al.\ \cite[Table~2]{xuRepresentationEquilibriumSolubility1992}', 'b', r'fitted$^{\mathrm{c}}$'),
-               ('R5', 'MEA', 'R5', r'Bates and Pinching \cite[Eq.~10]{batesAcidicDissociationConstant1951}', '', 'fixed'),
-               ('R5', 'DEA', 'DEA-dissociation', r'Bower et al.\ \cite[Eq.~7]{bowerAcidicDissociationConstant1962}', '', 'fixed'),
+    origins = [('R1--R3', 'all four', 'R1', r'Austgen et al.\ \cite{Austgen1991}', 'a', 'fixed'),
+               ('R4', 'MEA', 'R4', r'Tong et al.\ \cite{Tong2012}', '', 'fixed'),
+               ('R4', 'DEA', 'carbamate-hydrolysis', r'Aroua et al.\ \cite{arouaTemperatureDependencyEquilibrium1997}', '', r'fitted$^{\mathrm{c}}$'),
+               ('R4', 'AMP', 'carbamate-hydrolysis', r'Xu et al.\ \cite{xuRepresentationEquilibriumSolubility1992}', 'b', r'fitted$^{\mathrm{c}}$'),
+               ('R5', 'MEA', 'R5', r'Bates and Pinching \cite{batesAcidicDissociationConstant1951}', '', 'fixed'),
+               ('R5', 'DEA', 'DEA-dissociation', r'Bower et al.\ \cite{bowerAcidicDissociationConstant1962}', '', 'fixed'),
                ('R5', 'MDEA', 'MDEA-dissociation', r'P\'erez-Salado Kamps and Maurer \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}', '', 'fixed'),
-               ('R5', 'AMP', 'AMP-dissociation', r'Hamborg and Versteeg \cite[Table~16]{hamborgDissociationConstantsThermodynamic2009}', '', 'fixed')]
+               ('R5', 'AMP', 'AMP-dissociation', r'Hamborg and Versteeg \cite{hamborgDissociationConstantsThermodynamic2009}', '', 'fixed')]
     extra = [r'\par\medskip', r'\begin{tabular}{@{}llllr@{}}', r'\toprule', r'Constant & Amine & Source & In the fit & Measured range (K) \\', r'\midrule',
              *[f"{name} & {amine} & {source} & {use} & {ranges[amine if amine in ranges else 'MEA'][key][0]:g}--{ranges[amine if amine in ranges else 'MEA'][key][1]:g}" + (r'$^{\mathrm{' + note + '}}$' if note else '') + r' \\' for name, amine, key, source, note, use in origins],
              r'\bottomrule', r'\end{tabular}']
@@ -382,9 +382,9 @@ def main():
     compare = a.rows(a.BUNDLE/'results/reduced-refit/fit-comparison.csv')
     agreement = a.rows(a.BUNDLE/'results/reduced-refit/agreement.csv')
     score = lambda fit, dataset: next(r for r in agreement if r['fit']==fit and r['dataset']==dataset)['aard_percent']
-    table('choice_cost.tex', r"Cumulative parameter restrictions and the resulting deviations on identical observations. || $C$: objective value. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite[Table~6]{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.", ['Calibration','Parameters','On bounds','$C$',r'\makecell[rb]{Fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Not-fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Fitted\\density\\AARD (\%)}'], [[r['fit'],r['fitted_parameters'],r['on_bound'],num(r['cost'],6),*[num(score(r['fit'],d)) for d in ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: loaded density')]] for r in compare], [.36]+['r']*6)
+    table('choice_cost.tex', r"Cumulative parameter restrictions and the resulting deviations on identical observations. || $C$: objective value. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.", ['Calibration','Parameters','On bounds','$C$',r'\makecell[rb]{Fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Not-fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Fitted\\density\\AARD (\%)}'], [[r['fit'],r['fitted_parameters'],r['on_bound'],num(r['cost'],6),*[num(score(r['fit'],d)) for d in ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: loaded density')]] for r in compare], [.36]+['r']*6)
     cp = a.load(E/'same-data-comparison/part1-scores.json')
-    heat_capacity_labels = {'Weiland1997 comparison': 'Weiland et al.\\ heat capacities \\cite[Table~3]{weilandHeatCapacityAqueous1997}', 'Concepcion2023 comparison': "Concepci\\'on et al.\\ heat capacities \\cite[Table~3]{concepcionHeatCapacitiesDifferent2023}"}
+    heat_capacity_labels = {'Weiland1997 comparison': 'Weiland et al.\\ heat capacities \\cite{weilandHeatCapacityAqueous1997}', 'Concepcion2023 comparison': "Concepci\\'on et al.\\ heat capacities \\cite{concepcionHeatCapacitiesDifferent2023}"}
     same_names = {'Six-source pressures':'Pressures at 30 wt% MEA, six sources', '112 current-not-fitted pressures':'Pressures not fitted, six sources', 'broad Cp':'Hilliard heat capacities at 313.15--393.15 K'}
     # The published fitting account of the earlier model does not give the role of each pressure and species observation.
     earlier_role = lambda role: 'not stated' if 'see role note' in role else role.split(';')[0].replace('formulation ','')

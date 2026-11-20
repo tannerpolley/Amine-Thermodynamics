@@ -11,7 +11,7 @@
 \captionsetup[table]{position=top,labelsep=newline,justification=raggedright,singlelinecheck=false}
 \AddToHook{env/table/begin}{\small}
 \setlength{\tabcolsep}{4pt}
-\usepackage[numbers]{natbib}
+\usepackage[numbers,sort]{natbib}
 \usepackage[version=4]{mhchem}
 \usepackage{siunitx}
 \sisetup{per-mode=symbol,group-digits=integer}
@@ -51,7 +51,7 @@ This supplement gives the four standard contributions of the equation of state, 
 % P:supplement-contributions-01
 These four contributions to the residual Helmholtz energy of main-text Eq.~(\ref{main-eq:epcsaft-residual-split}) are used in their published forms.
 Below, $x_i$ is the mole fraction and $m_i^{\mathrm{seg}}$ the segment count of species $i$, $\rho_N=N_{\mathrm A}\rho$ is the number density, $k_B$ is the Boltzmann constant, $\mathcal I$ is the set of ions and $z_i$ is a charge number.
-The hard-sphere diameter of a neutral species or chain cation depends on temperature \cite[Eq.~A.9]{Gross2001},
+The hard-sphere diameter of a neutral species or chain cation depends on temperature \cite{Gross2001},
 \begin{equation}
     d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3\epsilon_i}{k_BT}\right)\right],
     \label{eq:hard-sphere-diameter}
@@ -59,7 +59,7 @@ The hard-sphere diameter of a neutral species or chain cation depends on tempera
 with the water diameter $\sigma_w(T)$ of the main text in place of a constant $\sigma_i$; a single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.
 
 % P:supplement-contributions-02
-The hard-chain term is \cite[Eqs.~A.4--A.8]{Gross2001}
+The hard-chain term is \cite{Gross2001}
 \begin{equation}
     a^{\mathrm{hc}}=\bar m\,a^{\mathrm{hs}}-\sum_i x_i\left(m_i^{\mathrm{seg}}-1\right)\ln g_{ii}^{\mathrm{hs}},
     \qquad
@@ -86,7 +86,7 @@ The hard-chain term is \cite[Eqs.~A.4--A.8]{Gross2001}
 where $g_{ij}^{\mathrm{hs}}$ is the hard-sphere pair distribution function at contact and $\eta=\zeta_3$ is the packing fraction.
 
 % P:supplement-contributions-03
-The dispersion term is the second-order perturbation expansion of Gross and Sadowski \cite[Eqs.~A.10--A.19, Table~1]{Gross2001}:
+The dispersion term is the second-order perturbation expansion of Gross and Sadowski \cite{Gross2001}:
 \begin{equation}
     a^{\mathrm{disp}}
     =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{\epsilon_{ij}}{k_BT}\sigma_{ij}^3
@@ -108,7 +108,7 @@ where $b_k(\bar m)$ has the form of $a_k(\bar m)$, and $a_{0k}$--$a_{2k}$ and $b
 The pair diameter $\sigma_{ij}$ and the pair energy $\epsilon_{ij}$ are those of main-text Eq.~(\ref{main-eq:dispersion-combining-rule}).
 
 % P:supplement-contributions-04
-Hydrogen bonding follows Wertheim's first-order theory in the form used with PC-SAFT \cite[Eqs.~4--6]{Kleiner2007}:
+Hydrogen bonding follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}:
 \begin{equation}
     a^{\mathrm{assoc}}=\sum_i x_i\sum_{A\in i}\left(\ln X_A-\frac{X_A}{2}+\frac12\right),
     \qquad
@@ -120,7 +120,7 @@ Hydrogen bonding follows Wertheim's first-order theory in the form used with PC-
     \label{eq:association-strength}
 \end{equation}
 where $X_A$ is the fraction of molecules $i$ not bonded at site $A$ and $\Delta^{AB}$ is the strength of a bond between site $A$ on molecule $i$ and site $B$ on molecule $j$.
-Cross-association between an amine species and water uses the Wolbach--Sandler rule \cite[Eqs.~7 and 8]{Kleiner2007},
+Cross-association between an amine species and water uses the Wolbach--Sandler rule \cite{Kleiner2007},
 \begin{equation}
     \epsilon^{AB}_{ij}=\tfrac12\left(\epsilon^{AB}_i+\epsilon^{AB}_j\right),
     \qquad
@@ -129,7 +129,7 @@ Cross-association between an amine species and water uses the Wolbach--Sandler r
 \end{equation}
 
 % P:supplement-contributions-05
-The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$ \cite[Eqs.~5, 13 and 14]{Cameretti2005}:
+The Debye--H\"uckel term of Cameretti et al.\ describes ions of diameter $d_i^{\mathrm{DH}}$ in a continuum of relative permittivity $\varepsilon_{\mathrm{bulk}}$ \cite{Cameretti2005}:
 \begin{equation}
     a^{\mathrm{DH}}=-\frac{\kappa_{\mathrm D}e^2}{12\pi\varepsilon_0\varepsilon_{\mathrm{bulk}}k_BT}\sum_{i\in\mathcal I}x_iz_i^2\chi_i,
     \qquad
@@ -147,14 +147,14 @@ where $e$ is the elementary charge, $\varepsilon_0$ is the vacuum permittivity, 
 
 \subsection{MEA and the shared species}
 % P:supplement-18
-Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite[Table~2]{Baygi2015}.
-\COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite[Table~2]{Gross2001}.
-Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite[Table~4]{Uyan2015}.
+Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite{Baygi2015}.
+\COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite{Gross2001}.
+Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite{Uyan2015}.
 Ion segment count one and the diameter ties are modeling assumptions.
 Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements.
 All other interactions are zero by assumption except the fixed water interactions listed below.
 \Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list their exact values; they are not attributed to the cited size/dispersion source.
-Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite[Table~2, Eqs.~5--10]{Figiel2025}.
+Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite{Figiel2025}.
 The ion packing and Debye--H\"uckel diameters follow the ties stated in the main text.
 
 \input{tables/supplement_reaction_coefficients}
@@ -164,8 +164,8 @@ The ion packing and Debye--H\"uckel diameters follow the ties stated in the main
 
 % P:supplement-association-01
 The \COtwo--water cross-association energy is \SI{878.325}{\kelvin}, half the fitted water self-association energy, with the same association volume as water.
-The topology follows Schick et al.\ and Pabsch et al.\ \cite[Table~1, Sect.~2.4.2]{Schick2023}\cite{Pabsch2020}.
-The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite[Table~2]{Baygi2015}.
+The topology follows Schick et al.\ and Pabsch et al.\ \cite{Schick2023,Pabsch2020}.
+The association strength here carries $\sigma_{ij}^3$, whereas Baygi and Pahlavanzadeh report their MEA association volume, 0.037470, for a $d_{ij}^3$ strength \cite{Baygi2015}.
 The value used here, 0.036305439, is the constant fitted by least squares with the epcsaft package to the vapor pressures and saturated-liquid densities of their own model at 21 temperatures from 293.15 to \SI{393.15}{\kelvin}.
 
 % P:supplement-19
@@ -173,7 +173,7 @@ The main text reports the fits of the five water parameters to IAPWS-95 \cite{in
 In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
 
 % P:supplement-20
-In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo coefficients, $10^{-8}$ L/mol and 1403 K, are assumptions \cite[Table~6]{Yang2024}.
+In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo coefficients, $10^{-8}$ L/mol and 1403 K, are assumptions \cite{Yang2024}.
 At the measurement temperature, two coefficient pairs give identical permittivities at any density.
 The larger-volume solution is used here; the permittivity data alone do not distinguish these solutions, so that selection is a model assumption.
 The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperature or loading dependence; direct static-permittivity data over the reacting domain are missing from this calibration, so extrapolation remains a model assumption.
@@ -204,26 +204,26 @@ The packing diameter is the hard-sphere diameter used in the repulsive contribut
 \section{Source conventions, objective scales and weights}\label{sec:s-corrections}\label{sec:s-objective}
 \subsection{MEA data}
 % P:supplement-mea-species
-B\"ottinger et al.\ report \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate while noting practically absent carbonate \cite[p.~134, Table~3]{Bottinger2008}.
+B\"ottinger et al.\ report \ce{MEA + MEAH+} as an NMR sum and tabulate bicarbonate while noting practically absent carbonate \cite{Bottinger2008}.
 Their bicarbonate-labeled observations are compared with calculated \ce{HCO3- + CO3^{2-}}.
-Matin et al.\ neglect carbonate when inferring bicarbonate from titration and carbon balance \cite[pp.~6615--6616, Eqs.~18--19b]{matinFacileMethodDetermination2012}; the same comparison with the calculated sum is therefore an approximation, and these bicarbonate values are not fitted.
+Matin et al.\ neglect carbonate when inferring bicarbonate from titration and carbon balance \cite{matinFacileMethodDetermination2012}; the same comparison with the calculated sum is therefore an approximation, and these bicarbonate values are not fitted.
 The Matin series labeled \SI{294.15}{\kelvin} is calculated at \SI{293.15}{\kelvin}.
 Jakobsen species-to-total-amine ratios enter the objective, whereas their carbonate shares of dissolved carbon do not.
-For the Jakobsen NMR calculations, dilution changes the solvent composition, and the reported NMR loading is used instead of the maximum loading \cite[Sample preparation, Tables~A1--A2]{Jakobsen2005}.
+For the Jakobsen NMR calculations, dilution changes the solvent composition, and the reported NMR loading is used instead of the maximum loading \cite{Jakobsen2005}.
 
 % P:supplement-mea-pressure
-Pressures and species fractions are calculated at each source's solvent composition, including the reported molality and temperature for Hilliard and Xu \cite[App.~D.4]{Hilliard2008}\cite[Table~1]{Xu2011}.
+Pressures and species fractions are calculated at each source's solvent composition, including the reported molality and temperature for Hilliard and Xu \cite{Hilliard2008,Xu2011}.
 Three Xu pressure observations above \SI{393.15}{\kelvin} and a B\"ottinger state with quantifiable oxazolidone are excluded; oxazolidone is absent from the model.
 The pressure sources are Aronu, Hilliard, Idris, Jou, Ma'mun and Xu, with Wagner assessed separately \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011,wagnerSolubilityCarbonDioxide2013}.
-Omitting the carrier gas from the bubble calculation can matter at low \COtwo pressure; Neumann et al.\ instead include nitrogen \cite[Sect.~4.2, Fig.~5]{neumannNewModelCombining2022}.
+Omitting the carrier gas from the bubble calculation can matter at low \COtwo pressure; Neumann et al.\ instead include nitrogen \cite{neumannNewModelCombining2022}.
 
 % P:supplement-mea-heat
-Vinjarapu integral heats are fitted at \SI{313.15}{\kelvin} and \SI{1.734}{\mega\pascal} from initially \COtwo-free 30 wt\% solvent \cite[Sects.~1.1.1 and 2.2, Table~4]{HemaBhavya2025}.
-Arcis integral heats use \SI{322.5}{\kelvin} and the reported pressures \cite[Sect.~2.4, Table~5]{arcisEnthalpySolutionCarbon2011}.
-The calculation for the semi-differential calorimetry of Kim and Svendsen uses the liquid enthalpy at each interval endpoint, rather than the cumulative heat from zero loading \cite[Tables~1--3]{Kim2007}.
+Vinjarapu integral heats are fitted at \SI{313.15}{\kelvin} and \SI{1.734}{\mega\pascal} from initially \COtwo-free 30 wt\% solvent \cite{HemaBhavya2025}.
+Arcis integral heats use \SI{322.5}{\kelvin} and the reported pressures \cite{arcisEnthalpySolutionCarbon2011}.
+The calculation for the semi-differential calorimetry of Kim and Svendsen uses the liquid enthalpy at each interval endpoint, rather than the cumulative heat from zero loading \cite{Kim2007}.
 A \SI{1.734}{\mega\pascal} isobar approximates these intervals because their experimental pressure histories are unavailable.
 The fitted Hilliard heat capacities use 7 mol MEA/kg water.
-Calculations assign \SI{101325}{\pascal}; Hilliard used sealed sample pans and did not report their internal pressure \cite[Sects.~4.5--4.6, App.~G.2]{Hilliard2008}.
+Calculations assign \SI{101325}{\pascal}; Hilliard used sealed sample pans and did not report their internal pressure \cite{Hilliard2008}.
 The other Hilliard heat-capacity comparisons use the same assigned pressure.
 The objective uses the heat capacity per mole of apparent components, while the comparisons with the other heat-capacity data use the source mass basis; both include the added \COtwo.
 
@@ -241,9 +241,9 @@ The fitted heat-capacity scale is $0.02C_P^{\mathrm{obs}}/n_{\mathrm{feed}}$ in 
 \input{tables/objective_groups}
 
 % P:supplement-objective-02
-Vinjarapu heat scales use the reported uncertainty converted to J/mol \COtwo \cite[Table~4]{HemaBhavya2025}, and the heat-capacity scale uses Hilliard's stated accuracy \cite[Sect.~4.6]{Hilliard2008}.
+Vinjarapu heat scales use the reported uncertainty converted to J/mol \COtwo \cite{HemaBhavya2025}, and the heat-capacity scale uses Hilliard's stated accuracy \cite{Hilliard2008}.
 The relative and constant parts of the species scales, the log-pressure scale, the \COtwo-free-density scale, the Cai scales and the weights are assigned choices without a statistical derivation and are not sampling variances.
-Cai's reported temperature resolution and maximum composition error differ from the fitting scales \cite[Tables~2--3]{caiBinaryIsobaricVaporLiquid1996}.
+Cai's reported temperature resolution and maximum composition error differ from the fitting scales \cite{caiBinaryIsobaricVaporLiquid1996}.
 The near-unit residual variance factor is not a statistical justification for these weights.
 Scales taken from source accuracy statements and assigned scales remain distinct.
 
@@ -254,8 +254,8 @@ The fitted loaded densities comprise Amundsen and Hartono data, and their residu
  \label{eq:density-scale}
 \end{equation}
 where $u_{\rho,j}$ and $u_{\alpha,j}$ are the density and loading inputs of the source and $g_j$ is the secant of density against loading between neighboring loadings at the same source temperature and composition, with a one-sided secant at either end.
-Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series; whether the density estimate applies at high temperature and loading is unresolved \cite[pp.~3099--3100]{Amundsen2009}.
-Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the reported expanded uncertainty with coverage factor two and is used without division by that factor \cite[Table~3, p.~1810]{Hartono2014}.
+Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series; whether the density estimate applies at high temperature and loading is unresolved \cite{Amundsen2009}.
+Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the reported expanded uncertainty with coverage factor two and is used without division by that factor \cite{Hartono2014}.
 The calculations adopt the loading $\alpha$ tabulated in Hartono's Table~3.
 The accompanying tabulated \COtwo mole fractions imply different loadings under the stated solvent composition; that source inconsistency remains unresolved.
 The density comparisons and conditional standard errors therefore depend on the adopted loading.
@@ -273,9 +273,9 @@ The 2.0 kmol/m$^3$ DEA concentration of Lal et al.\ is represented by unloaded m
 Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson and Garst cell is not reconstructed.
 The DEA species calculations for B\"ottinger et al.\ use 2.5 MPa because the source gives a 0.5--2.5 MPa cell-pressure interval without individual values.
 All observations of Weiland et al.\ are kept, including a suspected misprint: at 20 wt\% DEA and a loading of 0.50 mol/mol the tabulated density is 1.167 g/mL, beside 1.062 g/mL at a loading of 0.45 mol/mol.
-The \COtwo-free pressures of Kuranov et al.\ are read from a tabulated column that is 10 times the total pressure in MPa \cite[Table~2, p.~1960]{kuranovSolubilitySingleGases1996}.
+The \COtwo-free pressures of Kuranov et al.\ are read from the column of their Table~2 that is 10 times the total pressure in MPa \cite{kuranovSolubilitySingleGases1996}.
 The MDEA species calculations for B\"ottinger et al.\ are made at 0.5 and at 2.5 MPa, the ends of the reported cell-pressure interval, and both are reported.
-The total pressures of P\'erez-Salado Kamps et al.\ are used at the temperatures corrected by Ermatchkov et al.\ \cite[Table~6, p.~6088]{ermatchkovSolubilityCarbonDioxide2006}.
+The total pressures of P\'erez-Salado Kamps et al.\ are used at the corrected temperatures of Table~6 of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}.
 The MDEA calculations use the ideal-gas heat-capacity correlation of Neumann et al.\ \cite{neumannThermodynamicPropertiesMethyl2022}.
 The carbamate fractions of Ciftja et al.\ are taken as carbamate per total AMP.
 The \COtwo-free observations of Tong et al.\ are the unloaded solution of that work.
@@ -470,34 +470,34 @@ Its objective value on the fitted data is 124.73; the contribution of the fitted
 
 \section{Published comparisons that are not on identical observations}\label{sec:s-published}
 % P:supplement-published-dea
-For the DEA data, Lawson and Garst report scatter against smoothed curves and give no model deviation for these observations \cite[p.~26, Results and Accuracy of data]{lawsonGasSweeteningData1976}.
-The smoothed graphical comparison of Seo and Hong is for AMP, not the DEA observations used here \cite[Table~1, Results and Discussion, p.~259]{seoSolubilitiesCarbonDioxide1996}.
-Lal et al.\ compare the Kent--Eisenberg treatment graphically with observations not used to fit those earlier constants and give no numerical deviation for the observations used here \cite[pp.~683--684, Eqs.~9--13, Fig.~3]{lalSolubilityH2SCO21985}.
-The infinite-dilution comparison of Carson et al.\ concerns a different quantity from the finite-loading integral heats fitted here \cite[Tables~2, 5--6, pp.~1289--1295]{carsonEnthalpySolutionCarbon2000}.
-Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy simultaneously and give no numerical deviation for that curve, so the two models are compared only in sign; the same heat observations are comparison only here \cite[pp.~1496--1500, Tables~6--7, Fig.~4(b)]{horstmannPhaseEquilibriumExcess2002}.
+For the DEA data, Lawson and Garst report scatter against smoothed curves and give no model deviation for these observations \cite{lawsonGasSweeteningData1976}.
+The smoothed graphical comparison of Seo and Hong is for AMP, not the DEA observations used here \cite{seoSolubilitiesCarbonDioxide1996}.
+Lal et al.\ compare the Kent--Eisenberg treatment graphically with observations not used to fit those earlier constants and give no numerical deviation for the observations used here \cite{lalSolubilityH2SCO21985}.
+The infinite-dilution comparison of Carson et al.\ concerns a different quantity from the finite-loading integral heats fitted here \cite{carsonEnthalpySolutionCarbon2000}.
+Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy simultaneously and give no numerical deviation for that curve, so the two models are compared only in sign; the same heat observations are comparison only here \cite{horstmannPhaseEquilibriumExcess2002}.
 The source's excess-enthalpy uncertainty expression has no absolute-value bars on its enthalpy-dependent term despite negative measured heats; it is not used to compute a negative uncertainty.
 
 % P:supplement-published-amp
-For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite[Tables~7 and 10]{kunduVaporLiquidEquilibriumCO22003}; these are not the same 51 observations compared here, so no ranking is inferred.
-Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite[Sect.~5.2, Fig.~6]{hartonoNewSolubilityHeat2021}.
+For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; these are not the same 51 observations compared here, so no ranking is inferred.
+Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite{hartonoNewSolubilityHeat2021}.
 
 % P:supplement-published-kuranov
 For MDEA, three ePC-SAFT studies report deviations from the total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} that were calculated without fitting a parameter to the \COtwo--MDEA--water system.
-Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite[Sect.~4.3, Table~6]{Uyan2015}.
-Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite[Fig.~11, Table~11]{Wangler2018}.
-Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite[Fig.~7]{Cleeton2020}.
+Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite{Uyan2015}.
+Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
+Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
 Wangler et al.\ give their two 82-observation values for the same observations. None of the published observation sets is the set of 66 pressures fitted here, from which the MDEA model deviates by 20.59\,\%, and those models did not fit these pressures; the published values are therefore listed and are not compared with that value.
 
 \section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
 % P:supplement-hong-model
 Hong et al.\ describe loaded 30 wt\% MEA with a PC-SAFT model of the three components MEA, water and \COtwo, without ions or reaction equilibria \cite{hongModelingCO2Absorption2027}.
-Two association schemes between MEA and \COtwo, one for the carbamate pathway and one for the bicarbonate pathway, are blended by a pathway weight, which they tabulate at 90 nodes: nine temperatures from 313.15 to \SI{393.15}{\kelvin} and ten loadings from 0.1 to 1.0 mol/mol \cite[Table~S1]{hongModelingCO2Absorption2027}.
-They fitted the model of the loaded solution to pressures calculated with a process simulator at 30 wt\% MEA, not to measurements \cite[Sect.~2.3]{hongModelingCO2Absorption2027}.
+Two association schemes between MEA and \COtwo, one for the carbamate pathway and one for the bicarbonate pathway, are blended by a pathway weight, which their Table~S1 gives at 90 nodes: nine temperatures from 313.15 to \SI{393.15}{\kelvin} and ten loadings from 0.1 to 1.0 mol/mol.
+They fitted the model of the loaded solution to pressures calculated with a process simulator at 30 wt\% MEA, not to measurements.
 
 % P:supplement-hong-evaluation
 Their published parameters are evaluated here with the epcsaft package, and nothing is refitted.
-The calculation uses the parameters of their Tables~1--3, the correction of their Eq.~10 for the symmetric two-site scheme, and the weight interpolated bilinearly in temperature and loading between the nodes \cite[Sect.~3.2]{hongModelingCO2Absorption2027}.
-The weight is held fixed while each state is calculated, as in their work \cite[Sect.~2.2]{hongModelingCO2Absorption2027}, so the states do not share one Helmholtz energy.
+The calculation uses the parameters of their Tables~1--3, the correction of their Eq.~10 for the symmetric two-site scheme, and the weight interpolated bilinearly in temperature and loading between the nodes \cite{hongModelingCO2Absorption2027}.
+The weight is held fixed while each state is calculated, as in their work, so the states do not share one Helmholtz energy.
 Each observation is calculated at its measured temperature and at the composition that the other two models use for it, and the deviations of the MEA model and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} are recalculated for the same observations.
 
 % P:supplement-hong-observations
@@ -513,7 +513,7 @@ The pressures at 15 and 45 wt\% MEA and the binary data lie outside the weight t
 
 % P:supplement-hong-quantities
 The pressure is the \COtwo partial pressure $y_{\COtwo}P$ at the bubble point, and the density is that of the liquid at the temperature, composition and pressure of the observation, without a phase-equilibrium calculation.
-Hong et al.\ define the absorption heat by the pressure slope at fixed loading, $\Delta H=R\,\partial\ln p_{\COtwo}/\partial(1/T)$, with the weight evaluated again at each temperature \cite[Eq.~17, Sect.~3.2]{hongModelingCO2Absorption2027}.
+Hong et al.\ define the absorption heat by the pressure slope at fixed loading, $\Delta H=R\,\partial\ln p_{\COtwo}/\partial(1/T)$, with the weight evaluated again at each temperature \cite{hongModelingCO2Absorption2027}.
 This pressure-slope heat is a different quantity from the calorimetric heat of Kim and Svendsen and from the enthalpy difference of main-text Eq.~(\ref{main-eq:addition-heat}) that the other two models use; it is compared with the interval measurements as Hong et al.\ did.
 The value for an interval is the mean of the released heat, $-\Delta H$, over the loadings of that interval.
 At a node the interpolated weight has a kink in temperature, so the slope is taken toward higher temperature at 313.15 K, toward lower temperature at 393.15 K and on both sides at 353.15 K, where the two values differ by up to 3.51 kJ/mol of \COtwo and both are reported.
@@ -544,7 +544,7 @@ At three states that fail the local test, the pressure differs from an independe
 At the 31 states that pass the test, the calculation with the fixed vapor amount differs from the bubble point by at most $5.5\times10^{-8}$.
 On all 159 six-source pressures, the recalculated deviations of the other two models, 20.97 and 52.34\,\%, equal those of main-text Table~\ref{main-tab:mea-data}.
 Repeating the whole calculation reproduces every tabulated value.
-With the pressure-slope heat taken at the final loading of each interval, the convention of Hong et al., the AARD on the 54 intervals at 313.15 and 353.15 K is 11.66 or 11.09\,\% for the two slopes at 353.15 K; they report 9.48\,\% without listing the observations used \cite[Sect.~3.2]{hongModelingCO2Absorption2027}.
+With the pressure-slope heat taken at the final loading of each interval, the convention of Hong et al., the AARD on the 54 intervals at 313.15 and 353.15 K is 11.66 or 11.09\,\% for the two slopes at 353.15 K; they report 9.48\,\% without listing the observations used \cite{hongModelingCO2Absorption2027}.
 Their reported pressure AARD of 1.53\,\% refers to simulator output that is not available, so it is not reproduced here.
 
 % P:supplement-hong-limits

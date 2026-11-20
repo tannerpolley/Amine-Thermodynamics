@@ -1,36 +1,36 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
 Aqueous amines of different classes absorb carbon dioxide (\COtwo) through different reactions.
-Primary and secondary amines, such as monoethanolamine (MEA) and diethanolamine (DEA), form carbamate \cite[Introduction, p.~7]{xuRepresentationEquilibriumSolubility1992}.
-The tertiary amine methyldiethanolamine (MDEA) forms none \cite[Sect.~3]{Nasrifar2010}, and in the hindered primary amine 2-amino-2-methyl-1-propanol (AMP) steric hindrance inhibits carbamate formation, so that bicarbonate formation dominates \cite[Results and analysis, p.~11]{xuRepresentationEquilibriumSolubility1992}.
+Primary and secondary amines, such as monoethanolamine (MEA) and diethanolamine (DEA), form carbamate \cite{xuRepresentationEquilibriumSolubility1992}.
+The tertiary amine methyldiethanolamine (MDEA) forms none \cite{Nasrifar2010}, and in the hindered primary amine 2-amino-2-methyl-1-propanol (AMP) steric hindrance inhibits carbamate formation, so that bicarbonate formation dominates \cite{xuRepresentationEquilibriumSolubility1992}.
 Thermodynamic models of these solvents therefore share water, \COtwo and the inorganic ions and differ in the amine species and their reactions.
 If the parameters of the shared species could be determined once and held fixed, each further amine would need only its own species, interactions and reaction constants.
 
 % P:introduction-02
 Absorption pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}.
 An equation of state relates them through derivatives of one Helmholtz energy, so agreement with one property does not establish agreement with the others.
-Nuclear magnetic resonance may report molecular and protonated amine as a sum, titration gives different information about bicarbonate and carbonate, and direct calorimetry differs from a heat inferred from the temperature dependence of pressure \cite[Table~3]{Bottinger2008}\cite[Eqs.~18--19b]{matinFacileMethodDetermination2012}\cite{Kim2007}.
+Nuclear magnetic resonance may report molecular and protonated amine as a sum, titration gives different information about bicarbonate and carbonate, and direct calorimetry differs from a heat inferred from the temperature dependence of pressure \cite{Bottinger2008,matinFacileMethodDetermination2012,Kim2007}.
 A joint fit must preserve these definitions.
 
 % P:introduction-03
 Activity-coefficient models combine reaction equilibria with a description of the nonideal liquid.
-B\"ottinger et al.\ fitted a Pitzer model to species observations of MEA and DEA \cite[Sects.~4--7]{Bottinger2008}, Zhang et al.\ estimated electrolyte non-random two-liquid (eNRTL) parameters for MEA jointly from pressure, heat, heat capacity and species data \cite[Sect.~3.3, Tables~9--11]{Zhang2011}, and Xu et al.\ represented \COtwo solubility in AMP with an extended Debye--H\"uckel model \cite[Tables~1--2]{xuRepresentationEquilibriumSolubility1992}.
+B\"ottinger et al.\ fitted a Pitzer model to species observations of MEA and DEA \cite{Bottinger2008}, Zhang et al.\ estimated electrolyte non-random two-liquid (eNRTL) parameters for MEA jointly from pressure, heat, heat capacity and species data \cite{Zhang2011}, and Xu et al.\ represented \COtwo solubility in AMP with an extended Debye--H\"uckel model \cite{xuRepresentationEquilibriumSolubility1992}.
 Statistical associating fluid theory (SAFT) provides an equation of state for both phases and gives the density directly.
-Perturbed-chain SAFT (PC-SAFT) has been combined with ideal-activity reaction equilibria for MEA, DEA and MDEA \cite[Sects.~3.1--3.3]{Baygi2015}\cite[Sects.~2, 5--6]{Nasrifar2010}\cite[Sects.~3.2.2 and 3.3]{Pahlavanzadeh2013}, as has Huang--Radosz SAFT (SAFT-HR) for MEA \cite[Sects.~2--3.3]{Najafloo2018}; reactive-association approaches instead represent the reaction products through bonded fractions \cite{lloretConsistentTransferableThermodynamic2017,perdomoPredictiveGroupcontributionFramework2023}.
+Perturbed-chain SAFT (PC-SAFT) has been combined with ideal-activity reaction equilibria for MEA, DEA and MDEA \cite{Baygi2015,Nasrifar2010,Pahlavanzadeh2013}, as has Huang--Radosz SAFT (SAFT-HR) for MEA \cite{Najafloo2018}; reactive-association approaches instead represent the reaction products through bonded fractions \cite{lloretConsistentTransferableThermodynamic2017,perdomoPredictiveGroupcontributionFramework2023}.
 
 % P:introduction-04
 Electrolyte PC-SAFT (ePC-SAFT) adds ionic electrostatics to the molecular equation of state \cite{Cameretti2005,Held2014}.
-For MDEA, Uyan et al.\ transfer neutral and inorganic-ion inputs and derive the protonated-amine inputs from molecular MDEA before calculating reactive pressures \cite[Sects.~4.1--4.3]{Uyan2015}.
-Wangler et al.\ add ion--water interactions fitted to osmotic coefficients and fit no parameter to the ternary system \cite[Sects.~6.1--6.3]{Wangler2018}, and Cleeton et al.\ find that agreement deteriorates as the MDEA content increases \cite[Sects.~3--4]{Cleeton2020}.
+For MDEA, Uyan et al.\ transfer neutral and inorganic-ion inputs and derive the protonated-amine inputs from molecular MDEA before calculating reactive pressures \cite{Uyan2015}.
+Wangler et al.\ add ion--water interactions fitted to osmotic coefficients and fit no parameter to the ternary system \cite{Wangler2018}, and Cleeton et al.\ find that agreement deteriorates as the MDEA content increases \cite{Cleeton2020}.
 MDEA forms no carbamate, so this experience does not determine the parameters of carbamate-forming amines.
-Polley and Hedengren describe the explicit MEA ions, including carbamate, with ePC-SAFT, but they estimate the parameters in separate steps and use empirical caloric properties in their column calculations \cite[Sect.~2.2, App.~B]{polleyReactiveEPCSAFTModeling2026}.
+Polley and Hedengren describe the explicit MEA ions, including carbamate, with ePC-SAFT, but they estimate the parameters in separate steps and use empirical caloric properties in their column calculations \cite{polleyReactiveEPCSAFTModeling2026}.
 These studies differ in which parameters are transferred, which are fitted and which data inform each comparison, so a calculation outside the final fit is not automatically a prediction.
 
 % P:introduction-05
 A joint fit can lower its objective by shifting equilibrium constants or by fitting separate Born diameters for the amine ions.
 Shifted constants depart from their source correlations, however, and the \COtwo hydration constant is common to every amine.
-A single-liquid objective also contains no requirement that the calculated liquid be stable, and ePC-SAFT ion parameters can predict liquid--liquid demixing that contradicts observation \cite[Sect.~2.4]{Held2014}.
-The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite[Sect.~2]{Michelsen1982}; for reacting electrolytes the trial phase must also satisfy charge neutrality and the chemical constraints \cite{Tsanas2022,Ascani2022,Perdomo2025}.
+A single-liquid objective also contains no requirement that the calculated liquid be stable, and ePC-SAFT ion parameters can predict liquid--liquid demixing that contradicts observation \cite{Held2014}.
+The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; for reacting electrolytes the trial phase must also satisfy charge neutrality and the chemical constraints \cite{Tsanas2022,Ascani2022,Perdomo2025}.
 A phase search is thus a separate numerical check on a calibration, although a finite search gives no global proof.
 
 % P:introduction-06
