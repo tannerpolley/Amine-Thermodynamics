@@ -44,7 +44,7 @@
 \maketitle
 
 % P:supplement-contents
-This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}) and the DEA and MDEA data that are neither fitted nor pressures, with the water--DEA binary figure (Section~\ref{sec:s-dea-binary}).
+This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}), the published parameters of Hong et al.\ on identical MEA observations (Section~\ref{sec:s-hong}) and the DEA and MDEA data that are neither fitted nor pressures, with the water--DEA binary figure (Section~\ref{sec:s-dea-binary}).
 
 \section{Model equations, inputs and parameter values}\label{sec:s-parameters}
 \subsection{Hard-chain, dispersion, association and Debye--H\"uckel contributions}\label{sec:s-contributions}
@@ -363,6 +363,7 @@ The MEA model is the most restricted set whose fitted pressure and density devia
 The cumulative changes quantify the combined effect of the selected assumptions, not the isolated physical effect of each restriction.
 Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source.
 Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures.
+The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/choice_cost}
 \input{tables/pressure_sources}
@@ -486,6 +487,72 @@ Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite[Fig.~11, Table~11]{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite[Fig.~7]{Cleeton2020}.
 Wangler et al.\ give their two 82-observation values for the same observations. None of the published observation sets is the set of 66 pressures fitted here, from which the MDEA model deviates by 20.59\,\%, and those models did not fit these pressures; the published values are therefore listed and are not compared with that value.
+
+\section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
+% P:supplement-hong-model
+Hong et al.\ describe loaded 30 wt\% MEA with a PC-SAFT model of the three components MEA, water and \COtwo, without ions or reaction equilibria \cite{hongModelingCO2Absorption2027}.
+Two association schemes between MEA and \COtwo, one for the carbamate pathway and one for the bicarbonate pathway, are blended by a pathway weight, which they tabulate at 90 nodes: nine temperatures from 313.15 to \SI{393.15}{\kelvin} and ten loadings from 0.1 to 1.0 mol/mol \cite[Table~S1]{hongModelingCO2Absorption2027}.
+They fitted the model of the loaded solution to pressures calculated with a process simulator at 30 wt\% MEA, not to measurements \cite[Sect.~2.3]{hongModelingCO2Absorption2027}.
+
+% P:supplement-hong-evaluation
+Their published parameters are evaluated here with the epcsaft package, and nothing is refitted.
+The calculation uses the parameters of their Tables~1--3, the correction of their Eq.~10 for the symmetric two-site scheme, and the weight interpolated bilinearly in temperature and loading between the nodes \cite[Sect.~3.2]{hongModelingCO2Absorption2027}.
+The weight is held fixed while each state is calculated, as in their work \cite[Sect.~2.2]{hongModelingCO2Absorption2027}, so the states do not share one Helmholtz energy.
+Each observation is calculated at its measured temperature and at the composition that the other two models use for it, and the deviations of the MEA model and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} are recalculated for the same observations.
+
+% P:supplement-hong-observations
+The compared observations are those at nominal 30 wt\% MEA inside the range of the weight table, which is the fitted range of Hong et al.
+Of the 159 \COtwo partial pressures from six sources, 132 lie inside it and 14 have a loading below 0.1 mol/mol.
+The other 13 are Hilliard pressures measured at 313.00--313.147 K, at most \SI{0.15}{\kelvin} below the lowest node; they are calculated at their measured temperatures with the weights of the 313.15 K nodes, and Table~\ref{tab:supplement-hong-comparison} gives the pressure deviations with and without them.
+All 23 Wagner pressures lie inside the range.
+Of the 86 intervals of Kim and Svendsen, 17 begin below a loading of 0.1 mol/mol, and 13 end above the loading of 0.60 mol/mol up to which the other two models are compared (Section~\ref{sec:s-files}); the remaining 56 are compared.
+Of the 210 density observations, 88 are loaded solutions at 30 wt\% MEA inside the range; 75 are at other MEA contents, 22 have a loading below 0.1 mol/mol and 25 lie below 313.15 K.
+Species fractions and ratios are not compared, because the model has no species and its pathway fractions are not mole fractions.
+Integral heats and heat capacities are not compared, because they require an enthalpy and the states do not share one Helmholtz energy.
+The pressures at 15 and 45 wt\% MEA and the binary data lie outside the weight table.
+
+% P:supplement-hong-quantities
+The pressure is the \COtwo partial pressure $y_{\COtwo}P$ at the bubble point, and the density is that of the liquid at the temperature, composition and pressure of the observation, without a phase-equilibrium calculation.
+Hong et al.\ define the absorption heat by the pressure slope at fixed loading, $\Delta H=R\,\partial\ln p_{\COtwo}/\partial(1/T)$, with the weight evaluated again at each temperature \cite[Eq.~17, Sect.~3.2]{hongModelingCO2Absorption2027}.
+This pressure-slope heat is a different quantity from the calorimetric heat of Kim and Svendsen and from the enthalpy difference of main-text Eq.~(\ref{main-eq:addition-heat}) that the other two models use; it is compared with the interval measurements as Hong et al.\ did.
+The value for an interval is the mean of the released heat, $-\Delta H$, over the loadings of that interval.
+At a node the interpolated weight has a kink in temperature, so the slope is taken toward higher temperature at 313.15 K, toward lower temperature at 393.15 K and on both sides at 353.15 K, where the two values differ by up to 3.51 kJ/mol of \COtwo and both are reported.
+
+\input{tables/supplement-hong-comparison}
+
+% P:supplement-hong-results
+On the 132 pressures inside the fitted range, the Hong parameters deviate by 24.77\,\%, the MEA model by 22.59\,\% and the model of Polley and Hedengren by 50.93\,\% (Table~\ref{tab:supplement-hong-comparison}); the MEA model fitted 32 of these observations and Hong et al.\ none.
+With the 13 Hilliard pressures at 313.00--313.147 K, all of which the MEA model fitted, the deviations are 26.27, 21.25 and 53.83\,\%.
+On the Wagner pressures, which none of the three models fitted, the Hong parameters deviate least.
+Their heat deviations exceed those of the other two models at 313.15 and 353.15 K and are similar at 393.15 K, and their density deviations lie between those of the other two models.
+The 13 intervals of Kim and Svendsen that end above a loading of 0.60 mol/mol are calculated with the Hong parameters only: the RMSE is 4.58 kJ/mol for the ten at 313.15 K and 6.47 or 6.67 kJ/mol, depending on the side of the slope, for the three at 353.15 K.
+
+% P:supplement-hong-stability
+The epcsaft package accepts a bubble point only if the liquid is locally stable, that is, if the lowest eigenvalue of the Hessian of its Helmholtz energy with respect to the component amounts, at fixed temperature and volume, is not negative.
+This local test is not the tangent-plane search of Section~\ref{sec:s-phase}.
+With the weight held fixed, the liquid of the Hong model fails the test at 167 of the 168 measured pressure states, namely 131 of the 132 inside the fitted range, all 13 Hilliard states at 313.00--313.147 K and all 23 Wagner states.
+It also fails at 62 of the 90 nodes of the weight table, where the lowest eigenvalue of the Hessian scaled by the mole fractions lies between $-1.092$ and $-0.018$.
+At a state that fails the test, the tabulated pressure is an equal-fugacity calculation for that liquid, solved with the vapor amount fixed at $10^{-9}$ of the feed; it is not an equilibrium pressure of the model.
+Every compared heat uses at least one such state.
+The one measured state that passes, a Jou pressure at 393.15 K and a loading of 0.639 mol/mol, passes a local test, which does not establish global stability.
+
+% P:supplement-hong-checks
+The interpolation returns all 90 tabulated weights, and at weights of zero and one the residual Helmholtz energy equals that of the corresponding single scheme.
+At 313.15 K and a loading of 0.50 mol/mol the calculated \COtwo partial pressure, 2.502 kPa, lies inside the interval of 2.339--2.896 kPa read from the model curve of their Fig.~4(b).
+The 180 pathway fractions printed in their Fig.~5 are reproduced with largest absolute differences of 0.0012 for the carbamate pathway and 0.0064 for the bicarbonate pathway, against a printing precision of 0.00005, so the two implementations differ measurably.
+At three states that fail the local test, the pressure differs from an independent equal-fugacity solution by at most $4.3\times10^{-8}$ in relative terms, and at five such states a finite-difference Hessian gives the same negative eigenvalue to four significant digits.
+At the 31 states that pass the test, the calculation with the fixed vapor amount differs from the bubble point by at most $5.5\times10^{-8}$.
+On all 159 six-source pressures, the recalculated deviations of the other two models, 20.97 and 52.34\,\%, equal those of main-text Table~\ref{main-tab:mea-data}.
+Repeating the whole calculation reproduces every tabulated value.
+With the pressure-slope heat taken at the final loading of each interval, the convention of Hong et al., the AARD on the 54 intervals at 313.15 and 353.15 K is 11.66 or 11.09\,\% for the two slopes at 353.15 K; they report 9.48\,\% without listing the observations used \cite[Sect.~3.2]{hongModelingCO2Absorption2027}.
+Their reported pressure AARD of 1.53\,\% refers to simulator output that is not available, so it is not reproduced here.
+
+% P:supplement-hong-limits
+The values for the Hong model are those of its published parameters, evaluated with an implementation other than that of Hong et al., on observations that they did not fit.
+The MEA model fitted 45 of the 145 pressures and 32 of the 88 densities, and every observation was examined before its parameters were selected.
+The deviations therefore show agreement on the same observations and do not rank the models as predictors.
+The models also differ in their parameters, association schemes and fitted data, so the comparison does not show whether explicit ions are needed.
+It is not a physical validation of any of the three models.
 
 \section{DEA and MDEA data that are neither fitted nor pressures, and the water--DEA binary system}\label{sec:s-dea-binary}
 % P:supplement-dea-binary

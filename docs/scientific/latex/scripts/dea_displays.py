@@ -432,6 +432,24 @@ for c in mpub:
     rows.append(['This work, MDEA model', c['data_role'] + ('; used to choose the initial parameters' if c['group'] == 'Ermatchkov' else ''), num(c['selected_point_mean_absolute_relative_deviation_percent'], 2)])
 table('published-models', 'Pressure deviations of published models and of this work on identical observations.', ['Observations and model', 'Role of these observations in the fit of that model', r'AARD (\%)'], rows, [.50,.36,.10],
       notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. Deviations on fitted and on not-fitted data are not directly comparable. The 16-parameter calibration is the MEA calibration with shifted R2 and R5 correlations and separate Born diameters (Section~\ref{sec:results-restrictions}). Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite[Table~5]{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently.')
+# Published parameters of Hong et al. on identical MEA observations: retained scores, no model call.
+HONG = MEA + 'same-data-comparison/hong-2027/'
+hong, hchecks = read(HONG + 'supplement-table.csv'), read(HONG + 'checks.json')
+hsets = [(r'\COtwo partial pressure, AARD (\%)', [('canonical', 'strict grid', 'Six sources, inside the fitted range of Hong et al.'), ('canonical', 'all', 'Six sources, with the 13 Hilliard observations at 313.00--313.147 K'), ('wagner', 'all', 'Wagner et al.')]),
+         (r'Heat of Kim and Svendsen, RMSE (kJ/mol \COtwo)', [(f'Kim {T} K', 'all', f'{T} K' + mark) for T, mark in (('313.15', r'\textsuperscript{a}'), ('353.15', r'\textsuperscript{a,b}'), ('393.15', ''))]),
+         (r'Loaded-solution density, RMSE (kg/m$^3$)', [(b, 'all', label + r'\textsuperscript{c}') for b, label in (('Amundsen2009', 'Amundsen et al.'), ('Hartono2014', 'Hartono et al.'), ('Han2012', 'Han et al.'))])]
+hrows = []
+for heading, sets in hsets:
+    hrows += [head(heading, 8)]
+    for block, subset, label in sets:
+        rs = [r for r in hong if (r['block'], r['subset']) == (block, subset)]  # two rows where Hong's slope is taken on both sides of a node
+        r, fitted = rs[0], int(rs[0]['adopted_fitted'])
+        assert rs and len({(q['n'], q['adopted'], q['polley_hedengren_2026'], q['locally_unstable']) for q in rs}) == 1 and {q['hong_role'] for q in rs} == {'not fitted'}
+        hrows.append([label, r['n'], f"{fitted} fitted / {int(r['n']) - fitted} not fitted" if fitted else 'not fitted', 'not stated' if block == 'canonical' else r['polley_hedengren_2026_role'],
+                      ' / '.join(num(q['hong'], 2) for q in rs), num(r['adopted'], 2), num(r['polley_hedengren_2026'], 2), '--' if heading.startswith('Loaded') else f"{r['locally_unstable']} of {r['n']}"])
+table('supplement-hong-comparison', r'Deviations of the published parameters of Hong et al.\ \cite{hongModelingCO2Absorption2027}, of the MEA model and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical MEA observations at nominal 30 wt\%.',
+      ['Observations', '$N$', 'Role in the MEA model', r'Role in \cite{polleyReactiveEPCSAFTModeling2026}', 'Hong et al.', 'MEA model', r'Ref.~\cite{polleyReactiveEPCSAFTModeling2026}', 'Fails the local test'], hrows, [.25, .04, .16, .10, .12, .08, .08, .10],
+      notes=r"Roles refer to the objective of each model; no observation was fitted by Hong et al. ``Not stated'' is defined in main-text Table~\ref{main-tab:mea-data}. The last column counts the states at which the liquid of the Hong model fails the local stability test at fixed weight; the density calculation involves no phase equilibrium. \textsuperscript{a}Three of the intervals at this temperature in the full set of Kim and Svendsen were fitted during earlier model development, in the objective of Ref.~\cite{polleyReactiveEPCSAFTModeling2026}. \textsuperscript{b}The two Hong values use the pressure slope toward lower and toward higher temperature. \textsuperscript{c}The comparison between density sources informed the choice of fitted density observations. Deviations on fitted and on not-fitted data are not directly comparable.")
 # Where the AMP splits lie: retained search states, projected onto temperature and loading.
 states = [r for r in read(AM + 'descent-diagnosis/descent-states.csv') if r['case'] == 'main start 0']
 split = [r for r in states if r['outcome'].startswith('confirmed')]
@@ -460,12 +478,17 @@ amp, alt = (f2(stable['loaded-pressure'][k]['AARD_percent']) for k in ('unpenali
 outside, split_MPa, splits = f'{min(notfit):.2f}--{max(notfit):.2f}', f"{float(msplit['search_pressure_Pa'])/1e6:.1f}", f"at least {asum['liquid_liquid_lower_bound']}"
 ours, theirs = f2(ermatchkov['selected_point_mean_absolute_relative_deviation_percent']), f"{ermatchkov['published_parameter_sets'][0]['mean_absolute_relative_deviation_percent']:g}"
 searched = dsum['stability']['grid']['states']
+hstrict, hall, hwagner = (next(r for r in hong if (r['block'], r['subset']) == k) for k in (('canonical', 'strict grid'), ('canonical', 'all'), ('wagner', 'all')))
+hong_main = [f2(hstrict['hong']), f2(hstrict['adopted']), f"the {hstrict['n']} observations", f"at {hstrict['locally_unstable']} of them"]
+hong_supplement = [f"{f2(hstrict['hong'])}\\,\\%, the MEA model by {f2(hstrict['adopted'])}\\,\\% and the model of Polley and Hedengren by {f2(hstrict['polley_hedengren_2026'])}", ', '.join(f2(hall[k]) for k in ('hong', 'adopted')) + f" and {f2(hall['polley_hedengren_2026'])}",
+                   f"{int(hall['locally_unstable']) + int(hwagner['locally_unstable'])} of the {int(hall['n']) + int(hwagner['n'])} measured pressure states", f"{hchecks['grid_stability']['locally unstable']} of the {sum(hchecks['grid_stability'].values())} nodes",
+                   ' and '.join(f2(hchecks['full_pressure_replay_AARD_percent'][k]) for k in ('adopted', 'polley_hedengren_2026')), ' or '.join(f2(hchecks['kim_endpoint_AARD_313_353'][k]['AARD_percent']) for k in ('cool', 'warm'))]
 stated = {'main.tex': [mea, amp, dea, split_MPa, splits, alt], 'sections/introduction.tex': [split_MPa, splits],
           'sections/conclusion.tex': [mea, dea, mdea, amp, outside, split_MPa, splits, alt, ours, theirs],
-          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.2f}--{max(fitted_mdea):.2f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them"],
+          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.2f}--{max(fitted_mdea):.2f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *hong_main],
           'sections/mea_system_modeling_results.tex': [f2(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')],
           'submission/highlights.txt': [mea + '%', f'{amp}-{dea}%', splits, ours + '%', theirs + '%'],
-          'supplement.tex': [f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea]}
+          'supplement.tex': [f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea, *hong_supplement]}
 for path, values in stated.items():
     for value in values: assert value in (LATEX / path).read_text(), (path, value)
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')

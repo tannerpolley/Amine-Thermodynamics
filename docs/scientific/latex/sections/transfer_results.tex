@@ -97,9 +97,10 @@ Within AMP the trade-off is real for the fits made here, since the alternative w
 \FloatBarrier
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:literature-mea
-\Cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026}, whose equation-of-state caloric properties are calculated here from their published specification.
+\Cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026}.
 The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures and the Kim heats at \SI{393.15}{\kelvin}; the two models were fitted to different data, so these deviations do not rank them.
-On the 19 Ma'mun pressures (\cref{tab:published-models}) the MEA model deviates more than the PC-SAFT calculation of Baygi and Pahlavanzadeh, which did not fit these data, and less than the SAFT-HR calculation of Najafloo and Zarei, whose paper leaves unclear whether these data were fitted; the eNRTL model of Zhang et al., which fitted them, is closest.
+With the published parameters of Hong et al.\ \cite{hongModelingCO2Absorption2027}, whose PC-SAFT model contains no ions, the \COtwo partial pressures deviate by 24.77\,\% on the 132 observations inside their fitted range, against 22.59\,\% for the MEA model, and the liquid of the Hong model fails a local stability test at fixed weight at 131 of them (Section~\ref{supp-sec:s-hong}).
+On the 19 Ma'mun pressures (\cref{tab:published-models}) the MEA model deviates more than the PC-SAFT calculation of Baygi and Pahlavanzadeh and less than the SAFT-HR calculation of Najafloo and Zarei; the eNRTL model of Zhang et al.\ is closest.
 
 \input{tables/published-models}
 
@@ -110,7 +111,7 @@ On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets
 
 % P:literature-kuranov
 Published ePC-SAFT models calculate the total pressures of Kuranov et al.\ without fitting any parameter to the \COtwo--MDEA--water system \cite{Uyan2015,Wangler2018,Cleeton2020}.
-Their reported deviations refer to different sets of observations and to a different data role from the 66 pressures fitted here, so no comparison is drawn; Section~\ref{supp-sec:s-published} lists the published values with their sets.
+Their reported deviations refer to different observations and a different data role from the 66 pressures fitted here, so no comparison is drawn (Section~\ref{supp-sec:s-published}).
 
 % P:literature-dea-amp
 For DEA and AMP the sources examined report no scalar deviation on identical observations (Section~\ref{supp-sec:s-published}).
