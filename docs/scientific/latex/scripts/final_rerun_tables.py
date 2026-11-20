@@ -129,13 +129,13 @@ def label(identity):
         identity = (f'{parts[0]}–{parts[2]} association ' if parts[0] == parts[2] else f'{parts[0]}({parts[1]})–{parts[2]}({parts[3]}) association ') + ' '.join(parts[4:])
     return identity.replace('dispersion energy over k', r'dispersion energy $\epsilon/k_B$').replace('debye huckel', 'Debye–Hückel').replace('born diameter', 'Born diameter').replace('reaction:', '').replace(':correlation:a k', r' completed $b_5$').replace(':', ' ')
 
-# Parameter provenance is stated in Source columns; numeric cells use no fitted/bound markers.
+# Parameter provenance is stated in Source columns; a value fitted in this work carries a leading ** and is set in bold.
 
 def cell(value, kind):
     number = re.fullmatch(r'(\*\*)?(-?\d+(?:\.\d*)?(?:[eE][-+]?\d+)?)([†*‡]*)', str(value))
     if kind == 'r' and number:
         body = scientific(number[2])
-        return '$' + body + '$'
+        return '$' + (r'\boldsymbol{' + body + '}' if number[1] else body) + '$'
     return tex(display(value))
 
 
@@ -266,6 +266,9 @@ def main():
     separate = {'component/water/segment_count', 'component/water/dispersion_energy_over_k', 'association/water/a/water/b/energy_over_k', 'association/water/a/water/b/volume',
                 'pair/carbon-dioxide/water/k_ij', 'pair/carbon-dioxide/water/k_ij/reciprocal_temperature_slope',
                 'component/monoethanolamine/dielectric_volume', 'component/monoethanolamine/dielectric_temperature'}
+    unordered = lambda i: '/'.join(['pair', *sorted(i.split('/')[1:3]), *i.split('/')[3:]]) if i.startswith('pair/') else i
+    fitted = {unordered(i) for i in [*coords, *separate]}
+    assert len(fitted) == 19
     shown = set()
     def value(identity, mark='', decimals=None):
         if identity not in values:
@@ -274,7 +277,7 @@ def main():
         v = float(values[identity])
         # Main-text species inputs round to at most four decimal places; the supplement retains all parameter digits.
         text = f'{v:.4f}' if decimals is not None and identity in coords and identity.endswith(('segment_diameter', 'born_diameter')) else (f'{v:.{decimals}f}' if decimals is not None and round(v, decimals) not in (v, 0) else num(v, PARAMETER_DIGITS))
-        return full_precision(v) if decimals is None else text
+        return '**' * (unordered(identity) in fitted) + (full_precision(v) if decimals is None else text)
     species = [n['component_id'] for n in document['components']]
     shared_species, mark = ['carbon-dioxide','water','bicarbonate-anion','carbonate-anion','hydronium-cation','hydroxide-anion'], r'$^{\mathrm{s}}$'
     charge = {s: n.get('fixed', {}).get('charge_number', {}).get('value', {}).get('magnitude', 0) for s, n in zip(species, document['components'])}
@@ -302,7 +305,7 @@ def main():
                r'Size, energy: \cite{Uyan2015}; Born: assumed']
     # Charge, solvation and dielectric inputs are specified with their sources in S2.
     main_indices = [0,1,2,3,4,5,7]
-    table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Sources identify fitted quantities and transferred inputs; a dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.",
+    table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || $^{\mathrm{s}}$Shared species: these values, the interactions marked in Table~\ref{tab:interaction-matrix} and the R1--R3 correlations of Table~\ref{tab:reaction-equilibrium-constants} are held fixed for DEA, MDEA and AMP. Bold values were fitted in this work; the others are transferred or assumed, as the sources state. A dash denotes an unused input. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values, the permittivity coefficients, the conditional standard errors of the four fitted ion parameters and the remaining inputs.",
           [species_headings[i] for i in main_indices]+['Source'],
           [[row[0]+mark*(s in shared_species), *[row[i] for i in main_indices[1:]], source] for row,source,s in zip(species_rows(4),sources,species,strict=True)],
           ['l']+['r']*6+[.25],sep=3)
@@ -319,8 +322,8 @@ def main():
             full.append([row[0],inline_headings[i],row[i],origin])
     water_law = next(c for c in document['correlations'] if c.get('component_id') == 'water' and c.get('family') == 'segment_diameter')
     for coefficient in [water_law['constant'], *[c for term in water_law['terms'] for c in term.values()]]:
-        full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), full_precision(coefficient['value']['magnitude']), 'Water fit' if coefficient is water_law['constant'] else 'Fixed'])
-    table('supplement_species_parameters.tex', r"Complete species inputs of the MEA model. || CO2 association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.",
+        full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), '**' * (coefficient is water_law['constant']) + full_precision(coefficient['value']['magnitude']), 'Water fit' if coefficient is water_law['constant'] else 'Fixed'])
+    table('supplement_species_parameters.tex', r"Complete species inputs of the MEA model. || Bold values were fitted in this work. CO2 association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.",
           ['Species','Quantity (unit)','Value','Source'],full,['l',.16,'r',.44])
     def pair(s, t, quantity='', decimals=None):
         if charge[s] * charge[t] > 0:  # same-sign ions: dispersion excluded
@@ -341,11 +344,11 @@ def main():
         return num(next((coords[i+quantity]['conditional_SE'] for i in (f'pair/{s}/{u}/k_ij', f'pair/{u}/{s}/k_ij') if i+quantity in coords), None), 3)
     def pair_rows(decimals=None, errors=False):
         return [[symbol[s]+'--'+symbol[u]+mark*(errors and {s,u} <= set(shared_species)),pair(s,u,decimals=decimals),*[pair_se(s,u)]*errors,pair(s,u,'/reciprocal_temperature_slope',decimals),*[pair_se(s,u,'/reciprocal_temperature_slope')]*errors,source] for s,u,source in pair_specs]
-    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || $^{\mathrm{s}}$Shared interaction, held fixed for DEA, MDEA and AMP. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. An absent slope is zero. A standard error is given for the jointly fitted values that are not on a bound; the \ce{MEAH+}--\ce{MEACOO-} interaction is on its lower bound. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values; sources of fixed inputs are in Section~\ref{supp-sec:s-parameters}.",
+    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || $^{\mathrm{s}}$Shared interaction, held fixed for DEA, MDEA and AMP. Bold values were fitted in this work. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. An absent slope is zero. A standard error is given for the jointly fitted values that are not on a bound; the \ce{MEAH+}--\ce{MEACOO-} interaction is on its lower bound. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values; sources of fixed inputs are in Section~\ref{supp-sec:s-parameters}.",
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$','s.e.',r'$b_{ij}$ (K)','s.e.','Source'],pair_rows(4,True),['l','r','r','r','r','l'])
-    table('supplement_interaction_matrix.tex', r"Binary interactions at full precision. || All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.",
+    table('supplement_interaction_matrix.tex', r"Binary interactions at full precision. || Bold values were fitted in this work. All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.",
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(),['l','r','r','l'])
-    table('supplement_fitted_parameters.tex', r"Jointly fitted parameters, bounds and conditional standard errors. || A dash marks the active bound. Born diameters of the two amine ions equal their segment diameters.", ['Parameter','Value','Lower','Upper','Standard error'], [[label(r['identity']),full_precision(r['value']),num(r['lower']),num(r['upper']),num(r['conditional_SE'])] for r in params], [.27,'r','r','r','r'])
+    table('supplement_fitted_parameters.tex', r"Jointly fitted parameters, bounds and conditional standard errors. || Bold values were fitted in this work. A dash marks the active bound. Born diameters of the two amine ions equal their segment diameters.", ['Parameter','Value','Lower','Upper','Standard error'], [[label(r['identity']),'**'+full_precision(r['value']),num(r['lower']),num(r['upper']),num(r['conditional_SE'])] for r in params], [.27,'r','r','r','r'])
     reaction = a.load(a.BUNDLE/'results/adoption-297/paper-evidence/source-only/chemical_reaction_source_contract.json')
     rr = []
     for r in reaction['reactions']:

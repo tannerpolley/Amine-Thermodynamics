@@ -52,6 +52,10 @@ def name(group, cite=False):
 def num(value, digits=3):
     return f'${float(value):.{digits}f}$'
 
+def bold(text):
+    """Set the first number of a cell in bold: the mark of a value fitted in this work."""
+    return re.sub(r'\$([^$]+)\$', r'$\\boldsymbol{\1}$', text, count=1)
+
 def span(values, fmt):
     return fmt(min(values)) if min(values) == max(values) else fmt(min(values)) + '--' + fmt(max(values))
 
@@ -80,7 +84,7 @@ params = read(BASE + 'parameter-values.csv')
 dflat = {r['parameter']: (float(r['value']), r['unit']) for r in params}
 fitted_names = [r'$k_{\mathrm{DEAH^+,w}}$', r'$k_{\mathrm{DEACOO^-,w}}$', r'R4 constant term $A_4$', r'R4 enthalpy increment $\delta h$']
 head = lambda text, n: [r'\addlinespace\multicolumn{' + str(n) + r'}{@{}l}{\textit{' + text + '}}']
-fit_rows = [head('DEA', 5)] + [[label + (' (J/mol)' if r['unit'] == 'J/mol' else ''), num(r['value'],d), num(r['conditional_SE'],d), '['+num(r['lower'],d)+', '+num(r['upper'],d)+']', ''] for label, r in zip(fitted_names, params[:4]) for d in [0 if r['unit'] == 'J/mol' else 3]]
+fit_rows = [head('DEA', 5)] + [[label + (' (J/mol)' if r['unit'] == 'J/mol' else ''), bold(num(r['value'],d)), num(r['conditional_SE'],d), '['+num(r['lower'],d)+', '+num(r['upper'],d)+']', ''] for label, r in zip(fitted_names, params[:4]) for d in [0 if r['unit'] == 'J/mol' else 3]]
 paper = {r['identity']: r for r in read(BASE + 'paper-data.csv')}
 data = read(OBSERVATIONS)
 for r in data:
@@ -293,9 +297,9 @@ def flatten(document, own):
             out |= {r['name'] + '/' + k: {'magnitude': r['correlation'][k], 'unit': u} for k, u in zip('abcdef', ['dimensionless', 'K', 'dimensionless', '1/K', 'K^2', '1/K^2'])}
     return {k: (v['magnitude'], v['unit']) for k, v in out.items()}
 
-def species_row(record, s, label, source):
-    """One species in the column layout of the MEA species table."""
-    get = lambda key: '$' + repr(round(record[key][0], 4)).removesuffix('.0') + '$' if key in record else '--'
+def species_row(record, s, label, source, fitted):
+    """One species in the column layout of the MEA species table; the keys in fitted are set in bold."""
+    get = lambda key: (bold if key in fitted else str)('$' + repr(round(record[key][0], 4)).removesuffix('.0') + '$') if key in record else '--'
     return [label, *[get(s + '/' + k) for k in ('segment_count', 'segment_diameter', 'dispersion_energy_over_k')], get(f'association/{s}/a/{s}/b/energy_over_k'), get(f'association/{s}/a/{s}/b/volume'), get(s + '/born_diameter'), source]
 
 def bounds(low, high, digits, scale=1):
@@ -314,7 +318,7 @@ MFIT = [(r'$k_{\mathrm{MDEA,w}}$ at 313.15 K',1,4), (r'$10^{3}\,\mathrm{d}k_{\ma
         (r'$b_{\mathrm{MDEAH^+,w}}$ (K)',1,3), (r'$k_{\mathrm{MDEAH^+,HCO_3^-}}$',1,4), (r'$\sigma_{\mathrm{MDEAH^+}}$ (\AA)',1,4), (r'$\epsilon_{\mathrm{MDEAH^+}}/k_B$ (K)',1,3)]
 mfit = read(MD + 'parameter-table.json')[:8]
 assert all(r['role'] == 'fitted' and not r['on_bound'] for r in mfit)
-fit_rows += [head('MDEA', 5)] + [[name, num(s*r['value'],d), num(s*r['conditional_standard_error'],d), bounds(*r['bounds'],d,s), ''] for (name,s,d), r in zip(MFIT, mfit)]
+fit_rows += [head('MDEA', 5)] + [[name, bold(num(s*r['value'],d)), num(s*r['conditional_standard_error'],d), bounds(*r['bounds'],d,s), ''] for (name,s,d), r in zip(MFIT, mfit)]
 mdoc = read(MD + 'start-0/endpoint.json')
 
 arows, afeed = read(AM + 'data-rows.json'), {r['identity']: r for r in read('analyses/amp_transfer/inputs/retransfer-344/observation-rows.csv')}
@@ -333,9 +337,9 @@ data_rows += amine('amp', 'AMP', ASETS, arows, collect(read(AM + 'deviations.jso
 AFIT = [(r'$k_{\mathrm{AMP,w}}$ at 313.15 K',4), (r'$b_{\mathrm{AMP,w}}$ (K)',3), (r'$k_{\mathrm{AMPH^+,w}}$ at 313.15 K',4), (r'$b_{\mathrm{AMPH^+,w}}$ (K)',3), (r'$k_{\mathrm{AMPH^+,CO_2}}$',4),
         (r'$\sigma_{\mathrm{AMPH^+}}$ (\AA)',4), (r'$\sigma_{\mathrm{AMPCOO^-}}$ (\AA)',4), (r'R4 constant term $A_4$',4), (r'R4 enthalpy increment $\delta h$ (J/mol)',1)]
 on = lambda point, d: num(point['value'], d) + (r'\textsuperscript{a}' if point['on_bound'] else '')
-fit_rows += [head('AMP', 5)] + [[name, on(r['unpenalized'],d), num(r['unpenalized']['conditional_standard_error'],d) if r['unpenalized']['conditional_standard_error'] else '---', bounds(r['lower'],r['upper'],d), on(r['retreat'],d)] for (name,d), r in zip(AFIT, acomp['parameters'])]
+fit_rows += [head('AMP', 5)] + [[name, bold(on(r['unpenalized'],d)), num(r['unpenalized']['conditional_standard_error'],d) if r['unpenalized']['conditional_standard_error'] else '---', bounds(r['lower'],r['upper'],d), bold(on(r['retreat'],d))] for (name,d), r in zip(AFIT, acomp['parameters'])]
 table('transfer-fitted', 'Fitted parameters of the DEA, MDEA and AMP models with conditional standard errors and bounds, and the stability-constrained alternative for AMP.', ['Parameter','Value','Standard error','Bounds','Stability-constrained alternative'], fit_rows, [.36,.13,.13,.21,.13],
-      notes=r'\textsuperscript{a}On a bound; no standard error is assigned. DEA: after the fit, the fitted enthalpy increment was absorbed into the R4 coefficients $A_4$ and $B_4$ of Eq.~\eqref{eq:reaction-equilibrium-constant-temperature}, so $\delta h$ is zero relative to the final correlation; its standard error and bounds are those of the fit (Section~\ref{sec:reactions}). MDEA: the reported, interpolated parameter set (Section~\ref{sec:methods-phase}). AMP: the values are those of the fit without the stability penalty, and $\delta h$ is relative to the initial R4 correlation. The stability-constrained alternative is the interpolated AMP parameter set with no detected instability (Section~\ref{sec:results-amines-stability}); it has no standard errors.')
+      notes=r'Bold values were fitted in this work. \textsuperscript{a}On a bound; no standard error is assigned. DEA: after the fit, the fitted enthalpy increment was absorbed into the R4 coefficients $A_4$ and $B_4$ of Eq.~\eqref{eq:reaction-equilibrium-constant-temperature}, so $\delta h$ is zero relative to the final correlation; its standard error and bounds are those of the fit (Section~\ref{sec:reactions}). MDEA: the reported, interpolated parameter set (Section~\ref{sec:methods-phase}). AMP: the values are those of the fit without the stability penalty, and $\delta h$ is relative to the initial R4 correlation. The stability-constrained alternative is the interpolated AMP parameter set with no detected instability (Section~\ref{sec:results-amines-stability}); it has no standard errors.')
 apure, ROLE = read(AM + 'pure-binary-on-05e94210.json')['pure'], {'fitted': 'fitted', 'assessment_not_fitted': 'not fitted'}
 data_rows.append(head('AMP, pure component', 11))
 for key, who in [('Klepacova2011', r"Klep\'a\v{c}ov\'a et al.\ \cite{klepacovaVaporPressuresSeveral2011}"), ('Belabbaci2010', r'Belabbaci et al.\ \cite{belabbaciInvestigationIsothermalVapour2010}'), ('Pappa2006', r'Pappa et al.\ \cite{pappaMeasurementThermodynamicModeling2006}'), ('Ayad2023', r'Ayad et al.\ \cite{ayadMeasurementsModelingThermodynamic2023}')]:
@@ -347,12 +351,26 @@ table('transfer-data', 'Data for DEA, MDEA and AMP with their roles in the fit o
       notes=r'$N$: number of observations. Amine content: that of the unloaded solution, or a mole fraction for the \COtwo-free binary sets ($x_{\mathrm{w}}$: water; $x_{\mathrm{A}}$: amine). R4 and R5: in, out or mixed relative to the measured temperature range of that equilibrium constant (Table~\ref{tab:reaction-equilibrium-constants}, Section~\ref{sec:data-roles}); ---: not reported in the source, or the calculation uses no such reaction. AARD and bias follow Eq.~\eqref{eq:aard}. Tables~\ref{supp-tab:supplement-dea-ranges}--\ref{supp-tab:supplement-amp-ranges} give the deviations inside and outside each range, Table~\ref{supp-tab:supplement-dea-comparison} lists the DEA and MDEA sets that are neither fitted nor pressures, and Section~\ref{supp-sec:s-corrections} gives the source conventions. \textsuperscript{a}Mole fraction of added \COtwo. DEA: the water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, which are not listed; the pressures not fitted were inspected before the choice between the two DEA solutions whose objective values agree within the optimizer tolerance. MDEA: the Xiao et al.\ and Ermatchkov et al.\ pressures were used to choose the initial MDEA parameter set but are not in the objective. Pure component: deviations at the fixed pure-AMP parameters, whose fit preceded the reactive fit; \textsuperscript{b}the errors of the three fitted densities are ' + ', '.join(num(e, 3) for e in apure['groups']['Ayad2023']['errors_kg_m3']) + r' kg/m$^3$. Stability-constrained alternative: the alternative AMP parameter set of Table~\ref{tab:transfer-fitted}, on the same loaded-solution pressures.')
 AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
 assert [record[f'association/{s}/a/multiplicity'][0] for _, record, s in AMINES] == [2, 2, 1], 'site counts stated in the species note'
+# Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
+# the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
+MKEYS = ['methyldiethanolamine/water/k_ij', 'methyldiethanolamine/water/k_ij_temperature_slope', 'carbon-dioxide/protonated-methyldiethanolamine/k_ij', 'protonated-methyldiethanolamine/water/k_ij',
+         'protonated-methyldiethanolamine/water/k_ij_reciprocal_temperature_slope', 'bicarbonate-anion/protonated-methyldiethanolamine/k_ij', 'protonated-methyldiethanolamine/segment_diameter', 'protonated-methyldiethanolamine/dispersion_energy_over_k']
+AKEYS = ['aminomethylpropanol/water/k_ij', 'aminomethylpropanol/water/k_ij_reciprocal_temperature_slope', 'protonated-aminomethylpropanol/water/k_ij', 'protonated-aminomethylpropanol/water/k_ij_reciprocal_temperature_slope',
+         'carbon-dioxide/protonated-aminomethylpropanol/k_ij', 'protonated-aminomethylpropanol/segment_diameter', 'carbamate-anion/segment_diameter', 'carbamate-hydrolysis/a']
+APURE = dict(zip(['aminomethylpropanol/segment_count', 'aminomethylpropanol/segment_diameter', 'aminomethylpropanol/dispersion_energy_over_k', 'association/aminomethylpropanol/a/aminomethylpropanol/b/energy_over_k', 'association/aminomethylpropanol/a/aminomethylpropanol/b/volume'], ['m', 'sigma', 'epsilon', 'eps_ab', 'kappa']))
+assert [AMINES[1][1][k][0] for k in MKEYS] == [r['value'] for r in mfit], 'bold MDEA values are those of the fit record'
+assert [AMINES[2][1][k][0] for k in AKEYS] == [r['unpenalized']['value'] for r in acomp['parameters'][:8]], 'bold AMP values are those of the fit record'
+assert all(AMINES[2][1][k][0] == apure['parameter_values'][v] for k, v in APURE.items()), 'bold pure-AMP values are those of the pure-component fit'
+permittivity = lambda s: {s + '/dielectric_volume', s + '/dielectric_temperature'}
+FITTED_HERE = [{r['parameter'] for r in params if r['fitted_or_fixed'] == 'fitted'} | permittivity('diethanolamine') | {'diethanolamine/water/k_ij'},
+               set(MKEYS) | permittivity('methyldiethanolamine'),
+               set(AKEYS) | {'carbamate-hydrolysis/b'} | set(APURE) | permittivity('aminomethylpropanol')]  # the fitted AMP enthalpy increment sets B_4
 SOURCE = [r'\cite{Nasrifar2010}', 'DEA values; zero self-association energy', 'Single sphere; fixed', r'Segments: \cite{Pahlavanzadeh2013}; association: \cite{Uyan2015}, volume converted here', r'Segment count of MDEA; $\sigma$ and $\epsilon/k_B$ fitted; zero self-association energy', 'Fitted beforehand to pure-AMP data', r'Single sphere; $\sigma$ fitted', r'Single sphere; $\sigma$ fitted']
 ROWS = [(0, 'diethanolamine', r'\ce{DEA}'), (0, 'protonated-diethanolamine', r'\ce{DEAH+}'), (0, 'carbamate-anion', r'\ce{DEACOO-}'), (1, 'methyldiethanolamine', r'\ce{MDEA}'), (1, 'protonated-methyldiethanolamine', r'\ce{MDEAH+}'), (2, 'aminomethylpropanol', r'\ce{AMP}'), (2, 'protonated-aminomethylpropanol', r'\ce{AMPH+}'), (2, 'carbamate-anion', r'\ce{AMPCOO-}')]
-table('transfer-species', 'Segment, association and Born parameters of the DEA, MDEA and AMP species.', ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', r'$d^{\mathrm{Born}}$ (\AA)', 'Source'], [species_row(AMINES[i][1], s, label, source) for (i, s, label), source in zip(ROWS, SOURCE)], [.10,.07,.07,.09,.10,.07,.08,.33],
-      notes=r'The columns are those of Table~\ref{tab:species-parameters}; a dash denotes an unused input. DEA and MDEA have two association sites of each type and AMP has one; \ce{DEAH+} and \ce{MDEAH+} keep the sites of their amine. Fitted values, with their standard errors and bounds, are in Table~\ref{tab:transfer-fitted}. For the ions, the Born and Debye--H\"uckel diameters equal $\sigma$, and the packing diameter of the single-sphere ions is $0.88\sigma$. Table~\ref{supp-tab:supplement-transfer-parameters} gives unrounded values, the permittivity coefficients and the remaining inputs.')
+table('transfer-species', 'Segment, association and Born parameters of the DEA, MDEA and AMP species.', ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', r'$d^{\mathrm{Born}}$ (\AA)', 'Source'], [species_row(AMINES[i][1], s, label, source, FITTED_HERE[i]) for (i, s, label), source in zip(ROWS, SOURCE)], [.10,.07,.07,.09,.10,.07,.08,.33],
+      notes=r'The columns are those of Table~\ref{tab:species-parameters}; bold values were fitted in this work, and a dash denotes an unused input. DEA and MDEA have two association sites of each type and AMP has one; \ce{DEAH+} and \ce{MDEAH+} keep the sites of their amine. Fitted values, with their standard errors and bounds, are in Table~\ref{tab:transfer-fitted}. For the ions, the Born and Debye--H\"uckel diameters equal $\sigma$, and the packing diameter of the single-sphere ions is $0.88\sigma$. Table~\ref{supp-tab:supplement-transfer-parameters} gives unrounded values, the permittivity coefficients and the remaining inputs.')
 rows = []
-for who, record, _ in AMINES:
+for (who, record, _), fitted in zip(AMINES, FITTED_HERE):
     SPECIES['carbamate-anion'], heading = who + 'COO$^-$', None
     for key, (value, unit) in record.items():
         last = key.split('/')[-1]
@@ -362,10 +380,10 @@ for who, record, _ in AMINES:
         if group != heading:
             heading = group
             rows.append(head(who + ': ' + group.lower(), 3))
-        rows.append([label, '$' + repr(float(value)).removesuffix('.0') + '$', units.get(unit, unit)])
-rows += [head('AMP: fitted values of the stability-constrained alternative', 3)] + [[name, '$' + repr(r['retreat']['value']) + '$', ''] for (name, d), r in zip(AFIT, acomp['parameters'])]
+        rows.append([label, (bold if key in fitted else str)('$' + repr(float(value)).removesuffix('.0') + '$'), units.get(unit, unit)])
+rows += [head('AMP: fitted values of the stability-constrained alternative', 3)] + [[name, bold('$' + repr(r['retreat']['value']) + '$'), ''] for (name, d), r in zip(AFIT, acomp['parameters'])]
 table('supplement-transfer-parameters', 'Amine-specific parameter values of the DEA, MDEA and AMP models at full precision.', ['Parameter','Value','Unit'], rows, [.52,.30,.12], long=True,
-      notes=r'Table~\ref{main-tab:transfer-fitted} of the main text identifies the fitted parameters and gives their standard errors and bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. The data deposit gives the source and basis of each value.')
+      notes=r'Bold values were fitted in this work; Table~\ref{main-tab:transfer-fitted} of the main text gives the standard errors and bounds of the parameters of the reactive fits. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. The data deposit gives the source and basis of each value.')
 def pressures(name, amine_name, shape, panels, kinds, curves, points, sep, laws, fitted, mass):
     """Pressure against loading: retained measurements as points, retained model curves as lines."""
     lines = {}
