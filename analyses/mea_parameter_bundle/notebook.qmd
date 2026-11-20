@@ -1348,12 +1348,15 @@ Hong's three-component perturbed-chain statistical associating fluid theory
 (PC-SAFT) model blends two MEA–CO₂ association pathways. The implementation
 uses Tables 1–3 and S1, including the symmetric-site correction in Eq. 10,
 with bilinear interpolation of the weight. Each state holds its weight fixed.
-The calculations use the retained analytical solvent amounts and measured
-temperatures. Source molalities set the Hilliard and Xu water amounts, and
-Wagner's source stock compositions are preserved. The Hilliard edge rows use
-the 313.15 K weights at their measured temperatures. Density was calculated
-at the stated pressure in the retained row tables, 0.1 MPa for Amundsen and
-Hartono and 0.1–0.7 MPa for Han, without a phase equilibrium calculation.
+Pressure calculations use the retained source feeds and measured temperatures.
+Source molalities set the Hilliard and Xu water amounts, and Wagner's source
+stock compositions are preserved. The Hilliard edge rows use the 313.15 K
+weights at their measured temperatures. Kim intervals use the comparators'
+heat solvent. Each fitted density uses its own retained analytical feed
+declaration, and the other densities use the retained source mass fractions.
+Density was calculated at the stated pressure in the retained row tables,
+0.1 MPa for Amundsen and Hartono and 0.1–0.7 MPa for Han, without a phase
+equilibrium calculation.
 [Parameter and source file](results/same-data-comparison/hong-2027/parameters.json) ·
 [Frozen admission and exclusions](results/same-data-comparison/hong-2027/admission.csv)
 
@@ -1404,7 +1407,7 @@ as in Hong's assessment. Kim's source estimate for the calorimetric heat is
 | Fig. 5 fractions | For 90 values per pathway, the median, 90th percentile and maximum absolute differences were 0.000210, 0.000750 and 0.001177 for carbamate and 0.002252, 0.005676 and 0.006430 for bicarbonate. Printing precision is ±0.00005. This is a measured implementation difference. |
 | Five finite-difference Hessians | At 313.15 K/loadings 0.1 and 0.5, 333.15 K/0.7, 363.15 K/0.3 and 393.15 K/0.4, both step sizes gave the same negative eigenvalues as the package to four significant digits. The largest change from halving the step was $1.90\times10^{-8}$. |
 | Ordinary and fixed-vapor pressure | All 31 ordinary pressure states, including the stable grid, measurement and heat-slope states, converged with the fixed amount in a separate check. The maximum relative difference was $5.45\times10^{-8}$, far below the pressure deviations. |
-| Cold replay | The 11 result tables and all numerical checks were identical in a new process, within the $10^{-10}$ relative replay requirement. The two runs took 28.05 s and 27.72 s on the pinned wheel. |
+| Cold replay | The 11 result tables and all numerical checks were identical in a new process, within the $10^{-10}$ relative replay requirement. The two runs took 25.43 s and 25.58 s on the pinned wheel. |
 
 Fig. 5 supports the implemented pathway fractions and does not indicate
 which stability tests Hong used. At 393.15 K, where the largest fraction
@@ -1416,6 +1419,12 @@ fractions. Hong's reported 1.53% pressure AARD uses simulator output
 that was unavailable for direct replay.
 [Fig. 4(b) calibration and precision](results/same-data-comparison/hong-2027/figure-4b-calibration.json) ·
 [Secondary readings](results/same-data-comparison/hong-2027/figure-4b-secondary.json) ·
+The feed correction changed the paired Kim root mean square error by at most
+0.000230 kJ/mol CO₂ (353.15 K, cooler side). The largest individual heat change
+was 0.000443 kJ/mol CO₂ at 393.15 K, and the largest individual density change
+was 0.000306 kg/m³ for Hartono at 313.15 K and loading 0.39 mol/mol. The
+pressure rows and admission table are byte for byte identical to the previous
+run, and all displayed deviations round to the same values.
 [Checks, times and file hashes](results/same-data-comparison/hong-2027/checks.json)
 
 This evaluates the published parameters through our implementation. The

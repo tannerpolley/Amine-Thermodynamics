@@ -10,24 +10,18 @@ from functools import cache
 from pathlib import Path
 from time import perf_counter
 
-import kim2007_heat_pathways as kim
-from candidate_evidence_255 import table
+from kim2007_heat_pathways import BUNDLE, digest, metrics, np, read, write_json
+from candidate_evidence_255 import SPEC, table
+from fit_observations import heat_solvent, indexed
 from epcsaft import Mixture, Parameters, equilibrium as eq
 from scipy.constants import R
 from scipy.optimize import root
 import shared_evaluation as shared
 from same_data_comparison import hong_scores
 
-from kim2007_heat_pathways import BUNDLE, metrics, np, read
 RESULTS = BUNDLE / 'results'
 ADOPTED, PUBLISHED = (RESULTS/p for p in ('paper-evidence-341/paper-evidence','same-data-comparison/part1/published'))
 OUT = PUBLISHED.parents[1] / 'hong-2027'
-
-
-def indexed(rows, key):
-    index = {r[key]: r for r in rows}
-    assert len(index) == len(rows), key
-    return index
 
 
 def comparison_rows(path):
@@ -71,6 +65,7 @@ WEIGHTS = np.array(INPUT['weights'])
 STABLE = 'stable'
 UNSTABLE = 'locally unstable'
 STABLE_PINNED = []
+FIGURE_WATER = .70 / MASS['water'] / (.30 / MASS['mea'])
 
 
 def weight(a, T):
@@ -120,15 +115,20 @@ def model(w, pathway=None):
     return Mixture(Parameters.from_mapping(doc))
 
 
-FIGURE_WATER = .70 / MASS['water'] / (.30 / MASS['mea'])
-
-
 def observed_water(rows):
     template = shared.load_state_packet()['observations'][0]['request']
     canonical = indexed(read(shared.CANONICAL_VLE), 'observation_id')
     wagner = indexed([r for r in read(RESULTS / 'temperature-reanchor-140/never-accessed-vle-admission.csv')
                       if r['admitted'] == 'yes'], 'csv_data_row_number')
+    kim_solvent = heat_solvent(shared.parameter_mapping(ADOPTED/'reported-parameters.json'))
+    declared = indexed(json.loads(SPEC.read_text())['direct_rows'], 'id')
     for row in rows:
+        is_kim = row['block'].startswith('Kim ')
+        if is_kim or (row['pressure_Pa'] and row['adopted_role']=='fitted'):
+            feed = kim_solvent if is_kim else declared[row['record_id']]['analytical_feed']
+            loading = row['loading'] if is_kim else feed['carbon-dioxide']/feed['monoethanolamine']
+            row.update(analytical_loading=loading, water_per_mea=feed['water']/feed['monoethanolamine'])
+            continue
         row_id = row['record_id'].removesuffix('-pco2')
         source = dict(source_key=row['source'], MEA_weight_fraction=row['mea_mass_fraction'],
                       CO2_loading=row['loading'], temperature_reported_C=row['T_K']-273.15)
@@ -261,7 +261,7 @@ def pressure_checks(run):
     checks = dict(weight_knots_exact=90, residual_helmholtz_limit_relative=limits, independent=independent,
                   hessian=hessian, figure_4b=fig4, figure_5=fractions,
                   grid_stability=dict(Counter(r['stability'] for r in grid)))
-    kim.write_json(run/'pressure-checks.json',checks)
+    write_json(run/'pressure-checks.json',checks)
     assert len(independent)==3 and all(r['relative_difference']<=5e-8 and
         round(r['independent_Pa'],6 if r['loading']==.1 else 3)==r['reference_Pa'] for r in independent), independent
     assert len(hessian)==5 and all(r['engine']<0 and len({f'{v:.4g}' for v in (r['engine'],r['step'],r['half_step'])})==1
@@ -338,8 +338,8 @@ def run_comparison(run):
     summary = hong_scores(selected)
     table(run/'scores.csv',summary)
     table(run/'supplement-table.csv',[r for r in summary if r['subset'] in ('all','strict grid')])
-    kim.write_json(run/'checks.json',dict(checks,engine_commit=shared.ENGINE_COMMIT,
-        wheel_sha256=shared.ENGINE_WHEEL_SHA256, admission_sha256=kim.digest(path),
+    write_json(run/'checks.json',dict(checks,engine_commit=shared.ENGINE_COMMIT,
+        wheel_sha256=shared.ENGINE_WHEEL_SHA256, admission_sha256=digest(path),
         pressure_states=pressure.cache_info().currsize, wall_seconds=perf_counter()-started))
 
 
