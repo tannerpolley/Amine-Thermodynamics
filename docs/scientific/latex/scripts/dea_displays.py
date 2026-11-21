@@ -44,7 +44,6 @@ SETS = {
     'Horstmann': ('Horstmann et al.', 'horstmannPhaseEquilibriumExcess2002', 'excess enthalpy'),
 }
 LAWS = {'carbamate-hydrolysis': 'R4', 'DEA-dissociation': 'R5'}
-PCO2_DEA = SETS['Lawson'][2]
 
 def name(group, cite=False):
     return SETS[group][0] + (r' \cite{' + SETS[group][1] + '}' if cite else '')
@@ -122,10 +121,7 @@ for group in dict.fromkeys(r['group'] for r in data):
     rs = [r for r in data if r['group']==group]
     t = [r['T_K'] for r in rs]
     data_rows.append([name(group, cite=True), SETS[group][2], rs[0]['role'], count(len(rs), dev[group]['relative_rows']), span(t, lambda v: num(v,2)), *composition(group), *marks(group), num(dev[group]['AARD_percent'],2), num(dev[group]['bias_percent'],2)])
-# Sets that are neither fitted nor pressures are listed in the supplement, not in the main-text table.
 DATA_HEAD = ['Data set','Property','Role',r'$N$',r'$T$ (K)','Amine content',r'$\alpha$ (mol/mol)','R4','R5',r'AARD (\%)',r'Bias (\%)']
-aside = [row for row in data_rows[1:] if row[2] == 'comparison only' and 'pressure' not in row[1] and row[1] != PCO2_DEA]
-data_rows = [row for row in data_rows if row not in aside]
 ranges = read(BASE + 'range-deviations.csv')
 rows = []
 for group in dict.fromkeys(r['group'] for r in data):
@@ -309,11 +305,6 @@ mrows = read(MD + 'post-binary/data-rows.json')
 for r in mrows: r['key'] = r['group']
 mstats = collect(read(MD + 'same-row-deviations.json'), 'reaction', 'retreated_all_available', lambda e: e['group'])
 data_rows += amine('mdea', 'MDEA', MSETS, mrows, mstats, {'MDEA-dissociation': 'R5'}, mdea_basis)
-late = [row for row in data_rows if len(row) > 1 and row[2] == 'not fitted' and 'pressure' not in row[1] and row[1] != PCO2_DEA]
-data_rows = [row for row in data_rows if row not in late]
-table('supplement-dea-comparison', 'Data for DEA and MDEA that are neither fitted nor pressures, with their ranges and the deviations of the DEA and MDEA models.', DATA_HEAD[:2] + DATA_HEAD[3:],
-      [head('DEA, comparison only', 10), *[row[:2] + row[3:] for row in aside], head('MDEA, not fitted', 10), *[row[:2] + row[3:] for row in late]], [.175,.10,.055,.12,.095,.105,.055,.055,.075,.085],
-      notes=r'The columns and marks are those of Table~\ref{tab:supplement-transfer-data}. $N$: number of observations; in parentheses, the number with a calculated value and a defined relative deviation. Section~\ref{sec:s-corrections} gives the treatment of the heats of Merkley et al.')
 MFIT = [(r'$k_{\mathrm{MDEA,w}}$ at 313.15 K',1,4), (r'$10^{3}\,\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T$ (K$^{-1}$)',1e3,4), (r'$k_{\mathrm{MDEAH^+,CO_2}}$',1,4), (r'$k_{\mathrm{MDEAH^+,w}}$ at 313.15 K',1,4),
         (r'$b_{\mathrm{MDEAH^+,w}}$ (K)',1,3), (r'$k_{\mathrm{MDEAH^+,HCO_3^-}}$',1,4), (r'$\sigma_{\mathrm{MDEAH^+}}$ (\AA)',1,4), (r'$\epsilon_{\mathrm{MDEAH^+}}/k_B$ (K)',1,3)]
 mfit = read(MD + 'parameter-table.json')[:8]
@@ -351,8 +342,8 @@ for key, who in [('Klepacova2011', r"Klep\'a\v{c}ov\'a et al.\ \cite{klepacovaVa
     assert g['n'] == len(t), key
     data_rows.append([who, g['metric'], ROLE[g['role']], str(g['n']), span(t, lambda v: num(v,2)), 'pure AMP', '---', '---', '---', *([num(g['AARD_percent'],2), num(g['signed_relative_bias_percent'],2)] if 'AARD_percent' in g else [r'---\textsuperscript{b}', '---'])])
 data_rows += [head('AMP, stability-constrained alternative', 11)] + [[ASETS[k][0], ASETS[k][2], stable[k]['role'], count(stable[k]['rows'], q['relative_rows']), *['']*5, num(q['AARD_percent'],2), num(q['bias_percent'],2)] for k in ASETS if k in stable for q in [stable[k]['retreat']]]
-table('supplement-transfer-data', 'Data for DEA, MDEA and AMP with their roles in the fit of each model, their ranges, and the deviations of the DEA, MDEA and AMP models.', DATA_HEAD, data_rows, [.185,.085,.095,.04,.09,.10,.095,.05,.05,.06,.06], long=True, size=r'\footnotesize',
-      notes=r'$N$: number of observations. Amine content: that of the unloaded solution, or a mole fraction for the \COtwo-free binary sets ($x_{\mathrm{w}}$: water; $x_{\mathrm{A}}$: amine). R4 and R5: in, out or mixed relative to the measured temperature range of that equilibrium constant (main-text Table~\ref{main-tab:reaction-equilibrium-constants} and Section~\ref{main-sec:data-roles}); ---: not reported in the source, or the calculation uses no such reaction. AARD and bias follow main-text Eq.~(\ref{main-eq:aard}). Tables~\ref{tab:supplement-dea-ranges}--\ref{tab:supplement-amp-ranges} give the deviations inside and outside each range, Table~\ref{tab:supplement-dea-comparison} lists the DEA and MDEA sets that are neither fitted nor pressures, and Section~\ref{sec:s-corrections} gives the source conventions. \textsuperscript{a}Mole fraction of added \COtwo. DEA: the water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, which are not listed; the pressures not fitted were inspected before the choice between the two DEA solutions whose objective values agree within the optimizer tolerance. MDEA: the Xiao et al.\ and Ermatchkov et al.\ pressures were used to choose the initial MDEA parameter set but are not in the objective. Pure component: deviations at the fixed pure-AMP parameters, whose fit preceded the reactive fit; \textsuperscript{b}the errors of the three fitted densities are ' + ', '.join(num(e, 3) for e in apure['groups']['Ayad2023']['errors_kg_m3']) + r' kg/m$^3$. Stability-constrained alternative: the alternative AMP parameter set of main-text Table~\ref{main-tab:transfer-fitted}, on the same loaded-solution pressures.')
+table('supplement-transfer-data', 'Data for DEA, MDEA and AMP with their roles in the fit of each model, their ranges, and the deviations of the DEA, MDEA and AMP models.', DATA_HEAD, data_rows, [.18,.085,.095,.04,.09,.10,.09,.05,.05,.06,.07], long=True, size=r'\footnotesize',
+      notes=r'$N$: number of observations; in parentheses, the number with a calculated value and a defined relative deviation. Amine content: that of the unloaded solution, or a mole fraction for the \COtwo-free binary sets ($x_{\mathrm{w}}$: water; $x_{\mathrm{A}}$: amine). R4 and R5: in, out or mixed relative to the measured temperature range of that equilibrium constant (main-text Table~\ref{main-tab:reaction-equilibrium-constants} and Section~\ref{main-sec:data-roles}); ---: not reported in the source, or the calculation uses no such reaction. AARD and bias follow main-text Eq.~(\ref{main-eq:aard}). Tables~\ref{tab:supplement-dea-ranges}--\ref{tab:supplement-amp-ranges} give the deviations inside and outside each range, and Section~\ref{sec:s-corrections} gives the source conventions. \textsuperscript{a}Mole fraction of added \COtwo. DEA: the water--DEA interaction was fitted beforehand to the 365.15 K vapor--liquid equilibria of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002}, which are not listed; the pressures not fitted were inspected before the choice between the two DEA solutions whose objective values agree within the optimizer tolerance. MDEA: the Xiao et al.\ and Ermatchkov et al.\ pressures were used to choose the initial MDEA parameter set but are not in the objective. Pure component: deviations at the fixed pure-AMP parameters, whose fit preceded the reactive fit; \textsuperscript{b}the errors of the three fitted densities are ' + ', '.join(num(e, 3) for e in apure['groups']['Ayad2023']['errors_kg_m3']) + r' kg/m$^3$. Stability-constrained alternative: the alternative AMP parameter set of main-text Table~\ref{main-tab:transfer-fitted}, on the same loaded-solution pressures.')
 AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
 assert [record[f'association/{s}/a/multiplicity'][0] for _, record, s in AMINES] == [2, 2, 1], 'site counts stated in the species note'
 # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
