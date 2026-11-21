@@ -2,6 +2,7 @@
 import csv
 import hashlib
 import json
+import math
 import re
 import sys
 from io import BytesIO
@@ -360,10 +361,22 @@ permittivity = lambda s: {s + '/dielectric_volume', s + '/dielectric_temperature
 FITTED_HERE = [{r['parameter'] for r in params if r['fitted_or_fixed'] == 'fitted'} | permittivity('diethanolamine') | {'diethanolamine/water/k_ij'},
                set(MKEYS) | permittivity('methyldiethanolamine'),
                set(AKEYS) | {'carbamate-hydrolysis/b'} | set(APURE) | permittivity('aminomethylpropanol')]  # the fitted AMP enthalpy increment sets B_4
-SOURCE = [r'\cite{Nasrifar2010}', r'\cite{Nasrifar2010}\textsuperscript{a}', 'This work', r'\cite{Pahlavanzadeh2013,Uyan2015}\textsuperscript{b}', r'This work\textsuperscript{c}', r'This work\textsuperscript{d}', 'This work', 'This work']
+SOURCE = [r'\cite{Nasrifar2010}', r'\cite{Nasrifar2010}\textsuperscript{a}', r'This work\textsuperscript{b}', r'\cite{Pahlavanzadeh2013,Uyan2015}\textsuperscript{c}', r'This work\textsuperscript{d}', r'This work\textsuperscript{e}', r'This work\textsuperscript{f}', 'This work']
+# Stated origins of fixed ion inputs (supplement): the DEA carbamate values come from the 16-parameter MEA calibration (fit F0),
+# its diameter scaled by the cube root of the DEA/MEA ratio of m*sigma^3 (neutral MEA: 3.0353, 3.0435 A); AMPH+ takes the AMP energy.
+f0 = {r['identity']: float(r['value']) for r in read(MEA + 'reduced-refit/parameter-details.csv') if r['fit'] == 'F0'}
+size_ratio = (dflat['diethanolamine/segment_count'][0] * dflat['diethanolamine/segment_diameter'][0] ** 3 / (3.0353 * 3.0435 ** 3)) ** (1 / 3)
+assert abs(size_ratio * f0['component/carbamate-anion/segment_diameter'] - dflat['carbamate-anion/segment_diameter'][0]) < 1e-9
+assert f0['component/carbamate-anion/dispersion_energy_over_k'] == dflat['carbamate-anion/dispersion_energy_over_k'][0]
+assert AMINES[2][1]['protonated-aminomethylpropanol/dispersion_energy_over_k'] == AMINES[2][1]['aminomethylpropanol/dispersion_energy_over_k']
+# Hydroxide Born diameter from the Born equation: hydration free energy -106.4 kcal/mol, water permittivity 78.37 at 298.15 K.
+born_oh = 6.02214076e23 * 1.602176634e-19 ** 2 * (1 - 1 / 78.37) / (4 * math.pi * 8.8541878128e-12 * 106.4 * 4184) * 1e10
+shared = {r['identity']: float(r['value']) for r in read(MEA + 'paper-evidence-341/shared-coefficients.csv') if r['identity'].endswith('born_diameter')}
+assert abs(born_oh - shared['component/hydroxide-anion/born_diameter']) < 1e-6
+origins = [f"{dflat['carbamate-anion/dispersion_energy_over_k'][0]:.4f}", f"{f0['component/carbamate-anion/segment_diameter']:.4f}", f'{size_ratio:.4f}', f'{born_oh:.4f}', '$-106.4$ kcal/mol', '78.37']
 ROWS = [(0, 'diethanolamine', r'\ce{DEA}'), (0, 'protonated-diethanolamine', r'\ce{DEAH+}'), (0, 'carbamate-anion', r'\ce{DEACOO-}'), (1, 'methyldiethanolamine', r'\ce{MDEA}'), (1, 'protonated-methyldiethanolamine', r'\ce{MDEAH+}'), (2, 'aminomethylpropanol', r'\ce{AMP}'), (2, 'protonated-aminomethylpropanol', r'\ce{AMPH+}'), (2, 'carbamate-anion', r'\ce{AMPCOO-}')]
 table('transfer-species', 'Segment, association and Born parameters of the DEA, MDEA and AMP species.', ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', r'$d^{\mathrm{Born}}$ (\AA)', 'Ref.'], [species_row(AMINES[i][1], s, label, source, FITTED_HERE[i]) for (i, s, label), source in zip(ROWS, SOURCE)], [.12,.10,.10,.12,.13,.10,.12,.14],
-      notes=r'The columns are those of Table~\ref{tab:species-parameters}. Bold: fitted in this work; in a row of this work, the values in normal weight are fixed; --: not used. \textsuperscript{a}DEA values, with zero self-association energy. \textsuperscript{b}Segment parameters of Ref.~\cite{Pahlavanzadeh2013} and association parameters of Ref.~\cite{Uyan2015}; association volume converted in this work. \textsuperscript{c}Segment count and association volume of MDEA; zero self-association energy. \textsuperscript{d}Fitted beforehand to pure-AMP data. Table~\ref{tab:transfer-fitted} gives the standard errors of the values fitted in the reactive fits, and Table~\ref{supp-tab:supplement-transfer-parameters} unrounded values and the remaining inputs.')
+      notes=r'The columns are those of Table~\ref{tab:species-parameters}. Bold: fitted in this work; in a row of this work, the values in normal weight are fixed; --: not used. \textsuperscript{a}DEA values, with zero self-association energy. \textsuperscript{b}Dispersion energy of \ce{MEACOO-} in the 16-parameter calibration and its diameter scaled to DEA (Section~\ref{supp-sec:s-parameters}). \textsuperscript{c}Segment parameters of Ref.~\cite{Pahlavanzadeh2013} and association parameters of Ref.~\cite{Uyan2015}; association volume converted in this work. \textsuperscript{d}Segment count and association volume of MDEA; zero self-association energy. \textsuperscript{e}Fitted beforehand to pure-AMP data. \textsuperscript{f}Dispersion energy of AMP. Table~\ref{tab:transfer-fitted} gives the standard errors of the values fitted in the reactive fits, and Table~\ref{supp-tab:supplement-transfer-parameters} unrounded values and the remaining inputs.')
 rows = []
 for (who, record, _), fitted in zip(AMINES, FITTED_HERE):
     SPECIES['carbamate-anion'], heading = who + 'COO$^-$', None
@@ -501,7 +514,7 @@ stated = {'main.tex': [mea, amp, dea, split_MPa, splits, alt], 'sections/introdu
           'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.2f}--{max(fitted_mdea):.2f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *hong_main],
           'sections/mea_system_modeling_results.tex': [f2(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')],
           'submission/highlights.txt': [mea + '%', f'{amp}-{dea}%', splits, ours + '%', theirs + '%'],
-          'supplement.tex': [f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea, *hong_supplement]}
+          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea, *hong_supplement]}
 for path, values in stated.items():
     for value in values: assert value in (LATEX / path).read_text(), (path, value)
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')

@@ -293,17 +293,17 @@ def main():
                         r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}']
     # Per species: the Ref. entry of the main-text table, then the supplement's source of a quantity (column of species_rows) that differs from it.
     note = lambda letters: r'$^{\mathrm{' + letters + '}}$'
-    uyan, assumed_born = r'\cite{Uyan2015}', {7: 'Assumed'}
+    held = r'\cite{Held2014}'
     sources = [(r'\cite{Gross2001}', 'b', {4: 'Half the water value', 5: 'Water value'}),
                (r'\cite{Baygi2015}', 'c', {5: r'Converted from \cite{Baygi2015}'}),
                ('This work', '', {2: 'Coefficients below'}),
-               *[('This work', 'd', {1: 'Assumed', 7: r'Equal to $\sigma$'})] * 2,
-               *[(uyan, 'e', assumed_born)] * 2,
-               (uyan, 'e,f', {**dict.fromkeys((1, 2, 3), r'Hydrogen-ion value of ' + uyan), **assumed_born}),
-               (uyan, 'e', assumed_born)]
+               *[('This work', 'd', {1: 'Single sphere', 7: r'Equal to $\sigma$'})] * 2,
+               *[(held, 'e', {7: 'Set in this work'})] * 2,
+               (held, 'f', {7: r'\cite{Figiel2025}'}),
+               (held, 'g', {7: r'Calculated from \cite{palascakAccurateExperimentalValues2004}'})]
     # Charge, solvation and dielectric inputs are specified with their sources in S2.
     main_indices = [0,1,2,3,4,5,7]
-    table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || Bold: fitted in this work; --: not used. $^{\mathrm{a}}$Shared species, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Cross-association with water; its energy is half that of water. $^{\mathrm{c}}$Association volume converted in this work (Section~\ref{supp-sec:s-parameters}). $^{\mathrm{d}}$Segment count assumed. $^{\mathrm{e}}$Born diameter assumed. $^{\mathrm{f}}$Hydrogen-ion parameters of Ref.~\cite{Uyan2015}, used for hydronium. For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs.",
+    table('species_parameters.tex', r"Segment, association and Born parameters of the MEA model. || Bold: fitted in this work; --: not used. $^{\mathrm{a}}$Shared species, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Cross-association with water; its energy is half that of water. $^{\mathrm{c}}$Association volume converted in this work (Section~\ref{supp-sec:s-parameters}). $^{\mathrm{d}}$Single sphere; Born diameter equal to $\sigma$. $^{\mathrm{e}}$Born diameter set in this work. $^{\mathrm{f}}$Born diameter of Ref.~\cite{Figiel2025}. $^{\mathrm{g}}$Born diameter calculated from the hydration free energy of Ref.~\cite{palascakAccurateExperimentalValues2004} (Section~\ref{supp-sec:s-parameters}). For the ions, the packing diameter is $0.88\sigma$ and the Debye--H\"uckel diameter is $\sigma$. Table~\ref{supp-tab:supplement-species-parameters} gives unrounded values and the remaining inputs.",
           [species_headings[i] for i in main_indices]+['Ref.'],
           [[row[0]+mark*(s in shared_species), *[row[i] for i in main_indices[1:]], ref + (note(letters) if letters else '')] for row,(ref,letters,_),s in zip(species_rows(4),sources,species,strict=True)],
           ['l']+['r']*6+['l'],sep=5)
@@ -315,12 +315,12 @@ def main():
             if row[i]=='--': continue
             origin=different.get(i,source)
             if i==6: origin='By definition'
-            elif i==8: origin=r'\cite{Figiel2025}' if row[0]==r'\ce{H2O}' else 'Assumed'
-            elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite{Yang2024}' if row[0]==r'\ce{H2O}' else 'Assumed')
+            elif i==8: origin=r'\cite{Figiel2025}' if row[0]==r'\ce{H2O}' else 'Set in this work'
+            elif i in (9,10): origin='Permittivity fit' if row[0]==r'\ce{MEA}' else (r'\cite{Yang2024}' if row[0]==r'\ce{H2O}' else 'Set in this work')
             full.append([row[0],inline_headings[i],row[i],origin])
     water_law = next(c for c in document['correlations'] if c.get('component_id') == 'water' and c.get('family') == 'segment_diameter')
     for coefficient in [water_law['constant'], *[c for term in water_law['terms'] for c in term.values()]]:
-        full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), '**' * (coefficient is water_law['constant']) + full_precision(coefficient['value']['magnitude']), 'This work' if coefficient is water_law['constant'] else 'Fixed'])
+        full.append([symbol['water'], label(coefficient['identity']) + (' (' + (r'\AA' if coefficient['value']['unit'] == 'angstrom' else r'K$^{-1}$') + ')'), '**' * (coefficient is water_law['constant']) + full_precision(coefficient['value']['magnitude']), 'This work' if coefficient is water_law['constant'] else r'\cite{Held2008}'])
     table('supplement_species_parameters.tex', r"Complete species inputs of the MEA model. || Bold values were fitted in this work. CO2 association entries apply only to induced bonding with water. The water-diameter correlation and the MEA association-volume conversion are specified in the text.",
           ['Species','Quantity (unit)','Value','Source'],full,['l',.20,'r',.36])
     def pair(s, t, quantity='', decimals=None):
@@ -337,13 +337,13 @@ def main():
     pair_specs = [('carbon-dioxide','water','CO2--water fit'),('monoethanolamine','water','Joint fit'),
                   ('water','protonated-monoethanolamine','Joint fit'),('water','carbamate-anion','Joint fit'),
                   ('water','bicarbonate-anion','Joint fit'),('protonated-monoethanolamine','carbamate-anion','Joint fit'),
-                  ('water','carbonate-anion','Assumed'),('water','hydronium-cation','Assumed'),('water','hydroxide-anion','Assumed')]
+                  *[('water', ion, r'\cite{Held2014}') for ion in ('carbonate-anion', 'hydronium-cation', 'hydroxide-anion')]]
     def pair_se(s, u, quantity=''):  # conditional standard error of a fitted interaction; none for a fixed value or one on its bound
         return num(next((coords[i+quantity]['conditional_SE'] for i in (f'pair/{s}/{u}/k_ij', f'pair/{u}/{s}/k_ij') if i+quantity in coords), None), 3)
     def pair_rows(decimals=None, errors=False):
-        ref = lambda s, u, source: source if not errors else 'Assumed' if source == 'Assumed' else 'This work' + (note('b') if source == 'CO2--water fit' else note('c') if {s,u} == {'protonated-monoethanolamine','carbamate-anion'} else '')
+        ref = lambda s, u, source: source if not errors or source.startswith(r'\cite') else 'This work' + (note('b') if source == 'CO2--water fit' else note('c') if {s,u} == {'protonated-monoethanolamine','carbamate-anion'} else '')
         return [[symbol[s]+'--'+symbol[u]+mark*(errors and {s,u} <= set(shared_species)),pair(s,u,decimals=decimals),*[pair_se(s,u)]*errors,pair(s,u,'/reciprocal_temperature_slope',decimals),*[pair_se(s,u,'/reciprocal_temperature_slope')]*errors,ref(s,u,source)] for s,u,source in pair_specs]
-    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. $^{\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Fitted beforehand to \ce{CO2}--water pressures (Section~\ref{sec:parameters}). $^{\mathrm{c}}$On its lower bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values; Section~\ref{supp-sec:s-parameters} describes the fixed inputs.",
+    table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. $^{\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Fitted beforehand to \ce{CO2}--water pressures (Section~\ref{sec:parameters}). $^{\mathrm{c}}$On its lower bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.",
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$','s.e.',r'$b_{ij}$ (K)','s.e.','Ref.'],pair_rows(4,True),['l','r','r','r','r','l'])
     table('supplement_interaction_matrix.tex', r"Binary interactions at full precision. || Bold values were fitted in this work. All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.",
           ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$',r'$b_{ij}$ (K)','Source'],pair_rows(),['l','r','r','l'])

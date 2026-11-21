@@ -150,12 +150,16 @@ where $e$ is the elementary charge, $\varepsilon_0$ is the vacuum permittivity, 
 % P:supplement-18
 Neutral MEA parameters are the 2B values of Baygi and Pahlavanzadeh, except the association volume described below \cite{Baygi2015}.
 \COtwo segment count, diameter and dispersion energy are from Gross and Sadowski \cite{Gross2001}.
-Bicarbonate, carbonate and hydroxide sizes and dispersion energies follow Uyan et al.; their hydrogen-ion parameters are transferred here to hydronium \cite{Uyan2015}.
+The segment diameters and dispersion energies of bicarbonate, carbonate, hydronium and hydroxide, and the water interactions of carbonate, hydronium and hydroxide, are those of Held et al.\ \cite{Held2014}, which Uyan et al.\ also use \cite{Uyan2015}.
+Held et al.\ determined these water interactions with their own water parameters; they are used here unchanged with the water parameters of this work.
 Ion segment count one and the diameter ties are modeling assumptions.
-Fixed Born diameters for bicarbonate, carbonate, hydronium and hydroxide, and the fixed water interactions with carbonate, hydronium and hydroxide, are model inputs without independent MEA-specific parameter measurements.
+The Born diameter of hydronium is that of the hydrogen ion in Figiel et al.\ \cite{Figiel2025}.
+The Born diameter of hydroxide, \SI{3.0811}{\angstrom}, was calculated here from the Born equation, $d^{\mathrm{Born}}=z^2e^2N_{\mathrm A}(1-1/\varepsilon_r)/(4\pi\varepsilon_0|\Delta G^{\mathrm{hyd}}|)$, where $N_{\mathrm A}$ is the Avogadro constant, with the hydration free energy $\Delta G^{\mathrm{hyd}}$ of $-106.4$ kcal/mol of Palascak and Shields \cite{palascakAccurateExperimentalValues2004} and the relative permittivity of water at \SI{298.15}{\kelvin}, $\varepsilon_r=78.37$.
+The Born diameters of bicarbonate and carbonate are set here at \SI{3}{\angstrom}.
+None of these inputs is fitted in the calibrations of this work.
 All other interactions are zero by assumption except the fixed water interactions listed below.
-\Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list their exact values; they are not attributed to the cited size/dispersion source.
-Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors for the other components are assumptions \cite{Figiel2025}.
+\Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list the exact values.
+Water's solvation factor and ion-region permittivity follow Figiel et al.; unit solvation factors are set here for the other components \cite{Figiel2025}.
 The ion packing and Debye--H\"uckel diameters follow the ties stated in the main text.
 
 \input{tables/supplement_reaction_coefficients}
@@ -171,7 +175,7 @@ The value used here, 0.036305439, is the constant fitted by least squares with t
 
 % P:supplement-19
 The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA permittivity coefficients to measured permittivities.
-In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
+In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed at the values of Held et al.\ \cite{Held2008} while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
 
 % P:supplement-20
 In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.; the \COtwo coefficients, $10^{-8}$ L/mol and 1403 K, are assumptions \cite{Yang2024}.
@@ -197,6 +201,8 @@ A molality-basis constant follows from the mole-fraction constant of its source 
 where $\nu_{ri}$ is the stoichiometric number of species $i$ in reaction $r$, $M_{\HtwoO}$ is the molar mass of water and $m^{\circ}=\SI{1}{\mole\per\kilogram}$.
 These correlations are written in the form $\ln K(T)=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ on the common-molality reference basis, with $T$ in K and $T_{\mathrm{ref}}=\SI{313.15}{\kelvin}$, which is equivalent to main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}).
 For DEA, the fitted-parameter table of the main text gives the enthalpy increment relative to the final R4 correlation; the final coefficients listed here already include the fitted enthalpy change.
+The dispersion energy of \ce{DEACOO-}, \SI{183.0006}{\kelvin}, is that of \ce{MEACOO-} in the 16-parameter calibration of the main text, and its segment diameter is the \ce{MEACOO-} diameter of that calibration, \SI{5.3200}{\angstrom}, multiplied by 1.1593, the cube root of the ratio of $m^{\mathrm{seg}}\sigma^3$ of DEA to that of MEA.
+The dispersion energy of \ce{AMPH+} is that of AMP.
 Fixed ionic parameters are model assumptions, not independent measurements of ionic size.
 The packing diameter is the hard-sphere diameter used in the repulsive contribution.
 
