@@ -2,6 +2,9 @@
 
 From the repository root, with the pinned wheel installed:
     agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/born_diameter_sensitivity.py
+
+In a worktree without a .venv, set UV_PROJECT_ENVIRONMENT to the absolute path
+of the main checkout's .venv containing the pinned wheel.
 """
 import csv
 import json
@@ -126,13 +129,21 @@ def main():
                           baseline_max_difference_identity=ids[worst])
             assert relative_errors[worst] <= 1e-10 and math.isclose(cost, reference['cost'], rel_tol=1e-10)
         else:
+            changes = [change(old, new, spec, row) for old, new, row in zip(base, values, declarations, strict=True)]
             case['largest_absolute_changes'] = []
+            case['largest_relative_changes'] = []
             for (group, quantity, species), indices in by_quantity.items():
-                peak = max(indices, key=lambda i: abs(values[i]['value']-base[i]['value']))
-                case['largest_absolute_changes'].append(dict(group=group, quantity=quantity, species=species,
-                                                            **change(base[peak], values[peak], spec, declarations[peak])))
-            jou = ids.index(JOU)
-            case['jou_pressure'] = change(base[jou], values[jou], spec, declarations[jou])
+                label = dict(group=group, quantity=quantity, species=species)
+                rows = [changes[i] for i in indices]
+                peak = max(rows, key=lambda row: abs(row['change']))
+                case['largest_absolute_changes'].append(dict(label, **peak))
+                relative = sorted((row for row in rows if row['change_percent'] is not None),
+                                  key=lambda row: abs(row['change_percent']), reverse=True)
+                limit = 3 if quantity in ('partial_pressure', 'pressure') else 1
+                case['largest_relative_changes'].extend(
+                    dict(label, rank=rank, **row) for rank, row in enumerate(relative[:limit], 1)
+                )
+            case['jou_pressure'] = changes[ids.index(JOU)]
 
         case['cost_change'] = cost - base_cost
         for group, key in zip(groups, group_keys, strict=True):
@@ -147,8 +158,16 @@ def main():
                             case['cost_change'], abs_tol=1e-12)
         case['stability'] = stability(spec if ion is None else replay.bind(varied), grid_state)
         report['cases'].append(case)
-        s.write_json(RUN / 'summary.json', report)
         print(name, 'cost', cost, 'change', case['cost_change'], flush=True)
+
+    # The reviewer found a lower cost between the original bicarbonate endpoints.
+    interior = s.with_parameter_values(mapping, {fixed['bicarbonate-anion']: 3.5})
+    values, available, cost = replay.replay(interior)
+    assert available and [row['identity'] for row in values] == ids
+    replay.d.check(values)
+    report['bicarbonate_interior'] = dict(diameter_A=3.5, rows=len(values), cost=cost, cost_change=cost-base_cost)
+    print('bicarbonate-anion-3.5', 'cost', cost, 'change', cost-base_cost, flush=True)
+    s.write_json(RUN / 'summary.json', report)
 
     with (RUN / 'objective-group-costs.csv').open('w', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=group_costs[0], lineterminator='\n')
