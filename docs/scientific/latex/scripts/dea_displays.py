@@ -604,6 +604,10 @@ amp_supplement = [rf"\SI{{{f0['component/carbamate-anion/dispersion_energy_over_
                   ' and '.join(str(g['full_search']['descent']) for g in apen['stages']) + f" of the {apen['stages'][0]['full_search']['states']} searched states, and " + ' and '.join(str(g['native_compressed']['descent']) for g in apen['stages']) + f" of the {apen['stages'][0]['native_compressed']['states']} penalized",
                   f"$t={aretreat['t']:.6f}$", f"$t={aretreat['upper_t']:.6f}$, {aup['available']} of the {aup['available'] + aup['unavailable']}", f"the {achecks['supplied_trial_bank_count']} trial compositions",
                   f"is {achecks['cost']:.2f}", f"from {afit['group_costs'][0]['cost']:.2f} to {read(AM + 'penalty-0/group-costs.json')[0]['cost']:.2f}"]
+aunc = read(AM + 'main/conditional-uncertainty.json'); afree = aunc['free_coordinates']
+acorr, ase = aunc['conditional_correlation'][afree.index('AMP-hydrolysis-a')][afree.index('AMPCOO-segment-diameter')], aunc['conditional_standard_error']
+assert ase['AMPCOO-segment-diameter'] == adiam['unpenalized']['conditional_standard_error']
+amp_supplement.append(f"its conditional correlation with the constant term of the AMP R4 correlation is {acorr:.3f}, so the data constrain mainly a combination of the two, and each standard error alone is large: {ase['AMP-hydrolysis-a']:.2f} for the constant term and " + rf"\SI{{{ase['AMPCOO-segment-diameter']:.2f}}}{{\angstrom}} for the diameter.")
 arange = {(r['group'], r['reaction'], r['range_mark']): f"{float(r['new_AARD_percent']):.2f}" for r in asame if r['case'] == 'penalty-0' and r['unit'] == 'Pa'}
 amp_supplement += [f"{arange[g, 'carbamate-hydrolysis', 'False']} and {arange[g, 'carbamate-hydrolysis', 'True']}" for g in ('loaded-pressure', 'hartono-2021-supplemental', 'kundu', 'tong')]
 amp_supplement += [f"({arange['loaded-pressure', 'AMP-dissociation', 'False']} and {arange['kundu', 'AMP-dissociation', 'False']}", f"({arange['hartono-2021-supplemental', 'AMP-dissociation', 'True']}"]
