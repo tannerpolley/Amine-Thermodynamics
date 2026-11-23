@@ -4,12 +4,12 @@ title: >
   Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability
 history: one paper and one supplement, merged from the former Parts I and II (#400)
 scientific_claim: >
-  Eleven MEA parameters are estimated jointly from pressure, speciation, absorption-heat, heat-capacity, density and binary equilibrium data, with the reaction equilibrium constants fixed at literature correlations; DEA, MDEA and AMP need four, eight and nine more, with the water, CO₂ and inorganic-ion parameters held fixed.
+  Eleven MEA parameters are estimated jointly from pressure, speciation, absorption-heat, heat-capacity, density and binary equilibrium data, with the reaction equilibrium constants fixed at literature correlations; DEA, MDEA and AMP need four, eight and eight more, with the water, CO₂ and inorganic-ion parameters held fixed.
   For MEA, the fitted CO₂ pressures at nominal 30 wt% have an average absolute relative deviation of 11.6% and the 112 not fitted 24.9%; no instability is detected, although the fit did not impose stability.
   Pressures at 15 and 45 wt% MEA, carbonate shares and high-temperature absorption heats remain inaccurate.
-  Fitted loaded-solution pressures of the other amines deviate by 10.4% (AMP) to 28.5% (DEA); no instability is detected for DEA, but its water–DEA excess enthalpies have the wrong sign.
+  Fitted loaded-solution pressures of the other amines deviate by 10.5% (AMP) to 28.5% (DEA); no instability is detected for DEA, but its water–DEA excess enthalpies have the wrong sign.
   For MDEA, no liquid–liquid gap of the CO₂-free solution is detected at the reported parameters, interpolated toward a stability-penalized fit; one loaded-solution split remains, at 262.9 MPa.
-  The AMP model has at least 73 calculated splits, all above the measured temperature range of its dissociation constant; an alternative set with none detected deviates by 20.2% from the same pressures.
+  For AMP, with the cation–water temperature coefficient set from a scan, no instability is detected; fitting it as well gives splits above 353 K at a similar deviation.
   The models are calibrations against data examined during development, with conditional standard errors; they provide neither validation nor a basis for absorber design.
 author:
   name: Tanner W. Polley
@@ -76,11 +76,11 @@ parameter_records:
     path: analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/parameter-table.json
     sha256: 42d6aafe4dd9e167bab3ac724bdd51a9f96d5791c4751ad5d5a0af46e8b8f3e3
   - scope: AMP model
-    path: analyses/amp_transfer/results/retransfer-404-05e94210/main/parameters.json
-    sha256: af8e6b93ecf31dd2232c6e4d243c05b5b7a3e3669043c2240489e4d79ee0c17a
+    path: analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json
+    sha256: 5c0bf32b4945d3cfdfd9bdc713799b0956adc296bbd17ba3f2450e1433bc6006
 comparison_fits:
   - 16-parameter MEA calibration (analyses/mea_parameter_bundle/results/reduced-refit/, fit F0)
-  - stability-constrained AMP alternative (analyses/amp_transfer/results/retransfer-404-05e94210/penalty-0/)
+  - AMP fit with the AMPH⁺–water temperature slope also fitted (analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/)
 pdf_commit: 2ec384c6a  # builds whose hashes are recorded below
 pdf_sha256: f3ae3f8f775c1bd116402cae7aed9b75a062e02623f832f187f1077e9e17948b
 pdf_pages: 24
