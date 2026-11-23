@@ -5,11 +5,94 @@ execute:
   enabled: false
 ---
 
-Both starts converged to tied costs. The selected fit differs from #346 by
+With the carbamate inputs of the adopted MEA fit F2 (#413), DEA's cost rises
+from 8.0340 to 8.0830. Fitted pressure deviation is 28.51% (was 28.46%), and
+not-fitted pressure deviation is 53.92% (was 54.19%), with the same
+stability result. The #398 text below remains the replayed baseline.
+
+For #398, both starts converged to tied costs. The selected fit differs from #346 by
 less than $4\times10^{-11}$ relative in every retained observation prediction.
 Each coarse-grid search returned 1,270 available states out of 1,271,
 with zero resolved liquid splits found. One Lawson Table VIII stability
 trial remained unavailable.
+
+## Refit with the F2 carbamate inputs (#413)
+
+On 2026-11-23 the owner decided that the DEA carbamate inputs come from the
+adopted 11-parameter aqueous monoethanolamine model (fit F2). They previously
+came from the 16-parameter calibration (F0), so
+[#413](https://github.com/tannerpolley/Amine-Thermodynamics/issues/413)
+refits DEA with only those inputs changed. The F2 values are in the
+[MEA parameter details](../mea_parameter_bundle/results/reduced-refit/parameter-details.csv)
+(SHA-256 `a391a1d0…`). The carbamate dispersion energy changes from
+183.00063 K to 179.85787 K. The diameter rule is the one #398 used: the MEA
+carbamate diameter times the cube root of the neutral DEA/MEA
+$m^{\mathrm{seg}}\sigma^3$ ratio, 1.15925. That rule reproduces the #398
+inputs from F0 exactly. Applied to the F2 diameter of 5.34799 Å, it gives
+6.19966 Å for the segment, Debye–Hückel and Born diameters, against 6.16721 Å.
+The packing diameter, $0.88\sigma$, becomes 5.45570 Å. The two
+[start files](inputs/part-ii-346/f2-carbamate-413-route.json) differ from #398's
+only in these five values and their provenance. Data, roles, weights,
+starts, bounds, objective, wheel, shared record and stability grid are unchanged.
+
+The #398 endpoint was replayed first on its own declaration. The 80 fitted
+predictions match the native values within $1.17\times10^{-12}$ relative,
+and all 299 observation predictions equal the retained #398 table exactly.
+
+| Quantity | #398 (F0 carbamate) | #413 (F2 carbamate) |
+| --- | ---: | ---: |
+| Selected cost (both starts tie) | 8.03397189313 | 8.08296822832 |
+| Start-1 cost difference | $9.1\times10^{-11}$ | $3.9\times10^{-11}$ |
+| Iterations, both starts | 7 | 7 |
+| Protonated DEA–water $k_{ij}$ (SE) | −0.188256 (0.003486) | −0.188343 (0.003485) |
+| Carbamate–water $k_{ij}$ (SE) | −0.038549 (0.05432) | −0.047731 (0.05411) |
+| Hydrolysis $a$ (SE) | 5.869411 (0.6151) | 5.883485 (0.6176) |
+| Hydrolysis enthalpy increment SE (J/mol) | 1346.3 | 1344.1 |
+| Coordinates on a bound | 0 | 0 |
+| Fitted pressure AARD / bias (30), % | 28.464 / −0.661 | 28.512 / −0.653 |
+| Fitted Carson heat AARD / bias (50), % | 0.947 / −0.115 | 0.943 / −0.119 |
+| Not-fitted pressure AARD / bias (67), % | 54.187 / −3.345 | 53.916 / −2.334 |
+| Stability states available / total, each endpoint | 1,270 / 1,271 | 1,270 / 1,271 |
+| Resolved liquid splits (lower bound) | 0 | 0 |
+
+By not-fitted set (AARD / bias, %): Lawson at 394.26 K 23.119 / −23.119 →
+22.949 / −22.949; Seo and Hong 84.947 / +83.089 → 85.358 / +83.586; Lal
+47.944 / −31.630 → 47.409 / −30.299. The carbamate–water interaction moves by
+0.17 of its conditional standard error. The other fitted values move by
+less than 0.03 of theirs. The correlation between the carbamate–water
+interaction and hydrolysis $a$ stays 0.974. The largest paired prediction
+change is 3.5% (Lawson Table VIII, comparison only). The same
+`lawson-1976-viii:1:problem` search is unavailable at both endpoints, for
+the same cause as in #398. The binary Cai and Horstmann comparisons use
+no reactions and are unchanged. Differences between the two fits are small
+compared with the deviations from the measurements. This is a
+calibration-and-prediction comparison under the same data use, not a
+validation.
+
+Checks: the selected endpoint reloads within $3.08\times10^{-12}$ relative
+in predictions and $1.98\times10^{-12}$ in cost. Both starts and the selected
+endpoint carry the adopted shared values. All 299 observation marks and 750
+curve-point marks match their declared ranges. Timings on 4 cores with the
+host shared: one objective evaluation took 4.0 s, and one stability search
+at start 0 took 137.9 s (endpoint searches 157.2 s and 113.7 s). Preflight
+and campaign took 497.1 s, and endpoint checks and reporting took 130.3 s.
+The fixed F2 carbamate inputs carry their own MEA-fit uncertainty, which the
+conditional standard errors here exclude.
+
+[Retained results](results/refit-413/) follow the #398 layout. The CSV model
+labels are `F2-carbamate` and `F0-carbamate`. The
+[manuscript handoff](results/refit-413/manuscript-handoff.md) lists every
+manuscript value that changes. Reproduce from the repository root:
+
+```bash
+uv run --no-sync python analyses/dea_transfer/f2_carbamate.py prepare  # rewrites the five input files identically
+run=analyses/dea_transfer/results/runs/413-reproduce
+agent-heavy timeout 3600s uv run --no-sync python -u analyses/dea_transfer/f2_carbamate.py run "$run"
+agent-heavy uv run --no-sync python analyses/dea_transfer/present_current.py "$run" "$run-paper" "$run-replay-398" \
+  F2-carbamate F0-carbamate 413 inputs/part-ii-346/f2-carbamate-413-parameter-table-declarations.json
+```
+
+Independent delivered review and owner confirmation for manuscript use are pending.
 
 ## Conditions and data
 
