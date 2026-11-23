@@ -6,7 +6,7 @@
 
 Every AMP fit here uses the carbamate inputs of the adopted MEA model (F2): carbamate dispersion energy 179.85787428794876 K and carbamate–water $k_{ij}$ −0.06612124724836234. The 16-parameter calibration (F0) values are no longer used.
 
-Locations refer to `origin/main` at `e3b2d19fd`, relative to `docs/scientific/latex` unless a path says otherwise. Evidence paths are relative to this folder. The current manuscript carries the #404 values.
+Locations refer to the merged tree `2bc1298c9` (`origin/main` at `18e8ea642`, after #413), relative to `docs/scientific/latex` unless a path says otherwise. Every cited line was checked against that tree. Evidence paths are relative to this folder. The current manuscript carries the #404 values.
 
 **The −150 K value is a choice.** It comes from a scan of fixed slopes on F2 and is not from a source:
 
@@ -151,7 +151,7 @@ AMP rows, from [same-row deviations](same-row-deviations.csv), case “Slope -15
 - **`figures/generated/amp-current-measured-model.pdf`, Figure 10.** Replot from [curve data](slope-150/curve-data.json) and [data rows](slope-150/data-rows.json). The curve identities, stocks, temperatures and range marks are unchanged.
 - **`figures/generated/amp-splits.pdf`, Figure 7.** It shows the AMP model's splits, and the AMP model now has none. With a one-sentence mention of the free fit, the figure and its reference at `sections/transfer_results.tex:38` would be removed. That is a Writer and owner choice. If it is kept, replot it from `main/phase-classification-1.json.gz`, captioned as the free fit with 73 confirmed and 20 unresolved.
 
-## Prose, by location on `origin/main`
+## Prose, by location on the merged tree
 
 | Location | Old | New |
 |---|---|---|
@@ -169,7 +169,7 @@ AMP rows, from [same-row deviations](same-row-deviations.csv), case “Slope -15
 | `sections/transfer_results.tex:90` | “at least 73 splits are confirmed for AMP” | No instability is detected for AMP at the reported set. The free fit's splits are in Section 4.x. |
 | `sections/transfer_results.tex:91` | DEA→MDEA→AMP closer as splits increase | Revise: AMP now has none, so the ordering no longer follows the split count. |
 | `sections/transfer_results.tex:92` | “Within AMP the trade-off is real … 20.2 % against 10.4 %” | Within AMP the fitted loaded pressures deviate by 10.5 % at the fixed slope and 10.3 % with it fitted. Do not generalize. At −175 K 5 instabilities remain, and on the old base 0 to −100 K put instabilities on the fitted NMR states. |
-| `sections/conclusion.tex:9` | 10.4 % for AMP | 10.5 %. The 15.4–84.9 % range still holds. |
+| `sections/conclusion.tex:9` | 10.4 % for AMP | 10.5 %. The not-fitted range, 15.4–85.4 % after #413, still holds with the new AMP sets. |
 | `sections/conclusion.tex:15–16` | 73 splits; alternative 20.2 %; “None of the fits made here gives …” | With the cation–water temperature coefficient fixed at a scanned value, the AMP model has no detected instability at 10.5 %, and fitting that coefficient brings splits above 353 K. **Delete** “None of the fits made here gives …”. |
 | `submission/highlights.txt:3` | 10.4–28.5 % | 10.5–28.5 %, subject to #413 for DEA. |
 | `submission/highlights.txt:4` | “at least 73 for AMP” | None for AMP at the reported parameters. |
@@ -191,13 +191,39 @@ AMP rows, from [same-row deviations](same-row-deviations.csv), case “Slope -15
 
 The DEA carbamate text (`supplement.tex:204`, Table 6 footnote b) belongs to #413.
 
-## `scripts/dea_displays.py`: pending
+## `scripts/dea_displays.py`: AMP part done (#412)
 
-Edit only after the owner's go-ahead, once #413's DEA changes to this script are on `main`. The script reads 18 files under the AMP folder. Ten of them have no counterpart here: `alternatives.json`, `checks.json`, six under `penalty-0/`, `penalty-1/anchor-eligibility.json` and `sensitivity-3.5/fit-summary.json`. It also reads `main/phase-classification-0.json.gz`, while the free fit selects start 1, and the F0 assertions and labels sit at `:393`, `:429–431` and `:644`.
+The script now reads `slope-150/` as the AMP model and `main/` (selected start 1) as the free-fit comparison: its splits figure, classification and slope. The reads of the #404 penalty, alternative, sensitivity and check files are gone. The AMP carbamate inputs are asserted against F2 and labelled “MEACOO⁻, MEA model”. The fixed slope is not bold, carries footnote b in Table 7, and is sourced “Set in this work (scan)” in S5.
 
-The planned AMP rework:
+The prose check now runs after the displays are written or compared and lists every missing value instead of stopping at the first one. Running the script without `--check` therefore regenerates the displays before the prose is revised.
 
-- Point the AMP model at `slope-150/`.
-- Keep `main/` as the free-fit comparison, reading `phase-classification-1.json.gz` and `measured-states.json`.
-- Drop the penalty, alternative and sensitivity reads.
-- Regenerate Tables 6–8, S5, S9 and S20, Figure 10 and `tables/number-sources.json`.
+**Regenerated displays are left uncommitted.** They show the new AMP model while the prose still has the #404 numbers. To regenerate them, run `.venv/bin/python docs/scientific/latex/scripts/dea_displays.py` from the repository root. That writes Tables 6–8 (`transfer-species`, `transfer-fitted`, `amine-summary`), `supplement-transfer-bounds`, `supplement-transfer-data`, `supplement-transfer-parameters`, `supplement-amp-ranges`, `number-sources.json`, `amp-current-measured-model.pdf` and `amp-splits.pdf`, the latter still drawn from the free fit's 93 states.
+
+**Prose contract.** With the regenerated displays, `--check` passes all 18 displays and 49 source files. It then fails only on these 19 AMP prose fragments, each of which must appear verbatim in its file:
+
+| File | Fragment |
+|---|---|
+| `main.tex` | `10.5` |
+| `sections/conclusion.tex` | `10.5` |
+| `submission/highlights.txt` | `10.5–28.5%` |
+| `sections/transfer_results.tex` | `Two of the eight fitted AMP parameters` |
+| `sections/transfer_results.tex` | `\SI{6.5}{\angstrom}` |
+| `sections/transfer_results.tex` | `7301 trial compositions` |
+| `sections/transfer_results.tex` | `at least 73 confirmed splits` |
+| `sections/transfer_results.tex` | `10.5\,\%` and `10.3\,\%` (two fragments) |
+| `supplement.tex` | `\SI{179.8579}{\kelvin}, and its interaction with water, $-0.0661$` |
+| `supplement.tex` | `0.5092` (MEA SE of that interaction) |
+| `supplement.tex` | `0.265` ($A_4$ SE) |
+| `supplement.tex` | `62.0651` (objective of both starts) |
+| `supplement.tex` | `0.78` (cost rise at the fixed slope) |
+| `supplement.tex` | `59.70` (loaded-pressure contribution) |
+| `supplement.tex` | `1.66\times10^{-4}` (smallest supplied-trial TPD) |
+| `supplement.tex` | `-0.178` and `-0.115` ($k_{\mathrm{AMPH^+,w}}$ of the free fit at 353 and 393 K) |
+| `supplement.tex` | `57, 57 and 48` (Ciftja states, old-base scan) |
+
+Four more checked fragments already pass on today's text, so they are not proof that the revision is complete. Include them anyway:
+
+- `0.86` (SE distance of the slope) and `58.89` (free-fit loaded contribution) occur elsewhere or in the old paragraph.
+- `\SI{5.3480}{\angstrom}, as its lower bound` and the DEA/MEA values are unchanged.
+
+The free-fit measured-state sentence (six confirmed, eight unconfirmed) is no longer checked, because the decision keeps the free fit to one sentence. If the Writer keeps it in the supplement, use the source rows above.
