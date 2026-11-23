@@ -1,0 +1,190 @@
+"""Classify AMP pressure roots and attempt two-liquid coexistence for #404 descents."""
+import math
+import time
+
+from part_ii import eq, jsonable, reg, stable
+
+# Engine 05e94210 phase_stability.cpp, as retained in #344's classification record.
+DENSITY_WINDOW = math.log(1.01)
+COINCIDENCE = 1e-6
+ERROR_TERMS = ('association_energy_estimate_over_rt',
+               'feasibility_estimate_over_rt','summation_estimate_over_rt')
+
+
+def pressure_roots(model, T, P, x, rho):
+    checks = []
+    for branch in ('liquid','vapor'):
+        try:
+            state = model.state(T, P=P, x=x, phase=branch)
+            distance = abs(math.log(state.molar_density/rho))
+            checks.append(dict(requested=branch, returned=state.returned_density_branch.name.lower(),
+                               density=state.molar_density, log_density_distance=distance,
+                               relative_pressure_residual=abs(state.pressure/P-1)))
+        except Exception as error:
+            checks.append(dict(requested=branch, error=str(error)))
+    return checks
+
+
+def matched(checks, tolerance):
+    return [r for r in checks if r.get('log_density_distance',math.inf)<=DENSITY_WINDOW
+            and r['relative_pressure_residual']<=tolerance]
+
+
+def gibbs(compiled, result):
+    report = eq.stability_test(compiled, result)
+    phases = jsonable(report.present_phases)
+    assert len(result.amounts)==len(phases) and phases
+    return (math.fsum(n*q['g_over_rt'] for n,q in zip(result.amounts,phases,strict=True)),
+            math.fsum(n*q[k] for n,q in zip(result.amounts,phases,strict=True) for k in ERROR_TERMS))
+
+
+def coexistence(spec, parent, parent_g, guesses):
+    compiled = eq.compile_problem(spec.model,parent)
+    support = [i for i in range(len(spec.parameters.component_ids)) if i not in compiled.removed_species]
+    phases = []
+    for i,(x,packing) in enumerate(guesses):
+        phase = type(parent.phases[0])()
+        phase.name, phase.kind, phase.support_declared = f'L{i+1}', parent.phases[0].kind, True
+        phase.support, phase.composition_guess, phase.packing_guess = support, [x[j] for j in support], packing
+        phases.append(phase)
+    original = parent.phases
+    parent.phases = phases
+    try:
+        compiled = eq.compile_problem(spec.model,parent)
+        result = eq.solve_equilibrium(spec.model,parent)
+    finally:
+        parent.phases = original
+    out = dict(message=result.message, requested_tolerance_met=result.requested_tolerance_met,
+               amounts_mol=list(result.amounts))
+    if not result.requested_tolerance_met or len(result.amounts)!=2 or min(result.amounts)<=0:
+        return dict(out, confirmed=False)
+    phases = [list(result.phase_mole_fractions(j)) for j in range(2)]
+    densities = list(result.molar_densities)
+    distinct = max(abs(a-b) for a,b in zip(*phases,strict=True))>COINCIDENCE or abs(math.log(densities[0]/densities[1]))>COINCIDENCE
+    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho)
+             for x,rho in zip(phases,densities,strict=True)]
+    liquid = all(any(r['returned']=='liquid' for r in matched(check,parent.row_tolerance)) for check in roots)
+    g, error = gibbs(compiled,result)
+    decrease, estimated_error = parent_g[0]-g, parent_g[1]+error
+    return dict(out, confirmed=distinct and liquid and decrease>estimated_error,
+                distinct=distinct, Gibbs_decrease_over_RT_mol=decrease,
+                numerical_error_over_RT_mol=estimated_error, phases=phases,
+                densities_mol_m3=densities, packings=list(result.packing_fractions),
+                max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)
+
+
+def classify(route, point, rows, states):
+    spec = route.bind(point)
+    by_key = {s['key']:s for s in states}
+    results, unresolved = [], []
+    for row in rows:
+        if not stable.descent(row):
+            continue
+        entry = dict(key=row['key'], native_branch=row['native_branch'],
+                     supplied_branch=row['supplied_branch'], attempts=[])
+        results.append(entry)
+        try:
+            item = route.stability_row(spec, by_key[row['key']], 1.)
+            prediction = reg.predict(spec.model,item)
+            parent = item.problem
+            if prediction.pressure_reference is not None:
+                parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
+            central = eq.solve_equilibrium(spec.model,parent)
+            assert central.requested_tolerance_met, central.message
+            T,P = central.temperature,central.pressure
+            parent_x = list(central.phase_mole_fractions(0))
+            parent_roots = pressure_roots(spec.model,T,P,parent_x,central.molar_densities[0])
+            entry.update(temperature_K=T, pressure_Pa=P, feed_mol=list(parent.feed.values),
+                         parent_roots=parent_roots, outside_ranges=route.marks(T,parent))
+            compiled = eq.compile_problem(spec.model,parent)
+            parent_g = gibbs(compiled,central)
+            primary = (parent_x,central.packing_fractions[0])
+            guesses, supplied = [], []
+            for witness in row.get('supplied_trial_evidence',[]):
+                if not stable.supplied_negative(witness):
+                    continue
+                phase, q = witness['phase'],witness['quantities']
+                x = phase['composition']
+                roots = pressure_roots(spec.model,T,P,x,q['molar_density_mol_m3'])
+                candidates = matched(roots,parent.row_tolerance)
+                evidence = dict(witness=witness,roots=roots)
+                supplied.append(evidence)
+                if candidates:
+                    root = min(candidates,key=lambda r:r['log_density_distance'])
+                    packing = q['packing_fraction']*root['density']/q['molar_density_mol_m3']
+                    reclosed, _, _, _ = stable._applicable(item,[dict(phase,packing=packing)],set(phase['support']))
+                    options = eq.StabilityOptions()
+                    options.prepared_trials = eq.prepare_supplied_trials(spec.model,T,reclosed)
+                    trial, = eq.stability_test(compiled,central,options).trials
+                    evidence.update(reclosed_evidence=trial.evidence,reclosed_quantities=jsonable(trial.quantities))
+                    if root['returned']=='liquid' and trial.evidence=='evaluated' and trial.quantities['tpd_over_rt']<0:
+                        guesses.append([primary,(x,packing)])
+            entry['supplied_pressure_roots'] = supplied
+            if prediction.stability is not None:
+                native = [t for t in prediction.stability.report.trials
+                          if t.resolved_descent and t.quantities.get('density_side')==2 and t.split_coordinates]
+                for trial in sorted(native,key=lambda t:t.quantities['split_delta_g_over_rt']):
+                    z = list(trial.split_coordinates)
+                    n = len(spec.parameters.component_ids)
+                    if len(z)==n+2+len(trial.phase.support)+2:
+                        phases = [(list(map(math.exp,z[:n])),math.exp(z[n+1])),
+                                  (list(trial.composition),math.exp(z[-1]))]
+                    else:
+                        phases = [primary,(list(trial.composition),math.exp(z[-1]))]
+                    guesses.insert(0,phases)
+            entry['liquid_directed'] = bool(guesses)
+            for guess in guesses:
+                attempt = coexistence(spec,parent,parent_g,guess)
+                entry['attempts'].append(attempt)
+                if attempt['confirmed']:
+                    break
+            if guesses and not any(a['confirmed'] for a in entry['attempts']):
+                unresolved.append((entry,parent,parent_g))
+        except (AssertionError, ValueError, RuntimeError) as error:
+            entry['classification_error'] = str(error)
+    for entry,parent,parent_g in unresolved:
+        neighbors = sorted(
+            ((r,a) for r in results for a in r['attempts'] if a['confirmed']),
+            key=lambda pair: (abs(entry['temperature_K']-pair[0]['temperature_K']),
+                              abs(math.log(entry['pressure_Pa']/pair[0]['pressure_Pa']))),
+        )[:3]
+        for other,seed in neighbors:
+            attempt = coexistence(spec,parent,parent_g,list(zip(seed['phases'],seed['packings'],strict=True)))
+            entry['attempts'].append(dict(attempt, seed_from=other['key']))
+            if attempt['confirmed']:
+                break
+    return results
+
+
+def write_classification(route, point, search_record, output):
+    rows = route.result(search_record)
+    started = time.monotonic()
+    result = classify(route, point, rows, route.states(route.bind(point)))
+    counts = dict(descents=len(result), liquid_directed=sum(e.get('liquid_directed', False) for e in result),
+                  confirmed=sum(any(p['confirmed'] for p in e['attempts']) for e in result),
+                  classification_errors=sum('classification_error' in e for e in result))
+    route.write(output, dict(counts=counts, states=result, seconds=time.monotonic()-started))
+    print(route.out.name, output, counts, flush=True)
+
+
+def main(case):
+    from refit_404 import DECLARATIONS, RUN, Route, stable
+
+    assert case in ('main', 'sensitivity', 'penalty-0', 'penalty-1')
+    suffix = '-sensitivity' if case=='sensitivity' else ''
+    route = Route(DECLARATIONS/f'AMP-05e94210{suffix}.json',RUN/case)
+    route.check_run_output()
+    if case.startswith('penalty-'):
+        for i, stage in enumerate(route.result('finding.json').get('stages', [])):
+            if 'full_search' in stage:
+                point = stable.read(sorted((route.out/f'penalized-{i}').glob('stage-*/parameters.json'))[-1])
+                write_classification(route, point, stage['full_search']['search_record'], f'phase-penalized-{i}.json')
+        return
+    for entry in route.result('fits.json'):
+        index = entry['start']
+        write_classification(route, entry['endpoint'], f'search-{index}.json', f'phase-classification-{index}.json')
+
+
+if __name__=='__main__':
+    import sys
+    main(sys.argv[1])

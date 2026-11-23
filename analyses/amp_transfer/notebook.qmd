@@ -79,7 +79,7 @@ The alternative interpolates from start 0's eligible anchor toward the final pen
 
 At the upper neighbor, the compressed 30 wt% grid state at 313.15 K, loading 0.6 and 1.05 times the model bubble pressure stalled at a residual of $1.18037\times10^{-10}$ against the declared $10^{-10}$ row tolerance. The upper fraction therefore reflects numerical availability at this bracket.
 
-The alternative replay gave cost **126.86096004** on the 156 fitted observations compared with 124.72679408 for the #344 alternative. The full and compressed checks and the supplied-trial rechecks completed 666/666 and 862/862 entries, respectively, with zero evaluated descents. The compressed supplied-trial recheck reused the final passing retreat sweep.
+The alternative replay gave cost **126.86096004** on the 156 fitted observations compared with 124.72679408 for the #344 alternative. The full and compressed checks and the supplied-trial rechecks completed 666/666 and 862/862 entries, respectively, with zero evaluated descents using the **7,879-trial bank**. The compressed supplied-trial recheck reused the final passing retreat sweep. The initial bank had 7,301 trials. The retained main bank later grew to 10,771 trials.
 
 | Alternative AARD | Rows | #344 | New | Change |
 |---|---:|---:|---:|---:|
@@ -98,24 +98,49 @@ The alternative replay gave cost **126.86096004** on the 156 fitted observations
 | Tong, inside | 17 | 52.990% | 53.660% |
 | Tong, outside | 23 | 24.727% | 24.698% |
 
-[Alternative parameter document](results/retransfer-404-05e94210/penalty-0/alternative-parameters.json) · [Alternative observations](results/retransfer-404-05e94210/penalty-0/data-rows.json) · [Group costs](results/retransfer-404-05e94210/penalty-0/group-costs.json) · [Full and compressed checks](results/retransfer-404-05e94210/penalty-0/alternative-checks.json) · [Retreat timing](results/retransfer-404-05e94210/penalty-0/retreat-timing.json) · [Unavailable searches](results/retransfer-404-05e94210/penalty-0/unavailable-searches.json.gz)
+[Alternative parameter document](results/retransfer-404-05e94210/penalty-0/alternative-parameters.json) · [Alternative observations](results/retransfer-404-05e94210/penalty-0/data-rows.json) · [Group costs](results/retransfer-404-05e94210/penalty-0/group-costs.json) · [Full and compressed checks](results/retransfer-404-05e94210/penalty-0/alternative-checks.json) · [Main trial bank additions](results/retransfer-404-05e94210/main-new-witnesses.json.gz) · [Retreat timing](results/retransfer-404-05e94210/penalty-0/retreat-timing.json) · [Unavailable searches](results/retransfer-404-05e94210/penalty-0/unavailable-searches.json.gz)
 
 - The 0.003 timing probe for start 0 took 205.3 s and projected 7.0 min including its diagnostic search. [Measured evaluations](results/retransfer-404-05e94210/penalty-0/profile-0.003.json)
 - The 0.01 timing probe for start 0 took 343.9 s and projected 17.4 min including its diagnostic search. [Measured evaluations](results/retransfer-404-05e94210/penalty-0/profile-0.01.json)
 - The compressed retreat sweep took 62.7 s, plus 3.0 s for replay. The 21-sweep projection was 23.0 min. The bisection took about 18.8 min from the run file times. [Retreat timing](results/retransfer-404-05e94210/penalty-0/retreat-timing.json)
 
+### Rerun from the frozen inputs
+
+Use the tracked [launcher](launch_404.py), [fit and replay](refit_404.py), [penalty and retreat](stability_404.py), [phase classification](classify_descents.py), and [reduction](retain_404.py) scripts from the repository root with the declared wheel installed in the selected uv environment. The launcher measures free resources before each stage and caps the worker request at 16. The first stage verifies the installed wheel against the pinned wheel file and replays both #344 points before fitting. The 3.5 Å branch runs only the fit and its phase search. The fit and penalty logs retain the launch measurements.
+
+```bash
+(
+  set -e
+  export AMP_404_RUN=404-repeat
+  amp_dir=analyses/amp_transfer
+  log_dir="$amp_dir/results/runs/$AMP_404_RUN-launch"
+  mkdir -p "$log_dir"
+  python3 "$amp_dir/launch_404.py" refit_404.py > "$log_dir/campaign.log" 2>&1
+  python3 "$amp_dir/launch_404.py" stability_404.py > "$log_dir/penalty.log" 2>&1
+  python3 "$amp_dir/launch_404.py" classify_descents.py main
+  python3 "$amp_dir/launch_404.py" classify_descents.py sensitivity
+  for route in "$amp_dir/results/runs/$AMP_404_RUN"/penalty-*; do
+    if test -f "$route/finding.json"; then
+      python3 "$amp_dir/launch_404.py" classify_descents.py "${route##*/}"
+    fi
+  done
+  python3 "$amp_dir/launch_404.py" retain_404.py
+) &
+```
+
+This rerun writes the reduced result to the ignored `results/runs/404-repeat-retained/` folder. The [presentation script](present_retransfer.py) uses the reviewed snapshot for the pressure plot.
 
 ### Manuscript numbers for the Writer
 
 [Old-to-new values and wording by LaTeX location](results/retransfer-404-05e94210/manuscript-handoff.md)
 
-- **Table 5** (`tab:transfer-species`) changes the AMP carbamate dispersion energy, its origin, and the fitted ion segment and Born diameters.
-- **Table 6** (`tab:transfer-fitted`) changes nine fitted values, active-bound marks, conditional errors and the alternative values. The main refit has one active bound, the R4 enthalpy increment.
-- **Table 7** (`tab:amine-summary`) changes both AMP rows, including the three pressure AARDs, bound counts, search denominators and split counts.
-- **S5, S7 and S20** change the full-precision parameters and completed R4 law, group deviations and signed biases, counts and separate reaction-range deviations. Check the eight R4 inside/outside alternative pressure deviations in the text beside S20.
+- **Table 6** (`tab:transfer-species`) changes the AMP carbamate dispersion energy, its origin, and the fitted ion segment and Born diameters.
+- **Table 7** (`tab:transfer-fitted`) changes fitted values, active-bound marks, conditional errors and the alternative values. The main refit has one active bound, the R4 enthalpy increment.
+- **Table 8** (`tab:amine-summary`) changes both AMP rows. The loaded-pressure AARD is 10.36% → 10.35% for the main refit, and the confirmed split count is 74 → 73.
+- **S5, S9 and S20** change the full-precision parameters, R4 coefficient $A_4$, group deviations, signed biases and separate reaction-range deviations. Check the eight R4 inside/outside alternative pressure deviations in the text beside S20.
 - **Figures 7 and 10** (`fig:amp-splits` and `fig:amp-pressure`) use the new phase locations and range-marked curves at the same observation conditions.
 - **Results, abstract and highlights** need the revised convergence and phase counts, sensitivity, penalty and interpolation evidence, and pressure and fraction errors. Recompute any four-amine range or ranking that uses AMP. Use the Gibbs-decrease example with its temperature, pressure, loading and two densities.
-- **Checks for the Writer** cover Tables 1–4, S8, S14 and S15 against the reaction, calibration, weighting, bounds and pure-component records.
+- **Checks for the Writer** cover Tables 2–5, S10, S16 and S17 against the reaction, calibration, weighting, bounds and pure-component records.
 
 The notebook is ready for independent numerical review and the owner’s reporting decision.
 
