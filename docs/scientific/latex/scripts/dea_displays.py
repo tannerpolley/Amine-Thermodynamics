@@ -595,6 +595,38 @@ hong_main = [f1(hstrict['hong']), f1(hstrict['adopted']), f"the {hstrict['n']} o
 hong_supplement = [f"{f2(hstrict['hong'])}\\,\\%, the MEA model by {f2(hstrict['adopted'])}\\,\\% and the model of Polley and Hedengren by {f2(hstrict['polley_hedengren_2026'])}", ', '.join(f2(hall[k]) for k in ('hong', 'adopted')) + f" and {f2(hall['polley_hedengren_2026'])}",
                    f"{int(hall['locally_unstable']) + int(hwagner['locally_unstable'])} of the {int(hall['n']) + int(hwagner['n'])} measured pressure states", f"{hchecks['grid_stability']['locally unstable']} of the {sum(hchecks['grid_stability'].values())} nodes",
                    ' and '.join(f2(hchecks['full_pressure_replay_AARD_percent'][k]) for k in ('adopted', 'polley_hedengren_2026')), ' or '.join(f2(hchecks['kim_endpoint_AARD_313_353'][k]['AARD_percent']) for k in ('cool', 'warm'))]
+# MEA model by temperature band (#409): every row recomputed from the retained points.
+BANDS = MEA + 'stripper-temperature-409/'
+bpts = read(BANDS + 'points.csv')
+BAND_CITE = dict(Hilliard2008='Hilliard2008', Jou1995='Jou1995', Aronu2011='Aronu2011', Idris2014='idrisSpeciationMEACO2Adducts2014', Wagner2013='wagnerSolubilityCarbonDioxide2013', Mamun2005='Mamun2005',
+                 Xu2011='Xu2011', Amundsen2009='Amundsen2009', Hartono2014='Hartono2014', Han2012='hanDensityWater12012', Sobrino2016='sobrinoViscosityDensityMeasurements2016', Concepcion2023='concepcionHeatCapacitiesDifferent2023',
+                 Weiland1997='weilandHeatCapacityAqueous1997', Vinjarapu2024='HemaBhavya2025', Arcis2011='arcisEnthalpySolutionCarbon2011', Kim2007='Kim2007', Kim2014='Kim2014')
+brel = lambda rows: [100 * (float(q['predicted']) - float(q['observed'])) / float(q['observed']) for q in rows]
+bstat = {}
+for b in read(BANDS + 'band-table.csv'):
+    if b['cohort'] == 'all':
+        d = brel([q for q in bpts if (q['property'], q['band'], q['role']) == (b['property'], b['band'], b['role'])])
+        assert len(d) == int(b['n']) and math.isclose(sum(map(abs, d)) / len(d), float(b['AARD_percent']), rel_tol=1e-9) and abs(sum(d) / len(d) - float(b['mean_signed_relative_percent'])) < 1e-9, b
+    bstat[b['property'], b['band'], b['role'], b['cohort']] = b
+PROPS = {'CO2 partial pressure': r'\COtwo partial pressure', 'heat of absorption': 'Absorption heat', 'heat capacity': 'Heat capacity', 'density': 'Density'}
+BROLE = {'fitted': 'fitted', 'not fitted': 'not fitted', 'not fitted, 15/45 wt%': r'not fitted, 15 and 45 wt\%', 'not fitted, source-flagged': r'not fitted, flagged\textsuperscript{a}'}
+trange = lambda b: f"{float(b['T_min_K']):.0f}" + ('' if round(float(b['T_min_K'])) == round(float(b['T_max_K'])) else f"--{float(b['T_max_K']):.0f}")
+brows = [[PROPS[b['property']], b['band'].capitalize() + ', ' + trange(b) + ' K', BROLE[b['role']], b['n'], f"${float(b['AARD_percent']):.2f}$", f"${float(b['mean_signed_relative_percent']):.2f}$",
+          r'\cite{' + ','.join(BAND_CITE[c] for c in b['sources'].split()) + '}']
+         for prop in PROPS for band in ('absorber', 'intermediate', 'stripper') for b in [v for (q, bd, _, c), v in bstat.items() if (q, bd, c) == (prop, band, 'all')]]
+table('supplement-temperature-bands', 'Deviations of the MEA model by temperature band.', ['Property', 'Band', 'Role', '$N$', 'AARD (\\%)', 'MSRD (\\%)', 'Sources'], brows, [.17, .19, .19, .05, .09, .09, .16],
+      notes=r'Absorber: $T\le\SI{353.2}{\kelvin}$; stripper: $T\ge\SI{370}{\kelvin}$; intermediate: between the two. Fitted observations are in the objective of the MEA model; no observation at or above \SI{370}{\kelvin} is fitted, and all were examined during development. AARD follows Eq.~\eqref{main-eq:aard}; MSRD is the mean of $100\,(y^{\mathrm{calc}}-y^{\mathrm{obs}})/y^{\mathrm{obs}}$, negative where the calculated value is low. Pressures are at nominal 30 wt\% MEA unless stated. Absorption heats are heat releases per mole of \COtwo as each source defines them; the heats of Kim and Svendsen, Kim et al.\ and Vinjarapu et al.\ are calculated at \SI{1.734}{\mega\pascal}, the pressure reported by Vinjarapu et al. \textsuperscript{a}Four intervals of Kim and Svendsen at \SI{393.15}{\kelvin}, two inconsistent with their integrals and the first two additions from zero loading, reported separately.')
+bget = lambda prop, band, role='not fitted', cohort='all': bstat[prop, band, role, cohort]
+bpa, bps = bget('CO2 partial pressure', 'absorber'), bget('CO2 partial pressure', 'stripper')
+assert round(float(bpa['AARD_percent'])) == round(float(bps['AARD_percent'])) == 25 and int(bget('CO2 partial pressure', 'absorber', cohort='six-source 30 wt%')['n']) + int(bget('CO2 partial pressure', 'stripper', cohort='six-source 30 wt%')['n']) == escore['112 current-not-fitted pressures'][1]
+assert all('Wagner2013' in b['sources'].split() for b in (bpa, bps)) and float(bget('density', 'stripper', cohort='Han2012 loaded')['mean_signed_relative_percent']) < 0
+bmin = {prop: min(brel([q for q in bpts if q['property'] == prop and q['band'] == 'stripper'])) for prop in ('heat capacity', 'density')}
+bheat = {c: -float(bget('heat of absorption', 'stripper', cohort=c)['mean_signed_relative_percent']) for c in ('Vinjarapu 2024 Table 5 (replayed)', 'Kim et al. 2014 (replayed)', 'Kim and Svendsen 2007')}
+assert min(bheat.values()) > 0
+bands_main = [rf"by about 25\,\% both at 313--\SI{{353}}{{\kelvin}}, on {bpa['n']} observations, and at 373--\SI{{393}}{{\kelvin}}, on {bps['n']},", rf"the {escore['112 current-not-fitted pressures'][1]} not-fitted pressures of the six sources at 313--\SI{{393}}{{\kelvin}}",
+              rf"deviate on average by {f1(bget('heat capacity', 'stripper')['AARD_percent'])}\,\% and {f1(bget('density', 'stripper')['AARD_percent'])}\,\%", rf"by up to ${bmin['heat capacity']:.1f}$ and ${bmin['density']:.1f}$\,\%",
+              rf"loaded densities are {f1(-float(bget('density', 'stripper', cohort='Han2012 loaded')['mean_signed_relative_percent']))}\,\% low on average",
+              rf"low by {f1(bheat['Vinjarapu 2024 Table 5 (replayed)'])}\,\% for Vinjarapu et al.", rf"{f1(bheat['Kim et al. 2014 (replayed)'])}\,\% for Kim et al.", rf"{f1(bheat['Kim and Svendsen 2007'])}\,\% for Kim and Svendsen"]
 apen, asens, achk = read(AM + 'penalty-0/finding.json'), read(AM + 'sensitivity-3.5/fit-summary.json'), read(AM + 'checks.json')
 aretreat = apen['retreat']; aup = next(e for e in aretreat['trace'] if e['t'] == aretreat['upper_t'])
 astall = [u for u in read(AM + 'penalty-0/unavailable-searches.json.gz')['search-21.json']]
@@ -626,7 +658,7 @@ stated = {'main.tex': [mea, amp, dea, split_MPa, splits, alt, f"the {escore['112
           'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *amp_main, *amp_measured, *hong_main,
                                             f"AARD of {float(dev['Cai']['AARD_percent']):.1f}", f"their bias equals their AARD, {f1(kur['True']['AARD_percent'])}",
                                             rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states"],
-          'sections/mea_system_modeling_results.tex': [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
+          'sections/mea_system_modeling_results.tex': bands_main + [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
           'submission/highlights.txt': [mea + '%', f'{amp}–{dea}%', splits, ours + '%', theirs + '%'],
           'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *amp_measured, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test"]}
 for path, values in stated.items():
