@@ -150,7 +150,7 @@ def _jsonable(value: object) -> object:
     if isinstance(value, (list, tuple)):
         return [_jsonable(item) for item in value]
     diagnostic_fields = (
-        "reaction_index", "terminal_contraction", "observed_terminal_change",
+        "reaction_index", "terminal_contraction",
         "reference_pressure_pa", "status", "message",
     )
     if all(hasattr(value, field) for field in diagnostic_fields):

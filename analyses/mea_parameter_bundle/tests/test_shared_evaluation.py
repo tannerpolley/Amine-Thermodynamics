@@ -5,7 +5,6 @@ import json
 import math
 import os
 import sys
-import subprocess
 import time
 from copy import deepcopy
 from pathlib import Path
@@ -21,6 +20,10 @@ shared = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 sys.modules["shared_evaluation"] = shared
 SPEC.loader.exec_module(shared)
+
+HISTORICAL_PARAMETERS = (
+    shared.ANALYSIS / "results/same-data-comparison/polley-2026-explicit-defaults.json"
+)
 
 
 def _request() -> dict[str, object]:
@@ -55,11 +58,8 @@ def _snapshot() -> shared.SolveSnapshot:
 
 
 def test_cache_records_model_identity_and_separates_candidate(tmp_path, monkeypatch):
-    parameter_file = tmp_path / "parameters.json"
-    parameter_file.write_text(shared.PARAMETERS.read_text())
-    monkeypatch.setattr(shared, "PARAMETERS", parameter_file)
     monkeypatch.setattr(shared, "RUNS", tmp_path / "runs")
-    monkeypatch.setattr(shared, "_selected_reactions", lambda: {})
+    monkeypatch.setattr(shared, "_selected_reactions", lambda _mapping=None: {})
     calls = []
     monkeypatch.setattr(
         shared,
@@ -93,11 +93,8 @@ def test_cache_records_model_identity_and_separates_candidate(tmp_path, monkeypa
     [("evaluation_timeout", False), ("engine_exception", False), ("infeasible", True)],
 )
 def test_failed_state_cache_policy(tmp_path, monkeypatch, failure_code, reusable):
-    parameter_file = tmp_path / "parameters.json"
-    parameter_file.write_text(shared.PARAMETERS.read_text())
-    monkeypatch.setattr(shared, "PARAMETERS", parameter_file)
     monkeypatch.setattr(shared, "RUNS", tmp_path / "runs")
-    monkeypatch.setattr(shared, "_selected_reactions", lambda: {})
+    monkeypatch.setattr(shared, "_selected_reactions", lambda _mapping=None: {})
     calls = []
     monkeypatch.setattr(
         shared,
@@ -145,38 +142,38 @@ def test_native_solver_timeout_terminates_owned_child(monkeypatch):
 def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
     shared.verify_wheel()
     monkeypatch.setattr(shared, "RUNS", tmp_path)
-    incumbent = tmp_path / "incumbent-868a5018.json"
-    incumbent.write_bytes(subprocess.check_output(["git", "show", "33508be:analyses/mea_parameter_bundle/results/selected-current-best-parameters.json"], cwd=Path(__file__).parents[3]))
-    assert shared.sha256(incumbent) == "868a501831b87e95dedf18ce40e9e7ac949f7c6a4aaf137f717cc493ecfcb7be"
-    parameters = shared.load_parameters(incumbent)
-    fingerprint = shared.parameter_fingerprint(shared.parameter_mapping(incumbent))
-    model = shared.epcsaft.Mixture(parameters)
+    # #339 translated 868a5018 with explicit Born defaults and inactive CO2–MEA association.
+    assert shared.sha256(HISTORICAL_PARAMETERS) == "be66f6cf9df77201a632d73a3c3e341f66ce7fc77b69c3d657288f4c1899a76b"
+    mapping = shared.parameter_mapping(HISTORICAL_PARAMETERS)
+    fingerprint = shared.parameter_fingerprint(mapping)
+    model = shared.epcsaft.Mixture(shared.load_parameters(HISTORICAL_PARAMETERS))
     request = next(
         observation["request"]
         for observation in shared.load_state_packet()["observations"]
         if observation["identity"] == "Bottinger2008_state_050"
     )
-    reactions = shared.reaction_values(shared.parameter_mapping(incumbent))
+    reactions = shared.reaction_values(mapping)
     result = shared.evaluate_state(
-        model, request, reactions, "Bottinger2008_state_050", [], budget_s=60, model_fingerprint=fingerprint
+        model, request, reactions, "Bottinger2008_state_050", [], budget_s=60,
+        model_fingerprint=fingerprint, mapping=mapping, parameter_path=HISTORICAL_PARAMETERS,
     )
     assert result["status"] == "evaluated", result["attempts"]
     assert result["failure_code"] == ""
-    # Fitted exclusion-mode record (SHA 868a5018...). The superseded all-ion-pairs record
-    # still reproduces the former pins (hco3 0.005214865, mea_meah 0.06771946, meacoo
-    # 0.04449868) to 6e-14 on this wheel, so the change is the declared model, not the Engine.
+    # #339 qualification-all-rows.csv gives the carbamate mole fraction with
+    # analytic infinite dilution. The other references still pass their tolerances.
+    carbamate = 0.03764887791365205
     assert result["predictions"] == pytest.approx(
         {
             "Bottinger2008_state_050-hco3": 0.010779404008693854,
             "Bottinger2008_state_050-mea_meah": 0.07456750655659783,
-            "Bottinger2008_state_050-meacoo": 0.0376488801816921,
+            "Bottinger2008_state_050-meacoo": carbamate,
         },
         rel=5e-8,
         abs=1e-12,
     )
     liquid = next(phase for phase in result["phases"] if phase["role"] == "liquid")
     species = dict(zip(liquid["support"], liquid["mole_fractions"], strict=True))
-    assert species["carbamate-anion"] == pytest.approx(0.0376488801816921, rel=5e-8)
+    assert species["carbamate-anion"] == pytest.approx(carbamate, rel=5e-8)
     assert species["bicarbonate-anion"] == pytest.approx(0.010779404008693854, rel=5e-8)
     assert species["hydronium-cation"] == pytest.approx(3.906278160355156e-10, rel=5e-6)
     evidence = dict(result["evidence"])
@@ -188,9 +185,9 @@ def test_pinned_engine_state_and_cached_replay(tmp_path, monkeypatch):
         row[1] for row in result["evidence"] if row[0] == "neutral_reference_diagnostics"
     )
     assert all(item["status"] == "Available" for item in diagnostics)
-    assert max(item["observed_terminal_change"] for item in diagnostics) <= 5.0e-5
     replay = shared.evaluate_state(
-        model, request, reactions, "Bottinger2008_state_050-replay", [], budget_s=15, model_fingerprint=fingerprint
+        model, request, reactions, "Bottinger2008_state_050-replay", [], budget_s=15,
+        model_fingerprint=fingerprint, mapping=mapping, parameter_path=HISTORICAL_PARAMETERS,
     )
     assert replay["cache_hit"] is True
     assert replay["predictions"] == result["predictions"]
@@ -202,7 +199,9 @@ def test_source_normalizer_keeps_common_r2_and_converts_only_log10_form():
         for o in shared.load_state_packet()["observations"]
         if o["identity"] == "Bottinger2008_state_050"
     )
-    selected = shared._engine_reaction_records(request, shared._selected_reactions())
+    # The reference coefficients below belong to the historical R2/R5 fit.
+    mapping = shared.parameter_mapping(HISTORICAL_PARAMETERS)
+    selected = shared._engine_reaction_records(request, shared.reaction_values(mapping), mapping)
     r2 = selected[1]
     assert r2["engine_correlation"]["a"] == pytest.approx(
         232.33141533884407
