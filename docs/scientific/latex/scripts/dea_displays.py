@@ -537,28 +537,29 @@ read(BASE + 'checks.json')
 read('analyses/dea_transfer/inputs/part-ii-346/route-current.json')
 # Numbers quoted in the prose, recomputed from the retained files read above.
 f2 = lambda v: f'{float(v):.2f}'
+f1 = lambda v: f'{float(v):.1f}'  # the main text and the highlights give percent deviations to one decimal; tables and the supplement keep two
 notfit = [float(r['AARD_percent']) for r in read(BASE + 'group-deviations.csv') if r['model'] == '05e94210' and r['role'] == 'not fitted'] + [mstats[g]['R1']['False']['AARD_percent'] for g in ('Ermatchkov', 'corrected-Kamps', 'Kuranov-413K', 'Sedighi', 'Xiao')] + [e['unpenalized']['AARD_percent'] for e in acomp['pressure_deviations_by_range'] if e['range'] == 'R1' and e['role'] == 'not fitted']
 fitted_mdea = [float((mstats[g]['R1'].get('False') or mstats[g]['R1']['reaction not used'])['AARD_percent']) for g in {r['group'] for r in mrows if r['role'] == 'fitted'} if g != 'Kuranov']  # every fitted MDEA set but the loaded pressures
 viii = next(r for r in data if r['identity'] + ':problem' == dsum['stability']['grid']['unavailable'][0])
 kur, ermatchkov = mstats['Kuranov']['MDEA-dissociation'], next(c for c in mpub if c['group'] == 'Ermatchkov')
-mea, dea, mdea = f2(escore['47 current-fitted pressures'][0]), f2(dsum['pressure']['fitted']['AARD_percent']), f2(mstats['Kuranov']['R1']['False']['AARD_percent'])
-amp, alt = (f2(stable['loaded-pressure'][k]['AARD_percent']) for k in ('unpenalized', 'retreat'))
-outside, split_MPa, splits = f'{min(notfit):.2f}--{max(notfit):.2f}', f"{float(msplit['search_pressure_Pa'])/1e6:.1f}", f"at least {asum['liquid_liquid_lower_bound']}"
-ours, theirs = f2(ermatchkov['selected_point_mean_absolute_relative_deviation_percent']), f"{ermatchkov['published_parameter_sets'][0]['mean_absolute_relative_deviation_percent']:g}"
+mea, dea, mdea = f1(escore['47 current-fitted pressures'][0]), f1(dsum['pressure']['fitted']['AARD_percent']), f1(mstats['Kuranov']['R1']['False']['AARD_percent'])
+amp, alt = (f1(stable['loaded-pressure'][k]['AARD_percent']) for k in ('unpenalized', 'retreat'))
+outside, split_MPa, splits = f'{min(notfit):.1f}--{max(notfit):.1f}', f"{float(msplit['search_pressure_Pa'])/1e6:.1f}", f"at least {asum['liquid_liquid_lower_bound']}"
+ours, theirs = f1(ermatchkov['selected_point_mean_absolute_relative_deviation_percent']), f"{ermatchkov['published_parameter_sets'][0]['mean_absolute_relative_deviation_percent']:g}"
 searched = dsum['stability']['grid']['states']
 hstrict, hall, hwagner = (next(r for r in hong if (r['block'], r['subset']) == k) for k in (('canonical', 'strict grid'), ('canonical', 'all'), ('wagner', 'all')))
-hong_main = [f2(hstrict['hong']), f2(hstrict['adopted']), f"the {hstrict['n']} observations", f"at {hstrict['locally_unstable']} of them"]
+hong_main = [f1(hstrict['hong']), f1(hstrict['adopted']), f"the {hstrict['n']} observations", f"at {hstrict['locally_unstable']} of them"]
 hong_supplement = [f"{f2(hstrict['hong'])}\\,\\%, the MEA model by {f2(hstrict['adopted'])}\\,\\% and the model of Polley and Hedengren by {f2(hstrict['polley_hedengren_2026'])}", ', '.join(f2(hall[k]) for k in ('hong', 'adopted')) + f" and {f2(hall['polley_hedengren_2026'])}",
                    f"{int(hall['locally_unstable']) + int(hwagner['locally_unstable'])} of the {int(hall['n']) + int(hwagner['n'])} measured pressure states", f"{hchecks['grid_stability']['locally unstable']} of the {sum(hchecks['grid_stability'].values())} nodes",
                    ' and '.join(f2(hchecks['full_pressure_replay_AARD_percent'][k]) for k in ('adopted', 'polley_hedengren_2026')), ' or '.join(f2(hchecks['kim_endpoint_AARD_313_353'][k]['AARD_percent']) for k in ('cool', 'warm'))]
 stated = {'main.tex': [mea, amp, dea, split_MPa, splits, alt], 'sections/introduction.tex': [split_MPa, splits],
           'sections/conclusion.tex': [mea, dea, mdea, amp, outside, split_MPa, splits, alt, ours, theirs],
-          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.2f}--{max(fitted_mdea):.2f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *hong_main,
+          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *hong_main,
                                             f"AARD of {float(dev['Cai']['AARD_percent']):.1f}",
                                             rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states"],
-          'sections/mea_system_modeling_results.tex': [f2(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
+          'sections/mea_system_modeling_results.tex': [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
           'submission/highlights.txt': [mea + '%', f'{amp}-{dea}%', splits, ours + '%', theirs + '%'],
-          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea, *hong_supplement]}
+          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *hong_supplement]}
 for path, values in stated.items():
     for value in values: assert value in (LATEX / path).read_text(), (path, value)
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
