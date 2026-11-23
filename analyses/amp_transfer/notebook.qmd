@@ -3,7 +3,150 @@ title: "AMP re-transfer onto the adopted shared parameters"
 subtitle: "Part II on Engine 05e94210"
 ---
 
-## AMP on the adopted shared record
+## AMP refit using two carbamate coefficients from the 16-parameter MEA calibration
+
+Replacing the two fixed carbamate coefficients together reduced the weighted fitted cost from 61.70003837 to 61.42269696 on the same 156 observations. The fitted-pressure error changed by about 0.01 percentage points. The carbamate-fraction AARD fell by 1.21 percentage points.
+
+| Quantity | Observations | #344 | F0-input refit | Change |
+|---|---:|---:|---:|---:|
+| Weighted fitted cost | 156 | 61.70003837 | 61.42269696 | −0.27734141 |
+| AARD, fitted loaded total pressure | 47 | 10.364% | 10.350% | −0.014 pp |
+| AARD, all fitted pressures | 73 | 7.080% | 7.069% | −0.011 pp |
+| AARD, pressures outside the objective | 114 | 34.199% | 34.216% | +0.017 pp |
+| AARD, binary total pressure | 26 | 1.143% | 1.138% | −0.005 pp |
+| AARD, binary vapor AMP mole fraction | 26 | 3.681% | 3.710% | +0.029 pp |
+| AARD, carbamate fraction per analytical AMP | 57 | 27.442% | 26.228% | −1.214 pp |
+
+The fixed AMP carbamate dispersion energy is $183.00063128808972$ K and the carbamate–water interaction coefficient is $-0.013004788810687472$. Both entries were identified by fit, coefficient identity and unit in the retained F0 table. The conditional standard error of the interaction coefficient in F0 is 0.1444. The AMP calculation holds both coefficients fixed. It estimates the tied carbamate segment and Born diameters with the F2 MEA carbamate diameter of 5.34799141560911 Å as the main floor and 3.5 Å as the sensitivity floor.
+
+All 270 observations returned predictions and have nonzero observed values. The objective uses half the sum of squared weighted residuals. The 47 Hartono loaded pressures use log-pressure scale 0.015 and weight $1/47$. The 26 binary pressures (log-pressure scale 0.05) and 26 vapor fractions (difference scale $\max(10^{-4},0.05y_{\mathrm{obs}})$) share weight $1/52$. The 57 Ciftja carbamate fractions use difference scale 0.003 and weight $1/57$. The other 114 pressures were seen during development and combine partial and total pressures when pooled. The differences measure the joint substitution and refitting.
+
+[Issue and readiness amendment](https://github.com/tannerpolley/Amine-Thermodynamics/issues/404) · [Paired observations](results/retransfer-404-05e94210/main/data-rows.json) · [Signed bias, AARD, counts and common-row differences](results/retransfer-404-05e94210/same-row-deviations.csv) · [Source uncertainties](results/retransfer-344-05e94210/source-measurement-uncertainties.json) · [Published-model comparison qualifications](results/retransfer-344-05e94210/published-model-comparisons.json)
+
+![Homogeneous AMP model curves and measured points by source, temperature and stock.](results/retransfer-404-05e94210/main/measured-model.png)
+
+The 298.15–393.20 K calculation interval includes 23 hot Tong rows. The range flags use 273.15–498.15 K for each R1–R3 source correlation (Austgen et al., Table V), 313.15–373.15 K for the model-derived R4 values (Xu et al., Table 2 and Eqs. 7–11), and 293.12–353.22 K for measured R5 constants (Hamborg and Versteeg, Table 16). Rows retain the reaction-not-used category. Dashed curves and open diamonds mark temperatures outside an applicable range. The pure AMP comparison uses its retained fit and source rows.
+
+[620 curve values and range flags](results/retransfer-404-05e94210/main/curve-data.json) · [Pure AMP comparison](results/pure/summary.json)
+
+### Parameter estimates and replay
+
+| Coordinate | Unit | Bounds | #344 | New fit | Conditional SE | New alternative |
+|---|---|---|---:|---:|---:|---:|
+| AMP–water intercept | dimensionless | -0.5 to 0.5 | -0.130402095 | -0.130109761 | 0.00617277 | -0.129341003 |
+| AMP–water slope | K | -1000 to 1000 | -55.1075226 | -54.3159072 | 16.3428 | -51.5260243 |
+| AMPH⁺–water intercept | dimensionless | -0.5 to 0.5 | -0.256352166 | -0.256131912 | 0.023166 | -0.277535008 |
+| AMPH⁺–water slope | K | -1000 to 1000 | -215.472636 | -214.680512 | 87.9867 | -222.43019 |
+| AMPH⁺–CO₂ interaction | dimensionless | -1 to 1 | 0.758404454 | 0.75651014 | 0.0760223 | 0.757974383 |
+| AMPH⁺ segment and Born diameters | angstrom | 4.5 to 6.5 | 5.7729841 | 5.76991543 | 0.714466 | 5.75897233 |
+| Carbamate segment and Born diameters | angstrom | 5.34799142 to 6.5 | 6.5 | 6.47046472 | 1.66476 | 5.98297799 |
+| R4 constant | dimensionless | 6.63463668 to 11.6346367 | 11.1144856 | 11.5616748 | 4.57024 | 10.1230666 |
+| R4 enthalpy increment | J/mol | -5000 to 5000 | -5000 | -5000 (lower bound) | — | -5000 (lower bound) |
+
+The conditional standard errors use the local weighted residual Jacobian with the fixed inputs and active bound held fixed. They exclude uncertainty from transfer, model form, source systematic error and competing phases. The enthalpy increment uses the declared starting law as its zero. The parameter file retains the completed R4 law.
+
+| Diameter floor | Start | Termination | Reloaded cost | Fit and replay, s | Search, s | Completed | Liquid-directed | Confirmed | Unresolved coexistence |
+|---|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 5.34799141560911 Å | 0 | Converged | 61.42269696437 | 37.1 | 69.1 | 666/666 | 92 | 73 | 19 |
+| 5.34799141560911 Å | 1 | Converged | 61.42269701978 | 51.0 | 46.6 | 666/666 | 92 | 73 | 19 |
+| 3.5 Å | 0 | Limit, then converged | 61.42269697052 | 53.9 | 80.5 | 666/666 | 92 | 73 | 19 |
+| 3.5 Å | 1 | Converged | 61.42269701979 | 34.4 | 75.6 | 666/666 | 92 | 73 | 19 |
+
+Start 0 gave the lowest fitted cost at both floors. Neither pair of costs ties within the relative function tolerance of $10^{-10}$. Start 0 at 3.5 Å reached its 60-iteration limit and converged after continuing with the same settings. Its final cost differs from the main fit by $6.15\times10^{-9}$, and both estimate a carbamate diameter near 6.47 Å. The sensitivity consisted of the fit and stability search.
+
+Both published #344 points replayed exactly on their costs and all 312 fitted predictions. The Engine 1.3.1 installation matched the pinned wheel bytes and the shared inputs matched their #340 hashes. The two-key difference check passed on both starts at each floor after shared-value adoption. All five main and sensitivity stage endpoints replayed within $10^{-8}$ relative. All 270 observations matched in identity, value, unit, role, stock, loading, temperature and reaction flags. The 7,301-entry bank was reconstructed from the #344 declaration and its retained additions and matched the recorded SHA-256 for that bank.
+
+[Source and replay checks](results/retransfer-404-05e94210/checks.json) · [Main fits and group costs](results/retransfer-404-05e94210/main/fit-summary.json) · [Main parameters and reactions](results/retransfer-404-05e94210/main/parameters.json) · [Sensitivity fits and conditional estimates](results/retransfer-404-05e94210/sensitivity-3.5/fit-summary.json)
+
+### Phase evidence
+
+The full finite search covered 270 observation states and a 396-entry grid. Grid states used 26.8 and 30.0 wt% AMP at 313.15–393.15 K in 10 K steps, loadings from $10^{-5}$ to 0.966 mol CO₂ per mol AMP, and pressures of 1.05 and 3 times the model bubble pressure. The selected main refit gave 92 liquid-directed descents, 73 independently converged two-liquid equilibria and 19 unresolved coexistence calculations. The corresponding #344 counts were 90, 74 and 16. The new descents occurred between 363.15 and 393.20 K and between 0.38 and 0.966 mol CO₂ per mol AMP.
+
+Confirmation held feed, temperature and pressure fixed. Both liquid roots had positive amounts and the decrease in total $G/(RT)$ exceeded its numerical estimate. The largest decrease was 0.0161832 mol at 393.15 K, 1.21528 MPa, 30.0 wt% AMP and 0.7 mol CO₂ per mol AMP. The two densities were 31,742.6 and 44,630.9 mol/m³. The numerical estimate was $2.79\times10^{-9}$ mol. The fitted pressures and fractions measure calibration agreement. The phase counts are lower bounds from a finite search. The study supplies no measured liquid–liquid coexistence or independent validation.
+
+[Main search states](results/retransfer-404-05e94210/main/search-0.json.gz) · [Density roots, coexistence attempts and Gibbs comparisons](results/retransfer-404-05e94210/main/phase-classification-0.json.gz)
+
+### Penalty stages and stability-constrained alternative
+
+Both unpenalized starts found liquid-directed descents. The main endpoints differ in eight coordinates, including a carbamate diameter difference of 0.00020036 Å and an R4 constant difference of 0.00055128. An eligibility search preceded any penalty fit for each start.
+
+- Start 0 anchor completed 666/666 entries and gave 0 descents in 68.7 s. [Stage disposition](results/retransfer-404-05e94210/penalty-0/finding.json)
+- Start 0 at scale 0.01 converged in 630.0 s including endpoint replay. Its data cost was 61.52917403 and its penalty cost was 0.02702698. The compressed check found 42 descents on 862/862 completed entries. The full search gave 39 descents on 666/666 entries in 59.5 s.
+- Start 0 at scale 0.003 converged in 424.4 s including endpoint replay. Its data cost was 61.59360343 and its penalty cost was 0.01824427. The compressed check found 17 descents on 862/862 completed entries. The full search gave 17 descents on 666/666 entries in 43.1 s.
+- Start 1 anchor completed 666/666 entries and gave 572 descents in 40.3 s. Its anchor was ineligible. Start 0 remains the main fit and the alternative uses the start 0 anchor. [Stage disposition](results/retransfer-404-05e94210/penalty-1/finding.json)
+
+The alternative interpolates from start 0's eligible anchor toward the final penalty endpoint at $t=0.558555603027$. The upper neighboring check at $t=0.558563232422$ had zero descents and one unavailable entry. The interpolated point has no fit standard errors.
+
+At the upper neighbor, the compressed 30 wt% grid state at 313.15 K, loading 0.6 and 1.05 times the model bubble pressure stalled at a residual of $1.18037\times10^{-10}$ against the declared $10^{-10}$ row tolerance. The upper fraction therefore reflects numerical availability at this bracket.
+
+The alternative replay gave cost **126.86096004** on the 156 fitted observations compared with 124.72679408 for the #344 alternative. The full and compressed checks and the supplied-trial rechecks completed 666/666 and 862/862 entries, respectively, with zero evaluated descents using the **7,879-trial bank**. The compressed supplied-trial recheck reused the final passing retreat sweep. The initial bank had 7,301 trials. The retained main bank later grew to 10,771 trials.
+
+| Alternative AARD | Rows | #344 | New | Change |
+|---|---:|---:|---:|---:|
+| Fitted loaded pressures | 47 | 20.043% | 20.202% | +0.159 pp |
+| All fitted pressures | 73 | 13.291% | 13.392% | +0.101 pp |
+| Pressures outside the objective | 114 | 59.048% | 59.513% | +0.465 pp |
+
+| R4 range and pressure set | Rows | #344 alternative AARD | New alternative AARD |
+|---|---:|---:|---:|
+| Supplemental Hartono, inside | 11 | 21.553% | 21.469% |
+| Supplemental Hartono, outside | 7 | 28.917% | 28.871% |
+| Kundu, inside | 11 | 30.913% | 31.295% |
+| Kundu, outside | 40 | 111.593% | 112.574% |
+| Fitted Hartono, inside | 32 | 19.784% | 19.917% |
+| Fitted Hartono, outside | 15 | 20.597% | 20.809% |
+| Tong, inside | 17 | 52.990% | 53.660% |
+| Tong, outside | 23 | 24.727% | 24.698% |
+
+[Alternative parameter document](results/retransfer-404-05e94210/penalty-0/alternative-parameters.json) · [Alternative observations](results/retransfer-404-05e94210/penalty-0/data-rows.json) · [Group costs](results/retransfer-404-05e94210/penalty-0/group-costs.json) · [Full and compressed checks](results/retransfer-404-05e94210/penalty-0/alternative-checks.json) · [Main trial bank additions](results/retransfer-404-05e94210/main-new-witnesses.json.gz) · [Retreat timing](results/retransfer-404-05e94210/penalty-0/retreat-timing.json) · [Unavailable searches](results/retransfer-404-05e94210/penalty-0/unavailable-searches.json.gz)
+
+- The 0.003 timing probe for start 0 took 205.3 s and projected 7.0 min including its diagnostic search. [Measured evaluations](results/retransfer-404-05e94210/penalty-0/profile-0.003.json)
+- The 0.01 timing probe for start 0 took 343.9 s and projected 17.4 min including its diagnostic search. [Measured evaluations](results/retransfer-404-05e94210/penalty-0/profile-0.01.json)
+- The compressed retreat sweep took 62.7 s, plus 3.0 s for replay. The 21-sweep projection was 23.0 min. The bisection took about 18.8 min from the run file times. [Retreat timing](results/retransfer-404-05e94210/penalty-0/retreat-timing.json)
+
+### Rerun from the frozen inputs
+
+Use the tracked [launcher](launch_404.py), [fit and replay](refit_404.py), [penalty and retreat](stability_404.py), [phase classification](classify_descents.py), and [reduction](retain_404.py) scripts from the repository root with the declared wheel installed in the selected uv environment. The launcher measures free resources before each stage and caps the worker request at 16. The first stage verifies the installed wheel against the pinned wheel file and replays both #344 points before fitting. The 3.5 Å branch runs only the fit and its phase search. The fit and penalty logs retain the launch measurements.
+
+```bash
+(
+  set -e
+  export AMP_404_RUN=404-repeat
+  amp_dir=analyses/amp_transfer
+  log_dir="$amp_dir/results/runs/$AMP_404_RUN-launch"
+  mkdir -p "$log_dir"
+  python3 "$amp_dir/launch_404.py" refit_404.py > "$log_dir/campaign.log" 2>&1
+  python3 "$amp_dir/launch_404.py" stability_404.py > "$log_dir/penalty.log" 2>&1
+  python3 "$amp_dir/launch_404.py" classify_descents.py main
+  python3 "$amp_dir/launch_404.py" classify_descents.py sensitivity
+  for route in "$amp_dir/results/runs/$AMP_404_RUN"/penalty-*; do
+    if test -f "$route/finding.json"; then
+      python3 "$amp_dir/launch_404.py" classify_descents.py "${route##*/}"
+    fi
+  done
+  python3 "$amp_dir/launch_404.py" retain_404.py
+) &
+```
+
+This rerun writes the reduced result to the ignored `results/runs/404-repeat-retained/` folder. The [presentation script](present_retransfer.py) uses the reviewed snapshot for the pressure plot.
+
+### Manuscript numbers for the Writer
+
+[Old-to-new values and wording by LaTeX location](results/retransfer-404-05e94210/manuscript-handoff.md)
+
+- **Table 6** (`tab:transfer-species`) changes the AMP carbamate dispersion energy, its origin, and the fitted ion segment and Born diameters.
+- **Table 7** (`tab:transfer-fitted`) changes fitted values, active-bound marks, conditional errors and the alternative values. The main refit has one active bound, the R4 enthalpy increment.
+- **Table 8** (`tab:amine-summary`) changes both AMP rows. The loaded-pressure AARD is 10.36% → 10.35% for the main refit, and the confirmed split count is 74 → 73.
+- **S5, S9 and S20** change the full-precision parameters, R4 coefficient $A_4$, group deviations, signed biases and separate reaction-range deviations. Check the eight R4 inside/outside alternative pressure deviations in the text beside S20.
+- **Figures 7 and 10** (`fig:amp-splits` and `fig:amp-pressure`) use the new phase locations and range-marked curves at the same observation conditions.
+- **Results, abstract and highlights** need the revised convergence and phase counts, sensitivity, penalty and interpolation evidence, and pressure and fraction errors. Recompute any four-amine range or ranking that uses AMP. Use the Gibbs-decrease example with its temperature, pressure, loading and two densities.
+- **Checks for the Writer** cover Tables 2–5, S10, S16 and S17 against the reaction, calibration, weighting, bounds and pure-component records.
+
+The notebook is ready for independent numerical review and the owner’s reporting decision.
+
+## Previous AMP transfer (#344)
+
+### AMP on the adopted shared record
 
 **OWNER DECISION 2026-11-19 (question tool, answered by the owner): "Unpenalized + stable shown".** This notebook reports unpenalized main start 0 as the AMP fit and unpenalized start 1 for the 3.5 Å sensitivity. Reporting the unpenalized endpoints is an AMP-only exception to the #337 penalty rule, stated openly. The main start-0 retreat is shown alongside as the stability-constrained alternative. The decision began as an orchestrator decision taken while the owner was away and was confirmed by the owner on 2026-11-19. [Reporting decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-7002669137); [owner confirmation](https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-7019544983)
 
@@ -23,7 +166,7 @@ The #337 cost rule compares starts of the same fit. The main unpenalized starts 
 
 The shared file and adopted parameter record match their declared SHA-256 hashes. Water–bicarbonate and water–carbonate have fixed interaction coefficients 0.7650000233694618 and −0.25. AMP ion Born and segment diameters are tied. The installed Engine files match the pinned 05e94210 wheel. The two declared starts were projected to the 5.34799141560911 Å AMP carbamate floor without changing the completed reaction laws. Start 0 moved from 5.31999516 Å and start 1 from 5.3 Å. The optimizer replayed their initial weighted costs of 229.23720904 and 3663.10577953, respectively. The diameter floor is 3.5 Å in the sensitivity. [Start projections](inputs/retransfer-344/phase-2/start-projections.json)
 
-## Optimizer results
+### Optimizer results
 
 | Floor | Stage | Fitted cost | Penalty cost | Iterations | Termination | Native fit / s |
 |---|---|---|---|---|---|---|
@@ -50,7 +193,7 @@ Conditional standard errors at the retreat point are unavailable because it is i
 
 The [compact parameter table](results/retransfer-344-05e94210/campaign/parameter-table.json) includes the five fixed pure-AMP coefficients. The retained pure-AMP vapour-pressure deviations are 1.8853% on 15 Klepáčová rows, 1.7698% on nine Belabbaci rows and 1.1848% on 23 Pappa rows. The three density residuals are +0.011923, −0.030034 and +0.018162 kg/m³. The retained AMP–water prefit has 1.0462% deviation and +0.9834% bias on 26 total pressures, and 3.6328% deviation and +0.5515% bias on 26 vapour fractions. Both prefits retain their original producing wheel and observations. [Pure AMP](results/pure/summary.json) · [AMP–water](results/binary-dielectric.json)
 
-## Completed penalty stages
+### Completed penalty stages
 
 | Floor | Start | Penalty scale | Fitted cost | Penalty cost | Iterations | Termination | Active bounds | Diagnostic available / entries | Descending entries, lower bound |
 |---|---:|---:|---:|---:|---:|---|---|---:|---:|
@@ -67,7 +210,7 @@ The two main 0.01 stages took 37.0 and 37.3 minutes including their diagnostic s
 
 The 3.5 Å start-0 scale-0.003 fit converged in 55 iterations on the relative function tolerance of $10^{-10}$. The native stage took 64.61 minutes with 57 residual and 38 Jacobian evaluations. Its compressed native replay and the supplied-trial diagnostic found 17 descending entries each, with 862 and 666 available entries, respectively. The diameter moved from the prior stage's 3.5 Å lower limit to the 6.5 Å upper limit. The enthalpy increment remained at its −5000 J/mol lower limit. The previous 3,450 s attempt and its memory trace are retained separately. [Sensitivity fit history](results/retransfer-344-05e94210/sensitivity-3.5/fits.json) · [Prior timeout](results/retransfer-344-05e94210/sensitivity-3.5/start-0/penalized-1-timeout.json)
 
-## Fitted cost by observation group
+### Fitted cost by observation group
 
 Cost is half the sum of squared weighted residuals. The reported fit and the retreat use the same 156 fitted rows and residual scales. The loaded Hartono pressures account for the increase of 63.02676 cost units. Their contribution rises by 63.08674 while each other group contributes slightly less.
 
@@ -81,7 +224,7 @@ Cost is half the sum of squared weighted residuals. The reported fit and the ret
 
 [Group totals and individual fitted row costs](results/retransfer-344-05e94210/campaign/start-0/retreat-comparison.json)
 
-## Deviation and signed bias by reaction range
+### Deviation and signed bias by reaction range
 
 Every calculation uses 298.15–393.20 K. The measured AMP dissociation interval is 293.12–353.22 K (Hamborg and Versteeg 2009, Table 16). The 313.15–373.15 K carbamate-hydrolysis interval comes from source estimates (Xu et al. 1992, Table 2 and Eqs. 7–11). 273.15–498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage.
 
@@ -119,7 +262,7 @@ The reported 3.5 Å sensitivity, unpenalized start 1, retains the same data role
 
 ![Measurements and homogeneous model curves at unpenalized start 1 with the 3.5 Å floor. Diamonds and dashed lines mark temperatures outside an applicable reaction range.](results/retransfer-344-05e94210/sensitivity-3.5/measured-model.png)
 
-## Finite stability searches and execution limits
+### Finite stability searches and execution limits
 
 | Case | Search | Entries | Available | Unavailable | Native liquid lower bound | Any descent lower bound | Supplied evaluated | Supplied unavailable | Supplied not applicable |
 |---|---|---|---|---|---|---|---|---|---|
@@ -138,7 +281,7 @@ All eight unpenalized searches returned zero native vapor descents. The four mai
 
 The retained #391/#392 qualification used 1,906 entries and 5,895 AMP supplied trials at the prior search-106 point. It took 369.3 s on three workers and returned 1,905 available entries and no descents. The entry at 393.15 K, loading 0.9 mol CO₂/mol AMP and $1.05 P_{\rm bubble}$ was unavailable because trial 1 stalled at residual $1.349\times10^{-10}$ against the declared $10^{-10}$ equilibrium-row tolerance (epcsaft#87). The first six unpenalized searches took 141–148 s each on three workers. [Completed diagnostic search timings](results/retransfer-344-05e94210/runtime-profile.json) retain the individual measurements.
 
-### Penalty evaluation timing
+#### Penalty evaluation timing
 
 The earlier one-iteration wrapper took 344.6 s. Its 56.6 s optimizer timer missed the initial Jacobian, endpoint Jacobian and serial stability replay. The detailed trace used the same 862 compressed-liquid rows, 156 fitted observations, wheel and three workers.
 
@@ -162,7 +305,7 @@ The projection uses the lighter timing trace, with 55.03 s per residual, 64.43 s
 
 The one-iteration profiling runs returned identical predictions, residuals, optimizer coordinates and costs. The optimizer, penalty, trial families and stopping controls are unchanged. The completed main 0.01 fits actually used 23 residual and 16 Jacobian evaluations each. The completed main 0.003 fits used nine residual and eight Jacobian evaluations each. The projection is local to its measured point and evaluation counts. [Penalty profile and planning inputs](results/retransfer-344-05e94210/penalty-evaluation-profile.json)
 
-### Retreat runtime
+#### Retreat runtime
 
 The full compressed anchor search found zero descents across 862 available entries with 7,150 supplied trials. The 209.4 s sweep gave a 73.3-minute projection for 21 sweeps before any expansion. Compact output reduced the same anchor sweep to 156.8 s, or 54.9 minutes for 21 sweeps. Every retained state summary matched, including counts and minimum tangent-plane distances. An additional check matched all 18 state summaries at the penalty endpoint, including 17 descents.
 
@@ -180,7 +323,7 @@ The exact 3.5 Å start-0 scale-0.003 probe took 317.29 s for one iteration, incl
 
 The declared main start 1 anchor returned 572 descents across all 666 available entries, so the eligibility search ruled out its bisection bracket. [Anchor search counts](results/retransfer-344-05e94210/campaign/start-1/retreat-disposition.json)
 
-### Main start-0 retreat and full search
+#### Main start-0 retreat and full search
 
 The owner set a 75-minute limit for the main start-0 retreat and the 3.5 Å start-0 scale-0.003 fit. The other stages retained their one-hour limit. The retreat finished in about 71.3 minutes, including anchor eligibility, with 21 compressed sweeps and a frozen bank of 10,230 supplied trial declarations. [Owner runtime decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/344#issuecomment-6999006070) · [Execution timings](results/retransfer-344-05e94210/runtime-execution.json)
 
@@ -194,7 +337,7 @@ The upper neighbor was rejected at 363.15 K, loading 0.1 mol CO₂/mol AMP and $
 
 The full search covered 6,266,001 applicable supplied trial combinations and 586,473 inapplicable combinations, with zero unavailable trials. The smallest supplied $\mathrm{TPD}/RT$ was $+5.9801\times10^{-8}$. The supplied check reused the completed search with identical inputs because the full search added no new witness. The detected descent count is a lower bound under the model. [Full search and supplied check](results/retransfer-344-05e94210/campaign/start-0/retreated-supplied-check.json)
 
-### Supplied split evidence at the unpenalized main endpoints
+#### Supplied split evidence at the unpenalized main endpoints
 
 Each of the four unpenalized searches found a negative supplied trial at the same 90 states. Each value below is the most negative supplied tangent-plane distance divided by $RT$ at that state. A negative value demonstrates a descent from the homogeneous liquid under the model. The raw supplied evaluations leave the density branch unknown. These states overlap the 90 native liquid descents, so the two lower bounds are counted together by state. The [retained witnesses](results/retransfer-344-05e94210/supplied-negative-witnesses.jsonl) give full precision and the actual pressure for every search and state.
 
@@ -298,7 +441,7 @@ Each of the four unpenalized searches found a negative supplied trial at the sam
 
 </details>
 
-### Pressure closure and two-liquid equilibrium
+#### Pressure closure and two-liquid equilibrium
 
 For each of the 90 descents at unpenalized main start 0 and the 90 at unpenalized 3.5 Å sensitivity start 1, the pressure-closure check held the most negative supplied trial's composition fixed and requested both density branches at the parent pressure. It used the pinned Engine's absolute log-density window of 0.00995033 to match the supplied point to a pressure root. The largest density correction was 0.0004383 on this log scale. All parent and trial roots were liquid-side. The native resolved witnesses also closed on liquid roots. After closing pressure, $\mathrm{TPD}/RT$ ranged from −0.00522325 to −0.00002256 at the main point and from −0.00522458 to −0.00002266 in the sensitivity. The largest absolute pressure-row residual was $2.55\times10^{-13}$ against the declared $10^{-10}$ limit. [Method used for MDEA](https://github.com/tannerpolley/Amine-Thermodynamics/commit/755d24ae5) · [Native density-root check](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/native/equilibrium/phase_stability.cpp#L152).
 
@@ -315,7 +458,7 @@ The 74 confirmed main splits span 373.00–393.20 K. The 76 sensitivity splits s
 
 The confirmed splits establish that the homogeneous AMP solution fails at those states. All 90 descents at each endpoint are above the measured AMP dissociation range. At each endpoint, 64 are also outside the carbamate-hydrolysis source-estimate interval. All fall inside the shared R1–R3 source-correlation interval. The evidence is numerical and concerns local model equilibria. Experimental coexistence measurements were not used. [Counts, numerical limits and timings](results/retransfer-344-05e94210/descent-diagnosis/summary.json).
 
-## Reproducibility and scope
+### Reproducibility and scope
 
 The frozen `refit-306-floor` fitted replay reproduced 156 predictions within 1.19e-13 relative and the cost within 7.31e-13 relative. The #344 replay and endpoint limit is $10^{-8}$ relative, following #255 reproducibility on identical inputs. Shared inputs and range marks use identity checks. 270 of 270 observations returned predictions. All 23 out-of-range loaded Tong observations were marked and 23 returned predictions. The [numerical checks](results/retransfer-344-05e94210/checks.json) record all checks and their basis.
 
