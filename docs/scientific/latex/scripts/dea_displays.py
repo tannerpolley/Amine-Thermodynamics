@@ -169,22 +169,33 @@ plt.rcParams.update({'font.family': 'STIXGeneral', 'mathtext.fontset': 'stix', '
                      'font.size': 8, 'legend.fontsize': 8, 'xtick.labelsize': 8, 'ytick.labelsize': 8,
                      'axes.labelsize': 9, 'axes.titlesize': 9})
 colors = ['#0072B2','#D55E00','#009E73','#CC79A7','#E69F00','#56B4E9']
+MARKERS = ['o', 's', '^', 'D', 'v', 'P', 'X', '*', 'p', 'h']
+def series(ax, x, y, style, T, temperatures, used, filled, label):
+    """A model line and its legend entry. In every panel of a figure the symbol shape means the temperature;
+    the color separates the curves of one panel, and the line style shows the position relative to the R4 and R5 ranges."""
+    i = temperatures.index(round(T))
+    color = next(c for c in colors[i % len(colors):] + colors if c not in used)
+    used.add(color)
+    ax.plot(x, y, style, color=color)
+    ax.plot([], [], style, color=color, marker=MARKERS[i], markersize=4.5, markerfacecolor=color if filled else 'none', label=label)
+    return dict(marker=MARKERS[i], edgecolors=color, facecolors=color if filled else 'none')
+DEA_PANELS = [('Lawson','Lawson-394K'),('SeoHong',),('Lal',),('Carson',)]
+dea_temperatures = sorted({round(r['T_K']) for r in curves if any(r['group'] in groups for groups in DEA_PANELS)})
 fig,axes=plt.subplots(2,2,figsize=(6.48,5.8),constrained_layout=True)
-for ax, groups, title in zip(axes.flat,[('Lawson','Lawson-394K'),('SeoHong',),('Lal',),('Carson',)],'abcd'):
-    cs=[r for r in curves if r['group'] in groups]
+for ax, groups, title in zip(axes.flat,DEA_PANELS,'abcd'):
+    cs, used = [r for r in curves if r['group'] in groups], set()
     for index,label in enumerate(dict.fromkeys(r['curve'] for r in cs)):
         line=sorted([r for r in cs if r['curve']==label],key=lambda r:r['loading'])
-        color=colors[index%len(colors)]
         outside=line[0]['outside_ranges']['DEA-dissociation'] is True
         hydrolysis=line[0]['outside_ranges']['carbamate-hydrolysis'] is True
         assert all((r['outside_ranges']['DEA-dissociation'],r['outside_ranges']['carbamate-hydrolysis'])==(outside,hydrolysis) for r in line)
         assert not outside or hydrolysis, 'Figure markers require outside both intervals'
         caption=f"{line[0]['T_K']:.2f} K" if groups!=('Carson',) else f"{float(line[0]['row']['DEA_mass_fraction'])*100:g} wt%"
-        ax.plot([r['loading'] for r in line],[r['value']/1000 for r in line],'--' if outside else ':' if hydrolysis else '-',color=color,label=caption)
+        look=series(ax,[r['loading'] for r in line],[r['value']/1000 for r in line],'--' if outside else ':' if hydrolysis else '-',line[0]['T_K'],dea_temperatures,used,line[0]['group'] in ('Lawson','Carson'),caption)
         obs=[r for r in data if r['group'] in groups and abs(r['T_K']-line[0]['T_K'])<1e-8]
         if groups==('Carson',): obs=[r for r in obs if r['row']['DEA_mass_fraction']==line[0]['row']['DEA_mass_fraction']]
         assert all((r['outside_ranges']['DEA-dissociation'],r['outside_ranges']['carbamate-hydrolysis'])==(outside,hydrolysis) for r in obs)
-        ax.scatter([loading(r['row']) for r in obs],[r['observed']/1000 for r in obs],marker='^' if outside else 's' if hydrolysis else 'o',facecolors=color if line[0]['group'] in ('Lawson','Carson') else 'none',edgecolors=color,s=25)
+        ax.scatter([loading(r['row']) for r in obs],[r['observed']/1000 for r in obs],s=25,**look)
     ax.set_title(f'({title})', loc='left'); ax.set(xlabel='Loading (mol CO$_2$/mol DEA)',ylabel='Integral heat (kJ/mol CO$_2$)' if groups==('Carson',) else 'CO$_2$ partial pressure (kPa)',yscale='linear' if groups==('Carson',) else 'log')
     ax.legend(ncol=2, columnspacing=.7, handlelength=1.8, handletextpad=.4)
 figure(fig,'dea-current-measured-model.pdf')
@@ -427,18 +438,19 @@ def pressures(name, amine_name, shape, panels, kinds, curves, points, sep, laws,
     for r in curves: lines.setdefault(r['curve'], []).append(r)
     assert {q['curve'] for q in points} <= set(lines), 'every plotted measurement belongs to a retained curve'
     fig, axes = plt.subplots(*shape, figsize=(6.48, 3.3*shape[0]), constrained_layout=True)
+    temperatures = sorted({round(float(key.split(sep)[1])) for key in lines if any(choose(*key.split(sep)) for choose in panels)})
     for ax, letter, choose, kind in zip(axes.flat, 'abcdef', panels, kinds):
         chosen = [key for key in lines if choose(*key.split(sep))]
         ax.set_yscale('log')
-        stocks = {key.split(sep)[2] for key in chosen}
+        stocks, used = {key.split(sep)[2] for key in chosen}, set()
         for index, key in enumerate(chosen):
             line, (group, T, water) = sorted(lines[key], key=lambda r: r['loading']), key.split(sep)
             outside = [line[0]['outside_ranges'][law] is True for law in laws]
-            style, marker = ('-.', 'D') if len(laws) > 1 and all(outside) else ('--', '^') if outside[0] else (':', 's') if any(outside) else ('-', 'o')
+            style = '-.' if len(laws) > 1 and all(outside) else '--' if outside[0] else ':' if any(outside) else '-'
             label = f'{float(T):.2f} K' + (f', {100*mass[0]/(mass[0] + mass[1]*float(water)):.3g} wt%' if len(stocks) > 1 else '')
-            ax.plot([r['loading'] for r in line], [r['value']/1000 for r in line], style, color=colors[index % len(colors)], label=label)
+            look = series(ax, [r['loading'] for r in line], [r['value']/1000 for r in line], style, float(T), temperatures, used, group in fitted, label)
             obs = [q for q in points if q['curve'] == key]
-            ax.scatter([q['loading'] for q in obs], [q['pressure_Pa']/1000 for q in obs], marker=marker, s=22, edgecolors=colors[index % len(colors)], facecolors=colors[index % len(colors)] if group in fitted else 'none')
+            ax.scatter([q['loading'] for q in obs], [q['pressure_Pa']/1000 for q in obs], s=22, **look)
         ax.set(xlabel=f'Loading (mol CO$_2$/mol {amine_name})', ylabel={'t': 'Total pressure (kPa)', 'p': 'CO$_2$ partial pressure (kPa)'}[kind])
         ax.set_title(f'({letter})', loc='left')
         ax.yaxis.set_minor_formatter(matplotlib.ticker.LogFormatterSciNotation(labelOnlyBase=False, minor_thresholds=(1.3, 0.4)))

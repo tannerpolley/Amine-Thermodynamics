@@ -35,40 +35,35 @@ def points(ax,rows,x,y,label,marker='o',scale=1):
 def main():
     meta={r['observation_id']:r for r in a.rows(t.ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')}
     canonical = a.rows(F/'canonical-pressure.csv'); curves = a.rows(F/'model-curves/pressure.csv')
+    fitted = {r['id'] for r in a.rows(F/'fitted-rows.csv') if r['quantity'] == 'PartialPressure'}; assert len(fitted) == 47 and fitted <= {r['target'] for r in canonical}
     fig,ax=plt.subplots(figsize=(6.8,4.4))
     for T,color in zip([313.15,333.15,353.15,373.15,393.15],COLORS):
         color, style = temperature_style(T)
         part=[r for r in curves if float(r['temperature_K'])==T and r['status']=='available']; part.sort(key=lambda r: float(r['analytical_loading'])); ax.plot([float(r['analytical_loading']) for r in part],[float(r['value'])/1000 for r in part],color=color,linestyle=style,label=f'{T:g} K')
-        part=[r for r in canonical if abs(float(r['temperature_K'])-T)<2]; ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in part],[float(r['observed'])/1000 for r in part],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color)
+        part=[r for r in canonical if abs(float(r['temperature_K'])-T)<2]; ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in part],[float(r['observed'])/1000 for r in part],s=SIZE,marker=temperature_marker(T),facecolors=[color if r['target'] in fitted else 'none' for r in part],edgecolors=color)
     ax.set(xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)',yscale='log'); ax.legend(handles=temperature_legend([313.15,333.15,353.15,373.15,393.15]),ncol=2); save(fig,'pressure')
     fig,axes=plt.subplots(1,2,figsize=(6.8,3.4)); rows=a.rows(F/'transfer.csv')
-    for ax,w in zip(axes,[.15,.45]):
+    for ax,w,letter in zip(axes,[.15,.45],'ab'):
         part=[r for r in rows if float(meta[r['target'].removesuffix('-pco2')]['MEA_weight_fraction'])==w]
         for T,color in zip(sorted({r['temperature_K'] for r in part},key=float),COLORS):
             color, style = temperature_style(T)
             sub=[r for r in part if r['temperature_K']==T]
             ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['observed'])/1000 for r in sub],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color,label=f'{float(T):g} K')
             ax.scatter([float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']) for r in sub],[float(r['predicted'])/1000 for r in sub],s=SIZE,color=color,marker='x')
-        ax.set(title=f'{100*w:g} wt% MEA',yscale='log',xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)'); ax.legend(fontsize=9)
+        ax.set_title(f'({letter}) {100*w:g} wt% MEA', loc='left'); ax.set(yscale='log',xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='CO$_2$ partial pressure (kPa)')
+    assert axes[0].get_legend_handles_labels()[1] == axes[1].get_legend_handles_labels()[1]  # one legend serves both panels
+    axes[0].legend(fontsize=9)
     save(fig,'concentration-pressure')
     rows=a.rows(F/'model-curves/species.csv'); obs=list({r['target']:r for r in a.rows(F/'species-figure-data.csv')}.values()); membership={r['membership_id'].replace('|','::'):r['co2_loading_mol_per_mol_mea'] for r in a.rows(t.ROOT/'data/reference/MEA/manifests/speciation_target_membership.csv')}
     names=['MEA + MEAH+','MEACOO-','MEAH+','HCO3- + CO3^2-']; fig,axes=plt.subplots(2,2,figsize=(6.8,5.4))
-    for ax,name in zip(axes.flat,names):
+    for ax,name,letter in zip(axes.flat,names,'abcd'):
         for T,color in zip([293.15,313.15,333.15,353.15],COLORS):
             color, temperature_dash = temperature_style(T)
             part=[r for r in rows if r['quantity']==name and float(r['temperature_K'])==T and r['status']=='available']
             for below,style in [('False','-'),('True',':')]:
                 sub=sorted([r for r in part if r['below_bubble_pressure']==below],key=lambda r:float(r['analytical_loading'])); ax.plot([float(r['analytical_loading']) for r in sub],[float(r['value']) for r in sub],color=color,linestyle=temperature_dash if below=='False' else ':',label=f'{T:g} K' if below=='False' else None)
-                if below == 'True' and sub:
-                    other = [float(r['value']) for r in rows if r['quantity']==name and float(r['temperature_K']) in (333.15,353.15) and float(r['temperature_K'])!=T and r['below_bubble_pressure']=='True' and r['status']=='available' and float(r['analytical_loading'])==0.6]
-                    endpoint = sub[-1]
-                    offset = 12 if float(endpoint['value']) > other[0] else -12
-                    ax.annotate(f'{T:g} K', (float(endpoint['analytical_loading']), float(endpoint['value'])),
-                                xytext=(12, offset), textcoords='offset points', fontsize=8,
-                                ha='left', va='center', color='#222222',
-                                arrowprops=dict(arrowstyle='-', color=color, linewidth=.7))
             sub=[r for r in obs if r['species']==('HCO3-' if name.startswith('HCO3') else name) and float(r['temperature_K'])==T]; ax.scatter([float(membership[r['target']]) for r in sub],[float(r['observed']) for r in sub],s=SIZE,marker=temperature_marker(T),facecolors='none',edgecolors=color)
-        ax.set(title={'MEA + MEAH+':r'MEA + MEAH$^+$','MEACOO-':r'MEACOO$^-$','MEAH+':r'MEAH$^+$','HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}[name],xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='Liquid mole fraction')
+        ax.set_title(f'({letter}) ' + {'MEA + MEAH+':r'MEA + MEAH$^+$','MEACOO-':r'MEACOO$^-$','MEAH+':r'MEAH$^+$','HCO3- + CO3^2-':r'HCO$_3^-$ + CO$_3^{2-}$'}[name], loc='left'); ax.set(xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel='Liquid mole fraction')
         ax.set_xlim(-.03,.83)
         if name.startswith('HCO3'): ax.set(yscale='log')
     axes[0,0].legend(handles=temperature_legend([293.15,313.15,333.15,353.15]),fontsize=9); save(fig,'speciation')
