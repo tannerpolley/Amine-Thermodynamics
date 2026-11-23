@@ -2,7 +2,7 @@
 
 ## Title
 
-Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability
+Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability
 
 ## Author and affiliation
 
@@ -10,16 +10,16 @@ Tanner W. Polley; ORCID 0009-0008-5957-4152; tpolley3@byu.edu. Department of Che
 
 ## Abstract
 
-Can a common electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) formulation describe loaded aqueous monoethanolamine while keeping literature reaction constants and avoiding a predicted additional liquid? A joint calibration with eleven adjustable parameters and tied amine-ion Born diameters preserves pressure, speciation, caloric and density agreement without a phase-stability penalty. For nominal 30 wt% monoethanolamine, fitted carbon-dioxide pressure average absolute relative deviation is 11.64%, integral absorption-heat root-mean-square error is 1.98 kJ/mol carbon dioxide, and fitted loaded-density deviation is 0.152% without volume translation. The parameter restrictions have a measurable cost: pressure deviation on the same Ma'mun observations rises from 19.43 to 33.47% relative to the less restricted calibration. Finite searches detect no additional-liquid instability for the adopted parameters; an unpenalized comparison fit instead predicts an ion-rich, water-poor liquid through a coupled energy balance with a prominent dispersion change. Concentration transfer, carbonate shares and high-temperature absorption heat remain inaccurate. All comparisons use data seen during development, and parameter uncertainty is conditional on the fit. The results support a common thermodynamic calculation and a bounded calibration, rather than independent validation or a global stability proof. Part I supplies the equations and shared inputs for the companion study of other amines.
+An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model of aqueous monoethanolamine (MEA) loaded with carbon dioxide (CO₂) is calibrated with its reaction equilibrium constants fixed at literature correlations, to test whether its water, CO₂ and inorganic-ion parameters can be held fixed for diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP), and whether finite phase-stability searches detect a second liquid. Eleven MEA parameters are estimated jointly from pressure, speciation, absorption-heat, heat-capacity, density and binary equilibrium data; DEA, MDEA and AMP need four, eight and nine more. For MEA, the fitted CO₂ pressures at nominal 30 wt% have an average absolute relative deviation of 11.6% and the 112 not fitted 24.9%; no instability is detected, although the fit did not impose stability. Pressures at 15 and 45 wt% MEA, carbonate shares and high-temperature absorption heats remain inaccurate. Fitted loaded-solution pressures of the other amines deviate by 10.4% (AMP) to 28.5% (DEA); no instability is detected for DEA, but its water–DEA excess enthalpies have the wrong sign. For MDEA, no liquid–liquid gap of the CO₂-free solution is detected at the reported parameters, interpolated toward a stability-penalized fit; one loaded-solution split remains, at 262.9 MPa, far above process pressures. The AMP model has at least 73 calculated splits, all above the measured temperature range of its dissociation constant; an alternative set with none detected deviates by 20.2% from the same pressures. The models are calibrations against data examined during development, with conditional standard errors; they provide neither validation nor a basis for absorber design.
 
 ## Keywords
 
-monoethanolamine; ePC-SAFT; chemical speciation; absorption heat; phase stability.
+ePC-SAFT; monoethanolamine; diethanolamine; methyldiethanolamine; 2-amino-2-methyl-1-propanol; parameter transfer; phase stability.
 
 ## Data availability
 
-Processed observations, selected parameters, numerical results and presentation code will be deposited in Zenodo; the DOI will be added at submission. The deposit README will identify the exact software versions, checksums and calculation commands. Thermodynamic calculations require the compiled ePC-SAFT library used here, to be supplied to referees through restricted access arranged by the corresponding author. The analysis code will be included in the deposit under the MIT license; its development repository is https://github.com/tannerpolley/Amine-Thermodynamics. Third-party measurements retain their source terms.
+The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code under the MIT license; third-party measurements remain under the terms of their sources. They will be deposited in Zenodo, and the DOI will be added at submission. A software index in the deposit lists the versions, checksums and commands needed to repeat the calculations. The MEA calculations were made with version 1.3.0 of the epcsaft package, and the DEA, MDEA and AMP calculations with version 1.3.1. Referees will receive access to the compiled epcsaft package through the corresponding author.
 
 ## Declarations and submission state
 
-Use the author-approved funding, competing-interest and generative-AI declarations in the manuscript. The prior preprint license preference is CC BY 4.0. Deposit publication, restricted package access, manuscript reviews, author review and submission remain outstanding. This local draft publishes nothing.
+Use the author-approved funding, competing-interest, CRediT and generative-AI declarations in the manuscript. The prior preprint license preference is CC BY 4.0. Deposit publication, referee access, author review and submission remain outstanding. This local draft publishes nothing.

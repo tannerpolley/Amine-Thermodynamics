@@ -4,9 +4,9 @@
 \endfirsthead\toprule Parameter & Value & Unit & Source \\ \midrule
 \endhead\bottomrule\endfoot\bottomrule\multicolumn{4}{@{}p{0.95\linewidth}@{}}{\footnotesize Bold values were fitted in this work; Table~\ref{main-tab:transfer-fitted} of the main text gives the standard errors of the parameters of the reactive fits, and Table~\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value and ``MDEA value: the value of the molecular amine. The data deposit gives the source and basis of each value.}\\\endlastfoot
 \addlinespace\multicolumn{4}{@{}l}{\textit{DEA: fitted parameters}} \\*
-$k_{\mathrm{DEAH^+,w}}$ & $\boldsymbol{-0.188256471177024}$ & 1 & This work \\
-$k_{\mathrm{DEACOO^-,w}}$ & $\boldsymbol{-0.03854869916071153}$ & 1 & This work \\
-R4 constant term $A_4$ & $\boldsymbol{5.86941067321772}$ & 1 & This work \\
+$k_{\mathrm{DEAH^+,w}}$ & $\boldsymbol{-0.18834282671276725}$ & 1 & This work \\
+$k_{\mathrm{DEACOO^-,w}}$ & $\boldsymbol{-0.0477314406219579}$ & 1 & This work \\
+R4 constant term $A_4$ & $\boldsymbol{5.883485367291507}$ & 1 & This work \\
 R4 enthalpy increment $\delta h$ & $\boldsymbol{0}$ & J/mol & This work \\
 \addlinespace\multicolumn{4}{@{}l}{\textit{DEA: species parameters}} \\*
 DEA, dispersion energy $u/k_B$ & $269$ & K & \cite{Nasrifar2010} \\
@@ -25,12 +25,12 @@ DEAH$^+$, segment diameter $\sigma$ & $2.9477$ & \AA & DEA value \\
 DEAH$^+$, solvation factor & $1$ & 1 & Set in this work \\
 DEAH$^+$, charge number & $1$ & $e$ & By definition \\
 DEAH$^+$, molar mass & $0.106145$ & kg/mol & From the formula \\
-DEACOO$^-$, Born diameter $d^{\mathrm{Born}}$ & $6.167209298821595$ & \AA & Equal to $\sigma$ \\
-DEACOO$^-$, Debye--H\"uckel diameter & $6.167209298821595$ & \AA & Equal to $\sigma$ \\
-DEACOO$^-$, dispersion energy $u/k_B$ & $183.00063128808972$ & K & \ce{MEACOO-}, 16-parameter calibration \\
-DEACOO$^-$, packing diameter & $5.427144182963003$ & \AA & $0.88\sigma$ \\
+DEACOO$^-$, Born diameter $d^{\mathrm{Born}}$ & $6.199663980008535$ & \AA & Equal to $\sigma$ \\
+DEACOO$^-$, Debye--H\"uckel diameter & $6.199663980008535$ & \AA & Equal to $\sigma$ \\
+DEACOO$^-$, dispersion energy $u/k_B$ & $179.85787428794876$ & K & \ce{MEACOO-}, MEA model \\
+DEACOO$^-$, packing diameter & $5.4557043024075105$ & \AA & $0.88\sigma$ \\
 DEACOO$^-$, segment count & $1$ & 1 & Single sphere \\
-DEACOO$^-$, segment diameter $\sigma$ & $6.167209298821595$ & \AA & Scaled from \ce{MEACOO-} \\
+DEACOO$^-$, segment diameter $\sigma$ & $6.199663980008535$ & \AA & Scaled from \ce{MEACOO-} \\
 DEACOO$^-$, solvation factor & $1$ & 1 & Set in this work \\
 DEACOO$^-$, charge number & $-1$ & $e$ & By definition \\
 DEACOO$^-$, molar mass & $0.148139$ & kg/mol & From the formula \\
@@ -49,8 +49,8 @@ DEA--H$_2$O, $k_{ij}$ & $\boldsymbol{-0.06363352262762448}$ & 1 & This work \\
 R5, $a$ & $-9.279878441784604$ & 1 & \cite{bowerAcidicDissociationConstant1962} \\
 R5, $b$ & $-4214.076107943053$ & K & \cite{bowerAcidicDissociationConstant1962} \\
 R5, $d$ & $0.009961213370801542$ & K$^{-1}$ & \cite{bowerAcidicDissociationConstant1962} \\
-R4, $A_4$ & $\boldsymbol{5.86941067321772}$ & 1 & This work \\*
-R4, $B_4$ & $\boldsymbol{-2660.2065169161024}$ & K & This work \\*
+R4, $A_4$ & $\boldsymbol{5.883485367291507}$ & 1 & This work \\*
+R4, $B_4$ & $\boldsymbol{-2661.435714463442}$ & K & This work \\*
 \addlinespace\multicolumn{4}{@{}l}{\textit{MDEA: species parameters}} \\*
 MDEA, segment count & $3.675$ & 1 & \cite{Pahlavanzadeh2013} \\
 MDEA, segment diameter $\sigma$ & $3.563$ & \AA & \cite{Pahlavanzadeh2013} \\
@@ -133,6 +133,7 @@ R5, $b$ & $-3850.7361064526635$ & K & \cite{hamborgDissociationConstantsThermody
 R5, $c$ & $8.064628630384732$ & 1 & \cite{hamborgDissociationConstantsThermodynamic2009} \\
 R4, $A_4$ & $\boldsymbol{11.5616747761141}$ & 1 & This work \\*
 R4, $B_4$ & $\boldsymbol{-1944.8382247863697}$ & K & This work \\*
+R4, enthalpy increment $\delta h$, contained in $B_4$ & $\boldsymbol{-5000.0}$ & J/mol & This work \\*
 \addlinespace\multicolumn{4}{@{}l}{\textit{AMP: fitted values of the stability-constrained alternative}} \\*
 $k_{\mathrm{AMP,w}}$ at 313.15 K & $\boldsymbol{-0.12934100269795387}$ &  & This work \\
 $b_{\mathrm{AMP,w}}$ (K) & $\boldsymbol{-51.52602425474883}$ &  & This work \\

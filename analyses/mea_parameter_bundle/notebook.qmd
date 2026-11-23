@@ -9,6 +9,7 @@ resources:
   - results/adoption-340/**
   - results/paper-evidence-341/**
   - results/born-diameter-sensitivity-405/**
+  - results/stripper-temperature-409/**
   - results/same-data-comparison/hong-2027/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
@@ -183,6 +184,25 @@ All three source correlations have the stated range **273.15–498.15 K (0–225
 ## Evidence and limits
 
 [File hashes](results/paper-evidence-341/file-hashes.json) bind every retained numeric file. The result is numerical reproduction, conditional uncertainty and comparison with measurements seen during model development. It is not physical validation or a process-use qualification. Model curves, balances, availability, source exclusions, density checks and heat-pathway checks retain the original producers’ diagnostics. Earlier parameter records and their results have not been rerun or relabelled. Independent delivered review and investigator promotion are pending; no manuscript prose or generated manuscript tables are changed.
+
+# Absorber versus stripper temperatures on F2 {#stripper-temperature-409}
+
+Issue [#409](https://github.com/tannerpolley/Amine-Thermodynamics/issues/409), under the owner's reduced scope of 2026-11-23, uses only data already in the repository and runs no fit. The comparison uses F2 (`ae17803e…`) on wheel `391dfe5d`. The bands are absorber, T ≤ 353.2 K, and stripper, T ≥ 370 K. "Fitted" means the row is in F2's 307-row objective. "Not fitted" rows were still seen during development. Mean signed relative deviation (MSRD) gives the bias sign. Heats are heat-release magnitudes.
+
+| Property | Absorber, fitted | Absorber, not fitted | Stripper, fitted | Stripper, not fitted |
+|---|---|---|---|---|
+| CO₂ partial pressure, 30 mass% | 47 rows, AARD 11.6%, MSRD +1.1% | 69 rows, 24.9%, −20.6% | none | 66 rows, 24.9%, −14.8% (Jou, Ma'mun, Wagner, Xu; 373–393 K) |
+| Heat of absorption | 8 rows, 1.97%, −1.0% (Vinjarapu, 313 K) | 84 rows, 7.2%, −4.3% | none | 28 rows, 14.1%, −10.0% (393 K); Vinjarapu Table 5: 5 rows, 4.8%, −4.8% |
+| Heat capacity | 4 rows, 2.8%, +2.8% | 31 rows, 3.9%, +3.7% | none | 15 rows, 1.35%, −0.8% (Hilliard 2008 only) |
+| Density | 52 rows, 0.14%, +0.02% | 149 rows, 0.32%, −0.19% | none | 26 rows, 0.41%, −0.24%; Han 2012 loaded −0.55% |
+
+**Pressure** has the same AARD in both bands among not-fitted 30 mass% rows. At 393 K, sources disagree in sign: Jou 1995 is +3.7%, Ma'mun 2005 −33.5% and Wagner 2013 −19% to −28%. **Heat capacity** and **density** stay within about 1.4% and 0.6%, respectively, at stripper temperatures. Each has only one loaded source there.
+
+**Heat of absorption** is the property that degrades at stripper temperatures. At 393 K, F2 gives 91.0–91.5 kJ/mol CO₂ at low loading. The measurements are 94–101 kJ/mol (Kim 2014; Vinjarapu Table 5) and 97–119 kJ/mol (Kim 2007). From 313 to 393 K, the model's low-loading heat rises by about 10.5 kJ/mol, compared with 15–16 kJ/mol in Kim 2014 and Vinjarapu and 21 kJ/mol in Mathonat 1998's plateau. Vinjarapu Table 5 uses the same calorimeter, pressure and declaration as the fitted 313 K rows. Its five 393 K rows lie 3–7 kJ/mol below the measurements, within twice the stated uncertainty. Four Kim 2007 rows flagged by #245 are reported separately.
+
+Checks: regrouping the retained rows reproduces #338's `agreement.csv` AARD for seven whole cohorts to 10⁻⁹ relative. Only Kim 2014 (27 rows) and Vinjarapu Table 5 (5 rows) lacked F2 predictions. They were replayed with #338's Kim producer from commit `f7e09b9ec`, after that producer had first reproduced the 20 retained Kim 2007 393 K intervals and the 8 fitted Vinjarapu heats to a maximum relative difference of 1.7×10⁻¹³. Three Kim 2014 rows at 313 K lie above the 0.6 loading ceiling. Every stripper row is available.
+
+Stripper gaps: no loaded-MEA row at 370 K or above is fitted. The repository has no heat data at about 373 K; Arcis 2011's 372.9 K table is inventoried but not extracted. Xu 2011 pressures at 383–443 K are present but pending QA. Aronu 2011's 100–120 °C data are not retained. Loaded heat capacity and density each have a single stripper source. The [result account](results/stripper-temperature-409/README.md) has the full band table, sources and reproduction. This is fixed-parameter comparison with data seen during development, not independent validation or process qualification. Independent review and investigator promotion are pending.
 
 # Adopted F2 record {#working-record-340}
 

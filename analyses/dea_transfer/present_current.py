@@ -16,9 +16,11 @@ from MEA.solvent_specification import deviation_statistics
 AN = Path(__file__).resolve().parent
 HISTORY = AN / 'results/retransfer-346'
 rerun = len(sys.argv) > 1
-FITS, OUT = map(Path, sys.argv[1:]) if rerun else (HISTORY/'f2-current', HISTORY/'f2-report-1')
-OLD = HISTORY / ('f2-report-1' if rerun else 'previous-current')
-current, previous = ('05e94210', '391dfe5d') if rerun else ('F2', 'F0')
+FITS, OUT = map(Path, sys.argv[1:3]) if rerun else (HISTORY/'f2-current', HISTORY/'f2-report-1')
+# Optional: OLD-run CURRENT-label PREVIOUS-label ISSUE TABLE (#413 compares with the #398 replay).
+OLD = Path(sys.argv[3]) if len(sys.argv) > 3 else HISTORY / ('f2-report-1' if rerun else 'previous-current')
+current, previous, ISSUE = sys.argv[4:7] if len(sys.argv) > 3 else ('05e94210', '391dfe5d', '398') if rerun else ('F2', 'F0', '346')
+TABLE = AN / (sys.argv[7] if len(sys.argv) > 3 else 'inputs/part-ii-346/parameter-table-declarations.json')
 OUT.mkdir(parents=True, exist_ok=not rerun)
 read = lambda p: json.loads(p.read_text())
 rows = read(FITS / 'data-rows.json')
@@ -76,8 +78,8 @@ for index, coordinate in enumerate(uncertainty['coordinates']):
         lower=coordinate['bounds'][0], upper=coordinate['bounds'][1],
         on_bound=index in uncertainty['active_bounds'],
         conditional_SE=uncertainty['conditional_standard_error'].get(identity),
-        basis='completed-law endpoint chart; enthalpy is an increment about the completed law', fitted_or_fixed='fitted', source=f'issue #{398 if rerun else 346} selected fit; conditional-uncertainty.json'))
-table = read(AN / 'inputs/part-ii-346/parameter-table-declarations.json')
+        basis='completed-law endpoint chart; enthalpy is an increment about the completed law', fitted_or_fixed='fitted', source=f'issue #{ISSUE} selected fit; conditional-uncertainty.json'))
+table = read(TABLE)
 if rerun:
     point = selection['chosen']['parameters']
 else:
@@ -89,7 +91,7 @@ for declaration in table['rows']:
         value = value[key]
     source = declaration['source']
     if rerun:
-        source = source.replace('issue #346 selected fit', 'issue #398 selected fit')
+        source = source.replace('issue #346 selected fit', f'issue #{ISSUE} selected fit')
     parameters.append(dict(parameter=declaration['parameter'], value=value['magnitude'] if isinstance(value,dict) else value,
         unit=declaration['unit'], lower='', upper='', on_bound='', conditional_SE='', basis=declaration['basis'], fitted_or_fixed=declaration['fitted_or_fixed'], source=source))
 write_csv('parameter-values.csv', parameters)

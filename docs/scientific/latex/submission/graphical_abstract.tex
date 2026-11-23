@@ -1,20 +1,27 @@
 \documentclass{article}
-\usepackage[paperwidth=22cm,paperheight=15cm,margin=5mm]{geometry}
-\usepackage{graphicx}
+% Elsevier graphical-abstract proportion, 1328 x 531 px (w x h)
+\usepackage[paperwidth=26.56cm,paperheight=10.62cm,margin=4mm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{stix}
-\usepackage{caption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning}
 \pagestyle{empty}
+\newcommand{\COtwo}{CO\textsubscript{2}}
 \begin{document}
 \centering
-{\large\bfseries Part I: Similar property fits can predict an additional liquid}\par
-\vspace{2mm}
-\begin{tabular}{lrr}
- & Fit without stability requirement & Final parameter set \\
-Fitted pressure deviation & 12.47\% & 11.79\% \\
-States with detected instability & 54 & 0 \\
-\end{tabular}\par
-\vspace{2mm}
-{\small 30 wt\% MEA; 162 states, 313.15--393.15 K.\par
-Numerical phase search at specified states; phase behavior is not physically validated.}
+{\LARGE\bfseries One ePC-SAFT model for \COtwo-loaded aqueous amines}\par
+\vspace{1.5mm}
+{\large Reaction equilibrium constants fixed at literature correlations}\par
+\vspace{4mm}
+\begin{tikzpicture}[box/.style={draw, rounded corners=3pt, line width=0.8pt, align=center, text width=4.9cm, minimum height=5.7cm, inner sep=5pt, anchor=west, font=\large}]
+\node[box, fill=gray!12] (mea) at (0,0) {{\LARGE\bfseries MEA}\\[2mm] 11 parameters fitted to\\ pressure, speciation, heat,\\ heat-capacity, density and\\ binary equilibrium data\\[3mm] Fitted pressures: \textbf{11.6\,\%}\\[1mm] No instability detected};
+\node[box] (dea) at (8.1,0) {{\LARGE\bfseries DEA}\\[2mm] 4 more parameters\\[3mm] Fitted pressures: \textbf{28.5\,\%}\\[1mm] No instability detected};
+\node[box] (mdea) at (13.75,0) {{\LARGE\bfseries MDEA}\\[2mm] 8 more parameters\\[3mm] Fitted pressures: \textbf{20.6\,\%}\\[1mm] One liquid--liquid split,\\ at 262.9\,MPa};
+\node[box] (amp) at (19.4,0) {{\LARGE\bfseries AMP}\\[2mm] 9 more parameters\\[3mm] Fitted pressures: \textbf{10.4\,\%}\\[1mm] At least 73 splits\\[2mm] Alternative set with none\\ detected: \textbf{20.2\,\%}};
+\draw[-{Latex[length=3mm]}, line width=1.6pt] (mea.east) -- (dea.west);
+\node[align=center, font=\normalsize, above=1mm] at ($(mea.east)!0.5!(dea.west)$) {water, CO$_2$ and\\ ion parameters};
+\node[font=\normalsize, below=1mm] at ($(mea.east)!0.5!(dea.west)$) {held fixed};
+\end{tikzpicture}\par
+\vspace{4mm}
+{\large Fitted pressures: average absolute relative deviation of the fitted loaded-solution pressures. Splits from finite phase-stability searches.\\ The models are calibrations against data examined during development; they provide neither validation nor a basis for absorber design.}
 \end{document}
