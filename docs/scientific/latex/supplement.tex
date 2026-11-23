@@ -184,7 +184,7 @@ The larger-volume solution is used here; the permittivity data alone do not dist
 The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperature or loading dependence; direct static-permittivity data over the reacting domain are missing from this calibration, so extrapolation remains a model assumption.
 
 % P:supplement-shared
-The shared parameters are those marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}; Tables~\ref{tab:supplement-reaction-coefficients}--\ref{tab:supplement-interaction-matrix} and \ref{tab:supplement-shared-remaining} give their unrounded values.
+The shared parameters are those marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}; Tables~\ref{tab:supplement-reaction-coefficients}--\ref{tab:supplement-shared-remaining} give their unrounded values.
 The DEA, MDEA and AMP models also keep the charges, segment counts and association scheme of the shared species, the electrostatic model choices, the standard states and the R1--R3 reaction definitions fixed.
 The water--bicarbonate interaction is the MEA-fitted value, whereas the carbonate--water interaction is that of Held et al.\ \cite{Held2014}.
 
@@ -371,7 +371,7 @@ Their phase stability was not searched, and they do not locate confidence limits
 % P:supplement-covariance-transfer
 For DEA, MDEA and AMP, main-text Table~\ref{main-tab:transfer-fitted} gives the conditional standard errors, which are also conditional on the fixed shared parameters, and Table~\ref{tab:supplement-transfer-bounds} gives the bounds.
 The conditional correlation between the DEA carbamate--water interaction and the constant term of the DEA R4 correlation is 0.974.
-For AMP, with the carbamate diameter free, its conditional correlation with the constant term of the AMP R4 correlation is 0.998, so the data constrain mainly a combination of the two, and each standard error alone is large: 4.57 for the constant term and \SI{1.66}{\angstrom} for the diameter.
+For AMP, with the carbamate diameter free, its conditional correlation with the constant term of the AMP R4 correlation is 0.998, so the data constrain mainly a combination of the two, and each standard error alone is large: 4.57 for the constant term, which lies 0.07 below its upper bound, and \SI{1.66}{\angstrom} for the diameter.
 The MDEA standard errors are local values at an interpolated parameter set, and the stability-constrained AMP alternative has none.
 
 \input{tables/supplement-transfer-bounds}
@@ -447,6 +447,7 @@ For AMP, the search covers the 270 measured states and 396 grid states, the latt
 Each of the 92 detected instabilities was classed by solving for the density of the trial phase at the pressure of the parent liquid; every parent and trial phase is liquid.
 A liquid--liquid split is counted as confirmed when a separate equilibrium calculation at fixed feed, temperature and pressure returns two distinct liquids with positive amounts and a Gibbs-energy decrease larger than its estimated numerical error.
 The confirmed splits lie at 26.8--30.0 wt\% AMP, 363.15--393.20 K and loadings of 0.400--0.966 mol/mol; all 92 states lie above the measured temperature range of the AMP dissociation constant, and 65 of them also lie outside the 313.15--373.15 K range of the R4 estimates.
+Six of the confirmed splits are at measured states, three of Hartono et al.\ at 373--393 K and three of Tong et al., and eight more measured states have an instability without a confirmed split; the values of Table~\ref{tab:supplement-transfer-data} at these states refer to a liquid that the model does not predict to be stable.
 The largest decrease occurs at 393.15 K, 30.0 wt\% AMP and a loading of 0.700 mol/mol, at 1.215 MPa, where the two liquid densities are \num{44631} and \num{31743} mol/m$^3$.
 
 \subsection{Stability penalty and interpolation between parameter sets}
@@ -560,7 +561,7 @@ The interpolation returns all 90 tabulated weights, and at weights of zero and o
 At 313.15 K and a loading of 0.50 mol/mol the calculated \COtwo partial pressure, 2.502 kPa, lies inside the interval of 2.339--2.896 kPa read from the model curve of their Fig.~4(b).
 The 180 pathway fractions printed in their Fig.~5 are reproduced with largest absolute differences of 0.0012 for the carbamate pathway and 0.0064 for the bicarbonate pathway, against a printing precision of 0.00005, so the two implementations differ measurably.
 At three states that fail the local test, the pressure differs from an independent equal-fugacity solution by at most $4.3\times10^{-8}$ in relative terms, and at five such states a finite-difference Hessian gives the same negative eigenvalue to four significant digits.
-At the 31 states that pass the test, the calculation with the fixed vapor amount differs from the bubble point by at most $5.5\times10^{-8}$.
+Of the states at which pressures were calculated with the Hong parameters, 31 pass the test; at these, the calculation with the fixed vapor amount differs from the bubble point by at most $5.5\times10^{-8}$.
 On all 159 six-source pressures, the recalculated deviations of the other two models, 20.97 and 52.34\,\%, equal those of main-text Table~\ref{main-tab:mea-data}.
 Repeating the whole calculation reproduces every tabulated value.
 With the pressure-slope heat taken at the final loading of each interval, the convention of Hong et al., the AARD on the 54 intervals at 313.15 and 353.15 K is 11.66 or 11.09\,\% for the two slopes at 353.15 K; they report 9.48\,\% without listing the observations used \cite{hongModelingCO2Absorption2027}.

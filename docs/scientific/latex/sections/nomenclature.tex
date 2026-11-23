@@ -21,7 +21,8 @@ $\rho$ & Molar density & mol/m$^3$ \\
 $e,\varepsilon_0$ & Elementary charge and vacuum permittivity & C; F/m \\
 $z_i,\mathcal I$ & Charge number and ion set & 1 \\
 $\varepsilon_{\mathrm{bulk}},\varepsilon_{\mathrm{ion}}$ & Bulk and ion-region relative permittivity & 1 \\
-$d_i^{\mathrm{Born}},D_i$ & Born and outer-shell diameter & \AA \\
+$d_i^{\mathrm{Born}},d_i^{\mathrm{DH}}$ & Born and Debye--H\"uckel diameter & \AA \\
+$D_i$ & Outer diameter of the first solvation shell & \AA \\
 $c_{\mathrm{shell}},c_{\mathrm{dielectric}}$ & Shell and saturation coefficients & 1 \\
 $f_i,f_{\mathrm{mix}}$ & Solvation factor and mixture average & 1 \\
 $d_{V,i},d_{T,i}$ & Permittivity coefficients & L/mol; K \\
@@ -29,6 +30,7 @@ $n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol;
 $\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 \\
 $a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol \\
 $P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa \\
+$y_{\COtwo}P$ & Calculated \COtwo partial pressure of a bubble calculation & Pa \\
 $Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg \\
 $A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 \\
 $\delta h$ & Fitted enthalpy increment of a carbamate hydrolysis correlation & J/mol \\
@@ -37,7 +39,8 @@ $\alpha$ & Loading, moles of added \COtwo per mole of amine & mol/mol \\
 $\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol \\
 $\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable \\
 $J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 \\
-$g,D,\boldsymbol w$ & Molar Gibbs energy, reduced distance and trial fraction & J/mol; 1; 1 \\
+$g,\boldsymbol w$ & Molar Gibbs energy and trial fraction & J/mol; 1 \\
+$D(\boldsymbol w)$ & Reduced tangent-plane distance & 1 \\
 $B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 \\
 $\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative tangent-plane distance, penalty scale and weight, penalized objective & 1; 1; 1; 1 \\
 \end{longtable}
