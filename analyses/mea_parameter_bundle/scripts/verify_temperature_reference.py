@@ -175,7 +175,6 @@ def main() -> None:
             slopes.append({"state": label, "T_K": temperature, "reaction": name,
                            "reference_pressure_pa": center[index].reference_pressure_pa,
                            "dC_dT_per_K": slope, "RT2_dC_dT_kJ_per_mol": R * temperature**2 * slope / 1e3,
-                           "observed_terminal_change": center[index].observed_terminal_change,
                            "source_extrapolated": temperature > SOURCE_UPPER_K.get(name, math.inf)})
         if len(problem.phases) > 1:
             ln_p = math.log(pco2(central, problem))
