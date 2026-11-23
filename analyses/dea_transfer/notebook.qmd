@@ -258,6 +258,15 @@ from the retained #398 values. The evidence is model sensitivity and
 term-by-term decomposition, compared against measurements outside the
 objective. It diagnoses causes and does not validate a corrected model.
 
+These probes ran on the #398 endpoint.
+[#413](https://github.com/tannerpolley/Amine-Thermodynamics/issues/413) refits
+DEA with the carbamate values of the adopted MEA model, so the pressure-shape
+numbers below need a rerun on that endpoint. The excess-enthalpy diagnosis does
+not depend on the carbamate values. Its binary states contain no ions, and the
+water–DEA $k_{ij}$ comes from the [binary stage](binary.py). That value,
+−0.06363, is identical in `results/binary.json` and in both #398 starts, and it
+is not a coordinate of the loaded fit.
+
 ![Water–DEA excess enthalpy at 363.15 K and 1.75 MPa: (a) measured, selected
 model and a k_ij temperature-slope probe; (b) selected model split by Helmholtz
 term. CO₂ pressure residual ln(measured/model) at 310.9–313.15 K before and
@@ -284,7 +293,8 @@ terms at every composition. The pressure–volume part is at most 0.2 J/mol.
 | 0.9415 | −529 | +401.4 | +69.0 | +215.2 | +117.1 | −75.2 |
 
 All values are J/mol of mixture. The model reproduces Horstmann's 365.15 K bubble
-pressures (Table 4, 42 binary rows) with 0.82% mean absolute relative
+pressures (Table 4, the 42 mixture rows; the binary fit also used the two
+pure-component rows) with 0.82% mean absolute relative
 deviation. Its excess Gibbs energy is therefore close to the measured one at
 this temperature. At $x_\text{water}=0.6414$ the model gives
 $TS^E = H^E - G^E = +1132$ J/mol, so mixing is driven by entropy. The measured
@@ -398,10 +408,15 @@ activity term in ln K of hydrolysis falls from −0.02 to −0.70 between loadin
 of 0.02 and 0.8 at 25 wt% DEA. These probes do not separate the two.
 
 Above a loading of 1, nearly all DEA has reacted, so the molecular CO₂ amount
-follows from the mass balance and the pressure is proportional to the CO₂
-activity coefficient. Fitting the hydrolysis constant and the carbamate–water
-$k_{ij}$ jointly leaves residuals of +0.42 and +0.96 at Lawson's loadings of
-1.01 and 1.17. A larger hydrolysis constant lowers the pressure there.
+follows mostly from the mass balance. The reaction constants still move the
+pressure there. At Lawson's loadings of 1.013 and 1.167, ln p changes by
+−0.30 and −0.19 per unit of ln K of hydrolysis and by +0.32 and +0.21 per unit
+of ln K of DEA dissociation. It changes by −11.1 and −8.9 per unit of the
+protonated DEA–water $k_{ij}$. The hydrolysis constant and the carbamate–water
+$k_{ij}$, adjusted to the 313 K rows, leave residuals of +0.42 and +0.96 at
+these two loadings. That joint step (+4.6 in ln K, +0.39 in $k_{ij}$) is far
+outside the linear range. The seven-coordinate linear fit brings the two
+residuals to −0.05 and +0.05, but only with unphysical steps.
 
 | Loading at 313.15 K, 25 wt% DEA | Model γ of CO₂ (molality, water infinite dilution) | Change in ln p for +0.05 in CO₂–DEA / CO₂–protonated DEA / CO₂–carbamate $k_{ij}$ |
 | ---: | ---: | --- |
@@ -410,11 +425,13 @@ $k_{ij}$ jointly leaves residuals of +0.42 and +0.96 at Lawson's loadings of
 | 1.0 | 0.326 | 0.000 / 0.112 / 0.007 |
 | 1.1 | 0.319 | 0.000 / 0.132 / 0.006 |
 
-The model salts molecular CO₂ in, more strongly as ions accumulate. Lawson's
-high-loading pressures would need γ near 0.45–0.8 at 313 K. CO₂ (or N₂O)
-physical-solubility data for loaded or unloaded aqueous DEA are not among the
-repository inputs. The salting-in is therefore a model property identified
-here, and its comparison with measurements remains open.
+The model's γ of CO₂ falls from 0.54 to 0.32 between loadings of 0.0001 and
+1.1. Lawson's high-loading pressures would need γ near 0.45–0.8 at 313 K. Most
+of the low value is present at a loading of 0.0001, so it comes from the amine
+solution itself; only the fall from 0.54 to 0.32 is salting in by the ions. This
+γ is a candidate cause of the high-loading residuals. CO₂ (or N₂O)
+physical-solubility data for aqueous DEA are not among the repository inputs,
+so it has not been checked against measurements.
 
 ### Causes and correction requirements
 
@@ -428,8 +445,25 @@ carbamate that is too stable. The controlling coordinates are the
 carbamate-hydrolysis constant and the collinear carbamate–water $k_{ij}$. They
 were set by an objective without low-loading pressures or speciation. The
 measured quotient's growth with loading also implicates the activity term's
-loading dependence. Above a loading of 1 the remaining low pressure follows the
-model's CO₂ activity coefficient, which the reaction constants do not control.
+loading dependence. Above a loading of 1, the carbamate coordinates adjusted to
+the 313 K rows leave the pressure 1.5–2.6 times too low. The model's CO₂
+activity coefficient is a candidate cause, not checked against solubility
+data.
+
+Two statements are supported for the paper. First: "The water–DEA interaction
+was fitted to vapor–liquid equilibrium at one temperature, which fixes the
+excess Gibbs energy but not its temperature dependence, so the excess enthalpy
+is an unconstrained prediction and comes out with the wrong sign (+739 against
+−1707 J/mol). A temperature-dependent cross interaction fitted to
+excess-enthalpy data would be needed; the one slope tested here worsens Cai's
+isobaric VLE from 51.5% to 71.8%." Second: "The fitted carbamate parameters (the
+hydrolysis constant and the carbamate–water interaction, which these data
+cannot separate) leave DEA carbamate too stable at 313 K. CO₂ pressure is
+under-predicted two- to four-fold below a loading of 0.2, and the NMR carbamate
+fraction is over-predicted above 0.4. Above a loading of 1, these parameters
+adjusted to the 313 K data leave the pressure under-predicted; the model's CO₂
+activity coefficient is a candidate cause not yet checked against solubility
+data."
 
 A correction would be a separate fit, reported on all DEA data. It would first
 fit the DEA–water $k_{ij}$ and its reciprocal-temperature slope, or a
