@@ -17,16 +17,16 @@ NAMES = {'carbon-dioxide': r'\ce{CO2}', 'monoethanolamine': r'\ce{MEA}', 'water'
          'bicarbonate-anion': r'\ce{HCO3-}', 'carbonate-anion': r'\ce{CO3^{2-}}', 'hydronium-cation': r'\ce{H3O+}', 'hydroxide-anion': r'\ce{OH-}'}
 # One reader-facing row per fitted quantity and source; the 7 later-added species observations are the same quantity, scale and weight as the other 94.
 QUANTITIES = {'PartialPressure': 'partial_pressure', 'PhaseMoleFraction': 'mole_fraction', 'AdditionEnthalpy': 'addition_enthalpy'}
-ROWS = {('common149', 'partial_pressure'): (r'\ce{CO2} partial pressure, Hilliard and Jou', 'Pa'),
-        ('species', 'mole_fraction'): (r'Species mole fraction, B\"ottinger and Matin', ''),
-        ('common149', 'addition_enthalpy'): ('Integral absorption heat, Vinjarapu', r'kJ/mol \ce{CO2}'),
-        ('Jakobsen', 'amount_ratio'): ('Species per total amine, Jakobsen', ''),
-        ('Kiepe', 'pressure'): (r'\ce{CO2}--water pressure, Kiepe', 'Pa'),
-        ('CO2-free density', 'phase_density'): (r'\ce{CO2}-free solution density, Amundsen', r'kg/m$^3$'),
-        ('Cai', 'temperature'): ('MEA--water bubble temperature, Cai', 'K'),
-        ('Cai', 'mole_fraction'): ('MEA--water vapor water mole fraction, Cai', ''),
-        ('loaded density', 'phase_density'): (r'Loaded-solution density, Amundsen and Hartono', r'kg/m$^3$'),
-        ('Cp', 'equilibrium_isobaric_heat_capacity'): ('Heat capacity per mole of apparent components, Hilliard', 'J/(mol K)')}
+ROWS = {('common149', 'partial_pressure'): (r'\ce{CO2} partial pressure, Hilliard and Jou \cite{Hilliard2008,Jou1995}', 'Pa'),
+        ('species', 'mole_fraction'): (r'Species mole fraction, B\"ottinger and Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', ''),
+        ('common149', 'addition_enthalpy'): (r'Integral absorption heat, Vinjarapu \cite{HemaBhavya2025}', r'kJ/mol \ce{CO2}'),
+        ('Jakobsen', 'amount_ratio'): (r'Species per total amine, Jakobsen \cite{Jakobsen2005}', ''),
+        ('Kiepe', 'pressure'): (r'\ce{CO2}--water pressure, Kiepe \cite{kiepeExperimentalDeterminationPrediction2002}', 'Pa'),
+        ('CO2-free density', 'phase_density'): (r'\ce{CO2}-free solution density, Amundsen \cite{Amundsen2009}', r'kg/m$^3$'),
+        ('Cai', 'temperature'): (r'MEA--water bubble temperature, Cai \cite{caiBinaryIsobaricVaporLiquid1996}', 'K'),
+        ('Cai', 'mole_fraction'): (r'MEA--water vapor water mole fraction, Cai \cite{caiBinaryIsobaricVaporLiquid1996}', ''),
+        ('loaded density', 'phase_density'): (r'Loaded-solution density, Amundsen and Hartono \cite{Amundsen2009,Hartono2014}', r'kg/m$^3$'),
+        ('Cp', 'equilibrium_isobaric_heat_capacity'): (r'Heat capacity per mole of apparent components, Hilliard \cite{Hilliard2008}', 'J/(mol K)')}
 
 
 
@@ -65,6 +65,13 @@ CALIBRATION_NAMES = {
 }
 
 CITE14 = r'\cite{polleyReactiveEPCSAFTModeling2026}'
+PRESSURE_CITE = {'Aronu2011': 'Aronu2011', 'Hilliard2008': 'Hilliard2008', 'Idris2014': 'idrisSpeciationMEACO2Adducts2014', 'Jou1995': 'Jou1995', 'Mamun2005': 'Mamun2005', 'Xu2011': 'Xu2011'}
+SET_CITE = {'Six-source': ','.join(PRESSURE_CITE.values()), 'Species fractions': 'Bottinger2008,matinFacileMethodDetermination2012', 'Jakobsen': 'Jakobsen2005', 'Arcis': 'arcisEnthalpySolutionCarbon2011',
+            'Amundsen': 'Amundsen2009', 'Hartono': 'Hartono2014', 'Han': 'hanDensityWater12012', 'broad Cp': 'Hilliard2008', 'Wagner': 'wagnerSolubilityCarbonDioxide2013', 'Aronu': 'Aronu2011', 'Kim': 'Kim2007'}
+
+def cited(group, text):
+    """A data-set label without its year, followed by the citation of its source."""
+    return re.sub(r' \(\d{4}\)', '', display(text)) + next((r' \cite{' + key + '}' for start, key in SET_CITE.items() if group.startswith(start)), '')
 SOURCE_CITE = {'Austgen1991_TableV_reaction_1a': r'\cite{Austgen1991}', 'Austgen1991_TableV_reaction_4a': r'\cite{Austgen1991}', 'Austgen1991_TableV_reaction_5a': r'\cite{Austgen1991}', 'Tong2012_Table5_K5_MEA_via_Aroua1999': r'\cite{Tong2012}', 'BatesPinching1951_equation_7': r'\cite{batesAcidicDissociationConstant1951}'}
 
 def scientific(value):
@@ -387,7 +394,7 @@ def main():
     table('choice_cost.tex', r"Cumulative parameter restrictions and the resulting deviations on identical observations. || $C$: objective value. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.", ['Calibration','Parameters','On bounds','$C$',r'\makecell[rb]{Fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Not-fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Fitted\\density\\AARD (\%)}'], [[r['fit'],r['fitted_parameters'],r['on_bound'],num(r['cost'],6),*[num(score(r['fit'],d)) for d in ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: loaded density')]] for r in compare], [.36]+['r']*6)
     cp = a.load(E/'same-data-comparison/part1-scores.json')
     heat_capacity_labels = {'Weiland1997 comparison': 'Weiland et al.\\ heat capacities \\cite{weilandHeatCapacityAqueous1997}', 'Concepcion2023 comparison': "Concepci\\'on et al.\\ heat capacities \\cite{concepcionHeatCapacitiesDifferent2023}"}
-    same_names = {'Six-source pressures':'Pressures at 30 wt% MEA, six sources', '112 current-not-fitted pressures':'Pressures not fitted, six sources', 'broad Cp':'Hilliard heat capacities at 313.15--393.15 K'}
+    same_names = {'Six-source pressures':'Pressures at 30 wt% MEA, six sources', '112 current-not-fitted pressures':'Pressures not fitted, the same six sources', 'broad Cp':'Hilliard heat capacities at 313.15--393.15 K'}
     # The published fitting account of the earlier model does not give the role of each pressure and species observation.
     earlier_role = lambda role: 'not stated' if 'see role note' in role else role.split(';')[0].replace('formulation ','')
     # Fitted quantities that the earlier model was scored on with identical observations, and the prior use of the comparison sets.
@@ -406,7 +413,7 @@ def main():
         if r['group'] in same.values(): continue
         unit = r['metric'].partition('(')[2].rstrip(')')
         main = 'pressures' in r['group'] or r['group'] == 'Species fractions'
-        (data if main else aside).append([heat_capacity_labels.get(r['group'], same_names.get(r['group'], r['group'])) + ('' if r['metric'].startswith('AARD') else f' ({unit})'), r['n'][0],
+        (data if main else aside).append([cited(r['group'], heat_capacity_labels.get(r['group'], same_names.get(r['group'], r['group']))) + ('' if r['metric'].startswith('AARD') else f' ({unit})'), r['n'][0],
                      r['roles'][1].split(';')[0] + next((r'$^{\mathrm{' + m + '}}$' for k, m in prior.items() if r['group'].startswith(k)), ''), *both(r, r['deviations'][1], main), earlier_role(r['roles'][0]), *both(r, r['deviations'][0], main)])
     table('mea_data.tex', r"Data for MEA with their roles in the joint fit of the MEA model, the deviations of that model, and the deviations of the model of Polley and Hedengren CITE14 on identical observations. || Roles refer to the objective of each model; ``not stated'': Ref.~CITE14 does not state for every pressure and species observation whether it was fitted. For that model, the species-ratio and carbonate-share measurements informed an earlier fit of the ion parameters but were not in the objective of the published parameters. The sets of the lower block overlap with each other and with the fitted observations, so their counts are not additive; Table~\ref{supp-tab:supplement-mea-comparison} lists the sets of that block that are not pressures. Deviations on fitted and not-fitted data are not directly comparable.".replace('CITE14', CITE14),
           ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}'], data, [.31,'r',.15,'r','r',.10,'r','r'])
@@ -447,7 +454,7 @@ def main():
     covered_pairs = {tuple(sorted((x, y))) for x, y, _ in pair_specs}
     missing = [r for r in shared if (r['identity'].startswith('component/') and r['identity'].rsplit('/', 1)[-1] in ('packing_diameter', 'debye_huckel_diameter')) or (r['identity'].startswith('pair/') and tuple(sorted(r['identity'].split('/')[1:3])) not in covered_pairs)]
     table('supplement_shared_remaining.tex', r"Shared parameters not listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at full precision. || Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded values of the shared parameters marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}.", ['Parameter','Value','Unit'], [[label(r['identity']), f"{float(r['value']):.15g}" if r['identity'].endswith('/packing_diameter') else full_precision(r['value']), r['unit']] for r in missing], [.55,'r','l'])
-    table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[SOURCE_NAMES.get(s,s),len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
+    table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[cited('', SOURCE_NAMES[s]) + r' \cite{' + PRESSURE_CITE[s] + '}',len(part),format(a.stats(part)['AARD_percent'], '.1f' if a.stats(part)['AARD_percent'] >= 10 else '.2f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
     a.load(E/'candidate/replay.json'); a.load(E/'uncertainty/covariance.json'); a.load(E/'stability/candidate/search.json'); a.load(a.BUNDLE/'results/split-cause-342/final-supplied-F2-summary.json')
     for name, body in OUTPUTS.items():
         body = GROUP.sub(r'\\num{\g<0>}', body)
