@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 LATEX = ROOT / 'docs/scientific/latex'
-BASE = 'analyses/dea_transfer/results/retransfer-398/'
+BASE = 'analyses/dea_transfer/results/refit-413/'
 MEA = 'analyses/mea_parameter_bundle/results/'  # read as retained files, so replacing them refreshes every MEA number shown here
 OBSERVATIONS = 'analyses/dea_transfer/results/retransfer-346/f2-report-1/data-rows.json'  # source rows only; every calculated value is taken from BASE
 outputs = {}
@@ -118,7 +118,7 @@ def composition(group):
     if group == 'Carson': return amine, span(get('x_CO2'), lambda v: num(v,4)) + r'\textsuperscript{a}'
     return amine, span(get('alpha_mol_CO2_per_mol_DEA') or get('alpha_mol_CO2_per_mol_amine'), g)
 
-dev = {r['group']: r for r in groups if r['model'] == '05e94210'}
+dev = {r['group']: r for r in groups if r['model'] == 'F2-carbamate'}
 count = lambda n, used: str(n) + (f' ({used})' if int(used) != n else '')
 data_rows = [head('DEA', 11)]
 for group in dict.fromkeys(r['group'] for r in data):
@@ -132,7 +132,7 @@ for group in dict.fromkeys(r['group'] for r in data):
     cells = []
     for law in LAWS:
         for outside in ['False','True']:
-            hit = [r for r in ranges if r['model']=='05e94210' and r['group']==group and r['law']==law and r['outside_range']==outside]
+            hit = [r for r in ranges if r['model']=='F2-carbamate' and r['group']==group and r['law']==law and r['outside_range']==outside]
             cells += [hit[0]['rows']+'/'+hit[0]['relative_rows'], num(hit[0]['AARD_percent'],2)] if hit else ['---','---']
     if set(cells) != {'---'}: rows.append([name(group),*cells])
     else: assert group in ['Cai','Horstmann'], 'Only the binary comparisons use no reaction correlation'
@@ -390,12 +390,12 @@ FITTED_HERE = [{r['parameter'] for r in params if r['fitted_or_fixed'] == 'fitte
                set(MKEYS) | permittivity('methyldiethanolamine'),
                set(AKEYS) | {'carbamate-hydrolysis/b'} | set(APURE) | permittivity('aminomethylpropanol')]  # the fitted AMP enthalpy increment sets B_4
 SOURCE = [r'\cite{Nasrifar2010}', r'\cite{Nasrifar2010}\textsuperscript{a}', r'This work\textsuperscript{b}', r'\cite{Pahlavanzadeh2013,Uyan2015}\textsuperscript{c}', r'This work\textsuperscript{d}', r'This work\textsuperscript{e}', r'This work\textsuperscript{f}', r'This work\textsuperscript{g}']
-# Stated origins of fixed ion inputs (supplement): the DEA carbamate values come from the 16-parameter MEA calibration (fit F0),
+# Stated origins of fixed ion inputs (supplement): the DEA carbamate values come from the MEA model (fit F2), the AMP carbamate values from the 16-parameter calibration (fit F0);
 # its diameter scaled by the cube root of the DEA/MEA ratio of m*sigma^3 (neutral MEA: 3.0353, 3.0435 A); AMPH+ takes the AMP energy.
-f0 = {r['identity']: float(r['value']) for r in read(MEA + 'reduced-refit/parameter-details.csv') if r['fit'] == 'F0'}
+f0, f2 = ({r['identity']: float(r['value']) for r in read(MEA + 'reduced-refit/parameter-details.csv') if r['fit'] == fit} for fit in ('F0', 'F2'))
 size_ratio = (dflat['diethanolamine/segment_count'][0] * dflat['diethanolamine/segment_diameter'][0] ** 3 / (3.0353 * 3.0435 ** 3)) ** (1 / 3)
-assert abs(size_ratio * f0['component/carbamate-anion/segment_diameter'] - dflat['carbamate-anion/segment_diameter'][0]) < 1e-9
-assert f0['component/carbamate-anion/dispersion_energy_over_k'] == dflat['carbamate-anion/dispersion_energy_over_k'][0]
+assert abs(size_ratio * f2['component/carbamate-anion/segment_diameter'] - dflat['carbamate-anion/segment_diameter'][0]) < 1e-9
+assert f2['component/carbamate-anion/dispersion_energy_over_k'] == dflat['carbamate-anion/dispersion_energy_over_k'][0]
 assert AMINES[2][1]['protonated-aminomethylpropanol/dispersion_energy_over_k'] == AMINES[2][1]['aminomethylpropanol/dispersion_energy_over_k']
 # Hydroxide Born diameter from the Born equation: hydration free energy -106.4 kcal/mol, water permittivity 78.37 at 298.15 K.
 born_oh = 6.02214076e23 * 1.602176634e-19 ** 2 * (1 - 1 / 78.37) / (4 * math.pi * 8.8541878128e-12 * 106.4 * 4184) * 1e10
@@ -407,10 +407,10 @@ assert sorted((c['ion'], c['diameter_A']) for c in born['cases'][1:]) == [(ion, 
 born_shift = lambda ion: max(abs(r['change_percent']) for c in born['cases'][1:] if c['ion'] == ion for r in c['largest_relative_changes'] if r['quantity'] == 'partial_pressure')
 assert round(born_shift('bicarbonate-anion')) == 6 and born_shift('carbonate-anion') < 0.02
 born_cost = f"at most {100 * max(abs(c['cost_change']) for c in [*born['cases'], born['bicarbonate_interior']]) / born['reference_cost']:.2f}"
-origins = [born_cost, f"{dflat['carbamate-anion/dispersion_energy_over_k'][0]:.4f}", f"{f0['component/carbamate-anion/segment_diameter']:.4f}", f'{size_ratio:.4f}', f'{born_oh:.4f}', '$-106.4$ kcal/mol', '78.37']
+origins = [born_cost, f"{dflat['carbamate-anion/dispersion_energy_over_k'][0]:.4f}", f"{f2['component/carbamate-anion/segment_diameter']:.4f}", f'{size_ratio:.4f}', f'{born_oh:.4f}', '$-106.4$ kcal/mol', '78.37']
 ROWS = [(0, 'diethanolamine', r'\ce{DEA}'), (0, 'protonated-diethanolamine', r'\ce{DEAH+}'), (0, 'carbamate-anion', r'\ce{DEACOO-}'), (1, 'methyldiethanolamine', r'\ce{MDEA}'), (1, 'protonated-methyldiethanolamine', r'\ce{MDEAH+}'), (2, 'aminomethylpropanol', r'\ce{AMP}'), (2, 'protonated-aminomethylpropanol', r'\ce{AMPH+}'), (2, 'carbamate-anion', r'\ce{AMPCOO-}')]
 table('transfer-species', 'Segment, association and Born parameters of the DEA, MDEA and AMP species.', ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$u/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', r'$d^{\mathrm{Born}}$ (\AA)', 'Ref.'], [species_row(AMINES[i][1], s, label, source, FITTED_HERE[i]) for (i, s, label), source in zip(ROWS, SOURCE)], [.12,.10,.10,.12,.13,.10,.12,.14],
-      notes=r'The columns are those of Table~\ref{tab:species-parameters}. Bold: fitted in this work; in a row of this work, the values in normal weight are fixed; --: not used. \textsuperscript{a}DEA values, with zero self-association energy. \textsuperscript{b}Dispersion energy of \ce{MEACOO-} in the 16-parameter calibration and its diameter scaled to DEA (Section~\ref{supp-sec:s-parameters}). \textsuperscript{c}Segment parameters of Ref.~\cite{Pahlavanzadeh2013} and association parameters of Ref.~\cite{Uyan2015}; association volume converted in this work. \textsuperscript{d}Segment count and association volume of MDEA; zero self-association energy. \textsuperscript{e}Fitted beforehand to pure-AMP data. \textsuperscript{f}Dispersion energy of AMP. \textsuperscript{g}Dispersion energy of \ce{MEACOO-} in the 16-parameter calibration; diameter fitted, with the \ce{MEACOO-} diameter of the MEA model as its lower bound. Table~\ref{tab:transfer-fitted} gives the standard errors of the values fitted in the reactive fits, and Table~\ref{supp-tab:supplement-transfer-parameters} unrounded values and the remaining inputs.')
+      notes=r'The columns are those of Table~\ref{tab:species-parameters}. Bold: fitted in this work; in a row of this work, the values in normal weight are fixed; --: not used. \textsuperscript{a}DEA values, with zero self-association energy. \textsuperscript{b}Dispersion energy of \ce{MEACOO-} in the MEA model and its diameter scaled to DEA (Section~\ref{supp-sec:s-parameters}). \textsuperscript{c}Segment parameters of Ref.~\cite{Pahlavanzadeh2013} and association parameters of Ref.~\cite{Uyan2015}; association volume converted in this work. \textsuperscript{d}Segment count and association volume of MDEA; zero self-association energy. \textsuperscript{e}Fitted beforehand to pure-AMP data. \textsuperscript{f}Dispersion energy of AMP. \textsuperscript{g}Dispersion energy of \ce{MEACOO-} in the 16-parameter calibration; diameter fitted, with the \ce{MEACOO-} diameter of the MEA model as its lower bound. Table~\ref{tab:transfer-fitted} gives the standard errors of the values fitted in the reactive fits, and Table~\ref{supp-tab:supplement-transfer-parameters} unrounded values and the remaining inputs.')
 NEUTRAL = {'DEA': r'\cite{Nasrifar2010}', 'MDEA': r'\cite{Pahlavanzadeh2013}'}
 R5_SOURCE = {'DEA': r'\cite{bowerAcidicDissociationConstant1962}', 'MDEA': r'\cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}', 'AMP': r'\cite{hamborgDissociationConstantsThermodynamic2009}'}
 
@@ -436,7 +436,7 @@ def origin(who, record, neutral, key, fitted):
     if last == 'segment_count' and record[key][0] == 1: return 'Single sphere'
     if last == 'energy_over_k' and record[key][0] == 0: return 'Set in this work'
     if species.startswith('protonated') and tie(key.replace(species, neutral)): return who + ' value'
-    if species == 'carbamate-anion' and who == 'DEA': return {'dispersion_energy_over_k': r'\ce{MEACOO-}, 16-parameter calibration', 'segment_diameter': r'Scaled from \ce{MEACOO-}'}[last]
+    if species == 'carbamate-anion' and who == 'DEA': return {'dispersion_energy_over_k': r'\ce{MEACOO-}, MEA model', 'segment_diameter': r'Scaled from \ce{MEACOO-}'}[last]
     raise AssertionError(('no stated source', who, key))
 
 rows = []
@@ -580,7 +580,7 @@ read('analyses/dea_transfer/inputs/part-ii-346/route-current.json')
 # Numbers quoted in the prose, recomputed from the retained files read above.
 f2 = lambda v: f'{float(v):.2f}'
 f1 = lambda v: f'{float(v):.1f}'  # the main text and the highlights give percent deviations to one decimal; tables and the supplement keep two
-notfit = [float(r['AARD_percent']) for r in read(BASE + 'group-deviations.csv') if r['model'] == '05e94210' and r['role'] == 'not fitted'] + [mstats[g]['R1']['False']['AARD_percent'] for g in ('Ermatchkov', 'corrected-Kamps', 'Kuranov-413K', 'Sedighi', 'Xiao')] + [e['unpenalized']['AARD_percent'] for e in acomp['pressure_deviations_by_range'] if e['range'] == 'R1' and e['role'] == 'not fitted']
+notfit = [float(r['AARD_percent']) for r in read(BASE + 'group-deviations.csv') if r['model'] == 'F2-carbamate' and r['role'] == 'not fitted'] + [mstats[g]['R1']['False']['AARD_percent'] for g in ('Ermatchkov', 'corrected-Kamps', 'Kuranov-413K', 'Sedighi', 'Xiao')] + [e['unpenalized']['AARD_percent'] for e in acomp['pressure_deviations_by_range'] if e['range'] == 'R1' and e['role'] == 'not fitted']
 fitted_mdea = [float((mstats[g]['R1'].get('False') or mstats[g]['R1']['reaction not used'])['AARD_percent']) for g in {r['group'] for r in mrows if r['role'] == 'fitted'} if g != 'Kuranov']  # every fitted MDEA set but the loaded pressures
 viii = next(r for r in data if r['identity'] + ':problem' == dsum['stability']['grid']['unavailable'][0])
 kur, ermatchkov = mstats['Kuranov']['MDEA-dissociation'], next(c for c in mpub if c['group'] == 'Ermatchkov')
