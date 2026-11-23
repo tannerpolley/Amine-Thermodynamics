@@ -17,7 +17,7 @@ The carbamate--water interaction is not distinguishable from zero and is strongl
 For MDEA and AMP the amine--water interaction is part of the reactive fit, and the fitted binary bubble pressures deviate by 1--3\,\%.
 The MDEA--water interaction and its temperature coefficient are well determined, whereas the cation--water and cation--bicarbonate interactions are not distinguishable from zero, and the standard error of the cation dispersion energy exceeds half its value.
 Because the reported MDEA set is interpolated (\cref{sec:methods-phase}), these standard errors are local values and do not describe a converged estimate.
-Two of the nine AMP parameters are on bounds, the carbamate segment diameter and the R4 enthalpy increment; in the stability-constrained alternative the carbamate diameter moves inside its bounds.
+One of the nine AMP parameters, the R4 enthalpy increment, is on a bound; the carbamate diameter, \SI{6.47}{\angstrom} with a conditional standard error of \SI{1.66}{\angstrom}, and its value in the stability-constrained alternative, \SI{5.98}{\angstrom}, lie inside their bounds.
 The fitted R4 correlations of DEA and AMP are effective quantities conditional on the fixed shared parameters, not independent measurements of an equilibrium constant.
 
 \subsubsection{Phase stability}\label{sec:results-amines-stability}
@@ -34,14 +34,14 @@ Of the \num{11824} MDEA searches, 1039 did not finish, 810 of them at grid state
 
 % P:transfer-amp-stability
 For AMP all 666 searches finish.
-At 90 states the search detects an instability toward a second liquid, and two-liquid equilibrium calculations confirm a split at 74 of them; at the other 16 that calculation gave no solution, so 74 is a lower bound.
-The confirmed splits lie at 373.00--\SI{393.20}{\kelvin} (\cref{fig:amp-splits}), above the measured temperature range of the AMP dissociation constant and above the highest fitted loaded-solution temperature of \SI{353}{\kelvin}.
+At 92 states the search detects an instability toward a second liquid, and two-liquid equilibrium calculations confirm a split at 73 of them; at the other 19 that calculation did not return two distinct liquids, so 73 is a lower bound.
+The confirmed splits lie at 363.15--\SI{393.20}{\kelvin} (\cref{fig:amp-splits}), above the measured temperature range of the AMP dissociation constant and above the highest fitted loaded-solution temperature of \SI{353}{\kelvin}.
 No measurement of liquid--liquid coexistence enters these calculations, and they do not identify which model quantity produces the splits.
 Fits with the stability penalty still leave states with a detected instability, whereas the stability-constrained alternative has none in any search.
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=0.72\linewidth]{amp-splits.pdf}
-\caption{Searched states at which the AMP model has a detected instability toward a second liquid: the 74 with a split confirmed by a two-liquid equilibrium calculation and the 16 at which that calculation gave no solution. States at 26.8 and 30.0 wt\% AMP and at two pressures each project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the fitted loaded-solution pressures; dashed line: upper limit of the measured R5 range.}
+\caption{Searched states at which the AMP model has a detected instability toward a second liquid: the 73 with a split confirmed by a two-liquid equilibrium calculation and the 19 at which that calculation did not return two distinct liquids. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the fitted loaded-solution pressures; dashed line: upper limit of the measured R5 range.}
 \label{fig:amp-splits}
 \end{figure}
 
@@ -86,9 +86,9 @@ The fitted carbamate fractions of AMP have a larger deviation than its fitted pr
 \subsection{Comparison of the four amines}\label{sec:results-compared}
 % P:compared
 The parameters shared with MEA support a fit of each of the other amines, with fitted loaded-solution pressures that deviate by about 10--28\,\% (\cref{tab:amine-summary}).
-Phase stability separates the amines: no instability is detected for MEA or DEA, one loaded-solution split is found for MDEA at a pressure far above any measurement, and at least 74 splits are confirmed for AMP.
+Phase stability separates the amines: no instability is detected for MEA or DEA, one loaded-solution split is found for MDEA at a pressure far above any measurement, and at least 73 splits are confirmed for AMP.
 From DEA to MDEA to AMP the fitted pressures are described more closely as the number of detected splits increases, but this is not a general trade-off: the MEA model describes its fitted pressures about as closely as the AMP model and has no detected instability.
-Within AMP the trade-off is real for the fits made here, since the alternative without a detected instability deviates about twice as much from the fitted pressures.
+Within AMP the trade-off is real for the fits made here, since the alternative without a detected instability deviates about twice as much from the fitted loaded-solution pressures, by 20.2\,\% against 10.4\,\%.
 
 \input{tables/amine-summary}
 
