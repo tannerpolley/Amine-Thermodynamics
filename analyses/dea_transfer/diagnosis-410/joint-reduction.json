@@ -1,0 +1,109 @@
+{
+ "rows": 29,
+ "names": [
+  "ln K carbamate hydrolysis (a)",
+  "ln K DEA dissociation (a)",
+  "k_ij protonated DEA-water",
+  "k_ij carbamate-water",
+  "k_ij DEA-water",
+  "k_ij DEA-CO2 (fixed at 0)",
+  "carbamate diameters x1.01"
+ ],
+ "unit_column_singular_values": [
+  2.2274745467099426,
+  1.4163823212174376,
+  0.15757933183042944,
+  0.07566080930594622,
+  0.039200673154577176,
+  0.01034115390416486,
+  0.00433909866688379
+ ],
+ "joint": {
+  "carbamate hydrolysis + carbamate-water k_ij": {
+   "steps": {
+    "ln K carbamate hydrolysis (a)": 4.635139410982575,
+    "k_ij carbamate-water": 0.3887849334403086
+   },
+   "rms": 0.2982127976267135,
+   "residual_lawson_alpha_ge_1": [
+    0.41570995112648323,
+    0.9562793838177317
+   ]
+  },
+  "seven DEA-specific": {
+   "steps": {
+    "ln K carbamate hydrolysis (a)": 10.597442426688435,
+    "ln K DEA dissociation (a)": -8.758579923583994,
+    "k_ij protonated DEA-water": -0.31337006511840393,
+    "k_ij carbamate-water": 0.34531059165688127,
+    "k_ij DEA-water": 0.2812448272499033,
+    "k_ij DEA-CO2 (fixed at 0)": -348.8521369008916,
+    "carbamate diameters x1.01": 1.4732385372755838
+   },
+   "rms": 0.12550537955398747,
+   "residual_lawson_alpha_ge_1": [
+    -0.047593195940266175,
+    0.04955311103930604
+   ]
+  },
+  "seven DEA-specific + offset": {
+   "steps": {
+    "ln K carbamate hydrolysis (a)": 12.934366780935644,
+    "ln K DEA dissociation (a)": -7.1345767822197255,
+    "k_ij protonated DEA-water": -0.9740530005164092,
+    "k_ij carbamate-water": -1.1914679569053064,
+    "k_ij DEA-water": -0.3446915627602136,
+    "k_ij DEA-CO2 (fixed at 0)": -498.68026201114606,
+    "carbamate diameters x1.01": 2.4605807065054157,
+    "offset": -3.144378307806391
+   },
+   "rms": 0.11664510661030304,
+   "residual_lawson_alpha_ge_1": [
+    -0.006308651879951499,
+    0.035052402040077646
+   ]
+  }
+ },
+ "lawson_cost_by_isotherm_linearized": {
+  "310.93": {
+   "rows": 7,
+   "cost": {
+    "0.0": 3.5805909218762806,
+    "0.5": 3.577135004801251,
+    "0.9": 4.3476402547926005
+   }
+  },
+  "338.71": {
+   "rows": 9,
+   "cost": {
+    "0.0": 2.3790956039755526,
+    "0.5": 3.227951333439836,
+    "0.9": 4.5389689174853975
+   }
+  },
+  "352.59": {
+   "rows": 3,
+   "cost": {
+    "0.0": 0.4408342758510946,
+    "0.5": 0.6475834599485142,
+    "0.9": 0.950254735508845
+   }
+  },
+  "366.48": {
+   "rows": 8,
+   "cost": {
+    "0.0": 0.9796702695277983,
+    "0.5": 1.2093756752036307,
+    "0.9": 1.7277115587918597
+   }
+  },
+  "380.37": {
+   "rows": 3,
+   "cost": {
+    "0.0": 0.47342025543735233,
+    "0.5": 0.5331012196917476,
+    "0.9": 0.651531957916769
+   }
+  }
+ }
+}
