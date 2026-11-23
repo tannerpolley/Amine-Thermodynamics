@@ -8,6 +8,7 @@ resources:
   - results/adoption-297/**
   - results/adoption-340/**
   - results/paper-evidence-341/**
+  - results/born-diameter-sensitivity-405/**
   - results/same-data-comparison/hong-2027/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
@@ -152,6 +153,26 @@ The loaded state is 30 wt% MEA at loading 0.3 mol/mol. The CO₂–water liquid 
 ## Stability and penalty
 
 The [penalty equation and retreat method](results/paper-evidence-341/stability-penalty.md) identify the native resolved-descent definition, the weights, both stages and state/pressure rules. F2 required no penalty stage or retreat: its data cost is 150.76290287953717 and penalty cost is zero. The fresh search finds zero resolved descents at all 1908 grid, 576 offset and 162 census states, with no unavailable grid/offset cases or incomplete census states. All 568134 supplied distances (3507 registry trials at each census state) are nonnegative and available. Their minimum is 4.815477097963594e-6 RT, with liquid minimum 3.065092460019514e-5 RT. These quantities exactly reproduce the adoption search. The grid, offset, census and supplied-trial results are in [the search export](results/paper-evidence-341/stability/candidate/search.json). The supplied compositions come exclusively from the MEA registry. No new resolved descent is found, so no registry append is needed. Finite split counts are lower bounds; unavailable searches never count as stable.
+
+## Sensitivity to bicarbonate and carbonate Born diameters {#born-diameter-sensitivity}
+
+The adopted MEA model uses 3.0 Å for both Born diameters. Each replay changed one diameter and held all other parameters fixed across the 307 fitted observations. Engine 1.3.1 (`05e94210`) reproduced the [retained Engine 1.3.0 replay](results/paper-evidence-341/candidate/replay.json) within $2.03 \times 10^{-12}$ relative across predictions. The baseline costs differ by $1.55 \times 10^{-11}$ across wheels.
+
+| Diameter changed | Diameter (Å) | Total cost | Cost change | Jou CO₂ partial-pressure change |
+| --- | ---: | ---: | ---: | ---: |
+| Neither | 3.0 | 150.762903 | 0 | 0 |
+| Bicarbonate | 2.5 | 151.002676 | +0.239774 | +2.3800% |
+| Bicarbonate | 4.0 | 150.784357 | +0.021454 | −2.9823% |
+| Carbonate | 2.5 | 150.747530 | −0.015373 | −0.00148% |
+| Carbonate | 4.0 | 150.787283 | +0.024380 | +0.00289% |
+
+The dimensionless cost is half the sum of squared weighted residuals. The largest increase at the tested endpoints was +0.239774 (0.159% of baseline) for bicarbonate at 2.5 Å. The CO₂ partial-pressure group contributed +0.287014 before changes in the other groups. These cost changes describe the two endpoints for each ion. A separate replay at 3.5 Å for bicarbonate gave a cost of 150.731000, or −0.031903 from baseline, so 3.0 Å is not the cost minimum with the other parameters held fixed.
+
+The pressure fit uses log-ratio residuals, so the percentage change shows the response across pressure levels. The largest relative CO₂ partial-pressure shifts at the endpoints occurred at the Hilliard state `vle_obs_0149` (31.1 wt% MEA, 333.1 K, 0.565 mol CO₂/mol MEA). The calculated pressure rose from 50.648 to 53.362 kPa (+5.36%) at 2.5 Å and fell to 47.420 kPa (−6.37%) at 4.0 Å. The measured pressure was 50.2 kPa. The largest change in kPa was −9.541 kPa (−2.98%) at the Jou state (30 wt% MEA, 333.15 K, 0.668 mol CO₂/mol MEA), from 319.909 to 310.368 kPa at 4.0 Å. The measured pressure there was 282 kPa. The baseline cost, largest endpoint cost change, and Jou pressure shift reproduce the [read-only probe](https://github.com/tannerpolley/Amine-Thermodynamics/issues/405) at its reported precision.
+
+At the 30 wt% MEA offset-grid state (338.15 K, 0.5875 mol CO₂/mol MEA, pressure 1.5 times each case's bubble pressure), the baseline and four endpoint searches completed without a resolved descent. The stability penalty was zero at both residual scales, 0.01 and 0.003. The [group costs](results/born-diameter-sensitivity-405/objective-group-costs.csv) retain the original scale and weight groups. The [summary](results/born-diameter-sensitivity-405/summary.json) gives the largest absolute and relative changes by quantity, including the three largest relative shifts for each pressure group. Percentages use the magnitude of the baseline prediction as the denominator and are omitted when it is zero.
+
+These replays quantify sensitivity on the fitted observations. The stability result applies to the single state above. Investigator approval for manuscript use remains pending.
 
 ## Shared parameters and reaction-source ranges
 
