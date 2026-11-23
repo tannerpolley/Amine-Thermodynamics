@@ -45,7 +45,7 @@
 \maketitle
 
 % P:supplement-contents
-This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}), the published parameters of Hong et al.\ on identical MEA observations (Section~\ref{sec:s-hong}) and the water--DEA binary system (Section~\ref{sec:s-dea-binary}).
+This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data, the deviations by data set and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}), the published parameters of Hong et al.\ on identical MEA observations (Section~\ref{sec:s-hong}) and the water--DEA binary system (Section~\ref{sec:s-dea-binary}).
 
 \section{Model equations, inputs and parameter values}\label{sec:s-parameters}
 \subsection{Hard-chain, dispersion, association and Debye--H\"uckel contributions}\label{sec:s-contributions}
@@ -238,6 +238,13 @@ The objective uses the heat capacity per mole of apparent components, while the 
 Every MEA observation that is not fitted was examined before the parameters were selected.
 Beyond that, the Arcis heats were used to select the parameters, three intervals of Kim and Svendsen at \SI{313.15}{\kelvin} and three at \SI{353.15}{\kelvin} were fitted during earlier model development, and the comparison between the density sources informed the choice of the fitted density observations, as the notes of Table~\ref{tab:supplement-mea-comparison} mark; no interval of Kim and Svendsen is in the reported fit.
 
+% P:supplement-mea-deviations
+Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures.
+The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
+
+\input{tables/pressure_sources}
+\input{tables/supplement_mea_comparison}
+
 \subsection{MEA objective scales and weights}
 % P:supplement-objective-00
 Table~\ref{tab:objective-groups} gives the scales, weights and contributions to the joint objective of main-text Eq.~(\ref{main-eq:fit-objective}).
@@ -366,19 +373,14 @@ The MDEA standard errors are local values at an interpolated parameter set, and 
 
 \input{tables/supplement-transfer-bounds}
 
-\section{Parameter restrictions and deviations by data set for MEA}\label{sec:s-restrictions}
+\section{Parameter restrictions for MEA}\label{sec:s-restrictions}
 % P:supplement-restrictions
 Table~\ref{tab:choice-cost} gives the joint MEA fit repeated on the same observations and weights for a sequence of cumulative restrictions.
 The first row is the 16-parameter calibration and the third is the MEA model.
 The MEA model is the most restricted set whose fitted pressure and density deviations do not exceed those of the 16-parameter calibration; every further restriction has larger fitted and not-fitted pressure deviations.
 The cumulative changes quantify the combined effect of the selected assumptions, not the isolated physical effect of each restriction.
-Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source.
-Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures.
-The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/choice_cost}
-\input{tables/pressure_sources}
-\input{tables/supplement_mea_comparison}
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
 % P:supplement-ranges

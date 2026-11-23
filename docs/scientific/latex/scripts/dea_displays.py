@@ -554,8 +554,9 @@ hong_supplement = [f"{f2(hstrict['hong'])}\\,\\%, the MEA model by {f2(hstrict['
 stated = {'main.tex': [mea, amp, dea, split_MPa, splits, alt], 'sections/introduction.tex': [split_MPa, splits],
           'sections/conclusion.tex': [mea, dea, mdea, amp, outside, split_MPa, splits, alt, ours, theirs],
           'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.2f}--{max(fitted_mdea):.2f}', f'{searched-1} of the {searched}', f"{asum['liquid_liquid_lower_bound']} of them", *hong_main,
+                                            f"AARD of {float(dev['Cai']['AARD_percent']):.1f}",
                                             rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states"],
-          'sections/mea_system_modeling_results.tex': [f2(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')],
+          'sections/mea_system_modeling_results.tex': [f2(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
           'submission/highlights.txt': [mea + '%', f'{amp}-{dea}%', splits, ours + '%', theirs + '%'],
           'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{read(MD + 'verification.json')['raw_search_files']}}} distinct states", mdea, *hong_supplement]}
 for path, values in stated.items():
