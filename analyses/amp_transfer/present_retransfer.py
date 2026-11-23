@@ -9,10 +9,19 @@ from matplotlib.figure import Figure
 AN = Path(__file__).resolve().parent
 OUT = AN / 'results/retransfer-344-05e94210'
 title = 'AMP on the adopted shared inputs'
-if sys.argv[1:]:
-    assert sys.argv[1:] == ['sensitivity-3.5']
+if sys.argv[1:] == ['sensitivity-3.5']:
     OUT /= 'sensitivity-3.5'
     title = 'AMP with a 3.5 Å carbamate diameter floor'
+elif sys.argv[1:]:
+    issue, label = sys.argv[1:]
+    assert issue == '404'
+    assert label in ('main', 'sensitivity-3.5', 'penalty-0')
+    OUT = AN / 'results/retransfer-404-05e94210' / label
+    title = 'AMP with the F0 carbamate energy and water interaction'
+    if label == 'sensitivity-3.5':
+        title += ' and 3.5 Å diameter floor'
+    elif label == 'penalty-0':
+        title += ', stability-constrained alternative'
 with (AN / 'inputs/retransfer-344/observation-rows.csv').open() as stream:
     inputs = {row['identity']: row for row in csv.DictReader(stream)}
 rows = json.loads((OUT / 'data-rows.json').read_text())
