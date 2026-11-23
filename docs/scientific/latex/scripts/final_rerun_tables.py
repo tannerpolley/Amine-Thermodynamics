@@ -389,6 +389,9 @@ def main():
     groups = {}
     for r in fitrows: groups.setdefault(rowkey(r['group'],r['quantity']),[]).append(r)
     assert set(groups) == set(ROWS) and len(groups[('species','mole_fraction')]) == 101
+    # The Introduction states that the fitted heats, heat capacities and densities of MEA deviate by less than 3 %.
+    caloric = [a.stats(groups[k])['AARD_percent'] for k in groups if k[1] in ('addition_enthalpy', 'equilibrium_isobaric_heat_capacity', 'phase_density')]
+    assert len(caloric) == 4 and max(caloric) < 3 and 'heat capacities and densities by less than 3\\,\\%' in (ROOT/'docs/scientific/latex/sections/introduction.tex').read_text()
     compare = a.rows(a.BUNDLE/'results/reduced-refit/fit-comparison.csv')
     agreement = a.rows(a.BUNDLE/'results/reduced-refit/agreement.csv')
     score = lambda fit, dataset: next(r for r in agreement if r['fit']==fit and r['dataset']==dataset)['aard_percent']
