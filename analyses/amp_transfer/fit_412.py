@@ -1,5 +1,6 @@
 """#412 AMP fits on the F2 carbamate inputs (owner decision 2026-11-23): the F2 reference refit of #404's main fit,
 the AMPH+-water slope profile and the penalty on descending states, each searched for liquid splits."""
+import json
 import os
 import sys
 import time
@@ -149,9 +150,21 @@ def penalize(scales):
         active |= set(screen['descent_keys'])
 
 
-def retain(value):
-    """Write the F2 reference (against #404) and the fixed-slope set (against the F2 reference) to the candidate folder."""
+def measured_sources():
+    """Search key -> data set, temperature (K) and the source record (its table, row and conditions) of a measured state."""
     import csv
+    with (AMP/'inputs/retransfer-344/observation-rows.csv').open() as stream:
+        rows = {r['identity']: r for r in csv.DictReader(stream)}
+    def source(key):
+        r = rows[key.removesuffix(':problem')]
+        return dict(key=key, data_set=r['dataset'], T_K=float(r['T']), source=json.loads(r['source']))
+    return source
+
+
+def retain(value):
+    """Write the F2 free fit and the fixed-slope set, both against #404 main, to the candidate folder."""
+    import csv
+    from collections import Counter
     import retain_404
     out = AMP/'results/retransfer-412-f2-05e94210'
     retain_404.OUT = out
@@ -169,16 +182,28 @@ def retain(value):
     if (route.out/'phase-classification.json').exists():
         retain_404.write(out/label/'phase-classification.json.gz', route.result('phase-classification.json'))
     retain_404.retain_curves(label, route.out/'curve-data.json')
-    rows = retain_404.compare(label, route.out/'data-rows.json', out/'main/data-rows.json')
+    retain_404.write(out/label/'start-1-parameters.json', route.result(sorted((route.out/'start-1').glob('stage-*/parameters.json'))[-1].relative_to(route.out).as_posix()))
+    rows = retain_404.compare(label, route.out/'data-rows.json', AMP/'results/retransfer-404-05e94210/main/data-rows.json')
     for row in rows:
-        row['case'] = f'Slope {value:g} K against F2 main'
+        row['case'] = f'Slope {value:g} K against #404 main'
     statistics += rows
+    locate = measured_sources()
     for case in ('f0', 'f2'):
         retain_404.write(out/f'diagnosis/{case}-probes.json', stable.read(RUN/f'412-{case}-probes/probes.json'))
         scan = stable.read(RUN/f'412-{case}-scan/scan.json')
-        for entry in scan.values():
+        for slope, entry in scan.items():
+            # The native screen of each warm fit is its slope folder's first search record.
+            searched = stable.read(RUN/f'412-{case}-slope{slope}/search-0.json')
+            assert stable.tally(searched)['descent'] == entry['native']['descent']
+            measured = [locate(r["key"]) for r in searched if stable.descent(r) and not r['key'].startswith('grid:')]
             entry['native'].pop('descent_keys', None)
+            entry['native']['measured_descent'] = measured
+            entry['native']['measured_descent_by_set'] = dict(Counter(m['data_set'] for m in measured))
         retain_404.write(out/f'diagnosis/{case}-scan.json', scan)
+    retain_404.write(out/'main/measured-states.json', {
+        f'start-{i}': [dict(locate(e["key"]), confirmed=any(a['confirmed'] for a in e['attempts']))
+                       for e in stable.read(REFERENCE/f'main/phase-classification-{i}.json')['states'] if not e['key'].startswith('grid:')]
+        for i in (0, 1)})
     retain_404.write(out/'reference-timing.json', stable.read(REFERENCE/'main/timing.json'))
     retain_404.write(out/'source.json', dict(coefficients=source, path=retain_404.FITS.relative_to(retain_404.ROOT).as_posix(),
                                               source_sha256=retain_404.FITS_SHA, input_checks=stable.read(REFERENCE/'main/input-checks.json')))
