@@ -199,7 +199,7 @@ The prose check now runs after the displays are written or compared and lists ev
 
 **Regenerated displays are left uncommitted.** They show the new AMP model while the prose still has the #404 numbers. To regenerate them, run `.venv/bin/python docs/scientific/latex/scripts/dea_displays.py` from the repository root. That writes Tables 6–8 (`transfer-species`, `transfer-fitted`, `amine-summary`), `supplement-transfer-bounds`, `supplement-transfer-data`, `supplement-transfer-parameters`, `supplement-amp-ranges`, `number-sources.json`, `amp-current-measured-model.pdf` and `amp-splits.pdf`, the latter still drawn from the free fit's 93 states.
 
-**Prose contract.** With the regenerated displays, `--check` passes all 18 displays and 49 source files. It then fails only on these 19 AMP prose fragments, each of which must appear verbatim in its file:
+**Prose check.** With the regenerated displays, `--check` passes all 18 displays and 49 source files. It then fails only on these 19 AMP prose fragments, each of which must appear verbatim in its file:
 
 | File | Fragment |
 |---|---|
