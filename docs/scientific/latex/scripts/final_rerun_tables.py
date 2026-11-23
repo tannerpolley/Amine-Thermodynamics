@@ -134,7 +134,7 @@ def label(identity):
         identity = parts[0] + '–' + parts[1] + ' ' + ' '.join(parts[2:]).replace('k ij', '$k_{ij}$')
     elif kind == 'association' and len(parts) >= 5:
         identity = (f'{parts[0]}–{parts[2]} association ' if parts[0] == parts[2] else f'{parts[0]}({parts[1]})–{parts[2]}({parts[3]}) association ') + ' '.join(parts[4:])
-    return identity.replace('dispersion energy over k', r'dispersion energy $\epsilon/k_B$').replace('debye huckel', 'Debye–Hückel').replace('born diameter', 'Born diameter').replace('reaction:', '').replace(':correlation:a k', r' completed $b_5$').replace(':', ' ')
+    return identity.replace('dispersion energy over k', r'dispersion energy $u/k_B$').replace('debye huckel', 'Debye–Hückel').replace('born diameter', 'Born diameter').replace('reaction:', '').replace(':correlation:a k', r' completed $b_5$').replace(':', ' ')
 
 # Main-text parameter tables give provenance in a Ref. column with lettered notes, the supplement in a Source column;
 # a value fitted in this work carries a leading ** and is set in bold.
@@ -169,7 +169,7 @@ def columns(*names):
 # Parameter quantity by the last identity part, in display order; units as block headings show them.
 QUANTITY = {'k_ij': r'Interaction $k_{ij}$', 'reciprocal_temperature_slope': r'Temperature slope $b_{ij}$', 'segment_count': 'Segment count',
             **dict.fromkeys(['segment_diameter', 'born_diameter', 'debye_huckel_diameter', 'packing_diameter', 'constant', 'amplitude'], 'Diameter'),
-            'exponent_coefficient': 'Diameter exponent coefficient', 'dispersion_energy_over_k': r'Dispersion energy $\epsilon_i/k_B$',
+            'exponent_coefficient': 'Diameter exponent coefficient', 'dispersion_energy_over_k': r'Dispersion energy $u_i/k_B$',
             'energy_over_k': r'Association energy $\epsilon^{AB}/k_B$', 'volume': r'Association volume $\kappa^{AB}$', 'solvation_factor': r'Solvation factor $f_i$',
             'dielectric_volume': r'Dielectric volume $d_{V,i}$', 'dielectric_temperature': r'Dielectric temperature $d_{T,i}$',
             'ionic_region_relative_permittivity': 'Relative permittivity', 'a_k': 'Reaction coefficient', 'enthalpy_shift': r'Enthalpy shift $\delta h_r$'}
@@ -296,12 +296,13 @@ def main():
                  v(f'component/{s}/dispersion_energy_over_k'), association(s, 'energy_over_k'), association(s, 'volume'),
                  f'${int(charge[s]):+d}$' if charge[s] else '0', v(f'component/{s}/born_diameter'), v(f'component/{s}/solvation_factor'),
                  v(f'component/{s}/dielectric_volume'), v(f'component/{s}/dielectric_temperature')] for s in species]
-    species_headings = ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$\epsilon/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
+    species_headings = ['Species', r'$m^{\mathrm{seg}}$', r'\makecell[rb]{$\sigma$\\(\AA)}', r'\makecell[rb]{$u/k_B$\\(K)}', r'\makecell[rb]{$\epsilon^{AB}/k_B$\\(K)}', r'$\kappa^{AB}$', '$z$',
                         r'\makecell[rb]{$d^\mathrm{Born}$\\(\AA)}', '$f$', r'\makecell[rb]{$d_V$\\(L/mol)}', r'\makecell[rb]{$d_T$\\(K)}']
     # Per species: the Ref. entry of the main-text table, then the supplement's source of a quantity (column of species_rows) that differs from it.
     note = lambda letters: r'$^{\mathrm{' + letters + '}}$'
     held = r'\cite{Held2014}'
-    sources = [(r'\cite{Gross2001}', 'b', {4: 'Half the water value', 5: 'Water value'}),
+    gross = r'\cite{Gross2001}'
+    sources = [(r'\cite{Gross2001,Kleiner2007}', 'b', {1: gross, 2: gross, 3: gross, 4: r'Half the water value \cite{Kleiner2007}', 5: r'Water value \cite{Kleiner2007}'}),
                (r'\cite{Baygi2015}', 'c', {5: r'Converted from \cite{Baygi2015}'}),
                ('This work', '', {2: 'Coefficients below'}),
                *[('This work', 'd', {1: 'Single sphere', 7: r'Equal to $\sigma$'})] * 2,
@@ -315,7 +316,7 @@ def main():
           [[row[0]+mark*(s in shared_species), *[row[i] for i in main_indices[1:]], ref + (note(letters) if letters else '')] for row,(ref,letters,_),s in zip(species_rows(4),sources,species,strict=True)],
           ['l']+['r']*6+['l'],sep=5)
     # Full parameter listing in the supplement: one quantity per row, with provenance.
-    inline_headings = ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$\epsilon/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', '$z$', r'$d^\mathrm{Born}$ (\AA)', '$f$', r'$d_V$ (L/mol)', r'$d_T$ (K)']
+    inline_headings = ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$u/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', '$z$', r'$d^\mathrm{Born}$ (\AA)', '$f$', r'$d_V$ (L/mol)', r'$d_T$ (K)']
     full=[]
     for row,(source,_,different) in zip(species_rows(),sources,strict=True):
         for i in range(1,len(row)):

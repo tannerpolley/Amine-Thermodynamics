@@ -54,7 +54,7 @@ These four contributions to the residual Helmholtz energy of main-text Eq.~(\ref
 Below, $x_i$ is the mole fraction and $m_i^{\mathrm{seg}}$ the segment count of species $i$, $\rho_N=N_{\mathrm A}\rho$ is the number density, $k_B$ is the Boltzmann constant, $\mathcal I$ is the set of ions and $z_i$ is a charge number.
 The hard-sphere diameter of a neutral species or chain cation depends on temperature \cite{Gross2001},
 \begin{equation}
-    d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3\epsilon_i}{k_BT}\right)\right],
+    d_i=\sigma_i\left[1-0.12\exp\!\left(-\frac{3u_i}{k_BT}\right)\right],
     \label{eq:hard-sphere-diameter}
 \end{equation}
 with the water diameter $\sigma_w(T)$ of the main text in place of a constant $\sigma_i$; a single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.
@@ -90,8 +90,8 @@ where $g_{ij}^{\mathrm{hs}}$ is the hard-sphere pair distribution function at co
 The dispersion term is the second-order perturbation expansion of Gross and Sadowski \cite{Gross2001}:
 \begin{equation}
     a^{\mathrm{disp}}
-    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{\epsilon_{ij}}{k_BT}\sigma_{ij}^3
-    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{\epsilon_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
+    =-2\pi\rho_N I_1\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\frac{u_{ij}}{k_BT}\sigma_{ij}^3
+    -\pi\rho_N\bar m\,C_1I_2\sum_i\sum_j x_ix_jm_i^{\mathrm{seg}}m_j^{\mathrm{seg}}\left(\frac{u_{ij}}{k_BT}\right)^2\sigma_{ij}^3 ,
     \label{eq:dispersion}
 \end{equation}
 \begin{equation}
@@ -106,7 +106,7 @@ The dispersion term is the second-order perturbation expansion of Gross and Sado
     \label{eq:dispersion-integrals}
 \end{equation}
 where $b_k(\bar m)$ has the form of $a_k(\bar m)$, and $a_{0k}$--$a_{2k}$ and $b_{0k}$--$b_{2k}$ are their universal constants.
-The pair diameter $\sigma_{ij}$ and the pair energy $\epsilon_{ij}$ are those of main-text Eq.~(\ref{main-eq:dispersion-combining-rule}).
+The pair diameter $\sigma_{ij}$ and the pair energy $u_{ij}$ are those of main-text Eq.~(\ref{main-eq:dispersion-combining-rule}).
 
 % P:supplement-contributions-04
 Hydrogen bonding follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}:

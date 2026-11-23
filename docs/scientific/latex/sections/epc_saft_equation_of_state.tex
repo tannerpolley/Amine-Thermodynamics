@@ -16,9 +16,9 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
     +a^{\mathrm{Born}} .
     \label{eq:epcsaft-residual-split}
 \end{equation}
-A neutral species is a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $\epsilon_i$; an ion is a single charged sphere, except the DEA and MDEA cations, which keep the chain of their amine.
+A neutral species is a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $u_i$; an ion is a single charged sphere, except the DEA and MDEA cations, which keep the chain of their amine.
 Pressure and chemical potentials follow from the density and composition derivatives of $a^{\mathrm{res}}$ \cite{Gross2001} and caloric properties from its temperature derivatives; all include the variation of the relative permittivity (\cref{eq:solvent-permittivity}).
-Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative permittivity, as distinct from the energies $\epsilon$.
+Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative permittivity, as distinct from the association energy $\epsilon^{AB}$.
 
 % P:theory-02a
 The hard-chain and dispersion terms are those of Gross and Sadowski \cite{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
@@ -28,10 +28,10 @@ A single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.
 % P:theory-contributions-03
 The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the pair energy is
 \begin{equation}
-    \epsilon_{ij}=\sqrt{\epsilon_i\epsilon_j}\,\left(1-k_{ij}\right).
+    u_{ij}=\sqrt{u_iu_j}\,\left(1-k_{ij}\right).
     \label{eq:dispersion-combining-rule}
 \end{equation}
-Dispersion between ions of the same charge sign, including a single-sphere ion with itself, is excluded ($\epsilon_{ij}=0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}; the two chain cations keep the dispersion between their own segments, a choice of this model.
+Dispersion between ions of the same charge sign, including a single-sphere ion with itself, is excluded ($u_{ij}=0$), while ion--solvent and cation--anion pairs keep \cref{eq:dispersion-combining-rule} \cite{Figiel2025}; the two chain cations keep the dispersion between their own segments, a choice of this model.
 A temperature-dependent interaction is linear in reciprocal temperature,
 \begin{equation}
  k_{ij}(T)=k_{ij}(T_{\mathrm{ref}})+b_{ij}(T^{-1}-T_{\mathrm{ref}}^{-1}),
@@ -49,7 +49,7 @@ The Born term has the solvation-shell and dielectric-saturation form of Figiel e
 \begin{equation}
     a^{\mathrm{Born}}
     =
-    -\frac{e^2}{4\pi\varepsilon_0k_{\mathrm{B}}T}
+    -\frac{e^2}{4\pi\varepsilon_0k_BT}
     \sum_{i\in\mathcal{I}}x_iz_i^2
     \left[
         \frac{1-\varepsilon_{\mathrm{bulk}}^{-1}}{D_i}
