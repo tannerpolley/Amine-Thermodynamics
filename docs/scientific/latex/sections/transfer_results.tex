@@ -30,6 +30,7 @@ For MDEA the fit without the penalty gives a calculated liquid--liquid gap in \C
 Each penalized fit still leaves a detected instability at 14 of the 78 penalized states, whereas at the reported interpolated set all 78 searches finish and none detects one.
 In the loaded solution one liquid--liquid split is found and confirmed by a two-liquid equilibrium calculation, at \SI{363.15}{\kelvin}, 78.62 wt\% MDEA and \SI{262.9}{\mega\pascal}, where no measurement exists.
 At 27 measured states the assigned pressure lies below the calculated bubble pressure and the search detects an instability toward a vapor, so the values calculated there refer to a liquid that the model does not predict to be stable (Section~\ref{supp-sec:s-phase}).
+Of the \num{11824} MDEA searches, 1039 did not finish, 810 of them at grid states where no bubble pressure could be calculated.
 
 % P:transfer-amp-stability
 For AMP all 666 searches finish.
@@ -116,7 +117,6 @@ For DEA and AMP the sources examined report no scalar deviation on identical obs
 \FloatBarrier
 \subsection{Scope and limitations}\label{sec:limits}
 % P:limits
-The four models are calibrations against data examined during development; they establish neither physical validation nor suitability for absorber or stripper design.
 For every amine the equilibrium-constant correlations are evaluated outside their measured temperature ranges.
 The permittivity correlation is used beyond its source data, the standard errors exclude model discrepancy and the uncertainty of the shared parameters, and finite searches do not prove global phase stability.
 Fixing the equilibrium constants and sharing the parameters is the premise of the transfer; because the 16-parameter calibration was not transferred, the results do not show that these restrictions are what makes the transfer possible.
