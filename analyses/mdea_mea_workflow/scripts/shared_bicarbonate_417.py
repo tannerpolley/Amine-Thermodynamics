@@ -35,10 +35,16 @@ def vapor_at_parent(model, state, trial):
     root = min(roots, key=lambda q: q['log_density_distance'])
     if root['returned'] != 'unspecified':
         return root['returned'] == 'vapor'
-    density = root['density']*np.geomspace(1e-4, 1., 33)
-    batch = model.states([state['temperature_K']]*33, rho=density, x=trial['witness']['phase']['composition'], derived_properties=True)
-    trial['isotherm'] = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
-    return all(v is not None and v > 0 for v in batch.pressure_density_derivative) and all(np.diff(batch.pressure) > 0)
+    trial['isotherm'], connected = dilute_vapor_connection(model,state['temperature_K'],trial['witness']['phase']['composition'],root['density'])
+    return connected
+
+
+def dilute_vapor_connection(model, T, x, rho):
+    density = rho*np.geomspace(1e-4, 1., 33)
+    batch = model.states([T]*33, rho=density, x=x, derived_properties=True)
+    trace = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
+    connected = all(v is not None and v > 0 for v in batch.pressure_density_derivative) and all(np.diff(batch.pressure) > 0)
+    return trace, connected
 
 
 def witnesses(route, point, rows):

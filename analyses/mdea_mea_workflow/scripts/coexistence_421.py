@@ -1,13 +1,12 @@
 """Trial and coexistence evidence at the prescribed MDEA pressures (#421)."""
-import math
 import sys
 
 from bounded_binary_411 import OLD
 from part_ii import ROOT, eq, jsonable, reg, stable
 
 sys.path.insert(0, str(ROOT/'analyses/amp_transfer'))
-from classify_descents import classify, coexistence, gibbs, pressure_roots, ERROR_TERMS
-from shared_bicarbonate_417 import vapor_at_parent
+from classify_descents import classify, coexistence, gibbs, matched
+from shared_bicarbonate_417 import dilute_vapor_connection, vapor_at_parent
 
 SPLIT_ONLY = 'feasible two-liquid equilibrium; bulk Gibbs comparison unavailable'
 
@@ -71,3 +70,17 @@ def measured(route, point, spec, states, canonical, unfinished):
         entry.update(pressure_basis=canonical[k], original=rows[k], salt=list(salt_trials(spec,item,parent)) if parent.requested_tolerance_met else [])
         entry['pressure_closed_vapor'] = [vapor_at_parent(spec.model,entry,t) for t in entry.get('supplied_pressure_roots',[])]
     route.write('measured-phase.json',output)
+
+
+def coexistence_roots(route, spec):
+    entries = route.result('measured-phase.json')
+    for entry in entries:
+        for attempt in (a for a in entry['attempts'] if a.get('distinct')):
+            identities = []
+            for x,rho,roots in zip(attempt['phases'],attempt['densities_mol_m3'],attempt['roots'],strict=True):
+                trace, connected = dilute_vapor_connection(spec.model,entry['temperature_K'],x,rho)
+                branch = min(matched(roots,spec.problems[entry['key']].row_tolerance),key=lambda r:r['log_density_distance'])['returned']
+                identity = 'dilute-vapor-connected' if branch == 'unspecified' and connected else branch
+                identities.append(dict(identity=identity, isotherm=trace, dilute_vapor_connected=connected))
+            attempt['coexistence_roots'] = identities
+    route.write('measured-phase.json',entries)
