@@ -1,7 +1,59 @@
 ---
 title: "MDEA transfer with saturation-capped absorption heat"
 format: html
+jupyter: python3
 ---
+
+## Kuranov total bubble pressures on published observation sets (#422)
+
+The #411 MDEA model gives **19.5292% average absolute relative deviation (AARD)** on Kuranov et al. (1996), Table 2, close to the **19.7%** Wangler et al. reported on 82 unfitted pressures. The #411 fit used 70 of these pressures (66 loaded and four CO₂-free). The 12 unfitted pressures give 22.0884% AARD. The data roles differ across the models, so these deviations provide no ranking. Uyan et al. reported 22.9% on 82 pressures in Table 6. Wangler et al. redetermined that value as 34.4% in Table 11, note b. The identification of the 82 points with Kuranov's Table 2 rests on the source, count and, for Uyan, the stated concentrations and ranges. [Study definitions and source locators](https://github.com/tannerpolley/Amine-Thermodynamics/issues/422).
+
+The measured quantity is total pressure at the first stable bubble, over about 313–413 K. K19 and K32 are the two Table 2 blocks, at nominal 19 and 32 wt% MDEA. K19-loaded selects the 39 rows at $\alpha>0.01$. Five K82 rows exceed $\alpha=1.2$. C28 selects the loaded K19 rows at nominal 333–413 K, and C21 applies the 3 MPa bound. Cleeton et al. report 20.26% AAD for 26 unidentified observations at 18.9 wt% (Table 3 and discussion of Fig. 7). Seven C28 rows exceed 3 MPa (18, 26, 27, 33, 34, 40 and 41), so C28 and C21 provide comparisons at the corresponding concentration and temperature range. [Retained row membership and full-precision reductions](results/kuranov-published-422/statistics.json).
+
+The 81 retained #411 predictions replayed with zero relative difference on Engine 1.3.1. Row 72, at 393.16 K and 0.373385 mol CO₂/mol MDEA, gives 1.705047 MPa against 1.205300 MPa measured (+41.46%) with the 413 K comparison template (pressure difference, scale 1). It was excluded from the fit and is above the 368 K measured limit of the MDEA dissociation correlation. The pressure difference is +0.4997 MPa, compared with about 0.010 MPa pressure-measurement uncertainty for the largest transducer (Kuranov 1996, Experimental Section, p. 1959). The paper gives no combined uncertainty for the residual. The replay verifies the calculation. The 12 unfitted rows show departure from measured pressures within this campaign. [Kuranov row predictions and replay differences](results/kuranov-published-422/kuranov-rows.json) · [Input, script and wheel hashes](results/kuranov-published-422/hashes.json).
+
+K19 and K32 each contain 35 fitted and six unfitted pressures. C28 has 22 fitted and six unfitted pressures, and C21 has 17 fitted and four unfitted pressures.
+
+AARD is the mean absolute value of $100(p_\mathrm{calc}/p_\mathrm{exp}-1)$ (Uyan Eq. 25 and Wangler Eq. 32). The bias is the signed mean of the same pressure deviations. The reported maximum is absolute, with the source row in parentheses. The published target columns distinguish Uyan's 19.22% from §4.3.2 (39 rows inferred from the loading cutoff) and 19.82% from the abstract (41 rows inferred from the reported aggregate). Wangler's 32 wt% target is from Fig. 11, and the three 60 wt% observations are from Table 10 and Fig. 14 at 303.00 K.
+
+```{python}
+#| eval: false
+#| echo: false
+#| output: asis
+import json
+from pathlib import Path
+from statistics import fmean
+from tabulate import tabulate
+results = Path("results/kuranov-published-422")
+saved = json.loads((results / "statistics.json").read_text())
+kuranov, wangler = [json.loads((results / file).read_text()) for file in ("kuranov-rows.json", "wangler-table-10-rows.json")]
+current = [dict(subset=s, reading="Present model", printed=None, **v) for s, v in saved["present"].items()]
+for reports in (current, saved["reconstruction"]):
+    table = []
+    for r in reports:
+        subset, reading = r["subset"], r["reading"]
+        cohort = [q for q in (wangler if subset == "Wangler Table 10" else kuranov) if q["source_row"] in saved["sets"][subset]]
+        pressures = {q["source_row"]: q["present" if r["printed"] is None else reading]["pressure_Pa"] for q in cohort}
+        dev = {q["source_row"]: 100 * (pressures[q["source_row"]] / q["p_exp"] - 1) for q in cohort if pressures[q["source_row"]] is not None}
+        missing = sorted(pressures.keys() - dev.keys())
+        aard, bias = (fmean(map(abs, dev.values())), fmean(dev.values())) if dev else (None, None)
+        worst, maximum = max(((i, abs(d)) for i, d in dev.items()), key=lambda pair: pair[1], default=(None, None))
+        full = None if missing else aard
+        assert (len(cohort), len(dev), missing, full, aard, bias, maximum, worst) == tuple(r[k] for k in ("n", "solved", "unsolved_rows", "AARD_percent", "solved_AARD_percent", "bias_percent", "max_abs_percent", "worst_row"))
+        roles = ", ".join("{} {}".format(sum(q.get("role") == role for q in cohort), role) for role in ("fitted", "not fitted")) if reading == "Present model" else "—"
+        table.append((subset, reading, roles, r["printed"], f"{len(dev)}/{len(cohort)}", full, aard if missing else None, bias, f"{maximum:.4f} ({worst})" if dev else None, ", ".join(map(str, missing)) if missing else None))
+    print(tabulate(table, headers=["Set", "Reading", "Role", "Printed (%)", "Solved", "AARD (%)", "Solved-row AARD (%)", "Bias (%)", "Max (%) and row", "Unsolved rows"], tablefmt="pipe", floatfmt=".4f", missingval="—", disable_numparse=[3]), end="\n\n")
+```
+
+Regenerate the checked tables from retained records with `uv run --no-project --with tabulate python analyses/mdea_mea_workflow/scripts/kuranov_tables_422.py` before rendering.
+
+{{< include results/kuranov-published-422/tables.md >}}
+
+The four retained readings use Uyan's Table 3 precision and Table 1 reaction constants, with the repository water and MDEA permittivity laws. The Uyan readings use Eqs. 26–27 with the Table 5 or zero water–MDEAH⁺ coefficient and the Table 5 water–MDEA association-volume correction. Both Wangler readings use Tables 6–7, interpreting the numbered temperature coefficients as powers. The charged-MDEA reading keeps its neutral packing diameter and self-dispersion, whereas the other three use $0.88\sigma$ for the ion packing diameter. None reproduces a printed target at the target's print resolution. The baseline Wangler reading yielded no pressure on the three 60 wt% rows from the specified starts. The charged-MDEA reading solved all three and underpredicted each measured pressure. The #126 Fig. 11 diagnostic showed the charged-MDEA curves up to 0.6 below the digitized curves in $\ln p$ at high loading. [The four fixed readings](https://github.com/tannerpolley/Amine-Thermodynamics/issues/422) · [Wangler Table 10 predictions and solve messages](results/kuranov-published-422/wangler-table-10-rows.json) · [Retained #126 Fig. 11 diagnostic](../mdea_kuranov_refit/results/wangler-figures-11-12.csv).
+
+Raeispour Shirazi and Lotfollahi report **10.9% AARD** for their fitted ePC-SAFT-MB model (Str2, Table 4, p. 7). Their reference [44] and count identify the 82 Kuranov Table 2 total pressures. Section 5.3 states that two binary interactions were fitted to all 162 ternary bubble pressures, including these observations. Eq. 20 uses the same absolute relative pressure deviation. [Raeispour Shirazi and Lotfollahi source check](results/kuranov-published-422/raeispour-table-4.json).
+
+These results await independent scientific review and investigator approval for manuscript use.
 
 ## Sensitivity to the shared water–bicarbonate interaction (#417)
 

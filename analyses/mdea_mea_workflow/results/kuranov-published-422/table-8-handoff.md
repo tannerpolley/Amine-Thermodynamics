@@ -1,0 +1,56 @@
+# Table 8 handoff for the writing stage
+
+The following is the retained Table 8 source before and after the proposed change. Apply only after investigator promotion. The generator and number-source entries also require updating from the retained statistics and Raeispour record.
+
+## Before
+
+```tex
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure deviations of published models and of this work on identical observations.}\label{tab:published-models}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}@{}}
+\toprule Observations and model & Role of these observations in the fit of that model & AARD (\%) \\ \midrule
+\addlinespace\multicolumn{3}{@{}l}{\textit{19 \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005}, MEA near 393 K}} \\*
+Baygi and Pahlavanzadeh, PC-SAFT \cite{Baygi2015} & not fitted & $21.03$ \\
+Najafloo and Zarei, SAFT-HR \cite{Najafloo2018} & unclear\textsuperscript{a} & $39.96$ \\
+Zhang et al., eNRTL \cite{Zhang2011} & fitted & $13.5$ \\
+This work, 16-parameter calibration & not fitted & $19.43$ \\
+This work, MEA model & not fitted & $33.47$ \\
+\addlinespace\multicolumn{3}{@{}l}{\textit{101 \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA}} \\*
+Ermatchkov et al., parameter set I & not fitted & $16.8$ \\
+Ermatchkov et al., parameter set II & fitted & $3.9$ \\
+This work, MDEA model & not fitted; used to choose the initial parameters & $17.89$ \\
+\addlinespace\multicolumn{3}{@{}l}{\textit{28 total pressures of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA}} \\*
+Ermatchkov et al., parameter set I & fitted & $1.9$ \\
+Ermatchkov et al., parameter set II & fitted & $3.5$ \\
+This work, MDEA model & not fitted & $28.08$ \\
+\bottomrule\end{tabular}
+\par\smallskip{\footnotesize\raggedright AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently.\par}\end{table}
+```
+
+## After
+
+```tex
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure deviations of published models and of this work on identical observations.}\label{tab:published-models}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}@{}}
+\toprule Observations and model & Role of these observations in the fit of that model & AARD (\%) \\ \midrule
+\addlinespace\multicolumn{3}{@{}l}{\textit{19 \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005}, MEA near 393 K}} \\*
+Baygi and Pahlavanzadeh, PC-SAFT \cite{Baygi2015} & not fitted & $21.03$ \\
+Najafloo and Zarei, SAFT-HR \cite{Najafloo2018} & unclear\textsuperscript{a} & $39.96$ \\
+Zhang et al., eNRTL \cite{Zhang2011} & fitted & $13.5$ \\
+This work, 16-parameter calibration & not fitted & $19.43$ \\
+This work, MEA model & not fitted & $33.47$ \\
+\addlinespace\multicolumn{3}{@{}l}{\textit{101 \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA}} \\*
+Ermatchkov et al., parameter set I & not fitted & $16.8$ \\
+Ermatchkov et al., parameter set II & fitted & $3.9$ \\
+This work, MDEA model & not fitted; used to choose the initial parameters & $17.89$ \\
+\addlinespace\multicolumn{3}{@{}l}{\textit{28 total pressures of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA}} \\*
+Ermatchkov et al., parameter set I & fitted & $1.9$ \\
+Ermatchkov et al., parameter set II & fitted & $3.5$ \\
+This work, MDEA model & not fitted & $28.08$ \\
+\addlinespace\multicolumn{3}{@{}l}{\textit{82 total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA\textsuperscript{b}}} \\*
+Uyan et al.\ \cite{Uyan2015} & not fitted & $22.9$\textsuperscript{c} \\
+Wangler et al.\ \cite{Wangler2018} & not fitted & $19.7$ \\
+Raeispour Shirazi and Lotfollahi \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020} & fitted & $10.9$ \\
+This work, MDEA model & 70 fitted, 12 not fitted & $19.53$ \\
+\bottomrule\end{tabular}
+\par\smallskip{\footnotesize\raggedright AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently. \textsuperscript{b}The published Kuranov sets are identified with Table 2 by count. \textsuperscript{c}Wangler et al.\ redetermined the Uyan et al.\ value as $34.4$\,\% (Table 11, note b).\par}\end{table}
+```
