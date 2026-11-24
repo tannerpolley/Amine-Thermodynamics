@@ -14,13 +14,18 @@ INPUT = AN / 'inputs/part-ii-346'
 LIMIT = 1e-8  # #346 and #255 reproducibility limit.
 
 
+def replay_errors(pairs, cost, reference_cost):
+    return dict(max_relative_prediction_error=max((abs(value / ref - 1) for value, ref in pairs), default=None),
+                relative_cost_error=abs(cost / reference_cost - 1) if cost is not None else None,
+                cost=cost, reference_cost=reference_cost)
+
+
 def error(rows, reference, cost, reference_cost):
     assert len(rows) == len(reference) == 80
     assert all(a['identity'] == b['identity'] and a['status'] == 'Available'
                and a['requested_tolerance_met'] for a, b in zip(rows, reference, strict=True))
-    return dict(max_relative_prediction_error=max(abs(a['value']/b['value']-1)
-                for a, b in zip(rows, reference, strict=True)),
-                relative_cost_error=abs(cost/reference_cost-1), cost=cost, reference_cost=reference_cost)
+    return replay_errors(((a['value'], b['value']) for a, b in zip(rows, reference, strict=True)),
+                         cost, reference_cost)
 
 
 def check_shared(point, adopted, shared, interval=None):
