@@ -582,9 +582,14 @@
     "release": {
       "states": 162,
       "descent": 0,
-      "incomplete": 162
+      "incomplete": 0
     },
-    "matched": false
+    "matched": true,
+    "original_release": {
+      "states": 162,
+      "descent": 0,
+      "incomplete": 162
+    }
   },
   "MEA stability supplied": {
     "retained": {
@@ -593,8 +598,14 @@
       "negative": 0,
       "unavailable": 0
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "compositions": 6121,
+      "evaluated": 991602,
+      "negative": 0,
+      "unavailable": 0
+    },
+    "matched": true,
+    "original_release": null
   },
   "DEA reported stability": {
     "retained": {
@@ -602,8 +613,12 @@
       "available": 1270,
       "descent": 0
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "states": 1271,
+      "available": 1271,
+      "descent": 0
+    },
+    "matched": false
   },
   "MDEA reported stability": {
     "retained": {
@@ -650,7 +665,49 @@
       "kim_2014_new": 27,
       "vinjarapu_table_5_new": 5
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "kim_393_15": 20,
+      "vinjarapu_313_15": 8,
+      "kim_2014_new": 27,
+      "vinjarapu_table_5_new": 5
+    },
+    "matched": true
+  },
+  "MEA census first nine": {
+    "retained": 1458,
+    "release": 1458,
+    "matched": true
+  },
+  "MEA stripper heat availability": {
+    "retained": {
+      "kim2007_393_15_available": 20,
+      "vinjarapu_313_15_available": 8,
+      "kim2014_available": 24,
+      "kim2014_above_ceiling": 3,
+      "vinjarapu_table5_available": 5
+    },
+    "release": {
+      "kim2007_393_15_available": 20,
+      "vinjarapu_313_15_available": 8,
+      "kim2014_available": 24,
+      "kim2014_above_ceiling": 3,
+      "vinjarapu_table5_available": 5
+    },
+    "matched": true
+  },
+  "DEA fitted replay availability": {
+    "retained": 80,
+    "release": 80,
+    "matched": true
+  },
+  "DEA reported-point data rows available": {
+    "retained": 299,
+    "release": 299,
+    "matched": true
+  },
+  "DEA reported-point curve rows available": {
+    "retained": 750,
+    "release": 750,
+    "matched": true
   }
 }

@@ -1143,6 +1143,76 @@
         "search.json"
       ],
       "search_summary": "Partial run: grid and census counts only. Supplied compositions did not run."
+    },
+    {
+      "run_root": "analyses/mea_parameter_bundle/results/runs/release-recheck-414-amendment-1/compare-05e94210",
+      "retained_root": "analyses/mea_parameter_bundle/results/wheel-recheck-05e94210/stability-adopted-law",
+      "same_relative_file_names": [
+        "census.json",
+        "grid.json",
+        "search.json"
+      ]
+    },
+    {
+      "run": "analyses/mea_parameter_bundle/results/runs/release-recheck-414-amendment-1/stability/candidate/census-raw.json.gz",
+      "retained": "analyses/mea_parameter_bundle/results/paper-evidence-341/stability/candidate/census-raw.json.gz",
+      "scope": "First nine trials at each census state"
+    },
+    {
+      "run": "analyses/mea_parameter_bundle/results/runs/release-recheck-414-amendment-1/stability/candidate/supplied.json.gz",
+      "retained": "analyses/mea_parameter_bundle/results/wheel-recheck-05e94210/stability-adopted-law/search.json:supplied",
+      "scope": "Counts and global minima for the 6121-composition registry. The retained raw file at paper-evidence-341 has 3507 compositions."
+    },
+    {
+      "run_root": "analyses/mea_parameter_bundle/results/runs/release-recheck-414-amendment-1-stripper-serial/compare",
+      "retained_root": "analyses/mea_parameter_bundle/results/stripper-temperature-409",
+      "same_relative_file_names": [
+        "heat-replay.json",
+        "agreement-check.json",
+        "band-table.csv",
+        "points.csv"
+      ]
+    }
+  ],
+  "DEA": [
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/search-summary.json",
+      "retained": "analyses/dea_transfer/results/refit-413/selection.json:chosen.search"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/search-0.json:lawson-1976-viii:1:problem",
+      "retained": "analyses/dea_transfer/results/refit-413/selection.json:chosen.search.grid.unavailable_searches[0]"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/replay.json:rows,cost",
+      "retained": "analyses/dea_transfer/results/refit-413/selection.json:chosen.optimizer_report.predictions,data_cost"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/data-rows.json",
+      "retained": "analyses/dea_transfer/results/refit-413/paper-data.csv",
+      "match": "identity; value maps to predicted."
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/curve-data.json",
+      "retained": "analyses/dea_transfer/results/refit-413/curve-data.json"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/conditional-uncertainty.json",
+      "retained": "analyses/dea_transfer/results/refit-413/conditional-uncertainty.json"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/deviations.json",
+      "retained": "analyses/dea_transfer/results/refit-413/deviations.json"
+    },
+    {
+      "run_root": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/compare-413",
+      "retained_root": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/compare-retained-413",
+      "same_relative_file_names": [
+        "paper-data.csv",
+        "curve-data.json",
+        "conditional-uncertainty.json",
+        "search-summary.json"
+      ]
     }
   ]
 }
