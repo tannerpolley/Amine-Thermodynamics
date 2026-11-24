@@ -440,12 +440,14 @@ class Route:
         result = conditional_information(SimpleNamespace(physical=[q['origin'] for q in declared],covariance=SimpleNamespace(active_bounds=active)),J,spec.whiten(np.array([r['residual'] for r in replay])),[q['identity'] for q in declared],[q['bounds'][0] for q in declared],[q['bounds'][1] for q in declared])
         self.write('conditional-uncertainty.json',dict(result,coordinates=declared,active_bounds=active))
 
-    def reduce(self, point):
+    def reduce(self, point, fitted=None):
         spec, output = self.bind(point), []
+        fitted = {} if fitted is None else {row['identity']: row for row in fitted}
         for role in ('fitted','comparisons'):
             for record in spec.inputs['observations'][role]:
                 T = spec.problems[record.get('problem',record.get('initial'))].T
-                output.append(dict(spec.prediction(record), role=record['role'], T_K=T, outside_ranges=self.marks(T,spec.problems[record.get('problem',record.get('initial'))])))
+                prediction = fitted.get(record['identity']) if role == 'fitted' else None
+                output.append(dict(prediction if prediction is not None else spec.prediction(record), role=record['role'], T_K=T, outside_ranges=self.marks(T,spec.problems[record.get('problem',record.get('initial'))])))
         summary = []
         for group,role,unit in sorted({(r['group'],r['role'],r.get('unit') or 'unit unspecified') for r in output}):
             for name in {name for r in output for name in r['outside_ranges']}:
@@ -455,10 +457,11 @@ class Route:
                     summary.append(dict(group=group,role=role,unit=unit,range_name=name,outside_range=outside,rows=len(rows),available=len(pairs),statistics=deviation_statistics(pairs,unit) if pairs else None))
         self.write('data-rows.json',output)
         self.write('deviations.json',summary)
+        return output
 
-    def curves(self, point):
+    def curves(self, point, declarations=None):
         spec, output = self.bind(point), []
-        for row in self.load(self.config['curve_rows']):
+        for row in self.load(self.config['curve_rows']) if declarations is None else declarations:
             record = copy.deepcopy(row['observation'])
             for key, declaration in row['problems'].items():
                 spec.problems[key] = spec.problem(declaration['template'],declaration['bindings'])
@@ -467,6 +470,7 @@ class Route:
             assert self.config['calculation_interval_K'][0]<=T<=self.config['calculation_interval_K'][1]
             output.append(dict(spec.prediction(record),curve=row['curve'],loading=row['loading'],T_K=T,outside_ranges=self.marks(T,spec.problems[record.get('problem',record.get('initial'))])))
         self.write('curve-data.json',output)
+        return output
 
 
 if __name__ == '__main__':
