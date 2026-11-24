@@ -15,8 +15,8 @@ The carbamate--water interaction is not distinguishable from zero and is strongl
 
 % P:transfer-mdea-amp-parameters
 For MDEA and AMP the amine--water interaction is part of the reactive fit, and the fitted binary bubble pressures deviate by 1--3\,\%.
-The MDEA--water interaction and its temperature coefficient are well determined, whereas the cation--water and cation--bicarbonate interactions are not distinguishable from zero, and the standard error of the cation dispersion energy exceeds half its value.
-Because the reported MDEA set is interpolated (\cref{sec:methods-phase}), these standard errors are local values and do not describe a converged estimate.
+The temperature coefficient of the MDEA--water interaction is well determined, and the interaction itself is held at its bound at \SI{423}{\kelvin}; the cation--bicarbonate interaction is at its upper bound, the cation--water interaction is not distinguishable from zero, and the cation dispersion energy has a standard error of 7\,\% of its value.
+The MDEA standard errors are conditional on the two parameters on bounds.
 Two of the eight fitted AMP parameters are on bounds, the R4 enthalpy increment at its lower and the carbamate diameter at its upper bound, \SI{6.5}{\angstrom}; the AMP standard errors are conditional on the fixed slope $b_{\mathrm{AMPH^+,w}}$.
 The fitted R4 correlations of DEA and AMP are effective quantities conditional on the fixed shared parameters, not independent measurements of an equilibrium constant.
 
@@ -26,11 +26,11 @@ For DEA, 1270 of the 1271 searches finish without a detected instability.
 The remaining search, at a comparison-only state at 54.5 wt\% DEA, did not finish.
 
 % P:transfer-mdea-stability
-For MDEA the fit without the penalty gives a calculated liquid--liquid gap in \COtwo-free MDEA--water at \SI{1.466}{\mega\pascal} above about \SI{413}{\kelvin}; no measurement of liquid--liquid coexistence in this system was used.
-Each penalized fit still leaves a detected instability at 14 of the 78 penalized states, whereas at the reported interpolated set all 78 searches finish and none detects one.
-In the loaded solution one liquid--liquid split is found and confirmed by a two-liquid equilibrium calculation, at \SI{363.15}{\kelvin}, 78.62 wt\% MDEA and \SI{262.9}{\mega\pascal}, where no measurement exists.
+For MDEA the fit without the bound converges with a calculated liquid--liquid gap in \COtwo-free MDEA--water at \SI{1.466}{\mega\pascal} above about \SI{413}{\kelvin}; no measurement of liquid--liquid coexistence in this system was used.
+That fit is a local minimum from one initial set, and it lies inside the gap: from the same initial set, the bound raises the fitted objective from 479.4 to 564.5. At the reported parameters, all 78 searches of the \COtwo-free solution at 393--\SI{423}{\kelvin} finish and none detects an instability.
+In the loaded solution no liquid--liquid split is found among the searches that finish. With an earlier MDEA parameter set, a split was found at \SI{363.15}{\kelvin}, 78.62 wt\% MDEA and 1.368 mol/mol; at the reported parameters no bubble pressure can be calculated at that state, so its search does not finish and a split there is neither found nor excluded.
 At 27 measured states the assigned pressure lies below the calculated bubble pressure and the search detects an instability toward a vapor, so the values calculated there refer to a liquid that the model does not predict to be stable (Section~\ref{supp-sec:s-phase}).
-Of the \num{11824} MDEA searches, 1039 did not finish, 810 of them at grid states where no bubble pressure could be calculated.
+Of the \num{11824} MDEA searches, 1099 did not finish, 870 of them at grid states where no bubble pressure could be calculated.
 
 % P:transfer-amp-stability
 For AMP all 666 searches finish without a detected instability, also when the 7301 trial compositions of earlier searches are tested.
@@ -46,7 +46,7 @@ With $b_{\mathrm{AMPH^+,w}}$ fitted as well, at \SI{-219}{\kelvin} with a condit
 % P:transfer-fitted-pressures
 The fitted loaded-solution pressures are described most closely for AMP and least closely for DEA (\cref{fig:dea-pressure,fig:mdea-pressure,fig:amp-pressure}, Table~\ref{supp-tab:supplement-transfer-data}).
 For DEA the bias is small, so the error lies mainly in the shape of pressure against loading: along each isotherm of Lawson and Garst the calculated pressure rises less steeply than the measured pressure at the highest loadings.
-For MDEA the deviation depends on temperature: it is larger above the measured R5 range, where all 29 pressures are overpredicted: their bias equals their AARD, 32.2\,\% (Table~\ref{supp-tab:supplement-mdea-ranges}).
+For MDEA the deviation depends on temperature: it is larger above the measured R5 range, where all 29 pressures are overpredicted: their bias equals their AARD, 30.6\,\% (Table~\ref{supp-tab:supplement-mdea-ranges}).
 
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=\linewidth]{dea-current-measured-model.pdf}
@@ -67,14 +67,14 @@ For MDEA the deviation depends on temperature: it is larger above the measured R
 \end{figure}
 
 % P:transfer-not-fitted-pressures
-The loaded-solution pressures that are not fitted deviate by 15.4--85.4\,\%, and the sign of the mean error depends on the source rather than on the amine (Table~\ref{supp-tab:supplement-transfer-data}).
-The lowest deviation belongs to the largest set, the 101 \COtwo partial pressures of Ermatchkov et al.\ over MDEA, with little bias and nearly equal values inside and above the R5 range; the highest belongs to the DEA pressures of Seo and Hong.
+The loaded-solution pressures that are not fitted deviate by 17.9--85.4\,\%, and the sign of the mean error depends on the source rather than on the amine (Table~\ref{supp-tab:supplement-transfer-data}).
+The lowest deviation belongs to the largest set, the 101 \COtwo partial pressures of Ermatchkov et al.\ over MDEA, with nearly equal values inside and above the R5 range but biases of opposite sign; the highest belongs to the DEA pressures of Seo and Hong.
 
 \subsubsection{Other properties}\label{sec:results-amines-other}
 % P:transfer-other
 The fitted integral absorption heats of DEA and its comparison-only loaded densities deviate by less than 1\,\%.
 Against the NMR speciation of B\"ottinger et al.\ \cite{Bottinger2008}, calculated DEA carbamate is too high and calculated bicarbonate plus carbonate too low, so the DEA model places too much absorbed \COtwo in carbamate (Table~\ref{supp-tab:supplement-transfer-data}).
-The fitted MDEA properties other than the loaded-solution pressures deviate by 0.1--13.6\,\%, and every fitted species ratio is overpredicted.
+The fitted MDEA properties other than the loaded-solution pressures deviate by 0.1--13.8\,\%, and every fitted species ratio is overpredicted.
 At 60 wt\% MDEA, above the fitted contents of 30--50 wt\%, the densities and heat capacities of Weiland et al.\ \cite{Weiland1998,weilandHeatCapacityAqueous1997} deviate several times more than at the fitted contents (Table~\ref{supp-tab:supplement-transfer-data}).
 The fitted carbamate fractions of AMP have a larger deviation than its fitted pressures but a small bias.
 
@@ -82,7 +82,7 @@ The fitted carbamate fractions of AMP have a larger deviation than its fitted pr
 \subsection{Comparison of the four amines}\label{sec:results-compared}
 % P:compared
 The parameters shared with MEA support a fit of each of the other amines, with fitted loaded-solution pressures that deviate by about 10--28\,\% (\cref{tab:amine-summary}).
-Phase stability separates the amines: no instability is detected for MEA or DEA, one loaded-solution split is found for MDEA at a pressure far above any measurement, and none is detected for AMP at its reported parameters.
+Phase stability separates the amines: no instability is detected for MEA or DEA, no liquid--liquid split is found among the completed searches for MDEA, whose \COtwo-free solution is kept single-phase by a bound, and none is detected for AMP at its reported parameters.
 Closer description of the fitted pressures does not go with more splits: the AMP and MEA models describe theirs most closely and have no detected instability.
 Within AMP the fitted loaded-solution pressures deviate by 10.5\,\% with the cation--water slope fixed and by 10.3\,\% with it fitted; other fixed slopes do not behave alike (Section~\ref{supp-sec:s-amp-slope}).
 
@@ -100,7 +100,7 @@ On the 19 Ma'mun pressures (\cref{tab:published-models}) the MEA model deviates 
 
 % P:literature-mdea
 For MDEA, Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} report the deviations of two parameter sets of their model on observations that are also calculated here.
-On their 101 \COtwo partial pressures the MDEA model deviates slightly less than their set I; neither was fitted to these data, but they were used here to choose the initial MDEA parameters, so this is not a blind test.
+On their 101 \COtwo partial pressures the MDEA model deviates slightly more than their set I; neither was fitted to these data, but they were used here to choose the initial MDEA parameters, so this is not a blind test.
 On the 28 total pressures of P\'erez-Salado Kamps et al., which Ermatchkov et al.\ tabulate at corrected temperatures, the two published sets, both fitted to them, are far closer than the MDEA model, which was not.
 
 % P:literature-kuranov

@@ -377,7 +377,7 @@ Their phase stability was not searched, and they do not locate confidence limits
 For DEA, MDEA and AMP, main-text Table~\ref{main-tab:transfer-fitted} gives the conditional standard errors, which are also conditional on the fixed shared parameters, and Table~\ref{tab:supplement-transfer-bounds} gives the bounds.
 The conditional correlation between the DEA carbamate--water interaction and the constant term of the DEA R4 correlation is 0.974.
 For AMP the carbamate diameter is on its upper bound and has no standard error, the constant term of the R4 correlation has a conditional standard error of 0.265, and all AMP standard errors are conditional on the fixed slope $b_{\mathrm{AMPH^+,w}}$.
-The MDEA standard errors are local values at an interpolated parameter set.
+The MDEA standard errors are conditional on the two parameters on bounds, $k_{\mathrm{MDEA,w}}$ at 423 K and $k_{\mathrm{MDEAH^+,HCO_3^-}}$; the largest conditional correlation, 0.925, is between $k_{\mathrm{MDEAH^+,w}}$ and $u_{\mathrm{MDEAH^+}}$.
 
 \input{tables/supplement-transfer-bounds}
 
@@ -440,10 +440,10 @@ Recalculating the 80 fitted quantities from the deposited DEA parameters reprodu
 % P:supplement-phase-mdea
 For MDEA, the search covers 1564 measured states and \num{10260} grid states, the latter at 38 MDEA concentrations from 3.03 to 78.62 wt\%, the nine grid temperatures and 15 loadings up to 1.368 mol/mol at both pressures.
 These \num{11824} searches cover \num{10870} distinct states.
-Of the 1039 MDEA searches that did not finish, 810 are at grid states where no bubble pressure could be calculated.
-The MDEA liquid--liquid split at 363.15 K is at 1.05 times the calculated bubble pressure and has a tangent-plane distance of $-0.00262$ in units of $RT$.
-The 27 measured MDEA states with an instability toward a vapor have an assigned pressure of 0.1733--0.9990 times the calculated bubble pressure: four densities of Sobrino et al., 11 species states of B\"ottinger et al.\ at 0.5 MPa and two at 2.5 MPa, five heats of Zheng et al.\ and five heats of Merkley et al.
-At three of the 11 species states at 0.5 MPa the instability is shown only by a trial composition from an earlier search.
+Of the 1099 MDEA searches that did not finish, 870 are at grid states where no bubble pressure could be calculated.
+No search that finishes finds a liquid--liquid split. One of those that do not finish is at 363.15 K, 78.62 wt\% MDEA and 1.368 mol/mol, at 1.05 times the bubble pressure, where an earlier MDEA parameter set gave a split with a tangent-plane distance of $-0.00262$ in units of $RT$; at the reported parameters the bubble-pressure calculation there does not converge.
+The 27 measured MDEA states with an instability toward a vapor have an assigned pressure of 0.1731--0.9807 times the calculated bubble pressure: four densities of Sobrino et al., 11 species states of B\"ottinger et al.\ at 0.5 MPa and two at 2.5 MPa, five heats of Zheng et al.\ and five heats of Merkley et al.
+At four of the 11 species states at 0.5 MPa the instability is shown only by a trial composition from an earlier search.
 
 % P:supplement-phase-amp
 For AMP, the search covers the 270 measured states and 396 grid states, the latter at 26.8 and 30.0 wt\% AMP, the nine grid temperatures and 11 loadings up to 0.966 mol/mol at both pressures.
@@ -454,36 +454,28 @@ The confirmed splits lie at 26.8--30.0 wt\% AMP, 363.15--393.20 K and loadings o
 Six are at measured states, none of them fitted: rows 9, 10 and 11 of the Hartono et al.\ pressures at 373 K, and rows 10 and 13 of the Tong et al.\ pressures at 373.2 K and row 12 at 393.2 K; eight more measured states, rows 7 and 8 of Hartono et al.\ at 373 K, rows 6 and 7 at 393 K and rows 8, 9, 11 and 12 of Tong et al.\ at 373.2 K, have an instability without a confirmed split.
 The largest decrease, 0.01881 mol in $G/(RT)$ against a numerical error of $2.8\times10^{-9}$, occurs at 393.15 K, 30.0 wt\% AMP and a loading of 0.700 mol/mol, at 1.212 MPa, where the two liquid densities are \num{44899} and \num{31612} mol/m$^3$.
 
-\subsection{Stability penalty and interpolation between parameter sets}
+\subsection{Stability penalty and the MDEA bound}\label{sec:s-mdea-bound}
 % P:supplement-penalty
-Where a search finds an instability toward a second liquid, the fit is repeated with the stability penalty of main-text Eq.~(\ref{main-eq:stability-penalty}), which adds half the squared, scaled most negative tangent-plane distance of each penalized state to the objective.
+The stability penalty of main-text Eq.~(\ref{main-eq:stability-penalty}), used for the 16-parameter calibration, adds half the squared, scaled most negative tangent-plane distance of each penalized state to the objective.
 The penalty is applied only when the search's own trials detect an instability toward a second liquid; an instability toward a vapor, or a negative distance at a trial composition from an earlier search, is reported without the penalty.
 Later fits also test the compositions of instabilities already found.
 
-% P:supplement-interpolation
-If the penalized solution still shows an instability or a search that did not finish, parameter sets are interpolated linearly between a reference set with neither, at $t=0$, and the penalized solution, at $t=1$.
-An interpolated set is accepted only if the fitted quantities can be calculated, every search finishes and no trial detects an instability.
-The line is tested in steps of 0.01, and bisection then narrows the interval between an accepted and a rejected set to at most $0.01/2^{10}$ in $t$; the accepted set nearest the penalized solution is selected.
-Each set is searched with the trial compositions of the two end sets and those of the instabilities found at that set, and its search is repeated until no new instability is found, so trials found at other interpolated sets do not change the decision at a given $t$.
-Bisection assumes a single change from accepted to rejected as $t$ increases; the selected set is checked again, and any return to an accepted set at larger $t$ is reported.
-If the reference set itself fails these conditions, no set is selected.
-An interpolated set is not a converged fit; if the selected set is the penalized solution itself ($t=1$), it is a converged fit.
-
 % P:supplement-penalty-mea-dea
-The MEA model required neither the penalty nor the interpolation.
-For DEA, both initial parameter sets converge to objective values that agree within the optimizer tolerance, and the solution with the lower value is reported; neither the penalty nor the interpolation was used.
+The MEA model required no penalty.
+For DEA, both initial parameter sets converge to objective values that agree within the optimizer tolerance, and the solution with the lower value is reported; no penalty was used.
 
 % P:supplement-penalty-mdea
-For MDEA, the penalized states are 78 \COtwo-free MDEA--water liquids at 1.466 MPa: the temperatures 393, 403, 413, 413.15, 422.04 and 423 K, each at MDEA mole fractions of 0.01, 0.02, 0.04, 0.06, 0.07, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20 and 0.24.
-The penalty scales $s_{\mathrm{stab}}$ are 0.01 and then 0.003, and the interpolation runs between each initial parameter set, which shows no instability at these states, and its penalized solution.
-The selected sets lie at $t=0.8690$ and $t=0.8688$ for the two initial sets; at each, all 78 searches finish without a detected instability, and the next set above has one search that did not finish.
-The reported set is the one with the lower objective value on the fitted data, 605.01 against 622.50; the objective value of its penalized solution on the fitted data is 504.47.
-A separate scan of the liquid Gibbs energy over 1041 compositions at each of 32 temperatures up to 422.04 K at 1.466 MPa shows no gap.
-No penalized fit was made for the loaded MDEA states.
+For MDEA, the MDEA--water interaction $k_{\mathrm{MDEA,w}}(T)=k_{\mathrm{MDEA,w}}(423\ \mathrm{K})+(\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T)(T-423\ \mathrm{K})$ is the only fitted parameter that acts on the \COtwo-free solution.
+With all other parameters fixed, the largest value without a gap in the lower convex envelope of the liquid Gibbs energy over 5490 compositions at 1.466 MPa rises from $-0.1323$ at 290 K to $-0.0670$ at 423 K, and $k_{\mathrm{MDEA,w}}(423\ \mathrm{K})$ is bounded above at $-0.0671$, $10^{-4}$ below it.
+Of three initial parameter sets, two converge to the same solution, with an objective value on the fitted data of 564.5, and the third to 582.8; at the reported solution the bound and the upper bound of $k_{\mathrm{MDEAH^+,HCO_3^-}}$ are active.
+Without the bound, the fit from one of these initial sets converges at 479.4, with an instability at 14 of 78 \COtwo-free MDEA--water liquids at 1.466 MPa (393, 403, 413, 413.15, 422.04 and 423 K, each at MDEA mole fractions of 0.01, 0.02, 0.04, 0.06, 0.07, 0.08, 0.10, 0.12, 0.14, 0.16, 0.18, 0.20 and 0.24).
+At the reported parameters all 78 searches finish without a detected instability, a scan of the liquid Gibbs energy over 1041 compositions at each of 32 temperatures up to 422.04 K shows no gap, and the fitted interaction lies below the onset value at each of the 33 tested temperatures from 290 to 423 K.
+The bound was fixed before fitting and independently of the deviations: the no-gap side of the 423 K onset bracket, $-0.0670135$, minus a predeclared margin of $10^{-4}$.
+No bound acts on the loaded MDEA states.
 
 \subsection{Fixed cation--water slope of the AMP model}\label{sec:s-amp-slope}
 % P:supplement-amp-slope
-For AMP neither the penalty nor an interpolation is used.
+For AMP neither the penalty nor a bound of this kind is used.
 With all nine parameters fitted, both initial parameter sets converge to an objective value of 61.2853, agreeing to $7\times10^{-12}$, and the temperature slope of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{-219.25}{\kelvin} with a conditional standard error of \SI{80.99}{\kelvin}; this comparison fit has the splits of Section~\ref{sec:s-phase} and main-text \cref{main-fig:amp-splits}.
 All fitted loaded pressures lie at 313--\SI{353}{\kelvin}; above that range the fitted slope raises $k_{\mathrm{AMPH^+,w}}$ from $-0.178$ at \SI{353}{\kelvin} to $-0.115$ at \SI{393}{\kelvin}, and the weaker cation--water attraction gives a second liquid rich in \ce{AMPH+}, bicarbonate and AMP, with carbamate mole fractions of $10^{-4}$ to $10^{-3}$.
 The splits are marginal: the smallest tangent-plane distance is about $-0.006$.
@@ -516,7 +508,7 @@ For MDEA, three ePC-SAFT studies report deviations from the total pressures of K
 Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite{Uyan2015}.
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
-Wangler et al.\ give their two 82-observation values for the same observations. None of the published observation sets is the set of 66 pressures fitted here, from which the MDEA model deviates by 20.59\,\%, and those models did not fit these pressures; the published values are therefore listed and are not compared with that value.
+Wangler et al.\ give their two 82-observation values for the same observations. None of the published observation sets is the set of 66 pressures fitted here, from which the MDEA model deviates by 20.09\,\%, and those models did not fit these pressures; the published values are therefore listed and are not compared with that value.
 
 \section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
 % P:supplement-hong-model

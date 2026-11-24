@@ -43,7 +43,7 @@ Each fit minimizes, by bounded least squares,
 \end{equation}
 with the logarithmic form for pressures.
 Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set; several are assigned without a statistical derivation, so an objective value sets relative fitting priorities and does not compare accuracy between amines.
-Each fit is started from two initial parameter sets, and the converged solution with the lower objective value is reported, except for MDEA, whose reported set is interpolated (\cref{sec:methods-phase}); these are local solutions, not a global search.
+Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; these are local solutions, not a global search.
 
 % P:methods-restrictions
 For MEA the joint fit is also made with fewer restrictions.
@@ -82,7 +82,7 @@ The parent states are grids of temperature, amine content and loading, mostly li
 A search that does not finish is counted as not completed, never as stable.
 
 % P:methods-penalty
-If a search detects an instability toward a second liquid, the fit is repeated with the searched states in a penalized objective:
+For the 16-parameter calibration the searched states enter a penalized objective:
 \begin{equation}
  r_k^{\mathrm{stab}}=\sqrt{w_{\mathrm{stab}}}\frac{\tau_k}{s_{\mathrm{stab}}},\qquad
  C_{\mathrm{pen}}=C+\frac12\sum_k(r_k^{\mathrm{stab}})^2,
@@ -91,11 +91,12 @@ If a search detects an instability toward a second liquid, the fit is repeated w
  \label{eq:stability-penalty}
 \end{equation}
 The two scales are applied in succession; $\tau_k$ is the most negative tangent-plane distance found at state $k$, or zero when the completed search finds none.
-If the penalized solution still shows an instability, parameter sets on the straight line between a reference set without one and the penalized solution are tested, and the set nearest the penalized solution that passes is taken.
-This interpolation between parameter sets does not give a converged fit.
 
 % P:methods-exceptions
 The MEA and DEA models needed no penalty; of the MEA fits, only the 16-parameter calibration did.
-For MDEA the penalty is applied to 78 \COtwo-free MDEA--water states at \SI{1.466}{\mega\pascal} and 393--\SI{423}{\kelvin}, and the reported parameters are an interpolated set.
-The loaded MDEA states are not penalized, so a split found there is reported as a limitation.
-For AMP neither the penalty nor an interpolation is used: the \emph{AMP model} fits the other eight parameters with $b_{\mathrm{AMPH^+,w}}$ fixed at \SI{-150}{\kelvin}.
+For MDEA no penalty is used, and only the MDEA--water interaction acts on the \COtwo-free solution.
+Its linear temperature law is written about \SI{423}{\kelvin}, the highest temperature tested, and its value there is bounded above at $-0.0671$, $10^{-4}$ below the value at which a liquid--liquid gap first appears in the \COtwo-free solution at \SI{1.466}{\mega\pascal}.
+At \SI{1.466}{\mega\pascal} the fitted interaction lies below that onset value at each of the 33 tested temperatures from 290 to \SI{423}{\kelvin}.
+The bound was fixed before fitting, from the onset at \SI{423}{\kelvin} and a margin of $10^{-4}$ (Section~\ref{supp-sec:s-mdea-bound}).
+The loaded MDEA states are not constrained, so a split found there would be reported as a limitation.
+For AMP neither the penalty nor a bound of this kind is used: the \emph{AMP model} fits the other eight parameters with $b_{\mathrm{AMPH^+,w}}$ fixed at \SI{-150}{\kelvin}.

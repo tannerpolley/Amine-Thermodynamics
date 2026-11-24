@@ -2,7 +2,7 @@
 \caption{Amine-specific parameter values of the DEA, MDEA and AMP models at full precision.}\label{tab:supplement-transfer-parameters}\\
 \toprule Parameter & Value & Unit & Source \\ \midrule
 \endfirsthead\toprule Parameter & Value & Unit & Source \\ \midrule
-\endhead\bottomrule\endfoot\bottomrule\multicolumn{4}{@{}p{0.95\linewidth}@{}}{\footnotesize Bold values were fitted in this work; Table~\ref{main-tab:transfer-fitted} of the main text gives the standard errors of the parameters of the reactive fits, and Table~\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value and ``MDEA value: the value of the molecular amine. The data deposit gives the source and basis of each value.}\\\endlastfoot
+\endhead\bottomrule\endfoot\bottomrule\multicolumn{4}{@{}p{0.95\linewidth}@{}}{\footnotesize Bold values were fitted in this work; Table~\ref{main-tab:transfer-fitted} of the main text gives the standard errors of the parameters of the reactive fits, and Table~\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K, except MDEA--water, at 423 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value and ``MDEA value: the value of the molecular amine. The data deposit gives the source and basis of each value.}\\\endlastfoot
 \addlinespace\multicolumn{4}{@{}l}{\textit{DEA: fitted parameters}} \\*
 $k_{\mathrm{DEAH^+,w}}$ & $\boldsymbol{-0.18834282671276725}$ & 1 & This work \\
 $k_{\mathrm{DEACOO^-,w}}$ & $\boldsymbol{-0.0477314406219579}$ & 1 & This work \\
@@ -61,11 +61,11 @@ MDEA, permittivity coefficient $d_T$ & $\boldsymbol{1121.7734731422595}$ & K & P
 MDEA, molar mass & $0.1191622$ & kg/mol & From the formula \\
 MDEA, charge number & $0$ & $e$ & By definition \\
 MDEAH$^+$, segment count & $3.675$ & 1 & MDEA value \\
-MDEAH$^+$, segment diameter $\sigma$ & $\boldsymbol{3.643022325303116}$ & \AA & This work \\
-MDEAH$^+$, dispersion energy $u/k_B$ & $\boldsymbol{596.4639593423817}$ & K & This work \\
+MDEAH$^+$, segment diameter $\sigma$ & $\boldsymbol{3.6552722619123172}$ & \AA & This work \\
+MDEAH$^+$, dispersion energy $u/k_B$ & $\boldsymbol{635.4895968646832}$ & K & This work \\
 MDEAH$^+$, solvation factor & $1$ & 1 & Set in this work \\
-MDEAH$^+$, Debye--H\"uckel diameter & $3.643022325303116$ & \AA & Equal to $\sigma$ \\
-MDEAH$^+$, Born diameter $d^{\mathrm{Born}}$ & $3.643022325303116$ & \AA & Equal to $\sigma$ \\
+MDEAH$^+$, Debye--H\"uckel diameter & $3.6552722619123172$ & \AA & Equal to $\sigma$ \\
+MDEAH$^+$, Born diameter $d^{\mathrm{Born}}$ & $3.6552722619123172$ & \AA & Equal to $\sigma$ \\
 MDEAH$^+$, molar mass & $0.12017014$ & kg/mol & From the formula \\
 MDEAH$^+$, charge number & $1$ & $e$ & By definition \\
 \addlinespace\multicolumn{4}{@{}l}{\textit{MDEA: association}} \\*
@@ -78,12 +78,12 @@ MDEA, number of association sites of type B & $2$ & 1 & \cite{Uyan2015} \\
 MDEAH$^+$, number of association sites of type A & $2$ & 1 & MDEA value \\
 MDEAH$^+$, number of association sites of type B & $2$ & 1 & MDEA value \\
 \addlinespace\multicolumn{4}{@{}l}{\textit{MDEA: binary dispersion interactions}} \\*
-CO$_2$--MDEAH$^+$, $k_{ij}$ & $\boldsymbol{0.2553397378431815}$ & 1 & This work \\
-MDEA--H$_2$O, $k_{ij}$ & $\boldsymbol{-0.19387872307364057}$ & 1 & This work \\
-MDEA--H$_2$O, temperature slope of $k_{ij}$ & $\boldsymbol{0.0011549065376627657}$ & K$^{-1}$ & This work \\
-MDEAH$^+$--H$_2$O, $k_{ij}$ & $\boldsymbol{-0.025506014313838404}$ & 1 & This work \\
-MDEAH$^+$--H$_2$O, reciprocal-temperature slope of $k_{ij}$ & $\boldsymbol{-18.235192736878783}$ & K & This work \\
-HCO$_3^-$--MDEAH$^+$, $k_{ij}$ & $\boldsymbol{0.8911854842478641}$ & 1 & This work \\
+CO$_2$--MDEAH$^+$, $k_{ij}$ & $\boldsymbol{0.25261865658522437}$ & 1 & This work \\
+MDEA--H$_2$O, $k_{ij}$ & $\boldsymbol{-0.06711345443725586}$ & 1 & This work \\
+MDEA--H$_2$O, temperature slope of $k_{ij}$ & $\boldsymbol{0.0012092080101259242}$ & K$^{-1}$ & This work \\
+MDEAH$^+$--H$_2$O, $k_{ij}$ & $\boldsymbol{-0.00956762026107625}$ & 1 & This work \\
+MDEAH$^+$--H$_2$O, reciprocal-temperature slope of $k_{ij}$ & $\boldsymbol{-15.929380742416088}$ & K & This work \\
+HCO$_3^-$--MDEAH$^+$, $k_{ij}$ & $\boldsymbol{1}$ & 1 & This work \\
 \addlinespace\multicolumn{4}{@{}l}{\textit{MDEA: equilibrium-constant correlations}} \\*
 R5, $a$ & $-16.398914976729678$ & 1 & \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996} \\
 R5, $b$ & $-819.7$ & K & \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996} \\
