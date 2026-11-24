@@ -256,7 +256,7 @@ def mdea_fit(side, k, reference, control, critical, upper):
     search = route.search(point)
     rows = route.result('search-0.json')
     assert len(rows) == 11824
-    route.write('stability.json', dict(search, **witnesses(route, point, rows), seconds=time.monotonic()-started))
+    route.write('stability.json', dict(search, grid={('preliminary_seed_based_liquid_liquid_labels' if k == 'liquid_liquid_splits' else k): v for k, v in search['grid'].items()}, **witnesses(route, point, rows), seconds=time.monotonic()-started))
     route.write('selection.json', dict(chosen=chosen, cost=cost, k=k, run=str(route.out.relative_to(ROOT))))
     return route.result('data-rows.json')
 
