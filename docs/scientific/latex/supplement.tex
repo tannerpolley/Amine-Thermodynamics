@@ -45,7 +45,7 @@
 \maketitle
 
 % P:supplement-contents
-This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data, the deviations by data set and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}), the published parameters of Hong et al.\ on identical MEA observations (Section~\ref{sec:s-hong}) and the water--DEA binary system (Section~\ref{sec:s-dea-binary}).
+This supplement gives the four standard contributions of the equation of state, the model inputs and the parameter values at full precision (Section~\ref{sec:s-parameters}), the source conventions of the data, the deviations by data set and the objective scales and weights (Section~\ref{sec:s-corrections}), the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}), the full sequence of MEA parameter restrictions (Section~\ref{sec:s-restrictions}), the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}), the phase-stability procedure (Section~\ref{sec:s-phase}), the published comparisons that are not on identical observations (Section~\ref{sec:s-published}) and the published parameters of Hong et al.\ on identical MEA observations (Section~\ref{sec:s-hong}).
 
 \section{Model equations, inputs and parameter values}\label{sec:s-parameters}
 \subsection{Hard-chain, dispersion, association and Debye--H\"uckel contributions}\label{sec:s-contributions}
@@ -241,11 +241,17 @@ Every MEA observation that is not fitted was examined before the parameters were
 Beyond that, the Arcis heats were used to select the parameters, three intervals of Kim and Svendsen at \SI{313.15}{\kelvin} and three at \SI{353.15}{\kelvin} were fitted during earlier model development, and the comparison between the density sources informed the choice of the fitted density observations, as the notes of Table~\ref{tab:supplement-mea-comparison} mark; no interval of Kim and Svendsen is in the reported fit.
 
 % P:supplement-mea-deviations
-Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures.
+Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures, and \cref{fig:jakobsen-carbonate-share} compares the calculated and measured carbonate shares.
 The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/pressure_sources}
 \input{tables/supplement_mea_comparison}
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=0.5\linewidth]{jakobsen-carbonate-share.pdf}
+\caption{Carbonate share of dissolved carbon in loaded MEA: the MEA model against the measurements of Jakobsen et al.\ \cite{Jakobsen2005}, for ten carbonate-share observations, none of which entered the objective (Table~\ref{tab:supplement-mea-comparison}). The species-to-total-amine ratios of the same source are fitted (main-text Table~\ref{main-tab:mea-data}).}
+\label{fig:jakobsen-carbonate-share}
+\end{figure}
 
 % P:supplement-temperature-bands
 Table~\ref{tab:supplement-temperature-bands} divides the MEA data used here by temperature, without refitting any parameter; the 66 pressures at 373--393 K are those of Jou et al.\ \cite{Jou1995}, Ma'mun et al.\ \cite{Mamun2005}, Wagner et al.\ \cite{wagnerSolubilityCarbonDioxide2013} and Xu and Rochelle \cite{Xu2011}.
@@ -303,6 +309,15 @@ The \COtwo-free observations of Tong et al.\ are the unloaded solution of that w
 The curves of the MDEA pressure figure of the main text use nominal isotherm temperatures and the median water-to-MDEA ratio of each isotherm; the deviations use each observation's own conditions.
 
 \input{tables/supplement-transfer-data}
+
+% P:supplement-dea-heat
+\Cref{fig:dea-integral-heat} shows the 50 fitted integral heats of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} separately for each DEA content; main-text Fig.~\ref{main-fig:dea-pressure}(d) shows them together.
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=\linewidth]{dea-integral-heat-concentrations.pdf}
+\caption{Integral absorption heat per mole of \COtwo in loaded aqueous DEA at \SI{298.15}{\kelvin} against loading, at 10, 20 and 30 wt\% DEA: the fitted measurements of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} (circles; 10, 20 and 20 observations) and the DEA model at each content (dotted lines).}
+\label{fig:dea-integral-heat}
+\end{figure}
 
 % P:supplement-merkley
 The heats of Merkley et al.\ are read from their Fig.~3 and the loading points from their Fig.~4; the assigned pressure is 1.121 MPa, or 1.466 MPa at 422.04 K.
@@ -576,16 +591,6 @@ The deviations therefore show agreement on the same observations and do not rank
 The models also differ in their parameters, association schemes and fitted data, so the comparison does not show whether explicit ions are needed.
 It is not a physical validation of any of the three models.
 
-\section{The water--DEA binary system}\label{sec:s-dea-binary}
-% P:supplement-dea-binary
-\Cref{fig:dea-binary} shows the water--DEA excess enthalpies and the binary bubble pressures of Cai et al., whose deviations are in Table~\ref{tab:supplement-transfer-data}.
-
-\begin{figure}[!htbp]
-\centering\includegraphics[width=\linewidth]{dea-current-binary-comparisons.pdf}
-\caption{Water--DEA binary system against water mole fraction: excess enthalpy per mole of mixture at the states of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002} (a) and bubble pressure at the states of the isobaric measurements of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (b). Circles are measurements and crosses are values calculated with the DEA model at each measured state. Both data sets are comparison only, and neither calculation uses a reaction.}
-\label{fig:dea-binary}
-\end{figure}
-\FloatBarrier
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references,transfer_sources}
