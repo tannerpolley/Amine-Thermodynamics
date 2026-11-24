@@ -8,6 +8,7 @@ resources:
   - results/adoption-297/**
   - results/adoption-340/**
   - results/paper-evidence-341/**
+  - results/objective-weights-420/**
   - results/born-diameter-sensitivity-405/**
   - results/stripper-temperature-409/**
   - results/same-data-comparison/hong-2027/**
@@ -1909,3 +1910,31 @@ The experimental evidence has a narrower meaning than a universal single-liquid 
 [The calculation account](results/split-cause-342/README.md), [all contribution values](results/split-cause-342/contributions.csv), [contribution changes](results/split-cause-342/contribution-changes.csv), [all compositions](results/split-cause-342/compositions.csv), [map coordinates](results/split-cause-342/split-map.csv), [figure contribution values](results/split-cause-342/figure-contributions.csv) and [figure composition values](results/split-cause-342/figure-compositions.csv) retain the evidence. This result supports fixed-model numerical interpretation, without a global stability certificate, independent physical validation, absorber qualification or a quantified parameter-uncertainty interval. Independent delivered review returned **Supported**, with **no required corrections**, for scientific commit `1a5ff4e11733c8a81c7e2fc29e178c975e69d44b` ([review report](results/split-cause-342/review.md)). The closeout records the independent review finding. Manuscript use still requires owner promotion of the reviewed notebook commit.
 
 The two new producers add **200/200 gross physical lines** (153 calculation, 47 figure), conservatively including imports, docstrings and blanks; [code-accounting.json](results/split-cause-342/code-accounting.json) retains their hashes. The protected manuscript metadata and manuscript sources are unchanged. Guarded Quarto rendering uses retained values with execution disabled; managed root refresh remains gated by its pre-existing request to change protected metadata.
+
+
+# MEA objective weighting audit {#objective-weights-420}
+
+The original MEA objective reproduced on Engine `05e94210` at the reported F2 mapping. The information audit used the retained Engine `391dfe5d` derivative matrix in optimizer coordinates, with each residual row weighted once. The MDEA pure-water derivative check stopped the study before reweighting.
+
+| Quantity | Reference | Readback |
+|---|---:|---:|
+| F2 cost, 307 fitted rows | 150.76290287953717 | 150.76290287955263 |
+| F2 cost, 47 loaded partial pressures | 5.96255336 | 5.96255336 |
+| F2 cost, 25 Cai bubble temperatures | 39.82390854 | 39.82390854 |
+| F2 cost, 25 Cai vapor water fractions | 51.80738006 | 51.80738006 |
+| F2 cost, 39 Kiepe pressures | 0.00067901950 | 0.00067901950 |
+| MEA residual variance, all 307 rows and 10 interior coordinates | 1.01523840 | 1.01523840 |
+| MEA residual variance, 268 responsive rows and 10 interior coordinates | 1.16869941 | 1.16869941 |
+| DEA cost, 80 fitted rows | 8.08296823 | 8.08296823 |
+| DEA residual variance, all 80 rows and 4 interior coordinates | 0.21270969 | 0.21270969 |
+| MDEA cost, 281 fitted rows | 564.48369613 | 564.48369613 |
+| MDEA residual variance, all 281 rows and 6 interior coordinates | 4.10533597 | 4.10533597 |
+| MDEA cost, three Kim pure-water rows | 0.00019501364415 | 0.00019501364415 |
+
+The 39 Kiepe rows had zero derivatives in all 11 coordinates. Excluding them from the variance calculation leaves 258 residual degrees of freedom and multiplies conditional standard errors by 1.07292013 at the same linearization. The corresponding information matrix is unchanged within the check tolerance. The 47 loaded pressure rows have adjustable and interior ranks of 11 and 10. Both Cai observables and their union have rank 2 in either basis, through the MEA–water interaction and its reciprocal-temperature slope. Rank describes local response at the F2 point. It gives no coverage probability for the error bands. [F2 replay](results/objective-weights-420/reported-mea.json.gz), [MEA information](results/objective-weights-420/MEA/information.json.gz), [DEA information](results/objective-weights-420/DEA/information.json.gz).
+
+The MDEA declaration gives `fit:229` a water-only feed and water-only support in both phases. On the study wheel, its scaled log-pressure residual had optimizer derivatives of $2.83792\times10^{-33}$ for the protonated-MDEA segment-diameter coordinate and $1.85698\times10^{-52}$ for its dispersion-energy coordinate. The derivative scan found exact zeros across all eight coordinates for `fit:227` and `fit:249`. Every other row returned at least one nonzero derivative. The audit used exact zero for the derivative check and withheld the stage-specific MDEA variance pending disposition of `fit:229`. The AMP audit and alternative MEA calculations remain pending. [MDEA control rows](results/objective-weights-420/MDEA/pure-water-derivative-control.json).
+
+The stability handoff checks used two previously specified MEA mappings. The main-grid check at 313.15 K, 15 wt% MEA and 0.125 mol CO₂/mol MEA recorded a liquid-side descent of approximately −0.03095797 in $\Delta g/RT$. Its coexistence attempt did not confirm two liquids. The classifier marked R1–R3 inside their source temperature ranges. The guard rejected the injected grid trial. Census state 40 produced 58 negative supplied trials on the study wheel, compared with 33 on the historical wheel. All 58 reached coexistence using their retained bank seeds. All 59 coexistence attempts across the two checks were unconfirmed, with zero classification refusals. Phase identity remains unresolved at the two control states. These calculations verify the witness handoff at sampled conditions. The reweighted endpoint and its full search are pending. [Grid witness](results/objective-weights-420/handoff/grid.json), [Grid classification](results/objective-weights-420/handoff/classification.json), [Census witnesses](results/objective-weights-420/handoff/census-raw.json.gz).
+
+This partial audit awaits independent review and investigator promotion.

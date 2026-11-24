@@ -455,6 +455,14 @@ def _census(task):
         p255.f.stability = lambda model, problem, result: original(
             model, problem, result, supplied=previous[0], retained=original(model, problem, result))
     row = {k: state[k] for k in ('index', 'temperature_K', 'loading', 'pressure_Pa')}
+    confirm = previous[3] if len(previous) > 3 else None
+    if confirm:
+        supplied_stability = p255.f.stability
+        def capture(model, problem, result):
+            parent[:] = [model, problem, result]
+            return supplied_stability(model, problem, result)
+        parent = []
+        p255.f.stability = capture
     try:
         p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
     except epcsaft.EosError as error:
@@ -463,6 +471,8 @@ def _census(task):
         raw = read(path) if path.exists() else row
         s.write_json(path, dict(raw, classification='unavailable', failure=str(error)))
     finally:
+        if confirm:
+            p255.f.stability = supplied_stability
         if previous and previous[0]:
             p255.f.stability = original
     raw = read(path)
@@ -480,10 +490,12 @@ def _census(task):
             report['supplied_minimum_tpd'] = min((t['quantities']['tpd_over_rt'] for t in trials if t['evidence']=='evaluated'), default=None)
             report['supplied_trials'] = [dict(t, bank_index=i) for i,t in enumerate(trials)
                                          if t['evidence']!='evaluated' or supplied_negative(t)]
+    if confirm and (reduced['resolved'] or reduced.get('supplied_negative')):
+        raw['coexistence'] = confirm(*parent, raw['stability'][0], previous[0])
     return raw, reduced
 
 
-def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False):
+def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False, confirm=None):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
     if indices is not None:
@@ -492,7 +504,7 @@ def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, com
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied) for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied, confirm) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]
