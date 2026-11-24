@@ -1,0 +1,71 @@
+{
+  "retained": "analyses/mea_parameter_bundle/results/wheel-recheck-05e94210/stability-adopted-law/search.json",
+  "release": "analyses/mea_parameter_bundle/results/runs/release-recheck-414-amendment-1/stability/candidate/search.json",
+  "final_assertion": "pass",
+  "final_summary_identical": true,
+  "final_summary": {
+    "census": {
+      "descent": 0,
+      "descent_indices": [],
+      "incomplete": 0,
+      "incomplete_indices": [],
+      "states": 162
+    },
+    "grid": {
+      "available": 1908,
+      "descent": 0,
+      "minimum_tau": null,
+      "states": 1908,
+      "supplied_minimum_tpd": null,
+      "supplied_trial_counts": {
+        "available": 0,
+        "not_applicable": 0,
+        "unavailable": 0
+      },
+      "unavailable": []
+    },
+    "offset": {
+      "available": 576,
+      "descent": 0,
+      "minimum_tau": null,
+      "states": 576,
+      "supplied_minimum_tpd": null,
+      "supplied_trial_counts": {
+        "available": 0,
+        "not_applicable": 0,
+        "unavailable": 0
+      },
+      "unavailable": []
+    },
+    "registry_sha256": "f7f02b1ef565690efb466dd6d3d73bc9c74c708116725b2b0d931486cdc1b666",
+    "stable": true,
+    "supplied": {
+      "compositions": 6121,
+      "evaluated": 991602,
+      "minimum_liquid_tpd": 3.065092460019514e-05,
+      "minimum_tpd": 4.815477097963594e-06,
+      "negative": 0,
+      "unavailable": 0
+    }
+  },
+  "first_nine": {
+    "reference": "analyses/mea_parameter_bundle/results/paper-evidence-341/stability/candidate/census-raw.json.gz",
+    "pairs": 1458,
+    "complete": 162,
+    "worst": {
+      "index": 38,
+      "trial": 3,
+      "retained": 2.842170943040401e-14,
+      "release": -8.526512829121202e-14,
+      "limit": 2.131964938173613e-12,
+      "matched": true,
+      "release_status": "SUCCESS"
+    },
+    "failures": [],
+    "max_fraction_of_limit": 0.10965101199863991,
+    "matched_pairs": 1458,
+    "states": 162,
+    "limit_rule": "Sum of the native per-trial summation estimates for the retained and release values, in TPD/RT.",
+    "index_basis": "Zero-based state and trial indices."
+  }
+}
