@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 import sys
 import time
+import types
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ANALYSIS.parent))
@@ -212,13 +213,30 @@ if __name__ == '__main__':
             records_with_liquid_label=sum(any(w.get('density_side') == 2 for w in r.get('witnesses', [])) for r in descents),
             largest_liquid_to_vapor_witness_distance=max(min(gap(w, v) for v in r['witnesses'] if v.get('density_side') == 1)
                                                          for r in descents for w in r.get('witnesses', []) if w.get('density_side') == 2))
+        witness = stability['descent_witnesses']
+        assert witness['largest_liquid_to_vapor_witness_distance'] < 1e-6 and stability['grid']['branches']['grid']['native']['liquid'] == 0  # Engine PHASE_COINCIDENCE_DISTANCE
+        if 'liquid_liquid_splits' in stability['grid']:  # seed labels, as #343 renamed them; the interpreted count follows
+            stability['grid']['preliminary_seed_based_liquid_liquid_labels'] = stability['grid'].pop('liquid_liquid_splits')
+        stability['liquid_liquid_splits_among_completed_searches'] = dict(
+            distinct=0, basis='No grid record has a liquid-labelled descent; every liquid-labelled witness of the 48 measured records coincides with a vapor-labelled witness')
+        spec, by_key = route.bind(point), {}
+        for state in route.states(spec):
+            by_key.setdefault(state['key'], state)
+        ratios = []
+        for key in sorted(witness_keys := {r.get('same_calculation_as', r['key']) for r in descents}):
+            state = by_key[key]
+            item = route.stability_row(spec, state, 1.)
+            assert item.pressure_reference is None, key  # every descent is at an assigned pressure
+            basis = route.pressure_basis(spec, state, item, types.SimpleNamespace(pressure_reference=None))
+            ratios.append(dict(key=key, **basis, ratio=basis['declared_pressure_Pa']/basis['model_bubble_pressure_Pa']))
+        stability['descent_witnesses'].update(bubble_pressure_ratio_range=[min(r['ratio'] for r in ratios), max(r['ratio'] for r in ratios)], calculations=ratios)
         split = "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:363.15:1.368:1.05"
         stability['interpolated_set_split_state'] = {k: next(r for r in search if r['key'] == split).get(k) for k in ('key', 'available', 'message')}
         pressures = {role: dict(rows=len(p), relative_rows=len(p), AARD_percent=100*math.fsum(p)/len(p)) for role in ('fitted', 'not fitted')
                      for p in [[abs(r['value']/r['observed']-1) for r in rows if r['role'] == role and r['unit'] == 'Pa' and r['status'] == 'Available']]}
         summary = dict(amine='MDEA', point='bounded fit', free_fitted_parameters=len(declared), on_bounds=len(active), fitted_pressure=dict(statistics=pressures['fitted']),
                        not_fitted_pressure=dict(statistics=pressures['not fitted']), unavailable_searches=len(unavailable),
-                       liquid_liquid_splits_found=stability['grid']['liquid_liquid_splits']['grid'], data_cost=stable.read(RESULTS/'comparison.json')['runs']['fit-0']['data_cost'])
+                       liquid_liquid_splits_found=stability['liquid_liquid_splits_among_completed_searches']['distinct'], data_cost=stable.read(RESULTS/'comparison.json')['runs']['fit-0']['data_cost'])
         for name, value in [('parameter-table.json', table), ('conditional-uncertainty.json', unc), ('published-pressure-comparisons.json', pub),
                             ('summary-row.json', summary), ('stability.json', stability), ('data-rows.json', rows), ('deviations.json', route.result('deviations.json')),
                             ('curves/curve-data.json', route.result('curve-data.json'))]:

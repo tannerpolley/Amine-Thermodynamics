@@ -40,7 +40,8 @@ without the bound measures the cost of the requirement.
 
 All four stopped on optimizer tolerance (the unbounded fit after one
 continuation). The first and third bounded fits reach the same point:
-costs agree to 8×10⁻¹² relative and every coordinate to 4.2×10⁻⁶. The
+costs agree to 8×10⁻¹² relative and every coordinate to 4.2×10⁻⁶ relative
+(largest absolute difference 5.60×10⁻⁵ K, in $u_{\mathrm{MDEAH^+}}/k_B$). The
 second stops at a separate minimum. At the selected point, k(T) is below
 the onset value at all 33 tabulated temperatures from 290 to 423 K. The
 binary searches are the 78 #343 states at 1.466 MPa; the hull scan uses
@@ -49,7 +50,7 @@ binary searches are the 78 #343 states at 1.466 MPa; the hull scan uses
 [Selected endpoint](results/bounded-binary-411/endpoint.json).
 
 **Result.** A converged set without the CO₂-free gap at the tested states
-exists. It is not the data optimum: from the same start, the unbounded fit
+exists. It is not the unbounded local minimum: from the same start, the unbounded fit
 has a 15.1% lower fitted-data cost (479.44 versus 564.48) and places the
 MDEA–water binary in a two-liquid region from about 413 K at 1.466 MPa.
 Within this model form, removing the gap costs about 85 units of fitted-data
@@ -76,7 +77,7 @@ cost. This is a local comparison from one start, not a global bound.
 The fitted-data cost falls from 605.01 to 564.48, and fitted pressures
 improve slightly. Every not-fitted pressure set and the Zheng heats are
 predicted less well, so the lower fitted cost does not carry to the
-comparison data. No parameter uncertainty was evaluated.
+comparison data. Conditional standard errors are given below.
 [Group comparison](results/bounded-binary-411/comparison.json).
 
 **Full #337 search at the selected point.** The search ran on the same
@@ -116,8 +117,13 @@ residual variance is 4.1053 and the conditional standard errors are
 1.35×10⁻⁵ K⁻¹ for d$k_{\mathrm{MDEA,w}}$/d$T$, 0.0353 for
 $k_{\mathrm{MDEAH^+,CO_2}}$, 0.0106 for $k_{\mathrm{MDEAH^+,w}}$, 3.546 K for
 $b_{\mathrm{MDEAH^+,w}}$, 0.0374 Å for $\sigma_{\mathrm{MDEAH^+}}$ and 43.9 K
-for $u_{\mathrm{MDEAH^+}}/k_B$. At both active bounds the cost gradient points
-out of the box. The largest conditional correlation is 0.925, between
+for $u_{\mathrm{MDEAH^+}}/k_B$. Both active bounds are upper bounds with a negative
+cost derivative (−15,970.61 and −8.0474 per unit), so the descent direction
+points out of the feasible region and each bound holds the cost up. The search
+records 48 measured records with seed-based liquid labels; the interpreted
+count is zero distinct liquid–liquid splits among completed searches. At the
+27 vapor-directed calculations every bubble pressure converges, at ratios
+0.17311–0.98067 of assigned to calculated pressure. The largest conditional correlation is 0.925, between
 $k_{\mathrm{MDEAH^+,w}}$ and $u_{\mathrm{MDEAH^+}}$; the smallest
 column-normalized singular value is 0.0185. The paper displays read this
 folder; the [manuscript handoff](results/bounded-binary-411/manuscript-handoff.md)

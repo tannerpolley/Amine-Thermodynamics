@@ -601,6 +601,7 @@ mea, dea, mdea = f1(escore['47 current-fitted pressures'][0]), f1(dsum['pressure
 amp, afree_loaded = (f1(stable['loaded-pressure'][k]['AARD_percent']) for k in ('model', 'free'))
 outside = f'{min(notfit):.1f}--{max(notfit):.1f}'
 mcost = [f"{mbounded['data_cost']:.1f}", f"{mcomp['runs']['unbounded-2']['data_cost']:.1f}"]  # the reported fit and the fit without the bound, from one start
+mratio = '{:.4f}--{:.4f}'.format(*mstability['descent_witnesses']['bubble_pressure_ratio_range'])  # assigned over calculated bubble pressure at the 27 vapor-directed measured states
 ours, theirs = f1(ermatchkov['selected_point_mean_absolute_relative_deviation_percent']), f"{ermatchkov['published_parameter_sets'][0]['mean_absolute_relative_deviation_percent']:g}"
 searched = dsum['stability']['grid']['states']
 hstrict, hall, hwagner = (next(r for r in hong if (r['block'], r['subset']) == k) for k in (('canonical', 'strict grid'), ('canonical', 'all'), ('wagner', 'all')))
@@ -673,7 +674,7 @@ stated = {'main.tex': [mea, amp, dea, f"the {escore['112 current-not-fitted pres
                                             rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states"],
           'sections/mea_system_modeling_results.tex': bands_main + [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
           'submission/highlights.txt': [mea + '%', f'{amp}–{dea}%', ours + '%', theirs + '%'],
-          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test"]}
+          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test"]}
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:
