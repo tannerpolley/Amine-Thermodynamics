@@ -27,6 +27,7 @@ import epcsaft
 from epcsaft import equilibrium
 
 from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
+from MEA.common.retained_results import parameter_fingerprint as parameter_fingerprint
 
 
 ANALYSIS = Path(__file__).resolve().parents[1]
@@ -242,11 +243,6 @@ def with_parameter_values(
     if missing := set(values) - found:
         raise KeyError(f"unknown parameter identities: {sorted(missing)}")
     return updated
-
-
-def parameter_fingerprint(mapping: dict[str, object]) -> str:
-    text = json.dumps(mapping, sort_keys=True, separators=(",", ":"))
-    return f"sha256:{hashlib.sha256(text.encode()).hexdigest()}"
 
 
 def stage2_reference(water: dict, declaration: dict) -> dict:

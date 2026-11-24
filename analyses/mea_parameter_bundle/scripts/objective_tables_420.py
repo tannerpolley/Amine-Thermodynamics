@@ -1,34 +1,47 @@
-"""Regenerate #420 reductions and notebook tables from retained records."""
+"""Regenerate #420 table and reconciliation records from retained results."""
 import argparse
-import gzip
+import csv
+import io
 import json
 import math
-import re
+import sys
 from collections import Counter, defaultdict
-from pathlib import Path
-from tempfile import TemporaryDirectory
+from functools import partial
 
-from objective_weights_420 import (
-    BASE, EVIDENCE, OUT, ROOT, attempt_outcome, carbonate_measurement, comparison_groups, f,
-    fitted_species_label, information_reduction, np, observable_errors, paper, r, s, search_accounting,
-)
-from shared_bicarbonate_417 import SHA, WHEEL
+from a7_presentation import BUNDLE, ROOT
+
+sys.path[:0] = [str(ROOT/'src'), str(ROOT/'docs/scientific/latex/scripts')]
+from final_rerun_tables import rowkey  # noqa: E402
+from MEA.common.retained_results import parameter_fingerprint, read, result  # noqa: E402
+
+RESULTS = BUNDLE/'results'
+OUT = RESULTS/'objective-weights-420'
+PAPER = RESULTS/'paper-evidence-341'
+BASE = RESULTS/'reduced-refit'
+WHEEL = ROOT/'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/wheel-modules.json'
 
 
-def result(folder, name):
-    data = r.read(folder/name)
-    assert data['wheel_sha256'] == SHA, name
-    return data['result']
+def csv_rows(path):
+    with path.open(newline='') as stream:
+        return list(csv.DictReader(stream))
 
 
-def objectives(declarations, effective, replays):
-    weights, blocks, totals = [], [], {}
+def csv_bytes(rows):
+    stream = io.StringIO()
+    writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
+    writer.writeheader()
+    writer.writerows(rows)
+    return stream.getvalue().encode()
+
+
+def objectives(declarations, effective, replays, scores):
+    weights, blocks = [], []
     assert len({d['identity'] for d in declarations}) == len(declarations)
     for old, new in zip(declarations, effective, strict=True):
         assert (old['identity'], old['group']) == (new['identity'], new['group'])
         weights.append(dict(identity=old['identity'], observable=old.get('kind', old['constructor']),
                             group=old['group'], original_weight=old['weight'], alternative_weight=new['weight']))
-    for (mapping, weighting), replay in replays.items():
+    for ((mapping, weighting), replay), score in zip(replays.items(), scores, strict=True):
         costs = defaultdict(list)
         for weight, row in zip(weights, replay['rows'], strict=True):
             assert row['status'] == 'Available' and row['identity'] == weight['identity']
@@ -39,46 +52,8 @@ def objectives(declarations, effective, replays):
             costs[weight['group'], observable].append(row['cost'])
         blocks.extend(dict(mapping=mapping, weights=weighting, group=g, observable=q, rows=len(v),
                            cost=math.fsum(v)) for (g, q), v in costs.items())
-        totals[mapping, weighting] = math.fsum(row['cost'] for row in replay['rows'])
-    return weights, blocks, totals
-
-
-def paired_comparisons(paired, declarations):
-    targets = {v['target']: v for v in f.e.rows(EVIDENCE/'state-targets.csv') if v['kind'] == 'packet'}
-    carbonate_label = None
-    for row in paired['rows']:
-        if row['kind'] != 'fitted':
-            continue
-        declaration = declarations[row['identity']]
-        measurement = carbonate_measurement(declaration, targets.get(row['identity'], {}))
-        if measurement:
-            label = fitted_species_label(row)
-            row.update(measurement)
-            carbonate_label = fitted_species_label(row)
-            row['groups'] = [carbonate_label if v == label else v for v in row['groups']]
-    assert carbonate_label is not None
-    paired['groups'] = comparison_groups(paired['rows'])
-    return carbonate_label
-
-
-def handoff_counts(native, census):
-    supplied = [entry for state in census for entry in state['coexistence']]
-    for entry in supplied:
-        if 'attempt' in entry:
-            entry['outcome'] = attempt_outcome(entry['attempt'])
-    for attempt in native['attempts']:
-        attempt['outcome'] = attempt_outcome(attempt)
-
-    groups = [native['attempts'], *(state['coexistence'] for state in census)]
-    totals = Counter(entry['outcome'] for group in groups for entry in group)
-    return dict(native_attempts=len(native['attempts']), supplied_attempts=len(supplied),
-                confirmed=totals['confirmed'], unconfirmed_attempts=totals['unconfirmed'],
-                failed_solves=totals['failed_solve'], unavailable=totals['unavailable']+int('classification_error' in native),
-                unresolved_states=sum(bool(g) and all(a['outcome'] in ('unconfirmed', 'failed_solve') for a in g)
-                                      for g in groups),
-                states_with_failed_solves=sum(any(a['outcome']=='failed_solve' for a in g) for g in groups),
-                native=dict(Counter(a['outcome'] for a in native['attempts'])),
-                supplied=dict(Counter(a['outcome'] for a in supplied)))
+        assert math.isclose(math.fsum(row['cost'] for row in replay['rows']), score, rel_tol=1e-14)
+    return weights, blocks
 
 
 # Paired groups and the corresponding independent #338 counts.
@@ -94,7 +69,28 @@ REFERENCE_GROUPS = {
 }
 
 
-def reconcile(info, contributions, blocks, paired, selected, search, census, handoff):
+def s9_check(blocks):
+    published, reduced = defaultdict(list), defaultdict(list)
+    for row in csv_rows(PAPER/'objective-groups.csv'):
+        published[rowkey(row['group'], row['quantity'])].append(row)
+    for row in blocks:
+        if (row['mapping'], row['weights']) == ('reported', 'original'):
+            reduced[rowkey(row['group'], row['observable'])].append(row)
+    assert reduced.keys() == published.keys()
+    report = {}
+    for key, reference in published.items():
+        part = reduced[key]
+        n, cost = sum(v['rows'] for v in part), math.fsum(v['cost'] for v in part)
+        expected = float(f"{sum(float(v['cost']) for v in reference):.6g}")
+        assert n == sum(int(v['n']) for v in reference) and float(f'{cost:.6g}') == expected, key
+        group, quantity = key
+        label = ('Cai vapor water fraction' if key == ('Cai', 'mole_fraction')
+                 else quantity if group in ('common149', 'species', 'Cai') else group)
+        report[label] = dict(n=n, cost=cost, reference=expected)
+    return report
+
+
+def reconcile(info, contributions, blocks, paired, mapping, search, load):
     report = {}
     for amine, record in info.items():
         rows, p = record['rows'], record['p']
@@ -103,153 +99,107 @@ def reconcile(info, contributions, blocks, paired, selected, search, census, han
         rss, stage_rss = (math.fsum(v['weighted_residual']**2 for v in values) for values in (rows, responsive))
         total = math.fsum(float(v['cost']) for v in contributions[amine])
         assert math.isclose(total, rss/2, rel_tol=1e-14), amine
-        assert sum(int(v['n']) for v in contributions[amine]) == len(rows)
-        old, stage = rss/(len(rows)-p), stage_rss/(len(responsive)-p)
-        assert math.isclose(record['variance'], old, rel_tol=1e-14)
-        assert math.isclose(record['stage_variance'], stage, rel_tol=1e-14)
-        report[amine] = dict(n=len(rows), na=len(responsive), p=p, objective=rss/2, all_row_variance=old,
+        n, na = len(rows), len(responsive)
+        assert n == sum(int(v['n']) for v in contributions[amine]) == record['n']
+        assert (na, n-p, na-p) == (record['na'], record['denominator'], record['stage_denominator'])
+        old, stage = rss/(n-p), stage_rss/(na-p)
+        for field, value in (('rss', rss), ('stage_rss', stage_rss), ('variance', old), ('stage_variance', stage)):
+            assert math.isclose(record[field], value, rel_tol=1e-14), (amine, field)
+        report[amine] = dict(n=n, na=na, p=p, objective=rss/2, all_row_variance=old,
                              stage_variance=stage, excluded=excluded, contribution_sum=total)
-    published = re.findall(r' & \$([\d.]+)\$ & [^\n]+? & \$([\d.]+)\$ \\',
-                           (ROOT/'docs/scientific/latex/tables/objective_groups.tex').read_text())
-    s9 = {
-        'partial_pressure': ('partial_pressure',),
-        'mole_fraction': ('common149:mole_fraction', 'restored species:mole_fraction'),
-        'addition_enthalpy': ('addition_enthalpy',),
-        'Jakobsen': ('amount_ratio',),
-        'Kiepe': ('pressure',),
-        'CO2-free density': ('CO2-free density:phase_density',),
-        'temperature': ('temperature',),
-        'Cai vapor water fraction': ('Cai:mole_fraction',),
-        'loaded density': ('loaded density:phase_density',),
-        'Cp': ('equilibrium_isobaric_heat_capacity',),
-    }
-    original = [v for v in blocks if (v['mapping'], v['weights']) == ('reported', 'original')]
-    report['F2_S9'] = {}
-    for (label, keys), (n, cost) in zip(s9.items(), published, strict=True):
-        rows = [v for v in original if v['observable'] in keys or f"{v['group']}:{v['observable']}" in keys]
-        count, value = sum(v['rows'] for v in rows), math.fsum(v['cost'] for v in rows)
-        assert count == int(n) and float(f'{value:.6g}') == float(cost), label
-        report['F2_S9'][label] = dict(n=count, cost=value, reference=float(cost))
-    report['mapping_fingerprints'] = dict(reported=s.parameter_fingerprint(s.parameter_mapping(paper.RECORD)),
-                                          alternative=s.parameter_fingerprint(selected['mapping']))
+    report['F2_S9'] = s9_check(blocks)
+    report['mapping_fingerprints'] = dict(
+        reported=parameter_fingerprint(read(RESULTS/'selected-current-best-parameters.json')),
+        alternative=parameter_fingerprint(mapping))
+    census = load('alternative/search/census-raw.json.gz')
+    records = [v for state in census for v in state.get('stability', [])]
     supplied = Counter()
-    for state in census:
-        for record in state['stability']:
-            supplied.update(record['supplied_counts'])
-    supplied['missing'] = len(census)*len(r.read(BASE/'split-registry.json')['trials'])-sum(supplied.values())
-    supplied['negative'] = sum(r.supplied_negative(v) for state in census for record in state['stability']
-                               for v in record['supplied_trials'])
-    assert supplied == search['supplied']
-    reference = {v['dataset']: v['n'] for v in r.read(BASE/'F2/agreement.json')}
-    counts = {group: paired[group]['reported']['declared'] for group in REFERENCE_GROUPS}
-    assert all(n == reference[REFERENCE_GROUPS[group]] for group, n in counts.items())
+    for record in records:
+        supplied.update(record['supplied_counts'])
+    supplied['missing'] = len(census)*len(read(BASE/'split-registry.json')['trials'])-sum(supplied.values())
+    supplied['negative'] = sum(v['evidence'] == 'evaluated' and v['quantities']['tpd_over_rt'] < 0
+                               for record in records for v in record['supplied_trials'])
+    assert supplied == search['supplied'], 'supplied-trial accounting'
+    reference = {v['dataset']: v['n'] for v in read(BASE/'F2/agreement.json')}
+    membership = Counter(group for row in paired['rows'] for group in row['groups'])
+    counts = {group: membership[group] for group in REFERENCE_GROUPS}
+    for group, n in counts.items():
+        assert n == reference[REFERENCE_GROUPS[group]] == paired['groups'][group]['reported']['declared'], group
+
+    native = load('handoff/classification.json')
+    census_control, = load('handoff/census-raw.json.gz')
+    reduced, = load('handoff/census.json')['rows']
+    supplied_attempts = census_control['coexistence']
+    assert len(supplied_attempts) == reduced['supplied_negative']
+    assert load('handoff/supplied-grid-guard.json') == 'MEA grid carries supplied trials'
+    native_counts = Counter()
+    for attempt in native['attempts']:
+        failed = not attempt['requested_tolerance_met']
+        outcome = 'failed_solve' if failed else 'confirmed' if attempt['confirmed'] else 'unconfirmed'
+        assert attempt.get('outcome', outcome) == outcome
+        native_counts[outcome] += 1
+    supplied_counts = Counter(v['outcome'] for v in supplied_attempts)
+    totals = native_counts + supplied_counts
+    attempts = native['attempts'] + [v['attempt'] for v in supplied_attempts if 'attempt' in v]
+    assert totals['failed_solve'] == sum(not v['requested_tolerance_met'] for v in attempts)
+    assert totals['confirmed'] == sum(v['requested_tolerance_met'] and v['confirmed'] for v in attempts)
+    assert totals['unconfirmed'] == len(attempts) - totals['confirmed'] - totals['failed_solve']
+    states = (native_counts, supplied_counts)
+    handoff = dict(native_attempts=len(native['attempts']), supplied_attempts=len(supplied_attempts),
+                   confirmed=totals['confirmed'], unconfirmed_attempts=totals['unconfirmed'],
+                   failed_solves=totals['failed_solve'], unavailable=totals['unavailable']+int('classification_error' in native),
+                   unresolved_states=sum(bool(v) and v.keys() <= {'unconfirmed', 'failed_solve'} for v in states),
+                   states_with_failed_solves=sum(bool(v['failed_solve']) for v in states),
+                   native=dict(native_counts), supplied=dict(supplied_counts))
     return dict(report, search=search['alternative'], supplied=dict(supplied),
                 reference_count_checks=counts, handoff=handoff)
 
 
 def generate(folder, check):
-    def load(name):
-        return result(folder, name)
-
-    history = paper.OUT/'uncertainty'
-    declarations = r.read(paper.OUT/'objective-declarations.json')
-    adopted = r.read(history/'adopted.json')
-    coordinates = r.read(history/'inputs.json')['coordinates']
-    historical = r.read(paper.OUT/'candidate/replay.json')['rows']
-    assert adopted['predictions'] == [v['value'] for v in historical]
-    assert adopted['residuals'] == [v['residual'] for v in historical]
-    sqrt_weight = np.sqrt([v['weight'] for v in declarations])
-    weighted = sqrt_weight*adopted['residuals']
-    assert np.array_equal(weighted, [v['weighted_residual'] for v in historical])
-    jacobian = sqrt_weight[:, None]*np.asarray(adopted['jacobian']).reshape(len(historical), len(coordinates))
-    covariance = r.read(history/'covariance.json')['adopted_point']
-    wheel = r.read(paper.OUT/'wheel.json')['commit'][:8]
-    mea, mea_contributions = information_reduction(
-        'MEA', declarations, historical, coordinates, weighted, jacobian, covariance, wheel)
-    info = dict(MEA=mea, **{k: load(f'{k}/information.json.gz') for k in ('DEA', 'MDEA', 'AMP')})
-    contributions = dict(MEA=mea_contributions, **{k: f.e.rows(folder/f'{k}/contributions.csv') for k in info if k != 'MEA'})
-
-    selection = load('alternative/selection.json')
+    wheel = read(WHEEL)
+    load = partial(result, folder, wheel_sha256=wheel['sha256'])
+    info = {k: load(f'{k}/information.json.gz') for k in ('MEA', 'DEA', 'MDEA', 'AMP')}
+    contributions = {k: csv_rows(folder/f'{k}/contributions.csv') for k in info}
+    selection, cross = load('alternative/selection.json'), load('alternative/cross-score.json.gz')
     selected = selection['selected']
-    assert selected['mapping'] == s.parameter_mapping(folder/'alternative/parameters.json')
+    assert selected['mapping'] == read(folder/'alternative/parameters.json')
     replays = {('reported', 'original'): load('reported-mea.json.gz'),
                ('reported', 'Cai mean'): load('alternative/f2-replay.json.gz'),
-               ('alternative', 'original'): load('alternative/cross-score.json.gz'),
-               ('alternative', 'Cai mean'): r.read(folder/selected['run']/'replay.json')}
+               ('alternative', 'original'): cross,
+               ('alternative', 'Cai mean'): read(folder/selected['run']/'replay.json')}
+    declarations = read(PAPER/'objective-declarations.json')
     effective = load(f"{selected['run']}/inputs.json.gz")['rows']
-    weights, blocks, totals = objectives(declarations, effective, replays)
-    assert all(math.isclose(totals[k], v, rel_tol=1e-14)
-               for k, v in zip(replays, sum(replays['alternative', 'original']['objectives'], []), strict=True))
-
-    paired = load('alternative/paired-comparisons.json.gz')
-    carbonate = paired_comparisons(paired, {v['identity']: v for v in declarations})
-    native, handoff_raw = load('handoff/classification.json'), load('handoff/census-raw.json.gz')
-    handoff = handoff_counts(native, handoff_raw)
-    handoff_census, = load('handoff/census.json')['rows']
-    assert handoff['supplied_attempts'] == handoff_census['supplied_negative']
-    assert load('handoff/supplied-grid-guard.json') == 'MEA grid carries supplied trials'
-    census = load('alternative/search/census-raw.json.gz')
-    search = search_accounting(lambda name: load(f'alternative/{name}'), census)
-    reconciliation = reconcile(info, contributions, blocks, paired['groups'], selected, search, census, handoff)
-    tables = notebook_tables(folder, info, contributions, weights, totals, selection, replays['alternative', 'original'],
-                            paired, carbonate, search, handoff)
-
-    with TemporaryDirectory() as tmp:
-        def emit(name, data):
-            stored = folder/name
-            if stored.suffix == '.csv':
-                path = Path(tmp)/stored.name
-                f.e.table(path, data)
-                body = path.read_bytes()
-            elif stored.suffix == '.md':
-                body = data.encode()
-            else:
-                wrapped = name != 'reconciliation.json'
-                content = dict(wheel_sha256=SHA, result=r.jsonable(data)) if wrapped else data
-                body = (json.dumps(content, indent=1 if wrapped else 2, allow_nan=False)+'\n').encode()
-            if check:
-                current = stored.read_bytes()
-                assert (gzip.decompress(current) if stored.suffix=='.gz' else current) == body, f'{name} needs regeneration'
-            else:
-                stored.write_bytes(gzip.compress(body, mtime=0) if stored.suffix=='.gz' else body)
-
-        for name, data in (
-            ('MEA/information.json.gz', mea), ('MEA/contributions.csv', mea_contributions),
-            ('alternative/weights.csv', weights), ('alternative/objective-blocks.csv', blocks),
-            ('alternative/paired-comparisons.json.gz', paired),
-            ('alternative/observable-errors.csv', observable_errors(paired['groups'])),
-            ('handoff/classification.json', native), ('handoff/census-raw.json.gz', handoff_raw),
-            ('alternative/search/outcomes.json', search), ('reconciliation.json', reconciliation), ('tables.md', tables),
-        ):
-            emit(name, data)
+    weights, blocks = objectives(declarations, effective, replays, [v for row in cross['objectives'] for v in row])
+    paired, search = load('alternative/paired-comparisons.json.gz'), load('alternative/search/outcomes.json')
+    report = reconcile(info, contributions, blocks, paired, selected['mapping'], search, load)
+    tables = notebook_tables(folder, info, contributions, weights, selection, cross, paired, search,
+                            report['handoff'], load('MDEA/pure-water-derivative-control.json'), wheel)
+    for name, body in (
+        ('alternative/weights.csv', csv_bytes(weights)), ('alternative/objective-blocks.csv', csv_bytes(blocks)),
+        ('reconciliation.json', (json.dumps(report, indent=2, allow_nan=False)+'\n').encode()),
+        ('tables.md', tables.encode()),
+    ):
+        path = folder/name
+        if check:
+            assert path.read_bytes() == body, f'{name} needs regeneration'
+        else:
+            path.write_bytes(body)
 
 
-def notebook_tables(folder, info, contributions, weights, totals, selection, cross, paired, carbonate, search, handoff):
+def notebook_tables(folder, info, contributions, weights, selection, cross, paired, search, handoff, water, wheel):
     lines = ['<!-- Generated by objective_tables_420.py. -->', '']
     groups = paired['groups']
 
     def add(*paragraphs):
-        for paragraph in paragraphs:
-            lines.extend((paragraph, ''))
+        lines.extend(item for paragraph in paragraphs for item in (paragraph, ''))
 
     def table(head, rows):
-        def row(cells):
-            return '| ' + ' | '.join(map(str, cells)) + ' |'
-
-        lines.extend((row(head), row(['---']*len(head))))
-        lines.extend(row(cells) for cells in rows)
+        for cells in (head, ['---']*len(head), *rows):
+            lines.append('| ' + ' | '.join(map(str, cells)) + ' |')
         lines.append('')
 
     def fmt(values, precision='.8f'):
         return [format(v, precision) if v is not None else '—' for v in values]
-
-    def band_stats():
-        rows = [v for v in f.e.rows(folder/'MEA/prediction-bands.csv') if v['group']=='common149: partial_pressure']
-        relative = [[100*float(v[key])/float(v['value']) for v in rows] for key in ('SE_bound_fixed', 'stage_SE')]
-        spans = ['–'.join(fmt((min(v), max(v)), '.3g')) + '%' for v in relative]
-        first = rows[0]
-        multiplier = (float(first['stage_upper_95']) - float(first['value']))/float(first['stage_SE'])
-        return len(rows), spans, multiplier
 
     cai = [v for v in weights if v['group']=='Cai']
     ncai = Counter(v['observable'] for v in cai)
@@ -258,8 +208,7 @@ def notebook_tables(folder, info, contributions, weights, totals, selection, cro
         f"fractions received weight {cai[0]['alternative_weight']:g}. Their respective residual scales were "
         f"{cai_scales['temperature']:g} K and {cai_scales['mole_fraction']:g} mole fraction. "
         f"Each observable contributed half its mean squared scaled residual. The fit retained all {len(weights)} "
-        f"observations. Both mappings were evaluated on ePC-SAFT {WHEEL.name.split('-')[1]} "
-        f"(build `{WHEEL.parent.name.removeprefix('main-')[:8]}`).",
+        f"observations. Both mappings were evaluated on ePC-SAFT {wheel['wheel'].split('-')[1]} (build `{wheel['commit'][:8]}`).",
         '## Which rows inform the fitted coordinates?')
     table(('Amine', 'Objective', 'Rows', 'Responsive rows', 'Interior rank', 'All-row DOF', 'Stage DOF',
            'All-row variance', 'Stage variance', 'SE multiplier'),
@@ -294,33 +243,38 @@ def notebook_tables(folder, info, contributions, weights, totals, selection, cro
         rank_rows.append((label, v['n'], v['zero_rows'], f"{v['cost']:.9g}", f'{full} / {interior}', smallest))
     table(('MEA block', 'Rows', 'Exact-zero rows', 'Cost', 'Adjustable / interior rank',
            'Smallest retained adjustable singular value'), rank_rows)
-    water = result(folder, 'MDEA/pure-water-derivative-control.json')
-    nw = sum(len(v['diagnostic_derivatives']) for v in water['rows'])
-    pressure = max(abs(v['pressure_change_Pa']) for v in water['rows'])
+    derivatives = sum(len(v['diagnostic_derivatives']) for v in water['rows'])
+    max_pressure = max(abs(v['pressure_change_Pa']) for v in water['rows'])
     add(f"The Cai observables account for {100*mea['Cai']['cost']/mea['whole fit']['cost']:.2f}% of the reported "
         f"objective. All {mea['Kiepe']['n']} Kiepe rows contribute to the objective and have exactly zero "
         f"derivatives. The MEA Jacobian uses the retained derivatives from build `{info['MEA']['wheel']}`.",
-        f"Disabling the MDEAH⁺–water association edges for the pure-water diagnostic produced {nw} exact-zero "
-        f"derivatives and a maximum pressure change of {pressure:.2e} Pa. The {len(water['rows'])} pure-water "
+        f"Disabling the MDEAH⁺–water association edges for the pure-water diagnostic produced {derivatives} exact-zero "
+        f"derivatives and a maximum pressure change of {max_pressure:.2e} Pa. The {len(water['rows'])} pure-water "
         f"rows contribute {water['pure_water_cost']:.10g} to the {water['declared']}-row objective. "
         f"The stage variance uses {info['MDEA']['stage_denominator']} residual degrees of freedom.",
         '## Conditional uncertainty at the reported fits')
     mea_se, mdea_se = (100*(info[k]['SE_multiplier']-1) for k in ('MEA', 'MDEA'))
-    n, (old_span, new_span), multiplier = band_stats()
+    bands = [v for v in csv_rows(folder/'MEA/prediction-bands.csv') if v['group']=='common149: partial_pressure']
+    relative = [[100*float(v[key])/float(v['value']) for v in bands] for key in ('SE_bound_fixed', 'stage_SE')]
+    old_span, new_span = ('–'.join(fmt((min(v), max(v)), '.3g')) + '%' for v in relative)
+    # objective_weights_420.revised_uncertainty defines the nominal multiplier.
     add(f"The stage variance increases conditional standard errors by {mea_se:.3f}% for MEA "
-        f"and {mdea_se:.3f}% for MDEA. The MEA bands use nominal ±{multiplier:.2f} conditional standard "
-        f"errors. For the {n} retained loaded partial pressures, relative standard errors span "
+        f"and {mdea_se:.3f}% for MDEA. The MEA bands use nominal ±1.96 conditional standard "
+        f"errors. For the {len(bands)} retained loaded partial pressures, relative standard errors span "
         f"{old_span} under the original convention and {new_span} under the stage convention.",
         '## MEA reweighting and paired comparisons')
     table(('Mapping', 'Original weights', 'Cai mean weights'),
-          ([m.title()+' MEA', *fmt(totals[m, w] for w in ('original', 'Cai mean'))] for m in ('reported', 'alternative')))
+          ([m+' MEA', *fmt(scores)] for m, scores in zip(('Reported', 'Alternative'), cross['objectives'], strict=True)))
     start_costs = ' and '.join(f"{v['cost']:.8f} ({v['start']})" for v in selection['starts'])
     add(f"The converged start families reached replayed objectives of {start_costs} with all {len(weights)} "
         f"fitted predictions available. The selected endpoint came from the {selection['selected']['start']} family.")
     table(('Coordinate', 'Unit', 'Reported', 'Alternative', 'Change', 'Bound before → after'),
           ([f"`{v['identity']}`", v['unit'], *fmt((v[k] for k in ('reported', 'alternative', 'change')), '.8g'),
             f"{v['reported_bound'] or 'interior'} → {v['alternative_bound'] or 'interior'}"] for v in cross['parameters']))
-    species_row = groups[carbonate]['largest_change']
+    carbonate, = (k for k in groups if k.startswith('fitted Bottinger2008 ')
+                  and k.endswith('true-species-liquid-mole-fraction-linear-aggregate'))
+    measured = groups[carbonate]['largest_change']['measured']
+    density, = (v['source'].removesuffix('2009') for v in contributions['MEA'] if v['group']=='CO2-free density')
     bot = groups['Böttinger 353 K checks']['largest_change']
     comparisons = {
         'fitted fitted CO2 partial pressure': 'Fitted loaded CO₂ partial pressure (Pa)',
@@ -331,12 +285,12 @@ def notebook_tables(folder, info, contributions, weights, totals, selection, cro
         'fitted Cai mole_fraction': 'Cai vapor water mole fraction',
         'fitted fitted phase mole fraction': 'Original fitted species mole fractions',
         'fitted restored species': 'Restored fitted species mole fractions',
-        carbonate: f"Fitted Böttinger {species_row['measured']} (linear aggregate of true liquid mole fractions)",
+        carbonate: f"Fitted Böttinger {measured} (linear aggregate of true liquid mole fractions)",
         'fitted Jakobsen ratio': 'Jakobsen fitted ratios',
         'Matin 19 pools': 'Matin unfitted pools',
         'Böttinger 353 K checks': f"Böttinger at {bot['temperature_K']} K",
         'fitted loaded density': 'Loaded density (kg/m³)',
-        'fitted CO2-free density': 'Amundsen unloaded density (kg/m³)',
+        'fitted CO2-free density': f"{density} unloaded density (kg/m³)",
         'fitted fitted heat of absorption': 'Absorption enthalpy (J/mol CO₂)',
         'fitted heat capacity': 'Heat capacity (J/(mol feed K))',
     }
@@ -363,20 +317,19 @@ def notebook_tables(folder, info, contributions, weights, totals, selection, cro
            'Unconfirmed attempts', 'Failed solves', 'Unresolved states', 'Unavailable states'),
           ([label, *(search['alternative'][key][field] for field in (
               'states', 'parents_available', 'descents', 'confirmed', 'unconfirmed', 'failed_solves', 'unresolved', 'unavailable'))]
-           for key, label in zip(search['alternative'], ('Main grid', 'Offset grid', 'Fixed-pressure census'), strict=True)))
+           for key, label in (('grid', 'Main grid'), ('offset', 'Offset grid'), ('census', 'Fixed-pressure census'))))
     supplied = search['supplied']
     baseline = search['baseline']
     descents = sum(baseline[k]['descent'] for k in search['alternative'])
     incomplete = len(baseline['grid']['unavailable'])+len(baseline['offset']['unavailable'])+baseline['census']['incomplete']
-    source_ranges = f.e.rows(paper.OUT/'reaction-source-ranges.csv')
+    source_ranges = csv_rows(PAPER/'reaction-source-ranges.csv')
     source = source_ranges[0]
     reactions = ', '.join(v['reaction'] for v in source_ranges)
     assert all(v['minimum_K']==source['minimum_K'] and v['maximum_K']==source['maximum_K'] for v in source_ranges)
     add(f"The reported mapping had {descents} descents and {incomplete} incomplete states across the same state sets. "
         f"The alternative census evaluated {supplied['evaluated']:,} supplied trials, with {supplied['negative']} "
         f"negative trials and {supplied['missing']} missing evaluations.",
-        f"The retained source range for {reactions} is {source['minimum_K']}–{source['maximum_K']} K "
-        f"({source['source'].split(', reactions')[0]}).",
+        f"The retained source range for {reactions} is {source['minimum_K']}–{source['maximum_K']} K ({source['source'].split(', reactions')[0]}).",
         f"The handoff controls produced {handoff['native_attempts']} native and {handoff['supplied_attempts']} supplied "
         f"coexistence attempts. There were **{handoff['failed_solves']} failed solves**, "
         f"**{handoff['unconfirmed_attempts']} completed attempts without a confirmed split**, "

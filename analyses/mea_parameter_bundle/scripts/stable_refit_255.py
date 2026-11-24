@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
 sys.path[:0] = [str(B / 'scripts'), str(B / 'calibration-misfit'), str(ROOT / 'src')]
 import shared_evaluation as s
+from MEA.common.retained_results import read as read, result as read_result
 
 COMMIT = 'bc7794731e94be961d16028d3f4880c6718a93ad'
 SHA = '8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069'
@@ -49,11 +50,6 @@ CENSUS_T = (313.15, 318.15, 333.15, 353.15, 373.15, 393.15)
 CENSUS_A = (1e-5, .05, .1, .2, .256, .3, .4, .5, .6)
 
 
-def read(path):
-    path = Path(path)
-    return json.loads(gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_bytes())
-
-
 def write(rel, value):
     path = OUT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -62,9 +58,7 @@ def write(rel, value):
 
 
 def result(rel):
-    payload = read(OUT / rel)
-    assert payload['wheel_sha256'] == SHA
-    return payload['result']
+    return read_result(OUT, rel, SHA)
 
 
 def verify():
