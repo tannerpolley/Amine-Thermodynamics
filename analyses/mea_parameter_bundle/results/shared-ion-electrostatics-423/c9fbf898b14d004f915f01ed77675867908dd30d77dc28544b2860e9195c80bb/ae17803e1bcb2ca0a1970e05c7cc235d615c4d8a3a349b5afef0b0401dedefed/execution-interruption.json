@@ -1,0 +1,10 @@
+{
+  "arm": "P1",
+  "cause": "Three forked workers initially shared one runtime directory and one temporary heartbeat filename.",
+  "retained_before_retry": "307-row replay, carbonate-share comparison, selected refits, three phase searches, and arm-specific P1 state assessment",
+  "retry_hypothesis": "Per-process #409 runtime directories remove the name collision.",
+  "retry_outcome": "P1 heat intervals and arm band table completed with per-process runtime directories",
+  "scientific_settings_changed": false,
+  "signature": "FileNotFoundError in os.replace(heartbeat.json.tmp, heartbeat.json) in shared_evaluation.write_json",
+  "stage": "#409 heat intervals"
+}

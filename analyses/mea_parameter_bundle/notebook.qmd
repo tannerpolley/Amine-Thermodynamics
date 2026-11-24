@@ -15,6 +15,10 @@ resources:
   - results/same-data-comparison/hong-2027/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
+  - results/shared-ion-electrostatics-423/*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/N*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/S1/parents.json.gz
   - results/bicarbonate-carbonate-266/**
   - results/selected-current-best-parameters.json
   - results/adoption-297/paper-evidence/model-curves/**
@@ -1992,3 +1996,21 @@ The stage variance divides the squared weighted residuals of responsive rows by 
 The Born diameters follow their respective segment diameters. The fit selected the lower replayed objective within the declared tie. The comparison pairs both mappings on the study build and preserves the fitted and development roles. AARD and signed relative bias use nonzero observations. RMSE uses all available observations in the indicated units. The carbonate-family pool results describe the measured sum. The Böttinger checks overlap the wider Böttinger comparison. Those checks and the unfitted Matin pools were examined during development. [Fit histories and endpoint selection](results/objective-weights-420/alternative/selection.json) · [Effective row weights](results/objective-weights-420/alternative/weights.csv) · [Block costs under both weights](results/objective-weights-420/alternative/objective-blocks.csv) · [Diameter ties and cross-scores](results/objective-weights-420/alternative/cross-score.json.gz) · [Errors by source, species, basis and role](results/objective-weights-420/alternative/observable-errors.csv) · [Paired rows and refusals](results/objective-weights-420/alternative/paired-comparisons.json.gz) · [Historical and study-build readbacks](results/objective-weights-420/alternative/published-readback.json).
 
 The main and offset grid searches used native trials. The grid adapter rejected a supplied grid trial as specified. The sampled states and finite trial bank bound the numerical stability evidence. The comparisons quantify a local weighting sensitivity. The conditional bands and development comparisons give no calibrated coverage or independent physical validation. [Reaction source ranges](results/paper-evidence-341/reaction-source-ranges.csv) · [Search outcomes and changed-state IDs](results/objective-weights-420/alternative/search/outcomes.json) · [Grid rows](results/objective-weights-420/alternative/search/grid.json.gz) · [Grid classification](results/objective-weights-420/alternative/search/grid-classification.json.gz) · [Census records](results/objective-weights-420/alternative/search/census-raw.json.gz) · [Native witness and classification](results/objective-weights-420/handoff/classification.json) · [Supplied witness attempts and messages](results/objective-weights-420/handoff/census-raw.json.gz) · [Independent arithmetic reconstruction from retained rows](results/objective-weights-420/reconciliation.json).
+
+## Shared ions and electrostatic sensitivities {#shared-ion-electrostatics-423}
+
+The [accepted calculation plan](https://github.com/tannerpolley/Amine-Thermodynamics/issues/423) compares electrostatic choices around the adopted F2 record and tests the shared-ion inputs with aqueous sodium salts. The wheel archive and installed Engine files were checked against the pin. The comparisons use fixed parameters or local fits to the original objective.
+
+{{< include shared-ion-electrostatics-423/tables.md >}}
+
+### Reproduction
+
+Run the calculation from the repository root with the pinned wheel installed. Use the pilot argument for the P0 timing before launching the remaining arms. The table check and HTML render read the retained results.
+
+```sh
+export AGENT_HEAVY_CORES=3 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py pilot
+agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py
+python3 analyses/mea_parameter_bundle/scripts/shared_ion_tables_423.py --check
+bash analyses/render.sh mea_parameter_bundle/notebook.qmd --to html
+```

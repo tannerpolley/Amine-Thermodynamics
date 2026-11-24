@@ -24,6 +24,14 @@ def write(name, value):
 def table(name, rows):
     e.table(OUT/name, rows)
 
+
+def lowest_cost(endpoints):
+    return min((p for p in endpoints if p['cost'] is not None), key=lambda p: p['cost'], default=None)
+
+
+def costs_tied(cost, best, tolerance):
+    return abs(cost - best) <= tolerance * best
+
 def laws():
     """Bates–Pinching Eq. (10), Table 2 p.351; Austgen Table V p.547."""
     measured = (10.3064, 10.1341, 9.9654, 9.8037, 9.6467, 9.4980,
@@ -390,7 +398,7 @@ def information(name, mapping, declared):
     write(f'{name}/information.json',out)
 
 
-def evidence(name, path):
+def evidence(name, path, *, kim_pathways=True):
     """Run the adoption assessment owners; stage their executable copies outside retained evidence."""
     import tempfile
     e.EV, e.RECORDS = OUT/'evidence', {name:path}
@@ -412,8 +420,8 @@ def evidence(name, path):
         r.OUT = OUT/'point-data'
         r.write(f'{name}/replay.json',r.read(OUT/name/'replay.json')['rows'])
         e.point_data(name,name)
-        curves = e.curves(name)
-        e.kim(name,curves)
+        if kim_pathways:
+            e.kim(name, e.curves(name))
         e.density(name)
         e.heat_capacity(name)
     finally:
@@ -553,9 +561,10 @@ def campaign():
             if result:
                 candidates.append(result)
         if candidates:
-            best=min(candidates,key=lambda x:x['cost'])
+            best=lowest_cost(candidates)
+            tolerance=r.read(r.A6)['controls']['function_tolerance']
             summaries[name]=dict(start=best['name'],cost=best['cost'],delta_F0=best['cost']-148.51054565397726,
-                                 tied_starts=[x['name'] for x in candidates if abs(x['cost']-best['cost'])<=r.read(r.A6)['controls']['function_tolerance']*best['cost']])
+                                 tied_starts=[x['name'] for x in candidates if costs_tied(x['cost'],best['cost'],tolerance)])
             previous=best['parameters']
             write(f'{name}/parameters.json',previous)
             summaries[name]['record_sha256']=a.sha(OUT/name/'parameters.json')
