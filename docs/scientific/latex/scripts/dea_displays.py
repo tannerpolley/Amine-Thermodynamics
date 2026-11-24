@@ -202,6 +202,15 @@ for ax, groups, title in zip(axes.flat,DEA_PANELS,'abcd'):
     ax.set_title(f'({title})', loc='left'); ax.set(xlabel='Loading (mol CO$_2$/mol DEA)',ylabel='Integral heat (kJ/mol CO$_2$)' if groups==('Carson',) else 'CO$_2$ partial pressure (kPa)',yscale='linear' if groups==('Carson',) else 'log')
     ax.legend(ncol=2, columnspacing=.7, handlelength=1.8, handletextpad=.4)
 figure(fig,'dea-current-measured-model.pdf')
+fig, axes = plt.subplots(1, 3, figsize=(6.48, 2.6), sharey=True, constrained_layout=True)
+for ax, fraction in zip(axes, ('0.10', '0.20', '0.30')):
+    line = sorted((r for r in curves if r['group'] == 'Carson' and r['row']['DEA_mass_fraction'] == fraction), key=lambda r: r['loading'])
+    assert len(line) == 25
+    ax.plot([r['loading'] for r in line], [r['value']/1000 for r in line], color=colors[0], linestyle=':')
+    ax.set_title(f'{100*float(fraction):g} wt%')
+    ax.set_xlabel('Loading (mol CO$_2$/mol DEA)')
+axes[0].set_ylabel('Integral heat (kJ/mol CO$_2$)')
+figure(fig, 'dea-integral-heat-concentrations.pdf')
 fig,axes=plt.subplots(1,2,figsize=(6.48,3.0),constrained_layout=True)
 for ax,group,scale,letter in [(axes[0],'Horstmann',1,'a'),(axes[1],'Cai',0.001,'b')]:
     ps=[r for r in data if r['group']==group]
@@ -212,6 +221,16 @@ for ax,group,scale,letter in [(axes[0],'Horstmann',1,'a'),(axes[1],'Cai',0.001,'
 figure(fig,'dea-current-binary-comparisons.pdf')
 # MDEA and AMP: the same displays, built from each amine's retained files.
 MD = 'analyses/mdea_mea_workflow/results/bounded-binary-411/'  # the reported MDEA fit: k(MDEA-water) at 423 K bounded at the CO2-free gap onset
+critical = read(MD + 'critical-k.json')
+comparison = read(MD + 'comparison.json')['k_versus_critical']
+assert critical['pressure_Pa'] == 1466000 and len(comparison) == len(critical['rows'])
+assert all(c['T_K'] == r['T_K'] and c['k_no_gap'] == r['k_no_gap'] for c, r in zip(comparison, critical['rows']))
+fig, ax = plt.subplots(figsize=(3.2, 2.7), constrained_layout=True)
+ax.plot([r['T_K'] for r in comparison], [r['k'] for r in comparison], color=colors[0], label='Reported model')
+ax.scatter([r['T_K'] for r in critical['rows']], [r['k_gap'] for r in critical['rows']], s=12, marker='o', facecolors='none', edgecolors=colors[1], label='Calculated gap onset')
+ax.set(xlabel='Temperature (K)', ylabel=r'$k_{\mathrm{MDEA,w}}$')
+ax.legend()
+figure(fig, 'mdea-gap-onset.pdf')
 MD343 = 'analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/'  # measured-point locations of the MDEA pressure figure
 AM = 'analyses/amp_transfer/results/retransfer-412-f2-05e94210/'  # #412: F2 carbamate inputs
 AMM = AM + 'slope-150/'  # the reported AMP model: AMPH+-water reciprocal-temperature slope fixed at a value chosen from a scan
