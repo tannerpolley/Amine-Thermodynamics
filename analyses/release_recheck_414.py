@@ -224,45 +224,43 @@ def dea(action, run):
     search_gate(run, search, chosen['search'])
 
 
-def search_gate(run, release, retained):
+def search_gate(run, release, retained, expected=None):
     new, old = release['grid'], retained['grid']
     rows = {r['key']: r for r in load(run / 'search-0.json')}
     before = {r['key']: r for r in old['unavailable_searches']}
     after = {r['key']: r for r in new['unavailable_searches']}
     gains = [dict(retained=before[k], release=rows[k]) for k in sorted(before.keys() - after.keys())]
-    losses = [after[k] for k in sorted(after.keys() - before.keys())]
+    losses = [dict(retained=dict(key=k, available=True), release=after[k]) for k in sorted(after.keys() - before.keys())]
     descents = [r for r in rows.values() if r['descent'] or r.get('witnesses')]
-    write(run / 'availability.json', dict(gains=gains, losses=losses, descents=descents))
-    assert new['states'] == old['states'] and not losses and not descents, run / 'availability.json'
+    returned = {r['key']: r.get('same_calculation_as', r['key']) for r in descents}
+    expected = expected or {}
+    changed = [dict(retained=before[k], release=after[k]) for k in sorted(before.keys() & after.keys())
+               if (before[k]['status'], before[k]['message']) != (after[k]['status'], after[k]['message'])]
+    # Match the branch test in bounded_binary_411.py (Engine PHASE_COINCIDENCE_DISTANCE).
+    gap = lambda a, b: max(abs(a['packing'] - b['packing']), *(abs(x-y) for x,y in zip(a['composition'], b['composition'], strict=True)))
+    distances = {r['key']: max((min((gap(w, v) for v in r['witnesses'] if v['density_side'] == 1), default=1.)
+                                for w in r.get('witnesses', []) if w['density_side'] == 2), default=0.) for r in descents}
+    evidence = run / 'availability.json'
+    write(evidence, dict(gains=gains, losses=losses, changed_unavailable_returns=changed, descents=descents,
+                         retained_descent_records=expected, release_descent_records=returned, witness_distances=distances))
+    assert new['states'] == old['states'] == len(rows) and not losses, evidence
+    assert returned == expected and new['descent'] == len(expected), evidence
+    assert max(distances.values(), default=0.) < 1e-6, evidence
     assert new['available'] == old['available'] + len(gains), (new['available'], old['available'], len(gains))
 
 
 def mdea_search_gate(route, point, out, retained):
+    expected = load(RESULTS / 'mdea-comparison.json')['retained_descent_reference']['records']
+    assert len(expected) == 76 and len(set(expected.values())) == 27
     try:
-        search_gate(route.out, load(out / 'stability.json'), load(retained / 'stability.json'))
+        search_gate(route.out, load(out / 'stability.json'), load(retained / 'stability.json'), expected)
     finally:
         evidence = load(route.out / 'availability.json')
-        affected = {r['release']['key'] for r in evidence['gains']}
-        affected.update(r['key'] for field in ('losses', 'descents') for r in evidence[field])
+        affected = {r['release']['key'] for field in ('gains', 'losses', 'changed_unavailable_returns') for r in evidence[field]}
+        affected.update(expected.keys() | evidence['release_descent_records'].keys())
         spec = route.bind(point)
         states = {r['key']: dict(r, T_K=route.temperature(spec, r)) for r in route.states(spec) if r['key'] in affected}
         write(out / 'affected-states.json', states)
-
-
-def mdea_descent_gate(producer, point, out, retained):
-    # The first retained descent is an exact reported-point case in the full search.
-    search = load(retained / 'stability.json')
-    recorded = search['descent_witnesses']['calculations'][0]
-    before = next((r for r in search['grid']['unavailable_searches'] if r['key'] == recorded['key']), None)
-    route = producer.Route(producer.DECLARATION, out / 'first-retained-descent')
-    shutil.copyfile(producer.OLD / 'split-record.json', route.out / 'split-record.json')
-    spec = route.bind(point)
-    state = next(r for r in route.states(spec) if r['key'] == recorded['key'])
-    measured, = route.grid(point, [state])
-    evidence = out / 'first-retained-descent.json'
-    write(evidence, dict(retained=before, retained_pressure_basis=recorded, release=measured,
-                         state=dict(state, T_K=route.temperature(spec, state))))
-    assert (before is not None or measured['available']) and not measured['descent'] and not measured.get('witnesses'), evidence
 
 
 def mdea(action, out):
@@ -294,8 +292,6 @@ def mdea(action, out):
         assert result['hull'] == expected['hull']
         return
     assert action in ('search', 'retain', 'critical')
-    if action == 'search':
-        mdea_descent_gate(producer, point, out, retained)
     source = path.read_text().replace("RESULTS = ANALYSIS/'results/bounded-binary-411'", f'RESULTS = Path({str(out)!r})')
     source = source.replace('Route(DECLARATION)', f'Route(DECLARATION, Path({str(runtime)!r}))')
     if action == 'retain':
@@ -308,6 +304,10 @@ def mdea(action, out):
         sys.argv[1] = original
     if action == 'search':
         mdea_search_gate(route, point, out, retained)
+    if action == 'retain':
+        for name in ('data-rows.json', 'curves/curve-data.json'):
+            before, after = ({r['identity']: r['status'] for r in load(folder / name)} for folder in (retained, out))
+            assert before == after, (name, {k: (before.get(k), after.get(k)) for k in before.keys() | after.keys() if before.get(k) != after.get(k)})
     if action == 'critical':
         expected, actual = (load(folder / 'critical-k.json') for folder in (retained, out))
         assert all(actual[k] == expected[k] for k in ('compositions','pressure_Pa'))
@@ -317,6 +317,47 @@ def mdea(action, out):
                   for report in (expected, actual)]
         write(out / 'printed-bound.json', dict(retained=values[0], release=values[1], precision=4))
         assert f'{values[0]:.4f}' == f'{values[1]:.4f}', values
+
+
+def amp(run):
+    from math import fsum
+    import part_ii
+    sys.path.insert(0, str(ROOT / 'analyses/amp_transfer'))
+    import retain_404 as producer
+    from candidate_evidence_255 import table
+    from refit_404 import trial_bank
+
+    part_ii.WHEEL, part_ii.SHA = WHEEL, WHEEL_SHA
+    producer.OUT = run
+    retained = producer.AMP / 'results/retransfer-412-f2-05e94210'
+    slope = 'slope-150'
+    point = load(retained / slope / 'parameters.json')
+    route = part_ii.Route(producer.DECLARATIONS / 'AMP-05e94210.json', run / slope)
+    record_identity(route.bind(point), run / 'solve.json', WHEEL_SHA)
+    route.write('split-record.json', trial_bank(route))
+    search = route.search(point)
+    confirmation = load(retained / slope / 'confirmation.json')
+    search_gate(route.out, search, dict(grid=dict(confirmation['full_search'], unavailable_searches=[])))
+    fitted, ok, cost = route.replay(point)
+    assert ok and len(fitted) == 156 and confirmation['selected_cost'] == confirmation['warm_cost']
+    route.write('confirmation.json', dict(confirmation, full_search=search['grid'], stable=search['stable'], selected_cost=cost, warm_cost=cost))
+    groups = load(retained / slope / 'group-costs.json')
+    for group in groups:
+        costs = [r['cost'] for r in fitted if (r['group'], r['unit']) == (group['group'], group['unit'])]
+        assert len(costs) == group['rows']
+        group['cost'] = fsum(costs)
+    route.write('group-costs.json', groups)
+    route.uncertainty(point)
+    route.reduce(point)
+    route.curves(point)
+    for name, count_rows in (('data-rows.json', 270), ('curve-data.json', 620)):
+        rows = route.result(name)
+        old = load(retained / slope / name)
+        assert len(rows) == len(old) == count_rows and {r['identity']:r['status'] for r in rows} == {r['identity']:r['status'] for r in old}, name
+    label = 'Slope -150 K against #404 main'
+    rows = producer.compare(slope, route.out / 'data-rows.json', producer.AMP / 'results/retransfer-404-05e94210/main/data-rows.json')
+    retained_rows = load(retained / 'same-row-deviations.csv')
+    table(run / 'same-row-deviations.csv', [r for r in retained_rows if r['case'] != label] + [dict(r, case=label) for r in rows])
 
 
 if __name__ == '__main__':
@@ -337,6 +378,8 @@ if __name__ == '__main__':
                 dea(action, run)
             elif command == 'mdea':
                 mdea(action, run)
+            elif command == 'amp':
+                amp(run)
             else:
                 assert command == 'mea'
                 assert action in ('replay', 'evidence', 'uncertainty', 'comparison', 'weights', 'shared', 'checks', 'stability')

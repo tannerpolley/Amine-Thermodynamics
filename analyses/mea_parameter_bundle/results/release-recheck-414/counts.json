@@ -626,14 +626,24 @@
   "MDEA reported stability": {
     "retained": {
       "states": 11824,
-      "incomplete": 1099,
+      "available": 10725,
+      "unavailable": 1099,
       "pressure_reference_unavailable": 870,
+      "resolved_descent_records": 76,
+      "distinct_descent_calculations": 27,
       "distinct_liquid_splits": 0
     },
-    "release": null,
-    "matched": null,
-    "status": "stopped during the first loaded-state search",
-    "evaluated_release_states": 1
+    "release": {
+      "states": 11824,
+      "available": 10729,
+      "unavailable": 1095,
+      "pressure_reference_unavailable": 870,
+      "resolved_descent_records": 76,
+      "distinct_descent_calculations": 27,
+      "distinct_liquid_splits": 0
+    },
+    "status": "pass with 4 availability gains",
+    "loss_count": 0
   },
   "MDEA CO2-free": {
     "retained": {
@@ -667,10 +677,22 @@
       "available": 666,
       "descent": 0,
       "distinct_liquid_splits": 0,
-      "trial_bank": 7301
+      "trial_counts": [
+        7301
+      ]
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "states": 666,
+      "available": 666,
+      "descent": 0,
+      "distinct_liquid_splits": 0,
+      "trial_counts": [
+        7301
+      ]
+    },
+    "gains": [],
+    "losses": [],
+    "matched": true
   },
   "MEA stripper heat reproduction": {
     "retained": {
@@ -768,5 +790,54 @@
     },
     "matched": true,
     "gate": "fail: resolved descent"
+  },
+  "MDEA row availability": {
+    "data-rows.json": [
+      {
+        "total": 731,
+        "available": 718
+      },
+      {
+        "total": 731,
+        "available": 718
+      }
+    ],
+    "curves/curve-data.json": [
+      {
+        "total": 483,
+        "available": 483
+      },
+      {
+        "total": 483,
+        "available": 483
+      }
+    ]
+  },
+  "AMP row availability": {
+    "data-rows.json": [
+      {
+        "total": 270,
+        "available": 270
+      },
+      {
+        "total": 270,
+        "available": 270
+      }
+    ],
+    "curve-data.json": [
+      {
+        "total": 620,
+        "available": 620
+      },
+      {
+        "total": 620,
+        "available": 620
+      }
+    ]
+  },
+  "AMP same-row deviations": {
+    "AMODEL": 56,
+    "AFREE": 56,
+    "AFREE_identical": true
   }
 }

@@ -1259,6 +1259,59 @@
         "critical-k.json",
         "search-row.json"
       ]
+    },
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected/stability.json",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/stability.json",
+      "match": "Ordered by state key for unavailable rows."
+    },
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected/route/search-0.json",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/stability.json:descent_witnesses,grid.unavailable_searches",
+      "match": "Expected 76 keys from retained_descent_reference, with unchanged available/unavailable keys except recorded gains."
+    },
+    {
+      "run_root": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected/compare-full-release",
+      "retained_root": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected/compare-full-retained",
+      "same_relative_file_names": [
+        "conditional-uncertainty.json",
+        "curves/curve-data.json",
+        "data-rows.json",
+        "parameter-table.json",
+        "published-pressure-comparisons.json",
+        "stability.json",
+        "summary-row.json"
+      ]
+    },
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected/deviations.json",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/deviations.json",
+      "match": "Group, role, unit, range and range side."
+    }
+  ],
+  "AMP": [
+    {
+      "run": "analyses/amp_transfer/results/runs/release-recheck-414-corrected/slope-150/search-0.json",
+      "retained": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/search-1.json.gz",
+      "match": "Search row by key."
+    },
+    {
+      "run": "analyses/amp_transfer/results/runs/release-recheck-414-corrected/same-row-deviations.csv",
+      "retained": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/same-row-deviations.csv",
+      "scope": "AMODEL regenerated; AFREE retained."
+    },
+    {
+      "run_root": "analyses/amp_transfer/results/runs/release-recheck-414-corrected/compare-release",
+      "retained_root": "analyses/amp_transfer/results/runs/release-recheck-414-corrected/compare-retained",
+      "same_relative_file_names": [
+        "conditional-uncertainty.json",
+        "confirmation.json",
+        "curve-data.json",
+        "data-rows.json",
+        "group-costs.json",
+        "same-row-deviations.csv",
+        "search-rows.json"
+      ]
     }
   ]
 }
