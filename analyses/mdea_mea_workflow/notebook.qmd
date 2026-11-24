@@ -5,8 +5,8 @@ format: html
 
 ## Bounded k(MDEA–water) fit without the CO₂-free gap (#411)
 
-This is a candidate set; the #343 interpolated set remains the reported one
-until the owner adopts a replacement. All values use wheel 1.3.1 `05e94210`,
+The owner adopted this set as the reported MDEA parameters on 23 November
+2026, replacing the #343 interpolated set. All values use wheel 1.3.1 `05e94210`,
 the #343 declaration, data roles and weights, and 4 worker processes.
 
 **Cause of the interpolated result.** Of the eight free coordinates, only
@@ -102,12 +102,28 @@ bubble pressure. Its bubble-pressure reference now fails with
 neither confirms nor excludes the split. Seventy-two grid records became unavailable and 12 became
 available. Of the 72, 68 failed the bubble-pressure reference and four stalled
 in a trial at residuals 1.09–1.72×10⁻¹⁰ against the 10⁻¹⁰ row limit
-([Engine issue #87](https://github.com/tannerpolley/epcsaft/issues/87)). The density-root check
-that #343 used to classify seed-labelled descents was not repeated. The mixed
-labels are therefore preliminary, but they occur at the same states that #343
-classified as vapor-directed. Neither unavailability nor an absent descent
-establishes stability.
+([Engine issue #87](https://github.com/tannerpolley/epcsaft/issues/87)). The 76 descent records are 27 distinct measured-state calculations. In the
+48 records labelled mixed, all 96 liquid-labelled witnesses coincide with a
+vapor-labelled witness in composition and packing fraction to 2.35×10⁻¹², the
+#343 test for a vapor-connected root (3.07×10⁻¹² there); the #343 isotherm and
+pressure-closure checks were not repeated. Four of the 11 Böttinger states at
+0.5 MPa now show the instability only through supplied trials, against three.
+Neither unavailability nor an absent descent establishes stability.
 [Search summary](results/bounded-binary-411/stability.json).
+
+**Conditional standard errors.** With the two bounded values held, the
+residual variance is 4.1053 and the conditional standard errors are
+1.35×10⁻⁵ K⁻¹ for d$k_{\mathrm{MDEA,w}}$/d$T$, 0.0353 for
+$k_{\mathrm{MDEAH^+,CO_2}}$, 0.0106 for $k_{\mathrm{MDEAH^+,w}}$, 3.546 K for
+$b_{\mathrm{MDEAH^+,w}}$, 0.0374 Å for $\sigma_{\mathrm{MDEAH^+}}$ and 43.9 K
+for $u_{\mathrm{MDEAH^+}}/k_B$. At both active bounds the cost gradient points
+out of the box. The largest conditional correlation is 0.925, between
+$k_{\mathrm{MDEAH^+,w}}$ and $u_{\mathrm{MDEAH^+}}$; the smallest
+column-normalized singular value is 0.0185. The paper displays read this
+folder; the [manuscript handoff](results/bounded-binary-411/manuscript-handoff.md)
+lists every changed number and sentence.
+[Parameter table](results/bounded-binary-411/parameter-table.json) ·
+[Conditional uncertainty](results/bounded-binary-411/conditional-uncertainty.json).
 
 ## Fixed-pressure CO₂-free stability penalty (#343)
 

@@ -4,6 +4,7 @@ Only k(MDEA-water) = a0 + a1 (T - T_ref) acts on the CO2-free binary. Re-referen
 hottest penalty temperature makes a0 the value there, so the gap-onset limit becomes an upper bound on a0.
 """
 import copy
+from collections import Counter
 import json
 import math
 from pathlib import Path
@@ -169,3 +170,60 @@ if __name__ == '__main__':
         result['seconds'], result['workers'] = time.monotonic()-started, route.workers
         (RESULTS/'stability.json').write_text(json.dumps(result, indent=1, default=str)+'\n')
         print(json.dumps({k: result['grid'][k] for k in ('states', 'available', 'descent')}), result['seconds'], flush=True)
+    elif step == 'retain':
+        # The files the paper displays read, in the #343 layouts, for the adopted bounded fit.
+        route = Route(DECLARATION)
+        point = stable.read(RESULTS/'endpoint.json')
+        started = time.monotonic()
+        route.uncertainty(point)
+        # The pressure figure's 23 curves (483 rows), as retained for the #343 figure.
+        route.config['curve_rows'] = dict(path='../results/retransfer-343/binary-penalty/curves/curve-rows.json',
+                                          sha256='c566979aaf300ea3501ce3b2d4a665dedc4bab71ed15679aede78dbbd628cc01')
+        route.curves(point)
+        seconds = time.monotonic()-started
+        unc, declared = route.result('conditional-uncertainty.json'), point['coordinates']
+        assert all(not unc['active_bound_outward_descent'] or v for v in unc['active_bound_outward_descent'].values()), 'an active bound must hold the cost down'
+        active = {declared[k]['identity'] for k in unc['active_bounds']}
+        T_ref = route.config['k_bound']['temperature_K']
+        UNITS = ['1', '1/K', '1', '1', 'K', '1', 'angstrom', 'K']
+        table = [dict(name=q['identity'], unit=u, role='fitted', source='Bounded fit, k(MDEA-water) at 423 K at most the CO2-free gap onset',
+                      value=q['origin'], bounds=q['bounds'], conditional_standard_error=unc['conditional_standard_error'].get(q['identity']),
+                      on_bound=q['identity'] in active) for q, u in zip(declared, UNITS, strict=True)]
+        old = stable.read(OLD/'parameter-table.json')
+        sigma = next(r for r in table if r['name'].endswith('segment_diameter'))
+        table += [dict(old[8], source='Tie to the fitted MDEAH+ segment diameter', value=sigma['value'], conditional_standard_error=sigma['conditional_standard_error']), *old[9:]]
+        assert all(old[i]['name'].startswith(('pair/mdea-water/k_ij/a0', 'pair/mdea-water/k_ij/a1')) or old[i]['name'] == table[i]['name'] for i in range(8))
+        rows = route.result('data-rows.json')
+        by_id = {r['identity']: r for r in rows}
+        pub = stable.read(OLD/'published-pressure-comparisons.json')
+        for c in pub['comparisons']:
+            c['selected_point_mean_absolute_relative_deviation_percent'] = 100*math.fsum(abs(by_id[i]['value']/by_id[i]['observed']-1) for i in c['row_ids'])/len(c['row_ids'])
+        search = route.result('search-0.json')
+        assert len(search) == 11824
+        stability = stable.read(RESULTS/'stability.json')
+        unavailable = [r for r in search if not r.get('available')]
+        causes = Counter(('grid' if r['key'].startswith('grid:') else 'data', 'pressure reference' if (r.get('message') or '').startswith('pressure reference') else 'other') for r in unavailable)
+        stability['unavailable_by_cause'] = [dict(tier=t, cause=c, count=n) for (t, c), n in sorted(causes.items())]
+        stability['distinct_calculations'] = sum('same_calculation_as' not in r for r in search)
+        descents = [r for r in search if r.get('descent')]
+        gap = lambda w, v: max(max(abs(a-b) for a, b in zip(w['composition'], v['composition'])), abs(w['packing']-v['packing']))
+        # #343 test: a liquid-labelled witness that coincides with a vapor-labelled one is the same vapor-connected root.
+        stability['descent_witnesses'] = dict(records=len(descents), distinct_calculations=len({r.get('same_calculation_as', r['key']) for r in descents}),
+            records_with_liquid_label=sum(any(w.get('density_side') == 2 for w in r.get('witnesses', [])) for r in descents),
+            largest_liquid_to_vapor_witness_distance=max(min(gap(w, v) for v in r['witnesses'] if v.get('density_side') == 1)
+                                                         for r in descents for w in r.get('witnesses', []) if w.get('density_side') == 2))
+        split = "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:363.15:1.368:1.05"
+        stability['interpolated_set_split_state'] = {k: next(r for r in search if r['key'] == split).get(k) for k in ('key', 'available', 'message')}
+        pressures = {role: dict(rows=len(p), relative_rows=len(p), AARD_percent=100*math.fsum(p)/len(p)) for role in ('fitted', 'not fitted')
+                     for p in [[abs(r['value']/r['observed']-1) for r in rows if r['role'] == role and r['unit'] == 'Pa' and r['status'] == 'Available']]}
+        summary = dict(amine='MDEA', point='bounded fit', free_fitted_parameters=len(declared), on_bounds=len(active), fitted_pressure=dict(statistics=pressures['fitted']),
+                       not_fitted_pressure=dict(statistics=pressures['not fitted']), unavailable_searches=len(unavailable),
+                       liquid_liquid_splits_found=stability['grid']['liquid_liquid_splits']['grid'], data_cost=stable.read(RESULTS/'comparison.json')['runs']['fit-0']['data_cost'])
+        for name, value in [('parameter-table.json', table), ('conditional-uncertainty.json', unc), ('published-pressure-comparisons.json', pub),
+                            ('summary-row.json', summary), ('stability.json', stability), ('data-rows.json', rows), ('deviations.json', route.result('deviations.json')),
+                            ('curves/curve-data.json', route.result('curve-data.json'))]:
+            (RESULTS/name).parent.mkdir(parents=True, exist_ok=True)
+            (RESULTS/name).write_text(json.dumps(value, indent=1, default=str)+'\n')
+        print(json.dumps(dict(seconds=seconds, table=[(r['name'], r['value'], r['conditional_standard_error'], r['on_bound']) for r in table[:8]],
+                              published=[(c['group'], c['selected_point_mean_absolute_relative_deviation_percent']) for c in pub['comparisons']],
+                              causes=stability['unavailable_by_cause'], distinct=stability['distinct_calculations'], split=stability['interpolated_set_split_state']), default=str), flush=True)

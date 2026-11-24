@@ -46605,5 +46605,34 @@
  "penalty_trigger": true,
  "stable": false,
  "seconds": 3026.052718176,
- "workers": 2
+ "workers": 2,
+ "unavailable_by_cause": [
+  {
+   "tier": "data",
+   "cause": "other",
+   "count": 225
+  },
+  {
+   "tier": "grid",
+   "cause": "other",
+   "count": 4
+  },
+  {
+   "tier": "grid",
+   "cause": "pressure reference",
+   "count": 870
+  }
+ ],
+ "distinct_calculations": 10870,
+ "descent_witnesses": {
+  "records": 76,
+  "distinct_calculations": 27,
+  "records_with_liquid_label": 48,
+  "largest_liquid_to_vapor_witness_distance": 2.348565786292056e-12
+ },
+ "interpolated_set_split_state": {
+  "key": "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:363.15:1.368:1.05",
+  "available": false,
+  "message": "pressure reference: LOCAL_INFEASIBILITY: infeasible: residual 0.040626000522767575 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 153 iterations, contraction absent, floor 7.2457554500962497e-11, amplification 0"
+ }
 }
