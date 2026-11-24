@@ -65,9 +65,10 @@ def coexistence(spec, parent, parent_g, guesses):
              for x,rho in zip(phases,densities,strict=True)]
     liquid = all(any(r['returned']=='liquid' for r in matched(check,parent.row_tolerance)) for check in roots)
     g, error = gibbs(compiled,result)
-    decrease, estimated_error = parent_g[0]-g, parent_g[1]+error
-    return dict(out, confirmed=distinct and liquid and decrease>estimated_error,
-                distinct=distinct, Gibbs_decrease_over_RT_mol=decrease,
+    comparison = {} if parent_g is None else dict(Gibbs_decrease_over_RT_mol=parent_g[0]-g)
+    estimated_error = error if parent_g is None else parent_g[1]+error
+    return dict(out, confirmed=distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
+                distinct=distinct, split_Gibbs_over_RT_mol=g, split_only=parent_g is None and distinct and liquid, **comparison,
                 numerical_error_over_RT_mol=estimated_error, phases=phases,
                 densities_mol_m3=densities, packings=list(result.packing_fractions),
                 max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)

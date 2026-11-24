@@ -3,6 +3,59 @@ title: "MDEA transfer with saturation-capped absorption heat"
 format: html
 ---
 
+## Phase-search coverage at the reported MDEA endpoint (#421)
+
+The reported model gives two distinct liquids at the historical split pressure of 262.8619197 MPa and 363.15 K. At the 27 prespecified measured-property states it gives pressure-closed vapor descent evidence. The CO₂-free binary hull first separates within the sampled brackets near 423.15 K. These are fixed-model calculations and numerical verification. The property measurements do not establish phase coexistence. [Study plan and readiness revisions](https://github.com/tannerpolley/Amine-Thermodynamics/issues/421).
+
+### Original phase searches
+
+| Original search population | Records | Unfinished | Unfinished with descent | Completed with descent | Completed with no descent in the finite trial set |
+|---|---:|---:|---:|---:|---:|
+| Measured-property states | 1,564 | 225 (14.39%) | 68 | 8 | 1,331 |
+| Constructed grid states | 10,260 | 874 (8.52%) | 0 | 0 | 9,386 |
+| Total | 11,824 | 1,099 (9.29%) | 68 | 8 | 10,717 |
+
+The 11,824 records represent 10,870 distinct calculations. The 76 descent records map to 27 calculations. Of the unfinished grid records, 870 refer to 435 failed underlying bubble references, with a record at each of 1.05 and 3 times the requested bubble pressure. The absolute pressures and reachability of those compressed liquids are undetermined. The four other unfinished grid records and 72 measured-property records had unavailable optimized searches and available supplied work. Another 146 measured-property records had incomplete supplied work after an available optimized search. Seven failed preparation. The coverage table keeps the declared coordinates, multiplier, retained absolute pressure where available, and both #417 alternatives by key. The reported search archive omits absolute pressures for 9,976 completed bubble-relative records. [Coverage table](results/phase-search-421/coverage.json) · [Counts and aliases](results/phase-search-421/coverage-counts.json).
+
+The #417 low alternative had 1,245 unfinished searches, including 1,024 failed pressure references, two confirmed splits and two unresolved phase identities. The high alternative had 1,104 unfinished searches, including 874 failed pressure references, with zero confirmed splits or unresolved phase identities. These refer to the two alternative endpoints, each searched on the same record keys. [Alternative endpoints and counts](results/shared-bicarbonate-417/mdea-search-readback.json).
+
+### Fixed-pressure split and measured-state evidence
+
+The 363.15 K calculation used 1 mol MDEA, 1.7987685418415897 mol water and 1.368 mol CO₂. The reported model converged a single liquid at the archived pressure. The native stability search reported overlapping value intervals for distinct stationary minima. The archived pair and one parent–archived-liquid pair independently initialized the same distinct two-liquid solution. The other parent–archived-liquid pair coalesced. The successful splits have densities of 22,214.25 and 25,052.69 mol/m³, with 4.387% of the equilibrium moles in the denser phase. The historical comparison is 22,331.57 and 24,982.97 mol/m³ and 0.8740% in the denser phase. The reported model decreased bulk $G/(RT)$ by $1.39417\times10^{-3}$ mol, with combined numerical error $7.60\times10^{-10}$ mol, compared with the historical decrease of $4.50550\times10^{-5}$ mol. The maximum absolute equilibrium residual for the archived pair start was $2.84\times10^{-13}$. Both phase roots closed at the parent pressure within $1.45\times10^{-15}$ relative error. [Fixed-pressure attempts](results/phase-search-421/fixed-pressure.json).
+
+The split-only check deliberately withheld the available parent Gibbs reference. It retained the split Gibbs sum of −545.1389724439191 mol in $G/(RT)$ with estimated numerical error $3.78\times10^{-10}$ mol and the label **feasible two-liquid equilibrium; bulk Gibbs comparison unavailable**. This check tests the reporting path. The actual fixed-pressure calculation had a Gibbs reference. [Split-only control](results/phase-search-421/split-only-control.json).
+
+The 27 measured-property calculations include four Sobrino density states, 11 Böttinger species states at 0.5 MPa, two at 2.5 MPa, five Zheng heat states and five Merkley heat states. Their assigned pressures span 0.1731113–0.9806738 of their calculated bubble pressures. The four Böttinger supplied-only states have pressure-closed vapor evidence, as do the other 23. A vapor descent establishes instability of the assumed liquid toward vapor under this model at the assigned pressure. It does not give the equilibrium vapor fraction. No case confirmed two liquids. Sixteen also have coexistence attempts with an unspecified second root whose phase identity remains unresolved in those attempts. The vapor assignments themselves include 18 dilute-vapor isotherm checks. [Measured-state roots, coexistence attempts and pressure basis](results/phase-search-421/measured-phase.json).
+
+The two prescribed salt-rich compositions gave positive TPD in all 48 applicable evaluations, ranging from 0.0098496 to 1.56027 in $RT$ units. Eight evaluations were inapplicable because the required ions were absent from the supported parent. The salt-rich compositions were numerical trial seeds. [Preserved preparation refusals from the first attempt](results/phase-search-421/salt-preparation-refusals.json).
+
+| Property comparison | Original AARD (%) | Linked AARD (%) | Excluding all linked (%) | Change (pp) | Excluding supplied-only (%) |
+|---|---:|---:|---:|---:|---:|
+| Böttinger amine sum, 0.5 MPa | 7.214 | 9.819 | 6.604 | −0.610 | 7.113 |
+| Böttinger amine sum, 2.5 MPa | 7.214 | 6.643 | 7.234 | +0.020 | 7.214 |
+| Böttinger bicarbonate, 0.5 MPa | 11.144 | 10.470 | 11.305 | +0.161 | 11.612 |
+| Böttinger bicarbonate, 2.5 MPa | 11.144 | 5.088 | 11.364 | +0.220 | 11.144 |
+| Merkley fitted heat | 8.547 | 19.611 | 4.859 | −3.688 | 8.547 |
+| Merkley outside-fit heat | 3.038 | 3.038 | Empty | — | 3.038 |
+| Zheng outside-fit heat | 23.613 | 26.796 | 7.696 | −15.917 | 23.613 |
+| Sobrino unloaded density | 0.0781 | 0.1592 | 0.0619 | −0.0162 | 0.0781 |
+
+These comparisons use the original predictions, deduplicating by observation identity. The Böttinger pressure assignments evaluate the same observations. The Merkley diagnostic loadings and property endpoints are identified separately in the crosswalk. The remaining Merkley outside-fit observations have no available predictions after exclusion. [Source observations and state roles](results/phase-search-421/observation-crosswalk.json) · [Denominators, relative bias and absolute errors](results/phase-search-421/property-deviations.json).
+
+### CO₂-free MDEA–water onset
+
+The 1.466 MPa comparison pressure is assigned to the 422.04 K Merkley rows. The other pressure assignment is 1.121 MPa, and 1.811 MPa is the symmetric upper comparison. The fitted $k$ at 423 K is −0.06711345443725586. The reported 423 K bound is below the no-gap edge at all three pressures.
+
+| Pressure (MPa) | 423 K $k_{\mathrm{no\ gap}}$ | 423 K $k_{\mathrm{gap}}$ | First-gap MDEA mole fractions | Fitted $k-k_{\mathrm{no\ gap}}$ | No-gap to gap, K |
+|---:|---:|---:|---:|---:|---:|
+| 1.121 | −0.0670221329 | −0.0670214653 | 0.06910, 0.06950 | −0.0000913216 | 423.13750–423.14375 |
+| 1.466 | −0.0670134544 | −0.0670127869 | 0.06900, 0.06960 | −0.0001000000 | 423.15000–423.15625 |
+| 1.811 | −0.0670047760 | −0.0670041084 | 0.06880, 0.06970 | −0.0001086784 | 423.16250–423.16875 |
+
+The 5,490-point grid and its 10,979-point midpoint refinement agreed at all sampled and bisected temperatures. At the first gap side of each final temperature bracket, the refined TPD minima were $-6.27\times10^{-10}$, $-4.74\times10^{-10}$ and $-3.60\times10^{-10}$ in pressure order, with a roundoff criterion of $3.55\times10^{-15}$. The corresponding hull excesses were $2.07\times10^{-10}$, $1.57\times10^{-10}$ and $1.20\times10^{-10}$. The low sides had zero minimum at identical trial and parent composition. At 430 K the minima were between −0.0022373 and −0.0022197. The fitted slope of about $1.209\times10^{-3}\ \mathrm{K}^{-1}$ exceeds the retained onset slope of about $4.9\times10^{-4}\ \mathrm{K}^{-1}$. The direct brackets locate the separation within the sampled design. The binary results above 423 K extrapolate the fitted temperature law. [1.121 MPa](results/phase-search-421/binary-1121000.json) · [1.466 MPa](results/phase-search-421/binary-1466000.json) · [1.811 MPa](results/phase-search-421/binary-1811000.json) · [33-temperature onset control](results/bounded-binary-411/critical-k.json).
+
+The coverage table retains the exact conditions and reaction-source range indicators. The rowwise comparison to measured concentration and loading bounds and the remaining unspecified coexistence roots require further implementation. The results await independent review and investigator promotion. [Input hashes, tolerances and timing](results/phase-search-421/inputs-and-controls.json).
+
 ## Sensitivity to the shared water–bicarbonate interaction (#417)
 
 The low and high MEA profiles qualified $k=0.1325000116847309$ and $k=1$ for transfer to MDEA. At these values the fitted MEA objective increased by 1.023004 and 0.023674, respectively, relative to the refitted center. The study tests how MDEA predictions and the finite phase-stability searches respond to the shared coefficient after each solvent refits its own parameters. [Study plan and selection rule](https://github.com/tannerpolley/Amine-Thermodynamics/issues/417).
