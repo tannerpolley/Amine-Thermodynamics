@@ -53,9 +53,9 @@
     "n": 80,
     "na": 80,
     "p": 4,
-    "objective": 8.082968228315167,
-    "all_row_variance": 0.2127096902188202,
-    "stage_variance": 0.2127096902188202,
+    "objective": 8.082968228315169,
+    "all_row_variance": 0.21270969021882022,
+    "stage_variance": 0.21270969021882022,
     "excluded": [],
     "contribution_sum": 8.082968228315169
   },
@@ -63,8 +63,8 @@
     "n": 281,
     "na": 278,
     "p": 6,
-    "objective": 564.4836961253137,
-    "all_row_variance": 4.105335971820463,
+    "objective": 564.4836961253138,
+    "all_row_variance": 4.105335971820464,
     "stage_variance": 4.1506139787622764,
     "excluded": [
       "fit:227",
@@ -77,9 +77,9 @@
     "n": 156,
     "na": 156,
     "p": 6,
-    "objective": 62.06511057792469,
-    "all_row_variance": 0.8275348077056626,
-    "stage_variance": 0.8275348077056626,
+    "objective": 62.0651105779247,
+    "all_row_variance": 0.8275348077056627,
+    "stage_variance": 0.8275348077056627,
     "excluded": [],
     "contribution_sum": 62.0651105779247
   },
@@ -91,7 +91,7 @@
     },
     "mole_fraction": {
       "n": 101,
-      "cost": 18.892294022565242,
+      "cost": 18.892294022565245,
       "reference": 18.8923
     },
     "addition_enthalpy": {
@@ -119,6 +119,11 @@
       "cost": 39.82390854417673,
       "reference": 39.8239
     },
+    "Cai vapor water fraction": {
+      "n": 25,
+      "cost": 51.807380060246956,
+      "reference": 51.8074
+    },
     "loaded density": {
       "n": 47,
       "cost": 0.37874286495332105,
@@ -128,11 +133,6 @@
       "n": 4,
       "cost": 6.648349311915058,
       "reference": 6.64835
-    },
-    "Cai vapor water fraction": {
-      "n": 25,
-      "cost": 51.807380060246956,
-      "reference": 51.8074
     }
   },
   "mapping_fingerprints": {
@@ -146,6 +146,7 @@
       "descents": 0,
       "confirmed": 0,
       "unconfirmed": 0,
+      "failed_solves": 0,
       "unresolved": 0,
       "unavailable": 0,
       "clear": 1908
@@ -156,6 +157,7 @@
       "descents": 0,
       "confirmed": 0,
       "unconfirmed": 0,
+      "failed_solves": 0,
       "unresolved": 0,
       "unavailable": 0,
       "clear": 576
@@ -166,6 +168,7 @@
       "descents": 0,
       "confirmed": 0,
       "unconfirmed": 0,
+      "failed_solves": 0,
       "unresolved": 0,
       "unavailable": 0,
       "clear": 162
@@ -176,11 +179,31 @@
     "missing": 0,
     "negative": 0
   },
-  "reference_count_checks": "Eight pressure and speciation counts reconstructed from paired rows",
+  "reference_count_checks": {
+    "fitted fitted CO2 partial pressure": 47,
+    "unfitted six-source pressures": 112,
+    "Wagner pressures": 23,
+    "fitted fitted phase mole fraction": 94,
+    "fitted restored species": 7,
+    "fitted Jakobsen ratio": 6,
+    "Matin 19 pools": 19,
+    "B\u00f6ttinger 353 K checks": 10
+  },
   "handoff": {
+    "native_attempts": 1,
+    "supplied_attempts": 58,
     "confirmed": 0,
-    "unconfirmed_attempts": 59,
+    "unconfirmed_attempts": 51,
+    "failed_solves": 8,
+    "unavailable": 0,
     "unresolved_states": 2,
-    "unavailable": 0
+    "states_with_failed_solves": 1,
+    "native": {
+      "unconfirmed": 1
+    },
+    "supplied": {
+      "unconfirmed": 50,
+      "failed_solve": 8
+    }
   }
 }

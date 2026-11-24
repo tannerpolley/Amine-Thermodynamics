@@ -13,9 +13,10 @@ from types import SimpleNamespace
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'mdea_mea_workflow/scripts'))
 from shared_bicarbonate_417 import BASE, ROOT, bind_wheel, compare_rows, f, mea_search, paper, r, s
 from classify_descents import classify, coexistence, gibbs, pressure_roots
-from part_ii import Route, branch_counts, np, reg
+from part_ii import Route, active_bound_indices, branch_counts, deviation_statistics, np, reg
 
 OUT = BASE.parent/'objective-weights-420'
+EVIDENCE = paper.OUT/'paper-evidence'
 STATE = 'dense|0.15|313.15|0.125|1.05'
 UNITS = {'partial_pressure':'Pa','pressure':'Pa','temperature':'K','phase_density':'kg/m³',
          'addition_enthalpy':'J/mol CO₂','equilibrium_isobaric_heat_capacity':'J/(mol feed K)'}
@@ -51,6 +52,12 @@ def grid_classify(mapping, rows, states):
     return classify(route, mapping, [row | branch_counts(row) for row in rows], states)
 
 
+def attempt_outcome(attempt):
+    if not attempt['requested_tolerance_met']:
+        return 'failed_solve'
+    return 'confirmed' if attempt['confirmed'] else 'unconfirmed'
+
+
 def census_classify(model, parent, result, report, registry):
     spec = SimpleNamespace(model=model, parameters=model.parameters)
     parent = parent._native(model)
@@ -70,7 +77,7 @@ def census_classify(model, parent, result, report, registry):
             assert result.requested_tolerance_met, result.message
             assert parent.pressure.value == result.pressure
             attempt = coexistence(spec, parent, parent_g,[primary, (seed['composition'], seed['packing'])])
-            entry.update(attempt=attempt, outcome='confirmed' if attempt['confirmed'] else 'unconfirmed')
+            entry.update(attempt=attempt, outcome=attempt_outcome(attempt))
         except (AssertionError, ValueError, RuntimeError) as error:
             entry.update(outcome='unavailable', message=str(error))
     return outcomes
@@ -117,18 +124,13 @@ def transfer(case, declaration, endpoint, rows_file):
     if case == 'DEA':
         assert point['chosen']['name'] == 'start-0'
         point = point['chosen']['parameters']
-    spec = route.bind(point)
+    spec, replay, ev = route.differentiate_endpoint(point)
     declared, records = point['coordinates'], spec.inputs['observations']['fitted']
-    ev = reg.differentiate(spec.parameters, spec.coordinates(), [spec.observation(v) for v in records],
-                           optimizer=[0.]*len(declared), thermochemistry=spec.thermal)
-    replay, ok, _ = route.replay(point)
-    assert ok and all(status.name == 'Available' for status in ev.statuses)
     for saved, value, record in zip(rows, replay, records, strict=True):
         assert saved['identity'] == value['identity'] == record['identity']
         assert float(saved['observed']) == value['observed'] and saved['unit'] == value['unit']
         assert f.a.relative(saved['value'], value['value']) <= 1e-8
         assert 'residual' not in saved or f.a.relative(saved['residual'], value['residual']) <= 1e-8
-    assert np.allclose(ev.predictions, [v['value'] for v in replay], rtol=1e-8, atol=0.)
     residuals = [math.log(v/o['arguments']['observed']) if o['arguments']['form']=='log_ratio'
                  else (v-o['arguments']['observed'])/o['arguments']['scale']
                  for v,o in zip(ev.predictions,records,strict=True)]
@@ -188,24 +190,35 @@ def pure_water_control(spec, rows, coords, jacobian):
 
 def information(case, spec, rows, coords, jacobian, covariance, wheel):
     records = spec.inputs['observations']['fitted']
-    assert len({v['identity'] for v in rows}) == len(rows)
     e = spec.whiten(np.array([v['residual'] for v in rows]))
     J = spec.whiten(np.asarray(jacobian, dtype=np.float64).reshape(len(rows), len(coords)))
+    report, contributions = information_reduction(case, records, rows, coords, e, J, covariance, wheel)
+    f.e.table(OUT/case/'contributions.csv', contributions)
+    r.write(f'{case}/information.json.gz', report)
+    return report['blocks'], report['variance'], report['stage_variance']
+
+
+def information_reduction(case, records, rows, coords, e, J, covariance, wheel):
+    assert len({v['identity'] for v in rows}) == len(rows)
     scales = np.array([q['scale'] for q in coords])
-    interior = [i for i,q in enumerate(coords) if min(q['origin']-q['bounds'][0], q['bounds'][1]-q['origin']) > 1e-6*q['scale']]
+    active = active_bound_indices(coords)
+    interior = [i for i in range(len(coords)) if i not in active]
     groups, detail, excluded = defaultdict(list), [], []
-    targets = {v['target']: v['source'] for v in f.e.rows(paper.OUT/'paper-evidence/state-targets.csv')}
+    targets = {v['target']: v for v in f.e.rows(EVIDENCE/'state-targets.csv')}
+    # The MEA objective origins assign Kiepe Table 1 and Amundsen Table 1 to these blocks.
+    mea_sources = {'Cai': 'Cai1996', 'Kiepe': 'Kiepe', 'CO2-free density': 'Amundsen2009'}
     for i, (v, rec) in enumerate(zip(rows, records, strict=True)):
         assert v['identity'] == rec['identity'] and v['group'] == rec['group']
-        source = targets.get(v['identity'], rec['row'].get('source_key') or rec['row'].get('source') or v['identity'].split(':')[0].split('_')[0].rsplit('-',1)[0])
+        target = targets.get(v['identity'], {})
+        source = ((mea_sources.get(v['group']) if case == 'MEA' else None) or target.get('source')
+                  or rec['row'].get('source_key') or rec['row'].get('source')
+                  or v['identity'].split(':')[0].split('_')[0].rsplit('-',1)[0])
         source = {'AMU': 'Amundsen2009', 'hartono-2013': 'Hartono2013', 'hartono':'Hartono2021',
                   'ciftja':'Ciftja2014'}.get(source, source)
         quantity = rec['kind'] if rec['constructor']=='observation' else rec['constructor']
         observable = rec['row'].get('ratio') or rec['arguments'].get('species') or quantity
         if case == 'MDEA' and v['group'] == 'Kim':
             observable = 'pure water' if rec['row']['liquid_x_MDEA']=='0' else 'mixture'
-        if case == 'MEA' and v['group'] == 'Cai':
-            source = 'Cai1996'
         groups[(v['group'], source, str(observable))].append(i)
         unit = v.get('unit') or UNITS.get(quantity,'dimensionless')
         detail.append(dict(v, source=source, observable=quantity, unit=unit,
@@ -216,7 +229,7 @@ def information(case, spec, rows, coords, jacobian, covariance, wheel):
     exact_zeros = set(np.flatnonzero(~np.any(J, axis=1)))
     assert exact_zeros <= set(excluded) and (case == 'MDEA' or exact_zeros == set(excluded))
     blocks = {str(key): ids for key, ids in groups.items()}
-    for block in {v['group'] for v in rows}:
+    for block in dict.fromkeys(v['group'] for v in rows):
         blocks.update({block: [i for i,v in enumerate(rows) if v['group'] == block]})
     if case == 'MEA':
         blocks.update({label: [i for i,v in enumerate(rows) if v['group']==group and (quantity is None or quantity in v['row'].values())]
@@ -243,7 +256,7 @@ def information(case, spec, rows, coords, jacobian, covariance, wheel):
     physical = J[:,interior]/scales[interior]
     assert np.array_equal(physical.T@physical, physical[affected].T@physical[affected]) or np.allclose(physical.T@physical, physical[affected].T@physical[affected],rtol=1e-12)
     assert p == len(interior) and na > p
-    f.e.table(OUT/case/'contributions.csv', [
+    contributions = [
         dict(group=group,source=source,observable=observable,role='fitted',n=len(ids),
              unit=str(sorted({str(detail[i].get('unit')) for i in ids})),
              form=str(sorted({str(detail[i]['form']) for i in ids})),
@@ -252,13 +265,12 @@ def information(case, spec, rows, coords, jacobian, covariance, wheel):
              coefficient_min=min(detail[i]['weight']/float(detail[i]['scale'])**2 for i in ids),
              coefficient_max=max(detail[i]['weight']/float(detail[i]['scale'])**2 for i in ids),
              cost=ranks[str((group,source,observable))]['cost'],percent=200*ranks[str((group,source,observable))]['cost']/rss)
-        for (group,source,observable),ids in groups.items()])
-    r.write(f'{case}/information.json.gz', dict(wheel=wheel,basis='optimizer coordinates, scaled residual weighted once',
-            coordinates=coords,active_bounds=sorted(set(range(len(coords)))-set(interior)),blocks=ranks, rows=detail,
+        for (group,source,observable),ids in groups.items()]
+    return dict(wheel=wheel,basis='optimizer coordinates, scaled residual weighted once',
+            coordinates=coords,active_bounds=active,blocks=ranks, rows=detail,
             n=n,na=na,p=p,denominator=n-p,stage_denominator=na-p,rss=rss,stage_rss=rss_stage,variance=old,
             stage_variance=stage,excluded=[detail[i] for i in excluded],SE_multiplier=math.sqrt(stage/old),
-            conditional_correlation=covariance['conditional_correlation'],unscaled_information=(physical.T@physical).tolist()))
-    return ranks, old, stage
+            conditional_correlation=covariance['conditional_correlation'],unscaled_information=(physical.T@physical).tolist()), contributions
 
 
 def audit(mea):
@@ -421,18 +433,58 @@ def assessment(record, task):
 
 
 def deviations(rows, key):
-    available = [v for v in rows if v[key] is not None]
-    relative = [100*(v[key]/v['observed']-1) for v in available if v['observed'] != 0]
-    return dict(declared=len(rows),available=len(available),relative_eligible=len(relative),
-                aard=math.fsum(map(abs,relative))/len(relative) if relative else None,
-                relative_bias=math.fsum(relative)/len(relative) if relative else None,
-                rmse=math.sqrt(math.fsum((v[key]-v['observed'])**2 for v in available)/len(available)) if available else None)
+    pairs = [(v['observed'], v[key]) for v in rows if v[key] is not None]
+    stats = deviation_statistics(pairs) if pairs else {}
+    return dict(declared=len(rows), available=len(pairs), relative_eligible=stats.get('relative_rows', 0),
+                aard=stats.get('AARD_percent'), relative_bias=stats.get('bias_percent'),
+                rmse=math.sqrt(math.fsum((p-o)**2 for o,p in pairs)/len(pairs)) if pairs else None)
+
+
+def carbonate_measurement(declaration, target):
+    species = {'bicarbonate-anion': 'HCO₃⁻', 'carbonate-anion': 'CO₃²⁻'}
+    components = declaration['arguments'].get('species', [])
+    if declaration['kind'] == 'mole_fraction' and set(components) == species.keys():
+        assert target['basis'] == 'true-species-liquid-mole-fraction-linear-aggregate', target
+        return dict(basis=target['basis'], measured=' + '.join(species.values()))
+    return {}
+
+
+def fitted_species_label(row):
+    return f"fitted {row['source']} {row.get('measured', row['species'])} {row['basis']}"
+
+
+def comparison_groups(data):
+    grouped = defaultdict(list)
+    for row in data:
+        a, b = row['reported'], row['alternative']
+        row['change'] = b-a if a is not None and b is not None else None
+        for label in row['groups']:
+            grouped[label].append(row)
+    summary = {}
+    for label, rows in grouped.items():
+        paired = [v for v in rows if v['reported'] is not None and v['alternative'] is not None]
+        old, new = (deviations(paired,k) for k in ('reported','alternative'))
+        summary[label] = dict(reported=deviations(rows,'reported'),alternative=deviations(rows,'alternative'),
+                              paired_reported=old,paired_alternative=new,
+                              aard_change_pp=new['aard']-old['aard'] if old['aard'] is not None else None,
+                              availability_changes=[v['identity'] for v in rows if (v['reported'] is None)!=(v['alternative'] is None)],
+                              largest_change=max(paired,key=lambda v:abs(v['change']),default=None))
+    return summary
+
+
+def observable_errors(summary):
+    return [
+        dict(group=label,unit=group['largest_change']['unit'] if group['largest_change'] else None,
+             aard_change_pp=group['aard_change_pp'],
+             **{f'{basis}_{metric}':value for basis in ('reported','alternative','paired_reported','paired_alternative')
+                for metric,value in group[basis].items()})
+        for label,group in summary.items()]
 
 
 def compare():
     import final_evidence as evidence
 
-    historical = paper.OUT/'paper-evidence'
+    historical = EVIDENCE
     targets = f.e.rows(historical/'state-targets.csv')
     _, groups = evidence.observations()
     spec = r.read(f.e.SPEC)
@@ -452,15 +504,12 @@ def compare():
             results = list(pool.map(partial(assessment,record),tasks))
         predictions.append({(v['kind'],v['identity'],v['target']):v for x in results for v in x['targets']})
         failures.append({v['identity']:v['message'] for v in results if 'message' in v})
-    data, grouped = [], defaultdict(list)
+    data = []
     canonical = {v['observation_id']:v for v in f.e.rows(ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')}
     roles = r.read(historical/'state-summary.json')['scores']
     def add(v, labels):
         v['groups'] = labels
-        v['change'] = v['alternative']-v['reported'] if None not in (v['alternative'],v['reported']) else None
         data.append(v)
-        for label in labels:
-            grouped[label].append(v)
     for row in targets:
         key = row['kind'],row['identity'],row['target']
         kind, _, target = key
@@ -497,8 +546,10 @@ def compare():
             labels.append(f"fitted {source['source']} pCO2")
         if 'mole fraction' in label or label in ('restored species','Jakobsen ratio'):
             basis = 'moles per mole total amine' if label=='Jakobsen ratio' else 'true liquid mole fraction'
+            measurement = carbonate_measurement(decl, source)
             source = dict(source,basis=basis,source=identity.split('_')[0],species=identity.split('::')[-1])
-            labels.append(f"fitted {source['source']} {source['species']} {basis}")
+            source.update(measurement)
+            labels.append(fitted_species_label(source))
         add(dict(source,identity=identity,kind='fitted',role='fitted',target=identity,observed=a['observed'],
                  unit=UNITS.get(decl['constructor'],UNITS.get(decl['kind'],'dimensionless')),historical=ref['value'],
                  row=row,mea_mass_fraction=canonical.get(identity.removesuffix('-pco2'),{}).get('MEA_weight_fraction'),
@@ -515,22 +566,9 @@ def compare():
                  temperature_K=353.15,reported=p.value if p.requested_tolerance_met else None,
                  alternative=q.value if q.requested_tolerance_met else None,messages=[p.message,q.message]),
             ['Böttinger 353 K checks',f"Böttinger 353 K {a['species']} mole fraction"])
-    summary = {}
-    for label,rows in grouped.items():
-        paired = [v for v in rows if v['reported'] is not None and v['alternative'] is not None]
-        old, new = (deviations(paired,k) for k in ('reported','alternative'))
-        summary[label] = dict(reported=deviations(rows,'reported'),alternative=deviations(rows,'alternative'),
-                              paired_reported=old,paired_alternative=new,
-                              aard_change_pp=new['aard']-old['aard'] if old['aard'] is not None else None,
-                              availability_changes=[v['identity'] for v in rows if (v['reported'] is None)!=(v['alternative'] is None)],
-                              largest_change=max(paired,key=lambda v:abs(v['alternative']-v['reported']),default=None))
+    summary = comparison_groups(data)
     r.write('alternative/paired-comparisons.json.gz',dict(rows=data,groups=summary,refusals=failures))
-    f.e.table(OUT/'alternative/observable-errors.csv',[
-        dict(group=label,unit=group['largest_change']['unit'] if group['largest_change'] else None,
-             aard_change_pp=group['aard_change_pp'],
-             **{f'{basis}_{metric}':value for basis in ('reported','alternative','paired_reported','paired_alternative')
-                for metric,value in group[basis].items()})
-        for label,group in summary.items()])
+    f.e.table(OUT/'alternative/observable-errors.csv', observable_errors(summary))
     old = r.read(BASE/'F2/agreement.json')
     references = {v['dataset']:v for v in old}
     labels = ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: Cai temperature','fitted: Cai mole_fraction')
@@ -561,15 +599,21 @@ def search():
 
 def search_counts():
     r.OUT = OUT/'alternative'
-    rows = r.result('search/grid.json.gz')
-    phases = {v['key']:v for v in r.result('search/grid-classification.json.gz')}
-    raw = {v['index']:v for v in r.result('search/census-raw.json.gz')}
-    census = r.result('search/census.json')['rows']
+    r.write('search/outcomes.json', search_accounting(r.result, r.result('search/census-raw.json.gz')))
+
+
+def search_accounting(result, census_raw):
+    rows = result('search/grid.json.gz')
+    phases = {v['key']:v for v in result('search/grid-classification.json.gz')}
+    raw = {v['index']:v for v in census_raw}
+    census = result('search/census.json')['rows']
+    search_summary = result('search/summary.json')
     baseline = r.read(BASE.parent/'wheel-recheck-05e94210/stability-adopted-law/search.json')
     summary, changed = {}, []
-    for label, bank in (('grid',rows[:1908]),('offset',rows[1908:]),('census',census)):
+    main_count = search_summary['grid']['states']
+    for label, bank in (('grid',rows[:main_count]),('offset',rows[main_count:]),('census',census)):
         counts = Counter(states=len(bank),parents_available=0,descents=0,confirmed=0,
-                         unconfirmed=0,unresolved=0,unavailable=0,clear=0)
+                         unconfirmed=0,failed_solves=0,unresolved=0,unavailable=0,clear=0)
         for row in bank:
             is_census = label=='census'
             key = row['index'] if is_census else row['key']
@@ -579,10 +623,10 @@ def search_counts():
             classified = raw[key].get('coexistence',[]) if is_census else phases.get(key,{})
             if is_census:
                 assert len(classified)==row['resolved']+row['supplied_negative'], key
-                outcomes = Counter(q['outcome'] for q in classified)
+                outcomes = Counter(attempt_outcome(q['attempt']) if 'attempt' in q else q['outcome'] for q in classified)
             else:
                 assert bool(classified)==descent, key
-                outcomes = Counter('confirmed' if q['confirmed'] else 'unconfirmed' for q in classified.get('attempts',[]))
+                outcomes = Counter(map(attempt_outcome, classified.get('attempts', [])))
                 outcomes['unavailable'] = int('classification_error' in classified)
             state = ('confirmed' if outcomes['confirmed'] else 'unavailable' if not complete or outcomes['unavailable']
                      else 'unresolved' if descent else 'clear')
@@ -590,19 +634,16 @@ def search_counts():
             counts['parents_available'] += available
             counts['descents'] += descent
             counts['unconfirmed'] += outcomes['unconfirmed']
+            counts['failed_solves'] += outcomes['failed_solve']
             if state!='clear':
                 changed.append(dict(group=label,key=key,outcome=state,available=available,complete=complete,
                                     descent=descent,attempts=dict(outcomes)))
         assert counts['states']==sum(counts[k] for k in ('confirmed','unavailable','unresolved','clear'))
         assert counts['states']==baseline[label]['states']
         summary[label] = dict(counts)
-    supplied = Counter()
-    for payload in raw.values():
-        for report in payload.get('stability',[]):
-            supplied.update(report['supplied_counts'])
-    supplied['missing'] = 162*6121-sum(supplied.values())
-    supplied['negative'] = sum(v['supplied_negative'] for v in census)
-    r.write('search/outcomes.json',dict(baseline=baseline,alternative=summary,supplied=supplied,changed=changed))
+    supplied = dict(search_summary['supplied'], missing=search_summary['missing_supplied'],
+                    negative=sum(v['supplied_negative'] for v in census))
+    return dict(baseline=baseline,alternative=summary,supplied=supplied,changed=changed)
 
 
 if __name__ == '__main__':
