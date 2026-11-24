@@ -472,10 +472,18 @@ def _census(task):
     if previous and previous[0]:
         reduced['supplied_negative'] = sum(t.get('quantities',{}).get('tpd_over_rt',0.)<0 for t in supplied)
         reduced['complete'] = reduced['complete'] and len(supplied)==len(previous[0]) and all(t['evidence']=='evaluated' for t in supplied)
+    if len(previous) > 2 and previous[2]:
+        from collections import Counter
+        for report in raw.get('stability', []):
+            trials = report.pop('supplied_trials', [])
+            report['supplied_counts'] = dict(Counter(t['evidence'] for t in trials))
+            report['supplied_minimum_tpd'] = min((t['quantities']['tpd_over_rt'] for t in trials if t['evidence']=='evaluated'), default=None)
+            report['supplied_trials'] = [dict(t, bank_index=i) for i,t in enumerate(trials)
+                                         if t['evidence']!='evaluated' or supplied_negative(t)]
     return raw, reduced
 
 
-def census(mapping, name, trials=None, *, indices=None, keep_refusals=False):
+def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
     if indices is not None:
@@ -484,7 +492,7 @@ def census(mapping, name, trials=None, *, indices=None, keep_refusals=False):
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals) for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]
