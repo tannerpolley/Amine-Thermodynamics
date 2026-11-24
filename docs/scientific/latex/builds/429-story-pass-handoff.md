@@ -46,7 +46,7 @@ Pending sentences: one after the controlled MDEA transfer (#424) and one after t
 
 ## Open questions
 
-1. Table S20 keeps the retained DEA A₄ bounds (2.098 to 8.098) beside level bounds of −3 to +3 on the starting-law basis. I could not reconcile the two from the records.
+1. Table S20 gives the #413 DEA A₄ bounds, 4.192 to 10.192. On the starting-law level basis at 313.15 K, these are −3 to +3 (#426 control C4).
 2. Austgen 1989 has no PDF in Zotero; its sentence states only what the abstract supports.
 3. The split of citations between Perdomo 2025 and the reacting-constraint papers follows the plan; I did not re-read those papers.
 4. The exact Figiel average is still unevaluated.
@@ -55,3 +55,48 @@ Pending sentences: one after the controlled MDEA transfer (#424) and one after t
 ## First action for the post-draft checks
 
 Read `builds/main.pdf` front to back as a fresh referee and grade each section, starting with whether Sections 4.2 and 4.3 support the abstract's two claims from the tables alone; then spot-check the unchecked rows of the number-sources file.
+
+## Fix round 1
+
+**Commit.** `315d30063` on `issue-429-story-pass` (on `89445aae4`). Not merged, not pushed. Applies the post-draft numbers-and-citations check and the story check; where they overlapped, the numbers check was used.
+
+**Outside-fit pressures (numbers item 1).** Fixed in the producers: `final_rerun_tables.py` (Table 8) and `dea_displays.py` (Table 10 and the prose checks, now also covering the preprint abstract and the cover letter). Recomputed count-weighted from the per-source records; every value equals the check list.
+
+| Model | Observable (N) | Values | Record |
+|---|---|---|---|
+| MDEA, k = 0.7650 / 0.1325 / 1.0 | total P outside the fit (54: Kamps 28, Kuranov 413 K 11, Sedighi 15) | 38.75 / 32.99 / 38.65 % | `shared-bicarbonate-417/mdea-comparison.json.gz` |
+| same | p(CO₂) outside the fit (121: Ermatchkov 101, Xiao 20) | 20.07 / 33.62 / 20.05 % | same |
+| MDEA model (Table 10) | total P; p(CO₂) | 38.75 (54); 20.07 (121) | `bounded-binary-411/data-rows.json` |
+| AMP model (Table 10) | total P (63: Hartono 18, Tong 40 loaded, Tong 5 CO₂-free); p(CO₂) (51, Kundu) | 26.18; 47.02 % | `slope-150/data-rows.json` |
+
+The producers assert that the five MDEA sets reproduce the pooled 175-row value (25.83 %) and that the reported-model rows reproduce both retained summaries.
+
+**Applied.** All items of the numbers check, plus all items of the story check that the numbers check did not replace: story 2 (conclusion, supplement), 5, 6 (conclusion), 7, 8, 9, 10, 11 and 12. No sentence still calls the slope a sufficient cause. The MEA and DEA cells of Table 10 now also carry the p(CO₂) label.
+
+**Not applied as written.**
+- Story 1, 3 and 4, and story 6 in `main.tex`: the numbers-check text was used.
+- Story 2's change to the section reference: it went with its own clause, which the numbers check replaced; the parenthetical reference stays.
+
+**Consequential edits.**
+- "The phase searches do." became "The phase searches separate them.", because the sentence before it changed.
+- The preprint abstract mirrors the new `main.tex` abstract sentence.
+- The cover letter drops "within the tolerance of the MEA fit". Its "The fitted data do not distinguish the two" now uses the numbers-check wording.
+
+**Section 5.2 densities (story flag).** The numbers agree with Table S8; the denominators were unnamed. The 0.4 % is the AARD of 26 densities: 15 loaded Han, 3 CO₂-free Han and 8 CO₂-free Sobrino. The 1.3 % is the AARD of 15 heat capacities. The "0.6 % low" is the mean signed deviation of the 15 loaded Han densities (−0.55 %). Source: `stripper-temperature-409/band-table.csv`. The sentence now names the 15, 26 and 15, and a prose check covers it.
+
+**Other findings.**
+- The worked-split source the numbers check proposed (`reference-states-428/amp.json`) gives the state and the 0.0188 mol. Its `uncertainty` is 1.83e-10, a different quantity. The printed 2.8e-9 is `numerical_error_over_RT_mol` of the same grid state in `retransfer-412-f2-05e94210/main/phase-classification-1.json.gz`. The number-sources file names both.
+- Table 2 temperatures come from `paper-evidence-341/objective-declarations.json`: Jakobsen 293.15–313.15 K, CO₂-free density 298.15–353.15 K. The "---" note was removed.
+- The 23 + 4 split of the 27 MDEA states was confirmed in `phase-search-421/measured-phase.json`.
+
+**Build and checks.**
+- `scripts/build_manuscript.sh` passes. Main has 33 pages and the supplement 35. Neither has undefined references or overfull boxes.
+- `dea_displays.py --check`, `final_rerun_tables.py --check` and `--reference-states --check` pass. So do `check_private_source.py` and the CSE prose check; its STYLE.md:66 advisory concerns a file this round did not touch.
+- Visual check: the AMP split sentence and Fig. 7 share page 15, and Tables 6 and 7 follow on page 16.
+- The graphical abstract is identical to `main`.
+
+**Open questions.**
+- The numbers check supplied Hong's 1.53 % (§3.2, Table 3), the Kundu Table 10 footnote and the Mac Dowell §III.B.1 wording. I did not re-read those sources; there is no local copy. I checked Perdomo 2023 App. D, and it supports the new sentence.
+- The abstract and highlights now use "AARD" without defining it there. This is the numbers-check wording; the owner may prefer "average deviation".
+- Open questions 2–5 above are unchanged.
+
