@@ -25,6 +25,7 @@
 % Input (working tree): analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-group-readback.json SHA256 e55b233a98a2c4b17c0aa835b31d90f440340ddc61d0ccd87286355c2a685e4e
 % Input (working tree): analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-search-readback.json SHA256 759bf4dbde1545e58e5f50b35b1f6cc0acd44c252fafa54099e669980e3c4ae1
 % Input (working tree): analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz SHA256 a14a2467ccdfd0b17fedf04688497ebe8d9076751eb3b487882a0bb55b790257
+% Input (working tree): analyses/mea_parameter_bundle/results/objective-weights-420/MEA/information.json.gz SHA256 e9994086b64e7df10c0e74eeefdaaebdb3ea08db2ba4e6f4f4555a43325becb6
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
 \caption{Aqueous reactions of an amine A, with the source and source temperature range of each equilibrium constant.}\label{tab:reaction-equilibrium-constants}
 \begin{tabular}{@{}lll@{}}
@@ -46,12 +47,12 @@ Constant & Amine & Source & In the fit & \makecell[rb]{Source\\range (K)} & \mak
 R1--R3 & all four & Austgen et al.\ \cite{Austgen1991} & fixed & 273.15--498.15$^{\mathrm{a}}$ & -- \\
 R4 & MEA & Tong et al.\ \cite{Tong2012} & fixed & 293.15--323.15 & -- \\
 R4 & DEA & Aroua et al.\ \cite{arouaTemperatureDependencyEquilibrium1997} & fitted$^{\mathrm{c}}$ & 303--331 & -- \\
-R4 & AMP & Xu et al.\ \cite{xuRepresentationEquilibriumSolubility1992} & fitted$^{\mathrm{c}}$ & -- & 313.15--373.15 \\
+R4 & AMP & Silkenb\"aumer et al.\ \cite{silkenbaumerSolubilityCarbonDioxide1998}$^{\mathrm{d}}$ & fitted$^{\mathrm{c}}$ & -- & 313.15--373.15 \\
 R5 & MEA & Bates and Pinching \cite{batesAcidicDissociationConstant1951} & fixed & 273.15--323.15 & -- \\
 R5 & DEA & Bower et al.\ \cite{bowerAcidicDissociationConstant1962} & fixed & 273.15--323.15 & -- \\
 R5 & MDEA & P\'erez-Salado Kamps and Maurer \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996} & fixed & 278--368 & -- \\
 R5 & AMP & Hamborg and Versteeg \cite{hamborgDissociationConstantsThermodynamic2009} & fixed & 293.12--353.22 & -- \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $^{\mathrm{a}}$Range stated for the correlation in its source. $^{\mathrm{b}}$Range of estimates made with a solubility model, not of measurements. $^{\mathrm{c}}$Starting correlation; its constant term and an enthalpy increment are then fitted (Table~\ref{tab:transfer-fitted}). Table~\ref{supp-tab:supplement-reaction-coefficients} gives the coefficients of R1--R3 and of the MEA correlations on the molality basis, and Table~\ref{supp-tab:supplement-transfer-parameters} those of R4 and R5 for DEA, MDEA and AMP.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright $^{\mathrm{a}}$Range stated for the correlation in its source. $^{\mathrm{b}}$Range of estimates made with a solubility model, not of measurements. $^{\mathrm{c}}$Starting correlation; its constant term and an enthalpy increment are then fitted (Table~\ref{tab:transfer-fitted}). $^{\mathrm{d}}$Correlation of Silkenb\"aumer et al., which represents three estimates that Xu et al.\ \cite{xuRepresentationEquilibriumSolubility1992} obtained with a solubility model. Table~\ref{supp-tab:supplement-reaction-coefficients} gives the coefficients of R1--R3 and of the MEA correlations on the molality basis, and Table~\ref{supp-tab:supplement-transfer-parameters} those of R4 and R5 for DEA, MDEA and AMP.}
 \end{table}

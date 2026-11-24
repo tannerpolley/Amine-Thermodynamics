@@ -29,7 +29,10 @@ $d_{V,i},d_{T,i}$ & Permittivity coefficients & L/mol; K \\
 $n_s,V,\mathcal S$ & Neutral-solvent amount, phase volume and neutral set & mol; m$^3$ \\
 $\nu_{ri},K_r$ & Reaction stoichiometry and equilibrium constant & 1 \\
 $a_i,\phi_i,\mu_i$ & Activity, fugacity coefficient and chemical potential & 1; 1; J/mol \\
-$P,P^\circ,p_{\COtwo}$ & Total, reference and partial pressure & Pa \\
+$P,p_{\COtwo}$ & Total and \COtwo partial pressure & Pa \\
+$P_{\mathrm{src},r}$ & Pressure of the aqueous reference states of reaction $r$: \SI{1.734}{\mega\pascal} for R1--R3, \SI{0.1}{\mega\pascal} for R4 and R5 & Pa \\
+$P^\circ$ & Ideal-gas standard pressure, \SI{0.1}{\mega\pascal} & Pa \\
+$K_{r,P^\circ}^{\mathrm{ig}}$ & Equilibrium constant converted to ideal-gas reference states at $P^\circ$ & 1 \\
 $y_{\COtwo}P$ & Calculated \COtwo partial pressure of a bubble calculation & Pa \\
 $Z,M_w,m^\circ$ & Compressibility, water molar mass, standard molality & 1; kg/mol; mol/kg \\
 $A_r,B_r,C_r,D_r,\Delta_r$ & Reaction coefficients and standard-state offset & 1; K; 1; K$^{-1}$; 1 \\
@@ -38,16 +41,17 @@ $H,C_P,c_P$ & Enthalpy, extensive and mass heat capacity & J; J/K; J/(kg K) \\
 $\alpha$ & Loading, moles of added \COtwo per mole of amine & mol/mol \\
 $\Delta h,h^{\mathrm{feed}}$ & Absorption heat and feed molar enthalpy & J/mol \\
 $\boldsymbol\theta,C,r_j,w_j,s_j$ & Parameters, objective, residual, weight and scale & various; 1; 1; 1; observable \\
-$J_I,s_C^2,I,N$ & Weighted Jacobian, variance factor and set of the parameters not at a bound; number of observations & various; 1; 1; 1 \\
+$J_I,s_C^2,I$ & Weighted Jacobian, variance factor and set of the parameters not at a bound & various; 1; 1 \\
+$N,N_{\mathrm{resp}}$ & Number of observations, and number with a nonzero derivative with respect to a fitted parameter & 1 \\
 $g,\boldsymbol w$ & Molar Gibbs energy and trial fraction & J/mol; 1 \\
 $D(\boldsymbol w)$ & Reduced tangent-plane distance & 1 \\
-$B,\boldsymbol\lambda$ & Conservation matrix and reduced multipliers & 1 \\
+$B,\boldsymbol\lambda$ & Conservation matrix of the true species, and Lagrange multipliers of the parent-state balances divided by $RT$ & 1 \\
 $\tau_k,s_{\mathrm{stab}},w_{\mathrm{stab}},C_{\mathrm{pen}}$ & Most negative tangent-plane distance, penalty scale and weight, penalized objective & 1; 1; 1; 1 \\
 \end{longtable}
 \endgroup
 % P:nomenclature-conventions
 Subscripts $i,j$ identify species, $r$ reactions, $w$ water and $k$ searched states; superscripts res, ig, hc, disp, assoc, DH and Born identify residual, ideal-gas, hard-chain, dispersion, association and electrostatic terms.
-Superscripts calc and obs mean calculated and observed; pure and $\infty,w$ mean pure solvent and infinite dilution in water; $\circ$ denotes the source standard state.
+Superscripts calc and obs mean calculated and observed; pure and $\infty,w$ mean pure solvent and infinite dilution in water; $m^\circ$ is the standard molality and $P^\circ$ the ideal-gas standard pressure.
 
 % P:nomenclature-acronyms
 AARD: average absolute relative deviation; RMSE: root-mean-square error; MEA: monoethanolamine; DEA: diethanolamine; MDEA: methyldiethanolamine; AMP: 2-amino-2-methyl-1-propanol; NMR: nuclear magnetic resonance; eNRTL: electrolyte non-random two-liquid; PC-SAFT: perturbed-chain statistical associating fluid theory; ePC-SAFT: electrolyte PC-SAFT; SAFT-HR: Huang--Radosz statistical associating fluid theory.

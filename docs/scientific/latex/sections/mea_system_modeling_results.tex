@@ -1,6 +1,11 @@
 \section{Results and discussion}\label{sec:results}
 \subsection{MEA calibration}\label{sec:results-mea}
 \subsubsection{Parameters, their uncertainty and phase stability}\label{sec:results-parameters}
+% P:results-design
+The MEA model has 11 jointly fitted parameters: the MEA--water interaction and its temperature coefficient, the diameters and dispersion energies of \MEAH and \MEACOO, their interactions with water, one with a temperature coefficient, and with each other, and the shared water--bicarbonate interaction.
+Its 307 fitted observations are those of \cref{tab:calibration-data}, its equilibrium constants are fixed at their literature correlations, and its final optimization used no stability penalty; both starts descended from the stability-penalized 16-parameter calibration (\cref{sec:parameters}).
+The results of this section are therefore those of one local solution reached from two related starts.
+
 % P:results-parameters
 \Cref{tab:species-parameters,tab:interaction-matrix} list the parameters of the MEA model, and \cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} give its deviations from every data set, beside those of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
 
@@ -9,29 +14,22 @@
 
 % P:results-parameter-interpretation
 Only the \MEAH--\MEACOO interaction is on a bound; its lower-bound value doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}.
-The MEA--water interaction is well determined (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (\cref{fig:mea-water}), with an RMSE of \SI{1.785}{\kelvin} (\cref{tab:mea-data}).
+The MEA--water interaction is well determined (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (Fig.~\ref{supp-fig:mea-water}), with an RMSE of \SI{1.785}{\kelvin} (\cref{tab:mea-data}).
 The water--bicarbonate interaction and the opposing size changes of the two MEA ions are weakly determined, and their large conditional standard errors preclude reading the fitted values as unique molecular properties.
+Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of 6.0--16.9\,\%, of the same size as the deviations themselves.
 Section~\ref{supp-sec:s-uncertainty} gives the standard errors of the ion parameters, the correlations and refits that hold the bound interaction slightly inside its bound.
 
 \FloatBarrier
 \input{tables/mea_data}
 
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth]{mea-water.pdf}
-\caption{Bubble temperature of MEA--water against liquid MEA mole fraction at the labeled pressures: fitted observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (circles) and the MEA model (lines).}
-\label{fig:mea-water}
-\end{figure}
-
 % P:results-phase-opening
 For loaded aqueous MEA, B\"ottinger et al.\ observe a homogeneous liquid in their measured subset \cite{Bottinger2008}, which does not establish homogeneity over the whole searched domain.
-The MEA model shows no detected instability at any of the 2484 liquid states or 162 liquid--vapor states searched, and every search finished.
+The 2646 finite searches are an endpoint check, separate from the optimization: the MEA model shows no detected instability at any of the 2484 liquid states or 162 liquid--vapor states searched, and every search finished.
 
 \subsubsection{Pressure and speciation at 30 wt\%}\label{sec:results-pressure}
 % P:results-pressure-01
 At nominal 30 wt\% MEA the bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while differences between sources remain visible (\cref{fig:pressure}).
-The fitted pressures constrain the lower-temperature part of this comparison, and the higher-temperature pressures are calculated without further fitting (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
-\Cref{fig:pressure-residuals} gives the logarithmic residuals of these pressures against loading, with the fitted and not-fitted observations distinguished, beside those of the other three amines.
+The 47 fitted pressures, at 313--\SI{333}{\kelvin}, constrain the lower-temperature part of this comparison, and the higher-temperature pressures are calculated without further fitting (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -40,18 +38,20 @@ The fitted pressures constrain the lower-temperature part of this comparison, an
 \label{fig:pressure}
 \end{figure}
 
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth]{loaded-pressure-residuals.pdf}
-\caption{Logarithmic residual $\ln(p^{\mathrm{calc}}/p^{\mathrm{obs}})$ of loaded-solution pressures against loading, one panel for each amine model: fitted (filled circles), not fitted (open circles) and comparison only (open triangles). MEA: \COtwo partial pressures at nominal 30 wt\% of the six sources of \cref{fig:pressure}, 47 fitted and 112 not fitted; the Wagner pressures and the Aronu pressures at 15 and 45 wt\% are not shown. DEA: \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976}, Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} and Lal et al.\ \cite{lalSolubilityH2SCO21985}, 30 fitted, 67 not fitted and 10 comparison only. MDEA: total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and Sedighi et al.\ \cite{sedighiExperimentalMeasurementThermodynamic2024}, 66 fitted and 54 not fitted. AMP: total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} and Tong et al.\ \cite{Tong2012}, 47 fitted and 58 not fitted. The \COtwo partial pressures over MDEA and AMP are not shown. Table~\ref{supp-tab:supplement-transfer-data} gives the sets and roles of the DEA, MDEA and AMP observations.}
-\label{fig:pressure-residuals}
-\end{figure}
-
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
-The carbonate share of dissolved carbon remains far below the observations of Jakobsen et al.\ (AARD of 95.0\,\%, Table~\ref{supp-tab:supplement-mea-comparison}, Fig.~\ref{supp-fig:jakobsen-carbonate-share}), even though their species-to-total-amine ratios are fitted \cite{Jakobsen2005}.
-The small share cannot be attributed to a single parameter, and the fitted pressures do not determine this minor-species partition.
+The carbonate share of dissolved carbon remains far below the ten observations of Jakobsen et al.\ (AARD of 95.0\,\%; \cref{fig:jakobsen-carbonate-share}), even though their species-to-total-amine ratios are fitted \cite{Jakobsen2005}: the geometric mean of the calculated-to-observed ratios is 0.032.
+Jakobsen et al.\ note limited resolution for a species below about 10\,\% of a common NMR signal, which limits the accuracy of these shares.
+The changes tested do not remove it: other Born diameters for bicarbonate and carbonate, a permittivity changed by $\pm5\,\%$, a solvation factor of 1.5 for \COtwo or for MEA, and a second pair of MEA permittivity coefficients all leave the geometric-mean ratio between 0.016 and 0.040 (Section~\ref{supp-sec:s-carbonate}).
+A refit with the solvation factor of MEA at 1.5 lowers the objective value by 1.096 but also lowers the ratio, to 0.020, so it gives no support for that change.
+The cause of the deficit is unresolved, and the fitted pressures do not determine this minor-species partition.
+
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=0.5\linewidth]{jakobsen-carbonate-share.pdf}
+\caption{Carbonate share of dissolved carbon in loaded MEA: the MEA model against the ten measurements of Jakobsen et al.\ \cite{Jakobsen2005}, none of which entered the objective. The species-to-total-amine ratios of the same source are fitted (\cref{tab:mea-data}).}
+\label{fig:jakobsen-carbonate-share}
+\end{figure}
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -88,10 +88,6 @@ Heat capacities outside the fitted states, from Weiland et al.\ \cite{weilandHea
 
 % P:results-density-01
 Without volume translation, the model describes the fitted loaded densities of Amundsen et al.\ and Hartono et al.\ more closely than the full ranges of those sources and the densities of Han et al., which are not fitted (\cref{fig:density-curves}) \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
-
-% P:results-temperature-bands
-Divided by temperature, the \COtwo partial pressures at 30 wt\% MEA that are not fitted deviate by about 25\,\% both at 313--\SI{353}{\kelvin}, on 69 observations, and at 373--\SI{393}{\kelvin}, on 66, each set including the pressures of Wagner et al.\ \cite{wagnerSolubilityCarbonDioxide2013}; these sets differ from the 112 not-fitted pressures of the six sources at 313--\SI{393}{\kelvin} in \cref{tab:mea-data} (Table~\ref{supp-tab:supplement-temperature-bands}).
-At 373--\SI{393}{\kelvin}, where no observation is fitted although all were examined during development, the heat capacities and densities deviate on average by 1.3\,\% and 0.4\,\%, single values by up to $-2.1$ and $-1.1$\,\%, the calculated loaded densities are 0.6\,\% low on average, and the absorption heats at \SI{393}{\kelvin} are low by 4.8\,\% for Vinjarapu et al.\ \cite{HemaBhavya2025}, 8.5\,\% for Kim et al.\ \cite{Kim2014} and 12.2\,\% for Kim and Svendsen \cite{Kim2007} on average, so the calculated heat rises less with temperature than these calorimetric data show.
 
 \subsubsection{Other MEA concentrations}\label{sec:results-concentration}
 % P:results-transfer

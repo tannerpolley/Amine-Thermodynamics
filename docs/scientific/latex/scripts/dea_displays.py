@@ -668,6 +668,30 @@ for r in data_rows:
 assert D425['tableS10'][12]['group'] == 'Horstmann VLE' and len(arcis) == 14 and objective_n == {'MEA': 307, 'DEA': 80, 'MDEA': 281, 'AMP': 156}, objective_n
 table('calibration-data', 'Data in the objective of each model, data fitted beforehand and data outside the objective that informed a choice.', ['Observable', 'Source', '$N$', '$T$ (K)', 'Role'], design, [.36, .16, .07, .19, .18],
       notes=r'Fitted: in the objective of the reported fit, ' + ', '.join(f'{n} observations for {k}' for k, n in objective_n.items()) + r'. Fitted beforehand: used to set a parameter that the reactive fit holds fixed. \textsuperscript{a}Development: outside the objective, but used to choose the parameters or the initial parameter set (Section~\ref{sec:data-roles}). $p_{\COtwo}$: \COtwo partial pressure; total pressure: bubble pressure of the loaded solution. ---: temperature not in the summary records; the deposited data give every state. Table~\ref{tab:mea-data} and Table~\ref{supp-tab:supplement-transfer-data} give the compositions, loadings and deviations of every set, including those that are neither fitted nor used for a choice.')
+# Carbonate share of Jakobsen et al. under the tested electrostatic and shared-ion changes (#423).
+C423 = MEA + 'shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/'
+CCASES = [('P0', 'MEA model'), ('bicarbonate-anion-2.5', r'Bicarbonate Born diameter \SI{2.5}{\angstrom}'), ('bicarbonate-anion-3.5', r'Bicarbonate Born diameter \SI{3.5}{\angstrom}'), ('bicarbonate-anion-4', r'Bicarbonate Born diameter \SI{4.0}{\angstrom}'),
+          ('carbonate-anion-2.5', r'Carbonate Born diameter \SI{2.5}{\angstrom}'), ('carbonate-anion-4', r'Carbonate Born diameter \SI{4.0}{\angstrom}'), ('carbonate-anion-4.953', r'Carbonate Born diameter \SI{4.953}{\angstrom}'),
+          ('permittivity--5pct', r'Permittivity lowered by 5\,\%'), ('permittivity-+5pct', r'Permittivity raised by 5\,\%'), ('P1', 'Second pair of MEA permittivity coefficients'), ('M1', r'Solvation factor of \COtwo 1.5'), ('M3', 'Solvation factor of MEA 1.5'),
+          ('P1-refit', 'Second permittivity pair, refitted'), ('M3-refit', 'Solvation factor of MEA 1.5, refitted')]
+cshare = {k: read(C423 + k + '/carbonate-share.json') for k, _ in CCASES}
+carm, crefit = read(C423 + 'arm-replay-costs.json')['arms'], read(C423 + 'refit-comparison.json')['arms']
+cgm = {k: v['summary']['all']['geometric_mean'] for k, v in cshare.items()}
+assert all(v['summary']['all']['n'] == 10 for v in cshare.values()) and carm['P0']['delta'] == 0
+table('supplement-carbonate-sensitivity', r'Carbonate share of dissolved carbon at the ten states of Jakobsen et al.\ \cite{Jakobsen2005} for the MEA model and for the changes tested.', ['Case', 'Geometric mean of calculated/observed', r'AARD (\%)'],
+      [[label, f'${cgm[k]:.4f}$', num(cshare[k]['summary']['all']['aard_percent'], 2)] for k, label in CCASES], [.52, .26, .14],
+      notes=r'The shares are not fitted in any case. The last two rows refit the other MEA parameters; every other change is made with all other parameters fixed. The Born diameters of bicarbonate and carbonate are \SI{3.0}{\angstrom} in the MEA model.')
+cratio = [float(r['calc_over_obs']) for r in cshare['P0']['rows']]
+# Volume-equivalent Born diameters of the chain cations: retained replays at fixed other parameters (#423).
+def born_replay(amine, group):
+    out = []
+    for case in ('control', 'volume-equivalent'):
+        rs = [r for r in read(C423 + amine + '/' + case + '/data-rows.json.gz') if r['group'] == group and r.get('status', 'Available') == 'Available']
+        out.append(100 * sum(abs(r['value'] / r['observed'] - 1) for r in rs) / len(rs))
+    return out
+bdea, bmdea = born_replay('diethanolamine', 'Lawson'), born_replay('methyldiethanolamine', 'Kuranov')
+assert abs(bdea[0] - dsum['pressure']['fitted']['AARD_percent']) < 1e-6 and abs(bmdea[0] - mstats['Kuranov']['R1']['False']['AARD_percent']) < 1e-6
+veq = lambda record, s: record[s + '/segment_diameter'][0] * record[s + '/segment_count'][0] ** (1 / 3)
 # Published models on identical observations only, each with the role of those observations in that model's fit.
 PUB = {'Baygi2015 PC-SAFT': r'Baygi and Pahlavanzadeh, PC-SAFT \cite{Baygi2015}', 'Najafloo2018 SAFT-HR': r'Najafloo and Zarei, SAFT-HR \cite{Najafloo2018}', 'Zhang2011 eNRTL': r'Zhang et al., eNRTL \cite{Zhang2011}'}
 SHARED = {'Ermatchkov': r'\COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA', 'corrected-Kamps': r"total pressures of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA"}
@@ -690,7 +714,7 @@ assert (krae['rows'], krae['AARD_percent'], krae['role']) == (82, 10.9, 'fitted'
 rows += [head(r'82 total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA\textsuperscript{b}', 3),
          [r'Uyan et al., ePC-SAFT \cite{Uyan2015}', 'not fitted', r'$22.9$\textsuperscript{c}'], [r'Wangler et al., ePC-SAFT \cite{Wangler2018}', 'not fitted', '$19.7$'],
          [r'Raeispour Shirazi and Lotfollahi, ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'fitted', f"${krae['AARD_percent']:g}$"], [ZHANG_CHEN, 'fitted', '$6.8$'],
-         ['This work, MDEA model', '70 fitted, of which 4 \COtwo-free; 12 not fitted', num(kstat['present']['K82']['AARD_percent'], 2)]]
+         ['This work, MDEA model', r'70 fitted, of which 4 \COtwo-free; 12 not fitted', num(kstat['present']['K82']['AARD_percent'], 2)]]
 table('published-models', 'Pressure deviations of published models and of this work on identical observations.', ['Observations and model', 'Role of these observations in the fit of that model', r'AARD (\%)'], rows, [.50,.36,.10],
       notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently. \textsuperscript{b}The published values are identified with the 82 total pressures of Table~2 of Kuranov et al.\ by their count. \textsuperscript{c}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}.')
 # Published parameters of Hong et al. on identical MEA observations: retained scores, no model call.
@@ -814,14 +838,50 @@ amp_supplement = [rf"\SI{{{AMINES[2][1]['carbamate-anion/dispersion_energy_over_
                   f"{f2se['pair/carbamate-anion/water/k_ij']:.4f}", f"{aunc['conditional_standard_error']['AMP-hydrolysis-a']:.3f}",
                   f"{acost[0]:.4f}", f"{(afixed - aslope) / aslope_se:.2f}", f"{acost[0] - afreecost:.2f}", f"{aloaded[0]:.2f}", f"{aloaded[1]:.2f}",
                   rf"{asearch['supplied_minimum_tpd'] * 1e4:.2f}\times10^{{-4}}", f"{afk(353.22):.3f}", f"{afk(393.15):.3f}", ', '.join(map(str, aciftja[:-1])) + f' and {aciftja[-1]}']
-stated = {'main.tex': [mea, amp, dea, f"the {escore['112 current-not-fitted pressures'][1]} not fitted {f1(escore['112 current-not-fitted pressures'][0])}"], 'sections/introduction.tex': [mea],
-          'sections/conclusion.tex': [mea, dea, mdea, amp, outside, ours, theirs],
-          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f'{searched-1} of the {searched}', *amp_main, *hong_main,
-                                            f"AARD of {float(dev['Cai']['AARD_percent']):.1f}", f"their bias equals their AARD, {f1(kur['True']['AARD_percent'])}",
-                                            rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states"],
-          'sections/mea_system_modeling_results.tex': bands_main + [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
-          'submission/highlights.txt': [mea + '%', f'{amp}–{dea}%', ours + '%', theirs + '%'],
-          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test"]}
+# Prose values of the story pass (#429): each string repeats a table or retained-record value and is rebuilt from it here.
+W420 = MEA + 'objective-weights-420/'
+ecost = stage['MEA']['rss'] / 2  # the objective value is half the weighted sum of squares
+wcai = [float(r['cost']) for r in read(W420 + 'MEA/contributions.csv') if r['group'] == 'Cai']
+wband = [float(r['stage_SE']) / float(r['value']) for r in read(W420 + 'MEA/prediction-bands.csv') if r['group'] == 'common149: partial_pressure']
+assert len(wcai) == 2 and len(wband) == escore['47 current-fitted pressures'][1]
+pair = rf'{afree_loaded} and {amp}\,\%'
+nsplit, nsearch = aclass['counts']['confirmed'], asearch['states']
+fatt = fixedp['attempts'][0]
+assert fixedp['outcome'] == 'confirmed split' and fatt['confirmed'] and fatt['densities_mol_m3'][1] > fatt['densities_mol_m3'][0]
+fdense = 100 * fatt['amounts_mol'][1] / sum(fatt['amounts_mol'])
+sci = lambda v, d: (lambda m, e: rf'{float(m):.{d}f}\times10^{{{int(e)}}}')(*f'{v:.{d}e}'.split('e'))
+dp = lambda g, role='fitted': [dpair[g, role][m]['AARD_percent'] for m in ('reference', 'candidate')]
+r4q = lambda k: (abs(r4[k]['delta_ln_K4']), r4[k]['SE_ln_K4'], float(r4shift[k][313.15]['K4_ratio']))
+r4T = lambda k, f: [abs(float(r4shift[k][T][f])) for T in (298.15, 313.15, 393.15)]
+assert r4[k := 'dea']['delta_ln_K4'] < 0 < r4['amp']['delta_ln_K4'] and r4['amp']['delta_h_J_mol'] == r4['amp']['bounds']['enthalpy'][0]
+cother = [v for k, v in cgm.items() if k != 'P0' and not k.endswith('-refit')]
+dcation, mcation = AMINES[0][1], AMINES[1][1]
+stated = {'main.tex': [mea, dea, pair, f'objective values of {f1(afreecost)} and {f1(acost[0])}', f'gives {nsplit} calculated liquid--liquid splits', f'none in {nsearch} finite phase-stability searches', rf"\SI{{{fixedp['P_Pa'] / 1e6:.1f}}}{{\mega\pascal}}"],
+          'sections/introduction.tex': [mea, pair],
+          'sections/conclusion.tex': [mea, dea, mdea, pair, f'{nsplit} confirmed liquid--liquid splits', f'none in {nsearch} finite searches', rf"\SI{{{fixedp['P_Pa'] / 1e6:.3f}}}{{\mega\pascal}}"],
+          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f'{searched-1} of the {searched}', *amp_main, *hong_main, *bands_main[1:],
+                                            f"their bias equals their AARD, {f1(kur['True']['AARD_percent'])}",
+                                            rf"Of the \num{{{msearch['states']}}} MDEA searches, {msum['unavailable_searches']} did not finish, {next(c['count'] for c in mstability['unavailable_by_cause'] if c['cause'] == 'pressure reference')} of them at grid states",
+                                            f'objective value of {afreecost:.2f}', f'the objective value is {acost[0]:.2f}', rf'\SI{{{aslope:.0f}}}{{\kelvin}}$ and a conditional standard error of \SI{{{aslope_se:.0f}}}{{\kelvin}}', f'{(afixed - aslope) / aslope_se:.2f} standard errors away',
+                                            rf'from ${afk(353.22):.3f}$ at \SI{{353}}{{\kelvin}} to ${afk(393.15):.3f}$', f'all {nsearch} searches finish', f'from {mcost[1]} to {mcost[0]}',
+                                            rf"\SI{{{fixedp['P_Pa'] / 1e6:.3f}}}{{\mega\pascal}}", f"${sci(fatt['Gibbs_decrease_over_RT_mol'], 3)}$ mol", f"${sci(fatt['numerical_error_over_RT_mol'], 1)}$ mol", rf'{fdense:.1f}\,\% of the moles',
+                                            rf"from {dp('Horstmann heat')[0]:.0f} to {f1(dp('Horstmann heat')[1])}\,\%", rf"from {f1(dp('Horstmann VLE')[0])} to {f1(dp('Horstmann VLE')[1])}\,\%", rf"by {f1(dp('Lawson')[1])} instead of {f1(dp('Lawson')[0])}\,\%",
+                                            rf"the {dpair['outside', 'not fitted']['reference']['rows']} \COtwo partial pressures outside the fit deviate by {f1(dp('outside', 'not fitted')[1])} instead of {f1(dp('outside', 'not fitted')[0])}\,\%", rf"by {f1(dp('Carson')[1])} instead of {f1(dp('Carson')[0])}\,\%",
+                                            *(rf'by ${v:.3f}\pm{se:.3f}$, a factor of {ratio:.3f}' for v, se, ratio in map(r4q, ('dea', 'amp'))), rf"$\num{{{r4['dea']['delta_h_J_mol']:.0f}}}\pm\SI{{{r4['dea']['SE_h_J_mol']:.0f}}}{{\joule\per\mole}}$", rf"\SI{{{r4['amp']['delta_h_J_mol']:.0f}}}{{\joule\per\mole}}",
+                                            rf'{mea}\,\% from', rf'{dea}\,\% from', rf'{mdea}\,\% from', rf'{amp}\,\% from', rf"it deviates by {f1(kstat['present']['K82']['AARD_percent'])}\,\%", rf'by {ours}\,\%, against {theirs}\,\%',
+                                            rf'from {f1(bdea[0])} to {f1(bdea[1])}\,\% for DEA and from {f1(bmdea[0])} to {f1(bmdea[1])}\,\% for MDEA', f"by {carm['M1']['delta']:.2f} at fixed parameters", f"by {carm['M3']['delta']:.1f}, which a refit"],
+          'sections/mea_system_modeling_results.tex': bands_main[:1] + [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}",
+                                            f"ratios is {cgm['P0']:.3f}", f'between {min(cother):.3f} and {max(cother):.3f}', f"by {-crefit['M3-refit']['delta_cost']:.3f} but also lowers the ratio, to {cgm['M3-refit']:.3f}", rf'{100 * min(wband):.1f}--{100 * max(wband):.1f}\,\%'],
+          'sections/data_methods.tex': [rf"{100 * sum(wcai) / ecost:.1f}\,\% of the objective value, {ecost:.2f}", f"leaves {stage['MEA']['na']} observations and {stage['MEA']['stage_denominator']} residual degrees of freedom", f"leaves {stage['MDEA']['na']} and {stage['MDEA']['stage_denominator']}",
+                                        rf"by {100 * (stage['MEA']['SE_multiplier'] - 1):.1f}\,\% and those of MDEA by {100 * (stage['MDEA']['SE_multiplier'] - 1):.1f}\,\%"],
+          'sections/epc_saft_equation_of_state.tex': [rf"\SI{{{dcation['protonated-diethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{DEAH+}} and \SI{{{mcation['protonated-methyldiethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{MDEAH+}}",
+                                                      rf"of {veq(dcation, 'protonated-diethanolamine'):.3f} and \SI{{{veq(mcation, 'protonated-methyldiethanolamine'):.3f}}}{{\angstrom}}"],
+          'submission/highlights.txt': [f'MEA {mea}%', f'DEA {dea}%', f'MDEA {mdea}%', f'AMP {amp}%', f'{nsplit} calculated splits'],
+          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test",
+                             'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'delta_ln_K4')) + ' below', 'standard errors of ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'SE_ln_K4')), 'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('amp', 'delta_ln_K4')) + ' above',
+                             rf"\SI{{{f2se['component/carbamate-anion/dispersion_energy_over_k']:.2f}}}{{\kelvin}}", f"by {carm['M1']['delta']:.3f}", f"by {carm['M3']['delta']:.3f}", f"falls {-crefit['M3-refit']['delta_cost']:.3f} below", f"falls to {cgm['M3-refit']:.4f}", f'tested changes is {max(cother):.4f}',
+                             f'contribute {wcai[0]:.3f} and {wcai[1]:.3f} to the objective value of {ecost:.3f}, together {100 * sum(wcai) / ecost:.2f}', f"factor of that equation is {stage['MEA']['stage_variance']:.8f}", f"MDEA variance factor is {stage['MDEA']['stage_variance']:.8f}", f"would give {stage['MDEA']['variance']:.8f}",
+                             f"{fixedp['P_Pa'] / 1e6:.3f} MPa", rf'{fdense:.3f}\,\% of the moles', f"${sci(fatt['Gibbs_decrease_over_RT_mol'], 5)}$ mol", rf"the {f2(kstat['present']['K82']['AARD_percent'])}\,\% of the MDEA model"]}
 # Water-bicarbonate refits: the main-text paragraph and the supplement text beside the table that final_rerun_tables.py writes from the same files.
 SB = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/'
 sbprof, sbsearch, sbcomp = read(SB + 'profile.json.gz'), read(SB + 'mdea-search-readback.json'), read(SB + 'mdea-comparison.json.gz')
@@ -835,9 +895,16 @@ sbfit, sbout = ([c['AARD_percent'] for c in sbcomp[g]['original']] for g in ('al
 sbmea = sbprof['searches'][repr(sblow['k'])]
 assert max(sbrise) <= sballow and max(abs(sbfit[2] - sbfit[0]), abs(sbout[2] - sbout[0])) < 0.05 and sbsearch['high']['counts']['confirmed_distinct_splits'] == 0
 assert all(sbprof['searches'][repr(p['k'])]['grid']['descent'] == sbprof['searches'][repr(p['k'])]['offset']['descent'] == sbprof['searches'][repr(p['k'])]['census']['descent'] == 0 for p in (sblow, sbhigh))
+sbkur = [c['AARD_percent'] for c in sbcomp['Kuranov']['original']]
+assert f1(sbkur[0]) == mdea
+sbmove = [rf'from {f1(sbkur[0])} to {f1(sbkur[1])}\,\%', rf'from {f1(sbout[0])} to {f1(sbout[1])}\,\%']
+stated['main.tex'] += sbmove + [f"introduces {WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]} splits"]
+stated['sections/conclusion.tex'] += sbmove + [f"at {sblow['k']:.4f} instead of {sbprof['center']['k']:.4f} raises the refitted MEA objective by {sbrise[0]:.3f}", f"in {sbmea['grid']['states'] + sbmea['offset']['states'] + sbmea['census']['states']} searches"]
+stated['sections/mea_system_modeling_results.tex'] += [f"The {sbmea['grid']['states'] + sbmea['offset']['states'] + sbmea['census']['states']} finite searches"]
+stated['submission/highlights.txt'] += [f'from {f1(sbkur[0])} to {f1(sbkur[1])}%']
 stated['sections/transfer_results.tex'] += [f"{sbcorr['pair/carbamate-anion/water/k_ij']:.3f} with the carbamate--water and ${sbcorr['pair/protonated-monoethanolamine/water/k_ij']:.3f}$ with",
     f"These values, {sblow['k']:.4f} and its upper bound {sbhigh['k']:.1f} against {sbprof['center']['k']:.4f} in the MEA model, raise the refitted MEA objective by {sbrise[0]:.3f} and {sbrise[1]:.3f}, within {sballow:.4f}",
-    rf"deviate by {f1(sbfit[1])} instead of {f1(sbfit[0])}\,\% and those outside the objective by {f1(sbout[1])} instead of {f1(sbout[0])}\,\%",
+    rf"deviate by {f1(sbkur[1])} instead of {f1(sbkur[0])}\,\%, while the MDEA pressures outside the objective deviate by {f1(sbout[1])} instead of {f1(sbout[0])}\,\%",
     f"{sbsearch['low']['counts']['unavailable_records']} instead of {msum['unavailable_searches']} searches do not finish, and {WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]} liquid--liquid splits are confirmed"]
 stated['supplement.tex'] += [f"at the {sbmea['grid']['states'] + sbmea['offset']['states']} liquid and {sbmea['census']['states']} liquid--vapor states",
     f"At the lower bound, ${sbprof['points']['-0.5']['k']:g}$, the objective rises by {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}, so the midpoint {sblow['k']:.4f} was taken"]

@@ -1,4 +1,4 @@
-\section{Thermodynamic model}\label{sec:theory}
+\section{Model and transfer design}\label{sec:theory}
 % P:theory-01
 Each liquid contains molecular \COtwo, water, the amine A and its cation \ce{AH+}, together with bicarbonate, carbonate, hydronium and hydroxide; the MEA, DEA and AMP liquids also contain the carbamate \ce{ACOO-}, which MDEA does not form.
 Only \COtwo, water and the molecular amine enter the vapor, and one ePC-SAFT equation of state describes both phases.
@@ -23,7 +23,7 @@ Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative per
 % P:theory-02a
 The hard-chain and dispersion terms are those of Gross and Sadowski \cite{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
 The hard-sphere diameter $d_i$ of a neutral species or chain cation depends on temperature \cite{Gross2001}, with the water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$ (Section~\ref{supp-sec:s-parameters}).
-A single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.
+A single-sphere ion has the temperature-independent packing diameter $d_i=0.88\sigma_i$ \cite{Held2014}.
 
 % P:theory-contributions-03
 The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the pair energy is
@@ -66,7 +66,7 @@ The Born term has the solvation-shell and dielectric-saturation form of Figiel e
 \end{equation}
 Here \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell, \(\varepsilon_{\mathrm{ion}}=8\) is the permittivity of the region between them, and \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\).
 The solvation factor is \(f_k=1.5\) for water \cite{Figiel2025} and 1 for every other component.
-Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents; here it runs over all components, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\) and the shell diameter changes with loading.
+Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents and fitted solvation factors for water, methanol and ethanol; here the average runs over all components and the amines and \COtwo have unit factors, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\) and the shell diameter changes with loading (\cref{sec:discussion-interpretation} gives the sensitivity).
 
 % P:theory-05
 The bulk permittivity has the Schreckenberg form reported by Yang et al.\ \cite{Yang2024}:
@@ -84,6 +84,7 @@ Ions affect the permittivity only through the phase volume and the neutral amoun
 % P:theory-shared
 Six species are common to the four amines: \COtwo, water and the four inorganic ions.
 Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are determined once, with MEA, and are held fixed for DEA, MDEA and AMP; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
+This is the transfer design: every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
 Interactions of an amine species with a shared species are amine-specific.
 Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007,Schick2023,Pabsch2020}.
 
@@ -92,6 +93,7 @@ MEA and AMP are two-site chains and DEA and MDEA four-site chains; the MEA, DEA 
 No amine species bonds with \COtwo.
 The MEA and AMP cations and the three carbamates are single spheres; the DEA and MDEA cations keep the segment count and association sites of their amine, with zero self-association energy.
 For every amine ion the Debye--H\"uckel and Born diameters equal the segment diameter, so no amine ion has a separately fitted Born diameter.
+For the two chain cations the tied Born diameter is therefore that of one segment, \SI{2.948}{\angstrom} for \ce{DEAH+} and \SI{3.655}{\angstrom} for \ce{MDEAH+}, not the volume-equivalent diameter $\sigma(m^{\mathrm{seg}})^{1/3}$ of 5.108 and \SI{5.641}{\angstrom}.
 These diameters define the parameterization and are not measured ion sizes.
 
 % P:theory-permittivity-inputs
@@ -110,12 +112,13 @@ Bubble states equate the chemical potentials of \COtwo, water and the molecular 
 \end{equation}
 With the fugacity coefficient $\ln\phi_i=\mu_i^{\mathrm{res}}/(RT)-\ln Z$ and compressibility factor $Z=P/(\rho RT)$, the activities are
 \begin{equation}
- a_w=x_w\frac{\phi_w(T,P,\boldsymbol x)P}{\phi_w^{\mathrm{pure}}(T,P^\circ)P^\circ},\qquad
- a_i=\frac{x_i}{M_wm^\circ}\frac{\phi_i(T,P,\boldsymbol x)P}{\phi_i^{\infty,w}(T,P^\circ)P^\circ}\quad(i\ne w),
+ a_w=x_w\frac{\phi_w(T,P,\boldsymbol x)P}{\phi_w^{\mathrm{pure}}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}},\qquad
+ a_i=\frac{x_i}{M_wm^\circ}\frac{\phi_i(T,P,\boldsymbol x)P}{\phi_i^{\infty,w}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}}\quad(i\ne w),
  \label{eq:activities}
 \end{equation}
-where $M_w$ is the molar mass of water and $m^\circ=\SI{1}{\mole\per\kilogram}$.
-With the rational activity coefficient normalized at infinite dilution in water, $\gamma_i^*=\phi_i(T,P,\boldsymbol x)P/[\phi_i^{\infty,w}(T,P^\circ)P^\circ]$, and the molality $m_i=x_i/(x_wM_w)$, the molality activity coefficient is $\gamma_i^m=x_w\gamma_i^*$, so the factor $x_w$ cancels and $a_i=\gamma_i^mm_i/m^\circ$ equals the form printed in \cref{eq:activities}.
+where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src},r}$ is the pressure at which the reference states of reaction $r$ are evaluated: \SI{1.734}{\mega\pascal} for R1--R3 and \SI{0.1}{\mega\pascal} for R4 and R5.
+An activity is thus defined for the reaction that uses it, and these source pressures are distinct from the ideal-gas standard pressure $P^\circ=\SI{0.1}{\mega\pascal}$ of the caloric functions (\cref{sec:caloric-model}).
+With the rational activity coefficient normalized at infinite dilution in water, $\gamma_i^*=\phi_i(T,P,\boldsymbol x)P/[\phi_i^{\infty,w}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}]$, and the molality $m_i=x_i/(x_wM_w)$, the molality activity coefficient is $\gamma_i^m=x_w\gamma_i^*$, so the factor $x_w$ cancels and $a_i=\gamma_i^mm_i/m^\circ$ equals the form printed in \cref{eq:activities}.
 The infinite-dilution reference is evaluated along a charge-neutral dilution path in pure water; only the charge-neutral combinations of species that appear in the reactions require it.
 Every constant is applied on one aqueous-molality basis (Section~\ref{supp-sec:s-parameters}).
 
@@ -144,6 +147,6 @@ Total enthalpy follows the same Helmholtz energy and reaction standard states as
  A=A^{\mathrm{ig}}+A^{\mathrm{res}}.
  \label{eq:total-enthalpy}
 \end{equation}
-Neutral ideal-gas functions supply the caloric reference, and the ionic functions follow from the equilibrium-constant correlations through $\Delta_rh^\circ=RT^2\,\mathrm{d}\ln K_r/\mathrm{d}T$; no separate reaction-enthalpy term is added (Section~\ref{supp-sec:s-files}).
+Neutral ideal-gas functions supply the caloric reference, and the ionic functions follow from the equilibrium-constant correlations through $\Delta_rh_{P^\circ}^{\mathrm{ig}}=RT^2\,\mathrm{d}\ln K_{r,P^\circ}^{\mathrm{ig}}/\mathrm{d}T$, where $K_{r,P^\circ}^{\mathrm{ig}}$ is the constant of reaction $r$ converted from its aqueous reference states at $P_{\mathrm{src},r}$ to ideal gases at $P^\circ$; no separate reaction-enthalpy term is added (Section~\ref{supp-sec:s-files} gives the conversion and a worked example).
 Equilibrium heat capacity is $C_P=(\mathrm{d}H_{\mathrm{eq}}/\mathrm{d}T)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
 Density is the mass of the apparent components divided by the equilibrium liquid volume, without volume translation, and a binary excess enthalpy subtracts the mole-fraction-weighted pure-liquid enthalpies from the mixture molar enthalpy.
