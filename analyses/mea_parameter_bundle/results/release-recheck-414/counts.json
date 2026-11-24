@@ -618,7 +618,10 @@
       "available": 1271,
       "descent": 0
     },
-    "matched": false
+    "matched": false,
+    "amendment_2": "pass with 1 availability gain",
+    "gain_count": 1,
+    "loss_count": 0
   },
   "MDEA reported stability": {
     "retained": {
@@ -628,24 +631,35 @@
       "distinct_liquid_splits": 0
     },
     "release": null,
-    "matched": null
+    "matched": null,
+    "status": "stopped during the first loaded-state search",
+    "evaluated_release_states": 1
   },
   "MDEA CO2-free": {
     "retained": {
       "states": 78,
       "available": 78,
-      "descent": 0
+      "descent": 0,
+      "minimum": 0.0
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "states": 78,
+      "available": 78,
+      "descent": 0,
+      "minimum": 0.0
+    },
+    "matched": true
   },
   "MDEA critical-k": {
     "retained": {
       "temperatures": 33,
       "compositions": 5490
     },
-    "release": null,
-    "matched": null
+    "release": {
+      "temperatures": 33,
+      "compositions": 5490
+    },
+    "matched": true
   },
   "AMP fixed-slope stability": {
     "retained": {
@@ -709,5 +723,50 @@
     "retained": 750,
     "release": 750,
     "matched": true
+  },
+  "DEA #398 fitted replay availability": {
+    "retained": 80,
+    "release": 80,
+    "matched": true
+  },
+  "DEA #398 comparison availability": {
+    "retained": 299,
+    "release": 299,
+    "matched": true
+  },
+  "MDEA CO2-free hull": {
+    "retained": {
+      "onset_bracket_K": [
+        null,
+        null
+      ],
+      "gaps": 0,
+      "unavailable": 0,
+      "temperatures": 32
+    },
+    "release": {
+      "onset_bracket_K": [
+        null,
+        null
+      ],
+      "gaps": 0,
+      "unavailable": 0,
+      "temperatures": 32
+    },
+    "matched": true
+  },
+  "MDEA first loaded-state search": {
+    "retained": {
+      "available": false,
+      "resolved_descent": true,
+      "witnesses": 5
+    },
+    "release": {
+      "available": false,
+      "resolved_descent": true,
+      "witnesses": 5
+    },
+    "matched": true,
+    "gate": "fail: resolved descent"
   }
 }

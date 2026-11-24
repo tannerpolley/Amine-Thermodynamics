@@ -1,6 +1,6 @@
 {
   "issue": 414,
-  "disposition": "Stopped at the DEA exact stability-search availability count gate.",
+  "disposition": "Stopped at the MDEA resolved-descent gate in the first reported-point stability case replayed under Amendment 2.",
   "base": "a6cbc25b4",
   "branch": "issue-414-recalculate-the-reported-mea-dea-mdea",
   "parameter_record": {
@@ -91,19 +91,34 @@
       "evidence": "counts.json"
     },
     {
-      "gate": "DEA exact reported-point stability search counts",
-      "result": "fail",
-      "evidence": "dea-comparison.json:state,counts"
+      "gate": "DEA search counts and availability under Amendment 2",
+      "result": "pass with recorded gain",
+      "evidence": "dea-comparison.json:availability_amendment_2"
     },
     {
       "gate": "DEA #398 comparison rows and presentation",
-      "result": "not run",
-      "evidence": "summary.json:stop"
+      "result": "pass",
+      "evidence": "dea-comparison.json:comparison_398,presentation"
     },
     {
-      "gate": "MDEA bounded-point and binary-critical checks and counts",
-      "result": "not run",
-      "evidence": "counts.json"
+      "gate": "MDEA 78 CO2-free searches and 32-temperature hull checks",
+      "result": "pass",
+      "evidence": "mdea-comparison.json:binary"
+    },
+    {
+      "gate": "MDEA #343 critical bound",
+      "result": "pass",
+      "evidence": "mdea-comparison.json:critical"
+    },
+    {
+      "gate": "MDEA reported-point resolved descent",
+      "result": "fail",
+      "evidence": "mdea-comparison.json:stop_state"
+    },
+    {
+      "gate": "MDEA full availability, liquid-split counts, and retain step",
+      "result": "not reached",
+      "evidence": "summary.json:stop"
     },
     {
       "gate": "AMP fixed-slope searches, bank and counts",
@@ -121,7 +136,7 @@
       "evidence": "summary.json:conda"
     },
     {
-      "gate": "250-line executable ceiling from a6cbc25b4",
+      "gate": "400-line executable ceiling from a6cbc25b4",
       "result": "pass",
       "evidence": "summary.json:change_accounting"
     }
@@ -236,7 +251,10 @@
     ],
     "stability": "Every supplied parent had unchanged exact coordinates within the release replay, and all requested trials were evaluated. The final no-resolved-descent assertion passed.",
     "stripper": "Historical source and parameter hashes, installed wheel, Table 5 pressure, same-wheel reproduction limit, and all mixed-input band-table assertions passed.",
-    "dea": "Route verified the shared inputs and wheel SHA and installed bytes. rerun.error passed fitted row identity, count, status and tolerance assertions, and the 1e-8 replay limit passed. reduce, uncertainty, curves and search completed. The recheck exact availability assertion failed."
+    "dea": "Route verified the shared inputs and wheel SHA and installed bytes. rerun.error passed fitted row identity, count, status and tolerance assertions, and the 1e-8 replay limit passed. reduce, uncertainty, curves and search completed. The recheck exact availability assertion failed. Amendment 2 accepts the sole availability gain. The #398 fitted 80-row assertion and 299-row all-row availability and prediction assertions passed. present_current.py completed with its original row counts, identity sets and availability assertions.",
+    "mdea_binary": "Passed the recorded CO2-free search and binary-hull counts.",
+    "mdea_critical": "Producer fine-grid availability and bisection bracket assertions passed across 33 temperatures. Every retained critical-k row matched exactly.",
+    "mdea_search": "At the first retained descent case the unchanged Route.grid completed and the Amendment 2 recheck assertion fired. Both builds returned CentralSolveUnavailable and five resolved witnesses. The same-case liquid-labelled witnesses coincide with vapor-labelled witnesses by the retained producer distance criterion."
   },
   "largest_relative_by_amine": {
     "MEA": {
@@ -274,7 +292,17 @@
         "reference_cost": 8.08296822829914
       }
     },
-    "MDEA": null,
+    "MDEA": {
+      "relative": 0.9291893803462478,
+      "comparison": "mdea-comparison.json",
+      "field": "uncertainty",
+      "location_new_retained": [
+        "search-row.json:/uncertainty",
+        2.4555868894834403e-11,
+        3.467822907765388e-10
+      ],
+      "scope": "Critical-k replay and one loaded-state stability row."
+    },
     "AMP": null
   },
   "mea_fitted_replay": {
@@ -304,8 +332,7 @@
   },
   "not_recalculated": [
     "Retained reduced-refit/evidence/F2 and F2 replay values used in the partly recalculated stripper band table.",
-    "DEA #398 comparison-point replay and reduction, and DEA presentation.",
-    "MDEA reported-point calculations and #343 critical-k replay",
+    "The remaining 11823 MDEA reported-point stability searches and the retain step, including MDEA bounded-point row reductions, uncertainty and curves.",
     "AMP fixed-slope reported-point calculations and AMODEL same-row deviations",
     "Display regeneration, full display-input inventory, text diffs and number-source key check",
     "Conda spot check",
@@ -333,7 +360,11 @@
     "stripper-amendment-1-serial": 24.92,
     "stripper-amendment-1": 12.34,
     "stripper-amendment-1-retry": 12.81,
-    "dea-amendment-1": 578.66
+    "dea-amendment-1": 578.66,
+    "dea-398-amendment-2": 13.05,
+    "mdea-binary-amendment-2": 5.06,
+    "mdea-critical-amendment-2": 320.88,
+    "mdea-search-amendment-2": 3.94
   },
   "runs": {
     "checks": {
@@ -1075,6 +1106,128 @@
         "pressure": 8700.470551614304
       },
       "exit_status": 1
+    },
+    "dea-398-amendment-2": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "dea",
+        "comparison",
+        "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398"
+      ],
+      "seconds": 12.93313749400113,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "row": "lawson-1976:0",
+        "T_K": 310.92777777777775,
+        "feed": {
+          "water": 17.50797101127487,
+          "diethanolamine": 1.0,
+          "carbon-dioxide": 0.408
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.8474111129762605e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 2.3170678165471489e-10, amplification 0",
+        "pressure": 8719.566600731492
+      },
+      "output": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398",
+      "linear_solver": "ma57"
+    },
+    "mdea-binary-amendment-2": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mdea",
+        "binary",
+        "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2"
+      ],
+      "seconds": 4.973605045999648,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "row": "fit:0",
+        "T_K": 313.24,
+        "feed": {
+          "water": 27.840523152669267,
+          "methyldiethanolamine": 1.0,
+          "carbon-dioxide": 0.7853846925468954
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 2.1316282072803006e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 2.4550283715827174e-10, amplification 0",
+        "pressure": 71137.11472295279
+      },
+      "output": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "linear_solver": "ma57"
+    },
+    "mdea-critical-amendment-2": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mdea",
+        "critical",
+        "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2"
+      ],
+      "seconds": 320.7729702479992,
+      "output": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "row": "fit:0",
+        "T_K": 313.24,
+        "feed": {
+          "water": 27.840523152669267,
+          "methyldiethanolamine": 1.0,
+          "carbon-dioxide": 0.7853846925468954
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 2.2737367544323206e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 2.4530634311633718e-10, amplification 0",
+        "pressure": 79857.3170907147
+      },
+      "linear_solver": "ma57",
+      "exit_status": 0
+    },
+    "mdea-search-amendment-2": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mdea",
+        "search",
+        "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2"
+      ],
+      "seconds": 3.829367070000444,
+      "output": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "row": "fit:0",
+        "T_K": 313.24,
+        "feed": {
+          "water": 27.840523152669267,
+          "methyldiethanolamine": 1.0,
+          "carbon-dioxide": 0.7853846925468954
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 2.1316282072803006e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 2.4550283715827174e-10, amplification 0",
+        "pressure": 71137.11472295279
+      },
+      "linear_solver": "ma57",
+      "exit_status": 1
     }
   },
   "commands": {
@@ -1091,19 +1244,27 @@
       "compare_dea": "compare analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/compare-413 analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/compare-retained-413 analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/dea-comparison-readback.json",
       "compare_dea_deviations": "python analyses/wheel_recheck_391.py deviations analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/deviations.json analyses/dea_transfer/results/refit-413/deviations.json analyses/dea_transfer/results/runs/release-recheck-414-amendment-1/dea-deviations-readback.json",
       "compare_environment": "PYTHONHASHSEED=0"
+    },
+    "amendment_2": {
+      "dea_398": "dea comparison analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398",
+      "mdea_binary": "mdea binary analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "mdea_critical": "mdea critical analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "mdea_search": "mdea search analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2",
+      "compare_mdea": "PYTHONHASHSEED=0 python analyses/release_recheck_414.py compare analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/compare-release analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/compare-retained analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/mdea-comparison-readback.json",
+      "compare_dea_presentation": "PYTHONHASHSEED=0 python analyses/release_recheck_414.py compare analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398/compare-presentation analyses/dea_transfer/results/refit-413 analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398/presentation-comparison-readback.json"
     }
   },
-  "claim": "MEA passed the amended stability and stripper replay gates. DEA fitted values passed the replay limit and the exact DEA availability count changed. This is fixed-parameter numerical verification on CPython 3.13 linux-x86_64 with MA57 and leaves the four-amine release claim open.",
+  "claim": "Fixed-point numerical verification on CPython 3.13 linux-x86_64 using MA57. MEA passed its replay and search gates. DEA recorded one newly available search with zero descents. MDEA reproduced the CO2-free search and the #343 critical bound. The MDEA loaded-state stop leaves the full four-amine release claim open.",
   "change_accounting": {
     "base": "a6cbc25b4",
-    "gross_added_executable_lines": 231,
-    "ceiling": 250,
-    "headroom_lines": 19,
+    "gross_added_executable_lines": 345,
+    "ceiling": 400,
+    "headroom_lines": 55,
     "executable_files": 1,
     "tests_files": 0,
     "documents_files": 0,
     "generated_files": 0,
-    "retained_evidence_files": 8
+    "retained_evidence_files": 9
   },
   "comparison_readback": {
     "results_equal": true,
@@ -1115,7 +1276,10 @@
     "dea_deviation_groups": 240,
     "amendment_1_results_equal": true,
     "python_hash_seed": 0,
-    "hash_seed_reason": "The imported comparator uses set iteration for sample messages and tied maxima. Fixing the Python hash seed reproduces their reported locations."
+    "hash_seed_reason": "The imported comparator uses set iteration for sample messages and tied maxima. Fixing the Python hash seed reproduces their reported locations.",
+    "mdea_pairs": 2,
+    "dea_presentation_pairs": 8,
+    "amendment_2_results_equal": true
   },
   "resolved_stop": {
     "gate": "Exact census completion counts against stability-adopted-law/census.json",
@@ -1171,7 +1335,7 @@
       "relative_difference": 8.997357684958676e-13
     }
   },
-  "stop": {
+  "resolved_dea_stop": {
     "gate": "Exact DEA available stability-search count",
     "retained": 1270,
     "release": 1271,
@@ -1239,5 +1403,505 @@
       "supplied_minimum_tpd": null
     },
     "evidence": "dea-comparison.json:state"
+  },
+  "availability_gains": [
+    {
+      "amine": "DEA",
+      "state": {
+        "source_input": {
+          "source_key": "LawsonGarst1976",
+          "pdf_attachment_key": "APKXH9KU",
+          "source_locator": "Table VIII (CO2 only; 77 F rows 54.5 wt% per footnote a), PDF p.10, printed p.29",
+          "source_row": "2",
+          "T_F": "77",
+          "DEA_mass_percent": "54.5",
+          "alpha_mol_CO2_per_mol_DEA": "0.602",
+          "p_CO2_mmHg": "420"
+        },
+        "T_K": 298.15,
+        "retained": {
+          "key": "lawson-1976-viii:1:problem",
+          "seconds": 0.4560226920002606,
+          "status": "CentralSolveUnavailable",
+          "message": "trial 1 (unresolved): converged: residual 2.4202861936828413e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 19 iterations, contraction absent, floor 3.6289794889048999e-18, amplification 0; reconstruction destroys support",
+          "available": false,
+          "value": null,
+          "raw_minimum": 0.0,
+          "uncertainty": null,
+          "cause": "trial 1 (unresolved): converged: residual 2.4202861936828413e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 19 iterations, contraction absent, floor 3.6289794889048999e-18, amplification 0; reconstruction destroys support",
+          "event": "",
+          "no_descent_in_trial_set": false,
+          "completed": true,
+          "pressure_Pa": 92174.79495999427,
+          "witnesses": [],
+          "parent_kind": "Liquid",
+          "optimized_available": false,
+          "native_branch": "none",
+          "supplied_branch": "none",
+          "native_liquid_descent": false,
+          "liquid_liquid_split": false,
+          "descent": false,
+          "supplied_minimum_tpd": null
+        },
+        "release": {
+          "key": "lawson-1976-viii:1:problem",
+          "seconds": 0.2843650129998423,
+          "status": "Available",
+          "message": "SUCCESS: converged: residual 3.3953803215267999e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.403302856137007e-10, amplification 0",
+          "available": true,
+          "value": 0.0,
+          "raw_minimum": 2.842170943040401e-14,
+          "uncertainty": 1.5151201448043057e-10,
+          "cause": "",
+          "event": "",
+          "no_descent_in_trial_set": true,
+          "completed": true,
+          "pressure_Pa": 92174.79495999427,
+          "witnesses": [],
+          "parent_kind": "Liquid",
+          "optimized_available": true,
+          "native_branch": "none",
+          "supplied_branch": "none",
+          "native_liquid_descent": false,
+          "liquid_liquid_split": false,
+          "descent": false,
+          "supplied_minimum_tpd": null
+        }
+      },
+      "evidence": "dea-comparison.json:availability_amendment_2"
+    }
+  ],
+  "display_differences": {
+    "status": "not evaluated after MDEA stop",
+    "differences": null
+  },
+  "stop": {
+    "gate": "Amendment 2: any resolved descent",
+    "amine": "MDEA",
+    "key": "Merkley-capped:5:phase",
+    "T_K": 333.15,
+    "pressure_Pa": 1121000.0,
+    "MDEA_mass_percent": 60.0,
+    "retained_search": {
+      "key": "Merkley-capped:5:phase",
+      "seconds": 0.5486066500000106,
+      "status": "CentralSolveUnavailable",
+      "message": "distinct stationary minima have overlapping value intervals",
+      "available": false,
+      "value": null,
+      "raw_minimum": -0.6981491761544447,
+      "uncertainty": 3.467822907765388e-10,
+      "cause": "distinct stationary minima have overlapping value intervals",
+      "event": "distinct stationary minima have overlapping value intervals",
+      "no_descent_in_trial_set": false,
+      "completed": true,
+      "pressure_Pa": null,
+      "witnesses": [
+        {
+          "resolved_descent": true,
+          "kind": "Liquid",
+          "density_side": 2.0,
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "composition": [
+            0.9940365105829181,
+            0.005963085796983782,
+            1.7420443159915076e-68,
+            7.871405381233232e-237,
+            5.535280934768386e-175,
+            1.9204661478832531e-81,
+            4.0362009811731014e-07,
+            1.7420443159916997e-68
+          ],
+          "packing": 0.005497883419436947,
+          "branch": "liquid"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Liquid",
+          "density_side": 2.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829357,
+            0.0059630857969661544,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581195e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "liquid"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829357,
+            0.0059630857969661544,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581195e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829359,
+            0.005963085796966159,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581264e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829359,
+            0.005963085796966154,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.036200981158119e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        }
+      ],
+      "parent_kind": "Liquid",
+      "optimized_available": false,
+      "supplied_available": true,
+      "supplied_parent_pressure_Pa": 1121000.0,
+      "supplied_trial_evidence": [
+        {
+          "evidence": "evaluated",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.2175628943325083e-13,
+            "association_energy_estimate_over_rt": 4.319913073369726e-17,
+            "association_residual": 3.469446951953614e-18,
+            "association_site_pivot_ratio": 1.0028822769051757,
+            "association_site_rank": 8.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.2529387986440807e-10,
+            "donor_capacity_mol": 0.06210907880872009,
+            "donor_chemical_contraction_over_rt": -85.98829855978335,
+            "donor_correction_over_rt": -4.6074255521943996e-14,
+            "donor_pressure_row": -3.425560191981782e-15,
+            "donor_slope_over_rt": -0.6980817834103198,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "feasibility_error_estimate_over_rt": 7.893105935213206e-14,
+            "g_over_rt": -86.68638034319366,
+            "gradient_floor_max_si_columns": 4.3097101371454484e-17,
+            "input_reconstruction_l1": 8.676264357844205e-19,
+            "molar_density_mol_m3": 422.3990077376259,
+            "normalization_residual": 4.8954216247003085e-17,
+            "packing_fraction": 0.0054993419039854365,
+            "pressure_row": -7.046501160908145e-12,
+            "reconstruction_l1": 2.100203496503054e-82,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.9347445742196734e-13,
+            "tpd_over_rt": -0.6980817834102737,
+            "volume_m3_per_mol": 0.0023674298037677974
+          },
+          "message": "",
+          "phase": {
+            "resolved_descent": true,
+            "kind": "Liquid",
+            "density_side": 2.0,
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "composition": [
+              0.9949080114910891,
+              0.005091615727632178,
+              2.6109038634182183e-68,
+              1.1625105340199817e-236,
+              1.9880447525827678e-175,
+              2.432834881853735e-81,
+              3.7278127877491604e-07,
+              2.6109038634184617e-68
+            ],
+            "packing": 0.0054993419039854365,
+            "branch": "liquid"
+          }
+        }
+      ],
+      "supplied_trial_counts": {
+        "available": 2980,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "native_branch": "mixed",
+      "supplied_branch": "unresolved",
+      "native_liquid_descent": true,
+      "liquid_liquid_split": true,
+      "descent": true,
+      "supplied_minimum_tpd": -0.6980817834102737
+    },
+    "release_search": {
+      "key": "Merkley-capped:5:phase",
+      "seconds": 2.2762150109992945,
+      "status": "CentralSolveUnavailable",
+      "message": "stability density branch unresolved",
+      "available": false,
+      "value": null,
+      "raw_minimum": -0.6981491761544447,
+      "uncertainty": 2.4555868894834403e-11,
+      "cause": "stability density branch unresolved",
+      "event": "",
+      "no_descent_in_trial_set": false,
+      "completed": true,
+      "pressure_Pa": null,
+      "witnesses": [
+        {
+          "resolved_descent": true,
+          "kind": "Liquid",
+          "density_side": 2.0,
+          "support": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "composition": [
+            0.994036510582899,
+            0.0059630857969836665,
+            1.9176140256941735e-14,
+            8.66471491133468e-183,
+            5.0284909062126884e-229,
+            2.114017873853985e-27,
+            4.0362009811730236e-07,
+            1.5825491252234524e-122
+          ],
+          "packing": 0.005497883419436947,
+          "branch": "liquid"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Liquid",
+          "density_side": 2.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829357,
+            0.0059630857969661544,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581195e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "liquid"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829357,
+            0.0059630857969661544,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581195e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829359,
+            0.005963085796966159,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.0362009811581264e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        },
+        {
+          "resolved_descent": true,
+          "kind": "Vapor",
+          "density_side": 1.0,
+          "support": [
+            0,
+            1,
+            6
+          ],
+          "composition": [
+            0.9940365105829359,
+            0.005963085796966154,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4.036200981158119e-07,
+            0.0
+          ],
+          "packing": 0.0054978834194369915,
+          "branch": "vapor"
+        }
+      ],
+      "parent_kind": "Liquid",
+      "optimized_available": false,
+      "supplied_available": true,
+      "supplied_parent_pressure_Pa": 1121000.0,
+      "supplied_trial_evidence": [
+        {
+          "evidence": "evaluated",
+          "resolved_descent": false,
+          "quantities": {
+            "arithmetic_error_estimate_over_rt": 4.2175628943325083e-13,
+            "association_energy_estimate_over_rt": 4.319913073369726e-17,
+            "association_residual": 3.469446951953614e-18,
+            "association_site_pivot_ratio": 1.0028822769051757,
+            "association_site_rank": 8.0,
+            "charge_residual": 0.0,
+            "descent_error_estimate_over_rt": 1.2529387986440807e-10,
+            "donor_capacity_mol": 0.06210907880872009,
+            "donor_chemical_contraction_over_rt": -85.98829855978335,
+            "donor_correction_over_rt": -4.6074255521943996e-14,
+            "donor_pressure_row": -3.425560191981782e-15,
+            "donor_slope_over_rt": -0.6980817834103198,
+            "euler_defect_over_rt": 6.938893903907228e-18,
+            "feasibility_error_estimate_over_rt": 7.893105935213206e-14,
+            "g_over_rt": -86.68638034319366,
+            "gradient_floor_max_si_columns": 4.3097101371454484e-17,
+            "input_reconstruction_l1": 8.676264357844205e-19,
+            "molar_density_mol_m3": 422.3990077376259,
+            "normalization_residual": 4.8954216247003085e-17,
+            "packing_fraction": 0.0054993419039854365,
+            "pressure_row": -7.046501160908145e-12,
+            "reconstruction_l1": 2.100203496503054e-82,
+            "standard_error_estimate_over_rt": 0.0,
+            "summation_estimate_over_rt": 3.9347445742196734e-13,
+            "tpd_over_rt": -0.6980817834102737,
+            "volume_m3_per_mol": 0.0023674298037677974
+          },
+          "message": "",
+          "phase": {
+            "resolved_descent": true,
+            "kind": "Liquid",
+            "density_side": 2.0,
+            "support": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "composition": [
+              0.9949080114910891,
+              0.005091615727632178,
+              2.6109038634182183e-68,
+              1.1625105340199817e-236,
+              1.9880447525827678e-175,
+              2.432834881853735e-81,
+              3.7278127877491604e-07,
+              2.6109038634184617e-68
+            ],
+            "packing": 0.0054993419039854365,
+            "branch": "liquid"
+          }
+        }
+      ],
+      "supplied_trial_counts": {
+        "available": 2980,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "native_branch": "mixed",
+      "supplied_branch": "unresolved",
+      "native_liquid_descent": true,
+      "liquid_liquid_split": true,
+      "descent": true,
+      "supplied_minimum_tpd": -0.6980817834102737
+    },
+    "retained_batch_states": 11824,
+    "release_batch_states_evaluated": 1,
+    "evidence": "mdea-comparison.json:stop_state"
   }
 }

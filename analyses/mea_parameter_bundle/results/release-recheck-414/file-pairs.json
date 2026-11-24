@@ -1213,6 +1213,52 @@
         "conditional-uncertainty.json",
         "search-summary.json"
       ]
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398/replay.json:rows,cost",
+      "retained": "analyses/dea_transfer/results/retransfer-398/selection.json:chosen.optimizer_report.predictions,data_cost"
+    },
+    {
+      "run": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398/data-rows.json",
+      "retained": "analyses/dea_transfer/results/retransfer-398/paper-data.csv",
+      "match": "identity; value maps to predicted."
+    },
+    {
+      "run_root": "analyses/dea_transfer/results/runs/release-recheck-414-amendment-1-replay-398/compare-presentation",
+      "retained_root": "analyses/dea_transfer/results/refit-413",
+      "same_relative_file_names": [
+        "curve-data.json",
+        "deviations.json",
+        "group-deviations.csv",
+        "horstmann.csv",
+        "paper-data.csv",
+        "paper-summary.json",
+        "parameter-values.csv",
+        "range-deviations.csv"
+      ]
+    }
+  ],
+  "MDEA": [
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/binary-check.json",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/comparison.json:runs.fit-0.checks",
+      "scope": "Counts and minimum; full binary solver rows retained only in the 1.3.2 run."
+    },
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/critical-k.json",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/critical-k.json"
+    },
+    {
+      "run": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/first-retained-descent.json:release",
+      "retained": "analyses/mdea_mea_workflow/results/bounded-binary-411/stability.json:grid.unavailable_searches[key=Merkley-capped:5:phase]"
+    },
+    {
+      "run_root": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/compare-release",
+      "retained_root": "analyses/mdea_mea_workflow/results/runs/release-recheck-414-amendment-2/compare-retained",
+      "same_relative_file_names": [
+        "critical-k.json",
+        "search-row.json"
+      ]
     }
   ]
 }

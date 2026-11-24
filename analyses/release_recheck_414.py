@@ -180,7 +180,7 @@ def stripper(run, export):
     producer.table()
 
 
-def dea(run):
+def dea(action, run):
     base = ROOT / 'analyses/dea_transfer'
     sys.path.insert(0, str(base))
     import part_ii
@@ -188,9 +188,12 @@ def dea(run):
     import rerun
 
     part_ii.WHEEL, part_ii.SHA = pinned.WHEEL, pinned.SHA = WHEEL, WHEEL_SHA
-    chosen = load(base / 'results/refit-413/selection.json')['chosen']
+    previous = action == 'comparison'
+    reference = base / 'results' / ('retransfer-398' if previous else 'refit-413')
+    chosen = load(reference / 'selection.json')['chosen']
     point, native = chosen['parameters'], chosen['optimizer_report']
-    route = part_ii.Route(base / 'inputs/part-ii-346/f2-carbamate-413-route.json', run)
+    declaration = 'route-current.json' if previous else 'f2-carbamate-413-route.json'
+    route = part_ii.Route(base / 'inputs/part-ii-346' / declaration, run)
     record_identity(route.bind(point), run / 'solve.json', WHEEL_SHA)
     rows, available, cost = route.replay(point)
     ref = [dict(r, value=v) for r, v in zip(rows, native['predictions'][:len(rows)], strict=True)]
@@ -199,12 +202,121 @@ def dea(run):
     route.write('replay-errors.json', errors)
     assert available and max(errors['max_relative_prediction_error'], errors['relative_cost_error']) <= rerun.LIMIT, errors
     route.reduce(point)
+    if previous:
+        old = {r['identity']: float(r['predicted']) for r in load(reference / 'paper-data.csv')}
+        rows = route.result('data-rows.json')
+        assert len(rows) == len(old) == 299 and all(r['status'] == 'Available' for r in rows)
+        differences = [dict(identity=r['identity'], unit=r['unit'], T_K=r['T_K'], release=r['value'],
+                            retained=old[r['identity']], relative=abs(r['value'] / old[r['identity']] - 1)) for r in rows]
+        worst = max(differences, key=lambda r:r['relative'])
+        route.write('comparison-errors.json', dict(rows=len(rows), worst=worst, limit=rerun.LIMIT))
+        assert worst['relative'] <= rerun.LIMIT, worst
+        reported = run.with_name(run.name.removesuffix('-replay-398'))
+        check_output(reported)
+        shutil.copyfile(base / 'results/refit-413/selection.json', reported / 'selection.json')
+        subprocess.run([sys.executable, str(base / 'present_current.py'), str(reported), str(run / 'presentation'), str(run),
+                        'F2-carbamate', 'F0-carbamate', '413', 'inputs/part-ii-346/f2-carbamate-413-parameter-table-declarations.json'], check=True)
+        return
     route.uncertainty(point)
     route.curves(point)
     search = route.search(point)
     route.write('search-summary.json', search)
-    for key in ('states', 'available', 'descent'):
-        assert search['grid'][key] == chosen['search']['grid'][key], (key, search['grid'], chosen['search']['grid'])
+    search_gate(run, search, chosen['search'])
+
+
+def search_gate(run, release, retained):
+    new, old = release['grid'], retained['grid']
+    rows = {r['key']: r for r in load(run / 'search-0.json')}
+    before = {r['key']: r for r in old['unavailable_searches']}
+    after = {r['key']: r for r in new['unavailable_searches']}
+    gains = [dict(retained=before[k], release=rows[k]) for k in sorted(before.keys() - after.keys())]
+    losses = [after[k] for k in sorted(after.keys() - before.keys())]
+    descents = [r for r in rows.values() if r['descent'] or r.get('witnesses')]
+    write(run / 'availability.json', dict(gains=gains, losses=losses, descents=descents))
+    assert new['states'] == old['states'] and not losses and not descents, run / 'availability.json'
+    assert new['available'] == old['available'] + len(gains), (new['available'], old['available'], len(gains))
+
+
+def mdea_search_gate(route, point, out, retained):
+    try:
+        search_gate(route.out, load(out / 'stability.json'), load(retained / 'stability.json'))
+    finally:
+        evidence = load(route.out / 'availability.json')
+        affected = {r['release']['key'] for r in evidence['gains']}
+        affected.update(r['key'] for field in ('losses', 'descents') for r in evidence[field])
+        spec = route.bind(point)
+        states = {r['key']: dict(r, T_K=route.temperature(spec, r)) for r in route.states(spec) if r['key'] in affected}
+        write(out / 'affected-states.json', states)
+
+
+def mdea_descent_gate(producer, point, out, retained):
+    # The first retained descent is an exact reported-point case in the full search.
+    search = load(retained / 'stability.json')
+    recorded = search['descent_witnesses']['calculations'][0]
+    before = next((r for r in search['grid']['unavailable_searches'] if r['key'] == recorded['key']), None)
+    route = producer.Route(producer.DECLARATION, out / 'first-retained-descent')
+    shutil.copyfile(producer.OLD / 'split-record.json', route.out / 'split-record.json')
+    spec = route.bind(point)
+    state = next(r for r in route.states(spec) if r['key'] == recorded['key'])
+    measured, = route.grid(point, [state])
+    evidence = out / 'first-retained-descent.json'
+    write(evidence, dict(retained=before, retained_pressure_basis=recorded, release=measured,
+                         state=dict(state, T_K=route.temperature(spec, state))))
+    assert (before is not None or measured['available']) and not measured['descent'] and not measured.get('witnesses'), evidence
+
+
+def mdea(action, out):
+    import part_ii
+
+    part_ii.WHEEL, part_ii.SHA = WHEEL, WHEEL_SHA
+    base = ROOT / 'analyses/mdea_mea_workflow'
+    retained = base / 'results/bounded-binary-411'
+    path = base / 'scripts/bounded_binary_411.py'
+    runtime = out / 'route'
+    sys.path.insert(0, str(path.parent))
+    import bounded_binary_411 as producer
+
+    route = part_ii.Route(producer.DECLARATION, runtime)
+    for name in ('endpoint.json', 'comparison.json'):
+        copy = out / name
+        if not copy.exists():
+            shutil.copyfile(retained / name, copy)
+            copy.chmod(0o444)
+        assert copy.read_bytes() == (retained / name).read_bytes(), copy
+    point = load(out / 'endpoint.json')
+    identity = load(producer.OLD / 'start-0/endpoint.json') if action == 'critical' else point
+    record_identity(route.bind(identity), out / f'{action}-solve.json', WHEEL_SHA)
+    if action == 'binary':
+        result = producer.binary_check(route, point)
+        write(out / 'binary-check.json', result)
+        expected = load(retained / 'comparison.json')['runs']['fit-0']['checks']
+        assert all(result['native'][k] == expected['native'][k] for k in ('states', 'available', 'descent'))
+        assert result['hull'] == expected['hull']
+        return
+    assert action in ('search', 'retain', 'critical')
+    if action == 'search':
+        mdea_descent_gate(producer, point, out, retained)
+    source = path.read_text().replace("RESULTS = ANALYSIS/'results/bounded-binary-411'", f'RESULTS = Path({str(out)!r})')
+    source = source.replace('Route(DECLARATION)', f'Route(DECLARATION, Path({str(runtime)!r}))')
+    if action == 'retain':
+        route.reduce(point)
+    original = sys.argv[1]
+    try:
+        sys.argv[1] = action
+        exec(compile(source, str(path), 'exec'), dict(__name__='__main__', __file__=str(path)))
+    finally:
+        sys.argv[1] = original
+    if action == 'search':
+        mdea_search_gate(route, point, out, retained)
+    if action == 'critical':
+        expected, actual = (load(folder / 'critical-k.json') for folder in (retained, out))
+        assert all(actual[k] == expected[k] for k in ('compositions','pressure_Pa'))
+        bound = route.config['k_bound']
+        assert [r['T_K'] for r in actual['rows']] == [r['T_K'] for r in expected['rows']]
+        values = [next(r['k_no_gap'] for r in report['rows'] if r['T_K'] == bound['temperature_K']) - bound['margin']
+                  for report in (expected, actual)]
+        write(out / 'printed-bound.json', dict(retained=values[0], release=values[1], precision=4))
+        assert f'{values[0]:.4f}' == f'{values[1]:.4f}', values
 
 
 if __name__ == '__main__':
@@ -222,7 +334,9 @@ if __name__ == '__main__':
             if command == 'stripper':
                 stripper(run, Path(extra[0]).resolve())
             elif command == 'dea':
-                dea(run)
+                dea(action, run)
+            elif command == 'mdea':
+                mdea(action, run)
             else:
                 assert command == 'mea'
                 assert action in ('replay', 'evidence', 'uncertainty', 'comparison', 'weights', 'shared', 'checks', 'stability')
