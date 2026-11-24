@@ -51,6 +51,8 @@ CENSUS_A = (1e-5, .05, .1, .2, .256, .3, .4, .5, .6)
 
 def read(path):
     path = Path(path)
+    if path.suffix == '.json' and not path.is_file() and path.with_suffix('.json.gz').is_file():
+        path = path.with_suffix('.json.gz')
     return json.loads(gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_bytes())
 
 

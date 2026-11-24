@@ -56,6 +56,26 @@ def interval(job):
     return k.heat(T, a, b)
 
 
+def heat_reference(evidence):
+    check = [dict(record_id=r['record_id'], T_K=float(r['T_K']), previous_loading=float(r['previous_loading']),
+                  loading=float(r['loading']), retained=float(r['predicted']))
+             for r in rows(evidence / 'kim2007-heat-pathways/kim-heat.csv') if float(r['T_K']) == 393.15]
+    return check + [dict(record_id=r['id'], T_K=float(r['T_K']), previous_loading=0.,
+                         loading=float(r['loading']), retained=-float(r['predicted_kJ_mol']))
+                    for r in rows(evidence / 'heat.csv') if r['role'] == 'fitted']
+
+
+def check_heat_reproduction(reproduction, reference):
+    differences = []
+    for row, expected in zip(reproduction['rows'], reference, strict=True):
+        assert row['status'] == 'available' and all(row[k] == v for k, v in expected.items()), row
+        difference = abs(row['replayed'] - expected['retained']) / abs(expected['retained'])
+        assert row['relative_difference'] == difference, row
+        differences.append(difference)
+    worst = max(differences)
+    assert worst == reproduction['max_relative_difference'] and worst <= 1e-10, worst  # #340 limit
+
+
 def replay(export, record=None, record_sha=RECORD_SHA, evidence=None, out=None, *, control=True, kim_2007=False,
            producer_sha=KIM_PRODUCER_SHA):
     global k
@@ -78,12 +98,8 @@ def replay(export, record=None, record_sha=RECORD_SHA, evidence=None, out=None, 
     k.c, k.CACHE, k.PROBLEMS = c, {}, {}
     k.RUNTIME = out / 'runtime'
     # Reproduction: retained F2 Kim 2007 393.15 K intervals and the 8 fitted Vinjarapu 313.15 K integral heats (0 -> alpha).
-    check = []
-    if control:
-        check = [dict(record_id=r['record_id'], T_K=float(r['T_K']), previous_loading=float(r['previous_loading']), loading=float(r['loading']),
-                  retained=float(r['predicted'])) for r in rows(evidence / 'kim2007-heat-pathways/kim-heat.csv') if float(r['T_K']) == 393.15]
-        check += [dict(record_id=r['id'], T_K=float(r['T_K']), previous_loading=0., loading=float(r['loading']), retained=-float(r['predicted_kJ_mol']))
-              for r in rows(evidence / 'heat.csv') if r['role'] == 'fitted']
+    reference = heat_reference(evidence) if control else []
+    check = [row.copy() for row in reference]
     source = []
     previous = {}
     for r in rows(export / KIM2014):  # semi-differential; first interval starts at zero, as the F2 Kim 2007 call
@@ -103,6 +119,7 @@ def replay(export, record=None, record_sha=RECORD_SHA, evidence=None, out=None, 
     for r, (q, status) in zip(check, values[:len(check)]):
         r.update(replayed=q, status=status, relative_difference=abs(q - r['retained']) / abs(r['retained']) if q is not None else None)
     worst = max((r['relative_difference'] for r in check if r['relative_difference'] is not None), default=None)
+    reproduction = dict(rows=check, max_relative_difference=worst)
     predictions = [dict(r, predicted_kJ_mol=q, status=status) for r, (q, status) in zip(source, values[len(check):len(check)+len(source)], strict=True)]
     if kim_rows:
         from candidate_evidence_255 import table
@@ -118,11 +135,9 @@ def replay(export, record=None, record_sha=RECORD_SHA, evidence=None, out=None, 
         parameter_sha256=record_sha, engine_wheel_sha256=s.ENGINE_WHEEL_SHA256, engine_commit=s.ENGINE_COMMIT,
         producer_commit='f7e09b9ec' if historical_route else 'bcf32c440', kim_producer_sha256=producer_sha, sources={p: sha(export / p) for p in (KIM2014, VINJARAPU2024)},
         system_pressure_Pa=k.PRESSURE, loading_ceiling=k.CEILING,
-        reproduction=dict(rows=check, max_relative_difference=worst), rows=predictions), indent=1, allow_nan=False) + '\n')
+        reproduction=reproduction, rows=predictions), indent=1, allow_nan=False) + '\n')
     if control:
-        assert all(row['status'] == 'available' for row in check), check
-    if control and historical_route:
-        assert worst <= 1e-10, worst  # #340's same-wheel replay limit
+        check_heat_reproduction(reproduction, reference)
     print('reproduction max relative difference', worst, '; available', sum(x['status'] == 'available' for x in predictions), '/', len(predictions))
 
 
@@ -186,6 +201,32 @@ def stats(group):
                 sources=' '.join(sorted({g[3] for g in group})))
 
 
+def band_summary(data, level=None):
+    keys = sorted({(p[0], p[1], band(p[4]), p[2] if level == 'cohort' else 'all') for p in data})
+    summary = []
+    for prop, role, b, cohort in keys:
+        group = [p for p in data if (p[0], p[1], band(p[4])) == (prop, role, b) and cohort in ('all', p[2])]
+        row = dict(property=prop, band=b, role=role)
+        if level is not None:
+            row['cohort'] = cohort
+        summary.append(dict(row, **stats(group)))
+    return summary
+
+
+def compare_bands(groups):
+    reference = {(x['property'], x['role'], x['band']): x
+                 for x in rows(OUT / 'band-table.csv') if x['cohort'] == 'all'}
+    assert len(groups) == len(reference)
+    differences = []
+    for x in groups:
+        ref = reference[x['property'], x['role'], x['band']]
+        n, aard = int(ref['n']), float(ref['AARD_percent'])
+        assert x['n'] == n and round(x['AARD_percent'], 2) == round(aard, 2), (x, ref)
+        differences.append(dict(x, historical_n=n, historical_aard_percent=aard,
+                                delta_percentage_points=x['AARD_percent']-aard))
+    return differences
+
+
 def table():
     data = points()
     # Falsifier: whole cohorts, regrouped here, must reproduce #338's F2 agreement.csv AARD.
@@ -197,12 +238,8 @@ def table():
     regrouped = {name: stats([p for p in data if rule(p)])['AARD_percent'] for name, rule in checks.items()}
     assert all(abs(regrouped[n] - agreement[n]) <= 1e-9 * agreement[n] for n in checks), (regrouped, agreement)
     (OUT / 'agreement-check.json').write_text(json.dumps({n: dict(regrouped=regrouped[n], agreement_csv=agreement[n]) for n in checks}, indent=1) + '\n')
-    summary = []
-    for level in ('role', 'cohort'):
-        keys = sorted({(p[0], band(p[4]), p[1], p[2] if level == 'cohort' else 'all') for p in data})
-        for prop, b, role, cohort in keys:
-            group = [p for p in data if (p[0], band(p[4]), p[1]) == (prop, b, role) and cohort in ('all', p[2])]
-            summary.append(dict(property=prop, band=b, role=role, cohort=cohort, **stats(group)))
+    summary = [row for level in ('role', 'cohort') for row in sorted(
+        band_summary(data, level), key=lambda x: (x['property'], x['band'], x['role'], x['cohort']))]
     with (OUT / 'band-table.csv').open('w', newline='') as stream:
         writer = csv.DictWriter(stream, list(summary[0]), lineterminator='\n')
         writer.writeheader()

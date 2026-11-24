@@ -159,12 +159,10 @@ def mea_fit(k, label, source, coordinates, ties):
     return dict(result, mapping=mapping)
 
 
-def profile(mea, control_cost):
-    assert s.parameter_values(mea)[KEY] == K0
+def f2_starts():
     starts = {'previous': s.parameter_mapping(BASE/'F1/parameters.json'),
               'current': s.parameter_mapping(f.a.RECORDS['candidate'])}
     declared = r.read(BASE/'F2/current/unpenalized/declaration.json')['declared']
-    coordinates = [q['identity'] for q in declared if q['identity'] != KEY]
     ties = {q['identity']: [t for t in q['targets'] if t[0] == 'born_diameter']
             for q in declared if any(t[0] == 'born_diameter' for t in q['targets'])}
     for label, mapping in starts.items():
@@ -172,11 +170,17 @@ def profile(mea, control_cost):
         original = r.read(BASE/f'F2/{label}/unpenalized/declaration.json')['declared']
         assert all(values[q['identity']] == q['origin'] for q in original)
         starts[label] = s.with_parameter_values(mapping, {q.replace('segment_diameter','born_diameter'): values[q] for q in ties})
+    return starts, [q['identity'] for q in declared], ties
+
+
+def profile(mea, control_cost):
+    assert s.parameter_values(mea)[KEY] == K0
+    starts, coordinates, ties = f2_starts()
+    coordinates.remove(KEY)
     points, searches = {}, {}
     def fit(k, label, source):
         return mea_fit(k, label, source, coordinates, ties)
-    def best(points):
-        return min((p for p in points if p['cost'] is not None), key=lambda p: p['cost'], default=None)
+    best = f.lowest_cost
     center = best([fit(K0, label, start) for label, start in starts.items()])
     if center is None or center['cost'] - control_cost > 1e-6*control_cost:
         center = best([center, fit(K0, 'reported-restart', mea)] if center else [fit(K0, 'reported-restart', mea)])

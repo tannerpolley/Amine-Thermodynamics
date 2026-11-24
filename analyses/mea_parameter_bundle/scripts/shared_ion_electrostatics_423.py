@@ -27,10 +27,11 @@ def write(path, value):
 
 
 def absolute_shares(rows):
-    ratios = [x['value'] / x['observed'] for x in rows if x['status'] == 'Available']
+    pairs = [(x['observed'], x['value']) for x in rows if x['status'] == 'Available']
+    ratios = [p / o for o, p in pairs]
     return dict(n=len(ratios), status='available' if ratios else 'unavailable',
                 geometric_mean=math.exp(math.fsum(map(math.log, ratios)) / len(ratios)) if ratios else None,
-                aard_percent=100 * math.fsum(abs(v-1) for v in ratios) / len(ratios) if ratios else None,
+                aard_percent=reuse.deviation_statistics(pairs)['AARD_percent'] if pairs else None,
                 minimum=min(ratios, default=None), maximum=max(ratios, default=None))
 
 
@@ -114,11 +115,11 @@ def salt_cases(mapping, fitted):
             for name in sorted(NAMES):
                 for T in (None, *sorted({x['T'] for x in rows})):
                     group = [x for x in rows if x['salt'] == name and (T is None or x['T'] == T)]
-                    errors = [100 * (x['value'] / x['observed'] - 1) for x in group if x.get('status') == 'Available']
-                    groups.append(dict(salt=name, temperature_K=T, total=len(group), available=len(errors),
-                                       aard_percent=sum(map(abs, errors))/len(errors) if errors else None,
-                                       max_percent=max(map(abs, errors), default=None),
-                                       signed_bias_percent=sum(errors)/len(errors) if errors else None))
+                    pairs = [(x['observed'], x['value']) for x in group if x['status'] == 'Available']
+                    stats = reuse.deviation_statistics(pairs) if pairs else dict(AARD_percent=None, bias_percent=None)
+                    groups.append(dict(salt=name, temperature_K=T, total=len(group), available=len(pairs),
+                                       aard_percent=stats['AARD_percent'], signed_bias_percent=stats['bias_percent'],
+                                       max_percent=max((100 * abs(p/o - 1) for o, p in pairs), default=None)))
             assert [g['available'] for g in groups if g['temperature_K'] is None] == [45, 45, 39]
             write(f'{sodium}/{label}/summary.json', groups)
     print('Osmotic coefficient cases reduced', flush=True)
@@ -188,6 +189,24 @@ def electrostatic_arms(mapping):
             'M1': {keys[2]: 1.5}, 'M3': {keys[3]: 1.5}}
 
 
+BAND_FIELDS = ('property', 'role', 'cohort', 'source', 'T_K', 'observed', 'predicted', 'unit')
+
+
+def check_band_control(root, digest):
+    heat = r.read(root / 'heat-replay.json')
+    assert heat['parameter_sha256'] == digest and heat['engine_wheel_sha256'] == reuse.SHA
+    bands.check_heat_reproduction(heat['reproduction'], bands.heat_reference(bands.EV))
+    points = [tuple(p[k] for k in BAND_FIELDS) for p in r.read(root / 'band-points.json')]
+    groups = bands.band_summary(points)
+    assert groups == r.read(root / 'bands.json')
+    agreement = {x['dataset']: x for x in r.read(root / 'agreement.json')}
+    reference = {x['dataset']: x for x in r.read(BASE / 'F2/agreement.json')}
+    for name in ('fitted: fitted CO2 partial pressure', 'not fitted: six-source pressures', 'fitted: loaded density'):
+        x, ref = agreement[name], reference[name]
+        assert x['n'] == ref['n'] and round(x['aard_percent'], 2) == round(ref['aard_percent'], 2), (x, ref)
+    return bands.compare_bands(groups)
+
+
 def band_comparisons(label, mapping):
     root = OUT / label
     record = root / 'parameters.json'
@@ -209,33 +228,14 @@ def band_comparisons(label, mapping):
             s.PARAMETERS, s.RUNS = old_record, old_runs
     heat = r.read(receipt)
     assert heat['parameter_sha256'] == digest and heat['engine_wheel_sha256'] == reuse.SHA
-    if label == 'P0':
-        assert len(heat['reproduction']['rows']) == 28 and all(x['status'] == 'available' for x in heat['reproduction']['rows'])
     points = bands.points(record, digest, evidence, root)
-    names = ('property', 'role', 'cohort', 'source', 'T_K', 'observed', 'predicted', 'unit')
-    write(f'{label}/band-points.json', [dict(zip(names, p, strict=True)) for p in points])
-    points = [tuple(p[k] for k in names) for p in r.read(root / 'band-points.json')]
-    groups = []
-    for prop, role, band in sorted({(p[0], p[1], bands.band(p[4])) for p in points}):
-        group = [p for p in points if (p[0], p[1], bands.band(p[4])) == (prop, role, band)]
-        groups.append(dict(property=prop, role=role, band=band, **bands.stats(group)))
-    write(f'{label}/bands.json', groups)
-    agreement = f.scores(label, mapping, root=evidence)
+    write(f'{label}/band-points.json', [dict(zip(BAND_FIELDS, p, strict=True)) for p in points])
+    write(f'{label}/bands.json', bands.band_summary(points))
+    f.scores(label, mapping, root=evidence)
     if label == 'P0':
-        historical = {(x['property'], x['role'], x['band']): x for x in bands.rows(bands.OUT / 'band-table.csv') if x['cohort'] == 'all'}
-        differences = [dict(x, historical_n=int(ref['n']), historical_aard_percent=float(ref['AARD_percent']),
-                            delta_percentage_points=x['AARD_percent']-float(ref['AARD_percent']))
-                       for x in groups for ref in [historical[x['property'], x['role'], x['band']]]]
-        write('P0/band-control-readback.json', differences)
-        assert all(x['n'] == x['historical_n'] and round(x['AARD_percent'], 2) == round(x['historical_aard_percent'], 2)
-                   for x in differences), differences
-        retained = {x['dataset']: x for x in agreement}
-        for key, n, aard in [('fitted: fitted CO2 partial pressure', 47, 11.64),
-                             ('not fitted: six-source pressures', 112, 24.89), ('fitted: loaded density', 47, .15)]:
-            assert retained[key]['n'] == n and round(retained[key]['aard_percent'], 2) == aard, retained[key]
+        write('P0/band-control-readback.json', check_band_control(root, digest))
         print('P0 Table S19 and #409 band checks passed', flush=True)
         write('P0/band-control-passed.json', dict(passed=True, record_sha256=digest, wheel_sha256=reuse.SHA))
-    return agreement
 
 
 
@@ -304,36 +304,29 @@ def sodium_control(sets, fitted):
 def refit_arm(label, overrides, reference):
     import time
     f.OUT = OUT
-    coordinates = r.read(BASE / 'F2/current/unpenalized/declaration.json')['declared']
-    ties = {q['identity']: [t for t in q['targets'] if t[0] == 'born_diameter']
-            for q in coordinates if any(t[0] == 'born_diameter' for t in q['targets'])}
+    starts, coordinates, ties = reuse.f2_starts()
     assert len(coordinates) == 11 and len(ties) == 2
-    starts = {'previous': BASE / 'F1/parameters.json', 'current': f.a.RECORDS['candidate']}
     chosen = []
-    for family, path in starts.items():
-        source = s.parameter_mapping(path)
-        historical = r.read(BASE / f'F2/{family}/unpenalized/declaration.json')['declared']
-        values = s.parameter_values(source)
-        assert all(values[q['identity']] == q['origin'] for q in historical)
-        imposition = {q.replace('segment_diameter', 'born_diameter'): values[q] for q in ties}
-        start = s.with_parameter_values(source, {**imposition, **overrides})
+    for family, source in starts.items():
+        start = s.with_parameter_values(source, overrides)
         name = f'{label}-refit/{family}'
         elapsed = OUT / name / 'readback.json'
         started = time.monotonic()
-        endpoint, report = f.fit(name, start, f.LITERATURE, [q['identity'] for q in coordinates], ties)
+        endpoint, report = f.fit(name, start, f.LITERATURE, coordinates, ties)
         replay = r.read(OUT / name / 'replay.json') if endpoint is not None else {}
         write(f'{name}/readback.json', dict(status=report['status'] if report else 'unavailable',
                                            cost=replay.get('cost'), seconds=r.read(elapsed)['seconds'] if elapsed.exists() else time.monotonic()-started))
         if endpoint is not None and report['status'] == 'converged':
             assert all(s.parameter_values(endpoint)[q] == s.parameter_values(endpoint)[q.replace('segment_diameter','born_diameter')] for q in ties)
             assert len(report['declared']) == 11
-            chosen.append((replay['cost'], family, endpoint, report))
+            chosen.append(dict(cost=replay['cost'], start=family, endpoint=endpoint,
+                               active_bounds=report['covariance']['active_bounds']))
     assert chosen, f'{label}: no converged fully replayable start'
-    cost, family, endpoint, report = min(chosen, key=lambda x: x[0])
-    replay_cost, groups = objective(f'{label}-refit', endpoint, reference)
-    assert f.a.relative(cost, replay_cost) <= REPLAY_LIMIT
-    write(f'{label}-refit/selected.json', dict(start=family, cost=cost, groups=groups,
-                                               active_bounds=report['covariance']['active_bounds']))
+    selected = f.lowest_cost(chosen)
+    endpoint = selected.pop('endpoint')
+    replay_cost, selected['groups'] = objective(f'{label}-refit', endpoint, reference)
+    assert f.a.relative(selected['cost'], replay_cost) <= REPLAY_LIMIT
+    write(f'{label}-refit/selected.json', selected)
     return endpoint
 
 
@@ -411,9 +404,18 @@ def share_case(label, mapping, parents=None):
     return summary
 
 
+def classify_s1_parent(parent, row):
+    from phase_diagnosis_255 import reduce_state
+    assessment = reduce_state(dict(index=parent, classification='single-liquid parent', final=row['final'],
+                                   stability=[row['stability']] if 'stability' in row else []))
+    row['admission'] = assessment
+    if assessment['parent_admitted']:
+        row['stability_disposition'] = search_disposition(assessment, assessment['resolved'])
+    return assessment['parent_admitted']
+
+
 def s1_admission(mapping):
     from final_evidence import phase_payload, stability
-    from phase_diagnosis_255 import reduce_state
     spec = r.bind(mapping)
     inputs = r.read(salt.POOL_266)['problems']
     keys = [f'{p}:101325' for p in salt.CARBONATE_IDS]
@@ -427,16 +429,11 @@ def s1_admission(mapping):
         try:
             result = r.eq.solve_equilibrium(spec.model, problem)
             row['final'] = phase_payload(spec.model, problem, result)
-            assessment = reduce_state(dict(index=parent, classification='single-liquid parent', final=row['final']))
-            row.update(admission=assessment, cause=result.message)
-            if assessment['parent_admitted']:
+            row['cause'] = result.message
+            if classify_s1_parent(parent, row):
                 row.update(status='admitted', cause=None)
-                check = stability(spec.model, problem, result)
-                row['stability'] = check
-                if any(t['resolved_descent'] for t in check['trials']):
-                    row['stability_disposition'] = 'unconfirmed'
-                else:
-                    row['stability_disposition'] = 'no descent found' if check['completed'] else 'unresolved'
+                row['stability'] = stability(spec.model, problem, result)
+                classify_s1_parent(parent, row)
             elif result.success and result.requested_tolerance_met:
                 row['cause'] = 'parent failed #396 closure, curvature or pressure-density admission'
         except r.epcsaft.EosError as error:
@@ -466,7 +463,8 @@ def cation_replays(mapping, sizes):
             route.write('replay.json', dict(rows=rows, cost=cost, available=ok, born_A=s.parameter_values(item['parameters'])[key]))
             assert ok and math.isclose(cost, math.fsum(.5*x['weighted_residual']**2 for x in rows), rel_tol=REPLAY_LIMIT)
             if label == 'control':
-                expected = 8.082968228315169 if amine == 'diethanolamine' else 564.4836961
+                expected = (r.read(ANALYSES / 'dea_transfer/results/refit-413/selection.json')['chosen']['cost']
+                            if amine == 'diethanolamine' else r.read(reuse.RESULTS / 'comparison.json')['runs']['fit-0']['data_cost'])
                 assert f.a.relative(cost, expected) <= 1e-8, (amine, cost, expected)
             route.reduce(item)
 
@@ -497,6 +495,14 @@ def molecular_co2(mapping):
     assert len(covered) == 307
 
 
+def search_disposition(row, descent):
+    if descent:
+        return 'unconfirmed'
+    if not row['parent_admitted']:
+        return 'unavailable'
+    return 'no descent found' if row['complete'] else 'unresolved'
+
+
 def search_classification(endpoint, search):
     from types import SimpleNamespace
     from part_ii import branch_counts
@@ -510,8 +516,7 @@ def search_classification(endpoint, search):
     classification = reuse.witnesses(route, endpoint, grid)
     census = r.read(path / 'census.json')['result']['rows']
     classification['census_dispositions'] = [
-        dict(index=x['index'], status=('unconfirmed' if x['index'] in search['census']['descent_indices']
-             else 'unavailable' if not x['parent_admitted'] else 'unresolved' if not x['complete'] else 'no descent found'),
+        dict(index=x['index'], status=search_disposition(x, x['index'] in search['census']['descent_indices']),
              cause=x['classification']) for x in census]
     return classification
 
@@ -534,7 +539,7 @@ def compare_refits(mappings, base):
             corr = conditional['conditional_correlation'][free.index(names[0])][free.index(names[1])] if all(p in free for p in names) else None
             correlations[' / '.join(names)] = dict(F2=row['correlation'], arm=corr)
         summaries[label] = dict(cost=record['cost'], delta_cost=record['cost']-p0,
-                                tied_with_P0=abs(record['cost']-p0) <= tolerance*min(record['cost'], p0),
+                                tied_with_P0=f.costs_tied(record['cost'], min(record['cost'], p0), tolerance),
                                 coordinates=[dict(identity=q['identity'], F2=original[q['identity']], arm=values[q['identity']])
                                              for q in historical['coordinates']],
                                 active_bounds=record['active_bounds'], correlation_pairs=correlations)
@@ -542,7 +547,11 @@ def compare_refits(mappings, base):
 
 def main():
     base, reference, laws = controls()
-    if not (OUT / 'P0/band-control-passed.json').exists():
+    marker = OUT / 'P0/band-control-passed.json'
+    if marker.exists():
+        assert r.read(marker) == dict(passed=True, record_sha256=bands.RECORD_SHA, wheel_sha256=reuse.SHA)
+        assert check_band_control(OUT / 'P0', bands.RECORD_SHA) == r.read(OUT / 'P0/band-control-readback.json')
+    else:
         band_comparisons('P0', base)
     sizes = diameter_records(base)
     sets = salt_cases(base, laws)
@@ -595,8 +604,9 @@ def main():
     reference_405 = r.read(r.B / 'results/born-diameter-sensitivity-405/summary.json')
     assert reference_405['wheel_sha256'] == reuse.SHA and reference_405['parameter_sha256'] == bands.RECORD_SHA
     bicarbonate_25 = next(x['cost'] for x in reference_405['cases'] if (x['ion'], x['diameter_A']) == (salt.HCO3, 2.5))
+    joint = r.read(r.B / 'results/permittivity-refit/S1/replay.json')
     checks = {f'{salt.HCO3}-2.5': bicarbonate_25, f'{salt.HCO3}-3.5': reference_405['bicarbonate_interior']['cost'],
-              'S1': 151.787333918}
+              'S1': math.fsum(x['cost'] for x in joint['rows'] if x['group'] != 'Hajj')}
     for label, mapping in variations.items():
         cost, groups = objective(label, mapping, reference)
         if label in checks:
