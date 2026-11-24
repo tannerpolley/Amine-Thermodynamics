@@ -1,0 +1,624 @@
+{
+  "issue": 414,
+  "disposition": "Stopped at the MEA census count gate",
+  "base": "a6cbc25b4",
+  "branch": "issue-414-recalculate-the-reported-mea-dea-mdea",
+  "parameter_record": {
+    "path": "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json",
+    "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed"
+  },
+  "wheel": {
+    "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+    "version": "1.3.2",
+    "target": "CPython 3.13 manylinux_2_39 x86_64",
+    "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+    "path": "build/engine-wheels/main-41dc357a656897b613597dd4c423914299f43cd2/epcsaft-1.3.2-cp313-cp313-manylinux_2_39_x86_64.whl",
+    "source_set_sha256": "514d2f1df74431bdbd82dcf569ef94ef2c563ee8fac94d39475100734e4fabe4",
+    "source_archive_sha256": "8f31ebc490356460db13622b20cbb2243433abc6b619db4b1267c223106f7548",
+    "source_identity": "Release-excluded git archive of v1.3.2, gzip -n, byte-identical to Engine archive inside the published source set. Outer and inner checksums verified."
+  },
+  "conda": {
+    "status": "not run",
+    "sha256": null
+  },
+  "setup": {
+    "non_engine_dependencies": "Frozen uv export, epcsaft excluded. Installed index packages with hashes. The locked PC-SAFT Git URL was unavailable, so the existing pcsaft files from the exact lock commit eec3e7e4999c928e5015d2342b974c59a75d01d6 were checked against direct_url.json and RECORD and copied into the ignored venv.",
+    "weights_input": {
+      "path": "paper-evidence-341/objective-origins.json",
+      "sha256": "23fd1ba6d9f2f2127601a791db7bc22808529b0e7c8960e8d8c74a50fffb86e9",
+      "treatment": "Copied byte-for-byte and read-only to the run after the initial weights attempt lacked the input."
+    }
+  },
+  "gates": [
+    {
+      "gate": "Published source identity and wheel import checks",
+      "result": "pass",
+      "evidence": "summary.json:wheel,runs"
+    },
+    {
+      "gate": "Wheel first equilibrium solve uses MA57",
+      "result": "pass",
+      "evidence": "summary.json:runs"
+    },
+    {
+      "gate": "MEA replay maximum prediction delta \u2264 1e-10; 307 rows available",
+      "result": "pass",
+      "evidence": "summary.json:mea_fitted_replay"
+    },
+    {
+      "gate": "MEA reported paper-evidence row counts and availability",
+      "result": "pass",
+      "evidence": "counts.json"
+    },
+    {
+      "gate": "MEA printed digits across the three pairs of starts",
+      "result": "pass",
+      "evidence": "summary.json:producer_assertions.checks"
+    },
+    {
+      "gate": "MEA main grid and offset-grid state, availability and descent counts",
+      "result": "pass",
+      "evidence": "counts.json"
+    },
+    {
+      "gate": "MEA census count at 162 states",
+      "result": "fail",
+      "evidence": "mea-census-counts.json"
+    },
+    {
+      "gate": "MEA supplied census trial evaluations and final stability assertion",
+      "result": "not reached",
+      "evidence": "summary.json:stop"
+    },
+    {
+      "gate": "Stripper replay same-wheel 1e-10 limit and row availability",
+      "result": "not run",
+      "evidence": "summary.json:not_recalculated"
+    },
+    {
+      "gate": "DEA #346/#255 1e-8 limit, #398 replay and search counts",
+      "result": "not run",
+      "evidence": "counts.json"
+    },
+    {
+      "gate": "MDEA bounded-point and binary-critical checks and counts",
+      "result": "not run",
+      "evidence": "counts.json"
+    },
+    {
+      "gate": "AMP fixed-slope searches, bank and counts",
+      "result": "not run",
+      "evidence": "counts.json"
+    },
+    {
+      "gate": "Identical display text and number-source key set",
+      "result": "not run",
+      "evidence": "summary.json:not_recalculated"
+    },
+    {
+      "gate": "Conda MEA replay and wheel comparison",
+      "result": "not run",
+      "evidence": "summary.json:conda"
+    }
+  ],
+  "producer_assertions": {
+    "setup": "Record hash, wheel SHA, installed wheel path and bytes, public Engine ancestry checked before every MEA command.",
+    "replay": "Passed paper_evidence_341.py:30.",
+    "evidence": {
+      "point_data": "Passed row status, row hash, and declared row checks in producer execution.",
+      "curve_replay": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "curve_grid": {
+        "density": {
+          "compared_rows": 132,
+          "passed": true,
+          "retained_rows": 132,
+          "worst_delta": 0.0
+        },
+        "heat": {
+          "compared_rows": 84,
+          "passed": true,
+          "retained_rows": 84,
+          "worst_delta": 0.0
+        },
+        "mea-water": {
+          "compared_rows": 128,
+          "passed": true,
+          "retained_rows": 128,
+          "worst_delta": 0.0
+        },
+        "pressure": {
+          "compared_rows": 365,
+          "passed": true,
+          "retained_rows": 365,
+          "worst_delta": 0.0
+        },
+        "species": {
+          "compared_rows": 1120,
+          "passed": true,
+          "retained_rows": 1120,
+          "worst_delta": 0.0
+        }
+      },
+      "kim_checks": {
+        "heat_references": {
+          "total": 3,
+          "passed": 3
+        },
+        "study_feed_reference": {
+          "total": 1,
+          "passed": 1
+        },
+        "nmr_references": {
+          "total": 43,
+          "passed": 43
+        },
+        "differential_halving": {
+          "total": 342,
+          "passed": 342
+        }
+      },
+      "kim_integral_failure": true
+    },
+    "uncertainty": "Passed adopted-point availability assertion. Conditional fit and inward profiles were skipped.",
+    "comparison": "Both same-data table producers completed with their existing applicable assertions.",
+    "weights": "Second run completed. Initial run stopped on a missing redirected input before weight reduction.",
+    "shared": "Completed at the reported MEA parameter record.",
+    "checks": [
+      {
+        "group": "Kiepe",
+        "printed_digits_agree": true
+      },
+      {
+        "group": "Cai",
+        "printed_digits_agree": true
+      },
+      {
+        "group": "common149",
+        "printed_digits_agree": true
+      }
+    ],
+    "stability": "Count gate failed in census reduction. The subsequent supplied-trial operation had no scratch .venv directory. The pe.stability final descent assertion was not reached."
+  },
+  "stop": {
+    "gate": "Exact census completion counts against stability-adopted-law/census.json",
+    "retained_complete": 162,
+    "release_complete": 0,
+    "retained_incomplete": 0,
+    "release_incomplete": 162,
+    "retained_trials_per_state": 9,
+    "release_trials_per_state": 10,
+    "native_reports_complete": 162,
+    "unresolved_trials": 0,
+    "failed_trial_optimizers": 0,
+    "states_with_resolved_descents": 0,
+    "cause": "Release includes dominant-charge-pair-midpoint from Engine 1ae2b350. All 162 searches include the extra trial. phase_diagnosis_255.reduce_state requires exactly nine trials, so the producer marks every state incomplete.",
+    "later_scratch_error": "FileNotFoundError in supplied_census at TemporaryDirectory(dir=r.ROOT/.venv), after the grid and census outputs were written. No supplied trial was evaluated. The recorded census count failure stands independently of this scratch setup error.",
+    "evidence": "mea-census-counts.json"
+  },
+  "largest_relative_by_amine": {
+    "MEA": {
+      "relative": 1.59283679484867,
+      "comparison": "paper_evidence_341",
+      "field": "raw_coordinates",
+      "location_new_retained": [
+        "stability/candidate/census-raw.json.gz:/result/11/stability/0/trials/2/raw_coordinates/11",
+        -2.439186981735564e-12,
+        1.4460397922887126e-12
+      ]
+    },
+    "DEA": null,
+    "MDEA": null,
+    "AMP": null
+  },
+  "mea_fitted_replay": {
+    "rows": 307,
+    "available": 307,
+    "maximum_relative_difference": 2.023360817132853e-12,
+    "prior_1_3_0_to_1_3_1": 2.1e-12,
+    "limit": 1e-10,
+    "row_index": 106,
+    "identity": "Matin2012_state_007::MEAH+",
+    "release": 0.027057889249479588,
+    "retained": 0.027057889249534336,
+    "cost_release": 150.76290287955263,
+    "cost_retained": 150.76290287953717
+  },
+  "mea_heat_curve_comparison": {
+    "field": "differential",
+    "T_K": 333.15,
+    "loading_mol_per_mol": 0.6,
+    "unit": "kJ/mol CO2",
+    "max_rel": 2.2418155411487665e-09,
+    "at": [
+      "paper-evidence/kim2007-heat-pathways/heat-curves.csv:/101/differential",
+      "53.17533372513566",
+      "53.17533360592637"
+    ]
+  },
+  "not_recalculated": [
+    "MEA supplied census trials and finalized stability summary",
+    "MEA stripper heat replay and mixed-input band table, including reduced-refit/evidence/F2",
+    "DEA refit-413 and retransfer-398 fixed-point replays, uncertainty, curves, searches and presentation",
+    "MDEA reported-point calculations and #343 critical-k replay",
+    "AMP fixed-slope reported-point calculations and AMODEL same-row deviations",
+    "Display regeneration, full display-input inventory, text diffs and number-source key check",
+    "Conda spot check",
+    "Out of replay scope: all refits, starts and profiles; MEA reduced-refit parameter-details, fit-comparison and agreement tables; split-cause-342; AMP free-slope fit, AFREE rows and split figures; MDEA unbounded fit."
+  ],
+  "counts": "counts.json",
+  "pairs": "file-pairs.json",
+  "comparison": "mea-comparison.json",
+  "measured_wall_seconds": {
+    "mea-checks": 1.38,
+    "mea-comparison": 1.28,
+    "mea-evidence": 599.71,
+    "mea-replay": 9.11,
+    "mea-shared": 1.23,
+    "mea-stability": 184.81,
+    "mea-uncertainty": 25.66,
+    "mea-weights-initial": 1.43,
+    "mea-weights": 1.22,
+    "source-download": 7.75,
+    "wheel-build": 1283.84,
+    "wheel-env": 0.87,
+    "wheel-install": 0.41,
+    "matched-comparisons-and-counts": 5.928441856000063
+  },
+  "runs": {
+    "checks": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "checks",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 1.3136529359999258,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "comparison": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "comparison",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 1.1547497960000328,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "evidence": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "evidence",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 599.3714838060005,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "replay": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "replay",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 8.878642937000222,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "shared": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "shared",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 1.152292308000142,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "stability": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "stability",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 184.67058833800002,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "uncertainty": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "uncertainty",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 25.455579555999975,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "weights": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "weights",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 1.146613919999254,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      }
+    },
+    "weights-initial": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "mea",
+        "weights",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414"
+      ],
+      "seconds": 1.43,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/venv/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "ma57",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259959e-09, amplification 0",
+        "pressure": 6528.695151534742,
+        "sha256": "ad8f2338f2983ec509cabba1280007005081ef3460838b584bd4b32b334dd2b5",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2"
+      },
+      "error": "Missing frozen objective-origins.json in redirected run tree"
+    }
+  },
+  "commands": {
+    "build": "SOURCE_DATE_EPOCH=<tag commit time> agent-heavy taskset -c 0-3 env AGENT_HEAVY_CORES=4 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 bash tools/build-engine.sh --wheel <build/engine-wheels/main-41dc357a...> from the extracted tag",
+    "calculate_prefix": "agent-heavy taskset -c 0-3 env AGENT_HEAVY_CORES=4 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src",
+    "compare": "PYTHONHASHSEED=0 python3 analyses/release_recheck_414.py compare <matched-run-tree> <retained-tree> <output-json>"
+  },
+  "claim": "Numerical replay on the four-amine task stopped at MEA. The completed MEA evaluations compare a fixed parameter record across Engine builds. The census change is in application completion accounting for the larger finite trial set.",
+  "change_accounting": {
+    "base": "a6cbc25b4",
+    "gross_added_executable_lines": 115,
+    "ceiling": 250
+  },
+  "comparison_readback": {
+    "results_equal": true,
+    "paper_evidence_pairs": 1128,
+    "stability_adopted_law_pairs": 3
+  }
+}
