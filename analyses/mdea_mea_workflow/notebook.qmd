@@ -3,6 +3,168 @@ title: "MDEA transfer with saturation-capped absorption heat"
 format: html
 ---
 
+## Sensitivity to the shared water–bicarbonate interaction (#417)
+
+The low and high MEA profiles qualified $k=0.1325000116847309$ and $k=1$ for transfer to MDEA. At these values the fitted MEA objective increased by 1.023004 and 0.023674, respectively, relative to the refitted center. The study tests how MDEA predictions and the finite phase-stability searches respond to the shared coefficient after each solvent refits its own parameters. [Study plan and selection rule](https://github.com/tannerpolley/Amine-Thermodynamics/issues/417).
+
+### Fixed-coordinate MEA fits
+
+The historical 11-coordinate F2 fit had $C=150.76290287953717$. The reported F2 parameters replayed at $C=150.76290287955263$ on Engine 1.3.1 `05e94210`, with all 307 fitted rows available. The relative change in objective was $1.03\times10^{-13}$, within the study's $10^{-10}$ replay limit. The maximum relative difference in a prediction was $2.02\times10^{-12}$. Refit at the full-precision center $k_0=0.7650000233694618$ gave $C(k_0)=150.76288471813868$. Its difference from the replay lies within the $10^{-6}C$ start-tie rule. The lower replayed refit cost sets the center for both profiles. [Control readback](results/shared-bicarbonate-417/control-readback.json).
+
+The refits minimized $C(k)=\tfrac12\sum_{i=1}^{307}r_i^2$ using the original weights, ten remaining F2 coordinates, two Born-to-segment-diameter ties, and two F2 start families. A candidate could increase the cost by at most 1.3986782374, the observed increase in the largest reported inward profile of the MEAH⁺–carbamate interaction. The two tested sides used the same allowance. The finite-search requirement was complete searches and no confirmed liquid–liquid split. Fits used only the fitted observations and kept $k$ fixed throughout.
+
+| Fixed $k$ | Previous start, $C$ | Current start, $C$ | Lowest $C-C(k_0)$ | Outcome |
+|---:|---:|---:|---:|---|
+| 0.7650000233694618 | 150.763064658 | 150.762884718 | 0 | Refitted center |
+| −0.5 | 166.651406042 | 166.651406034 | +15.888521316 | Cost exceeds allowance |
+| 0.1325000116847309 | 151.786667505 | 151.785889075 | +1.023004357 | First qualifying low value |
+| 1.0 | 150.786558248 | 150.787225109 | +0.023673530 | First qualifying high value |
+
+Every start converged and replayed all 307 fitted rows. The largest MEA endpoint replay difference was below the $10^{-8}$ relative cost check. The declared midpoints and quarter-distance values were computed from full-precision $k_0$. The low midpoint and high bound met the selection rule, ending the MEA profile at those points. [Start declarations, evaluated mappings and row replays](results/shared-bicarbonate-417/starts/) · [Objective and search-count readback](results/shared-bicarbonate-417/objective-and-count-readback.json).
+
+| Point | $k_{\mathrm{MEACOO^-},\,\mathrm{H_2O}}$ | $k_{\mathrm{MEAH^+},\,\mathrm{H_2O}}$ | Active fitted bound |
+|---|---:|---:|---|
+| Low bound, $k=-0.5$ | −0.017993 | −0.500000 | MEAH⁺–water, lower |
+| Low midpoint | −0.107259 | −0.333008 | MEAH⁺–carbamate, lower |
+| Center refit | −0.064924 | −0.358066 | MEAH⁺–carbamate, lower |
+| High bound, $k=1$ | −0.016712 | −0.411770 | MEAH⁺–carbamate, lower |
+
+The F2 conditional correlation for water–bicarbonate is **+0.9601** with carbamate–water and **−0.9739** with MEAH⁺–water. Its conditional standard error is 2.96525 on a fitted interval of width 1.5. The profile shows how these parameters move when the ten other coordinates can refit. [F2 covariance](../mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json) · [Inward-profile cost comparison](../mea_parameter_bundle/results/paper-evidence-341/uncertainty/profiles.json).
+
+| MEA point | Main grid completed | Offset grid completed | Census completed | Supplied evaluations available | Descents |
+|---|---:|---:|---:|---:|---:|
+| Center | 1,908 / 1,908 | 576 / 576 | 162 / 162 | 991,602 / 991,602 | 0 |
+| Low midpoint | 1,908 / 1,908 | 576 / 576 | 162 / 162 | 991,602 / 991,602 | 0 |
+| High bound | 1,908 / 1,908 | 576 / 576 | 162 / 162 | 991,602 / 991,602 | 0 |
+
+Each census used the adopted 6,121-composition bank with fingerprint `f7f02b1ef565690efb466dd6d3d73bc9c74c708116725b2b0d931486cdc1b666`. The state records keep parent and trial diagnostics. The grids and census give finite numerical evidence over their declared temperatures, feeds, pressures and trial set. [Search rows](results/shared-bicarbonate-417/searches/) · [Wheel and installed files](results/shared-bicarbonate-417/wheel-modules.json).
+
+The group results retain the observation counts, costs, AARD, RMSE and signed prediction bias. Each cell gives $C$ / AARD (%) / RMSE / bias. The last two values use the displayed property unit. The historical F2 group values describe the reported fit. The study-wheel replay is checked above. [All unrounded MEA group results](results/shared-bicarbonate-417/mea-agreement.csv) · [Source and comparison rows](results/shared-bicarbonate-417/comparison-rows/).
+
+**Fitted MEA observations**
+
+| Observation group (unit), $n$ | Historical F2 | Center refit | Low bound | Low midpoint | High bound |
+|---|---:|---:|---:|---:|---:|
+| fitted CO2 partial pressure (Pa), 47 | 5.963 / 11.64 / 7495 / 127.9 | 5.971 / 11.64 / 7478 / 122.7 | 8.911 / 15.48 / 8646 / 1087 | 5.981 / 11.7 / 8320 / 284.1 | 5.988 / 11.64 / 7344 / 80.98 |
+| Kiepe pressure (Pa), 39 | 0.000679 / 2.667 / 1.8e+05 / 5445 | 0.000679 / 2.667 / 1.8e+05 / 5445 | 0.000679 / 2.667 / 1.8e+05 / 5445 | 0.000679 / 2.667 / 1.8e+05 / 5445 | 0.000679 / 2.667 / 1.8e+05 / 5445 |
+| fitted phase mole fraction (1), 94 | 16.49 / 7.079 / 0.002683 / 0.0001001 | 16.48 / 7.077 / 0.002682 / 9.994e-05 | 23.4 / 8.093 / 0.003102 / 5.564e-05 | 17.42 / 7.227 / 0.002754 / 8.998e-05 | 16.45 / 7.069 / 0.00268 / 0.0001001 |
+| restored species (1), 7 | 2.406 / 8.928 / 0.003463 / -0.0001634 | 2.405 / 8.927 / 0.003462 / -0.0001634 | 3.354 / 10 / 0.003972 / -0.0001634 | 2.542 / 9.073 / 0.003536 / -0.0001634 | 2.401 / 8.922 / 0.00346 / -0.0001634 |
+| Jakobsen ratio (1), 6 | 12.75 / 17.07 / 0.04612 / 0.02274 | 12.75 / 17.08 / 0.04612 / 0.02273 | 16.75 / 25.78 / 0.04867 / 0.02478 | 12.79 / 17.4 / 0.04632 / 0.02314 | 12.73 / 16.97 / 0.04611 / 0.02271 |
+| loaded density (kg/m³), 47 | 0.3787 / 0.1523 / 1.842 / 0.1685 | 0.3811 / 0.1526 / 1.847 / 0.1702 | 0.6568 / 0.1894 / 2.364 / -0.389 | 0.4091 / 0.1563 / 1.911 / 0.1102 | 0.384 / 0.1532 / 1.853 / 0.1725 |
+| CO2-free density (kg/m³), 5 | 13.12 / 0.03036 / 0.3622 / -0.01158 | 13.1 / 0.03034 / 0.362 / -0.01165 | 11.56 / 0.02836 / 0.34 / -0.01261 | 13.18 / 0.03037 / 0.363 / -0.008147 | 13 / 0.03025 / 0.3606 / -0.01337 |
+| fitted heat of absorption (J/mol CO₂), 8 | 1.386 / 1.969 / 1979 / 903.6 | 1.387 / 1.969 / 1980 / 905.6 | 2.296 / 2.538 / 2593 / 1957 | 1.429 / 2.009 / 2002 / 907.5 | 1.393 / 1.969 / 1985 / 923.6 |
+| heat capacity (J/(mol-feed K)), 4 | 6.648 / 2.835 / 3.003 / 2.343 | 6.657 / 2.837 / 3.005 / 2.345 | 7.915 / 3.142 / 3.282 / 2.603 | 6.411 / 2.749 / 2.949 / 2.272 | 6.796 / 2.882 / 3.037 / 2.383 |
+| Cai temperature (K), 25 | 39.82 / 0.3695 / 1.785 / 0.1422 | 39.83 / 0.3695 / 1.785 / 0.1425 | 40.01 / 0.3708 / 1.789 / 0.147 | 39.79 / 0.3689 / 1.784 / 0.1334 | 39.85 / 0.3698 / 1.785 / 0.1471 |
+| Cai mole_fraction (1), 25 | 51.81 / 2.602 / 0.02036 / -0.002932 | 51.81 / 2.601 / 0.02036 / -0.002932 | 51.79 / 2.594 / 0.02036 / -0.00282 | 51.83 / 2.602 / 0.02036 / -0.002883 | 51.79 / 2.601 / 0.02036 / -0.002954 |
+
+**Not fitted MEA observations**
+
+| Observation group (unit), $n$ | Historical F2 | Center refit | Low bound | Low midpoint | High bound |
+|---|---:|---:|---:|---:|---:|
+| six-source pressures (Pa), 112 | 91.84 / 24.89 / 8.399e+04 / -1.224e+04 | 91.82 / 24.89 / 8.392e+04 / -1.217e+04 | 98.27 / 26.85 / 7.526e+04 / -6450 | 91.58 / 24.81 / 8.03e+04 / -1.117e+04 | 91.8 / 24.9 / 8.437e+04 / -1.229e+04 |
+| Wagner pressures (Pa), 23 | 12.38 / 25.03 / 8506 / -6462 | 12.36 / 25 / 8479 / -6447 | 15.84 / 27.23 / 7649 / -6283 | 12.44 / 25.08 / 8538 / -6483 | 12.36 / 25.01 / 8465 / -6444 |
+| transfer 15 wt% (Pa), 33 | 36.15 / 45.08 / 1664 / -317.5 | 36.15 / 45.09 / 1664 / -316.9 | 31.88 / 42.29 / 1519 / -239.3 | 36.1 / 45.14 / 1658 / -312.3 | 36.19 / 45.12 / 1665 / -316.7 |
+| transfer 45 wt% (Pa), 37 | 93.14 / 45.86 / 1541 / -663.7 | 93.19 / 45.87 / 1541 / -663.8 | 89.64 / 43.68 / 1534 / -676.4 | 92.27 / 45.39 / 1543 / -664.9 | 93.35 / 45.93 / 1542 / -664.3 |
+| Matin 19 pools (1), 19 | 33.38 / 67.53 / 0.002887 / -0.002655 | 33.36 / 67.51 / 0.002886 / -0.002654 | 29.73 / 62.58 / 0.002764 / -0.002518 | 34.37 / 68.35 / 0.002935 / -0.0027 | 33.36 / 67.54 / 0.002886 / -0.002654 |
+| Arcis heats (kJ/mol CO₂), 14 | 848.2 / 8.862 / 9.026 / 8.197 | 848.6 / 8.864 / 9.028 / 8.199 | 1049 / 9.996 / 9.979 / 9.227 | 847.3 / 8.87 / 9.03 / 8.204 | 851.6 / 8.881 / 9.043 / 8.215 |
+| Kim heats (kJ/mol CO₂), 53 | 427.4 / 7.009 / 7.612 / -4.953 | 427.6 / 7.012 / 7.609 / -4.946 | 485.7 / 7.744 / 8.148 / -5.757 | 427.1 / 7.015 / 7.622 / -4.982 | 428.5 / 7.024 / 7.615 / -4.954 |
+| Han densities (kg/m³), 67 | 520.2 / 0.3507 / 4.897 / -1.399 | 513.4 / 0.3495 / 4.862 / -1.452 | 1255 / 0.5339 / 7.823 / -5.432 | 513.5 / 0.3539 / 4.861 / -1.732 | 507 / 0.3483 / 4.829 / -1.507 |
+| broad heat capacities (kJ/(kg K)), 51 | 64.33 / 2.54 / 0.113 / 0.06274 | 64.41 / 2.541 / 0.1131 / 0.06283 | 74.4 / 2.728 / 0.1216 / 0.07152 | 62.66 / 2.508 / 0.1116 / 0.05992 | 65.51 / 2.561 / 0.1141 / 0.06432 |
+| Bottinger 353 K (1), 10 | 4.756 / 10 / 0.005543 / 0.0002022 | 4.761 / 10.01 / 0.005546 / 0.0002022 | 6.731 / 12.15 / 0.006468 / 0.0002022 | 5.297 / 10.7 / 0.005789 / 0.0002022 | 4.744 / 9.983 / 0.005539 / 0.0002022 |
+
+### MDEA refit and pressure and speciation comparisons
+
+The bounded MDEA control replayed all 281 fitted rows at $C=564.48369612531$, within 4.71e-14 relative of the retained fit. At the selected MEA values the refitted MDEA costs were 541.079255 (low) and 565.942499 (high), with signed changes of -23.404441 and +1.458802. The high-minus-low span was +24.863243. [MDEA control rows](results/shared-bicarbonate-417/reported-mdea/replay.json.gz).
+
+Each refit used the same eight MDEA coordinates, all three hash-identified starts, original observation weights, and the original bound on the MDEA–water coefficient at 423 K. Each start loaded the new fixed water–bicarbonate value before binding the model. The objective passed the $10^{-12}$ relative check when the MDEA–water interaction was written about 423 K. The selected start had the lowest converged objective on full replay. [Fitted mappings and start outcomes](results/shared-bicarbonate-417/mdea/).
+
+| Fixed value | Start 0, $C$ | Start 1, $C$ | Start 2, $C$ | Selected start |
+|---|---:|---:|---:|---|
+| Low | 541.079255213 | 578.025157725 | 541.079255216 | 0 |
+| High | 565.942498576 | 584.367880936 | 565.942498595 | 0 |
+
+Ermatchkov pressure rows helped select the historical initial parameters and have the role “not fitted.” The Jakobsen carbonate-family ratio is $(n_{\mathrm{HCO_3^-}}+n_{\mathrm{CO_3^{2-}}})/(n_{\mathrm{MDEA}}+n_{\mathrm{MDEAH^+}})$. Böttinger Table 2 reports $x_{\mathrm{HCO_3^-}}+x_{\mathrm{CO_3^{2-}}}$. Each pressure assignment has 58 available predictions and 57 observations eligible for AARD. The two assignments share the same observations, including the zero that contributes to absolute errors.
+
+AARD cells give % with relative-error denominators in parentheses. Changes are percentage points, with the last column giving high minus low. [Unrounded group statistics and paired rows](results/shared-bicarbonate-417/mdea-comparison.json.gz).
+
+| Observation group | Reported | Low | High | Low − reported, pp | High − reported, pp | High − low, pp |
+|---|---:|---:|---:|---:|---:|---:|
+| All fitted pressures | 11.2425 (131) | 6.7506 (131) | 11.2865 (131) | -4.4919 | +0.0441 | +4.5360 |
+| All pressures outside the objective | 25.8321 (175) | 33.4290 (175) | 25.7892 (175) | +7.5969 | -0.0429 | -7.6398 |
+| Kuranov loaded total pressure | 20.0922 (66) | 11.1754 (66) | 20.1797 (66) | -8.9168 | +0.0875 | +9.0043 |
+| Kuranov loaded total pressure, within dissociation source range | 11.8230 (37) | 8.1344 (37) | 11.9230 (37) | -3.6887 | +0.1000 | +3.7886 |
+| Kuranov loaded total pressure, above dissociation source range | 30.6425 (29) | 15.0554 (29) | 30.7142 (29) | -15.5871 | +0.0717 | +15.6588 |
+| Kuranov 413 K total pressure | 20.3271 (11) | 8.1797 (11) | 20.2860 (11) | -12.1474 | -0.0412 | +12.1062 |
+| Kuranov binary total pressure | 2.5631 (4) | 2.5612 (4) | 2.5632 (4) | -0.0019 | +0.0000 | +0.0019 |
+| Ermatchkov CO₂ partial pressure | 17.8887 (101) | 32.4783 (101) | 17.9003 (101) | +14.5897 | +0.0116 | -14.5781 |
+| Ermatchkov CO₂ partial pressure, within dissociation source range | 18.2286 (69) | 36.6465 (69) | 18.3043 (69) | +18.4179 | +0.0757 | -18.3421 |
+| Ermatchkov CO₂ partial pressure, outside dissociation source range | 17.1557 (32) | 23.4908 (32) | 17.0291 (32) | +6.3351 | -0.1267 | -6.4617 |
+| Jakobsen ratios, pooled | 13.7557 (16) | 16.8433 (16) | 13.5856 (16) | +3.0876 | -0.1701 | -3.2576 |
+| Jakobsen carbonate-family ratio | 9.8179 (8) | 9.8569 (8) | 9.8169 (8) | +0.0389 | -0.0010 | -0.0400 |
+| Jakobsen cation ratio | 17.6935 (8) | 23.8297 (8) | 17.3544 (8) | +6.1362 | -0.3391 | -6.4753 |
+| Böttinger carbonate fraction, 0.5 MPa | 11.1441 (57) | 11.2535 (57) | 11.1420 (57) | +0.1094 | -0.0022 | -0.1115 |
+| Böttinger carbonate fraction, 2.5 MPa | 11.1435 (57) | 11.2516 (57) | 11.1418 (57) | +0.1081 | -0.0017 | -0.1098 |
+
+The same 718 observation rows were available in all three cases. The original and paired statistics therefore use identical denominators. [Availability readback](results/shared-bicarbonate-417/mdea-group-readback.json).
+
+The signed relative bias on the 29 loaded Kuranov pressures above the dissociation source range was +30.6425%, +14.9663%, +30.7142% for the reported, low and high fits. For Ermatchkov the corresponding biases were -6.2912%, -32.2306%, -6.3879%.
+
+| Böttinger Table 2 assignment | Reported MAE / signed bias | Low MAE / signed bias | High MAE / signed bias |
+|---|---:|---:|---:|
+| Böttinger carbonate fraction, 0.5 MPa | 0.002573 / +0.002184 | 0.002610 / +0.002225 | 0.002572 / +0.002183 |
+| Böttinger carbonate fraction, 2.5 MPa | 0.002573 / +0.002183 | 0.002609 / +0.002223 | 0.002572 / +0.002183 |
+
+The largest paired prediction changes across the available pressure and carbonate observations are listed below. The Ermatchkov total-pressure rows shown here have 7.994 mol MDEA per kg water. Positive values indicate a larger prediction in the first named scenario.
+
+| Comparison | Quantity | Δ prediction | Source observation | $T$/K | Loading, mol CO₂/mol MDEA |
+|---|---|---:|---|---:|---:|
+| Low − reported | Total pressure (Pa) | +1.47794e+06 | Ermatchkov2006 Table 6, PDF p.8, printed p.6088, row 13 (comparison:113) | 313.73 | 1.1542 |
+| High − reported | Total pressure (Pa) | +40657 | Ermatchkov2006 Table 6, PDF p.8, printed p.6088, row 21 (comparison:121) | 354.38 | 0.94496 |
+| High − low | Total pressure (Pa) | -1.4454e+06 | Ermatchkov2006 Table 6, PDF p.8, printed p.6088, row 13 (comparison:113) | 313.73 | 1.1542 |
+| Low − reported | Jakobsen (1) | +0.000678493 | Jakobsen2005 Table A5, PDF p.9, printed p.9902, row 8 (fit:84) | 313.15 | 0.79 |
+| High − reported | Jakobsen (1) | -2.9096e-05 | Jakobsen2005 Table A5, PDF p.9, printed p.9902, row 8 (fit:84) | 313.15 | 0.79 |
+| High − low | Jakobsen (1) | -0.000707589 | Jakobsen2005 Table A5, PDF p.9, printed p.9902, row 8 (fit:84) | 313.15 | 0.79 |
+
+[Pressure row details](results/shared-bicarbonate-417/mdea-largest-pressure.json) · [Carbonate row details](results/shared-bicarbonate-417/mdea-largest-carbonate.json).
+
+### MDEA phase-stability searches
+
+The CO₂-free checks used 1.466 MPa, the original 78 native searches, and the 1,041-composition hull scan. The onset comparison reused the hash-checked 33-temperature table after verifying the pure MDEA and water inputs. Each fitted temperature law was compared to the full table.
+
+| CO₂-free check | Reported | Low | High |
+|---|---:|---:|---:|
+| Native searches completed | 78 | 78 | 78 |
+| Native descents | 0 | 0 | 0 |
+| Hull gaps | 0 | 0 | 0 |
+| Minimum distance below onset, at temperature | 0.0001000 at 423 K | 0.0001000 at 423 K | 0.0001000 at 423 K |
+
+| Loaded stability search | Reported | Low | High | Low − reported | High − reported | High − low |
+|---|---:|---:|---:|---:|---:|---:|
+| Requested records | 11824 | 11824 | 11824 | +0 | +0 | +0 |
+| Completed | 10725 | 10579 | 10720 | -146 | -5 | +141 |
+| Unfinished | 1099 | 1245 | 1104 | +146 | +5 | -141 |
+| Grid records without bubble pressure | 870 | 1024 | 874 | +154 | +4 | -150 |
+| Descent records | 76 | 74 | 76 | -2 | +0 | +2 |
+| Distinct calculations with descent | 27 | 28 | 27 | +1 | +0 | -1 |
+| Distinct confirmed liquid–liquid splits | 0 | 2 | 0 | +2 | +0 | -2 |
+| Distinct calculations with unmatched liquid-labelled witness | 0 | 4 | 0 | +4 | +0 | -4 |
+| Distinct calculations with vapor coincidence | — | 16 | 18 | — | — | +2 |
+| Vapor-coincident liquid-labelled witnesses in distinct calculations | — | 33 | 36 | — | — | +3 |
+| Unmatched liquid-labelled witnesses in distinct calculations | — | 21 | 0 | — | — | -21 |
+| Distinct calculations resolved as vapor | 27 | 24 | 27 | -3 | +0 | +3 |
+| Distinct descent calculations with unresolved phase identity | — | 2 | 0 | — | — | -2 |
+
+The search compares each liquid-labelled native witness with the vapor-labelled witnesses using the original composition and packing-fraction distance. A coincidence gives vapor evidence. Unmatched labels and ambiguous supplied descents receive pressure-closure and density-branch checks. A 33-point fixed-composition isotherm checks whether an unspecified root connects to dilute vapor. A confirmed split requires two distinct liquid phases at the parent pressure. The low fit leaves two Merkley bubble-state descents unresolved at 288.71 K. Their fitted liquid roots exceed the $10^{-10}$ relative pressure-closure limit. Search availability changed for 184 low-case records and 25 high-case records compared with the reported fit. [Search counts and state identity](results/shared-bicarbonate-417/mdea-search-readback.json) · [State rows, pressure-closure checks and changes in availability](results/shared-bicarbonate-417/mdea/).
+
+At 363.15 K, 78.62 wt% unloaded MDEA and loading 1.368 mol/mol, the search at 1.05 times its own bubble pressure was unavailable for all three parameter sets. In the low case, the liquid phase vanished during the bubble calculation. In the high case, the bubble calculation reached the 200-iteration limit with a residual of 1.00002 against the $10^{-10}$ limit. [State diagnostics](results/shared-bicarbonate-417/mdea-search-readback.json).
+
+| Confirmed second liquid | $T$/K | Parent $P$/MPa | Liquid densities, mol/m³ | $\Delta G/(RT)$ decrease, mol | Relative pressure closure |
+|---|---:|---:|---:|---:|---:|
+| Low, Merkley1987 (comparison:363:final) at the assigned pressure for the 40 wt% half-loading comparison | 288.71 | 1.121 | 38544.4344, 37753.4750 | 0.00193713 | 2.16e-12 |
+| Low, Grid, 1.3 mol/mol, 1.05 times bubble pressure, 78.62 wt% unloaded MDEA | 373.15 | 203.127 | 21673.2265, 23564.7739 | 0.000249499 | 3.46e-14 |
+
+The binary contains no bicarbonate. Its result responds to refitting the MDEA–water law. The loaded-state and property comparisons describe sensitivity within the declared data, weights, bounds, local starts and sampled states. The measured carbonate sums leave individual inorganic ion concentrations unidentified. The stability counts apply to the tested trial set and available states.
+
 ## Bounded k(MDEA–water) fit without the CO₂-free gap (#411)
 
 The owner adopted this set as the reported MDEA parameters on 23 November
