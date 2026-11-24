@@ -241,11 +241,17 @@ Every MEA observation that is not fitted was examined before the parameters were
 Beyond that, the Arcis heats were used to select the parameters, three intervals of Kim and Svendsen at \SI{313.15}{\kelvin} and three at \SI{353.15}{\kelvin} were fitted during earlier model development, and the comparison between the density sources informed the choice of the fitted density observations, as the notes of Table~\ref{tab:supplement-mea-comparison} mark; no interval of Kim and Svendsen is in the reported fit.
 
 % P:supplement-mea-deviations
-Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures.
+Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures, and \cref{fig:jakobsen-carbonate-share} compares the calculated and measured carbonate shares.
 The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/pressure_sources}
 \input{tables/supplement_mea_comparison}
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=0.5\linewidth]{jakobsen-carbonate-share.pdf}
+\caption{Carbonate share of dissolved carbon in loaded MEA: the MEA model against the measurements of Jakobsen et al.\ \cite{Jakobsen2005}, at the 10 states of Table~\ref{tab:supplement-mea-comparison}, none of which is fitted. The species-to-total-amine ratios of the same source are fitted (main-text Table~\ref{main-tab:mea-data}).}
+\label{fig:jakobsen-carbonate-share}
+\end{figure}
 
 % P:supplement-temperature-bands
 Table~\ref{tab:supplement-temperature-bands} divides the MEA data used here by temperature, without refitting any parameter; the 66 pressures at 373--393 K are those of Jou et al.\ \cite{Jou1995}, Ma'mun et al.\ \cite{Mamun2005}, Wagner et al.\ \cite{wagnerSolubilityCarbonDioxide2013} and Xu and Rochelle \cite{Xu2011}.
@@ -303,6 +309,15 @@ The \COtwo-free observations of Tong et al.\ are the unloaded solution of that w
 The curves of the MDEA pressure figure of the main text use nominal isotherm temperatures and the median water-to-MDEA ratio of each isotherm; the deviations use each observation's own conditions.
 
 \input{tables/supplement-transfer-data}
+
+% P:supplement-dea-heat
+\Cref{fig:dea-integral-heat} shows the 50 fitted integral heats of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} separately for each DEA content; main-text Fig.~\ref{main-fig:dea-pressure}(d) shows them together.
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=\linewidth]{dea-integral-heat-concentrations.pdf}
+\caption{Integral absorption heat per mole of \COtwo in loaded aqueous DEA at \SI{298.15}{\kelvin} against loading, at 10, 20 and 30 wt\% DEA: the fitted measurements of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} (circles; 10, 20 and 20 observations) and the DEA model at each content (dotted lines).}
+\label{fig:dea-integral-heat}
+\end{figure}
 
 % P:supplement-merkley
 The heats of Merkley et al.\ are read from their Fig.~3 and the loading points from their Fig.~4; the assigned pressure is 1.121 MPa, or 1.466 MPa at 422.04 K.
