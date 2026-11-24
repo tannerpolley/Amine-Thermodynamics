@@ -32,15 +32,18 @@ if __name__ == '__main__':
     from part_ii import Route
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('question', choices=('q1', 'q3', 'q4', 'q5', 'q6', 'q8'),
+    parser.add_argument('question', choices=('q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q8'),
                         help='q1 also writes q2; recall.py writes q7')
     question = parser.parse_args().question
     with TemporaryDirectory() as directory:
         work = Path(directory)
         Route(DECLARATION, work/'verify')
-        if question in ('q1', 'q3'):
-            from phases import amp_rows, mdea_rows
-            (amp_rows if question=='q1' else mdea_rows)(work/question, save)
+        if question in ('q1', 'q2'):
+            from phases import amp_rows
+            amp_rows(work/question, save, save_q1=question=='q1')
+        elif question == 'q3':
+            from phases import mdea_rows
+            mdea_rows(work/question, save)
         elif question == 'q8':
             from records import reductions
             reductions(work, save)

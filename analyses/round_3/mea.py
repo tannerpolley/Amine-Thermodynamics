@@ -199,8 +199,29 @@ def activity_grid(save):
                 ion['attribution_5dp'] = {k:round(last[k],5) if round(last[k],5)==round(penultimate[k],5)
                                          and ion['closure_within_dilution_change'] else None for k in ion['terminal_change']}
     control = next(r for r in rows if r['T_K']==313.15 and r['loading']==.30 and r['symbol'] is None)
-    carbonate, = (BUNDLE/'results/shared-ion-electrostatics-423').glob('*/*/P0/carbonate-share.json')
-    save('q5',start, rows=rows, retained_carbonate_comparison=stable.read(carbonate),
+    carbonate = BUNDLE/'results/bicarbonate-carbonate-266/inputs.json'
+    retained = stable.read(carbonate)
+    source_states = {r['identity']:r for r in retained['source_rows']}
+    pool = []
+    for r in retained['records']:
+        source = source_states[r['state_identity']]
+        state = retained['problems'][r['problem']]
+        if not (r['group']=='Jakobsen2005 carbonate-pool-split' and state['T']==313.15
+                and float(source['input']['MEA_weight_fraction'])==.30):
+            continue
+        loading = r['row']['model_loading']
+        problem = s._problem_from_request(request(mapping,state['T'],loading))
+        problem.feed = eq.Amounts(state['feed']['values'])
+        assert problem.P==state['P']
+        result = eq.solve_equilibrium(model,problem)
+        x = result.phase_mole_fractions(0) if result.requested_tolerance_met else None
+        pool.append(dict(identity=r['identity'], T_K=state['T'], P_Pa=state['P'], loading=loading,
+                         stock_MEA_mass_fraction=float(source['model_state']['model_unloaded_MEA_mass_fraction']),
+                         feed_mol=problem.feed.values, observed=r['arguments']['observed'],
+                         carbonate_pool_split=None if x is None else x[C]/(x[C]+x[B]), message=result.message))
+    carbon = sum(control['x'][IDS.index(c)] for c in ('carbon-dioxide','carbamate-anion','bicarbonate-anion','carbonate-anion'))
+    save('q5',start, rows=rows, carbonate_pool_comparison=pool,
+         control_carbonate_total_carbon_fraction=control['x'][C]/carbon,
          inputs=identity(PARAMETERS,digitized,s.STATE_PACKET,carbonate), stock_MEA_mass_fraction=.30,
          control_pass=(round(control['pH'],6),round(control['raw_R1_pH'],6))==(8.887695,10.632054))
     assert (round(control['pH'],6),round(control['raw_R1_pH'],6))==(8.887695,10.632054)

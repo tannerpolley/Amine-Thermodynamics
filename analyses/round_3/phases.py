@@ -69,6 +69,7 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
         stable.supplied_negative(t) for t in out.get('supplied', []) if 'quantities' in t)
     out['instability'] = 'resolved descent' if resolved else 'finite search, no resolved descent' if (
         out.get('search', {}).get('no_descent_in_trial_set')) else 'unresolved' if result.requested_tolerance_met else 'unavailable'
+    pair_solution = []
     if seed and (resolved or mdea or not assemblages):
         attempts = [list(zip(seed['pair']['phases'], seed['pair']['packings'], strict=True))]
         if guess is not None and not mdea:
@@ -76,17 +77,18 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
                 z, n = t.split_coordinates, len(guess[0])
                 donor = (list(map(math.exp,z[:n])),math.exp(z[n+1])) if len(z)==2*n+4 else guess
                 attempts.append([donor,(list(t.composition),math.exp(z[-1]))])
+        def inspect(compiled, solved):
+            pair_solution[:] = compiled, solved
+            if solved.requested_tolerance_met and len(solved.amounts)==2 and min(solved.amounts)>0:
+                details = physical(spec, problem, solved)
+                return {k:details[k] for k in ('balances', 'physical_checks_pass')}
+
         for index, guesses in enumerate(attempts):
             try:
-                pair = cd.coexistence(spec, problem, parent_g, guesses)
-                out['attempts'].append(dict(pair, seed='archive' if index==0 else 'native split'))
-                pair = out['attempts'][-1]
+                pair = cd.coexistence(spec, problem, parent_g, guesses, inspect=inspect)
+                pair.update(pair.pop('diagnostics') or {}, seed='archive' if index==0 else 'native split')
+                out['attempts'].append(pair)
                 if 'phases' in pair:
-                    pair_rows = [phase(model, result.temperature, P, n, rho, x, [spec.spec['element_formulas'][c] for c in spec.parameters.component_ids])
-                                 for n, rho, x in zip(pair['amounts_mol'], pair['densities_mol_m3'], pair['phases'], strict=True)]
-                    pair['balances'] = balances(problem.feed.values, pair_rows, [spec.spec['element_formulas'][c] for c in spec.parameters.component_ids])
-                    pair['physical_checks_pass'] = all(phase_passed(p, P, problem.row_tolerance) for p in pair_rows) and max(
-                        map(abs, pair['balances']['scaled_element_residual'].values())) <= problem.row_tolerance
                     pair['confirmed'] &= pair['physical_checks_pass']
                     if mdea:
                         pair['dilute_vapor_traces'] = [dilute_vapor_connection(model, result.temperature, x, rho)
@@ -102,64 +104,77 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
         out['minimum_trial_roots'] = cd.pressure_roots(model, result.temperature, P, best['composition'],
                                                        1/best['quantities']['volume_m3_per_mol'])
     if assemblages and resolved:
-        amp_candidates(spec, route, problem, guess, out)
+        amp_candidates(spec, route, problem, guess, out, pair_solution)
     return out
 
 
-def amp_candidates(spec, route, problem, guess, out):
+def amp_candidates(spec, route, problem, guess, out, pair_solution):
     model = spec.model
     vapor = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
     support = [i for i in range(len(spec.parameters.component_ids))
                if i not in eq.compile_problem(model, problem).removed_species]
     pair = next((a for a in out['attempts'] if a['confirmed']), None)
-    candidates = [dict(support='L', Gibbs_over_RT_mol=out['parent_gibbs_RT_mol'][0],
-                       error=out['parent_gibbs_RT_mol'][1], qualified=out['physical_checks_pass'])]
+    g, error = out['parent_gibbs_RT_mol']
+    candidates = [dict(support='L', Gibbs_over_RT_mol=g, error=error, qualified=out['physical_checks_pass'])]
     out['candidates'] = candidates
     original, pressure = problem.phases, problem.pressure
-    def make_phase(name, kind, support, guess=None, pinned=False):
+
+    def make_phase(name, kind, support, guess=(None, None), pinned=False):
         phase = type(original[0])()
         phase.name, phase.kind = name, getattr(type(original[0].kind), kind)
         phase.support, phase.support_declared = support, True
-        if guess is not None:
-            x, phase.packing_guess = guess
+        x, phase.packing_guess = guess
+        if x is not None:
             phase.composition_guess = [x[i] for i in support]
         if pinned:
             phase.amount = type(phase.amount).pinned(0.)
         return phase
-    for label, guesses in [('L+V', [guess]), *([('L1+L2', list(zip(pair['phases'], pair['packings'], strict=True)))] if pair else [])]:
-        liquid = [make_phase(f'L{i+1}', 'Liquid', support, guess) for i, guess in enumerate(guesses)]
-        variants = [(label, liquid+[make_phase('V', 'Vapor', vapor)])] if len(liquid)==1 else [
-            (label, liquid), ('L1+L2+incipient V', liquid+[make_phase('V', 'Vapor', vapor, pinned=True)])]
-        for kind, phases in variants:
-            entry = dict(support=kind, qualified=False)
-            candidates.append(entry)
-            try:
-                problem.phases = phases
-                problem.pressure = type(pressure).variable(pressure.value) if 'incipient' in kind else pressure
-                solved = eq.solve_equilibrium(model, problem)
-                entry.update(message=solved.message, pressure_Pa=solved.pressure, amounts_mol=list(solved.amounts))
-                if solved.requested_tolerance_met and solved.amounts:
-                    compiled = eq.compile_problem(model, problem)
-                    entry.update(physical(spec, problem, solved))
-                    roots = [cd.pressure_roots(model, solved.temperature, solved.pressure, solved.phase_mole_fractions(i), rho)
-                             for i, rho in enumerate(solved.molar_densities)]
-                    entry['roots'] = roots
-                    wanted = ['liquid']*len(liquid)+['vapor']*(len(phases)-len(liquid))
-                    roots_ok = all(any(r['returned']==branch for r in cd.matched(test, problem.row_tolerance))
-                                   for branch, test in zip(wanted, roots, strict=True))
-                    entry['qualified'] = (entry['physical_checks_pass'] and roots_ok and min(solved.amounts[:len(liquid)])>0
-                                          and ('incipient' in kind or min(solved.amounts)>0))
-                    if 'incipient' not in kind:
-                        entry['Gibbs_over_RT_mol'], entry['error'] = cd.gibbs(compiled, solved)
-                        entry['omitted_phase_trials'] = trials(eq.stability_test(compiled, solved))
-                        if kind=='L1+L2' and any(t['kind']=='Vapor' and t['descent'] for t in entry['omitted_phase_trials']):
-                            variants.append(('L1+L2+V',liquid+[make_phase('V', 'Vapor', vapor)]))
-            except (ValueError, RuntimeError) as error:
-                entry.update(message=str(error))
-            finally:
-                problem.phases, problem.pressure = original, pressure
-    if not pair:
+
+    variants = [('L+V', [make_phase('L1', 'Liquid', support, guess), make_phase('V', 'Vapor', vapor)])]
+    if pair:
+        compiled, solved = pair_solution
+        omitted = trials(eq.stability_test(compiled, solved))
+        candidates.append(dict(support='L1+L2', qualified=True, pressure_Pa=solved.pressure,
+                               Gibbs_over_RT_mol=pair['split_Gibbs_over_RT_mol'],
+                               error=pair['numerical_error_over_RT_mol']-error,
+                               amounts_mol=pair['amounts_mol'], omitted_phase_trials=omitted))
+        liquid = [make_phase(f'L{i+1}', 'Liquid', support, seed)
+                  for i, seed in enumerate(zip(pair['phases'], pair['packings'], strict=True))]
+        seed = next(t for t in out['native_trials'] if t['kind']=='Vapor' and t['seed']=='positive-neutral-base')
+        vapor_guess = (seed['composition'], None)
+        variants.append(('L1+L2+incipient V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess, pinned=True)]))
+        if any(t['kind']=='Vapor' and t['descent'] for t in omitted):
+            variants.append(('L1+L2+V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess)]))
+    else:
         candidates.append(dict(support='L1+L2', qualified=False, message='Seeded attempts did not confirm distinct liquid roots below parent Gibbs beyond paired error.'))
+    for kind, phases in variants:
+        entry = dict(support=kind, qualified=False)
+        candidates.append(entry)
+        incipient = 'incipient' in kind
+        try:
+            problem.phases = phases
+            problem.pressure = type(pressure).variable(pressure.value) if incipient else pressure
+            solved = eq.solve_equilibrium(model, problem)
+            entry.update(message=solved.message, pressure_Pa=solved.pressure, amounts_mol=list(solved.amounts),
+                         requested_tolerance_met=solved.requested_tolerance_met)
+            if solved.requested_tolerance_met and solved.amounts:
+                entry.update(physical(spec, problem, solved))
+                roots = [cd.pressure_roots(model, solved.temperature, solved.pressure, p['x'], p['density_mol_m3'])
+                         for p in entry['phases']]
+                entry['roots'] = roots
+                wanted = ['liquid']*(len(phases)-1)+['vapor']
+                entry['root_checks_pass'] = all(any(r['returned']==branch for r in cd.matched(test, problem.row_tolerance))
+                                                for branch, test in zip(wanted, roots, strict=True))
+                entry['qualified'] = (entry['physical_checks_pass'] and entry['root_checks_pass']
+                                      and min(solved.amounts[:(-1 if incipient else None)])>0)
+                if not incipient:
+                    compiled = eq.compile_problem(model, problem)
+                    entry['Gibbs_over_RT_mol'], entry['error'] = cd.gibbs(compiled, solved)
+                    entry['omitted_phase_trials'] = trials(eq.stability_test(compiled, solved))
+        except (ValueError, RuntimeError) as error:
+            entry.update(message=str(error))
+        finally:
+            problem.phases, problem.pressure = original, pressure
     eligible = sorted((c for c in candidates if c['qualified'] and 'Gibbs_over_RT_mol' in c), key=lambda c: c['Gibbs_over_RT_mol'])
     out['lowest_found'] = dict(scope=FULL, support=eligible[0]['support']) if eligible else None
     out['unresolved_supports'] = [c['support'] for c in candidates if not c['qualified'] and 'incipient' not in c['support']]
@@ -168,7 +183,7 @@ def amp_candidates(spec, route, problem, guess, out):
     out['stable_assemblage'] = None
 
 
-def amp_rows(work, save):
+def amp_rows(work, save, *, save_q1=True):
     start = monotonic()
     route = Route(DECLARATION, work)
     paths = [ENDPOINTS / name / 'parameters.json' for name in ('main', 'slope-150')]
@@ -211,7 +226,8 @@ def amp_rows(work, save):
         rows.append(dict(key=key, pressure_basis=label, free=free, fixed=fixed_fit))
         if label=='measured pressure':
             observed[key] = free
-    save('q1', start, rows=rows, inputs=inputs)
+    if save_q1:
+        save('q1', start, rows=rows, inputs=inputs)
     start = monotonic()
     rows = []
     for index, key in enumerate(keys):
@@ -314,11 +330,20 @@ def certificate(spec, problem, compiled, result):
     options.trials = [vapor]
     report = eq.stability_test(compiled, result, options)
     evaluated = trials(report)
-    minimum = min((t['quantities']['tpd_over_rt'] for t in evaluated
-                   if (t['descent'] or t['evidence'] in ('evaluated','no_resolved_descent')) and 'tpd_over_rt' in t['quantities']), default=None)
+    endpoints = [t for t in evaluated if (t['descent'] or t['evidence'] in ('evaluated','no_resolved_descent'))
+                 and 'tpd_over_rt' in t['quantities']]
+    for t in endpoints:
+        rho = 1/t['quantities']['volume_m3_per_mol']
+        trace, connected = dilute_vapor_connection(spec.model, result.temperature, t['composition'], rho)
+        roots = cd.pressure_roots(spec.model, result.temperature, result.pressure, t['composition'], rho)
+        liquid = any(r['returned']=='liquid' for r in cd.matched(roots, tolerance))
+        t.update(density_mol_m3=rho, dilute_vapor_trace=trace, vapor_connected=connected, roots=roots,
+                 endpoint='dilute-vapor-connected' if connected else 'liquid' if liquid else 'unresolved')
+    tpd = [t['quantities']['tpd_over_rt'] for t in endpoints]
     return dict(gauge_phi_over_RT=gauge, primitive_chemical_rows=chemical, primitive_limit=tolerance,
                 reaction_contractions=reactions, electrochemical_difference_L2_minus_L1=transfer, transfer_limit=2*tolerance,
-                vapor_trials=evaluated, vapor_minimum=minimum, vapor_message=report.message,
+                trial_minimum=min(tpd, default=None), vapor_trials=evaluated, vapor_message=report.message,
+                vapor_connected_minimum=min((v for t,v in zip(endpoints,tpd,strict=True) if t['vapor_connected']), default=None),
                 vapor_completed=report.completed, vapor_no_descent=report.no_descent_in_trial_set,
                 reaction_pass=all(abs(row['residual'])<=row['tolerance'] for row in reactions),
                 transfer_pass=max(map(abs,transfer.values()))<=2*tolerance,

@@ -31,12 +31,21 @@ Report the matched, constrained single-liquid AARD and signed bias (prediction m
 
 Hartono 55 measured 406,500 Pa. The free liquid parent gave -0.001840 minimum TPD/RT at that pressure. The lowest-G feasible assemblage found among the tested supports was L1+L2. The separate local two-liquid bubble was 252,535.6 Pa with liquid amounts 13.0812 and 1.44171 mol.
 
-| Observation | Observed total pressure (Pa) | Local LL bubble (Pa) |
-| --- | --- | --- |
-| hartono-2021:55 | 406,500 | 252,535.6 |
-| hartono-2021:56 | 510,000 | 338,419.7 |
-| hartono-2021:57 | 640,500 | 445,120.0 |
-| tong-2012:44 | 632,600 | 329,092.5 |
+At Tong 28 (373.2 K, 291,500 Pa), the lowest-G feasible assemblage found was L1+L2. Its liquid amounts were 11.41035 and 1.13818 mol. The pair lowered G/RT by 0.000556998 mol against paired numerical error 3.13e-09 mol. The previous restart coalesced. [Earlier attempts](results/q2-prior-attempts.json).
+
+The root readback check requires relative pressure error at or below 1e-10 on the matching branch.
+
+| Observation | Observed total pressure (Pa) | Local LL bubble (Pa) | Numerical checks |
+| --- | --- | --- | --- |
+| hartono-2021:55 | 406,500 | 252,535.6 | Qualified |
+| hartono-2021:56 | 510,000 | 338,419.7 | Qualified |
+| hartono-2021:57 | 640,500 | 445,120.0 | Qualified |
+| tong-2012:28 | 291,500 | 158,660.3 | Root readback missed |
+| tong-2012:29 | 351,800 | 186,302.1 | Root readback missed |
+| tong-2012:30 | 387,200 | 209,307.5 | Root readback missed |
+| tong-2012:31 | 440,700 | 238,419.9 | Root readback missed |
+| tong-2012:32 | 983,500 | Unavailable | phase L2 vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected |
+| tong-2012:44 | 632,600 | 329,092.5 | Qualified |
 
 ## Q3. MDEA Table 8 supplement
 
@@ -86,6 +95,19 @@ At 30 wt% unloaded MEA, 313.15 K, 101,325 Pa and loading 0.30, R2 gives pH 8.887
 | 0.45 | 8.28609 | 0.00133356 |
 | 0.5 | 7.92249 | 0.000570555 |
 
+The loading-0.30 grid control gives carbonate-pool split 0.00599939. Its carbonate fraction of total absorbed carbon is 0.000216128. The Jakobsen comparisons use the retained carbonate-pool observable at 313.15 K and 101,325 Pa, with the source-modeled unloaded stock (27.14 wt% MEA) and loadings. [Tables A2 and 2 and modeled feeds](../mea_parameter_bundle/results/bicarbonate-carbonate-266/inputs.json).
+
+| Jakobsen state | Loading (mol/mol) | Observed pool split | Calculated pool split |
+| --- | --- | --- | --- |
+| Jakobsen2005_state_017 | 0.09 | 0.5 | 0.0390141 |
+| Jakobsen2005_state_018 | 0.21 | 0.574468 | 0.017073 |
+| Jakobsen2005_state_019 | 0.27 | 0.571429 | 0.0114788 |
+| Jakobsen2005_state_020 | 0.26 | 0.5 | 0.0122864 |
+| Jakobsen2005_state_021 | 0.39 | 0.454545 | 0.00438532 |
+| Jakobsen2005_state_022 | 0.59 | 0.05625 | 0.000184519 |
+| Jakobsen2005_state_023 | 0.78 | 0.0196937 | 1.7466e-05 |
+| Jakobsen2005_state_024 | 0.95 | 0.0155587 | 5.88605e-06 |
+
 | Electrode data | Temperature (K) | Available / measured | Model minus electrode pH (range) |
 | --- | --- | --- | --- |
 | Hartono and Svendsen (2009), as plotted by Hessen et al. (2010), Fig. 6, p. 3644 | 313.15 | 197 / 197 | -0.81 to -0.64 |
@@ -104,7 +126,7 @@ At 30 wt% unloaded MEA, 313.15 K, 101,325 Pa and loading 0.30, R2 gives pH 8.887
 
 ## Q6. AMP S14 certificate
 
-On the solved pair, the maximum absolute primitive chemical row is 1.82e-13 against 1e-10. The largest reaction and electrochemical residuals are 7.46e-13 and 1.11e-13, respectively. The 5 neutral vapor trials gave minimum TPD/RT 0.030718. Report this minimum only for those trials. [Primitive rows, contraction bounds, trial seeds and errors](results/q6.json).
+On the solved pair, the maximum absolute primitive chemical row is 1.82e-13 against 1e-10. The largest reaction and electrochemical residuals are 7.46e-13 and 1.11e-13, respectively. The minimum TPD/RT over all 5 starts was 0.03071759. That start ended at the water-rich liquid root (51,407.29 mol/m³). The 4 dilute-vapor-connected endpoints at 383.40 mol/m³ gave minimum TPD/RT 0.03816547. These minima apply to the sampled endpoints. [Primitive rows, contraction bounds, trial seeds and errors](results/q6.json).
 
 ## Q7. Empty-bank search recall
 
@@ -138,18 +160,18 @@ Water supplement. The five frozen water coefficients exactly match F2. [IAPWS-95
 | component/water/segment_count | 1.25275383793441 |
 | component/water/segment_diameter/constant-plus-sum-of-exponentials/constant | 2.78043261494296 |
 
-| Candidate assessment grid | Property | Evaluated rows | Mean error (%) | Maximum error (%) |
-| --- | --- | --- | --- | --- |
-| primary | cp | 20 | 0.440033 | 1.48694 |
-| primary | rho | 20 | 0.0373979 | 0.0954496 |
-| primary | saturated_liquid_rho | 20 | 0.0362947 | 0.0984651 |
-| primary | psat | 20 | 0.075413 | 0.170901 |
-| staggered | cp | 19 | 0.415904 | 1.36132 |
-| staggered | rho | 19 | 0.0354057 | 0.0745235 |
-| staggered | saturated_liquid_rho | 19 | 0.0343298 | 0.0779572 |
-| staggered | psat | 19 | 0.0700389 | 0.141053 |
-| atmospheric-controls | cp | 3 | 0.78441 | 1.48453 |
-| atmospheric-controls | rho | 3 | 0.0378209 | 0.0531249 |
+| Candidate assessment grid | Property | Pressure basis | First T (K) / P (Pa) | Evaluated rows | Mean error (%) | Maximum error (%) |
+| --- | --- | --- | --- | --- | --- | --- |
+| primary | cp | imposed | 298.15 / 300,000.00 | 20 | 0.440033 | 1.48694 |
+| primary | rho | imposed | 298.15 / 300,000.00 | 20 | 0.0373979 | 0.0954496 |
+| primary | saturated_liquid_rho | IAPWS-95 saturation | 298.15 / 3,169.93 | 20 | 0.0362947 | 0.0984651 |
+| primary | psat | IAPWS-95 saturation | 298.15 / 3,169.93 | 20 | 0.075413 | 0.170901 |
+| staggered | cp | imposed | 300.65 / 300,000.00 | 19 | 0.415904 | 1.36132 |
+| staggered | rho | imposed | 300.65 / 300,000.00 | 19 | 0.0354057 | 0.0745235 |
+| staggered | saturated_liquid_rho | IAPWS-95 saturation | 300.65 / 3,674.21 | 19 | 0.0343298 | 0.0779572 |
+| staggered | psat | IAPWS-95 saturation | 300.65 / 3,674.21 | 19 | 0.0700389 | 0.141053 |
+| atmospheric-controls | cp | imposed | 298.15 / 101,325.00 | 3 | 0.78441 | 1.48453 |
+| atmospheric-controls | rho | imposed | 298.15 / 101,325.00 | 3 | 0.0378209 | 0.0531249 |
 
 Kuranov Table 2. 70 fitted and 12 outside-fit rows, including row 72 at 393.16 K and 1,205,300 Pa outside fit. Present-model AARD is 19.0905% fitted and 22.0884% outside fit.
 

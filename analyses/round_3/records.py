@@ -76,8 +76,14 @@ def reductions(work, save):
     with reference_grid.open() as stream:
         grid = list(csv.DictReader(stream))
     with metrics.open() as stream:
-        statistics = [dict(r, mean_percent=100*float(r['mean_absolute_relative_error']), max_percent=100*float(r['maximum_absolute_relative_error']),
-                           conditions=[(float(g['T_K']),float(g['P_Pa'])) for g in grid if g['grid']==r['grid']]) for r in csv.DictReader(stream)]
+        statistics = []
+        for r in csv.DictReader(stream):
+            saturated = r['quantity'] in ('saturated_liquid_rho', 'psat')
+            pressure = 'psat_Pa' if saturated else 'P_Pa'
+            statistics.append(dict(r, mean_percent=100*float(r['mean_absolute_relative_error']),
+                                   max_percent=100*float(r['maximum_absolute_relative_error']),
+                                   pressure_basis='IAPWS-95 saturation' if saturated else 'imposed',
+                                   conditions=[(float(g['T_K']),float(g[pressure])) for g in grid if g['grid']==r['grid']]))
     old, current = (s.parameter_values(read(path)) for path in
                     (water_dir/'lambda-0.1-A/parameters.json', BUNDLE/'results/selected-current-best-parameters.json'))
     ids = read(water_dir/'verification.json')['only_five_coordinates_changed']

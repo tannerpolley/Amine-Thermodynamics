@@ -47,10 +47,20 @@ def handoff():
            f"The lowest-G feasible assemblage found among the tested supports was {search['lowest_found']['support']}. "
            f"The separate local two-liquid bubble was {number(bubble['pressure_Pa'],',.1f')} Pa "
            f"with liquid amounts {bubble['amounts_mol'][0]:.4f} and {bubble['amounts_mol'][1]:.5f} mol.")
+    tong = next(r['measured_pressure_search'] for r in q2['rows'] if r['identity']=='tong-2012:28')
+    pair = next(a for a in tong['attempts'] if a['confirmed'])
+    yield (f"At Tong 28 ({tong['T_K']:.1f} K, {tong['P_Pa']:,.0f} Pa), the lowest-G feasible assemblage found was "
+           f"{tong['lowest_found']['support']}. Its liquid amounts were {pair['amounts_mol'][0]:.5f} and "
+           f"{pair['amounts_mol'][1]:.5f} mol. The pair lowered G/RT by {pair['Gibbs_decrease_over_RT_mol']:.9f} mol "
+           f"against paired numerical error {pair['numerical_error_over_RT_mol']:.3g} mol. The previous restart coalesced. "
+           "[Earlier attempts](results/q2-prior-attempts.json).")
+    yield 'The root readback check requires relative pressure error at or below 1e-10 on the matching branch.'
     local = [(r,c) for r in q2['rows'] for c in r['measured_pressure_search'].get('candidates',[])
-             if c['support']=='L1+L2+incipient V' and c['qualified']]
-    yield table(['Observation','Observed total pressure (Pa)','Local LL bubble (Pa)'],
-                ((r['identity'],number(r['observed_Pa'],',.0f'),number(c['pressure_Pa'],',.1f')) for r,c in local))
+             if c['support']=='L1+L2+incipient V']
+    yield table(['Observation','Observed total pressure (Pa)','Local LL bubble (Pa)','Numerical checks'],
+                ((r['identity'],number(r['observed_Pa'],',.0f'),number(c.get('pressure_Pa'),',.1f'),
+                  'Qualified' if c['qualified'] else 'Root readback missed' if c.get('physical_checks_pass') and not c.get('root_checks_pass')
+                  else 'Physical checks missed' if c.get('requested_tolerance_met') else c['message']) for r,c in local))
     yield '## Q3. MDEA Table 8 supplement'
     yield ('Gibbs decrease is parent minus pair, divided by $RT$, on the 1 mol MDEA feed basis. '
            'Both low-fit decreases reproduce within the original paired numerical errors. The other endpoints had '
@@ -85,6 +95,14 @@ def handoff():
            "This comparison cannot attribute the carbonate deficit to one term. "
            "[Matched pH, ion decompositions, and carbonate comparison](results/q5.json) · [Digitization](results/ph-digitization.json).")
     yield table(['Loading (mol/mol)','R2 pH','CO₃²⁻/(CO₃²⁻ + HCO₃⁻)'],((r['loading'],number(r['pH']),number(r['carbonate_share'])) for r in grid))
+    pool = q5['carbonate_pool_comparison']
+    yield (f"The loading-0.30 grid control gives carbonate-pool split {ctrl['carbonate_share']:.8f}. Its carbonate fraction "
+           f"of total absorbed carbon is {q5['control_carbonate_total_carbon_fraction']:.9f}. The Jakobsen comparisons use "
+           f"the retained carbonate-pool observable at {pool[0]['T_K']:.2f} K and {pool[0]['P_Pa']:,.0f} Pa, "
+           f"with the source-modeled unloaded stock ({100*pool[0]['stock_MEA_mass_fraction']:.2f} wt% MEA) and loadings. "
+           "[Tables A2 and 2 and modeled feeds](../mea_parameter_bundle/results/bicarbonate-carbonate-266/inputs.json).")
+    yield table(['Jakobsen state','Loading (mol/mol)','Observed pool split','Calculated pool split'],
+                ((r['identity'].split(':')[0],r['loading'],number(r['observed']),number(r['carbonate_pool_split'])) for r in pool))
     yield table(['Electrode data','Temperature (K)','Available / measured','Model minus electrode pH (range)'],
                 ((source['source'],source['T_K'],f"{len(values)} / {len(source['points'])}",f"{min(values):.2f} to {max(values):.2f}")
                  for source in read('ph-digitization') if (values := [r['model_minus_electrode_pH'] for r in q5['rows']
@@ -95,12 +113,18 @@ def handoff():
     yield '![Matched electrode and EOS pH on the two temperature series.](results/ph-comparison.svg)'
     yield '## Q6. AMP S14 certificate'
     d = q6['split']['diagnostics']
+    endpoints = [t for t in d['vapor_trials'] if 'endpoint' in t]
+    trial = min(endpoints, key=lambda t:t['quantities']['tpd_over_rt'])
+    vapor = [t for t in endpoints if t['vapor_connected']]
     yield (f"On the solved pair, the maximum absolute primitive chemical row is "
            f"{max(abs(r['residual']) for r in d['primitive_chemical_rows']):.3g} against {d['primitive_limit']:.1g}. "
            f"The largest reaction and electrochemical residuals are {max(abs(r['residual']) for r in d['reaction_contractions']):.3g} and "
            f"{max(map(abs,d['electrochemical_difference_L2_minus_L1'].values())):.3g}, respectively. "
-           f"The {len(d['vapor_trials'])} neutral vapor trials gave minimum TPD/RT {d['vapor_minimum']:.6f}. "
-           "Report this minimum only for those trials. [Primitive rows, contraction bounds, trial seeds and errors](results/q6.json).")
+           f"The minimum TPD/RT over all {len(d['vapor_trials'])} starts was {d['trial_minimum']:.8f}. "
+           f"That start ended at the water-rich liquid root ({trial['density_mol_m3']:,.2f} mol/m³). "
+           f"The {len(vapor)} dilute-vapor-connected endpoints at {vapor[0]['density_mol_m3']:,.2f} mol/m³ gave "
+           f"minimum TPD/RT {d['vapor_connected_minimum']:.8f}. These minima apply to the sampled endpoints. "
+           "[Primitive rows, contraction bounds, trial seeds and errors](results/q6.json).")
     yield '## Q7. Empty-bank search recall'
     yield (f"Native trials recovered {q7['recovered']}/{q7['archived_positive']} archived positives "
            f"({q7['missed']} missed, {q7['positive_unavailable']} unavailable). "
@@ -121,8 +145,9 @@ def handoff():
     yield ('Water supplement. The five frozen water coefficients exactly match F2. '
            '[IAPWS-95 grid conditions, coefficient values and mean/maximum errors](results/q8.json).')
     yield table(['Frozen water coordinate','Value'],((key,number(value,'.15g')) for key,value in q8['water']['coefficients'].items()))
-    yield table(['Candidate assessment grid','Property','Evaluated rows','Mean error (%)','Maximum error (%)'],
-                ((r['grid'],r['quantity'],r['evaluated_rows'],number(r['mean_percent']),number(r['max_percent']))
+    yield table(['Candidate assessment grid','Property','Pressure basis','First T (K) / P (Pa)','Evaluated rows','Mean error (%)','Maximum error (%)'],
+                ((r['grid'],r['quantity'],r['pressure_basis'],f"{r['conditions'][0][0]:.2f} / {r['conditions'][0][1]:,.2f}",
+                  r['evaluated_rows'],number(r['mean_percent']),number(r['max_percent']))
                  for r in q8['water']['metrics'] if r['record']=='lambda-0.1-A'))
     yield (f"Kuranov Table 2. {k['counts']['fitted']} fitted and {k['counts']['not fitted']} outside-fit rows, including "
            f"row {k['added_row']['source_row']} at {k['added_row']['T']:.2f} K and {k['added_row']['p_exp']:,.0f} Pa outside fit. "
