@@ -207,6 +207,9 @@ for ax, fraction in zip(axes, ('0.10', '0.20', '0.30')):
     line = sorted((r for r in curves if r['group'] == 'Carson' and r['row']['DEA_mass_fraction'] == fraction), key=lambda r: r['loading'])
     assert len(line) == 25
     ax.plot([r['loading'] for r in line], [r['value']/1000 for r in line], color=colors[0], linestyle=':')
+    obs = [r for r in data if r['group'] == 'Carson' and r['row']['DEA_mass_fraction'] == fraction]
+    assert all(r['role'] == 'fitted' for r in obs)
+    ax.scatter([loading(r['row']) for r in obs], [r['observed']/1000 for r in obs], s=15, color=colors[0])
     ax.set_title(f'{100*float(fraction):g} wt%')
     ax.set_xlabel('Loading (mol CO$_2$/mol DEA)')
 axes[0].set_ylabel('Integral heat (kJ/mol CO$_2$)')
@@ -234,6 +237,40 @@ figure(fig, 'mdea-gap-onset.pdf')
 MD343 = 'analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/'  # measured-point locations of the MDEA pressure figure
 AM = 'analyses/amp_transfer/results/retransfer-412-f2-05e94210/'  # #412: F2 carbamate inputs
 AMM = AM + 'slope-150/'  # the reported AMP model: AMPH+-water reciprocal-temperature slope fixed at a value chosen from a scan
+f2 = MEA + 'reduced-refit/evidence/F2/'
+mea_pressure = read(f2 + 'canonical-pressure.csv')
+fitted_pressure = {r['id'] for r in read(f2 + 'fitted-rows.csv') if r['quantity'] == 'PartialPressure'}
+pressure = {'MEA': [(float(r['loading']), float(r['ln_pred_over_obs']), 'fitted' if r['target'] in fitted_pressure else 'not fitted') for r in mea_pressure]}
+pressure['DEA'] = [(loading(r['row']), math.log(r['value']/r['observed']), r['role']) for r in data if r['group'] in ('Lawson', 'Lawson-394K', 'SeoHong', 'Lal', 'Lawson-VIII')]
+mrows = read(MD + 'data-rows.json')
+def mdea_loading(r):
+    q = r['row']
+    if r['group'] == 'corrected-Kamps': return float(q['m_CO2_mol_kg_water']) / float(q['m_MDEA_mol_kg_water'])
+    if r['group'] == 'Sedighi': return float(q['alpha_mol_CO2_per_mol_MDEA'])
+    return float(q['m_CO2_mol_per_kg_H2O']) / float(q['m_MDEA_mol_per_kg_H2O'])
+pressure['MDEA'] = [(mdea_loading(r), math.log(r['value']/r['observed']), r['role']) for r in mrows if r['group'] in ('Kuranov', 'Kuranov-413K', 'corrected-Kamps', 'Sedighi') and r['status'] == 'Available']
+arows = read(AMM + 'data-rows.json')
+pressure['AMP'] = [(r['loading_mol_CO2_per_mol_AMP'], math.log(r['value']/r['observed']), r['role']) for r in arows if r['group'] in ('loaded-pressure', 'hartono-2021-supplemental', 'tong') and r['status'] == 'Available']
+assert {k: collections.Counter(r for _, _, r in v) for k, v in pressure.items()} == {
+    'MEA': {'fitted': 47, 'not fitted': 112}, 'DEA': {'fitted': 30, 'not fitted': 67, 'comparison only': 10},
+    'MDEA': {'fitted': 66, 'not fitted': 54}, 'AMP': {'fitted': 47, 'not fitted': 58}}
+fig, axes = plt.subplots(2, 2, figsize=(6.48, 5.5), constrained_layout=True)
+for ax, (amine, points) in zip(axes.flat, pressure.items()):
+    for role, marker, filled in [('fitted', 'o', True), ('not fitted', 'o', False), ('comparison only', '^', False)]:
+        rows = [(x, y) for x, y, label in points if label == role]
+        if rows: ax.scatter([x for x, y in rows], [y for x, y in rows], s=17, marker=marker, edgecolors=colors[0], facecolors=colors[0] if filled else 'none', label=role.capitalize())
+    ax.axhline(0, color='0.5', linewidth=.7)
+    ax.set_title(amine + (' — CO$_2$ partial pressure' if amine in ('MEA', 'DEA') else ' — total pressure'))
+    ax.set(xlabel='Loading (mol CO$_2$/mol amine)', ylabel=r'$\ln(p^{\mathrm{calc}}/p^{\mathrm{obs}})$')
+    ax.legend()
+figure(fig, 'loaded-pressure-residuals.pdf')
+carbonate = read(f2 + 'carbonate-share.csv')
+assert len(carbonate) == 10
+fig, ax = plt.subplots(figsize=(3.2, 2.7), constrained_layout=True)
+ax.scatter([float(r['observed_share']) for r in carbonate], [float(r['predicted_share']) for r in carbonate], s=24, facecolors='none', edgecolors=colors[0], label='Not fitted')
+ax.set(xlabel='Measured carbonate share', ylabel='Calculated carbonate share')
+ax.legend()
+figure(fig, 'jakobsen-carbonate-share.pdf')
 AMF = AM + 'main/'  # the comparison fit with that slope also fitted, which has the splits
 ASLOPE = 'protonated-aminomethylpropanol/water/k_ij_reciprocal_temperature_slope'
 AM344 = 'analyses/amp_transfer/results/retransfer-344-05e94210/'  # the pure-AMP prefit, which the refit keeps
