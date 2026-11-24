@@ -1,0 +1,60 @@
+**The worked AMP split is a numerical prediction of the free-slope model.** At 393.15 K, 1.212490953 MPa, 30 wt% unloaded AMP and 0.700 mol CO₂/mol AMP, the ion-rich and water-rich liquids lower G/(RT) by **0.018814103256 mol** on the feed of 1 mol AMP, 11.545384437 mol water and 0.7 mol CO₂. The fitted AMPH⁺–water temperature law controls the loss of convexity. The exact Figiel Eq. 9 average preserves the split. The evidence supports handling AMP as a parameter and extrapolation choice in this repository. The high-pressure MDEA splits have a different composition and energy balance.
+
+### Independent verification
+
+I verified the SHA-256 of the Engine 05e94210 wheel (`c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`), compared every installed Engine file to the wheel archive with `Route.verify`, and checked the #428 input hashes. I evaluated the archived phase amounts, densities and compositions directly through the EOS at fixed T, V and n before calling any stability or coexistence routine. The two liquids contain 4.221982 and 8.365087 mol, with densities of 31,612 and 44,899 mol/m³.
+
+- CO₂, AMP and water chemical potentials agree across phases within 3.91×10⁻¹⁴ RT. The five independent charge-neutral ion combinations agree within 1.85×10⁻¹³ RT. The basis uses AMPH⁺ paired with each monovalent anion, two AMPH⁺ per carbonate, and hydronium minus AMPH⁺. The five reaction affinities in each phase are at most 1.43×10⁻¹³ RT using the verified study's completed aqueous standard states.
+- The largest elemental residual is 1.10×10⁻¹⁴ mol of atoms in the split, the largest mole-fraction charge residual is 1.81×10⁻¹⁶, and the largest relative pressure closure error is 1.46×10⁻¹². All three homogeneous evaluations have positive fixed-composition dP/dρ.
+- Adding each phase's residual Helmholtz energy, ideal and standard-state term, and imposed PV gives ΔG/(RT) = −0.018814103255977 mol, within 1.14×10⁻¹³ mol of #428. The retained numerical error estimate is 2.819×10⁻⁹ mol. Three fresh seeded coexistence solves recover the same pair.
+- Finite differences of extensive residual Helmholtz energy in the eight neutral transfer directions agree with the EOS derivatives within 2.03×10⁻⁹ RT at a 3×10⁻⁵ mol step on a unit-mol phase. Volume differencing checks pressure to within 4.56×10⁻⁸ relative at a 3×10⁻⁶ fractional step. Both checks used step sweeps.
+- In the normalized, electroneutral composition space at fixed T and P, the lowest Hessian eigenvalue relative to the ideal-mixing metric is −0.083375 in the parent and +0.215817 and +0.161361 in the two liquids. Finite differences of molar G/(RT) in the respective eigenvector directions give −0.083374, +0.215817 and +0.161364. The homogeneous parent is locally unstable. Both split liquids are local minima of their common tangent-plane distance.
+
+### AMP energy and curvature
+
+Following #342, I reclosed the archived phase compositions and the optimized trial at the same absolute T and P for each fit. The left columns retain the archived split compositions and amounts. The TPD columns subtract each model's own equilibrated parent's isobaric tangent. A direct chemical-potential contraction checks the sum of all TPD terms within 3×10⁻¹¹ at the middle differencing step.
+
+| Contribution | Free ΔG/RT (mol) | Fixed ΔG/RT vs its own parent (mol) | Free trial TPD/RT | Fixed trial TPD/RT |
+|---|---:|---:|---:|---:|
+| Ideal and reaction standards | +0.703203 | +0.939611 | +0.089602 | +0.101362 |
+| Hard chain | +0.294321 | +0.430250 | +0.057249 | +0.080847 |
+| Dispersion | −0.517868 | −0.613711 | −0.098271 | −0.116161 |
+| Association | −0.325698 | −0.408049 | −0.059864 | −0.074010 |
+| Debye–Hückel | −0.303448 | −0.353530 | −0.060706 | −0.070599 |
+| Born | +0.130218 | +0.057621 | +0.068209 | +0.090179 |
+| PV | +0.000459 | +0.000598 | +0.000084 | +0.000106 |
+| **Total** | **−0.01881410** | **+0.05279006** | **−0.003697445** | **+0.011723042** |
+
+Cation-mixing and dipolar contributions are zero. Using the free parent's composition for both fits instead changes the fixed-fit ΔG/(RT) to +0.05276191 mol and its TPD/RT to +0.01170435. Three seeded fixed-fit solves from the archived liquids or trial coalesce within 1.2×10⁻¹³ in the Engine phase-distance measure.
+
+The free fit's midpoint curvature along the composition line between the two liquids is −0.024387 in molar G/(RT) per squared interpolation coordinate. Dispersion (−0.368711), association (−0.228389) and Debye–Hückel (−0.218031) oppose ideal mixing (+0.343403), hard chain (+0.211005) and Born (+0.236000), with PV +0.000335. The full fixed fit has +0.030006 curvature there. The free fit's liquid permittivities are 26.201 and 42.278 and its f_mix values are 1.370347 and 1.463936. The corresponding fixed-fit permittivities at the archived compositions are 23.487 and 40.470. The same compositions give the same f_mix because the component factors are unchanged.
+
+Changing only the AMPH⁺–water law, from −219.251 K to −150 K while holding k fixed at 353.22 K, isolates the slope from the other changes in the fixed fit. At 393.15 K this strengthens the unlike dispersion attraction by changing k from −0.114864 to −0.134776. The midpoint dispersion curvature rises by +0.031252 and total curvature rises to +0.000344. The common-composition split comparison moves from −0.01881410 to +0.01896829 mol and the archived trial's TPD/RT against the new parent rises to +0.00274146. Freezing k entirely at its 353.22 K value gives +0.01871151 for the same trial. The slope-only seeded coexistence attempts stalled near 2.18×10⁻⁹ against the 10⁻¹⁰ solver row tolerance. The sign reversal is supported by the direct evaluations, and the stalled solves do not establish global stability.
+
+The fixed-pressure sweep also finds a separate low-density descent. For the fixed fit it has TPD/RT −0.01988932 and density 383.23 mol/m³. Liquid- and vapor-seeded optimizations return the same composition and density. A 33-point fixed-composition isotherm has positive dP/dρ from dilute vapor to that root. The two one-law controls likewise have only vapor-directed descents among their resolved trials. The fixed fit's retained 666-state search used its own bubble pressures. For this feed and temperature its bubble reference is 1.238250 MPa, above the 1.212491 MPa imposed here.
+
+### Formulation test and resolution
+
+**Exact Figiel Eq. 9, with the same fitted coefficients.** I excluded molecular CO₂ from the solvation-factor average. At each composition I reproduced the exact subset-average Born energy through the pinned Engine by setting the local CO₂ factor equal to the subset average. The independent coexistence solve included the composition derivative of that average through the chain rule. The pure-water reference completion was unchanged. Two differencing steps for the Engine Born sensitivity give ΔG/(RT) **−0.01869319273 and −0.01869319275 mol**, with maximum neutral exchange residual 3.71×10⁻¹² RT. The phase densities are 31,648 and 44,889 mol/m³, and x(AMPH⁺) is 0.10106 and 0.02857. The change in Gibbs decrease is 0.64%. Eq. 9 is on p. 9408 and the corrigendum concerns Eq. 7. [Figiel, Yu and Held (2025)](https://doi.org/10.1021/acs.iecr.5c00475) · [Correction (2026)](https://doi.org/10.1021/acs.iecr.6c01415) · [Engine #212](https://github.com/tannerpolley/epcsaft/issues/212)
+
+**Born off, all remaining coefficients fixed.** Turning off Born leaves each other residual term and the permittivity identical at the same T, density and composition. After reclosing pressure, the two archived liquid compositions are still distinct liquid roots. Their feasible combination is −0.36375749 mol below the new equilibrated parent, and the archived trial gives TPD/RT −0.07755339. A fresh search also gives a converged liquid-root witness at −0.02582829. The seeded two-liquid coexistence solves stall or exhaust their budgets, so the equilibrium phase amounts with Born off remain unresolved.
+
+**Disposition.** Keep the free fit's hot split as a model prediction outside its loaded fit temperatures, and use the already-selected −150 K fit for the stated application envelope. The selected fit has zero detected descents in its retained 666-state bubble-relative search, with a minimum supplied TPD/RT of +1.6643×10⁻⁴. The controlled slope change and the earlier reaction-law hold show that the prediction depends on extrapolated interaction and chemistry. The calculations provide no evidence of an Engine formulation defect causing the AMP split. A new Engine issue is unwarranted. The worked AMP case can serve as a downstream check for Engine #212 when the subset average ships.
+
+### MDEA
+
+Direct Helmholtz readback reproduces all three split energy signs. The retained numerical error estimates on ΔG/(RT) are 1.24×10⁻⁷, 7.66×10⁻¹⁰ and 7.60×10⁻¹⁰ mol in the order shown below. The largest elemental balance residual is 3.51×10⁻¹⁴ mol of atoms, and neutral transfer discrepancies range from 1.99×10⁻¹³ to 1.34×10⁻¹⁰ RT in the unscaled basis. The table gives directional curvatures at the midpoint between each case's own liquid compositions.
+
+| Endpoint and state | ΔG/RT (mol) | x(CO₂) in two liquids | Total curvature | Dispersion | Debye–Hückel | Born |
+|---|---:|---:|---:|---:|---:|---:|
+| #417 low k, 288.71 K, 1.121 MPa | −0.0019371313 | 0.0000168 / 0.00000972 | −0.003565 | −0.054951 | −0.038933 | +0.037366 |
+| #417 low k, 373.15 K, 203.127 MPa | −0.0002494988 | 0.26731 / 0.67961 | −0.170873 | −0.397747 | +0.126920 | −0.316809 |
+| #421 reported, 363.15 K, 262.862 MPa | −0.0013941731 | 0.26205 / 0.73643 | −0.244360 | −0.564317 | +0.206536 | −0.419240 |
+
+The cold MDEA case shares AMP's competition between negative dispersion/screening curvature and positive Born curvature. The ion partitioning differs. The bicarbonate mole fraction changes from 0.03769 to 0.03009, while carbonate rises from 0.00712 to 0.02486. Changing only water–bicarbonate k from 0.13250 to 0.76500 lifts the archived pair to +0.39080 mol above the new parent, with positive TPD at both archived compositions. Seeded solves stalled at 8.64×10⁻⁸. This implicates the low water–bicarbonate parameter choice at the cold state.
+
+The two high-pressure cases split into an aqueous electrolyte liquid and a dense CO₂-rich liquid with x(MDEAH⁺) below 1.08×10⁻⁴. Born and dispersion favor their nonconvexity, and Debye–Hückel opposes it. Born is also the largest favorable contribution to the *bulk* Gibbs difference (−1.14677 and −2.73001 mol in G/RT). Removing Born caused the homogeneous solves to stall with out-of-domain packing during trial preparation at residuals 5.57×10⁻⁵ and 6.02×10⁻⁵. Those controls do not resolve whether the high-pressure pair survives a formulation change. Treat those pairs as high-pressure extrapolation predictions. Their existence alone does not identify a Born implementation defect.
+
+This verifies the worked AMP split and three MDEA states within the specified models. Physical coexistence, global phase stability, alternate permittivity mixing, and Debye–Hückel accuracy at the ion-rich composition remain unverified. The fixed-fit full census and other AMP temperature-law comparisons are cited as retained results. No refit or changes to retained files or Engine source were made.
+
+Inputs and methods: [#428 worked AMP state](https://github.com/tannerpolley/Amine-Thermodynamics/blob/0569d80d001adbfed914d5e380bd77831da5827a/analyses/mea_parameter_bundle/results/reference-states-428/amp.json) · [#412 AMP endpoints and slope controls](https://github.com/tannerpolley/Amine-Thermodynamics/blob/0569d80d001adbfed914d5e380bd77831da5827a/analyses/amp_transfer/results/retransfer-412-f2-05e94210/manuscript-handoff.md) · [#342 decomposition method](https://github.com/tannerpolley/Amine-Thermodynamics/blob/0569d80d001adbfed914d5e380bd77831da5827a/analyses/mea_parameter_bundle/results/split-cause-342/README.md) · [#417 MDEA parameter comparison](https://github.com/tannerpolley/Amine-Thermodynamics/issues/417) · [#421 MDEA phase search](https://github.com/tannerpolley/Amine-Thermodynamics/issues/421)
