@@ -506,6 +506,15 @@ def main():
         return [f"{c['AARD_percent']:.2f}" for c in cases]
     assert all(2 * search[s]['pressure_reference_failures'] > search[s]['counts']['unavailable_records'] for s in ('low', 'high'))
     ermatchkov = compared['Ermatchkov']['original'][0]['relative_rows']
+    def pooled(sets):  # count-weighted over the sets: the AARD over all of their observations
+        cases = [compared[g]['original'] for g in sets]
+        n = sum(c[0]['relative_rows'] for c in cases)
+        return n, [sum(c[i]['relative_rows'] * c[i]['AARD_percent'] for c in cases) / n for i in range(3)]
+    # Total pressures and CO2 partial pressures are different observables; the pooled group mixes them.
+    outside = {'Total pressures': pooled(('corrected-Kamps', 'Kuranov-413K', 'Sedighi')), 'CO2 partial pressures': pooled(('Ermatchkov', 'Xiao'))}
+    whole = compared['all pressures not fitted']['original']
+    assert sum(n for n, _ in outside.values()) == whole[0]['relative_rows'] and all(abs(pooled(('corrected-Kamps', 'Kuranov-413K', 'Sedighi', 'Ermatchkov', 'Xiao'))[1][i] - whole[i]['AARD_percent']) < 1e-9 for i in range(3)), 'the five sets are every pressure outside the objective'
+    outside = {k: (n, [f'{v:.2f}' for v in values]) for k, (n, values) in outside.items()}
     table('mdea-shared-control.tex', rf"Controlled transfer to MDEA: the shared water--bicarbonate interaction $k$ fixed at the value of the MEA model and at two other values, with the MEA and the MDEA parameters refitted at each. || Fixed in every column: the other shared parameters, the reaction correlations, the MDEA data, weights and bound, and the three initial MDEA parameter sets. Refitted: the other ten MEA parameters and the eight MDEA parameters. $C(k)$: objective of the MEA fit with $k$ fixed; the refit at the value of the MEA model, $k_0$, reproduces the objective of the MEA model within $10^{{-6}}C$, and both other values keep $C(k)-C(k_0)$ within {allowance:.4f}, the largest change among the refits that hold the \ce{{MEAH+}}--\ce{{MEACOO-}} interaction inside its bound (Table~\ref{{supp-tab:bound-profiles}}). $P$: total pressure; AARD follows Eq.~\eqref{{eq:aard}}. The {ermatchkov} CO2 partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation. The searches are those of Table~\ref{{tab:amine-summary}} and do not include the fixed-pressure calculation of Section~\ref{{sec:results-mdea-phase}}.",
           ['Quantity', 'MEA model, $k_0$', 'Lower value', 'Upper value'],
           [['Water--bicarbonate interaction $k$', *(f'{k:.4f}' for k in (profile['center']['k'], *(p['k'] for p in sides)))],
@@ -513,7 +522,7 @@ def main():
            ['MDEA objective', *(f'{c:.4f}' for c in (reported['data_cost'], search['low']['cost'], search['high']['cost']))],
            [f"Fitted loaded-solution $P$ of Kuranov et al.\\ ({compared['Kuranov']['original'][0]['rows']}), AARD (%)", *aard('Kuranov')],
            [f"All fitted MDEA pressures, with the CO2-free binary pressures ({compared['all pressures fitted']['original'][0]['rows']}), AARD (%)", *aard('all pressures fitted')],
-           [f"MDEA pressures outside the objective ({compared['all pressures not fitted']['original'][0]['rows']}), AARD (%)", *aard('all pressures not fitted')],
+           *([f"{label} outside the objective ({n}), AARD (%)", *values] for label, (n, values) in outside.items()),
            [f'Unfinished searches of {states}', reported['unavailable_searches'], *(search[s]['counts']['unavailable_records'] for s in ('low', 'high'))],
            ['Confirmed liquid--liquid splits', reported['liquid_liquid_splits_found'], *(search[s]['counts']['confirmed_distinct_splits'] for s in ('low', 'high'))]],
           [.46, 'r', 'r', 'r'])

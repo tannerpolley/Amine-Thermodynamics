@@ -56,8 +56,6 @@ With the two Cai observables instead weighted so that each contributes half its 
 Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; these are local solutions, not a global search.
 The final 11-parameter MEA optimization used no stability penalty.
 Its two starts descended from an earlier stability-penalized calibration, the 16-parameter calibration described next, and they converge to objective values of 150.763 and 150.767.
-% PENDING #427: one sentence on the sensitivity of the fits to their starting parameters.
-\textit{[Pending: sensitivity of the four fits to starting parameter sets other than those used here.]}
 
 % P:methods-restrictions
 For MEA the joint fit is also made with fewer restrictions.
@@ -87,7 +85,7 @@ They exclude model discrepancy and systematic differences between sources, and t
 
 \subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}
 % P:methods-phase-01
-Each fitted parameter set is searched for a phase split with the reacting tangent-plane criterion, which tests charge-neutral trial phases in reaction equilibrium \cite{Michelsen1982,Tsanas2022,Ascani2022,Perdomo2025}:
+Each fitted parameter set is searched for a phase split with the tangent-plane criterion \cite{Michelsen1982}, with electroneutral trial phases \cite{Perdomo2025} and reaction-equilibrium constraints \cite{Tsanas2022,Ascani2022}:
 \begin{equation}
  D(\boldsymbol w)=g(T,P,\boldsymbol w)/(RT)-\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda,
  \quad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0.
@@ -117,3 +115,6 @@ At \SI{1.466}{\mega\pascal} the fitted interaction lies below that onset value a
 The bound was fixed before fitting, from the onset at \SI{423}{\kelvin} and a margin of $10^{-4}$ (Section~\ref{supp-sec:s-mdea-bound}).
 The loaded MDEA states are not constrained, so a split found there would be reported as a limitation.
 For AMP neither the penalty nor a bound of this kind is used: the \emph{AMP model} fits the other eight parameters with $b_{\mathrm{AMPH^+,w}}$ fixed at \SI{-150}{\kelvin}.
+
+% PENDING #427: one sentence on the sensitivity of the fits to their starting parameters.
+Sensitivity of the four fits to other starting parameter sets remains to be tested.

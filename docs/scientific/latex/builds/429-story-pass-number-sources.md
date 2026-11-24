@@ -13,7 +13,7 @@ Numbers marked **checked** are rebuilt from their record by `docs/scientific/lat
 | Slope and its standard error; distance of −150 K | −219 K, 81 K, 0.86 SE | free-fit `fit-summary.json:parameter_table['AMPH-water-slope']` | checked |
 | Confirmed splits; searches | 73; 666 | AMP split classification `counts.confirmed`; `confirmation.json:full_search.states` | checked |
 | k(AMPH⁺–water) at 353 and 393 K | −0.178, −0.115 | free-fit `AMPH-water-k` and slope, reference 313.15 K | checked |
-| Worked split: Gibbs decrease, error, state | 0.0188 mol, 2.8e-9, 30 wt %, 393.15 K, 0.700 mol/mol, 1.212 MPa; mole fractions 0.100 / 0.028 | `analyses/amp_transfer/results/refit-306/summary.json` and the supplement's worked-split table (unchanged values, moved into the main text) | not checked |
+| Worked split: Gibbs decrease, error, state (a grid state) | 0.0188 mol, 2.8e-9, 30 wt %, 393.15 K, 0.700 mol/mol, 1.212 MPa; mole fractions 0.100 / 0.028 | State and Gibbs decrease: `analyses/mea_parameter_bundle/results/reference-states-428/amp.json` (`row_key` = grid state, `feed_mol`, `P_Pa` 1212490.95, `Gibbs_difference_over_RT_mol` −0.0188141, `phases`). Numerical error 2.8e-9: `numerical_error_over_RT_mol` 2.807e-9 of the same grid state in `analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz`; the `uncertainty` field of `amp.json` (1.83e-10) is the error of the plane value, a different quantity (fix round 1) | not checked |
 | Split domain | 26.8–30.0 wt %, loadings 0.40–0.97, six at measured states | AMP split classification states (values already in the supplement) | not checked |
 
 ## Controlled MDEA transfer (abstract, Section 4.3, Table 8, conclusions, highlights)
@@ -23,9 +23,19 @@ Numbers marked **checked** are rebuilt from their record by `docs/scientific/lat
 | k values | 0.7650, 0.1325, 1.0 | `analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz` | checked |
 | MEA objective rise; allowance | 1.023, 0.024; 1.3987 | same; `MEA/paper-evidence-341/uncertainty/profiles.json` (largest `delta_cost`) | checked |
 | Fitted Kuranov total P (66) | 20.1 → 11.2 % (20.09, 11.18, 20.18) | `shared-bicarbonate-417/mdea-comparison.json.gz:Kuranov.original` | checked; table generated |
-| Pressures outside the objective (175) | 25.8 → 33.4 % | same, `all pressures not fitted` | checked |
+| Total pressures outside the objective (54: Kamps 28, Kuranov 413 K 11, Sedighi 15) | 38.7 → 33.0 % (38.75, 32.99, 38.65) | same, per-source `original` AARD of `corrected-Kamps`, `Kuranov-413K`, `Sedighi`, count-weighted; the five sets reproduce `all pressures not fitted` (175, 25.83 %) within 1e-9 | checked (fix round 1); table generated |
+| CO₂ partial pressures outside the objective (121: Ermatchkov 101, Xiao 20) | 20.1 → 33.6 % (20.07, 33.62, 20.05) | same, `Ermatchkov`, `Xiao`, count-weighted | checked, including the preprint abstract and the cover letter (fix round 1); table generated |
+| At the upper value, every displayed deviation changes by less than 0.1 points | 0.088, 0.099, 0.018 | same | asserted (fix round 1) |
 | Unfinished searches; confirmed splits | 1099 → 1245; 0 → 2 | `shared-bicarbonate-417/mdea-search-readback.json`; MDEA `summary-row.json` | checked |
 | Correlations of the interaction | 0.960, −0.974 | `MEA/paper-evidence-341/uncertainty/covariance.json` (unchanged) | checked |
+
+## Table 10, pressures not fitted (fix round 1)
+
+| Quantity | Displayed | Retained source | Check |
+|---|---|---|---|
+| MDEA: total P; p(CO₂) | 38.75 (54); 20.07 (121) | reported MDEA model, `analyses/mdea_mea_workflow/results/bounded-binary-411/data-rows.json` (role `not fitted`, unit Pa, by group); equal to the k₀ column of Table 8 | table generated; pooled rows reproduce `summary-row.json` (25.83, 175) |
+| AMP: total P; p(CO₂) | 26.18 (63: Hartono 2021 18, Tong 40 loaded, Tong 5 CO₂-free); 47.02 (51, Kundu) | `analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/data-rows.json`, same selection | table generated; pooled rows reproduce the retained AMP summary (35.50, 114) |
+| MEA and DEA pressures not fitted | labeled p(CO₂); values unchanged | Tables 5 and S8 | label only |
 
 ## MDEA phase behavior (Section 4.4, Table 10, conclusions, supplement)
 
@@ -36,6 +46,7 @@ Numbers marked **checked** are rebuilt from their record by `docs/scientific/lat
 | Moles in the denser liquid; densities | 4.4 % (4.387 %); 22214, 25053 mol/m³ | same, `attempts[0].amounts_mol`, `densities_mol_m3` | checked (shares) |
 | State of the earlier split | 363.15 K, 78.62 wt %, 1.368 mol/mol, 1.05 × bubble pressure | same, `T_K`, `feed` (unchanged prose values) | not checked |
 | Assigned pressures at the 27 states | 0.100–4.190 MPa | `phase-search-421/` 27-state record | not checked |
+| The 27 states: 23 loaded, 4 CO₂-free densities at 0.100 MPa | 23, four, 0.100 MPa | `phase-search-421/measured-phase.json` (`feed_mol` CO₂ = 0, `pressure_Pa`) | not checked; read in fix round 1 |
 | Gap onset brackets | 423.150–423.156 K at 1.466 MPa; 423.13750–423.14375 at 1.121; 423.16250–423.16875 at 1.811 | `phase-search-421/` onset record | not checked |
 | Objective without / with bound | 479.4, 564.5 | bounded-binary-411 records (unchanged) | checked |
 
@@ -108,6 +119,8 @@ Numbers marked **checked** are rebuilt from their record by `docs/scientific/lat
 
 | Quantity | Displayed | Retained source | Check |
 |---|---|---|---|
+| Hong et al., their own fit | 1.53 % AARD | Hong et al. §3.2, Table 3, as given by the post-draft numbers check; not re-read by the Writer (no local copy) | not checked |
+| Kundu et al. statistic | AAD label with a signed formula; 56 observations | Kundu et al. Table 10 and its footnote, as given by the post-draft numbers check; not re-read by the Writer | not checked |
 | MDEA model on the 82 Kuranov pressures | 19.5 % (19.53); 70 fitted, 4 CO₂-free | `analyses/mdea_mea_workflow/results/kuranov-published-422/statistics.json:present.K82` | checked |
 | Published values on those 82 | Uyan 22.9, Wangler 19.7, Raeispour 10.9 | `kuranov-published-422/` records | table generated |
 | Zhang and Chen | 6.8 % (82 Kuranov), 17.7 % (101 Ermatchkov) | their Table 14, read in `literature/zhangThermodynamicModelingCO22011--2KHILX2X.md`; constants in `dea_displays.py` | table generated |
@@ -123,6 +136,8 @@ Generated by `dea_displays.py` from `MEA/paper-evidence-341/paper-evidence/{fitt
 | Quantity | Displayed | Retained source | Check |
 |---|---|---|---|
 | MEA searches | 2646 = 2484 + 162 | MEA stability record (unchanged counts, summed) | checked |
+| Table 2 temperatures: Jakobsen ratios; CO₂-free densities | 293.15–313.15 K; 298.15–353.15 K | `MEA/paper-evidence-341/objective-declarations.json` (`row.T_K`) | table generated (fix round 1) |
+| Section 5.2 denominators | 15 heat capacities, 26 densities, 15 loaded Han densities | `MEA/stripper-temperature-409/band-table.csv` (`n`, cohort `all` and `Han2012 loaded`) | checked (fix round 1) |
 | Fitted MEA p(CO₂) temperature range | 313–333 K | `MEA/paper-evidence-341/paper-evidence/fitted-rows.csv` (Table 2 shows 313.00–333.15) | table generated |
 | Cai temperatures at or above 370 K | 22 of 25, up to 431.85 K | same | table note generated |
 | Horstmann isotherm | 365.15 K, 42 pressures | `reactive-refit-425/comparisons.json` | table generated |

@@ -373,7 +373,7 @@ AMP & Loaded total pressures & 0.015 & average over the 47 pressures \\
 \bottomrule\end{tabular}
 \par\smallskip{\footnotesize\raggedright Pressure residuals are logarithmic, so their scales are dimensionless. $\rho_j$ is the measured density and $g_j$ the local secant slope of measured density against loading at fixed amine concentration. ``Average'' means that the weights average the squared residuals within the data set.\par}\end{table}
 
-\section{Caloric functions and reference values}\label{sec:s-files}
+\section{Caloric functions, worked MEA heat calculation and worked AMP phase split}\label{sec:s-files}
 % P:supplement-calorics
 Neutral caloric functions use NIST-JANAF for \COtwo, the MEA heat-capacity function tabulated by Zhang et al., and an ideal-gas water fit to IAPWS-95 \cite{chaseNISTJANAFThermochemicalTables1998,Zhang2011,internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}.
 The ionic functions follow from the equilibrium-constant correlations and their infinite-dilution reference corrections.
@@ -547,14 +547,14 @@ For AMP neither the penalty nor a bound of this kind is used.
 With all nine parameters fitted, both initial parameter sets converge to an objective value of 61.2853, agreeing to $7\times10^{-12}$, and the temperature slope of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{-219.25}{\kelvin} with a conditional standard error of \SI{80.99}{\kelvin}; this comparison fit has the splits of Section~\ref{sec:s-phase} and main-text \cref{main-fig:amp-splits}.
 All fitted loaded pressures lie at 313--\SI{353}{\kelvin}; above that range the fitted slope raises $k_{\mathrm{AMPH^+,w}}$ from $-0.178$ at \SI{353}{\kelvin} to $-0.115$ at \SI{393}{\kelvin}, and the weaker cation--water attraction gives a second liquid rich in \ce{AMPH+}, bicarbonate and AMP, with carbamate mole fractions of $10^{-4}$ to $10^{-3}$.
 The splits are marginal: the smallest tangent-plane distance is about $-0.006$.
-Holding $k_{\mathrm{AMPH^+,w}}$ at its value at \SI{353.22}{\kelvin} above that temperature removes every instability, and so does holding the AMP dissociation constant at its value at \SI{353.22}{\kelvin} or continuing it at constant enthalpy, which lowers $\ln K$ by 0.04 at \SI{393}{\kelvin}; the slope is therefore a sufficient cause of the splits, not the only one.
+Holding $k_{\mathrm{AMPH^+,w}}$ at its value at \SI{353.22}{\kelvin} above that temperature removes every instability, and so does holding the AMP dissociation constant at its value at \SI{353.22}{\kelvin} or continuing it at constant enthalpy, which lowers $\ln K$ by 0.04 at \SI{393}{\kelvin}.
 Holding the R4 constant at its value at \SI{353.22}{\kelvin}, or setting the carbamate diameter at its lower bound, leaves 93 and 90 of the 93 instabilities.
 
 % P:supplement-amp-slope-choice
 The AMP model fixes $b_{\mathrm{AMPH^+,w}}$ at \SI{-150}{\kelvin}, a value chosen from a scan of fixed slopes because no instability was detected there; it is not taken from a source.
 At \SI{-175}{\kelvin} five instabilities at grid states remain, and at \SI{-125}{\kelvin} a shorter search without the earlier trial compositions detected none; only \SI{-150}{\kelvin} was searched in full.
 With the carbamate inputs of the 16-parameter calibration, slopes of 0, $-50$ and \SI{-100}{\kelvin} move the instabilities to 298--\SI{323}{\kelvin}, onto 57, 57 and 48 of the 57 fitted carbamate fractions of Ciftja et al.; these scans do not establish a range of slopes without instability.
-The fixed slope lies 0.86 standard errors from the fitted value, and fixing it raises the objective value by 0.78, from 61.2853 to 62.0651, so the data do not distinguish the two slopes.
+The fixed slope lies 0.86 standard errors from the fitted value, and fixing it raises the objective value by 0.78, from 61.2853 to 62.0651, so the two slopes give similar objective values on the assigned scales and weights.
 The AMP model was started from the comparison fit and from the second initial parameter set, and both reach 62.0651; it refits the other eight parameters, and its standard errors are conditional on the fixed slope.
 The contribution of the fitted loaded pressures to its objective is 59.70, against 58.89 for the comparison fit.
 
@@ -568,7 +568,7 @@ Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy simul
 The source's excess-enthalpy uncertainty expression has no absolute-value bars on its enthalpy-dependent term despite negative measured heats; it is not used to compute a negative uncertainty.
 
 % P:supplement-published-amp
-For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; these are not the same 51 observations compared here, so no ranking is inferred.
+For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; their Table~10 labels the statistic AAD, but its footnote prints a signed relative-deviation formula. The statistic and the 56 observations therefore do not support a direct AARD comparison with the 51 observations used here.
 Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite{hartonoNewSolubilityHeat2021}.
 
 % P:supplement-published-kuranov
