@@ -14,12 +14,13 @@ COMPOSITIONS = np.array(sorted({0., 1., *np.linspace(.001, .999, 999),
                                  *np.geomspace(1e-6, .001, 21), * (1-np.geomspace(1e-6, .001, 21))}))
 
 
-def binary_gaps(model, amine, T, pressure, x=COMPOSITIONS):
+def binary_gaps(model, amine, T, pressure, x=COMPOSITIONS, *, batch=None):
     """Lower-convex-envelope gaps of G/(RT) for amine-water liquid at (T, P); None when any composition is unavailable."""
     y = np.array([x if cid == amine else 1-x for cid in model.parameters.component_ids]).T
     with np.errstate(divide='ignore'):
         ideal = np.sum(y*np.log(np.where(y > 0, y, 1)), axis=1)
-    batch = model.states([T]*len(x), P=pressure, x=y.tolist(), phase='liquid')
+    if batch is None:
+        batch = model.states([T]*len(x), P=pressure, x=y.tolist(), phase='liquid')
     if any(v is None for v in batch.log_fugacity_coefficient):
         return [dict(x_MDEA=float(z), cause=c) for z,v,c in zip(x,batch.log_fugacity_coefficient,batch.cause,strict=True) if v is None], None
     g = ideal + np.sum(y*np.array(batch.log_fugacity_coefficient), axis=1)
