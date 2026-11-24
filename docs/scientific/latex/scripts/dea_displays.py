@@ -604,8 +604,16 @@ mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
 for c in mpub:
     rows += [head(f"{c['measured_rows']} " + SHARED[c['group']], 3)] + [['Ermatchkov et al., parameter set ' + q['set'], {'predicted': 'not fitted'}.get(q['data_role'], q['data_role']), f"${q['mean_absolute_relative_deviation_percent']:g}$"] for q in c['published_parameter_sets']]
     rows.append(['This work, MDEA model', c['data_role'] + ('; used to choose the initial parameters' if c['group'] == 'Ermatchkov' else ''), num(c['selected_point_mean_absolute_relative_deviation_percent'], 2)])
+kuranov = 'analyses/mdea_mea_workflow/results/kuranov-published-422/'
+kpub, shirazi = read(kuranov + 'statistics.json'), read(kuranov + 'raeispour-table-4.json')
+uyan, redetermined, wangler = [r['printed'] for r in kpub['reconstruction'] if r['subset'] == 'K82' and r['reading'] in ('Uyan', 'Wangler')]
+rows += [head(r'82 total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA\textsuperscript{b}', 3),
+         [r'Uyan et al.\ \cite{Uyan2015}', 'not fitted', rf'${uyan}$\textsuperscript{{c}}'],
+         [r'Wangler et al.\ \cite{Wangler2018}', 'not fitted', f'${wangler}$'],
+         [r'Raeispour Shirazi and Lotfollahi \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', shirazi['role'], num(shirazi['AARD_percent'], 1)],
+         ['This work, MDEA model', '70 fitted, 12 not fitted', num(kpub['present']['K82']['AARD_percent'], 2)]]
 table('published-models', 'Pressure deviations of published models and of this work on identical observations.', ['Observations and model', 'Role of these observations in the fit of that model', r'AARD (\%)'], rows, [.50,.36,.10],
-      notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently.')
+      notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there; the values of this work are calculated for the same observations. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently.' + rf' \textsuperscript{{b}}The published Kuranov sets are identified with Table 2 by count. \textsuperscript{{c}}Wangler et al.\ redetermined the Uyan et al.\ value as ${redetermined}$\,\% (Table 11, note b).')
 # Published parameters of Hong et al. on identical MEA observations: retained scores, no model call.
 HONG = MEA + 'same-data-comparison/hong-2027/'
 hong, hchecks = read(HONG + 'supplement-table.csv'), read(HONG + 'checks.json')
