@@ -199,6 +199,9 @@ for ax, groups, title in zip(axes.flat,DEA_PANELS,'abcd'):
         if groups==('Carson',): obs=[r for r in obs if r['row']['DEA_mass_fraction']==line[0]['row']['DEA_mass_fraction']]
         assert all((r['outside_ranges']['DEA-dissociation'],r['outside_ranges']['carbamate-hydrolysis'])==(outside,hydrolysis) for r in obs)
         ax.scatter([loading(r['row']) for r in obs],[r['observed']/1000 for r in obs],s=25,**look)
+        if groups==('Carson',):  # the short heat curves are labelled at their ends so each reads at print size
+            ax.lines[-2].set_linewidth(2.2)
+            ax.annotate(caption,(line[-1]['loading'],line[-1]['value']/1000),xytext=(0,8) if caption=='30 wt%' else (3,0),textcoords='offset points',ha='center' if caption=='30 wt%' else 'left',va='center',fontsize=7,color=look['edgecolors'],bbox=dict(boxstyle='square,pad=0.1',facecolor='white',edgecolor='none'))
     ax.set_title(f'({title})', loc='left'); ax.set(xlabel='Loading (mol CO$_2$/mol DEA)',ylabel='Integral heat (kJ/mol CO$_2$)' if groups==('Carson',) else 'CO$_2$ partial pressure (kPa)',yscale='linear' if groups==('Carson',) else 'log')
     ax.legend(ncol=2, columnspacing=.7, handlelength=1.8, handletextpad=.4)
 figure(fig,'dea-current-measured-model.pdf')
