@@ -1,6 +1,6 @@
 {
   "issue": 414,
-  "disposition": "Stopped before exceeding the 400-line executable ceiling, after the corrected MDEA and AMP calculations passed.",
+  "disposition": "Completed the display and conda gates after Amendment 3 raised the executable line ceiling.",
   "base": "a6cbc25b4",
   "branch": "issue-414-recalculate-the-reported-mea-dea-mdea",
   "parameter_record": {
@@ -18,8 +18,24 @@
     "source_identity": "Release-excluded git archive of v1.3.2, gzip -n, byte-identical to Engine archive inside the published source set. Outer and inner checksums verified."
   },
   "conda": {
-    "status": "not run due to code ceiling",
-    "sha256": null
+    "status": "pass",
+    "sha256": "3945ef7b5ad038196c64055daf194c380be0c86275ccb2ae2625a8229d760a31",
+    "filename": "epcsaft-1.3.2-py313hc6ff12e_0.conda",
+    "url": "https://conda.anaconda.org/tannerwpolley/linux-64/epcsaft-1.3.2-py313hc6ff12e_0.conda",
+    "linear_solver": "mumps",
+    "row_pairs": 307,
+    "available_on_both": 307,
+    "max_relative_prediction_difference": {
+      "identity": "Matin2012_state_009::MEAH+",
+      "quantity": "PhaseMoleFraction",
+      "unit": "1",
+      "file_location": "replay.json:/rows/112/value",
+      "conda": 0.032219551235166614,
+      "wheel": 0.03221955123521055,
+      "abs_delta": 4.393707619954057e-14,
+      "relative_delta": 1.3636774726869793e-12
+    },
+    "evidence": "conda-spot-check.json"
   },
   "setup": {
     "non_engine_dependencies": "Frozen uv export, epcsaft excluded. Installed index packages with hashes. The locked PC-SAFT Git URL was unavailable, so the existing pcsaft files from the exact lock commit eec3e7e4999c928e5015d2342b974c59a75d01d6 were checked against direct_url.json and RECORD and copied into the ignored venv.",
@@ -126,23 +142,28 @@
       "evidence": "amp-comparison.json"
     },
     {
-      "gate": "Identical display text and number-source key set",
-      "result": "not reached: executable ceiling",
-      "evidence": "summary.json:stop"
+      "gate": "TeX agrees at printed precision except Amendment 2 availability counts",
+      "result": "pass with five count changes",
+      "evidence": "display-diff.json"
+    },
+    {
+      "gate": "Figures under deposit-pinned Matplotlib 3.11.2",
+      "result": "pass: all 13 byte-identical to the retained-input control",
+      "evidence": "display-diff.json:figures"
+    },
+    {
+      "gate": "number-sources.json key set",
+      "result": "pass: 48 keys, no additions or removals",
+      "evidence": "display-diff.json:number_sources"
     },
     {
       "gate": "Conda MEA replay and wheel comparison",
-      "result": "not reached: executable ceiling",
-      "evidence": "summary.json:stop"
+      "result": "pass: 307 available, max relative prediction difference 1.364e-12",
+      "evidence": "conda-spot-check.json"
     },
     {
       "gate": "Committed executable line ceiling from a6cbc25b4",
-      "result": "pass: 388 / 400",
-      "evidence": "summary.json:change_accounting"
-    },
-    {
-      "gate": "Remaining display and conda code fits under 400 lines",
-      "result": "stop: draft requires 454",
+      "result": "pass: 457 / 460",
       "evidence": "summary.json:change_accounting"
     }
   ],
@@ -261,7 +282,13 @@
     "mdea_critical": "Producer fine-grid availability and bisection bracket assertions passed across 33 temperatures. Every retained critical-k row matched exactly.",
     "mdea_search": "All 11,824 searches and the corrected state-by-state descent gate passed. The 76 retained descents identify exactly 27 distinct calculations and every liquid-labelled witness coincides with a vapor-labelled one.",
     "mdea_retain": "Passed the bounded-binary-411 retain assertions, including the active-bound, parameter-table, descent-witness, and pressure-reference tests. All retained and release data/curve availability statuses and deviation counts matched.",
-    "amp": "The #404 trial-bank identity and count assertions passed. All 666 searches were available, with no descents or distinct liquid splits. All 156 fitted replay rows were available. The 270 data and 620 curve availability values matched; the AMODEL producer assertions passed and AFREE rows were identical."
+    "amp": "The #404 trial-bank identity and count assertions passed. All 666 searches were available, with no descents or distinct liquid splits. All 156 fitted replay rows were available. The 270 data and 620 curve availability values matched; the AMODEL producer assertions passed and AFREE rows were identical.",
+    "amendment_3": {
+      "final_rerun_tables.py": "Retained-input control and replay passed all assertions, including source receipts and printed digits on MEA bubble-state check values.",
+      "dea_displays.py": "All data and manuscript-presence assertions passed for the control and replay. The scratch replay supplied the actual available DEA count and retained identification of the historically unavailable state. Counts allowed under Amendment 2 were patched only in scratch prose.",
+      "f2_figures.py": "Control and replay both passed their assertions, including 47 fitted pressure observations and 47 retained pressure bands.",
+      "paper_evidence_341.py replay": "307 available rows and maximum relative prediction change 2.022847924657027e-12 against adoption-340 passed the existing 1e-10 limit under conda."
+    }
   },
   "largest_relative_by_amine": {
     "MEA": {
@@ -347,9 +374,9 @@
   },
   "not_recalculated": [
     "Retained reduced-refit/evidence/F2 and F2 replay values used in the partly recalculated stripper band table.",
-    "Display regeneration, full display-input inventory, text diffs and number-source key check",
-    "Conda spot check",
-    "Out of replay scope: all refits, starts and profiles; MEA reduced-refit parameter-details, fit-comparison and agreement tables; split-cause-342; AMP free-slope fit, AFREE rows and split figures; MDEA unbounded fit."
+    "Out of replay scope: all refits, starts and profiles; MEA reduced-refit parameter-details, fit-comparison and agreement tables; split-cause-342; AMP free-slope fit, AFREE rows and phase-split data; MDEA unbounded fit.",
+    "Numerical inputs marked retained or partly recalculated in display-inputs.json, including AMP free-slope classification and the 56 AFREE rows, MEA uncertainty bands, conditional covariance and refitted profiles, and historical model comparisons.",
+    "The six PDFs outside the three selected generators and the retained PNG companions were not rendered. The manuscript was not compiled."
   ],
   "counts": "counts.json",
   "pairs": "file-pairs.json",
@@ -381,7 +408,11 @@
     "mdea-retained-aliases": 41.8,
     "mdea-search-corrected": 3618.24,
     "mdea-retain-corrected": 122.94,
-    "amp-corrected": 190.51
+    "amp-corrected": 190.51,
+    "display-baseline": 7.4,
+    "display-replay": 8.62,
+    "conda-replay": 8.38,
+    "conda-compare": 0.08
   },
   "runs": {
     "checks": {
@@ -1335,6 +1366,43 @@
       },
       "output": "analyses/amp_transfer/results/runs/release-recheck-414-corrected",
       "linear_solver": "ma57"
+    },
+    "conda-amendment-3": {
+      "command": [
+        "analyses/release_recheck_414.py",
+        "conda",
+        "replay",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-conda",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/mamba-root/pkgs/https/conda.anaconda.org/tannerwpolley/linux-64/epcsaft-1.3.2-py313hc6ff12e_0.conda"
+      ],
+      "seconds": 8.215188468999258,
+      "first_solve": {
+        "version": "1.3.2",
+        "module": "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/conda-132/lib/python3.13/site-packages/epcsaft/__init__.py",
+        "commit": "41dc357a656897b613597dd4c423914299f43cd2",
+        "sha256": "3945ef7b5ad038196c64055daf194c380be0c86275ccb2ae2625a8229d760a31",
+        "row": "vle_obs_0119-pco2",
+        "T_K": 313.137,
+        "feed": {
+          "carbon-dioxide": 0.1529,
+          "monoethanolamine": 0.99998,
+          "water": 8.067902802628065,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "linear_solver": "mumps",
+        "solver_status": "SUCCESS",
+        "success": true,
+        "requested_tolerance_met": true,
+        "message": "converged: residual 1.1368683772161603e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 1.3255909182259967e-09, amplification 0",
+        "pressure": 6528.695151534689
+      },
+      "linear_solver": "mumps",
+      "distribution": "conda spot check"
     }
   },
   "commands": {
@@ -1365,48 +1433,69 @@
       "mdea_search": "mdea search analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected",
       "mdea_retain": "mdea retain analyses/mdea_mea_workflow/results/runs/release-recheck-414-corrected",
       "amp": "amp replay analyses/amp_transfer/results/runs/release-recheck-414-corrected"
+    },
+    "amendment_3": {
+      "display_control": [
+        "analyses/release_recheck_414.py",
+        "displays",
+        "render",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-displays-baseline",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/display-baseline-recipe.json"
+      ],
+      "display_replay": [
+        "analyses/release_recheck_414.py",
+        "displays",
+        "render",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-displays",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/display-replay-recipe.json"
+      ],
+      "display_execution_environment": "agent-heavy, one thread per BLAS/OpenMP runtime, pinned Matplotlib 3.11.2 in the ignored display environment",
+      "conda_create": "~/.local/bin/micromamba create --no-rc --override-channels -c tannerwpolley -c conda-forge --platform linux-64 --prefix build/release-recheck-414/conda-132 python=3.13 tannerwpolley::epcsaft=1.3.2",
+      "conda_replay": [
+        "analyses/release_recheck_414.py",
+        "conda",
+        "replay",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-conda",
+        "/home/tnnrpolley21/Workspaces/Engineering/Amine-Thermodynamics/.worktrees/slot-1/build/release-recheck-414/mamba-root/pkgs/https/conda.anaconda.org/tannerwpolley/linux-64/epcsaft-1.3.2-py313hc6ff12e_0.conda"
+      ],
+      "conda_compare": [
+        "analyses/release_recheck_414.py",
+        "compare",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-conda/candidate",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414/candidate",
+        "analyses/mea_parameter_bundle/results/runs/release-recheck-414-conda/comparison.json"
+      ]
     }
   },
-  "claim": "Fixed-parameter numerical verification on CPython 3.13 linux-x86_64 with MA57. All four amines completed the replay stages. DEA gained one search and MDEA gained four, all without resolved descent. MDEA preserved every retained resolved-descent state and calculation identity. Display and conda verification remain open.",
+  "claim": "Fixed-parameter numerical verification across builds. All four wheel replays used MA57. DEA gained one available search and MDEA gained four, without a new resolved descent. MDEA preserved all 76 retained resolved-descent records across 27 calculations. The only TeX body changes were the corresponding counts. The conda package reproduced all 307 fitted MEA values under the recorded limit with MUMPS in its first solve.",
   "change_accounting": {
     "base": "a6cbc25b4",
-    "gross_added_executable_lines": 388,
-    "ceiling": 400,
-    "headroom_lines": 12,
+    "gross_added_executable_lines": 457,
+    "ceiling": 460,
+    "headroom_lines": 3,
     "executable_files": 1,
     "tests_files": 0,
     "documents_files": 0,
     "generated_files": 0,
-    "retained_evidence_files": 10,
+    "retained_evidence_files": 13,
     "by_step": [
       {
-        "step": "At dee5e2d9",
-        "committed_start_lines": 345,
-        "total": 345
-      },
-      {
-        "step": "MDEA correction and retain row-availability gate",
-        "net_lines": 1,
-        "total": 346
-      },
-      {
-        "step": "AMP search, replay and AMODEL rows",
-        "net_lines": 42,
+        "step": "Build 5 calculation gates",
+        "lines": 388,
         "total": 388
       },
       {
-        "step": "Display scratch overlay, provenance, rendering, input inventory and diff",
-        "draft_lines": 52,
-        "total": 440
+        "step": "Display control and replay, input inventory, TeX diff and number-source key check",
+        "lines": 57,
+        "total": 445
       },
       {
-        "step": "Conda identity and MEA replay integration",
-        "draft_lines": 14,
-        "total": 454
+        "step": "Conda identity and MEA replay",
+        "lines": 12,
+        "total": 457
       }
     ],
-    "smallest_accounted_revised_ceiling": 454,
-    "budget_basis": "The first three totals are measured code. The final two are the line-counted drafts using the existing compare and MEA replay functions. Display and conda code and checks were not applied or run."
+    "accounting_report": "build/release-recheck-414/change-accounting-amendment-3.txt"
   },
   "comparison_readback": {
     "results_equal": true,
@@ -1933,8 +2022,36 @@
     }
   ],
   "display_differences": {
-    "status": "not evaluated due to code ceiling",
-    "differences": null
+    "status": "pass with recorded availability gains",
+    "evidence": "display-diff.json",
+    "inventory": "display-inputs.json",
+    "tex_files": 42,
+    "identical_tex_bodies": 39,
+    "printed_count_changes": 5,
+    "changed_tex_files": [
+      "docs/scientific/latex/sections/transfer_results.tex",
+      "docs/scientific/latex/supplement.tex",
+      "docs/scientific/latex/tables/amine-summary.tex"
+    ],
+    "figures_rendered": 13,
+    "figures_identical_to_retained_input_control": 13,
+    "figures_identical_to_committed": 3,
+    "figures_with_renderer_only_changes": 10,
+    "committed_pdfs_outside_generators": 6,
+    "number_source_key_check": {
+      "path": "docs/scientific/latex/tables/number-sources.json",
+      "comparison": "key set only",
+      "status": "pass",
+      "committed": 48,
+      "regenerated": 48,
+      "added_keys": [],
+      "removed_keys": []
+    },
+    "input_counts": {
+      "not recalculated": 30,
+      "partly recalculated": 4,
+      "replaced by replay output": 41
+    }
   },
   "resolved_mdea_stop": {
     "gate": "Amendment 2: any resolved descent",
@@ -2381,13 +2498,15 @@
     "changed_unavailable_returns": 446,
     "evidence": "mdea-comparison.json:full_search,retain"
   },
-  "stop": {
+  "stop": null,
+  "resolved_budget_stop": {
     "gate": "400-line executable ceiling",
     "actual": 388,
     "remaining_headroom": 12,
     "next_step": "display regeneration, input inventory, text comparison and number-source key check",
     "next_step_draft_lines": 52,
     "smallest_accounted_revised_ceiling": 454,
-    "evidence": "summary.json:change_accounting"
+    "evidence": "summary.json:change_accounting",
+    "disposition": "Amendment 3 raised the executable ceiling to 460."
   }
 }

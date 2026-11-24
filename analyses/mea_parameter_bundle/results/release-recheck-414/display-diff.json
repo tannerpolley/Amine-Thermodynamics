@@ -1,0 +1,438 @@
+{
+  "differences": {
+    "docs/scientific/latex/chemistry_macros.tex": "",
+    "docs/scientific/latex/main.tex": "",
+    "docs/scientific/latex/sections/acknowledgements.tex": "",
+    "docs/scientific/latex/sections/conclusion.tex": "",
+    "docs/scientific/latex/sections/data_code_availability.tex": "",
+    "docs/scientific/latex/sections/data_methods.tex": "",
+    "docs/scientific/latex/sections/epc_saft_equation_of_state.tex": "",
+    "docs/scientific/latex/sections/introduction.tex": "",
+    "docs/scientific/latex/sections/mea_system_modeling_results.tex": "",
+    "docs/scientific/latex/sections/nomenclature.tex": "",
+    "docs/scientific/latex/sections/transfer_results.tex": "--- \n+++ \n@@ -22,7 +22,7 @@\n \n \\subsubsection{Phase stability}\\label{sec:results-amines-stability}\n % P:transfer-dea-stability\n-For DEA, 1270 of the 1271 searches finish without a detected instability.\n+For DEA, 1271 of the 1271 searches finish without a detected instability.\n The remaining search, at a comparison-only state at 54.5 wt\\% DEA, did not finish.\n \n % P:transfer-mdea-stability\n@@ -30,7 +30,7 @@\n That fit is a local minimum from one initial set, and it lies inside the gap: from the same initial set, the bound raises the fitted objective from 479.4 to 564.5. At the reported parameters, all 78 searches of the \\COtwo-free solution at 393--\\SI{423}{\\kelvin} finish and none detects an instability.\n In the loaded solution no liquid--liquid split is found among the searches that finish. With an earlier MDEA parameter set, a split was found at \\SI{363.15}{\\kelvin}, 78.62 wt\\% MDEA and 1.368 mol/mol; at the reported parameters no bubble pressure can be calculated at that state, so its search does not finish and a split there is neither found nor excluded.\n At 27 measured states the assigned pressure lies below the calculated bubble pressure and the search detects an instability toward a vapor, so the values calculated there refer to a liquid that the model does not predict to be stable (Section~\\ref{supp-sec:s-phase}).\n-Of the \\num{11824} MDEA searches, 1099 did not finish, 870 of them at grid states where no bubble pressure could be calculated.\n+Of the \\num{11824} MDEA searches, 1095 did not finish, 870 of them at grid states where no bubble pressure could be calculated.\n \n % P:transfer-amp-stability\n For AMP all 666 searches finish without a detected instability, also when the 7301 trial compositions of earlier searches are tested.\n",
+    "docs/scientific/latex/submission/graphical_abstract.tex": "",
+    "docs/scientific/latex/supplement.tex": "--- \n+++ \n@@ -440,7 +440,7 @@\n % P:supplement-phase-mdea\n For MDEA, the search covers 1564 measured states and \\num{10260} grid states, the latter at 38 MDEA concentrations from 3.03 to 78.62 wt\\%, the nine grid temperatures and 15 loadings up to 1.368 mol/mol at both pressures.\n These \\num{11824} searches cover \\num{10870} distinct states.\n-Of the 1099 MDEA searches that did not finish, 870 are at grid states where no bubble pressure could be calculated.\n+Of the 1095 MDEA searches that did not finish, 870 are at grid states where no bubble pressure could be calculated.\n No search that finishes finds a liquid--liquid split. One of those that do not finish is at 363.15 K, 78.62 wt\\% MDEA and 1.368 mol/mol, at 1.05 times the bubble pressure, where an earlier MDEA parameter set gave a split with a tangent-plane distance of $-0.00262$ in units of $RT$; at the reported parameters the bubble-pressure calculation there does not converge.\n The 27 measured MDEA states with an instability toward a vapor have an assigned pressure of 0.1731--0.9807 times the calculated bubble pressure: four densities of Sobrino et al., 11 species states of B\\\"ottinger et al.\\ at 0.5 MPa and two at 2.5 MPa, five heats of Zheng et al.\\ and five heats of Merkley et al.\n At four of the 11 species states at 0.5 MPa the instability is shown only by a trial composition from an earlier search.\n",
+    "docs/scientific/latex/tables/amine-summary.tex": "--- \n+++ \n@@ -2,8 +2,8 @@\n \\begin{tabular}{@{}>{\\raggedright\\arraybackslash}p{0.13\\linewidth}>{\\raggedright\\arraybackslash}p{0.09\\linewidth}>{\\raggedright\\arraybackslash}p{0.06\\linewidth}>{\\raggedright\\arraybackslash}p{0.135\\linewidth}>{\\raggedright\\arraybackslash}p{0.105\\linewidth}>{\\raggedright\\arraybackslash}p{0.115\\linewidth}>{\\raggedright\\arraybackslash}p{0.07\\linewidth}>{\\raggedright\\arraybackslash}p{0.1\\linewidth}>{\\raggedright\\arraybackslash}p{0.1\\linewidth}@{}}\n \\toprule Model & Fitted parameters & On bounds & Fitted loaded-solution pressures: AARD (\\%) ($N$) & Fitted pressures of amine solutions: AARD (\\%) ($N$) & Pressures not fitted: AARD (\\%) ($N$) & Searches & Searches not completed & Liquid--liquid splits found \\\\ \\midrule\n MEA & 11 & 1 & $11.64$ (47) & $11.64$ (47) & $31.94$ (205) & 2646 & 0 & 0 \\\\\n-DEA & 4 & 0 & $28.51$ (30) & $28.51$ (30) & $53.92$ (67) & 1271 & 1 & 0 \\\\\n-MDEA & 8 & 2 & $20.09$ (66) & $11.24$ (131) & $25.83$ (175) & \\num{11824} & 1099 & 0 \\\\\n+DEA & 4 & 0 & $28.51$ (30) & $28.51$ (30) & $53.92$ (67) & 1271 & 0 & 0 \\\\\n+MDEA & 8 & 2 & $20.09$ (66) & $11.24$ (131) & $25.83$ (175) & \\num{11824} & 1095 & 0 \\\\\n AMP & 8 & 2 & $10.49$ (47) & $7.12$ (73) & $35.50$ (114) & 666 & 0 & 0 \\\\\n \\bottomrule\\end{tabular}\n \\par\\smallskip{\\footnotesize\\raggedright AARD follows Eq.~\\eqref{eq:aard}; $N$ is the number of observations. Fitted loaded-solution pressures are the fitted \\COtwo partial or total pressures of loaded solutions; the next column adds the fitted \\COtwo-free bubble pressures of MDEA--water and AMP--water. Neither includes the fitted \\COtwo--water pressures of Kiepe et al.\\ in the MEA objective (Table~\\ref{tab:mea-data}). The MEA value for pressures not fitted is the mean over the observations of its four pressure sets not fitted. The searches are finite and their designs differ between the amines (Section~\\ref{supp-sec:s-phase}), so the counts do not measure equal coverage, and split counts are lower bounds.\\par}\\end{table}\n",
+    "docs/scientific/latex/tables/bound_profiles.tex": "",
+    "docs/scientific/latex/tables/choice_cost.tex": "",
+    "docs/scientific/latex/tables/interaction_matrix.tex": "",
+    "docs/scientific/latex/tables/kim_alternatives.tex": "",
+    "docs/scientific/latex/tables/mea_data.tex": "",
+    "docs/scientific/latex/tables/objective_groups.tex": "",
+    "docs/scientific/latex/tables/pressure_sources.tex": "",
+    "docs/scientific/latex/tables/published-models.tex": "",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "",
+    "docs/scientific/latex/tables/species_parameters.tex": "",
+    "docs/scientific/latex/tables/supplement-amp-ranges.tex": "",
+    "docs/scientific/latex/tables/supplement-dea-ranges.tex": "",
+    "docs/scientific/latex/tables/supplement-hong-comparison.tex": "",
+    "docs/scientific/latex/tables/supplement-mdea-ranges.tex": "",
+    "docs/scientific/latex/tables/supplement-temperature-bands.tex": "",
+    "docs/scientific/latex/tables/supplement-transfer-bounds.tex": "",
+    "docs/scientific/latex/tables/supplement-transfer-data.tex": "",
+    "docs/scientific/latex/tables/supplement-transfer-parameters.tex": "",
+    "docs/scientific/latex/tables/supplement_check_values.tex": "",
+    "docs/scientific/latex/tables/supplement_correlations.tex": "",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "",
+    "docs/scientific/latex/tables/supplement_interaction_matrix.tex": "",
+    "docs/scientific/latex/tables/supplement_mea_comparison.tex": "",
+    "docs/scientific/latex/tables/supplement_reaction_coefficients.tex": "",
+    "docs/scientific/latex/tables/supplement_shared_remaining.tex": "",
+    "docs/scientific/latex/tables/supplement_species_parameters.tex": "",
+    "docs/scientific/latex/tables/transfer-fitted.tex": "",
+    "docs/scientific/latex/tables/transfer-species.tex": ""
+  },
+  "count_changes": [
+    {
+      "path": "docs/scientific/latex/tables/amine-summary.tex",
+      "retained": "DEA & 4 & 0 & $28.51$ (30) & $28.51$ (30) & $53.92$ (67) & 1271 & 1 & 0 \\\\",
+      "release": "DEA & 4 & 0 & $28.51$ (30) & $28.51$ (30) & $53.92$ (67) & 1271 & 0 & 0 \\\\",
+      "amine": "DEA",
+      "quantity": "unfinished searches",
+      "numbers": [
+        1,
+        0
+      ],
+      "gain_keys": [
+        "lawson-1976-viii:1:problem"
+      ]
+    },
+    {
+      "path": "docs/scientific/latex/tables/amine-summary.tex",
+      "retained": "MDEA & 8 & 2 & $20.09$ (66) & $11.24$ (131) & $25.83$ (175) & \\num{11824} & 1099 & 0 \\\\",
+      "release": "MDEA & 8 & 2 & $20.09$ (66) & $11.24$ (131) & $25.83$ (175) & \\num{11824} & 1095 & 0 \\\\",
+      "amine": "MDEA",
+      "quantity": "unfinished searches",
+      "numbers": [
+        1099,
+        1095
+      ],
+      "gain_keys": [
+        "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:373.15:1.0:1.05",
+        "grid:{'water': 2.4482758620689657, 'methyldiethanolamine': 1.0}:393.15:0.8:1.05",
+        "grid:{'water': 3.8899755501222497, 'methyldiethanolamine': 1.0}:393.15:0.2:3.0",
+        "grid:{'water': 59.53056516468242, 'methyldiethanolamine': 1.0}:363.15:1.3:3.0"
+      ]
+    },
+    {
+      "path": "docs/scientific/latex/sections/transfer_results.tex",
+      "retained": "1270 of the 1271",
+      "release": "1271 of the 1271",
+      "amine": "DEA",
+      "quantity": "available searches",
+      "numbers": [
+        1270,
+        1271
+      ],
+      "gain_keys": [
+        "lawson-1976-viii:1:problem"
+      ]
+    },
+    {
+      "path": "docs/scientific/latex/sections/transfer_results.tex",
+      "retained": "1099 did not finish",
+      "release": "1095 did not finish",
+      "amine": "MDEA",
+      "quantity": "unfinished searches",
+      "numbers": [
+        1099,
+        1095
+      ],
+      "gain_keys": [
+        "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:373.15:1.0:1.05",
+        "grid:{'water': 2.4482758620689657, 'methyldiethanolamine': 1.0}:393.15:0.8:1.05",
+        "grid:{'water': 3.8899755501222497, 'methyldiethanolamine': 1.0}:393.15:0.2:3.0",
+        "grid:{'water': 59.53056516468242, 'methyldiethanolamine': 1.0}:363.15:1.3:3.0"
+      ]
+    },
+    {
+      "path": "docs/scientific/latex/supplement.tex",
+      "retained": "Of the 1099 MDEA searches",
+      "release": "Of the 1095 MDEA searches",
+      "amine": "MDEA",
+      "quantity": "unfinished searches",
+      "numbers": [
+        1099,
+        1095
+      ],
+      "gain_keys": [
+        "grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:373.15:1.0:1.05",
+        "grid:{'water': 2.4482758620689657, 'methyldiethanolamine': 1.0}:393.15:0.8:1.05",
+        "grid:{'water': 3.8899755501222497, 'methyldiethanolamine': 1.0}:393.15:0.2:3.0",
+        "grid:{'water': 59.53056516468242, 'methyldiethanolamine': 1.0}:363.15:1.3:3.0"
+      ]
+    }
+  ],
+  "unexpected": [],
+  "provenance_only": [
+    "docs/scientific/latex/tables/bound_profiles.tex",
+    "docs/scientific/latex/tables/choice_cost.tex",
+    "docs/scientific/latex/tables/interaction_matrix.tex",
+    "docs/scientific/latex/tables/kim_alternatives.tex",
+    "docs/scientific/latex/tables/mea_data.tex",
+    "docs/scientific/latex/tables/objective_groups.tex",
+    "docs/scientific/latex/tables/pressure_sources.tex",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex",
+    "docs/scientific/latex/tables/species_parameters.tex",
+    "docs/scientific/latex/tables/supplement_check_values.tex",
+    "docs/scientific/latex/tables/supplement_correlations.tex",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex",
+    "docs/scientific/latex/tables/supplement_interaction_matrix.tex",
+    "docs/scientific/latex/tables/supplement_mea_comparison.tex",
+    "docs/scientific/latex/tables/supplement_reaction_coefficients.tex",
+    "docs/scientific/latex/tables/supplement_shared_remaining.tex",
+    "docs/scientific/latex/tables/supplement_species_parameters.tex"
+  ],
+  "generator_statuses": [
+    0,
+    0,
+    0
+  ],
+  "matplotlib": "3.11.2",
+  "source_count": 48,
+  "added_keys": [],
+  "removed_keys": [],
+  "tex_status": {
+    "docs/scientific/latex/chemistry_macros.tex": "identical body",
+    "docs/scientific/latex/main.tex": "identical body",
+    "docs/scientific/latex/sections/acknowledgements.tex": "identical body",
+    "docs/scientific/latex/sections/conclusion.tex": "identical body",
+    "docs/scientific/latex/sections/data_code_availability.tex": "identical body",
+    "docs/scientific/latex/sections/data_methods.tex": "identical body",
+    "docs/scientific/latex/sections/epc_saft_equation_of_state.tex": "identical body",
+    "docs/scientific/latex/sections/introduction.tex": "identical body",
+    "docs/scientific/latex/sections/mea_system_modeling_results.tex": "identical body",
+    "docs/scientific/latex/sections/nomenclature.tex": "identical body",
+    "docs/scientific/latex/sections/transfer_results.tex": "recorded availability count changes",
+    "docs/scientific/latex/submission/graphical_abstract.tex": "identical body",
+    "docs/scientific/latex/supplement.tex": "recorded availability count changes",
+    "docs/scientific/latex/tables/amine-summary.tex": "recorded availability count changes",
+    "docs/scientific/latex/tables/bound_profiles.tex": "identical body",
+    "docs/scientific/latex/tables/choice_cost.tex": "identical body",
+    "docs/scientific/latex/tables/interaction_matrix.tex": "identical body",
+    "docs/scientific/latex/tables/kim_alternatives.tex": "identical body",
+    "docs/scientific/latex/tables/mea_data.tex": "identical body",
+    "docs/scientific/latex/tables/objective_groups.tex": "identical body",
+    "docs/scientific/latex/tables/pressure_sources.tex": "identical body",
+    "docs/scientific/latex/tables/published-models.tex": "identical body",
+    "docs/scientific/latex/tables/reaction_equilibrium_constants.tex": "identical body",
+    "docs/scientific/latex/tables/species_parameters.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-amp-ranges.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-dea-ranges.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-hong-comparison.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-mdea-ranges.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-temperature-bands.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-transfer-bounds.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-transfer-data.tex": "identical body",
+    "docs/scientific/latex/tables/supplement-transfer-parameters.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_check_values.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_correlations.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_fitted_parameters.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_interaction_matrix.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_mea_comparison.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_reaction_coefficients.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_shared_remaining.tex": "identical body",
+    "docs/scientific/latex/tables/supplement_species_parameters.tex": "identical body",
+    "docs/scientific/latex/tables/transfer-fitted.tex": "identical body",
+    "docs/scientific/latex/tables/transfer-species.tex": "identical body"
+  },
+  "tex_files": 42,
+  "identical_tex_bodies": 39,
+  "number_sources": {
+    "path": "docs/scientific/latex/tables/number-sources.json",
+    "comparison": "key set only",
+    "status": "pass",
+    "committed": 48,
+    "regenerated": 48,
+    "added_keys": [],
+    "removed_keys": []
+  },
+  "retained_input_control": {
+    "identical_tex_bodies": 42,
+    "generator_statuses": [
+      0,
+      0,
+      0
+    ],
+    "provenance_only": [],
+    "number_source_keys": 48
+  },
+  "tex_comparison": "Compared all tracked TeX bodies. Input and Generated from receipt comments are ignored for the body comparison. The count edits in the two prose files were staged only in the scratch checkout and checked by the original prose assertions.",
+  "renderer": {
+    "version": "3.11.2",
+    "cp313_wheel_sha256": "1944895967f87c84c9b4bad29a707b31f5b36df4a3a2339ea1f8ea3ce5105539",
+    "source": "Deposit pin",
+    "text_comparison": "pdftotext -raw; figure PDFs compared both with the committed files and byte-for-byte with a retained-input control rendered under the same 3.11.2 environment."
+  },
+  "figures": {
+    "amp-current-measured-model.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/amp-current-measured-model.pdf",
+      "committed_sha256": "1cc9022c380397c40f86e93b6149dfa6ce628ad95fb7b1da75fc832ee431e5df",
+      "retained_control_sha256": "0b5314dd38adb0ceafe78136044871453a0352de95bf9135b5d5006bfb09afea",
+      "release_sha256": "0b5314dd38adb0ceafe78136044871453a0352de95bf9135b5d5006bfb09afea",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "amp-splits.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/amp-splits.pdf",
+      "committed_sha256": "1a8fb95341af7ea6590f257c24ff403b9b99bf4ec0551c23c44a5a440a71e577",
+      "retained_control_sha256": "909b375b579f82676efabd16d2ca303c7fe64f7ce7c1c97d02527caf7d0278e2",
+      "release_sha256": "909b375b579f82676efabd16d2ca303c7fe64f7ce7c1c97d02527caf7d0278e2",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "concentration-pressure.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/concentration-pressure.pdf",
+      "committed_sha256": "414adb4fce194e903283ff954ab1e60478a803e317f72df9cb090524b472cd55",
+      "retained_control_sha256": "4f21c08c141a74083bfe3ad5555144cb9e0e1cf911dd888774094b4c6c76aa9f",
+      "release_sha256": "4f21c08c141a74083bfe3ad5555144cb9e0e1cf911dd888774094b4c6c76aa9f",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "dea-current-binary-comparisons.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/dea-current-binary-comparisons.pdf",
+      "committed_sha256": "cdb61712c08fcf2be93baf573ce289f877812ea3657de9bd8d8d99df6b15311f",
+      "retained_control_sha256": "5d24ad5db91c4b764b775214cff8f30a4b30155e761d58dbb56b707eeef092a4",
+      "release_sha256": "5d24ad5db91c4b764b775214cff8f30a4b30155e761d58dbb56b707eeef092a4",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "dea-current-measured-model.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/dea-current-measured-model.pdf",
+      "committed_sha256": "c9629f224706232bbd735bd59ac54ac24ef7a957f6d498aeec0fde37f488c387",
+      "retained_control_sha256": "6135e2e518a0f369cbb9f54cd76d72fabdd08f44d225529eb707d06ffd64a6d3",
+      "release_sha256": "6135e2e518a0f369cbb9f54cd76d72fabdd08f44d225529eb707d06ffd64a6d3",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "density-curves.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/density-curves.pdf",
+      "committed_sha256": "5b77a00eeaf31b26933c9c4edea0cd0ab3a6054d9ef530dc084b8b9f6e65e20c",
+      "retained_control_sha256": "5b77a00eeaf31b26933c9c4edea0cd0ab3a6054d9ef530dc084b8b9f6e65e20c",
+      "release_sha256": "5b77a00eeaf31b26933c9c4edea0cd0ab3a6054d9ef530dc084b8b9f6e65e20c",
+      "identical_to_committed": true,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": null
+    },
+    "heat-of-absorption.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/heat-of-absorption.pdf",
+      "committed_sha256": "6389b2a62caa5329bf59f6958163eb10a35b4926e4ba193f9497301fb489ad13",
+      "retained_control_sha256": "07ce5b25c726212ee4d57ec5c5792491c7f7549e9cbb7cc6cc3b8f37303d98a5",
+      "release_sha256": "07ce5b25c726212ee4d57ec5c5792491c7f7549e9cbb7cc6cc3b8f37303d98a5",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "mdea-current-measured-model.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/mdea-current-measured-model.pdf",
+      "committed_sha256": "04d2f6d5f0873ecec28233657b52d3df93b9087621f067fc0c1b046352f5dcb4",
+      "retained_control_sha256": "c11425cfbf34c81376efca35932b283de64fe61276b38c53feffe50b10ca0bc1",
+      "release_sha256": "c11425cfbf34c81376efca35932b283de64fe61276b38c53feffe50b10ca0bc1",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "spacing around multiplication signs on logarithmic tick labels",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "mea-water.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/mea-water.pdf",
+      "committed_sha256": "51a3e1e096b8f6f0584520804cebcc57b9abb99ea471621fd59eb7ea24cb197e",
+      "retained_control_sha256": "51a3e1e096b8f6f0584520804cebcc57b9abb99ea471621fd59eb7ea24cb197e",
+      "release_sha256": "51a3e1e096b8f6f0584520804cebcc57b9abb99ea471621fd59eb7ea24cb197e",
+      "identical_to_committed": true,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": null
+    },
+    "pressure-uncertainty.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/pressure-uncertainty.pdf",
+      "committed_sha256": "c59c079014af9f504c032ae2091144fca59ef5605e1b90ff9b4064c7f2e51ca7",
+      "retained_control_sha256": "15aedb459c0362f2a505dbb94b7ad50b2edef6e14823321184f0e602bb5c10d2",
+      "release_sha256": "15aedb459c0362f2a505dbb94b7ad50b2edef6e14823321184f0e602bb5c10d2",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "pressure.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/pressure.pdf",
+      "committed_sha256": "4f3c776d7eda4d8f0b585afdb7ff3e2974001058623fc531b05daf9aa4c0170a",
+      "retained_control_sha256": "da968cbc57bbb06e27a9c15894274210c5c22adffce90992e81a3be66f49b852",
+      "release_sha256": "da968cbc57bbb06e27a9c15894274210c5c22adffce90992e81a3be66f49b852",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "axis tick values changed",
+      "numeric_axis_tick_changes": {
+        "axis": "CO\u2082 partial pressure, kPa",
+        "retained": [
+          1e-05,
+          0.001,
+          0.1,
+          10.0,
+          1000.0
+        ],
+        "rendered": [
+          1e-06,
+          0.0001,
+          0.01,
+          1.0,
+          100.0
+        ]
+      },
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "speciation.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/speciation.pdf",
+      "committed_sha256": "ebef5db76a6f65ded5d8c6de6843bfda5873c43114858ee20d79d57227dfedae",
+      "retained_control_sha256": "85d44a4ddcc123f727889b328b1750f902b9d95000efcd31de0c778273c0a1a5",
+      "release_sha256": "85d44a4ddcc123f727889b328b1750f902b9d95000efcd31de0c778273c0a1a5",
+      "identical_to_committed": false,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.10.9, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "spacing before ionic superscript charges in extracted text",
+      "numeric_axis_tick_changes": null,
+      "cause": "Renderer version/settings; reproduced with retained inputs under 3.11.2"
+    },
+    "split-energy.pdf": {
+      "committed_path": "docs/scientific/latex/figures/generated/split-energy.pdf",
+      "committed_sha256": "5dcad4518b13bbcd6ade4c1205dbae37c688c08332155f0a8bbc7343436490c3",
+      "retained_control_sha256": "5dcad4518b13bbcd6ade4c1205dbae37c688c08332155f0a8bbc7343436490c3",
+      "release_sha256": "5dcad4518b13bbcd6ade4c1205dbae37c688c08332155f0a8bbc7343436490c3",
+      "identical_to_committed": true,
+      "identical_to_retained_control": true,
+      "committed_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "rendered_pdf_creator": "Matplotlib v3.11.2, https://matplotlib.org",
+      "committed_text_comparison": "identical",
+      "numeric_axis_tick_changes": null,
+      "cause": null
+    }
+  },
+  "figures_outside_the_three_generators": [
+    "docs/scientific/latex/figures/generated/co2-water.pdf",
+    "docs/scientific/latex/figures/generated/heat-temperature.pdf",
+    "docs/scientific/latex/figures/generated/loaded-density-errors.pdf",
+    "docs/scientific/latex/figures/generated/mea-permittivity.pdf",
+    "docs/scientific/latex/figures/generated/species-parity.pdf",
+    "docs/scientific/latex/figures/generated/water-iapws.pdf"
+  ],
+  "retained_png_companions": [
+    "docs/scientific/latex/figures/generated/co2-water.png",
+    "docs/scientific/latex/figures/generated/density-curves.png",
+    "docs/scientific/latex/figures/generated/heat-of-absorption.png",
+    "docs/scientific/latex/figures/generated/heat-temperature.png",
+    "docs/scientific/latex/figures/generated/loaded-density-errors.png",
+    "docs/scientific/latex/figures/generated/mea-permittivity.png",
+    "docs/scientific/latex/figures/generated/mea-water.png",
+    "docs/scientific/latex/figures/generated/pressure-uncertainty.png",
+    "docs/scientific/latex/figures/generated/pressure.png",
+    "docs/scientific/latex/figures/generated/speciation.png",
+    "docs/scientific/latex/figures/generated/species-parity.png",
+    "docs/scientific/latex/figures/generated/water-iapws.png"
+  ],
+  "note": "Figures were rendered from input files; the set of TeX bodies includes static manuscript sources. No final manuscript PDF was rebuilt."
+}

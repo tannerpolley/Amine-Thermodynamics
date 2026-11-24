@@ -30,7 +30,7 @@ def check_output(path):
     assert not subprocess.check_output(['git', 'ls-files', '--', str(path)], cwd=ROOT)
 
 
-def record_solve(path, sha, problem, result, row):
+def record_solve(path, sha, problem, result, row, wheel=True):
     import epcsaft
     temperature = problem.T if hasattr(problem, 'T') else problem.temperature.value
     evidence = dict(version=epcsaft.__version__, module=epcsaft.__file__, commit=COMMIT, sha256=sha,
@@ -38,14 +38,14 @@ def record_solve(path, sha, problem, result, row):
     evidence.update({k: getattr(result, k) for k in ('linear_solver', 'solver_status', 'success',
                                                     'requested_tolerance_met', 'message', 'pressure')})
     write(path, evidence)
-    assert epcsaft.__version__ == '1.3.2' and result.linear_solver == 'ma57', evidence
+    assert epcsaft.__version__ == '1.3.2' and (not wheel or result.linear_solver == 'ma57'), evidence
 
 
-def record_identity(spec, path, sha):
+def record_identity(spec, path, sha, wheel=True):
     from epcsaft import equilibrium as eq
     record = spec.inputs['observations']['fitted'][0]
     problem = spec.problems[record.get('problem', record.get('initial'))]
-    record_solve(path, sha, problem, eq.solve_equilibrium(spec.model, problem), record['identity'])
+    record_solve(path, sha, problem, eq.solve_equilibrium(spec.model, problem), record['identity'], wheel)
 
 
 def uncertainty(pe, sha):
@@ -110,13 +110,23 @@ def census(run, reduce_state):
     (ROOT / '.venv').mkdir(exist_ok=True)
 
 
-def mea(action, run):
+def mea(action, run, package=None):
     sys.path[:0] = [str(MEA / 'scripts'), str(ROOT / 'src')]
     import paper_evidence_341 as pe
 
     a, r = pe.a, pe.r
-    sha = a.sha(WHEEL)
-    assert sha == WHEEL_SHA
+    sha = a.sha(package or WHEEL)
+    if package:
+        import epcsaft
+        assert action == 'replay' and sys.version_info[:2] == (3, 13)
+        assert Path(epcsaft.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
+        receipt, = Path(sys.prefix, 'conda-meta').glob('epcsaft-1.3.2-*.json')
+        metadata = load(receipt)
+        assert (metadata['sha256'], metadata['fn'], metadata['subdir']) == (sha, package.name, 'linux-64')
+        assert metadata['url'].startswith('https://conda.anaconda.org/tannerwpolley/')
+        a.verify = lambda: write(run / 'conda-package.json', metadata)
+    else:
+        assert sha == WHEEL_SHA
     for owner in (a, r):
         owner.COMMIT, owner.SHA, owner.WHEEL = COMMIT, sha, WHEEL
     r.s.ENGINE_COMMIT, r.s.ENGINE_WHEEL_SHA256 = COMMIT, sha
@@ -127,7 +137,7 @@ def mea(action, run):
         [*command[:2], str(common / 'upstream/epcsaft'), *command[3:]]))
     pe.setup()
     spec = r.bind(r.s.parameter_mapping(pe.RECORD))
-    record_identity(spec, run / f'{action}-identity.json', sha)
+    record_identity(spec, run / f'{action}-identity.json', sha, wheel=package is None)
     try:
         if action == 'uncertainty':
             uncertainty(pe, sha)
@@ -360,6 +370,63 @@ def amp(run):
     table(run / 'same-row-deviations.csv', [r for r in retained_rows if r['case'] != label] + [dict(r, case=label) for r in rows])
 
 
+def displays(run, recipe):
+    import difflib
+    from hashlib import sha256
+    import re
+    import matplotlib
+
+    assert matplotlib.__version__ == '3.11.2'
+    plan = load(recipe)
+    scratch, latex = Path(plan['scratch']), Path('docs/scientific/latex')
+    git = ['git', '-C', str(scratch)]
+    assert scratch.is_relative_to(ROOT / 'build/release-recheck-414')
+    tracked = subprocess.check_output(git + ['ls-files', '-z', '--', str(latex)], text=True).split('\0')
+    original = {name: (ROOT / name).read_text() for name in tracked if name.endswith('.tex')}
+    figures = {p: p.stat().st_mtime_ns for p in (scratch / latex / 'figures/generated').glob('*.pdf')}
+    for destination, source in plan['overlay'].items():
+        shutil.copyfile(ROOT / source, scratch / destination)
+    subprocess.run(git + ['add', '-u', '--', 'analyses'], check=True)
+    subprocess.run(git + ['-c', 'user.name=Release replay', '-c', 'user.email=replay@localhost',
+                          'commit', '--allow-empty', '-qm', 'Bind scratch replay inputs'], check=True)
+    commit = subprocess.check_output(git + ['rev-parse', 'HEAD'], text=True).strip()
+    expected = original.copy()
+    for change in plan['count_changes']:
+        name, before, after = (change[k] for k in ('path', 'retained', 'release'))
+        assert expected[name].count(before) == 1 and change['gain_keys'], change
+        expected[name] = expected[name].replace(before, after, 1)
+        if not Path(name).is_relative_to(latex / 'tables'):
+            (scratch / name).write_text(expected[name])
+    scripts = scratch / latex / 'scripts'
+    source = (scripts / 'dea_displays.py').read_text()
+    for before, after in plan['dea_bindings']:
+        assert source.count(before) == 1
+        source = source.replace(before, after, 1)
+    bind = 'import final_rerun_tables as t\n'
+    if plan['overlay']:
+        bind += f't.BASE = {commit!r}\n'
+    commands = (bind + 't.main()', source, bind + 'import f2_figures\nf2_figures.main()')
+    runs = [subprocess.run([sys.executable, '-c', command.replace('Path(__file__)', f'Path({str(scripts / "dea_displays.py")!r})')], cwd=scripts).returncode
+            for command in commands]
+    regenerated = {str(p.relative_to(scratch)): p.read_text() for p in (scratch / latex).rglob('*.tex')}
+    header = re.compile(r'^% (?:Input(?: \(working tree\))?:|Generated from) .*\n', re.M)
+    body = lambda index, name: header.sub('', index.get(name, '')).splitlines(keepends=True)
+    differences = {name: ''.join(difflib.unified_diff(body(original, name), body(regenerated, name)))
+                   for name in sorted(original.keys() | regenerated.keys())}
+    other = set(re.findall(r'^% Input \(working tree\): (.*?) SHA256 ', '\n'.join(regenerated.values()), re.M))
+    keys_path = latex / 'tables/number-sources.json'
+    keys, retained = (set(load(p / keys_path)) for p in (scratch, ROOT))
+    hashes = (scratch / latex / 'builds').glob('347-*-hashes.json')
+    inputs = keys | other | {name for p in hashes for name in load(p)['files']}
+    write(run / 'display-inputs.json', {name: plan['overlay'].get(name, 'not recalculated') for name in sorted(inputs)})
+    unexpected = [name for name in differences if body(expected, name) != body(regenerated, name)]
+    write(run / 'figure-hashes.json', {p.name: sha256(p.read_bytes()).hexdigest() for p, stamp in figures.items() if p.stat().st_mtime_ns != stamp})
+    write(run / 'display-diff.json', dict(differences=differences, count_changes=plan['count_changes'], unexpected=unexpected,
+          provenance_only=[name for name in differences if not differences[name] and original.get(name) != regenerated.get(name)],
+          generator_statuses=runs, matplotlib=matplotlib.__version__, source_count=len(keys), added_keys=sorted(keys-retained), removed_keys=sorted(retained-keys)))
+    assert runs == [0, 0, 0] and keys == retained and not unexpected and original.keys() == regenerated.keys()
+
+
 if __name__ == '__main__':
     command, first, second, *extra = sys.argv[1:]
     if command == 'compare':
@@ -380,9 +447,11 @@ if __name__ == '__main__':
                 mdea(action, run)
             elif command == 'amp':
                 amp(run)
+            elif command == 'displays':
+                displays(run, Path(extra[0]))
             else:
-                assert command == 'mea'
+                assert command in ('mea', 'conda')
                 assert action in ('replay', 'evidence', 'uncertainty', 'comparison', 'weights', 'shared', 'checks', 'stability')
-                mea(action, run)
+                mea(action, run, Path(extra[0]) if command == 'conda' else None)
         finally:
             write(run / f'{action}-wall.json', dict(command=sys.argv, seconds=time.monotonic() - started))
