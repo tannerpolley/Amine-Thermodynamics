@@ -1,9 +1,226 @@
 ---
 title: "Diethanolamine equilibrium and calorimetry on the adopted shared record"
 format: html
+resources:
+  - results/binary-refit-425/**
+  - results/reactive-refit-425/**
+  - results/refit-413/**
 execute:
   enabled: false
 ---
+
+## Temperature-dependent DEA–water interaction (#425)
+
+The two-coefficient DEA–water law recovered exothermic mixing at 363.15 K
+and 1.75 MPa, but none of the four candidates met the fixed pressure and
+heat limits together. The lowest-cost replay gave a minimum heat of
+−1,480.25 J/mol of mixture at a liquid water mole fraction of 0.67.
+The measured minimum was −1,707 J/mol at 0.6414. The same candidate gave
+9.504843% pressure AARD on the 42 Horstmann mixtures, 4.504843 percentage
+points above the initial 5.0% cap. The first run stopped at the binary
+decision. The owner subsequently dropped that cap and requested the
+reactive refit below. #413 remains the DEA basis for #424, #426 and #427
+pending the owner's choice. [Owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/425#issuecomment-7142371340)
+
+The fit used $k(T)=a+b(1/T-1/365.15\ \mathrm{K})$, with $b$ in kelvin
+and both endpoint values of $k$ bounded at 293.15 and 458.64 K.
+The objective used 42 Horstmann Table 4 mixture pressures, seven Cai Table 4
+mixture pressures and 14 Horstmann Table 6 heats. It sums half the mean
+squared residual for each series. The pressure residual is the natural
+logarithm of calculated over observed pressure. The heat residual is the
+signed difference divided by 1,707 J/mol of mixture. Four pure-component
+bubble points are reported separately. The fits hold the #413 pure
+parameters, water diameter correlation, permittivity parameters and
+Wolbach–Sandler association fixed.
+
+| Point | $a$ | $b$ (K) | Binary cost | Horstmann AARD (%) | Cai AARD (%) | Heat RMSE (J/mol) | Heat minimum (J/mol) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| #413 constant | −0.06363352 | 0 | 0.4978609014 | 0.818291 | 51.490316 | 1,513.525 | — |
+| #410 slope probe | −0.06363352 | −46.20553082 | 0.1696763414 | 0.818291 | 71.842875 | 124.600 | — |
+| Unconstrained, zero-slope start | −0.08702964 | −32.25411092 | 0.1240703210 | 9.504485 | 48.553330 | 149.813 | −1,480.222 |
+| Unconstrained, −46.2 K start | −0.08703060 | −32.25421243 | 0.1240703210 | 9.504843 | 48.552750 | 149.800 | −1,480.251 |
+| Constrained, zero-slope start | −0.07552310 | −25.60993175 | 0.1593680407 | 5.000000001 | 53.707246 | 506.675 | −853.496175 |
+| Constrained, −46.2 K start | −0.07743288 | −24.68397413 | 0.1566758267 | 5.778141 | 52.045913 | 506.611 | −853.499964 |
+
+The physical bounds on $k(T)$ applied in both searches. The two
+unconstrained costs agree to $1.56\times10^{-11}$, within the optimizer's
+$10^{-10}$ stopping tolerance. The second point has the lower replayed cost.
+Its scaled residual Jacobian has singular values 1.03244 and 0.52488.
+The two values changed by less than $3\times10^{-10}$ when the difference
+step was halved. The fitted coefficients were interior to the endpoint
+bounds. Engine dispersion evaluations at both reference temperatures and
+the two extreme Cai mixture temperatures agreed with constant-$k$
+calculations set to the expected $k(T)$ at each temperature.
+
+| Fixed requirement | Value at lowest cost | Margin toward passing |
+|---|---:|---:|
+| All 14 heats below zero | Largest −132.434 J/mol | 132.434 J/mol |
+| Interior minimum at $0.50\le x_{\mathrm{w}}\le0.80$ | 0.67, closer adjacent heat 0.481395 J/mol higher | 0.17 and 0.13 to the composition limits |
+| Minimum heat in [−3,414, −853.5] J/mol | −1,480.251 J/mol | 1,933.749 and 626.751 J/mol to the depth limits |
+| Heat RMSE below 1,040.933 J/mol | 149.800 J/mol | 891.133 J/mol |
+| Horstmann AARD at most 5.0% | 9.504843% | **−4.504843 percentage points** |
+| Cai AARD below 51.490316% | 48.552750% | 2.937566 percentage points |
+| Positive unlike dispersion energy | Minimum multiplier $1-k(T)=1.069025$ | 1.069025 above zero |
+| Complete branch and measured-state search evidence | 63 of 63, zero confirmed or unresolved liquid splits | All required states resolved |
+
+The pressure comparison uses $10^{-8}$ percentage points from the normalized
+constraint stopping tolerance. Halving the bubble equation tolerance left
+the pressure comparisons unchanged at that resolution.
+Perturbing the heat calculation pressure by the largest observed
+density-root pressure residual changed the heat by at most
+$1.24\times10^{-9}$ J/mol over the four candidates. The recorded statistics
+include the pure-endpoint denominators, absolute and signed errors and bias.
+[Retained reductions and margins](results/binary-refit-425/disposition.json)
+
+Both constrained starts stopped with SLSQP's positive directional derivative
+message. At the zero-slope start's endpoint the Horstmann pressure result
+ties the cap within numerical resolution, the heat minimum misses by
+0.003825 J/mol and Cai misses by 2.216930 percentage points. The other
+endpoint misses by 0.778141 percentage points for Horstmann, 0.000036 J/mol
+for the minimum heat and 0.555597 percentage points for Cai.
+An independent check solved for the two intercepts on the 5% Horstmann
+contour, then sampled 17 intercepts between them and nine slopes between
+the two heat-depth limits at each intercept. The lowest sampled Cai AARD
+was 53.707275%. At that point, the scaled derivatives show that moving
+toward the interior of both the Horstmann and the heat constraints increases
+Cai AARD to first order. Halving the derivative step preserved the direction
+and size of the tradeoff. The diagnosis supports failure for the tested
+law, association rule, data and search. The finite sample does not bound
+all possible coefficients or other ePC-SAFT parameterizations.
+[Constraint diagnosis](results/binary-refit-425/constraint-diagnosis.json)
+
+![Fitted-row residuals for all four starts versus liquid water mole fraction and temperature. Horstmann VLE is isothermal at 365.15 K and calorimetry at 363.15 K. Residuals are calculated minus observed.](results/binary-refit-425/binary-residuals.png)
+
+Horstmann's experimental section (p. 1497) gives 0.03 K and 0.0001 mole
+fraction as estimated temperature and composition uncertainties for
+the pressure apparatus. It reports a pressure uncertainty of 20 Pa
+plus the stated pressure-dependent term. Its calorimeter uncertainty
+uses a printed expression with an ambiguous sign for negative heats.
+The objective weights are series weights. Cai et al. (Table 4,
+p. 1102) give modified-UNIFAC mean absolute differences of 1.08 K
+and 0.011 in vapor water mole fraction. The Cai vapor compositions
+are retained at the calculated bubble points. These results measure
+calibration quality for the stated conditions.
+
+### Numerical controls and phase checks
+
+- The 44-row [cross-wheel reproduction](results/binary-refit-425/controls/cross-wheel.json)
+  recovered $k=-0.06363352262762448$, cost 0.0004118709373610573 and
+  pressure AARD 1.163912%. The historical and study-wheel predictions
+  agree row by row. The independently reduced fixed-point cost differs
+  by $2.28\times10^{-14}$ relative. The #413 replay gives
+  0.818291% on the 42 Horstmann mixtures, versus 12.665446% at
+  the published $k=-0.04$.
+- At 363.15 K and 1.75 MPa, the [#413 heat replay](results/binary-refit-425/controls/binary-controls.json)
+  gives 152.449866% AARD and +1,313.142874 J/mol mean signed error.
+  It predicts +739.312 J/mol at the measured minimum. The nine Cai
+  pressures reproduce 40.816649% AARD and +33.587586% bias.
+- For the derivative control at $b=-46.2$ K, the production heat at
+  the measured minimum is −1,603.080742 J/mol. The [derivative check](results/binary-refit-425/controls/heat-derivative.json) uses 0.10, 0.05 and
+  0.025 K centered differences and gives −1,603.081499, −1,603.080931 and
+  −1,603.080789 J/mol. The finest result differs by
+  $4.78\times10^{-5}$ J/mol, within the observed successive-step change
+  of $1.42\times10^{-4}$ J/mol. Dividing that change by three gives a
+  nominal second-order estimate of $4.72\times10^{-5}$ J/mol. Finer steps
+  and an independent fixed-pressure Gibbs evaluation show numerical
+  variation at the scale of the $5.4\times10^{-7}$ J/mol difference
+  between the finest-step discrepancy and that nominal estimate.
+  The pure limits are zero on all four candidate heat grids.
+- The pinned Engine reproduces the [#413 reactive replay](results/binary-refit-425/controls/reactive-checks.json)
+  at cost 8.082968228315 with zero relative difference against the
+  299 retained CSV predictions. The 80 fitted predictions agree with
+  the optimizer within $3.09\times10^{-12}$ relative. The retained
+  #413 tally is 335 data and 936 grid searches, with 1,270 available
+  and one unavailable, Lawson Table VIII problem 1. Zero descents
+  were reported in the available #413 searches.
+- The candidate branch checks use the calculated bubble pressure in
+  VLE and 1.75 MPa for the calorimetry. The Part II phase searches use
+  measured pressure for VLE and 1.75 MPa for calorimetry. Each candidate
+  resolved all 63 liquid parents. The unconstrained endpoints showed
+  16 vapor descents each and the constrained endpoints 18 each.
+  Targeted repeats recovered the same counts, zero liquid witnesses and
+  zero unresolved searches. The vapor descents are consistent with
+  searching below the calculated bubble pressure. These counts describe
+  the specific states and trials retained with each point.
+
+One timed 63-row evaluation, on one core with single-threaded BLAS,
+took 0.181 s. The [candidate records](results/binary-refit-425/disposition.json)
+contain the row predictions, bounds, objective contributions, stopping
+conditions, heat grids, singular values and phase searches. Delivered
+scientific review supported the binary result.
+
+## Reactive refit with the temperature-dependent DEA–water law (#425 §D)
+
+Both reactive starts converged with the same four fitted coordinates on the
+same 80 observations as #413. Start 0 had the smaller unpenalized cost
+by about $1.5\times10^{-10}$, outside the declared $10^{-10}$ tie rule,
+and incurred zero stability penalty. Its hydrolysis intercept reached the
+lower bound. All 299 observation predictions and 750 curve points were
+available. The cost decrease came from the 30 fitted Lawson CO₂ pressures.
+The 50 Carson integral heats and the 67 loaded-pressure comparisons outside
+the fit had larger errors. The 49 binary mixture pressures and the 30
+loaded pressures in the pooled readback were fitted in separate stages.
+The #413 columns replay the same rows and use the same denominators.
+The loaded pressure bands use the #409 temperature boundaries
+($T\le353.2$ K, $353.2<T<370$ K, and $T\ge370$ K).
+
+{{< include results/reactive-refit-425/comparison.md >}}
+
+The binary law has $a=-0.08703060184037906$ at 365.15 K and
+$b=-32.254212427287676\ \mathrm{K}$. The mixture pressure readback
+at 365.15 K gives 3.51% AARD for $0.85\le x_\mathrm{w}<0.95$ and
+0.35% for $0.95\le x_\mathrm{w}<1$. The binary heat RMSE at 363.15 K
+and 1.75 MPa fell from 1,514 to 150 J/mol of mixture.
+
+The completed R4 law uses $\ln K=a+b/T$ on the aqueous molality scale
+referenced to infinite dilution in water, with 100 kPa reference pressure.
+The selected law has $a=2.0976409180833815$ and
+$b=-2005.431152140249\ \mathrm{K}$, compared with 5.883485367291507 and
+$-2661.435714463442\ \mathrm{K}$ in #413. Both fits used the inverse of
+Aroua's carbamate formation law, $\log_{10}K_1=-5.12+1781\ \mathrm{K}/T$,
+as the source seed (1997, Eq. 14, p. 695). R4 and R5 range marks refer to
+the source ranges of hydrolysis (303–331 K) and DEA dissociation
+(273.15–323.15 K), respectively. [Dataset reductions and range marks](results/reactive-refit-425/comparisons.json)
+
+The reactive standard errors hold the binary coefficients and the bound
+hydrolysis intercept fixed. The separate binary estimates use the weighted
+residual Jacobian with two step sizes. The weights are engineering scales,
+so these estimates describe local sensitivity to residuals. They leave
+out uncertainty in the fixed inputs and model form.
+[Reactive conditional information](results/reactive-refit-425/run/conditional-uncertainty.json)
+[Binary conditional information](results/reactive-refit-425/binary-uncertainty.json)
+
+The selected endpoint completed the #413 Lawson Table VIII search
+(`lawson-1976-viii:1:problem`). It left one grid search unfinished at
+383.15 K, 10 wt% DEA, loading 0.9 mol CO₂/mol DEA and 6.402 MPa
+(three times calculated bubble pressure). The targeted readback solved the
+parent and reproduced residual $2.31\times10^{-10}$ for the unfinished
+near-pure trial, against the $10^{-10}$ row tolerance. Neither start
+found a liquid or vapor descent in the 1,270 available searches. The
+63 separate binary searches at measured VLE or calorimetric pressures
+had 16 vapor descents, zero liquid descents and zero unfinished searches.
+The conclusions apply to these finite searches and the source rows
+already inspected during development. The pressure and heat comparisons
+show calibration and fixed-parameter performance. Independent validation
+and the adoption decision remain open.
+[Reactive stability readback](results/reactive-refit-425/run/stability-readback.json)
+[Binary stability readback](results/binary-refit-425/unconstrained-1/stability.json.gz)
+
+![Loaded DEA predictions and measurements. Points show observations. Line styles distinguish reaction source temperature ranges.](results/reactive-refit-425/measured-model.png)
+
+![Fig. 8 comparison. Open circles show measurements. Crosses show calculated results at the measured states for binary heat and Cai pressure.](results/reactive-refit-425/fig-8-comparison.png)
+
+The [run inputs and wheel identity](results/reactive-refit-425/inputs.json),
+[both reactive fits](results/reactive-refit-425/run/selection.json),
+[endpoint checks](results/reactive-refit-425/run/checks.json) and
+[range-separated deviations](results/reactive-refit-425/range-deviations.csv)
+retain the numerical evidence. The [file hashes](results/reactive-refit-425/SHA256SUMS)
+identify this delivery. The 80-row preflight took 3.52 s on the
+pinned wheel. The [campaign producer](reactive_refit.py), [stability readback](reactive_stability.py)
+and [paired reductions](reactive_readback.py) take a scratch output directory.
+The notebook renders the retained results with execution disabled.
+
+## Reference DEA calculation
 
 With the carbamate inputs of the adopted MEA fit F2 (#413), DEA's cost rises
 from 8.0340 to 8.0830. Fitted pressure deviation is 28.51% (was 28.46%), and
