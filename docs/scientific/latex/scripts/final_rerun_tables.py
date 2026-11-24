@@ -286,17 +286,24 @@ def reference_states():
         ('Reclosed supplied trial $D$', amp['supplied']['quantities']['tpd_over_rt'], 'Dimensionless'),
         ('Split-minus-parent $\\Delta G/(RT)$', amp['Gibbs_difference_over_RT_mol'], 'mol per declared feed'),
         ('Paired Gibbs numerical estimate', amp['split']['numerical_error_over_RT_mol'], 'mol per declared feed'),
+        ('Equilibrium liquid amounts', ', '.join(map(str, amp['split']['amounts_mol'])), 'mol true species'),
+        ('Equilibrium liquid densities', ', '.join(map(str, amp['split']['densities_mol_m3'])), 'mol/m³'),
+        ('MEA initial and loaded liquid enthalpies', f"{mea['points']['initial']['H_J']}, {mea['points']['loaded']['H_J']}", 'J on the declared feed'),
+        ('Pure CO₂ addition-stream enthalpy', mea['added_stream']['H_J_per_mol'], 'J/mol, vapor branch'),
+        ('Loaded solution mass', mea['loaded_mass_kg'], 'kg'),
         ('MEA integral heat', mea['heat_kJ_mol'], 'kJ/mol added CO₂'),
         ('MEA equilibrium $C_P$', mea['cp_J_mol_K'], 'J/(mol apparent feed·K)'),
+        ('MEA $C_P$ on loaded feed and per mass', f"{mea['cp_J_K']}, {mea['cp_kJ_kg_K']}", 'J/K; kJ/(kg solution·K)'),
+        ('Centered re-solves at 0.10 and 0.05 K', ', '.join(map(str, mea['cp_stencil_J_mol_K'])), 'J/(mol apparent feed·K)'),
+        ('Analytic minus fine centered $C_P$', mea['cp_minus_fine_J_mol_K'], 'J/(mol apparent feed·K)'),
     ]
     lines = ['| Quantity | Value | Basis |', '|---|---:|---|']
     lines += [f'| {label} | {value} | {unit} |' for label, value, unit in rows]
     lines += ['', '| Reaction | Source (kJ/mol reaction) | Fugacity correction (kJ/mol reaction) | Ideal-gas sum (kJ/mol reaction) |', '|---|---:|---:|---:|']
     lines += [f"| {r['name']} | {r['source_kJ_mol']:.2f} | {r['fugacity_kJ_mol']:.2f} | {r['ideal_gas_kJ_mol']:.2f} |" for r in mea['reactions']]
     differences = s12['nonzero_differences'][-1]['replay_minus_retained']
-    count = sum(len(d) for d in differences)
     pressure = max(abs(d.get('bubble_pressure_Pa', 0)) for d in differences)
-    lines += ['', f"S12: {sum(r['printed_digits_agree'] for r in s12['replay'])} bubble states reproduce the displayed digits; the CO₂–water and MEA–water readbacks are identical to the retained records. For loaded MEA, {count} unrounded fields differ across the two starts, with a largest bubble-pressure difference of {pressure:.2e} Pa."]
+    lines += ['', f"S12: {sum(r['printed_digits_agree'] for r in s12['replay'])} bubble states reproduce the displayed digits; the CO₂–water and MEA–water readbacks are identical to the retained records. For loaded MEA, the replays from the two starting pressures differ from the retained record in {' and '.join(str(len(d)) for d in differences)} unrounded fields; the largest bubble-pressure difference from the record is {pressure:.2e} Pa."]
     output = folder/'tables.md'
     text = '\n'.join(lines)+'\n'
     if '--check' not in sys.argv:
