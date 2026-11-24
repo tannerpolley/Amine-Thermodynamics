@@ -1,0 +1,574 @@
+{
+  "disposition": "documented failure for the tested two-coefficient law, fixed association rule, datasets and search",
+  "adopted": false,
+  "binary_replacement": null,
+  "reactive_refit": "not run",
+  "least_cost_complete_candidate": "unconstrained-1",
+  "unconstrained_cost_tie": true,
+  "candidates": {
+    "constrained-0": {
+      "a": -0.07552309757413038,
+      "b": -25.60993174931909,
+      "cost": 0.15936804066339183,
+      "fit_converged": false,
+      "solver_message": "Positive directional derivative for linesearch",
+      "active_endpoint_bounds": [],
+      "quantities": {
+        "warmest_measured_heat": -71.8726142880987,
+        "minimum_x_water": 0.66,
+        "minimum_depth_J_mol": -853.4961748267742,
+        "heat_RMSE_J_mol": 506.6745510793857,
+        "horstmann_AARD_percent": 5.000000001019021,
+        "cai_AARD_percent": 53.70724571659165,
+        "minimum_unlike_energy_factor": 1.0612265772135818
+      },
+      "signed_margins": {
+        "negative_heat": 71.8726142880987,
+        "minimum_location_lower": 0.16000000000000003,
+        "minimum_location_upper": 0.14,
+        "adjacent_grid_minimum": 0.08450673853803892,
+        "depth_lower": 2560.503825173226,
+        "depth_upper": -0.0038251732257776894,
+        "rmse": 534.2584489206142,
+        "horstmann": -1.0190213117766689e-09,
+        "cai": -2.2169297165916504,
+        "unlike_energy": 1.0612265772135818
+      },
+      "misses": [
+        "depth_upper",
+        "horstmann",
+        "cai"
+      ],
+      "pressure_comparison_resolution_percent": {
+        "Horstmann VLE": 1e-08,
+        "Cai VLE": 1e-08
+      },
+      "fit_liquid_branches_resolved": 63,
+      "stability": {
+        "supplied_trial_counts": {
+          "available": 0,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 63,
+        "available": 63,
+        "descent": 18,
+        "unavailable": [],
+        "minimum_tau": -0.7019721544289109,
+        "supplied_minimum_tpd": null
+      },
+      "native_branches": {
+        "none": 45,
+        "vapor": 18
+      },
+      "confirmed_splits": 0,
+      "unresolved_splits": [],
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 0.0030768128654441373,
+          "aard": 5.000000001019021,
+          "bias": -4.784164837913646,
+          "rmse": 1.4800169392373874,
+          "mean_error": -0.9518864801630562
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.11223968279484405,
+          "aard": 53.70724571659165,
+          "bias": 38.040757943328906,
+          "rmse": 4.1229010675130375,
+          "mean_error": 2.5335144790257047
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.04405154500310364,
+          "aard": 43.676474300081175,
+          "bias": -43.676474300081175,
+          "rmse": 506.6745510793857,
+          "mean_error": 422.03414684583197
+        }
+      },
+      "cai_vapor_water_mole_fraction_MAE": {
+        "all": 0.0771739301046046,
+        "fitted": 0.09922362442020592
+      },
+      "heat_resolution_J_mol": 1.2369127944111824e-09,
+      "vapor_descents_below_calculated_bubble_pressure": 18
+    },
+    "constrained-1": {
+      "a": -0.07743287781591705,
+      "b": -24.683974131769425,
+      "cost": 0.1566758266846658,
+      "fit_converged": false,
+      "solver_message": "Positive directional derivative for linesearch",
+      "active_endpoint_bounds": [],
+      "quantities": {
+        "warmest_measured_heat": -71.56691784463328,
+        "minimum_x_water": 0.66,
+        "minimum_depth_J_mol": -853.4999643389456,
+        "heat_RMSE_J_mol": 506.6110469635048,
+        "horstmann_AARD_percent": 5.778140800109601,
+        "cai_AARD_percent": 52.04591289784351,
+        "minimum_unlike_energy_factor": 1.0636532651949862
+      },
+      "signed_margins": {
+        "negative_heat": 71.56691784463328,
+        "minimum_location_lower": 0.16000000000000003,
+        "minimum_location_upper": 0.14,
+        "adjacent_grid_minimum": 0.0306440782660502,
+        "depth_lower": 2560.5000356610544,
+        "depth_upper": -3.566105442587286e-05,
+        "rmse": 534.3219530364952,
+        "horstmann": -0.7781408001096013,
+        "cai": -0.5555968978435075,
+        "unlike_energy": 1.0636532651949862
+      },
+      "misses": [
+        "depth_upper",
+        "horstmann",
+        "cai"
+      ],
+      "pressure_comparison_resolution_percent": {
+        "Horstmann VLE": 1e-08,
+        "Cai VLE": 1e-08
+      },
+      "fit_liquid_branches_resolved": 63,
+      "stability": {
+        "supplied_trial_counts": {
+          "available": 0,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 63,
+        "available": 63,
+        "descent": 18,
+        "unavailable": [],
+        "minimum_tau": -0.6850692044632878,
+        "supplied_minimum_tpd": null
+      },
+      "native_branches": {
+        "none": 45,
+        "vapor": 18
+      },
+      "confirmed_splits": 0,
+      "unresolved_splits": [],
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 0.004130448507514203,
+          "aard": 5.778140800109601,
+          "bias": -5.570375324506062,
+          "rmse": 1.7532236666176249,
+          "mean_error": -1.153227797153587
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.1085048748934436,
+          "aard": 52.04591289784351,
+          "bias": 35.4933019485727,
+          "rmse": 3.9862965093588816,
+          "mean_error": 2.363853909774942
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.04404050328370799,
+          "aard": 43.71885346773898,
+          "bias": -43.71885346773898,
+          "rmse": 506.6110469635048,
+          "mean_error": 422.11546708827274
+        }
+      },
+      "cai_vapor_water_mole_fraction_MAE": {
+        "all": 0.07578094517565875,
+        "fitted": 0.09743264379727554
+      },
+      "heat_resolution_J_mol": 1.0113581083714962e-09,
+      "vapor_descents_below_calculated_bubble_pressure": 18
+    },
+    "unconstrained-0": {
+      "a": -0.0870296422447003,
+      "b": -32.25411091798082,
+      "cost": 0.12407032099275822,
+      "fit_converged": true,
+      "solver_message": "Optimization terminated successfully",
+      "active_endpoint_bounds": [],
+      "quantities": {
+        "warmest_measured_heat": -132.43134394614026,
+        "minimum_x_water": 0.67,
+        "minimum_depth_J_mol": -1480.222106246416,
+        "heat_RMSE_J_mol": 149.81250992588042,
+        "horstmann_AARD_percent": 9.504485247909114,
+        "cai_AARD_percent": 48.553330103994504,
+        "minimum_unlike_energy_factor": 1.0690240669872588
+      },
+      "signed_margins": {
+        "negative_heat": 132.43134394614026,
+        "minimum_location_lower": 0.17000000000000004,
+        "minimum_location_upper": 0.13,
+        "adjacent_grid_minimum": 0.4813538125818013,
+        "depth_lower": 1933.777893753584,
+        "depth_upper": 626.7221062464159,
+        "rmse": 891.1204900741195,
+        "horstmann": -4.504485247909114,
+        "cai": 2.9369858960054955,
+        "unlike_energy": 1.0690240669872588
+      },
+      "misses": [
+        "horstmann"
+      ],
+      "pressure_comparison_resolution_percent": {
+        "Horstmann VLE": 1e-08,
+        "Cai VLE": 1e-08
+      },
+      "fit_liquid_branches_resolved": 63,
+      "stability": {
+        "supplied_trial_counts": {
+          "available": 0,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 63,
+        "available": 63,
+        "descent": 16,
+        "unavailable": [],
+        "minimum_tau": -0.6431705819351418,
+        "supplied_minimum_tpd": null
+      },
+      "native_branches": {
+        "none": 47,
+        "vapor": 16
+      },
+      "confirmed_splits": 0,
+      "unresolved_splits": [],
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 0.011796418326238548,
+          "aard": 9.504485247909114,
+          "bias": -9.322380024745257,
+          "rmse": 3.0892604511079154,
+          "mean_error": -2.1316756497822262
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.10842267562450549,
+          "aard": 48.553330103994504,
+          "bias": 27.15945120620454,
+          "rmse": 3.6986049708786504,
+          "mean_error": 1.8088194503332224
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.003851227042014192,
+          "aard": 17.136522854427053,
+          "bias": -1.3511124910603496,
+          "rmse": 149.81250992588042,
+          "mean_error": 74.16380708326281
+        }
+      },
+      "cai_vapor_water_mole_fraction_MAE": {
+        "all": 0.072229968805103,
+        "fitted": 0.09286710274941815
+      },
+      "heat_resolution_J_mol": 1.1496013030409813e-09,
+      "vapor_descents_below_calculated_bubble_pressure": 16
+    },
+    "unconstrained-1": {
+      "a": -0.08703060184037906,
+      "b": -32.254212427287676,
+      "cost": 0.12407032097712861,
+      "fit_converged": true,
+      "solver_message": "Optimization terminated successfully",
+      "active_endpoint_bounds": [],
+      "quantities": {
+        "warmest_measured_heat": -132.43408537688083,
+        "minimum_x_water": 0.67,
+        "minimum_depth_J_mol": -1480.2512337209919,
+        "heat_RMSE_J_mol": 149.80048290320107,
+        "horstmann_AARD_percent": 9.504843174078212,
+        "cai_AARD_percent": 48.55275001520503,
+        "minimum_unlike_energy_factor": 1.069024969916255
+      },
+      "signed_margins": {
+        "negative_heat": 132.43408537688083,
+        "minimum_location_lower": 0.17000000000000004,
+        "minimum_location_upper": 0.13,
+        "adjacent_grid_minimum": 0.4813946762442356,
+        "depth_lower": 1933.7487662790081,
+        "depth_upper": 626.7512337209919,
+        "rmse": 891.1325170967989,
+        "horstmann": -4.504843174078212,
+        "cai": 2.937565984794972,
+        "unlike_energy": 1.069024969916255
+      },
+      "misses": [
+        "horstmann"
+      ],
+      "pressure_comparison_resolution_percent": {
+        "Horstmann VLE": 1e-08,
+        "Cai VLE": 1e-08
+      },
+      "fit_liquid_branches_resolved": 63,
+      "stability": {
+        "supplied_trial_counts": {
+          "available": 0,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "states": 63,
+        "available": 63,
+        "descent": 16,
+        "unavailable": [],
+        "minimum_tau": -0.6431641706298473,
+        "supplied_minimum_tpd": null
+      },
+      "native_branches": {
+        "none": 47,
+        "vapor": 16
+      },
+      "confirmed_splits": 0,
+      "unresolved_splits": [],
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 0.011797382598991112,
+          "aard": 9.504843174078212,
+          "bias": -9.322739259504944,
+          "rmse": 3.089390634404716,
+          "mean_error": -2.1317707874157144
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.10842232966814047,
+          "aard": 48.55275001520503,
+          "bias": 27.158452087331565,
+          "rmse": 3.6985631715405334,
+          "mean_error": 1.8087529090162822
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.0038506087099970244,
+          "aard": 17.13635502014564,
+          "bias": -1.3491569146501536,
+          "rmse": 149.80048290320107,
+          "mean_error": 74.14767156197256
+        }
+      },
+      "cai_vapor_water_mole_fraction_MAE": {
+        "all": 0.07222941640197159,
+        "fitted": 0.0928663925168206
+      },
+      "heat_resolution_J_mol": 1.1641532182693481e-09,
+      "vapor_descents_below_calculated_bubble_pressure": 16
+    }
+  },
+  "comparisons": {
+    "413": {
+      "cost": 0.4978609014457222,
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 4.1047382605015306e-05,
+          "aard": 0.8182907091594787,
+          "bias": 0.43059621142057075,
+          "rmse": 0.43205857490655336,
+          "mean_error": 0.3540762005449321
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.10473877319168334,
+          "aard": 51.49031615839473,
+          "bias": 44.08664024874901,
+          "rmse": 4.114873825485205,
+          "mean_error": 2.9361702405666845
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.39308108087143384,
+          "aard": 152.44986607342713,
+          "bias": -152.44986607342713,
+          "rmse": 1513.5249680240802,
+          "mean_error": 1313.1428743529032
+        }
+      },
+      "full_statistics": {
+        "Horstmann VLE / all": {
+          "observed": 44,
+          "available": 44,
+          "unit": "kPa",
+          "aard": 1.163912354903478,
+          "bias": 0.040982739676365364,
+          "rmse": 0.4233371908080669,
+          "signed_error": 0.3426553837404179
+        },
+        "Horstmann VLE / fitted": {
+          "observed": 42,
+          "available": 42,
+          "unit": "kPa",
+          "aard": 0.8182907091594785,
+          "bias": 0.43059621142057075,
+          "rmse": 0.4320585749065534,
+          "signed_error": 0.3540762005449321
+        },
+        "Horstmann VLE / pure": {
+          "observed": 2,
+          "available": 2,
+          "unit": "kPa",
+          "aard": 8.421966915527463,
+          "bias": -8.140900166951946,
+          "rmse": 0.1501647146034183,
+          "signed_error": 0.10281823084561909
+        },
+        "Cai VLE / all": {
+          "observed": 9,
+          "available": 9,
+          "unit": "kPa",
+          "aard": 40.81664912367688,
+          "bias": 33.587585535597654,
+          "rmse": 3.6319564405272975,
+          "signed_error": 2.2369331966708037
+        },
+        "Cai VLE / fitted": {
+          "observed": 7,
+          "available": 7,
+          "unit": "kPa",
+          "aard": 51.49031615839472,
+          "bias": 44.08664024874901,
+          "rmse": 4.114873825485205,
+          "signed_error": 2.936170240566685
+        },
+        "Cai VLE / pure": {
+          "observed": 2,
+          "available": 2,
+          "unit": "kPa",
+          "aard": 3.45881450216444,
+          "bias": -3.1591059604321132,
+          "rmse": 0.3119792263490898,
+          "signed_error": -0.2103964569647787
+        },
+        "Horstmann heat / all": {
+          "observed": 14,
+          "available": 14,
+          "unit": "J/mol",
+          "aard": 152.44986607342713,
+          "bias": -152.44986607342713,
+          "rmse": 1513.52496802408,
+          "signed_error": 1313.1428743529032
+        },
+        "Horstmann heat / fitted": {
+          "observed": 14,
+          "available": 14,
+          "unit": "J/mol",
+          "aard": 152.44986607342713,
+          "bias": -152.44986607342713,
+          "rmse": 1513.52496802408,
+          "signed_error": 1313.1428743529032
+        }
+      }
+    },
+    "410": {
+      "cost": 0.16967634138976037,
+      "groups": {
+        "Horstmann VLE": {
+          "n": 42,
+          "cost": 4.1047382605015306e-05,
+          "aard": 0.8182907091594787,
+          "bias": 0.43059621142057075,
+          "rmse": 0.43205857490655336,
+          "mean_error": 0.3540762005449321
+        },
+        "Cai VLE": {
+          "n": 7,
+          "cost": 0.16697125342902944,
+          "aard": 71.84287546577367,
+          "bias": 61.10611330125896,
+          "rmse": 5.635179868230733,
+          "mean_error": 4.069667145863846
+        },
+        "Horstmann heat": {
+          "n": 14,
+          "cost": 0.0026640405781259238,
+          "aard": 18.426928209045084,
+          "bias": 8.087095918210984,
+          "rmse": 124.60025661716466,
+          "mean_error": 0.5038268972681895
+        }
+      },
+      "full_statistics": {
+        "Horstmann VLE / all": {
+          "observed": 44,
+          "available": 44,
+          "unit": "kPa",
+          "aard": 1.163912354903478,
+          "bias": 0.040982739676365364,
+          "rmse": 0.4233371908080669,
+          "signed_error": 0.3426553837404179
+        },
+        "Horstmann VLE / fitted": {
+          "observed": 42,
+          "available": 42,
+          "unit": "kPa",
+          "aard": 0.8182907091594785,
+          "bias": 0.43059621142057075,
+          "rmse": 0.4320585749065534,
+          "signed_error": 0.3540762005449321
+        },
+        "Horstmann VLE / pure": {
+          "observed": 2,
+          "available": 2,
+          "unit": "kPa",
+          "aard": 8.421966915527463,
+          "bias": -8.140900166951946,
+          "rmse": 0.1501647146034183,
+          "signed_error": 0.10281823084561909
+        },
+        "Cai VLE / all": {
+          "observed": 9,
+          "available": 9,
+          "unit": "kPa",
+          "aard": 56.64641747386051,
+          "bias": 46.82495346532761,
+          "rmse": 4.971937104126824,
+          "signed_error": 3.118541900790819
+        },
+        "Cai VLE / fitted": {
+          "observed": 7,
+          "available": 7,
+          "unit": "kPa",
+          "aard": 71.84287546577366,
+          "bias": 61.10611330125896,
+          "rmse": 5.635179868230733,
+          "signed_error": 4.069667145863846
+        },
+        "Cai VLE / pure": {
+          "observed": 2,
+          "available": 2,
+          "unit": "kPa",
+          "aard": 3.45881450216444,
+          "bias": -3.1591059604321132,
+          "rmse": 0.3119792263490898,
+          "signed_error": -0.2103964569647787
+        },
+        "Horstmann heat / all": {
+          "observed": 14,
+          "available": 14,
+          "unit": "J/mol",
+          "aard": 18.426928209045084,
+          "bias": 8.087095918210986,
+          "rmse": 124.60025661716466,
+          "signed_error": 0.5038268972681895
+        },
+        "Horstmann heat / fitted": {
+          "observed": 14,
+          "available": 14,
+          "unit": "J/mol",
+          "aard": 18.426928209045084,
+          "bias": 8.087095918210986,
+          "rmse": 124.60025661716466,
+          "signed_error": 0.5038268972681895
+        }
+      }
+    }
+  }
+}

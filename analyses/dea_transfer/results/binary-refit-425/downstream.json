@@ -1,0 +1,317 @@
+{
+  "disposition": "documented failure for the tested two-coefficient law, fixed association rule, datasets and search",
+  "replacement_adopted": false,
+  "selected_replacement": null,
+  "historical_comparator": {
+    "issue": 413,
+    "selected_mapping": {
+      "path": "analyses/dea_transfer/results/refit-413/selection.json",
+      "sha256": "529153f0a1262b6848471f69967112e3559d03c921dd9f75576aa50b0ff9df95"
+    },
+    "mapping_location": "chosen.parameters includes parameters, reactions and coordinates",
+    "route": {
+      "path": "analyses/dea_transfer/inputs/part-ii-346/f2-carbamate-413-route.json",
+      "sha256": "a493780aff1bb5d3a788a0656a7bd7bfcfbed6aa7b14d922d7b1470d08b8b447"
+    },
+    "starts": [
+      {
+        "path": "f2-carbamate-413-start-0-parameters.json",
+        "sha256": "1c80b6f3c2add40a5cf4891626a0c2bec9b9e46229d75ad4ba658745ae7e3d4a",
+        "reactions": {
+          "path": "start-0-reactions.json",
+          "sha256": "0d9cabad6969879de66d101935b27f0c3b4ae2a579631a7235c6f0d79f759fa8"
+        },
+        "coordinates": {
+          "path": "start-0-coordinates.json",
+          "sha256": "c1b30c83bcb0ddb15b9023c320624b42b65600526a48e486d0e36df2393c7e60"
+        }
+      },
+      {
+        "path": "f2-carbamate-413-start-1-parameters.json",
+        "sha256": "d8d734bc4571ef43eb975a4425aa4dd8ac8feba32a6b849a427e6b9f8fa05df0",
+        "reactions": {
+          "path": "start-1-reactions.json",
+          "sha256": "97ba9c26436b3e4f920a952a3366e9b4ff70a62d948cc8d3891ff649d8e3dc92"
+        },
+        "coordinates": {
+          "path": "start-1-coordinates.json",
+          "sha256": "e143839fd37c66d6e1370a7d54bc745ddb80c4c89823b0f2388278ded516a6c9"
+        }
+      }
+    ],
+    "observed_rows": {
+      "path": "analyses/dea_transfer/results/refit-413/paper-data.csv",
+      "sha256": "ffb3ed053d1edd62f626927744d018e56488f4fb91309fe8918783e42d86d4d5"
+    },
+    "stability": {
+      "path": "analyses/dea_transfer/results/refit-413/split-record.json",
+      "sha256": "c052b7999bce59c29458a4fd7b2a814db27252c9e91c735d440c83eaed7a7968"
+    },
+    "stability_tally_location": "selection.json / chosen.search.grid",
+    "binary": {
+      "a": -0.06363352262762448,
+      "b_K": 0,
+      "fit_reference_K": 365.15,
+      "stored_reference_K": 313.15
+    },
+    "reactive_fitted_coordinates": [
+      {
+        "targets": [
+          [
+            "k_ij",
+            [
+              "protonated-diethanolamine",
+              "water"
+            ],
+            1.0
+          ]
+        ],
+        "origin": -0.2151637014268124,
+        "scale": 0.05,
+        "bounds": [
+          -1.0,
+          1.0
+        ],
+        "identity": "k-DEAH-water"
+      },
+      {
+        "targets": [
+          [
+            "k_ij",
+            [
+              "carbamate-anion",
+              "water"
+            ],
+            1.0
+          ]
+        ],
+        "origin": 0.005714802739846051,
+        "scale": 0.05,
+        "bounds": [
+          -1.0,
+          1.0
+        ],
+        "identity": "k-DEACOO-water"
+      },
+      {
+        "kind": "reaction_coordinate",
+        "name": "carbamate-hydrolysis",
+        "coefficient": "a",
+        "origin": 5.926331831301357,
+        "scale": 1.0,
+        "bounds": [
+          4.097376425483943,
+          10.097376425483944
+        ],
+        "identity": "hydrolysis-a"
+      },
+      {
+        "kind": "reaction_enthalpy_shift",
+        "name": "carbamate-hydrolysis",
+        "pivot_temperature": 313.15,
+        "origin": 0.0,
+        "scale": 1000.0,
+        "bounds": [
+          -17783.92820347023,
+          22216.07179652977
+        ],
+        "identity": "hydrolysis-enthalpy-shift"
+      }
+    ]
+  },
+  "issue_disposition": {
+    "424": "Resolve the DEA arm with the owner before running. Issue #413 is the historical comparator.",
+    "426": "Resolve the DEA arm with the owner before running. Issue #413 is the historical comparator.",
+    "427": "Resolve the DEA arm with the owner before running. Issue #413 is the historical comparator."
+  },
+  "attempted_binary": {
+    "form": "a + b*(1/T - 1/365.15 K)",
+    "fitting_reference_K": 365.15,
+    "engine_reference_K": 313.15,
+    "starts": [
+      {
+        "a": -0.06363352262762448,
+        "b_K": 0
+      },
+      {
+        "a": -0.06363352262762448,
+        "b_K": -46.2
+      }
+    ],
+    "scales": [
+      0.05,
+      46.20553081855322
+    ],
+    "constrained_temperatures_K": [
+      293.15,
+      458.64
+    ],
+    "fixed": "All parameters and reactions outside the neutral DEA\u2013water intercept and reciprocal-temperature slope",
+    "binary_objective": [
+      {
+        "rows": 42,
+        "source": "Horstmann Table 4 mixtures",
+        "form": "log pressure ratio",
+        "row_weight": 0.023809523809523808
+      },
+      {
+        "rows": 7,
+        "source": "Cai Table 4 mixtures",
+        "form": "log pressure ratio",
+        "row_weight": 0.14285714285714285
+      },
+      {
+        "rows": 14,
+        "source": "Horstmann Table 6",
+        "form": "difference",
+        "scale_J_mol": 1707,
+        "row_weight": 0.07142857142857142
+      }
+    ],
+    "comparison_rows": "Two pure endpoints per VLE series and Cai vapor water mole fractions"
+  },
+  "wheel": {
+    "commit": "05e94210fa64cf69725e45babc0411d32139df5a",
+    "sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb"
+  },
+  "reference_inputs": [
+    {
+      "path": "data/reference/DEA/Horstmann2002_Table4_water_DEA_365K.csv",
+      "sha256": "177e5fd827d9006e1df1fd73d3ff00f0e4ffb64ae070103000c99527be6260b1"
+    },
+    {
+      "path": "data/reference/DEA/Cai1996_Table4_water_DEA.csv",
+      "sha256": "0f40dd2b7f34b27560dc9bcc85c8c22e3670c2e2d69c10d93fa27b8fbdc9cc65"
+    },
+    {
+      "path": "data/reference/DEA/Horstmann2002_Table6_water_DEA_HE.csv",
+      "sha256": "069f1519a2b65baa621f41927ea297038485b35fde2c1b394cebb6b01a594b9f"
+    }
+  ],
+  "results": [
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/410-comparison.json",
+      "sha256": "b482c6da6b002244e2bfe983cccad465add6501fc8fd3bd41d0f270feb1d732d"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/413-comparison.json",
+      "sha256": "fc8e8c2071b6b68ca958db95d780a9da0c292f5876b30eebfb8ae990e50e5a71"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/binary-residuals.png",
+      "sha256": "452b2d6acdfa7b0a021d3207fd8898a6b48c0ca4a0abe23a19ea88adb56317f8"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-0/fit.json",
+      "sha256": "5c95e249ff712b03c23f4bfb41d630d6c9a1146d49678ac2ee7e9953b1a396f2"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-0/identity.json",
+      "sha256": "d8b473e9077283498576ff8a0d60207fc3065d08a3949030efbf425b31bf4d0f"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-0/readback.json",
+      "sha256": "59e79fbb4d399a2c02de3d91f222f0f4ce51c00e7c0dfb6118fe4ce86b7afb3a"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-0/stability.json.gz",
+      "sha256": "f4149836453db3cb7282d62b659f415dccbb599464bf20a93ca6f912168741b7"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-1/fit.json",
+      "sha256": "4e44a1da22e9d231fe9578b165bf94a871461c3833a75be5d4424d8ae6b3ac91"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-1/identity.json",
+      "sha256": "d8b473e9077283498576ff8a0d60207fc3065d08a3949030efbf425b31bf4d0f"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-1/readback.json",
+      "sha256": "f20b89ddc4b46bffdf79dd4e4876740245851acd96f74edca51f5599ecf5c346"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constrained-1/stability.json.gz",
+      "sha256": "1f76461e27066876900a3b52922765de10989c61dd4642b5b8947c8450e7e3aa"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/constraint-diagnosis.json",
+      "sha256": "310ce845c22356ba8d5664d847f9f73ddcfbc7d2a35c24cb40b989dcbc548327"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/binary-controls.json",
+      "sha256": "6f4b2e99dac6af9efa295e4460f5cfd01608801c1f4de001358d5cefb2033a60"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/cross-wheel.json",
+      "sha256": "37879d5cbd1ab895a1421b5b1078c719eb5dde41ac35c65bf9354b7d366177fb"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/heat-derivative.json",
+      "sha256": "cf0a549e44d95e20fe386bbef73878a50ba18ef214745bf8520ee8bdc1d0d271"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/reactive-checks.json",
+      "sha256": "023fddc1476aeba1aab89734e50464ec171ac54e095d4b8611b91c802993bfdf"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/reactive-data-rows.json",
+      "sha256": "3d1c53f77dcb579c39ef90c6e06df4fb019eb3ab04b7103ee7d351337486f623"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/reactive-fitted-rows.json",
+      "sha256": "a8d1d2103c00073e0b8986f51b5bdc0808fedfb5743e7ebe8ecb5584fa0003b1"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/reactive-identity.json",
+      "sha256": "d8b473e9077283498576ff8a0d60207fc3065d08a3949030efbf425b31bf4d0f"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/controls/reactive-objective.json",
+      "sha256": "0cade42c3e037095249b862a4d81e6d2a979f91660efbd1efb8336611555b2f3"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/disposition.json",
+      "sha256": "b7bbcf0e78791fe24240d62667099b817d7df38c55ea0b07cbb908f967801778"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/manuscript-handoff.md",
+      "sha256": "6488f2a2554b3a98482b95ccfc6255013ea0a69f31f5f3be25a36f7943b5cf04"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/timing.json",
+      "sha256": "3f0a14e9c0aa5fe31a4a75088e8b008f1db28b0aa3e96e6010e99e74c5316926"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-0/fit.json",
+      "sha256": "37a1d00eec83e84a66280abf88e9464c2de61c8ff037f5fd219e49703b1cc09b"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-0/identity.json",
+      "sha256": "d8b473e9077283498576ff8a0d60207fc3065d08a3949030efbf425b31bf4d0f"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-0/readback.json",
+      "sha256": "87c940666bd0c7df15ca1ca07ecfae0840a534eb5cb5804cee5c12f93f394c38"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-0/stability.json.gz",
+      "sha256": "309caa614b40f821090bfe387bebf994db94f62db18d532fe01958221797d389"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-1/fit.json",
+      "sha256": "af240fa10bd802389a0862909dddf9c227ad71eccbe75fd127a134538a304c3b"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-1/identity.json",
+      "sha256": "d8b473e9077283498576ff8a0d60207fc3065d08a3949030efbf425b31bf4d0f"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-1/readback.json",
+      "sha256": "ee93eef2e15861d07d2f92bfbb474d31891eade3bcd771ba5f8ef21fd717a924"
+    },
+    {
+      "path": "analyses/dea_transfer/results/binary-refit-425/unconstrained-1/stability.json.gz",
+      "sha256": "59a0c3256f9d5735154e903029b93f9238d7460d066f3876bc7a93b7d368a12c"
+    }
+  ]
+}
