@@ -32,7 +32,7 @@ The semi-differential heats of Kim and Svendsen are calculated over each finite 
 % P:methods-04
 Estimation is sequential: the water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, and the permittivity coefficients are determined first and remain fixed.
 Eleven MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}); one of them, the water--bicarbonate interaction, belongs to the shared species.
-With all shared parameters fixed, four DEA, eight MDEA and nine AMP parameters are fitted (\cref{tab:transfer-fitted}).
+With all shared parameters fixed, four DEA, eight MDEA and eight AMP parameters are fitted (\cref{tab:transfer-fitted}); for AMP the temperature coefficient of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is fixed at \SI{-150}{\kelvin}, a value chosen from a scan of fixed values (Section~\ref{supp-sec:s-amp-slope}).
 Each fit minimizes, by bounded least squares,
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
@@ -98,4 +98,4 @@ This interpolation between parameter sets does not give a converged fit.
 The MEA and DEA models needed no penalty; of the MEA fits, only the 16-parameter calibration did.
 For MDEA the penalty is applied to 78 \COtwo-free MDEA--water states at \SI{1.466}{\mega\pascal} and 393--\SI{423}{\kelvin}, and the reported parameters are an interpolated set.
 The loaded MDEA states are not penalized, so a split found there is reported as a limitation.
-For AMP the converged fit without the penalty is reported as the \emph{AMP model}; the interpolated set that the penalty procedure selects, which has no detected instability, is reported beside it as the \emph{stability-constrained alternative}.
+For AMP neither the penalty nor an interpolation is used: the \emph{AMP model} fits the other eight parameters with $b_{\mathrm{AMPH^+,w}}$ fixed at \SI{-150}{\kelvin}.

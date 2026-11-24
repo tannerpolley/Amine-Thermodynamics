@@ -21,6 +21,10 @@ RUN = AMP/'results/runs'/RUN_NAME
 FITS = ROOT/'analyses/mea_parameter_bundle/results/reduced-refit/parameter-details.csv'
 FITS_SHA = 'a391a1d04ae64ba7c5a9b57c2e0fd7b08290d1c81a907daa64e5a5d8c5272b0a'
 TRIAL_SHA = '24f61da662d6bd0e20eec33e91157af9d80992b1f2a078441341b4fc18bd26fb'
+# MEA fit supplying the fixed carbamate dispersion energy and carbamate-water k_ij: F0 for #404, F2 from #412 on.
+CARBAMATE_FIT = os.environ.get('AMP_CARBAMATE_FIT', 'F0')
+CITATIONS = {'F0': 'F0 16-parameter MEA calibration', 'F2': 'F2 11-parameter MEA model'}
+assert CARBAMATE_FIT in CITATIONS, CARBAMATE_FIT
 
 
 def replay_published(route):
@@ -55,8 +59,8 @@ def source_values():
         rows = list(csv.DictReader(stream))
     selected = []
     for fit, identity, unit in (
-        ('F0', 'component/carbamate-anion/dispersion_energy_over_k', 'kelvin'),
-        ('F0', 'pair/carbamate-anion/water/k_ij', 'dimensionless'),
+        (CARBAMATE_FIT, 'component/carbamate-anion/dispersion_energy_over_k', 'kelvin'),
+        (CARBAMATE_FIT, 'pair/carbamate-anion/water/k_ij', 'dimensionless'),
         ('F2', 'component/carbamate-anion/segment_diameter', 'angstrom'),
     ):
         row, = [r for r in rows if r['fit']==fit and r['identity']==identity]
@@ -66,12 +70,12 @@ def source_values():
 
 
 def record_f0_source(point, source):
-    """Attribute the two fixed magnitudes after checking them against F0."""
+    """Attribute the two fixed magnitudes after checking them against the selected MEA fit."""
     mapping = point['parameters']
-    rows = {row['identity']: row for row in source if row['fit'] == 'F0'}
-    assert len(rows) == 2
+    rows = {row['identity']: row for row in source[:2]}
+    assert len(rows) == 2 and {row['fit'] for row in source[:2]} == {CARBAMATE_FIT}
     path = FITS.relative_to(ROOT).as_posix()
-    source_id = 'mea-reduced-refit-f0'
+    source_id = f'mea-reduced-refit-{CARBAMATE_FIT.lower()}'
     found = set()
     for section in ('components', 'pairs'):
         for block in mapping[section]:
@@ -82,11 +86,11 @@ def record_f0_source(point, source):
                 row = rows[identity]
                 assert identity not in found
                 assert coefficient['value'] == dict(magnitude=float(row['value']), unit=row['unit'])
-                coefficient['provenance'] = dict(source_id=source_id, locator=f'{path}:fit=F0:identity={identity}')
+                coefficient['provenance'] = dict(source_id=source_id, locator=f'{path}:fit={CARBAMATE_FIT}:identity={identity}')
                 coefficient['source_sha256'] = f'sha256:{FITS_SHA}'
                 found.add(identity)
     assert found == rows.keys()
-    entry = dict(source_id=source_id, citation='F0 16-parameter MEA calibration',
+    entry = dict(source_id=source_id, citation=CITATIONS[CARBAMATE_FIT],
                  use_basis=f'Fixed AMP carbamate inputs transferred from {path}.')
     registered = [s for s in mapping['sources'] if s['source_id'] == source_id]
     if registered:

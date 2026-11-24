@@ -1,14 +1,20 @@
 Dear Editors of Fluid Phase Equilibria,
 
-Please consider “Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT. Part I: monoethanolamine calibration for phase equilibria, speciation, absorption heat, density and phase stability” as a research article.
+Please consider “Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability” as a research article.
 
-The paper asks what agreement is preserved or lost when literature reaction constants and tied amine-ion Born diameters reduce the adjustable freedom of a common ePC-SAFT description. It reports the adopted eleven-parameter MEA calibration, its cost relative to less and more restricted choices, and comparisons with the 2026 Polley–Hedengren model and published calculations on identified observations. The equation-of-state contribution equations and shared inputs are specified for use by the companion Part II.
+The paper asks whether one electrolyte equation of state, ePC-SAFT, with its reaction equilibrium constants fixed at literature correlations, can describe the equilibrium, caloric and density properties of CO₂-loaded aqueous monoethanolamine (MEA), and whether its water, CO₂ and inorganic-ion parameters can then be held fixed for diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP). It also asks whether the resulting models predict a second liquid phase.
 
-The adopted fit required no stability penalty. Finite phase searches find no additional-liquid instability, while analysis of an unpenalized comparison fit shows a false split arising from a coupled energy balance with a prominent dispersion change. The paper states the worsened Ma'mun pressure comparison, concentration-transfer errors, minor-species discrepancies and high-temperature caloric error directly. Comparisons use data seen during development; parameter uncertainty is conditional, and the searches give no global stability proof.
+What is new:
 
-Electronic data include processed observations, parameters, numerical results and presentation code. Deposit identifier: [Zenodo DOI supplied in the final submission]. Referee access to the compiled ePC-SAFT library: [access arrangement supplied in the final submission].
+- **One model for several properties of loaded MEA.** Eleven parameters are estimated jointly from pressure, speciation, absorption-heat, heat-capacity, density and binary equilibrium data. The fitted CO₂ pressures at nominal 30 wt% deviate by 11.6 % on average.
+- **Transfer of the shared parameters.** DEA, MDEA and AMP need four, eight and eight more fitted parameters, and one AMP coefficient is set from a scan. Their fitted loaded-solution pressures deviate by 10.5 % (AMP) to 28.5 % (DEA).
+- **Phase stability as a reported result.** Phase-stability searches detect no instability for MEA or DEA. They find one loaded-solution split for MDEA, at 262.9 MPa, far above process pressures, and none for AMP once its cation–water temperature coefficient is fixed at a value chosen from a scan. With that coefficient also fitted, AMP has splits above the measured temperature range at a similar deviation. The paper therefore reports where a fitted electrolyte equation of state predicts a liquid–liquid split, and which parameter choice removes it.
 
-The manuscript includes funding, competing-interest and generative-AI declarations. This letter and the submission files are drafts pending the author's final review.
+The work fits the journal's scope in equations of state for electrolyte and reacting systems, chemical and phase equilibrium, and phase-stability analysis. It builds on ePC-SAFT studies of aqueous amines and electrolytes published in Fluid Phase Equilibria. The MEA model is compared with the author's earlier reactive ePC-SAFT model of MEA (Polley and Hedengren, Next Chemical Engineering 3 (2026) 100132), whose parameters were estimated in separate steps.
+
+The limits are stated plainly. Pressures at 15 and 45 wt% MEA, carbonate shares and high-temperature absorption heats remain inaccurate, and the water–DEA excess enthalpies have the wrong sign. The models are calibrations against data examined during development, with conditional standard errors; they provide neither validation nor a basis for absorber design.
+
+A supplement gives the data, parameters, deviations and phase-stability details. The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code. Deposit identifier: [Zenodo DOI supplied in the final submission]. Referee access to the compiled epcsaft package: [access arrangement supplied in the final submission]. The manuscript includes funding, competing-interest, CRediT and generative-AI declarations.
 
 Sincerely,
 

@@ -5,11 +5,94 @@ execute:
   enabled: false
 ---
 
-Both starts converged to tied costs. The selected fit differs from #346 by
+With the carbamate inputs of the adopted MEA fit F2 (#413), DEA's cost rises
+from 8.0340 to 8.0830. Fitted pressure deviation is 28.51% (was 28.46%), and
+not-fitted pressure deviation is 53.92% (was 54.19%), with the same
+stability result. The #398 text below remains the replayed baseline.
+
+For #398, both starts converged to tied costs. The selected fit differs from #346 by
 less than $4\times10^{-11}$ relative in every retained observation prediction.
 Each coarse-grid search returned 1,270 available states out of 1,271,
 with zero resolved liquid splits found. One Lawson Table VIII stability
 trial remained unavailable.
+
+## Refit with the F2 carbamate inputs (#413)
+
+On 2026-11-23 the owner decided that the DEA carbamate inputs come from the
+adopted 11-parameter aqueous monoethanolamine model (fit F2). They previously
+came from the 16-parameter calibration (F0), so
+[#413](https://github.com/tannerpolley/Amine-Thermodynamics/issues/413)
+refits DEA with only those inputs changed. The F2 values are in the
+[MEA parameter details](../mea_parameter_bundle/results/reduced-refit/parameter-details.csv)
+(SHA-256 `a391a1d0…`). The carbamate dispersion energy changes from
+183.00063 K to 179.85787 K. The diameter rule is the one #398 used: the MEA
+carbamate diameter times the cube root of the neutral DEA/MEA
+$m^{\mathrm{seg}}\sigma^3$ ratio, 1.15925. That rule reproduces the #398
+inputs from F0 exactly. Applied to the F2 diameter of 5.34799 Å, it gives
+6.19966 Å for the segment, Debye–Hückel and Born diameters, against 6.16721 Å.
+The packing diameter, $0.88\sigma$, becomes 5.45570 Å. The two
+[start files](inputs/part-ii-346/f2-carbamate-413-route.json) differ from #398's
+only in these five values and their provenance. Data, roles, weights,
+starts, bounds, objective, wheel, shared record and stability grid are unchanged.
+
+The #398 endpoint was replayed first on its own declaration. The 80 fitted
+predictions match the native values within $1.17\times10^{-12}$ relative,
+and all 299 observation predictions equal the retained #398 table exactly.
+
+| Quantity | #398 (F0 carbamate) | #413 (F2 carbamate) |
+| --- | ---: | ---: |
+| Selected cost (both starts tie) | 8.03397189313 | 8.08296822832 |
+| Start-1 cost difference | $9.1\times10^{-11}$ | $3.9\times10^{-11}$ |
+| Iterations, both starts | 7 | 7 |
+| Protonated DEA–water $k_{ij}$ (SE) | −0.188256 (0.003486) | −0.188343 (0.003485) |
+| Carbamate–water $k_{ij}$ (SE) | −0.038549 (0.05432) | −0.047731 (0.05411) |
+| Hydrolysis $a$ (SE) | 5.869411 (0.6151) | 5.883485 (0.6176) |
+| Hydrolysis enthalpy increment SE (J/mol) | 1346.3 | 1344.1 |
+| Coordinates on a bound | 0 | 0 |
+| Fitted pressure AARD / bias (30), % | 28.464 / −0.661 | 28.512 / −0.653 |
+| Fitted Carson heat AARD / bias (50), % | 0.947 / −0.115 | 0.943 / −0.119 |
+| Not-fitted pressure AARD / bias (67), % | 54.187 / −3.345 | 53.916 / −2.334 |
+| Stability states available / total, each endpoint | 1,270 / 1,271 | 1,270 / 1,271 |
+| Resolved liquid splits (lower bound) | 0 | 0 |
+
+By not-fitted set (AARD / bias, %): Lawson at 394.26 K 23.119 / −23.119 →
+22.949 / −22.949; Seo and Hong 84.947 / +83.089 → 85.358 / +83.586; Lal
+47.944 / −31.630 → 47.409 / −30.299. The carbamate–water interaction moves by
+0.17 of its conditional standard error. The other fitted values move by
+less than 0.03 of theirs. The correlation between the carbamate–water
+interaction and hydrolysis $a$ stays 0.974. The largest paired prediction
+change is 3.5% (Lawson Table VIII, comparison only). The same
+`lawson-1976-viii:1:problem` search is unavailable at both endpoints, for
+the same cause as in #398. The binary Cai and Horstmann comparisons use
+no reactions and are unchanged. Differences between the two fits are small
+compared with the deviations from the measurements. This is a
+calibration-and-prediction comparison under the same data use, not a
+validation.
+
+Checks: the selected endpoint reloads within $3.08\times10^{-12}$ relative
+in predictions and $1.98\times10^{-12}$ in cost. Both starts and the selected
+endpoint carry the adopted shared values. All 299 observation marks and 750
+curve-point marks match their declared ranges. Timings on 4 cores with the
+host shared: one objective evaluation took 4.0 s, and one stability search
+at start 0 took 137.9 s (endpoint searches 157.2 s and 113.7 s). Preflight
+and campaign took 497.1 s, and endpoint checks and reporting took 130.3 s.
+The fixed F2 carbamate inputs carry their own MEA-fit uncertainty, which the
+conditional standard errors here exclude.
+
+[Retained results](results/refit-413/) follow the #398 layout. The CSV model
+labels are `F2-carbamate` and `F0-carbamate`. The
+[manuscript handoff](results/refit-413/manuscript-handoff.md) lists every
+manuscript value that changes. Reproduce from the repository root:
+
+```bash
+uv run --no-sync python analyses/dea_transfer/f2_carbamate.py prepare  # rewrites the five input files identically
+run=analyses/dea_transfer/results/runs/413-reproduce
+agent-heavy timeout 3600s uv run --no-sync python -u analyses/dea_transfer/f2_carbamate.py run "$run"
+agent-heavy uv run --no-sync python analyses/dea_transfer/present_current.py "$run" "$run-paper" "$run-replay-398" \
+  F2-carbamate F0-carbamate 413 inputs/part-ii-346/f2-carbamate-413-parameter-table-declarations.json
+```
+
+Independent delivered review and owner confirmation for manuscript use are pending.
 
 ## Conditions and data
 
@@ -244,3 +327,246 @@ agent-heavy uv run --no-sync python analyses/dea_transfer/present_current.py "$r
 Raw solver rows, per-state stability files and logs are in the ignored run
 directory `analyses/dea_transfer/results/runs/398/`. Independent delivered
 review and owner confirmation for manuscript use are pending.
+
+## Causes of the pressure shape and the excess-enthalpy sign
+
+[#410](https://github.com/tannerpolley/Amine-Thermodynamics/issues/410) asks
+what produces two disagreements of the selected #398 endpoint. One is the wrong
+sign of the water–DEA excess enthalpy. The other is the shape of CO₂ partial
+pressure against loading. Every probe below uses the selected endpoint on the
+pinned 05e94210 wheel. Each parameter change is a disposable perturbation and
+no adopted value or result changed. The probes recompute the 97 pressure and
+75 Böttinger speciation predictions with a maximum relative difference of 0
+from the retained #398 values. The evidence is model sensitivity and
+term-by-term decomposition, compared against measurements outside the
+objective. It diagnoses causes and does not validate a corrected model.
+
+These probes ran on the #398 endpoint.
+[#413](https://github.com/tannerpolley/Amine-Thermodynamics/issues/413) refits
+DEA with the carbamate values of the adopted MEA model, so the pressure-shape
+numbers below need a rerun on that endpoint. The excess-enthalpy diagnosis does
+not depend on the carbamate values. Its binary states contain no ions, and the
+water–DEA $k_{ij}$ comes from the [binary stage](binary.py). That value,
+−0.06363, is identical in `results/binary.json` and in both #398 starts, and it
+is not a coordinate of the loaded fit.
+
+![Water–DEA excess enthalpy at 363.15 K and 1.75 MPa: (a) measured, selected
+model and a k_ij temperature-slope probe; (b) selected model split by Helmholtz
+term. CO₂ pressure residual ln(measured/model) at 310.9–313.15 K before and
+after a linearized +0.9 shift in ln K of carbamate hydrolysis (c). Carbamate and
+bicarbonate true mole fractions at 313.15 K and 20 wt% DEA, Böttinger 2008
+Table 4 against the model (d).](diagnosis-410/diagnosis-410.png)
+
+### Excess enthalpy
+
+Each Helmholtz contribution gives an internal-energy part
+$U_k = -RT^2(\partial a_k/\partial T)_{\rho,x}$, evaluated by central difference
+over ±0.01 K at the state density, plus $RT(Z-1)$. The four parts sum to the
+Engine residual enthalpy within $10^{-3}$ relative. Ions are absent, so only
+hard-chain, dispersion and association terms exist. At Horstmann's 363.15 K
+and 1.75 MPa the selected model gives positive contributions from all three
+terms at every composition. The pressure–volume part is at most 0.2 J/mol.
+
+| Water mole fraction | Measured $H^E$ | Model $H^E$ | Hard chain | Dispersion | Association | Model $G^E$ |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.0636 | −232 | +88.6 | +23.8 | +19.0 | +45.8 | −81.3 |
+| 0.3032 | −1106 | +405.8 | +102.1 | +108.0 | +195.8 | −319.1 |
+| 0.6414 | −1707 | +739.3 | +159.9 | +277.4 | +302.2 | −392.9 |
+| 0.7630 | −1504 | +758.5 | +151.2 | +326.9 | +280.5 | −310.6 |
+| 0.9415 | −529 | +401.4 | +69.0 | +215.2 | +117.1 | −75.2 |
+
+All values are J/mol of mixture. The model reproduces Horstmann's 365.15 K bubble
+pressures (Table 4, the 42 mixture rows; the binary fit also used the two
+pure-component rows) with 0.82% mean absolute relative
+deviation. Its excess Gibbs energy is therefore close to the measured one at
+this temperature. At $x_\text{water}=0.6414$ the model gives
+$TS^E = H^E - G^E = +1132$ J/mol, so mixing is driven by entropy. The measured
+$H^E$ of −1707 J/mol requires $TS^E$ near −1300 J/mol if $G^E$ is as modeled.
+The real mixture mixes by enthalpy against an entropy penalty, which is the
+signature of strong water–DEA hydrogen bonds.
+
+| Probe at 363.15 K | $H^E$ at 0.6414 | $G^E$ at 0.6414 | Mean signed $H^E$ error | 365.15 K bubble P, deviation / bias (%) | Cai 6.66 kPa bubble P, deviation / bias (%) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Selected endpoint | 739 | −393 | +1313 | 0.82 / +0.43 | 51.5 / +44.1 |
+| Water σ frozen at its 363.15 K value | 759 | −393 | +1324 | 0.81 / +0.42 | 51.5 / +44.2 |
+| $k_{ij}$ slope −46.2 K, $k_{ij}$(365.15 K) unchanged | −1603 | −406 | +1 | 0.82 / +0.43 | 71.8 / +61.1 |
+| $k_{ij}$ slope −200 K, $k_{ij}$(365.15 K) unchanged | −9406 | −448 | −4371 | 0.82 / +0.43 | 170.7 / +150.9 |
+| Cross-association energy ×1.05 | 65 | −752 | +949 | 7.78 / −7.52 | 40.6 / +19.9 |
+| Cross-association energy ×1.10 | −716 | −1157 | +546 | 14.65 / −14.42 | 35.6 / −0.9 |
+| Cross-association energy ×1.15 | −1598 | −1606 | +110 | 20.48 / −20.27 | 36.5 / −18.2 |
+| ×1.15 and $k_{ij}$ +0.02 | −1112 | −1240 | +382 | 15.15 / −14.69 | 36.1 / −4.8 |
+| ×1.15 and $k_{ij}$ +0.04 | −627 | −875 | +653 | 10.79 / −8.12 | 40.2 / +11.6 |
+
+Enthalpies are J/mol of mixture. The slope follows
+$k_{ij}(T)=k_{ij}+b(1/T-1/313.15\ \text{K})$, the Engine form. The −46.2 K slope is
+a linear estimate from the 0 and −200 K points, evaluated once and not fitted.
+The explicit cross-association edges reproduce the combining-rule association
+energy at 363.15 K exactly. They hold the association volume constant in
+temperature, which alone changes $H^E$ by at most 0.28 J/mol.
+
+The water–DEA $k_{ij}$ was fitted only to the 365.15 K isotherm
+([binary fit](binary.py)), with no temperature slope. One isotherm fixes $G^E$
+but not $H^E=-T^2\,\partial(G^E/T)/\partial T$, so the sign of $H^E$ is an
+unconstrained prediction of the combining rules and the pure-component
+parameters. Freezing the temperature-dependent water diameter makes $H^E$
+slightly more positive, which rules it out as the cause. Raising the
+cross-association energy gives the measured sign but moves $G^E$ with $H^E$.
+Restoring the isotherm with a constant $k_{ij}$ then returns $H^E$ toward
+positive values. Only a temperature-dependent cross interaction separates
+$H^E$ from $G^E$. A slope of −46.2 K removes the mean signed $H^E$ error with
+the 365.15 K isotherm unchanged. It worsens the Cai 6.66 kPa rows (340–456 K,
+water mole fraction 0.01–0.30) from 51.5% to 71.8%. The model already
+over-predicts those rows, so a corrected binary must be fitted to the isobaric
+VLE and $H^E$ together.
+
+Published DEA models handle the enthalpy the same way. Horstmann et al. (2002)
+fitted NRTL parameters linear in temperature to the binary VLE and excess
+enthalpies together (p. 1500, Table 7). Their fit agrees with the Maham et al.
+298–338 K excess enthalpies except for small deviations (p. 1500 and
+Fig. 4b, p. 1499).
+Nasrifar and Tafazzol (2010) correlated DEA–water VLE alone with a
+temperature-independent $k_{ij}=-0.04$ (Table 3 and Fig. 5) and reported no
+excess enthalpy. Austgen et al. (1991) fitted DEA–water NRTL parameters
+$\tau=a+b/T$ to binary VLE (p. 548, Table VII).
+
+### CO₂ pressure against loading
+
+At 310.9–313.15 K the measured pressure exceeds the model by a factor of 2.0–3.8
+for Lal's loadings of 0.04–0.20. The model is 20–70% high at loadings of
+0.37–0.87 in all three data sets, except Seo and Hong's two rows above 0.6,
+which are within 20%. It is again low by factors of 1.4 and 2.5 at
+Lawson's loadings of 1.01 and 1.17. Böttinger's NMR speciation at 313.15 K
+agrees with the model's carbamate amount below a loading of 0.3. That agreement
+does not discriminate because nearly all absorbed CO₂ is carbamate by mass
+balance. At loadings of 0.40–0.89 the model carbamate is 1.3–2.0 times the
+measured value, and the model bicarbonate is less than half the measured value at
+0.29–0.40.
+
+| Loading, Böttinger / model | ln of $x_\text{DEA}x_{\text{HCO}_3^-}/x_\text{carbamate}$, Böttinger 2008 | Same quotient, model at 20 wt% DEA |
+| --- | ---: | ---: |
+| 0.290 / 0.3 | −5.18 | −6.31 |
+| 0.401 / 0.4 | −4.94 | −6.22 |
+| 0.576 / 0.6 | −4.74 | −6.11 |
+
+Free DEA in both columns comes from the charge balance (protonated DEA equals
+bicarbonate plus carbamate). The measured apparent hydrolysis quotient exceeds
+the model's by 1.13–1.37 ln units, and the gap grows with loading. Above a
+loading of 0.7 the charge-balance free DEA is a small difference of larger
+mole fractions (0.0019 and 0.0005), so those rows are omitted.
+
+Linearized single-coordinate sensitivities on the 29 pressure rows at
+310.9–313.15 K start from a root-mean-square ln residual of 0.776. The best
+constant offset alone leaves 0.636.
+
+| Coordinate | Step alone | ln-residual RMS | Step with offset | RMS with offset | Böttinger carbamate RMS after its own best step |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| ln K carbamate hydrolysis | +0.90 | 0.401 | +0.82 | 0.393 | 0.0004 at +2.0 |
+| ln K DEA dissociation | +0.55 | 0.604 | +0.99 | 0.594 | 0.0020 |
+| $k_{ij}$ protonated DEA–water | −0.022 | 0.685 | +0.10 | 0.529 | 0.0019 |
+| $k_{ij}$ carbamate–water | −0.089 | 0.446 | −0.078 | 0.427 | 0.0003 at −0.19 |
+| $k_{ij}$ DEA–water | +0.025 | 0.521 | +0.035 | 0.507 | 0.0024 |
+| Carbamate diameters (fractional change) | −0.117 | 0.438 | −0.102 | 0.415 | 0.0003 at −0.24 |
+
+The Böttinger carbamate mole-fraction RMS is 0.0036 at the endpoint. The
+pressures and the independent speciation both ask for less stable carbamate,
+through a larger hydrolysis constant, a more negative carbamate–water $k_{ij}$
+or a smaller carbamate. These three coordinates have nearly the same loading
+profile. Across the seven DEA-specific coordinates the column-normalized
+singular values are 2.23, 1.42, 0.158, 0.076, 0.039, 0.010 and 0.004, so these
+data determine only two directions.
+
+The fitted objective holds the carbamate constant where it is. Raising ln K
+of hydrolysis by 0.5 and 0.9 with everything else fixed raises the fitted cost
+from 8.034 to 9.386 and 12.271. Lawson rows account for 11.821 of the latter
+and Carson heats for 0.450. In the linearized split at +0.9, every Lawson isotherm
+gets worse, including the 310.9 K rows at loadings of 0.41–1.17. The objective has
+no pressure below a loading of 0.41 and no speciation, so nothing in it asks for
+less stable carbamate. A single hydrolysis constant also cannot satisfy Lal
+below a loading of 0.37 and Lawson above 0.41 at the same temperature, although
+the two sets agree where they meet. Raising the constant by 0.9 moves Lal's
+residuals from +0.7–1.3 to −0.1–0.5 below a loading of 0.2 and to −0.4 to −0.8
+near 0.3. The growing gap in the apparent quotient points to the loading
+dependence of the carbamate activity term as well as the constant. The model's
+activity term in ln K of hydrolysis falls from −0.02 to −0.70 between loadings
+of 0.02 and 0.8 at 25 wt% DEA. These probes do not separate the two.
+
+Above a loading of 1, nearly all DEA has reacted, so the molecular CO₂ amount
+follows mostly from the mass balance. The reaction constants still move the
+pressure there. At Lawson's loadings of 1.013 and 1.167, ln p changes by
+−0.30 and −0.19 per unit of ln K of hydrolysis and by +0.32 and +0.21 per unit
+of ln K of DEA dissociation. It changes by −11.1 and −8.9 per unit of the
+protonated DEA–water $k_{ij}$. The hydrolysis constant and the carbamate–water
+$k_{ij}$, adjusted to the 313 K rows, leave residuals of +0.42 and +0.96 at
+these two loadings. That joint step (+4.6 in ln K, +0.39 in $k_{ij}$) is far
+outside the linear range. The seven-coordinate linear fit brings the two
+residuals to −0.05 and +0.05, but only with unphysical steps.
+
+| Loading at 313.15 K, 25 wt% DEA | Model γ of CO₂ (molality, water infinite dilution) | Change in ln p for +0.05 in CO₂–DEA / CO₂–protonated DEA / CO₂–carbamate $k_{ij}$ |
+| ---: | ---: | --- |
+| 0.0001 | 0.542 | 0.000 / 0.000 / 0.000 |
+| 0.5 | 0.359 | 0.001 / 0.004 / 0.002 |
+| 1.0 | 0.326 | 0.000 / 0.112 / 0.007 |
+| 1.1 | 0.319 | 0.000 / 0.132 / 0.006 |
+
+The model's γ of CO₂ falls from 0.54 to 0.32 between loadings of 0.0001 and
+1.1. Lawson's high-loading pressures would need γ near 0.45–0.8 at 313 K. Most
+of the low value is present at a loading of 0.0001, so it comes from the amine
+solution itself; only the fall from 0.54 to 0.32 is salting in by the ions. This
+γ is a candidate cause of the high-loading residuals. CO₂ (or N₂O)
+physical-solubility data for aqueous DEA are not among the repository inputs,
+so it has not been checked against measurements.
+
+### Causes and correction requirements
+
+The wrong excess-enthalpy sign comes from a parameter: the water–DEA cross
+interaction has no calibrated temperature dependence. It was fitted to one VLE
+isotherm, which leaves $\partial G^E/\partial T$ free. The data are not
+implicated.
+
+At 313 K below a loading of about 0.9, the pressure shape comes from DEA
+carbamate that is too stable. The controlling coordinates are the
+carbamate-hydrolysis constant and the collinear carbamate–water $k_{ij}$. They
+were set by an objective without low-loading pressures or speciation. The
+measured quotient's growth with loading also implicates the activity term's
+loading dependence. Above a loading of 1, the carbamate coordinates adjusted to
+the 313 K rows leave the pressure 1.5–2.6 times too low. The model's CO₂
+activity coefficient is a candidate cause, not checked against solubility
+data.
+
+Two statements are supported for the paper. First: "The water–DEA interaction
+was fitted to vapor–liquid equilibrium at one temperature, which fixes the
+excess Gibbs energy but not its temperature dependence, so the excess enthalpy
+is an unconstrained prediction and comes out with the wrong sign (+739 against
+−1707 J/mol). A temperature-dependent cross interaction fitted to
+excess-enthalpy data would be needed; the one slope tested here worsens Cai's
+isobaric VLE from 51.5% to 71.8%." Second: "The fitted carbamate parameters (the
+hydrolysis constant and the carbamate–water interaction, which these data
+cannot separate) leave DEA carbamate too stable at 313 K. CO₂ pressure is
+under-predicted two- to four-fold below a loading of 0.2, and the NMR carbamate
+fraction is over-predicted above 0.4. Above a loading of 1, these parameters
+adjusted to the 313 K data leave the pressure under-predicted; the model's CO₂
+activity coefficient is a candidate cause not yet checked against solubility
+data."
+
+A correction would be a separate fit, reported on all DEA data. It would first
+fit the DEA–water $k_{ij}$ and its reciprocal-temperature slope, or a
+temperature law on the cross-association energy, to Horstmann's 365.15 K VLE,
+Cai's isobaric VLE and Horstmann's 363.15 K $H^E$. Maham's 298–338 K $H^E$ would
+be added if transcribed. Because the DEA–water $k_{ij}$ enters every loaded
+calculation (−46.2 K would move it to −0.085 at 313.15 K), the reactive fit
+would then be repeated. That fit would add low-loading pressures and Böttinger
+speciation to the objective and free the hydrolysis enthalpy with the constant.
+It would test one CO₂ interaction coordinate against high-loading pressures,
+after physical-solubility data are checked. Data added to the objective stop
+being independent comparisons. Temperature trends outside 310–313 K, such as
+Seo and Hong's two-fold over-prediction at 333–353 K, were not diagnosed here.
+
+[Excess-enthalpy probes](diagnosis-410/excess-enthalpy.json),
+[pressure probes and sensitivities](diagnosis-410/pressure-shape.json),
+[objective split and CO₂ activity](diagnosis-410/co2-activity-and-objective.json),
+[joint linearized reduction](diagnosis-410/joint-reduction.json) and
+[figure values](diagnosis-410/figure-values.csv) retain every number above.
+The scripts in `diagnosis-410/` regenerate them from the repository root with
+`AGENT_HEAVY_CORES=1 uv run --no-sync python analyses/dea_transfer/diagnosis-410/<script>.py <scratch-dir>`,
+followed by `joint.py` and `figure.py`. This diagnosis has not been
+independently reviewed or promoted for manuscript use.
