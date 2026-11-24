@@ -921,6 +921,7 @@ FUNCTION {article}
   if$
   format.journal.pages
   new.sentence
+  print.doi output
   format.note output
   fin.entry
 }

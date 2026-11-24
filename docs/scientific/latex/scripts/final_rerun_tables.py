@@ -317,6 +317,11 @@ def main():
     assert len(fitrows) == 307 and hashlib.sha256((F/'reported-parameters.json').read_bytes()).hexdigest() == 'ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed'
     params = [r for r in a.rows(a.BUNDLE/'results/reduced-refit/parameter-details.csv') if r['fit']=='F2']
     assert len(params)==11
+    # Standard errors on the responsive-row convention (#420): the 39 Kiepe rows have zero derivatives and leave the residual degrees of freedom.
+    stage = other('analyses/mea_parameter_bundle/results/objective-weights-420/MEA/information.json.gz')['result']
+    assert (stage['n'], stage['na'], stage['p'], stage['stage_denominator']) == (307, 268, 10, 258) and math.isclose(stage['SE_multiplier'] ** 2, stage['stage_variance'] / stage['variance'], rel_tol=1e-6)
+    for r in params:
+        if r['conditional_SE'] not in (None, ''): r['conditional_SE'] = float(r['conditional_SE']) * stage['SE_multiplier']
     a.close(sum(float(r['cost']) for r in fitrows),a.load(E/'candidate/replay.json')['cost'])
     coords = {r['identity']:r for r in params}
     values = {c['identity']: c['value']['magnitude'] for n in document['components'] + document['pairs'] for c in n['coefficients']}
@@ -426,7 +431,7 @@ def main():
     # Separate stoichiometry and coefficients to preserve every printed digit at readable size.
     reaction_names = dict(R1='Water autoprotolysis', R2=r'\ce{CO2} hydration', R3='Bicarbonate dissociation', R4='Carbamate hydrolysis', R5='Amine dissociation')
     reaction_rows = [[r[0], reaction_names[r[0]], r[1].replace('MEACOO-', 'ACOO-').replace('MEAH+', 'AH+').replace('MEA', 'A')] for r in rr]
-    table('reaction_equilibrium_constants.tex', r"Aqueous reactions of an amine A, with the source and source temperature range of each equilibrium constant. || $^{\mathrm{a}}$Range stated for the correlation in its source. $^{\mathrm{b}}$Range of estimates made with a solubility model, not of measurements. $^{\mathrm{c}}$Starting correlation; its constant term and an enthalpy increment are then fitted (Table~\ref{tab:transfer-fitted}). Table~\ref{supp-tab:supplement-reaction-coefficients} gives the coefficients of R1--R3 and of the MEA correlations on the molality basis, and Table~\ref{supp-tab:supplement-transfer-parameters} those of R4 and R5 for DEA, MDEA and AMP.", ['Reaction', 'Name', 'Stoichiometry'], reaction_rows, ['l','l','l'])
+    table('reaction_equilibrium_constants.tex', r"Aqueous reactions of an amine A, with the source and source temperature range of each equilibrium constant. || $^{\mathrm{a}}$Range stated for the correlation in its source. $^{\mathrm{b}}$Range of estimates made with a solubility model, not of measurements. $^{\mathrm{c}}$Starting correlation; its constant term and an enthalpy increment are then fitted (Table~\ref{tab:transfer-fitted}). $^{\mathrm{d}}$Correlation of Silkenb\"aumer et al., which represents three estimates that Xu et al.\ \cite{xuRepresentationEquilibriumSolubility1992} obtained with a solubility model. Table~\ref{supp-tab:supplement-reaction-coefficients} gives the coefficients of R1--R3 and of the MEA correlations on the molality basis, and Table~\ref{supp-tab:supplement-transfer-parameters} those of R4 and R5 for DEA, MDEA and AMP.", ['Reaction', 'Name', 'Stoichiometry'], reaction_rows, ['l','l','l'])
     ranges = {'MEA': {r['reaction_id']: r['temperature_range_k'] for r in reaction['reactions']}, 'DEA': other('analyses/dea_transfer/inputs/part-ii-346/route-current.json')['reaction_ranges_K'],
               'MDEA': other('analyses/mdea_mea_workflow/results/retransfer-343/reaction-ranges.json')['source_ranges_K'], 'AMP': other('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']}
     assert all(ranges[amine][r] == [273.15, 498.15] for amine in ranges for r in ('R1', 'R2', 'R3'))
@@ -434,7 +439,7 @@ def main():
     origins = [('R1--R3', 'all four', 'R1', r'Austgen et al.\ \cite{Austgen1991}', 'a', 'fixed'),
                ('R4', 'MEA', 'R4', r'Tong et al.\ \cite{Tong2012}', '', 'fixed'),
                ('R4', 'DEA', 'carbamate-hydrolysis', r'Aroua et al.\ \cite{arouaTemperatureDependencyEquilibrium1997}', '', r'fitted$^{\mathrm{c}}$'),
-               ('R4', 'AMP', 'carbamate-hydrolysis', r'Xu et al.\ \cite{xuRepresentationEquilibriumSolubility1992}', 'b', r'fitted$^{\mathrm{c}}$'),
+               ('R4', 'AMP', 'carbamate-hydrolysis', r'Silkenb\"aumer et al.\ \cite{silkenbaumerSolubilityCarbonDioxide1998}$^{\mathrm{d}}$', 'b', r'fitted$^{\mathrm{c}}$'),
                ('R5', 'MEA', 'R5', r'Bates and Pinching \cite{batesAcidicDissociationConstant1951}', '', 'fixed'),
                ('R5', 'DEA', 'DEA-dissociation', r'Bower et al.\ \cite{bowerAcidicDissociationConstant1962}', '', 'fixed'),
                ('R5', 'MDEA', 'MDEA-dissociation', r'P\'erez-Salado Kamps and Maurer \cite{perez-saladokampsDissociationConstantNMethyldiethanolamine1996}', '', 'fixed'),
@@ -501,13 +506,14 @@ def main():
         return [f"{c['AARD_percent']:.2f}" for c in cases]
     assert all(2 * search[s]['pressure_reference_failures'] > search[s]['counts']['unavailable_records'] for s in ('low', 'high'))
     ermatchkov = compared['Ermatchkov']['original'][0]['relative_rows']
-    table('supplement-bicarbonate-sensitivity.tex', rf"MEA and MDEA refits with the shared water--bicarbonate interaction $k$ fixed at the value of the MEA model, $k_0$, and at two other values. || $C(k)$: objective of the MEA fit with $k$ fixed and the other parameters refitted; the refit at $k_0$ reproduces the objective of the MEA model within $10^{{-6}}C$, and both other values keep $C(k)-C(k_0)$ within {allowance:.4f}, the largest change in Table~\ref{{tab:bound-profiles}}. The MDEA parameters are refitted at each value with the same data, weights, bound and initial parameter sets. The {ermatchkov} CO2 partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation.",
-          ['Quantity', 'MEA model', 'Lower value', 'Upper value'],
+    table('mdea-shared-control.tex', rf"Controlled transfer to MDEA: the shared water--bicarbonate interaction $k$ fixed at the value of the MEA model and at two other values, with the MEA and the MDEA parameters refitted at each. || Fixed in every column: the other shared parameters, the reaction correlations, the MDEA data, weights and bound, and the three initial MDEA parameter sets. Refitted: the other ten MEA parameters and the eight MDEA parameters. $C(k)$: objective of the MEA fit with $k$ fixed; the refit at the value of the MEA model, $k_0$, reproduces the objective of the MEA model within $10^{{-6}}C$, and both other values keep $C(k)-C(k_0)$ within {allowance:.4f}, the largest change among the refits that hold the \ce{{MEAH+}}--\ce{{MEACOO-}} interaction inside its bound (Table~\ref{{supp-tab:bound-profiles}}). $P$: total pressure; AARD follows Eq.~\eqref{{eq:aard}}. The {ermatchkov} CO2 partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation. The searches are those of Table~\ref{{tab:amine-summary}} and do not include the fixed-pressure calculation of Section~\ref{{sec:results-mdea-phase}}.",
+          ['Quantity', 'MEA model, $k_0$', 'Lower value', 'Upper value'],
           [['Water--bicarbonate interaction $k$', *(f'{k:.4f}' for k in (profile['center']['k'], *(p['k'] for p in sides)))],
            ['MEA objective change $C(k)-C(k_0)$', *(f"{c - profile['center_cost']:.4f}" for c in (model_cost, *(p['cost'] for p in sides)))],
            ['MDEA objective', *(f'{c:.4f}' for c in (reported['data_cost'], search['low']['cost'], search['high']['cost']))],
-           ['Fitted MDEA pressures, AARD (%)', *aard('all pressures fitted')],
-           ['MDEA pressures outside the objective, AARD (%)', *aard('all pressures not fitted')],
+           [f"Fitted loaded-solution $P$ of Kuranov et al.\\ ({compared['Kuranov']['original'][0]['rows']}), AARD (%)", *aard('Kuranov')],
+           [f"All fitted MDEA pressures, with the CO2-free binary pressures ({compared['all pressures fitted']['original'][0]['rows']}), AARD (%)", *aard('all pressures fitted')],
+           [f"MDEA pressures outside the objective ({compared['all pressures not fitted']['original'][0]['rows']}), AARD (%)", *aard('all pressures not fitted')],
            [f'Unfinished searches of {states}', reported['unavailable_searches'], *(search[s]['counts']['unavailable_records'] for s in ('low', 'high'))],
            ['Confirmed liquid--liquid splits', reported['liquid_liquid_splits_found'], *(search[s]['counts']['confirmed_distinct_splits'] for s in ('low', 'high'))]],
           [.46, 'r', 'r', 'r'])
