@@ -1,9 +1,11 @@
 """Render promoted F2 MEA results (#341, Engine 391dfe5d) and explicitly historical comparisons; no Engine computation."""
 import ast
+from functools import reduce
 import gzip
 import json
 import math
 import re
+from operator import getitem
 from pathlib import Path
 import sys
 
@@ -213,7 +215,7 @@ def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
             for row, after in zip(data, [*data[1:], None])]
     if len(data) <= 32 and not landscape and name != 'supplement_literature_comparison.tex':  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
         # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
-        place = '[!htbp]' if '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
+        place = '[!htbp]' if name.endswith('_reference_state.tex') or '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
         OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{' + str(sep) + r'pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
                                    r'\toprule', head, r'\midrule', *rows, r'\bottomrule', r'\end{tabular}',
                                    *([r'\par\smallskip\parbox{\linewidth}{' + notes + '}'] if notes else []), r'\end{table}', ''])
@@ -254,6 +256,59 @@ def other(path):  # DEA, MDEA and AMP files postdate BASE: hashed into the table
     return json.loads(gzip.decompress(data) if path.endswith('.gz') else data)
 
 
+
+
+def reference_states():
+    folder = E.parent/'reference-states-428'
+    for case, spec in json.loads((folder/'tables.json').read_text()).items():
+        record = json.loads((folder/f'{case}.json').read_text())
+        assert all(record['checks'].values()), case
+        rows = [[label, *(format(reduce(getitem, path, record), precision) if path else '' for path in paths)]
+                for label, precision, *paths in spec['rows']]
+        name = f'{case}_reference_state.tex'
+        table(name, spec['caption'], spec['headings'], rows, spec['cols'])
+        provenance = ''.join(f'% Input: {p.name} SHA256 {hashlib.sha256(p.read_bytes()).hexdigest()}\n'
+                             for p in (folder/'tables.json', folder/f'{case}.json'))
+        if '--check' not in sys.argv:
+            (folder/name).write_text(provenance+OUTPUTS[name])
+        assert (folder/name).read_text() == provenance+OUTPUTS[name], name
+
+
+    amp, mea, s12 = (json.loads((folder/f'{name}.json').read_text()) for name in ('amp', 'mea', 's12'))
+    q = amp['trial_quantities']
+    rows = [
+        ('Trial Gibbs energy, $g/(RT)$', q['g_over_rt'], 'Per mole of true trial species'),
+        ('Plane contraction', amp['plane_contraction'], 'Dimensionless'),
+        ('Optimized $D$', q['tpd_over_rt'], 'Dimensionless'),
+        ('Plane-value error estimate', q['plane_value_error_estimate_over_rt'], 'Dimensionless'),
+        ('Donor slope', q['donor_slope_over_rt'], 'Dimensionless'),
+        ('Donor-descent error estimate', q['descent_error_estimate_over_rt'], 'Dimensionless'),
+        ('Reclosed supplied trial $D$', amp['supplied']['quantities']['tpd_over_rt'], 'Dimensionless'),
+        ('Split-minus-parent $\\Delta G/(RT)$', amp['Gibbs_difference_over_RT_mol'], 'mol per declared feed'),
+        ('Paired Gibbs numerical estimate', amp['split']['numerical_error_over_RT_mol'], 'mol per declared feed'),
+        ('Equilibrium liquid amounts', ', '.join(map(str, amp['split']['amounts_mol'])), 'mol true species'),
+        ('Equilibrium liquid densities', ', '.join(map(str, amp['split']['densities_mol_m3'])), 'mol/m³'),
+        ('MEA initial and loaded liquid enthalpies', f"{mea['points']['initial']['H_J']}, {mea['points']['loaded']['H_J']}", 'J on the declared feed'),
+        ('Pure CO₂ addition-stream enthalpy', mea['added_stream']['H_J_per_mol'], 'J/mol, vapor branch'),
+        ('Loaded solution mass', mea['loaded_mass_kg'], 'kg'),
+        ('MEA integral heat', mea['heat_kJ_mol'], 'kJ/mol added CO₂'),
+        ('MEA equilibrium $C_P$', mea['cp_J_mol_K'], 'J/(mol apparent feed·K)'),
+        ('MEA $C_P$ on loaded feed and per mass', f"{mea['cp_J_K']}, {mea['cp_kJ_kg_K']}", 'J/K; kJ/(kg solution·K)'),
+        ('Centered re-solves at 0.10 and 0.05 K', ', '.join(map(str, mea['cp_stencil_J_mol_K'])), 'J/(mol apparent feed·K)'),
+        ('Analytic minus fine centered $C_P$', mea['cp_minus_fine_J_mol_K'], 'J/(mol apparent feed·K)'),
+    ]
+    lines = ['| Quantity | Value | Basis |', '|---|---:|---|']
+    lines += [f'| {label} | {value} | {unit} |' for label, value, unit in rows]
+    lines += ['', '| Reaction | Source (kJ/mol reaction) | Fugacity correction (kJ/mol reaction) | Ideal-gas sum (kJ/mol reaction) |', '|---|---:|---:|---:|']
+    lines += [f"| {r['name']} | {r['source_kJ_mol']:.2f} | {r['fugacity_kJ_mol']:.2f} | {r['ideal_gas_kJ_mol']:.2f} |" for r in mea['reactions']]
+    differences = s12['nonzero_differences'][-1]['replay_minus_retained']
+    pressure = max(abs(d.get('bubble_pressure_Pa', 0)) for d in differences)
+    lines += ['', f"S12: {sum(r['printed_digits_agree'] for r in s12['replay'])} bubble states reproduce the displayed digits; the CO₂–water and MEA–water readbacks are identical to the retained records. For loaded MEA, the replays from the two starting pressures differ from the retained record in {' and '.join(str(len(d)) for d in differences)} unrounded fields; the largest bubble-pressure difference from the record is {pressure:.2e} Pa."]
+    output = folder/'tables.md'
+    text = '\n'.join(lines)+'\n'
+    if '--check' not in sys.argv:
+        output.write_text(text)
+    assert output.read_text() == text, output
 
 
 def main():
@@ -497,4 +552,4 @@ def main():
     (ROOT/'docs/scientific/latex/builds/347-input-hashes.json').write_text(json.dumps({'commit':BASE,'files':a.INPUTS},indent=2)+'\n')
 
 if __name__ == '__main__':
-    main()
+    reference_states() if '--reference-states' in sys.argv else main()

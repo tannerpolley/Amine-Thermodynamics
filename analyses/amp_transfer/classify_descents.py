@@ -69,6 +69,7 @@ def coexistence(spec, parent, parent_g, guesses):
     return dict(out, confirmed=distinct and liquid and decrease>estimated_error,
                 distinct=distinct, Gibbs_decrease_over_RT_mol=decrease,
                 numerical_error_over_RT_mol=estimated_error, phases=phases,
+                Gibbs_sum_over_RT_mol=g, objective_over_RT_mol=result.objective, residuals=list(result.residuals),
                 densities_mol_m3=densities, packings=list(result.packing_fractions),
                 max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)
 
