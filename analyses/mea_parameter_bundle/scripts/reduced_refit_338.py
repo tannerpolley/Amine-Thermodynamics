@@ -390,7 +390,7 @@ def information(name, mapping, declared):
     write(f'{name}/information.json',out)
 
 
-def evidence(name, path):
+def evidence(name, path, *, kim_pathways=True):
     """Run the adoption assessment owners; stage their executable copies outside retained evidence."""
     import tempfile
     e.EV, e.RECORDS = OUT/'evidence', {name:path}
@@ -412,8 +412,8 @@ def evidence(name, path):
         r.OUT = OUT/'point-data'
         r.write(f'{name}/replay.json',r.read(OUT/name/'replay.json')['rows'])
         e.point_data(name,name)
-        curves = e.curves(name)
-        e.kim(name,curves)
+        if kim_pathways:
+            e.kim(name, e.curves(name))
         e.density(name)
         e.heat_capacity(name)
     finally:

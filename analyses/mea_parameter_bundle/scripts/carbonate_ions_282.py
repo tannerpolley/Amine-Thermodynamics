@@ -90,11 +90,11 @@ def law_value(law, T):
 
 # ---------------------------------------------------------------- salt document
 
-def salt_document(laws):
+def salt_document(laws, base=FINAL, *, reactive=False):
     """The selected record reduced to water, Na+, Cl-, HCO3-, CO3^2- and OH-; Na+/Cl- in the record's ion conventions.
 
     ``laws``: {ion: (a0, a1)} about 298.15 K for the three water-ion laws."""
-    mapping = copy.deepcopy(s.parameter_mapping(FINAL))
+    mapping = s.parameter_mapping(base)
     template = next(c for c in mapping['components'] if c['component_id'] == HCO3)
     for ion, (sigma, u, z, molar_mass) in IONS.items():
         c = copy.deepcopy(template)
@@ -110,11 +110,12 @@ def salt_document(laws):
             node['value'] = {**node['value'], 'magnitude': values[node['family']]}
             node['provenance'] = {**node['provenance'], **HELD}
         mapping['components'].append(c)
-    keep = {W, NA, CL, HCO3, CO3, OH}
+    keep = {W, NA, HCO3, CO3, OH} | ({"carbon-dioxide", "hydronium-cation"} if reactive else {CL})
     mapping['components'] = [c for c in mapping['components'] if c['component_id'] in keep]
     mapping['pairs'] = [p for p in mapping['pairs'] if {p['component_id_a'], p['component_id_b']} <= keep]
     mapping['correlations'] = [c for c in mapping['correlations'] if c['component_id'] in keep]
-    mapping['reaction_correlations'] = []
+    mapping['reaction_correlations'] = [c for c in mapping['reaction_correlations']
+                                        if reactive and c['reaction_id'] in ('R1', 'R2', 'R3')]
     topology = mapping['topology']
     topology['sites'] = [x for x in topology['sites'] if x['component_id'] in keep]
     topology['edges'] = [e for e in topology['edges'] if {e['endpoint_a']['component_id'], e['endpoint_b']['component_id']} <= keep]
@@ -123,7 +124,8 @@ def salt_document(laws):
             if key in owner:
                 owner[key] = [x for x in owner[key] if {v for k, v in x.items() if k.startswith('component_id')} <= keep]
     for (a, b), k in SALT_PAIRS.items():
-        set_pair(mapping, a, b, k_node(mapping, f'pair/{min(a, b)}/{max(a, b)}/k_ij', k, HELD))
+        if {a, b} <= keep:
+            set_pair(mapping, a, b, k_node(mapping, f'pair/{min(a, b)}/{max(a, b)}/k_ij', k, HELD))
     own = dict(source_id='carbonate-ions-282', locator='analyses/mea_parameter_bundle/scripts/carbonate_ions_282.py')
     for ion, (a0, a1) in laws.items():
         set_pair(mapping, ion, W, law_node(LAWS[ion], a0, a1, T_SALT, own))
@@ -599,7 +601,7 @@ POOL_266 = B / 'results/bicarbonate-carbonate-266/inputs.json'
 CARBONATE_IDS = [x['id'] for x in csv.DictReader((R255 / 'evidence/final/carbonate-share.csv').open())]  # the A7 ten F_C states
 
 
-def pool_and_shares(mapping):
+def pool_and_shares(mapping, *, parents=None):
     """#266's retained comparison records at one record: Matin pool against the Matin-Böttinger envelope at three pressures,
     the Jakobsen pool, S_pool (carbonate-pool-split) and F_C (carbonate-carbon-fraction). Compared, never fitted."""
     spec = r.bind(mapping)
@@ -608,9 +610,14 @@ def pool_and_shares(mapping):
     spec.problems.update({k: spec.problem(k, {}) for k in inputs['problems']})
     rows = []
     for x in inputs['records']:
-        p = spec.prediction(x)
+        if parents is not None and (x['state_identity'] not in parents or x['group'] != 'Jakobsen2005 carbonate-carbon-fraction'):
+            continue
+        cause = parents.get(x['state_identity']) if parents is not None else None
+        p = dict(status='Unavailable', message=cause) if cause else spec.prediction(x)
         rows.append(dict(identity=x['identity'], group=x['group'], state=x['state_identity'], pressure_Pa=spec.spec['templates'][x['problem']]['P'],
-                         observed=x['arguments']['observed'], status=p['status'], value=p.get('value')))
+                         observed=x['arguments']['observed'], status=p['status'], value=p.get('value'), cause=p.get('message')))
+    if parents is not None:
+        return rows
     assert all(x['status'] == 'Available' for x in rows), [x['identity'] for x in rows if x['status'] != 'Available']
     envelope = {x['identity']: x for x in inputs['reconciliation']}
     inside = {}

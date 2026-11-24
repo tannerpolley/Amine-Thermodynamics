@@ -13,6 +13,10 @@ resources:
   - results/same-data-comparison/hong-2027/**
   - results/engine-3e83e19c-paper-evidence/**
   - figures/a7_regression_overview/output/**
+  - results/shared-ion-electrostatics-423/*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/N*/*/*.json
+  - results/shared-ion-electrostatics-423/*/*/S1/parents.json.gz
   - results/bicarbonate-carbonate-266/**
   - results/selected-current-best-parameters.json
   - results/adoption-297/paper-evidence/model-curves/**
@@ -1909,3 +1913,214 @@ The experimental evidence has a narrower meaning than a universal single-liquid 
 [The calculation account](results/split-cause-342/README.md), [all contribution values](results/split-cause-342/contributions.csv), [contribution changes](results/split-cause-342/contribution-changes.csv), [all compositions](results/split-cause-342/compositions.csv), [map coordinates](results/split-cause-342/split-map.csv), [figure contribution values](results/split-cause-342/figure-contributions.csv) and [figure composition values](results/split-cause-342/figure-compositions.csv) retain the evidence. This result supports fixed-model numerical interpretation, without a global stability certificate, independent physical validation, absorber qualification or a quantified parameter-uncertainty interval. Independent delivered review returned **Supported**, with **no required corrections**, for scientific commit `1a5ff4e11733c8a81c7e2fc29e178c975e69d44b` ([review report](results/split-cause-342/review.md)). The closeout records the independent review finding. Manuscript use still requires owner promotion of the reviewed notebook commit.
 
 The two new producers add **200/200 gross physical lines** (153 calculation, 47 figure), conservatively including imports, docstrings and blanks; [code-accounting.json](results/split-cause-342/code-accounting.json) retains their hashes. The protected manuscript metadata and manuscript sources are unchanged. Guarded Quarto rendering uses retained values with execution disabled; managed root refresh remains gated by its pre-existing request to change protected metadata.
+
+## Shared ions and electrostatic sensitivities {#shared-ion-electrostatics-423}
+
+The [accepted calculation plan](https://github.com/tannerpolley/Amine-Thermodynamics/issues/423) compares electrostatic choices around the adopted F2 record and tests the shared-ion inputs with aqueous sodium salts. The wheel archive and installed Engine files were checked against the pin. The comparisons use fixed parameters or local fits to the original objective.
+
+| Control | Rows | Replay | Reference |
+| --- | --- | --- | --- |
+| F2 objective | 307 | 150.76290287955263 | 150.76290287953717 |
+| Table S19 fitted CO₂ pressure AARD | 47 | 11.64158909% | 11.64% |
+| Table S19 six-source CO₂ pressure AARD | 112 | 24.88714988% | 24.89% |
+| Table S19 fitted loaded density AARD | 47 | 0.15225579% | 0.15% |
+| Jakobsen carbonate share AARD | 10 | 95.01050464% | 95.0105% |
+| Na2CO3 salt-fitted osmotic AARD | 45 | 5.111329873% | 5.111329873% |
+| NaHCO3 salt-fitted osmotic AARD | 45 | 0.162978885% | 0.162978885% |
+
+The salt replay maximum relative prediction difference was 0. The [cross-wheel absorber and stripper readback](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P0/band-control-readback.json) retained every band and the difference from #409. The maximum relative change over the 28 heat-control predictions was 9e-13.
+
+### Ion packing and the Born diameters
+
+All 21 single-sphere ion declarations in the four reported records satisfy $d=0.88\sigma$. Every Debye–Hückel diameter equals the segment diameter. DEAH⁺ and MDEAH⁺ use temperature-dependent hard-chain packing, with their Debye–Hückel and Born diameters tied to the segment diameter. The volume-equivalent order is MEAH⁺, DEAH⁺, MDEAH⁺, AMPH⁺. [Ion record readback](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/diameters.json)
+
+Held et al. (2014), §2.4 Eq. (21), insert the 0.88 factor in the packing term, with zero ion self-dispersion in Eq. (22). Their §2.1 uses the solvated-ion segment diameter for Debye–Hückel. Figiel et al. (2025), Eq. (4), also give the packing factor and use that packing diameter in Debye–Hückel. Schick et al. (2023), p. 3, use $d=\sigma$. Held's Table 2 ties the water interactions to its water parameters. Held fitted osmotic coefficients and densities at 298.15 K without a Born contribution and lists no carbonate salt in Table 5. Figiel refitted ion–water and ion–ion interactions for its Born formulation. Its new pure-ion fits were V³⁺ and VO²⁺ (p. 9410), and its solvation-factor fits covered water, methanol and ethanol (pp. 9411, 9413). The M3 factor is a sensitivity assumption for MEA.
+
+| Cation | Segments | Born diameter (Å) | Volume-equivalent diameter (Å) | Parent (Å) | Classical continuum Born energy (kJ/mol) |
+| --- | --- | --- | --- | --- | --- |
+| MEAH⁺ | 1 | 4.856 | 4.856 | 4.407 | -282.48 |
+| DEAH⁺ | 5.2048 | 2.948 | 5.108 | 5.108 | -465.33 |
+| MDEAH⁺ | 3.675 | 3.655 | 5.641 | 5.498 | -375.25 |
+| AMPH⁺ | 1 | 6.469 | 6.469 | 5.091 | -212.02 |
+
+Classical continuum energies use the tied Born diameter and the water permittivity at 298.15 K and 101325 Pa. The Engine's SSM+DS contribution adds an outer-shell correction. AMPH⁺ has bounds 4.5–6.5 Å, an inactive bound, and conditional standard error 0.322 Å.
+
+### Sodium salts and R1–R3
+
+| Sodium law | Shared set | NaHCO₃ AARD (%) | Na₂CO₃ AARD (%) | Mixed AARD (%) |
+| --- | --- | --- | --- | --- |
+| N1 | F2 | 2.171 | 8.253 | 6.195 |
+| N1 | Held | 0.421 | 8.230 | 3.950 |
+| N1 | salt-fitted | 0.163 | 5.111 | 2.561 |
+| N2 | F2 | 9.012 | 19.414 | 24.062 |
+| N2 | Held | 6.012 | 19.384 | 21.342 |
+| N2 | salt-fitted | 6.364 | 15.605 | 17.795 |
+
+Each sodium law and shared set has 45 NaHCO₃, 45 Na₂CO₃, and 39 mixed osmotic predictions. Six mixed rows have negative charge-closure OH⁻ and are unavailable. The input is Peiper and Pitzer (1982), Table 6, at 278.15–318.15 K and 0.01–1 mol/kg. These are model-derived values. The ionic osmotic coefficient uses the printed species, charge closure and ideal removed dissolved CO₂ at 0.1 MPa. N1 uses the NaCl-fitted water–Na⁺ intercept. N2 uses Held's published temperature law. Held's Table 5 strategy 2 reports 2.41% for Na₂SO₄ and 6.43% for Na₂HPO₄ under its own formulation. The difference between N1 and N2 limits attribution to the bicarbonate and carbonate pairs. [Row residuals by molality](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/N1/F2/osmotic.json), [temperature summaries](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/N1/F2/summary.json).
+
+The N1 reactive control uses $k_{\mathrm{CO_2–Na^+}}=0$, 1 kg water plus nominal salt at 0.1 MPa, and an electroneutral water dilution path of 0.125 per retained solute and 0.375 for Na⁺, with standard molality 1 mol/kg. R2 and R3 give molality-basis pK 6.35908 and 10.33280 at 298.15 K. Peiper and Pitzer report 6.355 and 10.337. Each set scores 36 salt rows and retains 24 outside the R2 range. The printed bare zeros have no rounding score.
+
+| Shared set | Printed pool | Within ±0.00005 mol/kg | Maximum absolute residual (mol/kg) |
+| --- | --- | --- | --- |
+| F2 | X2 | 2/36 | 0.002942 |
+| F2 | Y | 0/36 | 0.005023 |
+| F2 | H2X | 2/18 | 0.002458 |
+| F2 | Z | 0/18 | 0.002994 |
+| salt-fitted | X2 | 2/36 | 0.002997 |
+| salt-fitted | Y | 0/36 | 0.004909 |
+| salt-fitted | H2X | 2/18 | 0.002408 |
+| salt-fitted | Z | 0/18 | 0.003050 |
+
+The largest bicarbonate deviations exceed the print bound by about two orders of magnitude with either shared set. The comparison depends on the N1 and CO₂–Na⁺ choices. Schick et al. (2023), §4.2.1 and Conclusions, use zero CO₂–ion interactions with a Born term, a different permittivity formulation and different ion packing. Pabsch et al. (2020), Table 9 and footnote a, fit a temperature-dependent CO₂–Na⁺ law with a different sodium description and without a Born term. The cause of the MEA carbonate-share deficit remains unresolved. [F2 species and temperature readback](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/N1/F2/sodium-reactive-summary.json), [salt-fitted readback](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/N1/salt-fitted/sodium-reactive-summary.json).
+
+![Signed relative osmotic residuals against nominal molality. The panels compare sodium laws and salts on a common residual scale. Each point is an available temperature and molality from Peiper and Pitzer’s Table 6 after the ionic-basis conversion.](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/osmotic-residuals.png)
+
+### MEA controls, fixed-parameter replays and local refits
+
+| Arm | 307-row fixed-parameter cost | Change from F2 | Lowest converged refit cost |
+| --- | --- | --- | --- |
+| P0 | 150.762902880 | +0.000000000 | 150.762902880 |
+| P1 | 150.873108065 | +0.110205186 | 150.871225577 |
+| M1 | 151.332047085 | +0.569144205 | Replay only |
+| M3 | 165.800264142 | +15.037361262 | 149.667331509 |
+
+The refit trigger is 0.000150762903. M1 only changes the molecular CO₂ solvation factor. Its maximum liquid molecular CO₂ mole fraction across fitted states is 0.0027686. The fixed-composition factor bracket applies to the value of $f_{\mathrm{mix}}$ and leaves its composition derivatives unconstrained. The exact Figiel form remains pending. [Engine #212](https://github.com/tannerpolley/epcsaft/issues/212)
+
+| Unloaded temperature (K) | MEA (wt%) | F2 permittivity | P1 permittivity | Fixed-density $(\varepsilon_1-1)/(\varepsilon_0-1)$ |
+| --- | --- | --- | --- | --- |
+| 313.15 | 30 | 62.255159 | 62.369521 | 1.00186697427 |
+| 313.15 | 100 | 27.980659 | 28.360670 | 1.01408453488 |
+| 353.15 | 30 | 52.015055 | 52.378157 | 1.00711755485 |
+| 353.15 | 100 | 22.854242 | 24.050659 | 1.05474531878 |
+| 393.15 | 30 | 43.733793 | 44.280898 | 1.01280262136 |
+| 393.15 | 100 | 18.835205 | 20.629480 | 1.10060294794 |
+
+The 14 Agieienko–Buchner predictions agree between P0 and P1 within $10^{-10}$ at 298.15 K. The uncertainty in Hajj's static limit is unquantified. [Permittivity rows and checks](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P1/permittivity.json)
+
+| Permittivity comparison | Rows | F2 AARD (%) | P1 AARD (%) |
+| --- | --- | --- | --- |
+| Agieienko–Buchner | 14 | 0.454 | 0.454 |
+| HajjUnloaded2024 | 2 | 1.822 | 1.639 |
+| HajjLoaded2024 | 28 | 31.305 | 31.232 |
+
+The fitted absorber bands below report AARD in percent, with the scored row count in parentheses.
+
+| Arm | CO₂ pressure | Absorption heat | Heat capacity | Density |
+| --- | --- | --- | --- | --- |
+| P0 | 11.64 (47) | 1.97 (8) | 2.83 (4) | 0.14 (52) |
+| P1 | 11.69 (47) | 1.95 (8) | 2.85 (4) | 0.14 (52) |
+| M1 | 12.15 (47) | 1.97 (8) | 2.83 (4) | 0.14 (52) |
+| M3 | 20.53 (47) | 2.11 (8) | 2.83 (4) | 0.14 (52) |
+| P0-refit | 11.64 (47) | 1.97 (8) | 2.83 (4) | 0.14 (52) |
+| P1-refit | 11.68 (47) | 1.94 (8) | 2.86 (4) | 0.14 (52) |
+| M3-refit | 11.57 (47) | 1.99 (8) | 2.87 (4) | 0.14 (52) |
+
+The not fitted absorber / stripper bands below report AARD in percent, with the scored row count in parentheses.
+
+| Arm | CO₂ pressure | Absorption heat | Heat capacity | Density |
+| --- | --- | --- | --- | --- |
+| P0 | 24.91 (69) / 24.91 (66) | 7.19 (84) / 14.07 (28) | 3.86 (31) / 1.35 (15) | 0.32 (149) / 0.41 (26) |
+| P1 | 24.90 (69) / 24.81 (66) | 7.23 (84) / 14.16 (28) | 3.88 (31) / 1.34 (15) | 0.32 (149) / 0.41 (26) |
+| M1 | 25.10 (69) / 25.32 (66) | 7.14 (84) / 13.89 (28) | 3.86 (31) / 1.39 (15) | 0.32 (149) / 0.41 (26) |
+| M3 | 35.12 (69) / 30.87 (66) | 7.43 (84) / 14.01 (28) | 3.86 (31) / 1.38 (15) | 0.33 (149) / 0.42 (26) |
+| P0-refit | 24.91 (69) / 24.91 (66) | 7.19 (84) / 14.07 (28) | 3.86 (31) / 1.35 (15) | 0.32 (149) / 0.41 (26) |
+| P1-refit | 24.87 (69) / 24.75 (66) | 7.19 (84) / 14.13 (28) | 3.88 (31) / 1.34 (15) | 0.32 (149) / 0.41 (26) |
+| M3-refit | 25.24 (69) / 24.76 (66) | 7.25 (84) / 14.11 (28) | 3.89 (31) / 1.33 (15) | 0.31 (149) / 0.39 (26) |
+
+The P0 refit search evaluated 1908/1908 dense grid states and 576/576 offset states. The grid confirmation found 0 distinct liquid splits and 0 unresolved phase identities, with 0 unavailable records. Of 162 census states, 0 had unconfirmed descents, 0 were unresolved and 0 were unavailable. [Search disposition](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P0-refit/search-classification.json)
+
+The P1 refit search evaluated 1907/1908 dense grid states and 576/576 offset states. The grid confirmation found 0 distinct liquid splits and 0 unresolved phase identities, with 1 unavailable records. Of 162 census states, 0 had unconfirmed descents, 0 were unresolved and 0 were unavailable. [Search disposition](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P1-refit/search-classification.json)
+
+The M3 refit search evaluated 1908/1908 dense grid states and 576/576 offset states. The grid confirmation found 0 distinct liquid splits and 0 unresolved phase identities, with 0 unavailable records. Of 162 census states, 0 had unconfirmed descents, 0 were unresolved and 1 were unavailable. [Search disposition](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/M3-refit/search-classification.json)
+
+### Jakobsen carbonate share and transfer replays
+
+| Case | Status | n | Geometric mean calc/obs | AARD (%) | n without 018 | Geometric mean without 018 | AARD without 018 (%) | Matched change from F2 | 307-row cost | Fitted CO₂ pressure AARD (%) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [P0](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P0/carbonate-share.json) | available | 10 | 0.0316987 | 95.0105 | 9 | 0.0394845 | 94.5049 | 0 | 150.763 | 11.6416 |
+| [P1](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P1/carbonate-share.json) | available | 10 | 0.0317574 | 95.0056 | 9 | 0.0395389 | 94.4997 | 5.86535e-05 | 150.873 | 11.6883 |
+| [M1](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/M1/carbonate-share.json) | available | 10 | 0.0316987 | 95.0105 | 9 | 0.0394844 | 94.5049 | -7.75118e-08 | 151.332 | 12.1466 |
+| [M3](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/M3/carbonate-share.json) | available | 10 | 0.01585 | 97.9102 | 9 | 0.0198569 | 97.7012 | -0.0158487 | 165.8 | 20.5284 |
+| [P0-refit](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P0-refit/carbonate-share.json) | available | 10 | 0.0316987 | 95.0105 | 9 | 0.0394845 | 94.5049 | -5.33783e-12 | 150.763 | 11.6416 |
+| [P1-refit](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/P1-refit/carbonate-share.json) | available | 10 | 0.031497 | 95.0496 | 9 | 0.0392189 | 94.5482 | -0.000201715 | 150.871 | 11.6762 |
+| [M3-refit](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/M3-refit/carbonate-share.json) | available | 10 | 0.0197306 | 97.2835 | 9 | 0.0246596 | 97.0111 | -0.0119682 | 149.667 | 11.5667 |
+| [S1](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/S1/carbonate-share.json) | available | 10 | 0.0382173 | 94.4397 | 9 | 0.0476863 | 93.8798 | 0.00651856 | 151.787 | 11.4889 |
+| [HCO₃⁻ 2.5 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/bicarbonate-anion-2.5/carbonate-share.json) | available | 10 | 0.0317172 | 95.0107 | 9 | 0.0395091 | 94.5051 | 1.84885e-05 | 151.003 | 12.0175 |
+| [HCO₃⁻ 2.9296 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/bicarbonate-anion-2.9296/carbonate-share.json) | available | 10 | 0.031701 | 95.0105 | 9 | 0.0394874 | 94.5049 | 2.22008e-06 | 150.78 | 11.6859 |
+| [HCO₃⁻ 3 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/bicarbonate-anion-3/carbonate-share.json) | available | 10 | 0.0316987 | 95.0105 | 9 | 0.0394845 | 94.5049 | 0 | 150.763 | 11.6416 |
+| [HCO₃⁻ 3.5 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/bicarbonate-anion-3.5/carbonate-share.json) | available | 10 | 0.0316856 | 95.0104 | 9 | 0.0394669 | 94.5048 | -1.31908e-05 | 150.731 | 11.5003 |
+| [HCO₃⁻ 4 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/bicarbonate-anion-4/carbonate-share.json) | available | 10 | 0.0316757 | 95.0103 | 9 | 0.0394537 | 94.5046 | -2.30764e-05 | 150.784 | 11.448 |
+| [CO₃²⁻ 2.4422 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/carbonate-anion-2.4422/carbonate-share.json) | available | 10 | 0.0276149 | 95.3834 | 9 | 0.0343798 | 94.9131 | -0.00408383 | 150.746 | 11.6406 |
+| [CO₃²⁻ 2.5 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/carbonate-anion-2.5/carbonate-share.json) | available | 10 | 0.0280926 | 95.3397 | 9 | 0.0349768 | 94.8653 | -0.0036061 | 150.748 | 11.6407 |
+| [CO₃²⁻ 3 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/carbonate-anion-3/carbonate-share.json) | available | 10 | 0.0316987 | 95.0105 | 9 | 0.0394845 | 94.5049 | 0 | 150.763 | 11.6416 |
+| [CO₃²⁻ 4 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/carbonate-anion-4/carbonate-share.json) | available | 10 | 0.0368625 | 94.5386 | 9 | 0.0459425 | 93.9882 | 0.0051638 | 150.787 | 11.6429 |
+| [CO₃²⁻ 4.953 Å](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/carbonate-anion-4.953/carbonate-share.json) | available | 10 | 0.0402168 | 94.2307 | 9 | 0.0501392 | 93.651 | 0.00851804 | 150.805 | 11.6439 |
+| [Permittivity +5%](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/permittivity-+5pct/carbonate-share.json) | available | 10 | 0.029122 | 95.3634 | 9 | 0.0362817 | 94.893 | -0.00257673 | 150.91 | 12.1662 |
+| [Permittivity -5%](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/permittivity--5pct/carbonate-share.json) | available | 10 | 0.0348965 | 94.5753 | 9 | 0.0434585 | 94.0263 | 0.0031978 | 151.228 | 12.0292 |
+
+The ten fixed F2 parent ratios span 0.00439–0.18234 with geometric mean 0.03170. Jakobsen's minor signals have scarce resolving power below roughly 10% of a common NMR signal. The Born diameters are sensitivity brackets and the share is excluded from the fit. S1 is a jointly refitted negative record. Only fresh admitted parents enter its share reduction.
+
+The 4.953 Å carbonate bracket gives the largest share ratio among the fixed-parameter cases, 0.04022 over 10 matched parents. That is 1.269 times the F2 ratio and about 25 times below the source values on the geometric-mean basis. The permittivity brackets change the unloaded 30 wt% MEA permittivity by ±5% at 313.15 K and 101325 Pa.
+
+S1's cost is 151.787333918 on the original objective and 158.856886364 on the retained joint objective. The fresh checks admitted 10 of ten parents, five tested at 293.15 K and five at 313.15 K, all at 101325 Pa. The trial search found an unconfirmed descent at parent 019. [Parent dispositions](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/S1/parents.json.gz)
+
+The 2.5 Å bicarbonate case reproduced the same-wheel #405 objective at 151.0026764296.
+The 3.5 Å bicarbonate case reproduced the same-wheel #405 objective at 150.7309995152.
+
+| Cation record | Pressure rows | Control cost | Volume-equivalent Born replay cost | Control pressure AARD (%) | Replay pressure AARD (%) |
+| --- | --- | --- | --- | --- | --- |
+| DEA | 30 | 8.08296823 | 8.66288744 | 28.5121 | 28.0938 |
+| MDEA | 66 | 564.48369613 | 560.00367983 | 20.0922 | 17.6775 |
+
+All displayed values come from retained results under [the wheel and F2 record directory](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/controls.json). The study uses the current pinned wheel, with single-threaded numerical libraries and at most three workers. The local refits and finite searches quantify behavior on the stated observations and trial bank.
+
+### Refit endpoints and search timing
+
+| Arm | Previous-start cost | Current-start cost | Selected start | Starts tied | Change from P0 refit | Tied with P0 |
+| --- | --- | --- | --- | --- | --- | --- |
+| P0 | 150.762902879547 | 150.766713874310 | previous | no | +0.00000000 | yes |
+| P1 | 150.871225577284 | 150.871328025253 | previous | yes | +0.10832270 | no |
+| M3 | 149.667373714297 | 149.667331508646 | current | yes | -1.09557137 | no |
+
+The cross-arm tie rule is a relative cost difference of 1e-06 from the lower endpoint. The carbamate–protonated MEA interaction sits at its bound in all three selected refits. The retained F2 information table contains four conditional correlation pairs with magnitude above 0.95. [Coordinates, active bounds, and correlations](results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/refit-comparison.json)
+
+The timed first P0 fit took 65.0 s and converged. The selected P0 endpoint search took 692.1 s, including 991,602 evaluated supplied trials. These are individual wall-clock runs with three workers and single-thread numerical libraries.
+
+### Reproduction
+
+Run the calculation from the repository root with the pinned wheel installed. Use the pilot argument for the P0 timing before launching the remaining arms. The HTML render reads the retained numbers.
+
+```sh
+export AGENT_HEAVY_CORES=3 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py pilot
+agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py
+bash analyses/render.sh mea_parameter_bundle/notebook.qmd --to html
+```
+
+### Before and after text for the manuscript handoff
+
+- **P:theory-02a**
+  - Before. “A single-sphere ion has the temperature-independent diameter $d_i=0.88\sigma_i$.”
+  - After. A single-sphere ion has the packing diameter $d_i=0.88\sigma_i$ (Held et al., 2014, Eq. 21). The Debye–Hückel closest-approach diameter is $\sigma_i$ (Held et al., §2.1). Figiel et al. (2025, p. 9407) use the packing diameter in Debye–Hückel.
+
+- **P:theory-04**
+  - Before. “Figiel et al. restrict the average … to ions and solvents; here it runs over all components.”
+  - After. The average includes molecular CO₂ with unit solvation factor. Figiel’s Eq. 9 averages ions and solvents. The present model assigns the amine unit solvation factor, and Figiel fitted solvent factors for water, methanol and ethanol. Raising the CO₂ factor to 1.5 at fixed coefficients changes $C$ by +0.569. Raising the MEA factor to 1.5 changes the fixed-coefficient cost by +15.037 and the locally refitted cost by -1.096. The exact solvent-and-ion average is pending.
+
+- **P:theory-permittivity-inputs and P:supplement-20**
+  - Before. “At the measurement temperature, two coefficient pairs give identical permittivities at any density.”
+  - After. The coefficient pairs (0.73099 L/mol, 1019.08 K) and (0.24645 L/mol, 2436.44 K) give the same 298.15 K permittivity. At 313.15, 353.15 and 393.15 K in unloaded 30 wt% MEA, the smaller-volume pair raises $\varepsilon-1$ by approximately 0.19%, 0.71% and 1.28% at fixed density. The comparison quantifies the model’s response to the choice.
+
+- **P:theory-amine-species and tab:transfer-species**
+  - Before. “For every amine ion the Debye–Hückel and Born diameters equal the segment diameter.”
+  - After. The Debye–Hückel and Born diameters equal the segment diameter. The volume-equivalent diameters, $\sigma m^{1/3}$, of MEAH⁺, DEAH⁺, MDEAH⁺ and AMPH⁺ are 4.856, 5.108, 5.641 and 6.469 Å. Include the volume-equivalent values alongside the tied Born diameters in the transfer species table.
+
+- **P:supplement-18 and P:supplement-shared**
+  - Before. “The Born diameters of bicarbonate and carbonate are set here at 3.0 Å.” The shared-species subsection specifies the MEA-fitted water–bicarbonate interaction and the Held water–carbonate interaction.
+  - After. The carbonate-share table gives the pressure, objective and share responses across the two Born diameter brackets. Report the six aqueous sodium-salt comparisons with the Peiper–Pitzer reference basis, the two sodium laws, and the tested temperature and molality range.
+
+- **MEA results and Jakobsen carbonate figure caption**
+  - Before. “The small share cannot be attributed to a single parameter, and the fitted pressures do not determine this minor-species partition.”
+  - After. The ten carbonate fractions give a geometric-mean calculated-to-observed ratio of 0.0317. In water, with the declared sodium interactions and $k_{\mathrm{CO_2,Na^+}}=0$, the reactive sodium-salt comparisons also exceed print rounding. The amine-free comparison leaves the cause of the MEA deficit unresolved.
+
+Use the retained values as inputs to the existing number display producers and their readback in #429.
