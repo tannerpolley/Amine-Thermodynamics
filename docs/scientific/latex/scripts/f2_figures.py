@@ -11,6 +11,7 @@ plt.rcParams.update({'font.size':11,'font.family':'STIXGeneral','mathtext.fontse
 STYLES = ['-', '--', '-.', (0, (7, 2, 1, 2, 1, 2)), (0, (5, 1, 1, 1)), (0, (3, 1, 1, 1, 1, 1)), '-', ':']
 TEMPERATURES = [293.15, 313.15, 333.15, 353.15, 373.15, 393.15, 298.15, 322.5]
 COLORS = ['#0072B2','#D55E00','#009E73','#CC79A7','#665500','#007DA8','#222222','#6F4C9B']
+DENSITY_MAP, DENSITY_NORM = matplotlib.colormaps['viridis'], matplotlib.colors.Normalize(293.15, 393.15)  # density figure: one temperature scale for curves and observations
 
 def temperature_style(temperature):
     index = TEMPERATURES.index(float(temperature)) if float(temperature) in TEMPERATURES else 0
@@ -71,6 +72,7 @@ def main():
         rows=a.rows(F/f'model-curves/{file}.csv'); fig,ax=plt.subplots(figsize=(6.8,3.8))
         for key,color in zip(dict.fromkeys(r['curve'] for r in rows),COLORS*3):
             color, style = temperature_style(next(r['temperature_K'] for r in rows if r['curve']==key))
+            if file == 'density': color = DENSITY_MAP(DENSITY_NORM(float(next(r['temperature_K'] for r in rows if r['curve']==key))))
             if file == 'heat' and key.startswith('322.5'):
                 style = ':' if '0.51' in key else '-.'
             part=[r for r in rows if r['curve']==key and r['status']=='available' and r['quantity']==quantity]; part.sort(key=lambda r: float(r['analytical_loading'])); ax.plot([float(r['analytical_loading']) for r in part],[float(r['value'])*scale for r in part],label=key,color=color,linestyle=style)
@@ -90,9 +92,15 @@ def main():
                                      markerfacecolor=face, markersize=SIZE**0.5,
                                      label=f'{T:g} K, {P/1e6:g} MPa'))
             ax.legend(handles=legend, fontsize=9)
-        else:
-            points(ax,obs,'loading','observed_kg_m3','Measured')
-            ax.legend(fontsize=9,ncol=2)
+        else:  # observations colored by temperature on the scale of the curves; filled if fitted (the CO2-free AMU-DENS-n rows are Amundsen state n)
+            fitted = {r['id'].replace('AMU-DENS-', 'Amundsen2009_state_') for r in a.rows(F/'fitted-rows.csv') if r['quantity'] == 'phase_density'}
+            filled = [r['id'] in fitted for r in obs]
+            assert sum(filled) == len(fitted) == 52
+            shade = [DENSITY_MAP(DENSITY_NORM(float(r['T_K']))) for r in obs]
+            ax.scatter([float(r['loading']) for r in obs], [float(r['observed_kg_m3']) for r in obs], s=18, facecolors=[c if f else 'none' for c, f in zip(shade, filled)], edgecolors=shade, linewidths=.8, zorder=3)
+            handles = ax.get_legend_handles_labels()[0] + [Line2D([], [], ls='', marker='o', color='0.3', label='Measured, fitted'), Line2D([], [], ls='', marker='o', markerfacecolor='none', color='0.3', label='Measured, not fitted')]
+            ax.legend(handles=handles, fontsize=9, ncol=2)
+            fig.colorbar(matplotlib.cm.ScalarMappable(norm=DENSITY_NORM, cmap=DENSITY_MAP), ax=ax, label='Temperature (K)')
         ax.set(xlabel='Loading (mol CO$_2$/mol total MEA)',ylabel=ylabel); save(fig,name)
     rows=a.rows(F/'model-curves/mea-water.csv'); fig,ax=plt.subplots(figsize=(6.8,3.4))
     for key,color in zip(dict.fromkeys(r['curve'] for r in rows),COLORS):

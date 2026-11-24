@@ -100,3 +100,58 @@ The producers assert that the five MDEA sets reproduce the pooled 175-row value 
 - The abstract and highlights now use "AARD" without defining it there. This is the numbers-check wording; the owner may prefer "average deviation".
 - Open questions 2–5 above are unchanged.
 
+
+## Round-3 text pass
+
+**Basis.** The round-3 text list of 2026-11-24 (owner decisions), drawn from the four condensed referee reports (Astra 4/5, Sol, Opus and Fable 3/5). No calculation was run and no retained record was edited. Calculations wait for #432; each place that needs one keeps its existing text and carries a `% TODO #432 Qn` comment. The added and moved numbers are in the "Round-3 text pass" section of `429-story-pass-number-sources.md`. `STYLE.md` has a new "Round-3 text pass" row recording the owner decisions this pass applies.
+
+### Items applied
+
+| # | Item | Where |
+|---|---|---|
+| 1 | The 262.9 MPa split is out of the abstract, the highlights, Table 10 (row and footnote removed in the producer), the conclusions and Section 5.2. The main text keeps one sentence ("not globally free of calculated splits"), and the full calculation stays in Section S7.1. | `main.tex`; `dea_displays.py` (Table 10); §4.4; `conclusion.tex`; §5.2 |
+| 2 | Abstract rewritten around one message (phase searches separate calibrations that pressure deviations do not). It has 8 numbers (10.3, 10.5, 73, 353, 20.1, 11.2, 20.1, 33.6), about 190 words, no layered caveats, the DEA negative result, and the testbed use. The preprint abstract mirrors it, and the cover letter follows. Limitations are gathered in §5.5. The §5.1 sentence repeating the Table 10 deviations, the §4.3 caveat list and the conclusion's caveat sentence are removed. | `main.tex`, `chemrxiv.md`, `cover_letter.md`, §4.3, §5.1, §5.5, conclusions |
+| 3 | Highlights: highlight 2 now says "above 353 K, top temperature of fitted loaded pressures". Highlight 4 has the p(CO₂) tradeoff (20.1→11.2 %, 20.1→33.6 %; 85 characters, the Elsevier limit). Highlight 5 is the DEA negative result. | `highlights.txt` |
+| 4 | Table S5: the DEA δh is −11968.4 J/mol on the starting-law basis, labelled like the AMP row; the producer asserts that the record row it replaces is 0. Table 7: the "R4 change at 313.15 K" rows became footnote c on A₄ (−1.309 ± 0.618, +1.233 ± 0.265). Table S20 keeps the level rows as bounds. | `dea_displays.py` |
+| 5 | DEA stated as a negative result and §4.5 shortened (retitled "a negative result for the water–DEA binary"); also in the abstract, introduction, conclusions and highlight 5. | §4.5 |
+| 6 | MDEA–water bound treated as a model-form limitation: §4.4 (unbounded fit converges inside a gap; linear-in-T law about 423 K against 1/T about 313.15 K, with no physical basis beyond placing the bound; "must not be used above about 423 K"), §5.4 (new paragraph), §5.5 and conclusions. | §4.4, §5.4, §5.5 |
+| 7 | Physical plausibility: Hartono 2021 and Tong 2012 were read and report no phase state, so "no report of a second liquid was found". The AMP splits are judged to be artefacts of the extrapolated interaction. The ion-rich liquid is described as resembling a concentrated salt solution, and solid precipitation is stated to be outside the analysis (§4.2, §5.5). Tsanas et al. 2022 is cited for a real split in a loaded amine solvent located by a VLE-fitted eNRTL. | §4.2, §5.5 |
+| 8 | Hong: the main text has one sentence with Hong's own 1.53 % (verified: their §3.2 and Table 3, against Aspen HYSYS output, with a weight fitted at each state) and "present implementation … at fixed pathway weight". The evaluation stays in S10, which now opens with the same label. | §5.3, S10 |
+| 9 | Literature (all verified in Zotero copies): Rodríguez 2012, graphical only on Jou (MEA) and Kuranov (MDEA), no loaded-system deviation (§5.1, §5.4); Tong 2012 quasi-chemical AMP, 1.9 % in loading (§3.4); Böttinger 2008 extended Pitzer DEA speciation, with constants refitted to the NMR (§5); Aronu 2011 extended UNIQUAC, 24.3 % overall p(CO₂), no per-concentration value (abstract, §4.2). Table 11's caption now says the Kuranov identity rests on count, and the text carries Uyan's 22.9 % against Wangler's recalculated 34.4 %. | §4.1.4, §4.2, §4.5, §5.3; `dea_displays.py` |
+| 10 | Exclusion rationale, new paragraph §3.1 `P:methods-selection`. AMP loaded pressures were restricted to the measured R5 range (declaration filter T ≤ 353.5 K). DEA's 394 K isotherm lies above the then-declared 393.15 K end of the shared R2 domain (`historical-f0.qmd`). Kuranov 413 K loaded rows were set aside as extrapolation in the #222 design. The text says plainly that "the exclusions follow no common rule". It also covers MEA (30 wt % only), DEA (one source, with methane) and MDEA/AMP (total pressure only). | §3.1 |
+| 11 | Model-choice notes, one line each in §5.5: MEAH⁺–MEACOO⁻ k on its bound as a possible stand-in for ion pairing; the −0.998 MEA ion-diameter correlation; the cation–CO₂ k and the MDEAH⁺ energy; the CO₂ permittivity coefficients set in this work; no dielectric decrement; the arbitrary MEA permittivity pair; chain versus sphere cations. | §5.5 |
+| 12 | Jakobsen: the carbonate share comes from the chemical shift of the merged ¹³C bicarbonate/carbonate signal (fast exchange), calibrated against standards; the authors call carbonate "most likely overpredicted" (p. 9895). The Tong MEA R4 is Aroua et al. 1999's titration constant extrapolated to zero ionic strength, i.e. measured, not model-regressed (Tong Table 5, p. 44; Aroua Eq. 14). | §4.1.2, §2.4 |
+| 13 | DEA tie rule: §3.3 now says the two DEA solutions agree within optimizer tolerance and that the outside-fit pressures had been inspected before the lower one was reported, so they are development data for that choice. | §3.3 + TODO Q8 |
+| 14 | 27 MDEA states: 23 shown by the search's own trials, four only by an earlier trial composition; a two-phase calculation converges at 16 of 27 (prose-checked against `phase-search-421/measured-phase.json`). Kuranov 81/82 is left as TODO Q8. | §4.4 |
+| 15 | Figures, all through producers: Fig. 2 log–log parity with a 1:1 line; Fig. 5 colored by temperature, filled if fitted (fitted rows matched by id); Fig. 7 R5 line drawn on top (black, zorder 4) and Hartono/Tong measured states as plus signs; Figs 8 and 10 legend titles ("Temperature …; filled: fitted"); Fig. 10 log loading axis; Fig. 13 colored by temperature with a color bar. Table 10 header definitions moved to footnotes a–d. Eq. 6 states the L/mol → m³ conversion. No near-empty page remains (every page has more than 80 words). Captions updated. | `dea_displays.py`, `f2_figures.py` |
+| 16 | Data availability: the version and solver bookkeeping moved verbatim into the deposit README (`scripts/stage_manuscript_deposit.py`, new "Package versions and linear solvers" section). The stager now also deposits `shared-bicarbonate-417/{mea,mdea,reported-mdea}/` (the three Table 8 MDEA fits), so the text can say the deposit holds both AMP fits and all three. The DOI placeholder is kept. | `data_code_availability.tex`, stager |
+
+### Deferred to #432 (TODO locations)
+
+| Question | Location | Reason |
+|---|---|---|
+| Q1: AMP fits at identical absolute pressures | `transfer_results.tex`, §4.2 after the worked split | The grid pressures are multiples of each fit's own bubble pressure. The text now says so but has no paired values. |
+| Q3: conditions of the two k = 0.1325 splits, and the 0.7650 / 1.0 sets at those states | `main.tex` abstract; `transfer_results.tex` §4.3 | "Introduces" was dropped from the abstract ("its searches confirm calculated splits"). The pairing needs the calculation. |
+| Q8: second DEA solution and the tie rule actually used | `data_methods.tex` `P:methods-starts` | Record read pending. |
+| Q8: Kuranov 81/82 accounting | `transfer_results.tex` §5.3 | Table 11 says 70 fitted + 12 not fitted = 82. The 12th (a 393.16 K row, per the MDEA notebook) is not yet stated in the text. |
+
+Not on the text list and therefore not addressed: Q2 (free-slope fit at 373–393 K), Q4 (P_src), Q5 (pH), Q6, Q7, and the #427/#424 pending sentences, which are unchanged.
+
+### Build and checks
+
+- `scripts/build_manuscript.sh`: passes. Main 33 pages, supplement 35; no undefined references or citations; 0 overfull boxes in either log. A first build added one overfull box in Table 10; the column widths were reduced to fix it.
+- `dea_displays.py --check` (25 displays, 99 sources, every prose string), `final_rerun_tables.py --check` (18 tables) and `--reference-states --check`: pass.
+- `python3 scripts/check_private_source.py`: passes.
+- CSE `check_prose.py`: one hit ("regression") fixed. The remaining STYLE.md:67 advisory is the existing row flagged in fix round 1.
+- The graphical abstract is identical to `main`.
+- `figures/generated/pressure-uncertainty.pdf` came out byte-different when `f2_figures.py` was rerun. It is not used by either document, so it was restored to the committed version; the cause of the byte difference was not investigated.
+
+### Open questions
+
+1. Privat, Gani and Jaubert 2010 and the Polishuk papers on SAFT artefacts are not in the Zotero library, so they are not cited. Should they be acquired and read for §5.5?
+2. Mouhoubi et al. 2020 (eNRTL predicts DEEA–MAPA demixing) is in Zotero but not in the `.bib` files. It is not cited; Tsanas 2022 carries the point.
+3. Aroua's R4 constant is on a molar (dm³/mol) basis, while Tong's Table 5 caption says mol/kg. Since Δν(solutes) = +1 for R4, the basis difference is about ln ρ_w ≈ 0.01. This was not checked against the Engine declaration.
+4. Jakobsen et al. judge their carbonate "most likely overpredicted". This bears on the carbonate deficit (§4.1.2); the text now cites it, but the deficit's attribution is unchanged.
+5. No record was found giving a reason why the MEA 15/45 wt % pressures were not fitted. The text describes only their use.
+6. Highlight 4 is exactly 85 characters, the Elsevier limit.
+7. The judgement that the AMP splits are artefacts is the Writer's wording of the owner's request. The owner should confirm it before submission.

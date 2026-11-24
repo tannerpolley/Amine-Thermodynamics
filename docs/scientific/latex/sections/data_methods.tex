@@ -10,6 +10,15 @@ The objectives contain 307 observations for MEA, 80 for DEA, 281 for MDEA and 15
 
 \input{tables/calibration-data}
 
+% P:methods-selection
+The fitted sets were chosen amine by amine, not by one rule.
+The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are held out and compared.
+The DEA objective has one loaded-pressure source, Lawson and Garst, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}); its isotherm at \SI{394}{\kelvin}, above \SI{393.15}{\kelvin}, the upper end of the temperature domain then declared for the shared R2 correlation, is not fitted, and the pressures of Seo and Hong and of Lal et al.\ are development data.
+For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside in the design as an extrapolation, whereas their \COtwo-free pressures at that temperature, which use no reaction, are.
+For AMP the loaded total pressures were restricted to the measured range of the AMP dissociation constant (R5), 293--\SI{353}{\kelvin}, so the pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and those of Tong et al.\ are not fitted.
+That restriction was not applied to DEA or MDEA, of whose fitted pressures 23 of 30 and 29 of 66 lie above their R5 ranges, so the exclusions follow no common rule.
+The fitted loaded pressures of MDEA and AMP are total pressures; their \COtwo partial pressures are held out.
+
 % P:methods-range
 A calculation is attempted for every observation, including those outside the measured temperature range of an equilibrium constant (\cref{tab:reaction-equilibrium-constants}).
 For DEA, MDEA and AMP such observations are marked in Table~\ref{supp-tab:supplement-transfer-data} and in the pressure figures, and Section~\ref{supp-sec:s-ranges} reports them separately.
@@ -54,6 +63,8 @@ With the two Cai observables instead weighted so that each contributes half its 
 
 % P:methods-starts
 Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; these are local solutions, not a global search.
+For DEA the two solutions agree within the optimizer tolerance, and the pressures outside the fit had been inspected before the lower one was reported, so for that choice they are development data (Table~\ref{supp-tab:supplement-transfer-data}).
+% TODO #432 Q8: the second DEA solution (deviations, phase results) and the tie rule actually used.
 The final 11-parameter MEA optimization used no stability penalty.
 Its two starts descended from an earlier stability-penalized calibration, the 16-parameter calibration described next, and they converge to objective values of 150.763 and 150.767.
 

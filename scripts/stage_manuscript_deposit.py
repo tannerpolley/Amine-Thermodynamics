@@ -118,6 +118,7 @@ def selected_files(tracked, records):
         'data/reference/MEA/', 'src/', f'{L}/sections/', f'{L}/styles/', f'{L}/thumbnails/',
         f'{L}/figures/generated/', f'{DEA_RESULTS}/', f'{MDEA_RESULTS}/', f'{AMP_RESULTS}/', f'{STRIPPER}/',
         f'{F2}/', f'{REDUCED}/F0/', f'{B}/results/wheel-recheck-05e94210/',
+        *(f'{MDEA}/results/shared-bicarbonate-417/{name}/' for name in ('mea', 'mdea', 'reported-mdea')),  # the three MDEA fits of main-text Table 8 and the two MEA refits behind them
         f'{B}/results/born-diameter-sensitivity-405/', f'{B}/results/same-data-comparison/hong-2027/',
         f'{B}/results/same-data-comparison/part1/published/',
     ]
@@ -449,6 +450,7 @@ commit is `{identity['manuscript_commit']}`. The deposit was staged from
 | DEA | `{DEA_RESULTS}/`, including the selected fit, property comparisons and stability summary. |
 | MDEA | `{MDEA_RESULTS}/`, including the bounded fit, its comparison and the search outcomes. |
 | AMP | `{AMP_RESULTS}/slope-150/` is the reported model. `{AMP_RESULTS}/main/` is the comparison with the temperature slope fitted. |
+| MDEA, shared water--bicarbonate interaction | `{MDEA}/results/shared-bicarbonate-417/`: `mdea/` holds the MDEA refits at 0.1325 and 1.0, `mea/` the MEA refits at those values and `reported-mdea/` the reported MDEA model on the same observations (main-text Table 8). |
 
 The parameter record paths and SHA-256 hashes are in `manifest.json`.
 The MEA ideal-gas caloric coefficients are in
@@ -462,6 +464,26 @@ The staged bibliography removes a nonprinting keyword field.
 `manifest.json` gives the payload file sizes and hashes.
 `provenance/rebuild-check.json` gives the accepted PDF hashes and the page,
 text and render comparisons. See `software-index.md` for reproduction commands.
+
+## Package versions and linear solvers
+
+The MEA calculations were made with version 1.3.0 of the epcsaft package, and
+the DEA, MDEA and AMP calculations with version 1.3.1. Recalculated with
+version 1.3.1 at the reported parameters, the fitted MEA quantities differ from
+the reported values by less than 2.1e-12 in relative terms, and all 2646
+phase-stability searches again finish without a detected instability. Version
+1.3.2 is public (https://github.com/tannerpolley/epcsaft, release v1.3.2).
+Built from that source for Linux and Python 3.13 with the separately licensed
+HSL MA57 linear solver, it reproduces the reported predictions of all four
+amines at the reported parameters: the fitted MEA quantities differ by less
+than 2.1e-12 in relative terms, all 2646 MEA searches again finish without a
+detected instability, and five searches that did not finish with version
+1.3.1, one for DEA and four for MDEA, now finish without a detected
+instability, while every search that finished before still finishes. The conda
+package uses the MUMPS linear solver and does not require MA57; checked on MEA
+only, its 307 fitted MEA predictions agree with those of the MA57 build within
+1.4e-12 in relative terms. The MEA fit and the refits near the bound were not
+repeated with version 1.3.1, and no fit was repeated with version 1.3.2.
 '''
     (DEST / 'README.md').write_text(readme)
     write_software_index(meta, identity)

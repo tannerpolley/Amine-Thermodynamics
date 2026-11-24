@@ -77,7 +77,7 @@ The bulk permittivity has the Schreckenberg form reported by Yang et al.\ \cite{
  \quad q\in\{V,T\},
  \label{eq:solvent-permittivity}
 \end{equation}
-where $V$ is the phase volume, the neutral set $\mathcal S$ comprises water, the molecular amine and molecular \COtwo, and $n_s=\sum_{i\in\mathcal S}n_i$.
+where $V$ is the phase volume, the neutral set $\mathcal S$ comprises water, the molecular amine and molecular \COtwo, and $n_s=\sum_{i\in\mathcal S}n_i$; the coefficients $d_{V,i}$ are given in L/mol, so with $V$ in \si{\cubic\metre} they are multiplied by \SI{e-3}{\cubic\metre\per\litre} to make $(n_s/V)\,d_{V,\mathrm{mix}}$ dimensionless.
 Ions affect the permittivity only through the phase volume and the neutral amounts.
 
 \subsection{Species and shared parameters}\label{sec:species}
@@ -130,6 +130,7 @@ The correlations of R1--R3 and of MEA have the form \cite{Austgen1991}
 \end{equation}
 where $\Delta_r$ converts the source to the common basis; Table~\ref{supp-tab:supplement-transfer-parameters} gives those of the other amines in an equivalent form.
 R1--R3 and the R4 and R5 correlations of MEA are fixed at their literature forms, and so is R5 of DEA, MDEA and AMP.
+The MEA R4 correlation of Tong et al.\ converts a measured constant: Aroua et al.\ obtained it by titration of dilute MEA solutions and extrapolation to zero ionic strength, not by fitting a solubility model to phase-equilibrium data \cite{Tong2012,arouaEquilibriumConstantCarbamate1999}.
 The R4 correlations of DEA and AMP start from a literature correlation and are then fitted: the fit adjusts the constant term and an enthalpy increment $\delta h$ that changes the temperature dependence through
 \begin{equation}
  \delta\ln K(T)=-\frac{\delta h}{R}\left(\frac1T-\frac1{T_{\mathrm{ref}}}\right).

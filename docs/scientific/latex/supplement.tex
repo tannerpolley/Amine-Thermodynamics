@@ -581,6 +581,7 @@ The subset values are for different observation sets from the 66 pressures fitte
 
 \section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
 % P:supplement-hong-model
+This section gives the present implementation of the model of Hong et al.\ at fixed pathway weight and its evaluation on measured MEA observations; Hong et al.\ themselves report a 1.53\,\% AARD against the simulator pressures to which the model was fitted (their Section~3.2 and Table~3) \cite{hongModelingCO2Absorption2027}.
 Hong et al.\ describe loaded 30 wt\% MEA with a PC-SAFT model of the three components MEA, water and \COtwo, without ions or reaction equilibria \cite{hongModelingCO2Absorption2027}.
 Two association schemes between MEA and \COtwo, one for the carbamate pathway and one for the bicarbonate pathway, are blended by a pathway weight, which their Table~S1 gives at 90 nodes: nine temperatures from 313.15 to \SI{393.15}{\kelvin} and ten loadings from 0.1 to 1.0 mol/mol.
 They fitted the model of the loaded solution to pressures calculated with a process simulator at 30 wt\% MEA, not to measurements.
@@ -621,7 +622,7 @@ The 13 intervals of Kim and Svendsen that end above a loading of 0.60 mol/mol ar
 % P:supplement-hong-stability
 The epcsaft package accepts a bubble point only if the liquid is locally stable, that is, if the lowest eigenvalue of the Hessian of its Helmholtz energy with respect to the component amounts, at fixed temperature and volume, is not negative.
 This local test is not the tangent-plane search of Section~\ref{sec:s-phase}.
-With the weight held fixed, the liquid of the Hong model fails the test at 167 of the 168 measured pressure states, namely 131 of the 132 inside the fitted range, all 13 Hilliard states at 313.00--313.147 K and all 23 Wagner states.
+In the present implementation of the Hong et al.\ model at fixed pathway weight, its liquid fails the test at 167 of the 168 measured pressure states, namely 131 of the 132 inside the fitted range, all 13 Hilliard states at 313.00--313.147 K and all 23 Wagner states.
 It also fails at 62 of the 90 nodes of the weight table, where the lowest eigenvalue of the Hessian scaled by the mole fractions lies between $-1.092$ and $-0.018$.
 At a state that fails the test, the tabulated pressure is an equal-fugacity calculation for that liquid, solved with the vapor amount fixed at $10^{-9}$ of the feed; it is not an equilibrium pressure of the model.
 Every compared heat uses at least one such state.
