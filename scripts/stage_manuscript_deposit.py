@@ -1,9 +1,8 @@
-"""Stage #206's retained Part I manuscript evidence; never upload or reserve a DOI.
+"""Stage #206's retained evidence for the merged manuscript; never upload or reserve a DOI.
 
-Use: stage (moves any old staging aside, copies Part I evidence), rebuild (compiles both PDFs from the
+Use: stage (moves any old staging aside, copies the manuscript evidence), rebuild (compiles both PDFs from the
 staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums).
 """
-import csv
 import datetime
 import hashlib
 import json
@@ -14,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 DEST = Path('/home/tnnrpolley21/Workspaces/External/mea-manuscript-deposit')
@@ -21,12 +21,18 @@ B = 'analyses/mea_parameter_bundle'
 A = f'{B}/results/adoption-297'
 E = f'{A}/paper-evidence'
 L = 'docs/scientific/latex'
-PARAMETER = 'f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97'
-# The accepted PDFs were compiled on the real clock; rebuilds use this fixed time (main.pdf's creation instant).
-SOURCE_DATE_EPOCH = '1794527621'
+DEA = 'analyses/dea_transfer'
+MDEA = 'analyses/mdea_mea_workflow'
+AMP = 'analyses/amp_transfer'
+DEA_RESULTS = f'{DEA}/results/refit-413'
+MDEA_RESULTS = f'{MDEA}/results/bounded-binary-411'
+AMP_RESULTS = f'{AMP}/results/retransfer-412-f2-05e94210'
+F2 = f'{B}/results/paper-evidence-341'
+REDUCED = f'{B}/results/reduced-refit'
+STRIPPER = f'{B}/results/stripper-temperature-409'
+FIGURE_INPUTS = f'{L}/builds/347-figure-hashes.json'
 SOURCE = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip()
 NOTEBOOK = subprocess.check_output(['git', '-C', str(ROOT), 'log', '-1', '--format=%H', SOURCE, '--', f'{B}/notebook.qmd'], text=True).strip()
-INVENTORY_COMMIT = '771410a94f7729915bfe6457bfe7a5a0746f1611'  # a7_presentation.py checks the table generator at this commit
 
 
 def sha(path):
@@ -53,28 +59,136 @@ def pdf_content(pdf):
     return subprocess.check_output(['pdftotext', str(pdf), '-'], text=True), pages
 
 
-def stage():
-    from check_private_source import path_is_blocked
+def metadata():
+    import yaml
 
-    receipt = json.loads((ROOT / L / 'builds/verification-receipt.json').read_text())
-    accepted = {n: ROOT / L / f'builds/{n}.pdf' for n in ('main', 'supplement')}
-    assert sha(accepted['main']) == receipt['pdf_sha256'], 'main.pdf does not match builds/verification-receipt.json'
-    tracked = subprocess.check_output(['git', '-C', str(ROOT), 'ls-files'], text=True).splitlines()
-    prefixes = [f'{A}/', f'{B}/results/uncertainty-307/', f'{B}/results/engine-3e83e19c-phase-search/run-2/',
-                f'{B}/results/engine-3e83e19c-density-free/', f'{B}/results/engine-3e83e19c-refit-chain/',
-                f'{B}/results/engine-3e83e19c-paper-evidence/', f'{B}/data/', f'{B}/scripts/', f'{B}/calibration-misfit/',
-                'data/reference/MEA/', 'src/', f'{L}/']
-    selected = {p for p in tracked if any(p.startswith(q) for q in prefixes)
-                and '/builds/' not in p and '/submission/' not in p and not p.endswith('submission_metadata.yml')
-                and 'mdea' not in p.lower()}  # MDEA files belong to Part II
-    selected.update(['LICENSE', 'pyproject.toml', 'uv.lock', f'{B}/notebook.qmd',
-                     f'{B}/results/selected-current-best-parameters.json',
-                     f'{B}/results/temperature-reanchor-140/never-accessed-vle-admission.csv',
-                     'scripts/stage_manuscript_deposit.py'])
-    # Every file the table and figure generators read is named in their outputs.
-    selected.update(json.loads((ROOT / L / 'figures/generated/provenance.json').read_text())['inputs'])
+    return yaml.safe_load((ROOT / L / 'submission_metadata.yml').read_text())
+
+
+def pdf_identities(meta):
+    return {
+        name: dict(pages=meta[prefix + 'pdf_pages'], sha256=meta[prefix + 'pdf_sha256'])
+        for name, prefix in [('main', ''), ('supplement', 'supplement_')]
+    }
+
+
+def check_parameters(root, records):
+    for record in records:
+        assert sha(root / record['path']) == record['sha256'], record['path']
+
+
+def declared_inputs(name, base=None, *, overridden=()):
+    """Follow hashed data records and specification files read by the fit declarations."""
+    path = ROOT / name
+    base = path.parent if base is None else base
+    document = tomllib.loads(path.read_text()) if path.suffix == '.toml' else json.loads(path.read_text())
+    for key in overridden:
+        del document[key]
+    yield name
+
+    def visit(node):
+        if isinstance(node, dict):
+            if 'path' in node and 'sha256' in node:
+                dependency = Path(os.path.abspath(base / node['path']))
+                relative = dependency.relative_to(ROOT).as_posix()
+                assert sha(dependency) == node['sha256'], relative
+                if dependency.suffix == '.toml':
+                    yield from declared_inputs(relative, base)
+                else:
+                    yield relative
+            for value in node.values():
+                yield from visit(value)
+        elif isinstance(node, list):
+            for value in node:
+                yield from visit(value)
+
+    if isinstance(document, dict) and 'specification' in document:
+        spec = Path(os.path.abspath(base / document['specification']))
+        yield from declared_inputs(spec.relative_to(ROOT).as_posix())
+        if changes := document.get('dataset_changes'):
+            yield from declared_inputs((base / changes['path']).relative_to(ROOT).as_posix(), spec.parent)
+    yield from visit(document)
+
+
+def selected_files(tracked, records):
+    prefixes = [
+        f'{A}/', f'{B}/results/uncertainty-307/', f'{B}/results/engine-3e83e19c-phase-search/run-2/',
+        f'{B}/results/engine-3e83e19c-density-free/', f'{B}/results/engine-3e83e19c-refit-chain/',
+        f'{B}/results/engine-3e83e19c-paper-evidence/', f'{B}/data/', f'{B}/scripts/', f'{B}/calibration-misfit/',
+        'data/reference/MEA/', 'src/', f'{L}/sections/', f'{L}/styles/', f'{L}/thumbnails/',
+        f'{L}/figures/generated/', f'{DEA_RESULTS}/', f'{MDEA_RESULTS}/', f'{AMP_RESULTS}/', f'{STRIPPER}/',
+        f'{F2}/', f'{REDUCED}/F0/', f'{B}/results/wheel-recheck-05e94210/',
+        f'{B}/results/born-diameter-sensitivity-405/', f'{B}/results/same-data-comparison/hong-2027/',
+        f'{B}/results/same-data-comparison/part1/published/',
+    ]
+    selected = {p for p in tracked if p.startswith(tuple(prefixes))}
+    selected.update([
+        'LICENSE', 'pyproject.toml', 'uv.lock', '.gitignore', f'{B}/notebook.qmd',
+        f'{B}/results/selected-current-best-parameters.json',
+        f'{B}/results/temperature-reanchor-140/never-accessed-vle-admission.csv',
+        'analyses/part_ii.py', 'analyses/wheel_recheck_391.py',
+        'analyses/solvent_specification_mea/inputs/endpoint.json',
+        f'{B}/results/adoption-340/part-ii-shared-values.json',
+        f'{REDUCED}/split-registry.json', f'{REDUCED}/split-trials.json', f'{REDUCED}/README.md',
+        f'{REDUCED}/F2/parameters.json', f'{REDUCED}/F2/replay.json', f'{REDUCED}/F2/information.json',
+        f'{B}/results/adoption-340/candidate/replay.json',
+        *(f'{REDUCED}/evidence/F2/{name}' for name in (
+            'state-targets.csv', 'heat.csv', 'cp.csv', 'kim2007-heat-pathways/kim-heat.csv',
+            'heat-capacity-264.json', 'density-268/density.json',
+        )),
+        f'{B}/results/split-cause-342/figure-contributions.csv',
+        f'{B}/results/split-cause-342/final-supplied-F2.json.gz',
+        f'{B}/results/same-data-comparison/matched-score.json',
+        f'{L}/.latexmkrc', f'{L}/main.tex', f'{L}/supplement.tex',
+        f'{L}/chemistry_macros.tex', f'{L}/references.bib', f'{L}/submission/highlights.txt',
+        *(f'{L}/scripts/{name}.py' for name in ('final_rerun_tables', 'f2_figures', 'dea_displays')),
+        *(f'{DEA}/{name}.py' for name in ('f2_carbamate', 'rerun', 'present_current')),
+        *(f'{AMP}/{name}.py' for name in (
+            'fit_412', 'probe_412', 'classify_descents', 'refit_404', 'retain_404', 'pure_binary_on_05e94210',
+        )),
+        *(f'{MDEA}/scripts/{name}.py' for name in ('bounded_binary_411', 'retransfer_343')),
+        f'{DEA}/inputs/part-ii-346/f2-carbamate-413-parameter-table-declarations.json',
+        f'{DEA}/inputs/part-ii-346/parameter-table-declarations.json',
+        f'{DEA}/inputs/part-ii-346/README.md', f'{AMP}/source-admission.md',
+        f'{AMP}/results/retransfer-344-05e94210/data-rows.json',
+        f'{AMP}/results/retransfer-344-05e94210/campaign/new-witnesses.json.gz',
+        f'{AMP}/results/retransfer-344-05e94210/campaign/start-0/retreat-disposition.json',
+        f'{AMP}/results/retransfer-344-05e94210/campaign/start-0/unpenalized/stage-0/parameters.json',
+        *(f'{AMP}/inputs/{name}' for name in ('pure-amp.csv', 'amp-pure-endpoint.json', 'hartono-2013-table-3.csv', 'amp-document.json')),
+        f'{AMP}/results/pure/summary.json', f'{AMP}/results/binary-dielectric.json',
+        f'{MDEA}/inputs/retransfer-343-binary-penalty.json',
+        *(f'{MDEA}/results/retransfer-343/binary-penalty/{name}' for name in (
+            'split-record.json', 'post-binary/data-rows.json', 'summary-row.json', 'curves/curve-rows.json',
+            'parameter-table.json', 'published-pressure-comparisons.json',
+        )),
+        f'{MDEA}/results/retransfer-343/reaction-ranges.json',
+        *(record['path'] for record in records),
+    ])
+    for declaration in (
+        f'{DEA}/inputs/part-ii-346/f2-carbamate-413-route.json',
+        f'{DEA}/inputs/part-ii-346/route-current.json',
+        f'{AMP}/inputs/retransfer-344/phase-2/AMP-05e94210.json',
+        'analyses/solvent_specification_mea/MEA.toml',
+        f'{A}/historical-spec/MEA.toml',
+        f'{B}/results/adoption-340/historical-spec/MEA.toml',
+    ):
+        selected.update(declared_inputs(declaration))
+    # The bounded-fit producer substitutes the retained pressure-figure curve rows.
+    selected.update(declared_inputs(f'{MDEA}/inputs/bounded-binary-411.json', overridden=('curve_rows',)))
+
+    # The checked transfer displays record every file they read, including the older measured-point rows.
+    sources = f'{L}/tables/number-sources.json'
+    selected.update((sources, FIGURE_INPUTS))
+    for inputs in (json.loads((ROOT / sources).read_text()), json.loads((ROOT / FIGURE_INPUTS).read_text())['files']):
+        for name, digest in inputs.items():
+            assert sha(ROOT / name) == digest, name
+            selected.add(name)
+    # Root tables include the current generators' auxiliary display files.
     for table in (ROOT / L / 'tables').glob('*.tex'):
+        selected.add(table.relative_to(ROOT).as_posix())
         selected.update(re.findall(r'^% Input: (\S+) SHA256', table.read_text(), re.M))
+    # Preserve the existing MEA evidence and its original figure receipt.
+    selected.update(json.loads((ROOT / L / 'figures/generated/provenance.json').read_text())['inputs'])
     # Keep the actual file dependencies of retained fit declarations, not whole retired studies.
     pending = [p for p in selected if p.endswith('spec.json')]
     seen = set()
@@ -98,42 +212,73 @@ def stage():
             selected.add(dependency)
             if dependency.endswith('.json'):
                 pending.append(dependency)
-    selected = {p for p in selected if not p.endswith('.whl')}
-    for name in sorted(selected):  # check everything before copying, so a failure leaves no half-staged folder
+    return {p for p in selected if not p.endswith('.whl')}
+
+
+def stage():
+    from check_private_source import PUBLISHED_LINE_HASH, PUBLISHED_PATH, path_is_blocked, scan
+
+    failures = scan(ROOT)
+    if failures:
+        raise SystemExit('\n'.join(failures))
+    meta = metadata()
+    accepted = pdf_identities(meta)
+    for name, identity in accepted.items():
+        pdf = ROOT / L / f'builds/{name}.pdf'
+        assert sha(pdf) == identity['sha256'] and pdf_pages(pdf) == identity['pages'], pdf.name
+    check_parameters(ROOT, meta['parameter_records'])
+    tracked = set(subprocess.check_output(['git', '-C', str(ROOT), 'ls-files'], text=True).splitlines())
+    selected = selected_files(tracked, meta['parameter_records'])
+    for name in sorted(selected):
         assert not path_is_blocked(name), "private-source identifier in deposit path"
-        assert not any(q in name.lower() for q in ('a7-paper-evidence/', 'mdea')), name  # MDEA belongs to Part II
-        assert not name.endswith('.pdf') or 'figures' in name, name  # generated figures only, never source papers
-        assert (ROOT / name).is_file() and not (ROOT / name).is_symlink(), name
+        assert name in tracked and (ROOT / name).is_file() and not (ROOT / name).is_symlink(), name
+        assert 'a7-paper-evidence/' not in name, name
+        assert not name.endswith('.pdf') or 'figures' in name, name  # generated figures only
     if DEST.exists() and any(DEST.iterdir()):  # replace cleanly; the old staging stays for review
         stamp = datetime.datetime.fromtimestamp(DEST.stat().st_mtime).strftime('%Y-%m-%dT%H%M%S')
         DEST.rename(DEST.with_name(f'{DEST.name}-{stamp}-superseded'))
     DEST.mkdir(parents=True, exist_ok=True)
     for name in sorted(selected):
         (DEST / name).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ROOT / name, DEST / name)
-    (DEST / L / 'builds').mkdir()
-    for name, pdf in accepted.items():
-        shutil.copy2(pdf, DEST / L / f'builds/{name}.pdf')
-    # Exact historical table source needed by the generator's Git provenance check.
+        if name == PUBLISHED_PATH:
+            # The repository scan allows an obsolete, nonprinting bibliography keyword field.
+            lines = (ROOT / name).read_bytes().splitlines(keepends=True)
+            (DEST / name).write_bytes(b''.join(
+                line for line in lines if hashlib.sha256(line.rstrip(b'\r\n')).hexdigest() != PUBLISHED_LINE_HASH
+            ))
+        else:
+            shutil.copy2(ROOT / name, DEST / name)
+    for name in accepted:
+        pdf = Path(L) / f'builds/{name}.pdf'
+        shutil.copy2(ROOT / pdf, DEST / pdf)
     history = DEST / 'provenance'
     history.mkdir()
-    (history / 'inventoried-table-generator.py').write_bytes(subprocess.check_output(
-        ['git', '-C', str(ROOT), 'show', f'{INVENTORY_COMMIT}:{L}/scripts/final_rerun_tables.py']))
-    write('provenance/source.json', dict(manuscript_commit=SOURCE, mea_notebook_commit=NOTEBOOK, source_date_epoch=int(SOURCE_DATE_EPOCH)))
+    info = subprocess.check_output(['pdfinfo', '-isodates', str(ROOT / L / 'builds/main.pdf')], text=True)
+    creation_date = re.search(r'^CreationDate:\s+(\S+)', info, re.M)[1]
+    write('provenance/source.json', dict(
+        deposit_commit=SOURCE, manuscript_commit=meta['pdf_commit'], mea_notebook_commit=NOTEBOOK,
+        source_date_epoch=int(datetime.datetime.fromisoformat(creation_date).timestamp()),
+    ))
     subprocess.run(['uv', 'export', '--frozen', '--no-dev', '--no-emit-project',
                     '--no-emit-package', 'epcsaft', '--no-emit-package', 'pcsaft',
                     '--format', 'requirements-txt', '--output-file',
                     str(history / 'presentation-requirements.txt')], cwd=ROOT,
                    stdout=subprocess.DEVNULL, check=True)
+    # The earlier accepted MEA figures carry this renderer version in their PDF metadata.
+    (history / 'matplotlib-3.11.2-linux-x86_64.txt').write_text(
+        'matplotlib==3.11.2 --hash=sha256:1944895967f87c84c9b4bad29a707b31f5b36df4a3a2339ea1f8ea3ce5105539\n'
+    )
     print(f'Staged {len(selected)} source files at {DEST}')
 
 
 def rebuild():
     """Compile both PDFs from the staged copy only, as a reader of the README would, and compare with the accepted PDFs."""
+    identity = load('provenance/source.json')
+    assert identity['deposit_commit'] == SOURCE
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copytree(DEST / L, Path(tmp) / 'latex', ignore=shutil.ignore_patterns('builds'))
         work = Path(tmp) / 'latex'
-        env = {**os.environ, 'SOURCE_DATE_EPOCH': SOURCE_DATE_EPOCH, 'FORCE_SOURCE_DATE': '1', 'TEXINPUTS': './styles//:'}
+        env = {**os.environ, 'SOURCE_DATE_EPOCH': str(identity['source_date_epoch']), 'FORCE_SOURCE_DATE': '1', 'TEXINPUTS': './styles//:'}
         for name in ('main', 'supplement', 'main', 'supplement'):  # each file reads the other's cross-references
             subprocess.run(['latexmk', '-g', '-pdf', '-interaction=nonstopmode', '-halt-on-error', '-outdir=builds', f'{name}.tex'],
                            cwd=work, env=env, check=True, stdout=subprocess.DEVNULL)
@@ -149,113 +294,180 @@ def rebuild():
     print(json.dumps(result, indent=2))
 
 
-def seal():
-    paths = dict(density=f'{E}/density.csv', phase_states=f'{E}/phase-family.csv',
-                 ideal_gas_calorics=f'{E}/source-only/physical-ideal-gas-calorics.json')
-    for path in paths.values():
-        assert (DEST / path).is_file(), path
-    with (DEST / paths['density']).open() as stream:
-        assert len(list(csv.DictReader(stream))) == 210
-    with (DEST / paths['phase_states']).open() as stream:
-        phase = list(csv.DictReader(stream))
-    adopted = {(r['engine_wheel_sha256'], r['parameter_sha256']) for r in phase if r['record'] == 'adopted #255 candidate'}
-    comparison = {(r['engine_wheel_sha256'], r['parameter_sha256']) for r in phase if r['record'] == 'comparison'}
-    assert len(phase) == 324 and sum(r['record'] == 'comparison' for r in phase) == 162 and len(adopted) == len(comparison) == 1
-    parameter = sha(DEST / B / 'results/selected-current-best-parameters.json')
-    assert parameter == PARAMETER
-    records = load(f'{L}/figures/generated/provenance.json')['records']
-    engine, historical = records['reported']['engine'], records['comparison']
-    assert (engine['wheel_sha256'], parameter) in adopted
-    assert (historical['engine']['wheel_sha256'], historical['parameter_sha256']) in comparison
-    rebuilt = load('provenance/rebuild-check.json')
-    pdfs = {}
-    for name, pages in [('main', 24), ('supplement', 22)]:
-        path = DEST / L / f'builds/{name}.pdf'
-        assert pdf_pages(path) == pages == rebuilt[name]['pages'] and sha(path) == rebuilt[name]['accepted_sha256']
-        pdfs[name] = dict(pages=pages, sha256=sha(path))
-    readme = f'''# MEA manuscript deposit, Part I: preparation only
+def write_software_index(meta, identity):
+    display_base = load(FIGURE_INPUTS)['commit']
+    engines = '\n'.join(
+        f"| {record['scope']} | {record['version']} | `{record['engine_commit']}` | `{record['engine_wheel_sha256']}` |"
+        for record in meta['engines']
+    )
+    (DEST / 'software-index.md').write_text(f'''# Software and commands
 
-Nothing has been uploaded or published. No DOI has been reserved. This staging represents manuscript commit `{SOURCE}` (Part I, main 24 pages, supplement 22 pages). Owner review and all publication actions remain separate gates. The MDEA evidence belongs to Part II and is not included.
+## Engine identities
 
-Scientific basis: the adopted MEA notebook at `{NOTEBOOK}`. Notebook text and historical receipts retain their status at authoring. No calculations were rerun in preparing this deposit.
+| Calculation | epcsaft version | Engine commit | Wheel SHA-256 |
+|---|---|---|---|
+{engines}
 
-- Adopted MEA parameters: `{B}/results/selected-current-best-parameters.json`, SHA-256 `{parameter}`.
-- Adopted-record Engine source: `{engine['commit']}`; immutable wheel `{Path(engine['wheel_path']).name}`, SHA-256 `{engine['wheel_sha256']}`. This wheel produced every adopted result and the 162 adopted phase states.
-- Historical comparison fit (the fit without a phase-stability requirement, parameter SHA-256 `{historical['parameter_sha256']}`): Engine source `{historical['engine']['commit']}`; wheel SHA-256 `{historical['engine']['wheel_sha256']}`. Only its comparison calculations and its 162 comparison phase states need this second wheel.
+Use CPython 3.13. The wheels are supplied through the corresponding author.
+Verify each wheel against the table and install the wheel for the calculation
+in its own environment. HSL MA57 requires a separate licence. The locked
+Python dependencies are listed in `uv.lock`. The current `pyproject.toml`
+binds version 1.3.1 at its expected repository-relative wheel path. For
+version 1.3.0 use the path suffix starting at `build/engine-wheels/` in
+`{F2}/wheel.json`, relative to the scratch checkout.
 
-Both wheels are omitted. Referee access to the compiled library is to be arranged by the corresponding author. HSL MA57 is separately licensed and is not redistributed. No source-paper PDFs or private-source material are included. Analysis code is supplied under the MIT license (`LICENSE`); third-party measurements retain their source terms.
+## Displays and PDFs
 
-## Data the manuscript says the deposit supplies
-
-| Statement in the manuscript | Deposited file |
-|---|---|
-| complete 210-observation density table (supplement) | `{paths['density']}` |
-| complete 162-state table for both fits (supplement); the `record` column names the fit and `engine_wheel_sha256` its wheel | `{paths['phase_states']}` |
-| neutral ideal-gas caloric coefficients (main text) | `{paths['ideal_gas_calorics']}` |
-
-Other same-named records in the repository are provenance or intermediate records, not alternate mappings.
-'''
-    figure_names = sorted({name for source in (DEST / L).rglob('*.tex')
-                           for name in re.findall(r'\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}', source.read_text())
-                           if name.endswith('.pdf')})
-    for name in figure_names:
-        assert (DEST / L / 'figures/generated' / name).is_file(), name
-    readme += '\nLaTeX figure filenames resolve as follows:\n\n' + ''.join(
-        f'- `{name}`: `{L}/figures/generated/{name}`\n' for name in figure_names)
-    readme += f'''
-## Contents and limits
-
-`{A}/` holds the adopted record's retained evidence: the 307-row replay, the 162-state phase searches of the adopted and comparison fits, conditional uncertainty, the paper-evidence tables and the retained wheel and input identities (`wheel.json`, `input-identity.json`, `inventory.json`). `{B}/results/uncertainty-307/` holds the covariance, profiles and prediction bands. The `engine-3e83e19c-*` directories under `{B}/results/` retain the historical comparison fit and its phase search. The phase searches are numerical verification and conditional calibration, not independent physical validation or a global stability proof.
-
-`data/reference/MEA/` retains processed measurements, provenance, source locators and data-role declarations. Current tables, vector figure PDFs, PNG previews and rendering code are under `{L}/` and `{B}/scripts/`. Application calculation code is under `src/`. The obsolete `a7-paper-evidence/` package is excluded.
-
-## Reproduction
-
-Start at the deposit root. Run `sha256sum -c SHA256SUMS` before doing anything else. Preserve an untouched copy because generators overwrite displays and receipts. Python 3.13 is required. `pyproject.toml` and `uv.lock` are byte-identical snapshots of the manuscript environment; the adopted wheel path is intentionally unresolved until supplied through referee access.
-
-For rendering retained values, only matplotlib and its dependencies are required. Exact package pins are recorded in `uv.lock`. The table generator also checks a historical source using `git show`. In a copied deposit, obtain that Git object with:
+Work in a copy because the generators write displays and receipts.
+`final_rerun_tables.py` and `f2_figures.py` check the archived numerical inputs
+against a Git snapshot. From the deposit root:
 
 ```bash
 git init
-git fetch --depth=1 https://github.com/tannerpolley/Amine-Thermodynamics.git {INVENTORY_COMMIT}
-```
-
-The matching historical source is also retained as `provenance/inventoried-table-generator.py`. This Git fetch is a reproduction prerequisite, not a publication action.
-
-```bash
+git fetch --depth=1 https://github.com/tannerpolley/Amine-Thermodynamics.git {display_base}
 uv venv --python 3.13 .venv-presentation
 uv pip sync --python .venv-presentation/bin/python provenance/presentation-requirements.txt
-nice -n 10 .venv-presentation/bin/python docs/scientific/latex/scripts/final_rerun_tables.py
-nice -n 10 .venv-presentation/bin/python analyses/mea_parameter_bundle/scripts/render_manuscript_figures.py
+mkdir -p {L}/builds
+.venv-presentation/bin/python {L}/scripts/final_rerun_tables.py --check
+.venv-presentation/bin/python {L}/scripts/dea_displays.py --check
+.venv-presentation/bin/python {L}/scripts/f2_figures.py
 ```
 
-Build both PDFs using pdfLaTeX/latexmk and BibTeX, with the supplied CAS class and styles, after installing the TeX packages named in the preamble. The two documents read each other's cross-references, so build main, supplement, main, supplement. From `{L}/`:
+The locked Matplotlib 3.10.9 reproduces the checked transfer displays and
+five MEA figures. The accepted `density-curves.pdf`, `mea-water.pdf` and
+`split-energy.pdf` use Matplotlib 3.11.2. Regenerate those three in a
+second scratch copy using the same commands, with this additional install
+after `uv pip sync` and before calling `f2_figures.py`:
 
 ```bash
-mkdir -p builds
+uv pip install --python .venv-presentation/bin/python --no-deps --require-hashes -r provenance/matplotlib-3.11.2-linux-x86_64.txt
+```
+
+Build with pdfLaTeX, latexmk and BibTeX. The two documents read each other's
+cross-references. The accepted LaTeX inputs and vector figures are ready for
+this build directly, with no Python environment required.
+
+```bash
+cd {L}
 for name in main supplement main supplement; do
-  SOURCE_DATE_EPOCH={SOURCE_DATE_EPOCH} FORCE_SOURCE_DATE=1 TEXINPUTS='./styles//:' nice -n 10 latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds $name.tex
+  SOURCE_DATE_EPOCH={identity['source_date_epoch']} FORCE_SOURCE_DATE=1 TEXINPUTS='./styles//:' \\
+    latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds "$name.tex"
 done
 ```
 
-The PDFs in `{L}/builds/` are the accepted builds, compiled on the real clock. A rebuild with the command above from this deposit alone gave the same page counts, text and rendered pages (`provenance/rebuild-check.json`); only the creation date and file identifier differ, so its SHA-256 differs.
+## Numerical reproduction
 
-For calculation replay, obtain the matching wheels and the licensed solver first. Place each wheel at the path identified by its retained runtime receipt, relative to a fresh copy of this deposit. The adopted wheel uses the path in `pyproject.toml`; run `uv sync --locked`, then use `UV_NO_SYNC=1 uv run python` for the retained scripts. `{B}/scripts/adoption_297.py` records the qualification sequence and command options (`f1`, `f2`, `f3`, `evidence`, `extras`, `phase-export`, `f5`); see its retained execution logs under `{A}/logs/`. These are expensive calculation reruns, separate from rendering retained results, and were not attempted for this deposit because the wheels and HSL are omitted.
+Run the commands below from the repository root in a scratch checkout at the
+recorded source, with the matching wheel installed. Several producers verify
+Git provenance and compare against historical baselines. The deposited
+records support the paper and display generation directly. Use the named
+historical Git inputs for the original numerical campaigns.
 
-## Build identities and inventories
+```bash
+export AGENT_HEAVY_CORES=4 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src
+```
 
-- Main PDF: SHA-256 `{pdfs['main']['sha256']}` (24 pages).
-- Supplement PDF: SHA-256 `{pdfs['supplement']['sha256']}` (22 pages).
+**MEA (1.3.0).** The calibration campaign and reductions use
+`{B}/scripts/reduced_refit_338.py`. See the command sequence in
+`{REDUCED}/README.md` and the F2 evidence recipe in `{F2}/README.md`.
 
-`manifest.json` lists each payload file's role, byte size and SHA-256, plus manuscript, parameter, Engine and PDF identities. It excludes itself and `SHA256SUMS` to avoid a recursive checksum. `SHA256SUMS` covers all final files except itself, including the manifest. `provenance/verification.json` records the data-file and wheel-label checks. These checks establish file identity and staging completeness; they add no new scientific result.
+```bash
+python {B}/scripts/reduced_refit_338.py campaign
+for action in replay evidence uncertainty comparison weights shared checks stability; do
+  python {B}/scripts/paper_evidence_341.py "$action"
+done
+python {B}/scripts/stripper_temperature_409.py table
+python {B}/scripts/stripper_temperature_409.py replay /path/to/f7e09b9ec-export
+python {B}/scripts/hong_2027.py /path/to/scratch-hong-results
+```
+
+The stripper heat replay uses the exact producer from Git commit
+`f7e09b9ec` as described in `{STRIPPER}/README.md`. The retained heat
+replay is sufficient to regenerate the band table. The 1.3.1 wheel recheck
+uses `python analyses/wheel_recheck_391.py part-i ACTION RUN_DIRECTORY`;
+see that script's action and comparison commands.
+
+**DEA (1.3.1).** The preflight uses `selection.json` and `paper-data.csv`
+from the earlier `{DEA}/results/retransfer-398/` in the Git checkout.
+
+```bash
+run={DEA}/results/runs/413-reproduce
+python {DEA}/f2_carbamate.py prepare
+python {DEA}/f2_carbamate.py run "$run"
+python {DEA}/present_current.py "$run" "$run-paper" "$run-replay-398" \\
+  F2-carbamate F0-carbamate 413 inputs/part-ii-346/f2-carbamate-413-parameter-table-declarations.json
+```
+
+**MDEA (1.3.1).** The bounded campaign reuses the earlier starts, trial bank
+and measured-point locations included as individual inputs.
+
+```bash
+for action in critical fit unbounded report search retain; do
+  python {MDEA}/scripts/bounded_binary_411.py "$action"
+done
+```
+
+**AMP (1.3.1).** The free-slope comparison supplies the warm start for the
+reported fixed-slope model. The historical F0 diagnostics and the final
+`fit_412.py retain -150` reduction also read earlier comparison rows from
+`{AMP}/results/retransfer-404-05e94210/main/` in the Git checkout.
+
+```bash
+export PYTHONPATH=src:analyses
+python {AMP}/fit_412.py reference
+python {AMP}/fit_412.py -125 -150 -175
+python {AMP}/fit_412.py confirm -150
+python {AMP}/probe_412.py f2
+```
+''')
+
+
+def seal():
+    meta = metadata()
+    identity = load('provenance/source.json')
+    assert identity['deposit_commit'] == SOURCE
+    check_parameters(DEST, meta['parameter_records'])
+    rebuilt = load('provenance/rebuild-check.json')
+    pdfs = pdf_identities(meta)
+    for name, pdf in pdfs.items():
+        path = DEST / L / f'builds/{name}.pdf'
+        assert pdf['pages'] == pdf_pages(path) == rebuilt[name]['pages']
+        assert pdf['sha256'] == sha(path) == rebuilt[name]['accepted_sha256']
+        assert rebuilt[name]['text_identical'] and rebuilt[name]['rendered_pages_identical']
+
+    readme = f'''# Data and code for the aqueous amine ePC-SAFT manuscript
+
+The accepted main text and supplement are in `{L}/builds/`. Their source
+commit is `{identity['manuscript_commit']}`. The deposit was staged from
+`{SOURCE}`. This is local preparation for Zenodo.
+
+| Model | Reported evidence |
+|---|---|
+| MEA | `{F2}/`, including the density, carbonate share and stability evidence. The 16-parameter comparison is under `{REDUCED}/F0/`. |
+| MEA at stripper temperatures | `{STRIPPER}/`, including observation-level results and band reductions. |
+| DEA | `{DEA_RESULTS}/`, including the selected fit, property comparisons and stability summary. |
+| MDEA | `{MDEA_RESULTS}/`, including the bounded fit, its comparison and the search outcomes. |
+| AMP | `{AMP_RESULTS}/slope-150/` is the reported model. `{AMP_RESULTS}/main/` is the comparison with the temperature slope fitted. |
+
+The parameter record paths and SHA-256 hashes are in `manifest.json`.
+The MEA ideal-gas caloric coefficients are in
+`{E}/source-only/physical-ideal-gas-calorics.json`.
+The numerical observations retain their published source terms. The supplied
+analysis code uses the MIT license in `LICENSE`.
+The staged bibliography removes a nonprinting keyword field.
+
+`SHA256SUMS` covers every deposited file except itself. Run
+`sha256sum -c SHA256SUMS` from the root before making changes.
+`manifest.json` gives the payload file sizes and hashes.
+`provenance/rebuild-check.json` gives the accepted PDF hashes and the page,
+text and render comparisons. See `software-index.md` for reproduction commands.
 '''
     (DEST / 'README.md').write_text(readme)
-    write('provenance/verification.json', dict(deposited_data=paths, density_rows=210, phase_state_rows=324,
-          adopted_wheel_labels=sorted(adopted), comparison_wheel_labels=sorted(comparison), mea_parameter_sha256=parameter, pdfs=pdfs))
+    write_software_index(meta, identity)
     files = sorted(p for p in DEST.rglob('*') if p.is_file() and p not in (DEST / 'manifest.json', DEST / 'SHA256SUMS'))
     entries = [dict(path=str(p.relative_to(DEST)), role=('manuscript source or display' if str(p.relative_to(DEST)).startswith(L) else 'retained data, provenance, environment or application code'), bytes=p.stat().st_size, sha256=sha(p)) for p in files]
-    write('manifest.json', dict(publication='preparation only; nothing published', manuscript_commit=SOURCE, mea_notebook_commit=NOTEBOOK,
-          mea_parameter_sha256=parameter, adopted_engine=engine, comparison_engine=historical, pdfs=pdfs, files=entries))
+    write('manifest.json', dict(**identity, engines=meta['engines'], parameter_records=meta['parameter_records'],
+                                pdfs=pdfs, files=entries))
     files = sorted(p for p in DEST.rglob('*') if p.is_file() and p != DEST / 'SHA256SUMS')
     (DEST / 'SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.relative_to(DEST)}\n' for p in files))
     print(json.dumps(dict(path=str(DEST), files=len(files)+1, bytes=sum(p.stat().st_size for p in files)+(DEST/'SHA256SUMS').stat().st_size)))
