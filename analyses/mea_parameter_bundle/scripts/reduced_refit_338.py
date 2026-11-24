@@ -101,7 +101,7 @@ def replay():
     assert report['passed'], '#338 stop: F0 replay failed'
 
 
-def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalty_rows=None):
+def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalty_rows=None, rows=None):
     """Use at most two same-control continuations after a limit.
 
     A caller supplying penalty_rows controls the endpoint search.
@@ -121,8 +121,8 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalt
         if route:
             if attempt and (route.out/name/f'stage-{attempt}/interrupted.json').is_file():
                 continue
-            rows = penalty_rows if penalty_rows is not None else route.penalty_states(enforced,route.bind(start)) if scale else []
-            report = r.stage_fit(name,attempt,scale,mapping,{},rows,route=route)
+            penalties = penalty_rows if penalty_rows is not None else route.penalty_states(enforced,route.bind(start)) if scale else []
+            report = r.stage_fit(name,attempt,scale,mapping,{},penalties,route=route)
             if not report.get('endpoint_replay_available'):
                 route.write(f'{name}/stage-{attempt}/unavailable.json',report)
                 return previous_endpoint if previous_endpoint is not None else (None, report)
@@ -147,13 +147,13 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalt
             spec = r.bind(mapping)
             spec.inputs['endpoint'] = mapping
             declared = r.coordinates(spec, {}, fitted=fitted, fixed=fixed, ties=ties)
-            values, ok, cost = r.replay(mapping)
+            values, ok, cost = r.replay(mapping, rows)
             write(f'{name}/declaration.json',dict(declared=declared,fixed=fixed,available=ok,cost=cost))
             if not ok:
                 write(f'{name}/no-candidate.json',dict(reason='first-start 307-row evaluation unavailable',rows=values))
                 return None, None
             r.OUT = OUT
-            report = r.stage_fit(name,attempt,scale,mapping,{},[] if scale is None else enforced,fitted=fitted,fixed=fixed,ties=ties)
+            report = r.stage_fit(name,attempt,scale,mapping,{},[] if scale is None else enforced,fitted=fitted,fixed=fixed,ties=ties,rows=rows)
             report.update(fixed=fixed,wheel_sha256=a.SHA)
             write(f'{name}/attempt-{attempt}.json',report)
             if not report['physical'] or not report['reactions']:
@@ -166,8 +166,8 @@ def fit(name, start, fixed, fitted, ties=None, scale=None, route=None, *, penalt
             break
     if route:
         return mapping, report
-    rows, ok, cost = r.replay(mapping)
-    write(f'{name}/replay.json',dict(rows=rows,available=ok,cost=cost))
+    values, ok, cost = r.replay(mapping, rows)
+    write(f'{name}/replay.json',dict(rows=values,available=ok,cost=cost))
     assert not ok or a.relative(cost,report['data_cost'] if report['data_cost'] is not None else report['final_cost'])<=1e-8
     assert all(r.s.parameter_values(mapping)[k]==v for k,v in fixed.items())
     declared = report['declared']

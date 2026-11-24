@@ -1,0 +1,96 @@
+{
+  "resource_limits": {
+    "runner": "agent-heavy",
+    "workers": 4,
+    "BLAS_threads": 1
+  },
+  "runs": [
+    {
+      "command": "audit",
+      "run": "campaign",
+      "wall_seconds": 85.17,
+      "max_process_rss_KiB": 178388,
+      "exit_code": 0
+    },
+    {
+      "command": "fit",
+      "run": "campaign",
+      "wall_seconds": 169.1,
+      "max_process_rss_KiB": 131792,
+      "exit_code": 0
+    },
+    {
+      "command": "time-search",
+      "run": "campaign",
+      "wall_seconds": 17.67,
+      "max_process_rss_KiB": 164688,
+      "exit_code": 0
+    },
+    {
+      "command": "search",
+      "run": "campaign",
+      "wall_seconds": 581.55,
+      "max_process_rss_KiB": 373264,
+      "exit_code": 0
+    },
+    {
+      "command": "search-counts",
+      "run": "reductions",
+      "wall_seconds": 1.15,
+      "max_process_rss_KiB": 201024,
+      "exit_code": 0
+    },
+    {
+      "command": "compare",
+      "run": "reductions",
+      "wall_seconds": 25.66,
+      "max_process_rss_KiB": 126840,
+      "exit_code": 0
+    },
+    {
+      "command": "audit",
+      "run": "reductions",
+      "wall_seconds": 5.45,
+      "max_process_rss_KiB": 99652,
+      "exit_code": 1,
+      "cause": "Native physical covariance includes 16 targets. The 10-coordinate table now uses the optimizer covariance and the declared coordinate scales."
+    },
+    {
+      "command": "audit",
+      "run": "final audit",
+      "wall_seconds": 72.31,
+      "max_process_rss_KiB": 181352,
+      "exit_code": 0
+    },
+    {
+      "command": "compare",
+      "run": "final comparisons",
+      "wall_seconds": 16.03,
+      "max_process_rss_KiB": 126092,
+      "exit_code": 0
+    },
+    {
+      "command": "handoff",
+      "run": "final handoff",
+      "wall_seconds": 43.59,
+      "max_process_rss_KiB": 166320,
+      "exit_code": 0
+    }
+  ],
+  "timing_unit": {
+    "census_index": 40,
+    "composition_trials": 6121
+  },
+  "code": {
+    "base": "bcf32c440d0c7ccda616ce3c4a58769f36a071ad",
+    "estimate": 300,
+    "gross_added_python_lines": 647,
+    "executable_notebook_lines": 0,
+    "files": {
+      "analyses/mdea_mea_workflow/scripts/shared_bicarbonate_417.py": 3,
+      "analyses/mea_parameter_bundle/scripts/objective_weights_420.py": 623,
+      "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py": 7,
+      "analyses/mea_parameter_bundle/scripts/stable_refit_255.py": 14
+    }
+  }
+}

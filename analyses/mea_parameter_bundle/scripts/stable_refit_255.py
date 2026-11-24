@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[3]
 B = ROOT / 'analyses/mea_parameter_bundle'
 sys.path[:0] = [str(B / 'scripts'), str(B / 'calibration-misfit'), str(ROOT / 'src')]
 import shared_evaluation as s
+from MEA.common.retained_results import read as read, result as read_result
 
 COMMIT = 'bc7794731e94be961d16028d3f4880c6718a93ad'
 SHA = '8b9609d4c8908d9397833988158f525c92dd28e3bcf7333f4c3b33c48db99069'
@@ -49,11 +50,6 @@ CENSUS_T = (313.15, 318.15, 333.15, 353.15, 373.15, 393.15)
 CENSUS_A = (1e-5, .05, .1, .2, .256, .3, .4, .5, .6)
 
 
-def read(path):
-    path = Path(path)
-    return json.loads(gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_bytes())
-
-
 def write(rel, value):
     path = OUT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -62,9 +58,7 @@ def write(rel, value):
 
 
 def result(rel):
-    payload = read(OUT / rel)
-    assert payload['wheel_sha256'] == SHA
-    return payload['result']
+    return read_result(OUT, rel, SHA)
 
 
 def verify():
@@ -455,6 +449,14 @@ def _census(task):
         p255.f.stability = lambda model, problem, result: original(
             model, problem, result, supplied=previous[0], retained=original(model, problem, result))
     row = {k: state[k] for k in ('index', 'temperature_K', 'loading', 'pressure_Pa')}
+    confirm = previous[3] if len(previous) > 3 else None
+    if confirm:
+        supplied_stability = p255.f.stability
+        def capture(model, problem, result):
+            parent[:] = [model, problem, result]
+            return supplied_stability(model, problem, result)
+        parent = []
+        p255.f.stability = capture
     try:
         p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
     except epcsaft.EosError as error:
@@ -463,6 +465,8 @@ def _census(task):
         raw = read(path) if path.exists() else row
         s.write_json(path, dict(raw, classification='unavailable', failure=str(error)))
     finally:
+        if confirm:
+            p255.f.stability = supplied_stability
         if previous and previous[0]:
             p255.f.stability = original
     raw = read(path)
@@ -480,10 +484,12 @@ def _census(task):
             report['supplied_minimum_tpd'] = min((t['quantities']['tpd_over_rt'] for t in trials if t['evidence']=='evaluated'), default=None)
             report['supplied_trials'] = [dict(t, bank_index=i) for i,t in enumerate(trials)
                                          if t['evidence']!='evaluated' or supplied_negative(t)]
+    if confirm and (reduced['resolved'] or reduced.get('supplied_negative')):
+        raw['coexistence'] = confirm(*parent, raw['stability'][0], previous[0])
     return raw, reduced
 
 
-def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False):
+def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False, confirm=None):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
     if indices is not None:
@@ -492,7 +498,7 @@ def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, com
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied) for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied, confirm) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]

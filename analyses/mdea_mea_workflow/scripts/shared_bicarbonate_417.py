@@ -81,9 +81,9 @@ def witnesses(route, point, rows):
     return dict(counts=counts, witnesses=details, pressure_roots=phases)
 
 
-def mea_search(label, mapping, k):
+def mea_search(label, mapping, k, *, output=None, confirm=None):
     started = time.monotonic()
-    r.OUT = run_key(label, mapping, k)
+    r.OUT = output if output is not None else run_key(label, mapping, k)
     registry = r.read(BASE/'split-registry.json')['trials']
     control = r.read(BASE.parent/'wheel-recheck-05e94210/stability-adopted-law/search.json')
     digest = hashlib.sha256(json.dumps(registry, sort_keys=True).encode()).hexdigest()
@@ -94,7 +94,7 @@ def mea_search(label, mapping, k):
     grid = r.grid(mapping, main+offset, bank, capture=True)
     r.write('search/grid.json.gz', grid)
     census = r.census(mapping, 'search', dict.fromkeys(map(str, range(162)), registry),
-                      keep_refusals=True, compact_supplied=True)
+                      keep_refusals=True, compact_supplied=True, confirm=confirm)
     supplied = Counter()
     for raw in r.result('search/census-raw.json.gz'):
         for report in raw.get('stability', []):

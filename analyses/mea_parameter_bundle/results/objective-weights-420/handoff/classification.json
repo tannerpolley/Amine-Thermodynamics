@@ -1,0 +1,55 @@
+{
+ "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+ "result": {
+  "key": "dense|0.15|313.15|0.125|1.05",
+  "native_branch": "liquid",
+  "supplied_branch": "none",
+  "attempts": [
+   {
+    "message": "declared phases L1 and L2 coalesced at T = 313.15 K, P = 7405.79 Pa (phase distance 6.66134e-16 at most PHASE_COINCIDENCE_DISTANCE); the declared split was rejected; Discover() searches other phase sets; phases_coincide: phase distance between L1 and L2 is too small: 6.6613381477509392e-16; amount chart physical_mol; retry after start_amount: phase L1 vanished: its amount reached at most PHASE_DISAPPEARANCE_AMOUNT of the feed; the declared split was rejected; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition in phase L1",
+    "requested_tolerance_met": true,
+    "amounts_mol": [],
+    "confirmed": false,
+    "outcome": "unconfirmed"
+   }
+  ],
+  "temperature_K": 313.15,
+  "pressure_Pa": 7405.7884626234845,
+  "feed_mol": [
+   1.2161602625,
+   9.7292821,
+   186.9246062482515,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "parent_roots": [
+   {
+    "requested": "liquid",
+    "returned": "liquid",
+    "density": 49491.84265178151,
+    "log_density_distance": 0.0,
+    "relative_pressure_residual": 7.548139890900529e-11
+   },
+   {
+    "requested": "vapor",
+    "returned": "vapor",
+    "density": 2.8925825011255473,
+    "log_density_distance": 9.74741343795528,
+    "relative_pressure_residual": 0.0
+   }
+  ],
+  "outside_ranges": {
+   "R4": "source range unknown",
+   "R5": "source range unknown",
+   "R1": false,
+   "R2": false,
+   "R3": false
+  },
+  "supplied_pressure_roots": [],
+  "liquid_directed": true
+ }
+}

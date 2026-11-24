@@ -60,6 +60,11 @@ def branch_counts(row):
                 liquid_liquid_split=row.get('parent_kind')=='Liquid' and any(t.get('density_side')==2 for t in native))
 
 
+def active_bound_indices(coordinates):
+    return [i for i, q in enumerate(coordinates)
+            if min(q['origin']-q['bounds'][0], q['bounds'][1]-q['origin']) <= 1e-6*q['scale']]
+
+
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
@@ -425,8 +430,7 @@ class Route:
         used = {r.name for r in problem.reactions} if problem is not None else set(self.config['reaction_ranges_K'])
         return {name: 'reaction not used' if name not in used else 'source range unknown' if self.config['reaction_ranges_K'].get(name) is None else not self.config['reaction_ranges_K'][name][0]<=T<=self.config['reaction_ranges_K'][name][1] for name in used|set(self.config['reaction_ranges_K'])}
 
-    def uncertainty(self, point):
-        (self.out/'conditional-uncertainty.json').unlink(missing_ok=True)
+    def differentiate_endpoint(self, point):
         spec = self.bind(point)
         declared = point['coordinates']
         rows = spec.inputs['observations']['fitted']
@@ -435,8 +439,14 @@ class Route:
         assert all(status.name=='Available' for status in ev.statuses)
         assert available and [r['identity'] for r in replay]==[r['identity'] for r in rows]
         assert np.allclose(ev.predictions,[r['value'] for r in replay],rtol=1e-8,atol=0.), 'Differentiation/replay row mismatch'
+        return spec, replay, ev
+
+    def uncertainty(self, point):
+        (self.out/'conditional-uncertainty.json').unlink(missing_ok=True)
+        spec, replay, ev = self.differentiate_endpoint(point)
+        declared = point['coordinates']
         J = spec.whiten(np.array(ev.residual_optimizer_gradient).reshape(-1,len(declared)))/np.array([q['scale'] for q in declared])
-        active = [i for i,q in enumerate(declared) if min(q['origin']-q['bounds'][0],q['bounds'][1]-q['origin'])<=1e-6*q['scale']]
+        active = active_bound_indices(declared)
         result = conditional_information(SimpleNamespace(physical=[q['origin'] for q in declared],covariance=SimpleNamespace(active_bounds=active)),J,spec.whiten(np.array([r['residual'] for r in replay])),[q['identity'] for q in declared],[q['bounds'][0] for q in declared],[q['bounds'][1] for q in declared])
         self.write('conditional-uncertainty.json',dict(result,coordinates=declared,active_bounds=active))
 
