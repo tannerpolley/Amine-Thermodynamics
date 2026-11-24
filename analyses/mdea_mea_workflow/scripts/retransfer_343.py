@@ -10,45 +10,53 @@ from part_ii import Route, epcsaft, np, stable
 import reduced_refit_338 as refit
 
 
+COMPOSITIONS = np.array(sorted({0., 1., *np.linspace(.001, .999, 999),
+                                 *np.geomspace(1e-6, .001, 21), * (1-np.geomspace(1e-6, .001, 21))}))
+
+
+def binary_gaps(model, amine, T, pressure, x=COMPOSITIONS):
+    """Lower-convex-envelope gaps of G/(RT) for amine-water liquid at (T, P); None when any composition is unavailable."""
+    y = np.array([x if cid == amine else 1-x for cid in model.parameters.component_ids]).T
+    with np.errstate(divide='ignore'):
+        ideal = np.sum(y*np.log(np.where(y > 0, y, 1)), axis=1)
+    batch = model.states([T]*len(x), P=pressure, x=y.tolist(), phase='liquid')
+    if any(v is None for v in batch.log_fugacity_coefficient):
+        return [dict(x_MDEA=float(z), cause=c) for z,v,c in zip(x,batch.log_fugacity_coefficient,batch.cause,strict=True) if v is None], None
+    g = ideal + np.sum(y*np.array(batch.log_fugacity_coefficient), axis=1)
+    hull, gaps = [], []
+    for i in range(len(x)):
+        while len(hull) >= 2:
+            a, b = hull[-2:]
+            if (g[b]-g[a])*(x[i]-x[b]) < (g[i]-g[b])*(x[b]-x[a]):
+                break
+            hull.pop()
+        hull.append(i)
+    for a,b in zip(hull,hull[1:]):
+        if b>a+1:
+            chord = np.interp(x[a:b+1],x[[a,b]],g[[a,b]])
+            excess = g[a:b+1]-chord
+            if max(excess)>16*np.spacing(max(1.,abs(g[a]),abs(g[b]))):
+                gaps.append(dict(x_MDEA_contacts=x[[a,b]].tolist(), x_MDEA_max_excess=float(x[a+np.argmax(excess)]),
+                                 max_g_excess_over_RT=float(max(excess))))
+    return None, gaps
+
+
 def binary_scan(route, point):
     amine, water = route.config['amine'], 'water'
     parameters = epcsaft.Parameters.from_mapping(point['parameters'], components=[amine, water])
     model = epcsaft.Mixture(parameters)
-    x = np.array(sorted({0., 1., *np.linspace(.001, .999, 999),
-                         *np.geomspace(1e-6, .001, 21), * (1-np.geomspace(1e-6, .001, 21))}))
-    y = np.array([x if cid == amine else 1-x for cid in parameters.component_ids]).T
-    with np.errstate(divide='ignore'):
-        ideal = np.sum(y*np.log(np.where(y > 0, y, 1)), axis=1)
+    x = COMPOSITIONS
     pressure = 1466000.
     first, last = route.config['calculation_interval_K']
     temperatures = sorted({first, last, *range(math.ceil(first/5)*5, 422, 5), 393.15, 413.15, 422.})
     records = {}
 
     def evaluate(T):
-        batch = model.states([T]*len(x), P=pressure, x=y.tolist(), phase='liquid')
         record = records[T] = dict(temperature_K=T, pressure_Pa=pressure)
-        gaps = []
-        if any(v is None for v in batch.log_fugacity_coefficient):
-            record['unavailable'] = [dict(x_MDEA=float(z), cause=c) for z,v,c in
-                                     zip(x,batch.log_fugacity_coefficient,batch.cause,strict=True) if v is None]
+        unavailable, gaps = binary_gaps(model, amine, T, pressure)
+        if unavailable:
+            record['unavailable'] = unavailable
             return False
-        phi = np.array([[0. if v is None else v for v in row] for row in batch.log_fugacity_coefficient])
-        g = ideal + np.sum(y*phi, axis=1)
-        hull = []
-        for i in range(len(x)):
-            while len(hull) >= 2:
-                a, b = hull[-2:]
-                if (g[b]-g[a])*(x[i]-x[b]) < (g[i]-g[b])*(x[b]-x[a]):
-                    break
-                hull.pop()
-            hull.append(i)
-        for a,b in zip(hull,hull[1:]):
-            if b>a+1:
-                chord = np.interp(x[a:b+1],x[[a,b]],g[[a,b]])
-                excess = g[a:b+1]-chord
-                if max(excess)>16*np.spacing(max(1.,abs(g[a]),abs(g[b]))):
-                    gaps.append(dict(x_MDEA_contacts=x[[a,b]].tolist(), x_MDEA_max_excess=float(x[a+np.argmax(excess)]),
-                                     max_g_excess_over_RT=float(max(excess))))
         record['gaps'] = gaps
         return bool(gaps)
 

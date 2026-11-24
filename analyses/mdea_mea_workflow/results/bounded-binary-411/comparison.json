@@ -1,0 +1,721 @@
+{
+ "chosen": "fit-0",
+ "basis": "Lowest fitted-data cost among converged bounded fits",
+ "runs": {
+  "fit-0": {
+   "start": {
+    "path": "../results/retransfer-343/binary-penalty/start-0/endpoint.json",
+    "label": "#343 retreated point, B1 with k(MDEA-water) from start 2",
+    "sha256": "8d9dd95fb1403f910931886f39af267e7fd0681ef796856e5b0214144c5bdedd"
+   },
+   "start_k_423": -0.06701223991138572,
+   "bound": -0.06711345443725586,
+   "wall_s": 501.83232005900936,
+   "status": "converged",
+   "data_cost": 564.4836961253404,
+   "active_bounds": [
+    0,
+    5
+   ],
+   "iterations": 11,
+   "k_423": -0.06711345443725586,
+   "checks": {
+    "native": {
+     "states": 78,
+     "available": 78,
+     "descent": 0,
+     "minimum": 0.0
+    },
+    "hull": {
+     "onset_bracket_K": [
+      null,
+      null
+     ],
+     "gaps": 0,
+     "unavailable": 0,
+     "temperatures": 32
+    }
+   }
+  },
+  "fit-1": {
+   "start": {
+    "path": "../results/retransfer-343/binary-penalty/start-1/endpoint.json",
+    "label": "#343 retreated point, retained second start",
+    "sha256": "d24cfc1aadabe89481492f634936509fd54eb66abb664a40e83a0ce5572f2d17"
+   },
+   "start_k_423": -0.06701236137473612,
+   "bound": -0.06711345443725586,
+   "wall_s": 421.5820918320096,
+   "status": "converged",
+   "data_cost": 582.7796880755523,
+   "active_bounds": [
+    0,
+    3
+   ],
+   "iterations": 11,
+   "k_423": -0.06711345443725586,
+   "checks": {
+    "native": {
+     "states": 78,
+     "available": 78,
+     "descent": 0,
+     "minimum": 0.0
+    },
+    "hull": {
+     "onset_bracket_K": [
+      null,
+      null
+     ],
+     "gaps": 0,
+     "unavailable": 0,
+     "temperatures": 32
+    }
+   }
+  },
+  "fit-2": {
+   "start": {
+    "path": "../results/retransfer-343/binary-penalty/start-0/binary-1/stage-0/parameters.json",
+    "label": "#343 scale-0.003 optimizer endpoint, B1 with k(MDEA-water) from start 2",
+    "sha256": "0a700945b2e222a4422862162593539464bdcf227e3d97b6f5c06af4e36a4004"
+   },
+   "start_k_423": -0.06023678106060826,
+   "bound": -0.06711345443725586,
+   "wall_s": 140.2857405070099,
+   "status": "converged",
+   "data_cost": 564.4836961297467,
+   "active_bounds": [
+    0,
+    5
+   ],
+   "iterations": 6,
+   "k_423": -0.06711345443725586,
+   "checks": {
+    "native": {
+     "states": 78,
+     "available": 78,
+     "descent": 0,
+     "minimum": 0.0
+    },
+    "hull": {
+     "onset_bracket_K": [
+      null,
+      null
+     ],
+     "gaps": 0,
+     "unavailable": 0,
+     "temperatures": 32
+    }
+   }
+  },
+  "unbounded-2": {
+   "start": {
+    "path": "../results/retransfer-343/binary-penalty/start-0/binary-1/stage-0/parameters.json",
+    "label": "#343 scale-0.003 optimizer endpoint, B1 with k(MDEA-water) from start 2",
+    "sha256": "0a700945b2e222a4422862162593539464bdcf227e3d97b6f5c06af4e36a4004"
+   },
+   "start_k_423": -0.06023678106060826,
+   "bound": null,
+   "wall_s": 720.2688348270021,
+   "status": "converged",
+   "data_cost": 479.4428398700497,
+   "active_bounds": [],
+   "iterations": 35,
+   "k_423": -0.0599404353144513,
+   "checks": {
+    "native": {
+     "states": 78,
+     "available": 77,
+     "descent": 14,
+     "minimum": -0.006213300378360653
+    },
+    "hull": {
+     "onset_bracket_K": [
+      413.0515625,
+      413.15
+     ],
+     "gaps": 5,
+     "unavailable": 0,
+     "temperatures": 37
+    }
+   }
+  }
+ },
+ "interpolated": {
+  "data_cost": 605.0130108826793,
+  "k_423": -0.06701223991138572
+ },
+ "k_versus_critical": [
+  {
+   "T_K": 290,
+   "k": -0.22793811978400377,
+   "k_no_gap": -0.13233470916748044,
+   "below": true
+  },
+  {
+   "T_K": 295,
+   "k": -0.22189207973337416,
+   "k_no_gap": -0.1303733825683594,
+   "below": true
+  },
+  {
+   "T_K": 300,
+   "k": -0.21584603968274454,
+   "k_no_gap": -0.1283426284790039,
+   "below": true
+  },
+  {
+   "T_K": 305,
+   "k": -0.20979999963211493,
+   "k_no_gap": -0.1262477874755859,
+   "below": true
+  },
+  {
+   "T_K": 310,
+   "k": -0.2037539595814853,
+   "k_no_gap": -0.12409620285034177,
+   "below": true
+  },
+  {
+   "T_K": 315,
+   "k": -0.19770791953085567,
+   "k_no_gap": -0.1218918800354004,
+   "below": true
+  },
+  {
+   "T_K": 320,
+   "k": -0.19166187948022606,
+   "k_no_gap": -0.11964015960693358,
+   "below": true
+  },
+  {
+   "T_K": 325,
+   "k": -0.18561583942959642,
+   "k_no_gap": -0.11734504699707031,
+   "below": true
+  },
+  {
+   "T_K": 330,
+   "k": -0.1795697993789668,
+   "k_no_gap": -0.11501054763793947,
+   "below": true
+  },
+  {
+   "T_K": 335,
+   "k": -0.1735237593283372,
+   "k_no_gap": -0.11264066696166994,
+   "below": true
+  },
+  {
+   "T_K": 340,
+   "k": -0.16747771927770758,
+   "k_no_gap": -0.11023740768432617,
+   "below": true
+  },
+  {
+   "T_K": 345,
+   "k": -0.16143167922707796,
+   "k_no_gap": -0.10780410766601561,
+   "below": true
+  },
+  {
+   "T_K": 350,
+   "k": -0.15538563917644832,
+   "k_no_gap": -0.10534210205078125,
+   "below": true
+  },
+  {
+   "T_K": 355,
+   "k": -0.1493395991258187,
+   "k_no_gap": -0.10285472869873047,
+   "below": true
+  },
+  {
+   "T_K": 360,
+   "k": -0.1432935590751891,
+   "k_no_gap": -0.10034265518188476,
+   "below": true
+  },
+  {
+   "T_K": 365,
+   "k": -0.13724751902455945,
+   "k_no_gap": -0.09780855178833006,
+   "below": true
+  },
+  {
+   "T_K": 370,
+   "k": -0.13120147897392984,
+   "k_no_gap": -0.0952517509460449,
+   "below": true
+  },
+  {
+   "T_K": 375,
+   "k": -0.12515543892330022,
+   "k_no_gap": -0.09267559051513671,
+   "below": true
+  },
+  {
+   "T_K": 380,
+   "k": -0.11910939887267061,
+   "k_no_gap": -0.09007940292358398,
+   "below": true
+  },
+  {
+   "T_K": 385,
+   "k": -0.11306335882204098,
+   "k_no_gap": -0.08746452331542967,
+   "below": true
+  },
+  {
+   "T_K": 390,
+   "k": -0.10701731877141135,
+   "k_no_gap": -0.08483161926269531,
+   "below": true
+  },
+  {
+   "T_K": 393.0,
+   "k": -0.10338969474103359,
+   "k_no_gap": -0.0832427978515625,
+   "below": true
+  },
+  {
+   "T_K": 395,
+   "k": -0.10097127872078174,
+   "k_no_gap": -0.08218069076538086,
+   "below": true
+  },
+  {
+   "T_K": 400,
+   "k": -0.09492523867015212,
+   "k_no_gap": -0.0795124053955078,
+   "below": true
+  },
+  {
+   "T_K": 403.0,
+   "k": -0.09129761463977434,
+   "k_no_gap": -0.07790288925170895,
+   "below": true
+  },
+  {
+   "T_K": 405,
+   "k": -0.0888791986195225,
+   "k_no_gap": -0.07682676315307616,
+   "below": true
+  },
+  {
+   "T_K": 410,
+   "k": -0.08283315856889287,
+   "k_no_gap": -0.07412309646606445,
+   "below": true
+  },
+  {
+   "T_K": 413.0,
+   "k": -0.0792055345385151,
+   "k_no_gap": -0.07249288558959958,
+   "below": true
+  },
+  {
+   "T_K": 413.15,
+   "k": -0.07902415333699624,
+   "k_no_gap": -0.0724114418029785,
+   "below": true
+  },
+  {
+   "T_K": 415,
+   "k": -0.07678711851826325,
+   "k_no_gap": -0.07140274047851561,
+   "below": true
+  },
+  {
+   "T_K": 420,
+   "k": -0.07074107846763364,
+   "k_no_gap": -0.0686650276184082,
+   "below": true
+  },
+  {
+   "T_K": 422.04,
+   "k": -0.06827429412697672,
+   "k_no_gap": -0.06754217147827148,
+   "below": true
+  },
+  {
+   "T_K": 423.0,
+   "k": -0.06711345443725586,
+   "k_no_gap": -0.06701345443725586,
+   "below": true
+  }
+ ],
+ "pressure": {
+  "fitted": {
+   "interpolated": {
+    "rows": 131,
+    "available": 131,
+    "AARD_percent": 11.479001005120146
+   },
+   "bounded": {
+    "rows": 131,
+    "available": 131,
+    "AARD_percent": 11.242450238734513
+   }
+  },
+  "not fitted": {
+   "interpolated": {
+    "rows": 175,
+    "available": 175,
+    "AARD_percent": 22.583713840287324
+   },
+   "bounded": {
+    "rows": 175,
+    "available": 175,
+    "AARD_percent": 25.83211479294776
+   }
+  }
+ },
+ "groups": [
+  {
+   "group": "Bottinger-amine-sum-25bar",
+   "role": "not fitted",
+   "unit": "1",
+   "interpolated": {
+    "rows": 58,
+    "available": 58,
+    "AARD_percent": 7.202683898431365
+   },
+   "bounded": {
+    "rows": 58,
+    "available": 58,
+    "AARD_percent": 7.21361709332576
+   }
+  },
+  {
+   "group": "Bottinger-amine-sum-5bar",
+   "role": "not fitted",
+   "unit": "1",
+   "interpolated": {
+    "rows": 58,
+    "available": 58,
+    "AARD_percent": 7.202708764671714
+   },
+   "bounded": {
+    "rows": 58,
+    "available": 58,
+    "AARD_percent": 7.21366396653147
+   }
+  },
+  {
+   "group": "Bottinger-bicarbonate-25bar",
+   "role": "not fitted",
+   "unit": "1",
+   "interpolated": {
+    "rows": 58,
+    "available": 57,
+    "AARD_percent": 10.985576687872468
+   },
+   "bounded": {
+    "rows": 58,
+    "available": 57,
+    "AARD_percent": 11.143510127028694
+   }
+  },
+  {
+   "group": "Bottinger-bicarbonate-5bar",
+   "role": "not fitted",
+   "unit": "1",
+   "interpolated": {
+    "rows": 58,
+    "available": 57,
+    "AARD_percent": 10.985832698540289
+   },
+   "bounded": {
+    "rows": 58,
+    "available": 57,
+    "AARD_percent": 11.144122870912932
+   }
+  },
+  {
+   "group": "Carson",
+   "role": "fitted",
+   "unit": "J/mol",
+   "interpolated": {
+    "rows": 40,
+    "available": 40,
+    "AARD_percent": 5.5390062539981555
+   },
+   "bounded": {
+    "rows": 40,
+    "available": 40,
+    "AARD_percent": 5.5849063506668255
+   }
+  },
+  {
+   "group": "Cp",
+   "role": "fitted",
+   "unit": "J/(mol-feed K)",
+   "interpolated": {
+    "rows": 33,
+    "available": 33,
+    "AARD_percent": 2.293945556310271
+   },
+   "bounded": {
+    "rows": 33,
+    "available": 33,
+    "AARD_percent": 2.17732555499638
+   }
+  },
+  {
+   "group": "Cp-60wt",
+   "role": "not fitted",
+   "unit": "J/(mol-feed K)",
+   "interpolated": {
+    "rows": 6,
+    "available": 6,
+    "AARD_percent": 9.239359848327469
+   },
+   "bounded": {
+    "rows": 6,
+    "available": 6,
+    "AARD_percent": 8.77736890573949
+   }
+  },
+  {
+   "group": "Ermatchkov",
+   "role": "not fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 101,
+    "available": 101,
+    "AARD_percent": 15.358894457649823
+   },
+   "bounded": {
+    "rows": 101,
+    "available": 101,
+    "AARD_percent": 17.88866694286025
+   }
+  },
+  {
+   "group": "Jakobsen",
+   "role": "fitted",
+   "unit": "1",
+   "interpolated": {
+    "rows": 16,
+    "available": 16,
+    "AARD_percent": 13.624456176616711
+   },
+   "bounded": {
+    "rows": 16,
+    "available": 16,
+    "AARD_percent": 13.75571884031847
+   }
+  },
+  {
+   "group": "Kim",
+   "role": "fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 61,
+    "available": 61,
+    "AARD_percent": 2.1969340938330264
+   },
+   "bounded": {
+    "rows": 61,
+    "available": 61,
+    "AARD_percent": 2.236456413074506
+   }
+  },
+  {
+   "group": "Kuranov",
+   "role": "fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 66,
+    "available": 66,
+    "AARD_percent": 20.594047008605955
+   },
+   "bounded": {
+    "rows": 66,
+    "available": 66,
+    "AARD_percent": 20.09219063042971
+   }
+  },
+  {
+   "group": "Kuranov-413K",
+   "role": "not fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 11,
+    "available": 11,
+    "AARD_percent": 18.96872915800124
+   },
+   "bounded": {
+    "rows": 11,
+    "available": 11,
+    "AARD_percent": 20.32713863159096
+   }
+  },
+  {
+   "group": "Kuranov-binary",
+   "role": "fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 4,
+    "available": 4,
+    "AARD_percent": 2.6322623447328883
+   },
+   "bounded": {
+    "rows": 4,
+    "available": 4,
+    "AARD_percent": 2.5631396170789023
+   }
+  },
+  {
+   "group": "Merkley",
+   "role": "fitted",
+   "unit": "J/mol",
+   "interpolated": {
+    "rows": 4,
+    "available": 4,
+    "AARD_percent": 6.461515760761083
+   },
+   "bounded": {
+    "rows": 4,
+    "available": 4,
+    "AARD_percent": 8.546686015829819
+   }
+  },
+  {
+   "group": "Merkley-half-loading",
+   "role": "not fitted",
+   "unit": "J/mol",
+   "interpolated": {
+    "rows": 12,
+    "available": 6,
+    "AARD_percent": 13.281011377971389
+   },
+   "bounded": {
+    "rows": 12,
+    "available": 6,
+    "AARD_percent": 16.342917620398385
+   }
+  },
+  {
+   "group": "Merkley-outside",
+   "role": "not fitted",
+   "unit": "J/mol",
+   "interpolated": {
+    "rows": 8,
+    "available": 1,
+    "AARD_percent": 0.6470144067038053
+   },
+   "bounded": {
+    "rows": 8,
+    "available": 1,
+    "AARD_percent": 3.038499131596728
+   }
+  },
+  {
+   "group": "Sedighi",
+   "role": "not fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 15,
+    "available": 15,
+    "AARD_percent": 71.36699028551689
+   },
+   "bounded": {
+    "rows": 15,
+    "available": 15,
+    "AARD_percent": 72.16945589491073
+   }
+  },
+  {
+   "group": "Xiao",
+   "role": "not fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 20,
+    "available": 20,
+    "AARD_percent": 20.678236136472478
+   },
+   "bounded": {
+    "rows": 20,
+    "available": 20,
+    "AARD_percent": 31.07324760841421
+   }
+  },
+  {
+   "group": "Zheng",
+   "role": "not fitted",
+   "unit": "J/mol",
+   "interpolated": {
+    "rows": 6,
+    "available": 6,
+    "AARD_percent": 17.210146005189827
+   },
+   "bounded": {
+    "rows": 6,
+    "available": 6,
+    "AARD_percent": 23.613023972517883
+   }
+  },
+  {
+   "group": "corrected-Kamps",
+   "role": "not fitted",
+   "unit": "Pa",
+   "interpolated": {
+    "rows": 28,
+    "available": 28,
+    "AARD_percent": 25.291999431336887
+   },
+   "bounded": {
+    "rows": 28,
+    "available": 28,
+    "AARD_percent": 28.080693285625973
+   }
+  },
+  {
+   "group": "density-60wt",
+   "role": "not fitted",
+   "unit": "kg/m^3",
+   "interpolated": {
+    "rows": 11,
+    "available": 11,
+    "AARD_percent": 1.9190139541829092
+   },
+   "bounded": {
+    "rows": 11,
+    "available": 11,
+    "AARD_percent": 1.8966600929422837
+   }
+  },
+  {
+   "group": "loaded-density",
+   "role": "fitted",
+   "unit": "kg/m^3",
+   "interpolated": {
+    "rows": 33,
+    "available": 33,
+    "AARD_percent": 0.2232462279800088
+   },
+   "bounded": {
+    "rows": 33,
+    "available": 33,
+    "AARD_percent": 0.20318908536759203
+   }
+  },
+  {
+   "group": "unloaded-density",
+   "role": "fitted",
+   "unit": "kg/m^3",
+   "interpolated": {
+    "rows": 24,
+    "available": 24,
+    "AARD_percent": 0.07828153464124003
+   },
+   "bounded": {
+    "rows": 24,
+    "available": 24,
+    "AARD_percent": 0.07814632953677496
+   }
+  }
+ ],
+ "reduce_s": 88.09127400800935
+}
