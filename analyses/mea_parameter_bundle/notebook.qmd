@@ -55,17 +55,7 @@ The [AMP stability calculation](results/reference-states-428/amp.json), [MEA cal
 
 The free-slope AMP comparison from #412, selected start 1 with F2 carbamate inputs, uses 1 mol AMP, 11.545384436618988 mol water and 0.700 mol CO₂ at 393.15 K. The unloaded stock contains 30.0 wt% AMP. The imposed pressure is 1,212,490.9526524344 Pa, or 1.05 times the calculated bubble pressure. This state lies outside the retained AMP R4 and R5 source temperature ranges.
 
-| Quantity | Value | Basis |
-|---|---:|---|
-| Trial Gibbs energy, $g/(RT)$ | −171.99392676254905 | Per mole of true trial species, reduced by $RT$ |
-| Plane contraction, $\boldsymbol w^{\mathsf T}B^{\mathsf T}\boldsymbol\lambda$ | −171.99022931754618 | Dimensionless |
-| Optimized $D$ | −0.003697445002899258 | Dimensionless |
-| Plane-value error estimate | $1.8267250942504662\times10^{-10}$ | Dimensionless |
-| Donor slope | −0.003697445002875287 | Dimensionless |
-| Donor-descent error estimate | $1.754445655997205\times10^{-10}$ | Dimensionless |
-| Reclosed supplied trial $D$ | −0.0036974450027571493 | Dimensionless |
-| Split-minus-parent $\Delta G/(RT)$ | −0.0188141032558633 | mol per declared feed |
-| Paired Gibbs numerical estimate | $2.8187949059968186\times10^{-9}$ | mol per declared feed |
+{{< include results/reference-states-428/tables.md >}}
 
 $B$ contains the independent conserved-moiety rows in true-species order. It satisfies $B\boldsymbol\nu_r=0$ and $\sum_p N_pB\boldsymbol x_p=B\boldsymbol n_{\rm feed}$. The sign of the reduced parent material-balance dual $\boldsymbol\lambda$ is chosen so that $B^{\mathsf T}\boldsymbol\lambda$ is the chemical plane. Divide the physical balance multipliers by $RT$ to obtain this reduced convention. The charge-multiplier term vanishes on each electroneutral phase. The trial has $w_i>0$ on the admitted support $S$ and $w_i=0$ elsewhere. The compiler excludes species forbidden by the parent inventory. The AMP trial uses all nine species. The vapor support admits CO₂, water and molecular amine. The trial varies conserved-moiety proportions at fixed normalization and charge, and its stationary point satisfies the chemical equations in the reaction directions permitted by that support. The standard Gibbs and chemical-plane vectors are retained in declaration order. [Engine tangent-plane equations at the pinned commit](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/docs/equations.md#tangent_plane_distance).
 
@@ -77,7 +67,7 @@ The finite trial search and descending two-liquid equilibrium verify a model spl
 
 The F2 MEA calculation uses 313.15 K and 1,734,000 Pa for both liquids and the pure CO₂ addition stream. The stock is 1 mol MEA and 7.911062165006594 mol water. Adding 0.31 mol CO₂ to the CO₂-free stock yields 0.21724310000000002 kg of loaded solution. On this feed, the initial and loaded extensive enthalpies are −2,315,218.123181773 and −2,462,507.6223387057 J. The pure CO₂ enthalpy on the declared vapor branch is −393,574.4494137983 J/mol.
 
-Subtracting the initial liquid and addition-stream enthalpies from the loaded enthalpy and dividing by 0.31 mol gives **−81.55296722146886 kJ/mol added CO₂**, equal to the Engine addition-enthalpy observation and the retained #341 value at this loading. The negative sign denotes exothermic absorption. The analytic equilibrium heat capacity is **84.62809864128532 J/(mol apparent feed·K)**, or 780.3609584776021 J/K on the loaded feed and 3.592109293586779 kJ/(kg solution·K). Fixed-pressure, fixed-feed enthalpy re-solves give 84.62810008112105 and 84.6280990014365 J/(mol apparent feed·K) at steps of 0.10 and 0.05 K. The fine discrepancy is $-3.60\times10^{-7}$ J/(mol apparent feed·K) (analytic minus centered difference). Its magnitude is $4.26\times10^{-9}$ relative to the fine result and about one quarter of the coarse discrepancy. All six liquid solves pass the branch and residual checks.
+Subtracting the initial liquid and addition-stream enthalpies from the loaded enthalpy and dividing by 0.31 mol gives the integral heat shown above, equal to the Engine addition-enthalpy observation and the retained #341 value at this loading. The negative sign denotes exothermic absorption. The analytic equilibrium heat capacity is the value shown above, or 780.3609584776021 J/K on the loaded feed and 3.592109293586779 kJ/(kg solution·K). Fixed-pressure, fixed-feed enthalpy re-solves give 84.62810008112105 and 84.6280990014365 J/(mol apparent feed·K) at steps of 0.10 and 0.05 K. The fine discrepancy is $-3.60\times10^{-7}$ J/(mol apparent feed·K) (analytic minus centered difference). Its magnitude is $4.26\times10^{-9}$ relative to the fine result and about one quarter of the coarse discrepancy. All six liquid solves pass the branch and residual checks.
 
 For products-positive $\nu_{ri}$, the pure water reference and charge-neutral infinitely dilute solute references are taken at $P_{\mathrm{src},r}$. With $\Gamma_r=\sum_i\nu_{ri}\ln\phi_i^{\mathrm{ref}}$ and $\Delta\nu_r=\sum_i\nu_{ri}$, the pressure-standard conversion is
 
@@ -101,19 +91,11 @@ $$
 
 The density standard at $\rho^\circ=1\ \mathrm{mol/m^3}$ uses $\ln K_{r,\rho}^\circ=\ln K_{r,P^\circ}^{\rm ig}-\Delta\nu_r\ln(RT\rho^\circ/P^\circ)$, which gives $\Delta_r h_\rho^\circ=\Delta_r h_{P^\circ}^{\rm ig}-\Delta\nu_r RT$. The CO₂, MEA and water records fix the neutral species enthalpies. The stoichiometric equations $\boldsymbol\nu_{\rm ion}\boldsymbol h_{\rm ion}^\circ=\Delta\boldsymbol h_\rho^\circ-\boldsymbol\nu_{\rm neutral}\boldsymbol h_{\rm neutral}^\circ$ determine the ionic values up to a charge-proportional shift, which cancels because $\boldsymbol z^{\mathsf T}\boldsymbol x=0$. Adding $RT$ to each density-standard species enthalpy recovers its ideal-gas pressure-standard value. The physical liquid enthalpy sums these species values and the EOS residual enthalpy once. The independently contracted pressure-standard species values reproduced the two extensive liquid enthalpies within $3.59\times10^{-8}$ J. [Engine reference transfer and caloric completion](https://github.com/tannerpolley/epcsaft/blob/05e94210fa64cf69725e45babc0411d32139df5a/engine/docs/equations.md#reference_species_calorics).
 
-| Reaction | Source (kJ/mol reaction) | Fugacity correction (kJ/mol reaction) | Ideal-gas sum (kJ/mol reaction) |
-|---|---:|---:|---:|
-| R1 | 53.27 | 1510.66 | 1563.93 |
-| R2 | 4.77 | 1446.41 | 1451.18 |
-| R3 | 10.98 | 2489.85 | 2500.83 |
-| R4 | 12.85 | 210.89 | 223.74 |
-| R5 | 50.46 | 857.51 | 907.97 |
 
 The source quotients match the bound laws within $1.04\times10^{-12}$ in $\ln K$. At the fine step, every analytic pressure-standard enthalpy agrees with the temperature re-solves to 0.01 kJ/mol reaction. Each column is rounded separately. The reaction enthalpies concern ideal-gas standards, and the integral heat concerns the change in total liquid and addition-stream enthalpies. These comparisons verify the equations and reference conventions numerically at the declared state.
 
 ### Table S12 control and reproduction
 
-The three S12 bubble states reproduce the displayed digits from both starting pressures. The CO₂–water and MEA–water readbacks are identical to the retained records. For loaded MEA, 32 unrounded fields differ across the two starts, with a largest bubble-pressure difference of $6.73\times10^{-11}$ Pa.
 
 From the repository root, run on the wheel recorded above with single-threaded numerical libraries.
 

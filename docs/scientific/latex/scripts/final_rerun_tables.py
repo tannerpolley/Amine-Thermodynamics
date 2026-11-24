@@ -274,6 +274,36 @@ def reference_states():
         assert (folder/name).read_text() == provenance+OUTPUTS[name], name
 
 
+    amp, mea, s12 = (json.loads((folder/f'{name}.json').read_text()) for name in ('amp', 'mea', 's12'))
+    q = amp['trial_quantities']
+    rows = [
+        ('Trial Gibbs energy, $g/(RT)$', q['g_over_rt'], 'Per mole of true trial species'),
+        ('Plane contraction', amp['plane_contraction'], 'Dimensionless'),
+        ('Optimized $D$', q['tpd_over_rt'], 'Dimensionless'),
+        ('Plane-value error estimate', q['plane_value_error_estimate_over_rt'], 'Dimensionless'),
+        ('Donor slope', q['donor_slope_over_rt'], 'Dimensionless'),
+        ('Donor-descent error estimate', q['descent_error_estimate_over_rt'], 'Dimensionless'),
+        ('Reclosed supplied trial $D$', amp['supplied']['quantities']['tpd_over_rt'], 'Dimensionless'),
+        ('Split-minus-parent $\\Delta G/(RT)$', amp['Gibbs_difference_over_RT_mol'], 'mol per declared feed'),
+        ('Paired Gibbs numerical estimate', amp['split']['numerical_error_over_RT_mol'], 'mol per declared feed'),
+        ('MEA integral heat', mea['heat_kJ_mol'], 'kJ/mol added CO₂'),
+        ('MEA equilibrium $C_P$', mea['cp_J_mol_K'], 'J/(mol apparent feed·K)'),
+    ]
+    lines = ['| Quantity | Value | Basis |', '|---|---:|---|']
+    lines += [f'| {label} | {value} | {unit} |' for label, value, unit in rows]
+    lines += ['', '| Reaction | Source (kJ/mol reaction) | Fugacity correction (kJ/mol reaction) | Ideal-gas sum (kJ/mol reaction) |', '|---|---:|---:|---:|']
+    lines += [f"| {r['name']} | {r['source_kJ_mol']:.2f} | {r['fugacity_kJ_mol']:.2f} | {r['ideal_gas_kJ_mol']:.2f} |" for r in mea['reactions']]
+    differences = s12['nonzero_differences'][-1]['replay_minus_retained']
+    count = sum(len(d) for d in differences)
+    pressure = max(abs(d.get('bubble_pressure_Pa', 0)) for d in differences)
+    lines += ['', f"S12: {sum(r['printed_digits_agree'] for r in s12['replay'])} bubble states reproduce the displayed digits; the CO₂–water and MEA–water readbacks are identical to the retained records. For loaded MEA, {count} unrounded fields differ across the two starts, with a largest bubble-pressure difference of {pressure:.2e} Pa."]
+    output = folder/'tables.md'
+    text = '\n'.join(lines)+'\n'
+    if '--check' not in sys.argv:
+        output.write_text(text)
+    assert output.read_text() == text, output
+
+
 def main():
     document = a.load(F/'reported-parameters.json')
     fitrows = a.rows(F/'fitted-rows.csv')
