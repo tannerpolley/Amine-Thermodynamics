@@ -3,6 +3,7 @@ title: "Diethanolamine equilibrium and calorimetry on the adopted shared record"
 format: html
 resources:
   - results/binary-refit-425/**
+  - results/reactive-refit-425/**
   - results/refit-413/**
 execute:
   enabled: false
@@ -16,9 +17,10 @@ heat limits together. The lowest-cost replay gave a minimum heat of
 −1,480.25 J/mol of mixture at a liquid water mole fraction of 0.67.
 The measured minimum was −1,707 J/mol at 0.6414. The same candidate gave
 9.504843% pressure AARD on the 42 Horstmann mixtures, 4.504843 percentage
-points above the 5.0% cap. The reactive refit stopped at the binary
-decision. The [downstream record](results/binary-refit-425/downstream.json)
-identifies #413 as the historical comparator for #424, #426 and #427.
+points above the initial 5.0% cap. The first run stopped at the binary
+decision. The owner subsequently dropped that cap and requested the
+reactive refit below. #413 remains the DEA basis for #424, #426 and #427
+pending the owner's choice. [Owner decision](https://github.com/tannerpolley/Amine-Thermodynamics/issues/425#issuecomment-7142371340)
 
 The fit used $k(T)=a+b(1/T-1/365.15\ \mathrm{K})$, with $b$ in kelvin
 and both endpoint values of $k$ bounded at 293.15 and 458.64 K.
@@ -145,7 +147,78 @@ One timed 63-row evaluation, on one core with single-threaded BLAS,
 took 0.181 s. The [candidate records](results/binary-refit-425/disposition.json)
 contain the row predictions, bounds, objective contributions, stopping
 conditions, heat grids, singular values and phase searches. Delivered
-scientific review and permission for manuscript use are pending.
+scientific review supported the binary result.
+
+## Reactive refit with the temperature-dependent DEA–water law (#425 §D)
+
+Both reactive starts converged with the same four fitted coordinates on the
+same 80 observations as #413. Start 0 had the smaller unpenalized cost
+by about $1.5\times10^{-10}$, outside the declared $10^{-10}$ tie rule,
+and incurred zero stability penalty. Its hydrolysis intercept reached the
+lower bound. All 299 observation predictions and 750 curve points were
+available. The cost decrease came from the 30 fitted Lawson CO₂ pressures.
+The 50 Carson integral heats and the 67 loaded-pressure comparisons outside
+the fit had larger errors. The 49 binary mixture pressures and the 30
+loaded pressures in the pooled readback were fitted in separate stages.
+The #413 columns replay the same rows and use the same denominators.
+The loaded pressure bands use the #409 temperature boundaries
+($T\le353.2$ K, $353.2<T<370$ K, and $T\ge370$ K).
+
+{{< include results/reactive-refit-425/comparison.md >}}
+
+The binary law has $a=-0.08703060184037906$ at 365.15 K and
+$b=-32.254212427287676\ \mathrm{K}$. The mixture pressure readback
+at 365.15 K gives 3.51% AARD for $0.85\le x_\mathrm{w}<0.95$ and
+0.35% for $0.95\le x_\mathrm{w}<1$. The binary heat RMSE at 363.15 K
+and 1.75 MPa fell from 1,514 to 150 J/mol of mixture.
+
+The completed R4 law uses $\ln K=a+b/T$ on the aqueous molality scale
+referenced to infinite dilution in water, with 100 kPa reference pressure.
+The selected law has $a=2.0976409180833815$ and
+$b=-2005.431152140249\ \mathrm{K}$, compared with 5.883485367291507 and
+$-2661.435714463442\ \mathrm{K}$ in #413. Both fits used the inverse of
+Aroua's carbamate formation law, $\log_{10}K_1=-5.12+1781\ \mathrm{K}/T$,
+as the source seed (1997, Eq. 14, p. 695). R4 and R5 range marks refer to
+the source ranges of hydrolysis (303–331 K) and DEA dissociation
+(273.15–323.15 K), respectively. [Dataset reductions and range marks](results/reactive-refit-425/comparisons.json)
+
+The reactive standard errors hold the binary coefficients and the bound
+hydrolysis intercept fixed. The separate binary estimates use the weighted
+residual Jacobian with two step sizes. The weights are engineering scales,
+so these estimates describe local sensitivity to residuals. They leave
+out uncertainty in the fixed inputs and model form.
+[Reactive conditional information](results/reactive-refit-425/run/conditional-uncertainty.json)
+[Binary conditional information](results/reactive-refit-425/binary-uncertainty.json)
+
+The selected endpoint completed the #413 Lawson Table VIII search
+(`lawson-1976-viii:1:problem`). It left one grid search unfinished at
+383.15 K, 10 wt% DEA, loading 0.9 mol CO₂/mol DEA and 6.402 MPa
+(three times calculated bubble pressure). The targeted readback solved the
+parent and reproduced residual $2.31\times10^{-10}$ for the unfinished
+near-pure trial, against the $10^{-10}$ row tolerance. Neither start
+found a liquid or vapor descent in the 1,270 available searches. The
+63 separate binary searches at measured VLE or calorimetric pressures
+had 16 vapor descents, zero liquid descents and zero unfinished searches.
+The conclusions apply to these finite searches and the source rows
+already inspected during development. The pressure and heat comparisons
+show calibration and fixed-parameter performance. Independent validation
+and the adoption decision remain open.
+[Reactive stability readback](results/reactive-refit-425/run/stability-readback.json)
+[Binary stability readback](results/binary-refit-425/unconstrained-1/stability.json.gz)
+
+![Loaded DEA predictions and measurements. Points show observations. Line styles distinguish reaction source temperature ranges.](results/reactive-refit-425/measured-model.png)
+
+![Fig. 8 comparison. Open circles show measurements. Crosses show calculated results at the measured states for binary heat and Cai pressure.](results/reactive-refit-425/fig-8-comparison.png)
+
+The [run inputs and wheel identity](results/reactive-refit-425/inputs.json),
+[both reactive fits](results/reactive-refit-425/run/selection.json),
+[endpoint checks](results/reactive-refit-425/run/checks.json) and
+[range-separated deviations](results/reactive-refit-425/range-deviations.csv)
+retain the numerical evidence. The [file hashes](results/reactive-refit-425/SHA256SUMS)
+identify this delivery. The 80-row preflight took 3.52 s on the
+pinned wheel. The [campaign producer](reactive_refit.py), [stability readback](reactive_stability.py)
+and [paired reductions](reactive_readback.py) take a scratch output directory.
+The notebook renders the retained results with execution disabled.
 
 ## Reference DEA calculation
 

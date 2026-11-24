@@ -1,0 +1,37 @@
+{
+  "issue": 425,
+  "amended_disposition": "reactive comparison for owner decision",
+  "replacement_adopted": false,
+  "engine": {
+    "commit": "05e94210fa64cf69725e45babc0411d32139df5a",
+    "sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb"
+  },
+  "input_sha256": {
+    "analyses/dea_transfer/inputs/part-ii-346/f2-carbamate-413-route.json": "a493780aff1bb5d3a788a0656a7bd7bfcfbed6aa7b14d922d7b1470d08b8b447",
+    "analyses/dea_transfer/results/binary-refit-425/unconstrained-1/fit.json": "af240fa10bd802389a0862909dddf9c227ad71eccbe75fd127a134538a304c3b",
+    "analyses/dea_transfer/results/binary-refit-425/controls/reactive-objective.json": "0cade42c3e037095249b862a4d81e6d2a979f91660efbd1efb8336611555b2f3",
+    "analyses/dea_transfer/results/refit-413/selection.json": "529153f0a1262b6848471f69967112e3559d03c921dd9f75576aa50b0ff9df95",
+    "analyses/dea_transfer/results/refit-413/paper-data.csv": "ffb3ed053d1edd62f626927744d018e56488f4fb91309fe8918783e42d86d4d5"
+  },
+  "binary": {
+    "a": -0.08703060184037906,
+    "b_K": -32.254212427287676,
+    "reference_K": 365.15,
+    "temperature_endpoints_K": [
+      293.15,
+      458.64
+    ],
+    "k_endpoints": [
+      -0.10872550594617296,
+      -0.06902496991625512
+    ]
+  },
+  "selected_start": "start-0",
+  "reactive_fit": "run/selection.json",
+  "starts": [
+    "run/binary-frozen-start-0.json",
+    "run/binary-frozen-start-1.json"
+  ],
+  "stability": "run/stability-readback.json",
+  "data_roles_and_comparisons": "comparisons.json"
+}

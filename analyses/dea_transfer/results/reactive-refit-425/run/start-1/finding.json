@@ -1,0 +1,96 @@
+{
+  "cost": 6.747545469315769,
+  "optimizer_converged": true,
+  "retreat": null,
+  "stable": false,
+  "unpenalized": {
+    "grid": {
+      "supplied_trial_counts": {
+        "available": 0,
+        "unavailable": 0,
+        "not_applicable": 0
+      },
+      "states": 1271,
+      "available": 1270,
+      "descent": 0,
+      "unavailable": [
+        "grid:{'water': 52.52391303382461, 'diethanolamine': 1.0}:383.15:0.9:3.0"
+      ],
+      "minimum_tau": null,
+      "supplied_minimum_tpd": null,
+      "unavailable_searches": [
+        {
+          "key": "grid:{'water': 52.52391303382461, 'diethanolamine': 1.0}:383.15:0.9:3.0",
+          "seconds": 0.2756725879953592,
+          "status": "CentralSolveUnavailable",
+          "message": "trial 1 (no_resolved_descent): stalled: residual 2.3105964960176265e-10 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 19 iterations, contraction absent, floor 2.3636700671404687e-14, amplification 0",
+          "available": false,
+          "value": null,
+          "raw_minimum": 0.0,
+          "uncertainty": null,
+          "cause": "trial 1 (no_resolved_descent): stalled: residual 2.3105964960176265e-10 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 19 iterations, contraction absent, floor 2.3636700671404687e-14, amplification 0",
+          "event": "",
+          "no_descent_in_trial_set": false,
+          "completed": true,
+          "pressure_Pa": 2133896.2864440936,
+          "witnesses": [],
+          "parent_kind": "Liquid",
+          "optimized_available": false,
+          "native_branch": "none",
+          "supplied_branch": "none",
+          "native_liquid_descent": false,
+          "liquid_liquid_split": false,
+          "descent": false,
+          "supplied_minimum_tpd": null
+        }
+      ],
+      "branches": {
+        "data": {
+          "native": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 335
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 335
+          }
+        },
+        "grid": {
+          "native": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 936
+          },
+          "supplied": {
+            "liquid": 0,
+            "vapor": 0,
+            "mixed": 0,
+            "unresolved": 0,
+            "none": 936
+          }
+        }
+      },
+      "liquid_liquid_splits": {
+        "data": 0,
+        "grid": 0
+      }
+    },
+    "offset": {
+      "descent": 0
+    },
+    "census": {
+      "descent": 0
+    },
+    "penalty_trigger": false,
+    "stable": false,
+    "search_file": "search-2.json"
+  }
+}

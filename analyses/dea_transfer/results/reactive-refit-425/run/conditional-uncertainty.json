@@ -1,0 +1,112 @@
+{
+  "column_normalized_singular_values": [
+    1.4238534464028805,
+    1.1200221833022723,
+    0.8399920118792029,
+    0.11227240113482932
+  ],
+  "cost_gradient": {
+    "k-DEAH-water": 4.707787557123311e-05,
+    "k-DEACOO-water": -2.385246851299705e-05,
+    "hydrolysis-a": 0.22677747384768362,
+    "hydrolysis-enthalpy-shift": 4.7958661117375977e-11
+  },
+  "active_bound_outward_descent": {
+    "hydrolysis-a": true
+  },
+  "free_coordinates": [
+    "k-DEAH-water",
+    "k-DEACOO-water",
+    "hydrolysis-enthalpy-shift"
+  ],
+  "residual_variance": 0.1752609212770244,
+  "conditional_standard_error": {
+    "k-DEAH-water": 0.002687467657090135,
+    "k-DEACOO-water": 0.00976634708317635,
+    "hydrolysis-enthalpy-shift": 638.0872826613717
+  },
+  "conditional_correlation": [
+    [
+      0.9999999999999999,
+      0.2177855617505919,
+      -0.25542414684560394
+    ],
+    [
+      0.2177855617505919,
+      1.0,
+      -0.35754846220380504
+    ],
+    [
+      -0.25542414684560394,
+      -0.357548462203805,
+      1.0000000000000002
+    ]
+  ],
+  "coordinates": [
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "protonated-diethanolamine",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.2082705065225989,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "k-DEAH-water"
+    },
+    {
+      "targets": [
+        [
+          "k_ij",
+          [
+            "carbamate-anion",
+            "water"
+          ],
+          1.0
+        ]
+      ],
+      "origin": -0.2765416491355303,
+      "scale": 0.05,
+      "bounds": [
+        -1.0,
+        1.0
+      ],
+      "identity": "k-DEACOO-water"
+    },
+    {
+      "kind": "reaction_coordinate",
+      "name": "carbamate-hydrolysis",
+      "coefficient": "a",
+      "origin": 2.0976409180833815,
+      "scale": 1.0,
+      "bounds": [
+        2.0976409180833815,
+        8.097640918083382
+      ],
+      "identity": "hydrolysis-a"
+    },
+    {
+      "kind": "reaction_enthalpy_shift",
+      "name": "carbamate-hydrolysis",
+      "pivot_temperature": 313.15,
+      "origin": 0.0,
+      "scale": 1000.0,
+      "bounds": [
+        -12577.268918216974,
+        27422.731081783026
+      ],
+      "identity": "hydrolysis-enthalpy-shift"
+    }
+  ],
+  "active_bounds": [
+    2
+  ]
+}
