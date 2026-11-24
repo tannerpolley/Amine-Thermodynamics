@@ -41,12 +41,12 @@ def present(out):
               [(k, *(f'{costs[s][k]:.10g}' for s in ('reference','candidate'))) for k in costs['candidate']]
               + [('Total', *(f'{sum(costs[s].values()):.12f}' for s in ('reference','candidate')))]),
         table('Table 7 pressure readback', headings,
-              [comparison(k.replace('_',' '), r) for k,r in data['table7'].items()]),
+              [comparison(k.replace('_',' ').replace('binary calibration pressure', '#425 binary calibration pressures replayed for both models').replace('pooled calibration pressures', '#425 pooled calibration pressures replayed for both models'), r) for k,r in data['table7'].items()]),
         table('Loaded CO₂ pressure by temperature band', headings,
               [comparison(f"{r['band']}, {r['role']}", r) for r in data['pressure_bands']]),
-        table('Table S10 group errors', [headings[0], 'Stage and role', 'Observed / available / relative',
-              'Temperature (K)', 'Unloaded composition', 'CO₂ loading', 'Outside R4 / R5', *headings[1:]],
-              [[r['group'], f"{r['stage']}, {r['role']}",
+        table('Table S10 group errors', [headings[0], 'Stage and role', 'Observed / available / relative-error denominator',
+              'Temperature (K)', 'Unloaded composition', 'CO₂ loading', 'Outside R4 / R5', '#413, available n / AARD / bias (%)', '#425, available n / AARD / bias (%)'],
+              [[r['group'], f"{r['stage']}, {r['role']}" if r['stage'] != 'binary' or r['role'] != 'fitted' else ('binary, #425 calibration; #413 calibration' if r['group'] == 'Horstmann VLE' else 'binary, #425 calibration; #413 comparison'),
                 ' / '.join(str(r['candidate'].get(k, 0)) for k in ('observed', 'available', 'relative_rows')),
                 span(r['temperature_K']),
                 f"{span(r['unloaded_composition'])} ({r['unloaded_composition_basis']})",
@@ -74,7 +74,7 @@ def present(out):
     old_values = [q['origin'] for q in old['parameters']['coordinates'][:3]]
     old_values.append(old['optimizer_report']['endpoint_shifts']['carbamate-hydrolysis'])
     text.append(table('Reactive coordinates', ['Quantity', '#413', '#425', 'Lower, upper', '#425 bound', 'Conditional SE #413 / #425'],
-                 [[name, f'{p:.8g}', f'{q:.8g}', ', '.join(f'{b:.8g}' for b in bounds),
+                 [[name + (' (J/mol)' if name == 'hydrolysis-enthalpy-shift' else ''), f'{p:.8g}', f'{q:.8g}', ', '.join(f'{b:.8g}' for b in bounds),
                    'lower' if i in uncertainty['active_bounds'] else 'interior',
                    ' / '.join(f'{se:.6g}' if (se := u['conditional_standard_error'].get(name)) is not None else '—'
                               for u in (previous, uncertainty))]

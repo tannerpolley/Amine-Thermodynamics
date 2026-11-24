@@ -11,10 +11,10 @@
 | Quantity or dataset | #413, n / AARD / bias (%) | #425, n / AARD / bias (%) |
 | --- | --- | --- |
 | loaded calibration | 30, 28.512, -0.653 | 30, 23.101, +0.535 |
-| binary calibration pressure | 49, 8.057, +6.667 | 49, 15.083, -4.111 |
+| #425 binary calibration pressures replayed for both models | 49, 8.057, +6.667 | 49, 15.083, -4.111 |
 | loaded outside reactive fit | 67, 53.916, -2.334 | 67, 62.892, -19.284 |
 | concentrated Lawson | 10, 38.730, -20.026 | 10, 48.583, -20.210 |
-| pooled calibration pressures | 79, 15.825, +3.887 | 79, 18.128, -2.347 |
+| #425 pooled calibration pressures replayed for both models | 79, 15.825, +3.887 | 79, 18.128, -2.347 |
 
 ### Loaded CO₂ pressure by temperature band
 
@@ -33,7 +33,7 @@
 
 ### Table S10 group errors
 
-| Quantity or dataset | Stage and role | Observed / available / relative | Temperature (K) | Unloaded composition | CO₂ loading | Outside R4 / R5 | #413, n / AARD / bias (%) | #425, n / AARD / bias (%) |
+| Quantity or dataset | Stage and role | Observed / available / relative-error denominator | Temperature (K) | Unloaded composition | CO₂ loading | Outside R4 / R5 | #413, available n / AARD / bias (%) | #425, available n / AARD / bias (%) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Bottinger-DEACOO | reactive, comparison only | 25 / 25 / 23 | 293.15–333.15 | 0.2–0.23 (DEA_mass_fraction) | 0.057–1.06 | 16 / 7 | 25, 59.203, +58.341 | 25, 51.324, +50.529 |
 | Bottinger-DEA_plus_DEAH | reactive, comparison only | 25 / 25 / 25 | 293.15–333.15 | 0.2–0.23 (DEA_mass_fraction) | 0.057–1.06 | 16 / 7 | 25, 7.485, -7.326 | 25, 6.983, -6.695 |
@@ -45,11 +45,11 @@
 | Lawson-VIII | reactive, comparison only | 10 / 10 / 10 | 298.15–366.48 | 50–54.5 (DEA_mass_percent) | 0.186–0.745 | 6 / 4 | 10, 38.730, -20.026 | 10, 48.583, -20.210 |
 | SeoHong | reactive, not fitted | 16 / 16 / 16 | 313.15–353.15 | 30 (DEA_mass_percent) | 0.404–0.727 | 11 / 11 | 16, 85.358, +83.586 | 16, 92.810, +80.567 |
 | Weiland | reactive, comparison only | 44 / 44 / 44 | 298.15 | 10–40 (DEA_mass_percent) | 0–0.5 | 44 / 0 | 44, 0.702, -0.470 | 44, 0.564, -0.084 |
-| Cai VLE | binary, fitted | 7 / 7 / 7 | 340.47–456.17 | 0.0102–0.301 (x_water) | — | — / — | 7, 51.490, +44.087 | 7, 48.553, +27.158 |
+| Cai VLE | binary, #425 calibration; #413 comparison | 7 / 7 / 7 | 340.47–456.17 | 0.0102–0.301 (x_water) | — | — / — | 7, 51.490, +44.087 | 7, 48.553, +27.158 |
 | Cai VLE | binary, pure-component comparison | 2 / 2 / 2 | 311.29–458.64 | 0–1 (x_water) | — | — / — | 2, 3.459, -3.159 | 2, 3.459, -3.159 |
-| Horstmann VLE | binary, fitted | 42 / 42 / 42 | 365.15 | 0.01305–0.99977 (x_water) | — | — / — | 42, 0.818, +0.431 | 42, 9.505, -9.323 |
+| Horstmann VLE | binary, #425 calibration; #413 calibration | 42 / 42 / 42 | 365.15 | 0.01305–0.99977 (x_water) | — | — / — | 42, 0.818, +0.431 | 42, 9.505, -9.323 |
 | Horstmann VLE | binary, pure-component comparison | 2 / 2 / 2 | 365.15 | 0–1 (x_water) | — | — / — | 2, 8.422, -8.141 | 2, 8.422, -8.141 |
-| Horstmann heat | binary, fitted | 14 / 14 / 14 | 363.15 | 0.0636–0.9903 (x_water) | — | — / — | 14, 152.450, -152.450 | 14, 17.136, -1.349 |
+| Horstmann heat | binary, #425 calibration; #413 comparison | 14 / 14 / 14 | 363.15 | 0.0636–0.9903 (x_water) | — | — / — | 14, 152.450, -152.450 | 14, 17.136, -1.349 |
 
 ### Horstmann pressure in water-rich mixtures
 
@@ -72,4 +72,4 @@
 | k-DEAH-water | -0.18834283 | -0.20827051 | -1, 1 | interior | 0.00348536 / 0.00268747 |
 | k-DEACOO-water | -0.047731441 | -0.27654165 | -1, 1 | interior | 0.0541125 / 0.00976635 |
 | hydrolysis-a | 5.8834854 | 2.0976409 | 2.0976409, 8.0976409 | lower | 0.617616 / — |
-| hydrolysis-enthalpy-shift | 247.66613 | -5206.6593 | -17783.928, 22216.072 | interior | 1344.07 / 638.087 |
+| hydrolysis-enthalpy-shift (J/mol) | 247.66613 | -5206.6593 | -17783.928, 22216.072 | interior | 1344.07 / 638.087 |
