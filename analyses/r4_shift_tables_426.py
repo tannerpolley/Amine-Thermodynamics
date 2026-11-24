@@ -2,9 +2,44 @@
 import argparse
 import csv
 import json
+import math
+import sys
 from pathlib import Path
+from string import Template
 
 RESULTS = Path(__file__).parent
+sys.path.insert(0, str(RESULTS.parent / 'src'))
+from MEA.common.deviation_statistics import deviation_statistics
+
+
+class Prose(Template):
+    delimiter = '@'
+
+
+def temperature_band(T):
+    return 'absorber' if T <= 353.2 else 'stripper' if T >= 370 else 'intermediate'
+
+
+def available_prediction(row):
+    return row['status'] == 'Available' and row.get('requested_tolerance_met', True)
+
+
+def pressure_comparisons(retained):
+    reference = {r['identity']: r for r in retained['reported']}
+    for name, rows in retained.items():
+        groups = {}
+        for r in rows:
+            campaign = r['identity'].split(':', 1)[0]
+            if (campaign in ('tong-2012', 'hartono-2021') and r['role'] == 'not fitted'
+                    and r['basis'] == 'Total equilibrium pressure'):
+                groups.setdefault((campaign, temperature_band(r['T_K'])), []).append(r)
+        for (campaign, band), observations in sorted(groups.items(), key=lambda item: (item[0][0] != 'tong-2012', item[0])):
+            pairs = [(r, reference[r['identity']]) for r in observations]
+            values = [(b['observed'], b['value']) for _, b in pairs if available_prediction(b)]
+            aard = deviation_statistics(values, 'Pa')['AARD_percent'] if values else None
+            changes = [(r['value'] - b['value']) / 1000 for r, b in pairs
+                       if available_prediction(r) and available_prediction(b)]
+            yield name, campaign, band, f'{len(changes)} / {len(pairs)}', aard, changes
 
 
 def tables(folder):
@@ -21,18 +56,21 @@ def tables(folder):
     def table(header, values):
         return ['| ' + ' | '.join(row) + ' |' for row in (header, ['---'] * len(header), *values)] + ['']
 
+    shifts = {float(r['T_K']): r for r in rows('shift.csv')}
+    pivot = shifts[313.15]
     output = table(['T (K)', 'Source ln K₄', 'Fitted ln K₄', 'Δln K₄', 'Fitted/source K₄', 'Conditional SE of ln K₄', 'Source range'],
                    [[fmt(r['T_K'], '.2f'), fmt(r['source_ln_K4']), fmt(r['fitted_ln_K4']), fmt(r['delta_ln_K4'], '+.3f'),
-                     fmt(r['K4_ratio']), fmt(r['SE_ln_K4']), r['source_range']] for r in rows('shift.csv')])
+                     fmt(r['K4_ratio']), fmt(r['SE_ln_K4']), r['source_range']] for r in shifts.values()])
     r = read('table6.json')
     output += table(['Table 6 quantity', 'Value', 'Conditional SE', 'Lower bound', 'Upper bound'], [
         ['Δln K₄ at 313.15 K', fmt(r['delta_ln_K4'], '+.3f'), fmt(r['SE_ln_K4']), *[fmt(b, '+.0f') for b in r['bounds']['level']]],
         ['Enthalpy increment (J/mol)', fmt(r['delta_h_J_mol'], ',.0f'), fmt(r['SE_h_J_mol'], ',.0f'), *[fmt(b, ',.0f') for b in r['bounds']['enthalpy']]],
     ])
     output += [f"The source and fitted hydrolysis enthalpies are {r['source_h_J_mol']/1000:.2f} and {r['fitted_h_J_mol']/1000:.2f} kJ/mol.", '']
+    controls = read('controls.json')
     output += ['### Numerical controls', ''] + table(['Control', 'Outcome', 'Result'], [
         [key, r['outcome'], ', '.join(f"{k.replace('_', ' ')} = {v}" for k, v in r.items() if k != 'outcome')]
-        for key, r in sorted(read('controls.json').items())])
+        for key, r in sorted(controls.items())])
     variants = [p.name.removesuffix('-replay.json') for p in sorted(folder.glob('*-replay.json'))]
     replay = {name: read(f'{name}-replay.json') for name in variants}
     groups = sorted(replay['reported']['cost_by_group'])
@@ -64,29 +102,47 @@ def tables(folder):
         ['R4 law', 'T (K)', 'Quantity', 'Unit', 'Available pairs', 'Minimum change', 'Maximum change'], deltas)
     if 'source-enthalpy' in variants:
         retained = {name: read(f'{name}-rows.json') for name in variants}
-        reference = {r['identity']: r for r in retained['reported']}
-        pressure = []
-        for name in variants:
-            for group in ('tong', 'hartono-2021-supplemental'):
-                for band, lower, upper in [('absorber', 0, 353.2), ('intermediate', 353.2, 370), ('stripper', 370, float('inf'))]:
-                    pairs = [(r, reference[r['identity']]) for r in retained[name] if r['group'] == group and r['role'] == 'not fitted'
-                             and (lower <= r['T_K'] <= upper if band != 'intermediate' else lower < r['T_K'] < upper)
-                             and r['basis'] == 'Total equilibrium pressure']
-                    if not pairs:
-                        continue
-                    errors = [abs(b['value']/b['observed']-1)*100 for _, b in pairs if b['status'] == 'Available']
-                    change = [(r['value']-b['value'])/1000 for r, b in pairs if r['status'] == b['status'] == 'Available']
-                    pressure.append([name, group, band, f'{len(change)} / {len(pairs)}', fmt(sum(errors)/len(errors) if errors else None, '.2f'),
-                                     fmt(min(change, default=None), '+.4g'), fmt(max(change, default=None), '+.4g')])
         output += ['### AMP total-pressure sensitivity at not-fitted observations', ''] + table(
-            ['R4 law', 'Campaign', 'Band', 'Available pairs', 'Reported-law AARD (%)', 'Min ΔP (kPa)', 'Max ΔP (kPa)'], pressure)
+            ['R4 law', 'Campaign', 'Band', 'Available pairs', 'Reported-law AARD (%)', 'Min ΔP (kPa)', 'Max ΔP (kPa)'],
+            [[name, campaign if campaign == 'tong-2012' else 'hartono-2021-supplemental', band, count,
+              fmt(aard, '.2f'), fmt(min(changes, default=None), '+.4g'), fmt(max(changes, default=None), '+.4g')]
+             for name, campaign, band, count, aard, changes in pressure_comparisons(retained)])
         nmr = [r for r in retained['reported'] if r['group'] == 'nmr']
         output += ['### Reported residuals at the calibration temperatures', ''] + table(
             ['T (K)', 'Rows', 'Mean observed carbamate (mol/mol)', 'Mean predicted minus observed (mol/mol)'],
             [[fmt(T, '.2f'), str(len(items)), fmt(sum(r['observed'] for r in items)/len(items), '.5f'),
               fmt(sum(r['value']-r['observed'] for r in items)/len(items), '+.5f')]
              for T in sorted({r['T_K'] for r in nmr}) if (items := [r for r in nmr if r['T_K'] == T])])
-    return '\n'.join(output)
+    directory = folder.parent.parent
+    uncertainty_path = next(p for p in read('identity.json')['inputs'] if p.endswith('/conditional-uncertainty.json'))
+    u = json.loads((directory / Path(uncertainty_path).relative_to(Path('analyses') / directory.name)).read_text())
+    se_multiple = lambda row: abs(float(row['delta_ln_K4'])) / float(row['SE_ln_K4'])
+    log_k = [float(shifts[T]['fitted_ln_K4']) for T in (298.15, 313.15)]
+    if 'released' in replay:
+        gradient = u['cost_gradient']['AMP-hydrolysis-enthalpy-increment']
+        b = {name: row['coefficients']['b'] for name, row in replay.items()}
+        released_step = r['delta_h_J_mol'] * (b['released'] - b['reported']) / (b['reported'] - b['source'])
+        values = dict(se_pivot=f'{se_multiple(pivot):.1f}',
+                      formation=' and '.join(f'{math.exp(-k):.4f}' for k in log_k),
+                      gradient=f'{gradient * 1e5:.3f}', projected=f'{-gradient * released_step:.2f}',
+                      evaluated=f"{replay['reported']['cost'] - replay['released']['cost']:.2f}")
+    else:
+        # Aroua et al., Table 4 absolute uncertainties and Eq. 14 slope SE.
+        source_rel = [se / k for se, k in zip((.014, .019, .038), controls['C2']['reference'], strict=True)]
+        source_multiples = [abs(float(shifts[T]['delta_ln_K4'])) / se for T, se in
+                            zip((298.15, 313.15), source_rel[1:], strict=True)]
+        source_enthalpy_se = r['source_h_J_mol'] * 114 / 1781
+        indices = [u['free_coordinates'].index(k) for k in ('hydrolysis-a', 'k-DEACOO-water')]
+        values = dict(pivot_shift=fmt(pivot['delta_ln_K4'], '+.3f'),
+                      source_multiples=' and '.join(f'{v:.1f}' for v in source_multiples),
+                      source_relative=', '.join(f'{v:.1%}' for v in source_rel),
+                      source_enthalpy_se=f'{source_enthalpy_se / 1000:.2f}',
+                      enthalpy_se_multiple=f"{abs(r['delta_h_J_mol']) / source_enthalpy_se:.1f}",
+                      hydrolysis=' and '.join(f'{math.exp(k):.3f}' for k in log_k),
+                      se_multiples=', '.join(f'{se_multiple(shifts[T]):.1f}' for T in (298.15, 313.15, 393.15)),
+                      correlation=f"{u['conditional_correlation'][indices[0]][indices[1]]:+.3f}")
+    template = Prose((directory / 'r4-shift-426.md').read_text())
+    return template.substitute(values) + '\n' + '\n'.join(output)
 
 
 if __name__ == '__main__':
@@ -101,5 +157,9 @@ if __name__ == '__main__':
         if args.check:
             if not path.is_file() or path.read_text() != rendered:
                 raise SystemExit(f'Stale generated include: {path}')
+            notebook = folder.parent.parent / 'notebook.qmd'
+            _, heading, remainder = notebook.read_text().partition(' (#426)\n')
+            if not heading or remainder.split('\n## ', 1)[0].strip() != '{{< include results/r4-shift-426/tables.md >}}':
+                raise SystemExit(f'#426 notebook section must use only its generated include: {notebook}')
         else:
             path.write_text(rendered)

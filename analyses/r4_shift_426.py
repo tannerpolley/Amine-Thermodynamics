@@ -9,11 +9,12 @@ from subprocess import check_output
 from tempfile import TemporaryDirectory
 from time import monotonic
 
-from part_ii import ROOT, SHA, SHARED, WHEEL, Route, deviation_statistics, epcsaft, jsonable
+from part_ii import ROOT, SHA, SHARED, WHEEL, Route, __file__ as ROUTE_FILE, deviation_statistics, epcsaft, jsonable
+from r4_shift_tables_426 import temperature_band, available_prediction
 sys.path[:0] = [str(ROOT / "analyses" / f"{amine}_transfer") for amine in ("amp", "dea")]
 from amp_transfer.probe_412 import law, ln_k
 from dea_transfer.reactive import A0, B0
-from dea_transfer.rerun import LIMIT, digest, read
+from dea_transfer.rerun import LIMIT, digest, read, replay_errors
 from MEA.common.analysis_io import write_csv_rows, write_json_file
 
 R, TP = epcsaft.GAS_CONSTANT_J_PER_MOL_K, 313.15
@@ -82,22 +83,22 @@ def grid_rows(route, dea):
 def deviations(rows):
     groups = defaultdict(list)
     for row in rows:
-        T = row['T_K']
-        band = 'absorber' if T <= 353.2 else 'stripper' if T >= 370 else 'intermediate'
+        band = temperature_band(row['T_K'])
         basis = row['basis']
         if row['identity'].startswith(('tong-2012:', 'hartono-2021:')) and row['role'] == 'not fitted':
             assert basis == 'Total equilibrium pressure', row['identity']
-        for temperature_band in ('all', band):
+        for band_name in ('all', band):
             for reaction, outside in [('all', 'all'), *sorted(row['outside_ranges'].items())]:
-                groups[row['group'], row['role'], basis, row['unit'], temperature_band, reaction, outside].append(row)
+                groups[row['group'], row['role'], basis, row['unit'], band_name, reaction, outside].append(row)
     for (group, role, basis, unit, band, reaction, outside), group_rows in groups.items():
-        pairs = [(r['observed'], r['value']) for r in group_rows if r['status'] == 'Available' and r.get('requested_tolerance_met', True)]
+        pairs = [(r['observed'], r['value']) for r in group_rows if available_prediction(r)]
         stats = deviation_statistics(pairs, unit) if pairs else {}
         yield dict(group=group, role=role, basis=basis, band=band, reaction=reaction,
                    outside_range=outside, **(stats | dict(unit=unit, rows=len(group_rows), available=len(pairs))))
 
 
 def prepare(work, dea):
+    start = monotonic()
     directory = ROOT / 'analyses' / ('dea_transfer' if dea else 'amp_transfer')
     retained = directory / ('results/refit-413' if dea else 'results/retransfer-412-f2-05e94210/slope-150')
     declaration = directory / ('inputs/part-ii-346/f2-carbamate-413-route.json' if dea else 'inputs/retransfer-344/phase-2/AMP-05e94210.json')
@@ -129,8 +130,10 @@ def prepare(work, dea):
               declaration.parent / route.config['specification']}
     if dea:
         inputs.add(declaration.parent / route.config['curve_rows']['path'])
-    write_json_file(out / 'identity.json', dict(commit=check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+    code = [Path(p).resolve() for p in (__file__, ROUTE_FILE)]
+    write_json_file(out / 'identity.json', dict(base_commit=check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
               wheel_sha256=SHA, engine_commit=WHEEL.parent.name.removeprefix('main-'),
+              executed_files={str(p.relative_to(ROOT)): digest(p) for p in code},
               inputs={str(p.relative_to(ROOT)): digest(p) for p in sorted(inputs)}))
     fitted_rows = [r for r in all_rows if r['role'] == 'fitted']
     fitted_T = [float(r['T_K']) for r in fitted_rows if dea or r['group'] != 'binary']
@@ -157,7 +160,13 @@ def prepare(work, dea):
         for name, increment in [('source-enthalpy', 0.), ('released', -10000.)]:
             b = seed['b'] - increment / R
             variants[name] = dict(a=ln_k(fit, TP) - b / TP, b=b)
+    check_elapsed(out, 'preparation', monotonic() - start)
     return route, out, point, variants, reference, cost, record, dea
+
+
+def check_elapsed(out, stage, seconds):
+    print(out.parent.parent.name, stage, 'seconds', seconds, flush=True)
+    assert seconds <= 900, f'{stage} exceeded 900 s ({seconds:.2f} s)'
 
 
 def replay(case, names):
@@ -169,24 +178,20 @@ def replay(case, names):
         fitted, available, cost = route.replay(variant)
         rows = route.reduce(variant, fitted=fitted)
         write_json_file(out / f'{name}-rows.json', jsonable(rows))
-        seconds = monotonic() - start
-        timing = dict(seconds=seconds, rows=len(rows), cost=cost,
+        write_csv_rows(out / f'{name}-deviations.csv', list(deviations(rows)))
+        timing = dict(seconds=monotonic() - start, rows=len(rows), cost=cost,
                   coefficients={k: law(variant, R4)[k] for k in ('a', 'b')},
                   cost_by_group={group: sum(r['cost'] for r in fitted if r['group'] == group)
                                  for group in sorted({r['group'] for r in fitted})} if available else None)
         write_json_file(out / f'{name}-replay.json', timing)
-        print(out.parent.parent.name, name, 'replay seconds', seconds, flush=True)
         if name == 'reported':
             matched = {r['identity'] for r in rows} == reference.keys() and len(rows) == len(reference) == (299 if dea else 270)
-            errors = [abs(r['value'] / reference[r['identity']] - 1) for r in rows if r['status'] == 'Available' and r['identity'] in reference]
-            prediction_error = max(errors, default=None)
-            cost_error = abs(cost / reference_cost - 1) if available else None
-            passed = matched and len(errors) == len(rows) and available and max(prediction_error, cost_error) <= LIMIT
-            record('C5', 'passed' if passed else 'failed', matched=matched, rows=len(rows), scored=len(errors),
-                   cost=cost, reference_cost=reference_cost, relative_cost_error=cost_error,
-                   max_relative_prediction_error=prediction_error, limit=LIMIT)
-            assert seconds * len(variants) < 600, 'Projected replay time exceeds 10 minutes'
-        write_csv_rows(out / f'{name}-deviations.csv', list(deviations(rows)))
+            pairs = [(r['value'], reference[r['identity']]) for r in rows if available_prediction(r) and r['identity'] in reference]
+            errors = replay_errors(pairs, cost, reference_cost)
+            passed = matched and len(pairs) == len(rows) and available and max(
+                errors['max_relative_prediction_error'], errors['relative_cost_error']) <= LIMIT
+            record('C5', 'passed' if passed else 'failed', matched=matched, rows=len(rows), scored=len(pairs), **errors, limit=LIMIT)
+        check_elapsed(out, f'{name} replay', timing['seconds'])
         start = monotonic()
         grid = route.curves(variant, grid_rows(route, dea))
         write_csv_rows(out / f'{name}-grid.csv', [
@@ -194,7 +199,7 @@ def replay(case, names):
             for r in grid])
         timing['grid_seconds'] = monotonic() - start
         write_json_file(out / f'{name}-replay.json', timing)
-        print(out.parent.parent.name, name, 'grid seconds', timing['grid_seconds'], flush=True)
+        check_elapsed(out, f'{name} grid', timing['grid_seconds'])
         if name == 'reported':
             assert all(r['status'] == 'Available' and r.get('requested_tolerance_met')
                        for r in grid if r['T_K'] in (TP, 393.15)), 'Reported pivot or stripper grid unavailable'
@@ -205,7 +210,7 @@ def replay(case, names):
             write_json_file(out / f'{name}-nmr-curves.json', jsonable(curves))
             timing['nmr_curve_seconds'] = monotonic() - start
             write_json_file(out / f'{name}-replay.json', timing)
-            print(out.parent.parent.name, name, 'NMR curve seconds', timing['nmr_curve_seconds'], flush=True)
+            check_elapsed(out, f'{name} NMR curves', timing['nmr_curve_seconds'])
 
 
 if __name__ == '__main__':

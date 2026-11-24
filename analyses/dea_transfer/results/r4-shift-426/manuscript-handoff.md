@@ -24,3 +24,11 @@ model-derived values without a stated uncertainty. Above the NMR
 temperature ranges (333.15 K for DEA and 318.15 K for AMP), speciation
 results are calculations. Keep AMP total-pressure comparisons and grid
 CO₂ partial pressures distinct.
+
+The Tong 2012 comparison includes 20 absorber and 25 stripper total
+pressures, including the five baseline observations. The reported-law
+AARDs are 25.12% and 25.47%, respectively. The absorber and stripper AARDs
+are 25.11% and 25.48% with the source enthalpy, 25.13% and 25.45% with the
+released enthalpy, and 29.53% and 25.41% with the source law. These are
+fixed-parameter comparisons at observations outside the fit.
+[AMP total-pressure sensitivity](../../../amp_transfer/results/r4-shift-426/tables.md#amp-total-pressure-sensitivity-at-not-fitted-observations)
