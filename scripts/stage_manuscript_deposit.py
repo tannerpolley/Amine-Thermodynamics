@@ -140,7 +140,8 @@ def selected_files(tracked, records):
         f'{B}/results/split-cause-342/final-supplied-F2.json.gz',
         f'{B}/results/same-data-comparison/matched-score.json',
         f'{L}/.latexmkrc', f'{L}/main.tex', f'{L}/supplement.tex',
-        f'{L}/chemistry_macros.tex', f'{L}/references.bib', f'{L}/submission/highlights.txt',
+        f'{L}/chemistry_macros.tex', f'{L}/references.bib', f'{L}/transfer_sources.bib',
+        f'{L}/submission/highlights.txt',
         *(f'{L}/scripts/{name}.py' for name in ('final_rerun_tables', 'f2_figures', 'dea_displays')),
         *(f'{DEA}/{name}.py' for name in ('f2_carbamate', 'rerun', 'present_current')),
         *(f'{AMP}/{name}.py' for name in (
