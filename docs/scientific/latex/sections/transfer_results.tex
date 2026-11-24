@@ -8,14 +8,20 @@ With the shared parameters fixed, each of the three amines can be fitted: \cref{
 
 % P:transfer-dea-parameters
 For DEA the neutral parameters and the DEA--water interaction are set before the reactive fit, so the binary data are comparisons.
-The calculated water--DEA excess enthalpies are positive, whereas the measurements of Horstmann et al.\ are negative \cite{horstmannPhaseEquilibriumExcess2002}, and the bubble pressures of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} are described poorly, with an AARD of 40.8\,\% (Table~\ref{supp-tab:supplement-transfer-data}, Fig.~\ref{supp-fig:dea-binary}).
+The calculated water--DEA excess enthalpies are positive, whereas the measurements of Horstmann et al.\ are negative \cite{horstmannPhaseEquilibriumExcess2002}, and the bubble pressures of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} are described poorly, with an AARD of 40.8\,\% (\cref{fig:dea-binary}, Table~\ref{supp-tab:supplement-transfer-data}).
 The model therefore describes the binary mixing enthalpy incorrectly even though absorption heats enter the reactive fit; the comparison does not identify the cause.
 Of the four fitted DEA parameters, the cation--water interaction is well determined.
 The carbamate--water interaction is not distinguishable from zero and is strongly correlated with the R4 constant term (conditional correlation 0.974), so the data constrain their combination rather than each separately.
 
+\begin{figure}[pos=!htbp]
+\centering\includegraphics[width=\linewidth]{dea-current-binary-comparisons.pdf}
+\caption{Water--DEA binary system against water mole fraction: excess enthalpy per mole of mixture at the states of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002} (a) and bubble pressure at the states of the isobaric measurements of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (b). Circles are measurements and crosses are values calculated with the DEA model at each measured state. Both data sets are comparison only, and neither calculation uses a reaction.}
+\label{fig:dea-binary}
+\end{figure}
+
 % P:transfer-mdea-amp-parameters
 For MDEA and AMP the amine--water interaction is part of the reactive fit, and the fitted binary bubble pressures deviate by 1--3\,\%.
-The temperature coefficient of the MDEA--water interaction is well determined, and the interaction itself is held at its bound at \SI{423}{\kelvin}; the cation--bicarbonate interaction is at its upper bound, the cation--water interaction is not distinguishable from zero, and the cation dispersion energy has a standard error of 7\,\% of its value.
+The temperature coefficient of the MDEA--water interaction is well determined, and the interaction itself is held at its bound at \SI{423}{\kelvin}, set from the onset of the calculated gap at \SI{1.466}{\mega\pascal}; the cation--bicarbonate interaction is at its upper bound, the cation--water interaction is not distinguishable from zero, and the cation dispersion energy has a standard error of 7\,\% of its value.
 The MDEA standard errors are conditional on the two parameters on bounds.
 Two of the eight fitted AMP parameters are on bounds, the R4 enthalpy increment at its lower and the carbamate diameter at its upper bound, \SI{6.5}{\angstrom}; the AMP standard errors are conditional on the fixed slope $b_{\mathrm{AMPH^+,w}}$.
 The fitted R4 correlations of DEA and AMP are effective quantities conditional on the fixed shared parameters, not independent measurements of an equilibrium constant.
@@ -82,7 +88,7 @@ The fitted carbamate fractions of AMP have a larger deviation than its fitted pr
 \subsection{Comparison of the four amines}\label{sec:results-compared}
 % P:compared
 The parameters shared with MEA support a fit of each of the other amines, with fitted loaded-solution pressures that deviate by about 10--28\,\% (\cref{tab:amine-summary}).
-Phase stability separates the amines: no instability is detected for MEA or DEA, no liquid--liquid split is found among the completed searches for MDEA, whose \COtwo-free solution is kept single-phase by a bound, and none is detected for AMP at its reported parameters.
+Phase stability separates the amines: no instability is detected for MEA or DEA, no liquid--liquid split is found among the completed searches for MDEA, whose \COtwo-free solution is kept free of a calculated gap at \SI{1.466}{\mega\pascal} by a bound, and none is detected for AMP at its reported parameters.
 Closer description of the fitted pressures does not go with more splits: the AMP and MEA models describe theirs most closely and have no detected instability.
 Within AMP the fitted loaded-solution pressures deviate by 10.5\,\% with the cation--water slope fixed and by 10.3\,\% with it fitted; other fixed slopes do not behave alike (Section~\ref{supp-sec:s-amp-slope}).
 
@@ -93,7 +99,7 @@ Within AMP the fitted loaded-solution pressures deviate by 10.5\,\% with the cat
 % P:literature-mea
 \Cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026}.
 The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures and the Kim heats at \SI{393.15}{\kelvin}; the two models were fitted to different data, so these deviations do not rank them.
-Implemented here with the published parameters of Hong et al.\ \cite{hongModelingCO2Absorption2027}, whose PC-SAFT model contains no ions, it deviates by 24.8\,\% from the \COtwo partial pressures on the 132 observations inside their fitted range, against 22.6\,\% for the MEA model, and its liquid fails a local stability test at fixed pathway weight at 131 of them (Section~\ref{supp-sec:s-hong}).
+Implemented here with the published parameters of Hong et al.\ \cite{hongModelingCO2Absorption2027}, whose PC-SAFT model contains no ions, it deviates by 24.8\,\% from the \COtwo partial pressures on the 132 observations inside their fitted range, against 22.6\,\% for the MEA model, but at 131 of them its liquid fails a local stability test at fixed pathway weight, so that deviation refers to equal-fugacity pressures of a locally unstable liquid rather than to equilibrium pressures of the model (Section~\ref{supp-sec:s-hong}).
 On the 19 Ma'mun pressures (\cref{tab:published-models}) the MEA model deviates more than the PC-SAFT calculation of Baygi and Pahlavanzadeh and less than the SAFT-HR calculation of Najafloo and Zarei; the eNRTL model of Zhang et al.\ is closest.
 
 \input{tables/published-models}
