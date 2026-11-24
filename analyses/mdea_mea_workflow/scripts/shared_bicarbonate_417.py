@@ -6,13 +6,13 @@ import json
 import sys
 import time
 
-from bounded_binary_411 import DECLARATION, OLD, PAIR, RESULTS, Route, binary_check, k_at, rereference
+from bounded_binary_411 import DECLARATION, OLD, PAIR, RESULTS, Route, binary_check, k_at, np, rereference
 from part_ii import ROOT, SHA, WHEEL, deviation_statistics, stable as r
 from epcsaft.parameters import document_mapping
 import paper_evidence_341 as paper
 
 sys.path.insert(0, str(ROOT/'analyses/amp_transfer'))
-from classify_descents import COINCIDENCE, classify
+from classify_descents import COINCIDENCE, classify, matched
 
 f, s = paper.f, r.s
 KEY = 'pair/bicarbonate-anion/water/k_ij'
@@ -28,12 +28,25 @@ def run_key(label, mapping, k):
     return RUN/f'{label}-{k!r}-{digest}'
 
 
+def vapor_at_parent(model, state, trial):
+    roots = matched(trial['roots'], 1e-10)
+    if not roots or trial.get('reclosed_evidence') != 'evaluated' or trial['reclosed_quantities']['tpd_over_rt'] >= 0:
+        return False
+    root = min(roots, key=lambda q: q['log_density_distance'])
+    if root['returned'] != 'unspecified':
+        return root['returned'] == 'vapor'
+    density = root['density']*np.geomspace(1e-4, 1., 33)
+    batch = model.states([state['temperature_K']]*33, rho=density, x=trial['witness']['phase']['composition'], derived_properties=True)
+    trial['isotherm'] = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
+    return all(v is not None and v > 0 for v in batch.pressure_density_derivative) and all(np.diff(batch.pressure) > 0)
+
+
 def witnesses(route, point, rows):
-    counts, details = Counter(), []
-    for row in rows:
-        counts['unavailable_records'] += not row['available']
-        counts['descent_records'] += r.descent(row)
-        if 'same_calculation_as' in row or not r.descent(row):
+    descents = [row for row in rows if r.descent(row)]
+    counts = Counter(unavailable_records=sum(not row['available'] for row in rows), descent_records=len(descents))
+    details, candidates = [], []
+    for row in descents:
+        if 'same_calculation_as' in row:
             continue
         counts['distinct_descents'] += 1
         vapor = [w for w in row.get('witnesses', []) if w['density_side'] == 1]
@@ -47,13 +60,18 @@ def witnesses(route, point, rows):
         counts['calculations_with_vapor_coincidence'] += len(distances) > unmatched
         counts['calculations_with_unmatched_liquid_label'] += unmatched > 0
         details.append(dict(key=row['key'], distances=distances, unmatched=unmatched))
-    needs_roots = {row['key'] for row in details if row['unmatched']}
-    candidates = [row for row in rows if row['key'] in needs_roots or
-                  ('same_calculation_as' not in row and (row.get('native_branch') == 'unresolved'
-                   or row.get('supplied_branch') in ('liquid','mixed','unresolved')))]
-    phases = classify(route, point, candidates, route.states(route.bind(point)))
-    counts['confirmed_distinct_splits'] = sum(any(a['confirmed'] for a in state['attempts']) for state in phases)
-    counts['unresolved_phase_identity'] = len(phases)-counts['confirmed_distinct_splits']
+        if unmatched or row['native_branch'] == 'unresolved' or row['supplied_branch'] in ('liquid','mixed','unresolved'):
+            candidates.append(row)
+    spec = route.bind(point)
+    phases = classify(route, point, candidates, route.states(spec))
+    unmatched = {row['key'] for row in details if row['unmatched']}
+    for state in phases:
+        vapor = [vapor_at_parent(spec.model, state, trial) for trial in state.get('supplied_pressure_roots', [])]
+        split = any(attempt['confirmed'] for attempt in state['attempts'])
+        resolved = bool(vapor) and all(vapor) and state['key'] not in unmatched and state['native_branch'] != 'unresolved'
+        state['phase_identity'] = 'two liquids' if split else 'vapor' if resolved else 'unresolved'
+    counts['confirmed_distinct_splits'] = sum(state['phase_identity'] == 'two liquids' for state in phases)
+    counts['unresolved_phase_identity'] = sum(state['phase_identity'] == 'unresolved' for state in phases)
     return dict(counts=counts, witnesses=details, pressure_roots=phases)
 
 
@@ -94,7 +112,6 @@ def bind_wheel():
     r.COMMIT, r.SHA, r.WHEEL = WHEEL.parent.name.removeprefix('main-'), SHA, WHEEL
     f.a.COMMIT, f.a.SHA, f.a.WHEEL = r.COMMIT, SHA, WHEEL
     s.ENGINE_COMMIT, s.ENGINE_WHEEL_SHA256 = r.COMMIT, SHA
-    r.verify()
 
 
 def controls(mea, mdea):
@@ -118,8 +135,6 @@ def controls(mea, mdea):
     critical = route.load(bound['critical'])['rows']
     upper = next(row['k_no_gap'] for row in critical if row['T_K'] == 423.)-bound['margin']
     assert upper == -0.06711345443725586 and k_at(mdea['parameters'],423.) <= upper
-    route.write('binary.json', binary_check(route, mdea))
-    print('Controls', cost, mdea_cost, flush=True)
     return cost, route, critical, upper
 
 
@@ -197,14 +212,6 @@ def profile(mea, control_cost):
     return selected
 
 
-def assess_mea(point):
-    source = ROOT/point['run']/'fit'
-    endpoint = max(source.glob('parameters-*.json'))
-    f.OUT = run_key('mea-assessment', r.read(endpoint), point['k'])
-    f.write('comparison/replay.json', r.read(source/'replay.json'))
-    f.evidence('comparison', endpoint)
-    return f.scores('comparison', r.read(endpoint))
-
 def mdea_fit(side, k, reference, control, critical, upper):
     starts = [control.load(ref) for ref in control.config['starts']]
     route = Route(DECLARATION, out=run_key(f'mdea-{side}', reference, k))
@@ -237,7 +244,6 @@ def mdea_fit(side, k, reference, control, critical, upper):
             endpoints.append((report['endpoint_replay_cost'], name, endpoint))
     assert endpoints, (side, 'no converged eight-coordinate endpoint')
     cost, chosen, point = min(endpoints)
-    route.write('endpoint.json', point)
     route.reduce(point)
     margin = [dict(T_K=row['T_K'], distance=row['k_no_gap']-k_at(point['parameters'],row['T_K'])) for row in critical]
     for cid in ('methyldiethanolamine', 'water'):
@@ -272,12 +278,6 @@ def mdea_comparison(data):
         return deviation_statistics(pairs, rows[0]['unit']) if pairs else {}
     f.write('mdea-comparison.json', {name: dict(total=list(map(len, rows)), original=[statistics(rr, ids) for rr,ids in zip(rows,available,strict=True)],
                                               paired=[statistics(rr, paired) for rr in rows]) for name,rows in groups.items()})
-    rows = [{r['identity']: r for r in case} for case in data]
-    for label, keep in [('pressure', lambda r: r['unit'] == 'Pa'),
-                        ('carbonate', lambda r: r['group'].startswith('Bottinger-bicarbonate') or r['row'].get('ratio') == 'carbonate')]:
-        changed = [[case[key] for case in rows] for key in sorted(paired) if keep(rows[0][key])]
-        f.write(f'mdea-largest-{label}.json', {f'{a}-{b}': max(changed, key=lambda rr: abs(rr[a]['value']-rr[b]['value']))
-                                               for a,b in [(1,0),(2,0),(2,1)]})
 
 
 if __name__ == '__main__':
