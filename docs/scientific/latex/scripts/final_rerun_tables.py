@@ -1,5 +1,6 @@
 """Render promoted F2 MEA results (#341, Engine 391dfe5d) and explicitly historical comparisons; no Engine computation."""
 import ast
+import gzip
 import json
 import math
 import re
@@ -248,8 +249,9 @@ OTHER = {}
 
 
 def other(path):  # DEA, MDEA and AMP files postdate BASE: hashed into the table headers, not compared with BASE
-    OTHER[path] = hashlib.sha256((ROOT/path).read_bytes()).hexdigest()
-    return json.loads((ROOT/path).read_text())
+    data = (ROOT/path).read_bytes()
+    OTHER[path] = hashlib.sha256(data).hexdigest()
+    return json.loads(gzip.decompress(data) if path.endswith('.gz') else data)
 
 
 
@@ -429,6 +431,31 @@ def main():
     table('supplement_correlations.tex', r"Conditional correlations of the 10 fitted parameters that are not at a bound.", ['Parameter']+[str(i+1) for i in range(10)], [[f'{i+1}. {interior[i]}']+[num(v,3) if j<=i else '' for j,v in enumerate(row)] for i,row in enumerate(covariance['native_correlation'])], [.26]+['r']*10)
     profiles = a.load(E/'uncertainty/profiles.json')
     table('bound_profiles.tex', r"Refits with the \ce{MEAH+}--\ce{MEACOO-} interaction fixed inside its lower bound. || The other parameters are refitted. Phase stability was not searched for these refits.", ['Distance from the bound (% of range)','Fixed interaction','$C$','Change in $C$'], [[num(100*r['fraction']),num(r['fixed_value']),num(r['cost'],9),num(r['delta_cost'],7)] for r in profiles], ['r']*4)
+    # The shared water-bicarbonate interaction fixed at two other values whose MEA refits stay within the largest change of bound_profiles; MDEA refitted at each.
+    S, M = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/', 'analyses/mdea_mea_workflow/results/bounded-binary-411/'
+    profile, search, compared = (other(S + f) for f in ('profile.json.gz', 'mdea-search-readback.json', 'mdea-comparison.json.gz'))
+    model_cost = a.load(E/'candidate/replay.json')['cost']
+    assert abs(model_cost - profile['center_cost']) <= 1e-6 * model_cost  # the caption's statement about the refit at k0
+    reported, states = other(M + 'summary-row.json'), other(M + 'stability.json')['grid']['states']
+    allowance, sides = max(r['delta_cost'] for r in profiles), [profile['selected'][s] for s in ('low', 'high')]
+    assert all(0 < p['cost'] - profile['center_cost'] <= allowance and p['k'] == search[s]['k'] for p, s in zip(sides, ('low', 'high')))
+    assert other(S + 'mdea-group-readback.json')['ordered_cases'] == ['reported', 'low', 'high']
+    def aard(group):
+        cases = compared[group]['original']
+        assert len({c['relative_rows'] for c in cases}) == 1
+        return [f"{c['AARD_percent']:.2f}" for c in cases]
+    assert all(2 * search[s]['pressure_reference_failures'] > search[s]['counts']['unavailable_records'] for s in ('low', 'high'))
+    ermatchkov = compared['Ermatchkov']['original'][0]['relative_rows']
+    table('supplement-bicarbonate-sensitivity.tex', rf"MEA and MDEA refits with the shared water--bicarbonate interaction $k$ fixed at the value of the MEA model, $k_0$, and at two other values. || $C(k)$: objective of the MEA fit with $k$ fixed and the other parameters refitted; the refit at $k_0$ reproduces the objective of the MEA model within $10^{{-6}}C$, and both other values keep $C(k)-C(k_0)$ within {allowance:.4f}, the largest change in Table~\ref{{tab:bound-profiles}}. The MDEA parameters are refitted at each value with the same data, weights, bound and initial parameter sets. The {ermatchkov} CO2 partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation.",
+          ['Quantity', 'MEA model', 'Lower value', 'Upper value'],
+          [['Water--bicarbonate interaction $k$', *(f'{k:.4f}' for k in (profile['center']['k'], *(p['k'] for p in sides)))],
+           ['MEA objective change $C(k)-C(k_0)$', *(f"{c - profile['center_cost']:.4f}" for c in (model_cost, *(p['cost'] for p in sides)))],
+           ['MDEA objective', *(f'{c:.4f}' for c in (reported['data_cost'], search['low']['cost'], search['high']['cost']))],
+           ['Fitted MDEA pressures, AARD (%)', *aard('all pressures fitted')],
+           ['MDEA pressures outside the objective, AARD (%)', *aard('all pressures not fitted')],
+           [f'Unfinished searches of {states}', reported['unavailable_searches'], *(search[s]['counts']['unavailable_records'] for s in ('low', 'high'))],
+           ['Confirmed liquid--liquid splits', reported['liquid_liquid_splits_found'], *(search[s]['counts']['confirmed_distinct_splits'] for s in ('low', 'high'))]],
+          [.46, 'r', 'r', 'r'])
     kim = a.load(F/'kim2007-heat-pathways/summary.json')['temperatures']
     table('kim_alternatives.tex', r"Kim finite-interval heat comparisons at 393.15 K for alternative source exclusions. || RMSE is kJ/mol absorbed CO2; AARD is percent. All alternatives use the MEA model.", ['Intervals','$N$','RMSE','AARD'], [[name,kim['393.15']['metrics']['semi_differential'][key]['n'],num(kim['393.15']['metrics']['semi_differential'][key]['rmse'],6),num(kim['393.15']['metrics']['semi_differential'][key]['aard_percent'],6)] for key,name in [('all_printed','All tabulated intervals'),('source_consistent','Without the two inconsistent intervals'),('without_first120','Also without first intervals')]], ['l','r','r','r'])
     weights = a.rows(E/'objective-groups.csv')

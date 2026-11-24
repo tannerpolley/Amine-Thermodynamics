@@ -735,6 +735,25 @@ stated = {'main.tex': [mea, amp, dea, f"the {escore['112 current-not-fitted pres
           'sections/mea_system_modeling_results.tex': bands_main + [f1(read(MEA + path)['pressure_aard_percent']) for path in ('same-data-comparison/matched-score.json', 'paper-evidence-341/same-data-comparison/matched-score.json')] + [f"AARD of {escore['Jakobsen carbonate share'][0]:.1f}"],
           'submission/highlights.txt': [mea + '%', f'{amp}–{dea}%', ours + '%', theirs + '%'],
           'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test"]}
+# Water-bicarbonate refits: the main-text paragraph and the supplement text beside the table that final_rerun_tables.py writes from the same files.
+SB = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/'
+sbprof, sbsearch, sbcomp = read(SB + 'profile.json.gz'), read(SB + 'mdea-search-readback.json'), read(SB + 'mdea-comparison.json.gz')
+assert read(SB + 'mdea-group-readback.json')['ordered_cases'] == ['reported', 'low', 'high']  # the case order of every 'original' list below
+sbids = [r['identity'] for r in efit if r['conditional_SE']]
+sbcorr = dict(zip(sbids, read(MEA + 'paper-evidence-341/uncertainty/covariance.json')['native_correlation'][sbids.index('pair/bicarbonate-anion/water/k_ij')]))
+sballow = max(r['delta_cost'] for r in read(MEA + 'paper-evidence-341/uncertainty/profiles.json'))
+sblow, sbhigh = (sbprof['selected'][s] for s in ('low', 'high'))
+sbrise = [p['cost'] - sbprof['center_cost'] for p in (sblow, sbhigh)]
+sbfit, sbout = ([c['AARD_percent'] for c in sbcomp[g]['original']] for g in ('all pressures fitted', 'all pressures not fitted'))
+sbmea = sbprof['searches'][repr(sblow['k'])]
+assert max(sbrise) <= sballow and max(abs(sbfit[2] - sbfit[0]), abs(sbout[2] - sbout[0])) < 0.05 and sbsearch['high']['counts']['confirmed_distinct_splits'] == 0
+assert all(sbprof['searches'][repr(p['k'])]['grid']['descent'] == sbprof['searches'][repr(p['k'])]['offset']['descent'] == sbprof['searches'][repr(p['k'])]['census']['descent'] == 0 for p in (sblow, sbhigh))
+stated['sections/transfer_results.tex'] += [f"{sbcorr['pair/carbamate-anion/water/k_ij']:.3f} with the carbamate--water and ${sbcorr['pair/protonated-monoethanolamine/water/k_ij']:.3f}$ with",
+    f"These values, {sblow['k']:.4f} and its upper bound {sbhigh['k']:.1f} against {sbprof['center']['k']:.4f} in the MEA model, raise the refitted MEA objective by {sbrise[0]:.3f} and {sbrise[1]:.3f}, within {sballow:.4f}",
+    rf"deviate by {f1(sbfit[1])} instead of {f1(sbfit[0])}\,\% and those outside the objective by {f1(sbout[1])} instead of {f1(sbout[0])}\,\%",
+    f"{sbsearch['low']['counts']['unavailable_records']} instead of {msum['unavailable_searches']} searches do not finish, and {WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]} liquid--liquid splits are confirmed"]
+stated['supplement.tex'] += [f"at the {sbmea['grid']['states'] + sbmea['offset']['states']} liquid and {sbmea['census']['states']} liquid--vapor states",
+    f"At the lower bound, ${sbprof['points']['-0.5']['k']:g}$, the objective rises by {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}, so the midpoint {sblow['k']:.4f} was taken"]
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:
