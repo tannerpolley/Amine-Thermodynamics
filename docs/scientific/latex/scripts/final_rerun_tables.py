@@ -1,9 +1,11 @@
 """Render promoted F2 MEA results (#341, Engine 391dfe5d) and explicitly historical comparisons; no Engine computation."""
 import ast
+from functools import reduce
 import gzip
 import json
 import math
 import re
+from operator import getitem
 from pathlib import Path
 import sys
 
@@ -213,7 +215,7 @@ def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
             for row, after in zip(data, [*data[1:], None])]
     if len(data) <= 32 and not landscape and name != 'supplement_literature_comparison.tex':  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
         # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
-        place = '[!htbp]' if '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
+        place = '[!htbp]' if name.endswith('_reference_state.tex') or '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
         OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{' + str(sep) + r'pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
                                    r'\toprule', head, r'\midrule', *rows, r'\bottomrule', r'\end{tabular}',
                                    *([r'\par\smallskip\parbox{\linewidth}{' + notes + '}'] if notes else []), r'\end{table}', ''])
@@ -254,6 +256,22 @@ def other(path):  # DEA, MDEA and AMP files postdate BASE: hashed into the table
     return json.loads(gzip.decompress(data) if path.endswith('.gz') else data)
 
 
+
+
+def reference_states():
+    folder = E.parent/'reference-states-428'
+    for case, spec in json.loads((folder/'tables.json').read_text()).items():
+        record = json.loads((folder/f'{case}.json').read_text())
+        assert all(record['checks'].values()), case
+        rows = [[label, *(format(reduce(getitem, path, record), precision) if path else '' for path in paths)]
+                for label, precision, *paths in spec['rows']]
+        name = f'{case}_reference_state.tex'
+        table(name, spec['caption'], spec['headings'], rows, spec['cols'])
+        provenance = ''.join(f'% Input: {p.name} SHA256 {hashlib.sha256(p.read_bytes()).hexdigest()}\n'
+                             for p in (folder/'tables.json', folder/f'{case}.json'))
+        if '--check' not in sys.argv:
+            (folder/name).write_text(provenance+OUTPUTS[name])
+        assert (folder/name).read_text() == provenance+OUTPUTS[name], name
 
 
 def main():
@@ -497,4 +515,4 @@ def main():
     (ROOT/'docs/scientific/latex/builds/347-input-hashes.json').write_text(json.dumps({'commit':BASE,'files':a.INPUTS},indent=2)+'\n')
 
 if __name__ == '__main__':
-    main()
+    reference_states() if '--reference-states' in sys.argv else main()
