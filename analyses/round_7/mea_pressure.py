@@ -7,6 +7,7 @@ import sys
 from time import monotonic
 
 from calculations import OUT, WORK, a, r, save
+from comparisons import off_window_population
 
 s, eq, f = r.s, r.eq, a.f
 REFERENCE = a.OUT / 'MEA'
@@ -153,28 +154,44 @@ def fit(label):
 
 
 def off_window():
-    started = monotonic()
     r.verify()
-    rows = [q for q in canonical().values() if q['active_view_member']=='yes' and q['CO2_pressure']
-            and q['MEA_weight_fraction'] and q['temperature_reported_C'] and (
-        (q['source_key']=='Jou1995' and float(q['temperature_reported_C'])<40 and float(q['MEA_weight_fraction'])==.30)
-        or (q['source_key']=='Aronu2011' and float(q['MEA_weight_fraction']) in (.15,.45)))]
+    rows = off_window_population()
     template = next(iter(requests()[0].values()))['request']
     for label in ('incumbent','F2','F4'):
+        started = monotonic()
         path = REFERENCE/'F4/parameters.json' if label=='incumbent' else OUT/f'E/{label}/parameters.json'
         mapping = s.parameter_mapping(path)
         spec = r.bind(mapping)
         spec.inputs['endpoint'] = mapping
-        observations = []
-        for source in rows:
-            identity = 'off-window:'+source['observation_id']
-            q = pressure_record(spec,pressure_template(spec)[0],identity,dict(
-                request=s.source_feed_request(template,source),targets=[dict(source_identity=source['source_key'],
-                    observed=float(source['CO2_pressure'])*1000)]),group=source['source_key'])
-            observations.append(dict(q,role='comparison'))
-        values = r.d.evaluate(spec,observations)
-        save(OUT/f'E/{label}/off-window.json.gz',dict(rows=values,source_rows=rows,
-             parameter_sha256=s.sha256(path),source_sha256=s.sha256(s.CANONICAL_VLE),seconds=monotonic()-started))
+        values = {}
+        pilot = rows[::12]
+        path_out = OUT/f'E/{label}/off-window.json.gz'
+        for batch in (pilot,[source for source in rows if source not in pilot]):
+            tick = monotonic()
+            for source in batch:
+                identity = 'off-window:'+source['observation_id']
+                observed = float(source['CO2_pressure'])*1000
+                try:
+                    q = pressure_record(spec,pressure_template(spec)[0],identity,dict(
+                        request=s.source_feed_request(template,source),targets=[dict(source_identity=source['source_key'],
+                            observed=observed)]),group=source['source_key'])
+                    row, = r.d.evaluate(spec,[q])
+                except (ValueError,RuntimeError) as error:
+                    row = dict(identity=identity,observed=observed,unit='Pa',group=source['source_key'],
+                               status='Exception',message=f'{type(error).__name__}: {error}',value=None)
+                values[identity] = dict(row,role='comparison')
+            if batch is pilot:
+                pilot_seconds = monotonic()-tick
+                projected = pilot_seconds*len(rows)/len(pilot)
+                if projected>1200:
+                    save(WORK/f'E/{label}/off-window-pilot.json.gz',dict(rows=list(values.values()),
+                         projected_seconds=projected,pilot_seconds=pilot_seconds))
+                    raise SystemExit(f'{label} off-window projection {projected:.1f} s exceeds 1200 s')
+        seconds = monotonic()-started
+        save(path_out,dict(rows=[values['off-window:'+source['observation_id']] for source in rows],
+             source_rows=rows,parameter_sha256=s.sha256(path),source_sha256=s.sha256(s.CANONICAL_VLE),
+             wheel_sha256=r.SHA,pilot_seconds=pilot_seconds,projected_seconds=projected,seconds=seconds))
+        print(f'{label} off-window MEA {seconds:.2f} s (pilot projected {projected:.2f} s)',flush=True)
 
 
 if __name__=='__main__':

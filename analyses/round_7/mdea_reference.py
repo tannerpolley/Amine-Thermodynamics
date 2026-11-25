@@ -8,7 +8,8 @@ from time import monotonic
 from calculations import MDEA, OUT, SALT, WORK, a, mdea_incumbent, r, save, transfer
 
 from classify_descents import COINCIDENCE, DENSITY_WINDOW, matched
-from part_ii import Route, deviation_statistics, epcsaft, eq, np
+from comparisons import mdea_deviations
+from part_ii import Route, epcsaft, eq, np
 from phases import fixed
 from reaction_reference import FixedReference, reference_readback
 from verify_reference_calorics import first_actions, observable
@@ -257,21 +258,9 @@ def census():
                      resolved_lowering=attempt.get('Gibbs_decrease_over_RT_mol',-math.inf)>
                                        attempt.get('numerical_error_over_RT_mol',math.inf)).items() if not passed]
     assert target['salt']['P_Pa']==target['historical']['P_Pa']
-    reductions = []
-    groups = {(x['group'],x['role'],x['unit']) for x in salt_data.values()}
-    for group,role,unit in sorted(groups,key=str):
-        all_rows = [x for x in salt_data.values() if (x['group'],x['role'],x['unit'])==(group,role,unit)]
-        admissible = [x for x in all_rows if any(
-            t['completed_without_descent'] and t['below_bubble_salt'] is False and t['historical']['bubble_multiplier'] is None
-            for t in links[x['identity']])]
-        reduction = dict(group=group,role=role,unit=unit)
-        for label,pool in (('all',all_rows),('resolved_fixed_pressure_subset',admissible)):
-            pairs = [(x['observed'],x['value']) for x in pool if x['status']=='Available' and x.get('requested_tolerance_met')]
-            reduction[label] = dict(attempted=len(pool), available=len(pairs), scores=deviation_statistics(pairs,unit) if pairs else None)
-        reductions.append(reduction)
     historical_stability = MDEA.RESULTS/'stability.json'
     hist = r.read(historical_stability)
-    save(OUT/'B/census.json.gz',dict(seconds=monotonic()-start, wheel_sha256=r.SHA,
+    doc = dict(seconds=monotonic()-start, wheel_sha256=r.SHA,
          parameter_sha256=r.s.sha256(source), joins=links, sobrinorows=sobrino,
          below_bubble_observations=sorted(below_observations),
          below_bubble_observation_counts=Counter(salt_data[i]['unit'] for i in below_observations),
@@ -283,10 +272,73 @@ def census():
             supplied_trial_counts=hist['grid']['supplied_trial_counts']),
             salt_435_confirmed=salt_record['confirmed'],salt_435_geometry_sha256=r.s.sha256(SALT/'search-0.json.gz')),
          below_bubble_421=sorted(below), unfinished_435=sorted(unfinished), intersection=sorted(below & unfinished),
-         cross_tab=[dict(flags=k,count=v) for k,v in table.items()], metrics=reductions, targeted=target))
+         cross_tab=[dict(flags=k,count=v) for k,v in table.items()], targeted=target)
+    admit_census(doc)
+
+
+def admit_census(doc):
+    started = monotonic()
+    point, source = mdea_incumbent('salt')
+    assert doc['parameter_sha256']==r.s.sha256(source)
+    run = route('salt','B')
+    spec = run.bind(point)
+    states = {q['key']:q for q in run.states(spec)}
+    fixed = [q for links in doc['joins'].values() for q in links if q['historical']['bubble_multiplier'] is None]
+    # A retained alias shares the parent declaration, not just its reported T/loading.
+    unique = {q['same_calculation_as'] or q['key']:q for q in fixed}
+    keys = list(unique)
+    pilot = keys[::20]
+    readbacks = {}
+    for batch in (pilot,[k for k in keys if k not in pilot]):
+        tick = monotonic()
+        for key in batch:
+            link = unique[key]
+            row = dict(T_K=link['historical']['T_K'],assigned_Pa=link['pressure_Pa'],bubble_Pa=None,
+                       requested_tolerance_met=False)
+            readbacks[key] = row
+            try:
+                item = run.stability_row(spec,dict(states[key],compressed=True),1.)
+                assert item.problem.temperature.value==row['T_K'] and item.problem.pressure.value==row['assigned_Pa'], key
+                assert item.pressure_reference.temperature.value==item.problem.temperature.value
+                assert item.pressure_reference.feed.values==item.problem.feed.values
+                row['feed_mol'] = dict(zip(spec.parameters.component_ids,item.problem.feed.values,strict=True))
+                result = eq.solve_equilibrium(spec.model,item.pressure_reference)
+                row.update(message=result.message,requested_tolerance_met=result.requested_tolerance_met,
+                           result_pressure_Pa=result.pressure if math.isfinite(result.pressure) else None,
+                           row_tolerance=item.pressure_reference.row_tolerance)
+                if result.requested_tolerance_met and math.isfinite(result.pressure) and result.pressure>0:
+                    row['bubble_Pa'] = result.pressure
+            except (ValueError,RuntimeError) as error:
+                row['message'] = f'{type(error).__name__}: {error}'
+        if batch is pilot:
+            pilot_seconds = monotonic()-tick
+            projected = pilot_seconds*len(keys)/len(pilot)
+            if projected>1200:
+                save(WORK/'B/salt-bubble-pilot.json.gz',dict(rows=readbacks,pilot_seconds=pilot_seconds,
+                     projected_seconds=projected))
+                raise SystemExit(f'B salt bubble projection {projected:.1f} s exceeds 1200 s')
+    for q in fixed:
+        key = q['same_calculation_as'] or q['key']
+        readback = readbacks[key]
+        assert q['historical']['T_K']==readback['T_K'] and q['pressure_Pa']==readback['assigned_Pa']
+        pressure = readback['bubble_Pa']
+        q.update(salt_bubble_readback=key,below_bubble_salt=q['pressure_Pa']<pressure if pressure is not None else None)
+    by_key = {q['key']:q for q in fixed}
+    for row in doc['sobrinorows']:
+        row['search'] = by_key[row['search']['key']]
+        row['salt_bubble_Pa'] = readbacks[row['search']['salt_bubble_readback']]['bubble_Pa']
+    observations = r.read(SALT/'data-rows.json.gz')
+    doc['metrics'] = mdea_deviations(observations,doc['joins'])
+    seconds = monotonic()-started
+    doc['salt_bubble'] = dict(rows=readbacks,seconds=seconds,pilot_seconds=pilot_seconds,projected_seconds=projected)
+    save(OUT/'B/census.json.gz',doc)
+    print(f'B MDEA salt bubble {seconds:.2f} s (pilot projected {projected:.2f} s)',flush=True)
 
 
 if __name__ == '__main__':
     a.study.reuse.bind_wheel()
     r.verify()
-    {'A':reference,'B':census}[sys.argv[1]]()
+    if sys.argv[1]=='B-bubble':
+        admit_census(r.read(OUT/'B/census.json.gz'))
+    else:
+        {'A':reference,'B':census}[sys.argv[1]]()
