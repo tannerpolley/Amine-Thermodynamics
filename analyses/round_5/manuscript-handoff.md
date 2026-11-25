@@ -144,10 +144,10 @@ The L+V searches use the reevaluated liquid parent and the default vapor initial
 
 | Conditional MEA k | Objective | Increase | Nominal cutoff | Retained record |
 | --- | --- | --- | --- | --- |
-| 0.765000023 | 150.7628847 | 0 | 2.244756 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[0]` |
-| -0.5 | 166.651406 | 15.888521 | 2.244756 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[1]` |
-| 0.132500012 | 151.7858891 | 1.0230044 | 2.244756 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[2]` |
-| 1 | 150.7865582 | 0.02367353 | 2.244756 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[3]` |
+| 0.765000023 | 150.7628847 | 0 | 2.2447557 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[0]` · [MEA-k-profile.json.gz](results/C/MEA-k-profile.json.gz) · `delta_cutoff` |
+| -0.5 | 166.651406 | 15.888521 | 2.2447557 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[1]` · [MEA-k-profile.json.gz](results/C/MEA-k-profile.json.gz) · `delta_cutoff` |
+| 0.132500012 | 151.7858891 | 1.0230044 | 2.2447557 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[2]` · [MEA-k-profile.json.gz](results/C/MEA-k-profile.json.gz) · `delta_cutoff` |
+| 1 | 150.7865582 | 0.02367353 | 2.2447557 | [reported-objectives.json](results/C/reported-objectives.json) · `MEA_profile[3]` · [MEA-k-profile.json.gz](results/C/MEA-k-profile.json.gz) · `delta_cutoff` |
 
 | MEA fixed k | Replayed objective | Retained objective | Increase | Retained record |
 | --- | --- | --- | --- | --- |

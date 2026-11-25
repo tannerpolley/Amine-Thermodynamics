@@ -99,12 +99,11 @@ def retained():
                             stage_excluded=original['excluded'], stage_dof=info['stage_denominator'], all_dof=info['denominator'])
     profile_path = SHARED_K / 'profile.json.gz'
     profile = stable.read(profile_path)
-    cutoff = .5 * output['MEA']['stage_variance'] * 3.84146
     points = [profile['center'], *profile['points'].values()]
     points = [dict(k=p['k'], cost=p['cost'], increase=p['cost'] - profile['center_cost'], start=p['start'],
                    active_bounds=p['active_bounds']) for p in points if p['cost'] is not None]
     save('C/reported-objectives.json', dict(models=output, MEA_profile=points, MEA_center_cost=profile['center_cost'],
-         MEA_delta_cutoff=cutoff, inputs=fingerprints(*paths, profile_path, OBJECTIVES/'reconciliation.json')), start=start)
+         inputs=fingerprints(*paths, profile_path, OBJECTIVES/'reconciliation.json')), start=start)
 
 
 class ObservableWeights(Route):

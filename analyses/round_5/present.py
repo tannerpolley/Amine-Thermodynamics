@@ -168,6 +168,9 @@ def reactions():
 
 def objective():
     yield '## C. Objective contributions and weights'
+    profile_path = 'C/MEA-k-profile.json.gz'
+    profile = load(profile_path)
+    cutoff = (profile or {}).get('delta_cutoff')
     p = 'C/reported-objectives.json'
     result = load(p)
     if result:
@@ -178,10 +181,10 @@ def objective():
                     [(model,k,g['count'],number(g['cost'],8),number(g['weight_sum'],8),link(p,f'models.{model}.groups.{k}'))
                      for model,v in result['models'].items() for k,g in v['groups'].items()])
         yield table(('Conditional MEA k','Objective','Increase','Nominal cutoff','Retained record'),
-                    [(number(r['k'],9),number(r['cost'],10),number(r['increase'],8),number(result['MEA_delta_cutoff'],8),
-                      link(p,f'MEA_profile[{i}]')) for i,r in enumerate(result['MEA_profile'])])
-    p = 'C/MEA-k-profile.json.gz'
-    if data := load(p):
+                    [(number(r['k'],9),number(r['cost'],10),number(r['increase'],8),number(cutoff,8),
+                      link(p,f'MEA_profile[{i}]')+' · '+link(profile_path,'delta_cutoff')) for i,r in enumerate(result['MEA_profile'])])
+    p = profile_path
+    if data := profile:
         yield table(('MEA fixed k','Replayed objective','Retained objective','Increase','Retained record'),
                     [(number(r['k'],9),number(r['replay_cost'],10),number(r['retained_cost'],10),
                       number(r.get('increase_from_center'),8),link(p,f'rows[{i}]')) for i,r in enumerate(data['rows'])])

@@ -53,8 +53,12 @@ def expanded_search(work, route, points, states, bank):
                     initial = bank_hash(run.result('split-record.json'))
                     assert initial == TRIAL_SHA
                     rows = run.grid(point, subset)
-                    final = bank_hash(run.result('split-record.json'))
-                    save(f'{record_path}-{name}-final-bank.json.gz', run.result('split-record.json'))
+                    final_bank = run.result('split-record.json')
+                    final = bank_hash(final_bank)
+                    bank_record = ('A/search-free-supplied-full-final-bank.json.gz' if final == TRIAL_SHA
+                                   else f'A/supplied-final-bank-{final}.json.gz')
+                    if not (RESULTS / bank_record).is_file():
+                        save(bank_record, final_bank)
                 else:
                     initial = final = None
                     rows = run.grid(point, subset, trial_set=[])
