@@ -1,12 +1,13 @@
 """Release-grid, measured-pressure and property comparisons for the selected MEA fit."""
 # ruff: noqa: E402
+from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 from hashlib import sha256
 import json
 import sys
 from time import monotonic
 
-from refit import OUT, WORK, MEA, P_REF, fingerprint, put, r
+from refit import OUT, WORK, P_REF, fingerprint, put, r
 from phase_replays import point_for
 import mea_pressure as pressure
 import mea_stability as stability
@@ -87,11 +88,42 @@ def screens(point, timing):
         grid=summary,classifications=classified,measured=measured,seconds=monotonic()-start))
 
 
+def measured_refinement(point):
+    start = monotonic()
+    mapping = point['parameters']
+    reference = r.s.parameter_mapping(stability.REFERENCE/'F4/parameters.json')
+    batches = sorted((OUT/'E/MEA/measured').glob('*.json.gz'))
+    original = [q for path in batches for q in r.read(path) if not q['available'] and q.get('parent')
+                and not q['parent']['physical_checks_pass']]
+    eligible = [q for kind in ('liquid','liquid-vapour') for q in
+                sorted((q for q in original if q['declared_parent']==kind),key=lambda q:q['identity'])[::13]][:8]
+    names = [q['identity'] for q in eligible]
+    args = (mapping,reference,names,.1,P_REF)
+    recalculated = stability.chunk(args)
+    elapsed = monotonic()-start
+    projected = sum(q['seconds'] for q in recalculated)*len(original)/max(1,len(recalculated))/r.CORES
+    admitted = bool(recalculated) and all(q['available'] and not q['witnesses'] for q in recalculated)
+    released = admitted and projected<=140
+    put('MEA/screen/refinement.json.gz',dict(endpoint_fingerprint=fingerprint(point),wheel=r.SHA,
+        hypothesis='Tightening the equilibrium solve reduces the independent EOS pressure closure residual',
+        original=eligible,recalculated=recalculated,eligible_count=len(original),seconds=elapsed,
+        projected_seconds=projected,released=released))
+    if not released:
+        return
+    rest = [q['identity'] for q in original if q['identity'] not in names]
+    groups = [rest[i:i+4] for i in range(0,len(rest),4)]
+    with ProcessPoolExecutor(r.CORES) as pool:
+        for i,rows in enumerate(pool.map(stability.chunk,[(mapping,reference,g,.1,P_REF) for g in groups])):
+            put(f'MEA/screen/refined/{i}.json.gz',dict(endpoint_fingerprint=fingerprint(point),wheel=r.SHA,rows=rows))
+
+
 if __name__=='__main__':
     stability.a.study.reuse.bind_wheel()
     r.verify()
     stability.OUT = OUT
     _,point = point_for('MEA','selected','mea-screens')
     report = pilot(point) if not (OUT/'MEA/screen-pilot.json.gz').exists() else r.read(OUT/'MEA/screen-pilot.json.gz')
-    if sys.argv[1:]!=['--pilot']:
+    if sys.argv[1:]==['--refinement']:
+        measured_refinement(point)
+    elif sys.argv[1:]!=['--pilot']:
         screens(point,report)
