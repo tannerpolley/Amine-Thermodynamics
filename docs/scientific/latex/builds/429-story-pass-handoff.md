@@ -286,3 +286,44 @@ Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting
 4. `429-story-pass-number-sources.md` was not extended. Every new number traces to the round-8 record keys in `round7-response.md`.
 
 **Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`. Start with §2.3 Eq. 9, §4.3 and S7.1, then decide which display requests to build first.
+
+## Round-9 prose pass: fixed 100 kPa references (Writer, 2026-11-25)
+
+**Basis.** The investigator promoted the #440 notebook (`analyses/fixed_reaction_reference/notebook.qmd`, main `5023dbc44`) on 2026-11-25 for this prose pass, subject to its recorded dispositions: the MDEA fit is provisional, every endpoint misses the strict projected-gradient check, C6 is open, and the open and undecided keys are stated as limits. No calculation was run. Numbers come from `manuscript-handoff.json`, the #440 result records and the rebound displays. Two owner decisions were taken in this stage, both through the question tool:
+- The comparison with system-pressure references is a supplement sensitivity. The main text gives one sentence. This is recorded in `STYLE.md`, row “Reaction-reference convention”.
+- Only the expected prose strings of the `dea_displays.py` prose check were updated, and they are now read from the #440 records.
+
+**What changed.**
+- **Prose gaps.** All entries of `440-rebind-prose-gaps.md` are applied, in the main text, supplement, highlights, preprint abstract and cover letter. Three rows had no prose number to change: supplement 374 (a figure environment), and the Böttinger and restriction-sequence displays, which are generated.
+- **Model and methods (A1/S1).**
+  - §2.3 states the fixed 100 kPa convention. It rewrites Eq. 9 so that the pressure derivative of G* is V_EOS, and it says which property comes from G*.
+  - §2.3 and §2.4 give the C1 numerical verification at named states (S3, Table S32), including the MEA and DEA envelope caveat.
+  - One main-text sentence and one S3 paragraph give the system-pressure sensitivity.
+- **Multistart (S4).** The new treatment is in §3.3, §5.4 and S4: three tied starts, the AMP fixed-slope minima, MDEA provisional, and the gradient misses stated plainly.
+- **Phase results.**
+  - DEA: feeds 32, 41, 42 and 43 confirmed, feed 31 unresolved, plus one unresolved Lawson–Garst state.
+  - MDEA: no confirmed split, and the 204 and 263 MPa cases unresolved.
+  - AMP: the 666 bubble-scaled states are separated from the six measured-pressure controls everywhere.
+  - Hartono 18 at 373–393 K and Tong 40 at 313–393 K.
+  - Both split-removal changes are stated, and suppression need not improve the pressure fit.
+- **Other round-8 items.** Salt qualification and Wangler positioning in §2.2. Kuranov is unranked. Hong failures are attributed to the reconstruction. Ma'mun is 38.66 % against 21.03 %. The 14.46 MPa subset is named. Version and reproduction wording are in the availability statement.
+- **Abstract and highlights.** Both are rewritten. The abstract is 246 words by `wc` on the PDF text, which counts “%” and “CO2 )” as separate tokens. Every highlight is at most 84 characters. The graphical abstract is untouched.
+
+**Checks.**
+- `scripts/build_manuscript.sh` passes: main 30 pages, supplement 56, no undefined references or citations, and no overfull boxes.
+- These pass: `dea_displays.py --check` (35 displays, 168 sources, prose strings), `final_rerun_tables.py --check` (21 tables), `analyses/round_7/handoff.py --check`, `analyses/round_8/handoff.py --check`, `analyses/fixed_reaction_reference/handoff.py --check` (2619 quantities) and `check_private_source.py`.
+- The CSE prose check passes on terminology. The STYLE.md advisories are the existing ones.
+- `cited_bibliography.py` reproduces `references.bib` byte for byte against the current Zotero export, so no entry changed.
+
+**Response.** `round8-response.md` answers every item of `r8-items.md` with a locator or states why it stays open. Display requests D1–D8 are listed there.
+
+**Open.**
+1. Display requests D1–D8: Table 8 rows, the AMP six-row control table, a salt worked row, the Hong table heading, Kiepe labels, MDEA descent compositions, start IDs, and the remaining “tracking” labels in Table 9 and S44.
+2. A4: the DOI is a placeholder. Reproduction with 1.3.2 was not run. The public tag `v1.3.1` is not the commit behind the 1.3.1 build (`05e94210`, on public `main`).
+3. S1: continuation of the aqueous reference roots below water saturation is not described, because no record was found.
+4. C6, the same-band endpoint spread, is stated as a limit (§5.4).
+5. S7: the deposit stager predates the adopted fits.
+6. The 132-row Hong table carries a column of 22.59 % next to the MEA model's 25.06 %. The caption does not say which fit that column is, and the C7 handoff key labels 22.59 as tracking. If it is the MEA model with system-pressure references, it differs by 2.5 points from the fixed-reference value on unfitted pressures, which is larger than the fitted-pressure sensitivity quoted in §2.3. This was not investigated.
+7. The statement that the Austgen-type correlations depend on temperature only rests on Eq. 10's form. The low-pressure origin of their data was not re-read.
+
+**Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`. Start with §2.3–2.4 and S3 (C1), §3.3 and S4 (multistart), and §4.3 and S7 (phase).
