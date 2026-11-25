@@ -1,0 +1,72 @@
+---
+title: Phase controls and shared-interaction sensitivity
+---
+
+## DEA split at 30 wt%
+
+At 298.15 K and assigned 101.325 kPa, a feed of 1 mol DEA at 0.50 mol CO₂/mol DEA gives the following two liquids.
+
+| Daughter | Amount (mol true species) | True mole share (%) | Density (kg/m³) | Molar volume (cm³/mol) |
+|---|---:|---:|---:|---:|
+| 1 | 13.196994 | 90.2693 | 1083.734 | 22.42474 |
+| 2 | 1.422586 | 9.7307 | 1162.881 | 31.27749 |
+
+The decrease in $G^*/(RT)$ is 0.001406466 mol with paired numerical error 6.58e-09 mol. The maximum reaction and interphase residuals are 1.02e-12 and 1.16e-13, respectively. Both daughters match liquid roots. The repeat with the enlarged trial set recovered all four splits. The direct daughter restart coalesced for this feed, and the retained neighboring-state start recovered the split. The [DEA readback](results/dea-phase-controls.json.gz) gives the complete compositions, conserved-group matrix, closure and phase criteria for all four states.
+
+## AMP at fixed external pressure
+
+| State | Search pressure (MPa) | Reported bubble pressure (MPa) | Early fit | Reported fit |
+|---|---:|---:|---|---|
+| worked-state | 2.03724 | 1.88323 | confirmed split | finite search, no resolved descent |
+| hartono-2021:55:problem | 0.40650 | 0.40766 | confirmed split | unresolved phase identity |
+| hartono-2021:56:problem | 0.51000 | 0.53852 | confirmed split | unresolved phase identity |
+| hartono-2021:57:problem | 0.64050 | 0.68494 | confirmed split | unresolved phase identity |
+| tong-2012:29:problem | 0.35180 | 0.31667 | confirmed split | finite search, no resolved descent |
+| tong-2012:32:problem | 0.98350 | 1.21692 | confirmed split | unresolved phase identity |
+| tong-2012:44:problem | 0.63260 | 0.59722 | confirmed split | finite search, no resolved descent |
+
+All four unresolved candidates had vapor-directed descents below the reported bubble pressure. One liquid–vapor candidate passed the strict root test. Three passed the equilibrium residual and physical checks with an unspecified returned vapor branch. A dilute-vapor trace connected those roots. The [AMP controls](results/amp-phase-controls.json.gz) retain the failed two-liquid starts and the source rows.
+
+## Search and start accounting
+
+| System | Attempted | Completed |
+|---|---:|---:|
+| MEA | 2646 | 2645 |
+| MEA measured | 321 | 246 |
+| DEA | 1271 | 1270 |
+| MDEA | 11824 | 10509 |
+| AMP | 666 | 666 |
+
+MDEA has 80 descent detections at 27 distinct states (10 measured pressures and 17 assigned pressures). Of 64 drawn starts, 63 were tested and one was evaluable. The other endpoint came from inherited start A. The optimizer stop messages and the projected-gradient test are recorded for each stage in the [quantity handoff](manuscript-handoff.json).
+
+## Shared interactions at a 100 kPa reaction reference
+
+The alternative uses the retained water–bicarbonate and water–carbonate interactions 0.7650000233694618 and −0.25. The two sensitivities use only inherited start A and the same observation weights and bounds as the salt-anchored models.
+
+| Observation | Common rows | Salt-anchored AARD (%) | MEA-fitted shared AARD (%) |
+|---|---:|---:|---:|
+| MEA legacy-47 | 47/47 | 11.34 | 11.57 |
+| MEA Mamun2005 | 19/19 | 38.66 | 33.80 |
+| MDEA Kuranov | 66/66 | 4.39 | 4.44 |
+| MDEA Ermatchkov | 101/101 | 29.21 | 30.79 |
+| MDEA Carson | 40/40 | 13.58 | 17.12 |
+
+The MDEA sensitivity reached the iteration limit at $C=20.203619$ with projected-gradient norm 0.012. The endpoint objective replay passed.
+
+| External pressure (MPa) | Basis | Salt-anchored | MEA-fitted shared |
+|---:|---|---|---|
+| 204.05398 | retained high-pressure control | unresolved phase identity | unresolved phase identity |
+| 262.86192 | retained high-pressure control | unresolved phase identity | unresolved phase identity |
+| 4.19000 | measured total pressure | unresolved phase identity | unresolved phase identity |
+
+These phase results apply to the tested declarations and starts. The errors quantify agreement on common observations. The residuals and paired Gibbs error quantify numerical verification. Experimental confirmation of phase identity remains open.
+
+## Corrected Kamps total pressures
+
+The provisional MDEA fit gives 11.93% AARD on the 27 common rows and 14.76% on all 28. The additional row is Ermatchkov et al. Table 6 row 13, with signed deviation +91.10%.
+
+## AMP enthalpy increment
+
+The signed R4 enthalpy increment in J/mol is fit coordinate 8 minus 5000 J/mol. The coordinate bounds $[0,10000]$ correspond to physical bounds $[-5000,5000]$ J/mol.
+
+The outputs are scalar and categorical comparisons. Full precision, failed calculations and contributor hashes are retained in the [quantity handoff](manuscript-handoff.json). Independent review and investigator promotion are pending.

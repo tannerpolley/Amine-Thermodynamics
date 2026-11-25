@@ -2,28 +2,28 @@
 \caption{Starts and endpoints of the fits at the fixed 100 kPa reaction reference.}\label{tab:supplement-fit-starts}\\
 \toprule Fit & Start & Nearest RMS & Initial $C$ & Endpoint $C$ & Projected gradient & Active bounds & Outcome \\ \midrule
 \endfirsthead\toprule Fit & Start & Nearest RMS & Initial $C$ & Endpoint $C$ & Projected gradient & Active bounds & Outcome \\ \midrule
-\endhead\bottomrule\endfoot\bottomrule\multicolumn{8}{@{}p{0.95\linewidth}@{}}{\footnotesize RMS distance is measured relative to coordinate bounds. A-loose repeats A. Active bounds are numbered in fit coordinate order. The projected gradient uses the optimizer scale. The selected fits missed the strict gradient limit. MDEA admitted two of 64 draws and remains provisional. AMP with fixed slope retains a second basin at 2741.26. A dash marks an unavailable value or an empty active set.}\\\endlastfoot
-MEA & \hyperlink{start-MEA-A}{A} & $0.455$ & $152.934$ & $152.932402$ & $3.908\times 10^{-5}$ & 3 lower, 11 upper & Selected \\
-MEA & \hyperlink{start-MEA-B}{B} & $0.486$ & $\num{34689.695}$ & $152.932402$ & $3.503\times 10^{-5}$ & 3 lower, 11 upper & converged \\
+\endhead\bottomrule\endfoot\bottomrule\multicolumn{8}{@{}p{0.95\linewidth}@{}}{\footnotesize RMS distance is measured relative to coordinate bounds. A-loose repeats A. Active bounds are numbered in fit coordinate order. The projected gradient uses the optimizer scale. The endpoints missed the projected-gradient limit of $10^{-8}$. MDEA had one evaluable draw of 64, in addition to inherited start A. Draw 17 missed the start-separation rule. Start A gives $4.39$\% on 66 loaded Kuranov pressures and $29.21$\% on 101 Ermatchkov partial pressures. AMP with fixed slope retains a second basin at 2741.26. A dash marks an unavailable value or an empty active set.}\\\endlastfoot
+MEA & \hyperlink{start-MEA-A}{A} & $0.455$ & $152.934$ & $152.932402$ & $3.908\times 10^{-5}$ & 3 lower, 11 upper & Selected\newline Function tolerance \\
+MEA & \hyperlink{start-MEA-B}{B} & $0.486$ & $\num{34689.695}$ & $152.932402$ & $3.503\times 10^{-5}$ & 3 lower, 11 upper & converged\newline Function tolerance \\
 MEA & \hyperlink{start-MEA-C}{C} & $0.486$ & --- & --- & --- & --- & initial evaluation failed \\
-MEA & \hyperlink{start-MEA-LHS-21}{LHS-21} & $0.455$ & $\num{204584.200}$ & $152.932402$ & $2.648\times 10^{-5}$ & 3 lower, 11 upper & converged \\
-MEA & \hyperlink{start-MEA-A-loose}{A-loose} & $0.000$ & $152.934$ & $152.932425$ & $2.686\times 10^{-3}$ & 3 lower, 11 upper & converged \\
-DEA & \hyperlink{start-DEA-A}{A} & $0.417$ & $15.589$ & $15.588667$ & $3.085\times 10^{-5}$ & --- & Selected \\
-DEA & \hyperlink{start-DEA-B}{B} & $0.421$ & $338.219$ & $15.588667$ & $1.345\times 10^{-4}$ & --- & converged \\
-DEA & \hyperlink{start-DEA-C}{C} & $0.417$ & $\num{11831.588}$ & $15.588667$ & $2.721\times 10^{-5}$ & --- & converged \\
-MDEA & \hyperlink{start-MDEA-A}{A} & $0.369$ & $17.445$ & $15.609314$ & $8.272\times 10^{-3}$ & 1 upper & Provisional \\
+MEA & \hyperlink{start-MEA-LHS-21}{LHS-21} & $0.455$ & $\num{204584.200}$ & $152.932402$ & $2.648\times 10^{-5}$ & 3 lower, 11 upper & converged\newline Function tolerance \\
+MEA & \hyperlink{start-MEA-A-loose}{A-loose} & $0.000$ & $152.934$ & $152.932425$ & $2.686\times 10^{-3}$ & 3 lower, 11 upper & converged\newline Function tolerance \\
+DEA & \hyperlink{start-DEA-A}{A} & $0.417$ & $15.589$ & $15.588667$ & $3.085\times 10^{-5}$ & --- & Selected\newline Function tolerance \\
+DEA & \hyperlink{start-DEA-B}{B} & $0.421$ & $338.219$ & $15.588667$ & $1.345\times 10^{-4}$ & --- & converged\newline Function tolerance \\
+DEA & \hyperlink{start-DEA-C}{C} & $0.417$ & $\num{11831.588}$ & $15.588667$ & $2.721\times 10^{-5}$ & --- & converged\newline Function tolerance \\
+MDEA & \hyperlink{start-MDEA-A}{A} & $0.369$ & $17.445$ & $15.609314$ & $8.272\times 10^{-3}$ & 1 upper & Provisional\newline Function tolerance \\
 MDEA & \hyperlink{start-MDEA-B}{B} & $0.451$ & --- & --- & --- & --- & initial evaluation failed \\
 MDEA & \hyperlink{start-MDEA-C}{C} & $0.451$ & --- & --- & --- & --- & initial evaluation failed \\
-MDEA & \hyperlink{start-MDEA-LHS-53}{LHS-53} & $0.369$ & $\num{57094.116}$ & $\num{48386.509423}$ & $1.954\times 10^{2}$ & 6 upper & converged \\
-AMP free & \hyperlink{start-AMP-free-A}{A} & $0.483$ & $74.937$ & $74.928158$ & $2.505\times 10^{-4}$ & 6 lower, 8 lower & Selected \\
+MDEA & \hyperlink{start-MDEA-LHS-53}{LHS-53} & $0.369$ & $\num{57094.116}$ & $\num{48386.509423}$ & $1.954\times 10^{2}$ & 6 upper & converged\newline Parameter tolerance \\
+AMP free & \hyperlink{start-AMP-free-A}{A} & $0.483$ & $74.937$ & $74.928158$ & $2.505\times 10^{-4}$ & 6 lower, 8 lower & Selected\newline Function tolerance \\
 AMP free & \hyperlink{start-AMP-free-B}{B} & $0.503$ & --- & --- & --- & --- & initial evaluation failed \\
 AMP free & \hyperlink{start-AMP-free-C}{C} & $0.483$ & --- & --- & --- & --- & initial evaluation failed \\
-AMP free & \hyperlink{start-AMP-free-LHS-06}{LHS-06} & $0.492$ & $3915.473$ & $74.928158$ & $1.724\times 10^{-4}$ & 6 lower, 8 lower & converged \\
-AMP free & \hyperlink{start-AMP-free-LHS-45}{LHS-45} & $0.483$ & $5289.847$ & $74.928158$ & $2.298\times 10^{-4}$ & 6 lower, 8 lower & converged \\
-AMP fixed & \hyperlink{start-AMP-fixed-A}{A} & $0.480$ & $76.234$ & $76.226564$ & $6.993\times 10^{-5}$ & 5 lower, 6 lower, 8 lower & Selected \\
+AMP free & \hyperlink{start-AMP-free-LHS-06}{LHS-06} & $0.492$ & $3915.473$ & $74.928158$ & $1.724\times 10^{-4}$ & 6 lower, 8 lower & converged\newline Function tolerance \\
+AMP free & \hyperlink{start-AMP-free-LHS-45}{LHS-45} & $0.483$ & $5289.847$ & $74.928158$ & $2.298\times 10^{-4}$ & 6 lower, 8 lower & converged\newline Function tolerance \\
+AMP fixed & \hyperlink{start-AMP-fixed-A}{A} & $0.480$ & $76.234$ & $76.226564$ & $6.993\times 10^{-5}$ & 5 lower, 6 lower, 8 lower & Selected\newline Function tolerance \\
 AMP fixed & \hyperlink{start-AMP-fixed-B}{B} & $0.526$ & --- & --- & --- & --- & initial evaluation failed \\
-AMP fixed & \hyperlink{start-AMP-fixed-C}{C} & $0.480$ & $4279.058$ & $2741.260320$ & $1.902\times 10^{-3}$ & 3 upper, 4 upper, 5 upper, 6 upper, 7 lower, 8 upper & converged \\
-AMP fixed & \hyperlink{start-AMP-fixed-LHS-53}{LHS-53} & $0.486$ & $4863.347$ & $2741.260320$ & $5.754\times 10^{-3}$ & 3 upper, 4 upper, 5 upper, 6 upper, 7 lower, 8 upper & converged \\
+AMP fixed & \hyperlink{start-AMP-fixed-C}{C} & $0.480$ & $4279.058$ & $2741.260320$ & $1.902\times 10^{-3}$ & 3 upper, 4 upper, 5 upper, 6 upper, 7 lower, 8 upper & converged\newline Function tolerance \\
+AMP fixed & \hyperlink{start-AMP-fixed-LHS-53}{LHS-53} & $0.486$ & $4863.347$ & $2741.260320$ & $5.754\times 10^{-3}$ & 3 upper, 4 upper, 5 upper, 6 upper, 7 lower, 8 upper & converged\newline Function tolerance \\
 \end{longtable}\endgroup
 \begingroup\footnotesize\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
 \caption{Gibbs-energy derivative checks at the named states and fixed 100 kPa reaction reference.}\label{tab:supplement-fixed-reference-consistency}\\

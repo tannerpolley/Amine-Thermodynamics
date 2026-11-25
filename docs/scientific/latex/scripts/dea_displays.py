@@ -107,6 +107,10 @@ def coordinates(uncertainty):
 
 
 fixed = FixedReference(read)
+round9 = read('analyses/round_9/manuscript-handoff.json')['quantities']
+r9_accounting = round9['R3 start, endpoint and search accounting']
+r9_units = round9['R7 AMP hydrolysis enthalpy increment']
+
 ddoc, mdoc, adoc = [fixed.fits[name]['endpoint'] for name in ('DEA', 'MDEA', 'AMP_free')]
 dcost, mcost, acost, afcost = [fixed.value(name + ' selected objective') for name in DESIGNS[1:]]
 dassessment = fixed.endpoint_record('DEA/property-comparisons/selected.json.gz', 'DEA')
@@ -532,6 +536,8 @@ fit_rows += [head('AMP', 5)] + [[label, bold(num(r['value'], d) + (r'\textsupers
 level = lambda q: [r'R4 change at 313.15 K, $\Delta\ln K_4$\textsuperscript{c}', f"${q['delta_ln_K4']:+.3f}$", num(q['SE_ln_K4'], 3), bounds(*q['bounds']['level'], 3), '']
 assert fit_rows[4][0].startswith('R4 enthalpy increment') and fit_rows[-1][0].startswith('R4 enthalpy increment')
 fit_rows[4][1:4] = [bold(num(r4['dea']['delta_h_J_mol'], 0)), num(r4['dea']['SE_h_J_mol'], 0), bounds(*r4['dea']['bounds']['enthalpy'], 0)]
+fit_rows[-1][1:4] = [bold(num(r4['amp']['delta_h_J_mol'], 0) + r'\textsuperscript{a}'),
+                       '---', bounds(*r9_units['AMP_free']['physical_bounds_J_mol'], 0)]
 fit_rows.insert(4, level(r4['dea']))
 fit_rows.insert(len(fit_rows) - 1, level(r4['amp']))
 # fit_rows: name, value, standard error, bounds and an unused fifth cell. The main text omits the bounds; the supplement lists them.
@@ -985,19 +991,20 @@ for state in sorted(mnew['classifications'], key=lambda q: (q['temperature_K'], 
         locator = f"{source_id[:-4]}, T{source['source_locator'].split('Table ')[1].split()[0].rstrip(',')}, r{source['source_row']}"
         source_pressure = num(source['pressure_MPa'])
         assert math.isclose(state['pressure_Pa'], float(source['pressure_MPa'])*1e6)
+    pressure_record = next(q for q in r9_accounting['mdea_distinct_states'] if q['key'] == key)
     phase_rows.append([key.replace(':', r':\allowbreak '), locator, num(state['temperature_K'], 2),
                        num(feed_wt(mdoc, feed, 'methyldiethanolamine'), 2),
                        num(feed['carbon-dioxide']/feed['methyldiethanolamine']),
-                       source_pressure, num(state['pressure_Pa']/1e6),
+                       source_pressure, num(state['pressure_Pa']/1e6) + r'\newline ' + pressure_record['pressure_basis'],
                        state['native_branch'], state['supplied_branch'],
                        'None confirmed' if state['attempts'] else 'Not attempted'])
 assert mnew['tally']['states'] == 11824 and not mnew['confirmed']
 table('supplement-mdea-phase-outcomes', 'Outcomes at the descent states of the provisional MDEA endpoint.',
       ['State', 'Source', '$T$ (K)', r'MDEA (wt\%)', r'$\alpha$', r'Source $P$ (MPa)',
        r'Search $P$ (MPa)', 'Native', 'Supplied', 'Two-liquid outcome'],
-      phase_rows, [.135,.127,.077,.077,.058,.096,.073,.089,.089,.090], long=True, size=r'\footnotesize',
+      phase_rows, [.125,.127,.077,.077,.058,.096,.083,.089,.089,.090], long=True, size=r'\footnotesize',
       notes=f"{mnew['tally']['available']} of {mnew['tally']['states']} searches completed; "
-            f"{mnew['tally']['descent']} detected descents and no split was confirmed. "
+            f"{mnew['tally']['descent']} detections at {len(phase_rows)} distinct states and no confirmed splits. "
             r"$\alpha$ is in mol \COtwo/mol MDEA and wt\% excludes \COtwo. T and r identify the source table "
             r"and row. B\"ottinger cell pressures are assignments. Merkley Fig.~3 gives the digitized traces; "
             r"the two possible pressures in Table~1 are shown, with the higher one used for the searches. "
@@ -1173,15 +1180,21 @@ rows += [['MEA', '', '', eold('47 current-fitted pressures'), eold('47 current-f
          ['AMP', '', '', *pressure_columns(read(AMP + 'data-rows.json.gz'), amp_loaded, {'tong-baseline'}, {'kundu'}),
           *search_summary(aorig['tally'], len(aorig['confirmed']))]]
 for row in rows: row[3] = {'MEA': r'$p_{\COtwo}$', 'DEA': r'$p_{\COtwo}$', 'MDEA': '$P$', 'AMP': '$P$'}[row[0]] + ': ' + row[3]  # fitted loaded-solution observable: Hilliard/Jou and Lawson-Garst partial, Kuranov and Hartono total pressures
-for row in rows:
+for i, row in enumerate(rows):
+    row[7] = row[6] - row[7]
+    if i < 4:
+        coverage = r9_accounting['coverage'][row[0]]
+        assert row[6:8] == [coverage['attempted'], coverage['completed']]
     if row[0] in ('MEA', 'DEA'): row[5] = r'$p_{\COtwo}$: ' + row[5]  # every MEA and DEA pressure not fitted is a CO2 partial pressure (Tables 5 and S8)
 for row, label in zip(rows[4:], ('MEA-fitted shared set', '30-pressure Lawson--Garst fit',
                                  'fit with MEA weights', 'earlier carbamate inputs'), strict=True):
     row[:3] = [r'\multicolumn{3}{@{}p{.24\linewidth}}{' + row[0] + ', ' + label + '}']
 rows.insert(4, head('Comparison fits', 9))
-table('amine-summary', 'The four fixed-reference models and their comparison fits with system-pressure references.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Searches','Searches not completed',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
+table('amine-summary', 'The four fixed-reference models and their comparison fits with system-pressure references.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Attempted searches','Completed searches',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
       notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses. \textsuperscript{a}Fitted \COtwo partial pressures ($p_{\COtwo}$) of loaded MEA and DEA and fitted total pressures ($P$) of loaded MDEA and AMP. \textsuperscript{b}Column a with the fitted \COtwo-free bubble pressures of MDEA--water and AMP--water; neither column includes the fitted \COtwo--water pressures of Kiepe et al.\ in the MEA objective (Table~\ref{tab:mea-data}). \textsuperscript{c}MEA: all pressures not fitted, those at nominal 30 wt\% of the six sources of Table~\ref{tab:mea-data}, those of Wagner et al.\ and those at 15 and 45 wt\%; MDEA and AMP: total pressures and \COtwo partial pressures separately, the AMP total pressures including the 5 \COtwo-free bubble pressures of Tong et al. The receiver comparisons use the original salt-anchored fits. \textsuperscript{d}In the searches of each fit, which are finite and differ in design between the amines (Section~\ref{supp-sec:s-phase}), so the counts do not measure equal coverage and split counts are lower bounds. '
-            'The MDEA endpoint is provisional. Both targeted pressure controls, at 204 and 263 MPa, are unresolved.')
+            'The MDEA endpoint is provisional. The separate MEA measured-state search completed '
+            f"{r9_accounting['coverage']['MEA_measured']['completed']} of "
+            f"{r9_accounting['coverage']['MEA_measured']['attempted']} attempts.")
 P341 = MEAEVIDENCE
 mea_fit = read(P341 + 'fitted-rows.csv')
 cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -1294,8 +1307,12 @@ for c in mpub:
         ids = set(common)
         cohort = [r for r in mrows if r['identity'] in ids and r['group'] == c['group']]
         assert len(cohort) == len(ids)
-        rows.append(['This work, provisional 100 kPa MDEA model', c['data_role'],
-                     num(deviations(cohort)['AARD_percent'], 2)])
+        r9_kamps = round9['R6 corrected Kamps pressure comparisons']
+        assert math.isclose(deviations(cohort)['AARD_percent'], r9_kamps['common_AARD_percent'])
+        rows.append(['This work, provisional 100 kPa MDEA model (27 rows)', c['data_role'],
+                     num(r9_kamps['common_AARD_percent'], 2)])
+        rows.append([r'This work, same fit (all 28 rows)\textsuperscript{d}', c['data_role'],
+                     num(r9_kamps['full_AARD_percent'], 2)])
         continue
     rows += [head(f"{c['measured_rows']} " + SHARED[c['group']], 3)] + [['Ermatchkov et al., parameter set ' + q['set'], {'predicted': 'not fitted'}.get(q['data_role'], q['data_role']), f"${q['mean_absolute_relative_deviation_percent']:g}$"] for q in c['published_parameter_sets']]
     if c['group'] == 'Ermatchkov': rows.append([ZHANG_CHEN, 'fitted', '$17.7$'])
@@ -1328,7 +1345,11 @@ rows += [head(kuranov_label + r', MDEA (matched by count)\textsuperscript{b}', 3
               f"; {k82_adopted['available']} predictions available" if k82_adopted['available'] != len(kuranov['source_rows']) else ''),
           num(k82_adopted['AARD_percent'], 2)]]
 table('published-models', r'Pressure deviations of published models and of this work. Published Kuranov values are matched by count\textsuperscript{b}.', ['Observations and model', 'Role of these observations in the fit of that model', r'AARD (\%)'], rows, [.50,.36,.10],
-      notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently. \textsuperscript{b}The published values are identified with the 82 total pressures of Table~2 of Kuranov et al.\ by their count. \textsuperscript{c}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}.')
+      notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently. \textsuperscript{b}The published values are identified with the 82 total pressures of Table~2 of Kuranov et al.\ by their count. \textsuperscript{c}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. ' +
+            rf'\textsuperscript{{d}}Added row {r9_kamps["additional_row"]["row"]["source_row"]} of Ermatchkov et al. Table 6 '
+            rf'has {num(r9_kamps["additional_row"]["observed"]/1e6, 3)} MPa measured, '
+            rf'{num(r9_kamps["additional_row"]["value"]/1e6, 3)} MPa calculated '
+            rf'(+{num(r9_kamps["additional_signed_percent"], 2)}\%).')
 # Published parameters of Hong et al. on identical MEA observations: retained scores, no model call.
 HONG = MEA + 'same-data-comparison/hong-2027/'
 hong, hchecks = read(HONG + 'supplement-table.csv'), read(HONG + 'checks.json')
@@ -1499,8 +1520,16 @@ for design, attempts in fixed.handoff['fit_attempts'].items():
         assert fit_start['optimizer_start'] == vector['optimizer'], (design, start)
         assert len(vector['vector']) == len(coordinate_order)
         anchor = f"start-{design.replace('_', '-')}-{start}"
+        physical = vector['vector'].copy()
+        if design in r9_units:
+            conversion = r9_units[design]
+            physical[conversion['coordinate_index']] += conversion['offset_J_mol']
         vector_rows.append([rf'\hypertarget{{{anchor}}}{{{start}}}',
-                            ', '.join(rf'\num{{{q:.9g}}}' for q in vector['vector'])])
+                            ', '.join(rf'\num{{{q:.9g}}}' for q in physical)])
+        endpoint = r9_accounting['endpoint_stages'][design][start][-1]
+        stop = endpoint['termination'].split(' tolerance', 1)[0]
+        if stop in ('Function', 'Parameter'):
+            status += r'\newline ' + stop + ' tolerance'
         start_rows.append([design_label, rf'\hyperlink{{{anchor}}}{{{start}}}',  num(min(near) if near else (0 if start == 'A-loose' else None)),
                            num(attempt['initial_cost']), num(attempt['objective'], 6),
                            reduced_gibbs(gradient) if gradient is not None else '---', active or '---', status])
@@ -1508,16 +1537,21 @@ table('supplement-fit-starts', 'Starts and endpoints of the fits at the fixed 10
       ['Fit', 'Start', 'Nearest RMS', 'Initial $C$', 'Endpoint $C$', 'Projected gradient', 'Active bounds', 'Outcome'],
       start_rows, [.115,.085,.085,.102,.12,.12,.15,.125], long=True, size=r'\footnotesize',
       notes=r'RMS distance is measured relative to coordinate bounds. A-loose repeats A. Active bounds are numbered in fit coordinate order. '
-            r'The projected gradient uses the optimizer scale. The selected fits missed the strict gradient limit. MDEA admitted two of 64 draws and remains provisional. '
+            r'The projected gradient uses the optimizer scale. The endpoints missed the projected-gradient limit of $10^{-8}$. '
+            r'MDEA had one evaluable draw of 64, in addition to inherited start A. Draw 17 missed the start-separation rule. '
+            + 'Start A gives ' + num(r9_accounting['mdea_start_counts']['A_AARD_percent']['Kuranov'], 2)
+            + r'\% on 66 loaded Kuranov pressures and '
+            + num(r9_accounting['mdea_start_counts']['A_AARD_percent']['Ermatchkov'], 2)
+            + r'\% on 101 Ermatchkov partial pressures. ' +
             r'AMP with fixed slope retains a second basin at 2741.26. A dash marks an unavailable value or an empty active set.')
 
-table('supplement-start-vectors', 'Initial vectors in physical fit coordinates.',
+table('supplement-start-vectors', 'Initial vectors in physical fit coordinates. AMP enthalpy entry 8 is the signed increment in J/mol.',
       ['Start', 'Coordinates in fit order'], vector_rows, [.13,.85], long=True, size=r'\footnotesize')
 vectors_path = LATEX / 'tables/supplement-start-vectors.tex'
 # LTcaptype is local to this group and keeps the unnumbered vectors out of the table sequence.
 outputs[vectors_path] = outputs[vectors_path].replace(r'\begingroup', r'\begingroup\def\LTcaptype{}', 1).replace(
-    r'\caption{Initial vectors in physical fit coordinates.}\label{tab:supplement-start-vectors}',
-    r'\multicolumn{2}{@{}l}{Initial vectors in physical fit coordinates.}')
+    r'\caption{Initial vectors in physical fit coordinates. AMP enthalpy entry 8 is the signed increment in J/mol.}\label{tab:supplement-start-vectors}',
+    r'\multicolumn{2}{@{}l}{Initial vectors in physical fit coordinates. AMP enthalpy entry 8 is the signed increment in J/mol.}')
 
 c1 = []
 for key, record in fixed.quantities.items():
@@ -1560,13 +1594,19 @@ path = LATEX / 'tables/supplement-transfer-bounds.tex'
 outputs[path] += outputs.pop(LATEX / 'tables/supplement-fixed-reference-variance.tex')
 
 amp_fixed = coordinates(fixed.conditional('AMP_fixed'))
+amp_fixed['AMP-hydrolysis-enthalpy-increment']['value'] = r9_units['AMP_fixed']['endpoint_increment_J_mol']
 table('supplement-amp-fixed-parameters', r'Parameters of the fixed-reference AMP sensitivity with the slope held at $-150$ K.',
       ['Parameter', 'Value', 'Standard error', 'Active bound'],
       [[label, num(amp_fixed[key]['value'], digits), num(amp_fixed[key]['error'], digits),
         fixed.fits['AMP_fixed']['diagnostics']['active_bounds'].get(key, '---')]
        for (label, digits), key in zip(AFIT, aorder, strict=True) if key in amp_fixed],
-      [.45,.15,.17,.15], notes=r'The enthalpy increment is on the coordinate basis of the fixed-reference fit declaration.')
+      [.45,.15,.17,.15], notes=r'The enthalpy increment is relative to the starting R4 correlation in J/mol.')
 outputs[path] += outputs.pop(LATEX / 'tables/supplement-amp-fixed-parameters.tex')
+sys.path.insert(0, str(ROOT / 'analyses/round_9'))
+from displays import tables as round9_tables
+
+round9_tables(round9, table, head, num, reduced_gibbs)
+
 read('analyses/dea_transfer/results/binary.json')
 read(BASE + 'conditional-uncertainty.json')
 read(BASE + 'checks.json')
