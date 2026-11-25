@@ -1554,6 +1554,15 @@ outputs[vectors_path] = outputs[vectors_path].replace(r'\begingroup', r'\begingr
     r'\multicolumn{2}{@{}l}{Initial vectors in physical fit coordinates. AMP enthalpy entry 8 is the signed increment in J/mol.}')
 
 c1 = []
+c1_declarations = {}
+for design in DESIGNS[:-1]:
+    for mode, point in (
+        ('fixed-at-old', fixed.load(f'{design}/manifest.json.gz')['prior_declaration']),
+        ('selected', fixed.fits[design]['endpoint']),
+    ):
+        c1_declarations[mode, design] = hashlib.sha256(
+            json.dumps(point, sort_keys=True, allow_nan=False).encode()).hexdigest()
+
 for key, record in fixed.quantities.items():
     if not key.startswith(('C1 fixed-at-old', 'C1 selected')):
         continue
@@ -1563,20 +1572,45 @@ for key, record in fixed.quantities.items():
     volume = comparison == 'volume'
     state = state.removesuffix(' Eq.')
     err = record['new']
-    # The two-daughter sum uses two distinct feeds at one temperature and pressure.
-    source = 'C1/' + state + '.json.gz'
-    if 'daughter-inventory sum' in state:
-        source = 'C1/' + state.split()[0] + '-MDEA-daughter-1.json.gz'
-    conditions = fixed.load(source)
-    state_label = (state.replace('_', r'\_') +
-                   f" ({conditions['T_K']:.2f} K, {conditions['P_Pa']/1e6:.5g} MPa)")
-    c1.append([state_label,
+    mode = 'selected' if state.startswith('selected') else 'fixed-at-old'
+    design = state[len(mode) + 1:].split()[0].split('-')[0]
+    conditions = record['pressure_basis']
+    pressure_type = None
+    # Read both contributors for the daughter sum.
+    for source in record['new_contributors']:
+        case = read(source['path'])
+        assert case['mode'] == mode, key
+        assert (case['endpoint_fingerprint'] == record['endpoint_fingerprint']
+                == c1_declarations[mode, design]), key
+        assert all(case[field] == value for field, value in conditions.items()), key
+        if case.get('pressure_basis') == 'retained absolute pressure':
+            basis = 'imposed'
+        else:
+            assert 'observation' in case and 'tracking_pressure_Pa' in case, key
+            basis = 'calculated bubble'
+        assert pressure_type in (None, basis), key
+        pressure_type = basis
+    assert pressure_type is not None, key
+    state_label = (state.replace('AMP_free', 'AMP (free slope)') + r'\newline '
+                   f"{conditions['T_K']:.2f} K, {conditions['P_Pa']/1e6:.5g} MPa")
+    c1.append([state_label, pressure_type,
                r'$\partial G^*/\partial P - V_{\mathrm{EOS}}$ (m$^3$)' if volume else r'Eq.~12 $-$ Gibbs--Helmholtz (J/mol amine)',
                reduced_gibbs(err['signed_error']), reduced_gibbs(err['estimated_error']),
                err['admitted_steps'], err['disposition']])
 table('supplement-fixed-reference-consistency', 'Gibbs-energy derivative checks at the named states and fixed 100 kPa reaction reference.',
-      ['State', 'Comparison', 'Discrepancy', 'Error estimate', 'Steps', 'Disposition'],
-      c1, [.22,.25,.12,.12,.07,.16], long=True, size=r'\footnotesize')
+      ['State', 'Pressure type', 'Comparison', 'Discrepancy', 'Error estimate', 'Steps', 'Disposition'],
+      c1, [.22,.105,.197,.106,.11,.055,.149], long=True, size=r'\footnotesize',
+      notes=r'Fixed-at-old rows use the tracking-fit parameter vectors re-evaluated with reaction references fixed at 100 kPa '
+            r"(\nolinkurl{prior_declaration} in each model's \nolinkurl{manifest.json.gz}). "
+            r'Selected rows use the MEA, DEA, provisional MDEA and free-slope AMP endpoints of main-text Table~\ref{main-tab:amine-summary} '
+            r'(\nolinkurl{endpoint} in the fit file named by the selected start in \nolinkurl{selection.json}). '
+            r'The imposed pressure is shared by the MDEA parent and the two daughter inventories, including their sum. '
+            r'Calculated bubble pressures are total pressures. '
+            r'The declarations are archived in \nolinkurl{analyses/fixed_reaction_reference/results/}, '
+            r'under each model name (\nolinkurl{AMP_free} for AMP). Each SHA-256 fingerprint identifies one declaration.\par '
+            + r'\par '.join(
+                rf'{design.removesuffix("_free")}, {mode}: \nolinkurl{{{digest}}}'
+                for (mode, design), digest in c1_declarations.items()))
 path = LATEX / 'tables/supplement-fit-starts.tex'
 outputs[path] += outputs.pop(LATEX / 'tables/supplement-fixed-reference-consistency.tex')
 
