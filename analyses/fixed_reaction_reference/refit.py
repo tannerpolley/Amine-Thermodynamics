@@ -214,44 +214,109 @@ def selected_donor():
                          endpoint=selection['endpoint_fingerprint'], parameter_sha256=fingerprint(mapping))
 
 
-def starts(spec):
-    declared = spec.inputs['coordinates']
-    native = spec.coordinates()
+def start_vector(spec, draw, values):
+    declared, native = spec.inputs['coordinates'], spec.coordinates()
     lower = np.array([q.lower for q in native])
     upper = np.array([q.upper for q in native])
-    incumbent = np.array([q.origin for q in native])
+    u = (values-np.array([q.origin for q in native]))/np.array([q.scale for q in native])
+    chart = reg.evaluate_coordinates(spec.parameters, native, u.tolist(), [],
+                                     thermochemistry=spec.thermal)
+    targets = iter(chart.physical[:len(chart.active)])
+    reactions = iter(chart.physical[len(chart.active):])
+    actual = []
+    for q, value in zip(declared, values, strict=True):
+        readback = ([next(targets) / factor for _, _, factor in q['targets']]
+                    if q.get('targets') else [next(reactions)])
+        assert np.allclose(readback,value,rtol=1e-13,atol=1e-14), (q,readback,value)
+        actual.append(readback[0])
+    return dict(draw=draw,vector=actual,optimizer=u.tolist(),
+                normalized=((np.array(actual)-lower)/(upper-lower)).tolist())
+
+
+def rms(x,y):
+    return np.sqrt(np.mean((np.asarray(x)-np.asarray(y))**2,axis=-1))
+
+
+def starts(spec):
+    native = spec.coordinates()
+    lower,upper,incumbent = (np.array([getattr(q,k) for q in native]) for k in ('lower','upper','origin'))
     width = upper-lower
     scaled_a = (incumbent-lower)/width
     assert np.all((0<=scaled_a) & (scaled_a<=1))
-    candidates = qmc.LatinHypercube(d=len(declared), seed=SEED).random(64)
-    distance = lambda x,y: np.sqrt(np.mean((x-y)**2, axis=-1))
-    b = int(np.argmax(distance(candidates,scaled_a)))
-    c = int(np.argmax(np.minimum(distance(candidates,scaled_a),distance(candidates,candidates[b]))))
-    vectors = dict(A=incumbent, B=lower+width*candidates[b], C=lower+width*candidates[c])
-    result = {}
-    for label, values in vectors.items():
-        u = (values-incumbent)/np.array([q.scale for q in native])
-        # The first physical target of each EOS coordinate independently checks every tie.
-        chart = reg.evaluate_coordinates(spec.parameters, native, u.tolist(), [],
-                                         thermochemistry=spec.thermal)
-        targets = iter(chart.physical[:len(chart.active)])
-        reactions = iter(chart.physical[len(chart.active):])
-        actual = []
-        for q, value in zip(declared, values, strict=True):
-            if q.get('targets'):
-                bound = [next(targets) / factor for _, _, factor in q['targets']]
-                assert np.allclose(bound,value,rtol=1e-13,atol=1e-14), (q,bound,value)
-                actual.append(bound[0])
-            else:
-                bound = next(reactions)
-                assert np.isclose(bound,value,rtol=1e-13,atol=1e-14), (q,bound,value)
-                actual.append(bound)
-        result[label] = dict(draw={'A':None,'B':b,'C':c}[label], vector=actual, optimizer=u.tolist(),
-                             normalized=((np.array(actual)-lower)/width).tolist())
-    distances = {x+y:float(distance(np.array(result[x]['normalized']),np.array(result[y]['normalized'])))
+    candidates = qmc.LatinHypercube(d=len(native), seed=SEED).random(64)
+    b = int(np.argmax(rms(candidates,scaled_a)))
+    c = int(np.argmax(np.minimum(rms(candidates,scaled_a),rms(candidates,candidates[b]))))
+    result = dict(A=start_vector(spec,None,incumbent),
+                  B=start_vector(spec,b,lower+width*candidates[b]),
+                  C=start_vector(spec,c,lower+width*candidates[c]))
+    distances = {x+y:float(rms(result[x]['normalized'],result[y]['normalized']))
                  for x,y in combinations(result,2)}
     assert min(distances.values()) >= .20, distances
     return result, distances
+
+
+def start_records(name):
+    manifest = r.read(OUT/f'{name}/manifest.json.gz')
+    path = OUT/f'{name}/replacement-starts.json.gz'
+    return manifest['starts'] | ({k:v['start'] for k,v in r.read(path)['draws'].items()
+                                  if v['disposition']=='eligible'} if path.exists() else {})
+
+
+def replacement_starts(name):
+    manifest = r.read(OUT/f'{name}/manifest.json.gz')
+    run,_,_ = configured(name,'replacement-initial')
+    spec = run.bind(manifest['start_A_declaration'])
+    native = spec.coordinates()
+    lower,upper = (np.array([getattr(q,k) for q in native]) for k in ('lower','upper'))
+    candidates = qmc.LatinHypercube(d=len(native),seed=SEED).random(64)
+    remaining = set(range(len(candidates)))-{q['draw'] for q in manifest['starts'].values()}
+    accepted = {k:v for k,v in manifest['starts'].items()
+                if r.read(OUT/f'{name}/{k}.json.gz')['report']['status']!='initial_evaluation_failed'}
+    record = dict(wheel=r.SHA,manifest_fingerprint=fingerprint(manifest),
+                  accepted_original=list(accepted),draws={})
+    path = f'{name}/replacement-starts.json.gz'
+    prior_seconds = 0.
+    if (OUT/path).exists():
+        prior = r.read(OUT/path)
+        assert prior['manifest_fingerprint']==record['manifest_fingerprint'] and prior['wheel']==r.SHA
+        record['draws'] = prior['draws']
+        prior_seconds = prior['seconds']
+        for label, item in record['draws'].items():
+            remaining.remove(item['start']['draw'])
+            if item['disposition']=='eligible':
+                accepted[label] = item['start']
+    observations = [spec.observation(q) for q in spec.inputs['observations']['fitted']]
+    started = monotonic()
+    while len(accepted)<3 and remaining:
+        distance = np.min([rms(candidates,v['normalized']) for v in accepted.values()],axis=0)
+        i = max(remaining,key=lambda j:(distance[j],-j))
+        if distance[i]<.20:
+            break
+        remaining.remove(i)
+        label = f'LHS-{i:02d}'
+        start = start_vector(spec,i,lower+(upper-lower)*candidates[i])
+        distances = {k:float(rms(start['normalized'],v['normalized'])) for k,v in accepted.items()}
+        assert min(distances.values())>=.20
+        tick = monotonic()
+        row = dict(start=start,pair_rms_distances=distances)
+        try:
+            ev = reg.differentiate(spec.parameters,native,observations,
+                                   optimizer=start['optimizer'],thermochemistry=spec.thermal)
+            row['statuses'] = [q.name for q in ev.statuses]
+            if all(q=='Available' for q in row['statuses']):
+                row.update(disposition='eligible',predictions=ev.predictions)
+                accepted[label] = start
+            else:
+                row.update(disposition='refused',reason='unavailable fitted row derivatives')
+        except (RuntimeError,ValueError) as error:
+            row.update(disposition='refused',reason=str(error))
+        row['seconds'] = monotonic()-tick
+        print(name,label,row['disposition'],row.get('reason',''),row['seconds'],flush=True)
+        record['draws'][label] = row
+        put(path,dict(record,seconds=prior_seconds+monotonic()-started))
+    record.update(seconds=prior_seconds+monotonic()-started,accepted=list(accepted),
+                  remaining=sorted(remaining),exhausted=len(accepted)<3)
+    put(path,record)
 
 
 def prepare(name, controls_only=False):
@@ -329,7 +394,7 @@ def endpoint_diagnostics(spec, fit_replay, point, controls):
     return values
 
 
-def attempt(name, label, continuation=False):
+def attempt(name, label, continuation=False, *, stationarity=False, maximum_seconds=None):
     manifest = r.read(OUT/f'{name}/manifest.json.gz')
     run, _, _ = configured(name, 'fixed')
     point = manifest['start_A_declaration']
@@ -338,14 +403,21 @@ def attempt(name, label, continuation=False):
     controls.setdefault('maximum_elapsed_time_seconds', 1.5*ALLOWANCE[name])
     if label=='A-loose':
         controls['function_tolerance'] = 1e-6
-    u = manifest['starts']['A' if label=='A-loose' else label]['optimizer']
+    u = start_records(name)['A' if label=='A-loose' else label]['optimizer']
     filename = f'{name}/{label}.json.gz'
     previous = r.read(OUT/filename) if continuation else None
     if previous:
-        assert previous['report']['status']=='limit_reached' and previous['replay_passed']
-        assert previous['controls']==controls
+        assert previous['replay_passed']
+        if stationarity:
+            # Tighten the cost exit for the continuation, preserving the inherited selection tie.
+            controls.update(function_tolerance=1e-14)
+        else:
+            assert previous['report']['status']=='limit_reached'
+            controls = previous['controls'].copy()
         point = previous['endpoint']
         spec = run.bind(point)
+    if maximum_seconds is not None:
+        controls['maximum_elapsed_time_seconds'] = min(maximum_seconds,controls['maximum_elapsed_time_seconds'])
     spec.spec['optimizer'] = controls
     tick = monotonic()
     _, report, _ = spec.fit(starts=None if continuation else [u])
@@ -390,10 +462,10 @@ def continue_fit(name,label):
 
 
 def select(name):
-    records = {label:r.read(OUT/f'{name}/{label}.json.gz') for label in 'ABC'}
+    records = {label:r.read(OUT/f'{name}/{label}.json.gz') for label in start_records(name) if (OUT/f'{name}/{label}.json.gz').exists()}
     eligible = {k:v for k,v in records.items() if v.get('replay_passed') and v['report']['status']=='converged'}
     best = min((v['replay']['cost'] for v in eligible.values()),default=None)
-    tolerance = eligible[next(iter(eligible))]['controls']['function_tolerance'] if eligible else None
+    tolerance = r.read(OUT/f'{name}/manifest.json.gz')['fit_controls']['function_tolerance']
     tied = [label for label,v in eligible.items() if a.f.costs_tied(v['replay']['cost'],best,tolerance)]
     selected = tied[0] if tied else None
     put(f'{name}/selection.json',dict(selected=selected,numerical_minimum=best,tied=tied,
@@ -444,4 +516,4 @@ if __name__ == '__main__':
             prepare(design,controls_only=True)
     else:
         {'prepare':prepare,'attempt':attempt,'continue':continue_fit,
-         'select':select,'initial':initial_replay}[action](name,*args)
+         'select':select,'initial':initial_replay,'replace':replacement_starts}[action](name,*args)

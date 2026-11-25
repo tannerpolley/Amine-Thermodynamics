@@ -1,0 +1,56 @@
+{
+  "wheel": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+  "revision": "d8f4c877f",
+  "index": 129,
+  "source": "analyses/mdea_mea_workflow/results/stage2-capped/B1",
+  "hypothesis": "Residual weights or units caused the mismatch",
+  "outcome": "Identical source row, observation, scale and weight. The archived prediction reproduces the archived residual using the current transform. The current Cp prediction differs.",
+  "expected_prediction": 94.32571302040198,
+  "expected_residual": 1.5260514342522322,
+  "actual_residual": 1.5247547065133156,
+  "difference": -0.0012967277389166476,
+  "tolerance": 1e-08,
+  "actual_prediction": {
+    "identity": "fit:129",
+    "group": "Cp",
+    "observed": 91.53206037994445,
+    "row": {
+      "Cp_J_g_K": "3.787",
+      "MDEA_mass_fraction": "0.30",
+      "loading": "0.00",
+      "pdf_attachment_key": "27V9SYLA",
+      "source_key": "Weiland1997",
+      "source_locator": "Table 1, PDF p.1, printed p.1004",
+      "source_row": "1"
+    },
+    "unit": "J/(mol-feed K)",
+    "basis": {
+      "constructor": "observation",
+      "kind": "equilibrium_isobaric_heat_capacity",
+      "arguments": {
+        "observed": 91.53206037994445,
+        "form": "difference",
+        "scale": 1.8306412075988892
+      }
+    },
+    "convergence": {
+      "residual": 6.3096404904893845e-15,
+      "floor": 2.45178186555508e-10,
+      "amplification": 0.0,
+      "contraction": null,
+      "iterations": 13,
+      "stop": "converged"
+    },
+    "saturation_loading": null,
+    "endpoint_loading": null,
+    "optional_field_unavailability": {},
+    "status": "Available",
+    "message": "SUCCESS: converged: residual 6.3096404904893845e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 2.4517818655550798e-10, amplification 0",
+    "value": 94.32333917716808,
+    "residual": 1.5247547065133156,
+    "requested_tolerance_met": true,
+    "branch": null,
+    "stable_root_count": null
+  },
+  "seconds": 0.1709912839869503
+}
