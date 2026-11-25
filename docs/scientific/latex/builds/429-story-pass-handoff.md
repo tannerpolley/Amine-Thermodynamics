@@ -327,3 +327,36 @@ Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting
 7. The statement that the Austgen-type correlations depend on temperature only rests on Eq. 10's form. The low-pressure origin of their data was not re-read.
 
 **Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`. Start with §2.3–2.4 and S3 (C1), §3.3 and S4 (multistart), and §4.3 and S7 (phase).
+
+## Round-10 prose pass: round-9 referee items (Writer, 2026-11-25)
+
+**Basis.** On 2026-11-25 the investigator promoted the round-9 notebook (`analyses/round_9/notebook.qmd`, commit `517d0b982`) for this prose pass. The promotion is subject to its limits: the MDEA fit is provisional, the MDEA alternative with the MEA-fitted shared set stopped at its iteration limit, phase identities hold only for the tested declarations and starts, and experimental confirmation of phase identity is open. No calculation was run, and no generated display or script was edited. `round9-response.md` answers every item of the round-9 list with a locator.
+
+**What changed.**
+- **DEA (§4.3).** The worked split at 30 wt % and α 0.50 is in the text, with Table S48 cited for all four certificates and for the B matrix of Eq. 17. The daughter restart coalesces and the neighboring-state start reproduces the split; the text says both. The density measurements do not establish the phase count.
+- **AMP (§4.3).** The 2.037 MPa common-pressure control and the six measured-pressure controls are in the text, citing Table 10. §4.3 ends on the measured-pressure outcome and the slope control, without “remedy”.
+- **MDEA.**
+  - §3.3 gives 63 tested draws, one evaluable, and the endpoint from inherited start A.
+  - The stopping tests are separated from the projected-gradient criterion.
+  - §4.3 gives attempted and completed search counts and the 27 states (10 measured, 17 assigned pressures).
+  - The 204 and 263 MPa controls are out of the main evidence.
+- **Shared set (§4.2.4).** The 100 kPa sensitivity (Tables S49–S50) is a new last paragraph. The historical trade-off is marked as arising under system-pressure references.
+- **Other changes.**
+  - Eq. 9: the follow-on sentence names the additional reference-derivative term.
+  - C1 wording, with 10.5 % and 8.9 %, is in the abstract and conclusions.
+  - Hong reconstruction outcomes are only in S9.
+  - The introduction positions Tsanas et al. and Rodríguez et al.
+  - Also changed: Kiepe 268 of 307; the MEA 321/246 screen; the AMP 270/6 terms; the salt zero-species rows; Fig. 7 and S41 brackets as numerical resolution; the deposit package description.
+- **Abstract.** 250 words by `wc` on the PDF text, with each observable named. The preprint abstract and cover letter are synced. The highlights and graphical abstract are unchanged.
+
+**Checks.** `scripts/build_manuscript.sh` passes: main 31 pages, supplement 62, no undefined references or citations and no overfull boxes. These pass: `dea_displays.py --check`, `final_rerun_tables.py --check` and `--reference-states --check`, the round-7, round-8, #440 and round-9 `handoff.py --check`, and `check_private_source.py`. The CSE prose check passes on terminology.
+
+**Bibliography.** `cited_bibliography.py` gives the same entries and fields as the committed `references.bib`. The current Zotero export now ends each entry's last field with a comma, and adopting that would change the line whose hash `check_private_source.py` pins, so the committed file is kept. Whoever owns that check should update the pinned hash before the next refresh.
+
+**Open.**
+1. R5 deposit (owner): build the reproducibility package for the referee packet. The DOI is assigned at submission. The `% PENDING` comment in the availability section stays until the contents are confirmed.
+2. Display requests D1 (Table S32 definitions and pressure type) and D2 (move Table 10 into §4.3).
+3. The bibliography trailing-comma format against the pinned private-source line hash.
+4. Items carried from earlier rounds: C6 endpoint spread, the 1.3.2 reproduction, and the v1.3.1 tag.
+
+**Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`, starting with §4.3 (DEA worked split, AMP controls), §3.3 and §4.2.4.
