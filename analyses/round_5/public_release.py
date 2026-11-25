@@ -32,15 +32,16 @@ def check_public(package):
     assert '.venv' not in Path(epcsaft.__file__).parts
 
 
-def calculate_states(package, study_control):
+def calculate_states(package, study_control, *, params=PARAMS, reference=RECORD, output=None):
     started = monotonic()
-    record = stable.read(RECORD)
-    spec = stable.bind(stable.s.parameter_mapping(PARAMS))
+    record = stable.read(reference)
+    retained = record['retained'] if isinstance(record, dict) else record
+    spec = stable.bind(stable.s.parameter_mapping(params))
     ids = spec.parameters.component_ids
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     model = spec.model
     outputs = []
-    for ref in record['retained']:
+    for ref in retained:
         group = ref['group']
         obs = next(o for o in spec.inputs['observations']['fitted'] if o['group'] == group)
         problem = spec.problems[obs['problem']]
@@ -85,10 +86,10 @@ def calculate_states(package, study_control):
             except (AttributeError, TypeError, ValueError, RuntimeError, AssertionError) as error:
                 row.update(disposition='Call refused', refusal=f'{type(error).__name__}: {error}')
         outputs.append(dict(group=group, temperature_K=ref['T_K'], feed=ref['feed'], answers=answers))
-    path = RESULTS / 'records' / ('study-wheel-S13-controls.json' if study_control else 'public-1.3.2.json')
+    path = output or RESULTS / 'records' / ('study-wheel-S13-controls.json' if study_control else 'public-1.3.2.json')
     path.write_text(json.dumps(dict(platform=platform.platform(), python=platform.python_version(),
                                     package=package.name if package else None, package_sha256=digest(package) if package else None, engine=epcsaft.__version__,
-                                    declaration_inputs=fingerprints(RECORD, PARAMS), rows=outputs,
+                                    declaration_inputs=fingerprints(reference, params), rows=outputs,
                                     seconds=monotonic()-started), indent=2, allow_nan=False)+'\n')
 
 

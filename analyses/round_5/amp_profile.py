@@ -12,11 +12,12 @@ PROFILE_ARCHIVE = ENDPOINTS / 'diagnosis/f2-scan.json'
 TARGET_INCREMENT = 3.84146
 
 
-def calculate(work, design):
+def calculate(work, design, *, endpoint=None, retain=save, extra_slopes=()):
     started = monotonic()
     if design == 'expanded':
-        source = RESULTS / 'A/expanded-free.json.gz'
-        point = stable.read(source)['point']
+        source = endpoint or RESULTS / 'A/expanded-free.json.gz'
+        archived = stable.read(source)
+        point = archived['point'] if endpoint is None else archived['selected'][2]
         route = ExpandedPressure(DECLARATION, work)
     else:
         source = ENDPOINTS / 'main/parameters.json'
@@ -30,12 +31,14 @@ def calculate(work, design):
     data = dict(design=design, center=center, minimum=base, stage_variance=info['stage_variance'],
                 delta_cutoff=delta, points={}, brackets={}, projection_minutes=[6, 15],
                 inputs=fingerprints(source, PROFILE_ARCHIVE, DECLARATION))
-    save(f'A/profile-{design}-information.json.gz', info)
+    retain(f'A/profile-{design}-information.json.gz', info)
     knots = {float(k): v for k, v in stable.read(PROFILE_ARCHIVE).items()}
+    scheduled = {k for k in (*knots, *extra_slopes) if lower <= k <= upper}
+    data['outside_bounds'] = sorted(set(extra_slopes)-scheduled)
     seeds = {center: point}
     points = data['points']
     elapsed = []
-    save(f'A/profile-{design}.json', data, start=started)
+    retain(f'A/profile-{design}.json', data, start=started)
 
     def evaluate(slope):
         if slope in points:
@@ -57,19 +60,19 @@ def calculate(work, design):
         if usable:
             seeds[slope] = mapping
         elapsed.append(monotonic() - tick)
-        save(f'A/{name}.json.gz', dict(point=mapping, report=report, seed_slope_K=seed, starting_point=trial_point,
+        retain(f'A/{name}.json.gz', dict(point=mapping, report=report, seed_slope_K=seed, starting_point=trial_point,
              replay=route.result(f'{name}/stage-0/replay.json') if mapping else None), start=tick)
         points[slope] = dict(cost=cost if usable else None, status=report['status'], seconds=elapsed[-1],
                              increase=cost-base if cost is not None else None, record=f'{name}.json.gz')
-        save(f'A/profile-{design}.json', data, start=started)
+        retain(f'A/profile-{design}.json', data, start=started)
         return points[slope]['cost']
 
     if design == 'original':
         for slope, entry in knots.items():
             points[slope] = dict(cost=entry['fit']['cost'], increase=entry['fit']['cost'] - base, record=str(PROFILE_ARCHIVE.relative_to(RESULTS.parents[2])))
     else:
-        for slope in sorted(knots, key=lambda k: abs(k-center)):
-            if len(elapsed) >= 2 and (monotonic()-started + max(elapsed) * (len(knots)-len(elapsed)+2)) >= 1800:
+        for slope in sorted(scheduled, key=lambda k: abs(k-center)):
+            if len(elapsed) >= 2 and (monotonic()-started + max(elapsed) * (len(scheduled)-len(elapsed)+2)) >= 1800:
                 data['stop'] = 'Adjacent conditional fits projected over twice the profile allowance'
                 break
             evaluate(slope)
@@ -101,7 +104,7 @@ def calculate(work, design):
             else:
                 inside = candidate
         data['brackets'][str(direction)] = dict(within=inside, beyond=outside, closed=outside is not None and abs(inside-outside) <= .5)
-        save(f'A/profile-{design}.json', data, start=started)
+        retain(f'A/profile-{design}.json', data, start=started)
 
 
 if __name__ == '__main__':

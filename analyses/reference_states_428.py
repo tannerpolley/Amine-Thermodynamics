@@ -44,14 +44,14 @@ def source_log_k(law, T):
     return law.a+law.b/T+law.c*math.log(T/law.reference_temperature)+law.d*T+law.e/T**2+law.f*T**2
 
 
-def amp(run, *, inspect=None):
+def amp(run, *, inspect=None, route_class=Route, allow_missing_trial_error=False):
     folder = ROOT / 'analyses/amp_transfer'
     declaration = folder / 'inputs/retransfer-344/phase-2/AMP-05e94210.json'
     main = folder / 'results/retransfer-412-f2-05e94210/main'
     params, search, classification = (main / n for n in ('parameters.json', 'search-1.json.gz', 'phase-classification-1.json.gz'))
     inputs = identity(declaration, declaration.with_name('specification.toml'), params, search, classification, SHARED)
     assert inputs[str(params.relative_to(ROOT))] == 'd69f7e9df46d73662e1180713ae05bed7a32412fa7032920cf7139b0d88132dd'
-    route = Route(declaration, run)
+    route = route_class(declaration, run)
     route.check_run_output()
     spec = route.bind(stable.read(params))
     stock = {'water': 11.545384436618988, 'aminomethylpropanol': 1.0}
@@ -71,7 +71,8 @@ def amp(run, *, inspect=None):
     trial = min((t for t in report.trials if t.resolved_descent and t.quantities.get('density_side') == 2
                  and len(t.phase.support) == 9), key=lambda t: t.quantities['tpd_over_rt'])
     q, w = trial.quantities, trial.composition
-    D, error = q['tpd_over_rt'], q['plane_value_error_estimate_over_rt']
+    D = q['tpd_over_rt']
+    error = q.get('plane_value_error_estimate_over_rt') if allow_missing_trial_error else q['plane_value_error_estimate_over_rt']
     plane = math.fsum(x*p for x, p in zip(w, report.plane_over_rt, strict=True))
     distance = q['g_over_rt']-plane
     witness, = (r for r in split['supplied_pressure_roots'] if r.get('reclosed_evidence') == 'evaluated')
@@ -94,9 +95,9 @@ def amp(run, *, inspect=None):
         zip(pair['densities_mol_m3'], pair['amounts_mol'], pair['phases'], strict=True))]
     trial_phase = phase(model, T, P, 1., 1/q['volume_m3_per_mol'], w, formulas)
     balance = [balances(feed, part, formulas) for part in (phases[:1], phases[1:])]
-    checks = dict(optimized=(D == prediction.value == retained['value'] and error == prediction.stability.uncertainty == retained['uncertainty']
+    checks = dict(optimized=(error is not None and D == prediction.value == retained['value'] and error == prediction.stability.uncertainty == retained['uncertainty']
                              and distance < -error and abs(distance-D) <= error and any(r['composition'] == w for r in retained['witnesses'])),
-                  supplied=(supplied.evidence == 'evaluated' and root['returned'] == 'liquid'
+                  supplied=(error is not None and supplied.evidence == 'evaluated' and root['returned'] == 'liquid'
                             and supplied.quantities['tpd_over_rt'] < -error
                             and abs(supplied.quantities['tpd_over_rt']-witness['reclosed_quantities']['tpd_over_rt']) <= error),
                   split=(pair['confirmed'] and gibbs_delta < -paired_error and abs(gibbs_delta-objective_delta) <= paired_error),
