@@ -193,6 +193,7 @@ def information(case, spec, rows, coords, jacobian, covariance, wheel):
     e = spec.whiten(np.array([v['residual'] for v in rows]))
     J = spec.whiten(np.asarray(jacobian, dtype=np.float64).reshape(len(rows), len(coords)))
     report, contributions = information_reduction(case, records, rows, coords, e, J, covariance, wheel)
+    (OUT/case).mkdir(parents=True, exist_ok=True)
     f.e.table(OUT/case/'contributions.csv', contributions)
     r.write(f'{case}/information.json.gz', report)
     return report['blocks'], report['variance'], report['stage_variance']

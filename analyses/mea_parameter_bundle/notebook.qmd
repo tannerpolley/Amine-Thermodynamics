@@ -1,6 +1,10 @@
 ---
 title: "MEA parameter bundle"
 resources:
+  - results/salt-anchored-435/**
+  - ../dea_transfer/results/salt-anchored-435/**
+  - ../mdea_mea_workflow/results/salt-anchored-435/**
+  - ../amp_transfer/results/salt-anchored-435/**
   - results/reference-states-428/**
   - results/split-cause-342/**
   - results/uncertainty-307/**
@@ -2014,3 +2018,74 @@ agent-heavy uv run --no-sync python analyses/mea_parameter_bundle/scripts/shared
 python3 analyses/mea_parameter_bundle/scripts/shared_ion_tables_423.py --check
 bash analyses/render.sh mea_parameter_bundle/notebook.qmd --to html
 ```
+
+## Salt-calibrated water–bicarbonate and water–carbonate interactions {#salt-anchored-435}
+
+The calculation uses sodium-salt osmotic coefficients to constrain the two
+water–anion dispersion laws. At 0.1 MPa, the NaCl stage uses 10 observations at
+298.15 K. The two carbonate-salt stages each use 45 values over 278.15–318.15 K,
+at nominal molalities of 0.01–1 mol/kg. Each value uses the charge-adjusted
+ionic basis and the ideal dissolved-CO₂ correction. The mixed-salt comparison
+has 39 evaluable values and six refusals where charge closure gives a negative
+minor-anion molality.
+
+{{< include results/salt-anchored-435/calculation-summary.md >}}
+
+The two MEA starts meet all nine preservation checks. The selected endpoint
+comes from the historical salt-held start. Its objective increases by 2.19527
+over the fresh F2 replay. MEAH⁺–carbamate and MEAH⁺–bicarbonate reach the −1 and
++1 bounds respectively. The conditional information has rank nine in the
+interior. The MEAH⁺ and carbamate diameters have correlation −0.9969 with the
+bounds fixed. Each inward profile increases the objective. At the worked
+saturated state (313.15 K, 1.734 MPa), addition of CO₂ releases 81.7952 kJ/mol
+and the equilibrium isobaric heat capacity is 3.6032 kJ/(kg K). The mean
+calculated-to-observed Jakobsen carbonate-share ratio is 0.101 across ten
+comparison states. The Kim calculation misses the reversal of the observed
+ordering between the two addition paths.
+
+The pressure residuals retain the original measurement identities and use
+CO₂ partial pressure for MEA and DEA and total pressure for MDEA and AMP. The
+AMP panel uses the 105 fitted total pressures admitted in #434. The expanded
+free-slope AMP fit gives −51.998 K. Its Kundu comparison changes from 15.67%
+to 15.64% AARD, while its fitted carbamate fractions change from 21.26% to
+26.83%. At the 393.15 K worked comparison and common pressure 2.03724 MPa,
+all four expanded AMP endpoints return a single parent. The two older
+47-pressure designs retain their historical roles.
+
+MDEA's fitted Kuranov total-pressure AARD falls from 20.09% to 10.12% on
+66 observations. Its Ermatchkov CO₂ partial-pressure AARD rises from 17.89%
+to 38.42% on 101 outside-fit observations. At the shared 373.15 K,
+203.1269 MPa test state, the new MDEA endpoint admits two liquid
+roots. The pair lowers $G/(RT)$ by $2.5575\times10^{-3}$ mol, compared with
+an estimated paired numerical error of $7.35\times10^{-10}$ mol. Both
+appear as liquid roots in the pressure checks. The corresponding archived
+endpoint and both endpoints at the 1.121 MPa comparison have zero confirmed
+pairs. The high-pressure result is an extrapolation.
+
+| Calculation | Passed checks | Misses and undecided checks |
+| --- | --- | --- |
+| Salt cascade | Both carbonate-salt AARD limits and the bicarbonate interaction limit at 313.15 K. The replay matched the prior coefficients row by row. | Six mixed-salt rows give a negative minor-anion molality on charge closure. |
+| MEA | Both fits, all nine preservation checks, and all 2,646 phase-search states per endpoint. Each census used 991,602 supplied evaluations. | Three Xu comparison rows exceed the R2 temperature interval. The Kim ordering comparison misses the observed reversal. |
+| DEA | Both 80-row fits converged. Each evaluated 1,269 of 1,271 phase states, with zero resolved descents on the evaluable set. | Lawson VIII:1 loses trial support on reconstruction. The optimized trial at 363.15 K and loading 0.8 stalls above tolerance. |
+| MDEA | All three 281-row fits converged. The CO₂-free check found zero gaps at 32 temperatures and zero descents in 78 states. | The full search retains 1,248 unavailable records and 75 descents including exact aliases, against 1,099 and 76 for the prior model. At 383.15 K, 121.309 MPa, and loading 1.368, one distinct search confirms a liquid–liquid split beyond the MDEA dissociation correlation range. The Gibbs decrease is $4.2335\times10^{-5}RT$ mol and paired numerical error $9.24\times10^{-10}RT$ mol. The 262.862 MPa fixed-state comparison remains undecided because one root has an unspecified branch. |
+| AMP | Both starts converge in each 214-row slope family. Each native and supplied search evaluates all 666 states with zero descents or confirmed splits. | The free fit's weighted objective rises from 72.7332 to 76.3119 on the matched expanded data. |
+| Manuscript handoff | The source closure and read-only regeneration check pass. | Numerical replacements and rendered-label reconciliation remain open in the occurrence inventory. |
+
+![Pressure residuals at the observations. Filled symbols mark fitted data.](results/salt-anchored-435/MEA/evidence/F4/model-curves/loaded-pressure-residuals.png)
+
+The carbonate-salt reference coefficients are model-derived. The sodium and
+carbonate lower intercept bounds and the weak dilute-carbonate response
+condition the fitted laws. Temperatures above 318.15 K extrapolate the salt
+calibration. The MEA objective compares the same 307 weighted observations
+with its salt-held and original declarations. A search covers specified
+parents, pressures, phase supports and trial compositions. Its result applies
+to those sampled calculations. Interior uncertainty is conditional on weights
+and active bounds. These calculations quantify fitted agreement and numerical
+stability on the study wheel.
+
+[Osmotic residuals by salt and temperature](results/salt-anchored-435/salt/phi-residuals.csv) ·
+[Law values and derivative readback](results/salt-anchored-435/salt/verification.json) ·
+[Bounded computation timing](results/salt-anchored-435/probe/timing.json) ·
+[Manuscript number inventory and open replacements](results/salt-anchored-435/manuscript-handoff.md)
+
+![Osmotic coefficients on the ionic basis and fitted water–ion dispersion laws.](results/salt-anchored-435/salt/phi-molality.png)

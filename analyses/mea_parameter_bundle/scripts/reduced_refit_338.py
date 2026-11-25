@@ -398,7 +398,7 @@ def information(name, mapping, declared):
     write(f'{name}/information.json',out)
 
 
-def evidence(name, path, *, kim_pathways=True):
+def evidence(name, path, *, kim_pathways=True, model_curves=False):
     """Run the adoption assessment owners; stage their executable copies outside retained evidence."""
     import tempfile
     e.EV, e.RECORDS = OUT/'evidence', {name:path}
@@ -424,6 +424,8 @@ def evidence(name, path, *, kim_pathways=True):
             e.kim(name, e.curves(name))
         e.density(name)
         e.heat_capacity(name)
+        if model_curves and not (e.EV / name / 'model-curves/summary.json').exists():
+            e.run(name, e.curves(name), [])
     finally:
         e.copy_of, r.OUT = original, OUT
 

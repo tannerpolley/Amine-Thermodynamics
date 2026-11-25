@@ -196,9 +196,9 @@ def aard(rows):
 
 # ---------------------------------------------------------------- salt fits (Method step 2)
 
-def salt_fit(name, laws, active, rows_of):
+def salt_fit(name, laws, active, rows_of, *, base=FINAL):
     """One cascade fit: ``active`` = [(ion, power), ...] law coefficients; other laws held at ``laws``."""
-    mapping = salt_document(laws)
+    mapping = salt_document(laws, base)
     parameters = epcsaft.Parameters.from_mapping(mapping)
     rows = rows_of(parameters)
     coordinates = [reg.coordinate(parameters, [('temperature_law_coefficient', f'{LAWS[ion]}/a{p}', 1.0)], origin=laws[ion][p],
@@ -211,7 +211,7 @@ def salt_fit(name, laws, active, rows_of):
         fitted[ion] = tuple(value if i == p else fitted[ion][i] for i in (0, 1))
     on_bound = [dict(coefficient=f'{LAWS[ion]}/a{p}', value=v, bounds=BOUNDS[p]) for (ion, p), v in zip(active, fit.physical, strict=True)
                 if min(abs(v - BOUNDS[p][0]), abs(v - BOUNDS[p][1])) <= 1e-8 * max(1., abs(v))]
-    replay = predict(salt_document(fitted), rows)
+    replay = predict(salt_document(fitted, base), rows)
     difference = max(abs(x['value'] - pv) for x, pv in zip(replay, fit.predictions, strict=True))
     report = dict(name=name, status=fit.status, message=fit.message, usable=fit.usable, iterations=len(fit.iteration_costs or []),
                   initial_cost=fit.initial_cost, final_cost=fit.final_cost, active=[f'{LAWS[i]}/a{p}' for i, p in active],
@@ -223,13 +223,13 @@ def salt_fit(name, laws, active, rows_of):
     return fitted, report
 
 
-def salt():
+def salt(*, base=FINAL, out=OUT):
     r.verify()
     laws = {ion: (a0, NA_SLOPE if ion == NA else 0.) for ion, a0 in HELD_A0.items()}
-    laws, a = salt_fit('1a-sodium', laws, [(NA, 0)], nacl_rows)
-    laws, b = salt_fit('1b-bicarbonate', laws, [(HCO3, 0), (HCO3, 1)], lambda p: carbonate_rows(p, {'NaHCO3'}))
-    laws, c = salt_fit('1c-carbonate', laws, [(CO3, 0), (CO3, 1)], lambda p: carbonate_rows(p, {'Na2CO3'}))
-    combined = salt_document(laws)
+    laws, a = salt_fit('1a-sodium', laws, [(NA, 0)], nacl_rows, base=base)
+    laws, b = salt_fit('1b-bicarbonate', laws, [(HCO3, 0), (HCO3, 1)], lambda p: carbonate_rows(p, {'NaHCO3'}), base=base)
+    laws, c = salt_fit('1c-carbonate', laws, [(CO3, 0), (CO3, 1)], lambda p: carbonate_rows(p, {'Na2CO3'}), base=base)
+    combined = salt_document(laws, base)
     parameters = epcsaft.Parameters.from_mapping(combined)
     groups = dict(NaCl=nacl_rows(parameters), NaHCO3=carbonate_rows(parameters, {'NaHCO3'}), Na2CO3=carbonate_rows(parameters, {'Na2CO3'}),
                   mixed=carbonate_rows(parameters, {'mixed'}))
@@ -253,7 +253,7 @@ def salt():
                   largest_dissolved_co2_share=max(x['h2x_share'] for g in ('NaHCO3', 'Na2CO3') for x in replay[g]),
                   curves=curves, rows=replay, document=combined)
     write('salt/summary.json', record)
-    with (OUT / 'salt/phi-residuals.csv').open('w', newline='') as h:
+    with (out / 'salt/phi-residuals.csv').open('w', newline='') as h:
         w = csv.DictWriter(h, ['salt', 'temperature_K', 'molality', 'phi_observed_ionic', 'phi_printed', 'phi_model', 'relative_error',
                                'charge_adjustment', 'dissolved_co2_share', 'role'], lineterminator='\n')
         w.writeheader()
@@ -262,13 +262,14 @@ def salt():
                 w.writerow(dict(salt=g, temperature_K=x['T'], molality=x['m'], phi_observed_ionic=x.get('observed'), phi_printed=x.get('phi_printed', x.get('observed')),
                                 phi_model=x.get('value'), relative_error=x.get('relative_error'), charge_adjustment=x.get('charge_adjustment'),
                                 dissolved_co2_share=x.get('h2x_share'), role='comparison' if g == 'mixed' else 'fitted'))
-    with (OUT / 'salt/laws.csv').open('w', newline='') as h:
+    with (out / 'salt/laws.csv').open('w', newline='') as h:
         w = csv.DictWriter(h, list(curves[0]), lineterminator='\n')
         w.writeheader()
         w.writerows(curves)
-    salt_figure(replay, curves)
+    salt_figure(replay, curves, out=out)
     print(json.dumps(dict(scores={g: {k: v for k, v in x.items() if k != 'by_temperature'} for g, x in scores.items()}, gates=record['gates'],
                           values_313_15=record['values_313_15'])), flush=True)
+    return record
 
 
 def f1_gates(scores, at_313, bounded):
@@ -308,7 +309,7 @@ def amend():
     print(json.dumps(gates['gates']), flush=True)
 
 
-def salt_figure(replay, curves):
+def salt_figure(replay, curves, *, out=OUT):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -331,14 +332,14 @@ def salt_figure(replay, curves):
     ax.axvspan(278.15, 318.15, color='0.9')
     ax.set(xlabel='T / K', ylabel='$k_{ij}$', title='water-anion laws (fitted range shaded)')
     ax.legend(fontsize=7)
-    fig.savefig(OUT / 'salt/phi-molality.png', dpi=150)
+    fig.savefig(out / 'salt/phi-molality.png', dpi=150)
 
 
-def scan():
+def scan(*, base=FINAL):
     """Diagnostic after F1 (no fit): NaCl phi on the formula and full-composition paths, and phi against each pinned a0."""
     r.verify()
     laws = {ion: (v['a0'], v['a1']) for ion, v in result('salt/summary.json')['laws'].items()}
-    mapping = salt_document(laws)
+    mapping = salt_document(laws, base)
     parameters = epcsaft.Parameters.from_mapping(mapping)
     model, n = epcsaft.Mixture(parameters), 1 / water_molar_mass()
     paths = []
@@ -352,7 +353,7 @@ def scan():
     for ion, rows_of in ((NA, nacl_rows), (CO3, lambda p: [x for x in carbonate_rows(p, {'Na2CO3'}) if x['T'] == T_SALT])):
         for a0 in (-1., -0.5, 0., 0.5, 1.):
             trial = dict(laws, **{ion: (a0, laws[ion][1])})
-            document = salt_document(trial)
+            document = salt_document(trial, base)
             for x in predict(document, rows_of(epcsaft.Parameters.from_mapping(document))):
                 sweeps.append(dict(law=LAWS[ion], a0=a0, salt=x['salt'], T=x['T'], molality=x['m'], observed=x['observed'], model=x['value']))
     write('salt/sensitivity.json', dict(paths=paths, sweeps=sweeps))

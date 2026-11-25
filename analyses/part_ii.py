@@ -68,15 +68,17 @@ def active_bound_indices(coordinates):
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
-    def __init__(self, declaration, out=None):
+    def __init__(self, declaration, out=None, *, shared_values=None):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
         self.out = Path(out) if out else self.path.parent/self.config['output']
         available = int(next(x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')).split()[1])/1e6
         self.workers = max(1, min(int(os.environ['AGENT_HEAVY_CORES']), int((available-7)/.35)))
         self.controls = self.config['optimizer']
+        self.shared_values = shared_values
         self.verify()
-        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,shared_values_sha256=SHARED_SHA)
+        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,
+                        shared_values_sha256=SHARED_SHA if shared_values is None else shared_values[1])
         if (self.out/'identity.json').exists():
             assert self.result('identity.json')==identity, 'Use a new output directory for changed declarations'
         self.write('identity.json',identity)
@@ -88,6 +90,9 @@ class Route:
 
     def verify(self):
         assert hashlib.sha256(SHARED.read_bytes()).hexdigest() == SHARED_SHA
+        if self.shared_values is not None:
+            path, digest = self.shared_values
+            assert hashlib.sha256(path.read_bytes()).hexdigest() == digest
         assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
         with zipfile.ZipFile(WHEEL) as archive:
             for name in archive.namelist():
@@ -153,6 +158,11 @@ class Route:
         return dict(parameters=mapping, reactions=laws, coordinates=declared)
 
     def bind(self, point):
+        if self.shared_values is not None:
+            shared = stable.read(self.shared_values[0])
+            assert shared['wheel_sha256'] == SHA
+            for pair in shared['water_ion_pairs']:
+                assert pair in point['parameters']['pairs'], pair
         datasets = self.load(self.config['dataset_changes']) if 'dataset_changes' in self.config else {}
         spec = SolventSpecification(self.path.parent/self.config['specification'], **datasets)
         spec.parameters = epcsaft.Parameters.from_mapping(point['parameters'])
