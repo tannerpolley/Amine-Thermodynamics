@@ -360,3 +360,43 @@ Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting
 4. Items carried from earlier rounds: C6 endpoint spread, the 1.3.2 reproduction, and the v1.3.1 tag.
 
 **Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`, starting with §4.3 (DEA worked split, AMP controls), §3.3 and §4.2.4.
+
+## Round-11 prose pass: round-10 referee items (Writer, 2026-11-25)
+
+**Basis.** The evidence is the round-10 study (`analyses/round_10/notebook.qmd` and `manuscript-handoff.json`, commit `609adcc26`). It is **not promoted**: asked on 2026-11-25, the investigator answered “keep working on this”. The investigator also directed that nothing that fails, such as 62 of 63 MDEA drawn starts failing at their first evaluation, may appear in the paper as acceptable. The investigator rejected the word “provisional”. No calculation was run in this pass, and no generated display or script was edited. `round10-response.md` answers every item of `r10-items.md` with a locator or the reason it stays open.
+
+**What changed.**
+- **K1.** §4.2.4 has a new last paragraph with Table S51, and §S4 and §5.4 are updated. The tied MEA, DEA and AMP endpoints differ by at most 0.0004, 0.0014 and 0.0002 percentage points in AARD. Each difference is more than 1,000 times smaller than the deviation from the measurements. The two MDEA continuations agree within 0.0002 points. LHS-53 is reported as a separate, much worse basin.
+- **§4.2.4.** The section now opens with the matched 100 kPa comparison and states its weights, bounds and stopping. The Table 8 comparison fits follow, then the MDEA weighting reading.
+- **Phase results.**
+  - K2: the MEA parent counts (149 and 13), and the AMP outcome wording in the abstract, §4.3, Fig. 8, §S7, the conclusions and the cover letter.
+  - K3: DEA bulk density, 0.113 % for one liquid against 0.155 % for two, with the pressure called assigned.
+  - K4: MDEA bubble pressures at the 10 measured-pressure descents.
+- **Literature (§5.2).**
+  - The section now leads with Ma'mun and Ermatchkov and gives each model's fit or development role.
+  - Kamps is shown on 28 and on 27 rows, and the count-matched Kuranov values are listed unranked.
+  - The DEA excess-enthalpy sign comparison and Smith et al. are added. Smith et al. was read in the Zotero PDF, and its Zotero metadata was corrected.
+- **Other text items.**
+  - The abstract and conclusions give the C1 resolutions against the observed differences, and §2.3 gives the full values.
+  - §2.4 has the AMP zero caloric reference.
+  - The availability statement gives the wheel first, the check name and both DEA identifiers.
+  - Also done: Eq. 17 definitions, highlight 1, the Kiepe count in §3.1, the 0.070 ratio in §5.3, and the Fig. 7 bracket.
+- **Abstract.** 250 words by `wc` on the PDF text. The preprint abstract and cover letter are synced, and the graphical abstract is identical to `main`.
+
+**Checks.**
+- `scripts/build_manuscript.sh` passes: main 32 pages, supplement 64, no undefined references or citations, no overfull boxes.
+- These pass: `dea_displays.py --check` (43 displays), `final_rerun_tables.py --check` and `--reference-states --check`, the round-7, round-8, #440, round-9 and round-10 `handoff.py --check`, and `check_private_source.py`.
+- The CSE prose check passes on terminology.
+- `references.bib` was regenerated with `cited_bibliography.py` and gained only `smithGibbsEnergyMinimization`.
+
+**Open.**
+1. **MDEA start failures (owner direction).** Diagnose why 62 of 63 drawn MDEA starts fail at their first evaluation. The #440 notebook says “feasibility undecided”. B and C miss the 1.121 MPa target. Of the 60 replacement draws, 28 are equilibrium non-convergence, 24 have no admissible saturation root, 5 hit the iteration limit and 3 are ill-conditioned. Then decide the MDEA wording. “Provisional” remains 12 times in the prose and 8 times in tables.
+2. **Promotion** of `609adcc26` for K1–K4.
+3. **Display requests** D1–D4 (`round10-response.md`).
+4. The stopping status of the Table 8 system-pressure comparison fits is not in any promoted record.
+5. **Deposit.**
+   - The README ID fix (`17c122356`) is on `main` and not merged here.
+   - The deposit lacks the round-10 records.
+   - The DOI is assigned at submission.
+
+**Next stage.** The orchestrator routes item 1 to a diagnosis stage (`cse:diagnose`). Its first action is to reproduce LHS-15 (equilibrium non-convergence) and LHS-57 (saturation slope reversal) on the study wheel, and to separate solver failure from an absent root. A Writer then applies the resulting MDEA wording, and then a fresh referee round follows.
