@@ -180,15 +180,17 @@ For DEA, 61 of the 90 fitted pressures lie outside the measured temperature rang
 The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures; the two models were fitted to different data, so these deviations do not rank them.
 On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin} (\cref{tab:published-models}), the MEA model underpredicts every pressure and deviates by 38.4\,\%, more than the PC-SAFT calculation of Baygi and Pahlavanzadeh, which fitted no ternary data, and the eNRTL model of Zhang et al., which fitted these pressures.
 Hong et al.\ report 1.53\,\% for a pathway-weighted PC-SAFT model of loaded MEA \cite{hongModelingCO2Absorption2027}; that value is a deviation from the simulator pressures to which the model was fitted, with a pathway weight fitted at each state, not from measurements, and Section~\ref{supp-sec:s-hong} evaluates their parameters on the measured pressures.
+There, the pressures of their model are equal-fugacity calculations with the vapor amount fixed at $10^{-9}$ of the feed, and at 131 of the 132 states inside their fitted range the liquid fails a local stability test, so these are not equilibrium pressures of that model.
 
 \input{tables/published-models}
 
 % P:literature-mdea
 For MDEA, \cref{tab:published-models} sets the MDEA model beside published values on three sets of observations.
-On the 82 total pressures of Kuranov et al., of which the MDEA model fitted 70, it deviates by 4.16\,\%, below the two models that also fitted these pressures \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020,zhangThermodynamicModelingCO22011} and well below the ePC-SAFT calculations of Uyan et al.\ and Wangler et al., which fitted no parameter to the ternary system \cite{Uyan2015,Wangler2018}.
+On the 82 total pressures of Kuranov et al., matched to the source rows one by one, of which the MDEA model fitted 70, it deviates by 4.16\,\%, below the two models that also fitted these pressures \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020,zhangThermodynamicModelingCO22011} and well below the ePC-SAFT calculations of Uyan et al.\ and Wangler et al., which fitted no parameter to the ternary system \cite{Uyan2015,Wangler2018}.
 The published values are identified with these 82 observations by their count only (Section~\ref{supp-sec:s-published}).
 On the 101 \COtwo partial pressures of Ermatchkov et al.\ the MDEA model deviates by 25.09\,\%, against 16.8\,\% for their parameter set I, which did not fit them either, so here a published model that fitted nothing to these data is closer.
-On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets, both fitted to them, are far closer than the MDEA model, which was not fitted to them and deviates by 12.94\,\% on the 27 states where it gives a result.
+On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets, both fitted to them, report 1.9 and 3.5\,\% and are far closer than the MDEA model, which was not fitted to them and deviates by 12.94\,\% on the 27 states where it gives a result, against 16.32\,\% for the first MDEA fit on the same 27.
+The state without a result is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, where the bubble calculation of the MDEA model ended at its limit of 200 iterations without converging.
 
 % P:literature-amp-dea
 For AMP, two eNRTL models were fitted to the pressures used here: Yi et al.\ report 15.4\,\% for the 51 \COtwo partial pressures of Kundu et al.\ and 8.0\,\% for the 45 total pressures of Tong et al.\ \cite{yiOpenAccessThermodynamically2024}, and Hartono et al.\ report 17.3 and 9.3\,\% \cite{hartonoSolubilityCO201M2020}.

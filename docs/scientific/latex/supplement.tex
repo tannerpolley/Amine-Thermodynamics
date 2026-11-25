@@ -541,7 +541,7 @@ The MDEA standard errors are conditional on the one parameter on a bound, $k_{\m
 Table~\ref{tab:supplement-fit-starts} gives the objective value at the start and at convergence for every start of the four fits.
 The two MEA starts end within a relative $10^{-6}$ of each other and the two DEA and two AMP starts within $10^{-10}$; the three MDEA starts end at 17.400956809, 17.600100679 and 148.906061996, and the lowest is reported.
 Two or three local fits do not establish a global optimum, and no search for the global optimum was made.
-Each fit stops when the relative change of the objective falls to $10^{-10}$, $10^{-6}$ for MEA; for MDEA a first stage ended at its limit of 39 or 40 iterations and a second stage from its endpoint met that criterion.
+The MDEA and AMP fits stop when the relative change of the objective falls to $10^{-10}$ and the MEA fit at $10^{-6}$; for MDEA a first stage ended at its limit of 39 or 40 iterations and a second stage from its endpoint met that criterion.
 
 % P:supplement-endpoints
 The two MEA starts reach the same parameters within $10^{-3}$ of each box width and the two AMP starts within $10^{-10}$, and each pair gives the same finite-search outcome: no resolved descent.
@@ -780,13 +780,13 @@ For MDEA, three ePC-SAFT studies report deviations from the total pressures of K
 Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite{Uyan2015}.
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
-The 82-observation values are identified with the 82 total pressures of Table~2 of Kuranov et al.\ by their count, and main-text Table~\ref{main-tab:published-models} sets them beside the 4.16\,\% of the MDEA model on those observations, of which it fitted 66 loaded and four \COtwo-free pressures; the MDEA fit with the first weights gave 8.75\,\%.
+The value of the MDEA model is calculated on the 82 total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only, and main-text Table~\ref{main-tab:published-models} sets them beside the 4.16\,\% of the MDEA model on those observations, of which it fitted 66 loaded and four \COtwo-free pressures; the MDEA fit with the first weights gave 8.75\,\%.
 The unfitted row 72, at 393.16 K, is calculated at 1.165620 MPa against 1.205300 MPa measured.
 The subset values are for different observation sets from the 66 pressures fitted here, from which the MDEA model deviates by 4.15\,\%, and they are listed without a comparison.
 
 \section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
 % P:supplement-hong-model
-This section gives the present implementation of the model of Hong et al.\ at fixed pathway weight and its evaluation on measured MEA observations; Hong et al.\ themselves report a 1.53\,\% AARD against the simulator pressures to which the model was fitted (their Section~3.2 and Table~3) \cite{hongModelingCO2Absorption2027}.
+This section gives the present implementation of the model of Hong et al.\ at fixed pathway weight and its evaluation on measured MEA observations; its tabulated pressures are equal-fugacity calculations with the vapor amount fixed at $10^{-9}$ of the feed, and its liquid fails the local stability test at 131 of the 132 states inside the fitted range; Hong et al.\ themselves report a 1.53\,\% AARD against the simulator pressures to which the model was fitted (their Section~3.2 and Table~3) \cite{hongModelingCO2Absorption2027}.
 Hong et al.\ describe loaded 30 wt\% MEA with a PC-SAFT model of the three components MEA, water and \COtwo, without ions or reaction equilibria \cite{hongModelingCO2Absorption2027}.
 Two association schemes between MEA and \COtwo, one for the carbamate pathway and one for the bicarbonate pathway, are blended by a pathway weight, which their Table~S1 gives at 90 nodes: nine temperatures from 313.15 to \SI{393.15}{\kelvin} and ten loadings from 0.1 to 1.0 mol/mol.
 They fitted the model of the loaded solution to pressures calculated with a process simulator at 30 wt\% MEA, not to measurements.
