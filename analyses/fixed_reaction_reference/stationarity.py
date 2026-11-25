@@ -1,8 +1,8 @@
 """Check feasible local descent and root guesses without changing the fit declaration."""
 from copy import copy
 from time import monotonic
-from scipy.optimize import lsq_linear
 import refit as f
+from scipy.optimize import lsq_linear
 
 def at_chart(run,spec,point,u):
     chart=f.reg.evaluate_coordinates(spec.parameters,spec.coordinates(),u,[],
@@ -39,7 +39,7 @@ def stationarity(name,label, fractions=(1.,.5)):
         cost=trial['cost']
         trials.append(dict(fraction=fraction,point=point,endpoint_fingerprint=f.fingerprint(point),replay=trial,
                            relative_reduction=(c-cost)/c if cost is not None else None))
-        if cost is not None and (c-cost)/c > 1e-10:
+        if cost is not None and (c-cost)/c > q['controls']['function_tolerance']:
             break
     f.put(f'{name}/stationarity/{label}.json.gz',dict(endpoint=q['endpoint_fingerprint'],wheel=f.r.SHA,
         cost=c,relative_linearized_reduction=predicted,optimizer_step=u.tolist(),trials=trials,seconds=monotonic()-tick))
@@ -98,11 +98,70 @@ def amp_roots():
                 try:
                     value = f.eq.solve_equilibrium(spec.model,prob)
                     guesses.append(dict(P_guess_Pa=prob.P.guess,P_Pa=value.pressure,
-                        admitted=value.requested_tolerance_met,message=value.message))
+                        requested_tolerance_met=value.requested_tolerance_met,
+                        admitted=bool(value.success and value.requested_tolerance_met),message=value.message))
                 except (ValueError,RuntimeError) as error:
                     guesses.append(dict(P_guess_Pa=prob.P.guess,admitted=False,message=str(error)))
             record['starts'][label] = dict(row=row['identity'],failure=failure,guesses=guesses)
         f.put(f'{design}/root-probe.json.gz',dict(record,seconds=monotonic()-started))
+
+
+def mdea_descent():
+    started = monotonic()
+    prior = f.r.read(f.OUT/'MDEA/A.json.gz')
+    point = prior['endpoint']
+    run,_,_ = f.configured('MDEA','projected-gradient-line')
+    spec = run.bind(point)
+    gradient = f.np.array([g*d['scale']/(d['bounds'][1]-d['bounds'][0])
+                          for g,d in zip(prior['diagnostics']['projected_gradient'],point['coordinates'],strict=True)])
+    direction = -gradient/max(abs(gradient))
+    trials = []
+    original_cost = prior['replay']['cost']
+    for step in (.1,.01,.001,.0001):
+        u = (direction*step).tolist()
+        trial = at_chart(run,spec,point,u)
+        replay = f.replay(run.bind(trial))
+        cost = replay['cost']
+        reduction = (original_cost-cost)/original_cost if cost is not None else None
+        trials.append(dict(step=step,optimizer_step=u,replay=replay,point=trial,relative_reduction=reduction))
+        f.put('MDEA/stationarity/A-projected-direction.json.gz',dict(endpoint=prior['endpoint_fingerprint'],
+            wheel=f.r.SHA,trials=trials,seconds=monotonic()-started))
+        if reduction is not None and reduction>prior['controls']['function_tolerance']:
+            break
+
+
+def mdea_continuation(after_descent=False):
+    prior = f.r.read(f.OUT/'MDEA/A.json.gz')
+    point = prior['endpoint']
+    label, maximum_seconds = 'A-continuation',440
+    if after_descent:
+        descent = f.r.read(f.OUT/'MDEA/stationarity/A-projected-direction.json.gz')['trials'][-1]
+        assert descent['relative_reduction']>prior['controls']['function_tolerance']
+        point = descent['point']
+        label, maximum_seconds = 'A-descent-continuation',72
+    path = f'MDEA/stationarity/{label}.json.gz'
+    run,_,_ = f.configured('MDEA',label)
+    spec = run.bind(point)
+    controls = prior['controls'] | dict(function_tolerance=1e-14,maximum_elapsed_time_seconds=maximum_seconds)
+    spec.spec['optimizer'] = controls
+    started = monotonic()
+    _,report,_ = spec.fit()
+    record = dict(wheel=f.r.SHA,source=f.fingerprint(point),controls=controls,report=report,
+                  fit_seconds=monotonic()-started)
+    f.put(path,record)
+    if report['physical'] and report['reactions']:
+        endpoint = run.endpoint_mapping(point,report,point['coordinates'])
+        bound = run.bind(endpoint)
+        started = monotonic()
+        replay = f.replay(bound)
+        passed = replay['cost'] is not None and f.a.f.a.relative(replay['cost'],report['final_cost'])<=f.REPLAY_TOLERANCE['MDEA']
+        record.update(endpoint=endpoint,endpoint_fingerprint=f.fingerprint(endpoint),replay=replay,
+                      replay_seconds=monotonic()-started,replay_passed=passed)
+        f.put(path,record)
+        started = monotonic()
+        record.update(diagnostics=f.endpoint_diagnostics(bound,replay,endpoint,controls),
+                      diagnostic_seconds=monotonic()-started)
+        f.put(path,record)
 
 
 if __name__=='__main__':
@@ -113,7 +172,12 @@ if __name__=='__main__':
         root()
     elif sys.argv[1]=='amp-roots':
         amp_roots()
+    elif sys.argv[1]=='mdea-descent':
+        mdea_descent()
+    elif sys.argv[1] in ('mdea-continue','mdea-restart'):
+        mdea_continuation(after_descent=sys.argv[1]=='mdea-restart')
     else:
         labels=sys.argv[2:] or ['A']
         for label in labels:
-            stationarity(sys.argv[1],label)
+            wide = (sys.argv[1],label)==('MDEA','A')
+            stationarity(sys.argv[1],label,(1.,.5,.125,.03125,.0078125) if wide else (1.,.5))

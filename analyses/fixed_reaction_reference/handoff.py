@@ -8,7 +8,7 @@ from math import fsum, log, sqrt
 import sys
 
 from refit import (BASE, COUNTS, HERE, OUT, P_REF, REPLAY_TOLERANCE, configured, fingerprint, r,
-                   remove_reference_pressure, row_manifest, save, starts)
+                   remove_reference_pressure, row_manifest, rms, save, starts, start_vector, qmc, SEED, np)
 from round_8.records import NAMES, blob
 from round_8.reductions import phase_outcome, witness_direction
 
@@ -114,14 +114,53 @@ class Quantities:
             len(declaration['coordinate_order'])) for pair in ('AB','AC','BC')}
         assert all(abs(v-declaration['pair_rms_distances'][k])<=4e-16 and v>=.2 for k,v in distances.items())
         self.quantity(f'{design} start distances',None,distances,sources=(manifests,))
+        replacement_path = f'{design}/replacement-starts.json.gz'
+        replacement = self.read(replacement_path)
+        if replacement:
+            assert replacement['wheel']==r.SHA and replacement['manifest_fingerprint']==fingerprint(declaration)
+            accepted = {k:actual_starts[k] for k in replacement['accepted_original']}
+            assert list(accepted)==[k for k in 'ABC' if self.read(f'{design}/{k}.json.gz')['report']['status']
+                                    !='initial_evaluation_failed']
+            native = spec.coordinates()
+            lower,upper = (np.array([getattr(q,k) for q in native]) for k in ('lower','upper'))
+            candidates = qmc.LatinHypercube(d=len(native),seed=SEED).random(64)
+            remaining = set(range(64))-{q['draw'] for q in actual_starts.values()}
+            for label,item in replacement['draws'].items():
+                d = np.min([rms(candidates,v['normalized']) for v in accepted.values()],axis=0)
+                i = max(remaining,key=lambda j:(d[j],-j))
+                remaining.remove(i)
+                vector = start_vector(spec,i,lower+(upper-lower)*candidates[i])
+                separation = {k:float(rms(vector['normalized'],v['normalized'])) for k,v in accepted.items()}
+                assert label==f'LHS-{i:02d}' and vector==item['start'], f'{design} {label} Latin hypercube readback'
+                assert min(separation.values())>=.20 and separation==item['pair_rms_distances'], f'{design} {label} start separation'
+                valid = item.get('statuses')==['Available']*COUNTS[design] and len(item.get('predictions',[]))==COUNTS[design]
+                assert valid==(item['disposition']=='eligible'), f'{design} {label} initial evaluation'
+                evaluation = {k:v for k,v in item.items() if k not in ('statuses','predictions')}
+                evaluation['available_rows'] = item.get('statuses',[]).count('Available') if valid else None
+                self.quantity(f'{design} {label} start screening',None,evaluation,unit='residual evaluation',
+                              sources=(manifests,replacement_path),
+                              disposition='replayed' if valid else 'refused at initial evaluation')
+                if valid:
+                    accepted[label] = actual_starts[label] = vector
+            if 'exhausted' in replacement:
+                assert replacement['accepted']==list(accepted) and replacement['remaining']==sorted(remaining)
+                if replacement['exhausted']:
+                    assert len(accepted)<3 and all(min(rms(candidates[i],v['normalized']) for v in accepted.values())<.20
+                                                   for i in remaining), f'{design} premature LHS exhaustion'
+            self.quantity(f'{design} admitted-start distances',None,
+                          {x+'/'+y:float(rms(accepted[x]['normalized'],accepted[y]['normalized']))
+                           for j,x in enumerate(accepted) for y in list(accepted)[j+1:]},
+                          sources=(manifests,replacement_path))
         attempts, eligible = {}, {}
-        for label in (*'ABC',*(['A-loose'] if design=='MEA' else [])):
+        for label in (*actual_starts,*(['A-loose'] if design=='MEA' else [])):
             path = f'{design}/{label}.json.gz'
             q = self.read(path)
             if q is None:
+                self.quantity(f'{design} {label} fit',None,None,sources=(manifests,replacement_path),
+                              disposition='open')
                 continue
             start = 'A' if label=='A-loose' else label
-            assert q['start']==label and q['optimizer_start']==declaration['starts'][start]['optimizer'], f'{design} {label} start identity'
+            assert q['start']==label and q['optimizer_start']==actual_starts[start]['optimizer'], f'{design} {label} start identity'
             assert q['manifest_fingerprint']==fingerprint(declaration) and q['wheel']==r.SHA, f'{design} {label} manifest'
             report = q['report']
             cost, replay_pass, endpoint = None, False, q.get('endpoint_fingerprint')
@@ -135,6 +174,20 @@ class Quantities:
                 replay_pass = cost is not None and abs(cost-native)<=REPLAY_TOLERANCE[design]*abs(native)
                 assert replay_pass==q.get('replay_passed'), f'{design} {label} independent objective replay'
             grad_norm, active, solver_gradient = self.stationarity(q)
+            gradient_tolerance = q['controls']['gradient_tolerance']
+            if solver_gradient is not None:
+                native_gradient = report['covariance']['projected_gradient_norm']
+                assert abs(solver_gradient-native_gradient)<=1e-8, f'{design} {label} optimizer gradient replay'
+            probe_path = f'{design}/stationarity/{label}.json.gz'
+            probe = self.read(probe_path)
+            if probe and probe['endpoint']==endpoint:
+                for j,t in enumerate(probe['trials']):
+                    trial_cost = self.cost(t['replay'],f'{design} {label} descent probe {j}') if 'replay' in t else None
+                    assert t['relative_reduction']==((cost-trial_cost)/cost if trial_cost is not None else None)
+                self.quantity(f'{design} {label} descent probe',None,
+                    dict(predicted=probe['relative_linearized_reduction'],
+                         measured=[t['relative_reduction'] for t in probe['trials']]),
+                    sources=(path,probe_path),endpoint=endpoint)
             chain = [q]
             while 'previous_stage' in chain[-1]:
                 chain.append(chain[-1]['previous_stage'])
@@ -148,7 +201,8 @@ class Quantities:
             initial = self.read(check_path)
             attempts[label] = dict(status=report['status'],initial_cost=start_report['initial_cost'] if start_report['residual_evaluations'] else None,
                                    objective=cost,projected_gradient_inf=grad_norm,active_bounds=active,
-                                   solver_scale_projected_gradient_inf=solver_gradient,
+                                   solver_scale_projected_gradient_inf=solver_gradient,gradient_tolerance=gradient_tolerance,
+                                   termination=report['message'],draw=actual_starts[start]['draw'],
                                    stationarity_met=(solver_gradient<=q['controls']['gradient_tolerance']
                                                      if solver_gradient is not None else None),
                                    fit_seconds=fsum(v['fit_seconds'] for v in stages),
@@ -157,10 +211,10 @@ class Quantities:
                                    attempted=(q.get('replay') or (initial or {}).get('replay') or {}).get('attempted'),
                                    refused=(q.get('replay') or (initial or {}).get('replay') or {}).get('refused'),
                                    fit_stages=stages)
-            for k in ('status','objective','projected_gradient_inf','active_bounds'):
-                self.quantity(f'{design} {label} {k}',None,attempts[label][k],sources=(path,manifests),endpoint=endpoint,
+            for k in ('status','objective','projected_gradient_inf','solver_scale_projected_gradient_inf','stationarity_met','active_bounds'):
+                self.quantity(f'{design} {label} {k}',None,attempts[label][k],sources=(path,manifests)+((replacement_path,) if label.startswith('LHS-') else ()),endpoint=endpoint,
                               disposition='refused at initial evaluation' if report['status']=='initial_evaluation_failed' else None,**share)
-            if replay_pass and report['status']=='converged' and label in 'ABC':
+            if replay_pass and report['status']=='converged' and label in actual_starts:
                 eligible[label] = (cost,q)
         self.attempts[design] = attempts
         selection_path = f'{design}/selection.json'
@@ -169,7 +223,7 @@ class Quantities:
         if selection is not None:
             assert all(k in attempts for k in 'ABC'), f'{design} missing declared attempt'
             best = min((v[0] for v in eligible.values()),default=None)
-            tied = [k for k,(v,q) in eligible.items() if abs(v-best)<=q['controls']['function_tolerance']*best]
+            tied = [k for k,(v,q) in eligible.items() if abs(v-best)<=declaration['fit_controls']['function_tolerance']*best]
             selected = tied[0] if tied else None
             if selected:
                 cost, q = eligible[selected]
@@ -178,7 +232,13 @@ class Quantities:
                                                 selection['cost']), f'{design} selected objective or endpoint fingerprint'
         self.selections[design] = (selected,endpoint)
         sources = (selection_path,base,manifests)+((f'{design}/{selected}.json.gz',) if selected else ())
-        self.quantity(f'{design} selected objective',old,cost,sources=sources,endpoint=endpoint,**share)
+        if design=='MDEA' and (OUT/'MDEA/stationarity/A-continuation.json.gz').exists() and selected=='A':
+            sources = (*sources,'MDEA/stationarity/A-continuation.json.gz')
+            disposition = 'undecided' if self.read(sources[-1])['report']['status']!='converged' else None
+        else:
+            disposition = None
+        self.quantity(f'{design} selected objective',old,cost,sources=sources,endpoint=endpoint,
+                      disposition=disposition,**share)
         if selected:
             q = self.read(f'{design}/{selected}.json.gz')
             uncertainty = q['diagnostics'].get('uncertainty',{})
@@ -240,8 +300,9 @@ class Quantities:
         coordinates = q['endpoint']['coordinates']
         rows = q['replay']['rows']
         residual = [r['weighted_residual'] for r in rows]
-        gradients = [fsum(a*b for a,b in zip(col,residual,strict=True))
-                     for col in zip(*data['jacobian_bound_normalized'],strict=True)]
+        products = [[a*b for a,b in zip(col,residual,strict=True)]
+                    for col in zip(*data['jacobian_bound_normalized'],strict=True)]
+        gradients = [fsum(col) for col in products]
         bound, projected = {},[]
         for d,g in zip(coordinates,gradients,strict=True):
             lower,upper = d['bounds']
@@ -251,9 +312,14 @@ class Quantities:
                 bound[d['identity']]=side
             projected.append(0. if side=='lower' and g>0 or side=='upper' and g<0 else g)
         norm = max(map(abs,projected))
-        assert bound==data['active_bounds'] and abs(norm-data['projected_gradient_inf'])<=1e-10
-        normalized = [abs(g)*d['scale']/(d['bounds'][1]-d['bounds'][0])
-                      for g,d in zip(projected,coordinates,strict=True)]
+        # The archived dot uses BLAS summation. Bound its roundoff against the fsum replay.
+        n_eps = len(residual)*sys.float_info.epsilon
+        roundoff = n_eps/(1-n_eps)*max(fsum(map(abs,col)) for col in products)
+        assert bound==data['active_bounds'] and abs(norm-data['projected_gradient_inf'])<=roundoff, q.get('start')
+        normalized = [abs(min((d['bounds'][1]-d['origin'])/d['scale'],
+                              max((d['bounds'][0]-d['origin'])/d['scale'],
+                                  -g*d['scale']/(d['bounds'][1]-d['bounds'][0]))))
+                      for g,d in zip(gradients,coordinates,strict=True)]
         return data['projected_gradient_inf'], bound,max(normalized)
 
     def properties(self,design):
@@ -416,13 +482,18 @@ class Quantities:
         old_record = f'{design}/controls/tracking.json.gz'
         tracking = self.read(old_record)
         fixed = self.read(f'{design}/controls/fixed-at-old.json.gz')
-        for label in ('A','B','C','fixed-at-old'):
+        extra = ('A-continuation','A-descent-continuation') if design=='MDEA' else ()
+        for label in (*self.attempts.get(design,{}),*extra,'fixed-at-old'):
             path = f'{design}/controls/{label}.json.gz'
             record = self.read(path)
             if not record:
                 continue
-            fingerprint_ = self.attempts.get(design,{}).get(label,{}).get('endpoint')
-            if label in 'ABC' and fingerprint_:
+            if label in extra:
+                fit = self.read(f'MDEA/stationarity/{label}.json.gz')
+                fingerprint_ = fit['endpoint_fingerprint']
+            else:
+                fingerprint_ = self.attempts.get(design,{}).get(label,{}).get('endpoint')
+            if fingerprint_:
                 assert record['endpoint_fingerprint']==fingerprint_,f'{design} {label} phase endpoint fingerprint'
             rows = record.get('rows') or {k:dict(P_Pa=q['P_Pa'],refusal=record.get('refusal'))
                                             for k,q in (fixed or {}).get('rows',{}).items()}
@@ -439,7 +510,7 @@ class Quantities:
                 if tracking and key in tracking.get('rows',{}):
                     before = phase_outcome(tracking['rows'][key].get('value',{}))
                 value = phase_outcome(row['value']) if 'value' in row else (
-                    'no endpoint' if not fingerprint_ and label in 'ABC' else 'unavailable')
+                    'no endpoint' if not fingerprint_ and label in self.attempts.get(design,{}) else 'unavailable')
                 sources = (path,old_record) if tracking else (path,)
                 self.quantity(f'{design} {label} phase {key}',before,value,unit='outcome',sources=sources,
                               old_source=oldfile,pressure_basis=dict(type='retained absolute pressure',P_Pa=row['P_Pa']),
@@ -642,8 +713,92 @@ class Quantities:
                               pressure_basis=dict(T_K=a['T_K'],P_Pa=a['P_Pa']),
                               endpoint=a['endpoint_fingerprint'])
 
+    def numerical_diagnosis(self):
+        p = 'MDEA/stationarity/A-continuation.json.gz'
+        continued = self.read(p)
+        if continued:
+            prior = self.read('MDEA/A.json.gz')
+            assert continued['source']==prior['endpoint_fingerprint']
+            assert continued['endpoint_fingerprint']==fingerprint(continued['endpoint'])
+            cost = self.cost(continued['replay'],'MDEA A continuation')
+            norm,_,optimizer_gradient = self.stationarity(continued)
+            report = continued['report']
+            self.quantity('MDEA A continuation',prior['replay']['cost'],
+                dict(cost=cost,iterations=report['iterations'],status=report['status'],termination=report['message'],
+                     projected_gradient_inf=norm,optimizer_gradient=optimizer_gradient,
+                     gradient_tolerance=continued['controls']['gradient_tolerance'],failures=report['failures'],
+                     fit_seconds=continued['fit_seconds'],replay_seconds=continued['replay_seconds'],
+                     diagnostic_seconds=continued['diagnostic_seconds']),
+                endpoint=continued['endpoint_fingerprint'],sources=('MDEA/A.json.gz',p),
+                disposition='undecided' if report['status']!='converged' else None)
+        for design in ('AMP_free','AMP_fixed'):
+            path = f'{design}/root-probe.json.gz'
+            record = self.read(path)
+            if record:
+                manifest = f'{design}/manifest.json.gz'
+                assert record['manifest_fingerprint']==fingerprint(self.read(manifest))
+                for label,data in record['starts'].items():
+                    self.quantity(f'{design} {label} bubble guess diagnostic',None,data['guesses'],unit='Pa',
+                                  sources=(path,manifest),pressure_basis={'row':data['row']})
+        p = 'MDEA/root-probe.json.gz'
+        probe = self.read(p)
+        if probe:
+            for start,data in probe['records'].items():
+                ranges = {}
+                for multiplier in sorted({q['multiplier'] for q in data['nodes']}):
+                    nodes = [q for q in data['nodes'] if q['multiplier']==multiplier]
+                    pressures = [q['pressure'] for q in nodes if q['admitted']]
+                    ranges[str(multiplier)] = dict(attempted=len(nodes),admitted=len(pressures),
+                                                   min_Pa=min(pressures,default=None),max_Pa=max(pressures,default=None))
+                self.quantity(f'MDEA {start} saturation guess diagnostic',None,ranges,
+                              sources=(p,),unit='Pa',pressure_basis=dict(target_Pa=data['P_Pa'],row=data['row']))
+        p = 'MDEA/stationarity/A-projected-direction.json.gz'
+        probe = self.read(p)
+        if probe:
+            prior = self.read('MDEA/A.json.gz')
+            assert probe['endpoint']==prior['endpoint_fingerprint']
+            old_cost = prior['replay']['cost']
+            reductions = []
+            for trial in probe['trials']:
+                cost = self.cost(trial['replay'],'MDEA projected gradient line')
+                reduction = (old_cost-cost)/old_cost if cost is not None else None
+                assert trial['relative_reduction']==reduction
+                reductions.append(dict(step=trial['step'],cost=cost,relative_reduction=reduction))
+            self.quantity('MDEA A projected gradient line',old_cost,reductions,sources=('MDEA/A.json.gz',p),
+                          endpoint=probe['endpoint'])
+            retry_path = 'MDEA/stationarity/A-descent-continuation.json.gz'
+            retry = self.read(retry_path)
+            if retry and retry.get('replay'):
+                assert retry['source']==fingerprint(probe['trials'][-1]['point'])
+                assert retry['endpoint_fingerprint']==fingerprint(retry['endpoint'])
+                cost = self.cost(retry['replay'],'MDEA A admitted-descent continuation')
+                self.quantity('MDEA A admitted-descent continuation',old_cost,
+                    dict(cost=cost,optimizer_gradient=retry['report']['covariance']['projected_gradient_norm'],
+                         status=retry['report']['status'],message=retry['report']['message'],
+                         fit_seconds=retry['fit_seconds'],replay_seconds=retry['replay_seconds']),
+                    sources=(p,retry_path),endpoint=retry['endpoint_fingerprint'],
+                    disposition='undecided' if retry['report']['covariance']['projected_gradient_norm']>
+                    retry['controls']['gradient_tolerance'] else None)
+        p = 'R1-R3-R5.json'
+        row = self.read(p)
+        if row:
+            assert row['actual_prediction']['residual']==row['actual_residual']
+            assert row['actual_residual']-row['expected_residual']==row['difference']
+            self.quantity('Legacy R1 weighted residual at row 129',row['expected_residual'],row['actual_residual'],
+                          sources=(p,),old_source=row['source']+'/fit.json',disposition='undecided')
+
     def archived_inventory(self):
         root = original(R8+'manuscript-handoff.json')
+        profile_root = 'AMP_free/conditional-profile/'
+        profile_path = profile_root+'profile-expanded.json'
+        profile = self.read(profile_path)
+        if profile:
+            assert profile['endpoint_fingerprint']==self.selections['AMP_free'][1] and profile['wheel']==r.SHA
+            assert profile['delta_cutoff']==.5*profile['stage_variance']*3.84146
+        electrode_path = 'MEA/electrode/D/electrode-selected.json.gz'
+        electrode = self.read(electrode_path)
+        hartono_path = 'AMP_free/hartono-S11.json.gz'
+        hartono = self.read(hartono_path)
         for name,meta in self.old.items():
             key = f'Round 7 {name}'
             value = meta.get('value')
@@ -651,7 +806,61 @@ class Quantities:
             if not record or not record.startswith('analyses/'):
                 record = R7+'manuscript-handoff.json'
             match = {}
-            if name.startswith('F DEA '):
+            if electrode and name.startswith(('D MEA electrode ','D MEA model minus electrode ')):
+                selected = self.selections['MEA'][0]
+                meapath = f'MEA/{selected}.json.gz'
+                endpoint = self.read(meapath)['endpoint']
+                assert electrode['parameter_sha256']==sha256(json.dumps(endpoint['parameters'],indent=2,
+                    allow_nan=False).encode()+b'\n').hexdigest()
+                field = ('signed_delta' if 'model minus' in name else
+                         'carbonate_share' if 'carbonate_share' in name else 'common_molality_minus_raw')
+                values = [row[field] for row in electrode['rows'] if row['requested_tolerance_met']]
+                mode = name.split()[-1]
+                val = min(values) if mode=='min' else max(values) if mode=='max' else fsum(values)/len(values)
+                match = dict(new=val,disposition='replayed',population=len(values),
+                             endpoint_fingerprint=self.selections['MEA'][1],
+                             new_contributors=[self.reference(p) for p in (electrode_path,meapath)])
+            elif hartono and name.startswith('H Hartono salt expanded free '):
+                assert hartono['endpoint_fingerprint']==self.selections['AMP_free'][1]
+                old = archived(record)['results']['salt expanded free'][name.split()[-2]]['rows']
+                rows = hartono['rows'][name.split()[-2]]
+                assert {q['identity']:q['observed'] for q in rows}=={q['identity']:q['observed'] for q in old}
+                scores = summary(rows)
+                match = dict(new=scores.get('AARD_percent'),disposition='replayed' if scores['available']==26 else 'partial',
+                             new_contributors=[self.reference(hartono_path)],endpoint_fingerprint=hartono['endpoint_fingerprint'])
+            elif name=='D Cai incumbent alternative objective':
+                label,endpoint = self.selections['MEA']
+                path = f'MEA/{label}.json.gz'
+                fit = self.read(path)
+                rows = fit['replay']['rows']
+                assert sum(q['group']=='Cai' for q in rows)==50
+                value_after = .5*fsum(q['residual']**2*.04 if q['group']=='Cai' else q['weighted_residual']**2
+                                      for q in rows)
+                match = dict(new=value_after,disposition='replayed',endpoint_fingerprint=endpoint,
+                             new_contributors=[self.reference(path)])
+            elif profile and name.startswith('D AMP profile '):
+                parts = name.split()
+                if 'conditional' in parts:
+                    slope = parts[-2]
+                    item = profile['points'].get(slope)
+                    if item is not None:
+                        contributor = profile_root+item['record']
+                        run = self.read(contributor)
+                        paths = (profile_path,contributor) if run else (profile_path,)
+                        if run:
+                            if item['cost'] is not None:
+                                assert abs(fsum(q['cost'] for q in run['replay'])-item['cost'])<=1e-12*item['cost']
+                            assert item['status']==run['report']['status']
+                        result = item.get('status') if 'solve' in parts else item['cost']
+                        match = dict(new=result,new_contributors=[self.reference(p) for p in paths],
+                                     disposition='replayed' if result is not None else 'undecided')
+                elif parts[-1]=='bracket':
+                    bracket = profile['brackets'].get(parts[-3])
+                    if bracket:
+                        result = bracket[parts[-2]]
+                        match = dict(new=result,new_contributors=[self.reference(profile_path)],
+                                     disposition='replayed' if bracket['closed'] else 'undecided')
+            elif name.startswith('F DEA '):
                 item = name.removeprefix('F DEA ')
                 match = self.items.get('DEA '+item,{})
                 candidates = [q for q in self.items if q.startswith('DEA ') and ' all ' in q]
@@ -666,6 +875,28 @@ class Quantities:
                 match = self.items.get(f'{design} selected objective',{})
             elif name=='E MEA incumbent original objective':
                 match = self.items.get('MEA selected objective',{})
+            elif name=='D5 incumbent unresolved, phase pressure closure':
+                match = self.items.get('MEA measured unresolved pressure closure',{})
+            elif name.startswith('D5 incumbent ') or name=='E MEA incumbent supplied missing':
+                path = 'MEA/screen/summary.json.gz'
+                screen = self.read(path)
+                field = name.removeprefix('D5 incumbent ')
+                if screen and (field in screen['measured'] or name.endswith('supplied missing')):
+                    counts = screen['measured']
+                    val = screen['grid']['missing_supplied'] if name.endswith('supplied missing') else counts[field]
+                    match = dict(new=val,disposition='replayed',new_contributors=[self.reference(path)])
+            elif name=='E MEA incumbent legacy pressure AARD rise versus F2':
+                paths = 'E/MEA/replay.json.gz',R7+'results/E/incumbent/replay.json.gz'
+                replay = self.read(paths[0])
+                if replay:
+                    old = archived(paths[1])
+                    pool = set(old['pressure_population'])
+                    assert pool==set(replay['pressure_population'])
+                    legacy = [[q for q in doc['rows'][:307] if q['identity'] in pool] for doc in (old,replay)]
+                    old_aard,new_aard = (summary(rows,pressure=True)['AARD_percent'] for rows in legacy)
+                    match = dict(new=value+new_aard-old_aard,disposition='replayed',
+                                 new_contributors=[self.reference(paths[0])],
+                                 endpoint_fingerprint=self.selections['MEA'][1])
             elif name.startswith('E MEA incumbent '):
                 match = self.items.get(name.replace('E MEA incumbent ','MEA pressure ',1),{})
                 if not match:
@@ -681,6 +912,24 @@ class Quantities:
                     better = self.items.get(new_key,{})
                     if better and with_grid[-1] in better['new']:
                         match = dict(better,new=better['new'][with_grid[-1]])
+            elif name.startswith(('F search-outcome.json ','AMP/free ','AMP/fixed ')) and name.split()[-1] in (
+                    'states','available','descent','confirmed'):
+                parts = name.split()
+                design = {'F':'DEA','AMP/free':'AMP_free','AMP/fixed':'AMP_fixed'}[parts[0]]
+                protocol = 'declared' if design=='DEA' else parts[1].split('-')[0]
+                match = self.items.get(f'{design} {protocol} finite search counts',{})
+                if match:
+                    counts = match['new']
+                    val = dict(states=sum(counts.values()),
+                               available=sum(counts.values())-counts.get('unavailable search',0),
+                               confirmed=counts.get('confirmed split',0),
+                               descent=self.items[f'{design} {protocol} descent flags']['new'])[parts[-1]]
+                    match = dict(match,new=val)
+            elif name=='C MDEA salt search-outcome.json.gz seconds':
+                path = 'MDEA/screen/selected/declared/summary.json.gz'
+                replay = self.read(path)
+                if replay:
+                    match = dict(new=replay['seconds'],disposition='replayed',new_contributors=[self.reference(path)])
             elif name.startswith('C MDEA salt refit '):
                 match = self.items.get('C5 '+name[2:],{})
                 if not match:
@@ -722,13 +971,14 @@ class Quantities:
                 new = match['new']
                 numerical = all(isinstance(x,(int,float)) and not isinstance(x,bool) for x in (value,new))
                 delta = new-value if numerical else None
-                self.items[key] = dict(match,old=value,absolute_change=delta,
+                self.items[key] = dict(unit=meta.get('unit'),population=meta.get('population'),pressure_basis=None,
+                    endpoint_fingerprint=None,transition=None) | dict(match,old=value,absolute_change=delta,
                     percent_change=100*delta/value if numerical and value else None,
                     old_contributor=dict(revision=BASE,path=record,field=meta.get('field'),sha256=sha256(blob(record,BASE)).hexdigest()))
             else:
                 historical = (name.endswith(' elapsed') or 'original-slope' in name or 'historical' in name or
                               name.startswith(('E MEA F2 ','E MEA F4 ','H public-','H study-','A MDEA tracking ','B Sobrino row ',
-                                               'H Kuranov Table 2','H Hong ','C MDEA salt incumbent ','D AMP original archive ',
+                                               'H Kuranov Table 2','H Hong ','D5 F2 ','D5 F4 ','C MDEA salt incumbent ','D AMP original archive ',
                                                'D AMP original trial ','D AMP constant-enthalpy R5 ','D AMP slope only at fixed ')))
                 self.quantity(key,value,value if historical else None,unit=meta.get('unit'),population=meta.get('population'),
                               old_source=record,old_field=meta.get('field'),independent=historical,
@@ -754,6 +1004,13 @@ class Quantities:
                            6:{'AMP':('AMP_free selected','AMP_fixed selected','C6 AMP'), 'MDEA':('MDEA selected','C6 MDEA'),
                               'MEA #435':('MEA selected','C6 MEA'),'unavailable':('C6 ',)},
                            7:{'hong':('C7 Hong',),'kamps':('C5 C7 corrected-Kamps',),'kuranov':('C7 Kuranov',)}}
+                if i==5 and key=='available':
+                    salt_path = 'salt.json.gz'
+                    rows = self.read(salt_path)['combined']
+                    counts = {k:sum(q.get('status')=='Available' for q in rows[k]) for k in value}
+                    self.quantity('Round 8 C5 available',value,counts,unit='rows',sources=(salt_path,),
+                                  old_source=path,old_field=meta['field'])
+                    continue
                 linked = [item for item in self.items if item.startswith(markers.get(i,{}).get(key,()))]
                 self.quantity(f'Round 8 C{i} {key}',value if historical else (value if isinstance(value,(int,float,str)) else len(value)),
                               value if historical else linked or None,old_source=path,old_field=meta['field'],
@@ -925,7 +1182,14 @@ class Quantities:
         previous = {q['identity']:q for q in old}
         assert all(q['identity'] in previous for q in new) and len(new)==len({q['identity'] for q in new})
         if result:
+            from round_7.handoff import measured_failures
             assert result['endpoint_fingerprint']==endpoint and len(new)==len(old)==321
+            metric = 'phase pressure closure'
+            old_path = R7+'results/E/incumbent/measured-summary.json'
+            missed = [sum(metric in measured_failures(row) for row in rows if not row['available'])
+                      for rows in (old,new)]
+            self.quantity('MEA measured unresolved pressure closure',*missed,unit='states',
+                          sources=(summary_path,*batches),old_source=old_path,population=len(old),endpoint=endpoint)
         fields = ('source total pressure','1.05 times #435 bubble pressure','assigned observation pressure',None)
         for field in fields:
             def counts(rows):
@@ -1036,13 +1300,17 @@ class Quantities:
         self.mea_screen()
         self.curves()
         self.matched_literature()
+        self.numerical_diagnosis()
         self.archived_inventory()
         timing = self.read('stages.json')
         if timing:
             for stage,data in timing.items():
                 self.quantity(f'Campaign stage {stage}',None,data,unit='s',sources=('stages.json',),
                               disposition=data['disposition'])
-        return dict(base=BASE,reference_pressure_pa=P_REF,wheel=r.SHA,
+        starting = json.loads(blob(str(HANDOFF.relative_to(r.ROOT)),'d8f4c877f'))['quantities']
+        starting = {k:v['disposition'] for k,v in starting.items() if v['disposition'] in ('open','undecided')}
+        return dict(base=BASE,reference_pressure_pa=P_REF,wheel=r.SHA,starting_dispositions=starting,
+                    selected_starts={k:v[0] for k,v in self.selections.items()},
                     fit_attempts=self.attempts,quantities=self.items)
 
 

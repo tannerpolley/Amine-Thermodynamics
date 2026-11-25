@@ -285,12 +285,62 @@ def mea_hong_population():
         rows=rows,seconds=monotonic()-start))
 
 
+def electrode_and_hartono():
+    import sensitivities
+
+    _,point = point_for('MEA','selected','electrode-comparison')
+    mapping = WORK/'MEA/electrode/endpoint.json'
+    save(mapping,point['parameters'])
+    with fixed_native_reference(), patch.object(sensitivities,'OUT',OUT/'MEA/electrode'):
+        sensitivities.electrode(point['parameters'],mapping,'selected')
+
+    started = monotonic()
+    run,point = point_for('AMP_free','selected','hartono-S11')
+    spec = run.bind(point)
+    selected = [row for row in spec.inputs['observations']['fitted'] if row['group']=='binary']
+    rows = {kind:[spec.prediction(q) for q in selected if q['kind']==kind]
+            for kind in ('pressure','mole_fraction')}
+    assert all(len(q)==26 for q in rows.values())
+    put('AMP_free/hartono-S11.json.gz',dict(endpoint_fingerprint=fingerprint(point),wheel=r.SHA,
+        rows=rows,seconds=monotonic()-started))
+
+
+def amp_profile():
+    from pathlib import Path
+    import sys
+
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'round_5'))
+    from amp_profile import calculate
+
+    _,point = point_for('AMP_free','selected','conditional-profile')
+    selection = r.read(OUT/'AMP_free/selection.json')
+    archived = r.read(r.ROOT/'analyses/round_7/results/D/AMP-profile/profile-expanded.json')
+    work = WORK/'AMP_free/conditional-profile'
+    endpoint = work/'selected.json.gz'
+    save(endpoint,dict(selected=[selection['cost'],selection['selected'],point]))
+    tick = monotonic()
+
+    def retain(name,value,*,start=None):
+        put('AMP_free/conditional-profile/'+name.removeprefix('A/'),dict(value,
+            endpoint_fingerprint=selection['endpoint_fingerprint'],wheel=r.SHA,
+            seconds=None if start is None else monotonic()-start))
+
+    # Include the published conditional slopes so the old and new objectives are paired.
+    calculate(work,'expanded',endpoint=endpoint,retain=retain,extra_slopes=tuple(map(float,archived['points'])),
+              fixed_reference_pressure_pa=P_REF,stop_seconds=1140)
+    print('AMP conditional profile',monotonic()-tick,flush=True)
+
+
 if __name__=='__main__':
     import sys
     a.study.reuse.bind_wheel()
     r.verify()
     for design in sys.argv[1:]:
-        if design=='MEA':
+        if design=='electrode-and-hartono':
+            electrode_and_hartono()
+        elif design=='AMP-profile':
+            amp_profile()
+        elif design=='MEA':
             for label in ('A','B','C','fixed-at-old'):
                 controls('MEA',label)
         elif design=='MEA-heat':

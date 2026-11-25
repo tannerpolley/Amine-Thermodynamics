@@ -21,7 +21,9 @@ def point_for(design, label, tag):
             raise ValueError(f'{design} selection is undecided')
     if label in ('tracking','fixed-at-old'):
         return run,point
-    attempt = r.read(OUT/f'{design}/{label}.json.gz')
+    path = (f'MDEA/stationarity/{label}.json.gz' if design=='MDEA' and label in
+            ('A-continuation','A-descent-continuation') else f'{design}/{label}.json.gz')
+    attempt = r.read(OUT/path)
     if not attempt.get('endpoint'):
         raise ValueError(f"{design} {label}: {attempt['report']['message']}")
     point = attempt['endpoint']

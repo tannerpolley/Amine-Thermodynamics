@@ -378,9 +378,12 @@ def endpoint_diagnostics(spec, fit_replay, point, controls):
             active[declared[i]['identity']] = side
             if (side=='lower' and grad[i]>0) or (side=='upper' and grad[i]<0):
                 projected[i] = 0.
+    lower, upper = (np.array([getattr(q,k)-q.origin for q in native])/scale for k in ('lower','upper'))
+    optimizer_norm = float(np.max(np.abs(np.clip(-grad*scale/width,lower,upper))))
     values.update(jacobian_bound_normalized=(J*(width/scale)).tolist(), gradient=grad.tolist(),
                   projected_gradient=projected.tolist(), projected_gradient_inf=float(np.max(np.abs(projected))),
-                  active_bounds=active, stationarity_met=bool(np.max(np.abs(projected))<=controls['gradient_tolerance']),
+                  active_bounds=active, optimizer_projected_gradient_inf=optimizer_norm,
+                  stationarity_met=optimizer_norm<=controls['gradient_tolerance'],
                   maximum_prediction_relative_difference=max(abs(v-q['value'])/max(1.,abs(q['value']))
                     for v,q in zip(ev.predictions,fit_replay['rows'],strict=True)))
     ids = [q['identity'] for q in declared]

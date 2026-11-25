@@ -27,13 +27,13 @@ and population basis, and open quantities.
 
 ## Fitted objectives
 
-| Design | Fitted rows | Tracking | Fixed at old parameters | Fixed and refitted | Change from tracking |
-|---|---:|---:|---:|---:|---:|
-| MEA | 307 | 152.95817 | 152.9336 | 152.9324 | -0.02577157 |
-| DEA | 140 | 15.537712 | 15.595132 | 15.588667 | 0.050954891 |
-| MDEA | 281 | 17.400957 | 17.44495 | 15.609314 | -1.7916425 |
-| AMP_free | 214 | 75.111439 | 74.939776 | 74.928158 | -0.18328102 |
-| AMP_fixed | 214 | 76.352718 | 76.236649 | 76.226564 | -0.12615408 |
+| Design | Fitted rows | Tracking | Fixed at old parameters | Fixed and refitted | Change from tracking | Selection |
+|---|---:|---:|---:|---:|---:|---|
+| MEA | 307 | 152.95817 | 152.9336 | 152.9324 | -0.02577157 | A |
+| DEA | 140 | 15.537712 | 15.595132 | 15.588667 | 0.050954891 | A |
+| MDEA | 281 | 17.400957 | 17.44495 | 15.609314 | -1.7916425 | A provisional |
+| AMP_free | 214 | 75.111439 | 74.939776 | 74.928158 | -0.18328102 | A |
+| AMP_fixed | 214 | 76.352718 | 76.236649 | 76.226564 | -0.12615408 | A |
 
 ## Start separation and endpoint stationarity
 
@@ -45,32 +45,37 @@ and population basis, and open quantities.
 | AMP_free | 0.57554873 | 0.48305187 | 0.50320847 |
 | AMP_fixed | 0.61602166 | 0.47950407 | 0.52558969 |
 
-The projected gradient uses the bound-normalized coordinate widths. The active-bound criterion is $10^{-6}$ times each optimizer scale. All replay-eligible endpoints missed the solver-scale stationarity tolerance.
+The first gradient uses the bound-normalized coordinate widths and zeros outward components within $10^{-6}$ optimizer units of a bound. The Engine gradient uses optimizer coordinates and the displacement $u-\operatorname{clip}(u-J^\mathsf{T}r,l,h)$. The pinned Engine computes it in `engine/native/regression/fit.cpp` at commit `05e94210`. The inherited gradient tolerance is $10^{-8}$ in these optimizer coordinates. Ceres can also stop on its function or parameter tolerance. A replayed objective and a Ceres convergence report are shown separately from the gradient check.
 
-| Design | Start | Status | Initial objective | Replayed objective | Projected gradient ∞-norm | Active bounds | Fit / replay (s) |
-|---|---|---|---:|---:|---:|---|---:|
-| MEA | A | converged | 152.9336 | 152.9324 | 0.0078162398 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 18.695818 / 4.0922253 |
-| MEA | B | converged | 34689.695 | 152.9324 | 0.004920479 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 83.71974 / 4.0458438 |
-| MEA | C | initial_evaluation_failed | — | — | — | — | 1.4813475 / — |
-| MEA | A-loose | converged | 152.9336 | 152.93243 | 0.24169648 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 5.2811895 / 4.0547177 |
-| DEA | A | converged | 15.588727 | 15.588667 | 0.0012340651 | — | 5.3862923 / 4.7232525 |
-| DEA | B | converged | 338.21861 | 15.588667 | 0.0034101153 | — | 52.702103 / 4.7236519 |
-| DEA | C | converged | 11831.588 | 15.588667 | 0.00065161615 | — | 160.91141 / 4.9423244 |
-| MDEA | A | converged | 17.44495 | 15.609314 | 0.74445524 | pair/mdea-water/k_ij/a0 / temperature_law_coefficient (upper) | 630.44868 / 52.628874 |
-| MDEA | B | initial_evaluation_failed | — | — | — | — | 5.1685931 / — |
-| MDEA | C | initial_evaluation_failed | — | — | — | — | 6.0759179 / — |
-| AMP_free | A | converged | 74.936897 | 74.928158 | 0.0050093488 | AMPCOO-segment-diameter (lower)<br>AMP-hydrolysis-enthalpy-increment (lower) | 25.985081 / 3.967192 |
-| AMP_free | B | initial_evaluation_failed | — | — | — | — | 1.0163821 / — |
-| AMP_free | C | initial_evaluation_failed | — | — | — | — | 5.8122216 / — |
-| AMP_fixed | A | converged | 76.233906 | 76.226564 | 0.0013986735 | AMPH-segment-diameter (lower)<br>AMPCOO-segment-diameter (lower)<br>AMP-hydrolysis-enthalpy-increment (lower) | 13.590651 / 4.5539272 |
-| AMP_fixed | B | initial_evaluation_failed | — | — | — | — | 4.6351286 / — |
-| AMP_fixed | C | converged | 4279.0576 | 2741.2603 | 0.03804058 | AMPH-water-k (upper)<br>AMPH-CO2-k (upper)<br>AMPH-segment-diameter (upper)<br>AMPCOO-segment-diameter (upper)<br>AMP-hydrolysis-a (lower)<br>AMP-hydrolysis-enthalpy-increment (upper) | 53.990975 / 6.0023066 |
+| Design | Start (LHS draw) | Status | Initial objective | Replayed objective | Bound gradient ∞-norm | Optimizer gradient ∞-norm | Gradient check | Fit / replay (s) |
+|---|---|---|---:|---:|---:|---:|---|---:|
+| MEA | A | converged | 152.9336 | 152.9324 | 0.0078162398 | 3.9081199e-05 | miss | 18.695818 / 4.0922253 |
+| MEA | B (1) | converged | 34689.695 | 152.9324 | 0.004920479 | 3.5028913e-05 | miss | 83.71974 / 4.0458438 |
+| MEA | C (27) | initial_evaluation_failed | — | — | — | — | — | 1.4813475 / — |
+| MEA | LHS-21 (21) | converged | 204584.2 | 152.9324 | 0.0052968127 | 2.6484064e-05 | miss | 167.15545 / 4.0183114 |
+| MEA | A-loose | converged | 152.9336 | 152.93243 | 0.24169648 | 0.0026855165 | miss | 5.2811895 / 4.0547177 |
+| DEA | A | converged | 15.588727 | 15.588667 | 0.0012340651 | 3.0851626e-05 | miss | 5.3862923 / 4.7232525 |
+| DEA | B (16) | converged | 338.21861 | 15.588667 | 0.0034101153 | 0.00013447479 | miss | 52.702103 / 4.7236519 |
+| DEA | C (23) | converged | 11831.588 | 15.588667 | 0.00065161615 | 2.7214383e-05 | miss | 160.91141 / 4.9423244 |
+| MDEA | A | converged | 17.44495 | 15.609314 | 0.74445524 | 0.0082717249 | miss | 630.44868 / 52.628874 |
+| MDEA | B (60) | initial_evaluation_failed | — | — | — | — | — | 5.1685931 / — |
+| MDEA | C (14) | initial_evaluation_failed | — | — | — | — | — | 6.0759179 / — |
+| MDEA | LHS-53 (53) | converged | 57094.116 | 48386.509 | 4818637.1 | 195.43874 | miss | 267.20289 / 32.707995 |
+| AMP_free | A | converged | 74.936897 | 74.928158 | 0.0050093488 | 0.00025046744 | miss | 25.985081 / 3.967192 |
+| AMP_free | B (56) | initial_evaluation_failed | — | — | — | — | — | 1.0163821 / — |
+| AMP_free | C (13) | initial_evaluation_failed | — | — | — | — | — | 5.8122216 / — |
+| AMP_free | LHS-06 (6) | converged | 3915.4732 | 74.928158 | 0.003448763 | 0.00017243815 | miss | 50.487626 / 3.8115812 |
+| AMP_free | LHS-45 (45) | converged | 5289.8474 | 74.928158 | 0.0045959629 | 0.00022979815 | miss | 126.70103 / 7.5328527 |
+| AMP_fixed | A | converged | 76.233906 | 76.226564 | 0.0013986735 | 6.9933673e-05 | miss | 13.590651 / 4.5539272 |
+| AMP_fixed | B (21) | initial_evaluation_failed | — | — | — | — | — | 4.6351286 / — |
+| AMP_fixed | C (27) | converged | 4279.0576 | 2741.2603 | 0.03804058 | 0.001902029 | miss | 53.990975 / 6.0023066 |
+| AMP_fixed | LHS-53 (53) | converged | 4863.3474 | 2741.2603 | 0.1150731 | 0.0057536549 | miss | 44.578631 / 4.9562954 |
 
 **MEA C** reported CentralSolveUnavailable at zero-based fitted row 218. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.56327745414857966 below the rounding band -2.8068950024848368e-14
 
 **DEA C** reported CentralSolveUnavailable at zero-based fitted row 5. LOCAL_INFEASIBILITY: infeasible: residual 0.23043048758445492 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 120 iterations, contraction absent, floor 2.3303072629266192e-10, amplification 0
 
-MDEA A continued from each of its own stage endpoints with the same controls. The independently replayed objectives were 15.998325 → 15.609329 → 15.609314.
+MDEA A continued from each of its own stage endpoints. The independently replayed objectives were 15.998325 → 15.609329 → 15.609314.
 
 **MDEA A** reported CentralSolveUnavailable at zero-based fitted row 124. saturation:loading 1.5: phase V has no locally unique anchored root: vapor branch not admitted by the finite search: the sole stable root 29870.087932820887 mol/m3 lies above the negative-slope sample 10368.284385236288 mol/m3;saturation:unexamined_gap;
 
@@ -78,13 +83,152 @@ MDEA A continued from each of its own stage endpoints with the same controls. Th
 
 **MDEA C** reported CentralSolveUnavailable at zero-based fitted row 126. saturation:no_resolved_root;
 
+MDEA LHS-53 continued from each of its own stage endpoints. The independently replayed objectives were 48387.293 → 48386.509.
+
+**MDEA LHS-53** reported CentralSolveUnavailable at zero-based fitted row 124. saturation:loading 1.05: infeasible: residual 0.27687664998269301 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 104 iterations, contraction absent, floor 2.6248954912223931e-10, amplification 0;saturation:unexamined_gap;
+
 **AMP_free B** reported CentralSolveUnavailable at zero-based fitted row 47. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.31574826780505305 below the rounding band -3.1634355715787279e-14
 
 **AMP_free C** reported CentralSolveUnavailable at zero-based fitted row 0. LOCAL_INFEASIBILITY: infeasible: residual 0.73127018440641067 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 101 iterations, contraction absent, floor 4.4411204203269427e-11, amplification 0
 
+AMP_free LHS-45 continued from each of its own stage endpoints. The independently replayed objectives were 76.700694 → 74.928158.
+
 **AMP_fixed B** reported CentralSolveUnavailable at zero-based fitted row 0. LOCAL_INFEASIBILITY: infeasible: residual 0.83031872509742299 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 119 iterations, contraction absent, floor 6.2124092313255033e-10, amplification 0
 
 **AMP_fixed C** reported CentralSolveUnavailable at zero-based fitted row 47. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.90554461490338256 below the rounding band -2.6580096067175438e-14
+
+**AMP_fixed LHS-53** reported CentralSolveUnavailable at zero-based fitted row 52. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.0054733072402442084 below the rounding band -3.5680747023408706e-14
+
+## Replacement starts
+
+| Design and draw | Minimum distance to admitted starts | Initial evaluation | Seconds |
+|---|---:|---|---:|
+| MEA LHS-21 | 0.455415 | eligible | 6.88 |
+| MDEA LHS-57 | 0.472090 | saturation:unresolved_slope_reversal; | 8.21 |
+| MDEA LHS-50 | 0.468273 | saturation:unresolved_slope_reversal; | 8.42 |
+| MDEA LHS-15 | 0.467780 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754221048001271 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 152 iterations, contraction absent, floor 2.8148656810273776e-10, amplification 0 | 4.64 |
+| MDEA LHS-59 | 0.448386 | LOCAL_INFEASIBILITY: infeasible: residual 1.0000000680070054 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 173 iterations, contraction absent, floor 2.7841949335647953e-10, amplification 0 | 2.21 |
+| MDEA LHS-40 | 0.447961 | saturation:unresolved_slope_reversal; | 8.85 |
+| MDEA LHS-51 | 0.447497 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754235744916018 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 114 iterations, contraction absent, floor 2.8148508511152251e-10, amplification 0 | 2.44 |
+| MDEA LHS-33 | 0.443254 | LOCAL_INFEASIBILITY: infeasible: residual 0.06538292080363832 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 107 iterations, contraction absent, floor 1.64635703903459e-09, amplification 0 | 6.26 |
+| MDEA LHS-61 | 0.442081 | saturation:loading 1.05: infeasible: residual 0.051590008587873895 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 130 iterations, contraction absent, floor 2.5477654887001903e-10, amplification 0;saturation:unexamined_gap; | 8.29 |
+| MDEA LHS-27 | 0.437228 | LOCAL_INFEASIBILITY: infeasible: residual 0.0016693069581537128 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 144 iterations, contraction absent, floor 2.0747186460221954e-10, amplification 0 | 4.76 |
+| MDEA LHS-55 | 0.433325 | LOCAL_INFEASIBILITY: infeasible: residual 0.023807700037724994 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 191 iterations, contraction absent, floor 1.3377853111869911e-08, amplification 0 | 3.93 |
+| MDEA LHS-09 | 0.424142 | saturation:loading 1.05: infeasible: residual 0.48070402184658395 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 178 iterations, contraction absent, floor 2.0595345892978127e-10, amplification 0;saturation:unexamined_gap; | 10.05 |
+| MDEA LHS-03 | 0.423954 | saturation:no_resolved_root; | 11.47 |
+| MDEA LHS-13 | 0.419842 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877629461 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 83 iterations, contraction absent, floor 2.8640872690555876e-10, amplification 0 | 3.95 |
+| MDEA LHS-18 | 0.418154 | saturation:no_resolved_root; | 9.76 |
+| MDEA LHS-16 | 0.413570 | LOCAL_INFEASIBILITY: infeasible: residual 0.24958238774668071 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 153 iterations, contraction absent, floor 2.6262484987072745e-10, amplification 0 | 2.78 |
+| MDEA LHS-36 | 0.403847 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877562951 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 87 iterations, contraction absent, floor 2.8156308251214202e-10, amplification 0 | 1.14 |
+| MDEA LHS-38 | 0.403383 | saturation:unresolved_slope_reversal; | 8.44 |
+| MDEA LHS-02 | 0.399563 | saturation:loading 1.05: infeasible: residual 0.075107106912127158 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 149 iterations, contraction absent, floor 2.5681157404447265e-10, amplification 0;saturation:unexamined_gap; | 13.93 |
+| MDEA LHS-63 | 0.391721 | LOCAL_INFEASIBILITY: infeasible: residual 0.24995268875373106 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 86 iterations, contraction absent, floor 1.0218365762840729e-08, amplification 0 | 1.53 |
+| MDEA LHS-44 | 0.383520 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877630446 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 101 iterations, contraction absent, floor 2.8134882911089559e-10, amplification 0 | 1.17 |
+| MDEA LHS-54 | 0.383409 | MAXITER_EXCEEDED: budget_exhausted: residual 0.033752615019797115 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.8147988796995606e-10, amplification 0; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: packing fraction outside the fluid domain | 2.65 |
+| MDEA LHS-43 | 0.374722 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877630293 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 88 iterations, contraction absent, floor 2.8140426657881746e-10, amplification 0 | 1.01 |
+| MDEA LHS-01 | 0.373617 | LOCAL_INFEASIBILITY: infeasible: residual 1.0000002979808809 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 199 iterations, contraction absent, floor 9.9143163535562375e-09, amplification 0 | 2.95 |
+| MDEA LHS-28 | 0.372910 | saturation:unresolved_slope_reversal; | 7.95 |
+| MDEA LHS-47 | 0.372570 | saturation:no_resolved_root; | 10.59 |
+| MDEA LHS-53 | 0.368731 | eligible | 18.50 |
+| MDEA LHS-12 | 0.366987 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239627359954 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 111 iterations, contraction absent, floor 2.8146286517633838e-10, amplification 0 | 3.49 |
+| MDEA LHS-26 | 0.366617 | LOCAL_INFEASIBILITY: infeasible: residual 0.024707348328670782 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 80 iterations, contraction absent, floor 6.4395989482780263e-09, amplification 0 | 1.93 |
+| MDEA LHS-31 | 0.352422 | LOCAL_INFEASIBILITY: infeasible: residual 0.069846372941754331 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 119 iterations, contraction absent, floor 4.75106493000865e-09, amplification 0 | 1.88 |
+| MDEA LHS-32 | 0.346903 | LOCAL_INFEASIBILITY: infeasible: residual 0.024637177567749132 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 87 iterations, contraction absent, floor 2.6314245198957766e-10, amplification 0 | 1.71 |
+| MDEA LHS-48 | 0.345357 | saturation:loading 1.05: infeasible: residual 0.331150273670068 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 124 iterations, contraction absent, floor 2.6034624153876851e-10, amplification 0;saturation:unexamined_gap; | 8.54 |
+| MDEA LHS-52 | 0.344054 | saturation:loading 1.05: infeasible: residual 0.25371329142078192 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 148 iterations, contraction absent, floor 2.7566543390663042e-10, amplification 0;saturation:unexamined_gap;saturation:unresolved_slope_reversal; | 8.75 |
+| MDEA LHS-30 | 0.339172 | ill_conditioned:  | 16.67 |
+| MDEA LHS-06 | 0.335600 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877630446 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 179 iterations, contraction absent, floor 2.8903952220015722e-10, amplification 0 | 2.02 |
+| MDEA LHS-42 | 0.331100 | LOCAL_INFEASIBILITY: infeasible: residual 1.0000004185231157 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 57 iterations, contraction absent, floor 2.5066427250906543e-10, amplification 0 | 0.65 |
+| MDEA LHS-08 | 0.329456 | saturation:loading 1.05: infeasible: residual 0.0058239603365827231 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 128 iterations, contraction absent, floor 1.1054450263646226e-10, amplification 0;saturation:unexamined_gap; | 11.66 |
+| MDEA LHS-05 | 0.327121 | LOCAL_INFEASIBILITY: infeasible: residual 0.015678312623033503 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 154 iterations, contraction absent, floor 2.2521897056292364e-10, amplification 0 | 2.31 |
+| MDEA LHS-49 | 0.322574 | saturation:no_resolved_root; | 10.47 |
+| MDEA LHS-56 | 0.320718 | LOCAL_INFEASIBILITY: infeasible: residual 1.0000003366996231 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 51 iterations, contraction absent, floor 2.5848918535051736e-10, amplification 0 | 0.56 |
+| MDEA LHS-10 | 0.317379 | LOCAL_INFEASIBILITY: infeasible: residual 1.000000361499858 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 77 iterations, contraction absent, floor 2.1577186814487628e-10, amplification 0 | 0.85 |
+| MDEA LHS-58 | 0.313103 | saturation:unresolved_slope_reversal; | 7.76 |
+| MDEA LHS-19 | 0.312476 | saturation:loading 0.55000000000000004: budget_exhausted: residual 0.021653842464985473 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.9868474957528589e-10, amplification 0;saturation:unexamined_gap;saturation:unresolved_slope_reversal; | 10.79 |
+| MDEA LHS-29 | 0.309940 | saturation:loading 1.05: infeasible: residual 0.051988802751240203 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 102 iterations, contraction absent, floor 1.3781261532129871e-09, amplification 0;saturation:unexamined_gap; | 7.85 |
+| MDEA LHS-07 | 0.306462 | saturation:no_resolved_root; | 7.68 |
+| MDEA LHS-25 | 0.297496 | MAXITER_EXCEEDED: budget_exhausted: residual 25.556452654709279 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 5.1356623063497504e-10, amplification 30.18531369287621; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition in phase L | 2.33 |
+| MDEA LHS-41 | 0.290798 | LOCAL_INFEASIBILITY: infeasible: residual 0.78695230766813606 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 78 iterations, contraction absent, floor 2.2077745982442021e-10, amplification 0 | 1.87 |
+| MDEA LHS-20 | 0.282654 | initial:ill_conditioned:  | 4.51 |
+| MDEA LHS-23 | 0.279577 | saturation:no_resolved_root; | 7.74 |
+| MDEA LHS-35 | 0.275244 | MAXITER_EXCEEDED: budget_exhausted: residual 0.14127886621061195 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 7.2110881902052965e-09, amplification 412.2657280953311 | 2.44 |
+| MDEA LHS-00 | 0.274111 | saturation:loading 1.05: infeasible: residual 0.33120600242788772 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 147 iterations, contraction absent, floor 2.3277303083524342e-10, amplification 0;saturation:unexamined_gap; | 8.16 |
+| MDEA LHS-34 | 0.272339 | LOCAL_INFEASIBILITY: infeasible: residual 0.063010317151635908 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 87 iterations, contraction absent, floor 2.0430201083495085e-10, amplification 0 | 1.93 |
+| MDEA LHS-39 | 0.268924 | saturation:loading 1.05: infeasible: residual 0.36205489640951999 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 85 iterations, contraction absent, floor 2.1141622263932783e-10, amplification 0;saturation:unexamined_gap; | 11.22 |
+| MDEA LHS-22 | 0.266166 | MAXITER_EXCEEDED: budget_exhausted: residual 0.34770029599332158 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 2.3660085370462836e-10, amplification 0.17968521372371365; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: packing fraction outside the fluid domain | 6.39 |
+| MDEA LHS-62 | 0.263837 | saturation:no_resolved_root; | 7.61 |
+| MDEA LHS-21 | 0.244681 | LOCAL_INFEASIBILITY: infeasible: residual 0.24734625935800872 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 165 iterations, contraction absent, floor 9.2841405224764809e-10, amplification 0 | 3.04 |
+| MDEA LHS-24 | 0.244180 | LOCAL_INFEASIBILITY: infeasible: residual 0.1050975418617616 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 124 iterations, contraction absent, floor 2.3075291604799132e-10, amplification 0 | 2.37 |
+| MDEA LHS-11 | 0.240689 | MAXITER_EXCEEDED: budget_exhausted: residual 274.16254568792431 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.5878111025963517e-09, amplification 3.6805747529798745; trial preparation failed: stalled: residual nan against absent 0 after 0 iterations, contraction absent, floor absent, amplification absent; polish trial: invalid composition in phase L | 3.46 |
+| MDEA LHS-37 | 0.239860 | ill_conditioned:  | 19.26 |
+| MDEA LHS-46 | 0.214233 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877630446 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 99 iterations, contraction absent, floor 2.8136737151332021e-10, amplification 0 | 1.27 |
+| MDEA LHS-45 | 0.206562 | LOCAL_INFEASIBILITY: infeasible: residual 0.033754239877630446 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 95 iterations, contraction absent, floor 2.8135079952124157e-10, amplification 0 | 1.23 |
+| MDEA LHS-04 | 0.206397 | saturation:loading 1.05: infeasible: residual 0.79381470799018261 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 112 iterations, contraction absent, floor 2.1036928057148918e-10, amplification 0;saturation:unexamined_gap; | 8.55 |
+| AMP_free LHS-21 | 0.574887 | MAXITER_EXCEEDED: budget_exhausted: residual 0.027866534059512834 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.9793756469794373e-10, amplification 0 | 5.40 |
+| AMP_free LHS-20 | 0.551520 | LOCAL_INFEASIBILITY: infeasible: residual 2.3627138984405605e-05 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 127 iterations, contraction absent, floor 2.3167712689662542e-12, amplification 0 | 3.34 |
+| AMP_free LHS-46 | 0.541372 | LOCAL_INFEASIBILITY: infeasible: residual 0.10379424664791935 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 66 iterations, contraction absent, floor 1.0351142269983539e-10, amplification 0 | 2.86 |
+| AMP_free LHS-27 | 0.530447 | LOCAL_INFEASIBILITY: infeasible: residual 1.0567665609251264e-07 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 104 iterations, contraction absent, floor 2.2069603527917975e-12, amplification 0 | 4.12 |
+| AMP_free LHS-48 | 0.517463 | LOCAL_INFEASIBILITY: infeasible: residual 1.0000000804862879 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 97 iterations, contraction absent, floor 1.5251072093399096e-10, amplification 0 | 4.45 |
+| AMP_free LHS-44 | 0.516402 | LOCAL_INFEASIBILITY: infeasible: residual 0.05660309244539221 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 83 iterations, contraction absent, floor 1.2597758181063571e-10, amplification 0 | 3.71 |
+| AMP_free LHS-06 | 0.514325 | eligible | 6.19 |
+| AMP_free LHS-45 | 0.483355 | eligible | 6.69 |
+| AMP_fixed LHS-59 | 0.555166 | LOCAL_INFEASIBILITY: infeasible: residual 0.0059924591709809146 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 92 iterations, contraction absent, floor 1.3682135259828511e-10, amplification 0 | 3.45 |
+| AMP_fixed LHS-35 | 0.540863 | LOCAL_INFEASIBILITY: infeasible: residual 0.079687842689727478 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 95 iterations, contraction absent, floor 1.1364846902499187e-10, amplification 0 | 3.62 |
+| AMP_fixed LHS-10 | 0.539464 | MAXITER_EXCEEDED: budget_exhausted: residual 0.0055958307721875045 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 200 iterations, contraction absent, floor 1.5379217517434655e-10, amplification 0 | 4.68 |
+| AMP_fixed LHS-63 | 0.515196 | SUCCESS: local phase instability: phase L has lowest eigenvalue -0.55353073539799769 below the rounding band -3.7927677992371662e-14 | 2.50 |
+| AMP_fixed LHS-25 | 0.507381 | LOCAL_INFEASIBILITY: infeasible: residual 0.068557391287254799 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 71 iterations, contraction absent, floor 2.2041155719557363e-10, amplification 0 | 3.88 |
+| AMP_fixed LHS-00 | 0.492959 | SUCCESS: local phase instability: phase L has lowest eigenvalue -0.67962328141525086 below the rounding band -2.6232400723050534e-14 | 3.27 |
+| AMP_fixed LHS-50 | 0.491586 | LOCAL_INFEASIBILITY: infeasible: residual 0.058962757342479022 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 118 iterations, contraction absent, floor 1.9000141519572803e-10, amplification 0 | 2.89 |
+| AMP_fixed LHS-53 | 0.486408 | eligible | 6.10 |
+
+## Replayed descent steps
+
+The box-constrained linearized least-squares step uses the endpoint Jacobian. A replay at the resulting coefficients measures the actual objective reduction. Both reductions are relative to the original objective.
+
+| Endpoint | Predicted reduction | Replayed reductions |
+|---|---:|---|
+| MEA A | 2.161918e-10 | -4.660433e-11, 9.6577842e-11 |
+| MEA B | 1.7512558e-10 | 4.6527204e-11, 9.9569015e-11 |
+| MEA LHS-21 | 9.2884692e-11 | -1.9412988e-11, 4.1591535e-11 |
+| DEA A | 1.6512199e-11 | -2.3638278e-11, 2.5015841e-12 |
+| DEA B | 6.8257869e-11 | -4.7118276e-11, 3.0302749e-11 |
+| DEA C | 2.9596573e-12 | 2.0511326e-15, 1.4255372e-13 |
+| MDEA A | 0.0022296767 | -2.0297375, -0.11893018, —, —, — |
+| AMP_free A | 2.0954105e-10 | -1.1898512e-10, 7.5050065e-11 |
+| AMP_free LHS-06 | 9.1791708e-11 | -5.0971433e-11, 3.3020139e-11 |
+| AMP_free LHS-45 | 1.6720608e-10 | -9.4803885e-11, 5.9765766e-11 |
+| AMP_fixed A | 1.167399e-12 | 1.1176429e-12, 8.2811836e-13 |
+| AMP_fixed C | 2.9133794e-12 | 3.1114306e-12, 2.22956e-12 |
+| AMP_fixed LHS-53 | 6.8299554e-11 | 7.2116977e-11, 5.2181824e-11 |
+
+## MDEA fit limits
+
+The tightened Ceres continuation from A used 40 iterations and returned objective 15.6093143505 with optimizer projected gradient 0.00827173. Its rejected trials concentrated on the Merkley heat observation at zero-based row 124. The saturation search could not admit the vapor root at 1.5 mol carbon dioxide per mol analytical amine.
+
+The shortest tested projected-gradient step gave objective 15.6093133277 and relative reduction 6.57205e-08. The decrease exceeds the inherited $10^{-10}$ relative function tolerance. The two larger Gauss–Newton steps increased the objective and the smaller steps returned unexamined saturation gaps.
+
+At start B, all 30 loading nodes returned bubble pressures from about 24 to 187 kPa for each of three pressure guesses. All admitted bubble pressures at start C exceeded 1.96 MPa. The target was 1.121 MPa in both cases. The search provides evidence about the sampled starts and loading domain. Among the 64 LHS draws, 61 were screened as replacements, two were the original failures, and one fell below the separation limit after admitting the replacement. With A, this yields two admitted starts in the declared design.
+
+The MDEA tables retain the phase and property comparisons at the provisional A endpoint.
+
+Restarting Ceres on the admitted descent step returned objective 15.6093124974 and optimizer projected gradient 0.00730911. Parameter tolerance reached. Relative step_norm: 3.546698e-11 <= 1.000000e-10.
+
+The Ceres function exits for MEA, DEA and both AMP fits are consistent with the small changes in the independent descent replays. They missed the separate strict gradient threshold. A second displaced AMP fixed-slope start returned the high-objective basin reached by C within the relative objective tie tolerance. The basin is reproducible at the fit tolerance, with several active bounds and an unresolved strict gradient check.
+
+
+## Legacy residual check
+
+R1 stopped at row 129 on the starting commit. The weighted residual was 1.524754706513316 against 1.526051434252232 at tolerance $10^{-8}$. Identical observation, residual scale and weight reproduce the archived residual from the archived prediction. The pinned wheel's equilibrium heat-capacity prediction for unloaded 30 wt% MDEA differs by $-0.00237384$ J/(mol feed K). The underlying cause remains open. R3 and R5 lie after the R1 assertion.
+
+## AMP conditional slope profile
+
+| Crossing | Tracking bracket (K) | Fixed-reference bracket (K) |
+|---|---:|---:|
+| Lower | -155.46875 to -155.85938 | -153.12500 to -153.51562 |
+| Upper | 46.97669 to 47.36731 | 49.71106 to 50.10169 |
+
+The profile reoptimizes the other eight AMP coordinates for each held slope. The cutoff uses the same conditional variance and objective-increment construction as round 7.
 
 ## Observation deviations
 
@@ -214,6 +358,7 @@ MDEA A continued from each of its own stage endpoints with the same controls. Th
 | MEA A phase 100-kPa | — | finite search, no resolved descent |
 | MEA B phase 100-kPa | — | finite search, no resolved descent |
 | MEA C phase 100-kPa | — | no endpoint |
+| MEA LHS-21 phase 100-kPa | — | finite search, no resolved descent |
 | MEA fixed-at-old phase 100-kPa | — | finite search, no resolved descent |
 | DEA A phase weiland-1998:31:problem | confirmed split | unresolved phase identity |
 | DEA A phase weiland-1998:41:problem | confirmed split | confirmed split |
@@ -238,6 +383,12 @@ MDEA A continued from each of its own stage endpoints with the same controls. Th
 | MDEA B phase 263-MPa | confirmed split | no endpoint |
 | MDEA C phase 204-MPa | confirmed split | no endpoint |
 | MDEA C phase 263-MPa | confirmed split | no endpoint |
+| MDEA LHS-53 phase 204-MPa | confirmed split | finite search, no resolved descent |
+| MDEA LHS-53 phase 263-MPa | confirmed split | unresolved phase identity |
+| MDEA A-continuation phase 204-MPa | confirmed split | unresolved phase identity |
+| MDEA A-continuation phase 263-MPa | confirmed split | unresolved phase identity |
+| MDEA A-descent-continuation phase 204-MPa | confirmed split | unresolved phase identity |
+| MDEA A-descent-continuation phase 263-MPa | confirmed split | unresolved phase identity |
 | MDEA fixed-at-old phase 204-MPa | confirmed split | unresolved phase identity |
 | MDEA fixed-at-old phase 263-MPa | confirmed split | unresolved phase identity |
 | MDEA declared finite search counts | {'states': 11824, 'available': 10476, 'descent': 75, 'confirmed': 1} | 10501 no resolved descent<br>1315 unavailable search<br>8 unresolved descent or identity |
@@ -262,6 +413,20 @@ MDEA A continued from each of its own stage endpoints with the same controls. Th
 | AMP_free C phase tong-2012:32:problem | unresolved phase identity | no endpoint |
 | AMP_free C phase tong-2012:44:problem | finite search, no resolved descent | no endpoint |
 | AMP_free C phase worked-state | finite search, no resolved descent | no endpoint |
+| AMP_free LHS-06 phase hartono-2021:55:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-06 phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-06 phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-06 phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free LHS-06 phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-06 phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free LHS-06 phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free LHS-45 phase hartono-2021:55:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-45 phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-45 phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-45 phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free LHS-45 phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free LHS-45 phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free LHS-45 phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
 | AMP_free fixed-at-old phase hartono-2021:55:problem | unresolved phase identity | unresolved phase identity |
 | AMP_free fixed-at-old phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
 | AMP_free fixed-at-old phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
@@ -292,6 +457,13 @@ MDEA A continued from each of its own stage endpoints with the same controls. Th
 | AMP_fixed C phase tong-2012:32:problem | unresolved phase identity | confirmed split |
 | AMP_fixed C phase tong-2012:44:problem | finite search, no resolved descent | confirmed split |
 | AMP_fixed C phase worked-state | finite search, no resolved descent | confirmed split |
+| AMP_fixed LHS-53 phase hartono-2021:55:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed LHS-53 phase hartono-2021:56:problem | unresolved phase identity | confirmed split |
+| AMP_fixed LHS-53 phase hartono-2021:57:problem | unresolved phase identity | confirmed split |
+| AMP_fixed LHS-53 phase tong-2012:29:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed LHS-53 phase tong-2012:32:problem | unresolved phase identity | confirmed split |
+| AMP_fixed LHS-53 phase tong-2012:44:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed LHS-53 phase worked-state | finite search, no resolved descent | confirmed split |
 | AMP_fixed fixed-at-old phase hartono-2021:55:problem | finite search, no resolved descent | finite search, no resolved descent |
 | AMP_fixed fixed-at-old phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
 | AMP_fixed fixed-at-old phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
@@ -394,12 +566,393 @@ Measured entries record timed calculations. The lanes overlapped.
 
 ## Coverage
 
-The quantity index contains 1585 replayed comparisons and 12 quantities with independent contributors. It records 198 open keys and 68 undecided results.
+The quantity index contains 1766 replayed comparisons and 12 quantities with independent contributors. It records 100 open keys and 85 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 
 ## Reproduction
 
-Run from the repository root with the installed study wheel verified against `c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`. Use `refit.py prepare`, `refit.py attempt` and `refit.py select` for the named design. Use `phase_replays.py pilot` on the bound A declaration after timing displaced B through its independent replay. For an initial refusal use `refit.py initial DESIGN B` to retain the independent replay refusal. The receiver expansion is `campaign.py DEA`, `campaign.py MDEA` or `campaign.py AMP`. The selected MEA screen uses `mea_replays.py`. The derivative checks use `reference_derivatives.py fixed-at-old` and `reference_derivatives.py selected`.
+Run from the repository root with the installed study wheel verified against `c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`. Use `refit.py prepare`, `refit.py attempt` and `refit.py select` for the named design. Use `phase_replays.py pilot` on the bound A declaration after timing displaced B through its independent replay. For an initial refusal use `refit.py initial DESIGN B` to retain the independent replay refusal. The receiver expansion is `campaign.py DEA`, `campaign.py MDEA` or `campaign.py AMP`. Use `refit.py replace DESIGN` for the seeded replacement screen and then `refit.py attempt DESIGN LHS-NN` for an admitted draw. Run `stationarity.py DESIGN START` for the descent probe. Use `stationarity.py root` or `stationarity.py amp-roots` for the pressure-guess diagnostics. The MDEA diagnostic commands are `stationarity.py mdea-continue`, `stationarity.py mdea-descent` and `stationarity.py mdea-restart`. Use `property_replays.py AMP-profile` for the conditional slope profile. The selected MEA screen uses `mea_replays.py`. The derivative checks use `reference_derivatives.py fixed-at-old` and `reference_derivatives.py selected`.
 
 Recompute the handoff with `uv run --no-sync python analyses/fixed_reaction_reference/handoff.py --check`.
+
+## Starting and remaining quantity keys
+
+The starting handoff had 198 open keys and 68 undecided results.
+The lists include the starting keys and any new unresolved results.
+
+### Open · MDEA properties (4)
+
+The MDEA replay requires a qualified endpoint or an admitted property or phase evaluation on the declared basis.
+
+- MDEA Merkley-outside J/mol all AARD_percent
+- MDEA Merkley-outside J/mol all bias_percent
+- MDEA Merkley-outside J/mol all mean_abs_error
+- MDEA Merkley-outside J/mol all mean_signed_error_predicted_minus_observed
+
+### Open · Round 7 A (19)
+
+The MDEA replay requires a qualified endpoint or an admitted property or phase evaluation on the declared basis.
+
+- Round 7 A MDEA 100 kPa 1 Gibbs_decrease_over_RT_mol
+- Round 7 A MDEA 100 kPa 1 numerical_error_over_RT_mol
+- Round 7 A MDEA 100 kPa 1 disposition
+- Round 7 A MDEA 100 kPa 2 Gibbs_decrease_over_RT_mol
+- Round 7 A MDEA 100 kPa 2 numerical_error_over_RT_mol
+- Round 7 A MDEA 100 kPa 2 disposition
+- Round 7 A MDEA 100 kPa 3 Gibbs_decrease_over_RT_mol
+- Round 7 A MDEA 100 kPa 3 numerical_error_over_RT_mol
+- Round 7 A MDEA 100 kPa 3 disposition
+- Round 7 A MDEA 100 kPa 4 Gibbs_decrease_over_RT_mol
+- Round 7 A MDEA 100 kPa 4 numerical_error_over_RT_mol
+- Round 7 A MDEA 100 kPa 4 disposition
+- Round 7 A MDEA 100 kPa eos_volume_m3
+- Round 7 A MDEA 100 kPa correction_m3
+- Round 7 A MDEA 100 kPa frozen_G_volume_m3
+- Round 7 A MDEA 100 kPa moving_G_volume_m3
+- Round 7 A MDEA 100 kPa pressure_tracking_term_J
+- Round 7 A MDEA 100 kPa pressure_tracking_direct_J
+- Round 7 A MDEA 100 kPa engine_tracking_minus_frozen_J
+
+### Open · Round 7 B (17)
+
+The MDEA replay requires a qualified endpoint or an admitted property or phase evaluation on the declared basis.
+
+- Round 7 B MDEA below_bubble_observations
+- Round 7 B MDEA below_bubble_421
+- Round 7 B MDEA unfinished_435
+- Round 7 B MDEA intersection
+- Round 7 B MDEA below_bubble_unfinished_observations
+- Round 7 B MDEA fixed-pressure search attempts
+- Round 7 B MDEA completed fixed-pressure attempts without detected descent
+- Round 7 B MDEA admitted fixed-pressure search attempts
+- Round 7 B MDEA Merkley-outside all AARD_percent
+- Round 7 B MDEA Merkley-outside all bias_percent
+- Round 7 B MDEA Merkley-outside all mean_abs_error
+- Round 7 B MDEA Merkley-outside all mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA targeted salt disposition
+- Round 7 B MDEA targeted salt trial 1 Gibbs_decrease_over_RT_mol
+- Round 7 B MDEA targeted salt trial 1 numerical_error_over_RT_mol
+- Round 7 B MDEA targeted salt trial 3 Gibbs_decrease_over_RT_mol
+- Round 7 B MDEA targeted salt trial 3 numerical_error_over_RT_mol
+
+### Open · Round 7 D (50)
+
+The remaining bound and weighting sensitivities need separate fits.
+
+- Round 7 D D unbounded-MDEA.json status
+- Round 7 D D unbounded-MDEA.json endpoint_replay_cost
+- Round 7 D D unbounded-MDEA.json k_423_bounded
+- Round 7 D D unbounded-MDEA.json k_423_unbounded
+- Round 7 D MDEA coordinate-5-0.05.json status
+- Round 7 D MDEA coordinate-5-0.05.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-5-0.05.json held_value
+- Round 7 D MDEA coordinate-5-0.01.json status
+- Round 7 D MDEA coordinate-5-0.01.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-5-0.01.json held_value
+- Round 7 D MDEA coordinate-0-0.05.json status
+- Round 7 D MDEA coordinate-0-0.05.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-0-0.05.json held_value
+- Round 7 D MDEA coordinate-5-0.1.json status
+- Round 7 D MDEA coordinate-5-0.1.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-5-0.1.json held_value
+- Round 7 D MDEA coordinate-0-0.1.json status
+- Round 7 D MDEA coordinate-0-0.1.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-0-0.1.json held_value
+- Round 7 D MDEA coordinate-0-0.01.json status
+- Round 7 D MDEA coordinate-0-0.01.json endpoint_replay_cost
+- Round 7 D MDEA coordinate-0-0.01.json held_value
+- Round 7 D AMP coordinate-7-0.05.json status
+- Round 7 D AMP coordinate-7-0.05.json endpoint_replay_cost
+- Round 7 D AMP coordinate-7-0.05.json held_value
+- Round 7 D AMP coordinate-5-0.05.json status
+- Round 7 D AMP coordinate-5-0.05.json endpoint_replay_cost
+- Round 7 D AMP coordinate-5-0.05.json held_value
+- Round 7 D AMP coordinate-5-0.01.json status
+- Round 7 D AMP coordinate-5-0.01.json endpoint_replay_cost
+- Round 7 D AMP coordinate-5-0.01.json held_value
+- Round 7 D AMP coordinate-7-0.1.json status
+- Round 7 D AMP coordinate-7-0.1.json endpoint_replay_cost
+- Round 7 D AMP coordinate-7-0.1.json held_value
+- Round 7 D AMP coordinate-7-0.01.json status
+- Round 7 D AMP coordinate-7-0.01.json endpoint_replay_cost
+- Round 7 D AMP coordinate-7-0.01.json held_value
+- Round 7 D AMP coordinate-5-0.1.json status
+- Round 7 D AMP coordinate-5-0.1.json endpoint_replay_cost
+- Round 7 D AMP coordinate-5-0.1.json held_value
+- Round 7 D MDEA bound binary descent
+- Round 7 D MDEA bound binary available
+- Round 7 D MDEA bound gap onset lower
+- Round 7 D MDEA bound gap onset upper
+- Round 7 D MDEA no bound binary descent
+- Round 7 D MDEA no bound binary available
+- Round 7 D MDEA no bound gap onset lower
+- Round 7 D MDEA no bound gap onset upper
+- Round 7 D Cai original objective
+- Round 7 D Cai alternative objective
+
+### Open · Round 7 D5 (1)
+
+- Round 7 D5 incumbent available with refined pressure closure
+
+### Open · Round 7 E (1)
+
+- Round 7 E MEA qualified declaration
+
+### Open · Round 7 F (2)
+
+- Round 7 F DEA methane conditional maximum pCO2 shift
+- Round 7 F DEA methane-refit conditional maximum pCO2 shift
+
+### Open · Round 7 H (6)
+
+The archived rounding checks require a table-specific contributor join.
+
+- Round 7 H study round6 S17_cells rounding matches
+- Round 7 H study round6 S16_cells rounding matches
+- Round 7 H study round7 S17_cells rounding matches
+- Round 7 H study round7 S16_cells rounding matches
+- Round 7 H study round6 S15 rounding matches
+- Round 7 H study round7 S15 rounding matches
+
+### Undecided · AMP_fixed phase controls (6)
+
+The retained search did not resolve the phase outcome or its physical checks.
+
+- AMP_fixed A phase hartono-2021:56:problem
+- AMP_fixed A phase hartono-2021:57:problem
+- AMP_fixed A phase tong-2012:32:problem
+- AMP_fixed fixed-at-old phase hartono-2021:56:problem
+- AMP_fixed fixed-at-old phase hartono-2021:57:problem
+- AMP_fixed fixed-at-old phase tong-2012:32:problem
+
+### Undecided · AMP_free phase controls (16)
+
+The retained search did not resolve the phase outcome or its physical checks.
+
+- AMP_free A phase hartono-2021:55:problem
+- AMP_free A phase hartono-2021:56:problem
+- AMP_free A phase hartono-2021:57:problem
+- AMP_free A phase tong-2012:32:problem
+- AMP_free LHS-06 phase hartono-2021:55:problem
+- AMP_free LHS-06 phase hartono-2021:56:problem
+- AMP_free LHS-06 phase hartono-2021:57:problem
+- AMP_free LHS-06 phase tong-2012:32:problem
+- AMP_free LHS-45 phase hartono-2021:55:problem
+- AMP_free LHS-45 phase hartono-2021:56:problem
+- AMP_free LHS-45 phase hartono-2021:57:problem
+- AMP_free LHS-45 phase tong-2012:32:problem
+- AMP_free fixed-at-old phase hartono-2021:55:problem
+- AMP_free fixed-at-old phase hartono-2021:56:problem
+- AMP_free fixed-at-old phase hartono-2021:57:problem
+- AMP_free fixed-at-old phase tong-2012:32:problem
+
+### Undecided · C1 numerical error (6)
+
+- C1 fixed-at-old-DEA volume
+- C1 fixed-at-old-DEA enthalpy
+- C1 fixed-at-old-DEA Eq. 12
+- C1 fixed-at-old-MEA volume
+- C1 fixed-at-old-MEA enthalpy
+- C1 fixed-at-old-MEA Eq. 12
+
+### Undecided · DEA phase controls (4)
+
+The retained search did not resolve the phase outcome or its physical checks.
+
+- DEA A phase weiland-1998:31:problem
+- DEA B phase weiland-1998:31:problem
+- DEA C phase weiland-1998:31:problem
+- DEA fixed-at-old phase weiland-1998:31:problem
+
+### Undecided · Legacy fit and properties (1)
+
+- Legacy R1 weighted residual at row 129
+
+### Undecided · MDEA fit and properties (3)
+
+- MDEA selected objective
+- MDEA A continuation
+- MDEA A admitted-descent continuation
+
+### Undecided · MDEA phase controls (9)
+
+The retained search did not resolve the phase outcome or its physical checks.
+
+- MDEA A phase 204-MPa
+- MDEA A phase 263-MPa
+- MDEA LHS-53 phase 263-MPa
+- MDEA A-continuation phase 204-MPa
+- MDEA A-continuation phase 263-MPa
+- MDEA A-descent-continuation phase 204-MPa
+- MDEA A-descent-continuation phase 263-MPa
+- MDEA fixed-at-old phase 204-MPa
+- MDEA fixed-at-old phase 263-MPa
+
+### Undecided · Round 7 B (40)
+
+- Round 7 B MDEA Ermatchkov resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Ermatchkov resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Ermatchkov resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Ermatchkov resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Kim resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Kim resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Kim resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Kim resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Kuranov resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Kuranov resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Kuranov resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Kuranov resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Kuranov-413K resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Kuranov-413K resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Kuranov-413K resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Kuranov-413K resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Kuranov-binary resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Kuranov-binary resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Kuranov-binary resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Kuranov-binary resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Merkley-outside resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Merkley-outside resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Merkley-outside resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Merkley-outside resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Sedighi resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Sedighi resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Sedighi resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Sedighi resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Xiao resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Xiao resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Xiao resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Xiao resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA Zheng resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA Zheng resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA Zheng resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA Zheng resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+- Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset AARD_percent
+- Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset bias_percent
+- Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_abs_error
+- Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+
+### Updated · Round 7 AMP/fixed (8)
+
+- Round 7 AMP/fixed native-outcome.json states → replayed (started open)
+- Round 7 AMP/fixed native-outcome.json available → replayed (started open)
+- Round 7 AMP/fixed native-outcome.json descent → replayed (started open)
+- Round 7 AMP/fixed native-outcome.json confirmed → replayed (started open)
+- Round 7 AMP/fixed supplied-outcome.json states → replayed (started open)
+- Round 7 AMP/fixed supplied-outcome.json available → replayed (started open)
+- Round 7 AMP/fixed supplied-outcome.json descent → replayed (started open)
+- Round 7 AMP/fixed supplied-outcome.json confirmed → replayed (started open)
+
+### Updated · Round 7 AMP/free (8)
+
+- Round 7 AMP/free native-outcome.json states → replayed (started open)
+- Round 7 AMP/free native-outcome.json available → replayed (started open)
+- Round 7 AMP/free native-outcome.json descent → replayed (started open)
+- Round 7 AMP/free native-outcome.json confirmed → replayed (started open)
+- Round 7 AMP/free supplied-outcome.json states → replayed (started open)
+- Round 7 AMP/free supplied-outcome.json available → replayed (started open)
+- Round 7 AMP/free supplied-outcome.json descent → replayed (started open)
+- Round 7 AMP/free supplied-outcome.json confirmed → replayed (started open)
+
+### Updated · Round 7 C (1)
+
+- Round 7 C MDEA salt search-outcome.json.gz seconds → replayed (started open)
+
+### Updated · Round 7 D (57)
+
+- Round 7 D MEA model minus electrode pH min → replayed (started open)
+- Round 7 D MEA model minus electrode pH max → replayed (started open)
+- Round 7 D MEA model minus electrode pH bias → replayed (started open)
+- Round 7 D MEA electrode carbonate_share min → replayed (started open)
+- Round 7 D MEA electrode carbonate_share max → replayed (started open)
+- Round 7 D MEA electrode common_molality_minus_raw min → replayed (started open)
+- Round 7 D MEA electrode common_molality_minus_raw max → replayed (started open)
+- Round 7 D Cai incumbent alternative objective → replayed (started open)
+- Round 7 D AMP profile conditional solve at -125.0 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -125.0 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -150.0 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -150.0 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -175.0 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -175.0 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -181.09021971325217 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -181.09021971325217 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -54.976439186299245 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -162.5 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -162.5 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -156.25 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -156.25 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -153.125 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -153.125 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -154.6875 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -154.6875 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -155.46875 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -155.46875 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -155.859375 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -155.859375 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -29.976439186299245 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -29.976439186299245 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at -4.976439186299245 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at -4.976439186299245 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 45.023560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 45.023560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 145.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 145.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 95.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 95.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 70.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 70.02356081370075 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 57.523560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 57.523560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 51.273560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 51.273560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 48.148560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 48.148560813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 46.586060813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 46.586060813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 47.367310813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 47.367310813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional solve at 46.976685813700755 K → replayed (started open)
+- Round 7 D AMP profile conditional objective at 46.976685813700755 K → replayed (started open)
+- Round 7 D AMP profile -1 within bracket → replayed (started open)
+- Round 7 D AMP profile -1 beyond bracket → replayed (started open)
+- Round 7 D AMP profile 1 within bracket → replayed (started open)
+- Round 7 D AMP profile 1 beyond bracket → replayed (started open)
+
+### Updated · Round 7 D5 (15)
+
+- Round 7 D5 incumbent states → replayed (started open)
+- Round 7 D5 incumbent available → replayed (started open)
+- Round 7 D5 incumbent descents → replayed (started open)
+- Round 7 D5 incumbent seconds → replayed (started open)
+- Round 7 D5 incumbent unresolved, phase pressure closure → replayed (started open)
+- Round 7 D5 F2 states → historical contributor (started open)
+- Round 7 D5 F2 available → historical contributor (started open)
+- Round 7 D5 F2 descents → historical contributor (started open)
+- Round 7 D5 F2 seconds → historical contributor (started open)
+- Round 7 D5 F2 unresolved, phase pressure closure → historical contributor (started open)
+- Round 7 D5 F4 states → historical contributor (started open)
+- Round 7 D5 F4 available → historical contributor (started open)
+- Round 7 D5 F4 descents → historical contributor (started open)
+- Round 7 D5 F4 seconds → historical contributor (started open)
+- Round 7 D5 F4 unresolved, phase pressure closure → historical contributor (started open)
+
+### Updated · Round 7 E (2)
+
+- Round 7 E MEA incumbent legacy pressure AARD rise versus F2 → replayed (started open)
+- Round 7 E MEA incumbent supplied missing → replayed (started open)
+
+### Updated · Round 7 F (4)
+
+- Round 7 F search-outcome.json states → replayed (started open)
+- Round 7 F search-outcome.json available → replayed (started open)
+- Round 7 F search-outcome.json descent → replayed (started open)
+- Round 7 F search-outcome.json confirmed → replayed (started open)
+
+### Updated · Round 7 H (2)
+
+- Round 7 H Hartono salt expanded free pressure AARD → replayed (started open)
+- Round 7 H Hartono salt expanded free mole_fraction AARD → replayed (started open)
+
+### Updated · Round 8 C5 (1)
+
+- Round 8 C5 available → replayed (started open)
