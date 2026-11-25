@@ -2,7 +2,7 @@
 
 ## Title
 
-Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability
+Phase-stability searches as a data diagnostic for ePC-SAFT models of CO₂-loaded aqueous amines
 
 ## Author and affiliation
 
@@ -10,15 +10,15 @@ Tanner W. Polley; ORCID 0009-0008-5957-4152; tpolley3@byu.edu. Department of Che
 
 ## Abstract
 
-Can two calibrations of an equation of state that reproduce the measured pressures of aqueous amines loaded with carbon dioxide (CO₂) about equally well predict different liquid phases? An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model of monoethanolamine (MEA) is calibrated first, and its water, CO₂ and inorganic-ion parameters are held fixed while diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each fitted. Phase-stability searches separate calibrations that the pressure deviations do not. For AMP, two fits deviate by 10.3 and 10.5% from the same fitted total pressures, yet the first gives 73 calculated liquid–liquid splits above 353 K, the highest temperature of the fitted loaded-solution pressures, and the second none. For MDEA, changing one shared MEA interaction lowers the deviation of the fitted total pressures from 20.1 to 11.2% but raises that of the CO₂ partial pressures outside the fit from 20.1 to 33.6%, and its searches confirm two calculated splits at states where none was found with the original value. The MEA and DEA models have no detected instability, and DEA is a negative result: with the adopted DEA pure-component and association parameters, no tested water–DEA interaction represents the binary excess enthalpies and bubble pressures together. The four models and their phase searches are offered as a testbed for calibration practice, in which a fit is judged by the phases it predicts as well as by its deviations, rather than as a basis for absorber design.
+An equation of state can reproduce the measured pressures of a solvent and still predict a liquid–liquid split that no measurement supports. Here a phase-stability search is used to find where such a calibration lacks data. Electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) models of aqueous monoethanolamine (MEA), diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) loaded with carbon dioxide (CO₂) share their water, CO₂ and inorganic-ion parameters, and each amine is fitted with its own species. A first AMP fit used loaded-solution pressures only up to 353 K. A tangent-plane search with electroneutral, reaction-constrained trial phases found liquid–liquid splits in it at 363–393 K, at 73 of 666 searched states, where total pressures had been measured but not fitted. With those pressures in the fit, no search detects an instability, and the reported AMP model deviates by 10.9% from its 105 fitted total pressures. The calculated splits thus marked where the fit lacked data; no measurement used here shows whether loaded AMP solutions form one liquid or two. The shared water–bicarbonate and water–carbonate interactions are fixed from osmotic coefficients of sodium salt solutions, because the MEA data do not determine them. Compared with fitting them to MEA data, this lowers the deviation of the fitted MDEA total pressures from 20.1 to 10.1% but raises that of 101 unfitted CO₂ partial pressures over MDEA from 17.9 to 38.4%, and the fitted DEA pressures also deviate more. The four models are calibrations for studying fitting practice, not a basis for absorber design.
 
 ## Keywords
 
-ePC-SAFT; monoethanolamine; diethanolamine; methyldiethanolamine; 2-amino-2-methyl-1-propanol; parameter transfer; phase stability.
+ePC-SAFT; monoethanolamine; diethanolamine; methyldiethanolamine; 2-amino-2-methyl-1-propanol; parameter estimation; phase stability.
 
 ## Data availability
 
-The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code under the MIT license; third-party measurements remain under the terms of their sources. They will be deposited in Zenodo, and the DOI will be added at submission. A software index in the deposit lists the versions, checksums and commands needed to repeat the calculations. The MEA calculations were made with version 1.3.0 of the epcsaft package, and the DEA, MDEA and AMP calculations with version 1.3.1. Referees will receive access to the compiled epcsaft package through the corresponding author.
+The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code under the MIT license; third-party measurements remain under the terms of their sources. They will be deposited in Zenodo, and the DOI will be added at submission. A software index in the deposit lists the versions, checksums and commands needed to repeat the calculations. The reported models were calculated with version 1.3.1 of the epcsaft package, and the comparison fits with the MEA-fitted shared set with versions 1.3.0 (MEA) and 1.3.1 (DEA, MDEA and AMP). Referees will receive access to the compiled epcsaft package through the corresponding author.
 
 ## Declarations and submission state
 
