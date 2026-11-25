@@ -14,7 +14,7 @@ sys.path.insert(0, str(HERE.parent / 'round_7'))
 from calculations import Route, a, r
 from receivers import AMP, DEA, ExpandedDEA
 from mdea_reference import FixedReference, predicates, route, seed_state, standard_derivatives
-from part_ii import eq, jsonable, reg, stable
+from part_ii import epcsaft, eq, jsonable, reg, stable
 from phases import fixed
 from classify_descents import COINCIDENCE, matched, pressure_roots
 from shared_bicarbonate_417 import dilute_vapor_connection
@@ -49,15 +49,44 @@ def selected_reference(spec, amine, component):
                              float(meta(q).get('source_row') or meta(q).get('row') or q['observation_order'])))
     return pool[len(pool)//2], source, len(pool)
 
-def derivative(spec, problem, pressure, feed_amine):
+def amp_caloric_model(spec, neutral, h0, s0):
+    P0 = spec.thermal.standard_pressure
+    zero = epcsaft.IdealInterval(250.,500.,True,True,
+        epcsaft.IdealCorrelation(epcsaft.IdealPolynomial([0.],350.,0.,0.),P0))
+    shifted = epcsaft.IdealInterval(250.,500.,True,True,
+        epcsaft.IdealCorrelation(epcsaft.IdealPolynomial([0.],350.,h0,s0),P0))
+    intervals = [[shifted] if k=='aminomethylpropanol' else [zero] if k in neutral else []
+                 for k in spec.parameters.component_ids]
+    return epcsaft.Mixture(spec.parameters, thermochemistry=epcsaft.ThermochemistryRecord(P0,intervals))
+
+def derivative(spec, problem, pressure, feed_amine, amine=None):
     problem.pressure = type(problem.pressure).fixed(pressure)
-    sol = eq.solve_equilibrium(spec.model, problem)
+    model = spec.model
+    sol = eq.solve_equilibrium(model, problem)
     assert sol.requested_tolerance_met, sol.message
-    rows = standard_derivatives(spec.model, problem, sol, gibbs_helmholtz=True)
+    warm = amine in ('MEA','DEA')
+    gauge = None
+    if amine == 'AMP':
+        neutral = ('water','carbon-dioxide','aminomethylpropanol')
+        model = amp_caloric_model(spec,neutral,0.,0.)
+        shifted = amp_caloric_model(spec,neutral,1000.,1.)
+        center, alternate = [eq.solve_equilibrium(m,problem) for m in (model,shifted)]
+        assert center.requested_tolerance_met and alternate.requested_tolerance_met
+        gauge = dict(neutral_species=neutral, shifted_species='aminomethylpropanol', anchor_T_K=350.,
+                     interval_K=[250.,500.], P_Pa=spec.thermal.standard_pressure, Cp_J_mol_K=0.,
+                     baseline=dict(h_J_mol=0.,s_J_mol_K=0.), shifted=dict(h_J_mol=1000.,s_J_mol_K=1.),
+                     max_center_x_difference=[max(abs(x-y) for x,y in zip(
+                         v.phase_mole_fractions(0),sol.phase_mole_fractions(0),strict=True)) for v in (center,alternate)])
+        sol = center
+    rows = standard_derivatives(model,problem,sol,gibbs_helmholtz=True,warm_start=warm)
+    if gauge:
+        shifted_rows = standard_derivatives(shifted,problem,alternate,gibbs_helmholtz=True)
+        for row, readback in zip(rows,shifted_rows,strict=True):
+            row['shifted_gauge'] = readback
     return dict(T_K=sol.temperature, P_Pa=pressure, feed_mol=feed(problem,spec.parameters.component_ids),
                 amount_mol=sol.amounts[0], x=sol.phase_mole_fractions(0), amine_feed_mol=feed_amine,
-                roots=pressure_roots(spec.model, sol.temperature, pressure, sol.phase_mole_fractions(0), sol.molar_densities[0]),
-                derivatives=rows)
+                roots=pressure_roots(model, sol.temperature, pressure, sol.phase_mole_fractions(0), sol.molar_densities[0]),
+                derivatives=rows, **({'caloric_gauge':gauge} if gauge else {}))
 
 def references(src, work):
     configs = [('MEA', None, src.core('E/selection.json')['parameters']),
@@ -77,9 +106,9 @@ def references(src, work):
             p.phases[0].amount = eq.Free()
             f = feed(bubble,spec.parameters.component_ids)
             n = f[component]+f.get(f"protonated-{component}",0)+f.get("carbamate-anion",0)
-            return dict(derivative(spec, reg.stability(spec.parameters,p,scale=1.).problem, solved.pressure, n), observation=row['identity'], source=source,
+            return dict(derivative(spec, reg.stability(spec.parameters,p,scale=1.).problem, solved.pressure, n, name), observation=row['identity'], source=source,
                         source_count=count, pressure_basis='calculated absolute total bubble pressure', source_row=row['row'])
-        work(name, 'fitted branch', fitted, 4-i)
+        work(name, {'MEA':'warm MEA', 'DEA':'warm DEA', 'AMP':'paired AMP gauges'}.get(name,'fitted branch'), fitted, 1)
     entry = grid_split(src)
     run, point = configs[-1][1:]
     spec = run.bind(point)
@@ -248,7 +277,8 @@ if __name__ == '__main__':
     r.verify()
     wheel = dict(wheel_sha256=r.SHA,engine_commit=r.COMMIT,installed_members_verified=True,
                  cpu_affinity=sorted(os.sched_getaffinity(0)))
-    write(OUT/'installed-wheel.json',wheel)
+    write(OUT/'installed-wheel.json',dict(wheel_sha256=r.SHA,engine_commit=r.COMMIT,wheel_filename=r.WHEEL.name,
+                                         installed_members_verified=True,cpu_affinity=wheel['cpu_affinity']))
     for arg in sys.argv[1:]:
         if not arg.startswith('--retry='):
             execute(int(arg))

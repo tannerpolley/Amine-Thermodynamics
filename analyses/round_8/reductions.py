@@ -24,32 +24,81 @@ def matched(s, group):
     return {m:dict(full=scores(list(rows.values())), matched=scores([rows[k] for k in sorted(keys)]),
                    missing=[r for r in rows.values() if r['value'] is None], common_keys=sorted(keys)) for m,rows in models.items()}
 
+def phase_outcome(value):
+    if any(q['confirmed'] for q in value.get('attempts',[])):
+        return 'confirmed split'
+    if 'instability' in value:
+        return ('unresolved phase identity' if value['instability']=='resolved descent' else value['instability'])
+    if value.get('search',{}).get('no_descent_in_trial_set'):
+        return 'finite search, no resolved descent'
+    return 'unresolved' if value.get('search',{}).get('completed') else 'unavailable'
+
 def reference(s, replay):
     data = {k:v['value'] for k,v in replay['rows'].items() if 'value' in v and 'derivatives' in v['value']}
     quantities = {}
+    difference = 'engine_minus_Gibbs_Helmholtz_kJ'
+    diagnostic = 'diagnostic_engine_minus_Gibbs_Helmholtz_kJ'
+    fields = ('eos_volume_m3','frozen_G_volume_m3','moving_G_volume_m3','correction_m3',
+              'engine_system_enthalpy_J','engine_frozen_at_same_pressure_J','Gibbs_Helmholtz_J','pressure_tracking_term_J')
     for k,v in data.items():
-        steps = v['derivatives']
-        fields = ('eos_volume_m3','frozen_G_volume_m3','moving_G_volume_m3','correction_m3',
-                  'engine_system_enthalpy_J','engine_frozen_at_same_pressure_J','Gibbs_Helmholtz_J','pressure_tracking_term_J')
-        reduced = [{f:q[f]/v['amine_feed_mol'] for f in fields if f in q} for q in steps]
-        quantities[k] = dict(steps=reduced, spread={f:max(q[f] for q in reduced)-min(q[f] for q in reduced)
-                             for f in fields if all(f in q for q in reduced)}, state={f:v[f] for f in v if f!='derivatives'})
+        n = v['amine_feed_mol']
+        reduced = []
+        for q in v['derivatives']:
+            step = {f:q[f]/n for f in fields if f in q}
+            if 'diagnostic_Gibbs_Helmholtz_J' in q and 'engine_system_enthalpy_J' in q:
+                step[diagnostic] = (q['engine_system_enthalpy_J']-q['diagnostic_Gibbs_Helmholtz_J'])/n/1000
+            if all(f in q for f in ('Gibbs_Helmholtz_J','engine_system_enthalpy_J')):
+                h, g = q['engine_system_enthalpy_J'],q['Gibbs_Helmholtz_J']
+                step[difference] = (h-g)/n/1000
+                alt = q.get('shifted_gauge',{})
+                if all(f in alt for f in ('Gibbs_Helmholtz_J','engine_system_enthalpy_J')):
+                    shift = v['caloric_gauge']['shifted']['h_J_mol']-v['caloric_gauge']['baseline']['h_J_mol']
+                    factor = v['T_K']**2/(v['T_K']**2-q['step_K']**2)
+                    dh, dg = (alt['engine_system_enthalpy_J']-h)/n, (alt['Gibbs_Helmholtz_J']-g)/n
+                    step['gauge_cancellation'] = dict(engine_shift_J_mol=dh, gibbs_shift_J_mol=dg,
+                          expected_engine_shift_J_mol=shift, expected_Gibbs_FD_shift_J_mol=shift*factor,
+                          difference_after_FD_bias_J_mol=(dh-dg)-shift*(1-factor))
+            reduced.append(step)
+        quantities[k] = dict(steps=reduced, step_K=[q['step_K'] for q in v['derivatives']],
+                             state={f:v[f] for f in v if f!='derivatives'})
+        if any(diagnostic in q for q in reduced) and all(diagnostic in q or difference in q for q in reduced):
+            values = [q.get(diagnostic,q.get(difference)) for q in reduced]
+            quantities[k]['diagnostic_spread_kJ'] = max(values)-min(values)
+        failures = [q for q in v['derivatives'] if 'caloric_refusal' in q]
+        if failures:
+            quantities[k]['caloric_refusals'] = {str(q['step_K']):q['caloric_refusal'] for q in failures}
+            residuals = {}
+            for q in failures:
+                for attempt in q.get('caloric_root_attempts',[]):
+                    if attempt['accepted']:
+                        residuals.pop(str(attempt['T_K']),None)
+                    elif (liquid := [r['relative_pressure_residual'] for r in attempt['roots'] if r.get('returned')=='liquid']):
+                        residuals.setdefault(str(attempt['T_K']),[]).append(min(liquid))
+            quantities[k]['failed_root_best_relative_residual'] = {t:min(values) for t,values in residuals.items()}
     if all(k in quantities for k in ('daughter-1','daughter-2')):
-        a,b = (quantities[f'daughter-{i}']['steps'] for i in (1,2))
-        quantities['daughters-sum'] = dict(steps=[{f:q[f]+r[f] for f in sorted(q.keys() & r.keys())} for q,r in zip(a,b,strict=True)])
+        a,b = (quantities[f'daughter-{i}'] for i in (1,2))
+        assert a['step_K']==b['step_K']
+        quantities['daughters-sum'] = dict(step_K=a['step_K'],steps=[
+            {f:q[f]+r[f] for f in sorted(q.keys() & r.keys())} for q,r in zip(a['steps'],b['steps'],strict=True)])
     for v in quantities.values():
         for q in v['steps']:
             if 'moving_G_volume_m3' in q:
                 q.update(correction_percent=100*q['correction_m3']/q['eos_volume_m3'],
                          slope_difference_m3=q['moving_G_volume_m3']-q['frozen_G_volume_m3']-q['correction_m3'])
-            if 'Gibbs_Helmholtz_J' in q and 'engine_system_enthalpy_J' in q:
-                q['engine_minus_Gibbs_Helmholtz_kJ']= (q['engine_system_enthalpy_J']-q['Gibbs_Helmholtz_J'])/1000
-    control = s.core('A/reference.json.gz')['low_pressure_controls']
-    complete = len(data)==7 and all('Gibbs_Helmholtz_J' in q for v in data.values() for q in v['derivatives'])
-    parent = quantities['parent']['steps'][-1]['correction_percent']
-    scope = 'Fitted rows and extrapolated split are the selected scope.' if complete else 'MEA and AMP caloric readbacks remain incomplete.'
-    return ('narrowed claim' if complete else 'undecided', f'The MDEA parent correction is {parent:.2f}% at 204.054 MPa. {scope}',
-            dict(branches=quantities, low_pressure_controls=control))
+        v['spread'] = {f:max(q[f] for q in v['steps'])-min(q[f] for q in v['steps'])
+                       for f in (*fields,difference) if all(f in q for q in v['steps'])}
+    low = s.core('A/reference.json.gz')['low_pressure_controls']
+    controls = {k:dict(outcome=phase_outcome(row['value']), replay=row['value']) if 'value' in row else row
+                for k,row in replay['rows'].items() if k in ('tracking','100-kPa')}
+    complete = len(quantities)==8 and all(difference in v['spread'] for v in quantities.values()) and all(
+        'gauge_cancellation' in q for q in quantities.get('AMP',{}).get('steps',[]))
+    parent = quantities['parent']
+    missing = [k for k,v in quantities.items() if difference not in v['spread']]
+    scope = ('Caloric comparisons cover the fitted rows and extrapolated split.' if complete else
+             f"The admitted caloric step spread remains unresolved for {', '.join(missing)}.")
+    return ('narrowed claim',
+            f"The MDEA parent correction is {parent['steps'][-1]['correction_percent']:.2f}% at {parent['state']['P_Pa']/1e6:.3f} MPa. {scope}",
+            dict(branches=quantities, low_pressure_controls=low, reference_controls=controls))
 
 def phases(s,replay):
     root = 'C/salt/'
@@ -95,10 +144,11 @@ def phases(s,replay):
                             attempt_outcomes=['confirmed' if a['confirmed'] else 'coalesced' if 'coalesced' in a['message'] else 'unresolved'
                                               for a in q['attempts']], search_evidence=row))
     strata['targeted'] = dict(attempts=1,distinct=1,confirmed=target['outcome']=='confirmed split')
+    grid = next(q for q in outcome['classifications'] if q['key'] in outcome['confirmed'])
     split = next(a for a in target['attempts'] if a['confirmed'])
     unclassified = sum('unclassified' in e['directions'] for e in entries if not e['key'].startswith('grid:'))
-    return ('narrowed claim' if unclassified else 'answered', f'The adopted model confirms a grid split at 204.054 MPa and a targeted split at 262.862 MPa. {unclassified} measured states include an unclassified direction.',
-            dict(fingerprint=selected,strata=strata, classifications=entries, targeted=dict(target,confirmed_attempt=split), counts=dict(total_descents=sum(r['descent'] for r in rows),
+    return ('narrowed claim' if unclassified else 'answered', f'The adopted model confirms a grid split at {grid["pressure_Pa"]/1e6:.3f} MPa and a targeted split at {target["P_Pa"]/1e6:.3f} MPa. {unclassified} measured states include an unclassified direction.',
+            dict(fingerprint=selected,strata=strata, classifications=entries, targeted=dict(target,confirmed_attempt=split), grid_confirmed=grid, counts=dict(total_descents=sum(r['descent'] for r in rows),
                 distinct_descents=len(entries), measured_two_liquid_attempted=sum(bool(e['attempts']) for e in entries if not e['key'].startswith('grid:')))))
 
 def dea(s,_):
@@ -123,7 +173,7 @@ def dea(s,_):
     feed=pairs[0]['phase']['feed_mol']
     closure={e:fsum(formulas[k].get(e,0)*(fsum(n*x[i] for n,x in zip(first['amounts_mol'],first['phases'],strict=True))-feed[i])
                     for i,k in enumerate(species)) for e in ('C','H','N','O','charge')}
-    return 'answered',f'Liquid density AARD is {scores(pairs)["AARD_percent"]:.5f}% across four predicted split feeds and {scores(pool)["AARD_percent"]:.5f}% across all 44 observations.',         dict(four=scores(pairs),all_44=scores(pool),rows=pairs,first_split=dict(first,species=species,daughters=daughter,closure_mol=closure))
+    return 'answered',f'Liquid density AARD is {scores(pairs)["AARD_percent"]:.5f}% across {len(pairs)} predicted split feeds and {scores(pool)["AARD_percent"]:.5f}% across all {len(pool)} observations.',         dict(four=scores(pairs),all_44=scores(pool),rows=pairs,first_split=dict(first,species=species,daughters=daughter,closure_mol=closure))
 
 def amp(s,replay):
     old=s.read('analyses/round_3/results/q1.json')['rows']
@@ -137,10 +187,9 @@ def amp(s,replay):
     assert all(r['historical']['P_Pa']==r['crosswalk']['observed']==r['adopted_bubble']['observed'] for r in rows)
     for row in rows:
         result = (row['adopted'] or {}).get('value',{})
-        row['outcome'] = ('confirmed split' if any(a['confirmed'] for a in result.get('attempts',[])) else
-                          'unresolved phase identity' if result.get('instability')=='resolved descent' else result.get('instability','unavailable'))
+        row['outcome'] = phase_outcome(result)
     confirmed=sum(r['outcome']=='confirmed split' for r in rows)
-    return 'narrowed claim',f'{confirmed} of six comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches.',         dict(rows=rows, archived_design=search['original_free'], worked_state=s.display('amp-common-pressure')['outcomes'],
+    return 'narrowed claim',f'{confirmed} of {len(rows)} comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches.',         dict(rows=rows, archived_design=search['original_free'], worked_state=s.display('amp-common-pressure')['outcomes'],
              added_pressure_rows=Counter(q['group'] for q in assessment.values() if q['group'] in ('tong','hartono-2021-supplemental')),
              hot_original=s.read('analyses/round_3/results/q2.json')['scores'],
              original_R5_control=s.read('analyses/amp_transfer/results/retransfer-412-f2-05e94210/diagnosis/f2-probes.json'),
@@ -194,17 +243,63 @@ def salts(s,_):
         models[f'{c}/{label}']['phase'] = dict(design=coverage(pool),common_keys=coverage([q for q in pool if q['key'] in common]))
         models[f'{c}/{label}']['confirmed'] = (s.core(f'C/{c}/search-outcome.json.gz')['confirmed'] if label=='refit' else
              s.read(MDEA+'salt-anchored-435/campaign/search-outcome.json.gz')['confirmed'] if c=='salt' else historical['liquid_liquid_splits_among_completed_searches'])
-    return 'answered',f'{counts["mixed"]}/45 mixed predictions are available. Pressure weighting improves the 66 fitted loaded totals and raises salt-set Carson heat AARD.',         dict(residuals=residuals,available=counts,models=models,properties={k:matched(s,k) for k in ('Kuranov','Ermatchkov','Xiao','Carson')})
+    properties = {k:matched(s,k) for k in ('Kuranov','Ermatchkov','Xiao','Carson')}
+    totals, heats = ([properties[k][f'salt/{label}']['matched'] for label in ('incumbent','refit')]
+                     for k in ('Kuranov','Carson'))
+    mixed_count = sum(q['salt']=='mixed' for q in residuals)
+    reason = (f'{counts["mixed"]}/{mixed_count} mixed predictions are available. '
+              f"Salt-set AARD changes from {totals[0]['AARD_percent']:.2f}% to {totals[1]['AARD_percent']:.2f}% on "
+              f"{totals[0]['available']} matched Kuranov pressures and from {heats[0]['AARD_percent']:.2f}% to "
+              f"{heats[1]['AARD_percent']:.2f}% on {heats[0]['available']} matched Carson heats.")
+    return 'answered',reason,dict(residuals=residuals,available=counts,models=models,properties=properties)
 
 def endpoints(s,replay):
     keys=('initial_cost','final_cost','physical','declared','status','message','maximum_elapsed_time_seconds')
     pairs={'MDEA':[s.core(f'C/salt/attempts/fit-{i}.json.gz') for i in range(3)],
            'AMP':[s.core(f'AMP/free/fit-{i}.json.gz') for i in range(2)],
            'MEA #435':[s.read(MEA+f'{label}/stage-0/fit.json')['result'] for label in ('F2','F4')]}
+    selected = s.core('C/salt/selection.json.gz')['selected'][2]
+    grid = s.core('C/salt/search-outcome.json.gz')
+    pressures = [next(q['pressure_Pa'] for q in grid['classifications'] if q['key'] in grid['confirmed'])]
+    pressures.append(s.core('C/salt/rms-fixed-pressures.json.gz')['pressure_262_MPa']['P_Pa'])
+    outstanding = {q['key']:q['reason'] for q in replay['outstanding']}
+    unavailable = {}
     out={}
     for name,pool in pairs.items():
         fits=[q.get('outcome.json',q).get('report',q) for q in pool]
-        out[name]=dict(inventory=[{k:q[k] for k in keys if k in q} for q in fits])
+        inventory=[]
+        for i,(archive,q) in enumerate(zip(pool,fits,strict=True)):
+            entry = {k:q[k] for k in keys if k in q}
+            label = ('F2','F4')[i] if name=='MEA #435' else f'fit-{i}'
+            entry.update(endpoint=label, initial_physical=[v['origin'] for v in q['declared']], phase={})
+            phase_keys = [f'{name}-{i}'] if name=='AMP' else [f'MEA-{label}']
+            if name=='MDEA':
+                stage, start = archive['stage-0/fit.json'],archive['start.json']['coordinates']
+                assert [v['identity'] for v in start]==[v['identity'] for v in q['declared']]
+                assert archive['stage-1/fit.json']['physical']==q['physical']
+                entry.update(initial_cost=stage['initial_cost'], initial_physical=[v['origin'] for v in start],
+                             start_replay_cost=archive['start-replay.json']['cost'],
+                             terminal_stage_initial_cost=q['initial_cost'], stage_0_physical=stage['physical'],
+                             stage_0_final_cost=stage['final_cost'], stage_0_status=stage['status'],
+                             stage_0_message=stage['message'], adopted=archive['outcome.json']['point']==selected)
+                phase_keys = [f'MDEA-{i}:{p}' for p in pressures] if i<2 else []
+            for key in phase_keys:
+                row = replay['rows'].get(key,{})
+                if 'value' in row:
+                    value = row['value']
+                    if name=='MDEA':
+                        assert value['P_Pa']==float(key.split(':',1)[1])
+                    phase = dict(outcome=phase_outcome(value), P_Pa=value['P_Pa'],
+                                 attempts=value.get('attempts',[]), search=value.get('search'))
+                    if phase['outcome'] in ('unavailable','unresolved','unresolved phase identity'):
+                        unavailable[key] = value.get('status',value.get('search',{}).get('message'))
+                else:
+                    cause = row.get('refusal') or outstanding.get(key) or 'missing replay'
+                    phase = dict(outcome='refused' if 'refusal' in row else 'outstanding', cause=cause)
+                    unavailable[key] = cause
+                entry['phase'][key] = phase
+            inventory.append(entry)
+        out[name]=dict(inventory=inventory)
         out[name]['coordinate_changes']=[dict(identity=q['identity'],change=b-a,box_scaled=(b-a)/(q['bounds'][1]-q['bounds'][0]),
             bounds=q['bounds'],active=[min(abs(v-x) for x in q['bounds'])<=1e-6*q['scale'] for v in (a,b)])
             for i,q in enumerate(fits[0]['declared']) for a,b in [(fits[0]['physical'][i],fits[1]['physical'][i])]]
@@ -227,24 +322,34 @@ def endpoints(s,replay):
                                           if q['value'] is not None and v['value'] is not None}
     out['MEA #435']['finite_searches']={label:s.read(MEA+f'{label}/search/summary.json')['result'] for label in ('F2','F4')}
     out['round7_F4_display_excluded']=s.display('mea-heat-sensitivity')['sources']
-    missing=[k for k,v in replay['rows'].items() if 'refusal' in v]
-    return ('undecided' if missing else 'narrowed claim'), 'The 17.401 and 17.600 MDEA endpoints differ at 204.054 MPa. The selected MEA and AMP endpoint pairs have no resolved descent at their common controls.', dict(out,unavailable=missing)
+    adopted, = (q for q in out['MDEA']['inventory'] if q['adopted'])
+    reason = []
+    for key,result in adopted['phase'].items():
+        pressure = float(key.split(':',1)[1])/1e6
+        reason.append(f"Adopted MDEA {adopted['endpoint']} at {pressure:.3f} MPa: {result['outcome']}.")
+    return ('undecided' if unavailable else 'narrowed claim'), ' '.join(reason), dict(out,unavailable=unavailable)
 
-def literature(s,_):
+def literature(s,replay):
     row=s.core('H/kuranov-82nd.json')
     population=s.read(MDEA+'salt-anchored-435/kuranov-matched-pressure.json.gz')['rows']
     assert len(population)==len({q['source_row'] for q in population})==82
     pressure=s.display('kuranov-row-72')['prediction']
     fit={q['row']['source_row']:q for q in s.core('C/salt/refit.json.gz')['rows'] if q['group'] in ('Kuranov','Kuranov-binary','Kuranov-413K')}
+    readback = replay['rows']['kuranov:72']['value']
+    assert (readback['row']['source_row'],readback['unit'],readback['observed']) == (
+        pressure['row']['source_row'],pressure['unit'],pressure['observed'])
     current=[pressure if q['source_row']==72 else fit[str(q['source_row'])] for q in population]
     assert all(p['observed']==q['p_exp'] for p,q in zip(current,population,strict=True))
     hong=s.core('H/hong-S31.json.gz')['rows']
     inside=[q for q in hong.values() if q['block']=='canonical' and q['inside_hong_grid']=='True']
     failed=sum(q['stability']=='locally unstable' for q in inside)
     assert len(inside)==132 and failed==131
-    return 'answered',f'Kuranov AARD is {scores(current)["AARD_percent"]:.2f}% on 82 matched rows. The corrected Kamps pool has 27 common keys. Hong fails local stability at {failed}/132 equal-fugacity states.',         dict(kuranov=dict(source_rows=[q['source_row'] for q in population],current=scores(current),additional_row=row['row'],
+    kamps = matched(s,'corrected-Kamps')
+    common, = {len(q['common_keys']) for q in kamps.values()}
+    return 'answered',f'Kuranov AARD is {scores(current)["AARD_percent"]:.2f}% on {len(current)} matched rows. The corrected Kamps pool has {common} common keys. Hong fails local stability at {failed}/{len(inside)} equal-fugacity states.',         dict(kuranov=dict(source_rows=[q['source_row'] for q in population],current=scores(current),additional_row=row['row'],
+                          readback=readback,readback_minus_archived_Pa=readback['value']-pressure['value'],
                           published={'Uyan':22.9,'Wangler':19.7,'Raeispour Shirazi and Lotfollahi':10.9,'Zhang and Chen':6.8}),
-             kamps=matched(s,'corrected-Kamps'),published_Kamps_28={'Ermatchkov I':1.9,'Ermatchkov II':3.5},
+             kamps=kamps,published_Kamps_28={'Ermatchkov I':1.9,'Ermatchkov II':3.5},
              hong=dict(vapor_amount_fraction_of_feed=1e-9,inside_count=len(inside),local_failures=failed,
                        matched_scores={k:scores([dict(value=float(q[k]),observed=float(q['observed'])) for q in inside])
                                        for k in ('predicted','adopted','polley_hedengren_2026')},

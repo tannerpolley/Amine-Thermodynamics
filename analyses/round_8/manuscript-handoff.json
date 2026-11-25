@@ -3,11 +3,11 @@
   "display_snapshot": "be3e316c5",
   "items": {
     "C1": {
-      "disposition": "undecided",
-      "reason": "The MDEA parent correction is -14.46% at 204.054 MPa. MEA and AMP caloric readbacks remain incomplete.",
+      "disposition": "narrowed claim",
+      "reason": "The MDEA parent correction is -14.46% at 204.054 MPa. The admitted caloric step spread remains unresolved for DEA.",
       "runtime": {
-        "replay_s": 58.022632341991994,
-        "reduction_s": 0.029492781002772972,
+        "replay_s": 131.3748234329978,
+        "reduction_s": 0.039658813999267295,
         "projection_s": 210
       },
       "quantities": {
@@ -18,16 +18,20 @@
         "low_pressure_controls": {
           "record": "results/reference-derivatives.json.gz",
           "field": "quantities.low_pressure_controls"
+        },
+        "reference_controls": {
+          "record": "results/reference-derivatives.json.gz",
+          "field": "quantities.reference_controls"
         }
       },
-      "record_sha256": "12544cec9e01a7d81f4c4a563df677b9ae79f351cbe27318f180b0f9611ac8a5"
+      "record_sha256": "283e1a92801b3f137f86d3bfd86993b3608235f2e2629ea75ee703e3857ea6b1"
     },
     "C2": {
       "disposition": "answered",
       "reason": "The adopted model confirms a grid split at 204.054 MPa and a targeted split at 262.862 MPa. 0 measured states include an unclassified direction.",
       "runtime": {
         "replay_s": 3.6719462889886927,
-        "reduction_s": 0.34497110900701955,
+        "reduction_s": 0.3603833160013892,
         "projection_s": 85
       },
       "quantities": {
@@ -47,19 +51,23 @@
           "record": "results/mdea-phase-outcomes.json.gz",
           "field": "quantities.targeted"
         },
+        "grid_confirmed": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.grid_confirmed"
+        },
         "counts": {
           "record": "results/mdea-phase-outcomes.json.gz",
           "field": "quantities.counts"
         }
       },
-      "record_sha256": "bdec080e56377a41b6bc0e813759920e55d15641ccfcce9c578571b9b78d1553"
+      "record_sha256": "cf1636ff86abb4fa28ad66b2881e06b5ae5c7abf206284d84f180eee1921ac49"
     },
     "C3": {
       "disposition": "answered",
-      "reason": "Liquid density AARD is 0.14782% across four predicted split feeds and 0.44704% across all 44 observations.",
+      "reason": "Liquid density AARD is 0.14782% across 4 predicted split feeds and 0.44704% across all 44 observations.",
       "runtime": {
         "replay_s": 0,
-        "reduction_s": 0.019271021999884397,
+        "reduction_s": 0.018758356003672816,
         "projection_s": 10
       },
       "quantities": {
@@ -80,14 +88,14 @@
           "field": "quantities.first_split"
         }
       },
-      "record_sha256": "478da1d8c7b03e246cd1ed807b89c700174a2e0ed887e1cdb24e4b8898795c96"
+      "record_sha256": "8c7dc0a2ce49e77288c78049504eaecc04d6901344caf17cc6e1f8903481c865"
     },
     "C4": {
       "disposition": "narrowed claim",
-      "reason": "0 of six comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches.",
+      "reason": "0 of 6 comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches.",
       "runtime": {
         "replay_s": 5.1424285960092675,
-        "reduction_s": 0.17040828500466887,
+        "reduction_s": 0.1687601189914858,
         "projection_s": 12
       },
       "quantities": {
@@ -124,14 +132,14 @@
           "field": "quantities.grid"
         }
       },
-      "record_sha256": "8b328a73de040c2d8a9b8c0964d9514f6810bf608d7c32a1aab047b65c471db4"
+      "record_sha256": "118bf50545569f54cb4c07a5356910d4b27f40a5df35b10f3899fa9f35101422"
     },
     "C5": {
       "disposition": "answered",
-      "reason": "39/45 mixed predictions are available. Pressure weighting improves the 66 fitted loaded totals and raises salt-set Carson heat AARD.",
+      "reason": "39/45 mixed predictions are available. Salt-set AARD changes from 10.12% to 4.15% on 66 matched Kuranov pressures and from 5.12% to 18.69% on 40 matched Carson heats.",
       "runtime": {
         "replay_s": 0,
-        "reduction_s": 0.44001113600097597,
+        "reduction_s": 0.4244316139956936,
         "projection_s": 20
       },
       "quantities": {
@@ -152,14 +160,14 @@
           "field": "quantities.properties"
         }
       },
-      "record_sha256": "c7bffef866fcaa36d05b750e8ce9d61b1bab3ea8e6514a4cc403eddf1a5e96a7"
+      "record_sha256": "32d5e9fcc49a71132fc5360bd4d4b82637cc7e7251c1e8d122302caf3b28fd42"
     },
     "C6": {
       "disposition": "narrowed claim",
-      "reason": "The 17.401 and 17.600 MDEA endpoints differ at 204.054 MPa. The selected MEA and AMP endpoint pairs have no resolved descent at their common controls.",
+      "reason": "Adopted MDEA fit-0 at 204.054 MPa: confirmed split. Adopted MDEA fit-0 at 262.862 MPa: confirmed split.",
       "runtime": {
         "replay_s": 7.202562826991198,
-        "reduction_s": 0.1501665179966949,
+        "reduction_s": 0.1571490670030471,
         "projection_s": 45
       },
       "quantities": {
@@ -184,14 +192,14 @@
           "field": "quantities.unavailable"
         }
       },
-      "record_sha256": "b47ab9672126c607a0591009d8fac7a34cfaaaf35dea5d362c510a38abc2b98d"
+      "record_sha256": "79e8b07c2515f219292312b5d6725dffd971c3b12b1c20f98aff01d2875bc5ff"
     },
     "C7": {
       "disposition": "answered",
       "reason": "Kuranov AARD is 4.16% on 82 matched rows. The corrected Kamps pool has 27 common keys. Hong fails local stability at 131/132 equal-fugacity states.",
       "runtime": {
         "replay_s": 0.3439490449964069,
-        "reduction_s": 0.0977313039911678,
+        "reduction_s": 0.09605435200501233,
         "projection_s": 8
       },
       "quantities": {
@@ -216,7 +224,7 @@
           "field": "quantities.published_table_snapshot"
         }
       },
-      "record_sha256": "bcde55402285346f18009221077431c4b6d9add19e4c8351e2cede6e8b5f1eb0"
+      "record_sha256": "42afef46d3cb84ade94763cf9cc50b21ed1b51286891de278404c72956826217"
     }
   }
 }
