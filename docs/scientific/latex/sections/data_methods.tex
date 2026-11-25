@@ -57,15 +57,19 @@ with the logarithmic form for pressures.
 Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
 Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective.
-The loaded-solution pressures contribute 94.0\,\% of the DEA objective and 97.1\,\% of the AMP objective.
+The loaded-solution pressures contribute 94.0\,\% of the DEA objective and 97.0\,\% of the AMP objective.
 In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
-There the loaded total pressures contribute 32.9\,\% and the 24 densities of the \COtwo-free solution 11.0\,\%.
-In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute 59.9\,\% of the objective value, 152.96, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
+There the loaded total pressures contribute 41.3\,\% and the 24 densities of the \COtwo-free solution 12.6\,\%.
+In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute 59.9\,\% of the objective value, 152.93, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
-Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; Table~\ref{supp-tab:supplement-fit-starts} lists every start.
-The two starts reach the same objective value within a relative $10^{-6}$ for MEA and $10^{-10}$ for DEA and AMP, and two of the three MDEA starts end within 1.2\,\% of each other, at 17.401 and 17.600, the third far higher, at 148.906.
-These are local solutions: no wider search over starting sets has been made, and the two MEA starts descend from the 16-parameter calibration described next.
+Each fit is started from the parameters of the same fit made with the R1--R3 references at the system pressure (\cref{sec:reactions}) and from displaced starts drawn from a 64-point Latin hypercube over the parameter box; a drawn start that cannot be evaluated is replaced by the next draw, and Table~\ref{supp-tab:supplement-fit-starts} lists every start.
+For MEA, DEA and AMP, three starts at least 0.42 apart in root-mean-square distance on the unit parameter box reach the same objective value within the function tolerance of the optimizer.
+With the AMP slope fixed (\cref{sec:results-phase}) the starts end in two minima, 76.23 and 2741.26, and the lower is reported.
+For MDEA only one of the 64 drawn starts could be evaluated, and it ended far higher, at 48386.5, so the MDEA fit is provisional: whether the rest of the parameter box admits an evaluable start, or a lower minimum, is undecided.
+No endpoint meets the strict projected-gradient criterion.
+For MEA, DEA and AMP the optimizer stopped on its relative function tolerance, and linearized descent steps from the endpoints, replayed independently, change the objective by less than $10^{-10}$ of its value, consistent with that tolerance; for MDEA the shortest such step lowers it by $6.6\times10^{-8}$ of its value, more than the tolerance, so the MDEA endpoint is also not converged to that tolerance.
+These are local solutions, and their robustness is established only for the starts run (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-restrictions
 For MEA the joint fit is also made with fewer restrictions.
