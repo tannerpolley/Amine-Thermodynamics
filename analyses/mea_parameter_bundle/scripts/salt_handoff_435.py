@@ -248,6 +248,17 @@ def parameters():
         if case.startswith('AMP'):
             yield f'{LABEL[case]} · protonated AMP–water reciprocal slope', 'K', record(CURRENT[case]+'selection.json.gz', (), ('slope_K',), 214), record(PREVIOUS[case], (), ('slope_K',), 214)
 
+    keys = ('point', 'reactions', 'aqueous', 4)
+    coefficients = []
+    for paths in ((CURRENT[case]+'selection.json.gz' for case in ('AMP', 'AMP fixed')),
+                  (PREVIOUS[case] for case in ('AMP', 'AMP fixed'))):
+        cells = []
+        for family, path in zip(('free', 'fixed'), paths, strict=True):
+            assert value_at(path, keys)['name'] == 'carbamate-hydrolysis'
+            cells.append(f'{family} · ' + record(path, (*keys, 'correlation'), ('b',), '214 fitted rows'))
+        coefficients.append('<br>'.join(cells))
+    yield 'AMP completed carbamate-hydrolysis law · b (zero enthalpy increment is the completed-law coordinate origin)', 'K', *coefficients
+
 
 def deviations():
     fields = ('AARD_percent', 'bias_percent', 'relative_rows', 'rows')
@@ -260,6 +271,16 @@ def deviations():
             yield label, '% / % / counts', record(path, ('groups', i, 'new'), fields, r['count'], '.2f'), record(path, ('groups', i, 'prior'), fields, r['count'], '.2f')
             if r['new']['relative_rows'] != r['prior']['relative_rows'] or r['unavailable_new'] or r['unavailable_prior']:
                 yield label + ' · matched available pairs', '% / % / counts', record(path, ('groups', i, 'matched_new'), fields, r['count'], '.2f'), record(path, ('groups', i, 'matched_prior'), fields, r['count'], '.2f')
+    group, reaction = 'Bottinger-HCO3', 'carbamate-hydrolysis'
+    path = CURRENT['DEA'] + 'data-rows.json.gz'
+    rows = [r for r in read(path) if r['group'] == group and r['outside_ranges'][reaction] is False]
+    old = DEA.replace('refit-413', 'r4-shift-426') + 'reported-deviations.csv'
+    (i, prior), = [(i, r) for i, r in enumerate(read(old)) if
+                   (r['group'], r['band'], r['reaction'], r['outside_range']) == (group, 'all', reaction, 'False')]
+    yield 'DEA bicarbonate within the R4 (carbamate-hydrolysis) source range', '% / % / counts', cell(
+        rates(rows, 'value'), path, f'{group}: outside_ranges[{reaction!r}] == false, value/observed/status', len(rows), '.2f'), cell(
+        (float(prior['AARD_percent']), float(prior['bias_percent']), int(prior['relative_rows']), int(prior['available'])),
+        old, f'[{i}].AARD_percent/bias_percent/relative_rows/available', int(prior['rows']), '.2f')
     species = {"['monoethanolamine', 'protonated-monoethanolamine']": 'MEA + MEAH+',
                "['monoethanolamine']": 'MEA', "['protonated-monoethanolamine']": 'MEAH+',
                "['carbamate-anion']": 'MEACOO-',
@@ -342,7 +363,17 @@ def searches():
     new = CURRENT['DEA'] + 'selection.json.gz'
     old = PREVIOUS['DEA']
     keys = ('chosen', 'search', 'grid')
-    yield f'DEA grid · {label}', 'states', search_cell(new, keys), search_cell(old, keys)
+    for group, cohort in (('data', 'data states'), ('grid', 'constructed grid states')):
+        cells = []
+        for path in (new, old):
+            tally = value_at(path, keys)
+            n = sum(tally['branches'][group]['native'].values())
+            incomplete = sum(key.startswith('grid:') == (group == 'grid') for key in tally['unavailable'])
+            assert tally['descent'] == 0, f'{path}: a nonzero descent count requires the state records'
+            cells.append(cell((n-incomplete, n, tally['descent'], tally['liquid_liquid_splits'][group], incomplete),
+                              path, f'{keys!r}: branches.{group}.native / unavailable by grid: prefix / descent / liquid_liquid_splits.{group}',
+                              f'{n} state records'))
+        yield f'DEA {cohort} · {label}', 'states', *cells
     refusals = [{r['key']: i for i, r in enumerate(value_at(p, keys)['unavailable_searches'])} for p in (new, old)]
     for key in dict.fromkeys((*refusals[0], *refusals[1])):
         yield f'DEA search refusal · {key}', '1', *(
@@ -392,8 +423,10 @@ def searches():
         j = next(j for j, r in enumerate(split['attempts']) if r['confirmed'])
         fields = ('Gibbs_decrease_over_RT_mol', 'numerical_error_over_RT_mol')
         yield f'MDEA confirmed grid split · {key} · T / absolute P', 'K / Pa', record(new, ('classifications', i), ('temperature_K', 'pressure_Pa'), '1 mol MDEA'), record(old, (prior_index,), ('T_K', 'pressure_Pa'), 'same grid key, pressure missing from archive')
+        assert before[prior_index]['descent'] is False
         yield 'MDEA confirmed grid split · Gibbs decrease / paired numerical error', 'mol (G/RT)', record(
-            new, ('classifications', i, 'attempts', j), fields, '1 mol MDEA'), record(old, (prior_index,), ('descent',), 'same grid key, no descent')
+            new, ('classifications', i, 'attempts', j), fields, '1 mol MDEA'), cell(
+            (None, None), old, f'[{prior_index}].descent', 'same grid key, no descent in the prior search')
 
     for family, case in (('free', 'AMP'), ('fixed', 'AMP fixed')):
         for protocol in ('native', 'supplied'):
