@@ -22,8 +22,8 @@ def bubble_problem(p):
                               eq.Phase('V',kind='vapor',support=s.COMPONENT_IDS[:3],amount=eq.Pinned(0.))])
 
 
-def preparations(mapping):
-    spec = r.bind(mapping)
+def preparations(mapping, reaction_reference_pressure_pa=None):
+    spec = r.bind(mapping, reaction_reference_pressure_pa=reaction_reference_pressure_pa)
     spec.inputs['endpoint'] = mapping
     records = expanded(spec)
     source_template = next(iter(requests()[0].values()))['request']
@@ -36,10 +36,10 @@ def preparations(mapping):
     return spec, {q['identity']:q for q in records}
 
 
-def calculations(mapping, reference, names, solver_factor=1.):
+def calculations(mapping, reference, names, solver_factor=1., reaction_reference_pressure_pa=None):
     a.study.reuse.bind_wheel()
     r.verify()
-    spec, records = preparations(mapping)
+    spec, records = preparations(mapping,reaction_reference_pressure_pa)
     prior, baseline = preparations(reference)
     bank = [dict(w,kind=w['kind'].capitalize()) for w in r.read(BASE/'split-registry.json')['trials']]
     for identity in names:
@@ -157,7 +157,7 @@ def chunk(args):
     return list(calculations(*args))
 
 
-def measured(mapping, label):
+def measured(mapping, label, *, reaction_reference_pressure_pa=None, pilot_only=False):
     start = monotonic()
     reference = s.parameter_mapping(REFERENCE/'F4/parameters.json')
     spec, rows = preparations(reference)
@@ -174,9 +174,11 @@ def measured(mapping, label):
         output.extend(payload)
     pilot_path = OUT / f'E/{label}/measured-pilot.json.gz'
     if not pilot_path.is_file():
-        pilot = chunk((mapping,reference,names[::37]))
+        pilot = chunk((mapping,reference,names[::37],1.,reaction_reference_pressure_pa))
         save(pilot_path,dict(rows=pilot, seconds=monotonic()-start,
              estimate_worker_s=sum(x['seconds'] for x in pilot)*len(names)/len(pilot),states=len(names)))
+    if pilot_only:
+        return r.read(pilot_path)
     pending = {}
     for i,batch in enumerate(batches):
         path = OUT / f'E/{label}/measured/{i}.json.gz'
@@ -193,7 +195,7 @@ def measured(mapping, label):
             output.extend(retained.values())
     with ProcessPoolExecutor(r.CORES) as pool:
         for (i,(_,old)),fresh in zip(pending.items(),
-                pool.map(chunk,[(mapping,reference,names) for names,_ in pending.values()]),strict=True):
+                pool.map(chunk,[(mapping,reference,names,1.,reaction_reference_pressure_pa) for names,_ in pending.values()]),strict=True):
             if old:
                 old.update({x['identity']:x for x in fresh})
                 fresh = list(old.values())

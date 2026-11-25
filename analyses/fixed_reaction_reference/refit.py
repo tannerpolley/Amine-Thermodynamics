@@ -4,6 +4,7 @@ from copy import copy, deepcopy
 import csv
 from hashlib import sha256
 from itertools import combinations
+from math import fsum
 import os
 from pathlib import Path
 import sys
@@ -139,7 +140,7 @@ def replay(spec):
     records = spec.inputs['observations']['fitted']
     rows = r.d.evaluate(spec, records)
     return dict(rows=rows, attempted=len(rows), refused=sum('cost' not in row for row in rows),
-                cost=sum(row['cost'] for row in rows) if all('cost' in row for row in rows) else None)
+                cost=fsum(row['cost'] for row in rows) if all('cost' in row for row in rows) else None)
 
 
 def salt_controls():
@@ -323,7 +324,7 @@ def endpoint_diagnostics(spec, fit_replay, point, controls):
     return values
 
 
-def attempt(name, label):
+def attempt(name, label, continuation=False):
     manifest = r.read(OUT/f'{name}/manifest.json.gz')
     run, _, _ = configured(name, 'fixed')
     point = manifest['start_A_declaration']
@@ -332,13 +333,21 @@ def attempt(name, label):
     controls.setdefault('maximum_elapsed_time_seconds', 1.5*ALLOWANCE[name])
     if label=='A-loose':
         controls['function_tolerance'] = 1e-6
-    spec.spec['optimizer'] = controls
     u = manifest['starts']['A' if label=='A-loose' else label]['optimizer']
+    filename = f'{name}/{label}.json.gz'
+    previous = r.read(OUT/filename) if continuation else None
+    if previous:
+        assert previous['report']['status']=='limit_reached' and previous['replay_passed']
+        assert previous['controls']==controls
+        point = previous['endpoint']
+        spec = run.bind(point)
+    spec.spec['optimizer'] = controls
     tick = monotonic()
-    _, report, _ = spec.fit(starts=[u])
+    _, report, _ = spec.fit(starts=None if continuation else [u])
     record = dict(start=label, controls=controls, wheel=r.SHA, manifest_fingerprint=fingerprint(manifest),
                   optimizer_start=u, report=report, fit_seconds=monotonic()-tick)
-    filename = f'{name}/{label}.json.gz'
+    if previous:
+        record['previous_stage'] = previous
     put(filename, record)
     if report['physical'] and report['reactions']:
         endpoint = run.endpoint_mapping(point,report,point['coordinates'])
@@ -358,6 +367,21 @@ def attempt(name, label):
     put(filename,record)
     print(name,label,report['status'],report['initial_cost'],report['final_cost'],
           record.get('replay_passed'),record['fit_seconds'],record.get('replay_seconds'),flush=True)
+    return record
+
+
+def continue_fit(name,label):
+    path = OUT/f'{name}/{label}.json.gz'
+    record = r.read(path)
+    stages = 1
+    previous = record
+    while 'previous_stage' in previous:
+        stages += 1
+        previous = previous['previous_stage']
+    # The round-7 producer uses at most two same-control continuations.
+    while stages < 3 and record['report']['status']=='limit_reached' and record.get('replay_passed'):
+        record = attempt(name,label,continuation=True)
+        stages += 1
 
 
 def select(name):
@@ -375,6 +399,37 @@ def select(name):
                   for label,v in records.items()}))
 
 
+def initial_replay(name, label):
+    """Independent native row evaluation at an unchanged declared start."""
+    manifest = r.read(OUT/f'{name}/manifest.json.gz')
+    run,_,_ = configured(name,'initial-evaluation')
+    spec = run.bind(manifest['start_A_declaration'])
+    rows = spec.inputs['observations']['fitted']
+    optimizer = manifest['starts'][label]['optimizer']
+    tick = monotonic()
+    try:
+        ev = reg.differentiate(spec.parameters,spec.coordinates(),[spec.observation(q) for q in rows],
+                               optimizer=optimizer,thermochemistry=spec.thermal)
+    except (ValueError,RuntimeError) as error:
+        attempt = r.read(OUT/f'{name}/{label}.json.gz')
+        failure = next(iter(attempt['report']['failures']),{})
+        index = failure.get('observation')
+        put(f'{name}/initial/{label}.json.gz',dict(refusal=str(error),
+            matches_fit_failure=str(error)==failure.get('message'), failure=failure,
+            row=rows[index] if index is not None and index<len(rows) else None,
+            reported_population=len(rows),seconds=monotonic()-tick, manifest_fingerprint=fingerprint(manifest),wheel=r.SHA))
+        return
+    values = []
+    for i,(q,status) in enumerate(zip(rows,ev.statuses,strict=True)):
+        available = status.name=='Available'
+        values.append(dict(identity=q['identity'],group=q['group'],status=status.name,
+                           observed=q['arguments']['observed'],prediction=ev.predictions[i] if available else None,
+                           weighted_residual=ev.residuals[i]*np.sqrt(q['weight']) if available else None))
+    put(f'{name}/initial/{label}.json.gz',dict(rows=values,attempted=len(rows),
+        refused=sum(x['status']!='Available' for x in values),seconds=monotonic()-tick,
+        manifest_fingerprint=fingerprint(manifest),wheel=r.SHA))
+
+
 if __name__ == '__main__':
     a.study.reuse.bind_wheel()
     r.verify()
@@ -383,4 +438,5 @@ if __name__ == '__main__':
         for design in (name,*args):
             prepare(design,controls_only=True)
     else:
-        {'prepare':prepare,'attempt':attempt,'select':select}[action](name,*args)
+        {'prepare':prepare,'attempt':attempt,'continue':continue_fit,
+         'select':select,'initial':initial_replay}[action](name,*args)

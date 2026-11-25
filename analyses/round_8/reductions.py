@@ -4,7 +4,10 @@ from decimal import Decimal
 from math import fsum, log
 from statistics import mean
 import sys
-from records import DISPLAY, MEA, MDEA, SALT, ROOT
+if __package__:
+    from .records import DISPLAY, MEA, MDEA, SALT, ROOT
+else:
+    from records import DISPLAY, MEA, MDEA, SALT, ROOT
 
 sys.path.insert(0,str(ROOT/'src'))
 from MEA.common.retained_results import parameter_fingerprint  # noqa: E402

@@ -90,8 +90,8 @@ def statistics(rows):
                 log_RMSE=math.sqrt(math.fsum(math.log1p(e)**2 for e in error)/len(error)) if error else None)
 
 
-def replay(mapping, label):
-    spec = r.bind(mapping)
+def replay(mapping, label, *, reaction_reference_pressure_pa=None, output=OUT):
+    spec = r.bind(mapping, reaction_reference_pressure_pa=reaction_reference_pressure_pa)
     spec.inputs['endpoint'] = mapping
     records = expanded(spec)
     values = r.d.evaluate(spec, records)
@@ -124,7 +124,7 @@ def replay(mapping, label):
                    expanded_cost=costs[1], pressure={name:statistics(rows) for name,rows in pools.items()},
                    metrics=metrics, relative_to_F2=r.acceptance(metrics,r.metrics(baseline)) if metrics else None,
                    relative_to_incumbent=r.acceptance(metrics,r.metrics(inc)) if metrics else None)
-    save(OUT / f'E/{label}/replay.json.gz', dict(summary=summary, rows=values, hot_wagner=wagner,
+    save(output / f'E/{label}/replay.json.gz', dict(summary=summary, rows=values, hot_wagner=wagner,
           pressure_population=membership(), source_hashes={p.relative_to(r.ROOT).as_posix():s.sha256(p) for p in (S6,s.CANONICAL_VLE)}))
     print(label, costs, summary['pressure']['hot_expanded'], summary['pressure']['hot_published'], flush=True)
     return summary
