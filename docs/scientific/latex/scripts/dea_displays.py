@@ -1649,6 +1649,42 @@ say('supplement.tex', origins[0], *origins[3:],
     f"by {q4a['rows'][0]['pCO2_change']['absolute']:.5f} and " + rf"\SI{{{q4a['rows'][1]['pCO2_change']['absolute']:.2f}}}{{\pascal}}", f"from ${q4a['heat_previous_kJ_mol']:.3f}$ to " + rf"\SI{{{q4a['heat_previous_kJ_mol'] + q4a['heat_change']['absolute']:.3f}}}",
     f"distance of $+{q6d['trial_minimum']:.4f}$", f"give $+{q6d['vapor_connected_minimum']:.4f}$", f"recovers all {q7['recovered']} detected instabilities and finds none at the other {q7['searched_negatives']} states",
     f"from {first['cost']:.4f} to {second['cost']:.4f}", rf"from {f1(lowT(first['original']['rows'], 'loaded-pressure'))} to {f1(lowT(second['original']['rows'], 'loaded-pressure'))}\,\%")
+# Fixed 100 kPa references (#429, #440): the text now states these values from the selected fits.
+# Read directly so the source index of the displays is unchanged; each value is traced to a #440 record or to a display that final_rerun_tables.py checks.
+FXR = ROOT / 'analyses/fixed_reaction_reference'
+fxload = lambda name: json.loads(gzip.decompress((FXR / name).read_bytes()) if name.endswith('.gz') else (FXR / name).read_bytes())
+fxq = fxload('manuscript-handoff.json')['quantities']
+fx = lambda key: fxq[key]['new']
+fxrow = lambda table, label: re.search(re.escape(label) + r'.*?\\\\', (LATEX / 'tables' / table).read_text()).group(0)
+fxnum = lambda text: re.findall(r'\$(-?[0-9.]+)\$', text)
+fxmea = f"{fx('MEA pressure legacy AARD_percent'):.2f}"
+fxcarb = [r['value'] / r['observed'] for r in fxload('results/display-replays/mea-comparisons.json.gz')['carbonate_share']]
+fxcai = [r['cost'] for r in fxload('results/MEA/A.json.gz')['replay']['rows'] if r['group'] == 'Cai']
+assert len(fxcarb) == 10 and len(fxcai) == 50 and math.isclose(fx('MEA selected objective'), math.fsum(r['cost'] for r in fxload('results/MEA/A.json.gz')['replay']['rows']), rel_tol=1e-9)
+fxband = {k: fxnum(fxrow('supplement-temperature-bands.tex', k)) for k in (r'\COtwo partial pressure & Absorber, 313--353 K & not fitted &', r'\COtwo partial pressure & Stripper, 373--393 K & not fitted &', r'Heat capacity & Stripper, 373--393 K', r'Density & Stripper, 373--393 K')}
+fxhong = {k: fxnum(fxrow('supplement-hong-comparison.tex', k)) for k in ('Six sources, inside the fitted range', 'Six sources, with the 13 Hilliard')}
+fxheat = fxload('results/display-replays/caloric-and-species.json.gz')['reference_state']
+fxstale = {('main.tex', rf'at 30 wt\% deviate by {mea}\,\%'): rf'at 30 wt\% deviate by {fxmea}\,\%',
+    ('submission/chemrxiv.md', f'at 30 wt% deviate by {mea}%'): f'at 30 wt% deviate by {fxmea}%',
+    ('sections/conclusion.tex', rf'deviates by {mea}\,\% from its 47 fitted'): rf'deviates by {fxmea}\,\% from its 47 fitted',
+    ('sections/mea_system_modeling_results.tex', rf'deviate by {mea}\,\%'): rf'deviate by {fxmea}\,\%',
+    ('sections/mea_system_modeling_results.tex', rf'deviate by {e112}\,\%'): rf"deviate by {fx('MEA pressure added AARD_percent'):.2f}\,\%",
+    ('sections/mea_system_modeling_results.tex', rf"{f1(baygi['prior_F2_Pa'])}\,\% for the 16-parameter calibration, {f1(read(MEA + 'paper-evidence-341/same-data-comparison/matched-score.json')['pressure_aard_percent'])}\,\% with the MEA-fitted shared set and {f1(baygi['salt_anchored_Pa'])}\,\% for the MEA model"):
+        rf"{f1(baygi['prior_F2_Pa'])}\,\% for the 16-parameter calibration, {f1(read(MEA + 'paper-evidence-341/same-data-comparison/matched-score.json')['pressure_aard_percent'])}\,\% with the MEA-fitted shared set and {f1(baygi['salt_anchored_Pa'])}\,\% for the restricted model in that sequence; the MEA model with the \SI{{100}}{{\kilo\pascal}} references deviates by {fx('MEA pressure Mamun2005 AARD_percent'):.2f}\,\%",
+    ('sections/mea_system_modeling_results.tex', f"AARD of {100*math.fsum(abs(r-1) for r in old_ratios)/len(old_ratios):.1f}"): f"AARD of {100*math.fsum(abs(r-1) for r in fxcarb)/len(fxcarb):.2f}",
+    ('sections/data_methods.tex', rf"{100 * sum(wcai) / ecost:.1f}\,\% of the objective value, {ecost:.2f}"): rf"{100 * math.fsum(fxcai) / fx('MEA selected objective'):.1f}\,\% of the objective value, {fx('MEA selected objective'):.2f}",
+    ('sections/transfer_results.tex', bands_main[1]): rf"by {fxband[r'\COtwo partial pressure & Absorber, 313--353 K & not fitted &'][0]}\,\% at 313--\SI{{353}}{{\kelvin}}, on 69 observations, and by {fxband[r'\COtwo partial pressure & Stripper, 373--393 K & not fitted &'][0]}\,\% at 373--\SI{{393}}{{\kelvin}}, on 66,",
+    ('sections/transfer_results.tex', bands_main[3]): rf"the 15 heat capacities and 26 densities deviate on average by {fxband['Heat capacity & Stripper, 373--393 K'][0]}\,\% and {fxband['Density & Stripper, 373--393 K'][0]}\,\%",
+    ('supplement.tex', rf"deviate by {hp('canonical', 'strict_grid', 'hong')}\,\%, the MEA model by {hp('canonical', 'strict_grid', 'salt_anchored')}\,\% and the model of Polley and Hedengren by {hp('canonical', 'strict_grid', 'polley_hedengren')}"):
+        rf"deviate by {fxhong['Six sources, inside the fitted range'][0]}\,\%, the MEA model by {fxhong['Six sources, inside the fitted range'][1]}\,\% and the model of Polley and Hedengren by {fxhong['Six sources, inside the fitted range'][3]}",
+    ('supplement.tex', f"{hp('canonical', 'all', 'hong')}, {hp('canonical', 'all', 'salt_anchored')} and {hp('canonical', 'all', 'polley_hedengren')}"):
+        f"{fxhong['Six sources, with the 13 Hilliard'][0]}, {fxhong['Six sources, with the 13 Hilliard'][1]} and {fxhong['Six sources, with the 13 Hilliard'][3]}",
+    ('supplement.tex', f"factor of that equation is {mea_stage['stage_variance']:.8f}"): f"factor of that equation is {fixed.conditional('MEA')['stage_variance']:.8f}",
+    ('supplement.tex', f"by {q4a['rows'][0]['pCO2_change']['absolute']:.5f} and " + rf"\SI{{{q4a['rows'][1]['pCO2_change']['absolute']:.2f}}}{{\pascal}}"): rf"\SI{{-81.803}}{{\kilo\joule\per\mole}} of \COtwo and {fxheat['cp_J_mol_K']:.3f} J/(mol K)",
+    ('supplement.tex', f"from ${q4a['heat_previous_kJ_mol']:.3f}$ to " + rf"\SI{{{q4a['heat_previous_kJ_mol'] + q4a['heat_change']['absolute']:.3f}}}"): None}
+assert f"{fxheat['heat_kJ_mol']:.3f}" == '-81.803'
+for (path, old), new in fxstale.items():
+    stated[path] = [v for v in stated[path] if v != old] + ([new] if new else [])
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:

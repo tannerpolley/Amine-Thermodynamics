@@ -149,7 +149,7 @@ Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=0.72\linewidth]{amp-splits.pdf}
-\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid: the 73 with a split confirmed by a two-liquid equilibrium calculation and the 20 at which that calculation did not return two distinct liquids. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.\ Diamonds mark the six confirmed splits at measured states.}
+\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid: the 73 with a split confirmed by a two-liquid equilibrium calculation and the 20 at which that calculation did not return two distinct liquids. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none at these 666 states, which are searched at pressures scaled to the bubble pressure of each fit; recalculated separately at the measured pressures of the six diamonds, it leaves four unresolved and finds no descent at two. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.\ Diamonds mark the six measured states at which the first fit confirms a split.}
 \label{fig:amp-splits}
 \end{figure}
 
@@ -187,7 +187,7 @@ The reconstruction was not verified against published values of their model, so 
 For MDEA, \cref{tab:published-models} sets the MDEA model beside published values on three sets of observations.
 On the 82 total pressures of Kuranov et al., matched to the source rows one by one, of which the MDEA model fitted 70, it deviates by 4.35\,\%.
 \Cref{tab:published-models} also lists the values of two models that fitted these pressures \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020,zhangThermodynamicModelingCO22011} and of the ePC-SAFT calculations of Uyan et al.\ and Wangler et al., which fitted no parameter to the ternary system \cite{Uyan2015,Wangler2018}.
-The published values are identified with these 82 observations by their count only, so they are context and are not ranked against the MDEA model (Section~\ref{supp-sec:s-published}).
+The published values are identified with these 82 observations by their count only, so they are listed without being ranked against the MDEA model (Section~\ref{supp-sec:s-published}).
 On the 101 \COtwo partial pressures of Ermatchkov et al.\ the MDEA model deviates by 29.21\,\%, against 16.8\,\% for their parameter set I, which did not fit them either, so here a published model that fitted nothing to these data is closer.
 On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets, both fitted to them, report 1.9 and 3.5\,\% and are far closer than the MDEA model, which was not fitted to them and deviates by 11.93\,\% on 27 of them and by 14.76\,\% on all 28.
 The 28th state is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, which the MDEA model calculates at \SI{14.457}{\mega\pascal}, a deviation of $+91.1$\,\%.
@@ -228,7 +228,7 @@ The bound of the MDEA--water interaction at \SI{423}{\kelvin} (\cref{sec:results
 Neither shared set was fitted jointly with the four amines, so agreement for one amine does not establish the shared parameters for another.
 
 % P:limits-estimation
-Every fit is a local solution, and its robustness is established only for the starts run (\cref{sec:parameters}).
+Every fit is a local solution, tested only from the starts run (\cref{sec:parameters}).
 For MEA, DEA and AMP three distinct starts reach the same objective, but no endpoint meets the strict projected-gradient criterion, and the MDEA fit is provisional: only one of 64 drawn starts could be evaluated, and a descent step from its endpoint still lowers the objective by more than the function tolerance, so the MDEA results are stated for that endpoint only (Section~\ref{supp-sec:s-uncertainty}).
 How far the predictions of the tied endpoints spread within each operating band, compared with their deviations from measurements there, has not been evaluated.
 The weights are assigned and differ between the amines; in the MDEA objective the loaded total pressures carry 41.3\,\%, the integral heats 19.0\,\% and the \COtwo-free densities 12.6\,\%.
