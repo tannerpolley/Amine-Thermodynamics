@@ -1,0 +1,225 @@
+{
+  "continuity": [
+    {
+      "T_boundary_K": 393.2,
+      "derivative_above_per_K": 0.029803620083868054,
+      "derivative_below_per_K": 0.02980362009097348,
+      "derivative_difference_per_K": -7.105427357601002e-12,
+      "logK": -35.58363012683679,
+      "name": "R1",
+      "value_difference": 0.0
+    },
+    {
+      "T_boundary_K": 393.2,
+      "derivative_above_per_K": -0.015332014536184602,
+      "derivative_below_per_K": -0.015332014543290029,
+      "derivative_difference_per_K": 7.105427357601002e-12,
+      "logK": -15.016541112096453,
+      "name": "R2",
+      "value_difference": 0.0
+    },
+    {
+      "T_boundary_K": 393.2,
+      "derivative_above_per_K": -0.009830024190193853,
+      "derivative_below_per_K": -0.00983002419729928,
+      "derivative_difference_per_K": 7.105427357601002e-12,
+      "logK": -27.547902107130714,
+      "name": "R3",
+      "value_difference": 0.0
+    },
+    {
+      "T_boundary_K": 393.2,
+      "derivative_above_per_K": 0.0454169772456936,
+      "derivative_below_per_K": 0.04541697724746996,
+      "derivative_difference_per_K": -1.7763568394002505e-12,
+      "logK": -16.930625851020874,
+      "name": "AMP-dissociation",
+      "value_difference": 0.0
+    },
+    {
+      "T_boundary_K": 393.2,
+      "derivative_above_per_K": 0.012579299675241629,
+      "derivative_below_per_K": 0.012579299675685718,
+      "derivative_difference_per_K": -4.440892098500626e-13,
+      "logK": 5.921753460024471,
+      "name": "carbamate-hydrolysis",
+      "value_difference": 0.0
+    }
+  ],
+  "declaration": {
+    "amine": "aminomethylpropanol",
+    "born_ties": [
+      "protonated-aminomethylpropanol",
+      "carbamate-anion"
+    ],
+    "calculation_interval_K": [
+      298.15,
+      458.0
+    ],
+    "coordinates": {
+      "path": "coordinates-0.json",
+      "sha256": "fdf127e66f1f6d8e0439260c8bd01b2a49623346615b80aff52caa30476f09cc"
+    },
+    "curve_rows": {
+      "path": "curve-rows.json",
+      "sha256": "c6f63e49199ebc882c249dbcd149839ad3229bb9d26f624304fb407a7ea26bd9"
+    },
+    "loadings": [
+      1e-05,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      0.966
+    ],
+    "optimizer": {
+      "function_tolerance": 1e-10,
+      "gradient_tolerance": 1e-08,
+      "maximum_elapsed_time_seconds": 4500,
+      "maximum_iterations": 60,
+      "parameter_tolerance": 1e-10
+    },
+    "output": "../../../results/runs/344-05e94210/campaign",
+    "range_meanings": {
+      "AMP_dissociation": {
+        "basis": "Measured dissociation constants",
+        "interval_K": [
+          293.12,
+          353.22
+        ],
+        "source": "Hamborg and Versteeg 2009, Table 16; Zotero D9KXSKLR/334KGLPV"
+      },
+      "AMP_hydrolysis": {
+        "basis": "Model-derived source estimates, not direct reaction-law measurements",
+        "interval_K": [
+          313.15,
+          373.15
+        ],
+        "source": "Xu et al. 1992, Table 2 and Eqs.7\u201311; Part II reaction-range table"
+      },
+      "R1_R2_R3": {
+        "basis": "273.15\u2013498.15 K is the source-correlation range stated by Austgen 1991 Table V p.547 (citing Edwards 1978), not verified measured coverage",
+        "interval_K": [
+          273.15,
+          498.15
+        ]
+      }
+    },
+    "reaction_ranges_K": {
+      "AMP-dissociation": [
+        293.12,
+        353.22
+      ],
+      "R1": [
+        273.15,
+        498.15
+      ],
+      "R2": [
+        273.15,
+        498.15
+      ],
+      "R3": [
+        273.15,
+        498.15
+      ],
+      "carbamate-hydrolysis": [
+        313.15,
+        373.15
+      ]
+    },
+    "reference": {
+      "coordinates": {
+        "path": "previous-coordinates.json",
+        "sha256": "b1dacd84571c029b12f063622ea8d6027bd5b89ffc0c0edaf05fda1769331f70"
+      },
+      "path": "previous-parameters.json",
+      "reactions": {
+        "path": "previous-reactions.json",
+        "sha256": "7bf1db764f0525a443f299e1e042914cf988dcecee5a589ac036559fd470d7c3"
+      },
+      "sha256": "27d89649ca8c65314b16029e87b2b6b44d494f6717614337c819df7ffb29b57a"
+    },
+    "reference_cost": 61.730298293437194,
+    "reference_predictions": {
+      "path": "refit-306-floor-predictions.json",
+      "sha256": "6ac208a471fec62414af6b7a4364330d12aab3e24fb5a0b8a3b3f5dcb3e85d42"
+    },
+    "roles": {
+      "binary": "fitted",
+      "hartono-2021-supplemental": "not fitted",
+      "kundu": "not fitted",
+      "loaded-pressure": "fitted",
+      "nmr": "fitted",
+      "tong": "not fitted",
+      "tong-baseline": "not fitted"
+    },
+    "species": [
+      "carbon-dioxide",
+      "aminomethylpropanol",
+      "water",
+      "protonated-aminomethylpropanol",
+      "carbamate-anion",
+      "bicarbonate-anion",
+      "carbonate-anion",
+      "hydronium-cation",
+      "hydroxide-anion"
+    ],
+    "specification": "/home/tnnrpolley21/.t3/worktrees/Amine-Thermodynamics/434-build-round-5-calcu-e7f4593f5b02677c/analyses/amp_transfer/inputs/retransfer-344/phase-2/specification.toml",
+    "split_record": {
+      "path": "../search-106/split-record-initial.json",
+      "sha256": "f491960a006cf7fd5a7eab11da32509ec0b111095fda10513d77cf8e5f234356"
+    },
+    "starts": [
+      {
+        "coordinates": {
+          "path": "coordinates-0.json",
+          "sha256": "fdf127e66f1f6d8e0439260c8bd01b2a49623346615b80aff52caa30476f09cc"
+        },
+        "path": "start-0.json",
+        "reactions": {
+          "path": "reactions-0.json",
+          "sha256": "7bf1db764f0525a443f299e1e042914cf988dcecee5a589ac036559fd470d7c3"
+        },
+        "sha256": "8f0c3b0613bb7f9200c5662670ae64afaa3fc8e9f8b119f46e331e685862392c"
+      },
+      {
+        "coordinates": {
+          "path": "coordinates-1.json",
+          "sha256": "719c086a9a16b9117f55e41be421eb015d5b0f62bc78dd72b6e09ed0447598f6"
+        },
+        "path": "start-1.json",
+        "reactions": {
+          "path": "reactions-1.json",
+          "sha256": "49927819776419438aa14dbb5ce2947e959a7557d18da447c7406e2b2bbcfe15"
+        },
+        "sha256": "7962c8f845e0efcfbc43042c755fccdbf6ac55d0ce187aeef56bb518571540a6"
+      }
+    ],
+    "stocks": [
+      {
+        "aminomethylpropanol": 1.0,
+        "water": 11.545384436618988
+      },
+      {
+        "aminomethylpropanol": 1.0,
+        "water": 13.514746387428197
+      }
+    ],
+    "vapor_species": [
+      "water",
+      "aminomethylpropanol",
+      "carbon-dioxide"
+    ]
+  },
+  "declaration_sha256": "07eadea5b2d87e4a37ec3cacc9c67480a427c553626385e133422906915cac90",
+  "inputs": {
+    "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json": "c05f53790a49cbc46361cba6d896bc65af7c5269596c92f796eeb3792b04ce83",
+    "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json": "5c0bf32b4945d3cfdfd9bdc713799b0956adc296bbd17ba3f2450e1433bc6006",
+    "analyses/mea_parameter_bundle/results/reference-states-428/amp.json": "53cb06f63475ab87875748fcc98e441014c4747fe8b3509acb4987bddd998c30"
+  }
+}
