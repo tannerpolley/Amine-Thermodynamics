@@ -1,0 +1,118 @@
+{
+  "A": [
+    {
+      "record": "A/common-pressure.json.gz",
+      "case": "Expanded free-slope S14 at the common pressure",
+      "check": "Seeded coexistence from the original split",
+      "disposition": "The first liquid vanished and the second attempt exhausted its budget at residual 4.8200291719693812e-4. The independent native search found no resolved descent."
+    },
+    {
+      "record": "records/AMP-native-starts.json.gz",
+      "case": "Original free-slope Q7 pressure comparison",
+      "disposition": "Original realized pressure is unavailable for 57 keys. Replay classification remains available for all 666."
+    }
+  ],
+  "B": [
+    {
+      "record": "B/reactions.json.gz",
+      "case": "MDEA at 373.15 K and 203126858.89663097 Pa",
+      "check": "Independent neutral chemical potential readback at system-pressure reference",
+      "maximum_RT": 1.340367816737853e-10,
+      "tolerance_RT": 1e-10,
+      "disposition": "Numerical miss. The Gibbs decrease reproduced within the paired error."
+    },
+    {
+      "record": "B/reactions.json.gz",
+      "case": "Same MDEA feed with all aqueous references fixed at 100000 Pa",
+      "check": "Seeded two-liquid equilibrium after resolved descent",
+      "minimum_reduced_hessian": 0.0015246311814160751,
+      "rounding_band": 0.00863317071381605,
+      "disposition": "The archived seed and three public liquid-directed seeds met the same indeterminate reduced-Hessian check. The phase decision is undecided."
+    }
+  ],
+  "D": [
+    {
+      "record": "D/MDEA-unbounded.json.gz",
+      "case": "Fitted Kim rows fit:227, fit:229 and fit:249, in each of the four MDEA parameter sets",
+      "disposition": "A one-species liquid face has no independent normalized charge-neutral composition direction. The three unavailable curvature values per endpoint are carried in the fitted-state records."
+    },
+    {
+      "record": "D/MDEA-unbounded-near-zero.json",
+      "case": "Kuranov-binary fit:502 at 413.15 K and 353476.72400635516 Pa, unbounded fit",
+      "analytic_minimum": 8.209534321231535e-12,
+      "disposition": "The extrapolated directional readbacks change sign at the finest steps. The combined binary tally is 94 positive, 1 undecided and 3 unavailable across 98 states. The analytic minimum remains positive. The separate finite search found a liquid-directed descent."
+    }
+  ],
+  "E": [
+    {
+      "record": "E/pure-properties.json",
+      "case": "Original pure DEA and MDEA calibrations",
+      "disposition": "The publications identify Yaws and DIPPR saturation correlations, respectively. Exact calibration temperature nodes and overlap with the individual primary measurements were unavailable."
+    },
+    {
+      "record": "E/pure-properties.json",
+      "case": "Primary pure DEA saturation series",
+      "disposition": "Native pressure uncertainties are absent in the retained Horstmann and Klepacova source rows. The records preserve the missing values."
+    },
+    {
+      "record": "E/pure-properties.json",
+      "case": "18 DEA and MDEA pure vapor-pressure observations",
+      "tolerance": 1e-10,
+      "disposition": "All saturation solves reached the nominal row tolerance with distinct roots. The independent direct density readback exceeded 1e-10 in relative pressure and log fugacity at 14 rows. Imposing the solved pressure for separate branch solves brought every log-fugacity difference below 1e-10. The independent pressure readback still exceeded 1e-10 at 11 rows."
+    }
+  ],
+  "execution_recoveries": [
+    {
+      "record": "C/normalized-MDEA-0.json.gz",
+      "case": "Observable-normalized MDEA at fixed k=0.1325000116847309",
+      "disposition": "The first optimizer stage reached its iteration limit with a usable replay. Its continuation converged. Independent phase checks of both retained endpoints found no resolved descent at the Q3 feeds."
+    },
+    {
+      "record": "C/normalized-MDEA-1.json.gz",
+      "assessment": "C/normalized-MDEA-1-refit-assessment.json.gz",
+      "timing_record": "C/normalized-MDEA-1-timing.json",
+      "earlier_stop_record": "C/normalized-MDEA-1-time-stop.json.gz",
+      "case": "Observable-normalized MDEA at fixed k=0.7650000233694618",
+      "disposition": "The original shared Group C window expired during the first native stage. The separate rerun reached function tolerance after continuation. Both Q3 searches returned no resolved descent and no confirmed liquid pair."
+    },
+    {
+      "record": "D/AMP-original-main.json.gz",
+      "case": "First fitted curvature pass on a binary liquid face",
+      "disposition": "The matrix inherited object dtype from absent-species fugacity actions. The restarted calculation gathered finite actions on the active face before forming the matrix."
+    },
+    {
+      "record": "E/DEA-association-1-binary.json.gz",
+      "case": "Explicit DEA edges, binary stability trials",
+      "disposition": "The initial passes supplied Python phase declarations where the interface required native PhaseSpec values. Replay via the standard bridge returned all 49 binary checks per multiplier. The earlier typed refusal is retained."
+    },
+    {
+      "record": "E/cation-sphere-fit.json.gz",
+      "case": "Spherical MDEAH+ optimizer",
+      "disposition": "The first stage reached its iteration limit. The saved endpoint was replayed at 594.7173646007237 and the ordinary continuation converged at 593.4827739798059."
+    }
+  ],
+  "retained_record_reconciliation": [
+    {
+      "record": "records/MDEA-coverage.json.gz",
+      "case": "Measured and generated MDEA supports",
+      "disposition": "1099 incomplete records across the five documented stages. Q8 produced distinct liquid plus vapor roots at 16 of 18 attempted property states."
+    },
+    {
+      "record": "records/pH-carbonate.json",
+      "case": "Jakobsen carbonate pool and pH",
+      "disposition": "The five matched loadings compare different stocks and an unverified electrode-to-activity scale. Three higher loadings lack an overlapping electrode read-off."
+    },
+    {
+      "record": "records/AMP-public-trials.json.gz",
+      "case": "Original Q7 start identification",
+      "disposition": "The replay retains public seed names, converged compositions, bank indices and supplied initial compositions. Initial iterates and execution order inside the native optimizer are unavailable. The public report order is retained separately."
+    },
+    {
+      "record": "records/public-1.3.2.json",
+      "comparison_record": "records/study-wheel-S13-controls.json",
+      "case": "S13 loaded MEA at both initial pressures",
+      "check": "Independent pressure and fugacity readback",
+      "disposition": "Both starts missed the original 1e-10 readback tolerance on the public and study installations. The balance and all displayed rounding checks passed."
+    }
+  ]
+}
