@@ -108,6 +108,11 @@ def coordinates(uncertainty):
 
 fixed = FixedReference(read)
 round9 = read('analyses/round_9/manuscript-handoff.json')['quantities']
+round10 = read('analyses/round_10/manuscript-handoff.json')['quantities']
+r10_mea = round10['K2 MEA search parent assemblages']
+r10_amp = round10['K2 AMP control outcomes']
+r10_dea = round10['K3 DEA measured and calculated densities']
+r10_mdea = round10['K4 MDEA bubble pressures at measured descent states']
 r9_accounting = round9['R3 start, endpoint and search accounting']
 r9_units = round9['R7 AMP hydrolysis enthalpy increment']
 
@@ -984,7 +989,7 @@ for state in sorted(mnew['classifications'], key=lambda q: (q['temperature_K'], 
         assert state['pressure_Pa'] == source['pressure_Pa']
     elif source_id == 'Merkley1987':
         locator = 'Merkley, Fig.~3'
-        source_pressure = '/'.join(f"{float(source[k])/1000:.3f}" for k in
+        source_pressure = r'/\allowbreak '.join(f"{float(source[k])/1000:.3f}" for k in
                                    ('candidate_pressure_1_kPa', 'candidate_pressure_2_kPa'))
         assert math.isclose(state['pressure_Pa'], float(source['proposed_pressure_kPa'])*1000)
     else:
@@ -992,23 +997,35 @@ for state in sorted(mnew['classifications'], key=lambda q: (q['temperature_K'], 
         source_pressure = num(source['pressure_MPa'])
         assert math.isclose(state['pressure_Pa'], float(source['pressure_MPa'])*1e6)
     pressure_record = next(q for q in r9_accounting['mdea_distinct_states'] if q['key'] == key)
+    bubble = r10_mdea.get(key)
+    bubble_cell = '---'
+    if bubble:
+        bubble_cell = (num(bubble['bubble_Pa']/1e6, 5) if bubble['status'] == 'Available'
+                       else 'Refused' + r'\textsuperscript{a}')
+        if bubble['status'] == 'Refused':
+            refusal = re.match(r'infeasible: residual (\S+) against EQUILIBRIUM_ROW_RESIDUAL (\S+)',
+                               bubble['diagnostic'])
+            assert refusal, bubble['diagnostic']
+            residual, tolerance = map(float, refusal.groups())
     phase_rows.append([key.replace(':', r':\allowbreak '), locator, num(state['temperature_K'], 2),
                        num(feed_wt(mdoc, feed, 'methyldiethanolamine'), 2),
                        num(feed['carbon-dioxide']/feed['methyldiethanolamine']),
-                       source_pressure, num(state['pressure_Pa']/1e6) + r'\newline ' + pressure_record['pressure_basis'],
+                       source_pressure, num(state['pressure_Pa']/1e6) + r'\newline ' + pressure_record['pressure_basis'], bubble_cell,
                        state['native_branch'], state['supplied_branch'],
                        'None confirmed' if state['attempts'] else 'Not attempted'])
 assert mnew['tally']['states'] == 11824 and not mnew['confirmed']
 table('supplement-mdea-phase-outcomes', 'Outcomes at the descent states of the provisional MDEA endpoint.',
       ['State', 'Source', '$T$ (K)', r'MDEA (wt\%)', r'$\alpha$', r'Source $P$ (MPa)',
-       r'Search $P$ (MPa)', 'Native', 'Supplied', 'Two-liquid outcome'],
-      phase_rows, [.125,.127,.077,.077,.058,.096,.083,.089,.089,.090], long=True, size=r'\footnotesize',
+       r'Search $P$ (MPa)', r'$P_{\rm bub}$ (MPa)', 'Native', 'Supplied', 'Two-liquid outcome'],
+      phase_rows, [.102,.113,.064,.061,.051,.073,.077,.086,.071,.092,.082], long=True, size=r'\footnotesize',
       notes=f"{mnew['tally']['available']} of {mnew['tally']['states']} searches completed; "
             f"{mnew['tally']['descent']} detections at {len(phase_rows)} distinct states and no confirmed splits. "
             r"$\alpha$ is in mol \COtwo/mol MDEA and wt\% excludes \COtwo. T and r identify the source table "
             r"and row. B\"ottinger cell pressures are assignments. Merkley Fig.~3 gives the digitized traces; "
             r"the two possible pressures in Table~1 are shown, with the higher one used for the searches. "
-            "The two separate high-pressure controls are unresolved.")
+            r"The two separate high-pressure controls are unresolved. The bubble-pressure column covers measured-pressure descents. "
+            r"\textsuperscript{a}The bubble solve returned infeasible with scaled residual "
+            + num(residual, 5) + " against " + reduced_gibbs(tolerance) + ".")
 
 amp_designs = ('AMP_free', 'AMP_fixed')
 amp_controls = {}
@@ -1037,10 +1054,13 @@ for key in measured:
         candidate = next((q for q in control.get('candidates', []) if q['support'] == 'L+V'), {})
         delta = candidate.get('Gibbs_over_RT_mol')
         flag = r'\textsuperscript{a}' if delta is not None and not candidate['qualified'] else ''
+        if design == 'AMP_free':
+            outcome = r10_amp[key]['outcome'].replace('; ', r'\newline ')
         fits.append([num(amp_screen[design][key]['pressure_Pa']/1e6, 5), trial,
                      reduced_gibbs(delta - parent) + flag if delta is not None else '---',
                      reduced_gibbs(parent_error + candidate['error']) if delta is not None else '---', outcome])
-    source, row, _ = key.split(':')
+    source, _, _ = key.split(':')
+    row = r10_amp[key]['source']['row']
     amp_rows.append([source.split('-')[0].capitalize() + ' r' + row, num(free['T_K'], 2),
                      num(feed_wt(adoc, feed, 'aminomethylpropanol'), 2) + r'\newline ' +
                      num(feed['carbon-dioxide']/feed['aminomethylpropanol']),
@@ -1192,9 +1212,13 @@ for row, label in zip(rows[4:], ('MEA-fitted shared set', '30-pressure Lawson--G
 rows.insert(4, head('Comparison fits', 9))
 table('amine-summary', 'The four fixed-reference models and their comparison fits with system-pressure references.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Attempted searches','Completed searches',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
       notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses. \textsuperscript{a}Fitted \COtwo partial pressures ($p_{\COtwo}$) of loaded MEA and DEA and fitted total pressures ($P$) of loaded MDEA and AMP. \textsuperscript{b}Column a with the fitted \COtwo-free bubble pressures of MDEA--water and AMP--water; neither column includes the fitted \COtwo--water pressures of Kiepe et al.\ in the MEA objective (Table~\ref{tab:mea-data}). \textsuperscript{c}MEA: all pressures not fitted, those at nominal 30 wt\% of the six sources of Table~\ref{tab:mea-data}, those of Wagner et al.\ and those at 15 and 45 wt\%; MDEA and AMP: total pressures and \COtwo partial pressures separately, the AMP total pressures including the 5 \COtwo-free bubble pressures of Tong et al. The receiver comparisons use the original salt-anchored fits. \textsuperscript{d}In the searches of each fit, which are finite and differ in design between the amines (Section~\ref{supp-sec:s-phase}), so the counts do not measure equal coverage and split counts are lower bounds. '
-            'The MDEA endpoint is provisional. The separate MEA measured-state search completed '
-            f"{r9_accounting['coverage']['MEA_measured']['completed']} of "
-            f"{r9_accounting['coverage']['MEA_measured']['attempted']} attempts.")
+            'The MDEA endpoint is provisional. '
+            f"The MEA liquid grid completed {r10_mea['liquid_grid']['completed']:,} of {r10_mea['liquid_grid']['attempted']:,} searches. "
+            f"The {r10_mea['census']['attempted']} L--V census cases returned "
+            f"{r10_mea['census']['outcomes']['passed-two-phase']} passed two-phase parents and "
+            f"{r10_mea['census']['outcomes']['passed-single-liquid']} passed single-liquid parents. "
+            f"The separate MEA measured-state search completed {r10_mea['measured']['completed']} of "
+            f"{r10_mea['measured']['attempted']} attempts.")
 P341 = MEAEVIDENCE
 mea_fit = read(P341 + 'fitted-rows.csv')
 cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -1639,7 +1663,11 @@ outputs[path] += outputs.pop(LATEX / 'tables/supplement-amp-fixed-parameters.tex
 sys.path.insert(0, str(ROOT / 'analyses/round_9'))
 from displays import tables as round9_tables
 
-round9_tables(round9, table, head, num, reduced_gibbs)
+round9_tables(round9, table, head, num, reduced_gibbs, r10_dea, r10_amp)
+sys.path.insert(0, str(ROOT / 'analyses/round_10'))
+from spread_display import spread_table
+
+spread_table(round10, table, head, num)
 
 read('analyses/dea_transfer/results/binary.json')
 read(BASE + 'conditional-uncertainty.json')

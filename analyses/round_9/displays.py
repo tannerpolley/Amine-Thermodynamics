@@ -1,16 +1,18 @@
 """Table rows for the round-9 numerical handoff."""
 
 
-def tables(q, table, head, num, scientific):
+def tables(q, table, head, num, scientific, dea_density, amp_outcomes):
     dea, amp, shared = (q[key] for key in ('R1 DEA two-liquid certificates',
                                            'R2 AMP early and reported pressure controls',
                                            'R4 shared interactions at 100 kPa'))
     rows = []
+    density = {r['key']: r for r in dea_density['rows']}
     for state in dea['rows']:
-        case = f"Row {state['key'].split(':')[1]}, {state['unloaded_wt_percent']:.0f} wt\\%, "
-        case += rf"$\alpha={state['loading']:.2f}$"
+        d = density[state['key']]
+        case = f"Deposit ID {d['deposit_id']}, processed source row {d['processed_source_row']}, "
+        case += rf"{state['unloaded_wt_percent']:.0f} wt\%, $\alpha={state['loading']:.2f}$"
         phase = state['phases']
-        rows += [head(case, 3)]
+        rows += [head(case, 6)]
         for label, key, factor, digits in [
             ('Amount (mol true species)', 'amount_mol', 1, 6),
             ('Share of total true moles (\\%)', 'true_mole_fraction', 100, 4),
@@ -19,7 +21,9 @@ def tables(q, table, head, num, scientific):
             (r'$\partial P/\partial\rho_{\rm mol}$ (Pa m$^3$/mol)', 'dP_drho_Pa_m3_mol', 1, 2),
             ('Molar volume (cm$^3$/mol)', 'molar_volume_m3_mol', 1e6, 5),
         ]:
-            rows.append([label, *[num(factor*p[key], digits) for p in phase]])
+            values = [num(factor*p[key], digits) for p in phase]
+            bulk = [num(d[k+'_kg_m3'], 2) for k in ('observed', 'single_liquid', 'two_liquid')] if key == 'density_kg_m3' else []
+            rows.append([label, *values, *bulk])
         rows += [['Mole fraction ' + symbol, *[scientific(p['x'][i]) for p in phase]]
                  for i, symbol in enumerate((r'\COtwo', 'DEA', r'\HtwoO', r'\ce{DEAH+}',
                      r'\ce{DEACOO-}', r'\ce{HCO3-}', r'\ce{CO3^2-}', r'\ce{H3O+}', r'\ce{OH-}'))]
@@ -37,18 +41,23 @@ def tables(q, table, head, num, scientific):
             ['Confirmed search / registry-growth repeat', f"{state['declared_confirmed']} / {state['registry_growth_confirmed']}", ''],
             ['Restart from its own daughters', 'Confirmed' if state['daughter_restart']['confirmed'] else 'Coalesced', ''],
         ]
+    rows = [row + [''] * (6-len(row)) if len(row) > 1 else row for row in rows]
+    rows.append([r'Density AARD across the four feeds (\%)', '', '', '',
+                 *[num(dea_density['AARD_percent'][m], 3) for m in ('single_liquid', 'two_liquid')]])
     matrix = dea['rows'][0]['conservation_matrix']
     B = r'$\left[\begin{smallmatrix}' + r'\\'.join('&'.join(str(round(x)) for x in row) for row in matrix) + r'\end{smallmatrix}\right]$'
     table('supplement-dea-split-certificate',
           'Two-liquid certificates for the four DEA density-cell feeds at 298.15 K and assigned 101.325 kPa.',
-          ['Quantity', 'Liquid 1', 'Liquid 2'], rows, [.47,.20,.28], long=True, size=r'\footnotesize',
-          notes=r'One mol DEA in each feed. The 9.73\% for the denser liquid of row 32 divides its true-species amount by the sum of both daughter amounts. '
+          ['Quantity', 'Liquid 1', 'Liquid 2', 'Measured bulk', 'Single-liquid bulk', 'Two-liquid bulk'],
+          rows, [.35,.13,.14,.093,.105,.105], long=True, size=r'\footnotesize',
+          notes=r'One mol DEA in each feed. Deposit IDs are zero-based. The 9.73\% for the denser liquid of processed source row 33 divides its true-species amount by the sum of both daughter amounts. '
+          r'The two-liquid bulk density is $(\sum_i w_i/\rho_i)^{-1}$ using daughter mass fractions $w_i$ and densities $\rho_i$. '
           r'Liquid roots must match within $|\ln(\rho_{\rm root}/\rho)|\le\ln(1.01)$ and relative pressure error $\le10^{-10}$. '
           r'Both phases must have positive isothermal pressure derivatives and positive amounts and differ by more than $10^{-6}$ in maximum mole-fraction difference or log density ratio. '
           r'The decrease in $G^*/(RT)$ must exceed the paired numerical error. Reaction residuals are $\ln Q-\ln K$ and interphase residuals are differences in '
           r'electrochemical potential divided by $RT$. '
           r'For main-text Eq.~(\ref{main-eq:tpd}), $g=G^*/n$ on the true-species molar basis and $B=$ ' + B +
-          r' in the displayed species order, with charge enforced separately. Row 32 is reproduced from the retained neighboring-state start.')
+          r' in the displayed species order, with charge enforced separately. Deposit ID 32 (processed source row 33) is reproduced from the retained neighboring-state start.')
 
     rows = []
     for state in sorted(amp['rows'], key=lambda q: q['key'] != 'worked-state'):
@@ -71,12 +80,14 @@ def tables(q, table, head, num, scientific):
             gates = '---'
         if key == 'worked-state':
             gates = 'Indeterminate reduced Hessian'
+        else:
+            reported = amp_outcomes[key]['outcome'].replace('; ', r'\newline ')
         rows.append([src, num(state['T_K'], 2), num(state['P_Pa']/1e6, 5), num(state['reported_bubble_Pa']/1e6, 5),
                      early, reported, gates, lv])
     table('amp-endpoint-pressure-controls',
           'Early and reported AMP fits at one common test pressure and six measured total pressures.',
           ['Source row (search ID)', '$T$ (K)', '$P$ (MPa)', r'Reported $P_{\rm bub}$ (MPa)',
-           'Early fit', 'Reported search', 'Reported L+L refusal', 'Reported L+V'],
+           'Early fit', 'Reported outcome', 'Reported L+L refusal', 'Reported L+V'],
           rows, [.113,.070,.085,.105,.121,.127,.161,.140], size=r'\footnotesize',
           notes=r'Tong row numbers restart at each temperature. The early fit uses the system-pressure reference and the reported fit uses 100 kPa. '
           r'The worked feed contains 1 mol AMP at unloaded 30 wt\% and $\alpha=0.70$. '
