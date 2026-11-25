@@ -264,10 +264,12 @@ def alternative_refits(work, only=None):
         try:
             subprocess.run([sys.executable, __file__, 'alternative_case', candidate, str(work)],
                            timeout=1680, check=True)
-        except subprocess.TimeoutExpired:
+        except (subprocess.TimeoutExpired, subprocess.CalledProcessError) as stop:
+            # Retain whatever the child wrote before the temporary work folder is removed.
             folder = work / 'MDEA' / 'alternative' / candidate
             save(f'C/normalized-{candidate}-time-stop.json.gz',
-                 dict(records=fit_records(folder), alternative_process_wall_seconds=monotonic()-started),
+                 dict(records=fit_records(folder), alternative_process_wall_seconds=monotonic()-started,
+                      stop=type(stop).__name__, returncode=getattr(stop, 'returncode', None)),
                  start=started)
 
 
