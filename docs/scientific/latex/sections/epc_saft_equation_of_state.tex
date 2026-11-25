@@ -126,6 +126,8 @@ With the fugacity coefficient $\ln\phi_i=\mu_i^{\mathrm{res}}/(RT)-\ln Z$ and co
 \end{equation}
 where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src}}=\SI{100}{\kilo\pascal}$ is the pressure at which the reference states of every reaction are evaluated, the same value as the ideal-gas standard pressure $P^\circ$ of the caloric functions (\cref{sec:caloric-model}).
 The correlations of \cref{tab:reaction-equilibrium-constants} depend on temperature only, and a fixed reference pressure adds no pressure dependence to them.
+Above about \SI{373}{\kelvin} the \SI{100}{\kilo\pascal} reference lies below the saturation pressure of water, and the aqueous reference states follow the liquid root, which is then metastable in the model.
+At \SI{393.15}{\kelvin} that root, at \SI{52.40}{\kilo\mole\per\cubic\metre} for pure water and in the infinite-dilution \COtwo{} limit, lies \SI{2.22}{\kilo\joule\per\mole} above the vapor root in molar Gibbs energy and \SI{10.63}{\kilo\mole\per\cubic\metre} above the liquid spinodal density, so it is well defined.
 At a given temperature and pressure the reference states do not depend on composition, so all phases compared at that state share one Gibbs energy.
 That Gibbs energy, $G^*=G_{\mathrm{EOS}}+RT\sum_in_ib_i(T,P_{\mathrm{src}})$, where $RTb_i$ is the reference contribution of species $i$, is the function minimized in the phase searches, and at fixed amounts its pressure derivative is the volume of the equation of state,
 \begin{equation}
