@@ -58,8 +58,11 @@ directory tree. [Build commits and wheel hashes](provenance.json)
 - **DEA split.** A 30 wt% DEA feed at 298.15 K, loading 0.50 mol/mol and
   101.325 kPa (the pressure assigned to the density calculation) gives a
   confirmed split in the selected model. The script reads the #440
-  declared-screen record for `weiland-1998:32:problem` and starts the
-  two-liquid calculation from the confirmed row-42 pair. In ascending
+  declared-screen record for `weiland-1998:32:problem` (zero-based deposit
+  ID 32, processed Weiland Table 2 source row 33) and starts the two-liquid
+  calculation from the confirmed pair at deposit ID 42 (processed source
+  row 43). The adjacent unresolved feed at loading 0.45 has deposit ID 31
+  and processed source row 32. In ascending
   molar density, the daughters are 31,971.88 mol/m³ at 1.422586 mol and
   44,593.61 mol/m³ at 13.196994 mol. The decrease in $G^*/(RT)$ is
   0.001406466 mol. The density and amount tolerances are half the last
