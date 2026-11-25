@@ -9,7 +9,53 @@ resources:
   - ../results/engine-3e83e19c-adoption/adoption-check.json
   - ../results/engine-3e83e19c-adoption/comparison.json
   - ../results/engine-3e83e19c-adoption/checks.json
+  - ../results/wheel-qualification-430/**
 ---
+## Engine qualification for the #435 calculations {#wheel-qualification-430}
+
+Engine `8078d7d1` does not qualify to replace the #435 study wheel for round 7. The candidate changes the declared search evidence and misses the #430 objective-reproduction limit in the NaHCO₃ fit. The run used the pinned #435 numerical declarations, starts, weights, bounds and search designs. The fresh cascade was scored separately. The MEA fits consumed the archived salt laws and the receiver fits consumed the archived shared-ion record, so a change in an upstream fitted coefficient did not propagate into the downstream comparisons. [Qualification criteria](https://github.com/tannerpolley/Amine-Thermodynamics/issues/430) · [Study calculation record](../results/salt-anchored-435/calculation-summary.md)
+
+- The NaHCO₃ objective increased from 0.6067037808541742 to 0.6067037809990378, a relative change of $2.39\times10^{-10}$ against the $10^{-10}$ limit. The largest stage-row osmotic coefficient change was $-1.38\times10^{-11}$ at 278.15 K and 0.01 mol/kg. Both sodium and carbonate intercepts stayed at their lower bound. The Na₂CO₃ slope changed from 0.001963126045030628 to 0.0019631301887990523 K⁻¹.
+- The two 307-row MEA replay objectives agreed within $1.51\times10^{-13}$ relative. Each search completed 1,908 grid and 576 offset states with zero descents. The Engine completed every census report, admitted every parent and evaluated all 991,602 supplied trials per endpoint. All 324 census reductions changed from complete to incomplete because Engine #109 added the `dominant-charge-pair-midpoint` optimized seed and the application reducer requires exactly nine optimized trials. The added trial returned no resolved descent in the census. [Engine #109](https://github.com/tannerpolley/epcsaft/commit/1ae2b350f3ac00d48d42abd56a391d6509d76666)
+- The normalized 281-row MDEA refit converged at 6.158203731974667 versus 6.16134087650797 on the study wheel. Both used the same starting declaration and weights and retained the same active bounds. The candidate refused trials 2–4 in stage 0 on the Merkley capped-heat row `fit:126` with `saturation:budget_exhausted;saturation:unexamined_gap;`. The study run recorded zero failed trials in that stage. The candidate returned all fitted endpoint predictions. The largest weighted row-cost change came from `fit:125`, where the heat changed from −50.679 to −50.608 kJ/mol.
+
+- DEA retained `start-1` with objective 10.932834014401832 versus 10.932834014387195. Both 1,271-state searches gained the same two available states, `lawson-1976-viii:1:problem` and the 363.15 K, 0.8 mol CO₂/mol DEA, $3P_{\mathrm{bubble}}$ grid state at 13.617310786547122 mol water/mol DEA. Both searches returned zero descents.
+- MDEA selected `fit-0` in place of `fit-2`, with objective 537.6587969325753 versus 537.6587969229375. The 11,824-state search gained 142 available entries and lost two. The losses share a bubble failure at 323.15 K, 1.0 mol CO₂/mol MDEA and 3.8899755501222497 mol water/mol MDEA. Its reported row residual was 0.32450 against a $10^{-10}$ limit. All five sampled availability changes reproduced at the exact study parameter point, including both losses. The 75 descent keys and the single confirmed two-liquid split key agreed. Thirteen coexistence attempts changed whether they met the requested tolerance, including the fixed-pressure replay attempts. The fixed-pressure disposition remained unresolved.
+- AMP retained both selected fit starts and active bounds. The free and −150 K objectives were 76.31190308635068 and 77.64284261021426, within $1.6\times10^{-13}$ relative of the study endpoints. All four 666-state searches remained available with zero descents. The common-pressure checks retained their physical decisions.
+- Part II passed 21 of 23 tests on the candidate and 23 of 23 on the study wheel with `AGENT_HEAVY_CORES=2`. At Hilliard rows 55 and 56, the candidate's charge-pair midpoint seed found liquid witnesses with TPD/RT of −0.03090972724 and −0.04372674105. The tests expected 100 retained witnesses. Each candidate case retained 101.
+
+Unrounded paired results, availability changes, optimizer decisions and phase details are in the [row and state comparison](../results/wheel-qualification-430/differences.csv.gz). The [comparison index](../results/wheel-qualification-430/comparison.json.gz) covers all 69 compared records. It applies the relative objective check away from zero and records changed predictions at returned precision. The [targeted replays](../results/wheel-qualification-430/diagnostics.json.gz) include the two fixed NaHCO₃ parameter points with both wheels. At the archived fit point their cold-replay objectives were 0.606703780949476 and 0.606703780875408, a relative change of $1.22\times10^{-10}$. These are numerical verification results on the declared states and supports.
+
+### Elapsed time
+
+| Step | Study wheel (s) | Candidate (s) | Study / candidate |
+|---|---:|---:|---:|
+| Salt cascade, controls and scan | 2.55 | 2.39 | 1.07× |
+| MEA F2 fit | 72.18 | 36.61 | 1.97× |
+| MEA F2 search | 523.51 | 231.83 | 2.26× |
+| MEA F4 fit | 49.49 | 28.58 | 1.73× |
+| MEA F4 search | 481.13 | 240.97 | 2.00× |
+| MEA control, fits and searches | 1131.64 | 541.97 | 2.09× |
+| MDEA campaign | 2175.29 | 1453.86 | 1.50× |
+| DEA campaign | 279.25 | 176.47 | 1.58× |
+| AMP campaign | 712.48 | 429.33 | 1.66× |
+| MDEA fits and selection | 433.93 | 197.21 | 2.20× |
+| MDEA full search | 1460.84 | 1123.78 | 1.30× |
+| AMP free native search | 36.93 | 31.99 | 1.15× |
+| AMP free supplied search | 106.60 | 62.95 | 1.69× |
+| AMP fixed native search | 33.70 | 34.65 | 0.97× |
+| AMP fixed supplied search | 106.68 | 58.65 | 1.82× |
+| Observable-normalized MDEA with assessments | 573.00 | 286.03 | 2.00× |
+
+The wall times are single executions against the retained baselines. Each campaign used four single-threaded workers. Two independent campaigns sometimes ran on disjoint core sets. The AMP and DEA baselines sum the retained original and resume or report run times. The 573 s normalized MDEA comparison is the #430 timing baseline. Its candidate time includes endpoint assessments and CPU sampling. The archived #434 result has 522.60 s across its fit and assessments. [Exact timings](../results/wheel-qualification-430/timings.csv)
+
+- MEA spent 293.0 s on the two grid and offset searches, 173.4 s on the census, and 65.2 s on the fit commands.
+- MDEA spent 197.2 s fitting and selecting, 1,123.8 s in the full search, and 132.9 s in the remaining binary, comparison, pilot and coexistence work. The full search took 21.5 s to identify exact data-state aliases and 1,101.9 s in its worker pool. In a 48-state replay stratified by state type and availability, 23.92 of 32.67 s went to native bubble and optimized stability calls, 6.89 s to preparing supplied banks, and 1.86 s to the remaining work. The sample deliberately overrepresents unavailable states. Separately, CppAD accounted for 45.7% of leaf CPU samples during the full search window. The application still calls optimized and supplied stability separately.
+- AMP spent 202.8 s refitting, 188.2 s in the four searches and 26.0 s reducing predictions and derivatives. The two DEA search calls took 133.9 s of its 176.5 s run.
+- In normalized MDEA, the two native fit stages accounted for 205.9 s, the fit with replays for 236.5 s, and the endpoint derivative assessments for a further 44.8 s. CppAD accounted for 69.2% of leaf CPU samples in the recorded run.
+
+The candidate archive has SHA-256 `b0adb6c777fca0a8a0aef130b948f693bc6b19ac978a48dbac34b4003de256eb`. The archive came from the fetched merged Engine main commit `8078d7d18b99fc46e63753cd485512e465ce5fdb`. Its installed bytes passed the existing application guard and all 41 wheel RECORD hashes. The round-7 pin stays on the study wheel. [Wheel identity and test results](../results/wheel-qualification-430/wheel.json)
+
 ## Current adoption, 11 November 2026
 
 [#297](https://github.com/tannerpolley/Amine-Thermodynamics/issues/297) adopts the #255 wide-start primary (`f8f64820…`) on Engine `391dfe5d…`, wheel `0962e21d…`. The [adoption account](../results/adoption-297/README.md) owns the fresh replays, finite stability searches, group rules, conditional information and current numerical package. Observation cost is 148.510545654; the same-wheel outgoing reference costs 148.883260440. Normal default replays cover 153 quantities and all 307 declared observations. This is numerical verification and calibration-quality comparison, not new independent physical validation. MDEA #298, manuscript #259 and delivered review remain separate.
