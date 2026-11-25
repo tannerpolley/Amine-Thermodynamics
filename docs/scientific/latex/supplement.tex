@@ -206,6 +206,15 @@ The water--bicarbonate interaction is fitted next and is not on a bound: $a_0=0.
 The water--carbonate interaction is fitted last: its intercept ends on the lower bound, $a_0=-1$, with $a_1=\SI{1.963e-3}{\per\kelvin}$, which is $-0.9706$ at \SI{313.15}{\kelvin}, and the 45 sodium carbonate coefficients deviate by 5.11\,\%, the calculated values being low.
 For 39 coefficients of mixed bicarbonate--carbonate solutions that were not fitted, the deviation is 2.56\,\%; six further mixed rows have no calculated value.
 
+% P:supplement-salt-target
+The printed water activities of Peiper and Pitzer satisfy $-\ln a_w/M_w=\phi_{\mathrm{eq}}\sum_im_i=\phi_{\mathrm{st}}\sum_s\nu_sm_s$ within printed precision, where the first sum runs over the equilibrium solute species and the second over the stoichiometric salt.
+The fitted target is the equilibrium coefficient of the ions: the molality of dissolved \COtwo, treated as ideal, is subtracted from the equilibrium numerator, and the remainder is divided by the charge-closed sum of the ionic molalities.
+The signed residuals, calculated minus target, are $-0.30$ to $+0.47$\,\% for sodium bicarbonate, without a trend in temperature or molality.
+For sodium carbonate every residual is negative: about $-1.1$\,\% at \SI{0.01}{\mole\per\kilogram}, $-7.4$ to $-8.3$\,\% at 0.2--\SI{0.4}{\mole\per\kilogram} and $-2.3$ to $-4.8$\,\% at \SI{1.0}{\mole\per\kilogram}, where the value at \SI{278.15}{\kelvin} is the least negative; below \SI{0.4}{\mole\per\kilogram} the temperature changes the residual by less than 0.6 points.
+For the mixed solutions, which are not fitted, the residuals run from $-3.8$\,\% at 0.1--\SI{0.2}{\mole\per\kilogram} to $+6.3$\,\% at \SI{1.0}{\mole\per\kilogram} and \SI{278.15}{\kelvin}, changing sign between 0.4 and \SI{0.8}{\mole\per\kilogram}.
+The six mixed rows without a value, at \SI{278.15}{\kelvin} and 0.01, 0.02 and \SI{0.6}{\mole\per\kilogram} and at 288.15, 298.15 and \SI{308.15}{\kelvin} and \SI{0.6}{\mole\per\kilogram}, fail a charge-closure check: the minor anion obtained by closing the charge balance on the printed composition is negative.
+In one row the printed values give $-0.0001$; in the other five they give zero, and floating-point subtraction leaves $-3\times10^{-18}$ to $-2\times10^{-16}$, which the check also refuses.
+
 % P:supplement-salt-limits
 Every result of the four amine models is conditional on the two intercepts that lie on their bounds.
 The sodium carbonate coefficients are already low at \SI{0.01}{\mole\per\kilogram}, where the water--carbonate interaction has almost no effect, which suggests that this interaction does not carry most of the remaining error; no decomposition by term was made.
@@ -553,6 +562,14 @@ With the interaction at 0.7650 and at 1.0 the single liquid converges at both st
 At the colder state, changing only this interaction from 0.1325 to 0.7650 raises the Gibbs energy of the two split liquids 0.391 mol above that of the single liquid, so that split follows from the low value of the interaction.
 The MDEA model, whose water--bicarbonate interaction is 0.171 at \SI{313.15}{\kelvin}, has no confirmed second liquid at the measured states (Section~\ref{sec:s-phase}).
 Under the pressure weights of the MDEA model the Ermatchkov partial-pressure deviation falls, from 38.42\,\% with the first weights to 25.09\,\%, so the trade described above belongs to the first weighting.
+
+% P:supplement-shared-matched
+The two shared sets and the two weightings were compared on identical rows, the salt-fitted set and the MEA-fitted set (water--bicarbonate 0.7650) each refitted with the first weights and with the pressure weights.
+In that order, salt-fitted with the first weights, salt-fitted with the pressure weights (the MDEA model), MEA-fitted with the first weights and MEA-fitted with the pressure weights, the 66 fitted total pressures of Kuranov et al.\ deviate by 10.12, 4.15, 20.09 and 4.46\,\%; the 101 \COtwo partial pressures of Ermatchkov et al.\ by 38.42, 25.09, 17.89 and 31.11\,\%; the 20 of Xiao et al.\ by 34.09, 17.22, 31.07 and 18.78\,\%; and the 40 integral heats of Carson et al.\ by 5.12, 18.69, 5.59 and 18.42\,\%, all heats being underpredicted with the pressure weights.
+The objective of the first weighting is 537.7, 737.2, 564.5 and 834.7, so reweighting raises it for both sets.
+Of the 1564 searches at measured states, 1342, 1340, 1339 and 1336 give a result, with 74 to 78 descents counted over the searches and no confirmed second liquid; of the \num{10260} grid searches, 9234, 9136, 9386 and 9119 give a result.
+The grid searches confirm one split for each salt-fitted fit, at 383.15 and \SI{373.15}{\kelvin}, none for the MEA-fitted fit with the first weights and four, at \SI{383.15}{\kelvin}, for the MEA-fitted fit with the pressure weights; the targeted calculation at \SI{262.862}{\mega\pascal} confirms a split for the MDEA model and for the MEA-fitted fit with the first weights and is unresolved for the other two.
+So with the pressure weights the salt-fitted set is the better of the two on the fitted total pressures and on both sets of partial pressures, and both sets pay with the heats.
 
 \section{Parameter restrictions for MEA}\label{sec:s-restrictions}
 % P:supplement-restrictions

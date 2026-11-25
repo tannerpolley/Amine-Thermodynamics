@@ -40,7 +40,7 @@ The MDEA model fits eight parameters, among them the MDEA--water interaction, wh
 Its objective weights each group of observations so that the many densities do not outweigh the 66 loaded-solution pressures (\cref{sec:parameters}).
 The 66 fitted total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} deviate by 4.15\,\% (\cref{fig:mdea-pressure}), and the 29 of them above the measured R5 range, from \SI{368}{\kelvin}, by 3.94\,\% with almost no bias.
 The other fitted MDEA properties deviate by 0.08\,\% for the \COtwo-free densities up to 18.69\,\% for the integral heats of Carson et al., and every fitted species ratio is overpredicted.
-The first MDEA fit, with the weights of the MEA fit, deviated by 10.12\,\% from the same pressures; the reweighted fit is reported because it fits the loaded solution better, although it raises the objective of the first weighting (Section~\ref{supp-sec:s-objective}).
+The first MDEA fit, with the weights of the MEA fit, deviated by 10.12\,\% from the same pressures; the reweighted fit is reported because it fits the loaded-solution pressures better, although it raises the objective of the first weighting and the deviation of the 40 integral heats of Carson et al.\ from 5.12 to 18.69\,\% (Sections~\ref{supp-sec:s-objective} and~\ref{supp-sec:s-shared}).
 
 % P:transfer-mdea-outside
 Outside the fit the agreement is uneven.
@@ -82,14 +82,14 @@ The fitted loaded-solution pressures are not one quantity across the amines: the
 For MEA the comparison is with the same fit made with the MEA-fitted shared set, which deviates by 11.64 instead of 11.35\,\% from the 47 fitted pressures, while the MEA pressures at \SI{393}{\kelvin} deteriorate with the salt-fitted set (\cref{sec:results-restrictions}).
 For the other amines the first fits already used the salt-fitted set.
 The DEA model adds the Seo and Hong and Lal pressures to the objective and lowers the objective on that common design from 26.43 to 15.54; its pressure deviation is higher than that of the first fit because it is taken over 90 instead of 30 pressures.
-The MDEA model changes the weights and lowers the deviation of the 66 fitted total pressures from 10.12 to 4.15\,\% and that of the Ermatchkov partial pressures from 38.42 to 25.09\,\%.
+The MDEA model changes the weights and lowers the deviation of the 66 fitted total pressures from 10.12 to 4.15\,\% and that of the Ermatchkov partial pressures from 38.42 to 25.09\,\%, while that of the 40 fitted heats of Carson et al.\ rises from 5.12 to 18.69\,\%.
 The AMP model takes its carbamate inputs from the MEA model instead of an earlier MEA fit, and its pressure deviation changes from 10.92 to 10.84\,\%.
 
 % P:shared-reading
 The salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
 MDEA is the amine most sensitive to them, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
 With the first MDEA weights, the MEA-fitted set gave a worse fit of the 66 total pressures, 20.09 against 10.12\,\%, but a better one of the Ermatchkov partial pressures, 17.89 against 38.42\,\%.
-With the pressure weights of the MDEA model, the salt-fitted set is the better of the two on both: 4.15 against 4.46\,\% and 25.09 against 31.11\,\% (Section~\ref{supp-sec:s-shared}).
+With the pressure weights of the MDEA model, the salt-fitted set is the better of the two on both: 4.15 against 4.46\,\% and 25.09 against 31.11\,\%, while the heats of Carson et al.\ deviate by 18.69 and 18.42\,\% (Section~\ref{supp-sec:s-shared}).
 How the MDEA fit changes when the shared parameters are released and fitted together with it remains to be tested.
 
 \input{tables/amine-summary}
