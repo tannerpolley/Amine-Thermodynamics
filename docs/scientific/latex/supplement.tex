@@ -213,7 +213,8 @@ The signed residuals, calculated minus target, are $-0.30$ to $+0.47$\,\% for so
 For sodium carbonate every residual is negative: about $-1.1$\,\% at \SI{0.01}{\mole\per\kilogram}, $-7.4$ to $-8.3$\,\% at 0.2--\SI{0.4}{\mole\per\kilogram} and $-2.3$ to $-4.8$\,\% at \SI{1.0}{\mole\per\kilogram}, where the value at \SI{278.15}{\kelvin} is the least negative; below \SI{0.4}{\mole\per\kilogram} the temperature changes the residual by less than 0.6 points.
 For the mixed solutions, which are not fitted, the residuals run from $-3.8$\,\% at 0.1--\SI{0.2}{\mole\per\kilogram} to $+6.3$\,\% at \SI{1.0}{\mole\per\kilogram} and \SI{278.15}{\kelvin}, changing sign between 0.4 and \SI{0.8}{\mole\per\kilogram}.
 The six mixed rows without a value, at \SI{278.15}{\kelvin} and 0.01, 0.02 and \SI{0.6}{\mole\per\kilogram} and at 288.15, 298.15 and \SI{308.15}{\kelvin} and \SI{0.6}{\mole\per\kilogram}, fail a charge-closure check: the minor anion obtained by closing the charge balance on the printed composition is negative.
-In one row the printed values give $-0.0001$; in the other five they give zero, and floating-point subtraction leaves $-3\times10^{-18}$ to $-2\times10^{-16}$, which the check also refuses.
+In one row the printed values give $-0.0001$, a negative amount; in the other five they give zero at printed precision, and floating-point subtraction leaves $-3\times10^{-18}$ to $-2\times10^{-16}$, which the check also refuses.
+Those five rows lie at the limit of a vanishing minor anion; whether the fit could be evaluated at that zero-species limit was not tested, so they stay without a calculated value.
 
 \input{tables/supplement-salt-reconstruction}
 \begin{figure}[!htbp]
@@ -681,12 +682,12 @@ These pressures are more than 14 times the highest pressure of any search at a m
 The first MDEA fit, with the weights of the MEA objective, has a confirmed split at 383.15 K, a loading of 1.368 mol/mol and 121.309 MPa with the references at the system pressure, discussed in Section~\ref{sec:s-files} with the reference convention.
 
 % P:supplement-phase-amp
-For AMP, the search covers the 270 measured states and 396 grid states, the latter at 26.8 and 30.0 wt\% AMP, the nine grid temperatures and 11 loadings up to 0.966 mol/mol at both pressures.
+For AMP, the search covers 270 measurement-derived feeds and 396 grid states, all searched at scaled pressures, the latter at 26.8 and 30.0 wt\% AMP, the nine grid temperatures and 11 loadings up to 0.966 mol/mol at both pressures.
 These searches use pressures of 1.05 and 3.0 times the bubble pressure of the parameter set being searched.
 For the AMP model every search finishes without a detected instability, with the trial phases of the search alone and also when the trial compositions from earlier searches are tested.
 The same holds for the AMP fit with the slope fixed at \SI{-150}{\kelvin} (Section~\ref{sec:s-amp-slope}); the searches of the earlier fits with the MEA-fitted shared set belong to those fits.
 The grid ends at 393.15 K; the measured states, which extend to the Tong et al.\ pressures at 393.20 K, are searched at their own temperatures, and the AMP model was not searched above 393.20 K.
-Separately from these searches, the six measured states where the first AMP fit confirmed a split, three Hartono et al.\ states at 373 K and three Tong et al.\ states, were recalculated at their measured absolute pressures.
+Separately from these searches, the six measured-pressure controls, the states where the first AMP fit confirmed a split, three Hartono et al.\ states at 373 K and three Tong et al.\ states, were recalculated at their measured total pressures (main-text Table~\ref{main-tab:amp-endpoint-pressure-controls}).
 There the AMP model leaves the phase identity unresolved at four, the three Hartono states and one Tong state at 373.2 K, and finds no descent at two; the fit with the slope fixed at \SI{-150}{\kelvin} leaves three unresolved and finds no descent at three (Table~\ref{tab:supplement-fixed-reference-controls}).
 
 \input{tables/supplement-fixed-reference-controls}
@@ -714,6 +715,7 @@ For the MDEA model the fitted interaction equals the bound at 423 K and lies bel
 The bound was fixed before fitting and independently of the deviations: the no-gap side of the 423 K onset bracket, $-0.0670135$, minus a predeclared margin of $10^{-4}$.
 At 423 K the bound lies below the no-gap edge of the onset bracket at 1.121, 1.466 and 1.811 MPa alike.
 With the fitted temperature law extrapolated above 423 K, the gap first appears between 423.14375 and 423.15000 K at 1.121 MPa, between 423.16250 and 423.16875 K at 1.466 MPa and between 423.17500 and 423.18125 K at 1.811 MPa, so the bound suppresses the calculated gap through the tested temperatures and no further.
+These brackets, like the narrow brackets of Table~\ref{tab:supplement-mdea-binary-onset}, are the numerical resolution of the tested steps, not an experimental uncertainty.
 No bound acts on the loaded MDEA states.
 
 \subsection{First AMP fit and the temperature slope of the cation--water interaction}\label{sec:s-amp-slope}
@@ -840,7 +842,7 @@ At a node the interpolated weight has a kink in temperature, so the slope is tak
 On the 132 pressures inside the fitted range, the Hong parameters deviate by 24.77\,\%, the MEA model by 25.06\,\% and the model of Polley and Hedengren by 50.93\,\% (Table~\ref{tab:supplement-hong-comparison}); the MEA model fitted 32 of these observations and Hong et al.\ none.
 The 22.59\,\% of the MEA-fitted shared set in the same table comes from the earlier shared interactions; with the salt-anchored interactions the system-pressure model deviates by 24.97\,\%, fixing the references at its parameters gives 24.99\,\% and the refit gives 25.06\,\%, so the reference convention moves these pressures by less than 0.1 point.
 With the 13 Hilliard pressures at 313.00--313.147 K, all of which the MEA model fitted, the deviations are 26.27, 23.48 and 53.83\,\%.
-On the Wagner pressures, which none of the three models fitted, the Hong parameters deviate least.
+On the Wagner pressures, which none of the three models fitted, the reconstructed equal-fugacity branch with the Hong parameters deviates least; this is an outcome of the reconstruction, not of the published model.
 Their heat deviations exceed those of the other two models at 313.15 K and are similar at 353.15 and 393.15 K, and their density deviations lie between those of the other two models.
 The 13 intervals of Kim and Svendsen that end above a loading of 0.60 mol/mol are calculated with the Hong parameters only: the RMSE is 4.58 kJ/mol for the ten at 313.15 K and 6.47 or 6.67 kJ/mol, depending on the side of the slope, for the three at 353.15 K.
 

@@ -31,6 +31,8 @@ A single-liquid objective contains no requirement of stability, and ePC-SAFT ion
 For nonreactive binary mixtures, parameters fitted to vapor--liquid data alone are known to give false liquid--liquid splits, and stability has been imposed as a constraint on the estimation \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018,gauReliableNonlinearParameter2000}.
 The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; in an electrolyte the trial phase must be electroneutral \cite{Perdomo2025}, and in a reacting liquid it must also satisfy the chemical constraints \cite{Tsanas2022,Ascani2022}.
 A phase search is thus a separate numerical check on a calibration, although a finite search gives no global proof.
+Tsanas et al.\ applied such a reactive electrolyte stability analysis to a demixing amine blend, water, \COtwo, DEEA and MAPA, described with eNRTL, and did not parameterize the model \cite{Tsanas2022}; Rodr\'iguez et al.\ treat the four amines of this work with transferable SAFT-VR parameters and association in place of explicit ions \cite{Rodriguez2012}.
+The combination tested here is different: explicit ions in one equation of state, with a phase search of each of four linked calibrations.
 
 % P:introduction-06
 This work calibrates an ePC-SAFT model of loaded aqueous MEA, transfers its shared parameters to DEA, MDEA and AMP, and searches each fitted model for phase instability.

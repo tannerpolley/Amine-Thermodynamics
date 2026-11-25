@@ -66,9 +66,12 @@ In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBina
 Each fit is started from the parameters of the same fit made with the R1--R3 references at the system pressure (\cref{sec:reactions}) and from displaced starts drawn from a 64-point Latin hypercube over the parameter box; a drawn start that cannot be evaluated is replaced by the next draw, and Table~\ref{supp-tab:supplement-fit-starts} lists every start.
 For MEA, DEA and AMP, three starts at least 0.42 apart in root-mean-square distance on the unit parameter box reach the same objective value within the function tolerance of the optimizer.
 With the AMP slope fixed (\cref{sec:results-phase}) the starts end in two minima, 76.23 and 2741.26, and the lower is reported.
-For MDEA only one of the 64 drawn starts could be evaluated, and it ended far higher, at 48386.5, so the MDEA fit is provisional: whether the rest of the parameter box admits an evaluable start, or a lower minimum, is undecided.
-No endpoint meets the strict projected-gradient criterion.
-For MEA, DEA and AMP the optimizer stopped on its relative function tolerance, and linearized descent steps from the endpoints, replayed independently, change the objective by less than $10^{-10}$ of its value, consistent with that tolerance; for MDEA the shortest such step lowers it by $6.6\times10^{-8}$ of its value, more than the tolerance, so the MDEA endpoint is also not converged to that tolerance.
+For MDEA, 63 of the 64 drawn starts were tested, one draw failing the start-separation rule, and only one of them could be evaluated; it ended far higher, at 48386.5.
+The reported MDEA endpoint therefore comes from the inherited start A alone, and the MDEA fit is provisional: whether the rest of the parameter box admits an evaluable start, or a lower minimum, is undecided.
+Two stopping tests are reported separately.
+The optimizer stopped on its relative function tolerance for MEA, DEA and AMP and, after two stages ended at the iteration limit, for MDEA start A, and on its parameter tolerance for the MDEA draw (Table~\ref{supp-tab:supplement-fit-starts}).
+The strict projected-gradient criterion, a norm below $10^{-8}$, is a separate test, and no endpoint meets it.
+For MEA, DEA and AMP linearized descent steps from the endpoints, replayed independently, change the objective by less than $10^{-10}$ of its value, consistent with that tolerance; for MDEA the shortest such step lowers it by $6.6\times10^{-8}$ of its value, more than the tolerance, so the MDEA endpoint is also not converged to that tolerance.
 These are local solutions, tested only from the starts run (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-restrictions
@@ -92,7 +95,7 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures of the MEA objective, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 observations and 271 residual degrees of freedom.
+Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures among the 307 observations of the MEA objective, a constant contribution to it, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 observations and 271 residual degrees of freedom.
 These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
 
 \subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}
