@@ -50,6 +50,7 @@ At 60 wt\% MDEA, above the fitted contents of 30--50 wt\%, the densities and hea
 % P:transfer-mdea-parameters
 The temperature coefficient of the MDEA--water interaction has a small standard error, and the interaction itself is held at its bound at \SI{423}{\kelvin} (\cref{sec:methods-phase}); no other MDEA parameter is on a bound.
 The cation--water interaction, $-0.2519\pm0.0773$, and the cation dispersion energy, $\SI{243.5}{\kelvin}\pm\SI{55.3}{\kelvin}$, are almost fully correlated (conditional correlation $+0.9987$), so the data determine one combination of the two (\cref{tab:transfer-fitted}).
+Because the MDEA endpoint is provisional, its standard errors are local Jacobian sensitivities at that endpoint, not uncertainties of a converged minimum.
 
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=0.9\linewidth]{mdea-current-measured-model.pdf}
@@ -76,28 +77,36 @@ The fixed carbamate inputs of AMP, an energy of \SI{203.8710}{\kelvin} and a car
 \end{figure}
 
 \subsubsection{Shared interactions and calibration choices}\label{sec:results-shared}
+% P:shared-100kpa
+The two shared sets are compared most directly in the convention of the reported models.
+With every reaction reference at \SI{100}{\kilo\pascal}, the MEA and MDEA fits were repeated from their start A with the MEA-fitted interactions, 0.765 for water--bicarbonate and $-0.25$ for water--carbonate, and with the weights and bounds of the reported models, the pressure weights for MDEA (Table~\ref{supp-tab:supplement-shared-interaction-sensitivity}).
+The salt-fitted set then deviates less from the 47 fitted \COtwo partial pressures of MEA, 11.34 against 11.57\,\%, from the 66 fitted Kuranov total pressures of MDEA, 4.39 against 4.44\,\%, from the 101 Ermatchkov \COtwo partial pressures, 29.21 against 30.79\,\%, and from the 40 fitted MDEA heats of Carson et al., 13.58 against 17.12\,\%; it deviates more from the 19 Ma'mun \COtwo partial pressures of MEA near \SI{393}{\kelvin}, 38.66 against 33.80\,\%.
+The MEA fit with the MEA-fitted set stopped on its relative function tolerance, like the MEA model, but the MDEA fit with that set stopped at its iteration limit, with a projected gradient of 0.012, so the MDEA differences are sensitivities of that endpoint, not differences between optimized fits.
+At a measured MDEA state at \SI{4.19}{\mega\pascal}, both MDEA fits leave a descent whose phase identity is unresolved (Table~\ref{supp-tab:supplement-shared-interaction-phase-controls}).
+The salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
+
 % P:shared-tradeoff
-\Cref{tab:amine-summary} sets each model beside one comparison fit, and Fig.~\ref{supp-fig:pressure-residuals} shows the pressure residuals of each model.
+\Cref{tab:amine-summary} sets each model beside one comparison fit made with the R1--R3 references at the system pressure, and Fig.~\ref{supp-fig:pressure-residuals} shows the pressure residuals of each model.
 The fitted loaded-solution pressures are not one quantity across the amines: they are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP.
-The comparison fits, and every comparison in this subsection before its last paragraph, were made with the R1--R3 references at the system pressure, which changes the fitted pressure deviations of the reported models by at most 0.23 percentage points (\cref{sec:reactions}); the reported models are quoted below in that convention.
+The system-pressure references change the fitted pressure deviations of the reported models by at most 0.23 percentage points (\cref{sec:reactions}), and in this paragraph and the next the reported models are quoted in that convention.
 For MEA the comparison fit uses the MEA-fitted shared set and deviates by 11.64 instead of 11.35\,\% from the 47 fitted pressures, while the MEA pressures at \SI{393}{\kelvin} deteriorate with the salt-fitted set (\cref{sec:results-restrictions}).
 For DEA it is the fit to the 30 Lawson and Garst pressures alone, which deviates by 36.63\,\% from those 30; adding the Seo and Hong and Lal pressures lowers the objective on the common design from 26.43 to 15.54, and the pressure deviation of the DEA model is higher because it is taken over 90 pressures.
 For MDEA it is the fit with the weights of the MEA objective: the pressure weights lower the deviation of the 66 fitted total pressures from 10.12 to 4.15\,\% and that of the Ermatchkov partial pressures from 38.42 to 25.09\,\%, while that of the 40 fitted heats of Carson et al.\ rises from 5.12 to 18.69\,\%.
 For AMP it is the fit with the carbamate inputs of the MEA fit with the MEA-fitted shared set, which deviates by 10.92 instead of 10.84\,\%.
 
 % P:shared-reading
-The salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
-MDEA is the amine most sensitive to them, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
-Under these system-pressure references and with the weights of the MEA objective, the MEA-fitted set gave a worse fit of the 66 total pressures, 20.09 against 10.12\,\%, but a better one of the Ermatchkov partial pressures, 17.89 against 38.42\,\%.
-With the pressure weights of the MDEA model, the salt-fitted set is the better of the two on both: 4.15 against 4.46\,\% and 25.09 against 31.11\,\%, while the heats of Carson et al.\ deviate by 18.69 and 18.42\,\% (Section~\ref{supp-sec:s-shared}).
+MDEA is the amine most sensitive to the shared interactions, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
+With the system-pressure references and the weights of the MEA objective, the MEA-fitted set gave a worse fit of the 66 total pressures, 20.09 against 10.12\,\%, but a better one of the Ermatchkov partial pressures, 17.89 against 38.42\,\%.
+With the pressure weights of the MDEA model, the salt-fitted set is the better of the two on both, 4.15 against 4.46\,\% and 25.09 against 31.11\,\%, while the heats of Carson et al.\ deviate by 18.69 and 18.42\,\% (Section~\ref{supp-sec:s-shared}).
+That trade-off therefore belongs to the weights of the MEA objective; at \SI{100}{\kilo\pascal} and with the pressure weights, the salt-fitted set fits none of the three compared MDEA sets worse.
 How the MDEA fit changes when the shared parameters are released and fitted together with it remains to be tested.
 
-% P:shared-100kpa
-With every reaction reference at \SI{100}{\kilo\pascal}, the two shared sets were also compared directly: the MEA and MDEA fits were repeated from their start A with the MEA-fitted interactions, 0.765 for water--bicarbonate and $-0.25$ for water--carbonate, and with unchanged weights and bounds (Table~\ref{supp-tab:supplement-shared-interaction-sensitivity}).
-The salt-fitted set then deviates less from the 47 fitted \COtwo partial pressures of MEA, 11.34 against 11.57\,\%, from the 66 fitted Kuranov total pressures of MDEA, 4.39 against 4.44\,\%, from the 101 Ermatchkov \COtwo partial pressures, 29.21 against 30.79\,\%, and from the 40 fitted MDEA heats of Carson et al., 13.58 against 17.12\,\%; it deviates more from the 19 Ma'mun \COtwo partial pressures of MEA near \SI{393}{\kelvin}, 38.66 against 33.80\,\%.
-The MDEA fit with the MEA-fitted set stopped at its iteration limit, with a projected gradient of 0.012, so its differences are sensitivities of that endpoint, not differences between optimized fits.
-At a measured MDEA state at \SI{4.19}{\mega\pascal}, both MDEA fits leave a descent whose phase identity is unresolved (Table~\ref{supp-tab:supplement-shared-interaction-phase-controls}).
-The trade-off of the preceding paragraph therefore arose under system-pressure references; at \SI{100}{\kilo\pascal} the salt-fitted set does not fit any of the three compared MDEA sets worse.
+% P:shared-endpoints
+The choice among tied endpoints does not change the reported predictions of MEA, DEA and AMP.
+Replayed on the pressures and heats of Table~\ref{supp-tab:supplement-endpoint-prediction-spread}, including those outside each objective and the MEA pressures and heats at 373--\SI{393}{\kelvin}, the three endpoints of each amine (\cref{sec:parameters}) differ in AARD by at most 0.0004 percentage points for MEA, 0.0014 for DEA and 0.0002 for AMP, while the reported endpoint deviates from the same measurements by 0.6--206\,\%; each difference is more than a thousand times smaller than the deviation on the same rows.
+For MDEA the two continuations of start A agree with it within 0.0002 percentage points on the Kuranov, Ermatchkov and Carson data.
+The only evaluable drawn start ended in a separate basin, at an objective of 48386.5 against 15.609; its deviations of 64\,\% for the Kuranov pressures and 320\,\% for the Carson heats show that a much worse local minimum exists, not a competing fit, and the MDEA endpoint stays provisional because the rest of the parameter box was not explored.
+These comparisons concern the endpoints found and do not quantify parameter uncertainty.
 
 \input{tables/amine-summary}
 
@@ -245,7 +254,7 @@ Neither shared set was fitted jointly with the four amines, so agreement for one
 % P:limits-estimation
 Every fit is a local solution, tested only from the starts run (\cref{sec:parameters}).
 For MEA, DEA and AMP three distinct starts reach the same objective, but no endpoint meets the strict projected-gradient criterion, and the MDEA fit is provisional: only one of 64 drawn starts could be evaluated, the reported endpoint comes from the inherited start, and a descent step from its endpoint still lowers the objective by more than the function tolerance, so the MDEA results are stated for that endpoint only (Section~\ref{supp-sec:s-uncertainty}).
-How far the predictions of the tied endpoints spread within each operating band, compared with their deviations from measurements there, has not been evaluated.
+The tied endpoints of MEA, DEA and AMP give the same predictions (\cref{sec:results-shared}), but that agreement is not a parameter uncertainty, which remains unquantified.
 The weights are assigned and differ between the amines; in the MDEA objective the loaded total pressures carry 41.3\,\%, the integral heats 19.0\,\% and the \COtwo-free densities 12.6\,\%.
 The standard errors exclude model discrepancy and the uncertainty of the shared parameters.
 The amine reaction correlations, R4 and R5, are evaluated outside their source temperature ranges for every amine, unlike R1--R3, and the R4 correlations of DEA and AMP are fitted.
