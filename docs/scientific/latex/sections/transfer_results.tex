@@ -203,29 +203,38 @@ The fitted MDEA pressures above \SI{368}{\kelvin} lie outside the measured R5 ra
 For DEA, 61 of the 90 fitted pressures lie outside the measured temperature range of R4 and 61 outside that of R5 (Table~\ref{supp-tab:supplement-transfer-data}), and the isotherm at \SI{394}{\kelvin} is not fitted.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
-% P:literature-mea
-\Cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026}.
-The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures; the two models were fitted to different data, so these deviations do not rank them.
-On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin} (\cref{tab:published-models}), the MEA model underpredicts every pressure and deviates by 38.66\,\%, against 21.03\,\% for the PC-SAFT calculation of Baygi and Pahlavanzadeh, which fitted no ternary data, and 13.5\,\% for the eNRTL model of Zhang et al., which fitted these pressures.
-Hong et al.\ report 1.53\,\% for a pathway-weighted PC-SAFT model of loaded MEA \cite{hongModelingCO2Absorption2027}; that value is a deviation from the simulator pressures to which the model was fitted, with a pathway weight fitted at each state, not from measurements.
-Section~\ref{supp-sec:s-hong} evaluates an equal-fugacity reconstruction of their model on measured pressures; the reconstruction was not verified against published values of their model, so its outcomes are attributed to the reconstruction, not to the model of Hong et al.
+% P:literature-row
+\Cref{tab:published-models} compares published models with this work on observations matched row by row where the source allows it.
+On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin}, which no fit of this work includes, the MEA model underpredicts every pressure and deviates by 38.66\,\%, against 21.03\,\% for the PC-SAFT calculation of Baygi and Pahlavanzadeh, which fitted no ternary data, and 13.5\,\% for the eNRTL model of Zhang et al., which fitted these pressures.
+On the 101 \COtwo partial pressures of Ermatchkov et al., which the MDEA model did not fit but which helped choose its initial parameters, so that the comparison is not a blind test, the MDEA model deviates by 29.21\,\%; their parameter set I, which did not fit them either, deviates by 16.8\,\%, and set II and the eNRTL model of Zhang and Chen, both fitted to them, by 3.9 and 17.7\,\%.
+Here a published model that fitted nothing to these data is closer.
+On the 28 total pressures of P\'erez-Salado Kamps et al., to which both published sets were fitted, these report 1.9 and 3.5\,\%, and the MDEA model, not fitted to them, deviates by 14.76\,\% on the same 28.
+On 27 of them it deviates by 11.93\,\%; the 28th state is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, which the MDEA model calculates at \SI{14.457}{\mega\pascal}, a deviation of $+91.1$\,\%.
 
 \input{tables/published-models}
 
 % P:literature-mdea
-For MDEA, \cref{tab:published-models} sets the MDEA model beside published values on three sets of observations.
 On the 82 total pressures of Kuranov et al., matched to the source rows one by one, of which the MDEA model fitted 70, it deviates by 4.35\,\%.
-\Cref{tab:published-models} also lists the values of two models that fitted these pressures \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020,zhangThermodynamicModelingCO22011} and of the ePC-SAFT calculations of Uyan et al.\ and Wangler et al., which fitted no parameter to the ternary system \cite{Uyan2015,Wangler2018}.
-The published values are identified with these 82 observations by their count only, so they are listed without being ranked against the MDEA model (Section~\ref{supp-sec:s-published}).
-On the 101 \COtwo partial pressures of Ermatchkov et al.\ the MDEA model deviates by 29.21\,\%, against 16.8\,\% for their parameter set I, which did not fit them either, so here a published model that fitted nothing to these data is closer.
-On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets, both fitted to them, report 1.9 and 3.5\,\% and are far closer than the MDEA model, which was not fitted to them and deviates by 11.93\,\% on 27 of them and by 14.76\,\% on all 28.
-The 28th state is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, which the MDEA model calculates at \SI{14.457}{\mega\pascal}, a deviation of $+91.1$\,\%.
+As context, \cref{tab:published-models} also lists the values of two models that fitted these pressures \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020,zhangThermodynamicModelingCO22011} and of the ePC-SAFT calculations of Uyan et al.\ and Wangler et al., which fitted no parameter to the ternary system \cite{Uyan2015,Wangler2018}.
+These published values are identified with the 82 observations by their count only, so they are not ranked against the MDEA model (Section~\ref{supp-sec:s-published}).
+
+% P:literature-mea
+\Cref{tab:mea-data} and Table~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical observations.
+The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures; the two models were fitted to different data, so these deviations do not rank them.
+Hong et al.\ report 1.53\,\% for a pathway-weighted PC-SAFT model of loaded MEA \cite{hongModelingCO2Absorption2027}; that value is a deviation from the simulator pressures to which the model was fitted, with a pathway weight fitted at each state, not from measurements.
+Section~\ref{supp-sec:s-hong} evaluates an equal-fugacity reconstruction of their model on measured pressures; the reconstruction was not verified against published values of their model, so its outcomes are attributed to the reconstruction, not to the model of Hong et al.
 
 % P:literature-amp-dea
 For AMP, two eNRTL models were fitted to the pressures used here: Yi et al.\ report 15.4\,\% for the 51 \COtwo partial pressures of Kundu et al.\ and 8.0\,\% for the 45 total pressures of Tong et al.\ \cite{yiOpenAccessThermodynamically2024}, and Hartono et al.\ report 17.3 and 9.3\,\% \cite{hartonoSolubilityCO201M2020}.
 The AMP model deviates by 15.64\,\% from the Kundu pressures, which it did not fit, and by 10.35\,\% from the 45 pressures of Tong et al., of which it fitted the 40 loaded ones.
-For DEA no deviation of a published model on identical observations is available (Section~\ref{supp-sec:s-published}).
+For DEA no deviation of a published model on identical loaded-solution observations is available (Section~\ref{supp-sec:s-published}).
+For the water--DEA binary, Horstmann et al.\ fitted their model to their excess enthalpies and bubble pressures together and report no numerical deviation, so the comparison is one of sign: the 14 measured excess enthalpies are negative, and the DEA model, whose constant water--DEA interaction is fitted to the bubble pressures alone, calculates them positive (\cref{sec:results-dea}).
 Rodr\'iguez et al.\ compare their SAFT-VR model with the MEA pressures of Jou et al.\ and the MDEA pressures of Kuranov et al.\ only graphically \cite{Rodriguez2012}.
+
+% P:literature-constants
+These comparisons rank agreement with measured pressures, not the fitted constants.
+Smith et al.\ show that equilibrium constants defined on different concentration scales must be converted exactly before they are compared, and that when equilibrium constants and activity-coefficient parameters are fitted to the same \COtwo pressures, they compensate, so that models reproducing the pressures can imply different constants and speciation \cite{smithGibbsEnergyMinimization}.
+Here every constant is applied on one aqueous-molality basis (\cref{sec:reactions}), and the fitted R4 correlations of DEA and AMP are of the compensating kind: the DEA R4 constant term and carbamate--water interaction are correlated at 0.976 (\cref{sec:results-dea}).
 
 \subsection{Physical interpretation}\label{sec:discussion-interpretation}
 % P:interpretation-01
@@ -243,7 +252,7 @@ The linear temperature law of this interaction lets one bound act where the gap 
 % P:interpretation-02
 The electrostatic terms carry choices that the data do not test.
 For the chain cations the Born diameter is that of one segment, not the volume-equivalent diameter, and for all ions the solvation average runs over all components rather than over ions and solvents only \cite{Figiel2025}.
-Tests of these choices, made with the MEA-fitted shared set, changed the fitted MDEA pressure deviation by up to 2.4 percentage points and did not remove the carbonate deficit of \cref{sec:results-pressure} (Section~\ref{supp-sec:s-carbonate}).
+Tests of these choices, made with the MEA-fitted shared set, changed the fitted MDEA pressure deviation by up to 2.4 percentage points and did not remove the carbonate deficit of \cref{sec:results-pressure}, where the geometric mean of the calculated-to-observed carbonate shares is 0.070 (Section~\ref{supp-sec:s-carbonate}).
 That deficit limits any use of the calculated carbonate concentrations.
 
 \subsection{Scope and limitations}\label{sec:limits}
