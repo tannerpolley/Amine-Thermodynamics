@@ -215,6 +215,12 @@ For the mixed solutions, which are not fitted, the residuals run from $-3.8$\,\%
 The six mixed rows without a value, at \SI{278.15}{\kelvin} and 0.01, 0.02 and \SI{0.6}{\mole\per\kilogram} and at 288.15, 298.15 and \SI{308.15}{\kelvin} and \SI{0.6}{\mole\per\kilogram}, fail a charge-closure check: the minor anion obtained by closing the charge balance on the printed composition is negative.
 In one row the printed values give $-0.0001$; in the other five they give zero, and floating-point subtraction leaves $-3\times10^{-18}$ to $-2\times10^{-16}$, which the check also refuses.
 
+\begin{figure}[!htbp]
+\centering\includegraphics[width=\linewidth]{salt-osmotic-residuals.pdf}
+\caption{Signed relative deviations of the calculated ionic osmotic coefficient from the target derived from Peiper and Pitzer. The mixed-salt refusals are shown at their nominal molality and temperature in the lower-right panel. No residual is available for those states.}
+\label{fig:salt-osmotic-residuals}
+\end{figure}
+
 % P:supplement-salt-limits
 Every result of the four amine models is conditional on the two intercepts that lie on their bounds.
 The sodium carbonate coefficients are already low at \SI{0.01}{\mole\per\kilogram}, where the water--carbonate interaction has almost no effect, which suggests that this interaction does not carry most of the remaining error; no decomposition by term was made.
@@ -581,6 +587,9 @@ Of the 1564 searches at measured states, 1342, 1340, 1339 and 1336 give a result
 The grid searches confirm one split for each salt-fitted fit, at 383.15 and \SI{373.15}{\kelvin}, none for the MEA-fitted fit with the first weights and four, at \SI{383.15}{\kelvin}, for the MEA-fitted fit with the pressure weights; the targeted calculation at \SI{262.862}{\mega\pascal} confirms a split for the MDEA model and for the MEA-fitted fit with the first weights and is unresolved for the other two.
 So with the pressure weights the salt-fitted set is the better of the two on the fitted total pressures and on both sets of partial pressures, and both sets pay with the heats.
 
+\input{tables/supplement-mdea-matched-weights}
+\FloatBarrier
+
 \section{Parameter restrictions for MEA}\label{sec:s-restrictions}
 % P:supplement-restrictions
 Table~\ref{tab:choice-cost} gives the joint MEA fit repeated on the same observations and weights for a sequence of cumulative restrictions; rows five to seven use the salt-fitted interactions in the nine-parameter form of the fourth row.
@@ -657,6 +666,8 @@ All 25 descents point toward a vapor, and none is left unclassified.
 At each of the 25 states the assigned pressure lies below the bubble pressure of the MDEA model: 0.1 against 0.19--\SI{0.20}{\mega\pascal} for the four Sobrino states, 0.5 or 2.5 against 0.52--\SI{3.44}{\mega\pascal} for the B\"ottinger states, 0.53--4.19 against 0.68--\SI{70.5}{\mega\pascal} for the Zheng states and 1.121 against 1.19--\SI{2.46}{\mega\pascal} for the Merkley states.
 A two-liquid calculation was attempted at the 17 states at which a liquid-labelled trial endpoint also descended, and it confirmed a second liquid at none; at the other eight no liquid-labelled endpoint descended, four of them shown only by an earlier trial composition, and none was attempted.
 These descents show a single liquid held below its calculated bubble pressure, not a liquid--liquid split.
+
+\input{tables/supplement-mdea-phase-outcomes}
 
 % P:supplement-phase-mdea-split
 The remaining state is a confirmed liquid--liquid split at the grid state at 373.15 K, 78.62 wt\% MDEA (1.7988 mol water per mole of MDEA), a loading of 1.300 mol/mol and 1.05 times the bubble pressure, 204.054 MPa; the two-liquid solution lowers $G/(RT)$ by $5.016\times10^{-4}$ mol against a numerical error of $7.2\times10^{-10}$ mol.
