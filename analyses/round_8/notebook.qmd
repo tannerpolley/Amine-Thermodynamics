@@ -1,0 +1,75 @@
+---
+title: Round 8 referee calculations
+---
+
+At fixed liquid inventory, $G^*=G_{\rm EOS}+RT\sum_i n_i b_i(T,P_s)$ and
+$G^*_P=V_{\rm EOS}+RT\sum_i n_i b_{i,P_s}\,dP_s/dP$.
+R1–R3 track pressure. R4–R5 use 0.1 MPa where present.
+Stationarity gives the same envelope derivative on each differentiable reaction branch at fixed conserved feed.
+Sum phase contributions for a pair and use one-sided derivatives at a branch switch.
+At fixed volume the separate pressure-reference chain term is
+$-RT^2\sum_i n_i b_{i,P_s}(\partial P/\partial T)_{V,n}$.
+The Gibbs–Helmholtz readback holds system and reference pressure fixed and uses the Engine caloric gauge through $G=H-TS$.
+The phase volumes and energies are per mole of apparent amine fed.
+
+Peiper and Pitzer Table 6 and Eq. 25 give $-\ln a_w/M_w=\phi_{\rm eq}\sum_i m_i=\phi_{\rm st}\sum_s\nu_s m_s$
+within printed precision. The fitted ionic target subtracts the ideal dissolved CO₂ molality from the equilibrium numerator
+and divides by the charge-closed ionic molality sum. The retained mixed denominator is 39 of 45.
+
+These results await delivered evidence review and investigator promotion. The finite searches concern declared states and trial banks.
+Measured property errors and predicted phase splits have separate evidentiary roles.
+
+[Quantity index](manuscript-handoff.json)
+
+## Scope and provenance
+
+The reference derivatives cover one fitted loading per amine and the parent and
+two daughters at the extrapolated MDEA split. No comparison-pressure state
+enters the derivative summary. The MEA and AMP caloric diagnostics remain
+unresolved. The 100 kPa reference control at 204.054 MPa retains a resolved
+descent. Its seeded two-liquid solve reports an indeterminate reduced Hessian
+and returns no phase amounts for a bulk Gibbs comparison.
+
+The AMP measured-pressure comparison retains the six exact historical controls
+and their replay outcomes. The adopted refit includes 18 supplemental Hartono
+and 40 loaded Tong pressures. The earlier hot-pressure biases were −28.1% for
+18 Hartono and −25.3% for 25 Tong observations. The original model was also
+sensitive to freezing or continuing R5 at constant enthalpy above 353.22 K.
+These changes support a comparison of the complete refit and a separate
+sensitivity of the original model.
+
+The Weiland et al. (1998) Table 2 observations come from prepared solutions
+measured with calibrated hydrometers. The phase splits are model predictions
+at four of those feeds. The first split record gives both daughter amount
+fractions, compositions, molar and mass densities, and the closure residuals.
+
+The 82 current-model Kuranov predictions are row matched. Author aggregates
+remain count-matched unless their row identities are established. The corrected
+Kamps published values retain their 28-observation denominator. The comparable
+local subset excludes Ermatchkov Table 6 row 13, where both pressure-weighted
+solves exhausted their iterations. Hong equal-fugacity calculations fix the
+vapor amount at $10^{-9}$ of the feed.
+
+Core contributors are read from `be37c32a3`. The named display replays are
+read from `be3e316c5`. The display contributor digests use decompressed JSON for gzip records.
+The pinned-wheel readback independently reproduces the archived Kuranov
+row 72 prediction of 1,165,619.52995 Pa at the same feed and temperature.
+
+The branch adds 650 executable lines against `be37c32a3`, with six removed.
+The initial 450-line estimate did not cover the same-gauge branch calculations,
+matched witness and missing bubble-pressure readbacks, and reconstruction
+checks for seven items. The owner authorized the expanded estimate. The
+calculation reuses the round-7 reference, equilibrium, root, and coexistence
+routines.
+
+## Retained results
+
+| Item | Disposition | Evidence | Record |
+| --- | --- | --- | --- |
+| C1 | undecided | The MDEA parent correction is -14.46% at 204.054 MPa. MEA and AMP caloric readbacks remain incomplete. | [Retained quantities](results/reference-derivatives.json.gz) |
+| C2 | answered | The adopted model confirms a grid split at 204.054 MPa and a targeted split at 262.862 MPa. 0 measured states include an unclassified direction. | [Retained quantities](results/mdea-phase-outcomes.json.gz) |
+| C3 | answered | Liquid density AARD is 0.14782% across four predicted split feeds and 0.44704% across all 44 observations. | [Retained quantities](results/dea-split-densities.json.gz) |
+| C4 | narrowed claim | 0 of six comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches. | [Retained quantities](results/amp-six-states.json.gz) |
+| C5 | answered | 39/45 mixed predictions are available. Pressure weighting improves the 66 fitted loaded totals and raises salt-set Carson heat AARD. | [Retained quantities](results/salt-and-weighting.json.gz) |
+| C6 | narrowed claim | The 17.401 and 17.600 MDEA endpoints differ at 204.054 MPa. The selected MEA and AMP endpoint pairs have no resolved descent at their common controls. | [Retained quantities](results/endpoint-comparison.json.gz) |
+| C7 | answered | Kuranov AARD is 4.16% on 82 matched rows. The corrected Kamps pool has 27 common keys. Hong fails local stability at 131/132 equal-fugacity states. | [Retained quantities](results/literature-populations.json.gz) |

@@ -1,0 +1,222 @@
+{
+  "base": "be37c32a3",
+  "display_snapshot": "be3e316c5",
+  "items": {
+    "C1": {
+      "disposition": "undecided",
+      "reason": "The MDEA parent correction is -14.46% at 204.054 MPa. MEA and AMP caloric readbacks remain incomplete.",
+      "runtime": {
+        "replay_s": 58.022632341991994,
+        "reduction_s": 0.029492781002772972,
+        "projection_s": 210
+      },
+      "quantities": {
+        "branches": {
+          "record": "results/reference-derivatives.json.gz",
+          "field": "quantities.branches"
+        },
+        "low_pressure_controls": {
+          "record": "results/reference-derivatives.json.gz",
+          "field": "quantities.low_pressure_controls"
+        }
+      },
+      "record_sha256": "12544cec9e01a7d81f4c4a563df677b9ae79f351cbe27318f180b0f9611ac8a5"
+    },
+    "C2": {
+      "disposition": "answered",
+      "reason": "The adopted model confirms a grid split at 204.054 MPa and a targeted split at 262.862 MPa. 0 measured states include an unclassified direction.",
+      "runtime": {
+        "replay_s": 3.6719462889886927,
+        "reduction_s": 0.34497110900701955,
+        "projection_s": 85
+      },
+      "quantities": {
+        "fingerprint": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.fingerprint"
+        },
+        "strata": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.strata"
+        },
+        "classifications": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.classifications"
+        },
+        "targeted": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.targeted"
+        },
+        "counts": {
+          "record": "results/mdea-phase-outcomes.json.gz",
+          "field": "quantities.counts"
+        }
+      },
+      "record_sha256": "bdec080e56377a41b6bc0e813759920e55d15641ccfcce9c578571b9b78d1553"
+    },
+    "C3": {
+      "disposition": "answered",
+      "reason": "Liquid density AARD is 0.14782% across four predicted split feeds and 0.44704% across all 44 observations.",
+      "runtime": {
+        "replay_s": 0,
+        "reduction_s": 0.019271021999884397,
+        "projection_s": 10
+      },
+      "quantities": {
+        "four": {
+          "record": "results/dea-split-densities.json.gz",
+          "field": "quantities.four"
+        },
+        "all_44": {
+          "record": "results/dea-split-densities.json.gz",
+          "field": "quantities.all_44"
+        },
+        "rows": {
+          "record": "results/dea-split-densities.json.gz",
+          "field": "quantities.rows"
+        },
+        "first_split": {
+          "record": "results/dea-split-densities.json.gz",
+          "field": "quantities.first_split"
+        }
+      },
+      "record_sha256": "478da1d8c7b03e246cd1ed807b89c700174a2e0ed887e1cdb24e4b8898795c96"
+    },
+    "C4": {
+      "disposition": "narrowed claim",
+      "reason": "0 of six comparisons confirm an adopted two-liquid split. Grid conclusions apply to the declared searches.",
+      "runtime": {
+        "replay_s": 5.1424285960092675,
+        "reduction_s": 0.17040828500466887,
+        "projection_s": 12
+      },
+      "quantities": {
+        "rows": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.rows"
+        },
+        "archived_design": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.archived_design"
+        },
+        "worked_state": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.worked_state"
+        },
+        "added_pressure_rows": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.added_pressure_rows"
+        },
+        "hot_original": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.hot_original"
+        },
+        "original_R5_control": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.original_R5_control"
+        },
+        "original_slope_control": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.original_slope_control"
+        },
+        "grid": {
+          "record": "results/amp-six-states.json.gz",
+          "field": "quantities.grid"
+        }
+      },
+      "record_sha256": "8b328a73de040c2d8a9b8c0964d9514f6810bf608d7c32a1aab047b65c471db4"
+    },
+    "C5": {
+      "disposition": "answered",
+      "reason": "39/45 mixed predictions are available. Pressure weighting improves the 66 fitted loaded totals and raises salt-set Carson heat AARD.",
+      "runtime": {
+        "replay_s": 0,
+        "reduction_s": 0.44001113600097597,
+        "projection_s": 20
+      },
+      "quantities": {
+        "residuals": {
+          "record": "results/salt-and-weighting.json.gz",
+          "field": "quantities.residuals"
+        },
+        "available": {
+          "record": "results/salt-and-weighting.json.gz",
+          "field": "quantities.available"
+        },
+        "models": {
+          "record": "results/salt-and-weighting.json.gz",
+          "field": "quantities.models"
+        },
+        "properties": {
+          "record": "results/salt-and-weighting.json.gz",
+          "field": "quantities.properties"
+        }
+      },
+      "record_sha256": "c7bffef866fcaa36d05b750e8ce9d61b1bab3ea8e6514a4cc403eddf1a5e96a7"
+    },
+    "C6": {
+      "disposition": "narrowed claim",
+      "reason": "The 17.401 and 17.600 MDEA endpoints differ at 204.054 MPa. The selected MEA and AMP endpoint pairs have no resolved descent at their common controls.",
+      "runtime": {
+        "replay_s": 7.202562826991198,
+        "reduction_s": 0.1501665179966949,
+        "projection_s": 45
+      },
+      "quantities": {
+        "MDEA": {
+          "record": "results/endpoint-comparison.json.gz",
+          "field": "quantities.MDEA"
+        },
+        "AMP": {
+          "record": "results/endpoint-comparison.json.gz",
+          "field": "quantities.AMP"
+        },
+        "MEA #435": {
+          "record": "results/endpoint-comparison.json.gz",
+          "field": "quantities.MEA #435"
+        },
+        "round7_F4_display_excluded": {
+          "record": "results/endpoint-comparison.json.gz",
+          "field": "quantities.round7_F4_display_excluded"
+        },
+        "unavailable": {
+          "record": "results/endpoint-comparison.json.gz",
+          "field": "quantities.unavailable"
+        }
+      },
+      "record_sha256": "b47ab9672126c607a0591009d8fac7a34cfaaaf35dea5d362c510a38abc2b98d"
+    },
+    "C7": {
+      "disposition": "answered",
+      "reason": "Kuranov AARD is 4.16% on 82 matched rows. The corrected Kamps pool has 27 common keys. Hong fails local stability at 131/132 equal-fugacity states.",
+      "runtime": {
+        "replay_s": 0.3439490449964069,
+        "reduction_s": 0.0977313039911678,
+        "projection_s": 8
+      },
+      "quantities": {
+        "kuranov": {
+          "record": "results/literature-populations.json.gz",
+          "field": "quantities.kuranov"
+        },
+        "kamps": {
+          "record": "results/literature-populations.json.gz",
+          "field": "quantities.kamps"
+        },
+        "published_Kamps_28": {
+          "record": "results/literature-populations.json.gz",
+          "field": "quantities.published_Kamps_28"
+        },
+        "hong": {
+          "record": "results/literature-populations.json.gz",
+          "field": "quantities.hong"
+        },
+        "published_table_snapshot": {
+          "record": "results/literature-populations.json.gz",
+          "field": "quantities.published_table_snapshot"
+        }
+      },
+      "record_sha256": "bcde55402285346f18009221077431c4b6d9add19e4c8351e2cede6e8b5f1eb0"
+    }
+  }
+}
