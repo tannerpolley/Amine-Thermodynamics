@@ -1,11 +1,13 @@
-"""Plot promoted F2 values only; no model evaluation."""
+"""Plot retained #435 and historical comparison values only; no model evaluation."""
 import json
+from io import BytesIO
+import sys
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import final_rerun_tables as t
-from final_rerun_tables import a, F, E
+from final_rerun_tables import a, F, ADOPTED
 OUT = t.ROOT/'docs/scientific/latex/figures/generated'
 plt.rcParams.update({'font.size':11,'font.family':'STIXGeneral','mathtext.fontset':'stix','pdf.fonttype':42,'figure.constrained_layout.use':True})
 STYLES = ['-', '--', '-.', (0, (7, 2, 1, 2, 1, 2)), (0, (5, 1, 1, 1)), (0, (3, 1, 1, 1, 1, 1)), '-', ':']
@@ -28,7 +30,14 @@ def temperature_legend(temperatures):
                    label=f'{T:g} K') for T in temperatures]
 
 def save(fig,name):
-    fig.savefig(OUT/(name+'.pdf'),metadata={'CreationDate':None,'ModDate':None}); plt.close(fig)
+    path = OUT / (name + '.pdf')
+    with BytesIO() as buffer:
+        fig.savefig(buffer, format='pdf', metadata={'CreationDate':None,'ModDate':None})
+        if '--check' in sys.argv:
+            assert path.read_bytes() == buffer.getvalue(), path
+        else:
+            path.write_bytes(buffer.getvalue())
+    plt.close(fig)
 
 def points(ax,rows,x,y,label,marker='o',scale=1):
     ax.scatter([float(r[x]) for r in rows],[float(r[y])*scale for r in rows],s=16,facecolors='none',edgecolors='black',marker=marker,label=label,zorder=3)
@@ -106,12 +115,19 @@ def main():
     for key,color in zip(dict.fromkeys(r['curve'] for r in rows),COLORS):
         style = STYLES[list(dict.fromkeys(r['curve'] for r in rows)).index(key)]
         part=[r for r in rows if r['curve']==key and r['quantity']=='bubble temperature' and r['status']=='available']; ax.plot([float(r['liquid_mea_mole_fraction']) for r in part],[float(r['value']) for r in part],color=color,linestyle=style,label=key)
-    replay=a.load(E/'candidate/replay.json')['rows']; obs=[dict(r['row'],observed=r['observed']) for r in replay if r['group']=='Cai' and r['row']['quantity']=='temperature']; points(ax,[dict(r,x_mea=r['feed']['monoethanolamine']) for r in obs],'x_mea','observed','Measured')
+    replay=a.load(ADOPTED/'replay.json')['rows']; obs=[dict(r['row'],observed=r['observed']) for r in replay if r['group']=='Cai' and r['row']['quantity']=='temperature']; points(ax,[dict(r,x_mea=r['feed']['monoethanolamine']) for r in obs],'x_mea','observed','Measured')
     ax.set(xlabel='Liquid MEA mole fraction',ylabel='Bubble temperature (K)'); ax.legend(); save(fig,'mea-water')
     rows=a.rows(a.BUNDLE/'results/split-cause-342/figure-contributions.csv'); fig,ax=plt.subplots(figsize=(6.8,4)); names=['hard_chain','dispersion','association','debye_huckel','born','pv','ideal_and_standard','delta_g_over_rt']
-    for i,r in enumerate(rows): ax.barh([k+i*.35 for k in range(len(names))],[float(r[n]) for n in names],height=.35,color=['#0072B2','#B54D00'][i],edgecolor='#222222',linewidth=.6,hatch='' if i==0 else '///',label='Unpenalized comparison' if i==0 else 'Present model, frozen compositions')
+    for i,r in enumerate(rows): ax.barh([k+i*.35 for k in range(len(names))],[float(r[n]) for n in names],height=.35,color=['#0072B2','#B54D00'][i],edgecolor='#222222',linewidth=.6,hatch='' if i==0 else '///',label='Unpenalized comparison' if i==0 else 'Previous shared set, frozen compositions')
     ax.set(yticks=[k+.175 for k in range(len(names))],yticklabels=['Hard chain','Dispersion','Association','Debye–Hückel','Born','PV','Ideal + standard','Total'],xlabel='Split minus parent G/(RT) (mol)'); ax.axvline(0,color='black',lw=.7); ax.legend(); save(fig,'split-energy')
-    rows=[r for r in a.rows(E/'uncertainty/prediction-bands.csv') if r['group']=='common149: partial_pressure']; assert len(rows)==47; rows.sort(key=lambda r:(float(meta[r['identity'].removesuffix('-pco2')]['temperature_reported_C']),float(meta[r['identity'].removesuffix('-pco2')]['CO2_loading']))); fig,ax=plt.subplots(figsize=(6.8,3.4)); ax.errorbar(range(len(rows)),[float(r['value'])/1000 for r in rows],yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in rows],fmt='o',ms=3); ax.set(xlabel='Fitted pressure observations, ordered by temperature and loading',ylabel='CO$_2$ partial pressure (kPa)'); save(fig,'pressure-uncertainty')
-    (t.ROOT/'docs/scientific/latex/builds/347-figure-hashes.json').write_text(json.dumps({'commit':t.BASE,'files':a.INPUTS},indent=2)+'\n')
+    rows=[r for r in a.rows(ADOPTED/'uncertainty/prediction-bands.csv') if r['group']=='common149: partial_pressure']; assert len(rows)==47; rows.sort(key=lambda r:(float(meta[r['identity'].removesuffix('-pco2')]['temperature_reported_C']),float(meta[r['identity'].removesuffix('-pco2')]['CO2_loading']))); fig,ax=plt.subplots(figsize=(6.8,3.4)); ax.errorbar(range(len(rows)),[float(r['value'])/1000 for r in rows],yerr=[1.96*float(r['SE_bound_fixed'])/1000 for r in rows],fmt='o',ms=3); ax.set(xlabel='Fitted pressure observations, ordered by temperature and loading',ylabel='CO$_2$ partial pressure (kPa)'); save(fig,'pressure-uncertainty')
+    manifest = t.ROOT/'docs/scientific/latex/builds/347-figure-hashes.json'
+    contents = json.dumps({'commit': t.SALT_COMMIT, 'scope': '#435 adopted MEA and historical split-energy comparison', 'files': a.INPUTS},
+                          indent=2) + '\n'
+    if '--check' in sys.argv:
+        assert manifest.read_text() == contents, manifest
+    else:
+        manifest.write_text(contents)
+
 
 if __name__=='__main__': main()
