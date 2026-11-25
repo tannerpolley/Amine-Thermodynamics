@@ -1,6 +1,7 @@
 """Compare the retained #435 and #434 records with the #430 reruns."""
 import argparse
 from collections import Counter
+from contextlib import ExitStack
 import csv
 import gzip
 import io
@@ -176,7 +177,7 @@ class Comparison:
                     largest_absolute_changes=self.max_abs, largest_relative_changes=self.max_relative)
 
 
-def comparisons(candidate, writer):
+def comparisons(candidate, writers):
     summaries = {}
 
     def compare(study_path, candidate_path, method, extract=result):
@@ -184,7 +185,8 @@ def comparisons(candidate, writer):
         if not candidate_path.exists():
             summaries[name] = dict(status='missing candidate record')
             return
-        record = Comparison(writer, name)
+        group = next((start for start in ('F2', 'F4') if f'/MEA/{start}/' in name), 'other')
+        record = Comparison(writers[group], name)
         method(record, *(extract(load(p)) for p in (study_path, candidate_path)))
         summaries[name] = record.summary()
 
@@ -331,12 +333,16 @@ def main():
     parser.add_argument('output', type=Path)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    with (args.output / 'differences.csv.gz').open('wb') as compressed:
-        with gzip.GzipFile(filename='', mode='wb', mtime=0, fileobj=compressed) as data, \
-                io.TextIOWrapper(data, encoding='utf-8', newline='') as handle:
+    with ExitStack() as files:
+        writers = {}
+        for group in ('F2', 'F4', 'other'):
+            compressed = files.enter_context((args.output / f'{group}-differences.csv.gz').open('wb'))
+            data = files.enter_context(gzip.GzipFile(filename='', mode='wb', mtime=0, fileobj=compressed))
+            handle = files.enter_context(io.TextIOWrapper(data, encoding='utf-8', newline=''))
             writer = csv.writer(handle)
             writer.writerow(('study_record', 'row_or_state', 'field', 'kind', 'study', 'candidate'))
-            summaries = comparisons(args.candidate, writer)
+            writers[group] = writer
+        summaries = comparisons(args.candidate, writers)
     (args.output / 'comparison.json.gz').write_bytes(
         gzip.compress((json.dumps(summaries, indent=2, allow_nan=False) + '\n').encode(), mtime=0))
 
