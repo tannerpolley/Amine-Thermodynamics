@@ -307,7 +307,7 @@ Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting
   - Hartono 18 at 373–393 K and Tong 40 at 313–393 K.
   - Both split-removal changes are stated, and suppression need not improve the pressure fit.
 - **Other round-8 items.** Salt qualification and Wangler positioning in §2.2. Kuranov is unranked. Hong failures are attributed to the reconstruction. Ma'mun is 38.66 % against 21.03 %. The 14.46 MPa subset is named. Version and reproduction wording are in the availability statement.
-- **Abstract and highlights.** Both are rewritten. The abstract is 246 words by `wc` on the PDF text, which counts “%” and “CO2 )” as separate tokens. Every highlight is at most 84 characters. The graphical abstract is untouched.
+- **Abstract and highlights.** Both are rewritten. The abstract is 248 words by `wc` on the PDF text, which counts “%” and “CO2 )” as separate tokens. Every highlight is at most 84 characters. The graphical abstract is untouched.
 
 **Checks.**
 - `scripts/build_manuscript.sh` passes: main 30 pages, supplement 56, no undefined references or citations, and no overfull boxes.
