@@ -4,6 +4,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import monotonic
 import math
+import subprocess
+import sys
 
 from amp import DECLARATION, ENDPOINTS, ORIGINAL, reduced
 from amp_stability import AMP_REFERENCE
@@ -143,8 +145,11 @@ class ObservableWeights(Route):
 
 def fit(route, name, starting):
     point, report = reduced.fit(name, starting, {}, [], route=route, penalty_rows=[])
-    records = {p.relative_to(route.out / name).as_posix(): stable.read(p) for p in (route.out / name).rglob('*.json')}
-    return dict(point=point, report=report, starting_point=starting, records=records)
+    return dict(point=point, report=report, starting_point=starting, records=fit_records(route.out / name))
+
+
+def fit_records(folder):
+    return {p.relative_to(folder).as_posix(): stable.read(p) for p in folder.rglob('*.json')}
 
 
 def q3_checks(route, point):
@@ -214,7 +219,7 @@ def assess_limited_MDEA(work, outcome):
          dict(assessment, Q3=q3_checks(default, point), inputs=fingerprints(outcome,MDEA)),start=started)
 
 
-def alternative(work, only=None):
+def alternative(work, only):
     total_start = monotonic()
     paths = {'AMP': [ENDPOINTS / label / 'parameters.json' for label in ORIGINAL], 'MDEA': [LOW, REPORTED]}
     for solvent, cases in paths.items():
@@ -223,7 +228,7 @@ def alternative(work, only=None):
         weighted = ObservableWeights(declaration, work / solvent / 'alternative', solvent)
         for i, path in enumerate(cases):
             name = f'{solvent}-{i}'
-            if only is not None and only != name:
+            if only != name:
                 continue
             started = monotonic()
             old = stable.read(path)
@@ -244,8 +249,28 @@ def alternative(work, only=None):
                     P = stable.read(RESULTS/'A/common-pressure.json.gz')['common_Pa']
                     assessment['S14'] = fixed(default, default.bind(point), S14, P, dict(pair=amp['split']))
                 save(f'C/normalized-{name}-{label}-assessment.json.gz', assessment, start=started)
-    name = 'C/normalized-timing.json' if only is None else f'C/normalized-{only}-timing.json'
-    save(name, dict(projection_minutes=[5,8], endpoint=only), start=total_start)
+    save(f'C/normalized-{only}-timing.json', dict(endpoint=only), start=total_start)
+
+
+def alternative_refits(work, only=None):
+    cases = ('AMP-0', 'AMP-1', 'MDEA-0', 'MDEA-1')
+    if only is not None and only not in cases:
+        raise ValueError(f'Unknown normalized refit {only}')
+    for candidate in (only,) if only else cases:
+        if candidate.startswith('AMP'):
+            alternative(work, candidate)
+            continue
+        # Each MDEA refit gets the full wall-time allowance formerly shared by Group C.
+        started = monotonic()
+        try:
+            subprocess.run([sys.executable, __file__, 'alternative_case', candidate, str(work)],
+                           timeout=1680, check=True)
+        except subprocess.TimeoutExpired:
+            folder = work / 'MDEA' / 'alternative' / candidate
+            save(f'C/normalized-{candidate}-time-stop.json.gz',
+                 dict(records=fit_records(folder), alternative_process_wall_seconds=monotonic()-started),
+                 start=started)
+
 
 
 def replay_k(work):
@@ -284,15 +309,16 @@ def replay_k(work):
 
 
 if __name__ == '__main__':
-    import sys
-
-    operation = dict(retained=retained, cross_start=cross_start, alternative=alternative, replay_k=replay_k,
+    operation = dict(retained=retained, cross_start=cross_start, alternative=alternative_refits,
+                     alternative_case=alternative, replay_k=replay_k,
                      assess_limited_MDEA=assess_limited_MDEA)[sys.argv[1]]
     if operation is retained:
         operation()
+    elif operation is alternative:
+        operation(Path(sys.argv[3]), only=sys.argv[2])
     else:
         with TemporaryDirectory() as directory:
-            if operation is alternative and len(sys.argv)>2:
+            if operation is alternative_refits and len(sys.argv)>2:
                 operation(Path(directory),only=sys.argv[2])
             elif operation is assess_limited_MDEA:
                 operation(Path(directory),Path(sys.argv[2]).resolve())

@@ -702,12 +702,12 @@ def stage_fit(run, index, scale, start, shifts, enforced, held=(), extra_shifts=
     endpoint = None
     if report['physical'] and report['reactions']:
         endpoint = endpoint_mapping(start, report, declared)
+        write(f'{rel}/parameters.json', endpoint)
         values, ok, cost = replay(endpoint, rows)
         report.update(endpoint_replay_available=ok, endpoint_replay_cost=cost,
                       endpoint_prediction_difference=max(abs(v['value'] - p) / max(1., abs(p)) for v, p in zip(values, report['predictions'][:len(values)], strict=True)) if ok and report['predictions'] else None,
                       endpoint_shifts=shift_totals(shifts, declared, report))
         write(f'{rel}/replay.json', values)
-        write(f'{rel}/parameters.json', endpoint)
     measured = report['stability_predictions'][-len(enforced):] if enforced else []  # stability rows are the last observations
     report['stability_tally'] = tally([dict(key=k, **(p or dict(available=False))) for k, p in zip(report['enforced'], measured, strict=True)])
     write(f'{rel}/fit.json', report)

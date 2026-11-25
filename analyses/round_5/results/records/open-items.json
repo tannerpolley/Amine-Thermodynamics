@@ -30,15 +30,6 @@
       "disposition": "The archived seed and three public liquid-directed seeds met the same indeterminate reduced-Hessian check. The phase decision is undecided."
     }
   ],
-  "C": [
-    {
-      "record": "C/normalized-MDEA-1-time-stop.json.gz",
-      "timing_record": "C/group-runtime.json",
-      "case": "Observable-normalized MDEA at fixed k=0.7650000233694618",
-      "starting_normalized_objective": 8.52605935588115,
-      "disposition": "The starting row replay completed. The process was in the first native fitting stage at the 28-minute Group C stop. There is no returned optimized endpoint, normalized refit phase check, or optimized cross-score for this case."
-    }
-  ],
   "D": [
     {
       "record": "D/MDEA-unbounded.json.gz",
@@ -49,7 +40,7 @@
       "record": "D/MDEA-unbounded-near-zero.json",
       "case": "Kuranov-binary fit:502 at 413.15 K and 353476.72400635516 Pa, unbounded fit",
       "analytic_minimum": 8.209534321231535e-12,
-      "disposition": "The smallest analytic eigenvalue is positive. The extrapolated directional readbacks alternate around zero at the finest steps. The independent sign check is unresolved. The separate finite search found a liquid-directed descent."
+      "disposition": "The extrapolated directional readbacks change sign at the finest steps. The combined binary tally is 94 positive, 1 undecided and 3 unavailable across 98 states. The analytic minimum remains positive. The separate finite search found a liquid-directed descent."
     }
   ],
   "E": [
@@ -75,6 +66,14 @@
       "record": "C/normalized-MDEA-0.json.gz",
       "case": "Observable-normalized MDEA at fixed k=0.1325000116847309",
       "disposition": "The first optimizer stage reached its iteration limit with a usable replay. Its continuation converged. Independent phase checks of both retained endpoints found no resolved descent at the Q3 feeds."
+    },
+    {
+      "record": "C/normalized-MDEA-1.json.gz",
+      "assessment": "C/normalized-MDEA-1-refit-assessment.json.gz",
+      "timing_record": "C/normalized-MDEA-1-timing.json",
+      "earlier_stop_record": "C/normalized-MDEA-1-time-stop.json.gz",
+      "case": "Observable-normalized MDEA at fixed k=0.7650000233694618",
+      "disposition": "The original shared Group C window expired during the first native stage. The separate rerun reached function tolerance after continuation. Both Q3 searches returned no resolved descent and no confirmed liquid pair."
     },
     {
       "record": "D/AMP-original-main.json.gz",

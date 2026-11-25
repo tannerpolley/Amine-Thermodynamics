@@ -2,9 +2,10 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import monotonic
+import argparse
 import math
 
-from common import ROOT, fingerprints, save
+from common import ROOT, RESULTS, fingerprints, save
 from part_ii import Route, epcsaft, eq, np, stable
 from phases import BOUNDED, MDEA, fixed, physical, trials
 from classify_descents import coexistence, gibbs
@@ -114,6 +115,12 @@ def reference_readback(route, spec, state, T, P, outcome):
                 added_reference_in_EOS_volume_and_calorics=False)
 
 
+def feed_state(target):
+    feed = dict(zip(target['species'], target['feed_mol'], strict=True))
+    loading = feed.pop('carbon-dioxide')
+    return dict(stock={c: amount for c, amount in feed.items() if amount}, T=target['T_K'], a=loading)
+
+
 def calculate(work):
     start = monotonic()
     low, = (BOUNDED.parent / 'shared-bicarbonate-417/mdea').glob('mdea-low-*/endpoint.json.gz')
@@ -130,9 +137,7 @@ def calculate(work):
     records = []
     for i, target in enumerate(targets):
         declaration, endpoint = (DECLARATION, ENDPOINTS / 'main/parameters.json') if i == 0 else (MDEA, low)
-        feed = dict(zip(target['species'], target['feed_mol'], strict=True))
-        loading = feed.pop('carbon-dioxide')
-        state = dict(stock={c: amount for c, amount in feed.items() if amount}, T=target['T_K'], a=loading)
+        state = feed_state(target)
         assert state['stock'][stable.read(declaration)['amine']] == 1
         record = dict(key=target['key'], T_K=target['T_K'], P_Pa=target['P_Pa'], feed_mol=target['feed_mol'],
                       reference=target['reference'], reference_error=target['reference_error'], conventions={})
@@ -164,6 +169,48 @@ def calculate(work):
              inputs=fingerprints(AMP_RECORD, AMP_VERIFICATION, q3, q4, q6, DECLARATION, MDEA, low, ENDPOINTS / 'main/parameters.json')), start=start)
 
 
+def mdea_supports(work):
+    started = monotonic()
+    q3 = ROUND3 / 'q3.json'
+    reference = RESULTS / 'B/reactions.json.gz'
+    low, = (BOUNDED.parent / 'shared-bicarbonate-417/mdea').glob('mdea-low-*/endpoint.json.gz')
+    rows = []
+    for i, (target, baseline) in enumerate(zip(stable.read(q3)['rows'][:2], stable.read(reference)['rows'][1:], strict=True)):
+        assert all(target[k] == baseline[k] for k in ('key', 'T_K', 'P_Pa', 'feed_mol'))
+        state = feed_state(target)
+        for label, route_class in (('baseline', Route), ('100-kPa', FixedReference)):
+            tick = monotonic()
+            route = route_class(MDEA, work / str(i) / label)
+            spec = route.bind(stable.read(low))
+            row = dict(key=target['key'], reference_convention=label, T_K=target['T_K'],
+                       P_Pa=target['P_Pa'], feed_mol=target['feed_mol'])
+            rows.append(row)
+            try:
+                outcome = fixed(route, spec, state, target['P_Pa'], dict(pair=target['attempts'][0]),
+                                mdea=True, assemblages=True)
+                row.update(outcome)
+                if 'candidates' not in outcome:
+                    row['support_refusal'] = f"{outcome['instability']}. Parent solver: {outcome['status']}"
+                    continue
+                expected = baseline['conventions'][label]['attempts'][0]
+                actual = next(iter(outcome['attempts']), {})
+                delta = actual.get('Gibbs_decrease_over_RT_mol')
+                reference_delta = expected.get('Gibbs_decrease_over_RT_mol')
+                difference = delta - reference_delta if delta is not None and reference_delta is not None else None
+                error = expected.get('numerical_error_over_RT_mol')
+                row['archived_seed_replay'] = dict(confirmation_matches=actual.get('confirmed') == expected['confirmed'],
+                                                  Gibbs_difference_RT_mol=difference, paired_error_RT_mol=error,
+                                                  within_paired_error=abs(difference) <= error if difference is not None else None)
+            except (ValueError, RuntimeError, AttributeError, TypeError) as error:
+                row['support_refusal'] = f'{type(error).__name__}: {error}'
+            finally:
+                row['seconds'] = monotonic() - tick
+    save('B/MDEA-supports.json.gz', dict(rows=rows, inputs=fingerprints(q3, reference, MDEA, low)), start=started)
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--mdea-supports', action='store_true')
+    args = parser.parse_args()
     with TemporaryDirectory() as directory:
-        calculate(Path(directory))
+        (mdea_supports if args.mdea_supports else calculate)(Path(directory))

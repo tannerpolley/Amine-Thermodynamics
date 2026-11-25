@@ -6,6 +6,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 RESULTS = HERE/'results'
+AMP_ORIGINAL = HERE.parent/'amp_transfer/results/retransfer-412-f2-05e94210'
 
 
 def load(name):
@@ -17,7 +18,7 @@ def load(name):
 
 
 def original_slope():
-    source = HERE.parent/'amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json'
+    source = AMP_ORIGINAL/'main/parameters.json'
     coords = json.loads(source.read_text())['coordinates']
     value = next(c['origin'] for c in coords if c['identity']=='AMPH-water-slope')
     return number(value,8), f'[original slope](../{source.relative_to(HERE.parent).as_posix()})'
@@ -52,9 +53,11 @@ def amp():
             slope, slope_link = ('−150',link(p)) if label == 'fixed' else original_slope()
             desc = len(phases['original_free']['descents']) if label == 'free' else phases['original_fixed']['descent']
             count = len(phases['original_free']['confirmed']) if label == 'free' else sum(phases['original_fixed'].get('liquid_liquid_splits',{}).values())
-            available = phases['states'] if label == 'free' else phases['original_fixed']['available']
+            with gzip.open(AMP_ORIGINAL/endpoint/'search-1.json.gz','rt') as stream:
+                original_search = json.load(stream)
+            completed = sum(bool(r['completed']) for r in original_search)
             records.append((design,label,slope,number(value['cost'],10),'retained original',
-                            f"{available} / {phases['states']}",desc,count,
+                            f"{completed} / {len(original_search)}",desc,count,
                             ' · '.join(dict.fromkeys((link(p),link(phase_file),slope_link)))))
         else:
             for protocol in ('native','supplied'):
@@ -135,6 +138,24 @@ def reactions():
            'through the fugacity reference conversion. The retained volume and enthalpy derivatives apply to the added standard vector. '
            'The reported EOS volume and calorics exclude that additional term. '
            f'The highest-pressure state is extreme extrapolation. {link(p,"rows")}')
+    p_supports = 'B/MDEA-supports.json.gz'
+    if supports := load(p_supports):
+        rows = []
+        for i, row in enumerate(supports['rows']):
+            for candidate in row.get('candidates') or [{}]:
+                misses = [label for field, label in (('physical_checks_pass','physical closure'),
+                                                     ('root_checks_pass','pressure-root readback'))
+                          if candidate.get(field) is False]
+                message = ', '.join(misses) or candidate.get('message','—').split(';',1)[0]
+                rows.append((number(row['T_K']), number(row['P_Pa'],10), row['reference_convention'],
+                             candidate.get('support','—'), number(candidate.get('pressure_Pa'),10),
+                             'yes' if candidate.get('qualified') else 'no', number(candidate.get('Gibbs_over_RT_mol'),10),
+                             row.get('support_refusal', message), link(p_supports,f'rows[{i}]')))
+        yield table(('MDEA T (K)','System P (Pa)','Reference','Support','Candidate P (Pa)','Qualified in search',
+                     'Gibbs / RT (mol)','Check missed or solver message','Retained record'),rows)
+        yield ('The L+V searches use the reevaluated liquid parent and the default vapor initialization. '
+               'The two-liquid candidates use the archived pair seeds. The incipient vapor calculation solves '
+               'for pressure separately and is excluded from the fixed-pressure Gibbs comparison.')
     derivatives = []
     for i,r in enumerate(data['rows']):
         for label,v in r['conventions'].items():
@@ -192,19 +213,36 @@ def objective():
     if comparisons:
         yield table(('Candidate','Default metric','Normalized metric','Interior rank','Active bounds',
                      'Feeds with confirmed LL','Retained record'),comparisons)
+    p_refit = 'C/normalized-MDEA-1.json.gz'
+    data = load(p_refit)
+    if data and data['report'] and (end := data['report'].get('endpoint_replay_cost')) is not None:
+        initial = data['records']['start-replay.json']['cost']
+        yield (f"The fixed k=0.765 MDEA fit reduced the normalized objective from {number(initial,12)} "
+               f"to {number(end,12)}. {link(p_refit,'report')}")
+        p_assessment = 'C/normalized-MDEA-1-refit-assessment.json.gz'
+        if assessment := load(p_assessment):
+            yield table(('MDEA T (K)','System P (Pa)','Q3 search','Confirmed LL','Retained record'),
+                        [(number(r.get('T_K')),number(r.get('P_Pa'),10),r.get('instability',r.get('refusal')),
+                          'yes' if any(a['confirmed'] for a in r.get('attempts',[])) else 'no',
+                          link(p_assessment,f'Q3[{i}]')) for i,r in enumerate(assessment['Q3'])])
     stopped = []
     for candidate in ('MDEA-0','MDEA-1'):
         p = f'C/normalized-{candidate}-time-stop.json.gz'
         if data := load(p):
             records = data['records']
-            completed = [r for k,r in records.items() if k.endswith('/fit.json')]
-            end = completed[-1] if completed else {}
+            stages = sorted(records.items())
+            replayed = [r for k,r in stages if k.endswith('/fit.json')]
+            optimizer = [r for k,r in stages if k.endswith(('/fit.json','/fit-native.json'))]
+            end = optimizer[-1] if optimizer else {}
             stopped.append((candidate,number(records.get('start-replay.json',{}).get('cost'),10),
-                            number(end.get('endpoint_replay_cost'),10),end.get('status','No endpoint returned'),
+                            number(end.get('data_cost',end.get('final_cost')),10),
+                            number(replayed[-1].get('endpoint_replay_cost') if replayed else None,10),
+                            end.get('status','No endpoint returned'),
                             number(data['alternative_process_wall_seconds']/60),link(p)))
     if stopped:
-        yield table(('Stopped candidate','Starting normalized objective','Last replayed normalized objective',
-                     'Last optimizer status','Fit-process minutes at stop','Retained record'),stopped)
+        yield table(('Stopped run','Starting normalized objective','Last native objective',
+                     'Last replayed normalized objective','Last optimizer status',
+                     'Fit-process minutes at stop','Retained record'),stopped)
     p = 'C/partial-pressures.json.gz'
     if data := load(p):
         yield table(('MDEA endpoint','Available rows','Combined AARD (%)','Combined signed bias (%)','Retained record'),
@@ -224,10 +262,20 @@ def curvature():
         name = path.relative_to(RESULTS).as_posix()
         record = load(name)
         for r in record.get('summary',[]):
-            rows.append((path.name.removesuffix('.json.gz'), r['kind'],r['count'],r['sign_counts']['negative'],
+            rows.append((path.name.removesuffix('.json.gz'), r['kind'],r['count'],r['sign_counts']['positive'],r['sign_counts']['negative'],
                          r['sign_counts']['undecided'],r['refused'],number(r['minimum']),link(name,'summary')))
     if rows:
-        yield table(('Fit','State type','States','Negative','Undecided','Refused','Minimum','Retained record'),rows)
+        yield table(('Fit','State type','States','Analytic positive','Analytic negative','Analytic undecided',
+                     'Unavailable','Analytic minimum','Retained record'),rows)
+    p = 'D/MDEA-unbounded-near-zero.json'
+    check = load(p)
+    if check and min(check['extrapolated_projected_mu_curvature'][-4:]) < 0 < max(check['extrapolated_projected_mu_curvature'][-4:]):
+        signs = next(r for r in load('D/MDEA-unbounded.json.gz')['summary'] if r['kind']=='unloaded or binary')
+        yield (f"The independent directional readback for fit:502 at {number(check['T_K'])} K changes sign at the finest steps. "
+               f"With that state undecided, the {signs['count']} unbounded MDEA binary states include "
+               f"{signs['sign_counts']['positive']-1} positive, {signs['sign_counts']['undecided']+1} undecided "
+               f"and {signs['refused']} unavailable. The analytic minimum remains "
+               f"{number(check['hessian']['minimum'],3)}. {link(p,'extrapolated_projected_mu_curvature')}")
     p = 'D/hot-paths.json.gz'
     if data := load(p):
         states = [r for path in data['paths'] for r in path['rows']]
@@ -244,11 +292,6 @@ def curvature():
         rows = data['rows']
         yield (f"The extended declaration replayed {len(rows)} original grid paths and temperatures. "
                f"Pressure and stability differences are retained per state. {link(p,'rows')}")
-    p = 'D/MDEA-unbounded-near-zero.json'
-    if data := load(p):
-        yield (f"The minimum for the unbounded MDEA binary at {number(data['T_K'])} K is "
-               f"{number(data['hessian']['minimum'])} in the analytic calculation. "
-               f"The directional step sweep and its extrapolations bound resolution at the nearly flat state. {link(p)}")
     yield ('Negative curvature is evidence of local instability of the model liquid. Positive curvature can coexist with a lower tangent at a distant composition. '
            'The calculations test properties of the model and supply no observation of physical demixing.')
 
@@ -318,7 +361,7 @@ def generate():
         yield from group()
     yield '## Wall time'
     operations = {'A':(18,35,['A/calibration.json','A/phase-timing.json','A/profile-original.json','A/profile-expanded.json']),
-                  'B':(1,4,['B/reactions.json.gz']),
+                  'B':(1,4,['B/reactions.json.gz','B/MDEA-supports.json.gz']),
                   'C':(8,14,['C/reported-objectives.json','C/partial-pressures.json.gz','C/cross-start-timing.json','C/normalized-timing.json','C/MEA-k-profile.json.gz']),
                   'D':(6,18,['D/fitted-timing.json','D/hot-paths.json.gz','D/overlap.json.gz']),
                   'E':(6,17,['E/cation-timing.json','E/pure-properties.json','E/DEA-association-timing.json'])}
@@ -335,6 +378,14 @@ def generate():
     yield ('Measured wall times sum the listed operations, with the continuous timed interval used for Group C. '
            'Several operations ran concurrently.')
     yield table(('Group','Projected minutes','Recorded minutes','Operation records'),time_rows)
+    p = 'C/normalized-MDEA-1-timing.json'
+    if rerun := load(p):
+        yield (f"The isolated four-worker MDEA k=0.765 rerun took {number(rerun['seconds'],5)} s "
+               f"including both metric replays and the Q3 checks. The separate diagnostic profile attributed "
+               f"84% of sampled CPU stacks to automatic differentiation and 33% to saturation-loading searches. "
+               f"The profiled fit took about ten times the wall time of the ordinary MDEA fit. "
+               f"Engine #214 tracks reuse in the saturation-loading search. {link(p)} · "
+               "[Engine #214](https://github.com/tannerpolley/epcsaft/issues/214)")
     yield '## Reconciled records and open items'
     p = 'records/Hilliard-Cp.json'
     if data := load(p):
