@@ -65,18 +65,27 @@ def active_bound_indices(coordinates):
             if min(q['origin']-q['bounds'][0], q['bounds'][1]-q['origin']) <= 1e-6*q['scale']]
 
 
+def select_campaign_endpoint(candidates, tolerance):
+    converged = [row for row in candidates if row is not None and row['optimizer_converged']]
+    chosen = min(converged, key=lambda row: row['cost'], default=None)
+    ties = [row['name'] for row in converged if abs(row['cost'] - chosen['cost']) <= tolerance]
+    return chosen, ties
+
+
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
-    def __init__(self, declaration, out=None):
+    def __init__(self, declaration, out=None, *, shared_values=None):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
         self.out = Path(out) if out else self.path.parent/self.config['output']
         available = int(next(x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:')).split()[1])/1e6
         self.workers = max(1, min(int(os.environ['AGENT_HEAVY_CORES']), int((available-7)/.35)))
         self.controls = self.config['optimizer']
+        self.shared_values = shared_values
         self.verify()
-        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,shared_values_sha256=SHARED_SHA)
+        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,
+                        shared_values_sha256=SHARED_SHA if shared_values is None else shared_values[1])
         if (self.out/'identity.json').exists():
             assert self.result('identity.json')==identity, 'Use a new output directory for changed declarations'
         self.write('identity.json',identity)
@@ -88,6 +97,9 @@ class Route:
 
     def verify(self):
         assert hashlib.sha256(SHARED.read_bytes()).hexdigest() == SHARED_SHA
+        if self.shared_values is not None:
+            path, digest = self.shared_values
+            assert hashlib.sha256(path.read_bytes()).hexdigest() == digest
         assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
         with zipfile.ZipFile(WHEEL) as archive:
             for name in archive.namelist():
@@ -153,6 +165,11 @@ class Route:
         return dict(parameters=mapping, reactions=laws, coordinates=declared)
 
     def bind(self, point):
+        if self.shared_values is not None:
+            shared = stable.read(self.shared_values[0])
+            assert shared['wheel_sha256'] == SHA
+            for pair in shared['water_ion_pairs']:
+                assert pair in point['parameters']['pairs'], pair
         datasets = self.load(self.config['dataset_changes']) if 'dataset_changes' in self.config else {}
         spec = SolventSpecification(self.path.parent/self.config['specification'], **datasets)
         spec.parameters = epcsaft.Parameters.from_mapping(point['parameters'])
@@ -421,9 +438,8 @@ class Route:
         assert len(self.config['starts'])==2 and self.config['loadings'][0]==1e-5, 'Part II requires two complete starts and loadings from 1e-5 mol/mol'
         candidates = [reduced.candidate(f'start-{i}',self.start(ref),{},[],{},route=self) for i,ref in enumerate(self.config['starts'])]
         candidates = [r for r in candidates if r is not None]
-        converged = [r for r in candidates if r['optimizer_converged']]
-        chosen = min(converged,key=lambda r:r['cost']) if converged else None
-        self.write('selection.json',dict(candidates=candidates,chosen=chosen,ties=[r['name'] for r in converged if chosen and abs(r['cost']-chosen['cost'])<=self.controls['function_tolerance']]))
+        chosen, ties = select_campaign_endpoint(candidates, self.controls['function_tolerance'])
+        self.write('selection.json', dict(candidates=candidates, chosen=chosen, ties=ties))
         return chosen
 
     def marks(self, T, problem=None):
@@ -449,6 +465,7 @@ class Route:
         active = active_bound_indices(declared)
         result = conditional_information(SimpleNamespace(physical=[q['origin'] for q in declared],covariance=SimpleNamespace(active_bounds=active)),J,spec.whiten(np.array([r['residual'] for r in replay])),[q['identity'] for q in declared],[q['bounds'][0] for q in declared],[q['bounds'][1] for q in declared])
         self.write('conditional-uncertainty.json',dict(result,coordinates=declared,active_bounds=active))
+        return spec, replay, ev
 
     def reduce(self, point, fitted=None):
         spec, output = self.bind(point), []

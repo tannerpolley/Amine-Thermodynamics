@@ -114,12 +114,12 @@ def amp(run, *, inspect=None):
                 outside_source_ranges=split['outside_ranges'], checks=checks)
 
 
-def mea():
-    params = BUNDLE / 'results/selected-current-best-parameters.json'
+def mea(params=BUNDLE / 'results/selected-current-best-parameters.json'):
     earlier = BUNDLE / 'results/paper-evidence-341/paper-evidence/model-curves/heat.csv'
     declaration = ROOT / 'analyses/solvent_specification_mea/declarations.toml'
     inputs = identity(params, earlier, declaration, vrc.PHYSICAL_CALORICS, s.STATE_PACKET)
-    assert inputs[str(params.relative_to(ROOT))] == 'ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed'
+    if params.name == 'selected-current-best-parameters.json':
+        assert inputs[str(params.relative_to(ROOT))] == 'ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed'
     mapping = s.parameter_mapping(params)
     parameters = epcsaft.Parameters.from_mapping(mapping)
     model = epcsaft.Mixture(parameters, thermochemistry=vrc.record())
