@@ -1,20 +1,20 @@
 \section{Conclusions}\label{sec:conclusion}
-% P:conclusion-question
-Fits of an ePC-SAFT model that reproduce measured pressures about equally well need not predict the same liquid phases.
-With the water, \COtwo and inorganic-ion parameters of an MEA calibration held fixed, two AMP fits deviate by 10.3 and 10.5\,\% from the same 47 fitted total pressures; the first gives 73 confirmed liquid--liquid splits above \SI{353}{\kelvin}, the highest temperature of the fitted loaded-solution pressures, and the second gives none in 666 finite searches.
-The calculated splits disappear when either the cation--water interaction or the AMP dissociation constant is held at its value at the upper end of the fitted pressure range.
+% P:conclusion-mea
+An ePC-SAFT model of \COtwo-loaded aqueous MEA with 11 jointly fitted parameters and literature equilibrium constants deviates by 11.3\,\% from its 47 fitted \COtwo partial pressures at 30 wt\% and by about 3\,\% or less from its fitted heats, heat capacities and densities.
+Its pressures at 15 and 45 wt\% MEA and at stripper temperatures, its carbonate shares and its absorption heats at high temperature remain inaccurate, and the cause of the carbonate deficit is unresolved.
 
 % P:conclusion-transfer
-The choice made for a shared parameter matters downstream.
-Fixing the shared water--bicarbonate interaction at 0.1325 instead of 0.7650 raises the refitted MEA objective by 1.023, within the range of increases found in the MEA bound refits, but lowers the deviation of the 66 fitted MDEA total pressures from 20.1 to 11.2\,\%, lowers that of 54 outside-fit total pressures from 38.7 to 33.0\,\%, raises that of 121 outside-fit \COtwo partial pressures from 20.1 to 33.6\,\% and introduces two confirmed splits.
-\emph{Transfer} in this work therefore means that DEA, MDEA and AMP could be fitted with the shared parameters held fixed, not that those parameters are determined by MEA.
+With the water, \COtwo and inorganic-ion parameters of that model held fixed, DEA, MDEA and AMP could each be fitted: the fitted loaded-solution pressures deviate by 36.6\,\% for DEA, 10.1\,\% for MDEA and 10.9\,\% for AMP, on 30, 66 and 105 observations.
+\emph{Transfer} means no more than this.
+DEA and AMP each need a fitted carbamate-hydrolysis constant, and for DEA no tested water--DEA interaction represents the binary excess enthalpies and bubble pressures together.
 
-% P:conclusion-models
-The MEA model, an 11-parameter calibration with its equilibrium constants fixed at literature correlations, deviates by 11.6\,\% from 47 fitted \COtwo partial pressures and shows no detected instability in 2646 searches; its final optimization used no stability penalty, although its starts descended from a penalized calibration.
-Its pressures at 15 and 45 wt\% MEA, carbonate shares and absorption heats at high temperature remain inaccurate, and the cause of the carbonate deficit is unresolved.
-The DEA model deviates by 28.5\,\% from 30 fitted \COtwo partial pressures and is a negative result: with the adopted DEA pure-component and association parameters, no tested water--DEA interaction represents the binary excess enthalpies and bubble pressures together.
-The MDEA model deviates by 20.1\,\% from 66 fitted total pressures; a bound keeps its \COtwo-free solution free of a calculated gap only through \SI{423}{\kelvin}, above which the model must not be used, and no second liquid is confirmed at the measured states.
-Unlike those of MEA, the carbamate-hydrolysis constants of DEA and AMP are fitted, not fixed at their literature correlations.
+% P:conclusion-shared
+The shared water--bicarbonate and water--carbonate interactions are fixed from sodium-salt osmotic coefficients, so that no amine data determine them.
+They are not better for every amine than an interaction fitted to the MEA data: the deviation of the 66 fitted MDEA total pressures falls from 20.1 to 10.1\,\%, but that of 101 unfitted MDEA \COtwo partial pressures rises from 17.9 to 38.4\,\% and that of the fitted DEA pressures from 28.5 to 36.6\,\%.
 
-% P:conclusion-limits
-The four models and their phase searches are a testbed for calibration practice, in which a fit is judged by the phases it predicts as well as by its deviations; \cref{sec:limits} states what they do not establish.
+% P:conclusion-phase
+Phase-stability searches of the fitted models detect no instability for MEA, DEA and AMP.
+For MDEA a bound keeps the \COtwo-free solution free of a calculated liquid--liquid gap only up to \SI{423}{\kelvin}, and one calculated split remains at a loaded state far outside the measured conditions.
+A first AMP fit, whose loaded-solution pressures ended at \SI{353}{\kelvin}, gave calculated liquid--liquid splits at 363--\SI{393}{\kelvin}, and fitting the measured pressures at those temperatures removed them.
+A phase-stability search is therefore a useful check on where a fit has been extrapolated.
+The four models are calibrations against data examined during development; \cref{sec:limits} states what they do not establish.
