@@ -253,6 +253,16 @@ def salts(s,_):
               f"{heats[1]['AARD_percent']:.2f}% on {heats[0]['available']} matched Carson heats.")
     return 'answered',reason,dict(residuals=residuals,available=counts,models=models,properties=properties)
 
+def terminal_coordinates(fit, label):
+    declared = fit['declared']
+    values = {q['identity']:q['origin']+q['scale']*u for q,u in zip(declared,fit['optimizer'],strict=True)}
+    assert len(values)==len(declared), f'C6 {label}: duplicate coordinate identity'
+    # The archived physical vector lists parameter targets first, then reaction coordinates.
+    expanded = [values[q['identity']]*factor for q in declared for _,_,factor in q.get('targets',[])]
+    expanded.extend(values[q['identity']] for q in declared if 'targets' not in q)
+    assert expanded==fit['physical'], f'C6 {label}: archived physical vector disagrees with declared coordinates'
+    return values
+
 def endpoints(s,replay):
     keys=('initial_cost','final_cost','physical','declared','status','message','maximum_elapsed_time_seconds')
     pairs={'MDEA':[s.core(f'C/salt/attempts/fit-{i}.json.gz') for i in range(3)],
@@ -299,10 +309,16 @@ def endpoints(s,replay):
                     unavailable[key] = cause
                 entry['phase'][key] = phase
             inventory.append(entry)
-        out[name]=dict(inventory=inventory)
-        out[name]['coordinate_changes']=[dict(identity=q['identity'],change=b-a,box_scaled=(b-a)/(q['bounds'][1]-q['bounds'][0]),
-            bounds=q['bounds'],active=[min(abs(v-x) for x in q['bounds'])<=1e-6*q['scale'] for v in (a,b)])
-            for i,q in enumerate(fits[0]['declared']) for a,b in [(fits[0]['physical'][i],fits[1]['physical'][i])]]
+        first, second = (terminal_coordinates(fit,f"{name} {entry['endpoint']}")
+                         for fit,entry in zip(fits[:2],inventory[:2],strict=True))
+        assert first.keys()==second.keys(), f'C6 {name}: endpoint coordinate identities differ'
+        changes = []
+        for q in fits[0]['declared']:
+            identity, bounds = q['identity'], q['bounds']
+            a,b = first[identity], second[identity]
+            changes.append(dict(identity=identity,change=b-a,box_scaled=(b-a)/(bounds[1]-bounds[0]),
+                                bounds=bounds,active=[min(abs(v-x) for x in bounds)<=1e-6*q['scale'] for v in (a,b)]))
+        out[name]=dict(inventory=inventory, coordinate_changes=changes)
     fit_rows = {'MEA #435':[s.read(MEA+f'{label}/replay.json')['rows'] for label in ('F2','F4')]}
     for family in ('MDEA','AMP'):
         paths = pairs[family][:2]

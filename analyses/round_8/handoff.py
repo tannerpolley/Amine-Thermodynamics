@@ -86,10 +86,16 @@ minimum of $H_{\rm Engine}-H_G$ over the retained step pairs.
                           f"on the retained feed, with an estimated numerical error of {error:.3g} mol."])
     added = c4['added_pressure_rows']
     hot = [c4['hot_original'][k]['free'] for k in ('hartono-2021','tong-2012')]
+    base, frozen, enthalpy = (c4['original_R5_control'][key]
+                              for key in ('base','dissociation-353','dissociation-constant-enthalpy'))
     lines.extend(['', f"The AMP refit includes {added['hartono-2021-supplemental']} supplemental Hartono pressures "
                   f"and {added['tong']} loaded Tong pressures. The original hot-pressure biases were "
                   f"{hot[0]['bias_percent']:.1f}% on {hot[0]['rows']} Hartono observations and "
                   f"{hot[1]['bias_percent']:.1f}% on {hot[1]['rows']} Tong observations.",
+                  '', f"On the original AMP model’s retained descent states above 353.22 K, the searches found descent at "
+                  f"{base['descent']}/{base['available']} states with the original R5 law, "
+                  f"{frozen['descent']}/{frozen['available']} with the equilibrium constant frozen at 353.22 K, and "
+                  f"{enthalpy['descent']}/{enthalpy['available']} with constant reaction enthalpy continued from 353.22 K.",
                   '', '## MDEA endpoint inventory', '',
                   '| Endpoint | Original start cost | Stage-0 final cost | Terminal cost | Keyed phase results |',
                   '| --- | ---: | ---: | ---: | --- |'])
@@ -113,6 +119,10 @@ minimum of $H_{\rm Engine}-H_G$ over the retained step pairs.
     for row in missing:
         lines.append(f"The matched Kamps comparison excludes {row['identity']} from Ermatchkov "
                      f"{row['row']['source_locator']}, row {row['row']['source_row']} ({row['status']}).")
+    hong = c7['hong']
+    lines.extend(['', f"Hong's equal-fugacity solutions used a fixed vapor amount of "
+                  f"{hong['vapor_amount_fraction_of_feed']:g} of the feed. "
+                  f"Local stability failed at {hong['local_failures']}/{hong['inside_count']} canonical states inside the Hong grid."])
     lines.extend(['', f'Core contributors are read from `{BASE}`. The named display replays are read from `{DISPLAY}`.',
                   '', '## Retained results', '', '| Item | Disposition | Evidence | Record |',
                   '| --- | --- | --- | --- |', *table])
