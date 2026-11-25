@@ -1,32 +1,63 @@
-\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}@{}}
-\caption{Outcomes at the distinct descent states of the MDEA model.}\label{tab:supplement-mdea-phase-outcomes}\\
-\toprule Source & $T$ (K) & Assigned $P$ (MPa) & Model bubble $P$ (MPa) & Direction & Two-liquid outcome \\ \midrule
-\endfirsthead\toprule Source & $T$ (K) & Assigned $P$ (MPa) & Model bubble $P$ (MPa) & Direction & Two-liquid outcome \\ \midrule
-\endhead\bottomrule\endfoot\bottomrule\multicolumn{6}{@{}p{0.95\linewidth}@{}}{\footnotesize 25 measured states have vapor-directed descents, identified by a vapor root or a trace to dilute vapor. A two-liquid solve was attempted at 17 measured states, with no confirmation. 224 of 1564 measured-state searches did not finish. The separate targeted split at $262.862$ MPa is outside these counts.}\\\endlastfoot
-Sobrino et al. & $393.15$ & $0.100$ & $0.196$ & Vapor & Not attempted \\
-Sobrino et al. & $393.15$ & $0.100$ & $0.194$ & Vapor & Not attempted \\
-Sobrino et al. & $393.15$ & $0.100$ & $0.192$ & Vapor & Not attempted \\
-Sobrino et al. & $393.15$ & $0.100$ & $0.190$ & Vapor & Not attempted \\
-B\"ottinger et al. & $293.15$ & $0.500$ & $1.433$ & Vapor & Not attempted \\
-B\"ottinger et al. & $293.15$ & $0.500$ & $3.257$ & Vapor & Not attempted \\
-B\"ottinger et al. & $293.15$ & $2.500$ & $3.257$ & Vapor & Not attempted \\
-B\"ottinger et al. & $293.15$ & $0.500$ & $1.558$ & Vapor & Not attempted \\
-B\"ottinger et al. & $313.15$ & $0.500$ & $0.773$ & Vapor & None confirmed \\
-B\"ottinger et al. & $313.15$ & $0.500$ & $3.438$ & Vapor & None confirmed \\
-B\"ottinger et al. & $313.15$ & $2.500$ & $3.438$ & Vapor & None confirmed \\
-B\"ottinger et al. & $313.15$ & $0.500$ & $2.126$ & Vapor & None confirmed \\
-B\"ottinger et al. & $333.15$ & $0.500$ & $0.823$ & Vapor & None confirmed \\
-B\"ottinger et al. & $333.15$ & $0.500$ & $0.538$ & Vapor & None confirmed \\
-B\"ottinger et al. & $333.15$ & $0.500$ & $0.699$ & Vapor & None confirmed \\
-B\"ottinger et al. & $333.15$ & $0.500$ & $0.515$ & Vapor & None confirmed \\
-B\"ottinger et al. & $333.15$ & $0.500$ & $0.948$ & Vapor & None confirmed \\
-Zheng et al. & $323.15$ & $0.640$ & $0.899$ & Vapor & None confirmed \\
-Zheng et al. & $323.15$ & $0.530$ & $0.681$ & Vapor & None confirmed \\
-Zheng et al. & $323.15$ & $1.180$ & $2.163$ & Vapor & None confirmed \\
-Zheng et al. & $323.15$ & $2.570$ & $9.891$ & Vapor & None confirmed \\
-Zheng et al. & $323.15$ & $4.190$ & $70.548$ & Vapor & None confirmed \\
-Merkley et al. & $333.15$ & $1.121$ & $1.189$ & Vapor & None confirmed \\
-Merkley et al. & $333.15$ & $1.121$ & $2.457$ & Vapor & None confirmed \\
-Merkley et al. & $333.15$ & $1.121$ & $2.364$ & Vapor & None confirmed \\
-Grid & $373.15$ & $204.054$ & $194.337$ & Liquid & Confirmed \\
+\begingroup\small\setlength{\tabcolsep}{2pt}\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.11\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\caption{Outcomes at the descent states of the provisional MDEA endpoint.}\label{tab:supplement-mdea-phase-outcomes}\\
+\toprule State & $T$ (K) & $P$ (MPa) & Native & Supplied & Two-liquid outcome \\ \midrule
+\endfirsthead\toprule State & $T$ (K) & $P$ (MPa) & Native & Supplied & Two-liquid outcome \\ \midrule
+\endhead\bottomrule\endfoot\bottomrule\multicolumn{6}{@{}p{0.95\linewidth}@{}}{\footnotesize \num{10509} of \num{11824} searches completed; 80 detected descents and no split was confirmed. The two separate high-pressure controls are unresolved.}\\\endlastfoot
+comparison:163:problem & $293.15$ & $2.500$ & none & unresolved & Not attempted \\
+comparison:416:final & $323.15$ & $4.190$ & mixed & unresolved & None confirmed \\
+comparison:357:problem & $333.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:411:final & $323.15$ & $0.640$ & mixed & unresolved & None confirmed \\
+fit:126:1:phase & $333.15$ & $1.121$ & mixed & unresolved & None confirmed \\
+comparison:412:final & $323.15$ & $1.190$ & mixed & unresolved & None confirmed \\
+fit:206:problem & $393.15$ & $0.100$ & vapor & unresolved & Not attempted \\
+fit:218:problem & $393.15$ & $0.100$ & vapor & unresolved & Not attempted \\
+comparison:221:problem & $313.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:245:problem & $313.15$ & $0.500$ & vapor & unresolved & Not attempted \\
+comparison:413:final & $323.15$ & $0.530$ & mixed & unresolved & None confirmed \\
+comparison:370:1:phase & $333.15$ & $1.121$ & mixed & unresolved & None confirmed \\
+comparison:201:problem & $293.15$ & $0.500$ & none & unresolved & Not attempted \\
+comparison:225:problem & $313.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:249:problem & $313.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:321:problem & $333.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:227:problem & $313.15$ & $2.500$ & mixed & unresolved & None confirmed \\
+comparison:414:final & $323.15$ & $1.180$ & mixed & unresolved & None confirmed \\
+Merkley-capped:5:phase & $333.15$ & $1.121$ & mixed & unresolved & None confirmed \\
+comparison:157:problem & $293.15$ & $0.500$ & none & unresolved & Not attempted \\
+comparison:325:problem & $333.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:415:final & $323.15$ & $2.570$ & mixed & unresolved & None confirmed \\
+fit:200:problem & $393.15$ & $0.100$ & vapor & unresolved & Not attempted \\
+fit:212:problem & $393.15$ & $0.100$ & vapor & unresolved & Not attempted \\
+comparison:161:problem & $293.15$ & $0.500$ & none & unresolved & Not attempted \\
+comparison:305:problem & $333.15$ & $0.500$ & mixed & unresolved & None confirmed \\
+comparison:353:problem & $333.15$ & $0.500$ & mixed & unresolved & None confirmed \\
 \end{longtable}\endgroup
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Phase controls on the selected fixed-reference endpoints.}\label{tab:supplement-fixed-reference-controls}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}@{}}
+\toprule Endpoint & Control & Disposition \\ \midrule
+MDEA & 204-MPa & unresolved phase identity \\
+MDEA & 263-MPa & unresolved phase identity \\
+AMP, fitted slope & hartono-2021:55:problem & unresolved phase identity \\
+AMP, fitted slope & hartono-2021:56:problem & unresolved phase identity \\
+AMP, fitted slope & hartono-2021:57:problem & unresolved phase identity \\
+AMP, fitted slope & tong-2012:29:problem & finite search, no resolved descent \\
+AMP, fitted slope & tong-2012:32:problem & unresolved phase identity \\
+AMP, fitted slope & tong-2012:44:problem & finite search, no resolved descent \\
+AMP, fitted slope & worked-state & finite search, no resolved descent \\
+AMP, fixed slope & hartono-2021:55:problem & finite search, no resolved descent \\
+AMP, fixed slope & hartono-2021:56:problem & unresolved phase identity \\
+AMP, fixed slope & hartono-2021:57:problem & unresolved phase identity \\
+AMP, fixed slope & tong-2012:29:problem & finite search, no resolved descent \\
+AMP, fixed slope & tong-2012:32:problem & unresolved phase identity \\
+AMP, fixed slope & tong-2012:44:problem & finite search, no resolved descent \\
+AMP, fixed slope & worked-state & finite search, no resolved descent \\
+\bottomrule\end{tabular}
+\par\smallskip{\footnotesize\raggedright Of six separate measured AMP controls, the free-slope endpoint has four unresolved and two without a descent. The fixed-slope endpoint has three unresolved and three without a descent. The worked-state controls are additional.\par}\end{table}
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{MDEA deviations for the tracking and fixed-reference endpoints on common observation IDs.}\label{tab:supplement-mdea-reference-comparison}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}@{}}
+\toprule Source & $N$ & Tracking AARD (\%) & Tracking bias (\%) & Fixed AARD (\%) & Fixed bias (\%) \\ \midrule
+Kuranov & 66 & $4.15$ & $0.06$ & $4.39$ & $0.32$ \\
+Ermatchkov & 101 & $25.09$ & $-17.12$ & $29.21$ & $-25.67$ \\
+Xiao & 20 & $17.22$ & $-11.81$ & $18.35$ & $-17.06$ \\
+Carson & 40 & $18.69$ & $-18.69$ & $13.58$ & $-13.58$ \\
+corrected-Kamps & 27 & $12.94$ & $-1.43$ & $11.93$ & $-7.50$ \\
+\bottomrule\end{tabular}\end{table}

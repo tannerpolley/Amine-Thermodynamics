@@ -1,6 +1,7 @@
 """Render adopted salt-anchored MEA results (#435) and explicitly historical comparisons; no Engine computation."""
 import ast
 from functools import reduce
+from fixed_reference import FixedReference, STUDY
 import gzip
 import json
 import math
@@ -268,21 +269,24 @@ def reference_states():
         for name in ('amp.json', 'amp_reference_state.tex', 'mea.json', 'mea_reference_state.tex', 's12.json', 'tables.md'):
             a.bind(folder/name)
     specs = a.bind(folder/'tables.json')
-    record_path = ADOPTED/'reference-state.json'
+    record_path = ROOT / STUDY / 'results/display-replays/caloric-and-species.json.gz'
+    old_record = a.load(ADOPTED/'reference-state.json')
     basis_path = ADOPTED/'q4.json'
     spec = json.loads(specs.read_text())['mea']
-    record = a.load(record_path)
+    record = other(str(record_path.relative_to(ROOT)))['reference_state']
     assert all(record['checks'].values())
     common = a.load(basis_path)['result']['S15_common_basis']
-    for reaction, basis in zip(record['reactions'], common, strict=True):
-        assert reaction['name'] == basis['reaction']
-        assert math.isclose(reaction['ln_K_source'] + reaction['Gamma'],
-                            basis['common_ln_K'] + basis['common_Gamma'], rel_tol=0, abs_tol=1e-9)
-        reaction['ln_K_source'], reaction['Gamma'] = basis['common_ln_K'], basis['common_Gamma']
+    for reaction, old, basis in zip(record['reactions'], old_record['reactions'], common, strict=True):
+        assert reaction['name'] == old['name'] == basis['reaction']
+        assert reaction['ln_K_source'] == old['ln_K_source'] and reaction['P_source_Pa'] == 100000
+        offset = basis['common_ln_K'] - old['ln_K_source']
+        reaction['ln_K_source'] += offset
+        reaction['Gamma'] -= offset
     rows = [[label, *(format(reduce(getitem, path, record), precision) if path else '' for path in paths)]
             for label, precision, *paths in spec['rows']]
     name = 'mea_reference_state.tex'
-    table(name, spec['caption'], spec['headings'], rows, spec['cols'])
+    table(name, spec['caption'].replace('MEA model.', 'MEA model with all reaction references at 100 kPa.'),
+          spec['headings'], rows, spec['cols'])
     provenance = ''.join(f'% Input: {path.relative_to(ROOT)} SHA256 {hashlib.sha256(path.read_bytes()).hexdigest()}\n'
                          for path in (specs, record_path, basis_path))
     out = TABLES/name
@@ -293,15 +297,23 @@ def reference_states():
 
 
 def main():
-    document = a.load(ADOPTED/'parameters.json')
+    study = FixedReference(other)
+    endpoint = study.fits['MEA']
+    document = endpoint['endpoint']['parameters']
     fitrows = a.rows(F/'fitted-rows.csv')
-    stage = other(str((ADOPTED/'objective-information.json.gz').relative_to(ROOT)))['result']
-    assert (len(fitrows), stage['na'], stage['p'], stage['stage_denominator']) == (307, 268, 9, 259)
-    errors = {r['parameter']: float(r['adopted_point_SE_bound_fixed']) * stage['SE_multiplier']
-              for r in a.rows(ADOPTED/'uncertainty/standard-errors.csv')}
-    params = [dict(identity=r['identity'], value=r['value'], lower=r['bounds'][0], upper=r['bounds'][1],
-                   conditional_SE=errors.get(r['identity'])) for r in stage['coordinates']]
-    a.close(sum(float(r['cost']) for r in fitrows), a.load(ADOPTED/'replay.json')['cost'])
+    fit = {r['identity']: r for r in endpoint['replay']['rows']}
+    assert len(fitrows) == len(fit) == 307
+    assert set(fit) == {r['id'] for r in fitrows}
+    for row in fitrows:
+        replay = fit[row['id']]
+        assert replay['status'] == 'Available' and replay['requested_tolerance_met']
+        assert math.isclose(float(row['observed']), replay['observed'], rel_tol=1e-12)
+        row.update(predicted=replay['value'], cost=replay['cost'])
+    uncertainty = study.conditional('MEA')
+    errors = uncertainty['conditional_standard_error']
+    params = [dict(identity=r['identity'], value=r['origin'], lower=r['bounds'][0], upper=r['bounds'][1],
+                   conditional_SE=errors.get(r['identity'])) for r in uncertainty['coordinates']]
+    a.close(sum(float(r['cost']) for r in fitrows), endpoint['replay']['cost'])
     coords = {r['identity']:r for r in params}
     values = {c['identity']: c['value']['magnitude'] for n in document['components'] + document['pairs'] for c in n['coefficients'] if 'value' in c}
     values |= {i: c['value']['magnitude'] for n in document['topology']['edges'] for i, c in a.coefficients(n)}
@@ -443,21 +455,43 @@ def main():
     score = lambda fit, dataset: next(r for r in agreement if r['fit']==fit and r['dataset']==dataset)['aard_percent']
     table('choice_cost.tex', r"Parameter restrictions for MEA and their deviations on identical observations. || $C$: objective value. The MEA model is not a row of this sequence: it keeps the eleven-parameter form of the third row, with the water--bicarbonate and water--carbonate interactions fixed from the salt data and the protonated-MEA--bicarbonate interaction fitted in place of the water--bicarbonate interaction. The deviations are for the 47 fitted pressures, the 112 pressures not fitted and the 47 fitted loaded densities. Each row adds its restriction to the row above; the last row is an alternative to the row above it, and both start from the sodium-salt row. The fourth row also fixes the carbamate--water interaction and the temperature slope of the protonated-MEA--water interaction at zero. The sodium-salt row fixes the temperature-dependent water--bicarbonate and water--carbonate interactions at values fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer derived from their model \cite{peiperThermodynamicsAqueousCarbonate1982}, and adds a protonated-MEA--bicarbonate interaction as a fitted parameter. The last two rows fix the protonated-MEA--bicarbonate and the protonated-MEA--carbamate interaction at zero, respectively. Deviations on fitted and not-fitted data are not directly comparable.", ['Calibration','Parameters','On bounds','$C$',r'\makecell[rb]{Fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Not-fitted\\pressure\\AARD (\%)}',r'\makecell[rb]{Fitted\\density\\AARD (\%)}'], [[r['fit'],r['fitted_parameters'],r['on_bound'],num(r['cost'],6),*[f"{float(score(r['fit'],d)):.2f}" for d in ('fitted: fitted CO2 partial pressure','not fitted: six-source pressures','fitted: loaded density')]] for r in compare], [.36]+['r']*6)
     cp = a.load(E/'same-data-comparison/part1-scores.json')
-    canonical = a.rows(F/'canonical-pressure.csv')
+    replay = study.load('E/MEA/replay.json.gz')
+    predictions = {r['identity']: r for r in replay['rows']}
+    def apply(rows, predictions, key):
+        scored = []
+        for row in rows:
+            q = predictions[key(row)]
+            assert math.isclose(float(row['observed']), q['observed'], rel_tol=1e-12)
+            if q['status'] == 'Available' and q['requested_tolerance_met']:
+                scored.append(dict(row, predicted=q['value']))
+        return scored
+
+    canonical = apply(a.rows(F/'canonical-pressure.csv'), predictions, lambda r: r['target'])
+    wagner = {r['identity']: r for r in [*replay['hot_wagner'], *study.endpoint_record('display-replays/wagner.json.gz', 'MEA')['rows']]}
+    off_window = {r['identity']: r for r in study.load('MEA/off-window.json.gz')['rows']}
+
     fitted_ids = {r['id'] for r in fitrows}
-    density = a.rows(F/'density.csv')
-    cp_rows = a.load(F/'heat-capacity-264.json')['rows']
-    heat = a.rows(F/'heat.csv')
-    kim = a.load(F/'kim2007-heat-pathways/summary.json')['temperatures']
+    comparison = study.endpoint_record('display-replays/mea-comparisons.json.gz', 'MEA')
+    caloric = study.endpoint_record('display-replays/caloric-and-species.json.gz', 'MEA')
+    density_by_id = {r['identity']: r for r in comparison['density']}
+    density = [dict(row, predicted_kg_m3=density_by_id[row['id']]['value']) for row in a.rows(F/'density.csv')]
+    cp_rows = comparison['heat_capacity']
+    heat = caloric['arcis']
+    kim = comparison['kim_2007']
+    def kim_at(T, subset='all_printed'):
+        rows = [r for r in kim if r['T_K'].startswith(T) and r['interval_status'] == 'available'
+                and (subset == 'all_printed' or r['source_inconsistent'] == 'False')
+                and (subset != 'without_first120' or r['first_120'] == 'False')]
+        return a.stats(rows)
+
     rows_for = {
         'Six-source pressures': canonical,
         '112 current-not-fitted pressures': [r for r in canonical if r['target'] not in fitted_ids],
-        'Wagner pressures': a.rows(F/'wagner-pressure.csv'),
-        'Species fractions': a.rows(F/'species-figure-data.csv'),
-        'Jakobsen carbonate share': [dict(observed=r['observed_share'], predicted=r['predicted_share'])
-                                     for r in a.rows(F/'carbonate-share.csv')],
-        'Arcis2011 heats': [dict(observed=r['observed_kJ_mol'], predicted=r['predicted_kJ_mol'])
-                            for r in heat if r['source'].startswith('Arcis')],
+        'Wagner pressures': apply(a.rows(F/'wagner-pressure.csv'), wagner, lambda r: r['target']),
+        'Species fractions': caloric['species'],
+        'Jakobsen carbonate share': [dict(observed=r['observed'], predicted=r['value'])
+                                     for r in comparison['carbonate_share']],
+        'Arcis2011 heats': heat,
     }
     all_density = {'Amundsen2009 loaded': ('Amundsen2009', True), 'Amundsen2009 CO2-free': ('Amundsen2009', False),
                    'Hartono2014 loaded': ('Hartono2014', True), 'Han2012 all': ('Han2012', None)}
@@ -468,7 +502,7 @@ def main():
                           ('Concepcion2023 comparison', 'Concepcion')]:
         rows_for[group] = [dict(observed=r['observed_kJ_kg_K'], predicted=r['predicted_kJ_kg_K'])
                            for r in cp_rows if r['source'].startswith(source) and r['observed_kJ_kg_K']]
-    transfer = a.rows(F/'transfer.csv')
+    transfer = apply(a.rows(F/'transfer.csv'), off_window, lambda r: 'off-window:' + r['target'].removesuffix('-pco2'))
     for concentration in (15, 45):
         ids = {r['observation_id'] for r in a.rows(ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')
                if float(r['MEA_weight_fraction'] or 0) == concentration / 100}
@@ -482,9 +516,9 @@ def main():
     for r in cp:
         name = r['group']
         if name.startswith('Kim heat'):
-            metric = kim[name.split()[2]]['metrics']['semi_differential']['all_printed']
+            metric = kim_at(name.split()[2])
             assert metric['n'] == r['n'][1], name
-            r['deviations'][1] = metric['rmse']
+            r['deviations'][1] = metric['RMSE']
         elif name in rows_for:
             rows = rows_for[name]
             assert len(rows) == r['n'][1], (name, len(rows), r['n'][1])
@@ -520,12 +554,12 @@ def main():
           ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}', r'\makecell[rb]{MEA-fitted\\shared set}'], data, [.24,'r',.12,'r','r',.08,'r','r','r'])
     table('supplement_mea_comparison.tex', r"Data for MEA that are not fitted, or fitted in part, and are not pressures, with the deviations of the MEA model, the model of Polley and Hedengren CITE14, and the fit with the MEA-fitted shared set on identical observations. || The deviations of the last column use the metric of the row. The columns are those of main-text Table~\ref{main-tab:mea-data}. $^{\mathrm{a}}$Also used to select the parameters; $^{\mathrm{b}}$three of these intervals were fitted during earlier model development, in the objective of Ref.~CITE14; no interval of Kim and Svendsen is in the reported fit; $^{\mathrm{c}}$the comparison between density sources informed the choice of fitted density observations. The densities of Ref.~CITE14 are those of its equation of state; for column hydraulics Ref.~CITE14 uses a separate empirical density correlation (its Section~2.2 and Appendix~A.2), so its loaded-density RMSEs of 135--153 kg/m$^3$ describe the liquid volume of that equation of state under load, not that hydraulic density. These sets overlap with each other and with the fitted observations, so their counts are not additive.".replace('CITE14', CITE14),
           ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}', r'\makecell[rb]{MEA-fitted\\shared set}'], aside, [.24,'r',.12,'r','r',.08,'r','r','r'])
-    covariance = a.load(ADOPTED/'uncertainty/covariance.json')
-    interior = [label(r['parameter']) for r in a.rows(ADOPTED/'uncertainty/standard-errors.csv')]
-    assert len(interior) == 9 == len(covariance['native_correlation'])
-    table('supplement_correlations.tex', r"Conditional correlations of the nine fitted parameters that are not at a bound.", ['Parameter']+[str(i+1) for i in range(9)], [[f'{i+1}. {interior[i]}']+[num(v,3) if j<=i else '' for j,v in enumerate(row)] for i,row in enumerate(covariance['native_correlation'])], [.26]+['r']*9)
+    interior = [label(k) for k in uncertainty['free_coordinates']]
+    correlation = uncertainty['conditional_correlation']
+    assert len(interior) == 9 == len(correlation)
+    table('supplement_correlations.tex', r"Conditional correlations of the nine fitted parameters that are not at a bound.", ['Parameter']+[str(i+1) for i in range(9)], [[f'{i+1}. {interior[i]}']+[num(v,3) if j<=i else '' for j,v in enumerate(row)] for i,row in enumerate(correlation)], [.26]+['r']*9)
     profiles = a.load(ADOPTED/'uncertainty/profiles.json')
-    table('bound_profiles.tex', r"Refits with one interaction fixed inside its active bound. || The other parameters are refitted. Phase stability was not searched for these refits.", ['Interaction','Distance from the bound (% of range)','Fixed value','$C$','Change in $C$'], [[label(r['parameter']),num(100*r['fraction']),num(r['fixed_value']),num(r['cost'],9),num(r['delta_cost'],7)] for r in profiles], ['l']+['r']*4)
+    table('bound_profiles.tex', r"Historical tracking-reference refits with one interaction fixed inside its active bound. || The other parameters are refitted. Phase stability was not searched for these refits.", ['Interaction','Distance from the bound (% of range)','Fixed value','$C$','Change in $C$'], [[label(r['parameter']),num(100*r['fraction']),num(r['fixed_value']),num(r['cost'],9),num(r['delta_cost'],7)] for r in profiles], ['l']+['r']*4)
     # Historical sensitivity on the previous shared set.
     # The shared water-bicarbonate interaction fixed at two other values whose MEA refits stay within the largest change of bound_profiles; MDEA refitted at each.
     S, M = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/', 'analyses/mdea_mea_workflow/results/bounded-binary-411/'
@@ -564,14 +598,16 @@ def main():
            [f'Unfinished searches of {states}', reported['unavailable_searches'], *(search[s]['counts']['unavailable_records'] for s in ('low', 'high'))],
            ['Confirmed liquid--liquid splits', reported['liquid_liquid_splits_found'], *(search[s]['counts']['confirmed_distinct_splits'] for s in ('low', 'high'))]],
           [.46, 'r', 'r', 'r'])
-    kim = a.load(F/'kim2007-heat-pathways/summary.json')['temperatures']
-    table('kim_alternatives.tex', r"Kim finite-interval heat comparisons at 393.15 K for alternative source exclusions. || RMSE is kJ/mol absorbed CO2; AARD is percent. All alternatives use the MEA model.", ['Intervals','$N$','RMSE','AARD'], [[name,kim['393.15']['metrics']['semi_differential'][key]['n'],num(kim['393.15']['metrics']['semi_differential'][key]['rmse'],6),num(kim['393.15']['metrics']['semi_differential'][key]['aard_percent'],6)] for key,name in [('all_printed','All tabulated intervals'),('source_consistent','Without the two inconsistent intervals'),('without_first120','Also without first intervals')]], ['l','r','r','r'])
+    table('kim_alternatives.tex', r"Kim finite-interval heat comparisons at 393.15 K for alternative source exclusions. || RMSE is kJ/mol absorbed CO2; AARD is percent. All alternatives use the MEA model.", ['Intervals','$N$','RMSE','AARD'], [[name,kim_at('393.15', key)['n'],num(kim_at('393.15', key)['RMSE'],6),num(kim_at('393.15', key)['AARD_percent'],6)] for key,name in [('all_printed','All tabulated intervals'),('source_consistent','Without the two inconsistent intervals'),('without_first120','Also without first intervals')]], ['l','r','r','r'])
     weights = a.rows(E/'objective-groups.csv')  # unchanged scales and weights
     weight_groups = {}
     for r in weights: weight_groups.setdefault(rowkey(r['group'],r['quantity']),[]).append(r)
     assert list(weight_groups) == list(groups)
     table('objective_groups.tex', r"Assigned objective scales and weights. || Scales are in the unit of the quantity, and unity for the logarithmic pressure residuals. The text gives the origin of each scale and weight. \textsuperscript{a}Preliminary fit of the \ce{CO2}--water interaction. These residuals contribute a constant to the reactive objective.", ['Quantity','$N$','Scale range','Weight range','Contribution to $C$'], [[rowlabel(key,False) + (r'\textsuperscript{a}' if key == ('Kiepe', 'pressure') else ''),sum(int(r['n']) for r in part),span(float(r['scale']) for r in part),span(float(r['weight']) for r in part),num(sum(float(r['cost']) for r in groups[key]),6)] for key,part in weight_groups.items()], [.42,'r','l','l','r'])
-    checks = a.load(ADOPTED/'check-values.json')
+    check_record = study.endpoint_record('display-replays/bubble-checks.json.gz', 'MEA')
+    assert check_record['endpoint_fingerprint'] == endpoint['endpoint_fingerprint']
+    checks = check_record['rows']
+    assert len(checks) == 3 and not check_record['failure']
     # Each bubble pressure was solved from two initial pressures; the digits shown must agree.
     state = [('$T$ (K)', lambda r, k: num(r['T_K'],7)), ('Bubble pressure (Pa)', lambda r, k: num(r['answers'][k]['bubble_pressure_Pa'],10)), (r'Liquid density (kg/m$^3$)', lambda r, k: num(r['answers'][k]['density_kg_m3'],10))]
     assert all(get(r,0) == get(r,1) for _, get in state for r in checks)
@@ -594,15 +630,15 @@ def main():
     missing = [r for r in shared if (r['identity'].startswith('component/') and r['identity'].rsplit('/', 1)[-1] in ('packing_diameter', 'debye_huckel_diameter')) or (r['identity'].startswith('pair/') and tuple(sorted(r['identity'].split('/')[1:3])) not in covered_pairs)]
     table('supplement_shared_remaining.tex', r"Shared parameters not listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at full precision. || Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded values of the shared parameters marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}.", ['Parameter','Value','Unit','Source'], [[label(r['identity']), f"{float(r['value']):.15g}" if r['identity'].endswith('/packing_diameter') else full_precision(r['value']), r['unit'],
                                           r'$0.88\sigma$' if r['identity'].endswith('/packing_diameter') else r'Equal to $\sigma$' if r['identity'].endswith('/debye_huckel_diameter') else 'Set in this work'] for r in missing], [.42,'r','l','l'])
-    table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[cited('', SOURCE_NAMES[s]) + r' \cite{' + PRESSURE_CITE[s] + '}',len(part),format(a.stats(part)['AARD_percent'], '.1f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
+    table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[cited('', SOURCE_NAMES[s]) + r' \cite{' + PRESSURE_CITE[s] + '}',len(part),format(a.stats(part)['AARD_percent'], '.1f')] for s in sorted({r['source'] for r in canonical}) for part in [[r for r in canonical if r['source']==s]]], ['l','r','r'])
     historical_inputs = OTHER.copy()
     historical_tables = set(OUTPUTS)
     round7 = 'analyses/round_7/'
     handoff = other(round7 + 'manuscript-handoff.json')
     quantities = handoff['quantities']
-    cases = ('incumbent', 'F4')
-    replays = [other(round7 + f'results/E/{name}/replay.json.gz') for name in cases]
-    for name in cases:
+    expanded = other(round7 + 'results/E/F4/replay.json.gz')
+    replays = [replay, expanded]
+    for name in ('incumbent', 'F4'):
         path = round7 + f'results/E/{name}/off-window.json.gz'
         assert len(other(path)['rows']) == 84
         assert OTHER[path] == handoff['source_hashes'][path], path
@@ -637,50 +673,55 @@ def main():
             scores.append(f'{math.fsum(map(abs, relative))/len(relative):.2f} / {math.fsum(relative)/len(relative):+.2f}')
         rows.append([source + ', nominal 120 degrees Celsius', len(ids), *scores])
     table('supplement-mea-pressure-sensitivity.tex',
-          r'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the reported fit and the full-weight expanded fit. || The 112 added pressures include the 54 hot rows. The 12 hot Wagner pressures enter the 66-row hot comparison and the separate Wagner row. Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
-          ['Pressure cohort', '$N$', 'Reported AARD / bias (%)', 'Expanded AARD / bias (%)'],
+          r'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the selected fixed-reference fit and the historical full-weight tracking-reference fit. || The 112 added pressures include the 54 hot rows. The 12 hot Wagner pressures enter the 66-row hot comparison and the separate Wagner row. Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
+          ['Pressure cohort', '$N$', '100 kPa AARD / bias (%)', 'Expanded AARD / bias (%)'],
           rows, [.43,.06,.22,.22])
     heat_path = round7 + 'results/display-replays/mea-heat-sensitivity.json.gz'
     heat = other(heat_path)['replay']
     assert OTHER[heat_path] == handoff['source_hashes'][heat_path], heat_path
+    selected_heat = study.load('MEA/heat-comparison.json.gz')['rows']['rows']
     heat_rows = []
     for dataset, dataset_label in [('Kim2014', r'Kim et al. \cite{Kim2014}, finite-addition heat'),
                            ('Vinjarapu2024', r'Vinjarapu et al. \cite{HemaBhavya2025}, integral heat')]:
         q = {k: quantities[f'MEA expanded hot heat {dataset} {k}'] for k in ('minimum', 'maximum', 'available')}
         observed = [row['observed_kJ_mol'] for row in heat['rows'] if row['source']==dataset and row['T_K']>=370.]
         assert len(observed) == q['available']['population']
+        new_rows = [r for r in selected_heat if r['source'] == dataset and r['T_K'] >= 370]
+        assert {r['record_id'] for r in new_rows} == {r['record_id'] for r in heat['rows'] if r['source'] == dataset and r['T_K'] >= 370}
+        values = [r['predicted_kJ_mol'] for r in new_rows if r['status'] == 'available']
         heat_rows.append([dataset_label, f"{q['available']['value']}/{len(observed)}",
                           f'{min(observed):.2f}--{max(observed):.2f}',
-                          *[f"{q['minimum'][k]:.2f}--{q['maximum'][k]:.2f}" if q['minimum'][k] is not None else '---'
-                            for k in ('prior', 'value')]])
+                          f'{min(values):.2f}--{max(values):.2f}',
+                          f"{q['minimum']['value']:.2f}--{q['maximum']['value']:.2f}"])
     heat_table = 'supplement-mea-heat-sensitivity.tex'
     table(heat_table,
-          r'MEA absorption heats at 393.15 K and 30 wt% with the reported fit and the full-weight expanded fit. || Ranges are in kJ/mol CO2 as positive heat release. Both models are evaluated at 1.734 MPa and at the source loading intervals for Kim or from zero loading for Vinjarapu.',
-          ['Calorimetry', 'Available', 'Measured', 'Reported fit', 'Expanded fit'],
+          r'MEA absorption heats at 393.15 K and 30 wt% with the reported fit and the full-weight expanded fit. || Ranges are in kJ/mol CO2 as positive heat release. The first column of predictions uses the selected fixed-reference fit and the second uses the historical tracking-reference sensitivity. Both models are evaluated at 1.734 MPa and at the source loading intervals for Kim or from zero loading for Vinjarapu.',
+          ['Calorimetry', 'Available', 'Measured', '100 kPa fit', 'Expanded fit'],
           heat_rows, [.34,.12,.16,.16,.16], included_in='supplement-mea-pressure-sensitivity.tex')
     OUTPUTS['supplement-mea-pressure-sensitivity.tex'] += OUTPUTS.pop(heat_table)
     off_rows = []
     for source in ('Aronu2011', 'Aronu2011 15 wt%', 'Aronu2011 45 wt%', 'Jou1995'):
-        entries = [{field: quantities[f'E MEA {case} outside fit {source} {field}']['value']
-                    for field in ('available', 'refused', 'AARD_percent', 'bias_percent')} for case in cases]
+        fields = ('available', 'refused', 'AARD_percent', 'bias_percent')
+        entries = [{field: study.value(f'MEA off-window {source} {field}') for field in fields},
+                   {field: quantities[f'E MEA F4 outside fit {source} {field}']['value'] for field in fields}]
         off_rows.append([source, *[v for entry in entries for v in (f"{entry['available']}/{entry['refused']}",
                          f"{entry['AARD_percent']:.2f} / {entry['bias_percent']:+.2f}")]])
     table('supplement-mea-off-window.tex',
           r'MEA CO2 partial-pressure comparison outside the expanded fit window. || The Aronu rows at 15 and 45 wt% sum to the Aronu total. The separate Jou comparison is at 30 wt%. Both endpoints refused the six Jou rows at 0 degrees Celsius under the 293.15 K lower limit. AARD and signed bias use available predictions. The population contains 84 observations.',
-          ['Source', 'Reported available/refused', 'AARD / bias (%)',
+          ['Source', '100 kPa available/refused', 'AARD / bias (%)',
            'Expanded available/refused', 'AARD / bias (%)'],
           off_rows, [.26,.16,.17,.16,.17])
     table('supplement-mea-window-objective.tex', r'MEA objectives evaluated on the original and expanded observation sets.',
-          ['Observation set', '$N$', 'Reported MEA fit', 'Full-weight expanded fit'],
+          ['Observation set', '$N$', 'MEA, 100 kPa', 'Tracking, expanded fit'],
           [[population_label, quantities[f'E MEA incumbent {key} objective']['population'],
-            *[f"{quantities[f'E MEA {case} {key} objective']['value']:.2f}" for case in cases]]
+            f"{replay['summary'][key + '_cost']:.2f}", f"{quantities[f'E MEA F4 {key} objective']['value']:.2f}" ]
            for key, population_label in [('original', 'Original'), ('expanded', 'Expanded')]], [.27,.08,.25,.28])
     for name, body in OUTPUTS.items():
         body = GROUP.sub(r'\\num{\g<0>}', body)
         if name in historical_tables:
-            header = '% Generated from #435 retained results and historical comparisons\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))+''.join('% Input (working tree): '+p+' SHA256 '+h+'\n' for p,h in sorted(historical_inputs.items()))
+            header = '% Generated from #440 retained results and historical comparisons\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))+''.join('% Input (working tree): '+p+' SHA256 '+h+'\n' for p,h in sorted(historical_inputs.items()))
         else:
-            header = '% Generated from round-7 retained results\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(OTHER.items()) if p not in historical_inputs)
+            header = '% Generated from #440 and round-7 retained results\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(OTHER.items()) if p not in historical_inputs or p.startswith(STUDY))
         if '--check' in sys.argv: assert (TABLES/name).read_text()==header+body, name
         else: (TABLES/name).write_text(header+body)
     print(json.dumps({'tables_checked': len(OUTPUTS), 'inputs': len(a.INPUTS) + len(OTHER)}))

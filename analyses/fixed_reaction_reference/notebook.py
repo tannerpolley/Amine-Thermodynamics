@@ -1,5 +1,8 @@
 """Present retained fit, derivative and phase comparisons as an analysis notebook."""
 from collections import Counter
+import gzip
+import json
+from pathlib import Path
 
 
 def show(value):
@@ -260,6 +263,47 @@ and population basis, and open quantities.
                   'The selected MEA screen uses `mea_replays.py`. The derivative checks use '
                   '`reference_derivatives.py fixed-at-old` and `reference_derivatives.py selected`.',
                   '', 'Recompute the handoff with `uv run --no-sync python analyses/fixed_reaction_reference/handoff.py --check`.'])
+    display = Path(__file__).parent/'results/display-replays'
+    if display.is_dir():
+        files = {p.name: json.loads(gzip.decompress(p.read_bytes())) for p in sorted(display.glob('*.json.gz'))}
+        lines.extend(['', '## Replays for the manuscript displays', '',
+                      'These evaluations use the selected endpoints. Each result retains its wheel and endpoint fingerprint.',
+                      '', '| Record | Elapsed (s) | Result |', '|---|---:|---|'])
+        for name, record in files.items():
+            if name.startswith('AMP_'):
+                pressure = record['pressure_Pa']
+                outcome = f'Worked-feed bubble pressure {pressure/1e6:.6f} MPa' if pressure is not None else record['status']
+            elif name == 'dea-methane.json.gz':
+                shifts = [abs(v) for q in record['rows'] for v in q.get('pCO2_change_Pa', [])]
+                n = sum('pCO2_change_Pa' in q for q in record['rows'])
+                outcome = f'{n}/{len(record["rows"])} Lawson feeds. Maximum conditional shift {max(shifts)/1e6:.6f} MPa'
+            elif name == 'bubble-checks.json.gz':
+                n = sum(q['printed_digits_agree'] for q in record['rows'])
+                outcome = f'{n}/3 bubble states agree to the printed digits from two guesses'
+            elif name == 'mea-comparisons.json.gz':
+                counts = [f"{sum(q.get('status', q.get('interval_status','')).lower() == 'available' for q in record[k])}/{len(record[k])} {label}"
+                          for k, label in [('density','densities'), ('heat_capacity','heat capacities'),
+                                           ('carbonate_share','carbonate shares'), ('kim_2007','Kim and Svendsen intervals')]]
+                outcome = '; '.join(counts) + '. The other Kim and Svendsen intervals exceed the declared loading ceiling'
+            elif name == 'caloric-and-species.json.gz':
+                heat = record['reference_state']['heat_kJ_mol']
+                cp = record['reference_state']['cp_J_mol_K']
+                outcome = (f"14 Arcis heats and 131 species comparisons. The worked MEA case gives {heat:.5f} kJ/mol added CO2 "
+                           f"and {cp:.5f} J/(mol apparent feed K). Its stored numerical checks pass")
+            elif name == 'mdea-binary-onset.json.gz':
+                ranges = [f"{p/1e6:.3f} MPa: {a:.5f}–{b:.5f} K"
+                          for pressure, v in record['pressures'].items() for q in v['brackets']
+                          for p, (a,b) in [(int(pressure), q['bracket_K'])]]
+                outcome = '; '.join(ranges)
+            else:
+                n = sum(q['status'] == 'Available' for q in record['rows'])
+                outcome = f'{n}/{len(record["rows"])} cooler Wagner pressure observations'
+            lines.append(f'| [{name}](results/display-replays/{name}) | {record["seconds"]:.2f} | {outcome} |')
+        lines.extend(['', 'The original study retained the MEA, DEA, MDEA and AMP curve points. '
+                      'The MEA curve families took 47.10 s summed across their five producers. '
+                      'The DEA pressure curves are included in the 24.49 s observation-and-curve replay. '
+                      'The MDEA selected curve batches took 19.80 s. '
+                      'The AMP property records do not isolate curve runtime from the receiver lane.'])
     lines.extend(['','## Starting and remaining quantity keys',''])
     prior = result['starting_dispositions']
     original = Counter(prior.values())

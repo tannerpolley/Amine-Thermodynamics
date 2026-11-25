@@ -572,6 +572,23 @@ Run from the repository root with the installed study wheel verified against `c9
 
 Recompute the handoff with `uv run --no-sync python analyses/fixed_reaction_reference/handoff.py --check`.
 
+## Replays for the manuscript displays
+
+These evaluations use the selected endpoints. Each result retains its wheel and endpoint fingerprint.
+
+| Record | Elapsed (s) | Result |
+|---|---:|---|
+| [AMP_fixed-bubble.json.gz](results/display-replays/AMP_fixed-bubble.json.gz) | 0.28 | Worked-feed bubble pressure 1.790874 MPa |
+| [AMP_free-bubble.json.gz](results/display-replays/AMP_free-bubble.json.gz) | 0.30 | Worked-feed bubble pressure 1.883232 MPa |
+| [bubble-checks.json.gz](results/display-replays/bubble-checks.json.gz) | 0.53 | 3/3 bubble states agree to the printed digits from two guesses |
+| [caloric-and-species.json.gz](results/display-replays/caloric-and-species.json.gz) | 8.86 | 14 Arcis heats and 131 species comparisons. The worked MEA case gives -81.80304 kJ/mol added CO2 and 84.88593 J/(mol apparent feed K). Its stored numerical checks pass |
+| [dea-methane.json.gz](results/display-replays/dea-methane.json.gz) | 1.95 | 30/30 Lawson feeds. Maximum conditional shift 0.317329 MPa |
+| [mdea-binary-onset.json.gz](results/display-replays/mdea-binary-onset.json.gz) | 73.50 | 1.121 MPa: 423.14375–423.15000 K; 1.466 MPa: 423.16250–423.16875 K; 1.811 MPa: 423.17500–423.18125 K |
+| [mea-comparisons.json.gz](results/display-replays/mea-comparisons.json.gz) | 20.58 | 234/234 densities; 60/60 heat capacities; 10/10 carbonate shares; 73/86 Kim and Svendsen intervals. The other Kim and Svendsen intervals exceed the declared loading ceiling |
+| [wagner.json.gz](results/display-replays/wagner.json.gz) | 0.70 | 11/11 cooler Wagner pressure observations |
+
+The original study retained the MEA, DEA, MDEA and AMP curve points. The MEA curve families took 47.10 s summed across their five producers. The DEA pressure curves are included in the 24.49 s observation-and-curve replay. The MDEA selected curve batches took 19.80 s. The AMP property records do not isolate curve runtime from the receiver lane.
+
 ## Starting and remaining quantity keys
 
 The starting handoff had 198 open keys and 68 undecided results.
