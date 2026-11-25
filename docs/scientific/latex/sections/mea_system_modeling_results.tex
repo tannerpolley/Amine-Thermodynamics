@@ -10,7 +10,7 @@ The MEA model has 11 jointly fitted parameters: the MEA--water interaction and i
 
 % P:results-parameter-interpretation
 Two interactions are on bounds.
-The \MEAH--\MEACOO interaction is at $-1$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $+1$, which removes it; refits that hold either one slightly inside its bound raise the objective value by at most 0.75 (Section~\ref{supp-sec:s-uncertainty}).
+The \MEAH--\MEACOO interaction is at $-1$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $+1$, which removes it; in fits with the R1--R3 references at the system pressure, holding either one slightly inside its bound raised the objective value by at most 0.75 (Section~\ref{supp-sec:s-uncertainty}).
 The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{1.783}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
 The diameters of the two MEA ions have a conditional correlation of $-0.997$ and are not separately identified, so the fitted values are not unique molecular properties.
 Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of 5.9--17.0\,\%, of the same size as the deviations themselves.
@@ -21,8 +21,8 @@ Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance g
 \subsubsection{Pressure and speciation at 30 wt\%}\label{sec:results-pressure}
 % P:results-pressure-01
 At nominal 30 wt\% MEA the bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while differences between sources remain visible (\cref{fig:pressure}).
-The 47 fitted pressures, at 313--\SI{333}{\kelvin}, deviate by 11.3\,\%.
-The higher-temperature pressures are calculated without further fitting, and the 112 pressures of the same six sources that are not fitted deviate by 27.8\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
+The 47 fitted pressures, at 313--\SI{333}{\kelvin}, deviate by 11.34\,\%.
+The higher-temperature pressures are calculated without further fitting, and the 112 pressures of the same six sources that are not fitted deviate by 27.88\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -34,7 +34,7 @@ The higher-temperature pressures are calculated without further fitting, and the
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
-The carbonate share of dissolved carbon remains far below the ten observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of 89.9\,\%: the geometric mean of the calculated-to-observed ratios is 0.070, against 0.032 with the MEA-fitted shared set (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
+The carbonate share of dissolved carbon remains far below the ten observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of 89.86\,\%: the geometric mean of the calculated-to-observed ratios is 0.070, against 0.032 with the MEA-fitted shared set (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
 Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}C} NMR signal and state that their carbonate is most likely overpredicted, which limits the accuracy of these observations.
 Changes to the Born diameters of the two anions, to the permittivity and to the solvation factors, tested with the MEA-fitted shared set, do not remove the deficit (Section~\ref{supp-sec:s-carbonate}).
 Its cause is unresolved, and the fitted pressures do not determine this minor-species partition.
@@ -62,20 +62,20 @@ The measurements themselves differ between the two series at nearby loadings, so
 % P:results-heat-kim
 The semi-differential heats of Kim and Svendsen deviate most at \SI{393.15}{\kelvin}, with an RMSE of \SI{32.51}{\kilo\joule\per\mole} of \COtwo over all 20 intervals, including the four flagged for source problems that Table~\ref{supp-tab:supplement-temperature-bands} reports separately.
 Extrapolated equilibrium constants, pressure histories that had to be approximated and chemistry missing from the model may all contribute, so caloric accuracy at high temperature is not demonstrated.
-Heat capacities outside the fitted states \cite{weilandHeatCapacityAqueous1997,concepcionHeatCapacitiesDifferent2023} deviate by about 5\,\% or less, 5.03\,\% for the six of Weiland et al.\ (Table~\ref{supp-tab:supplement-mea-comparison}).
+Heat capacities outside the fitted states \cite{weilandHeatCapacityAqueous1997,concepcionHeatCapacitiesDifferent2023} deviate by about 5\,\% or less, 5.02\,\% for the six of Weiland et al.\ (Table~\ref{supp-tab:supplement-mea-comparison}).
 
 % P:results-density-01
 Without volume translation, the model describes the fitted loaded densities of Amundsen et al.\ and Hartono et al.\ more closely than the full ranges of those sources and the densities of Han et al., which are not fitted (Fig.~\ref{supp-fig:density-curves}) \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
 
 \subsubsection{Other MEA concentrations}\label{sec:results-concentration}
 % P:results-transfer
-At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressures of Aronu et al.\ deviate by 44.2 and 46.9\,\%, against 31.6\,\% for their pressures at 30 wt\%, which are not fitted either (\cref{tab:mea-data}, Fig.~\ref{supp-fig:concentration-pressure}).
+At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressures of Aronu et al.\ deviate by 44.26 and 46.89\,\%, against 31.65\,\% for their pressures at 30 wt\%, which are not fitted either (\cref{tab:mea-data}, Fig.~\ref{supp-fig:concentration-pressure}).
 Aronu et al.\ fitted an extended UNIQUAC model to their own data at 15--60 wt\% and report 24.3\,\% for all their \COtwo partial pressures together \cite{Aronu2011}, so the two are not compared on identical observations.
 The concentration dependence of the pressure is a weakness of the calibration.
 
 \subsubsection{Effect of the restrictions and of the salt-fitted interactions}\label{sec:results-restrictions}
 % P:results-joint-01
-Two steps lead from the 16-parameter calibration to the MEA model (Section~\ref{supp-sec:s-restrictions}).
+Two steps lead from the 16-parameter calibration to the MEA model; the sequence was computed with the R1--R3 references at the system pressure (Section~\ref{supp-sec:s-restrictions}).
 The first fixes R2 and R5 at their literature forms and ties the Born diameters, which gives the 11-parameter fit with the MEA-fitted shared set.
 It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from six to one.
 The second fixes the two water--anion interactions from the salt data.
@@ -83,14 +83,13 @@ On the same 307 observations it raises the objective value from 150.76 to 152.96
 
 % P:results-joint-02
 Both steps cost accuracy at high temperature.
-On the 19 \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005} near \SI{393}{\kelvin}, which no fit includes, the deviation is 19.4\,\% for the 16-parameter calibration, 33.5\,\% with the MEA-fitted shared set and 38.4\,\% for the MEA model (\cref{tab:published-models}).
+On the 19 \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005} near \SI{393}{\kelvin}, which no fit includes, the deviation is 19.4\,\% for the 16-parameter calibration, 33.5\,\% with the MEA-fitted shared set and 38.4\,\% for the restricted model in that sequence; the MEA model with the \SI{100}{\kilo\pascal} references deviates by 38.66\,\% (\cref{tab:published-models}).
 In return the restricted model keeps the literature equilibrium constants that the other amines share, needs no stability penalty, and no longer takes a shared interaction from MEA data that do not determine it.
-With the water--bicarbonate interaction fixed, the conditional standard errors of the carbamate--water and \MEAH--water interactions fall from 0.55 and 0.62 to 0.11 and 0.12.
+With the water--bicarbonate interaction fixed, the conditional standard errors of the carbamate--water and \MEAH--water interactions fall from 0.55 and 0.62 to 0.10 and 0.11.
 
 % P:results-expanded
 Fitting the hot pressures does not remove this cost.
-A sensitivity fit adds the 112 pressures not fitted here to the MEA objective at full weight (Section~\ref{supp-sec:s-restrictions}).
-It lowers the deviation of the 12 hot pressures of Wagner et al., which neither fit includes, from 28.07 to 10.40\,\%, but the 47 pressures fitted here then deviate by 22.78 instead of 11.35\,\%, with a bias of +20.27\,\%, and the objective of the 307 observations rises from 152.96 to 165.71.
+A sensitivity fit, made with the R1--R3 references at the system pressure, adds the 112 pressures not fitted here to the MEA objective at full weight; it lowers the deviation of the 12 hot pressures of Wagner et al.\ from 28.07 to 10.40\,\% but raises that of the 47 pressures fitted here from 11.35 to 22.78\,\% (Section~\ref{supp-sec:s-restrictions}).
 The sources disagree at these temperatures: at \SI{393}{\kelvin} and 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} at a loading of 0.349 and Ma'mun et al.\ \SI{83.6}{\kilo\pascal} at 0.350.
-A different weighting therefore moves the error from one campaign to another, and the MEA model remains the fit to the 47 pressures.
-Neither fit reproduces the absorption heats at \SI{393}{\kelvin}: for the finite additions of Kim et al.\ \cite{Kim2014}, the MEA model gives 70.55--\SI{90.52}{\kilo\joule\per\mole} against 79.74--\SI{100.77}{\kilo\joule\per\mole} measured (Table~\ref{supp-tab:supplement-mea-heat-sensitivity}).
+A different weighting therefore moves the error from one campaign to another, and the MEA model remains the fit to the 47 pressures; with the \SI{100}{\kilo\pascal} references it deviates by 28.41\,\% from the 12 Wagner pressures.
+The MEA model does not reproduce the absorption heats at \SI{393}{\kelvin}: for the finite additions of Kim et al.\ \cite{Kim2014}, it gives 70.72--\SI{90.54}{\kilo\joule\per\mole} against 79.74--\SI{100.77}{\kilo\joule\per\mole} measured (Table~\ref{supp-tab:supplement-mea-heat-sensitivity}).
