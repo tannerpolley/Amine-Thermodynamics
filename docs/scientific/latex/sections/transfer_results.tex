@@ -37,7 +37,7 @@ With the adopted DEA pure-component and association parameters, neither of the t
 \subsubsection{MDEA}\label{sec:results-mdea}
 % P:transfer-mdea-fit
 The MDEA model fits eight parameters, among them the MDEA--water interaction, which is part of the reactive fit.
-Each group of observations enters its objective as a mean of squared standardized residuals, so that the many densities do not outweigh the 66 loaded-solution pressures (\cref{sec:parameters}).
+Its objective weights each group of observations so that the many densities do not outweigh the 66 loaded-solution pressures (\cref{sec:parameters}).
 The 66 fitted total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} deviate by 4.15\,\% (\cref{fig:mdea-pressure}), and the 29 of them above the measured R5 range, from \SI{368}{\kelvin}, by 3.94\,\% with almost no bias.
 The other fitted MDEA properties deviate by 0.08\,\% for the \COtwo-free densities up to 18.69\,\% for the integral heats of Carson et al., and every fitted species ratio is overpredicted.
 The first MDEA fit, with the weights of the MEA fit, deviated by 10.12\,\% from the same pressures; the reweighted fit is reported because it fits the loaded solution better, although it raises the objective of the first weighting (Section~\ref{supp-sec:s-objective}).
@@ -135,9 +135,10 @@ Its searches gave 73 confirmed liquid--liquid splits and 20 further detected ins
 At 373--\SI{393}{\kelvin} it underpredicted every measured total pressure of Hartono et al.\ and of Tong et al., by 28.1 and 25.3\,\% on average.
 
 % P:phase-amp-refit
-Fitting those measured pressures removed the splits.
+In the fits tested, adding those measured pressures removed the detected splits.
 With the 58 further pressures in the objective and the same shared set, the coefficient becomes \SI{-181}{\kelvin}, the pressures at 373--\SI{393}{\kelvin} of Hartono et al.\ deviate by 6.7\,\%, and no search detects an instability; the same holds for the AMP model, which also has the salt-fitted interactions.
-The splits were therefore a consequence of extrapolating a weakly determined temperature coefficient beyond the fitted pressures, not a property that the AMP data support.
+The splits are tied to extrapolation beyond the fitted pressures: changing only the temperature coefficient of the \ce{AMPH+}--water interaction removes the worked split (Section~\ref{supp-sec:s-amp-slope}), but the added pressures also move the other parameters, so they do not isolate that coefficient as the cause.
+Stability and accuracy are separate tests here: the first fit already underpredicted the unfitted pressures at 373--\SI{393}{\kelvin}, and the fit with the slope fixed at \SI{-150}{\kelvin} removed the splits without improving those pressures.
 In the first fit that coefficient raised the cation--water interaction from $-0.178$ at \SI{353}{\kelvin} to $-0.115$ at \SI{393}{\kelvin}, and with the weaker cation--water attraction an ion-rich second liquid lowered the Gibbs energy; in the AMP model the interaction changes only from $-0.206$ at \SI{353.22}{\kelvin} to $-0.190$ at \SI{393.15}{\kelvin}.
 Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples, and no measurement of liquid--liquid coexistence in loaded aqueous AMP was used, so the single liquid of the AMP model is consistent with the data but not established by them.
 

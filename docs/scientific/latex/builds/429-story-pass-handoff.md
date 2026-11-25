@@ -228,3 +228,32 @@ The manuscript keeps its story and title: MEA calibration, transfer to DEA, MDEA
 ### First action for the next stage
 
 Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting with Sections 4.2.4 and 4.3, and decide whether the open items of point 3 need calculations before submission.
+
+## Round-7 prose pass (Writer, 2026-11-25)
+
+**Basis.** Owner adoptions of 2026-11-25 on #429. #435 stays the MEA model. The adopted receivers are the broadened DEA fit, the pressure-weighted salt MDEA fit and the corrected-input AMP fit. Numbers come from `analyses/round_7/manuscript-handoff.json` and its result records. No calculation was run, and no display or script was edited.
+
+**What changed.**
+- **Prose-gap list.** All 71 entries of `436-rebind-prose-gaps.md` are resolved in the main text, supplement, preprint abstract, cover letter and highlights, including the AMP donor statement at `transfer_results.tex:219`. The deposit sentence now carries a `% PENDING` comment: `scripts/stage_manuscript_deposit.py` does not yet stage the round-7 fits.
+- **DEA failures.** Weiland et al. measured densities of a single liquid at four states: 298.15 K, 30 wt% at α 0.45 and 40 wt% at 0.40, 0.45 and 0.50. At all four the broadened DEA fit confirms a liquid–liquid split. These are reported as model failures in the abstract, highlight 4, §4.3, §5.4 and the conclusions. One more descent is unresolved, and one search is unfinished.
+- **MEA.** §4.1.5 states that the full-weight expanded fit is a sensitivity, with its gains and costs and the source conflict. The Jou value is 46.8 kPa at α 0.349, and the Ma'mun value is 83.6 kPa at α 0.350, read from `Combined_VLE.csv`. The owner's 82.8 kPa is an interpolation and was not used. §4.1.5 also gives the Kim 393 K heats from Table S10. §5.4 says the model does not support regeneration-duty estimates. §5.2 says Ma'mun is underpredicted at every point.
+- **121 MPa.** §4.3 and S3 state the reference convention. The split is confirmed with tracking references. At 100 kPa the case is unresolved. The pressure-tracking correction is −15.7 % of the EOS volume.
+- **Round 6.** The new `round6-response.md` covers all four reports.
+- **§4.2.4.** Retitled “Shared interactions and calibration choices”. It compares the adopted fits with the first fits and states the MDEA shared-set result under both weightings.
+
+**Checks.**
+- `scripts/build_manuscript.sh` passes: main 28 pages, supplement 49, no undefined references or citations, no overfull boxes.
+- `dea_displays.py --check` passes (32 displays, prose strings included), as do `final_rerun_tables.py --check` (21 tables) and `analyses/round_7/handoff.py --check` (1061 quantities).
+- `check_private_source.py` passes. The CSE prose terminology check passes; the STYLE.md advisories are the existing ones.
+- `cited_bibliography.py` reproduces `references.bib` unchanged.
+- The graphical abstract is untouched.
+
+**Open.**
+1. Should the deposit stager include the round-7 fits before submission?
+2. Fig. 4 (DEA) still mixes solid and dashed model lines, which the caption no longer explains. The figure producer should state the line-style meaning or drop it.
+3. The MDEA trial-phase classification at the 25 measured descent states was not repeated for the adopted model. Its trial branches now read “mixed”, “vapor” or “none”. S7.1 says this. A by-source table of deviations at these states is still requested by referees.
+4. The adopted MDEA split at 204.054 MPa has no reference-convention test.
+5. `429-story-pass-number-sources.md` was not extended for this pass. Every new number is cited in `round6-response.md`, or comes from the record keys of the prose-gap list.
+6. #424, #427 and the DOI remain open.
+
+**Next stage.** Run a fresh referee round on `builds/main.pdf` and `builds/supplement.pdf`, starting with §4.3 (DEA failures) and §4.2.4.
