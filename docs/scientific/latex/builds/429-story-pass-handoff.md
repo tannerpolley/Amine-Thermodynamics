@@ -191,3 +191,40 @@ Not on the text list and therefore not addressed: Q2 (free-slope fit at 373–39
 2. The water fit's "23 heat capacities" is a constant written in `analyses/round_3/records.py`, not counted from fit rows.
 3. Hartono and Svendsen 2009 is cited only through Hessen et al.'s Fig. 6; the pH points are figure read-offs.
 4. The previous open questions 1 (SAFT artefact papers), 4 (exact Figiel average) and 7 (artefact wording) are closed by this pass; the others are unchanged.
+
+## Revision pass (adopted #435 models, round-4 referees)
+
+Stage handoff of the Writer, 2026-11-24. Branch `issue-429-story-pass`; issue [#429](https://github.com/tannerpolley/Amine-Thermodynamics/issues/429). Not merged.
+
+### What this stage did
+
+The manuscript keeps its story and title: MEA calibration, transfer to DEA, MDEA and AMP, phase stability. The archived reframe (tag `archive/429-diagnostic-reframe`) is not used for framing or prose; its display producers (`dea_displays.py`, `final_rerun_tables.py`, `cited_bibliography.py`) were reused because they generate the adopted numbers, and their prose-check block was rewritten for this text.
+
+- **Models.** Every number is from the adopted #435 records (`analyses/mea_parameter_bundle/results/salt-anchored-435/manuscript-handoff.md`). The shared water–bicarbonate and water–carbonate interactions are fixed from sodium-salt osmotic data (Section 2.2, S1.3); the fits with the MEA-fitted value 0.765 are the comparison (“MEA-fitted shared set”, Table 8).
+- **AMP.** The model is the fit to all 105 loaded pressures with the slope fitted (−52.0 ± 63 K). The first fit and its 73 splits are one finding in Section 4.3; the −150 K fit is a sensitivity in S7.3.
+- **Structure.** Results: 4.1 MEA, 4.2 transfer (DEA, MDEA, AMP, effect of the salt-fixed interactions), 4.3 phase stability; Section 5 “Discussion”. Moved to the supplement: the carbonate-share, density, 15/45 wt % pressure, pressure-residual and water–DEA binary figures, the DEA binary table, the table of MDEA fits at other water–bicarbonate values and the Hong stability claim.
+- **Length.** Main text 33 → 27 pages; six body sections 11,016 → 9,065 words. Supplement 35 → 47 pages.
+- **Decisions recorded.** `docs/scientific/writing/STYLE.md`, row “Revision pass (adopted salt-anchored models)”.
+
+### Evidence and verification status
+
+- `scripts/build_manuscript.sh`: passes; no undefined references or citations, no overfull boxes, BibTeX without warnings.
+- `dea_displays.py --check` (27 displays, 154 source files, every prose string), `final_rerun_tables.py --check` and `--reference-states --check`: pass.
+- `scripts/check_private_source.py`: passes. CSE `check_prose.py` on the sources and submission files: terminology passes; the STYLE.md advisories are the existing ones.
+- `submission/graphical_abstract.tex` is identical to `main`. `references.bib` was regenerated with `scripts/cited_bibliography.py` (seven entries added).
+- Referee response: `docs/scientific/latex/builds/round4-response.md`, every major and minor comment of the four round-4 reports.
+- Numbers: `429-story-pass-number-sources.md`, section “Revision pass”.
+- Not verified by this stage: no calculation was run; the prose check covers the headline numbers, not every number in the supplement text. The CSE `BANNED.md` is the plugin's file; the repository has none of its own.
+
+### Open questions
+
+1. #424 (shared parameters released) and #427 (multistart) remain open and are stated as limits.
+2. The deposit DOI is a placeholder; the graphical abstract was not updated to the adopted models.
+3. Not calculated for the adopted models: a reweighted MDEA refit, the AMP search above 393.15 K, the reference-pressure comparison at the 121.3 MPa MDEA split, the electrode pH comparison, the eigenvalue test and slope profile for the AMP model, fixed-pressure recovery of the 222 unfinished MDEA searches at measured states.
+4. The AMP carbamate inputs are those of the MEA fit with the MEA-fitted shared set, not of the MEA model.
+5. The MDEA and AMP pressure figures are scatter panels without temperature coding; Fig. 8 has no companion panel.
+6. STYLE.md keeps a 2026-11-19 row saying the MEA–water figure stays in the main text; it was already in the supplement at the start of this stage and was left there.
+
+### First action for the next stage
+
+Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting with Sections 4.2.4 and 4.3, and decide whether the open items of point 3 need calculations before submission.
