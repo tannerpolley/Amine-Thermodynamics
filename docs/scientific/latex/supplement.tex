@@ -271,12 +271,32 @@ Every MEA observation that is not fitted was examined before the parameters were
 Beyond that, the Arcis heats were used to select the parameters, three intervals of Kim and Svendsen at \SI{313.15}{\kelvin} and three at \SI{353.15}{\kelvin} were fitted during earlier model development, and the comparison between the density sources informed the choice of the fitted density observations, as the notes of Table~\ref{tab:supplement-mea-comparison} mark; no interval of Kim and Svendsen is in the reported fit.
 
 % P:supplement-mea-deviations
-Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures; main-text Fig.~\ref{main-fig:jakobsen-carbonate-share} compares the calculated and measured carbonate shares.
+Table~\ref{tab:pressure-sources} separates the pressure deviations of the MEA model at nominal 30 wt\% MEA by experimental source, and Table~\ref{tab:supplement-mea-comparison} lists the MEA data sets that are not fitted, or fitted in part, and are not pressures; \cref{fig:speciation,fig:heat} show the species fractions and the integral absorption heats, and \cref{fig:jakobsen-carbonate-share} compares the calculated and measured carbonate shares.
 \Cref{fig:density-curves} shows the densities at nominal 30 wt\% MEA, and \cref{fig:concentration-pressure} the \COtwo partial pressures of Aronu et al.\ at 15 and 45 wt\% MEA, which are not fitted.
 The equation-of-state caloric properties of the model of Polley and Hedengren are calculated here from their published specification \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/pressure_sources}
 \input{tables/supplement_mea_comparison}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{speciation.pdf}
+\caption{Liquid mole fractions of the species and species sums named in panels (a)--(d) against loading: B\"ottinger NMR and Matin titration observations \cite{Bottinger2008,matinFacileMethodDetermination2012} (symbols) and single-liquid calculations with the MEA model at \SI{101325}{\pascal} (lines; dotted where that pressure lies below the calculated bubble pressure). Colors and symbol shapes identify temperature. The highest-temperature NMR series, at 31 wt\% MEA, and the Matin bicarbonate totals are not fitted.}
+\label{fig:speciation}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=0.5\linewidth]{jakobsen-carbonate-share.pdf}
+\caption{Carbonate share of dissolved carbon in loaded MEA on logarithmic axes: the MEA model against the ten measurements of Jakobsen et al.\ \cite{Jakobsen2005}, none of which entered the objective; dashed line: equality. The species-to-total-amine ratios of the same source are fitted (main-text Table~\ref{main-tab:mea-data}).}
+\label{fig:jakobsen-carbonate-share}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{heat-of-absorption.pdf}
+\caption{Integral absorption heat per mole of added \COtwo in nominal 30 wt\% MEA against loading: fitted Vinjarapu observations and Arcis observations, which are not fitted \cite{HemaBhavya2025,arcisEnthalpySolutionCarbon2011} (symbols), and the MEA model at the labeled temperature and pressure (lines). At \SI{322.5}{\kelvin}, open and filled squares are \SI{0.51}{\mega\pascal} and \SI{1.03}{\mega\pascal}.}
+\label{fig:heat}
+\end{figure}
 
 \begin{figure}[!htbp]
 \centering
@@ -382,6 +402,16 @@ The \COtwo-free observations of Tong et al.\ are the unloaded solution of that w
 The last column of the table gives the deviation of the fit made with the MEA-fitted shared set from the same observations.
 
 \input{tables/supplement-transfer-data}
+
+% P:supplement-residuals
+\Cref{fig:pressure-residuals} shows the residuals of the loaded-solution pressures of the four reported models.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{loaded-pressure-residuals.pdf}
+\caption{Logarithmic residual $\ln(p^{\mathrm{calc}}/p^{\mathrm{obs}})$ of the loaded-solution pressures of the four reported models against loading, one panel for each amine: fitted (filled circles), not fitted (open circles) and comparison only (open triangles), colored by temperature. MEA and DEA: \COtwo partial pressures; MDEA and AMP: total pressures. The MEA panel shows the six sources of main-text Fig.~\ref{main-fig:pressure} at nominal 30 wt\%. Table~\ref{tab:supplement-transfer-data} gives the sets and roles of the DEA, MDEA and AMP observations.}
+\label{fig:pressure-residuals}
+\end{figure}
 
 % P:supplement-dea-heat
 \Cref{fig:dea-integral-heat} shows the 50 fitted integral heats of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} separately for each DEA content; main-text Fig.~\ref{main-fig:dea-pressure}(d) shows them together.
@@ -758,7 +788,7 @@ The source's excess-enthalpy uncertainty expression has no absolute-value bars o
 % P:supplement-published-amp
 For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; their Table~10 labels the statistic AAD, but its footnote prints a signed relative-deviation formula. The statistic and the 56 observations therefore do not support a direct AARD comparison with the 51 observations used here.
 Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite{hartonoNewSolubilityHeat2021}.
-The two electrolyte NRTL models that report deviations on the pressures of Kundu et al.\ and of Tong et al.\ after regression to them are given in the main text.
+The two electrolyte NRTL models that report deviations on the pressures of Kundu et al.\ and of Tong et al.\ after being fitted to them are given in the main text.
 
 % P:supplement-published-kuranov
 For MDEA, three ePC-SAFT studies report deviations from the total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} that were calculated without fitting a parameter to the \COtwo--MDEA--water system.

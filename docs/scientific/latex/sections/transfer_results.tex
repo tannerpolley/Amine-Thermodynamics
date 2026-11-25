@@ -54,7 +54,7 @@ Within the first fit the mechanism is an extrapolation: the free coefficient rai
 
 % P:amp-physical
 The search does not say whether loaded AMP solutions split.
-Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples \cite{hartonoNewSolubilityHeat2021,Tong2012}, and AMP and AMP--piperazine solvents are regenerated at 363--\SI{393}{\kelvin} without a reported liquid--liquid separation, but in no such study found here were the liquid phases sampled \cite{barzagliContinuousCyclesCO22010,guoAbsorptionDesorptionHeat2025,neerupCO2CapturePilot2025}.
+Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples \cite{hartonoNewSolubilityHeat2021,Tong2012}, and aqueous AMP has been regenerated at 363--\SI{383}{\kelvin} in a closed absorption--desorption loop and at \SI{378}{\kelvin} in batch desorption without a reported liquid--liquid separation, but in neither study were the liquid phases sampled \cite{barzagliContinuousCyclesCO22010,guoAbsorptionDesorptionHeat2025}.
 Liquid--liquid splits do occur in some loaded amine solvents, and an electrolyte NRTL model fitted only to vapor--liquid data has located one \cite{Tsanas2022}.
 Where it could be calculated, the two-liquid bubble pressure of the first fit lies further from the measurement than a single-liquid fit of the same data, which favors one liquid at those states but does not exclude a split elsewhere.
 
@@ -133,7 +133,7 @@ For DEA, 1269 of the 1271 searches finish, none with a detected instability, and
 \section{Discussion}\label{sec:discussion}
 \subsection{The two shared sets}\label{sec:results-compared}
 % P:compared
-\Cref{tab:amine-summary} sets the four reported models beside the same fits made with the MEA-fitted shared set; the fitted loaded-solution pressures are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP, so the table names the basis of each value.
+\Cref{tab:amine-summary} sets the four reported models beside the same fits made with the MEA-fitted shared set, and Fig.~\ref{supp-fig:pressure-residuals} shows the residuals of their loaded-solution pressures; the fitted loaded-solution pressures are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP, so the table names the basis of each value.
 Taking the water--bicarbonate and water--carbonate interactions from salt data has a price for three of the four amines.
 The fitted MEA pressures change little, from 11.6 to 11.3\,\%, but all MEA pressures outside the fit deviate by 34.3 instead of 31.9\,\%; the fitted DEA pressures rise from 28.5 to 36.6\,\%; and for MDEA the fitted total pressures improve while the \COtwo partial pressures outside the fit become nearly twice as inaccurate (\cref{sec:results-mdea}).
 AMP is almost unaffected, with 10.9 against 10.7\,\%.
@@ -141,13 +141,6 @@ What the reported set gains is not accuracy but a definition: its two interactio
 The results do not show that the salt-fitted values are right for loaded amine solutions; the salt data end at \SI{318}{\kelvin}, and the water--carbonate law sits on a bound.
 
 \input{tables/amine-summary}
-
-\begin{figure}[pos=!htbp]
-\centering
-\includegraphics[width=\linewidth]{loaded-pressure-residuals.pdf}
-\caption{Logarithmic residual $\ln(p^{\mathrm{calc}}/p^{\mathrm{obs}})$ of the loaded-solution pressures of the four reported models against loading, one panel for each amine: fitted (filled circles), not fitted (open circles) and comparison only (open triangles), colored by temperature. MEA and DEA: \COtwo partial pressures; MDEA and AMP: total pressures. The MEA panel shows the six sources of \cref{fig:pressure} at nominal 30 wt\%. Table~\ref{supp-tab:supplement-transfer-data} gives the sets and roles of the DEA, MDEA and AMP observations.}
-\label{fig:pressure-residuals}
-\end{figure}
 
 \subsection{What the stability search diagnoses}\label{sec:discussion-interpretation}
 % P:interpretation-01
@@ -191,7 +184,7 @@ On the 101 \COtwo partial pressures of Ermatchkov et al.\ it deviates by 38.4\,\
 On the 28 total pressures of P\'erez-Salado Kamps et al.\ the two published sets, both fitted to them, are far closer than the MDEA model.
 
 % P:literature-amp
-For AMP two eNRTL models report deviations on sets used here, both after regression to them: 15.4 and 17.3\,\% for the 51 \COtwo partial pressures of Kundu et al., and 8.0 and 9.3\,\% for the 45 total pressures of Tong et al., five of them without \COtwo \cite{yiOpenAccessThermodynamically2024,hartonoSolubilityCO201M2020}.
+For AMP two eNRTL models report deviations on sets used here, both after being fitted to them: 15.4 and 17.3\,\% for the 51 \COtwo partial pressures of Kundu et al., and 8.0 and 9.3\,\% for the 45 total pressures of Tong et al., five of them without \COtwo \cite{yiOpenAccessThermodynamically2024,hartonoSolubilityCO201M2020}.
 The AMP model deviates by 15.6\,\% from the Kundu pressures, which it did not fit, and by 11.4\,\% from the 40 loaded pressures of Tong et al., which it did.
 For DEA no deviation of a published model on identical observations is available (Section~\ref{supp-sec:s-published}).
 

@@ -1098,31 +1098,6 @@ r4T = lambda k, f: [abs(float(r4shift[k][T][f])) for T in (298.15, 313.15, 393.1
 assert r4[k := 'dea']['delta_ln_K4'] < 0 < r4['amp']['delta_ln_K4'] and math.isclose(r4['amp']['delta_h_J_mol'], r4['amp']['bounds']['enthalpy'][0], abs_tol=1e-9)
 cother = [v for k, v in cgm.items() if k != 'P0' and not k.endswith('-refit')]
 dcation, mcation = AMINES[0][1], AMINES[1][1]
-stated = {'main.tex': [pair, f'gives {nsplit} calculated liquid--liquid splits'],
-          'sections/introduction.tex': [mea, pair],
-          'sections/conclusion.tex': [mea, dea, mdea, pair, f'{nsplit} confirmed liquid--liquid splits', f"none in {anew['tally']['states']} finite searches"],
-          'sections/transfer_results.tex': [outside, f"all {kur['True']['rows']} pressures", f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f"{dnew['available']} of the {dnew['states']}", *amp_main, *bands_main[1:],
-                                            f"AARD of {f1(kur['True']['AARD_percent'])} and bias of {f1(kur['True']['bias_percent'])}",
-                                            rf"Of the \num{{{mnew['tally']['states']}}} MDEA searches, {len(mnew['tally']['unavailable'])} did not finish, {len(mnew['bubble_refusals'])} with a bubble reference refusal",
-                                            f'objective value of {afreecost:.2f}', f'the objective value is {acost[0]:.2f}', rf'\SI{{{aslope:.0f}}}{{\kelvin}}$ and a conditional standard error of \SI{{{aslope_se:.0f}}}{{\kelvin}}', f'{(afixed - aslope) / aslope_se:.2f} standard errors away',
-                                            rf'from ${afk(353.22):.3f}$ at \SI{{353}}{{\kelvin}} to ${afk(393.15):.3f}$', f"all {anew['tally']['states']} searches finish", f'from {mcost[1]} to {mcost[0]}',
-                                            rf"from {dp('Horstmann heat')[0]:.0f} to {f1(dp('Horstmann heat')[1])}\,\%", rf"from {f1(dp('Horstmann VLE')[0])} to {f1(dp('Horstmann VLE')[1])}\,\%", rf"by {f1(dp('Lawson')[1])} instead of {f1(dp('Lawson')[0])}\,\%",
-                                            rf"the {dpair['outside', 'not fitted']['reference']['rows']} \COtwo partial pressures outside the fit deviate by {f1(dp('outside', 'not fitted')[1])} instead of {f1(dp('outside', 'not fitted')[0])}\,\%", rf"by {f1(dp('Carson')[1])} instead of {f1(dp('Carson')[0])}\,\%",
-                                            *(rf'by ${v:.3f}\pm{se:.3f}$, a factor of {ratio:.3f}' for v, se, ratio in map(r4q, ('dea', 'amp'))), rf"$\num{{{r4['dea']['delta_h_J_mol']:.0f}}}\pm\SI{{{r4['dea']['SE_h_J_mol']:.0f}}}{{\joule\per\mole}}$", rf"\SI{{{r4['amp']['delta_h_J_mol']:.0f}}}{{\joule\per\mole}}",
-                                            rf"it deviates by {f1(k82['AARD_percent'])}\,\%", rf'by {ours}\,\%, against {theirs}\,\%',
-                                            rf'from {f1(bdea[0])} to {f1(bdea[1])}\,\% for DEA and from {f1(bmdea[0])} to {f1(bmdea[1])}\,\% for MDEA', f"by {carm['M1']['delta']:.2f} at fixed parameters", f"by {carm['M3']['delta']:.1f}, which a refit"],
-          'sections/mea_system_modeling_results.tex': bands_main[:1] + [f1(value) for value in (read(MEA + 'paper-evidence-341/same-data-comparison/matched-score.json')['pressure_aard_percent'], baygi['salt_anchored_Pa'])] + [f"AARD of {adopted_carbonate['aard_percent']:.1f}",
-                                            f"ratios is {adopted_carbonate['geometric_mean']:.3f}", f'between {min(cother):.3f} and {max(cother):.3f}', f"by {-crefit['M3-refit']['delta_cost']:.3f} but also lowers the ratio, to {cgm['M3-refit']:.3f}", rf'{100 * min(wband):.1f}--{100 * max(wband):.1f}\,\%'],
-          'sections/data_methods.tex': [rf"{100 * sum(wcai) / ecost:.1f}\,\% of the objective value, {ecost:.2f}", f"leaves {stage['MEA']['na']} observations and {stage['MEA']['stage_denominator']} residual degrees of freedom", f"leaves {stage['MDEA']['na']} and {stage['MDEA']['stage_denominator']}",
-                                        rf"by {100 * (stage['MEA']['SE_multiplier'] - 1):.1f}\,\% and those of MDEA by {100 * (stage['MDEA']['SE_multiplier'] - 1):.1f}\,\%"],
-          'sections/epc_saft_equation_of_state.tex': [rf"\SI{{{dcation['protonated-diethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{DEAH+}} and \SI{{{mcation['protonated-methyldiethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{MDEAH+}}",
-                                                      rf"of {veq(dcation, 'protonated-diethanolamine'):.3f} and \SI{{{veq(mcation, 'protonated-methyldiethanolamine'):.3f}}}{{\angstrom}}"],
-          'submission/highlights.txt': [f'{nsplit} splits above 353 K'],
-          'supplement.tex': [*origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement, *hong_supplement, f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test",
-                             'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'delta_ln_K4')) + ' below', 'standard errors of ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'SE_ln_K4')), 'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('amp', 'delta_ln_K4')) + ' above',
-                             rf"\SI{{{prior_f2se['component/carbamate-anion/dispersion_energy_over_k']:.2f}}}{{\kelvin}}", f"by {carm['M1']['delta']:.3f}", f"by {carm['M3']['delta']:.3f}", f"falls {-crefit['M3-refit']['delta_cost']:.3f} below", f"falls to {cgm['M3-refit']:.4f}", f'tested changes is {max(cother):.4f}',
-                             f'contribute {wcai[0]:.3f} and {wcai[1]:.3f} to the objective value of {ecost:.3f}, together {100 * sum(wcai) / ecost:.2f}', f"factor of that equation is {stage['MEA']['stage_variance']:.8f}", f"MDEA variance factor is {stage['MDEA']['stage_variance']:.8f}", f"would give {stage['MDEA']['variance']:.8f}",
-                             f"{fixedp['P_Pa'] / 1e6:.3f} MPa", rf'{fdense:.3f}\,\% of the moles', f"${sci(fatt['Gibbs_decrease_over_RT_mol'], 5)}$ mol", rf"the {f2(k82['AARD_percent'])}\,\% of the MDEA model"]}
 # Water-bicarbonate refits: the main-text paragraph and the supplement text beside the table that final_rerun_tables.py writes from the same files.
 SB = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/'
 sbprof, sbsearch, sbcomp = read(SB + 'profile.json.gz'), read(SB + 'mdea-search-readback.json'), read(SB + 'mdea-comparison.json.gz')
@@ -1146,23 +1121,10 @@ def sbset(sets):  # count-weighted over the sets: the AARD over all of their obs
 assert sbtn + sbpn == sbcomp['all pressures not fitted']['original'][0]['relative_rows'] and all(abs(v - w) < 1e-9 for v, w in zip(sbset(('corrected-Kamps', 'Kuranov-413K', 'Sedighi', 'Ermatchkov', 'Xiao'))[1], sbout)), 'total and CO2 partial pressures are every pressure outside the objective'
 assert max(abs(v[2] - v[0]) for v in (sbkur, sbtot, sbpart)) < 0.1 and sbtot[1] < sbtot[0] and sbpart[1] > sbpart[0], 'at the upper value the displayed deviations change by less than 0.1 points; at the lower value total pressures improve and CO2 partial pressures worsen'
 sbsplits = WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]
-stated['main.tex'] += [rf'from {f1(sbkur[0])} to {f1(sbkur[1])}\,\%', rf'outside the fit from {f1(sbpart[0])} to {f1(sbpart[1])}\,\%']
-stated['submission/chemrxiv.md'] = [f'outside the fit from {f1(sbpart[0])} to {f1(sbpart[1])}%']
-stated['submission/cover_letter.md'] = [f'raises that of {sbpn} outside-fit CO₂ partial pressures from {f1(sbpart[0])} to {f1(sbpart[1])} %']
-stated['sections/conclusion.tex'] += [rf'from {f1(sbkur[0])} to {f1(sbkur[1])}\,\%', rf'lowers that of {sbtn} outside-fit total pressures from {f1(sbtot[0])} to {f1(sbtot[1])}\,\%, raises that of {sbpn} outside-fit \COtwo partial pressures from {f1(sbpart[0])} to {f1(sbpart[1])}\,\%', f"at {sblow['k']:.4f} instead of {sbprof['center']['k']:.4f} raises the refitted MEA objective by {sbrise[0]:.3f}", f"in {sbmea['grid']['states'] + sbmea['offset']['states'] + sbmea['census']['states']} searches"]
-stated['sections/mea_system_modeling_results.tex'] += [f"The {sbmea['grid']['states'] + sbmea['offset']['states'] + sbmea['census']['states']} finite searches"]
-stated['submission/highlights.txt'] += [f'MDEA fitted P {f1(sbkur[0])}→{f1(sbkur[1])}%', f'p(CO₂) {f1(sbpart[0])}→{f1(sbpart[1])}%']
 # The 27 measured MDEA states with a vapor-directed instability: states with a converged two-phase calculation, and those shown only by an earlier trial composition.
 mphase = read('analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json')
 mconv = sum(any(a.get('requested_tolerance_met') and a.get('distinct') for a in r['attempts']) for r in mphase)
 mtrial = sum(r['native_branch'] == 'none' for r in mphase)
-stated['sections/transfer_results.tex'] += [f'At {len(mphase) - mtrial} of the states the search', f'at the other {WORDS[mtrial]}, species states', f'converges at {mconv} of the {len(mphase)} states']
-stated['sections/transfer_results.tex'] += [f"{sbcorr['pair/carbamate-anion/water/k_ij']:.3f} with the carbamate--water and ${sbcorr['pair/protonated-monoethanolamine/water/k_ij']:.3f}$ with",
-    f"These values, {sblow['k']:.4f} and its upper bound {sbhigh['k']:.1f} against {sbprof['center']['k']:.4f} in the MEA model, raise the refitted MEA objective by {sbrise[0]:.3f} and {sbrise[1]:.3f}, within {sballow:.4f}",
-    rf"deviate by {f1(sbkur[1])} instead of {f1(sbkur[0])}\,\%, while outside the objective the {sbtn} total pressures deviate by {f1(sbtot[1])} instead of {f1(sbtot[0])}\,\% and the {sbpn} \COtwo partial pressures by {f1(sbpart[1])} instead of {f1(sbpart[0])}\,\%",
-    f"{sbsearch['low']['counts']['unavailable_records']} instead of {msum['unavailable_searches']} searches do not finish, and {WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]} liquid--liquid splits are confirmed"]
-stated['supplement.tex'] += [f"at the {sbmea['grid']['states'] + sbmea['offset']['states']} liquid and {sbmea['census']['states']} liquid--vapor states",
-    f"At the lower bound, ${sbprof['points']['-0.5']['k']:g}$, the objective rises by {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}, so the midpoint {sblow['k']:.4f} was taken"]
 # Round-3 calculations (#432) quoted in text pass 4.
 R3 = 'analyses/round_3/results/'
 q1, q2, q3, q4, q6, q7, q8 = (read(R3 + f) for f in ('q1.json', 'q2.json', 'q3.json', 'q4.json', 'q6.json', 'q7-summary.json', 'q8.json'))
@@ -1177,19 +1139,74 @@ assert [r['k'] < 0.2 for r in q3['rows']] == [True, True] + [False] * 4 and all(
 q4p = [r['pCO2_change']['absolute'] for r in q4['rows'][:2]]
 q6d = q6['split']['diagnostics']
 q8d = q8['dea']
-stated['main.tex'] += ['confirm two calculated splits at states where none was found with the original value']
-stated['sections/transfer_results.tex'] += [f"confirmed split in {q1ll['free']} of these {len(q1['rows'])} calculations",
-    rf"by {f1(q2s['hartono-2021'][0])} and {f1(q2s['tong-2012'][0])}\,\% on average for the first fit and {f1(q2s['hartono-2021'][1])} and {f1(q2s['tong-2012'][1])}\,\% for the second",
-    rf"${sci(q3d[0], 2)}$ and ${sci(q3d[1], 2)}$ mol",
-    rf"deviate by {f1(q8['kuranov']['scores']['not fitted']['AARD_percent'])}\,\% against {f1(q8['kuranov']['scores']['fitted']['AARD_percent'])}\,\% for the fitted {q8['kuranov']['counts']['fitted']}"]
-stated['sections/data_methods.tex'] += [f"{q8d['chosen_cost']:.12f} and {q8d['alternative_cost']:.12f}"]
-stated['supplement.tex'] += [f"$-{sci(-max(q1tpd), 1)}$ to $-{sci(-min(q1tpd), 1)}$",
-    rf"by {q2s['hartono-2021'][0]:.2f} and {q2s['tong-2012'][0]:.2f}\,\% for the comparison fit and by {q2s['hartono-2021'][1]:.2f} and {q2s['tong-2012'][1]:.2f}\,\% for the AMP model",
-    f"by {q4p[0]:.5f} and " + rf"\SI{{{q4p[1]:.2f}}}{{\pascal}}", f"from ${q4['heat_previous_kJ_mol']:.3f}$ to " + rf"\SI{{{q4['heat'][0]['value_kJ_mol'] + q4['heat_change']['absolute']:.3f}}}",
-    f"distance of $+{q6d['trial_minimum']:.4f}$", f"give $+{q6d['vapor_connected_minimum']:.4f}$",
-    f"recovers all {q7['recovered']} of its detected instabilities and finds none at the other {q7['searched_negatives']} states", f"archived pressure at {q7['matched_pressure']} states", f"for the other {q7['missing_archived_pressure']}",
-    rf"${sci(q3d[0], 3)}$ and ${sci(q3d[1], 3)}$ mol", f"objective values of {q8d['chosen_cost']:.12f} and {q8d['alternative_cost']:.12f}",
-    rf"deviates by {q8d['scores'][0]['AARD_percent']:.2f}\,\% from the {q8d['scores'][0]['rows']} Lawson"]
+# Prose check: each string repeats a value of the text and is rebuilt here from the retained records.
+stated = {}
+def say(path, *values): stated.setdefault(path, []).extend(values)
+lowT = lambda rows, group: pressure_stats([r['prediction'] for r in rows if r['group'] == group])['AARD_percent']
+first, second = (read(round5 + f'original-{k}.json.gz') for k in ('main', 'slope-150'))  # the two fits to the first AMP data
+ncomp = lambda rows, groups, role: pressure_stats([r for r in rows if r['group'] in groups and r['role'] == role])['AARD_percent']
+erm_old, erm_n = f1(ermatchkov['selected_point_mean_absolute_relative_deviation_percent']), ermatchkov['measured_rows']
+dold, dout = f1(dsum['pressure']['fitted']['AARD_percent']), [f1(pressure_stats(doutside)['AARD_percent']), f1(dsum['pressure']['not fitted']['AARD_percent'])]
+mtot, mpart = (f1(ncomp(mrows, g, 'not fitted')) for g in ({'corrected-Kamps', 'Kuranov-413K', 'Sedighi'}, {'Ermatchkov', 'Xiao'}))
+e112 = f1(pressure_stats([r for r in mea_pressure if r['target'] not in fitted_pressure], 'predicted')['AARD_percent'])
+eall = [f1(pressure_stats(enot, 'predicted')['AARD_percent']), eold('112 current-not-fitted pressures', 'Wagner pressures', 'Aronu 15 wt% pressures', 'Aronu 45 wt% pressures').split('$')[1][:-1]]
+nsearched = sum(q['states'] for q in ephase)
+dstart = [c['cost'] for c in read(DEA + 'selection.json.gz')['candidates']]
+refchange = read('analyses/round_5/results/C/MEA-k-profile.json.gz')['delta_cutoff']
+q4a = read(MEAFIT + 'q4.json')['result']
+hp = lambda block, subset, model: f2(hong_pressures[block][subset][model]['aard_percent'])
+say('main.tex', f'at {nsplit} of {nsearch} searched states', rf'deviates by {amp}\,\% from its 105 fitted total pressures', rf'from {f1(sbkur[0])} to {mdea}\,\%', rf'that of {erm_n} unfitted \COtwo partial pressures over MDEA from {erm_old} to {ours}\,\%')
+say('submission/chemrxiv.md', f'at {nsplit} of {nsearch} searched states', f'deviates by {amp}% from its 105 fitted total pressures', f'from {f1(sbkur[0])} to {mdea}%', f'that of {erm_n} unfitted CO₂ partial pressures over MDEA from {erm_old} to {ours}%')
+say('submission/cover_letter.md', f'at {nsplit} of {nsearch} searched states', f'deviates by {amp} % from its 105 fitted total pressures', f'from {f1(sbkur[0])} to {mdea} %', f'that of {erm_n} unfitted CO₂ partial pressures over MDEA from {erm_old} to {ours} %', f'deviate by {dea} % instead of {dold} %')
+say('sections/conclusion.tex', f'gave {nsplit} confirmed liquid--liquid splits among {nsearch} searched states', rf'deviates by {amp}\,\% from 105 fitted total pressures', f"none in {anew['tally']['states']} finite searches",
+    rf'from {f1(sbkur[0])} to {mdea}\,\%', rf'the {erm_n} \COtwo partial pressures of Ermatchkov et al.\ worsen from {erm_old} to {ours}\,\%', rf'from {dold} to {dea}\,\%', rf'deviates by {mea}\,\% from 47 fitted', f'in {nsearched} searches',
+    rf'deviates by {dea}\,\% from 30 fitted', rf'deviates by {mdea}\,\% from 66 fitted', f"confirm {WORDS[len(mnew['confirmed'])]} split")
+say('sections/transfer_results.tex',
+    f"objective value of {first['cost']:.2f} and a deviation of {f1(lowT(first['original']['rows'], 'loaded-pressure'))}",
+    f"gives {nsplit} confirmed liquid--liquid splits and {aclass['counts']['descents'] - nsplit} further detected instabilities toward a second liquid among {nsearch} searched states",
+    f"objective value of {second['cost']:.2f} and deviates by {f1(lowT(second['original']['rows'], 'loaded-pressure'))}", f"splits in {q1ll['free']} of {len(q1['rows'])} calculations",
+    rf"by {f1(q2s['hartono-2021'][0])} and {f1(q2s['hartono-2021'][1])}\,\% on average", rf"deviate by {f1(lowT(first['expanded']['rows'], 'tong'))} and {f1(lowT(second['expanded']['rows'], 'tong'))}\,\% from the 40",
+    rf"deviate by {f1(matched_amp['hartono-2021-supplemental']['prior']['AARD_percent'])}\,\% and the 40 of Tong et al.\ by {f1(matched_amp['tong']['prior']['AARD_percent'])}\,\%",
+    rf"by {f1(matched_amp['kundu']['prior']['AARD_percent'])} instead of {f1(lowT(first['expanded']['rows'], 'kundu'))}\,\%", rf"by {f1(matched_amp['loaded-pressure']['prior']['AARD_percent'])} instead of {f1(lowT(first['original']['rows'], 'loaded-pressure'))}\,\%",
+    f'an objective value of {afreecost:.2f}', rf'\SI{{{aslope:.0f}}}{{\kelvin}}$ with a conditional standard error of \SI{{{aslope_se:.0f}}}{{\kelvin}}', rf'a deviation of {amp}\,\% from the 105 fitted total pressures', f"no detected instability in {anew['tally']['states']} searches",
+    f'{abs(afixed - aslope) / aslope_se:.1f} standard errors from the fitted one', rf'from ${afk(353.22):.3f}$ at \SI{{353}}{{\kelvin}} to ${afk(393.15):.3f}$', *amp_main[:1], rf"deviate by {f1(matched_amp['binary']['new']['AARD_percent'])}\,\%",
+    rf'deviate by {mdea}\,\%, against {f1(sbkur[0])}\,\% with the MEA-fitted set', rf'by {mtot} instead of {f1(sbtot[0])}\,\%', rf'from {f1(sbpart[0])} to {mpart}\,\%', rf'from {erm_old} to {ours}\,\%', f"fixed at {sblow['k']:.4f}",
+    rf'deviate by {f1(sbkur[1])} and the \COtwo partial pressures by {f1(sbpart[1])}\,\%', f'{min(fitted_mdea):.1f}--{max(fitted_mdea):.1f}', f"AARD of {f1(kur['True']['AARD_percent'])} and bias of {f1(kur['True']['bias_percent'])}",
+    f"The MDEA objective, {read(MDEA + 'selection.json.gz')['cost']:.2f}", f'objective value of {mcost[1]} against {mcost[0]}',
+    rf"Of the \num{{{mnew['tally']['states']}}} MDEA searches, {len(mnew['tally']['unavailable'])} did not finish, {len(mnew['bubble_refusals'])} with a bubble reference refusal", f"and {mnew['tally']['descent']} detect an instability",
+    rf"from {dp('Horstmann heat')[0]:.0f} to {f1(dp('Horstmann heat')[1])}\,\%", rf"from {f1(dp('Horstmann VLE')[0])} to {f1(dp('Horstmann VLE')[1])}\,\%", rf"deviate by {f1(dp('outside', 'not fitted')[1])} instead of {f1(dp('outside', 'not fitted')[0])}\,\%",
+    rf'deviate by {dea}\,\%, against {dold}\,\% with the MEA-fitted shared set', rf'by {dout[0]} instead of {dout[1]}\,\%',
+    *(rf'by ${v:.3f}\pm{se:.3f}$, a factor of {ratio:.3f}' for v, se, ratio in map(r4q, ('dea', 'amp'))), rf"$\num{{{r4['dea']['delta_h_J_mol']:.0f}}}\pm\SI{{{r4['dea']['SE_h_J_mol']:.0f}}}{{\joule\per\mole}}$", rf"\SI{{{r4['amp']['delta_h_J_mol']:.0f}}}{{\joule\per\mole}}",
+    f"{dnew['available']} of the {dnew['states']}", rf"from {f1(escore['47 current-fitted pressures'][0])} to {mea}\,\%", rf'by {eall[0]} instead of {f1(eall[1])}\,\%', rf'from {dold} to {dea}\,\%', rf'{amp} against {afree_loaded}\,\%',
+    bands_main[1], bands_main[3], bands_main[4], *bands_main[6:], rf"deviates by {f1(baygi['salt_anchored_Pa'])}\,\%", rf"it deviates by {f1(k82['AARD_percent'])}\,\%", rf'by {ours}\,\%, against {theirs}\,\%',
+    rf"deviates by {f1(matched_amp['kundu']['new']['AARD_percent'])}\,\% from the Kundu pressures", rf"by {f1(matched_amp['tong']['new']['AARD_percent'])}\,\% from the 40 loaded pressures")
+say('sections/mea_system_modeling_results.tex', f"{sbprof['center']['k']:.3f} with a conditional standard error", f"{sbcorr['pair/carbamate-anion/water/k_ij']:.3f} and ${sbcorr['pair/protonated-monoethanolamine/water/k_ij']:.3f}$",
+    f'raises the objective by {sbrise[0]:.3f} and {sbrise[1]:.3f}', f'reference change of {refchange:.2f}', f"with a rise of {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}",
+    f"the MEA objective is {ecost:.2f}, against {sbprof['center_cost']:.2f}", f"at most {max(r['delta_cost'] for r in read(MEAFIT + 'uncertainty/profiles.json')):.2f}", rf'{100 * min(wband):.1f}--{100 * max(wband):.1f}\,\%',
+    f"any of the {sum(q['states'] for q in ephase[:2])} liquid states or {ephase[2]['states']} liquid--vapor states", f'every one of the {nsearched} searches',
+    rf"rises from {f1(baygi['prior_F2_Pa'])} to {f1(read(MEA + 'paper-evidence-341/same-data-comparison/matched-score.json')['pressure_aard_percent'])}\,\%; with the salt-fitted interactions it is {f1(baygi['salt_anchored_Pa'])}\,\%",
+    rf"deviate by {mea}\,\%; the 112 pressures of the same six sources that are not fitted deviate by {e112}\,\%, against {f1(escore['112 current-not-fitted pressures'][0])}\,\%",
+    f"AARD of {adopted_carbonate['aard_percent']:.1f}", f"ratios of {adopted_carbonate['geometric_mean']:.3f}", f"the ratio is {cgm['P0']:.3f}", bands_main[0])
+say('sections/data_methods.tex', rf"{100 * sum(wcai) / ecost:.1f}\,\% of the objective value, {ecost:.2f}", f"leaves {stage['MEA']['na']} observations and {stage['MEA']['stage_denominator']} residual degrees of freedom", f"leaves {stage['MDEA']['na']} and {stage['MDEA']['stage_denominator']}",
+    rf"by {100 * (stage['MEA']['SE_multiplier'] - 1):.1f}\,\% and those of MDEA by {100 * (stage['MDEA']['SE_multiplier'] - 1):.1f}\,\%", f'{dstart[0]:.12f} and {dstart[1]:.12f}',
+    rf"contribute {cshare['DEA', r'\COtwo partial pressures']:.0f}\,\% of the DEA objective and {sum(v for (a, l), v in cshare.items() if a == 'AMP' and l.startswith('Loaded')):.0f}\,\% of the AMP objective, but {cshare['MDEA', 'Loaded total pressures of Kuranov et al.']:.0f}\,\% of the MDEA objective, in which 24 densities of the \COtwo-free solution contribute {cshare['MDEA', r'\COtwo-free densities']:.0f}\,\%")
+say('sections/epc_saft_equation_of_state.tex', rf"\SI{{{dcation['protonated-diethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{DEAH+}} and \SI{{{mcation['protonated-methyldiethanolamine/segment_diameter'][0]:.3f}}}{{\angstrom}} for \ce{{MDEAH+}}",
+    rf"of {veq(dcation, 'protonated-diethanolamine'):.3f} and \SI{{{veq(mcation, 'protonated-methyldiethanolamine'):.3f}}}{{\angstrom}}")
+say('supplement.tex', *origins, f"loading of {float(viii['row']['alpha_mol_CO2_per_mol_DEA']):.3f} mol/mol", rf"\num{{{mstability['distinct_calculations']}}} distinct states", *mcost, f'{mcorr:.3f}', mratio, f2(mstats['Kuranov']['R1']['False']['AARD_percent']), *amp_supplement[:4],
+    f'{abs(afixed - aslope) / aslope_se:.2f} standard errors below', f'raises the objective value by {acost[0] - afreecost:.2f}', f'contribute {aloaded[0]:.2f} to that objective, against {aloaded[1]:.2f}',
+    rf"deviate by {hp('canonical', 'strict_grid', 'hong')}\,\%, the MEA model by {hp('canonical', 'strict_grid', 'salt_anchored')}\,\% and the model of Polley and Hedengren by {hp('canonical', 'strict_grid', 'polley_hedengren')}",
+    f"{hp('canonical', 'all', 'hong')}, {hp('canonical', 'all', 'salt_anchored')} and {hp('canonical', 'all', 'polley_hedengren')}", *hong_supplement[2:4], hong_supplement[5], f"with the Hong parameters, {hchecks['stable_fixed_vapor']['tried']} pass the test",
+    'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'delta_ln_K4')) + ' below', 'standard errors of ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('dea', 'SE_ln_K4')), 'lies ' + '{:.3f}, {:.3f} and {:.3f}'.format(*r4T('amp', 'delta_ln_K4')) + ' above',
+    rf"\SI{{{prior_f2se['component/carbamate-anion/dispersion_energy_over_k']:.2f}}}{{\kelvin}}", f"by {carm['M1']['delta']:.3f}", f"by {carm['M3']['delta']:.3f}", f"falls {-crefit['M3-refit']['delta_cost']:.3f} below", f"falls to {cgm['M3-refit']:.4f}", f'tested changes is {max(cother):.4f}',
+    f'contribute {wcai[0]:.3f} and {wcai[1]:.3f} to the objective value of {ecost:.3f}, together {100 * sum(wcai) / ecost:.2f}', f"factor of that equation is {stage['MEA']['stage_variance']:.8f}", f"MDEA variance factor is {stage['MDEA']['stage_variance']:.8f}", f"would give {stage['MDEA']['variance']:.8f}",
+    f"{fixedp['P_Pa'] / 1e6:.3f} MPa", rf'{fdense:.3f}\,\% of the moles', f"${sci(fatt['Gibbs_decrease_over_RT_mol'], 5)}$ mol", rf"the {f2(k82['AARD_percent'])}\,\% of the MDEA model",
+    f"at the {sbmea['grid']['states'] + sbmea['offset']['states']} liquid and {sbmea['census']['states']} liquid--vapor states", f"At the lower bound, ${sbprof['points']['-0.5']['k']:g}$, the objective rises by {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}, so the midpoint {sblow['k']:.4f} was taken",
+    f'the objective rises by {sbrise[0]:.3f} and {sbrise[1]:.3f}, less than the reference change of {refchange:.2f}', f"$-{sci(-max(q1tpd), 1)}$ to $-{sci(-min(q1tpd), 1)}$",
+    rf"by {q2s['hartono-2021'][0]:.2f} and {q2s['tong-2012'][0]:.2f}\,\% for the first fit and by {q2s['hartono-2021'][1]:.2f} and {q2s['tong-2012'][1]:.2f}\,\% for the second",
+    f"by {q4a['rows'][0]['pCO2_change']['absolute']:.5f} and " + rf"\SI{{{q4a['rows'][1]['pCO2_change']['absolute']:.2f}}}{{\pascal}}", f"from ${q4a['heat_previous_kJ_mol']:.3f}$ to " + rf"\SI{{{q4a['heat_previous_kJ_mol'] + q4a['heat_change']['absolute']:.3f}}}",
+    f"distance of $+{q6d['trial_minimum']:.4f}$", f"give $+{q6d['vapor_connected_minimum']:.4f}$", f"recovers all {q7['recovered']} of its detected instabilities and finds none at the other {q7['searched_negatives']} states", f"archived pressure at {q7['matched_pressure']} states", f"for the other {q7['missing_archived_pressure']}",
+    rf"${sci(q3d[0], 3)}$ and ${sci(q3d[1], 3)}$ mol", f'objective values of {dstart[0]:.12f} and {dstart[1]:.12f}',
+    f"Of the searches of the MDEA model, {len(mnew['tally']['unavailable'])} do not finish: {len(mnew['bubble_refusals'])} at grid states", f"at {len(mnew['classifications'])} distinct states")
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:
