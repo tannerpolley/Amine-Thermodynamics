@@ -2,6 +2,8 @@
 
 import concurrent.futures
 import copy
+import gzip
+from hashlib import sha256
 import json
 import math
 import multiprocessing
@@ -42,26 +44,27 @@ def evaluate(label):
 
 def test_R1_R3_R5():
     global SPEC
-    records, residuals, cost = evaluate("B1")
+    results = ROOT / "analyses/fixed_reaction_reference/results"
+    diagnosis = json.loads((results / "R1-R3-R5.json").read_text())
+    basis = diagnosis["water_caloric_basis"]
+    assert sha256((ROOT / basis["path"]).read_bytes()).hexdigest() == basis["caloric_record_sha256"]
+
+    def compare(label):
+        records, residuals, cost = evaluate(label)
+        archived = json.loads((OLD / label / "fit.json").read_text())["weighted_residuals"]
+        shifts = basis["weighted_residual_corrections"]
+        assert shifts.keys() == {row["identity"] for row in records if row["group"] == "Cp"}
+        expected = [value + shifts.get(row["identity"], 0.0) for row, value in zip(records, archived, strict=True)]
+        expected_cost = 0.5 * math.fsum(v * v for v in expected)
+        errors = [abs(a - b) for a, b in zip(residuals, expected, strict=True)]
+        first = next((i for i, e in enumerate(errors) if e > 1e-8), None)
+        return dict(cost=cost, expected_cost=expected_cost, cost_relative_error=abs(cost / expected_cost - 1),
+                    max_residual_error=max(errors), first_differing_residual=first, records=records,
+                    first_discrepancy=None if first is None else dict(identity=records[first]["identity"],
+                        actual=residuals[first], expected=expected[first]))
+
+    result = {"R1": compare("B1")}
     assert len(SPEC.species_mapping(SPEC.spec["chemistry"]["reactions"])) == 8
-    expected = json.loads((OLD / "B1/fit.json").read_text())
-    errors = [abs(a - b) for a, b in zip(residuals, expected["weighted_residuals"], strict=True)]
-    first = next((i for i, e in enumerate(errors) if e > 1e-8), None)
-    result = dict(
-        R1=dict(
-            cost=cost,
-            expected_cost=374.45201342397434,
-            cost_relative_error=abs(cost / 374.45201342397434 - 1),
-            max_residual_error=max(errors),
-            first_differing_residual=first,
-            records=records,
-        )
-    )
-    (AN / "results").mkdir(exist_ok=True)
-    assert first is None, (
-        f"R1 STOP: residual {first}: actual {residuals[first]}, expected {expected['weighted_residuals'][first]}"
-    )
-    assert abs(cost / 374.45201342397434 - 1) <= 1e-8
     selected = [
         r
         for r in SPEC.inputs["observations"]["comparisons"]
@@ -73,22 +76,23 @@ def test_R1_R3_R5():
         er = list(pool.map(predict, selected))
     aard = relative_error_statistic(er)
     result["R3"] = dict(rows=len(er), AARD_percent=aard, expected=19.1460124028601, records=er)
-    a3, _, a3cost = evaluate("A3")
+    result["R5"] = compare("A3")
     declarations = json.loads((OLD / "A3/declaration.json").read_text())["coordinates"]
-    result["R5"] = dict(
-        cost=a3cost,
-        expected=403.71498514705206,
-        coordinates_match=SPEC.inputs["coordinates"] == declarations,
-        records=a3,
-    )
-    assert len(er) == 88 and aard is not None and abs(aard - 19.1460124028601) <= 1e-6
-    assert abs(a3cost / 403.71498514705206 - 1) <= 1e-8
-    assert SPEC.inputs["coordinates"] == declarations
+    result["R5"]["coordinates_match"] = SPEC.inputs["coordinates"] == declarations
+    result["wheel"] = diagnosis["wheel"]
+    result["water_caloric_basis"] = {k: basis[k] for k in ("caloric_record_commit", "caloric_record_sha256")}
+
+    encoded = (json.dumps(result, indent=2, allow_nan=False) + "\n").encode()
+    (results / "R1-R3-R5-current-water.json.gz").write_bytes(gzip.compress(encoded, mtime=0))
+    for gate in ("R1", "R5"):
+        check = result[gate]
+        assert check["first_discrepancy"] is None, f"{gate} first residual discrepancy {check['first_discrepancy']}"
+        assert check["cost_relative_error"] <= 1e-8, gate
+    assert len(er) == 88 and aard is not None and abs(aard - result["R3"]["expected"]) <= 1e-6
+    assert result["R5"]["coordinates_match"]
 
     with pytest.raises(ValueError, match="bound to another parameter endpoint"):
         SPEC.phase(SPEC.inputs["observations"]["phase_states"][0], SPEC.spec["phase_policy"])
-
-    (AN / "results/endpoint-checks.json").write_text(json.dumps(result, indent=2) + "\n")
 
 
 @pytest.mark.parametrize("kind", ["reaction_coordinate", "reaction_enthalpy_shift"])

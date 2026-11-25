@@ -103,6 +103,12 @@ and population basis, and open quantities.
     if continuation:
         trial = q.get('MDEA A projected gradient line',{}).get('new',[{}])[-1]
         restart = q.get('MDEA A admitted-descent continuation',{}).get('new')
+        b = q['MDEA B saturation guess diagnostic']
+        c = q['MDEA C saturation guess diagnostic']
+        b_min = min(v['min_Pa'] for v in b['new'].values())/1000
+        b_max = max(v['max_Pa'] for v in b['new'].values())/1000
+        c_min = min(v['min_Pa'] for v in c['new'].values())/1000
+        target = b['pressure_basis']['target_Pa']/1000
         lines.extend(['','## MDEA fit limits','',
                       f"The tightened Ceres continuation from A used {continuation['iterations']} iterations and returned "
                       f"objective {continuation['cost']:.12g} with optimizer projected gradient "
@@ -115,10 +121,10 @@ and population basis, and open quantities.
                       "The decrease exceeds the inherited $10^{-10}$ relative function tolerance. "
                       "The two larger Gauss–Newton steps increased the objective and the smaller steps returned unexamined saturation gaps.",
                       '',
-                      "At start B, all 30 loading nodes returned bubble pressures from about 24 to 187 kPa for each "
-                      "of three pressure guesses. All admitted bubble pressures at start C exceeded 1.96 MPa. "
-                      "The target was 1.121 MPa in both cases. The search provides evidence about the sampled starts "
-                      "and loading domain. Among the 64 LHS draws, 61 were screened as replacements, two were the "
+                      f"At start B, all 30 loading nodes returned bubble pressures from {b_min:.1f} to {b_max:.1f} kPa "
+                      f"for each of three pressure guesses. All admitted nodes at C exceeded {int(c_min):,} kPa. "
+                      f"The target was {target:,.0f} kPa in both cases. These finite samples leave feasibility undecided. "
+                      "Among the 64 LHS draws, 61 were screened as replacements, two were the "
                       "original failures, and one fell below the separation limit after admitting the replacement. "
                       "With A, this yields two admitted starts in the declared design.",
                       '',
@@ -135,12 +141,21 @@ and population basis, and open quantities.
                   ''])
     legacy = q.get('Legacy R1 weighted residual at row 129')
     if legacy:
-        lines.extend(['','## Legacy residual check','',
-                      f"R1 stopped at row 129 on the starting commit. The weighted residual was {legacy['new']:.16g} "
-                      f"against {legacy['old']:.16g} at tolerance $10^{{-8}}$. Identical observation, residual scale "
-                      "and weight reproduce the archived residual from the archived prediction. The pinned wheel's "
-                      "equilibrium heat-capacity prediction for unloaded 30 wt% MDEA differs by "
-                      "$-0.00237384$ J/(mol feed K). The underlying cause remains open. R3 and R5 lie after the R1 assertion."])
+        cp = q['R1 row 129 Cp with archived water record']
+        r1,r3,r5 = (q[f'{gate} numerical reproduction on current water caloric basis']['new']
+                    for gate in ('R1','R3','R5'))
+        lines.extend(['','## Numerical reproduction on the current water caloric basis','',
+                      f"R1 originally stopped at zero-based row 129. The weighted residual was {legacy['new']:.16g} "
+                      f"against {legacy['old']:.16g} at tolerance $10^{{-8}}$. Commit `32e572051` replaced the "
+                      "water ideal-gas caloric correlation. With the archived water record restored on the study wheel, "
+                      f"the predicted heat capacity for unloaded 30 wt% MDEA was {cp['new']:.14f} J/(mol feed K), "
+                      f"compared with {cp['old']:.14f} in the archive. The current-basis expectations use the archived "
+                      "residuals plus the measured water-record correction for the 33 heat-capacity rows.",
+                      '',
+                      f"R1 reproduced the B1 objective ({r1['cost']:.12g}) with maximum weighted residual error "
+                      f"{r1['max_residual_error']:.3g}. R3 reproduced the Ermatchkov AARD ({r3['AARD_percent']:.8f}%) "
+                      f"on {r3['rows']} rows at or below 49 wt% MDEA. R5 reproduced the A3 objective ({r5['cost']:.12g}) "
+                      f"with maximum weighted residual error {r5['max_residual_error']:.3g} and matching coordinates."])
     profile = [q.get(f'Round 7 D AMP profile {side} {edge} bracket') for side in ('-1','1')
                for edge in ('within','beyond')]
     if all(p and p['new'] is not None for p in profile):
@@ -152,14 +167,35 @@ and population basis, and open quantities.
         lines.extend(['','The profile reoptimizes the other eight AMP coordinates for each held slope. '
                       'The cutoff uses the same conditional variance and objective-increment construction as round 7.'])
     lines.extend(['','## Observation deviations','',
-                  '| Population | Tracking AARD (%) | Refitted AARD (%) |','|---|---:|---:|'])
+                  '| Population | Statistic (%) | Tracking | Refitted |','|---|---|---:|---:|'])
     for key, item in q.items():
-        if (key.endswith(' all AARD_percent') or key.startswith(('C3 DEA AARD','MEA off-window','C7 Kuranov row-matched',
-                                                               'C7 Hong matched population')) and item['unit']=='%'
-                or key.startswith('MEA pressure ') and key.endswith(' AARD_percent')):
-            lines.append(f"| {key.removesuffix(' all AARD_percent')} | {show(item['old'])} | {show(item['new'])} |")
+        if (key.endswith(' matched AARD_percent') and not key.startswith(('C5 ','MDEA corrected-Kamps '))
+                or key.startswith(('C3 DEA AARD','C7 Kuranov row-matched','C7 Hong matched population'))
+                or key.startswith(('MEA off-window ','MEA pressure ')) and key.endswith(' AARD_percent')):
+            label = key.removesuffix(' AARD_percent').removesuffix(' matched')
+            lines.append(f"| {label} | AARD | {show(item['old'])} | {show(item['new'])} |")
+    lines.extend(['','### MDEA matched populations','',
+                  '| Population | Common rows | Statistic (%) | Tracking | Refitted |',
+                  '|---|---:|---|---:|---:|'])
+    for key,item in q.items():
+        if key.startswith('C5 ') and ' matched ' in key:
+            label,stat = key.removeprefix('C5 ').removeprefix('C7 ').split(' matched ')
+            statistic = 'AARD' if stat=='AARD_percent' else 'Signed bias'
+            lines.append(f"| {label} | {item['population']} | {statistic} | {show(item['old'])} | {show(item['new'])} |")
+        if key.startswith('C7 corrected-Kamps additional row '):
+            extra = item
+    counts = extra['population']
+    full = q['MDEA corrected-Kamps Pa all AARD_percent']
+    lines.extend(['',f"Corrected Kamps row 13 (`comparison:113`) was unavailable in tracking. The refitted "
+                  f"bubble pressure was {extra['new']/1e6:.6f} MPa against the measured {counts['observed_Pa']/1e6:.3f} MPa "
+                  f"({counts['refit_relative_error_percent']:+.2f}% signed deviation). The refitted AARD over all "
+                  f"{full['population']['new']['available']} available rows was {full['new']:.5f}%.",
+                  '', 'C6 reports prediction spread on fitted rows by property group. The comparison of spread '
+                  'against deviations from measurements within the same operating bands remains open.'])
     lines.extend(['','## Phase searches','',
-                  '| State or search | Tracking outcome | Fixed-reference outcome |','|---|---|---|'])
+                  'The AMP experimental counts use the six retained absolute pressures for each selected endpoint. '
+                  'The worked state and the 666 standard search states per protocol have separate outcomes.',
+                  '','| State or search | Tracking outcome | Fixed-reference outcome |','|---|---|---|'])
     for key,item in q.items():
         if ' phase ' in key and not key.startswith('Round ') or key.endswith('finite search counts') or key.startswith('MEA measured screen'):
             outcome = item['new']

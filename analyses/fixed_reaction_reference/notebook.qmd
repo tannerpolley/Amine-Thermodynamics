@@ -208,7 +208,7 @@ The tightened Ceres continuation from A used 40 iterations and returned objectiv
 
 The shortest tested projected-gradient step gave objective 15.6093133277 and relative reduction 6.57205e-08. The decrease exceeds the inherited $10^{-10}$ relative function tolerance. The two larger Gauss–Newton steps increased the objective and the smaller steps returned unexamined saturation gaps.
 
-At start B, all 30 loading nodes returned bubble pressures from about 24 to 187 kPa for each of three pressure guesses. All admitted bubble pressures at start C exceeded 1.96 MPa. The target was 1.121 MPa in both cases. The search provides evidence about the sampled starts and loading domain. Among the 64 LHS draws, 61 were screened as replacements, two were the original failures, and one fell below the separation limit after admitting the replacement. With A, this yields two admitted starts in the declared design.
+At start B, all 30 loading nodes returned bubble pressures from 24.4 to 186.6 kPa for each of three pressure guesses. All admitted nodes at C exceeded 1,962 kPa. The target was 1,121 kPa in both cases. These finite samples leave feasibility undecided. Among the 64 LHS draws, 61 were screened as replacements, two were the original failures, and one fell below the separation limit after admitting the replacement. With A, this yields two admitted starts in the declared design.
 
 The MDEA tables retain the phase and property comparisons at the provisional A endpoint.
 
@@ -217,9 +217,11 @@ Restarting Ceres on the admitted descent step returned objective 15.6093124974 a
 The Ceres function exits for MEA, DEA and both AMP fits are consistent with the small changes in the independent descent replays. They missed the separate strict gradient threshold. A second displaced AMP fixed-slope start returned the high-objective basin reached by C within the relative objective tie tolerance. The basin is reproducible at the fit tolerance, with several active bounds and an unresolved strict gradient check.
 
 
-## Legacy residual check
+## Numerical reproduction on the current water caloric basis
 
-R1 stopped at row 129 on the starting commit. The weighted residual was 1.524754706513316 against 1.526051434252232 at tolerance $10^{-8}$. Identical observation, residual scale and weight reproduce the archived residual from the archived prediction. The pinned wheel's equilibrium heat-capacity prediction for unloaded 30 wt% MDEA differs by $-0.00237384$ J/(mol feed K). The underlying cause remains open. R3 and R5 lie after the R1 assertion.
+R1 originally stopped at zero-based row 129. The weighted residual was 1.524754706513316 against 1.526051434252232 at tolerance $10^{-8}$. Commit `32e572051` replaced the water ideal-gas caloric correlation. With the archived water record restored on the study wheel, the predicted heat capacity for unloaded 30 wt% MDEA was 94.32571302040229 J/(mol feed K), compared with 94.32571302040198 in the archive. The current-basis expectations use the archived residuals plus the measured water-record correction for the 33 heat-capacity rows.
+
+R1 reproduced the B1 objective (374.446741289) with maximum weighted residual error 5.85e-11. R3 reproduced the Ermatchkov AARD (19.14601240%) on 88 rows at or below 49 wt% MDEA. R5 reproduced the A3 objective (403.729440371) with maximum weighted residual error 3.54e-11 and matching coordinates.
 
 ## AMP conditional slope profile
 
@@ -232,126 +234,118 @@ The profile reoptimizes the other eight AMP coordinates for each held slope. The
 
 ## Observation deviations
 
-| Population | Tracking AARD (%) | Refitted AARD (%) |
-|---|---:|---:|
-| MEA CO2-free density kg/m^3 | 0.031171995 | 0.031166128 |
-| MEA Cai 1 | 2.6069245 | 2.6068774 |
-| MEA Cai K | 0.36928557 | 0.36927969 |
-| MEA Cp J/(mol-feed K) | 3.0296914 | 3.0235969 |
-| MEA Jakobsen 1 | 16.167979 | 16.180861 |
-| MEA Kiepe Pa | 2.6665236 | 2.6665236 |
-| MEA Table S6 additions Pa | 27.778994 | 27.884887 |
-| MEA common149 1 | 7.4369537 | 7.4371076 |
-| MEA common149 J/mol | 2.0318382 | 2.0290655 |
-| MEA common149 Pa | 11.346544 | 11.33535 |
-| MEA loaded density kg/m^3 | 0.1540217 | 0.15412687 |
-| MEA restored species 1 | 9.3335522 | 9.3357162 |
-| DEA Bottinger-DEACOO mol/mol | 48.150039 | 47.767692 |
-| DEA Bottinger-DEA_plus_DEAH mol/mol | 5.142 | 5.1162212 |
-| DEA Bottinger-HCO3 mol/mol | 22.394664 | 22.282982 |
-| DEA Cai Pa | 40.816649 | 40.816649 |
-| DEA Carson J/mol CO2 | 2.0025141 | 2.0058764 |
-| DEA Horstmann J/mol mixture | 152.44987 | 152.44987 |
-| DEA Lal Pa | 39.985031 | 39.97202 |
-| DEA Lawson Pa | 34.176371 | 34.321512 |
-| DEA Lawson-394K Pa | 37.198302 | 37.556841 |
-| DEA Lawson-VIII Pa | 52.550715 | 52.847525 |
-| DEA SeoHong Pa | 66.196018 | 66.191253 |
-| DEA Weiland kg/m3 | 0.4470381 | 0.44715166 |
-| C3 DEA AARD all 44 density samples | 0.4470381 | 0.44715166 |
-| C3 DEA AARD four historically split feeds | 0.14782146 | 0.14387199 |
-| C3 DEA AARD on split feeds in each model | 0.14782146 | 0.11321053 |
-| MDEA Bottinger-amine-sum-25bar 1 | 7.2183918 | 7.2177942 |
-| MDEA Bottinger-amine-sum-5bar 1 | 7.2184908 | 7.2166894 |
-| MDEA Bottinger-bicarbonate-25bar 1 | 11.219286 | 11.231856 |
-| MDEA Bottinger-bicarbonate-5bar 1 | 11.220826 | 11.214715 |
-| MDEA Carson J/mol | 18.685424 | 13.581397 |
-| MDEA Cp J/(mol-feed K) | 2.8410934 | 2.938876 |
-| MDEA Cp-60wt J/(mol-feed K) | 11.579296 | 11.970643 |
-| MDEA Ermatchkov Pa | 25.093446 | 29.208683 |
-| MDEA Jakobsen 1 | 13.569201 | 13.562053 |
-| MDEA Kim Pa | 2.217412 | 2.2053279 |
-| MDEA Kuranov Pa | 4.1532115 | 4.385683 |
-| MDEA Kuranov-413K Pa | 4.8239039 | 4.8892488 |
-| MDEA Kuranov-binary Pa | 2.5916826 | 2.6093734 |
-| MDEA Merkley J/mol | 4.4830209 | 3.3151045 |
-| MDEA Merkley-half-loading J/mol | 5.13534 | 7.1223654 |
-| MDEA Merkley-outside J/mol | 2.6562304 | — |
-| MDEA Sedighi Pa | 75.282603 | 78.434684 |
-| MDEA Xiao Pa | 17.218634 | 18.354732 |
-| MDEA Zheng J/mol | 6.208304 | 4.6502153 |
-| MDEA corrected-Kamps Pa | 12.942935 | 14.761673 |
-| MDEA density-60wt kg/m^3 | 1.6417048 | 1.3179571 |
-| MDEA loaded-density kg/m^3 | 0.19032784 | 0.16685178 |
-| MDEA unloaded-density kg/m^3 | 0.077257692 | 0.077602698 |
-| AMP_free binary Pa | 1.0789677 | 1.0766564 |
-| AMP_free binary dimensionless | 4.673756 | 4.7395097 |
-| AMP_free hartono-2021-supplemental Pa | 6.8965936 | 6.8499813 |
-| AMP_free kundu Pa | 15.674405 | 15.637976 |
-| AMP_free loaded-pressure Pa | 12.05487 | 12.047537 |
-| AMP_free nmr dimensionless | 23.518809 | 23.447071 |
-| AMP_free tong Pa | 11.195916 | 11.161145 |
-| AMP_free tong-baseline Pa | 3.8510643 | 3.8600289 |
-| AMP_fixed binary Pa | 1.319861 | 1.3256084 |
-| AMP_fixed binary dimensionless | 5.7733358 | 5.8558166 |
-| AMP_fixed hartono-2021-supplemental Pa | 7.1770983 | 7.152053 |
-| AMP_fixed kundu Pa | 17.32413 | 17.3115 |
-| AMP_fixed loaded-pressure Pa | 12.175949 | 12.165733 |
-| AMP_fixed nmr dimensionless | 26.901362 | 26.94415 |
-| AMP_fixed tong Pa | 11.387123 | 11.375435 |
-| AMP_fixed tong-baseline Pa | 3.2976949 | 3.2883346 |
-| MEA pressure unfitted hot Wagner AARD_percent | 28.07278 | 28.405066 |
-| MEA pressure legacy AARD_percent | 11.346544 | 11.33535 |
-| MEA pressure added AARD_percent | 27.778994 | 27.884887 |
-| MEA pressure Aronu2011 AARD_percent | 31.609691 | 31.651051 |
-| MEA pressure Hilliard2008 AARD_percent | 8.07755 | 8.0635717 |
-| MEA pressure Idris2014 AARD_percent | 21.03179 | 21.030527 |
-| MEA pressure Jou1995 AARD_percent | 17.324452 | 17.366241 |
-| MEA pressure Mamun2005 AARD_percent | 38.363497 | 38.656766 |
-| MEA pressure Xu2011 AARD_percent | 32.358927 | 32.539788 |
-| MEA pressure 40 C nominal AARD_percent | 20.374275 | 20.366864 |
-| MEA pressure 60 C nominal AARD_percent | 14.807652 | 14.810374 |
-| MEA pressure 80 C nominal AARD_percent | 21.488707 | 21.622433 |
-| MEA pressure 100 C nominal AARD_percent | 26.564614 | 26.703704 |
-| MEA pressure 120 C nominal AARD_percent | 31.74543 | 31.922964 |
-| MEA pressure hot_expanded AARD_percent | 30.018491 | 30.183211 |
-| MEA pressure hot_published AARD_percent | 29.664725 | 29.859912 |
-| MEA pressure all_pressure AARD_percent | 22.921603 | 22.992886 |
-| MEA off-window Jou1995 AARD_percent | 13.921689 | 13.915869 |
-| MEA off-window Jou1995 bias_percent | -0.20552918 | -0.06190039 |
-| MEA off-window Aronu2011 AARD_percent | 45.674364 | 45.647693 |
-| MEA off-window Aronu2011 bias_percent | 8.8294134 | 8.7679176 |
-| MEA off-window Aronu2011 15 wt% AARD_percent | 44.241837 | 44.258622 |
-| MEA off-window Aronu2011 15 wt% bias_percent | 33.558031 | 33.597447 |
-| MEA off-window Aronu2011 45 wt% AARD_percent | 46.952023 | 46.886594 |
-| MEA off-window Aronu2011 45 wt% bias_percent | -13.22584 | -13.377339 |
-| C7 Hong matched population refitted MEA AARD | 22.588807 | 25.060932 |
-| C7 Kuranov row-matched 82 AARD | 4.1565097 | 4.354789 |
-| Round 7 B MDEA Bottinger-amine-sum-25bar | 7.2134938 | 7.2177942 |
-| Round 7 B MDEA Bottinger-amine-sum-5bar | 7.2136125 | 7.2166894 |
-| Round 7 B MDEA Bottinger-bicarbonate-25bar | 11.191788 | 11.231856 |
-| Round 7 B MDEA Bottinger-bicarbonate-5bar | 11.193488 | 11.214715 |
-| Round 7 B MDEA Carson | 5.12 | 13.581397 |
-| Round 7 B MDEA Cp | 1.9672976 | 2.938876 |
-| Round 7 B MDEA Cp-60wt | 6.5911989 | 11.970643 |
-| Round 7 B MDEA Ermatchkov | 38.422134 | 29.208683 |
-| Round 7 B MDEA Jakobsen | 13.905425 | 13.562053 |
-| Round 7 B MDEA Kim | 2.2373316 | 2.2053279 |
-| Round 7 B MDEA Kuranov | 10.117866 | 4.385683 |
-| Round 7 B MDEA Kuranov-413K | 3.0801081 | 4.8892488 |
-| Round 7 B MDEA Kuranov-binary | 2.5618109 | 2.6093734 |
-| Round 7 B MDEA Merkley | 7.6198064 | 3.3151045 |
-| Round 7 B MDEA Merkley-half-loading | 17.459565 | 7.1223654 |
-| Round 7 B MDEA Merkley-outside | 20.137374 | — |
-| Round 7 B MDEA Sedighi | 77.660829 | 78.434684 |
-| Round 7 B MDEA Xiao | 34.091845 | 18.354732 |
-| Round 7 B MDEA Zheng | 16.75478 | 4.6502153 |
-| Round 7 B MDEA corrected-Kamps | 15.802655 | 14.761673 |
-| Round 7 B MDEA density-60wt | 1.7650769 | 1.3179571 |
-| Round 7 B MDEA loaded-density | 0.18860708 | 0.16685178 |
-| Round 7 B MDEA unloaded-density | 0.07820584 | 0.077602698 |
+| Population | Statistic (%) | Tracking | Refitted |
+|---|---|---:|---:|
+| MEA CO2-free density kg/m^3 | AARD | 0.031171995 | 0.031166128 |
+| MEA Cai 1 | AARD | 2.6069245 | 2.6068774 |
+| MEA Cai K | AARD | 0.36928557 | 0.36927969 |
+| MEA Cp J/(mol-feed K) | AARD | 3.0296914 | 3.0235969 |
+| MEA Jakobsen 1 | AARD | 16.167979 | 16.180861 |
+| MEA Kiepe Pa | AARD | 2.6665236 | 2.6665236 |
+| MEA Table S6 additions Pa | AARD | 27.778994 | 27.884887 |
+| MEA common149 1 | AARD | 7.4369537 | 7.4371076 |
+| MEA common149 J/mol | AARD | 2.0318382 | 2.0290655 |
+| MEA common149 Pa | AARD | 11.346544 | 11.33535 |
+| MEA loaded density kg/m^3 | AARD | 0.1540217 | 0.15412687 |
+| MEA restored species 1 | AARD | 9.3335522 | 9.3357162 |
+| DEA Bottinger-DEACOO mol/mol | AARD | 48.150039 | 47.767692 |
+| DEA Bottinger-DEA_plus_DEAH mol/mol | AARD | 5.142 | 5.1162212 |
+| DEA Bottinger-HCO3 mol/mol | AARD | 22.394664 | 22.282982 |
+| DEA Cai Pa | AARD | 40.816649 | 40.816649 |
+| DEA Carson J/mol CO2 | AARD | 2.0025141 | 2.0058764 |
+| DEA Horstmann J/mol mixture | AARD | 152.44987 | 152.44987 |
+| DEA Lal Pa | AARD | 39.985031 | 39.97202 |
+| DEA Lawson Pa | AARD | 34.176371 | 34.321512 |
+| DEA Lawson-394K Pa | AARD | 37.198302 | 37.556841 |
+| DEA Lawson-VIII Pa | AARD | 52.550715 | 52.847525 |
+| DEA SeoHong Pa | AARD | 66.196018 | 66.191253 |
+| DEA Weiland kg/m3 | AARD | 0.4470381 | 0.44715166 |
+| C3 DEA AARD all 44 density samples | AARD | 0.4470381 | 0.44715166 |
+| C3 DEA AARD four historically split feeds | AARD | 0.14782146 | 0.14387199 |
+| C3 DEA AARD on split feeds in each model | AARD | 0.14782146 | 0.11321053 |
+| MDEA Bottinger-amine-sum-25bar 1 | AARD | 7.2183918 | 7.2177942 |
+| MDEA Bottinger-amine-sum-5bar 1 | AARD | 7.2184908 | 7.2166894 |
+| MDEA Bottinger-bicarbonate-25bar 1 | AARD | 11.219286 | 11.231856 |
+| MDEA Bottinger-bicarbonate-5bar 1 | AARD | 11.220826 | 11.214715 |
+| MDEA Carson J/mol | AARD | 18.685424 | 13.581397 |
+| MDEA Cp J/(mol-feed K) | AARD | 2.8410934 | 2.938876 |
+| MDEA Cp-60wt J/(mol-feed K) | AARD | 11.579296 | 11.970643 |
+| MDEA Ermatchkov Pa | AARD | 25.093446 | 29.208683 |
+| MDEA Jakobsen 1 | AARD | 13.569201 | 13.562053 |
+| MDEA Kim Pa | AARD | 2.217412 | 2.2053279 |
+| MDEA Kuranov Pa | AARD | 4.1532115 | 4.385683 |
+| MDEA Kuranov-413K Pa | AARD | 4.8239039 | 4.8892488 |
+| MDEA Kuranov-binary Pa | AARD | 2.5916826 | 2.6093734 |
+| MDEA Merkley J/mol | AARD | 4.4830209 | 3.3151045 |
+| MDEA Merkley-half-loading J/mol | AARD | 5.13534 | 7.1223654 |
+| MDEA Sedighi Pa | AARD | 75.282603 | 78.434684 |
+| MDEA Xiao Pa | AARD | 17.218634 | 18.354732 |
+| MDEA Zheng J/mol | AARD | 6.208304 | 4.6502153 |
+| MDEA density-60wt kg/m^3 | AARD | 1.6417048 | 1.3179571 |
+| MDEA loaded-density kg/m^3 | AARD | 0.19032784 | 0.16685178 |
+| MDEA unloaded-density kg/m^3 | AARD | 0.077257692 | 0.077602698 |
+| AMP_free binary Pa | AARD | 1.0789677 | 1.0766564 |
+| AMP_free binary dimensionless | AARD | 4.673756 | 4.7395097 |
+| AMP_free hartono-2021-supplemental Pa | AARD | 6.8965936 | 6.8499813 |
+| AMP_free kundu Pa | AARD | 15.674405 | 15.637976 |
+| AMP_free loaded-pressure Pa | AARD | 12.05487 | 12.047537 |
+| AMP_free nmr dimensionless | AARD | 23.518809 | 23.447071 |
+| AMP_free tong Pa | AARD | 11.195916 | 11.161145 |
+| AMP_free tong-baseline Pa | AARD | 3.8510643 | 3.8600289 |
+| AMP_fixed binary Pa | AARD | 1.319861 | 1.3256084 |
+| AMP_fixed binary dimensionless | AARD | 5.7733358 | 5.8558166 |
+| AMP_fixed hartono-2021-supplemental Pa | AARD | 7.1770983 | 7.152053 |
+| AMP_fixed kundu Pa | AARD | 17.32413 | 17.3115 |
+| AMP_fixed loaded-pressure Pa | AARD | 12.175949 | 12.165733 |
+| AMP_fixed nmr dimensionless | AARD | 26.901362 | 26.94415 |
+| AMP_fixed tong Pa | AARD | 11.387123 | 11.375435 |
+| AMP_fixed tong-baseline Pa | AARD | 3.2976949 | 3.2883346 |
+| MEA pressure unfitted hot Wagner | AARD | 28.07278 | 28.405066 |
+| MEA pressure legacy | AARD | 11.346544 | 11.33535 |
+| MEA pressure added | AARD | 27.778994 | 27.884887 |
+| MEA pressure Aronu2011 | AARD | 31.609691 | 31.651051 |
+| MEA pressure Hilliard2008 | AARD | 8.07755 | 8.0635717 |
+| MEA pressure Idris2014 | AARD | 21.03179 | 21.030527 |
+| MEA pressure Jou1995 | AARD | 17.324452 | 17.366241 |
+| MEA pressure Mamun2005 | AARD | 38.363497 | 38.656766 |
+| MEA pressure Xu2011 | AARD | 32.358927 | 32.539788 |
+| MEA pressure 40 C nominal | AARD | 20.374275 | 20.366864 |
+| MEA pressure 60 C nominal | AARD | 14.807652 | 14.810374 |
+| MEA pressure 80 C nominal | AARD | 21.488707 | 21.622433 |
+| MEA pressure 100 C nominal | AARD | 26.564614 | 26.703704 |
+| MEA pressure 120 C nominal | AARD | 31.74543 | 31.922964 |
+| MEA pressure hot_expanded | AARD | 30.018491 | 30.183211 |
+| MEA pressure hot_published | AARD | 29.664725 | 29.859912 |
+| MEA pressure all_pressure | AARD | 22.921603 | 22.992886 |
+| MEA off-window Jou1995 | AARD | 13.921689 | 13.915869 |
+| MEA off-window Aronu2011 | AARD | 45.674364 | 45.647693 |
+| MEA off-window Aronu2011 15 wt% | AARD | 44.241837 | 44.258622 |
+| MEA off-window Aronu2011 45 wt% | AARD | 46.952023 | 46.886594 |
+| C7 Hong matched population refitted MEA AARD | AARD | 22.588807 | 25.060932 |
+| C7 Kuranov row-matched 82 AARD | AARD | 4.1565097 | 4.354789 |
+
+### MDEA matched populations
+
+| Population | Common rows | Statistic (%) | Tracking | Refitted |
+|---|---:|---|---:|---:|
+| Kuranov | 66 | AARD | 4.1532115 | 4.385683 |
+| Kuranov | 66 | Signed bias | 0.063542506 | 0.32268882 |
+| Ermatchkov | 101 | AARD | 25.093446 | 29.208683 |
+| Ermatchkov | 101 | Signed bias | -17.124575 | -25.670226 |
+| Xiao | 20 | AARD | 17.218634 | 18.354732 |
+| Xiao | 20 | Signed bias | -11.809813 | -17.06495 |
+| Carson | 40 | AARD | 18.685424 | 13.581397 |
+| Carson | 40 | Signed bias | -18.685424 | -13.581397 |
+| corrected-Kamps | 27 | AARD | 12.942935 | 11.934186 |
+| corrected-Kamps | 27 | Signed bias | -1.4340076 | -7.4997907 |
+
+Corrected Kamps row 13 (`comparison:113`) was unavailable in tracking. The refitted bubble pressure was 14.457004 MPa against the measured 7.565 MPa (+91.10% signed deviation). The refitted AARD over all 28 available rows was 14.76167%.
+
+C6 reports prediction spread on fitted rows by property group. The comparison of spread against deviations from measurements within the same operating bands remains open.
 
 ## Phase searches
+
+The AMP experimental counts use the six retained absolute pressures for each selected endpoint. The worked state and the 666 standard search states per protocol have separate outcomes.
 
 | State or search | Tracking outcome | Fixed-reference outcome |
 |---|---|---|
@@ -434,6 +428,7 @@ The profile reoptimizes the other eight AMP coordinates for each held slope. The
 | AMP_free fixed-at-old phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
 | AMP_free fixed-at-old phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
 | AMP_free fixed-at-old phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| C4 AMP_free selected experimental phase counts | — | 4 unresolved phase identity<br>2 finite search, no resolved descent |
 | AMP_free native finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
 | AMP_free supplied finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
 | AMP_fixed A phase hartono-2021:55:problem | finite search, no resolved descent | finite search, no resolved descent |
@@ -471,6 +466,7 @@ The profile reoptimizes the other eight AMP coordinates for each held slope. The
 | AMP_fixed fixed-at-old phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
 | AMP_fixed fixed-at-old phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
 | AMP_fixed fixed-at-old phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| C4 AMP_fixed selected experimental phase counts | — | 3 finite search, no resolved descent<br>3 unresolved phase identity |
 | AMP_fixed native finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
 | AMP_fixed supplied finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
 | MEA main finite search counts | {'states': 1908, 'available': 1908, 'descent': 0} | 1908 states<br>1908 available<br>0 descent |
@@ -548,7 +544,7 @@ Measured entries record timed calculations. The lanes overlapped.
 | MDEA receiver | 7320 | 10980 | 4802.0397 | 2597.8696 | replayed |
 | AMP receiver, both designs | 4500 | 6750 | 1963.7199 | 1042.1909 | replayed |
 | MEA screens and displayed comparisons | 1500 | 2250 | 1253.2789 | 1798.36 | retained with unresolved searches |
-| C1–C7 numerical replays | 600 | 900 | 600 | 743.75609 | retained with open quantities |
+| C1–C7 numerical replays | 600 | 900 | 600 | 1209.7555 | retained with open quantities and stop overrun |
 
 **Wheel, salt and start manifests.** The stage timers include bound manifest and tracking-control evaluation by design. The initial failed probe is recorded separately from retained successful controls.
 
@@ -556,17 +552,17 @@ Measured entries record timed calculations. The lanes overlapped.
 
 **DEA receiver.** The first screen let the saved trial registry grow between batches. Those calculations are retained. The second screen used the unchanged declared trial bank.
 
-**MDEA receiver.** B refused on its initial evaluation and on independent replay. A reached the iteration limit twice and converged within the original lane budget on its third stage. The measured subtotal combines the fit, replay and diagnostics of all attempts with the final campaign service, which reduced observations, phase controls and release screens.
+**MDEA receiver.** B refused on its initial evaluation and on independent replay. A reached the iteration limit twice and converged within the original lane budget on its third stage. The measured subtotal combines the fit, replay and diagnostics of all attempts with the final campaign service, which reduced observations, phase controls and release screens. The expansion forecast in MDEA/projection.json used archived round-7 fit timings after displaced start B refused. This departed from the binding requirement to measure B through fit and independent replay before expansion.
 
-**AMP receiver, both designs.** The measured subtotal combines the displaced B pilots, screen pilots and the four-worker expansion.
+**AMP receiver, both designs.** The measured subtotal combines the displaced B pilots, screen pilots and the four-worker expansion. The expansion forecast in AMP/projection.json used archived round-7 fit timings after displaced start B refused. This departed from the binding requirement to measure B through fit and independent replay before expansion.
 
 **MEA screens and displayed comparisons.** The service wall includes the pilot and release screens. The seven-row refinement pilot admitted two rows. Its release gate stopped the remaining refinement. The original 321 measured-state results and the one unavailable offset search remain in the denominator.
 
-**C1–C7 numerical replays.** The measured subtotal covers recorded C1 evaluations and the timed MDEA curve runs, including the 480.273 s stop on the oversized historical declaration. The 483 retained keys were rebuilt from the source observations and used for the completed curve replays. The prior AMP conditional profile took 722.526 s. Repeating that profile would exceed the time left under the 900 s stop, so the profile keys retain their prior values and remain open for a new replay. The selected fixed-slope fit at −150 K and its controls completed.
+**C1–C7 numerical replays.** The measured subtotal covers timed C1 evaluations, the MDEA curve runs and the completed AMP conditional profile. The MDEA curve subtotal includes the 480.273 s stop on the oversized historical declaration and the completed replays on 483 source keys. The AMP profile completed in 466.0 s and supplied both crossings. The timed subtotal exceeded the 900 s stop by 309.8 s. Other C2–C7 reductions use retained readbacks and have no separate wall times here. The selected fixed-slope fit at −150 K and its controls completed in the receiver lane.
 
 ## Coverage
 
-The quantity index contains 1766 replayed comparisons and 12 quantities with independent contributors. It records 100 open keys and 85 undecided results.
+The quantity index contains 1763 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 84 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 
@@ -580,6 +576,14 @@ Recompute the handoff with `uv run --no-sync python analyses/fixed_reaction_refe
 
 The starting handoff had 198 open keys and 68 undecided results.
 The lists include the starting keys and any new unresolved results.
+
+### Open · C6 fit and properties (5)
+
+- C6 MEA endpoint spread versus measurement deviation by operating band
+- C6 DEA endpoint spread versus measurement deviation by operating band
+- C6 MDEA endpoint spread versus measurement deviation by operating band
+- C6 AMP_free endpoint spread versus measurement deviation by operating band
+- C6 AMP_fixed endpoint spread versus measurement deviation by operating band
 
 ### Open · MDEA properties (4)
 
@@ -764,10 +768,6 @@ The retained search did not resolve the phase outcome or its physical checks.
 - DEA B phase weiland-1998:31:problem
 - DEA C phase weiland-1998:31:problem
 - DEA fixed-at-old phase weiland-1998:31:problem
-
-### Undecided · Legacy fit and properties (1)
-
-- Legacy R1 weighted residual at row 129
 
 ### Undecided · MDEA fit and properties (3)
 

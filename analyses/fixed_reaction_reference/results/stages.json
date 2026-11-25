@@ -46,13 +46,14 @@
     "measured_s": 2597.869602001008,
     "projected_s": 4802.039716230276,
     "disposition": "replayed",
-    "notes": "B refused on its initial evaluation and on independent replay. A reached the iteration limit twice and converged within the original lane budget on its third stage. The measured subtotal combines the fit, replay and diagnostics of all attempts with the final campaign service, which reduced observations, phase controls and release screens.",
+    "notes": "B refused on its initial evaluation and on independent replay. A reached the iteration limit twice and converged within the original lane budget on its third stage. The measured subtotal combines the fit, replay and diagnostics of all attempts with the final campaign service, which reduced observations, phase controls and release screens. The expansion forecast in MDEA/projection.json used archived round-7 fit timings after displaced start B refused. This departed from the binding requirement to measure B through fit and independent replay before expansion.",
     "worker_limit": 4,
     "C1_and_matched_pressure_excluded_from_lane_subtotal": true,
     "final_campaign_wall_s": 1737.0901437379944,
     "final_campaign_cpu_s": 6014.218822999999,
     "state_inventory_service_s": 99.963,
-    "witness_readback_service_s": 3.746
+    "witness_readback_service_s": 3.746,
+    "expansion_forecast_exception": "archived fit timings substituted after displaced start B refused"
   },
   "AMP receiver, both designs": {
     "allowance_s": 4500,
@@ -60,10 +61,11 @@
     "measured_s": 1042.1908804709965,
     "projected_s": 1963.7198937794738,
     "disposition": "replayed",
-    "notes": "The measured subtotal combines the displaced B pilots, screen pilots and the four-worker expansion.",
+    "notes": "The measured subtotal combines the displaced B pilots, screen pilots and the four-worker expansion. The expansion forecast in AMP/projection.json used archived round-7 fit timings after displaced start B refused. This departed from the binding requirement to measure B through fit and independent replay before expansion.",
     "worker_limit": 4,
     "expansion_wall_s": 944.788769442006,
-    "expansion_cpu_s": 3157.194374
+    "expansion_cpu_s": 3157.194374,
+    "expansion_forecast_exception": "archived fit timings substituted after displaced start B refused"
   },
   "MEA screens and displayed comparisons": {
     "allowance_s": 1500,
@@ -81,14 +83,17 @@
   "C1\u2013C7 numerical replays": {
     "allowance_s": 600,
     "stop_s": 900.0,
-    "measured_s": 743.7560898249995,
+    "measured_s": 1209.7554829769851,
     "projected_s": 600,
-    "disposition": "retained with open quantities",
-    "notes": "The measured subtotal covers recorded C1 evaluations and the timed MDEA curve runs, including the 480.273 s stop on the oversized historical declaration. The 483 retained keys were rebuilt from the source observations and used for the completed curve replays. The prior AMP conditional profile took 722.526 s. Repeating that profile would exceed the time left under the 900 s stop, so the profile keys retain their prior values and remain open for a new replay. The selected fixed-slope fit at \u2212150 K and its controls completed.",
+    "disposition": "retained with open quantities and stop overrun",
+    "notes": "The measured subtotal covers timed C1 evaluations, the MDEA curve runs and the completed AMP conditional profile. The MDEA curve subtotal includes the 480.273 s stop on the oversized historical declaration and the completed replays on 483 source keys. The AMP profile completed in 466.0 s and supplied both crossings. The timed subtotal exceeded the 900 s stop by 309.8 s. Other C2\u2013C7 reductions use retained readbacks and have no separate wall times here. The selected fixed-slope fit at \u2212150 K and its controls completed in the receiver lane.",
     "reconstructed_G_branch_s": 187.64008982499945,
     "oversized_curve_stop_s": 480.273,
     "keyed_curve_expansion_s": 72.311,
     "previous_AMP_profile_wall_s": 722.5257562320039,
-    "AMP_profile_disposition": "paused before expansion"
+    "AMP_profile_disposition": "completed with both conditional crossings retained",
+    "timed_subtotal_before_AMP_profile_s": 743.7560898249995,
+    "AMP_profile_wall_s": 465.9993931519857,
+    "stop_overrun_s": 309.75548297698515
   }
 }

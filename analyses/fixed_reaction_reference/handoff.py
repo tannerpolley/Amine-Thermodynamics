@@ -27,9 +27,12 @@ def archived(path):
     return r.read(r.ROOT/path)
 
 
+def available(q):
+    return q.get('status')=='Available' and q.get('requested_tolerance_met',True) and q.get('value') is not None
+
+
 def summary(rows, pressure=False):
-    good = [q for q in rows if q.get('status')=='Available' and q.get('requested_tolerance_met',True)
-            and q.get('value') is not None]
+    good = [q for q in rows if available(q)]
     ratios = [q['value']/q['observed'] for q in good if q['observed']]
     result = dict(rows=len(rows),available=len(good),point_count=len(ratios),
                   fitted=sum(q.get('role')=='fitted' for q in rows))
@@ -66,7 +69,8 @@ class Quantities:
         source = {'revision':BASE,'path':old_source,'field':old_field,
                   'sha256':sha256(blob(old_source,BASE)).hexdigest() if old_source else None}
         refs = [self.reference(p) for p in sources]
-        numerical = all(isinstance(x,(int,float)) and not isinstance(x,bool) for x in (old,new))
+        numerical = disposition!='different available populations' and all(
+            isinstance(x,(int,float)) and not isinstance(x,bool) for x in (old,new))
         changed = new-old if numerical else None
         self.items[key] = dict(old=old,new=new,unit=unit,population=population,pressure_basis=pressure_basis,
                                absolute_change=changed,percent_change=100*changed/old if numerical and old else None,
@@ -282,6 +286,8 @@ class Quantities:
             self.quantity(f'C6 {design} fitted-row endpoint prediction spread',None,spreads,
                           sources=sources+tuple(f'{design}/{k}.json.gz' for k in eligible if k!=selected),
                           population=COUNTS[design],endpoint=endpoint)
+            self.quantity(f'C6 {design} endpoint spread versus measurement deviation by operating band',
+                          None,None,sources=sources,population=COUNTS[design],endpoint=endpoint)
 
     @staticmethod
     def cost(data, key):
@@ -348,11 +354,10 @@ class Quantities:
             left,right = ([q for q in pool if q['group']==group and (q.get('unit') or 'unspecified')==unit] for pool in (old,new))
             if left and right:
                 assert {x['identity']:x['observed'] for x in left}=={q['identity']:q['observed'] for q in right}, f'{design} {group} row keys'
+            left_keys,right_keys = ({q['identity'] for q in pool if available(q)} for pool in (left,right))
             for side in ('all','matched') if right else ('all',):
                 if side=='matched':
-                    keys = set.intersection(*[{q['identity'] for q in pool if q.get('status')=='Available' and
-                                               q.get('requested_tolerance_met',True) and q.get('value') is not None}
-                                              for pool in (left,right)])
+                    keys = left_keys & right_keys
                     left,right = ([q for q in pool if q['identity'] in keys] for pool in (left,right))
                 a,b = (summary(pool,pressure=unit=='Pa') if pool else {} for pool in (left,right))
                 counts = {k:dict(rows=v.get('rows'),available=v.get('available'),fitted=v.get('fitted'))
@@ -361,10 +366,13 @@ class Quantities:
                                   'mean_signed_error_predicted_minus_observed'):
                     if statistic not in a:
                         continue
-                    self.quantity(f'{design} {group} {unit} {side} {statistic}',a[statistic],b.get(statistic),
+                    key = f'{design} {group} {unit} {side} {statistic}'
+                    different = side=='all' and left_keys!=right_keys and statistic!='available' and statistic in b
+                    self.quantity(key,a[statistic],b.get(statistic),
                         unit='%' if statistic.endswith('percent') else 'rows' if statistic=='available' else
                              unit if 'error' in statistic else '1',
                         sources=(path,),old_source=old_file,old_field=field,population=counts,endpoint=endpoint,
+                        disposition='different available populations' if different else None,
                         pressure_basis='source row and observation basis retained; pressure residuals use calculated pressure')
         if design=='DEA' and new:
             for group in ('Lawson','Lawson-394K','SeoHong','Lal','Carson'):
@@ -466,11 +474,14 @@ class Quantities:
         left,right = ([q for q in rows if predicate(q)] for rows in (old,new))
         assert {q['identity'] for q in left}=={q['identity'] for q in right}
         if left:
-            a,b = (summary(rows,True) for rows in (left,right))
+            keys = {q['identity'] for q in left if available(q)} & {q['identity'] for q in right if available(q)}
+            a,b = (summary([q for q in rows if q['identity'] in keys],True) for rows in (left,right))
             for metric in ('AARD_percent','bias_percent','log_RMSE','available'):
-                self.quantity(f'C5 MDEA salt refit {name} {metric}',a.get(metric),b.get(metric),
+                values = [sum(map(available,rows)) for rows in (left,right)] if metric=='available' else [a.get(metric),b.get(metric)]
+                self.quantity(f'C5 MDEA salt refit {name} {metric}',*values,
                               unit='%' if metric.endswith('percent') else 'rows' if metric=='available' else '1',
-                              sources=(path,),old_source=old_file,endpoint=endpoint,population=dict(rows=len(left),fitted=a['fitted']),
+                              sources=(path,),old_source=old_file,endpoint=endpoint,
+                              population=dict(rows=len(left),matched=len(keys),fitted=a['fitted']),
                               pressure_basis='same source rows; calculated bubble pressure')
 
     def phases(self,design):
@@ -517,6 +528,18 @@ class Quantities:
                               population=1,endpoint=fingerprint_,
                               disposition='refused at initial evaluation' if value=='no endpoint' else
                               'undecided' if value in ('unavailable','unresolved','unresolved phase identity') else None)
+        if design.startswith('AMP') and selected:
+            control = f'{design}/controls/{selected}.json.gz'
+            keys = old['rows']
+            rows = self.read(control)['rows']
+            assert len(keys)==6
+            outcomes = Counter()
+            for key,previous in keys.items():
+                assert rows[key]['P_Pa']==previous['value']['P_Pa'], f'{design} {key}: experimental pressure'
+                outcomes[self.items[f'{design} {selected} phase {key}']['new']] += 1
+            self.quantity(f'C4 {design} selected experimental phase counts',None,dict(outcomes),unit='states',
+                          sources=(control,),old_source=oldfile,population=len(keys),endpoint=endpoint,
+                          pressure_basis='same six experimental absolute pressures as round 8')
         for path in sorted((OUT/design/'screen/selected').glob('*/summary.json.gz')):
             rel = str(path.relative_to(OUT))
             result = self.read(rel)
@@ -639,14 +662,22 @@ class Quantities:
                               disposition='undecided' if readback.get('refusal') or not labels.intersection(directions) else None)
 
     def c1(self):
+        steps = {}
         for path in sorted((OUT/'C1').glob('*.json.gz')):
             rel = str(path.relative_to(OUT))
             q = self.read(rel)
+            record = path.name.removesuffix('.json.gz')
+            mode = 'selected' if record.startswith('selected-') else 'fixed-at-old'
+            assert q['mode']==mode and q['wheel']==r.SHA, rel
+            design = record.removeprefix(mode+'-').split('-')[0]
+            if mode=='selected':
+                assert q['endpoint_fingerprint']==self.selections[design][1], f'{rel}: selected endpoint fingerprint'
             if not q.get('steps'):
                 continue
+            steps[rel] = [dict(step) for step in q['steps']]
             center = q['center']
             assert center['volume_m3']==fsum(v['amount_mol']/v['rho_mol_m3'] for v in center['values'])
-            for step in q['steps']:
+            for step in steps[rel]:
                 pts = step['points']
                 for p in pts.values():
                     if 'G_J' in p:
@@ -659,12 +690,16 @@ class Quantities:
                     T,dt = q['T_K'],step['step_K']
                     h = -T*T*(pts['T+']['G_J']/(T+dt)-pts['T-']['G_J']/(T-dt))/(2*dt)
                     eq12 = fsum(c['eq12_H_J'] for c in step['caloric_components'])
-                    assert eq12-h==step['eq12_minus_Gibbs_Helmholtz_J'], rel
+                    assert h==step['Gibbs_Helmholtz_H_J'] and eq12-h==step['eq12_minus_Gibbs_Helmholtz_J'], rel
+                    if 'engine_H_J' in center:
+                        discrepancy = center['engine_H_J']-h
+                        assert discrepancy==step['engine_minus_Gibbs_Helmholtz_J'], f'{rel}: Engine enthalpy minus Gibbs–Helmholtz'
+                        step['engine_minus_Gibbs_Helmholtz_J'] = discrepancy
                     assert step['enthalpy_admitted']==all(p['admitted'] for p in (center,pts['T+'],pts['T-'])), rel
             for key,error,metric in (('volume','volume_arithmetic_error_m3','signed_volume_error_m3'),
                                      ('enthalpy','caloric_arithmetic_error_J','engine_minus_Gibbs_Helmholtz_J'),
                                      ('Eq. 12','caloric_arithmetic_error_J','eq12_minus_Gibbs_Helmholtz_J')):
-                available = [s for s in q['steps'] if metric in s]
+                available = [s for s in steps[rel] if metric in s]
                 if not available:
                     continue
                 admitted = [s for s in available if s.get(('volume' if key=='volume' else 'enthalpy')+'_admitted')]
@@ -697,7 +732,7 @@ class Quantities:
                                      ('enthalpy','engine_minus_Gibbs_Helmholtz_J','caloric_arithmetic_error_J'),
                                      ('Eq. 12','eq12_minus_Gibbs_Helmholtz_J','caloric_arithmetic_error_J')):
                 available = [(left[metric]+right[metric],left[error]+right[error])
-                             for left,right in zip(a['steps'],b['steps'],strict=True)
+                             for left,right in zip(*(steps[p] for p in paths),strict=True)
                              if left.get(('volume' if key=='volume' else 'enthalpy')+'_admitted')
                              and right.get(('volume' if key=='volume' else 'enthalpy')+'_admitted') and metric in left and metric in right]
                 if not available:
@@ -785,7 +820,23 @@ class Quantities:
             assert row['actual_prediction']['residual']==row['actual_residual']
             assert row['actual_residual']-row['expected_residual']==row['difference']
             self.quantity('Legacy R1 weighted residual at row 129',row['expected_residual'],row['actual_residual'],
-                          sources=(p,),old_source=row['source']+'/fit.json',disposition='undecided')
+                          sources=(p,),old_source=row['source']+'/fit.json',disposition='diagnosed caloric basis change')
+            basis = row['water_caloric_basis']
+            revision = basis['caloric_record_commit']
+            assert sha256(blob(basis['path'],revision)).hexdigest()==basis['caloric_record_sha256']
+            assert sha256(blob(basis['path'],revision+'^')).hexdigest()==basis['archived_caloric_record_sha256']
+            self.quantity('R1 row 129 Cp with archived water record',row['expected_prediction'],
+                          basis['archived_water_replay_row_129_prediction'],unit='J/(mol feed K)',
+                          sources=(p,),old_source=row['source']+'/fit.json',population=1)
+            checks_file = 'R1-R3-R5-current-water.json.gz'
+            checks = self.read(checks_file)
+            assert checks['wheel']==r.SHA
+            assert all(basis[k]==v for k,v in checks['water_caloric_basis'].items())
+            for gate in ('R1','R3','R5'):
+                data = checks[gate]
+                self.quantity(f'{gate} numerical reproduction on current water caloric basis',None,
+                              {k:v for k,v in data.items() if k!='records'},
+                              sources=(p,checks_file),population=len(data['records']))
 
     def archived_inventory(self):
         root = original(R8+'manuscript-handoff.json')
@@ -969,7 +1020,8 @@ class Quantities:
                 match = self.items.get(name,{})
             if match:
                 new = match['new']
-                numerical = all(isinstance(x,(int,float)) and not isinstance(x,bool) for x in (value,new))
+                numerical = match['disposition']!='different available populations' and all(
+                    isinstance(x,(int,float)) and not isinstance(x,bool) for x in (value,new))
                 delta = new-value if numerical else None
                 self.items[key] = dict(unit=meta.get('unit'),population=meta.get('population'),pressure_basis=None,
                     endpoint_fingerprint=None,transition=None) | dict(match,old=value,absolute_change=delta,
@@ -996,8 +1048,7 @@ class Quantities:
                               'targeted':('MDEA A phase 263',),'grid_confirmed':('MDEA declared grid',)},
                            3:{'all_44':('C3 DEA AARD all 44',),'four':('C3 DEA AARD four historically',),
                               'rows':('C3 DEA Weiland','C3 DEA weiland'),'first_split':('C3 DEA weiland',)},
-                           4:{'rows':('AMP_free A phase','AMP_fixed A phase'),'grid':('AMP_free native','AMP_fixed native'),
-                              'worked_state':('AMP_free A phase worked','AMP_fixed A phase worked'),
+                           4:{'grid':('AMP_free native','AMP_fixed native'),
                               'added_pressure_rows':('C4 AMP_free added','C4 AMP_fixed added')},
                            5:{'available':('C5 mixed salt',),'models':('C5 MDEA salt refit',),'properties':('C5 Kuranov matched',
                               'C5 Carson matched','C5 Xiao matched','C5 Ermatchkov matched'),'residuals':('C5 ',)},
@@ -1012,6 +1063,13 @@ class Quantities:
                                   old_source=path,old_field=meta['field'])
                     continue
                 linked = [item for item in self.items if item.startswith(markers.get(i,{}).get(key,()))]
+                if i==4 and key in ('rows','worked_state'):
+                    linked = []
+                    for design in ('AMP_free','AMP_fixed'):
+                        selected,_ = self.selections[design]
+                        states = [row['key'] for row in value] if key=='rows' else ['worked-state']
+                        linked.extend(f'{design} {selected} phase {state}' for state in states)
+                    assert all(q in self.items for q in linked), linked
                 self.quantity(f'Round 8 C{i} {key}',value if historical else (value if isinstance(value,(int,float,str)) else len(value)),
                               value if historical else linked or None,old_source=path,old_field=meta['field'],
                               disposition='historical contributor' if historical else 'reduced under linked quantities' if linked else None)
@@ -1084,12 +1142,28 @@ class Quantities:
             right = [v for v in new['rows'] if v['identity'] in keys] if new else []
             if right:
                 assert len(right)==len(keys) and {v['identity'] for v in right}==keys
+            old_rows = R7+'results/C/salt/refit.json.gz'
+            left = [v for v in archived(old_rows)['rows'] if v['identity'] in keys]
+            assert len(left)==len(keys) and all(map(available,left))
+            assert all(abs(summary(left)[m]-before['matched'][m])<1e-10 for m in ('AARD_percent','bias_percent'))
+            common = {v['identity'] for v in right if available(v)}
+            a,b = (summary([v for v in rows if v['identity'] in common]) for rows in (left,right))
             for metric in ('AARD_percent','bias_percent'):
                 self.quantity(f"C5 {'C7 ' if group=='corrected-Kamps' else ''}{group} matched {metric}",
-                              before['matched'][metric],summary(right).get(metric),unit='%',
-                              population=len(keys),sources=(p,),
-                              old_source=literature if group=='corrected-Kamps' else c5,endpoint=endpoint,
-                              pressure_basis='common source row keys; archived exclusions retained')
+                              a.get(metric),b.get(metric),unit='%',
+                              population=len(common),sources=(p,),
+                              old_source=old_rows,old_field='rows',endpoint=endpoint,
+                              pressure_basis='common available source row keys; archived exclusions retained')
+            if group=='corrected-Kamps' and new:
+                for old_row in before['missing']:
+                    v, = [v for v in new['rows'] if v['identity']==old_row['identity']]
+                    assert v['observed']==old_row['observed']
+                    self.quantity(f"C7 corrected-Kamps additional row {v['identity']}",old_row['value'],v['value'],unit='Pa',
+                                  population=dict(rows=1,observed_Pa=v['observed'],tracking_status=old_row['status'],
+                                                  refit_status=v['status'],refit_relative_error_percent=summary([v]).get('bias_percent')),
+                                  sources=(p,),old_source=literature,endpoint=endpoint,
+                                  pressure_basis='calculated bubble pressure compared with source total pressure',
+                                  disposition='refit only' if available(v) else 'open')
 
     def mea_comparisons(self):
         endpoint = self.selections['MEA'][1]
@@ -1305,7 +1379,22 @@ class Quantities:
         timing = self.read('stages.json')
         if timing:
             for stage,data in timing.items():
-                self.quantity(f'Campaign stage {stage}',None,data,unit='s',sources=('stages.json',),
+                sources = ['stages.json']
+                if 'AMP_profile_wall_s' in data:
+                    path = 'AMP_free/conditional-profile/profile-expanded.json'
+                    profile = self.read(path)
+                    assert data['AMP_profile_wall_s']==profile['seconds'] and all(q['closed'] for q in profile['brackets'].values())
+                    assert data['measured_s']==data['timed_subtotal_before_AMP_profile_s']+profile['seconds']
+                    assert data['stop_overrun_s']==data['measured_s']-data['stop_s']
+                    sources.append(path)
+                if 'expansion_forecast_exception' in data:
+                    path = stage.split()[0]+'/projection.json'
+                    projection = self.read(path)
+                    assert projection['projected_s']==data['projected_s']
+                    assert all(v['fit_projection_basis'].startswith('maximum archived round-7 fit wall time')
+                               for v in projection['designs'].values())
+                    sources.append(path)
+                self.quantity(f'Campaign stage {stage}',None,data,unit='s',sources=sources,
                               disposition=data['disposition'])
         starting = json.loads(blob(str(HANDOFF.relative_to(r.ROOT)),'d8f4c877f'))['quantities']
         starting = {k:v['disposition'] for k,v in starting.items() if v['disposition'] in ('open','undecided')}
