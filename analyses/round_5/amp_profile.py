@@ -12,13 +12,14 @@ PROFILE_ARCHIVE = ENDPOINTS / 'diagnosis/f2-scan.json'
 TARGET_INCREMENT = 3.84146
 
 
-def calculate(work, design, *, endpoint=None, retain=save, extra_slopes=()):
+def calculate(work, design, *, endpoint=None, retain=save, extra_slopes=(),
+              fixed_reference_pressure_pa=None, stop_seconds=1800):
     started = monotonic()
     if design == 'expanded':
         source = endpoint or RESULTS / 'A/expanded-free.json.gz'
         archived = stable.read(source)
         point = archived['point'] if endpoint is None else archived['selected'][2]
-        route = ExpandedPressure(DECLARATION, work)
+        route = ExpandedPressure(DECLARATION, work, fixed_reference_pressure_pa=fixed_reference_pressure_pa)
     else:
         source = ENDPOINTS / 'main/parameters.json'
         point = stable.read(source)
@@ -72,8 +73,8 @@ def calculate(work, design, *, endpoint=None, retain=save, extra_slopes=()):
             points[slope] = dict(cost=entry['fit']['cost'], increase=entry['fit']['cost'] - base, record=str(PROFILE_ARCHIVE.relative_to(RESULTS.parents[2])))
     else:
         for slope in sorted(scheduled, key=lambda k: abs(k-center)):
-            if len(elapsed) >= 2 and (monotonic()-started + max(elapsed) * (len(scheduled)-len(elapsed)+2)) >= 1800:
-                data['stop'] = 'Adjacent conditional fits projected over twice the profile allowance'
+            if len(elapsed) >= 2 and (monotonic()-started + max(elapsed) * (len(scheduled)-len(elapsed)+2)) >= stop_seconds:
+                data['stop'] = 'Remaining conditional fits projected over the profile deadline'
                 break
             evaluate(slope)
         # Removing the slope coordinate at the unrestricted optimum holds the fitted value exactly.
@@ -89,8 +90,8 @@ def calculate(work, design, *, endpoint=None, retain=save, extra_slopes=()):
                 break
             inside = k
         while not data.get('stop') and (outside is None or abs(inside-outside) > .5):
-            if monotonic()-started + max(elapsed, default=1) >= 1800:
-                data['stop'] = 'Profile elapsed time plus a timed conditional fit reached twice the 15-minute upper projection'
+            if monotonic()-started + max(elapsed, default=1) >= stop_seconds:
+                data['stop'] = 'Profile elapsed time plus a timed conditional fit reached the profile deadline'
                 break
             if outside is None and inside == limit:
                 break

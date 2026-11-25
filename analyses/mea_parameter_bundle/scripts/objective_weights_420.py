@@ -43,11 +43,11 @@ def control(mea):
     return rows
 
 
-def grid_classify(mapping, rows, states):
+def grid_classify(mapping, rows, states, *, bind=None):
     assert not any('supplied_trials' in row for row in rows), 'MEA grid carries supplied trials'
     ranges = {v['reaction']: (float(v['minimum_K']), float(v['maximum_K']))
               for v in f.e.rows(paper.OUT/'reaction-source-ranges.csv')}
-    route = SimpleNamespace(bind=r.bind, stability_row=r.stability_row, config=dict(reaction_ranges_K=ranges))
+    route = SimpleNamespace(bind=bind or r.bind, stability_row=r.stability_row, config=dict(reaction_ranges_K=ranges))
     route.marks = Route.marks.__get__(route)
     return classify(route, mapping, [row | branch_counts(row) for row in rows], states)
 

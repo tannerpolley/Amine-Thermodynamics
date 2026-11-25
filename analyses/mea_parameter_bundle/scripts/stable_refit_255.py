@@ -128,29 +128,29 @@ def spec_261():
     SPEC261.write_text(text)
 
 
-def bind(mapping):
+def bind(mapping, *, reaction_reference_pressure_pa=None):
     """density_268.bind on the run's solvent specification (MEA.toml, or #261's study.toml for variant c)."""
     saved = d.AN
     try:
         d.AN = TOML.parent
         if TOML.name == 'MEA.toml':
-            return d.bind(mapping, 'MEA.toml')
-        d.SolventSpecification, original = (lambda path: original(TOML)), d.SolventSpecification
+            return d.bind(mapping, 'MEA.toml', reaction_reference_pressure_pa=reaction_reference_pressure_pa)
+        d.SolventSpecification, original = (lambda path, **kwargs: original(TOML, **kwargs)), d.SolventSpecification
         try:
-            return d.bind(mapping)
+            return d.bind(mapping, reaction_reference_pressure_pa=reaction_reference_pressure_pa)
         finally:
             d.SolventSpecification = original
     finally:
         d.AN = saved
 
 
-def _init(mapping, trials=None, route=None, capture=False):
+def _init(mapping, trials=None, route=None, capture=False, reaction_reference_pressure_pa=None):
     global _SPEC, _TRIALS, _ROUTE, _HELD, _CAPTURE
     _CAPTURE = capture
     _ROUTE, _HELD = route, None  # a forked worker must not inherit a set prepared for the parent's model
     _TRIALS = trials or {}
     (route.verify if route else verify)()
-    _SPEC = (route.bind if route else bind)(mapping)
+    _SPEC = route.bind(mapping) if route else bind(mapping, reaction_reference_pressure_pa=reaction_reference_pressure_pa)
     _APPLICABLE.clear()
 
 
@@ -283,7 +283,7 @@ def _measure(state):
     return row
 
 
-def grid(mapping, chosen, trials=None, *, route=None, capture=False):
+def grid(mapping, chosen, trials=None, *, route=None, capture=False, reaction_reference_pressure_pa=None):
     """Fresh Full searches at one parameter mapping; each worker task is one temperature's states, largest first."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
@@ -294,7 +294,8 @@ def grid(mapping, chosen, trials=None, *, route=None, capture=False):
     groups = sorted(groups.values(), key=len, reverse=True)
     workers = min(route.workers if route else CORES, len(groups))
     measured = [None]*len(chosen)
-    with ProcessPoolExecutor(workers, initializer=_init, initargs=(mapping, trials, route, capture)) as pool:
+    with ProcessPoolExecutor(workers, initializer=_init,
+                             initargs=(mapping, trials, route, capture, reaction_reference_pressure_pa)) as pool:
         for indices, rows in zip(groups, pool.map(_measure_group, [[chosen[i] for i in g] for g in groups])):
             for i, row in zip(indices, rows, strict=True):
                 measured[i] = row
@@ -458,7 +459,12 @@ def _census(task):
         parent = []
         p255.f.stability = capture
     try:
-        p255.f.family_job(mapping, p255.e.request(mapping, 313.15, .11), row, [], path)
+        request = p255.e.request(mapping, 313.15, .11)
+        if len(previous) > 4 and previous[4] is not None:
+            for reaction in request['reaction_system']['engine_reactions']:
+                reference = reaction.get('engine_reference') or reaction.get('reference') or {}
+                reaction['engine_reference'] = dict(reference,reference_pressure_pa=previous[4])
+        p255.f.family_job(mapping, request, row, [], path)
     except epcsaft.EosError as error:
         if not keep_refusals:
             raise
@@ -489,7 +495,8 @@ def _census(task):
     return raw, reduced
 
 
-def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False, confirm=None):
+def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, compact_supplied=False,
+           confirm=None, reaction_reference_pressure_pa=None):
     from concurrent.futures import ProcessPoolExecutor
     chosen = read(B / 'results/engine-3e83e19c-phase-search/run-2/inputs/states.json')
     if indices is not None:
@@ -498,7 +505,8 @@ def census(mapping, name, trials=None, *, indices=None, keep_refusals=False, com
     tmp.mkdir(parents=True, exist_ok=True)
     memory = int(next(x for x in open('/proc/meminfo') if x.startswith('MemAvailable')).split()[1])
     with ProcessPoolExecutor(min(CORES, max(1, memory // 750000)), initializer=verify) as pool:
-        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []), keep_refusals, compact_supplied, confirm) for x in chosen]))
+        out = list(pool.map(_census, [(mapping, x, tmp / f'{x["index"]}.json', (trials or {}).get(str(x['index']), []),
+                                      keep_refusals, compact_supplied, confirm, reaction_reference_pressure_pa) for x in chosen]))
     tmp.rmdir()
     write(f'{name}/census-raw.json.gz', [r for r, _ in out])
     rows = [r for _, r in out]

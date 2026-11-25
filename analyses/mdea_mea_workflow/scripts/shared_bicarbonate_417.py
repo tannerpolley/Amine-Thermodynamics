@@ -81,7 +81,7 @@ def witnesses(route, point, rows):
     return dict(counts=counts, witnesses=details, pressure_roots=phases)
 
 
-def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False):
+def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False, reaction_reference_pressure_pa=None):
     started = time.monotonic()
     r.OUT = output if output is not None else run_key(label, mapping, k)
     registry = r.read(BASE/'split-registry.json')['trials']
@@ -96,7 +96,8 @@ def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False):
         grid = r.result(grid_path)
         assert [x['key'] for x in grid]==[x['key'] for x in main+offset]
     else:
-        grid = r.grid(mapping, main+offset, bank, capture=True)
+        grid = r.grid(mapping, main+offset, bank, capture=True,
+                      reaction_reference_pressure_pa=reaction_reference_pressure_pa)
         r.write(grid_path, grid)
     census_path = 'search/census.json'
     if resume and (r.OUT/census_path).is_file():
@@ -109,7 +110,8 @@ def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False):
             path = f'{name}/census.json'
             if not (r.OUT/path).is_file():
                 r.census(mapping,name,dict.fromkeys(map(str,indices),registry),indices=indices,
-                         keep_refusals=True,compact_supplied=True,confirm=confirm)
+                         keep_refusals=True,compact_supplied=True,confirm=confirm,
+                         reaction_reference_pressure_pa=reaction_reference_pressure_pa)
             batch = r.result(path)['rows']
             assert [x['index'] for x in batch]==list(indices)
             raw.extend(r.result(f'{name}/census-raw.json.gz'))
@@ -122,7 +124,8 @@ def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False):
         r.write('search/census-raw.json.gz',raw)
     else:
         census = r.census(mapping, 'search', dict.fromkeys(map(str, range(162)), registry),
-                          keep_refusals=True, compact_supplied=True, confirm=confirm)
+                          keep_refusals=True, compact_supplied=True, confirm=confirm,
+                          reaction_reference_pressure_pa=reaction_reference_pressure_pa)
     supplied = Counter()
     for raw in r.result('search/census-raw.json.gz'):
         for report in raw.get('stability', []):

@@ -6,7 +6,10 @@ import os
 import signal
 import sys
 from time import monotonic
-from records import HERE, ROOT, OUT, MEA, LIMITS, Sources, replay_path, write
+if __package__:
+    from .records import HERE, ROOT, OUT, MEA, LIMITS, Sources, replay_path, write
+else:
+    from records import HERE, ROOT, OUT, MEA, LIMITS, Sources, replay_path, write
 os.sched_setaffinity(0, set(sorted(os.sched_getaffinity(0))[:8]))
 for name in ('AGENT_HEAVY_CORES', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'BLIS_NUM_THREADS'):
     os.environ[name] = '1'
@@ -132,13 +135,18 @@ def references(src, work):
         work(label, 'reference control', lambda: predicates(fixed(run,run.bind(point),state,P,dict(pair=pair),mdea=True),
                                                            tolerance=1e-10), 2 if cls is Route else 1)
 
-def mdea_witnesses(src, work):
-    point = endpoint(src, 'C/salt')
-    run = route('salt','round-8-witness')
+def mdea_witnesses(src, work, *, released=None):
+    if released is None:
+        point = endpoint(src, 'C/salt')
+        run = route('salt','round-8-witness')
+        rows = src.core('C/salt/search-0.json.gz')
+        classifications = src.core('C/salt/search-outcome.json.gz')['classifications']
+    else:
+        run,point,rows,classifications = released
     spec = run.bind(point)
     model = spec.model
-    search = {q['key']:q for q in src.core('C/salt/search-0.json.gz') if q['descent']}
-    entries = [e for e in src.core('C/salt/search-outcome.json.gz')['classifications'] if not e['key'].startswith('grid:')]
+    search = {q['key']:q for q in rows if q['descent']}
+    entries = [e for e in classifications if not e['key'].startswith('grid:')]
     for i,e in enumerate(entries):
         def readback():
             row = search[e['key']]

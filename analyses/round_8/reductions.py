@@ -4,7 +4,10 @@ from decimal import Decimal
 from math import fsum, log
 from statistics import mean
 import sys
-from records import DISPLAY, MEA, MDEA, SALT, ROOT
+if __package__:
+    from .records import DISPLAY, MEA, MDEA, SALT, ROOT
+else:
+    from records import DISPLAY, MEA, MDEA, SALT, ROOT
 
 sys.path.insert(0,str(ROOT/'src'))
 from MEA.common.retained_results import parameter_fingerprint  # noqa: E402
@@ -32,6 +35,20 @@ def phase_outcome(value):
     if value.get('search',{}).get('no_descent_in_trial_set'):
         return 'finite search, no resolved descent'
     return 'unresolved' if value.get('search',{}).get('completed') else 'unavailable'
+
+
+def witness_direction(entry):
+    evidence = entry['evidence']
+    witness = evidence['witness']
+    roots = [v for v in evidence['roots'] if v.get('log_density_distance',1)<=log(1.01)
+             and v['relative_pressure_residual']<=1e-10]
+    error = witness['quantities'].get('arithmetic_error_estimate_over_rt')
+    direction = min(roots,key=lambda v:v['log_density_distance'])['returned'] if roots else None
+    if direction=='unspecified' and entry.get('dilute_trace',{}).get('connected'):
+        direction = 'vapor'
+    if not (error is not None and witness['quantities'].get('tpd_over_rt',0)<-error):
+        direction = None
+    return direction if direction in ('vapor','liquid') else 'unclassified'
 
 def reference(s, replay):
     data = {k:v['value'] for k,v in replay['rows'].items() if 'value' in v and 'derivatives' in v['value']}
@@ -129,15 +146,7 @@ def phases(s,replay):
         row, directions = by_key[q['key']], set()
         readback = replay['rows'].get(q['key'],{})
         for w in readback.get('value',[]):
-            witness = w['evidence']['witness']
-            roots = [v for v in w['evidence']['roots'] if v.get('log_density_distance',1)<=log(1.01) and v['relative_pressure_residual']<=1e-10]
-            error = witness['quantities'].get('arithmetic_error_estimate_over_rt')
-            direction = min(roots,key=lambda v:v['log_density_distance'])['returned'] if roots else None
-            if direction=='unspecified' and w.get('dilute_trace',{}).get('connected'):
-                direction = 'vapor'
-            if not (error is not None and witness['quantities'].get('tpd_over_rt',0)<-error):
-                direction = None
-            directions.add(direction if direction in ('vapor','liquid') else 'unclassified')
+            directions.add(witness_direction(w))
         entries.append(dict(q, model_bubble_Pa=row.get('pressure_basis',{}).get('model_bubble_pressure_Pa') or
                             replay['rows'].get('bubble:'+q['key'],{}).get('value',{}).get('P_Pa') or row.get('pressure_Pa'),
                             observation_ids=sorted(set(observations.get(q['key'],[]))), directions=sorted(directions or {'unclassified'}),
