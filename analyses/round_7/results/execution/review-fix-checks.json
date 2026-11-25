@@ -1,0 +1,45 @@
+{
+  "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+  "injections": [
+    {
+      "injection": "empty incumbent MEA comparison",
+      "check_exit": 1,
+      "diagnostic": "AssertionError: E incumbent: off-window comparison must contain all 84 canonical rows",
+      "regenerated_before_check": false,
+      "restored": true
+    },
+    {
+      "injection": "empty B observation subset and attempt reduction",
+      "check_exit": 1,
+      "diagnostic": "AssertionError: B MDEA: retained admissible subset or deviations differ from joined contributors",
+      "regenerated_before_check": false,
+      "restored": true
+    },
+    {
+      "injection": "edited disposition from 251 to 252",
+      "check_exit": 1,
+      "diagnostic": "Disposition differs from retained contributors for E and D5 \u00b7 MEA model selection",
+      "regenerated_before_check": true,
+      "restored": true
+    },
+    {
+      "injection": "edited S15 prediction with unchanged rounding flag",
+      "check_exit": 1,
+      "diagnostic": "AssertionError: H study round6 S15: stale rounding flags",
+      "regenerated_before_check": false,
+      "restored": true
+    },
+    {
+      "injection": "edited S15 prediction and flag",
+      "check_exit": 1,
+      "diagnostic": "Disposition differs from retained contributors for H \u00b7 Source and package readbacks",
+      "regenerated_before_check": true,
+      "restored": true
+    }
+  ],
+  "part_ii": {
+    "command": "AGENT_HEAVY_CORES=2 agent-heavy uv run --no-sync pytest -q tests/test_part_ii.py",
+    "exit_status": 0,
+    "terminal_output": "23 passed in 84.29s (0:01:24)"
+  }
+}

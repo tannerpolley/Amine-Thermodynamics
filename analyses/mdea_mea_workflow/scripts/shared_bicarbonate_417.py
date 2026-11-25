@@ -81,7 +81,7 @@ def witnesses(route, point, rows):
     return dict(counts=counts, witnesses=details, pressure_roots=phases)
 
 
-def mea_search(label, mapping, k, *, output=None, confirm=None):
+def mea_search(label, mapping, k, *, output=None, confirm=None, resume=False):
     started = time.monotonic()
     r.OUT = output if output is not None else run_key(label, mapping, k)
     registry = r.read(BASE/'split-registry.json')['trials']
@@ -91,10 +91,38 @@ def mea_search(label, mapping, k, *, output=None, confirm=None):
     bank = r.read(BASE/'split-trials.json')
     r.write('search/grid-trials.json', bank)
     main, offset = r.states()
-    grid = r.grid(mapping, main+offset, bank, capture=True)
-    r.write('search/grid.json.gz', grid)
-    census = r.census(mapping, 'search', dict.fromkeys(map(str, range(162)), registry),
-                      keep_refusals=True, compact_supplied=True, confirm=confirm)
+    grid_path = 'search/grid.json.gz'
+    if resume and (r.OUT/grid_path).is_file():
+        grid = r.result(grid_path)
+        assert [x['key'] for x in grid]==[x['key'] for x in main+offset]
+    else:
+        grid = r.grid(mapping, main+offset, bank, capture=True)
+        r.write(grid_path, grid)
+    census_path = 'search/census.json'
+    if resume and (r.OUT/census_path).is_file():
+        census = r.result(census_path)['summary']
+    elif resume:
+        raw, reduced = [], []
+        for first in range(0,162,18):
+            indices = range(first,first+18)
+            name = f'search/census-batches/{first:03d}'
+            path = f'{name}/census.json'
+            if not (r.OUT/path).is_file():
+                r.census(mapping,name,dict.fromkeys(map(str,indices),registry),indices=indices,
+                         keep_refusals=True,compact_supplied=True,confirm=confirm)
+            batch = r.result(path)['rows']
+            assert [x['index'] for x in batch]==list(indices)
+            raw.extend(r.result(f'{name}/census-raw.json.gz'))
+            reduced.extend(batch)
+        descents = [x['index'] for x in reduced if x['resolved'] or x.get('supplied_negative',0)]
+        incomplete = [x['index'] for x in reduced if not x['complete']]
+        census = dict(states=len(reduced),descent=len(descents),incomplete=len(incomplete),
+                      descent_indices=descents,incomplete_indices=incomplete)
+        r.write(census_path,dict(summary=census,rows=reduced))
+        r.write('search/census-raw.json.gz',raw)
+    else:
+        census = r.census(mapping, 'search', dict.fromkeys(map(str, range(162)), registry),
+                          keep_refusals=True, compact_supplied=True, confirm=confirm)
     supplied = Counter()
     for raw in r.result('search/census-raw.json.gz'):
         for report in raw.get('stability', []):

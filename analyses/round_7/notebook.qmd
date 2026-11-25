@@ -1,0 +1,1106 @@
+---
+title: Round 7 referee calculations
+---
+
+The study tests whether expanding the measured CO₂ partial-pressure window improves the salt-anchored MEA fit while retaining its original properties and screening coverage.
+Deviations on fitted rows describe calibration. The phase calculations screen finite sets of fluid states on declared feeds and pressure bases.
+The notebook identifies numerical misses and their consequences for the proposed declarations. It awaits independent evidence review and investigator promotion for manuscript use.
+
+## Disposition
+
+- E and D5 · MEA model selection — Both expanded 419-row fits improve the hot-pressure bias. Their legacy partial-pressure AARD rises by at least 11 percentage points from the F2 replay, above the 2-point limit. The incumbent has 251 qualifying measured-state searches out of 321 after pressure refinement. F2 has 253 and F4 has 248. The 162-state censuses have incomplete entries (F2 1, F4 1). No resolved descent was found in these finite screens. The exact #435 MEA declaration remains the historical carbamate donor.
+- A · MDEA reference pressure — At 383.15 K and 121.309 MPa the pressure-tracking split is confirmed. The 100 kPa reference split candidate lowers Gibbs energy. Its liquid-root check remains unresolved. The independent pressure-tracking correction is -15.7% of the EOS volume. The matched Engine enthalpies at the same composition coincide. The fixed-volume reference chain term is 17.55 kJ per feed.
+- B · MDEA measured-state census — The historical below-bubble group has 27 search attempts on 25 observations. 21 attempts overlap the 222 unfinished #435 searches among 1,564. 2 diagnostic IDs lack a current property row. The 4 Sobrino liquid-branch predictions exceed observations by 1.36–1.82 kg/m³. At 262.862 MPa the historical comparison reports a confirmed split and the salt case is unresolved.
+- C · MDEA pressure reweighting — Pressure AARD on 66 fitted loaded totals changes from 10.12% to 4.15% for salt and from 20.09% to 4.46% for the historical pair. The original-weight objectives worsen in both pairs. The original and RMS salt screens confirm 1 and 1 splits at different grid states. The historical RMS screen confirms 4 compared with 0 in the original historical grid census. Both RMS screens have more unfinished searches.
+- D · Declaration sensitivities — The MEA electrode discrepancy spans -0.150 to +0.138 pH on the digitized 197 points. Cai reweighting reduces its alternate objective and raises the original objective. Removing the MDEA binary bound produces 14 descents, 1 incomplete native search and a hull-onset bracket of 413.052–413.150 K. The AMP conditional slope profile brackets crossings near -155.7 and +47.2 K. 6 AMP inward variants retain unresolved phase identities at the historical absolute pressure after detecting descents. 6 MDEA inward variants leave the matched high-pressure split unresolved.
+- DEA and F · Broader measurement coverage — The original DEA transfer replays the #435 objective exactly with the historical donor. The expanded 140-row objective falls from 26.43 to 15.54. The broadened fit confirms 4 measured-state splits. The search records retain 1 for unresolved descent and 1 for incomplete search. Seo–Hong pressure AARD is 66.20%, the 7 outside-fit Lawson rows have 37.20% AARD, and the Horstmann excess-enthalpy sign misses on 14 of 14 rows. The maximum conditional methane shift is 0.318 MPa for the refit. Dissolved methane effects remain unbounded by the experiment.
+- AMP · Inherited carbamate inputs — Both free- and fixed-slope AMP fits converge and preserve the donor checks. Their objectives are 75.11 and 76.35 on 214 rows, compared with 76.31 and 77.64 for #435. Each native and supplied-bank search completes all 666 declared states without a resolved descent. The historical absolute-pressure worked state has unresolved phase identity for the free-slope endpoint.
+- H · Source and package readbacks — Kuranov Table 2 row 72 is the unmatched observation after 81 source rows were matched. Historical Hartono S11 gives 1.1144% bubble-pressure AARD and 3.8890% vapor mole-fraction AARD. The strict canonical Hong group solves 132 equal-fugacity rows and fails the local test on 131. The study wheel and public package match 120 and 120 rounded S15 cells, respectively, with physical-check misses retained. The study wheel matches 85 historical S16 and 53 S17 cells at displayed precision. Public 1.3.2 matches 62 historical S16 cells at displayed precision and omits the plane-value error diagnostic. It matches 52 of 53 S17 cells. The revised S16 exercise retains the parent, trial and failed phase attempts at the same pressure. A future #430-qualified wheel is pending.
+- Execution — A simultaneous SIGTERM ended the initial C and E searches before their configured limits. Its sender remains unverified. The reruns retained completed work and checkpointed batches. The retained timing and refusal records give each interruption, failed implementation check and recovery. The original execution exceeded the issue #436 limit of 4 workers total. Its execution record gives a cap of 12, with 5 E workers and 6 C workers.
+
+## Calculation basis
+
+The MEA objective adds 112 CO₂ partial pressures to the original 307 rows at the original pressure weight. The 12 hot Wagner observations enter only the 66-row comparison. The measured-state phase search uses recorded total pressure where available and retains assigned pressures with their basis elsewhere.
+The DEA objective combines 90 partial pressures at a log scale of 0.09 and 50 integral heats. The methane calculation uses the calibrated apparatus range and a dry Redlich–Kwong gas. Its liquid calculation holds the methane-free composition fixed.
+The MDEA alternative uses an average of squared standardized residuals for each Table S12 family. The loaded-total-pressure group uses a log scale of 0.015. Ermatchkov and Xiao are development comparisons under both weightings.
+The reference-pressure readback adds $\sum_i n_i c_i(T,P_{\rm src})$ to the EOS Gibbs energy in the neutral reaction gauge. At fixed $T,n_i$ its pressure derivative contributes $\sum_i n_i (\partial c_i/\partial P_{\rm src})(dP_{\rm src}/dP)$. The caloric readback compares the explicit temperature derivative at frozen reference pressure with the chain term when the reference pressure follows $P(T,V,n)$.
+
+## MEA CO₂ partial pressure outside the fit window
+
+Aronu covers 15 and 45 wt% MEA at 40–80 °C. Jou covers 30 wt% MEA at 0 and 25 °C. The existing assessment limit is 293.15 K, so every endpoint refused the six 0 °C Jou rows. The errors use the available predictions at the reported temperatures, stocks and loadings.
+
+| Endpoint | Source | Predicted | Refused | AARD (%) | Signed bias (%) |
+| --- | --- | ---: | ---: | ---: | ---: |
+| incumbent | Aronu2011 | 70 | 0 | 45.674 | 8.829 |
+| incumbent | Aronu2011, 15 wt% | 33 | 0 | 44.242 | 33.558 |
+| incumbent | Aronu2011, 45 wt% | 37 | 0 | 46.952 | -13.226 |
+| incumbent | Jou1995 | 8 | 6 | 13.922 | -0.206 |
+| F2 | Aronu2011 | 70 | 0 | 47.404 | 23.752 |
+| F2 | Aronu2011, 15 wt% | 33 | 0 | 51.355 | 43.635 |
+| F2 | Aronu2011, 45 wt% | 37 | 0 | 43.880 | 6.019 |
+| F2 | Jou1995 | 8 | 6 | 15.441 | 4.696 |
+| F4 | Aronu2011 | 70 | 0 | 47.403 | 23.752 |
+| F4 | Aronu2011, 15 wt% | 33 | 0 | 51.356 | 43.636 |
+| F4 | Aronu2011, 45 wt% | 37 | 0 | 43.878 | 6.018 |
+| F4 | Jou1995 | 8 | 6 | 15.444 | 4.692 |
+
+## MDEA deviations on admitted fixed-pressure liquid parents
+
+744 of 972 retained fixed-pressure search attempts completed without detected descent at or above the matched salt bubble pressure. Each property observation contributes once if at least one of its linked fixed-pressure attempts qualifies. Search counts include aliases. Of 374 admitted observations, 368 have an available property prediction.
+The pressure criterion uses the assigned absolute pressure. The source and assigned pressure fields distinguish reported and assumed conditions. These are conditional liquid-branch deviations over the finite search. The AARD and signed bias exclude zero observations. The keyed handoff gives their relative-error denominators and the absolute errors in the original property units.
+
+| Property group | Available / all observations | Full-set AARD (%) | Available / admitted observations | Admitted / fixed-pressure attempts | Admitted AARD (%) | Admitted signed bias (%) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Bottinger-amine-sum-25bar | 58/58 | 7.213 | 56/56 | 112/116 | 7.234 | 6.895 |
+| Bottinger-amine-sum-5bar | 58/58 | 7.214 | 47/47 | 94/116 | 6.605 | 6.201 |
+| Bottinger-bicarbonate-25bar | 58/58 | 11.192 | 56/56 | 112/116 | 11.413 | 10.720 |
+| Bottinger-bicarbonate-5bar | 58/58 | 11.193 | 47/47 | 94/116 | 11.375 | 10.702 |
+| Carson | 40/40 | 5.120 | 40/40 | 80/160 | 5.120 | -2.725 |
+| Cp | 33/33 | 1.967 | 30/30 | 60/66 | 1.720 | 0.743 |
+| Cp-60wt | 6/6 | 6.591 | 5/5 | 10/12 | 6.241 | -4.436 |
+| Ermatchkov | 101/101 | 38.422 | 0/0 | 0/0 | — | — |
+| Jakobsen | 16/16 | 13.905 | 16/16 | 32/32 | 13.905 | 13.905 |
+| Kim | 61/61 | 2.237 | 0/0 | 0/0 | — | — |
+| Kuranov | 66/66 | 10.118 | 0/0 | 0/0 | — | — |
+| Kuranov-413K | 11/11 | 3.080 | 0/0 | 0/0 | — | — |
+| Kuranov-binary | 4/4 | 2.562 | 0/0 | 0/0 | — | — |
+| Merkley | 4/4 | 7.620 | 3/3 | 7/20 | 5.592 | 4.102 |
+| Merkley-half-loading | 6/12 | 17.460 | 6/12 | 18/36 | 17.460 | 17.460 |
+| Merkley-outside | 1/8 | 20.137 | 1/1 | 3/22 | 20.137 | 20.137 |
+| Sedighi | 15/15 | 77.661 | 0/0 | 0/0 | — | — |
+| Xiao | 20/20 | 34.092 | 0/0 | 0/0 | — | — |
+| Zheng | 6/6 | 16.755 | 1/1 | 2/24 | 2.965 | 2.965 |
+| corrected-Kamps | 28/28 | 15.803 | 0/0 | 0/0 | — | — |
+| density-60wt | 11/11 | 1.765 | 10/10 | 20/22 | 1.865 | 1.826 |
+| loaded-density | 33/33 | 0.189 | 30/30 | 60/66 | 0.173 | 0.015 |
+| unloaded-density | 24/24 | 0.078 | 20/20 | 40/48 | 0.062 | 0.017 |
+
+## Numerical handoff
+
+The [quantity-keyed handoff](manuscript-handoff.json) gives the full precision, denominator, comparator and record field for every quantity.
+Comparisons below use the same observations or declared state. A dash indicates an unavailable or inapplicable entry.
+
+| Quantity | Value | Unit | N | Comparison or limit | Record |
+| --- | --- | --- | --- | --- | --- |
+| E MEA incumbent original objective | 152.9582 | 1 | 307 | 152.9581738516127 | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent expanded objective | 264.2319 | 1 | 419 | 264.23192049220074 | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent legacy pressure AARD rise versus F2 | -0.2950453 | percentage points | 47 | 2.0 | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent all_pressure bias_percent | -15.56801 | % | 159 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent all_pressure AARD_percent | 22.9216 | % | 159 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent all_pressure log_RMSE | 0.36377 | 1 | 159 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent legacy bias_percent | 0.9401503 | % | 47 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent legacy AARD_percent | 11.34654 | % | 47 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent legacy log_RMSE | 0.1466629 | 1 | 47 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent added bias_percent | -22.49554 | % | 112 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent added AARD_percent | 27.77899 | % | 112 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent added log_RMSE | 0.4228863 | 1 | 112 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_expanded bias_percent | -23.56985 | % | 54 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_expanded AARD_percent | 30.01849 | % | 54 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_expanded log_RMSE | 0.4262339 | 1 | 54 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_published bias_percent | -24.38857 | % | 66 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_published AARD_percent | 29.66473 | % | 66 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent hot_published log_RMSE | 0.413715 | 1 | 66 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Aronu2011 bias_percent | -29.95375 | % | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Aronu2011 AARD_percent | 31.60969 | % | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Aronu2011 log_RMSE | 0.5061716 | 1 | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Hilliard2008 bias_percent | -3.624828 | % | 31 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Hilliard2008 AARD_percent | 8.07755 | % | 31 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Hilliard2008 log_RMSE | 0.1104724 | 1 | 31 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Idris2014 bias_percent | -7.722234 | % | 10 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Idris2014 AARD_percent | 21.03179 | % | 10 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Idris2014 log_RMSE | 0.2560326 | 1 | 10 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Jou1995 bias_percent | -1.317381 | % | 48 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Jou1995 AARD_percent | 17.32445 | % | 48 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Jou1995 log_RMSE | 0.2270455 | 1 | 48 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Mamun2005 bias_percent | -38.3635 | % | 19 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Mamun2005 AARD_percent | 38.3635 | % | 19 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Mamun2005 log_RMSE | 0.48987 | 1 | 19 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Xu2011 bias_percent | -27.68302 | % | 15 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Xu2011 AARD_percent | 32.35893 | % | 15 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent Xu2011 log_RMSE | 0.4999319 | 1 | 15 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 40 C nominal bias_percent | -11.22245 | % | 59 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 40 C nominal AARD_percent | 20.37427 | % | 59 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 40 C nominal log_RMSE | 0.3619544 | 1 | 59 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 60 C nominal bias_percent | -5.547726 | % | 25 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 60 C nominal AARD_percent | 14.80765 | % | 25 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 60 C nominal log_RMSE | 0.2348104 | 1 | 25 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 80 C nominal bias_percent | -19.12968 | % | 21 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 80 C nominal AARD_percent | 21.48871 | % | 21 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 80 C nominal log_RMSE | 0.3178597 | 1 | 21 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 100 C nominal bias_percent | -20.51267 | % | 18 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 100 C nominal AARD_percent | 26.56461 | % | 18 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 100 C nominal log_RMSE | 0.4330316 | 1 | 18 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 120 C nominal bias_percent | -25.09845 | % | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 120 C nominal AARD_percent | 31.74543 | % | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent 120 C nominal log_RMSE | 0.4227941 | 1 | 36 | — | [replay.json.gz](results/E/incumbent/replay.json.gz) |
+| E MEA incumbent outside fit Aronu2011 bias_percent | 8.829413 | % | 70 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 AARD_percent | 45.67436 | % | 70 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 log_RMSE | 0.5846179 | 1 | 70 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 available | 70 | rows | 70 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 refused | 0 | rows | 70 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 15 wt% bias_percent | 33.55803 | % | 33 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 15 wt% AARD_percent | 44.24184 | % | 33 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 15 wt% log_RMSE | 0.4353681 | 1 | 33 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 15 wt% available | 33 | rows | 33 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 15 wt% refused | 0 | rows | 33 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 45 wt% bias_percent | -13.22584 | % | 37 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 45 wt% AARD_percent | 46.95202 | % | 37 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 45 wt% log_RMSE | 0.6910522 | 1 | 37 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 45 wt% available | 37 | rows | 37 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Aronu2011 45 wt% refused | 0 | rows | 37 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Jou1995 bias_percent | -0.2055292 | % | 14 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Jou1995 AARD_percent | 13.92169 | % | 14 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Jou1995 log_RMSE | 0.187476 | 1 | 14 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Jou1995 available | 8 | rows | 14 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent outside fit Jou1995 refused | 6 | rows | 14 | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA incumbent off-window elapsed | 8.360939 | s | — | — | [off-window.json.gz](results/E/incumbent/off-window.json.gz) |
+| E MEA historical-F2 original objective | 150.7629 | 1 | 307 | 152.9581738516127 | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 expanded objective | 242.6003 | 1 | 419 | 264.23192049220074 | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 legacy pressure AARD rise versus F2 | 0 | percentage points | 47 | 2.0 | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 all_pressure bias_percent | -11.10937 | % | 159 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 all_pressure AARD_percent | 20.9718 | % | 159 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 all_pressure log_RMSE | 0.3327415 | 1 | 159 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 legacy bias_percent | 1.101284 | % | 47 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 legacy AARD_percent | 11.64159 | % | 47 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 legacy log_RMSE | 0.1511136 | 1 | 47 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 added bias_percent | -16.23349 | % | 112 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 added AARD_percent | 24.88715 | % | 112 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 added log_RMSE | 0.384182 | 1 | 112 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_expanded bias_percent | -12.82128 | % | 54 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_expanded AARD_percent | 25.20137 | % | 54 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_expanded log_RMSE | 0.3522815 | 1 | 54 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_published bias_percent | -14.78422 | % | 66 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_published AARD_percent | 24.91338 | % | 66 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 hot_published log_RMSE | 0.3449501 | 1 | 66 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Aronu2011 bias_percent | -29.5615 | % | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Aronu2011 AARD_percent | 31.20137 | % | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Aronu2011 log_RMSE | 0.5022914 | 1 | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Hilliard2008 bias_percent | -3.058914 | % | 31 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Hilliard2008 AARD_percent | 9.245078 | % | 31 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Hilliard2008 log_RMSE | 0.1198055 | 1 | 31 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Idris2014 bias_percent | -8.006675 | % | 10 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Idris2014 AARD_percent | 20.97396 | % | 10 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Idris2014 log_RMSE | 0.2564586 | 1 | 10 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Jou1995 bias_percent | 6.487104 | % | 48 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Jou1995 AARD_percent | 14.41491 | % | 48 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Jou1995 log_RMSE | 0.1827856 | 1 | 48 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Mamun2005 bias_percent | -33.46595 | % | 19 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Mamun2005 AARD_percent | 33.46595 | % | 19 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Mamun2005 log_RMSE | 0.4170557 | 1 | 19 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Xu2011 bias_percent | -13.52073 | % | 15 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Xu2011 AARD_percent | 25.81071 | % | 15 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 Xu2011 log_RMSE | 0.4090778 | 1 | 15 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 40 C nominal bias_percent | -12.47142 | % | 59 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 40 C nominal AARD_percent | 20.51546 | % | 59 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 40 C nominal log_RMSE | 0.3666902 | 1 | 59 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 60 C nominal bias_percent | -1.637011 | % | 25 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 60 C nominal AARD_percent | 15.40445 | % | 25 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 60 C nominal log_RMSE | 0.2213992 | 1 | 25 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 80 C nominal bias_percent | -14.15723 | % | 21 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 80 C nominal AARD_percent | 18.00563 | % | 21 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 80 C nominal log_RMSE | 0.2881627 | 1 | 21 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 100 C nominal bias_percent | -5.824806 | % | 18 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 100 C nominal AARD_percent | 22.67133 | % | 18 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 100 C nominal log_RMSE | 0.3759646 | 1 | 18 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 120 C nominal bias_percent | -16.31952 | % | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 120 C nominal AARD_percent | 26.46639 | % | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA historical-F2 120 C nominal log_RMSE | 0.3398215 | 1 | 36 | — | [replay.json.gz](results/E/historical-F2/replay.json.gz) |
+| E MEA F2 original objective | 165.7135 | 1 | 307 | 152.9581738516127 | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 expanded objective | 217.5375 | 1 | 419 | 264.23192049220074 | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 legacy pressure AARD rise versus F2 | 11.13623 | percentage points | 47 | 2.0 | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 all_pressure bias_percent | 3.401998 | % | 159 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 all_pressure AARD_percent | 21.75611 | % | 159 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 all_pressure log_RMSE | 0.2768596 | 1 | 159 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 legacy bias_percent | 20.26755 | % | 47 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 legacy AARD_percent | 22.77782 | % | 47 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 legacy log_RMSE | 0.2466466 | 1 | 47 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 added bias_percent | -3.67551 | % | 112 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 added AARD_percent | 21.32735 | % | 112 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 added log_RMSE | 0.2885976 | 1 | 112 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_expanded bias_percent | -1.24714 | % | 54 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_expanded AARD_percent | 23.40701 | % | 54 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_expanded log_RMSE | 0.2840942 | 1 | 54 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_published bias_percent | -2.456228 | % | 66 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_published AARD_percent | 21.04191 | % | 66 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 hot_published log_RMSE | 0.2675923 | 1 | 66 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Aronu2011 bias_percent | -16.00466 | % | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Aronu2011 AARD_percent | 19.02089 | % | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Aronu2011 log_RMSE | 0.3338428 | 1 | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Hilliard2008 bias_percent | 15.89721 | % | 31 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Hilliard2008 AARD_percent | 18.05153 | % | 31 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Hilliard2008 log_RMSE | 0.2003597 | 1 | 31 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Idris2014 bias_percent | 9.315269 | % | 10 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Idris2014 AARD_percent | 21.33725 | % | 10 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Idris2014 log_RMSE | 0.2224582 | 1 | 10 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Jou1995 bias_percent | 19.76443 | % | 48 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Jou1995 AARD_percent | 26.43862 | % | 48 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Jou1995 log_RMSE | 0.2760545 | 1 | 48 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Mamun2005 bias_percent | -20.11119 | % | 19 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Mamun2005 AARD_percent | 20.11119 | % | 19 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Mamun2005 log_RMSE | 0.2381063 | 1 | 19 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Xu2011 bias_percent | -2.364075 | % | 15 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Xu2011 AARD_percent | 23.35548 | % | 15 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 Xu2011 log_RMSE | 0.3367372 | 1 | 15 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 40 C nominal bias_percent | 5.418597 | % | 59 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 40 C nominal AARD_percent | 22.45002 | % | 59 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 40 C nominal log_RMSE | 0.2954214 | 1 | 59 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 60 C nominal bias_percent | 14.48478 | % | 25 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 60 C nominal AARD_percent | 20.16796 | % | 25 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 60 C nominal log_RMSE | 0.2436004 | 1 | 25 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 80 C nominal bias_percent | -3.502546 | % | 21 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 80 C nominal AARD_percent | 17.45202 | % | 21 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 80 C nominal log_RMSE | 0.2387017 | 1 | 21 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 100 C nominal bias_percent | 3.358854 | % | 18 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 100 C nominal AARD_percent | 23.59692 | % | 18 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 100 C nominal log_RMSE | 0.3199288 | 1 | 18 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 120 C nominal bias_percent | -3.550137 | % | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 120 C nominal AARD_percent | 23.31206 | % | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 120 C nominal log_RMSE | 0.2643615 | 1 | 36 | — | [replay.json.gz](results/E/F2/replay.json.gz) |
+| E MEA F2 outside fit Aronu2011 bias_percent | 23.75222 | % | 70 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 AARD_percent | 47.40399 | % | 70 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 log_RMSE | 0.5038535 | 1 | 70 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 available | 70 | rows | 70 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 refused | 0 | rows | 70 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 15 wt% bias_percent | 43.63479 | % | 33 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 15 wt% AARD_percent | 51.35474 | % | 33 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 15 wt% log_RMSE | 0.4672448 | 1 | 33 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 15 wt% available | 33 | rows | 33 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 15 wt% refused | 0 | rows | 33 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 45 wt% bias_percent | 6.019111 | % | 37 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 45 wt% AARD_percent | 43.88034 | % | 37 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 45 wt% log_RMSE | 0.5343928 | 1 | 37 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 45 wt% available | 37 | rows | 37 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Aronu2011 45 wt% refused | 0 | rows | 37 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Jou1995 bias_percent | 4.695699 | % | 14 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Jou1995 AARD_percent | 15.44126 | % | 14 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Jou1995 log_RMSE | 0.1671934 | 1 | 14 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Jou1995 available | 8 | rows | 14 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 outside fit Jou1995 refused | 6 | rows | 14 | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F2 off-window elapsed | 8.412153 | s | — | — | [off-window.json.gz](results/E/F2/off-window.json.gz) |
+| E MEA F4 original objective | 165.7077 | 1 | 307 | 152.9581738516127 | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 expanded objective | 217.5375 | 1 | 419 | 264.23192049220074 | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 legacy pressure AARD rise versus F2 | 11.13386 | percentage points | 47 | 2.0 | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 all_pressure bias_percent | 3.402097 | % | 159 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 all_pressure AARD_percent | 21.75563 | % | 159 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 all_pressure log_RMSE | 0.2768645 | 1 | 159 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 legacy bias_percent | 20.26586 | % | 47 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 legacy AARD_percent | 22.77545 | % | 47 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 legacy log_RMSE | 0.24662 | 1 | 47 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 added bias_percent | -3.674659 | % | 112 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 added AARD_percent | 21.32767 | % | 112 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 added log_RMSE | 0.2886139 | 1 | 112 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_expanded bias_percent | -1.245497 | % | 54 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_expanded AARD_percent | 23.40701 | % | 54 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_expanded log_RMSE | 0.2840918 | 1 | 54 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_published bias_percent | -2.454959 | % | 66 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_published AARD_percent | 21.04206 | % | 66 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 hot_published log_RMSE | 0.2675914 | 1 | 66 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Aronu2011 bias_percent | -16.00564 | % | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Aronu2011 AARD_percent | 19.02219 | % | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Aronu2011 log_RMSE | 0.33389 | 1 | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Hilliard2008 bias_percent | 15.89586 | % | 31 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Hilliard2008 AARD_percent | 18.04961 | % | 31 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Hilliard2008 log_RMSE | 0.200333 | 1 | 31 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Idris2014 bias_percent | 9.31878 | % | 10 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Idris2014 AARD_percent | 21.33933 | % | 10 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Idris2014 log_RMSE | 0.2224818 | 1 | 10 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Jou1995 bias_percent | 19.76461 | % | 48 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Jou1995 AARD_percent | 26.43662 | % | 48 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Jou1995 log_RMSE | 0.2760361 | 1 | 48 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Mamun2005 bias_percent | -20.11106 | % | 19 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Mamun2005 AARD_percent | 20.11106 | % | 19 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Mamun2005 log_RMSE | 0.2381068 | 1 | 19 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Xu2011 bias_percent | -2.360928 | % | 15 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Xu2011 AARD_percent | 23.35653 | % | 15 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 Xu2011 log_RMSE | 0.3367381 | 1 | 15 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 40 C nominal bias_percent | 5.417605 | % | 59 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 40 C nominal AARD_percent | 22.44912 | % | 59 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 40 C nominal log_RMSE | 0.2954368 | 1 | 59 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 60 C nominal bias_percent | 14.48419 | % | 25 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 60 C nominal AARD_percent | 20.16767 | % | 25 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 60 C nominal log_RMSE | 0.2435985 | 1 | 25 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 80 C nominal bias_percent | -3.502536 | % | 21 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 80 C nominal AARD_percent | 17.45129 | % | 21 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 80 C nominal log_RMSE | 0.2387009 | 1 | 21 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 100 C nominal bias_percent | 3.361812 | % | 18 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 100 C nominal AARD_percent | 23.5977 | % | 18 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 100 C nominal log_RMSE | 0.3199344 | 1 | 18 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 120 C nominal bias_percent | -3.549151 | % | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 120 C nominal AARD_percent | 23.31167 | % | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 120 C nominal log_RMSE | 0.2643544 | 1 | 36 | — | [replay.json.gz](results/E/F4/replay.json.gz) |
+| E MEA F4 outside fit Aronu2011 bias_percent | 23.75206 | % | 70 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 AARD_percent | 47.40326 | % | 70 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 log_RMSE | 0.5038618 | 1 | 70 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 available | 70 | rows | 70 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 refused | 0 | rows | 70 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 15 wt% bias_percent | 43.63593 | % | 33 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 15 wt% AARD_percent | 51.35593 | % | 33 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 15 wt% log_RMSE | 0.4672512 | 1 | 33 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 15 wt% available | 33 | rows | 33 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 15 wt% refused | 0 | rows | 33 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 45 wt% bias_percent | 6.017795 | % | 37 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 45 wt% AARD_percent | 43.8779 | % | 37 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 45 wt% log_RMSE | 0.5344027 | 1 | 37 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 45 wt% available | 37 | rows | 37 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Aronu2011 45 wt% refused | 0 | rows | 37 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Jou1995 bias_percent | 4.692008 | % | 14 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Jou1995 AARD_percent | 15.44415 | % | 14 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Jou1995 log_RMSE | 0.1672334 | 1 | 14 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Jou1995 available | 8 | rows | 14 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 outside fit Jou1995 refused | 6 | rows | 14 | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA F4 off-window elapsed | 8.321724 | s | — | — | [off-window.json.gz](results/E/F4/off-window.json.gz) |
+| E MEA qualified declaration | — | label | — | — | [selection.json](results/E/selection.json) |
+| DEA carbamate energy divided by k | 204.0748 | K | — | — | [assessment.json.gz](results/F/assessment.json.gz) |
+| DEA carbamate segment diameter | 6.029443 | Å | — | — | [assessment.json.gz](results/F/assessment.json.gz) |
+| AMP free carbamate energy divided by k | 204.0748 | K | — | — | [assessment.json.gz](results/AMP/free/assessment.json.gz) |
+| AMP free carbamate segment diameter | 5.201154 | Å | — | — | [assessment.json.gz](results/AMP/free/assessment.json.gz) |
+| AMP fixed carbamate energy divided by k | 204.0748 | K | — | — | [assessment.json.gz](results/AMP/fixed/assessment.json.gz) |
+| AMP fixed carbamate segment diameter | 5.201154 | Å | — | — | [assessment.json.gz](results/AMP/fixed/assessment.json.gz) |
+| D5 incumbent states | 321 | states | 321 | — | [measured-summary.json](results/E/incumbent/measured-summary.json) |
+| D5 incumbent available | 247 | states | 321 | — | [measured-summary.json](results/E/incumbent/measured-summary.json) |
+| D5 incumbent descents | 0 | states | 321 | — | [measured-summary.json](results/E/incumbent/measured-summary.json) |
+| D5 incumbent seconds | 473.5224 | s | 321 | — | [measured-summary.json](results/E/incumbent/measured-summary.json) |
+| D5 incumbent unresolved, phase pressure closure | 74 | states | 321 | — | [measured-summary.json](results/E/incumbent/measured-summary.json) |
+| D5 incumbent available with refined pressure closure | 251 | states | 321 | — | [pilot.json.gz](results/E/incumbent/measured-refined/pilot.json.gz) |
+| E MEA incumbent grid states | 1908 | states | 1908 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent grid available | 1908 | states | 1908 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent grid descent | 0 | states | 1908 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent offset states | 576 | states | 576 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent offset available | 576 | states | 576 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent offset descent | 0 | states | 576 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent census states | 162 | states | 162 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent census descent | 0 | states | 162 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent census incomplete | 0 | states | 162 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| E MEA incumbent supplied missing | 0 | trials | 991602 | — | [grid-summary.json](results/E/incumbent/grid-summary.json) |
+| D5 F2 states | 321 | states | 321 | — | [measured-summary.json](results/E/F2/measured-summary.json) |
+| D5 F2 available | 253 | states | 321 | — | [measured-summary.json](results/E/F2/measured-summary.json) |
+| D5 F2 descents | 0 | states | 321 | — | [measured-summary.json](results/E/F2/measured-summary.json) |
+| D5 F2 seconds | 706.9563 | s | 321 | — | [measured-summary.json](results/E/F2/measured-summary.json) |
+| D5 F2 unresolved, phase pressure closure | 68 | states | 321 | — | [measured-summary.json](results/E/F2/measured-summary.json) |
+| E MEA F2 grid states | 1908 | states | 1908 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 grid available | 1908 | states | 1908 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 grid descent | 0 | states | 1908 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 offset states | 576 | states | 576 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 offset available | 576 | states | 576 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 offset descent | 0 | states | 576 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 census states | 162 | states | 162 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 census descent | 0 | states | 162 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 census incomplete | 1 | states | 162 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| E MEA F2 supplied missing | 0 | trials | 991602 | — | [grid-summary.json](results/E/F2/grid-summary.json) |
+| D5 F4 states | 321 | states | 321 | — | [measured-summary.json](results/E/F4/measured-summary.json) |
+| D5 F4 available | 248 | states | 321 | — | [measured-summary.json](results/E/F4/measured-summary.json) |
+| D5 F4 descents | 0 | states | 321 | — | [measured-summary.json](results/E/F4/measured-summary.json) |
+| D5 F4 seconds | 833.2391 | s | 321 | — | [measured-summary.json](results/E/F4/measured-summary.json) |
+| D5 F4 unresolved, phase pressure closure | 73 | states | 321 | — | [measured-summary.json](results/E/F4/measured-summary.json) |
+| E MEA F4 grid states | 1908 | states | 1908 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 grid available | 1908 | states | 1908 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 grid descent | 0 | states | 1908 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 offset states | 576 | states | 576 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 offset available | 576 | states | 576 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 offset descent | 0 | states | 576 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 census states | 162 | states | 162 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 census descent | 0 | states | 162 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 census incomplete | 1 | states | 162 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| E MEA F4 supplied missing | 0 | trials | 991602 | — | [grid-summary.json](results/E/F4/grid-summary.json) |
+| A MDEA tracking 1 Gibbs_decrease_over_RT_mol | 4.233488e-05 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking 1 numerical_error_over_RT_mol | 9.238495e-10 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking 1 disposition | confirmed | label | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking eos_volume_m3 | 0.0001902594 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking correction_m3 | -2.982132e-05 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking frozen_G_volume_m3 | 0.0001902594 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking moving_G_volume_m3 | 0.000160438 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking pressure_tracking_term_J | 17549.58 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking pressure_tracking_direct_J | 17549.58 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA tracking engine_tracking_minus_frozen_J | 0 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 1 Gibbs_decrease_over_RT_mol | 0.04750592 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 1 numerical_error_over_RT_mol | 6.134489e-10 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 1 disposition | unresolved | label | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 2 Gibbs_decrease_over_RT_mol | 0.04750592 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 2 numerical_error_over_RT_mol | 6.130648e-10 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 2 disposition | unresolved | label | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 3 Gibbs_decrease_over_RT_mol | 0.04750592 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 3 numerical_error_over_RT_mol | 6.129871e-10 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 3 disposition | unresolved | label | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 4 Gibbs_decrease_over_RT_mol | 0.04750592 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 4 numerical_error_over_RT_mol | 6.131386e-10 | mol | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa 4 disposition | unresolved | label | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa eos_volume_m3 | 0.0001860072 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa correction_m3 | 0 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa frozen_G_volume_m3 | 0.0001860072 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa moving_G_volume_m3 | 0.0001860072 | m³ | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa pressure_tracking_term_J | -0 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa pressure_tracking_direct_J | 0 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| A MDEA 100 kPa engine_tracking_minus_frozen_J | 0 | J | 1 | — | [reference.json.gz](results/A/reference.json.gz) |
+| B MDEA below_bubble_observations | 25 | count | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA below_bubble_421 | 27 | count | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unfinished_435 | 222 | count | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA intersection | 21 | count | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA below_bubble_unfinished_observations | 20 | count | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA fixed-pressure search attempts | 972 | attempts | 1564 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA completed fixed-pressure attempts without detected descent | 744 | attempts | 972 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA admitted fixed-pressure search attempts | 744 | attempts | 972 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA salt bubble elapsed | 52.85024 | s | — | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar admitted search attempts | 112 | attempts | 116 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar all available | 58 | rows | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar all AARD_percent | 7.213494 | % | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar all bias_percent | 6.886268 | % | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar all mean_abs_error | 0.00448035 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar all mean_signed_error_predicted_minus_observed | 0.004296217 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar resolved_fixed_pressure_subset available | 56 | rows | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar resolved_fixed_pressure_subset AARD_percent | 7.233986 | % | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar resolved_fixed_pressure_subset bias_percent | 6.895074 | % | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar resolved_fixed_pressure_subset mean_abs_error | 0.004560644 | 1 | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-25bar resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.004369934 | 1 | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar admitted search attempts | 94 | attempts | 116 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar all available | 58 | rows | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar all AARD_percent | 7.213612 | % | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar all bias_percent | 6.886387 | % | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar all mean_abs_error | 0.00448042 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar all mean_signed_error_predicted_minus_observed | 0.004296286 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar resolved_fixed_pressure_subset available | 47 | rows | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar resolved_fixed_pressure_subset AARD_percent | 6.604598 | % | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar resolved_fixed_pressure_subset bias_percent | 6.200787 | % | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar resolved_fixed_pressure_subset mean_abs_error | 0.004236719 | 1 | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-amine-sum-5bar resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.004009491 | 1 | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar admitted search attempts | 112 | attempts | 116 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar all available | 58 | rows | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar all AARD_percent | 11.19179 | % | 57 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar all bias_percent | 10.2457 | % | 57 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar all mean_abs_error | 0.002580537 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar all mean_signed_error_predicted_minus_observed | 0.002182394 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar resolved_fixed_pressure_subset available | 56 | rows | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar resolved_fixed_pressure_subset AARD_percent | 11.41289 | % | 55 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar resolved_fixed_pressure_subset bias_percent | 10.71977 | % | 55 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar resolved_fixed_pressure_subset mean_abs_error | 0.002603584 | 1 | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-25bar resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.002300447 | 1 | 56 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar admitted search attempts | 94 | attempts | 116 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar all available | 58 | rows | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar all AARD_percent | 11.19349 | % | 57 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar all bias_percent | 10.24839 | % | 57 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar all mean_abs_error | 0.002581254 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar all mean_signed_error_predicted_minus_observed | 0.002183527 | 1 | 58 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar resolved_fixed_pressure_subset available | 47 | rows | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar resolved_fixed_pressure_subset AARD_percent | 11.37512 | % | 46 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar resolved_fixed_pressure_subset bias_percent | 10.70222 | % | 46 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar resolved_fixed_pressure_subset mean_abs_error | 0.002052846 | 1 | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Bottinger-bicarbonate-5bar resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.001746796 | 1 | 47 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson admitted search attempts | 80 | attempts | 160 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson all available | 40 | rows | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson all AARD_percent | 5.12 | % | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson all bias_percent | -2.725218 | % | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson all mean_abs_error | 2538.182 | J/mol | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson all mean_signed_error_predicted_minus_observed | 1380.82 | J/mol | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson resolved_fixed_pressure_subset available | 40 | rows | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson resolved_fixed_pressure_subset AARD_percent | 5.12 | % | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson resolved_fixed_pressure_subset bias_percent | -2.725218 | % | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson resolved_fixed_pressure_subset mean_abs_error | 2538.182 | J/mol | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Carson resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 1380.82 | J/mol | 40 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp admitted search attempts | 60 | attempts | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp all available | 33 | rows | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp all AARD_percent | 1.967298 | % | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp all bias_percent | 1.078792 | % | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp all mean_abs_error | 1.93335 | J/(mol-feed K) | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp all mean_signed_error_predicted_minus_observed | 1.064181 | J/(mol-feed K) | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp resolved_fixed_pressure_subset available | 30 | rows | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp resolved_fixed_pressure_subset AARD_percent | 1.719942 | % | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp resolved_fixed_pressure_subset bias_percent | 0.7425859 | % | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp resolved_fixed_pressure_subset mean_abs_error | 1.679303 | J/(mol-feed K) | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.7232174 | J/(mol-feed K) | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt admitted search attempts | 10 | attempts | 12 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt all available | 6 | rows | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt all AARD_percent | 6.591199 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt all bias_percent | -2.306308 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt all mean_abs_error | 7.272463 | J/(mol-feed K) | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt all mean_signed_error_predicted_minus_observed | -2.323534 | J/(mol-feed K) | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt resolved_fixed_pressure_subset available | 5 | rows | 5 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt resolved_fixed_pressure_subset AARD_percent | 6.241273 | % | 5 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt resolved_fixed_pressure_subset bias_percent | -4.435735 | % | 5 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt resolved_fixed_pressure_subset mean_abs_error | 6.783107 | J/(mol-feed K) | 5 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Cp-60wt resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | -4.73209 | J/(mol-feed K) | 5 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov all available | 101 | rows | 101 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov all AARD_percent | 38.42213 | % | 101 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov all bias_percent | -37.9848 | % | 101 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov all mean_abs_error | 6547.435 | Pa | 101 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov all mean_signed_error_predicted_minus_observed | -6370.935 | Pa | 101 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Ermatchkov resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen admitted search attempts | 32 | attempts | 32 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen all available | 16 | rows | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen all AARD_percent | 13.90543 | % | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen all bias_percent | 13.90543 | % | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen all mean_abs_error | 0.04440723 | 1 | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen all mean_signed_error_predicted_minus_observed | 0.04440723 | 1 | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen resolved_fixed_pressure_subset available | 16 | rows | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen resolved_fixed_pressure_subset AARD_percent | 13.90543 | % | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen resolved_fixed_pressure_subset bias_percent | 13.90543 | % | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen resolved_fixed_pressure_subset mean_abs_error | 0.04440723 | 1 | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Jakobsen resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.04440723 | 1 | 16 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim all available | 61 | rows | 61 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim all AARD_percent | 2.237332 | % | 61 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim all bias_percent | 0.5083996 | % | 61 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim all mean_abs_error | 1091.813 | Pa | 61 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim all mean_signed_error_predicted_minus_observed | 876.3966 | Pa | 61 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kim resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov all available | 66 | rows | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov all AARD_percent | 10.11787 | % | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov all bias_percent | 2.724296 | % | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov all mean_abs_error | 180472.2 | Pa | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov all mean_signed_error_predicted_minus_observed | 52520.98 | Pa | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K all available | 11 | rows | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K all AARD_percent | 3.080108 | % | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K all bias_percent | 1.022932 | % | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K all mean_abs_error | 61476.04 | Pa | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K all mean_signed_error_predicted_minus_observed | 40383.27 | Pa | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-413K resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary all available | 4 | rows | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary all AARD_percent | 2.561811 | % | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary all bias_percent | 2.561811 | % | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary all mean_abs_error | 7056.814 | Pa | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary all mean_signed_error_predicted_minus_observed | 7056.814 | Pa | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Kuranov-binary resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley admitted search attempts | 7 | attempts | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley all available | 4 | rows | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley all AARD_percent | 7.619806 | % | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley all bias_percent | 6.502165 | % | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley all mean_abs_error | 4419.09 | J/mol | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley all mean_signed_error_predicted_minus_observed | -3823.387 | J/mol | 4 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley resolved_fixed_pressure_subset available | 3 | rows | 3 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley resolved_fixed_pressure_subset AARD_percent | 5.592331 | % | 3 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley resolved_fixed_pressure_subset bias_percent | 4.102143 | % | 3 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley resolved_fixed_pressure_subset mean_abs_error | 3361.775 | J/mol | 3 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | -2567.504 | J/mol | 3 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading admitted search attempts | 18 | attempts | 36 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading all available | 6 | rows | 12 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading all AARD_percent | 17.45957 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading all bias_percent | 17.45957 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading all mean_abs_error | 10352.51 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading all mean_signed_error_predicted_minus_observed | -10352.51 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading resolved_fixed_pressure_subset available | 6 | rows | 12 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading resolved_fixed_pressure_subset AARD_percent | 17.45957 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading resolved_fixed_pressure_subset bias_percent | 17.45957 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading resolved_fixed_pressure_subset mean_abs_error | 10352.51 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-half-loading resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | -10352.51 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside admitted search attempts | 3 | attempts | 22 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside all available | 1 | rows | 8 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside all AARD_percent | 20.13737 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside all bias_percent | 20.13737 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside all mean_abs_error | 12746.96 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside all mean_signed_error_predicted_minus_observed | -12746.96 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside resolved_fixed_pressure_subset available | 1 | rows | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside resolved_fixed_pressure_subset AARD_percent | 20.13737 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside resolved_fixed_pressure_subset bias_percent | 20.13737 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside resolved_fixed_pressure_subset mean_abs_error | 12746.96 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Merkley-outside resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | -12746.96 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi all available | 15 | rows | 15 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi all AARD_percent | 77.66083 | % | 15 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi all bias_percent | 22.09032 | % | 15 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi all mean_abs_error | 78689.83 | Pa | 15 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi all mean_signed_error_predicted_minus_observed | 22383.01 | Pa | 15 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Sedighi resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao all available | 20 | rows | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao all AARD_percent | 34.09185 | % | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao all bias_percent | -34.09185 | % | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao all mean_abs_error | 10633.14 | Pa | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao all mean_signed_error_predicted_minus_observed | -10633.14 | Pa | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Xiao resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng admitted search attempts | 2 | attempts | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng all available | 6 | rows | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng all AARD_percent | 16.75478 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng all bias_percent | 16.75478 | % | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng all mean_abs_error | 8586.273 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng all mean_signed_error_predicted_minus_observed | -8586.273 | J/mol | 6 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng resolved_fixed_pressure_subset available | 1 | rows | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng resolved_fixed_pressure_subset AARD_percent | 2.96517 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng resolved_fixed_pressure_subset bias_percent | 2.96517 | % | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng resolved_fixed_pressure_subset mean_abs_error | 1584.883 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA Zheng resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | -1584.883 | J/mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps admitted search attempts | 0 | attempts | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps all available | 28 | rows | 28 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps all AARD_percent | 15.80265 | % | 28 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps all bias_percent | -1.958319 | % | 28 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps all mean_abs_error | 364995.1 | Pa | 28 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps all mean_signed_error_predicted_minus_observed | 89809.76 | Pa | 28 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps resolved_fixed_pressure_subset available | 0 | rows | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps resolved_fixed_pressure_subset AARD_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps resolved_fixed_pressure_subset bias_percent | — | % | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_abs_error | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | — | Pa | 0 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt admitted search attempts | 20 | attempts | 22 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt all available | 11 | rows | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt all AARD_percent | 1.765077 | % | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt all bias_percent | 1.589925 | % | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt all mean_abs_error | 19.7441 | kg/m^3 | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt all mean_signed_error_predicted_minus_observed | 17.89694 | kg/m^3 | 11 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt resolved_fixed_pressure_subset available | 10 | rows | 10 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt resolved_fixed_pressure_subset AARD_percent | 1.86456 | % | 10 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt resolved_fixed_pressure_subset bias_percent | 1.825942 | % | 10 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt resolved_fixed_pressure_subset mean_abs_error | 20.90744 | kg/m^3 | 10 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA density-60wt resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 20.4977 | kg/m^3 | 10 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density admitted search attempts | 60 | attempts | 66 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density all available | 33 | rows | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density all AARD_percent | 0.1886071 | % | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density all bias_percent | -0.01721789 | % | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density all mean_abs_error | 2.026194 | kg/m^3 | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density all mean_signed_error_predicted_minus_observed | -0.1307814 | kg/m^3 | 33 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density resolved_fixed_pressure_subset available | 30 | rows | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density resolved_fixed_pressure_subset AARD_percent | 0.1731359 | % | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density resolved_fixed_pressure_subset bias_percent | 0.01539217 | % | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density resolved_fixed_pressure_subset mean_abs_error | 1.872809 | kg/m^3 | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA loaded-density resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.2121456 | kg/m^3 | 30 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density admitted search attempts | 40 | attempts | 48 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density all available | 24 | rows | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density all AARD_percent | 0.07820584 | % | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density all bias_percent | 0.04065125 | % | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density all mean_abs_error | 0.7738918 | kg/m^3 | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density all mean_signed_error_predicted_minus_observed | 0.3873426 | kg/m^3 | 24 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density resolved_fixed_pressure_subset available | 20 | rows | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density resolved_fixed_pressure_subset AARD_percent | 0.06195409 | % | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density resolved_fixed_pressure_subset bias_percent | 0.01688858 | % | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density resolved_fixed_pressure_subset mean_abs_error | 0.6237125 | kg/m^3 | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA unloaded-density resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed | 0.1598534 | kg/m^3 | 20 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted salt disposition | unresolved | label | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted salt trial 1 Gibbs_decrease_over_RT_mol | 0.03193807 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted salt trial 1 numerical_error_over_RT_mol | 1.415871e-09 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted salt trial 3 Gibbs_decrease_over_RT_mol | 0.03193807 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted salt trial 3 numerical_error_over_RT_mol | 1.415224e-09 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted historical disposition | confirmed split | label | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted historical trial 1 Gibbs_decrease_over_RT_mol | 0.001394173 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted historical trial 1 numerical_error_over_RT_mol | 7.601725e-10 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted historical trial 3 Gibbs_decrease_over_RT_mol | 0.001394173 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B MDEA targeted historical trial 3 numerical_error_over_RT_mol | 7.607458e-10 | mol | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 1 fit_weight | 10 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 1 liquid_branch_error_kg_m3 | 1.513858 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 1 salt_bubble_Pa | 195727.3 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 1 original_cost | 45.83533 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 2 fit_weight | 10 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 2 liquid_branch_error_kg_m3 | 1.820658 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 2 salt_bubble_Pa | 193647.2 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 2 original_cost | 66.29595 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 3 fit_weight | 10 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 3 liquid_branch_error_kg_m3 | 1.40076 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 3 salt_bubble_Pa | 191787 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 3 original_cost | 39.24258 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 4 fit_weight | 10 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 4 liquid_branch_error_kg_m3 | 1.363877 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 4 salt_bubble_Pa | 189571.3 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| B Sobrino row 4 original_cost | 37.20322 | see record | 1 | — | [census.json.gz](results/B/census.json.gz) |
+| C MDEA historical incumbent original objective | 564.4837 | 1 | 281 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent original loaded pressure cost share | 3.139848 | % | 66 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent original density cost share | 80.35818 | % | 57 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent rms objective | 116.0848 | 1 | 281 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent rms loaded pressure cost share | 92.53389 | % | 66 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent rms density cost share | 2.94404 | % | 57 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent loaded total bias_percent | 8.805468 | % | 66 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent loaded total AARD_percent | 20.09219 | % | 66 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent all fitted pressures bias_percent | 4.758565 | % | 131 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent all fitted pressures AARD_percent | 11.24245 | % | 131 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent Ermatchkov bias_percent | -6.291186 | % | 101 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent Ermatchkov AARD_percent | 17.88867 | % | 101 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent Xiao bias_percent | -31.07325 | % | 20 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent Xiao AARD_percent | 31.07325 | % | 20 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent development partials bias_percent | -10.38739 | % | 121 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical incumbent development partials AARD_percent | 20.06794 | % | 121 | — | [incumbent.json.gz](results/C/historical/incumbent.json.gz) |
+| C MDEA historical refit original objective | 834.7164 | 1 | 281 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit original loaded pressure cost share | 0.1453961 | % | 66 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit original density cost share | 60.17272 | % | 57 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit rms objective | 21.19168 | 1 | 281 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit rms loaded pressure cost share | 34.70901 | % | 66 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit rms density cost share | 16.60655 | % | 57 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit loaded total bias_percent | -0.701718 | % | 66 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit loaded total AARD_percent | 4.463577 | % | 66 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit all fitted pressures bias_percent | 0.3689907 | % | 131 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit all fitted pressures AARD_percent | 3.348589 | % | 131 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit Ermatchkov bias_percent | -28.23673 | % | 101 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit Ermatchkov AARD_percent | 31.10843 | % | 101 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit Xiao bias_percent | -17.78389 | % | 20 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit Xiao AARD_percent | 18.77458 | % | 20 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit development partials bias_percent | -26.50898 | % | 121 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical refit development partials AARD_percent | 29.06978 | % | 121 | — | [refit.json.gz](results/C/historical/refit.json.gz) |
+| C MDEA historical search-outcome.json.gz seconds | 1587.74 | s | — | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical RMS states | 11824 | states | 11824 | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical RMS available | 10455 | states | 11824 | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical RMS descent | 82 | states | 11824 | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical RMS unavailable | 1369 | states | 11824 | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical RMS confirmed | 4 | states | 11824 | — | [search-outcome.json.gz](results/C/historical/search-outcome.json.gz) |
+| C MDEA historical timing.json seconds | 3052.773 | s | — | — | [timing.json](results/C/historical/timing.json) |
+| C MDEA salt incumbent original objective | 537.6588 | 1 | 281 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent original loaded pressure cost share | 0.9930815 | % | 66 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent original density cost share | 84.30377 | % | 57 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent rms objective | 39.7477 | 1 | 281 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent rms loaded pressure cost share | 81.41336 | % | 66 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent rms density cost share | 7.906246 | % | 57 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent loaded total bias_percent | 2.724296 | % | 66 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent loaded total AARD_percent | 10.11787 | % | 66 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent all fitted pressures bias_percent | 1.687505 | % | 131 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent all fitted pressures AARD_percent | 6.217585 | % | 131 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent Ermatchkov bias_percent | -37.9848 | % | 101 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent Ermatchkov AARD_percent | 38.42213 | % | 101 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent Xiao bias_percent | -34.09185 | % | 20 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent Xiao AARD_percent | 34.09185 | % | 20 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent development partials bias_percent | -37.34134 | % | 121 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt incumbent development partials AARD_percent | 37.70638 | % | 121 | — | [incumbent.json.gz](results/C/salt/incumbent.json.gz) |
+| C MDEA salt refit original objective | 737.2315 | 1 | 281 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit original loaded pressure cost share | 0.128271 | % | 66 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit original density cost share | 62.64442 | % | 57 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit rms objective | 17.40096 | 1 | 281 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit rms loaded pressure cost share | 32.93634 | % | 66 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit rms density cost share | 17.79896 | % | 57 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit loaded total bias_percent | 0.06354251 | % | 66 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit loaded total AARD_percent | 4.153212 | % | 66 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit all fitted pressures bias_percent | 0.5107086 | % | 131 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit all fitted pressures AARD_percent | 3.204128 | % | 131 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit Ermatchkov bias_percent | -17.12458 | % | 101 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit Ermatchkov AARD_percent | 25.09345 | % | 101 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit Xiao bias_percent | -11.80981 | % | 20 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit Xiao AARD_percent | 17.21863 | % | 20 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit development partials bias_percent | -16.2461 | % | 121 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt refit development partials AARD_percent | 23.79182 | % | 121 | — | [refit.json.gz](results/C/salt/refit.json.gz) |
+| C MDEA salt search-outcome.json.gz seconds | 1604.843 | s | — | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| C MDEA salt RMS states | 11824 | states | 11824 | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| C MDEA salt RMS available | 10476 | states | 11824 | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| C MDEA salt RMS descent | 75 | states | 11824 | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| C MDEA salt RMS unavailable | 1348 | states | 11824 | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| C MDEA salt RMS confirmed | 1 | states | 11824 | — | [search-outcome.json.gz](results/C/salt/search-outcome.json.gz) |
+| D MEA model minus electrode pH min | -0.1502363 | pH | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA model minus electrode pH max | 0.138077 | pH | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA model minus electrode pH bias | 0.004120309 | pH | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA electrode carbonate_share min | 0.001725283 | 1 | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA electrode carbonate_share max | 0.06391785 | 1 | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA electrode common_molality_minus_raw min | -1.744359 | pH | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| D MEA electrode common_molality_minus_raw max | -1.744359 | pH | 197 | — | [electrode-incumbent.json.gz](results/D/electrode-incumbent.json.gz) |
+| DEA selected converged objective | 15.53771 | 1 | — | — | [selection.json.gz](results/F/selection.json.gz) |
+| AMP free selected converged objective | 75.11144 | 1 | — | — | [selection.json.gz](results/AMP/free/selection.json.gz) |
+| AMP free reciprocal temperature slope | -54.97644 | K | — | — | [selection.json.gz](results/AMP/free/selection.json.gz) |
+| AMP fixed slope selected converged objective | 76.35272 | 1 | — | — | [selection.json.gz](results/AMP/fixed/selection.json.gz) |
+| AMP fixed slope reciprocal temperature slope | -150 | K | — | — | [selection.json.gz](results/AMP/fixed/selection.json.gz) |
+| F DEA historical expanded objective | 26.42685 | 1 | 140 | — | [incumbent-expanded.json.gz](results/F/incumbent-expanded.json.gz) |
+| F DEA Lawson bias_percent | -14.99571 | % | 30 | 2.0425231444581735 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson AARD_percent | 34.17637 | % | 30 | 36.634437856572205 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson available | 30 | rows | 30 | 30 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson outside carbamate-hydrolysis AARD | 30.74569 | % | 23 | 26.78347971354866 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson inside carbamate-hydrolysis AARD | 45.4486 | % | 7 | 69.00187175507814 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson outside DEA-dissociation AARD | 30.74569 | % | 23 | 26.78347971354866 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson inside DEA-dissociation AARD | 45.4486 | % | 7 | 69.00187175507814 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson-394K bias_percent | -37.1983 | % | 7 | -34.72658466208582 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson-394K AARD_percent | 37.1983 | % | 7 | 34.72658466208582 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson-394K available | 7 | rows | 7 | 7 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson-394K outside carbamate-hydrolysis AARD | 37.1983 | % | 7 | 34.72658466208582 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lawson-394K outside DEA-dissociation AARD | 37.1983 | % | 7 | 34.72658466208582 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong bias_percent | 58.78887 | % | 16 | 92.62467248459822 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong AARD_percent | 66.19602 | % | 16 | 92.62467248459822 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong available | 16 | rows | 16 | 16 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong outside carbamate-hydrolysis AARD | 83.18016 | % | 11 | 109.26260830375631 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong inside carbamate-hydrolysis AARD | 28.83091 | % | 5 | 56.02121368245042 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong outside DEA-dissociation AARD | 83.18016 | % | 11 | 109.26260830375631 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA SeoHong inside DEA-dissociation AARD | 28.83091 | % | 5 | 56.02121368245042 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal bias_percent | 6.687341 | % | 44 | -35.90617461747685 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal AARD_percent | 39.98503 | % | 44 | 49.93160234554659 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal available | 44 | rows | 44 | 44 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal outside carbamate-hydrolysis AARD | 40.60426 | % | 27 | 45.43874255967405 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal inside carbamate-hydrolysis AARD | 39.00155 | % | 17 | 57.0673208289912 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal outside DEA-dissociation AARD | 40.60426 | % | 27 | 45.43874255967405 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Lal inside DEA-dissociation AARD | 39.00155 | % | 17 | 57.0673208289912 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Carson bias_percent | -1.015325 | % | 50 | -0.23310580196060715 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Carson AARD_percent | 2.002514 | % | 50 | 1.0392968140855634 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Carson available | 50 | rows | 50 | 50 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Carson outside carbamate-hydrolysis AARD | 2.002514 | % | 50 | 1.0392968140855634 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Carson inside DEA-dissociation AARD | 2.002514 | % | 50 | 1.0392968140855634 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Horstmann bias_percent | -152.4499 | % | 14 | -152.4498660734273 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Horstmann AARD_percent | 152.4499 | % | 14 | 152.4498660734273 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Horstmann available | 14 | rows | 14 | 14 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Horstmann positive predictions for negative excess enthalpy | 14 | rows | 14 | 14 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Cai bias_percent | 33.58759 | % | 9 | 33.587585535597654 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Cai AARD_percent | 40.81665 | % | 9 | 40.816649123676896 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Cai available | 9 | rows | 9 | 9 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Weiland bias_percent | -0.04923078 | % | 44 | 0.0169176856995556 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Weiland AARD_percent | 0.4470381 | % | 44 | 0.4785138428237177 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Weiland available | 44 | rows | 44 | 44 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEACOO bias_percent | 46.92282 | % | 25 | 67.94430874756198 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEACOO AARD_percent | 48.15004 | % | 25 | 68.67774601565925 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEACOO available | 23 | rows | 25 | 23 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEA_plus_DEAH bias_percent | -4.725724 | % | 25 | -8.108191299292473 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEA_plus_DEAH AARD_percent | 5.142 | % | 25 | 8.180353418729585 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-DEA_plus_DEAH available | 25 | rows | 25 | 25 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-HCO3 bias_percent | -22.39466 | % | 25 | -36.05199037245472 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-HCO3 AARD_percent | 22.39466 | % | 25 | 36.05199037245472 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA Bottinger-HCO3 available | 19 | rows | 25 | 19 | [assessment.json.gz](results/F/assessment.json.gz) |
+| F DEA methane conditional maximum pCO2 shift | 387113.1 | Pa | 30 | — | [methane.json.gz](results/F/methane.json.gz) |
+| F DEA methane-refit conditional maximum pCO2 shift | 318003.8 | Pa | 30 | — | [methane-refit.json.gz](results/F/methane-refit.json.gz) |
+| F search-outcome.json states | 1271 | states | 1271 | — | [search-outcome.json.gz](results/F/search-outcome.json.gz) |
+| F search-outcome.json available | 1270 | states | 1271 | — | [search-outcome.json.gz](results/F/search-outcome.json.gz) |
+| F search-outcome.json descent | 5 | states | 1271 | — | [search-outcome.json.gz](results/F/search-outcome.json.gz) |
+| F search-outcome.json confirmed | 4 | states | 1271 | — | [search-outcome.json.gz](results/F/search-outcome.json.gz) |
+| AMP/free native-outcome.json states | 666 | states | 666 | — | [native-outcome.json.gz](results/AMP/free/native-outcome.json.gz) |
+| AMP/free native-outcome.json available | 666 | states | 666 | — | [native-outcome.json.gz](results/AMP/free/native-outcome.json.gz) |
+| AMP/free native-outcome.json descent | 0 | states | 666 | — | [native-outcome.json.gz](results/AMP/free/native-outcome.json.gz) |
+| AMP/free native-outcome.json confirmed | 0 | states | 666 | — | [native-outcome.json.gz](results/AMP/free/native-outcome.json.gz) |
+| AMP/free supplied-outcome.json states | 666 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/free/supplied-outcome.json.gz) |
+| AMP/free supplied-outcome.json available | 666 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/free/supplied-outcome.json.gz) |
+| AMP/free supplied-outcome.json descent | 0 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/free/supplied-outcome.json.gz) |
+| AMP/free supplied-outcome.json confirmed | 0 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/free/supplied-outcome.json.gz) |
+| AMP/fixed native-outcome.json states | 666 | states | 666 | — | [native-outcome.json.gz](results/AMP/fixed/native-outcome.json.gz) |
+| AMP/fixed native-outcome.json available | 666 | states | 666 | — | [native-outcome.json.gz](results/AMP/fixed/native-outcome.json.gz) |
+| AMP/fixed native-outcome.json descent | 0 | states | 666 | — | [native-outcome.json.gz](results/AMP/fixed/native-outcome.json.gz) |
+| AMP/fixed native-outcome.json confirmed | 0 | states | 666 | — | [native-outcome.json.gz](results/AMP/fixed/native-outcome.json.gz) |
+| AMP/fixed supplied-outcome.json states | 666 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/fixed/supplied-outcome.json.gz) |
+| AMP/fixed supplied-outcome.json available | 666 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/fixed/supplied-outcome.json.gz) |
+| AMP/fixed supplied-outcome.json descent | 0 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/fixed/supplied-outcome.json.gz) |
+| AMP/fixed supplied-outcome.json confirmed | 0 | states | 666 | — | [supplied-outcome.json.gz](results/AMP/fixed/supplied-outcome.json.gz) |
+| D D unbounded-MDEA.json status | converged | label | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D D unbounded-MDEA.json endpoint_replay_cost | 473.475 | 1 | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D D unbounded-MDEA.json k_423_bounded | -0.06711345 | see record | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D D unbounded-MDEA.json k_423_unbounded | -0.05984303 | see record | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA coordinate-5-0.05.json status | converged | label | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/MDEA/coordinate-5-0.05.json.gz) |
+| D MDEA coordinate-5-0.05.json endpoint_replay_cost | 537.9405 | 1 | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/MDEA/coordinate-5-0.05.json.gz) |
+| D MDEA coordinate-5-0.05.json held_value | 0.9 | see record | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/MDEA/coordinate-5-0.05.json.gz) |
+| D MDEA coordinate-5-0.01.json status | converged | label | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/MDEA/coordinate-5-0.01.json.gz) |
+| D MDEA coordinate-5-0.01.json endpoint_replay_cost | 537.7134 | 1 | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/MDEA/coordinate-5-0.01.json.gz) |
+| D MDEA coordinate-5-0.01.json held_value | 0.98 | see record | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/MDEA/coordinate-5-0.01.json.gz) |
+| D MDEA coordinate-0-0.05.json status | converged | label | — | — | [coordinate-0-0.05.json.gz](results/D/bounds/MDEA/coordinate-0-0.05.json.gz) |
+| D MDEA coordinate-0-0.05.json endpoint_replay_cost | 1049.543 | 1 | — | — | [coordinate-0-0.05.json.gz](results/D/bounds/MDEA/coordinate-0-0.05.json.gz) |
+| D MDEA coordinate-0-0.05.json held_value | -0.08875778 | see record | — | — | [coordinate-0-0.05.json.gz](results/D/bounds/MDEA/coordinate-0-0.05.json.gz) |
+| D MDEA coordinate-5-0.1.json status | converged | label | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/MDEA/coordinate-5-0.1.json.gz) |
+| D MDEA coordinate-5-0.1.json endpoint_replay_cost | 538.2486 | 1 | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/MDEA/coordinate-5-0.1.json.gz) |
+| D MDEA coordinate-5-0.1.json held_value | 0.8 | see record | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/MDEA/coordinate-5-0.1.json.gz) |
+| D MDEA coordinate-0-0.1.json status | converged | label | — | — | [coordinate-0-0.1.json.gz](results/D/bounds/MDEA/coordinate-0-0.1.json.gz) |
+| D MDEA coordinate-0-0.1.json endpoint_replay_cost | 1881.958 | 1 | — | — | [coordinate-0-0.1.json.gz](results/D/bounds/MDEA/coordinate-0-0.1.json.gz) |
+| D MDEA coordinate-0-0.1.json held_value | -0.1104021 | see record | — | — | [coordinate-0-0.1.json.gz](results/D/bounds/MDEA/coordinate-0-0.1.json.gz) |
+| D MDEA coordinate-0-0.01.json status | converged | label | — | — | [coordinate-0-0.01.json.gz](results/D/bounds/MDEA/coordinate-0-0.01.json.gz) |
+| D MDEA coordinate-0-0.01.json endpoint_replay_cost | 614.138 | 1 | — | — | [coordinate-0-0.01.json.gz](results/D/bounds/MDEA/coordinate-0-0.01.json.gz) |
+| D MDEA coordinate-0-0.01.json held_value | -0.07144232 | see record | — | — | [coordinate-0-0.01.json.gz](results/D/bounds/MDEA/coordinate-0-0.01.json.gz) |
+| D AMP coordinate-7-0.05.json status | converged | label | — | — | [coordinate-7-0.05.json.gz](results/D/bounds/AMP/coordinate-7-0.05.json.gz) |
+| D AMP coordinate-7-0.05.json endpoint_replay_cost | 75.1291 | 1 | — | — | [coordinate-7-0.05.json.gz](results/D/bounds/AMP/coordinate-7-0.05.json.gz) |
+| D AMP coordinate-7-0.05.json held_value | 500 | see record | — | — | [coordinate-7-0.05.json.gz](results/D/bounds/AMP/coordinate-7-0.05.json.gz) |
+| D AMP coordinate-5-0.05.json status | converged | label | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/AMP/coordinate-5-0.05.json.gz) |
+| D AMP coordinate-5-0.05.json endpoint_replay_cost | 75.18329 | 1 | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/AMP/coordinate-5-0.05.json.gz) |
+| D AMP coordinate-5-0.05.json held_value | 5.266096 | see record | — | — | [coordinate-5-0.05.json.gz](results/D/bounds/AMP/coordinate-5-0.05.json.gz) |
+| D AMP coordinate-5-0.01.json status | converged | label | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/AMP/coordinate-5-0.01.json.gz) |
+| D AMP coordinate-5-0.01.json endpoint_replay_cost | 75.12555 | 1 | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/AMP/coordinate-5-0.01.json.gz) |
+| D AMP coordinate-5-0.01.json held_value | 5.214142 | see record | — | — | [coordinate-5-0.01.json.gz](results/D/bounds/AMP/coordinate-5-0.01.json.gz) |
+| D AMP coordinate-7-0.1.json status | converged | label | — | — | [coordinate-7-0.1.json.gz](results/D/bounds/AMP/coordinate-7-0.1.json.gz) |
+| D AMP coordinate-7-0.1.json endpoint_replay_cost | 75.14864 | 1 | — | — | [coordinate-7-0.1.json.gz](results/D/bounds/AMP/coordinate-7-0.1.json.gz) |
+| D AMP coordinate-7-0.1.json held_value | 1000 | see record | — | — | [coordinate-7-0.1.json.gz](results/D/bounds/AMP/coordinate-7-0.1.json.gz) |
+| D AMP coordinate-7-0.01.json status | converged | label | — | — | [coordinate-7-0.01.json.gz](results/D/bounds/AMP/coordinate-7-0.01.json.gz) |
+| D AMP coordinate-7-0.01.json endpoint_replay_cost | 75.11482 | 1 | — | — | [coordinate-7-0.01.json.gz](results/D/bounds/AMP/coordinate-7-0.01.json.gz) |
+| D AMP coordinate-7-0.01.json held_value | 100 | see record | — | — | [coordinate-7-0.01.json.gz](results/D/bounds/AMP/coordinate-7-0.01.json.gz) |
+| D AMP coordinate-5-0.1.json status | converged | label | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/AMP/coordinate-5-0.1.json.gz) |
+| D AMP coordinate-5-0.1.json endpoint_replay_cost | 75.25832 | 1 | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/AMP/coordinate-5-0.1.json.gz) |
+| D AMP coordinate-5-0.1.json held_value | 5.331039 | see record | — | — | [coordinate-5-0.1.json.gz](results/D/bounds/AMP/coordinate-5-0.1.json.gz) |
+| D MDEA bound binary descent | 0 | states | 78 | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA bound binary available | 78 | states | 78 | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA bound gap onset lower | — | K | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA bound gap onset upper | — | K | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA no bound binary descent | 14 | states | 78 | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA no bound binary available | 77 | states | 78 | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA no bound gap onset lower | 413.0516 | K | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D MDEA no bound gap onset upper | 413.15 | K | — | — | [unbounded-MDEA.json.gz](results/D/unbounded-MDEA.json.gz) |
+| D Cai original objective | 153.1272 | 1 | 307 | — | [assessment.json.gz](results/D/cai/assessment.json.gz) |
+| D Cai alternative objective | 65.03596 | 1 | 307 | — | [assessment.json.gz](results/D/cai/assessment.json.gz) |
+| D Cai incumbent alternative objective | 65.0744 | 1 | 307 | — | [incumbent-alternative-weight.json.gz](results/D/cai/incumbent-alternative-weight.json.gz) |
+| D AMP profile conditional solve at -125.0 K | converged | label | — | — | [profile-expanded--125.json.gz](results/D/AMP-profile/profile-expanded--125.json.gz) |
+| D AMP profile conditional objective at -125.0 K | 75.79568 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -150.0 K | converged | label | — | — | [profile-expanded--150.json.gz](results/D/AMP-profile/profile-expanded--150.json.gz) |
+| D AMP profile conditional objective at -150.0 K | 76.35272 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -175.0 K | converged | label | — | — | [profile-expanded--175.json.gz](results/D/AMP-profile/profile-expanded--175.json.gz) |
+| D AMP profile conditional objective at -175.0 K | 77.0656 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -181.09021971325217 K | converged | label | — | — | [profile-expanded--181.09.json.gz](results/D/AMP-profile/profile-expanded--181.09.json.gz) |
+| D AMP profile conditional objective at -181.09021971325217 K | 77.26259 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional objective at -54.976439186299245 K | 75.11144 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -162.5 K | converged | label | — | — | [profile-expanded--162.5.json.gz](results/D/AMP-profile/profile-expanded--162.5.json.gz) |
+| D AMP profile conditional objective at -162.5 K | 76.68971 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -156.25 K | converged | label | — | — | [profile-expanded--156.25.json.gz](results/D/AMP-profile/profile-expanded--156.25.json.gz) |
+| D AMP profile conditional objective at -156.25 K | 76.5163 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -153.125 K | converged | label | — | — | [profile-expanded--153.125.json.gz](results/D/AMP-profile/profile-expanded--153.125.json.gz) |
+| D AMP profile conditional objective at -153.125 K | 76.43327 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -154.6875 K | converged | label | — | — | [profile-expanded--154.688.json.gz](results/D/AMP-profile/profile-expanded--154.688.json.gz) |
+| D AMP profile conditional objective at -154.6875 K | 76.47448 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -155.46875 K | converged | label | — | — | [profile-expanded--155.469.json.gz](results/D/AMP-profile/profile-expanded--155.469.json.gz) |
+| D AMP profile conditional objective at -155.46875 K | 76.49531 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -155.859375 K | converged | label | — | — | [profile-expanded--155.859.json.gz](results/D/AMP-profile/profile-expanded--155.859.json.gz) |
+| D AMP profile conditional objective at -155.859375 K | 76.50579 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -29.976439186299245 K | converged | label | — | — | [profile-expanded--29.9764.json.gz](results/D/AMP-profile/profile-expanded--29.9764.json.gz) |
+| D AMP profile conditional objective at -29.976439186299245 K | 75.20097 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at -4.976439186299245 K | converged | label | — | — | [profile-expanded--4.97644.json.gz](results/D/AMP-profile/profile-expanded--4.97644.json.gz) |
+| D AMP profile conditional objective at -4.976439186299245 K | 75.46758 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 45.023560813700755 K | converged | label | — | — | [profile-expanded-45.0236.json.gz](results/D/AMP-profile/profile-expanded-45.0236.json.gz) |
+| D AMP profile conditional objective at 45.023560813700755 K | 76.44979 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 145.02356081370075 K | converged | label | — | — | [profile-expanded-145.024.json.gz](results/D/AMP-profile/profile-expanded-145.024.json.gz) |
+| D AMP profile conditional objective at 145.02356081370075 K | 79.94571 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 95.02356081370075 K | converged | label | — | — | [profile-expanded-95.0236.json.gz](results/D/AMP-profile/profile-expanded-95.0236.json.gz) |
+| D AMP profile conditional objective at 95.02356081370075 K | 77.96249 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 70.02356081370075 K | converged | label | — | — | [profile-expanded-70.0236.json.gz](results/D/AMP-profile/profile-expanded-70.0236.json.gz) |
+| D AMP profile conditional objective at 70.02356081370075 K | 77.14272 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 57.523560813700755 K | converged | label | — | — | [profile-expanded-57.5236.json.gz](results/D/AMP-profile/profile-expanded-57.5236.json.gz) |
+| D AMP profile conditional objective at 57.523560813700755 K | 76.7799 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 51.273560813700755 K | converged | label | — | — | [profile-expanded-51.2736.json.gz](results/D/AMP-profile/profile-expanded-51.2736.json.gz) |
+| D AMP profile conditional objective at 51.273560813700755 K | 76.6107 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 48.148560813700755 K | converged | label | — | — | [profile-expanded-48.1486.json.gz](results/D/AMP-profile/profile-expanded-48.1486.json.gz) |
+| D AMP profile conditional objective at 48.148560813700755 K | 76.5292 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 46.586060813700755 K | converged | label | — | — | [profile-expanded-46.5861.json.gz](results/D/AMP-profile/profile-expanded-46.5861.json.gz) |
+| D AMP profile conditional objective at 46.586060813700755 K | 76.48923 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 47.367310813700755 K | converged | label | — | — | [profile-expanded-47.3673.json.gz](results/D/AMP-profile/profile-expanded-47.3673.json.gz) |
+| D AMP profile conditional objective at 47.367310813700755 K | 76.50915 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile conditional solve at 46.976685813700755 K | converged | label | — | — | [profile-expanded-46.9767.json.gz](results/D/AMP-profile/profile-expanded-46.9767.json.gz) |
+| D AMP profile conditional objective at 46.976685813700755 K | 76.49918 | 1 | 214 | 75.11143919239048 | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile -1 within bracket | -155.4688 | K | — | — | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile -1 beyond bracket | -155.8594 | K | — | — | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile 1 within bracket | 46.97669 | K | — | — | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP profile 1 beyond bracket | 47.36731 | K | — | — | [profile-expanded.json](results/D/AMP-profile/profile-expanded.json) |
+| D AMP original archive split minus parent ideal/reaction | 10.71261 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent hard_chain | -0.4403775 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent dispersion | 0.8078823 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent association | -0.0101307 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent debye_huckel | -0.3327382 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent born | -10.55167 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent cation_mixing | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent dipolar | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original archive split minus parent PV | -0.001305843 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial TPD over RT | 0.02989064 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial ideal/reaction contribution | 0.07880648 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial hard_chain contribution | 0.01622579 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial dispersion contribution | -0.01537631 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial association contribution | -0.03589209 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial debye_huckel contribution | -0.05091108 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial born contribution | 0.0369878 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial cation_mixing contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial dipolar contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP original trial PV contribution | 5.005093e-05 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent ideal/reaction | 10.15654 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent hard_chain | -0.4122765 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent dispersion | 0.7592034 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent association | -0.02024758 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent debye_huckel | -0.3275885 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent born | -9.972219 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent cation_mixing | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent dipolar | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 archive split minus parent PV | -0.00121972 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial TPD over RT | 0.02942778 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial ideal/reaction contribution | 0.07850821 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial hard_chain contribution | 0.01628794 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial dispersion contribution | -0.01571254 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial association contribution | -0.03596025 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial debye_huckel contribution | -0.05071655 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial born contribution | 0.03697089 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial cation_mixing contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial dipolar contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP constant-enthalpy R5 trial PV contribution | 5.009049e-05 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent ideal/reaction | 9.33969 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent hard_chain | -0.3716512 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent dispersion | 0.6774672 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent association | -0.03574759 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent debye_huckel | -0.3212333 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent born | -9.140505 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent cation_mixing | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent dipolar | 0 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k archive split minus parent PV | -0.001090297 | mol | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial TPD over RT | 0.02273554 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial ideal/reaction contribution | 0.07822753 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial hard_chain contribution | 0.01804839 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial dispersion contribution | -0.02370626 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial association contribution | -0.03659104 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial debye_huckel contribution | -0.05062703 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial born contribution | 0.03733364 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial cation_mixing contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial dipolar contribution | 0 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| D AMP slope only at fixed 353.22 K k trial PV contribution | 5.03124e-05 | 1 | 1 | — | [AMP-worked-terms.json.gz](results/D/AMP-worked-terms.json.gz) |
+| H Kuranov Table 2 row 72 T | 393.16 | K | 1 | — | [kuranov-82nd.json](results/H/kuranov-82nd.json) |
+| H Kuranov Table 2 row 72 m_mdea | 3.9707 | mol/kg water | 1 | — | [kuranov-82nd.json](results/H/kuranov-82nd.json) |
+| H Kuranov Table 2 row 72 m_co2 | 1.4826 | mol/kg water | 1 | — | [kuranov-82nd.json](results/H/kuranov-82nd.json) |
+| H Kuranov Table 2 row 72 p_exp | 1205300 | Pa | 1 | — | [kuranov-82nd.json](results/H/kuranov-82nd.json) |
+| H Hartono historical expanded free pressure AARD | 1.114411 | % | 26 | 3.89 | [hartono-S11.json.gz](results/H/hartono-S11.json.gz) |
+| H Hartono historical expanded free mole_fraction AARD | 3.888955 | % | 26 | 3.89 | [hartono-S11.json.gz](results/H/hartono-S11.json.gz) |
+| H Hartono salt expanded free pressure AARD | 1.083034 | % | 26 | — | [hartono-S11.json.gz](results/H/hartono-S11.json.gz) |
+| H Hartono salt expanded free mole_fraction AARD | 4.550815 | % | 26 | — | [hartono-S11.json.gz](results/H/hartono-S11.json.gz) |
+| H Hong all joined equal-fugacity solved | 168 | rows | 168 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong all joined locally unstable | 167 | rows | 168 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong canonical equal-fugacity solved | 145 | rows | 145 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong canonical locally unstable | 144 | rows | 145 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong Wagner equal-fugacity solved | 23 | rows | 23 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong Wagner locally unstable | 23 | rows | 23 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong strict canonical equal-fugacity solved | 132 | rows | 132 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H Hong strict canonical locally unstable | 131 | rows | 132 | — | [hong-S31.json.gz](results/H/hong-S31.json.gz) |
+| H study round6 S17_cells rounding matches | 53 | cells | 53 | — | [cells.json.gz](results/H/study/cells.json.gz) |
+| H study round6 S16_cells rounding matches | 85 | cells | 85 | — | [cells.json.gz](results/H/study/cells.json.gz) |
+| H study round7 S17_cells rounding matches | 53 | cells | 53 | — | [cells.json.gz](results/H/study/cells.json.gz) |
+| H study round7 S16_cells rounding matches | 11 | cells | 85 | — | [cells.json.gz](results/H/study/cells.json.gz) |
+| H study round6 S15 rounding matches | 120 | cells | 120 | — | [round6-S15.json](results/H/study/round6-S15.json) |
+| H study round7 S15 rounding matches | 120 | cells | 120 | — | [round7-S15.json](results/H/study/round7-S15.json) |
+| H public-1.3.2 round6 S17_cells rounding matches | 52 | cells | 53 | — | [cells.json.gz](results/H/public-1.3.2/cells.json.gz) |
+| H public-1.3.2 round6 S16_cells rounding matches | 62 | cells | 85 | — | [cells.json.gz](results/H/public-1.3.2/cells.json.gz) |
+| H public-1.3.2 round7 S17_cells rounding matches | 52 | cells | 53 | — | [cells.json.gz](results/H/public-1.3.2/cells.json.gz) |
+| H public-1.3.2 round7 S16_cells rounding matches | 10 | cells | 85 | — | [cells.json.gz](results/H/public-1.3.2/cells.json.gz) |
+| H public-1.3.2 round6 S15 rounding matches | 120 | cells | 120 | — | [round6-S15.json](results/H/public-1.3.2/round6-S15.json) |
+| H public-1.3.2 round7 S15 rounding matches | 120 | cells | 120 | — | [round7-S15.json](results/H/public-1.3.2/round7-S15.json) |
+| A-derivative-readback elapsed | 23 | s | — | — | [A-derivative-readback.json](results/execution/A-derivative-readback.json) |
+| A-engine-enthalpy elapsed | 26 | s | — | — | [A-engine-enthalpy.json](results/execution/A-engine-enthalpy.json) |
+| A-high-pressure elapsed | 22 | s | — | — | [A-high-pressure.json](results/execution/A-high-pressure.json) |
+| B-census-recheck elapsed | 4 | s | — | — | [B-census-recheck.json](results/execution/B-census-recheck.json) |
+| B-census elapsed | 0 | s | — | — | [B-census.json](results/execution/B-census.json) |
+| B-model-census-context elapsed | 4 | s | — | — | [B-model-census-context.json](results/execution/B-model-census-context.json) |
+| C-all-fit-records elapsed | 0 | s | — | — | [C-all-fit-records.json](results/execution/C-all-fit-records.json) |
+| C-fit-records elapsed | 1 | s | — | — | [C-fit-records.json](results/execution/C-fit-records.json) |
+| C-historical-common-pressure elapsed | 4 | s | — | — | [C-historical-common-pressure.json](results/execution/C-historical-common-pressure.json) |
+| C-salt-common-pressure elapsed | 5 | s | — | — | [C-salt-common-pressure.json](results/execution/C-salt-common-pressure.json) |
+| C-total elapsed | 7324.177 | s | — | — | [C-total.json](results/execution/C-total.json) |
+| D-AMP-inward elapsed | 269 | s | — | — | [D-AMP-inward.json](results/execution/D-AMP-inward.json) |
+| D-AMP-profile elapsed | 722 | s | — | — | [D-AMP-profile.json](results/execution/D-AMP-profile.json) |
+| D-AMP-terms-recheck elapsed | 4 | s | — | — | [D-AMP-terms-recheck.json](results/execution/D-AMP-terms-recheck.json) |
+| D-AMP-terms elapsed | 1 | s | — | — | [D-AMP-terms.json](results/execution/D-AMP-terms.json) |
+| D-MDEA-inward elapsed | 2339 | s | — | — | [D-MDEA-inward.json](results/execution/D-MDEA-inward.json) |
+| D-MEA-Cai elapsed | 84 | s | — | — | [D-MEA-Cai.json](results/execution/D-MEA-Cai.json) |
+| D-MEA-controls elapsed | 10 | s | — | — | [D-MEA-controls.json](results/execution/D-MEA-controls.json) |
+| D-pressure-closure-recheck elapsed | 80 | s | — | — | [D-pressure-closure-recheck.json](results/execution/D-pressure-closure-recheck.json) |
+| D-pressure-closure elapsed | 22 | s | — | — | [D-pressure-closure.json](results/execution/D-pressure-closure.json) |
+| E-AMP-transfer elapsed | 842 | s | — | — | [E-AMP-transfer.json](results/execution/E-AMP-transfer.json) |
+| E-F4-continuation elapsed | 469 | s | — | — | [E-F4-continuation.json](results/execution/E-F4-continuation.json) |
+| E-F4-measured elapsed | 834 | s | — | — | [E-F4-measured.json](results/execution/E-F4-measured.json) |
+| E-MEA-total elapsed | 3710.856 | s | — | — | [E-MEA-total.json](results/execution/E-MEA-total.json) |
+| E-off-window elapsed | 14 | s | — | — | [E-off-window.json](results/execution/E-off-window.json) |
+| F-DEA-expanded elapsed | 274 | s | — | — | [F-DEA-expanded.json](results/execution/F-DEA-expanded.json) |
+| F-methane-refit elapsed | 3 | s | — | — | [F-methane-refit.json](results/execution/F-methane-refit.json) |
+| H-factual elapsed | 4 | s | — | — | [H-factual.json](results/execution/H-factual.json) |
+| H-public-corresponding-cells elapsed | 2 | s | — | — | [H-public-corresponding-cells.json](results/execution/H-public-corresponding-cells.json) |
+| H-public-package-recheck elapsed | 2 | s | — | — | [H-public-package-recheck.json](results/execution/H-public-package-recheck.json) |
+| H-public-package elapsed | 1 | s | — | — | [H-public-package.json](results/execution/H-public-package.json) |
+| H-public-unsupported-trial-field elapsed | 3 | s | — | — | [H-public-unsupported-trial-field.json](results/execution/H-public-unsupported-trial-field.json) |
+| H-study-corresponding-cells elapsed | 4 | s | — | — | [H-study-corresponding-cells.json](results/execution/H-study-corresponding-cells.json) |
+| H-study-wheel-recheck elapsed | 5 | s | — | — | [H-study-wheel-recheck.json](results/execution/H-study-wheel-recheck.json) |
+| H-study-wheel elapsed | 1 | s | — | — | [H-study-wheel.json](results/execution/H-study-wheel.json) |
+| H-total elapsed | 174.9575 | s | — | — | [H-total.json](results/execution/H-total.json) |
+| MDEA-identity elapsed | 40 | s | — | — | [MDEA-identity.json](results/execution/MDEA-identity.json) |
+| Part-II-tests elapsed | 97 | s | — | — | [Part-II-tests.json](results/execution/Part-II-tests.json) |
