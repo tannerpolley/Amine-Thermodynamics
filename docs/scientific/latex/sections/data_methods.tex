@@ -2,32 +2,25 @@
 \subsection{Experimental data}\label{sec:data-roles}
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the amine content is the amine mass fraction of the unloaded solution, written in wt\%.
-\emph{Fitted} means that an observation enters the objective of the reported fit; \emph{not fitted} means that it is outside that objective; \emph{comparison only} means a different quantity or different conditions from those the model was built for, never used to choose a fit.
+\emph{Fitted} means that an observation enters the objective of the reported fit; \emph{not fitted} means that it is outside that objective; \emph{comparison only} means a different quantity or different conditions from those the model was built for.
 Every observation had been examined during model development, and some observations that are not fitted informed a choice of parameters or of an initial parameter set; these are \emph{development} data.
-No comparison in this paper is therefore an independent validation or a blind test.
-\Cref{tab:calibration-data} lists, for each amine, the data in the objective, the data fitted beforehand and the development data.
-The objectives contain 307 observations for MEA, 80 for DEA, 281 for MDEA and 156 for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
+No comparison in this paper is therefore an independent validation or a blind test, a limit that applies to every deviation reported below and is not repeated there.
+\Cref{tab:calibration-data} lists, for each amine, the data in the objective, the data fitted beforehand and the development data; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
 
 \input{tables/calibration-data}
 
 % P:methods-selection
 The fitted sets were chosen amine by amine, not by one rule.
-The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are held out and compared.
-The DEA objective has one loaded-pressure source, Lawson and Garst, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}); its isotherm at \SI{394}{\kelvin}, above \SI{393.15}{\kelvin}, the upper end of the temperature domain then declared for the shared R2 correlation, is not fitted, and the pressures of Seo and Hong and of Lal et al.\ are development data.
-For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside in the design as an extrapolation, whereas their \COtwo-free pressures at that temperature, which use no reaction, are.
-For AMP the loaded total pressures were restricted to the measured range of the AMP dissociation constant (R5), 293--\SI{353}{\kelvin}, so the pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and those of Tong et al.\ are not fitted.
-That restriction was not applied to DEA or MDEA, of whose fitted pressures 23 of 30 and 29 of 66 lie above their R5 ranges, so the exclusions follow no common rule.
-The fitted loaded pressures of MDEA and AMP are total pressures; their \COtwo partial pressures are held out.
+The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are not fitted.
+The DEA objective has one loaded-pressure source, Lawson and Garst, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}); its isotherm at \SI{394}{\kelvin} is not fitted.
+For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} are not fitted, whereas their \COtwo-free pressures at that temperature are.
+For AMP the objective contains every loaded total pressure of Hartono et al., at 313--\SI{393}{\kelvin}, and of Tong et al.; the first AMP fits of this work contained only the 47 pressures of Hartono et al.\ at 313--\SI{353}{\kelvin}, the measured range of the AMP dissociation constant (R5), and \cref{sec:results-amp} reports what that restriction caused.
+The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
 
 % P:methods-range
 A calculation is attempted for every observation, including those outside the measured temperature range of an equilibrium constant (\cref{tab:reaction-equilibrium-constants}).
-For DEA, MDEA and AMP such observations are marked in Table~\ref{supp-tab:supplement-transfer-data} and in the pressure figures, and Section~\ref{supp-sec:s-ranges} reports them separately.
-For MEA the reacting calculations span 293.15--\SI{393.15}{\kelvin}, so R4 and R5 are extrapolated above \SI{323.15}{\kelvin}.
-The calculated states of every amine extend above its R5 range, and no R4 range establishes the validity of a fitted R4 correlation.
-
-% P:methods-02
-Each observable follows its experimental definition: a sum reported by nuclear magnetic resonance (NMR) is compared with the same calculated sum \cite{Bottinger2008}, and bubble calculations omit carrier gas, so calculated $y_{\COtwo}P$ is compared with a measured \COtwo partial pressure and calculated $P$ with a measured total pressure.
-Section~\ref{supp-sec:s-corrections} gives the conventions of the individual sources and the excluded observations.
+For MEA the reacting calculations span 293.15--\SI{393.15}{\kelvin}, so R4 and R5 are extrapolated above \SI{323.15}{\kelvin}; the fitted pressures of every other amine also extend above its R5 range, and Section~\ref{supp-sec:s-ranges} reports the deviations inside and outside each range.
+Each observable follows its experimental definition: a sum reported by nuclear magnetic resonance (NMR) is compared with the same calculated sum \cite{Bottinger2008}, and bubble calculations omit carrier gas, so calculated $y_{\COtwo}P$ is compared with a measured \COtwo partial pressure and calculated $P$ with a measured total pressure (Section~\ref{supp-sec:s-corrections}).
 
 \subsection{Calculated quantities}\label{sec:heat-method}
 % P:methods-heat-01
@@ -42,11 +35,11 @@ The semi-differential heats of Kim and Svendsen are calculated over each finite 
 
 \subsection{Objective, deviations and conditional standard errors}\label{sec:parameters}
 % P:methods-04
-Estimation is sequential: the water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, and the permittivity coefficients are determined first and remain fixed.
-The 39 Kiepe pressures nevertheless remain in the MEA objective, to which they contribute 0.0007 without responding to any of its parameters (\cref{eq:fit-objective}, Table~\ref{supp-tab:objective-groups}).
-Eleven MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}); one of them, the water--bicarbonate interaction, belongs to the shared species.
-With all shared parameters fixed, four DEA, eight MDEA and eight AMP parameters are fitted (\cref{tab:transfer-fitted}); for AMP the temperature coefficient of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is fixed at \SI{-150}{\kelvin}, a value chosen from a scan of fixed values (Section~\ref{supp-sec:s-amp-slope}).
-Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction and the five pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these and the scanned slope, 7 quantities are adjusted for DEA, 10 for MDEA and 16 for AMP.
+Estimation is sequential.
+The water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, the permittivity coefficients and the two salt-fitted interactions of \cref{sec:species} are determined first and remain fixed.
+Eleven MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}): the MEA--water interaction and its temperature coefficient, the diameters and dispersion energies of \MEAH and \MEACOO, their interactions with water, one with a temperature coefficient, the \MEAH--\MEACOO interaction and the \MEAH--bicarbonate interaction.
+With all shared parameters fixed, four DEA, eight MDEA and nine AMP parameters are fitted (\cref{tab:transfer-fitted}).
+Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction and the five pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, 7 quantities are adjusted for DEA, 10 for MDEA and 16 for AMP.
 Each fit minimizes, by bounded least squares,
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
@@ -56,21 +49,22 @@ Each fit minimizes, by bounded least squares,
  \label{eq:fit-objective}
 \end{equation}
 with the logarithmic form for pressures.
-Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set; several are assigned without a statistical derivation, so an objective value sets relative fitting priorities and does not compare accuracy between amines, and two objective values can be compared only on the same weights.
-In the reported MEA objective each of the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} has unit weight, with scales of \SI{1}{\kelvin} and 0.01 mole fraction.
-They contribute 60.8\,\% of the objective value, 150.76, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
-With the two Cai observables instead weighted so that each contributes half its mean squared residual, the reported parameters give an objective value of 62.797 and a refit gives 62.656; the fitted \COtwo partial pressures then deviate by 11.61 instead of 11.64\,\% (Section~\ref{supp-sec:s-objective}).
+
+% P:methods-weights
+The scales $s_j$ and weights $w_j$ are assigned for each data set, several without a statistical derivation, and they differ between the amines (Section~\ref{supp-sec:s-objective}).
+An objective value therefore sets fitting priorities within one amine and does not compare accuracy between amines, and two objective values can be compared only on the same weights.
+The objectives are also dominated by different observables.
+In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute 59.9\,\% of the objective value, 152.96, although they respond only to the MEA--water interaction and its temperature coefficient.
+The fitted loaded-solution pressures contribute 98\,\% of the DEA objective and 96\,\% of the AMP objective, but 1\,\% of the MDEA objective, in which 24 densities of the \COtwo-free solution contribute 84\,\% (Table~\ref{supp-tab:objective-contributions}).
+\Cref{sec:results-mdea} and Section~\ref{supp-sec:s-objective} report what changes when the weights are changed.
 
 % P:methods-starts
-Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; these are local solutions, not a global search.
-For DEA the two objective values, 8.082968228315 and 8.082968228355, differ by less than the tie tolerance of $10^{-10}$, the parameters agree to four significant figures, and the second solution gives the same deviations of the fitted pressures and heats, 28.5 and 0.9\,\%, and no split in the 1270 searches that finish; the lower one is reported, but the pressures outside the fit had been inspected before that choice, so for it they are development data; the deviations of the second solution from them were not retained (Table~\ref{supp-tab:supplement-transfer-data}).
-The final 11-parameter MEA optimization used no stability penalty.
-Its two starts descended from an earlier stability-penalized calibration, the 16-parameter calibration described next, and they converge to objective values of 150.763 and 150.767.
-
-% P:methods-restrictions
-For MEA the joint fit is also made with fewer restrictions.
-The 16-parameter calibration shifts the R2 and R5 correlations, fits separate Born diameters for the two MEA ions and is fitted with the stability penalty of \cref{sec:methods-phase}.
-Fixing R2 and R5 at their literature forms and tying the Born diameters to the segment diameters gives the 11-parameter \emph{MEA model} used throughout.
+Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; Table~\ref{supp-tab:fit-starts} gives the result of every start.
+These are local solutions.
+No global search was made, and the sensitivity of the four fits to other starting sets has not been tested, which limits every statement below about what a fit ``gives'' to the solutions found.
+For DEA the two objective values, 10.932834014425 and 10.932834014387, differ by less than the tie tolerance of $10^{-10}$, and the lower one is reported.
+For MEA the joint fit was first made with fewer restrictions: the 16-parameter calibration also shifts the R2 and R5 correlations, fits separate Born diameters for the two MEA ions and is fitted with the stability penalty of \cref{sec:methods-phase}.
+Fixing R2 and R5 at their literature forms and tying the Born diameters to the segment diameters gives the 11-parameter \emph{MEA model} used throughout; its optimization used no stability penalty, but both of its starts descend from the penalized calibration.
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),
@@ -88,12 +82,12 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-An observation that responds to no fitted parameter carries no information on the parameters, so it is left out of both the sum and the count: the 39 Kiepe pressures of the MEA objective, which leaves 268 observations and 258 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 and 272.
+An observation that responds to no fitted parameter is left out of both the sum and the count: the 39 Kiepe pressures of the MEA objective, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 and 272.
 Compared with counting every observation, this raises the MEA standard errors by 7.3\,\% and those of MDEA by 0.5\,\%; all DEA and AMP observations respond.
-These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization.
-They exclude model discrepancy and systematic differences between sources, and they do not define prediction intervals.
+These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
+Where two fits are compared by their objective values, the reference is the change $\Delta C=\tfrac12s_C^2\chi^2_{1,0.95}$ of a nominal 95\,\% likelihood-ratio interval for one parameter, which carries the same conditions.
 
-\subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}
+\subsection{Phase-stability search}\label{sec:methods-phase}
 % P:methods-phase-01
 Each fitted parameter set is searched for a phase split with the tangent-plane criterion \cite{Michelsen1982}, with electroneutral trial phases \cite{Perdomo2025} and reaction-equilibrium constraints \cite{Tsanas2022,Ascani2022}:
 \begin{equation}
@@ -102,29 +96,15 @@ Each fitted parameter set is searched for a phase split with the tangent-plane c
  \label{eq:tpd}
 \end{equation}
 Here $\boldsymbol w$ is the composition of a trial phase, restricted to the species that can form from the feed and, for a vapor, to \COtwo, water and the molecular amine; $B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\boldsymbol\nu_r=0$ for every reaction; and $\boldsymbol\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched (parent) state, divided by $RT$, so that $B^{\mathsf T}\boldsymbol\lambda$ is the tangent plane of the parent.
-A negative distance that is confirmed by a finite, mass-conserving transfer lowering the Gibbs energy by more than its numerical error estimate is a \emph{detected instability}, classed as toward a second liquid or toward a vapor from the density of the trial phase.
-The parent states are grids of temperature, amine content and loading, mostly liquids at pressures above the calculated bubble pressure, and, for DEA, MDEA and AMP, also the measured states (Section~\ref{supp-sec:s-phase}).
-A search that does not finish is counted as not completed, never as stable.
+At each state $D$ is minimized from several initial trial compositions: a uniform one, one rich in each neutral species and, for a vapor, mixtures of the three neutral species.
+A negative distance counts only when a finite, mass-conserving transfer of the trial phase lowers the Gibbs energy by more than its numerical error estimate; it is then a \emph{detected instability}, toward a second liquid or toward a vapor according to the density of the trial phase.
+A liquid--liquid split is \emph{confirmed} when a separate equilibrium calculation at the same feed, temperature and pressure returns two distinct liquids with positive amounts and a Gibbs energy below that of the single liquid by more than its numerical error.
+Trial compositions at which other parameter sets of this work gave a Gibbs-energy decrease are tested as well.
 
-% P:methods-penalty
-For the 16-parameter calibration the searched states enter a penalized objective:
-\begin{equation}
- r_k^{\mathrm{stab}}=\sqrt{w_{\mathrm{stab}}}\frac{\tau_k}{s_{\mathrm{stab}}},\qquad
- C_{\mathrm{pen}}=C+\frac12\sum_k(r_k^{\mathrm{stab}})^2,
- \quad w_{\mathrm{stab}}=1,
- \quad s_{\mathrm{stab}}\in\{10^{-2},3\times10^{-3}\}.
- \label{eq:stability-penalty}
-\end{equation}
-The two scales are applied in succession; $\tau_k$ is the most negative tangent-plane distance found at state $k$, or zero when the completed search finds none.
-
-% P:methods-exceptions
-The MEA and DEA models were fitted without the penalty; of the MEA fits, only the 16-parameter calibration used it.
-For MDEA no penalty is used, and only the MDEA--water interaction acts on the \COtwo-free solution.
-Its linear temperature law is written about \SI{423}{\kelvin}, the highest temperature tested, and its value there is bounded above at $-0.0671$, $10^{-4}$ below the value at which a liquid--liquid gap first appears in the \COtwo-free solution at \SI{1.466}{\mega\pascal}.
-At \SI{1.466}{\mega\pascal} the fitted interaction lies below that onset value at each of the 33 tested temperatures from 290 to \SI{423}{\kelvin}.
-The bound was fixed before fitting, from the onset at \SI{423}{\kelvin} and a margin of $10^{-4}$ (Section~\ref{supp-sec:s-mdea-bound}).
-The loaded MDEA states are not constrained, so a split found there would be reported as a limitation.
-For AMP neither the penalty nor a bound of this kind is used: the \emph{AMP model} fits the other eight parameters with $b_{\mathrm{AMPH^+,w}}$ fixed at \SI{-150}{\kelvin}.
-
-% PENDING #427: one sentence on the sensitivity of the fits to their starting parameters.
-Sensitivity of the four fits to other starting parameter sets remains to be tested.
+% P:methods-phase-states
+The searched states are grids of temperature, amine content and loading, mostly at pressures of 1.05 and 3 times the calculated bubble pressure, and, for DEA, MDEA and AMP, also the measured states (Section~\ref{supp-sec:s-phase}).
+A search that does not finish is counted as not completed, never as stable, and the grids differ between the amines, so the counts do not measure equal coverage.
+The search is finite and local: it gives no proof of global stability, a count of splits is a lower bound, and the set of phases with the lowest Gibbs energy was determined only at the states where the text says so.
+For the 16-parameter MEA calibration alone, the searched states also entered the objective, through the penalty $C_{\mathrm{pen}}=C+\tfrac12\sum_k(\tau_k/s_{\mathrm{stab}})^2$, where $\tau_k$ is the most negative tangent-plane distance found at state $k$, or zero, and $s_{\mathrm{stab}}$ is $10^{-2}$ and then $3\times10^{-3}$.
+No reported model was fitted with a penalty.
+For MDEA one interaction is bounded from the calculated phase behavior of the \COtwo-free solution (\cref{sec:results-mdea}); for AMP no bound or penalty is used.
