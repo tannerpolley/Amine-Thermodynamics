@@ -1,4 +1,4 @@
-"""Stage the #440 evidence and three worked calculations for referee round 9."""
+"""Stage the #440 and round-9 evidence with three worked calculations."""
 import argparse
 import gzip
 import json
@@ -14,6 +14,14 @@ STUDY = 'analyses/fixed_reaction_reference'
 RESULTS = f'{STUDY}/results'
 BASE = '5023dbc44885be4675820dea8812576da58c570d'
 WORKED_HEAT_REVISION = '13d133739cedc422449491ad8214db8b18e85c99'
+ROUND_9_REVISION = '517d0b982d1ef3dff07ad08163849746199110af'
+ROUND_9_HANDOFF = 'analyses/round_9/manuscript-handoff.json'
+ROUND_9_FILES = {
+    ROUND_9_HANDOFF: 'bc51c50f0559ae087da01969323b35f1baed24a9654e6fbc9170bef447f6bce0',
+    'analyses/round_9/handoff.py': '6a0e43beec85640081e9454f70981238f1184edd58dd0bae6336a21f35083548',
+    'analyses/round_9/notebook.py': 'ca4edbda185bc2052eaa80cb2e6f74d1d6c8d6c08a1b66d092eb06e108db3921',
+    'analyses/round_9/notebook.qmd': '322cd0f1f208fdcff4cf0229fa8cd57a53961e09f1633bc392cc54789b46394c',
+}
 WHEELS = (
     ('05e94210fa64cf69725e45babc0411d32139df5a', '1.3.1',
      'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'),
@@ -92,6 +100,14 @@ def selected_files():
                 if sha(ROOT / path) != record['sha256']:
                     raise ValueError(f'#440 contributor changed: {path}')
                 selected.add(path)
+    for path, digest in ROUND_9_FILES.items():
+        if sha(ROOT / path) != digest:
+            raise ValueError(f'Round-9 file changed from {ROUND_9_REVISION}: {path}')
+        selected.add(path)
+    for path, digest in read(ROUND_9_HANDOFF)['sources'].items():
+        if sha(ROOT / path) != digest:
+            raise ValueError(f'Round-9 contributor changed from {ROUND_9_REVISION}: {path}')
+        selected.add(path)
     for name in sorted(selected):
         path = ROOT / name
         if path_is_blocked(name):
@@ -139,6 +155,7 @@ def stage(dest, wheel_dir):
                                 engine_commit=commit, sha256=digest))
         (package / 'provenance.json').write_text(json.dumps(dict(
             adopted_fit_commit=BASE, worked_heat_revision=WORKED_HEAT_REVISION, engines=engines,
+            round_9_evidence=dict(commit=ROUND_9_REVISION, handoff=ROUND_9_HANDOFF),
             table_8_models=model_index(),
         ), indent=2) + '\n')
         shutil.copyfile(ROOT / 'scripts/deposit_examples/README.md', package / 'README.md')
@@ -159,8 +176,9 @@ def stage(dest, wheel_dir):
             subprocess.run(['sha256sum', '--check', '--quiet', manifest.name], cwd=dest, check=True)
         else:
             package.rename(dest)
-        print('# Round 9 reproducibility package\n')
-        print(f'- Directory {dest.relative_to(ROOT) if dest.is_relative_to(ROOT) else dest.name}')
+        print('# Round 10 reproducibility package\n')
+        directory = dest.relative_to(ROOT) if dest.is_relative_to(ROOT) else Path(dest.parent.name) / dest.name
+        print(f'- Directory {directory}')
         print(f'- Size {sum(p.stat().st_size for p in dest.rglob("*") if p.is_file()):,} bytes')
         print(f'- SHA-256 manifest SHA256SUMS covers {len(payload):,} files')
         print(f'- SHA-256 of SHA256SUMS {sha(dest / manifest.name)}\n')
@@ -173,6 +191,6 @@ def main(args=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--wheel-dir', type=Path, default=ROOT / 'build/engine-wheels',
                         help='Directory holding the main-COMMIT subdirectories for both wheels')
-    parser.add_argument('--output', type=Path, default=ROOT / 'build/referee-packet-r9/reproducibility')
+    parser.add_argument('--output', type=Path, default=ROOT / 'build/referee-packet-r10/reproducibility')
     options = parser.parse_args(args)
     stage(options.output.resolve(), options.wheel_dir.resolve())

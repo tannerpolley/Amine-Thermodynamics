@@ -1,9 +1,9 @@
-# Round 9 reproducibility package
+# Round 10 reproducibility package
 
-- Directory build/referee-packet-r9/reproducibility
-- Size 251,262,722 bytes
-- SHA-256 manifest SHA256SUMS covers 2,659 files
-- SHA-256 of SHA256SUMS bc9aa160030af11a204cfd83827ef927a49e9ca2289f5608a6058a5b300eb082
+- Directory packet-r10/reproducibility
+- Size 252,759,990 bytes
+- SHA-256 manifest SHA256SUMS covers 2,671 files
+- SHA-256 of SHA256SUMS 7fe230e82eaf15ff0df3bef5d4abe36659ad5b99d1825f162eeef7f98b651a0f
 
 Top-level entries
 

@@ -1,10 +1,13 @@
-# Reproducibility package for referee round 9
+# Reproducibility package for referee round 10
 
 This package contains the fixed 100 kPa reaction-reference calculations for
 aqueous MEA, DEA, MDEA and AMP adopted in #440. The examples replay three
 states at the retained endpoints. They perform numerical verification on the
 study wheel. The comparisons with measurements and the finite phase searches
 have the limits stated in the #440 notebook and the manuscript.
+The round-9 evidence includes the four DEA certificates in Table S48,
+the shared-interaction comparisons in Tables S49–S50, and the pressure
+and search accounting.
 
 ## Verify and install
 
@@ -24,12 +27,17 @@ export PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NU
 for example in mea_heat dea_split c1; do
     "$env_dir/bin/python" "scripts/deposit_examples/$example.py"
 done
+"$env_dir/bin/python" analyses/round_9/handoff.py --check
 ```
 
 On an affinity-restricted Linux host, allow at least one of CPUs 0–11 for
 the archived #440 code. Each example runs one calculation at a time. The
 scripts abort if a checked quantity misses its replay tolerance. See
 [sample output](scripts/deposit_examples/expected.txt).
+The handoff check recomputes six quantity groups from 49 retained records.
+The [round-9 notebook](analyses/round_9/notebook.qmd) presents the results,
+and the [handoff](analyses/round_9/manuscript-handoff.json) lists each
+contributor and its SHA-256 hash.
 
 The #440 calculations use Engine commit
 `05e94210fa64cf69725e45babc0411d32139df5a` (wheel SHA-256
@@ -50,11 +58,14 @@ directory tree. [Build commits and wheel hashes](provenance.json)
 - **DEA split.** A 30 wt% DEA feed at 298.15 K, loading 0.50 mol/mol and
   101.325 kPa (the pressure assigned to the density calculation) gives a
   confirmed split in the selected model. The script reads the #440
-  `weiland-1998:43:problem` control, starts the two-liquid calculation from
-  the archived pair, and checks the daughters and Gibbs decrease. The
-  density and amount tolerances are half the last displayed digit. The
-  comparison of Gibbs decreases uses the sum of both calculations'
-  numerical Gibbs errors. The experiment treated the sample as one liquid.
+  declared-screen record for `weiland-1998:32:problem` and starts the
+  two-liquid calculation from the confirmed row-42 pair. In ascending
+  molar density, the daughters are 31,971.88 mol/m³ at 1.422586 mol and
+  44,593.61 mol/m³ at 13.196994 mol. The decrease in $G^*/(RT)$ is
+  0.001406466 mol. The density and amount tolerances are half the last
+  displayed digit. The comparison of Gibbs decreases uses the sum of
+  both calculations' numerical Gibbs errors. The experiment treated
+  the sample as one liquid.
 - **C1.** At the selected MEA bubble state `vle_obs_0131-pco2`
   (313.02 K, approximately 6.675 kPa), continue the liquid branch at
   fixed feed. The middle centered step uses ±0.3338 Pa and ±0.02 K.

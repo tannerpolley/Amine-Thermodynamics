@@ -1,7 +1,7 @@
 """Stage #206's retained evidence for the merged manuscript; never upload or reserve a DOI.
 
 Use: stage (moves any old staging aside, copies the manuscript evidence), rebuild (compiles both PDFs from the
-staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums). Use reviewer for the #440 round-9 package.
+staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums). Use reviewer for the round-10 package.
 """
 import datetime
 import hashlib
