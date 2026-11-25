@@ -38,7 +38,7 @@ def gibbs(compiled, result):
             math.fsum(n*q[k] for n,q in zip(result.amounts,phases,strict=True) for k in ERROR_TERMS))
 
 
-def coexistence(spec, parent, parent_g, guesses):
+def coexistence(spec, parent, parent_g, guesses, *, inspect=None):
     compiled = eq.compile_problem(spec.model,parent)
     support = [i for i in range(len(spec.parameters.component_ids)) if i not in compiled.removed_species]
     phases = []
@@ -56,6 +56,8 @@ def coexistence(spec, parent, parent_g, guesses):
         parent.phases = original
     out = dict(message=result.message, requested_tolerance_met=result.requested_tolerance_met,
                amounts_mol=list(result.amounts))
+    if inspect is not None:
+        out["diagnostics"] = inspect(compiled, result)
     if not result.requested_tolerance_met or len(result.amounts)!=2 or min(result.amounts)<=0:
         return dict(out, confirmed=False)
     phases = [list(result.phase_mole_fractions(j)) for j in range(2)]

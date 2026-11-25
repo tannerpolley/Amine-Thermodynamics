@@ -1,5 +1,6 @@
 """Replay the AMP stability and MEA caloric examples on the pinned wheel (#428)."""
 import csv
+from functools import partial
 import hashlib
 import json
 import math
@@ -39,7 +40,11 @@ def phase_passed(p, P, tol):
     return max(abs(p['pressure_residual_Pa'])/P, abs(p['charge_residual']), abs(p['normalization_residual'])) <= tol
 
 
-def amp(run):
+def source_log_k(law, T):
+    return law.a+law.b/T+law.c*math.log(T/law.reference_temperature)+law.d*T+law.e/T**2+law.f*T**2
+
+
+def amp(run, *, inspect=None):
     folder = ROOT / 'analyses/amp_transfer'
     declaration = folder / 'inputs/retransfer-344/phase-2/AMP-05e94210.json'
     main = folder / 'results/retransfer-412-f2-05e94210/main'
@@ -77,7 +82,7 @@ def amp(run):
     options.prepared_trials = eq.prepare_supplied_trials(model, T, points)
     supplied, = eq.stability_test(compiled, result, options).trials
     parent_g = cd.gibbs(compiled, result)
-    pair = cd.coexistence(spec, parent, parent_g, list(zip(seed['phases'], seed['packings'], strict=True)))
+    pair = cd.coexistence(spec, parent, parent_g, list(zip(seed['phases'], seed['packings'], strict=True)), inspect=None if inspect is None else partial(inspect, spec, parent))
     objective_delta = pair['objective_over_RT_mol']-result.objective
     gibbs_delta = pair['Gibbs_sum_over_RT_mol']-parent_g[0]
     paired_error = pair['numerical_error_over_RT_mol']
@@ -163,7 +168,7 @@ def mea():
         law, nu = rx.correlation, rx.stoichiometry
         dnu = sum(nu)
         molality = (dnu-nu[vrc.WATER])*math.log(masses[vrc.WATER]*loaded.neutral_reference.standard_molality_mol_per_kg)
-        ln_k = law.a+law.b/T+law.c*math.log(T/law.reference_temperature)+law.d*T+law.e/T**2+law.f*T**2
+        ln_k = source_log_k(law, T)
         source_slope = -law.b/T**2+law.c/T+law.d-2*law.e/T**3+2*law.f*T
         slope = math.fsum(n*d for n, (_, d) in zip(nu, actions, strict=True))+dnu/T
         factor = R*T*T/1000

@@ -1,0 +1,1565 @@
+{
+  "seconds": 2.35572337800113,
+  "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb",
+  "engine_commit": "05e94210fa64cf69725e45babc0411d32139df5a",
+  "executed_files": {
+    "analyses/round_3/run.py": "c798228344e199d2b94cd977e20b64508267681d5f85802d9a42fb101823d81b",
+    "src/MEA/__init__.py": "b2b6b57bbabc80e325f663ae1dd7925f759d4bec8c4c6c1df6689a912bf6a1d3",
+    "src/MEA/common/__init__.py": "a3b08d7cf8ecd69072c6cbb959122c7da10d6763bc7f44f63e4b99b49763dd70",
+    "src/MEA/common/deviation_statistics.py": "d6ffb6638f8eea25e70c8adc7e1b1d4018bc3230bd4bffe74f99007f1b627285",
+    "src/MEA/solvent_specification.py": "41a2eeb2a2092645058aab8b70e4ee1d6f340a9dfa56644ffcdb0ccc2acaf7ba",
+    "src/MEA/common/config.py": "f1728c3f3ef55e1160fc74faaeb1c8ee91ff31e6426cdc71da8476fa9820af1f",
+    "src/MEA/common/mea_source_contracts.py": "242973e500e33530a1d0315475fa4a6f974e57c6f7354706081c07bf94820ef5",
+    "src/MEA/common/retained_results.py": "8fb78b76fdeb976cd2f6607e3a5d14a173c16503c33a7566a5fa9a1ebc27c5de",
+    "analyses/mea_parameter_bundle/scripts/shared_evaluation.py": "238b2f368084d830ed212d73f0e5499c539b206f4ee08c65a0115a0907fcbd6f",
+    "analyses/mea_parameter_bundle/scripts/density_268.py": "da44f588260f80c364c626d716bcfa9c3af90f222bdac76125d36a8ed1b03ba0",
+    "analyses/mea_parameter_bundle/scripts/stable_refit_255.py": "07128564f51283952e5da66586f6cdd9d9e337bb370784d225101383933f246b",
+    "analyses/part_ii.py": "4f3b32d993696c2151a67de7ebe19421e6f6aa484eb5f6d3c58a0fc7b900ec4a",
+    "analyses/round_3/recall.py": "9cebe830fb94f5ea5d48b93841756db02a5ce42cbfc38e55d741d79009eaff96",
+    "analyses/amp_transfer/classify_descents.py": "45a4442273fdf56f40d66d0d67b96112777fd407e14e9e82357f8bdf8c306be9",
+    "analyses/mea_parameter_bundle/scripts/verify_temperature_reference.py": "ca83b8ac4936543b7ca5e11b0bf1c25e18f8943d20254b0eff120ce12551925a",
+    "analyses/mea_parameter_bundle/scripts/verify_reference_calorics.py": "d66213b7b827ee226731c49d3899e2c4ae840b5a081b5082f88b14dfa7f37d4b",
+    "analyses/mea_parameter_bundle/scripts/fit_observations.py": "fd2d3e32fb74ebb0765c145e1ac6a565c4ecf36ee2e16cd14123ab4dfe8f1308",
+    "analyses/mea_parameter_bundle/scripts/verify_solution_heat_capacity.py": "425b11bbcc6b7f74c5173069e7a67d34c509fbb274c748f203b4c8d8bff5fcfe",
+    "analyses/mea_parameter_bundle/scripts/heat_evidence_170.py": "d3c1c5dc9c5db333634e1da551984d29409b0267417b90f2a598fec47c9c6850",
+    "analyses/reference_states_428.py": "f66e16aacbf554c043cb441c3f2e05c57d2a0d72a61eb280dd6da766194e2af6",
+    "analyses/round_3/mea.py": "8562efaaa91f92c97b54d06cef9fa5a91fbd1e9bce72a66a918a66cd432bc2b0",
+    "analyses/mea_parameter_bundle/calibration-misfit/probe.py": "c466077ed31c905eaa9cf2553902760c2f4355f80590cff4ec93fb98bd1aeb77"
+  },
+  "species": [
+    "carbon-dioxide",
+    "monoethanolamine",
+    "water",
+    "protonated-monoethanolamine",
+    "carbamate-anion",
+    "bicarbonate-anion",
+    "carbonate-anion",
+    "hydronium-cation",
+    "hydroxide-anion"
+  ],
+  "rows": [
+    {
+      "identity": "canonical:vle_obs_0186",
+      "baseline": {
+        "status": "converged: residual 1.7053025658242404e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 7.2336845483039125e-09, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 6481.25190652888,
+        "feed_mol": {
+          "carbon-dioxide": 0.0887,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.7053025658242404e-13,
+        "phases": [
+          {
+            "amount_mol": 8.911157484716762,
+            "density_mol_m3": 43815.187283751904,
+            "x": [
+              1.3411211004110025e-08,
+              0.09250632556651311,
+              0.8875565839757792,
+              0.009971525906481172,
+              0.009741015909280979,
+              0.00021803127890981643,
+              5.974824144245841e-06,
+              2.8839255412582394e-11,
+              5.290988411347597e-07
+            ],
+            "pressure_Pa": 6481.251907490275,
+            "pressure_residual_Pa": 9.613950169296004e-07,
+            "normalization_residual": -1.1102230246251565e-16,
+            "charge_residual": 5.027732638482973e-18
+          },
+          {
+            "amount_mol": 0.0,
+            "density_mol_m3": 2.4913797081323694,
+            "x": [
+              0.00024050350567848317,
+              0.0014921142651692682,
+              0.9982673822291522,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "pressure_Pa": 6481.251906528881,
+            "pressure_residual_Pa": 9.094947017729282e-13,
+            "normalization_residual": 0.0,
+            "charge_residual": 0.0
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": -1.1102230246251565e-16,
+            "H": -7.676320787786822e-16,
+            "N": -6.938893903907228e-17,
+            "O": -2.4027614208173287e-16
+          },
+          "scaled_element_residual": {
+            "C": -4.112002296529649e-18,
+            "H": -1.0661725620039824e-17,
+            "N": -7.710004305993091e-18,
+            "O": -8.899257411590365e-18
+          }
+        },
+        "liquid_checks_pass": false,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 6481.25190652888,
+            "ln_Q": -39.20847211814653,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 6481.25190652888,
+            "ln_Q": -14.505072059412182,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 6481.25190652888,
+            "ln_Q": -27.55307337666896,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.7836958326680863,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.88987878362738,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true,
+        "value_Pa": 1.5587638047055483
+      },
+      "fixed_reference": {
+        "status": "converged: residual 2.2737367544323206e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 3 iterations, contraction absent, floor 7.2617220649546436e-09, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 6481.2538569485605,
+        "feed_mol": {
+          "carbon-dioxide": 0.0887,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 2.2737367544323206e-13,
+        "phases": [
+          {
+            "amount_mol": 8.911157484860368,
+            "density_mol_m3": 43815.187079487376,
+            "x": [
+              1.3427326070818866e-08,
+              0.09250632597160106,
+              0.8875565869952611,
+              0.009971522788974979,
+              0.009741018619890806,
+              0.00021803134635189238,
+              5.972029816682033e-06,
+              2.883924241491416e-11,
+              5.287919381450684e-07
+            ],
+            "pressure_Pa": 6481.253850011797,
+            "pressure_residual_Pa": -6.936763384146616e-06,
+            "normalization_residual": 0.0,
+            "charge_residual": 1.407388509871405e-17
+          },
+          {
+            "amount_mol": 0.0,
+            "density_mol_m3": 2.491380457919473,
+            "x": [
+              0.00024079241294529166,
+              0.001492113708511435,
+              0.9982670938785433,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "pressure_Pa": 6481.253856948566,
+            "pressure_residual_Pa": 5.4569682106375694e-12,
+            "normalization_residual": 0.0,
+            "charge_residual": 0.0
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 4.163336342344337e-16,
+            "H": 6.433367700326917e-15,
+            "N": 2.3592239273284576e-16,
+            "O": 2.4781981750997967e-15
+          },
+          "scaled_element_residual": {
+            "C": 1.5420008611986182e-17,
+            "H": 8.935374527708832e-17,
+            "N": 2.621401464037651e-17,
+            "O": 9.178657225836681e-17
+          }
+        },
+        "liquid_checks_pass": false,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -39.208472118146744,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -14.505072059412083,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -27.553073376668706,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.783695832668081,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.889878783627488,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true,
+        "value_Pa": 1.560636755125622
+      },
+      "species_x_change": {
+        "carbon-dioxide": {
+          "absolute": 1.6115066708840975e-11,
+          "percent": 0.12016115997206533
+        },
+        "monoethanolamine": {
+          "absolute": 4.0508794929561276e-10,
+          "percent": 4.3790298054346977e-07
+        },
+        "water": {
+          "absolute": 3.019481886745723e-09,
+          "percent": 3.402016224285376e-07
+        },
+        "protonated-monoethanolamine": {
+          "absolute": -3.117506192432118e-09,
+          "percent": -3.1264083566462375e-05
+        },
+        "carbamate-anion": {
+          "absolute": 2.7106098268725454e-09,
+          "percent": 2.782676726820199e-05
+        },
+        "bicarbonate-anion": {
+          "absolute": 6.744207595816773e-11,
+          "percent": 3.093229388184682e-05
+        },
+        "carbonate-anion": {
+          "absolute": -2.7943275638076423e-09,
+          "percent": -0.046768364998639456
+        },
+        "hydronium-cation": {
+          "absolute": -1.2997668233825275e-17,
+          "percent": -4.506936135406647e-05
+        },
+        "hydroxide-anion": {
+          "absolute": -3.0690298969136705e-10,
+          "percent": -0.05800485010194478
+        }
+      },
+      "pCO2_change": {
+        "absolute": 0.0018729504200736269,
+        "percent": 0.1201561400399287
+      },
+      "bubble_pressure_change": {
+        "absolute": 0.0019504196807247354,
+        "percent": 3.009325526548423e-05
+      },
+      "prior_prediction_Pa": 1.5587638047055816
+    },
+    {
+      "identity": "canonical:vle_obs_0193",
+      "baseline": {
+        "status": "converged: residual 2.8421709430404007e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 1.425190559078294e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 79978.64852136838,
+        "feed_mol": {
+          "carbon-dioxide": 0.6419,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 2.8421709430404007e-13,
+        "phases": [
+          {
+            "amount_mol": 8.921441428425151,
+            "density_mol_m3": 43927.430543506314,
+            "x": [
+              0.0011527356089607425,
+              0.0011301197082362368,
+              0.8560984366568822,
+              0.07080997415517531,
+              0.04014941633769099,
+              0.03065806662129878,
+              1.2469811573263222e-06,
+              3.3483637894678155e-09,
+              5.822346139117756e-10
+            ],
+            "pressure_Pa": 79978.64852372435,
+            "pressure_residual_Pa": 2.3559696273878217e-06,
+            "normalization_residual": 0.0,
+            "charge_residual": 7.01846603185687e-17
+          },
+          {
+            "amount_mol": 0.0,
+            "density_mol_m3": 30.83685378927857,
+            "x": [
+              0.9153144648734333,
+              1.2049814980752003e-06,
+              0.08468433014506872,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "pressure_Pa": 79978.64852136948,
+            "pressure_residual_Pa": 1.1059455573558807e-09,
+            "normalization_residual": 0.0,
+            "charge_residual": 0.0
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": -3.885780586188048e-16,
+            "H": 4.716110043722493e-16,
+            "N": -1.6653345369377348e-16,
+            "O": 1.3854409698470238e-16
+          },
+          "scaled_element_residual": {
+            "C": -1.3558593295099537e-17,
+            "H": 6.170943321374229e-18,
+            "N": -1.7432477093699405e-17,
+            "O": 4.83419746119834e-18
+          }
+        },
+        "liquid_checks_pass": true,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 79978.64852136838,
+            "ln_Q": -39.208472118146574,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 79978.64852136838,
+            "ln_Q": -14.505072059412548,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 79978.64852136838,
+            "ln_Q": -27.553073376669026,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.78369583266826,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.88987878362736,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true,
+        "value_Pa": 73205.6138726367
+      },
+      "fixed_reference": {
+        "status": "converged: residual 1.1368683772161603e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 2 iterations, contraction absent, floor 1.425190779539654e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 79993.6881229545,
+        "feed_mol": {
+          "carbon-dioxide": 0.6419,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.1368683772161603e-13,
+        "phases": [
+          {
+            "amount_mol": 8.921443515863087,
+            "density_mol_m3": 43927.41701396287,
+            "x": [
+              0.0011529693190847404,
+              0.0011301493660959298,
+              0.8560986744830587,
+              0.07080972350885478,
+              0.04014961109946609,
+              0.03065762141061217,
+              1.2468824125907322e-06,
+              3.348231942442046e-09,
+              5.821832338180121e-10
+            ],
+            "pressure_Pa": 79993.68812531195,
+            "pressure_residual_Pa": 2.357453922741115e-06,
+            "normalization_residual": 2.220446049250313e-16,
+            "charge_residual": 5.12766224934798e-17
+          },
+          {
+            "amount_mol": 0.0,
+            "density_mol_m3": 30.842672899192117,
+            "x": [
+              0.9153302386957926,
+              1.2047941148272604e-06,
+              0.0846685565100927,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "pressure_Pa": 79993.68812295544,
+            "pressure_residual_Pa": 9.458744898438454e-10,
+            "normalization_residual": 0.0,
+            "charge_residual": 0.0
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 9.43689570931383e-16,
+            "H": 8.263788958684515e-15,
+            "N": 3.3306690738754696e-16,
+            "O": 3.4898299527963417e-15
+          },
+          "scaled_element_residual": {
+            "C": 3.2928012288098877e-17,
+            "H": 1.0813015983738351e-16,
+            "N": 3.486495418739881e-17,
+            "O": 1.2177008955989506e-16
+          }
+        },
+        "liquid_checks_pass": true,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -39.208472118146595,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -14.505072059411951,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -27.553073376668554,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.7836958326680623,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.889878783627243,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true,
+        "value_Pa": 73220.64164374073
+      },
+      "species_x_change": {
+        "carbon-dioxide": {
+          "absolute": 2.337101239978899e-07,
+          "percent": 0.02027439095151351
+        },
+        "monoethanolamine": {
+          "absolute": 2.9657859693067376e-08,
+          "percent": 0.0026243113430357567
+        },
+        "water": {
+          "absolute": 2.378261764190981e-07,
+          "percent": 2.7780237199515057e-05
+        },
+        "protonated-monoethanolamine": {
+          "absolute": -2.5064632053206637e-07,
+          "percent": -0.0003539703601451727
+        },
+        "carbamate-anion": {
+          "absolute": 1.9476177510330261e-07,
+          "percent": 0.0004850924194332862
+        },
+        "bicarbonate-anion": {
+          "absolute": -4.4521068661221297e-07,
+          "percent": -0.0014521812223611263
+        },
+        "carbonate-anion": {
+          "absolute": -9.874473558999124e-11,
+          "percent": -0.007918703102272051
+        },
+        "hydronium-cation": {
+          "absolute": -1.3184702576938095e-13,
+          "percent": -0.003937655346297753
+        },
+        "hydroxide-anion": {
+          "absolute": -5.1380093763466305e-14,
+          "percent": -0.00882463744611428
+        }
+      },
+      "pCO2_change": {
+        "absolute": 15.027771104025305,
+        "percent": 0.020528167594036084
+      },
+      "bubble_pressure_change": {
+        "absolute": 15.039601586118806,
+        "percent": 0.01880452078668604
+      },
+      "prior_prediction_Pa": 73205.61387262863
+    },
+    {
+      "identity": "Bottinger2008_state_046",
+      "baseline": {
+        "status": "converged: residual 1.2579833635742909e-13 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.5519391034258084e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 101325.0,
+        "feed_mol": {
+          "carbon-dioxide": 0.34290000000000004,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207347,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.5560885913146194e-12,
+        "phases": [
+          {
+            "amount_mol": 8.91116356998589,
+            "density_mol_m3": 43564.11585622513,
+            "x": [
+              6.96292744952828e-07,
+              0.03685728611008613,
+              0.8861542699807641,
+              0.03849734068202558,
+              0.03686416395801027,
+              0.0016192510973530405,
+              6.9338791692621854e-06,
+              6.577140324941965e-11,
+              5.79340753010504e-08
+            ],
+            "pressure_Pa": 101325.00002220621,
+            "pressure_residual_Pa": 2.2206208086572587e-05,
+            "normalization_residual": 0.0,
+            "charge_residual": 1.98503843656737e-14
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 7.077671781985373e-13,
+            "H": 1.959715472649279e-12,
+            "N": 3.56548124358369e-13,
+            "O": -1.0708351455448843e-14
+          },
+          "scaled_element_residual": {
+            "C": 2.549394102740789e-14,
+            "H": 2.6471030426303305e-14,
+            "N": 3.852884311036256e-14,
+            "O": -3.8571735016142694e-16
+          }
+        },
+        "liquid_checks_pass": false,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 101325.0,
+            "ln_Q": -39.20847211814694,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 101325.0,
+            "ln_Q": -14.505072059413259,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 101325.0,
+            "ln_Q": -27.55307337666772,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.7836958326678554,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.88987878362842,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true
+      },
+      "fixed_reference": {
+        "status": "converged: residual 6.6291726567860102e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 14 iterations, contraction absent, floor 1.5519391034723683e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 101325.0,
+        "feed_mol": {
+          "carbon-dioxide": 0.34290000000000004,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207347,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.4068746168049984e-12,
+        "phases": [
+          {
+            "amount_mol": 8.911163569880342,
+            "density_mol_m3": 43564.11585945063,
+            "x": [
+              6.962809003174447e-07,
+              0.03685728608433764,
+              0.886154269946846,
+              0.03849734074076006,
+              0.036864163926353444,
+              0.0016192510953526849,
+              6.933925126970332e-06,
+              6.577140346497392e-11,
+              5.793455153692787e-08
+            ],
+            "pressure_Pa": 101325.00001315087,
+            "pressure_residual_Pa": 1.315087138209492e-05,
+            "normalization_residual": 0.0,
+            "charge_residual": 1.985959166437177e-14
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 7.075451335936123e-13,
+            "H": 1.963583428274125e-12,
+            "N": 3.564371020559065e-13,
+            "O": -8.838797274928097e-15
+          },
+          "scaled_element_residual": {
+            "C": 2.548594292826204e-14,
+            "H": 2.6523277179702906e-14,
+            "N": 3.8516845961643787e-14,
+            "O": -3.183755667418376e-16
+          }
+        },
+        "liquid_checks_pass": false,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -39.20847211814667,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -14.505072059412925,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -27.55307337666786,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.783695832667732,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.889878783628248,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true
+      },
+      "species_x_change": {
+        "carbon-dioxide": {
+          "absolute": -1.184463538331953e-11,
+          "percent": -0.0017010999280420158
+        },
+        "monoethanolamine": {
+          "absolute": -2.5748493615029844e-11,
+          "percent": -6.985998446396025e-08
+        },
+        "water": {
+          "absolute": -3.391809055841577e-11,
+          "percent": -3.827560490776705e-09
+        },
+        "protonated-monoethanolamine": {
+          "absolute": 5.873448255533376e-11,
+          "percent": 1.5256762520010625e-07
+        },
+        "carbamate-anion": {
+          "absolute": -3.165682299632877e-11,
+          "percent": -8.587424105144237e-08
+        },
+        "bicarbonate-anion": {
+          "absolute": -2.0003556103209696e-12,
+          "percent": -1.2353584821767072e-07
+        },
+        "carbonate-anion": {
+          "absolute": 4.595770814638632e-11,
+          "percent": 0.0006627993800467635
+        },
+        "hydronium-cation": {
+          "absolute": 2.155542720421575e-19,
+          "percent": 3.27732507798828e-07
+        },
+        "hydroxide-anion": {
+          "absolute": 4.762358774664333e-13,
+          "percent": 0.0008220306874529015
+        }
+      },
+      "prior_speciation_check": {
+        "Bottinger2008_state_046::MEA + MEAH+": {
+          "predicted": 0.07535462679211172,
+          "archived": 0.07535462679211168,
+          "within_1e_10": true
+        },
+        "Bottinger2008_state_046::MEACOO-": {
+          "predicted": 0.03686416395801027,
+          "archived": 0.036864163958010294,
+          "within_1e_10": true
+        }
+      }
+    },
+    {
+      "identity": "100 kPa control",
+      "baseline": {
+        "status": "converged: residual 4.8754756343159028e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5737048741070962e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 100000.0,
+        "feed_mol": {
+          "carbon-dioxide": 0.2999,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.3073986337985843e-12,
+        "phases": [
+          {
+            "amount_mol": 8.911160716264483,
+            "density_mol_m3": 43601.86274956614,
+            "x": [
+              3.7605169966890415e-07,
+              0.04609372112131781,
+              0.8865679152369419,
+              0.03367263174486952,
+              0.032452473821022704,
+              0.0012055221157567402,
+              7.276017671542158e-06,
+              5.899857283148627e-11,
+              8.383172150872145e-08
+            ],
+            "pressure_Pa": 100000.00000431217,
+            "pressure_residual_Pa": 4.312169039621949e-06,
+            "normalization_residual": 0.0,
+            "charge_residual": 2.4057540740761558e-14
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 7.144285163462882e-13,
+            "H": 2.0093276475725667e-12,
+            "N": 3.584355035002318e-13,
+            "O": -3.5066960728420693e-15
+          },
+          "scaled_element_residual": {
+            "C": 2.5854017550865105e-14,
+            "H": 2.7267874467408326e-14,
+            "N": 3.8913611031686714e-14,
+            "O": -1.269016839871829e-16
+          }
+        },
+        "liquid_checks_pass": true,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -39.20847211814639,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -14.505072059412512,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -27.5530733766678,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.783695832667452,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.889878783628184,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true
+      },
+      "fixed_reference": {
+        "status": "converged: residual 4.8754756343159028e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5737048741070962e-10, amplification 0",
+        "success": true,
+        "T_K": 313.15,
+        "P_Pa": 100000.0,
+        "feed_mol": {
+          "carbon-dioxide": 0.2999,
+          "monoethanolamine": 0.99998,
+          "water": 7.910947365207348,
+          "protonated-monoethanolamine": 1e-05,
+          "carbamate-anion": 1e-05,
+          "bicarbonate-anion": 8e-05,
+          "carbonate-anion": 1e-05,
+          "hydronium-cation": 0.00011,
+          "hydroxide-anion": 1e-05
+        },
+        "max_residual": 1.3073986337985843e-12,
+        "phases": [
+          {
+            "amount_mol": 8.911160716264483,
+            "density_mol_m3": 43601.86274956614,
+            "x": [
+              3.7605169966890415e-07,
+              0.04609372112131781,
+              0.8865679152369419,
+              0.03367263174486952,
+              0.032452473821022704,
+              0.0012055221157567402,
+              7.276017671542158e-06,
+              5.899857283148627e-11,
+              8.383172150872145e-08
+            ],
+            "pressure_Pa": 100000.00000431217,
+            "pressure_residual_Pa": 4.312169039621949e-06,
+            "normalization_residual": 0.0,
+            "charge_residual": 2.4057540740761558e-14
+          }
+        ],
+        "balances": {
+          "element_residual_mol": {
+            "C": 7.144285163462882e-13,
+            "H": 2.0093276475725667e-12,
+            "N": 3.584355035002318e-13,
+            "O": -3.5066960728420693e-15
+          },
+          "scaled_element_residual": {
+            "C": 2.5854017550865105e-14,
+            "H": 2.7267874467408326e-14,
+            "N": 3.8913611031686714e-14,
+            "O": -1.269016839871829e-16
+          }
+        },
+        "liquid_checks_pass": true,
+        "quotients": [
+          {
+            "name": "R1",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -39.20847211814639,
+            "ln_K": -39.20847211814555,
+            "cause": ""
+          },
+          {
+            "name": "R2",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -14.505072059412512,
+            "ln_K": -14.505072059412207,
+            "cause": ""
+          },
+          {
+            "name": "R3",
+            "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -27.5530733766678,
+            "ln_K": -27.55307337666852,
+            "cause": ""
+          },
+          {
+            "name": "R4",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -2.783695832667452,
+            "ln_K": -2.7836958326680508,
+            "cause": ""
+          },
+          {
+            "name": "R5",
+            "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+            "P_ref_Pa": 100000.0,
+            "ln_Q": -20.889878783628184,
+            "ln_K": -20.889878783626994,
+            "cause": ""
+          }
+        ],
+        "reference_checks_pass": true
+      },
+      "species_x_change": {
+        "carbon-dioxide": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "monoethanolamine": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "water": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "protonated-monoethanolamine": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "carbamate-anion": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "bicarbonate-anion": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "carbonate-anion": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "hydronium-cation": {
+          "absolute": 0.0,
+          "percent": 0.0
+        },
+        "hydroxide-anion": {
+          "absolute": 0.0,
+          "percent": 0.0
+        }
+      }
+    }
+  ],
+  "heat": [
+    {
+      "status": "Available",
+      "message": "SUCCESS: converged: residual 6.8817912216148511e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.7296661075006713e-10, amplification 0",
+      "value_kJ_mol": -81.55296722146886,
+      "reference_pressures_Pa": [
+        1734000.0,
+        1734000.0,
+        1734000.0,
+        100000.0,
+        100000.0
+      ],
+      "endpoints": [
+        {
+          "status": "converged: residual 6.8817912216148511e-15 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.7296661075006713e-10, amplification 0",
+          "success": true,
+          "T_K": 313.15,
+          "P_Pa": 1734000.0,
+          "feed_mol": [
+            0.0,
+            1.0,
+            7.911062165006594,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max_residual": 1.4210854715202004e-13,
+          "phases": [
+            {
+              "amount_mol": 8.911062165006594,
+              "density_mol_m3": 43926.54350691595,
+              "x": [
+                0.0,
+                0.11216532938757365,
+                0.8877251938605694,
+                5.473837572421371e-05,
+                0.0,
+                0.0,
+                0.0,
+                2.0425066370360173e-13,
+                5.473837592853406e-05
+              ],
+              "pressure_Pa": 1734000.0000007872,
+              "pressure_residual_Pa": 7.872004061937332e-07,
+              "normalization_residual": 0.0,
+              "charge_residual": -6.968870870683056e-17
+            }
+          ],
+          "balances": {
+            "element_residual_mol": {
+              "C": -3.6440035017237804e-16,
+              "H": -1.2778406804914155e-15,
+              "N": -1.8220017508618902e-16,
+              "O": 1.2706849461530112e-16
+            },
+            "scaled_element_residual": {
+              "C": -1.3631010663104581e-17,
+              "H": -1.7924920969430666e-17,
+              "N": -2.044651599465687e-17,
+              "O": 4.753211692103115e-18
+            }
+          },
+          "liquid_checks_pass": true,
+          "quotients": [
+            {
+              "name": "R1",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": -39.20847211814648,
+              "ln_K": -39.20847211814555,
+              "cause": ""
+            },
+            {
+              "name": "R2",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": null,
+              "ln_K": -14.505072059412207,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R3",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": null,
+              "ln_K": -27.55307337666852,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R4",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": null,
+              "ln_K": -2.7836958326680508,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R5",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -20.88987878362721,
+              "ln_K": -20.889878783626994,
+              "cause": ""
+            }
+          ],
+          "reference_checks_pass": false
+        },
+        {
+          "status": "converged: residual 6.0873862128692341e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.5701111749068333e-10, amplification 0",
+          "success": true,
+          "T_K": 313.15,
+          "P_Pa": 1734000.0,
+          "feed_mol": [
+            0.31,
+            1.0,
+            7.911062165006594,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max_residual": 1.4495071809506044e-12,
+          "phases": [
+            {
+              "amount_mol": 8.911066023355673,
+              "density_mol_m3": 43609.277903463706,
+              "x": [
+                4.329840075426215e-07,
+                0.04394331916068325,
+                0.8864732399780638,
+                0.03479515730989843,
+                0.03348154270326163,
+                0.001298923393972901,
+                7.306862636593804e-06,
+                6.005402416949591e-11,
+                7.754742171888468e-08
+              ],
+              "pressure_Pa": 1734000.0000095773,
+              "pressure_residual_Pa": 9.577255696058273e-06,
+              "normalization_residual": -1.1102230246251565e-16,
+              "charge_residual": 2.301073610079849e-14
+            }
+          ],
+          "balances": {
+            "element_residual_mol": {
+              "C": 7.117639810871879e-13,
+              "H": 1.9895539135053928e-12,
+              "N": 3.5726976932437537e-13,
+              "O": -6.627084770638686e-15
+            },
+            "scaled_element_residual": {
+              "C": 2.5729645469994103e-14,
+              "H": 2.6970237781494906e-14,
+              "N": 3.8744969172878346e-14,
+              "O": -2.395633189918942e-16
+            }
+          },
+          "liquid_checks_pass": true,
+          "quotients": [
+            {
+              "name": "R1",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": -39.20847211814629,
+              "ln_K": -39.20847211814555,
+              "cause": ""
+            },
+            {
+              "name": "R2",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": -14.505072059412782,
+              "ln_K": -14.505072059412207,
+              "cause": ""
+            },
+            {
+              "name": "R3",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 1734000.0,
+              "ln_Q": -27.553073376667726,
+              "ln_K": -27.55307337666852,
+              "cause": ""
+            },
+            {
+              "name": "R4",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -2.7836958326676484,
+              "ln_K": -2.7836958326680508,
+              "cause": ""
+            },
+            {
+              "name": "R5",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -20.88987878362803,
+              "ln_K": -20.889878783626994,
+              "cause": ""
+            }
+          ],
+          "reference_checks_pass": true
+        }
+      ]
+    },
+    {
+      "status": "Available",
+      "message": "SUCCESS: converged: residual 6.83183848785586e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.7296657299190524e-10, amplification 0",
+      "value_kJ_mol": -81.60268956628774,
+      "reference_pressures_Pa": [
+        100000.0,
+        100000.0,
+        100000.0,
+        100000.0,
+        100000.0
+      ],
+      "endpoints": [
+        {
+          "status": "converged: residual 6.83183848785586e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 12 iterations, contraction absent, floor 1.7296657299190524e-10, amplification 0",
+          "success": true,
+          "T_K": 313.15,
+          "P_Pa": 1734000.0,
+          "feed_mol": [
+            0.0,
+            1.0,
+            7.911062165006594,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max_residual": 1.8474111129762605e-13,
+          "phases": [
+            {
+              "amount_mol": 8.911062165006594,
+              "density_mol_m3": 43926.557407233806,
+              "x": [
+                0.0,
+                0.1121650418467298,
+                0.8877249063197233,
+                5.5025916568100744e-05,
+                0.0,
+                0.0,
+                0.0,
+                2.0532491318724097e-13,
+                5.502591677348569e-05
+              ],
+              "pressure_Pa": 1733999.9999921864,
+              "pressure_residual_Pa": -7.813563570380211e-06,
+              "normalization_residual": 0.0,
+              "charge_residual": -6.003089075826666e-17
+            }
+          ],
+          "balances": {
+            "element_residual_mol": {
+              "C": 3.7730235602495554e-16,
+              "H": 2.0732113942267816e-15,
+              "N": 1.8865117801247777e-16,
+              "O": 8.323420078171218e-16
+            },
+            "scaled_element_residual": {
+              "C": 1.4113631986790818e-17,
+              "H": 2.908199039347134e-17,
+              "N": 2.1170447980186228e-17,
+              "O": 3.113515883982561e-17
+            }
+          },
+          "liquid_checks_pass": true,
+          "quotients": [
+            {
+              "name": "R1",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -39.20847211814676,
+              "ln_K": -39.20847211814555,
+              "cause": ""
+            },
+            {
+              "name": "R2",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": null,
+              "ln_K": -14.505072059412207,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R3",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": null,
+              "ln_K": -27.55307337666852,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R4",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": null,
+              "ln_K": -2.7836958326680508,
+              "cause": "conflicting infinite log activity terms"
+            },
+            {
+              "name": "R5",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -20.88987878362746,
+              "ln_K": -20.889878783626994,
+              "cause": ""
+            }
+          ],
+          "reference_checks_pass": false
+        },
+        {
+          "status": "converged: residual 4.778466933291343e-14 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 13 iterations, contraction absent, floor 1.570111250502944e-10, amplification 0",
+          "success": true,
+          "T_K": 313.15,
+          "P_Pa": 1734000.0,
+          "feed_mol": [
+            0.31,
+            1.0,
+            7.911062165006594,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "max_residual": 1.4210854715202004e-12,
+          "phases": [
+            {
+              "amount_mol": 8.911065943265216,
+              "density_mol_m3": 43609.282030350805,
+              "x": [
+                4.2399625863072177e-07,
+                0.043943297883528507,
+                0.8864731901550676,
+                0.03479522730757962,
+                0.033481494991341,
+                0.0012989204988473155,
+                7.366770099518877e-06,
+                6.005428506373265e-11,
+                7.83372235277349e-08
+              ],
+              "pressure_Pa": 1734000.000010676,
+              "pressure_residual_Pa": 1.0675983503460884e-05,
+              "normalization_residual": 0.0,
+              "charge_residual": 2.302069510637934e-14
+            }
+          ],
+          "balances": {
+            "element_residual_mol": {
+              "C": 7.12430114901963e-13,
+              "H": 1.997130860599566e-12,
+              "N": 3.576028362317629e-13,
+              "O": -4.046141287278706e-15
+            },
+            "scaled_element_residual": {
+              "C": 2.5753725624856053e-14,
+              "H": 2.707295028574045e-14,
+              "N": 3.878108940517127e-14,
+              "O": -1.462644691350772e-16
+            }
+          },
+          "liquid_checks_pass": true,
+          "quotients": [
+            {
+              "name": "R1",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -39.20847211814621,
+              "ln_K": -39.20847211814555,
+              "cause": ""
+            },
+            {
+              "name": "R2",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -14.50507205941252,
+              "ln_K": -14.505072059412207,
+              "cause": ""
+            },
+            {
+              "name": "R3",
+              "basis": "raw-mole-fraction-species-reference; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -27.55307337666777,
+              "ln_K": -27.55307337666852,
+              "cause": ""
+            },
+            {
+              "name": "R4",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -2.7836958326676555,
+              "ln_K": -2.7836958326680508,
+              "cause": ""
+            },
+            {
+              "name": "R5",
+              "basis": "common-molality-infinite-dilution; EOS single-ion convention",
+              "P_ref_Pa": 100000.0,
+              "ln_Q": -20.88987878362794,
+              "ln_K": -20.889878783626994,
+              "cause": ""
+            }
+          ],
+          "reference_checks_pass": true
+        }
+      ]
+    }
+  ],
+  "heat_previous_kJ_mol": -81.55296722146886,
+  "heat_change": {
+    "absolute": -0.04972234481887483,
+    "percent": 0.060969387764697736
+  },
+  "checks": {
+    "control_max_abs_dx": 0.0,
+    "S15_basis_invariant": true,
+    "archived_pressure_replay": true
+  },
+  "S15_common_basis": [
+    {
+      "reaction": "R1",
+      "common_ln_K": -31.17540213354659,
+      "common_Gamma": -576.922840750301,
+      "original_sum": -608.0982428838477,
+      "molality_term": -8.033069984598958
+    },
+    {
+      "reaction": "R2",
+      "common_ln_K": -14.505072059412207,
+      "common_Gamma": -565.3227269298671,
+      "original_sum": -579.8277989892794,
+      "molality_term": -4.016534992299479
+    },
+    {
+      "reaction": "R3",
+      "common_ln_K": -23.53653838436904,
+      "common_Gamma": -942.6276219051797,
+      "original_sum": -966.1641602895487,
+      "molality_term": -4.016534992299479
+    },
+    {
+      "reaction": "R4",
+      "common_ln_K": -2.7836958326680508,
+      "common_Gamma": -74.24182201863509,
+      "original_sum": -77.02551785130314,
+      "molality_term": -4.016534992299479
+    },
+    {
+      "reaction": "R5",
+      "common_ln_K": -20.889878783626994,
+      "common_Gamma": -311.1992926361831,
+      "original_sum": -332.0891714198101,
+      "molality_term": -4.016534992299479
+    }
+  ],
+  "inputs": {
+    "analyses/mea_parameter_bundle/results/selected-current-best-parameters.json": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
+    "analyses/mea_parameter_bundle/results/reference-states-428/mea.json": "6c9a400210bcbbab181328bb2007af41d7cbc95d9cc31f53ac606b9c495eb6d8",
+    "analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/state-targets.csv": "f2f0ba4e5e80b8cb87f29a0b6080c1119e04fdec942172873d2af450e2016567",
+    "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a",
+    "analyses/mea_parameter_bundle/data/input/state-packet.json.gz": "e9d3ea9903fec9b5239dddcfe5bb8449e9f1a1aff488f0900cc9a91479ba48ba",
+    "analyses/solvent_specification_mea/declarations.toml": "1f39af2b9d9a0c744081ab2062a20d0ddb624113fae4447495b1134a1d629bb3"
+  }
+}
