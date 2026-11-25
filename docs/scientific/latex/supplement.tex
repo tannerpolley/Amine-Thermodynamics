@@ -541,6 +541,16 @@ The MDEA standard errors are conditional on the one parameter on a bound, $k_{\m
 Table~\ref{tab:supplement-fit-starts} gives the objective value at the start and at convergence for every start of the four fits.
 The two MEA starts end within a relative $10^{-6}$ of each other and the two DEA and two AMP starts within $10^{-10}$; the three MDEA starts end at 17.400956809, 17.600100679 and 148.906061996, and the lowest is reported.
 Two or three local fits do not establish a global optimum, and no search for the global optimum was made.
+Each fit stops when the relative change of the objective falls to $10^{-10}$, $10^{-6}$ for MEA; for MDEA a first stage ended at its limit of 39 or 40 iterations and a second stage from its endpoint met that criterion.
+
+% P:supplement-endpoints
+The two MEA starts reach the same parameters within $10^{-3}$ of each box width and the two AMP starts within $10^{-10}$, and each pair gives the same finite-search outcome: no resolved descent.
+The two low MDEA endpoints are different parameter sets.
+From the reported endpoint, 17.401, to the second, 17.600, the \ce{MDEAH+} dispersion energy changes by \SI{-326}{\kelvin}, 36\,\% of its box width, the \ce{MDEAH+}--water interaction by $-0.390$, 39\,\%, the \ce{MDEAH+}--bicarbonate interaction by $-0.423$, 21\,\%, and the \ce{MDEAH+}--\COtwo interaction by $+0.105$, 10\,\%; only the reported endpoint has the MDEA--water interaction on its bound.
+On identical rows the second endpoint deviates by 4.52 instead of 4.15\,\% from the 66 fitted Kuranov pressures, by 17.33 instead of 18.69\,\% from the 40 Carson heats, by 3.34 instead of 2.84\,\% from 33 heat capacities and by 0.13 instead of 0.19\,\% from 33 loaded densities.
+The endpoints disagree on the decisive phase case: at \SI{204.054}{\mega\pascal} the reported endpoint confirms a split and the second finds no descent, while both confirm the split at \SI{262.862}{\mega\pascal}.
+The third MDEA endpoint, 148.906, was not compared.
+Statements about the MDEA model, the \SI{204.054}{\mega\pascal} split among them, therefore hold for the reported endpoint of the starts run, and their robustness to other starts is not established.
 
 \input{tables/supplement-fit-starts}
 
