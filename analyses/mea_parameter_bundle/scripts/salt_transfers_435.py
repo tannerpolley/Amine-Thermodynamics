@@ -8,7 +8,7 @@ from time import monotonic
 from salt_anchored_435 import ANALYSES, OUT, f, r, setup, salt, timed
 
 sys.path[:0] = [str(ANALYSES / name) for name in ('dea_transfer', 'round_5', 'round_3')]
-from part_ii import Route, SHA
+from part_ii import Route, SHA, select_campaign_endpoint
 from classify_descents import classify
 import f2_carbamate as dea
 import bounded_binary_411 as mdea
@@ -64,9 +64,8 @@ def retain(owner, name, run):
 
 def score(run, point, case):
     run.reduce(point)
-    run.uncertainty(point)
+    spec, rows, ev = run.uncertainty(point)
     import objective_weights_420 as information
-    spec, rows, ev = run.differentiate_endpoint(point)
     information.OUT = r.OUT = run.out
     information.information(case, spec, rows, point['coordinates'], ev.residual_optimizer_gradient,
                             run.result('conditional-uncertainty.json'), r.COMMIT)
@@ -104,10 +103,9 @@ def dea_fit():
     old = r.read(DEABASE / 'selection.json')['chosen']
     starts = [substitute(run.start(ref), carbamate=True) for ref in run.config['starts']]
     candidates = [f.candidate(f'start-{i}', start, {}, [], {}, route=run) for i, start in enumerate(starts)]
-    eligible = [c for c in candidates if c is not None and c['optimizer_converged']]
-    chosen = f.lowest_cost(eligible)
+    chosen, ties = select_campaign_endpoint(candidates, run.controls['function_tolerance'])
     run.write('selection.json', dict(candidates=candidates, chosen=chosen, prior_cost=old['cost'],
-                                     ties=[x['name'] for x in eligible if f.costs_tied(x['cost'], chosen['cost'], run.controls['function_tolerance'])],
+                                     ties=ties,
                                      seconds=monotonic()-started, projected_minutes=[8, 11]))
     if chosen:
         score(run, chosen['parameters'], 'DEA')

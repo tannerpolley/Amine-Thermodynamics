@@ -102,3 +102,12 @@ AMP fixed [search-outcome.json.gz](../amp_transfer/results/salt-anchored-435/fix
 - [matched-deviations-free.json](../amp_transfer/results/salt-anchored-435/matched-deviations-free.json)
 - [common-pressure.json](../amp_transfer/results/salt-anchored-435/common-pressure.json)
 - [shift.json](../amp_transfer/results/salt-anchored-435/hydrolysis/shift.json)
+
+### Supplementary readbacks
+
+- Three MEA bubble checks agree to ten significant digits from two initial pressures. [check-values.json](results/salt-anchored-435/MEA/F4/check-values.json) `printed_digits_agree`
+- The temperature-band readback preserves the #409 role rules. The added heat replay returned 29 of 32 predictions, with 3 above the calculation ceiling. [bands.json](results/salt-anchored-435/MEA/F4/bands.json) · [heat-replay.json](results/salt-anchored-435/MEA/F4/heat-replay.json)
+- The source-pressure replay passes the common-basis and equal-pressure checks. Equality to the old F2 archived pressures fails for the changed parameters. [q4.json](results/salt-anchored-435/MEA/F4/q4.json) `result.checks`
+- The activity grid retains the #432 historical pH check as false. The worked state at 313.15 K, 101325 Pa, 30 wt% MEA and loading 0.30 gives pH 9.620717 on the common molality basis, and its R1 and R2 common-molality calculations agree. [q5.json](results/salt-anchored-435/MEA/F4/q5.json) `result.rows`
+- The MDEA CO₂-free onset readback took 91.5 s. The three brackets have the same printed limits as #421. [binary-onset.json](../mdea_mea_workflow/results/salt-anchored-435/campaign/binary-onset.json) `result.pressures`
+- The MDEA loaded case at 262.862 MPa has outcome `unresolved` under #435. The worked two-liquid composition, densities and curvature in the supplement belong to the older declaration. [fixed-pressure.json.gz](../mdea_mea_workflow/results/salt-anchored-435/campaign/fixed-pressure.json.gz) `outcome, attempts`

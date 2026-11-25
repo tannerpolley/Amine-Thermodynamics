@@ -110,15 +110,42 @@ AMP fixed [search-outcome.json.gz](../../../amp_transfer/results/salt-anchored-4
 - [common-pressure.json](../../../amp_transfer/results/salt-anchored-435/common-pressure.json)
 - [shift.json](../../../amp_transfer/results/salt-anchored-435/hydrolysis/shift.json)
 
-## Manuscript occurrence inventory
+## Publication numbers
 
-51 source files in the input closure. The [occurrence ledger](number-occurrences.csv) records the printed token and locator, with current-model replacements left unresolved wherever support is incomplete.
+Pinned #429 TeX commit `75c3ee525d9068a37197bbb1e915990f7a87b59a`. All 51 active source files are present.
 
-- historical endpoint: 114 source occurrences.
-- reference source law: 40 source occurrences.
-- unresolved: 3989 source occurrences.
+Use the [occurrence map](number-occurrences.csv) to locate a printed value by file, line, row and column. The [quantity records](publication-quantities.json) give full-precision values, denominators, effective models and wheel. The [figure series map](figure-series.json) gives the plotted fields and retained input hashes.
 
-The ledger covers source tokens. Rendered numbering, macro expansion and display readback still require reconciliation.
+Scientific counts written as cardinal numbers before quantity nouns also enter the map. Structural numbers are excluded by rule. These include TeX dimensions and command arguments used for layout, citation keys and publication years in citations, section/equation/table/figure identifiers, issue numbers, hashes, chemical-name locants and math subscripts or exponents used as notation. Scientific-notation mantissa and exponent are recorded together. Model versions are tracked as provenance.
+
+- 624 excluded.
+- 4 figure series · historical.
+- 25 figure series · retained #435.
+- 1 figure series · unchanged.
+- 759 historical.
+- 1,745 retained #435.
+- 1,111 unchanged.
+
+The old MEA objective 150.76 (307 rows, primary weights) becomes 152.96. The Cai share changes from 60.8% to 59.9%.
+
+DEA #413 absolute tie check. The saved starts differ by 3.7522e-11; both tie at 1e-10 and start-1 has the lower cost. The previously used relative rule gives the same labels for these saved costs.
+
+### Supplementary readbacks
+
+- Three MEA bubble checks agree to ten significant digits from two initial pressures. [check-values.json](MEA/F4/check-values.json) `printed_digits_agree`
+- The temperature-band readback preserves the #409 role rules. The added heat replay returned 29 of 32 predictions, with 3 above the calculation ceiling. [bands.json](MEA/F4/bands.json) · [heat-replay.json](MEA/F4/heat-replay.json)
+- The source-pressure replay passes the common-basis and equal-pressure checks. Equality to the old F2 archived pressures fails for the changed parameters. [q4.json](MEA/F4/q4.json) `result.checks`
+- The activity grid retains the #432 historical pH check as false. The worked state at 313.15 K, 101325 Pa, 30 wt% MEA and loading 0.30 gives pH 9.620717 on the common molality basis, and its R1 and R2 common-molality calculations agree. [q5.json](MEA/F4/q5.json) `result.rows`
+- The MDEA CO₂-free onset readback took 91.5 s. The three brackets have the same printed limits as #421. [binary-onset.json](../../../mdea_mea_workflow/results/salt-anchored-435/campaign/binary-onset.json) `result.pressures`
+- The MDEA loaded case at 262.862 MPa has outcome `unresolved` under #435. The worked two-liquid composition, densities and curvature in the supplement belong to the older declaration. [fixed-pressure.json.gz](../../../mdea_mea_workflow/results/salt-anchored-435/campaign/fixed-pressure.json.gz) `outcome, attempts`
+
+### Open publication items
+
+| Producer | Estimated effort | Needed evidence | Occurrences / series |
+| --- | --- | --- | ---: |
+| — | — | No current-value recomputation is assigned by the pinned occurrence map. | 0 |
+
+Publication rendering remains open. Bind the #435 records in `final_rerun_tables.py`, `dea_displays.py`, `f2_figures.py` and `supplement_data_inventory.py` when revising the manuscript. Rendering is a readback, estimated at seconds to minutes after rebinding. Update labels and captions for the expanded AMP objective, linear-T salt laws and changed search outcomes, then run the document and generated-display checks.
 
 ### Retained point and declaration hashes
 
