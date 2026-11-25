@@ -116,8 +116,8 @@ With the fugacity coefficient $\ln\phi_i=\mu_i^{\mathrm{res}}/(RT)-\ln Z$ and co
  a_i=\frac{x_i}{M_wm^\circ}\frac{\phi_i(T,P,\boldsymbol x)P}{\phi_i^{\infty,w}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}}\quad(i\ne w),
  \label{eq:activities}
 \end{equation}
-where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src},r}$ is the pressure at which the reference states of reaction $r$ are evaluated: \SI{1.734}{\mega\pascal} for R1--R3 and \SI{0.1}{\mega\pascal} for R4 and R5.
-An activity is thus defined for the reaction that uses it, and these source pressures are distinct from the ideal-gas standard pressure $P^\circ=\SI{0.1}{\mega\pascal}$ of the caloric functions (\cref{sec:caloric-model}).
+where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src},r}$ is the pressure at which the reference states of reaction $r$ are evaluated: the system pressure $P$ for R1--R3, including the solved pressure of a bubble calculation, and \SI{0.1}{\mega\pascal} for R4 and R5.
+An activity is thus defined for the reaction that uses it, and these reference pressures are distinct from the ideal-gas standard pressure $P^\circ=\SI{0.1}{\mega\pascal}$ of the caloric functions (\cref{sec:caloric-model}).
 With the rational activity coefficient normalized at infinite dilution in water, $\gamma_i^*=\phi_i(T,P,\boldsymbol x)P/[\phi_i^{\infty,w}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}]$, and the molality $m_i=x_i/(x_wM_w)$, the molality activity coefficient is $\gamma_i^m=x_w\gamma_i^*$, so the factor $x_w$ cancels and $a_i=\gamma_i^mm_i/m^\circ$ equals the form printed in \cref{eq:activities}.
 The infinite-dilution reference is evaluated along a charge-neutral dilution path in pure water; only the charge-neutral combinations of species that appear in the reactions require it.
 Every constant is applied on one aqueous-molality basis (Section~\ref{supp-sec:s-parameters}).

@@ -263,15 +263,21 @@ def reference_states():
     for case, spec in json.loads((folder/'tables.json').read_text()).items():
         record = json.loads((folder/f'{case}.json').read_text())
         assert all(record['checks'].values()), case
+        inputs = [folder/'tables.json', folder/f'{case}.json']
+        if case == 'mea':  # R1 and R3 on the common molality basis of the conversion equation (#432 Q4); ln K + Gamma does not depend on the basis
+            inputs.append(ROOT/'analyses/round_3/results/q4.json')
+            for r, c in zip(record['reactions'], json.loads(inputs[-1].read_text())['S15_common_basis'], strict=True):
+                assert r['name'] == c['reaction'] and math.isclose(r['ln_K_source'] + r['Gamma'], c['common_ln_K'] + c['common_Gamma'], rel_tol=0, abs_tol=1e-9)
+                r['ln_K_source'], r['Gamma'] = c['common_ln_K'], c['common_Gamma']
         rows = [[label, *(format(reduce(getitem, path, record), precision) if path else '' for path in paths)]
                 for label, precision, *paths in spec['rows']]
         name = f'{case}_reference_state.tex'
         table(name, spec['caption'], spec['headings'], rows, spec['cols'])
-        provenance = ''.join(f'% Input: {p.name} SHA256 {hashlib.sha256(p.read_bytes()).hexdigest()}\n'
-                             for p in (folder/'tables.json', folder/f'{case}.json'))
+        provenance = ''.join(f'% Input: {p.name} SHA256 {hashlib.sha256(p.read_bytes()).hexdigest()}\n' for p in inputs)
+        out = ROOT/'docs/scientific/latex/tables'/name if case == 'mea' else folder/name  # the retained #428 file keeps its mole-fraction R1 and R3 values
         if '--check' not in sys.argv:
-            (folder/name).write_text(provenance+OUTPUTS[name])
-        assert (folder/name).read_text() == provenance+OUTPUTS[name], name
+            out.write_text(provenance+OUTPUTS[name])
+        assert out.read_text() == provenance+OUTPUTS[name], name
 
 
     amp, mea, s12 = (json.loads((folder/f'{name}.json').read_text()) for name in ('amp', 'mea', 's12'))

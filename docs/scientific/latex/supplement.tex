@@ -176,6 +176,8 @@ The value used here, 0.036305439, is the constant fitted by least squares with t
 % P:supplement-19
 The main text reports the fits of the five water parameters to IAPWS-95 \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, the \COtwo--water interaction to Kiepe pressures \cite{kiepeExperimentalDeterminationPrediction2002} and the \MEA permittivity coefficients to measured permittivities.
 In the water fit, the two exponential terms in $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$, with $a_1=10.11$, $b_1=-0.01775$, $a_2=-1.417$ and $b_2=-0.01146$, were fixed at the values of Held et al.\ \cite{Held2008} while $\sigma_0=2.7804326$~\si{\angstrom} was fitted; diameters are in angstrom and temperature in kelvin.
+The water fit uses IAPWS-95 vapor pressures and saturated-liquid densities at 20 temperatures, 298.15--\SI{393.15}{\kelvin} in \SI{5}{\kelvin} steps, and 23 isobaric heat capacities.
+At those 20 temperatures the fitted parameters deviate on average by 0.075\,\% in vapor pressure, 0.036\,\% in saturated-liquid density, 0.037\,\% in liquid density at \SI{0.3}{\mega\pascal} and 0.44\,\% in heat capacity at \SI{0.3}{\mega\pascal}, with maxima of 0.17, 0.098, 0.095 and 1.49\,\%; at 19 temperatures midway between them the averages are 0.070, 0.034, 0.035 and 0.42\,\%, and at three temperatures from 298.15 to \SI{353.15}{\kelvin} at \SI{0.101325}{\mega\pascal} the density and heat capacity deviate on average by 0.038 and 0.78\,\%.
 
 % P:supplement-20
 In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.\ \cite{Yang2024}; the \COtwo coefficients, $10^{-8}$ L/mol and 1403 K, are set in this work.
@@ -262,7 +264,11 @@ The MEA model gives ratios of 0.004--0.182 at the ten states, five at \SI{293.15
 Every change but the last two rows is made with all other parameters fixed.
 Raising the solvation factor of \COtwo to 1.5 raises the objective value by 0.569, and raising that of MEA to 1.5 raises it by 15.037; refitted with the MEA factor at 1.5, the objective falls 1.096 below that of the MEA model while the geometric-mean ratio falls to 0.0197.
 The second pair of MEA permittivity coefficients raises the objective by 0.110 at fixed parameters and by 0.108 after a refit.
-The largest geometric-mean ratio among the tested changes is 0.0402, so the calculated share stays about 25 times below the measurements; the average of Figiel et al.\ over ions and solvents only has not been evaluated, and the cause of the deficit is unresolved.
+The largest geometric-mean ratio among the tested changes is 0.0402, so the calculated share stays about 25 times below the measurements; the exact average of Figiel et al.\ over ions and solvents only has not been evaluated for MEA, and the cause of the deficit is unresolved.
+Two further comparisons do not attribute it to one term.
+For the bicarbonate--carbonate pool alone, the calculated carbonate fraction $c_{\ce{CO3^{2-}}}/(c_{\ce{CO3^{2-}}}+c_{\ce{HCO3-}})$ at the eight Jakobsen et al.\ states at \SI{313.15}{\kelvin}, 0.09--0.95 mol/mol, is $5.9\times10^{-6}$ to 0.039 against measured values of 0.016 to 0.57.
+The calculated pH, from R2 on the common molality basis, falls from 9.84 to 7.92 between loadings of 0.05 and 0.50 mol/mol in unloaded 30 wt\% MEA at \SI{313.15}{\kelvin} and \SI{101325}{\pascal}; it lies 0.64--0.81 below the electrode values of Hartono and Svendsen as plotted by Hessen et al.\ at \SI{313.15}{\kelvin} (197 points read from their Fig.~6) and 0.42--0.82 below the six of Matin et al.\ at \SI{294.15}{\kelvin} (their Fig.~1) \cite{Hessen2010,matinFacileMethodDetermination2012}.
+The pressure of the electrode measurements and the relation between the electrode and equation-of-state activity scales are not reported, and at a loading of 0.30 mol/mol the pH from R1 on its mole-fraction basis is 10.63 against 8.89 from R2, so these differences do not isolate a cause.
 The refits with a changed solvation factor or permittivity pair show no detected instability at the liquid and liquid--vapor states of Section~\ref{sec:s-phase} that could be evaluated.
 
 \input{tables/supplement-carbonate-sensitivity}
@@ -388,17 +394,20 @@ Table~\ref{tab:supplement-check-values} gives reference values of the MEA model 
 Two worked calculations give every intermediate quantity for checking an implementation; both are numerical verification cases and involve no comparison with a measurement.
 Table~\ref{tab:amp-reference-state} gives the tangent-plane trial and the two-liquid equilibrium of the AMP fit with the free cation--water coefficient at 30 wt\% AMP, \SI{393.15}{\kelvin} and a loading of 0.700 mol/mol, the state of the largest Gibbs-energy decrease in Section~\ref{sec:s-phase}.
 The error estimate of the plane value is $1.8267\times10^{-10}$ and that of the descent along the direction of the trial phase $1.7544\times10^{-10}$, against a tangent-plane distance of $-3.697\times10^{-3}$.
+On the two-liquid solution the largest residual of the chemical-potential equations is $1.8\times10^{-13}$ against a tolerance of $10^{-10}$, and the largest reaction and electrochemical-potential residuals are $7.5\times10^{-13}$ and $1.1\times10^{-13}$.
+Tested against the tangent plane of that solution, five trial starts give a smallest distance of $+0.0307$, at a water-rich liquid root, and the four that end on a branch connected to the dilute vapor, at 383.4 mol/m$^3$, give $+0.0382$; these minima apply to the sampled endpoints.
 Table~\ref{tab:mea-reference-state} gives the integral absorption heat and the equilibrium heat capacity of the MEA model at \SI{313.15}{\kelvin}, \SI{1.734}{\mega\pascal} and a final loading of 0.31 mol/mol: \SI{-81.553}{\kilo\joule\per\mole} of \COtwo and 84.628 J/(mol K) per mole of apparent components, the latter reproduced by centered differences of the enthalpy within $4\times10^{-7}$ J/(mol K).
 With stoichiometric numbers $\nu_{ri}$ positive for products, $\Gamma_r=\sum_i\nu_{ri}\ln\phi_i^{\mathrm{ref}}$ over the pure-water and infinite-dilution reference states at $P_{\mathrm{src},r}$ and $\Delta\nu_r=\sum_i\nu_{ri}$, the constant of reaction $r$ on ideal-gas reference states at $P^\circ=\SI{0.1}{\mega\pascal}$ is
 \begin{equation}
  \ln K_{r,P^\circ}^{\mathrm{ig}}=\ln K_{r,\mathrm{src}}+\Big(\sum_{i\ne w}\nu_{ri}\Big)\ln(M_wm^\circ)+\Gamma_r+\Delta\nu_r\ln(P_{\mathrm{src},r}/P^\circ),
  \label{eq:pressure-standard-conversion}
 \end{equation}
-where $K_{r,\mathrm{src}}$ is the source correlation on the molality basis and $P_{\mathrm{src},r}$ is \SI{1.734}{\mega\pascal} for R1--R3 and \SI{0.1}{\mega\pascal} for R4 and R5.
+where $K_{r,\mathrm{src}}$ is the source correlation on the molality basis and $P_{\mathrm{src},r}$ is the system pressure for R1--R3, here \SI{1.734}{\mega\pascal}, and \SI{0.1}{\mega\pascal} for R4 and R5; the values of $\ln K_{r,\mathrm{src}}$ and $\Gamma_r$ in Table~\ref{tab:mea-reference-state} are on the common molality basis, and their sum is the same on the mole-fraction basis of the R1 and R3 sources.
 Its temperature derivative gives the reaction enthalpies of the last rows of Table~\ref{tab:mea-reference-state}, $\Delta_rh_{P^\circ}^{\mathrm{ig}}=RT^2\,\mathrm{d}\ln K_{r,\mathrm{src}}/\mathrm{d}T+RT^2(\partial\Gamma_r/\partial T)_{P_{\mathrm{src},r}}$, as the sum of a source term and a fugacity term.
+Evaluating the R1--R3 reference states at \SI{0.1}{\mega\pascal} instead of the system pressure changes little: at two MEA bubble states with calculated \COtwo partial pressures of 1.559 and \SI{73206}{\pascal} it raises them by 0.00187 and \SI{15.03}{\pascal}, and it changes this integral heat from $-81.553$ to \SI{-81.603}{\kilo\joule\per\mole} of \COtwo.
 
 \input{../../../analyses/mea_parameter_bundle/results/reference-states-428/amp_reference_state}
-\input{../../../analyses/mea_parameter_bundle/results/reference-states-428/mea_reference_state}
+\input{tables/mea_reference_state}
 
 % P:supplement-kim
 The primary Kim comparison on common intervals includes calculated intervals whose final loading is at most 0.60 mol \COtwo/mol total MEA.
@@ -507,6 +516,12 @@ No search that finishes finds a liquid--liquid split.
 One of those that do not finish is at 363.15 K, 78.62 wt\% MDEA and 1.368 mol/mol, at 1.05 times the bubble pressure, where an earlier MDEA parameter set gave a split with a tangent-plane distance of $-0.00262$ in units of $RT$; at the reported parameters the bubble-pressure calculation there does not converge.
 At the pressure of that earlier split, 262.862 MPa, the reported parameters give a converged single liquid and, from two of three starting pairs of compositions, the same two distinct liquids, with densities of \num{22214} and \num{25053} mol/m$^3$ and 4.387\,\% of the moles in the denser one; the two-liquid solution lowers $G/(RT)$ by $1.39417\times10^{-3}$ mol against a numerical error of $7.60\times10^{-10}$ mol.
 This calculation is separate from the \num{11824} searches and is reported under its own conditions, far above the 0.100--4.190 MPa of the measured states.
+Its two liquids are an aqueous electrolyte liquid and a dense \COtwo-rich liquid, with \COtwo mole fractions of 0.262 and 0.736 and an \ce{MDEAH+} mole fraction below $1.08\times10^{-4}$ in the \COtwo-rich one.
+Along the composition line between them, dispersion and the Born term make the Gibbs energy concave and the Debye--H\"uckel term opposes them (curvatures $-0.564$, $-0.419$ and $+0.207$ of a total $-0.244$ in molar $G/(RT)$); removing the Born term stopped the single-liquid calculation before a result, so whether the split survives that change is unresolved.
+The split is a prediction at a pressure far outside the data, and its existence alone does not identify a defect in the Born term.
+The two splits of the MDEA refit with the water--bicarbonate interaction at 0.1325 (main-text \cref{main-sec:results-mdea-control}) lie at 288.71 K, 1.121 MPa, a feed of 1 mol MDEA, 9.9218 mol water and 0.5635 mol \COtwo, and at 373.15 K, 203.127 MPa, 1 mol MDEA, 1.7988 mol water and 1.3 mol \COtwo; they lower $G/(RT)$ by $1.937\times10^{-3}$ and $2.495\times10^{-4}$ mol.
+With the interaction at 0.7650 and at 1.0 the single liquid converges at both states, its search finds no descent, and every two-liquid calculation started from the split compositions is rejected because the two liquids coincide or one vanishes, or ends at its iteration limit.
+At the colder state, changing only this interaction from 0.1325 to 0.7650 raises the Gibbs energy of the two split liquids 0.391 mol above that of the single liquid, so that split follows from the low value of the interaction.
 The 27 measured MDEA states with an instability toward a vapor have an assigned pressure of 0.1731--0.9807 times the calculated bubble pressure: four densities of Sobrino et al., 11 species states of B\"ottinger et al.\ at 0.5 MPa and two at 2.5 MPa, five heats of Zheng et al.\ and five heats of Merkley et al.
 At four of the 11 species states at 0.5 MPa the instability is shown only by a trial composition from an earlier search.
 At none of the 27 states is a second liquid confirmed: the 24 converged two-phase calculations, at 16 of the states, each return one liquid and one phase that connects continuously to a dilute vapor along the isotherm.
@@ -514,6 +529,7 @@ At none of the 27 states is a second liquid confirmed: the 24 converged two-phas
 % P:supplement-phase-amp
 For AMP, the search covers the 270 measured states and 396 grid states, the latter at 26.8 and 30.0 wt\% AMP, the nine grid temperatures and 11 loadings up to 0.966 mol/mol at both pressures.
 For the AMP model every search finishes without a detected instability, also when the 7301 trial compositions from earlier searches are tested; the smallest tangent-plane distance at those compositions is $+1.66\times10^{-4}$.
+Repeating the 666 searches of the comparison fit with the search's own trials alone recovers all 93 of its detected instabilities and finds none at the other 573 states; the pressure of the repeat equals the archived pressure at 609 states, and the archive does not record that pressure for the other 57, so these 57 are not compared.
 For the comparison fit, with $b_{\mathrm{AMPH^+,w}}$ also fitted (Section~\ref{sec:s-amp-slope}), each of its 93 detected instabilities was classed by solving for the density of the trial phase at the pressure of the parent liquid; every parent and trial phase is liquid.
 A liquid--liquid split is counted as confirmed when a separate equilibrium calculation at fixed feed, temperature and pressure returns two distinct liquids with positive amounts and a Gibbs-energy decrease larger than its estimated numerical error; 73 splits are confirmed and 20 are not.
 The confirmed splits lie at 26.8--30.0 wt\% AMP, 363.15--393.20 K and loadings of 0.400--0.966 mol/mol.
@@ -528,7 +544,8 @@ Later fits also test the compositions of instabilities already found.
 
 % P:supplement-penalty-mea-dea
 The MEA model required no penalty.
-For DEA, both initial parameter sets converge to objective values that agree within the optimizer tolerance, and the solution with the lower value is reported; no penalty was used.
+For DEA, the two initial parameter sets converge to objective values of 8.082968228315 and 8.082968228355, within the tie tolerance of $10^{-10}$, and the solution with the lower value is reported; no penalty was used.
+The second solution has $k_{\mathrm{DEAH^+,w}}=-0.18834289$ and $k_{\mathrm{DEACOO^-,w}}=-0.04772959$ against $-0.18834283$ and $-0.04773144$, deviates by 28.51\,\% from the 30 Lawson and Garst pressures and by 0.94\,\% from the 50 Carson heats, and has no detected split in the 1270 searches that finish; its deviations from the pressures outside the fit were not retained.
 
 % P:supplement-penalty-mdea
 For MDEA, the MDEA--water interaction $k_{\mathrm{MDEA,w}}(T)=k_{\mathrm{MDEA,w}}(423\ \mathrm{K})+(\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T)(T-423\ \mathrm{K})$ is the only fitted parameter that acts on the \COtwo-free solution.
@@ -557,6 +574,28 @@ With the carbamate inputs of the 16-parameter calibration, slopes of 0, $-50$ an
 The fixed slope lies 0.86 standard errors from the fitted value, and fixing it raises the objective value by 0.78, from 61.2853 to 62.0651, so the two slopes give similar objective values on the assigned scales and weights.
 The AMP model was started from the comparison fit and from the second initial parameter set, and both reach 62.0651; it refits the other eight parameters, and its standard errors are conditional on the fixed slope.
 The contribution of the fitted loaded pressures to its objective is 59.70, against 58.89 for the comparison fit.
+
+% P:supplement-amp-same-pressure
+At equal absolute pressures the two fits were compared at three grid states, 30 wt\% AMP, \SI{393.15}{\kelvin} and loadings of 0.3, 0.4 and 0.7 mol/mol, at the search pressures of the comparison fit, and at the six measured states with a confirmed split, both at that fit's search pressure and at the measured pressure.
+The comparison fit gives a confirmed two-liquid split in 14 of these 15 calculations, all but the grid state at 0.3 mol/mol, with smallest tangent-plane distances of $-9.9\times10^{-4}$ to $-3.7\times10^{-3}$; the AMP model gives none, and its smallest distance is within $1.2\times10^{-13}$ of zero in every calculation but the worked state.
+There the imposed \SI{1.212}{\mega\pascal} lies below the AMP model's own bubble pressure, \SI{1.238}{\mega\pascal}, and the AMP model has a descent of $-0.0199$ toward a phase at 383 mol/m$^3$, which a fixed-composition isotherm with positive pressure--density derivative connects to the dilute vapor.
+
+% P:supplement-amp-hot-pressures
+At 373--\SI{393}{\kelvin}, the 18 total pressures of Hartono et al.\ and the 25 of Tong et al., two of them \COtwo-free, are all outside the fit; calculated for one liquid, they deviate by 28.10 and 25.30\,\% for the comparison fit and by 28.35 and 25.47\,\% for the AMP model, with signed deviations equal to minus these values, so each pressure is underpredicted.
+A search of the comparison fit at the measured pressure resolves a descent at seven states of each source.
+At the Hartono et al.\ state at \SI{373}{\kelvin} and 0.58 mol/mol, measured at \SI{0.4065}{\mega\pascal}, its single liquid has a smallest tangent-plane distance of $-1.84\times10^{-3}$, and of the sets of phases tested the two-liquid one has the lowest Gibbs energy.
+At the Tong et al.\ state at \SI{373.2}{\kelvin} and 0.455 mol/mol, measured at \SI{0.2915}{\mega\pascal}, the same holds, and the two liquids, of 11.410 and 1.138 mol, lower $G/(RT)$ by $5.57\times10^{-4}$ mol against a numerical error of $3.1\times10^{-9}$ mol.
+The bubble pressure of the two-liquid solution is lower than the measured pressure where it could be calculated: 0.2525, 0.3384 and \SI{0.4451}{\mega\pascal} at the three Hartono et al.\ states at \SI{373}{\kelvin} measured at 0.4065, 0.5100 and \SI{0.6405}{\mega\pascal}, and \SI{0.3291}{\mega\pascal} at the Tong et al.\ state at \SI{393.2}{\kelvin} measured at \SI{0.6326}{\mega\pascal}.
+At four Tong et al.\ states at \SI{373.2}{\kelvin} the calculated values, 0.159--\SI{0.238}{\mega\pascal}, miss the check that the pressure recalculated from the solved liquid agrees within a relative $10^{-10}$, and at the fifth, measured at \SI{0.9835}{\mega\pascal}, one liquid vanishes and no two-liquid bubble pressure is obtained.
+These comparisons do not establish global stability.
+
+% P:supplement-amp-split-terms
+Recalculated directly from the equation of state, the worked split of the comparison fit at \SI{393.15}{\kelvin} reproduces its Gibbs-energy decrease within $1.2\times10^{-13}$ mol, the chemical potentials of \COtwo, AMP and water agree between the liquids within $3.9\times10^{-14}\,RT$, and the single liquid is locally unstable, with a lowest eigenvalue of $-0.083$ of the composition Hessian of its Gibbs energy.
+Along the composition line between the two liquids, dispersion, association and the Debye--H\"uckel term make the molar $G/(RT)$ concave, with curvatures of $-0.369$, $-0.228$ and $-0.218$, against $+0.343$, $+0.211$ and $+0.236$ from ideal mixing, the hard chain and the Born term, for a total of $-0.024$; the AMP model gives $+0.030$ there.
+Changing only the temperature coefficient of the \ce{AMPH+}--water interaction of the comparison fit from $-219.25$ to \SI{-150}{\kelvin} makes that total positive, $+3.4\times10^{-4}$, and places the Gibbs energy of the two liquids \SI{0.0190}{\mole} above that of the single liquid, so this coefficient controls the split.
+With the same fitted coefficients, the exact average of Figiel et al.\ over ions and solvents (their Eq.~9) \cite{Figiel2025} in place of the average used here keeps the split and changes its Gibbs-energy decrease from 0.018814 to 0.018693 mol, by 0.64\,\%.
+With the Born term removed and every other coefficient fixed, the two liquid compositions remain distinct liquid roots whose combination lies 0.364 mol below the single liquid, but the two-liquid calculations did not converge, so the amounts of the two liquids without the Born term are unresolved.
+No measurement used here tests the split, which therefore remains a prediction of the comparison fit above the temperatures of its fitted loaded-solution pressures.
 
 \section{Published comparisons that are not on identical observations}\label{sec:s-published}
 % P:supplement-published-dea

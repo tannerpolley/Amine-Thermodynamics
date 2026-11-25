@@ -164,3 +164,40 @@ No calculation was run and no retained record was edited. Numbers added or moved
 | Section 5.3 and S10: Hong pressure AARD | 1.53 % | Hong et al. 2027, Section 3.2 and Table 3 (Zotero 5MFM84GS) | literature, read |
 
 Removed from the main text: the 262.862 MPa state, its Gibbs decrease, numerical error and dense-phase share (kept in Section S7.1), the Table 10 fixed-pressure row, the abstract objective values, MEA and DEA deviations and 666 searches, and the Section 5.1 sentence repeating the Table 10 deviations. The Hong deviations on 132 observations and the 131 failing states remain in Section S10 and Table S25.
+
+## Text pass 4 (round-3 calculations and the #433 split diagnosis)
+
+No calculation was run and no retained record was edited. `R3/` abbreviates `analyses/round_3/results/`; `S433` is `analyses/mea_parameter_bundle/results/split-diagnosis-433/README.md`. **checked** means `dea_displays.py` rebuilds the string from the record (new block "Round-3 calculations") and the run fails if the prose differs.
+
+| Quantity | Displayed | Where | Retained source | Check |
+|---|---|---|---|---|
+| AMP fits at equal absolute pressure: confirmed splits | 14 of 15 (first fit), none (second) | §4.2, S7.3 | `R3/q1.json` (`attempts[*].confirmed` per fit); the producer asserts 15 rows, 14 and 0 | checked |
+| Same: first-fit smallest TPD at confirmed states; second-fit TPD | −9.9e-4 to −3.7e-3; within 1.2e-13 of zero except the worked state | S7.3 | `R3/q1.json` (`minimum_trial.quantities.tpd_over_rt`); the producer asserts the 1.2e-13 bound | checked |
+| Worked state: second fit's bubble pressure; vapor-side descent | 1.238 MPa; −0.0199 at 383 mol/m³ | §4.2, S7.3 | `S433` (fixed-pressure sweep paragraph: 1.238250 MPa, −0.01988932, 383.23 mol/m³, 33-point isotherm) | not checked |
+| AMP total pressures at 373–393 K, one liquid: AARD (bias = −AARD) | Hartono 18: 28.10 / 28.35 %; Tong 25: 25.30 / 25.47 % (main text 28.1, 25.3, 28.3, 25.5) | §4.2, S7.3 | `R3/q2.json:scores` (`free`, `fixed`); the producer asserts bias = −AARD for all four | checked |
+| Resolved descents of the first fit at the measured pressure | 7 Hartono, 7 Tong | S7.3 | `R3/q2.json:scores[*].fixed_pressure_outcomes` | not checked |
+| Hartono row 9 (373 K, 0.58 mol/mol): measured P; parent TPD; local two-liquid bubble P | 0.4065 MPa; −1.84e-3; 0.2525 MPa | §4.2, S7.3 | `R3/q2.json` row `hartono-2021:55`; `analyses/round_3/manuscript-handoff.md` Q2 (−0.001840; 252,535.6 Pa) | not checked |
+| Tong row 9 (373.2 K, 0.455 mol/mol, 0.2915 MPa): liquid amounts; ΔG/RT; error | 11.410 and 1.138 mol; 5.57e-4 mol; 3.1e-9 | S7.3 | handoff Q2 (11.41035, 1.13818, 0.000556998, 3.13e-09); row `tong-2012:28` | not checked |
+| Two-liquid bubble pressures; readback misses; vanished phase | 0.2525, 0.3384, 0.4451, 0.3291 MPa; four Tong states 0.159–0.238 MPa miss the 1e-10 readback; Tong row 13 (0.9835 MPa) unavailable | S7.3 | handoff Q2 table | not checked; **misses reported as misses** |
+| Worked AMP split: recalculation, chemical potentials, Hessian eigenvalue | within 1.2e-13 mol (record 1.14e-13); 3.9e-14 RT; −0.083 | S7.3 | `S433` "Independent verification" | not checked |
+| Curvature terms along the liquid–liquid line (first fit); AMP model total | −0.369, −0.228, −0.218 vs +0.343, +0.211, +0.236; total −0.024; +0.030 | S7.3 | `S433` "AMP energy and curvature" | not checked |
+| Slope-only control (−219.25 → −150 K) | total curvature +3.4e-4; pair 0.0190 mol above the single liquid | S7.3 | `S433` (+0.000344; +0.01896829) | not checked |
+| Exact Figiel Eq. 9 average | 0.018814 → 0.018693 mol; 0.64 % | §5.4, S7.3 | `S433` "Formulation test" (−0.01869319273) | not checked |
+| Born removed | pair 0.364 mol below the single liquid; amounts unresolved | S7.3 | `S433` (−0.36375749) | not checked |
+| Controlled MDEA splits at k = 0.1325 | 288.71 K, 1.121 MPa, 0.5635 mol/mol; 373.15 K, 203.1 MPa (203.127), 1.3 mol/mol; water 9.9218 and 1.7988 mol; ΔG/RT 1.94e-3 and 2.49e-4 (S7: 1.937e-3, 2.495e-4) | abstract, §4.3, S7.1 | `R3/q3.json` (`reference`); the producer asserts that the 0.7650 and 1.0 rows have no resolved descent and no confirmed attempt | checked (ΔG and the abstract wording) |
+| Same, 0.7650 and 1.0: attempt outcomes | coalesced, vanished or iteration budget exhausted | §4.3, S7.1 | `R3/q3.json` (`attempts[*].message`) | asserted |
+| Cold MDEA split, k alone 0.1325 → 0.7650 | pair 0.391 mol above the single liquid | S7.1 | `S433` "MDEA" (+0.39080) | not checked |
+| 262.862 MPa MDEA split: x(CO₂) in the two liquids; x(MDEAH⁺); curvature terms | 0.262, 0.736; < 1.08e-4; dispersion −0.564, Born −0.419, Debye–Hückel +0.207, total −0.244 | S7.1 | `S433` MDEA table and text | not checked |
+| Reaction reference pressure | R1–R3 at system P (bubble P in a bubble calculation), R4–R5 at 0.1 MPa | Section 2 (text after the activity equation), nomenclature, S3 | handoff Q4; #432 readiness | text |
+| S15 common-molality R1 / R3: ln K, Γ | −31.175402, −23.536538; −576.92284, −942.62762 | Table S15 (generated) | `R3/q4.json:S15_common_basis`; `final_rerun_tables.py --reference-states` asserts ln K + Γ equals the retained #428 value within 1e-9 and now writes `tables/mea_reference_state.tex` (the #428 file is unchanged) | table generated |
+| R1–R3 at 0.1 MPa instead: p(CO₂) shifts; heat | +0.00187 and +15.03 Pa at 1.559 and 73206 Pa; −81.553 → −81.603 kJ/mol | S3 | `R3/q4.json` (`rows[*].pCO2_change`, `prior_prediction_Pa`, `heat`, `heat_change`) | checked |
+| S14 certificate | chemical-potential residual 1.8e-13 (tolerance 1e-10); reaction 7.5e-13; electrochemical 1.1e-13; smallest TPD of 5 starts +0.0307; four vapor-connected +0.0382 at 383.4 mol/m³ | S3 | `R3/q6.json:split.diagnostics`; handoff Q6 | +0.0307, +0.0382: checked; residuals not checked |
+| Search recall of the comparison fit | 93 of 93 recovered; 0 new among 573; pressure matches at 609; 57 without archived pressure | S7.1 (AMP) | `R3/q7-summary.json` | checked; **57 keys reported as not compared** |
+| DEA tie | 8.082968228315, 8.082968228355; tolerance 1e-10; second solution k −0.18834289, −0.04772959 vs −0.18834283, −0.04773144; 28.51 % (30 Lawson), 0.94 % (50 Carson); 1270 searches finish, no split; outside-fit deviations not retained | Section 3 (initial parameter sets), S7.2 | `R3/q8.json:dea`; `analyses/dea_transfer/results/refit-413/selection.json` (`chosen` = start-0, `ties`) | costs and 28.51: checked |
+| Kuranov 82 | 66 + 4 fitted; 11 at 413 K + 1 at 393.16 K, 1.205 MPa not fitted; 22.1 vs 19.1 % | §5.3 | `R3/q8.json:kuranov` | checked |
+| Water fit conditions | 20 temperatures 298.15–393.15 K (psat, saturated ρ), 23 heat capacities | S1.2 | `R3/q8.json:water.fitted_rows` (a constant written by `analyses/round_3/records.py`, not computed from fit rows) | not checked |
+| Water deviations (record `lambda-0.1-A`, equal to F2 in all five coordinates) | 0.075, 0.036, 0.037, 0.44 % (max 0.17, 0.098, 0.095, 1.49); staggered 0.070, 0.034, 0.035, 0.42 %; 0.101325 MPa controls 0.038, 0.78 % | S1.2 | `R3/q8.json:water.metrics` | not checked |
+| Carbonate pool split, 8 Jakobsen states at 313.15 K | calculated 5.9e-6 to 0.039; measured 0.016 to 0.57 | S2.2 | `R3/q5.json`; handoff Q5 table | not checked |
+| MEA pH (R2, common molality) | 9.84 → 7.92 (loading 0.05 → 0.50); 0.64–0.81 below Hessen Fig. 6 (197 points, 313.15 K); 0.42–0.82 below Matin Fig. 1 (6 points, 294.15 K); 10.63 (R1) vs 8.89 (R2) at 0.30 | S2.2 | `R3/q5.json`, `R3/ph-digitization.json`; handoff Q5 | not checked (digitized read-off bounds) |
+
+Not used from the round-3 handoff: the MDEA unbounded per-dataset deviations and the AMP relative-objective statistics (Q8), the transplanted-ion comparison (Q8), the per-ion activity decomposition (Q5) and the Böttinger 046 and 100 kPa control rows of Q4.

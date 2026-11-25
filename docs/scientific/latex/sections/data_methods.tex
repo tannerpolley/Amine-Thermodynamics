@@ -63,8 +63,7 @@ With the two Cai observables instead weighted so that each contributes half its 
 
 % P:methods-starts
 Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; these are local solutions, not a global search.
-For DEA the two solutions agree within the optimizer tolerance, and the pressures outside the fit had been inspected before the lower one was reported, so for that choice they are development data (Table~\ref{supp-tab:supplement-transfer-data}).
-% TODO #432 Q8: the second DEA solution (deviations, phase results) and the tie rule actually used.
+For DEA the two objective values, 8.082968228315 and 8.082968228355, differ by less than the tie tolerance of $10^{-10}$, the parameters agree to four significant figures, and the second solution gives the same deviations of the fitted pressures and heats, 28.5 and 0.9\,\%, and no split in the 1270 searches that finish; the lower one is reported, but the pressures outside the fit had been inspected before that choice, so for it they are development data; the deviations of the second solution from them were not retained (Table~\ref{supp-tab:supplement-transfer-data}).
 The final 11-parameter MEA optimization used no stability penalty.
 Its two starts descended from an earlier stability-penalized calibration, the 16-parameter calibration described next, and they converge to objective values of 150.763 and 150.767.
 

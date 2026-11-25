@@ -155,3 +155,39 @@ Not on the text list and therefore not addressed: Q2 (free-slope fit at 373–39
 5. No record was found giving a reason why the MEA 15/45 wt % pressures were not fitted. The text describes only their use.
 6. Highlight 4 is exactly 85 characters, the Elsevier limit.
 7. The judgement that the AMP splits are artefacts is the Writer's wording of the owner's request. The owner should confirm it before submission.
+
+## Text pass 4 (round-3 evidence)
+
+**Basis.** The text-pass-4 Writer brief of 2026-11-24: the merged #432 round-3 handoff (`analyses/round_3/manuscript-handoff.md`), the #432 reference-pressure correction, the #433 AMP split diagnosis (`analyses/mea_parameter_bundle/results/split-diagnosis-433/README.md`) with the owner's decision on its wording, and the research child's SAFT-precedent list. No calculation was run and no retained record was edited. Every new number is in the "Text pass 4" section of `429-story-pass-number-sources.md`; `STYLE.md` has a new "Text pass 4 (AMP split status)" row.
+
+### Applied
+
+| Item | Where |
+|---|---|
+| Q1: both AMP fits at equal absolute pressures (14 of 15 confirmed vs none; the second fit's descent at the worked state is toward a vapor, below its own 1.238 MPa bubble pressure) | §4.2; S7.3 |
+| Q2: the 18 Hartono and 25 Tong pressures at 373–393 K, one liquid, all underpredicted (28.1/25.3 vs 28.3/25.5 %); two-liquid set lowest at Hartono row 9 and Tong row 9; two-liquid bubble pressures below the measured ones; the four Tong readback misses and the Tong row 13 failure stated as such | §4.2; S7.3 |
+| Q3: conditions and ΔG/RT of the two k = 0.1325 splits; the 0.7650 and 1.0 sets converge to one liquid with no descent and no two-liquid result; the abstract now says "two calculated splits at states where none was found with the original value" (mirrored in the preprint abstract and cover letter) | abstract; §4.3; S7.1 |
+| Q4: R1–R3 reference states at the system pressure, R4–R5 at 0.1 MPa; 1.734 MPa only as the S15 example. Table S15 prints R1 and R3 on the common-molality basis of Eq. S-conversion (the producer now writes `tables/mea_reference_state.tex` and asserts that ln K + Γ equals the #428 value; the #428 file is untouched). One sentence gives the 100 kPa alternative | Section 2, nomenclature, S3, Table S15 |
+| Q5: carbonate-pool split at 8 Jakobsen states and the pH comparison against Hessen Fig. 6 and Matin Fig. 1, with the unreported electrode pressure and activity scale and the R1/R2 pH difference; no attribution | S2.2 |
+| Q6: S14 certificate (residuals; smallest TPD +0.0307 over five starts, +0.0382 on the vapor branch) | S3 |
+| Q7: search recall 93/93, 0 new in 573; 57 keys without archived pressure reported as not compared | S7.1 |
+| Q8: DEA tie (costs, tolerance, second solution's parameters, deviations and phase result; its outside-fit deviations were not retained); Kuranov 82 = 66 + 4 fitted, 11 + 1 not fitted, 22.1 vs 19.1 %; water fit conditions and deviations | Section 3; S7.2; §5.3; S1.2 |
+| #433: "judged to be artefacts" replaced by one sentence (calculated predictions of the free-slope fit, controlled by the fitted AMPH⁺–water temperature coefficient, neither confirmed nor excluded by any measurement used). Supplement: term curvatures, slope-only control, exact Figiel Eq. 9 average (0.64 %), Born-off result, and the 262.9 MPa MDEA case (composition, curvature terms, Born-off unresolved). §5.4 now says the exact average was evaluated only at the worked AMP split | §4.2, §5.4; S7.1, S7.3 |
+| SAFT precedents: Privat 2010, Yelash 2005, Polishuk 2010, Ascani and Held 2021, Yang 2024 (one sentence) followed by "The calculated AMP and MDEA splits are predictions of the stated models, and no measurement used here tests them." | §5.5 |
+| `references.bib` refreshed with `scripts/cited_bibliography.py`, run on `main.aux` and `supplement.aux` only (a scratch copy, because the ignored stale `builds/part2*.aux` would otherwise be read). Output: 100 entries; the 7 keys owned by `transfer_sources.bib` were removed so each key has one owner, leaving 93. The refresh adds the four new SAFT entries, drops 24 uncited entries, and updates the others to the current Zotero export | `references.bib` |
+
+### Build and checks
+
+- `scripts/build_manuscript.sh`: passes. Main 34 pages, supplement 37; no undefined references or citations; 0 overfull boxes in either log; BibTeX 0 warnings.
+- `dea_displays.py --check`: 25 displays, 106 source files, every prose string, including a new "Round-3 calculations" block that rebuilds the new checked numbers from `analyses/round_3/results/` and asserts the Q1 counts, the Q2 sign, and the Q3 outcomes of the 0.7650 and 1.0 sets.
+- `final_rerun_tables.py --check` (18 tables) and `--reference-states --check`: pass.
+- `check_private_source.py`: passes. CSE `check_prose.py`: terminology passes; the STYLE.md:67 advisory is the existing one.
+- No `TODO #432` remains. The graphical abstract is identical to `main`.
+- Not done: a page-by-page visual read of the rebuilt PDFs.
+
+### Open
+
+1. Kuranov row 72 (393.16 K, 1.205 MPa) is not fitted (`kuranov-published-422/kuranov-rows.json` group `Kuranov-393K`) and is in no group of `shared-bicarbonate-417/mdea-comparison.json.gz`, whose Kuranov groups are 66 loaded, 11 at 413 K and 4 binary; it is therefore outside the 54 + 121 outside-fit pressures of Table 8. No retained record gives the reason it was left out of both. The text states the count only.
+2. The water fit's "23 heat capacities" is a constant written in `analyses/round_3/records.py`, not counted from fit rows.
+3. Hartono and Svendsen 2009 is cited only through Hessen et al.'s Fig. 6; the pH points are figure read-offs.
+4. The previous open questions 1 (SAFT artefact papers), 4 (exact Figiel average) and 7 (artefact wording) are closed by this pass; the others are unchanged.

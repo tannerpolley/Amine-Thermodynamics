@@ -954,6 +954,33 @@ stated['sections/transfer_results.tex'] += [f"{sbcorr['pair/carbamate-anion/wate
     f"{sbsearch['low']['counts']['unavailable_records']} instead of {msum['unavailable_searches']} searches do not finish, and {WORDS[sbsearch['low']['counts']['confirmed_distinct_splits']]} liquid--liquid splits are confirmed"]
 stated['supplement.tex'] += [f"at the {sbmea['grid']['states'] + sbmea['offset']['states']} liquid and {sbmea['census']['states']} liquid--vapor states",
     f"At the lower bound, ${sbprof['points']['-0.5']['k']:g}$, the objective rises by {sbprof['points']['-0.5']['cost'] - sbprof['center_cost']:.2f}, so the midpoint {sblow['k']:.4f} was taken"]
+# Round-3 calculations (#432) quoted in text pass 4.
+R3 = 'analyses/round_3/results/'
+q1, q2, q3, q4, q6, q7, q8 = (read(R3 + f) for f in ('q1.json', 'q2.json', 'q3.json', 'q4.json', 'q6.json', 'q7-summary.json', 'q8.json'))
+q1ll = {k: sum(any(a['confirmed'] for a in r[k]['attempts']) for r in q1['rows']) for k in ('free', 'fixed')}
+q1tpd = [r['free']['minimum_trial']['quantities']['tpd_over_rt'] for r in q1['rows'] if any(a['confirmed'] for a in r['free']['attempts'])]
+assert len(q1['rows']) == 15 and q1ll == {'free': 14, 'fixed': 0}
+assert max(abs(r['fixed']['minimum_trial']['quantities']['tpd_over_rt']) for r in q1['rows'][1:]) < 1.2e-13
+q2s = {g: [q2['scores'][g][f]['AARD_percent'] for f in ('free', 'fixed')] for g in ('hartono-2021', 'tong-2012')}
+assert all(math.isclose(q2['scores'][g][f]['AARD_percent'], -q2['scores'][g][f]['bias_percent']) for g in q2s for f in ('free', 'fixed')), 'every pressure underpredicted'
+q3d = [r['reference'] for r in q3['rows'][:2]]
+assert [r['k'] < 0.2 for r in q3['rows']] == [True, True] + [False] * 4 and all(r['instability'] == 'finite search, no resolved descent' and not any(a.get('confirmed') for a in r['attempts']) for r in q3['rows'][2:])
+q4p = [r['pCO2_change']['absolute'] for r in q4['rows'][:2]]
+q6d = q6['split']['diagnostics']
+q8d = q8['dea']
+stated['main.tex'] += ['confirm two calculated splits at states where none was found with the original value']
+stated['sections/transfer_results.tex'] += [f"confirmed split in {q1ll['free']} of these {len(q1['rows'])} calculations",
+    rf"by {f1(q2s['hartono-2021'][0])} and {f1(q2s['tong-2012'][0])}\,\% on average for the first fit and {f1(q2s['hartono-2021'][1])} and {f1(q2s['tong-2012'][1])}\,\% for the second",
+    rf"${sci(q3d[0], 2)}$ and ${sci(q3d[1], 2)}$ mol",
+    rf"deviate by {f1(q8['kuranov']['scores']['not fitted']['AARD_percent'])}\,\% against {f1(q8['kuranov']['scores']['fitted']['AARD_percent'])}\,\% for the fitted {q8['kuranov']['counts']['fitted']}"]
+stated['sections/data_methods.tex'] += [f"{q8d['chosen_cost']:.12f} and {q8d['alternative_cost']:.12f}"]
+stated['supplement.tex'] += [f"$-{sci(-max(q1tpd), 1)}$ to $-{sci(-min(q1tpd), 1)}$",
+    rf"by {q2s['hartono-2021'][0]:.2f} and {q2s['tong-2012'][0]:.2f}\,\% for the comparison fit and by {q2s['hartono-2021'][1]:.2f} and {q2s['tong-2012'][1]:.2f}\,\% for the AMP model",
+    f"by {q4p[0]:.5f} and " + rf"\SI{{{q4p[1]:.2f}}}{{\pascal}}", f"from ${q4['heat_previous_kJ_mol']:.3f}$ to " + rf"\SI{{{q4['heat'][0]['value_kJ_mol'] + q4['heat_change']['absolute']:.3f}}}",
+    f"distance of $+{q6d['trial_minimum']:.4f}$", f"give $+{q6d['vapor_connected_minimum']:.4f}$",
+    f"recovers all {q7['recovered']} of its detected instabilities and finds none at the other {q7['searched_negatives']} states", f"archived pressure at {q7['matched_pressure']} states", f"for the other {q7['missing_archived_pressure']}",
+    rf"${sci(q3d[0], 3)}$ and ${sci(q3d[1], 3)}$ mol", f"objective values of {q8d['chosen_cost']:.12f} and {q8d['alternative_cost']:.12f}",
+    rf"deviates by {q8d['scores'][0]['AARD_percent']:.2f}\,\% from the {q8d['scores'][0]['rows']} Lawson"]
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:
