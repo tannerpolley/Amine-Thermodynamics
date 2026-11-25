@@ -1,4 +1,4 @@
-\section{Model}\label{sec:theory}
+\section{Model and transfer design}\label{sec:theory}
 % P:theory-01
 Each liquid contains molecular \COtwo, water, the amine A and its cation \ce{AH+}, together with bicarbonate, carbonate, hydronium and hydroxide; the MEA, DEA and AMP liquids also contain the carbamate \ce{ACOO-}, which MDEA does not form.
 Only \COtwo, water and the molecular amine enter the vapor, and one ePC-SAFT equation of state describes both phases.
@@ -22,7 +22,8 @@ Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative per
 
 % P:theory-02a
 The hard-chain and dispersion terms are those of Gross and Sadowski \cite{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
-The hard-sphere diameter $d_i$ of a neutral species or chain cation depends on temperature \cite{Gross2001}, the water diameter $\sigma_w(T)$ is a fitted function of temperature (Section~\ref{supp-sec:s-parameters}), and a single-sphere ion has the temperature-independent packing diameter $d_i=0.88\sigma_i$ \cite{Held2014}.
+The hard-sphere diameter $d_i$ of a neutral species or chain cation depends on temperature \cite{Gross2001}, with the water diameter $\sigma_w(T)=\sigma_0+a_1\exp(b_1T)+a_2\exp(b_2T)$ in place of a constant $\sigma_i$ (Section~\ref{supp-sec:s-parameters}).
+A single-sphere ion has the temperature-independent packing diameter $d_i=0.88\sigma_i$ \cite{Held2014}.
 
 % P:theory-contributions-03
 The unlike-pair diameter is $\sigma_{ij}=(\sigma_i+\sigma_j)/2$, and the pair energy is
@@ -37,7 +38,7 @@ A temperature-dependent interaction is linear in reciprocal temperature,
  \qquad T_{\mathrm{ref}}=\SI{313.15}{\kelvin},
  \label{eq:kij-temperature}
 \end{equation}
-except three that are linear in temperature, $k_{ij}(T)=k_{ij}(T_0)+(\mathrm{d}k_{ij}/\mathrm{d}T)(T-T_0)$: the water--bicarbonate and water--carbonate interactions, with $T_0=\SI{313.15}{\kelvin}$, and the MDEA--water interaction, with $T_0=\SI{423}{\kelvin}$ (\cref{sec:species,sec:results-mdea}).
+except the MDEA--water interaction, which is linear in temperature about \SI{423}{\kelvin}, $k_{ij}(T)=k_{ij}(\SI{423}{\kelvin})+(\mathrm{d}k_{ij}/\mathrm{d}T)(T-\SI{423}{\kelvin})$.
 
 % P:theory-contributions-04
 Only donor--acceptor pairs bond, and cross-association between an amine species and water uses the Wolbach--Sandler rule \cite{Kleiner2007}.
@@ -65,7 +66,7 @@ The Born term has the solvation-shell and dielectric-saturation form of Figiel e
 \end{equation}
 Here \(d_i^{\mathrm{Born}}\) is the Born diameter, \(D_i\) is the outer diameter of the first solvation shell, \(\varepsilon_{\mathrm{ion}}=8\) is the permittivity of the region between them, and \(c_{\mathrm{shell}}=c_{\mathrm{dielectric}}=1\).
 The solvation factor is \(f_k=1.5\) for water \cite{Figiel2025} and 1 for every other component.
-Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents and fitted solvation factors for water, methanol and ethanol; here the average runs over all components and the amines and \COtwo have unit factors, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\) and the shell diameter changes with loading (Section~\ref{supp-sec:s-carbonate} gives the sensitivity).
+Figiel et al.\ restrict the average in \cref{eq:born-shell-diameter} to ions and solvents and fitted solvation factors for water, methanol and ethanol; here the average runs over all components and the amines and \COtwo have unit factors, so \(f_{\mathrm{mix}}=1+0.5\,x_{\HtwoO}\) and the shell diameter changes with loading (\cref{sec:discussion-interpretation} gives the sensitivity).
 
 % P:theory-05
 The bulk permittivity has the Schreckenberg form reported by Yang et al.\ \cite{Yang2024}:
@@ -82,25 +83,17 @@ Ions affect the permittivity only through the phase volume and the neutral amoun
 \subsection{Species and shared parameters}\label{sec:species}
 % P:theory-shared
 Six species are common to the four amines: \COtwo, water and the four inorganic ions.
-Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are the same in all four models and are held fixed during the DEA, MDEA and AMP fits; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
-Every difference between the amine models therefore lies in the amine species, their interactions, which include those with the shared species, and their own reaction correlations.
+Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are taken from the MEA model and held fixed during the DEA, MDEA and AMP fits; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
+This is the transfer design: every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
+Interactions of an amine species with a shared species are amine-specific.
 Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007,Schick2023,Pabsch2020}.
-
-% P:theory-salt
-Two shared interactions are fixed from data that contain no amine.
-The MEA data do not determine the water--bicarbonate interaction (\cref{sec:results-parameters}), so it and the water--carbonate interaction are fitted, as Wangler et al.\ did for bicarbonate \cite{Wangler2018}, to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate that Peiper and Pitzer tabulate from their ion-interaction model \cite{peiperThermodynamicsAqueousCarbonate1982}: 45 values for each salt at 278.15--\SI{318.15}{\kelvin} and 0.01--1.0 mol/kg.
-The fitted laws are $k(\SI{313.15}{\kelvin})=0.1707$ with a slope of $3.931\times10^{-3}$~\si{\per\kelvin} for water--bicarbonate and $-0.9706$ with $1.963\times10^{-3}$~\si{\per\kelvin} for water--carbonate, and they reproduce the tabulated osmotic coefficients with deviations of 0.16 and 5.1\,\%.
-The sodium parameters are those of Held et al.\ \cite{Held2014}, with the water--sodium interaction refitted to the osmotic coefficients of sodium chloride solutions at \SI{298.15}{\kelvin} \cite{HamerWu1972}.
-That interaction and the water--carbonate interaction both end on their lower bound of $-1$ at \SI{298.15}{\kelvin}, so the two salt-fitted laws are conditional on those bounds, and the amine states above \SI{318}{\kelvin} use them in extrapolation (Section~\ref{supp-sec:s-salt}).
-This set of shared parameters is the \emph{reported shared set}.
-It is compared throughout with the \emph{MEA-fitted shared set}, in which the water--bicarbonate interaction is a constant fitted with the MEA parameters, 0.765, and the water--carbonate interaction is that of Held et al., $-0.25$ \cite{Held2014}.
 
 % P:theory-amine-species
 MEA and AMP are two-site chains and DEA and MDEA four-site chains; the MEA, DEA and MDEA parameters are taken from the literature, and the five pure-component parameters of AMP were fitted here to vapor pressures and liquid densities (\cref{tab:species-parameters,tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-data}).
 No amine species bonds with \COtwo.
 The MEA and AMP cations and the three carbamates are single spheres; the DEA and MDEA cations keep the segment count and association sites of their amine, with zero self-association energy.
 For every amine ion the Debye--H\"uckel and Born diameters equal the segment diameter, so no amine ion has a separately fitted Born diameter.
-For the two chain cations the tied Born diameter is therefore that of one segment, \SI{2.948}{\angstrom} for \ce{DEAH+} and \SI{3.647}{\angstrom} for \ce{MDEAH+}, not the volume-equivalent diameter $\sigma(m^{\mathrm{seg}})^{1/3}$ of 5.108 and \SI{5.628}{\angstrom}.
+For the two chain cations the tied Born diameter is therefore that of one segment, \SI{2.948}{\angstrom} for \ce{DEAH+} and \SI{3.655}{\angstrom} for \ce{MDEAH+}, not the volume-equivalent diameter $\sigma(m^{\mathrm{seg}})^{1/3}$ of 5.108 and \SI{5.641}{\angstrom}.
 These diameters define the parameterization and are not measured ion sizes.
 
 % P:theory-permittivity-inputs
@@ -125,11 +118,7 @@ With the fugacity coefficient $\ln\phi_i=\mu_i^{\mathrm{res}}/(RT)-\ln Z$ and co
 \end{equation}
 where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src},r}$ is the pressure at which the reference states of reaction $r$ are evaluated: the system pressure $P$ for R1--R3, including the solved pressure of a bubble calculation, and \SI{0.1}{\mega\pascal} for R4 and R5.
 An activity is thus defined for the reaction that uses it, and these reference pressures are distinct from the ideal-gas standard pressure $P^\circ=\SI{0.1}{\mega\pascal}$ of the caloric functions (\cref{sec:caloric-model}).
-For R1--R3 the reference moves with the system pressure, a choice of this model.
-At each temperature and pressure the reactions therefore fix one set of composition-independent standard chemical potentials, the same for the liquid and for every trial phase, so the tangent-plane distances and Gibbs-energy differences of \cref{sec:methods-phase} compare phases under one Gibbs energy.
-The pressure dependence of these standard potentials enters only through the reference fugacity coefficients, and its contribution to the volume and the enthalpy is not added to the reported densities and caloric properties.
-With the R1--R3 references held at \SI{0.1}{\mega\pascal} instead, two calculated \COtwo partial pressures of MEA change by 0.002 and \SI{4.8}{\pascal} and the two calculated splits tested below \SI{2}{\mega\pascal} persist; above about \SI{100}{\mega\pascal} the choice is an extrapolation, and one split calculated at \SI{203}{\mega\pascal} is not confirmed with the fixed reference (Section~\ref{supp-sec:s-files}).
-The solute activity equals $\gamma_i^mm_i/m^\circ$, with the molality $m_i=x_i/(x_wM_w)$ and the molality activity coefficient $\gamma_i^m=x_w\gamma_i^*$ normalized at infinite dilution in water.
+With the rational activity coefficient normalized at infinite dilution in water, $\gamma_i^*=\phi_i(T,P,\boldsymbol x)P/[\phi_i^{\infty,w}(T,P_{\mathrm{src},r})P_{\mathrm{src},r}]$, and the molality $m_i=x_i/(x_wM_w)$, the molality activity coefficient is $\gamma_i^m=x_w\gamma_i^*$, so the factor $x_w$ cancels and $a_i=\gamma_i^mm_i/m^\circ$ equals the form printed in \cref{eq:activities}.
 The infinite-dilution reference is evaluated along a charge-neutral dilution path in pure water; only the charge-neutral combinations of species that appear in the reactions require it.
 Every constant is applied on one aqueous-molality basis (Section~\ref{supp-sec:s-parameters}).
 

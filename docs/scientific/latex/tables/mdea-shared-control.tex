@@ -39,12 +39,11 @@
 % Input (working tree): analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-search-readback.json SHA256 759bf4dbde1545e58e5f50b35b1f6cc0acd44c252fafa54099e669980e3c4ae1
 % Input (working tree): analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz SHA256 a14a2467ccdfd0b17fedf04688497ebe8d9076751eb3b487882a0bb55b790257
 % Input (working tree): analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/objective-information.json.gz SHA256 136027bfb007006db08025eb416f3c7c52b4d6eeadab42fd8ddb6fa1a682ec5d
-% Input (working tree): analyses/round_5/results/C/MEA-k-profile.json.gz SHA256 9ff94f018a0124775cd463f8eab10ef3e7c27eb92b5eae0e596a0ea22e72acea
-\begin{table}[!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{MDEA fits with the MEA-fitted shared set: the shared water--bicarbonate interaction $k$ fixed at its MEA-fitted value, $k_0$, and at two other values, with the MEA and the MDEA parameters refitted at each.}\label{tab:mdea-shared-control}
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
+\caption{Historical transfer to MDEA with the previous shared set: the shared water--bicarbonate interaction $k$ fixed at the value of the MEA model and at two other values, with the MEA and the MDEA parameters refitted at each.}\label{tab:mdea-shared-control}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.4600\linewidth}rrr@{}}
 \toprule
-Quantity & $k_0$ & Lower value & Upper value \\
+Quantity & MEA model, $k_0$ & Lower value & Upper value \\
 \midrule
 Water--bicarbonate interaction $k$ & $0.7650$ & $0.1325$ & $1.0000$ \\
 MEA objective change $C(k)-C(k_0)$ & $0.0000$ & $1.0230$ & $0.0237$ \\
@@ -57,5 +56,5 @@ Unfinished searches of \num{11824} & $1099$ & $1245$ & $1104$ \\
 Confirmed liquid--liquid splits & $0$ & $2$ & $0$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Fixed in every column: the other shared parameters, the reaction correlations, the MDEA data, weights and bound, and the three initial MDEA parameter sets. Refitted: the other ten MEA parameters and the eight MDEA parameters. $C(k)$: objective of the MEA fit with $k$ fixed; the refit at $k_0$ reproduces the objective of the fit with $k$ free within $10^{-6}C$, and both other values keep $C(k)-C(k_0)$ within the reference change of 2.24 (main-text Section~\ref{main-sec:parameters}). $P$: total pressure; AARD follows main-text Eq.~\eqref{main-eq:aard}. The 101 \ce{CO2} partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation. The searches are those of Section~S7.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright Fixed in every column: the other shared parameters, the reaction correlations, the MDEA data, weights and bound, and the three initial MDEA parameter sets. Refitted: the other ten MEA parameters and the eight MDEA parameters. $C(k)$: objective of the MEA fit with $k$ fixed; the refit at the value of the MEA model, $k_0$, reproduces the objective of the MEA model within $10^{-6}C$, and both other values keep $C(k)-C(k_0)$ within 1.3987, the largest change among the refits that hold the \ce{MEAH+}--\ce{MEACOO-} interaction inside its bound. $P$: total pressure; AARD follows Eq.~\eqref{eq:aard}. The 101 \ce{CO2} partial pressures of Ermatchkov et al.\ among the pressures outside the objective helped choose the initial MDEA parameters. Most unfinished searches are at states where no bubble pressure could be calculated; a confirmed split is a second liquid confirmed by a two-liquid equilibrium calculation. The searches are those of Table~\ref{tab:amine-summary} and do not include the fixed-pressure calculation of Section~\ref{sec:results-mdea-phase}.}
 \end{table}

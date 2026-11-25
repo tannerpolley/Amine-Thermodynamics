@@ -1,39 +1,44 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
 Aqueous amine solutions are widely used to remove carbon dioxide (\COtwo) from gas streams by absorption and stripping, and the design of these processes starts from the thermodynamic properties of the loaded solvent \cite{Zhang2011}.
-\COtwo partial pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}; an equation of state gives them all from one Helmholtz energy, so each has to be tested against its own data.
+\COtwo partial pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}; an equation of state gives them all from one Helmholtz energy, but each depends on different derivatives of it and on different parameters, so each has to be tested against its own data.
 
 % P:introduction-02
 Amines of different classes absorb \COtwo through different reactions.
 Primary and secondary amines, such as monoethanolamine (MEA) and diethanolamine (DEA), form carbamate \cite{xuRepresentationEquilibriumSolubility1992}.
 The tertiary amine methyldiethanolamine (MDEA) forms none \cite{Nasrifar2010}, and in the hindered primary amine 2-amino-2-methyl-1-propanol (AMP) steric hindrance inhibits carbamate formation, so that bicarbonate formation dominates \cite{xuRepresentationEquilibriumSolubility1992}.
-Models of these solvents share water, \COtwo and the inorganic ions and differ in the amine species and their reactions, so the parameters of the shared species can be set once and reused.
+Thermodynamic models of these solvents share water, \COtwo and the inorganic ions and differ in the amine species and their reactions.
+If the parameters of the shared species could be determined once and held fixed, each further amine would need only its own species, interactions and reaction constants.
 
 % P:introduction-03
 Electrolyte models of these solvents have long reused subsystems.
-Austgen et al.\ fitted the electrolyte non-random two-liquid (eNRTL) model to binary data and to the solubility of a single acid gas in aqueous MEA and DEA, and then represented mixed \ce{H2S}--\COtwo solubility without further adjustment \cite{austgenModelVaporliquidEquilibria1989}; Hessen et al.\ and Zhang et al.\ fit eNRTL parameters to loaded-solution data \cite{Hessen2010,Zhang2011}.
+Austgen et al.\ fitted the interaction parameters of the electrolyte non-random two-liquid (eNRTL) model to binary data and to the solubility of a single acid gas in aqueous MEA and DEA, and then represented mixed \ce{H2S}--\COtwo solubility without further adjustment \cite{austgenModelVaporliquidEquilibria1989}.
+Hessen et al.\ fit the salt--molecule interactions of a refined eNRTL model to \COtwo partial pressures over loaded solutions \cite{Hessen2010}, and Zhang et al.\ estimate eNRTL parameters for MEA jointly from pressure, heat, heat capacity and species data \cite{Zhang2011}.
 Electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) adds ionic electrostatics to a molecular equation of state \cite{Cameretti2005,Held2014}.
-For MDEA, Uyan et al.\ transfer neutral and inorganic-ion parameters \cite{Uyan2015}, Wangler et al.\ add ion--water interactions fitted to osmotic coefficients of salt solutions and fit no parameter to the ternary system \cite{Wangler2018}, and Cleeton et al.\ find that agreement deteriorates as the MDEA content increases \cite{Cleeton2020}.
-MDEA forms no carbamate, so these studies do not determine the parameters of carbamate-forming amines; Polley and Hedengren describe the explicit MEA ions, including carbamate, with ePC-SAFT, but estimate the parameters in separate steps \cite{polleyReactiveEPCSAFTModeling2026}.
-In equations of state of the statistical associating fluid theory (SAFT) without explicit ions, the reaction products are represented by association, and association or group parameters are transferred between amines \cite{MacDowell2010,Rodriguez2012,lloretConsistentTransferableThermodynamic2017,perdomoPredictiveGroupcontributionFramework2023}; Rodr\'iguez et al.\ treat MEA, DEA, MDEA and AMP, the four amines studied here \cite{Rodriguez2012}.
-Perturbed-chain SAFT (PC-SAFT) and Huang--Radosz SAFT (SAFT-HR) have also been combined with ideal-activity reaction equilibria \cite{Baygi2015,Nasrifar2010,Pahlavanzadeh2013,Najafloo2018}.
-All of these studies judge a calibration by its deviations from measured pressures and compositions.
+For MDEA, Uyan et al.\ transfer neutral and inorganic-ion parameters and derive the protonated-amine parameters from molecular MDEA \cite{Uyan2015}, Wangler et al.\ add ion--water interactions fitted to osmotic coefficients and fit no parameter to the ternary system \cite{Wangler2018}, and Cleeton et al.\ find that agreement deteriorates as the MDEA content increases \cite{Cleeton2020}.
+MDEA forms no carbamate, so these studies do not determine the parameters of carbamate-forming amines.
+Polley and Hedengren describe the explicit MEA ions, including carbamate, with ePC-SAFT, but they estimate the parameters in separate steps and use empirical caloric properties in their column calculations \cite{polleyReactiveEPCSAFTModeling2026}.
 
 % P:introduction-04
-Deviations do not show whether the calculated liquid is stable.
-A single-liquid objective contains no requirement of stability, and SAFT-type equations can predict demixing that contradicts observation \cite{Held2014,privatAreSafeResults2010}.
-The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; in an electrolyte the trial phase must be electroneutral \cite{Perdomo2025}, and in a reacting liquid it must also satisfy the chemical constraints \cite{Tsanas2022,Ascani2022}.
-For activity-coefficient and cubic models of non-reacting binary mixtures, stability has been built into parameter estimation.
-Gau et al.\ show that local fits of vapor--liquid data can miss the parameter sets that a global method finds \cite{gauReliableNonlinearParameter2000}.
-Bollas et al.\ show that a published fit to vapor--liquid data predicts a liquid--liquid split that makes a homogeneous azeotrope heterogeneous, and they remove it by imposing tangent-plane stability as a constraint of the fit \cite{bollasBilevelOptimizationFormulation2009,mitsosBilevelOptimizationFormulation2009}; Glass et al.\ do the same for cubic equations of state \cite{glassParameterEstimationCubic2018}.
-In those studies the system is known to be homogeneous, and the split is an error to be excluded.
-For a reacting electrolyte solution at stripper temperatures the number of liquid phases is often not reported, and a calculated split then raises a different question: which data would decide it.
+In equations of state of the statistical associating fluid theory (SAFT) without explicit ions, the reaction products are represented by association, and it is the association or group parameters that are transferred.
+Mac Dowell et al.\ describe \COtwo in aqueous MEA using hydroxyl--hydroxyl and amine--amine self-association parameters for MEA taken from ethanol and ethylamine, respectively \cite{MacDowell2010}.
+Rodr\'iguez et al.\ extend that approach to MEA, DEA, MDEA and AMP, the four amines studied here, and fit three to five amine--\COtwo parameters for each \cite{Rodriguez2012}; reactive-association models transfer parameters across amines \cite{lloretConsistentTransferableThermodynamic2017}. Perdomo et al.\ used group interactions estimated from other compounds to calculate pure-component properties of dimethylmonoethanolamine without using its data in parameter estimation \cite{perdomoPredictiveGroupcontributionFramework2023}.
+Perturbed-chain SAFT (PC-SAFT) and Huang--Radosz SAFT (SAFT-HR) have also been combined with ideal-activity reaction equilibria for MEA, DEA and MDEA \cite{Baygi2015,Nasrifar2010,Pahlavanzadeh2013,Najafloo2018}.
+These studies differ in what is transferred, what is fitted and which data inform each comparison, and they judge a calibration by its deviations from measured pressures and compositions.
 
 % P:introduction-05
-This work applies a tangent-plane search with electroneutral, reaction-constrained trial phases to ePC-SAFT calibrations of \COtwo-loaded aqueous MEA, DEA, MDEA and AMP, and reads its result as a statement about the data.
-The four models share water, \COtwo and the inorganic ions; the water--bicarbonate and water--carbonate interactions are fixed from osmotic coefficients of sodium salt solutions, the other shared parameters come from an MEA calibration with its equilibrium constants at literature correlations, and each further amine is fitted with the shared parameters held fixed.
-\emph{Transfer} here means only that: fits of the further amines were obtained with the shared parameters fixed, not that the shared parameters are optimal for them or that the minima are unique.
-AMP gives the worked example.
-A first fit, whose loaded-solution pressures ended at \SI{353}{\kelvin}, predicts liquid--liquid splits at 363--\SI{393}{\kelvin}; fitting the total pressures measured at 373--\SI{393}{\kelvin} removes every one of them.
-For MDEA the calculated splits depend on a shared interaction and on the weights, and for DEA the water--amine binary is a negative result.
+Deviations do not show whether the calculated liquid is stable.
+A single-liquid objective contains no requirement of stability, and ePC-SAFT ion parameters can predict liquid--liquid demixing that contradicts observation \cite{Held2014}.
+The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; in an electrolyte the trial phase must be electroneutral \cite{Perdomo2025}, and in a reacting liquid it must also satisfy the chemical constraints \cite{Tsanas2022,Ascani2022}.
+A phase search is thus a separate numerical check on a calibration, although a finite search gives no global proof.
+When several parameter sets reproduce the same pressures about equally well, the search can distinguish them where the deviations cannot.
+
+% P:introduction-06
+This work reuses explicit shared species, calibrates each amine on its own data and compares near-equal fits directly for phase stability.
+An ePC-SAFT model of loaded aqueous MEA is calibrated first, with its equilibrium constants fixed at literature correlations; its water, \COtwo and inorganic-ion parameters and the reaction correlations of those species are then held fixed while DEA, MDEA and AMP are each fitted.
+\emph{Transfer} here means only that: fits of the further amines were obtained with the shared parameters held fixed, not that ionic sizes are transferable, that the transfer is optimal or that the minima are unique.
+The question is whether fits that reproduce the pressures about equally well predict the same liquid phases.
+AMP answers it most clearly: two fits whose deviations from the fitted total pressures are 10.3 and 10.5\,\% differ in whether a second liquid is calculated above the temperature range of the fitted loaded-solution pressures.
+A controlled refit of MDEA shows that the choice made for one shared MEA interaction matters downstream.
+For MEA the fitted \COtwo partial pressures at nominal 30 wt\% deviate by 11.6\,\% and the fitted heats, heat capacities and densities by less than 3\,\%, with no detected instability; DEA is a negative result, because no tested water--DEA interaction represents both its binary pressures and its excess enthalpies.
 The phase behaviors reported are those calculated with experimentally calibrated models; the measurements used here do not establish coexistence.
