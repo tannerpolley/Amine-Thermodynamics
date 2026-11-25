@@ -139,9 +139,12 @@ Its searches gave 73 confirmed liquid--liquid splits and 20 further detected ins
 At 373--\SI{393}{\kelvin} it underpredicted every measured total pressure of Hartono et al.\ and of Tong et al., by 28.1 and 25.3\,\% on average.
 
 % P:phase-amp-refit
-In the fits tested, adding those measured pressures removed the detected splits.
-With the 58 further pressures in the objective and the same shared set, the coefficient becomes \SI{-181}{\kelvin}, the pressures at 373--\SI{393}{\kelvin} of Hartono et al.\ deviate by 6.7\,\%, and no search detects an instability; the same holds for the AMP model, which also has the salt-fitted interactions.
+In the fits tested, the refit as performed removed the confirmed splits: it added 18 pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and 40 loaded pressures of Tong et al.\ to the objective.
+With the same shared set the coefficient becomes \SI{-181}{\kelvin}, the pressures at 373--\SI{393}{\kelvin} of Hartono et al.\ deviate by 6.7\,\%, and no search detects an instability; the same holds for the AMP model, which also has the salt-fitted interactions.
+At the six measured states where the first fit confirmed a split, recalculated at their measured pressures, the AMP model confirms none: at two its search finds no descent, and at four, three Hartono states at \SI{373}{\kelvin} and one Tong state at \SI{373.2}{\kelvin}, a descent remains whose phase identity is unresolved.
+The claim is therefore that the refit leaves no confirmed split at these states, not that it is shown to be stable there.
 The splits are tied to extrapolation beyond the fitted pressures: changing only the temperature coefficient of the \ce{AMPH+}--water interaction removes the worked split (Section~\ref{supp-sec:s-amp-slope}), but the added pressures also move the other parameters, so they do not isolate that coefficient as the cause.
+The splits of the first fit also depend on how the AMP dissociation constant R5 is continued above \SI{353.22}{\kelvin}, the top of its measured range: at the 93 states with a detected instability the searches find a descent at all 93 with the source correlation and at none when the constant is held at its value at \SI{353.22}{\kelvin} or continued with constant reaction enthalpy.
 Stability and accuracy are separate tests here: the first fit already underpredicted the unfitted pressures at 373--\SI{393}{\kelvin}, and the fit with the slope fixed at \SI{-150}{\kelvin} removed the splits without improving those pressures.
 In the first fit that coefficient raised the cation--water interaction from $-0.178$ at \SI{353}{\kelvin} to $-0.115$ at \SI{393}{\kelvin}, and with the weaker cation--water attraction an ion-rich second liquid lowered the Gibbs energy; in the AMP model the interaction changes only from $-0.206$ at \SI{353.22}{\kelvin} to $-0.190$ at \SI{393.15}{\kelvin}.
 Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples, and no measurement of liquid--liquid coexistence in loaded aqueous AMP was used, so the single liquid of the AMP model is consistent with the data but not established by them.
@@ -153,7 +156,8 @@ Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples
 \end{figure}
 
 % P:phase-reading
-The practical lesson is limited to these cases: a phase-stability search showed where the first AMP fit had been extrapolated and where the DEA model fails at measured states, in both cases at conditions where the deviations of the data gave no warning.
+The practical lesson is limited to these cases: a phase-stability search showed where the first AMP fit had been extrapolated and where the DEA model fails at measured states.
+At the DEA states the densities are reproduced within 0.15\,\%, so the deviations gave no warning; the first AMP fit underpredicted its unfitted pressures at 373--\SI{393}{\kelvin} by 28.1 and 25.3\,\%, which showed the extrapolation was poor but not that the calculated liquid splits.
 Stability has been imposed during estimation for nonreactive binaries, where parameter sets fitted to vapor--liquid data alone are known to give false liquid--liquid splits \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018}; here it is checked after the fit; for AMP the remedy was data, and for DEA no remedy has been found.
 
 \section{Discussion}\label{sec:discussion}
