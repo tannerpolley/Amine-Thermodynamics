@@ -6,14 +6,14 @@ Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the 
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
 Every observation was examined during model development, so no comparison in this paper is an independent validation or a blind test.
 \Cref{tab:calibration-data} lists, for each amine, the data in the objective, the data fitted beforehand and the development data.
-The objectives contain 307 observations for MEA, 80 for DEA, 281 for MDEA and 214 for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
+The objectives contain 307 observations for MEA, 140 for DEA, 281 for MDEA and 214 for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
 
 \input{tables/calibration-data}
 
 % P:methods-selection
 The fitted sets were chosen amine by amine, not by one rule.
 The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are compared but not fitted.
-The DEA objective has one loaded-pressure source, Lawson and Garst, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}); its isotherm at \SI{394}{\kelvin} is not fitted, and the pressures of Seo and Hong and of Lal et al.\ are development data.
+The DEA objective has three loaded-pressure sources, 30 pressures of Lawson and Garst, 16 of Seo and Hong and 44 of Lal et al.; the cell of Lawson and Garst also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}), and their seven pressures at \SI{394}{\kelvin} are not fitted.
 For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation.
 For AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted; a first AMP fit used only those of Hartono et al.\ at 313--\SI{353}{\kelvin}, and \cref{sec:results-phase} reports what that restriction caused.
 The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
@@ -57,12 +57,13 @@ with the logarithmic form for pressures.
 Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
 Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective.
-The loaded-solution pressures contribute 98\,\% of the DEA objective and 96\,\% of the AMP objective but 1\,\% of the MDEA objective, in which the 24 densities of the \COtwo-free solution contribute 84\,\%.
+The loaded-solution pressures contribute 94.0\,\% of the DEA objective and 97.1\,\% of the AMP objective.
+In the MDEA objective each group enters as the mean of its squared standardized residuals, the loaded total pressures with an equivalent logarithmic scale of 0.015 and a weight of 1/66, so that the many densities do not dominate; the loaded total pressures contribute 32.9\,\% and the 24 densities of the \COtwo-free solution 11.0\,\%.
 In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute 59.9\,\% of the objective value, 152.96, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
 Each fit is started from two initial parameter sets, three for MDEA, and the converged solution with the lower objective value is reported; Table~\ref{supp-tab:supplement-fit-starts} lists every start.
-The two starts reach the same objective value within a relative $10^{-6}$ for MEA and $10^{-10}$ for DEA and AMP, and two of the three MDEA starts agree, the third ending 0.4\,\% higher.
+The two starts reach the same objective value within a relative $10^{-6}$ for MEA and $10^{-10}$ for DEA and AMP, and two of the three MDEA starts end within 1.2\,\% of each other, at 17.401 and 17.600, the third far higher, at 148.906.
 These are local solutions: no wider search over starting sets has been made, and the two MEA starts descend from the 16-parameter calibration described next.
 
 % P:methods-restrictions
@@ -86,7 +87,7 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures of the MEA objective, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 and 272.
+Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures of the MEA objective, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 observations and 271 residual degrees of freedom.
 These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
 
 \subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}
