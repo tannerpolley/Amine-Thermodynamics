@@ -257,3 +257,32 @@ Read `builds/main.pdf` as a fresh referee against `round4-response.md`, starting
 6. #424, #427 and the DOI remain open.
 
 **Next stage.** Run a fresh referee round on `builds/main.pdf` and `builds/supplement.pdf`, starting with §4.3 (DEA failures) and §4.2.4.
+
+## Round-8 prose pass (Writer, 2026-11-25)
+
+**Basis.** The investigator promoted the round-8 notebook (`analyses/round_8/notebook.qmd`, main `5953bd802`, #439) on 2026-11-25 for this prose pass, subject to each item's recorded disposition: C1, C4 and C6 narrowed; the DEA caloric step spread and the 100 kPa control at 204.054 MPa unresolved. `origin/main` was merged first. No calculation was run, and no generated display or script was edited. Every item of the round-7 referee list is answered in `round7-response.md`, with locators.
+
+**What changed.**
+- **C1.** New Eq. 9 in §2.3 relates ∂G*/∂P to V_EOS, with R1–R3 tracking. §2.4 adds the caloric check: 3×10⁻⁸ to 7×10⁻⁶ kJ/mol amine at the 0.01 K step, with the DEA step dependence unresolved. S3 gives the sizes at four fitted states and at the 204.054 MPa split, the chain terms, and the 100 kPa control (unresolved).
+- **C2.** The MDEA model has two confirmed splits, 204.054 MPa (grid) and 262.862 MPa (targeted). This now appears in the abstract, §4.3, the conclusions and S7.1. The 25 measured descents are classified for the reported model: all point toward a vapor, below the model bubble pressure.
+- **C3 / T1.** DEA four-row density AARD 0.148 % (0.447 % on 44 rows); row-31 split fractions, densities and compositions. The Weiland method (hydrometers; samples mixed from unloaded and CO₂-saturated portions) was verified in the Zotero PDF, p. 378.
+- **C4.** The AMP model confirms 0 of 6 measured-state splits; 4 are unresolved and 2 have no descent. Main text now covers the R5 continuation (93/93 → 0/93), credits the removal to the refit as performed, and rewrites the "no warning" sentence.
+- **C5.** S1.3 gives the salt target, residuals and the six charge-closure refusals. S4.1 gives the MDEA 2×2 on identical rows. The Carson trade-off (5.12 → 18.69 %) now sits beside the pressure gain.
+- **C6.** S4 compares the two low MDEA endpoints. §5.4 limits the MDEA statements to the reported endpoint.
+- **C7.** Kuranov is matched by row (ours) and by count (published). Kamps is compared on the 27 common rows, and the missing row (Ermatchkov Table 6 row 13; bubble calculation at its iteration limit) is named. The Hong equal-fugacity label is in §5.2 and S9.
+- **T2, T3, T5, T6, T7** applied. **T10** was already in place.
+- The abstract is 250 words and every highlight is at most 82 characters. The graphical abstract is identical to `main`.
+
+**Checks.**
+- `scripts/build_manuscript.sh` passes: main 30 pages, supplement 51, no undefined references, no overfull boxes.
+- These pass: `dea_displays.py --check` (32 displays, prose strings), `final_rerun_tables.py --check` and `--reference-states --check`, `analyses/round_7/handoff.py --check`, `analyses/round_8/handoff.py --check` and `check_private_source.py`.
+- The CSE prose check passes on terminology. The STYLE.md advisories are the existing ones.
+- `cited_bibliography.py` reproduces `references.bib` unchanged.
+
+**Open.**
+1. Display requests, each with its record key, are in the last table of `round7-response.md`: Table 8 MDEA split count, an MDEA outcome table, an MDEA 2×2 table, a salt-residual figure, Table 9 and Hong headings, Figs 5–6 and 8, and the Kiepe marks in Tables 2, S14 and S19 (T4, T8, T9).
+2. #424, #427 and the DOI remain open. The deposit stager does not include the round-7 fits.
+3. No unfitted comparison-pressure state was evaluated for the C1 correction size.
+4. `429-story-pass-number-sources.md` was not extended. Every new number traces to the round-8 record keys in `round7-response.md`.
+
+**Next stage.** A fresh four-referee round on `builds/main.pdf` and `builds/supplement.pdf`. Start with §2.3 Eq. 9, §4.3 and S7.1, then decide which display requests to build first.
