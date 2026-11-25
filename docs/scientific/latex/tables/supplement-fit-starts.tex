@@ -1,16 +1,16 @@
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Objective value at the start and at convergence for every start of the reported fits.}\label{tab:supplement-fit-starts}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.3\linewidth}>{\raggedright\arraybackslash}p{0.07\linewidth}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}@{}}
-\toprule Fit & Start & Objective at the start & Objective at convergence &  \\ \midrule
-MEA & 1 & $355.248$ & $152.958255844760$ &  \\
- & 2 & $174.451$ & $152.958173851630$ & reported \\
-DEA & 1 & --- & $10.932834014425$ &  \\
- & 2 & --- & $10.932834014387$ & reported \\
-MDEA & 1 & $1000.385$ & $537.658796932365$ &  \\
- & 2 & $981.778$ & $539.870433077563$ &  \\
- & 3 & $837.116$ & $537.658796923217$ & reported \\
-AMP & 1 & $1288.884$ & $76.311903088712$ &  \\
- & 2 & $1953.391$ & $76.311903086382$ & reported \\
-AMP, slope fixed at $-150$ K & 1 & $1953.391$ & $77.642842610257$ & reported \\
- & 2 & $1509.545$ & $77.642842611378$ &  \\
+\toprule Fit & Start & Objective at the start & Endpoint objective &  \\ \midrule
+MEA, mapped start & 1 & $355.248$ & $152.958255844760$ &  \\
+MEA, salt start & 1 & $174.451$ & $152.958173851630$ & reported \\
+DEA & 1 & $61.724$ & $15.537712195487$ & converged \\
+ & 2 & $90.946$ & $15.537712195479$ & reported \\
+MDEA & 1 & $1272.029$ & $17.400956808975$ & reported \\
+ & 2 & $1270.868$ & $17.600100678734$ & converged \\
+ & 3 & $926.232$ & $148.906061995815$ & converged \\
+AMP & 1 & $1043.593$ & $75.111439192398$ & converged \\
+ & 2 & $1612.627$ & $75.111439192390$ & reported \\
+AMP, slope fixed at $-150$ K & 1 & $1612.627$ & $76.352717626774$ & converged \\
+ & 2 & $1257.738$ & $76.352717626764$ & reported \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright ---: not retained. Every start converged by the function tolerance of $10^{-10}$ in the relative change of the objective. The AMP row with the fixed slope is the sensitivity fit of Section~\ref{sec:s-amp-slope}.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright ---: not retained. Receiver objectives are retained endpoint replays. The AMP row with the fixed slope is the sensitivity fit of Section~\ref{sec:s-amp-slope}.\par}\end{table}

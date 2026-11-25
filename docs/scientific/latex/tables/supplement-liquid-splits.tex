@@ -1,0 +1,12 @@
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Liquid--liquid calculations for the broadened DEA fit and the two salt-anchored MDEA fits.}\label{tab:supplement-liquid-splits}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.075\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.135\linewidth}@{}}
+\toprule Fit and state & $T$ (K) & $P$ (MPa) & Amine (wt\%) & $\alpha$ (mol/mol) & Result & $-\Delta G/(RT)$ (mol) & Numerical error (mol) \\ \midrule
+DEA, measured-state & $298.15$ & $0.101$ & $30.00$ & $0.450$ & Confirmed & $3.024\times 10^{-4}$ & $6.619\times 10^{-9}$ \\
+DEA, measured-state & $298.15$ & $0.101$ & $40.00$ & $0.400$ & Confirmed & $1.400\times 10^{-3}$ & $3.942\times 10^{-9}$ \\
+DEA, measured-state & $298.15$ & $0.101$ & $40.00$ & $0.450$ & Confirmed & $3.631\times 10^{-3}$ & $3.890\times 10^{-9}$ \\
+DEA, measured-state & $298.15$ & $0.101$ & $40.00$ & $0.500$ & Confirmed & $4.641\times 10^{-3}$ & $4.488\times 10^{-9}$ \\
+MDEA, pressure-weighted grid & $373.15$ & $204.054$ & $78.62$ & $1.300$ & Confirmed & $5.016\times 10^{-4}$ & $7.184\times 10^{-10}$ \\
+MDEA, original weights, tracking & $383.15$ & $121.309$ & $78.62$ & $1.368$ & Confirmed & $4.233\times 10^{-5}$ & $9.238\times 10^{-10}$ \\
+MDEA, original weights, 100 kPa reference & $383.15$ & $121.309$ & $78.62$ & $1.368$ & Unresolved & $4.751\times 10^{-2}$ & $6.134\times 10^{-10}$ \\
+\bottomrule\end{tabular}
+\par\smallskip{\footnotesize\raggedright Tracking means R1--R3 use the system pressure and R5 uses 100 kPa. The 100 kPa reference case also fixes R1--R3 at 100 kPa. All other rows use tracking. The 100 kPa candidate has unresolved liquid roots even though its Gibbs energy is lower. For DEA the finite search also has one unresolved descent and one incomplete search. For pressure-weighted MDEA the confirmed grid state differs from the original-weight grid state.\par}\end{table}

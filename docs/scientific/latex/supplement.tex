@@ -277,6 +277,9 @@ The equation-of-state caloric properties of the model of Polley and Hedengren ar
 Table~\ref{tab:supplement-temperature-bands} divides the MEA data used here by temperature, without refitting any parameter; the 66 pressures at 373--393 K are those of Jou et al.\ \cite{Jou1995}, Ma'mun et al.\ \cite{Mamun2005}, Wagner et al.\ \cite{wagnerSolubilityCarbonDioxide2013} and Xu and Rochelle \cite{Xu2011}.
 
 \input{tables/supplement-temperature-bands}
+\input{tables/supplement-mea-pressure-sensitivity}
+\input{tables/supplement-mea-off-window}
+\input{tables/supplement-mea-window-objective}
 
 \subsection{Carbonate share and electrostatic choices}\label{sec:s-carbonate}
 % P:supplement-carbonate
@@ -375,6 +378,8 @@ The carbamate fractions of Ciftja et al.\ are taken as carbamate per total AMP.
 The \COtwo-free observations of Tong et al.\ are the unloaded solution of that work.
 
 \input{tables/supplement-transfer-data}
+\input{tables/supplement-dea-expanded}
+\input{tables/supplement-mdea-weighting}
 
 % P:supplement-dea-heat
 \Cref{fig:dea-integral-heat} shows the 50 fitted integral heats of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000} separately for each DEA content; main-text Fig.~\ref{main-fig:dea-pressure}(d) shows them together.
@@ -398,28 +403,7 @@ The scales and weights of the logarithmic pressure residuals differ between the 
 The loaded pressures therefore dominate the DEA and AMP objectives and contribute about 1\,\% of the MDEA objective, in which the 24 densities of the \COtwo-free solution, with a scale of \SI{0.5}{\kilogram\per\cubic\metre} and a weight of 10, contribute 84\,\%.
 These are assigned choices, and no model was refitted with a common weighting.
 
-\begin{table}[htbp]\small\setlength{\tabcolsep}{4pt}\caption{Residual scales and weights of the fitted DEA, MDEA and AMP data sets.}\label{tab:transfer-scales}
-\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}@{}}
-\toprule Amine & Data set & Scale $s_j$ & Weight $w_j$ \\ \midrule
-DEA & \COtwo partial pressures & 0.09 & average over the data set \\
- & Integral absorption heats & $0.02\,|y_j^{\mathrm{obs}}|$ & average over the data set \\
-\addlinespace
-MDEA & Loaded total pressures of Kuranov et al. & 1 & $100/9$ \\
- & Four \COtwo-free pressures of Kuranov et al. & 1 & $1/2$ \\
- & 58 mixture pressures of Kim et al. & 1 & $1/58$ \\
- & Three pure-water pressures of Kim et al. & 1 & 1 \\
- & Species ratios of Jakobsen et al. & $0.10\,|y_j^{\mathrm{obs}}|$ & 1 \\
- & Heat capacities & $0.02\,|y_j^{\mathrm{obs}}|$ & 1 \\
- & Integral absorption heats & larger of 3000 J/mol and $0.05\,|y_j^{\mathrm{obs}}|$ & 1 \\
- & Loaded densities & $[(0.001\rho_j)^2+(0.01g_j)^2]^{1/2}$ & $1/33$ \\
- & Unloaded densities & 0.5 kg/m$^{3}$ & 10 \\
-\addlinespace
-AMP & Loaded total pressures & 0.015 & average over the 105 pressures \\
- & Binary bubble pressures & 0.05 & average over the 52 binary observations \\
- & Vapor AMP mole fractions & $\max(10^{-4},0.05\,y_j^{\mathrm{obs}})$ & average over the 52 binary observations \\
- & Carbamate fractions & 0.003 & average over the 57 fractions \\
-\bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright Pressure residuals are logarithmic, so their scales are dimensionless. $\rho_j$ is the measured density and $g_j$ the local secant slope of measured density against loading at fixed amine concentration. ``Average'' means that the weights average the squared residuals within the data set.\par}\end{table}
+\input{tables/supplement-transfer-scales}
 
 \input{tables/supplement-objective-contributions}
 
@@ -630,6 +614,9 @@ For AMP, the search covers the 270 measured states and 396 grid states, the latt
 For the AMP model every search finishes without a detected instability, with the trial phases of the search alone and also when the 7301 trial compositions from earlier searches are tested.
 The same holds for the three other fits to all loaded pressures (Section~\ref{sec:s-amp-slope}).
 The grid ends at 393.15 K, and the AMP model was not searched above it.
+
+\input{tables/supplement-liquid-splits}
+\input{tables/supplement-mdea-fixed-pressure}
 
 \subsection{Stability penalty and the MDEA bound}\label{sec:s-mdea-bound}
 % P:supplement-penalty

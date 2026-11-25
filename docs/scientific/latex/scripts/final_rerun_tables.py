@@ -595,9 +595,73 @@ def main():
     table('supplement_shared_remaining.tex', r"Shared parameters not listed in Tables~\ref{tab:supplement-species-parameters} and \ref{tab:supplement-interaction-matrix}, at full precision. || Together with the reaction coefficients in Table~\ref{tab:supplement-reaction-coefficients}, those tables give the unrounded values of the shared parameters marked in main-text Tables~\ref{main-tab:species-parameters} and \ref{main-tab:interaction-matrix}.", ['Parameter','Value','Unit','Source'], [[label(r['identity']), f"{float(r['value']):.15g}" if r['identity'].endswith('/packing_diameter') else full_precision(r['value']), r['unit'],
                                           r'$0.88\sigma$' if r['identity'].endswith('/packing_diameter') else r'Equal to $\sigma$' if r['identity'].endswith('/debye_huckel_diameter') else 'Set in this work'] for r in missing], [.42,'r','l','l'])
     table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[cited('', SOURCE_NAMES[s]) + r' \cite{' + PRESSURE_CITE[s] + '}',len(part),format(a.stats(part)['AARD_percent'], '.1f')] for s in sorted({r['source'] for r in a.rows(F/'canonical-pressure.csv')}) for part in [[r for r in a.rows(F/'canonical-pressure.csv') if r['source']==s]]], ['l','r','r'])
+    historical_inputs = OTHER.copy()
+    historical_tables = set(OUTPUTS)
+    round7 = 'analyses/round_7/'
+    handoff = other(round7 + 'manuscript-handoff.json')
+    quantities = handoff['quantities']
+    cases = ('incumbent', 'F4')
+    replays = [other(round7 + f'results/E/{name}/replay.json.gz') for name in cases]
+    for name in cases:
+        path = round7 + f'results/E/{name}/off-window.json.gz'
+        assert len(other(path)['rows']) == 84
+        assert OTHER[path] == handoff['source_hashes'][path], path
+    rows = []
+    for cohort_label, key in [
+            ('Legacy fitted pressures', 'legacy'), ('Added pressures', 'added'),
+            ('Hot pressures in the expanded objective', 'hot_expanded'),
+            ('Hot pressures including Wagner', 'hot_published'),
+            ('All pressures in the expanded objective', 'all_pressure'),
+            *[(s, s) for s in PRESSURE_CITE]]:
+        summaries = [r['summary']['pressure'][key] for r in replays]
+        assert summaries[0]['attempted'] == summaries[1]['attempted']
+        rows.append([cohort_label, summaries[0]['attempted'],
+                     *[f"{r['AARD_percent']:.2f} / {r['bias_percent']:+.2f}" for r in summaries]])
+    wagner = [r['hot_wagner'] for r in replays]
+    assert [(r['identity'], r['observed']) for r in wagner[0]] == [(r['identity'], r['observed']) for r in wagner[1]]
+    wagner_scores = []
+    for cohort in wagner:
+        relative = [100*(r['value']/r['observed'] - 1) for r in cohort if r['status'] == 'Available']
+        assert len(relative) == len(cohort) == 12
+        wagner_scores.append(f'{math.fsum(map(abs, relative))/len(relative):.2f} / {math.fsum(relative)/len(relative):+.2f}')
+    rows.append(['Hot Wagner pressures, outside both fits', len(wagner[0]), *wagner_scores])
+    for source in ('Jou1995', 'Mamun2005'):
+        scores = []
+        for replay in replays:
+            ids = {key for key, row in replay['pressure_population'].items()
+                   if row['source_key'] == source
+                   and round(float(row['temperature_series_C'] or row['temperature_reported_C'])) == 120}
+            relative = [100*(r['value']/r['observed'] - 1) for r in replay['rows']
+                        if r['identity'] in ids and r['status'] == 'Available']
+            assert len(relative) == len(ids) and ids
+            scores.append(f'{math.fsum(map(abs, relative))/len(relative):.2f} / {math.fsum(relative)/len(relative):+.2f}')
+        rows.append([source + ', nominal 120 degrees Celsius', len(ids), *scores])
+    table('supplement-mea-pressure-sensitivity.tex',
+          r'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the reported fit and the full-weight expanded fit. || The 112 added pressures include the 54 hot rows. The 12 hot Wagner pressures enter the 66-row hot comparison and the separate Wagner row. Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
+          ['Pressure cohort', '$N$', 'Reported AARD / bias (%)', 'Expanded AARD / bias (%)'],
+          rows, [.43,.06,.22,.22])
+    off_rows = []
+    for source in ('Aronu2011', 'Aronu2011 15 wt%', 'Aronu2011 45 wt%', 'Jou1995'):
+        entries = [{field: quantities[f'E MEA {case} outside fit {source} {field}']['value']
+                    for field in ('available', 'refused', 'AARD_percent', 'bias_percent')} for case in cases]
+        off_rows.append([source, *[v for entry in entries for v in (f"{entry['available']}/{entry['refused']}",
+                         f"{entry['AARD_percent']:.2f} / {entry['bias_percent']:+.2f}")]])
+    table('supplement-mea-off-window.tex',
+          r'MEA CO2 partial-pressure comparison outside the expanded fit window. || The Aronu rows at 15 and 45 wt% sum to the Aronu total. The separate Jou comparison is at 30 wt%. Both endpoints refused the six Jou rows at 0 degrees Celsius under the 293.15 K lower limit. AARD and signed bias use available predictions. The population contains 84 observations.',
+          ['Source', 'Reported available/refused', 'AARD / bias (%)',
+           'Expanded available/refused', 'AARD / bias (%)'],
+          off_rows, [.26,.16,.17,.16,.17])
+    table('supplement-mea-window-objective.tex', r'MEA objectives evaluated on the original and expanded observation sets.',
+          ['Observation set', '$N$', 'Reported MEA fit', 'Full-weight expanded fit'],
+          [[population_label, quantities[f'E MEA incumbent {key} objective']['population'],
+            *[f"{quantities[f'E MEA {case} {key} objective']['value']:.2f}" for case in cases]]
+           for key, population_label in [('original', 'Original'), ('expanded', 'Expanded')]], [.27,.08,.25,.28])
     for name, body in OUTPUTS.items():
         body = GROUP.sub(r'\\num{\g<0>}', body)
-        header = '% Generated from #435 retained results and historical comparisons\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))+''.join('% Input (working tree): '+p+' SHA256 '+h+'\n' for p,h in sorted(OTHER.items()))
+        if name in historical_tables:
+            header = '% Generated from #435 retained results and historical comparisons\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(a.INPUTS.items()))+''.join('% Input (working tree): '+p+' SHA256 '+h+'\n' for p,h in sorted(historical_inputs.items()))
+        else:
+            header = '% Generated from round-7 retained results\n'+''.join('% Input: '+p+' SHA256 '+h+'\n' for p,h in sorted(OTHER.items()) if p not in historical_inputs)
         if '--check' in sys.argv: assert (TABLES/name).read_text()==header+body, name
         else: (TABLES/name).write_text(header+body)
     print(json.dumps({'tables_checked': len(OUTPUTS), 'inputs': len(a.INPUTS) + len(OTHER)}))
