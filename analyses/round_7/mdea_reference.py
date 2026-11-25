@@ -7,7 +7,7 @@ from time import monotonic
 
 from calculations import MDEA, OUT, SALT, WORK, a, mdea_incumbent, r, save, transfer
 
-from classify_descents import COINCIDENCE, DENSITY_WINDOW, matched
+from classify_descents import COINCIDENCE, DENSITY_WINDOW, matched, pressure_roots
 from comparisons import mdea_deviations
 from part_ii import Route, epcsaft, eq, np
 from phases import fixed
@@ -55,7 +55,7 @@ def predicates(outcome, *, tolerance):
     return outcome
 
 
-def standard_derivatives(model, problem, solution):
+def standard_derivatives(model, problem, solution, *, gibbs_helmholtz=False, warm_start=False):
     T,P = solution.temperature,solution.pressure
     x = np.array(solution.phase_mole_fractions(0))
     N,rho = solution.amounts[0],solution.molar_densities[0]
@@ -63,6 +63,7 @@ def standard_derivatives(model, problem, solution):
     refs = problem.reactions
     mobile = [rx.name for rx in refs if rx.reference.reference_pressure_pa is None]
     caloric = {}
+    center = solution
 
     def enthalpy(result):
         values = first_actions(model,problem,result,[observable('SystemEnthalpy',0)],[(0.,0.,[0.]*len(x))])
@@ -104,8 +105,46 @@ def standard_derivatives(model, problem, solution):
 
     def total_g(t,p,source_p):
         state = model.state(t,P=p,x=x,phase='liquid')
+        if gibbs_helmholtz and abs(math.log(state.molar_density/rho)) > DENSITY_WINDOW:
+            raise ValueError('pressure finite difference switched density roots')
         return R*t*N*float(x @ (np.log(x*state.molar_density) + state.residual_chemical_potential_over_rt
                                 + offsets(t,p,source_p)))
+
+    phases = problem.phases
+
+    def caloric_g_over_T(t, attempts):
+        problem.temperature = type(problem.temperature).fixed(t)
+        problem.pressure = type(problem.pressure).fixed(P)
+        offset = problem.reactions
+        for rx in offset:
+            if rx.name in mobile:
+                rx.reference = eq.ReactionReference(rx.reference.source_basis, reference_pressure_pa=P)
+        problem.reactions = offset
+        res = center if warm_start else None
+        try:
+            for _ in range(5 if warm_start else 1):
+                if res is not None:
+                    phase = problem.phases[0]
+                    phase.composition_guess = res.phase_mole_fractions(0)
+                    problem.phases = [phase]
+                res = eq.solve_equilibrium(model, problem)
+                converged = res.requested_tolerance_met
+                roots = pressure_roots(model, t, P, res.phase_mole_fractions(0), res.molar_densities[0]) if converged else []
+                accepted = any(q['returned']=='liquid' for q in matched(roots,problem.row_tolerance))
+                attempts.append(dict(T_K=t,roots=roots,converged=converged,accepted=accepted,message=res.message))
+                if accepted:
+                    break
+                if not converged:
+                    raise ValueError(f'Gibbs–Helmholtz equilibrium at {t:g} K: {res.message}')
+            else:
+                same_root = any(q.get('returned')=='liquid' and q['log_density_distance']<=DENSITY_WINDOW for q in roots)
+                if not (warm_start and same_root):
+                    raise ValueError(f'Gibbs–Helmholtz liquid root unavailable at {t:g} K')
+        finally:
+            problem.phases = phases
+        obs = observable('PhaseProperty', 0, prop=epcsaft.PropertyObservable.TotalEntropy)
+        entropy = first_actions(model,problem,res,[obs],[(0.,0.,[0.]*len(x))])[0][0][0]
+        return enthalpy(res)/t-res.amounts[0]*entropy, accepted
 
     for dp,dt in ((P*1e-4,.04),(P*5e-5,.02),(P*2.5e-5,.01)):
         row = dict(step_Pa=dp,step_K=dt,eos_volume_m3=N/rho,moving_reactions=mobile,
@@ -117,17 +156,42 @@ def standard_derivatives(model, problem, solution):
             pplus,pminus = [model.state(t,rho=rho,x=x).pressure for t in (T+dt,T-dt)]
             dP_dT = (pplus-pminus)/(2*dt)
             frozen_term = float(-R*T*T*N*(x @ dT_Psrc))
-            moving_term = float(-R*T*T*N*(x @ (
-                offsets(T+dt,P,pplus)-offsets(T-dt,P,pminus)))/(2*dt))
             row.update(offsets_over_rt=offsets(T,P,P), d_offsets_over_rt_dPsrc_Pa_inverse=derivative,
                        correction_m3=float(R*T*N*(x @ derivative)), dP_dT_Pa_K=dP_dT,
-                       frozen_reference_term_J=frozen_term,moving_reference_term_direct_J=moving_term,
+                       frozen_reference_term_J=frozen_term,
                        pressure_tracking_term_J=float(-R*T*T*N*(x @ derivative)*dP_dT),
-                       pressure_tracking_direct_J=moving_term-frozen_term,
                        frozen_G_volume_m3=(total_g(T,P+dp,P)-total_g(T,P-dp,P))/(2*dp),
                        moving_G_volume_m3=(total_g(T,P+dp,P+dp)-total_g(T,P-dp,P-dp))/(2*dp))
+            if gibbs_helmholtz:
+                attempts = row['caloric_root_attempts'] = []
+                values, failures = [], []
+                for t in (T+dt,T-dt):
+                    try:
+                        values.append(caloric_g_over_T(t,attempts))
+                    except (RuntimeError, ValueError) as exc:
+                        failures.append(str(exc))
+                if failures:
+                    row['caloric_refusal'] = ' | '.join(failures)
+                else:
+                    (plus, plus_ok), (minus, minus_ok) = values
+                    gibbs_h = -T*T*(plus-minus)/(2*dt)
+                    if plus_ok and minus_ok:
+                        row['Gibbs_Helmholtz_J'] = gibbs_h
+                    else:
+                        row['diagnostic_Gibbs_Helmholtz_J'] = gibbs_h
+                        row['caloric_refusal'] = f'Liquid pressure readback exceeds relative tolerance {problem.row_tolerance:g}'
+            if min(pplus,pminus)>0:
+                moving_term = float(-R*T*T*N*(x @ (
+                    offsets(T+dt,P,pplus)-offsets(T-dt,P,pminus)))/(2*dt))
+                row.update(moving_reference_term_direct_J=moving_term,pressure_tracking_direct_J=moving_term-frozen_term)
+            else:
+                row['fixed_volume_direct_refusal'] = f'nonpositive source pressure: {pminus}, {pplus} Pa'
         except (RuntimeError,ValueError) as exc:
             row['refusal'] = str(exc)
+        finally:
+            problem.temperature = type(problem.temperature).fixed(T)
+            problem.pressure = type(problem.pressure).fixed(P)
+            problem.reactions = refs
     return rows
 
 
