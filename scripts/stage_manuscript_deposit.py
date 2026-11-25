@@ -1,7 +1,7 @@
 """Stage #206's retained evidence for the merged manuscript; never upload or reserve a DOI.
 
 Use: stage (moves any old staging aside, copies the manuscript evidence), rebuild (compiles both PDFs from the
-staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums).
+staged copy and compares them with the accepted PDFs), then seal (README, manifest, checksums). Use reviewer for the #440 round-9 package.
 """
 import datetime
 import hashlib
@@ -475,7 +475,12 @@ text and render comparisons. See `software-index.md` for reproduction commands.
 
 
 if __name__ == '__main__':
+    if sys.argv[1:2] == ['reviewer']:
+        from stage_reviewer_deposit import main
+
+        main(sys.argv[2:])
+        sys.exit()
     steps = dict(stage=stage, rebuild=rebuild, seal=seal)
     if len(sys.argv) != 2 or sys.argv[1] not in steps:
-        raise SystemExit('Use: stage, then rebuild, then seal.')
+        raise SystemExit('Use: reviewer [--help], or stage, then rebuild, then seal.')
     steps[sys.argv[1]]()

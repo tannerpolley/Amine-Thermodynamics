@@ -115,7 +115,7 @@ def amp(run, *, inspect=None, route_class=Route, allow_missing_trial_error=False
                 outside_source_ranges=split['outside_ranges'], checks=checks)
 
 
-def mea(params=BUNDLE / 'results/selected-current-best-parameters.json'):
+def mea(params=BUNDLE / 'results/selected-current-best-parameters.json', *, reaction_reference_pressure_pa=None):
     earlier = BUNDLE / 'results/paper-evidence-341/paper-evidence/model-curves/heat.csv'
     declaration = ROOT / 'analyses/solvent_specification_mea/declarations.toml'
     inputs = identity(params, earlier, declaration, vrc.PHYSICAL_CALORICS, s.STATE_PACKET)
@@ -165,6 +165,8 @@ def mea(params=BUNDLE / 'results/selected-current-best-parameters.json'):
     finite = [(points[str(d)]['H_J']-points[str(-d)]['H_J'])/(2*d*sum(feed)) for d in hc.STEP_K]
     checks['heat_capacity'] = abs(cp-finite[1]) <= min(hc.RESOLVE_RTOL*abs(finite[1]), abs(cp-finite[0])/2)
     reactions = []
+    reference_pressures = ([P]*3+[p0]*2 if reaction_reference_pressure_pa is None
+                           else [reaction_reference_pressure_pa]*len(loaded.reactions))
     for i, (rx, a) in enumerate(zip(loaded.reactions, source, strict=True)):
         law, nu = rx.correlation, rx.stoichiometry
         dnu = sum(nu)
@@ -176,7 +178,7 @@ def mea(params=BUNDLE / 'results/selected-current-best-parameters.json'):
         dh = factor*slope
         stencil = [factor*(points[str(d)]['ln_Q_pressure_standard'][i]-points[str(-d)]['ln_Q_pressure_standard'][i])/(2*d) for d in hc.STEP_K]
         checks[rx.name] = (abs(a.log_quotient-ln_k) <= tol and format(stencil[1], '.2f') == format(dh, '.2f')
-                           and a.reference_pressure_pa == a.standard_pressure_pa == ([P]*3+[p0]*2)[i])
+                           and a.reference_pressure_pa == a.standard_pressure_pa == reference_pressures[i])
         reactions.append(dict(name=rx.name, P_source_Pa=a.reference_pressure_pa, ln_K_source=ln_k, ln_Q_source=a.log_quotient,
                               ln_Q_minus_ln_K_source=a.log_quotient-ln_k, molality_term=molality,
                               Gamma=a.log_pressure_quotient-a.log_quotient-molality, ln_K_ideal_gas=central['ln_Q_pressure_standard'][i],
