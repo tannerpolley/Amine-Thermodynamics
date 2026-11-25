@@ -472,6 +472,21 @@ For the split of the first MDEA fit at \SI{383.15}{\kelvin} and \SI{121.309}{\me
 With the references fixed at \SI{100}{\kilo\pascal} the candidate split lowers $G/(RT)$ by 0.0475 mol, but its liquid roots remain unresolved, so this case is undecided.
 At that state the pressure-tracking correction to the volume, $-2.98\times10^{-5}$ of \SI{1.90e-4}{\cubic\metre}, is $-15.7$\,\% of the volume calculated by the equation of state, and the pressure-tracking term contributes \SI{17.55}{\kilo\joule} per feed.
 
+% P:supplement-pressure-tracking
+Main-text \cref{main-eq:pressure-tracking} gives the size of this correction for the reported models.
+Per mole of amine fed, it is evaluated at one fitted bubble state of each amine: the Hilliard MEA \COtwo partial pressure at \SI{313.02}{\kelvin} and \SI{6.675}{\kilo\pascal}, the Lal et al.\ DEA pressure at \SI{313.15}{\kelvin} and \SI{7.130}{\kilo\pascal}, the Hartono et al.\ AMP pressure at \SI{353.00}{\kelvin} and \SI{88.72}{\kilo\pascal} and a Kuranov et al.\ MDEA pressure at \SI{333.16}{\kelvin} and \SI{0.7232}{\mega\pascal}.
+There the correction is $-30.16$, $-36.96$, $-34.37$ and $-28.96$\,\% of the volume of the equation of state.
+At the split of the MDEA model at \SI{373.15}{\kelvin} and \SI{204.054}{\mega\pascal} it is $-14.46$\,\% for the single liquid and $-14.13$ and $-20.67$\,\% for the two liquids.
+These states are fitted rows and the extrapolated split; no unfitted comparison state was evaluated.
+At fixed volume, as in main-text Eq.~(\ref{main-eq:total-enthalpy}), the pressure dependence of the R1--R3 references enters through the chain term $-RT^2\sum_in_i(\partial b_i/\partial P_{\mathrm{src}})_T(\partial P/\partial T)_{V,\boldsymbol n}$; it is 41.89, 135.46, 114.40 and \SI{99.16}{\kilo\joule} per mole of amine at the four fitted states and \SI{16.54}{\kilo\joule} for the single liquid of the MDEA split.
+The enthalpy of the equation of state was compared with $H_G=-T^2[\partial(G^*/T)/\partial T]_P$, with both the system pressure and the reference pressures fixed, the neutral ideal-gas functions included in both and step pairs of 0.04, 0.02 and \SI{0.01}{\kelvin}.
+At the \SI{0.01}{\kelvin} step the difference is $2.71\times10^{-6}$, $7.05\times10^{-6}$, $6.80\times10^{-7}$ and $4.21\times10^{-6}$~kJ/mol for MEA, DEA, AMP and MDEA, and $8.69\times10^{-7}$, $8.28\times10^{-7}$ and $3.46\times10^{-8}$~kJ/mol for the single liquid and the two liquids of the split; it falls about fourfold per halving of the step, the behavior of the error of a central difference.
+For DEA the liquid pressure at the three coarser step temperatures missed the relative tolerance of $10^{-10}$, by up to $1.96\times10^{-10}$, so those values are diagnostic and the DEA step dependence is unresolved.
+These are checks of numerical consistency, not comparisons with a measurement.
+
+% P:supplement-reference-204
+With the references fixed at \SI{100}{\kilo\pascal}, the state of the split of the MDEA model at \SI{204.054}{\mega\pascal} still shows a resolved descent, but the local stability of the equilibrated single liquid is indeterminate (smallest eigenvalue 0.00149 inside a rounding band of 0.0189), so the phase identity of the split under that convention is unresolved; with the references at the system pressure the split is confirmed (Section~\ref{sec:s-phase}).
+
 \input{../../../analyses/mea_parameter_bundle/results/reference-states-428/amp_reference_state}
 \input{tables/mea_reference_state}
 
@@ -595,9 +610,12 @@ For DEA the grid keeps the design of the first DEA fit, made before the Seo and 
 For DEA, the search covers 335 measured states and 936 grid states, the latter at the four fitted DEA concentrations (10, 20, 25 and 30 wt\%), the nine grid temperatures and 13 loadings up to 1.167 mol/mol at both pressures; no trial compositions from earlier searches applied.
 One search did not finish: at the Lawson and Garst state at 298.15 K, 54.5 wt\% DEA and a loading of 0.602 mol/mol, the reconstructed trial phase lacked a species required by the feed, and no stability result is reported for it.
 The 1270 searches that finish detect an instability at five states, all at the densities of Weiland et al.\ \cite{Weiland1998} at 298.15 K and 101.325 kPa.
-A two-liquid calculation confirms a split at four: 30 wt\% DEA at a loading of 0.45 and 40 wt\% DEA at 0.40, 0.45 and 0.50, with decreases of $G/(RT)$ from $3.0\times10^{-4}$ to $4.6\times10^{-3}$ mol per mole of DEA fed and numerical errors below $5\times10^{-9}$ mol.
+A two-liquid calculation confirms a split at four: 30 wt\% DEA at a loading of 0.45 and 40 wt\% DEA at 0.40, 0.45 and 0.50, with decreases of $G/(RT)$ from $3.0\times10^{-4}$ to $4.6\times10^{-3}$ mol per mole of DEA fed and numerical errors of at most $6.62\times10^{-9}$ mol, at the state with the smallest decrease.
+At that state, 30 wt\% DEA and 0.45 mol/mol, the feed divides into 0.7558 and 13.862 mol, fractions 0.0517 and 0.9483 of the feed.
+The smaller liquid is ion-rich, with mole fractions of 0.0233 DEA, 0.8274 water, 0.0746 \ce{DEAH+} and 0.0710 carbamate and a density of \SI{1156.4}{\kilo\gram\per\cubic\metre}; the larger has 0.0108 DEA, 0.9324 water, 0.0283 \ce{DEAH+} and 0.0238 carbamate and \SI{1082.8}{\kilo\gram\per\cubic\metre}.
+Calculated as one liquid at the measured state, the four solutions have densities of 1088.1, 1109.9, 1117.2 and \SI{1125.3}{\kilo\gram\per\cubic\metre} against 1090, 1111, 1119 and \SI{1127}{\kilo\gram\per\cubic\metre} measured, an AARD of 0.148\,\% against 0.447\,\% on all 44 densities of Weiland et al.
 At the fifth, 30 wt\% DEA and a loading of 0.50, the two-liquid calculations coalesced or stalled, so that descent is unresolved.
-The measured densities of these solutions refer to one liquid, so the four splits are failures of the DEA model.
+Weiland et al.\ measured these densities with hydrometers on samples made by mixing unloaded and \COtwo-saturated solutions \cite{Weiland1998}; they did not test the number of phases, but the measurement treats each sample as one homogeneous liquid, so the four splits conflict with the measured state and are counted as failures of the DEA model.
 
 % P:supplement-phase-mdea
 For MDEA, the search covers 1564 measured states and \num{10260} grid states, the latter at 38 MDEA concentrations from 3.03 to 78.62 wt\%, the nine grid temperatures and 15 loadings up to 1.368 mol/mol at both pressures.
@@ -607,13 +625,17 @@ The detailed causes of the unfinished searches were classified for the first MDE
 
 % P:supplement-phase-mdea-vapor
 At 25 of the 26 states a property was measured: four densities of Sobrino et al.\ at 393.15 K and 0.1 MPa, 13 species states of B\"ottinger et al., 11 at 0.5 MPa and two at 2.5 MPa, five heats of Zheng et al.\ and three heats of Merkley et al.\ at 333.15 K and 1.121 MPa.
-A two-liquid calculation was attempted at 17 of these states and confirmed a second liquid at none; at the other eight none was attempted.
-For the first MDEA fit the instability at these states was toward a gas-like phase at an assigned pressure below the calculated bubble pressure; that classification was not repeated for the MDEA model.
+For the MDEA model the direction of each descent was classified at the assigned pressure, after coincident trial endpoints were merged, from a vapor root at the trial composition or, where the endpoint was not labelled, from one bounded trace that connects it to the dilute vapor.
+All 25 descents point toward a vapor, and none is left unclassified.
+At each of the 25 states the assigned pressure lies below the bubble pressure of the MDEA model: 0.1 against 0.19--\SI{0.20}{\mega\pascal} for the four Sobrino states, 0.5 or 2.5 against 0.52--\SI{3.44}{\mega\pascal} for the B\"ottinger states, 0.53--4.19 against 0.68--\SI{70.5}{\mega\pascal} for the Zheng states and 1.121 against 1.19--\SI{2.46}{\mega\pascal} for the Merkley states.
+A two-liquid calculation was attempted at the 17 states at which a liquid-labelled trial endpoint also descended, and it confirmed a second liquid at none; at the other eight no liquid-labelled endpoint descended, four of them shown only by an earlier trial composition, and none was attempted.
+These descents show a single liquid held below its calculated bubble pressure, not a liquid--liquid split.
 
 % P:supplement-phase-mdea-split
 The remaining state is a confirmed liquid--liquid split at the grid state at 373.15 K, 78.62 wt\% MDEA (1.7988 mol water per mole of MDEA), a loading of 1.300 mol/mol and 1.05 times the bubble pressure, 204.054 MPa; the two-liquid solution lowers $G/(RT)$ by $5.016\times10^{-4}$ mol against a numerical error of $7.2\times10^{-10}$ mol.
 This pressure is about 49 times the highest measured pressure, 4.190 MPa, and the split is a prediction of the MDEA model there, not a measured phase boundary.
-A targeted calculation of the MDEA model at 262.862 MPa, the state of a split of the fit with the MEA-fitted shared set, also confirms a split; for the first MDEA fit the calculation there is unresolved (Table~\ref{tab:supplement-phase-replays}).
+A targeted calculation of the MDEA model at 363.15 K, the same composition, a loading of 1.368 mol/mol and 262.862 MPa, the state of a split of the fit with the MEA-fitted shared set, confirms a second split, lowering $G/(RT)$ by 0.01857 mol; the fingerprint of the parameter set in that calculation is that of the MDEA model.
+This split lies outside the grid, so the grid count of main-text Table~\ref{main-tab:amine-summary} does not include it; for the first MDEA fit the calculation there is unresolved (Table~\ref{tab:supplement-phase-replays}).
 The first MDEA fit has its own confirmed split at 383.15 K, a loading of 1.368 mol/mol and 121.309 MPa, discussed in Section~\ref{sec:s-files} with the reference convention.
 The contributions of the equation-of-state terms to the split of the MDEA model were not determined, so its existence does not identify a defect of a particular term.
 
@@ -621,7 +643,7 @@ The contributions of the equation-of-state terms to the split of the MDEA model 
 For AMP, the search covers the 270 measured states and 396 grid states, the latter at 26.8 and 30.0 wt\% AMP, the nine grid temperatures and 11 loadings up to 0.966 mol/mol at both pressures.
 For the AMP model every search finishes without a detected instability, with the trial phases of the search alone and also when the 7301 trial compositions from earlier searches are tested.
 The same holds for the AMP fit with the slope fixed at \SI{-150}{\kelvin} (Section~\ref{sec:s-amp-slope}); the searches of the earlier fits with the MEA-fitted shared set belong to those fits.
-The grid ends at 393.15 K, and the AMP model was not searched above it.
+The grid ends at 393.15 K; the measured states, which extend to the Tong et al.\ pressures at 393.20 K, are searched at their own temperatures, and the AMP model was not searched above 393.20 K.
 
 \input{tables/supplement-liquid-splits}
 \input{tables/supplement-mdea-fixed-pressure}

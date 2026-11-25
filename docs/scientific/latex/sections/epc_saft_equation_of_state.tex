@@ -126,6 +126,14 @@ With the fugacity coefficient $\ln\phi_i=\mu_i^{\mathrm{res}}/(RT)-\ln Z$ and co
 where $M_w$ is the molar mass of water, $m^\circ=\SI{1}{\mole\per\kilogram}$, and $P_{\mathrm{src},r}$ is the pressure at which the reference states of reaction $r$ are evaluated: the system pressure $P$ for R1--R3, including the solved pressure of a bubble calculation, and \SI{0.1}{\mega\pascal} for R4 and R5.
 These reference pressures are distinct from the ideal-gas standard pressure $P^\circ=\SI{0.1}{\mega\pascal}$ of the caloric functions (\cref{sec:caloric-model}).
 At a given temperature and pressure the reference states do not depend on composition, so all phases compared at that state share one Gibbs energy.
+That Gibbs energy, $G^*=G_{\mathrm{EOS}}+RT\sum_in_ib_i(T,P_{\mathrm{src}})$, where $RTb_i$ is the reference contribution of species $i$, is the function minimized in the phase searches; at fixed amounts its pressure derivative differs from the volume of the equation of state,
+\begin{equation}
+ \left(\frac{\partial G^*}{\partial P}\right)_{T,\boldsymbol n}-V_{\mathrm{EOS}}=RT\sum_in_i\left(\frac{\partial b_i}{\partial P_{\mathrm{src}}}\right)_T\frac{\mathrm{d}P_{\mathrm{src}}}{\mathrm{d}P},
+ \label{eq:pressure-tracking}
+\end{equation}
+with $\mathrm{d}P_{\mathrm{src}}/\mathrm{d}P=1$ for R1--R3 and 0 for R4 and R5.
+Densities are calculated from $V_{\mathrm{EOS}}$.
+At one fitted bubble state of each amine, at 313--\SI{353}{\kelvin} and 6.7~kPa to \SI{0.72}{\mega\pascal}, the right side of \cref{eq:pressure-tracking} is $-29.0$ to $-37.0$\,\% of $V_{\mathrm{EOS}}$, and at the calculated MDEA split at \SI{204.054}{\mega\pascal} (\cref{sec:results-phase}) it is $-14.46$\,\% for the single liquid (Section~\ref{supp-sec:s-files}).
 Evaluating the R1--R3 references at \SI{0.1}{\mega\pascal} instead changes two calculated \COtwo partial pressures and one absorption heat of MEA by less than 0.2\,\%, and the two phase splits recalculated with it below \SI{2}{\mega\pascal} persist (Section~\ref{supp-sec:s-files}).
 With the molality $m_i=x_i/(x_wM_w)$, \cref{eq:activities} is the usual molality activity $a_i=\gamma_i^mm_i/m^\circ$ with the activity coefficient normalized at infinite dilution in water.
 The infinite-dilution reference is evaluated for the charge-neutral combinations of species that appear in the reactions, and every constant is applied on one aqueous-molality basis (Section~\ref{supp-sec:s-parameters}).
@@ -157,5 +165,6 @@ Total enthalpy follows the same Helmholtz energy and reaction standard states as
  \label{eq:total-enthalpy}
 \end{equation}
 Neutral ideal-gas functions supply the caloric reference, and the ionic functions follow from the equilibrium-constant correlations converted from their aqueous reference states to ideal gases at $P^\circ$, $\Delta_rh_{P^\circ}^{\mathrm{ig}}=RT^2\,\mathrm{d}\ln K_{r,P^\circ}^{\mathrm{ig}}/\mathrm{d}T$; no separate reaction-enthalpy term is added (Section~\ref{supp-sec:s-files} gives the conversion and a worked example).
+This enthalpy agrees with $-T^2[\partial(G^*/T)/\partial T]_P$, taken with the system and reference pressures fixed: at the four fitted states of \cref{sec:reactions} and for the single liquid and the two liquids of the MDEA split, central differences with a \SI{0.01}{\kelvin} step leave differences of $3\times10^{-8}$ to $7\times10^{-6}$~kJ per mole of amine fed, which fall about fourfold per halving of the step, as the error of the central difference does; for DEA only the finest step met the pressure tolerance, so its step dependence is not shown.
 Equilibrium heat capacity is $C_P=(\mathrm{d}H_{\mathrm{eq}}/\mathrm{d}T)_{P,\boldsymbol n_{\mathrm{feed}}}$, including the change in speciation.
 Density is the mass of the apparent components divided by the equilibrium liquid volume, without volume translation, and a binary excess enthalpy subtracts the mole-fraction-weighted pure-liquid enthalpies from the mixture molar enthalpy.

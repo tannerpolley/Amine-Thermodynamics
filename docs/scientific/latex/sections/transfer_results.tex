@@ -102,7 +102,10 @@ The MEA model shows no detected instability at any of the 2484 liquid states or 
 For DEA, 1270 of the 1271 searches finish, and four of them confirm a liquid--liquid split at measured states.
 All four are states of the density measurements of Weiland et al.\ \cite{Weiland1998} at \SI{298.15}{\kelvin} and \SI{101.325}{\kilo\pascal}: 30 wt\% DEA at a loading of 0.45 and 40 wt\% DEA at 0.40, 0.45 and 0.50.
 The split lowers $G/(RT)$ by \num{3.0e-4} to \SI{4.6e-3}{\mole} per mole of DEA fed.
-Weiland et al.\ measured the density of one solution at these states, which the DEA model describes within 0.45\,\% on average, so the calculated splits are failures of the DEA model, not predictions.
+At 30 wt\% and a loading of 0.45 it gives an ion-rich liquid of 5.17\,\% of the feed, with a density of \SI{1156.4}{\kilo\gram\per\cubic\metre}, and a water-rich liquid of 94.83\,\% with \SI{1082.8}{\kilo\gram\per\cubic\metre} (Section~\ref{supp-sec:s-phase}).
+Weiland et al.\ measured these densities at \SI{298}{\kelvin} with hydrometers, on samples made by mixing an unloaded solution with a portion saturated with \COtwo at \SI{1}{atm} and checked by titration \cite{Weiland1998}; the measurement is not a test of the number of phases, but it treats each sample as one homogeneous liquid.
+Calculated as one liquid, the DEA model reproduces the four densities within 0.15\,\% on average, against 0.45\,\% on all 44 densities of that source.
+The calculated splits therefore conflict with the measured state, and they are counted as failures of the DEA model, not as predictions.
 A fifth search, at 30 wt\% and a loading of 0.50, detects an instability that the two-liquid calculation did not resolve, and the one unfinished search is not counted as stable (Section~\ref{supp-sec:s-phase}).
 
 % P:phase-mdea-binary
@@ -120,11 +123,12 @@ No measurement of liquid--liquid coexistence in this system was used.
 % P:phase-mdea-loaded
 Of the \num{11824} MDEA searches, 1348 did not finish: 1124 with a bubble reference refusal, at grid states where no bubble pressure could be calculated, and 224 at measured states.
 The searches that finish detect an instability at 26 distinct states.
-Twenty-five of them are measured states, and at none of these does a two-liquid calculation confirm a second liquid.
-The remaining state is a confirmed liquid--liquid split at a grid state far outside the measured conditions: \SI{373.15}{\kelvin}, 78.62 wt\% MDEA, a loading of 1.300 mol/mol and \SI{204.054}{\mega\pascal} (Section~\ref{supp-sec:s-phase}).
-At such pressures the result depends on the reference state of the reactions.
+Twenty-five of them are measured states, at each of which the assigned pressure lies below the bubble pressure of the MDEA model and the descent points toward a vapor; a two-liquid calculation was attempted at 17 of them and confirmed a second liquid at none.
+The MDEA model has two confirmed liquid--liquid splits, both at 78.62 wt\% MDEA and far above the highest measured pressure, \SI{4.19}{\mega\pascal} (Section~\ref{supp-sec:s-phase}).
+The grid search finds one at \SI{373.15}{\kelvin}, a loading of 1.300 mol/mol and \SI{204.054}{\mega\pascal}, and a targeted calculation finds the other at \SI{363.15}{\kelvin}, 1.368 mol/mol and \SI{262.862}{\mega\pascal}; the grid count of \cref{tab:amine-summary} does not include the targeted one.
+At such pressures the result depends on the reference state of the reactions: at \SI{204.054}{\mega\pascal} the split is confirmed with the R1--R3 references at the system pressure, and with them fixed at \SI{100}{\kilo\pascal} a descent remains but its phase identity is unresolved.
 The first MDEA fit has a split at \SI{383.15}{\kelvin} and \SI{121.309}{\mega\pascal} that is confirmed with the convention used here, in which the reference states of R1--R3 follow the system pressure; with the reference fixed at \SI{100}{\kilo\pascal} the candidate split also lowers the Gibbs energy, but its liquid roots remain unresolved.
-At that state the pressure-tracking term amounts to $-15.7$\,\% of the volume calculated by the equation of state.
+At that state the right side of \cref{eq:pressure-tracking} is $-15.7$\,\% of the volume calculated by the equation of state, and at the \SI{204.054}{\mega\pascal} split of the MDEA model $-14.46$\,\%.
 The MDEA model is therefore not free of calculated splits, and 224 of its 1564 searches at measured states give no result.
 
 % P:phase-amp
