@@ -4,7 +4,7 @@ from collections import Counter
 import sys
 from time import monotonic
 
-from refit import OUT, WORK, P_REF, ROUND7, ALLOWANCE, configured, fingerprint, put, r
+from refit import OUT, WORK, P_REF, ROUND7, configured, fingerprint, put, r
 from calculations import MDEA, Route, transfer
 from mdea_reference import seed_state, predicates
 from phases import fixed
@@ -112,6 +112,12 @@ def release_routes(design, tag):
     return [('native',native,[]),('supplied',supplied,bank['trials']+bank.get('supplied_trials',[]))]
 
 
+def baseline_screen(design,protocol):
+    path = ('C/salt/search-0.json.gz' if design=='MDEA' else 'F/search-rows.json.gz'
+            if design=='DEA' else f"AMP/{design.split('_')[1]}/{protocol}-rows.json.gz")
+    return {q['key']:q for q in r.read(ROUND7/path)}
+
+
 def screening(design, label, pilot=False):
     tick = monotonic()
     _,point = point_for(design,label,'screen')
@@ -156,13 +162,12 @@ def screening(design, label, pilot=False):
         classifications = transfer.classify(run,point,list(merged.values()),states)
         merged.update((dest,dict(merged[src],key=dest,seconds=0.,same_calculation_as=src)) for dest,src in aliases.items())
         rows = [merged[q['key']] for q in states]
-        baseline_file = ('C/salt/search-0.json.gz' if design=='MDEA' else 'F/search-rows.json.gz'
-                         if design=='DEA' else f"AMP/{design.split('_')[1]}/{protocol}-rows.json.gz")
-        baseline = {q['key']:q for q in r.read(ROUND7/baseline_file)}
+        baseline = baseline_screen(design,protocol)
         assert set(merged)==set(baseline)
         put(f'{folder}/summary.json.gz',dict(endpoint_fingerprint=endpoint,wheel=r.SHA,rows=rows,
             classifications=classifications,tally=r.tally(rows),aliases=aliases,
-            original_pressure_basis={k:q.get('pressure_basis',{'search_pressure_Pa':q.get('pressure_Pa')}) for k,q in baseline.items()},
+            original_pressure_basis={k:q.get('pressure_basis',{'model_bubble_pressure_Pa':q.get('pressure_Pa')})
+                                     for k,q in baseline.items()},
             unavailable_by_message=dict(Counter(q.get('message') or q.get('status') for q in rows if not q['available'])),
             seconds=monotonic()-started))
     return monotonic()-tick

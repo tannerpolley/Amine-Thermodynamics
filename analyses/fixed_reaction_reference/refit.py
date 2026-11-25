@@ -19,6 +19,7 @@ SEED = 427
 COUNTS = dict(MEA=307, DEA=140, MDEA=281, AMP_free=214, AMP_fixed=214)
 ALLOWANCE = dict(MEA=1800, DEA=1080, MDEA=7320, AMP_free=4500, AMP_fixed=4500)
 REPLAY_TOLERANCE = dict.fromkeys(COUNTS, 1e-8) | {'MEA': 1e-10}
+CPU_POOL = set(range(12))
 THREAD_VARIABLES = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'BLIS_NUM_THREADS',
                     'NUMEXPR_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS')
 
@@ -26,6 +27,10 @@ sys.path[:0] = [str(HERE.parent / name) for name in ('round_7', 'round_8')]
 for variable in THREAD_VARIABLES:
     os.environ[variable] = '1'
 os.environ['AGENT_HEAVY_CORES'] = '4'
+study_cpus = os.sched_getaffinity(0) & CPU_POOL
+if not study_cpus:
+    raise RuntimeError('The #440 CPU pool is 0–11. Assign at least one of those CPUs to the campaign.')
+os.sched_setaffinity(0,study_cpus)
 
 from scipy.stats import qmc
 from calculations import OUT as ROUND7, MDEA, MDEAWeights, Route, a, r, save

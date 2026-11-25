@@ -1,0 +1,405 @@
+---
+title: Reaction standard-state pressure fixed at 100 kPa
+resources:
+  - manuscript-handoff.json
+  - results/handoff-checks.json
+  - results/stages.json
+---
+
+The study compares three calculations on Engine commit `05e94210`.
+The tracking model uses the retained coefficients. The 100 kPa control
+changes the reaction reference with those coefficients held fixed. The
+refit varies the designated coordinates with the same residual definitions
+and external observation pressures. DEA and AMP also take the selected MEA
+donor before refitting.
+
+Each design uses an incumbent and two displaced starts from a 64-point
+Latin hypercube with seed 427. The distances are root mean square differences
+on the unit coordinate box. A relative objective tie favors the incumbent.
+The selected fit is a local result. The calibration residuals, the
+comparison against measurements, and the model's finite phase searches have
+different meanings. Conditional standard errors describe the declared fit
+and active bounds. The study awaits independent evidence review and
+investigator promotion for manuscript use.
+
+[Quantity index](manuscript-handoff.json) records contributor hashes, pressure
+and population basis, and open quantities.
+
+## Fitted objectives
+
+| Design | Fitted rows | Tracking | Fixed at old parameters | Fixed and refitted | Change from tracking |
+|---|---:|---:|---:|---:|---:|
+| MEA | 307 | 152.95817 | 152.9336 | 152.9324 | -0.02577157 |
+| DEA | 140 | 15.537712 | 15.595132 | 15.588667 | 0.050954891 |
+| MDEA | 281 | 17.400957 | 17.44495 | 15.609314 | -1.7916425 |
+| AMP_free | 214 | 75.111439 | 74.939776 | 74.928158 | -0.18328102 |
+| AMP_fixed | 214 | 76.352718 | 76.236649 | 76.226564 | -0.12615408 |
+
+## Start separation and endpoint stationarity
+
+| Design | A−B | A−C | B−C |
+|---|---:|---:|---:|
+| MEA | 0.57934889 | 0.52924215 | 0.4855093 |
+| DEA | 0.42066221 | 0.41665915 | 0.62453068 |
+| MDEA | 0.50721693 | 0.46951108 | 0.45066382 |
+| AMP_free | 0.57554873 | 0.48305187 | 0.50320847 |
+| AMP_fixed | 0.61602166 | 0.47950407 | 0.52558969 |
+
+The projected gradient uses the bound-normalized coordinate widths. The active-bound criterion is $10^{-6}$ times each optimizer scale. All replay-eligible endpoints missed the solver-scale stationarity tolerance.
+
+| Design | Start | Status | Initial objective | Replayed objective | Projected gradient ∞-norm | Active bounds | Fit / replay (s) |
+|---|---|---|---:|---:|---:|---|---:|
+| MEA | A | converged | 152.9336 | 152.9324 | 0.0078162398 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 18.695818 / 4.0922253 |
+| MEA | B | converged | 34689.695 | 152.9324 | 0.004920479 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 83.71974 / 4.0458438 |
+| MEA | C | initial_evaluation_failed | — | — | — | — | 1.4813475 / — |
+| MEA | A-loose | converged | 152.9336 | 152.93243 | 0.24169648 | pair/carbamate-anion/protonated-monoethanolamine/k_ij (lower)<br>pair/bicarbonate-anion/protonated-monoethanolamine/k_ij (upper) | 5.2811895 / 4.0547177 |
+| DEA | A | converged | 15.588727 | 15.588667 | 0.0012340651 | — | 5.3862923 / 4.7232525 |
+| DEA | B | converged | 338.21861 | 15.588667 | 0.0034101153 | — | 52.702103 / 4.7236519 |
+| DEA | C | converged | 11831.588 | 15.588667 | 0.00065161615 | — | 160.91141 / 4.9423244 |
+| MDEA | A | converged | 17.44495 | 15.609314 | 0.74445524 | pair/mdea-water/k_ij/a0 / temperature_law_coefficient (upper) | 630.44868 / 52.628874 |
+| MDEA | B | initial_evaluation_failed | — | — | — | — | 5.1685931 / — |
+| MDEA | C | initial_evaluation_failed | — | — | — | — | 6.0759179 / — |
+| AMP_free | A | converged | 74.936897 | 74.928158 | 0.0050093488 | AMPCOO-segment-diameter (lower)<br>AMP-hydrolysis-enthalpy-increment (lower) | 25.985081 / 3.967192 |
+| AMP_free | B | initial_evaluation_failed | — | — | — | — | 1.0163821 / — |
+| AMP_free | C | initial_evaluation_failed | — | — | — | — | 5.8122216 / — |
+| AMP_fixed | A | converged | 76.233906 | 76.226564 | 0.0013986735 | AMPH-segment-diameter (lower)<br>AMPCOO-segment-diameter (lower)<br>AMP-hydrolysis-enthalpy-increment (lower) | 13.590651 / 4.5539272 |
+| AMP_fixed | B | initial_evaluation_failed | — | — | — | — | 4.6351286 / — |
+| AMP_fixed | C | converged | 4279.0576 | 2741.2603 | 0.03804058 | AMPH-water-k (upper)<br>AMPH-CO2-k (upper)<br>AMPH-segment-diameter (upper)<br>AMPCOO-segment-diameter (upper)<br>AMP-hydrolysis-a (lower)<br>AMP-hydrolysis-enthalpy-increment (upper) | 53.990975 / 6.0023066 |
+
+**MEA C** reported CentralSolveUnavailable at zero-based fitted row 218. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.56327745414857966 below the rounding band -2.8068950024848368e-14
+
+**DEA C** reported CentralSolveUnavailable at zero-based fitted row 5. LOCAL_INFEASIBILITY: infeasible: residual 0.23043048758445492 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 120 iterations, contraction absent, floor 2.3303072629266192e-10, amplification 0
+
+MDEA A continued from each of its own stage endpoints with the same controls. The independently replayed objectives were 15.998325 → 15.609329 → 15.609314.
+
+**MDEA A** reported CentralSolveUnavailable at zero-based fitted row 124. saturation:loading 1.5: phase V has no locally unique anchored root: vapor branch not admitted by the finite search: the sole stable root 29870.087932820887 mol/m3 lies above the negative-slope sample 10368.284385236288 mol/m3;saturation:unexamined_gap;
+
+**MDEA B** reported CentralSolveUnavailable at zero-based fitted row 123. saturation:no_resolved_root;
+
+**MDEA C** reported CentralSolveUnavailable at zero-based fitted row 126. saturation:no_resolved_root;
+
+**AMP_free B** reported CentralSolveUnavailable at zero-based fitted row 47. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.31574826780505305 below the rounding band -3.1634355715787279e-14
+
+**AMP_free C** reported CentralSolveUnavailable at zero-based fitted row 0. LOCAL_INFEASIBILITY: infeasible: residual 0.73127018440641067 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 101 iterations, contraction absent, floor 4.4411204203269427e-11, amplification 0
+
+**AMP_fixed B** reported CentralSolveUnavailable at zero-based fitted row 0. LOCAL_INFEASIBILITY: infeasible: residual 0.83031872509742299 against EQUILIBRIUM_ROW_RESIDUAL 1e-10 after 119 iterations, contraction absent, floor 6.2124092313255033e-10, amplification 0
+
+**AMP_fixed C** reported CentralSolveUnavailable at zero-based fitted row 47. SUCCESS: local phase instability: phase L has lowest eigenvalue -0.90554461490338256 below the rounding band -2.6580096067175438e-14
+
+## Observation deviations
+
+| Population | Tracking AARD (%) | Refitted AARD (%) |
+|---|---:|---:|
+| MEA CO2-free density kg/m^3 | 0.031171995 | 0.031166128 |
+| MEA Cai 1 | 2.6069245 | 2.6068774 |
+| MEA Cai K | 0.36928557 | 0.36927969 |
+| MEA Cp J/(mol-feed K) | 3.0296914 | 3.0235969 |
+| MEA Jakobsen 1 | 16.167979 | 16.180861 |
+| MEA Kiepe Pa | 2.6665236 | 2.6665236 |
+| MEA Table S6 additions Pa | 27.778994 | 27.884887 |
+| MEA common149 1 | 7.4369537 | 7.4371076 |
+| MEA common149 J/mol | 2.0318382 | 2.0290655 |
+| MEA common149 Pa | 11.346544 | 11.33535 |
+| MEA loaded density kg/m^3 | 0.1540217 | 0.15412687 |
+| MEA restored species 1 | 9.3335522 | 9.3357162 |
+| DEA Bottinger-DEACOO mol/mol | 48.150039 | 47.767692 |
+| DEA Bottinger-DEA_plus_DEAH mol/mol | 5.142 | 5.1162212 |
+| DEA Bottinger-HCO3 mol/mol | 22.394664 | 22.282982 |
+| DEA Cai Pa | 40.816649 | 40.816649 |
+| DEA Carson J/mol CO2 | 2.0025141 | 2.0058764 |
+| DEA Horstmann J/mol mixture | 152.44987 | 152.44987 |
+| DEA Lal Pa | 39.985031 | 39.97202 |
+| DEA Lawson Pa | 34.176371 | 34.321512 |
+| DEA Lawson-394K Pa | 37.198302 | 37.556841 |
+| DEA Lawson-VIII Pa | 52.550715 | 52.847525 |
+| DEA SeoHong Pa | 66.196018 | 66.191253 |
+| DEA Weiland kg/m3 | 0.4470381 | 0.44715166 |
+| C3 DEA AARD all 44 density samples | 0.4470381 | 0.44715166 |
+| C3 DEA AARD four historically split feeds | 0.14782146 | 0.14387199 |
+| C3 DEA AARD on split feeds in each model | 0.14782146 | 0.11321053 |
+| MDEA Bottinger-amine-sum-25bar 1 | 7.2183918 | 7.2177942 |
+| MDEA Bottinger-amine-sum-5bar 1 | 7.2184908 | 7.2166894 |
+| MDEA Bottinger-bicarbonate-25bar 1 | 11.219286 | 11.231856 |
+| MDEA Bottinger-bicarbonate-5bar 1 | 11.220826 | 11.214715 |
+| MDEA Carson J/mol | 18.685424 | 13.581397 |
+| MDEA Cp J/(mol-feed K) | 2.8410934 | 2.938876 |
+| MDEA Cp-60wt J/(mol-feed K) | 11.579296 | 11.970643 |
+| MDEA Ermatchkov Pa | 25.093446 | 29.208683 |
+| MDEA Jakobsen 1 | 13.569201 | 13.562053 |
+| MDEA Kim Pa | 2.217412 | 2.2053279 |
+| MDEA Kuranov Pa | 4.1532115 | 4.385683 |
+| MDEA Kuranov-413K Pa | 4.8239039 | 4.8892488 |
+| MDEA Kuranov-binary Pa | 2.5916826 | 2.6093734 |
+| MDEA Merkley J/mol | 4.4830209 | 3.3151045 |
+| MDEA Merkley-half-loading J/mol | 5.13534 | 7.1223654 |
+| MDEA Merkley-outside J/mol | 2.6562304 | — |
+| MDEA Sedighi Pa | 75.282603 | 78.434684 |
+| MDEA Xiao Pa | 17.218634 | 18.354732 |
+| MDEA Zheng J/mol | 6.208304 | 4.6502153 |
+| MDEA corrected-Kamps Pa | 12.942935 | 14.761673 |
+| MDEA density-60wt kg/m^3 | 1.6417048 | 1.3179571 |
+| MDEA loaded-density kg/m^3 | 0.19032784 | 0.16685178 |
+| MDEA unloaded-density kg/m^3 | 0.077257692 | 0.077602698 |
+| AMP_free binary Pa | 1.0789677 | 1.0766564 |
+| AMP_free binary dimensionless | 4.673756 | 4.7395097 |
+| AMP_free hartono-2021-supplemental Pa | 6.8965936 | 6.8499813 |
+| AMP_free kundu Pa | 15.674405 | 15.637976 |
+| AMP_free loaded-pressure Pa | 12.05487 | 12.047537 |
+| AMP_free nmr dimensionless | 23.518809 | 23.447071 |
+| AMP_free tong Pa | 11.195916 | 11.161145 |
+| AMP_free tong-baseline Pa | 3.8510643 | 3.8600289 |
+| AMP_fixed binary Pa | 1.319861 | 1.3256084 |
+| AMP_fixed binary dimensionless | 5.7733358 | 5.8558166 |
+| AMP_fixed hartono-2021-supplemental Pa | 7.1770983 | 7.152053 |
+| AMP_fixed kundu Pa | 17.32413 | 17.3115 |
+| AMP_fixed loaded-pressure Pa | 12.175949 | 12.165733 |
+| AMP_fixed nmr dimensionless | 26.901362 | 26.94415 |
+| AMP_fixed tong Pa | 11.387123 | 11.375435 |
+| AMP_fixed tong-baseline Pa | 3.2976949 | 3.2883346 |
+| MEA pressure unfitted hot Wagner AARD_percent | 28.07278 | 28.405066 |
+| MEA pressure legacy AARD_percent | 11.346544 | 11.33535 |
+| MEA pressure added AARD_percent | 27.778994 | 27.884887 |
+| MEA pressure Aronu2011 AARD_percent | 31.609691 | 31.651051 |
+| MEA pressure Hilliard2008 AARD_percent | 8.07755 | 8.0635717 |
+| MEA pressure Idris2014 AARD_percent | 21.03179 | 21.030527 |
+| MEA pressure Jou1995 AARD_percent | 17.324452 | 17.366241 |
+| MEA pressure Mamun2005 AARD_percent | 38.363497 | 38.656766 |
+| MEA pressure Xu2011 AARD_percent | 32.358927 | 32.539788 |
+| MEA pressure 40 C nominal AARD_percent | 20.374275 | 20.366864 |
+| MEA pressure 60 C nominal AARD_percent | 14.807652 | 14.810374 |
+| MEA pressure 80 C nominal AARD_percent | 21.488707 | 21.622433 |
+| MEA pressure 100 C nominal AARD_percent | 26.564614 | 26.703704 |
+| MEA pressure 120 C nominal AARD_percent | 31.74543 | 31.922964 |
+| MEA pressure hot_expanded AARD_percent | 30.018491 | 30.183211 |
+| MEA pressure hot_published AARD_percent | 29.664725 | 29.859912 |
+| MEA pressure all_pressure AARD_percent | 22.921603 | 22.992886 |
+| MEA off-window Jou1995 AARD_percent | 13.921689 | 13.915869 |
+| MEA off-window Jou1995 bias_percent | -0.20552918 | -0.06190039 |
+| MEA off-window Aronu2011 AARD_percent | 45.674364 | 45.647693 |
+| MEA off-window Aronu2011 bias_percent | 8.8294134 | 8.7679176 |
+| MEA off-window Aronu2011 15 wt% AARD_percent | 44.241837 | 44.258622 |
+| MEA off-window Aronu2011 15 wt% bias_percent | 33.558031 | 33.597447 |
+| MEA off-window Aronu2011 45 wt% AARD_percent | 46.952023 | 46.886594 |
+| MEA off-window Aronu2011 45 wt% bias_percent | -13.22584 | -13.377339 |
+| C7 Hong matched population refitted MEA AARD | 22.588807 | 25.060932 |
+| C7 Kuranov row-matched 82 AARD | 4.1565097 | 4.354789 |
+| Round 7 B MDEA Bottinger-amine-sum-25bar | 7.2134938 | 7.2177942 |
+| Round 7 B MDEA Bottinger-amine-sum-5bar | 7.2136125 | 7.2166894 |
+| Round 7 B MDEA Bottinger-bicarbonate-25bar | 11.191788 | 11.231856 |
+| Round 7 B MDEA Bottinger-bicarbonate-5bar | 11.193488 | 11.214715 |
+| Round 7 B MDEA Carson | 5.12 | 13.581397 |
+| Round 7 B MDEA Cp | 1.9672976 | 2.938876 |
+| Round 7 B MDEA Cp-60wt | 6.5911989 | 11.970643 |
+| Round 7 B MDEA Ermatchkov | 38.422134 | 29.208683 |
+| Round 7 B MDEA Jakobsen | 13.905425 | 13.562053 |
+| Round 7 B MDEA Kim | 2.2373316 | 2.2053279 |
+| Round 7 B MDEA Kuranov | 10.117866 | 4.385683 |
+| Round 7 B MDEA Kuranov-413K | 3.0801081 | 4.8892488 |
+| Round 7 B MDEA Kuranov-binary | 2.5618109 | 2.6093734 |
+| Round 7 B MDEA Merkley | 7.6198064 | 3.3151045 |
+| Round 7 B MDEA Merkley-half-loading | 17.459565 | 7.1223654 |
+| Round 7 B MDEA Merkley-outside | 20.137374 | — |
+| Round 7 B MDEA Sedighi | 77.660829 | 78.434684 |
+| Round 7 B MDEA Xiao | 34.091845 | 18.354732 |
+| Round 7 B MDEA Zheng | 16.75478 | 4.6502153 |
+| Round 7 B MDEA corrected-Kamps | 15.802655 | 14.761673 |
+| Round 7 B MDEA density-60wt | 1.7650769 | 1.3179571 |
+| Round 7 B MDEA loaded-density | 0.18860708 | 0.16685178 |
+| Round 7 B MDEA unloaded-density | 0.07820584 | 0.077602698 |
+
+## Phase searches
+
+| State or search | Tracking outcome | Fixed-reference outcome |
+|---|---|---|
+| MEA A phase 100-kPa | — | finite search, no resolved descent |
+| MEA B phase 100-kPa | — | finite search, no resolved descent |
+| MEA C phase 100-kPa | — | no endpoint |
+| MEA fixed-at-old phase 100-kPa | — | finite search, no resolved descent |
+| DEA A phase weiland-1998:31:problem | confirmed split | unresolved phase identity |
+| DEA A phase weiland-1998:41:problem | confirmed split | confirmed split |
+| DEA A phase weiland-1998:42:problem | confirmed split | confirmed split |
+| DEA A phase weiland-1998:43:problem | confirmed split | confirmed split |
+| DEA B phase weiland-1998:31:problem | confirmed split | unresolved phase identity |
+| DEA B phase weiland-1998:41:problem | confirmed split | confirmed split |
+| DEA B phase weiland-1998:42:problem | confirmed split | confirmed split |
+| DEA B phase weiland-1998:43:problem | confirmed split | confirmed split |
+| DEA C phase weiland-1998:31:problem | confirmed split | unresolved phase identity |
+| DEA C phase weiland-1998:41:problem | confirmed split | confirmed split |
+| DEA C phase weiland-1998:42:problem | confirmed split | confirmed split |
+| DEA C phase weiland-1998:43:problem | confirmed split | confirmed split |
+| DEA fixed-at-old phase weiland-1998:31:problem | confirmed split | unresolved phase identity |
+| DEA fixed-at-old phase weiland-1998:41:problem | confirmed split | confirmed split |
+| DEA fixed-at-old phase weiland-1998:42:problem | confirmed split | confirmed split |
+| DEA fixed-at-old phase weiland-1998:43:problem | confirmed split | confirmed split |
+| DEA declared finite search counts | {'states': 1271, 'available': 1270, 'descent': 5, 'confirmed': 4} | 1264 no resolved descent<br>2 unresolved descent or identity<br>4 confirmed split<br>1 unavailable search |
+| MDEA A phase 204-MPa | confirmed split | unresolved phase identity |
+| MDEA A phase 263-MPa | confirmed split | unresolved phase identity |
+| MDEA B phase 204-MPa | confirmed split | no endpoint |
+| MDEA B phase 263-MPa | confirmed split | no endpoint |
+| MDEA C phase 204-MPa | confirmed split | no endpoint |
+| MDEA C phase 263-MPa | confirmed split | no endpoint |
+| MDEA fixed-at-old phase 204-MPa | confirmed split | unresolved phase identity |
+| MDEA fixed-at-old phase 263-MPa | confirmed split | unresolved phase identity |
+| MDEA declared finite search counts | {'states': 11824, 'available': 10476, 'descent': 75, 'confirmed': 1} | 10501 no resolved descent<br>1315 unavailable search<br>8 unresolved descent or identity |
+| AMP_free A phase hartono-2021:55:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free A phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free A phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free A phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free A phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free A phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free A phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free B phase hartono-2021:55:problem | unresolved phase identity | no endpoint |
+| AMP_free B phase hartono-2021:56:problem | unresolved phase identity | no endpoint |
+| AMP_free B phase hartono-2021:57:problem | unresolved phase identity | no endpoint |
+| AMP_free B phase tong-2012:29:problem | finite search, no resolved descent | no endpoint |
+| AMP_free B phase tong-2012:32:problem | unresolved phase identity | no endpoint |
+| AMP_free B phase tong-2012:44:problem | finite search, no resolved descent | no endpoint |
+| AMP_free B phase worked-state | finite search, no resolved descent | no endpoint |
+| AMP_free C phase hartono-2021:55:problem | unresolved phase identity | no endpoint |
+| AMP_free C phase hartono-2021:56:problem | unresolved phase identity | no endpoint |
+| AMP_free C phase hartono-2021:57:problem | unresolved phase identity | no endpoint |
+| AMP_free C phase tong-2012:29:problem | finite search, no resolved descent | no endpoint |
+| AMP_free C phase tong-2012:32:problem | unresolved phase identity | no endpoint |
+| AMP_free C phase tong-2012:44:problem | finite search, no resolved descent | no endpoint |
+| AMP_free C phase worked-state | finite search, no resolved descent | no endpoint |
+| AMP_free fixed-at-old phase hartono-2021:55:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free fixed-at-old phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free fixed-at-old phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free fixed-at-old phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free fixed-at-old phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_free fixed-at-old phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free fixed-at-old phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_free native finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
+| AMP_free supplied finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
+| AMP_fixed A phase hartono-2021:55:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed A phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed A phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed A phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed A phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed A phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed A phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed B phase hartono-2021:55:problem | finite search, no resolved descent | no endpoint |
+| AMP_fixed B phase hartono-2021:56:problem | unresolved phase identity | no endpoint |
+| AMP_fixed B phase hartono-2021:57:problem | unresolved phase identity | no endpoint |
+| AMP_fixed B phase tong-2012:29:problem | finite search, no resolved descent | no endpoint |
+| AMP_fixed B phase tong-2012:32:problem | unresolved phase identity | no endpoint |
+| AMP_fixed B phase tong-2012:44:problem | finite search, no resolved descent | no endpoint |
+| AMP_fixed B phase worked-state | finite search, no resolved descent | no endpoint |
+| AMP_fixed C phase hartono-2021:55:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed C phase hartono-2021:56:problem | unresolved phase identity | confirmed split |
+| AMP_fixed C phase hartono-2021:57:problem | unresolved phase identity | confirmed split |
+| AMP_fixed C phase tong-2012:29:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed C phase tong-2012:32:problem | unresolved phase identity | confirmed split |
+| AMP_fixed C phase tong-2012:44:problem | finite search, no resolved descent | confirmed split |
+| AMP_fixed C phase worked-state | finite search, no resolved descent | confirmed split |
+| AMP_fixed fixed-at-old phase hartono-2021:55:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed fixed-at-old phase hartono-2021:56:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed fixed-at-old phase hartono-2021:57:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed fixed-at-old phase tong-2012:29:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed fixed-at-old phase tong-2012:32:problem | unresolved phase identity | unresolved phase identity |
+| AMP_fixed fixed-at-old phase tong-2012:44:problem | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed fixed-at-old phase worked-state | finite search, no resolved descent | finite search, no resolved descent |
+| AMP_fixed native finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
+| AMP_fixed supplied finite search counts | {'states': 666, 'available': 666, 'descent': 0, 'confirmed': 0} | 666 no resolved descent |
+| MEA main finite search counts | {'states': 1908, 'available': 1908, 'descent': 0} | 1908 states<br>1908 available<br>0 descent |
+| MEA offset finite search counts | {'states': 576, 'available': 576, 'descent': 0} | 576 states<br>575 available<br>0 descent |
+| MEA measured screen source total pressure | {'states': 102, 'available': 73, 'descents': 0, 'unavailable': {'Inspect parent physical checks and native and supplied trial dispositions': 29}} | 102 states<br>74 available<br>0 descents<br>{'Inspect parent physical checks and native and supplied trial dispositions': 28} unavailable |
+| MEA measured screen 1.05 times #435 bubble pressure | {'states': 65, 'available': 29, 'descents': 0, 'unavailable': {'Inspect parent physical checks and native and supplied trial dispositions': 36}} | 65 states<br>28 available<br>0 descents<br>{'Inspect parent physical checks and native and supplied trial dispositions': 37} unavailable |
+| MEA measured screen assigned observation pressure | {'states': 154, 'available': 145, 'descents': 0, 'unavailable': {'Inspect parent physical checks and native and supplied trial dispositions': 9}} | 154 states<br>144 available<br>0 descents<br>{'Inspect parent physical checks and native and supplied trial dispositions': 10} unavailable |
+| MEA measured screen pressure not resolved | {'states': 0, 'available': 0, 'descents': 0, 'unavailable': {}} | 0 states<br>0 available<br>0 descents<br>{} unavailable |
+
+## Reference derivatives
+
+Each pressure or temperature perturbation re-solves the same conserved feed with $P_s$ held at 100 kPa. The reconstructed extensive potential is $G^*=G_{\rm EOS}+RT\sum_i n_i b_i$. The pressure stencil tests $\partial G^*/\partial P=\sum_\alpha n_\alpha/\rho_\alpha$. The temperature stencil tests $-T^2\partial(G^*/T)/\partial T$ against Eq. 12 and the Engine enthalpy.
+The error envelope combines the Engine arithmetic estimate for the potential and the spread across admitted steps. The retained MDEA high-pressure daughters are separate conserved inventories for this check.
+
+| Branch and quantity | Signed discrepancy | Numerical error estimate | Relative volume discrepancy | Units | Admitted steps | Disposition |
+|---|---:|---:|---:|---|---:|---|
+| C1 fixed-at-old-AMP_free volume | -9.0444932e-12 | 2.9858845e-06 | -2.8121426e-08 | m³ | 2 | agreement within numerical error |
+| C1 fixed-at-old-AMP_free enthalpy | 0.0027236036 | 0.12506051 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 fixed-at-old-AMP_free Eq. 12 | 0.0035561757 | 0.12757768 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 fixed-at-old-DEA volume | -1.1963485e-08 | 8.935864e-05 | -2.387025e-05 | m³ | 0 | undecided |
+| C1 fixed-at-old-DEA enthalpy | 0.0070839562 | 0.60322583 | — | J/mol apparent amine | 0 | undecided |
+| C1 fixed-at-old-DEA Eq. 12 | 0.0013351319 | 0.51722287 | — | J/mol apparent amine | 0 | undecided |
+| C1 fixed-at-old-MDEA-daughter-1 volume | -1.8990126e-14 | 1.8609088e-10 | -1.1407741e-10 | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-daughter-1 enthalpy | 0.00074818602 | 0.046830824 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-daughter-1 Eq. 12 | 0.00029623194 | 0.040045044 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-daughter-2 volume | 1.7352995e-15 | 3.9970259e-12 | 2.9804692e-10 | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-daughter-2 enthalpy | 3.4353769e-05 | 0.0012923476 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-daughter-2 Eq. 12 | 2.9818475e-06 | 0.00081929944 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-parent volume | -1.80965e-14 | 1.9081154e-10 | -1.0499668e-10 | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-parent enthalpy | 0.00079222885 | 0.048268492 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA-parent Eq. 12 | 0.0003062617 | 0.040969491 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA volume | 1.0224793e-12 | 4.5175728e-07 | 2.7488254e-09 | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA enthalpy | 0.0042056898 | 0.33335869 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MDEA Eq. 12 | 0.0013464317 | 0.29044277 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-MEA volume | 2.7413289e-09 | 2.125273e-05 | 1.3538075e-05 | m³ | 0 | undecided |
+| C1 fixed-at-old-MEA enthalpy | 0.0026889867 | 0.15133293 | — | J/mol apparent amine | 0 | undecided |
+| C1 fixed-at-old-MEA Eq. 12 | 0.00064501585 | 0.12055334 | — | J/mol apparent amine | 0 | undecided |
+| C1 selected-AMP_free volume | -1.0806744e-11 | 1.4935842e-06 | -3.3603976e-08 | m³ | 2 | agreement within numerical error |
+| C1 selected-AMP_free enthalpy | 0.00066840311 | 0.24428973 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 selected-AMP_free Eq. 12 | 0.00088889035 | 0.24741365 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 selected-DEA volume | -1.8874563e-09 | 4.4573649e-05 | -3.7659764e-06 | m³ | 2 | agreement within numerical error |
+| C1 selected-DEA enthalpy | 0.007054056 | 0.60526225 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-DEA Eq. 12 | 0.00130546 | 0.51925916 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-1 volume | 2.9206238e-15 | 1.7626354e-10 | 1.7432278e-11 | m³ | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-1 enthalpy | 0.00076604099 | 0.045111396 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-1 Eq. 12 | 0.00030311639 | 0.038080287 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-2 volume | -6.6982349e-16 | 3.9643927e-12 | -1.1515733e-10 | m³ | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-2 enthalpy | 3.6361824e-05 | 0.0013047607 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-daughter-2 Eq. 12 | 5.089445e-06 | 0.00083316327 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-parent volume | -9.9242988e-15 | 1.8084661e-10 | -5.7218674e-11 | m³ | 3 | agreement within numerical error |
+| C1 selected-MDEA-parent enthalpy | 0.00079821423 | 0.046529609 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA-parent Eq. 12 | 0.00030213664 | 0.038998967 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA volume | -2.7877524e-11 | 4.4602495e-07 | -7.506128e-08 | m³ | 3 | agreement within numerical error |
+| C1 selected-MDEA enthalpy | 0.004196221 | 0.33968932 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MDEA Eq. 12 | 0.0012890156 | 0.29625557 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected-MEA volume | 2.8378444e-09 | 2.130066e-05 | 1.4014746e-05 | m³ | 2 | agreement within numerical error |
+| C1 selected-MEA enthalpy | 0.010714821 | 0.08773361 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 selected-MEA Eq. 12 | 0.0025096652 | 0.063117876 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 fixed-at-old MDEA daughter-inventory sum volume | -1.7254827e-14 | 1.9008665e-10 | — | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old MDEA daughter-inventory sum enthalpy | 0.00078253979 | 0.048123172 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old MDEA daughter-inventory sum Eq. 12 | 0.00029921379 | 0.040864343 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected MDEA daughter-inventory sum volume | 2.2508003e-15 | 1.8022794e-10 | — | m³ | 3 | agreement within numerical error |
+| C1 selected MDEA daughter-inventory sum enthalpy | 0.00080240281 | 0.046416156 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 selected MDEA daughter-inventory sum Eq. 12 | 0.00030820584 | 0.03891345 | — | J/mol apparent amine | 3 | agreement within numerical error |
+
+## Stage timing
+
+Measured entries record timed calculations. The lanes overlapped.
+
+| Stage | Allowance (s) | Stop (s) | Throughput projection (s) | Measured (s) | Disposition |
+|---|---:|---:|---:|---:|---|
+| Wheel, salt and start manifests | 300 | 450 | — | 77.113211 | replayed |
+| MEA fits and donor | 1800 | 2700 | 278.81369 | 136.65667 | selected with stationarity missed |
+| DEA receiver | 1080 | 1620 | 274.52951 | 639.21331 | replayed |
+| MDEA receiver | 7320 | 10980 | 4802.0397 | 2597.8696 | replayed |
+| AMP receiver, both designs | 4500 | 6750 | 1963.7199 | 1042.1909 | replayed |
+| MEA screens and displayed comparisons | 1500 | 2250 | 1253.2789 | 1798.36 | retained with unresolved searches |
+| C1–C7 numerical replays | 600 | 900 | 600 | 743.75609 | retained with open quantities |
+
+**Wheel, salt and start manifests.** The stage timers include bound manifest and tracking-control evaluation by design. The initial failed probe is recorded separately from retained successful controls.
+
+**MEA fits and donor.** The displaced B fit and independent replay preceded the decision to expand. The loose incumbent-start sensitivity is included in measured fit time.
+
+**DEA receiver.** The first screen let the saved trial registry grow between batches. Those calculations are retained. The second screen used the unchanged declared trial bank.
+
+**MDEA receiver.** B refused on its initial evaluation and on independent replay. A reached the iteration limit twice and converged within the original lane budget on its third stage. The measured subtotal combines the fit, replay and diagnostics of all attempts with the final campaign service, which reduced observations, phase controls and release screens.
+
+**AMP receiver, both designs.** The measured subtotal combines the displaced B pilots, screen pilots and the four-worker expansion.
+
+**MEA screens and displayed comparisons.** The service wall includes the pilot and release screens. The seven-row refinement pilot admitted two rows. Its release gate stopped the remaining refinement. The original 321 measured-state results and the one unavailable offset search remain in the denominator.
+
+**C1–C7 numerical replays.** The measured subtotal covers recorded C1 evaluations and the timed MDEA curve runs, including the 480.273 s stop on the oversized historical declaration. The 483 retained keys were rebuilt from the source observations and used for the completed curve replays. The prior AMP conditional profile took 722.526 s. Repeating that profile would exceed the time left under the 900 s stop, so the profile keys retain their prior values and remain open for a new replay. The selected fixed-slope fit at −150 K and its controls completed.
+
+## Coverage
+
+The quantity index contains 1585 replayed comparisons and 12 quantities with independent contributors. It records 198 open keys and 68 undecided results.
+
+Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
+
+## Reproduction
+
+Run from the repository root with the installed study wheel verified against `c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb`. Use `refit.py prepare`, `refit.py attempt` and `refit.py select` for the named design. Use `phase_replays.py pilot` on the bound A declaration after timing displaced B through its independent replay. For an initial refusal use `refit.py initial DESIGN B` to retain the independent replay refusal. The receiver expansion is `campaign.py DEA`, `campaign.py MDEA` or `campaign.py AMP`. The selected MEA screen uses `mea_replays.py`. The derivative checks use `reference_derivatives.py fixed-at-old` and `reference_derivatives.py selected`.
+
+Recompute the handoff with `uv run --no-sync python analyses/fixed_reaction_reference/handoff.py --check`.

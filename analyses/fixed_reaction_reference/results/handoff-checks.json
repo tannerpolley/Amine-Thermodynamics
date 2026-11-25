@@ -1,0 +1,27 @@
+[
+  {
+    "mutation": "unmodified",
+    "return_code": 0,
+    "output": "2412 retained comparison quantities verified"
+  },
+  {
+    "mutation": "changed MEA A row 0 weighted residual by +0.125",
+    "return_code": 1,
+    "output": "AssertionError: MEA A objective: changed objective contributor"
+  },
+  {
+    "mutation": "exchanged valid MEA A/B endpoint fingerprints",
+    "return_code": 1,
+    "output": "AssertionError: MEA A endpoint fingerprint"
+  },
+  {
+    "mutation": "changed selected objective disposition to open",
+    "return_code": 1,
+    "output": "AssertionError: MEA selected objective: changed contributor or stale disposition"
+  },
+  {
+    "mutation": "restored byte-for-byte",
+    "return_code": 0,
+    "output": "2412 retained comparison quantities verified"
+  }
+]
