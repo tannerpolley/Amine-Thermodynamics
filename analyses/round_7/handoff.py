@@ -541,6 +541,11 @@ def claims(off_window, b_metrics):
             cost = math.fsum(q['cost'] for q in rows)
             assert math.isclose(cost,d[case+'_cost'],rel_tol=1e-12)
             add(f'D Cai {case} objective','1',p,case+'_rows: sum cost',cost,len(rows))
+        p = OUT/'D/cai/incumbent-alternative-weight.json.gz'
+        rows = load(p)['rows']
+        cost = math.fsum(q['cost'] for q in rows)
+        assert math.isclose(cost,load(p)['cost'],rel_tol=1e-12)
+        add('D Cai incumbent alternative objective','1',p,'rows: sum cost',cost,len(rows))
     p = OUT/'D/AMP-profile/profile-expanded.json'
     if p.is_file():
         d = load(p)
@@ -618,6 +623,10 @@ def claims(off_window, b_metrics):
 def dispositions(quantities):
     def value(name):
         return quantities[name]['value']
+
+    def cai_change(case, incumbent):
+        refit, prior = value(f'D Cai {case} objective'), value(incumbent)
+        return 'reduces' if refit < prior else 'raises' if refit > prior else 'leaves unchanged'
 
     e = ('incumbent','F2','F4')
     measured = {label:effective_measured(label) for label in e}
@@ -732,7 +741,7 @@ def dispositions(quantities):
             f"The historical RMS screen confirms {len(rms_splits['historical'])} compared with {historical_splits} in the original historical grid census. Both RMS screens have more unfinished searches."),
         'D · Declaration sensitivities': (
             f"The MEA electrode discrepancy spans {value('D MEA model minus electrode pH min'):+.3f} to {value('D MEA model minus electrode pH max'):+.3f} pH on the digitized {quantities['D MEA model minus electrode pH min']['population']} points. "
-            "Cai reweighting slightly reduces its alternate objective and raises the original objective. "
+            f"Cai reweighting {cai_change('alternative','D Cai incumbent alternative objective')} its alternate objective and {cai_change('original','E MEA incumbent original objective')} the original objective. "
             f"Removing the MDEA binary bound produces {value('D MDEA no bound binary descent')} descents, {binary['population']-binary['value']} incomplete native search and a hull-onset bracket of {value('D MDEA no bound gap onset lower'):.3f}–{value('D MDEA no bound gap onset upper'):.3f} K. "
             f"The AMP conditional slope profile brackets crossings near {crossings[0]:+.1f} and {crossings[1]:+.1f} K. "
             f"{amp_unresolved} AMP inward variants retain unresolved phase identities at the historical absolute pressure after detecting descents. "
