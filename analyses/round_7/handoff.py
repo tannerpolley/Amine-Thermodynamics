@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 from collections import Counter
 
-from comparisons import CANONICAL_VLE, MDEA_RESULTS, MDEA_SALT, mdea_deviations, off_window_population
+from comparisons import CANONICAL_VLE, MDEA_RESULTS, MDEA_SALT, kuranov_82, mdea_deviations, off_window_population
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -578,6 +578,86 @@ def claims(off_window, b_metrics):
     source = load(p)
     for field,unit in (('T','K'),('m_mdea','mol/kg water'),('m_co2','mol/kg water'),('p_exp','Pa')):
         add(f'H Kuranov Table 2 row 72 {field}',unit,p,f'row/{field}',source['row'][field],1)
+    replay_folder = OUT/'display-replays'
+
+    def display_replay(name):
+        path = replay_folder/f'{name}.json.gz'
+        replay = load(path)
+        assert replay['wheel_sha256']==WHEEL
+        for file, digest in replay['sources'].items():
+            source_bytes = (ROOT/file).read_bytes()
+            if file.endswith('.json.gz'):
+                source_bytes = gzip.decompress(source_bytes)
+            assert hashlib.sha256(source_bytes).hexdigest()==digest, file
+        return path, replay
+
+    p, replay = display_replay('dea-pressure-curves')
+    curves = replay['rows']
+    good = [q for q in curves if q['status']=='Available' and q['requested_tolerance_met']]
+    add('DEA pressure isotherms', 'count', p, 'rows: distinct curve keys', len({q['curve'] for q in curves}))
+    add('DEA pressure curve points converged', 'count', p, 'rows: status and tolerance', len(good), replay['requested'])
+    for name, reduce in (('minimum', min), ('maximum', max)):
+        add(f'DEA pressure curve {name}', 'Pa', p, 'rows: available values', reduce(q['value'] for q in good))
+
+    p, replay = display_replay('mdea-standard-errors')
+    if replay['covariance_available']:
+        info = replay['information']
+        for k, unit in (('na','count'), ('stage_denominator','count'), ('stage_variance','1')):
+            add('MDEA pressure-weighted covariance '+k, unit, p, f'information/{k}', info[k])
+        units = ('1', '1/K', '1', '1', 'K', '1', 'angstrom', 'K')
+        for coordinate, unit in zip(replay['uncertainty']['coordinates'], units, strict=True):
+            name = coordinate['identity']
+            if name in replay['responsive_standard_error']:
+                add(f'MDEA conditional SE · {name}', unit, p, 'responsive_standard_error/'+name,
+                    replay['responsive_standard_error'][name], info['na'])
+    else:
+        add('MDEA pressure-weighted covariance refusal', '1', p, 'refusal', replay['refusal'])
+
+    p, replay = display_replay('mdea-binary-onset')
+    for P, values in replay['pressures'].items():
+        for i, bracket in enumerate(values['brackets']):
+            for edge, T in zip(('lower','upper'), bracket['bracket_K'], strict=True):
+                add(f'MDEA binary onset at {P} Pa · bracket {i+1} {edge}', 'K', p,
+                    f'pressures/{P}/brackets/{i}/bracket_K', T)
+        add(f'MDEA binary onset at {P} Pa · unresolved isotherms', 'count', p,
+            f'pressures/{P}/rows: gap is null', sum(q['gap'] is None for q in values['rows']))
+
+    p, replay = display_replay('kuranov-row-72')
+    prediction = replay['prediction']
+    score = kuranov_82(load(OUT/'C/salt/refit.json.gz')['rows'], prediction, source)
+    add('MDEA Kuranov Table 2 row 72 calculated total pressure', 'Pa', p, 'prediction/value',
+        prediction.get('value'), 1, source['row']['salt_anchored']['pressure_Pa'])
+    add('MDEA pressure-weighted Kuranov K82 AARD', '%', p, 'prediction and C/salt/refit rows',
+        score['AARD_percent'], score['available'])
+
+    p, replay = display_replay('amp-common-pressure')
+    add('Corrected AMP worked state common pressure', 'Pa', p, 'common_Pa', replay['common_Pa'])
+    for family, q in replay['outcomes'].items():
+        add(f'Corrected AMP {family} worked state bubble pressure', 'Pa', p, f'outcomes/{family}/bubble_Pa', q['bubble_Pa'])
+        outcome = q.get('fixed', {})
+        add(f'Corrected AMP {family} worked state finite search', '1', p, f'outcomes/{family}/fixed/instability',
+            outcome.get('instability', q.get('refusal')), 1)
+        attempts = outcome.get('attempts', [])
+        add(f'Corrected AMP {family} worked state confirmed splits', 'count', p,
+            f'outcomes/{family}/fixed/attempts: confirmed', sum(q['confirmed'] for q in attempts), len(attempts))
+
+    p, heat = display_replay('mea-heat-sensitivity')
+    old_heat = load(REF/'F4/heat-replay.json')
+    conditions = ('record_id', 'T_K', 'previous_loading', 'loading', 'observed_kJ_mol')
+    for dataset in ('Kim2014', 'Vinjarapu2024'):
+        rows = [[q for q in doc['rows'] if q['source']==dataset and q['T_K']>=370.]
+                for doc in (old_heat, heat['replay'])]
+        assert [[q[k] for k in conditions] for q in rows[0]]==[[q[k] for k in conditions] for q in rows[1]]
+        reported, expanded = rows
+        assert all(q['status']=='available' for q in reported)
+        good = [q for q in expanded if q['status']=='available']
+        add(f'MEA expanded hot heat {dataset} available', 'count', p, 'replay/rows: status', len(good), len(expanded))
+        for name, fn in [('minimum',min), ('maximum',max)]:
+            add(f'MEA expanded hot heat {dataset} {name}', 'kJ/mol CO2', p, 'replay/rows: predicted_kJ_mol',
+                fn(q['predicted_kJ_mol'] for q in good) if good else None, len(good),
+                fn(q['predicted_kJ_mol'] for q in reported))
+    add('MEA expanded heat total available','count',p,'replay/rows: status',
+        sum(q['status']=='available' for q in heat['replay']['rows']),len(heat['replay']['rows']))
     p = OUT/'H/hartono-S11.json.gz'
     for label,results in load(p)['results'].items():
         for field,source in results.items():
@@ -848,7 +928,7 @@ def main():
         for path,digest in load(OUT/f'E/{label}/replay.json.gz')['source_hashes'].items():
             assert sha(ROOT/path)==digest
             manifest[path] = digest
-    sources = (REF/'F2-control/replay.json',REF/'F4/parameters.json',TOLERANCE,DEA_COMPARISON,CANONICAL_VLE,
+    sources = (REF/'F2-control/replay.json',REF/'F4/parameters.json',REF/'F4/heat-replay.json',TOLERANCE,DEA_COMPARISON,CANONICAL_VLE,
                MDEA_RESULTS/'bounded-binary-411/stability.json',
                *(MDEA_RESULTS/'phase-search-421'/name for name in ('coverage.json','coverage-counts.json')),
                *(MDEA_SALT/name for name in ('selection.json.gz','search-0.json.gz','search-outcome.json.gz','data-rows.json.gz')),

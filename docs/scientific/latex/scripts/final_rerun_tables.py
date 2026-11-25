@@ -190,7 +190,7 @@ def parameter_blocks(rows, ncols):
 
 # cols: one entry per column: 'l' label, 'r' number, or a float width (fraction of linewidth) for wrapped text.
 # caption: the one-sentence title; text after ' || ' is set as notes under the table body, as the journal guide asks.
-def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
+def table(name, caption, headings, data, cols=None, landscape=False, sep=3, included_in=None):
     section_order = re.findall(r'\\section\{[^}]*\}\\label\{(sec:s-[^}]+)\}', (ROOT/'docs/scientific/latex/supplement.tex').read_text())
     sections = {label: f'S{i}' for i,label in enumerate(section_order,1)}
     def section_refs(value):
@@ -217,7 +217,7 @@ def table(name, caption, headings, data, cols=None, landscape=False, sep=3):
             for row, after in zip(data, [*data[1:], None])]
     if len(data) <= 32 and not landscape and name != 'supplement_literature_comparison.tex':  # a table that fits on one page floats whole instead of breaking; a landscape page holds its table whole
         # The main text's journal class reads the table placement as its pos key; the supplement's article class reads it directly.
-        place = '[!htbp]' if name.endswith('_reference_state.tex') or '{tables/' + name.removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
+        place = '[!htbp]' if name.endswith('_reference_state.tex') or '{tables/' + (included_in or name).removesuffix('.tex') + '}' in (ROOT/'docs/scientific/latex/supplement.tex').read_text() else '[pos=!htbp]'
         OUTPUTS[name] = '\n'.join([r'\begin{table}' + place + r'\small\setlength{\tabcolsep}{' + str(sep) + r'pt}\centering', caption, r'\begin{tabular}{' + spec + '}',
                                    r'\toprule', head, r'\midrule', *rows, r'\bottomrule', r'\end{tabular}',
                                    *([r'\par\smallskip\parbox{\linewidth}{' + notes + '}'] if notes else []), r'\end{table}', ''])
@@ -640,6 +640,25 @@ def main():
           r'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the reported fit and the full-weight expanded fit. || The 112 added pressures include the 54 hot rows. The 12 hot Wagner pressures enter the 66-row hot comparison and the separate Wagner row. Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
           ['Pressure cohort', '$N$', 'Reported AARD / bias (%)', 'Expanded AARD / bias (%)'],
           rows, [.43,.06,.22,.22])
+    heat_path = round7 + 'results/display-replays/mea-heat-sensitivity.json.gz'
+    heat = other(heat_path)['replay']
+    assert OTHER[heat_path] == handoff['source_hashes'][heat_path], heat_path
+    heat_rows = []
+    for dataset, dataset_label in [('Kim2014', r'Kim et al. \cite{Kim2014}, finite-addition heat'),
+                           ('Vinjarapu2024', r'Vinjarapu et al. \cite{HemaBhavya2025}, integral heat')]:
+        q = {k: quantities[f'MEA expanded hot heat {dataset} {k}'] for k in ('minimum', 'maximum', 'available')}
+        observed = [row['observed_kJ_mol'] for row in heat['rows'] if row['source']==dataset and row['T_K']>=370.]
+        assert len(observed) == q['available']['population']
+        heat_rows.append([dataset_label, f"{q['available']['value']}/{len(observed)}",
+                          f'{min(observed):.2f}--{max(observed):.2f}',
+                          *[f"{q['minimum'][k]:.2f}--{q['maximum'][k]:.2f}" if q['minimum'][k] is not None else '---'
+                            for k in ('prior', 'value')]])
+    heat_table = 'supplement-mea-heat-sensitivity.tex'
+    table(heat_table,
+          r'MEA absorption heats at 393.15 K and 30 wt% with the reported fit and the full-weight expanded fit. || Ranges are in kJ/mol CO2 as positive heat release. Both models are evaluated at 1.734 MPa and at the source loading intervals for Kim or from zero loading for Vinjarapu.',
+          ['Calorimetry', 'Available', 'Measured', 'Reported fit', 'Expanded fit'],
+          heat_rows, [.34,.12,.16,.16,.16], included_in='supplement-mea-pressure-sensitivity.tex')
+    OUTPUTS['supplement-mea-pressure-sensitivity.tex'] += OUTPUTS.pop(heat_table)
     off_rows = []
     for source in ('Aronu2011', 'Aronu2011 15 wt%', 'Aronu2011 45 wt%', 'Jou1995'):
         entries = [{field: quantities[f'E MEA {case} outside fit {source} {field}']['value']

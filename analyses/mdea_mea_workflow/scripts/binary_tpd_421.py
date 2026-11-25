@@ -31,6 +31,28 @@ def isotherm(model, T, P, x):
                 tpd_roundoff=resolution, classification=classification)
 
 
+def bracket_onset(model, P):
+    rows, brackets = {}, []
+    def resolved(T):
+        coarse, fine = [isotherm(model, T, P, x) for x in (FINE, REFINED)]
+        flag = coarse['classification'] if fine['classification'] == coarse['classification'] else None
+        rows[T] = dict(coarse=coarse, refined=fine, gap=flag)
+        return flag
+    flags = [resolved(T) for T in TEMPERATURES]
+    for lo, hi, left, right in zip(TEMPERATURES, TEMPERATURES[1:], flags, flags[1:]):
+        if left is None or right is None or left == right:
+            continue
+        sampled = [lo, hi]
+        while hi-lo > .01:
+            mid = (lo+hi)/2
+            flag = resolved(mid)
+            if flag is None:
+                break
+            lo, hi = (mid, hi) if flag == left else (lo, mid)
+        brackets.append(dict(adjacent_K=sampled, bracket_K=[lo, hi], resolved=hi-lo <= .01, low_side_gap=left))
+    return rows, brackets
+
+
 def binary(route, mapping):
     old = stable.read(OLD/'start-0/endpoint.json')['parameters']
     for cid in ('water', 'methyldiethanolamine'):
@@ -42,24 +64,7 @@ def binary(route, mapping):
     assert onset['pressure_Pa'] == PRESSURES[1] and middle['k_no_gap']-fitted > 0 and len(onset['rows']) == 33
     model = binary_model(mapping)
     for P in PRESSURES:
-        rows, brackets = {}, []
-        def resolved(T):
-            coarse, fine = [isotherm(model, T, P, x) for x in (FINE, REFINED)]
-            flag = coarse['classification'] if fine['classification'] == coarse['classification'] else None
-            rows[T] = dict(coarse=coarse, refined=fine, gap=flag)
-            return flag
-        flags = [resolved(T) for T in TEMPERATURES]
-        for lo, hi, left, right in zip(TEMPERATURES, TEMPERATURES[1:], flags, flags[1:]):
-            if left is None or right is None or left == right:
-                continue
-            sampled = [lo, hi]
-            while hi-lo > .01:
-                mid = (lo+hi)/2
-                flag = resolved(mid)
-                if flag is None:
-                    break
-                lo, hi = (mid, hi) if flag == left else (lo, mid)
-            brackets.append(dict(adjacent_K=sampled, bracket_K=[lo, hi], resolved=hi-lo <= .01, low_side_gap=left))
+        rows, brackets = bracket_onset(model, P)
         try:
             bound = middle if P == onset['pressure_Pa'] else critical(mapping, [423.], P)[0]
             bound = dict(bound, fitted_minus_k_no_gap=fitted-bound['k_no_gap'])

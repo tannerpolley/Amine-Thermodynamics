@@ -46,3 +46,13 @@ def mdea_deviations(observations, joins):
                                     scores=deviation_statistics(pairs,unit) if pairs else None)
         reductions.append(reduction)
     return reductions
+
+
+def kuranov_82(observations, extra, source):
+    rows = [q for q in observations if q['group'] in ('Kuranov', 'Kuranov-binary', 'Kuranov-413K')]
+    assert sorted(int(q['row']['source_row']) for q in rows) == source['matched_rows']
+    assert (int(extra['row']['source_row']), extra['observed']) == (72, source['row']['p_exp'])
+    available = [q for q in [*rows, extra] if q['status']=='Available' and q['requested_tolerance_met']]
+    assert all(q['unit']=='Pa' for q in available)
+    stats = deviation_statistics([(q['observed'], q['value']) for q in available], 'Pa')
+    return dict(available=len(available), AARD_percent=stats['AARD_percent'] if len(available)==82 else None)
