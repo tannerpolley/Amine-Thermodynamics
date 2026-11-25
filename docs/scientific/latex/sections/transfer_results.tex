@@ -124,7 +124,7 @@ At 30 wt\% and a loading of 0.50, a feed of \SI{1}{\mole} DEA gives a water-rich
 There $G^*/(RT)$ falls by \SI{1.41e-3}{\mole} against a numerical error of \SI{6.6e-9}{\mole}, the largest reaction and interphase residuals are $1.0\times10^{-12}$ and $1.2\times10^{-13}$, and both liquids match liquid roots of the equation of state.
 Restarted from its own two liquids, this split coalesces, and it is reproduced from a start retained from a neighboring state; both tests were made at the reported endpoint only.
 Weiland et al.\ measured these densities at \SI{298}{\kelvin} with hydrometers, on samples made by mixing an unloaded solution with a portion saturated with \COtwo at \SI{1}{atm} and checked by titration \cite{Weiland1998}; the density measurements do not establish the number of phases, and the source treats each sample as one homogeneous liquid.
-Calculated as one liquid, the DEA model reproduces the four densities within 0.113\,\% on average, against 0.447\,\% on all 44 densities of that source; as the two liquids it predicts, combined with additive volumes, $\rho=(\sum_iw_i/\rho_i)^{-1}$, it reproduces them within 0.155\,\% (Table~\ref{supp-tab:supplement-dea-split-certificate}).
+Calculated as one liquid, the DEA model reproduces the four densities within 0.113\,\% on average, against 0.447\,\% on all 44 densities of that source; as the two liquids it predicts, combined with additive volumes, it reproduces them within 0.155\,\% (Table~\ref{supp-tab:supplement-dea-split-certificate}).
 Both calculations reproduce the measured densities and the two-liquid one is not closer, so the densities cannot tell the two cases apart.
 The single-liquid calculation thus matches the densities while the model's own phase calculation favors two liquids, contrary to treating the samples as one liquid; the splits are counted as failures of the DEA model, not as predictions, and no phase-state measurement is claimed to contradict them.
 Two descents are unresolved: at 30 wt\% and a loading of 0.45 and at one unfitted Lawson and Garst state at \SI{298.15}{\kelvin} and \SI{7.97}{\kilo\pascal}, the two-liquid calculations did not return two distinct liquids, and the one unfinished search is not counted as stable (Section~\ref{supp-sec:s-phase}).
@@ -209,7 +209,7 @@ For DEA, 61 of the 90 fitted pressures lie outside the measured temperature rang
 On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin}, which no fit of this work includes, the MEA model underpredicts every pressure and deviates by 38.66\,\%, against 21.03\,\% for the PC-SAFT calculation of Baygi and Pahlavanzadeh, which fitted no ternary data, and 13.5\,\% for the eNRTL model of Zhang et al., which fitted these pressures.
 On the 101 \COtwo partial pressures of Ermatchkov et al., which the MDEA model did not fit but which helped choose its initial parameters, so that the comparison is not a blind test, the MDEA model deviates by 29.21\,\%; their parameter set I, which did not fit them either, deviates by 16.8\,\%, and set II and the eNRTL model of Zhang and Chen, both fitted to them, by 3.9 and 17.7\,\%.
 Here a published model that fitted nothing to these data is closer.
-On the 28 total pressures of P\'erez-Salado Kamps et al., to which both published sets were fitted, these report 1.9 and 3.5\,\%, and the MDEA model, not fitted to them, deviates by 14.76\,\% on the same 28.
+On the 28 total pressures of P\'erez-Salado Kamps et al., to which both published sets were fitted, the two sets report 1.9 and 3.5\,\%, and the MDEA model, not fitted to them, deviates by 14.76\,\% on the same 28.
 On 27 of them it deviates by 11.93\,\%; the 28th state is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, which the MDEA model calculates at \SI{14.457}{\mega\pascal}, a deviation of $+91.1$\,\%.
 
 \input{tables/published-models}
@@ -233,7 +233,7 @@ For the water--DEA binary, Horstmann et al.\ fitted their model to their excess 
 Rodr\'iguez et al.\ compare their SAFT-VR model with the MEA pressures of Jou et al.\ and the MDEA pressures of Kuranov et al.\ only graphically \cite{Rodriguez2012}.
 
 % P:literature-constants
-These comparisons rank agreement with measured pressures, not the fitted constants.
+These comparisons concern agreement with measured pressures, not the fitted constants.
 Smith et al.\ show that equilibrium constants defined on different concentration scales must be converted exactly before they are compared, and that when equilibrium constants and activity-coefficient parameters are fitted to the same \COtwo pressures, they compensate, so that models reproducing the pressures can imply different constants and speciation \cite{smithGibbsEnergyMinimization}.
 Here every constant is applied on one aqueous-molality basis (\cref{sec:reactions}), and the fitted R4 correlations of DEA and AMP are of the compensating kind: the DEA R4 constant term and carbamate--water interaction are correlated at 0.976 (\cref{sec:results-dea}).
 
