@@ -12,7 +12,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
-from fixed_reference import DESIGNS, FixedReference
+from fixed_reference import DESIGNS, KIEPE_AUTHOR, KIEPE_CITE, FixedReference
 
 ROOT = Path(__file__).resolve().parents[4]
 LATEX = ROOT / 'docs/scientific/latex'
@@ -961,32 +961,96 @@ table('supplement-dea-expanded', 'Broadened DEA objective and diagnostics of the
            num(max(methane_shifts, default=None), 3)]
       ], [.52,.21,.21], notes=r'The common objective has 90 partial pressures and 50 integral heats. The methane shift holds the methane-free liquid composition fixed. The measurements do not bound the effects of dissolved methane.')
 
+mdea_manifest = fixed.load('MDEA/manifest.json.gz')
+mdea_sources = {q['identity']: q['row'] for rows in mdea_manifest['rows'].values() for q in rows}
+crosswalk = {q['key']: q['identity'] for q in read(
+    'analyses/mdea_mea_workflow/results/phase-search-421/observation-crosswalk.json')}
+mcomponents = [c['component_id'] for c in mdoc['parameters']['components']]
 phase_rows = []
-for state in mnew['classifications']:
-    phase_rows.append([state['key'].replace('_', r'\_'), num(state['temperature_K'], 2),
-                       num(state['pressure_Pa']/1e6, 3), state['native_branch'],
-                       state['supplied_branch'], 'None confirmed' if state['attempts'] else 'Not attempted'])
-targeted = [[name, control, fixed.value(f'{design} A phase {control}')]
-            for design, name, controls in
-            [('MDEA', 'MDEA', ('204-MPa', '263-MPa')),
-             ('AMP_free', 'AMP, fitted slope', ('hartono-2021:55:problem', 'hartono-2021:56:problem',
-              'hartono-2021:57:problem', 'tong-2012:29:problem', 'tong-2012:32:problem', 'tong-2012:44:problem', 'worked-state')),
-             ('AMP_fixed', 'AMP, fixed slope', ('hartono-2021:55:problem', 'hartono-2021:56:problem',
-              'hartono-2021:57:problem', 'tong-2012:29:problem', 'tong-2012:32:problem', 'tong-2012:44:problem', 'worked-state'))]
-            for control in controls]
+for state in sorted(mnew['classifications'], key=lambda q: (q['temperature_K'], q['key'])):
+    key = state['key']
+    source = mdea_sources[crosswalk[key] if key.startswith('Merkley-capped:') else key.rsplit(':', 1)[0].removesuffix(':1')]
+    feed = dict(zip(mcomponents, state['feed_mol'], strict=True))
+    source_id = source['source_key']
+    if source_id == 'BottingerMDEA2008':
+        locator = r'B\"ottinger, T2 r' + source['source_row']
+        source_pressure = '---'
+        assert state['pressure_Pa'] == source['pressure_Pa']
+    elif source_id == 'Merkley1987':
+        locator = 'Merkley, Fig.~3'
+        source_pressure = '/'.join(f"{float(source[k])/1000:.3f}" for k in
+                                   ('candidate_pressure_1_kPa', 'candidate_pressure_2_kPa'))
+        assert math.isclose(state['pressure_Pa'], float(source['proposed_pressure_kPa'])*1000)
+    else:
+        locator = f"{source_id[:-4]}, T{source['source_locator'].split('Table ')[1].split()[0].rstrip(',')}, r{source['source_row']}"
+        source_pressure = num(source['pressure_MPa'])
+        assert math.isclose(state['pressure_Pa'], float(source['pressure_MPa'])*1e6)
+    phase_rows.append([key.replace(':', r':\allowbreak '), locator, num(state['temperature_K'], 2),
+                       num(feed_wt(mdoc, feed, 'methyldiethanolamine'), 2),
+                       num(feed['carbon-dioxide']/feed['methyldiethanolamine']),
+                       source_pressure, num(state['pressure_Pa']/1e6),
+                       state['native_branch'], state['supplied_branch'],
+                       'None confirmed' if state['attempts'] else 'Not attempted'])
 assert mnew['tally']['states'] == 11824 and not mnew['confirmed']
 table('supplement-mdea-phase-outcomes', 'Outcomes at the descent states of the provisional MDEA endpoint.',
-      ['State', '$T$ (K)', '$P$ (MPa)', 'Native', 'Supplied', 'Two-liquid outcome'],
-      phase_rows, [.31,.10,.11,.13,.13,.16], long=True,
+      ['State', 'Source', '$T$ (K)', r'MDEA (wt\%)', r'$\alpha$', r'Source $P$ (MPa)',
+       r'Search $P$ (MPa)', 'Native', 'Supplied', 'Two-liquid outcome'],
+      phase_rows, [.135,.127,.077,.077,.058,.096,.073,.089,.089,.090], long=True, size=r'\footnotesize',
       notes=f"{mnew['tally']['available']} of {mnew['tally']['states']} searches completed; "
             f"{mnew['tally']['descent']} detected descents and no split was confirmed. "
+            r"$\alpha$ is in mol \COtwo/mol MDEA and wt\% excludes \COtwo. T and r identify the source table "
+            r"and row. B\"ottinger cell pressures are assignments. Merkley Fig.~3 gives the digitized traces; "
+            r"the two possible pressures in Table~1 are shown, with the higher one used for the searches. "
             "The two separate high-pressure controls are unresolved.")
-table('supplement-fixed-reference-controls', 'Phase controls on the selected fixed-reference endpoints.',
-      ['Endpoint', 'Control', 'Disposition'], targeted, [.24,.36,.34],
-      notes='Of six separate measured AMP controls, the free-slope endpoint has four unresolved and two without a descent. '
-            'The fixed-slope endpoint has three unresolved and three without a descent. The worked-state controls are additional.')
-path = LATEX / 'tables/supplement-mdea-phase-outcomes.tex'
-outputs[path] += outputs.pop(LATEX / 'tables/supplement-fixed-reference-controls.tex')
+
+amp_designs = ('AMP_free', 'AMP_fixed')
+amp_controls = {}
+amp_screen = {}
+for design in amp_designs:
+    selected = fixed.fits[design]['start']
+    amp_controls[design] = fixed.endpoint_record(f'{design}/controls/{selected}.json.gz', design)['rows']
+    amp_screen[design] = {q['key']: q for q in fixed.coverage(design, 'native')['rows']}
+measured = sorted(amp_controls['AMP_free'].keys() - {'worked-state'})
+assert len(measured) == 6 and set(amp_controls['AMP_free']) == set(amp_controls['AMP_fixed'])
+amp_rows = []
+for key in measured:
+    free, held = (amp_controls[d][key]['value'] for d in amp_designs)
+    assert (free['T_K'], free['feed_mol'], free['P_Pa']) == (held['T_K'], held['feed_mol'], held['P_Pa'])
+    feed = dict(zip(free['species'], free['feed_mol'], strict=True))
+    assert all(amp_controls[d][key]['P_Pa'] == free['P_Pa'] for d in amp_designs)
+
+    fits = []
+    for design, control in zip(amp_designs, (free, held), strict=True):
+        assert not any(q['confirmed'] for q in control['attempts'])
+        outcome = 'No descent' if control['search']['no_descent_in_trial_set'] else 'Unresolved'
+        expected = 'finite search, no resolved descent' if outcome == 'No descent' else 'unresolved phase identity'
+        assert fixed.value(f"{design} {fixed.fits[design]['start']} phase {key}") == expected
+        trial = control['minimum_trial']['seed'].replace('positive-neutral-base', 'neutral base')
+        parent, parent_error = control['parent_gibbs_RT_mol']
+        candidate = next((q for q in control.get('candidates', []) if q['support'] == 'L+V'), {})
+        delta = candidate.get('Gibbs_over_RT_mol')
+        flag = r'\textsuperscript{a}' if delta is not None and not candidate['qualified'] else ''
+        fits.append([num(amp_screen[design][key]['pressure_Pa']/1e6, 5), trial,
+                     reduced_gibbs(delta - parent) + flag if delta is not None else '---',
+                     reduced_gibbs(parent_error + candidate['error']) if delta is not None else '---', outcome])
+    source, row, _ = key.split(':')
+    amp_rows.append([source.split('-')[0].capitalize() + ' r' + row, num(free['T_K'], 2),
+                     num(feed_wt(adoc, feed, 'aminomethylpropanol'), 2) + r'\newline ' +
+                     num(feed['carbon-dioxide']/feed['aminomethylpropanol']),
+                     num(free['P_Pa']/1e6, 5),
+                     *[r'\newline '.join(pair) for pair in zip(*fits, strict=True)]])
+table('supplement-fixed-reference-controls', 'Six AMP controls at the measured absolute pressures. '
+      'Paired entries give the fitted slope above the fixed slope.',
+      ['Source row', '$T$ (K)', r'Feed (wt\%, $\alpha$)', '$P$ (MPa)', r'$P_{\rm bub}$ (MPa)',
+       'Trial initialization', r'$\Delta G/(RT)$ (mol)', 'Error (mol)', 'Outcome'],
+      amp_rows, [.102,.064,.083,.087,.092,.120,.139,.125,.100], size=r'\footnotesize',
+      notes=r'Feed gives unloaded AMP mass percent and mol \COtwo/mol AMP. Initialization is the native seed of the minimum '
+            r'tangent-plane trial. Two-liquid attempts used archived and, when available, native splits. '
+            r'$\Delta G/(RT)$ is the retained liquid--vapor candidate minus the parent liquid, per feed with 1 mol AMP. '
+            r'The error is the sum of the two Gibbs-energy error estimates. A dash marks an unavailable comparison. '
+            r'\textsuperscript{a}The candidate did not qualify. No two-liquid split was confirmed. '
+            r'The separate AMP worked-state controls find no resolved descent at either slope.')
+path = LATEX / 'tables/supplement-fixed-reference-controls.tex'
 
 matched = []
 for group, unit in [('Kuranov', 'Pa'), ('Ermatchkov', 'Pa'), ('Xiao', 'Pa'),
@@ -996,8 +1060,8 @@ for group, unit in [('Kuranov', 'Pa'), ('Ermatchkov', 'Pa'), ('Xiao', 'Pa'),
     n = ard['population']['new']['available']
     assert n == ard['population']['old']['available'] == bias['population']['new']['available']
     matched.append([group, n, *[num(r[side], 2) for side in ('old', 'new') for r in (ard, bias)]])
-table('supplement-mdea-reference-comparison', 'MDEA deviations for the tracking and fixed-reference endpoints on common observation IDs.',
-      ['Source', '$N$', r'Tracking AARD (\%)', r'Tracking bias (\%)', r'Fixed AARD (\%)', r'Fixed bias (\%)'],
+table('supplement-mdea-reference-comparison', 'MDEA deviations for the endpoints with system-pressure and fixed references on common observations.',
+      ['Source', '$N$', r'System-pressure AARD (\%)', r'System-pressure bias (\%)', r'Fixed AARD (\%)', r'Fixed bias (\%)'],
       matched, [.23,.08,.15,.15,.15,.15])
 outputs[path] += outputs.pop(LATEX / 'tables/supplement-mdea-reference-comparison.tex')
 
@@ -1061,6 +1125,37 @@ fig.colorbar(matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes,
              ticks=salt_temperatures, label='Temperature (K)', aspect=30)
 figure(fig, 'salt-osmotic-residuals.pdf')
 
+def salt_reconstruction():
+    salt_example = fixed.load('salt.json.gz')['reconstruction']
+    printed = salt_example['printed']
+    m, X2, Y, H2X, Z, phi = (float(printed[k]) for k in
+        ('nominal_molality', 'X2', 'Y', 'H2X', 'Z', 'phi'))
+    carbonate = (m - Y - Z) / 2
+    ionic_sum = m + carbonate + Y + Z
+    numerator = phi * (m + X2 + Y + H2X + Z)
+    target = (numerator - H2X) / ionic_sum
+    for field, derived in [('ionic_sum', ionic_sum), ('numerator', numerator),
+                           ('ideal_co2', H2X), ('target', target)]:
+        assert math.isclose(salt_example[field], derived, rel_tol=1e-12), field
+    assert printed['salt'] == 'NaHCO3' and printed['source_locator'] == 'Peiper and Pitzer 1982, Table 6(a)'
+    table('supplement-salt-reconstruction', r'Worked sodium bicarbonate row from Peiper and Pitzer, '
+          r'Table 6(a) \cite{peiperThermodynamicsAqueousCarbonate1982}.',
+          ['$T$ (K)', '$m$', '$X_2$', '$Y$', '$H_2X$', '$Z$', '$a_w$', r'$\phi_{\rm eq}$'],
+          [[printed[k] for k in ('temperature_K', 'nominal_molality', 'X2', 'Y', 'H2X', 'Z', 'water_activity', 'phi')]],
+          [.11,.10,.10,.10,.10,.10,.10,.10],
+          notes=rf'Molalities are in mol/kg water. The symbols denote nominal salt and sodium ($m$), '
+                rf'$X_2$ carbonate, $Y$ bicarbonate, $H_2X$ dissolved \COtwo, and $Z$ hydroxide. '
+                rf'Charge closure gives $m_{{\mathrm{{CO}}_3^{{2-}}}}=(m-Y-Z)/2={carbonate:.4f}$. '
+                rf'The ionic target is $[\phi_{{\rm eq}}(m+X_2+Y+H_2X+Z)-H_2X]/'
+                rf'(m+m_{{\mathrm{{CO}}_3^{{2-}}}}+Y+Z)=({numerator:.5f}-{H2X:.5f})/'
+                rf'{ionic_sum:.5f}={target:.7f}$.')
+    # The worked row belongs with the salt figure and does not shift the subsequent table numbers.
+    salt_path = LATEX / 'tables/supplement-salt-reconstruction.tex'
+    outputs[salt_path] = outputs[salt_path].replace(r'\caption{', r'\caption*{').replace(
+        r'\label{tab:supplement-salt-reconstruction}', '')
+
+salt_reconstruction()
+
 # MEA keeps its historical shared-set comparison. The receivers use their original salt fits.
 eold = lambda *gs: (lambda cs: num(sum(a * n for a, n in cs) / sum(n for a, n in cs), 2) + f' ({sum(n for a, n in cs)})')([escore[g] for g in gs])
 eoldsearch = [read(MEA + 'paper-evidence-341/stability/candidate/search.json')[k] for k in ('grid', 'offset', 'census')]
@@ -1080,9 +1175,12 @@ rows += [['MEA', '', '', eold('47 current-fitted pressures'), eold('47 current-f
 for row in rows: row[3] = {'MEA': r'$p_{\COtwo}$', 'DEA': r'$p_{\COtwo}$', 'MDEA': '$P$', 'AMP': '$P$'}[row[0]] + ': ' + row[3]  # fitted loaded-solution observable: Hilliard/Jou and Lawson-Garst partial, Kuranov and Hartono total pressures
 for row in rows:
     if row[0] in ('MEA', 'DEA'): row[5] = r'$p_{\COtwo}$: ' + row[5]  # every MEA and DEA pressure not fitted is a CO2 partial pressure (Tables 5 and S8)
+for row, label in zip(rows[4:], ('MEA-fitted shared set', '30-pressure Lawson--Garst fit',
+                                 'fit with MEA weights', 'earlier carbamate inputs'), strict=True):
+    row[:3] = [r'\multicolumn{3}{@{}p{.24\linewidth}}{' + row[0] + ', ' + label + '}']
 rows.insert(4, head('Comparison fits', 9))
-table('amine-summary', 'The four fixed-reference models and their historical comparison fits.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Searches','Searches not completed',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
-      notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses. \textsuperscript{a}Fitted \COtwo partial pressures ($p_{\COtwo}$) of loaded MEA and DEA and fitted total pressures ($P$) of loaded MDEA and AMP. \textsuperscript{b}Column a with the fitted \COtwo-free bubble pressures of MDEA--water and AMP--water; neither column includes the fitted \COtwo--water pressures of Kiepe et al.\ in the MEA objective (Table~\ref{tab:mea-data}). \textsuperscript{c}MEA: all pressures not fitted, those at nominal 30 wt\% of the six sources of Table~\ref{tab:mea-data}, those of Wagner et al.\ and those at 15 and 45 wt\%; MDEA and AMP: total pressures and \COtwo partial pressures separately, the AMP total pressures including the 5 \COtwo-free bubble pressures of Tong et al. The lower block gives the historical MEA fit with MEA-fitted shared interactions and the three original salt-anchored receiver fits. DEA used fewer pressure observations in the original fit. \textsuperscript{d}In the searches of each fit, which are finite and differ in design between the amines (Section~\ref{supp-sec:s-phase}), so the counts do not measure equal coverage and split counts are lower bounds. '
+table('amine-summary', 'The four fixed-reference models and their comparison fits with system-pressure references.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Searches','Searches not completed',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
+      notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses. \textsuperscript{a}Fitted \COtwo partial pressures ($p_{\COtwo}$) of loaded MEA and DEA and fitted total pressures ($P$) of loaded MDEA and AMP. \textsuperscript{b}Column a with the fitted \COtwo-free bubble pressures of MDEA--water and AMP--water; neither column includes the fitted \COtwo--water pressures of Kiepe et al.\ in the MEA objective (Table~\ref{tab:mea-data}). \textsuperscript{c}MEA: all pressures not fitted, those at nominal 30 wt\% of the six sources of Table~\ref{tab:mea-data}, those of Wagner et al.\ and those at 15 and 45 wt\%; MDEA and AMP: total pressures and \COtwo partial pressures separately, the AMP total pressures including the 5 \COtwo-free bubble pressures of Tong et al. The receiver comparisons use the original salt-anchored fits. \textsuperscript{d}In the searches of each fit, which are finite and differ in design between the amines (Section~\ref{supp-sec:s-phase}), so the counts do not measure equal coverage and split counts are lower bounds. '
             'The MDEA endpoint is provisional. Both targeted pressure controls, at 204 and 263 MPa, are unresolved.')
 P341 = MEAEVIDENCE
 mea_fit = read(P341 + 'fitted-rows.csv')
@@ -1109,7 +1207,7 @@ mea_T = {r['identity']: float(r['row']['T_K']) for r in read(MEA + 'paper-eviden
 MEA_SETS = [(r'$p_{\COtwo}$', 'Hilliard2008,Jou1995', lambda r: r['quantity'] == 'PartialPressure'), ('species mole fractions', 'Bottinger2008,matinFacileMethodDetermination2012', lambda r: r['quantity'] in ('PhaseMoleFraction', 'mole_fraction') and r['group'] != 'Cai'),
             ('species per total amine', 'Jakobsen2005', lambda r: r['group'] == 'Jakobsen'), ('integral heat', 'HemaBhavya2025', lambda r: r['quantity'] == 'AdditionEnthalpy'), ('heat capacity', 'Hilliard2008', lambda r: r['group'] == 'Cp'),
             ('loaded density', 'Amundsen2009,Hartono2014', lambda r: r['group'] == 'loaded density'), (r'\COtwo-free density', 'Amundsen2009', lambda r: r['group'] == 'CO2-free density'),
-            ('MEA--water bubble temperature and vapor composition', 'caiBinaryIsobaricVaporLiquid1996', lambda r: r['group'] == 'Cai'), (r'\COtwo--water pressure', 'kiepeExperimentalDeterminationPrediction2002', lambda r: r['group'] == 'Kiepe')]
+            ('MEA--water bubble temperature and vapor composition', 'caiBinaryIsobaricVaporLiquid1996', lambda r: r['group'] == 'Cai'), (r'\COtwo--water pressures', KIEPE_CITE, lambda r: r['group'] == 'Kiepe')]
 tspan = lambda t: span(t, lambda v: num(v, 2))
 design, mea_n = [head('MEA', 5)], 0
 for label, cite, choose in MEA_SETS:
@@ -1117,7 +1215,8 @@ for label, cite, choose in MEA_SETS:
     t = cai_T if cite.startswith('cai') else [float(r['id'].split('-')[1]) for r in rs] if cite.startswith('kiepe') else [mea_T[r['id']] for r in rs if r['id'] in mea_T]
     assert rs and len(t) in (len(rs), len(rs) // 2), label
     role = r'fitted beforehand\textsuperscript{b}' if cite.startswith('kiepe') else 'fitted'
-    design.append([label, r'\cite{' + cite + '}', len(rs), tspan(t), role])
+    source = (KIEPE_AUTHOR if cite == KIEPE_CITE else '') + r'\cite{' + cite + '}'
+    design.append([label, source, len(rs), tspan(t), role])
     mea_n += len(rs)
 arcis = [r for r in read(P341 + 'heat.csv') if r['source'].startswith('Arcis')]
 design.append(['integral heat', r'\cite{arcisEnthalpySolutionCarbon2011}', len(arcis), tspan([float(r['T_K']) for r in arcis]), r'development\textsuperscript{a}'])
@@ -1191,7 +1290,7 @@ for c in mpub:
         for case, label in [('historical/incumbent', 'MEA-fitted shared set'),
                             ('salt/incumbent', 'original salt fit'),
                             ('salt/refit', 'pressure-weighted fit')]:
-            rows.append(['This work, tracking, ' + label, c['data_role'], num(kamps[case]['matched']['AARD_percent'], 2)])
+            rows.append(['This work, system-pressure references, ' + label, c['data_role'], num(kamps[case]['matched']['AARD_percent'], 2)])
         ids = set(common)
         cohort = [r for r in mrows if r['identity'] in ids and r['group'] == c['group']]
         assert len(cohort) == len(ids)
@@ -1266,10 +1365,10 @@ for heading, sets in hsets:
             adopted = math.sqrt(math.fsum((q['value']-q['observed'])**2 for q in cohort)/len(cohort))
         hrows.append([label, r['n'], f"{fitted} fitted / {int(r['n']) - fitted} not fitted" if fitted else 'not fitted', 'not stated' if block == 'canonical' else r['polley_hedengren_2026_role'],
                       ' / '.join(num(q['hong'], 2) for q in rs), num(adopted, 2), num(r['adopted'], 2), num(r['polley_hedengren_2026'], 2), '--' if heading.startswith('Loaded') else f"{r['locally_unstable']} of {r['n']}"])
-table('supplement-hong-comparison', r'Deviations of the published parameters of Hong et al.\ \cite{hongModelingCO2Absorption2027}, of the fixed-reference MEA model and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical MEA observations at nominal 30 wt\%. '
+table('supplement-hong-comparison', r'Deviations of the reconstruction of the Hong et al.\ model\ \cite{hongModelingCO2Absorption2027}, of the fixed-reference MEA model, of the MEA-fitted shared set with system-pressure references, and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical MEA observations at nominal 30 wt\%. '
       rf'The Hong pressures use equal fugacity at a vapor amount of \num{{{hong_phase["vapor_amount_fraction_of_feed"]:g}}} of the feed. '
       rf'{hong_phase["local_failures"]} of {hong_phase["inside_count"]} liquids in the fitted range fail the local stability test.',
-      ['Observations', '$N$', 'Role in the MEA model', r'Role in \cite{polleyReactiveEPCSAFTModeling2026}', 'Hong et al.', 'MEA model', 'MEA-fitted shared set', r'Ref.~\cite{polleyReactiveEPCSAFTModeling2026}', 'Fails the local test'], hrows, [.21, .035, .13, .09, .105, .10, .09, .08, .085],
+      ['Observations', '$N$', 'Role in the MEA model', r'Role in \cite{polleyReactiveEPCSAFTModeling2026}', 'Hong et al. reconstruction', 'MEA model', 'MEA-fitted shared set', r'Ref.~\cite{polleyReactiveEPCSAFTModeling2026}', 'Fails the local test'], hrows, [.21, .035, .13, .09, .105, .10, .09, .08, .085],
       notes=r"Roles refer to the objective of each model; no observation was fitted by Hong et al. ``Not stated'' is defined in main-text Table~\ref{main-tab:mea-data}. The last column counts the states at which the liquid of the Hong model fails the local stability test at fixed pathway weight; the density calculation involves no phase equilibrium. \textsuperscript{a}Three of the intervals at this temperature in the full set of Kim and Svendsen were fitted during earlier model development, in the objective of Ref.~\cite{polleyReactiveEPCSAFTModeling2026}. \textsuperscript{b}The two Hong values use the pressure slope toward lower and toward higher temperature. \textsuperscript{c}The comparison between density sources informed the choice of fitted density observations. Deviations on fitted and on not-fitted data are not directly comparable.")
 # Where the AMP splits lie: retained search states, projected onto temperature and loading.
 acomponents = [c['component_id'] for c in adoc['parameters']['components']]
@@ -1305,7 +1404,7 @@ reported_costs = [fixed.value(name + ' selected objective') for name in DESIGNS]
 CONTRIB = [('MEA', [
                 (r'\COtwo partial pressures', [('common149', 'Pa')]), ('Species mole fractions', [('common149', '1'), ('restored species', '1')]), ('Species ratios of Jakobsen et al.', [('Jakobsen', '1')]),
                 ('Integral absorption heats', [('common149', 'J/mol')]), ('Heat capacities', [('Cp', 'J/(mol-feed K)')]), ('Loaded densities', [('loaded density', 'kg/m^3')]), (r'\COtwo-free densities', [('CO2-free density', 'kg/m^3')]),
-                ('MEA--water bubble temperatures of Cai et al.', [('Cai', 'K')]), ('MEA--water vapor mole fractions of Cai et al.', [('Cai', '1')]), (r'\COtwo--water pressures of Kiepe et al.', [('Kiepe', 'Pa')])]),
+                ('MEA--water bubble temperatures of Cai et al.', [('Cai', 'K')]), ('MEA--water vapor mole fractions of Cai et al.', [('Cai', '1')]), (rf'\COtwo--water pressures, {KIEPE_AUTHOR}\cite{{{KIEPE_CITE}}}', [('Kiepe', 'Pa')])]),
            ('DEA', [(r'\COtwo partial pressures', [(g, 'Pa') for g in ('Lawson','SeoHong','Lal')]), ('Integral absorption heats', [('Carson', 'J/mol CO2')])]),
            ('MDEA', [
                 ('Loaded total pressures of Kuranov et al.', [('Kuranov', 'Pa')]), (r'\COtwo-free pressures of Kuranov et al.', [('Kuranov-binary', 'Pa')]), ('MDEA--water and water pressures of Kim et al.', [('Kim', 'Pa')]),
@@ -1328,11 +1427,11 @@ for (amine, sets), expected in zip(CONTRIB, reported_costs[:4], strict=True):
         values = [part for k in keys for part in recs[k]]
         n, cost = sum(n for n, _ in values), math.fsum(cost for _, cost in values)
         if keys == [('Kiepe', 'Pa')]:
-            crow.append([label + ' (preliminary fit, constant)', n, num(cost, 7), num(100 * cost / total, 1)])
+            crow.append([label + r'\textsuperscript{a}', n, num(cost, 7), num(100 * cost / total, 1)])
         else:
             crow.append([label, n, num(cost, 3), num(100 * cost / total, 1)])
 table('supplement-objective-contributions', 'Contribution of each fitted data set to the objective value of its reported model.', ['Data set', '$N$', 'Contribution', r'Share (\%)'], crow, [.52, .08, .14, .12],
-      notes=r'The objective is that of main-text Eq.~(\ref{main-eq:fit-objective}) with the scales and weights of Tables~\ref{tab:objective-groups} and \ref{tab:transfer-scales}; values of different amines are not comparable.')
+      notes=r'The objective is that of main-text Eq.~(\ref{main-eq:fit-objective}) with the scales and weights of Tables~\ref{tab:objective-groups} and \ref{tab:transfer-scales}; values of different amines are not comparable. \textsuperscript{a} Fitted beforehand and constant in the reactive objective.')
 weighted_rows = mrefit['objective']['rms']['rows']
 mweights = {r['group']: r['weight'] for r in weighted_rows}
 assert all(r['weight'] == mweights[r['group']] for r in weighted_rows)
@@ -1369,8 +1468,19 @@ outputs[scales_path] = outputs[scales_path].replace('tab:supplement-transfer-sca
 # Distances are in optimizer-bound coordinates. The complete pairwise distances
 # and screened draws are preserved by the study handoff.
 start_rows = []
+vector_rows = []
 for design, attempts in fixed.handoff['fit_attempts'].items():
     design_label = design.replace('_', ' ')
+    record = fixed.load(f'{design}/manifest.json.gz')
+    vectors = record['starts']
+    if any(start.startswith('LHS-') for start in attempts):
+        draws = fixed.load(f'{design}/replacement-starts.json.gz')['draws']
+        vectors |= {key: value['start'] for key, value in draws.items() if value['disposition'] == 'eligible'}
+    coordinate_order = record['coordinate_order']
+    coordinates_text = r'; \allowbreak '.join(
+        rf'{i}. \nolinkurl{{{key}}}' for i, key in enumerate(coordinate_order, 1))
+    vector_rows.append(head(design_label, 2))
+    vector_rows.append(['Order', coordinates_text])
     manifest = fixed.value(design + ' start distances')
     expanded_key = design + ' admitted-start distances'
     distances = fixed.value(expanded_key) if expanded_key in fixed.quantities else {
@@ -1384,7 +1494,14 @@ for design, attempts in fixed.handoff['fit_attempts'].items():
         selected = fixed.handoff['selected_starts'][design] == start
         status = ('Provisional' if design == 'MDEA' else 'Selected') if selected else attempt['status'].replace('_', ' ')
         gradient = attempt['solver_scale_projected_gradient_inf']
-        start_rows.append([design_label, start, num(min(near) if near else (0 if start == 'A-loose' else None)),
+        vector = vectors['A' if start == 'A-loose' else start]
+        fit_start = fixed.load(f'{design}/{start}.json.gz')
+        assert fit_start['optimizer_start'] == vector['optimizer'], (design, start)
+        assert len(vector['vector']) == len(coordinate_order)
+        anchor = f"start-{design.replace('_', '-')}-{start}"
+        vector_rows.append([rf'\hypertarget{{{anchor}}}{{{start}}}',
+                            ', '.join(rf'\num{{{q:.9g}}}' for q in vector['vector'])])
+        start_rows.append([design_label, rf'\hyperlink{{{anchor}}}{{{start}}}',  num(min(near) if near else (0 if start == 'A-loose' else None)),
                            num(attempt['initial_cost']), num(attempt['objective'], 6),
                            reduced_gibbs(gradient) if gradient is not None else '---', active or '---', status])
 table('supplement-fit-starts', 'Starts and endpoints of the fits at the fixed 100 kPa reaction reference.',
@@ -1393,6 +1510,14 @@ table('supplement-fit-starts', 'Starts and endpoints of the fits at the fixed 10
       notes=r'RMS distance is measured relative to coordinate bounds. A-loose repeats A. Active bounds are numbered in fit coordinate order. '
             r'The projected gradient uses the optimizer scale. The selected fits missed the strict gradient limit. MDEA admitted two of 64 draws and remains provisional. '
             r'AMP with fixed slope retains a second basin at 2741.26. A dash marks an unavailable value or an empty active set.')
+
+table('supplement-start-vectors', 'Initial vectors in physical fit coordinates.',
+      ['Start', 'Coordinates in fit order'], vector_rows, [.13,.85], long=True, size=r'\footnotesize')
+vectors_path = LATEX / 'tables/supplement-start-vectors.tex'
+# LTcaptype is local to this group and keeps the unnumbered vectors out of the table sequence.
+outputs[vectors_path] = outputs[vectors_path].replace(r'\begingroup', r'\begingroup\def\LTcaptype{}', 1).replace(
+    r'\caption{Initial vectors in physical fit coordinates.}\label{tab:supplement-start-vectors}',
+    r'\multicolumn{2}{@{}l}{Initial vectors in physical fit coordinates.}')
 
 c1 = []
 for key, record in fixed.quantities.items():
@@ -1688,6 +1813,9 @@ for (path, old), new in fxstale.items():
 missing = [(path, value) for path, values in stated.items() for value in values if value not in (LATEX / path).read_text()]
 emit('tables/number-sources.json',json.dumps(sources,indent=2)+'\n')
 if '--check' in sys.argv:
+    previous_sources = json.loads((LATEX / 'tables/number-sources.json').read_text())
+    for source in sorted(previous_sources.keys() | sources.keys()):
+        assert previous_sources.get(source) == sources.get(source), f'Changed display record: {source}'
     for path, value in outputs.items():
         assert path.read_bytes()==(value if isinstance(value,bytes) else value.encode()), path
     print(f'Numeric and retained-figure check passed: {len(outputs)} displays; {len(sources)} source files.')

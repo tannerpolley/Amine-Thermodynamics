@@ -1,7 +1,7 @@
 """Render adopted salt-anchored MEA results (#435) and explicitly historical comparisons; no Engine computation."""
 import ast
 from functools import reduce
-from fixed_reference import FixedReference, STUDY
+from fixed_reference import KIEPE_AUTHOR, KIEPE_CITE, FixedReference, STUDY
 import gzip
 import json
 import math
@@ -25,7 +25,7 @@ ROWS = {('common149', 'partial_pressure'): (r'\ce{CO2} partial pressure, Hilliar
         ('species', 'mole_fraction'): (r'Species mole fraction, B\"ottinger and Matin \cite{Bottinger2008,matinFacileMethodDetermination2012}', ''),
         ('common149', 'addition_enthalpy'): (r'Integral absorption heat, Vinjarapu \cite{HemaBhavya2025}', r'kJ/mol \ce{CO2}'),
         ('Jakobsen', 'amount_ratio'): (r'Species per total amine, Jakobsen \cite{Jakobsen2005}', ''),
-        ('Kiepe', 'pressure'): (r'\ce{CO2}--water pressure, Kiepe \cite{kiepeExperimentalDeterminationPrediction2002}', ''),
+        ('Kiepe', 'pressure'): (rf'\ce{{CO2}}--water pressures, {KIEPE_AUTHOR}\cite{{{KIEPE_CITE}}}', ''),
         ('CO2-free density', 'phase_density'): (r'\ce{CO2}-free solution density, Amundsen \cite{Amundsen2009}', r'kg/m$^3$'),
         ('Cai', 'temperature'): (r'MEA--water bubble temperature, Cai \cite{caiBinaryIsobaricVaporLiquid1996}', 'K'),
         ('Cai', 'mole_fraction'): (r'MEA--water vapor water mole fraction, Cai \cite{caiBinaryIsobaricVaporLiquid1996}', ''),
@@ -603,7 +603,7 @@ def main():
     weight_groups = {}
     for r in weights: weight_groups.setdefault(rowkey(r['group'],r['quantity']),[]).append(r)
     assert list(weight_groups) == list(groups)
-    table('objective_groups.tex', r"Assigned objective scales and weights. || Scales are in the unit of the quantity, and unity for the logarithmic pressure residuals. The text gives the origin of each scale and weight. \textsuperscript{a}Preliminary fit of the \ce{CO2}--water interaction. These residuals contribute a constant to the reactive objective.", ['Quantity','$N$','Scale range','Weight range','Contribution to $C$'], [[rowlabel(key,False) + (r'\textsuperscript{a}' if key == ('Kiepe', 'pressure') else ''),sum(int(r['n']) for r in part),span(float(r['scale']) for r in part),span(float(r['weight']) for r in part),num(sum(float(r['cost']) for r in groups[key]),6)] for key,part in weight_groups.items()], [.42,'r','l','l','r'])
+    table('objective_groups.tex', r"Assigned objective scales and weights. || Scales are in the unit of the quantity, and unity for the logarithmic pressure residuals. The text gives the origin of each scale and weight. The Kiepe pressures were fitted beforehand and contribute a constant to the reactive objective.", ['Quantity','$N$','Scale range','Weight range','Contribution to $C$'], [[rowlabel(key,False),sum(int(r['n']) for r in part),span(float(r['scale']) for r in part),span(float(r['weight']) for r in part),num(sum(float(r['cost']) for r in groups[key]),6)] for key,part in weight_groups.items()], [.42,'r','l','l','r'])
     check_record = study.endpoint_record('display-replays/bubble-checks.json.gz', 'MEA')
     assert check_record['endpoint_fingerprint'] == endpoint['endpoint_fingerprint']
     checks = check_record['rows']

@@ -2,6 +2,8 @@
 from math import fsum, isclose, sqrt
 
 STUDY = 'analyses/fixed_reaction_reference/'
+KIEPE_AUTHOR = r'Kiepe et al.\ '
+KIEPE_CITE = 'kiepeExperimentalDeterminationPrediction2002'
 WHEEL = 'c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb'
 DESIGNS = ('MEA', 'DEA', 'MDEA', 'AMP_free', 'AMP_fixed')
 
