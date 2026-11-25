@@ -128,16 +128,16 @@ def spec_261():
     SPEC261.write_text(text)
 
 
-def bind(mapping):
+def bind(mapping, *, reaction_reference_pressure_pa=None):
     """density_268.bind on the run's solvent specification (MEA.toml, or #261's study.toml for variant c)."""
     saved = d.AN
     try:
         d.AN = TOML.parent
         if TOML.name == 'MEA.toml':
-            return d.bind(mapping, 'MEA.toml')
-        d.SolventSpecification, original = (lambda path: original(TOML)), d.SolventSpecification
+            return d.bind(mapping, 'MEA.toml', reaction_reference_pressure_pa=reaction_reference_pressure_pa)
+        d.SolventSpecification, original = (lambda path, **kwargs: original(TOML, **kwargs)), d.SolventSpecification
         try:
-            return d.bind(mapping)
+            return d.bind(mapping, reaction_reference_pressure_pa=reaction_reference_pressure_pa)
         finally:
             d.SolventSpecification = original
     finally:

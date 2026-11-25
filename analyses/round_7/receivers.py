@@ -25,8 +25,8 @@ def donor():
     return r.s.parameter_mapping(path), selection
 
 
-def inherited(point, *, amp):
-    mea, selection = donor()
+def inherited(point, *, amp, donor_record=None):
+    mea, _ = donor() if donor_record is None else donor_record
     mapping = point['parameters']
     donor_values = r.s.parameter_values(mea)
     for ion in (a.salt.HCO3,a.salt.CO3):
@@ -46,12 +46,13 @@ def inherited(point, *, amp):
     return point
 
 
-def verify_binding(run, point, *, amp):
-    updated = inherited(copy.deepcopy(point),amp=amp)
+def verify_binding(run, point, *, amp, donor_record=None):
+    donor_record = donor() if donor_record is None else donor_record
+    updated = inherited(copy.deepcopy(point),amp=amp,donor_record=donor_record)
     original = r.s.parameter_values(epcsaft.parameters.document_mapping(run.bind(point).parameters))
     expected = r.s.parameter_values(updated['parameters'])
     assert all(original[k]==v for k,v in expected.items())
-    _, identity = donor()
+    _, identity = donor_record
     values = {k:v for k,v in original.items() if k.startswith(CARB) or k==WATER}
     if amp:
         q = next(q for q in point['coordinates'] if q['identity']=='AMPCOO-segment-diameter')

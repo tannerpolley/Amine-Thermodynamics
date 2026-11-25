@@ -75,7 +75,7 @@ def select_campaign_endpoint(candidates, tolerance):
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
-    def __init__(self, declaration, out=None, *, shared_values=None):
+    def __init__(self, declaration, out=None, *, shared_values=None, fixed_reference_pressure_pa=None):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
         self.out = Path(out) if out else self.path.parent/self.config['output']
@@ -83,9 +83,12 @@ class Route:
         self.workers = max(1, min(int(os.environ['AGENT_HEAVY_CORES']), int((available-7)/.35)))
         self.controls = self.config['optimizer']
         self.shared_values = shared_values
+        self.fixed_reference_pressure_pa = fixed_reference_pressure_pa
         self.verify()
         identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,
                         shared_values_sha256=SHARED_SHA if shared_values is None else shared_values[1])
+        if fixed_reference_pressure_pa is not None:
+            identity['fixed_reference_pressure_pa'] = fixed_reference_pressure_pa
         if (self.out/'identity.json').exists():
             assert self.result('identity.json')==identity, 'Use a new output directory for changed declarations'
         self.write('identity.json',identity)
@@ -171,22 +174,27 @@ class Route:
             for pair in shared['water_ion_pairs']:
                 assert pair in point['parameters']['pairs'], pair
         datasets = self.load(self.config['dataset_changes']) if 'dataset_changes' in self.config else {}
+        interval = self.config['calculation_interval_K']
+        reactions = copy.deepcopy(point['reactions'])
+        for group in reactions.values():
+            for reaction in group:
+                reaction['correlation'].update(temperature_min=interval[0], temperature_max=interval[1])
+        if self.fixed_reference_pressure_pa is not None:
+            datasets.update(reactions=reactions, reaction_reference_pressure_pa=self.fixed_reference_pressure_pa)
         spec = SolventSpecification(self.path.parent/self.config['specification'], **datasets)
         spec.parameters = epcsaft.Parameters.from_mapping(point['parameters'])
         spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
         assert list(spec.parameters.component_ids)==self.config['species']
         spec.inputs['endpoint'] = point
         spec.construction_parameters = {k:spec.parameters for k in spec.construction_parameters}
-        spec.spec['chemistry']['reactions'] = copy.deepcopy(point['reactions'])
-        interval = self.config['calculation_interval_K']
         for problem in spec.problems.values():
             assert interval[0] <= problem.T <= interval[1], problem.T
-            for reaction in problem.reactions:
-                law = next(r['correlation'] for group in point['reactions'].values() for r in group if r['name']==reaction.name)
-                reaction.correlation = eq.ReactionLogPolynomial(**dict(law, temperature_min=interval[0], temperature_max=interval[1]))
-        for group in spec.spec['chemistry']['reactions'].values():
-            for reaction in group:
-                reaction['correlation'].update(temperature_min=interval[0], temperature_max=interval[1])
+            if self.fixed_reference_pressure_pa is None:
+                for reaction in problem.reactions:
+                    law = next(r['correlation'] for group in reactions.values() for r in group if r['name']==reaction.name)
+                    reaction.correlation = eq.ReactionLogPolynomial(**law)
+        if self.fixed_reference_pressure_pa is None:
+            spec.spec['chemistry']['reactions'] = reactions
         for role in ('fitted','comparisons'):
             for row in spec.inputs['observations'][role]:
                 row['temperature_domain'] = interval

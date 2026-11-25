@@ -37,7 +37,8 @@ def residual_excess_enthalpy(model, T, P, x):
 
 
 class SolventSpecification:
-    def __init__(self, path, parameter="endpoint", *, additional_datasets=(), dataset_replacements=()):
+    def __init__(self, path, parameter="endpoint", *, additional_datasets=(), dataset_replacements=(),
+                 reactions=None, reaction_reference_pressure_pa=None):
         self.path = Path(path)
         self.spec = tomllib.loads(self.path.read_text())
         if self.spec["schema"] != "solvent-specification-1":
@@ -47,6 +48,12 @@ class SolventSpecification:
         if hashlib.sha256(data).hexdigest() != shared["sha256"]:
             raise ValueError("Declaration hash mismatch")
         self.spec.update(tomllib.loads(data.decode()))
+        if reactions is not None:
+            self.spec["chemistry"]["reactions"] = copy.deepcopy(reactions)
+        if reaction_reference_pressure_pa is not None:
+            for group in self.spec["chemistry"]["reactions"].values():
+                for reaction in group:
+                    reaction["reference"]["reference_pressure_pa"] = reaction_reference_pressure_pa
         self.inputs = {key: self.load_record(self.spec[key]) for key in ("start", "endpoint", "coordinates", "caloric")}
         self.parameters = epcsaft.Parameters.from_mapping(self.inputs[parameter])
         self.parameter_sha256 = self.spec[parameter]["sha256"]
@@ -364,7 +371,7 @@ class SolventSpecification:
         weights = np.sqrt([r['weight'] for r in (self.inputs['observations']['fitted'] if records is None else records)])
         return weights*np.asarray(values) if np.ndim(values)==1 else weights[:,None]*values
 
-    def fit(self, stability=()):
+    def fit(self, stability=(), *, starts=None):
         """Fit the calibration rows plus optional (observation, weight) stability requirements."""
         coords = self.coordinates()
         records = self.inputs["observations"]["fitted"]
@@ -376,9 +383,12 @@ class SolventSpecification:
             weights=[r["weight"] for r in records] + [w for _, w in stability],
             thermochemistry=self.thermal,
             controls=controls,
+            **({"starts": starts} if starts is not None else {}),
             singular_vectors=True,
             uncertainty=output_uncertainty(self.spec.get('measurement_covariance'),len(stability)),
         )
+        if starts is not None:
+            result, = result
         # data_cost/stability_cost/acceptance exist only on Engine wheels with stability requirements.
         report = {
             key: jsonable(getattr(result, key, None))

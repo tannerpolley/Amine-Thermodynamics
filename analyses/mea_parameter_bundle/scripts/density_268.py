@@ -54,8 +54,9 @@ def verify():
                 s.ENGINE_COMMIT = 'e6dae5c7' if digest == NEW_SHA else '3e83e19ccc771b51d8ebc038931ab25192f4c5b5'
                 return
     raise RuntimeError('Installed Engine differs from both authorized immutable wheels')
-def bind(mapping, specification='MEA-pre-260-340.toml', *, additional_datasets=()):
-    spec = SolventSpecification(AN / specification, additional_datasets=additional_datasets)
+def bind(mapping, specification='MEA-pre-260-340.toml', *, additional_datasets=(), reaction_reference_pressure_pa=None):
+    spec = SolventSpecification(AN / specification, additional_datasets=additional_datasets,
+                               reaction_reference_pressure_pa=reaction_reference_pressure_pa)
     spec.parameters = epcsaft.Parameters.from_mapping(mapping)
     spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
     packet = s.load_state_packet()['observations'][0]['request']
