@@ -224,6 +224,24 @@ def derivatives(spec, model, thermal, problem, T, P, amine_feed, starting_soluti
     return record
 
 
+def worked_state(spec, model, thermal, observation, amine_feed):
+    """Continue the liquid branch of a fitted bubble state for C1."""
+    row = next(q for q in spec.inputs['observations']['fitted'] if q['identity']==observation)
+    bubble = copy(spec.problems[row['problem']])
+    result = eq.solve_equilibrium(model,bubble)
+    if not result.requested_tolerance_met:
+        raise ValueError(result.message)
+    problem = copy(bubble)
+    liquid = copy(problem.phases[0])
+    liquid.amount = eq.Free()
+    liquid.composition_guess = result.phase_mole_fractions(0)
+    liquid.packing_guess = result.packing_fractions[0]
+    problem.phases = [liquid]
+    problem.P = result.pressure
+    native = reg.stability(spec.parameters,problem,scale=1.).problem
+    return derivatives(spec,model,thermal,native,result.temperature,result.pressure,amine_feed,result)
+
+
 def main(mode, designs):
     r.verify()
     baseline = r.read(R8)['rows']
@@ -259,20 +277,7 @@ def main(mode, designs):
                 model = epcsaft.Mixture(spec.parameters,thermochemistry=thermal)
                 record['caloric_basis'] = dict(gauge='Round 8 zero Cp, h and s for neutral species',
                                                reference_temperature_K=350.,reference_pressure_Pa=P0)
-            row = next(q for q in spec.inputs['observations']['fitted'] if q['identity']==old['observation'])
-            bubble = copy(spec.problems[row['problem']])
-            result = eq.solve_equilibrium(model,bubble)
-            if not result.requested_tolerance_met:
-                raise ValueError(result.message)
-            problem = copy(bubble)
-            liquid = copy(problem.phases[0])
-            liquid.amount = eq.Free()
-            liquid.composition_guess = result.phase_mole_fractions(0)
-            liquid.packing_guess = result.packing_fractions[0]
-            problem.phases = [liquid]
-            problem.P = result.pressure
-            native = reg.stability(spec.parameters,problem,scale=1.).problem
-            record.update(derivatives(spec,model,thermal,native,result.temperature,result.pressure,old['amine_feed_mol'],result))
+            record.update(worked_state(spec, model, thermal, old['observation'], old['amine_feed_mol']))
         except (AttributeError,RuntimeError,ValueError,AssertionError) as error:
             record['refusal'] = f'{type(error).__name__}: {error}'
         name = f'C1/{mode}-{design}.json.gz'
