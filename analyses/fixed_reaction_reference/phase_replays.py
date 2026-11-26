@@ -70,11 +70,11 @@ def control_states(design, spec):
         yield 'worked-state',archive['state'],P,dict(pair=seed),False
 
 
-def controls(design,label):
+def controls(design,label,*,rebuild=False):
     started = monotonic()
-    path = f'{design}/controls/{label}.json.gz'
+    path = f'{design}/controls/{"rebuild-441/" if rebuild else ""}{label}.json.gz'
     try:
-        run,point = point_for(design,label,'decisive-phase')
+        run,point = point_for(design,label,'decisive-phase-rebuild-441' if rebuild else 'decisive-phase')
     except ValueError as error:
         put(path,dict(refusal=str(error),seconds=monotonic()-started))
         return
@@ -83,7 +83,8 @@ def controls(design,label):
     for key,state,P,seed,assemblages in control_states(design,spec):
         row = dict(state=state,P_Pa=P,pressure_basis='retained absolute pressure')
         try:
-            value = fixed(run,spec,state,P,seed,mdea=design=='MDEA',assemblages=assemblages)
+            value = fixed(run,spec,state,P,seed,mdea=design=='MDEA',assemblages=assemblages,
+                          decision_bubble=rebuild and design.startswith('AMP'))
             if design=='MDEA':
                 value = predicates(value,tolerance=1e-10)
             if label!='tracking':
@@ -120,18 +121,44 @@ def baseline_screen(design,protocol):
     return {q['key']:q for q in r.read(ROUND7/path)}
 
 
-def screening(design, label, pilot=False):
+def support_census(spec, states, declare, bank, *, old_full=False):
+    rows = []
+    for state in states:
+        row = dict(key=state['key'])
+        rows.append(row)
+        try:
+            item = declare(spec,state,1.)
+            before = set(range(len(spec.parameters.component_ids))) if old_full else (
+                {i for i,n in enumerate(item.problem.feed.values) if n>0}
+                | {i for rx in item.problem.reactions for i,v in enumerate(rx.stoichiometry) if v})
+            after = r.supplied_support(spec,item)
+            supplied = bank.get(state['key'],[]) if isinstance(bank,dict) else bank
+            row.update(before=sorted(before),after=sorted(after),excluded=sum(
+                not set(w['support'])<=after for w in supplied),bank_size=len(supplied))
+        except (ValueError,RuntimeError,TypeError,AttributeError) as error:
+            row['blocker'] = f'{type(error).__name__}: {error}'
+    return rows
+
+
+def screening(design, label, pilot=False, *, rebuild=False, workers=None):
     tick = monotonic()
     _,point = point_for(design,label,'screen')
     endpoint = fingerprint(point)
-    for protocol,run,bank in release_routes(design,f'screen-{label}'):
+    for protocol,run,bank in release_routes(design,f'screen-{label}' + ('-rebuild-441' if rebuild else '')):
         started = monotonic()
-        folder = f'{design}/screen/{label}/{protocol}'
+        folder = f'{design}/screen/{"rebuild-441" if rebuild else label}/{protocol}'
+        if workers is not None:
+            run.workers = workers
         spec = run.bind(point)
         states = run.states(spec)
         assert len(states)==(666 if design.startswith('AMP') else 11824 if design=='MDEA' else 1271)
         aliases = run.same_calculations(point,states)
         unique = [q for q in states if q['key'] not in aliases]
+        held = {}
+        if rebuild and design=='DEA':
+            prior = r.read(OUT/'DEA/screen/selected/declared/summary.json.gz')
+            assert prior['endpoint_fingerprint']==endpoint and prior['wheel']==r.SHA
+            held = {q['key']:q for q in prior['rows'] if q['key']=='lawson-1976-viii:1:problem'}
         if pilot:
             selected = unique[::47] if design=='MDEA' else unique[::17]
             batch = run.grid(point,selected,trial_set=bank)
@@ -151,16 +178,18 @@ def screening(design, label, pilot=False):
             path = f'{folder}/batches/{i}.json.gz'
             if (OUT/path).exists():
                 record = r.read(OUT/path)
-                assert record['endpoint_fingerprint']==endpoint
+                assert record['endpoint_fingerprint']==endpoint and record['wheel']==r.SHA
                 assert [q['key'] for q in record['rows']]==[q['key'] for q in keys]
             else:
                 t = monotonic()
                 if design=='MDEA':
                     run.out = WORK/design/f'screen-{label}'/protocol/str(i)
-                batch = run.grid(point,keys,trial_set=bank)
+                fresh = iter(run.grid(point,[q for q in keys if q['key'] not in held],trial_set=bank))
+                batch = [held[q['key']] if q['key'] in held else next(fresh) for q in keys]
                 record = dict(endpoint_fingerprint=endpoint,wheel=r.SHA,rows=batch,seconds=monotonic()-t)
                 put(path,record)
             merged.update((q['key'],q) for q in record['rows'])
+        merged.update(held)
         classifications = transfer.classify(run,point,list(merged.values()),states)
         merged.update((dest,dict(merged[src],key=dest,seconds=0.,same_calculation_as=src)) for dest,src in aliases.items())
         rows = [merged[q['key']] for q in states]

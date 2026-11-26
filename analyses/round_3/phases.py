@@ -23,7 +23,7 @@ def trials(report):
             for t in report.trials]
 
 
-def physical(spec, problem, result, *, reclose=True):
+def physical(spec, problem, result, *, reclose=True, compiled=None):
     ids = spec.parameters.component_ids
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     T, P = result.temperature, result.pressure
@@ -32,7 +32,8 @@ def physical(spec, problem, result, *, reclose=True):
     if reclose and any(abs(r['pressure_residual_Pa'])/P > problem.row_tolerance and min(r['x']) > 0 for r in rows):
         from reference_derivatives import pressure_reclosure
 
-        compiled = eq.compile_problem(spec.model, problem)
+        if compiled is None:
+            compiled = eq.compile_problem(spec.model, problem)
         standard = eq.stability_test(compiled, result).standard_over_rt
         for row in rows:
             if abs(row['pressure_residual_Pa'])/P <= problem.row_tolerance or min(row['x']) <= 0:
@@ -49,7 +50,7 @@ def physical(spec, problem, result, *, reclose=True):
     return dict(phases=rows, balances=residuals, physical_checks_pass=passed, residuals=list(result.residuals))
 
 
-def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
+def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decision_bubble=False):
     item = route.stability_row(spec, state, 1.)
     problem, model = item.problem, spec.model
     problem.pressure = type(problem.pressure).fixed(P)
@@ -94,7 +95,7 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
         def inspect(compiled, solved):
             pair_solution[:] = compiled, solved
             if solved.requested_tolerance_met and len(solved.amounts)==2 and min(solved.amounts)>0:
-                details = physical(spec, problem, solved)
+                details = physical(spec, problem, solved, compiled=compiled)
                 return {k:details[k] for k in ('balances', 'physical_checks_pass')}
 
         for index, guesses in enumerate(attempts):
@@ -117,21 +118,76 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False):
     if (best := out['minimum_trial']) is not None:
         out['minimum_trial_roots'] = cd.pressure_roots(model, result.temperature, P, best['composition'],
                                                        1/best['quantities']['volume_m3_per_mol'])
-    if assemblages and resolved:
-        amp_candidates(spec, route, problem, guess, out, pair_solution)
+    if resolved:
+        out['liquid_vapor'] = liquid_vapor(spec, route, problem, guess, parent_g)
+        if decision_bubble:
+            pair = out['liquid_vapor']
+            out['bubble'] = liquid_vapor(spec, route, problem, guess, parent_g, incipient=True, seed=pair)
+        if assemblages:
+            amp_candidates(spec, route, problem, out, pair_solution)
     return out
 
 
-def amp_candidates(spec, route, problem, guess, out, pair_solution):
+def liquid_vapor(spec, route, parent, guess, parent_g, *, incipient=False, seed=None):
+    problem = parent
+    original = parent.phases
+    pressure = type(parent.pressure).fixed(parent.pressure.value)
+    liquid = type(original[0])()
+    liquid.name, liquid.kind, liquid.support_declared = 'L', original[0].kind, True
+    liquid.support = original[0].support
+    x, packing = guess
+    liquid.composition_guess, liquid.packing_guess = [x[j] for j in liquid.support], packing
+    vapor = type(liquid)()
+    vapor.name, vapor.kind, vapor.support_declared = 'V', type(liquid.kind).Vapor, True
+    vapor.support = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
+    if incipient:
+        vapor.amount = type(vapor.amount).pinned(0.)
+        problem.pressure = type(problem.pressure).variable(problem.pressure.value)
+        if seed and seed.get('phases'):
+            liquid.composition_guess = [seed['phases'][0]['x'][j] for j in liquid.support]
+            vapor.composition_guess = [seed['phases'][1]['x'][j] for j in vapor.support]
+            liquid.packing_guess, vapor.packing_guess = seed['packings']
+    problem.phases = [liquid, vapor]
+    try:
+        result = eq.solve_equilibrium(spec.model, problem)
+        compiled = eq.compile_problem(spec.model, problem)
+    finally:
+        problem.phases, problem.pressure = original, pressure
+    out = dict(support='L+incipient V' if incipient else 'L+V', message=result.message, qualified=False,
+               T_K=result.temperature, pressure_Pa=result.pressure, amounts_mol=list(result.amounts),
+               feed_mol=list(problem.feed.values), row_tolerance=problem.row_tolerance,
+               requested_tolerance_met=result.requested_tolerance_met)
+    if result.requested_tolerance_met and len(result.amounts)==2:
+        out.update(physical(spec, problem, result, compiled=compiled), packings=list(result.packing_fractions))
+        x, rho = [row['x'] for row in out['phases']], list(result.molar_densities)
+        trace, connected = dilute_vapor_connection(spec.model, result.temperature, x[1], rho[1])
+        out.update(vapor_trace=trace, vapor_connected=connected)
+        distinct = (max(abs(a-b) for a,b in zip(*x,strict=True))>cd.COINCIDENCE or
+                    abs(math.log(rho[0]/rho[1]))>cd.COINCIDENCE)
+        out['qualified'] = out['physical_checks_pass'] and connected and distinct and result.amounts[0]>0
+        if incipient:
+            out['qualified'] &= result.amounts[1]==0
+        else:
+            g, err = cd.gibbs(compiled,result)
+            out.update(Gibbs_over_RT_mol=g, error=err)
+            out.update(Gibbs_decrease_over_RT_mol=parent_g[0]-g, numerical_error_over_RT_mol=parent_g[1]+err)
+            out['qualified'] &= (result.amounts[1]>0 and
+                                 out['Gibbs_decrease_over_RT_mol']>out['numerical_error_over_RT_mol'])
+    return out
+
+
+def amp_candidates(spec, route, problem, out, pair_solution):
     model = spec.model
     vapor = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
     support = [i for i in range(len(spec.parameters.component_ids))
                if i not in eq.compile_problem(model, problem).removed_species]
     pair = next((a for a in out['attempts'] if a['confirmed']), None)
     g, error = out['parent_gibbs_RT_mol']
-    candidates = [dict(support='L', Gibbs_over_RT_mol=g, error=error, qualified=out['physical_checks_pass'])]
+    candidates = [dict(support='L', Gibbs_over_RT_mol=g, error=error, qualified=out['physical_checks_pass']),
+                  out['liquid_vapor']]
     out['candidates'] = candidates
-    original, pressure = problem.phases, problem.pressure
+    original = problem.phases
+    pressure = type(problem.pressure).fixed(problem.pressure.value)
 
     def make_phase(name, kind, support, guess=(None, None), pinned=False):
         phase = type(original[0])()
@@ -144,7 +200,7 @@ def amp_candidates(spec, route, problem, guess, out, pair_solution):
             phase.amount = type(phase.amount).pinned(0.)
         return phase
 
-    variants = [('L+V', [make_phase('L1', 'Liquid', support, guess), make_phase('V', 'Vapor', vapor)])]
+    variants = []
     if pair:
         compiled, solved = pair_solution
         omitted = trials(eq.stability_test(compiled, solved))

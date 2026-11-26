@@ -89,9 +89,18 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
 
 
 def classify(route, point, rows, states):
+    from phases import liquid_vapor, physical
+
     spec = route.bind(point)
     by_key = {s['key']:s for s in states}
-    results, unresolved = [], []
+    results, unresolved, solutions = [], [], {}
+
+    def inspect(compiled, result):
+        last[:] = [result]
+        if result.requested_tolerance_met and len(result.amounts)==2 and min(result.amounts)>0:
+            return physical(spec,parent,result,compiled=compiled)
+
+    last = []
     for row in rows:
         if not stable.descent(row):
             continue
@@ -110,10 +119,12 @@ def classify(route, point, rows, states):
             parent_x = list(central.phase_mole_fractions(0))
             parent_roots = pressure_roots(spec.model,T,P,parent_x,central.molar_densities[0])
             entry.update(temperature_K=T, pressure_Pa=P, feed_mol=list(parent.feed.values),
-                         parent_roots=parent_roots, outside_ranges=route.marks(T,parent))
+                         parent_roots=parent_roots, outside_ranges=route.marks(T,parent),
+                         row_tolerance=parent.row_tolerance, parent=physical(spec,parent,central))
             compiled = eq.compile_problem(spec.model,parent)
             parent_g = gibbs(compiled,central)
             primary = (parent_x,central.packing_fractions[0])
+            entry['liquid_vapor'] = liquid_vapor(spec,route,parent,primary,parent_g)
             guesses, supplied = [], []
             for witness in row.get('supplied_trial_evidence',[]):
                 if not stable.supplied_negative(witness):
@@ -148,25 +159,69 @@ def classify(route, point, rows, states):
                         phases = [primary,(list(trial.composition),math.exp(z[-1]))]
                     guesses.insert(0,phases)
             entry['liquid_directed'] = bool(guesses)
-            for guess in guesses:
-                attempt = coexistence(spec,parent,parent_g,guess)
+            for guess in guesses if row['key'] not in ('weiland-1998:31:problem','lawson-1976-viii:0:problem') else []:
+                attempt = coexistence(spec,parent,parent_g,guess,inspect=inspect)
+                attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
                 entry['attempts'].append(attempt)
                 if attempt['confirmed']:
+                    solutions[entry['key']] = last[0]
                     break
             if guesses and not any(a['confirmed'] for a in entry['attempts']):
                 unresolved.append((entry,parent,parent_g))
         except (AssertionError, ValueError, RuntimeError) as error:
             entry['classification_error'] = str(error)
-    for entry,parent,parent_g in unresolved:
+    for entry,parent,parent_g in sorted(unresolved,key=lambda item: item[0]['key'] in (
+            'weiland-1998:31:problem','lawson-1976-viii:0:problem')):
+        if entry['key']=='weiland-1998:31:problem':
+            target = entry['feed_mol']
+            carbon = spec.parameters.component_ids.index('carbon-dioxide')
+            other, seed = min(
+                ((r,a) for r in results if r.get('temperature_K')==entry['temperature_K']
+                 and r['feed_mol'][:carbon]+r['feed_mol'][carbon+1:]==target[:carbon]+target[carbon+1:]
+                 for a in r['attempts'] if a['confirmed']),
+                key=lambda pair: abs(pair[0]['feed_mol'][carbon]-target[carbon]))
+            start = solutions[other['key']]
+            amine = target[spec.parameters.component_ids.index(route.config['amine'])]
+            difference = target[carbon]-other['feed_mol'][carbon]
+            steps = round(abs(difference)/amine/.0025)
+            assert steps>0 and math.isclose(abs(difference),steps*.0025*amine,abs_tol=math.ulp(target[carbon]))
+            guess = list(zip(seed['phases'],seed['packings'],strict=True))
+            trace = entry['continuation'] = []
+            for i in range(1,steps+1):
+                feed = target.copy()
+                if i!=steps:
+                    feed[carbon] = other['feed_mol'][carbon]+math.copysign(i*.0025*amine,difference)
+                declared = parent.feed
+                declared.values = feed
+                parent.feed = declared
+                center = eq.solve_equilibrium(spec.model,parent)
+                if not center.requested_tolerance_met:
+                    trace.append(dict(feed_mol=feed,message=center.message))
+                    break
+                g = gibbs(eq.compile_problem(spec.model,parent),center)
+                attempt = coexistence(spec,parent,g,guess,inspect=inspect,start=start)
+                attempt.update(feed_mol=feed,seed_from=other['key'])
+                attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
+                trace.append(attempt)
+                if not attempt['requested_tolerance_met'] or min(attempt['amounts_mol'],default=0)<=0:
+                    break
+                start = last[0]
+            if trace[-1]['feed_mol']==target and 'confirmed' in trace[-1]:
+                entry['attempts'].append(trace[-1])
+            continue
         neighbors = sorted(
             ((r,a) for r in results for a in r['attempts'] if a['confirmed']),
             key=lambda pair: (abs(entry['temperature_K']-pair[0]['temperature_K']),
                               abs(math.log(entry['pressure_Pa']/pair[0]['pressure_Pa']))),
         )[:3]
+        if entry['key']=='lawson-1976-viii:0:problem':
+            neighbors.sort(key=lambda pair: pair[0]['key']!='weiland-1998:32:problem')
         for other,seed in neighbors:
-            attempt = coexistence(spec,parent,parent_g,list(zip(seed['phases'],seed['packings'],strict=True)))
+            attempt = coexistence(spec,parent,parent_g,list(zip(seed['phases'],seed['packings'],strict=True)),inspect=inspect)
+            attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
             entry['attempts'].append(dict(attempt, seed_from=other['key']))
             if attempt['confirmed']:
+                solutions[entry['key']] = last[0]
                 break
     return results
 
