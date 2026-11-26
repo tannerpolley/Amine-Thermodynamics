@@ -9,7 +9,9 @@ import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 from MEA.common.retained_results import read
 
+from .fit import save
 from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route
+from .wheel import verify
 
 DEA = ROOT / "analyses/dea_transfer"
 DECLARATION = DEA / "inputs/part-ii-346/f2-carbamate-413-route.json"
@@ -20,6 +22,31 @@ PRESSURE = {"Lawson", "SeoHong", "Lal"}
 PRESSURE_LOG_SCALE = 0.09
 LAL_MOLARITY_MOL_M3 = 2000
 LAL_FEED_TOLERANCE = 1e-12
+
+
+def write_salt_anchored_summary():
+    wheel = verify()
+    stage = ROOT / "analyses/amines/results/dea/system-pressure-salt-anchored/replay"
+    campaign = ROOT / "analyses/round_7/results/F"
+    endpoint = read(stage / "endpoint.json.gz")
+    if endpoint["wheel"] != wheel:
+        raise ValueError("DEA salt-anchored replay uses another wheel")
+    properties = endpoint["replay"]["properties"]["rows"]
+    seohong = [row for row in properties if row["group"] == "SeoHong" and row["status"] == "Available"]
+    horstmann = [row for row in properties if row["group"] == "Horstmann" and row["observed"] < 0]
+    expanded = read(campaign / "incumbent-expanded.json.gz")["rows"]
+    methane = read(campaign / "methane.json.gz")["rows"]
+    save(stage / "summary.json", dict(
+        wheel=wheel,
+        expanded_objective=math.fsum(row["cost"] for row in expanded),
+        expanded_groups={group: sum(row["group"] == group for row in expanded)
+                         for group in sorted({row["group"] for row in expanded})},
+        seohong_aard_percent=100 * math.fsum(abs(row["value"] / row["observed"] - 1)
+                                          for row in seohong) / len(seohong),
+        horstmann_positive=sum(row["value"] > 0 for row in horstmann if row["status"] == "Available"),
+        horstmann_negative_observations=len(horstmann),
+        methane_maximum_shift_pa=max(value for row in methane for value in row.get("pCO2_change_Pa", [])),
+    ))
 
 
 class ExpandedDEA(Route):

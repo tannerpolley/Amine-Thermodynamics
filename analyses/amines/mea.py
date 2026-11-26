@@ -13,7 +13,7 @@ import re
 import tarfile
 from pathlib import Path
 
-from .fit import compare_rows
+from .fit import compare_rows, save
 from .model import (
     CAMPAIGN_ARCHIVE,
     P_REF,
@@ -37,6 +37,8 @@ import epcsaft
 import numpy as np
 from epcsaft import equilibrium, regression as reg
 from scipy.constants import R
+
+from .wheel import verify
 
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
 HISTORICAL_SPEC = BUNDLE / "results/adoption-297/historical-spec/MEA.toml"
@@ -793,6 +795,56 @@ def pressure_statistics(rows):
         AARD_percent=100 * math.fsum(map(abs, error)) / len(error) if error else None,
         log_RMSE=math.sqrt(math.fsum(math.log1p(value) ** 2 for value in error) / len(error)) if error else None,
     )
+
+
+def off_window_statistics(rows):
+    pools = {}
+    for row in rows:
+        group = row["group"]
+        pools.setdefault(group, []).append(row)
+        if group == "Aronu2011":
+            fraction = float(row["row"]["source_coordinates"]["MEA_weight_fraction"])
+            pools.setdefault(f"{group} {100 * fraction:g} wt%", []).append(row)
+    return {group: pressure_statistics(pool) for group, pool in pools.items()}
+
+
+def write_expanded_weights_summary():
+    wheel = verify()
+    results = ROOT / "analyses/amines/results/mea"
+    stage = results / "expanded-weights/replay"
+    expanded = read(stage / "endpoint.json.gz")
+    reported = read(results / "reported/replay/endpoint.json.gz")
+    reported_off = read(REPORTED / "MEA/off-window.json.gz")
+    if any(record["wheel"] != wheel for record in (expanded, reported, reported_off)):
+        raise ValueError("MEA comparison records use another wheel")
+    expanded_off = expanded["F4"]["off_window"]["rows"]
+    differences, _ = compare_rows(reported_off["rows"], expanded_off)
+    if differences:
+        raise ValueError(f"Different MEA off-window populations: {differences}")
+
+    heat_file = EXPANDED_FIT.parent / "display-replays/mea-heat-sensitivity.json.gz"
+    heat = read(heat_file)["replay"]["rows"]
+    hot_heat = {}
+    for source in ("Kim2014", "Vinjarapu2024"):
+        cohort = [row for row in heat if row["source"] == source and row["T_K"] >= 370]
+        values = [row["predicted_kJ_mol"] for row in cohort if row["status"] == "available"]
+        hot_heat[source] = dict(available=len(values), attempted=len(cohort),
+                               minimum=min(values), maximum=max(values))
+    save(stage / "summary.json", dict(
+        wheel=wheel,
+        hot_heat=hot_heat,
+        off_window=dict(
+            reported=off_window_statistics(reported_off["rows"]),
+            expanded=off_window_statistics(expanded_off),
+            incumbent=off_window_statistics(expanded["incumbent"]["off_window"]["rows"]),
+            population=len(expanded_off),
+        ),
+        objective={name: dict(
+            count=len(rows),
+            expanded_fit=expanded["F4"][name + "_cost"],
+        ) for name, rows in (("original", reported["replay"]["rows"]),
+                             ("expanded", expanded["F4"]["rows"]))},
+    ))
 
 
 def pressure_inputs(declaration):

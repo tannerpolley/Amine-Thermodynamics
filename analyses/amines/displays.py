@@ -27,8 +27,18 @@ LATEX = ROOT / "docs/scientific/latex"
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
 TABLES = LATEX / "tables"
 DEFAULT_RECORDS = ROOT / "tmp/issue-430-display-records"
+DEA_SALT_SUMMARY = "analyses/amines/results/dea/system-pressure-salt-anchored/replay/summary.json"
+MEA_EXPANDED_SUMMARY = "analyses/amines/results/mea/expanded-weights/replay/summary.json"
 sources = {}
 stage_records = {}
+
+
+def register_records(catalog, baseline):
+    stage_records.update({
+        key: ROOT / key if row.get("disposition") == "stage" else baseline / row["record"]
+        for key, row in catalog.items() if "record" in row
+    })
+
 
 def read(name):
     path = Path(name)
@@ -1168,26 +1178,25 @@ def transfer_displays(outputs):
           mcomparisons, [.22,.20,.08,.15,.25],
           notes=r'Compare objectives within the same weighting. Tracking rows use the historical reaction references. The pressure deviation uses the 66 fitted Kuranov total pressures.')
 
-    quantities = read(ROUND7 + 'manuscript-handoff.json')['quantities']
-    def quantity_value(key):
-        return quantities[key]['value']
-
+    dea_prior = read(DEA_SALT_SUMMARY)
     methane = fixed.endpoint_record('display-replays/dea-methane.json.gz', 'DEA')['rows']
-    {q['identity']: q for q in data if q['group'] == 'Lawson'}
     methane_shifts = [abs(v)/1e6 for q in methane for v in q.get('pCO2_change_Pa', [])]
-    sign_misses = quantities['F DEA Horstmann positive predictions for negative excess enthalpy']
     horstmann = [r for r in data if r['group'] == 'Horstmann' and r['observed'] < 0]
-    sign_misses['value'] = sum(r['value'] > 0 for r in horstmann if r['status'] == 'Available')
+    horstmann_positive = sum(r['value'] > 0 for r in horstmann if r['status'] == 'Available')
+    expanded_groups = dea_prior['expanded_groups']
+    pressures = sum(expanded_groups[group] for group in ('Lawson', 'SeoHong', 'Lal'))
+    heats = expanded_groups['Carson']
     table('supplement-dea-expanded', 'Broadened DEA objective and diagnostics of the reported fit.',
           ['Quantity', 'Original salt fit', 'Broadened fit, 100 kPa'], [
-              ['Common 140-row objective', num(quantity_value('F DEA historical expanded objective'), 2), num(dcost, 2)],
-              [r'Seo and Hong partial-pressure AARD (\%)', num(quantities['F DEA SeoHong AARD_percent']['prior'], 2), num(dev['SeoHong']['AARD_percent'], 2)],
+              [f'Common {pressures + heats}-row objective', num(dea_prior['expanded_objective'], 2), num(dcost, 2)],
+              [r'Seo and Hong partial-pressure AARD (\%)', num(dea_prior['seohong_aard_percent'], 2), num(dev['SeoHong']['AARD_percent'], 2)],
               ['Horstmann excess enthalpies with the wrong sign',
-               *[f"{sign_misses[field]} of {sign_misses['population']}" for field in ('prior', 'value')]],
+               f"{dea_prior['horstmann_positive']} of {dea_prior['horstmann_negative_observations']}",
+               f"{horstmann_positive} of {len(horstmann)}"],
               ['Maximum conditional methane shift (MPa)',
-               num(quantity_value('F DEA methane conditional maximum pCO2 shift')/1e6, 3),
+               num(dea_prior['methane_maximum_shift_pa']/1e6, 3),
                num(max(methane_shifts, default=None), 3)]
-          ], [.52,.21,.21], notes=r'The common objective has 90 partial pressures and 50 integral heats. The methane shift holds the methane-free liquid composition fixed. The measurements do not bound the effects of dissolved methane.')
+          ], [.52,.21,.21], notes=f'The common objective has {pressures} partial pressures and {heats} integral heats. The methane shift holds the methane-free liquid composition fixed. The measurements do not bound the effects of dissolved methane.')
 
     mdea_manifest = fixed.load('MDEA/manifest.json.gz')
     mdea_sources = {q['identity']: q['row'] for rows in mdea_manifest['rows'].values() for q in rows}
@@ -2490,8 +2499,7 @@ def mea_tables(outputs):
                                               r'$0.88\sigma$' if r['identity'].endswith('/packing_diameter') else r'Equal to $\sigma$' if r['identity'].endswith('/debye_huckel_diameter') else 'Set in this work'] for r in missing], [.42,'r','l','l'])
         table('pressure_sources.tex', r"Pressure deviations of the MEA model by experimental source at nominal 30 wt\% MEA. || Source subsets contain both fitted observations and observations that are not fitted.", ['Source','Observations','AARD (%)'], [[cited('', SOURCE_NAMES[s]) + r' \cite{' + PRESSURE_CITE[s] + '}',len(part),format(stats(part)['AARD_percent'], '.1f')] for s in sorted({r['source'] for r in canonical}) for part in [[r for r in canonical if r['source']==s]]], ['l','r','r'])
         round7 = 'analyses/round_7/'
-        handoff = read(round7 + 'manuscript-handoff.json')
-        quantities = handoff['quantities']
+        sensitivity = read(MEA_EXPANDED_SUMMARY)
         expanded = read(round7 + 'results/E/F4/replay.json.gz')
         replays = [replay, expanded]
         rows = []
@@ -2520,8 +2528,12 @@ def mea_tables(outputs):
                             if r['identity'] in ids and r['status'] == 'Available']
                 scores.append(f'{math.fsum(map(abs, relative))/len(relative):.2f} / {math.fsum(relative)/len(relative):+.2f}')
             rows.append([source + ', nominal 120 degrees Celsius', len(ids), *scores])
+        pressure = expanded['summary']['pressure']
         table('supplement-mea-pressure-sensitivity.tex',
-              r'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the selected fixed-reference fit and the historical full-weight tracking-reference fit. || The 112 added pressures include the 54 hot rows. The 12 hot Wagner pressures enter the 66-row hot comparison and the separate Wagner row. Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
+              'MEA CO2 partial-pressure sensitivity at nominal 30 wt% with the selected fixed-reference fit and the historical full-weight tracking-reference fit. || '
+              f"The {pressure['added']['attempted']} added pressures include the {pressure['hot_expanded']['attempted']} hot rows. "
+              f"The {len(wagner[1])} hot Wagner pressures enter the {pressure['hot_published']['attempted']}-row hot comparison and the separate Wagner row. "
+              'Signed bias is the mean signed relative deviation. Both fits retain the salt-anchored shared interactions.',
               ['Pressure cohort', '$N$', '100 kPa AARD / bias (%)', 'Expanded AARD / bias (%)'],
               rows, [.43,.06,.22,.22])
         heat_path = round7 + 'results/display-replays/mea-heat-sensitivity.json.gz'
@@ -2530,40 +2542,37 @@ def mea_tables(outputs):
         heat_rows = []
         for dataset, dataset_label in [('Kim2014', r'Kim et al. \cite{Kim2014}, finite-addition heat'),
                                ('Vinjarapu2024', r'Vinjarapu et al. \cite{HemaBhavya2025}, integral heat')]:
-            q = {k: quantities[f'MEA expanded hot heat {dataset} {k}'] for k in ('minimum', 'maximum', 'available')}
+            q = sensitivity['hot_heat'][dataset]
             observed = [row['observed_kJ_mol'] for row in heat['rows'] if row['source']==dataset and row['T_K']>=370.]
             new_rows = [r for r in selected_heat if r['source'] == dataset and r['T_K'] >= 370]
             values = [r['predicted_kJ_mol'] for r in new_rows if r['status'] == 'available']
-            heat_rows.append([dataset_label, f"{q['available']['value']}/{len(observed)}",
+            heat_rows.append([dataset_label, f"{q['available']}/{q['attempted']}",
                               f'{min(observed):.2f}--{max(observed):.2f}',
                               f'{min(values):.2f}--{max(values):.2f}',
-                              f"{q['minimum']['value']:.2f}--{q['maximum']['value']:.2f}"])
+                              f"{q['minimum']:.2f}--{q['maximum']:.2f}"])
         heat_table = 'supplement-mea-heat-sensitivity.tex'
         table(heat_table,
               r'MEA absorption heats at 393.15 K and 30 wt% with the reported fit and the full-weight expanded fit. || Ranges are in kJ/mol CO2 as positive heat release. The first column of predictions uses the selected fixed-reference fit and the second uses the historical tracking-reference sensitivity. Both models are evaluated at 1.734 MPa and at the source loading intervals for Kim or from zero loading for Vinjarapu.',
               ['Calorimetry', 'Available', 'Measured', '100 kPa fit', 'Expanded fit'],
               heat_rows, [.34,.12,.16,.16,.16], included_in='supplement-mea-pressure-sensitivity.tex')
         OUTPUTS['supplement-mea-pressure-sensitivity.tex'] += OUTPUTS.pop(heat_table)
+        off_window = sensitivity['off_window']
         off_rows = []
         for source in ('Aronu2011', 'Aronu2011 15 wt%', 'Aronu2011 45 wt%', 'Jou1995'):
-            fields = ('available', 'refused', 'AARD_percent', 'bias_percent')
-            entries = [{field: study.value(f'MEA off-window {source} {field}') for field in fields},
-                       {field: quantities[f'E MEA F4 outside fit {source} {field}']['value'] for field in fields}]
-            off_rows.append([source, *[v for entry in entries for v in (f"{entry['available']}/{entry['refused']}",
+            entries = [off_window[fit][source] for fit in ('reported', 'expanded')]
+            off_rows.append([source, *[v for entry in entries for v in (f"{entry['available']}/{entry['attempted'] - entry['available']}",
                              f"{entry['AARD_percent']:.2f} / {entry['bias_percent']:+.2f}")]])
-        expanded_off_window = read(round7 + 'results/E/F4/off-window.json.gz')['rows']
-        refused = sum(row['status'] == 'OutsideDeclaredDomain' for row in expanded_off_window)
-        if refused != quantities['E MEA F4 outside fit Jou1995 refused']['value']:
-            raise ValueError("Expanded Jou refusal count disagrees with its summary")
+        jou = off_window['expanded']['Jou1995']
+        refused = jou['attempted'] - jou['available']
         table('supplement-mea-off-window.tex',
-              r'MEA CO2 partial-pressure comparison outside the expanded fit window. || The Aronu rows at 15 and 45 wt% sum to the Aronu total. The separate Jou comparison is at 30 wt%. Both endpoints refused the ' + NUMBER_WORDS[refused] + ' Jou rows at 0 degrees Celsius under the 293.15 K lower limit. AARD and signed bias use available predictions. The population contains ' + str(len(expanded_off_window)) + ' observations.',
+              r'MEA CO2 partial-pressure comparison outside the expanded fit window. || The Aronu rows at 15 and 45 wt% sum to the Aronu total. The separate Jou comparison is at 30 wt%. Both endpoints refused the ' + NUMBER_WORDS[refused] + ' Jou rows at 0 degrees Celsius under the 293.15 K lower limit. AARD and signed bias use available predictions. The population contains ' + str(off_window['population']) + ' observations.',
               ['Source', '100 kPa available/refused', 'AARD / bias (%)',
                'Expanded available/refused', 'AARD / bias (%)'],
               off_rows, [.26,.16,.17,.16,.17])
         table('supplement-mea-window-objective.tex', r'MEA objectives evaluated on the original and expanded observation sets.',
               ['Observation set', '$N$', 'MEA, 100 kPa', 'Tracking, expanded fit'],
-              [[population_label, quantities[f'E MEA incumbent {key} objective']['population'],
-                f"{replay['summary'][key + '_cost']:.2f}", f"{quantities[f'E MEA F4 {key} objective']['value']:.2f}" ]
+              [[population_label, sensitivity['objective'][key]['count'],
+                f"{replay['summary'][key + '_cost']:.2f}", f"{sensitivity['objective'][key]['expanded_fit']:.2f}" ]
                for key, population_label in [('original', 'Original'), ('expanded', 'Expanded')]], [.27,.08,.25,.28])
     reference_states()
     folder = E.parent / 'reference-states-428'
@@ -2908,7 +2917,7 @@ def main():
     started = monotonic()
     verify()
     catalog = json.loads(Path(__file__).with_name("sources.json").read_text())
-    stage_records.update({key: args.records.resolve() / row["record"] for key, row in catalog.items() if "record" in row})
+    register_records(catalog, args.records.resolve())
     values = result_values()
     outputs = render_all()
     if args.bindings is not None:
