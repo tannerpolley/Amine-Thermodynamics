@@ -13,6 +13,43 @@ def show(value):
     return str(value)
 
 
+def render_mdea_stage3(result):
+    lines = [
+        '---', 'title: MDEA shared bicarbonate–water comparison screens', '---', '',
+        'The screens use the historical reaction-reference declaration and the study wheel. '
+        'The grid interval ends at the first converged loading with bubble pressure above 5.0367 MPa '
+        'for each aqueous stock and temperature. Measured-state searches have no grid membership.', '',
+        '| Bicarbonate–water coefficient | Inside | Outside | Measured | Grid membership unassigned | '
+        'Finite negative | Liquid and vapor-connected phase | Two liquids | Incomplete outside | Held | Reused |',
+        '|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|',
+    ]
+    counts = ('no descent in the finite search','liquid plus a vapor-connected phase of lower Gibbs energy',
+              'two liquids of lower Gibbs energy','not searched to completion, outside the screened interval','held')
+    domains = ('inside','outside','not applicable','unassigned')
+    controls, holds = [], []
+    for k in ('0.7650','0.1325','1.0000'):
+        row = result['quantities'][f'Stage 3 MDEA k = {k}']['new']
+        values = (k,*(row['domain_counts'].get(v,0) for v in domains),
+                  *(row['counts'].get(v,0) for v in counts),row['reuse']['passed'])
+        lines.append('| '+' | '.join(map(str,values))+' |')
+        for key, q in row['controls'].items():
+            controls.append(f"- `{key}` at {q['T_K']:.2f} K and {q['P_Pa']/1e6:.6g} MPa "
+                            f"gave two liquids with amounts {q['amounts_mol'][0]:.7g} and {q['amounts_mol'][1]:.7g} mol. "
+                            f"The Gibbs decrease divided by RT was {q['Gibbs_decrease_over_RT_mol']:.7g} mol, "
+                            f"with estimated numerical error {q['numerical_error_over_RT_mol']:.3g} mol. "
+                            + ('The pressure replay is outside the grid interval.' if q['domain']=='outside' else
+                               'The imposed pressure applies to the prescribed final feed.'))
+        if row['held_strata']:
+            holds.append(f"- At {k}, the {', '.join(row['held_strata'])} strata have {len(row['blockers'])} "
+                         f"search keys with blockers and {row['pending']} additional search keys awaiting evaluation. "
+                         f"The [handoff](handoff.json) gives each blocker and its search key.")
+    lines += ['', 'Each row covers 11,824 declared searches. The table gives exact counts by category. '
+              'Finite negatives apply to the supplied and native trials at the declared states. '
+              'The two-liquid replays are model predictions under the stated conditions.', '',
+              *controls, '', *holds, '', 'The comparison is pending independent delivered review.', '']
+    return '\n'.join(lines)
+
+
 def mdea_slope_bound():
     results = Path(__file__).parent/'results/MDEA_slope_bound'
     if not (results/'checks.json.gz').exists():

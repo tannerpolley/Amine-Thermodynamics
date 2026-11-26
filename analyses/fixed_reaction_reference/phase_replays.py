@@ -237,7 +237,7 @@ def comparison_domain(state, path):
 
 def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot):
     """Retain independent loading paths, specimen searches and their inventory."""
-    from handoff import comparison_outcome
+    from fixed_reaction_reference.handoff import comparison_outcome
 
     started = monotonic()
     output = Path(output)
