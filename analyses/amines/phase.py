@@ -10,7 +10,7 @@ from .wheel import verify
 
 import epcsaft
 from epcsaft import equilibrium as eq, regression as reg
-from MEA.solvent_specification import stability_payload
+from MEA.solvent_specification import jsonable, stability_payload, supplied_negative
 
 LOWEST_LOADING = 1e-5
 FINITE_NEGATIVE = "no descent in the finite search"
@@ -255,7 +255,87 @@ def same_calculations(route, point, states):
     return {key: source for key, source in same.items() if key != source}
 
 
-def native_search(route, spec, state):
+class SuppliedTrials:
+    """Evaluate retained trial compositions on the current liquid parent."""
+
+    def __init__(self, spec, witnesses):
+        self.spec = spec
+        self.witnesses = witnesses
+        self.by_support = {}
+        self.prepared = None
+
+    def applicable(self, item, witnesses, support):
+        phases, repeated, unique = [], [], {}
+        for witness in witnesses:
+            if not set(witness["support"]) <= support:
+                continue
+            kind = witness.get("kind", "Liquid" if len(witness["support"]) == len(self.spec.parameters.component_ids) else "Vapor")
+            identity = (kind, tuple(witness["support"]), tuple(witness["composition"]), witness["packing"])
+            i = unique.setdefault(identity, len(phases))
+            repeated.append((i, witness))
+            if i < len(phases):
+                continue
+            phase = type(item.problem.phases[0])()
+            phase.name, phase.kind, phase.support_declared = "previous-split", getattr(type(phase.kind), kind), True
+            phase.support, phase.composition_guess, phase.packing_guess = identity[1:]
+            phases.append(phase)
+        return phases, repeated, tuple(unique)
+
+    def evaluate(self, item, prediction, key):
+        spec = self.spec
+        compiled = eq.compile_problem(spec.model, item.problem)
+        support = frozenset(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
+        if isinstance(self.witnesses, dict):
+            witnesses = self.witnesses.get(key, ())
+            phases, repeated, identities = self.applicable(item, witnesses, support)
+        else:
+            witnesses = self.witnesses
+            if support not in self.by_support:
+                self.by_support[support] = self.applicable(item, witnesses, support)
+            phases, repeated, identities = self.by_support[support]
+        if not witnesses:
+            return {}
+        excluded = len(witnesses) - len(repeated)
+        if not phases:
+            return dict(supplied_trial_counts=dict(available=0, unavailable=0, not_applicable=excluded))
+        details = dict(supplied_available=False, supplied_minimum_tpd=None, supplied_trial_evidence=[])
+        evaluated = 0
+        try:
+            parent = item.problem
+            if prediction.pressure_reference is not None:
+                parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value * item.pressure_ratio)
+            result = eq.solve_equilibrium(spec.model, parent)
+            prepared_key = (parent.temperature.value, identities)
+            if self.prepared is None or self.prepared[0] != prepared_key:
+                self.prepared = prepared_key, eq.prepare_supplied_trials(spec.model, prepared_key[0], phases)
+            options = eq.StabilityOptions()
+            options.prepared_trials = self.prepared[1]
+            report = eq.stability_test(eq.compile_problem(spec.model, parent), result, options)
+            trials = [dict(evidence=t.evidence, resolved_descent=t.resolved_descent, quantities=jsonable(t.quantities), message=t.message)
+                      for t in report.trials]
+            pairs = ([(trials[i], witness) for i, witness in repeated] if len(trials) == len(phases)
+                     else [(trial, None) for trial in trials])
+            evaluated = sum(trial["evidence"] == "evaluated" for trial, _ in pairs)
+            evidence = {}
+            for trial, witness in pairs:
+                if supplied_negative(trial):
+                    side = trial["quantities"].get("density_side")
+                    old = evidence.get(side)
+                    if old is None or trial["quantities"]["tpd_over_rt"] < old["quantities"]["tpd_over_rt"]:
+                        evidence[side] = dict(trial, phase=witness)
+            details.update(
+                supplied_parent_pressure_Pa=result.pressure,
+                supplied_available=result.requested_tolerance_met and len(trials) == len(phases) and evaluated == len(repeated),
+                supplied_minimum_tpd=min((trial["quantities"]["tpd_over_rt"] for trial, _ in pairs if trial["evidence"] == "evaluated"), default=None),
+                supplied_trial_evidence=list(evidence.values()),
+            )
+        except (ValueError, RuntimeError, TypeError) as error:
+            details["supplied_error"] = f"{type(error).__name__}: {error}"
+        details["supplied_trial_counts"] = dict(available=evaluated, unavailable=len(repeated) - evaluated, not_applicable=excluded)
+        return details
+
+
+def native_search(route, spec, state, *, supplied=None):
     wheel = verify()
     metadata = {}
     try:
@@ -275,6 +355,11 @@ def native_search(route, spec, state):
                 for t in prediction.stability.report.trials
                 if t.resolved_descent and t.split_coordinates
             ]
+        search["parent_kind"] = item.problem.phases[0].kind.name
+        if supplied is not None:
+            search["optimized_available"] = search["available"]
+            search.update(supplied.evaluate(item, prediction, state["key"]))
+            search["available"] &= search.get("supplied_available", True)
     except (ValueError, RuntimeError) as error:
         search = dict(
             status="Exception",
@@ -282,6 +367,62 @@ def native_search(route, spec, state):
             available=False,
         )
     return dict(key=state["key"], wheel=wheel, search=search, **metadata)
+
+
+def search_descent(search):
+    value = search.get("value")
+    optimized = search.get("optimized_available", search["available"]) and value is not None and value < 0
+    minimum = search.get("supplied_minimum_tpd")
+    return bool(optimized or (minimum is not None and minimum < 0)
+                or any(map(supplied_negative, search.get("supplied_trials", ()))))
+
+
+def search_class(search):
+    if search_descent(search):
+        return "descent"
+    if not search["available"]:
+        return "unavailable"
+    if search.get("no_descent_in_trial_set"):
+        return "searched, no instability"
+    return "no resolved descent"
+
+
+def census_class(row):
+    """Classify the MEA census from the held parent and its Engine trials."""
+    if "failure" in row:
+        return "unavailable"
+    state, reports = row.get("final"), row.get("stability", [])
+    if any(t["resolved_descent"] for r in reports for t in r["trials"]) or any(
+        supplied_negative(t) for r in reports for t in r.get("supplied_trials", [])
+    ):
+        return "failed"
+    if state is None or not state["success"] or not state["requested_tolerance_met"]:
+        return "failed"
+    if "raw_residuals" in state and (
+        max(map(abs, state["raw_residuals"]), default=0.0) > 1e-10
+        or state["reduced_hessian_minimum"] < 0
+        or any(v <= 0 for v in state["pressure_density_derivatives"])
+        or any(v < 0 for v in state["amounts"])
+    ):
+        return "failed"
+    if (
+        any(t["evidence"] != "evaluated" for r in reports for t in r.get("supplied_trials", []))
+        or len(reports) != 1 or not reports[0]["completed"] or not reports[0]["trials"]
+        or {t["phase"]["kind"] for t in reports[0]["trials"]} != {"liquid", "vapor"}
+        or any(not t["optimizer"]["success"]
+               or t["evidence"] in ("unresolved", "indeterminate", "negative_plane_without_positive_donor")
+               for t in reports[0]["trials"])
+        or "raw_residuals" not in state or row.get("bubble_pressure_Pa") is None
+        or row.get("pressure_uncertainty_Pa") is None
+    ):
+        return "unresolved"
+    dP = row["pressure_Pa"] - row["bubble_pressure_Pa"]
+    if abs(dP) <= row["pressure_uncertainty_Pa"]:
+        return "unresolved"
+    expected = 2 if dP < 0 else 1
+    if len(state["amounts"]) != expected:
+        return "unresolved"
+    return "passed-two-phase" if expected == 2 else "passed-single-liquid"
 
 
 def phase_outcome(value, *, completion=False):

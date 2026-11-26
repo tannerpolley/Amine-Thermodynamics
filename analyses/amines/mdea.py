@@ -19,6 +19,13 @@ UNBOUNDED_BINARY = BOUNDED_BINARY / "fits/unbounded-2"
 KURANOV_LOG_SCALE = 0.015
 
 
+def census_status(prediction):
+    status = prediction["status"]
+    if status == "Available" and not prediction["requested_tolerance_met"]:
+        return "ToleranceNotMet"
+    return status
+
+
 class MDEAWeights(Route):
     def bind(self, point):
         spec = super().bind(point)
