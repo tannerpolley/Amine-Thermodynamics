@@ -121,7 +121,9 @@ def stage1_phases(quantities):
                      f"{after['best_abs_relative_pressure_error']:.3g} | {before['analytic_step_per_ULP']:.3g} | "
                      f"{before['local_fit_scatter_RMS']:.3g} / {after['local_fit_scatter_RMS']:.3g} |")
     lines.extend(['','For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target '
-                  'pressure and the closest scan points still miss the pressure limit. For Hartono, the '
+                  'pressure and the closest scan points still miss the ordinary pressure limit. '
+                  'Fix 1a admits the density with the smallest absolute pressure error in each of these scans. '
+                  'All three reruns completed without descent at the selected densities. For Hartono, the '
                   'original search window contains a qualifying density. None of the declared reactions are '
                   'on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 '
                   'and both trial protocols completed without descent.'])

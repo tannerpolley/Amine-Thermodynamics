@@ -1386,9 +1386,14 @@ class Quantities:
         closure_root = screen+'parent-closure/'
         scan_path = closure_root+'pressure-scan.json.gz'
         replay_path = closure_root+'pressure-replays.json.gz'
+        bracket_path = closure_root+'pressure-bracket-replays.json.gz'
         scans = self.read(scan_path)
         replays = self.read(replay_path)
-        assert scans['wheel']==replays['wheel']==r.SHA and scans['radius_ULP']>=200
+        bracket_replays = self.read(bracket_path)
+        assert scans['wheel']==replays['wheel']==bracket_replays['wheel']==r.SHA and scans['radius_ULP']>=200
+        replay_rows = {(v['source'],v['row']['key']):(v,path) for path,data in
+                       ((replay_path,replays),(bracket_path,bracket_replays)) for v in data['searches'].values()}
+        bracket_results = {}
         fields = ('best_abs_relative_pressure_error','analytic_step_per_ULP','local_fit_scatter_RMS',
                   'adjacent_sign_changes_ULP','passing_offsets_ULP','minimum_in_prior_window')
         self.quantity('Stage 1 pressure closure diagnosis',None,
@@ -1419,9 +1424,6 @@ class Quantities:
             pilot = self.read(start)
             assert pilot['requested']==len(data['keys']) and data['seconds']<=1.5*pilot['projected_seconds']
             result,paths,closure = {},[index,start],{}
-            replay = replays['searches'].get(name)
-            if replay:
-                paths.append(replay_path)
             for i in range(data['batches']):
                 path = root+f'{i}.json.gz'
                 paths.append(path)
@@ -1431,7 +1433,10 @@ class Quantities:
                 for q in batch['rows']:
                     key = q['key']
                     assert key not in result and q['wheel']==r.SHA
-                    if replay and replay['source']==path and replay['row']['key']==key:
+                    if (path,key) in replay_rows:
+                        replay,replay_file = replay_rows[path,key]
+                        if replay_file not in paths:
+                            paths.append(replay_file)
                         assert q.get('blocker') and replay['source_sha256']==self.files[path][1]
                         assert all(replay[k]==data[k] for k in ('endpoint_fingerprint','bank_fingerprint'))
                         assert all(replay['row'][k]==q[k] for k in ('wheel','T_K','P_Pa'))
@@ -1478,6 +1483,20 @@ class Quantities:
                     declared = len(bank.get(key,[])) if isinstance(bank,dict) else len(bank)
                     assert q.get('bank_size')==declared, f'{key}: supplied trial bank size'
                     assert phase_closure(q['parent'],q['P_Pa'],q['parent']['row_tolerance']), f'{key}: parent pressure closure'
+                    if (path,key) in replay_rows and replay_file==bracket_path:
+                        p, = q['parent']['phases']
+                        scan = p['pressure_reclosure']['scan']
+                        rho = p['density_mol_m3']
+                        error = p['pressure_residual_Pa']/q['P_Pa']
+                        assert 'bracketed' in p['pressure_reclosure'] and not q.get('restart')
+                        assert p['x']==original['initial_parent']['phases'][0]['x'] and scan['T_K']==q['T_K']
+                        assert list(q['bracketed_trial_start'].values())==[rho]
+                        assert q['trial_parent_densities_mol_m3']==[rho]
+                        if key=='census|None|318.15|1e-05|1.05':
+                            assert (rho,f'{error:.4g}')==(43798.68148164182,'-1.194e-10'), f'{key}: bracketed root pin'
+                        bracket_results[name] = dict(key=key,density_mol_m3=rho,relative_pressure_error=error,
+                            step_per_ULP=scan['analytic_step_per_ULP'],sign_change_offsets=scan['adjacent_sign_changes_ULP'],
+                            trial_density_mol_m3=q['trial_parent_densities_mol_m3'][0])
                     assert no_descent(q['native_completed'],q['native_trials']), f'{key}: native trial completion'
                     assert supplied_complete(q.get('supplied_counts'),q.get('supplied_excluded'),declared), f'{key}: supplied trial count'
                     assert not q.get('supplied_descents',0), f'{key}: supplied descent needs classification'
@@ -1645,6 +1664,9 @@ class Quantities:
                 assert rows.keys()=={q['key'] for q in group}
                 record('MEA census',rows,[census,'MEA/screen/census-raw.json.gz',*parent_paths],pressure_closure=closure)
 
+        assert bracket_results.keys()==bracket_replays['searches'].keys()
+        self.quantity('Stage 1 bracketed roots',None,bracket_results,sources=(bracket_path,),
+                      population=len(bracket_results))
         for name in ('salt-rms','historical-original'):
             path = f'MDEA/controls/rebuild-441/121-MPa-{name}.json.gz'
             data = self.read(path)

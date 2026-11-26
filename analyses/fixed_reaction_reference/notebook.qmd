@@ -62,15 +62,15 @@ Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/dia
 |---|---:|---:|---:|---:|---:|
 | MEA measured | 321 | 0 | 0 | 0 | 0 |
 | MEA control | 1 | 0 | 0 | 0 | 0 |
-| DEA screen | 1263 | 6 | 0 | 1 | 1 |
+| DEA screen | 1264 | 6 | 0 | 1 | 0 |
 | DEA controls | 0 | 4 | 0 | 0 | 0 |
 | AMP_free controls | 3 | 0 | 4 | 0 | 0 |
 | AMP_fixed controls | 4 | 0 | 3 | 0 | 0 |
-| MEA grid | 1907 | 0 | 0 | 0 | 1 |
+| MEA grid | 1908 | 0 | 0 | 0 | 0 |
 | MEA offset | 575 | 0 | 0 | 1 | 0 |
 | MEA census | 162 | 0 | 0 | 0 | 0 |
-| AMP_free/native | 665 | 0 | 0 | 0 | 1 |
-| AMP_free/supplied | 665 | 0 | 0 | 0 | 1 |
+| AMP_free/native | 666 | 0 | 0 | 0 | 0 |
+| AMP_free/supplied | 666 | 0 | 0 | 0 | 0 |
 | AMP_fixed/native | 666 | 0 | 0 | 0 | 0 |
 | AMP_fixed/supplied | 666 | 0 | 0 | 0 | 0 |
 | MDEA salt-rms | 1 | 0 | 0 | 0 | 0 |
@@ -80,24 +80,17 @@ Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/dia
 
 | Screen stratum | Distinct parents read | Pressure misses | Reclosed | Recovered by restart | Still missing |
 |---|---:|---:|---:|---:|---:|
-| DEA/declared | 1163 | 122 | 121 | 0 | 1 |
+| DEA/declared | 1163 | 122 | 122 | 0 | 0 |
 | dense | 1800 | 475 | 467 | 8 | 0 |
-| census | 108 | 39 | 37 | 1 | 1 |
+| census | 108 | 39 | 38 | 1 | 0 |
 | MEA/offset | 575 | 174 | 174 | 0 | 0 |
 | MEA/census | 162 | 79 | 77 | 2 | 0 |
-| AMP_free/native | 630 | 132 | 131 | 0 | 1 |
-| AMP_free/supplied | 630 | 132 | 131 | 0 | 1 |
+| AMP_free/native | 630 | 132 | 132 | 0 | 0 |
+| AMP_free/supplied | 630 | 132 | 132 | 0 | 0 |
 | AMP_fixed/native | 630 | 141 | 140 | 1 | 0 |
 | AMP_fixed/supplied | 630 | 141 | 140 | 1 | 0 |
 
 The native stability test consumes the Engine equilibrium result. In these replays the largest relative molar-density difference from the independently reclosed parent was 8.64e-14.
-
-Pressure-closure blockers by stratum, including equivalent calculation keys.
-
-- Stage 1 DEA screen. `Cai:9:problem`. Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.32e-10. See `results/MEA/screen/rebuild-441/parent-closure/DEA/declared/18.json.gz`.
-- Stage 1 MEA grid. `census|None|318.15|1e-05|1.05`. Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.19e-10. See `results/MEA/screen/rebuild-441/parent-closure/MEA/grid/151.json.gz`.
-- Stage 1 AMP_free/native. `kundu-2003:0:problem`. Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.24e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/11.json.gz`.
-- Stage 1 AMP_free/supplied. `kundu-2003:0:problem`. Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.24e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/11.json.gz`.
 
 The pressure scans evaluated 401 consecutive densities around each Newton density at the original and restarted compositions. Repeated reads and the derived-property route agreed at the sampled densities.
 
@@ -108,7 +101,7 @@ The pressure scans evaluated 401 consecutive densities around each Newton densit
 | `kundu-2003:0:problem` | 1.24e-10 / 1.9e-10 | 9.34e-11 | 1.51e-10 / 1.52e-10 |
 | `hartono-2013-P:0:problem` | 1.6e-11 / 8.09e-12 | 3.54e-11 | 5.21e-11 / 5.25e-11 |
 
-For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target pressure and the closest scan points still miss the pressure limit. For Hartono, the original search window contains a qualifying density. None of the declared reactions are on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 and both trial protocols completed without descent.
+For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target pressure and the closest scan points still miss the ordinary pressure limit. Fix 1a admits the density with the smallest absolute pressure error in each of these scans. All three reruns completed without descent at the selected densities. For Hartono, the original search window contains a qualifying density. None of the declared reactions are on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 and both trial protocols completed without descent.
 
 The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at 7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.
 
@@ -652,7 +645,7 @@ Measured entries record timed calculations. The lanes overlapped.
 
 ## Coverage
 
-The quantity index contains 1778 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 82 undecided results.
+The quantity index contains 1783 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 78 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 
@@ -912,13 +905,6 @@ The retained search did not resolve the phase outcome or its physical checks.
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset bias_percent
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_abs_error
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
-
-### Undecided · Stage fit and properties (4)
-
-- Stage 1 DEA screen
-- Stage 1 MEA grid
-- Stage 1 AMP_free/native
-- Stage 1 AMP_free/supplied
 
 ### Updated · C1 (6)
 

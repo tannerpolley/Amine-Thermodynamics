@@ -56297,14 +56297,14 @@
       ],
       "endpoint_fingerprint": "196faf11c956870b5ddfe0fcc24a36fcb8545b5f55ac3062b55da343cf766511"
     },
-    "MEA Vinjarapu2024 retained heat AARD": {
-      "old": 4.529164398036761,
-      "new": 5.754135291274293,
+    "MEA Kim2014 retained heat AARD": {
+      "old": 5.150792171759218,
+      "new": 5.844168254644999,
       "unit": "%",
-      "population": 5,
+      "population": 27,
       "pressure_basis": "retained absolute calorimetry pressure",
-      "absolute_change": 1.2249708932375327,
-      "percent_change": 27.046289018974804,
+      "absolute_change": 0.6933760828857807,
+      "percent_change": 13.461542608677274,
       "transition": null,
       "disposition": "replayed",
       "old_contributor": {
@@ -56321,14 +56321,14 @@
       ],
       "endpoint_fingerprint": "196faf11c956870b5ddfe0fcc24a36fcb8545b5f55ac3062b55da343cf766511"
     },
-    "MEA Kim2014 retained heat AARD": {
-      "old": 5.150792171759218,
-      "new": 5.844168254644999,
+    "MEA Vinjarapu2024 retained heat AARD": {
+      "old": 4.529164398036761,
+      "new": 5.754135291274293,
       "unit": "%",
-      "population": 27,
+      "population": 5,
       "pressure_basis": "retained absolute calorimetry pressure",
-      "absolute_change": 0.6933760828857807,
-      "percent_change": 13.461542608677274,
+      "absolute_change": 1.2249708932375327,
+      "percent_change": 27.046289018974804,
       "transition": null,
       "disposition": "replayed",
       "old_contributor": {
@@ -87981,7 +87981,7 @@
       "new": {
         "counts": {
           "two liquids of lower Gibbs energy": 6,
-          "no descent in the finite search": 1263,
+          "no descent in the finite search": 1264,
           "open Engine item": 1
         },
         "outcomes": {
@@ -88217,6 +88217,7 @@
           "Cai:6:problem": "no descent in the finite search",
           "Cai:7:problem": "no descent in the finite search",
           "Cai:8:problem": "no descent in the finite search",
+          "Cai:9:problem": "no descent in the finite search",
           "grid:{'water': 52.52391303382461, 'diethanolamine': 1.0}:313.15:1e-05:1.05": "no descent in the finite search",
           "grid:{'water': 52.52391303382461, 'diethanolamine': 1.0}:313.15:1e-05:3.0": "no descent in the finite search",
           "grid:{'water': 52.52391303382461, 'diethanolamine': 1.0}:313.15:0.1:1.05": "no descent in the finite search",
@@ -89259,13 +89260,7 @@
         "engine_items": {
           "lawson-1976-viii:1:problem": "tannerpolley/epcsaft#265"
         },
-        "blockers": {
-          "Cai:9:problem": {
-            "record": "MEA/screen/rebuild-441/parent-closure/DEA/declared/18.json.gz",
-            "diagnosis": "Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.32e-10",
-            "scan": "MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz"
-          }
-        },
+        "blockers": {},
         "aliases": {
           "carson-2000:1:initial": "carson-2000:0:initial",
           "carson-2000:2:initial": "carson-2000:0:initial",
@@ -89376,9 +89371,8 @@
           "DEA/declared": {
             "parents_read": 1163,
             "misses": 122,
-            "reclosure": 121,
-            "max_native_density_relative_difference": 7.105427357601002e-15,
-            "still_missing": 1
+            "reclosure": 122,
+            "max_native_density_relative_difference": 7.105427357601002e-15
           }
         }
       },
@@ -89388,7 +89382,7 @@
       "absolute_change": null,
       "percent_change": null,
       "transition": null,
-      "disposition": "undecided",
+      "disposition": "replayed",
       "old_contributor": {
         "revision": "5953bd80290767125056eb3393778d777c46aca5",
         "path": null,
@@ -89411,10 +89405,6 @@
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/DEA/declared/pilot.json.gz",
           "sha256": "e6d693ad1b864fc6e38fb0e98b5ec3a0c7e689aff5f6deec082b15f5603c330a"
-        },
-        {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-replays.json.gz",
-          "sha256": "346c515db9860cad4a35e282dfed89921f549211ca239382440fb6739bb86959"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/DEA/declared/0.json.gz",
@@ -89493,8 +89483,8 @@
           "sha256": "9a2cdf7eeeb91ec07f3120999eb3e10b4882226bc369066f853a058d47e94ac9"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz",
-          "sha256": "f304a1ad78bae49bac9b4843184643211d7dafb2528949cad71dd816c640c266"
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-bracket-replays.json.gz",
+          "sha256": "47578613e5170bb211f359decee611693f7edc4808db7f5236751c83057884e8"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/DEA/declared/19.json.gz",
@@ -89997,7 +89987,7 @@
       "old": null,
       "new": {
         "counts": {
-          "no descent in the finite search": 1907
+          "no descent in the finite search": 1908
         },
         "outcomes": {
           "dense|0.15|313.15|1e-05|1.05": "no descent in the finite search",
@@ -91818,6 +91808,7 @@
           "census|None|313.15|0.5|3.0": "no descent in the finite search",
           "census|None|313.15|0.6|1.05": "no descent in the finite search",
           "census|None|313.15|0.6|3.0": "no descent in the finite search",
+          "census|None|318.15|1e-05|1.05": "no descent in the finite search",
           "census|None|318.15|1e-05|3.0": "no descent in the finite search",
           "census|None|318.15|0.05|1.05": "no descent in the finite search",
           "census|None|318.15|0.05|3.0": "no descent in the finite search",
@@ -91909,13 +91900,7 @@
           "census|None|393.15|0.6|3.0": "no descent in the finite search"
         },
         "engine_items": {},
-        "blockers": {
-          "census|None|318.15|1e-05|1.05": {
-            "record": "MEA/screen/rebuild-441/parent-closure/MEA/grid/151.json.gz",
-            "diagnosis": "Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.19e-10",
-            "scan": "MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz"
-          }
-        },
+        "blockers": {},
         "pressure_closure": {
           "dense": {
             "parents_read": 1800,
@@ -91928,9 +91913,8 @@
             "parents_read": 108,
             "misses": 39,
             "max_native_density_relative_difference": 5.551115123125783e-15,
-            "reclosure": 37,
-            "restart": 1,
-            "still_missing": 1
+            "reclosure": 38,
+            "restart": 1
           }
         }
       },
@@ -91940,7 +91924,7 @@
       "absolute_change": null,
       "percent_change": null,
       "transition": null,
-      "disposition": "undecided",
+      "disposition": "replayed",
       "old_contributor": {
         "revision": "5953bd80290767125056eb3393778d777c46aca5",
         "path": null,
@@ -92573,8 +92557,8 @@
           "sha256": "7afa4cbaa1d52ae3f9b12889f41523c9e61a1c2e1824a0902ea87359bd917094"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz",
-          "sha256": "f304a1ad78bae49bac9b4843184643211d7dafb2528949cad71dd816c640c266"
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-bracket-replays.json.gz",
+          "sha256": "47578613e5170bb211f359decee611693f7edc4808db7f5236751c83057884e8"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/MEA/grid/152.json.gz",
@@ -93705,7 +93689,7 @@
       "old": null,
       "new": {
         "counts": {
-          "no descent in the finite search": 665
+          "no descent in the finite search": 666
         },
         "outcomes": {
           "hartono-2021:0:problem": "no descent in the finite search",
@@ -93846,6 +93830,7 @@
           "hartono-2021:62:problem": "no descent in the finite search",
           "hartono-2021:63:problem": "no descent in the finite search",
           "hartono-2021:64:problem": "no descent in the finite search",
+          "kundu-2003:0:problem": "no descent in the finite search",
           "kundu-2003:1:problem": "no descent in the finite search",
           "kundu-2003:2:problem": "no descent in the finite search",
           "kundu-2003:3:problem": "no descent in the finite search",
@@ -94375,20 +94360,13 @@
           "ciftja-2014:38:problem": "no descent in the finite search"
         },
         "engine_items": {},
-        "blockers": {
-          "kundu-2003:0:problem": {
-            "record": "MEA/screen/rebuild-441/parent-closure/AMP_free/native/11.json.gz",
-            "diagnosis": "Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.24e-10",
-            "scan": "MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz"
-          }
-        },
+        "blockers": {},
         "pressure_closure": {
           "AMP_free/native": {
             "parents_read": 630,
             "misses": 132,
-            "reclosure": 131,
-            "max_native_density_relative_difference": 7.549516567451064e-15,
-            "still_missing": 1
+            "reclosure": 132,
+            "max_native_density_relative_difference": 7.549516567451064e-15
           }
         }
       },
@@ -94398,7 +94376,7 @@
       "absolute_change": null,
       "percent_change": null,
       "transition": null,
-      "disposition": "undecided",
+      "disposition": "replayed",
       "old_contributor": {
         "revision": "5953bd80290767125056eb3393778d777c46aca5",
         "path": null,
@@ -94423,10 +94401,6 @@
           "sha256": "55bd17241a9bee33f37f65d15c598b553536a1ceb15da2a498db33b3f5368dee"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-replays.json.gz",
-          "sha256": "346c515db9860cad4a35e282dfed89921f549211ca239382440fb6739bb86959"
-        },
-        {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/0.json.gz",
           "sha256": "054e5bd67586a4a4d2651c54f65781aa39cf5cf891a09f050df97d7f28671550"
         },
@@ -94441,6 +94415,10 @@
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/3.json.gz",
           "sha256": "d32bec85612c333d356af19ae5d61eb6caa70e3cbbb368d14480eb0ce89d2404"
+        },
+        {
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-replays.json.gz",
+          "sha256": "346c515db9860cad4a35e282dfed89921f549211ca239382440fb6739bb86959"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/4.json.gz",
@@ -94475,8 +94453,8 @@
           "sha256": "302920cf9a304413cd0d55d8dccec09535515364a87d7625c32a9f68efdf2b4f"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz",
-          "sha256": "f304a1ad78bae49bac9b4843184643211d7dafb2528949cad71dd816c640c266"
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-bracket-replays.json.gz",
+          "sha256": "47578613e5170bb211f359decee611693f7edc4808db7f5236751c83057884e8"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/12.json.gz",
@@ -94649,7 +94627,7 @@
       "old": null,
       "new": {
         "counts": {
-          "no descent in the finite search": 665
+          "no descent in the finite search": 666
         },
         "outcomes": {
           "hartono-2021:0:problem": "no descent in the finite search",
@@ -94790,6 +94768,7 @@
           "hartono-2021:62:problem": "no descent in the finite search",
           "hartono-2021:63:problem": "no descent in the finite search",
           "hartono-2021:64:problem": "no descent in the finite search",
+          "kundu-2003:0:problem": "no descent in the finite search",
           "kundu-2003:1:problem": "no descent in the finite search",
           "kundu-2003:2:problem": "no descent in the finite search",
           "kundu-2003:3:problem": "no descent in the finite search",
@@ -95319,20 +95298,13 @@
           "ciftja-2014:38:problem": "no descent in the finite search"
         },
         "engine_items": {},
-        "blockers": {
-          "kundu-2003:0:problem": {
-            "record": "MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/11.json.gz",
-            "diagnosis": "Adjacent densities bracket pressure. Closest relative residual magnitude in the scans was 1.24e-10",
-            "scan": "MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz"
-          }
-        },
+        "blockers": {},
         "pressure_closure": {
           "AMP_free/supplied": {
             "parents_read": 630,
             "misses": 132,
-            "reclosure": 131,
-            "max_native_density_relative_difference": 7.549516567451064e-15,
-            "still_missing": 1
+            "reclosure": 132,
+            "max_native_density_relative_difference": 7.549516567451064e-15
           }
         }
       },
@@ -95342,7 +95314,7 @@
       "absolute_change": null,
       "percent_change": null,
       "transition": null,
-      "disposition": "undecided",
+      "disposition": "replayed",
       "old_contributor": {
         "revision": "5953bd80290767125056eb3393778d777c46aca5",
         "path": null,
@@ -95367,10 +95339,6 @@
           "sha256": "c1dcb83119d0c7a2bedc75a583991793f3ae59c46461a42f56f1f658e3810368"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-replays.json.gz",
-          "sha256": "346c515db9860cad4a35e282dfed89921f549211ca239382440fb6739bb86959"
-        },
-        {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/0.json.gz",
           "sha256": "a671fa5ffed0a07fb9e902bb80af6e86443dce30b98470dc603789c172c3b538"
         },
@@ -95385,6 +95353,10 @@
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/3.json.gz",
           "sha256": "6aac75275560ca8c02afab55752af442efc411ecf5c92a28ff64d37ba863bc4a"
+        },
+        {
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-replays.json.gz",
+          "sha256": "346c515db9860cad4a35e282dfed89921f549211ca239382440fb6739bb86959"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/4.json.gz",
@@ -95419,12 +95391,8 @@
           "sha256": "21ba2934bcc09d758595e096dbd75433356e23f7585a48811e47e038a002861d"
         },
         {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-scan.json.gz",
-          "sha256": "f304a1ad78bae49bac9b4843184643211d7dafb2528949cad71dd816c640c266"
-        },
-        {
-          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/11.json.gz",
-          "sha256": "302920cf9a304413cd0d55d8dccec09535515364a87d7625c32a9f68efdf2b4f"
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-bracket-replays.json.gz",
+          "sha256": "47578613e5170bb211f359decee611693f7edc4808db7f5236751c83057884e8"
         },
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/12.json.gz",
@@ -97451,6 +97419,91 @@
         {
           "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/AMP_fixed/supplied/52.json.gz",
           "sha256": "fbea092de240bd751f9d2dcf184d6548532749f42eef1819d29f591c2c02cfb2"
+        }
+      ],
+      "endpoint_fingerprint": null
+    },
+    "Stage 1 bracketed roots": {
+      "old": null,
+      "new": {
+        "DEA/declared": {
+          "key": "Cai:9:problem",
+          "density_mol_m3": 55130.20673859649,
+          "relative_pressure_error": 1.31911483158587e-10,
+          "step_per_ULP": 1.0988120280014383e-10,
+          "sign_change_offsets": [
+            [
+              -5,
+              -4
+            ]
+          ],
+          "trial_density_mol_m3": 55130.20673859649
+        },
+        "MEA/grid": {
+          "key": "census|None|318.15|1e-05|1.05",
+          "density_mol_m3": 43798.68148164182,
+          "relative_pressure_error": -1.194471972633421e-10,
+          "step_per_ULP": 8.669303122361858e-11,
+          "sign_change_offsets": [
+            [
+              -1,
+              0
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "trial_density_mol_m3": 43798.68148164182
+        },
+        "AMP_free/native": {
+          "key": "kundu-2003:0:problem",
+          "density_mol_m3": 51004.33721007267,
+          "relative_pressure_error": 1.2428224157319695e-10,
+          "step_per_ULP": 9.336830793327203e-11,
+          "sign_change_offsets": [
+            [
+              -1,
+              0
+            ]
+          ],
+          "trial_density_mol_m3": 51004.33721007267
+        },
+        "AMP_free/supplied": {
+          "key": "kundu-2003:0:problem",
+          "density_mol_m3": 51004.33721007267,
+          "relative_pressure_error": 1.2428224157319695e-10,
+          "step_per_ULP": 9.336830793327203e-11,
+          "sign_change_offsets": [
+            [
+              -1,
+              0
+            ]
+          ],
+          "trial_density_mol_m3": 51004.33721007267
+        }
+      },
+      "unit": "1",
+      "population": 4,
+      "pressure_basis": null,
+      "absolute_change": null,
+      "percent_change": null,
+      "transition": null,
+      "disposition": "replayed",
+      "old_contributor": {
+        "revision": "5953bd80290767125056eb3393778d777c46aca5",
+        "path": null,
+        "field": null,
+        "sha256": null
+      },
+      "new_contributors": [
+        {
+          "path": "analyses/fixed_reaction_reference/results/MEA/screen/rebuild-441/parent-closure/pressure-bracket-replays.json.gz",
+          "sha256": "47578613e5170bb211f359decee611693f7edc4808db7f5236751c83057884e8"
         }
       ],
       "endpoint_fingerprint": null
