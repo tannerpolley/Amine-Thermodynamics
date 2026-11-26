@@ -307,7 +307,7 @@ FIT_SETS = {
         objective=FROZEN_BINARY_FIT / "selection.json",
         objective_keys=("chosen", "cost"),
     ),
-    "system-pressure-first-data": dict(
+    "system-pressure-salt-anchored": dict(
         route=Route,
         declaration=DECLARATION,
         reference_pressure_pa=None,

@@ -56,12 +56,12 @@ availability, and recorded stop. The objective is over fitted rows.
 | [AMP first-data-fixed-slope](results/amp/first-data-fixed-slope/replay/endpoint.json.gz) | 156 | 156 | 62.0651105779247 | 62.0651105779247 |
 | [AMP mea-fitted-shared](results/amp/mea-fitted-shared/replay/endpoint.json.gz) | 270 | 270 | 61.28527532435647 | 61.28527532435647 |
 | [AMP mea-fitted-shared-fixed-slope](results/amp/mea-fitted-shared-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 62.0651105779247 | 62.0651105779247 |
-| [AMP system-pressure-first-data](results/amp/system-pressure-first-data/replay/endpoint.json.gz) | 270 | 270 | 76.31190308633893 | 76.31190308633893 |
-| [AMP system-pressure-first-data-fixed-slope](results/amp/system-pressure-first-data-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 77.64284261021933 | 77.64284261021933 |
+| [AMP system-pressure-salt-anchored](results/amp/system-pressure-salt-anchored/replay/endpoint.json.gz) | 270 | 270 | 76.31190308633893 | 76.31190308633893 |
+| [AMP system-pressure-salt-anchored-fixed-slope](results/amp/system-pressure-salt-anchored-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 77.64284261021933 | 77.64284261021933 |
 | [DEA mea-fitted-shared](results/dea/mea-fitted-shared/replay/endpoint.json.gz) | 299 | 299 | 6.747545469165438 | 6.747545469165438 |
 | [DEA mea-fitted-shared-0](results/dea/mea-fitted-shared-0/replay/endpoint.json.gz) | 80 | 80 | 8.082968228315169 | 8.082968228315169 |
 | [DEA mea-fitted-shared-1](results/dea/mea-fitted-shared-1/replay/endpoint.json.gz) | 80 | 80 | 8.082968228354506 | 8.082968228354506 |
-| [DEA system-pressure-first-data](results/dea/system-pressure-first-data/replay/endpoint.json.gz) | 299 | 299 | 10.932834014387195 | 10.932834014387195 |
+| [DEA system-pressure-salt-anchored](results/dea/system-pressure-salt-anchored/replay/endpoint.json.gz) (80 fitted, 219 assessment) | 299 | 299 | 10.932834014387195 | 10.932834014387195 |
 | [MDEA bicarbonate-0.1325](results/mdea/bicarbonate-0.1325/replay/endpoint.json.gz) | 718 | 718 | 541.0792552129477 | 541.0792552129477 |
 | [MDEA bicarbonate-0.765](results/mdea/bicarbonate-0.765/replay/endpoint.json.gz) | 718 | 718 | 564.4836961253404 | 564.4836961253138 |
 | [MDEA bicarbonate-0.765-unbounded](results/mdea/bicarbonate-0.765-unbounded/replay/endpoint.json.gz) | 281 | 281 | 479.4428398697488 | 479.4428398697488 |
@@ -71,9 +71,8 @@ availability, and recorded stop. The objective is over fitted rows.
 The MDEA bounded 0.765 objective agrees at printed precision. The retained derivative predictions
 for the two DEA #413 endpoints and the archive's unbounded MDEA point
 were compared with direct row replay. Their objective readbacks agree
-with the retained direct replay. The AMP salt-anchored campaign in the
-first-data mapping actually fitted 214 rows, including the added pressure
-rows. The earlier AMP campaign fitted 156 rows.
+with the retained direct replay. The #435 salt-anchored AMP campaign fitted
+214 rows and assessed 56. The earlier AMP campaign fitted 156 rows.
 
 ## Expanded MEA pressure weights
 

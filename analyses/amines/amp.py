@@ -244,7 +244,7 @@ FIT_SETS = {
             ),
         },
     ),
-    "system-pressure-first-data": dict(
+    "system-pressure-salt-anchored": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
         reference_pressure_pa=None,
@@ -286,7 +286,7 @@ FIT_SETS = {
         objective=ROOT / "analyses/round_5/results/A/original-main.json.gz",
         objective_keys=("cost",),
     ),
-    "system-pressure-first-data-fixed-slope": dict(
+    "system-pressure-salt-anchored-fixed-slope": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
         reference_pressure_pa=None,
