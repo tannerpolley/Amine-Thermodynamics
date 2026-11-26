@@ -519,8 +519,10 @@ derived from `rows[].descent`, `rows[].available`, `rows[].optimized_available`
 and `rows[].supplied_available` in the
 [selected screen](../fixed_reaction_reference/results/MDEA/screen/selected/declared/summary.json.gz).
 The main text and supplement each attribute all 80 descents to finished
-searches. Their wording is preserved for the S identity test. The manuscript
-revision on W will use the rerun counts for each class.
+searches. The A3 wording review records both sentences and their component
+counts in [findings.jsonl](findings.jsonl). The same screen records 10,742
+completed requests. Completion, optimization availability and a supplied
+descent describe different numerical outcomes.
 
 ## Kuranov row 72 by reaction reference
 
@@ -528,6 +530,35 @@ The unfitted row at 393.16 K has a measured total pressure of 1.205300 MPa.
 The [system-pressure-reference calculation](../round_7/results/display-replays/kuranov-row-72.json.gz)
 gives 1.165620 MPa, the value printed in the supplement. The
 [reported endpoint with the 100 kPa references](../fixed_reaction_reference/results/MDEA/property-comparisons/A.json.gz)
-gives 1.164098 MPa for the same observation on S. The prose retains the
-system-pressure-reference value for the identity test. The comparison
-changes the endpoint and the reaction references together.
+gives 1.164098 MPa for the same observation on S, which is now the value
+bound in the supplement. The two calculations change the endpoint and the
+reaction references together.
+
+
+## Reported MEA property and uncertainty replay on S
+
+The [reported MEA summary](results/mea/reported/properties/uncertainty-and-activities.json.gz)
+holds the numerical replay at the 100 kPa reaction-reference endpoint. All
+213 retained activity requests and eight carbonate-pool requests returned
+results. Repeating the activity calculation at the historical F4 endpoint
+first reproduced all 213 retained pH values and all eight pool fractions.
+On the reported endpoint the maximum calculated carbonate-pool fraction
+is 0.065 at the manuscript's precision. For the 197 matched electrode
+observations, the reported endpoint minus electrode difference ranges from
+−0.149 to +0.138 pH units, with a mean of +0.005. The pressure and electrode
+basis limitations stated in the supplement still apply.
+
+The 25 Cai temperatures and 25 vapor fractions contribute 39.750 and
+51.796 to the dimensionless objective of 152.932, a combined 59.86%.
+The variance factor using the 268 responsive rows and nine free coordinates
+is 1.181 at the printed precision. The standard-error ratio to the
+all-row variance basis is 1.07264814. The conditional relative standard
+errors on the 47 fitted partial pressures span 5.94274–17.00638%.
+The calculation holds the bounds and weights fixed and omits model
+discrepancy and correlation uncertainty. These are checks of the reported
+endpoint and its conditional covariance.
+
+The replay is generated from the fit, Jacobian and retained state feeds with
+`uv run --locked python -c 'from analyses.amines.mea import write_reported_property_summary; write_reported_property_summary()'`.
+The [binding ledger](findings.jsonl) carries the remaining wording findings
+for the manuscript revision on W.
