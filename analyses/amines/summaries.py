@@ -139,6 +139,16 @@ def phase_accounting(s):
         screen = s.fixed(f'{family}/screen/selected/{protocol}/summary.json.gz')
         coverage[label] = dict(attempted=len(screen['rows']), completed=sum(q['available'] for q in screen['rows']))
     screen = s.fixed('MDEA/screen/selected/declared/summary.json.gz')
+    grid_rows = [q for q in screen['rows'] if q['key'].startswith('grid:')]
+    grid_unavailable = Counter(q['key'].rsplit(':', 1)[1] for q in grid_rows if not q['available'])
+    mdea_populations = dict(
+        attempted=len(screen['rows']), available=coverage['MDEA']['completed'],
+        unavailable=len(screen['rows']) - coverage['MDEA']['completed'],
+        grid_attempted=len(grid_rows), grid_unavailable=sum(grid_unavailable.values()),
+        grid_unavailable_by_pressure_factor=dict(grid_unavailable),
+        measured_attempted=len(screen['rows']) - len(grid_rows),
+        measured_unavailable=len(screen['rows']) - coverage['MDEA']['completed'] - sum(grid_unavailable.values()),
+    )
     inventory = {q['key']: q for q in s.fixed('MDEA/screen/selected/declared/state-inventory.json.gz')['rows']}
     crosswalk = s.read('analyses/mdea_mea_workflow/results/phase-search-421/observation-crosswalk.json')
     manifest = s.fixed('MDEA/manifest.json.gz')
@@ -168,9 +178,10 @@ def phase_accounting(s):
         else:
             basis = 'measured'
         states.append(dict(key=key, T_K=q['temperature_K'], source=source, pressure_Pa=pressure,
-                           pressure_basis=basis, detections=detections[key],
+                           pressure_basis=basis, detections=detections[key], native_branch=q['native_branch'],
                            confirmed=sum(a['confirmed'] for a in q['attempts']), attempts=len(q['attempts'])))
-    return dict(coverage=coverage, mdea_distinct_states=states, mdea_descent_counts=descent_counts)
+    return dict(coverage=coverage, mdea_search=mdea_populations, mdea_distinct_states=states,
+                mdea_descent_counts=descent_counts)
 
 
 def paired(before, after):
@@ -549,6 +560,7 @@ def main():
     covariance = s.read('analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json')
     mea_early = s.read('analyses/round_3/results/q4.json')
     readback = s.read('analyses/round_3/results/q8.json')
+    amp_reference = s.read('analyses/mea_parameter_bundle/results/reference-states-428/amp.json')
     candidate = readback['dea']
     s.write('shared/properties/display-summary.json.gz', dict(
         shared=shared(s), kamps=kamps(s), mdea=mdea_properties(s), mdea_bubble=mdea_bubble(s, account),
@@ -558,6 +570,7 @@ def main():
         mea_early_reference={key: mea_early[key] for key in ('rows', 'heat_previous_kJ_mol', 'heat_change')},
         dea_alternative={key: candidate[key] for key in ('endpoint', 'chosen_cost', 'alternative_cost', 'rows', 'scores')},
         water_calibration=readback['water'],
+        amp_historical_reference_state=amp_reference,
     ))
 
 
