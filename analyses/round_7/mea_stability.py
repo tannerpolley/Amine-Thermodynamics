@@ -36,19 +36,21 @@ def preparations(mapping, reaction_reference_pressure_pa=None):
     return spec, {q['identity']:q for q in records}
 
 
-def calculations(mapping, reference, names, solver_factor=1., reaction_reference_pressure_pa=None):
+def calculations(mapping, reference, names, solver_factor=1., reaction_reference_pressure_pa=None, bank=None):
     a.study.reuse.bind_wheel()
     r.verify()
     spec, records = preparations(mapping,reaction_reference_pressure_pa)
     prior, baseline = preparations(reference)
-    bank = [dict(w,kind=w['kind'].capitalize()) for w in r.read(BASE/'split-registry.json')['trials']]
+    if bank is None:
+        bank = r.read(BASE/'split-registry.json')['trials']
+    bank = [dict(w,kind=w['kind'].capitalize()) for w in bank]
     for identity in names:
         started = monotonic()
         q = records[identity]
         p = spec.problems[q['problem']]
         source = membership().get(identity) or q['row'].get('source_coordinates')
         record = dict(identity=identity,group=q['group'],T_K=p.T,feed_mol=p.feed.values,
-                      source=source or q['row'],row_tolerance=p.row_tolerance)
+                      source=source or q['row'],row_tolerance=p.row_tolerance,wheel=r.SHA)
         try:
             bubble = bubble_problem(p)
             if isinstance(p.P,eq.Free):
@@ -95,13 +97,33 @@ def calculations(mapping, reference, names, solver_factor=1., reaction_reference
             if not parent.requested_tolerance_met or min(parent.amounts)<=0:
                 raise ValueError(parent.message)
             native_parent = problem._native(spec.parameters)
-            validation = SimpleNamespace(feed=native_parent.feed,row_tolerance=p.row_tolerance)
+            validation = copy.copy(problem)
+            validation.row_tolerance = p.row_tolerance
+            validation = validation._native(spec.parameters)
             record['parent'] = physical(spec,validation,parent)
+            if any(abs(q['pressure_residual_Pa'])/pressure > p.row_tolerance for q in record['parent']['phases']):
+                nearby = copy.copy(problem)
+                nearby.P = .999*pressure
+                nearby.phases = [copy.copy(q) for q in problem.phases]
+                for i, phase in enumerate(nearby.phases):
+                    phase.composition_guess = {k:parent.phase_mole_fractions(i)[s.COMPONENT_IDS.index(k)]
+                                               for k in phase.support}
+                    phase.packing_guess = parent.packing_fractions[i]
+                seed = eq.solve_equilibrium(spec.model,nearby)
+                record['pressure_restart'] = dict(P_Pa=nearby.P,message=seed.message,original_parent=record['parent'])
+                if not seed.requested_tolerance_met:
+                    raise ValueError(seed.message)
+                parent = eq.solve_equilibrium(spec.model,problem,start=seed)
+                record.update(parent_status=parent.message, realized_Pa=parent.pressure,amounts_mol=list(parent.amounts))
+                if not parent.requested_tolerance_met or min(parent.amounts)<=0:
+                    raise ValueError(parent.message)
+                record['parent'] = physical(spec,validation,parent)
             compiled = eq.compile_problem(spec.model,problem)
             options = eq.StabilityOptions()
             options.mode = type(options.mode).Full
             optimized = eq.stability_test(compiled,parent,options)
             record['optimized_message'] = optimized.message
+            record['native_no_descent'] = optimized.no_descent_in_trial_set
             native = trials(optimized)
             # 2 MEA + CO2 -> MEAH+ + MEACOO-. Apply an interior extent to the analytical feed.
             inventory = [math.fsum(n*parent.phase_mole_fractions(i)[j] for i,n in enumerate(parent.amounts))

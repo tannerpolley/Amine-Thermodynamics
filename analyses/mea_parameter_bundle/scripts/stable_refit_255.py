@@ -66,7 +66,7 @@ def verify():
     assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
     base = Path(epcsaft.__file__).parent.parent
     with zipfile.ZipFile(WHEEL) as archive:
-        names = [n for n in archive.namelist() if n.startswith('epcsaft/') and not n.endswith('/')]
+        names = [n for n in archive.namelist() if n.startswith(('epcsaft/', 'epcsaft.libs/')) and not n.endswith('/')]
         assert names and all(archive.read(n) == (base / n).read_bytes() for n in names)
 
 
@@ -203,6 +203,11 @@ def _measure_group(states):
     return [_measure(state) for state in states]
 
 
+def supplied_support(spec, item):
+    compiled = eq.compile_problem(spec.model, item.problem)
+    return set(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
+
+
 def _measure(state):
     started = time.monotonic()
     supplied, not_applicable, repeated, unique = [], [], [], ()
@@ -211,8 +216,7 @@ def _measure(state):
     try:
         item = (_ROUTE.stability_row if _ROUTE else stability_row)(_SPEC, state, 1.)
         if _ROUTE: metadata = _ROUTE.stability_metadata(_SPEC,item)
-        support = {i for i, amount in enumerate(item.problem.feed.values) if amount > 0}
-        support.update(i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value != 0)
+        support = supplied_support(_SPEC, item)
         if isinstance(_TRIALS, dict):
             supplied, not_applicable, repeated, unique = _applicable(item, _TRIALS.get(state['key'], []), support)
         else:

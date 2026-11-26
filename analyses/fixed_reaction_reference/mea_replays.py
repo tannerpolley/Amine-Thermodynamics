@@ -16,6 +16,27 @@ from objective_weights_420 import census_classify, grid_classify
 ALLOWANCE = 1500.
 
 
+def rebuild_measured(point, reference, names, bank, output, workers):
+    started = monotonic()
+    pilot = r.read(output/'measured-pilot.json.gz')
+    endpoint = fingerprint(point)
+    assert pilot['endpoint_fingerprint']==endpoint and pilot['wheel']==r.SHA
+    rows = {q['identity']:q for q in pilot['rows']}
+    assert len(set(names))==321 and rows.keys()<=set(names)
+    pending = [i for i in names if i not in rows]
+    batches = [pending[i:i+8] for i in range(0,len(pending),8)]
+    assert not (output/'measured').exists()
+    with ProcessPoolExecutor(workers) as pool:
+        jobs = [(point['parameters'],reference,batch,1.,P_REF,bank) for batch in batches]
+        for i, batch in enumerate(pool.map(stability.chunk,jobs)):
+            stability.save(output/f'measured/{i}.json.gz',batch)
+            assert all(q['available'] and q['native_no_descent'] and not q['witnesses'] for q in batch), (
+                f'MEA rebuilt measured batch {i} stops on an incomplete search')
+            rows.update((q['identity'],q) for q in batch)
+    stability.save(output/'measured-inventory.json.gz',dict(
+        names=names, endpoint_fingerprint=endpoint, wheel=r.SHA, seconds=monotonic()-started))
+
+
 def pilot(point):
     started = monotonic()
     grid_bank = r.read(stability.BASE/'split-trials.json')

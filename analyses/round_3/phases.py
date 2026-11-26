@@ -23,12 +23,26 @@ def trials(report):
             for t in report.trials]
 
 
-def physical(spec, problem, result):
+def physical(spec, problem, result, *, reclose=True):
     ids = spec.parameters.component_ids
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     T, P = result.temperature, result.pressure
     rows = [phase(spec.model, T, P, n, rho, result.phase_mole_fractions(i), formulas)
             for i, (n, rho) in enumerate(zip(result.amounts, result.molar_densities, strict=True))]
+    if reclose and any(abs(r['pressure_residual_Pa'])/P > problem.row_tolerance and min(r['x']) > 0 for r in rows):
+        from reference_derivatives import pressure_reclosure
+
+        compiled = eq.compile_problem(spec.model, problem)
+        standard = eq.stability_test(compiled, result).standard_over_rt
+        for row in rows:
+            if abs(row['pressure_residual_Pa'])/P <= problem.row_tolerance or min(row['x']) <= 0:
+                continue
+            x, rho = row['x'], row['density_mol_m3']
+            new_rho, state, evidence = pressure_reclosure(
+                spec.model, problem, T, P, rho, x, standard, spec.model.state(T, rho=rho, x=x))
+            row.update(original_pressure_residual_Pa=row['pressure_residual_Pa'],
+                       original_density_mol_m3=rho, pressure_reclosure=evidence,
+                       density_mol_m3=new_rho, pressure_Pa=state.pressure, pressure_residual_Pa=state.pressure-P)
     residuals = balances(problem.feed.values, rows, formulas)
     passed = all(phase_passed(r, P, problem.row_tolerance) for r in rows) and max(
         map(abs, residuals['scaled_element_residual'].values())) <= problem.row_tolerance

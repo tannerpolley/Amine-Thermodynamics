@@ -85,7 +85,7 @@ def solve(spec, model, anchor_model, thermal, declaration, seed=None):
                admitted=False, requested_tolerance_met=result.requested_tolerance_met)
     if not result.requested_tolerance_met:
         return row, result
-    checks = physical(spec, declaration, result)
+    checks = physical(spec, declaration, result, reclose=False)
     continuation = []
     if any(k in model.component_ids for k in ('monoethanolamine','diethanolamine')):
         # Round 8 allowed five repeated warm reads when pressure closure was
@@ -103,7 +103,7 @@ def solve(spec, model, anchor_model, thermal, declaration, seed=None):
             continuation.append(observed)
             if not refined.requested_tolerance_met:
                 continue
-            candidate = physical(spec,declaration,refined)
+            candidate = physical(spec,declaration,refined,reclose=False)
             observed['checks'] = candidate
             if (candidate['physical_checks_pass'] or
                 max(abs(q['pressure_residual_Pa']) for q in candidate['phases']) <

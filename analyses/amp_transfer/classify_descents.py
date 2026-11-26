@@ -11,15 +11,23 @@ ERROR_TERMS = ('association_energy_estimate_over_rt',
                'feasibility_estimate_over_rt','summation_estimate_over_rt')
 
 
-def pressure_roots(model, T, P, x, rho):
+def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
     checks = []
     for branch in ('liquid','vapor'):
         try:
             state = model.state(T, P=P, x=x, phase=branch)
-            distance = abs(math.log(state.molar_density/rho))
-            checks.append(dict(requested=branch, returned=state.returned_density_branch.name.lower(),
-                               density=state.molar_density, log_density_distance=distance,
-                               relative_pressure_residual=abs(state.pressure/P-1)))
+            density, original = state.molar_density, state.pressure/P-1
+            returned = state.returned_density_branch.name.lower()
+            evidence = None
+            if (declaration is not None and returned=='liquid' and
+                    abs(math.log(density/rho))<=DENSITY_WINDOW and abs(original)>declaration.row_tolerance):
+                from reference_derivatives import pressure_reclosure
+
+                density,state,evidence = pressure_reclosure(model,declaration,T,P,density,x,standard,state)
+            checks.append(dict(requested=branch, returned=returned, density=density,
+                               log_density_distance=abs(math.log(density/rho)),
+                               relative_pressure_residual=abs(state.pressure/P-1),
+                               original_relative_pressure_residual=original, pressure_reclosure=evidence))
         except Exception as error:
             checks.append(dict(requested=branch, error=str(error)))
     return checks
@@ -30,15 +38,16 @@ def matched(checks, tolerance):
             and r['relative_pressure_residual']<=tolerance]
 
 
-def gibbs(compiled, result):
-    report = eq.stability_test(compiled, result)
+def gibbs(compiled, result, report=None):
+    if report is None:
+        report = eq.stability_test(compiled, result)
     phases = jsonable(report.present_phases)
     assert len(result.amounts)==len(phases) and phases
     return (math.fsum(n*q['g_over_rt'] for n,q in zip(result.amounts,phases,strict=True)),
             math.fsum(n*q[k] for n,q in zip(result.amounts,phases,strict=True) for k in ERROR_TERMS))
 
 
-def coexistence(spec, parent, parent_g, guesses, *, inspect=None):
+def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
     compiled = eq.compile_problem(spec.model,parent)
     support = [i for i in range(len(spec.parameters.component_ids)) if i not in compiled.removed_species]
     phases = []
@@ -51,7 +60,7 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None):
     parent.phases = phases
     try:
         compiled = eq.compile_problem(spec.model,parent)
-        result = eq.solve_equilibrium(spec.model,parent)
+        result = eq.solve_equilibrium(spec.model,parent,start)
     finally:
         parent.phases = original
     out = dict(message=result.message, requested_tolerance_met=result.requested_tolerance_met,
@@ -63,10 +72,12 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None):
     phases = [list(result.phase_mole_fractions(j)) for j in range(2)]
     densities = list(result.molar_densities)
     distinct = max(abs(a-b) for a,b in zip(*phases,strict=True))>COINCIDENCE or abs(math.log(densities[0]/densities[1]))>COINCIDENCE
-    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho)
+    report = eq.stability_test(compiled,result)
+    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho,
+                            declaration=parent,standard=report.standard_over_rt)
              for x,rho in zip(phases,densities,strict=True)]
     liquid = all(any(r['returned']=='liquid' for r in matched(check,parent.row_tolerance)) for check in roots)
-    g, error = gibbs(compiled,result)
+    g, error = gibbs(compiled,result,report)
     comparison = {} if parent_g is None else dict(Gibbs_decrease_over_RT_mol=parent_g[0]-g)
     estimated_error = error if parent_g is None else parent_g[1]+error
     return dict(out, confirmed=distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
