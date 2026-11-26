@@ -17,7 +17,6 @@ OUT = refit.OUT / DESIGN
 INCUMBENT = refit.OUT / 'MDEA/A.json.gz'
 KNOWN_GAP = refit.OUT / 'MDEA/LHS-53.json.gz'
 COLD = 288.71
-RESOLUTION = 1e-6  # #411 fine-grid onset bisection
 REPLAY_TOLERANCE = 1e-10  # #427 same-wheel readback of A
 A0, A1 = (f'{M.PAIR}/a{i} / temperature_law_coefficient' for i in range(2))
 RECORDS = ('declaration.json.gz', 'replay-A.json.gz', 'onset-S.json', 'hull-S.json', 'census-S.json.gz')
@@ -99,9 +98,9 @@ def onset_check(declaration, result):
     errors = {str(T): abs(rows[T]['k_no_gap']-previous[T]) for T in (290, 423) if T in rows}
     k = declaration['U'] + declaration['s_per_K']*(COLD-declaration['reference_temperature_K'])
     margin = rows[COLD]['k_no_gap']-k if COLD in rows else None
-    return dict(passed=len(errors) == 2 and max(errors.values()) <= RESOLUTION and margin is not None
+    return dict(passed=len(errors) == 2 and max(errors.values()) <= M.RESOLUTION and margin is not None
                 and margin >= declaration['margin'] and format(declaration['s_per_K'], '.7g') == '0.0005507469'
-                and all(0 < q['k_gap']-q['k_no_gap'] <= RESOLUTION for q in rows.values()),
+                and all(0 < q['k_gap']-q['k_no_gap'] <= M.RESOLUTION for q in rows.values()),
                 cold_onset=rows.get(COLD), corner_k=k, corner_margin=margin, reference_errors=errors,
                 s_per_K=declaration['s_per_K'], U=declaration['U'], seconds=result['seconds'])
 
@@ -176,6 +175,16 @@ def require(number):
     print(f'Stage 0 check {number} passed', flush=True)
 
 
+def verify():
+    rebuilt, retained = reduce(), r.read(OUT/'checks.json.gz')
+    if rebuilt != retained:
+        raise SystemExit('Stage 0 retained checks differ from the records')
+    checks = rebuilt['checks']
+    if sorted(checks) != ['1', '2', '3', '4', '5'] or not all(q['passed'] for q in checks.values()):
+        raise SystemExit(f'Stage 0 retained checks reproduced, but not every check passed. See {OUT}/checks.json.gz')
+    print('Stage 0 retained checks reproduced')
+
+
 def run():
     refit.a.study.reuse.bind_wheel()
     try:
@@ -222,13 +231,4 @@ def run():
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Recompute checks from retained records without writing')
-    if parser.parse_args().check:
-        rebuilt, retained = reduce(), r.read(OUT/'checks.json.gz')
-        for name in RECORDS:
-            if rebuilt['record_fingerprints'].get(name) != retained['record_fingerprints'].get(name):
-                raise SystemExit(f'Stage 0 record differs from the checked evidence: {name}')
-        if rebuilt != retained:
-            raise SystemExit('Stage 0 retained checks differ from the records')
-        print('Stage 0 retained checks reproduced')
-    else:
-        run()
+    verify() if parser.parse_args().check else run()
