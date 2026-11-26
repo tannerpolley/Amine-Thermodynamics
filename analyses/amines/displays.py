@@ -2694,6 +2694,7 @@ def manuscript_sources():
 
 RES = re.compile(r"\\res\{([a-z0-9-]+)\}")
 NUMERAL = re.compile(r"(?<![\w.])[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?(?!\w|\.\d)")
+SCIENTIFIC = re.compile(r"(?P<mantissa>[+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*\\times\s*10\^\{(?P<exponent>[+-]?\d+)\}")
 NUMBER_WORDS = "zero one two three four five six seven eight nine ten".split()
 NUMBER_WORD = re.compile(
     r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|"
@@ -2703,7 +2704,7 @@ NUMBER_WORD = re.compile(
 COMMENT = re.compile(r"(?<!\\)%[^\n]*")
 REFERENCE = re.compile(
     r"\\(?:[Cc]ref|[Cc]pageref|pageref|eqref|ref|label|cite\w*|input|includegraphics|begin|end|"
-    r"bibliography|bibliographystyle|url|nolinkurl|res|orcidlink|orcid|author|affil|affiliation|email|thanks|"
+    r"bibliography|bibliographystyle|url|nolinkurl|res|orcidlink|orcid|author|affil|affiliation|email|ead|cormark|thanks|"
     r"date|runningauthor|correspondingauthor|usepackage|documentclass|newcolumntype|newcommand|renewcommand|"
     r"providecommand|def|gdef|edef|xdef|setlength|addtolength|setcounter)\b\*?"
 )
@@ -2756,6 +2757,10 @@ def mask_syntax(text):
             if closing == "}" and not definition and match[0] not in (
                 r"\newcolumntype", r"\setlength", r"\addtolength", r"\setcounter"
             ):
+                if match[0] == r"\author":
+                    metadata = re.match(r"\s*\[orcid=[^\]]+\]", text[end:])
+                    if metadata:
+                        end += metadata.end()
                 break
         masked[match.start():end] = re.sub(r"[^\n]", " ", text[match.start():end])
     filtered = "".join(masked)
@@ -2855,6 +2860,11 @@ def result_values():
         cost = read(record)["cost"]
         for passage in occurrences:
             add(f"amp-first-data-{fit}-objective-{passage}", record, "cost", f"{cost:.4f}")
+        pressures = [row["prediction"] for row in read(record)["original"]["rows"] if row["group"] == "loaded-pressure"]
+        deviation = stats(pressures, predicted="value")["AARD_percent"]
+        for passage in ("first-fit", "supplement") if fit == "main" else ("supplement",):
+            add(f"amp-first-data-{fit}-loaded-pressure-aard-{passage}", record,
+                "original.rows[loaded-pressure].prediction: AARD", f"{deviation:.1f}")
 
     for name, label, occurrences in (
         ("MEA", "mea", (("starts", 3), ("cai-weight", 2), ("reference-comparison", 3), ("restrictions", 3))),
@@ -2911,11 +2921,14 @@ def result_values():
 
     record = tracking + "uncertainty/prediction-bands.csv"
     pressures = [row for row in read(record) if row["group"] == "common149: partial_pressure"]
-    minimum = 100 * min(objective["SE_multiplier"] * float(row["SE_bound_fixed"]) / float(row["value"]) for row in pressures)
+    relative = [100 * objective["SE_multiplier"] * float(row["SE_bound_fixed"]) / float(row["value"])
+                for row in pressures]
     for passage, digits in (("results", 1), ("supplement", 2)):
         add(f"mea-tracking-fitted-pressure-minimum-relative-se-{passage}", record,
             "common149: partial_pressure: minimum SE_bound_fixed / value times SE_multiplier",
-            f"{minimum:.{digits}f}")
+            f"{min(relative):.{digits}f}")
+        add(f"mea-tracking-fitted-pressure-maximum-relative-se-{passage}", record,
+            "common149: partial_pressure: maximum SE_bound_fixed / value times SE_multiplier", f"{max(relative):.1f}")
 
     record = STUDY + "results/AMP_fixed/properties.json.gz"
     rows = [row for row in read(record)["rows"] if row["role"] == "fitted"
@@ -2933,6 +2946,131 @@ def result_values():
     record = "analyses/round_3/results/q7-summary.json"
     add("amp-first-data-recall-searched-negative-states", record, "searched_negatives",
         str(read(record)["searched_negatives"]))
+    add("amp-first-data-recall-states-supplement", record, "searched", str(read(record)["searched"]))
+
+    record = STUDY + "results/AMP_free/screen/selected/native/summary.json.gz"
+    screen = read(record)
+    for passage in ("abstract", "conclusion", "conclusion-refit", "figure-caption", "transfer", "supplement-slope"):
+        add(f"amp-reported-screen-states-{passage}", record, "tally.states", str(screen["tally"]["states"]))
+    grid = sum(row["key"].startswith("grid:") for row in screen["rows"])
+    for passage in ("transfer", "supplement"):
+        add(f"amp-reported-screen-grid-states-{passage}", record, "rows[grid].count", str(grid))
+        add(f"amp-reported-screen-measured-states-{passage}", record, "rows[measurement-derived].count",
+            str(len(screen["rows"]) - grid))
+
+    record = "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz"
+    instabilities = read(record)["states"]
+    confirmed = sum(any(attempt["confirmed"] for attempt in row["attempts"]) for row in instabilities)
+    for passage in ("figure-caption", "transfer", "supplement"):
+        add(f"amp-first-data-confirmed-splits-{passage}", record, "states[].attempts[].confirmed", str(confirmed))
+        add(f"amp-first-data-unconfirmed-descents-{passage}", record, "states without a confirmed attempt",
+            str(len(instabilities) - confirmed))
+    record = "analyses/round_3/results/q7-summary.json"
+    for passage in ("transfer", "supplement-first-fit"):
+        add(f"amp-first-data-screen-states-{passage}", record, "total", str(read(record)["total"]))
+    record = "analyses/round_8/results/amp-six-states.json.gz"
+    controls = read(record)["quantities"]["rows"]
+    for passage in ("diamonds", "observations"):
+        add(f"amp-first-data-measured-splits-caption-{passage}", record, "quantities.rows.count", NUMBER_WORDS[len(controls)])
+    record = PHASE_SUMMARY
+    outcomes = read(record)["amp_outcomes"]
+    for label, count in (("vapor-descents", sum(row["outcome"] != "No resolved descent" for row in outcomes.values())),
+                         ("no-descent", sum(row["outcome"] == "No resolved descent" for row in outcomes.values()))):
+        add(f"amp-reported-measured-controls-caption-{label}", record, "amp_outcomes[].outcome", NUMBER_WORDS[count])
+
+    record = FIT_SUMMARY
+    draws = read(record)["mdea_start_counts"]
+    for passage in ("abstract", "conclusion", "transfer", "methods", "supplement"):
+        add(f"mdea-evaluable-drawn-starts-{passage}", record, "mdea_start_counts.evaluable.count",
+            NUMBER_WORDS[len(draws["evaluable"])])
+        if passage != "supplement":
+            add(f"mdea-planned-drawn-starts-{passage}", record, "mdea_start_counts.drawn", str(draws["drawn"]))
+    add("mdea-skipped-drawn-starts-methods", record, "mdea_start_counts.untested_draws.count",
+        NUMBER_WORDS[len(draws["untested_draws"])])
+    add("mdea-tested-drawn-starts-methods", record, "mdea_start_counts.tested", str(draws["tested"]))
+    add("mdea-replacement-drawn-starts-supplement", record, "mdea_start_counts.replacement_draws",
+        str(draws["replacement_draws"]))
+
+    record = GIBBS_DERIVATIVES
+    checks = {(row["state"], row["comparison"]): row for row in read(record)["rows"]}
+    relative_max = max(abs(checks[f"selected-{name}", "volume"]["relative_error"])
+                       for name in ("MEA", "DEA", "AMP_free", "MDEA"))
+    mantissa, exponent = f"{relative_max:.1e}".split("e")
+    for passage in ("abstract", "conclusion"):
+        add(f"gibbs-derivative-maximum-relative-error-{passage}", record,
+            "rows[selected,volume].relative_error: maximum absolute", rf"{mantissa}\times10^{{{int(exponent)}}}")
+    for amine, design, scale, digits in (
+        ("mea", "MEA", 1000, 3), ("dea", "DEA", 1000, 3),
+        ("amp", "AMP_free", 1000, 2), ("mdea", "MDEA", 1000000, 3),
+    ):
+        state = f"selected-{design}"
+        volume = checks[state, "volume"]
+        for passage in ("theory", "supplement"):
+            add(f"{amine}-gibbs-derivative-bubble-pressure-{passage}", record,
+                f"rows[{state},volume].pressure_Pa/{scale}", f"{volume['pressure_Pa'] / scale:.{digits}f}")
+        mantissa, exponent = f"{volume['relative_error']:.2e}".split("e")
+        relative = rf"{mantissa}\times10^{{{int(exponent)}}}"
+        add(f"{amine}-gibbs-derivative-relative-error-supplement", record,
+            f"rows[{state},volume].relative_error", relative)
+        if amine in ("mea", "dea"):
+            add(f"{amine}-gibbs-derivative-relative-error-theory", record,
+                f"rows[{state},volume].relative_error", ("+" if amine == "mea" else "") + relative)
+        estimate = volume["relative_estimated_error"]
+        add(f"{amine}-gibbs-derivative-relative-resolution-supplement", record,
+            f"rows[{state},volume].relative_estimated_error", f"{estimate:.{'3' if amine in ('mea', 'dea') else '4'}f}")
+        places = 1 if amine in ("mea", "dea") else 2
+        passages = ("theory", "conclusion", "abstract") if amine == "mea" else (
+            ("theory", "conclusion") if amine == "dea" else ("theory", "abstract") if amine == "mdea" else ("theory",))
+        for passage in passages:
+            add(f"{amine}-gibbs-derivative-resolution-percent-{passage}", record,
+                f"100 * rows[{state},volume].relative_estimated_error", f"{100 * estimate:.{places}f}")
+        caloric = checks[state, "Eq. 12"]
+        add(f"{amine}-gibbs-helmholtz-enthalpy-discrepancy-supplement", record,
+            f"rows[{state},Eq. 12].signed_error*1000", f"{caloric['signed_error'] * 1000:.2f}")
+        add(f"{amine}-gibbs-helmholtz-enthalpy-resolution-supplement", record,
+            f"rows[{state},Eq. 12].estimated_error*1000", f"{caloric['estimated_error'] * 1000:.0f}")
+
+    record = PROPERTY_SUMMARY
+    property_summary = read(record)
+    water = property_summary["water_calibration"]
+    for passage in ("fit-input", "fit-deviations"):
+        add(f"water-fit-vapor-pressure-temperature-count-{passage}", record,
+            "water_calibration.fitted_rows.psat", str(water["fitted_rows"]["psat"]))
+    xiao = property_summary["mdea"]["paired"]["Xiao"]
+    add("mdea-xiao-matched-pressure-comparison-count", record, "mdea.paired.Xiao.n", str(xiao["n"]))
+    for cohort in ("Kuranov", "Carson"):
+        scores = property_summary["spread"]["MDEA"]["groups"][cohort]["endpoint_AARD_percent"]
+        add(f"mdea-alternate-basin-{cohort.lower()}-aard-transfer", record,
+            f"spread.MDEA.groups.{cohort}.endpoint_AARD_percent.LHS-53", f"{scores['LHS-53']:.0f}")
+
+    record = PHASE_SUMMARY
+    assigned = sum(row["pressure_basis"] == "assigned" for row in read(record)["mdea_distinct_states"])
+    for passage in ("transfer", "supplement"):
+        add(f"mdea-assigned-pressure-distinct-descents-{passage}", record,
+            "mdea_distinct_states[assigned].count", str(assigned))
+
+    record = STUDY + "results/DEA/property-comparisons/selected.json.gz"
+    fitted = [row for row in read(record)["rows"] if row["role"] == "fitted"]
+    carson = [row for row in fitted if row["group"] == "Carson"]
+    for label, fraction in (("intermediate", "0.20"), ("highest", "0.30")):
+        count = sum(row["row"]["DEA_mass_fraction"] == fraction for row in carson)
+        add(f"dea-carson-{label}-concentration-observations-caption", record,
+            f"rows[Carson,fitted,{fraction}].count", str(count))
+    for reaction, label in (("carbamate-hydrolysis", "r4"), ("DEA-dissociation", "r5")):
+        outside = sum(row["unit"] == "Pa" and row["outside_ranges"].get(reaction, False) for row in fitted)
+        add(f"dea-fitted-pressure-outside-{label}-range", record,
+            f"rows[fitted,Pa].outside_ranges.{reaction}: count", str(outside))
+    record = STUDY + "results/display-replays/mea-comparisons.json.gz"
+    kim = read(record)["kim_2007"]
+    hot = [row for row in kim if row["T_K"].startswith("393.15") and row["interval_status"] == "available"]
+    add("mea-kim-svendsen-hot-interval-count-results", record, "kim_2007[393.15 K,available].count", str(len(hot)))
+    low = sum(float(row["previous_loading"]) < 0.1 for row in kim)
+    add("hong-kim-svendsen-intervals-below-loading-window", record, "kim_2007[previous_loading < 0.1].count", str(low))
+    record = "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/checks.json"
+    figure = read(record)["figure_5"]
+    for pathway in ("carbamate", "bicarbonate"):
+        add(f"hong-pathway-{pathway}-maximum-fraction-difference", record,
+            f"figure_5.{pathway}.abs_quantiles.100", f"{figure[pathway]['abs_quantiles']['100']:.4f}")
     return values
 
 
@@ -2984,22 +3122,51 @@ def bindings(values, outputs, commit=None):
                                  ensure_ascii=False))
 
 
-def typed_numbers(values):
-    import ast
+def numeric_occurrences(text, masked):
     from decimal import Decimal
 
-    def numbers(text):
-        return {Decimal(match[0]) for match in NUMERAL.finditer(mask_syntax(text))}
+    for match in SCIENTIFIC.finditer(text):
+        if masked[match.start():match.end("mantissa")].strip():
+            yield match, Decimal(match["mantissa"]).scaleb(int(match["exponent"]))
+            masked = masked[:match.start()] + " " * len(match[0]) + masked[match.end():]
+    for match in NUMERAL.finditer(masked):
+        yield match, Decimal(match[0])
 
-    registered = set().union(*(numbers(row["value"]) for row in values.values()))
-    for path in manuscript_sources():
-        for line, text in enumerate(mask_syntax(manuscript_body(path.read_text())).splitlines(), 1):
-            for value in numbers(text) & registered:
-                yield str(path.relative_to(ROOT)), line, str(value)
-    for node in ast.walk(ast.parse(Path(__file__).read_text())):
-        if isinstance(node, ast.Constant) and isinstance(node.value, str):
-            for value in numbers(node.value) & registered:
-                yield str(Path(__file__).relative_to(ROOT)), node.lineno, str(value)
+
+def typed_numbers(values, collisions):
+    import ast
+
+    def candidates():
+        for path in manuscript_sources():
+            raw = manuscript_body(path.read_text())
+            for line, (text, masked) in enumerate(zip(raw.splitlines(), mask_syntax(raw).splitlines(), strict=True), 1):
+                yield path.relative_to(ROOT).as_posix(), line, text, masked
+        path = Path(__file__)
+        for node in ast.walk(ast.parse(path.read_text())):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                yield path.relative_to(ROOT).as_posix(), node.lineno, node.value, mask_syntax(node.value)
+
+    registered = {value for row in values.values() for _, value in numeric_occurrences(row["value"], row["value"])}
+    used = collections.Counter()
+    for file, line, text, masked in candidates():
+        for match, value in numeric_occurrences(text, masked):
+            if value not in registered:
+                continue
+            accepted = []
+            for i, entry in enumerate(collisions):
+                if file != entry["file"] or match[0] != entry["token"]:
+                    continue
+                excerpt = entry["context"]
+                if any(start <= match.start() and match.end() <= start + len(excerpt)
+                       for start in (m.start() for m in re.finditer(re.escape(excerpt), text))):
+                    accepted.append(i)
+            if len(accepted) == 1:
+                used[accepted[0]] += 1
+            else:
+                yield f"Typed result candidate: {file}:{line}: {match[0]}"
+    for i, entry in enumerate(collisions):
+        if used[i] != 1:
+            yield f"Stale or ambiguous number collision: {entry['file']}: {entry['context']}"
 
 
 def at_revision(path, commit, *, missing=None, binary=False):
@@ -3056,7 +3223,7 @@ def main():
         if args.compare:
             old_values_source = at_revision(values_path, args.compare, missing="")
             old_values = {name: {"value": value} for name, value in
-                          re.findall(r"\\resultvalue\{([^}]+)\}\{([^}]*)\}", old_values_source)}
+                          re.findall(r"^\\resultvalue\{([^}]+)\}\{(.*)\}$", old_values_source, re.M)}
             for name in sorted(old_values.keys() | values.keys()):
                 before = old_values.get(name, {}).get("value")
                 after = values.get(name, {}).get("value")
@@ -3092,8 +3259,8 @@ def main():
                         if name not in values or occurrences[name] != 1}
             if unpaired:
                 errors.append(f"Each result requires exactly one occurrence: {unpaired}")
-            errors.extend(f"Typed result candidate: {path}:{line}: {value}"
-                          for path, line, value in typed_numbers(values))
+            collisions = json.loads(Path(__file__).with_name("number-collisions.json").read_text())
+            errors.extend(typed_numbers(values, collisions))
         if errors:
             for error in errors:
                 print(error)

@@ -105,7 +105,7 @@ How the MDEA fit changes when the shared parameters are released and fitted toge
 The choice among tied endpoints does not change the reported predictions of MEA, DEA and AMP.
 Replayed on the pressures and heats of Table~\ref{supp-tab:supplement-endpoint-prediction-spread}, including those outside each objective and the MEA pressures and heats at 373--\SI{393}{\kelvin}, the three endpoints of each amine (\cref{sec:parameters}) differ in AARD by at most 0.0004 percentage points for MEA, 0.0014 for DEA and 0.0002 for AMP, while the reported endpoint deviates from the same measurements by 0.6--206\,\%; each difference is more than a thousand times smaller than the deviation on the same rows.
 For MDEA the two continuations of start A agree with it within 0.0002 percentage points on the Kuranov, Ermatchkov and Carson data.
-The only evaluable drawn start ended in a separate basin, at an objective of \res{mdea-alternate-basin-objective-basin-comparison} against \res{mdea-selected-objective-basin-comparison}; its deviations of 64\,\% for the Kuranov pressures and 320\,\% for the Carson heats show that a much worse local minimum exists, not a competing fit, and the MDEA endpoint stays provisional because the rest of the parameter box was not explored.
+The only evaluable drawn start ended in a separate basin, at an objective of \res{mdea-alternate-basin-objective-basin-comparison} against \res{mdea-selected-objective-basin-comparison}; its deviations of \res{mdea-alternate-basin-kuranov-aard-transfer}\,\% for the Kuranov pressures and \res{mdea-alternate-basin-carson-aard-transfer}\,\% for the Carson heats show that a much worse local minimum exists, not a competing fit, and the MDEA endpoint stays provisional because the rest of the parameter box was not explored.
 These comparisons concern the endpoints found and do not quantify parameter uncertainty.
 
 \input{tables/amine-summary}
@@ -143,7 +143,7 @@ No measurement of liquid--liquid coexistence in this system was used.
 
 % P:phase-mdea-loaded
 Of the \num{11824} searches of the provisional MDEA model, \num{10509} finished and 1315 did not: 1086 at grid states and 229 at measured states.
-The searches that finish detect a descent 80 times, at no grid state; the 80 detections fall at 27 distinct states of measured composition, 10 searched at their measured pressures and 17 at pressures assigned to the state rather than measured.
+The searches that finish detect a descent 80 times, at no grid state; the 80 detections fall at 27 distinct states of measured composition, 10 searched at their measured pressures and \res{mdea-assigned-pressure-distinct-descents-transfer} at pressures assigned to the state rather than measured.
 At five of them only vapor-labelled trial endpoints descend, at 18 both liquid- and vapor-labelled endpoints do, and at four the descending endpoint is not labelled; a two-liquid calculation was attempted at the 18 and confirmed a second liquid at none.
 At eight of the 10 measured-pressure states, rows 1 and 3--5 of the heats of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} and the four \COtwo-free densities of Sobrino et al.\ \cite{sobrinoViscosityDensityMeasurements2016} at \SI{393.15}{\kelvin}, the bubble pressure of the MDEA model lies above the measured pressure, for example 7.48 against \SI{2.57}{\mega\pascal} at Zheng row 5 and 0.19 against \SI{0.100}{\mega\pascal} for Sobrino (Table~\ref{supp-tab:supplement-mdea-phase-outcomes}).
 There a descent toward a vapor is what the model should show, partial vaporization rather than a second liquid; this supports the vapor reading of those descents but does not prove it.
@@ -152,10 +152,10 @@ The MDEA model has no confirmed liquid--liquid split.
 It is not shown to be free of splits, because 229 of its 1564 searches at measured states give no result (Section~\ref{supp-sec:s-phase}), which also reports targeted controls far above the measured pressures.
 
 % P:phase-amp
-For AMP, all 666 searches of the AMP model, of 270 measurement-derived feeds and 396 grid states searched at pressures scaled to its own bubble pressure, finish without a detected instability, also when the trial compositions of earlier searches are tested.
+For AMP, all \res{amp-reported-screen-states-transfer} searches of the AMP model, of \res{amp-reported-screen-measured-states-transfer} measurement-derived feeds and \res{amp-reported-screen-grid-states-transfer} grid states searched at pressures scaled to its own bubble pressure, finish without a detected instability, also when the trial compositions of earlier searches are tested.
 This was not so for the first AMP fit.
-That fit, made with the MEA-fitted shared set and the R1--R3 references at the system pressure, used only the 47 loaded total pressures of Hartono et al.\ at 313--\SI{353}{\kelvin}, from which it deviates by 10.3\,\%, and it gave $b_{\mathrm{AMPH^+,w}}=\SI{-219}{\kelvin}$ with a conditional standard error of \SI{81}{\kelvin}.
-Its searches gave 73 confirmed liquid--liquid splits and 20 further detected instabilities among the same 666 states, all of them at 363--\SI{393}{\kelvin}, above its fitted pressures (\cref{fig:amp-splits}).
+That fit, made with the MEA-fitted shared set and the R1--R3 references at the system pressure, used only the 47 loaded total pressures of Hartono et al.\ at 313--\SI{353}{\kelvin}, from which it deviates by \res{amp-first-data-main-loaded-pressure-aard-first-fit}\,\%, and it gave $b_{\mathrm{AMPH^+,w}}=\SI{-219}{\kelvin}$ with a conditional standard error of \SI{81}{\kelvin}.
+Its searches gave \res{amp-first-data-confirmed-splits-transfer} confirmed liquid--liquid splits and \res{amp-first-data-unconfirmed-descents-transfer} further detected instabilities among the same \res{amp-first-data-screen-states-transfer} states, all of them at 363--\SI{393}{\kelvin}, above its fitted pressures (\cref{fig:amp-splits}).
 At 373--\SI{393}{\kelvin} it underpredicted every measured total pressure of Hartono et al.\ and of Tong et al., by \res{amp-first-data-free-hartono-aard-first-fit} and \res{amp-first-data-free-tong-aard-first-fit}\,\% on average.
 
 % P:phase-amp-refit
@@ -178,7 +178,7 @@ Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=0.72\linewidth]{amp-splits.pdf}
-\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid: the 73 with a split confirmed by a two-liquid equilibrium calculation and the 20 at which that calculation did not return two distinct liquids. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none at these 666 states, which are searched at pressures scaled to the bubble pressure of each fit; recalculated separately at the measured pressures of the six diamonds, it has no confirmed second liquid at any of them: four descents point toward a vapor and two controls have none. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.\ Diamonds mark the six measured states at which the first fit confirms a split.}
+\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid: the \res{amp-first-data-confirmed-splits-figure-caption} with a split confirmed by a two-liquid equilibrium calculation and the \res{amp-first-data-unconfirmed-descents-figure-caption} at which that calculation did not return two distinct liquids. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none at these \res{amp-reported-screen-states-figure-caption} states, which are searched at pressures scaled to the bubble pressure of each fit; recalculated separately at the measured pressures of the \res{amp-first-data-measured-splits-caption-diamonds} diamonds, it has no confirmed second liquid at any of them: \res{amp-reported-measured-controls-caption-vapor-descents} descents point toward a vapor and \res{amp-reported-measured-controls-caption-no-descent} controls have none. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.\ Diamonds mark the \res{amp-first-data-measured-splits-caption-observations} measured states at which the first fit confirms a split.}
 \label{fig:amp-splits}
 \end{figure}
 
@@ -201,7 +201,7 @@ The absorption heats at \SI{393}{\kelvin} are low by 5.8\,\% for Vinjarapu et al
 For the three further amines the support at stripper temperatures differs.
 The AMP model fits loaded total pressures up to \SI{393}{\kelvin}.
 The fitted MDEA pressures above \SI{368}{\kelvin} lie outside the measured R5 range and deviate by 4.44\,\% with a bias of $+0.76$\,\%.
-For DEA, 61 of the 90 fitted pressures lie outside the measured temperature range of R4 and 61 outside that of R5 (Table~\ref{supp-tab:supplement-transfer-data}), and the isotherm at \SI{394}{\kelvin} is not fitted.
+For DEA, \res{dea-fitted-pressure-outside-r4-range} of the 90 fitted pressures lie outside the measured temperature range of R4 and \res{dea-fitted-pressure-outside-r5-range} outside that of R5 (Table~\ref{supp-tab:supplement-transfer-data}), and the isotherm at \SI{394}{\kelvin} is not fitted.
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:literature-row
@@ -268,7 +268,7 @@ Neither shared set was fitted jointly with the four amines, so agreement for one
 
 % P:limits-estimation
 Every fit is a local solution, tested only from the starts run (\cref{sec:parameters}).
-For MEA, DEA and AMP three distinct starts reach the same objective, but no endpoint meets the strict projected-gradient criterion, and the MDEA fit is provisional: only one of 64 drawn starts could be evaluated, the reported endpoint comes from the inherited start, and a descent step from its endpoint still lowers the objective by more than the function tolerance, so the MDEA results are stated for that endpoint only (Section~\ref{supp-sec:s-uncertainty}).
+For MEA, DEA and AMP three distinct starts reach the same objective, but no endpoint meets the strict projected-gradient criterion, and the MDEA fit is provisional: only \res{mdea-evaluable-drawn-starts-transfer} of \res{mdea-planned-drawn-starts-transfer} drawn starts could be evaluated, the reported endpoint comes from the inherited start, and a descent step from its endpoint still lowers the objective by more than the function tolerance, so the MDEA results are stated for that endpoint only (Section~\ref{supp-sec:s-uncertainty}).
 The tied endpoints of MEA, DEA and AMP give the same predictions (\cref{sec:results-shared}), but that agreement is not a parameter uncertainty, which remains unquantified.
 The weights are assigned and differ between the amines; in the MDEA objective the loaded total pressures carry 41.3\,\%, the integral heats 19.0\,\% and the \COtwo-free densities 12.6\,\%.
 The standard errors exclude model discrepancy and the uncertainty of the shared parameters.

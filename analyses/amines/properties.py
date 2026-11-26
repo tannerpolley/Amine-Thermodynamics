@@ -50,6 +50,9 @@ def write_gibbs_derivative_summary():
                          if len(admitted) >= 2 and abs(delta) <= error else "undecided"),
             records=[paths[key].relative_to(ROOT).as_posix() for key in inputs],
         ))
+        if comparison == "volume" and len(inputs) == 1:
+            volume = record["center"]["volume_m3"]
+            rows[-1].update(relative_error=delta / volume, relative_estimated_error=error / volume)
 
     states = [(name, [name]) for name, record in records.items() if record.get("steps")]
     states.extend((f"{mode} MDEA daughter-inventory sum", [f"{mode}-MDEA-daughter-{i}" for i in (1, 2)])

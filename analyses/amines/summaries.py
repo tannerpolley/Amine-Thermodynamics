@@ -115,6 +115,7 @@ def accounting(s, attempts):
     initial_draws = {q['draw'] for q in manifest['starts'].values() if q['draw'] is not None}
     tested = initial_draws | {q['start']['draw'] for q in draws['draws'].values()}
     start_counts = dict(inherited=draws['accepted_original'], drawn=len(tested | set(draws['remaining'])), tested=len(tested),
+                        replacement_draws=len(draws['draws']),
                         evaluable=[k for k, q in draws['draws'].items() if q['disposition'] == 'eligible'],
                         untested_draws=draws['remaining'], fitted_endpoints=[k for k,q in initial.items() if q['endpoint']])
     properties = s.fixed('MDEA/properties.json.gz')['rows']
@@ -534,7 +535,8 @@ def main():
     ))
     covariance = s.read('analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json')
     mea_early = s.read('analyses/round_3/results/q4.json')
-    candidate = s.read('analyses/round_3/results/q8.json')['dea']
+    readback = s.read('analyses/round_3/results/q8.json')
+    candidate = readback['dea']
     s.write('shared/properties/display-summary.json.gz', dict(
         shared=shared(s), kamps=kamps(s), mdea=mdea_properties(s), mdea_bubble=mdea_bubble(s, account),
         dea_density=dea_density(s), spread=endpoint_predictions(s),
@@ -542,6 +544,7 @@ def main():
         mea_historical_covariance=covariance['native_correlation'],
         mea_early_reference={key: mea_early[key] for key in ('rows', 'heat_previous_kJ_mol', 'heat_change')},
         dea_alternative={key: candidate[key] for key in ('endpoint', 'chosen_cost', 'alternative_cost', 'rows', 'scores')},
+        water_calibration=readback['water'],
     ))
 
 
