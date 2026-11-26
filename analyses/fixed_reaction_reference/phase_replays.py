@@ -271,6 +271,8 @@ def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot)
         paths.update(zip(requested,pool.map(partial(_loading_path,run=run,point=point),
                                              (groups[k] for k in requested)),strict=True))
     retain('march-pilot' if pilot else 'domain-march',rows=list(paths.values()),seconds=monotonic()-tick)
+    print(output,'loading paths',len(paths),'stalls',sum(bool(p['stall']) for p in paths.values()),
+          round(monotonic()-tick,2),flush=True)
     aliases = run.same_calculations(point,states)
     assert not splits.keys() & aliases.keys(), 'split control must own its calculation'
     inventory = []
@@ -298,6 +300,8 @@ def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot)
     held = {q['key']:q for q in read('pilot')['rows']}
     stratum = lambda q: 'grid' if 'stock' in q else 'measured'
     stopped = {stratum(q) for q in inventory if q['domain']=='unassigned'}
+    if stopped:
+        print(output,'grid held at',next(q['key'] for q in inventory if q['domain']=='unassigned'),flush=True)
 
     def register_stops(rows):
         for q in rows:

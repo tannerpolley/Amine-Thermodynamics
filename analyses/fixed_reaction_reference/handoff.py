@@ -249,7 +249,8 @@ def comparison_consumed(row, search, spec, route):
         feed, T, pressure = parent.feed.values, parent.T, parent.P
         if isinstance(pressure,eq.Free) or row.get('compressed'):
             pressure = row.get('c',1.05)*search['pressure_reference_Pa']
-    assert (T,pressure,[feed.get(c,0.) for c in ids])==(search['T_K'],search['P_Pa'],search['feed_mol']), (
+    feed = [feed.get(c,0.) for c in ids]
+    assert (T,pressure,feed)==(search['T_K'],search['P_Pa'],search['feed_mol']), (
         f'{key}: consumed comparison state')
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     for value in (search.get('parent'),search.get('liquid_vapor'),search.get('two_liquid',{}).get('diagnostics')):
@@ -2111,10 +2112,15 @@ class Quantities:
                 else:
                     outcomes[key] = outcome
             stratum = lambda key: 'grid' if key.startswith('grid:') else 'measured'
-            held = {stratum(key) for key in blockers}
+            held = {}
+            for key in blockers:
+                held.setdefault(stratum(key),key)
             assert all(stratum(key) in held for key in pending), 'comparison unexplained missing searches'
             for key, record in records.items():
-                record['outcome'] = outcomes[key] if stratum(key) not in held else None
+                if stratum(key) in held:
+                    record['blocked_by'] = key if key in blockers else held[stratum(key)]
+                else:
+                    record['outcome'] = outcomes[key]
             counts = Counter(q['outcome'] or 'held' for q in records.values())
             domains = Counter(q['domain'] for q in records.values())
             assert sum(counts.values())==sum(domains.values())==11824, 'comparison outcome and domain counts'
