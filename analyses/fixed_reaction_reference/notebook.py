@@ -164,7 +164,7 @@ def render_mdea_stage2(result):
                       f"{grid['historical_outside_outcomes'].get('not completed',0):,} were incomplete.", '']
         if unassigned := d.get('unassigned'):
             lines += [f"{unassigned:,} grid searches have unassigned domain membership after the branch-connection check.", '']
-        else:
+        if grid['march_blockers'] or grid['additional_search_blockers']:
             lines += ['The grid phase counts are held. See the retained handoff for the exact blockers.', '']
     else:
         lines += [f"The warm start from the lowest loading failed on {len(grid['march_blockers'])} paths, "

@@ -1911,12 +1911,15 @@ class Quantities:
         assert len(searched)==sum(len(b['rows']) for b,_ in grid_batches)
         inputs = {q['key']:q for q in grid['rows'] if q['domain']=='inside' and q['key'] not in engine}
         assert inputs.keys()<=searched.keys(), 'an assigned grid row has no search record'
+        ids = [c['component_id'] for c in declaration['point']['parameters']['components']]
         outcomes, refuses = {}, {}
         for key,state in inputs.items():
             q = searched[key]
+            feed = [state['stock'].get(c,0.) for c in ids]
+            feed[ids.index('carbon-dioxide')] = state['a']*state['stock']['methyldiethanolamine']
             try:
-                assert q['P_Pa']==state['c']*state['marched_pressure_Pa'] and q['T_K']==state['T'], (
-                    f'{key}: consumed grid state')
+                assert (q['P_Pa']==state['c']*state['marched_pressure_Pa'] and q['T_K']==state['T']
+                        and q['feed_mol']==feed), f'{key}: consumed grid state'
                 outcomes[key] = mdea_outcome(q,len(bank))
             except (AssertionError,KeyError) as exc:
                 refuses[key] = q.get('blocker') or str(exc)
