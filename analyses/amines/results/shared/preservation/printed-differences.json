@@ -42,7 +42,8 @@
     "cause": "MDEA LHS-53",
     "classification": "Class 1, elapsed work budget changes the retained optimizer path",
     "mechanism": "First stage and its endpoint were exact. In the 75 s continuation the first nine cost entries matched; trial 10 returned a saturation elapsed-work refusal. The continuation reached the minimum trust-region radius without a lower objective.",
-    "disposition": "Endpoint reproduced at the 16-entry common prefix. The printed stop remains open."
+    "disposition": "Exact at the end of the 16-entry common prefix.",
+    "common_prefix_rerun": "$\\num{48386.509423}$"
   },
   {
     "display": "docs/scientific/latex/tables/supplement-fit-starts.tex",
@@ -50,13 +51,14 @@
     "row": "LHS-53",
     "column": "Outcome",
     "record": "analyses/amines/results/shared/fit/display-summary.json.gz",
-    "key": "endpoint_stages[MDEA][LHS-53][-1].termination",
+    "key": "attempts[MDEA][LHS-53].status; endpoint_stages[MDEA][LHS-53][-1].termination",
     "retained": "converged\\newline Parameter tolerance",
     "staged": "converged",
     "cause": "MDEA LHS-53",
     "classification": "Class 1, elapsed work budget changes the retained optimizer path",
     "mechanism": "First stage and its endpoint were exact. In the 75 s continuation the first nine cost entries matched; trial 10 returned a saturation elapsed-work refusal. The continuation reached the minimum trust-region radius without a lower objective.",
-    "disposition": "Endpoint reproduced at the 16-entry common prefix. The printed stop remains open."
+    "disposition": "The endpoint and projected gradient reproduce. The displayed termination differs from the historical termination.",
+    "common_prefix_rerun": "limit reached"
   },
   {
     "display": "docs/scientific/latex/tables/supplement-fit-starts.tex",

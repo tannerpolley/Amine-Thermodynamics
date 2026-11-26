@@ -148,11 +148,41 @@ ToleranceNotMet. This was a classification check on the held response.
 The MDEA state `comparison:157:problem` at 293.15 K and 0.5 MPa
 reproduced the unavailable optimized result and the supplied trial's
 dimensionless TPD/RT of −0.9718818375750402. The trial evaluated an
-existing composition on a separately solved liquid parent. The DEA
-screen recovered six classification outcomes, including six confirmed
-splits in the rebuilt screen. All 20 fixed-pressure DEA, AMP and MDEA
-controls retained their classifications. These are numerical
-comparisons of the declared model states.
+existing composition on a separately solved liquid parent. Across the
+11,824 reported MDEA requests, 10,509 were available. The 80 detections
+comprised eight from available optimized searches and 72 from supplied
+trials whose optimized searches were unavailable. The 80 detections
+resolved to 27 distinct states. None of the 27 split checks confirmed
+two liquids. The rebuilt DEA screen reproduced all six split confirmations.
+All 20 fixed-pressure DEA, AMP and MDEA controls retained their classifications.
+
+The separate MEA measured-pressure run reproduced 246 available results
+among 321 requests at the original closure rule, with no resolved descent.
+Its 162-state flash census reproduced 149 two-phase parents and 13
+single-liquid parents. Applying the newer density-scaled pressure criterion
+would admit 75 additional measured-pressure parents on the same wheel.
+For example, at 313.15 K and 101,325 Pa, the parent of
+`Jakobsen2005_state_022::MEACOO-` has a pressure mismatch of
+3.3213 × 10⁻⁵ Pa. Dividing by the requested pressure gives 3.2778 × 10⁻¹⁰.
+Dividing by the molar density times RT gives 2.8540 × 10⁻¹³. The former
+misses the 10⁻¹⁰ gate and the latter passes it. The staged rerun used
+the original criterion for this preserved population.
+
+The [phase comparison](results/shared/preservation/phase-comparison.json)
+records the held-response classifications, request comparisons and
+re-solves by set. The historical MEA restrictions grid and the full MDEA
+bicarbonate 0.765 screen lack per-state responses and support request
+comparison only. The separate restrictions census and the 27 measured MDEA
+records do hold responses. The DEA MEA-fitted shared summaries and the AMP
+F2 probes also lack complete per-state responses. The eight AMP probe
+counts were independently reproduced on S. The phase evidence checks
+the calculation paths at retained parameters and conditions.
+
+The regenerated display curves matched all 2,211 MEA, 275 DEA and 483 MDEA
+rows by identity, status and plotted quantity. The Hong 30 mass % MEA model
+reproduced the stability labels at all 90 weight nodes, with 62 locally
+unstable and 28 stable. Its three independent fugacity checks and five
+finite-difference Hessian checks matched the retained records.
 
 The 14 C1 Gibbs-derivative records reproduced their displayed quantities
 using the procedures that originally generated them. A first staged run
@@ -160,9 +190,17 @@ with the later scaled pressure-closure gate changed step admission in
 six records. The preservation comparison restored the original
 pressure basis and the reclosure procedures for the rebuilt MEA and DEA
 cases. The comparison used the direct pressure gate for the two AMP
-records. The display check over the regenerated derivative summary,
-alternate assessments and MEA and AMP fits reproduced 55 tables and
-16 figures in 23.44 s with the retained MDEA stop shown.
+records. The six AMP control candidate flags also reproduced after
+restoring the original liquid–vapor root qualification. At 373.00 K
+and 0.510 MPa, the candidate for Hartono row 10 has the same calculated
+Gibbs energy under both gates. The original gate rejects the vapor root
+because Engine S returned its identity as unspecified.
+
+The display check over regenerated phase and property records,
+the derivative summary, and the count-budgeted MEA and AMP fits
+reproduced 55 tables and 16 figures in 25.03 s with the historical
+MDEA LHS-53 stop shown. Using the count-budgeted MDEA run's stop instead
+changes its fit-outcome cell. The other displayed quantities match.
 
 ## Retained endpoints at the system pressure
 
