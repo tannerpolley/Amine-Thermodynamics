@@ -3,27 +3,37 @@
 from __future__ import annotations
 
 import copy
+import csv
 from dataclasses import dataclass
 import gzip
 import json
 import math
 from pathlib import Path
 
+from .fit import compare_rows
 from .model import (
     CAMPAIGN_ARCHIVE,
     P_REF,
     REPORTED,
     ROOT,
     Route,
+    evaluate,
     parameter_values,
     with_parameter_values,
 )
-from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS, REACTION_CONTRACT_PATH
+from MEA.common.mea_source_contracts import (
+    EXPECTED_REACTION_CORRELATIONS,
+    REACTION_CONTRACT_PATH,
+)
+from MEA.common.retained_results import read
 from MEA.solvent_specification import SolventSpecification
 import epcsaft
 from epcsaft import equilibrium, regression as reg
 
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
+HISTORICAL_SPEC = BUNDLE / "results/adoption-297/historical-spec/MEA.toml"
+SALT_FIT = BUNDLE / "results/salt-anchored-435/MEA/F4"
+EXPANDED_FIT = ROOT / "analyses/round_7/results/E"
 STATE_PACKET = BUNDLE / "data/input/state-packet.json.gz"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
 STATE_PACKET_SCHEMA_VERSION = 1
@@ -719,10 +729,233 @@ class MEARoute(Route):
         return reg.stability(spec.parameters, parent, scale=scale, pressure_reference=bubble, pressure_ratio=state["c"])
 
 
+def pressure_record(spec, template, identity, request, observed, source, group):
+    problem = _problem_from_request(corrected_request(request, spec.inputs["endpoint"]))
+    binding = spec.problems[template["problem"]]
+    problem.reactions = binding.reactions
+    problem.neutral_reference = binding.neutral_reference
+    problem.row_tolerance = binding.row_tolerance
+    spec.problems[identity] = problem
+    arguments = dict(
+        template["arguments"], observed=observed, phase=problem.phases[1].name
+    )
+    source_coordinates = request["reaction_system"]["analytical_feed_contract"][
+        "source_coordinates"
+    ]
+    row = dict(
+        id=identity,
+        observed=observed,
+        quantity="PartialPressure",
+        temperature_K=problem.T,
+        feed_mol=problem.feed.values,
+        source=source,
+        source_coordinates=source_coordinates,
+        weight=template["weight"],
+        form="LogRatio",
+        scale=1.0,
+    )
+    return dict(
+        template,
+        identity=identity,
+        problem=identity,
+        group=group,
+        row=row,
+        arguments=arguments,
+        unit="Pa",
+        temperature_domain=[293.15, 393.15],
+        basis=dict(template["basis"], arguments=arguments),
+    )
+
+
+def pressure_series(source):
+    return round(
+        float(source["temperature_series_C"] or source["temperature_reported_C"])
+    )
+
+
+def pressure_statistics(rows):
+    good = [
+        row
+        for row in rows
+        if row["status"] == "Available" and row["requested_tolerance_met"]
+    ]
+    error = [row["value"] / row["observed"] - 1 for row in good]
+    return dict(
+        attempted=len(rows),
+        available=len(good),
+        bias_percent=100 * math.fsum(error) / len(error) if error else None,
+        AARD_percent=100 * math.fsum(map(abs, error)) / len(error) if error else None,
+        log_RMSE=math.sqrt(
+            math.fsum(math.log1p(value) ** 2 for value in error) / len(error)
+        )
+        if error
+        else None,
+    )
+
+
+def replay_expanded_weights(declaration):
+    templates = {}
+    for observation in load_state_packet(declaration["packet"])["observations"]:
+        request = observation["request"]
+        if request["pressure"]["role"] == "solved":
+            series = round(request["temperature"]["value"] - 273.15)
+            templates.setdefault(series, []).append(
+                (request["reaction_system"]["feed_amounts_mol"][0], request)
+            )
+    with declaration["canonical"].open(newline="") as stream:
+        canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
+    with declaration["pressure_rows"].open(newline="") as stream:
+        population = {
+            row["target"]: canonical[row["identity"].removeprefix("canonical:")]
+            for row in csv.DictReader(stream)
+        }
+    with declaration["wagner"].open(newline="") as stream:
+        wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
+
+    cases = {}
+    for name, (parameters, reference) in declaration["cases"].items():
+        reference = read(reference)
+        mapping = read(parameters)
+        spec = bind_mea(
+            mapping, declaration["specification"], reaction_reference_pressure_pa=None
+        )
+        spec.inputs["endpoint"] = mapping
+        originals = spec.inputs["observations"]["fitted"]
+        legacy = [
+            row
+            for row in originals
+            if row["group"] == "common149" and row["kind"] == "partial_pressure"
+        ]
+        old_ids = {row["identity"] for row in legacy}
+        added = []
+        for identity, source in population.items():
+            if identity in old_ids:
+                continue
+            loading = float(source["CO2_loading"])
+            template = min(
+                templates[pressure_series(source)],
+                key=lambda item: abs(item[0] - loading),
+            )[1]
+            added.append(
+                pressure_record(
+                    spec,
+                    legacy[0],
+                    identity,
+                    source_feed_request(template, source),
+                    float(source["CO2_pressure"]) * 1000,
+                    source["source_key"],
+                    "Table S6 additions",
+                )
+            )
+        hot_wagner = []
+        for row in sorted(wagner, key=lambda row: row["subset"]):
+            T = float(row["evaluation_temperature_k"])
+            if T < 370:
+                continue
+            loading = float(row["loading_mol_CO2_per_mol_MEA"])
+            template = min(
+                templates[80 if T < 355 else 120],
+                key=lambda item: abs(item[0] - loading),
+            )[1]
+            request = source_feed_request(
+                template,
+                dict(
+                    source_key="Wagner2013",
+                    CO2_loading=loading,
+                    MEA_weight_fraction=float(row["MEA_mass_fraction_unloaded"]),
+                    temperature_reported_C=T - 273.15,
+                ),
+            )
+            identity = f"Wagner2013:csv-row-{row['csv_data_row_number']}-pco2"
+            hot_wagner.append(
+                pressure_record(
+                    spec,
+                    legacy[0],
+                    identity,
+                    request,
+                    float(row["pressure_pa_reported_quantity"]),
+                    "Wagner2013",
+                    "Wagner comparison",
+                )
+            )
+        rows = evaluate(spec, [*originals, *added])
+        held = evaluate(spec, hot_wagner)
+        pressure_rows = {
+            row["identity"]: row for row in rows if row["identity"] in population
+        }
+        hot = [
+            row
+            for identity, row in pressure_rows.items()
+            if float(population[identity]["temperature_reported_C"]) + 273.15 >= 370
+        ]
+        pools = dict(
+            legacy=[
+                row for identity, row in pressure_rows.items() if identity in old_ids
+            ],
+            added=[
+                row
+                for identity, row in pressure_rows.items()
+                if identity not in old_ids
+            ],
+            hot_expanded=hot,
+            hot_published=hot + held,
+            all_pressure=list(pressure_rows.values()),
+        )
+        for identity, row in pressure_rows.items():
+            source = population[identity]
+            pools.setdefault(source["source_key"], []).append(row)
+            pools.setdefault(f"{pressure_series(source)} C nominal", []).append(row)
+        differences, values = compare_rows(
+            reference["rows"] + reference["hot_wagner"], rows + held
+        )
+        cost = [
+            math.fsum(row["cost"] for row in group)
+            if all("cost" in row for row in group)
+            else None
+            for group in (rows[: len(originals)], rows)
+        ]
+        cases[name] = dict(
+            rows=rows,
+            hot_wagner=held,
+            row_differences=differences,
+            value_differences=values,
+            original_cost=cost[0],
+            expanded_cost=cost[1],
+            pressure={name: pressure_statistics(rows) for name, rows in pools.items()},
+        )
+    return cases
+
+
 FIT_SETS = {
+    "expanded-weights": dict(
+        replay=replay_expanded_weights,
+        archive=CAMPAIGN_ARCHIVE,
+        specification=HISTORICAL_SPEC,
+        packet=BUNDLE / "results/source-corrections-152/state-packet.json.gz",
+        canonical=ROOT
+        / "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
+        pressure_rows=BUNDLE
+        / "results/paper-evidence-341/paper-evidence/canonical-pressure.csv",
+        wagner=BUNDLE
+        / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
+        cases={
+            "F4": (
+                EXPANDED_FIT / "F4/parameters.json",
+                EXPANDED_FIT / "F4/replay.json.gz",
+            ),
+            "F2": (
+                EXPANDED_FIT / "F2/parameters.json",
+                EXPANDED_FIT / "F2/replay.json.gz",
+            ),
+            "incumbent": (
+                SALT_FIT / "parameters.json",
+                EXPANDED_FIT / "incumbent/replay.json.gz",
+            ),
+        },
+    ),
     "system-pressure": dict(
         route=MEARoute,
-        declaration=BUNDLE / "results/adoption-297/historical-spec/MEA.toml",
+        declaration=HISTORICAL_SPEC,
         reference_pressure_pa=None,
         archive=CAMPAIGN_ARCHIVE,
         endpoint=REPORTED / "MEA/manifest.json.gz",
@@ -732,7 +965,7 @@ FIT_SETS = {
     ),
     "reported": dict(
         route=MEARoute,
-        declaration=BUNDLE / "results/adoption-297/historical-spec/MEA.toml",
+        declaration=HISTORICAL_SPEC,
         retained=REPORTED / "MEA",
         reference_pressure_pa=P_REF,
         maximum_seconds=2700,

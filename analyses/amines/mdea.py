@@ -5,6 +5,8 @@ from collections import Counter
 from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
 
 DECLARATION = ROOT / "analyses/mdea_mea_workflow/inputs/bounded-binary-411.json"
+BOUNDED_BINARY = ROOT / "analyses/mdea_mea_workflow/results/bounded-binary-411"
+UNBOUNDED_BINARY = BOUNDED_BINARY / "fits/unbounded-2"
 KURANOV_LOG_SCALE = 0.015
 
 
@@ -24,6 +26,77 @@ class MDEAWeights(Route):
 
 
 FIT_SETS = {
+    "system-pressure-first-weights": dict(
+        route=Route,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=ROOT
+        / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/selection.json.gz",
+        endpoint_keys=("point",),
+        reference=ROOT
+        / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/data-rows.json.gz",
+        reference_keys=(),
+        objective=ROOT
+        / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/selection.json.gz",
+        objective_keys=("cost",),
+    ),
+    "bicarbonate-0.765": dict(
+        route=Route,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=BOUNDED_BINARY / "endpoint.json",
+        endpoint_keys=(),
+        reference=BOUNDED_BINARY / "data-rows.json",
+        reference_keys=(),
+        objective=BOUNDED_BINARY / "summary-row.json",
+        objective_keys=("data_cost",),
+    ),
+    "bicarbonate-0.765-unbounded": dict(
+        route=Route,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=UNBOUNDED_BINARY / "endpoint.json",
+        endpoint_keys=(),
+        reference=BOUNDED_BINARY / "data-rows.json",
+        reference_keys=(),
+        prediction_record=UNBOUNDED_BINARY / "stage-1-fit.json",
+        prediction_keys=("predictions",),
+        objective=UNBOUNDED_BINARY / "stage-1-fit.json",
+        objective_keys=("endpoint_replay_cost",),
+    ),
+    "bicarbonate-0.1325": dict(
+        route=Route,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/endpoint.json.gz",
+        endpoint_keys=(),
+        reference=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/data-rows.json.gz",
+        reference_keys=(),
+        objective=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/selection.json.gz",
+        objective_keys=("cost",),
+    ),
+    "bicarbonate-1.0": dict(
+        route=Route,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/endpoint.json.gz",
+        endpoint_keys=(),
+        reference=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/data-rows.json.gz",
+        reference_keys=(),
+        objective=ROOT
+        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/selection.json.gz",
+        objective_keys=("cost",),
+    ),
     "system-pressure": dict(
         route=MDEAWeights,
         declaration=DECLARATION,

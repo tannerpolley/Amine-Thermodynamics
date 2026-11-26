@@ -1,5 +1,6 @@
 """Reported fit starts, attempts, selection and replay."""
 
+import csv
 import gzip
 from hashlib import sha256
 import json
@@ -7,7 +8,7 @@ import os
 from time import monotonic
 
 from .model import replay, row_manifest
-from .properties import endpoint_diagnostics
+from .properties import endpoint_diagnostics, property_rows
 from .wheel import verify
 from MEA.common.retained_results import read
 from MEA.solvent_specification import jsonable
@@ -257,35 +258,106 @@ def descent_probe(route, fit_record, fractions=(1.0, 0.5)):
 
 def replay_retained(fit_set):
     wheel = verify()
+    if "replay" in fit_set:
+        return dict(fit_set["replay"](fit_set), wheel=wheel, archive=fit_set["archive"])
     point = read(fit_set["endpoint"])
     for key in fit_set["endpoint_keys"]:
         point = point[key]
-    reference = read(fit_set["reference"])
+    reference_path = fit_set["reference"]
+    if reference_path.suffix == ".csv":
+        with reference_path.open(newline="") as stream:
+            reference = list(csv.DictReader(stream))
+    else:
+        reference = read(reference_path)
     for key in fit_set["reference_keys"]:
         reference = reference[key]
-    result = replay(route_for(fit_set).bind(point))
-    old = {row["identity"]: row for row in reference["rows"]}
-    new = {row["identity"]: row for row in result["rows"]}
-    differences = []
-    for identity in sorted(old.keys() | new.keys()):
-        before, after = old.get(identity), new.get(identity)
-        if before is None or after is None:
-            differences.append(dict(identity=identity, retained=before is not None, replayed=after is not None))
-            continue
-        fields = ("status", "requested_tolerance_met")
-        if "cost" not in before or "cost" not in after:
-            fields += ("convergence",)
-        for field in fields:
-            if before.get(field) != after.get(field):
-                differences.append(
-                    dict(identity=identity, field=field, retained=before.get(field), replayed=after.get(field))
+    route = route_for(fit_set)
+    result = replay(route.bind(point))
+    if isinstance(reference, list):
+        retained_rows = reference
+        objective = read(fit_set["objective"])
+        for key in fit_set["objective_keys"]:
+            objective = objective[key]
+        if "prediction_record" in fit_set:
+            predictions = read(fit_set["prediction_record"])
+            for key in fit_set["prediction_keys"]:
+                predictions = predictions[key]
+            retained_rows = [
+                dict(
+                    identity=row["identity"],
+                    value=value,
+                    status="Available",
+                    requested_tolerance_met=True,
                 )
+                for row, value in zip(
+                    (row for row in retained_rows if row["role"] == "fitted"),
+                    predictions,
+                    strict=True,
+                )
+            ]
+        if "role" in retained_rows[0]:
+            result["properties"] = property_rows(route, point, result["rows"])
+    else:
+        retained_rows, objective = reference["rows"], reference["cost"]
+    replayed_rows = (
+        result["properties"]["rows"] if "properties" in result else result["rows"]
+    )
+    differences, values = compare_rows(retained_rows, replayed_rows)
     return dict(
         wheel=wheel,
         archive=fit_set["archive"],
         endpoint_fingerprint=fingerprint(point),
         replay=result,
-        retained_cost=reference["cost"],
-        retained_available=reference["attempted"] - reference["refused"],
+        retained_cost=objective,
+        retained_available=sum(row["status"] == "Available" for row in retained_rows),
+        replayed_available=sum(row["status"] == "Available" for row in replayed_rows),
         row_differences=differences,
+        value_differences=values,
     )
+
+
+def compare_rows(retained_rows, replayed_rows):
+    old = {row["identity"]: row for row in retained_rows}
+    new = {row["identity"]: row for row in replayed_rows}
+    differences, values = [], []
+    for identity in sorted(old.keys() | new.keys()):
+        before, after = old.get(identity), new.get(identity)
+        if before is None or after is None:
+            differences.append(
+                dict(
+                    identity=identity,
+                    retained=before is not None,
+                    replayed=after is not None,
+                )
+            )
+            continue
+        for field in ("status", "requested_tolerance_met", "role"):
+            if before.get(field) != after.get(field):
+                differences.append(
+                    dict(
+                        identity=identity,
+                        field=field,
+                        retained=before.get(field),
+                        replayed=after.get(field),
+                    )
+                )
+        if before.get("status") != "Available" or after.get("status") != "Available":
+            stop = [(r.get("convergence") or {}).get("stop") for r in (before, after)]
+            if stop[0] != stop[1]:
+                differences.append(
+                    dict(
+                        identity=identity,
+                        field="stop",
+                        retained=stop[0],
+                        replayed=stop[1],
+                    )
+                )
+        if before.get("value") != after.get("value"):
+            values.append(
+                dict(
+                    identity=identity,
+                    retained=before.get("value"),
+                    replayed=after.get("value"),
+                )
+            )
+    return differences, values
