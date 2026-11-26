@@ -17,6 +17,33 @@
     "sha256": "63e70002fd4882d9459b77a23f2325e227593b7bd2a3cf0c4dad70a305774d47",
     "stage": "replay summary"
   },
+  "analyses/amines/results/shared/fit/display-summary.json.gz": {
+    "disposition": "stage",
+    "owner": "fit stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "fit",
+    "record": "shared/fit/display-summary.json.gz",
+    "keys": "amp_enthalpy, attempts, start_distances, endpoint_stages, mdea_start_counts",
+    "sha256": "04f4146014f4aba126ff2eeb1a5e711ed2c36dc4b5e685c5356a3920f68efd5d"
+  },
+  "analyses/amines/results/shared/phase/display-summary.json.gz": {
+    "disposition": "stage",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "shared/phase/display-summary.json.gz",
+    "keys": "dea_controls, amp_controls, amp_worked, mdea_early, mea_grid, amp_outcomes, coverage, mdea_historical_measured, mea_search, mdea_distinct_states, amp_early",
+    "sha256": "117102193b8ee7d682f20313966d06e9ab5b9e502ebb34e89d5a91d954286b40"
+  },
+  "analyses/amines/results/shared/properties/display-summary.json.gz": {
+    "disposition": "stage",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "shared/properties/display-summary.json.gz",
+    "keys": "mea_early_reference, kamps, dea_density, mdea, spread, shared, mea_mamun, mea_historical_covariance, dea_alternative, mdea_bubble",
+    "sha256": "6d7809fe91046ab9f8abc8bdeb83f9bae96ec009f7cd55fcbd7883b50168f351"
+  },
   "analyses/amines/results/shared/properties/gibbs-derivatives.json": {
     "disposition": "stage",
     "fit_set": "fixed-at-old, reported",
@@ -298,13 +325,14 @@
   },
   "analyses/fixed_reaction_reference/manuscript-handoff.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "comparison-only",
     "fit_set": "reported",
     "keys": "fit_attempts;quantities;reference_pressure_pa;selected_starts",
     "owner": "all five",
     "record": "shared/comparisons/properties/display/analyses/fixed_reaction_reference/manuscript-handoff.json",
     "sha256": "eacad036ea577e13a1fa949657842a1f175d1d9e6727986b6c1f9b9dd405142a",
-    "stage": "summary of each stage (45 named quantities)"
+    "stage": "summary of each stage (45 named quantities)",
+    "evidence": "Superseded for rendering by the fit, phase and properties stage summaries."
   },
   "analyses/fixed_reaction_reference/results/AMP_fixed/A.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -757,6 +785,375 @@
     "sha256": "92403fe2d1d418906bdf9e4f7f1b4dcc2a21337bc59a498f714ae92ba1045606",
     "stage": "selected endpoint"
   },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/0.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/0.json.gz",
+    "keys": "summary contributor",
+    "sha256": "806752b39bc37230b7dd957f332b1f115ea614ee0746c2a20fb413b3a4c9f191"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/1.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/1.json.gz",
+    "keys": "summary contributor",
+    "sha256": "63c43ac2333a201fb1ffffb4c9de2578b37e6402492f7e5c2f832bd8adc973dd"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/10.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/10.json.gz",
+    "keys": "summary contributor",
+    "sha256": "fa2db011f5954087b8b7820c7de7274e870dbcc83a3b03715a3d40390bfb1999"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/11.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/11.json.gz",
+    "keys": "summary contributor",
+    "sha256": "e2320c19749ff351274215bc1f9b646a46c64b23df7f0f98c207e0a1cdf57de0"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/12.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/12.json.gz",
+    "keys": "summary contributor",
+    "sha256": "d2edfad822a9a3b67cfae75191429d325d658d5ca49db78330444066ec2a2780"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/13.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/13.json.gz",
+    "keys": "summary contributor",
+    "sha256": "8c6a11b238024e3c6475e33ec5acd963c3075eb7f07fc0bcdfb7f54547c1b7a3"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/14.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/14.json.gz",
+    "keys": "summary contributor",
+    "sha256": "b5ef4bd28c9bee659aa4393787d1621c82d882508e6b4eeb73c5eca089be80c5"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/15.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/15.json.gz",
+    "keys": "summary contributor",
+    "sha256": "14dab7d0086f5aef666c0a06d3b7c4f489f5b214ca62def47dfe7a39c70dd203"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/16.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/16.json.gz",
+    "keys": "summary contributor",
+    "sha256": "4daa35902faae357fce9cf8cd64a10b150f971d4b95606636f6345ae5cdb5a0c"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/17.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/17.json.gz",
+    "keys": "summary contributor",
+    "sha256": "ba3bc7c8bdc67053f0a3990f94b3acce7d53da561f2e513241006ddbc61981cb"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/18.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/18.json.gz",
+    "keys": "summary contributor",
+    "sha256": "c077b26947f438d2e7b9fadd38adf23b3268d081492b53353834f2ee23c73293"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/19.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/19.json.gz",
+    "keys": "summary contributor",
+    "sha256": "3eee2501229f0f237c50d3f6ef0d24ed6af05c6ca4c58e2ec255a9f16190db2e"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/2.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/2.json.gz",
+    "keys": "summary contributor",
+    "sha256": "aab14b3a2777cbf52d144472eeaee27e88f4890070722bad2c735a2b656388ed"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/20.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/20.json.gz",
+    "keys": "summary contributor",
+    "sha256": "650203e842545d596e6ec91941b5fea8c2e465b1101623d53d6cbbb5a2fb5a81"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/21.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/21.json.gz",
+    "keys": "summary contributor",
+    "sha256": "548eb8960c7e8d18c99c0c0608cc58c0fe5c09741dffa5b02a706f90cb36b562"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/22.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/22.json.gz",
+    "keys": "summary contributor",
+    "sha256": "36375a5dfbfdc2b34565682e83e13abac487062e6ea795ceb8cbbeb6bf407784"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/23.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/23.json.gz",
+    "keys": "summary contributor",
+    "sha256": "2835029f9a9d42ed85d787e6a145e29b835e8701abadf845a770d2fef9372918"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/24.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/24.json.gz",
+    "keys": "summary contributor",
+    "sha256": "3265d7cfe993d2abe4f50ec3b8306686e96e845c980c24bff60913a83b4b3218"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/25.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/25.json.gz",
+    "keys": "summary contributor",
+    "sha256": "04382f902e812911132e28de6499fcd81f57d86dab242e2d8d9f06d21c5a8889"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/26.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/26.json.gz",
+    "keys": "summary contributor",
+    "sha256": "c5a7d861179c0db30b410edd3fbe2632439efc4d7ccf582089ca2834f83293da"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/27.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/27.json.gz",
+    "keys": "summary contributor",
+    "sha256": "09a684770671b79e70a21e5b012ca425fa8af9c53eb209732b64ff5666a6db5d"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/28.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/28.json.gz",
+    "keys": "summary contributor",
+    "sha256": "28938cc6e5274488f0624d1928b11835c85ad32edf098b4125a7f0942fdeec3f"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/29.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/29.json.gz",
+    "keys": "summary contributor",
+    "sha256": "67162d7feeeb031039276afd6e088a64121325366fd4aa6919875d43f4148ce6"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/3.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/3.json.gz",
+    "keys": "summary contributor",
+    "sha256": "614eb221cf12c5453f2532a52d1621a981acfb87e0462afb19380636b0d57ed7"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/30.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/30.json.gz",
+    "keys": "summary contributor",
+    "sha256": "fb7ff1cb6b4cd81f3fa62beeb1b7bf7f27aef542f81667ff563cf58940720054"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/31.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/31.json.gz",
+    "keys": "summary contributor",
+    "sha256": "34028721b7f09a24007aaf42ac00190e70cb164070c73745871d65d12ab66fbc"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/32.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/32.json.gz",
+    "keys": "summary contributor",
+    "sha256": "bd0b8032cd244b0a42b3f77b4773e89a7eff4d596810f003096900c1f3b63281"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/33.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/33.json.gz",
+    "keys": "summary contributor",
+    "sha256": "f4b782633da215322c939e8c8e35e46e54eba9a2fe3504cd63f3b1830b34d076"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/34.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/34.json.gz",
+    "keys": "summary contributor",
+    "sha256": "aa2281ef4b8c40631f5bfd59d00893b10e36565e9ed4ace0aeeb436e7197f4d6"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/35.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/35.json.gz",
+    "keys": "summary contributor",
+    "sha256": "582fff66a9919d4ec4f7e8bfd8496bb711102041457d6d1f4afaad49a6478d73"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/36.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/36.json.gz",
+    "keys": "summary contributor",
+    "sha256": "551d109c1d1360657d49bc63ac32d5ae73f50ae2d65b31f68dea39ea861043d6"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/37.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/37.json.gz",
+    "keys": "summary contributor",
+    "sha256": "9c1d2822f93ad9adb44e2ffab3f67b97fadbe9eabe609f9fa45e947849322d74"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/38.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/38.json.gz",
+    "keys": "summary contributor",
+    "sha256": "7cad8178cb34464314c1f2bf03256308cd6bcc7c0fa9fca463e0e1f3c80b285a"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/39.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/39.json.gz",
+    "keys": "summary contributor",
+    "sha256": "33baa5cedd3eee87f43385fb3867177d19323599510e074d1af8e35e89ec58bc"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/4.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/4.json.gz",
+    "keys": "summary contributor",
+    "sha256": "7235a7b6181f3452419e3f3819050bb15bae2bfddca024bd99b7cedca7348604"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/40.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/40.json.gz",
+    "keys": "summary contributor",
+    "sha256": "529a197c414d32134de897b89241cf67254f028b0ed80169278228319803dce1"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/5.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/5.json.gz",
+    "keys": "summary contributor",
+    "sha256": "5efe0fc7c482afe004c5bcf569b6d15282da2c83174f1968accd585735012484"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/6.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/6.json.gz",
+    "keys": "summary contributor",
+    "sha256": "9f54909846ae839eff766fd3122d02800f8d6c43c761634fbfb4254216fbf57f"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/7.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/7.json.gz",
+    "keys": "summary contributor",
+    "sha256": "d16a2ce5b310b797b8ee8d580f79e500e2c7178f127830131d1f7c61bd54b472"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/8.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/8.json.gz",
+    "keys": "summary contributor",
+    "sha256": "cfe8c3501c6db585e47827ef67d3e31bf26b4a2246be3bb34703b89927ba884f"
+  },
+  "analyses/fixed_reaction_reference/results/E/MEA/measured/9.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/E/MEA/measured/9.json.gz",
+    "keys": "summary contributor",
+    "sha256": "a2d01299c9e11021d4a52f8c4f98415218e140be73993cedcc18477f1cb92336"
+  },
   "analyses/fixed_reaction_reference/results/E/MEA/replay.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "rekey",
@@ -827,6 +1224,15 @@
     "sha256": "53bd3a77a6264a976a650f7726f6e471427cf9383959331c27486b2a226457db",
     "stage": "properties"
   },
+  "analyses/fixed_reaction_reference/results/MDEA/property-comparisons/A.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/fixed_reaction_reference/results/MDEA/property-comparisons/A.json.gz",
+    "keys": "summary contributor",
+    "sha256": "fee6466a57330d7b33e6061965b30180798a036f730d58cfa7c7567f347a7d68"
+  },
   "analyses/fixed_reaction_reference/results/MDEA/replacement-starts.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "rekey",
@@ -836,6 +1242,15 @@
     "record": "mdea/reported/fit/display/analyses/fixed_reaction_reference/results/MDEA/replacement-starts.json.gz",
     "sha256": "82acfd308f45a1c3b35f68b5b64c72112267687ab8a721a578f743cabf4d7b8e",
     "stage": "fit"
+  },
+  "analyses/fixed_reaction_reference/results/MDEA/screen/selected/declared/state-inventory.json.gz": {
+    "disposition": "stage-input",
+    "owner": "fit stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "fit",
+    "record": "analyses/fixed_reaction_reference/results/MDEA/screen/selected/declared/state-inventory.json.gz",
+    "keys": "summary contributor",
+    "sha256": "e81f392bf54c86e9a7ce512f79a820a6d1b79382b1a54780d0b78f14dec99967"
   },
   "analyses/fixed_reaction_reference/results/MDEA/screen/selected/declared/summary.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -855,6 +1270,15 @@
     "record": "mdea/reported/fit/selection.json",
     "sha256": "a64fa1b325183915e023aad08df1159b74d5cf62e56b4b4cd7dcdfe73057a8e6",
     "stage": "selected endpoint"
+  },
+  "analyses/fixed_reaction_reference/results/MDEA/stationarity/A-continuation.json.gz": {
+    "disposition": "stage-input",
+    "owner": "fit stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "fit",
+    "record": "analyses/fixed_reaction_reference/results/MDEA/stationarity/A-continuation.json.gz",
+    "keys": "summary contributor",
+    "sha256": "f88cf6198997422243695147ee2752d5377be7fede9f74eb3aefc9f267c86b74"
   },
   "analyses/fixed_reaction_reference/results/MDEA/stationarity/A-descent-continuation.json.gz": {
     "disposition": "input",
@@ -1004,6 +1428,33 @@
     "record": "mea/reported/fit/display/analyses/fixed_reaction_reference/results/MEA/replacement-starts.json.gz",
     "sha256": "d15356a7630afebacb9eb2a77ecb8c69fb537e26887fe0d0d7804c26ccca7694",
     "stage": "fit"
+  },
+  "analyses/fixed_reaction_reference/results/MEA/screen/census.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/MEA/screen/census.json.gz",
+    "keys": "summary contributor",
+    "sha256": "11c6d51b747fd17df9c8b2a70deb53c065640ff39eedc32c3d755d7e9e202b52"
+  },
+  "analyses/fixed_reaction_reference/results/MEA/screen/grid.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/fixed_reaction_reference/results/MEA/screen/grid.json.gz",
+    "keys": "summary contributor",
+    "sha256": "bb1d6d911b8ffde9a3466bc3584ae1bd6f92f4cf27409a2431b3bbd2ef4de78f"
+  },
+  "analyses/fixed_reaction_reference/results/MEA/screen/summary.json.gz": {
+    "disposition": "stage-input",
+    "owner": "fit stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "fit",
+    "record": "analyses/fixed_reaction_reference/results/MEA/screen/summary.json.gz",
+    "keys": "summary contributor",
+    "sha256": "2f3330d643b97cdc3a8ae131a33a62e2185829da36a109aff3f193ce2e4f4d10"
   },
   "analyses/fixed_reaction_reference/results/MEA/selection.json": {
     "disposition": "input",
@@ -1197,14 +1648,14 @@
   },
   "analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "bicarbonate-0.765",
     "keys": "[rows] key,native_branch,supplied_branch,attempts,temperature_K,pressu",
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.765/replay/display/analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json",
     "sha256": "febc9e412c736487a72b38ee5edabef54c7e036b480a629ecbd995b229ecf33a",
     "stage": "replay, phase",
-    "evidence": "The historical paired MDEA phase readback round_3/records.py:103 reads its measured-pressure attempts. The current displayed census uses fixed-reference classifications. The later MDEA phase producer has yet to be connected."
+    "evidence": "Read by analyses/amines/results/shared/phase/display-summary.json.gz."
   },
   "analyses/mdea_mea_workflow/results/phase-search-421/observation-crosswalk.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1429,14 +1880,14 @@
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "restrictions",
     "keys": "native_correlation",
     "owner": "mea.py",
     "record": "mea/restrictions/replay/display/analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json",
     "sha256": "12f71b586ab33c043c185bb2e5606427b7b088de59e700973b406bc084d0e18a",
     "stage": "replay, properties",
-    "evidence": "objective_weights_420.py:audit reads adopted_point for the historical conditional-covariance calculation. The old display computes sbcorr and never uses it. The displayed fixed-reference covariance comes from the selected fit."
+    "evidence": "Read by analyses/amines/results/shared/properties/display-summary.json.gz."
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/profiles.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2050,24 +2501,142 @@
   },
   "analyses/round_10/manuscript-handoff.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "comparison-only",
     "fit_set": "reported, every start",
     "keys": "quantities",
     "owner": "all five",
     "record": "shared/comparisons/properties/display/analyses/round_10/manuscript-handoff.json",
     "sha256": "240370994f4a0c29af922337c4905d259d3f02903776d20a1b98cdfacd119f91",
-    "stage": "properties summary (5 quantities)"
+    "stage": "properties summary (5 quantities)",
+    "evidence": "Superseded for rendering by the fit, phase and properties stage summaries."
+  },
+  "analyses/round_10/results/AMP_free-A.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/AMP_free-A.json.gz",
+    "keys": "summary contributor",
+    "sha256": "09144c8d8b24a205a0bc1aae3e60dd83962c754eb6fa825feb7607b3756373bf"
+  },
+  "analyses/round_10/results/AMP_free-LHS-06.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/AMP_free-LHS-06.json.gz",
+    "keys": "summary contributor",
+    "sha256": "92aec70f9c24cd41f27d31b69a29ee996401d869eff7ba579bc266527d133bd2"
+  },
+  "analyses/round_10/results/AMP_free-LHS-45.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/AMP_free-LHS-45.json.gz",
+    "keys": "summary contributor",
+    "sha256": "d52a5938a9cae39dbe1ecce70804a4d71e41088978aea8b3a71c61d5ddca0651"
+  },
+  "analyses/round_10/results/DEA-A.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/DEA-A.json.gz",
+    "keys": "summary contributor",
+    "sha256": "0ca6b00f1deeda80c68900502558982829f176c959a4062cc0e79e7e0e2d9fdf"
+  },
+  "analyses/round_10/results/DEA-B.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/DEA-B.json.gz",
+    "keys": "summary contributor",
+    "sha256": "03d171b4a600ecf0760194eec8ef659bf203430bad455682eefa07538cff99b9"
+  },
+  "analyses/round_10/results/DEA-C.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/DEA-C.json.gz",
+    "keys": "summary contributor",
+    "sha256": "459bea41f0074b5d435b8b4d3e1a3328b0776a86bcea4c38c5b39d1de0b63c27"
+  },
+  "analyses/round_10/results/MDEA-A-continuation.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MDEA-A-continuation.json.gz",
+    "keys": "summary contributor",
+    "sha256": "01fa588fbc4138cd913e4c3264355be9625bc9767e7b4cc6e8b4516eb0e649a2"
+  },
+  "analyses/round_10/results/MDEA-A-descent-continuation.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MDEA-A-descent-continuation.json.gz",
+    "keys": "summary contributor",
+    "sha256": "302412d592ae65f349dcaa92343b75d796bb580e8730bde52d6151dd1150fe62"
+  },
+  "analyses/round_10/results/MDEA-A.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MDEA-A.json.gz",
+    "keys": "summary contributor",
+    "sha256": "6c494a91aa5f20e015c0f1f0b51c047be8ec2bf521327585d6daece766344520"
+  },
+  "analyses/round_10/results/MDEA-LHS-53.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MDEA-LHS-53.json.gz",
+    "keys": "summary contributor",
+    "sha256": "a0efdd02e42c1f421017048eb418899ad12c3cfb17f0c856e35a33268304d831"
+  },
+  "analyses/round_10/results/MEA-A.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MEA-A.json.gz",
+    "keys": "summary contributor",
+    "sha256": "c2890ed74b41ccfb064cd43a81a9d5403584143f4fa03f1a352e882b012f6442"
+  },
+  "analyses/round_10/results/MEA-B.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MEA-B.json.gz",
+    "keys": "summary contributor",
+    "sha256": "c16aae01967123d04a0c152ea789291f74329f485d227a2825910cf6a6ca23c6"
+  },
+  "analyses/round_10/results/MEA-LHS-21.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_10/results/MEA-LHS-21.json.gz",
+    "keys": "summary contributor",
+    "sha256": "a81237f43f53ab977a903f8cfdf21c56d8c8c8f97829392d48417af5aa1db671"
   },
   "analyses/round_3/results/q1.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "mea-fitted-shared",
     "keys": "rows",
     "owner": "amp.py",
     "record": "amp/mea-fitted-shared/phase/display/analyses/round_3/results/q1.json",
     "sha256": "0a483a90b1a4af17bd49be7414c67c1866d572e856e4d746e728b0fb9a0e6956",
     "stage": "phase (AMP measured rows; round_3/phases.py amp_rows on the retransfer-412 endpoints)",
-    "evidence": "The AMP reported pressure controls select the measured records in round_9/phase_controls.py:107 and fixed_reaction_reference/phase_replays.py:321. The current figure uses the retained six-state crosswalk and later replay."
+    "evidence": "Read by analyses/amines/results/shared/phase/display-summary.json.gz."
   },
   "analyses/round_3/results/q2.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2082,25 +2651,25 @@
   },
   "analyses/round_3/results/q3.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "bicarbonate-0.765",
     "keys": "rows",
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.765/phase/display/analyses/round_3/results/q3.json",
     "sha256": "ca443c25e7e0c6ba30099414144aa607909730586e8e9ec0322f387cb85fe62c",
     "stage": "phase (MDEA measured rows; phases.py mdea_rows on the bounded-binary-411 declaration)",
-    "evidence": "round_5/reaction_reference.py:174 and round_5/objective.py:156 use the historical measured-pressure MDEA branch controls. The current census table uses the fixed-reference classification records."
+    "evidence": "Read by analyses/amines/results/shared/phase/display-summary.json.gz."
   },
   "analyses/round_3/results/q4.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "restrictions",
     "keys": "rows",
     "owner": "mea.py",
     "record": "mea/restrictions/properties/display/analyses/round_3/results/q4.json",
     "sha256": "7a97c98a24fadf41f282ab85c94abc2a2c7f7d6f172b706347dc832dc809f6ad",
     "stage": "properties (state sensitivities; round_3/mea.py sensitivity)",
-    "evidence": "round_7/mdea_reference.py:248 reads the historical MEA pressure-reference basis for the MDEA comparison. The MEA supplement now uses the fixed-reference caloric record. The later pressure-reference comparison is still unmigrated."
+    "evidence": "Read by analyses/amines/results/shared/properties/display-summary.json.gz."
   },
   "analyses/round_3/results/q6.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2126,14 +2695,14 @@
   },
   "analyses/round_3/results/q8.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "pending-stage",
+    "disposition": "stage-input",
     "fit_set": "dea: mea-fitted-shared, alternative endpoint; mdea: bicarbonate-0.765 and published",
     "keys": "dea",
     "owner": "dea.py, mdea.py",
     "record": "shared/comparisons/replay/display/analyses/round_3/results/q8.json",
     "sha256": "8691dfc6cd63fca5416c5af17d43b528abdeb3decca15612ed5f8625d4aa000d",
     "stage": "replay and properties. Needs as retained inputs the alternative candidate start-1 of DEA/results/refit-413/selection.json (its endpoint, optimizer report and predictions; records.py:41-56) and the MDEA unbounded-2 fit archive",
-    "evidence": "Plan section 4 assigns its candidate-1 endpoint, optimizer report and predictions to the DEA mea-fitted-shared comparison and mapping comment 7187938907 also lists the MDEA unbounded comparison. The underlying endpoints are retained in A2; the display from this combined historical summary is still unmigrated."
+    "evidence": "Read by analyses/amines/results/shared/properties/display-summary.json.gz."
   },
   "analyses/round_5/results/A/original-main.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2331,13 +2900,77 @@
   },
   "analyses/round_9/manuscript-handoff.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "comparison-only",
     "fit_set": "reported; sensitivities",
     "keys": "quantities",
     "owner": "mea.py, dea.py, amp.py",
     "record": "shared/comparisons/phase/display/analyses/round_9/manuscript-handoff.json",
     "sha256": "bc51c50f0559ae087da01969323b35f1baed24a9654e6fbc9170bef447f6bce0",
-    "stage": "phase, properties summaries (6 quantities)"
+    "stage": "phase, properties summaries (6 quantities)",
+    "evidence": "Superseded for rendering by the fit, phase and properties stage summaries."
+  },
+  "analyses/round_9/results/MDEA-shared-assessment.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_9/results/MDEA-shared-assessment.json.gz",
+    "keys": "summary contributor",
+    "sha256": "545c79558db879efe01af206ce4554150569ad8e54ed1202595bdc56b9c4b821"
+  },
+  "analyses/round_9/results/MDEA-shared-fit.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_9/results/MDEA-shared-fit.json.gz",
+    "keys": "summary contributor",
+    "sha256": "995bef7ad9253586ab77dc72dbfb6f8e675a8c38756da21f3cf957c27fb29a3e"
+  },
+  "analyses/round_9/results/MEA-shared-assessment.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_9/results/MEA-shared-assessment.json.gz",
+    "keys": "summary contributor",
+    "sha256": "7b3fd3ac8fe4a67f22d8734471d63c4a458e77b046d37d015584b5c48744955c"
+  },
+  "analyses/round_9/results/MEA-shared-fit.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_9/results/MEA-shared-fit.json.gz",
+    "keys": "summary contributor",
+    "sha256": "7deb9765afc32bf59c5b0982b32088cccaadbf2251ee5cc3ba884e1ca3cb5ff9"
+  },
+  "analyses/round_9/results/amp-phase-controls.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/round_9/results/amp-phase-controls.json.gz",
+    "keys": "summary contributor",
+    "sha256": "ad1abc9b38762593ac69c2b2b2cc6a9fcdf8453699ceafb0618dea41a73035c4"
+  },
+  "analyses/round_9/results/dea-phase-controls.json.gz": {
+    "disposition": "stage-input",
+    "owner": "phase stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "phase",
+    "record": "analyses/round_9/results/dea-phase-controls.json.gz",
+    "keys": "summary contributor",
+    "sha256": "5d87bc6ba77fd929e6ff2bc7d6e676a39c7e080a9022d08f83b4569e8b57213f"
+  },
+  "analyses/round_9/results/mdea-phase-controls.json.gz": {
+    "disposition": "stage-input",
+    "owner": "properties stage",
+    "fit_set": "reported and retained comparisons",
+    "stage": "properties",
+    "record": "analyses/round_9/results/mdea-phase-controls.json.gz",
+    "keys": "summary contributor",
+    "sha256": "847ab6d111f0dbe927a6cac85e088686e59f5989e55350346f010ed4c151269f"
   },
   "data/reference/MEA/manifests/speciation_target_membership.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",

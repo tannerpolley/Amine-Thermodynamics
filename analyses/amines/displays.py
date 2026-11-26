@@ -26,18 +26,20 @@ ROOT = Path(__file__).resolve().parents[2]
 LATEX = ROOT / "docs/scientific/latex"
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
 TABLES = LATEX / "tables"
-DEFAULT_RECORDS = ROOT / "tmp/issue-430-display-records"
 DEA_SALT_SUMMARY = "analyses/amines/results/dea/system-pressure-salt-anchored/replay/summary.json"
 MEA_EXPANDED_SUMMARY = "analyses/amines/results/mea/expanded-weights/replay/summary.json"
 GIBBS_DERIVATIVES = "analyses/amines/results/shared/properties/gibbs-derivatives.json"
+FIT_SUMMARY = "analyses/amines/results/shared/fit/display-summary.json.gz"
+PHASE_SUMMARY = "analyses/amines/results/shared/phase/display-summary.json.gz"
+PROPERTY_SUMMARY = "analyses/amines/results/shared/properties/display-summary.json.gz"
 sources = {}
 stage_records = {}
 
 
-def register_records(catalog, baseline):
+def register_records(catalog):
     stage_records.update({
-        key: ROOT / key if row.get("disposition") == "stage" else baseline / row["record"]
-        for key, row in catalog.items() if "record" in row
+        key: ROOT / key for key, row in catalog.items()
+        if "record" in row and row["disposition"] not in ("comparison-only", "orphan")
     })
 
 
@@ -61,8 +63,6 @@ DESIGNS = ('MEA', 'DEA', 'MDEA', 'AMP_free', 'AMP_fixed')
 class FixedReference:
     def __init__(self, read):
         self.read = read
-        self.handoff = read(STUDY + 'manuscript-handoff.json')
-        self.quantities = self.handoff['quantities']
         self.selections = {name: self.load(f'{name}/selection.json') for name in DESIGNS}
         self.fits = {name: self.load(f"{name}/{selection['selected']}.json.gz")
                      for name, selection in self.selections.items()}
@@ -81,9 +81,6 @@ class FixedReference:
         if record['endpoint_fingerprint'] != self.fits[name]['endpoint_fingerprint']:
             raise ValueError(f"Wrong endpoint for {relative}")
         return record
-
-    def value(self, key):
-        return self.quantities[key]['new']
 
     def coverage(self, name, protocol='declared'):
         record = self.endpoint_record(f'{name}/screen/selected/{protocol}/summary.json.gz', name)
@@ -132,10 +129,7 @@ def stats(part, observed='observed', predicted='predicted'):
 
 
 
-def round9_tables(q, table, head, num, scientific, dea_density, amp_outcomes):
-    dea, amp, shared = (q[key] for key in ('R1 DEA two-liquid certificates',
-                                           'R2 AMP early and reported pressure controls',
-                                           'R4 shared interactions at 100 kPa'))
+def phase_control_tables(dea, amp, shared, table, head, num, scientific, dea_density, amp_outcomes):
     rows = []
     density = {r['key']: r for r in dea_density['rows']}
     for state in dea['rows']:
@@ -279,7 +273,7 @@ def spread_table(q, table, head, num):
         'Wagner2013': 'Wagner partial pressure',
     }
     rows = []
-    for amine, record in q['K1 Endpoint prediction spread'].items():
+    for amine, record in q.items():
         rows.append(head(amine.replace('_free', ', free slope'), 6))
         for name, r in record['groups'].items():
             extreme = r['row_spreads'].get(r['max_row'], {})
@@ -386,14 +380,13 @@ def transfer_displays(outputs):
 
 
     fixed = FixedReference(read)
-    round9 = read('analyses/round_9/manuscript-handoff.json')['quantities']
-    round10 = read('analyses/round_10/manuscript-handoff.json')['quantities']
-    r10_mea = round10['K2 MEA search parent assemblages']
-    r10_amp = round10['K2 AMP control outcomes']
-    r10_dea = round10['K3 DEA measured and calculated densities']
-    r10_mdea = round10['K4 MDEA bubble pressures at measured descent states']
-    r9_accounting = round9['R3 start, endpoint and search accounting']
-    r9_units = round9['R7 AMP hydrolysis enthalpy increment']
+    fit_summary = read(FIT_SUMMARY)
+    phases = read(PHASE_SUMMARY)
+    property_summary = read(PROPERTY_SUMMARY)
+    mea_search = phases['mea_search']
+    amp_outcomes = phases['amp_outcomes']
+    amp_enthalpy = fit_summary['amp_enthalpy']
+    mdea_draws = fit_summary['mdea_start_counts']
 
     ddoc, mdoc, adoc = [fixed.fits[name]['endpoint'] for name in ('DEA', 'MDEA', 'AMP_free')]
     dcost, mcost, acost, afcost = [fixed.cost(name) for name in DESIGNS[1:]]
@@ -804,7 +797,7 @@ def transfer_displays(outputs):
     level = lambda q: [r'R4 change at 313.15 K, $\Delta\ln K_4$\textsuperscript{c}', f"${q['delta_ln_K4']:+.3f}$", num(q['SE_ln_K4'], 3), bounds(*q['bounds']['level'], 3), '']
     fit_rows[4][1:4] = [bold(num(r4['dea']['delta_h_J_mol'], 0)), num(r4['dea']['SE_h_J_mol'], 0), bounds(*r4['dea']['bounds']['enthalpy'], 0)]
     fit_rows[-1][1:4] = [bold(num(r4['amp']['delta_h_J_mol'], 0) + r'\textsuperscript{a}'),
-                           '---', bounds(*r9_units['AMP_free']['physical_bounds_J_mol'], 0)]
+                           '---', bounds(*amp_enthalpy['AMP_free']['physical_bounds_J_mol'], 0)]
     fit_rows.insert(4, level(r4['dea']))
     fit_rows.insert(len(fit_rows) - 1, level(r4['amp']))
     # fit_rows: name, value, standard error, bounds and an unused fifth cell. The main text omits the bounds; the supplement lists them.
@@ -1020,8 +1013,7 @@ def transfer_displays(outputs):
     dloaded = {'Lawson', 'Lawson-394K', 'SeoHong', 'Lal', 'Lawson-VIII'}
     doutside = [r for r in data if r['group'] in dloaded and r['role'] == 'not fitted']
     dfitted = scores([r for r in data if r['role'] == 'fitted' and r['unit'] == 'Pa'], dloaded)
-    ephase = [fixed.value(f'MEA {key} finite search counts') for key in ('main', 'offset')]
-    ephase += [fixed.value('MEA native and supplied census counts')]
+    ephase = [phases['mea_grid'][key] for key in ('grid', 'offset', 'census')]
     amp_loaded = {'loaded-pressure', 'hartono-2021-supplemental', 'tong'}
     rows = [
         ['MEA', len(mea_stage['coordinates']), len(mea_stage['active_bounds']), e47, e47,
@@ -1080,7 +1072,7 @@ def transfer_displays(outputs):
               amp_replay_outcome(amp_replay['outcomes'][case])]
              for case, label in [('free', 'fitted'), ('fixed', 'fixed at $-150$ K')]],
            *[[f'AMP, 100 kPa, slope {label}', num(amp_replay['common_Pa']/1e6, 6),
-              fixed.value(f'AMP_{case} A phase worked-state')]
+              phases['amp_worked']['AMP_' + case]]
              for case, label in [('free', 'fitted'), ('fixed', 'fixed at $-150$ K')]],
            *[[name, num(common['common_Pa']/1e6, 6),
               f"{sum(a['confirmed'] for a in common['outcomes'][case]['attempts'])} confirmed of {len(common['outcomes'][case]['attempts'])} attempted splits"]
@@ -1175,7 +1167,7 @@ def transfer_displays(outputs):
                                  objective['n'], num(objective['objective'], 2), scores(record['rows'], {'Kuranov'})])
     for weight, label in [('original', 'Original'), ('rms', 'Pressure-weighted')]:
         mcomparisons.append(['Provisional, 100 kPa', label, len(fixed.fits['MDEA']['replay']['rows']),
-                             num(fixed.value(f'C5 MDEA salt refit {weight} objective'), 2),
+                             num(property_summary['mdea']['objectives'][weight], 2),
                              scores(mrows, {'Kuranov'})])
     kuranov_count = sum(row['group'] == 'Kuranov' and row['role'] == 'fitted' for row in mrows)
     table('supplement-mdea-weighting', 'MDEA objectives on the same fitted observations and loaded total-pressure deviations.',
@@ -1224,8 +1216,8 @@ def transfer_displays(outputs):
         else:
             locator = f"{source_id[:-4]}, T{source['source_locator'].split('Table ')[1].split()[0].rstrip(',')}, r{source['source_row']}"
             source_pressure = num(source['pressure_MPa'])
-        pressure_record = next(q for q in r9_accounting['mdea_distinct_states'] if q['key'] == key)
-        bubble = r10_mdea.get(key)
+        pressure_record = next(q for q in phases['mdea_distinct_states'] if q['key'] == key)
+        bubble = property_summary['mdea_bubble'].get(key)
         bubble_cell = '---'
         if bubble:
             bubble_cell = (num(bubble['bubble_Pa']/1e6, 5) if bubble['status'] == 'Available'
@@ -1276,12 +1268,12 @@ def transfer_displays(outputs):
             delta = candidate.get('Gibbs_over_RT_mol')
             flag = r'\textsuperscript{a}' if delta is not None and not candidate['qualified'] else ''
             if design == 'AMP_free':
-                outcome = r10_amp[key]['outcome'].replace('; ', r'\newline ')
+                outcome = amp_outcomes[key]['outcome'].replace('; ', r'\newline ')
             fits.append([num(amp_screen[design][key]['pressure_Pa']/1e6, 5), trial,
                          reduced_gibbs(delta - parent) + flag if delta is not None else '---',
                          reduced_gibbs(parent_error + candidate['error']) if delta is not None else '---', outcome])
         source, _, _ = key.split(':')
-        row = r10_amp[key]['source']['row']
+        row = amp_outcomes[key]['source']['row']
         amp_rows.append([source.split('-')[0].capitalize() + ' r' + row, num(free['T_K'], 2),
                          num(feed_wt(adoc, feed, 'aminomethylpropanol'), 2) + r'\newline ' +
                          num(feed['carbon-dioxide']/feed['aminomethylpropanol']),
@@ -1301,12 +1293,9 @@ def transfer_displays(outputs):
     path = LATEX / 'tables/supplement-fixed-reference-controls.tex'
 
     matched = []
-    for group, unit in [('Kuranov', 'Pa'), ('Ermatchkov', 'Pa'), ('Xiao', 'Pa'),
-                        ('Carson', 'J/mol'), ('corrected-Kamps', 'Pa')]:
-        prefix = f'MDEA {group} {unit} matched'
-        ard, bias = (fixed.quantities[f'{prefix} {metric}'] for metric in ('AARD_percent', 'bias_percent'))
-        n = ard['population']['new']['available']
-        matched.append([group, n, *[num(r[side], 2) for side in ('old', 'new') for r in (ard, bias)]])
+    for group, match in property_summary['mdea']['paired'].items():
+        matched.append([group, match['n'], *[num(model[metric], 2)
+                        for model in match['models'] for metric in ('AARD_percent', 'bias_percent')]])
     table('supplement-mdea-reference-comparison', 'MDEA deviations for the endpoints with system-pressure and fixed references on common observations.',
           ['Source', '$N$', r'System-pressure AARD (\%)', r'System-pressure bias (\%)', r'Fixed AARD (\%)', r'Fixed bias (\%)'],
           matched, [.23,.08,.15,.15,.15,.15])
@@ -1416,7 +1405,7 @@ def transfer_displays(outputs):
     for i, row in enumerate(rows):
         row[7] = row[6] - row[7]
         if i < 4:
-            coverage = r9_accounting['coverage'][row[0]]
+            coverage = phases['coverage'][row[0]]
         if row[0] in ('MEA', 'DEA'): row[5] = r'$p_{\COtwo}$: ' + row[5]  # every MEA and DEA pressure not fitted is a CO2 partial pressure (Tables 5 and S8)
     for row, label in zip(rows[4:], ('MEA-fitted shared set', '30-pressure Lawson--Garst fit',
                                      'fit with MEA weights', 'earlier carbamate inputs'), strict=True):
@@ -1425,12 +1414,12 @@ def transfer_displays(outputs):
     table('amine-summary', 'The four fixed-reference models and their comparison fits with system-pressure references.', ['Model','Fitted parameters','On bounds',r'Fitted loaded-solution pressures\textsuperscript{a}',r'All fitted pressures\textsuperscript{b}',r'Pressures not fitted\textsuperscript{c}','Attempted searches','Completed searches',r'Liquid--liquid splits found\textsuperscript{d}'], rows, [.09,.08,.06,.14,.10,.15,.08,.10,.105],
           notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses. \textsuperscript{a}Fitted \COtwo partial pressures ($p_{\COtwo}$) of loaded MEA and DEA and fitted total pressures ($P$) of loaded MDEA and AMP. \textsuperscript{b}Column a with the fitted \COtwo-free bubble pressures of MDEA--water and AMP--water; neither column includes the fitted \COtwo--water pressures of Kiepe et al.\ in the MEA objective (Table~\ref{tab:mea-data}). \textsuperscript{c}MEA: all pressures not fitted, those at nominal 30 wt\% of the six sources of Table~\ref{tab:mea-data}, those of Wagner et al.\ and those at 15 and 45 wt\%; MDEA and AMP: total pressures and \COtwo partial pressures separately, the AMP total pressures including the 5 \COtwo-free bubble pressures of Tong et al. The receiver comparisons use the original salt-anchored fits. \textsuperscript{d}In the searches of each fit, which are finite and differ in design between the amines (Section~\ref{supp-sec:s-phase}), so the counts do not measure equal coverage and split counts are lower bounds. '
                 'The MDEA endpoint is provisional. '
-                f"The MEA liquid grid completed {r10_mea['liquid_grid']['completed']:,} of {r10_mea['liquid_grid']['attempted']:,} searches. "
-                f"The {r10_mea['census']['attempted']} L--V census cases returned "
-                f"{r10_mea['census']['outcomes']['passed-two-phase']} passed two-phase parents and "
-                f"{r10_mea['census']['outcomes']['passed-single-liquid']} passed single-liquid parents. "
-                f"The separate MEA measured-state search completed {r10_mea['measured']['completed']} of "
-                f"{r10_mea['measured']['attempted']} attempts.")
+                f"The MEA liquid grid completed {mea_search['liquid_grid']['completed']:,} of {mea_search['liquid_grid']['attempted']:,} searches. "
+                f"The {mea_search['census']['attempted']} L--V census cases returned "
+                f"{mea_search['census']['outcomes']['passed-two-phase']} passed two-phase parents and "
+                f"{mea_search['census']['outcomes']['passed-single-liquid']} passed single-liquid parents. "
+                f"The separate MEA measured-state search completed {mea_search['measured']['completed']} of "
+                f"{mea_search['measured']['attempted']} attempts.")
     P341 = MEAEVIDENCE
     mea_fit = read(P341 + 'fitted-rows.csv')
     cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -1515,7 +1504,7 @@ def transfer_displays(outputs):
     rows += [['This work, 16-parameter calibration', 'not fitted', own('same-data-comparison/matched-score.json')], ['This work, MEA-fitted shared set', 'not fitted', own('paper-evidence-341/same-data-comparison/matched-score.json')]]
     read(SALT + 'MEA/baygi-matched-pressure.json')['aard_percent']
     # The archived prior_F2 column was read from the 16-parameter matched-pressure table.
-    rows.append(['This work, MEA model', 'not fitted', num(fixed.value('MEA pressure Mamun2005 AARD_percent'), 2)])
+    rows.append(['This work, MEA model', 'not fitted', num(property_summary['mea_mamun'], 2)])
     mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
     ZHANG_CHEN = r'Zhang and Chen, eNRTL \cite{zhangThermodynamicModelingCO22011}'  # their Table 14: AARD 6.8 % on the 82 Kuranov total pressures and 17.7 % on the 101 Ermatchkov CO2 partial pressures, both in their regression
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
@@ -1533,7 +1522,7 @@ def transfer_displays(outputs):
                 rows.append(['This work, system-pressure references, ' + label, c['data_role'], num(kamps[case]['matched']['AARD_percent'], 2)])
             ids = set(common)
             cohort = [r for r in mrows if r['identity'] in ids and r['group'] == c['group']]
-            r9_kamps = round9['R6 corrected Kamps pressure comparisons']
+            r9_kamps = property_summary['kamps']
             rows.append(['This work, provisional 100 kPa MDEA model (27 rows)', c['data_role'],
                          num(r9_kamps['common_AARD_percent'], 2)])
             rows.append([r'This work, same fit (all 28 rows)\textsuperscript{d}', c['data_role'],
@@ -1553,8 +1542,7 @@ def transfer_displays(outputs):
     collections.Counter(r['role'] for r in mrows if r['group'] in ('Kuranov', 'Kuranov-binary'))
     k82 = read(MDEA + '../kuranov-matched-pressure.json.gz')['grouped']['K82']['salt_anchored']
     kuranov = literature['kuranov']
-    k82_result = fixed.quantities['C7 Kuranov row-matched 82 AARD']
-    k82_adopted = {'available': k82_result['population'], 'AARD_percent': k82_result['new']}
+    k82_adopted = property_summary['mdea']['kuranov']
     kuranov_label = str(len(kuranov['source_rows'])) + r' total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}'
     rows += [head(kuranov_label + r', MDEA (matched by count)\textsuperscript{b}', 3),
              [r'Uyan et al., ePC-SAFT \cite{Uyan2015}', 'not fitted', r'$22.9$\textsuperscript{c}'], [r'Wangler et al., ePC-SAFT \cite{Wangler2018}', 'not fitted', '$19.7$'],
@@ -1700,7 +1688,7 @@ def transfer_displays(outputs):
     # and screened draws are preserved by the study handoff.
     start_rows = []
     vector_rows = []
-    for design, attempts in fixed.handoff['fit_attempts'].items():
+    for design, attempts in fit_summary['attempts'].items():
         design_label = design.replace('_', ' ')
         record = fixed.load(f'{design}/manifest.json.gz')
         vectors = record['starts']
@@ -1712,11 +1700,7 @@ def transfer_displays(outputs):
             rf'{i}. \nolinkurl{{{key}}}' for i, key in enumerate(coordinate_order, 1))
         vector_rows.append(head(design_label, 2))
         vector_rows.append(['Order', coordinates_text])
-        manifest = fixed.value(design + ' start distances')
-        expanded_key = design + ' admitted-start distances'
-        distances = fixed.value(expanded_key) if expanded_key in fixed.quantities else {
-            '/'.join(pair): value for pair, value in manifest.items()}
-        distances |= {'/'.join(pair): value for pair, value in manifest.items()}
+        distances = fit_summary['start_distances'][design]
         for start, attempt in attempts.items():
             near = [value for pair, value in distances.items() if start in pair.split('/')]
             bound_ids = [r['identity'] for r in fixed.fits[design]['endpoint']['coordinates']]
@@ -1729,12 +1713,12 @@ def transfer_displays(outputs):
             fixed.load(f'{design}/{start}.json.gz')
             anchor = f"start-{design.replace('_', '-')}-{start}"
             physical = vector['vector'].copy()
-            if design in r9_units:
-                conversion = r9_units[design]
+            if design in amp_enthalpy:
+                conversion = amp_enthalpy[design]
                 physical[conversion['coordinate_index']] += conversion['offset_J_mol']
             vector_rows.append([rf'\hypertarget{{{anchor}}}{{{start}}}',
                                 ', '.join(rf'\num{{{q:.9g}}}' for q in physical)])
-            endpoint = r9_accounting['endpoint_stages'][design][start][-1]
+            endpoint = fit_summary['endpoint_stages'][design][start][-1]
             stop = endpoint['termination'].split(' tolerance', 1)[0]
             if stop in ('Function', 'Parameter'):
                 status += r'\newline ' + stop + ' tolerance'
@@ -1746,10 +1730,12 @@ def transfer_displays(outputs):
           start_rows, [.115,.085,.085,.102,.12,.12,.15,.125], long=True, size=r'\footnotesize',
           notes=r'RMS distance is measured relative to coordinate bounds. A-loose repeats A. Active bounds are numbered in fit coordinate order. '
                 r'The projected gradient uses the optimizer scale. The endpoints missed the projected-gradient limit of $10^{-8}$. '
-                r'MDEA had one evaluable draw of 64, in addition to inherited start A. Draw 17 missed the start-separation rule. '
-                + 'Start A gives ' + num(r9_accounting['mdea_start_counts']['A_AARD_percent']['Kuranov'], 2)
+                f"MDEA had {NUMBER_WORDS[len(mdea_draws['evaluable'])]} evaluable draw of {mdea_draws['drawn']}, "
+                f"in addition to inherited start {', '.join(mdea_draws['inherited'])}. "
+                f"Draw {', '.join(map(str, mdea_draws['untested_draws']))} missed the start-separation rule. "
+                + 'Start A gives ' + num(mdea_draws['A_AARD_percent']['Kuranov'], 2)
                 + r'\% on 66 loaded Kuranov pressures and '
-                + num(r9_accounting['mdea_start_counts']['A_AARD_percent']['Ermatchkov'], 2)
+                + num(mdea_draws['A_AARD_percent']['Ermatchkov'], 2)
                 + r'\% on 101 Ermatchkov partial pressures. ' +
                 f"AMP with fixed slope retains a second basin at {fixed.selections['AMP_fixed']['attempts']['C']['cost']:.2f}. "
                 'A dash marks an unavailable value or an empty active set.')
@@ -1812,7 +1798,7 @@ def transfer_displays(outputs):
     outputs[path] += outputs.pop(LATEX / 'tables/supplement-fixed-reference-variance.tex')
 
     amp_fixed = coordinates(fixed.conditional('AMP_fixed'))
-    amp_fixed['AMP-hydrolysis-enthalpy-increment']['value'] = r9_units['AMP_fixed']['endpoint_increment_J_mol']
+    amp_fixed['AMP-hydrolysis-enthalpy-increment']['value'] = amp_enthalpy['AMP_fixed']['endpoint_increment_J_mol']
     table('supplement-amp-fixed-parameters', r'Parameters of the fixed-reference AMP sensitivity with the slope held at $-150$ K.',
           ['Parameter', 'Value', 'Standard error', 'Active bound'],
           [[label, num(amp_fixed[key]['value'], digits), num(amp_fixed[key]['error'], digits),
@@ -1820,8 +1806,9 @@ def transfer_displays(outputs):
            for (label, digits), key in zip(AFIT, aorder, strict=True) if key in amp_fixed],
           [.45,.15,.17,.15], notes=r'The enthalpy increment is relative to the starting R4 correlation in J/mol.')
     outputs[path] += outputs.pop(LATEX / 'tables/supplement-amp-fixed-parameters.tex')
-    round9_tables(round9, table, head, num, reduced_gibbs, r10_dea, r10_amp)
-    spread_table(round10, table, head, num)
+    phase_control_tables(phases['dea_controls'], phases['amp_controls'], property_summary['shared'],
+                         table, head, num, reduced_gibbs, property_summary['dea_density'], amp_outcomes)
+    spread_table(property_summary['spread'], table, head, num)
 
     read('analyses/dea_transfer/results/binary.json')
     read(BASE + 'conditional-uncertainty.json')
@@ -2714,12 +2701,67 @@ NUMBER_WORD = re.compile(
     r"fifty|sixty|seventy|eighty|ninety|hundred|thousand|million)\b", re.I
 )
 COMMENT = re.compile(r"(?<!\\)%[^\n]*")
-SYNTAX = re.compile(
-    r"\\(?:[Cc]ref|[Cc]pageref|eqref|label|cite\w*|input|includegraphics|begin|end|"
-    r"bibliography|bibliographystyle|url|res)(?:\[[^\]]*\])?\{[^}]*\}"
-    r"|[_^]\{[^}]*\}|[_^][0-9]+|\b\d+(?:\.\d+)?(?:pt|cm|mm|em|ex)\b"
-    r"|\b\d+(?:\.\d+)?\\(?:textwidth|linewidth|textheight)\b"
+REFERENCE = re.compile(
+    r"\\(?:[Cc]ref|[Cc]pageref|pageref|eqref|ref|label|cite\w*|input|includegraphics|begin|end|"
+    r"bibliography|bibliographystyle|url|nolinkurl|res|orcidlink|orcid|author|affil|affiliation|email|thanks|"
+    r"date|runningauthor|correspondingauthor|usepackage|documentclass|newcolumntype|newcommand|renewcommand|"
+    r"providecommand|def|gdef|edef|xdef|setlength|addtolength|setcounter)\b\*?"
 )
+GROUPS = re.compile(r"[\s{}\[\]\\]")
+LAYOUT = re.compile(
+    r"\b\d+(?:\.\d+)?\s*(?:pt|pc|in|cm|mm|em|ex|bp|sp|dd|cc)\b"
+    r"|\b\d+(?:\.\d+)?\\(?:textwidth|linewidth|columnwidth|textheight|baselineskip)\b"
+)
+INDEX = re.compile(r"(?<=[A-Za-z0-9}\]])[_^](?:\{[^}]*\}|[0-9]+)")
+
+
+def manuscript_body(source):
+    marker = r"\begin{document}"
+    source = COMMENT.sub(lambda match: " " * len(match[0]), source)
+    start = source.find(marker)
+    if start < 0:
+        return source
+    return re.sub(r"[^\n]", " ", source[:start + len(marker)]) + source[start + len(marker):]
+
+
+def mask_syntax(text):
+    masked = list(text)
+    for match in REFERENCE.finditer(text):
+        end = match.end()
+        definition = match[0].lstrip("\\").startswith(
+            ("def", "gdef", "edef", "xdef", "newcommand", "renewcommand", "providecommand")
+        )
+        if definition:
+            prefix = re.match(r"\s*\\[a-zA-Z@:_]+(?:#\d+)*", text[end:])
+            if prefix:
+                end += prefix.end()
+        while end < len(text):
+            spaces = re.match(r"\s*", text[end:])
+            start = end + spaces.end()
+            if start == len(text) or text[start] not in "{[":
+                break
+            # Only definitions and length assignments take consecutive braced arguments.
+            depth = 1
+            closing = "}" if text[start] == "{" else "]"
+            for token in GROUPS.finditer(text, start + 1):
+                if token[0] == text[start] and text[token.start() - 1] != "\\":
+                    depth += 1
+                if token[0] == closing and text[token.start() - 1] != "\\":
+                    depth -= 1
+                    if depth == 0:
+                        end = token.end()
+                        break
+            else:
+                break
+            if closing == "}" and not definition and match[0] not in (
+                r"\newcolumntype", r"\setlength", r"\addtolength", r"\setcounter"
+            ):
+                break
+        masked[match.start():end] = re.sub(r"[^\n]", " ", text[match.start():end])
+    filtered = "".join(masked)
+    for syntax in (LAYOUT, INDEX):
+        filtered = syntax.sub(lambda match: " " * len(match[0]), filtered)
+    return filtered
 
 
 def expand(text, values):
@@ -2947,12 +2989,12 @@ def typed_numbers(values):
     from decimal import Decimal
 
     def numbers(text):
-        return {Decimal(match[0]) for match in NUMERAL.finditer(SYNTAX.sub("", text))}
+        return {Decimal(match[0]) for match in NUMERAL.finditer(mask_syntax(text))}
 
     registered = set().union(*(numbers(row["value"]) for row in values.values()))
     for path in manuscript_sources():
-        for line, text in enumerate(path.read_text().splitlines(), 1):
-            for value in numbers(COMMENT.sub("", text)) & registered:
+        for line, text in enumerate(mask_syntax(manuscript_body(path.read_text())).splitlines(), 1):
+            for value in numbers(text) & registered:
                 yield str(path.relative_to(ROOT)), line, str(value)
     for node in ast.walk(ast.parse(Path(__file__).read_text())):
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
@@ -2975,7 +3017,6 @@ def main():
     from time import monotonic
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--records", type=Path, default=DEFAULT_RECORDS, help="Stage record directory")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--compare", metavar="COMMIT")
@@ -2984,7 +3025,7 @@ def main():
     started = monotonic()
     verify()
     catalog = json.loads(Path(__file__).with_name("sources.json").read_text())
-    register_records(catalog, args.records.resolve())
+    register_records(catalog)
     values = result_values()
     outputs = render_all()
     if args.bindings is not None:
