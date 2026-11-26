@@ -253,3 +253,39 @@ def descent_probe(route, fit_record, fractions=(1.0, 0.5)):
         optimizer_step=u.tolist(),
         trials=trials,
     )
+
+
+def replay_retained(fit_set):
+    wheel = verify()
+    point = read(fit_set["endpoint"])
+    for key in fit_set["endpoint_keys"]:
+        point = point[key]
+    reference = read(fit_set["reference"])
+    for key in fit_set["reference_keys"]:
+        reference = reference[key]
+    result = replay(route_for(fit_set).bind(point))
+    old = {row["identity"]: row for row in reference["rows"]}
+    new = {row["identity"]: row for row in result["rows"]}
+    differences = []
+    for identity in sorted(old.keys() | new.keys()):
+        before, after = old.get(identity), new.get(identity)
+        if before is None or after is None:
+            differences.append(dict(identity=identity, retained=before is not None, replayed=after is not None))
+            continue
+        fields = ("status", "requested_tolerance_met")
+        if "cost" not in before or "cost" not in after:
+            fields += ("convergence",)
+        for field in fields:
+            if before.get(field) != after.get(field):
+                differences.append(
+                    dict(identity=identity, field=field, retained=before.get(field), replayed=after.get(field))
+                )
+    return dict(
+        wheel=wheel,
+        archive=fit_set["archive"],
+        endpoint_fingerprint=fingerprint(point),
+        replay=result,
+        retained_cost=reference["cost"],
+        retained_available=reference["attempted"] - reference["refused"],
+        row_differences=differences,
+    )

@@ -1,6 +1,6 @@
 """Fixed-reference AMP reported declarations."""
 
-from .model import P_REF, REPORTED, ROOT, Route
+from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
 
 DECLARATION = ROOT / "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json"
 ADDED = {"tong", "hartono-2021-supplemental"}
@@ -27,6 +27,26 @@ class ExpandedPressure(Route):
 
 
 FIT_SETS = {
+    "system-pressure": dict(
+        route=ExpandedPressure,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=REPORTED / "AMP_free/manifest.json.gz",
+        endpoint_keys=("prior_declaration",),
+        reference=REPORTED / "AMP_free/reference-control.json.gz",
+        reference_keys=("tracking",),
+    ),
+    "system-pressure-fixed-slope": dict(
+        route=ExpandedPressure,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=REPORTED / "AMP_fixed/manifest.json.gz",
+        endpoint_keys=("prior_declaration",),
+        reference=REPORTED / "AMP_fixed/reference-control.json.gz",
+        reference_keys=("tracking",),
+    ),
     "reported": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,

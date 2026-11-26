@@ -13,8 +13,10 @@ verify()
 
 import epcsaft  # noqa: E402
 from MEA.solvent_specification import SolventSpecification  # noqa: E402
+from epcsaft import equilibrium as eq  # noqa: E402
 
 REPORTED = ROOT / "analyses/fixed_reaction_reference/results"
+CAMPAIGN_ARCHIVE = "archive/pre-rebuild-3c85ad4fc"
 P_REF = 100_000.0
 MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
 
@@ -112,10 +114,11 @@ class Route:
         for group in reactions.values():
             for reaction in group:
                 reaction["correlation"].update(temperature_min=interval[0], temperature_max=interval[1])
-        datasets.update(
-            reactions=reactions,
-            reaction_reference_pressure_pa=self.fixed_reference_pressure_pa,
-        )
+        if self.fixed_reference_pressure_pa is not None:
+            datasets.update(
+                reactions=reactions,
+                reaction_reference_pressure_pa=self.fixed_reference_pressure_pa,
+            )
         spec = SolventSpecification(self.path.parent / self.config["specification"], **datasets)
         spec.parameters = epcsaft.Parameters.from_mapping(point["parameters"])
         spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
@@ -124,6 +127,14 @@ class Route:
         spec.construction_parameters = {k: spec.parameters for k in spec.construction_parameters}
         for problem in spec.problems.values():
             assert interval[0] <= problem.T <= interval[1], problem.T
+            if self.fixed_reference_pressure_pa is None:
+                for reaction in problem.reactions:
+                    law = next(
+                        r["correlation"] for group in reactions.values() for r in group if r["name"] == reaction.name
+                    )
+                    reaction.correlation = eq.ReactionLogPolynomial(**law)
+        if self.fixed_reference_pressure_pa is None:
+            spec.spec["chemistry"]["reactions"] = reactions
         for role in ("fitted", "comparisons"):
             for row in spec.inputs["observations"][role]:
                 row["temperature_domain"] = interval

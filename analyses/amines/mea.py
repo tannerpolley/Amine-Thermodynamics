@@ -10,6 +10,7 @@ import math
 from pathlib import Path
 
 from .model import (
+    CAMPAIGN_ARCHIVE,
     P_REF,
     REPORTED,
     ROOT,
@@ -666,7 +667,8 @@ class MEARoute(Route):
         )
         spec.inputs["endpoint"] = point["parameters"]
         spec.inputs["coordinates"] = point["coordinates"]
-        assert spec.spec["chemistry"]["reactions"] == point["reactions"]
+        if self.fixed_reference_pressure_pa is not None:
+            assert spec.spec["chemistry"]["reactions"] == point["reactions"]
         return spec
 
     def endpoint_mapping(self, point, report, declared):
@@ -718,6 +720,16 @@ class MEARoute(Route):
 
 
 FIT_SETS = {
+    "system-pressure": dict(
+        route=MEARoute,
+        declaration=BUNDLE / "results/adoption-297/historical-spec/MEA.toml",
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=REPORTED / "MEA/manifest.json.gz",
+        endpoint_keys=("prior_declaration",),
+        reference=REPORTED / "MEA/reference-control.json.gz",
+        reference_keys=("tracking",),
+    ),
     "reported": dict(
         route=MEARoute,
         declaration=BUNDLE / "results/adoption-297/historical-spec/MEA.toml",

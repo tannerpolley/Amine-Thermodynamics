@@ -2,7 +2,7 @@
 
 import math
 
-from .model import P_REF, REPORTED, ROOT, Route
+from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
 
 DECLARATION = ROOT / "analyses/dea_transfer/inputs/part-ii-346/f2-carbamate-413-route.json"
 PRESSURE = {"Lawson", "SeoHong", "Lal"}
@@ -49,6 +49,16 @@ class ExpandedDEA(Route):
 
 
 FIT_SETS = {
+    "system-pressure": dict(
+        route=ExpandedDEA,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        archive=CAMPAIGN_ARCHIVE,
+        endpoint=REPORTED / "DEA/manifest.json.gz",
+        endpoint_keys=("prior_declaration",),
+        reference=REPORTED / "DEA/reference-control.json.gz",
+        reference_keys=("tracking",),
+    ),
     "reported": dict(
         route=ExpandedDEA,
         declaration=DECLARATION,
