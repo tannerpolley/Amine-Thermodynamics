@@ -126,9 +126,9 @@ def march_connections(paths):
 
 def mdea_record_identity(data, endpoint, wheel, bank, *, computed=True):
     assert (data['endpoint_fingerprint'],data['wheel'],data['bank_fingerprint'])==(endpoint,wheel,bank), (
-        'Stage 2 endpoint, wheel or supplied bank identity')
+        'MDEA endpoint, wheel or supplied bank identity')
     if computed:
-        assert all(row.get('wheel')==wheel for row in data['rows']), 'Stage 2 worker wheel identity'
+        assert all(row.get('wheel')==wheel for row in data['rows']), 'MDEA worker wheel identity'
 
 
 def mdea_measured(rows, aliases, prior, bank_size):
@@ -2082,6 +2082,8 @@ class Quantities:
             batches = [data(f'search-{i}') for i in range(8)]
             rows = [q for batch in [pilot,*batches] for q in batch['rows']]
             searched = {q['key']:q for q in rows}
+            search_paths = {q['key']:path for path,batch in zip(sources[-9:],[pilot,*batches],strict=True)
+                            for q in batch['rows']}
             aliases = manifest['aliases']
             assert (len(searched)==len(rows) and searched.keys()<=inventory.keys()-aliases.keys()
                     and aliases.keys()<=inventory.keys() and set(aliases.values())<=inventory.keys()-aliases.keys()
@@ -2108,7 +2110,8 @@ class Quantities:
                     pending[key] = source
                     continue
                 if blocker:
-                    blockers[key] = dict(blocker,record_key=source)
+                    blockers[key] = dict(blocker,record_key=source,
+                                         record=search_paths.get(source,f'{folder}/domain-march.json.gz'))
                 else:
                     outcomes[key] = outcome
             stratum = lambda key: 'grid' if key.startswith('grid:') else 'measured'
@@ -2135,6 +2138,9 @@ class Quantities:
                             seconds=pilot['elapsed']+march['seconds']+sum(b['seconds'] for b in batches))
             self.quantity(f'Stage 3 MDEA k = {k}',None,evidence,population=len(records),endpoint=endpoint,
                           disposition='undecided' if held else None,sources=sources)
+            for path in sources:
+                del self.files[path]
+            del rows, searched, batches, pilot
 
     def compute(self, *, stage2=False, stage3=False):
         for design in COUNTS:
