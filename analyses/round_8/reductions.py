@@ -67,6 +67,7 @@ def vapor_trace_passes(pair):
     trace = pair['vapor_trace']
     pressure = trace['pressure_Pa']
     return (len(pressure)==len(trace['dP_drho'])==len(trace['density_mol_m3'])==33
+            and trace['density_mol_m3'][-1]==pair['phases'][-1]['density_mol_m3']
             and all(v is not None and v>0 for v in trace['dP_drho'])
             and all(b>a for a,b in zip(pressure,pressure[1:])))
 

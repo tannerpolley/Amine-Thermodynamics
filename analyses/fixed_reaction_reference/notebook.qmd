@@ -56,6 +56,43 @@ The approved two-wheel exception applies to the #427 candidate checks, fits and 
 Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/diagnosis-starts/stage0.py` from the repository root to repeat Stage 0. Add `--check` to recompute the checks from the retained records.
 
 
+## Rebuilt phase searches (#441)
+
+| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item |
+|---|---:|---:|---:|---:|
+| MEA measured | 321 | 0 | 0 | 0 |
+| MEA control | 1 | 0 | 0 | 0 |
+| DEA screen | 1264 | 6 | 0 | 1 |
+| DEA controls | 0 | 4 | 0 | 0 |
+| AMP_free controls | 3 | 0 | 4 | 0 |
+| AMP_fixed controls | 4 | 0 | 3 | 0 |
+| MEA grid | 1908 | 0 | 0 | 0 |
+| MEA offset | 575 | 0 | 0 | 1 |
+| MEA census | 162 | 0 | 0 | 0 |
+| AMP_free/native | 666 | 0 | 0 | 0 |
+| AMP_free/supplied | 666 | 0 | 0 | 0 |
+| AMP_fixed/native | 666 | 0 | 0 | 0 |
+| AMP_fixed/supplied | 666 | 0 | 0 | 0 |
+| MDEA salt-rms | 1 | 0 | 0 | 0 |
+| MDEA historical-original | 1 | 0 | 0 | 0 |
+| MDEA retained positive controls | 0 | 0 | 3 | 0 |
+| MDEA retained open search | 0 | 0 | 0 | 1 |
+
+The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at 7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.
+
+| AMP fit | Control | Imposed pressure (kPa) | Model bubble (kPa) | Gibbs decrease / RT (mol) | Paired error (mol) |
+|---|---|---:|---:|---:|---:|
+| AMP_free | hartono-2021:55:problem | 406.5 | 407.665 | 1.17366e-06 | 8.86e-09 |
+| AMP_free | hartono-2021:56:problem | 510 | 538.52 | 0.000379954 | 7.15e-09 |
+| AMP_free | hartono-2021:57:problem | 640.5 | 684.939 | 0.000536091 | 5.11e-09 |
+| AMP_free | tong-2012:32:problem | 983.5 | 1216.92 | 0.00490482 | 3.37e-09 |
+| AMP_fixed | hartono-2021:56:problem | 510 | 528.317 | 0.000161753 | 7.16e-09 |
+| AMP_fixed | hartono-2021:57:problem | 640.5 | 670.181 | 0.000247577 | 5.11e-09 |
+| AMP_fixed | tong-2012:32:problem | 983.5 | 1178.05 | 0.00358263 | 3.36e-09 |
+
+Both historical MDEA targets at 383.15 K, 121.309 MPa and loading 1.368 completed the declared finite search with zero descents. The continued vapor amount reached zero along each parameter and reference-pressure path. The AMP bubble solves are model predictions on the same feeds as their pressure controls. The three searches tied to [Engine #265](https://github.com/tannerpolley/epcsaft/issues/265) remain open.
+The support census matched every prior support set, so it triggered no screen reruns.
+
 ## Start separation and endpoint stationarity
 
 | Design | A−B | A−C | B−C |
@@ -507,9 +544,9 @@ The error envelope combines the Engine arithmetic estimate for the potential and
 | C1 fixed-at-old-AMP_free volume | -9.0444932e-12 | 2.9858845e-06 | -2.8121426e-08 | m³ | 2 | agreement within numerical error |
 | C1 fixed-at-old-AMP_free enthalpy | 0.0027236036 | 0.12506051 | — | J/mol apparent amine | 2 | agreement within numerical error |
 | C1 fixed-at-old-AMP_free Eq. 12 | 0.0035561757 | 0.12757768 | — | J/mol apparent amine | 2 | agreement within numerical error |
-| C1 fixed-at-old-DEA volume | -1.1963485e-08 | 8.935864e-05 | -2.387025e-05 | m³ | 0 | undecided |
-| C1 fixed-at-old-DEA enthalpy | 0.0070839562 | 0.60322583 | — | J/mol apparent amine | 0 | undecided |
-| C1 fixed-at-old-DEA Eq. 12 | 0.0013351319 | 0.51722287 | — | J/mol apparent amine | 0 | undecided |
+| C1 fixed-at-old-DEA volume | -2.8196991e-09 | 4.4515505e-05 | -5.6260298e-06 | m³ | 2 | agreement within numerical error |
+| C1 fixed-at-old-DEA enthalpy | 0.0070839562 | 0.60322583 | — | J/mol apparent amine | 3 | agreement within numerical error |
+| C1 fixed-at-old-DEA Eq. 12 | 0.0013351319 | 0.51722287 | — | J/mol apparent amine | 3 | agreement within numerical error |
 | C1 fixed-at-old-MDEA-daughter-1 volume | -1.8990126e-14 | 1.8609088e-10 | -1.1407741e-10 | m³ | 3 | agreement within numerical error |
 | C1 fixed-at-old-MDEA-daughter-1 enthalpy | 0.00074818602 | 0.046830824 | — | J/mol apparent amine | 3 | agreement within numerical error |
 | C1 fixed-at-old-MDEA-daughter-1 Eq. 12 | 0.00029623194 | 0.040045044 | — | J/mol apparent amine | 3 | agreement within numerical error |
@@ -522,9 +559,9 @@ The error envelope combines the Engine arithmetic estimate for the potential and
 | C1 fixed-at-old-MDEA volume | 1.0224793e-12 | 4.5175728e-07 | 2.7488254e-09 | m³ | 3 | agreement within numerical error |
 | C1 fixed-at-old-MDEA enthalpy | 0.0042056898 | 0.33335869 | — | J/mol apparent amine | 3 | agreement within numerical error |
 | C1 fixed-at-old-MDEA Eq. 12 | 0.0013464317 | 0.29044277 | — | J/mol apparent amine | 3 | agreement within numerical error |
-| C1 fixed-at-old-MEA volume | 2.7413289e-09 | 2.125273e-05 | 1.3538075e-05 | m³ | 0 | undecided |
-| C1 fixed-at-old-MEA enthalpy | 0.0026889867 | 0.15133293 | — | J/mol apparent amine | 0 | undecided |
-| C1 fixed-at-old-MEA Eq. 12 | 0.00064501585 | 0.12055334 | — | J/mol apparent amine | 0 | undecided |
+| C1 fixed-at-old-MEA volume | 1.3461433e-09 | 2.1287781e-05 | 6.6479396e-06 | m³ | 3 | agreement within numerical error |
+| C1 fixed-at-old-MEA enthalpy | 0.010722585 | 0.087719696 | — | J/mol apparent amine | 2 | agreement within numerical error |
+| C1 fixed-at-old-MEA Eq. 12 | 0.0025189128 | 0.063099806 | — | J/mol apparent amine | 2 | agreement within numerical error |
 | C1 selected-AMP_free volume | -1.0806744e-11 | 1.4935842e-06 | -3.3603976e-08 | m³ | 2 | agreement within numerical error |
 | C1 selected-AMP_free enthalpy | 0.00066840311 | 0.24428973 | — | J/mol apparent amine | 2 | agreement within numerical error |
 | C1 selected-AMP_free Eq. 12 | 0.00088889035 | 0.24741365 | — | J/mol apparent amine | 2 | agreement within numerical error |
@@ -583,7 +620,7 @@ Measured entries record timed calculations. The lanes overlapped.
 
 ## Coverage
 
-The quantity index contains 1763 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 84 undecided results.
+The quantity index contains 1781 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 78 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 
@@ -772,15 +809,6 @@ The retained search did not resolve the phase outcome or its physical checks.
 - AMP_free fixed-at-old phase hartono-2021:57:problem
 - AMP_free fixed-at-old phase tong-2012:32:problem
 
-### Undecided · C1 numerical error (6)
-
-- C1 fixed-at-old-DEA volume
-- C1 fixed-at-old-DEA enthalpy
-- C1 fixed-at-old-DEA Eq. 12
-- C1 fixed-at-old-MEA volume
-- C1 fixed-at-old-MEA enthalpy
-- C1 fixed-at-old-MEA Eq. 12
-
 ### Undecided · DEA phase controls (4)
 
 The retained search did not resolve the phase outcome or its physical checks.
@@ -852,6 +880,15 @@ The retained search did not resolve the phase outcome or its physical checks.
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset bias_percent
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_abs_error
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+
+### Updated · C1 (6)
+
+- C1 fixed-at-old-DEA volume → agreement within numerical error (started undecided)
+- C1 fixed-at-old-DEA enthalpy → agreement within numerical error (started undecided)
+- C1 fixed-at-old-DEA Eq. 12 → agreement within numerical error (started undecided)
+- C1 fixed-at-old-MEA volume → agreement within numerical error (started undecided)
+- C1 fixed-at-old-MEA enthalpy → agreement within numerical error (started undecided)
+- C1 fixed-at-old-MEA Eq. 12 → agreement within numerical error (started undecided)
 
 ### Updated · Round 7 AMP/fixed (8)
 
