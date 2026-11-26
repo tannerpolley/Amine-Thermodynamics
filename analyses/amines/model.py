@@ -17,6 +17,7 @@ from epcsaft import equilibrium as eq  # noqa: E402
 
 REPORTED = ROOT / "analyses/fixed_reaction_reference/results"
 CAMPAIGN_ARCHIVE = "archive/pre-rebuild-3c85ad4fc"
+ELECTROSTATICS = ROOT / "analyses/mea_parameter_bundle/results/shared-ion-electrostatics-423"
 P_REF = 100_000.0
 MODEL_RUNTIME_DEFAULTS = {"c_shell": 1.0, "c_dielectric": 1.0}
 

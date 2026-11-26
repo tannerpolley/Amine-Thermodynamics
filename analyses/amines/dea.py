@@ -9,7 +9,7 @@ import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 from MEA.common.retained_results import read
 
-from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
+from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route
 
 DEA = ROOT / "analyses/dea_transfer"
 DECLARATION = DEA / "inputs/part-ii-346/f2-carbamate-413-route.json"
@@ -251,7 +251,24 @@ def replay_water_binary(declaration):
     )
 
 
+(CATION_REPLAY,) = ELECTROSTATICS.glob("*/*/diethanolamine")
 FIT_SETS = {
+    **{
+        f"born-{arm}": dict(
+            route=Route,
+            declaration=DECLARATION,
+            reference_pressure_pa=None,
+            archive=CAMPAIGN_ARCHIVE,
+            endpoint=SHARED_FIT / "selection.json",
+            endpoint_keys=("chosen", "parameters"),
+            born_diameter=("protonated-diethanolamine", CATION_REPLAY / arm / "replay.json.gz"),
+            reference=CATION_REPLAY / arm / "data-rows.json.gz",
+            reference_keys=(),
+            objective=CATION_REPLAY / arm / "replay.json.gz",
+            objective_keys=("cost",),
+        )
+        for arm in ("control", "volume-equivalent")
+    },
     "water-binary": dict(
         replay=replay_water_binary,
         archive=CAMPAIGN_ARCHIVE,

@@ -7,7 +7,7 @@ import json
 import os
 from time import monotonic
 
-from .model import replay, row_manifest
+from .model import replay, row_manifest, with_parameter_values
 from .properties import endpoint_diagnostics, property_rows
 from .wheel import verify
 from MEA.common.retained_results import read
@@ -263,6 +263,11 @@ def replay_retained(fit_set):
     point = read(fit_set["endpoint"])
     for key in fit_set["endpoint_keys"]:
         point = point[key]
+    if "born_diameter" in fit_set:
+        species, path = fit_set["born_diameter"]
+        point = dict(point, parameters=with_parameter_values(
+            point["parameters"], {f"component/{species}/born_diameter": read(path)["born_A"]}
+        ))
     reference_path = fit_set["reference"]
     if reference_path.suffix == ".csv":
         with reference_path.open(newline="") as stream:
