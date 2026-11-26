@@ -434,7 +434,7 @@ def dea_density(s):
 def mdea_bubble(s, pressure_basis):
     screen = selected(s, 'MDEA', 'screen/selected/declared/summary.json.gz')
     inventory = selected(s, 'MDEA', 'screen/selected/declared/state-inventory.json.gz')
-    
+
     measured = {r['key']: r for r in pressure_basis['mdea_distinct_states'] if r['pressure_basis'] == 'measured'}
     classified = {r['key']: r for r in screen['classifications']}
     states = {r['key']: r for r in inventory['rows']}
