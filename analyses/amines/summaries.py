@@ -7,9 +7,10 @@ from math import fsum, sqrt
 from MEA.common.retained_results import read
 from scipy.constants import R
 
-from .fit import save
+from . import amp as amp_model, dea as dea_model, mdea
+from .fit import retained_endpoint, route_for, save
 from .model import P_REF, REPORTED, ROOT
-from .phase import phase_outcome
+from .phase import grid_axes, grid_states, phase_outcome
 from .wheel import verify
 
 RESULTS = ROOT / "analyses/amines/results"
@@ -502,7 +503,8 @@ def fit_attempts(s):
             attempts[design][label] = dict(
                 status=report['status'], initial_cost=start_report['initial_cost'] if start_report['residual_evaluations'] else None,
                 objective=(fit.get('replay') or {}).get('cost'), active_bounds=bounds,
-                solver_scale_projected_gradient_inf=gradient, endpoint=fit.get('endpoint_fingerprint'),
+                solver_scale_projected_gradient_inf=gradient, gradient_tolerance=fit['controls']['gradient_tolerance'],
+                endpoint=fit.get('endpoint_fingerprint'),
             )
     return attempts, distances
 
@@ -538,18 +540,65 @@ def mdea_properties(s):
                 kuranov=dict(available=len(values), AARD_percent=aard(values)))
 
 
+def reported_grid_axes(s):
+    result = {}
+    for label, module, family in (('DEA', dea_model, 'DEA'), ('MDEA', mdea, 'MDEA'), ('AMP', amp_model, 'AMP_free')):
+        fit = module.FIT_SETS['reported']
+        selection = s.fixed(f'{family}/selection.json')
+        record = s.fixed(f'{family}/{selection["selected"]}.json.gz')
+        point, _ = retained_endpoint(fit)
+        route = route_for(fit)
+        stocks, loadings = grid_axes(route, route.bind(point))
+        masses = {row['component_id']: row['fixed']['molar_mass']['value']['magnitude']
+                  for row in record['endpoint']['parameters']['components']}
+        amine = route.config['amine']
+        stock_weights = [100 * stock[amine] * masses[amine] / fsum(n * masses[k] for k, n in stock.items())
+                         for stock in stocks]
+        result[label] = dict(stocks=len(stocks), loadings=len(loadings), maximum_loading=max(loadings),
+                             stock_wt_percent=stock_weights,
+                             temperatures=len({row['T'] for row in grid_states(stocks, loadings)}),
+                             endpoint_fingerprint=record['endpoint_fingerprint'])
+    return result
+
+
+def historical_bicarbonate_profile(s):
+    declaration = s.read('analyses/mea_parameter_bundle/results/reduced-refit/F2/current/unpenalized/declaration.json')
+    coordinates = [row['identity'] for row in declaration['declared']
+                   if row['identity'] != 'pair/bicarbonate-anion/water/k_ij']
+    starts = {}
+    for case, fit_set in (('low', 'bicarbonate-0.1325'), ('high', 'bicarbonate-1.0')):
+        directory = mdea.FIT_SETS[fit_set]['endpoint'].parent
+        starts[case] = {
+            path.parent.parent.name: [row['identity'] for row in s.read(path)['coordinates']]
+            for path in sorted(directory.glob('fit-*/stage-0/parameters.json.gz'))
+        }
+    return dict(mea_refitted_coordinates=coordinates, mdea_starts=starts)
+
+
+def tied_phase_controls(s):
+    return {
+        family: {
+            start: {key: phase_outcome(row['value']) for key, row in
+                    s.fixed(f'{family}/controls/{start}.json.gz')['rows'].items()}
+            for start in ENDPOINTS[family]
+        }
+        for family in ('DEA', 'AMP_free')
+    }
+
+
 def main():
     s = Records()
     attempts, distances = fit_attempts(s)
     s.write('shared/fit/display-summary.json.gz', dict(
-        attempts=attempts, start_distances=distances, amp_enthalpy=amp_units(s), **fit_accounting(s, attempts),
+        attempts=attempts, start_distances=distances, amp_enthalpy=amp_units(s),
+        historical_bicarbonate_profile=historical_bicarbonate_profile(s), **fit_accounting(s, attempts),
     ))
     account = phase_accounting(s)
     amp_early = s.read('analyses/round_3/results/q1.json')['rows']
     mdea_early = s.read('analyses/round_3/results/q3.json')['rows']
     mdea_measured = s.read('analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json')
     s.write('shared/phase/display-summary.json.gz', dict(
-        **account,
+        **account, grid_axes=reported_grid_axes(s), tied_controls=tied_phase_controls(s),
         mea_search=mea_search(s), mea_grid=s.fixed('MEA/screen/summary.json.gz')['grid'],
         dea_controls=dea(s), amp_controls=amp(s), amp_outcomes=amp_outcomes(s),
         amp_worked={family: phase_outcome(selected(s, family, 'controls/A.json.gz')['rows']['worked-state']['value'])
@@ -558,7 +607,8 @@ def main():
             attempted=len(amp_early),
             confirmed=sum(any(a['confirmed'] for a in row[fit]['attempts']) for row in amp_early),
         ) for fit in ('free', 'fixed')},
-        mdea_early=[{key: row[key] for key in ('key', 'P_Pa', 'T_K', 'instability', 'reference')} for row in mdea_early],
+        mdea_early=[{key: row[key] for key in ('key', 'P_Pa', 'T_K', 'instability', 'reference', 'attempts')}
+                    for row in mdea_early],
         mdea_historical_measured=[{key: row[key] for key in ('key', 'native_branch', 'supplied_branch', 'attempts')}
                                   for row in mdea_measured],
     ))

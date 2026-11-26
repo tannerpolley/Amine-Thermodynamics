@@ -50,8 +50,8 @@
     "fit_set": "reported and retained comparisons",
     "stage": "fit",
     "record": "shared/fit/display-summary.json.gz",
-    "keys": "amp_enthalpy, attempts, start_distances, endpoint_stages, mdea_start_counts",
-    "sha256": "6c5c5cde582da69174af8018b50b7c9ddc5e1947f958160287051a4d898f3273"
+    "keys": "amp_enthalpy, attempts, start_distances, endpoint_stages, mdea_start_counts, historical_bicarbonate_profile, attempts[].gradient_tolerance",
+    "sha256": "9647f5b18b03cebb79cae7a07557ebaa5a4ea64b6b91bbdc03f49705ad683bcc"
   },
   "analyses/amines/results/shared/phase/display-summary.json.gz": {
     "disposition": "stage",
@@ -59,8 +59,8 @@
     "fit_set": "reported and retained comparisons",
     "stage": "phase",
     "record": "shared/phase/display-summary.json.gz",
-    "keys": "dea_controls, amp_controls, amp_worked, mdea_early, mea_grid, amp_outcomes, coverage, mdea_historical_measured, mea_search, mdea_search, mdea_distinct_states, amp_early, mdea_descent_counts",
-    "sha256": "1dae4bbbc07c1f851b5924119b4fa57d40c7523e35e3a550af16b21f23289bc6"
+    "keys": "dea_controls, amp_controls, amp_worked, mdea_early, mea_grid, amp_outcomes, coverage, mdea_historical_measured, mea_search, mdea_search, mdea_distinct_states, amp_early, mdea_descent_counts, grid_axes, tied_controls, mdea_early[].attempts",
+    "sha256": "f585238421176829e59a669744daec1998f85e059cdf3adf51de386837c4e5cb"
   },
   "analyses/amines/results/shared/properties/display-summary.json.gz": {
     "disposition": "stage",
@@ -3579,6 +3579,19 @@
     "c_path": "analyses/amines/results/mdea/system-pressure/replay/display/analyses/round_7/results/C/salt/rms-fixed-pressures.json.gz",
     "a3_review_external_read": true
   },
+  "analyses/round_7/results/C/salt/search-outcome.json.gz": {
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "disposition": "rekey",
+    "fit_set": "system-pressure",
+    "keys": "classifications[].attempts[].confirmed",
+    "owner": "mdea.py",
+    "record": "mdea/system-pressure/replay/display/analyses/round_7/results/C/salt/search-outcome.json.gz",
+    "sha256": "bbb36b59488199fc9913ea05c743edd26640b6a1ec6727f56200af82c21b247f",
+    "stage": "replay, phase",
+    "c_disposition": "rekey-into-stage",
+    "c_path": "analyses/amines/results/mdea/system-pressure/replay/display/analyses/round_7/results/C/salt/search-outcome.json.gz",
+    "a3_review_external_read": false
+  },
   "analyses/round_7/results/E/F4/off-window.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "replay-reference",
@@ -3615,16 +3628,25 @@
     "evidence": "The MEA expanded-weights replay reads the archived source rows, identities and refusal causes from its off_window declaration. The MEA display summary reads the replay result."
   },
   "analyses/round_7/results/F/selection.json.gz": {
-    "disposition": "input",
+    "disposition": "comparison-only",
     "fit_set": "system-pressure",
     "keys": "selected[0]",
     "owner": "dea.py",
     "record": "dea/system-pressure/fit/selection.json.gz",
     "sha256": "4d8137f6deb90a55c6a75a7e4cdfb41f4475c5cca8a15a28a3402e8fa7003b9d",
     "stage": "fit",
-    "c_disposition": "retain-in-place",
-    "c_path": "analyses/round_7/results/F/selection.json.gz",
+    "c_disposition": "rekey-into-stage",
+    "c_path": "analyses/amines/results/dea/system-pressure/fit/selection.json.gz",
     "a3_review_external_read": true
+  },
+  "analyses/amines/results/dea/system-pressure/fit/selection.json.gz": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "selected[0]",
+    "owner": "dea.py",
+    "record": "dea/system-pressure/fit/selection.json.gz",
+    "sha256": "4d8137f6deb90a55c6a75a7e4cdfb41f4475c5cca8a15a28a3402e8fa7003b9d",
+    "stage": "fit"
   },
   "analyses/round_7/results/display-replays/amp-common-pressure.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3890,7 +3912,7 @@
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/grid.csv": {
     "disposition": "stage",
     "fit_set": "published",
-    "keys": "minimum_eigenvalue minimum over locally unstable rows; minimum_eigenvalue maximum over locally unstable rows",
+    "keys": "minimum_eigenvalue minimum over locally unstable rows; minimum_eigenvalue maximum over locally unstable rows; minimum T_K across grid nodes",
     "owner": "mea.py",
     "record": "mea/published/phase grid control/grid.csv",
     "sha256": "9ad41dc5568bb8c0ea3e447fa0f209c8082de180d6f143ca33a2c2fdfc962339",
