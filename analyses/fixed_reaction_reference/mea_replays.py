@@ -17,38 +17,43 @@ from objective_weights_420 import census_classify, grid_classify
 ALLOWANCE = 1500.
 
 
+def measured_identity(point, bank):
+    return dict(endpoint_fingerprint=fingerprint(point),bank_fingerprint=fingerprint(bank),wheel=r.SHA)
+
+
+def measured_batch(record, identity, names):
+    assert all(record.get(k)==v for k,v in identity.items()), 'MEA batch endpoint, trial bank or wheel changed'
+    rows = record['rows']
+    assert [q['identity'] for q in rows]==names and all(q['wheel']==r.SHA for q in rows)
+    return rows
+
+
 def rebuild_measured(point, reference, names, bank, output, workers):
     started = monotonic()
-    pilot = r.read(output/'measured-pilot.json.gz')
-    endpoint = fingerprint(point)
-    assert pilot['endpoint_fingerprint']==endpoint and pilot['wheel']==r.SHA
-    rows = {q['identity']:q for q in pilot['rows']}
-    assert len(set(names))==321 and rows.keys()<=set(names)
-    pending = [i for i in names if i not in rows]
+    identity = measured_identity(point,bank)
+    pilot = r.read(output/'measured-bound/pilot.json.gz')
+    pilot_names = [q['identity'] for q in pilot['rows']]
+    done = {q['identity'] for q in measured_batch(pilot,identity,pilot_names)}
+    assert len(set(names))==321 and done<=set(names)
+    pending = [i for i in names if i not in done]
     batches = [pending[i:i+8] for i in range(0,len(pending),8)]
     jobs = []
     for i, batch in enumerate(batches):
-        path = output/f'measured/{i}.json.gz'
+        path = output/f'measured-bound/{i}.json.gz'
         if path.exists():
-            retained = r.read(path)
-            assert [q['identity'] for q in retained]==batch and all(q['wheel']==r.SHA for q in retained), path
-            rows.update((q['identity'],q) for q in retained)
+            measured_batch(r.read(path),identity,batch)
         else:
             jobs.append((i,(point['parameters'],reference,batch,1.,P_REF,bank)))
     with ProcessPoolExecutor(workers) as pool:
         for (i,_), batch in zip(jobs,pool.map(stability.chunk,[args for _,args in jobs]),strict=True):
-            stability.save(output/f'measured/{i}.json.gz',batch)
-            rows.update((q['identity'],q) for q in batch)
-    stability.save(output/'measured-inventory.json.gz',dict(
-        names=names, endpoint_fingerprint=endpoint, wheel=r.SHA, seconds=monotonic()-started))
+            stability.save(output/f'measured-bound/{i}.json.gz',dict(identity,rows=batch))
+    stability.save(output/'measured-bound/inventory.json.gz',dict(identity,names=names,seconds=monotonic()-started))
 
 
-def census_support(point, main, offset, census, grid_bank, census_bank):
+def census_declaration(point):
     from final_evidence import flash_problem
     from heat_evidence_170 import request as heat_request
 
-    spec = r.bind(point['parameters'],reaction_reference_pressure_pa=P_REF)
-    spec.inputs['endpoint'] = point['parameters']
     request = heat_request(point['parameters'],313.15,.11)
     for reaction in request['reaction_system']['engine_reactions']:
         reference = reaction.get('engine_reference') or reaction.get('reference') or {}
@@ -57,11 +62,17 @@ def census_support(point, main, offset, census, grid_bank, census_bank):
     def declaration(spec,state,scale):
         phases = [r.eq.Phase(q['identity'],kind=q['role'],support=q['support']) for q in state['final']['phases']]
         p = flash_problem(request,state['loading'],state['temperature_K'],state['pressure_Pa'],phases)
-        return SimpleNamespace(problem=p._native(spec.parameters))
+        return SimpleNamespace(problem=p._native(spec.parameters), declaration=p)
 
+    return declaration
+
+
+def census_support(point, main, offset, census, grid_bank, census_bank):
+    spec = r.bind(point['parameters'],reaction_reference_pressure_pa=P_REF)
+    spec.inputs['endpoint'] = point['parameters']
     return dict(grid=support_census(spec,main,r.stability_row,grid_bank),
                 offset=support_census(spec,offset,r.stability_row,grid_bank),
-                census=support_census(spec,census,declaration,census_bank,old_full=True))
+                census=support_census(spec,census,census_declaration(point),census_bank,old_full=True))
 
 
 def pilot(point):
