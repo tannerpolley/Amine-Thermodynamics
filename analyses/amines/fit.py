@@ -271,7 +271,14 @@ def replay_retained(fit_set):
     reference_path = fit_set["reference"]
     if reference_path.suffix == ".csv":
         with reference_path.open(newline="") as stream:
-            reference = list(csv.DictReader(stream))
+            reference = [
+                dict(
+                    row,
+                    value=float(row["predicted"]) if row["predicted"] else None,
+                    status="Available" if row["predicted"] else "Unavailable",
+                )
+                for row in csv.DictReader(stream)
+            ]
     else:
         reference = read(reference_path)
     for key in fit_set["reference_keys"]:
@@ -300,6 +307,8 @@ def replay_retained(fit_set):
                     strict=True,
                 )
             ]
+        if "prediction" in retained_rows[0]:
+            retained_rows = [dict(row["prediction"], role=row["role"]) for row in retained_rows]
         if "role" in retained_rows[0]:
             result["properties"] = property_rows(route, point, result["rows"])
     else:
@@ -337,6 +346,8 @@ def compare_rows(retained_rows, replayed_rows):
             )
             continue
         for field in ("status", "requested_tolerance_met", "role"):
+            if field == "requested_tolerance_met" and field not in before:
+                continue
             if before.get(field) != after.get(field):
                 differences.append(
                     dict(

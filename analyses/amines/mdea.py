@@ -10,6 +10,7 @@ import epcsaft
 from epcsaft import equilibrium
 from MEA.common.retained_results import read
 
+from .fit import replay_retained
 from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route, evaluate
 
 DECLARATION = ROOT / "analyses/mdea_mea_workflow/inputs/bounded-binary-411.json"
@@ -31,6 +32,29 @@ class MDEAWeights(Route):
                 assert row["arguments"]["form"] == "log_ratio"
                 row["weight"] /= KURANOV_LOG_SCALE**2
         return spec
+
+
+def replay_weighting(declaration):
+    result = replay_retained({key: value for key, value in declaration.items() if key != "replay"})
+    point = read(declaration["endpoint"])
+    for key in declaration["endpoint_keys"]:
+        point = point[key]
+    reference = read(declaration["weighting_reference"])["objective"]
+    result["weighting"] = {}
+    for name, route_type in (("original", Route), ("rms", MDEAWeights)):
+        spec = route_type(declaration["declaration"], reference_pressure_pa=None).bind(point)
+        rows = {row["identity"]: row for row in spec.inputs["observations"]["fitted"]}
+        predictions = result["replay"]["rows"]
+        contributions = [
+            0.5 * (math.sqrt(rows[row["identity"]]["weight"]) * row["residual"]) ** 2
+            for row in predictions if "cost" in row
+        ]
+        result["weighting"][name] = dict(
+            retained=reference[name]["objective"],
+            replayed=math.fsum(contributions) if len(contributions) == len(rows) else None,
+            fitted=len(rows),
+        )
+    return result
 
 
 T_REF = 298.15  # Wangler Eqs. 34-35, T+ = 298.15 K
@@ -484,11 +508,19 @@ def replay_published(declaration):
     route = Route(declaration["specification"], reference_pressure_pa=None)
     spec = route.bind(read(declaration["endpoint"]))
     restore = next(row for row in rows if row["row"] == declaration["restored_row"])
-    predictions = evaluate(spec, replay_records(spec, restore))
+    records = replay_records(spec, restore)
+    predictions = [
+        dict(prediction, role=record["role"])
+        for record, prediction in zip(records, evaluate(spec, records), strict=True)
+    ]
     for row, predicted in zip(rows, sorted(predictions, key=lambda p: int(p["row"]["source_row"])), strict=True):
         if row["row"] != int(predicted["row"]["source_row"]):
             raise ValueError(f"Mismatched Kuranov row {row['row']}")
-        row["present"] = dict(pressure_Pa=predicted["value"], status=predicted["status"])
+        row.update(
+            group=predicted["group"],
+            role=predicted["role"],
+            present=dict(pressure_Pa=predicted["value"], status=predicted["status"]),
+        )
     references = {name: read(path) for name, path in declaration["reference"].items()}
     own = [dict(row, row=row["source_row"]) for row in references["wangler"]]
     documents = dict(
@@ -505,10 +537,29 @@ def replay_published(declaration):
                     linear_solver=result["linear_solver"],
                     message=result["message"],
                 )
-    selected = {row["row"]: row for row in rows}
     stats = references["statistics"]
-    subsets = {name: [selected[i] for i in ids] for name, ids in stats["sets"].items() if name != "Wangler Table 10"}
-    subsets["Wangler Table 10"] = own
+    subsets = {
+        "K82": rows,
+        "K19": rows[:41],
+        "K32": rows[41:],
+        "K19-loaded": [row for row in rows[:41] if row["alpha"] > 0.01],
+        "alpha > 1.2": [row for row in rows if row["alpha"] > 1.2],
+        "alpha <= 1.2": [row for row in rows if row["alpha"] <= 1.2],
+        "C28": [row for row in rows[11:41] if row["alpha"] > 0],
+        "Wangler Table 10": own,
+        "not fitted": [row for row in rows if row["role"] == "not fitted"],
+    }
+    subsets["C21"] = [row for row in subsets["C28"] if row["p_exp"] <= 3e6]
+    groups = {
+        "fitted loaded": "Kuranov", "fitted CO2-free": "Kuranov-binary",
+        "not fitted 413 K": "Kuranov-413K", "not fitted 393 K": "Kuranov-393K",
+    }
+    subsets.update({name: [row for row in rows if row["group"] == group] for name, group in groups.items()})
+    lower, upper = route.config["reaction_ranges_K"]["MDEA-dissociation"]
+    subsets["fitted loaded, within 278–368 K"] = [
+        row for row in subsets["fitted loaded"] if lower <= row["T"] <= upper
+    ]
+    subsets["fitted loaded, above 368 K"] = [row for row in subsets["fitted loaded"] if row["T"] > upper]
     present = {name: pressure_deviation(subsets[name], "present") for name in stats["present"]}
     reconstruction = [
         dict(
@@ -554,6 +605,8 @@ FIT_SETS = {
         },
     ),
     "system-pressure-first-weights": dict(
+        replay=replay_weighting,
+        weighting_reference=ROOT / "analyses/round_7/results/C/salt/incumbent.json.gz",
         route=Route,
         declaration=DECLARATION,
         reference_pressure_pa=None,
@@ -622,14 +675,18 @@ FIT_SETS = {
         objective_keys=("cost",),
     ),
     "system-pressure": dict(
+        replay=replay_weighting,
+        weighting_reference=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
         route=MDEAWeights,
         declaration=DECLARATION,
         reference_pressure_pa=None,
         archive=CAMPAIGN_ARCHIVE,
         endpoint=REPORTED / "MDEA/manifest.json.gz",
         endpoint_keys=("prior_declaration",),
-        reference=REPORTED / "MDEA/reference-control.json.gz",
-        reference_keys=("tracking",),
+        reference=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
+        reference_keys=("rows",),
+        objective=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
+        objective_keys=("objective", "rms", "objective"),
     ),
     "reported": dict(
         route=MDEAWeights,

@@ -33,16 +33,26 @@ to the retained prediction. These are numerical checks of the two paths.
 
 The fixed-reference study retained a tracking-reference replay for each
 starting endpoint. The following fitted objectives are half the sum of
-squared weighted residuals on wheel S. Fitted rows matched by identity and
-availability. Ancillary property and phase records are assessed separately.
+squared weighted residuals on wheel S. The round-7 transfer assessments
+matched by identity, role, availability, refusal cause and prediction.
+The MDEA assessment reproduced 10 thermochemistry refusals and four
+central-solve refusals.
 
 | Endpoint | Rows available | Retained objective | Replayed objective |
 |---|---:|---:|---:|
 | MEA | 307/307 | 152.9581738516127 | 152.9581738516127 |
-| DEA | 140/140 | 15.537712195478546 | 15.537712195478546 |
-| MDEA | 281/281 | 17.40095680897502 | 17.40095680897502 |
-| AMP, fitted slope | 214/214 | 75.11143919239048 | 75.11143919239048 |
-| AMP, fixed slope | 214/214 | 76.35271762676425 | 76.35271762676425 |
+| DEA | 299/299 | 15.537712195478546 | 15.537712195478546 |
+| MDEA | 717/731 | 17.40095680897502 | 17.40095680897502 |
+| AMP, fitted slope | 270/270 | 75.11143919239048 | 75.11143919239048 |
+| AMP, fixed slope | 270/270 | 76.35271762676425 | 76.35271762676425 |
+
+The two MDEA endpoints also reproduce both objective columns in the
+weighting table over the same 281 fitted rows at each endpoint.
+
+| MDEA endpoint | Original weights, retained and on S | Pressure weights, retained and on S |
+|---|---:|---:|
+| Original weights | 537.6587969229375 | 39.74770415743704 |
+| Pressure-weighted refit | 737.231483145826 | 17.40095680897502 |
 
 ## Reactive comparison endpoints
 
@@ -52,14 +62,14 @@ availability, and recorded stop. The objective is over fitted rows.
 
 | Endpoint | Available retained | Available on S | Retained objective | Objective on S |
 |---|---:|---:|---:|---:|
-| [AMP first-data](results/amp/first-data/replay/endpoint.json.gz) | 156 | 156 | 61.28527532435647 | 61.28527532435647 |
-| [AMP first-data-fixed-slope](results/amp/first-data-fixed-slope/replay/endpoint.json.gz) | 156 | 156 | 62.0651105779247 | 62.0651105779247 |
+| [AMP first-data](results/amp/first-data/replay/endpoint.json.gz) | 270 | 270 | 61.28527532435647 | 61.28527532435647 |
+| [AMP first-data-fixed-slope](results/amp/first-data-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 62.0651105779247 | 62.0651105779247 |
 | [AMP mea-fitted-shared](results/amp/mea-fitted-shared/replay/endpoint.json.gz) | 270 | 270 | 61.28527532435647 | 61.28527532435647 |
 | [AMP mea-fitted-shared-fixed-slope](results/amp/mea-fitted-shared-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 62.0651105779247 | 62.0651105779247 |
 | [AMP system-pressure-salt-anchored](results/amp/system-pressure-salt-anchored/replay/endpoint.json.gz) | 270 | 270 | 76.31190308633893 | 76.31190308633893 |
 | [AMP system-pressure-salt-anchored-fixed-slope](results/amp/system-pressure-salt-anchored-fixed-slope/replay/endpoint.json.gz) | 270 | 270 | 77.64284261021933 | 77.64284261021933 |
 | [DEA mea-fitted-shared](results/dea/mea-fitted-shared/replay/endpoint.json.gz) | 299 | 299 | 6.747545469165438 | 6.747545469165438 |
-| [DEA mea-fitted-shared-0](results/dea/mea-fitted-shared-0/replay/endpoint.json.gz) | 80 | 80 | 8.082968228315169 | 8.082968228315169 |
+| [DEA mea-fitted-shared-0](results/dea/mea-fitted-shared-0/replay/endpoint.json.gz) | 299 | 299 | 8.082968228315169 | 8.082968228315169 |
 | [DEA mea-fitted-shared-1](results/dea/mea-fitted-shared-1/replay/endpoint.json.gz) | 80 | 80 | 8.082968228354506 | 8.082968228354506 |
 | [DEA system-pressure-salt-anchored](results/dea/system-pressure-salt-anchored/replay/endpoint.json.gz) (80 fitted, 219 assessment) | 299 | 299 | 10.932834014387195 | 10.932834014387195 |
 | [MDEA bicarbonate-0.1325](results/mdea/bicarbonate-0.1325/replay/endpoint.json.gz) | 718 | 718 | 541.0792552129477 | 541.0792552129477 |
@@ -68,11 +78,14 @@ availability, and recorded stop. The objective is over fitted rows.
 | [MDEA bicarbonate-1.0](results/mdea/bicarbonate-1.0/replay/endpoint.json.gz) | 718 | 718 | 565.9424985764472 | 565.9424985764472 |
 | [MDEA system-pressure-first-weights](results/mdea/system-pressure-first-weights/replay/endpoint.json.gz) | 718 | 718 | 537.6587969229375 | 537.6587969229375 |
 
-The MDEA bounded 0.765 objective agrees at printed precision. The retained derivative predictions
-for the two DEA #413 endpoints and the archive's unbounded MDEA point
-were compared with direct row replay. Their objective readbacks agree
-with the retained direct replay. The #435 salt-anchored AMP campaign fitted
-214 rows and assessed 56. The earlier AMP campaign fitted 156 rows.
+The MDEA bounded 0.765 objective agrees at printed precision. The selected
+DEA #413 candidate reproduces the 299 paper rows and their roles. The
+alternative candidate and the archive's unbounded MDEA point retain their
+fitted prediction replays. Their objective readbacks agree with the
+retained direct replay. The #435 salt-anchored AMP campaign fitted 214
+rows and assessed 56. The first AMP fits used 156 fitted and 114 assessment
+rows in the original design. Both endpoints reproduce that role assignment
+exactly.
 
 ## Expanded MEA pressure weights
 
@@ -122,6 +135,11 @@ below agree at the displayed precision. Differences in these runs fall below the
 | F4 | 174.451397 → 174.451397 | 15.46 | 38.48 | 0.21 |
 | F4-0 | 176.049063 → 176.049063 | 15.59 | 38.53 | 0.21 |
 | F5 | 186.615092 → 186.615092 | 20.09 | 39.70 | 0.23 |
+
+The F2 assessment also reproduces the 23 Wagner and 70 Aronu transfer
+pressures used in the published and temperature-band comparisons.
+Their AARDs are 25.03% and 45.49%, respectively, in both the retained
+and S cases. The plotted pressures agree at four significant figures.
 
 Each [older bound profile](results/mea/restrictions-bound-profiles/replay/endpoint.json.gz) and
 [system-pressure bound profile](results/mea/system-pressure-bound-profiles/replay/endpoint.json.gz)
@@ -232,9 +250,13 @@ use available pressures and the matched source rows.
 
 ## Published MEA comparisons
 
-The [Hong replay](results/mea/published/replay/endpoint.json.gz) reproduced 325/325 requests
-and all 21 score groups exactly. The table gives Hong's scores on the
-named, same-row evaluation cohorts.
+The [Hong replay](results/mea/published/replay/endpoint.json.gz)
+reproduced 325/325 requests and Hong's 21 scores exactly. The package
+also recomputed the comparisons with the MEA-fitted shared set and
+Polley and Hedengren. Each comparison returned 312 available predictions
+and retained the 13 refused Kim requests. Every displayed score agrees
+at its printed precision. The largest density RMSE difference among
+the displayed cohorts is 0.0023 kg/m³. The table below gives Hong's scores.
 
 | Cohort | Subset | Temperature side | Rows | Metric | Retained | On S |
 |---|---|---|---:|---|---:|---:|
@@ -279,6 +301,8 @@ The replay uses the corresponding endpoint labels.
 The [Polley and Hedengren property comparison](results/mea/published-properties/replay/endpoint.json.gz)
 binds the same parameter document and archived source requests. The
 retained and replayed counts refer to the same measured populations.
+All 86 Kim intervals were evaluated. The same 73 heat values were
+available and the same 13 intervals were refused at the loading ceiling.
 
 | Cohort | Available retained → S | Metric | Retained | On S |
 |---|---:|---|---:|---:|
@@ -307,8 +331,10 @@ retained and replayed counts refer to the same measured populations.
 
 ## Published MDEA comparisons
 
-The [Kuranov replays](results/mdea/published/replay/endpoint.json.gz) reproduce all stored
-subsets and their statistics exactly. The native central solve refuses the
+The [Kuranov replays](results/mdea/published/replay/endpoint.json.gz)
+reproduce all stored subsets and their statistics exactly. The declaration
+assigns 70 fitted and 12 assessment roles and their groups across the
+82 rows. The native central solve refuses the
 same three Wangler Table 10 rows with the unmodified Wangler reading.
 The corresponding final classified residuals are 0.121–0.164 on a
 dimensionless target scale of 10⁻¹⁰, with no contraction reported.
@@ -348,3 +374,25 @@ amine. DEA uses the Lawson pressures and MDEA uses the Kuranov pressures.
 | `bubble`, `replay_water_binary` | `dea_transfer/binary.py` |
 | `document`, `charged_molecule_ions`, `reactions`, `bubble_problem`, `uyan`, `kuranov_rows`, `solve_rows`, `replay_records`, `pressure_deviation`, `replay_published` | `mdea_kuranov_refit/{model,conventions,score}.py`, `kuranov_published_422.py` |
 | `pure_observation`, `assess_pure`, `binary_bubble`, `relative_statistics`, `replay_pure_and_binary` | `amp_transfer/{pure_fit,binary,pure_binary_on_05e94210}.py` |
+
+
+## Archive populations outside the display and move comparisons
+
+- AMP first-data, both slopes. The prose bindings in dea_displays.py
+  use cost and original.rows. The expanded role assignment at those
+  same two endpoints belongs to the round-5 campaign record. The display
+  mapping names the separate broadened AMP endpoints for the comparison.
+- MEA expanded weights. final_rerun_tables.py reads the F4 and incumbent
+  off-window records and objective families. The F2 off-window rows and
+  historical-F2 expanded control were used by the round-7 campaign
+  handoff. The mapped display families have no read of either control.
+- MEA restrictions. The choice table uses the fitted pressures and
+  densities and the 112 assessment pressures at each endpoint. The F2
+  published and temperature-band comparisons additionally use the Wagner
+  and transfer pressures. The other restriction arms' analogous cohorts
+  have no separate mapped comparison.
+- MEA electrostatics. The carbonate-share table and its prose use the
+  14 entries of CCASES in dea_displays.py. The two displayed refits
+  use M3 and P1. S1, P0-refit, the 2.9296 Å bicarbonate and 2.4422 Å
+  carbonate Born arms and the two 3 Å controls stay in the campaign
+  archive.

@@ -961,6 +961,17 @@ def replay_expanded_weights(declaration):
     return cases
 
 
+def transfer_pressure_records(spec, legacy, templates, canonical, rows):
+    for row in rows:
+        source = canonical[row["identity"].removeprefix("transfer:canonical:")]
+        loading = float(source["CO2_loading"])
+        template = min(templates[pressure_series(source)], key=lambda item: abs(item[0] - loading))[1]
+        yield pressure_record(
+            spec, legacy, row["target"], source_feed_request(template, source),
+            float(row["observed"]), row["source"], "transfer",
+        )
+
+
 def replay_restrictions(declaration):
     templates, population = pressure_inputs(declaration)
     with declaration["statistics"].open(newline="") as stream:
@@ -979,17 +990,34 @@ def replay_restrictions(declaration):
         original_ids = {row["identity"] for row in legacy}
         selected = {row["identity"] for row in additional}
         with declaration["assessment"][name].open(newline="") as stream:
-            prior = [
+            assessment = list(csv.DictReader(stream))
+        prior = [row for row in assessment if row["target"] in selected]
+        held = additional
+        if name == declaration["transfer_case"]:
+            with declaration["wagner"].open(newline="") as stream:
+                wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
+            with declaration["canonical"].open(newline="") as stream:
+                canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
+            transfers = [row for row in assessment if row["kind"] == "transfer"]
+            extra = wagner_pressure_records(spec, legacy[0], templates, wagner) + list(
+                transfer_pressure_records(spec, legacy[0], templates, canonical, transfers)
+            )
+            held = additional + evaluate(spec, extra)
+            prior.extend(row for row in assessment if row["kind"] in ("wagner", "transfer"))
+        held = [dict(row, role="not fitted") for row in held]
+        held_differences, held_values = compare_rows(
+            [
                 dict(
                     identity=row["target"],
-                    value=float(row["predicted"]),
+                    value=float(row["predicted"]) if row["predicted"] else None,
                     status=row["status"],
                     requested_tolerance_met=row["status"] == "Available",
+                    role="not fitted",
                 )
-                for row in csv.DictReader(stream)
-                if row["kind"] == "canonical" and row["target"] in selected
-            ]
-        held_differences, held_values = compare_rows(prior, additional)
+                for row in prior
+            ],
+            held,
+        )
         pools = {
             "fitted: fitted CO2 partial pressure": [row for row in result["rows"] if row["identity"] in original_ids],
             "fitted: loaded density": [row for row in result["rows"] if row["group"] == "loaded density"],
@@ -1003,10 +1031,11 @@ def replay_restrictions(declaration):
         }
         cases[name] = dict(
             result,
+            rows=[dict(row, role="fitted") for row in result["rows"]],
             retained_cost=retained["cost"],
             row_differences=differences + held_differences,
             value_differences=values + held_values,
-            comparisons=additional,
+            comparisons=held,
             aard_percent=aard,
             parameter_source=(folder / "parameters.json").relative_to(ROOT).as_posix(),
         )
@@ -1323,13 +1352,13 @@ def replay_published_pressures(declaration):
         label: pressure_statistics([row for row in record["rows"] if row["identity"] in comparison_ids])
         for label, record in results.items()
     }
-    return dict(results=results, baygi_matched=matched, baygi_published=baygi["reference"])
+    return dict(results=results, baygi_matched=matched, baygi_literature_input=baygi["reference"])
 
 
 def replay_hong(declaration):
     model = Hong(declaration["endpoint"])
     with declaration["admission"].open(newline="") as stream:
-        pressure_inputs = {row["record_id"]: row["pressure_Pa"] for row in csv.DictReader(stream)}
+        pressures = {row["record_id"]: row["pressure_Pa"] for row in csv.DictReader(stream)}
     rows = []
     for path in declaration["blocks"]:
         with path.open(newline="") as stream:
@@ -1349,7 +1378,7 @@ def replay_hong(declaration):
                 ):
                     row[field] = float(record[field]) if record[field] else None
                 row["pressure_Pa"] = (
-                    float(pressure_inputs[row["record_id"]]) if pressure_inputs[row["record_id"]] else None
+                    float(pressures[row["record_id"]]) if pressures[row["record_id"]] else None
                 )
                 try:
                     row.update(model.predict(row), failure="")
@@ -1357,7 +1386,27 @@ def replay_hong(declaration):
                     row["failure"] = str(error)
                 row["retained_failure"] = record["failure"]
                 rows.append(row)
-    return dict(rows=rows, statistics=hong_scores(rows), pressure_comparisons=replay_published_pressures(declaration))
+    comparisons = replay_published_pressures(declaration)
+    templates, _ = pressure_inputs(declaration)
+    identities = {row["record_id"] for row in rows}
+    for column, (name, density, kim) in declaration["comparison_cases"].items():
+        endpoint, _ = declaration["pressure_cases"][name]
+        mapping = parameter_mapping(endpoint)
+        spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
+        spec.inputs["endpoint"] = mapping
+        with density.open(newline="") as stream:
+            records = [row for row in csv.DictReader(stream) if row["id"] in identities]
+        predicted = {row["identity"]: row["value"] for row in evaluate(spec, list(density_records(spec, records)))}
+        predicted.update({row["identity"]: row["value"] for row in comparisons["results"][name]["rows"]})
+        intervals = [
+            row for row in kim_intervals(kim, declaration["heat_pressure"], declaration["loading_ceiling"])
+            if row["identity"] in identities
+        ]
+        predicted.update({row["identity"]: row["predicted"] for row in heat_intervals(spec, mapping, templates, intervals)})
+        for row in rows:
+            row[f"retained_{column}"] = row[column]
+            row[column] = predicted[row["record_id"]]
+    return dict(rows=rows, statistics=hong_scores(rows), pressure_comparisons=comparisons)
 
 
 def carbonate_shares(spec, inputs, reference):
@@ -1588,6 +1637,23 @@ def heat_capacity_records(spec, rows):
         )
 
 
+def kim_intervals(path, pressure, ceiling):
+    with path.open(newline="") as stream:
+        for row in csv.DictReader(stream):
+            yield dict(
+                identity=row["record_id"],
+                T_K=float(row["T_K"]),
+                pressure=pressure,
+                loading=float(row["loading"]),
+                previous_loading=float(row["previous_loading"]),
+                observed=float(row["observed"]),
+                retained=float(row["predicted"]) if row["predicted"] else None,
+                retained_status=row["interval_status"],
+                loading_ceiling=ceiling,
+                group=f"Kim heat {float(row['T_K']):g} K",
+            )
+
+
 def heat_intervals(spec, mapping, templates, rows):
     packet = load_state_packet()["observations"]
     template = next(item["request"] for item in packet if item["identity"] == "Bottinger2008_state_046")
@@ -1737,18 +1803,7 @@ def replay_temperature_bands(declaration):
             if row["quantity"] != "pressure" or kind not in ("canonical", "wagner", "transfer"):
                 continue
             if kind == "transfer":
-                source = canonical[row["identity"].removeprefix("transfer:canonical:")]
-                loading = float(source["CO2_loading"])
-                template = min(templates[pressure_series(source)], key=lambda item: abs(item[0] - loading))[1]
-                record = pressure_record(
-                    spec,
-                    legacy[0],
-                    identity,
-                    source_feed_request(template, source),
-                    float(row["observed"]),
-                    row["source"],
-                    "transfer",
-                )
+                (record,) = transfer_pressure_records(spec, legacy[0], templates, canonical, [row])
                 pressure[identity] = spec.prediction(record)
             prediction = fitted.get(identity, pressure.get(identity))
             role = "fitted" if identity in fitted else "not fitted, 15/45 wt%" if kind == "transfer" else "not fitted"
@@ -2141,23 +2196,7 @@ def replay_part1(declaration):
             )
         )
     templates, _ = pressure_inputs(declaration)
-    with declaration["kim"].open(newline="") as stream:
-        for row in csv.DictReader(stream):
-            if not row["predicted"]:
-                continue
-            heat.append(
-                dict(
-                    identity=row["record_id"],
-                    T_K=float(row["T_K"]),
-                    pressure=declaration["heat_pressure"],
-                    loading=float(row["loading"]),
-                    previous_loading=float(row["previous_loading"]),
-                    observed=float(row["observed"]),
-                    retained=float(row["predicted"]),
-                    loading_ceiling=declaration["loading_ceiling"],
-                    group=f"Kim heat {float(row['T_K']):g} K",
-                )
-            )
+    heat.extend(kim_intervals(declaration["kim"], declaration["heat_pressure"], declaration["loading_ceiling"]))
     for row in heat_intervals(spec, mapping, templates, heat):
         groups.setdefault(row["group"], []).append(row)
     canonical = groups.pop("canonical")
@@ -2178,6 +2217,7 @@ def replay_part1(declaration):
                 group=name,
                 n=statistics["n"],
                 retained_rows=reference["n"][0],
+                replayed_rows=statistics["n"],
                 metric=reference["metric"],
                 retained=reference["deviations"][0],
                 replayed=statistics[metric],
@@ -2265,6 +2305,20 @@ FIT_SETS = {
                 SALT_FIT.parent / "evidence/F4/state-targets.csv",
             ),
         },
+        comparison_cases={
+            "adopted": (
+                "prior F2",
+                PAPER_EVIDENCE / "paper-evidence/density.csv",
+                PAPER_EVIDENCE / "paper-evidence/kim2007-heat-pathways/kim-heat.csv",
+            ),
+            "polley_hedengren_2026": (
+                "Polley and Hedengren",
+                HONG.parent / "part1/published/selected-assessment/density.csv",
+                HONG.parent / "part1/published/kim2007-heat-pathways/kim-heat.csv",
+            ),
+        },
+        heat_pressure=1734000.0,
+        loading_ceiling=0.6,
         baygi=SALT_FIT.parent / "baygi-matched-pressure.json",
         admission=HONG / "admission.csv",
         statistics=HONG / "scores.csv",
@@ -2290,6 +2344,8 @@ FIT_SETS = {
         statistics=RESTRICTION_FIT / "agreement.csv",
         **PRESSURE_INPUTS,
         cases=("F0", "F1", "F2", "F3", "F4", "F4-0", "F5"),
+        transfer_case="F2",
+        wagner=BUNDLE / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
         assessment={
             "F0": BUNDLE / "results/adoption-297/paper-evidence/state-targets.csv",
             **{

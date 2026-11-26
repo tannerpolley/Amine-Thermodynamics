@@ -288,8 +288,13 @@ FIT_SETS = {
             endpoint_keys=("candidates", index, "parameters"),
             reference=SHARED_FIT / "paper-data.csv",
             reference_keys=(),
-            prediction_record=SHARED_FIT / "selection.json",
-            prediction_keys=("candidates", index, "optimizer_report", "predictions"),
+            **(
+                dict(
+                    prediction_record=SHARED_FIT / "selection.json",
+                    prediction_keys=("candidates", index, "optimizer_report", "predictions"),
+                )
+                if index != 0 else {}
+            ),
             objective=SHARED_FIT / "selection.json",
             objective_keys=("candidates", index, "cost"),
         )
@@ -329,8 +334,10 @@ FIT_SETS = {
         archive=CAMPAIGN_ARCHIVE,
         endpoint=REPORTED / "DEA/manifest.json.gz",
         endpoint_keys=("prior_declaration",),
-        reference=REPORTED / "DEA/reference-control.json.gz",
-        reference_keys=("tracking",),
+        reference=ROOT / "analyses/round_7/results/F/assessment.json.gz",
+        reference_keys=("expanded_design",),
+        objective=REPORTED / "DEA/reference-control.json.gz",
+        objective_keys=("tracking", "cost"),
     ),
     "reported": dict(
         route=ExpandedDEA,
