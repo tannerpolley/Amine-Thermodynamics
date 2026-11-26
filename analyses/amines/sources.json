@@ -3423,5 +3423,113 @@
     "record": "mea/historical-shared-set/properties/q5.json",
     "sha256": "8f36599b2b18780263f1a3e8f32c59bba603cca5abf5b51f330ba7cac8a67acf",
     "stage": "properties"
+  },
+  "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json": {
+    "disposition": "stage",
+    "fit_set": "first-data",
+    "keys": "parameters.pairs[AMPH+,water].k_ij and slope at 353.15 K; parameters.pairs[AMPH+,water].k_ij and slope at 393.15 K",
+    "owner": "amp.py",
+    "record": "amp/first-data/fit uncertainty/parameters.json",
+    "sha256": "d69f7e9df46d73662e1180713ae05bed7a32412fa7032920cf7139b0d88132dd",
+    "stage": "fit uncertainty"
+  },
+  "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json": {
+    "disposition": "stage",
+    "fit_set": "permittivity branches",
+    "keys": "Supporting key identified in the corresponding binding",
+    "owner": "mea.py",
+    "record": "mea/permittivity branches/fit/parameters.json",
+    "sha256": "0fcb0ef01b78e44ebe1e3c6e3338b46303e9821dd5efac61ad3e39d477851e71",
+    "stage": "fit"
+  },
+  "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/states-excluded.json": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "canonical pressure rows excluded above 393.15 K",
+    "owner": "mea.py",
+    "record": "mea/system-pressure/replay inputs/states-excluded.json",
+    "sha256": "0a6f4f2d6969118342b57c201128c00f78d7d86866b7e5c78fdca356c46c819e",
+    "stage": "replay inputs"
+  },
+  "analyses/amines/results/dea/system-pressure/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "replay.cost; replay.rows[Lawson / SeoHong / Lal]: AARD percent",
+    "owner": "dea.py",
+    "record": "dea/system-pressure/replay/endpoint.json.gz",
+    "sha256": "3f50d899276abc52ef1332fc6dfd9dc394a2364f7d52dc4745c5ed46c21e61e8",
+    "stage": "replay"
+  },
+  "analyses/amines/results/mdea/system-pressure/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "replay.cost; tracking and fixed references: distinct endpoint fingerprints",
+    "owner": "mdea.py",
+    "record": "mdea/system-pressure/replay/endpoint.json.gz",
+    "sha256": "3549ddf4c64dfee1b1fc9bd887b9274f07d48e64fa9898f222f2e2d5610ee28f",
+    "stage": "replay"
+  },
+  "analyses/amines/results/amp/system-pressure/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "replay.cost; replay.rows[loaded-pressure / hartono-2021-supplemental / tong]: AARD percent",
+    "owner": "amp.py",
+    "record": "amp/system-pressure/replay/endpoint.json.gz",
+    "sha256": "385dc80fe9b272b22425675681da9f916ddbb2966525043dc0fb39c8cd9d5f73",
+    "stage": "replay"
+  },
+  "analyses/round_5/results/B/reactions.json.gz": {
+    "disposition": "stage",
+    "fit_set": "historical-reference-control",
+    "keys": "rows[S14].conventions[100-kPa].attempts[confirmed].Gibbs_decrease_over_RT_mol; rows[comparison:363:final].conventions[100-kPa].attempts[confirmed].Gibbs_decrease_over_RT_mol; rows[comparison:363:final].conventions[baseline].attempts[confirmed].Gibbs_decrease_over_RT_mol",
+    "owner": "shared.py",
+    "record": "shared/historical-reference-control/phase/reactions.json.gz",
+    "sha256": "09ede693033476cb5338077c304e2ef804282d3466427a53c9f28357175ae032",
+    "stage": "phase"
+  },
+  "analyses/amines/results/mdea/system-pressure-first-weights/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "system-pressure-first-weights",
+    "keys": "replay.rows[Kuranov].cost / total percent; replay.rows[unloaded-density].cost / total percent",
+    "owner": "mdea.py",
+    "record": "mdea/system-pressure-first-weights/replay/endpoint.json.gz",
+    "sha256": "af1bb0470b25d635a634ed508a11b3b5826556dbae49e8ea6fc089b4c8146d57",
+    "stage": "replay"
+  },
+  "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/selected-assessment/density-summary.json": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "Amundsen source-conflict five.row_ids",
+    "owner": "mea.py",
+    "record": "mea/system-pressure/replay inputs/density-summary.json",
+    "sha256": "39d83c4052d91dbfa46d8445fbf9155fc758956eeae7288e19ae16764016c263",
+    "stage": "replay inputs"
+  },
+  "analyses/fixed_reaction_reference/diagnosis-starts/results/saturation.json.gz": {
+    "disposition": "stage",
+    "fit_set": "reported",
+    "keys": "rows[start B,Merkley 123].nodes: min kPa; rows[start B,Merkley 123].nodes: solved count; rows[start B,Merkley 123].nodes: max kPa; rows[start C,Merkley 126].nodes: min kPa",
+    "owner": "mdea.py",
+    "record": "mdea/reported/start availability/saturation.json.gz",
+    "sha256": "c0374c3ab46a65d02272c306416f627d7517e3fc05fd28bf1be63c215d44e152",
+    "stage": "start availability"
+  },
+  "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/search-1.json.gz": {
+    "disposition": "stage",
+    "fit_set": "first-data",
+    "keys": "available search rows: minimum dimensionless tangent-plane value",
+    "owner": "amp.py",
+    "record": "amp/first-data/fit uncertainty/search-1.json.gz",
+    "sha256": "18e2c0aa2f274e1ae19afd265c065ab0e9834eeca1493e1469545b39201dfcfd",
+    "stage": "fit uncertainty"
+  },
+  "analyses/amines/results/mea/expanded-weights/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "expanded-weights",
+    "keys": "F2.hot_wagner: count; F2.hot_wagner: AARD percent; F2.pressure.legacy.AARD_percent",
+    "owner": "mea.py",
+    "record": "mea/expanded-weights/replay/endpoint.json.gz",
+    "sha256": "92b84dab1028c600b895ad821654c0cb004723628cac2b120c402c0cc0b67efb",
+    "stage": "replay"
   }
 }

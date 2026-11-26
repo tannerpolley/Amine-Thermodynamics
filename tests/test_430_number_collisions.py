@@ -73,3 +73,12 @@ def test_typed_renderer_collision_uses_statement_context(tmp_path, monkeypatch):
     assert list(displays.typed_numbers(value, reviewed)) == [
         "Stale or ambiguous number collision: displays.py: 20 wt%"
     ]
+
+    renderer.write_text('caption = "20 wt% at inlet and 20 wt% at outlet"\n')
+    repeated = [dict(file=renderer.name, token="20", reason="condition",
+                     context="20 wt% at inlet and 20 wt% at outlet", count=2)]
+    assert not list(displays.typed_numbers(value, repeated))
+    renderer.write_text('caption = "20 wt% at inlet and 21 wt% at outlet"\n')
+    assert list(displays.typed_numbers(value, repeated))[-1] == (
+        "Stale or ambiguous number collision: displays.py: 20 wt% at inlet and 20 wt% at outlet"
+    )
