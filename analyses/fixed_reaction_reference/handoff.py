@@ -45,18 +45,26 @@ def mdea_outcome(q, bank_size):
     native = q['native_trials']
     supplied = q['supplied_witnesses']
     detected = any(t['descent'] for t in native) or any(map(stable.supplied_negative,supplied))
-    pair = q.get('liquid_vapor')
+    result = None
     if detected:
-        assert pair and qualifying_pair(pair,pressure,tolerance,vapor=True), f'{key}: qualifying L+V'
-        assert (pair['T_K'],pair['pressure_Pa'],pair['feed_mol'])==(q['T_K'],pressure,q['feed_mol']), (
-            f'{key}: pair state identity')
         g, error = q['parent_gibbs_RT_mol']
-        assert pair['Gibbs_decrease_over_RT_mol']==g-pair['Gibbs_over_RT_mol'], f'{key}: Gibbs decrease'
-        assert pair['numerical_error_over_RT_mol']==error+pair['error'], f'{key}: Gibbs error'
+        for field, vapor, outcome, gibbs, pair_error in (
+            ('two_liquid',False,TWO_LIQUIDS,'Gibbs_sum_over_RT_mol','split_numerical_error_over_RT_mol'),
+            ('liquid_vapor',True,CONNECTED_VAPOR,'Gibbs_over_RT_mol','error'),
+        ):
+            pair = q.get(field)
+            if not pair or not qualifying_pair(pair,pressure,tolerance,vapor=vapor):
+                continue
+            assert (pair['T_K'],pair['pressure_Pa'],pair['feed_mol'])==(q['T_K'],pressure,q['feed_mol']), (
+                f'{key}: pair state identity')
+            assert pair['Gibbs_decrease_over_RT_mol']==g-pair[gibbs], f'{key}: Gibbs decrease'
+            assert pair['numerical_error_over_RT_mol']==error+pair[pair_error], f'{key}: Gibbs error'
+            result = result or outcome
+        assert result, f'{key}: detected descent has no qualifying pair'
     native_complete = no_descent(q['native_completed'] and q['native_message'].endswith('unresolved trials 0'),native)
     supplied_done = supplied_complete(q['supplied_counts'],q['supplied_excluded'],bank_size)
     return phase_outcome(dict(key=key,parent_closed=True,native_complete=native_complete,supplied_complete=supplied_done,
-                              descent=detected,pair=CONNECTED_VAPOR if detected else None),completion=True)
+                              descent=detected,pair=result),completion=True)
 
 
 def mdea_bubble_comparison(q):
@@ -90,6 +98,30 @@ def mdea_grid_membership(row, path, ceiling):
     else:
         assert row['domain']=='unassigned' and row['blocker']==path['stall'] and path['stall'], f"{row['key']}: unreached loading"
     return row['domain']
+
+
+def march_connections(paths):
+    from phase_replays import check_cold_point, check_reverse_connection, reverse_errors
+
+    maximum_errors, connected = Counter(), 0
+    for path in paths:
+        for previous, point in zip(path['points'],path['points'][1:]):
+            if point.get('start')!='cold':
+                continue
+            warm = path['warm_failures'][point['warm_failure']]
+            check_cold_point(point,previous,path['stock'],path['T_K'],warm['target'],ROW_TOLERANCE)
+            reverse = point['reverse']
+            returned = reverse['returned']
+            first, last = reverse['attempts'][0], reverse['attempts'][-1]
+            assert first['from_loading']==point['loading'] and last['loading']==previous['loading'] and last['converged']
+            assert reverse['stop'] is None and phase_closure(returned,returned['pressure_Pa'],ROW_TOLERANCE)
+            errors = reverse_errors(previous,returned)
+            assert reverse['errors']==errors, 'stored reverse branch errors'
+            check_reverse_connection(errors)
+            for key,value in errors.items():
+                maximum_errors[key] = max(maximum_errors[key],value)
+            connected += 1
+    return connected, maximum_errors
 
 
 def mdea_record_identity(data, endpoint, wheel, bank, *, computed=True):
@@ -132,8 +164,9 @@ def mdea_measured(rows, aliases, prior, bank_size):
 def mdea_pressure_stats(rows):
     checks = Counter()
     for q in rows:
-        for field in ('parent','liquid_vapor','bubble'):
-            phases = q.get(field,{}).get('phases',[])
+        for field in ('parent','liquid_vapor','bubble','two_liquid'):
+            value = q.get(field,{})
+            phases = (value.get('diagnostics') or {}).get('phases',[]) if field=='two_liquid' else value.get('phases',[])
             if phases:
                 assert all('relative_pressure_residual' in p for p in phases), f"{q['key']}: raw ΔP/P"
                 checks[field+'_phases'] += len(phases)
@@ -141,6 +174,89 @@ def mdea_pressure_stats(rows):
                 checks[name] = max(checks[name],*(scaled_pressure_error(
                     p['pressure_residual_Pa'],p['density_mol_m3'],p['T_K']) for p in phases))
     return checks
+
+
+def comparison_outcome(row, search, bank_size):
+    from phase_replays import OUTSIDE_INCOMPLETE
+    from part_ii import stable
+
+    if row['domain']=='unassigned':
+        return None, dict(message='loading march did not reach or pass the state')
+    if search.get('blocker'):
+        if row['domain']=='outside' and 'P_Pa' not in search and search.get('pressure_reference_message'):
+            return OUTSIDE_INCOMPLETE, None
+        return None, dict(message=search['blocker'])
+    try:
+        return mdea_outcome(search,bank_size), None
+    except (AssertionError,KeyError) as error:
+        native = search.get('native_trials',[])
+        details = [dict(seed=t['seed'],evidence=t['evidence'],message=t['message']) for t in native
+                   if not no_descent(True,[t]) and not t['descent']]
+        witness = any(t['descent'] for t in native) or any(map(stable.supplied_negative,search.get('supplied_witnesses',[])))
+        blocker = dict(message=str(error),native_message=search.get('native_message'),trials=details)
+        if native and not witness and (details or not search['native_completed']):
+            blocker['engine_issue'] = 'tannerpolley/epcsaft#266'
+        return None, blocker
+
+
+def comparison_split_check(inventory, searches, outcomes, splits):
+    from phase_replays import SPLIT_PRESSURES
+
+    assert len(splits)==2 and 'comparison:363:final' in splits, 'two low-k control keys'
+    controls = {}
+    for key in splits:
+        row, q = inventory[key], searches[key]
+        grid = key.startswith('grid:')
+        pressure = SPLIT_PRESSURES[grid]
+        assert q['P_Pa']==row['declared_pressure_Pa']==pressure, f'{key}: split control pressure'
+        assert row['domain']==('outside' if grid else 'not applicable'), f'{key}: split control domain'
+        assert outcomes[key]==TWO_LIQUIDS, f'{key}: two-liquid split replay'
+        pair = q['two_liquid']
+        controls[key] = dict(T_K=q['T_K'],P_Pa=pressure,domain=row['domain'],amounts_mol=pair['amounts_mol'],
+                             densities_mol_m3=pair['densities_mol_m3'],Gibbs_decrease_over_RT_mol=pair['Gibbs_decrease_over_RT_mol'],
+                             numerical_error_over_RT_mol=pair['numerical_error_over_RT_mol'])
+    return controls
+
+
+def comparison_consumed(row, search, spec, route):
+    from part_ii import eq
+    from reference_states_428 import balances
+
+    key, ids = row['key'], spec.parameters.component_ids
+    if 'P_Pa' not in search:
+        return
+    if 'stock' in row:
+        feed = dict(row['stock'],**{'carbon-dioxide':row['a']*row['stock'][route.config['amine']]})
+        T = row['T']
+        pressure = row.get('declared_pressure_Pa',row['c']*search['pressure_reference_Pa']
+                           if 'pressure_reference_Pa' in search else None)
+        if row['domain']=='inside':
+            assert search['pressure_reference_Pa']==row['marched_pressure_Pa'], f'{key}: marched search pressure'
+    elif 'cap_record' in row:
+        cap = search['capped_feed']
+        record = next(q for role in ('fitted','comparisons') for q in spec.inputs['observations'][role]
+                      if q['identity']==row['cap_record'])
+        parent, args = spec.problems[record['initial']],record['arguments']
+        crossing = next((a,b) for a,b in zip(cap['nodes'],cap['nodes'][1:])
+                        if a['pressure_Pa']<=args['P']<b['pressure_Pa'] and min(a['slope_Pa'],b['slope_Pa'])>0)
+        assert (cap['target_Pa']==args['P'] and cap['source_cap']==args['loading_cap']
+                and cap['bracket']==[q['loading'] for q in crossing] and cap['bracket'][0]<=cap['root']<=cap['bracket'][1]
+                and cap['loading']==min(cap['source_cap'],cap['root'])), f'{key}: capped feed bracket'
+        feed = {c:n+cap['loading']*(args['basis_amount']*args['feed'].get(c,0.)) for c,n in parent.feed.values.items()}
+        T, pressure = parent.T, parent.P
+    else:
+        parent = spec.problems[row['problem']]
+        feed, T, pressure = parent.feed.values, parent.T, parent.P
+        if isinstance(pressure,eq.Free) or row.get('compressed'):
+            pressure = row.get('c',1.05)*search['pressure_reference_Pa']
+    assert (T,pressure,[feed.get(c,0.) for c in ids])==(search['T_K'],search['P_Pa'],search['feed_mol']), (
+        f'{key}: consumed comparison state')
+    formulas = [spec.spec['element_formulas'][c] for c in ids]
+    for value in (search.get('parent'),search.get('liquid_vapor'),search.get('two_liquid',{}).get('diagnostics')):
+        if value and (phases := value.get('phases')):
+            assert value['balances']==balances(feed,phases,formulas), f'{key}: comparison material balance'
+            assert all(p['T_K']==T and p['charge_residual']==fsum(x*f['charge'] for x,f in zip(p['x'],formulas,strict=True))
+                       for p in phases), f'{key}: comparison charge or temperature'
 
 
 def summary(rows, pressure=False):
@@ -1800,7 +1916,7 @@ class Quantities:
     def stage2_phases(self):
         from part_ii import SHA, WHEEL
         from phase_replays import (MDEA, MDEA_265, MDEA_CEILING_PA, MDEA_CONNECTED, MDEA_GRID,
-                                   MDEA_REBUILD, check_cold_point, check_reverse_connection, reverse_errors)
+                                   MDEA_REBUILD)
 
         endpoint_path = 'MDEA_slope_bound/declaration.json.gz'
         declaration = self.read(endpoint_path)
@@ -1868,25 +1984,7 @@ class Quantities:
         assert {key for key,domain in domains.items() if domain=='inside' and not prior[key]['available']}==engine.keys(), (
             'the historical in-domain miss must be the retained #265 case')
         blockers = [q for q in march['rows'] if q['stall']]
-        maximum_errors = Counter()
-        connected = 0
-        for path in march['rows']:
-            for previous, point in zip(path['points'],path['points'][1:]):
-                if point.get('start')!='cold':
-                    continue
-                warm = path['warm_failures'][point['warm_failure']]
-                check_cold_point(point,previous,path['stock'],path['T_K'],warm['target'],ROW_TOLERANCE)
-                reverse = point['reverse']
-                returned = reverse['returned']
-                first, last = reverse['attempts'][0], reverse['attempts'][-1]
-                assert first['from_loading']==point['loading'] and last['loading']==previous['loading'] and last['converged']
-                assert reverse['stop'] is None and phase_closure(returned,returned['pressure_Pa'],ROW_TOLERANCE)
-                errors = reverse_errors(previous,returned)
-                assert reverse['errors']==errors
-                check_reverse_connection(errors)
-                for key,value in errors.items():
-                    maximum_errors[key] = max(maximum_errors[key],value)
-                connected += 1
+        connected, maximum_errors = march_connections(march['rows'])
 
         before = '../diagnosis-starts/results/searches.json.gz'
         historical = self.read(before)['records']
@@ -1934,7 +2032,105 @@ class Quantities:
                       disposition='undecided' if blockers or refuses else None,
                       sources=(*common,march_path,grid_path,before,*(path for _,path in grid_batches)))
 
-    def compute(self, *, stage2=False):
+    def stage3_phases(self):
+        from part_ii import SHA, WHEEL, Route, calculation_declaration
+        from phase_replays import (COMPARISON_SETS, MDEA, MDEA_CEILING_PA, MDEA_COMPARISON, WORK,
+                                   comparison_prior, comparison_reuse, comparison_sources, comparison_splits)
+
+        for k in COMPARISON_SETS:
+            folder = f'{MDEA_COMPARISON}/{k}'
+            endpoint_path, bank_path, prior_paths, split_path = comparison_sources(k)
+            point = r.read(endpoint_path)
+            endpoint = fingerprint(point)
+            registry = r.read(bank_path)
+            bank = registry['trials']+registry.get('supplied_trials',[])
+            bank_id = fingerprint(bank)
+            route = Route(MDEA.DECLARATION,WORK/folder,wheel=WHEEL,wheel_sha256=SHA)
+            spec = route.bind(point)
+            declaration = route.result('identity.json')
+            prior, splits = comparison_prior(prior_paths),comparison_splits(split_path)
+            sources = []
+
+            def data(name, *, computed=True):
+                path = f'{folder}/{name}.json.gz'
+                record = self.read(path)
+                sources.append(path)
+                mdea_record_identity(record,endpoint,SHA,bank_id,computed=computed)
+                assert record['declaration']==declaration, 'comparison declaration identity'
+                return record
+
+            manifest = data('inventory',computed=False)
+            inventory = {q['key']:q for q in manifest['rows']}
+            recipes = {q['key']:q for q in route.states(spec)}
+            assert len(inventory)==len(manifest['rows'])==len(recipes)==11824 and inventory.keys()==recipes.keys()==prior.keys(), (
+                'comparison inventory reconciliation')
+            assert all(all(row[f]==v for f,v in recipes[key].items()) and row['original_message']==prior[key].get('message')
+                       and all(row[f]==v for f,v in splits.get(key,{}).items()) for key,row in inventory.items()), (
+                'comparison recipe, control or original message')
+            assert manifest['reuse']==comparison_reuse(prior), 'comparison reuse census'
+            assert manifest['reaction_references']=={
+                rx.name:calculation_declaration(rx.reference) for rx in spec.problems['comparison:363:final'].reactions}, (
+                'comparison historical reaction references')
+            march = data('domain-march')
+            march_pilot = data('march-pilot')
+            paths = {(tuple(q['stock'].items()),q['T_K']):q for q in march['rows']}
+            assert len(paths)==len(march['rows'])==342 and all(paths[tuple(q['stock'].items()),q['T_K']]==q
+                                                                for q in march_pilot['rows']), 'comparison loading paths'
+            connected, reverse = march_connections(paths.values())
+            pilot = data('pilot')
+            batches = [data(f'search-{i}') for i in range(8)]
+            rows = [q for batch in [pilot,*batches] for q in batch['rows']]
+            searched = {q['key']:q for q in rows}
+            aliases = manifest['aliases']
+            assert (len(searched)==len(rows) and searched.keys()<=inventory.keys()-aliases.keys()
+                    and aliases.keys()<=inventory.keys() and set(aliases.values())<=inventory.keys()-aliases.keys()
+                    and all(inventory[k]['domain']==inventory[v]['domain']=='not applicable' for k,v in aliases.items())), (
+                'comparison search and alias reconciliation')
+            records, outcomes, blockers, pending = {}, {}, {}, {}
+            for key,row in inventory.items():
+                if 'stock' in row:
+                    path = paths[tuple(row['stock'].items()),row['T']]
+                    domain = mdea_grid_membership(row,path,MDEA_CEILING_PA)
+                else:
+                    assert row['domain']=='not applicable', f'{key}: measured domain'
+                    domain = row['domain']
+                records[key] = dict(domain=domain,outcome=None)
+                source = aliases.get(key,key)
+                if source in searched:
+                    q = searched[source]
+                    assert q.get('bank_size',len(bank))==len(bank), f'{key}: declared trial count'
+                    comparison_consumed(row,q,spec,route)
+                    outcome, blocker = comparison_outcome(row,q,len(bank))
+                elif domain=='unassigned':
+                    outcome, blocker = comparison_outcome(row,{},len(bank))
+                else:
+                    pending[key] = source
+                    continue
+                if blocker:
+                    blockers[key] = dict(blocker,record_key=source)
+                else:
+                    outcomes[key] = outcome
+            stratum = lambda key: 'grid' if key.startswith('grid:') else 'measured'
+            held = {stratum(key) for key in blockers}
+            assert all(stratum(key) in held for key in pending), 'comparison unexplained missing searches'
+            for key, record in records.items():
+                record['outcome'] = outcomes[key] if stratum(key) not in held else None
+            counts = Counter(q['outcome'] or 'held' for q in records.values())
+            domains = Counter(q['domain'] for q in records.values())
+            assert sum(counts.values())==sum(domains.values())==11824, 'comparison outcome and domain counts'
+            controls = comparison_split_check(inventory,searched,outcomes,splits) if k=='0.1325' else {}
+            old_sources = [endpoint_path,bank_path,*prior_paths]+([split_path] if split_path else [])
+            evidence = dict(records=records,counts=counts,domain_counts=domains,controls=controls,held_strata=sorted(held),
+                            blockers=blockers,pending=len(pending),reuse=manifest['reuse'],cold_starts=connected,
+                            reverse_maximum_errors=reverse,
+                            pressure_closure=mdea_pressure_stats(searched[key] for key in searched if outcomes.get(key) in
+                                                               (FINITE_NEGATIVE,CONNECTED_VAPOR,TWO_LIQUIDS)),
+                            inputs={str(p.relative_to(r.ROOT)):sha256(p.read_bytes()).hexdigest() for p in old_sources},
+                            seconds=pilot['elapsed']+march['seconds']+sum(b['seconds'] for b in batches))
+            self.quantity(f'Stage 3 MDEA k = {k}',None,evidence,population=len(records),endpoint=endpoint,
+                          disposition='undecided' if held else None,sources=sources)
+
+    def compute(self, *, stage2=False, stage3=False):
         for design in COUNTS:
             self.fit(design)
             self.properties(design)
@@ -1949,6 +2145,8 @@ class Quantities:
         self.stage1_phases()
         if stage2:
             self.stage2_phases()
+        if stage3:
+            self.stage3_phases()
         timing = self.read('stages.json')
         if timing:
             for stage,data in timing.items():
@@ -1977,12 +2175,13 @@ class Quantities:
 
 
 def main(check):
-    from phase_replays import MDEA_REBUILD, MDEA_CONNECTED
+    from phase_replays import COMPARISON_SETS, MDEA_REBUILD, MDEA_CONNECTED, MDEA_COMPARISON
 
     quantities = Quantities()
     stage2 = (OUT/MDEA_REBUILD/'measured-inventory.json.gz').is_file()
-    target = OUT/MDEA_CONNECTED/'handoff.json' if stage2 else HANDOFF
-    expected = quantities.compute(stage2=stage2)
+    stage3 = all((OUT/MDEA_COMPARISON/k/'search-7.json.gz').is_file() for k in COMPARISON_SETS)
+    target = (OUT/MDEA_COMPARISON/'handoff.json' if stage3 else OUT/MDEA_CONNECTED/'handoff.json' if stage2 else HANDOFF)
+    expected = quantities.compute(stage2=stage2,stage3=stage3)
     if check:
         retained = json.loads(target.read_text())
         for key in sorted(expected['quantities'].keys() | retained['quantities'].keys()):
@@ -1993,7 +2192,11 @@ def main(check):
         if stage2:
             assert not target.exists(), target
         save(target,expected)
-        if stage2:
+        if stage3:
+            from notebook import render_mdea_stage3
+            with target.with_name('notebook.qmd').open('x') as stream:
+                stream.write(render_mdea_stage3(expected))
+        elif stage2:
             from notebook import render_mdea_stage2
             with target.with_name('notebook.qmd').open('x') as stream:
                 stream.write(render_mdea_stage2(expected))

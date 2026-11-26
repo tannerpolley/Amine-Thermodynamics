@@ -7,14 +7,15 @@ from time import monotonic
 from concurrent.futures import ProcessPoolExecutor
 from functools import cache, partial
 from hashlib import sha256
+from pathlib import Path
 from types import SimpleNamespace
 
-from refit import OUT, WORK, P_REF, ROUND7, MDEAWeights, configured, fingerprint, put, r
+from refit import OUT, WORK, P_REF, ROUND7, MDEAWeights, configured, fingerprint, put, r, save
 from calculations import MDEA, Route, transfer
 from mdea_reference import seed_state, predicates
 from phases import fixed
 from receivers import AMP, DEA
-from part_ii import eq, stable
+from part_ii import SHA, WHEEL, calculation_declaration, eq, stable
 from round_3.phases import cd, dilute_vapor_connection, physical, trial_parent, trials
 from reference_states_428 import phase_closure
 from round_8.reductions import vapor_trace_passes
@@ -26,6 +27,10 @@ MDEA_REBUILD = 'MDEA_slope_bound/screen/rebuild-441'
 MDEA_GRID = MDEA_REBUILD+'/cold-march'
 MDEA_CONNECTED = MDEA_REBUILD+'/reverse-connection'
 MDEA_265 = "grid:{'water': 40.84100418410041, 'methyldiethanolamine': 1.0}:393.15:0.8:3.0"
+MDEA_COMPARISON = 'MDEA_comparison'
+COMPARISON_SETS = ('0.7650','0.1325','1.0000')
+OUTSIDE_INCOMPLETE = 'not searched to completion, outside the screened interval'
+SPLIT_PRESSURES = (1_121_000., 203_126_858.89663097)
 
 
 def check_cold_point(point, previous, stock, temperature, loading, tolerance):
@@ -170,6 +175,146 @@ def loading_march(spec, run, states):
 def _loading_path(states, run, point):
     run.verify()
     return dict(loading_march(run.bind(point),run,states),wheel=run.wheel_sha256)
+
+
+def comparison_sources(k):
+    results = MDEA.RESULTS.parent
+    bank = MDEA.OLD/'split-record.json'
+    if k=='0.7650':
+        return MDEA.RESULTS/'endpoint.json', bank, [results/'phase-search-421/coverage.json',
+                                                    MDEA.RESULTS/'stability.json'], None
+    side = {'0.1325':'low','1.0000':'high'}[k]
+    folder, = (results/'shared-bicarbonate-417/mdea').glob(f'mdea-{side}-*')
+    return folder/'endpoint.json.gz', bank, sorted(folder.glob('search-*.json.gz')), folder/'stability.json.gz'
+
+
+def comparison_prior(sources):
+    if sources[0].name=='coverage.json':
+        counts = r.read(sources[1])
+        unavailable = {q['key']:q for q in counts['grid']['unavailable_searches']}
+        rows = [dict(q,available=q['complete'],**{
+            'archive':unavailable.get(q['key'],{})}) for q in r.read(sources[0])]
+        assert len(unavailable)==sum(not q['available'] for q in rows)==1099
+    else:
+        rows = [q for path in sources for q in r.read(path)]
+    by_key = {q['key']:q for q in rows}
+    assert len(by_key)==len(rows)==11824, 'historical comparison inventory'
+    return by_key
+
+
+def comparison_reuse(prior):
+    """Count admission evidence before attempting a reuse identity comparison."""
+    missing = Counter()
+    for q in prior.values():
+        if q['available'] and not q['descent']:
+            record = q.get('archive',q)
+            if not {'parent','native_trials','supplied_counts'}<=record.keys():
+                missing['missing amendment-4 evidence'] += 1
+            else:
+                raise AssertionError(f"{q['key']}: check consumed parent, feed, cap and bank before reuse")
+    return dict(passed=0,**missing)
+
+
+def comparison_splits(path):
+    if path is None:
+        return {}
+    return {q['key']:dict(declared_pressure_Pa=q['pressure_Pa'],two_liquid_seed={
+                field:a[field] for field in ('phases','packings')})
+            for q in r.read(path)['pressure_roots'] for a in q['attempts'] if a['confirmed']}
+
+
+def comparison_domain(state, path):
+    if not path:
+        return dict(domain='not applicable')
+    cutoff = next((p for p in path['points'] if p['pressure_Pa']>MDEA_CEILING_PA),None)
+    if cutoff and state['a']>=cutoff['loading']:
+        return dict(domain='outside',cutoff=cutoff)
+    if point := next((p for p in path['points'] if p['loading']==state['a']),None):
+        return dict(domain='inside',marched_pressure_Pa=point['pressure_Pa'])
+    assert path['stall'], state['key']
+    return dict(domain='unassigned',blocker=path['stall'])
+
+
+def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot):
+    """Retain independent loading paths, specimen searches and their inventory."""
+    from handoff import comparison_outcome
+
+    started = monotonic()
+    output = Path(output)
+    identity = dict(endpoint_fingerprint=fingerprint(point),wheel=run.wheel_sha256,
+                    bank_fingerprint=fingerprint(bank),declaration=r.read(run.out/'identity.json'))
+    assert len(states)==len(prior)==11824 and {q['key'] for q in states}==prior.keys()
+
+    def retain(name, **payload):
+        path = output/f'{name}.json.gz'
+        assert not path.exists(), path
+        save(path,dict(identity,**payload))
+
+    def read(name):
+        record = r.read(output/f'{name}.json.gz')
+        assert all(record[k]==v for k,v in identity.items()), name
+        return record
+
+    groups = defaultdict(list)
+    group_key = lambda row: (tuple(row['stock'].items()),row.get('T',row.get('T_K')))
+    for q in states:
+        if 'stock' in q:
+            groups[group_key(q)].append(q)
+    selected = [*groups][::21]
+    for q in states:
+        if q['key'] in splits and 'stock' in q and group_key(q) not in selected:
+            selected.append(group_key(q))
+    paths = {} if pilot else {group_key(q):q for q in read('march-pilot')['rows']}
+    tick = monotonic()
+    requested = selected if pilot else [k for k in groups if k not in paths]
+    with ProcessPoolExecutor(run.workers) as pool:
+        paths.update(zip(requested,pool.map(partial(_loading_path,run=run,point=point),
+                                             (groups[k] for k in requested)),strict=True))
+    retain('march-pilot' if pilot else 'domain-march',rows=list(paths.values()),seconds=monotonic()-tick)
+    aliases = run.same_calculations(point,states)
+    assert not splits.keys() & aliases.keys(), 'split control must own its calculation'
+    inventory = []
+    for q in states:
+        if pilot and 'stock' in q and group_key(q) not in paths:
+            continue
+        key = q['key']
+        path = paths[group_key(q)] if 'stock' in q else None
+        inventory.append(dict(q,**comparison_domain(q,path),**splits.get(key,{}),
+                              original_message=prior[key].get('message')))
+    pending = [q for q in inventory if q['key'] not in aliases and q['domain']!='unassigned']
+    if pilot:
+        sample = {q['key'] for q in pending[::max(1,len(pending)//128)]} | splits.keys()
+        pending = [q for q in pending if q['key'] in sample]
+        tick = monotonic()
+        rows = stable.grid(point,pending,bank,route=run,completion=True)
+        retain('pilot',rows=rows,seconds=monotonic()-tick,elapsed=monotonic()-started)
+        print(output,len(rows),monotonic()-started,flush=True)
+        return
+    reuse = comparison_reuse(prior)
+    retain('inventory',rows=inventory,aliases=aliases,reuse=reuse,
+           reaction_references={k:calculation_declaration(q.reference)
+                                for k,q in ((rx.name,rx) for rx in run.bind(point).problems['comparison:363:final'].reactions)})
+    by_key = {q['key']:q for q in inventory}
+    held = {q['key']:q for q in read('pilot')['rows']}
+    stratum = lambda q: 'grid' if 'stock' in q else 'measured'
+    stopped = {stratum(q) for q in inventory if q['domain']=='unassigned'}
+
+    def register_stops(rows):
+        for q in rows:
+            state = by_key[q['key']]
+            _, blocker = comparison_outcome(state,q,len(bank))
+            if blocker:
+                stopped.add(stratum(state))
+                print(output,q['key'],blocker,flush=True)
+
+    register_stops(held.values())
+    for i in range(8):
+        tick = monotonic()
+        batch = [q for q in pending[i::8] if q['key'] not in held and stratum(q) not in stopped]
+        rows = stable.grid(point,batch,bank,route=run,completion=True) if batch else []
+        retain(f'search-{i}',rows=rows,seconds=monotonic()-tick)
+        print(output,i,len(rows),round(monotonic()-tick,2),flush=True)
+        register_stops(rows)
 
 
 def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
@@ -635,6 +780,19 @@ if __name__=='__main__':
         trial_set = r.read(bank_path)
         mdea_rebuild(run,declaration['point'],trial_set['trials']+trial_set.get('supplied_trials',[]),
                      r.read(screen_path),modes=modes,folder=folder)
+    elif sys.argv[1]=='mdea-comparison':
+        _, mode, k, declaration, endpoint, bank_path, output, *sources = sys.argv[1:]
+        assert mode in ('pilot','full') and k in COMPARISON_SETS
+        *prior, split_path = sources
+        run = Route(declaration,WORK/MDEA_COMPARISON/k,wheel=WHEEL,wheel_sha256=SHA)
+        run.workers = min(8,len(os.sched_getaffinity(0)))
+        point = r.read(endpoint)
+        registry = r.read(bank_path)
+        bank = registry['trials']+registry.get('supplied_trials',[])
+        assert len(bank)==2980 and registry['species']==run.config['species']
+        comparison_screen(run,point,bank,run.states(run.bind(point)),
+                          comparison_prior(list(map(Path,prior))),comparison_splits(None if split_path=='-' else split_path),
+                          output,pilot=mode=='pilot')
     else:
         action,design,label = sys.argv[1:]
         if action=='controls':

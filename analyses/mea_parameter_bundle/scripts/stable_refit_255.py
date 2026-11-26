@@ -266,6 +266,10 @@ def _measure_completion(state):
             out['parent_gibbs_RT_mol'] = parent_g
             guess = (list(center.phase_mole_fractions(0)),center.packing_fractions[0])
             out['liquid_vapor'] = liquid_vapor(_SPEC,_ROUTE,parent,guess,parent_g)
+            if seed := state.get('two_liquid_seed'):
+                out['two_liquid'] = cd.coexistence(_SPEC,parent,parent_g,
+                                                   list(zip(seed['phases'],seed['packings'],strict=True)))
+                out['two_liquid'].update(T_K=out['T_K'],pressure_Pa=P,feed_mol=out['feed_mol'])
             if state.get('decision_bubble'):
                 out['bubble'] = liquid_vapor(_SPEC,_ROUTE,parent,guess,parent_g,incipient=True,
                                              seed=out['liquid_vapor'])

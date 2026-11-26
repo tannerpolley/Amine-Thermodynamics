@@ -95,7 +95,8 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
     return dict(out, confirmed=diagnostics['physical_checks_pass'] and distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
                 distinct=distinct, split_Gibbs_over_RT_mol=g, split_only=parent_g is None and distinct and liquid, **comparison,
                 numerical_error_over_RT_mol=estimated_error, phases=phases,
-                Gibbs_sum_over_RT_mol=g, objective_over_RT_mol=result.objective, residuals=list(result.residuals),
+                Gibbs_sum_over_RT_mol=g, split_numerical_error_over_RT_mol=error,
+                objective_over_RT_mol=result.objective, residuals=list(result.residuals),
                 densities_mol_m3=densities, packings=list(result.packing_fractions),
                 max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)
 
