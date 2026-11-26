@@ -396,3 +396,22 @@ amine. DEA uses the Lawson pressures and MDEA uses the Kuranov pressures.
   use M3 and P1. S1, P0-refit, the 2.9296 Å bicarbonate and 2.4422 Å
   carbonate Born arms and the two 3 Å controls stay in the campaign
   archive.
+
+## MDEA descents by search availability
+
+At the provisional MDEA endpoint on S, 10,509 of 11,824 phase searches have an
+available result. Eight of those searches recorded a descent.
+Supplied trial compositions establish 72 further descents at requests whose
+optimized result was unavailable. These counts describe the finite set of
+model calculations. They give no experimental determination of the phase
+state.
+
+The [phase summary](results/shared/phase/display-summary.json.gz) records the
+classes as `mdea_descent_counts.optimized_result_available` and
+`mdea_descent_counts.supplied_trial_optimized_result_unavailable`. They are
+derived from `rows[].descent`, `rows[].available`, `rows[].optimized_available`
+and `rows[].supplied_available` in the
+[selected screen](../fixed_reaction_reference/results/MDEA/screen/selected/declared/summary.json.gz).
+The main text and supplement each attribute all 80 descents to finished
+searches. Their wording is preserved for the S identity test. The manuscript
+revision on W will use the rerun counts for each class.

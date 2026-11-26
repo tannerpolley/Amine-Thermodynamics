@@ -32,6 +32,7 @@ GIBBS_DERIVATIVES = "analyses/amines/results/shared/properties/gibbs-derivatives
 FIT_SUMMARY = "analyses/amines/results/shared/fit/display-summary.json.gz"
 PHASE_SUMMARY = "analyses/amines/results/shared/phase/display-summary.json.gz"
 PROPERTY_SUMMARY = "analyses/amines/results/shared/properties/display-summary.json.gz"
+HONG_REPLAY = "analyses/amines/results/mea/published/replay/endpoint.json.gz"
 sources = {}
 stage_records = {}
 
@@ -283,7 +284,6 @@ def spread_table(q, table, head, num):
         'Merkley-half-loading': 'Merkley integral heat (half loading)',
         'Merkley-outside': 'Merkley integral heat (remaining states)',
         'corrected-Kamps': 'Corrected Kamps total pressure',
-        'corrected-Kamps (27 common rows)': 'Corrected Kamps total pressure (27 rows)',
         'Arcis2011': 'Arcis integral heat', 'Kim2007': 'Kim and Svendsen absorption heat',
         'Kim2014': 'Kim et al. absorption heat', 'Vinjarapu2024': 'Vinjarapu et al. integral heat',
         'Kim2007 flagged': 'Kim and Svendsen absorption heat (flagged)',
@@ -296,6 +296,8 @@ def spread_table(q, table, head, num):
         for name, r in record['groups'].items():
             extreme = r['row_spreads'].get(r['max_row'], {})
             label = labels.get(name)
+            if name == 'corrected-Kamps common rows':
+                label = f"Corrected Kamps total pressure ({r['common']} rows)"
             if label is None:
                 base = name.removesuffix(' (hot)')
                 label = labels[base] + ' (hot)' if base in labels else name
@@ -1557,9 +1559,9 @@ def transfer_displays(outputs):
             ids = set(common)
             cohort = [r for r in mrows if r['identity'] in ids and r['group'] == c['group']]
             r9_kamps = property_summary['kamps']
-            rows.append(['This work, provisional 100 kPa MDEA model (27 rows)', c['data_role'],
+            rows.append([f"This work, provisional 100 kPa MDEA model ({r9_kamps['common_rows']} rows)", c['data_role'],
                          num(r9_kamps['common_AARD_percent'], 2)])
-            rows.append([r'This work, same fit (all 28 rows)\textsuperscript{d}', c['data_role'],
+            rows.append([rf"This work, same fit (all {r9_kamps['full_rows']} rows)\textsuperscript{{d}}", c['data_role'],
                          num(r9_kamps['full_AARD_percent'], 2)])
             continue
         rows += [head(f"{c['measured_rows']} " + SHARED[c['group']], 3)] + [['Ermatchkov et al., parameter set ' + q['set'], {'predicted': 'not fitted'}.get(q['data_role'], q['data_role']), f"${q['mean_absolute_relative_deviation_percent']:g}$"] for q in c['published_parameter_sets']]
@@ -1595,23 +1597,24 @@ def transfer_displays(outputs):
                 rf'{num(r9_kamps["additional_row"]["value"]/1e6, 3)} MPa calculated '
                 rf'(+{num(r9_kamps["additional_signed_percent"], 2)}\%).')
     # Published parameters of Hong et al. on identical MEA observations: retained scores, no model call.
-    HONG = MEA + 'same-data-comparison/hong-2027/'
-    hong, hchecks = read(HONG + 'supplement-table.csv'), read(HONG + 'checks.json')
+    hong_replay = read(HONG_REPLAY)
+    hong = hong_replay['statistics']
     hsets = [(r'\COtwo partial pressure, AARD (\%)', [('canonical', 'strict grid', 'Six sources, inside the fitted range of Hong et al.'), ('canonical', 'all', 'Six sources, with the 13 Hilliard observations at 313.00--313.147 K'), ('wagner', 'all', 'Wagner et al.')]),
              (r'Heat of Kim and Svendsen, RMSE (kJ/mol \COtwo)', [(f'Kim {T} K', 'all', f'{T} K' + mark) for T, mark in (('313.15', r'\textsuperscript{a}'), ('353.15', r'\textsuperscript{a,b}'), ('393.15', ''))]),
              (r'Loaded-solution density, RMSE (kg/m$^3$)', [(b, 'all', label + r'\textsuperscript{c}') for b, label in (('Amundsen2009', 'Amundsen et al.'), ('Hartono2014', 'Hartono et al.'), ('Han2012', 'Han et al.'))])]
-    hong_pressures = read(SALT + 'MEA/hong-matched-pressure.json')['grouped']
     hong_phase = literature['hong']
+    strict = next(row for row in hong if row['block'] == 'canonical' and row['subset'] == 'strict grid')
     hrows = []
     for heading, sets in hsets:
         hrows += [head(heading, 9)]
         for block, subset, label in sets:
             rs = [r for r in hong if (r['block'], r['subset']) == (block, subset)]  # two rows where Hong's slope is taken on both sides of a node
-            r, fitted = rs[0], int(rs[0]['adopted_fitted'])
-            measured = read(HONG + block + '.csv')
-            ids = {q['record_id'] for q in measured if q['three_model_eligible'] == 'True'
-                   and (subset != 'strict grid' or q['inside_hong_grid'] == 'True')}
-            if block in hong_pressures:
+            r = rs[0]
+            fitted = r['adopted_fitted']
+            ids = [q['record_id'] for q in hong_replay['rows'] if q['block'] == block and q['three_model_eligible']
+                   and (subset != 'strict grid' or q['inside_hong_grid'])
+                   and q['record_id'] not in r['unavailable']]
+            if block in ('canonical', 'wagner'):
                 predictions = eprops | {q['identity']: q for q in wagner}
                 cohort = [predictions[key] for key in ids]
                 adopted = deviations(cohort)['AARD_percent']
@@ -1624,11 +1627,11 @@ def transfer_displays(outputs):
                 predictions = {r['identity']: r for r in compare_mea['density']}
                 cohort = [predictions[key] for key in ids]
                 adopted = math.sqrt(math.fsum((q['value']-q['observed'])**2 for q in cohort)/len(cohort))
-            hrows.append([label, r['n'], f"{fitted} fitted / {int(r['n']) - fitted} not fitted" if fitted else 'not fitted', 'not stated' if block == 'canonical' else r['polley_hedengren_2026_role'],
+            hrows.append([label, r['n'], f"{fitted} fitted / {r['n'] - fitted} not fitted" if fitted else 'not fitted', 'not stated' if block == 'canonical' else r['polley_hedengren_2026_role'],
                           ' / '.join(num(q['hong'], 2) for q in rs), num(adopted, 2), num(r['adopted'], 2), num(r['polley_hedengren_2026'], 2), '--' if heading.startswith('Loaded') else f"{r['locally_unstable']} of {r['n']}"])
     table('supplement-hong-comparison', r'Deviations of the reconstruction of the Hong et al.\ model\ \cite{hongModelingCO2Absorption2027}, of the fixed-reference MEA model, of the MEA-fitted shared set with system-pressure references, and of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical MEA observations at nominal 30 wt\%. '
           rf'The Hong pressures use equal fugacity at a vapor amount of \num{{{hong_phase["vapor_amount_fraction_of_feed"]:g}}} of the feed. '
-          rf'{hong_phase["local_failures"]} of {hong_phase["inside_count"]} liquids in the fitted range fail the local stability test.',
+          rf'{strict["locally_unstable"]} of {strict["n"]} liquids in the fitted range fail the local stability test.',
           ['Observations', '$N$', 'Role in the MEA model', r'Role in \cite{polleyReactiveEPCSAFTModeling2026}', 'Hong et al. reconstruction', 'MEA model', 'MEA-fitted shared set', r'Ref.~\cite{polleyReactiveEPCSAFTModeling2026}', 'Fails the local test'], hrows, [.21, .035, .13, .09, .105, .10, .09, .08, .085],
           notes=r"Roles refer to the objective of each model; no observation was fitted by Hong et al. ``Not stated'' is defined in main-text Table~\ref{main-tab:mea-data}. The last column counts the states at which the liquid of the Hong model fails the local stability test at fixed pathway weight; the density calculation involves no phase equilibrium. \textsuperscript{a}Three of the intervals at this temperature in the full set of Kim and Svendsen were fitted during earlier model development, in the objective of Ref.~\cite{polleyReactiveEPCSAFTModeling2026}. \textsuperscript{b}The two Hong values use the pressure slope toward lower and toward higher temperature. \textsuperscript{c}The comparison between density sources informed the choice of fitted density observations. Deviations on fitted and on not-fitted data are not directly comparable.")
     # Where the AMP splits lie: retained search states, projected onto temperature and loading.
@@ -1853,15 +1856,6 @@ def transfer_displays(outputs):
     read(BASE + 'conditional-uncertainty.json')
     read(BASE + 'checks.json')
     read('analyses/dea_transfer/inputs/part-ii-346/route-current.json')
-    # Values used by the surviving MEA and historical-comparison prose checks.
-    f2 = lambda v: f'{float(v):.2f}'
-    f1 = lambda v: f'{float(v):.1f}'
-    f1(pressure_stats([r for r in mea_fit if r['quantity'] == 'PartialPressure'], 'predicted')['AARD_percent'])
-    hstrict, hall, hwagner = (next(r for r in hong if (r['block'], r['subset']) == k) for k in (('canonical', 'strict grid'), ('canonical', 'all'), ('wagner', 'all')))
-    [f1(hstrict['hong']), f1(hong_pressures['canonical']['strict_grid']['salt_anchored']['aard_percent']), f"the {hstrict['n']} observations", f"at {hstrict['locally_unstable']} of them"]
-    [f"{f2(hstrict['hong'])}\\,\\%, the MEA model by {f2(hstrict['adopted'])}\\,\\% and the model of Polley and Hedengren by {f2(hstrict['polley_hedengren_2026'])}", ', '.join(f2(hall[k]) for k in ('hong', 'adopted')) + f" and {f2(hall['polley_hedengren_2026'])}",
-                       f"{int(hall['locally_unstable']) + int(hwagner['locally_unstable'])} of the {int(hall['n']) + int(hwagner['n'])} measured pressure states", f"{hchecks['grid_stability']['locally unstable']} of the {sum(hchecks['grid_stability'].values())} nodes",
-                       ' and '.join(f2(hchecks['full_pressure_replay_AARD_percent'][k]) for k in ('adopted', 'polley_hedengren_2026')), ' or '.join(f2(hchecks['kim_endpoint_AARD_313_353'][k]['AARD_percent']) for k in ('cool', 'warm'))]
     # MEA model by temperature band (#409): every row recomputed from the retained points.
     BANDS = MEA + 'stripper-temperature-409/'
     bpts = read(MEAFIT + 'band-points.json')['result']
@@ -2744,7 +2738,10 @@ def manuscript_sources():
 
 RES = re.compile(r"\\res\{([a-z0-9-]+)\}")
 NUMERAL = re.compile(r"(?<![\w.])(?:(?<!-)[+-])?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?(?!\w|\.\d)")
-SCIENTIFIC = re.compile(r"(?P<mantissa>[+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*\\times\s*10\^\{(?P<exponent>[+-]?\d+)\}")
+SCIENTIFIC = re.compile(
+    r"(?<![\w.])(?:(?P<mantissa>[+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*\\times\s*)?"
+    r"(?P<base>10)\^\{(?P<exponent>[+-]?\d+)\}"
+)
 NUMBER_WORDS = "zero one two three four five six seven eight nine ten".split()
 NUMBER_WORD = re.compile(
     r"\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|"
@@ -3147,6 +3144,17 @@ def result_values():
 
     record = PROPERTY_SUMMARY
     property_summary = read(record)
+    kamps = property_summary["kamps"]
+    for key, label, value in (
+        ("common_rows", "common-pressure-count", str(kamps["common_rows"])),
+        ("common_AARD_percent", "common-pressure-aard", f"{kamps['common_AARD_percent']:.2f}"),
+        ("full_AARD_percent", "all-pressure-aard", f"{kamps['full_AARD_percent']:.2f}"),
+        ("additional_signed_percent", "additional-pressure-deviation", f"{kamps['additional_signed_percent']:+.1f}"),
+    ):
+        add(f"mdea-corrected-kamps-{label}-transfer", record, f"kamps.{key}", value)
+    for quantity, key, digits in (("measured", "observed", 3), ("predicted", "value", 3)):
+        add(f"mdea-corrected-kamps-additional-pressure-{quantity}", record,
+            f"kamps.additional_row.{key} / 1e6", f"{kamps['additional_row'][key]/1e6:.{digits}f}")
     water = property_summary["water_calibration"]
     for passage in ("fit-input", "fit-deviations"):
         add(f"water-fit-vapor-pressure-temperature-count-{passage}", record,
@@ -3204,6 +3212,20 @@ def result_values():
         add(f"mdea-descents-all-{passage}", record, "mdea_descent_counts: sum",
             str(sum(phase_results["mdea_descent_counts"].values())))
     states = phase_results["mdea_distinct_states"]
+    for passage in ("transfer", "supplement-total", "supplement-by-source"):
+        add(f"mdea-distinct-descent-states-{passage}", record, "mdea_distinct_states.count", str(len(states)))
+    zheng = {str(row["source"]["source_row"]): row["key"]
+             for row in states if row["source"]["source_key"] == "Zheng2020"}
+    measured = [row for row in states if row["pressure_basis"] == "measured"]
+    for passage in ("transfer-detection", "transfer-bubble", "supplement"):
+        add(f"mdea-descent-states-at-measured-pressure-{passage}", record,
+            "mdea_distinct_states[measured pressure].count", str(len(measured)))
+    for row, digits, passages in (("2", 3, ("transfer", "supplement")), ("5", 2, ("transfer",))):
+        key = zheng[row]
+        result = property_summary["mdea_bubble"][key]
+        for passage in passages:
+            add(f"mdea-zheng-row-{row}-bubble-pressure-{passage}", PROPERTY_SUMMARY,
+                f"mdea_bubble[{key}].bubble_Pa / 1e6", f"{result['bubble_Pa']/1e6:.{digits}f}")
     for passage in ("transfer", "supplement"):
         for branch, label, words in (("vapor", "vapor-only", True), ("mixed", "mixed", False),
                                      ("none", "unlabeled", True)):
@@ -3262,7 +3284,11 @@ def result_values():
     record = STUDY + "results/DEA/property-comparisons/selected.json.gz"
     fitted = [row for row in read(record)["rows"] if row["role"] == "fitted"]
     carson = [row for row in fitted if row["group"] == "Carson"]
-    for label, fraction in (("intermediate", "0.20"), ("highest", "0.30")):
+    seo_hong_pressure_count = sum(row["group"] == "SeoHong" and row["unit"] == "Pa" for row in fitted)
+    for passage in ("methods", "transfer"):
+        add(f"dea-seo-hong-fitted-pressure-count-{passage}", record, "rows[SeoHong,Pa,fitted].count",
+            str(seo_hong_pressure_count))
+    for label, fraction in (("lowest", "0.10"), ("intermediate", "0.20"), ("highest", "0.30")):
         count = sum(row["row"]["DEA_mass_fraction"] == fraction for row in carson)
         add(f"dea-carson-{label}-concentration-observations-caption", record,
             f"rows[Carson,fitted,{fraction}].count", str(count))
@@ -3274,8 +3300,32 @@ def result_values():
     kim = read(record)["kim_2007"]
     hot = [row for row in kim if row["T_K"].startswith("393.15") and row["interval_status"] == "available"]
     add("mea-kim-svendsen-hot-interval-count-results", record, "kim_2007[393.15 K,available].count", str(len(hot)))
+    clean_hot = [row for row in hot if 'True' not in (row["source_inconsistent"], row["first_120"])]
+    key = "kim_2007[393.15 K, available, unflagged]"
+    add("mea-kim-svendsen-unflagged-hot-interval-count-transfer", record, key + ".count", str(len(clean_hot)))
+    kim_svendsen_bias = 100 * fsum(1 - float(row["predicted"]) / float(row["observed"]) for row in clean_hot) / len(clean_hot)
+    add("mea-kim-svendsen-hot-interval-low-bias-transfer", record, key + ": negative signed deviation %", f"{kim_svendsen_bias:.1f}")
+    add("mea-kim-svendsen-hot-interval-low-bias-limit", record, key + ": negative signed deviation %", f"{kim_svendsen_bias:.1f}")
+    for flag, label in (("source_inconsistent", "inconsistent"), ("first_120", "first-additions")):
+        count = sum(row[flag] == "True" for row in hot)
+        add(f"mea-kim-svendsen-hot-{label}-intervals-transfer", record,
+            f"kim_2007[393.15 K,available].{flag}: count", NUMBER_WORDS[count])
+    add("mea-kim-svendsen-hot-flagged-intervals-transfer", record,
+        "kim_2007[393.15 K,available]: count flagged by either source_inconsistent or first_120",
+        NUMBER_WORDS[len(hot) - len(clean_hot)])
     low = sum(float(row["previous_loading"]) < 0.1 for row in kim)
     add("hong-kim-svendsen-intervals-below-loading-window", record, "kim_2007[previous_loading < 0.1].count", str(low))
+    record = STUDY + "results/MEA/heat-comparison.json.gz"
+    heats = read(record)["rows"]["rows"]
+    for source, label in (("Kim2014", "kim"), ("Vinjarapu2024", "vinjarapu")):
+        rows = [row for row in heats if row["source"] == source and row["T_K"] >= 370
+                and row["predicted_kJ_mol"] is not None]
+        bias = 100 * fsum(1 - row["predicted_kJ_mol"] / row["observed_kJ_mol"] for row in rows) / len(rows)
+        add(f"mea-{label}-hot-heat-low-bias-transfer", record,
+            f"rows.rows[{source},stripper, available]: negative signed deviation %", f"{bias:.1f}")
+        if label == "vinjarapu":
+            add("mea-vinjarapu-hot-heat-low-bias-limit", record,
+                f"rows.rows[{source},stripper, available]: negative signed deviation %", f"{bias:.1f}")
     record = "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/checks.json"
     figure = read(record)["figure_5"]
     for pathway in ("carbamate", "bicarbonate"):
@@ -3345,19 +3395,41 @@ def result_values():
         str(sum(row["group"] == "hartono-2021-supplemental" and row["role"] == "not fitted" for row in rows)))
 
     record = STUDY + "results/MDEA/properties.json.gz"
-    rows = [row for row in read(record)["rows"] if row["group"] == "Ermatchkov" and row["unit"] == "Pa"]
+    available_rows = read(record)["rows"]
+    heat_assessments = [row for row in available_rows if row["group"] in ("Merkley-half-loading", "Merkley-outside")]
+    unresolved = collections.Counter(row["status"] for row in heat_assessments if row["status"] != "Available")
+    add("mdea-merkley-heat-assessment-thermochemistry-refusals", record,
+        "rows[Merkley-half-loading|Merkley-outside,ThermochemistryUnavailable].count",
+        str(unresolved["ThermochemistryUnavailable"]))
+    add("mdea-merkley-heat-assessment-saturation-refusals", record,
+        "rows[Merkley-half-loading|Merkley-outside,CentralSolveUnavailable].count",
+        NUMBER_WORDS[unresolved["CentralSolveUnavailable"]])
+    mdea_not_fitted = sum(row["group"] in ("Kuranov-413K", "corrected-Kamps", "Sedighi") and row["role"] == "not fitted"
+                          and row["status"] == "Available" for row in available_rows)
+    add("mdea-not-fitted-total-pressure-count-residual-figure-caption", record,
+        "rows[Kuranov-413K|corrected-Kamps|Sedighi, not fitted, Available].count", str(mdea_not_fitted))
+    rows = [row for row in available_rows if row["group"] == "Ermatchkov" and row["unit"] == "Pa"]
     for passage in ("abstract", "mdea-results", "shared-comparison", "literature", "weighting"):
         add(f"mdea-ermatchkov-partial-pressure-count-{passage}", record, "rows[Ermatchkov,Pa].count", str(len(rows)))
-    rows = [row for row in read(record)["rows"] if row["group"] == "Kuranov" and row["role"] == "fitted"]
+    rows = [row for row in available_rows if row["group"] == "Kuranov" and row["role"] == "fitted"]
     for passage in ("introduction", "conclusion", "relative-weight", "mdea-results", "shared-comparison",
                     "weighting", "normalized-weight", "historical-comparison", "residual-figure-caption", "supplement-weighting",
                     "published-fit-coverage", "literature-subsets"):
         add(f"mdea-fitted-kuranov-pressure-count-{passage}", record, "rows[Kuranov,fitted].count", str(len(rows)))
 
     record = STUDY + "results/DEA/property-comparisons/selected.json.gz"
-    dea_pressures = [row for row in read(record)["rows"] if row["unit"] == "Pa" and row["role"] == "fitted"]
+    dea_rows = read(record)["rows"]
+    dea_pressures = [row for row in dea_rows if row["unit"] == "Pa" and row["role"] == "fitted"]
     for passage in ("introduction", "conclusion", "dea-results", "residual-figure-caption", "expanded-comparison", "range-check"):
         add(f"dea-fitted-partial-pressure-count-{passage}", record, "rows[Pa,fitted].count", str(len(dea_pressures)))
+    add("dea-not-fitted-partial-pressure-count-residual-figure-caption", record,
+        "rows[Lawson-394K, not fitted, Available].count",
+        str(sum(row["group"] == "Lawson-394K" and row["role"] == "not fitted" and row["status"] == "Available"
+                for row in dea_rows)))
+    add("dea-comparison-only-partial-pressure-count-residual-figure-caption", record,
+        "rows[Lawson-VIII, comparison only, Available].count",
+        str(sum(row["group"] == "Lawson-VIII" and row["role"] == "comparison only" and row["status"] == "Available"
+                for row in dea_rows)))
 
     record = STUDY + "results/E/MEA/replay.json.gz"
     hot = read(record)["summary"]["pressure"]["hot_published"]
@@ -3382,6 +3454,12 @@ def result_values():
     hong = read(record)
     add("hong-reconstructed-weight-nodes", record, "weight_knots_exact", str(hong["weight_knots_exact"]))
     add("hong-checked-weight-nodes", record, "grid_stability: total", str(sum(hong["grid_stability"].values())))
+    endpoint_heat = hong["kim_endpoint_AARD_313_353"]
+    (n,) = {row["n"] for row in endpoint_heat.values()}
+    add("hong-kim-endpoint-heat-interval-count", record, "kim_endpoint_AARD_313_353[].n: common count", str(n))
+    for side, metrics in endpoint_heat.items():
+        add(f"hong-kim-endpoint-heat-aard-{side}", record, f"kim_endpoint_AARD_313_353.{side}.AARD_percent",
+            f"{metrics['AARD_percent']:.2f}")
 
     record = "analyses/mdea_mea_workflow/results/bounded-binary-411/critical-k.json"
     count = len(read(record)["rows"])
@@ -3843,11 +3921,15 @@ def numeric_occurrences(text, masked):
     from decimal import Decimal
 
     for match in SCIENTIFIC.finditer(text):
-        if masked[match.start():match.end("mantissa")].strip():
-            yield match, Decimal(match["mantissa"]).scaleb(int(match["exponent"]))
+        if masked[match.start():match.end("base")].strip():
+            yield match, Decimal(match["mantissa"] or "1").scaleb(int(match["exponent"]))
             masked = masked[:match.start()] + " " * len(match[0]) + masked[match.end():]
     for match in NUMERAL.finditer(masked):
-        yield match, Decimal(match[0])
+        # An f-string can hold only the base of a power before its exponent interpolation.
+        value = Decimal(match[0])
+        if value == 10 and text[match.end():] == "^{":
+            continue
+        yield match, value
 
 
 def collision_contexts(text, excerpt):
@@ -3864,7 +3946,7 @@ def typed_numbers(values, collisions):
             yield path.relative_to(ROOT).as_posix(), 1, text, mask_syntax(text)
         path = Path(__file__)
         for node in ast.walk(ast.parse(path.read_text())):
-            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            if isinstance(node, ast.Constant) and isinstance(node.value, str) and node.value != SCIENTIFIC.pattern:
                 yield path.relative_to(ROOT).as_posix(), node.lineno, node.value, mask_syntax(node.value)
 
     registered = {value for row in values.values() for _, value in numeric_occurrences(row["value"], row["value"])}

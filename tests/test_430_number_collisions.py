@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from analyses.amines import displays
 
 
@@ -41,4 +43,13 @@ def test_typed_range_upper_limit_is_unsigned():
     text = r"Prescribed 10--20 wt\%; the residual is -20\%."
     assert [(match[0], value) for match, value in displays.numeric_occurrences(text, text)] == [
         ("10", 10), ("20", 20), ("-20", -20)
+    ]
+
+
+def test_typed_power_of_ten_uses_its_value():
+    text = r"10 states, $10^{-8}$ and $6.6\times10^{-8}$."
+    assert [(match[0], value) for match, value in displays.numeric_occurrences(text, displays.mask_syntax(text))] == [
+        (r"10^{-8}", Decimal("1e-8")),
+        (r"6.6\times10^{-8}", Decimal("6.6e-8")),
+        ("10", 10),
     ]

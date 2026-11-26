@@ -17,6 +17,15 @@
     "sha256": "63e70002fd4882d9459b77a23f2325e227593b7bd2a3cf0c4dad70a305774d47",
     "stage": "replay summary"
   },
+  "analyses/amines/results/mea/published/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "published",
+    "keys": "rows, statistics",
+    "owner": "mea.py",
+    "record": "mea/published/replay/endpoint.json.gz",
+    "sha256": "1ce7fce4e4b78a60e82f78e258579c8b5683a90099fa517491fa193ffe340119",
+    "stage": "replay"
+  },
   "analyses/amines/results/shared/deposit/reviewer-package.json": {
     "disposition": "stage",
     "owner": "reviewer deposit",
@@ -51,7 +60,7 @@
     "stage": "properties",
     "record": "shared/properties/display-summary.json.gz",
     "keys": "mea_early_reference, kamps, dea_density, mdea, spread, shared, mea_mamun, mea_historical_covariance, dea_alternative, mdea_bubble, water_calibration, amp_historical_reference_state",
-    "sha256": "4a7acf87e13627b1c15cc6861a712880095fc491f3f9d9516f5a555247746a1d"
+    "sha256": "0bf43faa2189712a84000aca9c84eee86bcc011446c3735bbdd9d8613fc2bf80"
   },
   "analyses/amines/results/shared/properties/gibbs-derivatives.json": {
     "disposition": "stage",
@@ -2210,13 +2219,14 @@
   },
   "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/hong-matched-pressure.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "comparison-only",
     "fit_set": "published",
     "keys": "grouped",
     "owner": "mea.py",
     "record": "mea/published/properties/display/analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/hong-matched-pressure.json",
     "sha256": "c48f36cf5c6bb54ecd78a2a2e9bd05e346b3d022807908a2e98a610545043885",
-    "stage": "properties"
+    "stage": "properties",
+    "evidence": "The renderer takes the canonical and Wagner row identities from the package published replay."
   },
   "analyses/mea_parameter_bundle/results/salt-anchored-435/shared-parameters.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2230,73 +2240,80 @@
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Amundsen2009.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Amundsen2009.csv",
     "sha256": "70db319da0f046d567440b4182a8681170a386f0eaf3cd12fd486a8915f6aa5b",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Han2012.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Han2012.csv",
     "sha256": "54888c26ab91733a002b601e31f37a2914ecd5faf50418e99ff8ef6c3e098b53",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Hartono2014.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Hartono2014.csv",
     "sha256": "b6914a393e9b356c813fd9d43237cb42616da7615b206c3729d78384dac194d7",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 313.15 K.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 313.15 K.csv",
     "sha256": "78c164b4131053280d93891ab73de6541b23bd614d05b07bfc005ba1e35f9a84",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 353.15 K.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 353.15 K.csv",
     "sha256": "bad6a17a1fdf5d021f639fa79399feedffc2c1bd0eed485120da2fbc9d018339",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 393.15 K.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/Kim 393.15 K.csv",
     "sha256": "b8e29635c3582c29d9d22ab985c2144d6cdf44c618e434816d956dfbfae88c01",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/canonical.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/canonical.csv",
     "sha256": "c3cd263f792e9eef4d3ef448f26dcac0c326b448d788f4011c74f8449ef51328",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/checks.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2310,23 +2327,25 @@
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/supplement-table.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "comparison-only",
     "fit_set": "published",
     "keys": "[rows] block,subset,side,n,metric,adopted_fitted,polley_hedengren_2026",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/supplement-table.csv",
     "sha256": "40ede064fec19064922534e0eccf3e5c33fa9a1ff4a0d1f050fd93a0820b5530",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The display uses the package published replay statistics. The legacy table remains the S comparison."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/wagner.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "stage-input",
     "fit_set": "published",
     "keys": "[rows] record_id,block,source,T_K,loading,previous_loading,mea_mass_fr",
     "owner": "mea.py",
     "record": "mea/published/replay/display/analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/wagner.csv",
     "sha256": "5b9199511a4925e90016b779fed7112d72a63405fe3c2e3067e79a925735bf21",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The package published replay uses these retained requests. The Hong display reads its replay output."
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",

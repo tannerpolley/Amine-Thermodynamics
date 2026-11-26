@@ -300,7 +300,7 @@ def cohorts(design, rows, canonical):
         if design != 'MEA':
             add(g, r)
             if g == 'corrected-Kamps' and r['identity'] != 'comparison:113':
-                add('corrected-Kamps (27 common rows)', r)
+                add('corrected-Kamps common rows', r)
             continue
         if r['unit'] != 'Pa':
             add(g, r)

@@ -30,12 +30,13 @@ SCIENTIFIC = d.SCIENTIFIC
 TOKEN = re.compile(rf"{SCIENTIFIC.pattern}|{d.NUMERAL.pattern}|{WORDS.pattern}", re.I)
 TERMS = re.compile(r"[A-Za-z][A-Za-z0-9]+")
 EQUATIONS = re.compile(r"\\begin\{equation\*?\}.*?\\end\{equation\*?\}", re.S)
+CAPTION = re.compile(r"\\caption\b(?:\[[^]]*\])?\s*\{")
 
 
 def displayed_number(token):
     scientific = SCIENTIFIC.fullmatch(token)
     if scientific:
-        mantissa, exponent = scientific.group('mantissa', 'exponent')
+        mantissa, exponent = scientific['mantissa'] or '1', scientific['exponent']
         return Decimal(mantissa).scaleb(int(exponent)), len(mantissa.partition('.')[2]) - int(exponent)
     if token.lower() in CARDINAL:
         return Decimal(CARDINAL[token.lower()]), 0
@@ -79,13 +80,21 @@ def occurrences(collisions):
         source = d.manuscript_body(path.read_text())
         masked = d.mask_syntax(source)
         equations = [match.span() for match in EQUATIONS.finditer(source)]
+        captions = []
+        for command in CAPTION.finditer(source):
+            depth = 1
+            for brace in re.finditer(r"(?<!\\)[{}]", source[command.end():]):
+                depth += 1 if brace[0] == "{" else -1
+                if not depth:
+                    captions.append((command.end(), command.end() + brace.start()))
+                    break
         relative = path.relative_to(d.ROOT).as_posix()
         reviewed_spans = [(match.span(), entry) for entry in collisions if entry['file'] == relative
                           for match in d.collision_contexts(source, entry['context'])]
         # Keep the exponent in a typed scientific number while hiding equation indices elsewhere.
         for scientific in SCIENTIFIC.finditer(source):
             start, stop = scientific.span()
-            if masked[start:scientific.end('mantissa')].strip():
+            if masked[start:scientific.end('base')].strip():
                 masked = masked[:start] + scientific[0] + masked[stop:]
         boundary = re.compile(r'[.!?](?=\s|$)|\n\s*\n|\\\\(?=\n|$)')
         stops = iter([*(match.end() for match in boundary.finditer(source)), len(source)])
@@ -104,6 +113,8 @@ def occurrences(collisions):
                     reason = 'equation'
                 row = dict(file=relative, line=i, column=match.start()+1,
                            token=match[0], sentence=sentence, reason=reason)
+                if any(a <= begin and end <= b for a, b in captions):
+                    row["display_text"] = True
                 for (a, b), entry in reviewed_spans:
                     if entry['token'] == row['token'] and a <= begin and end <= b:
                         row.update(reason=entry['reason'], collision=True, context=entry['context'])
