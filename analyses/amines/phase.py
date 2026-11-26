@@ -408,6 +408,22 @@ def search_class(search):
     return "no resolved descent"
 
 
+def measured_search_class(row):
+    """Reclassify a held MEA measured-pressure record."""
+    native = row["native_trials"]
+    if any(t["descent"] for t in native) or any(t["source"] == "supplied" for t in row["witnesses"]):
+        return "descent"
+    if not (
+        row["parent"]["physical_checks_pass"]
+        and row["ion_rich_seed"]["strictly_positive"]
+        and row["supplied_counts"].keys() == {"evaluated"}
+        and row["ion_rich_result"]["evidence"] == "evaluated"
+        and no_descent(bool(native), native)
+    ):
+        return "unavailable"
+    return "searched, no instability"
+
+
 def census_class(row):
     """Classify the MEA census from the held parent and its Engine trials."""
     if "failure" in row:

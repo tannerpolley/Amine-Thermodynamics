@@ -1,8 +1,17 @@
 from analyses.amines import dea, mdea
 from analyses.amines.fit import retained_endpoint, route_for
-from analyses.amines.phase import SuppliedTrials, native_search, search_class, states
+from analyses.amines.phase import SuppliedTrials, measured_search_class, native_search, search_class, states
 from analyses.amines.wheel import ROOT, verify
 from MEA.common.retained_results import read
+
+
+def test_classify_held_mea_measured_searches_without_solving():
+    measured = ROOT / "analyses/fixed_reaction_reference/results/E/MEA/measured"
+    rows = [row for path in sorted(measured.glob("*.json.gz")) for row in read(path)]
+    assert rows
+    for row in rows:
+        expected = "descent" if row["witnesses"] else "searched, no instability" if row["available"] else "unavailable"
+        assert measured_search_class(row) == expected, row["identity"]
 
 
 def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailable():
