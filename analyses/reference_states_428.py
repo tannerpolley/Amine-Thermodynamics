@@ -37,7 +37,13 @@ def balances(feed, phases, formulas):
 
 
 def phase_passed(p, P, tol):
-    return max(abs(p['pressure_residual_Pa'])/P, abs(p['charge_residual']), abs(p['normalization_residual'])) <= tol
+    return (p['pressure_residual_Pa']==p['pressure_Pa']-P and p['normalization_residual']==math.fsum(p['x'])-1 and
+            max(abs(p['pressure_residual_Pa'])/P, abs(p['charge_residual']), abs(p['normalization_residual']))<=tol)
+
+
+def phase_closure(value, pressure, tolerance):
+    return bool(value.get('phases')) and all(phase_passed(p,pressure,tolerance) for p in value['phases']) and max(
+        map(abs,value['balances']['scaled_element_residual'].values()))<=tolerance
 
 
 def source_log_k(law, T):

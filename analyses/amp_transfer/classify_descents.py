@@ -33,8 +33,9 @@ def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
     return checks
 
 
-def matched(checks, tolerance):
-    return [r for r in checks if r.get('log_density_distance',math.inf)<=DENSITY_WINDOW
+def matched(checks, tolerance, density=None):
+    return [r for r in checks if (r.get('log_density_distance',math.inf) if density is None else
+            abs(math.log(r['density']/density)) if 'density' in r else math.inf)<=DENSITY_WINDOW
             and r['relative_pressure_residual']<=tolerance]
 
 
@@ -80,7 +81,8 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
     g, error = gibbs(compiled,result,report)
     comparison = {} if parent_g is None else dict(Gibbs_decrease_over_RT_mol=parent_g[0]-g)
     estimated_error = error if parent_g is None else parent_g[1]+error
-    return dict(out, confirmed=distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
+    physical = inspect is None or (out['diagnostics'] or {}).get('physical_checks_pass',True)
+    return dict(out, confirmed=physical and distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
                 distinct=distinct, split_Gibbs_over_RT_mol=g, split_only=parent_g is None and distinct and liquid, **comparison,
                 numerical_error_over_RT_mol=estimated_error, phases=phases,
                 Gibbs_sum_over_RT_mol=g, objective_over_RT_mol=result.objective, residuals=list(result.residuals),
@@ -161,7 +163,6 @@ def classify(route, point, rows, states):
             entry['liquid_directed'] = bool(guesses)
             for guess in guesses if row['key'] not in ('weiland-1998:31:problem','lawson-1976-viii:0:problem') else []:
                 attempt = coexistence(spec,parent,parent_g,guess,inspect=inspect)
-                attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
                 entry['attempts'].append(attempt)
                 if attempt['confirmed']:
                     solutions[entry['key']] = last[0]
@@ -201,7 +202,6 @@ def classify(route, point, rows, states):
                 g = gibbs(eq.compile_problem(spec.model,parent),center)
                 attempt = coexistence(spec,parent,g,guess,inspect=inspect,start=start)
                 attempt.update(feed_mol=feed,seed_from=other['key'])
-                attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
                 trace.append(attempt)
                 if not attempt['requested_tolerance_met'] or min(attempt['amounts_mol'],default=0)<=0:
                     break
@@ -218,7 +218,6 @@ def classify(route, point, rows, states):
             neighbors.sort(key=lambda pair: pair[0]['key']!='weiland-1998:32:problem')
         for other,seed in neighbors:
             attempt = coexistence(spec,parent,parent_g,list(zip(seed['phases'],seed['packings'],strict=True)),inspect=inspect)
-            attempt['confirmed'] &= (attempt.get('diagnostics') or {}).get('physical_checks_pass',False)
             entry['attempts'].append(dict(attempt, seed_from=other['key']))
             if attempt['confirmed']:
                 solutions[entry['key']] = last[0]

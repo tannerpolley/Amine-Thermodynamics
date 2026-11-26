@@ -6,7 +6,7 @@ from time import monotonic
 
 from round_3.recall import DECLARATION, ENDPOINTS
 from part_ii import ROOT, Route, calculation_declaration, deviation_statistics, eq, jsonable, reg, stable
-from reference_states_428 import amp, balances, identity, phase, phase_passed
+from reference_states_428 import amp, balances, identity, phase, phase_closure
 from r4_shift_tables_426 import available_prediction, temperature_band
 from amp_transfer import classify_descents as cd
 
@@ -19,11 +19,12 @@ FULL = 'lowest-G feasible assemblage found among the tested supports'
 
 def trials(report):
     return [dict(seed=t.seed, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition),
-                 evidence=t.evidence, message=t.message, descent=t.resolved_descent, quantities=t.quantities)
+                 evidence=t.evidence, message=t.message, descent=t.resolved_descent, quantities=t.quantities,
+                 optimizer_success=t.optimizer.success, optimizer_tolerance_met=t.optimizer.requested_tolerance_met)
             for t in report.trials]
 
 
-def physical(spec, problem, result, *, reclose=True, compiled=None):
+def physical(spec, problem, result, *, reclose=True, compiled=None, standard=None):
     ids = spec.parameters.component_ids
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     T, P = result.temperature, result.pressure
@@ -32,9 +33,10 @@ def physical(spec, problem, result, *, reclose=True, compiled=None):
     if reclose and any(abs(r['pressure_residual_Pa'])/P > problem.row_tolerance and min(r['x']) > 0 for r in rows):
         from fixed_reaction_reference.reference_derivatives import pressure_reclosure
 
-        if compiled is None:
-            compiled = eq.compile_problem(spec.model, problem)
-        standard = eq.stability_test(compiled, result).standard_over_rt
+        if standard is None:
+            if compiled is None:
+                compiled = eq.compile_problem(spec.model, problem)
+            standard = eq.stability_test(compiled, result).standard_over_rt
         for row in rows:
             if abs(row['pressure_residual_Pa'])/P <= problem.row_tolerance or min(row['x']) <= 0:
                 continue
@@ -45,12 +47,12 @@ def physical(spec, problem, result, *, reclose=True, compiled=None):
                        original_density_mol_m3=rho, pressure_reclosure=evidence,
                        density_mol_m3=new_rho, pressure_Pa=state.pressure, pressure_residual_Pa=state.pressure-P)
     residuals = balances(problem.feed.values, rows, formulas)
-    passed = all(phase_passed(r, P, problem.row_tolerance) for r in rows) and max(
-        map(abs, residuals['scaled_element_residual'].values())) <= problem.row_tolerance
-    return dict(phases=rows, balances=residuals, physical_checks_pass=passed, residuals=list(result.residuals))
+    checks = dict(phases=rows,balances=residuals)
+    return dict(checks,physical_checks_pass=phase_closure(checks,P,problem.row_tolerance),
+                residuals=list(result.residuals),row_tolerance=problem.row_tolerance)
 
 
-def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decision_bubble=False):
+def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decision_bubble=False, checkpoint=None):
     item = route.stability_row(spec, state, 1.)
     problem, model = item.problem, spec.model
     problem.pressure = type(problem.pressure).fixed(P)
@@ -64,7 +66,10 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decisio
     if result.requested_tolerance_met:
         x, rho = list(result.phase_mole_fractions(0)), result.molar_densities[0]
         guess = (x, result.packing_fractions[0])
-        out.update(physical(spec, problem, result), roots=cd.pressure_roots(model, result.temperature, P, x, rho))
+        out.update(physical(spec, problem, result))
+        if checkpoint is not None:
+            checkpoint(out)
+        out['roots'] = cd.pressure_roots(model, result.temperature, P, x, rho)
         prediction = reg.predict(model, item)
         out['search'] = cd.jsonable(stable.stability_payload(prediction))
         parent_g = cd.gibbs(compiled, result)
@@ -104,7 +109,6 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decisio
                 pair.update(pair.pop('diagnostics') or {}, seed='archive' if index==0 else 'native split')
                 out['attempts'].append(pair)
                 if 'phases' in pair:
-                    pair['confirmed'] &= pair['physical_checks_pass']
                     if mdea:
                         pair['dilute_vapor_traces'] = [dilute_vapor_connection(model, result.temperature, x, rho)
                                                        for x, rho in zip(pair['phases'], pair['densities_mol_m3'], strict=True)]
@@ -122,7 +126,19 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decisio
         out['liquid_vapor'] = liquid_vapor(spec, route, problem, guess, parent_g)
         if decision_bubble:
             pair = out['liquid_vapor']
-            out['bubble'] = liquid_vapor(spec, route, problem, guess, parent_g, incipient=True, seed=pair)
+            out['bubble_inputs'] = dict(T_K=out['T_K'],feed_mol=out['feed_mol'],pressure_guess_Pa=P,
+                                       parent_seed=guess,pair_packings=pair.get('packings'),
+                                       pair_compositions=[p['x'] for p in pair.get('phases',[])])
+            if checkpoint is not None:
+                checkpoint(out)
+            try:
+                out['bubble'] = liquid_vapor(spec, route, problem, guess, parent_g, incipient=True, seed=pair)
+                if not out['bubble']['qualified']:
+                    out['bubble_refusal'] = out['bubble']['message']
+            except (ValueError,RuntimeError,AttributeError) as error:
+                out['bubble_refusal'] = f'{type(error).__name__}: {error}'
+            if checkpoint is not None:
+                checkpoint(out)
         if assemblages:
             amp_candidates(spec, route, problem, out, pair_solution)
     return out

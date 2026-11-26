@@ -57,23 +57,15 @@ def parent_agreement(left, right):
         (*left['x'],*(left[k] for k in fields)),(*right['x'],*(right[k] for k in fields)),strict=True))
 
 
-def phase_closure(value, pressure, tolerance):
-    return bool(value.get('phases')) and all(
-        max(abs(p['pressure_Pa']/pressure-1),abs(fsum(p['x'])-1),abs(p['charge_residual']))<=tolerance
-        for p in value['phases']) and max(map(abs,value['balances']['scaled_element_residual'].values()))<=tolerance
-
-
 def vapor_trace_passes(pair):
-    trace = pair['vapor_trace']
-    pressure = trace['pressure_Pa']
-    return (len(pressure)==len(trace['dP_drho'])==len(trace['density_mol_m3'])==33
-            and trace['density_mol_m3'][-1]==pair['phases'][-1]['density_mol_m3']
-            and all(v is not None and v>0 for v in trace['dP_drho'])
-            and all(b>a for a,b in zip(pressure,pressure[1:])))
+    from shared_bicarbonate_417 import vapor_trace_connected
+
+    return vapor_trace_connected(pair['vapor_trace'],pair['phases'][-1]['density_mol_m3'])
 
 
 def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
-    from classify_descents import COINCIDENCE, DENSITY_WINDOW
+    from classify_descents import COINCIDENCE, matched
+    from reference_states_428 import phase_closure
 
     amounts = pair.get('amounts_mol',[])
     if len(amounts)!=2 or min(amounts)<=0 or not pair.get('requested_tolerance_met'):
@@ -84,12 +76,25 @@ def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
     a,b = details['phases']
     distinct = max(abs(x-y) for x,y in zip(a['x'],b['x'],strict=True))>COINCIDENCE or (
         abs(log(a['density_mol_m3']/b['density_mol_m3']))>COINCIDENCE)
-    roots = vapor_trace_passes(pair) if vapor else all(
-        any(r.get('returned')=='liquid' and abs(log(r['density']/rho))<=DENSITY_WINDOW
-            and r['relative_pressure_residual']<=tolerance for r in group)
-        for group,rho in zip(pair['roots'],pair['densities_mol_m3'],strict=True))
+    roots = vapor_trace_passes(pair) if vapor else len(pair['roots'])==2 and all(
+        any(r['returned']=='liquid' for r in matched(group,tolerance,density))
+        for group,density in zip(pair['roots'],pair['densities_mol_m3'],strict=True))
     return (distinct and roots and amounts==[a['amount_mol'],b['amount_mol']]
             and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol'])
+
+
+def no_descent(completed, trials):
+    return bool(completed and trials) and all(t['evidence']=='no_resolved_descent'
+        and t['message'].startswith(('converged:','Michelsen tangent-plane trial converged:'))
+        and t.get('optimizer_success',True) and t.get('optimizer_tolerance_met') is not False
+        and t.get('descent',t.get('resolved_descent')) is False for t in trials)
+
+
+def supplied_complete(counts, excluded, declared):
+    return (isinstance(counts,dict) and counts.keys()=={'evaluated'}
+            and type(excluded) is int and type(declared) is int
+            and 0<=excluded<=declared and type(counts['evaluated']) is int
+            and counts['evaluated']==declared-excluded)
 
 
 def witness_direction(entry):
