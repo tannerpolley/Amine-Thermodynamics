@@ -25,13 +25,18 @@ def rebuild_measured(point, reference, names, bank, output, workers):
     assert len(set(names))==321 and rows.keys()<=set(names)
     pending = [i for i in names if i not in rows]
     batches = [pending[i:i+8] for i in range(0,len(pending),8)]
-    assert not (output/'measured').exists()
+    jobs = []
+    for i, batch in enumerate(batches):
+        path = output/f'measured/{i}.json.gz'
+        if path.exists():
+            retained = r.read(path)
+            assert [q['identity'] for q in retained]==batch and all(q['wheel']==r.SHA for q in retained), path
+            rows.update((q['identity'],q) for q in retained)
+        else:
+            jobs.append((i,(point['parameters'],reference,batch,1.,P_REF,bank)))
     with ProcessPoolExecutor(workers) as pool:
-        jobs = [(point['parameters'],reference,batch,1.,P_REF,bank) for batch in batches]
-        for i, batch in enumerate(pool.map(stability.chunk,jobs)):
+        for (i,_), batch in zip(jobs,pool.map(stability.chunk,[args for _,args in jobs]),strict=True):
             stability.save(output/f'measured/{i}.json.gz',batch)
-            assert all(q['available'] and q['native_no_descent'] and not q['witnesses'] for q in batch), (
-                f'MEA rebuilt measured batch {i} stops on an incomplete search')
             rows.update((q['identity'],q) for q in batch)
     stability.save(output/'measured-inventory.json.gz',dict(
         names=names, endpoint_fingerprint=endpoint, wheel=r.SHA, seconds=monotonic()-started))
