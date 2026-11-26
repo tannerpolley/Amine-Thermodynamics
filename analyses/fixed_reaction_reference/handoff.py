@@ -10,9 +10,10 @@ import sys
 from refit import (BASE, COUNTS, HERE, OUT, P_REF, REPLAY_TOLERANCE, configured, fingerprint, r,
                    remove_reference_pressure, row_manifest, rms, save, starts, start_vector, qmc, SEED, np)
 from round_8.records import NAMES, blob
+from reference_states_428 import ROW_TOLERANCE, phase_closure
 from round_8.reductions import (
-    CONNECTED_VAPOR, FINITE_NEGATIVE, TWO_LIQUIDS, parent_agreement, phase_closure,
-    phase_outcome, qualifying_pair, vapor_trace_passes, witness_direction,
+    CONNECTED_VAPOR, FINITE_NEGATIVE, TWO_LIQUIDS, no_descent, parent_agreement,
+    phase_outcome, qualifying_pair, supplied_complete, vapor_trace_passes, witness_direction,
 )
 
 HANDOFF = HERE/'manuscript-handoff.json'
@@ -666,6 +667,7 @@ class Quantities:
 
     def c1(self):
         steps = {}
+        self.c1_results = {}
         files = {p.name:p for folder in (OUT/'C1', OUT/'C1/rebuild-441') for p in folder.glob('*.json.gz')}
         for _,path in sorted(files.items()):
             rel = str(path.relative_to(OUT))
@@ -721,6 +723,7 @@ class Quantities:
                 if key=='enthalpy' and 'H_over_T_minus_S_check_J' in latest:
                     value['secondary_H_over_T_minus_S_error_J_per_mol'] = (
                         latest['H_over_T_minus_S_check_J']-latest['Gibbs_Helmholtz_H_J'])/scale
+                self.c1_results[rel,key] = value
                 self.quantity(f'C1 {path.name.removesuffix(".json.gz")} {key}',None,value,disposition=value['disposition'],
                               unit='J/mol apparent amine' if key!='volume' else 'm³',sources=(rel,),
                               pressure_basis=dict(T_K=q['T_K'],P_Pa=q['P_Pa']),endpoint=q['endpoint_fingerprint'])
@@ -1369,39 +1372,105 @@ class Quantities:
                               pressure_basis='archived curve temperature, stock and loading')
 
     def stage1_phases(self):
-        tolerance = 1e-10
+        from mea_replays import measured_batch, measured_identity
+        from mea_stability import BASE as MEA_TRIALS
+        from phase_replays import point_for, screen_declarations
+
         issue = 'tannerpolley/epcsaft#265'
         screen = 'MEA/screen/rebuild-441/'
-        inventory = screen+'measured-inventory.json.gz'
+        folder = screen+'measured-bound/'
+        inventory = folder+'inventory.json.gz'
         measured = self.read(inventory)
         if not measured:
             return
 
         def record(name, rows, paths, **evidence):
             assert all(self.read(path) is not None for path in paths), paths
-            outcomes = {key:phase_outcome(row,completion=True) for key,row in rows.items()}
+            outcomes = {key:phase_outcome(row,completion=True) for key,row in rows.items() if 'blocker' not in row}
+            blockers = {key:row['blocker'] for key,row in rows.items() if 'blocker' in row}
             self.quantity('Stage 1 '+name,None,dict(counts=dict(Counter(outcomes.values())),
                 outcomes=outcomes,engine_items={k:q['engine_issue'] for k,q in rows.items() if 'engine_issue' in q},
-                **evidence),sources=tuple(paths),population=len(outcomes))
+                blockers=blockers,**evidence),sources=tuple(paths),population=len(rows),
+                disposition='undecided' if blockers else None)
 
-        def screen_row(row, *, pair=None, blocker=None):
-            if blocker:
-                return dict(key=row['key'],engine_issue=issue)
-            return dict(key=row['key'],parent_closed=row.get('optimized_available',row['available']),
-                        native_complete=row.get('no_descent_in_trial_set') and row.get('completed'),
-                        supplied_complete=row.get('supplied_trial_counts',{}).get('unavailable',0)==0,
-                        descent=r.descent(row),pair=pair)
+        def parent_rows(name):
+            root = screen+'parent-closure/'+name+'/'
+            index = root+'inventory.json.gz'
+            data = self.read(index)
+            source = data['source']
+            self.read(source)
+            lane = 'MEA/grid' if name=='MEA/offset' else name
+            point,_,_,bank,declared_source,_ = screen_declarations(lane)
+            assert source==declared_source and data['source_sha256']==self.files[source][1]
+            assert data['endpoint_fingerprint']==fingerprint(point) and data['wheel']==r.SHA
+            assert data['bank_fingerprint']==fingerprint(bank)
+            start = root+'pilot.json.gz'
+            pilot = self.read(start)
+            assert pilot['requested']==len(data['keys']) and data['seconds']<=1.5*pilot['projected_seconds']
+            result,paths,closure = {},[index,start],{}
+            for i in range(data['batches']):
+                path = root+f'{i}.json.gz'
+                paths.append(path)
+                batch = self.read(path)
+                assert all(batch[k]==data[k] for k in ('source','source_sha256','endpoint_fingerprint','wheel','bank_fingerprint'))
+                assert [q['key'] for q in batch['rows']]==batch['keys']
+                for q in batch['rows']:
+                    key = q['key']
+                    assert key not in result and q['wheel']==r.SHA
+                    stratum = key.split('|')[0] if name=='MEA/grid' else name
+                    tally = closure.setdefault(stratum,Counter())
+                    phases = q.get('initial_parent',q.get('parent',{})).get('phases',[])
+                    if phases:
+                        P, tol = q['P_Pa'], q.get('initial_parent',q['parent'])['row_tolerance']
+                        missed = any(abs(p.get('original_pressure_residual_Pa',p['pressure_residual_Pa']))/P>tol for p in phases)
+                        tally.update(parents_read=1,misses=int(missed))
+                        if missed and 'blocker' not in q:
+                            tally['restart' if 'restart' in q else 'reclosure'] += 1
+                    if key=='dense|0.35|313.15|0.35|1.05':
+                        p, = phases
+                        relative = p['original_pressure_residual_Pa']/q['P_Pa'],p['pressure_residual_Pa']/q['P_Pa']
+                        assert tuple(f'{v:.3g}' for v in relative)==('5.72e-09','-7.75e-12'), f'{key}: reclosure pin'
+                    if q.get('blocker'):
+                        tally['still_missing'] += 1
+                        phase = max(q['parent']['phases'],key=lambda p:abs(p['pressure_residual_Pa']))
+                        residual = phase['pressure_residual_Pa']/q['P_Pa']
+                        result[key] = dict(blocker=dict(record=path,diagnosis=f"{q['blocker']}. Final relative residual {residual:+.5g}"))
+                        continue
+                    declared = len(bank.get(key,[])) if isinstance(bank,dict) else len(bank)
+                    assert q.get('bank_size')==declared, f'{key}: supplied trial bank size'
+                    assert phase_closure(q['parent'],q['P_Pa'],q['parent']['row_tolerance']), f'{key}: parent pressure closure'
+                    assert no_descent(q['native_completed'],q['native_trials']), f'{key}: native trial completion'
+                    assert supplied_complete(q.get('supplied_counts'),q.get('supplied_excluded'),declared), f'{key}: supplied trial count'
+                    assert not q.get('supplied_descents',0), f'{key}: supplied descent needs classification'
+                    if densities := q.get('trial_parent_densities_mol_m3'):
+                        gap = max(abs(rho/p['density_mol_m3']-1)
+                                  for rho,p in zip(densities,q['parent']['phases'],strict=True))
+                        tally['max_native_density_relative_difference'] = max(
+                            tally['max_native_density_relative_difference'],gap)
+                    result[key] = dict(key=key,parent_closed=True,native_complete=True,supplied_complete=True,descent=False)
+            assert list(result)==data['keys'], name
+            return result,paths,closure
 
-        def control_row(key, value, pair=None):
+        def control_row(key, value, pair=None, *, supplied=0):
             search = value['search']
-            return dict(key=key,parent_closed=phase_closure(value,value['P_Pa'],tolerance),
-                        native_complete=search.get('completed') and search.get('no_descent_in_trial_set'),
-                        supplied_complete=all(q['evidence']=='evaluated' for q in value.get('supplied',[])),
+            counts = Counter(evaluated=0)
+            counts.update(q['evidence'] for q in value.get('supplied',[]))
+            return dict(key=key,parent_closed=phase_closure(value,value['P_Pa'],value['declaration']['row_tolerance']),
+                        native_complete=no_descent(search.get('completed') and search.get('no_descent_in_trial_set'),
+                                                   value['native_trials']),
+                        supplied_complete=supplied_complete(counts,0,supplied),
                         descent=value['instability']=='resolved descent',pair=pair)
 
-        pilot = screen+'measured-pilot.json.gz'
-        batches = [str(p.relative_to(OUT)) for p in sorted((OUT/screen/'measured').glob('*.json.gz'))]
-        mea = self.read(pilot)['rows'] + [q for p in batches for q in self.read(p)]
+        bank = r.read(MEA_TRIALS/'split-registry.json')['trials']
+        _,point = point_for('MEA','selected','measured-bound-441')
+        identity = measured_identity(point,bank)
+        assert all(measured.get(k)==v for k,v in identity.items())
+        pilot = folder+'pilot.json.gz'
+        chosen = [q['identity'] for q in self.read(pilot)['rows']]
+        mea = measured_batch(self.read(pilot),identity,chosen)
+        pending = [i for i in measured['names'] if i not in chosen]
+        batches = [folder+f'{i//8}.json.gz' for i in range(0,len(pending),8)]
+        mea = mea + [q for i,p in enumerate(batches) for q in measured_batch(self.read(p),identity,pending[8*i:8*i+8])]
         assert len(mea)==len(measured['names'])==321 and {q['identity'] for q in mea}==set(measured['names'])
         previous = {q['identity']:q for p in sorted((OUT/'E/MEA/measured').glob('*.gz'))
                     for q in self.read(str(p.relative_to(OUT)))}
@@ -1414,15 +1483,15 @@ class Quantities:
                        for p in original['phases']), q['identity']
         for q in restarted:
             assert q['pressure_restart']['P_Pa']==.999*q['P_Pa'], q['identity']
-        assert all(q['wheel']==r.SHA and q['supplied_counts']=={'evaluated':6122} for q in mea)
-        assert measured['wheel']==self.read(pilot)['wheel']==r.SHA
         assert all(len(q['parent']['phases'])==(1 if q['declared_parent']=='liquid' else 2) for q in mea)
         parents = dict(Counter(q['declared_parent'] for q in mea))
         assert parents=={'liquid':307,'liquid-vapour':14}
         record('MEA measured',{q['identity']:dict(key=q['identity'],
             parent_closed=phase_closure(q['parent'],q['P_Pa'],q['row_tolerance']),
-            native_complete=q['native_no_descent'] and all(t['evidence']=='no_resolved_descent' for t in q['native_trials']),
-            supplied_complete=q['supplied_counts']=={'evaluated':6122},descent=bool(q['witnesses'])) for q in mea},
+            native_complete=no_descent(q['native_no_descent'] and q['optimized_message'].endswith('unresolved trials 0'),
+                                       q['native_trials']),
+            supplied_complete=supplied_complete(q.get('supplied_counts'),q.get('supplied_not_applicable'),len(bank)+1),
+            descent=bool(q['witnesses'])) for q in mea},
             [inventory,pilot,*batches],parents=parents,pressure_reclosures=len(failed)-len(restarted),
             pressure_restarts=[q['identity'] for q in restarted])
         path = 'MEA/controls/rebuild-441/selected.json.gz'
@@ -1441,17 +1510,23 @@ class Quantities:
         assert len(pairs)==6
         passes = {}
         for key,q in pairs.items():
-            good = [a for a in q['attempts'] if qualifying_pair(a,q['pressure_Pa'],tolerance)]
+            good = [a for a in q['attempts'] if qualifying_pair(a,q['pressure_Pa'],q['row_tolerance'])]
             assert good, key
             passes[key] = good[0]
         a = passes['weiland-1998:31:problem']
         assert a['seed_from']=='weiland-1998:32:problem' and a['feed_mol']==pairs['weiland-1998:31:problem']['feed_mol']
         assert [round(n,6) for n in a['amounts_mol']]==[13.656813,.961327]
         assert format(a['Gibbs_decrease_over_RT_mol'],'.6g')=='0.000565537'
+        assert format(a['numerical_error_over_RT_mol'],'.3g')=='6.64e-09', 'DEA deposit 31: numerical error'
         l = passes['lawson-1976-viii:0:problem']
+        tolerance = pairs['lawson-1976-viii:0:problem']['row_tolerance']
         assert format(l['Gibbs_decrease_over_RT_mol'],'.6g')=='2.76493e-06'
-        assert any(abs(q.get('original_relative_pressure_residual',0.))>tolerance and q.get('pressure_reclosure')
-                   for group in l['roots'] for q in group)
+        assert format(l['numerical_error_over_RT_mol'],'.3g')=='1.87e-09', 'DEA Lawson 0: numerical error'
+        diagnostics = l['diagnostics']
+        assert diagnostics['physical_checks_pass'] and any(
+            abs(q['original_pressure_residual_Pa'])/pairs['lawson-1976-viii:0:problem']['pressure_Pa']>tolerance and
+            q['pressure_reclosure']['accepted_density_mol_m3']==q['density_mol_m3']
+            for q in diagnostics['phases'] if q.get('pressure_reclosure')), 'DEA Lawson 0: original and accepted closure'
         blocker = 'lawson-1976-viii:1:problem'
         origin = 'DEA/screen/selected/declared/summary.json.gz'
         held, = (q for q in self.read(origin)['rows'] if q['key']==blocker)
@@ -1462,9 +1537,12 @@ class Quantities:
         assert len(controls)==4
         for k,row in controls.items():
             assert row['P_Pa']==pairs[k]['pressure_Pa'] and row['value']['feed_mol']==pairs[k]['feed_mol'], k
-        record('DEA screen',{k:screen_row(q,pair=TWO_LIQUIDS if k in passes else None,blocker=k==blocker)
-                            for k,q in by_key.items()},[path,origin],aliases=dea['aliases'],
-               parents=dict(Counter(q['parent_kind'] for q in dea['rows'])))
+        negatives,parent_paths,closure = parent_rows('DEA/declared')
+        assert set(negatives)|set(passes)|{blocker}==by_key.keys()-dea['aliases'].keys()
+        outcomes = {k:dict(pair=TWO_LIQUIDS) for k in passes} | negatives | {blocker:dict(engine_issue=issue)}
+        outcomes.update((k,outcomes[v]) for k,v in dea['aliases'].items())
+        record('DEA screen',outcomes,[path,origin,*parent_paths],aliases=dea['aliases'],
+               parents=dict(Counter(q['parent_kind'] for q in dea['rows'])),pressure_closure=closure)
         record('DEA controls',{k:control_row(k,row['value'],TWO_LIQUIDS) for k,row in controls.items()},
                [control,path],parents={'Liquid':len(controls)})
 
@@ -1479,17 +1557,17 @@ class Quantities:
                 pair = v.get('liquid_vapor')
                 outcome = None
                 if pair:
-                    assert qualifying_pair(pair,v['P_Pa'],tolerance,vapor=True), k
+                    assert qualifying_pair(pair,v['P_Pa'],v['declaration']['row_tolerance'],vapor=True), k
                     bubble = v['bubble']
                     assert bubble['feed_mol']==pair['feed_mol']==v['feed_mol'] and bubble['T_K']==v['T_K'], k
                     assert bubble['amounts_mol'][0]>0 and bubble['amounts_mol'][1]==0
-                    assert bubble['requested_tolerance_met'] and phase_closure(bubble,bubble['pressure_Pa'],tolerance)
+                    assert bubble['requested_tolerance_met'] and phase_closure(bubble,bubble['pressure_Pa'],bubble['row_tolerance'])
                     assert vapor_trace_passes(bubble)
                     pressure[k] = dict(imposed_Pa=v['P_Pa'],bubble_Pa=bubble['pressure_Pa'],
                         below=v['P_Pa']<bubble['pressure_Pa'],decrease=pair['Gibbs_decrease_over_RT_mol'],
                         error=pair['numerical_error_over_RT_mol'])
                     outcome = CONNECTED_VAPOR
-                outcomes[k] = control_row(k,v,outcome)
+                outcomes[k] = control_row(k,v,outcome,supplied=int(k!='worked-state'))
             assert len(pressure)==expected and phase_outcome(outcomes['worked-state'],completion=True)==FINITE_NEGATIVE
             record(design+' controls',outcomes,[path],bubble_comparisons=pressure,parents={'Liquid':len(outcomes)})
 
@@ -1508,26 +1586,25 @@ class Quantities:
                 path = f'{design}/screen/selected/{protocol}/summary.json.gz'
                 baseline = self.read(path)
                 assert baseline['wheel']==r.SHA
-                rows = {q['key']:screen_row(q) for q in baseline['rows']}
-                assert len(rows)==len(baseline['rows']) and set(rows)=={q['key'] for q in group}
+                negatives,parent_paths,closure = parent_rows(name)
                 assert baseline['aliases']=={q['key']:q['same_calculation_as'] for q in baseline['rows']
                                              if 'same_calculation_as' in q}
-                record(name,rows,[census,path])
+                rows = negatives | {key:negatives[src] for key,src in baseline['aliases'].items()}
+                assert len(rows)==len(baseline['rows']) and set(rows)=={q['key'] for q in group}
+                record(name,rows,[census,path,*parent_paths],pressure_closure=closure)
             elif name!='census':
                 path = 'MEA/screen/grid.json.gz'
+                self.read(path)
                 keys = {q['key'] for q in group}
-                rows = {q['key']:screen_row(q,blocker=q['key']=='offset|0.4|338.15|0.5375|1.5')
-                        for q in self.read(path)['data'] if q['key'] in keys}
+                rows,parent_paths,closure = parent_rows('MEA/'+name)
+                if name=='offset':
+                    rows['offset|0.4|338.15|0.5375|1.5'] = dict(engine_issue=issue)
                 assert rows.keys()==keys
-                record('MEA '+name,rows,[census,path])
+                record('MEA '+name,rows,[census,path,*parent_paths],pressure_closure=closure)
             else:
-                path = 'MEA/screen/census.json.gz'
-                rows = {str(q['index']):dict(key=q['index'],parent_closed=q['parent_admitted'],
-                    native_complete=q['reports_completed'] and q['unresolved_trials']==0,
-                    supplied_complete=q['complete'],descent=q['resolved'] or q['supplied_negative'])
-                    for q in self.read(path)['data']['rows']}
+                rows,parent_paths,closure = parent_rows('MEA/census')
                 assert rows.keys()=={q['key'] for q in group}
-                record('MEA census',rows,[census,path])
+                record('MEA census',rows,[census,'MEA/screen/census-raw.json.gz',*parent_paths],pressure_closure=closure)
 
         for name in ('salt-rms','historical-original'):
             path = f'MDEA/controls/rebuild-441/121-MPa-{name}.json.gz'
@@ -1537,8 +1614,8 @@ class Quantities:
             assert parent_agreement(data['direct_parent'],data['endpoint_parent'])
             assert data['crossing'][-1]['t']==data['zero_amount_crossing']
             search = data['target_search']
-            record('MDEA '+name,{name:dict(key=name,parent_closed=phase_closure(data['direct_parent'],data['P_Pa'],tolerance),
-                native_complete=search['completed'] and search['no_descent'],supplied_complete=True,
+            record('MDEA '+name,{name:dict(key=name,parent_closed=phase_closure(data['direct_parent'],data['P_Pa'],ROW_TOLERANCE),
+                native_complete=no_descent(search['completed'] and search['no_descent'],search['trials']),supplied_complete=True,
                 descent=any(q['descent'] for q in search['trials']))},[path,'MDEA/controls/rebuild-441/historical.json.gz'],
                 zero_amount_crossing=data['zero_amount_crossing'])
         path = 'MDEA/controls/rebuild-441/historical.json.gz'
@@ -1550,7 +1627,7 @@ class Quantities:
                 continue
             pair = dict(q,amounts_mol=q['amounts'],requested_tolerance_met=q['message'].startswith('converged:'),
                 vapor_trace=q['trace'][0],Gibbs_decrease_over_RT_mol=q['decrease'],numerical_error_over_RT_mol=q['error'])
-            assert qualifying_pair(pair,q['P'],tolerance,vapor=True)
+            assert qualifying_pair(pair,q['P'],ROW_TOLERANCE,vapor=True)
             pairs[f"{q['family']}/{q['weights']}/{q['P']}"] = dict(pair=CONNECTED_VAPOR)
         assert len(pairs)==3
         record('MDEA retained positive controls',pairs,[path])
@@ -1558,7 +1635,7 @@ class Quantities:
         key = "grid:{'water': 40.84100418410041, 'methyldiethanolamine': 1.0}:393.15:0.8:3.0"
         blocker, = (q for q in self.read(path)['rows'] if q['key']==key)
         assert not blocker['available'] and '1.730566017378354e-10' in blocker['message']
-        record('MDEA retained open search',{key:screen_row(blocker,blocker=True)},[path])
+        record('MDEA retained open search',{key:dict(engine_issue=issue)},[path])
 
         paths = ['MEA/controls/rebuild-441/hong.json.gz',
                  'AMP_free/controls/rebuild-441/born.json.gz','AMP_free/controls/rebuild-441/born-direct.json.gz',
@@ -1574,18 +1651,17 @@ class Quantities:
         assert step_change<=5.91e-8
         lowering = -fsum(born['old_split_vs_own_parent'].values())
         assert f'{lowering:.7f}'=='0.3637575'
-        assert max(map(abs,verification['balance_split']['scaled_element_residual'].values()))<=tolerance
-        assert max(abs(p['charge']) for p in verification['phase_log'][1:])<=tolerance
+        assert max(map(abs,verification['balance_split']['scaled_element_residual'].values()))<=ROW_TOLERANCE
+        assert max(abs(p['charge']) for p in verification['phase_log'][1:])<=ROW_TOLERANCE
         derivatives = {}
         for design,want in (('MEA',(3,2,'1.35e-09','0.00252')),('DEA',(2,3,'-2.82e-09','0.00134'))):
             path = f'C1/rebuild-441/fixed-at-old-{design}.json.gz'
             paths.append(path)
-            q = self.read(path)
-            v,h = ([s for s in q['steps'] if s[k+'_admitted']] for k in ('volume','enthalpy'))
-            volume = v[-1]['signed_volume_error_m3']
-            enthalpy = h[-1]['eq12_minus_Gibbs_Helmholtz_J']/q['apparent_amine_feed_mol']
-            assert (len(v),len(h),f'{volume:.3g}',f'{enthalpy:.3g}')==want
-            derivatives[design] = dict(volume_pairs=len(v),enthalpy_pairs=len(h),volume_error_m3=volume,
+            v,h = (self.c1_results[path,k] for k in ('volume','Eq. 12'))
+            volume,enthalpy = v['signed_error'],h['signed_error']
+            n_v,n_h = v['admitted_steps'],h['admitted_steps']
+            assert (n_v,n_h,f'{volume:.3g}',f'{enthalpy:.3g}')==want
+            derivatives[design] = dict(volume_pairs=n_v,enthalpy_pairs=n_h,volume_error_m3=volume,
                 Eq12_minus_Gibbs_Helmholtz_J_per_mol_amine=enthalpy)
         self.quantity('Stage 1 separate controls',None,dict(Hong_negative=131,Hong_total=132,
             Hong_max_step_change=step_change,Born_off_Gibbs_decrease_over_RT_mol=lowering,derivatives=derivatives),
@@ -1649,4 +1725,5 @@ def main(check):
 if __name__=='__main__':
     from refit import a
     a.study.reuse.bind_wheel()
+    r.verify()
     main(sys.argv[1:]==['--check'])

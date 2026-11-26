@@ -44,10 +44,15 @@ def rebuild_measured(point, reference, names, bank, output, workers):
             measured_batch(r.read(path),identity,batch)
         else:
             jobs.append((i,(point['parameters'],reference,batch,1.,P_REF,bank)))
+    manifest = output/'measured-bound/inventory.json.gz'
+    if not jobs and manifest.exists():
+        retained = r.read(manifest)
+        assert all(retained[k]==v for k,v in identity.items()) and retained['names']==names
+        return
     with ProcessPoolExecutor(workers) as pool:
         for (i,_), batch in zip(jobs,pool.map(stability.chunk,[args for _,args in jobs]),strict=True):
             stability.save(output/f'measured-bound/{i}.json.gz',dict(identity,rows=batch))
-    stability.save(output/'measured-bound/inventory.json.gz',dict(identity,names=names,seconds=monotonic()-started))
+    stability.save(manifest,dict(identity,names=names,seconds=monotonic()-started))
 
 
 def census_declaration(point):

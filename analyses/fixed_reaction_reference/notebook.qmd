@@ -58,25 +58,52 @@ Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/dia
 
 ## Rebuilt phase searches (#441)
 
-| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item |
-|---|---:|---:|---:|---:|
-| MEA measured | 321 | 0 | 0 | 0 |
-| MEA control | 1 | 0 | 0 | 0 |
-| DEA screen | 1264 | 6 | 0 | 1 |
-| DEA controls | 0 | 4 | 0 | 0 |
-| AMP_free controls | 3 | 0 | 4 | 0 |
-| AMP_fixed controls | 4 | 0 | 3 | 0 |
-| MEA grid | 1908 | 0 | 0 | 0 |
-| MEA offset | 575 | 0 | 0 | 1 |
-| MEA census | 162 | 0 | 0 | 0 |
-| AMP_free/native | 666 | 0 | 0 | 0 |
-| AMP_free/supplied | 666 | 0 | 0 | 0 |
-| AMP_fixed/native | 666 | 0 | 0 | 0 |
-| AMP_fixed/supplied | 666 | 0 | 0 | 0 |
-| MDEA salt-rms | 1 | 0 | 0 | 0 |
-| MDEA historical-original | 1 | 0 | 0 | 0 |
-| MDEA retained positive controls | 0 | 0 | 3 | 0 |
-| MDEA retained open search | 0 | 0 | 0 | 1 |
+| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item | Blocked |
+|---|---:|---:|---:|---:|---:|
+| MEA measured | 321 | 0 | 0 | 0 | 0 |
+| MEA control | 1 | 0 | 0 | 0 | 0 |
+| DEA screen | 1263 | 6 | 0 | 1 | 1 |
+| DEA controls | 0 | 4 | 0 | 0 | 0 |
+| AMP_free controls | 3 | 0 | 4 | 0 | 0 |
+| AMP_fixed controls | 4 | 0 | 3 | 0 | 0 |
+| MEA grid | 1907 | 0 | 0 | 0 | 1 |
+| MEA offset | 575 | 0 | 0 | 1 | 0 |
+| MEA census | 162 | 0 | 0 | 0 | 0 |
+| AMP_free/native | 663 | 0 | 0 | 0 | 3 |
+| AMP_free/supplied | 663 | 0 | 0 | 0 | 3 |
+| AMP_fixed/native | 666 | 0 | 0 | 0 | 0 |
+| AMP_fixed/supplied | 666 | 0 | 0 | 0 | 0 |
+| MDEA salt-rms | 1 | 0 | 0 | 0 | 0 |
+| MDEA historical-original | 1 | 0 | 0 | 0 | 0 |
+| MDEA retained positive controls | 0 | 0 | 3 | 0 | 0 |
+| MDEA retained open search | 0 | 0 | 0 | 1 | 0 |
+
+| Screen stratum | Distinct parents read | Pressure misses | Reclosed | Recovered by restart | Still missing |
+|---|---:|---:|---:|---:|---:|
+| DEA/declared | 1163 | 122 | 121 | 0 | 1 |
+| dense | 1800 | 475 | 467 | 8 | 0 |
+| census | 108 | 39 | 37 | 1 | 1 |
+| MEA/offset | 575 | 174 | 174 | 0 | 0 |
+| MEA/census | 162 | 79 | 77 | 2 | 0 |
+| AMP_free/native | 630 | 132 | 130 | 0 | 2 |
+| AMP_free/supplied | 630 | 132 | 130 | 0 | 2 |
+| AMP_fixed/native | 630 | 141 | 140 | 1 | 0 |
+| AMP_fixed/supplied | 630 | 141 | 140 | 1 | 0 |
+
+The native stability test consumes the Engine equilibrium result. In these replays the largest relative molar-density difference from the independently reclosed parent was 8.64e-14.
+
+Pressure-closure blockers by stratum, including equivalent calculation keys.
+
+- Stage 1 DEA screen. `Cai:9:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual -5.1783e-10. See `results/MEA/screen/rebuild-441/parent-closure/DEA/declared/18.json.gz`.
+- Stage 1 MEA grid. `census|None|318.15|1e-05|1.05`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual -1.5226e-10. See `results/MEA/screen/rebuild-441/parent-closure/MEA/grid/151.json.gz`.
+- Stage 1 AMP_free/native. `hartono-2013-P:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual +1.799e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/3.json.gz`.
+- Stage 1 AMP_free/native. `kundu-2003:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual -4.7369e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/11.json.gz`.
+- Stage 1 AMP_free/native. `hartono-2013-y:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual +1.799e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/native/3.json.gz`.
+- Stage 1 AMP_free/supplied. `hartono-2013-P:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual +1.799e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/3.json.gz`.
+- Stage 1 AMP_free/supplied. `kundu-2003:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual -4.7369e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/11.json.gz`.
+- Stage 1 AMP_free/supplied. `hartono-2013-y:0:problem`. ValueError: Parent pressure or balance closure missed after reclosure and restart. Final relative residual +1.799e-10. See `results/MEA/screen/rebuild-441/parent-closure/AMP_free/supplied/3.json.gz`.
+
+The pressure-only probes and nearest reclosure trials are in `results/MEA/screen/rebuild-441/parent-closure/pressure-refusals.json.gz`.
 
 The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at 7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.
 
@@ -620,7 +647,7 @@ Measured entries record timed calculations. The lanes overlapped.
 
 ## Coverage
 
-The quantity index contains 1781 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 78 undecided results.
+The quantity index contains 1777 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 82 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 
@@ -880,6 +907,13 @@ The retained search did not resolve the phase outcome or its physical checks.
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset bias_percent
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_abs_error
 - Round 7 B MDEA corrected-Kamps resolved_fixed_pressure_subset mean_signed_error_predicted_minus_observed
+
+### Undecided · Stage fit and properties (4)
+
+- Stage 1 DEA screen
+- Stage 1 MEA grid
+- Stage 1 AMP_free/native
+- Stage 1 AMP_free/supplied
 
 ### Updated · C1 (6)
 

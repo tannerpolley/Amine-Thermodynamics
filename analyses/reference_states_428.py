@@ -15,6 +15,7 @@ from heat_evidence_170 import hc, request, s, vrc
 
 BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
 R = epcsaft.GAS_CONSTANT_J_PER_MOL_K
+ROW_TOLERANCE = 1e-10
 
 
 def identity(*paths):

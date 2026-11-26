@@ -83,14 +83,34 @@ def stage1_phases(quantities):
     if 'Stage 1 MEA measured' not in quantities:
         return []
     lines = ['', '## Rebuilt phase searches (#441)', '',
-             '| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item |',
-             '|---|---:|---:|---:|---:|']
+             '| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item | Blocked |',
+             '|---|---:|---:|---:|---:|---:|']
     classes = ('no descent in the finite search','two liquids of lower Gibbs energy',
                'liquid plus a vapor-connected phase of lower Gibbs energy','open Engine item')
     for name,item in quantities.items():
         if name.startswith('Stage 1 ') and 'counts' in item['new']:
             counts = item['new']['counts']
-            lines.append('| '+' | '.join([name.removeprefix('Stage 1 '),*[str(counts.get(k,0)) for k in classes]])+' |')
+            cells = [name.removeprefix('Stage 1 '),*[str(counts.get(k,0)) for k in classes],str(len(item['new']['blockers']))]
+            lines.append('| '+' | '.join(cells)+' |')
+    lines.extend(['','| Screen stratum | Distinct parents read | Pressure misses | Reclosed | Recovered by restart | Still missing |',
+                  '|---|---:|---:|---:|---:|---:|'])
+    density_gap = 0.
+    for item in quantities.values():
+        if isinstance(item['new'],dict):
+            for name,value in item['new'].get('pressure_closure',{}).items():
+                fields = ('parents_read','misses','reclosure','restart','still_missing')
+                lines.append('| '+' | '.join([name,*(str(value.get(k,0)) for k in fields)])+' |')
+                density_gap = max(density_gap,value.get('max_native_density_relative_difference',0.))
+    lines.extend(['',f'The native stability test consumes the Engine equilibrium result. In these replays the largest '
+                  f'relative molar-density difference from the independently reclosed parent was {density_gap:.3g}.'])
+    blockers = [(name,key,v) for name,item in quantities.items() if name.startswith('Stage 1 ')
+                for key,v in item['new'].get('blockers',{}).items()]
+    if blockers:
+        lines.extend(['','Pressure-closure blockers by stratum, including equivalent calculation keys.',''])
+        for name,key,value in blockers:
+            lines.append(f"- {name}. `{key}`. {value['diagnosis']}. See `results/{value['record']}`.")
+        lines.extend(['','The pressure-only probes and nearest reclosure trials are in '
+                      '`results/MEA/screen/rebuild-441/parent-closure/pressure-refusals.json.gz`.'])
     lines.extend(['','The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. '
                   'The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at '
                   '7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.',
