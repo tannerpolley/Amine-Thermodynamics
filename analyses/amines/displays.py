@@ -1858,9 +1858,12 @@ def transfer_displays(outputs):
             vector_rows.append([rf'\hypertarget{{{anchor}}}{{{start}}}',
                                 ', '.join(rf'\num{{{q:.9g}}}' for q in physical)])
             endpoint = fit_summary['endpoint_stages'][design][start][-1]
-            stop = endpoint['termination'].split(' tolerance', 1)[0]
-            if stop in ('Function', 'Parameter'):
-                status += r'\newline ' + stop + ' tolerance'
+            if 'historical_stop' in endpoint:
+                status = endpoint['historical_stop']
+            else:
+                stop = endpoint['termination'].split(' tolerance', 1)[0]
+                if stop in ('Function', 'Parameter'):
+                    status += r'\newline ' + stop + ' tolerance'
             start_rows.append([design_label, rf'\hyperlink{{{anchor}}}{{{start}}}',  num(min(near) if near else (0 if start == 'A-loose' else None)),
                                num(attempt['initial_cost']), num(attempt['objective'], 6),
                                reduced_gibbs(gradient) if gradient is not None else '---', active or '---', status])
@@ -5782,6 +5785,10 @@ def result_values():
     add('pure-water-selected-liquid-vapor-gibbs-difference', aqueous_roots, 'pure_water.delta_G_liquid_minus_vapor_J_mol / 1000', format(aqueous_roots_data['pure_water']['delta_G_liquid_minus_vapor_J_mol']/1000, '.2f'))
     add('pure-water-selected-density-margin', aqueous_roots, 'pure_water.density_margin_mol_m3 / 1000', format(aqueous_roots_data['pure_water']['density_margin_mol_m3']/1000, '.2f'))
     add('mdea-a-iteration-limited-stage-count-methods', FIT_SUMMARY, 'endpoint_stages.MDEA.A[status=limit_reached].count', NUMBER_WORDS[sum(stage["status"]=="limit_reached" for stage in read(FIT_SUMMARY)["endpoint_stages"]["MDEA"]["A"])])
+    draw, = read(FIT_SUMMARY)["mdea_start_counts"]["evaluable"]
+    endpoint = read(FIT_SUMMARY)["endpoint_stages"]["MDEA"][draw][-1]
+    add('mdea-alternate-start-stop-methods', FIT_SUMMARY, f'endpoint_stages.MDEA.{draw}[-1].historical_stop or termination',
+        endpoint.get('historical_stop', endpoint['termination'].split('.', 1)[0].lower()))
 
     phase_summary = 'analyses/amines/results/shared/phase/display-summary.json.gz'
     phase_summary_data = read(phase_summary)

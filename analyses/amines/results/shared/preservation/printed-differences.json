@@ -55,10 +55,12 @@
     "retained": "converged\\newline Parameter tolerance",
     "staged": "converged",
     "cause": "MDEA LHS-53",
-    "classification": "Class 1, elapsed work budget changes the retained optimizer path",
-    "mechanism": "First stage and its endpoint were exact. In the 75 s continuation the first nine cost entries matched; trial 10 returned a saturation elapsed-work refusal. The continuation reached the minimum trust-region radius without a lower objective.",
-    "disposition": "The endpoint and projected gradient reproduce. The displayed termination differs from the historical termination.",
-    "common_prefix_rerun": "limit reached"
+    "classification": "Class 3, old display defect",
+    "mechanism": "At retained cost entry 17, the Merkley saturation solve for fit:125 at 0.65 mol CO2/mol MDEA exhausted its elapsed work budget. Successive refusals shrank the step and triggered the parameter-tolerance label. With the deadline removed the step was accepted and the objective fell further from 48386.50942301494 to 48386.22158304294.",
+    "disposition": "Print the historical time limit on S. Restart the attempt on W under owner decision 2, M5.",
+    "common_prefix_rerun": "limit reached",
+    "corrected_display": "time limit",
+    "additional_display": "docs/scientific/latex/sections/data_methods.tex"
   },
   {
     "display": "docs/scientific/latex/tables/supplement-fit-starts.tex",

@@ -108,6 +108,11 @@ def fit_accounting(s, attempts):
         endpoints[amine] = {label: endpoint_stages(s.fixed(f'{amine}/{label}.json.gz')) for label in fits}
     for label in ('A-continuation', 'A-descent-continuation'):
         endpoints['MDEA'][label] = endpoint_stages(s.fixed(f'MDEA/stationarity/{label}.json.gz'))
+    preservation = s.read(RESULTS / 'shared/preservation/fit-cost-budgets.json.gz')
+    diagnostic = preservation['fits']['MDEA LHS-53, common prefix']
+    stage = endpoints['MDEA']['LHS-53'][-1]
+    if preservation['wheel'] == s.wheel and stage['endpoint'] == diagnostic['retained_fingerprint']:
+        stage['historical_stop'] = preservation['mdea_path']['printed_stop']
 
     draws = s.fixed('MDEA/replacement-starts.json.gz')
     initial = attempts['MDEA']
