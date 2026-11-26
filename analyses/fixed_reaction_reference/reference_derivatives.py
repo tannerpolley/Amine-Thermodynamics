@@ -242,7 +242,7 @@ def worked_state(spec, model, thermal, observation, amine_feed):
     return derivatives(spec,model,thermal,native,result.temperature,result.pressure,amine_feed,result)
 
 
-def main(mode, designs):
+def main(mode, designs, folder='C1'):
     r.verify()
     baseline = r.read(R8)['rows']
     for design,component in FITTED.items():
@@ -280,7 +280,7 @@ def main(mode, designs):
             record.update(worked_state(spec, model, thermal, old['observation'], old['amine_feed_mol']))
         except (AttributeError,RuntimeError,ValueError,AssertionError) as error:
             record['refusal'] = f'{type(error).__name__}: {error}'
-        name = f'C1/{mode}-{design}.json.gz'
+        name = f'{folder}/{mode}-{design}.json.gz'
         if (OUT/name).exists():
             record['prior_attempt'] = r.read(OUT/name)
         put(name,dict(record,seconds=monotonic()-started))
