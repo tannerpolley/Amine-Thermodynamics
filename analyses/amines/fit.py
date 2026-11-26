@@ -26,7 +26,7 @@ def save(path, value):
     tmp.replace(path)
 
 
-def manifest(fit_set):
+def manifest(fit_set, *, preserve_evaluation_counts=()):
     wheel = verify()
     path = fit_set["retained"]
     declaration = read(path / "manifest.json.gz")
@@ -47,17 +47,28 @@ def manifest(fit_set):
         if data["wheel"] != wheel or data["manifest_fingerprint"] != manifest_id:
             raise ValueError(f"{label}: additional start does not belong to the fit manifest")
         diagnostic_starts[label] = dict(optimizer=data["optimizer_start"], controls=data["controls"])
-    start_controls = {}
+    start_controls, evaluation_counts = {}, {}
     for label in starts:
         data = read(path / f"{label}.json.gz")
-        stages = []
+        stages, counts = [], []
         while data is not None:
             if data["wheel"] != wheel or data["manifest_fingerprint"] != manifest_id or data["start"] != label:
                 raise ValueError(f"{path}: controls for {label} do not belong to the fit manifest")
             stages.append(data["controls"])
+            if label in preserve_evaluation_counts:
+                report = data["report"]
+                elapsed_refusal = any("elapsed work budget exhausted" in failure["message"]
+                                      for failure in report["failures"])
+                counts.append(dict(entries=len(report["iteration_costs"]),
+                                   converged=report["status"] == "converged" and not elapsed_refusal))
             data = data.get("previous_stage")
         start_controls[label] = stages[::-1]
-    return dict(declaration, starts=starts, diagnostic_starts=diagnostic_starts, start_controls=start_controls)
+        if counts:
+            evaluation_counts[label] = counts[::-1]
+    result = dict(declaration, starts=starts, diagnostic_starts=diagnostic_starts, start_controls=start_controls)
+    if evaluation_counts:
+        result["evaluation_counts"] = evaluation_counts
+    return result
 
 
 def route_for(fit_set):
@@ -130,6 +141,13 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
         controls = recorded[stage]
     controls = controls | dict(workers=int(os.environ["AGENT_HEAVY_CORES"]))
     controls.setdefault("maximum_elapsed_time_seconds", fit_set["maximum_seconds"])
+    counts = declaration.get("evaluation_counts", {}).get(label)
+    if counts is not None:
+        # S records the initial cost at iteration zero.
+        budget = counts[stage]
+        # A tolerance stop tests its final step before reaching the iteration limit.
+        controls.update(maximum_iterations=budget["entries"] - 1 + budget["converged"],
+                        maximum_elapsed_time_seconds=24 * 60 * 60)
     spec = route.bind(point)
     spec.spec["optimizer"] = controls
     tick = monotonic()
@@ -145,6 +163,8 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
     )
     if previous is not None:
         record["previous_stage"] = previous
+    if counts is not None:
+        record["cost_entries"] = dict(retained=budget["entries"], attained=len(report["iteration_costs"]))
     save(path, record)
     if report["physical"] and report["reactions"]:
         endpoint = route.endpoint_mapping(point, report, point["coordinates"])
@@ -175,7 +195,8 @@ def continue_fit(fit_set, declaration, label, path, record):
         stages += 1
         previous = previous["previous_stage"]
     # The reported campaigns permit two continuations at the same controls.
-    while stages < 3 and record["report"]["status"] == "limit_reached" and record.get("replay_passed"):
+    counts = declaration.get("evaluation_counts", {}).get(label)
+    while stages < (len(counts) if counts is not None else 3) and record["report"]["status"] == "limit_reached" and record.get("replay_passed"):
         record = attempt(fit_set, declaration, label, path, previous=record)
         stages += 1
     return record
