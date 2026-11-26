@@ -29,6 +29,7 @@ TABLES = LATEX / "tables"
 DEFAULT_RECORDS = ROOT / "tmp/issue-430-display-records"
 DEA_SALT_SUMMARY = "analyses/amines/results/dea/system-pressure-salt-anchored/replay/summary.json"
 MEA_EXPANDED_SUMMARY = "analyses/amines/results/mea/expanded-weights/replay/summary.json"
+GIBBS_DERIVATIVES = "analyses/amines/results/shared/properties/gibbs-derivatives.json"
 sources = {}
 stage_records = {}
 
@@ -1771,33 +1772,15 @@ def transfer_displays(outputs):
             c1_declarations[mode, design] = hashlib.sha256(
                 json.dumps(point, sort_keys=True, allow_nan=False).encode()).hexdigest()
 
-    for key, record in fixed.quantities.items():
-        if not key.startswith(('C1 fixed-at-old', 'C1 selected')):
-            continue
-        state, comparison = key[3:].rsplit(' ', 1)
-        if comparison == 'enthalpy':
-            continue
-        volume = comparison == 'volume'
-        state = state.removesuffix(' Eq.')
-        err = record['new']
-        mode = 'selected' if state.startswith('selected') else 'fixed-at-old'
-        design = state[len(mode) + 1:].split()[0].split('-')[0]
-        conditions = record['pressure_basis']
-        pressure_type = None
-        # Read both contributors for the daughter sum.
-        for source in record['new_contributors']:
-            case = read(source['path'])
-            if case.get('pressure_basis') == 'retained absolute pressure':
-                basis = 'imposed'
-            else:
-                basis = 'calculated bubble'
-            pressure_type = basis
-        state_label = (state.replace('AMP_free', 'AMP (free slope)') + r'\newline '
-                       f"{conditions['T_K']:.2f} K, {conditions['P_Pa']/1e6:.5g} MPa")
+    for row in read(GIBBS_DERIVATIVES)['rows']:
+        volume = row['comparison'] == 'volume'
+        pressure_type = 'imposed' if row['pressure_basis'] == 'retained absolute pressure' else 'calculated bubble'
+        state_label = (row['state'].replace('AMP_free', 'AMP (free slope)') + r'\newline '
+                       f"{row['temperature_K']:.2f} K, {row['pressure_Pa']/1e6:.5g} MPa")
         c1.append([state_label, pressure_type,
                    r'$\partial G^*/\partial P - V_{\mathrm{EOS}}$ (m$^3$)' if volume else r'Eq.~12 $-$ Gibbs--Helmholtz (J/mol amine)',
-                   reduced_gibbs(err['signed_error']), reduced_gibbs(err['estimated_error']),
-                   err['admitted_steps'], err['disposition']])
+                   reduced_gibbs(row['signed_error']), reduced_gibbs(row['estimated_error']),
+                   row['admitted_steps'], row['disposition']])
     table('supplement-fixed-reference-consistency', 'Gibbs-energy derivative checks at the named states and fixed 100 kPa reaction reference.',
           ['State', 'Pressure type', 'Comparison', 'Discrepancy', 'Error estimate', 'Steps', 'Disposition'],
           c1, [.22,.105,.197,.106,.11,.055,.149], long=True, size=r'\footnotesize',

@@ -1,13 +1,67 @@
 """Derivative and property readbacks at one declared endpoint."""
 
 import copy
+import json
 from types import SimpleNamespace
 
 import numpy as np
 from epcsaft import regression as reg
+from MEA.common.retained_results import read
 from MEA.solvent_specification import conditional_information, deviation_statistics
 
-from .wheel import verify
+from .wheel import ROOT, verify
+
+
+def write_gibbs_derivative_summary():
+    wheel = verify()
+    folder = ROOT / "analyses/fixed_reaction_reference/results/C1"
+    paths = {path.name.removesuffix(".json.gz"): path
+             for base in (folder, folder / "rebuild-441") for path in base.glob("*.json.gz")}
+    records = {name: read(path) for name, path in sorted(paths.items(), key=lambda item: item[1].name)}
+    if any(record["wheel"] != wheel for record in records.values()):
+        raise ValueError("Gibbs derivative record uses another wheel")
+
+    rows = []
+
+    def summarize(name, inputs, comparison, admitted_field, discrepancy, arithmetic):
+        record = records[inputs[0]]
+        matching = ("T_K", "P_Pa", "endpoint_fingerprint", "apparent_amine_feed_mol")
+        if any(records[key][field] != record[field] for key in inputs for field in matching):
+            raise ValueError(f"Different conditions for the daughter inventories of {name}")
+        candidates = []
+        for steps in zip(*(records[key]["steps"] for key in inputs), strict=True):
+            if all(discrepancy in step for step in steps):
+                candidates.append((sum(step[discrepancy] for step in steps),
+                                   sum(step[arithmetic] for step in steps),
+                                   all(step.get(admitted_field) for step in steps)))
+        admitted = [candidate for candidate in candidates if candidate[2]]
+        used = admitted or (candidates if len(inputs) == 1 else [])
+        if not used:
+            return
+        delta, arithmetic_error, _ = used[-1]
+        span = max(step[0] for step in used) - min(step[0] for step in used)
+        error = arithmetic_error + span
+        scale = 1 if comparison == "volume" else record["apparent_amine_feed_mol"]
+        rows.append(dict(
+            state=name, comparison=comparison, temperature_K=record["T_K"], pressure_Pa=record["P_Pa"],
+            pressure_basis=record.get("pressure_basis"),
+            signed_error=delta / scale, estimated_error=error / scale, admitted_steps=len(admitted),
+            disposition=("agreement within numerical error"
+                         if len(admitted) >= 2 and abs(delta) <= error else "undecided"),
+            records=[paths[key].relative_to(ROOT).as_posix() for key in inputs],
+        ))
+
+    states = [(name, [name]) for name, record in records.items() if record.get("steps")]
+    states.extend((f"{mode} MDEA daughter-inventory sum", [f"{mode}-MDEA-daughter-{i}" for i in (1, 2)])
+                  for mode in ("fixed-at-old", "selected"))
+    for state, inputs in states:
+        summarize(state, inputs, "volume", "volume_admitted",
+                  "signed_volume_error_m3", "volume_arithmetic_error_m3")
+        summarize(state, inputs, "Eq. 12", "enthalpy_admitted",
+                  "eq12_minus_Gibbs_Helmholtz_J", "caloric_arithmetic_error_J")
+    path = ROOT / "analyses/amines/results/shared/properties/gibbs-derivatives.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(dict(wheel=wheel, rows=rows), indent=2) + "\n")
 
 
 def endpoint_diagnostics(spec, fit_replay, point, controls):
