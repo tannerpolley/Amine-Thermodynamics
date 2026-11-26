@@ -128,16 +128,22 @@ def render_mdea_stage2(result):
     quantities = result['quantities']
     measured, controls, grid = [quantities['Stage 2 MDEA '+name]['new']
                                 for name in ('measured','fixed-pressure controls','grid domain')]
+    comparisons = measured['bubble_comparisons']
+    exceptions = [key for key,q in sorted(comparisons.items()) if not q['below']]
+    bubble_summary = ('The qualified model bubble pressure exceeds the imposed pressure in every comparison.'
+                      if not exceptions else
+                      'The qualified model bubble pressure exceeds the imposed pressure in '
+                      f'{len(comparisons)-len(exceptions)} of {len(comparisons)} comparisons. The exceptions are '
+                      + ', '.join(f'`{key}`' for key in exceptions) + '.')
     lines = ['---', 'title: MDEA phase searches at the slope-bound endpoint', '---', '',
              'The measured searches found 80 descents across 27 distinct feeds and no descent in 1,484 '
              'finite searches. Liquid plus a vapor-connected phase lowers Gibbs energy at all 27 feeds. '
-             'The qualified model bubble pressure exceeds the imposed pressure in every comparison. '
-             'The search outcomes are model predictions at the declared conditions. The paired errors '
+             + bubble_summary + ' The search outcomes are model predictions at the declared conditions. The paired errors '
              'estimate numerical uncertainty in the Gibbs difference. Independent review and manuscript '
              'promotion are pending.', '',
              '| Search | Imposed pressure (MPa) | Model bubble (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
              '|---|---:|---:|---:|---:|']
-    for key,q in sorted(measured['bubble_comparisons'].items()):
+    for key,q in sorted(comparisons.items()):
         lines.append(f"| {key} | {q['imposed_Pa']/1e6:.7g} | {q['bubble_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
     lines.extend(['', '| Control | Temperature (K) | Pressure (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
                   '|---|---:|---:|---:|---:|'])
@@ -148,14 +154,16 @@ def render_mdea_stage2(result):
                   f"5.0367 MPa bubble-pressure interval and {d['outside']:,} searches at or above a retained cutoff."])
     if grid.get('paths_completed') is not None:
         lines += [f"{grid['paths_completed']} paths completed, including {grid['cold_starts']} accepted cold starts "
-                  f"after warm-start failures. The cutoff evidence covers all {grid['historical_unreached_excluded']} "
-                  'historically unreached loadings.', '']
+                  f"after warm-start failures. The cutoff evidence covers {grid['historical_unreached_excluded']} "
+                  'of the 14 historically unreached loadings.', '']
         if counts := grid.get('inside_counts'):
             lines += [f"{counts.get('no descent in the finite search',0):,} in-domain searches completed with no "
                       f"descent. The one open in-domain Engine item remains recorded. "
-                      f"Outside the interval the historical screen retained "
-                      f"{grid['outside_searches']['archived_finite_negatives']:,} finite negatives and "
-                      f"{grid['outside_searches']['not_searched_to_completion']:,} incomplete searches.", '']
+                      f"Outside the interval the historical screen recorded no descent for "
+                      f"{grid['historical_outside_outcomes'].get('no descent',0):,} searches and "
+                      f"{grid['historical_outside_outcomes'].get('not completed',0):,} were incomplete.", '']
+        if unassigned := d.get('unassigned'):
+            lines += [f"{unassigned:,} grid searches have unassigned domain membership after the branch-connection check.", '']
         else:
             lines += ['The grid phase counts are held. See the retained handoff for the exact blockers.', '']
     else:

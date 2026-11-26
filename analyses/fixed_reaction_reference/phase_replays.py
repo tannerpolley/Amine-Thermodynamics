@@ -35,6 +35,7 @@ def check_cold_point(point, previous, stock, temperature, loading, tolerance):
     assert point['phase_kinds']==['Liquid','Vapor'], 'cold bubble root labels'
     assert phase_closure(point,P,tolerance,temperature=temperature), 'cold bubble scaled closure'
     liquid, vapor = point['phases']
+    assert liquid['T_K']==vapor['T_K']==temperature, 'cold bubble phase temperature'
     assert liquid['amount_mol']>0 and vapor['amount_mol']==0, 'cold bubble incipient amount'
     assert any(r['returned']=='liquid' for r in cd.matched(
         point['liquid_roots'],tolerance,liquid['density_mol_m3'],T=temperature,P=P)), 'cold bubble liquid root'
@@ -74,6 +75,8 @@ def reverse_bubble(solve, spec, bubble, previous, cold, seed):
             record['pressure_Pa'] = result.pressure
             last, seed = loading, result
         else:
+            if 'third directional energy contraction unavailable: nonfinite' in record['message']:
+                record['engine_issue'] = 'tannerpolley/epcsaft#275'
             step /= 2
             if step<1e-3:
                 stop = record['message']
@@ -88,8 +91,7 @@ def reverse_bubble(solve, spec, bubble, previous, cold, seed):
         except AssertionError as error:
             stop = str(error)
     return dict(attempts=attempts,returned=returned,errors=errors,stop=stop,
-                engine_issue='tannerpolley/epcsaft#275' if stop and
-                'third directional energy contraction unavailable: nonfinite' in stop else None,
+                engine_issue=attempts[-1].get('engine_issue') if stop else None,
                 seconds=monotonic()-started)
 
 
