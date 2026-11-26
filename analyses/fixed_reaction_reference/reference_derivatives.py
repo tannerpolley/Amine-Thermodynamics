@@ -47,7 +47,7 @@ def anchored_offsets(anchor_model, thermal, declaration, T, unanchored):
 def pressure_reclosure(model, declaration, T, P, rho, x, b, state):
     """Read the same dense root at neighboring representable densities."""
     if (state.pressure_density_derivative<=0 or abs(state.pressure/P-1)<=declaration.row_tolerance
-            or min(x)<=0):
+            or min(x)<0):
         return rho,state,None
     target = rho+(P-state.pressure)/state.pressure_density_derivative
     candidates = {rho,target}
@@ -57,22 +57,29 @@ def pressure_reclosure(model, declaration, T, P, rho, x, b, state):
             for _ in range(8):
                 density = float(np.nextafter(density,direction))
                 candidates.add(density)
-    nu = np.array([q.stoichiometry for q in declaration.reactions])
+    x = np.asarray(x)
+    present = x>0
+    nu = np.asarray([q.stoichiometry for q in declaration.reactions]).reshape(-1,len(x))
+    active = np.flatnonzero(~np.any(nu[:,~present]!=0,axis=1))
+    on_support = nu[active][:,present]
     tested = []
     accepted = []
     for density in sorted(candidates):
         value = model.state(T,rho=density,x=x)
         pressure_error = value.pressure/P-1
-        affinity = nu @ (np.log(np.asarray(x)*density)+value.residual_chemical_potential_over_rt+b)
+        affinity = (on_support @ (np.log(x[present]*density)
+                                  + np.asarray(value.residual_chemical_potential_over_rt)[present]
+                                  + np.asarray(b)[present])) if active.size else []
         evidence = dict(density_mol_m3=density,relative_pressure_error=pressure_error,
-                        max_affinity_over_RT=float(np.max(np.abs(affinity))))
+                        max_affinity_over_RT=float(np.max(np.abs(affinity),initial=0.)))
         tested.append(evidence)
         if (value.pressure_density_derivative>0 and evidence['max_affinity_over_RT']<=declaration.row_tolerance
                 and abs(pressure_error)<=declaration.row_tolerance):
             accepted.append((abs(pressure_error),density,value))
     best = min(accepted,key=lambda q:q[0],default=None)
     evidence = dict(native_density_mol_m3=rho,newton_density_mol_m3=target,
-                    accepted_density_mol_m3=best[1] if best else None,tested=tested)
+                    accepted_density_mol_m3=best[1] if best else None,tested=tested,
+                    active_reaction_indices=active.tolist())
     return (best[1],best[2],evidence) if best else (rho,state,evidence)
 
 

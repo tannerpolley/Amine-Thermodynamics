@@ -1383,6 +1383,17 @@ class Quantities:
         measured = self.read(inventory)
         if not measured:
             return
+        closure_root = screen+'parent-closure/'
+        scan_path = closure_root+'pressure-scan.json.gz'
+        replay_path = closure_root+'pressure-replays.json.gz'
+        scans = self.read(scan_path)
+        replays = self.read(replay_path)
+        assert scans['wheel']==replays['wheel']==r.SHA and scans['radius_ULP']>=200
+        fields = ('best_abs_relative_pressure_error','analytic_step_per_ULP','local_fit_scatter_RMS',
+                  'adjacent_sign_changes_ULP','passing_offsets_ULP','minimum_in_prior_window')
+        self.quantity('Stage 1 pressure closure diagnosis',None,
+            {key:{step:{k:scan[k] for k in fields} for step,scan in value['scans'].items()}
+             for key,value in scans['records'].items()},sources=(scan_path,replay_path),population=len(scans['records']))
 
         def record(name, rows, paths, **evidence):
             assert all(self.read(path) is not None for path in paths), paths
@@ -1394,7 +1405,7 @@ class Quantities:
                 disposition='undecided' if blockers else None)
 
         def parent_rows(name):
-            root = screen+'parent-closure/'+name+'/'
+            root = closure_root+name+'/'
             index = root+'inventory.json.gz'
             data = self.read(index)
             source = data['source']
@@ -1408,6 +1419,9 @@ class Quantities:
             pilot = self.read(start)
             assert pilot['requested']==len(data['keys']) and data['seconds']<=1.5*pilot['projected_seconds']
             result,paths,closure = {},[index,start],{}
+            replay = replays['searches'].get(name)
+            if replay:
+                paths.append(replay_path)
             for i in range(data['batches']):
                 path = root+f'{i}.json.gz'
                 paths.append(path)
@@ -1417,6 +1431,19 @@ class Quantities:
                 for q in batch['rows']:
                     key = q['key']
                     assert key not in result and q['wheel']==r.SHA
+                    if replay and replay['source']==path and replay['row']['key']==key:
+                        assert q.get('blocker') and replay['source_sha256']==self.files[path][1]
+                        assert all(replay[k]==data[k] for k in ('endpoint_fingerprint','bank_fingerprint'))
+                        assert all(replay['row'][k]==q[k] for k in ('wheel','T_K','P_Pa'))
+                        original = q
+                        q = replay['row']
+                        if key=='hartono-2013-P:0:problem':
+                            p, = q['parent']['phases']
+                            h2 = p['pressure_reclosure']
+                            assert not q.get('blocker') and not q.get('restart')
+                            assert p['x']==original['initial_parent']['phases'][0]['x'] and min(p['x'])==0.
+                            assert h2['accepted_density_mol_m3']==p['density_mol_m3'] and not h2['active_reaction_indices']
+                            assert f"{p['pressure_residual_Pa']/q['P_Pa']:.3g}"=='-1.6e-11', f'{key}: reclosure on present support'
                     stratum = key.split('|')[0] if name=='MEA/grid' else name
                     tally = closure.setdefault(stratum,Counter())
                     phases = q.get('initial_parent',q.get('parent',{})).get('phases',[])
@@ -1432,9 +1459,21 @@ class Quantities:
                         assert tuple(f'{v:.3g}' for v in relative)==('5.72e-09','-7.75e-12'), f'{key}: reclosure pin'
                     if q.get('blocker'):
                         tally['still_missing'] += 1
-                        phase = max(q['parent']['phases'],key=lambda p:abs(p['pressure_residual_Pa']))
-                        residual = phase['pressure_residual_Pa']/q['P_Pa']
-                        result[key] = dict(blocker=dict(record=path,diagnosis=f"{q['blocker']}. Final relative residual {residual:+.5g}"))
+                        evidence = scans['records'][key]
+                        source = evidence['source']
+                        self.read(source)
+                        assert self.files[source][1]==evidence['source_sha256']
+                        for step,s in evidence['scans'].items():
+                            p, = q[step]['phases']
+                            assert s['P_Pa']==q['P_Pa'] and s['T_K']==q['T_K']
+                            assert s['x']==p['x'] and s['native_density_mol_m3']==p.get('original_density_mol_m3',p['density_mol_m3'])
+                            assert s['adjacent_sign_changes_ULP'] and s['best_abs_relative_pressure_error']>s['tolerance']
+                        paths.append(scan_path)
+                        if source!=path:
+                            paths.append(source)
+                        gap = min(s['best_abs_relative_pressure_error'] for s in evidence['scans'].values())
+                        result[key] = dict(blocker=dict(record=path,diagnosis=f'Adjacent densities bracket pressure. '
+                            f'Closest relative residual magnitude in the scans was {gap:.3g}',scan=scan_path))
                         continue
                     declared = len(bank.get(key,[])) if isinstance(bank,dict) else len(bank)
                     assert q.get('bank_size')==declared, f'{key}: supplied trial bank size'

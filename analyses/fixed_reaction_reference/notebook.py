@@ -109,8 +109,22 @@ def stage1_phases(quantities):
         lines.extend(['','Pressure-closure blockers by stratum, including equivalent calculation keys.',''])
         for name,key,value in blockers:
             lines.append(f"- {name}. `{key}`. {value['diagnosis']}. See `results/{value['record']}`.")
-        lines.extend(['','The pressure-only probes and nearest reclosure trials are in '
-                      '`results/MEA/screen/rebuild-441/parent-closure/pressure-refusals.json.gz`.'])
+    diagnosis = quantities['Stage 1 pressure closure diagnosis']['new']
+    lines.extend(['','The pressure scans evaluated 401 consecutive densities around each Newton density '
+                  'at the original and restarted compositions. Repeated reads and the derived-property '
+                  'route agreed at the sampled densities.',
+                  '', '| Parent | Minimum relative error magnitude, original / restart | Relative step per density ULP | RMS scatter, original / restart |',
+                  '|---|---:|---:|---:|'])
+    for key,scans in diagnosis.items():
+        before,after = (scans[k] for k in ('initial_parent','parent'))
+        lines.append(f"| `{key.replace('|', '&#124;')}` | {before['best_abs_relative_pressure_error']:.3g} / "
+                     f"{after['best_abs_relative_pressure_error']:.3g} | {before['analytic_step_per_ULP']:.3g} | "
+                     f"{before['local_fit_scatter_RMS']:.3g} / {after['local_fit_scatter_RMS']:.3g} |")
+    lines.extend(['','For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target '
+                  'pressure and the closest scan points still miss the pressure limit. For Hartono, the '
+                  'original search window contains a qualifying density. None of the declared reactions are '
+                  'on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 '
+                  'and both trial protocols completed without descent.'])
     lines.extend(['','The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. '
                   'The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at '
                   '7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.',

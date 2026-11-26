@@ -30,16 +30,18 @@ def physical(spec, problem, result, *, reclose=True, compiled=None, standard=Non
     T, P = result.temperature, result.pressure
     rows = [phase(spec.model, T, P, n, rho, result.phase_mole_fractions(i), formulas)
             for i, (n, rho) in enumerate(zip(result.amounts, result.molar_densities, strict=True))]
-    if reclose and any(abs(r['pressure_residual_Pa'])/P > problem.row_tolerance and min(r['x']) > 0 for r in rows):
+    phases = problem.phases
+    candidates = [r for i,r in enumerate(rows)
+                  if reclose and abs(r['pressure_residual_Pa'])/P>problem.row_tolerance
+                  and (min(r['x'])>0 or (len(phases)==len(rows) and phases[i].kind.name=='Liquid'))]
+    if candidates:
         from fixed_reaction_reference.reference_derivatives import pressure_reclosure
 
         if standard is None:
             if compiled is None:
                 compiled = eq.compile_problem(spec.model, problem)
             standard = eq.stability_test(compiled, result).standard_over_rt
-        for row in rows:
-            if abs(row['pressure_residual_Pa'])/P <= problem.row_tolerance or min(row['x']) <= 0:
-                continue
+        for row in candidates:
             x, rho = row['x'], row['density_mol_m3']
             new_rho, state, evidence = pressure_reclosure(
                 spec.model, problem, T, P, rho, x, standard, spec.model.state(T, rho=rho, x=x))
