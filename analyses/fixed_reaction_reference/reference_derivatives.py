@@ -5,7 +5,10 @@ from math import fsum, log
 import sys
 from time import monotonic
 
-from refit import OUT, P_REF, configured, epcsaft, eq, fingerprint, np, put, r, reg
+if __package__:
+    from .refit import OUT, P_REF, configured, epcsaft, eq, fingerprint, np, put, r, reg
+else:
+    from refit import OUT, P_REF, configured, epcsaft, eq, fingerprint, np, put, r, reg
 from classify_descents import DENSITY_WINDOW, ERROR_TERMS, matched, pressure_roots
 from mdea_reference import seed_state
 from phases import physical

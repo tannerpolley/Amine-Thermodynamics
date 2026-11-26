@@ -21,7 +21,7 @@ def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
             evidence = None
             if (declaration is not None and returned=='liquid' and
                     abs(math.log(density/rho))<=DENSITY_WINDOW and abs(original)>declaration.row_tolerance):
-                from reference_derivatives import pressure_reclosure
+                from fixed_reaction_reference.reference_derivatives import pressure_reclosure
 
                 density,state,evidence = pressure_reclosure(model,declaration,T,P,density,x,standard,state)
             checks.append(dict(requested=branch, returned=returned, density=density,
@@ -89,7 +89,7 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
 
 
 def classify(route, point, rows, states):
-    from phases import liquid_vapor, physical
+    from round_3.phases import liquid_vapor, physical
 
     spec = route.bind(point)
     by_key = {s['key']:s for s in states}

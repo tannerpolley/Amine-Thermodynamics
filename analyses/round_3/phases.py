@@ -4,7 +4,7 @@ import math
 import sys
 from time import monotonic
 
-from recall import DECLARATION, ENDPOINTS
+from round_3.recall import DECLARATION, ENDPOINTS
 from part_ii import ROOT, Route, calculation_declaration, deviation_statistics, eq, jsonable, reg, stable
 from reference_states_428 import amp, balances, identity, phase, phase_passed
 from r4_shift_tables_426 import available_prediction, temperature_band
@@ -30,7 +30,7 @@ def physical(spec, problem, result, *, reclose=True, compiled=None):
     rows = [phase(spec.model, T, P, n, rho, result.phase_mole_fractions(i), formulas)
             for i, (n, rho) in enumerate(zip(result.amounts, result.molar_densities, strict=True))]
     if reclose and any(abs(r['pressure_residual_Pa'])/P > problem.row_tolerance and min(r['x']) > 0 for r in rows):
-        from reference_derivatives import pressure_reclosure
+        from fixed_reaction_reference.reference_derivatives import pressure_reclosure
 
         if compiled is None:
             compiled = eq.compile_problem(spec.model, problem)
