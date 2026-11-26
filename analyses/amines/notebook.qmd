@@ -88,10 +88,28 @@ The 351 MEA, 56 AMP and 307 MDEA assessment rows retained their identities
 and availability, with the same refusal causes. A was selected in all three
 cases. The
 [printed comparison](results/shared/preservation/printed-differences.json)
-identifies every changed cell or value with its record and key. With the
-alternate results in place, the display check flagged the two supplement
-tables and the bound gradient in results.tex. The elapsed-work differences
-have no disposition in the three classes of §6 and remain open. In the
+identifies every changed cell or value in the elapsed-limit run. These were
+Class 1 differences. The subsequent [cost-entry comparison](results/shared/preservation/fit-cost-budgets.json.gz)
+reproduced the MEA fingerprint in 93 cost entries and the free-slope AMP
+fingerprint in two stages of 55 and 24 entries. The two reruns recovered the
+original projected gradients and assessments exactly and took 253.00 s and
+176.07 s.
+
+Removing the 75 s limit from the MDEA continuation matched the first 16 of
+its 23 retained cost entries. The 17th entry in the retained history refused
+the Merkley saturation search after its elapsed work budget ran out. The
+trace first records the exhausted deadline at 0.65 mol CO2 per mol MDEA
+for `fit:125`. The count-budgeted run accepted that iteration at
+`48386.2670314497` and ended at objective `48386.22158304294` after 643.15 s
+including the first stage. A diagnostic rerun from the exact first-stage
+endpoint stopped at the end of the 16-entry common prefix in 173.45 s,
+recovering the retained objective `48386.50942301494`, fingerprint,
+projected gradient and all 307 assessment predictions exactly. The only
+difference in the display check with the common-prefix record is the
+stop label in the LHS-53 outcome cell. The retained run reported parameter
+tolerance after the elapsed-budget refusals. The diagnostic run records an
+iteration limit. Preserving the printed stop is a separate decision from
+preserving the numerical endpoint. In the
 separate MDEA descent continuation, the objective changed from
 15.609312497421323 to 15.609312502021526. Both print as 15.60931 and the
 comparison changed no printed cell. The 13 bounded descent probes and
@@ -116,24 +134,35 @@ and all 137 hull cases matched their retained records. At 288.71 K and
 −0.1328280448913574 ≤ k ≤ −0.13282737731933592. The 64 regenerated draws
 reproduced all 17,984 census statuses, with 17,363 available rows,
 612 central-solve refusals and nine action refusals. The census took 741.17 s.
-The independent tight-tolerance probe on fit:0 remains open. With the
+The independent tight-tolerance probe used `fit:0`. With the
 declared tolerance of 10⁻¹⁰, the solve attained 7.11 × 10⁻¹⁴.
 At the tighter request of 4.44 × 10⁻¹⁵, S returned CentralSolveUnavailable
 at the 200-iteration work limit with residual 1.11. A second probe made
 63 tighter requests across 21 retained rows. It yielded 53 available
 predictions that met the tighter tolerances, nine central-solve refusals and
-one action refusal. The intended ToleranceNotMet branch remains unexercised.
+one action refusal. Holding the admitted solve fixed and lowering the
+requested tolerance to the next representable value below its attained
+residual changed the census classification from Available to
+ToleranceNotMet. This was a classification check on the held response.
 
-The MDEA state comparison:157:problem at 293.15 K and 0.5 MPa reproduced
-the unavailable optimized result. Its retained supplied trial has
-TPD/RT = −0.971882 and records a descent. The package search currently omits
-the supplied trial. The separate MEA measured searches and 162-state census,
-split confirmations, and complete property and derivative regeneration also
-remain open. The MEA restriction search and the Cai-weighting control retain
-search tallies but lack the per-state Engine responses needed for
-reclassification. Their request identity comparisons remain open. These
-checks establish numerical reproduction for the listed populations.
-Preservation Check 2 remains open.
+The MDEA state `comparison:157:problem` at 293.15 K and 0.5 MPa
+reproduced the unavailable optimized result and the supplied trial's
+dimensionless TPD/RT of −0.9718818375750402. The trial evaluated an
+existing composition on a separately solved liquid parent. The DEA
+screen recovered six classification outcomes, including six confirmed
+splits in the rebuilt screen. All 20 fixed-pressure DEA, AMP and MDEA
+controls retained their classifications. These are numerical
+comparisons of the declared model states.
+
+The 14 C1 Gibbs-derivative records reproduced their displayed quantities
+using the procedures that originally generated them. A first staged run
+with the later scaled pressure-closure gate changed step admission in
+six records. The preservation comparison restored the original
+pressure basis and the reclosure procedures for the rebuilt MEA and DEA
+cases. The comparison used the direct pressure gate for the two AMP
+records. The display check over the regenerated derivative summary,
+alternate assessments and MEA and AMP fits reproduced 55 tables and
+16 figures in 23.44 s with the retained MDEA stop shown.
 
 ## Retained endpoints at the system pressure
 
