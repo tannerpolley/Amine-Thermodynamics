@@ -131,7 +131,7 @@ def states(route, spec):
     return list({r["key"]: r for r in states}.values())
 
 
-def stability_row(route, spec, state, scale, *, metadata=None):
+def stability_row(route, spec, state, scale, *, metadata=None, cap_from_prediction=False):
     if isinstance(route, MEARoute):
         return route.stability_row(spec, state, scale)
     if "cap_record" in state:
@@ -142,7 +142,18 @@ def stability_row(route, spec, state, scale, *, metadata=None):
             if r["identity"] == state["cap_record"]
         )
         parent = copy.copy(spec.problems[record["initial"]])
-        evidence = capped_feed(spec, record, parent)
+        if cap_from_prediction:
+            prediction = reg.predict(spec.model, spec.observation(record))
+            if prediction.status.name != "Available":
+                raise ValueError(prediction.message)
+            args = record["arguments"]
+            parent.feed = eq.Amounts({
+                c: parent.feed.values.get(c, 0.0) + prediction.endpoint_loading * args["basis_amount"] * args["feed"].get(c, 0.0)
+                for c in spec.parameters.component_ids
+            })
+            evidence = dict(loading=prediction.endpoint_loading)
+        else:
+            evidence = capped_feed(spec, record, parent)
         if metadata is not None:
             metadata["capped_feed"] = evidence
         bubble = None
@@ -258,9 +269,10 @@ def same_calculations(route, point, states):
 class SuppliedTrials:
     """Evaluate retained trial compositions on the current liquid parent."""
 
-    def __init__(self, spec, witnesses):
+    def __init__(self, spec, witnesses, *, compiled_support=True):
         self.spec = spec
         self.witnesses = witnesses
+        self.compiled_support = compiled_support
         self.by_support = {}
         self.prepared = None
 
@@ -281,10 +293,19 @@ class SuppliedTrials:
             phases.append(phase)
         return phases, repeated, tuple(unique)
 
+    def support(self, item):
+        spec = self.spec
+        if self.compiled_support:
+            compiled = eq.compile_problem(spec.model, item.problem)
+            return frozenset(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
+        # The earlier screens offered all species present in the feed or reactions.
+        return frozenset(i for i, amount in enumerate(item.problem.feed.values) if amount > 0) | frozenset(
+            i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value
+        )
+
     def evaluate(self, item, prediction, key):
         spec = self.spec
-        compiled = eq.compile_problem(spec.model, item.problem)
-        support = frozenset(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
+        support = self.support(item)
         if isinstance(self.witnesses, dict):
             witnesses = self.witnesses.get(key, ())
             phases, repeated, identities = self.applicable(item, witnesses, support)
@@ -335,11 +356,11 @@ class SuppliedTrials:
         return details
 
 
-def native_search(route, spec, state, *, supplied=None):
+def native_search(route, spec, state, *, supplied=None, cap_from_prediction=False):
     wheel = verify()
     metadata = {}
     try:
-        item = stability_row(route, spec, state, 1.0, metadata=metadata)
+        item = stability_row(route, spec, state, 1.0, metadata=metadata, cap_from_prediction=cap_from_prediction)
         prediction = reg.predict(spec.model, item)
         search = stability_payload(prediction)
         if prediction.stability is not None:
