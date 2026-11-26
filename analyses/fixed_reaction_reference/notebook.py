@@ -124,6 +124,35 @@ def stage1_phases(quantities):
     return lines
 
 
+def render_mdea_stage2(result):
+    quantities = result['quantities']
+    measured, controls, grid = [quantities['Stage 2 MDEA '+name]['new']
+                                for name in ('measured','fixed-pressure controls','grid domain')]
+    lines = ['---', 'title: MDEA phase searches at the slope-bound endpoint', '---', '',
+             'The measured searches found 80 descents across 27 distinct feeds and no descent in 1,484 '
+             'finite searches. Liquid plus a vapor-connected phase lowers Gibbs energy at all 27 feeds. '
+             'The qualified model bubble pressure exceeds the imposed pressure in every comparison. '
+             'The search outcomes are model predictions at the declared conditions. The paired errors '
+             'estimate numerical uncertainty in the Gibbs difference. Independent review and manuscript '
+             'promotion are pending.', '',
+             '| Search | Imposed pressure (MPa) | Model bubble (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+             '|---|---:|---:|---:|---:|']
+    for key,q in sorted(measured['bubble_comparisons'].items()):
+        lines.append(f"| {key} | {q['imposed_Pa']/1e6:.7g} | {q['bubble_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
+    lines.extend(['', '| Control | Temperature (K) | Pressure (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+                  '|---|---:|---:|---:|---:|'])
+    for key,q in sorted(controls['rows'].items()):
+        lines.append(f"| {key} | {q['T_K']} | {q['P_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
+    d = grid['domain_counts']
+    lines.extend(['', f"The march established domain membership for {d['inside']:,} searches inside the "
+                  f"5.0367 MPa bubble-pressure interval and {d['outside']:,} searches above a retained cutoff. "
+                  f"The warm start from the lowest loading failed on {len(grid['march_blockers'])} paths, "
+                  f"leaving {d['unreached']:,} grid searches without membership. The grid outcome counts are held.", '',
+                  '[Retained handoff](handoff.json) · [March](domain-march.json.gz) · '
+                  '[Grid inventory](grid-inventory.json.gz) · [Warm-start diagnostic](domain-diagnosis.json.gz)', ''])
+    return '\n'.join(lines)
+
+
 def render(result):
     q = result['quantities']
     lines = [r"""---

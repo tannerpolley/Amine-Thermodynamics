@@ -1,11 +1,11 @@
 """Replay the retained phase controls and release search populations."""
 # ruff: noqa: E402
 from collections import Counter, defaultdict
-from functools import partial
+import os
 import sys
 from time import monotonic
 from concurrent.futures import ProcessPoolExecutor
-from functools import cache
+from functools import cache, partial
 from hashlib import sha256
 from types import SimpleNamespace
 
@@ -332,8 +332,8 @@ def _screen_parents(args):
                 center = None
             center = trial_parent(spec,p,P,out,center=center)
             if not census and 'parent' in old:
-                assert center.molar_densities==[old['parent']['rho']]
-                assert list(center.phase_mole_fractions(0))==old['parent']['x']
+                consumed = out.get('initial_parent',out['parent'])['phases'][0]
+                assert consumed['density_mol_m3']==old['parent']['rho'] and list(consumed['x'])==old['parent']['x']
             compiled = eq.compile_problem(spec.model,p)
             out.update(P_Pa=P,T_K=center.temperature,parent_kinds=[q.kind.name for q in p.phases])
             witnesses = bank.get(key,[]) if isinstance(bank,dict) else bank
@@ -492,7 +492,7 @@ if __name__=='__main__':
         assert declaration['wheel']==SHA and 'rebuild-441' in folder.split('/')
         run = MDEAWeights(declaration_path,WORK/folder,fixed_reference_pressure_pa=declaration['reaction_reference_pressure_Pa'],
                           wheel=WHEEL,wheel_sha256=SHA)
-        run.workers = min(8,len(__import__('os').sched_getaffinity(0)))
+        run.workers = min(8,len(os.sched_getaffinity(0)))
         trial_set = r.read(bank_path)
         mdea_rebuild(run,declaration['point'],trial_set['trials']+trial_set.get('supplied_trials',[]),
                      r.read(screen_path),modes=modes,folder=folder)
