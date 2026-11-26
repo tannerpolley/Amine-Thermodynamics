@@ -6,6 +6,7 @@ from time import monotonic
 from concurrent.futures import ProcessPoolExecutor
 from functools import cache
 from hashlib import sha256
+from math import inf, log, nextafter
 from types import SimpleNamespace
 
 from refit import OUT, WORK, P_REF, ROUND7, configured, fingerprint, put, r
@@ -13,7 +14,7 @@ from calculations import MDEA, Route, transfer
 from mdea_reference import seed_state, predicates
 from phases import fixed
 from receivers import AMP, DEA
-from part_ii import eq
+from part_ii import epcsaft, eq
 from round_3.phases import physical, trials
 from round_8.records import Sources
 from round_8.reductions import phase_outcome
@@ -272,6 +273,47 @@ def _screen_parents(name, selected):
                         abs(a-b)<=p.row_tolerance for i,phase in enumerate(out['parent']['phases'])
                         for a,b in zip(center.phase_mole_fractions(i),phase['x'],strict=True)):
                         raise ValueError(f'Native census replay differs from retained parent: {center.message}')
+                bracketed = [(phase,row) for phase,row in zip(p.phases,out['parent']['phases'],strict=True)
+                             if 'bracketed' in (row.get('pressure_reclosure') or {})]
+                if bracketed:
+                    start = eq.EquilibriumStart()
+                    coordinates = list(center.coordinates)
+                    labels = compiled.coordinate_labels()
+                    out['bracketed_trial_start'] = {}
+                    columns = []
+                    for phase,row in bracketed:
+                        rho = row['density_mol_m3']
+                        eta = rho*spec.model._model.packing_fraction_coefficient(center.temperature,row['x'])
+                        column = labels.index(f'ln eta[{phase.name}]')
+                        coordinates[column] = log(eta)
+                        columns.append(column)
+                        out['bracketed_trial_start'][phase.name] = rho
+                    expected = [row['density_mol_m3'] for _,row in bracketed]
+                    indices = [i for i,phase in enumerate(p.phases) if phase.name in out['bracketed_trial_start']]
+                    out['bracketed_trial_encodings'] = []
+                    # Log packing can round to a neighboring density in the native result.
+                    offsets = (0,1,-1,2,-2,3,-3,4,-4) if len(columns)==1 else (0,)
+                    for offset in offsets:
+                        seed = list(coordinates)
+                        if offset:
+                            col, = columns
+                            seed[col] = nextafter(coordinates[col],inf if offset>0 else -inf,steps=abs(offset))
+                        start.coordinates = seed
+                        seeded = epcsaft._core.solve_equilibrium_starts(spec.model._model,p,[start],
+                            eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
+                        center, = seeded.results
+                        densities = [center.molar_densities[i] for i in indices] if center is not None else []
+                        out['bracketed_trial_encodings'].append(dict(offset_ULP=offset,densities_mol_m3=densities,
+                                                                    message=seeded.causes[0]))
+                        if center is not None and center.requested_tolerance_met and densities==expected:
+                            break
+                    else:
+                        raise ValueError('Native equilibrium solve did not retain the selected bracketed density')
+                    out['trial_parent_composition_max_difference'] = max(
+                        abs(a-b) for i,phase in enumerate(out['parent']['phases'])
+                        for a,b in zip(center.phase_mole_fractions(i),phase['x'],strict=True))
+                    if out['trial_parent_composition_max_difference']>p.row_tolerance:
+                        raise ValueError('Native bracketed-root replay changed the parent composition')
                 out['trial_parent_densities_mol_m3'] = list(center.molar_densities)
                 report = eq.stability_test(compiled,center,options)
                 out.update(native_completed=report.completed,native_message=report.message,native_trials=trials(report))

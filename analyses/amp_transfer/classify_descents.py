@@ -27,6 +27,7 @@ def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
             checks.append(dict(requested=branch, returned=returned, density=density,
                                log_density_distance=abs(math.log(density/rho)),
                                relative_pressure_residual=abs(state.pressure/P-1),
+                               pressure_residual_Pa=state.pressure-P,
                                original_relative_pressure_residual=original, pressure_reclosure=evidence))
         except Exception as error:
             checks.append(dict(requested=branch, error=str(error)))
@@ -34,9 +35,18 @@ def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
 
 
 def matched(checks, tolerance, density=None):
+    def pressure_passes(root):
+        reclosure = root.get('pressure_reclosure') or {}
+        if 'bracketed' not in reclosure:
+            return root['relative_pressure_residual']<=tolerance
+        from fixed_reaction_reference.reference_derivatives import bracketed_pressure_passes
+
+        return bracketed_pressure_passes(root['density'],root['pressure_residual_Pa'],
+                                         reclosure['scan']['P_Pa'],tolerance,reclosure)
+
     return [r for r in checks if (r.get('log_density_distance',math.inf) if density is None else
             abs(math.log(r['density']/density)) if 'density' in r else math.inf)<=DENSITY_WINDOW
-            and r['relative_pressure_residual']<=tolerance]
+            and pressure_passes(r)]
 
 
 def gibbs(compiled, result, report=None):

@@ -4,6 +4,7 @@ from time import monotonic
 
 from refit import OUT, a, epcsaft, np, put, r
 from phase_replays import screen_declarations
+from fixed_reaction_reference.reference_derivatives import PRESSURE_SCAN_RADIUS as RADIUS, pressure_scan
 
 ROOT = 'MEA/screen/rebuild-441/parent-closure'
 CASES = {
@@ -11,7 +12,6 @@ CASES = {
     'DEA/declared': {'Cai:9:problem': 18},
     'AMP_free/native': {'kundu-2003:0:problem': 11, 'hartono-2013-P:0:problem': 3},
 }
-RADIUS = 200
 
 
 def scan(model, problem, T, P, phase):
@@ -25,23 +25,17 @@ def scan(model, problem, T, P, phase):
     assert (state.pressure-P)==phase.get('original_pressure_residual_Pa',phase['pressure_residual_Pa'])
     ulp = np.spacing(target)
     native_offset = int((rho-target)/ulp)
-    densities = [target]
-    for side in (-np.inf,np.inf):
-        value = target
-        for _ in range(RADIUS):
-            value = float(np.nextafter(value,side))
-            densities.append(value)
-    densities = sorted(densities)
+    _,scan = pressure_scan(model,T,P,x,target,slope)
+    densities = scan['densities_mol_m3']
     offsets = np.arange(-RADIUS,RADIUS+1)
     assert np.array_equal((np.asarray(densities)-target)/ulp,offsets)
-    pressure = np.array([model.state(T,rho=v,x=x).pressure for v in densities])
-    errors = (pressure-P)/P
+    errors = np.array(scan['relative_pressure_errors'])
     fitted_slope, intercept = np.polyfit(offsets,errors,1)
     noise = errors - (fitted_slope*offsets + intercept)
     best = int(np.argmin(abs(errors)))
     passes = np.flatnonzero(abs(errors)<=tol)
     prior_window = (abs(offsets)<=8)|(abs(offsets-native_offset)<=8)
-    changes = np.flatnonzero(errors[:-1]*errors[1:]<0)
+    changes = [i+RADIUS for i,_ in scan['adjacent_sign_changes_ULP']]
     support = np.asarray(x)>0
     reaction_support = [np.asarray(q.stoichiometry)!=0 for q in problem.reactions]
     active = [j for j,mask in enumerate(reaction_support) if not np.any(mask&~support)]
@@ -64,7 +58,7 @@ def scan(model, problem, T, P, phase):
                 best_abs_relative_pressure_error=abs(errors[best]),best_offset_ULP=int(offsets[best]),
                 minimum_in_prior_window=min(abs(errors[prior_window])),
                 passing_offsets_ULP=offsets[passes].tolist(),
-                adjacent_sign_changes_ULP=[[int(offsets[i]),int(offsets[i+1])] for i in changes],
+                adjacent_sign_changes_ULP=scan['adjacent_sign_changes_ULP'],
                 densities_mol_m3=densities,relative_pressure_errors=errors.tolist(),
                 direct_readbacks=checks,active_reaction_indices=active,
                 zero_components=[c for c,v in zip(model.component_ids,x,strict=True) if v==0],

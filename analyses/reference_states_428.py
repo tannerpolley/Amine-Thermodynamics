@@ -38,8 +38,17 @@ def balances(feed, phases, formulas):
 
 
 def phase_passed(p, P, tol):
-    return (p['pressure_residual_Pa']==p['pressure_Pa']-P and p['normalization_residual']==math.fsum(p['x'])-1 and
-            max(abs(p['pressure_residual_Pa'])/P, abs(p['charge_residual']), abs(p['normalization_residual']))<=tol)
+    residual = p['pressure_residual_Pa']
+    if (residual!=p['pressure_Pa']-P or p['normalization_residual']!=math.fsum(p['x'])-1 or
+            not max(abs(p['charge_residual']),abs(p['normalization_residual']))<=tol):
+        return False
+    reclosure = p.get('pressure_reclosure') or {}
+    if abs(residual)/P<=tol and 'bracketed' not in reclosure:
+        return True
+    from fixed_reaction_reference.reference_derivatives import bracketed_pressure_passes
+
+    return (reclosure.get('scan',{}).get('x')==p['x'] and
+            bracketed_pressure_passes(p['density_mol_m3'],residual,P,tol,reclosure))
 
 
 def phase_closure(value, pressure, tolerance):
