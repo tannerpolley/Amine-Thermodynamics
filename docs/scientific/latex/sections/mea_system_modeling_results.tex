@@ -13,7 +13,7 @@ Two interactions are on bounds.
 The \MEAH--\MEACOO interaction is at $-1$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $+1$, which removes it; in fits with the R1--R3 references at the system pressure, holding either one slightly inside its bound raised the objective value by at most 0.75 (Section~\ref{supp-sec:s-uncertainty}).
 The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{1.783}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
 The diameters of the two MEA ions have a conditional correlation of $-0.997$ and are not separately identified, so the fitted values are not unique molecular properties.
-Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of \res{mea-tracking-fitted-pressure-minimum-relative-se-results}--\res{mea-tracking-fitted-pressure-maximum-relative-se-results}\,\%, of the same size as the deviations themselves.
+Propagated to the \res{mea-tracking-covariance-volatilization-pressure-count-results} fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of \res{mea-tracking-fitted-pressure-minimum-relative-se-results}--\res{mea-tracking-fitted-pressure-maximum-relative-se-results}\,\%, of the same size as the deviations themselves.
 
 \FloatBarrier
 \input{tables/mea_data}
@@ -21,8 +21,8 @@ Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance g
 \subsubsection{Pressure and speciation at 30 wt\%}\label{sec:results-pressure}
 % P:results-pressure-01
 At nominal 30 wt\% MEA the bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while differences between sources remain visible (\cref{fig:pressure}).
-The 47 fitted pressures, at 313--\SI{333}{\kelvin}, deviate by \res{mea-fitted-pressure-aard-mea-results}\,\%.
-The higher-temperature pressures are calculated without further fitting, and the 112 pressures of the same six sources that are not fitted deviate by \res{mea-added-same-sources-pressure-aard-results}\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
+The \res{mea-legacy-pressure-count-results} fitted pressures, at 313--\SI{333}{\kelvin}, deviate by \res{mea-fitted-pressure-aard-mea-results}\,\%.
+The higher-temperature pressures are calculated without further fitting, and the \res{mea-added-pressure-count-results} pressures of the same six sources that are not fitted deviate by \res{mea-added-same-sources-pressure-aard-results}\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -79,7 +79,7 @@ Two steps lead from the 16-parameter calibration to the MEA model; the sequence 
 The first fixes R2 and R5 at their literature forms and ties the Born diameters, which gives the 11-parameter fit with the MEA-fitted shared set.
 It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from six to one.
 The second fixes the two water--anion interactions from the salt data.
-On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from 150.76 to 152.96, and the 112 pressures not fitted deviate by 27.8 instead of 24.9\,\%.
+On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from 150.76 to 152.96, and the \res{mea-added-pressure-count-restriction-comparison} pressures not fitted deviate by 27.8 instead of 24.9\,\%.
 
 % P:results-joint-02
 Both steps cost accuracy at high temperature.
@@ -89,7 +89,7 @@ With the water--bicarbonate interaction fixed, the conditional standard errors o
 
 % P:results-expanded
 Fitting the hot pressures does not remove this cost.
-A sensitivity fit, made with the R1--R3 references at the system pressure, adds the 112 pressures not fitted here to the MEA objective at full weight; it lowers the deviation of the 12 hot pressures of Wagner et al.\ from 28.07 to 10.40\,\% but raises that of the 47 pressures fitted here from 11.35 to 22.78\,\% (Section~\ref{supp-sec:s-restrictions}).
+A sensitivity fit, made with the R1--R3 references at the system pressure, adds the \res{mea-added-pressure-count-weighting-sensitivity} pressures not fitted here to the MEA objective at full weight; it lowers the deviation of the 12 hot pressures of Wagner et al.\ from 28.07 to 10.40\,\% but raises that of the \res{mea-legacy-pressure-count-weighting-sensitivity} pressures fitted here from 11.35 to 22.78\,\% (Section~\ref{supp-sec:s-restrictions}).
 The sources disagree at these temperatures: at \SI{393}{\kelvin} and 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} at a loading of 0.349 and Ma'mun et al.\ \SI{83.6}{\kilo\pascal} at 0.350.
-A different weighting therefore moves the error from one campaign to another, and the MEA model remains the fit to the 47 pressures; with the \SI{100}{\kilo\pascal} references it deviates by 28.41\,\% from the 12 Wagner pressures.
+A different weighting therefore moves the error from one campaign to another, and the MEA model remains the fit to the \res{mea-legacy-pressure-count-weighting-interpretation} pressures; with the \SI{100}{\kilo\pascal} references it deviates by 28.41\,\% from the 12 Wagner pressures.
 The MEA model does not reproduce the absorption heats at \SI{393}{\kelvin}: for the finite additions of Kim et al.\ \cite{Kim2014}, it gives 70.72--\SI{90.54}{\kilo\joule\per\mole} against 79.74--\SI{100.77}{\kilo\joule\per\mole} measured (Table~\ref{supp-tab:supplement-mea-heat-sensitivity}).

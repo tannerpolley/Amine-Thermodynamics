@@ -144,7 +144,15 @@ def phase_accounting(s):
     manifest = s.fixed('MDEA/manifest.json.gz')
     sources = {q['identity']: q['row'] for pool in manifest['rows'].values() for q in pool}
     crosswalk = {q['key']: q['identity'] for q in crosswalk}
-    detections = Counter(q.get('same_calculation_as', q['key']) for q in screen['rows'] if q['descent'])
+    descending = [q for q in screen['rows'] if q['descent']]
+    detections = Counter(q.get('same_calculation_as', q['key']) for q in descending)
+    descent_counts = dict(
+        optimized_result_available=sum(q['available'] and q['optimized_available'] for q in descending),
+        supplied_trial_optimized_result_unavailable=sum(
+            not q['available'] and not q['optimized_available'] and q['supplied_available'] for q in descending
+        ),
+    )
+    assert sum(descent_counts.values()) == len(descending)
     assert set(detections) == {q['key'] for q in screen['classifications']}
     states = []
     for q in screen['classifications']:
@@ -162,7 +170,7 @@ def phase_accounting(s):
         states.append(dict(key=key, T_K=q['temperature_K'], source=source, pressure_Pa=pressure,
                            pressure_basis=basis, detections=detections[key],
                            confirmed=sum(a['confirmed'] for a in q['attempts']), attempts=len(q['attempts'])))
-    return dict(coverage=coverage, mdea_distinct_states=states)
+    return dict(coverage=coverage, mdea_distinct_states=states, mdea_descent_counts=descent_counts)
 
 
 def paired(before, after):
@@ -356,7 +364,9 @@ def mea_search(s):
     grid = selected(s, 'MEA', 'screen/grid.json.gz')['data']
     batches = sorted((REPORTED / 'E/MEA/measured').glob('*.json.gz'))
     measured = [row for batch in batches for row in s.read(str(batch.relative_to(ROOT)))]
-    result = dict(liquid_grid=dict(completed=sum(q['available'] for q in grid), attempted=len(grid)),
+    liquid_counts = Counter(q['key'].split('|', 1)[0] for q in grid)
+    result = dict(liquid_grid=dict(completed=sum(q['available'] for q in grid), attempted=len(grid),
+                                   populations=dict(liquid_counts)),
                   census=dict(attempted=len(census), outcomes=dict(Counter(q['classification'] for q in census))),
                   measured=dict(completed=sum(q['available'] for q in measured), attempted=len(measured)))
     summary = selected(s, 'MEA', 'screen/summary.json.gz')

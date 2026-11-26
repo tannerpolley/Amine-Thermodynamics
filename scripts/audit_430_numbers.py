@@ -49,16 +49,25 @@ def classification(text, start, stop):
     rules = (
         ('year', r'(?:\bin |\(\s*)(?P<value>(?:19|20)\d{2})\b'),
         ('citation', r'\b(?:Eq\.|Fig\.|Table|row|run)\s*~?\s*S?(?P<value>\d+)(?=[^\d.]|\.(?!\d)|$)'),
-        ('condition', r'\\SI\{(?P<value>100)\}\{\\kilo\\pascal\}'),
-        ('condition', r'(?:nominal |unloaded )(?P<value>30)(?=\s*wt)'),
+        ('condition', r'\\SI\{(?P<value>100)\}\{\\kilo\\pascal\}|(?P<plain>100)\s+kPa(?:\b|\\)'),
+        ('condition', r'(?:nominal |unloaded )(?P<value>\d+(?:\.\d+)?)(?=\s*wt)'),
         ('constant', r'P\^\\circ\s*=?\s*\\SI\{(?P<value>0\.1)\}\{\\mega\\pascal\}'),
         ('definition', r'(?P<value>[Tt]wo)(?=-(?:liquid|phase|site|sided)\b)'),
-        ('definition', r'(?P<value>[Oo]ne)(?=-sided\b| Gibbs energy\b)'),
+        ('definition', r'(?P<value>[Oo]ne)(?=-sided\b| Gibbs energy\b| donor\b| acceptor\b| induced-association\b)'),
+        ('definition', r'(?P<value>four)(?=-site chain\b| standard contributions\b)'),
+        ('definition', r'(?P<value>\d+)-parameter (?:calibration|form|model|fit)\b'),
+        ('equation', r'(?P<value>\d+)(?=\\(?:pi|eta|rho)\b)'),
         ('version', r'python=(?P<value>3\.13)(?=\s)'),
     )
     for reason, rule in rules:
-        if any(match.span('value') == (start, stop) for match in re.finditer(rule, text)):
+        if any(any(match.span(name) == (start, stop) for name in match.groupdict())
+               for match in re.finditer(rule, text)):
             return reason
+    recipe = text.lstrip().lower()
+    if recipe.startswith(('the grid spans ', 'each temperature--loading pair uses ',
+                          'the mea liquid--vapor search contains ',
+                          'for mea, the liquid grid contains ', 'a second liquid grid, offset from the first,')):
+        return 'condition'
     if any(begin <= start < stop <= end for begin, end in
            (match.span() for match in re.finditer(r"\b2-amino-2-methyl-1-propanol\b", text))):
         return 'definition'
@@ -188,6 +197,29 @@ def ranking(words, record, key):
     return 3 * match(' '.join(fields)) + match(record)
 
 
+def mdea_descent_findings():
+    record = d.PHASE_SUMMARY
+    counts = d.read(record)['mdea_descent_counts']
+    names = {
+        'optimized_result_available': 'mdea-descents-optimized-result-available',
+        'supplied_trial_optimized_result_unavailable': 'mdea-descents-supplied-trial-optimized-result-unavailable',
+    }
+    evidence = [dict(name=name, value=counts[key], record=record, key=f'mdea_descent_counts.{key}')
+                for key, name in names.items()]
+    available, supplied = (counts[key] for key in names)
+    interpretation = (f'{supplied} of the {available + supplied} descents came from supplied trial compositions '
+                      'whose optimized result was unavailable. The count of searches reported as finished '
+                      f'covers {available} descents.')
+    for path in d.manuscript_sources():
+        for line, sentence in d.sentences(path.read_text()):
+            if r'\res{mdea-descents-all-transfer-search}' in sentence or r'\res{mdea-descents-all-supplement}' in sentence:
+                yield dict(file=path.relative_to(d.ROOT).as_posix(), line=line, sentence=sentence,
+                           status='finding', interpretation=interpretation, evidence=evidence,
+                           retained_source='analyses/fixed_reaction_reference/results/MDEA/screen/selected/declared/summary.json.gz',
+                           retained_keys=['rows[].descent', 'rows[].available', 'rows[].optimized_available',
+                                          'rows[].supplied_available', 'rows[].supplied_trial_evidence'])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
@@ -209,6 +241,8 @@ def main():
         for entry in collisions:
             if (entry['file'], entry['context'], entry['token']) not in detected_collisions:
                 out.write(json.dumps(dict(entry, status='collision'), ensure_ascii=False) + '\n')
+        for finding in mdea_descent_findings():
+            out.write(json.dumps(finding, ensure_ascii=False) + '\n')
 
 
 if __name__ == '__main__':
