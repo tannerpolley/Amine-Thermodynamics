@@ -5,10 +5,11 @@ import json
 from types import SimpleNamespace
 
 import numpy as np
-from epcsaft import regression as reg
+from epcsaft import equilibrium as eq, regression as reg
 from MEA.common.retained_results import read
 from MEA.solvent_specification import conditional_information, deviation_statistics
 
+from .model import calculation_declaration
 from .wheel import ROOT, verify
 
 
@@ -144,6 +145,8 @@ def marks(route, T, problem=None):
             if name not in used
             else "source range unknown"
             if ranges.get(name) is None
+            else "temperature unavailable"
+            if T is None
             else not ranges[name][0] <= T <= ranges[name][1]
         )
         for name in used | ranges.keys()
@@ -151,28 +154,38 @@ def marks(route, T, problem=None):
 
 
 def property_rows(route, point, fitted=None):
-    spec, output = route.bind(point), []
+    spec, predictions = route.bind(point), []
     fitted = {} if fitted is None else {row["identity"]: row for row in fitted}
     for role in ("fitted", "comparisons"):
         for record in spec.inputs["observations"][role]:
-            T = spec.problems[record.get("problem", record.get("initial"))].T
             prediction = fitted.get(record["identity"]) if role == "fitted" else None
-            output.append(
-                dict(
-                    prediction if prediction is not None else spec.prediction(record),
-                    role=record.get("role", "fitted" if role == "fitted" else "not fitted"),
-                    T_K=T,
-                    outside_ranges=marks(
-                        route,
-                        T,
-                        spec.problems[record.get("problem", record.get("initial"))],
-                    ),
-                )
-            )
+            if prediction is None:
+                prediction = spec.prediction(record)
+            problem = spec.problems[record.get("problem", record.get("initial"))]
+            key = json.dumps(calculation_declaration(problem), sort_keys=True) if isinstance(problem.T, eq.Free) else None
+            predictions.append((role, record, problem, key, prediction))
+    # The paired boiling-temperature and vapor-composition observations have the same problem declaration.
+    temperatures = {
+        key: prediction["value"]
+        for _, record, _, key, prediction in predictions
+        if key is not None and record.get("kind") == "temperature" and prediction["status"] == "Available"
+    }
+    output = []
+    for role, record, problem, key, prediction in predictions:
+        T = temperatures.get(key) if key is not None else problem.T
+        output.append(dict(
+            prediction,
+            role=record.get("role", "fitted" if role == "fitted" else "not fitted"),
+            T_K=T,
+            outside_ranges=marks(route, T, problem),
+        ))
     summary = []
     for group, role, unit in sorted({(r["group"], r["role"], r.get("unit") or "unit unspecified") for r in output}):
         for name in {name for r in output for name in r["outside_ranges"]}:
-            for outside in (False, True, "source range unknown", "reaction not used"):
+            dispositions = [False, True, "source range unknown", "reaction not used"]
+            if any(r["outside_ranges"].get(name) == "temperature unavailable" for r in output):
+                dispositions.append("temperature unavailable")
+            for outside in dispositions:
                 rows = [
                     r
                     for r in output
