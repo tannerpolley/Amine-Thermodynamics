@@ -71,16 +71,21 @@ def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
     if len(amounts)!=2 or min(amounts)<=0 or not pair.get('requested_tolerance_met'):
         return False
     details = pair if vapor else pair.get('diagnostics') or {}
+    phases = details.get('phases',[])
+    if len(phases)!=2 or amounts!=[p['amount_mol'] for p in phases]:
+        return False
+    compositions = [p['x'] for p in phases]
+    densities = [p['density_mol_m3'] for p in phases]
+    if not vapor and (pair.get('phases')!=compositions or pair.get('densities_mol_m3')!=densities):
+        return False
     T = pair.get('T_K',pair.get('T'))
     if not phase_closure(details,pressure,tolerance,temperature=T):
         return False
-    a,b = details['phases']
-    distinct = distinct_phases((a['x'],b['x']),(a['density_mol_m3'],b['density_mol_m3']))
+    distinct = distinct_phases(compositions,densities)
     roots = vapor_trace_passes(pair) if vapor else len(pair['roots'])==2 and all(
         any(r['returned']=='liquid' for r in matched(group,tolerance,density,T=T,P=pressure))
-        for group,density in zip(pair['roots'],pair['densities_mol_m3'],strict=True))
-    return (distinct and roots and amounts==[a['amount_mol'],b['amount_mol']]
-            and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol'])
+        for group,density in zip(pair['roots'],densities,strict=True))
+    return distinct and roots and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol']
 
 
 def no_descent(completed, trials):

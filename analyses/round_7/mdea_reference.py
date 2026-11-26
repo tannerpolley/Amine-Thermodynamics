@@ -33,12 +33,14 @@ def seed_state(spec, entry):
 def predicates(outcome, *, tolerance):
     readback = outcome.get('reference_readback',{}).get('pair_readback',[])
     for i,result in enumerate(outcome['attempts']):
+        diagnostics = result.get('diagnostics')
         checks = dict(requested_tolerance=result.get('requested_tolerance_met',False),
                       positive_amounts=len(result.get('amounts_mol',[]))==2 and min(result['amounts_mol'])>0,
-                      balances_and_phases=result.get('physical_checks_pass',False),
+                      balances_and_phases=(result if diagnostics is None else diagnostics).get('physical_checks_pass',False),
                       distinct=result.get('distinct',False),
                       liquid_root=bool(result.get('roots')) and all(
-                          any(x['returned']=='liquid' for x in matched(group,tolerance)) for group in result['roots']),
+                          any(x['returned']=='liquid' for x in matched(
+                              group,tolerance,T=outcome.get('T_K'),P=outcome.get('P_Pa'))) for group in result['roots']),
                       lowering=result.get('Gibbs_decrease_over_RT_mol',-math.inf)>result.get('numerical_error_over_RT_mol',math.inf))
         if i < len(readback) and readback[i]:
             checks['reaction'] = readback[i]['affinity_within_tolerance']
