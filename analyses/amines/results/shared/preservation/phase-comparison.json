@@ -645,6 +645,46 @@
       "d_differences": 0,
       "source": "analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json",
       "cumulative_seconds": 192.78097566202632
+    },
+    "MEA restrictions census": {
+      "c_requests": 162,
+      "c_differences": [],
+      "request_fields": [
+        "temperature_K",
+        "pressure_Pa",
+        "loading"
+      ],
+      "d_resolved": 0
+    },
+    "MEA system-pressure census": {
+      "c_requests": 162,
+      "c_differences": [],
+      "request_fields": [
+        "temperature_K",
+        "pressure_Pa",
+        "loading"
+      ],
+      "d_resolved": 0
+    },
+    "MEA Cai-weighting census": {
+      "c_requests": 162,
+      "c_differences": [],
+      "request_fields": [
+        "temperature_K",
+        "pressure_Pa",
+        "loading"
+      ],
+      "d_resolved": 0
+    },
+    "MEA historical-F2 census": {
+      "c_requests": 1,
+      "c_differences": [],
+      "request_fields": [
+        "temperature_K",
+        "pressure_Pa",
+        "loading"
+      ],
+      "d_resolved": 0
     }
   },
   "validation": {
@@ -1874,7 +1914,57 @@
         "pressure_Pa": 510000,
         "returned_phase_identity": "unspecified",
         "requested_phase_identity": "vapor",
-        "Gibbs_over_RT_mol": -2860.76831319549
+        "Gibbs_over_RT_mol": -2860.76831319549,
+        "changed_flags": [
+          {
+            "design": "AMP_free",
+            "key": "hartono-2021:56:problem",
+            "T_K": 373.0,
+            "P_Pa": 510000.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          },
+          {
+            "design": "AMP_free",
+            "key": "hartono-2021:57:problem",
+            "T_K": 373.0,
+            "P_Pa": 640500.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          },
+          {
+            "design": "AMP_free",
+            "key": "tong-2012:32:problem",
+            "T_K": 373.2,
+            "P_Pa": 983500.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          },
+          {
+            "design": "AMP_fixed",
+            "key": "hartono-2021:56:problem",
+            "T_K": 373.0,
+            "P_Pa": 510000.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          },
+          {
+            "design": "AMP_fixed",
+            "key": "hartono-2021:57:problem",
+            "T_K": 373.0,
+            "P_Pa": 640500.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          },
+          {
+            "design": "AMP_fixed",
+            "key": "tong-2012:32:problem",
+            "T_K": 373.2,
+            "P_Pa": 983500.0,
+            "retained_and_restored_qualified": false,
+            "later_procedure_qualified": true
+          }
+        ]
       }
     }
   ],
