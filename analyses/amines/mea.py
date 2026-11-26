@@ -1295,9 +1295,12 @@ def hong_scores(rows):
                 models = [("hong", key), ("adopted", "adopted"), ("polley_hedengren_2026", "polley_hedengren_2026")]
                 if data is unmatched:
                     models = models[:1]
-                n = len(data)
-                assert len({r["record_id"] for r in data}) == n
-                values = {m: comparison_metrics(data, predicted=k) for m, k in models} if n else {}
+                assert len({r["record_id"] for r in data}) == len(data)
+                # Every model is scored on the same rows; a row any model cannot predict is listed, not dropped silently.
+                unavailable = [r["record_id"] for r in data if any(r.get(k) is None for _, k in models)]
+                scored = [r for r in data if r["record_id"] not in unavailable]
+                n = len(scored)
+                values = {m: comparison_metrics(scored, predicted=k) for m, k in models} if n else {}
                 role_2026 = (
                     "fitted / not fitted" if block in ("canonical", "Kim 313.15 K", "Kim 353.15 K") else "not fitted"
                 )
@@ -1307,12 +1310,13 @@ def hong_scores(rows):
                         subset=group,
                         side=side,
                         n=n,
+                        unavailable=unavailable,
                         metric=metric,
-                        adopted_fitted=sum(r["adopted_role"] == "fitted" for r in data),
+                        adopted_fitted=sum(r["adopted_role"] == "fitted" for r in scored),
                         polley_hedengren_2026_role=role_2026 if data is not unmatched else "above_ceiling",
                         hong_role="not fitted",
-                        stable=sum(r.get("stability") == "stable" for r in data),
-                        locally_unstable=sum(r.get("stability") == "locally unstable" for r in data),
+                        stable=sum(r.get("stability") == "stable" for r in scored),
+                        locally_unstable=sum(r.get("stability") == "locally unstable" for r in scored),
                         **{m: values[m][metric] if values else None for m, _ in models},
                     )
                 )
