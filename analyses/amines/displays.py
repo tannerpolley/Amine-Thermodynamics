@@ -5580,6 +5580,15 @@ def result_values():
     add('mea-kim-hot-heat-measured-max-results', record,
         'rows.rows[Kim2014,stripper,available].observed_kJ_mol: max',
         format((max(x['observed_kJ_mol'] for x in r["rows"]["rows"] if x["source"]=="Kim2014" and x["T_K"]>=370 and x["status"]=="available")), '.2f'))
+
+    record = 'analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/standard-errors.csv'
+    r = read(record)
+    add('mea-salt-shared-carbamate-water-conditional-se-results', record,
+        'parameter pair/carbamate-anion/water/k_ij: adopted_point_SE_bound_fixed',
+        format((float(next(x["adopted_point_SE_bound_fixed"] for x in r if x["parameter"]=='pair/carbamate-anion/water/k_ij'))), '.2f'))
+    add('mea-salt-shared-protonated-mea-water-conditional-se-results', record,
+        'parameter pair/protonated-monoethanolamine/water/k_ij: adopted_point_SE_bound_fixed',
+        format((float(next(x["adopted_point_SE_bound_fixed"] for x in r if x["parameter"]=='pair/protonated-monoethanolamine/water/k_ij'))), '.2f'))
     return values
 
 
