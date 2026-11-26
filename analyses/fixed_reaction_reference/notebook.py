@@ -13,6 +13,166 @@ def show(value):
     return str(value)
 
 
+def mdea_slope_bound():
+    results = Path(__file__).parent/'results/MDEA_slope_bound'
+    if not (results/'checks.json.gz').exists():
+        return []
+    def read(name):
+        return json.loads(gzip.decompress((results/name).read_bytes()))
+    checks, declaration = read('checks.json.gz')['checks'], read('declaration.json.gz')
+    slope = next(q['bounds'] for q in declaration['point']['coordinates']
+                 if q['identity'] == 'pair/mdea-water/k_ij/a1 / temperature_law_coefficient')
+    pressure = f"{declaration['pressure_Pa']/1e6:g} MPa"
+
+    def wheel(_):
+        return [f"Stage 0 used the study wheel with the reaction reference fixed at "
+                f"{declaration['reaction_reference_pressure_Pa']/1e3:g} kPa.",
+                f"The lower slope bound is {slope[0]:.10g} K⁻¹. The upper slope bound is {slope[1]:g} K⁻¹."]
+
+    def replay(q):
+        return [f"A replays all {q['rows']} predictions at cost {q['cost']:.17g}, with maximum relative prediction "
+                f"and conditional standard-error differences of {q['max_relative_prediction_difference']:.3g} and "
+                f"{q['max_relative_conditional_se_difference']:.3g}. Only the upper bound on $a_0$ is active."]
+
+    def onset(q):
+        cold = q['cold_onset']
+        return [f"At {cold['T_K']} K and {pressure}, the binary liquid hull brackets gap onset between "
+                f"{cold['k_no_gap']:.10g} and {cold['k_gap']:.10g}. At the $(U,s)$ corner, "
+                f"$k={q['corner_k']:.10g}$ is {q['corner_margin']:.6g} below the no-gap end of the bracket."]
+
+    def hull(q):
+        left, right = q['known_answer']['gaps'][0]['x_MDEA_contacts']
+        return [f"The four corners had {q['gaps']} gaps in {q['corner_states']} temperature–corner checks "
+                f"on the {declaration['compositions']:,}-point composition grid. The LHS-53 control had a gap with "
+                f"MDEA mole-fraction contacts {left:.4g} and {right:.4g}. These are finite-grid model checks."]
+
+    def census(q):
+        counts = ', '.join(f'{group} {count}' for group, count in sorted(q['by_family'].items()))
+        return [f"{q['can_start']} of {q['candidates']} draws had every row available. "
+                f"The census recorded {q['available_rows']} available and {q['unavailable_rows']} unavailable "
+                f"rows ({counts}). All MDEA–water bubble rows were available. The census records Engine responses "
+                'at the declared vectors.']
+
+    lines = ['', '## MDEA–water slope bound (#427)', '']
+    # A failed check is labelled in place; the checks before it keep their reported values.
+    for number, paragraph in enumerate((wheel, replay, onset, hull, census), 1):
+        check = checks.get(str(number))
+        if check is None:
+            lines += [f'Check {number} was not run because an earlier check did not pass.', '']
+        elif not check['passed']:
+            lines += [f'Check {number} did not pass. Its values are in the '
+                      '[retained checks](results/MDEA_slope_bound/checks.json.gz).', '']
+        else:
+            lines += [*paragraph(check), '']
+    return [*lines,
+            'The approved two-wheel exception applies to the #427 candidate checks, fits and descent probes. '
+            'Endpoint values are reported on the study wheel. The fit comparison awaits the second wheel. '
+            '[Accepted plan](https://github.com/tannerpolley/Amine-Thermodynamics/issues/427#issuecomment-7178782607).',
+            '',
+            '[Declaration](results/MDEA_slope_bound/declaration.json.gz) · '
+            '[A replay](results/MDEA_slope_bound/replay-A.json.gz) · '
+            '[Onsets](results/MDEA_slope_bound/onset-S.json) · [Hulls](results/MDEA_slope_bound/hull-S.json) · '
+            '[Row census](results/MDEA_slope_bound/census-S.json.gz) · '
+            '[Checks and message counts](results/MDEA_slope_bound/checks.json.gz).',
+            '',
+            'Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/diagnosis-starts/stage0.py` '
+            'from the repository root to repeat Stage 0. Add `--check` to recompute the checks from the retained records.', '']
+
+
+def stage1_phases(quantities):
+    if 'Stage 1 MEA measured' not in quantities:
+        return []
+    lines = ['', '## Rebuilt phase searches (#441)', '',
+             '| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item | Blocked |',
+             '|---|---:|---:|---:|---:|---:|']
+    classes = ('no descent in the finite search','two liquids of lower Gibbs energy',
+               'liquid plus a vapor-connected phase of lower Gibbs energy','open Engine item')
+    for name,item in quantities.items():
+        if name.startswith('Stage 1 ') and 'counts' in item['new']:
+            counts = item['new']['counts']
+            cells = [name.removeprefix('Stage 1 '),*[str(counts.get(k,0)) for k in classes],str(len(item['new']['blockers']))]
+            lines.append('| '+' | '.join(cells)+' |')
+    lines.extend(['','| Stratum | Parents checked | Phases checked | Max scaled pressure error | Restarts | Failures |',
+                  '|---|---:|---:|---:|---:|---:|'])
+    for item in quantities.values():
+        if isinstance(item['new'],dict):
+            for name,value in item['new'].get('pressure_closure',{}).items():
+                fields = ('parents_checked','phases_checked','maximum_scaled_pressure_error','restarts','failures')
+                lines.append('| '+' | '.join([name,*(f'{value.get(k,0):.5g}' for k in fields)])+' |')
+    lines.extend(['','Pressure closure uses the absolute EOS pressure residual divided by ρRT at the state '
+                  'passed to the native search. The trial-call records also retain the raw relative pressure residual.'])
+    lines.extend(['','| MEA observation | Native pressure (kPa) | Max scaled pressure error | Restart |',
+                  '|---|---:|---:|---|'])
+    for key,value in quantities['Stage 1 MEA measured']['new']['restart_cases'].items():
+        restarted = 'yes' if value['restarted'] else 'no'
+        lines.append(f"| {key} | {value['P_Pa']/1000:.6g} | {value['maximum_scaled_pressure_error']:.3g} | {restarted} |")
+    lines.extend(['','The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. '
+                  'The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at '
+                  '7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.',
+                  '', '| AMP fit | Control | Imposed pressure (kPa) | Model bubble (kPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+                  '|---|---|---:|---:|---:|---:|'])
+    for design in ('AMP_free','AMP_fixed'):
+        for key,q in quantities[f'Stage 1 {design} controls']['new']['bubble_comparisons'].items():
+            lines.append(f"| {design} | {key} | {q['imposed_Pa']/1000:.6g} | {q['bubble_Pa']/1000:.6g} | "
+                         f"{q['decrease']:.6g} | {q['error']:.3g} |")
+    lines.extend(['','Both historical MDEA targets at 383.15 K, 121.309 MPa and loading 1.368 '
+                  'completed the declared finite search with zero descents. The continued vapor amount reached zero '
+                  'along each parameter and reference-pressure path. The AMP bubble solves are model predictions on '
+                  'the same feeds as their pressure controls. The three searches tied to '
+                  '[Engine #265](https://github.com/tannerpolley/epcsaft/issues/265) remain open.',
+                  'The support census matched every prior support set, so it triggered no screen reruns.'])
+    return lines
+
+
+def render_mdea_stage2(result):
+    quantities = result['quantities']
+    measured, controls, grid = [quantities['Stage 2 MDEA '+name]['new']
+                                for name in ('measured','fixed-pressure controls','grid domain')]
+    comparisons = measured['bubble_comparisons']
+    exceptions = [key for key,q in sorted(comparisons.items()) if not q['below']]
+    bubble_summary = ('The qualified model bubble pressure exceeds the imposed pressure in every comparison.'
+                      if not exceptions else
+                      'The qualified model bubble pressure exceeds the imposed pressure in '
+                      f'{len(comparisons)-len(exceptions)} of {len(comparisons)} comparisons. The exceptions are '
+                      + ', '.join(f'`{key}`' for key in exceptions) + '.')
+    lines = ['---', 'title: MDEA phase searches at the slope-bound endpoint', '---', '',
+             'The measured searches found 80 descents across 27 distinct feeds and no descent in 1,484 '
+             'finite searches. Liquid plus a vapor-connected phase lowers Gibbs energy at all 27 feeds. '
+             + bubble_summary + ' The search outcomes are model predictions at the declared conditions. The paired errors '
+             'estimate numerical uncertainty in the Gibbs difference. Independent review and manuscript '
+             'promotion are pending.', '',
+             '| Search | Imposed pressure (MPa) | Model bubble (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+             '|---|---:|---:|---:|---:|']
+    for key,q in sorted(comparisons.items()):
+        lines.append(f"| {key} | {q['imposed_Pa']/1e6:.7g} | {q['bubble_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
+    lines.extend(['', '| Control | Temperature (K) | Pressure (MPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+                  '|---|---:|---:|---:|---:|'])
+    for key,q in sorted(controls['rows'].items()):
+        lines.append(f"| {key} | {q['T_K']} | {q['P_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
+    d = grid['domain_counts']
+    lines.extend(['', f"The march established domain membership for {d['inside']:,} searches inside the "
+                  f"5.0367 MPa bubble-pressure interval and {d['outside']:,} searches at or above a retained cutoff."])
+    if grid.get('paths_completed') is not None:
+        lines += [f"{grid['paths_completed']} paths completed, including {grid['cold_starts']} accepted cold starts "
+                  f"after warm-start failures. The cutoff evidence covers {grid['historical_unreached_excluded']} "
+                  'of the 14 historically unreached loadings.', '']
+        if counts := grid.get('inside_counts'):
+            lines += [f"{counts.get('no descent in the finite search',0):,} in-domain searches completed with no "
+                      f"descent. The one open in-domain Engine item remains recorded. "
+                      f"Outside the interval the historical screen recorded no descent for "
+                      f"{grid['historical_outside_outcomes'].get('no descent',0):,} searches and "
+                      f"{grid['historical_outside_outcomes'].get('not completed',0):,} were incomplete.", '']
+        if unassigned := d.get('unassigned'):
+            lines += [f"{unassigned:,} grid searches have unassigned domain membership after the branch-connection check.", '']
+        if grid['march_blockers'] or grid['additional_search_blockers']:
+            lines += ['The grid phase counts are held. See the retained handoff for the exact blockers.', '']
+    else:
+        lines += [f"The warm start from the lowest loading failed on {len(grid['march_blockers'])} paths, "
+                  f"leaving {d['unreached']:,} grid searches without membership. The grid outcome counts are held.", '']
+    lines += ['[Retained handoff](handoff.json) · [March](domain-march.json.gz) · [Grid inventory](grid-inventory.json.gz)', '']
+    return '\n'.join(lines)
+
+
 def render(result):
     q = result['quantities']
     lines = [r"""---
@@ -21,6 +181,7 @@ resources:
   - manuscript-handoff.json
   - results/handoff-checks.json
   - results/stages.json
+  - results/MDEA_slope_bound/*
 ---
 
 The study compares three calculations on Engine commit `05e94210`.
@@ -53,6 +214,8 @@ and population basis, and open quantities.
         label = f'{selected} provisional' if selected and new['disposition']=='undecided' else selected
         lines.append('| '+' | '.join(map(show,(design,old['population']['fitted'],old['old'],old['new'],
                                               new['new'],new['absolute_change'],label)))+' |')
+    lines.extend(mdea_slope_bound())
+    lines.extend(stage1_phases(q))
     lines.extend(['','## Start separation and endpoint stationarity','',
                   '| Design | A−B | A−C | B−C |','|---|---:|---:|---:|'])
     for design in result['fit_attempts']:

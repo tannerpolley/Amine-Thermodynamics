@@ -2,7 +2,7 @@
 from collections import Counter
 import json
 
-import starts as c
+import retained_starts as c
 
 np = c.np
 read = lambda name: c.r.read(c.HERE/'results'/name)  # noqa: E731

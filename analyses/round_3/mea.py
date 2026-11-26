@@ -7,13 +7,13 @@ import tomllib
 from recall import OUT
 from part_ii import ROOT, np, reg, stable
 from reference_states_428 import BUNDLE, balances, epcsaft, eq, heat_items, identity, phase, phase_passed, request, s, source_log_k, vrc
+from reference_states_428 import ROW_TOLERANCE as TOL
 
 PARAMETERS = BUNDLE/'results/selected-current-best-parameters.json'
 WORKED = BUNDLE/'results/reference-states-428/mea.json'
 IDS = s.COMPONENT_IDS
 W, H, OH, C, B = map(IDS.index, ('water','hydronium-cation','hydroxide-anion','carbonate-anion','bicarbonate-anion'))
 P0 = 100000.
-TOL = 1e-10
 
 
 def setup():

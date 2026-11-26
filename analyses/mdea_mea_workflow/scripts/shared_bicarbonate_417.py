@@ -3,6 +3,7 @@
 from collections import Counter
 import hashlib
 import json
+from pathlib import Path
 import sys
 import time
 
@@ -43,8 +44,14 @@ def dilute_vapor_connection(model, T, x, rho):
     density = rho*np.geomspace(1e-4, 1., 33)
     batch = model.states([T]*33, rho=density, x=x, derived_properties=True)
     trace = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
-    connected = all(v is not None and v > 0 for v in batch.pressure_density_derivative) and all(np.diff(batch.pressure) > 0)
-    return trace, connected
+    return trace, vapor_trace_connected(trace,rho)
+
+
+def vapor_trace_connected(trace, rho):
+    pressure, density, derivative = (trace[k] for k in ('pressure_Pa','density_mol_m3','dP_drho'))
+    return (len(pressure)==len(density)==len(derivative)==33 and density[-1]==rho
+            and all(v is not None and v>0 for v in derivative)
+            and all(b>a for a,b in zip(pressure,pressure[1:])))
 
 
 def witnesses(route, point, rows):
@@ -145,10 +152,11 @@ def compare_rows(rows, old, fields, tolerance):
             assert abs(new['value']-ref['value']) <= tolerance * max(1., abs(ref['value'])), (new, ref)
 
 
-def bind_wheel():
-    r.COMMIT, r.SHA, r.WHEEL = WHEEL.parent.name.removeprefix('main-'), SHA, WHEEL
-    f.a.COMMIT, f.a.SHA, f.a.WHEEL = r.COMMIT, SHA, WHEEL
-    s.ENGINE_COMMIT, s.ENGINE_WHEEL_SHA256 = r.COMMIT, SHA
+def bind_wheel(wheel=WHEEL, wheel_sha256=SHA):
+    wheel = Path(wheel)
+    r.COMMIT, r.SHA, r.WHEEL = wheel.parent.name.removeprefix('main-'), wheel_sha256, wheel
+    f.a.COMMIT, f.a.SHA, f.a.WHEEL = r.COMMIT, wheel_sha256, wheel
+    s.ENGINE_COMMIT, s.ENGINE_WHEEL_SHA256 = r.COMMIT, wheel_sha256
 
 
 def controls(mea, mdea):

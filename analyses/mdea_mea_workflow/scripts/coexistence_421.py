@@ -79,7 +79,9 @@ def coexistence_roots(route, spec):
             identities = []
             for x,rho,roots in zip(attempt['phases'],attempt['densities_mol_m3'],attempt['roots'],strict=True):
                 trace, connected = dilute_vapor_connection(spec.model,entry['temperature_K'],x,rho)
-                branch = min(matched(roots,spec.problems[entry['key']].row_tolerance),key=lambda r:r['log_density_distance'])['returned']
+                matches = matched(roots,spec.problems[entry['key']].row_tolerance,
+                                  T=entry['temperature_K'],P=entry['pressure_Pa'])
+                branch = min(matches,key=lambda r:r['log_density_distance'])['returned']
                 identity = 'dilute-vapor-connected' if branch == 'unspecified' and connected else branch
                 identities.append(dict(identity=identity, isotherm=trace, dilute_vapor_connected=connected))
             attempt['coexistence_roots'] = identities

@@ -15,6 +15,7 @@ from heat_evidence_170 import hc, request, s, vrc
 
 BUNDLE = ROOT / 'analyses/mea_parameter_bundle'
 R = epcsaft.GAS_CONSTANT_J_PER_MOL_K
+ROW_TOLERANCE = 1e-10
 
 
 def identity(*paths):
@@ -23,8 +24,8 @@ def identity(*paths):
 
 def phase(model, T, P, amounts, rho, x, formulas):
     eos = model.state(T, rho=rho, x=x)
-    return dict(amount_mol=amounts, density_mol_m3=rho, x=x, pressure_Pa=eos.pressure,
-                pressure_residual_Pa=eos.pressure-P, normalization_residual=math.fsum(x)-1,
+    return dict(T_K=T, amount_mol=amounts, density_mol_m3=rho, x=x, pressure_Pa=eos.pressure,
+                pressure_residual_Pa=eos.pressure-P, relative_pressure_residual=(eos.pressure-P)/P, normalization_residual=math.fsum(x)-1,
                 charge_residual=math.fsum(w*f['charge'] for w, f in zip(x, formulas, strict=True)))
 
 
@@ -36,8 +37,21 @@ def balances(feed, phases, formulas):
     return dict(element_residual_mol=dict(zip('CHNO', atoms.tolist(), strict=True)), scaled_element_residual=dict(zip('CHNO', scaled.tolist(), strict=True)))
 
 
-def phase_passed(p, P, tol):
-    return max(abs(p['pressure_residual_Pa'])/P, abs(p['charge_residual']), abs(p['normalization_residual'])) <= tol
+def scaled_pressure_error(residual, density, temperature):
+    return abs(residual)/(density*R*temperature)
+
+
+def phase_passed(p, P, tol, temperature=None):
+    residual = p['pressure_residual_Pa']
+    return (residual==p['pressure_Pa']-P and p.get('relative_pressure_residual',residual/P)==residual/P
+            and p['normalization_residual']==math.fsum(p['x'])-1
+            and max(abs(p['charge_residual']),abs(p['normalization_residual']),
+                    scaled_pressure_error(residual,p['density_mol_m3'],p.get('T_K',temperature)))<=tol)
+
+
+def phase_closure(value, pressure, tolerance, *, temperature=None):
+    return bool(value.get('phases')) and all(phase_passed(p,pressure,tolerance,temperature) for p in value['phases']) and max(
+        map(abs,value['balances']['scaled_element_residual'].values()))<=tolerance
 
 
 def source_log_k(law, T):
@@ -77,7 +91,7 @@ def amp(run, *, inspect=None, route_class=Route, allow_missing_trial_error=False
     distance = q['g_over_rt']-plane
     witness, = (r for r in split['supplied_pressure_roots'] if r.get('reclosed_evidence') == 'evaluated')
     source = witness['witness']['phase']
-    root = min(cd.matched(witness['roots'], parent.row_tolerance), key=lambda r: r['log_density_distance'])
+    root = min(cd.matched(witness['roots'], parent.row_tolerance,T=T,P=P), key=lambda r: r['log_density_distance'])
     points, *_ = stable._applicable(item, [dict(source, packing=witness['reclosed_quantities']['packing_fraction'])], set(source['support']))
     options = eq.StabilityOptions()
     options.prepared_trials = eq.prepare_supplied_trials(model, T, points)

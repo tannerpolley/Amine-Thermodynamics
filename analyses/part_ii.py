@@ -72,10 +72,50 @@ def select_campaign_endpoint(candidates, tolerance):
     return chosen, ties
 
 
+def capped_feed(spec, record, parent):
+    """Follow the declared loading nodes to the first rising pressure bracket."""
+    from scipy.optimize import brentq
+
+    args = record['arguments']
+    bubble = copy.copy(spec.problems[record['bubble']])
+    initial = parent.feed.values
+    direction = {c: args['basis_amount']*args['feed'].get(c, 0.) for c in initial}
+    action = eq.SolvedStateActionDirection(0., 0., [direction.get(c, 0.) for c in spec.parameters.component_ids], [])
+    observable = eq.SolvedStateObservable(eq.SolvedStateObservableKind.Pressure)
+    nodes = []
+
+    def solve(loading, start):
+        bubble.feed = eq.Amounts({c: n+loading*direction[c] for c, n in initial.items()})
+        result = eq.solve_equilibrium(spec.model, bubble, start=start)
+        if not result.requested_tolerance_met:
+            raise ValueError(f'Saturation bracket at loading {loading}: {result.message}')
+        return result
+
+    previous, start = None, None
+    for loading in args['loading_grid']:
+        result = solve(loading, start)
+        compiled = eq.compile_problem(spec.model, bubble)
+        slope, = eq.solved_state_first_actions(compiled, result, [observable], [action])[0].results
+        if slope.status.name != 'Available':
+            raise ValueError(f'Saturation bracket slope at {loading}: {slope.status.name}')
+        nodes.append(dict(loading=loading, pressure_Pa=result.pressure, slope_Pa=slope.action))
+        if previous is not None and previous['pressure_Pa'] <= args['P'] < result.pressure and min(previous['slope_Pa'], slope.action)>0:
+            bracket = [previous['loading'], loading]
+            residual = lambda a: solve(a, start).pressure - args['P']
+            root = brentq(residual, *bracket, xtol=1e-14)
+            capped = min(root, args['loading_cap'])
+            parent.feed = eq.Amounts({c: n+capped*direction[c] for c, n in initial.items()})
+            return dict(nodes=nodes, bracket=bracket, root=root, loading=capped, source_cap=args['loading_cap'],
+                        target_Pa=args['P'], pressure_residual_Pa=residual(root))
+        previous, start = nodes[-1], result
+    raise ValueError(f"{record['identity']}: no positive-slope saturation bracket on declared loading grid")
+
+
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
-    def __init__(self, declaration, out=None, *, shared_values=None, fixed_reference_pressure_pa=None):
+    def __init__(self, declaration, out=None, *, shared_values=None, fixed_reference_pressure_pa=None,
+                 wheel=WHEEL, wheel_sha256=SHA):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
         self.out = Path(out) if out else self.path.parent/self.config['output']
@@ -84,8 +124,9 @@ class Route:
         self.controls = self.config['optimizer']
         self.shared_values = shared_values
         self.fixed_reference_pressure_pa = fixed_reference_pressure_pa
+        self.wheel, self.wheel_sha256 = Path(wheel), wheel_sha256
         self.verify()
-        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,
+        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=self.wheel_sha256,
                         shared_values_sha256=SHARED_SHA if shared_values is None else shared_values[1])
         if fixed_reference_pressure_pa is not None:
             identity['fixed_reference_pressure_pa'] = fixed_reference_pressure_pa
@@ -103,8 +144,8 @@ class Route:
         if self.shared_values is not None:
             path, digest = self.shared_values
             assert hashlib.sha256(path.read_bytes()).hexdigest() == digest
-        assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
-        with zipfile.ZipFile(WHEEL) as archive:
+        assert hashlib.sha256(self.wheel.read_bytes()).hexdigest() == self.wheel_sha256, self.wheel
+        with zipfile.ZipFile(self.wheel) as archive:
             for name in archive.namelist():
                 if name.startswith(('epcsaft/', 'epcsaft.libs/')) and not name.endswith('/'):
                     assert archive.read(name) == (Path(epcsaft.__file__).parent.parent/name).read_bytes(), name
@@ -278,14 +319,13 @@ class Route:
                 stocks.append(stock)
         return stocks, loadings
 
-    def stability_row(self, spec, state, scale):
+    def stability_row(self, spec, state, scale, *, metadata=None):
         if 'cap_record' in state:
             record = next(r for role in ('fitted','comparisons') for r in spec.inputs['observations'][role] if r['identity']==state['cap_record'])
-            prediction = reg.predict(spec.model,spec.observation(record))
-            if prediction.status.name!='Available':
-                raise ValueError(prediction.message)
-            parent, args = copy.copy(spec.problems[record['initial']]), record['arguments']
-            parent.feed = eq.Amounts({c:parent.feed.values.get(c,0.)+prediction.endpoint_loading*args['basis_amount']*args['feed'].get(c,0.) for c in spec.parameters.component_ids})
+            parent = copy.copy(spec.problems[record['initial']])
+            evidence = capped_feed(spec, record, parent)
+            if metadata is not None:
+                metadata['capped_feed'] = evidence
             bubble = None
         elif 'binary_x' in state:
             water, amine = 'water', self.config['amine']

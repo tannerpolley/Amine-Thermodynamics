@@ -1,6 +1,6 @@
 """Rebuild the target phase declarations, keeping the external T, P and feed fixed."""
 
-from closure import HERE, c, cd, physical, point_for, pressure_reclosure
+from closure import HERE, c, cd, physical, point_for
 from phases import dilute_vapor_connection
 from time import monotonic
 from copy import copy
@@ -109,22 +109,10 @@ def dea():
                     error=g[1] + split[1],
                     roots=[],
                 )
-                b = c.refit.eq.stability_test(compiled, s).standard_over_rt
-                for j, phase in enumerate(row["phases"]):
-                    x, rho = phase["x"], phase["density_mol_m3"]
-                    T, P = s.temperature, s.pressure
-                    roots = cd.pressure_roots(spec.model, T, P, x, rho)
-                    _, _, test = pressure_reclosure(
-                        spec.model,
-                        p,
-                        T,
-                        P,
-                        rho,
-                        x,
-                        b,
-                        spec.model.state(T, rho=rho, x=x),
-                    )
-                    row["roots"].append(dict(original=roots, reclosure=test))
+                row["roots"] = [
+                    cd.pressure_roots(spec.model,s.temperature,s.pressure,phase["x"],phase["density_mol_m3"])
+                    for phase in row["phases"]
+                ]
             yield dict(row, seconds=monotonic() - tick)
             if s is not sol:
                 break

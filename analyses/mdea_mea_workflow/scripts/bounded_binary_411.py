@@ -24,6 +24,7 @@ OLD = ANALYSIS/'results/retransfer-343/binary-penalty'
 RESULTS = ANALYSIS/'results/bounded-binary-411'
 DECLARATION = ANALYSIS/'inputs/bounded-binary-411.json'
 # Gap onset is resolved on this composition grid; the hull grid's 0.001 spacing is too coarse near a critical point.
+RESOLUTION = 1e-6  # width in k at which the onset bisection stops
 FINE = np.unique(np.concatenate([np.linspace(.001, .5, 4991), np.linspace(.5, .999, 500)]))
 
 
@@ -53,7 +54,7 @@ def binary_model(mapping):
 
 
 def critical(mapping, temperatures, pressure):
-    """Largest k(MDEA-water) at each T without a fine-grid hull gap, bisected to 1e-6 with every other value fixed."""
+    """Largest k(MDEA-water) at each T without a fine-grid hull gap, bisected to RESOLUTION with every other value fixed."""
     rows = []
     for T in temperatures:
         def gap(k):
@@ -62,7 +63,7 @@ def critical(mapping, temperatures, pressure):
             return gaps
         lo, hi = -0.5, 0.2
         assert not gap(lo) and gap(hi), T
-        while hi-lo > 1e-6:
+        while hi-lo > RESOLUTION:
             mid = (lo+hi)/2
             lo, hi = (lo, mid) if gap(mid) else (mid, hi)
         first = gap(hi)[0]
