@@ -53,3 +53,23 @@ def test_typed_power_of_ten_uses_its_value():
         (r"6.6\times10^{-8}", Decimal("6.6e-8")),
         ("10", 10),
     ]
+
+
+def test_typed_renderer_collision_uses_statement_context(tmp_path, monkeypatch):
+    renderer = tmp_path / "displays.py"
+    first = 'feed_label = "20 wt%"'
+    second = 'table_label = "20 wt%"'
+    renderer.write_text(f'{first}\n{second}\nreported = "20"\n')
+    monkeypatch.setattr(displays, "__file__", str(renderer))
+    monkeypatch.setattr(displays, "ROOT", tmp_path)
+    monkeypatch.setattr(displays, "manuscript_sources", lambda: [])
+    value = {"count": {"value": "20"}}
+    reviewed = [
+        dict(file=renderer.name, context="20 wt%", token="20", reason="condition", statement=statement)
+        for statement in (first, second)
+    ]
+    assert list(displays.typed_numbers(value, reviewed)) == ["Typed result candidate: displays.py:3: 20"]
+    renderer.write_text(f"{first}\n")
+    assert list(displays.typed_numbers(value, reviewed)) == [
+        "Stale or ambiguous number collision: displays.py: 20 wt%"
+    ]

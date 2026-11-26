@@ -10,9 +10,9 @@ The MEA model has \res{mea-jointly-fitted-parameter-count-results} jointly fitte
 
 % P:results-parameter-interpretation
 Two interactions are on bounds.
-The \MEAH--\MEACOO interaction is at $-1$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $+1$, which removes it; in fits with the R1--R3 references at the system pressure, holding either one slightly inside its bound raised the objective value by at most 0.75 (Section~\ref{supp-sec:s-uncertainty}).
-The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{1.783}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
-The diameters of the two MEA ions have a conditional correlation of $-0.997$ and are not separately identified, so the fitted values are not unique molecular properties.
+The \MEAH--\MEACOO interaction is at $-1$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $+1$, which removes it; in fits with the R1--R3 references at the system pressure, holding either one slightly inside its bound raised the objective value by at most \res{mea-inward-bound-profile-maximum-objective-increase} (Section~\ref{supp-sec:s-uncertainty}).
+The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{\res{mea-cai-bubble-temperature-rmse}}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
+The diameters of the two MEA ions have a conditional correlation of $\res{mea-ion-segment-diameter-conditional-correlation}$ and are not separately identified, so the fitted values are not unique molecular properties.
 Propagated to the \res{mea-tracking-covariance-volatilization-pressure-count-results} fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of \res{mea-tracking-fitted-pressure-minimum-relative-se-results}--\res{mea-tracking-fitted-pressure-maximum-relative-se-results}\,\%, of the same size as the deviations themselves.
 
 \FloatBarrier
