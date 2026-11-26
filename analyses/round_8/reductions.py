@@ -30,6 +30,7 @@ def matched(s, group):
 FINITE_NEGATIVE = 'no descent in the finite search'
 TWO_LIQUIDS = 'two liquids of lower Gibbs energy'
 CONNECTED_VAPOR = 'liquid plus a vapor-connected phase of lower Gibbs energy'
+OUTSIDE_INCOMPLETE = 'not searched to completion, outside the screened interval'
 
 
 def phase_outcome(value, *, completion=False):
@@ -37,6 +38,8 @@ def phase_outcome(value, *, completion=False):
         if issue := value.get('engine_issue'):
             assert '#' in issue and issue.rsplit('#',1)[1].isdigit()
             return 'open Engine item'
+        if value.get('domain')=='outside' and value.get('pressure_reference_refused'):
+            return OUTSIDE_INCOMPLETE
         if value.get('pair'):
             return value['pair']
         if value['parent_closed'] and value['native_complete'] and value['supplied_complete'] and not value['descent']:

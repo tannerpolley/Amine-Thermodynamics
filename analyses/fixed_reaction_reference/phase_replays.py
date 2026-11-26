@@ -29,7 +29,6 @@ MDEA_CONNECTED = MDEA_REBUILD+'/reverse-connection'
 MDEA_265 = "grid:{'water': 40.84100418410041, 'methyldiethanolamine': 1.0}:393.15:0.8:3.0"
 MDEA_COMPARISON = 'MDEA_comparison'
 COMPARISON_SETS = ('0.7650','0.1325','1.0000')
-OUTSIDE_INCOMPLETE = 'not searched to completion, outside the screened interval'
 SPLIT_PRESSURES = (1_121_000., 203_126_858.89663097)
 
 

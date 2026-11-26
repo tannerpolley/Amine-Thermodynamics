@@ -177,14 +177,13 @@ def mdea_pressure_stats(rows):
 
 
 def comparison_outcome(row, search, bank_size):
-    from phase_replays import OUTSIDE_INCOMPLETE
     from part_ii import stable
 
     if row['domain']=='unassigned':
         return None, dict(message='loading march did not reach or pass the state')
     if search.get('blocker'):
         if row['domain']=='outside' and 'P_Pa' not in search and search.get('pressure_reference_message'):
-            return OUTSIDE_INCOMPLETE, None
+            return phase_outcome(dict(domain=row['domain'],pressure_reference_refused=True),completion=True), None
         return None, dict(message=search['blocker'])
     try:
         return mdea_outcome(search,bank_size), None
@@ -194,7 +193,7 @@ def comparison_outcome(row, search, bank_size):
                    if not no_descent(True,[t]) and not t['descent']]
         witness = any(t['descent'] for t in native) or any(map(stable.supplied_negative,search.get('supplied_witnesses',[])))
         blocker = dict(message=str(error),native_message=search.get('native_message'),trials=details)
-        if native and not witness and (details or not search['native_completed']):
+        if 'native_completed' in search and not witness and (details or not native or not search['native_completed']):
             blocker['engine_issue'] = 'tannerpolley/epcsaft#266'
         return None, blocker
 
