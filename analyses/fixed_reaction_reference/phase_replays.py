@@ -15,13 +15,28 @@ from mdea_reference import seed_state, predicates
 from phases import fixed
 from receivers import AMP, DEA
 from part_ii import eq, stable
-from round_3.phases import trial_parent, trials
+from round_3.phases import cd, dilute_vapor_connection, physical, trial_parent, trials
+from reference_states_428 import phase_closure
+from round_8.reductions import vapor_trace_passes
 from round_8.records import Sources
 from round_8.reductions import phase_outcome
 
 MDEA_CEILING_PA = 5_036_700.
 MDEA_REBUILD = 'MDEA_slope_bound/screen/rebuild-441'
+MDEA_GRID = MDEA_REBUILD+'/cold-march'
 MDEA_265 = "grid:{'water': 40.84100418410041, 'methyldiethanolamine': 1.0}:393.15:0.8:3.0"
+
+
+def check_cold_point(point, previous, temperature, tolerance):
+    P = point['pressure_Pa']
+    assert P>=previous['pressure_Pa'], 'cold bubble pressure below its predecessor'
+    assert point['phase_kinds']==['Liquid','Vapor'], 'cold bubble root labels'
+    assert phase_closure(point,P,tolerance,temperature=temperature), 'cold bubble scaled closure'
+    liquid, vapor = point['phases']
+    assert liquid['amount_mol']>0 and vapor['amount_mol']==0, 'cold bubble incipient amount'
+    assert any(r['returned']=='liquid' for r in cd.matched(
+        point['liquid_roots'],tolerance,liquid['density_mol_m3'],T=temperature,P=P)), 'cold bubble liquid root'
+    assert vapor_trace_passes(point), 'cold incipient phase lacks a vapor connection'
 
 
 def loading_march(spec, run, states):
@@ -32,16 +47,20 @@ def loading_march(spec, run, states):
     ids = spec.parameters.component_ids
     feed = list(bubble.feed.values)
     carbon, amine = (ids.index(c) for c in ('carbon-dioxide', run.config['amine']))
-    points, solution, last = [], None, None
+    points, warm_failures, solution, last = [], [], None, None
     stall = None
+
+    def solve(loading, start):
+        feed[carbon] = loading*feed[amine]
+        native_feed = bubble.feed
+        native_feed.values = feed
+        bubble.feed = native_feed
+        return eq.solve_equilibrium(spec.model,bubble,start=start)
+
     for target in sorted({s['a'] for s in states}):
         loading, step = target, target-(last or 0.)
         while True:
-            feed[carbon] = loading*feed[amine]
-            native_feed = bubble.feed
-            native_feed.values = feed
-            bubble.feed = native_feed
-            result = eq.solve_equilibrium(spec.model, bubble, start=solution)
+            result = solve(loading,solution)
             if result.success and result.requested_tolerance_met:
                 points.append(dict(loading=loading, pressure_Pa=result.pressure))
                 solution, last = result, loading
@@ -52,11 +71,32 @@ def loading_march(spec, run, states):
                 step /= 2
                 if step<1e-3 or last is None:
                     stall = dict(target=target, loading=loading, message=result.message)
+                    if solution is None:
+                        break
+                    warm_failures.append(stall)
+                    result = solve(target,None)
+                    attempt = dict(loading=target,start='cold',message=result.message)
+                    stall = dict(warm=stall,cold=attempt)
+                    if result.success and result.requested_tolerance_met:
+                        attempt.update(physical(spec,bubble,result),pressure_Pa=result.pressure,
+                                       phase_kinds=[p.kind.name for p in bubble.phases])
+                        liquid, vapor = attempt['phases']
+                        attempt['liquid_roots'] = cd.pressure_roots(spec.model,result.temperature,
+                            result.pressure,liquid['x'],liquid['density_mol_m3'])
+                        attempt['vapor_trace'], _ = dilute_vapor_connection(
+                            spec.model,result.temperature,vapor['x'],vapor['density_mol_m3'])
+                        try:
+                            check_cold_point(attempt,points[-1],first['T'],bubble.row_tolerance)
+                        except AssertionError as error:
+                            attempt['qualification_failure'] = str(error)
+                            break
+                        points.append(attempt)
+                        solution, last, stall = result, target, None
                     break
                 loading = min(target, last+step)
         if stall or points[-1]['pressure_Pa']>MDEA_CEILING_PA:
             break
-    return dict(stock=first['stock'], T_K=first['T'], points=points, stall=stall,
+    return dict(stock=first['stock'], T_K=first['T'], points=points, stall=stall,warm_failures=warm_failures,
                 seconds=monotonic()-started)
 
 
@@ -108,12 +148,9 @@ def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
         for q in states:
             if q['key'].startswith('grid:'):
                 groups[tuple(q['stock'].items()),q['T']].append(q)
-        pilot = r.read(OUT/f'{folder}/pilot-march.json.gz')
-        assert all(pilot[k]==identity[k] for k in ('endpoint_fingerprint','wheel'))
-        paths = {(tuple(p['stock'].items()),p['T_K']):p for p in pilot['rows']}
-        pending = [states for key,states in groups.items() if key not in paths]
+        paths = {}
         with ProcessPoolExecutor(run.workers) as pool:
-            for path in pool.map(partial(_loading_path,run=run,point=point),pending,chunksize=4):
+            for path in pool.map(partial(_loading_path,run=run,point=point),groups.values(),chunksize=4):
                 paths[tuple(path['stock'].items()),path['T_K']] = path
         retain('domain-march',list(paths.values()),tick,ceiling_Pa=MDEA_CEILING_PA)
         grid = []
@@ -134,6 +171,26 @@ def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
                     row.update(domain=None, blocker=path['stall'])
                 grid.append(row)
         retain('grid-inventory',grid,tick,ceiling_Pa=MDEA_CEILING_PA)
+
+    if set(modes)&{'grid-pilot','grid'}:
+        inventory = r.read(OUT/f'{folder}/grid-inventory.json.gz')
+        assert all(inventory[k]==v for k,v in identity.items())
+        assert all(q['domain'] is not None for q in inventory['rows']), 'unassigned grid membership'
+        requested = [q for q in inventory['rows'] if q['domain']=='inside' and 'engine_issue' not in q]
+        if 'grid-pilot' in modes:
+            tick = monotonic()
+            selected = requested[::max(1,len(requested)//128)]
+            retain('grid-pilot',stable.grid(point,selected,bank,route=run,completion=True),tick)
+        if 'grid' in modes:
+            pilot = r.read(OUT/f'{folder}/grid-pilot.json.gz')
+            assert all(pilot[k]==v for k,v in identity.items())
+            held = {q['key']:q for q in pilot['rows']}
+            for i in range(8):
+                tick = monotonic()
+                members = requested[i::8]
+                pending = [q for q in members if q['key'] not in held]
+                fresh = iter(stable.grid(point,pending,bank,route=run,completion=True))
+                retain(f'grid-{i}',[held[q['key']] if q['key'] in held else next(fresh) for q in members],tick)
 
 
 def point_for(design, label, tag):
