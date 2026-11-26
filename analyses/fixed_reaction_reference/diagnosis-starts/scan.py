@@ -6,7 +6,7 @@ from collections import Counter
 from multiprocessing import Pool
 from time import monotonic
 
-import starts as c
+import retained_starts as c
 
 FRACTIONS = [0., .125, .25, .375, .5, .625, .75, .875, 1.]
 

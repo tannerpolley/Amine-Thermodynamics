@@ -1,4 +1,4 @@
-"""Shared setup for the issue #429 MDEA start probes (pinned study wheel only)."""
+"""Evaluate MDEA starts from a caller-supplied route and declaration."""
 # ruff: noqa: E402
 from pathlib import Path
 import sys
@@ -7,35 +7,30 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 
 import refit
-from refit import OUT, np, r, reg
-
-refit.a.study.reuse.bind_wheel()
-r.verify()
-MANIFEST = r.read(OUT/'MDEA/manifest.json.gz')
-POINT = MANIFEST['start_A_declaration']
-RUN = refit.configured('MDEA', 'diagnosis-starts')[0]
-SPEC = RUN.bind(POINT)
-NATIVE = SPEC.coordinates()
-ROWS = SPEC.inputs['observations']['fitted']
-LOWER, UPPER, ORIGIN, SCALE = (np.array([getattr(q, k) for q in NATIVE]) for k in ('lower', 'upper', 'origin', 'scale'))
-CANDIDATES = refit.qmc.LatinHypercube(d=len(NATIVE), seed=refit.SEED).random(64)
+from refit import np, reg
 
 
-def vector(draw):
-    """Physical start vector of a Latin-hypercube draw, as the campaign formed it."""
-    return LOWER + (UPPER-LOWER)*CANDIDATES[draw]
+class Starts:
+    def __init__(self, run, point):
+        self.run, self.point = run, point
+        self.spec = run.bind(point)
+        self.native = self.spec.coordinates()
+        self.rows = self.spec.inputs['observations']['fitted']
+        self.lower, self.upper, self.origin, self.scale = (
+            np.array([getattr(q, k) for q in self.native]) for k in ('lower', 'upper', 'origin', 'scale')
+        )
+        self.candidates = refit.qmc.LatinHypercube(d=len(self.native), seed=refit.SEED).random(64)
 
+    def vector(self, draw):
+        return self.lower + (self.upper-self.lower)*self.candidates[draw]
 
-def at(values):
-    """Specification bound at a physical coordinate vector."""
-    u = (np.asarray(values)-ORIGIN)/SCALE
-    chart = reg.evaluate_coordinates(SPEC.parameters, NATIVE, u.tolist(), [], thermochemistry=SPEC.thermal)
-    report = dict(physical=chart.physical, optimizer=u.tolist(), reactions=POINT['reactions'])
-    return RUN.bind(RUN.endpoint_mapping(POINT, report, POINT['coordinates']))
+    def at(self, values):
+        u = ((np.asarray(values)-self.origin)/self.scale).tolist()
+        chart = reg.evaluate_coordinates(self.spec.parameters, self.native, u, [], thermochemistry=self.spec.thermal)
+        report = dict(physical=chart.physical, optimizer=u, reactions=self.point['reactions'])
+        return self.run.bind(self.run.endpoint_mapping(self.point, report, self.point['coordinates']))
 
-
-def census(values):
-    """Status of each fitted row evaluated alone at a physical coordinate vector."""
-    spec = at(values)
-    return [{k: q.get(k) for k in ('identity', 'group', 'status', 'message', 'value', 'requested_tolerance_met')}
-            for q in map(spec.prediction, spec.inputs['observations']['fitted'])]
+    def census(self, values):
+        spec = self.at(values)
+        return [{k: q.get(k) for k in ('identity', 'group', 'status', 'message', 'value', 'requested_tolerance_met')}
+                for q in map(spec.prediction, spec.inputs['observations']['fitted'])]

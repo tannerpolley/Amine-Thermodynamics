@@ -58,7 +58,7 @@ root for the CO2-rich phase; 37 stop on a residual or work budget and remain und
 
 | Script | Question | Wall time, 8 processes |
 |---|---|---|
-| `census.py`, `summarize.py` | Which rows are unavailable at each draw? | 509 s |
+| Retained census, `summarize.py` | Which rows are unavailable at each draw? | 509 s |
 | `saturation.py` | What did each Merkley search solve before refusing? | 103 s |
 | `gap.py` | Do binary failures coincide with a liquid–liquid gap? | 122 s |
 | `continuation.py` | Does a loading march reach rows that fail cold? | 385 s |
@@ -68,4 +68,6 @@ root for the CO2-rich phase; 37 stop on a residual or work budget and remain und
 | `zheng.py` | Zheng row 6 bubble pressure along loading | 2 s |
 | `outlook.py` | Per-draw cause from the retained records | under 5 s |
 
-`starts.py` holds the shared setup. `results/` holds every record the tables above are read from.
+`retained_starts.py` binds the historical declaration to the shared start evaluator. `results/`
+holds the records used above. For #427, `stage0.py` passes the slope-bound declaration to
+`census.py` and writes to `../results/MDEA_slope_bound/`.

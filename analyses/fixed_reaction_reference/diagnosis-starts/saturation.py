@@ -5,7 +5,7 @@ Keeps every node's loading, pressure mismatch, slope and message; `outlook.py` o
 from multiprocessing import Pool
 from time import monotonic
 
-import starts as c
+import retained_starts as c
 
 MERKLEY = [i for i, q in enumerate(c.ROWS) if q['group'] == 'Merkley']
 

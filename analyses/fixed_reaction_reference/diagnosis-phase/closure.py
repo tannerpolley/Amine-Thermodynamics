@@ -7,7 +7,7 @@ import sys
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "diagnosis-starts"))
-import starts as c
+import retained_starts as c
 from phase_replays import point_for
 import mea_stability as mea
 from reference_derivatives import pressure_reclosure

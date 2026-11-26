@@ -6,7 +6,7 @@ A feed between the hull contacts is not a stable single liquid; negative curvatu
 from multiprocessing import Pool
 from time import monotonic
 
-import starts as c
+import retained_starts as c
 
 M, np = c.refit.MDEA, c.np
 AMINE, X, P = 'methyldiethanolamine', c.refit.MDEA.FINE, 101325.

@@ -3,6 +3,7 @@
 from collections import Counter
 import hashlib
 import json
+from pathlib import Path
 import sys
 import time
 
@@ -145,10 +146,11 @@ def compare_rows(rows, old, fields, tolerance):
             assert abs(new['value']-ref['value']) <= tolerance * max(1., abs(ref['value'])), (new, ref)
 
 
-def bind_wheel():
-    r.COMMIT, r.SHA, r.WHEEL = WHEEL.parent.name.removeprefix('main-'), SHA, WHEEL
-    f.a.COMMIT, f.a.SHA, f.a.WHEEL = r.COMMIT, SHA, WHEEL
-    s.ENGINE_COMMIT, s.ENGINE_WHEEL_SHA256 = r.COMMIT, SHA
+def bind_wheel(wheel=WHEEL, wheel_sha256=SHA):
+    wheel = Path(wheel)
+    r.COMMIT, r.SHA, r.WHEEL = wheel.parent.name.removeprefix('main-'), wheel_sha256, wheel
+    f.a.COMMIT, f.a.SHA, f.a.WHEEL = r.COMMIT, wheel_sha256, wheel
+    s.ENGINE_COMMIT, s.ENGINE_WHEEL_SHA256 = r.COMMIT, wheel_sha256
 
 
 def controls(mea, mdea):

@@ -4,6 +4,7 @@ resources:
   - manuscript-handoff.json
   - results/handoff-checks.json
   - results/stages.json
+  - results/MDEA_slope_bound/*
 ---
 
 The study compares three calculations on Engine commit `05e94210`.
@@ -34,6 +35,26 @@ and population basis, and open quantities.
 | MDEA | 281 | 17.400957 | 17.44495 | 15.609314 | -1.7916425 | A provisional |
 | AMP_free | 214 | 75.111439 | 74.939776 | 74.928158 | -0.18328102 | A |
 | AMP_fixed | 214 | 76.352718 | 76.236649 | 76.226564 | -0.12615408 | A |
+
+## MDEA–water slope bound (#427)
+
+Stage 0 used the study wheel with the reaction reference fixed at 100 kPa.
+The lower slope bound is 0.0005507469177 K⁻¹. The upper slope bound is 0.01 K⁻¹.
+
+A replays all 281 predictions at cost 15.609314353577124, with maximum relative prediction and conditional standard-error differences of 0 and 0. Only the upper bound on $a_0$ is active.
+
+At 288.71 K and 1.466 MPa, the binary liquid hull brackets gap onset between -0.1328280449 and -0.1328273773. At the $(U,s)$ corner, $k=-0.141073258$ is 0.00824521 below the no-gap end of the bracket.
+
+The four corners had 0 gaps in 136 temperature–corner checks on the 5,490-point composition grid. The LHS-53 control had a gap with MDEA mole-fraction contacts 0.0088 and 0.3078. These are finite-grid model checks.
+
+2 of 64 draws had every row available. The census recorded 17363 available and 621 unavailable rows (Cp 9, Kuranov 436, Merkley 176). All MDEA–water bubble rows were available. The census records Engine responses at the declared vectors.
+
+The approved two-wheel exception applies to the #427 candidate checks, fits and descent probes. Endpoint values are reported on the study wheel. The fit comparison awaits the second wheel. [Accepted plan](https://github.com/tannerpolley/Amine-Thermodynamics/issues/427#issuecomment-7178782607).
+
+[Declaration](results/MDEA_slope_bound/declaration.json.gz) · [A replay](results/MDEA_slope_bound/replay-A.json.gz) · [Onsets](results/MDEA_slope_bound/onset-S.json) · [Hulls](results/MDEA_slope_bound/hull-S.json) · [Row census](results/MDEA_slope_bound/census-S.json.gz) · [Checks and message counts](results/MDEA_slope_bound/checks.json.gz).
+
+Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/diagnosis-starts/stage0.py` from the repository root to repeat Stage 0. Add `--check` to recompute the checks from the retained records.
+
 
 ## Start separation and endpoint stationarity
 
