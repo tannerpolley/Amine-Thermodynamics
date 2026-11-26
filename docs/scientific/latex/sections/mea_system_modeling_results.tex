@@ -2,7 +2,7 @@
 \subsection{MEA calibration}\label{sec:results-mea}
 \subsubsection{Parameters and their uncertainty}\label{sec:results-parameters}
 % P:results-design
-The MEA model has 11 jointly fitted parameters: the MEA--water interaction and its temperature coefficient, the diameters and dispersion energies of \MEAH and \MEACOO, their interactions with water, one with a temperature coefficient, and the interactions of \MEAH with \MEACOO and with bicarbonate.
+The MEA model has \res{mea-jointly-fitted-parameter-count-results} jointly fitted parameters: the MEA--water interaction and its temperature coefficient, the diameters and dispersion energies of \MEAH and \MEACOO, their interactions with water, one with a temperature coefficient, and the interactions of \MEAH with \MEACOO and with bicarbonate.
 \Cref{tab:species-parameters,tab:interaction-matrix} list them, and \cref{tab:mea-data} gives the deviations from every fitted data set, beside those of the fit with the MEA-fitted shared set and of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/species_parameters}
@@ -34,7 +34,7 @@ The higher-temperature pressures are calculated without further fitting, and the
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
-The carbonate share of dissolved carbon remains far below the ten observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of \res{mea-carbonate-share-aard-results}\,\%: the geometric mean of the calculated-to-observed ratios is \res{mea-carbonate-share-geometric-mean-mea-results}, against 0.032 with the MEA-fitted shared set (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
+The carbonate share of dissolved carbon remains far below the \res{mea-carbonate-share-observation-count-results} observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of \res{mea-carbonate-share-aard-results}\,\%: the geometric mean of the calculated-to-observed ratios is \res{mea-carbonate-share-geometric-mean-mea-results}, against \res{mea-historical-shared-carbonate-share-geometric-mean-results} with the MEA-fitted shared set (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
 Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}C} NMR signal and state that their carbonate is most likely overpredicted, which limits the accuracy of these observations.
 Changes to the Born diameters of the two anions, to the permittivity and to the solvation factors, tested with the MEA-fitted shared set, do not remove the deficit (Section~\ref{supp-sec:s-carbonate}).
 Its cause is unresolved, and the fitted pressures do not determine this minor-species partition.
@@ -62,7 +62,7 @@ The measurements themselves differ between the two series at nearby loadings, so
 % P:results-heat-kim
 The semi-differential heats of Kim and Svendsen deviate most at \SI{393.15}{\kelvin}, with an RMSE of \SI{\res{mea-kim-svendsen-hot-interval-rmse-results}}{\kilo\joule\per\mole} of \COtwo over all \res{mea-kim-svendsen-hot-interval-count-results} intervals, including the four flagged for source problems that Table~\ref{supp-tab:supplement-temperature-bands} reports separately.
 Extrapolated equilibrium constants, pressure histories that had to be approximated and chemistry missing from the model may all contribute, so caloric accuracy at high temperature is not demonstrated.
-Heat capacities outside the fitted states \cite{weilandHeatCapacityAqueous1997,concepcionHeatCapacitiesDifferent2023} deviate by about 5\,\% or less, 5.02\,\% for the six of Weiland et al.\ (Table~\ref{supp-tab:supplement-mea-comparison}).
+Heat capacities outside the fitted states \cite{weilandHeatCapacityAqueous1997,concepcionHeatCapacitiesDifferent2023} deviate by about \res{mea-heat-capacity-outside-weiland-concepcion-maximum-aard}\,\% or less, \res{mea-weiland-outside-heat-capacity-aard}\,\% for the \res{mea-weiland-outside-heat-capacity-count} of Weiland et al.\ (Table~\ref{supp-tab:supplement-mea-comparison}).
 
 % P:results-density-01
 Without volume translation, the model describes the fitted loaded densities of Amundsen et al.\ and Hartono et al.\ more closely than the full ranges of those sources and the densities of Han et al., which are not fitted (Fig.~\ref{supp-fig:density-curves}) \cite{Amundsen2009,Hartono2014,hanDensityWater12012}.
@@ -77,9 +77,9 @@ The concentration dependence of the pressure is a weakness of the calibration.
 % P:results-joint-01
 Two steps lead from the 16-parameter calibration to the MEA model; the sequence was computed with the R1--R3 references at the system pressure (Section~\ref{supp-sec:s-restrictions}).
 The first fixes R2 and R5 at their literature forms and ties the Born diameters, which gives the 11-parameter fit with the MEA-fitted shared set.
-It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from six to one.
+It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from \res{mea-restriction-unrestricted-active-bound-count} to \res{mea-restriction-tied-born-active-bound-count}.
 The second fixes the two water--anion interactions from the salt data.
-On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from 150.76 to 152.96, and the \res{mea-added-pressure-count-restriction-comparison} pressures not fitted deviate by 27.8 instead of 24.9\,\%.
+On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from \res{mea-restriction-mea-shared-set-objective} to \res{mea-restriction-salt-set-tracking-objective}, and the \res{mea-added-pressure-count-restriction-comparison} pressures not fitted deviate by \res{mea-restriction-salt-set-tracking-unfitted-aard} instead of \res{mea-restriction-mea-shared-set-not-fitted-pressure-aard}\,\%.
 
 % P:results-joint-02
 Both steps cost accuracy at high temperature.

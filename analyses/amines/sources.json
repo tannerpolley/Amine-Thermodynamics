@@ -3171,5 +3171,131 @@
     "record": "mea/source/rows/display/data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
     "sha256": "d5cd6ea0d5d75f9994f5ed354463776a09b8f3cd081eb72ddef98dd4a356c53a",
     "stage": "input"
+  },
+  "analyses/mea_parameter_bundle/results/engine-3e83e19c-association-volume/least-squares-declaration.json": {
+    "disposition": "stage",
+    "fit_set": "association-volume-conversion",
+    "keys": "distinct observations[].T_K",
+    "owner": "mea.py",
+    "record": "mea/association-volume-conversion/fit inputs/least-squares-declaration.json",
+    "sha256": "e359b57c83389c314b99632fe1f8cb1efddcb2da68ee30fff3f24bff881be026",
+    "stage": "fit inputs"
+  },
+  "analyses/mea_parameter_bundle/results/salt-anchored-435/salt/summary.json": {
+    "disposition": "stage",
+    "fit_set": "sodium-salts",
+    "keys": "result.scores[NaCl].n; result.laws.sodium-cation.a0; result.scores[NaHCO3].n; result.laws.carbonate-anion.a0; result.scores[Na2CO3].n; result.scores[mixed].n; result.rows.Na2CO3[available,m=0.01].relative_error.mean_percent; result.rows.Na2CO3[available,0.2<=m<=0.4].maximum_relative_error_percent; result.rows.Na2CO3[available,0.2<=m<=0.4].minimum_relative_error_percent; result.rows.Na2CO3[available,m=1].maximum_relative_error_percent; result.rows.Na2CO3[available,m=1].minimum_relative_error_percent; result.on_bound.count; result.laws_at_record_reference.bicarbonate-anion.a0",
+    "owner": "salt.py",
+    "record": "salt/sodium-salts/fit/summary.json",
+    "sha256": "c57aaee508f5b8eb617843befc2c59e0dc66832a818d7267975f3ae964b2918e",
+    "stage": "fit"
+  },
+  "analyses/round_5/results/A/profile-original.json": {
+    "disposition": "stage",
+    "fit_set": "first-data",
+    "keys": "center; [\"brackets\"][\"-1\"][\"within\"]; [\"brackets\"][\"1\"]['within']; [\"center\"]; [\"delta_cutoff\"]",
+    "owner": "amp.py",
+    "record": "amp/first-data/fit profile/profile-original.json",
+    "sha256": "080c5eb1e3d903603d893ad453a12b5af0796fd9016d5aba71d70bff5c7fb03e",
+    "stage": "fit profile"
+  },
+  "analyses/fixed_reaction_reference/results/AMP_free/conditional-profile/profile-expanded.json": {
+    "disposition": "stage",
+    "fit_set": "reported",
+    "keys": "center; brackets[-1].beyond; brackets[-1].within; brackets[1].within; brackets[1].beyond",
+    "owner": "amp.py",
+    "record": "amp/reported/fit profile/profile-expanded.json",
+    "sha256": "2e7004377a71eb08fb2e094853953b23c843119d9cd5f86532832d704d4b1d63",
+    "stage": "fit profile"
+  },
+  "analyses/round_5/results/A/common-pressure.json.gz": {
+    "disposition": "stage",
+    "fit_set": "first-data and expanded",
+    "keys": "bubbles[original-main].pressure_Pa in MPa; bubbles[original-slope-150].pressure_Pa in MPa; bubbles[expanded-free].pressure_Pa in MPa; bubbles[expanded-fixed].pressure_Pa in MPa; common_Pa in MPa; outcomes[original-main].attempts[confirmed].Gibbs_decrease_over_RT_mol; common pressure outcomes excluding first-data free, plus free and fixed original salt fits: no attempt confirmed",
+    "owner": "amp.py",
+    "record": "amp/first-data and expanded/phase/common-pressure.json.gz",
+    "sha256": "9525afa933834f69ad129ad3be6598dcd5bfdfa47785ce0b47b84e94e1788599",
+    "stage": "phase"
+  },
+  "analyses/round_5/results/A/profile-expanded.json": {
+    "disposition": "stage",
+    "fit_set": "first-data and expanded",
+    "keys": "[\"brackets\"][\"-1\"][\"within\"]; [\"brackets\"][\"1\"]['beyond']; [\"center\"]; [\"delta_cutoff\"]; center",
+    "owner": "amp.py",
+    "record": "amp/first-data and expanded/fit profile/profile-expanded.json",
+    "sha256": "7ef90121826d02792e46a6371bdd075bb094cbdc95c103d6298c60a20a827aaa",
+    "stage": "fit profile"
+  },
+  "analyses/mea_parameter_bundle/results/split-diagnosis-433/figiel-equilibrium.json": {
+    "disposition": "stage",
+    "fit_set": "reported",
+    "keys": "runs[finest step].delta_g: magnitude",
+    "owner": "dea.py",
+    "record": "dea/reported/phase control/figiel-equilibrium.json",
+    "sha256": "c7f4577a06a3604481cb84a69581ad4d321105a435bad25030e1e504ebbd6532",
+    "stage": "phase control"
+  },
+  "analyses/amines/results/mea/published-properties/replay/endpoint.json.gz": {
+    "disposition": "stage",
+    "fit_set": "published-properties",
+    "keys": "statistics[broad Cp].n",
+    "owner": "mea.py",
+    "record": "mea/published-properties/replay/endpoint.json.gz",
+    "sha256": "0215046846ac409a26cc5a3ec93649f5eb63ce8550b4f85f438631dfee46c964",
+    "stage": "replay"
+  },
+  "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/grid.csv": {
+    "disposition": "stage",
+    "fit_set": "published",
+    "keys": "minimum_eigenvalue minimum over locally unstable rows; minimum_eigenvalue maximum over locally unstable rows",
+    "owner": "mea.py",
+    "record": "mea/published/phase grid control/grid.csv",
+    "sha256": "9ad41dc5568bb8c0ea3e447fa0f209c8082de180d6f143ca33a2c2fdfc962339",
+    "stage": "phase grid control"
+  },
+  "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/reduction.json": {
+    "disposition": "stage",
+    "fit_set": "permittivity branches",
+    "keys": "branches[smaller-dV].dielectric_temperature_K",
+    "owner": "mea.py",
+    "record": "mea/permittivity branches/fit/reduction.json",
+    "sha256": "bed06086cfa121d0c69b55d9e584eaf60ca198635d2588988c7d6cef7da66717",
+    "stage": "fit"
+  },
+  "analyses/dea_transfer/results/reactive-refit-425/inputs.json": {
+    "disposition": "stage",
+    "fit_set": "binary-temperature-dependent",
+    "keys": "binary.b_K",
+    "owner": "dea.py",
+    "record": "dea/binary-temperature-dependent/fit inputs/inputs.json",
+    "sha256": "22cbd9ed0c2407958226e411decec63c339ef311090e703732b4a2d8413053a1",
+    "stage": "fit inputs"
+  },
+  "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/stability.json.gz": {
+    "disposition": "stage",
+    "fit_set": "bicarbonate-0.1325",
+    "keys": "pressure_roots[confirmed grid split].pressure_Pa / 1e6",
+    "owner": "mdea.py",
+    "record": "mdea/bicarbonate-0.1325/phase/stability.json.gz",
+    "sha256": "e9d9dacaffe4796db6657732277bcf80b241c2fc121f912e73322e27a52d4b48",
+    "stage": "phase"
+  },
+  "analyses/round_5/results/A/expanded-free.json.gz": {
+    "disposition": "stage",
+    "fit_set": "first-data and expanded",
+    "keys": "expanded.scores[Hartono supplemental, all temperatures].AARD_percent",
+    "owner": "amp.py",
+    "record": "amp/first-data and expanded/replay/expanded-free.json.gz",
+    "sha256": "79b1299b6ca1b0acaf6660f6775890bb2ed507e8b151fcb0e1a74d9c8dd01b81",
+    "stage": "replay"
+  },
+  "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/agreement.json": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "dataset[not fitted: six-source pressures].aard_percent",
+    "owner": "mea.py",
+    "record": "mea/system-pressure/replay/agreement.json",
+    "sha256": "2c04a8f1c1c6acba176c5c28f4a95d36d379d80984894276bbfffdbdbc63896d",
+    "stage": "replay"
   }
 }
