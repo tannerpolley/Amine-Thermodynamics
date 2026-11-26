@@ -32,21 +32,32 @@ def manifest(fit_set):
     declaration = read(path / "manifest.json.gz")
     if declaration["wheel"] != wheel:
         raise ValueError(f"{path}: fit manifest wheel differs from the installed wheel")
+    manifest_id = fingerprint(declaration)
     replacement = path / "replacement-starts.json.gz"
     starts = declaration["starts"]
     if replacement.is_file():
         extra = read(replacement)
-        if extra["wheel"] != wheel or extra["manifest_fingerprint"] != fingerprint(declaration):
+        if extra["wheel"] != wheel or extra["manifest_fingerprint"] != manifest_id:
             raise ValueError(f"{replacement}: replacement starts do not belong to the fit manifest")
         starts = starts | {k: v["start"] for k, v in extra["draws"].items() if v["disposition"] == "eligible"}
     diagnostic_starts = {}
     for source in fit_set.get("diagnostic_attempts", ()):
         data = read(path / source)
         label = data["start"]
-        if data["wheel"] != wheel or data["manifest_fingerprint"] != fingerprint(declaration):
+        if data["wheel"] != wheel or data["manifest_fingerprint"] != manifest_id:
             raise ValueError(f"{label}: additional start does not belong to the fit manifest")
         diagnostic_starts[label] = dict(optimizer=data["optimizer_start"], controls=data["controls"])
-    return dict(declaration, starts=starts, diagnostic_starts=diagnostic_starts)
+    start_controls = {}
+    for label in starts:
+        data = read(path / f"{label}.json.gz")
+        stages = []
+        while data is not None:
+            if data["wheel"] != wheel or data["manifest_fingerprint"] != manifest_id or data["start"] != label:
+                raise ValueError(f"{path}: controls for {label} do not belong to the fit manifest")
+            stages.append(data["controls"])
+            data = data.get("previous_stage")
+        start_controls[label] = stages[::-1]
+    return dict(declaration, starts=starts, diagnostic_starts=diagnostic_starts, start_controls=start_controls)
 
 
 def route_for(fit_set):
@@ -94,10 +105,10 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
     route = route_for(fit_set)
     point = declaration["start_A_declaration"]
     start = (declaration["starts"] | declaration["diagnostic_starts"])[label]
-    controls = start.get("controls", declaration["fit_controls"]) | dict(workers=int(os.environ["AGENT_HEAVY_CORES"]))
-    controls.setdefault("maximum_elapsed_time_seconds", fit_set["maximum_seconds"])
+    controls = start.get("controls", declaration["fit_controls"])
     u = start["optimizer"]
     manifest_id = fingerprint(declaration)
+    stage = 0
     if previous is not None:
         if (
             previous["wheel"] != wheel
@@ -110,6 +121,15 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
             raise ValueError("Continuation requires the same fit, start and wheel at a replayable work limit")
         controls = previous["controls"]
         point = previous["endpoint"]
+        earlier = previous
+        while earlier is not None:
+            stage += 1
+            earlier = earlier.get("previous_stage")
+    recorded = declaration.get("start_controls", {}).get(label, ())
+    if stage < len(recorded):
+        controls = recorded[stage]
+    controls = controls | dict(workers=int(os.environ["AGENT_HEAVY_CORES"]))
+    controls.setdefault("maximum_elapsed_time_seconds", fit_set["maximum_seconds"])
     spec = route.bind(point)
     spec.spec["optimizer"] = controls
     tick = monotonic()
