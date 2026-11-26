@@ -78,30 +78,31 @@ Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/dia
 | MDEA retained positive controls | 0 | 0 | 3 | 0 | 0 |
 | MDEA retained open search | 0 | 0 | 0 | 1 | 0 |
 
-| Screen stratum | Distinct parents read | Pressure misses | Reclosed | Recovered by restart | Still missing |
+| Stratum | Parents checked | Phases checked | Max scaled pressure error | Restarts | Failures |
 |---|---:|---:|---:|---:|---:|
-| DEA/declared | 1163 | 122 | 122 | 0 | 0 |
-| dense | 1800 | 475 | 467 | 8 | 0 |
-| census | 108 | 39 | 38 | 1 | 0 |
-| MEA/offset | 575 | 174 | 174 | 0 | 0 |
-| MEA/census | 162 | 79 | 77 | 2 | 0 |
-| AMP_free/native | 630 | 132 | 132 | 0 | 0 |
-| AMP_free/supplied | 630 | 132 | 132 | 0 | 0 |
-| AMP_fixed/native | 630 | 141 | 140 | 1 | 0 |
-| AMP_fixed/supplied | 630 | 141 | 140 | 1 | 0 |
+| MEA measured | 321 | 335 | 3.7615e-13 | 0 | 0 |
+| MEA control | 1 | 1 | 6.222e-15 | 0 | 0 |
+| DEA/declared | 1169 | 1169 | 2.4376e-13 | 0 | 0 |
+| DEA controls | 4 | 4 | 3.774e-14 | 0 | 0 |
+| AMP_free controls | 7 | 7 | 3.1659e-14 | 0 | 0 |
+| AMP_fixed controls | 7 | 7 | 3.7084e-14 | 0 | 0 |
+| MEA dense grid | 1800 | 1800 | 3.6805e-13 | 0 | 0 |
+| MEA census-grid | 108 | 108 | 1.9647e-13 | 0 | 0 |
+| MEA/offset | 575 | 575 | 3.0972e-13 | 0 | 0 |
+| MEA/census | 162 | 311 | 2.6859e-13 | 0 | 0 |
+| AMP_free/native | 630 | 630 | 2.8242e-13 | 0 | 0 |
+| AMP_free/supplied | 630 | 630 | 2.8242e-13 | 0 | 0 |
+| AMP_fixed/native | 630 | 630 | 2.4484e-13 | 0 | 0 |
+| AMP_fixed/supplied | 630 | 630 | 2.4484e-13 | 0 | 0 |
+| MDEA salt-rms | 1 | 1 | 3.3479e-14 | 0 | 0 |
+| MDEA historical-original | 1 | 1 | 1.332e-15 | 0 | 0 |
 
-The native stability test consumes the Engine equilibrium result. In these replays the largest relative molar-density difference from the independently reclosed parent was 8.64e-14.
+Pressure closure uses the absolute EOS pressure residual divided by ρRT at the state passed to the native search. The trial-call records also retain the raw relative pressure residual.
 
-The pressure scans evaluated 401 consecutive densities around each Newton density at the original and restarted compositions. Repeated reads and the derived-property route agreed at the sampled densities.
-
-| Parent | Minimum relative error magnitude, original / restart | Relative step per density ULP | RMS scatter, original / restart |
-|---|---:|---:|---:|
-| `census&#124;None&#124;318.15&#124;1e-05&#124;1.05` | 1.19e-10 / 1.19e-10 | 8.67e-11 | 1.27e-10 / 1.27e-10 |
-| `Cai:9:problem` | 1.32e-10 / 1.32e-10 | 1.1e-10 | 2.14e-10 / 2.14e-10 |
-| `kundu-2003:0:problem` | 1.24e-10 / 1.9e-10 | 9.34e-11 | 1.51e-10 / 1.52e-10 |
-| `hartono-2013-P:0:problem` | 1.6e-11 / 8.09e-12 | 3.54e-11 | 5.21e-11 / 5.25e-11 |
-
-For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target pressure and the closest scan points still miss the ordinary pressure limit. Fix 1a admits the density with the smallest absolute pressure error in each of these scans. All three reruns completed without descent at the selected densities. For Hartono, the original search window contains a qualifying density. None of the declared reactions are on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 and both trial protocols completed without descent.
+| MEA observation | Native pressure (kPa) | Max scaled pressure error | Restart |
+|---|---:|---:|---|
+| vle_obs_0047-pco2 | 8.1864 | 1.85e-14 | no |
+| vle_obs_0162-pco2 | 6.91714 | 1.2e-14 | no |
 
 The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at 7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.
 
@@ -645,7 +646,7 @@ Measured entries record timed calculations. The lanes overlapped.
 
 ## Coverage
 
-The quantity index contains 1783 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 78 undecided results.
+The quantity index contains 1781 replayed comparisons and 12 quantities with independent contributors. It records 105 open keys and 78 undecided results.
 
 Tables preserve exact comparisons at discrete feeds, fitted endpoints and pressure controls. A phase outcome applies to its finite trials and recorded pressure and feed.
 

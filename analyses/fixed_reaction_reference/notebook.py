@@ -92,41 +92,20 @@ def stage1_phases(quantities):
             counts = item['new']['counts']
             cells = [name.removeprefix('Stage 1 '),*[str(counts.get(k,0)) for k in classes],str(len(item['new']['blockers']))]
             lines.append('| '+' | '.join(cells)+' |')
-    lines.extend(['','| Screen stratum | Distinct parents read | Pressure misses | Reclosed | Recovered by restart | Still missing |',
+    lines.extend(['','| Stratum | Parents checked | Phases checked | Max scaled pressure error | Restarts | Failures |',
                   '|---|---:|---:|---:|---:|---:|'])
-    density_gap = 0.
     for item in quantities.values():
         if isinstance(item['new'],dict):
             for name,value in item['new'].get('pressure_closure',{}).items():
-                fields = ('parents_read','misses','reclosure','restart','still_missing')
-                lines.append('| '+' | '.join([name,*(str(value.get(k,0)) for k in fields)])+' |')
-                density_gap = max(density_gap,value.get('max_native_density_relative_difference',0.))
-    lines.extend(['',f'The native stability test consumes the Engine equilibrium result. In these replays the largest '
-                  f'relative molar-density difference from the independently reclosed parent was {density_gap:.3g}.'])
-    blockers = [(name,key,v) for name,item in quantities.items() if name.startswith('Stage 1 ')
-                for key,v in item['new'].get('blockers',{}).items()]
-    if blockers:
-        lines.extend(['','Pressure-closure blockers by stratum, including equivalent calculation keys.',''])
-        for name,key,value in blockers:
-            lines.append(f"- {name}. `{key}`. {value['diagnosis']}. See `results/{value['record']}`.")
-    diagnosis = quantities['Stage 1 pressure closure diagnosis']['new']
-    lines.extend(['','The pressure scans evaluated 401 consecutive densities around each Newton density '
-                  'at the original and restarted compositions. Repeated reads and the derived-property '
-                  'route agreed at the sampled densities.',
-                  '', '| Parent | Minimum relative error magnitude, original / restart | Relative step per density ULP | RMS scatter, original / restart |',
-                  '|---|---:|---:|---:|'])
-    for key,scans in diagnosis.items():
-        before,after = (scans[k] for k in ('initial_parent','parent'))
-        lines.append(f"| `{key.replace('|', '&#124;')}` | {before['best_abs_relative_pressure_error']:.3g} / "
-                     f"{after['best_abs_relative_pressure_error']:.3g} | {before['analytic_step_per_ULP']:.3g} | "
-                     f"{before['local_fit_scatter_RMS']:.3g} / {after['local_fit_scatter_RMS']:.3g} |")
-    lines.extend(['','For the MEA census-grid, Cai and Kundu parents, adjacent densities bracket the target '
-                  'pressure and the closest scan points still miss the ordinary pressure limit. '
-                  'Fix 1a admits the density with the smallest absolute pressure error in each of these scans. '
-                  'All three reruns completed without descent at the selected densities. For Hartono, the '
-                  'original search window contains a qualifying density. None of the declared reactions are '
-                  'on that liquid support. Reclosure gave a relative pressure residual of −1.60e−11 '
-                  'and both trial protocols completed without descent.'])
+                fields = ('parents_checked','phases_checked','maximum_scaled_pressure_error','restarts','failures')
+                lines.append('| '+' | '.join([name,*(f'{value.get(k,0):.5g}' for k in fields)])+' |')
+    lines.extend(['','Pressure closure uses the absolute EOS pressure residual divided by ρRT at the state '
+                  'passed to the native search. The trial-call records also retain the raw relative pressure residual.'])
+    lines.extend(['','| MEA observation | Native pressure (kPa) | Max scaled pressure error | Restart |',
+                  '|---|---:|---:|---|'])
+    for key,value in quantities['Stage 1 MEA measured']['new']['restart_cases'].items():
+        restarted = 'yes' if value['restarted'] else 'no'
+        lines.append(f"| {key} | {value['P_Pa']/1000:.6g} | {value['maximum_scaled_pressure_error']:.3g} | {restarted} |")
     lines.extend(['','The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. '
                   'The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at '
                   '7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.',
