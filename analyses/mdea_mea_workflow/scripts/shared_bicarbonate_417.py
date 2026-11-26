@@ -44,8 +44,14 @@ def dilute_vapor_connection(model, T, x, rho):
     density = rho*np.geomspace(1e-4, 1., 33)
     batch = model.states([T]*33, rho=density, x=x, derived_properties=True)
     trace = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
-    connected = all(v is not None and v > 0 for v in batch.pressure_density_derivative) and all(np.diff(batch.pressure) > 0)
-    return trace, connected
+    return trace, vapor_trace_connected(trace,rho)
+
+
+def vapor_trace_connected(trace, rho):
+    pressure, density, derivative = (trace[k] for k in ('pressure_Pa','density_mol_m3','dP_drho'))
+    return (len(pressure)==len(density)==len(derivative)==33 and density[-1]==rho
+            and all(v is not None and v>0 for v in derivative)
+            and all(b>a for a,b in zip(pressure,pressure[1:])))
 
 
 def witnesses(route, point, rows):

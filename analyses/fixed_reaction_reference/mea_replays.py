@@ -6,14 +6,74 @@ from hashlib import sha256
 import json
 import sys
 from time import monotonic
+from types import SimpleNamespace
 
 from refit import OUT, WORK, P_REF, fingerprint, put, r
-from phase_replays import point_for
+from phase_replays import point_for, support_census
 import mea_pressure as pressure
 import mea_stability as stability
 from objective_weights_420 import census_classify, grid_classify
 
 ALLOWANCE = 1500.
+
+
+def measured_identity(point, bank):
+    return dict(endpoint_fingerprint=fingerprint(point),bank_fingerprint=fingerprint(bank),wheel=r.SHA)
+
+
+def measured_batch(record, identity, names):
+    assert all(record.get(k)==v for k,v in identity.items()), 'MEA batch endpoint, trial bank or wheel changed'
+    rows = record['rows']
+    assert [q['identity'] for q in rows]==names and all(q['wheel']==r.SHA for q in rows)
+    return rows
+
+
+def rebuild_measured(point, reference, names, bank, output, workers):
+    started = monotonic()
+    identity = measured_identity(point,bank)
+    assert len(names)==len(set(names))==321
+    batches = [names[i:i+8] for i in range(0,len(names),8)]
+    jobs = []
+    for i, batch in enumerate(batches):
+        path = output/f'measured-scaled/{i}.json.gz'
+        if path.exists():
+            measured_batch(r.read(path),identity,batch)
+        else:
+            jobs.append((i,(point['parameters'],reference,batch,1.,P_REF,bank)))
+    manifest = output/'measured-scaled/inventory.json.gz'
+    if not jobs and manifest.exists():
+        retained = r.read(manifest)
+        assert all(retained[k]==v for k,v in identity.items()) and retained['names']==names
+        return
+    with ProcessPoolExecutor(workers) as pool:
+        for (i,_), batch in zip(jobs,pool.map(stability.chunk,[args for _,args in jobs]),strict=True):
+            stability.save(output/f'measured-scaled/{i}.json.gz',dict(identity,rows=batch))
+    stability.save(manifest,dict(identity,names=names,seconds=monotonic()-started))
+
+
+def census_declaration(point):
+    from final_evidence import flash_problem
+    from heat_evidence_170 import request as heat_request
+
+    request = heat_request(point['parameters'],313.15,.11)
+    for reaction in request['reaction_system']['engine_reactions']:
+        reference = reaction.get('engine_reference') or reaction.get('reference') or {}
+        reaction['engine_reference'] = dict(reference,reference_pressure_pa=P_REF)
+
+    def declaration(spec,state,scale):
+        phases = [r.eq.Phase(q['identity'],kind=q['role'],support=q['support']) for q in state['final']['phases']]
+        p = flash_problem(request,state['loading'],state['temperature_K'],state['pressure_Pa'],phases)
+        return SimpleNamespace(problem=p._native(spec.parameters), declaration=p)
+
+    return declaration
+
+
+def census_support(point, main, offset, census, grid_bank, census_bank):
+    spec = r.bind(point['parameters'],reaction_reference_pressure_pa=P_REF)
+    spec.inputs['endpoint'] = point['parameters']
+    return dict(grid=support_census(spec,main,r.stability_row,grid_bank),
+                offset=support_census(spec,offset,r.stability_row,grid_bank),
+                census=support_census(spec,census,census_declaration(point),census_bank,old_full=True))
 
 
 def pilot(point):

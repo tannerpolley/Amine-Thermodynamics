@@ -79,6 +79,51 @@ def mdea_slope_bound():
             'from the repository root to repeat Stage 0. Add `--check` to recompute the checks from the retained records.', '']
 
 
+def stage1_phases(quantities):
+    if 'Stage 1 MEA measured' not in quantities:
+        return []
+    lines = ['', '## Rebuilt phase searches (#441)', '',
+             '| Stratum | No descent | Two liquids | Liquid plus vapor-connected phase | Open Engine item | Blocked |',
+             '|---|---:|---:|---:|---:|---:|']
+    classes = ('no descent in the finite search','two liquids of lower Gibbs energy',
+               'liquid plus a vapor-connected phase of lower Gibbs energy','open Engine item')
+    for name,item in quantities.items():
+        if name.startswith('Stage 1 ') and 'counts' in item['new']:
+            counts = item['new']['counts']
+            cells = [name.removeprefix('Stage 1 '),*[str(counts.get(k,0)) for k in classes],str(len(item['new']['blockers']))]
+            lines.append('| '+' | '.join(cells)+' |')
+    lines.extend(['','| Stratum | Parents checked | Phases checked | Max scaled pressure error | Restarts | Failures |',
+                  '|---|---:|---:|---:|---:|---:|'])
+    for item in quantities.values():
+        if isinstance(item['new'],dict):
+            for name,value in item['new'].get('pressure_closure',{}).items():
+                fields = ('parents_checked','phases_checked','maximum_scaled_pressure_error','restarts','failures')
+                lines.append('| '+' | '.join([name,*(f'{value.get(k,0):.5g}' for k in fields)])+' |')
+    lines.extend(['','Pressure closure uses the absolute EOS pressure residual divided by ρRT at the state '
+                  'passed to the native search. The trial-call records also retain the raw relative pressure residual.'])
+    lines.extend(['','| MEA observation | Native pressure (kPa) | Max scaled pressure error | Restart |',
+                  '|---|---:|---:|---|'])
+    for key,value in quantities['Stage 1 MEA measured']['new']['restart_cases'].items():
+        restarted = 'yes' if value['restarted'] else 'no'
+        lines.append(f"| {key} | {value['P_Pa']/1000:.6g} | {value['maximum_scaled_pressure_error']:.3g} | {restarted} |")
+    lines.extend(['','The 321 measured MEA searches comprise 307 liquid and 14 liquid–vapor parents. '
+                  'The qualified DEA pairs cover five Weiland feeds and the Lawson and Garst composition at '
+                  '7.97232 kPa, which is 1.05 times the model bubble pressure. The searches use the declared models.',
+                  '', '| AMP fit | Control | Imposed pressure (kPa) | Model bubble (kPa) | Gibbs decrease / RT (mol) | Paired error (mol) |',
+                  '|---|---|---:|---:|---:|---:|'])
+    for design in ('AMP_free','AMP_fixed'):
+        for key,q in quantities[f'Stage 1 {design} controls']['new']['bubble_comparisons'].items():
+            lines.append(f"| {design} | {key} | {q['imposed_Pa']/1000:.6g} | {q['bubble_Pa']/1000:.6g} | "
+                         f"{q['decrease']:.6g} | {q['error']:.3g} |")
+    lines.extend(['','Both historical MDEA targets at 383.15 K, 121.309 MPa and loading 1.368 '
+                  'completed the declared finite search with zero descents. The continued vapor amount reached zero '
+                  'along each parameter and reference-pressure path. The AMP bubble solves are model predictions on '
+                  'the same feeds as their pressure controls. The three searches tied to '
+                  '[Engine #265](https://github.com/tannerpolley/epcsaft/issues/265) remain open.',
+                  'The support census matched every prior support set, so it triggered no screen reruns.'])
+    return lines
+
+
 def render(result):
     q = result['quantities']
     lines = [r"""---
@@ -121,6 +166,7 @@ and population basis, and open quantities.
         lines.append('| '+' | '.join(map(show,(design,old['population']['fitted'],old['old'],old['new'],
                                               new['new'],new['absolute_change'],label)))+' |')
     lines.extend(mdea_slope_bound())
+    lines.extend(stage1_phases(q))
     lines.extend(['','## Start separation and endpoint stationarity','',
                   '| Design | A−B | A−C | B−C |','|---|---:|---:|---:|'])
     for design in result['fit_attempts']:

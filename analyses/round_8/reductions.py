@@ -1,7 +1,7 @@
 """Reconcile referee quantities from retained state and observation identities."""
 from collections import Counter
 from decimal import Decimal
-from math import fsum, log
+from math import fsum, isclose, log
 from statistics import mean
 import sys
 if __package__:
@@ -27,7 +27,21 @@ def matched(s, group):
     return {m:dict(full=scores(list(rows.values())), matched=scores([rows[k] for k in sorted(keys)]),
                    missing=[r for r in rows.values() if r['value'] is None], common_keys=sorted(keys)) for m,rows in models.items()}
 
-def phase_outcome(value):
+FINITE_NEGATIVE = 'no descent in the finite search'
+TWO_LIQUIDS = 'two liquids of lower Gibbs energy'
+CONNECTED_VAPOR = 'liquid plus a vapor-connected phase of lower Gibbs energy'
+
+
+def phase_outcome(value, *, completion=False):
+    if completion:
+        if issue := value.get('engine_issue'):
+            assert '#' in issue and issue.rsplit('#',1)[1].isdigit()
+            return 'open Engine item'
+        if value.get('pair'):
+            return value['pair']
+        if value['parent_closed'] and value['native_complete'] and value['supplied_complete'] and not value['descent']:
+            return FINITE_NEGATIVE
+        raise AssertionError(f"Search {value['key']} did not meet the completion rule")
     if any(q['confirmed'] for q in value.get('attempts',[])):
         return 'confirmed split'
     if 'instability' in value:
@@ -35,6 +49,57 @@ def phase_outcome(value):
     if value.get('search',{}).get('no_descent_in_trial_set'):
         return 'finite search, no resolved descent'
     return 'unresolved' if value.get('search',{}).get('completed') else 'unavailable'
+
+
+def parent_agreement(left, right):
+    fields = ('density_mol_m3','Gibbs_over_RT_mol')
+    return all(isclose(a,b,rel_tol=1e-10) for a,b in zip(
+        (*left['x'],*(left[k] for k in fields)),(*right['x'],*(right[k] for k in fields)),strict=True))
+
+
+def vapor_trace_passes(pair):
+    from shared_bicarbonate_417 import vapor_trace_connected
+
+    return vapor_trace_connected(pair['vapor_trace'],pair['phases'][-1]['density_mol_m3'])
+
+
+def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
+    from classify_descents import distinct_phases, matched
+    from reference_states_428 import phase_closure
+
+    amounts = pair.get('amounts_mol',[])
+    if len(amounts)!=2 or min(amounts)<=0 or not pair.get('requested_tolerance_met'):
+        return False
+    details = pair if vapor else pair.get('diagnostics') or {}
+    phases = details.get('phases',[])
+    if len(phases)!=2 or amounts!=[p['amount_mol'] for p in phases]:
+        return False
+    compositions = [p['x'] for p in phases]
+    densities = [p['density_mol_m3'] for p in phases]
+    if not vapor and (pair.get('phases')!=compositions or pair.get('densities_mol_m3')!=densities):
+        return False
+    T = pair.get('T_K',pair.get('T'))
+    if not phase_closure(details,pressure,tolerance,temperature=T):
+        return False
+    distinct = distinct_phases(compositions,densities)
+    roots = vapor_trace_passes(pair) if vapor else len(pair['roots'])==2 and all(
+        any(r['returned']=='liquid' for r in matched(group,tolerance,density,T=T,P=pressure))
+        for group,density in zip(pair['roots'],densities,strict=True))
+    return distinct and roots and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol']
+
+
+def no_descent(completed, trials):
+    return bool(completed and trials) and all(t['evidence']=='no_resolved_descent'
+        and t['message'].startswith(('converged:','Michelsen tangent-plane trial converged:'))
+        and t.get('optimizer_success',True) and t.get('optimizer_tolerance_met') is not False
+        and t.get('descent',t.get('resolved_descent')) is False for t in trials)
+
+
+def supplied_complete(counts, excluded, declared):
+    return (isinstance(counts,dict) and counts.keys()=={'evaluated'}
+            and type(excluded) is int and type(declared) is int
+            and 0<=excluded<=declared and type(counts['evaluated']) is int
+            and counts['evaluated']==declared-excluded)
 
 
 def witness_direction(entry):
