@@ -471,7 +471,7 @@ Two worked calculations give every intermediate quantity for checking an impleme
 Table~\ref{tab:amp-reference-state} gives the tangent-plane trial and the two-liquid equilibrium of the first AMP fit (Section~\ref{sec:s-amp-slope}), computed with the R1--R3 references at the system pressure and not of the AMP model, at 30 wt\% AMP, \SI{393.15}{\kelvin}, a loading of 0.700 mol/mol and \SI{1.212}{\mega\pascal}, the state of its largest Gibbs-energy decrease.
 The error estimate of the plane value is $1.8267\times10^{-10}$ and that of the descent along the direction of the trial phase $1.7544\times10^{-10}$, against a tangent-plane distance of $-3.697\times10^{-3}$.
 On the two-liquid solution the largest residual of the chemical-potential equations is $1.8\times10^{-13}$ against a tolerance of $10^{-10}$, and the largest reaction and electrochemical-potential residuals are $7.5\times10^{-13}$ and $1.1\times10^{-13}$.
-Tested against the tangent plane of that solution, five trial starts give a smallest distance of $+0.0307$, at a water-rich liquid root, and the four that end on a branch connected to the dilute vapor, at 383.4 mol/m$^3$, give $+0.0382$; these minima apply to the sampled endpoints.
+Tested against the tangent plane of that solution, five trial starts give a smallest distance of $+\res{amp-worked-state-all-minimum-tangent-distance}$, at a water-rich liquid root, and the four that end on a branch connected to the dilute vapor, at 383.4 mol/m$^3$, give $+\res{amp-worked-state-vapor-connected-minimum-tangent-distance}$; these minima apply to the sampled endpoints.
 Table~\ref{tab:mea-reference-state} gives the integral absorption heat and the equilibrium heat capacity of the MEA model at \SI{313.15}{\kelvin}, \SI{1.734}{\mega\pascal} and a final loading of 0.31 mol/mol: \SI{-81.803}{\kilo\joule\per\mole} of \COtwo and 84.886 J/(mol K) per mole of apparent components, the latter reproduced by centered differences of the enthalpy within $3.4\times10^{-7}$ J/(mol K).
 With stoichiometric numbers $\nu_{ri}$ positive for products, $\Gamma_r=\sum_i\nu_{ri}\ln\phi_i^{\mathrm{ref}}$ over the pure-water and infinite-dilution reference states at $P_{\mathrm{src}}$ and $\Delta\nu_r=\sum_i\nu_{ri}$, the constant of reaction $r$ on ideal-gas reference states at $P^\circ=\SI{0.1}{\mega\pascal}$ is
 \begin{equation}
@@ -725,7 +725,7 @@ No bound acts on the loaded MDEA states.
 % P:supplement-amp-slope
 For AMP neither the penalty nor a bound of this kind is used.
 The first AMP fit used the 47 loaded total pressures of Hartono et al.\ at 313--\SI{353}{\kelvin}, the binary data and the carbamate fractions, 156 observations, with the MEA-fitted shared set.
-With all nine parameters fitted, both initial parameter sets converge to an objective value of 61.2853, agreeing to $7\times10^{-12}$, and the temperature slope of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{-219.25}{\kelvin} with a conditional standard error of \SI{80.99}{\kelvin}.
+With all nine parameters fitted, both initial parameter sets converge to an objective value of \res{amp-first-data-main-objective-free-starts}, agreeing to $7\times10^{-12}$, and the temperature slope of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{-219.25}{\kelvin} with a conditional standard error of \SI{80.99}{\kelvin}.
 Its search of the 666 states of Section~\ref{sec:s-phase} detects an instability at 93, and at each the parent and the trial phase are both liquid at the pressure of the parent (main-text \cref{main-fig:amp-splits}).
 The two-liquid calculation of the main text confirms a split at 73 of them and not at the other 20.
 The confirmed splits lie at 26.8--30.0 wt\% AMP, 363.15--393.20 K and loadings of 0.400--0.966 mol/mol.
@@ -743,9 +743,9 @@ Suppressing the splits need not improve the pressure agreement: the fit with the
 
 % P:supplement-amp-slope-choice
 A second fit of the same data fixes $b_{\mathrm{AMPH^+,w}}$ at \SI{-150}{\kelvin}, a value chosen from a scan of fixed slopes because no instability was detected there; it is not taken from a source.
-The fixed slope lies 0.86 standard errors from the fitted value, and fixing it raises the objective value by 0.78, from 61.2853 to 62.0651, while the deviation of the 47 pressures changes from 10.3 to 10.5\,\%.
+The fixed slope lies 0.86 standard errors from the fitted value, and fixing it raises the objective value by 0.78, from \res{amp-first-data-main-objective-slope-comparison} to \res{amp-first-data-slope-150-objective-slope-comparison}, while the deviation of the 47 pressures changes from 10.3 to 10.5\,\%.
 Every search of this fit finishes without a detected instability.
-At 373--\SI{393}{\kelvin}, the 18 total pressures of Hartono et al.\ and the 25 of Tong et al., two of them \COtwo-free, are outside both fits; calculated for one liquid, they deviate by 28.10 and 25.30\,\% for the first fit and by 28.35 and 25.47\,\% for the second, with signed deviations equal to minus these values, so each pressure is underpredicted.
+At 373--\SI{393}{\kelvin}, the 18 total pressures of Hartono et al.\ and the 25 of Tong et al., two of them \COtwo-free, are outside both fits; calculated for one liquid, they deviate by \res{amp-first-data-free-hartono-aard-supplement} and \res{amp-first-data-free-tong-aard-supplement}\,\% for the first fit and by \res{amp-first-data-fixed-hartono-aard-supplement} and \res{amp-first-data-fixed-tong-aard-supplement}\,\% for the second, with signed deviations equal to minus these values, so each pressure is underpredicted.
 Fixing the slope therefore removes the splits without improving the pressures at those temperatures.
 
 % P:supplement-amp-hot-pressures

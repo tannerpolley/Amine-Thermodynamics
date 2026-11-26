@@ -2791,6 +2791,30 @@ def result_values():
         record, key, value = reported_aard[quantity]
         for occurrence in occurrences:
             add(f"{quantity}-aard-{occurrence}", record, key, f"{value:.2f}")
+
+    record = "analyses/round_3/results/q2.json"
+    scores = read(record)["scores"]
+    for source, group in (("hartono", "hartono-2021"), ("tong", "tong-2012")):
+        for fit in ("free", "fixed"):
+            value = scores[group][fit]["AARD_percent"]
+            key = f"scores.{group}.{fit}.AARD_percent"
+            add(f"amp-first-data-{fit}-{source}-aard-supplement", record, key, f"{value:.2f}")
+            if fit == "free":
+                for passage in ("first-fit", "split-diagnostic"):
+                    add(f"amp-first-data-free-{source}-aard-{passage}", record, key, f"{value:.1f}")
+
+    record = "analyses/round_3/results/q6.json"
+    diagnostics = read(record)["split"]["diagnostics"]
+    for start_set, key in (("all", "trial_minimum"), ("vapor-connected", "vapor_connected_minimum")):
+        add(f"amp-worked-state-{start_set}-minimum-tangent-distance", record,
+            f"split.diagnostics.{key}", f"{diagnostics[key]:.4f}")
+
+    for fit, occurrences in (("main", ("free-starts", "slope-comparison")),
+                             ("slope-150", ("slope-comparison",))):
+        record = f"analyses/round_5/results/A/original-{fit}.json.gz"
+        cost = read(record)["cost"]
+        for passage in occurrences:
+            add(f"amp-first-data-{fit}-objective-{passage}", record, "cost", f"{cost:.4f}")
     return values
 
 
