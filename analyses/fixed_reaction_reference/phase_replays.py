@@ -198,7 +198,6 @@ def _screen_parents(args):
         out = dict(key=key,message=old.get('message'),wheel=r.SHA)
         started = monotonic()
         try:
-            options = eq.StabilityOptions()
             if census:
                 item = census(spec,state,1.)
                 p = item.problem
@@ -211,7 +210,6 @@ def _screen_parents(args):
                 P = p.pressure.value
             else:
                 item = run.stability_row(spec,state,1.)
-                options = item.stability_options
                 p = item.problem
                 P = (old['pressure_Pa']*item.pressure_ratio if item.pressure_reference is not None
                      else p.pressure.value)
@@ -222,16 +220,6 @@ def _screen_parents(args):
                 if 'parent' in old:
                     assert center.molar_densities==[old['parent']['rho']]
                     assert list(center.phase_mole_fractions(0))==old['parent']['x']
-            options.mode = type(options.mode).Full
-            if census:
-                template = type(p.phases[0])
-                seeds = []
-                for kind,ids in [('Liquid',r.s.COMPONENT_IDS),('Vapor',r.s.COMPONENT_IDS[:3])]:
-                    phase = template()
-                    phase.kind,phase.name,phase.support_declared = getattr(type(phase.kind),kind),kind,True
-                    phase.support = [spec.parameters.component_ids.index(c) for c in ids]
-                    seeds.append(phase)
-                options.trials = seeds
             compiled = eq.compile_problem(spec.model,p)
             out.update(P_Pa=P,T_K=center.temperature,parent_kinds=[q.kind.name for q in p.phases])
             out['parent'] = physical(spec,p,center)
@@ -264,14 +252,29 @@ def _screen_parents(args):
                            native_trials=[dict(seed=t['seed'],evidence=t['evidence'],message=t['message'],
                                 descent=t['resolved_descent'],optimizer_success=t['optimizer']['success'],
                                 optimizer_tolerance_met=t['optimizer']['requested_tolerance_met']) for t in archive['trials']],
-                           supplied_counts=dict(archive['supplied_counts']),supplied_excluded=0)
+                           supplied_counts=dict(archive['supplied_counts']),supplied_excluded=0,
+                           supplied_descents=sum(map(r.supplied_negative,archive['supplied_trials'])))
             else:
+                if census:
+                    options = eq.StabilityOptions()
+                    template = type(p.phases[0])
+                    seeds = []
+                    for kind,ids in [('Liquid',r.s.COMPONENT_IDS),('Vapor',r.s.COMPONENT_IDS[:3])]:
+                        phase = template()
+                        phase.kind,phase.name,phase.support_declared = getattr(type(phase.kind),kind),kind,True
+                        phase.support = [spec.parameters.component_ids.index(c) for c in ids]
+                        seeds.append(phase)
+                    options.trials = seeds
+                else:
+                    options = item.stability_options
+                options.mode = type(options.mode).Full
                 report = eq.stability_test(compiled,center,options)
                 out.update(native_completed=report.completed,native_message=report.message,native_trials=trials(report))
                 support = r.supplied_support(spec,item,compiled=compiled)
                 supplied_bank = [dict(w,kind=w['kind'].capitalize()) for w in witnesses] if census else witnesses
                 supplied, excluded, repeated, identities = r._applicable(item,supplied_bank,support)
                 counts = Counter(evaluated=0)
+                out['supplied_descents'] = 0
                 if supplied:
                     k = center.temperature,identities
                     if prepared is None or prepared[0]!=k:

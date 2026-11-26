@@ -1438,7 +1438,8 @@ class Quantities:
                     assert phase_closure(q['parent'],q['P_Pa'],q['parent']['row_tolerance']), f'{key}: trial-call parent scaled closure'
                     assert no_descent(q['native_completed'],q['native_trials']), f'{key}: native trial completion'
                     assert supplied_complete(q.get('supplied_counts'),q.get('supplied_excluded'),declared), f'{key}: supplied trial count'
-                    assert not q.get('supplied_descents',0), f'{key}: supplied descent needs classification'
+                    assert type(q.get('supplied_descents')) is int, f'{key}: missing supplied descent count'
+                    assert q['supplied_descents']==0, f'{key}: supplied descent needs classification'
                     result[key] = dict(key=key,parent_closed=True,native_complete=True,supplied_complete=True,descent=False)
             assert list(result)==data['keys'], name
             return result,paths,closure
