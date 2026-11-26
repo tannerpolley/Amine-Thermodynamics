@@ -39,11 +39,12 @@ def manifest(fit_set):
             raise ValueError(f"{replacement}: replacement starts do not belong to the fit manifest")
         starts = starts | {k: v["start"] for k, v in extra["draws"].items() if v["disposition"] == "eligible"}
     diagnostic_starts = {}
-    for label in fit_set.get("additional_controls", {}):
-        data = read(path / f"{label}.json.gz")
+    for source in fit_set.get("diagnostic_attempts", ()):
+        data = read(path / source)
+        label = data["start"]
         if data["wheel"] != wheel or data["manifest_fingerprint"] != fingerprint(declaration):
             raise ValueError(f"{label}: additional start does not belong to the fit manifest")
-        diagnostic_starts[label] = dict(optimizer=data["optimizer_start"])
+        diagnostic_starts[label] = dict(optimizer=data["optimizer_start"], controls=data["controls"])
     return dict(declaration, starts=starts, diagnostic_starts=diagnostic_starts)
 
 
@@ -91,10 +92,10 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
     wheel = verify()
     route = route_for(fit_set)
     point = declaration["start_A_declaration"]
-    controls = declaration["fit_controls"] | dict(workers=int(os.environ["AGENT_HEAVY_CORES"]))
+    start = (declaration["starts"] | declaration["diagnostic_starts"])[label]
+    controls = start.get("controls", declaration["fit_controls"]) | dict(workers=int(os.environ["AGENT_HEAVY_CORES"]))
     controls.setdefault("maximum_elapsed_time_seconds", fit_set["maximum_seconds"])
-    controls.update(fit_set.get("additional_controls", {}).get(label, {}))
-    u = (declaration["starts"] | declaration["diagnostic_starts"])[label]["optimizer"]
+    u = start["optimizer"]
     manifest_id = fingerprint(declaration)
     if previous is not None:
         if (
@@ -165,8 +166,8 @@ def select(declaration, records):
         raise ValueError("Selection requires attempts from the same fit and wheel")
     eligible = {
         label: r
-        for label, r in records.items()
-        if label in declaration["starts"] and r.get("replay_passed") and r["report"]["status"] == "converged"
+        for label in declaration["starts"]
+        if (r := records.get(label)) and r.get("replay_passed") and r["report"]["status"] == "converged"
     }
     best = min((v["replay"]["cost"] for v in eligible.values()), default=None)
     tolerance = declaration["fit_controls"]["function_tolerance"]

@@ -14,17 +14,15 @@ from .model import (
     REPORTED,
     ROOT,
     Route,
-    parameter_mapping,
     parameter_values,
     with_parameter_values,
 )
-from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS
+from MEA.common.mea_source_contracts import EXPECTED_REACTION_CORRELATIONS, REACTION_CONTRACT_PATH
 from MEA.solvent_specification import SolventSpecification
 import epcsaft
 from epcsaft import equilibrium, regression as reg
 
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
-PARAMETERS = BUNDLE / "results/selected-current-best-parameters.json"
 STATE_PACKET = BUNDLE / "data/input/state-packet.json.gz"
 STATE_PACKET_SCHEMA = "mea-parameter-estimation-observations-compact"
 STATE_PACKET_SCHEMA_VERSION = 1
@@ -52,6 +50,9 @@ COMPONENT_IDS = (
     "hydronium-cation",
     "hydroxide-anion",
 )
+CENSUS_FEED = (9.7292821, 76.9751925)
+CENSUS_T = (313.15, 318.15, 333.15, 353.15, 373.15, 393.15)
+CENSUS_A = (1e-5, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5, 0.6)
 # Shell-modified Born constants of the adopted configuration
 # (data/reference/MEA/manifests/reactive_vle_model_configurations.json).
 REACTION_REFERENCE_PRESSURES = {
@@ -210,19 +211,15 @@ def source_feed_request(template: dict, source: dict) -> dict:
 
 def corrected_request(
     request: dict[str, object],
-    reaction_values: dict[str, float] | None = None,
-    mapping: dict | None = None,
+    mapping: dict,
 ) -> dict[str, object]:
     """Normalize phase model metadata without inventing source-to-EOS reactions."""
     corrected = copy.deepcopy(request)
-    if reaction_values is None:
-        reaction_values = _selected_reactions(mapping)
+    values_by_identity = reaction_values(mapping)
     for phase in corrected.get("phases", ()):
         phase.setdefault("model", {})["kind"] = "eos"
         phase["model"]["reference_id"] = "installed-eos"
-    if reaction_values:
-        selected_specs = _reaction_specifications(mapping)
-        adopted = mapping is None and reaction_values == _selected_reactions(mapping)
+    if values_by_identity:
         records = corrected.get("reaction_system", {}).get("equilibrium_constants", ())
         for index, record in enumerate(records):
             reaction_id = f"R{index + 1}"
@@ -231,7 +228,7 @@ def corrected_request(
             prefix = f"reaction:{reaction_id}:correlation:"
             selected = {
                 identity[len(prefix) :]: float(value)
-                for identity, value in reaction_values.items()
+                for identity, value in values_by_identity.items()
                 if identity.startswith(prefix)
             }
             if not selected and reaction_id not in EXPECTED_REACTION_CORRELATIONS:
@@ -244,23 +241,16 @@ def corrected_request(
                 if len(record) > 2:
                     metadata["source_standard_state_id"] = record[2]
             if selected:
-                metadata["effective_parameter_role"] = "selected" if adopted else "candidate"
+                metadata["effective_parameter_role"] = "candidate"
                 metadata["effective_coefficient_identities"] = [
                     f"reaction:{reaction_id}:correlation:{name}" for name in selected
                 ]
                 metadata["effective_coefficient_values"] = selected
-                if adopted:
-                    metadata["selected_parameter_role"] = "owner-adopted"
-                    metadata["selected_coefficient_values"] = selected
-                    selected_spec = selected_specs.get(reaction_id)
-                    if selected_spec is not None:
-                        metadata["selected_correlation_kind"] = selected_spec.get("kind")
-                        metadata["selected_correlation_source"] = copy.deepcopy(selected_spec.get("source", {}))
             identities = metadata.get("coefficient_identities", ())
             values = list(metadata.get("coefficient_values", ()))
             for position, identity in enumerate(identities):
-                if identity in reaction_values and position < len(values):
-                    values[position] = reaction_values[identity]
+                if identity in values_by_identity and position < len(values):
+                    values[position] = values_by_identity[identity]
             if identities:
                 metadata["coefficient_values"] = values
             if len(record) >= 7:
@@ -274,23 +264,20 @@ def corrected_request(
         if "reaction_matrix" in corrected.get("reaction_system", {}):
             corrected["reaction_system"]["engine_reactions"] = _engine_reaction_records(
                 corrected,
-                reaction_values,
-                **({"mapping": mapping} if mapping is not None else {}),
+                values_by_identity,
+                mapping,
             )
     return corrected
 
 
 def _reaction_specifications(
-    mapping: dict | None = None,
+    mapping: dict,
 ) -> dict[str, dict[str, object]]:
-    return {
-        str(item["reaction_id"]): item
-        for item in (parameter_mapping() if mapping is None else mapping).get("reaction_correlations", ())
-    }
+    return {str(item["reaction_id"]): item for item in mapping.get("reaction_correlations", ())}
 
 
-def _parameter_domain(domain_id: object, mapping: dict | None = None) -> tuple[float, float] | None:
-    for domain in (parameter_mapping() if mapping is None else mapping).get("domains", ()):
+def _parameter_domain(domain_id: object, mapping: dict) -> tuple[float, float] | None:
+    for domain in mapping.get("domains", ()):
         if domain.get("domain_id") == domain_id:
             lower = domain.get("temperature_min", {}).get("magnitude")
             upper = domain.get("temperature_max", {}).get("magnitude")
@@ -302,12 +289,10 @@ def _parameter_domain(domain_id: object, mapping: dict | None = None) -> tuple[f
 def _engine_reaction_records(
     request: dict[str, object],
     reaction_values: dict[str, float],
-    mapping: dict | None = None,
+    mapping: dict,
 ) -> list[dict[str, object]]:
     """Normalize source forms to native polynomial fields without EOS conversion."""
     selected_specs = _reaction_specifications(mapping)
-    selected_values = _selected_reactions() if mapping is None else None
-    adopted = reaction_values == selected_values
     records = []
     for index, row in enumerate(request["reaction_system"]["reaction_matrix"]):
         reaction_id = f"R{index + 1}"
@@ -319,11 +304,6 @@ def _engine_reaction_records(
             if identity.startswith(prefix)
         }
         selected_spec = selected_specs.get(reaction_id)
-        if adopted and selected_spec is not None:
-            effective = {
-                str(coefficient["name"]): float(coefficient["value"]["magnitude"])
-                for coefficient in selected_spec.get("coefficients", ())
-            }
         source.update(effective)
         common = reaction_id in {"R4", "R5"} or (reaction_id == "R2" and bool(effective))
         if reaction_id == "R5":
@@ -344,7 +324,7 @@ def _engine_reaction_records(
             correlation["a"] += correlation["c"] * math.log(REACTION_REFERENCE_TEMPERATURE_K)
         selected_domain = (
             _parameter_domain(selected_spec.get("candidate_domain_id"), mapping)
-            if selected_spec is not None and (adopted or effective)
+            if selected_spec is not None and effective
             else None
         )
         if selected_domain is not None:
@@ -370,7 +350,7 @@ def _engine_reaction_records(
                     "source_basis": ("CommonMolalityInfiniteDilution" if common else "RawMoleFractionInfiniteDilution"),
                     "reference_pressure_pa": REACTION_REFERENCE_PRESSURES[reaction_id],
                 },
-                "parameter_role": "selected" if adopted and selected_spec is not None else "candidate",
+                "parameter_role": "candidate",
             }
         )
     return records
@@ -586,10 +566,6 @@ def _problem_from_request(request: dict[str, object], anchor: Anchor | None = No
     return equilibrium.Problem(**problem_kwargs)
 
 
-def _selected_reactions(mapping: dict | None = None) -> dict[str, float]:
-    return reaction_values(parameter_mapping() if mapping is None else mapping)
-
-
 @dataclass(frozen=True)
 class Anchor:
     temperature_c: int
@@ -604,7 +580,7 @@ def bind_mea(mapping, specification, *, reaction_reference_pressure_pa):
     spec.parameters = epcsaft.Parameters.from_mapping(mapping)
     spec.model = epcsaft.Mixture(spec.parameters, thermochemistry=spec.thermal)
     packet = load_state_packet()["observations"][0]["request"]
-    request = corrected_request(packet, reaction_values(mapping), mapping=mapping)
+    request = corrected_request(packet, mapping)
     laws = {r.name: r.correlation for r in _problem_from_request(request).reactions}
     fields = ("a", "b", "c", "d", "e", "f", "reference_temperature")
     for problem in spec.problems.values():
@@ -675,6 +651,12 @@ class MEARoute(Route):
     def __init__(self, declaration, *, reference_pressure_pa):
         self.path = declaration
         self.fixed_reference_pressure_pa = reference_pressure_pa
+        self.config = {
+            "reaction_ranges_K": {
+                row["reaction_id"]: row["temperature_range_k"]
+                for row in json.loads(REACTION_CONTRACT_PATH.read_text())["reactions"]
+            }
+        }
 
     def bind(self, point):
         spec = bind_mea(
@@ -692,6 +674,48 @@ class MEARoute(Route):
         p["parameters"] = mea_endpoint_mapping(point["parameters"], report, declared)
         return p
 
+    def phase_states(self):
+        dense = [
+            dict(block="dense", wt=w, T=round(313.15 + 10 * i, 2), a=a, c=c)
+            for w in (0.15, 0.25, 0.35, 0.45)
+            for i in range(9)
+            for a in [1e-5] + [round(0.025 * k, 4) for k in range(1, 25)]
+            for c in (1.05, 3.0)
+        ]
+        census = [dict(block="census", wt=None, T=T, a=a, c=c) for T in CENSUS_T for a in CENSUS_A for c in (1.05, 3.0)]
+        offset = [
+            dict(block="offset", wt=w, T=round(318.15 + 10 * i, 2), a=round(0.0125 + 0.025 * k, 4), c=1.5)
+            for w in (0.2, 0.3, 0.4)
+            for i in range(8)
+            for k in range(24)
+        ]
+        return [dict(row, key="{block}|{wt}|{T}|{a}|{c}".format(**row)) for row in dense + census + offset]
+
+    def stability_row(self, spec, state, scale):
+        template = spec.problems[
+            next(row["problem"] for row in spec.inputs["observations"]["fitted"] if row["group"] == "loaded density")
+        ]
+        masses = {
+            row["component_id"]: row["fixed"]["molar_mass"]["value"]["magnitude"]
+            for row in spec.inputs["endpoint"]["components"]
+        }
+        amine, water = CENSUS_FEED
+        if (wt := state["wt"]) is not None:
+            water = amine * masses["monoethanolamine"] * (1 - wt) / (wt * masses["water"])
+        feed = equilibrium.Amounts({"monoethanolamine": amine, "water": water, "carbon-dioxide": state["a"] * amine})
+        liquid = equilibrium.Phase("L", kind="liquid", support=COMPONENT_IDS)
+        common = dict(
+            T=state["T"],
+            feed=feed,
+            reactions=template.reactions,
+            neutral_reference=template.neutral_reference,
+            row_tolerance=1e-10,
+        )
+        parent = equilibrium.Problem(P=1e5, phases=[liquid], **common)
+        vapor = equilibrium.Phase("V", kind="vapor", support=COMPONENT_IDS[:3], amount=equilibrium.Pinned(0.0))
+        bubble = equilibrium.Problem(P=equilibrium.Free(2e4), phases=[liquid, vapor], **common)
+        return reg.stability(spec.parameters, parent, scale=scale, pressure_reference=bubble, pressure_ratio=state["c"])
+
 
 FIT_SETS = {
     "reported": dict(
@@ -701,6 +725,6 @@ FIT_SETS = {
         reference_pressure_pa=P_REF,
         maximum_seconds=2700,
         replay_tolerance=1e-10,
-        additional_controls={"A-loose": dict(function_tolerance=1e-6)},
+        diagnostic_attempts=("A-loose.json.gz",),
     ),
 }

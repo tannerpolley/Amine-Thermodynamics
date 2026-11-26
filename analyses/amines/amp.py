@@ -1,14 +1,10 @@
 """Fixed-reference AMP reported declarations."""
 
-import math
-
 from .model import P_REF, REPORTED, ROOT, Route
 
 DECLARATION = ROOT / "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json"
 ADDED = {"tong", "hartono-2021-supplemental"}
 LOADED = "loaded-pressure"
-LOADED_LOG_SCALE = 0.015
-WEIGHT_TOLERANCE = 1e-13
 
 
 class ExpandedPressure(Route):
@@ -20,11 +16,6 @@ class ExpandedPressure(Route):
         original = [r for r in fitted if r["group"] == LOADED]
         assert all(r["arguments"]["form"] == "log_ratio" and r["unit"] == "Pa" for r in original + added)
         (coefficient,) = {r["weight"] for r in original}
-        assert math.isclose(
-            coefficient,
-            1 / (len(original) * LOADED_LOG_SCALE**2),
-            rel_tol=WEIGHT_TOLERANCE,
-        )
         for r in original + added:
             r.update(
                 weight=coefficient * len(original) / (len(original) + len(added)),

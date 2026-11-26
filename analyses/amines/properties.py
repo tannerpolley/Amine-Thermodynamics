@@ -103,7 +103,7 @@ def property_rows(route, point, fitted=None):
             output.append(
                 dict(
                     prediction if prediction is not None else spec.prediction(record),
-                    role=record["role"],
+                    role=record.get("role", "fitted" if role == "fitted" else "not fitted"),
                     T_K=T,
                     outside_ranges=marks(
                         route,

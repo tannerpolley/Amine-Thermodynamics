@@ -5,6 +5,7 @@ import json
 import math
 
 from .model import calculation_declaration
+from .mea import MEARoute
 from .wheel import verify
 
 import epcsaft
@@ -113,6 +114,8 @@ def grid_axes(route, spec):
 
 
 def states(route, spec):
+    if isinstance(route, MEARoute):
+        return route.phase_states()
     states = []
     for role in ("fitted", "comparisons"):
         for row in spec.inputs["observations"][role]:
@@ -129,6 +132,8 @@ def states(route, spec):
 
 
 def stability_row(route, spec, state, scale, *, metadata=None):
+    if isinstance(route, MEARoute):
+        return route.stability_row(spec, state, scale)
     if "cap_record" in state:
         record = next(
             r
