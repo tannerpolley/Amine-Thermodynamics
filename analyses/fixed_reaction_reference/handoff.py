@@ -2117,7 +2117,9 @@ class Quantities:
                                          record=search_paths.get(source,f'{folder}/domain-march.json.gz'))
                 else:
                     outcomes[key] = outcome
-            stratum = lambda key: comparison_stratum(inventory[key])
+            def stratum(key):
+                return comparison_stratum(inventory[key])
+
             held = {}
             for key in blockers:
                 held.setdefault(stratum(key),key)

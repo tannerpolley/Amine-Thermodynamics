@@ -291,7 +291,10 @@ def comparison_screen(run, point, bank, states, prior, splits, output, *, mode):
     pilot = mode=='pilot'
 
     groups = defaultdict(list)
-    group_key = lambda row: (tuple(row['stock'].items()),row.get('T',row.get('T_K')))
+
+    def group_key(row):
+        return tuple(row['stock'].items()),row.get('T',row.get('T_K'))
+
     for q in states:
         if 'stock' in q:
             groups[group_key(q)].append(q)
