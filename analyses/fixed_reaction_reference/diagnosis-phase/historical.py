@@ -18,7 +18,7 @@ from scipy.optimize import brentq
 from round_8.reductions import parent_agreement
 
 
-def rows():
+def rows(*, selected=None):
     from closure import c
 
     for family in ("salt", "historical"):
@@ -46,6 +46,8 @@ def rows():
                 / f"C/{family}/{'original' if label == 'fixed' else label}-fixed-pressures.json.gz"
             )
             for key in ("pressure_121_MPa", "pressure_262_MPa"):
+                if selected is not None and (family, label, key) not in selected:
+                    continue
                 q = controls[key]
                 if (
                     label == "fixed"
@@ -95,9 +97,15 @@ def rows():
                     )
                     n.phases = n.phases[:1]
                     parent = c.refit.eq.solve_equilibrium(spec.model, n)
-                    if parent.success:
-                        pg = cd.gibbs(c.refit.eq.compile_problem(spec.model, n), parent)
-                        out.update(decrease=pg[0] - g[0], error=pg[1] + g[1])
+                    if parent.requested_tolerance_met:
+                        out['comparison_parent'] = physical(spec, n, parent)
+                        if out['comparison_parent']['physical_checks_pass']:
+                            pg = cd.gibbs(c.refit.eq.compile_problem(spec.model, n), parent)
+                            out.update(decrease=pg[0] - g[0], error=pg[1] + g[1])
+                        else:
+                            out['comparison_parent_blocker'] = 'Comparison parent misses scaled closure'
+                    else:
+                        out['comparison_parent_blocker'] = parent.message
                 yield dict(out, seconds=monotonic() - t)
 
 

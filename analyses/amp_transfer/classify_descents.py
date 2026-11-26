@@ -211,9 +211,15 @@ def classify(route, point, rows, states):
                 if not center.requested_tolerance_met:
                     trace.append(dict(feed_mol=feed,message=center.message))
                     break
+                comparison = {}
+                if i==steps:
+                    comparison['comparison_parent'] = physical(spec,parent,center)
+                    if not comparison['comparison_parent']['physical_checks_pass']:
+                        trace.append(dict(feed_mol=feed,message='Comparison parent misses scaled closure',**comparison))
+                        break
                 g = gibbs(eq.compile_problem(spec.model,parent),center)
                 attempt = coexistence(spec,parent,g,guess,inspect=inspect,start=start)
-                attempt.update(feed_mol=feed,seed_from=other['key'])
+                attempt.update(feed_mol=feed,seed_from=other['key'],**comparison)
                 trace.append(attempt)
                 if not attempt['requested_tolerance_met'] or min(attempt['amounts_mol'],default=0)<=0:
                     break

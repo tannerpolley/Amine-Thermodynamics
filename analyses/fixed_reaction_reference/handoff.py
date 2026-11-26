@@ -1522,7 +1522,10 @@ class Quantities:
             assert good, key
             passes[key] = good[0]
         a = passes['weiland-1998:31:problem']
-        assert a['seed_from']=='weiland-1998:32:problem' and a['feed_mol']==pairs['weiland-1998:31:problem']['feed_mol']
+        deposit = pairs['weiland-1998:31:problem']
+        assert phase_closure(a.get('comparison_parent',{}),deposit['pressure_Pa'],deposit['row_tolerance']), (
+            'DEA deposit 31: comparison parent scaled closure')
+        assert a['seed_from']=='weiland-1998:32:problem' and a['feed_mol']==deposit['feed_mol']
         assert [round(n,6) for n in a['amounts_mol']]==[13.656813,.961327]
         assert format(a['Gibbs_decrease_over_RT_mol'],'.6g')=='0.000565537'
         assert format(a['numerical_error_over_RT_mol'],'.3g')=='6.64e-09', 'DEA deposit 31: numerical error'
@@ -1641,6 +1644,8 @@ class Quantities:
         for q in history['rows']:
             if 'decrease' not in q:
                 continue
+            assert phase_closure(q.get('comparison_parent',{}),q['P'],ROW_TOLERANCE), (
+                f"MDEA {q['family']}/{q['weights']}: comparison parent scaled closure")
             pair = dict(q,amounts_mol=q['amounts'],requested_tolerance_met=q['message'].startswith('converged:'),
                 vapor_trace=q['trace'][0],Gibbs_decrease_over_RT_mol=q['decrease'],numerical_error_over_RT_mol=q['error'])
             assert all('original_density_mol_m3' not in p for p in pair['phases'])
