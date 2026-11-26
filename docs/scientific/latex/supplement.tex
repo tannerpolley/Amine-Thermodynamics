@@ -244,9 +244,9 @@ For DEA and AMP, the fitted-parameter table of the main text gives the enthalpy 
 At 298.15, 313.15 and \SI{393.15}{\kelvin} the fitted DEA correlation differs from its starting correlation in $\ln K_4$ by $+0.419$, $+0.141$ and $-0.984$, and the fitted AMP correlation by $-1.080$, $-1.177$ and $-1.568$.
 At \SI{313.15}{\kelvin} the conditional standard errors are 0.390 for DEA and 0.236 for AMP.
 The measurements behind the DEA correlation span 303--\SI{331}{\kelvin} and the model estimates behind the AMP correlation 313.15--\SI{373.15}{\kelvin}, so the first and last of these temperatures are extrapolations.
-The dispersion energy of \ce{DEACOO-}, \SI{203.8710}{\kelvin}, is that of \ce{MEACOO-} in the MEA model, and its segment diameter is the \ce{MEACOO-} diameter of that model, \SI{5.2002}{\angstrom}, multiplied by 1.1593, the cube root of the ratio of $m^{\mathrm{seg}}\sigma^3$ of DEA to that of MEA.
+The dispersion energy of \ce{DEACOO-}, \SI{\res{dea-carbamate-dispersion-energy-supplement}}{\kelvin}, is that of \ce{MEACOO-} in the MEA model, and its segment diameter is the \ce{MEACOO-} diameter of that model, \SI{5.2002}{\angstrom}, multiplied by 1.1593, the cube root of the ratio of $m^{\mathrm{seg}}\sigma^3$ of DEA to that of MEA.
 The dispersion energy of \ce{AMPH+} is that of AMP.
-The dispersion energy of \ce{AMPCOO-}, \SI{203.8710}{\kelvin}, and its interaction with water, $-0.166058$, are those of \ce{MEACOO-} in the MEA model.
+The dispersion energy of \ce{AMPCOO-}, \SI{\res{amp-carbamate-dispersion-energy-supplement}}{\kelvin}, and its interaction with water, $-0.166058$, are those of \ce{MEACOO-} in the MEA model.
 The \ce{AMPCOO-} diameter is fitted, with the \ce{MEACOO-} diameter of the MEA model, \SI{5.200200}{\angstrom}, as its lower bound, on which it ends.
 An earlier AMP fit took these three inputs from the MEA fit with the MEA-fitted shared set, \SI{179.8579}{\kelvin}, $-0.0661$ and \SI{5.3480}{\angstrom}; it appears only as a comparison in Table~\ref{main-tab:amine-summary} and Section~\ref{sec:s-amp-slope}.
 Fixed ionic parameters are model assumptions, not independent measurements of ionic size.
@@ -494,8 +494,8 @@ These are numerical verifications at the named states, not a proof and not compa
 % P:supplement-reference-sensitivity
 The choice of reference pressure was tested by fitting the four models also with the R1--R3 references at the system pressure, the convention of the comparison fits of main-text Table~\ref{main-tab:amine-summary}.
 The right side of main-text \cref{main-eq:pressure-tracking} is then nonzero; at the four fitted states above it is $-29.0$ to $-37.0$\,\% of $V_{\mathrm{EOS}}$ with the species reference offsets used in that calculation, a size that depends on how those offsets are fixed.
-With the references at the system pressure and at \SI{100}{\kilo\pascal}, the fitted loaded-solution pressures deviate by 11.35 and 11.34\,\% for MEA, 42.71 and 42.75\,\% for DEA, 4.15 and 4.39\,\% for MDEA and 10.84 and 10.82\,\% for AMP, and the objective values are 152.958 and 152.932, 15.538 and 15.589, 17.401 and 15.609, and 75.111 and 74.928; the two MDEA objectives belong to different local endpoints.
-Outside the fitted MDEA data the Ermatchkov partial pressures deviate by 25.09 and 29.21\,\% and the Carson heats by 18.69 and 13.58\,\%.
+With the references at the system pressure and at \SI{100}{\kilo\pascal}, the fitted loaded-solution pressures deviate by 11.35 and \res{mea-fitted-pressure-aard-reference-comparison}\,\% for MEA, 42.71 and \res{dea-fitted-pressure-aard-reference-comparison}\,\% for DEA, 4.15 and \res{mdea-fitted-pressure-aard-reference-comparison}\,\% for MDEA and 10.84 and \res{amp-fitted-pressure-aard-reference-comparison}\,\% for AMP, and the objective values are 152.958 and 152.932, 15.538 and 15.589, 17.401 and 15.609, and 75.111 and 74.928; the two MDEA objectives belong to different local endpoints.
+Outside the fitted MDEA data the Ermatchkov partial pressures deviate by 25.09 and \res{mdea-ermatchkov-pressure-aard-reference-comparison}\,\% and the Carson heats by 18.69 and 13.58\,\%.
 The phase results differ where a split is close to its limit or far outside the data.
 For DEA the split at 30 wt\% and a loading of 0.45 is confirmed only with the references at the system pressure and the split at 0.50 only with the fixed references, while the three 40 wt\% splits are confirmed with both.
 For MDEA the splits at \SI{204.054}{\mega\pascal} and \SI{262.862}{\mega\pascal} are confirmed only with the references at the system pressure; with the fixed references a descent remains at both, but the two-liquid calculation does not confirm a split, so the phase identity there is unresolved.
@@ -503,7 +503,7 @@ For the MDEA fit with the weights of the MEA objective, the split at \SI{383.15}
 At low pressure the choice changes little: with the parameters of the system-pressure fit, the worked split of the first AMP fit at \SI{1.212}{\mega\pascal} persists with the references at \SI{100}{\kilo\pascal}, with a Gibbs-energy decrease of 0.01882 against 0.01881 mol, and so does the MDEA split at \SI{288.71}{\kelvin} and \SI{1.121}{\mega\pascal} of Section~\ref{sec:s-shared}, with $1.89\times10^{-3}$ against $1.94\times10^{-3}$ mol.
 The reference pressure therefore matters for the calculated phase behavior far above the measured pressures, not for the fitted results.
 
-\input{../../../analyses/mea_parameter_bundle/results/reference-states-428/amp_reference_state}
+\input{tables/amp_reference_state}
 \input{tables/mea_reference_state}
 
 % P:supplement-kim
@@ -759,7 +759,7 @@ These comparisons do not establish global stability.
 The fits to all loaded pressures add the 18 pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and the 40 loaded pressures of Tong et al.\ at 313--\SI{393}{\kelvin} to the first data, 214 observations in all, with the 105 loaded pressures sharing the weight that the 47 had.
 Table~\ref{tab:supplement-amp-expanded} gives four fits to them, made with the R1--R3 references at the system pressure and all with the salt-fitted interactions, with the slope fitted or fixed at \SI{-150}{\kelvin} and with the carbamate inputs of the MEA model or, as in the original fits, of the MEA fit with the MEA-fitted shared set.
 The AMP model is the fit with the fitted slope and the carbamate inputs of the MEA model, refitted with the references at \SI{100}{\kilo\pascal}: the 18 pressures of Hartono et al.\ deviate by 6.85\,\% and the 40 of Tong et al.\ by 11.16\,\%, and the five \COtwo-free pressures of Tong et al., which are not fitted, by 3.86\,\%.
-With the same inputs, fixing the slope at \SI{-150}{\kelvin}, 1.55 conditional standard errors below the fitted \SI{-52.592}{\kelvin}, raises the objective value from 74.928 to 76.227 and the deviation of the 105 loaded pressures from 10.82 to 11.01\,\%.
+With the same inputs, fixing the slope at \SI{-150}{\kelvin}, 1.55 conditional standard errors below the fitted \SI{-52.592}{\kelvin}, raises the objective value from 74.928 to 76.227 and the deviation of the 105 loaded pressures from \res{amp-fitted-pressure-aard-slope-comparison} to 11.01\,\%.
 Neither the AMP model nor its fixed-slope fit has a detected instability at the 666 states, and the same held for the four fits with the references at the system pressure.
 At the feed of the worked split of Table~\ref{tab:amp-reference-state}, the calculated bubble pressure is 1.155 and \SI{1.238}{\mega\pascal} for the two fits of the first data, against 1.907 and \SI{1.940}{\mega\pascal} for the fits to all loaded pressures with the MEA-fitted shared set, 1.886 and \SI{1.794}{\mega\pascal} for the original salt-fitted fits, all with the references at the system pressure, and 1.883 and \SI{1.791}{\mega\pascal} for the AMP model and its fixed-slope fit.
 At \SI{2.037}{\mega\pascal}, above all of these, the first fit still splits, lowering $G/(RT)$ by 0.0185 mol, and none of the other five fits does (Table~\ref{tab:supplement-phase-replays}).
@@ -806,7 +806,7 @@ Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, an
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
 The value of the MDEA model is calculated on the 82 total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only, and main-text Table~\ref{main-tab:published-models} lists them with the 4.35\,\% of the MDEA model on those observations, of which it fitted 66 loaded and four \COtwo-free pressures, without ranking them.
 The unfitted row 72, at 393.16 K, is calculated at 1.165620 MPa against 1.205300 MPa measured.
-The subset values are for different observation sets from the 66 pressures fitted here, from which the MDEA model deviates by 4.39\,\%, and they are listed without a comparison.
+The subset values are for different observation sets from the 66 pressures fitted here, from which the MDEA model deviates by \res{mdea-fitted-pressure-aard-literature-subsets}\,\%, and they are listed without a comparison.
 
 \section{Published parameters of Hong et al.\ on identical MEA observations}\label{sec:s-hong}
 % P:supplement-hong-model

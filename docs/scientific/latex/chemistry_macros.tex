@@ -11,3 +11,10 @@
 \newcommand{\Ntwo}{\ce{N2}\xspace}
 \newcommand{\Otwo}{\ce{O2}\xspace}
 \newcommand{\NtwoO}{\ce{N2O}\xspace}
+\ExplSyntaxOn
+\cs_new:Npn \resultvalue #1#2 { \cs_new:cpn { amine_result_#1: } {#2} }
+\msg_new:nnn { amine } { undefined-result } { Undefined~manuscript~result~'#1'. }
+\NewExpandableDocumentCommand \res { m }
+  { \cs_if_exist_use:cF { amine_result_#1: } { \msg_expandable_error:nnn { amine } { undefined-result } {#1} } }
+\ExplSyntaxOff
+\input{tables/results}

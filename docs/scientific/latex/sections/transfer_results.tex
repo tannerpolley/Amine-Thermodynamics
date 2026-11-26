@@ -10,7 +10,7 @@ With the shared parameters fixed, each of the three further amines can be fitted
 % P:transfer-dea-fit
 The DEA model fits four parameters to 90 \COtwo partial pressures and 50 integral heats of Carson et al.\ \cite{carsonEnthalpySolutionCarbon2000}.
 The pressures come from three sources: 30 of Lawson and Garst \cite{lawsonGasSweeteningData1976}, 16 of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} and 44 of Lal et al.\ \cite{lalSolubilityH2SCO21985}.
-The fitted pressures deviate by 42.75\,\% and the heats by 2.01\,\% (\cref{fig:dea-pressure}).
+The fitted pressures deviate by \res{dea-fitted-pressure-aard-dea-results}\,\% and the heats by 2.01\,\% (\cref{fig:dea-pressure}).
 The sources pull in different directions: the Lawson and Garst pressures are underpredicted on average (AARD 34.32\,\%, bias $-15.09$\,\%), and the Seo and Hong pressures are overpredicted (AARD 66.19\,\%, bias $+58.90$\,\%).
 The seven Lawson and Garst pressures at \SI{394}{\kelvin}, which are not fitted, are all underpredicted, by 37.56\,\% on average.
 Against the NMR speciation of B\"ottinger et al.\ \cite{Bottinger2008}, calculated carbamate is too high and calculated bicarbonate plus carbonate too low, so the DEA model places too much absorbed \COtwo in carbamate.
@@ -38,13 +38,13 @@ With the adopted DEA pure-component and association parameters, neither of the t
 % P:transfer-mdea-fit
 The MDEA model fits eight parameters, among them the MDEA--water interaction, which is part of the reactive fit.
 Its objective weights each group of observations so that the many densities do not outweigh the 66 loaded-solution pressures (\cref{sec:parameters}).
-The 66 fitted total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} deviate by 4.39\,\% (\cref{fig:mdea-pressure}), and the 29 of them above the measured R5 range, from \SI{368}{\kelvin}, by 4.44\,\% with a bias of $+0.76$\,\%.
+The 66 fitted total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} deviate by \res{mdea-fitted-pressure-aard-mdea-results}\,\% (\cref{fig:mdea-pressure}), and the 29 of them above the measured R5 range, from \SI{368}{\kelvin}, by 4.44\,\% with a bias of $+0.76$\,\%.
 The other fitted MDEA properties deviate by 0.08\,\% for the \COtwo-free densities up to 13.58\,\% for the integral heats of Carson et al., and the fitted species ratios are overpredicted on average (bias $+13.56$\,\%).
 The weights favor the loaded-solution pressures; with the weights of the MEA fit and the R1--R3 references at the system pressure, the same pressures deviated by 10.12\,\% and the 40 integral heats of Carson et al.\ by 5.12\,\% (\cref{sec:results-shared}, Sections~\ref{supp-sec:s-objective} and~\ref{supp-sec:s-shared}).
 
 % P:transfer-mdea-outside
 Outside the fit the agreement is uneven.
-The 11 total pressures of Kuranov et al.\ at \SI{413}{\kelvin} deviate by 4.89\,\%, but the 101 \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, at lower loadings and pressures, deviate by 29.21\,\% and are mostly underpredicted (bias $-25.67$\,\%).
+The 11 total pressures of Kuranov et al.\ at \SI{413}{\kelvin} deviate by 4.89\,\%, but the 101 \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, at lower loadings and pressures, deviate by \res{mdea-ermatchkov-pressure-aard-mdea-results}\,\% and are mostly underpredicted (bias $-25.67$\,\%).
 At 60 wt\% MDEA, above the fitted contents of 30--50 wt\%, the densities and heat capacities of Weiland et al.\ \cite{Weiland1998,weilandHeatCapacityAqueous1997} deviate several times more than at the fitted contents (Table~\ref{supp-tab:supplement-transfer-data}).
 
 % P:transfer-mdea-parameters
@@ -61,14 +61,14 @@ Because the MDEA endpoint is provisional, its standard errors are local Jacobian
 \subsubsection{AMP}\label{sec:results-amp}
 % P:transfer-amp-fit
 The AMP model fits nine parameters to 214 observations, among them all 105 loaded total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} and Tong et al.\ \cite{Tong2012} at 313--\SI{393}{\kelvin}.
-These pressures deviate by 10.82\,\%, and the 51 \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, which are not fitted, by 15.64\,\% (\cref{fig:amp-pressure}).
+These pressures deviate by \res{amp-fitted-pressure-aard-amp-results}\,\%, and the 51 \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, which are not fitted, by 15.64\,\% (\cref{fig:amp-pressure}).
 The fitted binary bubble pressures of AMP--water deviate by 1.1\,\%, and the fitted carbamate fractions have a larger deviation than the pressures but a small bias (Table~\ref{supp-tab:supplement-transfer-data}).
 
 % P:transfer-amp-parameters
 Two of the nine fitted AMP parameters are on bounds: the R4 enthalpy increment and the carbamate diameter, both at their lower bounds.
 The fitted R4 correlation lowers $\ln K_4$ at \SI{313.15}{\kelvin} by $1.177\pm0.236$, a factor of 0.308 in $K_4$.
 The temperature coefficient of the \ce{AMPH+}--water interaction is $b_{\mathrm{AMPH^+,w}}=\SI{-52.592}{\kelvin}$, with a conditional standard error of \SI{62.923}{\kelvin}, so even the extended data do not distinguish it from zero; \cref{sec:results-phase} returns to this coefficient.
-The fixed carbamate inputs of AMP, an energy of \SI{203.8710}{\kelvin} and a carbamate--water interaction of $-0.166058$, are those of the MEA model (Section~\ref{supp-sec:s-parameters}).
+The fixed carbamate inputs of AMP, an energy of \SI{\res{amp-carbamate-dispersion-energy-transfer-parameters}}{\kelvin} and a carbamate--water interaction of $-0.166058$, are those of the MEA model (Section~\ref{supp-sec:s-parameters}).
 
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=0.85\linewidth]{amp-current-measured-model.pdf}
@@ -80,7 +80,7 @@ The fixed carbamate inputs of AMP, an energy of \SI{203.8710}{\kelvin} and a car
 % P:shared-100kpa
 The two shared sets are compared most directly in the convention of the reported models.
 With every reaction reference at \SI{100}{\kilo\pascal}, the MEA and MDEA fits were repeated from their start A with the MEA-fitted interactions, 0.765 for water--bicarbonate and $-0.25$ for water--carbonate, and with the weights and bounds of the reported models, the pressure weights for MDEA (Table~\ref{supp-tab:supplement-shared-interaction-sensitivity}).
-The salt-fitted set then deviates less from the 47 fitted \COtwo partial pressures of MEA, 11.34 against 11.57\,\%, from the 66 fitted Kuranov total pressures of MDEA, 4.39 against 4.44\,\%, from the 101 Ermatchkov \COtwo partial pressures, 29.21 against 30.79\,\%, and from the 40 fitted MDEA heats of Carson et al., 13.58 against 17.12\,\%; it deviates more from the 19 Ma'mun \COtwo partial pressures of MEA near \SI{393}{\kelvin}, 38.66 against 33.80\,\%.
+The salt-fitted set then deviates less from the 47 fitted \COtwo partial pressures of MEA, \res{mea-fitted-pressure-aard-transfer-comparison} against 11.57\,\%, from the 66 fitted Kuranov total pressures of MDEA, \res{mdea-fitted-pressure-aard-transfer-comparison} against 4.44\,\%, from the 101 Ermatchkov \COtwo partial pressures, \res{mdea-ermatchkov-pressure-aard-transfer-comparison} against 30.79\,\%, and from the 40 fitted MDEA heats of Carson et al., 13.58 against 17.12\,\%; it deviates more from the 19 Ma'mun \COtwo partial pressures of MEA near \SI{393}{\kelvin}, 38.66 against 33.80\,\%.
 The MEA fit with the MEA-fitted set stopped on its relative function tolerance, like the MEA model, but the MDEA fit with that set stopped at its iteration limit, with a projected gradient of 0.012, so the MDEA differences are sensitivities of that endpoint, not differences between optimized fits.
 At a measured MDEA state at \SI{4.19}{\mega\pascal}, both MDEA fits leave a descent whose phase identity is unresolved (Table~\ref{supp-tab:supplement-shared-interaction-phase-controls}).
 The salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
@@ -207,7 +207,7 @@ For DEA, 61 of the 90 fitted pressures lie outside the measured temperature rang
 % P:literature-row
 \Cref{tab:published-models} compares published models with this work on observations matched row by row where the source allows it.
 On the 19 \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin}, which no fit of this work includes, the MEA model underpredicts every pressure and deviates by 38.66\,\%, against 21.03\,\% for the PC-SAFT calculation of Baygi and Pahlavanzadeh, which fitted no ternary data, and 13.5\,\% for the eNRTL model of Zhang et al., which fitted these pressures.
-On the 101 \COtwo partial pressures of Ermatchkov et al., which the MDEA model did not fit but which helped choose its initial parameters, so that the comparison is not a blind test, the MDEA model deviates by 29.21\,\%; their parameter set I, which did not fit them either, deviates by 16.8\,\%, and set II and the eNRTL model of Zhang and Chen, both fitted to them, by 3.9 and 17.7\,\%.
+On the 101 \COtwo partial pressures of Ermatchkov et al., which the MDEA model did not fit but which helped choose its initial parameters, so that the comparison is not a blind test, the MDEA model deviates by \res{mdea-ermatchkov-pressure-aard-literature-comparison}\,\%; their parameter set I, which did not fit them either, deviates by 16.8\,\%, and set II and the eNRTL model of Zhang and Chen, both fitted to them, by 3.9 and 17.7\,\%.
 Here a published model that fitted nothing to these data is closer.
 On the 28 total pressures of P\'erez-Salado Kamps et al., to which both published sets were fitted, the two sets report 1.9 and 3.5\,\%, and the MDEA model, not fitted to them, deviates by 14.76\,\% on the same 28.
 On 27 of them it deviates by 11.93\,\%; the 28th state is row 13 of Table~6 of Ermatchkov et al., at \SI{313.73}{\kelvin}, 7.994 mol MDEA and 9.227 mol \COtwo per kilogram of water and \SI{7.565}{\mega\pascal}, which the MDEA model calculates at \SI{14.457}{\mega\pascal}, a deviation of $+91.1$\,\%.
@@ -281,7 +281,7 @@ The calculated MEA absorption heats at \SI{393}{\kelvin} are low by 5.8--13.4\,\
 Several fitted values are effective rather than molecular.
 The \MEAH--\MEACOO interaction lies on its lower bound, where it may stand in for ion pairing, which the model does not describe, and the large cation--\COtwo interactions of MDEA and AMP and the dispersion energy of \ce{MDEAH+} are not interpreted physically.
 The DEA and MDEA cations are chains and the other amine ions single spheres.
-The fixed carbamate inputs of AMP are the energy, \SI{203.8710}{\kelvin}, and the carbamate--water interaction, $-0.166058$, of the MEA model; the fitted AMP carbamate diameter ends at its lower bound, the MEA carbamate diameter of \SI{5.2002}{\angstrom} (Section~\ref{supp-sec:s-parameters}).
+The fixed carbamate inputs of AMP are the energy, \SI{\res{amp-carbamate-dispersion-energy-transfer-sensitivity}}{\kelvin}, and the carbamate--water interaction, $-0.166058$, of the MEA model; the fitted AMP carbamate diameter ends at its lower bound, the MEA carbamate diameter of \SI{5.2002}{\angstrom} (Section~\ref{supp-sec:s-parameters}).
 The permittivity correlation is used beyond its source data, and ions affect it only through the volume and the neutral amounts, with no dielectric decrement.
 
 % P:limits-phase
