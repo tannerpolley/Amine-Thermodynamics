@@ -3387,5 +3387,41 @@
     "record": "amp/first-data/phase control/born-off.json",
     "sha256": "48ae42fac3c6bf5785625decbe2dcaac496e29d431ae71cf6d8074c366d7de5f",
     "stage": "phase control"
+  },
+  "analyses/fixed_reaction_reference/results/MDEA/stationarity/A-projected-direction.json.gz": {
+    "disposition": "stage",
+    "fit_set": "reported",
+    "keys": "trials[minimum step].relative_reduction",
+    "owner": "mdea.py",
+    "record": "mdea/reported/fit stationarity/A-projected-direction.json.gz",
+    "sha256": "93e158690ef096ddfeb7cf2f1266b2009561e3064497dc9d3944116d0016bbb2",
+    "stage": "fit stationarity"
+  },
+  "analyses/mea_parameter_bundle/results/reaction-temperature-fit/candidate-targets.csv": {
+    "disposition": "stage",
+    "fit_set": "published-reaction-temperature",
+    "keys": "rows[key kim2007_t40_].count; rows[key kim2007_t80_].count",
+    "owner": "mea.py",
+    "record": "mea/published-reaction-temperature/fit inputs/candidate-targets.csv",
+    "sha256": "afa4e713008ceda4251a0ad666aaf45a1448e2ff1cf37f87635340557942d404",
+    "stage": "fit inputs"
+  },
+  "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/q5.json": {
+    "disposition": "stage",
+    "fit_set": "system-pressure",
+    "keys": "result.carbonate_pool_comparison count; result.carbonate_pool_comparison[].carbonate_pool_split minimum; result.carbonate_pool_comparison[].carbonate_pool_split maximum; result.rows[loading=0.05].pH; result.rows[loading=0.50].pH; result.rows[loading=0.30].raw_R1_pH; result.rows[loading=0.30].pH; result.rows[Hessen Figure 6].model_minus_electrode_pH: len; result.rows[Hessen Figure 6].model_minus_electrode_pH: min; result.rows[Hessen Figure 6].model_minus_electrode_pH: max; result.rows[Hessen Figure 6].model_minus_electrode_pH: mean",
+    "owner": "mea.py",
+    "record": "mea/system-pressure/replay/q5.json",
+    "sha256": "3500e6a5d29833ec6871d90e69da7a7d05332f8cf67eea5e9300b04cbfb184b0",
+    "stage": "replay"
+  },
+  "analyses/round_3/results/q5.json": {
+    "disposition": "stage",
+    "fit_set": "historical-shared-set",
+    "keys": "rows[prescribed loading].pH; rows[Hessen Figure 6].model_minus_electrode_pH: max; rows[Hessen Figure 6].model_minus_electrode_pH: min",
+    "owner": "mea.py",
+    "record": "mea/historical-shared-set/properties/q5.json",
+    "sha256": "8f36599b2b18780263f1a3e8f32c59bba603cca5abf5b51f330ba7cac8a67acf",
+    "stage": "properties"
   }
 }

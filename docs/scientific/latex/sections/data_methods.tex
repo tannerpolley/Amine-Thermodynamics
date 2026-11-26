@@ -72,7 +72,7 @@ The reported MDEA endpoint therefore comes from the inherited start A alone, and
 Two stopping tests are reported separately.
 The optimizer stopped on its relative function tolerance for MEA, DEA and AMP and, after two stages ended at the iteration limit, for MDEA start A, and on its parameter tolerance for the MDEA draw (Table~\ref{supp-tab:supplement-fit-starts}).
 The strict projected-gradient criterion, a norm below $10^{-8}$, is a separate test, and no endpoint meets it.
-For MEA, DEA and AMP linearized descent steps from the endpoints, replayed independently, change the objective by less than $10^{-10}$ of its value, consistent with that tolerance; for MDEA the shortest such step lowers it by $6.6\times10^{-8}$ of its value, more than the tolerance, so the MDEA endpoint is also not converged to that tolerance.
+For MEA, DEA and AMP linearized descent steps from the endpoints, replayed independently, change the objective by less than $10^{-10}$ of its value, consistent with that tolerance; for MDEA the shortest such step lowers it by $\res{mdea-shortest-tested-projected-step-relative-cost-decrease-methods}$ of its value, more than the tolerance, so the MDEA endpoint is also not converged to that tolerance.
 These are local solutions, tested only from the starts run (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-restrictions
@@ -96,7 +96,7 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-Observations that respond to no fitted parameter are left out of both the sum and the count: the \res{mea-kiepe-constant-pressure-count-covariance} Kiepe pressures among the \res{mea-objective-observations-methods-covariance} observations of the MEA objective, a constant contribution to it, which leaves \res{mea-responsive-observations-methods} observations and \res{mea-residual-degrees-of-freedom-methods} residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves \res{mdea-responsive-observations-methods} observations and \res{mdea-residual-degrees-of-freedom-methods} residual degrees of freedom.
+Observations that respond to no fitted parameter are left out of both the sum and the count: the \res{mea-kiepe-constant-pressure-count-covariance} Kiepe pressures among the \res{mea-objective-observations-methods-covariance} observations of the MEA objective, a constant contribution to it, which leaves \res{mea-responsive-observations-methods} observations and \res{mea-residual-degrees-of-freedom-methods} residual degrees of freedom, and \res{mdea-pure-water-pressures-constant-methods} pure-water pressures of the MDEA objective, which leaves \res{mdea-responsive-observations-methods} observations and \res{mdea-residual-degrees-of-freedom-methods} residual degrees of freedom.
 These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
 
 \subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}
