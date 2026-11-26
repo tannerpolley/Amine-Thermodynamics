@@ -1,6 +1,7 @@
 """Index the records read by the display renderer against manuscript number occurrences."""
 
 import argparse
+import ast
 import collections
 import gzip
 from heapq import nsmallest
@@ -28,6 +29,7 @@ WORDS = re.compile(r"\b(?:" + "|".join(sorted(CARDINAL, key=len, reverse=True)) 
 SCIENTIFIC = d.SCIENTIFIC
 TOKEN = re.compile(rf"{SCIENTIFIC.pattern}|{d.NUMERAL.pattern}|{WORDS.pattern}", re.I)
 TERMS = re.compile(r"[A-Za-z][A-Za-z0-9]+")
+EQUATIONS = re.compile(r"\\begin\{equation\*?\}.*?\\end\{equation\*?\}", re.S)
 
 
 def displayed_number(token):
@@ -45,15 +47,21 @@ def displayed_number(token):
 
 def classification(text, start, stop):
     rules = (
-        ('year', r'(?:\bin |\(\s*)(?P<value>(?:19|20)\d{2})(?=\s*\)|\s+when\b)'),
+        ('year', r'(?:\bin |\(\s*)(?P<value>(?:19|20)\d{2})\b'),
+        ('citation', r'\b(?:Eq\.|Fig\.|Table|row|run)\s*~?\s*S?(?P<value>\d+)(?=[^\d.]|\.(?!\d)|$)'),
         ('condition', r'\\SI\{(?P<value>100)\}\{\\kilo\\pascal\}'),
         ('condition', r'(?:nominal |unloaded )(?P<value>30)(?=\s*wt)'),
-        ('definition', r'(?P<value>[Tt]wo)(?=-(?:liquid|phase|site)\b)'),
+        ('constant', r'P\^\\circ\s*=?\s*\\SI\{(?P<value>0\.1)\}\{\\mega\\pascal\}'),
+        ('definition', r'(?P<value>[Tt]wo)(?=-(?:liquid|phase|site|sided)\b)'),
+        ('definition', r'(?P<value>[Oo]ne)(?=-sided\b| Gibbs energy\b)'),
         ('version', r'python=(?P<value>3\.13)(?=\s)'),
     )
     for reason, rule in rules:
         if any(match.span('value') == (start, stop) for match in re.finditer(rule, text)):
             return reason
+    if any(begin <= start < stop <= end for begin, end in
+           (match.span() for match in re.finditer(r"\b2-amino-2-methyl-1-propanol\b", text))):
+        return 'definition'
     return None
 
 
@@ -61,6 +69,10 @@ def occurrences(collisions):
     for path in d.manuscript_sources():
         source = d.manuscript_body(path.read_text())
         masked = d.mask_syntax(source)
+        equations = [match.span() for match in EQUATIONS.finditer(source)]
+        relative = path.relative_to(d.ROOT).as_posix()
+        reviewed_spans = [(match.span(), entry) for entry in collisions if entry['file'] == relative
+                          for match in d.collision_contexts(source, entry['context'])]
         # Keep the exponent in a typed scientific number while hiding equation indices elsewhere.
         for scientific in SCIENTIFIC.finditer(source):
             start, stop = scientific.span()
@@ -75,17 +87,50 @@ def occurrences(collisions):
                 while stop <= offset + match.start():
                     start, stop = stop, next(stops)
                 sentence = ' '.join(source[start:stop].split())
-                row = dict(file=path.relative_to(d.ROOT).as_posix(), line=i, column=match.start()+1,
-                           token=match[0], sentence=sentence,
-                           reason=classification(source[start:stop], offset+match.start()-start, offset+match.end()-start))
-                for entry in collisions:
-                    if entry['file'] == row['file'] and entry['token'] == row['token'] and any(
-                        context.start() <= match.start() and match.end() <= context.end()
-                        for context in re.finditer(re.escape(entry['context']), raw)
-                    ):
-                        row.update(reason=entry['reason'], collision=True)
+                begin, end = offset + match.start(), offset + match.end()
+                reason = classification(source[start:stop], begin-start, end-start)
+                if not reason and path.name == 'nomenclature.tex':
+                    reason = 'definition'
+                if not reason and any(a <= begin and end <= b for a, b in equations):
+                    reason = 'equation'
+                row = dict(file=relative, line=i, column=match.start()+1,
+                           token=match[0], sentence=sentence, reason=reason)
+                for (a, b), entry in reviewed_spans:
+                    if entry['token'] == row['token'] and a <= begin and end <= b:
+                        row.update(reason=entry['reason'], collision=True, context=entry['context'])
                 yield row
             offset += len(raw) + 1
+
+
+def display_text(collisions):
+    path = Path(d.__file__)
+    file = path.relative_to(d.ROOT).as_posix()
+    labels = {"label", "xlabel", "ylabel", "title", "notes"}
+    seen = set()
+    for call in ast.walk(ast.parse(path.read_text())):
+        if not isinstance(call, ast.Call):
+            continue
+        parts = [part.value for part in call.keywords if part.arg in labels]
+        if isinstance(call.func, ast.Name) and call.func.id == 'table' and len(call.args) > 1:
+            parts.append(call.args[1])
+        for part in parts:
+            for node in ast.walk(part):
+                if not isinstance(node, ast.Constant) or not isinstance(node.value, str):
+                    continue
+                if node in seen:
+                    continue
+                seen.add(node)
+                text = node.value
+                for match in TOKEN.finditer(d.mask_syntax(text)):
+                    row = dict(file=file, line=node.lineno, token=match[0], sentence=text,
+                               reason=classification(text, *match.span()), display_text=True)
+                    for entry in collisions:
+                        if entry['file'] == file and entry['token'] == match[0] and any(
+                            m.start() <= match.start() and match.end() <= m.end()
+                            for m in d.collision_contexts(text, entry['context'])
+                        ):
+                            row.update(reason=entry['reason'], collision=True, context=entry['context'])
+                    yield row
 
 
 def number_fields(data, prefix):
@@ -148,7 +193,7 @@ def main():
     parser.add_argument('output', type=Path)
     args = parser.parse_args()
     collisions = json.loads((d.ROOT / 'analyses/amines/number-collisions.json').read_text())
-    rows = list(occurrences(collisions))
+    rows = [*occurrences(collisions), *display_text(collisions)]
     targets = {displayed_number(row['token']) for row in rows if row['reason'] is None} - {(None, None)}
     candidates = index(targets)
     with args.output.open('w') as out:
@@ -160,9 +205,9 @@ def main():
             row['proposals'] = nsmallest(12, matches, key=lambda item: -ranking(words, **item))
             row['status'] = ('collision' if row.get('collision') else 'non-result' if row['reason'] else 'unclassified')
             out.write(json.dumps(row, ensure_ascii=False) + '\n')
-        paths = {path.relative_to(d.ROOT).as_posix() for path in d.manuscript_sources()}
+        detected_collisions = {(row['file'], row['context'], row['token']) for row in rows if row.get('collision')}
         for entry in collisions:
-            if entry['file'] not in paths:
+            if (entry['file'], entry['context'], entry['token']) not in detected_collisions:
                 out.write(json.dumps(dict(entry, status='collision'), ensure_ascii=False) + '\n')
 
 

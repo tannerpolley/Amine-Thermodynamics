@@ -6,8 +6,8 @@ Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the 
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
 Every observation was examined during model development, so no comparison in this paper is an independent validation or a blind test.
 \Cref{tab:calibration-data} lists, for each amine, the data in the objective, the data fitted beforehand and the development data.
-The objectives contain 307 observations for MEA, 140 for DEA, 281 for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
-The 39 \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it, so 268 of its observations respond to the fitted parameters.
+The objectives contain \res{mea-objective-observations-methods} observations for MEA, \res{dea-objective-observations-methods} for DEA, \res{mdea-objective-observations-methods} for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
+The 39 \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it, so \res{mea-responsive-observations-methods-data} of its observations respond to the fitted parameters.
 
 \input{tables/calibration-data}
 
@@ -58,9 +58,9 @@ with the logarithmic form for pressures.
 Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
 Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective.
-The loaded-solution pressures contribute 94.0\,\% of the DEA objective and 97.0\,\% of the AMP objective.
+The loaded-solution pressures contribute \res{dea-loaded-pressures-objective-share-methods}\,\% of the DEA objective and \res{amp-loaded-pressures-objective-share-methods}\,\% of the AMP objective.
 In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
-There the loaded total pressures contribute 41.3\,\% and the 24 densities of the \COtwo-free solution 12.6\,\%.
+There the loaded total pressures contribute \res{mdea-loaded-pressures-objective-share-methods}\,\% and the 24 densities of the \COtwo-free solution \res{mdea-unloaded-densities-objective-share-methods}\,\%.
 In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the objective value, \res{mea-selected-objective-cai-weight}, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
@@ -96,7 +96,7 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures among the 307 observations of the MEA objective, a constant contribution to it, which leaves 268 observations and 259 residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves 278 observations and 271 residual degrees of freedom.
+Observations that respond to no fitted parameter are left out of both the sum and the count: the 39 Kiepe pressures among the \res{mea-objective-observations-methods-covariance} observations of the MEA objective, a constant contribution to it, which leaves \res{mea-responsive-observations-methods} observations and \res{mea-residual-degrees-of-freedom-methods} residual degrees of freedom, and three pure-water pressures of the MDEA objective, which leaves \res{mdea-responsive-observations-methods} observations and \res{mdea-residual-degrees-of-freedom-methods} residual degrees of freedom.
 These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
 
 \subsection{Phase-stability search and stability penalty}\label{sec:methods-phase}

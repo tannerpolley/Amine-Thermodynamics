@@ -18,6 +18,14 @@ def test_typed_number_exception_belongs_to_one_context(tmp_path, monkeypatch):
     path.write_text(r"From 20 states, the retained count was \res{reported-count}.")
     assert not list(displays.typed_numbers(values, reviewed))
 
+    path.write_text("\n\n" + r"From 20 states, the retained count was \res{reported-count}.")
+    assert not list(displays.typed_numbers(values, reviewed))
+
+    path.write_text("From 20 states\nFrom 20 states")
+    assert list(displays.typed_numbers(values, reviewed)) == [
+        "Stale or ambiguous number collision: experiment.tex: From 20 states"
+    ]
+
     path.write_text(r"From 21 states, the retained count was \res{reported-count}.")
     assert list(displays.typed_numbers(values, reviewed)) == [
         "Stale or ambiguous number collision: experiment.tex: From 20 states"
@@ -26,4 +34,11 @@ def test_typed_number_exception_belongs_to_one_context(tmp_path, monkeypatch):
     path.write_text(r"From 20 states, the retained count was \res{reported-count}.")
     assert list(displays.typed_numbers({"reported-count": {"value": "21"}}, reviewed)) == [
         "Stale or ambiguous number collision: experiment.tex: From 20 states"
+    ]
+
+
+def test_typed_range_upper_limit_is_unsigned():
+    text = r"Prescribed 10--20 wt\%; the residual is -20\%."
+    assert [(match[0], value) for match, value in displays.numeric_occurrences(text, text)] == [
+        ("10", 10), ("20", 20), ("-20", -20)
     ]

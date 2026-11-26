@@ -33,7 +33,7 @@
     "stage": "fit",
     "record": "shared/fit/display-summary.json.gz",
     "keys": "amp_enthalpy, attempts, start_distances, endpoint_stages, mdea_start_counts",
-    "sha256": "fce5e7c4a7a1ef85b5cf193b39a81d20035e4914ba5593c0b8b887adedef118d"
+    "sha256": "6c5c5cde582da69174af8018b50b7c9ddc5e1947f958160287051a4d898f3273"
   },
   "analyses/amines/results/shared/phase/display-summary.json.gz": {
     "disposition": "stage",
@@ -42,7 +42,7 @@
     "stage": "phase",
     "record": "shared/phase/display-summary.json.gz",
     "keys": "dea_controls, amp_controls, amp_worked, mdea_early, mea_grid, amp_outcomes, coverage, mdea_historical_measured, mea_search, mdea_distinct_states, amp_early",
-    "sha256": "117102193b8ee7d682f20313966d06e9ab5b9e502ebb34e89d5a91d954286b40"
+    "sha256": "4204279241b7cf5793e3a1cd646ce2c31473672be267ce5d7f356dc8ee8cdd5a"
   },
   "analyses/amines/results/shared/properties/display-summary.json.gz": {
     "disposition": "stage",
@@ -50,7 +50,7 @@
     "fit_set": "reported and retained comparisons",
     "stage": "properties",
     "record": "shared/properties/display-summary.json.gz",
-    "keys": "mea_early_reference, kamps, dea_density, mdea, spread, shared, mea_mamun, mea_historical_covariance, dea_alternative, mdea_bubble",
+    "keys": "mea_early_reference, kamps, dea_density, mdea, spread, shared, mea_mamun, mea_historical_covariance, dea_alternative, mdea_bubble, water_calibration",
     "sha256": "22e119aa7167f4d72d2bf0b04c88e984b5a614c4aaf8c010e8b4297205e3cccf"
   },
   "analyses/amines/results/shared/properties/gibbs-derivatives.json": {
@@ -550,6 +550,15 @@
     "record": "amp/reported/fit/display/analyses/fixed_reaction_reference/results/AMP_free/replacement-starts.json.gz",
     "sha256": "d07b0770764243ce44fa5b03c0192b4baaa49803e44e568da967d6f3995ada75",
     "stage": "fit"
+  },
+  "analyses/fixed_reaction_reference/results/AMP_free/screen/selected/native/state-inventory.json.gz": {
+    "fit_set": "AMP reported",
+    "stage": "phase",
+    "disposition": "stage",
+    "record": "amp/reported/phase/state-inventory.json.gz",
+    "sha256": "eda59dd626d5969ad33050c7f2c7123b38137e9c3589b203ca8f159355acf039",
+    "owner": "phase.py",
+    "keys": "rows[].T_K"
   },
   "analyses/fixed_reaction_reference/results/AMP_free/screen/selected/native/summary.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2762,6 +2771,50 @@
     "record": "mea/sensitivities/replay/display/analyses/round_5/results/C/MEA-k-profile.json.gz",
     "sha256": "9ff94f018a0124775cd463f8eab10ef3e7c27eb92b5eae0e596a0ea22e72acea",
     "stage": "replay at four retained points (the centre and k = -0.5, 0.1325, 1.0), whose mappings are in MMW/shared-bicarbonate-417/profile.json.gz (round_5/objective.py:277-308)"
+  },
+  "analyses/round_5/results/D/AMP-expanded-fixed.json.gz": {
+    "disposition": "stage",
+    "owner": "properties.py",
+    "fit_set": "expanded-fixed",
+    "stage": "properties",
+    "record": "amp/expanded-fixed/properties/gibbs-curvature.json.gz",
+    "keys": "rows[].state_type, rows[].minimum",
+    "sha256": "d4505b3a8ae425716a965f6f888822609dd6f74b1bb1536bf696941b0d0558a0",
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/curvature.py"
+  },
+  "analyses/round_5/results/D/AMP-expanded-free.json.gz": {
+    "disposition": "stage",
+    "owner": "properties.py",
+    "fit_set": "expanded-free",
+    "stage": "properties",
+    "record": "amp/expanded-free/properties/gibbs-curvature.json.gz",
+    "keys": "rows[].state_type, rows[].minimum",
+    "sha256": "0270eca0740c7fe6a20592126eebe9ae7b8d3a752bac51057f53b1e10b308f44",
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/curvature.py"
+  },
+  "analyses/round_5/results/D/AMP-original-main.json.gz": {
+    "disposition": "stage",
+    "owner": "properties.py",
+    "fit_set": "original-main",
+    "stage": "properties",
+    "record": "amp/original-main/properties/gibbs-curvature.json.gz",
+    "keys": "rows[].state_type, rows[].minimum",
+    "sha256": "f0c75cad9e2c09a2d6c0c41477954b672c3301e5d7d11bf4757a575c7e7b0a6c",
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/curvature.py"
+  },
+  "analyses/round_5/results/D/AMP-original-slope-150.json.gz": {
+    "disposition": "stage",
+    "owner": "properties.py",
+    "fit_set": "original-slope-150",
+    "stage": "properties",
+    "record": "amp/original-slope-150/properties/gibbs-curvature.json.gz",
+    "keys": "rows[].state_type, rows[].minimum",
+    "sha256": "cfba45cb9e696acd9df7692f9f120c5d72766e1f8da77daa7933ae47ac7b21c4",
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/curvature.py"
   },
   "analyses/round_5/results/records/Hilliard-Cp.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",

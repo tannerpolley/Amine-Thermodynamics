@@ -102,7 +102,7 @@ def endpoint_stages(record):
                           wall_seconds=record.get('wall_s'), gradient_passed=None if gradient is None else gradient <= tol)]
 
 
-def accounting(s, attempts):
+def fit_accounting(s, attempts):
     endpoints = {}
     for amine, fits in attempts.items():
         endpoints[amine] = {label: endpoint_stages(s.fixed(f'{amine}/{label}.json.gz')) for label in fits}
@@ -124,6 +124,10 @@ def accounting(s, attempts):
                     if row['group'] == group and row['unit'] == 'Pa' and available(row))
         for group in ('Kuranov', 'Ermatchkov')
     }
+    return dict(mdea_start_counts=start_counts, endpoint_stages=endpoints)
+
+
+def phase_accounting(s):
     mea = s.fixed('MEA/screen/summary.json.gz')
     grid = mea['grid']
     coverage = dict(MEA=dict(attempted=sum(grid[k]['states'] for k in ('grid', 'offset', 'census')),
@@ -137,6 +141,7 @@ def accounting(s, attempts):
     screen = s.fixed('MDEA/screen/selected/declared/summary.json.gz')
     inventory = {q['key']: q for q in s.fixed('MDEA/screen/selected/declared/state-inventory.json.gz')['rows']}
     crosswalk = s.read('analyses/mdea_mea_workflow/results/phase-search-421/observation-crosswalk.json')
+    manifest = s.fixed('MDEA/manifest.json.gz')
     sources = {q['identity']: q['row'] for pool in manifest['rows'].values() for q in pool}
     crosswalk = {q['key']: q['identity'] for q in crosswalk}
     detections = Counter(q.get('same_calculation_as', q['key']) for q in screen['rows'] if q['descent'])
@@ -157,8 +162,7 @@ def accounting(s, attempts):
         states.append(dict(key=key, T_K=q['temperature_K'], source=source, pressure_Pa=pressure,
                            pressure_basis=basis, detections=detections[key],
                            confirmed=sum(a['confirmed'] for a in q['attempts']), attempts=len(q['attempts'])))
-    return dict(coverage=coverage, mdea_start_counts=start_counts, endpoint_stages=endpoints,
-                mdea_detections=sum(detections.values()), mdea_distinct_states=states)
+    return dict(coverage=coverage, mdea_distinct_states=states)
 
 
 def paired(before, after):
@@ -511,16 +515,15 @@ def mdea_properties(s):
 def main():
     s = Records()
     attempts, distances = fit_attempts(s)
-    account = accounting(s, attempts)
     s.write('shared/fit/display-summary.json.gz', dict(
-        attempts=attempts, start_distances=distances, endpoint_stages=account['endpoint_stages'],
-        mdea_start_counts=account['mdea_start_counts'], amp_enthalpy=amp_units(s),
+        attempts=attempts, start_distances=distances, amp_enthalpy=amp_units(s), **fit_accounting(s, attempts),
     ))
+    account = phase_accounting(s)
     amp_early = s.read('analyses/round_3/results/q1.json')['rows']
     mdea_early = s.read('analyses/round_3/results/q3.json')['rows']
     mdea_measured = s.read('analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json')
     s.write('shared/phase/display-summary.json.gz', dict(
-        coverage=account['coverage'], mdea_distinct_states=account['mdea_distinct_states'],
+        **account,
         mea_search=mea_search(s), mea_grid=s.fixed('MEA/screen/summary.json.gz')['grid'],
         dea_controls=dea(s), amp_controls=amp(s), amp_outcomes=amp_outcomes(s),
         amp_worked={family: phase_outcome(selected(s, family, 'controls/A.json.gz')['rows']['worked-state']['value'])

@@ -22,7 +22,7 @@ Propagated to the 47 fitted \COtwo partial pressures, the parameter covariance g
 % P:results-pressure-01
 At nominal 30 wt\% MEA the bubble curves follow the measured \COtwo partial pressures over the broad logarithmic pressure range, while differences between sources remain visible (\cref{fig:pressure}).
 The 47 fitted pressures, at 313--\SI{333}{\kelvin}, deviate by \res{mea-fitted-pressure-aard-mea-results}\,\%.
-The higher-temperature pressures are calculated without further fitting, and the 112 pressures of the same six sources that are not fitted deviate by 27.88\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
+The higher-temperature pressures are calculated without further fitting, and the 112 pressures of the same six sources that are not fitted deviate by \res{mea-added-same-sources-pressure-aard-results}\,\% (\cref{tab:mea-data}; Table~\ref{supp-tab:pressure-sources} gives the deviation for each source).
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -69,7 +69,7 @@ Without volume translation, the model describes the fitted loaded densities of A
 
 \subsubsection{Other MEA concentrations}\label{sec:results-concentration}
 % P:results-transfer
-At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressures of Aronu et al.\ deviate by 44.26 and 46.89\,\%, against 31.65\,\% for their pressures at 30 wt\%, which are not fitted either (\cref{tab:mea-data}, Fig.~\ref{supp-fig:concentration-pressure}).
+At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressures of Aronu et al.\ deviate by \res{mea-aronu-lower-concentration-pressure-aard-results} and \res{mea-aronu-higher-concentration-pressure-aard-results}\,\%, against \res{mea-aronu-nominal-pressure-aard-results}\,\% for their pressures at 30 wt\%, which are not fitted either (\cref{tab:mea-data}, Fig.~\ref{supp-fig:concentration-pressure}).
 Aronu et al.\ fitted an extended UNIQUAC model to their own data at 15--60 wt\% and report 24.3\,\% for all their \COtwo partial pressures together \cite{Aronu2011}, so the two are not compared on identical observations.
 The concentration dependence of the pressure is a weakness of the calibration.
 
@@ -79,11 +79,11 @@ Two steps lead from the 16-parameter calibration to the MEA model; the sequence 
 The first fixes R2 and R5 at their literature forms and ties the Born diameters, which gives the 11-parameter fit with the MEA-fitted shared set.
 It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from six to one.
 The second fixes the two water--anion interactions from the salt data.
-On the same 307 observations it raises the objective value from 150.76 to 152.96, and the 112 pressures not fitted deviate by 27.8 instead of 24.9\,\%.
+On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from 150.76 to 152.96, and the 112 pressures not fitted deviate by 27.8 instead of 24.9\,\%.
 
 % P:results-joint-02
 Both steps cost accuracy at high temperature.
-On the 19 \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005} near \SI{393}{\kelvin}, which no fit includes, the deviation is 19.4\,\% for the 16-parameter calibration, 33.5\,\% with the MEA-fitted shared set and 38.4\,\% for the restricted model in that sequence; the MEA model with the \SI{100}{\kilo\pascal} references deviates by 38.66\,\% (\cref{tab:published-models}).
+On the \res{mea-mamun-assessment-pressure-count-mea-results} \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005} near \SI{393}{\kelvin}, which no fit includes, the deviation is 19.4\,\% for the 16-parameter calibration, 33.5\,\% with the MEA-fitted shared set and 38.4\,\% for the restricted model in that sequence; the MEA model with the \SI{100}{\kilo\pascal} references deviates by \res{mea-mamun-pressure-aard-mea-results}\,\% (\cref{tab:published-models}).
 In return the restricted model keeps the literature equilibrium constants that the other amines share, needs no stability penalty, and no longer takes a shared interaction from MEA data that do not determine it.
 With the water--bicarbonate interaction fixed, the conditional standard errors of the carbamate--water and \MEAH--water interactions fall from \res{mea-shared-carbamate-water-conditional-se-before-fixing} and \res{mea-shared-protonated-mea-water-conditional-se-before-fixing} to 0.10 and 0.11.
 
