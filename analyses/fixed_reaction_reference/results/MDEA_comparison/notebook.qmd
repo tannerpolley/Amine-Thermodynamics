@@ -1,0 +1,22 @@
+---
+title: MDEA shared bicarbonate–water comparison screens
+---
+
+The screens use the historical reaction-reference declaration and the study wheel. The grid interval ends at the first converged loading with bubble pressure above 5.0367 MPa for each aqueous stock and temperature. Measured-state searches have no grid membership.
+
+| Bicarbonate–water coefficient | Inside | Outside | Measured | Grid membership unassigned | Finite negative | Liquid and vapor-connected phase | Two liquids | Incomplete outside | Held | Reused |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0.7650 | 7108 | 3152 | 1564 | 0 | 0 | 0 | 0 | 0 | 11824 | 0 |
+| 0.1325 | 7168 | 3092 | 1564 | 0 | 0 | 0 | 0 | 0 | 11824 | 0 |
+| 1.0000 | 7106 | 3154 | 1564 | 0 | 1488 | 76 | 0 | 0 | 10260 | 0 |
+
+Each row covers 11,824 declared searches. The table gives exact counts by category. Finite negatives apply to the supplied and native trials at the declared states. The two-liquid replays are model predictions under the stated conditions.
+
+- `comparison:363:final` at 288.71 K and 1.121 MPa gave two liquids with amounts 3.62995 and 7.291942 mol. The Gibbs decrease divided by RT was 0.001937131 mol, with estimated numerical error 1.24e-07 mol. The imposed pressure applies to the prescribed final feed.
+- `grid:{'water': 1.7987685418415897, 'methyldiethanolamine': 1.0}:373.15:1.3:1.05` at 373.15 K and 203.127 MPa gave two liquids with amounts 3.78015 and 0.09082804 mol. The Gibbs decrease divided by RT was 0.0002494988 mol, with estimated numerical error 7.66e-10 mol. The pressure replay is outside the grid interval.
+
+- At 0.7650, the grid inside, grid outside, measured strata have 4 search keys with blockers and 7469 additional search keys awaiting evaluation. The [handoff](handoff.json) gives each blocker and its search key.
+- At 0.1325, the grid inside, grid outside, measured strata have 4 search keys with blockers and 3988 additional search keys awaiting evaluation. The [handoff](handoff.json) gives each blocker and its search key.
+- At 1.0000, the grid inside, grid outside strata have 2 search keys with blockers and 6413 additional search keys awaiting evaluation. The [handoff](handoff.json) gives each blocker and its search key.
+
+The comparison is pending independent delivered review.
