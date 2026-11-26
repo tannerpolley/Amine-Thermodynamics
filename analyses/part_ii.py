@@ -75,7 +75,8 @@ def select_campaign_endpoint(candidates, tolerance):
 class Route:
     branch_counts = staticmethod(branch_counts)
     density_branch = staticmethod(density_branch)
-    def __init__(self, declaration, out=None, *, shared_values=None, fixed_reference_pressure_pa=None):
+    def __init__(self, declaration, out=None, *, shared_values=None, fixed_reference_pressure_pa=None,
+                 wheel=WHEEL, wheel_sha256=SHA):
         self.path = Path(declaration).resolve()
         self.config = json.loads(self.path.read_text())
         self.out = Path(out) if out else self.path.parent/self.config['output']
@@ -84,8 +85,9 @@ class Route:
         self.controls = self.config['optimizer']
         self.shared_values = shared_values
         self.fixed_reference_pressure_pa = fixed_reference_pressure_pa
+        self.wheel, self.wheel_sha256 = Path(wheel), wheel_sha256
         self.verify()
-        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=SHA,
+        identity = dict(declaration_sha256=hashlib.sha256(self.path.read_bytes()).hexdigest(),wheel_sha256=self.wheel_sha256,
                         shared_values_sha256=SHARED_SHA if shared_values is None else shared_values[1])
         if fixed_reference_pressure_pa is not None:
             identity['fixed_reference_pressure_pa'] = fixed_reference_pressure_pa
@@ -103,8 +105,8 @@ class Route:
         if self.shared_values is not None:
             path, digest = self.shared_values
             assert hashlib.sha256(path.read_bytes()).hexdigest() == digest
-        assert hashlib.sha256(WHEEL.read_bytes()).hexdigest() == SHA
-        with zipfile.ZipFile(WHEEL) as archive:
+        assert hashlib.sha256(self.wheel.read_bytes()).hexdigest() == self.wheel_sha256, self.wheel
+        with zipfile.ZipFile(self.wheel) as archive:
             for name in archive.namelist():
                 if name.startswith(('epcsaft/', 'epcsaft.libs/')) and not name.endswith('/'):
                     assert archive.read(name) == (Path(epcsaft.__file__).parent.parent/name).read_bytes(), name

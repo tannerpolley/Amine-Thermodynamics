@@ -1,5 +1,8 @@
 """Present retained fit, derivative and phase comparisons as an analysis notebook."""
 from collections import Counter
+import gzip
+import json
+from pathlib import Path
 
 
 def show(value):
@@ -10,6 +13,52 @@ def show(value):
     return str(value)
 
 
+def mdea_slope_bound():
+    results = Path(__file__).parent/'results/MDEA_slope_bound'
+    path = results/'checks.json.gz'
+    if not path.exists():
+        return []
+    checks = json.loads(gzip.decompress(path.read_bytes()))['checks']
+    lines = ['', '## MDEA–water slope bound (#427)', '']
+    if len(checks) != 5 or not all(q['passed'] for q in checks.values()):
+        return [*lines, 'See the [retained checks](results/MDEA_slope_bound/checks.json.gz) for the stopping point.']
+    replay, onset, hull, census = (checks[str(k)] for k in range(2, 6))
+    cold, control = onset['cold_onset'], hull['known_answer']
+    left, right = control['gaps'][0]['x_MDEA_contacts']
+    counts = ', '.join(f'{group} {count}' for group, count in sorted(census['by_family'].items()))
+    return [*lines,
+            'Stage 0 used the study wheel with the reaction reference fixed at 100 kPa.',
+            f"The lower slope bound is {onset['s_per_K']:.10g} K⁻¹. The upper slope bound is 0.01 K⁻¹.",
+            f"A replays all {replay['rows']} predictions at cost {replay['cost']:.17g}, with maximum relative prediction "
+            f"and conditional standard-error differences of {replay['max_relative_prediction_difference']:.3g} and "
+            f"{replay['max_relative_conditional_se_difference']:.3g}. Only the upper bound on $a_0$ is active.",
+            '',
+            f"At {cold['T_K']} K and 1.466 MPa, the binary liquid hull brackets gap onset between "
+            f"{cold['k_no_gap']:.10g} and {cold['k_gap']:.10g}. At the $(U,s)$ corner, "
+            f"$k={onset['corner_k']:.10g}$ is {onset['corner_margin']:.6g} below the no-gap end of the bracket.",
+            f"The four corners had {hull['gaps']} gaps in {hull['corner_states']} temperature–corner checks "
+            f"on the 5,490-point composition grid. The LHS-53 control had a gap with MDEA mole-fraction "
+            f"contacts {left:.4g} and {right:.4g}. These are finite-grid model checks.",
+            '',
+            f"{census['can_start']} of {census['candidates']} draws had every row available. "
+            f"The census recorded {census['available_rows']} available and {census['unavailable_rows']} unavailable "
+            f"rows ({counts}). All MDEA–water bubble rows were available. The census records Engine responses at "
+            'the declared vectors.',
+            '',
+            'The approved two-wheel exception applies to the #427 candidate checks, fits and descent probes. '
+            'Endpoint values are reported on the study wheel. The fit comparison awaits the second wheel. '
+            '[Accepted plan](https://github.com/tannerpolley/Amine-Thermodynamics/issues/427#issuecomment-7178782607).',
+            '',
+            '[Declaration](results/MDEA_slope_bound/declaration.json.gz) · '
+            '[A replay](results/MDEA_slope_bound/replay-A.json.gz) · '
+            '[Onsets](results/MDEA_slope_bound/onset-S.json) · [Hulls](results/MDEA_slope_bound/hull-S.json) · '
+            '[Row census](results/MDEA_slope_bound/census-S.json.gz) · '
+            '[Checks and message counts](results/MDEA_slope_bound/checks.json.gz).',
+            '',
+            'Run `taskset -c 0-7 uv run --locked python analyses/fixed_reaction_reference/diagnosis-starts/stage0.py` '
+            'from the repository root to repeat Stage 0. Add `--check` to recompute the checks from the retained records.', '']
+
+
 def render(result):
     q = result['quantities']
     lines = [r"""---
@@ -18,6 +67,7 @@ resources:
   - manuscript-handoff.json
   - results/handoff-checks.json
   - results/stages.json
+  - results/MDEA_slope_bound/*
 ---
 
 The study compares three calculations on Engine commit `05e94210`.
@@ -50,6 +100,7 @@ and population basis, and open quantities.
         label = f'{selected} provisional' if selected and new['disposition']=='undecided' else selected
         lines.append('| '+' | '.join(map(show,(design,old['population']['fitted'],old['old'],old['new'],
                                               new['new'],new['absolute_change'],label)))+' |')
+    lines.extend(mdea_slope_bound())
     lines.extend(['','## Start separation and endpoint stationarity','',
                   '| Design | A−B | A−C | B−C |','|---|---:|---:|---:|'])
     for design in result['fit_attempts']:

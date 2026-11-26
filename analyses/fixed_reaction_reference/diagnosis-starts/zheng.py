@@ -5,7 +5,7 @@ Source state: 50 wt % MDEA, 323.15 K, loading 1.177 mol/mol, total pressure 4.19
 from copy import copy
 from time import monotonic
 
-import starts as c
+import retained_starts as c
 
 eq = c.refit.eq
 endpoint = c.r.read(c.OUT/'MDEA/A.json.gz')['endpoint']

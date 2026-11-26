@@ -8,7 +8,7 @@ from multiprocessing import Pool
 import sys
 from time import monotonic
 
-import starts as c
+import retained_starts as c
 
 eq = c.refit.eq
 CENSUS = {q['draw']: q for q in c.r.read(c.HERE/'results/census.json.gz')['records']}
