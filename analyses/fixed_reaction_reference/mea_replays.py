@@ -31,27 +31,23 @@ def measured_batch(record, identity, names):
 def rebuild_measured(point, reference, names, bank, output, workers):
     started = monotonic()
     identity = measured_identity(point,bank)
-    pilot = r.read(output/'measured-bound/pilot.json.gz')
-    pilot_names = [q['identity'] for q in pilot['rows']]
-    done = {q['identity'] for q in measured_batch(pilot,identity,pilot_names)}
-    assert len(set(names))==321 and done<=set(names)
-    pending = [i for i in names if i not in done]
-    batches = [pending[i:i+8] for i in range(0,len(pending),8)]
+    assert len(names)==len(set(names))==321
+    batches = [names[i:i+8] for i in range(0,len(names),8)]
     jobs = []
     for i, batch in enumerate(batches):
-        path = output/f'measured-bound/{i}.json.gz'
+        path = output/f'measured-scaled/{i}.json.gz'
         if path.exists():
             measured_batch(r.read(path),identity,batch)
         else:
             jobs.append((i,(point['parameters'],reference,batch,1.,P_REF,bank)))
-    manifest = output/'measured-bound/inventory.json.gz'
+    manifest = output/'measured-scaled/inventory.json.gz'
     if not jobs and manifest.exists():
         retained = r.read(manifest)
         assert all(retained[k]==v for k,v in identity.items()) and retained['names']==names
         return
     with ProcessPoolExecutor(workers) as pool:
         for (i,_), batch in zip(jobs,pool.map(stability.chunk,[args for _,args in jobs]),strict=True):
-            stability.save(output/f'measured-bound/{i}.json.gz',dict(identity,rows=batch))
+            stability.save(output/f'measured-scaled/{i}.json.gz',dict(identity,rows=batch))
     stability.save(manifest,dict(identity,names=names,seconds=monotonic()-started))
 
 

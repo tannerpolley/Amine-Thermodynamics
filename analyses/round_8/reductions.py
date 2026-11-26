@@ -64,20 +64,20 @@ def vapor_trace_passes(pair):
 
 
 def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
-    from classify_descents import COINCIDENCE, matched
+    from classify_descents import distinct_phases, matched
     from reference_states_428 import phase_closure
 
     amounts = pair.get('amounts_mol',[])
     if len(amounts)!=2 or min(amounts)<=0 or not pair.get('requested_tolerance_met'):
         return False
     details = pair if vapor else pair.get('diagnostics') or {}
-    if not phase_closure(details,pressure,tolerance):
+    T = pair.get('T_K',pair.get('T'))
+    if not phase_closure(details,pressure,tolerance,temperature=T):
         return False
     a,b = details['phases']
-    distinct = max(abs(x-y) for x,y in zip(a['x'],b['x'],strict=True))>COINCIDENCE or (
-        abs(log(a['density_mol_m3']/b['density_mol_m3']))>COINCIDENCE)
+    distinct = distinct_phases((a['x'],b['x']),(a['density_mol_m3'],b['density_mol_m3']))
     roots = vapor_trace_passes(pair) if vapor else len(pair['roots'])==2 and all(
-        any(r['returned']=='liquid' for r in matched(group,tolerance,density))
+        any(r['returned']=='liquid' for r in matched(group,tolerance,density,T=T,P=pressure))
         for group,density in zip(pair['roots'],pair['densities_mol_m3'],strict=True))
     return (distinct and roots and amounts==[a['amount_mol'],b['amount_mol']]
             and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol'])

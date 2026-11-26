@@ -11,42 +11,38 @@ ERROR_TERMS = ('association_energy_estimate_over_rt',
                'feasibility_estimate_over_rt','summation_estimate_over_rt')
 
 
-def pressure_roots(model, T, P, x, rho, *, declaration=None, standard=None):
+def pressure_roots(model, T, P, x, rho):
     checks = []
     for branch in ('liquid','vapor'):
         try:
             state = model.state(T, P=P, x=x, phase=branch)
-            density, original = state.molar_density, state.pressure/P-1
-            returned = state.returned_density_branch.name.lower()
-            evidence = None
-            if (declaration is not None and returned=='liquid' and
-                    abs(math.log(density/rho))<=DENSITY_WINDOW and abs(original)>declaration.row_tolerance):
-                from fixed_reaction_reference.reference_derivatives import pressure_reclosure
-
-                density,state,evidence = pressure_reclosure(model,declaration,T,P,density,x,standard,state)
-            checks.append(dict(requested=branch, returned=returned, density=density,
-                               log_density_distance=abs(math.log(density/rho)),
-                               relative_pressure_residual=abs(state.pressure/P-1),
-                               pressure_residual_Pa=state.pressure-P,
-                               original_relative_pressure_residual=original, pressure_reclosure=evidence))
+            density, residual = state.molar_density, state.pressure-P
+            checks.append(dict(requested=branch, returned=state.returned_density_branch.name.lower(), density=density,
+                               T_K=T,P_Pa=P,log_density_distance=abs(math.log(density/rho)),
+                               relative_pressure_residual=abs(residual)/P,pressure_residual_Pa=residual))
         except Exception as error:
             checks.append(dict(requested=branch, error=str(error)))
     return checks
 
 
-def matched(checks, tolerance, density=None):
+def matched(checks, tolerance, density=None, *, T=None, P=None):
+    from reference_states_428 import scaled_pressure_error
+
     def pressure_passes(root):
-        reclosure = root.get('pressure_reclosure') or {}
-        if 'bracketed' not in reclosure:
-            return root['relative_pressure_residual']<=tolerance
-        from fixed_reaction_reference.reference_derivatives import bracketed_pressure_passes
+        temperature, pressure = root.get('T_K',T),root.get('P_Pa',P)
+        if temperature is None or pressure is None:
+            return False
+        residual = root.get('pressure_residual_Pa',root['relative_pressure_residual']*pressure)
+        return scaled_pressure_error(residual,root['density'],temperature)<=tolerance
 
-        return bracketed_pressure_passes(root['density'],root['pressure_residual_Pa'],
-                                         reclosure['scan']['P_Pa'],tolerance,reclosure)
+    return [r for r in checks if 'density' in r and
+            (r.get('log_density_distance',math.inf) if density is None else
+             abs(math.log(r['density']/density)))<=DENSITY_WINDOW and pressure_passes(r)]
 
-    return [r for r in checks if (r.get('log_density_distance',math.inf) if density is None else
-            abs(math.log(r['density']/density)) if 'density' in r else math.inf)<=DENSITY_WINDOW
-            and pressure_passes(r)]
+
+def distinct_phases(compositions, densities):
+    return (max(abs(a-b) for a,b in zip(*compositions,strict=True))>COINCIDENCE or
+            abs(math.log(densities[0]/densities[1]))>COINCIDENCE)
 
 
 def gibbs(compiled, result, report=None):
@@ -80,19 +76,23 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
         out["diagnostics"] = inspect(compiled, result)
     if not result.requested_tolerance_met or len(result.amounts)!=2 or min(result.amounts)<=0:
         return dict(out, confirmed=False)
+    diagnostics = out.get('diagnostics') or {}
+    if 'physical_checks_pass' not in diagnostics:
+        from round_3.phases import physical
+
+        diagnostics.update(physical(spec,parent,result))
+        out['diagnostics'] = diagnostics
     phases = [list(result.phase_mole_fractions(j)) for j in range(2)]
     densities = list(result.molar_densities)
-    distinct = max(abs(a-b) for a,b in zip(*phases,strict=True))>COINCIDENCE or abs(math.log(densities[0]/densities[1]))>COINCIDENCE
+    distinct = distinct_phases(phases,densities)
     report = eq.stability_test(compiled,result)
-    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho,
-                            declaration=parent,standard=report.standard_over_rt)
+    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho)
              for x,rho in zip(phases,densities,strict=True)]
     liquid = all(any(r['returned']=='liquid' for r in matched(check,parent.row_tolerance)) for check in roots)
     g, error = gibbs(compiled,result,report)
     comparison = {} if parent_g is None else dict(Gibbs_decrease_over_RT_mol=parent_g[0]-g)
     estimated_error = error if parent_g is None else parent_g[1]+error
-    physical = inspect is None or (out['diagnostics'] or {}).get('physical_checks_pass',True)
-    return dict(out, confirmed=physical and distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
+    return dict(out, confirmed=diagnostics['physical_checks_pass'] and distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
                 distinct=distinct, split_Gibbs_over_RT_mol=g, split_only=parent_g is None and distinct and liquid, **comparison,
                 numerical_error_over_RT_mol=estimated_error, phases=phases,
                 Gibbs_sum_over_RT_mol=g, objective_over_RT_mol=result.objective, residuals=list(result.residuals),
@@ -110,7 +110,7 @@ def classify(route, point, rows, states):
     def inspect(compiled, result):
         last[:] = [result]
         if result.requested_tolerance_met and len(result.amounts)==2 and min(result.amounts)>0:
-            return physical(spec,parent,result,compiled=compiled)
+            return physical(spec,parent,result)
 
     last = []
     for row in rows:
@@ -134,7 +134,9 @@ def classify(route, point, rows, states):
                          parent_roots=parent_roots, outside_ranges=route.marks(T,parent),
                          row_tolerance=parent.row_tolerance, parent=physical(spec,parent,central))
             compiled = eq.compile_problem(spec.model,parent)
-            parent_g = gibbs(compiled,central)
+            assert entry['parent']['physical_checks_pass'], 'Parent misses scaled closure'
+            report = eq.stability_test(compiled,central,item.stability_options)
+            parent_g = gibbs(compiled,central,report)
             primary = (parent_x,central.packing_fractions[0])
             entry['liquid_vapor'] = liquid_vapor(spec,route,parent,primary,parent_g)
             guesses, supplied = [], []
@@ -158,8 +160,8 @@ def classify(route, point, rows, states):
                     if root['returned']=='liquid' and trial.evidence=='evaluated' and trial.quantities['tpd_over_rt']<0:
                         guesses.append([primary,(x,packing)])
             entry['supplied_pressure_roots'] = supplied
-            if prediction.stability is not None:
-                native = [t for t in prediction.stability.report.trials
+            if report.trials:
+                native = [t for t in report.trials
                           if t.resolved_descent and t.quantities.get('density_side')==2 and t.split_coordinates]
                 for trial in sorted(native,key=lambda t:t.quantities['split_delta_g_over_rt']):
                     z = list(trial.split_coordinates)

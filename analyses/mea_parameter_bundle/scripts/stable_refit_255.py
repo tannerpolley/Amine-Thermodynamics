@@ -203,8 +203,9 @@ def _measure_group(states):
     return [_measure(state) for state in states]
 
 
-def supplied_support(spec, item):
-    compiled = eq.compile_problem(spec.model, item.problem)
+def supplied_support(spec, item, *, compiled=None):
+    if compiled is None:
+        compiled = eq.compile_problem(spec.model, item.problem)
     return set(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
 
 

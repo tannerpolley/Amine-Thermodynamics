@@ -158,7 +158,7 @@ def deciding_path(run, seed_point, target_point, archive, target, output, *, lif
             g,error = cd.gibbs(compiled,solved)
             row.update(x=list(solved.phase_mole_fractions(0)),density_mol_m3=solved.molar_densities[0],
                        amount_mol=solved.amounts[0],Gibbs_over_RT_mol=g,error=error,
-                       **physical(spec,problem,solved,compiled=compiled))
+                       **physical(spec,problem,solved))
             return row,eq.stability_test(compiled,solved,options) if options is not None else None
         finally:
             problem.phases = phases
@@ -166,9 +166,6 @@ def deciding_path(run, seed_point, target_point, archive, target, output, *, lif
     def node(t):
         reference = refit.P_REF*(P/refit.P_REF)**t
         return declaration(refit.r.segment(seed_mapping,lifted,t),reference)
-
-    def record():
-        refit.save(output,dict(saved,seconds=monotonic()-started))
 
     try:
         spec,direct = declaration(target_mapping,None)
@@ -201,9 +198,9 @@ def deciding_path(run, seed_point, target_point, archive, target, output, *, lif
             x = [list(result.phase_mole_fractions(j)) for j in (0,1)]
             rho = list(result.molar_densities)
             trace,connected = dilute_vapor_connection(spec.model,T,x[1],rho[1])
-            row.update(physical(spec,p,result,compiled=compiled), coordinates=list(result.coordinates),
+            row.update(physical(spec,p,result), coordinates=list(result.coordinates),
                        reduced_curvature=result.reduced_hessian_minimum, vapor_trace=trace, vapor_connected=connected,
-                       max_delta_x=max(abs(a-b) for a,b in zip(*x,strict=True)),log_density_ratio=abs(log(rho[0]/rho[1])),
+                       distinct=cd.distinct_phases(x,rho),
                        decrease=parent['Gibbs_over_RT_mol']-g,error=parent['error']+error)
             start = result
         endpoint, endpoint_problem = node(1.)
@@ -211,14 +208,15 @@ def deciding_path(run, seed_point, target_point, archive, target, output, *, lif
         assert parent_agreement(saved['endpoint_parent'],direct_parent), 'path endpoint parent differs from declared target'
         if start is result:
             assert row['physical_checks_pass'] and row['vapor_connected'] and row['decrease']>row['error']
-            assert max(row['max_delta_x'],row['log_density_ratio'])>cd.COINCIDENCE
+            assert row['distinct']
             saved['outcome'] = 'liquid plus vapor-connected phase'
         else:
             opts = eq.StabilityOptions()
             opts.mode = type(opts.mode).Full
-            _, report = center(run.bind(target_point),direct,opts)
+            searched_parent, report = center(run.bind(target_point),direct,opts)
             saved['target_search'] = dict(message=report.message,completed=report.completed,
-                                          no_descent=report.no_descent_in_trial_set,trials=trials(report))
+                                          no_descent=report.no_descent_in_trial_set,trials=trials(report),
+                                          parent=searched_parent)
             crossing = saved['crossing'] = []
             daughter = saved['path'][-2]['phases'][1]
 
@@ -251,7 +249,7 @@ def deciding_path(run, seed_point, target_point, archive, target, output, *, lif
     except (AttributeError, AssertionError, RuntimeError, ValueError) as error:
         saved['blocker'] = f'{type(error).__name__}: {error}'
     finally:
-        record()
+        refit.save(output,dict(saved,seconds=monotonic()-started))
     return saved
 
 

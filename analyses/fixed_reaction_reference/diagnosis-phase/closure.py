@@ -1,4 +1,4 @@
-"""Hold each returned composition fixed and probe neighboring densities on the same EOS."""
+"""Replay the DEA liquid pair along the loading continuation."""
 
 # ruff: noqa: E402
 from pathlib import Path
@@ -9,46 +9,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "diagnosis-starts"))
 import retained_starts as c
 from phase_replays import point_for
-import mea_stability as mea
-from reference_derivatives import pressure_reclosure
 from phases import cd, physical
-from copy import copy
-
-
-def mea_rows():
-    _, point = point_for("MEA", "selected", "pressure-readback")
-    spec, records = mea.preparations(point["parameters"], c.refit.P_REF)
-    for path in sorted((c.OUT / "E/MEA/measured").glob("*.gz")):
-        for row in c.r.read(path):
-            if row["available"]:
-                continue
-            t = monotonic()
-            p = copy(spec.problems[records[row["identity"]]["problem"]])
-            p.P = row["P_Pa"]
-            p.phases = [copy(mea.bubble_problem(p).phases[0])]
-            original = row["parent"]["phases"][0]
-            p.phases[0].composition_guess = original["x"]
-            p.phases[0].packing_guess = original[
-                "density_mol_m3"
-            ] * spec.model._model.packing_fraction_coefficient(p.T, original["x"])
-            n = p._native(spec.parameters)
-            s = c.refit.eq.solve_equilibrium(spec.model, n)
-            out = dict(key=row["identity"], P=p.P, parent=s.message)
-            if s.requested_tolerance_met and s.amounts:
-                b = c.refit.eq.stability_test(
-                    c.refit.eq.compile_problem(spec.model, n), s
-                ).standard_over_rt
-                out["phases"] = []
-                for phase in row["parent"]["phases"]:
-                    x, rho = phase["x"], phase["density_mol_m3"]
-                    st = spec.model.state(p.T, rho=rho, x=x)
-                    _, _, check = pressure_reclosure(
-                        spec.model, n, p.T, p.P, rho, x, b, st
-                    )
-                    out["phases"].append(
-                        dict(original_error=st.pressure / p.P - 1, readback=check)
-                    )
-            yield dict(out, seconds=monotonic() - t)
 
 
 def dea_rows():
@@ -87,9 +48,9 @@ def dea_rows():
 
 
 if __name__ == "__main__":
-    fn = {"dea": dea_rows, "mea": mea_rows}[sys.argv[1]]
+    assert sys.argv[1:] == ["dea"]
     tick = monotonic()
     c.refit.save(
         HERE / (sys.argv[1] + ".json.gz"),
-        dict(wheel=c.r.SHA, rows=list(fn()), seconds=monotonic() - tick),
+        dict(wheel=c.r.SHA, rows=list(dea_rows()), seconds=monotonic() - tick),
     )

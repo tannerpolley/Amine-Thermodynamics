@@ -19,7 +19,6 @@ R = epcsaft.GAS_CONSTANT_J_PER_MOL_K
 R8 = OUT.parents[1] / 'round_8/results/C1-replays.json.gz'
 FITTED = dict(MEA='monoethanolamine', DEA='diethanolamine', MDEA='methyldiethanolamine',
               AMP_free='aminomethylpropanol')
-PRESSURE_SCAN_RADIUS = 200
 
 
 def anchored_offsets(anchor_model, thermal, declaration, T, unanchored):
@@ -45,113 +44,6 @@ def anchored_offsets(anchor_model, thermal, declaration, T, unanchored):
     return offsets,neutral,(nu @ offsets-contraction).tolist()
 
 
-def sign_change_offsets(errors):
-    changes = np.flatnonzero(np.signbit(errors[:-1])!=np.signbit(errors[1:]))
-    return [[int(i)-PRESSURE_SCAN_RADIUS,int(i)+1-PRESSURE_SCAN_RADIUS] for i in changes
-            if errors[i]!=0 and errors[i+1]!=0]
-
-
-def pressure_scan(model, T, P, x, target, slope):
-    densities = [target]
-    for direction in (-np.inf,np.inf):
-        density = target
-        for _ in range(PRESSURE_SCAN_RADIUS):
-            density = float(np.nextafter(density,direction))
-            densities.append(density)
-    densities.sort()
-    states = [model.state(T,rho=density,x=x) for density in densities]
-    pressures = np.array([state.pressure for state in states])
-    errors = (pressures-P)/P
-    return states,dict(T_K=T,P_Pa=P,x=list(x),newton_density_mol_m3=target,
-                       densities_mol_m3=densities,pressures_Pa=pressures.tolist(),
-                       relative_pressure_errors=errors.tolist(),
-                       analytic_step_per_ULP=slope*np.spacing(target)/P,
-                       adjacent_sign_changes_ULP=sign_change_offsets(errors))
-
-
-def bracketed_pressure_passes(density, residual, P, tol, reclosure):
-    scan = (reclosure or {}).get('scan')
-    selected = (reclosure or {}).get('bracketed')
-    if not scan or not selected or scan['P_Pa']!=P:
-        return False
-    densities = np.asarray(scan['densities_mol_m3'])
-    pressures = np.asarray(scan['pressures_Pa'])
-    if len(densities)!=2*PRESSURE_SCAN_RADIUS+1 or len(pressures)!=len(densities):
-        return False
-    errors = (pressures-P)/P
-    best = int(np.argmin(abs(errors)))
-    changes = sign_change_offsets(errors)
-    return (bool(changes) and changes==scan['adjacent_sign_changes_ULP']
-            and np.array_equal(errors,scan['relative_pressure_errors'])
-            and np.array_equal(np.nextafter(densities[:-1],np.inf),densities[1:])
-            and densities[PRESSURE_SCAN_RADIUS]==scan['newton_density_mol_m3']
-            and np.all(np.isfinite(errors)) and abs(errors[best])>tol
-            and all(abs(q['relative_pressure_error'])>tol for q in reclosure['tested'])
-            and reclosure['accepted_density_mol_m3']==density==densities[best]
-            and pressures[best]-P==residual and selected['relative_pressure_error']==errors[best]
-            and selected['pressure_density_derivative_Pa_m3_mol']>0
-            and selected['max_affinity_over_RT']<=tol)
-
-
-def pressure_reclosure(model, declaration, T, P, rho, x, b, state):
-    """Read the same dense root at neighboring representable densities."""
-    if (state.pressure_density_derivative<=0 or abs(state.pressure-P)/P<=declaration.row_tolerance
-            or min(x)<0):
-        return rho,state,None
-    target = rho+(P-state.pressure)/state.pressure_density_derivative
-    candidates = {rho,target}
-    for seed in (rho,target):
-        for direction in (-np.inf,np.inf):
-            density = seed
-            for _ in range(8):
-                density = float(np.nextafter(density,direction))
-                candidates.add(density)
-    x = np.asarray(x)
-    present = x>0
-    nu = np.asarray([q.stoichiometry for q in declaration.reactions]).reshape(-1,len(x))
-    active = np.flatnonzero(~np.any(nu[:,~present]!=0,axis=1))
-    on_support = nu[active][:,present]
-    tol = declaration.row_tolerance
-
-    def evaluate(density, value):
-        affinity = (on_support @ (np.log(x[present]*density)
-                                  + np.asarray(value.residual_chemical_potential_over_rt)[present]
-                                  + np.asarray(b)[present])) if active.size else []
-        return dict(density_mol_m3=density,relative_pressure_error=(value.pressure-P)/P,
-                    max_affinity_over_RT=float(np.max(np.abs(affinity),initial=0.)))
-
-    evidence = dict(native_density_mol_m3=rho,newton_density_mol_m3=target,
-                    accepted_density_mol_m3=None,tested=[],
-                    active_reaction_indices=active.tolist())
-    short_scan = [(density,model.state(T,rho=density,x=x)) for density in sorted(candidates)]
-    evidence['tested'] = [evaluate(density,value) for density,value in short_scan]
-    closed = [(abs(q['relative_pressure_error']),density,value)
-              for q,(density,value) in zip(evidence['tested'],short_scan,strict=True)
-              if abs(q['relative_pressure_error'])<=tol and q['max_affinity_over_RT']<=tol
-              and value.pressure_density_derivative>0]
-    if best := min(closed,key=lambda q:q[0],default=None):
-        _,density,value = best
-        evidence['accepted_density_mol_m3'] = density
-        return density,value,evidence
-    if any(abs(q['relative_pressure_error'])<=tol for q in evidence['tested']):
-        return rho,state,evidence
-    states,scan = pressure_scan(model,T,P,x,target,state.pressure_density_derivative)
-    evidence['scan'] = scan
-    order = np.argsort(np.abs(scan['relative_pressure_errors']),kind='stable')
-    for i in order:
-        density,value = scan['densities_mol_m3'][i],states[i]
-        error = scan['relative_pressure_errors'][i]
-        if abs(error)>tol and (i!=order[0] or not scan['adjacent_sign_changes_ULP']):
-            break
-        trial = evaluate(density,value)
-        if value.pressure_density_derivative>0 and trial['max_affinity_over_RT']<=tol:
-            evidence['accepted_density_mol_m3'] = density
-            if abs(error)>tol:
-                evidence['bracketed'] = dict(trial,pressure_density_derivative_Pa_m3_mol=value.pressure_density_derivative)
-            return density,value,evidence
-    return rho,state,evidence
-
-
 def solve(spec, model, anchor_model, thermal, declaration, seed=None):
     if seed is not None:
         phases = declaration.phases
@@ -164,32 +56,8 @@ def solve(spec, model, anchor_model, thermal, declaration, seed=None):
                admitted=False, requested_tolerance_met=result.requested_tolerance_met)
     if not result.requested_tolerance_met:
         return row, result
-    checks = physical(spec, declaration, result, reclose=False)
-    continuation = []
-    if any(k in model.component_ids for k in ('monoethanolamine','diethanolamine')):
-        # Round 8 allowed five repeated warm reads when pressure closure was
-        # obscured by cancellation in the low-pressure liquid branch.
-        for _ in range(4):
-            if checks['physical_checks_pass']:
-                break
-            phases = declaration.phases
-            for i, phase in enumerate(phases):
-                phase.composition_guess = [result.phase_mole_fractions(i)[j] for j in phase.support]
-                phase.packing_guess = result.packing_fractions[i]
-            declaration.phases = phases
-            refined = eq.solve_equilibrium(model,declaration)
-            observed = dict(message=refined.message,tolerance_met=refined.requested_tolerance_met)
-            continuation.append(observed)
-            if not refined.requested_tolerance_met:
-                continue
-            candidate = physical(spec,declaration,refined,reclose=False)
-            observed['checks'] = candidate
-            if (candidate['physical_checks_pass'] or
-                max(abs(q['pressure_residual_Pa']) for q in candidate['phases']) <
-                max(abs(q['pressure_residual_Pa']) for q in checks['phases'])):
-                result,checks = refined,candidate
+    checks = physical(spec, declaration, result)
     row['convergence_message'] = result.message
-    row['closure_refinement'] = continuation
     row.update(checks)
     T,P = result.temperature,result.pressure
     compiled = eq.compile_problem(model,declaration)
@@ -201,16 +69,14 @@ def solve(spec, model, anchor_model, thermal, declaration, seed=None):
     for i,(n,rho) in enumerate(zip(result.amounts,result.molar_densities,strict=True)):
         x = result.phase_mole_fractions(i)
         state = model.state(T,rho=rho,x=x)
-        rho_reclosed, state, reclosure = pressure_reclosure(model,declaration,T,P,rho,x,b,state)
-        eos = n*R*T*(state.residual_helmholtz + P/(rho_reclosed*R*T) - 1 + fsum(
-            v*log(v*rho_reclosed) for v in x if v>0))
+        eos = n*R*T*(state.residual_helmholtz + P/(rho*R*T) - 1 + fsum(
+            v*log(v*rho) for v in x if v>0))
         standard_g = n*R*T*fsum(v*bb for v,bb in zip(x,b,strict=True) if v>0)
         roots = pressure_roots(model,T,P,x,rho)
         admitted_roots = matched(roots,declaration.row_tolerance)
         continued_dense = (seed is not None and state.pressure_density_derivative>0
                            and abs(log(rho/seed.molar_densities[i]))<=DENSITY_WINDOW)
         values.append(dict(amount_mol=n,x=x,rho_mol_m3=rho,roots=roots,volume_m3=n/rho,
-                           pressure_reclosure=reclosure,
                            eos_G_J=eos,standard_G_J=standard_g,pressure_slope=state.pressure_density_derivative,
                            H_res_J=n*state.residual_enthalpy,
                            continued_dense=continued_dense,
@@ -221,14 +87,7 @@ def solve(spec, model, anchor_model, thermal, declaration, seed=None):
                G_J=fsum(q['eos_G_J']+q['standard_G_J'] for q in values),
                volume_m3=fsum(q['volume_m3'] for q in values),
                G_error_J=fsum(q['energy_error_J'] for q in values),reference_pressure_Pa=P_REF)
-    tolerance = declaration.row_tolerance
-    inventory_pass = (max(map(abs,checks['balances']['scaled_element_residual'].values()))<=tolerance and
-                      all(abs(p['normalization_residual'])<=tolerance and abs(p['charge_residual'])<=tolerance
-                          for p in checks['phases']))
-    pressure_pass = all(abs(p['pressure_residual_Pa'])/P<=tolerance or
-                        (q['pressure_reclosure'] or {}).get('accepted_density_mol_m3') is not None
-                        for p,q in zip(checks['phases'],values,strict=True))
-    row['admitted'] = (inventory_pass and pressure_pass and
+    row['admitted'] = (checks['physical_checks_pass'] and
                        all(q['amount_mol']>0 and (q['liquid_root'] or q['continued_dense']) for q in values))
     observables = [observable('SystemEnthalpy',0)]+[
         observable('PhaseProperty',i,prop=epcsaft.PropertyObservable.TotalEntropy) for i in range(len(values))]

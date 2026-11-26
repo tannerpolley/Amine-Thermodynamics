@@ -6,7 +6,6 @@ from time import monotonic
 from concurrent.futures import ProcessPoolExecutor
 from functools import cache
 from hashlib import sha256
-from math import inf, log, nextafter
 from types import SimpleNamespace
 
 from refit import OUT, WORK, P_REF, ROUND7, configured, fingerprint, put, r
@@ -14,7 +13,8 @@ from calculations import MDEA, Route, transfer
 from mdea_reference import seed_state, predicates
 from phases import fixed
 from receivers import AMP, DEA
-from part_ii import epcsaft, eq
+from part_ii import eq
+from reference_states_428 import scaled_pressure_error
 from round_3.phases import physical, trials
 from round_8.records import Sources
 from round_8.reductions import phase_outcome
@@ -77,9 +77,10 @@ def control_states(design, spec):
         yield 'worked-state',archive['state'],P,dict(pair=seed),False
 
 
-def controls(design,label,*,rebuild=False):
+def controls(design,label,*,rebuild=False,scaled=False):
     started = monotonic()
-    path = f'{design}/controls/{"rebuild-441/" if rebuild else ""}{label}.json.gz'
+    folder = "rebuild-441/scaled/" if scaled else "rebuild-441/" if rebuild else ""
+    path = f'{design}/controls/{folder}{label}.json.gz'
     try:
         run,point = point_for(design,label,'decisive-phase-rebuild-441' if rebuild else 'decisive-phase')
     except ValueError as error:
@@ -181,7 +182,8 @@ def screen_declarations(name):
     return point, run, rows, bank, path, None
 
 
-def _screen_parents(name, selected):
+def _screen_parents(args):
+    name, selected = args
     from refit import a
 
     a.study.reuse.bind_wheel()
@@ -190,6 +192,7 @@ def _screen_parents(name, selected):
     spec = run.bind(point)
     retained = {state['key']:(state,row) for state,row in rows}
     prepared = None
+    rows = []
     for key in selected:
         state,old = retained[key]
         out = dict(key=key,message=old.get('message'),wheel=r.SHA)
@@ -231,9 +234,9 @@ def _screen_parents(name, selected):
                 options.trials = seeds
             compiled = eq.compile_problem(spec.model,p)
             out.update(P_Pa=P,T_K=center.temperature,parent_kinds=[q.kind.name for q in p.phases])
-            out['parent'] = physical(spec,p,center,compiled=compiled,
-                                     standard=archive['standard_over_rt'] if census else None)
-            if not out['parent']['physical_checks_pass']:
+            out['parent'] = physical(spec,p,center)
+            if any(scaled_pressure_error(q['pressure_residual_Pa'],q['density_mol_m3'],q['T_K'])>p.row_tolerance
+                   for q in out['parent']['phases']):
                 out['initial_parent'] = out['parent']
                 phases = p.phases
                 for i,phase in enumerate(phases):
@@ -251,73 +254,21 @@ def _screen_parents(name, selected):
                 if not center.requested_tolerance_met:
                     raise ValueError(center.message)
                 compiled = eq.compile_problem(spec.model,p)
-                out['parent'] = physical(spec,p,center,compiled=compiled)
+                out['parent'] = physical(spec,p,center)
             if not out['parent']['physical_checks_pass']:
-                raise ValueError('Parent pressure or balance closure missed after reclosure and restart')
+                raise ValueError('Trial-call parent misses scaled pressure or balance closure')
             witnesses = bank.get(key,[]) if isinstance(bank,dict) else bank
             out['bank_size'] = len(witnesses)
-            if census and 'initial_parent' not in out and not any('pressure_reclosure' in p for p in out['parent']['phases']):
+            if census and 'restart' not in out:
                 out.update(native_completed=archive['completed'],native_message=archive['message'],
                            native_trials=[dict(seed=t['seed'],evidence=t['evidence'],message=t['message'],
                                 descent=t['resolved_descent'],optimizer_success=t['optimizer']['success'],
                                 optimizer_tolerance_met=t['optimizer']['requested_tolerance_met']) for t in archive['trials']],
                            supplied_counts=dict(archive['supplied_counts']),supplied_excluded=0)
             else:
-                if census and isinstance(center,SimpleNamespace):
-                    start = eq.EquilibriumStart()
-                    start.coordinates = final['coordinates']
-                    seeded = eq.solve_equilibrium_starts(spec.model,item.declaration,[start],
-                        eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
-                    center, = seeded.results
-                    if not center.requested_tolerance_met or not all(
-                        abs(a-b)<=p.row_tolerance for i,phase in enumerate(out['parent']['phases'])
-                        for a,b in zip(center.phase_mole_fractions(i),phase['x'],strict=True)):
-                        raise ValueError(f'Native census replay differs from retained parent: {center.message}')
-                bracketed = [(phase,row) for phase,row in zip(p.phases,out['parent']['phases'],strict=True)
-                             if 'bracketed' in (row.get('pressure_reclosure') or {})]
-                if bracketed:
-                    start = eq.EquilibriumStart()
-                    coordinates = list(center.coordinates)
-                    labels = compiled.coordinate_labels()
-                    out['bracketed_trial_start'] = {}
-                    columns = []
-                    for phase,row in bracketed:
-                        rho = row['density_mol_m3']
-                        eta = rho*spec.model._model.packing_fraction_coefficient(center.temperature,row['x'])
-                        column = labels.index(f'ln eta[{phase.name}]')
-                        coordinates[column] = log(eta)
-                        columns.append(column)
-                        out['bracketed_trial_start'][phase.name] = rho
-                    expected = [row['density_mol_m3'] for _,row in bracketed]
-                    indices = [i for i,phase in enumerate(p.phases) if phase.name in out['bracketed_trial_start']]
-                    out['bracketed_trial_encodings'] = []
-                    # Log packing can round to a neighboring density in the native result.
-                    offsets = (0,1,-1,2,-2,3,-3,4,-4) if len(columns)==1 else (0,)
-                    for offset in offsets:
-                        seed = list(coordinates)
-                        if offset:
-                            col, = columns
-                            seed[col] = nextafter(coordinates[col],inf if offset>0 else -inf,steps=abs(offset))
-                        start.coordinates = seed
-                        seeded = epcsaft._core.solve_equilibrium_starts(spec.model._model,p,[start],
-                            eq.EquilibriumWorkLimits(attempts=1,attempt_iterations=400,iterations=400))
-                        center, = seeded.results
-                        densities = [center.molar_densities[i] for i in indices] if center is not None else []
-                        out['bracketed_trial_encodings'].append(dict(offset_ULP=offset,densities_mol_m3=densities,
-                                                                    message=seeded.causes[0]))
-                        if center is not None and center.requested_tolerance_met and densities==expected:
-                            break
-                    else:
-                        raise ValueError('Native equilibrium solve did not retain the selected bracketed density')
-                    out['trial_parent_composition_max_difference'] = max(
-                        abs(a-b) for i,phase in enumerate(out['parent']['phases'])
-                        for a,b in zip(center.phase_mole_fractions(i),phase['x'],strict=True))
-                    if out['trial_parent_composition_max_difference']>p.row_tolerance:
-                        raise ValueError('Native bracketed-root replay changed the parent composition')
-                out['trial_parent_densities_mol_m3'] = list(center.molar_densities)
                 report = eq.stability_test(compiled,center,options)
                 out.update(native_completed=report.completed,native_message=report.message,native_trials=trials(report))
-                support = set(range(len(spec.parameters.component_ids)))-set(compiled.removed_species)
+                support = r.supplied_support(spec,item,compiled=compiled)
                 supplied_bank = [dict(w,kind=w['kind'].capitalize()) for w in witnesses] if census else witnesses
                 supplied, excluded, repeated, identities = r._applicable(item,supplied_bank,support)
                 counts = Counter(evaluated=0)
@@ -334,11 +285,8 @@ def _screen_parents(name, selected):
                 out.update(supplied_counts=dict(counts),supplied_excluded=len(excluded))
         except (ValueError,RuntimeError,AttributeError,AssertionError,IndexError) as error:
             out['blocker'] = f'{type(error).__name__}: {error}'
-        yield dict(out,seconds=monotonic()-started)
-
-
-def screen_parent_batch(args):
-    return list(_screen_parents(*args))
+        rows.append(dict(out,seconds=monotonic()-started))
+    return rows
 
 
 def screen_parents(name, *, workers, pilot=False):
@@ -349,7 +297,7 @@ def screen_parents(name, *, workers, pilot=False):
     metadata = dict(endpoint_fingerprint=fingerprint(point),wheel=r.SHA,
                     bank_fingerprint=fingerprint(bank),source=path,
                     source_sha256=sha256((OUT/path).read_bytes()).hexdigest())
-    folder = f'MEA/screen/rebuild-441/parent-closure/{name}'
+    folder = f'MEA/screen/rebuild-441/trial-call/{name}'
     if pilot:
         chosen = keys[::max(1,len(keys)//8)][:8]
         if name=='MEA/grid':
@@ -360,7 +308,7 @@ def screen_parents(name, *, workers, pilot=False):
     start = monotonic()
     retained = []
     with ProcessPoolExecutor(workers) as pool:
-        for i,batch in enumerate(pool.map(screen_parent_batch,[(declaration,g) for g in groups])):
+        for i,batch in enumerate(pool.map(_screen_parents,[(declaration,g) for g in groups])):
             retained.extend(batch)
             if not pilot:
                 put(f'{folder}/{i}.json.gz',dict(metadata,keys=groups[i],rows=batch))
@@ -425,7 +373,6 @@ def screening(design, label, pilot=False, *, rebuild=False, workers=None):
                 record = dict(endpoint_fingerprint=endpoint,wheel=r.SHA,rows=batch,seconds=monotonic()-t)
                 put(path,record)
             merged.update((q['key'],q) for q in record['rows'])
-        merged.update(held)
         classifications = transfer.classify(run,point,list(merged.values()),states)
         merged.update((dest,dict(merged[src],key=dest,seconds=0.,same_calculation_as=src)) for dest,src in aliases.items())
         rows = [merged[q['key']] for q in states]

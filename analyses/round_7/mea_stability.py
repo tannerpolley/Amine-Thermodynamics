@@ -11,6 +11,7 @@ from types import SimpleNamespace
 from mea_pressure import OUT, REFERENCE, a, canonical, eq, expanded, membership, pressure_record, pressure_template, requests, r, save, s
 from classify_descents import coexistence, gibbs
 from phases import physical, trials
+from reference_states_428 import scaled_pressure_error
 
 BASE = a.BASE
 
@@ -101,7 +102,8 @@ def calculations(mapping, reference, names, solver_factor=1., reaction_reference
             validation.row_tolerance = p.row_tolerance
             validation = validation._native(spec.parameters)
             record['parent'] = physical(spec,validation,parent)
-            if any(abs(q['pressure_residual_Pa'])/pressure > p.row_tolerance for q in record['parent']['phases']):
+            if any(scaled_pressure_error(q['pressure_residual_Pa'],q['density_mol_m3'],q['T_K'])>p.row_tolerance
+                   for q in record['parent']['phases']):
                 nearby = copy.copy(problem)
                 nearby.P = .999*pressure
                 nearby.phases = [copy.copy(q) for q in problem.phases]
@@ -118,6 +120,8 @@ def calculations(mapping, reference, names, solver_factor=1., reaction_reference
                 if not parent.requested_tolerance_met or min(parent.amounts)<=0:
                     raise ValueError(parent.message)
                 record['parent'] = physical(spec,validation,parent)
+            if not record['parent']['physical_checks_pass']:
+                raise ValueError('Trial-call parent misses scaled pressure or balance closure')
             compiled = eq.compile_problem(spec.model,problem)
             options = eq.StabilityOptions()
             options.mode = type(options.mode).Full
@@ -143,7 +147,7 @@ def calculations(mapping, reference, names, solver_factor=1., reaction_reference
                  strictly_positive=min(seed.values())>0,packing_fraction=packing)
             supplied = bank + [dict(support=list(range(len(x))),composition=x,kind='Liquid',packing=packing)]
             item = SimpleNamespace(problem=native_parent)
-            phases, absent, repeated, _ = r._applicable(item,supplied,set(range(len(x)))-set(compiled.removed_species))
+            phases, absent, repeated, _ = r._applicable(item,supplied,r.supplied_support(spec,item,compiled=compiled))
             options = eq.StabilityOptions()
             options.prepared_trials = eq.prepare_supplied_trials(spec.model,p.T,phases)
             tested = eq.stability_test(compiled,parent,options).trials

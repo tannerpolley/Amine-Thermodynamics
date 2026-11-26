@@ -5,7 +5,7 @@ import sys
 from time import monotonic
 
 from round_3.recall import DECLARATION, ENDPOINTS
-from part_ii import ROOT, Route, calculation_declaration, deviation_statistics, eq, jsonable, reg, stable
+from part_ii import ROOT, Route, calculation_declaration, deviation_statistics, eq, jsonable, stable
 from reference_states_428 import amp, balances, identity, phase, phase_closure
 from r4_shift_tables_426 import available_prediction, temperature_band
 from amp_transfer import classify_descents as cd
@@ -24,30 +24,12 @@ def trials(report):
             for t in report.trials]
 
 
-def physical(spec, problem, result, *, reclose=True, compiled=None, standard=None):
+def physical(spec, problem, result):
     ids = spec.parameters.component_ids
     formulas = [spec.spec['element_formulas'][c] for c in ids]
     T, P = result.temperature, result.pressure
     rows = [phase(spec.model, T, P, n, rho, result.phase_mole_fractions(i), formulas)
             for i, (n, rho) in enumerate(zip(result.amounts, result.molar_densities, strict=True))]
-    phases = problem.phases
-    candidates = [r for i,r in enumerate(rows)
-                  if reclose and abs(r['pressure_residual_Pa'])/P>problem.row_tolerance
-                  and (min(r['x'])>0 or (len(phases)==len(rows) and phases[i].kind.name=='Liquid'))]
-    if candidates:
-        from fixed_reaction_reference.reference_derivatives import pressure_reclosure
-
-        if standard is None:
-            if compiled is None:
-                compiled = eq.compile_problem(spec.model, problem)
-            standard = eq.stability_test(compiled, result).standard_over_rt
-        for row in candidates:
-            x, rho = row['x'], row['density_mol_m3']
-            new_rho, state, evidence = pressure_reclosure(
-                spec.model, problem, T, P, rho, x, standard, spec.model.state(T, rho=rho, x=x))
-            row.update(original_pressure_residual_Pa=row['pressure_residual_Pa'],
-                       original_density_mol_m3=rho, pressure_reclosure=evidence,
-                       density_mol_m3=new_rho, pressure_Pa=state.pressure, pressure_residual_Pa=state.pressure-P)
     residuals = balances(problem.feed.values, rows, formulas)
     checks = dict(phases=rows,balances=residuals)
     return dict(checks,physical_checks_pass=phase_closure(checks,P,problem.row_tolerance),
@@ -72,17 +54,23 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decisio
         if checkpoint is not None:
             checkpoint(out)
         out['roots'] = cd.pressure_roots(model, result.temperature, P, x, rho)
-        prediction = reg.predict(model, item)
-        out['search'] = cd.jsonable(stable.stability_payload(prediction))
-        parent_g = cd.gibbs(compiled, result)
+        if not out['physical_checks_pass']:
+            out['instability'] = 'unresolved'
+            out['blocker'] = 'Trial-call parent misses scaled closure'
+            out['search'] = dict(completed=False,message=out['blocker'])
+            out['native_trials'] = []
+            return out
+        report = eq.stability_test(compiled,result,item.stability_options)
+        out['search'] = dict(completed=report.completed,message=report.message,available=report.completed,
+                             no_descent_in_trial_set=report.no_descent_in_trial_set)
+        parent_g = cd.gibbs(compiled, result, report)
         out['parent_gibbs_RT_mol'] = parent_g
-        if prediction.stability is not None:
-            native = trials(prediction.stability.report)
-            seeds = [t for t in prediction.stability.report.trials if t.resolved_descent and t.split_coordinates
-                     and t.quantities.get('density_side')==2 and len(t.phase.support)==len(x)]
+        native = trials(report)
+        seeds = [t for t in report.trials if t.resolved_descent and t.split_coordinates
+                 and t.quantities.get('density_side')==2 and len(t.phase.support)==len(x)]
         if seed and seed.get('witness'):
             witness = seed['witness']
-            supplied, absent, *_ = stable._applicable(item, [witness], set(range(len(x)))-set(compiled.removed_species))
+            supplied, absent, *_ = stable._applicable(item, [witness], stable.supplied_support(spec,item,compiled=compiled))
             options = eq.StabilityOptions()
             options.prepared_trials = eq.prepare_supplied_trials(model, result.temperature, supplied)
             out['supplied'] = trials(eq.stability_test(compiled, result, options)) if supplied else absent
@@ -102,13 +90,13 @@ def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decisio
         def inspect(compiled, solved):
             pair_solution[:] = compiled, solved
             if solved.requested_tolerance_met and len(solved.amounts)==2 and min(solved.amounts)>0:
-                details = physical(spec, problem, solved, compiled=compiled)
-                return {k:details[k] for k in ('balances', 'physical_checks_pass')}
+                details = physical(spec, problem, solved)
+                return details
 
         for index, guesses in enumerate(attempts):
             try:
                 pair = cd.coexistence(spec, problem, parent_g, guesses, inspect=inspect)
-                pair.update(pair.pop('diagnostics') or {}, seed='archive' if index==0 else 'native split')
+                pair.update(seed='archive' if index==0 else 'native split')
                 out['attempts'].append(pair)
                 if 'phases' in pair:
                     if mdea:
@@ -176,13 +164,11 @@ def liquid_vapor(spec, route, parent, guess, parent_g, *, incipient=False, seed=
                feed_mol=list(problem.feed.values), row_tolerance=problem.row_tolerance,
                requested_tolerance_met=result.requested_tolerance_met)
     if result.requested_tolerance_met and len(result.amounts)==2:
-        out.update(physical(spec, problem, result, compiled=compiled), packings=list(result.packing_fractions))
+        out.update(physical(spec, problem, result), packings=list(result.packing_fractions))
         x, rho = [row['x'] for row in out['phases']], list(result.molar_densities)
         trace, connected = dilute_vapor_connection(spec.model, result.temperature, x[1], rho[1])
         out.update(vapor_trace=trace, vapor_connected=connected)
-        distinct = (max(abs(a-b) for a,b in zip(*x,strict=True))>cd.COINCIDENCE or
-                    abs(math.log(rho[0]/rho[1]))>cd.COINCIDENCE)
-        out['qualified'] = out['physical_checks_pass'] and connected and distinct and result.amounts[0]>0
+        out['qualified'] = out['physical_checks_pass'] and connected and cd.distinct_phases(x,rho) and result.amounts[0]>0
         if incipient:
             out['qualified'] &= result.amounts[1]==0
         else:
