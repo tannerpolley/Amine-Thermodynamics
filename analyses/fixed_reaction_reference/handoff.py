@@ -1,6 +1,7 @@
 """Recompute #440 comparisons from the archived and fixed-reference contributors."""
 # ruff: noqa: E402
 from collections import Counter
+from ast import literal_eval
 from functools import cache
 from hashlib import sha256
 import json
@@ -1799,7 +1800,7 @@ class Quantities:
 
     def stage2_phases(self):
         from part_ii import SHA, WHEEL
-        from phase_replays import MDEA, MDEA_265, MDEA_CEILING_PA
+        from phase_replays import MDEA, MDEA_265, MDEA_CEILING_PA, MDEA_GRID, check_cold_point
 
         endpoint_path = 'MDEA_slope_bound/declaration.json.gz'
         declaration = self.read(endpoint_path)
@@ -1814,8 +1815,8 @@ class Quantities:
         prior = {q['key']:q for q in self.read(prior_path)['rows']}
         common = (endpoint_path,prior_path)
 
-        def data(name):
-            path = f'{STAGE2}/{name}.json.gz'
+        def data(name, folder=STAGE2):
+            path = f'{folder}/{name}.json.gz'
             record = self.read(path)
             mdea_record_identity(record,endpoint,SHA,bank_id,computed=not name.endswith('-inventory'))
             return record, path
@@ -1847,8 +1848,10 @@ class Quantities:
                       dict(rows=quantities,pressure_closure=mdea_pressure_stats(control_rows.values())),
                       population=3,endpoint=endpoint,sources=(*common,controls_path,*(path for _,path in batches)))
 
-        march, march_path = data('domain-march')
-        grid, grid_path = data('grid-inventory')
+        current = (OUT/MDEA_GRID/'grid-inventory.json.gz').is_file()
+        grid_folder = MDEA_GRID if current else STAGE2
+        march, march_path = data('domain-march',grid_folder)
+        grid, grid_path = data('grid-inventory',grid_folder)
         assert {q['key'] for q in grid['rows']}==prior.keys()-recipes.keys() and len(grid['rows'])==10260
         assert grid['ceiling_Pa']==march['ceiling_Pa']==MDEA_CEILING_PA
         paths = {(tuple(q['stock'].items()),q['T_K']):q for q in march['rows']}
@@ -1858,12 +1861,59 @@ class Quantities:
         engine = {q['key']:q['engine_issue'] for q in grid['rows'] if 'engine_issue' in q}
         assert engine=={MDEA_265:'tannerpolley/epcsaft#265'} and domains[MDEA_265]=='inside'
         blockers = [q for q in march['rows'] if q['stall']]
-        assert blockers, 'Reconcile Stage 2 grid search batches before accepting domain completion'
-        self.quantity('Stage 2 MDEA grid domain',None,dict(
+        grid_evidence = dict(
             domain_counts=Counter(v or 'unreached' for v in domains.values()), march_blockers=blockers,
             archived_outside_available=sum(q.get('archived_available',False) for q in grid['rows']),
-            engine_items=engine, search_outcomes={}),population=len(domains),endpoint=endpoint,
-            disposition='undecided',sources=(*common,march_path,grid_path))
+            engine_items=engine, search_outcomes={})
+        sources = (*common,march_path,grid_path)
+        open_grid = bool(blockers) or not current
+        if current:
+            assert {key for key,domain in domains.items() if domain=='inside' and not prior[key]['available']}==engine.keys(), (
+                'the historical in-domain miss must be the retained #265 case')
+            assert all(q['archived_available']==prior[q['key']]['available'] for q in grid['rows'] if q['domain']=='outside'), (
+                'outside grid searches changed historical availability')
+            cold = [(path,a,b) for path in march['rows'] for a,b in zip(path['points'],path['points'][1:])
+                    if b.get('start')=='cold']
+            for path,previous,point in cold:
+                check_cold_point(point,previous,path['T_K'],ROW_TOLERANCE)
+                assert any(w['target']==point['loading'] for w in path['warm_failures']), 'missing warm failure'
+            grid_evidence.update(paths_completed=len(paths)-len(blockers),cold_starts=len(cold))
+            before = '../diagnosis-starts/results/searches.json.gz'
+            historical = self.read(before)['records']
+            check14 = {(tuple(literal_eval(path['stock']).items()),path['T'],s['loading'])
+                       for path in historical for s in path['states'] if not s['reached'] and not s['search_available']
+                       and not any(p['reached'] and p['loading']<s['loading'] and p['pressure_Pa']>MDEA_CEILING_PA
+                                   for p in path['states'])}
+            mapped14 = {(tuple(q['stock'].items()),q['T'],q['a']) for q in grid['rows'] if domains[q['key']]=='outside'}
+            assert len(check14)==14 and check14<=mapped14, '14 historical unreached loadings'
+            sources = (*sources,before)
+            outside = Counter(('archived_descent' if prior[k]['descent'] else 'archived_finite_negatives')
+                              if prior[k]['available'] else 'not_searched_to_completion'
+                              for k,v in domains.items() if v=='outside')
+            grid_evidence.update(historical_unreached_excluded=len(check14),outside_searches=outside)
+            if not blockers:
+                grid_batches = [data(f'grid-{i}',grid_folder) for i in range(8)]
+                inputs = {q['key']:q for q in grid['rows'] if q['domain']=='inside' and q['key'] not in engine}
+                searched = {q['key']:q for batch,_ in grid_batches for q in batch['rows']}
+                assert searched.keys()==inputs.keys() and len(searched)==sum(len(b['rows']) for b,_ in grid_batches)
+                outcomes, refuses = {}, {}
+                for key,q in searched.items():
+                    state = inputs[key]
+                    try:
+                        assert q['P_Pa']==state['c']*state['marched_pressure_Pa'] and q['T_K']==state['T'], (
+                            f'{key}: consumed grid state')
+                        outcomes[key] = mdea_outcome(q,len(bank))
+                    except (AssertionError,KeyError) as exc:
+                        refuses[key] = q.get('blocker') or str(exc)
+                open_grid = bool(refuses)
+                grid_evidence['additional_search_blockers'] = refuses
+                if not open_grid:
+                    outcomes.update((key,phase_outcome(dict(engine_issue=issue),completion=True)) for key,issue in engine.items())
+                    grid_evidence.update(search_outcomes=outcomes,inside_counts=Counter(outcomes.values()),
+                                         pressure_closure=mdea_pressure_stats(searched.values()))
+                sources = (*sources,*(path for _,path in grid_batches))
+        self.quantity('Stage 2 MDEA grid domain',None,grid_evidence,population=len(domains),endpoint=endpoint,
+                      disposition='undecided' if open_grid else None,sources=sources)
 
     def compute(self, *, stage2=False):
         for design in COUNTS:
@@ -1908,9 +1958,12 @@ class Quantities:
 
 
 def main(check):
+    from phase_replays import MDEA_GRID
+
     quantities = Quantities()
     stage2 = (OUT/STAGE2/'measured-inventory.json.gz').is_file()
-    target = OUT/STAGE2/'handoff.json' if stage2 else HANDOFF
+    folder = MDEA_GRID if (OUT/MDEA_GRID/'grid-inventory.json.gz').is_file() else STAGE2
+    target = OUT/folder/'handoff.json' if stage2 else HANDOFF
     expected = quantities.compute(stage2=stage2)
     if check:
         retained = json.loads(target.read_text())

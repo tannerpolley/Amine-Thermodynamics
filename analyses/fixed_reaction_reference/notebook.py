@@ -145,11 +145,23 @@ def render_mdea_stage2(result):
         lines.append(f"| {key} | {q['T_K']} | {q['P_Pa']/1e6:.7g} | {q['decrease']:.7g} | {q['error']:.4g} |")
     d = grid['domain_counts']
     lines.extend(['', f"The march established domain membership for {d['inside']:,} searches inside the "
-                  f"5.0367 MPa bubble-pressure interval and {d['outside']:,} searches above a retained cutoff. "
-                  f"The warm start from the lowest loading failed on {len(grid['march_blockers'])} paths, "
-                  f"leaving {d['unreached']:,} grid searches without membership. The grid outcome counts are held.", '',
-                  '[Retained handoff](handoff.json) · [March](domain-march.json.gz) · '
-                  '[Grid inventory](grid-inventory.json.gz) · [Warm-start diagnostic](domain-diagnosis.json.gz)', ''])
+                  f"5.0367 MPa bubble-pressure interval and {d['outside']:,} searches at or above a retained cutoff."])
+    if grid.get('paths_completed') is not None:
+        lines += [f"{grid['paths_completed']} paths completed, including {grid['cold_starts']} accepted cold starts "
+                  f"after warm-start failures. The cutoff evidence covers all {grid['historical_unreached_excluded']} "
+                  'historically unreached loadings.', '']
+        if counts := grid.get('inside_counts'):
+            lines += [f"{counts.get('no descent in the finite search',0):,} in-domain searches completed with no "
+                      f"descent. The one open in-domain Engine item remains recorded. "
+                      f"Outside the interval the historical screen retained "
+                      f"{grid['outside_searches']['archived_finite_negatives']:,} finite negatives and "
+                      f"{grid['outside_searches']['not_searched_to_completion']:,} incomplete searches.", '']
+        else:
+            lines += ['The grid phase counts are held. See the retained handoff for the exact blockers.', '']
+    else:
+        lines += [f"The warm start from the lowest loading failed on {len(grid['march_blockers'])} paths, "
+                  f"leaving {d['unreached']:,} grid searches without membership. The grid outcome counts are held.", '']
+    lines += ['[Retained handoff](handoff.json) · [March](domain-march.json.gz) · [Grid inventory](grid-inventory.json.gz)', '']
     return '\n'.join(lines)
 
 
