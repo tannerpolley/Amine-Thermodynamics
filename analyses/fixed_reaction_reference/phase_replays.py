@@ -235,7 +235,11 @@ def comparison_domain(state, path):
     return dict(domain='unassigned',blocker=path['stall'])
 
 
-def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot):
+def comparison_stratum(row):
+    return 'measured' if row['domain']=='not applicable' else f"grid {row['domain']}"
+
+
+def comparison_screen(run, point, bank, states, prior, splits, output, *, mode):
     """Retain independent loading paths, specimen searches and their inventory."""
     from fixed_reaction_reference.handoff import comparison_outcome
 
@@ -254,6 +258,37 @@ def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot)
         record = r.read(output/f'{name}.json.gz')
         assert all(record[k]==v for k,v in identity.items()), name
         return record
+
+    def search_batches(inventory, aliases, held, prefix):
+        by_key = {q['key']:q for q in inventory}
+        pending = [q for q in inventory if q['key'] not in aliases and q['domain']!='unassigned']
+        stopped = {comparison_stratum(q) for q in inventory if q['domain']=='unassigned'}
+
+        def register_stops(rows):
+            for q in rows:
+                state = by_key[q['key']]
+                _, blocker = comparison_outcome(state,q,len(bank))
+                if blocker:
+                    stopped.add(comparison_stratum(state))
+                    print(output,q['key'],blocker,flush=True)
+
+        register_stops(held.values())
+        for i in range(8):
+            tick = monotonic()
+            batch = [q for q in pending[i::8] if q['key'] not in held and comparison_stratum(q) not in stopped]
+            rows = stable.grid(point,batch,bank,route=run,completion=True) if batch else []
+            retain(f'{prefix}-{i}',rows=rows,seconds=monotonic()-tick)
+            print(output,prefix,i,len(rows),round(monotonic()-tick,2),flush=True)
+            register_stops(rows)
+
+    if mode=='continue':
+        manifest = read('inventory')
+        names = ['pilot',*(f'search-{i}' for i in range(8))]
+        held = {q['key']:q for name in names for q in read(name)['rows']}
+        search_batches(manifest['rows'],manifest['aliases'],held,'continued-search')
+        return
+
+    pilot = mode=='pilot'
 
     groups = defaultdict(list)
     group_key = lambda row: (tuple(row['stock'].items()),row.get('T',row.get('T_K')))
@@ -296,29 +331,8 @@ def comparison_screen(run, point, bank, states, prior, splits, output, *, pilot)
     retain('inventory',rows=inventory,aliases=aliases,reuse=reuse,
            reaction_references={k:calculation_declaration(q.reference)
                                 for k,q in ((rx.name,rx) for rx in run.bind(point).problems['comparison:363:final'].reactions)})
-    by_key = {q['key']:q for q in inventory}
     held = {q['key']:q for q in read('pilot')['rows']}
-    stratum = lambda q: 'grid' if 'stock' in q else 'measured'
-    stopped = {stratum(q) for q in inventory if q['domain']=='unassigned'}
-    if stopped:
-        print(output,'grid held at',next(q['key'] for q in inventory if q['domain']=='unassigned'),flush=True)
-
-    def register_stops(rows):
-        for q in rows:
-            state = by_key[q['key']]
-            _, blocker = comparison_outcome(state,q,len(bank))
-            if blocker:
-                stopped.add(stratum(state))
-                print(output,q['key'],blocker,flush=True)
-
-    register_stops(held.values())
-    for i in range(8):
-        tick = monotonic()
-        batch = [q for q in pending[i::8] if q['key'] not in held and stratum(q) not in stopped]
-        rows = stable.grid(point,batch,bank,route=run,completion=True) if batch else []
-        retain(f'search-{i}',rows=rows,seconds=monotonic()-tick)
-        print(output,i,len(rows),round(monotonic()-tick,2),flush=True)
-        register_stops(rows)
+    search_batches(inventory,aliases,held,'search')
 
 
 def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
@@ -786,7 +800,7 @@ if __name__=='__main__':
                      r.read(screen_path),modes=modes,folder=folder)
     elif sys.argv[1]=='mdea-comparison':
         _, mode, k, declaration, endpoint, bank_path, output, *sources = sys.argv[1:]
-        assert mode in ('pilot','full') and k in COMPARISON_SETS
+        assert mode in ('pilot','full','continue') and k in COMPARISON_SETS
         *prior, split_path = sources
         run = Route(declaration,WORK/MDEA_COMPARISON/k,wheel=WHEEL,wheel_sha256=SHA)
         run.workers = min(8,len(os.sched_getaffinity(0)))
@@ -796,7 +810,7 @@ if __name__=='__main__':
         assert len(bank)==2980 and registry['species']==run.config['species']
         comparison_screen(run,point,bank,run.states(run.bind(point)),
                           comparison_prior(list(map(Path,prior))),comparison_splits(None if split_path=='-' else split_path),
-                          output,pilot=mode=='pilot')
+                          output,mode=mode)
     else:
         action,design,label = sys.argv[1:]
         if action=='controls':

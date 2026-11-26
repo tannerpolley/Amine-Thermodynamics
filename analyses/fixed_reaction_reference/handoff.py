@@ -2036,7 +2036,8 @@ class Quantities:
     def stage3_phases(self):
         from part_ii import SHA, WHEEL, Route, calculation_declaration
         from phase_replays import (COMPARISON_SETS, MDEA, MDEA_CEILING_PA, MDEA_COMPARISON, WORK,
-                                   comparison_prior, comparison_reuse, comparison_sources, comparison_splits)
+                                   comparison_prior, comparison_reuse, comparison_sources, comparison_splits,
+                                   comparison_stratum)
 
         for k in COMPARISON_SETS:
             folder = f'{MDEA_COMPARISON}/{k}'
@@ -2078,11 +2079,13 @@ class Quantities:
             assert len(paths)==len(march['rows'])==342 and all(paths[tuple(q['stock'].items()),q['T_K']]==q
                                                                 for q in march_pilot['rows']), 'comparison loading paths'
             connected, reverse = march_connections(paths.values())
-            pilot = data('pilot')
-            batches = [data(f'search-{i}') for i in range(8)]
+            names = ['pilot',*(f'search-{i}' for i in range(8))]
+            if (OUT/folder/'continued-search-0.json.gz').is_file():
+                names.extend(f'continued-search-{i}' for i in range(8))
+            pilot, *batches = (data(name) for name in names)
             rows = [q for batch in [pilot,*batches] for q in batch['rows']]
             searched = {q['key']:q for q in rows}
-            search_paths = {q['key']:path for path,batch in zip(sources[-9:],[pilot,*batches],strict=True)
+            search_paths = {q['key']:f'{folder}/{name}.json.gz' for name,batch in zip(names,[pilot,*batches],strict=True)
                             for q in batch['rows']}
             aliases = manifest['aliases']
             assert (len(searched)==len(rows) and searched.keys()<=inventory.keys()-aliases.keys()
@@ -2114,7 +2117,7 @@ class Quantities:
                                          record=search_paths.get(source,f'{folder}/domain-march.json.gz'))
                 else:
                     outcomes[key] = outcome
-            stratum = lambda key: 'grid' if key.startswith('grid:') else 'measured'
+            stratum = lambda key: comparison_stratum(inventory[key])
             held = {}
             for key in blockers:
                 held.setdefault(stratum(key),key)
