@@ -231,6 +231,33 @@ def mdea_descent_findings():
                                           'rows[].supplied_available', 'rows[].supplied_trial_evidence'])
 
 
+def kuranov_pressure_finding():
+    tracking_record = 'analyses/round_8/results/literature-populations.json.gz'
+    reported_record = d.STUDY + 'results/MDEA/property-comparisons/A.json.gz'
+    tracking = d.read(tracking_record)['quantities']['kuranov']['readback']
+    reported = d.read(reported_record)['additional_Kuranov_72']
+    if tracking['identity'] != reported['identity'] or tracking['observed'] != reported['observed']:
+        raise ValueError('Different observations in the Kuranov row comparison')
+    path = d.LATEX / 'supplement.tex'
+    for line, sentence in d.sentences(path.read_text()):
+        if r'\res{mdea-kuranov-row-72-tracking-reference-pressure}' in sentence:
+            yield dict(
+                file=path.relative_to(d.ROOT).as_posix(), line=line, sentence=sentence, status='finding',
+                interpretation=(
+                    'The printed pressure comes from the system-pressure-reference endpoint. '
+                    'The 100 kPa reported endpoint predicts a different pressure at the same observation on S.'
+                ),
+                evidence=[
+                    dict(record=tracking_record, key='quantities.kuranov.readback.value',
+                         value=tracking['value'], unit='Pa'),
+                    dict(record=reported_record, key='additional_Kuranov_72.value',
+                         value=reported['value'], unit='Pa'),
+                    dict(record=reported_record, key='additional_Kuranov_72.observed',
+                         value=reported['observed'], unit='Pa'),
+                ],
+            )
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
@@ -253,6 +280,8 @@ def main():
             if (entry['file'], entry['context'], entry['token']) not in detected_collisions:
                 out.write(json.dumps(dict(entry, status='collision'), ensure_ascii=False) + '\n')
         for finding in mdea_descent_findings():
+            out.write(json.dumps(finding, ensure_ascii=False) + '\n')
+        for finding in kuranov_pressure_finding():
             out.write(json.dumps(finding, ensure_ascii=False) + '\n')
 
 

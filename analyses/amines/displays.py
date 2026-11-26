@@ -33,6 +33,7 @@ FIT_SUMMARY = "analyses/amines/results/shared/fit/display-summary.json.gz"
 PHASE_SUMMARY = "analyses/amines/results/shared/phase/display-summary.json.gz"
 PROPERTY_SUMMARY = "analyses/amines/results/shared/properties/display-summary.json.gz"
 HONG_REPLAY = "analyses/amines/results/mea/published/replay/endpoint.json.gz"
+MDEA_PUBLISHED_REPLAY = "analyses/amines/results/mdea/published/replay/endpoint.json.gz"
 sources = {}
 stage_records = {}
 
@@ -1574,21 +1575,25 @@ def transfer_displays(outputs):
             role += f"; {score['rows']} of {c['measured_rows']} predictions available"
         rows.append(['This work, pressure-weighted MDEA model', role, num(score['AARD_percent'], 2)])
     K422 = 'analyses/mdea_mea_workflow/results/kuranov-published-422/'
-    kstat, krae = read(K422 + 'statistics.json'), read(K422 + 'raeispour-table-4.json')
-    collections.Counter(r['role'] for r in mrows if r['group'] in ('Kuranov', 'Kuranov-binary'))
+    kpub, krae = read(MDEA_PUBLISHED_REPLAY), read(K422 + 'raeispour-table-4.json')
+    kstat = kpub['statistics']
+    role_counts = collections.Counter(row['role'] for row in kpub['kuranov'])
+    binary_count = sum(row['group'] == 'Kuranov-binary' and row['role'] == 'fitted' for row in kpub['kuranov'])
+    roles = rf"{role_counts['fitted']} fitted, of which {binary_count} \COtwo-free; {role_counts['not fitted']} not fitted"
     k82 = read(MDEA + '../kuranov-matched-pressure.json.gz')['grouped']['K82']['salt_anchored']
-    kuranov = literature['kuranov']
+    published_kuranov_count = len(kpub['kuranov'])
     k82_adopted = property_summary['mdea']['kuranov']
-    kuranov_label = str(len(kuranov['source_rows'])) + r' total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}'
+    kuranov_label = str(published_kuranov_count) + r' total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}'
     rows += [head(kuranov_label + r', MDEA (matched by count)\textsuperscript{b}', 3),
              [r'Uyan et al., ePC-SAFT \cite{Uyan2015}', 'not fitted', r'$22.9$\textsuperscript{c}'], [r'Wangler et al., ePC-SAFT \cite{Wangler2018}', 'not fitted', '$19.7$'],
              [r'Raeispour Shirazi and Lotfollahi, ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'fitted', f"${krae['AARD_percent']:g}$"], [ZHANG_CHEN, 'fitted', '$6.8$'],
              head(kuranov_label + ', MDEA (matched by row)', 3),
-             ['This work, MEA-fitted shared set', r'70 fitted, of which 4 \COtwo-free; 12 not fitted', num(kstat['present']['K82']['AARD_percent'], 2)],
-             ['This work, original salt fit', r'70 fitted, of which 4 \COtwo-free; 12 not fitted', num(k82['AARD_percent'], 2)],
+             ['This work, MEA-fitted shared set', roles, num(kstat['present']['K82']['AARD_percent'], 2)],
+             ['This work, original salt fit', roles, num(k82['AARD_percent'], 2)],
              ['This work, pressure-weighted MDEA model',
-              r'70 fitted, of which 4 \COtwo-free; 12 not fitted' + (
-                  f"; {k82_adopted['available']} predictions available" if k82_adopted['available'] != len(kuranov['source_rows']) else ''),
+              roles + (
+                  f"; {k82_adopted['available']} predictions available"
+                  if k82_adopted['available'] != published_kuranov_count else ''),
               num(k82_adopted['AARD_percent'], 2)]]
     table('published-models', r'Pressure deviations of published models and of this work. Published Kuranov values are matched by count\textsuperscript{b}.', ['Observations and model', 'Role of these observations in the fit of that model', r'AARD (\%)'], rows, [.50,.36,.10],
           notes=r'AARD follows Eq.~\eqref{eq:aard} over the stated observations. Published values are those reported in each source, with the digits given there. The 16-parameter calibration is defined in Section~\ref{sec:parameters}. Parameter sets I and II are the two sets of interaction parameters of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Najafloo and Zarei do not define their average absolute deviation; it is assumed equivalent to Eq.~\eqref{eq:aard}, and their methods and conclusions describe the fitting differently. \textsuperscript{b}The published values are identified with the 82 total pressures of Table~2 of Kuranov et al.\ by their count. \textsuperscript{c}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. ' +
@@ -3144,6 +3149,9 @@ def result_values():
 
     record = PROPERTY_SUMMARY
     property_summary = read(record)
+    for passage in ("transfer", "supplement"):
+        add(f"mdea-kuranov-all-pressure-aard-{passage}", record, "mdea.kuranov.AARD_percent",
+            f"{property_summary['mdea']['kuranov']['AARD_percent']:.2f}")
     kamps = property_summary["kamps"]
     for key, label, value in (
         ("common_rows", "common-pressure-count", str(kamps["common_rows"])),
@@ -3300,6 +3308,9 @@ def result_values():
     kim = read(record)["kim_2007"]
     hot = [row for row in kim if row["T_K"].startswith("393.15") and row["interval_status"] == "available"]
     add("mea-kim-svendsen-hot-interval-count-results", record, "kim_2007[393.15 K,available].count", str(len(hot)))
+    rmse = sqrt(fsum((float(row["predicted"]) - float(row["observed"]))**2 for row in hot) / len(hot))
+    add("mea-kim-svendsen-hot-interval-rmse-results", record,
+        "kim_2007[393.15 K,available].predicted,observed: RMSE (kJ/mol)", f"{rmse:.2f}")
     clean_hot = [row for row in hot if 'True' not in (row["source_inconsistent"], row["first_120"])]
     key = "kim_2007[393.15 K, available, unflagged]"
     add("mea-kim-svendsen-unflagged-hot-interval-count-transfer", record, key + ".count", str(len(clean_hot)))
@@ -3460,6 +3471,12 @@ def result_values():
     for side, metrics in endpoint_heat.items():
         add(f"hong-kim-endpoint-heat-aard-{side}", record, f"kim_endpoint_AARD_313_353.{side}.AARD_percent",
             f"{metrics['AARD_percent']:.2f}")
+    record = "analyses/round_8/results/literature-populations.json.gz"
+    row72 = read(record)["quantities"]["kuranov"]["readback"]
+    add("mdea-kuranov-row-72-tracking-reference-pressure", record, "quantities.kuranov.readback.value / 1e6",
+        f"{row72['value']/1e6:.6f}")
+    add("mdea-kuranov-row-72-measured-pressure", record, "quantities.kuranov.readback.observed / 1e6",
+        f"{row72['observed']/1e6:.6f}")
 
     record = "analyses/mdea_mea_workflow/results/bounded-binary-411/critical-k.json"
     count = len(read(record)["rows"])
