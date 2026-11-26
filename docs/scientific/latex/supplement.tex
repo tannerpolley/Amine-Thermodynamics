@@ -334,7 +334,7 @@ Vinjarapu heat scales use the reported uncertainty converted to J/mol \COtwo \ci
 The relative and constant parts of the species scales, the log-pressure scale, the \COtwo-free-density scale, the Cai scales and the weights are assigned choices without a statistical derivation and are not sampling variances.
 Cai's reported temperature resolution and maximum composition error differ from the fitting scales \cite{caiBinaryIsobaricVaporLiquid1996}.
 The residual variance factor, 1.181, is not a statistical justification for these weights.
-The 25 bubble temperatures and 25 vapor mole fractions of Cai et al.\ have unit weight and contribute 39.750 and 51.795 to the objective value of 152.958, together 59.85\,\%, although they respond only to the MEA--water interaction and its temperature coefficient.
+The 25 bubble temperatures and 25 vapor mole fractions of Cai et al.\ have unit weight and contribute \res{mea-tracking-cai-temperature-objective} and \res{mea-tracking-cai-vapor-fraction-objective} to the objective value of \res{mea-tracking-objective-cai-weight}, together \res{mea-tracking-cai-objective-share}\,\%, although they respond only to the MEA--water interaction and its temperature coefficient.
 As a check, made with the MEA-fitted shared set, that fit was repeated with each of these observations weighted 0.04, so that each of the two observables contributes half its mean squared scaled residual.
 The refit changes the AARD of the 47 fitted \COtwo partial pressures from 11.64 to 11.61\,\%, that of the 112 not fitted from 24.89 to 24.98\,\% and that of the Wagner pressures from 25.03 to 25.50\,\%, and it shows no detected instability at the same 2484 liquid and 162 liquid--vapor states.
 Scales taken from source accuracy statements and assigned scales remain distinct.
@@ -472,7 +472,7 @@ Table~\ref{tab:amp-reference-state} gives the tangent-plane trial and the two-li
 The error estimate of the plane value is $1.8267\times10^{-10}$ and that of the descent along the direction of the trial phase $1.7544\times10^{-10}$, against a tangent-plane distance of $-3.697\times10^{-3}$.
 On the two-liquid solution the largest residual of the chemical-potential equations is $1.8\times10^{-13}$ against a tolerance of $10^{-10}$, and the largest reaction and electrochemical-potential residuals are $7.5\times10^{-13}$ and $1.1\times10^{-13}$.
 Tested against the tangent plane of that solution, five trial starts give a smallest distance of $+\res{amp-worked-state-all-minimum-tangent-distance}$, at a water-rich liquid root, and the four that end on a branch connected to the dilute vapor, at 383.4 mol/m$^3$, give $+\res{amp-worked-state-vapor-connected-minimum-tangent-distance}$; these minima apply to the sampled endpoints.
-Table~\ref{tab:mea-reference-state} gives the integral absorption heat and the equilibrium heat capacity of the MEA model at \SI{313.15}{\kelvin}, \SI{1.734}{\mega\pascal} and a final loading of 0.31 mol/mol: \SI{-81.803}{\kilo\joule\per\mole} of \COtwo and 84.886 J/(mol K) per mole of apparent components, the latter reproduced by centered differences of the enthalpy within $3.4\times10^{-7}$ J/(mol K).
+Table~\ref{tab:mea-reference-state} gives the integral absorption heat and the equilibrium heat capacity of the MEA model at \SI{313.15}{\kelvin}, \SI{1.734}{\mega\pascal} and a final loading of 0.31 mol/mol: \SI{\res{mea-reference-state-integral-heat}}{\kilo\joule\per\mole} of \COtwo and \res{mea-reference-state-equilibrium-heat-capacity} J/(mol K) per mole of apparent components, the latter reproduced by centered differences of the enthalpy within $3.4\times10^{-7}$ J/(mol K).
 With stoichiometric numbers $\nu_{ri}$ positive for products, $\Gamma_r=\sum_i\nu_{ri}\ln\phi_i^{\mathrm{ref}}$ over the pure-water and infinite-dilution reference states at $P_{\mathrm{src}}$ and $\Delta\nu_r=\sum_i\nu_{ri}$, the constant of reaction $r$ on ideal-gas reference states at $P^\circ=\SI{0.1}{\mega\pascal}$ is
 \begin{equation}
  \ln K_{r,P^\circ}^{\mathrm{ig}}=\ln K_{r,\mathrm{src}}+\Big(\sum_{i\ne w}\nu_{ri}\Big)\ln(M_wm^\circ)+\Gamma_r+\Delta\nu_r\ln(P_{\mathrm{src}}/P^\circ),
@@ -494,7 +494,7 @@ These are numerical verifications at the named states, not a proof and not compa
 % P:supplement-reference-sensitivity
 The choice of reference pressure was tested by fitting the four models also with the R1--R3 references at the system pressure, the convention of the comparison fits of main-text Table~\ref{main-tab:amine-summary}.
 The right side of main-text \cref{main-eq:pressure-tracking} is then nonzero; at the four fitted states above it is $-29.0$ to $-37.0$\,\% of $V_{\mathrm{EOS}}$ with the species reference offsets used in that calculation, a size that depends on how those offsets are fixed.
-With the references at the system pressure and at \SI{100}{\kilo\pascal}, the fitted loaded-solution pressures deviate by 11.35 and \res{mea-fitted-pressure-aard-reference-comparison}\,\% for MEA, 42.71 and \res{dea-fitted-pressure-aard-reference-comparison}\,\% for DEA, 4.15 and \res{mdea-fitted-pressure-aard-reference-comparison}\,\% for MDEA and 10.84 and \res{amp-fitted-pressure-aard-reference-comparison}\,\% for AMP, and the objective values are 152.958 and 152.932, 15.538 and 15.589, 17.401 and 15.609, and 75.111 and 74.928; the two MDEA objectives belong to different local endpoints.
+With the references at the system pressure and at \SI{100}{\kilo\pascal}, the fitted loaded-solution pressures deviate by 11.35 and \res{mea-fitted-pressure-aard-reference-comparison}\,\% for MEA, 42.71 and \res{dea-fitted-pressure-aard-reference-comparison}\,\% for DEA, 4.15 and \res{mdea-fitted-pressure-aard-reference-comparison}\,\% for MDEA and 10.84 and \res{amp-fitted-pressure-aard-reference-comparison}\,\% for AMP, and the objective values are \res{mea-tracking-objective-reference-comparison} and \res{mea-selected-objective-reference-comparison}, 15.538 and \res{dea-selected-objective-reference-comparison}, 17.401 and \res{mdea-selected-objective-reference-comparison}, and 75.111 and \res{amp-selected-objective-reference-comparison}; the two MDEA objectives belong to different local endpoints.
 Outside the fitted MDEA data the Ermatchkov partial pressures deviate by 25.09 and \res{mdea-ermatchkov-pressure-aard-reference-comparison}\,\% and the Carson heats by 18.69 and 13.58\,\%.
 The phase results differ where a split is close to its limit or far outside the data.
 For DEA the split at 30 wt\% and a loading of 0.45 is confirmed only with the references at the system pressure and the split at 0.50 only with the fixed references, while the three 40 wt\% splits are confirmed with both.
@@ -521,7 +521,7 @@ For the MEA model, the nine parameters that are not at a bound have the local co
 The weighted Jacobian has rank 9.
 The variance factor of that equation is 1.18093995, from the 268 observations that respond to at least one fitted parameter and 259 residual degrees of freedom; the 39 Kiepe pressures have zero derivatives with respect to all 11 parameters.
 Counting all 307 observations would give 1.02639196 and standard errors smaller by the factor 1.0727.
-Propagated to the 47 fitted \COtwo partial pressures, the covariance gives relative standard errors of 5.94--17.0\,\%.
+Propagated to the 47 fitted \COtwo partial pressures, the covariance gives relative standard errors of \res{mea-tracking-fitted-pressure-minimum-relative-se-supplement}--17.0\,\%.
 Table~\ref{tab:supplement-fitted-parameters} gives values, bounds and conditional standard errors, and Table~\ref{tab:supplement-correlations} gives the correlations in the same parameter order.
 Correlated errors within one experimental source, model discrepancy, uncertainty of the equilibrium-constant correlations and of the salt-fitted interactions, and future measurement noise are not included.
 
@@ -547,22 +547,22 @@ The MDEA standard errors are conditional on the one parameter on a bound, $k_{\m
 % P:supplement-starts
 Table~\ref{tab:supplement-fit-starts} gives the objective value at the start and at convergence for every start of the four fits and of the AMP fit with the slope fixed at \SI{-150}{\kelvin}.
 Start A of each fit is the parameter set of the same fit with the R1--R3 references at the system pressure; the other starts are drawn from a 64-point Latin hypercube over the unit parameter box, and a drawn start that could not be evaluated was replaced by a further draw.
-For MEA, DEA and AMP with the slope fitted, three admitted starts, 0.42 to 0.62 apart in root-mean-square distance on the unit box, reach the same objective value, 152.932, 15.589 and 74.928.
-With the AMP slope fixed, start A reaches 76.227 and the two other admitted starts both reach 2741.260, a second minimum with several parameters on bounds.
+For MEA, DEA and AMP with the slope fitted, three admitted starts, 0.42 to 0.62 apart in root-mean-square distance on the unit box, reach the same objective value, \res{mea-selected-objective-starts}, \res{dea-selected-objective-starts} and \res{amp-selected-objective-starts}.
+With the AMP slope fixed, start A reaches \res{amp-fixed-slope-selected-objective-starts} and the two other admitted starts both reach \res{amp-fixed-slope-alternate-basin-objective}, a second minimum with several parameters on bounds.
 For MDEA, starts B and C could not be evaluated: at B the saturation search at \SI{1.121}{\mega\pascal} returned bubble pressures of 24.4--\SI{186.6}{\kilo\pascal} at all 30 loading nodes, and at C every admitted node exceeded \SI{1962}{\kilo\pascal}.
-Of 61 further draws, one could be evaluated, and it converged to 48386.5.
-The reported MDEA endpoint, 15.609, is that of start A after two continuation stages, which replayed at 15.998, 15.60933 and 15.60931.
+Of 61 further draws, one could be evaluated, and it converged to \res{mdea-alternate-basin-objective-draw-accounting}.
+The reported MDEA endpoint, \res{mdea-selected-objective-continuation}, is that of start A after two continuation stages, which replayed at \res{mdea-first-fit-stage-objective}, \res{mdea-second-fit-stage-objective} and \res{mdea-third-fit-stage-objective}.
 Whether the rest of the MDEA parameter box admits an evaluable start, or a lower minimum, is undecided, so the MDEA fit is provisional.
 
 % P:supplement-endpoints
 No endpoint meets the strict criterion of a projected gradient below $10^{-8}$ in optimizer coordinates: the infinity norms are $2.6\times10^{-5}$ to $2.5\times10^{-4}$ for the MEA, DEA and AMP endpoints and $8.3\times10^{-3}$ for MDEA.
 For MEA, DEA and both AMP fits the optimizer stopped on its relative function tolerance, and linearized descent steps from each endpoint, replayed independently, change the objective by at most $10^{-10}$ of its value, consistent with that tolerance.
-For MDEA the shortest tested descent step lowers the objective by $6.6\times10^{-8}$ of its value, above the relative function tolerance of $10^{-10}$, and a restart from that step ends at 15.60931 on the parameter tolerance; the two larger steps raised the objective and the smaller ones met unresolved saturation calculations.
+For MDEA the shortest tested descent step lowers the objective by $6.6\times10^{-8}$ of its value, above the relative function tolerance of $10^{-10}$, and a restart from that step ends at \res{mdea-descent-restart-objective} on the parameter tolerance; the two larger steps raised the objective and the smaller ones met unresolved saturation calculations.
 The phase outcomes of the MDEA continuation endpoints at \SI{204.054}{\mega\pascal} and \SI{262.862}{\mega\pascal} equal those of the reported endpoint.
 The tied DEA endpoints give the same outcome at the decisive DEA states (three 40 wt\% splits confirmed, 30 wt\% at 0.45 unresolved), and the tied AMP endpoints the same outcome at the six measured-pressure controls and the worked state.
 Table~\ref{tab:supplement-endpoint-prediction-spread} replays the tied endpoints on the pressures and heats inside and outside each objective, with the bands below and above \SI{370}{\kelvin} separated for MEA.
 Across the MEA, DEA and AMP endpoints the largest AARD difference is 0.0014 percentage points, for the Lawson and Garst pressures at 50--54.5 wt\% DEA, and the largest difference on a single row is 0.0036\,\% of the measured value; on every set the difference is more than a thousand times smaller than the deviation of the reported endpoint from the same measurements.
-For MDEA the spread is taken over both continuations of start A and the draw LHS-53; the continuations agree with A within 0.0002 percentage points on every set, so the large MDEA spreads of the table, such as 59.6 percentage points for the Kuranov pressures and 307 for the Carson heats, measure the distance to the separate basin of LHS-53 (objective 48386.5), not an uncertainty of the reported endpoint.
+For MDEA the spread is taken over both continuations of start A and the draw LHS-53; the continuations agree with A within 0.0002 percentage points on every set, so the large MDEA spreads of the table, such as 59.6 percentage points for the Kuranov pressures and 307 for the Carson heats, measure the distance to the separate basin of LHS-53 (objective \res{mdea-alternate-basin-objective-property-spread}), not an uncertainty of the reported endpoint.
 Two or three local fits do not establish a global optimum, and no search for the global optimum was made.
 
 \input{tables/supplement-fit-starts}
@@ -603,7 +603,7 @@ So with the pressure weights the salt-fitted set is the better of the two on the
 % P:supplement-restrictions
 Table~\ref{tab:choice-cost} gives the joint MEA fit repeated on the same observations and weights for a sequence of cumulative restrictions; rows five to seven use the salt-fitted interactions in the nine-parameter form of the fourth row.
 The first row is the 16-parameter calibration and the third is the 11-parameter fit with the MEA-fitted shared set.
-The MEA model is not a row of the sequence: it keeps the 11-parameter form of the third row, fixes the two water--anion interactions from the salt data and fits the \MEAH--bicarbonate interaction in place of the water--bicarbonate interaction; its objective value is 152.958, against 150.763 for the third row; the sequence and these values were computed with the R1--R3 references at the system pressure, and with the references at \SI{100}{\kilo\pascal} the MEA model has 152.932.
+The MEA model is not a row of the sequence: it keeps the 11-parameter form of the third row, fixes the two water--anion interactions from the salt data and fits the \MEAH--bicarbonate interaction in place of the water--bicarbonate interaction; its objective value is \res{mea-tracking-objective-restrictions}, against 150.763 for the third row; the sequence and these values were computed with the R1--R3 references at the system pressure, and with the references at \SI{100}{\kilo\pascal} the MEA model has \res{mea-selected-objective-restrictions}.
 The third row is the most restricted set of the sequence whose fitted pressure and density deviations do not exceed those of the 16-parameter calibration; every further restriction has larger fitted and not-fitted pressure deviations.
 The cumulative changes quantify the combined effect of the selected assumptions, not the isolated physical effect of each restriction.
 
@@ -705,7 +705,7 @@ Later fits also test the compositions of instabilities already found.
 
 % P:supplement-penalty-mea-dea
 None of the four reported models required a penalty.
-For DEA, the three admitted starts converge to the same objective value, 15.589 (Section~\ref{sec:s-uncertainty}).
+For DEA, the three admitted starts converge to the same objective value, \res{dea-selected-objective-penalty} (Section~\ref{sec:s-uncertainty}).
 
 % P:supplement-penalty-mdea
 For MDEA, the MDEA--water interaction $k_{\mathrm{MDEA,w}}(T)=k_{\mathrm{MDEA,w}}(423\ \mathrm{K})+(\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T)(T-423\ \mathrm{K})$ is the only fitted parameter that acts on the \COtwo-free solution.
@@ -731,7 +731,7 @@ The two-liquid calculation of the main text confirms a split at 73 of them and n
 The confirmed splits lie at 26.8--30.0 wt\% AMP, 363.15--393.20 K and loadings of 0.400--0.966 mol/mol.
 Six are at measured states, none of them fitted in the first fit: rows 9, 10 and 11 of the Hartono et al.\ pressures at 373 K, and rows 10 and 13 of the Tong et al.\ pressures at 373.2 K and row 12 at 393.2 K; eight more measured states, rows 7 and 8 of Hartono et al.\ at 373 K, rows 6 and 7 at 393 K and rows 8, 9, 11 and 12 of Tong et al.\ at 373.2 K, have an instability without a confirmed split.
 The largest decrease, 0.01881 mol in $G/(RT)$ against a numerical error of $2.8\times10^{-9}$, occurs at 393.15 K, 30.0 wt\% AMP and a loading of 0.700 mol/mol, at 1.212 MPa, where the two liquid densities are \num{44899} and \num{31612} mol/m$^3$.
-Repeating the 666 searches with the search's own trials alone recovers all 93 detected instabilities and finds none at the other 573 states.
+Repeating the 666 searches with the search's own trials alone recovers all 93 detected instabilities and finds none at the other \res{amp-first-data-recall-searched-negative-states} states.
 
 % P:supplement-amp-cause
 Two separate changes each remove the splits, so neither is identified as their cause.
@@ -759,7 +759,7 @@ These comparisons do not establish global stability.
 The fits to all loaded pressures add the 18 pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and the 40 loaded pressures of Tong et al.\ at 313--\SI{393}{\kelvin} to the first data, 214 observations in all, with the 105 loaded pressures sharing the weight that the 47 had.
 Table~\ref{tab:supplement-amp-expanded} gives four fits to them, made with the R1--R3 references at the system pressure and all with the salt-fitted interactions, with the slope fitted or fixed at \SI{-150}{\kelvin} and with the carbamate inputs of the MEA model or, as in the original fits, of the MEA fit with the MEA-fitted shared set.
 The AMP model is the fit with the fitted slope and the carbamate inputs of the MEA model, refitted with the references at \SI{100}{\kilo\pascal}: the 18 pressures of Hartono et al.\ deviate by 6.85\,\% and the 40 of Tong et al.\ by 11.16\,\%, and the five \COtwo-free pressures of Tong et al., which are not fitted, by 3.86\,\%.
-With the same inputs, fixing the slope at \SI{-150}{\kelvin}, 1.55 conditional standard errors below the fitted \SI{-52.592}{\kelvin}, raises the objective value from 74.928 to 76.227 and the deviation of the 105 loaded pressures from \res{amp-fitted-pressure-aard-slope-comparison} to 11.01\,\%.
+With the same inputs, fixing the slope at \SI{-150}{\kelvin}, 1.55 conditional standard errors below the fitted \SI{-52.592}{\kelvin}, raises the objective value from \res{amp-selected-objective-slope-comparison} to \res{amp-fixed-slope-selected-objective-slope-comparison} and the deviation of the 105 loaded pressures from \res{amp-fitted-pressure-aard-slope-comparison} to \res{amp-fixed-slope-loaded-pressure-aard}\,\%.
 Neither the AMP model nor its fixed-slope fit has a detected instability at the 666 states, and the same held for the four fits with the references at the system pressure.
 At the feed of the worked split of Table~\ref{tab:amp-reference-state}, the calculated bubble pressure is 1.155 and \SI{1.238}{\mega\pascal} for the two fits of the first data, against 1.907 and \SI{1.940}{\mega\pascal} for the fits to all loaded pressures with the MEA-fitted shared set, 1.886 and \SI{1.794}{\mega\pascal} for the original salt-fitted fits, all with the references at the system pressure, and 1.883 and \SI{1.791}{\mega\pascal} for the AMP model and its fixed-slope fit.
 At \SI{2.037}{\mega\pascal}, above all of these, the first fit still splits, lowering $G/(RT)$ by 0.0185 mol, and none of the other five fits does (Table~\ref{tab:supplement-phase-replays}).

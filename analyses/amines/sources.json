@@ -397,6 +397,15 @@
     "sha256": "950ad730778246c1f44914fd0d6849280cda58b3d56cd832da163bd7cd8db61a",
     "stage": "phase"
   },
+  "analyses/fixed_reaction_reference/results/AMP_fixed/selection.json": {
+    "disposition": "input",
+    "fit_set": "slope-fixed",
+    "keys": "selected, endpoint_fingerprint, cost",
+    "owner": "amp.py",
+    "record": "amp/slope-fixed/fit/selection.json",
+    "sha256": "a2418811f2065229fe37a9feb429060946921a00791902e7aa0bbefbdb671141",
+    "stage": "selected endpoint"
+  },
   "analyses/fixed_reaction_reference/results/AMP_free/A.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "rekey",
@@ -506,6 +515,15 @@
     "record": "amp/reported/phase/display/analyses/fixed_reaction_reference/results/AMP_free/screen/selected/supplied/summary.json.gz",
     "sha256": "1aaee74ec4a95204f1e98049d407d74714e92c976706d936a4a02d657b2269fd",
     "stage": "phase"
+  },
+  "analyses/fixed_reaction_reference/results/AMP_free/selection.json": {
+    "disposition": "input",
+    "fit_set": "reported",
+    "keys": "selected, endpoint_fingerprint, cost",
+    "owner": "amp.py",
+    "record": "amp/reported/fit/selection.json",
+    "sha256": "a0a1409d44786056967996f27f0e8c76e43f1ee921854d6ba9ea0b2321714a4f",
+    "stage": "selected endpoint"
   },
   "analyses/fixed_reaction_reference/results/C1/fixed-at-old-AMP_free.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -707,6 +725,15 @@
     "sha256": "ee1a6e9a4ebfeb1fff414d0ab7611b30a2b65d78e879f1f9167bc1e3789089bd",
     "stage": "phase"
   },
+  "analyses/fixed_reaction_reference/results/DEA/selection.json": {
+    "disposition": "input",
+    "fit_set": "reported",
+    "keys": "selected, endpoint_fingerprint, cost",
+    "owner": "dea.py",
+    "record": "dea/reported/fit/selection.json",
+    "sha256": "92403fe2d1d418906bdf9e4f7f1b4dcc2a21337bc59a498f714ae92ba1045606",
+    "stage": "selected endpoint"
+  },
   "analyses/fixed_reaction_reference/results/E/MEA/replay.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "rekey",
@@ -796,6 +823,24 @@
     "record": "mdea/reported/phase/display/analyses/fixed_reaction_reference/results/MDEA/screen/selected/declared/summary.json.gz",
     "sha256": "7dae85d2fedd9a184ac5dbeedb743b7a121743e170621526a8ac7260ca6979b8",
     "stage": "phase"
+  },
+  "analyses/fixed_reaction_reference/results/MDEA/selection.json": {
+    "disposition": "input",
+    "fit_set": "reported",
+    "keys": "selected, endpoint_fingerprint, cost",
+    "owner": "mdea.py",
+    "record": "mdea/reported/fit/selection.json",
+    "sha256": "a64fa1b325183915e023aad08df1159b74d5cf62e56b4b4cd7dcdfe73057a8e6",
+    "stage": "selected endpoint"
+  },
+  "analyses/fixed_reaction_reference/results/MDEA/stationarity/A-descent-continuation.json.gz": {
+    "disposition": "input",
+    "fit_set": "reported",
+    "keys": "replay.cost",
+    "owner": "mdea.py",
+    "record": "mdea/reported/fit/A-descent-continuation.json.gz",
+    "sha256": "5d58410c1f86ed2de49f869c1489db4b5f5a92d3a661db017813bcd8102756a8",
+    "stage": "fit"
   },
   "analyses/fixed_reaction_reference/results/MEA/A-loose.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -937,6 +982,15 @@
     "sha256": "d15356a7630afebacb9eb2a77ecb8c69fb537e26887fe0d0d7804c26ccca7694",
     "stage": "fit"
   },
+  "analyses/fixed_reaction_reference/results/MEA/selection.json": {
+    "disposition": "input",
+    "fit_set": "reported",
+    "keys": "selected, endpoint_fingerprint, cost",
+    "owner": "mea.py",
+    "record": "mea/reported/fit/selection.json",
+    "sha256": "b536c57bbaed06613a921f08fd055751890582f9846855e3ffa1b697476e6f23",
+    "stage": "selected endpoint"
+  },
   "analyses/fixed_reaction_reference/results/display-replays/AMP_fixed-bubble.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
     "disposition": "rekey",
@@ -1049,13 +1103,14 @@
   },
   "analyses/mdea_mea_workflow/results/bounded-binary-411/deviations.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "orphan",
     "fit_set": "bicarbonate-0.765",
     "keys": "[rows] group,role,unit,range_name,outside_range,rows,available,statist",
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.765/replay/display/analyses/mdea_mea_workflow/results/bounded-binary-411/deviations.json",
     "sha256": "f34fd1d1502063dd1645b6b4f074bcd91591bc72c754e0c3ca34c3d75e2a75f2",
-    "stage": "replay, phase"
+    "stage": "replay, phase",
+    "evidence": "The display producer used it only in an equality assertion at dea_displays.py:1301. The table scores the pressure rows, and the bicarbonate-0.765 declaration uses data-rows.json and summary-row.json."
   },
   "analyses/mdea_mea_workflow/results/bounded-binary-411/published-pressure-comparisons.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1119,13 +1174,14 @@
   },
   "analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "bicarbonate-0.765",
     "keys": "[rows] key,native_branch,supplied_branch,attempts,temperature_K,pressu",
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.765/replay/display/analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json",
     "sha256": "febc9e412c736487a72b38ee5edabef54c7e036b480a629ecbd995b229ecf33a",
-    "stage": "replay, phase"
+    "stage": "replay, phase",
+    "evidence": "The historical paired MDEA phase readback round_3/records.py:103 reads its measured-pressure attempts. The current displayed census uses fixed-reference classifications. The later MDEA phase producer has yet to be connected."
   },
   "analyses/mdea_mea_workflow/results/phase-search-421/observation-crosswalk.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1215,7 +1271,8 @@
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.1325/replay/display/analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-group-readback.json",
     "sha256": "e55b233a98a2c4b17c0aa835b31d90f440340ddc61d0ccd87286355c2a685e4e",
-    "stage": "replay, phase"
+    "stage": "replay, phase",
+    "evidence": "The shared-interaction table resolves the three compared columns through ordered_cases."
   },
   "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-search-readback.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1349,13 +1406,14 @@
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "restrictions",
     "keys": "native_correlation",
     "owner": "mea.py",
     "record": "mea/restrictions/replay/display/analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json",
     "sha256": "12f71b586ab33c043c185bb2e5606427b7b088de59e700973b406bc084d0e18a",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "objective_weights_420.py:audit reads adopted_point for the historical conditional-covariance calculation. The old display computes sbcorr and never uses it. The displayed fixed-reference covariance comes from the selected fit."
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/profiles.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1445,7 +1503,8 @@
     "owner": "mea.py",
     "record": "mea/system-pressure/replay/display/analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/objective-contributions.csv",
     "sha256": "63804d23df18821fb3784047963b9bbe7a11477d4562e9440ba04c4d3962cab8",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The supplement binds the two Cai contributions and their share of the historical system-pressure objective."
   },
   "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/objective-information.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1495,7 +1554,8 @@
     "owner": "mea.py",
     "record": "mea/system-pressure/replay/display/analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/prediction-bands.csv",
     "sha256": "42642693ecdf20041c9f55ccf9a4b302daeb5bf3f273c70f4192fb0e69433193",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The MEA results and supplement bind the lower end of the relative pressure standard-error range from the 47 fitted pressure predictions. The upper end remains typed."
   },
   "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/profiles.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1977,13 +2037,14 @@
   },
   "analyses/round_3/results/q1.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "mea-fitted-shared",
     "keys": "rows",
     "owner": "amp.py",
     "record": "amp/mea-fitted-shared/phase/display/analyses/round_3/results/q1.json",
     "sha256": "0a483a90b1a4af17bd49be7414c67c1866d572e856e4d746e728b0fb9a0e6956",
-    "stage": "phase (AMP measured rows; round_3/phases.py amp_rows on the retransfer-412 endpoints)"
+    "stage": "phase (AMP measured rows; round_3/phases.py amp_rows on the retransfer-412 endpoints)",
+    "evidence": "The AMP reported pressure controls select the measured records in round_9/phase_controls.py:107 and fixed_reaction_reference/phase_replays.py:321. The current figure uses the retained six-state crosswalk and later replay."
   },
   "analyses/round_3/results/q2.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1993,27 +2054,30 @@
     "owner": "amp.py",
     "record": "amp/mea-fitted-shared/phase/display/analyses/round_3/results/q2.json",
     "sha256": "d9d24697c94525df2093a30be492a786c78c8129af14e34853b67b0c034395fd",
-    "stage": "phase (AMP measured rows; round_3/phases.py amp_rows on the retransfer-412 endpoints)"
+    "stage": "phase (AMP measured rows; round_3/phases.py amp_rows on the retransfer-412 endpoints)",
+    "evidence": "The supplement and transfer text bind the first-data AMP total-pressure AARDs for Hartono and Tong."
   },
   "analyses/round_3/results/q3.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "bicarbonate-0.765",
     "keys": "rows",
     "owner": "mdea.py",
     "record": "mdea/bicarbonate-0.765/phase/display/analyses/round_3/results/q3.json",
     "sha256": "ca443c25e7e0c6ba30099414144aa607909730586e8e9ec0322f387cb85fe62c",
-    "stage": "phase (MDEA measured rows; phases.py mdea_rows on the bounded-binary-411 declaration)"
+    "stage": "phase (MDEA measured rows; phases.py mdea_rows on the bounded-binary-411 declaration)",
+    "evidence": "round_5/reaction_reference.py:174 and round_5/objective.py:156 use the historical measured-pressure MDEA branch controls. The current census table uses the fixed-reference classification records."
   },
   "analyses/round_3/results/q4.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "restrictions",
     "keys": "rows",
     "owner": "mea.py",
     "record": "mea/restrictions/properties/display/analyses/round_3/results/q4.json",
     "sha256": "7a97c98a24fadf41f282ab85c94abc2a2c7f7d6f172b706347dc832dc809f6ad",
-    "stage": "properties (state sensitivities; round_3/mea.py sensitivity)"
+    "stage": "properties (state sensitivities; round_3/mea.py sensitivity)",
+    "evidence": "round_7/mdea_reference.py:248 reads the historical MEA pressure-reference basis for the MDEA comparison. The MEA supplement now uses the fixed-reference caloric record. The later pressure-reference comparison is still unmigrated."
   },
   "analyses/round_3/results/q6.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2023,7 +2087,8 @@
     "owner": "amp.py",
     "record": "amp/mea-fitted-shared/phase/display/analyses/round_3/results/q6.json",
     "sha256": "79e0200e685d461dc9d865a7b6b30c6eb844633a8ed745d1194c3b735a2c6e76",
-    "stage": "phase (worked AMP split and its certificate; phases.py worked)"
+    "stage": "phase (worked AMP split and its certificate; phases.py worked)",
+    "evidence": "The supplement binds the two finite-search tangent-distance minima at the worked AMP state."
   },
   "analyses/round_3/results/q7-summary.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2033,17 +2098,19 @@
     "owner": "amp.py",
     "record": "amp/mea-fitted-shared/phase/display/analyses/round_3/results/q7-summary.json",
     "sha256": "c8a059b76805272333d685d8e20639fd373230f4cfae75abfd5bb2483a7c247a",
-    "stage": "phase (recall of the retained splits; round_3/recall.py)"
+    "stage": "phase (recall of the retained splits; round_3/recall.py)",
+    "evidence": "The supplement binds the number of formerly negative first-data AMP states in the recall screen."
   },
   "analyses/round_3/results/q8.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "pending-stage",
     "fit_set": "dea: mea-fitted-shared, alternative endpoint; mdea: bicarbonate-0.765 and published",
     "keys": "dea",
     "owner": "dea.py, mdea.py",
     "record": "shared/comparisons/replay/display/analyses/round_3/results/q8.json",
     "sha256": "8691dfc6cd63fca5416c5af17d43b528abdeb3decca15612ed5f8625d4aa000d",
-    "stage": "replay and properties. Needs as retained inputs the alternative candidate start-1 of DEA/results/refit-413/selection.json (its endpoint, optimizer report and predictions; records.py:41-56) and the MDEA unbounded-2 fit archive"
+    "stage": "replay and properties. Needs as retained inputs the alternative candidate start-1 of DEA/results/refit-413/selection.json (its endpoint, optimizer report and predictions; records.py:41-56) and the MDEA unbounded-2 fit archive",
+    "evidence": "Plan section 4 assigns its candidate-1 endpoint, optimizer report and predictions to the DEA mea-fitted-shared comparison and mapping comment 7187938907 also lists the MDEA unbounded comparison. The underlying endpoints are retained in A2; the display from this combined historical summary is still unmigrated."
   },
   "analyses/round_5/results/A/original-main.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2053,7 +2120,8 @@
     "owner": "amp.py",
     "record": "amp/first-data/replay/display/analyses/round_5/results/A/original-main.json.gz",
     "sha256": "3dc4d0bf98afe1047508f201f1eb72414a42018162b5bef582dd8f0a0c77fe26",
-    "stage": "replay"
+    "stage": "replay",
+    "evidence": "The supplement binds the first-data free-slope fit objective."
   },
   "analyses/round_5/results/A/original-slope-150.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2063,7 +2131,8 @@
     "owner": "amp.py",
     "record": "amp/first-data/replay/display/analyses/round_5/results/A/original-slope-150.json.gz",
     "sha256": "f850eac817ba4c4adafdbd885a00da80e2d9bdd3d1f0916869693deb3efca529",
-    "stage": "replay"
+    "stage": "replay",
+    "evidence": "The supplement binds the first-data fixed-slope fit objective."
   },
   "analyses/round_5/results/C/MEA-k-profile.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2093,7 +2162,8 @@
     "owner": "mea.py, dea.py",
     "record": "shared/comparisons/replay/display/analyses/round_7/manuscript-handoff.json",
     "sha256": "210f6f7dd022fe78b517e2dd4b7d76436b45b1e457d1665804c10176098168be",
-    "stage": "replay and properties summaries: the families E MEA F4 objective, E MEA F4 outside fit and E MEA incumbent objective (final_rerun_tables.py:638, 699-718), and the 4 F DEA quantities dea_displays.py names"
+    "stage": "replay and properties summaries: the families E MEA F4 objective, E MEA F4 outside fit and E MEA incumbent objective (final_rerun_tables.py:638, 699-718), and the 4 F DEA quantities dea_displays.py names",
+    "evidence": "The DEA salt-anchored and MEA expanded-weights replay summaries supply the displayed quantities. The archive remains the A3 comparison baseline."
   },
   "analyses/round_7/results/A/reference.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2147,13 +2217,14 @@
   },
   "analyses/round_7/results/E/F4/off-window.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "replay-reference",
     "fit_set": "expanded-weights",
     "keys": "read by final (keys not traced)",
     "owner": "mea.py",
     "record": "mea/expanded-weights/replay/display/analyses/round_7/results/E/F4/off-window.json.gz",
     "sha256": "1a8857156d3927c3864f924652ed26e7735126dca5b2b5864d6a634639181601",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The MEA expanded-weights replay reads the archived source rows, identities and refusal causes from its off_window declaration. The MEA display summary reads the replay result."
   },
   "analyses/round_7/results/E/F4/replay.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2167,13 +2238,23 @@
   },
   "analyses/round_7/results/E/incumbent/off-window.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "disposition": "rekey",
+    "disposition": "replay-reference",
     "fit_set": "expanded-weights",
     "keys": "read by final (keys not traced)",
     "owner": "mea.py",
     "record": "mea/expanded-weights/replay/display/analyses/round_7/results/E/incumbent/off-window.json.gz",
     "sha256": "375ab3628c5c48b8c2f8b46859bb286c25c6f94458b1f753e95ecd0018d5ddf9",
-    "stage": "replay, properties"
+    "stage": "replay, properties",
+    "evidence": "The MEA expanded-weights replay reads the archived source rows, identities and refusal causes from its off_window declaration. The MEA display summary reads the replay result."
+  },
+  "analyses/round_7/results/F/selection.json.gz": {
+    "disposition": "input",
+    "fit_set": "system-pressure",
+    "keys": "selected[0]",
+    "owner": "dea.py",
+    "record": "dea/system-pressure/fit/selection.json.gz",
+    "sha256": "4d8137f6deb90a55c6a75a7e4cdfb41f4475c5cca8a15a28a3402e8fa7003b9d",
+    "stage": "fit"
   },
   "analyses/round_7/results/display-replays/amp-common-pressure.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",

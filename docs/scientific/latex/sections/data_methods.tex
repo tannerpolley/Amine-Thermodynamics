@@ -61,13 +61,13 @@ Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution o
 The loaded-solution pressures contribute 94.0\,\% of the DEA objective and 97.0\,\% of the AMP objective.
 In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
 There the loaded total pressures contribute 41.3\,\% and the 24 densities of the \COtwo-free solution 12.6\,\%.
-In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute 59.9\,\% of the objective value, 152.93, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
+In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the objective value, \res{mea-selected-objective-cai-weight}, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
 Each fit is started from the parameters of the same fit made with the R1--R3 references at the system pressure (\cref{sec:reactions}) and from displaced starts drawn from a 64-point Latin hypercube over the parameter box; a drawn start that cannot be evaluated is replaced by the next draw, and Table~\ref{supp-tab:supplement-fit-starts} lists every start.
 For MEA, DEA and AMP, three starts at least 0.42 apart in root-mean-square distance on the unit parameter box reach the same objective value within the function tolerance of the optimizer.
-With the AMP slope fixed (\cref{sec:results-phase}) the starts end in two minima, 76.23 and 2741.26, and the lower is reported.
-For MDEA, 63 of the 64 drawn starts were tested, one draw failing the start-separation rule, and only one of them could be evaluated; it ended far higher, at 48386.5.
+With the AMP slope fixed (\cref{sec:results-phase}) the starts end in two minima, \res{amp-fixed-slope-selected-objective-methods} and \res{amp-fixed-slope-alternate-basin-objective-methods}, and the lower is reported.
+For MDEA, 63 of the 64 drawn starts were tested, one draw failing the start-separation rule, and only one of them could be evaluated; it ended far higher, at \res{mdea-alternate-basin-objective-calibration-methods}.
 The reported MDEA endpoint therefore comes from the inherited start A alone, and the MDEA fit is provisional: whether the rest of the parameter box admits an evaluable start, or a lower minimum, is undecided.
 Two stopping tests are reported separately.
 The optimizer stopped on its relative function tolerance for MEA, DEA and AMP and, after two stages ended at the iteration limit, for MDEA start A, and on its parameter tolerance for the MDEA draw (Table~\ref{supp-tab:supplement-fit-starts}).

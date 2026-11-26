@@ -16,7 +16,7 @@ def main():
     args = parser.parse_args()
     catalog = json.loads(SOURCES.read_text())
     for source, entry in catalog.items():
-        if "record" not in entry or entry["disposition"] == "stage":
+        if "record" not in entry or entry["disposition"] in {"orphan", "stage"}:
             continue
         original = ROOT / source
         if sha256(original.read_bytes()).hexdigest() != entry["sha256"]:
