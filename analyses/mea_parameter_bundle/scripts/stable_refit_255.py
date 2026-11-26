@@ -16,6 +16,7 @@ from pathlib import Path
 import sys
 import time
 import zipfile
+from collections import Counter
 
 for key in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS'):
     os.environ[key] = '1'
@@ -144,9 +145,13 @@ def bind(mapping, *, reaction_reference_pressure_pa=None):
         d.AN = saved
 
 
-def _init(mapping, trials=None, route=None, capture=False, reaction_reference_pressure_pa=None):
-    global _SPEC, _TRIALS, _ROUTE, _HELD, _CAPTURE
+_COMPLETION = False
+
+
+def _init(mapping, trials=None, route=None, capture=False, reaction_reference_pressure_pa=None, completion=False):
+    global _SPEC, _TRIALS, _ROUTE, _HELD, _CAPTURE, _COMPLETION
     _CAPTURE = capture
+    _COMPLETION = completion
     _ROUTE, _HELD = route, None  # a forked worker must not inherit a set prepared for the parent's model
     _TRIALS = trials or {}
     (route.verify if route else verify)()
@@ -209,7 +214,69 @@ def supplied_support(spec, item, *, compiled=None):
     return set(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
 
 
+def _measure_completion(state):
+    from round_3.phases import cd, liquid_vapor, trial_parent, trials
+
+    started = time.monotonic()
+    out = dict(key=state['key'], wheel=_ROUTE.wheel_sha256)
+    try:
+        item = _ROUTE.stability_row(_SPEC, state, 1., metadata=out)
+        parent, model = item.problem, _SPEC.model
+        P = state.get('declared_pressure_Pa',parent.pressure.value)
+        if item.pressure_reference is not None and 'declared_pressure_Pa' not in state:
+            bubble_pressure = state.get('marched_pressure_Pa')
+            if bubble_pressure is None:
+                bubble = eq.solve_equilibrium(model,item.pressure_reference)
+                out['pressure_reference_message'] = bubble.message
+                if not bubble.requested_tolerance_met:
+                    raise ValueError(bubble.message)
+                bubble_pressure = bubble.pressure
+            out['pressure_reference_Pa'] = bubble_pressure
+            P = item.pressure_ratio*bubble_pressure
+        out.update(T_K=parent.temperature.value, P_Pa=P, feed_mol=list(parent.feed.values),
+                   row_tolerance=parent.row_tolerance, parent_kind=parent.phases[0].kind.name)
+        center = trial_parent(_SPEC, parent, P, out)
+        compiled = eq.compile_problem(model,parent)
+        options = item.stability_options
+        options.mode = type(options.mode).Full
+        report = eq.stability_test(compiled,center,options)
+        out.update(native_completed=report.completed, native_message=report.message, native_trials=trials(report))
+        support = supplied_support(_SPEC,item,compiled=compiled)
+        key = frozenset(support)
+        if key not in _APPLICABLE:
+            _APPLICABLE[key] = _applicable(item,_TRIALS,support)
+        supplied, excluded, repeated, unique = _APPLICABLE[key]
+        counts = Counter(evaluated=0)
+        witnesses = []
+        out.update(bank_size=len(_TRIALS), supplied_excluded=len(excluded), supplied_counts=counts,
+                   supplied_witnesses=witnesses)
+        if supplied:
+            ts = _supplied_report(parent,center,supplied,unique).trials
+            for i, phase in repeated:
+                if i>=len(ts):
+                    counts['missing'] += 1
+                    continue
+                t = ts[i]
+                counts[t.evidence] += 1
+                result = dict(evidence=t.evidence, quantities=_quantities(t.quantities), message=t.message)
+                if supplied_negative(result) or t.evidence!='evaluated':
+                    witnesses.append(dict(result,phase=phase))
+        if any(t.resolved_descent for t in report.trials) or any(map(supplied_negative,witnesses)):
+            parent_g = cd.gibbs(compiled,center,report)
+            out['parent_gibbs_RT_mol'] = parent_g
+            guess = (list(center.phase_mole_fractions(0)),center.packing_fractions[0])
+            out['liquid_vapor'] = liquid_vapor(_SPEC,_ROUTE,parent,guess,parent_g)
+            if state.get('decision_bubble'):
+                out['bubble'] = liquid_vapor(_SPEC,_ROUTE,parent,guess,parent_g,incipient=True,
+                                             seed=out['liquid_vapor'])
+    except (ValueError,RuntimeError,AssertionError,AttributeError,IndexError) as error:
+        out['blocker'] = f'{type(error).__name__}: {error}'
+    return dict(out,seconds=time.monotonic()-started)
+
+
 def _measure(state):
+    if _COMPLETION:
+        return _measure_completion(state)
     started = time.monotonic()
     supplied, not_applicable, repeated, unique = [], [], [], ()
     short_rows = getattr(_ROUTE, 'short_rows', False)
@@ -288,7 +355,7 @@ def _measure(state):
     return row
 
 
-def grid(mapping, chosen, trials=None, *, route=None, capture=False, reaction_reference_pressure_pa=None):
+def grid(mapping, chosen, trials=None, *, route=None, capture=False, reaction_reference_pressure_pa=None, completion=False):
     """Fresh Full searches at one parameter mapping; each worker task is one temperature's states, largest first."""
     from concurrent.futures import ProcessPoolExecutor
     trials = globals().get('GRID_TRIALS') if trials is None else trials
@@ -296,11 +363,14 @@ def grid(mapping, chosen, trials=None, *, route=None, capture=False, reaction_re
     groups = {}
     for index, state in enumerate(chosen):
         groups.setdefault(route.temperature(spec, state) if route else state['T'], []).append(index)
+    if completion:
+        groups = {group[0]:group for indices in groups.values()
+                  for offset in range(0,len(indices),32) if (group := indices[offset:offset+32])}
     groups = sorted(groups.values(), key=len, reverse=True)
     workers = min(route.workers if route else CORES, len(groups))
     measured = [None]*len(chosen)
     with ProcessPoolExecutor(workers, initializer=_init,
-                             initargs=(mapping, trials, route, capture, reaction_reference_pressure_pa)) as pool:
+                             initargs=(mapping, trials, route, capture, reaction_reference_pressure_pa, completion)) as pool:
         for indices, rows in zip(groups, pool.map(_measure_group, [[chosen[i] for i in g] for g in groups])):
             for i, row in zip(indices, rows, strict=True):
                 measured[i] = row

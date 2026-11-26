@@ -6,7 +6,7 @@ from time import monotonic
 
 from round_3.recall import DECLARATION, ENDPOINTS
 from part_ii import ROOT, Route, calculation_declaration, deviation_statistics, eq, jsonable, stable
-from reference_states_428 import amp, balances, identity, phase, phase_closure
+from reference_states_428 import amp, balances, identity, phase, phase_closure, scaled_pressure_error
 from r4_shift_tables_426 import available_prediction, temperature_band
 from amp_transfer import classify_descents as cd
 
@@ -34,6 +34,41 @@ def physical(spec, problem, result):
     checks = dict(phases=rows,balances=residuals)
     return dict(checks,physical_checks_pass=phase_closure(checks,P,problem.row_tolerance),
                 residuals=list(result.residuals),row_tolerance=problem.row_tolerance)
+
+
+def trial_parent(spec, problem, P, out, *, center=None):
+    """Solve and verify the actual parent before passing it to any trial."""
+    model = spec.model
+    if center is None:
+        problem.pressure = type(problem.pressure).fixed(P)
+        center = eq.solve_equilibrium(model, problem)
+        out['parent_message'] = center.message
+        if not center.requested_tolerance_met:
+            raise ValueError(center.message)
+    out['parent'] = physical(spec, problem, center)
+    if any(scaled_pressure_error(p['pressure_residual_Pa'],p['density_mol_m3'],p['T_K'])>problem.row_tolerance
+           for p in out['parent']['phases']):
+        out['initial_parent'] = out['parent']
+        phases = problem.phases
+        for i, phase in enumerate(phases):
+            x, rho = center.phase_mole_fractions(i), center.molar_densities[i]
+            phase.composition_guess = [x[j] for j in phase.support]
+            phase.packing_guess = rho*model._model.packing_fraction_coefficient(center.temperature,x)
+        problem.phases = phases
+        problem.pressure = type(problem.pressure).fixed(.999*P)
+        seed = eq.solve_equilibrium(model, problem)
+        problem.pressure = type(problem.pressure).fixed(P)
+        out['restart'] = dict(P_Pa=.999*P,message=seed.message)
+        if not seed.requested_tolerance_met:
+            raise ValueError(seed.message)
+        center = eq.solve_equilibrium(model,problem,start=seed)
+        out['parent_message'] = center.message
+        if not center.requested_tolerance_met:
+            raise ValueError(center.message)
+        out['parent'] = physical(spec,problem,center)
+    if not out['parent']['physical_checks_pass']:
+        raise ValueError('Trial-call parent misses scaled pressure or balance closure')
+    return center
 
 
 def fixed(route, spec, state, P, seed, *, mdea=False, assemblages=False, decision_bubble=False, checkpoint=None):
@@ -171,12 +206,13 @@ def liquid_vapor(spec, route, parent, guess, parent_g, *, incipient=False, seed=
         out['qualified'] = out['physical_checks_pass'] and connected and cd.distinct_phases(x,rho) and result.amounts[0]>0
         if incipient:
             out['qualified'] &= result.amounts[1]==0
-        else:
+        elif out['physical_checks_pass'] and result.amounts[1]>0:
             g, err = cd.gibbs(compiled,result)
             out.update(Gibbs_over_RT_mol=g, error=err)
             out.update(Gibbs_decrease_over_RT_mol=parent_g[0]-g, numerical_error_over_RT_mol=parent_g[1]+err)
-            out['qualified'] &= (result.amounts[1]>0 and
-                                 out['Gibbs_decrease_over_RT_mol']>out['numerical_error_over_RT_mol'])
+            out['qualified'] &= out['Gibbs_decrease_over_RT_mol']>out['numerical_error_over_RT_mol']
+        else:
+            out['qualified'] = False
     return out
 
 
