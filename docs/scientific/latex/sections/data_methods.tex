@@ -6,7 +6,7 @@ Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the 
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
 Every observation was examined during model development, so no comparison in this paper is an independent validation or a blind test.
 \Cref{tab:calibration-data} lists, for each amine, the data in the objective, the data fitted beforehand and the development data.
-The objectives contain 307 observations for MEA, 140 for DEA, 281 for MDEA and 214 for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
+The objectives contain 307 observations for MEA, 140 for DEA, 281 for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Tables~\ref{supp-tab:supplement-mea-comparison} and \ref{supp-tab:supplement-transfer-data} give every other set that is compared.
 The 39 \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it, so 268 of its observations respond to the fitted parameters.
 
 \input{tables/calibration-data}
@@ -65,7 +65,7 @@ In the MEA objective the 50 MEA--water observations of Cai et al.\ \cite{caiBina
 
 % P:methods-starts
 Each fit is started from the parameters of the same fit made with the R1--R3 references at the system pressure (\cref{sec:reactions}) and from displaced starts drawn from a 64-point Latin hypercube over the parameter box; a drawn start that cannot be evaluated is replaced by the next draw, and Table~\ref{supp-tab:supplement-fit-starts} lists every start.
-For MEA, DEA and AMP, three starts at least 0.42 apart in root-mean-square distance on the unit parameter box reach the same objective value within the function tolerance of the optimizer.
+For MEA, DEA and AMP, three starts at least \res{reported-starts-minimum-rms-distance-methods} apart in root-mean-square distance on the unit parameter box reach the same objective value within the function tolerance of the optimizer.
 With the AMP slope fixed (\cref{sec:results-phase}) the starts end in two minima, \res{amp-fixed-slope-selected-objective-methods} and \res{amp-fixed-slope-alternate-basin-objective-methods}, and the lower is reported.
 For MDEA, \res{mdea-tested-drawn-starts-methods} of the \res{mdea-planned-drawn-starts-methods} drawn starts were tested, \res{mdea-skipped-drawn-starts-methods} draw failing the start-separation rule, and only \res{mdea-evaluable-drawn-starts-methods} of them could be evaluated; it ended far higher, at \res{mdea-alternate-basin-objective-calibration-methods}.
 The reported MDEA endpoint therefore comes from the inherited start A alone, and the MDEA fit is provisional: whether the rest of the parameter box admits an evaluable start, or a lower minimum, is undecided.
