@@ -24,11 +24,13 @@ from round_8.reductions import phase_outcome
 MDEA_CEILING_PA = 5_036_700.
 MDEA_REBUILD = 'MDEA_slope_bound/screen/rebuild-441'
 MDEA_GRID = MDEA_REBUILD+'/cold-march'
+MDEA_CONNECTED = MDEA_REBUILD+'/reverse-connection'
 MDEA_265 = "grid:{'water': 40.84100418410041, 'methyldiethanolamine': 1.0}:393.15:0.8:3.0"
 
 
-def check_cold_point(point, previous, temperature, tolerance):
+def check_cold_point(point, previous, stock, temperature, loading, tolerance):
     P = point['pressure_Pa']
+    assert (point['stock'],point['T_K'],point['loading'])==(stock,temperature,loading), 'cold bubble path identity'
     assert P>=previous['pressure_Pa'], 'cold bubble pressure below its predecessor'
     assert point['phase_kinds']==['Liquid','Vapor'], 'cold bubble root labels'
     assert phase_closure(point,P,tolerance,temperature=temperature), 'cold bubble scaled closure'
@@ -37,6 +39,58 @@ def check_cold_point(point, previous, temperature, tolerance):
     assert any(r['returned']=='liquid' for r in cd.matched(
         point['liquid_roots'],tolerance,liquid['density_mol_m3'],T=temperature,P=P)), 'cold bubble liquid root'
     assert vapor_trace_passes(point), 'cold incipient phase lacks a vapor connection'
+
+
+def reverse_errors(previous, returned):
+    assert returned['loading']==previous['loading'], 'reverse continuation did not reach the predecessor loading'
+    left, right = previous['phases'], returned['phases']
+    assert len(left)==len(right)==2, 'reverse continuation phase count'
+    return dict(pressure_relative=abs(returned['pressure_Pa']/previous['pressure_Pa']-1),
+                density_relative=max(abs(b['density_mol_m3']/a['density_mol_m3']-1) for a,b in zip(left,right,strict=True)),
+                mole_fraction_absolute=max(abs(x-y) for a,b in zip(left,right,strict=True)
+                                            for x,y in zip(a['x'],b['x'],strict=True)))
+
+
+def check_reverse_connection(errors):
+    assert max(errors['pressure_relative'],errors['density_relative'])<=1e-6, 'reverse pressure or density mismatch'
+    assert errors['mole_fraction_absolute']<=1e-8, 'reverse mole-fraction mismatch'
+
+
+def reverse_bubble(solve, spec, bubble, previous, cold, seed):
+    started = monotonic()
+    target, last = previous['loading'], cold['loading']
+    step = last-target
+    attempts, returned = [], None
+    stop = None
+    while last>target:
+        loading = max(target,last-step)
+        tick = monotonic()
+        result = solve(loading,seed)
+        converged = result.success and result.requested_tolerance_met
+        record = dict(loading=loading,from_loading=last,message=result.message,converged=converged,
+                      iterations=result.iterations,seconds=monotonic()-tick)
+        attempts.append(record)
+        if converged:
+            record['pressure_Pa'] = result.pressure
+            last, seed = loading, result
+        else:
+            step /= 2
+            if step<1e-3:
+                stop = record['message']
+                break
+    errors = None
+    if stop is None:
+        returned = dict(physical(spec,bubble,seed),loading=last,pressure_Pa=seed.pressure)
+        errors = reverse_errors(previous,returned)
+        try:
+            assert returned['physical_checks_pass'], 'reverse predecessor misses phase closure'
+            check_reverse_connection(errors)
+        except AssertionError as error:
+            stop = str(error)
+    return dict(attempts=attempts,returned=returned,errors=errors,stop=stop,
+                engine_issue='tannerpolley/epcsaft#275' if stop and
+                'third directional energy contraction unavailable: nonfinite' in stop else None,
+                seconds=monotonic()-started)
 
 
 def loading_march(spec, run, states):
@@ -48,6 +102,7 @@ def loading_march(spec, run, states):
     feed = list(bubble.feed.values)
     carbon, amine = (ids.index(c) for c in ('carbon-dioxide', run.config['amine']))
     points, warm_failures, solution, last = [], [], None, None
+    cold_attempts = []
     stall = None
 
     def solve(loading, start):
@@ -68,14 +123,18 @@ def loading_march(spec, run, states):
                     break
                 loading = min(target, loading+step)
             else:
+                failure = dict(target=target,loading=loading,message=result.message)
+                if solution is not None:
+                    warm_failures.append(failure)
                 step /= 2
                 if step<1e-3 or last is None:
-                    stall = dict(target=target, loading=loading, message=result.message)
+                    stall = failure
                     if solution is None:
                         break
-                    warm_failures.append(stall)
                     result = solve(target,None)
-                    attempt = dict(loading=target,start='cold',message=result.message)
+                    attempt = dict(loading=target,start='cold',message=result.message,stock=first['stock'],
+                                   T_K=first['T'],warm_failure=len(warm_failures)-1)
+                    cold_attempts.append(attempt)
                     stall = dict(warm=stall,cold=attempt)
                     if result.success and result.requested_tolerance_met:
                         attempt.update(physical(spec,bubble,result),pressure_Pa=result.pressure,
@@ -86,9 +145,14 @@ def loading_march(spec, run, states):
                         attempt['vapor_trace'], _ = dilute_vapor_connection(
                             spec.model,result.temperature,vapor['x'],vapor['density_mol_m3'])
                         try:
-                            check_cold_point(attempt,points[-1],first['T'],bubble.row_tolerance)
+                            check_cold_point(attempt,points[-1],first['stock'],first['T'],target,bubble.row_tolerance)
                         except AssertionError as error:
                             attempt['qualification_failure'] = str(error)
+                            break
+                        points[-1]['phases'] = physical(spec,
+                            run.stability_row(spec,dict(first,a=last),1.).pressure_reference,solution)['phases']
+                        attempt['reverse'] = reverse_bubble(solve,spec,bubble,points[-1],attempt,result)
+                        if attempt['reverse']['stop']:
                             break
                         points.append(attempt)
                         solution, last, stall = result, target, None
@@ -97,6 +161,7 @@ def loading_march(spec, run, states):
         if stall or points[-1]['pressure_Pa']>MDEA_CEILING_PA:
             break
     return dict(stock=first['stock'], T_K=first['T'], points=points, stall=stall,warm_failures=warm_failures,
+                cold_attempts=cold_attempts,
                 seconds=monotonic()-started)
 
 
@@ -123,17 +188,21 @@ def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
         tick = monotonic()
         measured = [q for q in states if not q['key'].startswith('grid:')]
         aliases = run.same_calculations(point,measured)
-        pilot = r.read(OUT/f'{folder}/pilot-measured.json.gz')
-        assert all(pilot[k]==identity[k] for k in ('endpoint_fingerprint','wheel'))
-        held = {q['key']:q for q in pilot['rows']}
         unique = [q for q in measured if q['key'] not in aliases]
         retain('measured-inventory',measured,tick,aliases=aliases)
+        # The old pilot supplies only the identities to replace in the bank-bound batches.
+        replaced = {q['key'] for q in r.read(OUT/MDEA_REBUILD/'pilot-measured.json.gz')['rows']}
         for i in range(4):
             tick = monotonic()
             keys = unique[i::4]
-            pending = [dict(q,decision_bubble=True) for q in keys if q['key'] not in held]
-            rows = iter(stable.grid(point,pending,bank,route=run,completion=True))
-            retain(f'measured-{i}',[held[q['key']] if q['key'] in held else next(rows) for q in keys],tick)
+            source = f'{MDEA_REBUILD}/measured-{i}.json.gz'
+            retained = r.read(OUT/source)
+            assert all(retained[k]==v for k,v in identity.items())
+            assert [q['key'] for q in keys]==[q['key'] for q in retained['rows']]
+            pending = [dict(q,decision_bubble=True) for q in keys if q['key'] in replaced]
+            fresh = {q['key']:q for q in stable.grid(point,pending,bank,route=run,completion=True)} if pending else {}
+            rows = [fresh.get(q['key'],q) for q in retained['rows']]
+            retain(f'measured-{i}',rows,tick,retained_batch=source,recomputed_keys=list(fresh))
 
     if 'controls' in modes:
         tick = monotonic()
@@ -142,15 +211,27 @@ def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
         rows = stable.grid(point,controls,bank,route=run,completion=True)
         retain('controls',rows,tick,measured_control='comparison:416:final')
 
-    if 'march' in modes:
+    if set(modes)&{'march','reverse-pilot'}:
         tick = monotonic()
         groups = defaultdict(list)
         for q in states:
             if q['key'].startswith('grid:'):
                 groups[tuple(q['stock'].items()),q['T']].append(q)
-        paths = {}
+        pilot_path = OUT/f'{folder}/reverse-pilot.json.gz'
+        if 'reverse-pilot' in modes:
+            old_march = r.read(OUT/MDEA_GRID/'domain-march.json.gz')
+            cold = [(tuple(q['stock'].items()),q['T_K']) for q in old_march['rows'] if q['warm_failures']]
+            selected = cold[::8]
+            with ProcessPoolExecutor(run.workers) as pool:
+                rows = list(pool.map(partial(_loading_path,run=run,point=point),(groups[k] for k in selected)))
+            retain('reverse-pilot',rows,tick)
+            return
+        pilot = r.read(pilot_path)
+        assert all(pilot[k]==v for k,v in identity.items())
+        paths = {(tuple(p['stock'].items()),p['T_K']):p for p in pilot['rows']}
         with ProcessPoolExecutor(run.workers) as pool:
-            for path in pool.map(partial(_loading_path,run=run,point=point),groups.values(),chunksize=4):
+            for path in pool.map(partial(_loading_path,run=run,point=point),
+                                 (group for k,group in groups.items() if k not in paths),chunksize=2):
                 paths[tuple(path['stock'].items()),path['T_K']] = path
         retain('domain-march',list(paths.values()),tick,ceiling_Pa=MDEA_CEILING_PA)
         grid = []
@@ -168,14 +249,13 @@ def mdea_rebuild(run, point, bank, prior, *, modes, folder=MDEA_REBUILD):
                     if q['key']==MDEA_265:
                         row['engine_issue'] = 'tannerpolley/epcsaft#265'
                 else:
-                    row.update(domain=None, blocker=path['stall'])
+                    row.update(domain='unassigned', blocker=path['stall'])
                 grid.append(row)
         retain('grid-inventory',grid,tick,ceiling_Pa=MDEA_CEILING_PA)
 
     if set(modes)&{'grid-pilot','grid'}:
         inventory = r.read(OUT/f'{folder}/grid-inventory.json.gz')
         assert all(inventory[k]==v for k,v in identity.items())
-        assert all(q['domain'] is not None for q in inventory['rows']), 'unassigned grid membership'
         requested = [q for q in inventory['rows'] if q['domain']=='inside' and 'engine_issue' not in q]
         if 'grid-pilot' in modes:
             tick = monotonic()
