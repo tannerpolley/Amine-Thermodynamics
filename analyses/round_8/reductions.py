@@ -1,7 +1,7 @@
 """Reconcile referee quantities from retained state and observation identities."""
 from collections import Counter
 from decimal import Decimal
-from math import fsum, log
+from math import fsum, isclose, log
 from statistics import mean
 import sys
 if __package__:
@@ -27,7 +27,21 @@ def matched(s, group):
     return {m:dict(full=scores(list(rows.values())), matched=scores([rows[k] for k in sorted(keys)]),
                    missing=[r for r in rows.values() if r['value'] is None], common_keys=sorted(keys)) for m,rows in models.items()}
 
-def phase_outcome(value):
+FINITE_NEGATIVE = 'no descent in the finite search'
+TWO_LIQUIDS = 'two liquids of lower Gibbs energy'
+CONNECTED_VAPOR = 'liquid plus a vapor-connected phase of lower Gibbs energy'
+
+
+def phase_outcome(value, *, completion=False):
+    if completion:
+        if issue := value.get('engine_issue'):
+            assert '#' in issue and issue.rsplit('#',1)[1].isdigit()
+            return 'open Engine item'
+        if value.get('pair'):
+            return value['pair']
+        if value['parent_closed'] and value['native_complete'] and value['supplied_complete'] and not value['descent']:
+            return FINITE_NEGATIVE
+        raise AssertionError(f"Search {value['key']} did not meet the completion rule")
     if any(q['confirmed'] for q in value.get('attempts',[])):
         return 'confirmed split'
     if 'instability' in value:
@@ -35,6 +49,46 @@ def phase_outcome(value):
     if value.get('search',{}).get('no_descent_in_trial_set'):
         return 'finite search, no resolved descent'
     return 'unresolved' if value.get('search',{}).get('completed') else 'unavailable'
+
+
+def parent_agreement(left, right):
+    fields = ('density_mol_m3','Gibbs_over_RT_mol')
+    return all(isclose(a,b,rel_tol=1e-10) for a,b in zip(
+        (*left['x'],*(left[k] for k in fields)),(*right['x'],*(right[k] for k in fields)),strict=True))
+
+
+def phase_closure(value, pressure, tolerance):
+    return bool(value.get('phases')) and all(
+        max(abs(p['pressure_Pa']/pressure-1),abs(fsum(p['x'])-1),abs(p['charge_residual']))<=tolerance
+        for p in value['phases']) and max(map(abs,value['balances']['scaled_element_residual'].values()))<=tolerance
+
+
+def vapor_trace_passes(pair):
+    trace = pair['vapor_trace']
+    pressure = trace['pressure_Pa']
+    return (len(pressure)==len(trace['dP_drho'])==len(trace['density_mol_m3'])==33
+            and all(v is not None and v>0 for v in trace['dP_drho'])
+            and all(b>a for a,b in zip(pressure,pressure[1:])))
+
+
+def qualifying_pair(pair, pressure, tolerance, *, vapor=False):
+    from classify_descents import COINCIDENCE, DENSITY_WINDOW
+
+    amounts = pair.get('amounts_mol',[])
+    if len(amounts)!=2 or min(amounts)<=0 or not pair.get('requested_tolerance_met'):
+        return False
+    details = pair if vapor else pair.get('diagnostics') or {}
+    if not phase_closure(details,pressure,tolerance):
+        return False
+    a,b = details['phases']
+    distinct = max(abs(x-y) for x,y in zip(a['x'],b['x'],strict=True))>COINCIDENCE or (
+        abs(log(a['density_mol_m3']/b['density_mol_m3']))>COINCIDENCE)
+    roots = vapor_trace_passes(pair) if vapor else all(
+        any(r.get('returned')=='liquid' and abs(log(r['density']/rho))<=DENSITY_WINDOW
+            and r['relative_pressure_residual']<=tolerance for r in group)
+        for group,rho in zip(pair['roots'],pair['densities_mol_m3'],strict=True))
+    return (distinct and roots and amounts==[a['amount_mol'],b['amount_mol']]
+            and pair['Gibbs_decrease_over_RT_mol']>pair['numerical_error_over_RT_mol'])
 
 
 def witness_direction(entry):
