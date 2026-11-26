@@ -29,6 +29,112 @@ resolved descent at 1.05 times that pressure. The loaded-liquid density for
 `Amundsen2009_state_060` at 298.15 K was 1,029.44 kg/m³, equal
 to the retained prediction. These are numerical checks of the two paths.
 
+## Reproduction from a staged copy on wheel S
+
+The staged calculations used the locked S wheel, verified against the archive
+and installed bytes, with three cores per job. The scratch staging copied the
+package and its retained inputs and used the package functions for the refits
+and native searches. The scratch inventory needed the historical MEA
+endpoint-only-coordinates.json and MDEA stage-b.toml. The Stage 0 check also
+carried the binary-hull functions into the scratch copy. The fixed-reference
+fits retain the 100 kPa reaction reference and the objective defined above.
+
+The sodium-salt cascade reproduced the parameter document, all 145 retained
+observations and refusals, and all three fitted objectives exactly. The mixed
+assessment had 39 available rows out of 45. The regenerated water–bicarbonate
+and water–carbonate coefficients matched the original MEA start.
+
+With the recorded controls applied, each of the five reported amine fits
+selected A. The complete parameter documents, fingerprints, objectives and
+fitted predictions matched exactly. The computed derivative fields shared
+with the retained diagnostics also matched. The package additionally writes
+the projected gradient on the optimizer scale. The
+[refit comparison](results/shared/preservation/refits.json.gz) holds the
+selected fingerprints, exact objectives and full-precision differences for the
+alternate starts.
+
+| Fit | Selected objective | Fitted rows available | Staged time (s) |
+|---|---:|---:|---:|
+| MEA | 152.932402 | 307/307 | 501.60, plus 234.15 for LHS-21 at the recorded limit |
+| DEA | 15.588667 | 140/140 | 321.37 |
+| AMP, fitted slope | 74.928158 | 214/214 | 255.56, plus 151.99 for LHS-45 at the recorded limits |
+| AMP, fixed slope | 76.226564 | 214/214 | 151.48, plus 60.14 to verify LHS-53 at its recorded limit |
+| MDEA | 15.609314 | 281/281 | 998.46 for A, 13.63 for B and C, and 467.70 for LHS-53 at the recorded limits |
+
+All 40 [staged endpoint replays](results/shared/preservation/replays.json.gz)
+reproduced the numerical content of the S baseline. The MEA system-pressure
+record also emitted an explicit count of 307 available rows and an empty
+prediction-difference list. The replays took 1,260.67 s. With the ten replay
+records it reads directly replaced, the display check reproduced 55 tables
+and 16 figures in 20.83 s. The other display inputs were held at their
+retained values for this comparison. The earlier campaign records for DEA
+#413 candidate 1 and the unbounded MDEA bicarbonate 0.765 case differ by at
+most 9.44 × 10⁻¹³ and 2.02 × 10⁻¹² relative in their predictions. The bounded
+MDEA case differs in objective by −2.66 × 10⁻¹¹. These differences were
+already recorded at A2 and leave the printed values unchanged.
+
+The original package refit used common time limits where the attempt records
+declared individual limits. The refit now reads the limits from each
+attempt and continuation record. With those controls, the same S wheel
+produced three changes to alternate-start endpoints.
+
+| Alternate start | Retained and staged comparison | Printed changes |
+|---|---|---|
+| MEA LHS-21 | At 187.5 s the first stage stopped after 87 of the original 93 cost entries. All 87 matched. The continuation changed the endpoint. | 62. The projected gradient changed from 2.648 × 10⁻⁵ to 3.957 × 10⁻⁵. This changed the prose minimum and 60 pressure and heat spread cells. |
+| AMP LHS-45, fitted slope | At 88.95 s the first stage stopped after 44 of the original 55 cost entries. All 44 matched. The 40 s continuation started from that point. | Five. The projected gradient changed from 2.298 × 10⁻⁴ to 2.218 × 10⁻⁴, along with four Kundu and Tong pressure spread cells. |
+| MDEA LHS-53 | The preceding endpoint and all 41 cost entries were exact. In the 75 s continuation, the first new refusal occurred at trial 10 when the Merkley saturation calculation exhausted its work budget. The trust-region radius reached 7.52 × 10⁻³³ against the 10⁻³² minimum. | Two. The objective changed from 48,386.509423 to 48,387.293467. The outcome lost the parameter-tolerance label. |
+
+The 351 MEA, 56 AMP and 307 MDEA assessment rows retained their identities
+and availability, with the same refusal causes. A was selected in all three
+cases. The
+[printed comparison](results/shared/preservation/printed-differences.json)
+identifies every changed cell or value with its record and key. With the
+alternate results in place, the display check flagged the two supplement
+tables and the bound gradient in results.tex. The elapsed-work differences
+have no disposition in the three classes of §6 and remain open. In the
+separate MDEA descent continuation, the objective changed from
+15.609312497421323 to 15.609312502021526. Both print as 15.60931 and the
+comparison changed no printed cell. The 13 bounded descent probes and
+the four MDEA projected-direction trials matched the retained numerical
+records. Their staged runs took 194.72 s and 64.03 s, respectively.
+
+| Phase population | Requested keys matched | Search-class or numeric differences | Staged time (s) |
+|---|---:|---:|---:|
+| MEA grid | 2,484 | 0 | 164.41 |
+| DEA native | 1,271 | 0 | 92.77 |
+| AMP native, both slopes | 1,332 | 0 | 82.02 |
+
+The property-observation replay matched all 1,570 DEA, AMP and MDEA row
+identities, availability classes and numeric values. The MEA path now records
+the solved temperatures for the 25 boiling-temperature and vapor-composition
+pairs. Its 307 fitted property rows matched every retained prediction, and
+the paired solved temperatures spanned 363.18–433.75 K.
+
+The MDEA slope-bound declaration, the replay of A with all 281 rows available,
+and all 137 hull cases matched their retained records. At 288.71 K and
+1.466 MPa the MDEA–water gap-onset bracket was reproduced at
+−0.1328280448913574 ≤ k ≤ −0.13282737731933592. The 64 regenerated draws
+reproduced all 17,984 census statuses, with 17,363 available rows,
+612 central-solve refusals and nine action refusals. The census took 741.17 s.
+The independent tight-tolerance probe on fit:0 remains open. With the
+declared tolerance of 10⁻¹⁰, the solve attained 7.11 × 10⁻¹⁴.
+At the tighter request of 4.44 × 10⁻¹⁵, S returned CentralSolveUnavailable
+at the 200-iteration work limit with residual 1.11. A second probe made
+63 tighter requests across 21 retained rows. It yielded 53 available
+predictions that met the tighter tolerances, nine central-solve refusals and
+one action refusal. The intended ToleranceNotMet branch remains unexercised.
+
+The MDEA state comparison:157:problem at 293.15 K and 0.5 MPa reproduced
+the unavailable optimized result. Its retained supplied trial has
+TPD/RT = −0.971882 and records a descent. The package search currently omits
+the supplied trial. The separate MEA measured searches and 162-state census,
+split confirmations, and complete property and derivative regeneration also
+remain open. The MEA restriction search and the Cai-weighting control retain
+search tallies but lack the per-state Engine responses needed for
+reclassification. Their request identity comparisons remain open. These
+checks establish numerical reproduction for the listed populations.
+Preservation Check 2 remains open.
+
 ## Retained endpoints at the system pressure
 
 The fixed-reference study retained a tracking-reference replay for each
