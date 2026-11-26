@@ -13,7 +13,7 @@ import re
 import tarfile
 from pathlib import Path
 
-from .fit import compare_rows, save
+from .fit import compare_rows, retained_endpoint, route_for, save
 from .model import (
     CAMPAIGN_ARCHIVE,
     P_REF,
@@ -1485,6 +1485,85 @@ def carbonate_shares(spec, inputs, reference):
             )
         )
     return rows
+
+
+def activity_rows(spec, retained, pool=False):
+    template = next(o["request"] for o in load_state_packet()["observations"]
+                    if o["identity"] == "Bottinger2008_state_046")
+    mapping = spec.inputs["endpoint"]
+    fixed_reactions = next(problem.reactions for problem in spec.problems.values() if problem.reactions)
+    hydrogen, carbonate, bicarbonate = map(
+        COMPONENT_IDS.index, ("hydronium-cation", "carbonate-anion", "bicarbonate-anion")
+    )
+    for prior in retained:
+        T, P = prior["T_K"], prior["P_Pa"]
+        request = source_feed_request(template, dict(
+            source_key="Amundsen2009", CO2_loading=prior["loading"],
+            temperature_reported_C=T - 273.15, MEA_weight_fraction=0.30,
+        ))
+        request["temperature"]["value"] = T
+        request["pressure"] = dict(role="fixed", value=P)
+        request["phases"] = [phase for phase in request["phases"] if phase["fluid_role"] == "liquid"]
+        problem = _problem_from_request(corrected_request(request, mapping))
+        problem.feed = equilibrium.Amounts(prior["feed_mol"])
+        problem.reactions = fixed_reactions
+        solved = equilibrium.solve_equilibrium(spec.model, problem)
+        fields = ("identity", "observed") if pool else ("symbol",)
+        row = {key: prior[key] for key in ("T_K", "P_Pa", "loading", "feed_mol", *fields)}
+        row.update(available=solved.requested_tolerance_met, message=solved.message)
+        if row["available"]:
+            if pool:
+                x = solved.phase_mole_fractions(0)
+                row["carbonate_pool_split"] = x[carbonate] / (x[carbonate] + x[bicarbonate])
+            else:
+                raw, molal, *_ = equilibrium.reaction_activities(spec.model, solved)
+                row["pH"] = -molal.species.log_activities[hydrogen] / math.log(10)
+                row["raw_R1_pH"] = -raw.species.log_activities[hydrogen] / math.log(10)
+                if row["symbol"] is not None:
+                    row["model_minus_electrode_pH"] = row["pH"] - row["symbol"]["pH"]
+        yield row
+
+
+def write_reported_property_summary():
+    wheel = verify()
+    declaration = FIT_SETS["reported"]
+    point, selection = retained_endpoint(declaration)
+    fit_path = declaration["retained"] / f'{selection["selected"]}.json.gz'
+    fit = read(fit_path)
+    spec = route_for(declaration).bind(point)
+    activity_path = SALT_FIT / "q5.json"
+    retained = read(activity_path)["result"]
+    activities = list(activity_rows(spec, retained["rows"]))
+    pool = list(activity_rows(spec, retained["carbonate_pool_comparison"], pool=True))
+
+    rows = fit["replay"]["rows"]
+    diagnostic = fit["diagnostics"]
+    free_ids = diagnostic["uncertainty"]["free_coordinates"]
+    free = [i for i, coord in enumerate(point["coordinates"]) if coord["identity"] in free_ids]
+    jacobian = np.array(diagnostic["jacobian_bound_normalized"])[:, free]
+    responsive = np.any(jacobian != 0, axis=1)
+    ss = math.fsum(row["cost"] for row, use in zip(rows, responsive, strict=True) if use) * 2
+    variance = ss / (int(responsive.sum()) - len(free))
+    covariance = variance * np.linalg.inv(jacobian.T @ jacobian)
+    bands = [
+        dict(identity=row["identity"], value_pa=row["value"],
+             relative_se_percent=100 * math.sqrt(gradient @ covariance @ gradient / row["row"]["weight"]))
+        for row, gradient in zip(rows, jacobian, strict=True)
+        if row["group"] == "common149" and row["basis"]["kind"] == "partial_pressure"
+    ]
+    cai = {
+        kind: dict(count=len(group), cost=math.fsum(row["cost"] for row in group))
+        for kind in ("temperature", "mole_fraction")
+        if (group := [row for row in rows if row["group"] == "Cai" and row["basis"]["kind"] == kind])
+    }
+    save(ROOT / "analyses/amines/results/mea/reported/properties/uncertainty-and-activities.json.gz", dict(
+        wheel=wheel, endpoint_fingerprint=selection["endpoint_fingerprint"],
+        inputs=[path.relative_to(ROOT).as_posix() for path in (fit_path, activity_path)],
+        objective=fit["replay"]["cost"], cai=cai, variance=variance,
+        raw_row_variance=diagnostic["uncertainty"]["residual_variance"],
+        responsive=int(responsive.sum()), fitted_pressure_bands=bands,
+        activity_rows=activities, carbonate_pool=pool,
+    ))
 
 
 def absolute_shares(rows):
