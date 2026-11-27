@@ -4,8 +4,7 @@
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the amine content is the amine mass fraction of the unloaded solution, written in wt\%.
 \emph{Fitted} means that an observation enters the objective of the reported fit, and \emph{not fitted} that it is outside that objective.
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
-Every observation was examined during model development, so no comparison in this paper is an independent validation or a blind test.
-\Cref{tab:mea-data} lists the MEA data with their roles and deviations, and \cref{tab:transfer-deviations} those of DEA, MDEA and AMP.
+\Cref{tab:mea-data} lists the MEA data with their roles and deviations, and Table~\ref{supp-tab:transfer-deviations} those of DEA, MDEA and AMP.
 The objectives contain \res{mea-objective-observations-methods} observations for MEA, \res{dea-objective-observations-methods} for DEA, \res{mdea-objective-observations-methods} for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Table~\ref{supp-tab:supplement-mea-comparison} gives the MEA sets that are compared and are not pressures.
 The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it, so \res{mea-responsive-observations-methods-data} of its observations respond to the fitted parameters.
 
@@ -62,8 +61,9 @@ There the loaded total pressures contribute \res{mdea-loaded-pressures-objective
 In the MEA objective the \res{mea-cai-binary-observation-count-methods} MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the objective value, \res{mea-selected-objective-cai-weight}, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
-The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
-For MEA, DEA and AMP, fits from \res{reported-tied-start-count-methods} starts in different parts of the parameter box reach the same objective value, and the reported MDEA parameters come from start A, the MDEA start with the lowest objective value (Section~\ref{supp-sec:s-uncertainty}).
+The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
+Each fit begins from start A, the initial parameter set of that amine, and from starts drawn in other parts of the parameter box.
+For MEA, DEA and AMP, fits from \res{reported-tied-start-count-methods} starts reach the same objective value, and the reported MDEA parameters come from start A, which reaches the lowest objective value of the MDEA starts (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),
