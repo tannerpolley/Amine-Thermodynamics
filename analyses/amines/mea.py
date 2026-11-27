@@ -1885,6 +1885,140 @@ def heat_intervals(spec, mapping, templates, rows):
         yield dict(row, status=status, predicted=value, diagnostic=diagnostic)
 
 
+def reported_curves(route, point):
+    from .properties import curve_differences
+
+    spec = route.bind(point)
+    mapping = point["parameters"]
+    folder = RESULTS / "mea/reported/properties/MEA/curves"
+    packet = load_state_packet()["observations"]
+    bubble_templates = [item["request"] for item in packet if item["request"]["pressure"]["role"] == "solved"]
+    species_templates = [item["request"] for item in packet if item["identity"].startswith("Bottinger")]
+    reference = next(item["request"] for item in packet if item["identity"] == "Bottinger2008_state_046")
+
+    def fixed_reference(problem):
+        for reaction in problem.reactions:
+            reaction.reference = equilibrium.ReactionReference(reaction.reference.source_basis, reference_pressure_pa=P_REF)
+        return problem
+
+    def request(template, temperature, loading, fraction, source):
+        return corrected_request(source_feed_request(template, dict(source_key=source, CO2_loading=loading,
+            MEA_weight_fraction=fraction, temperature_reported_C=temperature - 273.15)), mapping)
+
+    chemistry = fixed_reference(_problem_from_request(request(reference, 313.15, 0.11, 0.30, "Amundsen2009")))
+    masses = {row["component_id"]: row["fixed"]["molar_mass"]["value"]["magnitude"] for row in mapping["components"]}
+    source_masses = packet[0]["request"]["reaction_system"]["molar_masses_kg_per_mol"]
+    species = {"MEA": (1,), "MEAH+": (3,), "MEACOO-": (4,), "HCO3-": (5,), "CO3^2-": (6,),
+               "CO2": (0,), "MEA + MEAH+": (1, 3), "HCO3- + CO3^2-": (5, 6)}
+
+    def liquid(T, P, water, loading):
+        return equilibrium.Problem(T=T, P=P,
+            feed=equilibrium.Amounts({"monoethanolamine": 1.0, "water": water, "carbon-dioxide": loading}),
+            phases=[equilibrium.Phase("L", kind="liquid", support=COMPONENT_IDS)],
+            reactions=chemistry.reactions, neutral_reference=chemistry.neutral_reference,
+            row_tolerance=chemistry.row_tolerance)
+
+    def solve(model, problem):
+        result = equilibrium.solve_equilibrium(model, problem)
+        if not result.requested_tolerance_met:
+            raise ValueError(result.message)
+        return result
+
+    def checked(prediction):
+        if prediction.status.name != "Available" or not prediction.requested_tolerance_met:
+            raise ValueError(prediction.message)
+        return prediction.value
+
+    @cache
+    def bubble(T, a, w):
+        if not a:
+            problem = liquid(T, 1e4, source_masses[1] * (1 - w) / (w * source_masses[2]), a)
+            problem.phases = [*problem.phases, equilibrium.Phase("V", kind="vapor", support=("monoethanolamine", "water"),
+                              amount=equilibrium.Pinned(0.0), composition_guess=(0.01, 0.99))]
+            problem.P = equilibrium.Free(1e4)
+        else:
+            problem = packet_problem(bubble_templates, T, a, w)
+        return solve(spec.model, problem)
+
+    def packet_problem(templates, T, a, w):
+        template = min(templates, key=lambda q: (abs(round(q["temperature"]["value"] - T)),
+                                               abs(q["reaction_system"]["feed_amounts_mol"][0] - a)))
+        return fixed_reference(_problem_from_request(request(template, T, a, w, "model-curve")))
+
+    cai = read(folder / "cai-declaration.json")
+    neutral = copy.deepcopy(mapping)
+    for domain in neutral["domains"]:
+        if domain["domain_id"] in cai["neutral_domain_ids"]:
+            domain.update(cai["neutral_domain"])
+    neutral_model = epcsaft.Mixture(epcsaft.Parameters.from_mapping(neutral), thermochemistry=spec.thermal)
+
+    @cache
+    def evaluate(family, T, P, a, w, x):
+        if family == "pressure":
+            result = bubble(T, a, w)
+            return {"CO2 partial pressure": result.pressure * result.phase_mole_fractions(1)[0]}, dict(pressure_Pa=result.pressure)
+        if family == "mea-water":
+            starts = sorted((r["feed"]["monoethanolamine"], r["T_K"], r["vapor_guess"]["water"])
+                            for r in cai["rows"] if r["P_Pa"] == P)
+            if not starts:
+                raise ValueError(f"Cai isobar is undeclared: {P} Pa")
+            composition, temperatures, vapor_water = zip(*starts, strict=True)
+            guess, y = float(np.interp(x, composition, temperatures)), float(np.interp(x, composition, vapor_water))
+            feed = {"water": 1 - x, "monoethanolamine": x}
+            phases = [equilibrium.Phase("L", kind="liquid", support=tuple(feed), composition_guess=feed),
+                      equilibrium.Phase("V", kind="vapor", support=tuple(feed), amount=equilibrium.Pinned(0.0),
+                                        composition_guess={"water": y, "monoethanolamine": 1 - y})]
+            problem = equilibrium.Problem(T=equilibrium.Free(guess), P=P, feed=equilibrium.Amounts(feed),
+                                          phases=phases, row_tolerance=chemistry.row_tolerance)
+            result = solve(neutral_model, problem)
+            return {"bubble temperature": result.temperature, "vapor water mole fraction": result.phase_mole_fractions(1)[2]}, dict(temperature_K=result.temperature)
+        if family == "heat":
+            water = masses["monoethanolamine"] * 0.7 / (0.3 * masses["water"])
+            item = reg.addition_enthalpy(spec.parameters, liquid(T, P, water, 0.0), liquid(T, P, water, a),
+                                        {"carbon-dioxide": 1.0}, a, T, P, phase="vapor", observed=0.0,
+                                        form="difference", scale=1000.0)
+            return {"integral heat of absorption": checked(reg.predict(spec.model, item)) / 1000.0}, {}
+        if not a:
+            problem = liquid(T, P, source_masses[1] * (1 - w) / (w * source_masses[2]), a)
+        elif family == "species":
+            problem = packet_problem(species_templates, T, a, w)
+        else:
+            loaded = request(reference, T, a, w, "Amundsen2009")
+            loaded["pressure"] = dict(role="fixed", value=P, bounds=[1.0, 1e7])
+            loaded["phases"] = [phase for phase in loaded["phases"] if phase["fluid_role"] == "liquid"]
+            problem = fixed_reference(_problem_from_request(loaded))
+        if family == "species":
+            x = solve(spec.model, problem).phase_mole_fractions(0)
+            values = {name: math.fsum(x[i] for i in indices) for name, indices in species.items()}
+        else:
+            item = reg.observation(spec.parameters, "phase_density", problem, observed=1000.0, form="difference",
+                                   scale=1.0, phase=problem.phases[0].name, mass_basis=True)
+            values = {"liquid density": checked(reg.predict(spec.model, item))}
+        pressure = bubble(T, a, w).pressure
+        return values, dict(bubble_pressure_Pa=pressure, below_bubble_pressure=P < pressure)
+
+    fresh, differences = {}, {}
+    for path in sorted(folder.glob("*.json.gz")):
+        family = path.name.removesuffix(".json.gz")
+        retained = read(path)["rows"]
+        fields = ("temperature_K", "pressure_Pa", "analytical_loading", "mea_mass_fraction", "liquid_mea_mole_fraction")
+        fresh[family] = []
+        for row in retained:
+            T, P, a, w, x = (row.get(key) for key in fields)
+            item = {key: row[key] for key in ("curve", "sampling", "quantity", "unit", *fields) if key in row}
+            try:
+                values, updates = evaluate(family, None if family == "mea-water" else T,
+                                           None if family == "pressure" else P, a, w, x)
+                item.update(value=values[row["quantity"]], status="available", requested_tolerance_met=True, **updates)
+            except (ValueError, RuntimeError) as error:
+                item.update(value=None, status="unavailable", cause=f"{type(error).__name__}: {error}")
+            fresh[family].append(item)
+        coordinates = tuple(key for key in fields if key != ("temperature_K" if family == "mea-water" else "pressure_Pa"))
+        differences[family] = curve_differences(retained, fresh[family],
+            lambda row: (row["curve"], row["sampling"], row["quantity"], *(row.get(key) for key in coordinates)))
+    return dict(curves=fresh, curve_differences=differences)
+
+
 def band_statistics(points):
     groups = {}
     for row in points:

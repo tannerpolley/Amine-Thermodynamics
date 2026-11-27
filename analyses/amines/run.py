@@ -53,6 +53,7 @@ def main():
             record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
         else:
             record = properties.property_rows(route, point)
+            record.update(properties.reported_curves(args.amine, route, point))
         record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
     path = target / name
     fit.save(path, record)

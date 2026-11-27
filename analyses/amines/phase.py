@@ -1,12 +1,14 @@
 """Declared phase requests and classification of the existing search evidence."""
 
 import copy
+from collections import Counter
 from collections.abc import Mapping
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import get_context
 import json
 import math
 import os
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -664,6 +666,159 @@ def _search(state):
     return native_search(_route, _spec, state, supplied=_supplied)
 
 
+def measured_search(spec, row, bank):
+    """Re-evaluate the recorded absolute-pressure request and its trial bank."""
+    verify()
+    ids = spec.parameters.component_ids
+    template = next(problem for problem in spec.problems.values() if len(problem.phases) == 2)
+    liquid = eq.Phase("L", kind="liquid", support=ids)
+    vapor = eq.Phase("V", kind="vapor", support=ids[:3], amount=eq.Pinned(0.0))
+    T, P = row["T_K"], row["P_Pa"]
+    basis = dict(identity=row["identity"], T_K=T, P_Pa=P, feed_mol=row["feed_mol"])
+    problem = eq.Problem(T=T, P=eq.Free(1e5), feed=eq.Amounts(row["feed_mol"]),
+                         reactions=template.reactions, neutral_reference=template.neutral_reference,
+                         row_tolerance=row["row_tolerance"], phases=[liquid, vapor])
+    try:
+        bubble = eq.solve_equilibrium(spec.model, problem)
+        if not bubble.requested_tolerance_met:
+            raise ValueError("Candidate bubble: " + bubble.message)
+        problem.P = P
+        liquid.composition_guess = list(bubble.phase_mole_fractions(0))
+        liquid.packing_guess = bubble.packing_fractions[0]
+        liquid_parent = P >= bubble.pressure
+        if liquid_parent:
+            problem.phases = [liquid]
+        else:
+            vapor.amount = eq.Free()
+            vapor.composition_guess = {species: bubble.phase_mole_fractions(1)[i] for i, species in enumerate(ids[:3])}
+            vapor.packing_guess = bubble.packing_fractions[1]
+            problem.phases = [liquid, vapor]
+        basis.update(bubble_Pa=bubble.pressure, declared_parent="liquid" if liquid_parent else "liquid-vapour")
+        parent = eq.solve_equilibrium(spec.model, problem)
+        if not parent.requested_tolerance_met or min(parent.amounts) <= 0:
+            raise ValueError(parent.message)
+        native = problem._native(spec.parameters)
+        closure = physical(spec, native, parent)
+        # The retained measured-pressure campaign normalized its pressure residual by P.
+        closure["physical_checks_pass"] = all(
+            max(abs(phase["relative_pressure_residual"]), abs(phase["charge_residual"]),
+                abs(phase["normalization_residual"])) <= native.row_tolerance
+            for phase in closure["phases"]
+        ) and max(map(abs, closure["balances"]["scaled_element_residual"].values())) <= native.row_tolerance
+        compiled = eq.compile_problem(spec.model, problem)
+        options = eq.StabilityOptions()
+        options.mode = type(options.mode).Full
+        optimized = eq.stability_test(compiled, parent, options)
+
+        inventory = [math.fsum(n * parent.phase_mole_fractions(i)[j] for i, n in enumerate(parent.amounts))
+                     for j in range(len(ids))]
+        amounts = dict(zip(ids, inventory, strict=True))
+        extent = 0.5 * min(amounts["carbon-dioxide"], 0.5 * amounts["monoethanolamine"])
+        change = {"carbon-dioxide": -1, "monoethanolamine": -2, "protonated-monoethanolamine": 1, "carbamate-anion": 1}
+        rich = [amount + extent * change.get(species, 0) for species, amount in amounts.items()]
+        total = math.fsum(rich)
+        fractions = [amount / total for amount in rich]
+        rho = spec.model.state(T, P=P, x=fractions, phase="liquid").molar_density
+        witness = dict(support=list(range(len(ids))), composition=fractions, kind="Liquid",
+                       packing=rho * spec.model._model.packing_fraction_coefficient(T, fractions))
+        support = set(range(len(ids))) - set(compiled.removed_species)
+        supplied = SuppliedTrials(spec, ())
+        phases, repeated, _ = supplied.applicable(SimpleNamespace(problem=native), [*bank, witness], support)
+        options = eq.StabilityOptions()
+        options.prepared_trials = eq.prepare_supplied_trials(spec.model, T, phases)
+        tested = eq.stability_test(compiled, parent, options).trials
+        counts = Counter(tested[i].evidence for i, _ in repeated)
+        descended = any(trial.resolved_descent for trial in optimized.trials) or any(
+            supplied_negative(dict(evidence=tested[i].evidence, quantities=tested[i].quantities)) for i, _ in repeated)
+        available = (closure["physical_checks_pass"] and optimized.completed and min(rich) > 0
+                     and counts["evaluated"] == len(repeated) and bool(optimized.trials))
+        return dict(basis, parent=closure, available=available, supplied_counts=dict(counts), descent=descended,
+                    cause=None if available else "Inspect parent physical checks and native and supplied trial dispositions")
+    except (ValueError, RuntimeError, IndexError, TypeError, AttributeError) as error:
+        return dict(basis, available=False, descent=False, cause=f"{type(error).__name__}: {error}")
+
+
+def _measured(row):
+    return measured_search(_spec, row, _supplied.witnesses)
+
+
+def _census(row):
+    from .mea import CENSUS_FEED
+
+    verify()
+    spec = _spec
+    T, P = row["temperature_K"], row["pressure_Pa"]
+    model, ids = spec.model, spec.parameters.component_ids
+    template = next(problem for problem in spec.problems.values() if len(problem.phases) == 2)
+    amine, water = CENSUS_FEED
+    feed = eq.Amounts({"monoethanolamine": amine, "water": water, "carbon-dioxide": row["loading"] * amine})
+    liquid = eq.Phase("L", kind="liquid", support=ids)
+    vapor = eq.Phase("V", kind="vapor", support=ids[:3])
+    problem = eq.Problem(T=T, P=P, feed=feed, phases=[liquid, vapor], reactions=template.reactions,
+                         neutral_reference=template.neutral_reference, row_tolerance=template.row_tolerance)
+    record = {key: row[key] for key in ("index", "temperature_K", "pressure_Pa", "loading")}
+    parent = eq.solve_equilibrium(model, problem)
+    liquid_problem = copy.copy(problem)
+    liquid_problem.phases = [liquid]
+    liquid_parent = eq.solve_equilibrium(model, liquid_problem)
+    if liquid_parent.success:
+        bubble_problem = copy.copy(problem)
+        bubble_problem.P = eq.Free(P)
+        bubble_problem.phases = [
+            eq.Phase("L", kind="liquid", support=ids, composition_guess=liquid_parent.phase_mole_fractions(0),
+                     packing_guess=liquid_parent.packing_fractions[0]),
+            eq.Phase("V", kind="vapor", support=ids[:3], amount=eq.Pinned(0.0)),
+        ]
+        bubble = eq.solve_equilibrium(model, bubble_problem)
+        if bubble.success:
+            criterion = bubble.convergence.criterion
+            uncertainty = bubble.pressure * max(bubble.convergence.residual, bubble.convergence.floor or 0.0,
+                                                criterion.value if criterion else 0.0)
+            record.update(bubble_pressure_Pa=bubble.pressure, pressure_uncertainty_Pa=uncertainty)
+            if P > bubble.pressure:
+                problem, parent = liquid_problem, liquid_parent
+            elif not parent.success:
+                compositions = [[bubble.phase_mole_fractions(i)[ids.index(species)] for species in phase.support]
+                                for i, phase in enumerate(problem.phases)]
+                starts = [eq.EquilibriumStart(amounts=[bubble.amounts[0] * f, bubble.amounts[0] * (1 - f)],
+                                               compositions=compositions, packing_fractions=bubble.packing_fractions)
+                          for f in (0.5, 0.9)]
+                batch = eq.solve_equilibrium_starts(model, problem, starts,
+                    eq.EquilibriumWorkLimits(attempts=2, attempt_iterations=400, iterations=800))
+                if batch.selected is not None:
+                    parent = batch.results[batch.selected]
+    record["final"] = final = dict(success=parent.success, requested_tolerance_met=parent.requested_tolerance_met)
+    if parent.success:
+        compiled = eq.compile_problem(model, problem)
+        final.update(amounts=list(parent.amounts), raw_residuals=list(compiled.evaluate(parent.coordinates).values),
+                     reduced_hessian_minimum=parent.reduced_hessian_minimum,
+                     pressure_density_derivatives=[model.state(T, rho=rho, x=parent.phase_mole_fractions(i))
+                                                   .pressure_density_derivative
+                                                   for i, rho in enumerate(parent.molar_densities)])
+        options = eq.StabilityOptions()
+        trials = copy.copy(problem)
+        trials.phases = [eq.Phase("trial-L", kind="liquid", support=ids),
+                         eq.Phase("trial-V", kind="vapor", support=ids[:3])]
+        options.trials = trials._native(model).phases
+        optimized = eq.stability_test(compiled, parent, options)
+        trials.phases = [eq.Phase("previous-split", kind=w["kind"].lower(), support=[ids[i] for i in w["support"]],
+                                  composition_guess=w["composition"], packing_guess=w["packing"])
+                         for w in _supplied.witnesses]
+        options.evaluate_supplied_trials = True
+        options.trials = trials._native(model).phases
+        supplied = eq.stability_test(compiled, parent, options)
+        record["stability"] = [dict(completed=optimized.completed, trials=[
+            dict(resolved_descent=t.resolved_descent, evidence=t.evidence, optimizer=dict(success=t.optimizer.success),
+                 phase=dict(kind=t.phase.kind.name.lower())) for t in optimized.trials
+        ], supplied_trials=[dict(evidence=t.evidence, quantities=jsonable(t.quantities)) for t in supplied.trials])]
+    record["classification"] = census_class(record)
+    for report in record.get("stability", ()):
+        trials = report["supplied_trials"]
+        report["supplied_counts"] = dict(Counter(t["evidence"] for t in trials))
+        report["supplied_trials"] = [t for t in trials if t["evidence"] != "evaluated" or supplied_negative(t)]
+    return record
+
+
 def reported_searches(amine, fit_set, route, point, target):
     from .fit import fingerprint, save
     from .model import REPORTED
@@ -714,4 +869,26 @@ def reported_searches(amine, fit_set, route, point, target):
                        for row in retained if identity(row) != identity(searches[row["key"]])]
         save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=searches))
         checks[protocol] = dict(rows=len(searches), aliases=aliases, differences=differences)
+    if amine == "mea":
+        from .records import RESULTS
+
+        folder = RESULTS / "mea/reported/phase"
+        held = [row for path in sorted((folder / "measured").glob("*.json.gz")) for row in read(path)]
+        bank = read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-registry.json")["trials"]
+        bank = [dict(witness, kind=witness["kind"].capitalize()) for witness in bank]
+        census = read(folder / "screen/census-raw.json.gz")["data"]
+        with ProcessPoolExecutor(max_workers=int(os.environ["AGENT_HEAVY_CORES"]), mp_context=get_context("fork"),
+                                 initializer=_bind_search, initargs=(route, point, bank)) as pool:
+            results = list(pool.map(_census, census, chunksize=4))
+            measured = list(pool.map(_measured, held, chunksize=4))
+        census_differences = [new["index"] for old, new in zip(census, results, strict=True)
+                              if old["classification"] != new["classification"]]
+        save(target / "census.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=results))
+        checks["census"] = dict(rows=len(results), differences=census_differences)
+        fields = ("identity", "declared_parent", "P_Pa", "T_K", "available")
+        differences = [new["identity"] for old, new in zip(held, measured, strict=True)
+                       if any(old.get(key) != new.get(key) for key in fields)
+                       or bool(old["witnesses"]) != new["descent"]]
+        save(target / "measured.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=measured))
+        checks["measured"] = dict(rows=len(measured), differences=differences)
     return dict(protocols=checks)

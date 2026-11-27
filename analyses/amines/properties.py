@@ -248,6 +248,60 @@ def curve_rows(route, point, declarations=None):
     return dict(rows=output, wheel=verify())
 
 
+def reported_curves(amine, route, point):
+    from .fit import fingerprint
+
+    folder = RESULTS / amine / "reported/properties"
+    if amine == "mea":
+        from .mea import reported_curves as mea_curves
+
+        return mea_curves(route, point)
+    if amine == "dea":
+        groups = {"Lawson", "Lawson-394K", "SeoHong", "Lal"}
+        declarations = [row for row in route.load(route.config["curve_rows"])
+                        if row["observation"]["group"] in groups]
+        retained = read(folder / "DEA/property-comparisons/selected.json.gz")["curves"]
+    elif amine == "mdea":
+        folder = folder / "curves"
+        templates = read(folder / "templates.json")
+        spec = route.bind(point)
+        observations = {(row["group"], fingerprint(row["row"])): row for role in ("fitted", "comparisons")
+                        for row in spec.inputs["observations"][role]}
+        declarations = []
+        for row in read(folder / "population.json.gz")["rows"]:
+            group = row["group"]
+            _, T, water = row["curve"].split(":")
+            source = observations[group, fingerprint(row["row"])]
+            (declared,) = templates[group].values()
+            if row["basis"] != source["basis"] or declared["template"] != "loaded-bubble":
+                raise ValueError(f"Changed curve declaration for {row['identity']}")
+            key = row["identity"] + ":problem"
+            base = spec.problems[source["problem"]]
+            bindings = dict(declared["bindings"], T=float(T), P=base.P.guess, water=float(water), alpha=row["loading"])
+            declarations.append(dict(curve=row["curve"], loading=row["loading"],
+                observation=dict(source, identity=row["identity"], problem=key, observed=row["observed"]),
+                problems={key: dict(template=declared["template"], bindings=bindings)}))
+        retained = [row for path in sorted(folder.glob("batch-*.json.gz")) for row in read(path)["rows"]]
+    else:
+        return {}
+    fresh = curve_rows(route, point, declarations)["rows"]
+    key = lambda row: (row["curve"], row["identity"], row["loading"])
+    return dict(curves=fresh, curve_differences=curve_differences(retained, fresh, key))
+
+
+def curve_differences(retained, fresh, key):
+    def signature(row):
+        value = row["value"]
+        return (row["status"], row.get("requested_tolerance_met"), (row.get("cause") or "").split(":", 1)[0],
+                row.get("unit"), None if value is None else f"{value:.4g}")
+
+    before, after = ({key(row): signature(row) for row in rows} for rows in (retained, fresh))
+    if len(before) != len(retained) or len(after) != len(fresh):
+        raise ValueError("Curve row keys are not unique")
+    return [dict(key=k, retained=before.get(k), replayed=after.get(k))
+            for k in sorted(before.keys() | after.keys(), key=repr) if before.get(k) != after.get(k)]
+
+
 def observable(kind: str, phase: int, component: int = 0, prop: object | None = None) -> object:
     kind_value = getattr(eq.SolvedStateObservableKind, kind)
     if prop is None:
