@@ -1,21 +1,15 @@
-"""Load the selected #440 endpoint and verify the installed Engine bytes."""
+"""Read the selected endpoint and verify the deposited wheel."""
 from pathlib import Path
 import sys
 
-ROOT = Path(__file__).resolve().parents[2]
-STUDY = ROOT / 'analyses/fixed_reaction_reference'
-RESULTS = STUDY / 'results'
-sys.path.insert(0, str(STUDY))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from refit import a, fingerprint, r  # noqa: E402
+from analyses.amines.fit import fingerprint as fingerprint, retained_endpoint, route_for
+from analyses.amines.records import RESULTS as RESULTS, read as read
+from analyses.amines.wheel import verify
 
 
-def endpoint(design):
-    a.study.reuse.bind_wheel()
-    r.verify()
-    selection = r.read(RESULTS / design / 'selection.json')
-    record = r.read(RESULTS / design / (selection['selected'] + '.json.gz'))
-    point = record['endpoint']
-    assert record['wheel'] == r.SHA
-    assert fingerprint(point) == selection['endpoint_fingerprint']
-    return point
+def endpoint(fit_set):
+    verify()
+    point, _ = retained_endpoint(fit_set)
+    return route_for(fit_set), point

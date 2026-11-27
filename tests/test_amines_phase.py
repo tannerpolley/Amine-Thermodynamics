@@ -2,11 +2,11 @@ from analyses.amines import dea, mdea
 from analyses.amines.fit import retained_endpoint, route_for
 from analyses.amines.phase import SuppliedTrials, measured_search_class, native_search, search_class, states
 from analyses.amines.wheel import ROOT, verify
-from MEA.common.retained_results import read
+from analyses.amines.records import RESULTS, read
 
 
 def test_classify_held_mea_measured_searches_without_solving():
-    measured = ROOT / "analyses/fixed_reaction_reference/results/E/MEA/measured"
+    measured = RESULTS / "mea/reported/phase/measured"
     rows = [row for path in sorted(measured.glob("*.json.gz")) for row in read(path)]
     assert rows
     for row in rows:
@@ -21,7 +21,7 @@ def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailabl
     spec = route.bind(point)
     key = "comparison:157:problem"
     (state,) = (q for q in states(route, spec) if q["key"] == key)
-    retained = read(design["retained"] / "screen/selected/declared/summary.json.gz")
+    retained = read(RESULTS / "mdea/reported/phase/MDEA/screen/selected/declared/summary.json.gz")
     assert retained["wheel"] == verify()
     (row,) = (q for q in retained["rows"] if q["key"] == key)
     bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
@@ -40,7 +40,7 @@ def test_dea_registry_preserves_supplied_refusal_on_original_support():
     spec = route.bind(point)
     key = "carson-2000:10:initial"
     (state,) = (q for q in states(route, spec) if q["key"] == key)
-    batches = design["retained"] / "screen/selected-registry-growth/declared/batches"
+    batches = RESULTS / "dea/reported/phase/selected-registry-growth/declared/batches"
     initial = read(batches / "0.json.gz")
     retained = read(batches / "1.json.gz")
     assert initial["wheel"] == retained["wheel"] == verify()
@@ -59,7 +59,7 @@ def test_original_mdea_cap_uses_the_saturation_predictions_refusal():
     spec = route.bind(point)
     key = "comparison:362:cap"
     (state,) = (q for q in states(route, spec) if q["key"] == key)
-    rows = read(ROOT / "analyses/round_7/results/C/salt/search-0.json.gz")
+    rows = read(RESULTS / "mdea/system-pressure/phase/search-0.json.gz")
     (row,) = (q for q in rows if q["key"] == key)
     result = native_search(route, spec, state, cap_from_prediction=True)["search"]
     assert result["status"] == row["status"] == "Exception"

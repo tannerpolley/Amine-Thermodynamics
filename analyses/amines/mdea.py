@@ -8,7 +8,7 @@ from statistics import fmean
 
 import epcsaft
 from epcsaft import equilibrium
-from MEA.common.retained_results import read
+from .records import RESULTS, input_path, read
 
 from .fit import replay_retained
 from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route, evaluate
@@ -414,7 +414,7 @@ def uyan(mdeah_kij=True):
 
 
 def kuranov_rows(path):
-    with path.open(newline="") as handle:
+    with input_path(path).open(newline="") as handle:
         return [
             {
                 "row": int(r["source_row"]),
@@ -698,7 +698,7 @@ FIT_SETS = {
     "reported": dict(
         route=MDEAWeights,
         declaration=DECLARATION,
-        retained=REPORTED / "MDEA",
+        retained=RESULTS / "mdea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=10980,
         replay_tolerance=1e-8,
@@ -706,7 +706,7 @@ FIT_SETS = {
     "slope-bound": dict(
         route=MDEAWeights,
         declaration=DECLARATION,
-        retained=REPORTED / "MDEA_slope_bound",
+        retained=RESULTS / "mdea/slope-bound/fit",
         reference_pressure_pa=P_REF,
         bound_rule="k_bound",
     ),

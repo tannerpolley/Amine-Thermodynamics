@@ -6,7 +6,7 @@ import os
 
 from .model import ROOT, parameter_mapping
 from .wheel import verify
-from MEA.common.retained_results import read
+from .records import RESULTS, read
 from MEA.solvent_specification import jsonable
 import epcsaft
 from epcsaft import regression as reg
@@ -50,7 +50,7 @@ SCALES = {0: 0.01, 1: 1e-4}
 FIT_SETS = {
     "sodium-salts": dict(
         declaration=BUNDLE / "results/selected-current-best-parameters.json",
-        retained=BUNDLE / "results/salt-anchored-435/salt",
+        retained=RESULTS / "salt/sodium-salts/fit",
         stages=(
             ("1a-sodium", "NaCl", ((NA, 0),)),
             ("1b-bicarbonate", "NaHCO3", ((HCO3, 0), (HCO3, 1))),
@@ -351,6 +351,17 @@ def replay(fit_set):
         wheel=wheel,
         rows=salt_rows(record["result"]["document"], fit_set["declaration"]),
     )
+
+
+def rows(fit_set):
+    base = fit_set["declaration"]
+    laws = {ion: (a0, NA_SLOPE if ion == NA else 0.0) for ion, a0 in HELD_A0.items()}
+    parameters = epcsaft.Parameters.from_mapping(salt_document(laws, base))
+    groups = {"NaCl": nacl_rows(parameters)}
+    groups.update((name, carbonate_rows(parameters, {name}, base=base))
+                  for name in ("NaHCO3", "Na2CO3", "mixed"))
+    return dict(wheel=verify(), rows={name: [{k: v for k, v in row.items() if k != "item"}
+                                           for row in data] for name, data in groups.items()})
 
 
 def fit(fit_set):

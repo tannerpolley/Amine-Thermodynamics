@@ -15,14 +15,19 @@ def verify():
     return _verify(getpid())
 
 
-@cache
-def _verify(pid):
+def locked_archive():
     with (ROOT / "uv.lock").open("rb") as lock:
         (package,) = (p for p in tomllib.load(lock)["package"] if p["name"] == "epcsaft")
     path = ROOT / package["source"]["path"]
     (entry,) = (w for w in package["wheels"] if w.get("filename") == path.name)
+    return path, entry["hash"]
+
+
+@cache
+def _verify(pid):
+    path, expected = locked_archive()
     digest = sha256(path.read_bytes()).hexdigest()
-    if entry["hash"] != f"sha256:{digest}":
+    if expected != f"sha256:{digest}":
         raise RuntimeError(f"Engine archive differs from uv.lock: {path}")
     module = find_spec("epcsaft")
     if module is None or module.origin is None:

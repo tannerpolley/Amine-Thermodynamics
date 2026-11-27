@@ -7,7 +7,7 @@ import math
 import epcsaft
 import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
-from MEA.common.retained_results import read
+from .records import RESULTS, input_path, read
 
 from .fit import save
 from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route
@@ -219,7 +219,7 @@ def replay_water_binary(declaration):
         dielectric_rows.append(
             dict(row, predicted=prediction.value, status=prediction.status.name)
         )
-    with declaration["heat_capacity"].open(newline="") as stream:
+    with input_path(declaration["heat_capacity"]).open(newline="") as stream:
         maham = list(csv.DictReader(stream))
     T = np.array([float(row["T_K"]) for row in maham])
     residual_cp = np.array(
@@ -369,7 +369,7 @@ FIT_SETS = {
     "reported": dict(
         route=ExpandedDEA,
         declaration=DECLARATION,
-        retained=REPORTED / "DEA",
+        retained=RESULTS / "dea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=1620,
         replay_tolerance=1e-8,

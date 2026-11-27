@@ -1,16 +1,17 @@
 """Reported fit starts, attempts, selection and replay."""
 
 import csv
+from copy import deepcopy
 import gzip
 from hashlib import sha256
 import json
 import os
 from time import monotonic
 
-from .model import replay, row_manifest, with_parameter_values
+from .model import parameter_values, replay, row_manifest, with_parameter_values
 from .properties import endpoint_diagnostics, property_rows
 from .wheel import verify
-from MEA.common.retained_results import read
+from .records import RESULTS, input_path, read
 from MEA.solvent_specification import jsonable
 
 
@@ -109,6 +110,99 @@ def rows(fit_set, declaration):
     if measured != declaration["rows"]:
         raise ValueError(f"{fit_set['retained']}: changed start-state row declarations")
     return dict(wheel=verify(), rows=measured)
+
+
+def reported_manifest(amine, fit_set, output):
+    """Bind the reported starts to the upstream endpoint reproduced in this run."""
+    from . import salt
+
+    preservation = read(RESULTS / "shared/preservation/fit-cost-budgets.json.gz")
+    declaration = manifest(fit_set)
+    budgets = {}
+    if preservation["wheel"] == declaration["wheel"]:
+        for case, record in preservation["fits"].items():
+            family, label = case.split(", ", 1)[0].split()
+            if family.lower() == amine and label in declaration["starts"]:
+                budgets[label] = [dict(entries=stage["iterations"], converged=stage["status"] == "converged")
+                                  for stage in record["new_stages"]]
+    if budgets:
+        declaration["evaluation_counts"] = budgets
+    point = deepcopy(declaration["prior_declaration"])
+    mapping = point["parameters"]
+    if amine == "mea":
+        upstream = read(output / "salt/sodium-salts/fit/summary.json.gz")
+        if upstream["wheel"] != declaration["wheel"]:
+            raise ValueError("Salt and MEA fits require the same Engine wheel")
+        values = {f"{salt.LAWS[ion]}/a{i}": upstream["laws_at_record_reference"][ion][f"a{i}"]
+                  for ion in (salt.HCO3, salt.CO3) for i in (0, 1)}
+        point["parameters"] = with_parameter_values(mapping, values)
+    else:
+        path = output / "mea/reported/fit"
+        selection = read(path / "selection.json")
+        (label,) = (name for name, attempt in selection["attempts"].items()
+                    if attempt["endpoint"] == selection["endpoint_fingerprint"])
+        donor = read(path / f"{label}.json.gz")
+        if donor["wheel"] != declaration["wheel"] or fingerprint(donor["endpoint"]) != selection["endpoint_fingerprint"]:
+            raise ValueError("The MEA donor does not match the current selection")
+        donor = donor["endpoint"]["parameters"]
+        for pair in donor["pairs"]:
+            species = {pair["component_id_a"], pair["component_id_b"]}
+            if species in ({salt.W, salt.HCO3}, {salt.W, salt.CO3}):
+                if amine != "mdea":
+                    salt.set_pair(mapping, pair["component_id_a"], pair["component_id_b"], pair["coefficients"][0])
+                elif pair not in mapping["pairs"]:
+                    raise ValueError("MDEA salt laws differ from the reproduced MEA donor")
+        values = parameter_values(donor)
+        carbamate = "component/carbamate-anion/"
+        if amine == "amp":
+            size = values[carbamate + "segment_diameter"]
+            coordinate = next(q for q in point["coordinates"] if q["identity"] == "AMPCOO-segment-diameter")
+            coordinate["bounds"][0] = size
+            coordinate["origin"] = max(coordinate["origin"], size)
+            changes = {carbamate + family: coordinate["origin"] * factor for family, _, factor in coordinate["targets"]}
+            changes["pair/carbamate-anion/water/k_ij"] = values["pair/carbamate-anion/water/k_ij"]
+        elif amine == "dea":
+            neutral, mea = "component/diethanolamine/", "component/monoethanolamine/"
+            model = parameter_values(mapping)
+            scale = model[neutral + "segment_count"] * model[neutral + "segment_diameter"]**3
+            scale /= values[mea + "segment_count"] * values[mea + "segment_diameter"]**3
+            size = scale**(1/3) * values[carbamate + "segment_diameter"]
+            changes = {carbamate + family: size for family in ("segment_diameter", "debye_huckel_diameter", "born_diameter")}
+            changes[carbamate + "packing_diameter"] = 0.88 * size
+        else:
+            changes = None
+        if changes is not None:
+            changes[carbamate + "dispersion_energy_over_k"] = values[carbamate + "dispersion_energy_over_k"]
+            point["parameters"] = with_parameter_values(mapping, changes)
+    if point != declaration["start_A_declaration"]:
+        raise ValueError(f"{amine}: reproduced donor does not recreate the reported fit declaration")
+    return declaration
+
+
+def reported_fit(fit_set, declaration, target):
+    attempts = {}
+    for label in declaration["starts"] | declaration["diagnostic_starts"]:
+        path = target / f"{label}.json.gz"
+        record = attempt(fit_set, declaration, label, path)
+        if label in declaration["starts"]:
+            attempts[label] = continue_fit(fit_set, declaration, label, path, record)
+    selection = select(declaration, attempts)
+    save(target / "selection.json", selection)
+    old, retained = retained_endpoint(fit_set)
+    if selection["selected"] is None:
+        raise ValueError("No reproduced fit met the selection criteria")
+    selected = attempts[selection["selected"]]
+    retained_attempt = read(fit_set["retained"] / f'{retained["selected"]}.json.gz')
+    row_differences, predictions = compare_rows(retained_attempt["replay"]["rows"], selected["replay"]["rows"])
+    values = parameter_values(selected["endpoint"]["parameters"])
+    return dict(
+        wheel=selection["wheel"], selected=selection["selected"], retained_selected=retained["selected"],
+        endpoint_fingerprint=selection["endpoint_fingerprint"], retained_fingerprint=fingerprint(old),
+        cost=selection["cost"], retained_cost=retained["cost"],
+        parameter_differences={key: (before, values[key]) for key, before in parameter_values(old["parameters"]).items()
+                               if before != values[key]},
+        row_differences=row_differences, prediction_differences=predictions,
+    )
 
 
 def attempt(fit_set, declaration, label, path, *, previous=None):
@@ -309,7 +403,7 @@ def replay_retained(fit_set):
         point = dict(point, parameters=with_parameter_values(
             point["parameters"], {f"component/{species}/born_diameter": read(path)["born_A"]}
         ))
-    reference_path = fit_set["reference"]
+    reference_path = input_path(fit_set["reference"])
     if reference_path.suffix == ".csv":
         with reference_path.open(newline="") as stream:
             reference = [

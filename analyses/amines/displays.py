@@ -3106,6 +3106,8 @@ def result_values():
 
     def add(name, record, key, value):
         def stage_path(locator):
+            if locator in record_paths:
+                return record_paths[locator]
             return re.sub(r"(?:analyses|data)/[^ ,;\[\]|]+",
                           lambda part: record_paths.get(normpath(part[0]), part[0]), locator)
 
@@ -6578,9 +6580,6 @@ def main():
         for path, content in outputs.items():
             if args.compare:
                 old = at_revision(path, args.compare, missing="", binary=isinstance(content, bytes))
-                if not old and path.name == "amp_reference_state.tex":
-                    original = BUNDLE / "results/reference-states-428" / path.name
-                    old = at_revision(original, args.compare)
             else:
                 old = path.read_bytes() if isinstance(content, bytes) else path.read_text()
             if isinstance(content, bytes):

@@ -1,11 +1,16 @@
 """Declared phase requests and classification of the existing search evidence."""
 
 import copy
+from collections.abc import Mapping
+from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import get_context
 import json
 import math
+import os
+
+import numpy as np
 
 from .model import calculation_declaration
-from .mea import MEARoute
 from .wheel import verify
 
 import epcsaft
@@ -114,6 +119,8 @@ def grid_axes(route, spec):
 
 
 def states(route, spec):
+    from .mea import MEARoute
+
     if isinstance(route, MEARoute):
         return route.phase_states()
     states = []
@@ -132,6 +139,8 @@ def states(route, spec):
 
 
 def stability_row(route, spec, state, scale, *, metadata=None, cap_from_prediction=False):
+    from .mea import MEARoute
+
     if isinstance(route, MEARoute):
         return route.stability_row(spec, state, scale)
     if "cap_record" in state:
@@ -502,3 +511,207 @@ def supplied_complete(counts, excluded, declared):
         and type(counts["evaluated"]) is int
         and counts["evaluated"] == declared - excluded
     )
+
+
+R = epcsaft.GAS_CONSTANT_J_PER_MOL_K
+# Match a recomputed root to the density at which the equilibrium was solved.
+DENSITY_WINDOW = math.log(1.01)
+COINCIDENCE = 1e-6
+ERROR_TERMS = ("association_energy_estimate_over_rt",
+               "feasibility_estimate_over_rt", "summation_estimate_over_rt")
+
+
+def phase(model, T, P, amounts, rho, x, formulas):
+    eos = model.state(T, rho=rho, x=x)
+    return dict(T_K=T, amount_mol=amounts, density_mol_m3=rho, x=x, pressure_Pa=eos.pressure,
+                pressure_residual_Pa=eos.pressure-P, relative_pressure_residual=(eos.pressure-P)/P, normalization_residual=math.fsum(x)-1,
+                charge_residual=math.fsum(w*f['charge'] for w, f in zip(x, formulas, strict=True)))
+
+
+def balances(feed, phases, formulas):
+    inventory = sum(p['amount_mol']*np.array(p['x']) for p in phases)
+    counts = np.array([[f.get(e, 0) for f in formulas] for e in 'CHNO'])
+    atoms = counts @ (inventory-feed)
+    scaled = atoms/(math.fsum(feed)*counts.max(axis=1))
+    return dict(element_residual_mol=dict(zip('CHNO', atoms.tolist(), strict=True)), scaled_element_residual=dict(zip('CHNO', scaled.tolist(), strict=True)))
+
+
+def scaled_pressure_error(residual, density, temperature):
+    return abs(residual)/(density*R*temperature)
+
+
+def phase_passed(p, P, tol, temperature=None):
+    residual = p['pressure_residual_Pa']
+    return (residual==p['pressure_Pa']-P and p.get('relative_pressure_residual',residual/P)==residual/P
+            and p['normalization_residual']==math.fsum(p['x'])-1
+            and max(abs(p['charge_residual']),abs(p['normalization_residual']),
+                    scaled_pressure_error(residual,p['density_mol_m3'],p.get('T_K',temperature)))<=tol)
+
+
+def phase_closure(value, pressure, tolerance, *, temperature=None):
+    return bool(value.get('phases')) and all(phase_passed(p,pressure,tolerance,temperature) for p in value['phases']) and max(
+        map(abs,value['balances']['scaled_element_residual'].values()))<=tolerance
+
+
+def physical(spec, problem, result):
+    ids = spec.parameters.component_ids
+    formulas = [spec.spec['element_formulas'][c] for c in ids]
+    T, P = result.temperature, result.pressure
+    rows = [phase(spec.model, T, P, n, rho, result.phase_mole_fractions(i), formulas)
+            for i, (n, rho) in enumerate(zip(result.amounts, result.molar_densities, strict=True))]
+    feed = problem.feed.values
+    if isinstance(feed, Mapping):
+        feed = [feed.get(component, 0.0) for component in ids]
+    residuals = balances(feed, rows, formulas)
+    checks = dict(phases=rows,balances=residuals)
+    return dict(checks,physical_checks_pass=phase_closure(checks,P,problem.row_tolerance),
+                residuals=list(result.residuals),row_tolerance=problem.row_tolerance)
+
+
+def pressure_roots(model, T, P, x, rho):
+    checks = []
+    for branch in ('liquid','vapor'):
+        try:
+            state = model.state(T, P=P, x=x, phase=branch)
+            density, residual = state.molar_density, state.pressure-P
+            checks.append(dict(requested=branch, returned=state.returned_density_branch.name.lower(), density=density,
+                               T_K=T,P_Pa=P,log_density_distance=abs(math.log(density/rho)),
+                               relative_pressure_residual=abs(residual)/P,pressure_residual_Pa=residual))
+        except Exception as error:
+            checks.append(dict(requested=branch, error=str(error)))
+    return checks
+
+
+def matched(checks, tolerance, density=None, *, T=None, P=None):
+    def pressure_passes(root):
+        temperature, pressure = root.get('T_K',T),root.get('P_Pa',P)
+        if temperature is None or pressure is None:
+            return False
+        residual = root.get('pressure_residual_Pa',root['relative_pressure_residual']*pressure)
+        return scaled_pressure_error(residual,root['density'],temperature)<=tolerance
+
+    return [r for r in checks if 'density' in r and
+            (r.get('log_density_distance',math.inf) if density is None else
+             abs(math.log(r['density']/density)))<=DENSITY_WINDOW and pressure_passes(r)]
+
+
+def distinct_phases(compositions, densities):
+    return (max(abs(a-b) for a,b in zip(*compositions,strict=True))>COINCIDENCE or
+            abs(math.log(densities[0]/densities[1]))>COINCIDENCE)
+
+
+def gibbs(compiled, result, report=None):
+    if report is None:
+        report = eq.stability_test(compiled, result)
+    phases = jsonable(report.present_phases)
+    assert len(result.amounts)==len(phases) and phases
+    return (math.fsum(n*q['g_over_rt'] for n,q in zip(result.amounts,phases,strict=True)),
+            math.fsum(n*q[k] for n,q in zip(result.amounts,phases,strict=True) for k in ERROR_TERMS))
+
+
+def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
+    compiled = eq.compile_problem(spec.model,parent)
+    support = [i for i in range(len(spec.parameters.component_ids)) if i not in compiled.removed_species]
+    phases = []
+    for i,(x,packing) in enumerate(guesses):
+        phase = type(parent.phases[0])()
+        phase.name, phase.kind, phase.support_declared = f'L{i+1}', parent.phases[0].kind, True
+        phase.support, phase.composition_guess, phase.packing_guess = support, [x[j] for j in support], packing
+        phases.append(phase)
+    original = parent.phases
+    parent.phases = phases
+    try:
+        compiled = eq.compile_problem(spec.model,parent)
+        result = eq.solve_equilibrium(spec.model,parent,start)
+    finally:
+        parent.phases = original
+    out = dict(message=result.message, requested_tolerance_met=result.requested_tolerance_met,
+               amounts_mol=list(result.amounts))
+    if inspect is not None:
+        out["diagnostics"] = inspect(compiled, result)
+    if not result.requested_tolerance_met or len(result.amounts)!=2 or min(result.amounts)<=0:
+        return dict(out, confirmed=False)
+    diagnostics = out.get('diagnostics') or {}
+    if 'physical_checks_pass' not in diagnostics:
+        diagnostics.update(physical(spec,parent,result))
+        out['diagnostics'] = diagnostics
+    phases = [list(result.phase_mole_fractions(j)) for j in range(2)]
+    densities = list(result.molar_densities)
+    distinct = distinct_phases(phases,densities)
+    report = eq.stability_test(compiled,result)
+    roots = [pressure_roots(spec.model,result.temperature,result.pressure,x,rho)
+             for x,rho in zip(phases,densities,strict=True)]
+    liquid = all(any(r['returned']=='liquid' for r in matched(check,parent.row_tolerance)) for check in roots)
+    g, error = gibbs(compiled,result,report)
+    comparison = {} if parent_g is None else dict(Gibbs_decrease_over_RT_mol=parent_g[0]-g)
+    estimated_error = error if parent_g is None else parent_g[1]+error
+    return dict(out, confirmed=diagnostics['physical_checks_pass'] and distinct and liquid and comparison.get('Gibbs_decrease_over_RT_mol',-math.inf)>estimated_error,
+                distinct=distinct, split_Gibbs_over_RT_mol=g, split_only=parent_g is None and distinct and liquid, **comparison,
+                numerical_error_over_RT_mol=estimated_error, phases=phases,
+                Gibbs_sum_over_RT_mol=g, objective_over_RT_mol=result.objective, residuals=list(result.residuals),
+                densities_mol_m3=densities, packings=list(result.packing_fractions),
+                max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)
+
+
+def _bind_search(route, point, witnesses):
+    global _route, _spec, _supplied
+    verify()
+    _route, _spec = route, route.bind(point)
+    _supplied = SuppliedTrials(_spec, witnesses) if witnesses else None
+
+
+def _search(state):
+    return native_search(_route, _spec, state, supplied=_supplied)
+
+
+def reported_searches(amine, fit_set, route, point, target):
+    from .fit import fingerprint, save
+    from .model import REPORTED
+    from .records import ROOT, read
+
+    wheel, endpoint = verify(), fingerprint(point)
+    spec = route.bind(point)
+    declared = states(route, spec)
+    keys = {state["key"] for state in declared}
+    if amine == "mea":
+        record = read(REPORTED / "MEA/screen/grid.json.gz")
+        cases = [("grid", record["data"], {},
+                  read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-trials.json"))]
+    else:
+        if amine == "mdea":
+            bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
+        else:
+            bank = route.load(route.config["split_record"])
+        if amine == "amp":
+            path = ROOT / "analyses/amp_transfer/results/retransfer-344-05e94210/campaign"
+            saved = read(path / "new-witnesses.json.gz")
+            manifest = read(path / "start-0/retreat-disposition.json")
+            bank["trials"] += saved["additional"][:manifest["initial_trial_count"] - saved["initial"]]
+            design = "AMP_free" if fit_set == "reported" else "AMP_fixed"
+            domains = [(design, "selected", protocol) for protocol in ("native", "supplied")]
+        else:
+            domains = [(amine.upper(), "rebuild-441" if amine == "dea" else "selected", "declared")]
+        witnesses = bank["trials"] + bank.get("supplied_trials", [])
+        witnesses.sort(key=lambda witness: not witness.get("resolved_descent"))
+        cases = []
+        for design, lane, protocol in domains:
+            record = read(REPORTED / design / "screen" / lane / protocol / "summary.json.gz")
+            cases.append((protocol, record["rows"], record["aliases"], witnesses if protocol != "native" else []))
+    checks = {}
+    for protocol, retained, aliases, witnesses in cases:
+        if {row["key"] for row in retained} != keys:
+            raise ValueError(f"{amine} {fit_set} {protocol}: state request keys differ")
+        if record["wheel"] != wheel or record["endpoint_fingerprint"] != endpoint:
+            raise ValueError(f"{amine} {fit_set} {protocol}: phase baseline belongs to a different wheel or endpoint")
+        distinct = [state for state in declared if state["key"] not in aliases]
+        with ProcessPoolExecutor(max_workers=int(os.environ["AGENT_HEAVY_CORES"]), mp_context=get_context("fork"),
+                                 initializer=_bind_search, initargs=(route, point, witnesses)) as pool:
+            searches = {row["key"]: row["search"] for row in pool.map(_search, distinct, chunksize=4)}
+        searches.update({key: searches[source] for key, source in aliases.items()})
+        def identity(row):
+            return search_class(row), row.get("status"), row.get("event")
+        differences = [dict(key=row["key"], retained=identity(row), replayed=identity(searches[row["key"]]))
+                       for row in retained if identity(row) != identity(searches[row["key"]])]
+        save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=searches))
+        checks[protocol] = dict(rows=len(searches), aliases=aliases, differences=differences)
+    return dict(protocols=checks)

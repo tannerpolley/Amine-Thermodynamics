@@ -4,7 +4,7 @@ from collections import Counter, defaultdict
 from csv import DictReader
 from math import fsum, sqrt
 
-from MEA.common.retained_results import read
+from .records import RESULTS, input_path, read
 from scipy.constants import R
 
 from . import amp as amp_model, dea as dea_model, mdea
@@ -13,7 +13,6 @@ from .model import P_REF, REPORTED, ROOT
 from .phase import grid_axes, grid_states, phase_outcome
 from .wheel import verify
 
-RESULTS = ROOT / "analyses/amines/results"
 ROUND9 = "analyses/round_9/"
 ENDPOINTS = {
     "MEA": ("A", "B", "LHS-21"),
@@ -30,12 +29,12 @@ class Records:
         self.inputs = set()
 
     def read_bytes(self, name):
-        path = ROOT / name
+        path = input_path(name)
         self.inputs.add(path.relative_to(ROOT).as_posix())
         return path.read_bytes()
 
     def read(self, name):
-        path = ROOT / name
+        path = input_path(name)
         self.inputs.add(path.relative_to(ROOT).as_posix())
         return read(path)
 
@@ -379,7 +378,7 @@ def selected(s, design, path):
 def mea_search(s):
     census = selected(s, 'MEA', 'screen/census.json.gz')['data']['rows']
     grid = selected(s, 'MEA', 'screen/grid.json.gz')['data']
-    batches = sorted((REPORTED / 'E/MEA/measured').glob('*.json.gz'))
+    batches = sorted((RESULTS / 'mea/reported/phase/measured').glob('*.json.gz'))
     measured = [row for batch in batches for row in s.read(str(batch.relative_to(ROOT)))]
     liquid_counts = Counter(q['key'].split('|', 1)[0] for q in grid)
     result = dict(liquid_grid=dict(completed=sum(q['available'] for q in grid), attempted=len(grid),
@@ -468,7 +467,7 @@ def fit_attempts(s):
         admitted = initial
         pairwise = {"/".join(pair): value for pair, value in manifest['pair_rms_distances'].items()}
         replacement = f'{design}/replacement-starts.json.gz'
-        if (REPORTED / replacement).is_file():
+        if input_path(REPORTED / replacement).is_file():
             screened = s.fixed(replacement)
             extra = {key: draw['start'] for key, draw in screened['draws'].items() if draw['disposition'] == 'eligible'}
             admitted = {key: initial[key] for key in screened['accepted_original']} | extra
@@ -478,7 +477,7 @@ def fit_attempts(s):
                     pairwise[f'{name}/{other}'] = sqrt(fsum(difference) / len(difference))
         diagnostic = f'{design}/A-loose.json.gz'
         labels = list(dict.fromkeys([*initial, *admitted]))
-        if (REPORTED / diagnostic).is_file():
+        if input_path(REPORTED / diagnostic).is_file():
             labels.append(s.fixed(diagnostic)['start'])
         attempts[design], distances[design] = {}, pairwise
         for label in labels:

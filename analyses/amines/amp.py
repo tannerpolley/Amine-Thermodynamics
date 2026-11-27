@@ -6,7 +6,7 @@ import math
 import epcsaft
 import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
-from MEA.common.retained_results import read
+from .records import RESULTS, input_path, read
 
 from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
 
@@ -139,7 +139,7 @@ def relative_statistics(rows):
 
 def replay_pure_and_binary(declaration):
     reference = read(declaration["reference"])
-    with declaration["pure_rows"].open(newline="") as stream:
+    with input_path(declaration["pure_rows"]).open(newline="") as stream:
         pure, unavailable = assess_pure(
             read(declaration["pure_endpoint"]), list(csv.DictReader(stream))
         )
@@ -155,7 +155,7 @@ def replay_pure_and_binary(declaration):
             if rows[0]["kind"] == "pressure"
             else dict(n=len(rows), errors_kg_m3=[row["error_kg_m3"] for row in rows])
         )
-    with declaration["binary_rows"].open(newline="") as stream:
+    with input_path(declaration["binary_rows"]).open(newline="") as stream:
         binary_rows = list(csv.DictReader(stream))
     binary = {}
     for name, (path, keys) in declaration["binary_endpoints"].items():
@@ -355,7 +355,7 @@ FIT_SETS = {
     "reported": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
-        retained=REPORTED / "AMP_free",
+        retained=RESULTS / "amp/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=6750,
         replay_tolerance=1e-8,
@@ -363,7 +363,7 @@ FIT_SETS = {
     "fixed-slope": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
-        retained=REPORTED / "AMP_fixed",
+        retained=RESULTS / "amp/fixed-slope/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=6750,
         replay_tolerance=1e-8,

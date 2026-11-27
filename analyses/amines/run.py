@@ -1,4 +1,4 @@
-"""Replay one declared amine fit set at its retained endpoint."""
+"""Run a stage of a declared amine fit set."""
 
 import argparse
 from importlib import import_module
@@ -9,27 +9,53 @@ if not __package__:
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     __package__ = "analyses.amines"
 
-from .fit import replay_endpoint, replay_retained, save  # noqa: E402
+from . import fit, phase, properties  # noqa: E402
+from .records import ROOT  # noqa: E402
+from .wheel import verify  # noqa: E402
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
-    parser.add_argument("stage", choices=("replay",))
+    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties"))
+    parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
     module = import_module(f"{__package__}.{args.amine}")
     if args.fit_set not in module.FIT_SETS:
         parser.error(f"{args.amine} fit sets: {', '.join(module.FIT_SETS)}")
     declaration = module.FIT_SETS[args.fit_set]
-    if args.amine == "salt":
-        record = module.replay(declaration)
-    elif "archive" in declaration:
-        record = replay_retained(declaration)
+    verify()
+    target = args.output.resolve() / args.amine / args.fit_set / args.stage
+    name = "summary.json.gz"
+    if args.stage == "replay":
+        name = "endpoint.json.gz"
+        if args.amine == "salt":
+            record = module.replay(declaration)
+        elif "archive" in declaration:
+            record = fit.replay_retained(declaration)
+        else:
+            record = fit.replay_endpoint(declaration)
+    elif args.amine == "salt" and args.stage in ("rows", "fit"):
+        record = getattr(module, args.stage)(declaration)
+    elif "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
+        parser.error("This fit set is replayed on the locked wheel")
+    elif args.stage == "rows":
+        record = fit.rows(declaration, fit.manifest(declaration))
+    elif args.stage == "fit":
+        manifest = fit.reported_manifest(args.amine, declaration, args.output.resolve())
+        fit.save(target / "manifest.json.gz", manifest)
+        record = fit.reported_fit(declaration, manifest, target)
     else:
-        record = replay_endpoint(declaration)
-    path = Path(__file__).resolve().parent / "results" / args.amine / args.fit_set / args.stage / "endpoint.json.gz"
-    save(path, record)
+        point, selection = fit.retained_endpoint(declaration)
+        route = fit.route_for(declaration)
+        if args.stage == "phase":
+            record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
+        else:
+            record = properties.property_rows(route, point)
+        record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
+    path = target / name
+    fit.save(path, record)
     print(path)
 
 

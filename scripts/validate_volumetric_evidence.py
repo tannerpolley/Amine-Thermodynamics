@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
+from collections import Counter
 import argparse
 import csv
 import hashlib
@@ -186,7 +186,6 @@ def validate() -> list[str]:
     split = rows(SPLIT)
     if len(split) != 231:
         errors.append(f"volumetric split row count is {len(split)}, expected 231")
-    split_counts = Counter(row["split"] for row in split)
 
     parameter_map = rows(PARAMETER_MAP)
     active = {

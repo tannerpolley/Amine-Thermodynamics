@@ -1854,3 +1854,5 @@ The two excluded Kuranov temperatures (393.17 and 393.16 K) exceed the adopted R
 F1.json owns qualification and provenance; attempts.json and each start directory own fit results; eligibility.json owns endpoint eligibility; selection.json freezes selection before pressure scoring; pressure-scores.json and gates.json own the comparisons. No source coefficients or Engine source were changed. The historical-water calculation is retained as logs/water-coefficient-confirmation.py and its row outputs, with coefficients recoverable from Git.
 
 Execution: agent-heavy .venv/bin/python analyses/mdea_mea_workflow/scripts/continue_298.py runs the declared fits after historical confirmation; agent-heavy .venv/bin/python analyses/mdea_mea_workflow/scripts/assess_298.py runs the endpoint checks and assessments. The latter reuses retained phase calculations and applies the owner domain exclusion before freezing the selection.
+
+The scripts for this analysis are in the [archive tag](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/mdea_mea_workflow).

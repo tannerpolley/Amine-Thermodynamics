@@ -1,12 +1,12 @@
 """Replay the C1 pressure and temperature derivatives at one MEA bubble state."""
-from _inputs import RESULTS, endpoint, fingerprint, r
-from refit import MEARoute
-from reference_derivatives import worked_state
+from _inputs import RESULTS, endpoint, fingerprint, read
+from analyses.amines.mea import FIT_SETS
+from analyses.amines.properties import worked_state
 
-point = endpoint('MEA')
-retained = r.read(RESULTS / 'C1/selected-MEA.json.gz')
+route, point = endpoint(FIT_SETS['reported'])
+retained = read(RESULTS / 'shared/comparisons/properties/derivatives/selected-MEA.json.gz')
 assert retained['endpoint_fingerprint'] == fingerprint(point)
-spec = MEARoute().bind(point)
+spec = route.bind(point)
 replay = worked_state(spec, spec.model, spec.thermal, retained['observation'], retained['apparent_amine_feed_mol'])
 assert replay['center']['admitted']
 assert abs(replay['P_Pa'] - retained['P_Pa']) <= replay['P_Pa'] * 1e-10

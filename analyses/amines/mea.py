@@ -31,7 +31,7 @@ from MEA.common.mea_source_contracts import (
     EXPECTED_REACTION_CORRELATIONS,
     REACTION_CONTRACT_PATH,
 )
-from MEA.common.retained_results import read
+from .records import RESULTS, archive_paths, input_path, read
 from MEA.solvent_specification import SolventSpecification
 import epcsaft
 import numpy as np
@@ -102,7 +102,7 @@ REACTION_REFERENCE_TEMPERATURE_K = 313.15
 
 
 def source_bytes(path: Path) -> bytes:
-    data = path.read_bytes()
+    data = input_path(path).read_bytes()
     return gzip.decompress(data) if path.name.endswith(".json.gz") else data
 
 
@@ -854,9 +854,9 @@ def pressure_inputs(declaration):
         if request["pressure"]["role"] == "solved":
             series = round(request["temperature"]["value"] - 273.15)
             templates.setdefault(series, []).append((request["reaction_system"]["feed_amounts_mol"][0], request))
-    with declaration["canonical"].open(newline="") as stream:
+    with input_path(declaration["canonical"]).open(newline="") as stream:
         canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
-    with declaration["pressure_rows"].open(newline="") as stream:
+    with input_path(declaration["pressure_rows"]).open(newline="") as stream:
         population = {
             row["target"]: canonical[row["identity"].removeprefix("canonical:")] for row in csv.DictReader(stream)
         }
@@ -960,7 +960,7 @@ def off_window_pressures(spec, legacy, templates, population, reference):
 
 def replay_expanded_weights(declaration):
     templates, population = pressure_inputs(declaration)
-    with declaration["wagner"].open(newline="") as stream:
+    with input_path(declaration["wagner"]).open(newline="") as stream:
         wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
 
     cases = {}
@@ -1026,7 +1026,7 @@ def transfer_pressure_records(spec, legacy, templates, canonical, rows):
 
 def replay_restrictions(declaration):
     templates, population = pressure_inputs(declaration)
-    with declaration["statistics"].open(newline="") as stream:
+    with input_path(declaration["statistics"]).open(newline="") as stream:
         agreement = {(row["fit"], row["dataset"]): row for row in csv.DictReader(stream)}
     cases = {}
     for name in declaration["cases"]:
@@ -1041,14 +1041,14 @@ def replay_restrictions(declaration):
         additional = evaluate(spec, additional)
         original_ids = {row["identity"] for row in legacy}
         selected = {row["identity"] for row in additional}
-        with declaration["assessment"][name].open(newline="") as stream:
+        with input_path(declaration["assessment"][name]).open(newline="") as stream:
             assessment = list(csv.DictReader(stream))
         prior = [row for row in assessment if row["target"] in selected]
         held = additional
         if name == declaration["transfer_case"]:
-            with declaration["wagner"].open(newline="") as stream:
+            with input_path(declaration["wagner"]).open(newline="") as stream:
                 wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-            with declaration["canonical"].open(newline="") as stream:
+            with input_path(declaration["canonical"]).open(newline="") as stream:
                 canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
             transfers = [row for row in assessment if row["kind"] == "transfer"]
             extra = wagner_pressure_records(spec, legacy[0], templates, wagner) + list(
@@ -1377,7 +1377,7 @@ def hong_scores(rows):
 
 def replay_published_pressures(declaration):
     templates, population = pressure_inputs(declaration)
-    with declaration["wagner"].open(newline="") as stream:
+    with input_path(declaration["wagner"]).open(newline="") as stream:
         wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
     results = {}
     for label, (endpoint, path) in declaration["pressure_cases"].items():
@@ -1386,7 +1386,7 @@ def replay_published_pressures(declaration):
         spec.inputs["endpoint"] = mapping
         legacy, added = pressure_additions(spec, templates, population)
         rows = evaluate(spec, legacy + added + wagner_pressure_records(spec, legacy[0], templates, wagner))
-        with path.open(newline="") as stream:
+        with input_path(path).open(newline="") as stream:
             prior = [
                 dict(
                     identity=row["target"],
@@ -1413,11 +1413,11 @@ def replay_published_pressures(declaration):
 
 def replay_hong(declaration):
     model = Hong(declaration["endpoint"])
-    with declaration["admission"].open(newline="") as stream:
+    with input_path(declaration["admission"]).open(newline="") as stream:
         pressures = {row["record_id"]: row["pressure_Pa"] for row in csv.DictReader(stream)}
     rows = []
     for path in declaration["blocks"]:
-        with path.open(newline="") as stream:
+        with input_path(path).open(newline="") as stream:
             for record in csv.DictReader(stream):
                 row = {field: record[field] for field in ("record_id", "block", "adopted_role")}
                 for field in ("hilliard_edge", "three_model_eligible", "inside_hong_grid"):
@@ -1450,7 +1450,7 @@ def replay_hong(declaration):
         mapping = parameter_mapping(endpoint)
         spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
         spec.inputs["endpoint"] = mapping
-        with density.open(newline="") as stream:
+        with input_path(density).open(newline="") as stream:
             records = [row for row in csv.DictReader(stream) if row["id"] in identities]
         predicted = {row["identity"]: row["value"] for row in evaluate(spec, list(density_records(spec, records)))}
         predicted.update({row["identity"]: row["value"] for row in comparisons["results"][name]["rows"]})
@@ -1581,7 +1581,9 @@ def absolute_shares(rows):
 def replay_sensitivities(declaration):
     specification = declaration["specification"]
     shared_inputs = read(declaration["share_inputs"])
-    (control,) = declaration["shared_root"].glob("*/*/arm-replay-costs.json")
+    prefix = declaration["shared_root"].relative_to(ROOT).as_posix() + "/"
+    (control,) = (ROOT / path for path in archive_paths()
+                  if path.startswith(prefix) and path.endswith("/arm-replay-costs.json"))
     shared = {}
     for name in declaration["arms"]:
         folder = control.parent / name
@@ -1773,7 +1775,7 @@ def heat_capacity_records(spec, rows):
 
 
 def kim_intervals(path, pressure, ceiling):
-    with path.open(newline="") as stream:
+    with input_path(path).open(newline="") as stream:
         for row in csv.DictReader(stream):
             yield dict(
                 identity=row["record_id"],
@@ -1922,9 +1924,9 @@ def replay_temperature_bands(declaration):
     spec.inputs["endpoint"] = mapping
     fitted = {row["identity"]: row for row in replay(spec)["rows"]}
     templates, population = pressure_inputs(declaration)
-    with declaration["wagner"].open(newline="") as stream:
+    with input_path(declaration["wagner"]).open(newline="") as stream:
         wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-    with declaration["canonical"].open(newline="") as stream:
+    with input_path(declaration["canonical"]).open(newline="") as stream:
         canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
     legacy, added = pressure_additions(spec, templates, population)
     pressure = {
@@ -1932,7 +1934,7 @@ def replay_temperature_bands(declaration):
         for row in evaluate(spec, added + wagner_pressure_records(spec, legacy[0], templates, wagner))
     }
     points = []
-    with (evidence / "state-targets.csv").open(newline="") as stream:
+    with input_path((evidence / "state-targets.csv")).open(newline="") as stream:
         for row in csv.DictReader(stream):
             kind, identity = row["kind"], row["target"]
             if row["quantity"] != "pressure" or kind not in ("canonical", "wagner", "transfer"):
@@ -1992,9 +1994,9 @@ def replay_temperature_bands(declaration):
             )
         )
 
-    with (evidence / "cp.csv").open(newline="") as stream:
+    with input_path((evidence / "cp.csv")).open(newline="") as stream:
         direct_cp = list(csv.DictReader(stream))
-    with declaration["cp_source"].open(newline="") as stream:
+    with input_path(declaration["cp_source"]).open(newline="") as stream:
         cp = list(heat_capacity_records(spec, csv.DictReader(stream)))
     direct_cp_coordinates = {(float(row["T_K"]), float(row["loading"])) for row in direct_cp}
     for source, prediction in zip(cp, evaluate(spec, cp), strict=True):
@@ -2039,7 +2041,7 @@ def replay_temperature_bands(declaration):
         )
 
     heat = []
-    with (evidence / "heat.csv").open(newline="") as stream:
+    with input_path((evidence / "heat.csv")).open(newline="") as stream:
         for row in csv.DictReader(stream):
             role = "fitted" if row["role"] == "fitted" else "not fitted"
             heat.append(
@@ -2058,7 +2060,7 @@ def replay_temperature_bands(declaration):
                 )
             )
     heat_reference = read(declaration["heat_reference"])
-    with (evidence / "kim2007-heat-pathways/kim-heat.csv").open(newline="") as stream:
+    with input_path((evidence / "kim2007-heat-pathways/kim-heat.csv")).open(newline="") as stream:
         for row in csv.DictReader(stream):
             flagged = row["source_inconsistent"] == "True" or row["first_120"] == "True"
             heat.append(
@@ -2166,7 +2168,7 @@ def replay_part1(declaration):
     liquid_basis = _problem_from_request(corrected_request(loaded_template, mapping))
     groups = {}
     heat = []
-    with tarfile.open(declaration["assessment"]) as archive:
+    with tarfile.open(input_path(declaration["assessment"])) as archive:
         for entry in sorted(archive.getmembers(), key=lambda entry: entry.name.startswith("declared-density-rows/")):
             kind = entry.name.split("/", 1)[0]
             if not entry.isfile() or kind not in (
@@ -2315,7 +2317,7 @@ def replay_part1(declaration):
     groups["Species ratios"] = [
         dict(row, predicted=row["value"], retained=retained_ratios[row["identity"]]["value"]) for row in ratios
     ]
-    with declaration["cp_source"].open(newline="") as stream:
+    with input_path(declaration["cp_source"]).open(newline="") as stream:
         records = list(heat_capacity_records(spec, csv.DictReader(stream)))
     retained_cp = {row["identity"]: row for row in read(declaration["broad_cp"])["rows"]}
     for record, result in zip(records, evaluate(spec, records), strict=True):
@@ -2538,7 +2540,7 @@ FIT_SETS = {
     "reported": dict(
         route=MEARoute,
         declaration=HISTORICAL_SPEC,
-        retained=REPORTED / "MEA",
+        retained=RESULTS / "mea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=2700,
         replay_tolerance=1e-10,

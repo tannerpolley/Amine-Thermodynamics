@@ -2,7 +2,6 @@
 
 import concurrent.futures
 import copy
-import gzip
 from hashlib import sha256
 import json
 import math
@@ -44,7 +43,7 @@ def evaluate(label):
 
 def test_R1_R3_R5():
     global SPEC
-    results = ROOT / "analyses/fixed_reaction_reference/results"
+    results = ROOT / "analyses/amines/results/mdea/historical/properties"
     diagnosis = json.loads((results / "R1-R3-R5.json").read_text())
     basis = diagnosis["water_caloric_basis"]
     assert sha256((ROOT / basis["path"]).read_bytes()).hexdigest() == basis["caloric_record_sha256"]
@@ -82,8 +81,6 @@ def test_R1_R3_R5():
     result["wheel"] = diagnosis["wheel"]
     result["water_caloric_basis"] = {k: basis[k] for k in ("caloric_record_commit", "caloric_record_sha256")}
 
-    encoded = (json.dumps(result, indent=2, allow_nan=False) + "\n").encode()
-    (results / "R1-R3-R5-current-water.json.gz").write_bytes(gzip.compress(encoded, mtime=0))
     for gate in ("R1", "R5"):
         check = result[gate]
         assert check["first_discrepancy"] is None, f"{gate} first residual discrepancy {check['first_discrepancy']}"
@@ -155,7 +152,6 @@ def test_reaction_coordinate_equivalence(kind):
             )
         )
     print(kind, results)
-    (AN / f"results/{kind}-check.json").write_text(json.dumps(results, indent=2) + "\n")
 
 
 def test_nonfinite_split_is_unresolved(monkeypatch, tmp_path):

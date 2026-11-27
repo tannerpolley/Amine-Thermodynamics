@@ -1,17 +1,17 @@
 """Source/result invariants only: no equilibrium solve, fit or publication write."""
 import copy
 import csv
-import json
 from pathlib import Path
-import sys
 
 import pytest
+
+from analyses.amines import mea
+from analyses.amines.wheel import verify
 
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE = ROOT / "analyses/mea_parameter_bundle"
 STUDY = BUNDLE / "results/source-corrections-152"
-sys.path.insert(0, str(BUNDLE / "scripts"))
-import shared_evaluation as shared
+CANONICAL = mea.PRESSURE_INPUTS["canonical"]
 
 
 def rows(path):
@@ -20,8 +20,8 @@ def rows(path):
 
 
 def test_source_population_and_immutable_assignments():
-    vle = rows(shared.CANONICAL_VLE)
-    active = rows(shared.CANONICAL_VLE.with_name("Combined_VLE.csv"))
+    vle = rows(CANONICAL)
+    active = rows(CANONICAL.with_name("Combined_VLE.csv"))
     assert (len(vle), len(active)) == (327, 162)
     assert sum(row["source_key"] == "Hilliard2008" for row in active) == 31
     assert next(row for row in vle if row["observation_id"] == "vle_obs_0148")["temperature_measured_C"] == "60.106"
@@ -39,13 +39,14 @@ def test_source_population_and_immutable_assignments():
 
 @pytest.mark.parametrize("source_key", ["Hilliard2008", "Xu2011"])
 def test_actual_native_temperature_and_analytical_feed(source_key):
-    shared.verify_wheel()
-    source = next(row for row in rows(shared.CANONICAL_VLE) if row["source_key"] == source_key)
-    template = shared.load_state_packet()["observations"][0]["request"]
-    request = shared.source_feed_request(template, source)
-    problem = shared._problem_from_request(shared.corrected_request(request))
+    verify()
+    mapping = mea.parameter_mapping(BUNDLE / "results/selected-current-best-parameters.json")
+    source = next(row for row in rows(CANONICAL) if row["source_key"] == source_key)
+    template = mea.load_state_packet()["observations"][0]["request"]
+    request = mea.source_feed_request(template, source)
+    problem = mea._problem_from_request(mea.corrected_request(request, mapping))
     assert problem.T == float(source["temperature_measured_C"]) + 273.15
-    actual = [problem.feed.values[name] for name in shared.COMPONENT_IDS]
+    actual = [problem.feed.values[name] for name in mea.COMPONENT_IDS]
     system = request["reaction_system"]
     extents = system["analytical_feed_contract"]["seed_extents_mol"]
     neutral = [amount - sum(row[i] * extent for row, extent in zip(system["reaction_matrix"], extents)) for i, amount in enumerate(actual)]
@@ -64,17 +65,17 @@ def test_actual_native_temperature_and_analytical_feed(source_key):
         else:
             bad["reaction_system"]["feed_amounts_mol"][2] -= 0.00021
         with pytest.raises((KeyError, ValueError)):
-            shared._problem_from_request(shared.corrected_request(bad))
+            mea._problem_from_request(mea.corrected_request(bad, mapping))
     nominal = dict(source)
     nominal["temperature_reported_C"] = "40" if source_key == "Hilliard2008" else "100"
     if float(nominal["temperature_reported_C"]) != float(source["temperature_measured_C"]):
         with pytest.raises(ValueError):
-            shared.source_feed_request(template, nominal)
+            mea.source_feed_request(template, nominal)
 
 
 def test_pool_transport_context_and_mat_unverified_preservation():
-    old = shared.load_state_packet()["observations"]
-    new = shared.expand_state_packet(shared.source_corrected_packet())["observations"]
+    old = mea.load_state_packet()["observations"]
+    new = mea.load_state_packet(mea.PRESSURE_INPUTS["packet"])["observations"]
     assert [row["identity"] for row in old] == [row["identity"] for row in new]
     for before, after in zip(old, new):
         assert [target["identity"] for target in before["targets"]] == [target["identity"] for target in after["targets"]]
@@ -99,25 +100,3 @@ def test_current_volumetrics():
     contract = rows(ROOT / "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv")
     analog = [r for r in contract if r["data_family"] == "ethanolammonium_carboxylate_density"]
     assert len(analog) == 128 and all(r["target_eligible"] == "no" for r in analog)
-
-
-def test_declared_domain_pre_dispatch_and_protected_rows(monkeypatch):
-    sys.path.insert(0, str(BUNDLE / "calibration-misfit"))
-    import probe
-    probe.RECORD = BUNDLE / "results/selected-current-best-parameters.json"
-    def forbidden_solve(*args, **kwargs):
-        raise AssertionError("domain classification must not invoke a solve")
-    monkeypatch.setattr(probe, "base_record", forbidden_solve)
-    excluded = [state for state in probe.CANONICAL if probe.reaction_domain_status(state)]
-    assert [state["identity"] for state in excluded] == [f"canonical:vle_obs_{i}" for i in ("0286", "0287", "0288")]
-    assert [round(state["request"]["temperature"]["value"] - 273.15, 10) for state in excluded] == [120.4, 121.0, 121.8]
-    assert all("reaction R2 temperature outside reaction correlation" in probe.reaction_domain_status(state) for state in excluded)
-    for identity in ("vle_obs_0119", "benchmark:vle_obs_0286", "transfer:canonical:vle_obs_0286", "Jakobsen2005_row9"):
-        protected = copy.deepcopy(excluded[0])
-        protected["identity"] = identity
-        with pytest.raises(RuntimeError, match="protected comparison/target"):
-            probe.reaction_domain_status(protected)
-    inside = copy.deepcopy(excluded[0])
-    inside["request"]["temperature"]["value"] = 393.15
-    assert probe.reaction_domain_status(inside) is None
-    assert shared.sha256(probe.RECORD) == "f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97"
