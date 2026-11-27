@@ -83,7 +83,6 @@ The cation--water interaction and the cation dispersion energy are almost fully 
 \subsubsection{AMP}\label{sec:results-amp}
 % P:transfer-amp-fit
 The AMP model fits \res{amp-parameter-count-results-intro} parameters (\cref{tab:amp-fitted}) to \res{amp-reported-objective-row-count-transfer} observations, among them all \res{amp-reported-loaded-pressure-count-transfer} loaded total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} and Tong et al.\ \cite{Tong2012} at 313--\SI{393}{\kelvin}, which deviate by \res{amp-fitted-pressure-aard-amp-results}\,\% (\cref{fig:amp-pressure}).
-The \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, which are not fitted, deviate about as much as those of two published models fitted to them (Table~\ref{supp-tab:supplement-published-models}).
 The fitted binary bubble pressures of AMP--water deviate by \res{amp-reported-binary-bubble-pressure-fitted-aard}\,\%, and the fitted carbamate fractions have a larger deviation than the pressures but a small bias (Table~\ref{supp-tab:transfer-deviations}).
 
 % P:transfer-amp-parameters
@@ -128,7 +127,7 @@ For MDEA the result has two parts.
 In the \COtwo-free solution the bound of \cref{sec:methods-phase} keeps the MDEA--water interaction below the calculated onset of a liquid--liquid gap at each tested temperature (\cref{fig:mdea-gap-onset}).
 The bound acts only through the tested temperatures: with the fitted temperature law extrapolated, the gap appears just above \SI{423}{\kelvin}.
 In the loaded solution no search finds a liquid--liquid split, and no grid state has a detected instability.
-At \res{mdea-distinct-descent-states-transfer} measured states the instability is toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model, for example \SI{2.57}{\mega\pascal} against \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal} at a heat-measurement state of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} in 50 wt\% MDEA at \SI{323.15}{\kelvin} and a loading of 1.10; there the model predicts partial vaporization, not a second liquid (Section~\ref{supp-sec:s-phase}).
+At \res{mdea-distinct-descent-states-transfer} measured states, four of them \COtwo-free, the instability is toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model, for example \SI{2.57}{\mega\pascal} against \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal} at a heat-measurement state of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} in 50 wt\% MDEA at \SI{323.15}{\kelvin} and a loading of 1.10; there the model predicts partial vaporization, not a second liquid (Section~\ref{supp-sec:s-phase}).
 
 \begin{figure}[pos=!htbp]
 \centering\includegraphics[width=0.5\linewidth]{mdea-gap-onset.pdf}
@@ -198,7 +197,7 @@ The fitted ion parameters are conditional on these choices, and the carbonate de
 Within the ranges of their data, the models can be used for absorber design at the accuracies reported here; these ranges of use are the following.
 The MEA model is fitted at nominal 30 wt\% MEA, and at 15 and 45 wt\% its pressures deviate more (\cref{sec:results-concentration}).
 Its absorption heats at \SI{393}{\kelvin} are low, for Kim and Svendsen on \res{mea-kim-svendsen-unflagged-hot-interval-count-limits} of their \res{mea-kim-svendsen-hot-interval-count-limits} intervals (\cref{sec:discussion-bands}), so stripper and regeneration duties calculated with it come out correspondingly low.
-The MDEA model represents the total pressures inside the fitted window of Kuranov et al.; outside it, \COtwo partial pressures at low loadings are underpredicted and pressures of concentrated MDEA above a loading of 1 are overpredicted (\cref{sec:results-mdea}), and above \SI{423}{\kelvin} its \COtwo-free solution has a calculated liquid--liquid gap (\cref{sec:results-phase}), so the model should not be used there.
+The MDEA model represents the total pressures inside the fitted window of Kuranov et al.; outside it, \COtwo partial pressures are underpredicted, most at low loadings, and pressures of concentrated MDEA above a loading of 1 are overpredicted (\cref{sec:results-mdea}), and above \SI{423}{\kelvin} its \COtwo-free solution has a calculated liquid--liquid gap (\cref{sec:results-phase}), so the model should not be used there.
 The DEA model is fitted at 20.6 and 25 wt\% DEA; at 50--54.5 wt\% it underpredicts the \COtwo partial pressures (\cref{sec:results-dea}) and should not be used without a refit.
 The shared water--anion interactions rest on a salt fit, with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), to data that end at \SI{318}{\kelvin}, so their linear laws are extrapolated to 393--\SI{394}{\kelvin} in the MEA, DEA and AMP calculations and to \SI{413}{\kelvin} only for the MDEA pressures of Kuranov et al.\ that are not fitted.
 The amine reaction correlations, R4 and R5, are evaluated outside their source temperature ranges for every amine, unlike R1--R3, and the R4 correlations of DEA and AMP are fitted.
