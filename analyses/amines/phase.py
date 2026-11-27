@@ -655,6 +655,424 @@ def coexistence(spec, parent, parent_g, guesses, *, inspect=None, start=None):
                 max_abs_equilibrium_residual=max(map(abs,result.residuals)), roots=roots)
 
 
+def dilute_vapor_connection(model, T, x, rho):
+    density = rho*np.geomspace(1e-4, 1., 33)
+    batch = model.states([T]*len(density), rho=density, x=x, derived_properties=True)
+    trace = dict(density_mol_m3=density.tolist(), pressure_Pa=batch.pressure, dP_drho=batch.pressure_density_derivative, causes=batch.cause)
+    return trace, vapor_trace_connected(trace,rho)
+
+
+def vapor_trace_connected(trace, rho):
+    pressure, density, derivative = (trace[k] for k in ('pressure_Pa','density_mol_m3','dP_drho'))
+    return (len(pressure)==len(density)==len(derivative) and density[-1]==rho
+            and all(v is not None and v>0 for v in derivative)
+            and all(b>a for a,b in zip(pressure,pressure[1:])))
+
+
+def liquid_vapor(spec, route, parent, guess, parent_g, *, incipient=False, seed=None):
+    problem = parent
+    original = parent.phases
+    pressure = type(parent.pressure).fixed(parent.pressure.value)
+    liquid = type(original[0])()
+    liquid.name, liquid.kind, liquid.support_declared = 'L', original[0].kind, True
+    liquid.support = original[0].support
+    x, packing = guess
+    liquid.composition_guess, liquid.packing_guess = [x[j] for j in liquid.support], packing
+    vapor = type(liquid)()
+    vapor.name, vapor.kind, vapor.support_declared = 'V', type(liquid.kind).Vapor, True
+    vapor.support = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
+    if incipient:
+        vapor.amount = type(vapor.amount).pinned(0.)
+        problem.pressure = type(problem.pressure).variable(problem.pressure.value)
+        if seed and seed.get('phases'):
+            liquid.composition_guess = [seed['phases'][0]['x'][j] for j in liquid.support]
+            vapor.composition_guess = [seed['phases'][1]['x'][j] for j in vapor.support]
+            liquid.packing_guess, vapor.packing_guess = seed['packings']
+    problem.phases = [liquid, vapor]
+    try:
+        result = eq.solve_equilibrium(spec.model, problem)
+        compiled = eq.compile_problem(spec.model, problem)
+    finally:
+        problem.phases, problem.pressure = original, pressure
+    out = dict(support='L+incipient V' if incipient else 'L+V', message=result.message, qualified=False,
+               T_K=result.temperature, pressure_Pa=result.pressure, amounts_mol=list(result.amounts),
+               feed_mol=list(problem.feed.values), row_tolerance=problem.row_tolerance,
+               requested_tolerance_met=result.requested_tolerance_met)
+    if result.requested_tolerance_met and len(result.amounts)==2:
+        out.update(physical(spec, problem, result), packings=list(result.packing_fractions))
+        x, rho = [row['x'] for row in out['phases']], list(result.molar_densities)
+        trace, connected = dilute_vapor_connection(spec.model, result.temperature, x[1], rho[1])
+        out.update(vapor_trace=trace, vapor_connected=connected)
+        out['qualified'] = out['physical_checks_pass'] and connected and distinct_phases(x,rho) and result.amounts[0]>0
+        if incipient:
+            out['qualified'] &= result.amounts[1]==0
+        elif out['physical_checks_pass'] and result.amounts[1]>0:
+            g, err = gibbs(compiled,result)
+            out.update(Gibbs_over_RT_mol=g, error=err)
+            out.update(Gibbs_decrease_over_RT_mol=parent_g[0]-g, numerical_error_over_RT_mol=parent_g[1]+err)
+            out['qualified'] &= out['Gibbs_decrease_over_RT_mol']>out['numerical_error_over_RT_mol']
+        else:
+            out['qualified'] = False
+    return out
+
+
+def density_branch(trials):
+    sides = {t.get('density_side') for t in trials}
+    if not sides:
+        return 'none'
+    if len(sides)>1:
+        return 'mixed'
+    return {1: 'vapor', 2: 'liquid'}.get(next(iter(sides)), 'unresolved')
+
+
+def confirm_descents(route, point, rows, states):
+    """Re-solve coexistence for the distinct state keys with a recorded descent."""
+    from .properties import marks
+
+    verify()
+
+    spec = route.bind(point)
+    by_key = {s['key']:s for s in states}
+    results, unresolved, solutions = [], [], {}
+
+    def inspect(compiled, result):
+        last[:] = [result]
+        if result.requested_tolerance_met and len(result.amounts)==2 and min(result.amounts)>0:
+            return physical(spec,parent,result)
+
+    last = []
+    for row in rows:
+        if not search_descent(row):
+            continue
+        entry = dict(key=row['key'], native_branch=row['native_branch'],
+                     supplied_branch=row['supplied_branch'], attempts=[])
+        results.append(entry)
+        try:
+            item = stability_row(route, spec, by_key[row['key']], 1.)
+            prediction = reg.predict(spec.model,item)
+            parent = item.problem
+            if prediction.pressure_reference is not None:
+                parent.pressure = type(parent.pressure).fixed(prediction.pressure_reference.value*item.pressure_ratio)
+            central = eq.solve_equilibrium(spec.model,parent)
+            if not central.requested_tolerance_met:
+                raise ValueError(central.message)
+            T,P = central.temperature,central.pressure
+            parent_x = list(central.phase_mole_fractions(0))
+            parent_roots = pressure_roots(spec.model,T,P,parent_x,central.molar_densities[0])
+            entry.update(temperature_K=T, pressure_Pa=P, feed_mol=list(parent.feed.values),
+                         parent_roots=parent_roots, outside_ranges=marks(route,T,parent),
+                         row_tolerance=parent.row_tolerance, parent=physical(spec,parent,central))
+            compiled = eq.compile_problem(spec.model,parent)
+            if not entry['parent']['physical_checks_pass']:
+                raise ValueError('Parent misses scaled closure')
+            report = eq.stability_test(compiled,central,item.stability_options)
+            parent_g = gibbs(compiled,central,report)
+            primary = (parent_x,central.packing_fractions[0])
+            entry['liquid_vapor'] = liquid_vapor(spec,route,parent,primary,parent_g)
+            guesses, supplied = [], []
+            for witness in row.get('supplied_trial_evidence',[]):
+                if not supplied_negative(witness):
+                    continue
+                phase, q = witness['phase'],witness['quantities']
+                x = phase['composition']
+                roots = pressure_roots(spec.model,T,P,x,q['molar_density_mol_m3'])
+                candidates = matched(roots,parent.row_tolerance)
+                evidence = dict(witness=witness,roots=roots)
+                supplied.append(evidence)
+                if candidates:
+                    root = min(candidates,key=lambda r:r['log_density_distance'])
+                    packing = q['packing_fraction']*root['density']/q['molar_density_mol_m3']
+                    reclosed, _, _ = SuppliedTrials(spec, ()).applicable(item,[dict(phase,packing=packing)],set(phase['support']))
+                    options = eq.StabilityOptions()
+                    options.prepared_trials = eq.prepare_supplied_trials(spec.model,T,reclosed)
+                    trial, = eq.stability_test(compiled,central,options).trials
+                    evidence.update(reclosed_evidence=trial.evidence,reclosed_quantities=jsonable(trial.quantities))
+                    if root['returned']=='liquid' and trial.evidence=='evaluated' and trial.quantities['tpd_over_rt']<0:
+                        guesses.append([primary,(x,packing)])
+            entry['supplied_pressure_roots'] = supplied
+            if report.trials:
+                native = [t for t in report.trials
+                          if t.resolved_descent and t.quantities.get('density_side')==2 and t.split_coordinates]
+                for trial in sorted(native,key=lambda t:t.quantities['split_delta_g_over_rt']):
+                    z = list(trial.split_coordinates)
+                    n = len(spec.parameters.component_ids)
+                    if len(z)==n+2+len(trial.phase.support)+2:
+                        phases = [(list(map(math.exp,z[:n])),math.exp(z[n+1])),
+                                  (list(trial.composition),math.exp(z[-1]))]
+                    else:
+                        phases = [primary,(list(trial.composition),math.exp(z[-1]))]
+                    guesses.insert(0,phases)
+            entry['liquid_directed'] = bool(guesses)
+            for guess in guesses if row['key'] not in ('weiland-1998:31:problem','lawson-1976-viii:0:problem') else []:
+                attempt = coexistence(spec,parent,parent_g,guess,inspect=inspect)
+                entry['attempts'].append(attempt)
+                if attempt['confirmed']:
+                    solutions[entry['key']] = last[0]
+                    break
+            if guesses and not any(a['confirmed'] for a in entry['attempts']):
+                unresolved.append((entry,parent,parent_g))
+        except (AssertionError, ValueError, RuntimeError) as error:
+            entry['classification_error'] = str(error)
+    for entry,parent,parent_g in sorted(unresolved,key=lambda item: item[0]['key'] in (
+            'weiland-1998:31:problem','lawson-1976-viii:0:problem')):
+        if entry['key']=='weiland-1998:31:problem':
+            target = entry['feed_mol']
+            carbon = spec.parameters.component_ids.index('carbon-dioxide')
+            other, seed = min(
+                ((r,a) for r in results if r.get('temperature_K')==entry['temperature_K']
+                 and r['feed_mol'][:carbon]+r['feed_mol'][carbon+1:]==target[:carbon]+target[carbon+1:]
+                 for a in r['attempts'] if a['confirmed']),
+                key=lambda pair: abs(pair[0]['feed_mol'][carbon]-target[carbon]))
+            start = solutions[other['key']]
+            amine = target[spec.parameters.component_ids.index(route.config['amine'])]
+            difference = target[carbon]-other['feed_mol'][carbon]
+            steps = round(abs(difference)/amine/.0025)
+            if steps <= 0 or not math.isclose(abs(difference),steps*.0025*amine,abs_tol=math.ulp(target[carbon])):
+                raise ValueError(f"Invalid DEA continuation loading step for {entry['key']}")
+            guess = list(zip(seed['phases'],seed['packings'],strict=True))
+            trace = entry['continuation'] = []
+            for i in range(1,steps+1):
+                feed = target.copy()
+                if i!=steps:
+                    feed[carbon] = other['feed_mol'][carbon]+math.copysign(i*.0025*amine,difference)
+                declared = parent.feed
+                declared.values = feed
+                parent.feed = declared
+                center = eq.solve_equilibrium(spec.model,parent)
+                if not center.requested_tolerance_met:
+                    trace.append(dict(feed_mol=feed,message=center.message))
+                    break
+                comparison = {}
+                if i==steps:
+                    comparison['comparison_parent'] = physical(spec,parent,center)
+                    if not comparison['comparison_parent']['physical_checks_pass']:
+                        trace.append(dict(feed_mol=feed,message='Comparison parent misses scaled closure',**comparison))
+                        break
+                g = gibbs(eq.compile_problem(spec.model,parent),center)
+                attempt = coexistence(spec,parent,g,guess,inspect=inspect,start=start)
+                attempt.update(feed_mol=feed,seed_from=other['key'],**comparison)
+                trace.append(attempt)
+                if not attempt['requested_tolerance_met'] or min(attempt['amounts_mol'],default=0)<=0:
+                    break
+                start = last[0]
+            if trace[-1]['feed_mol']==target and 'confirmed' in trace[-1]:
+                entry['attempts'].append(trace[-1])
+            continue
+        neighbors = sorted(
+            ((r,a) for r in results for a in r['attempts'] if a['confirmed']),
+            key=lambda pair: (abs(entry['temperature_K']-pair[0]['temperature_K']),
+                              abs(math.log(entry['pressure_Pa']/pair[0]['pressure_Pa']))),
+        )[:3]
+        if entry['key']=='lawson-1976-viii:0:problem':
+            neighbors.sort(key=lambda pair: pair[0]['key']!='weiland-1998:32:problem')
+        for other,seed in neighbors:
+            attempt = coexistence(spec,parent,parent_g,list(zip(seed['phases'],seed['packings'],strict=True)),inspect=inspect)
+            entry['attempts'].append(dict(attempt, seed_from=other['key']))
+            if attempt['confirmed']:
+                solutions[entry['key']] = last[0]
+                break
+    return results
+
+
+def trials(report):
+    return [dict(seed=t.seed, kind=t.phase.kind.name, support=list(t.phase.support), composition=list(t.composition),
+                 evidence=t.evidence, message=t.message, descent=t.resolved_descent, quantities=t.quantities,
+                 optimizer_success=t.optimizer.success, optimizer_tolerance_met=t.optimizer.requested_tolerance_met)
+            for t in report.trials]
+
+
+def fixed_control(route, spec, state, P, seed, *, mdea=False, assemblages=False):
+    item = stability_row(route, spec, state, 1.)
+    problem, model = item.problem, spec.model
+    problem.pressure = type(problem.pressure).fixed(P)
+    item.pressure_reference = None
+    result = eq.solve_equilibrium(model, problem)
+    compiled = eq.compile_problem(model, problem)
+    out = dict(T_K=result.temperature, P_Pa=P, realized_Pa=result.pressure, feed_mol=list(problem.feed.values),
+               species=list(spec.parameters.component_ids), declaration=calculation_declaration(problem),
+               status=result.message, attempts=[])
+    parent_g, guess, native, seeds = None, None, [], []
+    if result.requested_tolerance_met:
+        x, rho = list(result.phase_mole_fractions(0)), result.molar_densities[0]
+        guess = (x, result.packing_fractions[0])
+        out.update(physical(spec, problem, result))
+        out['roots'] = pressure_roots(model, result.temperature, P, x, rho)
+        if not out['physical_checks_pass']:
+            out['instability'] = 'unresolved'
+            out['blocker'] = 'Trial-call parent misses scaled closure'
+            out['search'] = dict(completed=False,message=out['blocker'])
+            out['native_trials'] = []
+            return out
+        report = eq.stability_test(compiled,result,item.stability_options)
+        out['search'] = dict(completed=report.completed,message=report.message,available=report.completed,
+                             no_descent_in_trial_set=report.no_descent_in_trial_set)
+        parent_g = gibbs(compiled, result, report)
+        out['parent_gibbs_RT_mol'] = parent_g
+        native = trials(report)
+        seeds = [t for t in report.trials if t.resolved_descent and t.split_coordinates
+                 and t.quantities.get('density_side')==2 and len(t.phase.support)==len(x)]
+        if seed and seed.get('witness'):
+            witness = seed['witness']
+            support = set(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
+            supplied, _, _ = SuppliedTrials(spec, ()).applicable(item, [witness], support)
+            options = eq.StabilityOptions()
+            options.prepared_trials = eq.prepare_supplied_trials(model, result.temperature, supplied)
+            out['supplied'] = trials(eq.stability_test(compiled, result, options)) if supplied else []
+    out['native_trials'] = native
+    resolved = any(t['descent'] for t in native) or any(
+        supplied_negative(t) for t in out.get('supplied', []) if 'quantities' in t)
+    out['instability'] = 'resolved descent' if resolved else 'finite search, no resolved descent' if (
+        out.get('search', {}).get('no_descent_in_trial_set')) else 'unresolved' if result.requested_tolerance_met else 'unavailable'
+    pair_solution = []
+    if seed and (resolved or mdea or not assemblages):
+        attempts = [list(zip(seed['pair']['phases'], seed['pair']['packings'], strict=True))]
+        if guess is not None and not mdea:
+            for t in sorted(seeds,key=lambda t:t.quantities['split_delta_g_over_rt']):
+                z, n = t.split_coordinates, len(guess[0])
+                donor = (list(map(math.exp,z[:n])),math.exp(z[n+1])) if len(z)==2*n+4 else guess
+                attempts.append([donor,(list(t.composition),math.exp(z[-1]))])
+        def inspect(compiled, solved):
+            pair_solution[:] = compiled, solved
+            if solved.requested_tolerance_met and len(solved.amounts)==2 and min(solved.amounts)>0:
+                details = physical(spec, problem, solved)
+                return details
+
+        for index, guesses in enumerate(attempts):
+            try:
+                pair = coexistence(spec, problem, parent_g, guesses, inspect=inspect)
+                pair.update(seed='archive' if index==0 else 'native split')
+                out['attempts'].append(pair)
+                if 'phases' in pair:
+                    if mdea:
+                        pair['dilute_vapor_traces'] = [dilute_vapor_connection(model, result.temperature, x, rho)
+                                                       for x, rho in zip(pair['phases'], pair['densities_mol_m3'], strict=True)]
+                if pair['confirmed']:
+                    break
+            except (ValueError, RuntimeError) as error:
+                out['attempts'].append(dict(confirmed=False, message=str(error)))
+    distances = [t for t in native+out.get('supplied', []) if (t.get('descent') or t.get('evidence') in ('evaluated','no_resolved_descent')) and 'quantities' in t
+                 and 'tpd_over_rt' in t['quantities']]
+    out['minimum_trial'] = min(distances, key=lambda t: t['quantities']['tpd_over_rt'], default=None)
+    if (best := out['minimum_trial']) is not None:
+        out['minimum_trial_roots'] = pressure_roots(model, result.temperature, P, best['composition'],
+                                                       1/best['quantities']['volume_m3_per_mol'])
+    if resolved:
+        out['liquid_vapor'] = liquid_vapor(spec, route, problem, guess, parent_g)
+        if assemblages:
+            amp_candidates(spec, route, problem, out, pair_solution)
+    return out
+
+
+def amp_candidates(spec, route, problem, out, pair_solution):
+    model = spec.model
+    vapor = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
+    support = [i for i in range(len(spec.parameters.component_ids))
+               if i not in eq.compile_problem(model, problem).removed_species]
+    pair = next((a for a in out['attempts'] if a['confirmed']), None)
+    g, error = out['parent_gibbs_RT_mol']
+    candidates = [dict(support='L', Gibbs_over_RT_mol=g, error=error, qualified=out['physical_checks_pass']),
+                  out['liquid_vapor']]
+    out['candidates'] = candidates
+    original = problem.phases
+    pressure = type(problem.pressure).fixed(problem.pressure.value)
+
+    def make_phase(name, kind, support, guess=(None, None), pinned=False):
+        phase = type(original[0])()
+        phase.name, phase.kind = name, getattr(type(original[0].kind), kind)
+        phase.support, phase.support_declared = support, True
+        x, phase.packing_guess = guess
+        if x is not None:
+            phase.composition_guess = [x[i] for i in support]
+        if pinned:
+            phase.amount = type(phase.amount).pinned(0.)
+        return phase
+
+    variants = []
+    if pair:
+        compiled, solved = pair_solution
+        omitted = trials(eq.stability_test(compiled, solved))
+        candidates.append(dict(support='L1+L2', qualified=True, pressure_Pa=solved.pressure,
+                               Gibbs_over_RT_mol=pair['split_Gibbs_over_RT_mol'],
+                               error=pair['numerical_error_over_RT_mol']-error,
+                               amounts_mol=pair['amounts_mol'], omitted_phase_trials=omitted))
+        liquid = [make_phase(f'L{i+1}', 'Liquid', support, seed)
+                  for i, seed in enumerate(zip(pair['phases'], pair['packings'], strict=True))]
+        seed = next(t for t in out['native_trials'] if t['kind']=='Vapor' and t['seed']=='positive-neutral-base')
+        vapor_guess = (seed['composition'], None)
+        variants.append(('L1+L2+incipient V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess, pinned=True)]))
+        if any(t['kind']=='Vapor' and t['descent'] for t in omitted):
+            variants.append(('L1+L2+V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess)]))
+    else:
+        candidates.append(dict(support='L1+L2', qualified=False, message='Seeded attempts did not confirm distinct liquid roots below parent Gibbs beyond paired error.'))
+    for kind, phases in variants:
+        entry = dict(support=kind, qualified=False)
+        candidates.append(entry)
+        incipient = 'incipient' in kind
+        try:
+            problem.phases = phases
+            problem.pressure = type(pressure).variable(pressure.value) if incipient else pressure
+            solved = eq.solve_equilibrium(model, problem)
+            entry.update(message=solved.message, pressure_Pa=solved.pressure, amounts_mol=list(solved.amounts),
+                         requested_tolerance_met=solved.requested_tolerance_met)
+            if solved.requested_tolerance_met and solved.amounts:
+                entry.update(physical(spec, problem, solved))
+                roots = [pressure_roots(model, solved.temperature, solved.pressure, p['x'], p['density_mol_m3'])
+                         for p in entry['phases']]
+                entry['roots'] = roots
+                wanted = ['liquid']*(len(phases)-1)+['vapor']
+                entry['root_checks_pass'] = all(any(r['returned']==branch for r in matched(test, problem.row_tolerance))
+                                                for branch, test in zip(wanted, roots, strict=True))
+                entry['qualified'] = (entry['physical_checks_pass'] and entry['root_checks_pass']
+                                      and min(solved.amounts[:(-1 if incipient else None)])>0)
+                if not incipient:
+                    compiled = eq.compile_problem(model, problem)
+                    entry['Gibbs_over_RT_mol'], entry['error'] = gibbs(compiled, solved)
+                    entry['omitted_phase_trials'] = trials(eq.stability_test(compiled, solved))
+        except (ValueError, RuntimeError) as error:
+            entry.update(message=str(error))
+        finally:
+            problem.phases, problem.pressure = original, pressure
+    eligible = sorted((c for c in candidates if c['qualified'] and 'Gibbs_over_RT_mol' in c), key=lambda c: c['Gibbs_over_RT_mol'])
+    out['lowest_found'] = dict(scope='lowest-G feasible assemblage found among the tested supports', support=eligible[0]['support']) if eligible else None
+    out['unresolved_supports'] = [c['support'] for c in candidates if not c['qualified'] and 'incipient' not in c['support']]
+    if len(eligible)>1 and eligible[1]['Gibbs_over_RT_mol']-eligible[0]['Gibbs_over_RT_mol'] <= eligible[0]['error']+eligible[1]['error']:
+        out['lowest_found']['comparison'] = 'Gibbs difference within paired numerical error'
+    out['stable_assemblage'] = None
+
+
+def seed_state(spec, entry):
+    feed = dict(zip(spec.parameters.component_ids, entry['feed_mol'], strict=True))
+    loading = feed.pop('carbon-dioxide') / feed['methyldiethanolamine']
+    return dict(T=entry['temperature_K'], stock={c:n for c,n in feed.items() if n}, a=loading)
+
+
+def mdea_predicates(outcome, *, tolerance):
+    readback = outcome.get('reference_readback',{}).get('pair_readback',[])
+    for i,result in enumerate(outcome['attempts']):
+        diagnostics = result.get('diagnostics')
+        checks = dict(requested_tolerance=result.get('requested_tolerance_met',False),
+                      positive_amounts=len(result.get('amounts_mol',[]))==2 and min(result['amounts_mol'])>0,
+                      balances_and_phases=(result if diagnostics is None else diagnostics).get('physical_checks_pass',False),
+                      distinct=result.get('distinct',False),
+                      liquid_root=bool(result.get('roots')) and all(
+                          any(x['returned']=='liquid' for x in matched(
+                              group,tolerance,T=outcome.get('T_K'),P=outcome.get('P_Pa'))) for group in result['roots']),
+                      lowering=result.get('Gibbs_decrease_over_RT_mol',-math.inf)>result.get('numerical_error_over_RT_mol',math.inf))
+        if i < len(readback) and readback[i]:
+            checks['reaction'] = readback[i]['affinity_within_tolerance']
+            checks['interphase'] = readback[i]['charge_neutral_transfer_within_tolerance']
+        if checks['positive_amounts']:
+            result['phase_fractions'] = [v/sum(result['amounts_mol']) for v in result['amounts_mol']]
+        if result.get('phases'):
+            result['separation'] = dict(max_delta_x=max(abs(i-j) for i,j in zip(*result['phases'],strict=True)),
+                     log_density_ratio=abs(math.log(result['densities_mol_m3'][0]/result['densities_mol_m3'][1])))
+        result['acceptance'] = checks
+        result['disposition'] = ('confirmed' if all(checks.values()) else 'failed' if not checks['requested_tolerance']
+            else 'coalesced' if checks['positive_amounts'] and not checks['distinct'] else 'unresolved')
+    outcome['tolerances'] = dict(equilibrium_row=tolerance, coincidence=COINCIDENCE, log_root_matching=DENSITY_WINDOW)
+    return outcome
+
+
 def _bind_search(route, point, witnesses):
     global _route, _spec, _supplied
     verify()
@@ -674,7 +1092,7 @@ def measured_search(spec, row, bank):
     liquid = eq.Phase("L", kind="liquid", support=ids)
     vapor = eq.Phase("V", kind="vapor", support=ids[:3], amount=eq.Pinned(0.0))
     T, P = row["T_K"], row["P_Pa"]
-    basis = dict(identity=row["identity"], T_K=T, P_Pa=P, feed_mol=row["feed_mol"])
+    basis = dict(identity=row["identity"], T_K=T, P_Pa=P, feed_mol=row["feed_mol"], row_tolerance=row["row_tolerance"])
     problem = eq.Problem(T=T, P=eq.Free(1e5), feed=eq.Amounts(row["feed_mol"]),
                          reactions=template.reactions, neutral_reference=template.neutral_reference,
                          row_tolerance=row["row_tolerance"], phases=[liquid, vapor])
@@ -740,6 +1158,81 @@ def measured_search(spec, row, bank):
 
 def _measured(row):
     return measured_search(_spec, row, _supplied.witnesses)
+
+
+def compare_confirmations(retained, replayed):
+    def outcomes(rows):
+        return {row["key"]: (row["native_branch"], row["supplied_branch"],
+                             any(attempt["confirmed"] for attempt in row["attempts"])) for row in rows}
+
+    before, after = outcomes(retained), outcomes(replayed)
+    return [dict(key=key, retained=before.get(key), replayed=after.get(key))
+            for key in sorted(before.keys() | after.keys()) if before.get(key) != after.get(key)]
+
+
+def control_requests(amine, spec):
+    from .records import ROOT, read
+
+    def prior_pair(entry):
+        return next(attempt for attempt in entry["attempts"] if attempt["confirmed"])
+
+    stage = ROOT / "analyses/round_7/results"
+    if amine == "dea":
+        retained = read(stage / "F/search-outcome.json.gz")
+        for entry in retained["classifications"]:
+            if entry["key"] in retained["confirmed"]:
+                yield entry["key"], dict(problem=entry["key"]), entry["pressure_Pa"], dict(pair=prior_pair(entry)), False
+    elif amine == "mdea":
+        retained = read(stage / "C/salt/search-outcome.json.gz")
+        (entry,) = (item for item in retained["classifications"] if item["key"] in retained["confirmed"])
+        yield "204-MPa", seed_state(spec, entry), entry["pressure_Pa"], dict(pair=prior_pair(entry)), False
+        target = read(stage / "C/salt/rms-fixed-pressures.json.gz")["pressure_262_MPa"]
+        feed = target["feed"]
+        state = dict(T=target["T_K"], stock={s: amount for s, amount in feed.items() if amount and s != "carbon-dioxide"},
+                     a=feed["carbon-dioxide"] / feed["methyldiethanolamine"])
+        yield "263-MPa", state, target["P_Pa"], dict(pair=prior_pair(target)), False
+    elif amine == "amp":
+        retained = read(ROOT / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz")
+        bank = {row["key"]: row for row in retained["states"]}
+        for row in read(ROOT / "analyses/round_3/results/q1.json")["rows"]:
+            if row["pressure_basis"] != "measured pressure":
+                continue
+            entry = bank[row["key"]]
+            witness = next(t for t in entry["supplied_pressure_roots"] if supplied_negative(t["witness"]))
+            phase = dict(witness["witness"]["phase"],
+                         packing=witness.get("reclosed_quantities", witness["witness"]["quantities"])["packing_fraction"])
+            yield row["key"], dict(problem=row["key"]), row["free"]["P_Pa"], dict(pair=prior_pair(entry), witness=phase), True
+        case = read(stage / "display-replays/amp-common-pressure.json.gz")
+        pair = read(ROOT / "analyses/mea_parameter_bundle/results/reference-states-428/amp.json")["split"]
+        yield "worked-state", case["state"], case["outcomes"]["free"]["fixed"]["P_Pa"], dict(pair=pair), False
+
+
+def reported_controls(amine, design, route, spec, endpoint):
+    from .model import REPORTED
+    from .records import read
+
+    wheel = verify()
+    retained = read(REPORTED / design / "controls/A.json.gz")
+    if retained["wheel"] != wheel or retained["endpoint_fingerprint"] != endpoint:
+        raise ValueError(f"{design}: control baseline belongs to a different wheel or endpoint")
+    rows = {}
+    for key, state, pressure, seed, assemblages in control_requests(amine, spec):
+        row = dict(state=state, P_Pa=pressure, pressure_basis="retained absolute pressure")
+        rows[key] = row
+        try:
+            value = fixed_control(route, spec, state, pressure, seed, mdea=amine == "mdea", assemblages=assemblages)
+            row["value"] = mdea_predicates(value, tolerance=value["declaration"]["row_tolerance"]) if amine == "mdea" else value
+        except (AttributeError, IndexError, RuntimeError, ValueError) as error:
+            row["refusal"] = f"{type(error).__name__}: {error}"
+
+    def outcomes(data):
+        return {key: (row["state"], row["P_Pa"], phase_outcome(value := row.get("value", {})),
+                      sum(attempt["confirmed"] for attempt in value.get("attempts", []))) for key, row in data.items()}
+
+    before, after = outcomes(retained["rows"]), outcomes(rows)
+    differences = [dict(key=key, retained=before.get(key), replayed=after.get(key))
+                   for key in sorted(before.keys() | after.keys()) if before.get(key) != after.get(key)]
+    return dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=rows, differences=differences)
 
 
 def _census(row):
@@ -862,13 +1355,22 @@ def reported_searches(amine, fit_set, route, point, target):
         with ProcessPoolExecutor(max_workers=int(os.environ["AGENT_HEAVY_CORES"]), mp_context=get_context("fork"),
                                  initializer=_bind_search, initargs=(route, point, witnesses)) as pool:
             searches = {row["key"]: row["search"] for row in pool.map(_search, distinct, chunksize=4)}
+        confirmations = []
+        if "classifications" in record:
+            descents = [dict(row, key=key, native_branch=density_branch(row.get("witnesses", [])),
+                             supplied_branch=density_branch([trial["quantities"] for trial in row.get("supplied_trial_evidence", [])
+                                                             if supplied_negative(trial)]))
+                        for key, row in searches.items() if search_descent(row)]
+            confirmations = confirm_descents(route, point, descents, declared)
         searches.update({key: searches[source] for key, source in aliases.items()})
         def identity(row):
             return search_class(row), row.get("status"), row.get("event")
         differences = [dict(key=row["key"], retained=identity(row), replayed=identity(searches[row["key"]]))
                        for row in retained if identity(row) != identity(searches[row["key"]])]
-        save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=searches))
-        checks[protocol] = dict(rows=len(searches), aliases=aliases, differences=differences)
+        save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=searches,
+                                                 classifications=confirmations))
+        checks[protocol] = dict(rows=len(searches), aliases=aliases, differences=differences,
+                               confirmation_differences=compare_confirmations(record.get("classifications", []), confirmations))
     if amine == "mea":
         from .records import RESULTS
 
@@ -885,10 +1387,14 @@ def reported_searches(amine, fit_set, route, point, target):
                               if old["classification"] != new["classification"]]
         save(target / "census.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=results))
         checks["census"] = dict(rows=len(results), differences=census_differences)
-        fields = ("identity", "declared_parent", "P_Pa", "T_K", "available")
+        fields = ("identity", "declared_parent", "feed_mol", "P_Pa", "T_K", "row_tolerance", "available")
         differences = [new["identity"] for old, new in zip(held, measured, strict=True)
                        if any(old.get(key) != new.get(key) for key in fields)
                        or bool(old["witnesses"]) != new["descent"]]
         save(target / "measured.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=measured))
         checks["measured"] = dict(rows=len(measured), differences=differences)
+    else:
+        controls = reported_controls(amine, design, route, spec, endpoint)
+        save(target / "controls.json.gz", controls)
+        checks["controls"] = dict(rows=len(controls["rows"]), differences=controls["differences"])
     return dict(protocols=checks)
