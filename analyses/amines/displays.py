@@ -1189,7 +1189,7 @@ def transfer_displays(outputs):
                 r'\res{amp-reported-tong-total-pressure-aard-literature}', 'fitted', '', AMP_PUB('8.0', '9.3'))]
     main_rows, other_rows = [], []
     for block in ('not fitted', 'fitted'):
-        main_rows.append(head('Not fitted by any model' if block == 'not fitted' else 'Fitted by every model', 2))
+        main_rows.append(head('Not fitted by any listed model' if block == 'not fitted' else 'Fitted by every listed model', 2))
         gap = ''
         for label, aard, this_role, mark, published in groups:
             same = [(model, value) for model, value, r in published if r == this_role == block]
@@ -1202,7 +1202,7 @@ def transfer_displays(outputs):
             counts = f"{role_counts['fitted']} of {len(kuranov_rows)} fitted" if 'Kuranov' in label else this_role + mark
             other_rows += [[r'\addlinespace ' + label.replace(r'\textsuperscript{a}', ''), '', ''], [r'\quad This work', counts, aard],
                            *([r'\quad ' + model, r, value] for model, r, value in other)]
-    table('published-models', 'Pressure AARD of this work and of published models on observation sets that no model fitted or that every model fitted.',
+    table('published-models', 'Pressure AARD of this work and of published models on observation sets that no listed model fitted or that every listed model fitted.',
           ['Observations and model', r'{AARD (\%)}'], main_rows, [], spec=r'>{\raggedright\arraybackslash}p{0.5\linewidth}S[table-format=2.2]',
           notes=r'AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source; number of observations in parentheses. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; set I: the first of the two parameter sets of Ermatchkov et al. '
                 rf'\textsuperscript{{a}}This work fitted {role_counts["fitted"]} of the {len(kuranov_rows)} and \res{{amp-reported-tong-fitted-pressure-count-literature}} of the \res{{amp-assessment-tong-pressure-count-note}}; the published Kuranov values are matched to the {len(kuranov_rows)} by count. \textsuperscript{{b}}Used to choose the initial parameters.')
