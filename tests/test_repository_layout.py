@@ -40,7 +40,4 @@ def test_cse_layout_keeps_cas_and_retires_central_notebook():
     assert r"\documentclass[a4paper,fleqn]{cas-sc}" in main
     assert r"\graphicspath{{figures/generated/}}" in main
     assert (ROOT / "docs/scientific/latex/figures/generated").is_dir()
-    assert (
-        ROOT
-        / "analyses/reactive_epcsaft_parameter_evidence/co2_water_induced_association/scripts/generate.py"
-    ).is_file()
+    assert (ROOT / "analyses/amines/notebook.qmd").is_file()

@@ -16,8 +16,8 @@ INVENTORY = LIBRARY / "manifests" / "data_library_inventory.csv"
 MODEL_CONFIGURATIONS = LIBRARY / "manifests" / "reactive_vle_model_configurations.json"
 PARAMETER_STAGES = LIBRARY / "manifests" / "reactive_vle_parameter_stages.json"
 CROSS_VALIDATION = LIBRARY / "manifests" / "reactive_vle_cross_validation.csv"
-READINESS = ROOT / "analyses/reactive_epcsaft_parameter_evidence/results/readiness/regression_readiness_summary.json"
 SPLIT = LIBRARY / "manifests/grouped_split_manifest.csv"
+BASELINE = ROOT / "analyses/mea_parameter_bundle/results/source-corrections-152/baseline"
 ADMISSION_BASELINE = None
 INVENTORY_FIELDS = (
     "library_tier",
@@ -111,7 +111,8 @@ def _csv_rows(path: Path) -> int:
 def _classification(relative: Path) -> tuple[str, str, str]:
     parts = relative.parts
     if parts[0] == "observations":
-        return "verified_observation", "/".join(parts[:2]), "manifest_governed"
+        admission = "assessment_only" if relative.name == "Sobrino_2016_density.csv" else "manifest_governed"
+        return "verified_observation", "/".join(parts[:2]), admission
     if parts[0] == "parameters":
         return "parameter_evidence", "parameters", "manifest_governed"
     if parts[0] == "manifests":
@@ -180,7 +181,7 @@ def _domain_role(temperature_c: str) -> str:
 
 
 def baseline_directory() -> Path:
-    path = ADMISSION_BASELINE or ROOT / json.loads(READINESS.read_text())["baseline_dir"]
+    path = ADMISSION_BASELINE or BASELINE
     preflight = json.loads((path.parent / "preflight.json").read_text())
     if any(_sha256(path / name) != expected for name, expected in preflight["baseline_file_hashes"].items()):
         raise ValueError("Frozen admission baseline hash drift")
@@ -363,31 +364,6 @@ def grouped_split_rows() -> list[dict[str, str]]:
     return baseline
 
 
-def readiness_summary(cv, split, outputs) -> dict:
-    summary = json.loads(READINESS.read_text())
-    sources = set(summary["source_hashes"]) | {row["source_file"] for row in cv}
-    sources.update((LIBRARY / "observations/vapor_liquid_equilibrium" / row["source_file"]).relative_to(ROOT).as_posix() for row in _read_dicts(LIBRARY / "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"))
-    sources.update(row["source_file"] for row in _read_dicts(LIBRARY / "observations/liquid_speciation/Canonical_Combined_ChEq.csv"))
-    sources.update(path.relative_to(ROOT).as_posix() for path in baseline_directory().iterdir() if path.is_file())
-    sources.update(["data/reference/MEA/manifests/speciation_linear_coefficient_rules.csv", "data/reference/MEA/manifests/target_admission_manifest.csv", "analyses/mea_parameter_bundle/results/source-corrections-152/current-volumetric-admission.json"])
-    summary.update(source_hashes={name: _sha256(ROOT / name) for name in sorted(sources)},
-                   baseline_dir=baseline_directory().relative_to(ROOT).as_posix(), target_admission=_read_dicts(LIBRARY / "manifests/target_admission_manifest.csv"),
-                   row_counts=dict(Counter(row["target_family"] for row in split)), role_counts=dict(Counter(row["role"] for row in split)),
-                   lifecycle_counts=dict(Counter(row["lifecycle_status"] for row in split)), candidate_counts=dict(Counter(row["observable_family"] for row in cv)),
-                   executable_observation_counts={"speciation": 0, "vle_pressure": 0}, admitted_target_families=[], upstream_execution_admitted=False,
-                   capability_metadata_status="retained/unrequalified; no Engine import or capability probe",
-                   blocking_conditions={"application_admission": "Candidate views only; execution not admitted; immutable qualification/scales and source-pressure/uncertainty contracts incomplete. Calorimetry admission/path repair remains147-owned."})
-    partitions = {}
-    for row in split:
-        partitions.setdefault(row["group_id"], set()).add(row["split"])
-    summary["leakage_findings"] = sorted(group for group, assignments in partitions.items() if len(assignments) != 1)
-    summary["uncertainty_coverage"] = {"speciation_rows_with_numeric_uncertainty": 0, "vle_rows_with_reported_loading_or_pressure_uncertainty": sum(bool(row["CO2_loading_uncertainty"] or row["CO2_pressure_uncertainty"]) for row in _read_dicts(LIBRARY / "observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv"))}
-    summary["output_hashes"] = {path.relative_to(ROOT).as_posix(): hashlib.sha256(data).hexdigest() for path, data in outputs.items()}
-    summary["source_hashes"].update(summary["output_hashes"])
-    summary["split_hash"] = summary["output_hashes"][SPLIT.relative_to(ROOT).as_posix()]
-    return summary
-
-
 def write_admission_outputs(*, check=False) -> list[str]:
     cv, split = cross_validation_rows(), grouped_split_rows()
     stream = io.StringIO(newline="")
@@ -395,8 +371,6 @@ def write_admission_outputs(*, check=False) -> list[str]:
     writer.writeheader()
     writer.writerows(split)
     outputs = {CROSS_VALIDATION: cross_validation_bytes(cv), SPLIT: stream.getvalue().encode()}
-    summary = readiness_summary(cv, split, outputs)
-    outputs[READINESS] = (json.dumps(summary, indent=2, sort_keys=True) + "\n").encode()
     stale = [path.relative_to(ROOT).as_posix() for path, data in outputs.items() if check and path.read_bytes() != data]
     if not check:
         for path, data in outputs.items():

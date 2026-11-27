@@ -14,6 +14,7 @@ The historical [independent chemical temperature study](mea_parameter_bundle/res
 
 | Group | Pages |
 |:--|:--|
+| Amine study | [Fit, phase and property records](amines/notebook.qmd) |
 | MEA parameter bundle | [Overview](mea_parameter_bundle/notebook.qmd) |
 | MEA parameter studies | [A7 joint calibration](mea_parameter_bundle/joint-recalibration/index.qmd) · [High-temperature pressure](mea_parameter_bundle/high-temperature/index.qmd) · [Neutral CO₂](mea_parameter_bundle/neutral-co2/index.qmd) · [Loaded density and phase](mea_parameter_bundle/loaded-density/index.qmd) |
 | Parameter and Engine history | [Joint recalibration history](mea_parameter_bundle/joint-recalibration-history/index.qmd) · [Heat F1 predecessor](mea_parameter_bundle/heat-f1/index.qmd) · [Engine transfers](mea_parameter_bundle/engine-adoptions/index.qmd) |
@@ -21,10 +22,8 @@ The historical [independent chemical temperature study](mea_parameter_bundle/res
 | Historical formulation studies | [Neutral MEA–water fit](mea_parameter_bundle/neutral-mea-water/index.qmd) · [CO₂ dispersion and R4 calibration](mea_parameter_bundle/co2-r4-calibration/index.qmd) · [Born and permittivity study](mea_parameter_bundle/born-permittivity/index.qmd) · [Association topology analysis](mea_parameter_bundle/association-topology/index.qmd) |
 | Earlier coupled assessment | [Reaction-temperature fit](mea_parameter_bundle/reaction-temperature-fit/index.qmd) · [Calorimetry and thermal assessment](mea_parameter_bundle/calorimetry/index.qmd) · [Coupling and parameter identification](mea_parameter_bundle/coupling-and-identification/index.qmd) |
 | Historical background | [Historical ionic/speciation fit](mea_parameter_bundle/ionic-speciation-fit/index.qmd) · [Historical designs and discarded strategies](mea_parameter_bundle/historical-designs/index.qmd) |
-| Reference and comparison | [Ideal reaction-equilibrium reference](ideal_reaction_equilibrium/index.qmd) · [Matched six- and nine-species comparison](enrtl_six_species_ideal_comparison/notebook.qmd) |
 | MDEA extension | [Kuranov constant ion–water fit](mdea_kuranov_refit/notebook.qmd) |
 | Source tracing | [MEA evidence map](evidence-map.qmd) |
-| Historical and decision evidence | [Historical fixed-parameter ePC-SAFT evaluation](historical_fixed_parameter_epcsaft_evaluation/index.qmd) · [Reactive ePC-SAFT parameter evidence](reactive_epcsaft_parameter_evidence/index.qmd) |
 
 ## Folder roles for parameter development
 
@@ -35,16 +34,10 @@ accepted parameter suite:
 | Role | Folders and purpose |
 |:--|:--|
 | Parameter bundle | `mea_parameter_bundle/` — adopted parameter overview, formulation studies, coupled assessment, and historical bundle background. This is the only active parameter-development parent. |
-| Reference and comparison | `six_species_solubility_reference/`, `neutral_pcsaft_pressure_reference/`, `ideal_reaction_equilibrium/`, and `paper_validation/2015_baygi/` — source-aligned baselines and parity checks used to define or assess candidates. |
-| Historical and decision evidence | `historical_fixed_parameter_epcsaft_evaluation/`, `reactive_epcsaft_parameter_evidence/`, and `enrtl_six_species_ideal_comparison/` — completed configurations, packet-specific comparisons, and supported-negative gates. |
-| Source and input-qualification records | `film_chemistry_work_package_a/` and `speciation_evidence_harmonization/` — qualified inputs and harmonization work that feed later studies but are not parameter authorities. |
 | Retired exploration | `toybox/ionic_parameter_fit_playground/` — retained rejection record only; retain for traceability and exclude from promotion. |
 
 The remaining records are source-qualification, reference, or audit analyses without
-a hosted report. Their `README.md` and `analysis.yaml` files remain the source
-records. Six-species, neutral-pressure, Baygi, speciation-harmonization, film,
-and toybox records stay source-only; their values are linked from the pages that
-use them rather than copied into new reports.
+a hosted report. The retired studies are in the [archive tag](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses).
 
 ## Publication rules
 

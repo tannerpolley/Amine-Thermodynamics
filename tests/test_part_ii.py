@@ -90,59 +90,6 @@ def test_zero_observation_and_correlated_information():
     assert output_uncertainty(None) is None
 
 
-@pytest.mark.parametrize('source_index',[0,1])
-def test_pz_evaluated_negative_trial(source_index,monkeypatch,tmp_path):
-    """#308 Hilliard 55/56 direct-distance references, checked within native numerical error."""
-    import copy
-    import csv
-    import hashlib
-    monkeypatch.syspath_prepend(str(ROOT/'analyses/pz_transfer'))
-    import reactive as pz
-    pz.verify_wheel()
-    path = ROOT/'analyses/pz_transfer/diagnosis-308/refit-checks.json'
-    assert hashlib.sha256(path.read_bytes()).hexdigest()=='d9c7054033bb58771491900f6689ce70a345ce8f4d4d03e59722f0f821481099'
-    source = json.loads(path.read_text())['missed_dense_splits']
-    record = source['rows'][source_index]
-    row = next(r for r in csv.DictReader((pz.AN/'inputs/hilliard-d5.csv').open()) if r['row']==record['row'])
-    start = p.epcsaft.Parameters.from_mapping(pz.document())
-    chart,_ = pz.chart(start,[])
-    native = p.reg.evaluate_coordinates(start,chart,source['endpoint_optimizer'][:9],[])
-    parameters = p.epcsaft.Parameters(native.parameters,start.component_ids,start.site_ids)
-    problem = pz.pressure_problem(parameters,row,source['endpoint_optimizer'][9:])
-    model = p.epcsaft.Mixture(parameters)
-    bubble = p.eq.solve_equilibrium(model,problem)
-    assert bubble.requested_tolerance_met
-    parent = copy.copy(problem)
-    parent.P,parent.phases = bubble.pressure,[copy.copy(problem.phases[0])]
-    parent.phases[0].amount = p.eq.Free()
-    route = p.Route.__new__(p.Route)
-    registry = json.loads((ROOT/'tests/fixtures/pz-supplied-trials.json').read_text())
-    route.out, route.config, route.workers = tmp_path, dict(amine=registry['amine'],species=registry['species'],split_record=None), 1
-    route.load = lambda reference: copy.deepcopy(registry)
-    route.verify, route.bind = lambda: None, lambda point: SimpleNamespace(model=model)
-    route.stability_row = lambda spec,state,scale:p.reg.stability(parameters,parent,scale=scale)
-    route.temperature = lambda spec,state:problem.T
-    states = [dict(key='pz')]
-    measured, = p.stable.grid(None, states, registry['trials'], route=route)
-    assert len(measured['supplied_trials'])==102
-    short, = route.grid(None, states)
-    retained = route.result('split-record.json')
-    assert len(retained['trials'])==100 and all(w['resolved_descent'] for w in retained['trials'])
-    assert retained['supplied_trials']==[dict(w, density_side=None, branch='unresolved') for w in registry['trials'][-2:]]
-    trial = measured['supplied_trials'][100+source_index]
-    assert measured['supplied_available'] and trial['evidence']=='evaluated'
-    assert trial['quantities']['tpd_over_rt']==pytest.approx(record['endpoint_direct_tpd'],rel=0.,abs=trial['quantities']['descent_error_estimate_over_rt'])
-    assert not trial['resolved_descent'] and measured['witnesses']==[]
-    assert p.stable.descent(measured)
-    assert p.stable.tally([measured])['descent']==1
-    assert not measured['optimized_available'] and not measured['available']
-    assert short['supplied_trial_counts']==measured['supplied_trial_counts']
-    assert short['descent']==p.stable.descent(measured)
-    assert 'supplied_trials' not in short
-    index, lowest = min(enumerate(measured['supplied_trials']), key=lambda pair: pair[1]['quantities']['tpd_over_rt'])
-    phase = (retained['trials']+retained['supplied_trials'])[index]
-    assert dict(lowest, phase=phase) in short['supplied_trial_evidence']
-
 
 def test_run_storage_limit_preserves_replaced_file(tmp_path):
     route = p.Route.__new__(p.Route)
@@ -156,29 +103,6 @@ def test_run_storage_limit_preserves_replaced_file(tmp_path):
         route.write('search-0.json', [1])
     assert search.read_bytes()==before
 
-
-def test_search_refuses_tracked_results_folder():
-    route = p.Route.__new__(p.Route)
-    route.out = ROOT/'analyses/pz_transfer/results/retransfer-345'
-    with pytest.raises(RuntimeError, match='ignored by Git'):
-        route.grid(None, [])
-
-
-def test_timing_comparison_accepts_reused_calculations(tmp_path, monkeypatch):
-    monkeypatch.syspath_prepend(str(ROOT/'analyses/stability_search'))
-    from search_profile import compare
-
-    base, changed = tmp_path/'base', tmp_path/'changed'
-    row = dict(key='hartono-2013-y:0:problem', seconds=1., value=0.)
-    copied = dict(row, same_calculation_as='hartono-2013-y:1:problem')
-    for folder, measured in ((base, row), (changed, copied)):
-        folder.mkdir()
-        (folder/'search-0.json').write_text(json.dumps([measured]))
-        (folder/'split-record.json').write_text('{"trials": []}')
-    matching = compare(base, changed)
-    assert matching['identical'] and matching['copies']==1
-    (changed/'search-0.json').write_text(json.dumps([dict(copied, value=-.01)]))
-    assert compare(base, changed)['row_mismatch']==[row['key']]
 
 
 def test_interpolated_retreat_keeps_optimizer_evidence_separate(tmp_path):

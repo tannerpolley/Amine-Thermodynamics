@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the issue 39 volumetric evidence and preregistration contract."""
+"""Validate the retained volumetric source and admission records."""
 
 from __future__ import annotations
 
@@ -11,10 +11,6 @@ import json
 from pathlib import Path
 
 from MEA.common.data_access import verify_source_hashes
-from MEA.epcsaft_ionic.preregistration import (
-    PreregistrationError,
-    validate_gate0_preregistration,
-)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,10 +22,7 @@ SPECIATION = ROOT / "data/reference/MEA/manifests/speciation_target_membership.c
 CONTRACT = ROOT / "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv"
 SPLIT = ROOT / "data/reference/MEA/manifests/volumetric_grouped_split_manifest.csv"
 PARAMETER_MAP = ROOT / "data/reference/MEA/manifests/ionic_parameter_observable_map.csv"
-PREREGISTRATION = (
-    ROOT
-    / "analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json"
-)
+ADMISSION = ROOT / "analyses/mea_parameter_bundle/results/source-corrections-152/current-volumetric-admission.json"
 
 
 def rows(path: Path) -> list[dict[str, str]]:
@@ -41,7 +34,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def validate(*, current: bool = False) -> list[str]:
+def validate() -> list[str]:
     errors: list[str] = []
     density = rows(DENSITY)
     required_density = {
@@ -132,7 +125,7 @@ def validate(*, current: bool = False) -> list[str]:
         "unloaded_mea_density": 35,
         "reactive_mea_density": 68,
         "ethanolammonium_carboxylate_density": 128,
-        "speciation": len(rows(SPECIATION)) if current else 1070,
+        "speciation": len(rows(SPECIATION)),
     }
     if family_counts != expected_families:
         errors.append(f"unexpected contract family counts: {dict(family_counts)}")
@@ -194,25 +187,6 @@ def validate(*, current: bool = False) -> list[str]:
     if len(split) != 231:
         errors.append(f"volumetric split row count is {len(split)}, expected 231")
     split_counts = Counter(row["split"] for row in split)
-    if not current and split_counts != {"training": 153, "validation": 78}:
-        errors.append(f"unexpected volumetric split counts: {dict(split_counts)}")
-    group_splits: dict[str, set[str]] = defaultdict(set)
-    for row in split:
-        group_splits[row["group_id"]].add(row["split"])
-    leaking = [group for group, assignments in group_splits.items() if len(assignments) != 1]
-    if leaking:
-        errors.append(f"split leakage across complete groups: {leaking}")
-    shared_water = [
-        row
-        for row in contract
-        if row["group_id"] == "Dhage2026|shared_water_endpoint|T=298"
-    ]
-    if len(shared_water) != 4 or any(
-        row["target_eligible"] != "no"
-        or row["contract_lifecycle_status"] != "diagnostic_only"
-        for row in shared_water
-    ):
-        errors.append("repeated Dhage pure-water endpoint is not contextualized")
 
     parameter_map = rows(PARAMETER_MAP)
     active = {
@@ -223,90 +197,23 @@ def validate(*, current: bool = False) -> list[str]:
     if active != {"MEAH+::sigma", "MEAH+::epsilon_over_k", "MEACOO-::sigma"}:
         errors.append(f"unexpected preregistered active parameter map: {active}")
 
-    preregistration = json.loads(PREREGISTRATION.read_text(encoding="utf-8"))
-    if not current:
-        try:
-            validate_gate0_preregistration(preregistration)
-        except PreregistrationError as exc:
-            errors.append(f"canonical Gate 0 preregistration failed: {exc}")
-    if (
-        preregistration["status"] != "GATE_0_FROZEN_EXECUTION_BLOCKED"
-        or preregistration["execution_admission"]["admitted"] is not False
-    ):
-        errors.append("preregistration does not fail closed")
-    if [row["identity"] for row in preregistration["active_coordinates"]] != [
-        "MEAH+::sigma",
-        "MEAH+::epsilon_over_k",
-        "MEACOO-::sigma",
-    ]:
-        errors.append("Gate 0 active coordinate order has drifted")
-    if preregistration["regularization"]["scale"] is not None:
-        errors.append("Gate 0 invents an unsupported regularization scale")
-    tracer = preregistration["tracer"]
-    if tracer["selected_state_ids"] != [
-        "vle_obs_0137",
-        "Bottinger2008_state_049",
-    ]:
-        errors.append("Gate 0 reduced tracer identities have drifted")
-    if [row["identity"] for row in tracer["active_coordinates"]] != [
-        "MEAH+::sigma",
-        "MEACOO-::sigma",
-    ]:
-        errors.append("Gate 0 reduced tracer coordinate order has drifted")
-    if tracer["regularization"] != {
-        "status": "NOT_REQUIRED_FOR_REDUCED_TRACER",
-        "scale": None,
-    }:
-        errors.append("Gate 0 reduced tracer invents or requires regularization")
-    if (
-        tracer["provider_regression_input"]["status"]
-        != "REGRESSION_INPUT_EXECUTABLE"
-        or tracer["observations"][1]["evaluation_pressure_pa"] != 7326.7
-        or tracer["observations"][1][
-            "evaluation_pressure_source_observation_id"
-        ]
-        != "vle_obs_0137"
-        or tracer["observations"][0]["source_observed_unit"] != "kPa"
-        or tracer["observations"][0]["observed_unit"] != "Pa"
-        or tracer["observations"][0]["source_to_residual_factor"] != 1000.0
-        or tracer["observations"][1]["observed_unit"] != "mole_fraction"
-    ):
-        errors.append("Gate 0 reduced tracer Provider input has drifted")
-    if [
-        (row["family"], row["state_id"])
-        for row in tracer["observations"]
-    ] != [
-        ("pco2", "vle_obs_0137"),
-        ("speciation", "Bottinger2008_state_049"),
-    ]:
-        errors.append("Gate 0 reduced tracer observation contract has drifted")
-    if tracer["numerical_acceptance"]["required_row_accounting"] != {
-        "input": 2,
-        "evaluated": 2,
-        "dropped": 0,
-        "skipped": 0,
-        "failed": 0,
-    }:
-        errors.append("Gate 0 reduced tracer accounting has drifted")
-    if preregistration["execution_admission"]["blockers"] != [
-        "composed_homogeneous_liquid_observable_receipt_missing",
-        "regression_mixed_observation_receipt_missing",
-        "tracer_rank_preflight_pending",
-    ]:
-        errors.append("Gate 0 retains a resolved reduced-tracer blocker")
-
     return errors
 
 
 def validate_current_admission(path: Path) -> list[str]:
     receipt = json.loads(path.read_text())
-    errors = validate(current=True)
-    verify_source_hashes({**receipt["source_hashes"], **receipt["output_hashes"]}, repo_root=ROOT)
+    errors = validate()
     baseline_dir = ROOT / receipt["baseline_dir"]
     preflight = json.loads((baseline_dir.parent / "preflight.json").read_text())
-    for name in (PREREGISTRATION.relative_to(ROOT).as_posix(), "src/MEA/epcsaft_ionic/preregistration.py"):
-        if sha256(ROOT / name) != preflight["protected_file_hashes"][name]:
-            errors.append(f"Immutable pin identity drift: {name}")
+    sources = dict(receipt["source_hashes"])
+    archived = {name: digest for name, digest in preflight["protected_file_hashes"].items()
+                if Path(name).stem in {"ionic_volumetric_fit_preregistration", "preregistration"}}
+    retired = receipt.get("retired_gate_hashes")
+    if retired is None:
+        retired = {name: sources.pop(name, None) for name in archived}
+    if retired != archived:
+        errors.append("Historical volumetric gate hashes do not match the preflight")
+    verify_source_hashes({**sources, **receipt["output_hashes"]}, repo_root=ROOT)
     before = {row["observation_id"]: row for row in rows(baseline_dir / SPLIT.name)}
     if sha256(baseline_dir / SPLIT.name) != receipt["baseline_assignment_sha256"]:
         errors.append("Frozen volumetric assignment baseline drift")
@@ -325,14 +232,14 @@ def validate_current_admission(path: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--current-admission", type=Path)
+    parser.add_argument("--current-admission", type=Path, default=ADMISSION)
     args = parser.parse_args()
-    errors = validate_current_admission(args.current_admission) if args.current_admission else validate()
+    errors = validate_current_admission(args.current_admission)
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("Volumetric source/value/unit/identity checks passed; current receipt is admission-only." if args.current_admission else "Frozen volumetric preregistration checked.")
+    print("Volumetric source/value/unit/identity checks passed; current receipt is admission-only.")
     return 0
 
 

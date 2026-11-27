@@ -1,7 +1,6 @@
 """Source/result invariants only: no equilibrium solve, fit or publication write."""
 import copy
 import csv
-import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -93,29 +92,13 @@ def test_pool_transport_context_and_mat_unverified_preservation():
     assert all(r["target_eligible"] == "no" for r in membership if r["state_id"] == "Matin2012_state_016")
 
 
-def test_current_volumetrics_and_old_pin_refusal():
-    from MEA.epcsaft_ionic.preregistration import PreregistrationError, validate_gate0_preregistration
-    prereg = ROOT / "analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json"
-    with pytest.raises(PreregistrationError, match="Gate 0 tracer source artifact drifted"):
-        validate_gate0_preregistration(json.loads(prereg.read_text()))
+def test_current_volumetrics():
     amundsen = rows(ROOT / "data/reference/MEA/observations/density_viscosity/Amundsen_2009_density_viscosity.csv")
     assert sum(row["system"] == "pure_mea" for row in amundsen) == 10
     assert all(not r["uncertainty_value"] for r in amundsen if r["co2_loading_mol_per_mol_mea"])
     contract = rows(ROOT / "data/reference/MEA/manifests/ionic_volumetric_observation_contract.csv")
     analog = [r for r in contract if r["data_family"] == "ethanolammonium_carboxylate_density"]
     assert len(analog) == 128 and all(r["target_eligible"] == "no" for r in analog)
-
-
-def test_public_views_refuse_execution_and_stale_hash():
-    from MEA.common import data_access as data
-    data.verify_regression_readiness_sources()
-    with pytest.raises(RuntimeError, match="blocked"):
-        data.require_regression_execution_admitted()
-    with pytest.raises(RuntimeError, match="hash drift"):
-        data.verify_source_hashes({"data/reference/MEA/manifests/grouped_split_manifest.csv": "0" * 64}, repo_root=ROOT)
-    for role in ("active_training", "reserved_validation"):
-        assert len(data.load_regression_vle_view(role=role, executable_only=False)) > 0
-        assert len(data.load_regression_speciation_view(role=role, executable_only=False)) > 0
 
 
 def test_declared_domain_pre_dispatch_and_protected_rows(monkeypatch):

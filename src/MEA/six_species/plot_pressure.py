@@ -18,10 +18,7 @@ from MEA.six_species.chemistry import (
 try:
     from pcsaft import flashTQ
 except ImportError as exc:
-    raise RuntimeError(
-        "The legacy Jou pressure baseline requires the locked pcsaft dependency. Run `uv sync --locked`, then "
-        "`uv run python analyses/six_species_solubility_reference/scripts/generate_data.py`."
-    ) from exc
+    raise RuntimeError("The historical Jou pressure baseline requires the locked pcsaft dependency.") from exc
 
 
 K_CO2_MEA = 0.16

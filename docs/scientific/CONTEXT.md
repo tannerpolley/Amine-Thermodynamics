@@ -80,16 +80,16 @@ This records adoption; Snakemake workflows have not yet been installed here.
 | Analysis | Owner decision |
 |---|---|
 | `analyses/enrtl_historical_evidence/` | Adopt |
-| `analyses/enrtl_six_species_ideal_comparison/` | Adopt |
+| [analyses/enrtl_six_species_ideal_comparison/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/enrtl_six_species_ideal_comparison/) | Adopt |
 | `analyses/film_chemistry_work_package_a/` | Adopt |
-| `analyses/historical_fixed_parameter_epcsaft_evaluation/` | Adopt |
-| `analyses/ideal_reaction_equilibrium/` | Adopt |
+| [analyses/historical_fixed_parameter_epcsaft_evaluation/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/historical_fixed_parameter_epcsaft_evaluation/) | Adopt |
+| [analyses/ideal_reaction_equilibrium/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/ideal_reaction_equilibrium/) | Adopt |
 | `analyses/mea_parameter_bundle/` | Adopt |
-| `analyses/neutral_pcsaft_pressure_reference/` | Adopt |
-| `analyses/paper_validation/` | Adopt |
-| `analyses/reactive_epcsaft_parameter_evidence/` | Adopt |
-| `analyses/six_species_solubility_reference/` | Adopt |
-| `analyses/speciation_evidence_harmonization/` | Adopt |
+| [analyses/neutral_pcsaft_pressure_reference/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/neutral_pcsaft_pressure_reference/) | Adopt |
+| [analyses/paper_validation/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/paper_validation/) | Adopt |
+| [analyses/reactive_epcsaft_parameter_evidence/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/reactive_epcsaft_parameter_evidence/) | Adopt |
+| [analyses/six_species_solubility_reference/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/six_species_solubility_reference/) | Adopt |
+| [analyses/speciation_evidence_harmonization/](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/speciation_evidence_harmonization/) | Adopt |
 
 Implement each workflow around its existing scientific scope and retained
 inputs. Historical records remain historical, and deferred calculations remain
@@ -186,9 +186,9 @@ not mean the method, data search or fitting strategy is unstudied.
 |---|---|---|
 | How should amine ePC-SAFT parameters be estimated? | Literature synthesis, staged neutral/binary/ionic/reactive estimation, observation roles and explicit comparison criteria are documented. | [Scientific plan, §§4–7](PREDICTIVE_MEA_PROGRAM.md); [amine literature synthesis](../ePC-SAFT/amine-epcsaft-model-hierarchy-literature-review.md) |
 | What transfers from MDEA to MEA? | Model lineage and parameter provenance distinguish shared methods, common species and MDEA-specific analog seeds. | [Component audit](../ePC-SAFT/full-component-parameter-source-audit.md); Uyan, Wangler, Cleeton and Bülow companions in [the reading shelf](../../literature/README.md) |
-| How can MEAH+ and MEACOO- be constrained? | A detailed staged identification plan already uses shared-cation analogs, restricted carbamate correction and coupled density/speciation. Its linked inventory keeps analog densities, bulk MEA densities and derived volumes separate. | [Volumetric evidence and frozen staged plan](../ePC-SAFT/meah-meacoo-volumetric-evidence.md); [exact objectives, active coordinates, scales and multistart settings](../../analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json) |
+| How can MEAH+ and MEACOO- be constrained? | A detailed staged identification plan already uses shared-cation analogs, restricted carbamate correction and coupled density/speciation. Its linked inventory keeps analog densities, bulk MEA densities and derived volumes separate. | [Volumetric evidence and frozen staged plan](../ePC-SAFT/meah-meacoo-volumetric-evidence.md); [exact objectives, active coordinates, scales and multistart settings](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/reactive_epcsaft_parameter_evidence/ionic_volumetric_fit_preregistration.json) |
 | Which measurement and reaction conventions are known? | Reaction direction, standard-state conversion, source conflicts, aggregate speciation, oxazolidone onset and pressure-pairing limitations have been audited. | [Primary-source audit](../ePC-SAFT/mea-reaction-and-sentinel-primary-source-audit.md); `data/reference/MEA/manifests/` |
-| Have neutral and electrostatic choices been studied? | Neutral-family comparisons, CO2–water induced association and Born/permittivity comparisons are retained. Their conclusions belong to the tested parameter/Engine identities. | [Historical parameter evidence](../../analyses/reactive_epcsaft_parameter_evidence/README.md); [later bundle studies](../../analyses/mea_parameter_bundle/README.md) |
+| Have neutral and electrostatic choices been studied? | Neutral-family comparisons, CO2–water induced association and Born/permittivity comparisons are retained. Their conclusions belong to the tested parameter/Engine identities. | [Historical parameter evidence](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/reactive_epcsaft_parameter_evidence/README.md); [later bundle studies](../../analyses/mea_parameter_bundle/README.md) |
 | Have coupled fits and predictive comparisons been attempted? | Issue 70 retains a supported-negative decision. Later work includes full retained-state dielectric comparison, Born studies, reaction-temperature fitting and holdout access. The May small fit is not the latest evidence. | [Issue 70 decision](../../analyses/reactive_epcsaft_parameter_evidence/results/issue_70/predictive_mea_parameter_decision.json); [working notebook](../../analyses/mea_parameter_bundle/notebook.qmd); [parameter history](../../analyses/mea_parameter_bundle/results/parameter-record-history.csv) |
 | Which paper, table and retained file sit behind a scored residual or reaction constant? | Jou 1995, Idris 2014 and Böttinger 2008 observations and R4/R5 constants are traced from printed locator to retained file hash and result, with transcription gaps listed; linked Zotero Companion records live in project view `mea-thermodynamics`. | [Evidence map](../../analyses/evidence-map.qmd) |
 | Is further F/S or ionic screening new work? | The September audit records completed diagnostics and evaluator v4 correction in another checkout; this checkout retains v3. | [Checkout and result discrepancies](REPOSITORY_AUDIT_2026-09-08.md); reconcile the reported owner-held results before repeating a screen |
@@ -199,7 +199,7 @@ not mean the method, data search or fitting strategy is unstudied.
 |---|---|---|
 | Coupled estimation and independent-assessment designs, July 2026 | Joint pressure/speciation objectives, frozen bounds, grouped partitions, multistart and identification requirements were already specified. | `git show 7953c00:docs/superpowers/specs/2026-07-13-coupled-regression-parameter-promotion-design.md`; companion `2026-07-13-independent-validation-identifiability-design.md` in the same directory |
 | Shared ion-size density/speciation fit, 28 July | Stable converged fitting did not establish publishable parameters: pressure errors worsened. Repeating density-only identification is not a new untested strategy. | `git show aaa6384:analyses/phase3/ionic_epcsaft_regression/results/scipy_regression_experiment/experiment_summary.json` |
-| Pressure-first screening, August | Parameter directions, conditioning, bounds and loading trends were screened; pressure-only movement did not resolve the fit. | Commit `327e34e`; [retained pressure-first evidence](../../analyses/reactive_epcsaft_parameter_evidence/pressure_first/) |
+| Pressure-first screening, August | Parameter directions, conditioning, bounds and loading trends were screened; pressure-only movement did not resolve the fit. | Commit `327e34e`; [retained pressure-first evidence](https://github.com/tannerpolley/Amine-Thermodynamics/tree/archive/pre-rebuild-3c85ad4fc/analyses/reactive_epcsaft_parameter_evidence/pressure_first/) |
 | Consolidated predictive comparison, August | Issue 70 returned a supported-negative decision rather than a transferable parameter export. | Commit `0ce3827`; decision linked above |
 | Reaction-temperature fitting, September | Retained comparisons improved pressure and heat agreement but barely changed speciation; source-sized reaction corrections did not explain all discrepancies. The later selected vector has separate replay/adoption limitations. | [Experiment account and cohort results](../../analyses/mea_parameter_bundle/results/reaction-temperature-fit/README.md); [September audit](REPOSITORY_AUDIT_2026-09-08.md) |
 
