@@ -81,13 +81,18 @@ class RepairedDEA(ExpandedDEA):
         return spec
 
 
+def water_dea_law(parameters, binary):
+    pair = "pair/diethanolamine/water/k_ij"
+    a, b, T_ref = (binary[key] for key in ("a", "b_K", "reference_K"))
+    return with_parameter_values(parameters, {
+        pair: a + b * (1 / 313.15 - 1 / T_ref),
+        pair + "/reciprocal_temperature_slope": b,
+    })
+
+
 def repaired_point(point):
     binary = read(RESULTS / "dea/binary-temperature-dependent/fit-inputs/inputs.json")["binary"]
-    water_pair = "pair/diethanolamine/water/k_ij"
-    point["parameters"] = with_parameter_values(point["parameters"], {
-        water_pair: binary["a"] + binary["b_K"] * (1 / 313.15 - 1 / binary["reference_K"]),
-        water_pair + "/reciprocal_temperature_slope": binary["b_K"],
-    })
+    point["parameters"] = water_dea_law(point["parameters"], binary)
     cation = "protonated-diethanolamine"
     for identity, family, other, scale, bound in (
         ("k-DEAH-water-slope", "k_ij_reciprocal_temperature_slope", "water", 50.0, 1000.0),
@@ -194,6 +199,64 @@ def bubble(parameters, row):
     return reg.observation(
         parameters, "pressure", problem, observed=pressure, form="log_ratio"
     )
+
+
+def replay_binary_temperature_law(declaration):
+    """Compare the two retained water–DEA interactions at the measured states."""
+    from MEA.solvent_specification import residual_excess_enthalpy
+
+    from .wheel import verify
+
+    wheel = verify()
+    inputs = declaration["binary_law"]
+    binary = read(inputs)["binary"]
+    reference = read(declaration["reference"])
+    assessment = read(declaration["assessment"])
+    constant = read(declaration["endpoint"])
+    law = water_dea_law(constant, binary)
+    horstmann = [
+        dict(group="Horstmann VLE",
+             row={key: row[key] for key in ("source_key", "pdf_attachment_key", "source_locator",
+                                           "source_row", "T_K", "x_water", "P_kPa")},
+             observed=1000 * float(row["P_kPa"]), unit="Pa")
+        for row in reference["binary"]["rows"] if 0 < float(row["x_water"]) < 1
+    ]
+    cai = [
+        {key: row[key] for key in ("group", "row", "observed", "unit")}
+        for row in assessment["rows"] if row["group"] == "Cai"
+    ]
+    heat = [
+        {key: row[key] for key in ("group", "row", "observed", "unit")}
+        for row in assessment["rows"] if row["group"] == "Horstmann"
+    ]
+    rows = horstmann + cai + heat
+    for entry in rows:
+        entry["T_K"] = float(entry["row"]["T_K"])
+        entry["role"] = ("pure-component comparison" if float(entry["row"]["x_water"]) in (0, 1)
+                         else "fitted beforehand")
+    assert (len(horstmann), sum(r["role"] == "fitted beforehand" for r in cai), len(heat)) == (42, 7, 14)
+    for label, document in (("law", law), ("constant", constant)):
+        parameters = epcsaft.Parameters.from_mapping(document, components=[DIETHANOLAMINE, WATER])
+        model = epcsaft.Mixture(parameters)
+        for entry in rows:
+            row = entry["row"]
+            if entry["unit"] == "Pa":
+                pred = reg.predict(model, bubble(parameters, row))
+                entry[label] = dict(value=pred.value, status=pred.status.name, message=pred.message,
+                                    requested_tolerance_met=pred.requested_tolerance_met,
+                                    residual=pred.residual)
+            else:
+                x = float(row["x_water"])
+                try:
+                    value = residual_excess_enthalpy(model, entry["T_K"], 1e6 * float(row["P_MPa"]),
+                                                     {WATER: x, DIETHANOLAMINE: 1 - x})
+                    if not math.isfinite(value):
+                        raise ValueError(f"Nonfinite residual excess enthalpy: {value}")
+                    entry[label] = dict(value=value, status="Available")
+                except (ValueError, RuntimeError) as error:
+                    entry[label] = dict(value=None, status="Unavailable", message=str(error))
+    return dict(wheel=wheel, inputs={key: str(declaration[key].relative_to(ROOT))
+                                   for key in ("binary_law", "endpoint", "reference", "assessment")}, rows=rows)
 
 
 def replay_water_binary(declaration):
@@ -369,6 +432,14 @@ FIT_SETS = {
         mea_endpoint=ROOT
         / "analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json",
         heat_capacity=ROOT / "data/reference/DEA/Maham1997_Table1_DEA_cp.csv",
+    ),
+    "binary-temperature-dependent": dict(
+        replay=replay_binary_temperature_law,
+        archive=CAMPAIGN_ARCHIVE,
+        binary_law=RESULTS / "dea/binary-temperature-dependent/fit-inputs/inputs.json",
+        endpoint=DEA / "inputs/dea-A.json",
+        reference=RESULTS / "dea/water-binary/replay/binary.json",
+        assessment=RESULTS / "move/dea/reported/properties/summary.json.gz",
     ),
     "reported": dict(
         route=RepairedDEA,

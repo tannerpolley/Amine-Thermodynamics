@@ -412,7 +412,7 @@ Figure~\ref{fig:pressure-residuals} shows the logarithmic residuals of the loade
 \subsection{Water--DEA binary}\label{sec:s-dea-binary}
 % P:supplement-dea-binary
 In the DEA model the water--DEA interaction follows main-text \cref{main-eq:kij-temperature}, with the value at \SI{313.15}{\kelvin} and the temperature coefficient of Table~\ref{tab:supplement-transfer-parameters}.
-The two values were fitted before the reactive fit, without a reaction, to three data sets together: the \res{dea-horstmann-prior-binary-fit-count-supplement} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin}, their \res{dea-horstmann-measured-negative-excess-enthalpy-count-supplement} excess enthalpies at \SI{363.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002} and the \res{dea-cai-unfitted-binary-mixture-pressure-count} isobaric mixture points of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996}.
+The two values were fitted before the reactive fit, without a reaction, to three data sets together: the \res{dea-horstmann-prior-binary-fit-count-supplement} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin}, their \res{dea-horstmann-measured-negative-excess-enthalpy-count-supplement} excess enthalpies at \SI{363.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002} and the \res{dea-cai-prior-binary-fit-count-supplement} isobaric mixture points of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996}.
 All calculated excess enthalpies are negative, as measured, with an RMSE of \SI{\res{dea-binary-law-excess-enthalpy-rmse-supplement}}{\joule\per\mole} (\cref{fig:dea-binary}).
 The bubble pressures at \SI{365.15}{\kelvin} deviate by \res{dea-binary-law-horstmann-pressure-aard-supplement}\,\%, and the points of Cai et al., measured at \SI{6.66}{\kilo\pascal}, by \res{dea-binary-law-cai-pressure-aard-supplement}\,\%, so the law does not represent that isobar.
 A constant interaction fitted to the bubble pressures of Horstmann et al.\ alone describes them to \res{dea-binary-constant-horstmann-pressure-aard-supplement}\,\% but gives positive excess enthalpies.
@@ -472,7 +472,9 @@ The MDEA standard errors are conditional on the \res{mdea-active-bound-count-sup
 \input{tables/supplement-transfer-bounds}
 
 % P:supplement-starts
-For MEA and AMP, fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reach the same objective values, \res{mea-selected-objective-starts} and \res{amp-selected-objective-starts}, and for DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}; the reported MDEA parameters come from start A, which has the lowest objective value of the MDEA starts, \res{mdea-selected-objective-continuation}.
+The earlier MEA and AMP fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reached the same objective value for each amine.
+The reported fits from start A give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA.
+For DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
 % P:supplement-ranges
@@ -525,7 +527,8 @@ For MDEA, \res{mdea-measurement-derived-searches-attempted-supplement-design} se
 No search finds a liquid--liquid split, and no grid state has a detected instability.
 At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 A further \res{mdea-measured-searches-unclassified-supplement} searches, at heat-measurement states of Merkley et al., are assigned to neither class.
-Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement}, at 288.71 and 422.04 K, lie outside the temperature interval of the caloric functions (Section~\ref{sec:s-files}), so the Gibbs energy is not evaluated there.
+Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement} fall outside the declared ideal-gas caloric intervals: 288.71 K is below both the \COtwo{} Shomate interval (298--1200 K) and the MDEA ideal-gas heat-capacity polynomial interval (293--423 K), and 422.04 K is above the IAPWS-95-based ideal-gas water polynomial interval (273.15--400 K).
+The \COtwo-free binary search at 422.04 K uses liquid fugacity coefficients without the ideal-gas caloric functions.
 At the other \res{mdea-merkley-searches-within-resolution-supplement}, at 333.15 and 388.71 K and 1.121 MPa, the smallest tangent-plane distance found is zero within its numerical resolution, and each of the \res{mdea-supplied-trial-count-supplement} trial compositions supplied to a search gives a positive distance.
 
 % P:supplement-phase-amp
