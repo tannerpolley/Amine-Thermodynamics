@@ -895,8 +895,12 @@ def transfer_displays(outputs):
                                    for (label, d), key in zip(AFIT, aorder, strict=True) for r in [acoords[key]]]
     level = lambda q: [r'R4 change at 313.15 K, $\Delta\ln K_4$\textsuperscript{c}', f"${q['delta_ln_K4']:+.3f}$", num(q['SE_ln_K4'], 3), bounds(*q['bounds']['level'], 3), '']
     fit_rows[4][1:4] = [bold(num(r4['dea']['delta_h_J_mol'], 0)), num(r4['dea']['SE_h_J_mol'], 0), bounds(*r4['dea']['bounds']['enthalpy'], 0)]
-    fit_rows[-1][1:4] = [bold(num(r4['amp']['delta_h_J_mol'], 0) + r'\textsuperscript{a}'),
-                           '---', bounds(*amp_enthalpy['AMP_free']['physical_bounds_J_mol'], 0)]
+    amp_enthalpy_bound = acoords['AMP-hydrolysis-enthalpy-increment']['on_bound']
+    fit_rows[-1][1:4] = [
+        bold(num(r4['amp']['delta_h_J_mol'], 0) + (r'\textsuperscript{a}' if amp_enthalpy_bound else '')),
+        '---' if amp_enthalpy_bound else num(r4['amp']['SE_h_J_mol'], 0),
+        bounds(*amp_enthalpy['AMP_free']['physical_bounds_J_mol'], 0),
+    ]
     fit_rows.insert(4, level(r4['dea']))
     fit_rows.insert(len(fit_rows) - 1, level(r4['amp']))
     # fit_rows: name, value, standard error, bounds and an unused fifth cell. The main text omits the bounds; the supplement lists them.
@@ -904,8 +908,19 @@ def transfer_displays(outputs):
     # Table 7 gives the level change of R4 at 313.15 K in a footnote to the constant term; the supplement's bounds table keeps it as a row.
     main_fit = [r for r in columns(3, lambda r: [r[0].replace('R4 constant term $A_4$', r'R4 constant term $A_4$\textsuperscript{b}'), r[1], r[2]]) if not r[0].startswith('R4 change')]
     level_note = ' and '.join(f"${r4[k]['delta_ln_K4']:+.3f}\\pm{r4[k]['SE_ln_K4']:.3f}$ for {k.upper()}" for k in ('dea', 'amp'))
+    mdea_bounds = fixed.fits['MDEA']['diagnostics']['active_bounds']
+    mdea_water_bound = mdea_bounds.get('pair/mdea-water/k_ij/a0 / temperature_law_coefficient')
+    mdea_bound_note = (r'MDEA: $k_{\mathrm{MDEA,w}}$ is held at the upper bound that keeps the \COtwo-free MDEA--water solution free of a calculated liquid--liquid gap at \SI{1.466}{\mega\pascal} (Section~\ref{sec:methods-phase}), with the margin below the no-gap edge. '
+                       if mdea_water_bound == 'upper' else '')
+    mdea_se_condition = ', with the bound held fixed' if mdea_bounds else ''
+    amp_bounds = fixed.fits['AMP_free']['diagnostics']['active_bounds']
+    amp_bound_note = (r'AMP: $\sigma_{\mathrm{AMPCOO^-}}$ and $\delta h$ are at their lower bounds, and the other standard errors are conditional on both. '
+                      if all(amp_bounds.get(key) == 'lower' for key in ('AMPCOO-segment-diameter', 'AMP-hydrolysis-enthalpy-increment')) else '')
     table('transfer-fitted', 'Fitted parameters of the DEA, MDEA and AMP models at a fixed 100 kPa reaction reference, with conditional standard errors.', ['Parameter','Value','Standard error'], main_fit, [.52,.20,.20],
-          notes=r'Bold: fitted in this work. \textsuperscript{a}On a bound; no standard error is assigned. DEA and AMP: $\delta h$ is measured from the starting R4 correlation of Table~\ref{tab:reaction-equilibrium-constants}, and the final R4 coefficients include it (Table~\ref{supp-tab:supplement-transfer-parameters}). \textsuperscript{b}Expressed relative to the starting correlation, the fitted constant term changes $\ln K_4$ at \SI{313.15}{\kelvin} by ' + level_note + r', with the standard error of $A_4$; this change is not a further parameter. MDEA: $k_{\mathrm{MDEA,w}}$ is held at the upper bound that keeps the \COtwo-free MDEA--water solution free of a calculated liquid--liquid gap at \SI{1.466}{\mega\pascal} (Section~\ref{sec:methods-phase}), with the margin below the no-gap edge. MDEA standard errors use the pressure-weighted residual Jacobian and the residual variance of the ' + str(fixed.conditional("MDEA")["responsive"]) + r' responsive observations, with the bound held fixed. AMP: $\sigma_{\mathrm{AMPCOO^-}}$ and $\delta h$ are at their lower bounds, and the other standard errors are conditional on both. The standard errors follow Eq.~\eqref{eq:conditional-covariance}. Table~\ref{supp-tab:supplement-transfer-bounds} gives the bounds.')
+          notes=r'Bold: fitted in this work. \textsuperscript{a}On a bound; no standard error is assigned. DEA and AMP: $\delta h$ is measured from the starting R4 correlation of Table~\ref{tab:reaction-equilibrium-constants}, and the final R4 coefficients include it (Table~\ref{supp-tab:supplement-transfer-parameters}). \textsuperscript{b}Expressed relative to the starting correlation, the fitted constant term changes $\ln K_4$ at \SI{313.15}{\kelvin} by ' + level_note + r', with the standard error of $A_4$; this change is not a further parameter. ' + mdea_bound_note
+          + 'MDEA standard errors use the pressure-weighted residual Jacobian and the residual variance of the '
+          + str(fixed.conditional("MDEA")["responsive"]) + ' responsive observations' + mdea_se_condition + '. '
+          + amp_bound_note + r'The standard errors follow Eq.~\eqref{eq:conditional-covariance}. Table~\ref{supp-tab:supplement-transfer-bounds} gives the bounds.')
     table('supplement-transfer-bounds', 'Bounds of the fitted parameters of the DEA, MDEA and AMP models.', ['Parameter','Lower bound','Upper bound'], columns(3, lambda r: [r[0].replace(r'\textsuperscript{c}', ''), *r[3][1:-1].split(', ')]), [.50,.20,.20],
           notes=r'The parameters are those of main-text Table~\ref{main-tab:transfer-fitted}. For DEA and AMP the bounds of $\delta h$ and of $\Delta\ln K_4$ are measured from the starting R4 correlations, like the values of that table.')
     apure, ROLE = read(AM344 + 'pure-binary-on-05e94210.json')['pure'], {'fitted': 'fitted', 'assessment_not_fitted': 'not fitted'}
@@ -2462,8 +2477,15 @@ def mea_tables(outputs):
                       *[('water', ion, r'\cite{Held2014}') for ion in ('hydronium-cation', 'hydroxide-anion')]]
         def pair_se(s, u, quantity=''):  # conditional standard error of a fitted interaction; none for a fixed value or one on its bound
             return num(next((coords[i+quantity]['conditional_SE'] for i in (f'pair/{s}/{u}/k_ij', f'pair/{u}/{s}/k_ij') if i+quantity in coords), None), 3)
+        active_pairs = {unordered(key): side for key, side in study.fits['MEA']['diagnostics']['active_bounds'].items()}
         def pair_rows(decimals=None, errors=False):
-            ref = lambda s, u, source: source if not errors or source.startswith(r'\cite') else source + (note('b') if source == 'CO2--water fit' else note('c') if {s,u} == {'protonated-monoethanolamine','carbamate-anion'} else note('d') if {s,u} == {'protonated-monoethanolamine','bicarbonate-anion'} else '')
+            def ref(s, u, source):
+                if not errors or source.startswith(r'\cite'):
+                    return source
+                if source == 'CO2--water fit':
+                    return source + note('b')
+                bound = active_pairs.get(unordered(f'pair/{s}/{u}/k_ij'))
+                return source + (note({'lower': 'c', 'upper': 'd'}[bound]) if bound else '')
             return [[symbol[s]+'--'+symbol[u]+mark*(errors and {s,u} <= set(shared_species)),pair(s,u,decimals=decimals),*[pair_se(s,u)]*errors,(pair(s,u,'/temperature_slope',decimals) + r'~K$^{-1}$' if source == 'Sodium-salt fit' else
                     pair(s,u,'/reciprocal_temperature_slope',decimals) + '~K' if pair(s,u,'/reciprocal_temperature_slope',decimals) != '--' else '--'),*[pair_se(s,u,'/reciprocal_temperature_slope')]*errors,ref(s,u,source)] for s,u,source in pair_specs]
         table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. The two sodium-salt slopes are linear in $T-313.15\,\mathrm{K}$. $^{\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Fitted beforehand to \ce{CO2}--water pressures (Section~\ref{sec:parameters}). $^{\mathrm{c}}$On its lower bound. $^{\mathrm{d}}$On its upper bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.",
@@ -4232,9 +4254,12 @@ def result_values():
     add('mea-cai-bubble-temperature-rmse', record,
         'RMSE available Cai rows with unit K',
         f"{math.sqrt(math.fsum((x['value']-x['observed'])**2 for x in r['replay']['rows'] if x['group']=='Cai' and x['unit']=='K' and x['status']=='Available')/sum(x['group']=='Cai' and x['unit']=='K' and x['status']=='Available' for x in r['replay']['rows'])):.3f}")
+    uncertainty = r['diagnostics']['uncertainty']
+    ions = ('protonated-monoethanolamine', 'carbamate-anion')
+    i, j = (uncertainty['free_coordinates'].index(f'component/{ion}/segment_diameter') for ion in ions)
     add('mea-ion-segment-diameter-conditional-correlation', record,
-        'diagnostics.uncertainty.conditional_correlation[3][4]',
-        f"{r['diagnostics']['uncertainty']['conditional_correlation'][3][4]:.3f}")
+        'diagnostics.uncertainty.conditional_correlation: free coordinates for protonated MEA and carbamate segment diameters',
+        f"{uncertainty['conditional_correlation'][i][j]:.3f}")
 
     record = 'analyses/fixed_reaction_reference/results/DEA/A.json.gz'
     r = read(record)
@@ -4404,20 +4429,15 @@ def result_values():
         prose_scientific(max(q["split"]["Gibbs_decrease_over_RT_mol"] for q in r["dea_controls"]["rows"] if q["split"]["confirmed"]), ".2e"))
 
     add('dea-weiland-maximum-split-numerical-error-supplement', record,
-        'max(dea_controls.rows[].split.numerical_error_over_RT_mol)',
-        prose_scientific((max(c['split']['numerical_error_over_RT_mol'] for c in r['dea_controls']['rows'])), '.1e'))
-    add('dea-worked-ion-rich-feed-mole-fraction-supplement', record,
-        'dea_controls.rows[weiland-1998:32:problem].phases[1].true_mole_fraction',
-        format((next(c for c in r['dea_controls']['rows'] if c['key']=='weiland-1998:32:problem')['phases'][1]['true_mole_fraction']), '.4f'))
-    add('dea-worked-water-rich-feed-mole-fraction-supplement', record,
-        'dea_controls.rows[weiland-1998:32:problem].phases[0].true_mole_fraction',
-        format((next(c for c in r['dea_controls']['rows'] if c['key']=='weiland-1998:32:problem')['phases'][0]['true_mole_fraction']), '.4f'))
-    add('dea-worked-ion-rich-density-supplement', record,
-        'dea_controls.rows[weiland-1998:32:problem].phases[1].density_kg_m3',
-        format((next(c for c in r['dea_controls']['rows'] if c['key']=='weiland-1998:32:problem')['phases'][1]['density_kg_m3']), '.2f'))
-    add('dea-worked-water-rich-density-supplement', record,
-        'dea_controls.rows[weiland-1998:32:problem].phases[0].density_kg_m3',
-        format((next(c for c in r['dea_controls']['rows'] if c['key']=='weiland-1998:32:problem')['phases'][0]['density_kg_m3']), '.2f'))
+        'max(dea_controls.rows[split.confirmed].split.numerical_error_over_RT_mol)',
+        prose_scientific(max(row['split']['numerical_error_over_RT_mol'] for row in r['dea_controls']['rows']
+                             if row['split']['confirmed']), '.1e'))
+    worked = next(row for row in r['dea_controls']['rows'] if row['key'] == r['dea_controls']['worked_state'])
+    phases = sorted(worked['phases'], key=lambda phase: phase['density_kg_m3'])
+    for phase, role in zip(phases, ('water-rich', 'ion-rich'), strict=True):
+        for name, field, digits in (('feed-mole-fraction', 'true_mole_fraction', 4), ('density', 'density_kg_m3', 2)):
+            add(f'dea-worked-{role}-{name}-supplement', record, f'dea_controls.rows[worked_state].phases[{role}].{field}',
+                f'{phase[field]:.{digits}f}')
     add('dea-confirmed-split-count-supplement', record,
         'dea_controls.rows where split.confirmed',
         NUMBER_WORDS[int(sum(bool(c['split']['confirmed']) for c in r['dea_controls']['rows']))])
@@ -4698,9 +4718,6 @@ def result_values():
     add('mea-dea-volume-resolution-max-percent', record,
         'rows[selected MEA and DEA,volume].relative_estimated_error: max percent',
         format((max(x["relative_estimated_error"] for x in r["rows"] if x["state"] in ("selected-MEA","selected-DEA") and x["comparison"]=="volume") * 100), '.0f'))
-    add('fitted-amine-reference-comparison-state-count', record,
-        'selected fitted Eq. 12 states',
-        NUMBER_WORDS[int(sum(x["state"] in ("selected-MEA","selected-DEA","selected-MDEA","selected-AMP_free") and x["comparison"]=="Eq. 12" for x in r["rows"]))])
 
     record = 'analyses/round_7/results/A/reference.json.gz'
     r = read(record)
@@ -4866,12 +4883,14 @@ def result_values():
 
     record = 'analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz'
     r = read(record)
-    add('amp-first-data-carbamate-lean-water-phase-lower-scale', record,
-        'states[].attempts[confirmed].phases[lower water].carbamate mole fraction: nearest decade of min',
-        prose_scientific((10 ** round(math.log10(min([min(a["phases"],key=lambda x:x[[z["component_id"] for z in read('analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json')["parameters"]["components"]].index("water")])[[z["component_id"] for z in read('analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json')["parameters"]["components"]].index("carbamate-anion")] for x in r["states"] for a in x["attempts"] if a.get("confirmed")])))), None))
-    add('amp-first-data-carbamate-lean-water-phase-upper-scale', record,
-        'states[].attempts[confirmed].phases[lower water].carbamate mole fraction: nearest decade of max',
-        prose_scientific((10 ** round(math.log10(max([min(a["phases"],key=lambda x:x[[z["component_id"] for z in read('analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json')["parameters"]["components"]].index("water")])[[z["component_id"] for z in read('analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json')["parameters"]["components"]].index("carbamate-anion")] for x in r["states"] for a in x["attempts"] if a.get("confirmed")])))), None))
+    species = list(masses)
+    water, carbamate = (species.index(key) for key in ('water', 'carbamate-anion'))
+    carbamate_fractions = [min(trial['phases'], key=lambda phase: phase[water])[carbamate]
+                           for state in r['states'] for trial in state['attempts'] if trial['confirmed']]
+    for bound, reduce in (('lower', min), ('upper', max)):
+        add(f'amp-first-data-carbamate-lean-water-phase-{bound}-scale', (record, first_data),
+            f'states[].attempts[confirmed].phases[lower water].carbamate mole fraction: nearest decade of {reduce.__name__}',
+            prose_scientific(10 ** round(math.log10(reduce(carbamate_fractions))), None))
 
     record = 'analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json'
     r = read(record)
@@ -5676,20 +5695,18 @@ def result_values():
         'rows[comparison:363:final].conventions[baseline].attempts[confirmed].Gibbs_decrease_over_RT_mol',
         prose_scientific((next(a["Gibbs_decrease_over_RT_mol"] for x in r["rows"] if x["key"]=='comparison:363:final' for a in x["conventions"]['baseline']["attempts"] if a.get("confirmed"))), '.2e'))
 
-    record = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea-comparison.json.gz'
-    r = read(record)
-    add('mdea-lower-bicarbonate-kuranov-aard-first-weights', record,
-        'Kuranov.original[1].AARD_percent',
-        format((r["Kuranov"]["original"][1]["AARD_percent"]), '.1f'))
-    add('mdea-lower-bicarbonate-outside-partial-pressure-aard-first-weights', record,
-        'Ermatchkov and Xiao original[1]: pooled AARD by relative row count',
-        format((mean(row["AARD_percent"] for k in ("Ermatchkov","Xiao") for row in [r[k]["original"][1]] for _ in range(row["relative_rows"]))), '.1f'))
-    add('mdea-incumbent-bicarbonate-kuranov-aard-first-weights', record,
-        'Kuranov.original[0].AARD_percent',
-        format((r["Kuranov"]["original"][0]["AARD_percent"]), '.1f'))
-    add('mdea-incumbent-bicarbonate-outside-partial-pressure-aard-first-weights', record,
-        'Ermatchkov and Xiao original[0]: pooled AARD by relative row count',
-        format((mean(row["AARD_percent"] for k in ("Ermatchkov","Xiao") for row in [r[k]["original"][0]] for _ in range(row["relative_rows"]))), '.1f'))
+    profile_directory = 'analyses/mdea_mea_workflow/results/shared-bicarbonate-417/'
+    comparison = profile_directory + 'mdea-comparison.json.gz'
+    order_record = profile_directory + 'mdea-group-readback.json'
+    r, order = read(comparison), read(order_record)['ordered_cases']
+    for label, case in (('lower', 'low'), ('incumbent', 'reported')):
+        index = order.index(case)
+        add(f'mdea-{label}-bicarbonate-kuranov-aard-first-weights', (comparison, order_record),
+            f'Kuranov.original[ordered_cases={case}].AARD_percent', f"{r['Kuranov']['original'][index]['AARD_percent']:.1f}")
+        rows = [r[group]['original'][index] for group in ('Ermatchkov', 'Xiao')]
+        pooled = fsum(row['AARD_percent'] * row['relative_rows'] for row in rows) / sum(row['relative_rows'] for row in rows)
+        add(f'mdea-{label}-bicarbonate-outside-partial-pressure-aard-first-weights', (comparison, order_record),
+            f'Ermatchkov and Xiao original[ordered_cases={case}]: pooled AARD by relative row count', f'{pooled:.1f}')
 
     record = 'analyses/amines/results/mdea/system-pressure-first-weights/replay/endpoint.json.gz'
     r = read(record)
@@ -5719,19 +5736,19 @@ def result_values():
         NUMBER_WORDS[int(len(r["Amundsen source-conflict five"]["row_ids"]))].capitalize())
 
     record = 'analyses/fixed_reaction_reference/diagnosis-starts/results/saturation.json.gz'
-    r = read(record)
-    add('mdea-start-b-bubble-pressure-lower-extremum', record,
-        'rows[start B,Merkley 123].nodes: min kPa',
-        format((min([(node["mismatch"] + x["P"]) / 1000 for case in r["records"] if case["draw"]==read('analyses/fixed_reaction_reference/results/MDEA/manifest.json.gz')["starts"]['B']["draw"] for x in case["rows"] if x["row"]==123 for node in x["nodes"] if node["solved"]])), '.1f'))
-    add('mdea-start-b-bubble-pressure-loading-nodes', record,
-        'rows[start B,Merkley 123].nodes: solved count',
-        format((len([(node["mismatch"] + x["P"]) / 1000 for case in r["records"] if case["draw"]==read('analyses/fixed_reaction_reference/results/MDEA/manifest.json.gz')["starts"]['B']["draw"] for x in case["rows"] if x["row"]==123 for node in x["nodes"] if node["solved"]])), '.0f'))
-    add('mdea-start-b-bubble-pressure-upper-extremum', record,
-        'rows[start B,Merkley 123].nodes: max kPa',
-        format((max([(node["mismatch"] + x["P"]) / 1000 for case in r["records"] if case["draw"]==read('analyses/fixed_reaction_reference/results/MDEA/manifest.json.gz')["starts"]['B']["draw"] for x in case["rows"] if x["row"]==123 for node in x["nodes"] if node["solved"]])), '.1f'))
-    add('mdea-start-c-bubble-pressure-lower-bound', record,
-        'rows[start C,Merkley 126].nodes: min kPa',
-        format((math.floor(min([(node["mismatch"] + x["P"]) / 1000 for case in r["records"] if case["draw"]==read('analyses/fixed_reaction_reference/results/MDEA/manifest.json.gz')["starts"]['C']["draw"] for x in case["rows"] if x["row"]==126 for node in x["nodes"] if node["solved"]]))), '.0f'))
+    mdea_manifest = STUDY + 'results/MDEA/manifest.json.gz'
+    starts_by_label = read(mdea_manifest)['starts']
+    records_by_draw = {row['draw']: row['rows'] for row in read(record)['records']}
+    nodes = {}
+    for label, number in (('B', 123), ('C', 126)):
+        case, = (row for row in records_by_draw[starts_by_label[label]['draw']] if row['row'] == number)
+        nodes[label] = [(node['mismatch'] + case['P']) / 1e3 for node in case['nodes'] if node['solved']]
+    for name, value in (('lower-extremum', f"{min(nodes['B']):.1f}"),
+                        ('loading-nodes', str(len(nodes['B']))), ('upper-extremum', f"{max(nodes['B']):.1f}")):
+        add(f'mdea-start-b-bubble-pressure-{name}', (record, mdea_manifest),
+            f'rows[draw for start B, Merkley 123].solved nodes: {name} (pressures in kPa)', value)
+    add('mdea-start-c-bubble-pressure-lower-bound', (record, mdea_manifest),
+        'rows[draw for start C, Merkley 126].solved nodes: minimum pressure floored in kPa', str(math.floor(min(nodes['C']))))
 
     record = 'analyses/mea_parameter_bundle/results/same-data-comparison/matched-score.json'
     r = read(record)
@@ -5953,11 +5970,12 @@ def result_values():
     add('kim-hot-inconsistent-observation-count-followup', mea_comparisons, 'count(kim_2007[T=393.15 K,source_inconsistent])', NUMBER_WORDS[sum(float(q["T_K"])==393.15 and q["source_inconsistent"]=="True" for q in mea_comparisons_data["kim_2007"])])
     derivative_branches = 'analyses/round_8/results/reference-derivatives.json.gz'
     derivative_branches_data = read(derivative_branches)
-    volume_corrections = [
-        100 * step['correction_m3'] / step['eos_volume_m3']
-        for amine in ('MEA', 'DEA', 'MDEA', 'AMP')
-        for step in [derivative_branches_data['quantities']['branches'][amine]['steps'][-1]]
-    ]
+    final_steps = [branch['steps'][-1] for amine, branch in derivative_branches_data['quantities']['branches'].items()
+                   if amine in ('MEA', 'DEA', 'MDEA', 'AMP')]
+    volume_corrections = [100 * step['correction_m3'] / step['eos_volume_m3'] for step in final_steps]
+    add('fitted-amine-reference-comparison-state-count', derivative_branches,
+        'quantities.branches: fitted MEA, DEA, MDEA and AMP states with a retained final step',
+        NUMBER_WORDS[len(final_steps)])
     for name, reduce in (('mdea', max), ('dea', min)):
         add(f'{name}-tracking-volume-correction-percent', derivative_branches,
             f'{reduce.__name__} over MEA, DEA, MDEA, AMP of branches[].steps[-1]: 100 * correction_m3 / eos_volume_m3',
@@ -6322,7 +6340,11 @@ def result_values():
     add('amp-pure-adjusted-coordinate-count-theory', amp_pure_calibration, 'pure.parameter_values count', NUMBER_WORDS[len(amp_pure_calibration_data["pure"]["parameter_values"])])
     worked_derivatives = 'analyses/amines/results/shared/properties/gibbs-derivatives.json'
     worked_derivatives_data = read(worked_derivatives)
-    add('reported-caloric-derivative-case-count-theory', worked_derivatives, 'count of selected reported amines with an admitted Eq. 12 check', NUMBER_WORDS[sum(q["comparison"]=="Eq. 12" and q["state"] in {"selected-MEA","selected-DEA","selected-MDEA","selected-AMP_free"} for q in worked_derivatives_data["rows"])])
+    add('reported-caloric-derivative-case-count-theory', worked_derivatives,
+        'count of selected reported amines with an admitted Eq. 12 check',
+        NUMBER_WORDS[sum(q['comparison'] == 'Eq. 12' and q['admitted_steps'] > 0
+                         and q['state'] in {'selected-MEA', 'selected-DEA', 'selected-MDEA', 'selected-AMP_free'}
+                         for q in worked_derivatives_data['rows'])])
     dea_binary_comparison = 'analyses/dea_transfer/results/reactive-refit-425/comparisons.json'
     dea_binary_comparison_data = read(dea_binary_comparison)
     add('dea-temperature-dependent-binary-fit-cohort-count-results', dea_binary_comparison, 'tableS10 fitted Horstmann VLE, Horstmann heat and Cai VLE cohorts', NUMBER_WORDS[sum(q["role"]=="fitted" and q["group"] in ("Horstmann VLE","Horstmann heat","Cai VLE") for q in dea_binary_comparison_data["tableS10"])])
