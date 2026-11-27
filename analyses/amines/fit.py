@@ -179,6 +179,75 @@ def reported_manifest(amine, fit_set, output):
     return declaration
 
 
+def move_manifest(amine, fit_set, output, *, ablation=False):
+    """Declare the W fit from the prescribed retained start and current donor."""
+    from . import dea, salt
+
+    wheel = verify()
+    retained = read(fit_set["retained"] / "manifest.json.gz")
+    if ablation:
+        held = read(RESULTS / amine / "water-bicarbonate-ablation/fit/A.json.gz")
+        point = deepcopy(held["endpoint"])
+    elif amine in ("mea", "amp"):
+        point = deepcopy(retained["prior_declaration"])
+    else:
+        held = read(fit_set["retained"] / "A.json.gz")
+        point = deepcopy(held["endpoint"])
+    mapping = point["parameters"]
+    if not ablation:
+        if amine == "mea":
+            donor = read(output / "salt/sodium-salts/fit/summary.json.gz")
+            pair_keys = {salt.W, salt.NA, salt.HCO3, salt.CO3}
+            for pair in donor["document"]["pairs"]:
+                a, b = pair["component_id_a"], pair["component_id_b"]
+                if a in pair_keys and b in pair_keys and salt.W in (a, b) and salt.NA not in (a, b):
+                    salt.set_pair(mapping, a, b, pair["coefficients"][0])
+        else:
+            donor_path = output / "mea/reported/fit"
+            selection = read(donor_path / "selection.json")
+            donor = read(donor_path / f'{selection["selected"]}.json.gz')
+            donor_mapping = donor["endpoint"]["parameters"]
+            if fingerprint(donor["endpoint"]) != selection["endpoint_fingerprint"]:
+                raise ValueError("MEA donor fingerprint differs from the selected endpoint")
+            for pair in donor_mapping["pairs"]:
+                a, b = pair["component_id_a"], pair["component_id_b"]
+                if {a, b} in ({salt.W, salt.HCO3}, {salt.W, salt.CO3}):
+                    salt.set_pair(mapping, a, b, pair["coefficients"][0])
+            if amine in ("amp", "dea"):
+                values = parameter_values(donor_mapping)
+                carbamate = "component/carbamate-anion/"
+                size = values[carbamate + "segment_diameter"]
+                changes = {carbamate + "dispersion_energy_over_k": values[carbamate + "dispersion_energy_over_k"]}
+                if amine == "amp":
+                    coordinate = next(q for q in point["coordinates"] if q["identity"] == "AMPCOO-segment-diameter")
+                    coordinate["bounds"][0] = size
+                    coordinate["origin"] = max(coordinate["origin"], size)
+                    size = coordinate["origin"]
+                else:
+                    neutral, mea = "component/diethanolamine/", "component/monoethanolamine/"
+                    model = parameter_values(mapping)
+                    ratio = model[neutral + "segment_count"] / values[mea + "segment_count"]
+                    size *= ratio**(1 / 3) * model[neutral + "segment_diameter"] / values[mea + "segment_diameter"]
+                    changes["pair/bicarbonate-anion/protonated-diethanolamine/k_ij"] = values[
+                        "pair/bicarbonate-anion/protonated-monoethanolamine/k_ij"]
+                changes.update({carbamate + k: size * factor for k, factor in (
+                    ("segment_diameter", 1), ("debye_huckel_diameter", 1),
+                    ("born_diameter", 1), ("packing_diameter", 0.88))})
+                changes["pair/carbamate-anion/water/k_ij"] = values["pair/carbamate-anion/water/k_ij"]
+                point["parameters"] = with_parameter_values(mapping, changes)
+        if donor["wheel"] != wheel:
+            raise ValueError("The fitted donor uses another wheel")
+    if amine == "dea":
+        point = dea.repaired_point(point)
+    controls = dict(retained["fit_controls"], maximum_elapsed_time_seconds=900.0)
+    starts = {"A": dict(optimizer=[0.0] * len(point["coordinates"]))}
+    if amine == "dea":
+        starts["B"] = dict(optimizer=dea.alternate_start(point))
+    return dict(wheel=wheel, source_wheel=retained["wheel"], source=retained["source"],
+                start_A_declaration=point, fit_controls=controls, starts=starts, diagnostic_starts={},
+                rows=row_manifest(route_for(fit_set).bind(point)))
+
+
 def reported_fit(fit_set, declaration, target):
     attempts = {}
     for label in declaration["starts"] | declaration["diagnostic_starts"]:
@@ -188,9 +257,11 @@ def reported_fit(fit_set, declaration, target):
             attempts[label] = continue_fit(fit_set, declaration, label, path, record)
     selection = select(declaration, attempts)
     save(target / "selection.json", selection)
-    old, retained = retained_endpoint(fit_set)
     if selection["selected"] is None:
         raise ValueError("No reproduced fit met the selection criteria")
+    if "source_wheel" in declaration:
+        return selection
+    old, retained = retained_endpoint(fit_set)
     selected = attempts[selection["selected"]]
     retained_attempt = read(fit_set["retained"] / f'{retained["selected"]}.json.gz')
     row_differences, predictions = compare_rows(retained_attempt["replay"]["rows"], selected["replay"]["rows"])

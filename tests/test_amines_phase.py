@@ -4,6 +4,12 @@ from analyses.amines.phase import SuppliedTrials, measured_search_class, native_
 from analyses.amines.wheel import ROOT, verify
 from analyses.amines.records import RESULTS, read
 
+MOVE = RESULTS / "move"
+
+
+def selected(design, amine):
+    return retained_endpoint(design | {"retained": MOVE / amine / "reported/fit"})
+
 
 def test_classify_held_mea_measured_searches_without_solving():
     measured = RESULTS / "mea/reported/phase/measured"
@@ -16,12 +22,12 @@ def test_classify_held_mea_measured_searches_without_solving():
 
 def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailable():
     design = mdea.FIT_SETS["reported"]
-    point, _ = retained_endpoint(design)
+    point, _ = selected(design, "mdea")
     route = route_for(design)
     spec = route.bind(point)
     key = "comparison:157:problem"
     (state,) = (q for q in states(route, spec) if q["key"] == key)
-    retained = read(RESULTS / "mdea/reported/phase/MDEA/screen/selected/declared/summary.json.gz")
+    retained = read(MOVE / "mdea/reported/phase/declared.json.gz")
     assert retained["wheel"] == verify()
     (row,) = (q for q in retained["rows"] if q["key"] == key)
     bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
@@ -35,7 +41,7 @@ def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailabl
 
 def test_mdea_carbon_free_parent_excludes_carbon_bearing_supplied_trials():
     design = mdea.FIT_SETS["reported"]
-    point, _ = retained_endpoint(design)
+    point, _ = selected(design, "mdea")
     route = route_for(design)
     spec = route.bind(point)
     key = "fit:85:initial"
@@ -47,7 +53,7 @@ def test_mdea_carbon_free_parent_excludes_carbon_bearing_supplied_trials():
 
     _bind_search(route, point, bank["trials"] + bank["supplied_trials"])
     result = _search(state)["search"]
-    assert result["optimized_available"] == row["optimized_available"]
+    assert result["optimized_available"]
     assert result["supplied_trial_counts"] == {
         "available": row["supplied_trial_counts"]["available"],
         "unavailable": 0,
@@ -61,7 +67,7 @@ def test_mea_measured_parent_uses_density_scaled_pressure_closure():
     from analyses.amines.phase import measured_search, scaled_pressure_error
 
     design = mea.FIT_SETS["reported"]
-    point, _ = retained_endpoint(design)
+    point, _ = selected(design, "mea")
     spec = route_for(design).bind(point)
     measured = RESULTS / "mea/reported/phase/measured"
     key = "vle_obs_0034-pco2"
@@ -78,15 +84,11 @@ def test_mea_measured_parent_uses_density_scaled_pressure_closure():
 
 def test_dea_lawson_trace_species_reconstruction():
     design = dea.FIT_SETS["reported"]
-    point, _ = retained_endpoint(design)
-    route = route_for(design)
+    point = read(design["retained"] / "A.json.gz")["endpoint"]
+    route = route_for(design | {"route": dea.ExpandedDEA})
     spec = route.bind(point)
     key = "lawson-1976-viii:1:problem"
     (state,) = (row for row in states(route, spec) if row["key"] == key)
     result = native_search(route, spec, state)["search"]
-    # Engine #100 preserves the trace support after convergence. S predates #100.
-    if verify() == "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb":
-        assert result["completed"] and not result["available"]
-        assert "reconstruction destroys support" in result["cause"]
-    else:
-        assert result["completed"] and "reconstruction destroys support" not in result["cause"]
+    assert result["completed"] and result["available"]
+    assert "reconstruction destroys support" not in (result.get("cause") or "")

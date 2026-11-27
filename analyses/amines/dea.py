@@ -9,7 +9,7 @@ import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 from .records import RESULTS, input_path, read
 
-from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route
+from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route, with_parameter_values
 
 DEA = ROOT / "analyses/dea_transfer"
 DECLARATION = DEA / "inputs/part-ii-346/f2-carbamate-413-route.json"
@@ -56,6 +56,52 @@ class ExpandedDEA(Route):
         observations["fitted"].extend(promoted)
         observations["comparisons"] = [row for row in comparisons if row not in promoted]
         return spec
+
+
+class RepairedDEA(ExpandedDEA):
+    def bind(self, point):
+        spec = super().bind(point)
+        observations = spec.inputs["observations"]
+        rows = sorted(observations["fitted"] + observations["comparisons"], key=lambda r: r["observation_order"])
+        fitted, comparisons = [], []
+        for row in rows:
+            if row["group"] in ("Lawson", "Carson") or (
+                row["group"] == "Lal" and row["arguments"]["observed"] >= 50.0
+            ):
+                row["role"] = "fitted"
+                fitted.append(row)
+            else:
+                if row["role"] == "fitted":
+                    row["role"] = "not fitted"
+                comparisons.append(row)
+        pressures = [row for row in fitted if row["group"] in PRESSURE]
+        for row in pressures:
+            row["weight"] = 1 / (len(pressures) * PRESSURE_LOG_SCALE**2)
+        observations.update(fitted=fitted, comparisons=comparisons)
+        return spec
+
+
+def repaired_point(point):
+    binary = read(RESULTS / "dea/binary-temperature-dependent/fit-inputs/inputs.json")["binary"]
+    water_pair = "pair/diethanolamine/water/k_ij"
+    point["parameters"] = with_parameter_values(point["parameters"], {
+        water_pair: binary["a"] + binary["b_K"] * (1 / 313.15 - 1 / binary["reference_K"]),
+        water_pair + "/reciprocal_temperature_slope": binary["b_K"],
+    })
+    cation = "protonated-diethanolamine"
+    for identity, family, other, scale, bound in (
+        ("k-DEAH-water-slope", "k_ij_reciprocal_temperature_slope", "water", 50.0, 1000.0),
+        ("k-DEAH-CO2", "k_ij", "carbon-dioxide", 0.05, 1.0),
+    ):
+        point["coordinates"].append(dict(identity=identity, targets=[[family, [cation, other], 1.0]],
+                                         origin=0.0, scale=scale, bounds=[-bound, bound]))
+    return point
+
+
+def alternate_start(point):
+    trial = {"k-DEAH-water": -0.25, "k-DEACOO-water": -0.10, "hydrolysis-a": 6.264,
+             "hydrolysis-enthalpy-shift": 5000.0, "k-DEAH-water-slope": -50.0, "k-DEAH-CO2": 0.2}
+    return [(trial[q["identity"]] - q["origin"]) / q["scale"] for q in point["coordinates"]]
 
 
 def bubble(parameters, row):
@@ -261,7 +307,7 @@ FIT_SETS = {
         heat_capacity=ROOT / "data/reference/DEA/Maham1997_Table1_DEA_cp.csv",
     ),
     "reported": dict(
-        route=ExpandedDEA,
+        route=RepairedDEA,
         declaration=DECLARATION,
         retained=RESULTS / "dea/reported/fit",
         reference_pressure_pa=P_REF,

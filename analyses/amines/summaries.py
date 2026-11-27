@@ -356,6 +356,48 @@ def reported_grid_axes(s):
     return result
 
 
+def write_move_ablation(output):
+    from . import mea
+
+    wheel = verify()
+    comparisons = {}
+    inputs = []
+    bicarbonate = None
+    for module in (mea, mdea):
+        amine = module.__name__.rsplit(".", 1)[-1]
+        base = output / amine
+        reported_path = base / "reported/properties/summary.json.gz"
+        ablation_path = base / "water-bicarbonate-ablation/properties/summary.json.gz"
+        reported, ablation = read(reported_path), read(ablation_path)
+        inputs.extend((reported_path, ablation_path))
+        for name, result in (("reported", reported), ("water-bicarbonate-ablation", ablation)):
+            selection_path = base / name / "fit/selection.json"
+            selection = read(selection_path)
+            inputs.append(selection_path)
+            if result["wheel"] != wheel or result["endpoint_fingerprint"] != selection["endpoint_fingerprint"]:
+                raise ValueError(f"{amine}/{name}: properties and selected fit differ")
+        if module is mea:
+            fit = module.FIT_SETS["reported"]
+            point, selected = retained_endpoint(fit | {"retained": base / "reported/fit"})
+            baseline = module.ablation_pressures(route_for(fit).bind(point))
+            inputs.append(base / "reported/fit" / f'{selected["selected"]}.json.gz')
+            ablation_fit = base / "water-bicarbonate-ablation/fit"
+            point, selected = retained_endpoint(fit | {"retained": ablation_fit})
+            inputs.append(ablation_fit / f'{selected["selected"]}.json.gz')
+            bicarbonate = next(c["value"]["magnitude"] for pair in point["parameters"]["pairs"]
+                               for c in pair["coefficients"]
+                               if c["identity"] == "pair/bicarbonate-anion/water/k_ij")
+        else:
+            baseline = {group: [q for q in reported["rows"] if q["group"] == group]
+                        for group in ablation["rows"]}
+        for group, rows in baseline.items():
+            comparisons[f"{amine.upper()} {group}"] = paired(rows, ablation["rows"][group])
+    path = output / "shared/properties/water-bicarbonate-ablation.json.gz"
+    save(path, dict(wheel=wheel, comparisons=comparisons, bicarbonate=bicarbonate,
+                    inputs=[path.relative_to(output).as_posix() for path in inputs]))
+    return path
+
+
 def main():
     s = Records()
     attempts, distances = fit_attempts(s)

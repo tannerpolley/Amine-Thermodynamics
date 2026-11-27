@@ -1347,6 +1347,71 @@ def _census(row):
     return record
 
 
+def fresh_searches(amine, route, point, target):
+    """Search the W declarations at the selected endpoint."""
+    from time import monotonic
+
+    from .fit import fingerprint, save
+    from .records import RESULTS, ROOT, read
+
+    wheel, endpoint = verify(), fingerprint(point)
+    spec = route.bind(point)
+    declared = states(route, spec)
+    aliases = same_calculations(route, point, declared)
+    if amine == "mea":
+        bank = read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-trials.json")
+        protocols = {"grid": bank}
+    elif amine == "mdea":
+        bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
+        protocols = {"declared": bank["trials"] + bank.get("supplied_trials", [])}
+    else:
+        bank = route.load(route.config["split_record"])["trials"]
+        if amine == "amp":
+            path = ROOT / "analyses/amp_transfer/results/retransfer-344-05e94210/campaign"
+            saved = read(path / "new-witnesses.json.gz")
+            count = read(path / "start-0/retreat-disposition.json")["initial_trial_count"]
+            protocols = {"native": [], "supplied": bank + saved["additional"][:count - saved["initial"]]}
+        else:
+            protocols = {"declared": bank}
+
+    checks = {}
+    unique = [state for state in declared if state["key"] not in aliases]
+    settings = dict(max_workers=int(os.environ["AGENT_HEAVY_CORES"]), mp_context=get_context("fork"),
+                    initializer=_bind_search)
+    for protocol, witnesses in protocols.items():
+        start = monotonic()
+        searches = {}
+        with ProcessPoolExecutor(**settings, initargs=(route, point, witnesses)) as pool:
+            for row in pool.map(_search, unique, chunksize=4):
+                searches[row["key"]] = row["search"]
+                if len(searches) % 100 == 0:
+                    print(amine, protocol, len(searches), len(unique), f"{monotonic() - start:.1f} s", flush=True)
+        descents = [dict(row, key=key, native_branch=density_branch(row.get("witnesses", [])),
+                         supplied_branch=density_branch([trial["quantities"] for trial in row.get("supplied_trial_evidence", [])
+                                                         if supplied_negative(trial)]))
+                    for key, row in searches.items() if search_descent(row)]
+        searches.update({key: searches[source] for key, source in aliases.items()})
+        rows = [dict(searches[state["key"]], key=state["key"]) for state in declared]
+        payload = dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=rows, aliases=aliases,
+                       seconds=monotonic() - start)
+        save(target / f"{protocol}.json.gz", payload)
+        confirmations = confirm_descents(route, point, descents, declared) if amine != "mea" else []
+        save(target / f"{protocol}.json.gz", dict(payload, classifications=confirmations, seconds=monotonic() - start))
+        checks[protocol] = dict(counts=dict(Counter(search_class(row) for row in rows)),
+                               seconds=monotonic() - start)
+    if amine == "mea":
+        requests = RESULTS / "mea/reported/phase/requests"
+        bank = read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-registry.json")["trials"]
+        bank = [dict(witness, kind=witness["kind"].capitalize()) for witness in bank]
+        for protocol, calculate in (("measured", _measured), ("census", _census)):
+            start = monotonic()
+            with ProcessPoolExecutor(**settings, initargs=(route, point, bank)) as pool:
+                rows = list(pool.map(calculate, read(requests / f"{protocol}.json.gz"), chunksize=4))
+            save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=rows,
+                                                     seconds=monotonic() - start))
+    return dict(protocols=checks)
+
+
 def reported_searches(amine, fit_set, route, point, target):
     from .fit import fingerprint, save
     from .model import REPORTED

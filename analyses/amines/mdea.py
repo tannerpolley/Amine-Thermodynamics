@@ -39,6 +39,18 @@ class MDEAWeights(Route):
         return spec
 
 
+class NonDigitizedHeats(MDEAWeights):
+    def bind(self, point):
+        spec = super().bind(point)
+        observations = spec.inputs["observations"]
+        demoted = [row for row in observations["fitted"] if row["group"] == "Merkley"]
+        for row in demoted:
+            row["role"] = "not fitted"
+        observations["comparisons"].extend(demoted)
+        observations["fitted"] = [row for row in observations["fitted"] if row["group"] != "Merkley"]
+        return spec
+
+
 
 
 T_REF = 298.15  # Wangler Eqs. 34-35, T+ = 298.15 K
@@ -572,7 +584,7 @@ FIT_SETS = {
         },
     ),
     "water-bicarbonate-ablation": dict(
-        route=MDEAWeights,
+        route=NonDigitizedHeats,
         declaration=DECLARATION,
         reference_pressure_pa=P_REF,
         archive=CAMPAIGN_ARCHIVE,
@@ -582,7 +594,7 @@ FIT_SETS = {
         reference_keys=("replay",),
     ),
     "reported": dict(
-        route=MDEAWeights,
+        route=NonDigitizedHeats,
         declaration=DECLARATION,
         retained=RESULTS / "mdea/reported/fit",
         reference_pressure_pa=P_REF,

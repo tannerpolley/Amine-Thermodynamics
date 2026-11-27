@@ -1,12 +1,13 @@
 from math import nextafter
 
 from MEA.common.retained_results import read
-from analyses.amines.mdea import FIT_SETS, census_status
+from analyses.amines.mdea import census_status
+from analyses.amines.records import RESULTS
 from analyses.amines.wheel import verify
 
 
 def test_retained_available_row_misses_tighter_tolerance():
-    record = read(FIT_SETS["reported"]["retained"] / "A.json.gz")
+    record = read(RESULTS / "move/mdea/reported/fit/A.json.gz")
     assert record["wheel"] == verify()
     (row,) = (r for r in record["replay"]["rows"] if r["identity"] == "fit:0")
     residual = row["convergence"]["residual"]

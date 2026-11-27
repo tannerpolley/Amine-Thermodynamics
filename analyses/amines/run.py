@@ -38,19 +38,50 @@ def main():
             record = fit.replay_endpoint(declaration)
     elif args.amine == "salt" and args.stage in ("rows", "fit"):
         record = getattr(module, args.stage)(declaration)
+    elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "fit":
+        reported = module.FIT_SETS["reported"]
+        manifest = fit.move_manifest(args.amine, reported, args.output.resolve(), ablation=True)
+        fit.save(target / "manifest.json.gz", manifest)
+        record = fit.reported_fit(reported | declaration, manifest, target)
+    elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "properties":
+        reported = module.FIT_SETS["reported"]
+        point, selected = fit.retained_endpoint(reported | {"retained": target.parent / "fit"})
+        spec = fit.route_for(declaration).bind(point)
+        if args.amine == "mea":
+            rows = module.ablation_pressures(spec)
+        else:
+            from .model import evaluate
+
+            source = spec.inputs["observations"]
+            rows = {group: evaluate(spec, [row for row in source[role] if row["group"] == group])
+                    for group, role in (("Kuranov", "fitted"), ("Ermatchkov", "comparisons"), ("Carson", "fitted"))}
+        record = dict(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"], rows=rows)
+    elif args.amine == "amp" and args.fit_set == "first-data" and args.stage == "phase":
+        point = fit.read(declaration["endpoint"])
+        route = fit.route_for(declaration)
+        record = phase.fresh_searches(args.amine, route, point, target)
     elif "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
         parser.error("This fit set is replayed on the locked wheel")
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))
     elif args.stage == "fit":
-        manifest = fit.reported_manifest(args.amine, declaration, args.output.resolve())
+        held = fit.read(declaration["retained"] / "manifest.json.gz")
+        if held["wheel"] != verify():
+            manifest = fit.move_manifest(args.amine, declaration, args.output.resolve())
+        else:
+            manifest = fit.reported_manifest(args.amine, declaration, args.output.resolve())
         fit.save(target / "manifest.json.gz", manifest)
         record = fit.reported_fit(declaration, manifest, target)
     else:
-        point, selection = fit.retained_endpoint(declaration)
+        fresh = target.parent / "fit"
+        point, selection = fit.retained_endpoint(
+            declaration | {"retained": fresh} if (fresh / "selection.json").is_file() else declaration)
         route = fit.route_for(declaration)
         if args.stage == "phase":
-            record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
+            if (fresh / "selection.json").is_file():
+                record = phase.fresh_searches(args.amine, route, point, target)
+            else:
+                record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
         else:
             record = properties.property_rows(route, point)
             record.update(properties.reported_curves(args.amine, route, point))

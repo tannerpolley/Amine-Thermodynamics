@@ -848,6 +848,14 @@ def pressure_additions(spec, templates, population):
     return legacy, added
 
 
+def ablation_pressures(spec):
+    templates, population = pressure_inputs(PRESSURE_INPUTS)
+    legacy, added = pressure_additions(spec, templates, population)
+    return {"legacy-47": evaluate(spec, legacy),
+            "Mamun2005": evaluate(spec, [row for row in added
+                                        if population[row["identity"]]["source_key"] == "Mamun2005"])}
+
+
 def wagner_pressure_records(spec, legacy, templates, wagner, *, minimum_temperature=None):
     records = []
     for row in sorted(wagner, key=lambda row: row["subset"]):
