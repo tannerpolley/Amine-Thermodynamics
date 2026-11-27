@@ -1278,6 +1278,22 @@ def heat_intervals(spec, mapping, templates, rows):
         yield dict(row, status=status, predicted=value, diagnostic=diagnostic)
 
 
+def heat_comparison(spec, mapping, templates, retained):
+    source = retained["rows"]
+    intervals = [
+        dict(T_K=row["T_K"], pressure=source["system_pressure_Pa"],
+             previous_loading=row["previous_loading"], loading=row["loading"],
+             loading_ceiling=source["loading_ceiling"])
+        for row in source["rows"]
+    ]
+    return {"rows": [
+        dict(row, predicted_kJ_mol=result["predicted"], status=result["status"],
+             diagnostic=result["diagnostic"])
+        for row, result in zip(source["rows"], heat_intervals(spec, mapping, templates, intervals), strict=True)
+    ], "system_pressure_Pa": source["system_pressure_Pa"], "loading_ceiling": source["loading_ceiling"],
+        "sources": source["sources"]}
+
+
 def display_properties(route, point, fit):
     spec = route.bind(point)
     mapping = point["parameters"]
@@ -1379,6 +1395,8 @@ def display_properties(route, point, fit):
         "expanded-pressure": replay | identity,
         "off-window": dict(identity, rows=off_window),
         "wagner": dict(identity, rows=wagner),
+        "heat-comparison": dict(identity, rows=heat_comparison(
+            spec, mapping, template_groups, read(held_base / "MEA/heat-comparison.json.gz"))),
         "mea-comparisons": dict(identity, density=density, heat_capacity=capacities,
                                 carbonate_share=shares, kim_2007=kim),
         "bubble-checks": dict(identity, rows=reference_bubbles(spec, read(held_display / "bubble-checks.json.gz")["rows"])),

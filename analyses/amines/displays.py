@@ -79,6 +79,7 @@ def register_records(catalog):
     for source, target in {
         "E/MEA/replay.json.gz": "expanded-pressure",
         "MEA/off-window.json.gz": "off-window",
+        "MEA/heat-comparison.json.gz": "heat-comparison",
         "display-replays/mea-comparisons.json.gz": "mea-comparisons",
         "display-replays/wagner.json.gz": "wagner",
         "display-replays/bubble-checks.json.gz": "bubble-checks",
@@ -2529,8 +2530,9 @@ def result_values(required):
     for passage in ("introduction", "conclusion", "dea-results", "residual-figure-caption", "expanded-comparison", "range-check"):
         add(f"dea-fitted-partial-pressure-count-{passage}", record, "rows[Pa,fitted].count", str(len(dea_pressures)))
     add("dea-not-fitted-partial-pressure-count-residual-figure-caption", record,
-        "rows[Lawson-394K, not fitted, Available].count",
-        str(sum(row["group"] == "Lawson-394K" and row["role"] == "not fitted" and row["status"] == "Available"
+        "rows[Lawson|Lawson-394K|SeoHong|Lal|Lawson-VIII, Pa, not fitted, Available].count",
+        str(sum(row["group"] in ('Lawson', 'Lawson-394K', 'SeoHong', 'Lal', 'Lawson-VIII')
+                and row["unit"] == "Pa" and row["role"] == "not fitted" and row["status"] == "Available"
                 for row in dea_rows)))
     add("dea-comparison-only-partial-pressure-count-residual-figure-caption", record,
         "rows[Lawson-VIII, comparison only, Available].count",
@@ -2839,7 +2841,7 @@ def result_values(required):
         'MEA and DEA endpoint.parameters: cube root of the DEA/MEA neutral segment-volume ratio',
         format(((next(c["value"]["magnitude"] for x in read('analyses/fixed_reaction_reference/results/DEA/A.json.gz')["endpoint"]["parameters"]["components"] if x["component_id"]=='diethanolamine' for c in x["coefficients"] if c["family"]=='segment_count') / next(c["value"]["magnitude"] for x in r["endpoint"]["parameters"]["components"] if x["component_id"]=='monoethanolamine' for c in x["coefficients"] if c["family"]=='segment_count'))**(1/3) * next(c["value"]["magnitude"] for x in read('analyses/fixed_reaction_reference/results/DEA/A.json.gz')["endpoint"]["parameters"]["components"] if x["component_id"]=='diethanolamine' for c in x["coefficients"] if c["family"]=='segment_diameter') / next(c["value"]["magnitude"] for x in r["endpoint"]["parameters"]["components"] if x["component_id"]=='monoethanolamine' for c in x["coefficients"] if c["family"]=='segment_diameter')), '.4f'))
 
-    record = 'analyses/amines/results/mea/reported/replay/endpoint.json.gz'
+    record = STUDY + 'results/MEA/A.json.gz'
     r = read(record)
     add('mea-fitted-heat-cp-density-maximum-aard-rounded', record,
         'maximum AARD over fitted heat, Cp and density groups, rounded to whole percent',
@@ -3575,7 +3577,7 @@ def result_values(required):
 
 
 
-    dea_binary_fit = 'analyses/dea_transfer/results/binary.json'
+    dea_binary_fit = 'analyses/amines/results/dea/binary-temperature-dependent/fit-inputs/inputs.json'
     amp_pure_fit = 'analyses/amp_transfer/results/retransfer-344-05e94210/pure-binary-on-05e94210.json'
     for amine, design, component in (
         ('dea', 'DEA', 'diethanolamine'), ('mdea', 'MDEA', 'methyldiethanolamine'),
@@ -3588,7 +3590,7 @@ def result_values(required):
         adjusted += sum(q['family'].startswith('dielectric_') for q in selected['coefficients'])
         records = [endpoint_path]
         if amine == 'dea':
-            adjusted += len(read(dea_binary_fit)['binary'].keys() & {'k_ij'})
+            adjusted += len(read(dea_binary_fit)['binary'].keys() & {'a', 'b_K'})
             records.append(dea_binary_fit)
         elif amine == 'amp':
             adjusted += len(read(amp_pure_fit)['pure']['parameter_values'])
