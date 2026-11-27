@@ -6,18 +6,17 @@ Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the 
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
 \Cref{tab:mea-data} lists the MEA data with their roles and deviations, and Table~\ref{supp-tab:transfer-deviations} those of DEA, MDEA and AMP.
 The objectives contain \res{mea-objective-observations-methods} observations for MEA, \res{dea-objective-observations-methods} for DEA, \res{mdea-objective-observations-methods} for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Table~\ref{supp-tab:supplement-mea-comparison} gives the MEA sets that are compared and are not pressures.
-The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it, so \res{mea-responsive-observations-methods-data} of its observations respond to the fitted parameters.
+The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it.
 
 % P:methods-selection
 The fitted sets were chosen amine by amine, not by one rule.
 The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are compared but not fitted.
-The DEA objective has \res{dea-fitted-loaded-pressure-source-count-methods} loaded-pressure sources: \res{dea-lawson-fitted-pressure-count-methods} \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}), and the \res{dea-lal-fitted-pressure-count-methods} pressures of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA that are at or above \SI{0.05}{\kilo\pascal}.
+The DEA objective contains the \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, measured with methane in the cell, which the calculation omits, and those of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA at or above \SI{0.05}{\kilo\pascal}.
 Four further DEA pressure sets are compared and not fitted.
-The \res{dea-lal-low-pressure-count-methods} pressures of Lal et al.\ below \SI{0.05}{\kilo\pascal} lie under the pressure above which that source states its accuracy, 15\,\%, and its authors consider four of them probably in error \cite{lalSolubilityH2SCO21985}.
-The \res{dea-seo-hong-pressure-count-methods} pressures of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} conflict with those of Lawson and Garst: at a loading of 0.404 in 30 wt\% DEA at \SI{353.15}{\kelvin} Seo and Hong report \SI{11.6}{\kilo\pascal}, whereas Lawson and Garst report 16.0 and \SI{16.7}{\kilo\pascal} at a loading of 0.410 in 25 wt\% DEA at \SI{338.71}{\kelvin}, a higher pressure at a lower temperature and a lower DEA content.
-The \res{dea-lawson-hot-pressure-row-count-methods} pressures of Lawson and Garst at \SI{394}{\kelvin} and their \res{dea-lawson-concentrated-pressure-count-methods} at 50--54.5 wt\% DEA lie above the fitted temperatures and DEA contents.
-For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation.
-For AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
+The pressures of Lal et al.\ below \SI{0.05}{\kilo\pascal} lie under the pressure above which that source states its accuracy, 15\,\%, and its authors consider four of them probably in error \cite{lalSolubilityH2SCO21985}.
+The pressures of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} conflict with those of Lawson and Garst, giving a lower pressure at a higher temperature and DEA content (Section~\ref{supp-sec:s-corrections}).
+The pressures of Lawson and Garst at \SI{394}{\kelvin} and at 50--54.5 wt\% DEA lie above the fitted temperatures and DEA contents.
+For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation, and for AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
 The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
 
 % P:methods-range
@@ -43,7 +42,7 @@ The semi-differential heats of Kim and Svendsen are calculated over each finite 
 % P:methods-04
 Estimation is sequential.
 The water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, the permittivity coefficients and the two salt-fitted water--anion interactions (\cref{sec:species}) are determined first and remain fixed.
-\res{mea-jointly-fitted-parameter-count-methods} MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}), and with all shared parameters fixed, \res{dea-reactive-fitted-parameter-count-methods} DEA, \res{mdea-reactive-fitted-parameter-count-methods} MDEA and \res{amp-reactive-fitted-parameter-count-methods} AMP parameters are fitted (\cref{tab:transfer-fitted}).
+\res{mea-jointly-fitted-parameter-count-methods} MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}), and with all shared parameters fixed, \res{dea-reactive-fitted-parameter-count-methods} DEA, \res{mdea-reactive-fitted-parameter-count-methods} MDEA and \res{amp-reactive-fitted-parameter-count-methods} AMP parameters are fitted (\cref{tab:dea-fitted,tab:mdea-fitted,tab:amp-fitted}).
 Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction with its temperature coefficient and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
 Each fit minimizes
 \begin{equation}
@@ -58,11 +57,9 @@ with the logarithmic form for pressures.
 % P:methods-weights
 Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
-Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective.
-The loaded-solution pressures contribute \res{dea-loaded-pressures-objective-share-methods}\,\% of the DEA objective and \res{amp-loaded-pressures-objective-share-methods}\,\% of the AMP objective.
+Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective; the loaded-solution pressures dominate the DEA and AMP objectives.
 In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
-There the loaded total pressures contribute \res{mdea-loaded-pressures-objective-share-methods}\,\% and the \res{mdea-unloaded-density-count-methods} densities of the \COtwo-free solution \res{mdea-unloaded-densities-objective-share-methods}\,\%.
-In the MEA objective the \res{mea-cai-binary-observation-count-methods} MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the objective value, \res{mea-selected-objective-cai-weight}, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
+The MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the MEA objective but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
 The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
@@ -86,7 +83,7 @@ For the parameters that are not on a bound, the local covariance is
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
-Observations that respond to no fitted parameter are left out of both the sum and the count: the \res{mea-kiepe-constant-pressure-count-covariance} Kiepe pressures among the \res{mea-objective-observations-methods-covariance} observations of the MEA objective, a constant contribution to it, which leaves \res{mea-responsive-observations-methods} observations and \res{mea-residual-degrees-of-freedom-methods} residual degrees of freedom, and \res{mdea-pure-water-pressures-constant-methods} pure-water pressures of the MDEA objective, which leaves \res{mdea-responsive-observations-methods} observations and \res{mdea-residual-degrees-of-freedom-methods} residual degrees of freedom.
+Observations that respond to no fitted parameter, the Kiepe pressures of the MEA objective and the pure-water pressures of the MDEA objective, are left out of both the sum and the count.
 These standard errors are conditional on the model form, the equilibrium-constant correlations, the fixed shared parameters, the scales, the weights and the local linearization; they exclude model discrepancy and systematic differences between sources and do not define prediction intervals.
 
 \subsection{Phase-stability search}\label{sec:methods-phase}

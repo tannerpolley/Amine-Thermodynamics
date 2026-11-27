@@ -236,7 +236,7 @@ A molality-basis constant follows from the mole-fraction constant of its source 
 \end{equation}
 where $\nu_{ri}$ is the stoichiometric number of species $i$ in reaction $r$, $M_{\HtwoO}$ is the molar mass of water and $m^{\circ}=\SI{1}{\mole\per\kilogram}$.
 These correlations are written in the form $\ln K(T)=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ on the common-molality reference basis, with $T$ in K and $T_{\mathrm{ref}}=\SI{313.15}{\kelvin}$, which is equivalent to main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}).
-For DEA and AMP, the fitted-parameter table of the main text gives the enthalpy increment $\delta h$ and the change of $\ln K_4$ at \SI{313.15}{\kelvin} relative to the starting R4 correlation, that of Aroua et al.\ for DEA \cite{arouaTemperatureDependencyEquilibrium1997} and that of Silkenb\"aumer et al.\ for AMP \cite{silkenbaumerSolubilityCarbonDioxide1998}; the final coefficients listed here already include both.
+For DEA and AMP, the fitted-parameter tables of the main text give the enthalpy increment $\delta h$ relative to the starting R4 correlation, that of Aroua et al.\ for DEA \cite{arouaTemperatureDependencyEquilibrium1997} and that of Silkenb\"aumer et al.\ for AMP \cite{silkenbaumerSolubilityCarbonDioxide1998}; the final coefficients listed here include it and the fitted constant term.
 At 298.15, 313.15 and \SI{393.15}{\kelvin} the fitted DEA correlation differs from its starting correlation in $\ln K_4$ by $\res{dea-fitted-r4-log-constant-change-low-temperature}$, $\res{dea-fitted-r4-log-constant-change-reference-temperature}$ and $\res{dea-fitted-r4-log-constant-change-high-temperature}$, and the fitted AMP correlation by $\res{amp-fitted-r4-log-constant-change-low-temperature}$, $\res{amp-fitted-r4-log-constant-change-reference-temperature}$ and $\res{amp-fitted-r4-log-constant-change-high-temperature}$.
 At \SI{313.15}{\kelvin} the conditional standard errors are \res{dea-r4-log-constant-conditional-standard-error} for DEA and \res{amp-r4-log-constant-conditional-standard-error} for AMP.
 The measurements behind the DEA correlation span 303--\SI{331}{\kelvin} and the model estimates behind the AMP correlation 313.15--\SI{373.15}{\kelvin}, so the first and last of these temperatures are extrapolations.
@@ -373,6 +373,7 @@ All observations of Weiland et al.\ are kept, including a suspected misprint: at
 The \COtwo-free pressures of Kuranov et al.\ are read from the column of their Table~2 that is 10 times the total pressure in MPa \cite{kuranovSolubilitySingleGases1996}.
 The MDEA species calculations for B\"ottinger et al.\ are made at 0.5 and at 2.5 MPa, the ends of the reported cell-pressure interval, and both are reported.
 Over all observations the AARD is insensitive to the assigned pressure, \res{mdea-bottinger-amine-sum-aard-across-assigned-pressures}\,\% for the amine sum and \res{mdea-bottinger-bicarbonate-aard-five-bar}/\res{mdea-bottinger-bicarbonate-aard-twenty-five-bar}\,\% for bicarbonate plus carbonate at each assigned pressure; this does not mean that the calculated speciation is independent of pressure at each state.
+The pressures of Seo and Hong conflict with those of Lawson and Garst: at a loading of 0.404 in 30 wt\% DEA at \SI{353.15}{\kelvin} Seo and Hong report \SI{11.6}{\kilo\pascal}, whereas Lawson and Garst report 16.0 and \SI{16.7}{\kilo\pascal} at a loading of 0.410 in 25 wt\% DEA at \SI{338.71}{\kelvin}.
 The total pressures of P\'erez-Salado Kamps et al.\ are used at the corrected temperatures of Table~6 of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}.
 The MDEA calculations use the ideal-gas heat-capacity correlation of Neumann et al.\ \cite{neumannThermodynamicPropertiesMethyl2022}.
 The carbamate fractions of Ciftja et al.\ are taken as carbamate per total AMP.
@@ -446,9 +447,7 @@ Because $P_{\mathrm{src}}$ is fixed, the reference chemical potentials depend on
 \section{Conditional parameter uncertainty}\label{sec:s-uncertainty}
 % P:supplement-covariance-01
 For the MEA model, the \res{mea-interior-coordinate-count-supplement} parameters that are not at a bound have the local covariance of main-text Eq.~(\ref{main-eq:conditional-covariance}); the \MEAH--\MEACOO interaction at its lower bound and the \MEAH--bicarbonate interaction at its upper bound remain fixed.
-The weighted Jacobian has rank \res{mea-covariance-weighted-jacobian-rank}.
 The variance factor of that equation is \res{mea-conditional-variance-factor-supplement}, from the \res{mea-responsive-observations-supplement} observations that respond to at least one fitted parameter and \res{mea-residual-degrees-of-freedom-supplement} residual degrees of freedom; the \res{mea-kiepe-constant-pressure-count-supplement-covariance} Kiepe pressures have \res{mea-kiepe-zero-derivative-value} derivatives with respect to all \res{mea-jointly-fitted-parameter-count-kiepe-derivatives} parameters.
-Counting all \res{mea-objective-observations-supplement-covariance} observations would give \res{mea-all-row-variance-supplement} and standard errors smaller by the factor \res{mea-responsive-to-all-row-standard-error-ratio}.
 Propagated to the \res{mea-reported-covariance-volatilization-pressure-count-supplement} fitted \COtwo partial pressures, the covariance gives relative standard errors of \res{mea-reported-fitted-pressure-minimum-relative-se-supplement}--\res{mea-reported-fitted-pressure-maximum-relative-se-supplement}\,\%.
 Table~\ref{tab:supplement-fitted-parameters} gives values, bounds and conditional standard errors, and Table~\ref{tab:supplement-correlations} gives the correlations in the same parameter order.
 Correlated errors within one experimental source, model discrepancy, uncertainty of the equilibrium-constant correlations and of the salt-fitted interactions, and future measurement noise are not included.
@@ -457,9 +456,9 @@ Correlated errors within one experimental source, model discrepancy, uncertainty
 \input{tables/supplement_correlations}
 
 % P:supplement-covariance-transfer
-For DEA, MDEA and AMP, main-text Table~\ref{main-tab:transfer-fitted} gives the conditional standard errors, which are also conditional on the fixed shared parameters, and Table~\ref{tab:supplement-transfer-bounds} gives the bounds.
+For DEA, MDEA and AMP, main-text Tables~\ref{main-tab:dea-fitted}--\ref{main-tab:amp-fitted} give the conditional standard errors, which are also conditional on the fixed shared parameters, and Table~\ref{tab:supplement-transfer-bounds} gives the bounds.
 The conditional correlation between the DEA carbamate--water interaction and the constant term of the DEA R4 correlation is \res{dea-carbamate-water-r4-level-conditional-correlation-supplement}.
-For AMP the carbamate diameter and the R4 enthalpy increment are on their lower bounds and have no standard error; the change of the R4 constant at \SI{313.15}{\kelvin} has a conditional standard error of \res{dea-amp-uncertainty-log-constant-standard-error}, and the slope $b_{\mathrm{AMPH^+,w}}$ has one of \SI{\res{amp-uncertainty-cation-water-slope-standard-error}}{\kelvin}, larger than its value of \SI{\res{amp-uncertainty-cation-water-slope}}{\kelvin}.
+For AMP the carbamate diameter and the R4 enthalpy increment are on their lower bounds and have no standard error, and the other standard errors are conditional on both; the change of the R4 constant at \SI{313.15}{\kelvin} has a conditional standard error of \res{dea-amp-uncertainty-log-constant-standard-error}, and the slope $b_{\mathrm{AMPH^+,w}}$ has one of \SI{\res{amp-uncertainty-cation-water-slope-standard-error}}{\kelvin}, larger than its value of \SI{\res{amp-uncertainty-cation-water-slope}}{\kelvin}.
 The DEA and AMP variance factors are \res{dea-conditional-stage-variance-supplement} and \res{amp-conditional-stage-variance-supplement}, on \res{dea-conditional-dof-supplement} and \res{amp-conditional-dof-supplement} residual degrees of freedom.
 The MDEA variance factor is \res{mdea-conditional-variance-factor-supplement}, on \res{mdea-residual-degrees-of-freedom-supplement} residual degrees of freedom, because \res{mdea-pure-water-pressures-constant-supplement} pure-water pressures respond to no fitted parameter.
 The MDEA standard errors are conditional on the \res{mdea-active-bound-count-supplement} parameter on a bound, $k_{\mathrm{MDEA,w}}$ at 423 K; the largest conditional correlation, $\res{mdea-cation-water-and-dispersion-conditional-correlation-covariance}$, is between $k_{\mathrm{MDEAH^+,w}}$ and $u_{\mathrm{MDEAH^+}}$.
@@ -497,7 +496,7 @@ Trial compositions at which a Gibbs-energy decrease was found with other paramet
 For MEA, the liquid grid contains \res{mea-liquid-grid-dense-requests} states at 15, 25, 35 and 45 wt\% MEA, 313.15--\SI{393.15}{\kelvin} in \SI{10}{\kelvin} steps, and loading $10^{-5}$ plus 0.025--0.6 mol/mol in 0.025 steps, at 1.05 and 3.0 times the bubble pressure of the parameter set being searched.
 Another \res{mea-liquid-grid-census-requests} states use the composition of the liquid--vapor search at those two ratios.
 A second liquid grid, offset from the first, contains \res{mea-liquid-grid-offset-requests} states at 20, 30 and 40 wt\%, 318.15--\SI{388.15}{\kelvin} and loadings 0.0125--0.5875, at 1.5 times the bubble pressure.
-These are the \res{mea-liquid-grid-requests-supplement} liquid states of the main text, and none has a detected instability.
+None of these \res{mea-liquid-grid-requests-supplement} liquid states has a detected instability.
 
 % P:supplement-phase-census
 The MEA liquid--vapor search contains six temperatures, 313.15, 318.15, 333.15, 353.15, 373.15 and \SI{393.15}{\kelvin}, and nine loadings, $10^{-5}$, 0.05, 0.1, 0.2, 0.256, 0.3, 0.4, 0.5 and 0.6 mol/mol.
@@ -560,15 +559,24 @@ The first fit differs from the AMP model in its data, in the water--anion intera
 \label{fig:amp-splits}
 \end{figure}
 
-\section{Published comparisons that are not on identical observations}\label{sec:s-published}
+\section{Published comparisons}\label{sec:s-published}
 % P:supplement-published-dea
 For the DEA data no source gives a numerical deviation of a model on the observations used here: Lawson and Garst report scatter against smoothed curves \cite{lawsonGasSweeteningData1976}, Lal et al.\ compare the Kent--Eisenberg treatment graphically \cite{lalSolubilityH2SCO21985}, and Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy together and give no deviation for either \cite{horstmannPhaseEquilibriumExcess2002}.
 The electrolyte cubic-two-state equation of state of T\'ellez-Arredondo and Medeiros reports 11.1\,\% for 99 pressures of loaded DEA at 298.15--394.26 K and 10.2--50.0 wt\% DEA, fitted with one ionic and seven binary parameters \cite{tellez-arredondoModelingCO2H2S2013}; its observations are not those used here.
 
+% P:supplement-published-mea
+For MEA, Najafloo and Zarei do not define the average absolute deviation that they report for the Ma'mun pressures, which is taken as main-text Eq.~(\ref{main-eq:aard}), and their methods and conclusions describe the fitting differently \cite{Najafloo2018}.
+Aronu et al.\ fitted an extended UNIQUAC model to their own data at 15--60 wt\% MEA and report 24.3\,\% for all their \COtwo partial pressures together \cite{Aronu2011}; these are not the observations compared in the main text.
+Rodr\'iguez et al.\ compare their SAFT-VR model with the MEA pressures of Jou et al.\ and the MDEA pressures of Kuranov et al.\ only graphically \cite{Rodriguez2012}.
+
+% P:supplement-published-kamps
+The published deviations of parameter sets I and II of Ermatchkov et al.\ are for all \res{mdea-kamps-comparison-count-results} total pressures of P\'erez-Salado Kamps et al.\ at the corrected temperatures, and the MDEA model is compared on the same observations.
+Without their most loaded state, at 8.0 mol/kg, the MDEA model deviates by \res{mdea-corrected-kamps-common-pressure-aard-transfer}\,\% on the other \res{mdea-corrected-kamps-common-pressure-count-transfer}; at that state it calculates \res{mdea-corrected-kamps-additional-pressure-predicted} MPa against \res{mdea-corrected-kamps-additional-pressure-measured} MPa measured, a deviation of $\res{mdea-corrected-kamps-additional-pressure-deviation-transfer}$\,\%.
+
 % P:supplement-published-amp
 For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; their Table~10 labels the statistic AAD, but its footnote prints a signed relative-deviation formula. The statistic and the 56 observations therefore do not support a direct AARD comparison with the \res{amp-unfitted-kundu-partial-pressure-count} observations used here.
 Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite{hartonoNewSolubilityHeat2021}.
-The eNRTL models of Yi et al.\ \cite{yiOpenAccessThermodynamically2024} and of Hartono et al.\ (2020) \cite{hartonoSolubilityCO201M2020}, whose deviations the main text quotes, were both fitted to these observations, and the 45 pressures of Tong et al.\ include five of the \COtwo-free solution.
+The eNRTL models of Yi et al.\ \cite{yiOpenAccessThermodynamically2024} and of Hartono et al.\ (2020) \cite{hartonoSolubilityCO201M2020}, whose deviations main-text Table~\ref{main-tab:published-models} lists, were both fitted to these observations, and the 45 pressures of Tong et al.\ include five of the \COtwo-free solution.
 
 % P:supplement-published-kuranov
 For MDEA, three ePC-SAFT studies report deviations from the total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} that were calculated without fitting a parameter to the \COtwo--MDEA--water system.
@@ -576,7 +584,6 @@ Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
 The value of the MDEA model is calculated on the \res{mdea-source-matched-kuranov-count-supplement} total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only, and main-text Table~\ref{main-tab:published-models} lists them with the \res{mdea-kuranov-all-pressure-aard-supplement}\,\% of the MDEA model on those observations, of which it fitted \res{mdea-fitted-kuranov-pressure-count-published-fit-coverage} loaded and \res{mdea-source-matched-kuranov-free-fitted-count} \COtwo-free pressures, without ranking them.
-The unfitted row 72, at 393.16 K, is calculated at \res{mdea-kuranov-row-72-reported-reference-pressure} MPa against \res{mdea-kuranov-row-72-measured-pressure} MPa measured.
 The subset values are for different observation sets from the \res{mdea-fitted-kuranov-pressure-count-literature-subsets} pressures fitted here, from which the MDEA model deviates by \res{mdea-fitted-pressure-aard-literature-subsets}\,\%, and they are listed without a comparison.
 
 \bibliographystyle{styles/model1-num-names}
