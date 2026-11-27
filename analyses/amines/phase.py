@@ -1077,11 +1077,13 @@ def _bind_search(route, point, witnesses):
     global _route, _spec, _supplied
     verify()
     _route, _spec = route, route.bind(point)
-    _supplied = SuppliedTrials(_spec, witnesses) if witnesses else None
+    # The reported MDEA screen used the declared feed and reactions to admit supplied trials.
+    _supplied = SuppliedTrials(_spec, witnesses, compiled_support=route.config.get("amine") != "methyldiethanolamine") if witnesses else None
 
 
 def _search(state):
-    return native_search(_route, _spec, state, supplied=_supplied)
+    return native_search(_route, _spec, state, supplied=_supplied,
+                         cap_from_prediction=_route.config.get("amine") == "methyldiethanolamine")
 
 
 def measured_search(spec, row, bank):
