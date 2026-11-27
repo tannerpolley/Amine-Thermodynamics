@@ -1,0 +1,97 @@
+{
+  "carbamate": {
+    "epsilon": 204.0747785808794,
+    "sigma": 5.201154017021453
+  },
+  "parameter_sha256": "ee618a9c1eaa3e0684a0344dc8345285ae6715bfc86e9392d2232d99028ea260",
+  "source": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/parameters.json",
+  "water_ion_pairs": [
+    {
+      "coefficients": [
+        {
+          "family": "k_ij",
+          "identity": "pair/bicarbonate-anion/water/k_ij",
+          "provenance": {
+            "locator": "salt-anchored-435/salt/summary.json",
+            "source_id": "issue-435"
+          },
+          "temperature_law": {
+            "form": "polynomial-plus-reciprocal-temperature",
+            "reference_temperature": {
+              "magnitude": 313.15,
+              "unit": "kelvin"
+            },
+            "terms": [
+              {
+                "coefficient": {
+                  "identity": "pair/bicarbonate-anion/water/k_ij/a0",
+                  "value": {
+                    "magnitude": 0.1706931974036258,
+                    "unit": "dimensionless"
+                  }
+                },
+                "power": 0
+              },
+              {
+                "coefficient": {
+                  "identity": "pair/bicarbonate-anion/water/k_ij/a1",
+                  "value": {
+                    "magnitude": 0.0039311876328716865,
+                    "unit": "1 / kelvin"
+                  }
+                },
+                "power": 1
+              }
+            ]
+          }
+        }
+      ],
+      "component_id_a": "bicarbonate-anion",
+      "component_id_b": "water"
+    },
+    {
+      "coefficients": [
+        {
+          "family": "k_ij",
+          "identity": "pair/carbonate-anion/water/k_ij",
+          "provenance": {
+            "locator": "salt-anchored-435/salt/summary.json",
+            "source_id": "issue-435"
+          },
+          "temperature_law": {
+            "form": "polynomial-plus-reciprocal-temperature",
+            "reference_temperature": {
+              "magnitude": 313.15,
+              "unit": "kelvin"
+            },
+            "terms": [
+              {
+                "coefficient": {
+                  "identity": "pair/carbonate-anion/water/k_ij/a0",
+                  "value": {
+                    "magnitude": -0.9705531093245405,
+                    "unit": "dimensionless"
+                  }
+                },
+                "power": 0
+              },
+              {
+                "coefficient": {
+                  "identity": "pair/carbonate-anion/water/k_ij/a1",
+                  "value": {
+                    "magnitude": 0.0019631260450306285,
+                    "unit": "1 / kelvin"
+                  }
+                },
+                "power": 1
+              }
+            ]
+          }
+        }
+      ],
+      "component_id_a": "carbonate-anion",
+      "component_id_b": "water"
+    }
+  ],
+  "wheel_sha256": "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb"
+}

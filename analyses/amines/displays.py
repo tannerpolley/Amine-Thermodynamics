@@ -14,6 +14,7 @@ import math
 from math import fsum, sqrt
 from operator import getitem
 from pathlib import Path
+from posixpath import normpath
 import re
 from statistics import mean
 
@@ -40,20 +41,27 @@ HONG_REPLAY = "analyses/amines/results/mea/published/replay/endpoint.json.gz"
 MDEA_PUBLISHED_REPLAY = "analyses/amines/results/mdea/published/replay/endpoint.json.gz"
 sources = {}
 stage_records = {}
+record_paths = {}
 
 
 def register_records(catalog):
-    stage_records.update({
-        key: ROOT / key for key, row in catalog.items()
-        if "record" in row and row["disposition"] not in ("comparison-only", "orphan")
-    })
+    for key, row in catalog.items():
+        if "record" not in row or row["disposition"] in ("comparison-only", "orphan"):
+            continue
+        path = ROOT / key
+        if not path.is_relative_to(ROOT / "analyses/amines/results") and row.get("c_disposition") != "retain-in-place":
+            continue
+        record_paths[key] = key
+        if "archive_path" in row:
+            record_paths[row["archive_path"]] = key
+        stage_records[key] = path
 
 
 def read(name):
     path = Path(name)
     if not path.is_absolute():
         path = ROOT / path
-    key = path.resolve().relative_to(ROOT).as_posix()
+    key = record_paths[normpath(path.relative_to(ROOT).as_posix())]
     raw = stage_records[key].read_bytes()
     sources[key] = sha256(raw).hexdigest()
     data = gzip.decompress(raw) if path.suffix == ".gz" else raw
@@ -1642,7 +1650,7 @@ def transfer_displays(outputs):
     table('calibration-data', 'Data in the objective of each model, data fitted beforehand and data outside the objective that informed a choice.', ['Observable', 'Source', '$N$', '$T$ (K)', 'Role'], design, [.36, .16, .07, .19, .18],
           notes=r'Fitted: in the objective of the reported fit, ' + ', '.join(f'{n} observations for {k}' for k, n in objective_n.items()) + r'. Fitted beforehand: used to set a parameter that the reactive fit holds fixed. \textsuperscript{a}Development: outside the objective, but used to choose the parameters or the initial parameter set (Section~\ref{sec:data-roles}). \textsuperscript{b}The Kiepe pressures give a constant contribution to the reactive objective. $p_{\COtwo}$: \COtwo partial pressure; total pressure: bubble pressure of the loaded solution. Table~\ref{tab:mea-data} and Table~\ref{supp-tab:supplement-transfer-data} give the compositions, loadings and deviations of every set, including those that are neither fitted nor used for a choice.')
     # Carbonate share of Jakobsen et al. under the tested electrostatic and shared-ion changes (#423).
-    (electrostatics,) = (key for key in stage_records if '/shared-ion-electrostatics-423/' in key and key.endswith('/arm-replay-costs.json'))
+    (electrostatics,) = (key for key in record_paths if key.startswith('analyses/mea_parameter_bundle/') and '/shared-ion-electrostatics-423/' in key and key.endswith('/arm-replay-costs.json'))
     C423 = electrostatics.removesuffix('arm-replay-costs.json')
     CCASES = [('P0', 'Fit with the MEA-fitted shared set'), ('bicarbonate-anion-2.5', r'Bicarbonate Born diameter \SI{2.5}{\angstrom}'), ('bicarbonate-anion-3.5', r'Bicarbonate Born diameter \SI{3.5}{\angstrom}'), ('bicarbonate-anion-4', r'Bicarbonate Born diameter \SI{4.0}{\angstrom}'),
               ('carbonate-anion-2.5', r'Carbonate Born diameter \SI{2.5}{\angstrom}'), ('carbonate-anion-4', r'Carbonate Born diameter \SI{4.0}{\angstrom}'), ('carbonate-anion-4.953', r'Carbonate Born diameter \SI{4.953}{\angstrom}'),
@@ -3097,6 +3105,11 @@ def result_values():
     values = {}
 
     def add(name, record, key, value):
+        def stage_path(locator):
+            return re.sub(r"(?:analyses|data)/[^ ,;\[\]|]+",
+                          lambda part: record_paths.get(normpath(part[0]), part[0]), locator)
+
+        record = [stage_path(locator) for locator in record] if isinstance(record, (list, tuple)) else stage_path(record)
         values[name] = dict(value=value, record=record, key=key)
 
     starts = {name: read(STUDY + f"results/{name}/selection.json")["selected"] for name in ("MEA", "AMP_free")}
@@ -4177,8 +4190,7 @@ def result_values():
             f"{coefficient:.{digits}f}")
 
     control, = (key for key in stage_records if '/shared-ion-electrostatics-423/' in key and key.endswith('/arm-replay-costs.json'))
-    prefix = control.removesuffix('arm-replay-costs.json')
-    cases = [name for name in stage_records if name.startswith(prefix) and name.endswith('/metrics.json')]
+    cases = [name for name in stage_records if '/mea/electrostatics/' in name and name.endswith('/metrics.json')]
     base = read(control)["arms"]["P0"]["cost"]
     costs = {case: abs(read(case)["cost"] / base - 1) for case in cases}
     record = max(costs, key=costs.get)
@@ -5406,7 +5418,7 @@ def result_values():
     r = read(record)
     add('mea-tested-electrostatics-maximum-carbonate-share-geometric-mean', record,
         'max summary.all.geometric_mean over electrostatic sensitivity cases',
-        format((max(read(p)["summary"]["all"]["geometric_mean"] for p in stage_records if p.startswith('analyses/mea_parameter_bundle/results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/') and p.endswith("/carbonate-share.json") and not p.endswith("/P0/carbonate-share.json"))), '.4f'))
+        format((max(read(p)["summary"]["all"]["geometric_mean"] for p in stage_records if p.startswith('analyses/amines/results/mea/sensitivities/replay/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/') and p.endswith("/carbonate-share.json") and not p.endswith("/P0/carbonate-share.json"))), '.4f'))
 
     temperatures_record = 'analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/carbonate-share.csv'
     replay_record = STUDY + 'results/display-replays/mea-comparisons.json.gz'
@@ -6458,7 +6470,7 @@ def display_literals(path):
             locators.update(ast.walk(node.value))
     for node in ast.walk(tree):
         if (isinstance(node, ast.Constant) and isinstance(node.value, str)
-                and node not in locators and node.value != SCIENTIFIC.pattern and node.value not in stage_records):
+                and node not in locators and node.value != SCIENTIFIC.pattern and node.value not in record_paths):
             yield node.lineno, node.value, lines[node.lineno - 1].strip()
 
 
