@@ -11,7 +11,7 @@ from time import monotonic
 from .model import parameter_values, replay, row_manifest, with_parameter_values
 from .properties import endpoint_diagnostics, property_rows
 from .wheel import verify
-from .records import RESULTS, input_path, read
+from .records import ROOT, RESULTS, input_path, read
 from MEA.solvent_specification import jsonable
 
 
@@ -195,7 +195,22 @@ def move_manifest(amine, fit_set, output, *, ablation=False):
         held = read(preserved / "A.json.gz")
         point = deepcopy(held["endpoint"])
     mapping = point["parameters"]
-    if not ablation:
+    if ablation:
+        if amine == "mea":
+            coordinates = read(ROOT / "analyses/solvent_specification_mea/inputs/fit-coordinates.json")
+            coordinate = deepcopy(next(q for q in coordinates if q["identity"] == salt.LAWS[salt.HCO3]))
+            coordinate["origin"] = parameter_values(mapping)[coordinate["identity"]]
+            point["coordinates"].append(coordinate)
+        else:
+            donor_path = output / "mea/water-bicarbonate-ablation/fit"
+            donor, selection = retained_endpoint({"retained": donor_path})
+            attempt = read(donor_path / f'{selection["selected"]}.json.gz')
+            if salt.LAWS[salt.HCO3] in attempt["diagnostics"]["active_bounds"]:
+                raise ValueError("The MEA water–bicarbonate interaction is on a bound")
+            node = next(c for p in donor["parameters"]["pairs"] for c in p["coefficients"]
+                        if c["identity"] == salt.LAWS[salt.HCO3])
+            salt.set_pair(mapping, salt.W, salt.HCO3, node)
+    else:
         if amine == "mea":
             donor = read(output / "salt/sodium-salts/fit/summary.json.gz")
             pair_keys = {salt.W, salt.NA, salt.HCO3, salt.CO3}
@@ -247,6 +262,55 @@ def move_manifest(amine, fit_set, output, *, ablation=False):
     return dict(wheel=wheel, source_wheel=retained["wheel"], source=retained["source"],
                 start_A_declaration=point, fit_controls=controls, starts=starts, diagnostic_starts={},
                 rows=row_manifest(route_for(fit_set).bind(point)))
+
+
+def alternate_starts(fit_set, target):
+    """Test the declared alternate vectors against the W start-A result."""
+    reported = fit_set["retained"]
+    declaration = read(reported / "manifest.json.gz")
+    baseline = read(reported / "A.json.gz")
+    prior = read(fit_set["preserved"] / "manifest.json.gz")
+    point = declaration["start_A_declaration"]
+    coordinates = point["coordinates"]
+    if [q["identity"] for q in coordinates] != prior["coordinate_order"]:
+        raise ValueError("Alternate start coordinate order differs from W")
+    replacements = read(fit_set["preserved"] / "replacement-starts.json.gz")
+    if replacements["manifest_fingerprint"] != fingerprint(prior):
+        raise ValueError("Replacement starts do not belong to the preserved declaration")
+    declared = prior["starts"] | {label: draw["start"] for label, draw in replacements["draws"].items()
+                                  if draw["disposition"] == "eligible"}
+    selected = read(fit_set["preserved"] / "selection.json")
+    starts = {}
+    for label in selected["tied"]:
+        if label != selected["selected"]:
+            start = declared[label]
+            optimizer = [(value - q["origin"]) / q["scale"]
+                         for value, q in zip(start["vector"], coordinates, strict=True)]
+            starts[label] = dict(start, optimizer=optimizer)
+    declaration = dict(declaration, starts=starts)
+    save(target / "manifest.json.gz", declaration)
+    attempts = {}
+    print_cost = f'{baseline["replay"]["cost"]:.3f}'
+    for label in starts:
+        path = target / f"{label}.json.gz"
+        record = continue_fit(fit_set, declaration, label, path, attempt(fit_set, declaration, label, path))
+        cost = record.get("replay", {}).get("cost")
+        tied = (record["report"]["status"] == "converged" and record.get("replay_passed")
+                and cost is not None and f"{cost:.3f}" == print_cost)
+        attempts[label] = dict(cost=cost, tied=tied, endpoint=record.get("endpoint_fingerprint"))
+    return dict(wheel=verify(), baseline=baseline["endpoint_fingerprint"],
+                baseline_cost=baseline["replay"]["cost"], attempts=attempts,
+                tied_count=1 + sum(a["tied"] for a in attempts.values()))
+
+
+def mdea_without_gap_bound(fit_set, target):
+    declaration = read(fit_set["retained"] / "manifest.json.gz")
+    coordinate = next(q for q in declaration["start_A_declaration"]["coordinates"]
+                      if q["identity"].startswith("pair/mdea-water/k_ij/a0"))
+    # Restore the upper limit of the interaction coordinate before the binary gap constraint.
+    coordinate["bounds"][1] = 0.5
+    save(target / "manifest.json.gz", declaration)
+    return reported_fit(fit_set, declaration, target)
 
 
 def reported_fit(fit_set, declaration, target):

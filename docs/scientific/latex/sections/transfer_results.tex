@@ -37,20 +37,18 @@ The fitted correlation is thus conditional on that interaction and on the fixed 
 
 % P:transfer-dea-binary
 The water--DEA interaction follows a temperature law that was fitted beforehand, $k_{\mathrm{DEA,w}}=\res{dea-water-interaction-reference-results}$ at \SI{313.15}{\kelvin} with $b_{\mathrm{DEA,w}}=\SI{\res{dea-water-interaction-slope-results}}{\kelvin}$ (\cref{eq:kij-temperature}), to the \res{dea-horstmann-prior-binary-fit-count-transfer} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin} and their \res{dea-horstmann-measured-negative-excess-enthalpy-count-transfer} excess enthalpies at \SI{363.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002} and to the isobaric points of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996}.
-The law gives up agreement in pressure for the excess enthalpy.
 All calculated excess enthalpies are negative, as measured, with an RMSE of \SI{\res{dea-binary-law-excess-enthalpy-rmse-transfer}}{\joule\per\mole}, and the bubble pressures at \SI{365.15}{\kelvin} deviate by \res{dea-binary-law-horstmann-pressure-aard-transfer}\,\%.
-A constant interaction fitted to those bubble pressures alone describes them to \res{dea-binary-constant-horstmann-pressure-aard-transfer}\,\% but gives excess enthalpies of the wrong sign (Section~\ref{supp-sec:s-dea-binary}).
 
 \subsubsection{MDEA}\label{sec:results-mdea}
 % P:transfer-mdea-fit
 The MDEA model fits \res{mdea-parameter-count-results-intro} parameters, among them the MDEA--water interaction, which is part of the reactive fit.
 Its objective weights each group of observations so that the many densities do not outweigh the \res{mdea-fitted-kuranov-pressure-count-relative-weight} loaded-solution pressures (\cref{sec:parameters}).
 The \res{mdea-fitted-kuranov-pressure-count-mdea-results} fitted total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, at 1.95--3.97 mol MDEA per kilogram of water, loadings of 0.195--1.32 and 313--\SI{393}{\kelvin}, deviate by \res{mdea-fitted-pressure-aard-mdea-results}\,\% (\cref{fig:mdea-pressure}), and the \res{mdea-kuranov-fit-outside-r5-count-results} of them above the measured R5 range, from \SI{368}{\kelvin}, by \res{mdea-hot-fitted-pressure-aard-results}\,\% with a bias of $\res{mdea-hot-fitted-pressure-bias-results}$\,\%.
-The other fitted MDEA properties deviate by \res{mdea-unloaded-density-aard-transfer}\,\% for the \COtwo-free densities up to \res{mdea-carson-heat-aard-transfer}\,\% for the integral heats of Carson et al., and the fitted species ratios are overpredicted on average (bias $\res{mdea-jakobsen-species-ratio-bias-transfer}$\,\%).
+The \COtwo-free densities deviate by \res{mdea-unloaded-density-aard-transfer}\,\%, the Carson integral heats by \res{mdea-carson-heat-aard-transfer}\,\%, and the Jakobsen species ratios by \res{mdea-jakobsen-species-ratio-aard-transfer}\,\%, with a bias of $\res{mdea-jakobsen-species-ratio-bias-transfer}$\,\%.
 
 % P:transfer-mdea-outside
 Outside this window the pressure deviations follow a pattern.
-At \SI{413}{\kelvin}, above the window but at its compositions, the \res{mdea-kuranov-hot-assessment-count-results} total pressures of Kuranov et al.\ deviate by \res{mdea-kuranov-held-out-pressure-aard-transfer}\,\%.
+At \SI{413}{\kelvin} and the same MDEA molalities, the \res{mdea-kuranov-hot-assessment-count-results} unfitted Kuranov total pressures deviate by \res{mdea-kuranov-held-out-pressure-aard-transfer}\,\%.
 At low loadings the model underpredicts: the \res{mdea-ermatchkov-partial-pressure-count-mdea-results} \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} deviate by \res{mdea-ermatchkov-pressure-aard-mdea-results}\,\% with a bias of $\res{mdea-ermatchkov-pressure-bias-transfer}$\,\%, \res{mdea-ermatchkov-factor-low-count} of them are calculated low by more than a factor of 1.5, and the largest misses, by factors of up to \res{mdea-ermatchkov-largest-low-factor}, lie at loadings below 0.07.
 The \COtwo partial pressures of Xiao et al.\ \cite{xiaoCO2AbsorptionAqueous2018a}, in 23.5 wt\% MDEA at 298--\SI{313}{\kelvin}, are also low (AARD \res{mdea-xiao-pressure-aard-transfer}\,\%, bias $\res{mdea-xiao-pressure-bias-transfer}$\,\%).
 In concentrated MDEA above a loading of 1 the model overpredicts: the total pressures of P\'erez-Salado Kamps et al.\ at 8.0 mol/kg rise above the measured ones beyond that loading, most at their most loaded state (\cref{tab:published-models}), and at the highest loading of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020}, 1.18 in 50 wt\% MDEA at \SI{323.15}{\kelvin}, the calculated bubble pressure is \res{mdea-zheng-row-6-bubble-pressure}~MPa against \SI{4.19}{\mega\pascal} measured.
@@ -112,7 +110,7 @@ The fixed carbamate inputs of AMP, an energy of \SI{\res{amp-carbamate-dispersio
 The fitted loaded-solution pressures are not one quantity across the amines: they are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP.
 MDEA is the amine most sensitive to the shared interactions, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
 The salt-fitted water--anion interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
-Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} compares the deviations of the MEA and MDEA models with those of the same fits made with the water--bicarbonate interaction fitted to the MEA data.
+Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} compares the salt-fitted interactions with a refit that estimates the water--bicarbonate interaction from the MEA data as \res{mea-fitted-water-bicarbonate-interaction-transfer}, carries it into the MDEA refit and fixes the water--carbonate interaction at the value of Held et al.\ \cite{Held2014}.
 
 \input{tables/amine-summary}
 
@@ -131,9 +129,9 @@ For MDEA the result has two parts.
 In the \COtwo-free solution the bound of \cref{sec:methods-phase} keeps the MDEA--water interaction below the calculated onset of a liquid--liquid gap at each of the \res{mdea-binary-gap-tested-temperatures-transfer} tested temperatures (\cref{fig:mdea-gap-onset}).
 The bound acts only through the tested temperatures: with the fitted temperature law extrapolated, the gap appears just above \SI{423}{\kelvin}.
 In the loaded solution no search finds a liquid--liquid split.
-At the measured states \res{mdea-measured-searches-without-instability-transfer} searches detect no instability, and \res{mdea-measured-searches-toward-vapor-transfer}, at \res{mdea-distinct-descent-states-transfer} distinct states, detect an instability toward a vapor.
+Of the \res{mdea-measured-states-transfer} distinct measured states, \res{mdea-measured-states-without-instability-transfer} have no detected instability and \res{mdea-distinct-descent-states-transfer} have an instability toward a vapor.
 At those states the measured or assigned pressure lies below the bubble pressure of the model, for example \SI{2.57}{\mega\pascal} against \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal} in 50 wt\% MDEA at \SI{323.15}{\kelvin} and a loading of 1.10, a heat-measurement state of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020}, and \SI{0.100}{\mega\pascal} against \SI{\res{mdea-sobrino-example-bubble-pressure-transfer}}{\mega\pascal} for the \COtwo-free densities of Sobrino et al.\ \cite{sobrinoViscosityDensityMeasurements2016} at \SI{393.15}{\kelvin}, so the model predicts partial vaporization, not a second liquid.
-Section~\ref{supp-sec:s-phase} describes the other \res{mdea-measured-searches-unclassified-transfer} of the \res{mdea-measurement-derived-searches-attempted-transfer} searches, at heat-measurement states of Merkley et al.\ \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
+Section~\ref{supp-sec:s-phase} describes the remaining heat-measurement states of Merkley et al.\ \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 None of the \res{mdea-restricted-grid-requested-states} grid states, which lie within the measured loading range of each concentration, has a detected instability.
 
 \begin{figure}[pos=!htbp]

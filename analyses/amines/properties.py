@@ -1,6 +1,7 @@
 """Derivative and property readbacks at one declared endpoint."""
 
 import copy
+import csv
 import json
 from math import fsum, log
 from types import SimpleNamespace
@@ -11,7 +12,7 @@ from epcsaft import equilibrium as eq, regression as reg
 from .records import RESULTS, read
 from MEA.solvent_specification import conditional_information, deviation_statistics
 
-from .model import P_REF, calculation_declaration
+from .model import P_REF, calculation_declaration, parameter_values
 from .phase import DENSITY_WINDOW, ERROR_TERMS, R, matched, physical, pressure_roots
 from .wheel import ROOT, verify
 
@@ -69,6 +70,63 @@ def write_gibbs_derivative_summary():
     path = ROOT / "analyses/amines/results/shared/properties/gibbs-derivatives.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(dict(wheel=wheel, rows=rows), indent=2) + "\n")
+
+
+def water_calibration(route, point):
+    """Evaluate the adopted water coefficients on W against the IAPWS-95 assessment grid."""
+    from collections import Counter
+    from scipy.optimize import brentq
+
+    bundle = ROOT / "analyses/mea_parameter_bundle"
+    design = read(bundle / "data/input/fit-campaigns/water-124.json")
+    reference = bundle / "results/density-cp-160/cp-124-assessment/iapws95-reference.csv"
+    targets = read(bundle / "results/water-124/lambda-0.1-A/targets.json")
+    counts = Counter(row["kind"] for row in targets)
+    values = parameter_values(point["parameters"])
+    coefficients = {q["identity"]: values[q["identity"]] for q in design["coordinates"]}
+    spec = route.bind(point)
+    i = spec.parameters.component_ids.index("water")
+    thermal = type(spec.thermal)(spec.thermal.standard_pressure, [spec.thermal.component_intervals[i]])
+    model = epcsaft.Pure(epcsaft.Parameters.from_mapping(point["parameters"], components=["water"]),
+                         thermochemistry=thermal)
+    mass = design["molar_mass_kg_mol"]
+    metrics = dict(rho="rho_kg_m3", cp="cp_kJ_kg_K", psat="psat_Pa",
+                   saturated_liquid_rho="saturated_liquid_rho_kg_m3")
+    rows = []
+    with reference.open(newline="") as stream:
+        for source in csv.DictReader(stream):
+            if source["grid"] == "atmospheric-controls":
+                continue
+            T, P = float(source["T_K"]), float(source["P_Pa"])
+            observed = {q: float(source[key]) for q, key in metrics.items()}
+            state = model.state(T, P=P, phase="liquid")
+            problem = eq.Problem(T=T, P=eq.Free(observed["psat"]), feed=eq.Amounts({"water": 1.}),
+                phases=[eq.Phase("L", kind="liquid", composition_guess=(1.,)),
+                        eq.Phase("V", kind="vapor", amount=eq.Pinned(0.), composition_guess=(1.,))],
+                row_tolerance=1e-10)
+            saturation = eq.solve_equilibrium(model, problem)
+            predicted = dict(rho=state.molar_density * mass,
+                             cp=state.total_isobaric_heat_capacity / (mass * 1000),
+                             psat=saturation.pressure if saturation.requested_tolerance_met else None,
+                             saturated_liquid_rho=saturation.molar_densities[0] * mass
+                             if saturation.requested_tolerance_met else None)
+            rows.append(dict(grid=source["grid"], T_K=T, P_Pa=P, observed=observed, predicted=predicted,
+                             saturation_tolerance_met=saturation.requested_tolerance_met,
+                             saturation_message=saturation.message))
+    T, P = 393.15, P_REF
+    liquid = model.state(T, P=P, phase="liquid")
+    vapor = model.state(T, P=P, phase="vapor")
+    slope = lambda rho: model.state(T, rho=rho).pressure_density_derivative
+    spinodal = brentq(slope, 0.75 * liquid.molar_density, liquid.molar_density)
+    roots = dict(T_K=T, P_Pa=P, density_mol_m3=liquid.molar_density,
+                 vapor_density_mol_m3=vapor.molar_density, spinodal_density_mol_m3=spinodal,
+                 dP_drho_liquid=liquid.pressure_density_derivative, dP_drho_spinodal=slope(spinodal),
+                 delta_G_liquid_minus_vapor_J_mol=R * T *
+                 (liquid.log_fugacity_coefficient[0] - vapor.log_fugacity_coefficient[0]),
+                 density_margin_mol_m3=liquid.molar_density - spinodal)
+    return dict(reference=reference.relative_to(ROOT).as_posix(), coefficients=coefficients, rows=rows,
+                fitted_rows=dict(psat=counts["EquilibriumPressure"], cp=counts["IsobaricHeatCapacity"]),
+                roots=roots)
 
 
 def endpoint_diagnostics(spec, fit_replay, point, controls):

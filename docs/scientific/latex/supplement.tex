@@ -155,7 +155,7 @@ Held et al.\ determined these water interactions with their own water parameters
 Ion segment count one and the diameter ties are modeling assumptions.
 The Born diameter of hydronium is that of the hydrogen ion in Figiel et al.\ \cite{Figiel2025}.
 The Born diameter of hydroxide, \SI{\res{mea-fixed-hydroxide-born-diameter}}{\angstrom}, was calculated here from the Born equation, $d^{\mathrm{Born}}=z^2e^2N_{\mathrm A}(1-1/\varepsilon_r)/(4\pi\varepsilon_0|\Delta G^{\mathrm{hyd}}|)$, where $N_{\mathrm A}$ is the Avogadro constant, with the hydration free energy $\Delta G^{\mathrm{hyd}}$ of $-106.4$ kcal/mol of Palascak and Shields \cite{palascakAccurateExperimentalValues2004} and the relative permittivity of water at \SI{298.15}{\kelvin}, $\varepsilon_r=78.37$.
-The Born diameters of bicarbonate and carbonate are set here at \SI{3.0}{\angstrom}; in an MEA fit with the water--bicarbonate interaction fitted to the MEA data (Section~\ref{sec:s-salt}) and with all other parameters fixed, setting the bicarbonate diameter to 2.5, 3.5 or \SI{4.0}{\angstrom} or the carbonate diameter to 2.5 or \SI{4.0}{\angstrom} changes the objective value of the MEA fit by at most \res{mea-electrostatics-diameter-maximum-fixed-objective-change}\,\% and individual fitted \COtwo partial pressures by up to about \res{mea-bicarbonate-born-diameter-maximum-pressure-change-supplement}\,\% for bicarbonate and by less than \res{mea-carbonate-born-diameter-pressure-change-upper-reporting-bound-supplement}\,\% for carbonate.
+The Born diameters of bicarbonate and carbonate are set at \SI{3.0}{\angstrom}.
 None of these inputs is fitted in the calibrations of this work.
 All other interactions are zero by assumption except the fixed water interactions listed below.
 \Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list the exact values.
@@ -181,9 +181,7 @@ At those \res{water-fit-vapor-pressure-temperature-count-fit-deviations} tempera
 
 % P:supplement-20
 In the permittivity fit, water coefficients, 0.3777 L/mol and 1403 K, follow Yang et al.\ \cite{Yang2024}; the \COtwo coefficients, $10^{-8}$ L/mol and 1403 K, are set in this work.
-\res{mea-equivalent-dielectric-branches} coefficient pairs, (\res{mea-dielectric-larger-volume-coefficient} L/mol, \SI{\res{mea-dielectric-larger-volume-temperature}}{\kelvin}) and (\res{mea-dielectric-smaller-volume-coefficient} L/mol, \SI{\res{mea-smaller-volume-dielectric-temperature}}{\kelvin}), give the same permittivity at the measurement temperature, \SI{298.15}{\kelvin}, at any density.
-The larger-volume pair is used here; the permittivity data alone do not distinguish the \res{mea-fitted-dielectric-branches-selection}, so that selection is a model assumption.
-At other temperatures the pairs differ: in unloaded 30 wt\% MEA at fixed density the smaller-volume pair raises $\varepsilon_{\mathrm{bulk}}-1$ by \res{mea-permittivity-branch-relative-increase-absorber}, \res{mea-permittivity-branch-relative-increase-intermediate} and \res{mea-permittivity-branch-relative-increase-stripper}\,\% at 313.15, 353.15 and \SI{393.15}{\kelvin}.
+The MEA model uses the permittivity coefficients listed in Table~\ref{tab:supplement-species-parameters}.
 The 14 unloaded measurements at \SI{298.15}{\kelvin} do not determine temperature or loading dependence; direct static-permittivity data over the reacting domain are missing from this calibration, so extrapolation remains a model assumption.
 
 % P:supplement-shared
@@ -218,12 +216,12 @@ The fitted target is the equilibrium coefficient of the ions: the molality of di
 
 % P:supplement-salt-limits
 Every result of the four amine models is conditional on the \res{salt-lower-bound-intercept-count-supplement} intercepts that lie on their bounds.
-The sodium carbonate coefficients are already low at \SI{0.01}{\mole\per\kilogram}, where the water--carbonate interaction has almost no effect, which suggests that this interaction does not carry most of the remaining error; no decomposition by term was made.
+Figure~\ref{fig:salt-osmotic-residuals} shows that the calculated sodium carbonate coefficient is already low at \SI{0.01}{\mole\per\kilogram}.
 The salt data end at \SI{318.15}{\kelvin}; extrapolated, the water--bicarbonate law reaches \res{salt-water-bicarbonate-absorber-extrapolation} at \SI{353.15}{\kelvin} and \res{salt-water-bicarbonate-stripper-extrapolation} at \SI{393.15}{\kelvin}.
 Wangler et al.\ fitted a temperature-dependent water--bicarbonate interaction to the same source with their own water and ion parameters \cite{Wangler2018}, and Held et al.\ use zero \cite{Held2014}; these values are not interchangeable between parameter sets.
 
 % P:supplement-salt-ablation
-Table~\ref{tab:supplement-shared-interaction-sensitivity} compares this choice with fitting the interaction to amine data: the MEA and MDEA fits were repeated with a constant water--bicarbonate interaction fitted with the MEA parameters, \res{historical-mea-fitted-water-bicarbonate-interaction-supplement-shared-set} with a conditional standard error of \res{mea-shared-bicarbonate-water-conditional-se-supplement}, and with the constant water--carbonate interaction of Held et al., $-0.25$ \cite{Held2014}.
+Table~\ref{tab:supplement-shared-interaction-sensitivity} compares the salt-fitted interactions with a refit in which the water--bicarbonate interaction is estimated from the MEA data as \res{mea-fitted-water-bicarbonate-interaction-supplement}, with a conditional standard error of \res{mea-shared-bicarbonate-water-conditional-se-supplement}, and then held at that value in the MDEA refit. The water--carbonate interaction in both refits is $-0.25$ from Held et al.\ \cite{Held2014}.
 The salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
 
 \input{tables/supplement-shared-interaction-sensitivity}
@@ -295,11 +293,10 @@ Table~\ref{tab:supplement-temperature-bands} divides the MEA data used here by t
 
 \input{tables/supplement-temperature-bands}
 
-\subsection{Carbonate share and electrostatic choices}\label{sec:s-carbonate}
+\subsection{Carbonate share}\label{sec:s-carbonate}
 % P:supplement-carbonate
 The MEA model gives ratios of calculated to observed carbonate share of \res{mea-carbonate-share-minimum-calculated-to-observed-ratio}--\res{mea-carbonate-share-maximum-calculated-to-observed-ratio} at the \res{mea-carbonate-share-observation-count-supplement-description} states of Jakobsen et al.\ \cite{Jakobsen2005}, \res{mea-carbonate-share-observations-lower-temperature} at \SI{293.15}{\kelvin} and \res{mea-carbonate-share-observations-higher-temperature} at \SI{313.15}{\kelvin}, with a geometric mean of \res{mea-carbonate-share-geometric-mean-detailed-supplement} (\cref{fig:jakobsen-carbonate-share}).
 Fast proton exchange merges bicarbonate and carbonate into one \ce{^{13}C} NMR signal, and Jakobsen et al.\ obtain the carbonate share from its chemical shift, calibrated against standards; they state that fractions below about 10\,\% cannot be evaluated accurately and that their carbonate is most likely overpredicted.
-Changes to the Born diameters of bicarbonate and carbonate, to the MEA permittivity coefficients and to the solvation factors of \COtwo and MEA were tested in an MEA fit with the water--bicarbonate interaction fitted to the MEA data (Section~\ref{sec:s-salt}); the largest geometric-mean ratio among them is \res{mea-tested-electrostatics-maximum-carbonate-share-geometric-mean}, so these choices do not explain the deficit.
 For the bicarbonate--carbonate pool alone, the carbonate fraction $c_{\ce{CO3^{2-}}}/(c_{\ce{CO3^{2-}}}+c_{\ce{HCO3-}})$ calculated with the MEA model at the \res{mea-reported-jakobsen-carbonate-pool-states} Jakobsen et al.\ states at \SI{313.15}{\kelvin}, 0.09--0.95 mol/mol, is $\res{mea-reported-carbonate-pool-ratio-minimum}$ to \res{mea-reported-carbonate-pool-ratio-maximum} against measured values of \res{mea-jakobsen-carbonate-pool-observation-minimum} to \res{mea-jakobsen-carbonate-pool-observation-maximum}.
 
 \begin{figure}[!htbp]
@@ -415,8 +412,6 @@ In the DEA model the water--DEA interaction follows main-text \cref{main-eq:kij-
 The two values were fitted before the reactive fit, without a reaction, to three data sets together: the \res{dea-horstmann-prior-binary-fit-count-supplement} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin}, their \res{dea-horstmann-measured-negative-excess-enthalpy-count-supplement} excess enthalpies at \SI{363.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002} and the \res{dea-cai-prior-binary-fit-count-supplement} isobaric mixture points of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996}.
 All calculated excess enthalpies are negative, as measured, with an RMSE of \SI{\res{dea-binary-law-excess-enthalpy-rmse-supplement}}{\joule\per\mole} (\cref{fig:dea-binary}).
 The bubble pressures at \SI{365.15}{\kelvin} deviate by \res{dea-binary-law-horstmann-pressure-aard-supplement}\,\%, and the points of Cai et al., measured at \SI{6.66}{\kilo\pascal}, by \res{dea-binary-law-cai-pressure-aard-supplement}\,\%, so the law does not represent that isobar.
-A constant interaction fitted to the bubble pressures of Horstmann et al.\ alone describes them to \res{dea-binary-constant-horstmann-pressure-aard-supplement}\,\% but gives positive excess enthalpies.
-The temperature law is used because it gives the excess enthalpy its measured sign, at the cost of the agreement with the bubble pressures.
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.8\linewidth]{dea-current-binary-comparisons.pdf}
@@ -472,8 +467,8 @@ The MDEA standard errors are conditional on the \res{mdea-active-bound-count-sup
 \input{tables/supplement-transfer-bounds}
 
 % P:supplement-starts
-The earlier MEA and AMP fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reached the same objective value for each amine.
-The reported fits from start A give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA.
+For MEA and AMP, \res{mea-tied-start-count-supplement} and \res{amp-tied-start-count-supplement} starts, respectively, reach the same objective value at the reported precision.
+The reported fits give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA, which is fitted from start A as specified in the data deposit.
 For DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
@@ -513,9 +508,9 @@ The equilibrium at these states is liquid plus vapor at \res{mea-census-two-phas
 A separate search at the \res{mea-measured-state-search-requests-supplement} measured MEA states detects none.
 
 % P:supplement-phase-transfer-grid
-For DEA, MDEA and AMP, the search covers the measured states and a grid.
+For DEA, MDEA and AMP, the search covers distinct measured states and a grid.
 The grid spans 313.15--393.15 K in 10 K steps and loadings of $10^{-5}$ and then 0.1 upward in steps of 0.1 to the largest loading in the data of the amine, which is added, at 1.05 and 3.0 times the calculated bubble pressure; its amine concentrations are those of the fitted data, with concentrations within 1 wt\% of each other searched once.
-For MDEA each fitted concentration is searched on its own, at the grid loadings that lie within the range of loadings measured at that concentration, so that no state is searched at a loading that was not measured at its concentration.
+At each fitted MDEA concentration, only grid loadings between the lowest and highest measured loading at that concentration were searched.
 
 % P:supplement-phase-dea
 For DEA, the search covers \res{dea-phase-search-measurement-requests} measured states and \res{dea-phase-search-grid-requests} grid states, the latter at the \res{dea-reported-grid-stocks-supplement} fitted DEA concentrations (10, 20, 25 and 30 wt\%), the \res{dea-reported-grid-temperatures-supplement} grid temperatures and \res{dea-reported-grid-loadings-supplement} loadings up to \res{dea-reported-grid-maximum-loading-supplement} mol/mol at both pressures.
@@ -523,10 +518,10 @@ No search detects an instability.
 The measured states include states that are not fitted: the densities of Weiland et al.\ \cite{Weiland1998} at 298.15 K and 10--40 wt\% DEA, searched at an assigned pressure of 101.325 kPa, and the pressures of Lawson and Garst at 50--54.5 wt\% DEA \cite{lawsonGasSweeteningData1976}.
 
 % P:supplement-phase-mdea
-For MDEA, \res{mdea-measurement-derived-searches-attempted-supplement-design} searches are made at measured states and one at each of the \res{mdea-restricted-grid-states} grid states.
-No search finds a liquid--liquid split, and no grid state has a detected instability.
+For MDEA, the search covers \res{mdea-measured-states-supplement-design} distinct measured states and \res{mdea-restricted-grid-states} grid states.
+No grid state has a detected instability, and no instability is detected at \res{mdea-measured-states-without-instability-supplement} measured states.
 At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
-A further \res{mdea-measured-searches-unclassified-supplement} searches, at heat-measurement states of Merkley et al., are assigned to neither class.
+A further \res{mdea-measured-states-unclassified-supplement} states from the heat measurements of Merkley et al.\ are unclassified.
 Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement} fall outside the declared ideal-gas caloric intervals: 288.71 K is below both the \COtwo{} Shomate interval (298--1200 K) and the MDEA ideal-gas heat-capacity polynomial interval (293--423 K), and 422.04 K is above the IAPWS-95-based ideal-gas water polynomial interval (273.15--400 K).
 The \COtwo-free binary search at 422.04 K uses liquid fugacity coefficients without the ideal-gas caloric functions.
 At the other \res{mdea-merkley-searches-within-resolution-supplement}, at 333.15 and 388.71 K and 1.121 MPa, the smallest tangent-plane distance found is zero within its numerical resolution, and each of the \res{mdea-supplied-trial-count-supplement} trial compositions supplied to a search gives a positive distance.
@@ -542,7 +537,7 @@ At the \res{amp-first-data-measured-splits-supplement} measured states where the
 The MDEA--water interaction $k_{\mathrm{MDEA,w}}(T)=k_{\mathrm{MDEA,w}}(423\ \mathrm{K})+(\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T)(T-423\ \mathrm{K})$ is the only fitted parameter that acts on the \COtwo-free solution.
 With all other parameters fixed, the largest value without a gap in the lower convex envelope of the liquid Gibbs energy over \res{mdea-binary-hull-compositions} compositions at \res{mdea-binary-hull-pressure} MPa rises from $\res{mdea-binary-hull-cold-no-gap-limit}$ at 290 K to $\res{mdea-binary-hull-hot-no-gap-limit}$ at 423 K, and $k_{\mathrm{MDEA,w}}(423\ \mathrm{K})$ is bounded above at $\res{mdea-bound-binary-limit-supplement}$, $10^{-4}$ below it.
 At the reported solution only this bound is active.
-Without the bound, an MDEA fit has an instability at \res{mdea-historical-unbounded-instabilities} of the \res{mdea-unbounded-binary-states-searched} \COtwo-free MDEA--water liquids searched at 1.466 MPa, which are 13 MDEA mole fractions from 0.01 to 0.24 at each of 393, 403, 413, 413.15, 422.04 and 423 K.
+Without the binary-gap bound, the MDEA fit from start A converges to parameters for which the search detects liquid instability at \res{mdea-unbounded-binary-instabilities} of the \res{mdea-unbounded-binary-states-searched} \COtwo-free MDEA--water states at 1.466 MPa, spanning 13 MDEA mole fractions from 0.01 to 0.24 at each of 393, 403, 413, 413.15, 422.04 and 423 K.
 For the MDEA model the fitted interaction equals the bound at 423 K and lies below the onset value at each of the \res{mdea-binary-gap-tested-temperatures-supplement} tested temperatures from 290 to 423 K (main-text \cref{main-fig:mdea-gap-onset}).
 The bound was fixed before fitting and independently of the deviations.
 At 423 K it lies below the largest tested value without a gap at 1.121, 1.466 and 1.811 MPa alike, and with the fitted temperature law extrapolated the gap appears just above 423 K at all three pressures, so the bound suppresses the calculated gap through the tested temperatures and no further.
@@ -552,12 +547,12 @@ No bound acts on the loaded MDEA states.
 % P:supplement-amp-first
 The AMP model fits all loaded total pressures to \SI{393}{\kelvin} because a first fit, with fewer of them, predicted a second liquid.
 That fit used the \res{amp-first-data-fitted-pressure-count-supplement} loaded total pressures of Hartono et al.\ at 313--\SI{353}{\kelvin}, the binary data and the carbamate fractions, \res{amp-first-data-objective-row-count-supplement} observations, with the water--bicarbonate interaction fitted to the MEA data (Section~\ref{sec:s-salt}).
-Its temperature coefficient of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{\res{amp-first-data-fitted-slope-free-starts}}{\kelvin} with a conditional standard error of \SI{\res{amp-first-data-cation-water-slope-conditional-se-supplement}}{\kelvin}.
+Its temperature coefficient of the \ce{AMPH+}--water interaction, $b_{\mathrm{AMPH^+,w}}$, is \SI{\res{amp-first-data-fitted-slope-free-starts}}{\kelvin}.
 Searched at the \res{amp-first-data-screen-states-supplement-first-fit} states of Section~\ref{sec:s-phase}, it has an instability toward a second liquid at \res{amp-first-data-detected-instabilities-supplement}, all at \res{amp-first-data-minimum-instability-temperature-supplement}--\res{amp-first-data-maximum-instability-temperature-supplement} K, above its fitted pressures and among them measured states of Hartono et al.\ and of Tong et al.\ (\cref{fig:amp-splits}).
 At 373--\SI{393}{\kelvin} it also underpredicts every measured total pressure of the two sources, by \res{amp-first-data-free-hartono-aard-supplement} and \res{amp-first-data-free-tong-aard-supplement}\,\% on average.
 Above the fitted pressures its coefficient raises $k_{\mathrm{AMPH^+,w}}$ from $\res{amp-first-data-cation-water-interaction-fitted-range-end}$ at \SI{353}{\kelvin} to $\res{amp-first-data-cation-water-interaction-stripper-range-end}$ at \SI{393}{\kelvin}, and with the weaker cation--water attraction a second liquid rich in \ce{AMPH+}, bicarbonate and AMP lowers the Gibbs energy.
 The AMP model adds the \res{amp-reported-hot-hartono-fitted-pressure-count-supplement-additions} pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and the \res{amp-reported-tong-fitted-pressure-count-supplement-additions} loaded pressures of Tong et al.\ at 313--\SI{393}{\kelvin} to the objective; its coefficient is \SI{\res{amp-reported-fitted-slope-slope-comparison}}{\kelvin}, and it has no detected instability at the same states.
-The first fit differs from the AMP model in its data, in the water--anion interactions and in its carbamate inputs, so the comparison does not isolate the cause of the second liquid, and no measurement used here tests it.
+The first fit differs from the AMP model in its data, in the water--anion interactions and in its carbamate inputs, so the comparison does not isolate the cause of the second liquid.
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.72\linewidth]{amp-splits.pdf}

@@ -500,6 +500,29 @@ def pressure_deviation(rows, name):
     )
 
 
+def binary_stability_search(route, point):
+    """Search the declared CO₂-free liquids at the fixed binary pressure."""
+    from time import monotonic
+
+    from .phase import native_search, search_descent
+
+    design = read(ROOT / "analyses/mdea_mea_workflow/inputs/retransfer-343-binary-penalty.json")["binary_penalty"]
+    pressure = design["pressure_Pa"]
+    spec = route.bind(point)
+    tick = monotonic()
+    rows = [
+        dict(native_search(route, spec, dict(key=f"binary:{T}:{x}", T=T, P=pressure, binary_x=x)),
+             T_K=T, x_MDEA=x, pressure_Pa=pressure)
+        for T in design["temperatures_K"] for x in design["x_MDEA"]
+    ]
+    available = [row["search"] for row in rows if row["search"]["available"]]
+    descents = [search for search in available if search_descent(search)]
+    return dict(rows=rows, searched=len(rows), available=len(available), descent=len(descents),
+                liquid_descent=sum(any(w["kind"] == "Liquid" for w in search["witnesses"]) for search in descents),
+                minimum_TPD_RT=min((search["value"] for search in available), default=None),
+                seconds=monotonic() - tick)
+
+
 def binary_gap(point):
     """Replay the isothermal binary bounds and follow the fitted law through onset."""
     import numpy as np
@@ -711,6 +734,9 @@ FIT_SETS = {
         reference=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
         reference_keys=("replay",),
         retained=RESULTS / "move/mdea/water-bicarbonate-ablation/fit",
+    ),
+    "without-binary-gap-bound": dict(
+        retained=RESULTS / "move/mdea/without-binary-gap-bound/fit",
     ),
     "reported": dict(
         route=NonDigitizedHeats,

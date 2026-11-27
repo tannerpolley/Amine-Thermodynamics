@@ -18,7 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
-    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties"))
+    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts", "water-calibration"))
     parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
     module = import_module(f"{__package__}.{args.amine}")
@@ -28,7 +28,24 @@ def main():
     verify()
     target = args.output.resolve() / args.amine / args.fit_set / args.stage
     name = "summary.json.gz"
-    if args.stage == "replay":
+    if args.stage == "alternate-starts" and args.amine in ("mea", "amp") and args.fit_set == "reported":
+        record = fit.alternate_starts(declaration, target)
+    elif args.fit_set == "without-binary-gap-bound" and args.amine == "mdea":
+        reported = module.FIT_SETS["reported"]
+        if args.stage == "fit":
+            record = fit.mdea_without_gap_bound(reported, target)
+        elif args.stage == "phase":
+            local = target.parent / "fit"
+            point, selected = fit.retained_endpoint({"retained": local if local.exists() else declaration["retained"]})
+            record = module.binary_stability_search(fit.route_for(reported), point)
+            record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
+        else:
+            parser.error("The MDEA fit without the binary-gap bound supports fit and phase")
+    elif args.amine == "mea" and args.fit_set == "reported" and args.stage == "water-calibration":
+        point, selected = fit.retained_endpoint(declaration)
+        record = properties.water_calibration(fit.route_for(declaration), point)
+        record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
+    elif args.stage == "replay":
         name = "endpoint.json.gz"
         if args.amine == "salt":
             record = module.replay(declaration)
@@ -36,6 +53,11 @@ def main():
             record = fit.replay_endpoint(declaration)
         else:
             record = fit.replay_retained(declaration)
+            if args.amine == "amp" and args.fit_set == "first-data":
+                endpoint = fit.read(declaration["endpoint"])
+                if fit.fingerprint(endpoint) != record["endpoint_fingerprint"]:
+                    raise ValueError("The first AMP fit does not match the replay endpoint")
+                record["endpoint"] = endpoint
     elif args.amine == "salt" and args.stage in ("rows", "fit"):
         record = getattr(module, args.stage)(declaration)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "fit":
@@ -62,7 +84,7 @@ def main():
         point = fit.read(declaration["endpoint"])
         route = fit.route_for(declaration)
         record = phase.fresh_searches(args.amine, route, point, target)
-    elif "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
+    elif args.stage in ("alternate-starts", "water-calibration") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
         parser.error("This fit set is replayed on the locked wheel")
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))
