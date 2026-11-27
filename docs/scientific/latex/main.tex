@@ -28,8 +28,7 @@
 \graphicspath{{figures/generated/}}
 
 % Typography. cas-sc sets floats, captions, header and footer in \sffamily
-% (bitmap EC sans here) and its Inconsolata check fails, leaving bitmap EC
-% typewriter. Set all of them in the STIX body serif, use Type 1 Inconsolata,
+% (bitmap EC sans here) and leaves bitmap EC typewriter. Set all of them in the STIX body serif, use Type 1 Inconsolata,
 % and route the class's caption makers through the caption package.
 \renewcommand{\sfdefault}{\rmdefault}
 \usepackage[scaled=0.95]{inconsolata}
@@ -88,14 +87,15 @@
 \hyphenation{mono-ethanolamine}
 \begin{abstract}
 % P:abstract-01
-An electrolyte perturbed-chain statistical associating fluid theory model is calibrated for aqueous monoethanolamine (MEA) loaded with carbon dioxide (\COtwo), and its water, \COtwo and inorganic-ion parameters, with water--anion interactions from sodium-salt osmotic coefficients, are held fixed while diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each fitted.
-With every reaction reference at \SI{100}{\kilo\pascal}, equilibrium, density and enthalpy follow from one Gibbs energy, whose pressure derivative differs from the volume by at most a relative $\res{gibbs-derivative-maximum-relative-error-abstract}$, at numerical resolutions of \res{mdea-gibbs-derivative-resolution-percent-abstract}--\res{mea-gibbs-derivative-resolution-percent-abstract}\,\%.
-Fitted \COtwo partial pressures of the \res{mea-jointly-fitted-parameter-count-abstract}-parameter MEA model at 30 wt\% deviate by \res{mea-fitted-pressure-aard-abstract}\,\%, more at other concentrations and stripper temperatures, and those of DEA by \res{dea-fitted-pressure-aard-abstract}\,\%; fitted total pressures deviate by \res{amp-fitted-pressure-aard-abstract}\,\% for AMP and \res{mdea-fitted-pressure-aard-abstract}\,\% for MDEA.
-The MDEA fit, provisional because only \res{mdea-evaluable-drawn-starts-abstract} of \res{mdea-planned-drawn-starts-abstract} drawn starts was evaluable, deviates by \res{mdea-ermatchkov-pressure-aard-abstract}\,\% from \res{mdea-ermatchkov-partial-pressure-count-abstract} unfitted Ermatchkov \COtwo partial pressures.
-Phase-stability searches find no instability for MEA or at \res{amp-reported-screen-states-abstract} bubble-pressure-scaled AMP states, and no confirmed MDEA split.
-For DEA they confirm splits at \res{dea-confirmed-splits-abstract} states whose measured densities the single-liquid calculation matches; these are failures of the DEA model.
-A first AMP fit, with pressures to \SI{353}{\kelvin}, split at \res{amp-first-data-minimum-instability-temperature-abstract}--\SI{\res{amp-first-data-maximum-instability-temperature-abstract}}{\kelvin}, also at \res{amp-first-data-measured-splits-abstract} measured-pressure controls; a refit adding \res{amp-refit-added-loaded-pressures-abstract} pressures to \SI{393}{\kelvin} confirms none, and at those controls \res{amp-measured-control-descents-abstract} descents point toward a vapor and \res{amp-reported-measured-controls-abstract-no-descent} have none.
-The searches show where a fit extrapolates or fails; the models are calibrations, not design tools.
+An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with explicit ions is calibrated for aqueous monoethanolamine (MEA) loaded with carbon dioxide (\COtwo) and transferred to diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP).
+The \res{mea-jointly-fitted-parameter-count-abstract} MEA parameters are fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities, with the equilibrium constants taken from the literature.
+The parameters of water, \COtwo and the inorganic ions are then held fixed, with the water--anion interactions taken from sodium-salt osmotic coefficients, and each further amine is described by a small fit of its own species.
+One set of shared parameters thus serves four classes of amine: the fitted \COtwo partial pressures of MEA at 30 wt\% deviate by \res{mea-fitted-pressure-aard-abstract}\,\%, the fitted total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%, and the fitted \COtwo partial pressures of DEA, the weakest of the four, by \res{dea-fitted-pressure-aard-abstract}\,\%.
+Deviations are larger outside the fitted data, at other MEA concentrations, at stripper temperatures and for \res{mdea-ermatchkov-partial-pressure-count-abstract} MDEA \COtwo partial pressures that were not fitted (\res{mdea-ermatchkov-pressure-aard-abstract}\,\%).
+A reactive phase-stability search then shows where each fitted model predicts a second liquid.
+The MEA and AMP models predict none at the measured states or the grid states.
+The MDEA model predicts no liquid--liquid split at the measured states, with its MDEA--water interaction bounded so that the \COtwo-free solution stays a single liquid up to \SI{423}{\kelvin}.
+The DEA model predicts a liquid--liquid split at \res{dea-split-states-abstract} measured states at \SI{298}{\kelvin}, in samples that were treated as one liquid; this deficiency of the DEA parameters does not show in the pressure or density deviations.
 
 \end{abstract}
 

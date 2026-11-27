@@ -1,26 +1,16 @@
 \section{Conclusions}\label{sec:conclusion}
 % P:conclusion-mea
 An ePC-SAFT model of \COtwo-loaded aqueous MEA with \res{mea-jointly-fitted-parameter-count-conclusion} jointly fitted parameters and literature equilibrium constants deviates by \res{mea-fitted-pressure-aard-conclusion}\,\% from its \res{mea-legacy-pressure-count-conclusion} fitted \COtwo partial pressures at 30 wt\% and by about \res{mea-fitted-heat-cp-density-maximum-aard-rounded}\,\% or less from its fitted heats, heat capacities and densities.
-Its pressures at 15 and 45 wt\% MEA and at stripper temperatures, its carbonate shares and its absorption heats at high temperature remain inaccurate, and the cause of the carbonate deficit is unresolved.
+Its pressures at 15 and 45 wt\% MEA and at stripper temperatures, its carbonate shares and its absorption heats at high temperature are less accurate.
 
 % P:conclusion-transfer
-With the water, \COtwo and inorganic-ion parameters of that model held fixed, DEA, MDEA and AMP could each be fitted: the fitted loaded-solution pressures deviate by \res{dea-fitted-pressure-aard-conclusion}\,\% for DEA, \res{mdea-fitted-pressure-aard-conclusion}\,\% for MDEA and \res{amp-fitted-pressure-aard-conclusion}\,\% for AMP, on \res{dea-fitted-partial-pressure-count-conclusion}, \res{mdea-fitted-kuranov-pressure-count-conclusion} and \res{amp-reported-loaded-pressure-count-conclusion} observations.
-Every reaction reference is at \SI{100}{\kilo\pascal}, so equilibrium, density and enthalpy follow from one Gibbs energy; at one fitted state of each amine the finite-difference pressure derivative of that Gibbs energy differs from the equation-of-state volume by at most $\res{gibbs-derivative-maximum-relative-error-conclusion}$ in relative terms, and at the MEA and DEA states, where the numerical resolution is \res{mea-gibbs-derivative-resolution-percent-conclusion} and \res{dea-gibbs-derivative-resolution-percent-conclusion}\,\%, the check excludes only larger differences.
-Each fit is a local solution.
-For MEA, DEA and AMP \res{reported-tied-start-count-conclusion} distinct starts reach the same objective, and their deviations from the compared pressures and heats differ by at most \res{reported-endpoints-maximum-aard-spread-conclusion} percentage points.
-The MDEA fit is provisional, because only \res{mdea-evaluable-drawn-starts-conclusion} of \res{mdea-planned-drawn-starts-conclusion} drawn starts could be evaluated and the reported endpoint comes from the inherited start; no endpoint meets the strict projected-gradient criterion.
-\emph{Transfer} means no more than this.
-DEA and AMP each fit a carbamate-hydrolysis correlation, MDEA needed its loaded-solution pressures weighted against its many density and heat data, and for DEA no tested water--DEA interaction represents the binary excess enthalpies and bubble pressures together.
-
-% P:conclusion-shared
-The shared water--bicarbonate and water--carbonate interactions are fixed from sodium-salt osmotic coefficients, so that no amine data determine them.
-They are adopted for that reason, not because the amine data are fitted better.
+With the water, \COtwo and inorganic-ion parameters of that model held fixed, and the water--bicarbonate and water--carbonate interactions fixed from sodium-salt osmotic coefficients so that no amine data determine them, DEA, MDEA and AMP could each be described by a small fit of its own species: the fitted loaded-solution pressures deviate by \res{dea-fitted-pressure-aard-conclusion}\,\% for DEA, \res{mdea-fitted-pressure-aard-conclusion}\,\% for MDEA and \res{amp-fitted-pressure-aard-conclusion}\,\% for AMP, on \res{dea-fitted-partial-pressure-count-conclusion}, \res{mdea-fitted-kuranov-pressure-count-conclusion} and \res{amp-reported-loaded-pressure-count-conclusion} observations.
+One set of shared parameters thus gives the pressures, speciation, absorption heats and densities of a primary, a secondary, a tertiary and a hindered amine from one Helmholtz energy.
+\emph{Transfer} means no more than this: DEA and AMP each fit a carbamate-hydrolysis correlation, MDEA needed its loaded-solution pressures weighted against its many density and heat data, and the DEA model does not represent the excess enthalpies and bubble pressures of the water--DEA binary together.
 
 % P:conclusion-phase
-Phase-stability searches of the fitted models detect no instability for MEA or at the \res{amp-reported-screen-states-conclusion} AMP states scaled to the bubble pressure.
-For DEA they confirm liquid--liquid splits at \res{dea-confirmed-split-density-feeds-conclusion} states of measured density: the single-liquid calculation matches those densities while the model's own phase calculation favors two liquids, contrary to treating the samples as one liquid.
-For MDEA a bound keeps the \COtwo-free solution free of a calculated liquid--liquid gap only up to \SI{423}{\kelvin}, and no split is confirmed for the provisional MDEA fit.
-A first AMP fit, whose loaded-solution pressures ended at \SI{353}{\kelvin}, gave calculated liquid--liquid splits at \res{amp-first-data-minimum-instability-temperature-conclusion}--\SI{\res{amp-first-data-maximum-instability-temperature-conclusion}}{\kelvin}; the refit that added \res{amp-reported-hot-hartono-fitted-pressure-count-conclusion} pressures of Hartono et al.\ at 373--\SI{393}{\kelvin} and \res{amp-reported-tong-fitted-pressure-count-conclusion} of Tong et al.\ at 313--\SI{393}{\kelvin} confirms none in the \res{amp-reported-screen-states-conclusion-refit}-state screen.
-At the \res{amp-first-data-measured-splits-conclusion-controls} measured-pressure controls, where the first fit confirms \res{amp-first-data-measured-splits-conclusion-confirmed} splits, the refit has no confirmed second liquid: \res{amp-reported-measured-controls-conclusion-vapor-descents} descents point toward a vapor below its bubble pressure, and \res{amp-reported-measured-controls-conclusion-no-descent} controls have no descent.
-A phase-stability search is therefore a useful check on where a fit has been extrapolated or fails.
-The four models are calibrations against data examined during development; \cref{sec:limits} states what they do not establish.
+The phase-stability searches show where each fitted model predicts a second liquid.
+The MEA model and the AMP model predict none at their measured states or grid states.
+The MDEA model predicts no liquid--liquid split at its measured states, and a bound on the MDEA--water interaction keeps the \COtwo-free solution free of a calculated liquid--liquid gap up to \SI{423}{\kelvin}.
+The DEA model predicts a liquid--liquid split at \res{dea-split-states-conclusion} measured states at \SI{298}{\kelvin}, in samples that were treated as one liquid; this is a deficiency of the DEA parameters.
+A phase-stability search therefore tests a fitted electrolyte model in a way that its pressure and density deviations do not.

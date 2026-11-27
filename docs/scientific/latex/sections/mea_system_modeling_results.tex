@@ -3,14 +3,14 @@
 \subsubsection{Parameters and their uncertainty}\label{sec:results-parameters}
 % P:results-design
 The MEA model has \res{mea-jointly-fitted-parameter-count-results} jointly fitted parameters: the MEA--water interaction and its temperature coefficient, the diameters and dispersion energies of \MEAH and \MEACOO, their interactions with water, one with a temperature coefficient, and the interactions of \MEAH with \MEACOO and with bicarbonate.
-\Cref{tab:species-parameters,tab:interaction-matrix} list them, and \cref{tab:mea-data} gives the deviations from every fitted data set, beside those of the fit with the MEA-fitted shared set and of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
+\Cref{tab:species-parameters,tab:interaction-matrix} list them, and \cref{tab:mea-data} gives the deviations from every fitted data set, beside those of the model of Polley and Hedengren on identical observations \cite{polleyReactiveEPCSAFTModeling2026}.
 
 \input{tables/species_parameters}
 \input{tables/interaction_matrix}
 
 % P:results-parameter-interpretation
 \res{mea-active-interactions-count-results} interactions are on bounds.
-The \MEAH--\MEACOO interaction is at $\res{mea-active-interaction-lower-value-results}$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $\res{mea-active-interaction-upper-value-results}$, which removes it; in fits with the R1--R3 references at the system pressure, holding either one slightly inside its bound raised the objective value by at most \res{mea-inward-bound-profile-maximum-objective-increase} (Section~\ref{supp-sec:s-uncertainty}).
+The \MEAH--\MEACOO interaction is at $\res{mea-active-interaction-lower-value-results}$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $\res{mea-active-interaction-upper-value-results}$, which removes it.
 The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{\res{mea-cai-bubble-temperature-rmse}}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
 The diameters of the two MEA ions have a conditional correlation of $\res{mea-ion-segment-diameter-conditional-correlation}$ and are not separately identified, so the fitted values are not unique molecular properties.
 Propagated to the \res{mea-reported-covariance-volatilization-pressure-count-results} fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of \res{mea-reported-fitted-pressure-minimum-relative-se-results}--\res{mea-reported-fitted-pressure-maximum-relative-se-results}\,\%, of the same size as the deviations themselves.
@@ -34,10 +34,9 @@ The higher-temperature pressures are calculated without further fitting, and the
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
 Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
-The carbonate share of dissolved carbon remains far below the \res{mea-carbonate-share-observation-count-results} observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of \res{mea-carbonate-share-aard-results}\,\%: the geometric mean of the calculated-to-observed ratios is \res{mea-carbonate-share-geometric-mean-mea-results}, against \res{mea-historical-shared-carbonate-share-geometric-mean-results} with the MEA-fitted shared set (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
+The carbonate share of dissolved carbon remains far below the \res{mea-carbonate-share-observation-count-results} observations of Jakobsen et al.\ \cite{Jakobsen2005}, with an AARD of \res{mea-carbonate-share-aard-results}\,\%: the geometric mean of the calculated-to-observed ratios is \res{mea-carbonate-share-geometric-mean-mea-results} (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
 Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}C} NMR signal and state that their carbonate is most likely overpredicted, which limits the accuracy of these observations.
-Changes to the Born diameters of the two anions, to the permittivity and to the solvation factors, tested with the MEA-fitted shared set, do not remove the deficit (Section~\ref{supp-sec:s-carbonate}).
-Its cause is unresolved, and the fitted pressures do not determine this minor-species partition.
+The deficit is not explained by the electrostatic choices that were tested, the Born diameters of the two anions, the permittivity coefficients and the solvation factors (Section~\ref{supp-sec:s-carbonate}), and the fitted pressures do not determine this minor-species partition.
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -72,24 +71,3 @@ Without volume translation, the model describes the fitted loaded densities of A
 At 15 and 45 wt\% MEA, where no pressure is fitted and no concentration-specific parameter is estimated, the pressures of Aronu et al.\ deviate by \res{mea-aronu-lower-concentration-pressure-aard-results} and \res{mea-aronu-higher-concentration-pressure-aard-results}\,\%, against \res{mea-aronu-nominal-pressure-aard-results}\,\% for their pressures at 30 wt\%, which are not fitted either (\cref{tab:mea-data}, Fig.~\ref{supp-fig:concentration-pressure}).
 Aronu et al.\ fitted an extended UNIQUAC model to their own data at 15--60 wt\% and report 24.3\,\% for all their \COtwo partial pressures together \cite{Aronu2011}, so the two are not compared on identical observations.
 The concentration dependence of the pressure is a weakness of the calibration.
-
-\subsubsection{Effect of the restrictions and of the salt-fitted interactions}\label{sec:results-restrictions}
-% P:results-joint-01
-Two steps lead from the \res{mea-unrestricted-results-coordinate-count}-parameter calibration to the MEA model; the sequence was computed with the R1--R3 references at the system pressure (Section~\ref{supp-sec:s-restrictions}).
-The first fixes R2 and R5 at their literature forms and ties the Born diameters, which gives the \res{mea-third-restriction-results-coordinate-count}-parameter fit with the MEA-fitted shared set.
-It leaves the objective value and the fitted pressure and density deviations nearly unchanged and lowers the number of parameters on bounds from \res{mea-restriction-unrestricted-active-bound-count} to \res{mea-restriction-tied-born-active-bound-count}.
-The second fixes the two water--anion interactions from the salt data.
-On the same \res{mea-objective-observations-electrostatics} observations it raises the objective value from \res{mea-restriction-mea-shared-set-objective} to \res{mea-restriction-salt-set-tracking-objective}, and the \res{mea-added-pressure-count-restriction-comparison} pressures not fitted deviate by \res{mea-restriction-salt-set-tracking-unfitted-aard} instead of \res{mea-restriction-mea-shared-set-not-fitted-pressure-aard}\,\%.
-
-% P:results-joint-02
-Both steps cost accuracy at high temperature.
-On the \res{mea-mamun-assessment-pressure-count-mea-results} \COtwo partial pressures of Ma'mun et al.\ \cite{Mamun2005} near \SI{393}{\kelvin}, which no fit includes, the deviation is \res{mea-mamun-16-coordinate-reference-comparison-aard}\,\% for the \res{mea-unrestricted-mamun-comparison-coordinate-count}-parameter calibration, \res{mea-mamun-mea-shared-reference-comparison-aard}\,\% with the MEA-fitted shared set and \res{mea-mamun-restricted-salt-shared-reference-comparison-aard}\,\% for the restricted model in that sequence; the MEA model with the \SI{100}{\kilo\pascal} references deviates by \res{mea-mamun-pressure-aard-mea-results}\,\% (\cref{tab:published-models}).
-In return the restricted model keeps the literature equilibrium constants that the other amines share, needs no stability penalty, and no longer takes a shared interaction from MEA data that do not determine it.
-With the water--bicarbonate interaction fixed, the conditional standard errors of the carbamate--water and \MEAH--water interactions fall from \res{mea-shared-carbamate-water-conditional-se-before-fixing} and \res{mea-shared-protonated-mea-water-conditional-se-before-fixing} to \res{mea-salt-shared-carbamate-water-conditional-se-results} and \res{mea-salt-shared-protonated-mea-water-conditional-se-results}.
-
-% P:results-expanded
-Fitting the hot pressures does not remove this cost.
-A sensitivity fit, made with the R1--R3 references at the system pressure, adds the \res{mea-added-pressure-count-weighting-sensitivity} pressures not fitted here to the MEA objective at full weight; it lowers the deviation of the \res{mea-expanded-weight-hot-wagner-pressure-count-results} hot pressures of Wagner et al.\ from \res{mea-tracking-legacy-hot-wagner-pressure-aard} to \res{mea-expanded-weight-hot-wagner-pressure-aard-results}\,\% but raises that of the \res{mea-legacy-pressure-count-weighting-sensitivity} pressures fitted here from \res{mea-tracking-legacy-pressure-aard-weighting-context} to \res{mea-expanded-weight-legacy-pressure-aard-results}\,\% (Section~\ref{supp-sec:s-restrictions}).
-The sources disagree at these temperatures: at \SI{393}{\kelvin} and 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} at a loading of 0.349 and Ma'mun et al.\ \SI{83.6}{\kilo\pascal} at 0.350.
-A different weighting therefore moves the error from one campaign to another, and the MEA model remains the fit to the \res{mea-legacy-pressure-count-weighting-interpretation} pressures; with the \SI{100}{\kilo\pascal} references it deviates by \res{mea-selected-hot-wagner-pressure-aard}\,\% from the \res{mea-selected-hot-wagner-pressure-row-count} Wagner pressures.
-The MEA model does not reproduce the absorption heats at \SI{393}{\kelvin}: for the finite additions of Kim et al.\ \cite{Kim2014}, it gives \res{mea-kim-hot-heat-predicted-min-results}--\SI{\res{mea-kim-hot-heat-predicted-max-results}}{\kilo\joule\per\mole} against \res{mea-kim-hot-heat-measured-min-results}--\SI{\res{mea-kim-hot-heat-measured-max-results}}{\kilo\joule\per\mole} measured (Table~\ref{supp-tab:supplement-mea-heat-sensitivity}).

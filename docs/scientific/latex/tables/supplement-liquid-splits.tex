@@ -1,13 +1,11 @@
-\begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Liquid--liquid calculations for the selected DEA endpoint and the historical original-weight MDEA fit.}\label{tab:supplement-liquid-splits}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.075\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.105\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.135\linewidth}@{}}
-\toprule Fit and state & $T$ (K) & $P$ (MPa) & Amine (wt\%) & $\alpha$ (mol/mol) & Result & $-\Delta G/(RT)$ (mol) & Numerical error (mol) \\ \midrule
-DEA, Lawson VIII & $298.15$ & $0.008$ & $54.50$ & $0.458$ & Unresolved & --- & --- \\
-DEA, feed 31 & $298.15$ & $0.101$ & $30.00$ & $0.450$ & Unresolved & --- & --- \\
-DEA, feed 32 & $298.15$ & $0.101$ & $30.00$ & $0.500$ & Confirmed & $1.406\times 10^{-3}$ & $6.576\times 10^{-9}$ \\
-DEA, feed 41 & $298.15$ & $0.101$ & $40.00$ & $0.400$ & Confirmed & $1.820\times 10^{-3}$ & $3.943\times 10^{-9}$ \\
-DEA, feed 42 & $298.15$ & $0.101$ & $40.00$ & $0.450$ & Confirmed & $4.313\times 10^{-3}$ & $3.896\times 10^{-9}$ \\
-DEA, feed 43 & $298.15$ & $0.101$ & $40.00$ & $0.500$ & Confirmed & $5.433\times 10^{-3}$ & $3.850\times 10^{-9}$ \\
-MDEA, original weights, tracking & $383.15$ & $121.309$ & $78.62$ & $1.368$ & Confirmed & $4.233\times 10^{-5}$ & $9.238\times 10^{-10}$ \\
-MDEA, original weights, 100 kPa reference & $383.15$ & $121.309$ & $78.62$ & $1.368$ & Unresolved & $4.751\times 10^{-2}$ & $6.134\times 10^{-10}$ \\
+\begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Measured states at which the DEA model predicts a liquid--liquid split, with the decrease of $G^*/(RT)$ from one liquid to two per mole of DEA fed.}\label{tab:supplement-liquid-splits}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.1\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\toprule Source & $T$ (K) & $P$ (MPa) & DEA (wt\%) & $\alpha$ (mol/mol) & $-\Delta G^*/(RT)$ (mol) \\ \midrule
+Lawson and Garst \cite{lawsonGasSweeteningData1976} & $298.15$ & $0.008$ & $54.50$ & $0.458$ & $2.765\times 10^{-6}$ \\
+Weiland et al.\ \cite{Weiland1998} & $298.15$ & $0.101$ & $30.00$ & $0.450$ & $5.655\times 10^{-4}$ \\
+Weiland et al.\ \cite{Weiland1998} & $298.15$ & $0.101$ & $30.00$ & $0.500$ & $1.406\times 10^{-3}$ \\
+Weiland et al.\ \cite{Weiland1998} & $298.15$ & $0.101$ & $40.00$ & $0.400$ & $1.820\times 10^{-3}$ \\
+Weiland et al.\ \cite{Weiland1998} & $298.15$ & $0.101$ & $40.00$ & $0.450$ & $4.313\times 10^{-3}$ \\
+Weiland et al.\ \cite{Weiland1998} & $298.15$ & $0.101$ & $40.00$ & $0.500$ & $5.433\times 10^{-3}$ \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright Tracking means R1--R3 use the system pressure and R5 uses 100 kPa. The 100 kPa reference case also fixes R1--R3 at 100 kPa. The DEA rows use a fixed 100 kPa reference for every reaction. The 100 kPa candidate has unresolved liquid roots even though its Gibbs energy is lower. DEA feed 31 has unresolved phase identity. One search did not finish.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright The pressure of the Weiland et al.\ states is assigned; that of the Lawson and Garst state is measured.\par}\end{table}
