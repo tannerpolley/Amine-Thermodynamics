@@ -1427,12 +1427,6 @@
   },
   {
     "file": "docs/scientific/latex/sections/transfer_results.tex",
-    "context": "Near a loading of 1 the atmospheric",
-    "token": "1",
-    "reason": "condition"
-  },
-  {
-    "file": "docs/scientific/latex/sections/transfer_results.tex",
     "context": "in 10 and 20 wt\\% MDEA",
     "token": "10",
     "reason": "condition"
@@ -1475,7 +1469,7 @@
   },
   {
     "file": "docs/scientific/latex/sections/transfer_results.tex",
-    "context": "extrapolated to 393--\\SI{413}{\\kelvin}",
+    "context": "extrapolated to 393--\\SI{394}{\\kelvin}",
     "token": "393",
     "reason": "condition"
   },
@@ -1499,10 +1493,10 @@
   },
   {
     "file": "analyses/amines/displays.py",
-    "context": "Ma'mun et al.\\ \\cite{Mamun2005}\\newline MEA, $p_{\\COtwo}$ near 393 K",
+    "context": "Ma'mun et al.\\ \\cite{Mamun2005}, MEA $p_{\\COtwo}$, 393 K (",
     "token": "393",
     "reason": "condition",
-    "statement": "rows = [[r\"Ma'mun et al.\\ \\cite{Mamun2005}\\newline MEA, $p_{\\COtwo}$ near 393 K\", mamun_pressure['attempted'],",
+    "statement": "groups = [(rf\"Ma'mun et al.\\ \\cite{{Mamun2005}}, MEA $p_{{\\COtwo}}$, 393 K ({mamun_pressure['attempted']})\",",
     "literal": true
   },
   {
@@ -1510,5 +1504,11 @@
     "context": "}, in 50 wt\\% MDEA, the",
     "token": "50",
     "reason": "condition"
+  },
+  {
+    "file": "docs/scientific/latex/sections/transfer_results.tex",
+    "context": "within about 1--2 points",
+    "token": "1",
+    "reason": "approximation"
   }
 ]

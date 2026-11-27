@@ -363,7 +363,7 @@ Figure~\ref{fig:density-curves} compares the calculated densities with the three
 \label{fig:concentration-pressure}
 \end{figure}
 
-\subsection{DEA, MDEA and AMP data}
+\subsection{DEA, MDEA and AMP data}\label{sec:s-transfer-data}
 % P:supplement-transfer-observations
 Table~\ref{tab:transfer-deviations} lists the data sets of DEA, MDEA and AMP with their roles in the fit of each model, their ranges and the model deviations; the DEA and MDEA rows use the source's own basis, and the AMP rows give the unloaded AMP content in wt\% used in the calculation.
 The 2.0 kmol/m$^3$ DEA concentration of Lal et al.\ is represented by unloaded mass fraction \res{dea-lal-unloaded-feed-mass-fraction} using solution density.
@@ -519,7 +519,7 @@ The measured states include states that are not fitted: the densities of Weiland
 % P:supplement-phase-mdea
 For MDEA, the search covers \res{mdea-measured-states-supplement-design} distinct measured states and \res{mdea-restricted-grid-states} grid states.
 No grid state has a detected instability, and no instability is detected at \res{mdea-measured-states-without-instability-supplement} measured states.
-At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
+At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} \COtwo-free states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 A further \res{mdea-measured-states-unclassified-supplement} states from the heat measurements of Merkley et al.\ are unclassified.
 Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement} fall outside the declared ideal-gas caloric intervals: 288.71 K is below both the \COtwo{} Shomate interval (298--1200 K) and the MDEA ideal-gas heat-capacity polynomial interval (293--423 K), and 422.04 K is above the IAPWS-95-based ideal-gas water polynomial interval (273.15--400 K).
 The \COtwo-free binary search at 422.04 K uses liquid fugacity coefficients without the ideal-gas caloric functions.
@@ -560,30 +560,35 @@ The first fit differs from the AMP model in its data, in the water--anion intera
 \end{figure}
 
 \section{Published comparisons}\label{sec:s-published}
+% P:supplement-published-table
+Table~\ref{tab:supplement-published-models} gives the comparisons with published models that main-text Table~\ref{main-tab:published-models} leaves out, those in which this work and the published model had different roles for the observations.
+
+\input{tables/supplement-published-models}
+
 % P:supplement-published-dea
 For the DEA data no source gives a numerical deviation of a model on the observations used here: Lawson and Garst report scatter against smoothed curves \cite{lawsonGasSweeteningData1976}, Lal et al.\ compare the Kent--Eisenberg treatment graphically \cite{lalSolubilityH2SCO21985}, and Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy together and give no deviation for either \cite{horstmannPhaseEquilibriumExcess2002}.
 The electrolyte cubic-two-state equation of state of T\'ellez-Arredondo and Medeiros reports 11.1\,\% for 99 pressures of loaded DEA at 298.15--394.26 K and 10.2--50.0 wt\% DEA, fitted with one ionic and seven binary parameters \cite{tellez-arredondoModelingCO2H2S2013}; its observations are not those used here.
 
 % P:supplement-published-mea
-For MEA, Najafloo and Zarei do not define the average absolute deviation that they report for the Ma'mun pressures, which is taken as main-text Eq.~(\ref{main-eq:aard}), and their methods and conclusions describe the fitting differently \cite{Najafloo2018}.
+For MEA, Najafloo and Zarei do not define the average absolute deviation that they report for the Ma'mun pressures, which is taken as main-text Eq.~(\ref{main-eq:aard}), and their methods and conclusions describe the fitting differently, so its role is unclear \cite{Najafloo2018}.
 Aronu et al.\ fitted an extended UNIQUAC model to their own data at 15--60 wt\% MEA and report 24.3\,\% for all their \COtwo partial pressures together \cite{Aronu2011}; these are not the observations compared in the main text.
 Rodr\'iguez et al.\ compare their SAFT-VR model with the MEA pressures of Jou et al.\ and the MDEA pressures of Kuranov et al.\ only graphically \cite{Rodriguez2012}.
 
 % P:supplement-published-kamps
 The published deviations of parameter sets I and II of Ermatchkov et al.\ are for all \res{mdea-kamps-comparison-count-results} total pressures of P\'erez-Salado Kamps et al.\ at the corrected temperatures, and the MDEA model is compared on the same observations.
-Without their most loaded state, at 8.0 mol/kg, the MDEA model deviates by \res{mdea-corrected-kamps-common-pressure-aard-transfer}\,\% on the other \res{mdea-corrected-kamps-common-pressure-count-transfer}; at that state it calculates \res{mdea-corrected-kamps-additional-pressure-predicted} MPa against \res{mdea-corrected-kamps-additional-pressure-measured} MPa measured, a deviation of $\res{mdea-corrected-kamps-additional-pressure-deviation-transfer}$\,\%.
+Without row \res{mdea-corrected-kamps-additional-pressure-source-row} of Table~6 of Ermatchkov et al., the most loaded state at an MDEA molality of \res{mdea-corrected-kamps-additional-pressure-molality} mol/kg, the MDEA model deviates by \res{mdea-corrected-kamps-common-pressure-aard-transfer}\,\% on the other \res{mdea-corrected-kamps-common-pressure-count-transfer}; at that state it calculates \res{mdea-corrected-kamps-additional-pressure-predicted} MPa against \res{mdea-corrected-kamps-additional-pressure-measured} MPa measured, a deviation of $\res{mdea-corrected-kamps-additional-pressure-deviation-transfer}$\,\%.
 
 % P:supplement-published-amp
 For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; their Table~10 labels the statistic AAD, but its footnote prints a signed relative-deviation formula. The statistic and the 56 observations therefore do not support a direct AARD comparison with the \res{amp-unfitted-kundu-partial-pressure-count} observations used here.
 Hartono et al.\ (2021) compare an existing electrolyte NRTL model with their AMP pressures graphically, without a scalar deviation on these observations \cite{hartonoNewSolubilityHeat2021}.
-The eNRTL models of Yi et al.\ \cite{yiOpenAccessThermodynamically2024} and of Hartono et al.\ (2020) \cite{hartonoSolubilityCO201M2020}, whose deviations main-text Table~\ref{main-tab:published-models} lists, were both fitted to these observations, and the 45 pressures of Tong et al.\ include five of the \COtwo-free solution.
+The eNRTL models of Yi et al.\ \cite{yiOpenAccessThermodynamically2024} and of Hartono et al.\ (2020) \cite{hartonoSolubilityCO201M2020}, whose deviations main-text Table~\ref{main-tab:published-models} and Table~\ref{tab:supplement-published-models} list, were both fitted to these observations, and the 45 pressures of Tong et al.\ include five of the \COtwo-free solution.
 
 % P:supplement-published-kuranov
 For MDEA, three ePC-SAFT studies report deviations from the total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} that were calculated without fitting a parameter to the \COtwo--MDEA--water system.
 Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite{Uyan2015}.
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
-The value of the MDEA model is calculated on the \res{mdea-source-matched-kuranov-count-supplement} total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only, and main-text Table~\ref{main-tab:published-models} lists them with the \res{mdea-kuranov-all-pressure-aard-supplement}\,\% of the MDEA model on those observations, of which it fitted \res{mdea-fitted-kuranov-pressure-count-published-fit-coverage} loaded and \res{mdea-source-matched-kuranov-free-fitted-count} \COtwo-free pressures, without ranking them.
+The value of the MDEA model is calculated on the \res{mdea-source-matched-kuranov-count-supplement} total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only, and main-text Table~\ref{main-tab:published-models} and Table~\ref{tab:supplement-published-models} list them with the \res{mdea-kuranov-all-pressure-aard-supplement}\,\% of the MDEA model on those observations, of which it fitted \res{mdea-fitted-kuranov-pressure-count-published-fit-coverage} loaded and \res{mdea-source-matched-kuranov-free-fitted-count} \COtwo-free pressures.
 The subset values are for different observation sets from the \res{mdea-fitted-kuranov-pressure-count-literature-subsets} pressures fitted here, from which the MDEA model deviates by \res{mdea-fitted-pressure-aard-literature-subsets}\,\%, and they are listed without a comparison.
 
 \bibliographystyle{styles/model1-num-names}

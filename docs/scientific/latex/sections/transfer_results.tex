@@ -48,10 +48,10 @@ The \COtwo-free densities deviate by \res{mdea-unloaded-density-aard-transfer}\,
 % P:transfer-mdea-outside
 Outside this window the pressure deviations follow a pattern.
 At \SI{413}{\kelvin} the \res{mdea-kuranov-hot-assessment-count-results} Kuranov total pressures, which are not fitted, deviate by \res{mdea-kuranov-held-out-pressure-aard-transfer}\,\%.
-At low loadings the model underpredicts the \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Xiao et al.\ \cite{xiaoCO2AbsorptionAqueous2018a}, with biases of $\res{mdea-ermatchkov-pressure-bias-transfer}$ and $\res{mdea-xiao-pressure-bias-transfer}$\,\%, and its largest misses lie at loadings below 0.07.
+The model underpredicts the \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Xiao et al.\ \cite{xiaoCO2AbsorptionAqueous2018a}, with biases of $\res{mdea-ermatchkov-pressure-bias-transfer}$ and $\res{mdea-xiao-pressure-bias-transfer}$\,\%, and its largest misses on the Ermatchkov pressures lie at loadings below 0.07.
 In concentrated MDEA above a loading of 1 it overpredicts: the calculated total pressures rise above those of P\'erez-Salado Kamps et al.\ at 8.0 mol/kg beyond that loading (Fig.~\ref{supp-fig:pressure-residuals}).
 At the highest loading of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020}, in 50 wt\% MDEA, the calculated bubble pressure is \res{mdea-zheng-row-6-bubble-pressure}~MPa against \SI{4.19}{\mega\pascal} measured.
-Near a loading of 1 the atmospheric solubilities of Sedighi et al.\ \cite{sedighiExperimentalMeasurementThermodynamic2024} show both sides: the calculated pressure is up to \res{mdea-sedighi-dilute-pressure-ratio-maximum} times the measured atmospheric pressure in 10 and 20 wt\% MDEA and down to \res{mdea-sedighi-concentrated-pressure-ratio-minimum} times it in 40 and 50 wt\%.
+The atmospheric solubilities of Sedighi et al.\ \cite{sedighiExperimentalMeasurementThermodynamic2024} show both sides: near a loading of 1 in 10 and 20 wt\% MDEA the calculated pressure is up to \res{mdea-sedighi-dilute-pressure-ratio-maximum} times the measured atmospheric pressure, and at lower loadings in 40 and 50 wt\% down to \res{mdea-sedighi-concentrated-pressure-ratio-minimum} times it.
 
 % P:transfer-mdea-other
 At 60 wt\% MDEA, above the fitted contents of 30--50 wt\%, the densities and heat capacities of Weiland et al.\ \cite{Weiland1998,weilandHeatCapacityAqueous1997} deviate several times more than at the fitted contents (Table~\ref{supp-tab:transfer-deviations}).
@@ -83,7 +83,7 @@ The cation--water interaction and the cation dispersion energy are almost fully 
 \subsubsection{AMP}\label{sec:results-amp}
 % P:transfer-amp-fit
 The AMP model fits \res{amp-parameter-count-results-intro} parameters (\cref{tab:amp-fitted}) to \res{amp-reported-objective-row-count-transfer} observations, among them all \res{amp-reported-loaded-pressure-count-transfer} loaded total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} and Tong et al.\ \cite{Tong2012} at 313--\SI{393}{\kelvin}, which deviate by \res{amp-fitted-pressure-aard-amp-results}\,\% (\cref{fig:amp-pressure}).
-The \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, which are not fitted, deviate about as much as those of two published models fitted to them (\cref{tab:published-models}).
+The \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, which are not fitted, deviate about as much as those of two published models fitted to them (Table~\ref{supp-tab:supplement-published-models}).
 The fitted binary bubble pressures of AMP--water deviate by \res{amp-reported-binary-bubble-pressure-fitted-aard}\,\%, and the fitted carbamate fractions have a larger deviation than the pressures but a small bias (Table~\ref{supp-tab:transfer-deviations}).
 
 % P:transfer-amp-parameters
@@ -109,7 +109,7 @@ The fixed carbamate energy and carbamate--water interaction of AMP are those of 
 % P:summary-four
 \Cref{tab:amine-summary} sets the four models side by side, and Fig.~\ref{supp-fig:pressure-residuals} shows the pressure residuals of each.
 The fitted loaded-solution pressures are not one quantity across the amines: they are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP.
-MDEA is the amine most sensitive to the shared interactions, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
+MDEA forms no carbamate, so bicarbonate is its main product and the water--bicarbonate interaction acts on its pressures directly.
 The salt-fitted water--anion interactions are adopted because data without an amine determine them, not because the amine data are fitted better (Table~\ref{supp-tab:supplement-shared-interaction-sensitivity}).
 
 \input{tables/amine-summary}
@@ -117,7 +117,7 @@ The salt-fitted water--anion interactions are adopted because data without an am
 \FloatBarrier
 \subsection{Phase stability}\label{sec:results-phase}
 % P:phase-mea-dea-amp
-Each fitted model was searched for a second liquid at its measured states and on a grid (\cref{sec:methods-phase}), and none of the four predicts one at its measured states (\cref{tab:amine-summary}).
+Each fitted model was searched for a second liquid at its measured states and on a grid (\cref{sec:methods-phase}), and none of the four predicts one at a measured state that the search classified; \res{mdea-measured-states-unclassified-transfer} MDEA states are unclassified (\cref{tab:amine-summary}).
 The MEA, DEA and AMP models have no detected instability at their measured states or at their grid states, and B\"ottinger et al.\ observe a homogeneous liquid in their measured subset of loaded MEA solutions \cite{Bottinger2008}.
 The DEA states reach 54.5 wt\% DEA, above its fitted contents.
 The data of the fit matter here: a first AMP fit, whose loaded-solution pressures ended at \SI{353}{\kelvin}, predicted a second liquid at \res{amp-first-data-minimum-instability-temperature-transfer}--\SI{\res{amp-first-data-maximum-instability-temperature-transfer}}{\kelvin}, where it also underpredicted the measured total pressures of Hartono et al.\ and of Tong et al.\ by \res{amp-first-data-free-hartono-aard-first-fit} and \res{amp-first-data-free-tong-aard-first-fit}\,\% on average.
@@ -146,7 +146,7 @@ Stability has been imposed during estimation for nonreactive binaries, where par
 An absorber operates at about 313--\SI{353}{\kelvin} and a stripper at about 373--\SI{393}{\kelvin}, and the calibrations are not equally supported in the two ranges.
 For MEA, the \COtwo partial pressures at 30 wt\% that are not fitted deviate by \res{mea-absorber-unfitted-pressure-aard}\,\% at absorber and \res{mea-hot-pressure-aard-transfer}\,\% at stripper temperatures (Table~\ref{supp-tab:supplement-temperature-bands}), and the sources disagree there: at \SI{393}{\kelvin} and a loading of 0.35 in 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} and Ma'mun et al.\ \SI{83.6}{\kilo\pascal}.
 At stripper temperatures, where no loaded-solution observation of MEA is fitted, the heat capacities and densities deviate on average by \res{mea-stripper-heat-capacity-aard-transfer} and \res{mea-stripper-density-aard-transfer}\,\%.
-The absorption heats at \SI{393}{\kelvin} are low by \res{mea-vinjarapu-hot-heat-low-bias-limit}--\res{mea-kim-svendsen-hot-interval-low-bias-limit}\,\% on average, depending on the calorimetric source, so the calculated heat rises less with temperature than these data show.
+The absorption heats at \SI{393}{\kelvin} are low by \res{mea-vinjarapu-hot-heat-low-bias-limit}--\res{mea-kim-svendsen-hot-interval-low-bias-limit}\,\% on average, depending on the calorimetric source, the upper value for the \res{mea-kim-svendsen-unflagged-hot-interval-count-transfer} of \res{mea-kim-svendsen-hot-interval-count-results} intervals of Kim and Svendsen not flagged for source problems, so the calculated heat rises less with temperature than these data show.
 
 % P:discussion-bands-transfer
 For the three further amines the support at stripper temperatures differs.
@@ -156,10 +156,9 @@ For DEA, most fitted pressures lie outside the measured temperature ranges of R4
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:literature-row
-\Cref{tab:published-models} sets this work beside published models on the same observations.
-On observations that no fit of this work includes, the MEA and MDEA models deviate more than the published models fitted to them, and on the Ma'mun and Ermatchkov pressures more than the PC-SAFT model of Baygi and Pahlavanzadeh and parameter set I of Ermatchkov et al., which did not fit them either; the MEA model underpredicts every Ma'mun pressure.
-The AMP model, which did not fit the Kundu pressures, deviates from them about as much as the two eNRTL models fitted to them.
-On the Kuranov and Tong pressures, which the MDEA and AMP models fitted, their deviations are of the size that published models fitted to the same pressures report; the published Kuranov values are matched to the observations by their count only and are not ranked.
+\Cref{tab:published-models} compares this work with a published model only where both had the same role for the observations, so that neither fitted them or both did; Table~\ref{supp-tab:supplement-published-models} gives the other comparisons.
+On the Ma'mun and Ermatchkov pressures, which no model fitted, both published models are closer than this work, and the MEA model underpredicts every Ma'mun pressure.
+On the Kuranov and Tong pressures, which the published models fitted and this work fitted in large part, the MDEA model is the closest for Kuranov and the AMP model lies within about 1--2 points of the two eNRTL models for Tong.
 For DEA no published model reports a deviation on the observations used here (Section~\ref{supp-sec:s-published}).
 
 \input{tables/published-models}
@@ -198,10 +197,10 @@ The fitted ion parameters are conditional on these choices, and the carbonate de
 % P:limits-scope
 Within the ranges of their data, the models can be used for absorber design at the accuracies reported here; these ranges of use are the following.
 The MEA model is fitted at nominal 30 wt\% MEA, and at 15 and 45 wt\% its pressures deviate more (\cref{sec:results-concentration}).
-Its absorption heats at \SI{393}{\kelvin} are low (\cref{sec:discussion-bands}), so stripper and regeneration duties calculated with it come out correspondingly low.
+Its absorption heats at \SI{393}{\kelvin} are low, for Kim and Svendsen on \res{mea-kim-svendsen-unflagged-hot-interval-count-limits} of their \res{mea-kim-svendsen-hot-interval-count-limits} intervals (\cref{sec:discussion-bands}), so stripper and regeneration duties calculated with it come out correspondingly low.
 The MDEA model represents the total pressures inside the fitted window of Kuranov et al.; outside it, \COtwo partial pressures at low loadings are underpredicted and pressures of concentrated MDEA above a loading of 1 are overpredicted (\cref{sec:results-mdea}), and above \SI{423}{\kelvin} its \COtwo-free solution has a calculated liquid--liquid gap (\cref{sec:results-phase}), so the model should not be used there.
 The DEA model is fitted at 20.6 and 25 wt\% DEA; at 50--54.5 wt\% it underpredicts the \COtwo partial pressures (\cref{sec:results-dea}) and should not be used without a refit.
-The shared water--anion interactions rest on a salt fit, with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), to data that end at \SI{318}{\kelvin}, so their linear laws are extrapolated to 393--\SI{413}{\kelvin} in the calculations of this work.
+The shared water--anion interactions rest on a salt fit, with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), to data that end at \SI{318}{\kelvin}, so their linear laws are extrapolated to 393--\SI{394}{\kelvin} in the MEA, DEA and AMP calculations and to \SI{413}{\kelvin} only for the MDEA pressures of Kuranov et al.\ that are not fitted.
 The amine reaction correlations, R4 and R5, are evaluated outside their source temperature ranges for every amine, unlike R1--R3, and the R4 correlations of DEA and AMP are fitted.
 The DEA model rests on \res{dea-pressure-source-count-limitations} sources of loaded pressures; those of Lawson and Garst were measured with methane in the cell, whose amount they do not report, and with methane partial pressures from zero to the cell limit of about \SI{7.0}{\mega\pascal} the largest change of their calculated \COtwo partial pressures is \SI{\res{dea-largest-lawson-methane-pressure-change}}{\mega\pascal}.
 Missing pressure histories, inconsistencies between sources, omitted carrier gas, solid precipitation and, for MEA, omitted oxazolidone further limit interpretation.

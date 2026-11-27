@@ -1,11 +1,21 @@
-\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure AARD (\%) of this work and of published models on the same observations.}\label{tab:published-models}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.05\linewidth}>{\raggedright\arraybackslash}p{0.14\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}@{}}
-\toprule Observations & $N$ & This work & Published, fitted to these observations & Published, not fitted to them \\ \midrule
-Ma'mun et al.\ \cite{Mamun2005}\newline MEA, $p_{\COtwo}$ near 393 K & 19 & $38.66$, not fitted & eNRTL \cite{Zhang2011}: $13.5$ & PC-SAFT \cite{Baygi2015}: $21.03$\newline SAFT-HR \cite{Najafloo2018}\textsuperscript{a}: $39.96$ \\
-\addlinespace Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}\newline MDEA, $p_{\COtwo}$ & 101 & $29.23$\textsuperscript{b}, not fitted & set II: $3.9$\newline eNRTL \cite{zhangThermodynamicModelingCO22011}: $17.7$ & set I: $16.8$ \\*
-\addlinespace P\'erez-Salado Kamps et al.\ in \cite{ermatchkovSolubilityCarbonDioxide2006}\newline MDEA, $P$ & 28 & $13.37$, not fitted & set I: $1.9$\newline set II: $3.5$ & --- \\*
-\addlinespace Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}\textsuperscript{c}\newline MDEA, $P$ & 82 & $4.40$, 70 fitted & ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}: $10.9$\newline eNRTL \cite{zhangThermodynamicModelingCO22011}: $6.8$ & ePC-SAFT \cite{Uyan2015}: $22.9$\textsuperscript{d}\newline ePC-SAFT \cite{Wangler2018}: $19.7$ \\*
-\addlinespace Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}\newline AMP, $p_{\COtwo}$ & \res{amp-kundu-comparison-partial-pressure-count} & $\res{amp-kundu-pressure-aard-literature}$, not fitted & eNRTL \cite{yiOpenAccessThermodynamically2024}: $15.4$\newline eNRTL \cite{hartonoSolubilityCO201M2020}: $17.3$ & --- \\*
-\addlinespace Tong et al.\ \cite{Tong2012}\newline AMP, $P$ & \res{amp-assessment-tong-pressure-count-literature} & $\res{amp-reported-tong-total-pressure-aard-literature}$, \res{amp-reported-tong-fitted-pressure-count-literature} fitted & eNRTL \cite{yiOpenAccessThermodynamically2024}: $8.0$\newline eNRTL \cite{hartonoSolubilityCO201M2020}: $9.3$ & --- \\*
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure AARD of this work and of published models on observation sets that no model fitted or that every model fitted.}\label{tab:published-models}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.5\linewidth}S[table-format=2.2]@{}}
+\toprule Observations and model & {AARD (\%)} \\ \midrule
+\addlinespace\multicolumn{2}{@{}l}{\textit{Not fitted by any model}} \\*
+Ma'mun et al.\ \cite{Mamun2005}, MEA $p_{\COtwo}$, 393 K (19) &  \\
+\quad This work & 38.66 \\
+\quad PC-SAFT \cite{Baygi2015} & 21.03 \\
+\addlinespace[2pt]Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}, MDEA $p_{\COtwo}$ (101) &  \\*
+\quad This work\textsuperscript{b} & 29.23 \\
+\quad Ermatchkov et al., set I \cite{ermatchkovSolubilityCarbonDioxide2006} & 16.8 \\
+\addlinespace\multicolumn{2}{@{}l}{\textit{Fitted by every model}} \\*
+Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA $P$ (82)\textsuperscript{a} &  \\
+\quad This work & 4.40 \\
+\quad eNRTL \cite{zhangThermodynamicModelingCO22011} & 6.8 \\
+\quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020} & 10.9 \\
+\addlinespace[2pt]Tong et al.\ \cite{Tong2012}, AMP $P$ (\res{amp-assessment-tong-pressure-count-literature})\textsuperscript{a} &  \\*
+\quad This work & \res{amp-reported-tong-total-pressure-aard-literature} \\
+\quad eNRTL \cite{yiOpenAccessThermodynamically2024} & 8.0 \\
+\quad eNRTL \cite{hartonoSolubilityCO201M2020} & 9.3 \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; sets I and II: the two parameter sets of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Statistic not defined in the source; its methods describe these pressures as not fitted. \textsuperscript{b}Used to choose the initial parameters. \textsuperscript{c}Published values for 82 observations, matched by count (Section~\ref{supp-sec:s-published}). \textsuperscript{d}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source; number of observations in parentheses. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; set I: the first of the two parameter sets of Ermatchkov et al. \textsuperscript{a}This work fitted 70 of the 82 and \res{amp-reported-tong-fitted-pressure-count-literature} of the \res{amp-assessment-tong-pressure-count-note}; the published Kuranov values are matched to the 82 by count. \textsuperscript{b}Used to choose the initial parameters.\par}\end{table}

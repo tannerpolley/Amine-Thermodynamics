@@ -344,8 +344,8 @@ def transfer_displays(outputs):
     def span(values, fmt):
         return fmt(min(values)) if min(values) == max(values) else fmt(min(values)) + '--' + fmt(max(values))
 
-    def table(name, caption, headers, rows, widths, long=False, notes='', size=r'\small'):
-        columns = ''.join(r'>{\raggedright\arraybackslash}p{' + str(w) + r'\linewidth}' for w in widths)
+    def table(name, caption, headers, rows, widths, long=False, notes='', size=r'\small', spec=''):
+        columns = spec or ''.join(r'>{\raggedright\arraybackslash}p{' + str(w) + r'\linewidth}' for w in widths)
         head = ' & '.join(headers) + r' \\ \midrule' + '\n'
         keep = lambda row: row[0].startswith(r'\addlinespace') or (row[0].startswith('R4, ') and not row[0].endswith('$d$'))
         body = '\n'.join(' & '.join(map(str, row)) + r' \\' + ('*' if keep(row) else '') for row in rows)
@@ -840,7 +840,7 @@ def transfer_displays(outputs):
           ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           transfer_rows, [.15,.10,.107,.048,.095,.09,.084,.065,.068,.10], long=True,
-          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (main-text Table~\ref{main-tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
     # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
     # the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
@@ -1049,11 +1049,16 @@ def transfer_displays(outputs):
     doutside = [r for r in data if r['group'] in dloaded and r['unit'] == 'Pa' and r['role'] != 'fitted']
     dfitted = scores([r for r in data if r['role'] == 'fitted' and r['unit'] == 'Pa'], dloaded)
     amp_loaded = {'loaded-pressure', 'hartono-2021-supplemental', 'tong'}
+    unclassified = []
     def measured_coverage(record):
         phase = read(record)
         measured = [row for row in distinct_phase_rows(phase) if not row["key"].startswith("grid:")]
         classified = {row["key"] for row in measured if search_class(row) in ("descent", "searched, no instability")}
-        return str(sum(row["key"] in classified and confirmed_split(row) for row in phase["classifications"]))
+        splits = str(sum(row["key"] in classified and confirmed_split(row) for row in phase["classifications"]))
+        if len(classified) < len(measured):
+            unclassified.append((len(classified), len(measured)))
+            splits += r'\textsuperscript{b}'
+        return splits
 
     amp_w = MOVE + 'amp/reported/phase/supplied.json.gz'
     mea_measured = [row for row in distinct_mea_measured_rows(read(W_MEA_PHASE + 'measured.json.gz'))
@@ -1101,7 +1106,8 @@ def transfer_displays(outputs):
     tong_binary_count = sum(row['group'] == 'tong-baseline' for row in arows)
     table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', r'Fitted loaded-solution pressures\textsuperscript{a}', r'Pressures not fitted', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
           notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses; $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. \textsuperscript{a}Fitted $p_{\COtwo}$ of loaded MEA and DEA and fitted $P$ of loaded MDEA and AMP. '
-                rf'The AMP total pressures not fitted are the {NUMBER_WORDS[tong_binary_count]} \COtwo-free ones of Tong et al.')
+                rf'The AMP total pressures not fitted are the {NUMBER_WORDS[tong_binary_count]} \COtwo-free ones of Tong et al. '
+                + ''.join(rf'\textsuperscript{{b}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified))
     P341 = MEAEVIDENCE
     mea_fit = read(P341 + 'fitted-rows.csv')
     cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -1136,54 +1142,74 @@ def transfer_displays(outputs):
         if role:
             design.append([r[1], r'\cite' + cite, r[3], r[4], role])
             if role == 'fitted': objective_n[who] = objective_n.get(who, 0) + int(str(r[3]).split()[0])
-    # Published models on identical observations: one row per observation set, this work beside the published models,
-    # which are split by the role of those observations in their fit.
-    PUB = {'Baygi2015 PC-SAFT': r'PC-SAFT \cite{Baygi2015}', 'Najafloo2018 SAFT-HR': r'SAFT-HR \cite{Najafloo2018}\textsuperscript{a}', 'Zhang2011 eNRTL': r'eNRTL \cite{Zhang2011}'}
+    # Published models on the same observations, by observation set: (heading, this work's AARD, role, mark, published models).
+    # The main-text table keeps a published model only where it had the same role for those observations as this work
+    # (owner decision 2026-11-27, "Like with like"); the other comparisons are in the Section S7 table with their roles.
+    PUB = {'Baygi2015 PC-SAFT': r'PC-SAFT \cite{Baygi2015}', 'Najafloo2018 SAFT-HR': r'SAFT-HR \cite{Najafloo2018}', 'Zhang2011 eNRTL': r'eNRTL \cite{Zhang2011}'}
     ERM = r'\cite{ermatchkovSolubilityCarbonDioxide2006}'
     ZHANG_CHEN = r'eNRTL \cite{zhangThermodynamicModelingCO22011}'  # Zhang and Chen, their Table 14: AARD 6.8 % on the 82 Kuranov total pressures and 17.7 % on the 101 Ermatchkov CO2 partial pressures, both in their regression
-    models = lambda entries: r'\newline '.join(f'{label}: {value}' for label, value in entries) or '---'
     exact = [r for r in read(MEA + 'paper-evidence-341/same-data-comparison/published-deviations.json') if r['comparison'].startswith('exact:')]
-    by_role = lambda entries, role: models([(label, value) for label, value, r in entries if r == role])
-    mamun = [(PUB[r['model']], f"${r['deviation_percent']:g}$", r['data_role']) for r in exact]
+    # Najafloo and Zarei describe the fitting of the Ma'mun pressures differently in their methods and conclusions (Section S7).
+    mamun = [(PUB[r['model']], f"{r['deviation_percent']:g}", 'unclear' if r['model'].startswith('Najafloo') else r['data_role']) for r in exact]
     mamun_pressure = mea_replay['summary']['pressure']['Mamun2005']
-    rows = [[r"Ma'mun et al.\ \cite{Mamun2005}\newline MEA, $p_{\COtwo}$ near 393 K", mamun_pressure['attempted'],
-             num(mamun_pressure['AARD_percent'], 2) + ', not fitted', by_role(mamun, 'fitted'), by_role(mamun, 'not fitted')]]
+    groups = [(rf"Ma'mun et al.\ \cite{{Mamun2005}}, MEA $p_{{\COtwo}}$, 393 K ({mamun_pressure['attempted']})",
+               f"{mamun_pressure['AARD_percent']:.2f}", 'not fitted', '', mamun)]
     mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
     k82_adopted, r9_kamps = mdea_pressure_comparisons()
     role = {'predicted': 'not fitted'}
     for c in mpub:
-        published = [('set ' + q['set'], f"${literature['published_Kamps_28']['Ermatchkov ' + q['set']]:g}$" if c['group'] == 'corrected-Kamps'
-                      else f"${q['mean_absolute_relative_deviation_percent']:g}$", role.get(q['data_role'], q['data_role'])) for q in c['published_parameter_sets']]
+        published = [(r'Ermatchkov et al., set ' + q['set'] + ' ' + ERM, f"{literature['published_Kamps_28']['Ermatchkov ' + q['set']]:g}" if c['group'] == 'corrected-Kamps'
+                      else f"{q['mean_absolute_relative_deviation_percent']:g}", role.get(q['data_role'], q['data_role'])) for q in c['published_parameter_sets']]
         if c['group'] == 'corrected-Kamps':
-            label, available = r"P\'erez-Salado Kamps et al.\ in " + ERM + r'\newline MDEA, $P$', r9_kamps['full_rows']
-            this_work = num(r9_kamps['full_AARD_percent'], 2)
+            label, available, aard, mark = r"P\'erez-Salado Kamps et al.\ in " + ERM + ', MDEA $P$', r9_kamps['full_rows'], r9_kamps['full_AARD_percent'], ''
         else:
-            published.append((ZHANG_CHEN, '$17.7$', 'fitted'))
+            published.append((ZHANG_CHEN, '17.7', 'fitted'))
             score = mstats[c['group']]['R1']['False']
-            label, available = 'Ermatchkov et al.\\ ' + ERM + r'\newline MDEA, $p_{\COtwo}$', score['rows']
-            this_work = num(score['AARD_percent'], 2) + r'\textsuperscript{b}'
-        this_work += ', ' + c['data_role'] + (f"; {available} of {c['measured_rows']} available" if available < c['measured_rows'] else '')
-        rows.append([label, c['measured_rows'], this_work, by_role(published, 'fitted'), by_role(published, 'not fitted')])
+            label, available, aard, mark = 'Ermatchkov et al.\\ ' + ERM + r', MDEA $p_{\COtwo}$', score['rows'], score['AARD_percent'], r'\textsuperscript{b}'
+        if available != c['measured_rows']:
+            raise ValueError(f"{c['group']}: {available} of {c['measured_rows']} observations calculated; the table gives no count of the rest")
+        groups.append((f"{label} ({c['measured_rows']})", f'{aard:.2f}', c['data_role'], mark, published))
     K422 = 'analyses/mdea_mea_workflow/results/kuranov-published-422/'
     kuranov_rows = mdea_kuranov_rows(read(W_MDEA_PROPERTIES))
     krae = read(K422 + 'raeispour-table-4.json')
     role_counts = collections.Counter(row['role'] for row in kuranov_rows)
-    rows.append([r'Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}\textsuperscript{c}\newline MDEA, $P$', len(kuranov_rows),
-                 num(k82_adopted['AARD_percent'], 2) + f", {role_counts['fitted']} fitted"
-                 + (f"; {k82_adopted['available']} of {len(kuranov_rows)} available" if k82_adopted['available'] != len(kuranov_rows) else ''),
-                 models([(r'ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', f"${krae['AARD_percent']:g}$"), (ZHANG_CHEN, '$6.8$')]),
-                 models([(r'ePC-SAFT \cite{Uyan2015}', r'$22.9$\textsuperscript{d}'), (r'ePC-SAFT \cite{Wangler2018}', '$19.7$')])])
+    if k82_adopted['available'] != len(kuranov_rows):
+        raise ValueError(f"Kuranov: {k82_adopted['available']} of {len(kuranov_rows)} observations calculated; the table gives no count of the rest")
+    # Most Kuranov and Tong observations are fitted here, so this work counts as fitting them; footnote a gives the counts.
+    groups.append((rf'Kuranov et al.\ \cite{{kuranovSolubilitySingleGases1996}}, MDEA $P$ ({len(kuranov_rows)})\textsuperscript{{a}}',
+                   f"{k82_adopted['AARD_percent']:.2f}", 'fitted', '',
+                   [(ZHANG_CHEN, '6.8', 'fitted'), (r'ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', f"{krae['AARD_percent']:g}", 'fitted'),
+                    (r'ePC-SAFT \cite{Uyan2015}\textsuperscript{a}', '22.9', 'not fitted'), (r'ePC-SAFT \cite{Wangler2018}', '19.7', 'not fitted')]))
     # Yi et al. and Hartono et al. (2020) report these deviations for the Kundu and Tong pressures, both fitted in their regressions.
-    AMP_PUB = lambda yi, hartono: models([(r'eNRTL \cite{yiOpenAccessThermodynamically2024}', yi), (r'eNRTL \cite{hartonoSolubilityCO201M2020}', hartono)])
-    rows += [[r'Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}\newline AMP, $p_{\COtwo}$', r'\res{amp-kundu-comparison-partial-pressure-count}',
-              r'$\res{amp-kundu-pressure-aard-literature}$, not fitted', AMP_PUB('$15.4$', '$17.3$'), '---'],
-             [r'Tong et al.\ \cite{Tong2012}\newline AMP, $P$', r'\res{amp-assessment-tong-pressure-count-literature}',
-              r'$\res{amp-reported-tong-total-pressure-aard-literature}$, \res{amp-reported-tong-fitted-pressure-count-literature} fitted', AMP_PUB('$8.0$', '$9.3$'), '---']]
-    rows[1:] = [[r'\addlinespace ' + row[0], *row[1:]] for row in rows[1:]]
-    table('published-models', r'Pressure AARD (\%) of this work and of published models on the same observations.',
-          ['Observations', '$N$', 'This work', 'Published, fitted to these observations', 'Published, not fitted to them'], rows, [.26, .05, .14, .26, .24],
-          notes=r'AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; sets I and II: the two parameter sets of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006}. \textsuperscript{a}Statistic not defined in the source; its methods describe these pressures as not fitted. \textsuperscript{b}Used to choose the initial parameters. \textsuperscript{c}Published values for ' + str(len(kuranov_rows)) + r' observations, matched by count (Section~\ref{supp-sec:s-published}). \textsuperscript{d}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}.')
+    AMP_PUB = lambda yi, hartono: [(r'eNRTL \cite{yiOpenAccessThermodynamically2024}', yi, 'fitted'), (r'eNRTL \cite{hartonoSolubilityCO201M2020}', hartono, 'fitted')]
+    groups += [(r'Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, AMP $p_{\COtwo}$ (\res{amp-kundu-comparison-partial-pressure-count})',
+                r'\res{amp-kundu-pressure-aard-literature}', 'not fitted', '', AMP_PUB('15.4', '17.3')),
+               (r'Tong et al.\ \cite{Tong2012}, AMP $P$ (\res{amp-assessment-tong-pressure-count-literature})\textsuperscript{a}',
+                r'\res{amp-reported-tong-total-pressure-aard-literature}', 'fitted', '', AMP_PUB('8.0', '9.3'))]
+    main_rows, other_rows = [], []
+    for block in ('not fitted', 'fitted'):
+        main_rows.append(head('Not fitted by any model' if block == 'not fitted' else 'Fitted by every model', 2))
+        gap = ''
+        for label, aard, this_role, mark, published in groups:
+            same = [(model, value) for model, value, r in published if r == this_role == block]
+            if same:
+                main_rows += [[gap + label, ''], [r'\quad This work' + mark, aard], *([r'\quad ' + model, value] for model, value in same)]
+                gap = r'\addlinespace[2pt]'
+    for label, aard, this_role, mark, published in groups:
+        other = [(model, r, value) for model, value, r in published if r != this_role]
+        if other:
+            counts = f"{role_counts['fitted']} of {len(kuranov_rows)} fitted" if 'Kuranov' in label else this_role + mark
+            other_rows += [[r'\addlinespace ' + label.replace(r'\textsuperscript{a}', ''), '', ''], [r'\quad This work', counts, aard],
+                           *([r'\quad ' + model, r, value] for model, r, value in other)]
+    table('published-models', 'Pressure AARD of this work and of published models on observation sets that no model fitted or that every model fitted.',
+          ['Observations and model', r'{AARD (\%)}'], main_rows, [], spec=r'>{\raggedright\arraybackslash}p{0.5\linewidth}S[table-format=2.2]',
+          notes=r'AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source; number of observations in parentheses. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; set I: the first of the two parameter sets of Ermatchkov et al. '
+                rf'\textsuperscript{{a}}This work fitted {role_counts["fitted"]} of the {len(kuranov_rows)} and \res{{amp-reported-tong-fitted-pressure-count-literature}} of the \res{{amp-assessment-tong-pressure-count-note}}; the published Kuranov values are matched to the {len(kuranov_rows)} by count. \textsuperscript{{b}}Used to choose the initial parameters.')
+    table('supplement-published-models', 'Pressure AARD of this work and of published models on observation sets that the models fitted in different roles.',
+          ['Observations and model', 'Role in the fit', r'{AARD (\%)}'], other_rows, [],
+          spec=r'>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.2\linewidth}S[table-format=2.2]',
+          notes=r'AARD follows main-text Eq.~(\ref{main-eq:aard}); published values are those reported in each source; number of observations in parentheses. Role: of the observations in the fit of each model; unclear: see the text. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; sets I and II: the two parameter sets of Ermatchkov et al. \textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}Used to choose the initial parameters.')
     # Where the AMP splits lie: retained search states, projected onto temperature and loading.
     acomponents = [c['component_id'] for c in adoc['parameters']['components']]
     def astate(s):
@@ -2329,9 +2355,12 @@ def result_values(required):
         ("common_rows", "common-pressure-count", str(kamps["common_rows"])),
         ("common_AARD_percent", "common-pressure-aard", f"{kamps['common_AARD_percent']:.2f}"),
         ("full_AARD_percent", "all-pressure-aard", f"{kamps['full_AARD_percent']:.2f}"),
-        ("additional_signed_percent", "additional-pressure-deviation", f"{kamps['additional_signed_percent']:+.1f}"),
+        ("additional_signed_percent", "additional-pressure-deviation", f"{kamps['additional_signed_percent']:+.2f}"),
     ):
         add(f"mdea-corrected-kamps-{label}-transfer", record, f"kamps.{key}", value)
+    for quantity, key in (("source-row", "source_row"), ("molality", "m_MDEA_mol_kg_water")):
+        add(f"mdea-corrected-kamps-additional-pressure-{quantity}", record, f"kamps.additional_row.row.{key}",
+            kamps['additional_row']['row'][key])
     for quantity, key, digits in (("measured", "observed", 3), ("predicted", "value", 3)):
         add(f"mdea-corrected-kamps-additional-pressure-{quantity}", record,
             f"kamps.additional_row.{key} / 1e6", f"{kamps['additional_row'][key]/1e6:.{digits}f}")
@@ -2375,8 +2404,9 @@ def result_values(required):
         add(f"mdea-measured-states-without-instability-{passage}", W_MDEA_SCREEN,
             "distinct measured rows[searched, no instability].count",
             str(measured_counts["searched, no instability"]))
-    add("mdea-measured-states-unclassified-supplement", W_MDEA_SCREEN,
-        "distinct measured rows[unavailable].count", NUMBER_WORDS[measured_counts["unavailable"]])
+    for passage in ("supplement", "transfer"):
+        add(f"mdea-measured-states-unclassified-{passage}", W_MDEA_SCREEN,
+            "distinct measured rows[unavailable].count", NUMBER_WORDS[measured_counts["unavailable"]])
     record = MOVE + "mdea/reported/phase/capped-heat-diagnosis.json.gz"
     diagnosis = read(record)["rows"]
     outside = [row for row in diagnosis if row["key"] not in mdea_screen["aliases"]
@@ -2465,13 +2495,15 @@ def result_values(required):
     record = STUDY + "results/display-replays/mea-comparisons.json.gz"
     kim = read(record)["kim_2007"]
     hot = [row for row in kim if row["T_K"].startswith("393.15") and row["interval_status"] == "available"]
-    add("mea-kim-svendsen-hot-interval-count-results", record, "kim_2007[393.15 K,available].count", str(len(hot)))
+    for passage in ("results", "limits"):
+        add(f"mea-kim-svendsen-hot-interval-count-{passage}", record, "kim_2007[393.15 K,available].count", str(len(hot)))
     rmse = sqrt(fsum((float(row["predicted"]) - float(row["observed"]))**2 for row in hot) / len(hot))
     add("mea-kim-svendsen-hot-interval-rmse-results", record,
         "kim_2007[393.15 K,available].predicted,observed: RMSE (kJ/mol)", f"{rmse:.2f}")
     clean_hot = [row for row in hot if 'True' not in (row["source_inconsistent"], row["first_120"])]
     key = "kim_2007[393.15 K, available, unflagged]"
-    add("mea-kim-svendsen-unflagged-hot-interval-count-transfer", record, key + ".count", str(len(clean_hot)))
+    for passage in ("transfer", "limits"):
+        add(f"mea-kim-svendsen-unflagged-hot-interval-count-{passage}", record, key + ".count", str(len(clean_hot)))
     kim_svendsen_bias = 100 * fsum(1 - float(row["predicted"]) / float(row["observed"]) for row in clean_hot) / len(clean_hot)
     add("mea-kim-svendsen-hot-interval-low-bias-transfer", record, key + ": negative signed deviation %", f"{kim_svendsen_bias:.1f}")
     add("mea-kim-svendsen-hot-interval-low-bias-limit", record, key + ": negative signed deviation %", f"{kim_svendsen_bias:.1f}")
@@ -3074,9 +3106,10 @@ def result_values(required):
     add('amp-reported-tong-total-pressure-aard-literature', record,
         'rows[tong,tong-baseline].observed,value',
         format((stats([x for x in r["rows"] if x["group"] in ("tong","tong-baseline")],predicted="value")["AARD_percent"]), '.2f'))
-    add('amp-assessment-tong-pressure-count-literature', record,
-        'count rows[tong,tong-baseline]',
-        format((sum(x["group"] in ("tong","tong-baseline") for x in r["rows"])), '.0f'))
+    for passage in ("literature", "note"):
+        add(f'amp-assessment-tong-pressure-count-{passage}', record,
+            'count rows[tong,tong-baseline]',
+            format((sum(x["group"] in ("tong","tong-baseline") for x in r["rows"])), '.0f'))
     add('amp-kundu-comparison-partial-pressure-count', record,
         'rows[kundu].count',
         format((sum(x["group"]=="kundu" for x in r["rows"])), '.0f'))
