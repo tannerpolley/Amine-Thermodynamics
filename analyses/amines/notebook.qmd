@@ -681,3 +681,110 @@ contains 672 available calculations at the Böttinger temperatures,
 concentrations and assigned pressures. Those calculations sample the
 reported endpoints for the plotted lines. The points in each figure are
 the observations. No parameters were adjusted in either calculation.
+
+## Engine move and the repaired DEA fit
+
+The development wheel from Engine commit `c8867574c4d1dc4f9f35ff9f2186a13c3208c1d3`
+was built with SHA-256 `48309bb7e9ccbab1f436c4e294a873e745c368bbe57e8cf14f113ad75cbb574c`.
+In the initial replay at the retained S endpoints, W returned all 307 MEA,
+140 DEA, 281 MDEA, 214 AMP and 139 applicable salt fitted predictions.
+The [move records](results/move/) keep these initial replays, the new starts
+and endpoints, and the stage calculations at those endpoints.
+
+| Loaded solution | Observable | S AARD (%) and N | W AARD (%) and N |
+|---|---|---:|---:|
+| MEA | CO₂ partial pressure | 11.34 (47) | 11.34 (47) |
+| DEA | CO₂ partial pressure, fitted on each build | 42.75 (90) | 14.71 (58) |
+| DEA | CO₂ partial pressure, common W-fit rows | 27.56 (58) | 14.71 (58) |
+| MDEA | Total pressure | 4.39 (66) | 4.44 (66) |
+| AMP | Total pressure | 10.82 (105) | 10.82 (105) |
+
+These are calibration deviations. The repaired DEA objective contains
+30 Lawson and Garst Table II pressures, 28 Lal pressures at or above 50 Pa,
+and 50 Carson heats. Both starts returned all 108 rows at convergence,
+with six coordinates free of their bounds. The objectives differ by
+$7.46\times10^{-11}$. The DEAH⁺–bicarbonate interaction equals the W MEA
+cation–bicarbonate value of 1.0. The #425 molecular DEA–water law is retained,
+$k(365.15\,\mathrm K)=-0.0870306$ with reciprocal-temperature slope
+$-32.2542\,\mathrm K$. The salt laws and carbamate inputs use the W donors.
+The revised MDEA objective contains 277 observations. The four digitized
+Merkley heats were moved to assessment.
+
+| DEA comparison | N | S AARD / signed bias (%) | W AARD / signed bias (%) |
+|---|---:|---:|---:|
+| Lawson and Garst Table II, fitted on W | 30 | 34.32 / −15.09 | 11.02 / +1.48 |
+| Lal at or above 50 Pa, fitted on W | 28 | 20.33 / −3.09 | 18.67 / +2.33 |
+| Carson integral heat, fitted on both | 50 | 2.01 / −1.02 | 1.29 / +0.05 |
+| Lawson and Garst, 394 K | 7 | 37.56 / −37.56 | 8.74 / −3.03 |
+| Lawson and Garst Table VIII | 10 | 52.85 / −20.03 | 45.02 / −44.95 |
+| Seo and Hong | 16 | 66.19 / +58.90 | 92.23 / +50.32 |
+| Lal below 50 Pa | 16 | 74.35 / +23.72 | 72.11 / +38.95 |
+| Böttinger DEA + DEAH⁺ | 25 | 5.12 / −4.69 | 4.74 / +3.42 |
+| Böttinger carbamate | 25 | 47.77 / +46.54 | 14.06 / −1.83 |
+| Böttinger bicarbonate + carbonate | 25 | 22.28 / −22.28 | 13.82 / +10.86 |
+| Weiland density | 44 | 0.447 / −0.048 | 0.944 / +0.562 |
+
+The W DEA errors of 11.02% and 18.67% can be compared with the source
+accuracy estimates of about 9% and 15% stated in issue #442. The 11.1%
+electrolyte-CTS deviation is from a different data set. All 14 predicted
+Horstmann excess enthalpies are negative on W, from −1476 to −132 J/mol
+mixture. The RMSE fell from 1514 to 150 J/mol mixture. These heats are
+assessment data. The W finite search found no descent at 335 measured and
+936 grid states. The S model had six confirmed splits and one unavailable
+measured search. The fit is concentrated at the Lawson and Lal feed
+compositions. The Table VIII bias and low-pressure errors limit extension
+to higher DEA concentrations or lower pressures.
+
+| Water–bicarbonate comparison | N | S salt / MEA-fitted AARD (%) | W salt / MEA-fitted AARD (%) |
+|---|---:|---:|---:|
+| MEA fitted partial pressure | 47 | 11.34 / 11.57 | 11.34 / 11.57 |
+| MEA Ma'mun partial pressure | 19 | 38.66 / 33.80 | 38.66 / 33.80 |
+| MDEA Kuranov total pressure | 66 | 4.39 / 4.44 | 4.44 / 4.72 |
+| MDEA Ermatchkov partial pressure | 101 | 29.21 / 30.79 | 29.23 / 32.49 |
+| MDEA Carson integral heat | 40 | 13.58 / 17.12 | 13.26 / 14.50 |
+
+The ablation holds the historical MEA-fitted water–bicarbonate constant
+$k=0.7650000$ and refits the other declared coordinates. The W MEA and
+MDEA ablation objectives reached the function stopping test at 149.921895964
+and 19.152092019, respectively. MDEA continued from its first 40-iteration
+stop and ended with relative objective change $1.67\times10^{-11}$ against
+$10^{-10}$. The comparisons are on common observation identities.
+
+| Phase population | S outcome | W outcome |
+|---|---|---|
+| MEA liquid grid, 2,484 | 2,483 searched with no detected instability, 1 unavailable | 2,484 with no detected instability |
+| MEA measured, 321 | Original search record has 246 available, 75 pressure-readback exclusions | 321 available, no detected instability |
+| MEA census, 162 | 149 liquid + vapor, 13 single liquid | 149 liquid + vapor, 13 single liquid |
+| DEA measured, 335 | 328 no detection, 6 confirmed liquid splits, 1 unavailable | 335 no detection |
+| DEA grid, 936 | 936 no detection | 936 no detection |
+| MDEA measured, 1,564 | 1,327 no detection, 80 descents, 157 unavailable without a descent | 1,474 no detection, 80 descents, 10 unavailable without a descent |
+| MDEA restricted grid, 918 | 720 no detection, 198 absent | 918 no detection |
+| Reported AMP, 270 measured and 396 grid | 666 no detection | 666 no detection under both trial protocols |
+| First AMP, 666 | 93 detected descents, six confirmed splits at measurement-derived requests | 93 detected descents, nine confirmed splits at measurement-derived requests |
+
+MDEA's 80 measured-request descents reduce to 27 distinct states. None gave
+a confirmed two-liquid calculation. Six of the ten remaining unavailable
+requests are at 288.71 K or 422.04 K, outside the thermochemistry data
+interval for the capped heats. Four other 1.121 MPa cap searches have trial
+minima from $-4.83\times10^{-13}$ to $-2.84\times10^{-14}$ in TPD/RT
+against numerical uncertainties of $2.24\times10^{-11}$ to
+$5.46\times10^{-10}$. Three have unresolved root-density sides and one
+misses the reconstructed plane's agreement scale. The 2,980 applicable
+supplied trials in each case returned positive minima. These four searches
+remain unavailable. At the highest Zheng loading, the MDEA bubble-pressure
+prediction is 32.1 MPa on W, versus 38.1 MPa on S and 4.19 MPa measured.
+
+The first AMP fit still has 156 fitted rows and a replay objective of
+61.285275. The nine measurement-derived split confirmations use scaled
+bubble pressures. At the corresponding measured pressures the W reported
+AMP model gives four qualified liquid–vapor candidates and five finite
+searches with no resolved descent. The first fit underpredicts all 41 hot
+Hartono and Tong test pressures, by average absolute relative deviations of
+28.10% and 27.40% in the 18- and 23-row cohorts.
+
+The finite searches and derivative checks give numerical evidence for the
+tested requests. The measured properties provide the empirical comparisons,
+with fit status shown separately. The method does not measure phase
+stability between search points. The main-text descriptions of the DEA
+binary, the old DEA splits, and MDEA's previously unsearched grid states
+require the Writer's update before the W manuscript is submitted.

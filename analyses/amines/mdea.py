@@ -11,6 +11,7 @@ from epcsaft import equilibrium
 from .records import RESULTS, input_path, read
 
 from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route, evaluate
+from .wheel import verify
 
 DECLARATION = ROOT / "analyses/mdea_mea_workflow/inputs/bounded-binary-411.json"
 BOUNDED_BINARY = ROOT / "analyses/mdea_mea_workflow/results/bounded-binary-411"
@@ -499,6 +500,123 @@ def pressure_deviation(rows, name):
     )
 
 
+def binary_gap(point):
+    """Replay the isothermal binary bounds and follow the fitted law through onset."""
+    import numpy as np
+
+    from .fit import fingerprint
+
+    mapping = point["parameters"]
+    pair = next(r for r in mapping["pairs"] if {r["component_id_a"], r["component_id_b"]} == {W, MDEA})
+    law = pair["coefficients"][0]["temperature_law"]
+    terms = {term["power"]: term["coefficient"]["value"] for term in law["terms"]}
+    reference = law["reference_temperature"]["magnitude"]
+    archive = read(BOUNDED_BINARY / "critical-k.json")
+    pressure = archive["pressure_Pa"]
+    x = np.unique(np.concatenate([np.linspace(.001, .5, 4991), np.linspace(.5, .999, 500)]))
+    y = np.array((x, 1-x)).T
+
+    def hull(T, p, k=None, refined=False):
+        x_grid = np.sort(np.r_[x, (x[:-1] + x[1:])/2]) if refined else x
+        amounts = np.array((x_grid, 1-x_grid)).T if refined else y
+        if k is not None:
+            terms[0]["magnitude"] = k - terms[1]["magnitude"] * (T-reference)
+        parameters = epcsaft.Parameters.from_mapping(mapping, components=[MDEA, W])
+        if parameters.component_ids[0] != MDEA:
+            amounts = amounts[:, ::-1]
+        model = epcsaft.Mixture(parameters)
+        batch = model.states([T] * len(x_grid), P=p, x=amounts.tolist(), phase="liquid")
+        if any(v is None for v in batch.log_fugacity_coefficient):
+            unavailable = [(float(z), cause) for z, v, cause in zip(x_grid, batch.log_fugacity_coefficient,
+                                                                   batch.cause, strict=True) if v is None]
+            raise ValueError(f"MDEA binary {T} K, {p} Pa, k={k}: {unavailable[:4]}")
+        g = np.sum(amounts * (np.log(amounts) + np.asarray(batch.log_fugacity_coefficient)), axis=1)
+        nodes = []
+        for i, value in enumerate(g):
+            while len(nodes) >= 2:
+                a, b = nodes[-2:]
+                if (g[b]-g[a]) * (x_grid[i]-x_grid[b]) < (value-g[b]) * (x_grid[b]-x_grid[a]):
+                    break
+                nodes.pop()
+            nodes.append(i)
+        gaps = []
+        for a, b in zip(nodes, nodes[1:]):
+            if b > a+1:
+                excess = g[a:b+1] - np.interp(x_grid[a:b+1], x_grid[[a,b]], g[[a,b]])
+                if max(excess) > 16 * np.spacing(max(1., abs(g[a]), abs(g[b]))):
+                    gaps.append(dict(x_MDEA_contacts=x_grid[[a,b]].tolist(),
+                                     max_g_excess_over_RT=float(max(excess))))
+        return gaps
+
+    rows = []
+    intercept = terms[0]["magnitude"]
+    try:
+        for row in archive["rows"]:
+            T = row["T_K"]
+            lo, hi = row["k_no_gap"], row["k_gap"]
+            low, high = hull(T, pressure, lo), hull(T, pressure, hi)
+            if low or not high:
+                lo, hi = -.5, .2
+                if hull(T, pressure, lo) or not hull(T, pressure, hi):
+                    raise ValueError(f"MDEA binary {T} K: cannot bracket the first sampled liquid gap")
+                while hi-lo > row["k_gap"]-row["k_no_gap"]:
+                    mid = (lo+hi)/2
+                    lo, hi = (lo, mid) if hull(T, pressure, mid) else (mid, hi)
+                high = hull(T, pressure, hi)
+            rows.append(dict(T_K=T, k_no_gap=lo, k_gap=hi, first_gap=high[0]))
+    finally:
+        terms[0]["magnitude"] = intercept
+    old = read(ROOT / "analyses/fixed_reaction_reference/results/display-replays/mdea-binary-onset.json.gz")
+    brackets = {}
+    for p in old["pressures"]:
+        p = float(p)
+        onset = []
+        for interval in old["pressures"][str(int(p))]["brackets"]:
+            lo, hi = interval["adjacent_K"]
+            if hull(lo, p, refined=True) or not hull(hi, p, refined=True):
+                lo, hi = 422.04, 430.
+                if hull(lo, p, refined=True) or not hull(hi, p, refined=True):
+                    raise ValueError(f"MDEA binary fitted law at {p} Pa: cannot bracket onset")
+            while hi-lo > .01:
+                mid = (lo+hi)/2
+                lo, hi = (lo, mid) if hull(mid, p, refined=True) else (mid, hi)
+            onset.append([lo, hi])
+        brackets[str(int(p))] = onset
+    return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point),
+                pressure_Pa=pressure, compositions=len(x), rows=rows, brackets_K=brackets)
+
+
+def move_property_cases(route, point):
+    from .records import RESULTS
+
+    spec = route.bind(point)
+    published = FIT_SETS["published"]
+    row = next(row for row in kuranov_rows(published["observations"]) if row["row"] == published["restored_row"])
+    record = replay_records(spec, dict(row, alpha=row["m_co2"] / row["m_mdea"]))[-1]
+    (additional,) = evaluate(spec, [record])
+    archived = read(RESULTS / "shared/properties/display-summary.json.gz")["mdea_bubble"]
+    bubbles = {}
+    for key, previous in archived.items():
+        problem = spec.problems[key]
+        feed = problem.feed.values
+        water = feed[W]
+        guess = previous["bubble_Pa"] or previous["measured_Pa"]
+        case = spec.problem("loaded-bubble", dict(T=problem.T, P=guess, water=water,
+                            alpha=feed.get(CO2, 0.) / feed[MDEA]))
+        result = equilibrium.solve_equilibrium(spec.model, case)
+        bubbles[key] = dict(previous, bubble_Pa=result.pressure if result.requested_tolerance_met else None,
+                            status="Available" if result.requested_tolerance_met else "Refused",
+                            diagnostic=result.message)
+    zheng = read(RESULTS / "mdea/reported/phase/diagnosis/zheng-row-6.json")
+    case = spec.problem("loaded-bubble", dict(T=zheng["T"], P=zheng["cold"]["pressure"],
+                        water=zheng["feed"][W], alpha=zheng["target_loading"]))
+    result = equilibrium.solve_equilibrium(spec.model, case)
+    zheng = dict(T=zheng["T"], feed=zheng["feed"], source_pressure_Pa=zheng["source_pressure_Pa"],
+                 cold=dict(success=result.requested_tolerance_met, message=result.message,
+                           pressure=result.pressure if result.requested_tolerance_met else None))
+    return dict(additional_Kuranov_72=additional, mdea_bubble=bubbles, zheng_row_6=zheng)
+
+
 def replay_published(declaration):
     rows = [dict(row, alpha=row["m_co2"] / row["m_mdea"]) for row in kuranov_rows(declaration["observations"])]
     route = Route(declaration["specification"], reference_pressure_pa=None)
@@ -592,11 +710,13 @@ FIT_SETS = {
         endpoint_keys=("endpoint",),
         reference=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
         reference_keys=("replay",),
+        retained=RESULTS / "move/mdea/water-bicarbonate-ablation/fit",
     ),
     "reported": dict(
         route=NonDigitizedHeats,
         declaration=DECLARATION,
-        retained=RESULTS / "mdea/reported/fit",
+        retained=RESULTS / "move/mdea/reported/fit",
+        preserved=RESULTS / "mdea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=10980,
         replay_tolerance=1e-8,

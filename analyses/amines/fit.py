@@ -184,14 +184,15 @@ def move_manifest(amine, fit_set, output, *, ablation=False):
     from . import dea, salt
 
     wheel = verify()
-    retained = read(fit_set["retained"] / "manifest.json.gz")
+    preserved = fit_set["preserved"]
+    retained = read(preserved / "manifest.json.gz")
     if ablation:
         held = read(RESULTS / amine / "water-bicarbonate-ablation/fit/A.json.gz")
         point = deepcopy(held["endpoint"])
     elif amine in ("mea", "amp"):
         point = deepcopy(retained["prior_declaration"])
     else:
-        held = read(fit_set["retained"] / "A.json.gz")
+        held = read(preserved / "A.json.gz")
         point = deepcopy(held["endpoint"])
     mapping = point["parameters"]
     if not ablation:

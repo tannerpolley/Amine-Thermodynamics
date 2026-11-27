@@ -175,12 +175,6 @@
   },
   {
     "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
-    "context": " each salt at 278--\\SI{318}{\\kelvin",
-    "token": "278",
-    "reason": "literature"
-  },
-  {
-    "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
     "context": "and up to \\SI{1}{\\mole\\per\\kilogram",
     "token": "1",
     "reason": "literature"
@@ -1689,14 +1683,6 @@
   },
   {
     "file": "analyses/amines/displays.py",
-    "token": "1",
-    "context": "phase-classification-1.json.gz",
-    "reason": "identifier",
-    "literal": true,
-    "statement": "aclass = read(AMF + 'phase-classification-1.json.gz')"
-  },
-  {
-    "file": "analyses/amines/displays.py",
     "token": "0.5",
     "context": " at 0.5 MPa",
     "reason": "condition",
@@ -1804,5 +1790,159 @@
     "context": "MDEA above a loading of 1 are overpredicted",
     "token": "1",
     "reason": "condition"
+  },
+  {
+    "file": "docs/scientific/latex/sections/data_methods.tex",
+    "token": "0",
+    "context": "\\quad \\sum_iw_i=1,\\quad\\sum_i z_iw_i=0,\\quad w_i>0.",
+    "reason": "equation",
+    "count": 2
+  },
+  {
+    "file": "docs/scientific/latex/sections/data_methods.tex",
+    "token": "0",
+    "context": "Here $g=G^*/n$ is the molar Gibbs energy of the trial phase on the true-species basis, with $G^*$ the Gibbs energy of \\cref{sec:reactions}, and $\\boldsymbol w$ is its composition, restricted to the species that can form from the feed and, for a vapor, to \\COtwo, water and the molecular amine; the condition $w_i>0$ applies to these species only, and a liquid trial phase also satisfies the reaction equilibria of \\cref{eq:activity-reaction-equilibrium}, which do not arise in a vapor of neutral species.",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/sections/data_methods.tex",
+    "token": "0",
+    "context": "$B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\\boldsymbol\\nu_r=0$ for every reaction; and $\\boldsymbol\\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched state, divided by $RT$, so that $B^{\\mathsf T}\\boldsymbol\\lambda$ is the tangent plane of that state.",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
+    "token": "0",
+    "context": "Dispersion between ions of the same charge sign, including a single-sphere ion with itself, is excluded ($u_{ij}=0$), while ion--solvent and cation--anion pairs keep \\cref{eq:dispersion-combining-rule} \\cite{Figiel2025}; the two chain cations keep the dispersion between their own segments, a choice of this model.",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
+    "token": "0",
+    "context": "because $\\mathrm{d}P_{\\mathrm{src}}/\\mathrm{d}P=0$.",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "token": "0",
+    "context": "\\quad n=0,\\dots,3,",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "token": "+12",
+    "context": "+\\left(1-\\bar m\\right)\\frac{20\\eta-27\\eta^2+12\\eta^3-2\\eta^4}{\\left[\\left(1-\\eta\\right)\\left(2-\\eta\\right)\\right]^2}\\right]^{-1},",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "token": "12",
+    "context": "a^{\\mathrm{DH}}=-\\frac{\\kappa_{\\mathrm D}e^2}{12\\pi\\varepsilon_0\\varepsilon_{\\mathrm{bulk}}k_BT}\\sum_{i\\in\\mathcal I}x_iz_i^2\\chi_i,",
+    "reason": "equation"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "F4-0",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "'F4-0': 'Zero protonated-MEA--bicarbonate interaction',"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "Bold values were fitted in this work; Table~\\ref{main-tab:transfer-fitted} of the main text gives the standard errors of the parameters of the reactive fits, and Table~\\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. For DEA and AMP, $\\delta h$ is measured from the starting R4 correlation, as in main-text Table~\\ref{main-tab:transfer-fitted}, and is contained in $B_4$. R4: carbamate hydrolysis; R5: amine dissociation; $\\ln K=a+b/T+c\\ln(T/T_{\\mathrm{ref}})+dT$ with $T$ in K and $T_{\\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K, except MDEA--water, at 423 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value\\textquotedblright{} and ``MDEA value\\textquotedblright{}: the value of the molecular amine. The data deposit gives the source and basis of each value.",
+    "reason": "definition",
+    "literal": true,
+    "statement": "notes=r'Bold values were fitted in this work; Table~\\ref{main-tab:transfer-fitted} of the main text gives the standard errors of the parameters of the reactive fits, and Table~\\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. For DEA and AMP, $\\delta h$ is measured from the starting R4 correlation, as in main-text Table~\\ref{main-tab:transfer-fitted}, and is contained in $B_4$. R4: carbamate hydrolysis; R5: amine dissociation; $\\ln K=a+b/T+c\\ln(T/T_{\\mathrm{ref}})+dT$ with $T$ in K and $T_{\\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K, except MDEA--water, at 423 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value\\textquotedblright{} and ``MDEA value\\textquotedblright{}: the value of the molecular amine. The data deposit gives the source and basis of each value.')",
+    "count": 2
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/amplitude",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "'component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/amplitude': r'$a_1$',"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/exponent_coefficient",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "'component/water/segment_diameter/constant-plus-sum-of-exponentials/term-0/exponent_coefficient': r'$b_1$',"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\\,\\mathrm{K})+b_{ij}(1/T-1/313.15\\,\\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. The two sodium-salt slopes are linear in $T-313.15\\,\\mathrm{K}$. $^{\\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\\mathrm{b}}$Fitted beforehand to \\ce{CO2}--water pressures (Section~\\ref{sec:parameters}). $^{\\mathrm{c}}$On its lower bound. $^{\\mathrm{d}}$On its upper bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.",
+    "reason": "definition",
+    "literal": true,
+    "statement": "table('interaction_matrix.tex', r\"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\\,\\mathrm{K})+b_{ij}(1/T-1/313.15\\,\\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. The two sodium-salt slopes are linear in $T-313.15\\,\\mathrm{K}$. $^{\\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\\mathrm{b}}$Fitted beforehand to \\ce{CO2}--water pressures (Section~\\ref{sec:parameters}). $^{\\mathrm{c}}$On its lower bound. $^{\\mathrm{d}}$On its upper bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.\","
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "\\\\num{\\g<0>}",
+    "reason": "layout",
+    "literal": true,
+    "statement": "outputs[LATEX / name] = GROUP.sub(r'\\\\num{\\g<0>}', text) if name.endswith('.tex') else text"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": ".0",
+    "context": ".0",
+    "reason": "layout",
+    "literal": true,
+    "statement": "return '--' if value is None or value == '' else repr(float(value)).removesuffix('.0')"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "\\\\num{\\g<0>}",
+    "reason": "layout",
+    "literal": true,
+    "statement": "outputs[TABLES / name] = body if name.endswith('_reference_state.tex') else GROUP.sub(r'\\\\num{\\g<0>}', body)"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "lawson-1976-viii:0:problem",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "if key in (\"weiland-1998:31:problem\", \"lawson-1976-viii:0:problem\"):"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": ".0",
+    "context": ".0",
+    "reason": "layout",
+    "literal": true,
+    "statement": "text = f'{record[key][0]:.4f}' if key.endswith('_diameter') and s + '/segment_diameter' in fitted else repr(round(record[key][0], 4)).removesuffix('.0')"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "0",
+    "reason": "definition",
+    "literal": true,
+    "statement": "f'${int(charge[s]):+d}$' if charge[s] else '0', v(f'component/{s}/born_diameter'), v(f'component/{s}/solvation_factor'),"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": ".0",
+    "context": ".0",
+    "reason": "layout",
+    "literal": true,
+    "statement": "rows.append([label, (bold if key in fitted else str)('$' + repr(float(value)).removesuffix('.0') + '$'), units.get(unit, unit), origin(who, record, neutral, key, fitted)])"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "token": "0",
+    "context": "lawson-1976-viii:0:problem",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "f\"{next(row['pressure_Pa'] for row, _ in splits if row['key'] == 'lawson-1976-viii:0:problem') / 1e3:.2f}\")"
   }
 ]

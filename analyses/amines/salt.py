@@ -50,7 +50,7 @@ SCALES = {0: 0.01, 1: 1e-4}
 FIT_SETS = {
     "sodium-salts": dict(
         declaration=BUNDLE / "results/selected-current-best-parameters.json",
-        retained=RESULTS / "salt/sodium-salts/fit",
+        retained=RESULTS / "move/salt/sodium-salts/fit",
         stages=(
             ("1a-sodium", "NaCl", ((NA, 0),)),
             ("1b-bicarbonate", "NaHCO3", ((HCO3, 0), (HCO3, 1))),
@@ -344,12 +344,12 @@ def salt_rows(document, base):
 
 def replay(fit_set):
     wheel = verify()
-    record = read(fit_set["retained"] / "summary.json")
-    if record["wheel_sha256"] != wheel:
+    record = read(fit_set["retained"] / "summary.json.gz")
+    if record["wheel"] != wheel:
         raise ValueError("The retained salt cascade belongs to a different wheel")
     return dict(
         wheel=wheel,
-        rows=salt_rows(record["result"]["document"], fit_set["declaration"]),
+        rows=salt_rows(record["document"], fit_set["declaration"]),
     )
 
 

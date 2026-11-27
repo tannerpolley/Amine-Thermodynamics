@@ -104,6 +104,70 @@ def alternate_start(point):
     return [(trial[q["identity"]] - q["origin"]) / q["scale"] for q in point["coordinates"]]
 
 
+def lawson_methane(route, point):
+    from scipy.optimize import minimize_scalar
+
+    from .fit import fingerprint
+    from .wheel import verify
+
+    prior = read(ROOT / "analyses/fixed_reaction_reference/results/display-replays/dea-methane.json.gz")
+    critical_T = np.asarray(prior["coefficients"]["temperature_K"])
+    critical_P = np.asarray(prior["coefficients"]["pressure_Pa"])
+    gauge_limit = prior["total_gauge_limit_Pa"]
+
+    def gas_log_fugacity(T, co2, methane):
+        # Redlich–Kwong (1949), equations 2, 4, 5, 15, 18 and 27, for the dry gas.
+        pressure = co2 + methane
+        y = np.array([co2, methane]) / pressure
+        Ai = np.sqrt(.4278 * (critical_T/T)**2.5 * pressure/critical_P)
+        Bi = .0867 * (critical_T/T) * pressure/critical_P
+        A, B = y @ Ai, y @ Bi
+        Z = max(v.real for v in np.roots([1., -1., A*A-B-B*B, -A*A*B]) if abs(v.imag) < 1e-10 and v.real > B)
+        return Bi[0]/B*(Z-1) - math.log(Z-B) - A*A/B*(2*Ai[0]/A-Bi[0]/B)*math.log1p(B/Z)
+
+    spec = route.bind(point)
+    idx = list(spec.parameters.component_ids).index("carbon-dioxide")
+    rows = []
+    keys = {row["identity"] for row in prior["rows"]}
+    for row in spec.inputs["observations"]["fitted"]:
+        if row["identity"] not in keys:
+            continue
+        p = spec.problems[row["problem"]]
+        result = eq.solve_equilibrium(spec.model, p)
+        if not result.requested_tolerance_met:
+            raise ValueError(f"{row['identity']}: {result.message}")
+        T, P, observed = p.T, result.pressure, row["arguments"]["observed"]
+        x = result.phase_mole_fractions(0)
+        partial = P * result.phase_mole_fractions(1)[idx]
+        limit = max(0., gauge_limit - observed - (P-partial))
+        base_gas = gas_log_fugacity(T, observed, 0.)
+        base_liquid = math.log(P) + spec.model.state(T, rho=result.molar_densities[0], x=x).log_fugacity_coefficient[idx]
+
+        def change(q):
+            liquid = spec.model.state(T, P=P+q, x=x, phase="liquid")
+            return math.log(P+q) + liquid.log_fugacity_coefficient[idx] - base_liquid - gas_log_fugacity(T, observed, q) + base_gas
+
+        nodes = np.linspace(0., limit, 33)
+        values = [change(float(q)) for q in nodes]
+        extrema = [(float(nodes[0]), values[0]), (float(nodes[-1]), values[-1])]
+        for i in range(1, len(nodes)-1):
+            a, b, c = values[i-1:i+2]
+            if (b-a) * (c-b) < 0:
+                sign = 1 if b < a else -1
+                opt = minimize_scalar(lambda q: sign*change(q), method="bounded", bounds=(nodes[i-1], nodes[i+1]))
+                extrema.append((float(opt.x), float(sign * opt.fun)))
+        bounds = [min(extrema, key=lambda q: q[1]), max(extrema, key=lambda q: q[1])]
+        rows.append(dict(identity=row["identity"], T_K=T, observed_Pa=observed, methane_free_pCO2_Pa=partial,
+                         methane_free_P_Pa=P, dry_methane_range_Pa=[0., limit], nodes_Pa=nodes,
+                         node_log_corrections=values, log_extrema=bounds,
+                         pCO2_change_Pa=[partial*math.expm1(v) for _,v in bounds]))
+    if {row["identity"] for row in rows} != keys:
+        raise ValueError("The Lawson methane assessment lost a row")
+    return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point), rows=rows, **{
+        k: prior[k] for k in ("conditional", "total_gauge_limit_Pa", "source", "coefficients", "basis", "unconstrained")
+    })
+
+
 def bubble(parameters, row):
     x = float(row["x_water"])
     feed = {
@@ -309,7 +373,8 @@ FIT_SETS = {
     "reported": dict(
         route=RepairedDEA,
         declaration=DECLARATION,
-        retained=RESULTS / "dea/reported/fit",
+        retained=RESULTS / "move/dea/reported/fit",
+        preserved=RESULTS / "dea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=1620,
         replay_tolerance=1e-8,

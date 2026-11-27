@@ -4,7 +4,7 @@ from analyses.amines.mea import FIT_SETS
 from analyses.amines.properties import worked_calorimetry
 
 route, point = endpoint(FIT_SETS["reported"])
-retained = read(RESULTS / "shared/comparisons/properties/display-replays/caloric-and-species.json.gz")
+retained = read(RESULTS / "move/mea/reported/properties/caloric-and-species.json.gz")
 assert retained["endpoint_fingerprint"] == fingerprint(point)
 expected = retained["reference_state"]
 replay = worked_calorimetry(route.bind(point), expected)

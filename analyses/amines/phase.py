@@ -1270,6 +1270,40 @@ def reported_controls(amine, design, route, spec, endpoint):
     return dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=rows, differences=differences)
 
 
+def amp_measured_controls(route, point, first):
+    from .fit import fingerprint
+
+    spec = route.bind(point)
+    observed = {row["problem"]: row["arguments"]["observed"]
+                for role in ("fitted", "comparisons")
+                for row in spec.inputs["observations"][role]
+                if row["kind"] == "pressure" and row["group"] in ("hartono-2021-supplemental", "tong")}
+    rows = {}
+    for entry in first["classifications"]:
+        key = entry["key"]
+        if key not in observed:
+            continue
+        pair = next((a for a in entry["attempts"] if a["confirmed"]), None)
+        if pair is None:
+            continue
+        state = dict(key=key, problem=key)
+        result = fixed_control(route, spec, state, observed[key], dict(pair=pair), assemblages=True)
+        candidates = result.get("candidates", []) or []
+        liquid_vapor = next((candidate for candidate in candidates if candidate["support"] == "L+V"), {})
+        vapor = any(t["descent"] and t["quantities"].get("density_side") == 1
+                    for t in result.get("native_trials", []))
+        outcome = phase_outcome(result)
+        if outcome == "finite search, no resolved descent":
+            outcome = "No resolved descent"
+        elif outcome == "unresolved phase identity" and liquid_vapor.get("qualified"):
+            outcome = "L+V passed; L+L unresolved"
+        elif outcome == "unresolved phase identity" and vapor:
+            outcome = "Vapor-directed; root unqualified"
+        rows[key] = dict(outcome=outcome, pressure_Pa=observed[key], result=result)
+    return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point),
+                first_fit_fingerprint=first["endpoint_fingerprint"], rows=rows)
+
+
 def _census(row):
     from .mea import CENSUS_FEED
 

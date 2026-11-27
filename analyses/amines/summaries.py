@@ -432,4 +432,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--move-ablation", type=Path, metavar="STAGE_OUTPUT")
+    args = parser.parse_args()
+    if args.move_ablation is None:
+        main()
+    else:
+        print(write_move_ablation(args.move_ablation))

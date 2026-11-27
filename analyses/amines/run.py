@@ -32,10 +32,10 @@ def main():
         name = "endpoint.json.gz"
         if args.amine == "salt":
             record = module.replay(declaration)
-        elif "archive" in declaration:
-            record = fit.replay_retained(declaration)
-        else:
+        elif "retained" in declaration:
             record = fit.replay_endpoint(declaration)
+        else:
+            record = fit.replay_retained(declaration)
     elif args.amine == "salt" and args.stage in ("rows", "fit"):
         record = getattr(module, args.stage)(declaration)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "fit":
@@ -45,7 +45,9 @@ def main():
         record = fit.reported_fit(reported | declaration, manifest, target)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "properties":
         reported = module.FIT_SETS["reported"]
-        point, selected = fit.retained_endpoint(reported | {"retained": target.parent / "fit"})
+        local = target.parent / "fit"
+        chosen = local if (local / "selection.json").is_file() else declaration["retained"]
+        point, selected = fit.retained_endpoint(reported | {"retained": chosen})
         spec = fit.route_for(declaration).bind(point)
         if args.amine == "mea":
             rows = module.ablation_pressures(spec)
@@ -65,8 +67,7 @@ def main():
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))
     elif args.stage == "fit":
-        held = fit.read(declaration["retained"] / "manifest.json.gz")
-        if held["wheel"] != verify():
+        if "preserved" in declaration:
             manifest = fit.move_manifest(args.amine, declaration, args.output.resolve())
         else:
             manifest = fit.reported_manifest(args.amine, declaration, args.output.resolve())
@@ -74,17 +75,35 @@ def main():
         record = fit.reported_fit(declaration, manifest, target)
     else:
         fresh = target.parent / "fit"
-        point, selection = fit.retained_endpoint(
-            declaration | {"retained": fresh} if (fresh / "selection.json").is_file() else declaration)
+        chosen = fresh if (fresh / "selection.json").is_file() else declaration["retained"]
+        point, selection = fit.retained_endpoint(declaration | {"retained": chosen})
         route = fit.route_for(declaration)
         if args.stage == "phase":
-            if (fresh / "selection.json").is_file():
+            if "preserved" in declaration:
                 record = phase.fresh_searches(args.amine, route, point, target)
+                if args.amine == "mdea":
+                    fit.save(target / "binary-gap.json.gz", module.binary_gap(point))
+                first = args.output.resolve() / "amp/first-data/phase/supplied.json.gz"
+                if not first.is_file():
+                    first = declaration["retained"].parents[1] / "first-data/phase/supplied.json.gz"
+                if args.amine == "amp":
+                    fit.save(target / "measured-controls.json.gz", phase.amp_measured_controls(route, point, fit.read(first)))
             else:
                 record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
         else:
             record = properties.property_rows(route, point)
             record.update(properties.reported_curves(args.amine, route, point))
+            if "preserved" in declaration:
+                fit.save(target / "derivatives.json.gz", properties.reported_derivatives(args.amine, route, point))
+            if args.amine == "dea" and "preserved" in declaration:
+                fit.save(target / "lawson-methane.json.gz", module.lawson_methane(route, point))
+            if args.amine == "mdea" and "preserved" in declaration:
+                record.update(module.move_property_cases(route, point))
+            if args.amine == "mea" and "preserved" in declaration:
+                selected = fit.read(chosen / f'{selection["selected"]}.json.gz')
+                for family, result in module.display_properties(route, point, selected).items():
+                    fit.save(target / f"{family}.json.gz", result)
+                module.write_reported_property_summary(fit_folder=chosen, output=target / "uncertainty-and-activities.json.gz")
         record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
     path = target / name
     fit.save(path, record)

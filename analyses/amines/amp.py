@@ -260,7 +260,8 @@ FIT_SETS = {
     "reported": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
-        retained=RESULTS / "amp/reported/fit",
+        retained=RESULTS / "move/amp/reported/fit",
+        preserved=RESULTS / "amp/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=6750,
         replay_tolerance=1e-8,

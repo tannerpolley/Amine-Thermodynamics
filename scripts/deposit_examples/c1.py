@@ -4,7 +4,7 @@ from analyses.amines.mea import FIT_SETS
 from analyses.amines.properties import worked_state
 
 route, point = endpoint(FIT_SETS['reported'])
-retained = read(RESULTS / 'shared/comparisons/properties/derivatives/selected-MEA.json.gz')
+retained = read(RESULTS / 'move/mea/reported/properties/derivatives.json.gz')
 assert retained['endpoint_fingerprint'] == fingerprint(point)
 spec = route.bind(point)
 replay = worked_state(spec, spec.model, spec.thermal, retained['observation'], retained['apparent_amine_feed_mol'])

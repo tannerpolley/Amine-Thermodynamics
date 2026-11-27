@@ -505,8 +505,9 @@ def derivatives(spec, model, thermal, problem, T, P, amine_feed, starting_soluti
 
 
 def worked_state(spec, model, thermal, observation, amine_feed):
-    """Continue the liquid branch of a fitted bubble state for C1."""
-    row = next(q for q in spec.inputs['observations']['fitted'] if q['identity']==observation)
+    """Continue the liquid branch of a declared bubble state for C1."""
+    row = next(q for role in ("fitted", "comparisons") for q in spec.inputs["observations"][role]
+               if q["identity"] == observation)
     bubble = copy.copy(spec.problems[row['problem']])
     result = eq.solve_equilibrium(model,bubble)
     if not result.requested_tolerance_met:
@@ -522,6 +523,19 @@ def worked_state(spec, model, thermal, observation, amine_feed):
     return derivatives(spec,model,thermal,native,result.temperature,result.pressure,amine_feed,result)
 
 
+def reported_derivatives(amine, route, point):
+    from .fit import fingerprint
+
+    label = "AMP_free" if amine == "amp" else amine.upper()
+    path = RESULTS / "shared/comparisons/properties/derivatives" / f"selected-{label}.json.gz"
+    retained = read(path)
+    spec = route.bind(point)
+    observation = retained["observation"]
+    record = worked_state(spec, spec.model, spec.thermal, observation, retained["apparent_amine_feed_mol"])
+    return dict(record, wheel=verify(), endpoint_fingerprint=fingerprint(point), observation=observation,
+                declaration_source=path.relative_to(ROOT).as_posix())
+
+
 def worked_calorimetry(spec, record):
     """Replay the recorded addition enthalpy and heat-capacity stencil."""
     verify()
@@ -530,6 +544,8 @@ def worked_calorimetry(spec, record):
     template = spec.problems[cp_row["problem"]]
     problems = {}
     values = {}
+    points = {}
+    loaded = None
     for label, retained in record["points"].items():
         problem = copy.copy(template)
         problem.T, problem.P = retained["T_K"], P
@@ -543,6 +559,10 @@ def worked_calorimetry(spec, record):
             kinds.append(observable("EquilibriumIsobaricHeatCapacity", 0))
         values[label] = [value for value, _ in first_actions(spec.model, problem, result, kinds, [(0., 0., None)])[0]]
         problems[label] = problem
+        points[label] = dict(feed_mol=retained["feed_mol"], T_K=result.temperature, H_J=values[label][0],
+                             physical_checks=checks)
+        if label == "loaded":
+            loaded = result
     added = record["added_CO2_mol"]
     observation = reg.addition_enthalpy(spec.parameters, problems["initial"], problems["loaded"],
         {"carbon-dioxide": 1.0}, added, T, P, phase="vapor", observed=0.0, form="difference", scale=1.0)
@@ -552,4 +572,29 @@ def worked_calorimetry(spec, record):
     amount = fsum(record["apparent_feed_mol"])
     finite = [(values[str(step)][0] - values[str(-step)][0]) / (2 * step * amount)
               for step in record["stencil_steps_K"]]
-    return dict(heat_kJ_mol=prediction.value / 1000, cp_J_mol_K=values["loaded"][1], cp_stencil_J_mol_K=finite)
+    cp = values["loaded"][1]
+    stream = (values["loaded"][0] - values["initial"][0]) / added - prediction.value
+    problem = problems["loaded"]
+    actions = first_actions(spec.model, problem, loaded, [observable("PhaseLogActivity", 0, i)
+                            for i in range(len(spec.parameters.component_ids))], [(1., 0., None)])[0]
+    reactions = []
+    for reaction, activity in zip(problem.reactions, eq.reaction_activities(spec.model, loaded), strict=True):
+        law = reaction.correlation
+        nu = [reaction.stoichiometry.get(c, 0.) for c in spec.parameters.component_ids]
+        dnu = fsum(nu)
+        slope = fsum(n * dt for n, (_, dt) in zip(nu, actions, strict=True)) + dnu / T
+        source_slope = -law.b / T**2 + law.c / T + law.d - 2 * law.e / T**3 + 2 * law.f * T
+        scale = R * T*T / 1000
+        water = spec.parameters.component_ids.index("water")
+        water_mass = next(q["fixed"]["molar_mass"]["value"]["magnitude"] for q in spec.inputs["endpoint"]["components"]
+                          if q["component_id"] == "water")
+        molality = (dnu - nu[water]) * log(water_mass * problem.neutral_reference.standard_molality_mol_per_kg)
+        reactions.append(dict(name=reaction.name, P_source_Pa=activity.reference_pressure_pa,
+            ln_K_source=activity.log_quotient, Gamma=activity.log_pressure_quotient-activity.log_quotient-molality,
+            source_kJ_mol=scale * source_slope, fugacity_kJ_mol=scale * (slope-source_slope), ideal_gas_kJ_mol=scale * slope))
+    conditions = ("T_K", "P_Pa", "MEA_wt_percent", "loading_initial", "loading_final",
+                  "apparent_feed_mol", "loaded_mass_kg", "added_CO2_mol", "stencil_steps_K")
+    return dict({name: record[name] for name in conditions}, points=points, reactions=reactions,
+                heat_kJ_mol=prediction.value / 1000, cp_J_mol_K=cp, cp_stencil_J_mol_K=finite,
+                cp_minus_fine_J_mol_K=cp-finite[-1], cp_kJ_kg_K=cp*amount/record["loaded_mass_kg"]/1000,
+                added_stream={"H_J_per_mol": stream})

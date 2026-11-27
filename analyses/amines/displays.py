@@ -40,6 +40,16 @@ AMP_SCREEN = "analyses/amines/results/amp/reported/phase/AMP_free/screen/selecte
 MDEA_RESTRICTED_GRID = "analyses/amines/results/mdea/reported/phase/diagnosis/restricted-grid.json.gz"
 MDEA_ZHENG = "analyses/amines/results/mdea/reported/phase/diagnosis/zheng-row-6.json"
 MDEA_PUBLISHED_REPLAY = "analyses/amines/results/mdea/published/replay/endpoint.json.gz"
+MOVE = "analyses/amines/results/move/"
+W_AMP_FIRST = MOVE + "amp/first-data/phase/supplied.json.gz"
+W_AMP_FIRST_PROPERTIES = MOVE + "amp/first-data/replay/endpoint.json.gz"
+W_AMP_CONTROLS = MOVE + "amp/reported/phase/measured-controls.json.gz"
+W_DEA_SCREEN = MOVE + "dea/reported/phase/declared.json.gz"
+W_MDEA_SCREEN = MOVE + "mdea/reported/phase/declared.json.gz"
+W_MDEA_PROPERTIES = MOVE + "mdea/reported/properties/summary.json.gz"
+W_MEA_PHASE = MOVE + "mea/reported/phase/"
+W_SALT = MOVE + "salt/sodium-salts/fit/summary.json.gz"
+W_MDEA_BINARY = MOVE + "mdea/reported/phase/binary-gap.json.gz"
 sources = {}
 stage_records = {}
 record_paths = {}
@@ -56,6 +66,27 @@ def register_records(catalog):
         if "archive_path" in row:
             record_paths[row["archive_path"]] = key
         stage_records[key] = path
+    for family, amine, properties in (
+        ("MEA", "mea", None),
+        ("DEA", "dea", "DEA/property-comparisons/selected.json.gz"),
+        ("MDEA", "mdea", "MDEA/properties.json.gz"),
+        ("AMP_free", "amp", "AMP_free/properties.json.gz"),
+    ):
+        for filename in ("A.json.gz", "selection.json"):
+            record_paths[STUDY + f"results/{family}/{filename}"] = MOVE + f"{amine}/reported/fit/{filename}"
+        if properties:
+            record_paths[STUDY + f"results/{properties}"] = MOVE + f"{amine}/reported/properties/summary.json.gz"
+    for source, target in {
+        "E/MEA/replay.json.gz": "expanded-pressure",
+        "MEA/off-window.json.gz": "off-window",
+        "display-replays/mea-comparisons.json.gz": "mea-comparisons",
+        "display-replays/wagner.json.gz": "wagner",
+        "display-replays/bubble-checks.json.gz": "bubble-checks",
+        "display-replays/caloric-and-species.json.gz": "caloric-and-species",
+    }.items():
+        record_paths[STUDY + "results/" + source] = MOVE + f"mea/reported/properties/{target}.json.gz"
+    record_paths[MEA_REPORTED_PROPERTIES] = MOVE + "mea/reported/properties/uncertainty-and-activities.json.gz"
+    record_paths[STUDY + "results/MDEA/property-comparisons/A.json.gz"] = W_MDEA_PROPERTIES
 
 
 def read(name):
@@ -194,6 +225,24 @@ def confirmed_dea_splits():
             for row in screen["classifications"] if any(attempt["confirmed"] for attempt in row["attempts"])]
 
 
+def mdea_pressure_comparisons():
+    result = read(W_MDEA_PROPERTIES)
+    keys = {str(row["row"]) for row in read(MDEA_PUBLISHED_REPLAY)["kuranov"]}
+    selected = [r for r in result["rows"] + [result["additional_Kuranov_72"]]
+                if r["group"].startswith("Kuranov") and str(r["row"].get("source_row")) in keys]
+    if {str(r["row"]["source_row"]) for r in selected} != keys or len(selected) != len(keys):
+        raise ValueError("Kuranov source rows differ from the matched published population")
+    used = [r for r in selected if r["status"] == "Available" and r["requested_tolerance_met"]]
+    kuranov = dict(available=len(used), AARD_percent=stats(used, predicted="value")["AARD_percent"])
+    rows = [r for r in result["rows"] if r["group"] == "corrected-Kamps" and r["status"] == "Available"]
+    additional, = (r for r in rows if r["identity"] == "comparison:113")
+    common = [r for r in rows if r is not additional]
+    kamps = dict(full_rows=len(rows), full_AARD_percent=stats(rows, predicted="value")["AARD_percent"],
+                 common_rows=len(common), common_AARD_percent=stats(common, predicted="value")["AARD_percent"],
+                 additional_row=additional, additional_signed_percent=100 * (additional["value"] / additional["observed"] - 1))
+    return kuranov, kamps
+
+
 def reduced_gibbs_value(value):
     mantissa, exponent = f"{value:.3e}".split("e")
     return rf"{mantissa}\times 10^{{{int(exponent)}}}"
@@ -208,7 +257,7 @@ def shared_interaction_table(shared, table, num):
     rows = [[labels[key], len(case['common']),
              *[num(case['models'][name]['AARD_percent'], 2) for name in ('salt-anchored','MEA-fitted')]]
             for key, case in shared['comparisons'].items()]
-    bicarbonate = read('analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz')['center']['k']
+    bicarbonate = shared['bicarbonate']
     table('supplement-shared-interaction-sensitivity',
           'Deviations of the MEA and MDEA models, with the water--anion interactions fixed from the sodium-salt data, and of the same fits with the water--bicarbonate interaction fitted to the MEA data, on identical observations.',
           ['Observable', '$N$', r'Salt-fitted interactions, AARD (\%)', r'MEA-fitted interaction, AARD (\%)'],
@@ -293,7 +342,7 @@ def transfer_displays(outputs):
     fit_summary = read(FIT_SUMMARY)
     phases = read(PHASE_SUMMARY)
     property_summary = read(PROPERTY_SUMMARY)
-    amp_outcomes = phases['amp_outcomes']
+    amp_outcomes = read(W_AMP_CONTROLS)['rows']
     amp_enthalpy = fit_summary['amp_enthalpy']
 
     ddoc, mdoc, adoc = [fixed.fits[name]['endpoint'] for name in ('DEA', 'MDEA', 'AMP_free')]
@@ -302,7 +351,8 @@ def transfer_displays(outputs):
     dcoords, acoords = (coordinates(fixed.conditional(name)) for name in ('DEA', 'AMP_free'))
 
     params = read(BASE + 'parameter-values.csv')
-    fitted_names = [r'$k_{\mathrm{DEAH^+,w}}$', r'$k_{\mathrm{DEACOO^-,w}}$', r'R4 constant term $A_4$', r'R4 enthalpy increment $\delta h$']
+    fitted_names = [r'$k_{\mathrm{DEAH^+,w}}$', r'$k_{\mathrm{DEACOO^-,w}}$', r'R4 constant term $A_4$', r'R4 enthalpy increment $\delta h$',
+                    r'$b_{\mathrm{DEAH^+,w}}$ (K)', r'$k_{\mathrm{DEAH^+,CO_2}}$']
     head = lambda text, n: [r'\addlinespace\multicolumn{' + str(n) + r'}{@{}l}{\textit{' + text + '}}']
     fit_rows = [head('DEA', 5)]
     data = dassessment['rows']
@@ -318,15 +368,14 @@ def transfer_displays(outputs):
 
     dev = {group: deviations([r for r in data if r['group'] == group]) for group in SETS}
 
-    def marks(group):
+    def marks(rs):
         out = []
         for law in LAWS:
-            flags = {x['outside_ranges'][law] for x in data if x['group']==group}
+            flags = {x['outside_ranges'][law] for x in rs}
             out.append('mixed' if len(flags)>1 else ('out' if True in flags else 'in' if False in flags else '---'))
         return out
 
-    def composition(group):
-        rs = [r for r in data if r['group']==group]
+    def composition(group, rs):
         def get(key, scale=1):
             values = []
             for r in rs:
@@ -343,9 +392,15 @@ def transfer_displays(outputs):
     count = lambda n, used: str(n) + (f' ({used})' if used != n else '')
     data_rows = [head('DEA', 11)]
     for group in dict.fromkeys(r['group'] for r in data):
-        rs = [r for r in data if r['group']==group]
-        t = [r['T_K'] for r in rs]
-        data_rows.append([name(group, cite=True), SETS[group][2], rs[0]['role'], count(len(rs), dev.get(group, {}).get('relative_rows', 0)), span(t, lambda v: num(v,2)), *composition(group), *marks(group), num(dev.get(group, {}).get('AARD_percent'),2), num(dev.get(group, {}).get('bias_percent'),2)])
+        group_rows = [r for r in data if r['group'] == group]
+        roles = list(dict.fromkeys(r['role'] for r in group_rows))
+        for role in roles:
+            rs = [r for r in group_rows if r['role'] == role]
+            t = [r['T_K'] for r in rs]
+            score = deviations(rs)
+            data_rows.append([name(group, cite=True), SETS[group][2], role, count(len(rs), score['relative_rows']),
+                              span(t, lambda v: num(v,2)), *composition(group, rs), *marks(rs),
+                              num(score['AARD_percent'],2), num(score['bias_percent'],2)])
     rows = []
     for group in dict.fromkeys(r['group'] for r in data):
         cells = []
@@ -451,8 +506,7 @@ def transfer_displays(outputs):
     figure(fig,'dea-current-binary-comparisons.pdf')
     # MDEA and AMP: the same displays, built from each amine's retained files.
     MD = 'analyses/mdea_mea_workflow/results/bounded-binary-411/'  # the reported MDEA fit: k(MDEA-water) at 423 K bounded at the CO2-free gap onset
-    critical = read(MD + 'critical-k.json')
-    comparison = read(MD + 'comparison.json')['k_versus_critical']
+    critical = read(W_MDEA_BINARY)
     fig, ax = plt.subplots(figsize=(3.2, 2.7), constrained_layout=True)
     def mdea_water(point):
         law, = [c['temperature_law'] for pair in point['parameters']['pairs']
@@ -461,7 +515,7 @@ def transfer_displays(outputs):
         return [t['coefficient']['value']['magnitude'] for t in law['terms']]
 
 
-    temperatures = [r['T_K'] for r in comparison]
+    temperatures = [r['T_K'] for r in critical['rows']]
     k0, slope = mdea_water(mdoc)
     ax.plot(temperatures, [k0 + slope * (T - 423.0) for T in temperatures], color=colors[0], label='MDEA model')
     ax.scatter([r['T_K'] for r in critical['rows']], [r['k_gap'] for r in critical['rows']], s=12, marker='o', facecolors='none', edgecolors=colors[1], label='Calculated gap onset')
@@ -675,7 +729,7 @@ def transfer_displays(outputs):
         hcoord.update(value=delta_h, bounds=shift['bounds']['enthalpy'])
     dflat = flatten(ddoc, {'diethanolamine', 'protonated-diethanolamine', 'carbamate-anion'})
     dcoords['hydrolysis-a']['value'] = dflat['carbamate-hydrolysis/a'][0]
-    dflat.update({key: (r['value'], params[i]['unit']) for i, (key, r) in enumerate(dcoords.items())})
+    dflat.update({row['parameter']: (dcoords[row['parameter']]['value'], row['unit']) for row in params[:4]})
     fit_rows[1:1] = [[label + (' (J/mol)' if i == 3 else ''), bold(num(r['value'], d)), num(r['error'], d),
                       bounds(*r['bounds'], d), ''] for i, (label, r) in enumerate(zip(fitted_names, dcoords.values(), strict=True))
                      for d in [0 if i == 3 else 3]]
@@ -727,12 +781,16 @@ def transfer_displays(outputs):
     transfer_rows = [[*row[:7], *row[9:], literature_by_source.get(row[0], '---')]
                      if len(row) > 1 else [row[0].replace(r'\multicolumn{11}', r'\multicolumn{10}')]
                      for row in data_rows]
+    nmr_pairs = {frozenset(r['row']['source_row'] for r in mrows if r['group'] == g)
+                 for g in MSETS if g.startswith('Bottinger-')}
+    (nmr_keys,) = nmr_pairs
+    nmr_rows = len(nmr_keys)
     table('transfer-deviations',
           r'Data for DEA, MDEA and AMP by source: observable, role in the fit of each model, number of observations $N$, ranges of temperature, amine content and loading, and the deviation of the DEA, MDEA and AMP models, beside the deviations that published models report for the same observations.',
           ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           transfer_rows, [.15,.10,.095,.048,.095,.09,.073,.065,.06,.10], long=True,
-          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (main-text Table~\ref{main-tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same 58 observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (main-text Table~\ref{main-tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
     # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
     # the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
@@ -742,7 +800,10 @@ def transfer_displays(outputs):
              'carbon-dioxide/protonated-aminomethylpropanol/k_ij', 'protonated-aminomethylpropanol/segment_diameter', 'carbamate-anion/segment_diameter', 'carbamate-hydrolysis/a']
     APURE = dict(zip(['aminomethylpropanol/segment_count', 'aminomethylpropanol/segment_diameter', 'aminomethylpropanol/dispersion_energy_over_k', 'association/aminomethylpropanol/a/aminomethylpropanol/b/energy_over_k', 'association/aminomethylpropanol/a/aminomethylpropanol/b/volume'], ['m', 'sigma', 'epsilon', 'eps_ab', 'kappa']))
     permittivity = lambda s: {s + '/dielectric_volume', s + '/dielectric_temperature'}
-    FITTED_HERE = [{r['parameter'] for r in params if r['fitted_or_fixed'] == 'fitted'} | DEA_PAIR_KEYS | permittivity('diethanolamine') | {'diethanolamine/water/k_ij'},
+    FITTED_HERE = [{r['parameter'] for r in params if r['fitted_or_fixed'] == 'fitted'} | DEA_PAIR_KEYS | permittivity('diethanolamine') | {
+                      'diethanolamine/water/k_ij', 'diethanolamine/water/k_ij_reciprocal_temperature_slope',
+                      'protonated-diethanolamine/water/k_ij_reciprocal_temperature_slope',
+                      'carbon-dioxide/protonated-diethanolamine/k_ij', 'k-DEAH-water-slope', 'k-DEAH-CO2'},
                    set(MKEYS) | permittivity('methyldiethanolamine'),
                    set(AKEYS) | {'carbamate-hydrolysis/b'} | set(APURE) | permittivity('aminomethylpropanol')]  # the fitted AMP enthalpy increment sets B_4; the reciprocal-temperature slope is fitted
     SOURCE = [r'\cite{Nasrifar2010}', r'\cite{Nasrifar2010}\textsuperscript{a}', r'This work\textsuperscript{b}', r'\cite{Pahlavanzadeh2013,Uyan2015}\textsuperscript{c}', r'This work\textsuperscript{d}', r'This work\textsuperscript{e}', r'This work\textsuperscript{f}', r'This work\textsuperscript{g}']
@@ -781,6 +842,8 @@ def transfer_displays(outputs):
         if who == 'AMP' and key in ('carbamate-anion/dispersion_energy_over_k', 'carbamate-anion/water/k_ij'):
             return r'\ce{MEACOO-}, MEA model'
         if who == 'AMP' and key == ASLOPE: return 'Set in this work (scan)'
+        if who == 'DEA' and key == 'bicarbonate-anion/protonated-diethanolamine/k_ij':
+            return r'MEA model, \ce{MEAH+}--\ce{HCO3-}'
         if species == neutral:
             if who == 'AMP': return 'Set in this work'  # only the site numbers of AMP are not fitted
             if who == 'MDEA' and parts[0] == 'association': return (r'Converted from ' if last == 'volume' else '') + r'\cite{Uyan2015}'
@@ -847,9 +910,8 @@ def transfer_displays(outputs):
             grouped[float(row['T_K'])].append(row)
         return grouped
 
-    curve_directory = 'analyses/amines/results/mdea/reported/properties/curves/'
-    mdea_curves = [r for path in sorted(stage_records) if path.startswith(curve_directory + 'batch-')
-                   for r in read(path)['rows'] if r['group'] in ('Kuranov', 'Kuranov-413K')]
+    mdea_curves = [r for r in fixed.load('MDEA/properties.json.gz')['curves']
+                   if r['group'] in ('Kuranov', 'Kuranov-413K')]
     mdea_pressures = [r for r in mrows if r['group'] in ('Kuranov', 'Kuranov-413K')]
     stocks = sorted({float(r['row']['m_MDEA_mol_per_kg_H2O']) for r in mdea_pressures})
     fig, axes = plt.subplots(1, len(stocks), figsize=(6.48, 2.85), sharey=True, constrained_layout=True)
@@ -869,7 +931,7 @@ def transfer_displays(outputs):
     axes[0].set_ylabel('Total pressure (kPa)')
     figure(fig, 'mdea-isotherms.pdf')
 
-    a_curves = read('analyses/amines/results/amp/reported/properties/isotherms.json.gz')['rows']
+    a_curves = aassessment['curves']
     fig, axes = plt.subplots(1, 2, figsize=(6.48, 3), sharey=True, constrained_layout=True)
     for ax, title, groups in zip(axes, ('(a) Hartono et al.', '(b) Tong et al.'),
                                  ({'loaded-pressure', 'hartono-2021-supplemental'}, {'tong'}), strict=True):
@@ -883,7 +945,7 @@ def transfer_displays(outputs):
     fig, axes = plt.subplots(2, 2, figsize=(6.48, 4.6), constrained_layout=True)
     speciation_loading = lambda row: float(row['row']['loading'])
     speciation = [row for row in mrows if row['group'].startswith('Bottinger-')]
-    mdea_species = read('analyses/amines/results/mdea/reported/properties/speciation-curves.json.gz')['rows']
+    mdea_species = fixed.load('MDEA/properties.json.gz')['speciation_curves']
     masses = {q['component_id']: q['fixed']['molar_mass']['value']['magnitude']
               for q in mdoc['parameters']['components']}
     amine_mass = masses['methyldiethanolamine']
@@ -906,7 +968,7 @@ def transfer_displays(outputs):
     figure(fig, 'mdea-speciation.pdf')
 
     # The free fit (selected start 1) is the comparison whose splits the paper names; its classification and search.
-    aclass = read(AMF + 'phase-classification-1.json.gz')
+    aclass = read(W_AMP_FIRST)
     cell = lambda s: num(s['AARD_percent'],2) + ' (' + str(s['rows']) + ')'
     def pressure_stats(rows, pred='value'):
         deviations = [100 * (float(r[pred]) / float(r['observed']) - 1) for r in rows
@@ -930,19 +992,24 @@ def transfer_displays(outputs):
     dfitted = scores([r for r in data if r['role'] == 'fitted' and r['unit'] == 'Pa'], dloaded)
     amp_loaded = {'loaded-pressure', 'hartono-2021-supplemental', 'tong'}
     def measured_coverage(record):
-        return sum(not row["key"].startswith("grid:") for row in read(record)["rows"])
+        phase = read(record)
+        measured = [row for row in phase['rows'] if not row["key"].startswith("grid:")]
+        splits = sum(not row["key"].startswith("grid:") and confirmed_split(row) for row in phase['classifications'])
+        return f"{splits} of {len(measured)}"
 
-    splits = len(confirmed_dea_splits())
+    amp_w = MOVE + 'amp/reported/phase/supplied.json.gz'
+    mea_measured = read(W_MEA_PHASE + 'measured.json.gz')['rows']
+    mea_no_detection = f"{sum(row['descent'] for row in mea_measured)} of {len(mea_measured)}"
     rows = [
         ['MEA', len(mea_stage['coordinates']), len(mea_stage['active_bounds']), e47, e47,
-         cell(pressure_stats(enot)), f"0 of {phases['coverage']['MEA_measured']['attempted']}"],
+         cell(pressure_stats(enot)), mea_no_detection],
         ['DEA', len(dcoords), sum(r['on_bound'] for r in dcoords.values()), dfitted, dfitted, cell(pressure_stats(doutside)),
-         f"{splits} of {measured_coverage(DEA_SCREEN)}"],
+         measured_coverage(W_DEA_SCREEN)],
         ['MDEA', len(mfit), sum(r['on_bound'] for r in mfit),
          *pressure_columns(mrows, {'Kuranov'}, {'corrected-Kamps', 'Kuranov-413K', 'Sedighi'}, {'Ermatchkov', 'Xiao'}),
-         f"0 of {measured_coverage(MDEA_SCREEN)}"],
+         measured_coverage(W_MDEA_SCREEN)],
         ['AMP', len(acoords), len(aunc['active_bounds']), *pressure_columns(arows, amp_loaded, {'tong-baseline'}, {'kundu'}),
-         f"0 of {measured_coverage(AMP_SCREEN)}"],
+         measured_coverage(amp_w)],
     ]
     def reduced_gibbs(value):
         mantissa, exponent = f'{value:.3e}'.split('e')
@@ -969,21 +1036,22 @@ def transfer_displays(outputs):
                            num(feed['carbon-dioxide']/feed['diethanolamine'], 3),
                            r'$\res{dea-split-gibbs-decrease-' + key.replace(':problem','').replace(':','-') + '}$'])
     table('supplement-liquid-splits',
-          r'Measured states at which the DEA model predicts a liquid--liquid split, with the decrease of $G^*/(RT)$ from one liquid to two per mole of DEA fed.',
+          r'Measured states at which the S DEA model predicted a liquid--liquid split, with the decrease of $G^*/(RT)$ from one liquid to two per mole of DEA fed.',
           ['Source', '$T$ (K)', '$P$ (MPa)', r'DEA (wt\%)', r'$\alpha$ (mol/mol)', r'$-\Delta G^*/(RT)$ (mol)'],
           phase_rows, [.34,.10,.12,.10,.12,.16],
           notes=r'The pressure of the Weiland et al.\ states is assigned; that of the Lawson and Garst state is measured.')
-    salt_rows = read('analyses/amines/results/salt/sodium-salts/properties/osmotic-residuals.json.gz')['rows']
-    salt_temperatures = sorted({float(r['temperature_K']) for r in salt_rows})
+    salt_data = read(W_SALT)['rows']
+    salt_temperatures = sorted({float(r['T']) for group in ('NaHCO3', 'Na2CO3', 'mixed')
+                                for r in salt_data[group] if r.get('status') == 'Available'})
     cmap = plt.colormaps['viridis']
     norm = matplotlib.colors.Normalize(min(salt_temperatures), max(salt_temperatures))
     fig, axes = plt.subplots(1, 3, figsize=(6.48, 2.4), constrained_layout=True, sharex=True)
     for ax, salt, title in zip(axes, ('NaHCO3', 'Na2CO3', 'mixed'),
                                ('Sodium bicarbonate', 'Sodium carbonate', 'Mixed salts'), strict=True):
-        accepted = [r for r in salt_rows if r['salt'] == salt and r['status'] == 'available']
+        accepted = [r for r in salt_data[salt] if r.get('status') == 'Available']
         ax.axhline(0, color='0.55', lw=.7)
-        ax.scatter([float(r['nominal_molality']) for r in accepted], [r['signed_percent'] for r in accepted],
-                   c=[float(r['temperature_K']) for r in accepted], cmap=cmap, norm=norm, s=18)
+        ax.scatter([float(r['m']) for r in accepted], [100*r['relative_error'] for r in accepted],
+                   c=[float(r['T']) for r in accepted], cmap=cmap, norm=norm, s=18)
         ax.set(title=title, ylabel='Signed residual (%)')
     for ax in axes:
         ax.set(xlabel='Nominal salt molality (mol/kg)', xscale='log')
@@ -1046,10 +1114,11 @@ def transfer_displays(outputs):
     mamun_count = mea_replay['summary']['pressure']['Mamun2005']['attempted']
     rows = [head(rf"{mamun_count} \COtwo partial pressures of Ma'mun et al.\ \cite{{Mamun2005}}, MEA near 393 K", 3)] + [[PUB[r['model']], (r'unclear\textsuperscript{a}' if 'role_note' in r else r['data_role']), f"${r['deviation_percent']:g}$"] for r in exact]
     # The archived prior_F2 column was read from the 16-parameter matched-pressure table.
-    rows.append(['This work, MEA model', 'not fitted', num(property_summary['mea_mamun'], 2)])
+    rows.append(['This work, MEA model', 'not fitted', num(mea_replay['summary']['pressure']['Mamun2005']['AARD_percent'], 2)])
     mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
     ZHANG_CHEN = r'Zhang and Chen, eNRTL \cite{zhangThermodynamicModelingCO22011}'  # their Table 14: AARD 6.8 % on the 82 Kuranov total pressures and 17.7 % on the 101 Ermatchkov CO2 partial pressures, both in their regression
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
+    k82_adopted, r9_kamps = mdea_pressure_comparisons()
     for c in mpub:
         if c['group'] == 'corrected-Kamps':
             kamps = literature['kamps']
@@ -1058,7 +1127,6 @@ def transfer_displays(outputs):
             rows += [['Ermatchkov et al., parameter set ' + q['set'], q['data_role'],
                       f"${literature['published_Kamps_28']['Ermatchkov ' + q['set']]:g}$"] for q in c['published_parameter_sets']]
             rows += [head(f'{len(common)} corrected Kamps total pressures (matched by row)', 3)]
-            r9_kamps = property_summary['kamps']
             rows.append([f"This work, MDEA model ({r9_kamps['common_rows']} rows)", c['data_role'],
                          num(r9_kamps['common_AARD_percent'], 2)])
             rows.append([rf"This work, MDEA model (all {r9_kamps['full_rows']} rows)\textsuperscript{{d}}", c['data_role'],
@@ -1077,7 +1145,6 @@ def transfer_displays(outputs):
     binary_count = sum(row['group'] == 'Kuranov-binary' and row['role'] == 'fitted' for row in kpub['kuranov'])
     roles = rf"{role_counts['fitted']} fitted, of which {binary_count} \COtwo-free; {role_counts['not fitted']} not fitted"
     published_kuranov_count = len(kpub['kuranov'])
-    k82_adopted = property_summary['mdea']['kuranov']
     kuranov_label = str(published_kuranov_count) + r' total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}'
     rows += [head(kuranov_label + r', MDEA (matched by count)\textsuperscript{b}', 3),
              [r'Uyan et al., ePC-SAFT \cite{Uyan2015}', 'not fitted', r'$22.9$\textsuperscript{c}'], [r'Wangler et al., ePC-SAFT \cite{Wangler2018}', 'not fitted', '$19.7$'],
@@ -1102,7 +1169,7 @@ def transfer_displays(outputs):
         confirmed = [a for a in s['attempts'] if a['confirmed']]
         return dict(T_K=s['temperature_K'], loading_mol_CO2_per_mol_AMP=feed['carbon-dioxide'] / feed['aminomethylpropanol'], P_Pa=s['pressure_Pa'], outside=s['outside_ranges'],
                     wt=100 * amass['aminomethylpropanol'] / (amass['aminomethylpropanol'] + amass['water'] * feed['water'] / feed['aminomethylpropanol']), split=confirmed[0] if confirmed else None)
-    states = [astate(s) for s in aclass['states']]
+    states = [astate(s) for s in aclass['classifications'] if s['liquid_directed']]
     fitted_T = [float(r['row']['T_K']) for r in arows if r['group'] == 'loaded-pressure']  # the loaded pressures of the first data, the fit that has the splits
     fig, ax = plt.subplots(figsize=(4.6, 3.5), constrained_layout=True)
     ax.axhspan(min(fitted_T), max(fitted_T), color='0.87', lw=0, label='Loaded-solution pressures fitted by the first fit')
@@ -1177,7 +1244,7 @@ def transfer_displays(outputs):
     scales_path = LATEX / 'tables/supplement-transfer-scales.tex'
     outputs[scales_path] = outputs[scales_path].replace('tab:supplement-transfer-scales', 'tab:transfer-scales')
 
-    shared_interaction_table(property_summary['shared'], table, num)
+    shared_interaction_table(read(MOVE + 'shared/properties/water-bicarbonate-ablation.json.gz'), table, num)
 
     # MEA model by temperature band (#409): every row recomputed from the retained points.
     BAND_CITE = dict(Hilliard2008='Hilliard2008', Jou1995='Jou1995', Aronu2011='Aronu2011', Idris2014='idrisSpeciationMEACO2Adducts2014', Wagner2013='wagnerSolubilityCarbonDioxide2013', Mamun2005='Mamun2005',
@@ -1795,10 +1862,10 @@ def mea_figures(outputs):
 
     def main():
         study = FixedReference(read)
+        families = read(MOVE + 'mea/reported/properties/summary.json.gz')['curves']
         def curve(family):
-            result = study.load(f'MEA/curves/{family}.json.gz')
             return [dict(r, status='available', value=r['value'] if r['status'] == 'available' else math.nan,
-                         below_bubble_pressure=str(r.get('below_bubble_pressure', False))) for r in result['rows']]
+                         below_bubble_pressure=str(r.get('below_bubble_pressure', False))) for r in families[family]]
         off_window = {r['identity']: r for r in study.load('MEA/off-window.json.gz')['rows']}
 
         meta={r['observation_id']:r for r in read(ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')}
@@ -2094,12 +2161,15 @@ def result_values(required):
         for occurrence in occurrences:
             add(f"{quantity}-aard-{occurrence}", record, key, f"{value:.2f}")
 
-    record = "analyses/round_3/results/q2.json"
-    scores = read(record)["scores"]
-    for source, group in (("hartono", "hartono-2021"), ("tong", "tong-2012")):
+    record = W_AMP_FIRST_PROPERTIES
+    rows = read(record)["replay"]["properties"]["rows"]
+    for source, group in (("hartono", "hartono-2021-supplemental"), ("tong", "tong")):
+        hot = [r for r in rows if r["group"] == group and r["unit"] == "Pa"
+               and r["T_K"] >= 373. and r["status"] == "Available"]
+        score = stats(hot, predicted="value")["AARD_percent"]
         for passage, digits in (("supplement", 2), ("first-fit", 1)):
-            add(f"amp-first-data-free-{source}-aard-{passage}", record, f"scores.{group}.free.AARD_percent",
-                f"{scores[group]['free']['AARD_percent']:.{digits}f}")
+            add(f"amp-first-data-free-{source}-aard-{passage}", record, f"properties.rows[{group}, T >= 373 K]: AARD",
+                f"{score:.{digits}f}")
 
     for name, label, occurrences in (
         ("MEA", "mea", (("starts", 3), ("cai-weight", 2), ("reference-comparison", 3), ("restrictions", 3))),
@@ -2146,18 +2216,18 @@ def result_values(required):
     add("mea-responsive-to-all-row-standard-error-ratio", record,
         "sqrt(variance / raw_row_variance)", f"{sqrt(reported['variance'] / reported['raw_row_variance']):.4f}")
 
-    record = STUDY + "results/AMP_free/screen/selected/native/summary.json.gz"
+    record = MOVE + "amp/reported/phase/native.json.gz"
     screen = read(record)
     for passage in ("abstract", "conclusion", "conclusion-refit", "figure-caption", "transfer", "supplement-slope"):
-        add(f"amp-reported-screen-states-{passage}", record, "tally.states", str(screen["tally"]["states"]))
+        add(f"amp-reported-screen-states-{passage}", record, "len(rows)", str(len(screen["rows"])))
     grid = sum(row["key"].startswith("grid:") for row in screen["rows"])
     for passage in ("transfer", "supplement"):
         add(f"amp-reported-screen-grid-states-{passage}", record, "rows[grid].count", str(grid))
         add(f"amp-reported-screen-measured-states-{passage}", record, "rows[measurement-derived].count",
             str(len(screen["rows"]) - grid))
 
-    record = "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz"
-    instabilities = read(record)["states"]
+    record = W_AMP_FIRST
+    instabilities = [row for row in read(record)["classifications"] if row["liquid_directed"]]
     split_states = [row for row in instabilities if any(attempt["confirmed"] for attempt in row["attempts"])]
     temperatures = [row["temperature_K"] for row in split_states]
     for bound, fun in (("minimum", min), ("maximum", max)):
@@ -2183,44 +2253,20 @@ def result_values(required):
     record = STUDY + "results/AMP_free/screen/selected/native/state-inventory.json.gz"
     maximum = max(row["T_K"] for row in read(record)["rows"])
     add("amp-reported-screen-maximum-temperature", record, "rows[].T_K: max", f"{maximum:.2f}")
-    record = "analyses/round_3/results/q7-summary.json"
+    record = W_AMP_FIRST
     for passage in ("transfer", "supplement-first-fit"):
-        add(f"amp-first-data-screen-states-{passage}", record, "total", str(read(record)["total"]))
-    record = "analyses/round_8/results/amp-six-states.json.gz"
-    controls = read(record)["quantities"]["rows"]
-    confirmed = sum(any(attempt["confirmed"] for attempt in row["historical"]["attempts"]) for row in controls)
+        add(f"amp-first-data-screen-states-{passage}", record, "len(rows)", str(len(read(record)["rows"])))
+    record = W_AMP_CONTROLS
+    controls = read(record)["rows"]
+    confirmed = sum(confirmed_split(row) and not row["key"].startswith("grid:") for row in instabilities)
     for passage in ("caption-diamonds", "caption-observations", "abstract", "conclusion-controls",
                     "conclusion-confirmed", "transfer-controls", "transfer-confirmed", "transfer-interpretation",
                     "transfer-claim", "supplement"):
         uses_controls = passage in ("conclusion-controls", "transfer-controls", "transfer-interpretation",
                                     "transfer-claim")
-        key = "quantities.rows.count" if uses_controls else "quantities.rows[historical.attempts any confirmed].count"
-        add(f"amp-first-data-measured-splits-{passage}", record, key,
+        key = "len(rows)" if uses_controls else "classifications[measured, confirmed split].count"
+        add(f"amp-first-data-measured-splits-{passage}", record if uses_controls else W_AMP_FIRST, key,
             NUMBER_WORDS[len(controls) if uses_controls else confirmed])
-    record = PHASE_SUMMARY
-    outcomes = read(record)["amp_outcomes"]
-    for label, count in (( "vapor-descents", sum(amp_vapor_outcome(row["outcome"]) for row in outcomes.values())),
-                         ("no-descent", sum(row["outcome"] == "No resolved descent" for row in outcomes.values()))):
-        for passage in ("caption", "conclusion", "transfer-description", "transfer-interpretation"):
-            pass
-        if label == "no-descent":
-            pass
-        else:
-            pass
-    for label, outcome in (("qualified-vapor", "L+V passed; L+L unresolved"),
-                           ("unqualified-vapor", "Vapor-directed; root unqualified")):
-        count = sum(row["outcome"] == outcome for row in outcomes.values())
-        for passage in ("transfer-description", "transfer-interpretation"):
-            pass
-    vapor = {key for key, row in outcomes.items() if amp_vapor_outcome(row["outcome"])}
-    for label, source in (("hartono", "hartono-2021"), ("tong", "tong-2012")):
-        keys = sorted(key for key in vapor if key.startswith(source))
-        if label == "tong":
-            key, = keys
-            row = next(row for row in read(record)["amp_controls"]["rows"] if row["key"] == key)
-            for label, key in (("measured-pressure", "P_Pa"), ("bubble-pressure", "reported_bubble_Pa")):
-                pass
-
     record = FIT_SUMMARY
     fitting = read(record)
     for passage in ("abstract", "conclusion", "transfer", "methods", "supplement"):
@@ -2259,12 +2305,11 @@ def result_values(required):
         for passage in passages:
             pass
 
-    record = PROPERTY_SUMMARY
-    property_summary = read(record)
+    record = W_MDEA_PROPERTIES
+    kuranov, kamps = mdea_pressure_comparisons()
     for passage in ("transfer", "supplement"):
-        add(f"mdea-kuranov-all-pressure-aard-{passage}", record, "mdea.kuranov.AARD_percent",
-            f"{property_summary['mdea']['kuranov']['AARD_percent']:.2f}")
-    kamps = property_summary["kamps"]
+        add(f"mdea-kuranov-all-pressure-aard-{passage}", (record, MDEA_PUBLISHED_REPLAY),
+            "rows matched by source_row to kuranov[]: AARD", f"{kuranov['AARD_percent']:.2f}")
     for key, label, value in (
         ("common_rows", "common-pressure-count", str(kamps["common_rows"])),
         ("common_AARD_percent", "common-pressure-aard", f"{kamps['common_AARD_percent']:.2f}"),
@@ -2275,7 +2320,8 @@ def result_values(required):
     for quantity, key, digits in (("measured", "observed", 3), ("predicted", "value", 3)):
         add(f"mdea-corrected-kamps-additional-pressure-{quantity}", record,
             f"kamps.additional_row.{key} / 1e6", f"{kamps['additional_row'][key]/1e6:.{digits}f}")
-    water = property_summary["water_calibration"]
+    record = PROPERTY_SUMMARY
+    water = read(record)["water_calibration"]
     for passage in ("fit-input", "fit-deviations"):
         add(f"water-fit-vapor-pressure-temperature-count-{passage}", record,
             "water_calibration.fitted_rows.psat", str(water["fitted_rows"]["psat"]))
@@ -2299,7 +2345,15 @@ def result_values(required):
             add(f"water-fit-{grid}-{label}-{score}-deviation", record, key, f"{metric[field]:.{places}f}")
     record = PHASE_SUMMARY
     phase_results = read(record)
-    populations = phase_results["mdea_search"]
+    mdea_screen = read(W_MDEA_SCREEN)
+    mdea_rows = mdea_screen["rows"]
+    mdea_grid = [r for r in mdea_rows if r["key"].startswith("grid:")]
+    def unavailable(rows):
+        return sum(not r["available"] for r in rows)
+    populations = dict(attempted=len(mdea_rows), available=len(mdea_rows)-unavailable(mdea_rows),
+                       unavailable=unavailable(mdea_rows), grid_attempted=len(mdea_grid),
+                       grid_unavailable=unavailable(mdea_grid), measured_attempted=len(mdea_rows)-len(mdea_grid),
+                       measured_unavailable=unavailable(mdea_rows)-unavailable(mdea_grid))
     for label, field, passages in (
         ("searches-attempted", "attempted", ("transfer",)),
         ("searches-available", "available", ("transfer", "supplement")),
@@ -2311,36 +2365,39 @@ def result_values(required):
          ("transfer-summary", "transfer-limitation", "supplement-summary", "supplement-availability")),
     ):
         for passage in passages:
-            add(f"mdea-{label}-{passage}", record, f"mdea_search.{field}", str(populations[field]))
-    states = phase_results["mdea_distinct_states"]
+            add(f"mdea-{label}-{passage}", W_MDEA_SCREEN, f"rows grouped by grid prefix and availability: {field}",
+                str(populations[field]))
+    sources_by_key = {r["key"]: r["source"] for r in phase_results["mdea_distinct_states"]}
+    states = [dict(r, source=sources_by_key[r["key"]]) for r in mdea_screen["classifications"]]
     for passage in ("transfer", "supplement-total", "supplement-by-source"):
-        add(f"mdea-distinct-descent-states-{passage}", record, "mdea_distinct_states.count", str(len(states)))
+        add(f"mdea-distinct-descent-states-{passage}", W_MDEA_SCREEN, "len(classifications)", str(len(states)))
     zheng = {str(row["source"]["source_row"]): row["key"]
              for row in states if row["source"]["source_key"] == "Zheng2020"}
     for row, digits, passages in (("2", 3, ("transfer", "supplement")), ("5", 2, ("transfer",))):
         key = zheng[row]
-        result = property_summary["mdea_bubble"][key]
+        result = read(W_MDEA_PROPERTIES)["mdea_bubble"][key]
         for passage in passages:
-            add(f"mdea-zheng-row-{row}-bubble-pressure-{passage}", PROPERTY_SUMMARY,
+            add(f"mdea-zheng-row-{row}-bubble-pressure-{passage}", W_MDEA_PROPERTIES,
                 f"mdea_bubble[{key}].bubble_Pa / 1e6", f"{result['bubble_Pa']/1e6:.{digits}f}")
     for passage in ("transfer", "supplement"):
         for branch, label, words in (("vapor", "vapor-only", True), ("mixed", "mixed", False),
                                      ("none", "unlabeled", True)):
             count = sum(row["native_branch"] == branch for row in states)
             value = NUMBER_WORDS[count] if words else str(count)
-    mea = phase_results["mea_search"]
+    mea_grid = W_MEA_PHASE + "grid.json.gz"
+    mea_measured = W_MEA_PHASE + "measured.json.gz"
+    mea_census = W_MEA_PHASE + "census.json.gz"
+    grid_rows, measured_rows, census_rows = (read(p)["rows"] for p in (mea_grid, mea_measured, mea_census))
+    census_classes = collections.Counter(row["classification"] for row in census_rows)
     for passage in ("transfer", "supplement"):
-        add(f"mea-liquid-grid-requests-{passage}", record, "mea_search.liquid_grid.attempted",
-            str(mea["liquid_grid"]["attempted"]))
-        add(f"mea-measured-state-search-requests-{passage}", record, "mea_search.measured.attempted",
-            str(mea["measured"]["attempted"]))
-        add(f"mea-census-two-phase-parent-count-{passage}", record, "mea_search.census.outcomes.passed-two-phase",
-            str(mea["census"]["outcomes"]["passed-two-phase"]))
+        add(f"mea-liquid-grid-requests-{passage}", mea_grid, "len(rows)", str(len(grid_rows)))
+        add(f"mea-measured-state-search-requests-{passage}", mea_measured, "len(rows)", str(len(measured_rows)))
+        add(f"mea-census-two-phase-parent-count-{passage}", mea_census, "rows[passed-two-phase].count",
+            str(census_classes["passed-two-phase"]))
     for passage in ("transfer-all", "transfer-outcomes", "supplement"):
-        add(f"mea-liquid-vapor-census-requests-{passage}", record, "mea_search.census.attempted",
-            str(mea["census"]["attempted"]))
-    for population, count in mea["liquid_grid"]["populations"].items():
-        add(f"mea-liquid-grid-{population}-requests", record, f"mea_search.liquid_grid.populations.{population}", str(count))
+        add(f"mea-liquid-vapor-census-requests-{passage}", mea_census, "len(rows)", str(len(census_rows)))
+    for population, count in collections.Counter(r["key"].split("|", 1)[0] for r in grid_rows).items():
+        add(f"mea-liquid-grid-{population}-requests", mea_grid, f"rows[{population}].count", str(count))
 
     record = "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz"
     profile = read(record)
@@ -2348,15 +2405,15 @@ def result_values(required):
     coverage = [(case["grid"]["states"] + case["offset"]["states"], case["census"]["states"]) for case in candidates]
     (liquid_grid, census), = set(coverage)
 
-    record = STUDY + "results/DEA/screen/selected/declared/summary.json.gz"
+    record = W_DEA_SCREEN
     dea_screen = read(record)
     grid = sum(row["key"].startswith("grid:") for row in dea_screen["rows"])
     for label, key, count in (
         ("grid-requests", "rows[grid].count", grid),
         ("measurement-requests", "rows[measurement-derived].count", len(dea_screen["rows"]) - grid),
-        ("transfer-requests", "tally.states", dea_screen["tally"]["states"]),
-        ("transfer-completed", "tally.available", dea_screen["tally"]["available"]),
-        ("supplement-completed", "tally.available", dea_screen["tally"]["available"]),
+        ("transfer-requests", "len(rows)", len(dea_screen["rows"])),
+        ("transfer-completed", "rows[available].count", sum(row["available"] for row in dea_screen["rows"])),
+        ("supplement-completed", "rows[available].count", sum(row["available"] for row in dea_screen["rows"])),
     ):
         add(f"dea-phase-search-{label}", record, key, str(count))
     count = sum(any(a["confirmed"] for a in row["attempts"]) for row in dea_screen["classifications"])
@@ -2486,8 +2543,9 @@ def result_values(required):
         add(f"mea-hot-pressure-count-{passage}", record, "summary.pressure.hot_published.attempted", str(hot["attempted"]))
     add("mea-hot-pressure-aard-transfer", record, "summary.pressure.hot_published.AARD_percent", f"{hot['AARD_percent']:.2f}")
 
-    record = "analyses/round_3/results/q7-summary.json"
-    add("amp-first-data-detected-instabilities-supplement", record, "archived_positive", str(read(record)["archived_positive"]))
+    record = W_AMP_FIRST
+    add("amp-first-data-detected-instabilities-supplement", record, "classifications[liquid_directed].count",
+        str(len(instabilities)))
 
     record = STUDY + "results/MDEA/property-comparisons/A.json.gz"
     row72 = read(record)["additional_Kuranov_72"]
@@ -2496,7 +2554,7 @@ def result_values(required):
     add("mdea-kuranov-row-72-measured-pressure", record, "additional_Kuranov_72.observed / 1e6",
         f"{row72['observed']/1e6:.6f}")
 
-    record = "analyses/mdea_mea_workflow/results/bounded-binary-411/critical-k.json"
+    record = W_MDEA_BINARY
     count = len(read(record)["rows"])
     for passage in ("transfer", "figure-caption", "supplement"):
         add(f"mdea-binary-gap-tested-temperatures-{passage}", record, "rows.count", str(count))
@@ -2673,7 +2731,7 @@ def result_values(required):
                     add(f"mdea-hot-fitted-pressure-{metric.split('_')[0].lower()}-{passage}", record,
                         f"rows[Kuranov,outside MDEA-dissociation].value,observed: {metric}", format(summary[metric], fmt))
 
-    record = STUDY + "results/salt.json.gz"
+    record = W_SALT
     salt = read(record)
     for formula, label, locations in (
         ("NaCl", "sodium-chloride", (("supplement", 2),)),
@@ -2681,18 +2739,19 @@ def result_values(required):
         ("Na2CO3", "sodium-carbonate", (("supplement", 2), ("theory", 1), ("limits", 1))),
         ("mixed", "mixed-salts", (("supplement", 2),)),
     ):
-        deltas = [100 * row["relative_error"] for row in salt["combined"][formula] if row.get("status") == "Available"]
+        deltas = [100 * row["relative_error"] for row in salt["rows"][formula] if row.get("status") == "Available"]
         for passage, digits in locations:
-            add(f"salt-{label}-osmotic-aard-{passage}", record, f"combined.{formula}[available].relative_error: AARD %",
+            add(f"salt-{label}-osmotic-aard-{passage}", record, f"rows.{formula}[available].relative_error: AARD %",
                 f"{fsum(map(abs, deltas)) / len(deltas):.{digits}f}")
         if formula in ("NaHCO3", "mixed"):
             for bound, reduce in (("minimum", min), ("maximum", max)):
                 pass
+    refused = sum(r.get("status") not in (None, "Available") for r in salt["rows"]["mixed"])
     for passage in ("theory", "refusal-description"):
-        add(f"salt-mixed-unavailable-count-{passage}", record, "mixed_refusals.count",
-            NUMBER_WORDS[len(salt["mixed_refusals"])])
+        add(f"salt-mixed-unavailable-count-{passage}", record, "rows.mixed[status refused].count",
+            NUMBER_WORDS[refused])
     for label, ion in (("bicarbonate", "bicarbonate-anion"), ("carbonate", "carbonate-anion")):
-        law = salt["laws"][ion]
+        law = salt["laws_at_record_reference"][ion]
         mantissa, exponent = f"{law['a1']:.3e}".split("e")
         add(f"salt-water-{label}-linear-slope", record, f"laws.{ion}.a1", f"{mantissa}e{int(exponent)}")
         add(f"salt-water-{label}-value-at-reference-temperature", record, f"laws.{ion}.a0", f"{law['a0']:.4f}")
@@ -2908,24 +2967,22 @@ def result_values(required):
         for name, field, digits in (('feed-mole-fraction', 'true_mole_fraction', 4), ('density', 'density_kg_m3', 2)):
             add(f'dea-worked-{role}-{name}-supplement', record, f'dea_controls.rows[worked_state].phases[{role}].{field}',
                 f'{phase[field]:.{digits}f}')
-    add('amp-hartono-373-pressure-control-count-supplement', record,
-        'amp_outcomes keys hartono-2021',
-        NUMBER_WORDS[int(sum(k.startswith('hartono-2021:') for k in r['amp_outcomes']))])
-    add('amp-tong-measured-pressure-control-count-supplement', record,
-        'amp_outcomes keys tong-2012',
-        NUMBER_WORDS[int(sum(k.startswith('tong-2012:') for k in r['amp_outcomes']))])
-    add('amp-reported-measured-pressure-control-vapor-directed-supplement', record,
-        'amp_outcomes[].outcome',
-        NUMBER_WORDS[sum(amp_vapor_outcome(row['outcome']) for row in r['amp_outcomes'].values())])
-    add('amp-hartono-vapor-directed-controls-supplement', record,
-        'amp_outcomes[hartono-2021,outcome is L+V passed or vapor-directed].count',
-        NUMBER_WORDS[int(sum(key.startswith('hartono-2021') and amp_vapor_outcome(val["outcome"]) for key,val in r["amp_outcomes"].items()))])
-    add('amp-tong-vapor-directed-controls-supplement', record,
-        'amp_outcomes[tong-2012,outcome is L+V passed or vapor-directed].count',
-        NUMBER_WORDS[int(sum(key.startswith('tong-2012') and amp_vapor_outcome(val["outcome"]) for key,val in r["amp_outcomes"].items()))])
-    add('amp-reported-measured-pressure-control-no-descent-supplement', record,
-        'amp_outcomes[].outcome',
-        NUMBER_WORDS[sum(row['outcome'] == 'No resolved descent' for row in r['amp_outcomes'].values())])
+    amp_controls = read(W_AMP_CONTROLS)["rows"]
+    for source, prefix, count_name in (
+        ("hartono", "hartono-2021:", "amp-hartono-373-pressure-control-count-supplement"),
+        ("tong", "tong-2012:", "amp-tong-measured-pressure-control-count-supplement"),
+    ):
+        cohort = [r for key, r in amp_controls.items() if key.startswith(prefix)]
+        add(count_name, W_AMP_CONTROLS, f"len(rows[{prefix}])", NUMBER_WORDS[len(cohort)])
+        add(f'amp-{source}-vapor-directed-controls-supplement', W_AMP_CONTROLS,
+            f'rows[{prefix}, outcome L+V passed or vapor-directed].count',
+            NUMBER_WORDS[sum(amp_vapor_outcome(r['outcome']) for r in cohort)])
+    add('amp-reported-measured-pressure-control-vapor-directed-supplement', W_AMP_CONTROLS,
+        'rows[outcome L+V passed or vapor-directed].count',
+        NUMBER_WORDS[sum(amp_vapor_outcome(r['outcome']) for r in amp_controls.values())])
+    add('amp-reported-measured-pressure-control-no-descent-supplement', W_AMP_CONTROLS,
+        'rows[outcome no resolved descent].count',
+        NUMBER_WORDS[sum(r['outcome'] == 'No resolved descent' for r in amp_controls.values())])
     record = 'analyses/amines/results/mdea/published/replay/endpoint.json.gz'
     r = read(record)
     add('mdea-published-kuranov-total-pressure-count', record,
@@ -3013,7 +3070,7 @@ def result_values(required):
         format((sum(x["group"]=="Horstmann" and x["observed"]<0 for x in r["rows"])), '.0f'))
 
 
-    record = 'analyses/mdea_mea_workflow/results/bounded-binary-411/critical-k.json'
+    record = W_MDEA_BINARY
     r = read(record)
     add('mdea-binary-hull-compositions', record,
         'compositions',
@@ -3400,9 +3457,11 @@ def result_values(required):
     add('dea-confirmed-higher-stock-middle-loading', PHASE_SUMMARY, 'dea_controls.rows[confirmed, 40 wt%], loading, sorted index 1', format(sorted(row['loading'] for row in dea_confirmed if round(row["unloaded_wt_percent"])==40)[1], '.2f'))
     add('dea-confirmed-higher-stock-high-loading', PHASE_SUMMARY, 'dea_controls.rows[confirmed, 40 wt%], loading, sorted index 2', format(sorted(row['loading'] for row in dea_confirmed if round(row["unloaded_wt_percent"])==40)[2], '.2f'))
     splits = confirmed_dea_splits()
+    confirmed = [r for r in read(W_DEA_SCREEN)["classifications"]
+                 if not r["key"].startswith("grid:") and confirmed_split(r)]
     for passage in ("abstract", "results", "conclusion", "supplement"):
-        add(f"dea-split-states-{passage}", DEA_SCREEN, "classifications[any attempts.confirmed].count",
-            NUMBER_WORDS[len(splits)])
+        add(f"dea-split-states-{passage}", W_DEA_SCREEN, "classifications[measured, any attempts.confirmed].count",
+            NUMBER_WORDS[len(confirmed)])
     name = "classifications"
     weiland, = (row for row, _ in splits if row["key"] == "weiland-1998:31:problem")
     for passage in ("results", "supplement"):
@@ -3427,19 +3486,17 @@ def result_values(required):
             add(name, [DEA_SCREEN, DEA_ASSEMBLAGES], locator, reduced_gibbs_value(decrease))
         else:
             add(name, DEA_SCREEN, locator, reduced_gibbs_value(decrease))
-    add("mdea-restricted-grid-states", MDEA_RESTRICTED_GRID, "len(rows)",
-        str(len(read(MDEA_RESTRICTED_GRID)["rows"])))
-    add("mdea-restricted-grid-unsearched-states", MDEA_RESTRICTED_GRID, "len(not_in_S_screen)",
-        str(len(read(MDEA_RESTRICTED_GRID)["not_in_S_screen"])))
-    add("mdea-restricted-grid-requested-states", MDEA_RESTRICTED_GRID, "len(rows) + len(not_in_S_screen)",
-        str(len(read(MDEA_RESTRICTED_GRID)["rows"]) + len(read(MDEA_RESTRICTED_GRID)["not_in_S_screen"])))
-    add("mdea-zheng-row-6-bubble-pressure", MDEA_ZHENG, "cold.pressure / 1e6",
-        f"{read(MDEA_ZHENG)['cold']['pressure'] / 1e6:.1f}")
-    add('mdea-kamps-comparison-count-results', PROPERTY_SUMMARY, 'kamps.full_rows', str(read(PROPERTY_SUMMARY)["kamps"]["full_rows"]))
-    add('mdea-kamps-same-row-count-results', PROPERTY_SUMMARY, 'kamps.full_rows', str(read(PROPERTY_SUMMARY)["kamps"]["full_rows"]))
+    for quantity, rows in (("states", [r for r in mdea_grid if r["available"]]),
+                           ("unsearched-states", [r for r in mdea_grid if not r["available"]]),
+                           ("requested-states", mdea_grid)):
+        add("mdea-restricted-grid-" + quantity, W_MDEA_SCREEN, f"rows[restricted grid].{quantity}.count", str(len(rows)))
+    add("mdea-zheng-row-6-bubble-pressure", W_MDEA_PROPERTIES, "zheng_row_6.cold.pressure / 1e6",
+        f"{read(W_MDEA_PROPERTIES)['zheng_row_6']['cold']['pressure'] / 1e6:.1f}")
+    add('mdea-kamps-comparison-count-results', W_MDEA_PROPERTIES, 'kamps.full_rows', str(kamps["full_rows"]))
+    add('mdea-kamps-same-row-count-results', W_MDEA_PROPERTIES, 'kamps.full_rows', str(kamps["full_rows"]))
     add('mdea-kamps-additional-row-ordinal-results', PROPERTY_SUMMARY, 'kamps.common_rows + one additional row', str(read(PROPERTY_SUMMARY)["kamps"]["common_rows"]+1))
     add('mdea-kuranov-source-matched-count-literature-results', values['mdea-published-kuranov-total-pressure-count']['record'], values['mdea-published-kuranov-total-pressure-count']['key'], values['mdea-published-kuranov-total-pressure-count']['value'])
-    dea_methane = 'analyses/fixed_reaction_reference/results/display-replays/dea-methane.json.gz'
+    dea_methane = MOVE + "dea/reported/properties/lawson-methane.json.gz"
     dea_methane_data = read(dea_methane)
     add('dea-largest-lawson-methane-pressure-change', dea_methane, 'maximum |pCO2_change_Pa| / 1e6', format(max(abs(change) for q in dea_methane_data["rows"] for change in q["pCO2_change_Pa"])/1e6, '.3f'))
     add('mea-active-interactions-count-results', mea_fit, 'len(diagnostics.active_bounds)', NUMBER_WORDS[len(mea_fit_data["diagnostics"]["active_bounds"])].capitalize())
@@ -3486,7 +3543,7 @@ def result_values(required):
     mdea_control = 'analyses/mea_parameter_bundle/results/split-diagnosis-433/mdea-controls.json'
     mdea_control_data = read(mdea_control)
     cold_control, = (q for q in mdea_control_data if q["key"]=="comparison:363:final" and q["label"]=="reported water-bicarbonate only")
-    add('mea-single-liquid-census-parents-supplement', phase_summary, 'mea_search.census.outcomes.passed-single-liquid', str(phase_summary_data["mea_search"]["census"]["outcomes"]["passed-single-liquid"]))
+    add('mea-single-liquid-census-parents-supplement', mea_census, 'rows[passed-single-liquid].count', str(census_classes["passed-single-liquid"]))
     add('mdea-distinct-descents-sobrino-supplement', phase_summary, 'len(mdea_distinct_states[sobrino source])', NUMBER_WORDS[sum(q["source"]["source_key"]=="Sobrino2016" for q in phase_summary_data["mdea_distinct_states"])])
     add('mdea-distinct-descents-bottinger-supplement', phase_summary, 'len(mdea_distinct_states[bottinger source])', str(sum(q["source"]["source_key"]=="BottingerMDEA2008" for q in phase_summary_data["mdea_distinct_states"])))
     add('mdea-distinct-descents-zheng-supplement', phase_summary, 'len(mdea_distinct_states[zheng source])', NUMBER_WORDS[sum(q["source"]["source_key"]=="Zheng2020" for q in phase_summary_data["mdea_distinct_states"])])
@@ -3513,7 +3570,8 @@ def result_values(required):
     add('amp-unfitted-kundu-partial-pressure-count', amp_assessed, 'rows[group=kundu,role=not fitted] count', str(sum(q["group"]=="kundu" and q["role"]=="not fitted" for q in amp_assessed_data["rows"])))
     prop_summary = 'analyses/amines/results/shared/properties/display-summary.json.gz'
     prop_summary_data = read(prop_summary)
-    add('mdea-sobrino-example-bubble-pressure-transfer', prop_summary, 'mdea_bubble[fit:218:problem].bubble_Pa / 1e6', format(prop_summary_data["mdea_bubble"]["fit:218:problem"]["bubble_Pa"]/1e6, '.2f'))
+    add('mdea-sobrino-example-bubble-pressure-transfer', W_MDEA_PROPERTIES, 'mdea_bubble[fit:218:problem].bubble_Pa / 1e6',
+        format(read(W_MDEA_PROPERTIES)["mdea_bubble"]["fit:218:problem"]["bubble_Pa"]/1e6, '.2f'))
 
 
 

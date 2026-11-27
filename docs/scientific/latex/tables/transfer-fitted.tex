@@ -2,19 +2,21 @@
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.52\linewidth}>{\raggedright\arraybackslash}p{0.2\linewidth}>{\raggedright\arraybackslash}p{0.2\linewidth}@{}}
 \toprule Parameter & Value & Standard error \\ \midrule
 \addlinespace\multicolumn{3}{@{}l}{\textit{DEA}} \\*
-$k_{\mathrm{DEAH^+,w}}$ & $\boldsymbol{-0.135}$ & $0.003$ \\
-$k_{\mathrm{DEACOO^-,w}}$ & $\boldsymbol{0.013}$ & $0.042$ \\
-R4 constant term $A_4$\textsuperscript{b} & $\boldsymbol{6.404}$ & $0.390$ \\
-R4 enthalpy increment $\delta h$ (J/mol) & $\boldsymbol{-14388}$ & $1171$ \\
+$k_{\mathrm{DEAH^+,w}}$ & $\boldsymbol{-0.100}$ & $0.002$ \\
+$k_{\mathrm{DEACOO^-,w}}$ & $\boldsymbol{-0.499}$ & $0.025$ \\
+R4 constant term $A_4$\textsuperscript{b} & $\boldsymbol{2.988}$ & $0.233$ \\
+R4 enthalpy increment $\delta h$ (J/mol) & $\boldsymbol{-16418}$ & $778$ \\
+$b_{\mathrm{DEAH^+,w}}$ (K) & $\boldsymbol{24.925}$ & $5.593$ \\
+$k_{\mathrm{DEAH^+,CO_2}}$ & $\boldsymbol{0.443}$ & $0.027$ \\
 \addlinespace\multicolumn{3}{@{}l}{\textit{MDEA}} \\*
 $k_{\mathrm{MDEA,w}}$ at 423 K & $\boldsymbol{-0.0671}$\textsuperscript{a} & --- \\
-$10^{3}\,\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T$ (K$^{-1}$) & $\boldsymbol{1.1695}$ & $0.0325$ \\
-$k_{\mathrm{MDEAH^+,CO_2}}$ & $\boldsymbol{0.3784}$ & $0.0300$ \\
-$k_{\mathrm{MDEAH^+,w}}$ at 313.15 K & $\boldsymbol{-0.2519}$ & $0.0773$ \\
-$b_{\mathrm{MDEAH^+,w}}$ (K) & $\boldsymbol{-31.025}$ & $5.963$ \\
-$k_{\mathrm{MDEAH^+,HCO_3^-}}$ & $\boldsymbol{-0.0313}$ & $0.0445$ \\
-$\sigma_{\mathrm{MDEAH^+}}$ (\AA) & $\boldsymbol{3.5959}$ & $0.0063$ \\
-$u_{\mathrm{MDEAH^+}}/k_B$ (K) & $\boldsymbol{243.522}$ & $55.263$ \\
+$10^{3}\,\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T$ (K$^{-1}$) & $\boldsymbol{1.1695}$ & $0.0324$ \\
+$k_{\mathrm{MDEAH^+,CO_2}}$ & $\boldsymbol{0.4068}$ & $0.0302$ \\
+$k_{\mathrm{MDEAH^+,w}}$ at 313.15 K & $\boldsymbol{-0.3284}$ & $0.0763$ \\
+$b_{\mathrm{MDEAH^+,w}}$ (K) & $\boldsymbol{-36.441}$ & $6.174$ \\
+$k_{\mathrm{MDEAH^+,HCO_3^-}}$ & $\boldsymbol{0.0191}$ & $0.1049$ \\
+$\sigma_{\mathrm{MDEAH^+}}$ (\AA) & $\boldsymbol{3.5995}$ & $0.0096$ \\
+$u_{\mathrm{MDEAH^+}}/k_B$ (K) & $\boldsymbol{196.357}$ & $40.934$ \\
 \addlinespace\multicolumn{3}{@{}l}{\textit{AMP}} \\*
 $k_{\mathrm{AMP,w}}$ at 313.15 K & $\boldsymbol{-0.1275}$ & $0.0055$ \\
 $b_{\mathrm{AMP,w}}$ (K) & $\boldsymbol{-46.926}$ & $14.722$ \\
@@ -26,4 +28,4 @@ $\sigma_{\mathrm{AMPCOO^-}}$ (\AA) & $\boldsymbol{5.2002}$\textsuperscript{a} & 
 R4 constant term $A_4$\textsuperscript{b} & $\boldsymbol{8.4579}$ & $0.2359$ \\
 R4 enthalpy increment $\delta h$ (J/mol) & $\boldsymbol{-5000}$\textsuperscript{a} & --- \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright Bold: fitted in this work. \textsuperscript{a}On a bound; no standard error is assigned. DEA and AMP: $\delta h$ is measured from the starting R4 correlation of Table~\ref{tab:reaction-equilibrium-constants}, and the final R4 coefficients include it (Table~\ref{supp-tab:supplement-transfer-parameters}). \textsuperscript{b}Expressed relative to the starting correlation, the fitted constant term changes $\ln K_4$ at \SI{313.15}{\kelvin} by $+0.141\pm0.390$ for DEA and $-1.177\pm0.236$ for AMP, with the standard error of $A_4$; this change is not a further parameter. MDEA: $k_{\mathrm{MDEA,w}}$ is held at the upper bound that keeps the \COtwo-free MDEA--water solution free of a calculated liquid--liquid gap at \SI{1.466}{\mega\pascal} (Section~\ref{sec:methods-phase}), with the margin below the no-gap edge. MDEA standard errors use the pressure-weighted residual Jacobian and the residual variance of the 278 responsive observations, with the bound held fixed. AMP: $\sigma_{\mathrm{AMPCOO^-}}$ and $\delta h$ are at their lower bounds, and the other standard errors are conditional on both. The standard errors follow Eq.~\eqref{eq:conditional-covariance}. Table~\ref{supp-tab:supplement-transfer-bounds} gives the bounds.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright Bold: fitted in this work. \textsuperscript{a}On a bound; no standard error is assigned. DEA and AMP: $\delta h$ is measured from the starting R4 correlation of Table~\ref{tab:reaction-equilibrium-constants}, and the final R4 coefficients include it (Table~\ref{supp-tab:supplement-transfer-parameters}). \textsuperscript{b}Expressed relative to the starting correlation, the fitted constant term changes $\ln K_4$ at \SI{313.15}{\kelvin} by $-2.495\pm0.233$ for DEA and $-1.177\pm0.236$ for AMP, with the standard error of $A_4$; this change is not a further parameter. MDEA: $k_{\mathrm{MDEA,w}}$ is held at the upper bound that keeps the \COtwo-free MDEA--water solution free of a calculated liquid--liquid gap at \SI{1.466}{\mega\pascal} (Section~\ref{sec:methods-phase}), with the margin below the no-gap edge. MDEA standard errors use the pressure-weighted residual Jacobian and the residual variance of the 274 responsive observations, with the bound held fixed. AMP: $\sigma_{\mathrm{AMPCOO^-}}$ and $\delta h$ are at their lower bounds, and the other standard errors are conditional on both. The standard errors follow Eq.~\eqref{eq:conditional-covariance}. Table~\ref{supp-tab:supplement-transfer-bounds} gives the bounds.\par}\end{table}

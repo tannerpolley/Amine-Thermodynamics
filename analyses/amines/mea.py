@@ -1019,9 +1019,11 @@ def activity_rows(spec, retained, pool=False):
         yield row
 
 
-def write_reported_property_summary():
+def write_reported_property_summary(*, fit_folder=None, output=None):
     wheel = verify()
     declaration = FIT_SETS["reported"]
+    if fit_folder is not None:
+        declaration = declaration | {"retained": fit_folder}
     point, selection = retained_endpoint(declaration)
     fit_path = declaration["retained"] / f'{selection["selected"]}.json.gz'
     fit = read(fit_path)
@@ -1051,9 +1053,10 @@ def write_reported_property_summary():
         for kind in ("temperature", "mole_fraction")
         if (group := [row for row in rows if row["group"] == "Cai" and row["basis"]["kind"] == kind])
     }
-    save(ROOT / "analyses/amines/results/mea/reported/properties/uncertainty-and-activities.json.gz", dict(
+    path = output or RESULTS / "mea/reported/properties/uncertainty-and-activities.json.gz"
+    save(path, dict(
         wheel=wheel, endpoint_fingerprint=selection["endpoint_fingerprint"],
-        inputs=[path.relative_to(ROOT).as_posix() for path in (fit_path, activity_path)],
+        inputs=[path.resolve().relative_to(ROOT).as_posix() for path in (fit_path, activity_path)],
         objective=fit["replay"]["cost"], cai=cai, variance=variance,
         raw_row_variance=diagnostic["uncertainty"]["residual_variance"],
         responsive=int(responsive.sum()), fitted_pressure_bands=bands,
@@ -1186,6 +1189,10 @@ def heat_intervals(spec, mapping, templates, rows):
         mapping,
     )
     chemistry = _problem_from_request(request)
+    row = next(item for item in spec.inputs["observations"]["fitted"] if item["group"] == "common149")
+    references = {reaction.name: reaction.reference for reaction in spec.problems[row["problem"]].reactions}
+    for reaction in chemistry.reactions:
+        reaction.reference = references[reaction.name]
     masses = {row["component_id"]: row["fixed"]["molar_mass"]["value"]["magnitude"] for row in mapping["components"]}
     water = masses["monoethanolamine"] * 0.7 / (0.3 * masses["water"])
     source_masses = template["reaction_system"]["molar_masses_kg_per_mol"]
@@ -1227,6 +1234,8 @@ def heat_intervals(spec, mapping, templates, rows):
                 temperature_reported_C=T - 273.15,
             )
             problem = _problem_from_request(corrected_request(source_feed_request(template, source), mapping))
+        for reaction in problem.reactions:
+            reaction.reference = references[reaction.name]
         return equilibrium.solve_equilibrium(spec.model, problem)
 
     for row in rows:
@@ -1267,6 +1276,147 @@ def heat_intervals(spec, mapping, templates, rows):
             else:
                 status, diagnostic = "addition_enthalpy", prediction.message
         yield dict(row, status=status, predicted=value, diagnostic=diagnostic)
+
+
+def display_properties(route, point, fit):
+    spec = route.bind(point)
+    mapping = point["parameters"]
+    template_groups, population = pressure_inputs(PRESSURE_INPUTS)
+    legacy, additions = pressure_additions(spec, template_groups, population)
+    extra = evaluate(spec, additions)
+    held_base = ROOT / "analyses/fixed_reaction_reference/results"
+    held_display = held_base / "display-replays"
+    retained = read(held_base / "E/MEA/replay.json.gz")
+    held_pressures = read(held_display / "wagner.json.gz")
+    held_off_window = read(held_base / "MEA/off-window.json.gz")
+    legacy_template = legacy[0]
+    template = next(row["request"] for row in load_state_packet()["observations"]
+                    if row["request"]["pressure"]["role"] == "solved")
+
+    def refresh_pressures(rows):
+        records = []
+        for row in rows:
+            source = row["row"]["source_coordinates"]
+            records.append(pressure_record(spec, legacy_template, row["identity"], source_feed_request(template, source),
+                                           row["observed"], row["row"]["source"], row["group"]))
+        return [dict(old, **new) for old, new in zip(rows, evaluate(spec, records), strict=True)]
+
+    hot = refresh_pressures(retained["hot_wagner"])
+    wagner = refresh_pressures(held_pressures["rows"])
+    off_window = refresh_pressures(held_off_window["rows"])
+    fitted_rows = fit["replay"]["rows"]
+    legacy_ids = {r["identity"] for r in legacy}
+    fitted_pressure = [r for r in fitted_rows if r["identity"] in legacy_ids]
+    all_pressure = fitted_pressure + extra
+    groups = dict(legacy=fitted_pressure, added=extra, hot_published=hot, all_pressure=all_pressure)
+    groups["hot_expanded"] = [q for q in all_pressure if pressure_series(population[q["identity"]]) == 120]
+    for row in all_pressure:
+        source = population[row["identity"]]
+        groups.setdefault(source["source_key"], []).append(row)
+        groups.setdefault(f"{pressure_series(source)} C nominal", []).append(row)
+    replay = dict(retained, rows=fitted_rows + extra, hot_wagner=hot,
+                  summary=dict(retained["summary"], original_cost=fit["replay"]["cost"],
+                               pressure={key: pressure_statistics(rows) for key, rows in groups.items()}))
+
+    held = read(held_display / "mea-comparisons.json.gz")
+    density = evaluate(spec, list(density_records(spec, [row["row"] for row in held["density"]])))
+    records = list(heat_capacity_records(spec, [row["row"] for row in held["heat_capacity"]]))
+    capacities = [dict(old, **{**prediction, "predicted_kJ_kg_K": None if prediction["value"] is None
+                              else prediction["value"] / record["mass_to_mol"]})
+                  for old, prediction, record in zip(held["heat_capacity"], evaluate(spec, records), records, strict=True)]
+    shares = []
+    for row in held["carbonate_share"]:
+        path = PAPER_EVIDENCE / "paper-evidence/selected-assessment/carbonate-requests" / (row["state"] + ".json")
+        problem = _problem_from_request(corrected_request(read(path), mapping))
+        for reaction in problem.reactions:
+            reaction.reference = equilibrium.ReactionReference(reaction.reference.source_basis, reference_pressure_pa=P_REF)
+        result = equilibrium.solve_equilibrium(spec.model, problem)
+        value = None
+        if result.requested_tolerance_met:
+            x = dict(zip(COMPONENT_IDS, result.phase_mole_fractions(0), strict=True))
+            value = x["carbonate-anion"] / sum(x[species] for species in (
+                "carbon-dioxide", "carbamate-anion", "bicarbonate-anion", "carbonate-anion"))
+        shares.append(dict(row, status="Available" if value is not None else "Unavailable", value=value,
+                           cause=None if value is not None else result.message))
+
+    kim = []
+    source = FIT_SETS["published-properties"]
+    intervals = kim_intervals(source["kim"], source["heat_pressure"], source["loading_ceiling"])
+    updates = {row["identity"]: row for row in heat_intervals(spec, mapping, template_groups, intervals)}
+    for row in held["kim_2007"]:
+        result = updates[row["record_id"]]
+        kim.append(dict(row, predicted=result["predicted"], interval_status=result["status"],
+                        diagnostic=result["diagnostic"]))
+    identity = dict(wheel=verify(), endpoint_fingerprint=fit["endpoint_fingerprint"], reference_pressure_pa=P_REF)
+    caloric = read(held_display / "caloric-and-species.json.gz")
+    arcis_measurements = ROOT / "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/heat.csv"
+    with input_path(arcis_measurements).open(newline="") as stream:
+        intervals = [dict(identity=q["id"], T_K=float(q["T_K"]), pressure=float(q["P_Pa"]),
+                          previous_loading=0., loading=float(q["loading"]), observed=-float(q["observed_kJ_mol"]))
+                     for q in csv.DictReader(stream) if q["source"] == "Arcis2011"]
+    arcis = [dict(identity=q["identity"], observed=-q["observed"],
+                  predicted=None if q["predicted"] is None else -q["predicted"],
+                  status="Available" if q["status"] == "available" else "Unavailable", diagnostic=q["diagnostic"])
+             for q in heat_intervals(spec, mapping, template_groups, intervals)]
+    targets = {q["identity"]: q for q in caloric["species"]}
+    species = {q["identity"]: dict(identity=q["identity"], observed=q["observed"], predicted=q["value"], status=q["status"])
+               for q in fitted_rows if q["identity"] in targets}
+    for source in load_state_packet()["observations"]:
+        request = [q for q in source["targets"] if q["identity"] in targets and q["identity"] not in species]
+        if not request:
+            continue
+        before = [dict(target=q["identity"], kind="packet", quantity="species",
+                       observed=targets[q["identity"]]["observed"], predicted=targets[q["identity"]]["predicted"])
+                  for q in request]
+        for q in retained_state_targets(mapping, spec.model, dict(source, targets=request), before,
+                                        reference_pressure_pa=P_REF):
+            species[q["identity"]] = q
+    if species.keys() != targets.keys():
+        raise ValueError("Changed MEA species assessment population")
+    from .properties import worked_calorimetry
+
+    return {
+        "expanded-pressure": replay | identity,
+        "off-window": dict(identity, rows=off_window),
+        "wagner": dict(identity, rows=wagner),
+        "mea-comparisons": dict(identity, density=density, heat_capacity=capacities,
+                                carbonate_share=shares, kim_2007=kim),
+        "bubble-checks": dict(identity, rows=reference_bubbles(spec, read(held_display / "bubble-checks.json.gz")["rows"])),
+        "caloric-and-species": dict(identity, arcis=arcis, species=list(species.values()),
+                                    reference_state=worked_calorimetry(spec, caloric["reference_state"])),
+    }
+
+
+def reference_bubbles(spec, retained):
+    rows = []
+    for row in retained:
+        group = row["group"]
+        source = next(q for q in spec.inputs["observations"]["fitted"] if q["group"] == group)
+        problem = copy.copy(spec.problems[source["problem"]])
+        problem.T, problem.feed = row["T_K"], equilibrium.Amounts(row["feed"])
+        initial = 5e4 if group == "Cai" else problem.P.guess
+        answers = []
+        for factor in (1, 1.5):
+            problem.P = equilibrium.Free(initial * factor)
+            result = equilibrium.solve_equilibrium(spec.model, problem)
+            if not result.requested_tolerance_met:
+                raise ValueError(f"{group}: {result.message}")
+            rho = result.molar_densities[0]
+            x = list(result.phase_mole_fractions(0))
+            state = spec.model.state(result.temperature, rho=rho, x=x)
+            fields = ("hard_chain", "dispersion", "association", "debye_huckel", "born",
+                      "cation_mixing", "dipolar", "residual_helmholtz")
+            obs = reg.observation(spec.parameters, "phase_density", problem, observed=1000., scale=1.,
+                                  form="difference", phase=problem.phases[0].name, mass_basis=True)
+            density = reg.predict(spec.model, obs)
+            if density.status.name != "Available" or not density.requested_tolerance_met:
+                raise ValueError(f"{group}: {density.message}")
+            answers.append(dict(bubble_pressure_Pa=result.pressure, molar_density_mol_m3=rho,
+                                density_kg_m3=density.value, **{k: getattr(state, k) for k in fields},
+                                **{"x_" + k: v for k, v in zip(COMPONENT_IDS, x, strict=True)}))
+        rows.append(dict(row, answers=answers, printed_digits_agree=all(
+            f"{value:.10g}" == f"{answers[1][key]:.10g}" for key, value in answers[0].items())))
+    return rows
 
 
 def reported_curves(route, point):
@@ -1437,9 +1587,13 @@ def band_statistics(points):
 
 
 
-def retained_state_targets(mapping, model, observation, retained):
+def retained_state_targets(mapping, model, observation, retained, *, reference_pressure_pa=None):
     request = corrected_request(observation["request"], mapping)
     problem = _problem_from_request(request)
+    if reference_pressure_pa is not None:
+        for reaction in problem.reactions:
+            reaction.reference = equilibrium.ReactionReference(reaction.reference.source_basis,
+                                                               reference_pressure_pa=reference_pressure_pa)
     result = equilibrium.solve_equilibrium(model, problem)
     outputs = {output["identity"]: output for output in request["outputs"]}
     phases = {phase.name: i for i, phase in enumerate(problem.phases)}
@@ -1713,14 +1867,15 @@ FIT_SETS = {
         endpoint_keys=("endpoint",),
         reference=RESULTS / "mea/water-bicarbonate-ablation/fit/A.json.gz",
         reference_keys=("replay",),
+        retained=RESULTS / "move/mea/water-bicarbonate-ablation/fit",
     ),
     "reported": dict(
         route=MEARoute,
         declaration=HISTORICAL_SPEC,
-        retained=RESULTS / "mea/reported/fit",
+        retained=RESULTS / "move/mea/reported/fit",
+        preserved=RESULTS / "mea/reported/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=2700,
         replay_tolerance=1e-10,
-        diagnostic_attempts=("A-loose.json.gz",),
     ),
 }
