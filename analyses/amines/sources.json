@@ -51,7 +51,8 @@
     "record": "shared/deposit/reviewer-package.json",
     "keys": "bytes, checksum_entries, executable_examples",
     "sha256": "122c46b812551ba8ce2849d05921ecbeb3522df69371d9fdb206ee3e0ceceb7c",
-    "source_commit": "aa7aada60d83baec246e32155359cdc0090ef967"
+    "source_commit": "aa7aada60d83baec246e32155359cdc0090ef967",
+    "source_type": "historical reviewer deposit verification receipt"
   },
   "analyses/amines/results/shared/fit/display-summary.json.gz": {
     "disposition": "stage",
@@ -109,7 +110,8 @@
     "c_disposition": "retain-in-place",
     "c_path": "analyses/amp_transfer/inputs/retransfer-344/observation-rows.csv",
     "a3_review_external_read": true,
-    "source_commit": "5307961bbc48c59241594f05431487eefe608bbe"
+    "source_commit": "5307961bbc48c59241594f05431487eefe608bbe",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -123,7 +125,8 @@
     "c_disposition": "retain-in-place",
     "c_path": "analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json",
     "a3_review_external_read": true,
-    "source_commit": "5307961bbc48c59241594f05431487eefe608bbe"
+    "source_commit": "5307961bbc48c59241594f05431487eefe608bbe",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amines/results/amp/pure-and-binary/replay/retransfer-344-05e94210/pure-binary-on-05e94210.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -137,7 +140,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-344-05e94210/pure-binary-on-05e94210.json",
-    "source_commit": "ac56d97225bf6ccd21c52bbf780cd1ea809b6288"
+    "source_commit": "ac56d97225bf6ccd21c52bbf780cd1ea809b6288",
+    "producer": "analyses/amp_transfer/pure_binary_on_05e94210.py"
   },
   "analyses/amines/results/amp/historical/phase/f2-probes.json": {
     "disposition": "stage-input",
@@ -151,7 +155,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/diagnosis/f2-probes.json",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/probe_412.py"
   },
   "analyses/amines/results/amp/mea-fitted-shared/replay/retransfer-412-f2-05e94210/main/fit-summary.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -195,7 +200,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/confirmation.json",
-    "source_commit": "f03c93a08d418dde8e4095f741e663552208f612"
+    "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
+    "producer": "analyses/amp_transfer/fit_412.py",
+    "producer_lines_at_source_commit": [
+      121
+    ]
   },
   "analyses/amines/results/amp/mea-fitted-shared/replay/retransfer-412-f2-05e94210/slope-150/search-1.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -209,7 +218,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/search-1.json.gz",
-    "source_commit": "f03c93a08d418dde8e4095f741e663552208f612"
+    "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/common-pressure.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -237,7 +247,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/fixed/data-rows.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored-fixed-slope/replay/salt-anchored-435/fixed/native/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -251,7 +262,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/fixed/native/search-outcome.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored-fixed-slope/replay/salt-anchored-435/fixed/selection.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -265,7 +277,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/fixed/selection.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored-fixed-slope/replay/salt-anchored-435/fixed/supplied/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -279,7 +292,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/fixed/supplied/search-outcome.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/free/data-rows.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -293,7 +307,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/free/data-rows.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/free/native/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -307,7 +322,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/free/native/search-outcome.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/free/selection.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -321,7 +337,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/free/selection.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/free/supplied/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -335,7 +352,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/salt-anchored-435/free/supplied/search-outcome.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/amp/system-pressure-salt-anchored/replay/salt-anchored-435/hydrolysis/shift.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -363,7 +381,8 @@
     "c_disposition": "retain-in-place",
     "c_path": "analyses/dea_transfer/inputs/part-ii-346/route-current.json",
     "a3_review_external_read": true,
-    "source_commit": "b880edd78f1c95b955f463fce92f0376485c0536"
+    "source_commit": "b880edd78f1c95b955f463fce92f0376485c0536",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amines/results/dea/water-binary/replay/binary.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -377,7 +396,12 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/binary.json",
-    "source_commit": "155948a5d7e4aff18a5a9a7743554f3c7605b85a"
+    "source_commit": "155948a5d7e4aff18a5a9a7743554f3c7605b85a",
+    "producer": "analyses/dea_transfer/binary.py",
+    "producer_lines_at_source_commit": [
+      16,
+      58
+    ]
   },
   "analyses/amines/results/dea/mea-fitted-shared/replay/reactive-refit-425/comparisons.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -391,7 +415,12 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/reactive-refit-425/comparisons.json",
-    "source_commit": "21745e9f3a81aee773c2e4abb41271076e565187"
+    "source_commit": "21745e9f3a81aee773c2e4abb41271076e565187",
+    "producer": "analyses/dea_transfer/reactive_readback.py",
+    "producer_lines_at_source_commit": [
+      140,
+      146
+    ]
   },
   "analyses/amines/results/dea/mea-fitted-shared/replay/refit-413/checks.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -405,7 +434,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/refit-413/checks.json",
-    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6"
+    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
+    "producer": "analyses/dea_transfer/f2_carbamate.py",
+    "producer_lines_at_source_commit": [
+      126
+    ]
   },
   "analyses/amines/results/dea/mea-fitted-shared/replay/refit-413/conditional-uncertainty.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -419,7 +452,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/refit-413/conditional-uncertainty.json",
-    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6"
+    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
+    "producer": "analyses/dea_transfer/f2_carbamate.py"
   },
   "analyses/amines/results/dea/mea-fitted-shared/replay/refit-413/paper-summary.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -433,7 +467,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/refit-413/paper-summary.json",
-    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6"
+    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
+    "producer": "analyses/dea_transfer/present_current.py"
   },
   "analyses/amines/results/dea/mea-fitted-shared/replay/refit-413/parameter-values.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -447,7 +482,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/refit-413/parameter-values.csv",
-    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6"
+    "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
+    "producer": "analyses/dea_transfer/present_current.py",
+    "producer_lines_at_source_commit": [
+      97
+    ]
   },
   "analyses/amines/results/dea/system-pressure-salt-anchored/replay/salt-anchored-435/campaign/data-rows.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -461,7 +500,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/salt-anchored-435/campaign/data-rows.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/dea/system-pressure-salt-anchored/replay/salt-anchored-435/campaign/selection.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -475,7 +515,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/salt-anchored-435/campaign/selection.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/dea/system-pressure-salt-anchored/replay/salt-anchored-435/hydrolysis/shift.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1191,7 +1232,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/fixed_reaction_reference/results/E/MEA/replay.json.gz",
-    "source_commit": "21429c6c29a9b9cd7ac148e9ac83e8d71ce3ce10"
+    "source_commit": "21429c6c29a9b9cd7ac148e9ac83e8d71ce3ce10",
+    "producer": "analyses/round_7/mea_pressure.py"
   },
   "analyses/amines/results/mdea/reported/fit/A.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1876,7 +1918,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/binary-onset.json",
-    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580"
+    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/mdea/system-pressure-first-weights/replay/salt-anchored-435/campaign/fixed-pressure.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1890,7 +1933,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/fixed-pressure.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/mdea/system-pressure-first-weights/replay/salt-anchored-435/campaign/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1904,7 +1948,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/search-outcome.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/mdea/system-pressure-first-weights/replay/salt-anchored-435/campaign/selection.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1918,7 +1963,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/selection.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/amines/results/mdea/system-pressure-first-weights/replay/salt-anchored-435/kuranov-matched-pressure.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -1992,7 +2038,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz",
-    "source_commit": "9db910e4cec7b631e1304ce8fc859ab3676a105e"
+    "source_commit": "9db910e4cec7b631e1304ce8fc859ab3676a105e",
+    "producer": "analyses/mdea_mea_workflow/scripts/shared_bicarbonate_417.py"
   },
   "analyses/mea_parameter_bundle/results/adoption-297/paper-evidence/source-only/chemical_reaction_source_contract.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2006,7 +2053,8 @@
     "c_disposition": "retain-in-place",
     "c_path": "analyses/mea_parameter_bundle/results/adoption-297/paper-evidence/source-only/chemical_reaction_source_contract.json",
     "a3_review_external_read": true,
-    "source_commit": "83a41166b31245a73a0477b30466185b4d9e3ab5"
+    "source_commit": "83a41166b31245a73a0477b30466185b4d9e3ab5",
+    "source_type": "historical source chemistry declaration"
   },
   "analyses/amines/results/mea/sensitivities/replay/born-diameter-sensitivity-405/summary.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2022,7 +2070,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/born-diameter-sensitivity-405/summary.json",
-    "source_commit": "ff4170c2026f9823be7574a1b7db18c05b7a06fe"
+    "source_commit": "ff4170c2026f9823be7574a1b7db18c05b7a06fe",
+    "producer": "analyses/mea_parameter_bundle/scripts/born_diameter_sensitivity.py",
+    "producer_lines_at_source_commit": [
+      170
+    ]
   },
   "analyses/amines/results/mea/historical/properties/standard-errors.csv": {
     "disposition": "stage-input",
@@ -2036,7 +2088,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/objective-weights-420/MEA/standard-errors.csv",
     "source_commit": "15e289ea900cfeb9ef0f946cdd19a19b8d45b14f",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/objective_weights_420.py"
   },
   "analyses/amines/results/mea/cai-weighting-control/properties/observable-errors.csv": {
     "disposition": "stage-input",
@@ -2050,7 +2103,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/objective-weights-420/alternative/observable-errors.csv",
-    "source_commit": "bb2d9ac48792419f998c7ce996b821eefc98e520"
+    "source_commit": "bb2d9ac48792419f998c7ce996b821eefc98e520",
+    "producer": "analyses/mea_parameter_bundle/scripts/objective_weights_420.py"
   },
   "analyses/amines/results/mea/cai-weighting-control/phase/summary.json": {
     "disposition": "stage-input",
@@ -2064,7 +2118,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/objective-weights-420/alternative/search/summary.json",
-    "source_commit": "15e289ea900cfeb9ef0f946cdd19a19b8d45b14f"
+    "source_commit": "15e289ea900cfeb9ef0f946cdd19a19b8d45b14f",
+    "producer": "analyses/mea_parameter_bundle/scripts/objective_weights_420.py"
   },
   "analyses/amines/results/mea/restrictions/replay/paper-evidence-341/candidate/replay.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2108,7 +2163,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/paper-evidence-341/objective-groups.csv",
-    "source_commit": "34c9349bcd05abc1d9e349ff429f477e0595e24c"
+    "source_commit": "34c9349bcd05abc1d9e349ff429f477e0595e24c",
+    "producer": "analyses/mea_parameter_bundle/scripts/paper_evidence_341.py"
   },
   "analyses/amines/results/mea/restrictions/replay/paper-evidence-341/paper-evidence/fitted-rows.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2287,7 +2343,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/band-points.json",
-    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580"
+    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580",
+    "producer": "analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/F4/bands.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2301,7 +2358,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/bands.json",
-    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580"
+    "source_commit": "01546ea983d3655dc69102679a8ebb85c2135580",
+    "producer": "analyses/mea_parameter_bundle/scripts/shared_ion_electrostatics_423.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/F4/objective-contributions.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2331,7 +2389,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/objective-information.json.gz",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py",
+    "producer_lines_at_source_commit": [
+      304
+    ]
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/F4/q4.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2359,7 +2421,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/reference-state.json",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py",
+    "producer_lines_at_source_commit": [
+      308
+    ]
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/F4/replay.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2389,7 +2455,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/prediction-bands.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/uncertainty_307.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/F4/uncertainty/profiles.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2403,7 +2470,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/profiles.json",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/uncertainty_307.py"
   },
   "analyses/amines/results/mea/published/properties/salt-anchored-435/MEA/baygi-matched-pressure.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2431,7 +2499,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/canonical-pressure.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/carbonate-share.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2445,7 +2514,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/carbonate-share.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/carbonate_ions_282.py",
+    "producer_lines_at_source_commit": [
+      655
+    ]
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/cp.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2459,7 +2532,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/cp.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/density.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2473,7 +2547,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/density.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/fitted-rows.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2487,7 +2562,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/fitted-rows.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/heat.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2501,7 +2577,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/heat.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/species-figure-data.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2515,7 +2592,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/species-figure-data.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/state-targets.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2529,7 +2607,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/state-targets.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/transfer.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2543,7 +2622,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/transfer.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/salt-anchored-435/MEA/evidence/F4/wagner-pressure.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -2557,7 +2637,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/wagner-pressure.csv",
-    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609"
+    "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/hong-matched-pressure.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3010,7 +3091,8 @@
     "owner": "none",
     "sha256": "124e4375767ffc95a73ef9a45a8f806e6107fd32e87a1327a10e7d66c92d1c17",
     "stage": "figure split-energy.pdf is not included by the manuscript",
-    "source_commit": "03768d2d4b7ab346bbd82d59d99f6e3f45473ee3"
+    "source_commit": "03768d2d4b7ab346bbd82d59d99f6e3f45473ee3",
+    "producer": "analyses/mea_parameter_bundle/scripts/plot_split_cause_342.py"
   },
   "analyses/amines/results/mea/sensitivities/replay/stripper-temperature-409/band-table.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3101,7 +3183,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/original-main.json.gz",
-    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00"
+    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
+    "producer": "analyses/round_5/amp.py"
   },
   "analyses/amines/results/amp/first-data/replay/A/original-slope-150.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3116,7 +3199,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/original-slope-150.json.gz",
-    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00"
+    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
+    "producer": "analyses/round_5/amp.py"
   },
   "analyses/amines/results/mea/sensitivities/replay/C/MEA-k-profile.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3130,7 +3214,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/C/MEA-k-profile.json.gz",
-    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00"
+    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
+    "producer": "analyses/round_5/objective.py",
+    "producer_lines_at_source_commit": [
+      281
+    ]
   },
   "analyses/amines/results/amp/expanded-fixed/properties/gibbs-curvature.json.gz": {
     "disposition": "stage-input",
@@ -3204,7 +3292,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/records/Hilliard-Cp.json",
-    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00"
+    "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
+    "producer": "analyses/round_5/reconcile.py",
+    "producer_lines_at_source_commit": [
+      47
+    ]
   },
   "analyses/round_7/manuscript-handoff.json": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3231,7 +3323,11 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_7/results/A/reference.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/mdea_reference.py",
+    "producer_lines_at_source_commit": [
+      182
+    ]
   },
   "analyses/amines/results/mdea/system-pressure/replay/C/salt/incumbent.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3245,7 +3341,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_7/results/C/salt/incumbent.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/mdea/system-pressure/replay/C/salt/original-fixed-pressures.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3259,7 +3356,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_7/results/C/salt/original-fixed-pressures.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/mdea/system-pressure/replay/C/salt/refit.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3273,7 +3371,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_7/results/C/salt/refit.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/mdea/system-pressure/replay/C/salt/rms-fixed-pressures.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3287,7 +3386,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": true,
     "archive_path": "analyses/round_7/results/C/salt/rms-fixed-pressures.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/mdea/system-pressure/replay/C/salt/search-outcome.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3301,7 +3401,8 @@
     "c_disposition": "stage-layout",
     "a3_review_external_read": false,
     "archive_path": "analyses/round_7/results/C/salt/search-outcome.json.gz",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/mea/expanded-weights/replay/E/F4/replay.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3444,7 +3545,8 @@
     "c_disposition": "retain-in-place",
     "c_path": "data/reference/MEA/manifests/speciation_target_membership.csv",
     "a3_review_external_read": true,
-    "source_commit": "730c718f1768a9d662887e188eb01392f081e049"
+    "source_commit": "730c718f1768a9d662887e188eb01392f081e049",
+    "source_type": "source declaration or reference observations"
   },
   "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -3473,7 +3575,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/engine-3e83e19c-association-volume/least-squares-declaration.json",
     "source_commit": "5c3772423bfa41f7f5a380b14a70237096a6e344",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/mea_association_volume.py",
+    "producer_lines_at_source_commit": [
+      115
+    ]
   },
   "analyses/amines/results/salt/sodium-salts/fit/summary.json": {
     "disposition": "stage-input",
@@ -3487,7 +3593,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/salt/summary.json",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/amp/first-data/fit-profile/profile-original.json": {
     "disposition": "stage-input",
@@ -3501,7 +3608,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/profile-original.json",
     "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/amp_profile.py"
   },
   "analyses/amines/results/amp/reported/fit-profile/profile-expanded.json": {
     "disposition": "stage-input",
@@ -3530,7 +3638,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/common-pressure.json.gz",
     "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/amp_stability.py",
+    "producer_lines_at_source_commit": [
+      99
+    ]
   },
   "analyses/amines/results/amp/first-data-and-expanded/fit-profile/profile-expanded.json": {
     "disposition": "stage-input",
@@ -3544,7 +3656,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/profile-expanded.json",
     "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/amp_profile.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/figiel-equilibrium.json": {
     "disposition": "stage-input",
@@ -3558,7 +3671,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/figiel-equilibrium.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/figiel_equilibrium.py"
   },
   "analyses/amines/results/mea/published-properties/replay/endpoint.json.gz": {
     "disposition": "stage",
@@ -3598,7 +3712,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/reduction.json",
     "source_commit": "0481ce3ab8d6346d6324cb3975fda2065909353f",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/fit_campaign.py",
+    "producer_lines_at_source_commit": [
+      321
+    ]
   },
   "analyses/amines/results/dea/binary-temperature-dependent/fit-inputs/inputs.json": {
     "disposition": "stage-input",
@@ -3612,7 +3730,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/dea_transfer/results/reactive-refit-425/inputs.json",
     "source_commit": "21745e9f3a81aee773c2e4abb41271076e565187",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/dea_transfer/reactive_readback.py",
+    "producer_lines_at_source_commit": [
+      146
+    ]
   },
   "analyses/amines/results/mdea/bicarbonate-0.1325/phase/stability.json.gz": {
     "disposition": "stage-input",
@@ -3640,7 +3762,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/A/expanded-free.json.gz",
     "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/amp.py"
   },
   "analyses/amines/results/mea/system-pressure/replay/agreement.json": {
     "disposition": "stage-input",
@@ -3654,7 +3777,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/agreement.json",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py",
+    "producer_lines_at_source_commit": [
+      655
+    ]
   },
   "analyses/amines/results/mea/reported/replay/endpoint.json.gz": {
     "disposition": "stage",
@@ -3690,7 +3817,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/conditional-uncertainty.json",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/amp/first-data/fit/uncertainty/slope-150/parameters.json": {
     "disposition": "stage-input",
@@ -3704,7 +3832,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/verification.json": {
     "disposition": "stage-input",
@@ -3718,7 +3847,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/verification.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/verify.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/amp-hessian.json": {
     "disposition": "stage-input",
@@ -3732,7 +3862,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/amp-hessian.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/formulation.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/free.json": {
     "disposition": "stage-input",
@@ -3746,7 +3877,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/free.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/decompose.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/fixed.json": {
     "disposition": "stage-input",
@@ -3760,7 +3892,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/fixed.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/decompose.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/slope-anchored.json": {
     "disposition": "stage-input",
@@ -3774,7 +3907,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/slope-anchored.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/decompose.py"
   },
   "analyses/amines/results/amp/first-data/phase-control/born-off.json": {
     "disposition": "stage-input",
@@ -3788,7 +3922,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/born-off.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/decompose.py"
   },
   "analyses/amines/results/mdea/reported/fit/A-projected-direction.json.gz": {
     "disposition": "stage-input",
@@ -3817,7 +3952,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/reaction-temperature-fit/candidate-targets.csv",
     "source_commit": "b2781104997c5f1f41e6f043c2175061329a95ba",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/run_reaction_temperature_fit.py",
+    "producer_lines_at_source_commit": [
+      187
+    ]
   },
   "analyses/amines/results/mea/system-pressure/replay/q5.json": {
     "disposition": "stage-input",
@@ -3860,7 +3999,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/mea/permittivity-branches/fit/parameters.json": {
     "disposition": "stage-input",
@@ -3874,7 +4014,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/joint-recalibration-170/amendment-2/stage5-smaller-dV/parameters.json",
     "source_commit": "0481ce3ab8d6346d6324cb3975fda2065909353f",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/fit_campaign.py"
   },
   "analyses/amines/results/mea/system-pressure/replay-inputs/states-excluded.json": {
     "disposition": "stage-input",
@@ -3888,7 +4029,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/states-excluded.json",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/dea/system-pressure/replay/endpoint.json.gz": {
     "disposition": "stage",
@@ -3935,7 +4077,11 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/round_5/results/B/reactions.json.gz",
     "source_commit": "804811e44eadfb04f1e3a51a6be0a46a4c54ba00",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_5/reaction_reference.py",
+    "producer_lines_at_source_commit": [
+      163
+    ]
   },
   "analyses/amines/results/mdea/system-pressure-first-weights/replay/endpoint.json.gz": {
     "disposition": "stage",
@@ -3960,7 +4106,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/evidence/F4/selected-assessment/density-summary.json",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_anchored_435.py"
   },
   "analyses/amines/results/mdea/reported/start-availability/saturation.json.gz": {
     "disposition": "stage-input",
@@ -3989,7 +4136,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/search-1.json.gz",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/mea/expanded-weights/replay/endpoint.json.gz": {
     "disposition": "stage",
@@ -4014,7 +4162,8 @@
     "a3_review_external_read": true,
     "archive_path": "analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/standard-errors.csv",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/uncertainty_307.py"
   },
   "analyses/amines/results/mea/reported/properties/uncertainty-and-activities.json.gz": {
     "disposition": "stage",
@@ -4065,7 +4214,11 @@
     "c_disposition": "stage-layout",
     "archive_path": "analyses/round_7/results/D/unbounded-MDEA.json.gz",
     "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/round_7/sensitivities.py",
+    "producer_lines_at_source_commit": [
+      139
+    ]
   },
   "analyses/amines/results/shared/properties/tracking-reference-derivatives.json.gz": {
     "disposition": "stage-input",
@@ -4088,7 +4241,8 @@
     "c_disposition": "stage-layout",
     "archive_path": "analyses/mea_parameter_bundle/results/split-diagnosis-433/mdea-controls.json",
     "source_commit": "0d270086370f5ada48e20b55020d61734748e3de",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/results/split-diagnosis-433/mdea_controls.py"
   },
   "analyses/amines/results/amp/first-data/phase/measured-states.json": {
     "disposition": "stage-input",
@@ -4099,7 +4253,11 @@
     "c_disposition": "stage-layout",
     "archive_path": "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/measured-states.json",
     "source_commit": "b1bd098d1ce3f5446d939ac7d7cf7a2b2697594f",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/fit_412.py",
+    "producer_lines_at_source_commit": [
+      203
+    ]
   },
   "analyses/amines/results/mea/published/replay/admission.csv": {
     "disposition": "stage-input",
@@ -4204,7 +4362,8 @@
     "sha256": "4ecc13a3240c7b3541439926e92fe7f20da7eca8c7ba77cb4d6b59bdb5f290f8",
     "c_disposition": "retain-in-place",
     "source_commit": "83a41166b31245a73a0477b30466185b4d9e3ab5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "historical solvent declaration"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/F2/parameters.json": {
     "disposition": "stage-input",
@@ -4214,7 +4373,8 @@
     "sha256": "ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/temperature-reanchor-140/never-accessed-vle-admission.csv": {
     "disposition": "stage-input",
@@ -4234,7 +4394,8 @@
     "sha256": "368637fac40a11ec2ced1af46c587a54de5bc527eea3512aa388f076b25491ed",
     "c_disposition": "retain-in-place",
     "source_commit": "97f230f910d96c984995a7da925b4fd468e485e8",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source ledger"
   },
   "analyses/mea_parameter_bundle/results/stripper-temperature-409/heat-replay.json": {
     "disposition": "stage-input",
@@ -4255,7 +4416,8 @@
     "sha256": "3fca278be8790d58ab30e5474b2b3892c47225d8230ac40fd4f87c066e8eaf2d",
     "c_disposition": "retain-in-place",
     "source_commit": "47c2d20fbca0c92562294ce7692b9e5dcded9308",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "historical observation packet"
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/canonical-pressure.csv": {
     "disposition": "stage-input",
@@ -4276,7 +4438,11 @@
     "sha256": "5fee5007391aa6893b48c114d79f76b4eeb5753589d3cc1988b10552f3b83487",
     "c_disposition": "retain-in-place",
     "source_commit": "2f398db3f344c4ea73f365169c5000138eadff16",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/bicarbonate_carbonate_266.py",
+    "producer_lines_at_source_commit": [
+      188
+    ]
   },
   "analyses/mea_parameter_bundle/results/objective-weights-420/MEA/information.json.gz": {
     "disposition": "stage-input",
@@ -4286,7 +4452,11 @@
     "sha256": "e9994086b64e7df10c0e74eeefdaaebdb3ea08db2ba4e6f4f4555a43325becb6",
     "c_disposition": "retain-in-place",
     "source_commit": "bb2d9ac48792419f998c7ce996b821eefc98e520",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/objective_weights_420.py",
+    "producer_lines_at_source_commit": [
+      197
+    ]
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/polley-2026-explicit-defaults.json": {
     "disposition": "stage-input",
@@ -4306,7 +4476,8 @@
     "sha256": "a9b2bd2317b2d77ba44c143162f60580b6344676b1480e3ffe4180217c5745a0",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/final_evidence.py"
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/part1/published/ratios.json": {
     "disposition": "stage-input",
@@ -4316,7 +4487,11 @@
     "sha256": "302276257b80a1cd86e07e550e98bf3e1892195e8dd62b2d035727cb580c6cbb",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/same_data_part1.py",
+    "producer_lines_at_source_commit": [
+      97
+    ]
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/part1/published/heat-capacity-264.json": {
     "disposition": "stage-input",
@@ -4326,7 +4501,8 @@
     "sha256": "625c4a4a156bb327d75de3da384bfff42884d7d6d19df0c91234843a6e8215aa",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/final_evidence.py"
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/part1/published/kim2007-heat-pathways/kim-heat.csv": {
     "disposition": "stage-input",
@@ -4336,7 +4512,8 @@
     "sha256": "f471457017db64cf167385726c7778e374b6ff3d261f0cae2e34e42c74bcab01",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/same_data_part1.py"
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/part1-scores.json": {
     "disposition": "stage-input",
@@ -4346,7 +4523,11 @@
     "sha256": "6ad6c034f5579c6a2ce8d68c5095045e351bb4e453aed25827b77d1c435db8ff",
     "c_disposition": "retain-in-place",
     "source_commit": "0b3fec665642fe401977ef69525b1b0b8efc6759",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/same_data_part1.py",
+    "producer_lines_at_source_commit": [
+      138
+    ]
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/parameters.json": {
     "disposition": "stage-input",
@@ -4367,7 +4548,8 @@
     "sha256": "0b2b754d0a1c9dd85b3f0c0cebcc92712a35f52a4c46fce45b8addac33ac7466",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/final_evidence.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/F0/parameters.json": {
     "disposition": "stage-input",
@@ -4377,7 +4559,8 @@
     "sha256": "f8f64820b161377a0d97d1e4ad4f6cea764cd0558dc63231d58e2096988eef97",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/adoption-297/paper-evidence/state-targets.csv": {
     "disposition": "stage-input",
@@ -4387,7 +4570,11 @@
     "sha256": "388fd76515f8b84ebe65fea2178581ff792fa5c4b12b65079ecbf45e944b7d45",
     "c_disposition": "retain-in-place",
     "source_commit": "83a41166b31245a73a0477b30466185b4d9e3ab5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/adoption_297.py",
+    "producer_lines_at_source_commit": [
+      251
+    ]
   },
   "analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/state-targets.csv": {
     "disposition": "stage-input",
@@ -4441,7 +4628,11 @@
     "sha256": "d7a7a6fdb42bbcae46a24ba6d39d1a975f9bbeeb953885f880854e8c4f02be9a",
     "c_disposition": "retain-in-place",
     "source_commit": "a6fbc006a8d35bb550c9f7a0faffb07fa85e6c36",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/final_evidence.py",
+    "producer_lines_at_source_commit": [
+      230
+    ]
   },
   "analyses/mea_parameter_bundle/results/same-data-comparison/hong-2027/scores.csv": {
     "disposition": "stage-input",
@@ -4574,7 +4765,8 @@
     "sha256": "a74afc024467122d0e245b9f1fc54e902e4ca590dc6b284fab9e8a555e59d307",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/evidence/F2/state-targets.csv": {
     "disposition": "stage-input",
@@ -4584,7 +4776,8 @@
     "sha256": "f2f0ba4e5e80b8cb87f29a0b6080c1119e04fdec942172873d2af450e2016567",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/evidence/F3/state-targets.csv": {
     "disposition": "stage-input",
@@ -4594,7 +4787,8 @@
     "sha256": "e65ebb3e084356b933663aea185a10a14870577d9e1b0fca5b9de680ccf02d3e",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/evidence/F4/state-targets.csv": {
     "disposition": "stage-input",
@@ -4604,7 +4798,8 @@
     "sha256": "f0d077264804e234cf332feaf710b8236346af15e4f23d1107ed0c0d0d78e22b",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/evidence/F4-0/state-targets.csv": {
     "disposition": "stage-input",
@@ -4614,7 +4809,8 @@
     "sha256": "42a112453c026692c5af9b5c5e1c1dfc87174a6c4a0de3138ff8d94d6d119a60",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/mea_parameter_bundle/results/reduced-refit/evidence/F5/state-targets.csv": {
     "disposition": "stage-input",
@@ -4624,7 +4820,8 @@
     "sha256": "79e9548cedd22942dbcb095c140191132c97a0aafcae7efe929a14c5c6e1f802",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py"
   },
   "analyses/amines/results/shared/comparisons/replay/round_7/E/F4/off-window.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -4665,7 +4862,8 @@
     "archive_path": "analyses/round_7/results/E/F4/parameters.json",
     "c_disposition": "stage-layout",
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/mea_pressure.py"
   },
   "analyses/amines/results/shared/comparisons/replay/round_7/E/F2/parameters.json": {
     "disposition": "stage-input",
@@ -4676,7 +4874,8 @@
     "archive_path": "analyses/round_7/results/E/F2/parameters.json",
     "c_disposition": "stage-layout",
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/mea_pressure.py"
   },
   "analyses/amines/results/shared/comparisons/replay/round_7/E/F2/replay.json.gz": {
     "disposition": "stage-input",
@@ -4722,7 +4921,8 @@
     "sha256": "d5c87d208678fafd397950afd76c3a2030435e7458af092c5d6c02e90b8870ba",
     "c_disposition": "retain-in-place",
     "source_commit": "438385c981815de0f90e536ccd181165e698efe1",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amp_transfer/inputs/pure-amp.csv": {
     "disposition": "stage-input",
@@ -4732,7 +4932,8 @@
     "sha256": "0f3e09f6181f46b2e8fb17fc5c45de4f7ccff6391d4cf0a38aa42a3e8b74194b",
     "c_disposition": "retain-in-place",
     "source_commit": "65073b95013cc5774235258ce196f879ba32b47c",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amp_transfer/inputs/hartono-2013-table-3.csv": {
     "disposition": "stage-input",
@@ -4742,7 +4943,8 @@
     "sha256": "b29114acf979ee64f06bde50f45aea0cb9307a3b8a0a23a0cec5ee07fb9df7e8",
     "c_disposition": "retain-in-place",
     "source_commit": "438385c981815de0f90e536ccd181165e698efe1",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/amp_transfer/inputs/amp-document.json": {
     "disposition": "stage-input",
@@ -4752,7 +4954,11 @@
     "sha256": "dfcc018e4e392e626f6fa16645e81ee7a50330636db91af49812d3b0ee9f465a",
     "c_disposition": "retain-in-place",
     "source_commit": "2bcd3b5b614e3fe97817a5c11695de7845c3e674",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/binary.py",
+    "producer_lines_at_source_commit": [
+      131
+    ]
   },
   "analyses/amp_transfer/results/retransfer-344-05e94210/campaign/start-0/unpenalized/stage-0/parameters.json": {
     "disposition": "stage-input",
@@ -4772,7 +4978,8 @@
     "sha256": "031d9b9ca53fa1c9b53e4ed0e5214711197d50997ee61ea2d1b20e77703709c5",
     "c_disposition": "retain-in-place",
     "source_commit": "f03c93a08d418dde8e4095f741e663552208f612",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/data-rows.json": {
     "disposition": "stage-input",
@@ -4782,7 +4989,8 @@
     "sha256": "8d2b3123d00d1207a1f354d410b37c485f04e93d27cccd799524646895b8fa16",
     "c_disposition": "retain-in-place",
     "source_commit": "b1bd098d1ce3f5446d939ac7d7cf7a2b2697594f",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/amp_transfer/retain_404.py"
   },
   "analyses/amines/results/shared/comparisons/replay/round_7/AMP/free/assessment.json.gz": {
     "disposition": "stage-input",
@@ -4793,7 +5001,8 @@
     "archive_path": "analyses/round_7/results/AMP/free/assessment.json.gz",
     "c_disposition": "stage-layout",
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/receivers.py"
   },
   "analyses/amines/results/amp/reported/fit/reference-control.json.gz": {
     "disposition": "stage-input",
@@ -4816,7 +5025,8 @@
     "archive_path": "analyses/round_7/results/AMP/fixed/assessment.json.gz",
     "c_disposition": "stage-layout",
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/receivers.py"
   },
   "analyses/amines/results/amp/fixed-slope/fit/reference-control.json.gz": {
     "disposition": "stage-input",
@@ -4838,7 +5048,8 @@
     "sha256": "a493780aff1bb5d3a788a0656a7bd7bfcfbed6aa7b14d922d7b1470d08b8b447",
     "c_disposition": "retain-in-place",
     "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/dea_transfer/results/refit-413/selection.json": {
     "disposition": "stage-input",
@@ -4848,7 +5059,8 @@
     "sha256": "529153f0a1262b6848471f69967112e3559d03c921dd9f75576aa50b0ff9df95",
     "c_disposition": "retain-in-place",
     "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/dea_transfer/f2_carbamate.py"
   },
   "analyses/mea_parameter_bundle/results/shared-ion-electrostatics-423/c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb/ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed/diethanolamine/control/replay.json.gz": {
     "disposition": "stage-input",
@@ -4880,7 +5092,11 @@
     "sha256": "6ef95bb3af2a9e96d5c624aceac1bfbe47c1430fc78d2aee6c3550dc5ca5ae4c",
     "c_disposition": "retain-in-place",
     "source_commit": "155948a5d7e4aff18a5a9a7743554f3c7605b85a",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/dea_transfer/binary.py",
+    "producer_lines_at_source_commit": [
+      151
+    ]
   },
   "analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json": {
     "disposition": "stage-input",
@@ -4900,7 +5116,8 @@
     "sha256": "006a50dc946baae584ff3ee9e570bbedad46202a319d94f3fa42e625ce38609e",
     "c_disposition": "retain-in-place",
     "source_commit": "155948a5d7e4aff18a5a9a7743554f3c7605b85a",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/dea_transfer/results/refit-413/paper-data.csv": {
     "disposition": "stage-input",
@@ -4910,7 +5127,11 @@
     "sha256": "ffb3ed053d1edd62f626927744d018e56488f4fb91309fe8918783e42d86d4d5",
     "c_disposition": "retain-in-place",
     "source_commit": "394176781ed0fb73fd825c94da0fff81c1bf0aa6",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/dea_transfer/present_current.py",
+    "producer_lines_at_source_commit": [
+      69
+    ]
   },
   "analyses/dea_transfer/results/reactive-refit-425/run/selection.json": {
     "disposition": "stage-input",
@@ -4964,7 +5185,8 @@
     "sha256": "41eb0b92cbee92d81802d5ef7a67e6f4ccf9f23fa239abe2f2f2e8920a7436b6",
     "c_disposition": "retain-in-place",
     "source_commit": "5761255504caa7353a886b756d366b2947f3afbb",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/mdea_mea_workflow/results/bounded-binary-411/endpoint.json": {
     "disposition": "stage-input",
@@ -5007,7 +5229,8 @@
     "sha256": "45159aae9cc2ad8019dc9de482ec36ae4e5355ef84981cc15068bd43b7a18b29",
     "c_disposition": "retain-in-place",
     "source_commit": "efc865641f032bafd6f525e17c8cd2230a8258bf",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/mdea_mea_workflow/results/kuranov-published-422/kuranov-rows.json": {
     "disposition": "stage-input",
@@ -5053,7 +5276,8 @@
     "sha256": "4086b91a5ba4c7abce7bbd1c8f0bf0bb3e3029fa1fbddec8948dd183a7bac7e0",
     "c_disposition": "retain-in-place",
     "source_commit": "f43bac9284c92351f58c90ba861fe7c90d181609",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/salt_transfers_435.py"
   },
   "analyses/mdea_mea_workflow/results/bounded-binary-411/data-rows.json": {
     "disposition": "stage-input",
@@ -6894,7 +7118,8 @@
     "stage": "fit",
     "sha256": "2b5b4bdad0c1632996c390e0af3059486ba265bd911b3bbf8d07e21547e83dbb",
     "c_disposition": "retain-in-place",
-    "source_commit": "b3dbecc3e4e1e71291ecab7db1443035cab0d9f2"
+    "source_commit": "b3dbecc3e4e1e71291ecab7db1443035cab0d9f2",
+    "source_type": "step B preservation evidence from the recorded fits"
   },
   "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/fit-1/stage-0/parameters.json.gz": {
     "disposition": "stage-input",
@@ -6948,7 +7173,11 @@
     "sha256": "fab4f3076a6bec9338a171165d21d51b1b2eb3fd4f3d8e548826c0c6517dc05b",
     "c_disposition": "retain-in-place",
     "source_commit": "f7e09b9ec5d90c6d6703003e1e6fe3446a3785f5",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "producer": "analyses/mea_parameter_bundle/scripts/reduced_refit_338.py",
+    "producer_lines_at_source_commit": [
+      124
+    ]
   },
   "analyses/amines/results/shared/comparisons/replay/round_7/F/incumbent-expanded.json.gz": {
     "disposition": "stage-input",
@@ -6971,7 +7200,8 @@
     "archive_path": "analyses/round_7/results/F/methane.json.gz",
     "c_disposition": "stage-layout",
     "archive": "archive/pre-rebuild-3c85ad4fc",
-    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909"
+    "source_commit": "27e78ed51c2875bac7c83e43f375e312e67d1909",
+    "producer": "analyses/round_7/lawson_methane.py"
   },
   "analyses/mea_parameter_bundle/results/carbonate-ions-282/inputs/hamer-wu-1972-nacl.csv": {
     "disposition": "stage-input",
@@ -6981,7 +7211,8 @@
     "sha256": "0c434d900f9a9db8b745852765533ab692e5baecffb62a2812b8fe1455221b4c",
     "c_disposition": "retain-in-place",
     "source_commit": "d4a33532c381aec85611e3b173e9be240c0a12d1",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/mea_parameter_bundle/results/carbonate-ions-282/inputs/peiper-pitzer-1982-table6.csv": {
     "disposition": "stage-input",
@@ -6991,7 +7222,8 @@
     "sha256": "1e683e4eb7405fd5a0fb32e336309efc70ba17811e9d2b9c97e960a0985ccc29",
     "c_disposition": "retain-in-place",
     "source_commit": "d4a33532c381aec85611e3b173e9be240c0a12d1",
-    "archive": "archive/pre-rebuild-3c85ad4fc"
+    "archive": "archive/pre-rebuild-3c85ad4fc",
+    "source_type": "source declaration or reference observations"
   },
   "analyses/mea_parameter_bundle/results/adoption-297/historical-spec/declarations.toml": {
     "disposition": "stage-input",
@@ -21286,7 +21518,8 @@
     "disposition": "stage-input",
     "c_disposition": "stage-layout",
     "sha256": "927c2fceb16367fd681984c590d5dd71a29eb94ea5754380d8b1e92c8137c3cd",
-    "owner": "test_amines_phase.py"
+    "owner": "test_amines_phase.py",
+    "producer": "analyses/round_7/calculations.py"
   },
   "analyses/amines/results/dea/reported/phase/selected-registry-growth/declared/batches/0.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -21295,7 +21528,8 @@
     "disposition": "stage-input",
     "c_disposition": "stage-layout",
     "sha256": "aa1556db9e53d6f141bcf5d47aa4442b498de342fb697555b94fdc63d07f6bf4",
-    "owner": "test_amines_phase.py"
+    "owner": "test_amines_phase.py",
+    "producer": "analyses/fixed_reaction_reference/phase_replays.py"
   },
   "analyses/amines/results/dea/reported/phase/selected-registry-growth/declared/batches/1.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",
@@ -21304,7 +21538,8 @@
     "disposition": "stage-input",
     "c_disposition": "stage-layout",
     "sha256": "40e531f2f28be96e499fcc4f3b81d7478b3a5ef92b63e4f319b27d44a78539ac",
-    "owner": "test_amines_phase.py"
+    "owner": "test_amines_phase.py",
+    "producer": "analyses/fixed_reaction_reference/phase_replays.py"
   },
   "analyses/amines/results/mea/reported/phase/screen/census-raw.json.gz": {
     "archive": "archive/pre-rebuild-3c85ad4fc",

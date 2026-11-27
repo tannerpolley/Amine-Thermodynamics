@@ -1323,7 +1323,7 @@ def reported_searches(amine, fit_set, route, point, target):
     keys = {state["key"] for state in declared}
     if amine == "mea":
         record = read(REPORTED / "MEA/screen/grid.json.gz")
-        cases = [("grid", record["data"], {},
+        cases = [("grid", record, record["data"], {},
                   read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-trials.json"))]
     else:
         if amine == "mdea":
@@ -1344,9 +1344,9 @@ def reported_searches(amine, fit_set, route, point, target):
         cases = []
         for design, lane, protocol in domains:
             record = read(REPORTED / design / "screen" / lane / protocol / "summary.json.gz")
-            cases.append((protocol, record["rows"], record["aliases"], witnesses if protocol != "native" else []))
+            cases.append((protocol, record, record["rows"], record["aliases"], witnesses if protocol != "native" else []))
     checks = {}
-    for protocol, retained, aliases, witnesses in cases:
+    for protocol, record, retained, aliases, witnesses in cases:
         if {row["key"] for row in retained} != keys:
             raise ValueError(f"{amine} {fit_set} {protocol}: state request keys differ")
         if record["wheel"] != wheel or record["endpoint_fingerprint"] != endpoint:
