@@ -39,7 +39,6 @@ This work calibrates an ePC-SAFT model of loaded aqueous MEA, transfers its shar
 The MEA model is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities, with its equilibrium constants fixed at literature correlations.
 Its water, \COtwo and inorganic-ion parameters and the reaction correlations of those species are then held fixed while DEA, MDEA and AMP are each fitted; \emph{transfer} here means only that.
 The shared water--bicarbonate and water--carbonate interactions are fixed from osmotic coefficients of the sodium salts, as Wangler et al.\ fixed the first of them \cite{Wangler2018}, so that no amine data determine them.
-The MEA model also supplies the fixed carbamate energy of DEA and AMP.
+The MEA model also supplies the fixed carbamate energy of DEA and AMP and the fixed cation--bicarbonate interaction of DEA.
 The fitted \COtwo partial pressures of MEA at nominal 30 wt\% deviate by \res{mea-fitted-pressure-aard-introduction}\,\%, and the fitted pressures of DEA, MDEA and AMP by \res{dea-fitted-pressure-aard-introduction}, \res{mdea-fitted-pressure-aard-introduction} and \res{amp-fitted-pressure-aard-introduction}\,\%, on \res{dea-fitted-partial-pressure-count-introduction}, \res{mdea-fitted-kuranov-pressure-count-introduction} and \res{amp-reported-loaded-pressure-count-introduction} observations.
-The MEA and AMP models predict no second liquid at the measured or grid states, and the MDEA model predicts no liquid--liquid split at the measured states.
-The DEA model predicts a liquid--liquid split at measured states at \SI{298}{\kelvin} whose samples were treated as one liquid.
+None of the four models predicts a second liquid at its measured states; two fits made on the way did, which led to a bound in the MDEA fit and to a wider temperature range of the fitted AMP pressures.

@@ -11,7 +11,11 @@ The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et a
 % P:methods-selection
 The fitted sets were chosen amine by amine, not by one rule.
 The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are compared but not fitted.
-The DEA objective has \res{dea-fitted-loaded-pressure-source-count-methods} loaded-pressure sources, \res{dea-lawson-fitted-pressure-count-methods} pressures of Lawson and Garst, \res{dea-seo-hong-fitted-pressure-count-methods} of Seo and Hong and \res{dea-lal-fitted-pressure-count-methods} of Lal et al.; the cell of Lawson and Garst also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}), and their \res{dea-lawson-hot-pressure-row-count-methods} pressures at \SI{394}{\kelvin} are not fitted.
+The DEA objective has \res{dea-fitted-loaded-pressure-source-count-methods} loaded-pressure sources: \res{dea-lawson-fitted-pressure-count-methods} \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, whose cell also contained methane, which the calculation omits (Section~\ref{supp-sec:s-corrections}), and the \res{dea-lal-fitted-pressure-count-methods} pressures of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA that are at or above \SI{0.05}{\kilo\pascal}.
+Four further DEA pressure sets are compared and not fitted.
+The \res{dea-lal-low-pressure-count-methods} pressures of Lal et al.\ below \SI{0.05}{\kilo\pascal} lie under the pressure above which that source states its accuracy, 15\,\%, and its authors consider four of them probably in error \cite{lalSolubilityH2SCO21985}.
+The \res{dea-seo-hong-pressure-count-methods} pressures of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} conflict with those of Lawson and Garst: at a loading of 0.404 in 30 wt\% DEA at \SI{353.15}{\kelvin} Seo and Hong report \SI{11.6}{\kilo\pascal}, whereas Lawson and Garst report 16.0 and \SI{16.7}{\kilo\pascal} at a loading of 0.410 in 25 wt\% DEA at \SI{338.71}{\kelvin}, a higher pressure at a lower temperature and a lower DEA content.
+The \res{dea-lawson-hot-pressure-row-count-methods} pressures of Lawson and Garst at \SI{394}{\kelvin} and their \res{dea-lawson-concentrated-pressure-count-methods} at 50--54.5 wt\% DEA lie above the fitted temperatures and DEA contents.
 For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation.
 For AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
 The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
@@ -40,7 +44,7 @@ The semi-differential heats of Kim and Svendsen are calculated over each finite 
 Estimation is sequential.
 The water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, the permittivity coefficients and the two salt-fitted water--anion interactions (\cref{sec:species}) are determined first and remain fixed.
 \res{mea-jointly-fitted-parameter-count-methods} MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}), and with all shared parameters fixed, \res{dea-reactive-fitted-parameter-count-methods} DEA, \res{mdea-reactive-fitted-parameter-count-methods} MDEA and \res{amp-reactive-fitted-parameter-count-methods} AMP parameters are fitted (\cref{tab:transfer-fitted}).
-Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
+Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction with its temperature coefficient and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
 Each fit minimizes
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
@@ -63,7 +67,7 @@ In the MEA objective the \res{mea-cai-binary-observation-count-methods} MEA--wat
 % P:methods-starts
 The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
 Each fit begins from start A, the initial parameter set of that amine, and from starts drawn in other parts of the parameter box.
-For MEA, DEA and AMP, fits from \res{reported-tied-start-count-methods} starts reach the same objective value, and the reported MDEA parameters come from start A, which reaches the lowest objective value of the MDEA starts (Section~\ref{supp-sec:s-uncertainty}).
+For MEA and AMP, fits from \res{reported-tied-start-count-methods} starts reach the same objective value, and for DEA the fits from \res{dea-tied-start-count-methods} starts do; the reported MDEA parameters come from start A, which reaches the lowest objective value of the MDEA starts (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),

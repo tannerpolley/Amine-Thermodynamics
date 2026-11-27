@@ -243,6 +243,7 @@ At 298.15, 313.15 and \SI{393.15}{\kelvin} the fitted DEA correlation differs fr
 At \SI{313.15}{\kelvin} the conditional standard errors are \res{dea-r4-log-constant-conditional-standard-error} for DEA and \res{amp-r4-log-constant-conditional-standard-error} for AMP.
 The measurements behind the DEA correlation span 303--\SI{331}{\kelvin} and the model estimates behind the AMP correlation 313.15--\SI{373.15}{\kelvin}, so the first and last of these temperatures are extrapolations.
 The dispersion energy of \ce{DEACOO-}, \SI{\res{dea-carbamate-dispersion-energy-supplement}}{\kelvin}, is that of \ce{MEACOO-} in the MEA model, and its segment diameter is the \ce{MEACOO-} diameter of that model, \SI{\res{dea-transferred-mea-carbamate-diameter}}{\angstrom}, multiplied by \res{dea-carbamate-segment-volume-scaling}, the cube root of the ratio of $m^{\mathrm{seg}}\sigma^3$ of DEA to that of MEA.
+The \ce{DEAH+}--bicarbonate interaction is not fitted; it is the \ce{MEAH+}--bicarbonate interaction of the MEA model.
 The dispersion energy of \ce{AMPH+} is that of AMP.
 The dispersion energy of \ce{AMPCOO-}, \SI{\res{amp-carbamate-dispersion-energy-supplement}}{\kelvin}, and its interaction with water, $\res{amp-transferred-mea-carbamate-water-interaction}$, are those of \ce{MEACOO-} in the MEA model.
 The \ce{AMPCOO-} diameter is fitted, with the \ce{MEACOO-} diameter of the MEA model, \SI{\res{amp-transferred-mea-carbamate-diameter-lower-bound}}{\angstrom}, as its lower bound, on which it ends.
@@ -410,12 +411,16 @@ Figure~\ref{fig:pressure-residuals} shows the logarithmic residuals of the loade
 
 \subsection{Water--DEA binary}\label{sec:s-dea-binary}
 % P:supplement-dea-binary
-In the DEA model the water--DEA interaction is a constant fitted to the \res{dea-horstmann-prior-binary-fit-count-supplement} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002}; the calculated excess enthalpies are then positive where the \res{dea-horstmann-measured-negative-excess-enthalpy-count-supplement} measured ones are negative, and the \res{dea-cai-unfitted-binary-mixture-pressure-count} mixture bubble pressures of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} are described poorly (\cref{fig:dea-binary}).
-The integral heats of Carson et al.\ in the reactive fit are heats at finite loading and do not correct the binary mixing enthalpy.
+In the DEA model the water--DEA interaction follows main-text \cref{main-eq:kij-temperature}, with the value at \SI{313.15}{\kelvin} and the temperature coefficient of Table~\ref{tab:supplement-transfer-parameters}.
+The two values were fitted before the reactive fit, without a reaction, to three data sets together: the \res{dea-horstmann-prior-binary-fit-count-supplement} bubble pressures of Horstmann et al.\ at \SI{365.15}{\kelvin}, their \res{dea-horstmann-measured-negative-excess-enthalpy-count-supplement} excess enthalpies at \SI{363.15}{\kelvin} \cite{horstmannPhaseEquilibriumExcess2002} and the \res{dea-cai-unfitted-binary-mixture-pressure-count} isobaric mixture points of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996}.
+All calculated excess enthalpies are negative, as measured, with an RMSE of \SI{\res{dea-binary-law-excess-enthalpy-rmse-supplement}}{\joule\per\mole} (\cref{fig:dea-binary}).
+The bubble pressures at \SI{365.15}{\kelvin} deviate by \res{dea-binary-law-horstmann-pressure-aard-supplement}\,\%, and the points of Cai et al., measured at \SI{6.66}{\kilo\pascal}, by \res{dea-binary-law-cai-pressure-aard-supplement}\,\%, so the law does not represent that isobar.
+A constant interaction fitted to the bubble pressures of Horstmann et al.\ alone describes them to \res{dea-binary-constant-horstmann-pressure-aard-supplement}\,\% but gives positive excess enthalpies.
+The temperature law is used because it gives the excess enthalpy its measured sign, at the cost of the agreement with the bubble pressures.
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.8\linewidth]{dea-current-binary-comparisons.pdf}
-\caption{Water--DEA binary system against water mole fraction: excess enthalpy per mole of mixture at the states of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002} (a) and bubble pressure at the states of the isobaric measurements of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (b). Circles are measurements and crosses are values calculated with the DEA model at each measured state. Neither set is fitted in the DEA model, and neither calculation uses a reaction.}
+\caption{Water--DEA binary system against water mole fraction: excess enthalpy per mole of mixture at the states of Horstmann et al.\ \cite{horstmannPhaseEquilibriumExcess2002} (a) and bubble pressure at the states of the isobaric measurements of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} (b). Circles are measurements and crosses are values calculated with the DEA model at each measured state. The water--DEA interaction was fitted beforehand to both sets, without the two pure-component points of panel (b), and to bubble pressures that are not shown; neither calculation uses a reaction.}
 \label{fig:dea-binary}
 \end{figure}
 
@@ -467,7 +472,7 @@ The MDEA standard errors are conditional on the \res{mdea-active-bound-count-sup
 \input{tables/supplement-transfer-bounds}
 
 % P:supplement-starts
-For MEA, DEA and AMP, fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reach the same objective values, \res{mea-selected-objective-starts}, \res{dea-selected-objective-starts} and \res{amp-selected-objective-starts}; the reported MDEA parameters come from start A, which has the lowest objective value of the MDEA starts, \res{mdea-selected-objective-continuation}.
+For MEA and AMP, fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reach the same objective values, \res{mea-selected-objective-starts} and \res{amp-selected-objective-starts}, and for DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}; the reported MDEA parameters come from start A, which has the lowest objective value of the MDEA starts, \res{mdea-selected-objective-continuation}.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
 % P:supplement-ranges
@@ -512,17 +517,16 @@ For MDEA each fitted concentration is searched on its own, at the grid loadings 
 
 % P:supplement-phase-dea
 For DEA, the search covers \res{dea-phase-search-measurement-requests} measured states and \res{dea-phase-search-grid-requests} grid states, the latter at the \res{dea-reported-grid-stocks-supplement} fitted DEA concentrations (10, 20, 25 and 30 wt\%), the \res{dea-reported-grid-temperatures-supplement} grid temperatures and \res{dea-reported-grid-loadings-supplement} loadings up to \res{dea-reported-grid-maximum-loading-supplement} mol/mol at both pressures.
-The DEA model predicts a liquid--liquid split at \res{dea-split-states-supplement} measured states and has no detected instability at the other measured states or at the grid states (Table~\ref{tab:supplement-liquid-splits}).
-The states are densities of Weiland et al.\ \cite{Weiland1998} at 298.15 K and an assigned pressure of 101.325 kPa, at \res{dea-lower-confirmed-split-concentration-supplement} wt\% DEA and loadings of \res{dea-weiland-loading-at-split-supplement} and \res{dea-lower-concentration-first-split-loading-supplement} and at \res{dea-higher-confirmed-split-concentration-supplement} wt\% DEA and \res{dea-minimum-confirmed-split-loading-supplement}, \res{dea-higher-concentration-second-split-loading-supplement} and \res{dea-higher-concentration-third-split-loading-supplement}, and the Lawson and Garst state at 298.15 K, 54.5 wt\% DEA and 0.458 mol/mol \cite{lawsonGasSweeteningData1976}.
-At 30 wt\% DEA and 0.50 mol/mol the feed divides into an ion-rich liquid of \res{dea-worked-ion-rich-feed-mole-fraction-supplement} and a water-rich liquid of \res{dea-worked-water-rich-feed-mole-fraction-supplement} of the feed, with densities of \res{dea-worked-ion-rich-density-supplement} and \SI{\res{dea-worked-water-rich-density-supplement}}{\kilo\gram\per\cubic\metre}.
-Weiland et al.\ measured these densities with hydrometers on samples made by mixing unloaded and \COtwo-saturated solutions \cite{Weiland1998}; they did not test the number of phases, and the measurement treats each sample as one homogeneous liquid.
-
-\input{tables/supplement-liquid-splits}
+No search detects an instability.
+The measured states include states that are not fitted: the densities of Weiland et al.\ \cite{Weiland1998} at 298.15 K and 10--40 wt\% DEA, searched at an assigned pressure of 101.325 kPa, and the pressures of Lawson and Garst at 50--54.5 wt\% DEA \cite{lawsonGasSweeteningData1976}.
 
 % P:supplement-phase-mdea
-For MDEA, the search covers \res{mdea-measurement-derived-searches-attempted-supplement-design} measured states and the grid states of the main text.
-The MDEA model predicts no liquid--liquid split at any measured state and has no detected instability at the searched grid states.
-At \res{mdea-distinct-descent-states-supplement-total} measured states it predicts liquid plus vapor, because the measured or assigned pressure lies below its bubble pressure: \res{mdea-distinct-descents-sobrino-supplement} at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
+For MDEA, \res{mdea-measurement-derived-searches-attempted-supplement-design} searches are made at measured states and one at each of the \res{mdea-restricted-grid-states} grid states.
+No search finds a liquid--liquid split, and no grid state has a detected instability.
+At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
+A further \res{mdea-measured-searches-unclassified-supplement} searches, at heat-measurement states of Merkley et al., are assigned to neither class.
+Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement}, at 288.71 and 422.04 K, lie outside the temperature interval of the caloric functions (Section~\ref{sec:s-files}), so the Gibbs energy is not evaluated there.
+At the other \res{mdea-merkley-searches-within-resolution-supplement}, at 333.15 and 388.71 K and 1.121 MPa, the smallest tangent-plane distance found is zero within its numerical resolution, and each of the \res{mdea-supplied-trial-count-supplement} trial compositions supplied to a search gives a positive distance.
 
 % P:supplement-phase-amp
 For AMP, the search covers \res{amp-reported-screen-measured-states-supplement} measured states and \res{amp-reported-screen-grid-states-supplement} grid states, all at 1.05 and 3.0 times the bubble pressure of the AMP model, the latter at \res{amp-reported-grid-minimum-stock-supplement} and \res{amp-reported-grid-maximum-stock-supplement} wt\% AMP, the \res{amp-reported-grid-temperatures-supplement} grid temperatures and \res{amp-reported-grid-loadings-supplement} loadings up to \res{amp-reported-grid-maximum-loading-supplement} mol/mol.
@@ -560,7 +564,8 @@ The first fit differs from the AMP model in its data, in the water--anion intera
 
 \section{Published comparisons that are not on identical observations}\label{sec:s-published}
 % P:supplement-published-dea
-For the DEA data no source gives a numerical deviation of a model on the observations used here: Lawson and Garst report scatter against smoothed curves \cite{lawsonGasSweeteningData1976}, Lal et al.\ compare the Kent--Eisenberg treatment graphically \cite{lalSolubilityH2SCO21985}, and Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy together and give no deviation for that curve, so the two models are compared only in sign \cite{horstmannPhaseEquilibriumExcess2002}.
+For the DEA data no source gives a numerical deviation of a model on the observations used here: Lawson and Garst report scatter against smoothed curves \cite{lawsonGasSweeteningData1976}, Lal et al.\ compare the Kent--Eisenberg treatment graphically \cite{lalSolubilityH2SCO21985}, and Horstmann et al.\ fit binary vapor--liquid equilibrium and excess enthalpy together and give no deviation for either \cite{horstmannPhaseEquilibriumExcess2002}.
+The electrolyte cubic-two-state equation of state of T\'ellez-Arredondo and Medeiros reports 11.1\,\% for 99 pressures of loaded DEA at 298.15--394.26 K and 10.2--50.0 wt\% DEA, fitted with one ionic and seven binary parameters \cite{tellez-arredondoModelingCO2H2S2013}; its observations are not those used here.
 
 % P:supplement-published-amp
 For AMP, Kundu et al.\ report 14.3\,\% for their activity-coefficient model on 56 of their observations, some of which entered its fit \cite{kunduVaporLiquidEquilibriumCO22003}; their Table~10 labels the statistic AAD, but its footnote prints a signed relative-deviation formula. The statistic and the 56 observations therefore do not support a direct AARD comparison with the \res{amp-unfitted-kundu-partial-pressure-count} observations used here.
