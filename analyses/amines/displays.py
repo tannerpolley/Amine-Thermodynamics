@@ -732,7 +732,7 @@ def transfer_displays(outputs):
           ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           transfer_rows, [.15,.10,.095,.048,.095,.09,.073,.065,.06,.10], long=True,
-          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Table~\ref{tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same 58 observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (main-text Table~\ref{main-tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same 58 observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
     # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
     # the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
@@ -2629,6 +2629,8 @@ def result_values(required):
         ("mdea", "MDEA/properties", (
             ("Ermatchkov", "ermatchkov-pressure", "Pa", ("bias_percent",)),
             ("Kuranov-413K", "kuranov-held-out-pressure", "Pa", ("AARD_percent",)),
+            ("Xiao", "xiao-pressure", "Pa", ("AARD_percent", "bias_percent")),
+            ("Sedighi", "sedighi-pressure", "Pa", ("AARD_percent",)),
             ("Carson", "carson-heat", "J/mol", ("AARD_percent",)),
             ("unloaded-density", "unloaded-density", "kg/m^3", ("AARD_percent",)),
             ("Jakobsen", "jakobsen-species-ratio", None, ("bias_percent",)),
@@ -2651,6 +2653,19 @@ def result_values(required):
                     add(f"dea-lawson-hot-pressure-row-count-{passage}", record,
                         "rows[Lawson-394K,Pa].count", NUMBER_WORDS[len(selected)])
         if amine == "mdea":
+            low = [row["value"] / row["observed"] for row in rows if row["group"] == "Ermatchkov" and row["unit"] == "Pa"]
+            add("mdea-ermatchkov-factor-low-count", record, "rows[Ermatchkov,Pa]: count value/observed < 1/1.5",
+                str(sum(ratio < 1 / 1.5 for ratio in low)))
+            add("mdea-ermatchkov-largest-low-factor", record, "rows[Ermatchkov,Pa]: 1/min(value/observed)",
+                f"{1 / min(low):.1f}")
+            sedighi = [(float(row["row"]["MDEA_wt_percent"]), float(row["row"]["alpha_mol_CO2_per_mol_MDEA"]),
+                        row["value"] / row["observed"]) for row in rows if row["group"] == "Sedighi"]
+            # "near a loading of 1 in 10 and 20 wt%" and "in 40 and 50 wt%" of the MDEA results paragraph
+            for label, ratios in (("dilute", [r for w, a, r in sedighi if w <= 20 and a >= 0.89]),
+                                  ("concentrated", [r for w, a, r in sedighi if w >= 40])):
+                for end, value in (("minimum", min(ratios)), ("maximum", max(ratios))):
+                    add(f"mdea-sedighi-{label}-pressure-ratio-{end}", record,
+                        f"rows[Sedighi,{label}]: {end} value/observed", f"{value:.2g}")
             hot = [row for row in rows if row["group"] == "Kuranov" and row["outside_ranges"]["MDEA-dissociation"]]
             summary = stats(hot, predicted="value")
             for passage in ("results", "discussion"):
