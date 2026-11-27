@@ -25,7 +25,7 @@ def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailabl
     assert retained["wheel"] == verify()
     (row,) = (q for q in retained["rows"] if q["key"] == key)
     bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
-    supplied = SuppliedTrials(spec, bank["trials"] + bank["supplied_trials"], compiled_support=False)
+    supplied = SuppliedTrials(spec, bank["trials"] + bank["supplied_trials"])
     result = native_search(route, spec, state, supplied=supplied)["search"]
     assert result["status"] == row["status"]
     assert result["optimized_available"] == row["optimized_available"] is False
@@ -33,34 +33,60 @@ def test_supplied_mdea_trial_detects_descent_when_optimized_search_is_unavailabl
     assert search_class(result) == "descent"
 
 
-def test_dea_registry_preserves_supplied_refusal_on_original_support():
+def test_mdea_carbon_free_parent_excludes_carbon_bearing_supplied_trials():
+    design = mdea.FIT_SETS["reported"]
+    point, _ = retained_endpoint(design)
+    route = route_for(design)
+    spec = route.bind(point)
+    key = "fit:85:initial"
+    (state,) = (row for row in states(route, spec) if row["key"] == key)
+    retained = read(RESULTS / "mdea/reported/phase/MDEA/screen/selected/declared/summary.json.gz")
+    (row,) = (row for row in retained["rows"] if row["key"] == key)
+    bank = read(ROOT / "analyses/mdea_mea_workflow/results/retransfer-343/binary-penalty/split-record.json")
+    from analyses.amines.phase import _bind_search, _search
+
+    _bind_search(route, point, bank["trials"] + bank["supplied_trials"])
+    result = _search(state)["search"]
+    assert result["optimized_available"] == row["optimized_available"]
+    assert result["supplied_trial_counts"] == {
+        "available": row["supplied_trial_counts"]["available"],
+        "unavailable": 0,
+        "not_applicable": row["supplied_trial_counts"]["unavailable"],
+    }
+    assert search_class(result) == "searched, no instability"
+
+
+def test_mea_measured_parent_uses_density_scaled_pressure_closure():
+    from analyses.amines import mea
+    from analyses.amines.phase import measured_search, scaled_pressure_error
+
+    design = mea.FIT_SETS["reported"]
+    point, _ = retained_endpoint(design)
+    spec = route_for(design).bind(point)
+    measured = RESULTS / "mea/reported/phase/measured"
+    key = "vle_obs_0034-pco2"
+    (row,) = (row for path in measured.glob("*.json.gz") for row in read(path) if row["identity"] == key)
+    assert row["available"] is False
+    bank = read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-registry.json")["trials"]
+    result = measured_search(spec, row, [dict(trial, kind=trial["kind"].capitalize()) for trial in bank])
+    (liquid,) = result["parent"]["phases"]
+    tol = row["row_tolerance"]
+    assert abs(liquid["relative_pressure_residual"]) > tol
+    assert scaled_pressure_error(liquid["pressure_residual_Pa"], liquid["density_mol_m3"], liquid["T_K"]) <= tol
+    assert result["available"] and not result["descent"]
+
+
+def test_dea_lawson_trace_species_reconstruction():
     design = dea.FIT_SETS["reported"]
     point, _ = retained_endpoint(design)
     route = route_for(design)
     spec = route.bind(point)
-    key = "carson-2000:10:initial"
-    (state,) = (q for q in states(route, spec) if q["key"] == key)
-    batches = RESULTS / "dea/reported/phase/selected-registry-growth/declared/batches"
-    initial = read(batches / "0.json.gz")
-    retained = read(batches / "1.json.gz")
-    assert initial["wheel"] == retained["wheel"] == verify()
-    witnesses = [w for row in initial["rows"] for w in row.get("witnesses", [])]
-    (row,) = (q for q in retained["rows"] if q["key"] == key)
-    supplied = SuppliedTrials(spec, witnesses, compiled_support=False)
-    result = native_search(route, spec, state, supplied=supplied)["search"]
-    assert search_class(result) == "unavailable"
-    assert result["supplied_trial_counts"] == row["supplied_trial_counts"]
-
-
-def test_original_mdea_cap_uses_the_saturation_predictions_refusal():
-    design = mdea.FIT_SETS["system-pressure"]
-    point = read(design["endpoint"])["prior_declaration"]
-    route = route_for(design)
-    spec = route.bind(point)
-    key = "comparison:362:cap"
-    (state,) = (q for q in states(route, spec) if q["key"] == key)
-    rows = read(RESULTS / "mdea/system-pressure/phase/search-0.json.gz")
-    (row,) = (q for q in rows if q["key"] == key)
-    result = native_search(route, spec, state, cap_from_prediction=True)["search"]
-    assert result["status"] == row["status"] == "Exception"
-    assert search_class(result) == "unavailable"
+    key = "lawson-1976-viii:1:problem"
+    (state,) = (row for row in states(route, spec) if row["key"] == key)
+    result = native_search(route, spec, state)["search"]
+    # Engine #100 preserves the trace support after convergence. S predates #100.
+    if verify() == "c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb":
+        assert result["completed"] and not result["available"]
+        assert "reconstruction destroys support" in result["cause"]
+    else:
+        assert result["completed"] and "reconstruction destroys support" not in result["cause"]

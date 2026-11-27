@@ -12,7 +12,7 @@ Build the supplement and main paper in `docs/scientific/latex` with `latexmk -pd
 
 ## Fits and replays
 
-Set `AGENT_HEAVY_CORES=3` and set the BLAS and OpenMP thread counts to one. Run the sodium-salt `rows` and `fit` stages before `mea reported`. Then run `rows` and `fit` for `dea reported`, `mdea reported`, `amp reported` and `amp fixed-slope`. For example:
+Set `AGENT_HEAVY_CORES=3` and set the BLAS and OpenMP thread counts to one. Run the sodium-salt `rows` and `fit` stages before `mea reported`. Then run `rows` and `fit` for `dea reported`, `mdea reported`, and `amp reported`. For example:
 
 ```sh
 uv run --locked python -m analyses.amines.run salt sodium-salts rows
@@ -21,7 +21,7 @@ uv run --locked python -m analyses.amines.run mea reported rows
 uv run --locked python -m analyses.amines.run mea reported fit
 ```
 
-The `phase` and `properties` stages take the retained selection for the five reported designs. The `replay` stage evaluates each retained fit set at its saved parameters. The `FIT_SETS` declarations in `analyses/amines` name the original campaign archive. The commands put fresh records under `build/amine-reproduction`, where they can be compared with the retained inputs without overwriting them.
+The amine `phase` and `properties` stages take the retained reported selection. The `replay` stage evaluates each retained fit set at its saved parameters, including the first AMP fit and the MEA and MDEA sides of the water–bicarbonate ablation. The `FIT_SETS` declarations in `analyses/amines` name the original campaign archive. The commands put fresh records under `build/amine-reproduction` for comparison with the retained inputs.
 
 ## Worked calculations
 

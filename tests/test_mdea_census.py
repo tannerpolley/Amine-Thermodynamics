@@ -6,7 +6,7 @@ from analyses.amines.wheel import verify
 
 
 def test_retained_available_row_misses_tighter_tolerance():
-    record = read(FIT_SETS["slope-bound"]["retained"] / "replay-A.json.gz")
+    record = read(FIT_SETS["reported"]["retained"] / "A.json.gz")
     assert record["wheel"] == verify()
     (row,) = (r for r in record["replay"]["rows"] if r["identity"] == "fit:0")
     residual = row["convergence"]["residual"]

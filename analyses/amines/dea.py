@@ -9,44 +9,16 @@ import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 from .records import RESULTS, input_path, read
 
-from .fit import save
-from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route
-from .wheel import verify
+from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route
 
 DEA = ROOT / "analyses/dea_transfer"
 DECLARATION = DEA / "inputs/part-ii-346/f2-carbamate-413-route.json"
-SHARED_FIT = DEA / "results/refit-413"
 FROZEN_BINARY_FIT = DEA / "results/reactive-refit-425/run"
 DIETHANOLAMINE, WATER = "diethanolamine", "water"
 PRESSURE = {"Lawson", "SeoHong", "Lal"}
 PRESSURE_LOG_SCALE = 0.09
 LAL_MOLARITY_MOL_M3 = 2000
 LAL_FEED_TOLERANCE = 1e-12
-
-
-def write_salt_anchored_summary():
-    wheel = verify()
-    stage = ROOT / "analyses/amines/results/dea/system-pressure-salt-anchored/replay"
-    campaign = ROOT / "analyses/round_7/results/F"
-    endpoint = read(stage / "endpoint.json.gz")
-    if endpoint["wheel"] != wheel:
-        raise ValueError("DEA salt-anchored replay uses another wheel")
-    properties = endpoint["replay"]["properties"]["rows"]
-    seohong = [row for row in properties if row["group"] == "SeoHong" and row["status"] == "Available"]
-    horstmann = [row for row in properties if row["group"] == "Horstmann" and row["observed"] < 0]
-    expanded = read(campaign / "incumbent-expanded.json.gz")["rows"]
-    methane = read(campaign / "methane.json.gz")["rows"]
-    save(stage / "summary.json", dict(
-        wheel=wheel,
-        expanded_objective=math.fsum(row["cost"] for row in expanded),
-        expanded_groups={group: sum(row["group"] == group for row in expanded)
-                         for group in sorted({row["group"] for row in expanded})},
-        seohong_aard_percent=100 * math.fsum(abs(row["value"] / row["observed"] - 1)
-                                          for row in seohong) / len(seohong),
-        horstmann_positive=sum(row["value"] > 0 for row in horstmann if row["status"] == "Available"),
-        horstmann_negative_observations=len(horstmann),
-        methane_maximum_shift_pa=max(value for row in methane for value in row.get("pCO2_change_Pa", [])),
-    ))
 
 
 class ExpandedDEA(Route):
@@ -278,24 +250,7 @@ def replay_water_binary(declaration):
     )
 
 
-(CATION_REPLAY,) = ELECTROSTATICS.glob("*/*/diethanolamine")
 FIT_SETS = {
-    **{
-        f"born-{arm}": dict(
-            route=Route,
-            declaration=DECLARATION,
-            reference_pressure_pa=None,
-            archive=CAMPAIGN_ARCHIVE,
-            endpoint=SHARED_FIT / "selection.json",
-            endpoint_keys=("chosen", "parameters"),
-            born_diameter=("protonated-diethanolamine", CATION_REPLAY / arm / "replay.json.gz"),
-            reference=CATION_REPLAY / arm / "data-rows.json.gz",
-            reference_keys=(),
-            objective=CATION_REPLAY / arm / "replay.json.gz",
-            objective_keys=("cost",),
-        )
-        for arm in ("control", "volume-equivalent")
-    },
     "water-binary": dict(
         replay=replay_water_binary,
         archive=CAMPAIGN_ARCHIVE,
@@ -304,67 +259,6 @@ FIT_SETS = {
         mea_endpoint=ROOT
         / "analyses/mea_parameter_bundle/results/stable-refit-255/evidence/candidate-parameters.json",
         heat_capacity=ROOT / "data/reference/DEA/Maham1997_Table1_DEA_cp.csv",
-    ),
-    **{
-        f"mea-fitted-shared-{index}": dict(
-            route=Route,
-            declaration=DECLARATION,
-            reference_pressure_pa=None,
-            archive=CAMPAIGN_ARCHIVE,
-            endpoint=SHARED_FIT / "selection.json",
-            endpoint_keys=("candidates", index, "parameters"),
-            reference=SHARED_FIT / "paper-data.csv",
-            reference_keys=(),
-            **(
-                dict(
-                    prediction_record=SHARED_FIT / "selection.json",
-                    prediction_keys=("candidates", index, "optimizer_report", "predictions"),
-                )
-                if index != 0 else {}
-            ),
-            objective=SHARED_FIT / "selection.json",
-            objective_keys=("candidates", index, "cost"),
-        )
-        for index in (0, 1)
-    },
-    "mea-fitted-shared": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=FROZEN_BINARY_FIT / "selection.json",
-        endpoint_keys=("chosen", "parameters"),
-        reference=FROZEN_BINARY_FIT / "data-rows.json",
-        reference_keys=(),
-        objective=FROZEN_BINARY_FIT / "selection.json",
-        objective_keys=("chosen", "cost"),
-    ),
-    "system-pressure-salt-anchored": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/dea_transfer/results/salt-anchored-435/campaign/selection.json.gz",
-        endpoint_keys=("chosen", "parameters"),
-        reference=ROOT
-        / "analyses/dea_transfer/results/salt-anchored-435/campaign/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT
-        / "analyses/dea_transfer/results/salt-anchored-435/campaign/selection.json.gz",
-        objective_keys=("chosen", "cost"),
-    ),
-    "system-pressure": dict(
-        route=ExpandedDEA,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=REPORTED / "DEA/manifest.json.gz",
-        endpoint_keys=("prior_declaration",),
-        reference=ROOT / "analyses/round_7/results/F/assessment.json.gz",
-        reference_keys=("expanded_design",),
-        objective=REPORTED / "DEA/reference-control.json.gz",
-        objective_keys=("tracking", "cost"),
     ),
     "reported": dict(
         route=ExpandedDEA,

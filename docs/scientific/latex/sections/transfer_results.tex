@@ -6,12 +6,7 @@ With the shared parameters fixed, each of the three further amines can be fitted
 \input{tables/transfer-species}
 \input{tables/transfer-fitted}
 
-% S2 display: tables/transfer-deviations.tex. Replace the framed box below by
-% the input of that table; keep the caption and label.
-\begin{table}[pos=!htbp]\small
-\caption{Data for DEA, MDEA and AMP by source: observable, role in the fit of each model, number of observations $N$, ranges of temperature, amine content and loading, and the deviation of the DEA, MDEA and AMP models, beside the deviations that published models report for the same observations.}\label{tab:transfer-deviations}
-\centering\fbox{\parbox[c][0.45\textheight][c]{0.9\linewidth}{\centering Table to be generated: \texttt{tables/transfer-deviations.tex}}}
-\end{table}
+\input{tables/transfer-deviations}
 
 \subsubsection{DEA}\label{sec:results-dea}
 % P:transfer-dea-fit
@@ -63,7 +58,7 @@ The cation--water interaction, $\res{mdea-cation-water-interaction-results}\pm\r
 % measurements (symbols; filled if fitted) and isotherms of the MDEA model at the
 % measured temperatures (lines). Colors and symbol shapes identify temperature.
 \begin{figure}[pos=!tbp]
-\centering\includegraphics[width=0.9\linewidth]{mdea-current-measured-model.pdf}
+\centering\includegraphics[width=0.9\linewidth]{mdea-isotherms.pdf}
 \caption{Loaded aqueous MDEA against loading: measurements (circles, filled if fitted) and MDEA model values at the measured states (crosses), colored by temperature. Total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} at \SI{413}{\kelvin}, of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Sedighi et al.\ \cite{sedighiExperimentalMeasurementThermodynamic2024} (upper row); \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Xiao et al.\ \cite{xiaoCO2AbsorptionAqueous2018a}, and the fitted total pressures of Kuranov et al.\ (lower row). Each panel pools the temperatures and MDEA contents of its source.}
 \label{fig:mdea-pressure}
 \end{figure}
@@ -71,7 +66,7 @@ The cation--water interaction, $\res{mdea-cation-water-interaction-results}\pm\r
 % S2 display: figures/generated/mdea-speciation.pdf. Replace the framed box below
 % by the figure; keep the caption and label.
 \begin{figure}[pos=!tbp]
-\centering\fbox{\parbox[c][0.25\textheight][c]{0.8\linewidth}{\centering Figure to be generated: \texttt{mdea-speciation.pdf}}}
+\centering\includegraphics[width=0.9\linewidth]{mdea-speciation.pdf}
 \caption{Liquid mole fractions in loaded aqueous MDEA against loading: the NMR measurements of B\"ottinger et al.\ \cite{bottingerOnlineNMRSpectroscopic2008} for the sum of MDEA and \ce{MDEAH+} and for the sum of bicarbonate and carbonate (symbols), none of them fitted, and single-liquid calculations with the MDEA model (lines). Colors and symbol shapes identify temperature.}
 \label{fig:mdea-speciation}
 \end{figure}
@@ -94,7 +89,7 @@ The fixed carbamate inputs of AMP, an energy of \SI{\res{amp-carbamate-dispersio
 % measurements (symbols; all fitted) and isotherms of the AMP model at the
 % measured temperatures (lines). Colors and symbol shapes identify temperature.
 \begin{figure}[pos=!tbp]
-\centering\includegraphics[width=0.85\linewidth]{amp-current-measured-model.pdf}
+\centering\includegraphics[width=0.85\linewidth]{amp-isotherms.pdf}
 \caption{Loaded aqueous AMP against loading: measurements (circles, filled if fitted) and AMP model values at the measured states (crosses), colored by temperature. Total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} at 313--\SI{353}{\kelvin} and at 373--\SI{393}{\kelvin} (upper row), total pressures of Tong et al.\ \cite{Tong2012} and \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003} (lower row). Each panel pools the temperatures and AMP contents of its source.}
 \label{fig:amp-pressure}
 \end{figure}
@@ -136,7 +131,7 @@ No measurement of liquid--liquid coexistence in this system was used.
 
 % P:phase-dea
 The DEA model predicts a liquid--liquid split at \res{dea-split-states-results} measured states, all at \SI{298.15}{\kelvin}.
-They are states of the density measurements of Weiland et al.\ \cite{Weiland1998} at an assigned pressure of \SI{101.325}{\kilo\pascal}, \res{dea-confirmed-lower-stock-content} wt\% DEA at loadings of \res{dea-unresolved-weiland-loading-results} and \res{dea-confirmed-lower-stock-loading} and \res{dea-confirmed-higher-stock-content} wt\% DEA at \res{dea-minimum-confirmed-split-loading-transfer}, \res{dea-confirmed-higher-stock-middle-loading} and \res{dea-confirmed-higher-stock-high-loading}, and one state of Lawson and Garst \cite{lawsonGasSweeteningData1976} that is not fitted, at 54.5 wt\% DEA, a loading of 0.458 and \SI{\res{dea-unresolved-lawson-pressure-results}}{\kilo\pascal} (Table~\ref{supp-tab:supplement-liquid-splits}).
+They are states of the density measurements of Weiland et al.\ \cite{Weiland1998} at an assigned pressure of \SI{101.325}{\kilo\pascal}, \res{dea-confirmed-lower-stock-content} wt\% DEA at loadings of \res{dea-weiland-loading-at-split-results} and \res{dea-confirmed-lower-stock-loading} and \res{dea-confirmed-higher-stock-content} wt\% DEA at \res{dea-minimum-confirmed-split-loading-transfer}, \res{dea-confirmed-higher-stock-middle-loading} and \res{dea-confirmed-higher-stock-high-loading}, and one state of Lawson and Garst \cite{lawsonGasSweeteningData1976} that is not fitted, at 54.5 wt\% DEA, a loading of 0.458 and \SI{\res{dea-lawson-measured-pressure-at-split-results}}{\kilo\pascal} (Table~\ref{supp-tab:supplement-liquid-splits}).
 At 30 wt\% and a loading of 0.50, a feed of \SI{1}{\mole} DEA gives a water-rich liquid of \SI{\res{dea-worked-split-water-rich-liquid-density}}{\kilo\gram\per\cubic\metre} and a denser, ion-rich liquid of \SI{\res{dea-worked-split-ion-rich-liquid-density}}{\kilo\gram\per\cubic\metre} that holds \res{dea-worked-split-ion-rich-liquid-share-of-true-moles}\,\% of the true-species moles and \res{dea-worked-split-ion-rich-liquid-share-of-mass}\,\% of the mass.
 Weiland et al.\ measured these densities with hydrometers, on samples made by mixing an unloaded solution with a portion saturated with \COtwo at \SI{1}{atm} and checked by titration \cite{Weiland1998}; the measurements do not establish the number of phases, and the source treats each sample as one homogeneous liquid.
 Calculated as one liquid, the DEA model deviates from the \res{dea-weiland-density-assessment-count-transfer} densities of that source by \res{dea-weiland-density-assessment-aard-transfer}\,\% on average, so the deviations give no warning of the split.

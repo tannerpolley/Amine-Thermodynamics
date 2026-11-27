@@ -10,12 +10,10 @@ import epcsaft
 from epcsaft import equilibrium
 from .records import RESULTS, input_path, read
 
-from .fit import replay_retained
-from .model import CAMPAIGN_ARCHIVE, ELECTROSTATICS, P_REF, REPORTED, ROOT, Route, evaluate
+from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route, evaluate
 
 DECLARATION = ROOT / "analyses/mdea_mea_workflow/inputs/bounded-binary-411.json"
 BOUNDED_BINARY = ROOT / "analyses/mdea_mea_workflow/results/bounded-binary-411"
-UNBOUNDED_BINARY = BOUNDED_BINARY / "fits/unbounded-2"
 KURANOV_LOG_SCALE = 0.015
 
 
@@ -41,27 +39,6 @@ class MDEAWeights(Route):
         return spec
 
 
-def replay_weighting(declaration):
-    result = replay_retained({key: value for key, value in declaration.items() if key != "replay"})
-    point = read(declaration["endpoint"])
-    for key in declaration["endpoint_keys"]:
-        point = point[key]
-    reference = read(declaration["weighting_reference"])["objective"]
-    result["weighting"] = {}
-    for name, route_type in (("original", Route), ("rms", MDEAWeights)):
-        spec = route_type(declaration["declaration"], reference_pressure_pa=None).bind(point)
-        rows = {row["identity"]: row for row in spec.inputs["observations"]["fitted"]}
-        predictions = result["replay"]["rows"]
-        contributions = [
-            0.5 * (math.sqrt(rows[row["identity"]]["weight"]) * row["residual"]) ** 2
-            for row in predictions if "cost" in row
-        ]
-        result["weighting"][name] = dict(
-            retained=reference[name]["objective"],
-            replayed=math.fsum(contributions) if len(contributions) == len(rows) else None,
-            fitted=len(rows),
-        )
-    return result
 
 
 T_REF = 298.15  # Wangler Eqs. 34-35, T+ = 298.15 K
@@ -580,24 +557,7 @@ def replay_published(declaration):
     return dict(kuranov=rows, wangler=own, statistics=dict(present=present, reconstruction=reconstruction))
 
 
-(CATION_REPLAY,) = ELECTROSTATICS.glob("*/*/methyldiethanolamine")
 FIT_SETS = {
-    **{
-        f"born-{arm}": dict(
-            route=Route,
-            declaration=DECLARATION,
-            reference_pressure_pa=None,
-            archive=CAMPAIGN_ARCHIVE,
-            endpoint=BOUNDED_BINARY / "endpoint.json",
-            endpoint_keys=(),
-            born_diameter=("protonated-methyldiethanolamine", CATION_REPLAY / arm / "replay.json.gz"),
-            reference=CATION_REPLAY / arm / "data-rows.json.gz",
-            reference_keys=(),
-            objective=CATION_REPLAY / arm / "replay.json.gz",
-            objective_keys=("cost",),
-        )
-        for arm in ("control", "volume-equivalent")
-    },
     "published": dict(
         replay=replay_published,
         archive=CAMPAIGN_ARCHIVE,
@@ -611,89 +571,15 @@ FIT_SETS = {
             "statistics": BOUNDED_BINARY.parent / "kuranov-published-422/statistics.json",
         },
     ),
-    "system-pressure-first-weights": dict(
-        replay=replay_weighting,
-        weighting_reference=ROOT / "analyses/round_7/results/C/salt/incumbent.json.gz",
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/selection.json.gz",
-        endpoint_keys=("point",),
-        reference=ROOT / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT / "analyses/mdea_mea_workflow/results/salt-anchored-435/campaign/selection.json.gz",
-        objective_keys=("cost",),
-    ),
-    "bicarbonate-0.765": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=BOUNDED_BINARY / "endpoint.json",
-        endpoint_keys=(),
-        reference=BOUNDED_BINARY / "data-rows.json",
-        reference_keys=(),
-        objective=BOUNDED_BINARY / "summary-row.json",
-        objective_keys=("data_cost",),
-    ),
-    "bicarbonate-0.765-unbounded": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=UNBOUNDED_BINARY / "endpoint.json",
-        endpoint_keys=(),
-        reference=BOUNDED_BINARY / "data-rows.json",
-        reference_keys=(),
-        prediction_record=UNBOUNDED_BINARY / "stage-1-fit.json",
-        prediction_keys=("predictions",),
-        objective=UNBOUNDED_BINARY / "stage-1-fit.json",
-        objective_keys=("endpoint_replay_cost",),
-    ),
-    "bicarbonate-0.1325": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/endpoint.json.gz",
-        endpoint_keys=(),
-        reference=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-low-0.1325000116847309-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/selection.json.gz",
-        objective_keys=("cost",),
-    ),
-    "bicarbonate-1.0": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/endpoint.json.gz",
-        endpoint_keys=(),
-        reference=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT
-        / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/mdea/mdea-high-1.0-8b91ef8cebc9f6abd2fa1af7fa05e0939b6b6e1d61c6293c8f84c05da5491c3f/selection.json.gz",
-        objective_keys=("cost",),
-    ),
-    "system-pressure": dict(
-        replay=replay_weighting,
-        weighting_reference=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
+    "water-bicarbonate-ablation": dict(
         route=MDEAWeights,
         declaration=DECLARATION,
-        reference_pressure_pa=None,
+        reference_pressure_pa=P_REF,
         archive=CAMPAIGN_ARCHIVE,
-        endpoint=REPORTED / "MDEA/manifest.json.gz",
-        endpoint_keys=("prior_declaration",),
-        reference=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
-        reference_keys=("rows",),
-        objective=ROOT / "analyses/round_7/results/C/salt/refit.json.gz",
-        objective_keys=("objective", "rms", "objective"),
+        endpoint=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
+        endpoint_keys=("endpoint",),
+        reference=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
+        reference_keys=("replay",),
     ),
     "reported": dict(
         route=MDEAWeights,
@@ -702,13 +588,6 @@ FIT_SETS = {
         reference_pressure_pa=P_REF,
         maximum_seconds=10980,
         replay_tolerance=1e-8,
-    ),
-    "slope-bound": dict(
-        route=MDEAWeights,
-        declaration=DECLARATION,
-        retained=RESULTS / "mdea/slope-bound/fit",
-        reference_pressure_pa=P_REF,
-        bound_rule="k_bound",
     ),
 }
 

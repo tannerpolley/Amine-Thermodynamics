@@ -1,7 +1,8 @@
 """Declared phase requests and classification of the existing search evidence."""
 
+import ast
 import copy
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Mapping
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import get_context
@@ -120,6 +121,56 @@ def grid_axes(route, spec):
     return stocks, loadings
 
 
+def measured_loading_envelope(spec, amine):
+    """Loading range at each distinct unloaded stock of the fitted loaded observations."""
+    by_stock = defaultdict(list)
+    for row in spec.inputs["observations"]["fitted"]:
+        for field in ("problem", "initial", "final"):
+            if field not in row:
+                continue
+            feed = spec.problems[row[field]].feed.values
+            amount = feed.get(amine, 0)
+            carbon = feed.get("carbon-dioxide", 0)
+            if amount > 0 and carbon > 0:
+                water = feed["water"] / amount
+                by_stock[round(water, 10)].append((water, carbon / amount))
+    return {water: (rows[0][0], min(a for _, a in rows), max(a for _, a in rows))
+            for water, rows in by_stock.items()}
+
+
+def in_measured_envelope(state, amine, envelope):
+    stock = state["stock"]
+    water = round(stock["water"] / stock[amine], 10)
+    if water not in envelope:
+        return False
+    _, lo, hi = envelope[water]
+    return lo <= state["a"] <= hi
+
+
+def measured_grid(route, spec, loadings):
+    amine = route.config["amine"]
+    envelope = measured_loading_envelope(spec, amine)
+    stocks = [dict(water=water, **{amine: 1.0}) for water, _, _ in sorted(envelope.values())]
+    return [state for state in grid_states(stocks, loadings) if in_measured_envelope(state, amine, envelope)]
+
+
+def retained_measured_grid(route, spec, screen):
+    amine = route.config["amine"]
+    envelope = measured_loading_envelope(spec, amine)
+    _, loadings = grid_axes(route, spec)
+    rows = []
+    for row in screen["rows"]:
+        if not row["key"].startswith("grid:"):
+            continue
+        stock, _, loading, _ = row["key"].rsplit(":", 3)
+        state = dict(stock=ast.literal_eval(stock.removeprefix("grid:")), a=float(loading))
+        if in_measured_envelope(state, amine, envelope):
+            rows.append(dict(key=row["key"], classification=search_class(row)))
+    held = {row["key"] for row in rows}
+    missing = [state["key"] for state in measured_grid(route, spec, loadings) if state["key"] not in held]
+    return dict(stock_envelopes=list(envelope.values()), rows=rows, not_in_S_screen=missing)
+
+
 def states(route, spec):
     from .mea import MEARoute
 
@@ -136,7 +187,11 @@ def states(route, spec):
                 if field in row:
                     states.append(dict(key=row[field], problem=row[field]))
     states.extend(dict(key=r["problem"], problem=r["problem"]) for r in spec.inputs["observations"]["phase_states"])
-    states.extend(grid_states(*grid_axes(route, spec)))
+    stocks, loadings = grid_axes(route, spec)
+    if route.config.get("amine") == "methyldiethanolamine":
+        states.extend(measured_grid(route, spec, loadings))
+    else:
+        states.extend(grid_states(stocks, loadings))
     return list({r["key"]: r for r in states}.values())
 
 
@@ -280,10 +335,9 @@ def same_calculations(route, point, states):
 class SuppliedTrials:
     """Evaluate retained trial compositions on the current liquid parent."""
 
-    def __init__(self, spec, witnesses, *, compiled_support=True):
+    def __init__(self, spec, witnesses):
         self.spec = spec
         self.witnesses = witnesses
-        self.compiled_support = compiled_support
         self.by_support = {}
         self.prepared = None
 
@@ -306,13 +360,8 @@ class SuppliedTrials:
 
     def support(self, item):
         spec = self.spec
-        if self.compiled_support:
-            compiled = eq.compile_problem(spec.model, item.problem)
-            return frozenset(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
-        # The earlier screens offered all species present in the feed or reactions.
-        return frozenset(i for i, amount in enumerate(item.problem.feed.values) if amount > 0) | frozenset(
-            i for reaction in item.problem.reactions for i, value in enumerate(reaction.stoichiometry) if value
-        )
+        compiled = eq.compile_problem(spec.model, item.problem)
+        return frozenset(range(len(spec.parameters.component_ids))) - set(compiled.removed_species)
 
     def evaluate(self, item, prediction, key):
         spec = self.spec
@@ -1077,8 +1126,7 @@ def _bind_search(route, point, witnesses):
     global _route, _spec, _supplied
     verify()
     _route, _spec = route, route.bind(point)
-    # The reported MDEA screen used the declared feed and reactions to admit supplied trials.
-    _supplied = SuppliedTrials(_spec, witnesses, compiled_support=route.config.get("amine") != "methyldiethanolamine") if witnesses else None
+    _supplied = SuppliedTrials(_spec, witnesses) if witnesses else None
 
 
 def _search(state):
@@ -1119,12 +1167,6 @@ def measured_search(spec, row, bank):
             raise ValueError(parent.message)
         native = problem._native(spec.parameters)
         closure = physical(spec, native, parent)
-        # The retained measured-pressure campaign normalized its pressure residual by P.
-        closure["physical_checks_pass"] = all(
-            max(abs(phase["relative_pressure_residual"]), abs(phase["charge_residual"]),
-                abs(phase["normalization_residual"])) <= native.row_tolerance
-            for phase in closure["phases"]
-        ) and max(map(abs, closure["balances"]["scaled_element_residual"].values())) <= native.row_tolerance
         compiled = eq.compile_problem(spec.model, problem)
         options = eq.StabilityOptions()
         options.mode = type(options.mode).Full
@@ -1184,15 +1226,6 @@ def control_requests(amine, spec):
         for entry in retained["classifications"]:
             if entry["key"] in retained["confirmed"]:
                 yield entry["key"], dict(problem=entry["key"]), entry["pressure_Pa"], dict(pair=prior_pair(entry)), False
-    elif amine == "mdea":
-        retained = read(stage / "C/salt/search-outcome.json.gz")
-        (entry,) = (item for item in retained["classifications"] if item["key"] in retained["confirmed"])
-        yield "204-MPa", seed_state(spec, entry), entry["pressure_Pa"], dict(pair=prior_pair(entry)), False
-        target = read(stage / "C/salt/rms-fixed-pressures.json.gz")["pressure_262_MPa"]
-        feed = target["feed"]
-        state = dict(T=target["T_K"], stock={s: amount for s, amount in feed.items() if amount and s != "carbon-dioxide"},
-                     a=feed["carbon-dioxide"] / feed["methyldiethanolamine"])
-        yield "263-MPa", state, target["P_Pa"], dict(pair=prior_pair(target)), False
     elif amine == "amp":
         retained = read(ROOT / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/phase-classification-1.json.gz")
         bank = {row["key"]: row for row in retained["states"]}
@@ -1337,7 +1370,7 @@ def reported_searches(amine, fit_set, route, point, target):
             saved = read(path / "new-witnesses.json.gz")
             manifest = read(path / "start-0/retreat-disposition.json")
             bank["trials"] += saved["additional"][:manifest["initial_trial_count"] - saved["initial"]]
-            design = "AMP_free" if fit_set == "reported" else "AMP_fixed"
+            design = "AMP_free"
             domains = [(design, "selected", protocol) for protocol in ("native", "supplied")]
         else:
             domains = [(amine.upper(), "rebuild-441" if amine == "dea" else "selected", "declared")]
@@ -1349,8 +1382,11 @@ def reported_searches(amine, fit_set, route, point, target):
             cases.append((protocol, record, record["rows"], record["aliases"], witnesses if protocol != "native" else []))
     checks = {}
     for protocol, record, retained, aliases, witnesses in cases:
-        if {row["key"] for row in retained} != keys:
-            raise ValueError(f"{amine} {fit_set} {protocol}: state request keys differ")
+        retained_keys = {row["key"] for row in retained}
+        changed_keys = retained_keys ^ keys
+        if changed_keys and (amine != "mdea" or any(not key.startswith("grid:") for key in changed_keys)):
+            raise ValueError(f"{amine} {fit_set} {protocol}: measured state request keys differ")
+        aliases = {key: source for key, source in aliases.items() if key in keys and source in keys}
         if record["wheel"] != wheel or record["endpoint_fingerprint"] != endpoint:
             raise ValueError(f"{amine} {fit_set} {protocol}: phase baseline belongs to a different wheel or endpoint")
         distinct = [state for state in declared if state["key"] not in aliases]
@@ -1368,10 +1404,11 @@ def reported_searches(amine, fit_set, route, point, target):
         def identity(row):
             return search_class(row), row.get("status"), row.get("event")
         differences = [dict(key=row["key"], retained=identity(row), replayed=identity(searches[row["key"]]))
-                       for row in retained if identity(row) != identity(searches[row["key"]])]
+                       for row in retained if row["key"] in keys and identity(row) != identity(searches[row["key"]])]
         save(target / f"{protocol}.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=searches,
                                                  classifications=confirmations))
         checks[protocol] = dict(rows=len(searches), aliases=aliases, differences=differences,
+                               removed_grid_keys=sorted(retained_keys - keys), new_grid_keys=sorted(keys - retained_keys),
                                confirmation_differences=compare_confirmations(record.get("classifications", []), confirmations))
     if amine == "mea":
         from .records import RESULTS
@@ -1395,7 +1432,7 @@ def reported_searches(amine, fit_set, route, point, target):
                        or bool(old["witnesses"]) != new["descent"]]
         save(target / "measured.json.gz", dict(wheel=wheel, endpoint_fingerprint=endpoint, rows=measured))
         checks["measured"] = dict(rows=len(measured), differences=differences)
-    else:
+    elif amine != "mdea":
         controls = reported_controls(amine, design, route, spec, endpoint)
         save(target / "controls.json.gz", controls)
         checks["controls"] = dict(rows=len(controls["rows"]), differences=controls["differences"])

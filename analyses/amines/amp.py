@@ -8,7 +8,7 @@ import numpy as np
 from epcsaft import equilibrium as eq, regression as reg
 from .records import RESULTS, input_path, read
 
-from .model import CAMPAIGN_ARCHIVE, P_REF, REPORTED, ROOT, Route
+from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route
 
 AMP, WATER = "aminomethylpropanol", "water"
 AMP_TRANSFER = ROOT / "analyses/amp_transfer"
@@ -244,21 +244,6 @@ FIT_SETS = {
             ),
         },
     ),
-    "system-pressure-salt-anchored": dict(
-        route=ExpandedPressure,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/free/selection.json.gz",
-        endpoint_keys=("point",),
-        reference=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/free/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/free/selection.json.gz",
-        objective_keys=("cost",),
-    ),
     "first-data": dict(
         route=Route,
         declaration=DECLARATION,
@@ -272,98 +257,10 @@ FIT_SETS = {
         objective=ROOT / "analyses/round_5/results/A/original-main.json.gz",
         objective_keys=("cost",),
     ),
-    "mea-fitted-shared": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json",
-        endpoint_keys=(),
-        reference=ROOT
-        / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/data-rows.json",
-        reference_keys=(),
-        objective=ROOT / "analyses/round_5/results/A/original-main.json.gz",
-        objective_keys=("cost",),
-    ),
-    "system-pressure-salt-anchored-fixed-slope": dict(
-        route=ExpandedPressure,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/fixed/selection.json.gz",
-        endpoint_keys=("point",),
-        reference=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/fixed/data-rows.json.gz",
-        reference_keys=(),
-        objective=ROOT
-        / "analyses/amp_transfer/results/salt-anchored-435/fixed/selection.json.gz",
-        objective_keys=("cost",),
-    ),
-    "first-data-fixed-slope": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json",
-        endpoint_keys=(),
-        reference=ROOT / "analyses/round_5/results/A/original-slope-150.json.gz",
-        reference_keys=("original", "rows"),
-        objective=ROOT / "analyses/round_5/results/A/original-slope-150.json.gz",
-        objective_keys=("cost",),
-    ),
-    "mea-fitted-shared-fixed-slope": dict(
-        route=Route,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=ROOT
-        / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json",
-        endpoint_keys=(),
-        reference=ROOT
-        / "analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/data-rows.json",
-        reference_keys=(),
-        objective=ROOT / "analyses/round_5/results/A/original-slope-150.json.gz",
-        objective_keys=("cost",),
-    ),
-    "system-pressure": dict(
-        route=ExpandedPressure,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=REPORTED / "AMP_free/manifest.json.gz",
-        endpoint_keys=("prior_declaration",),
-        reference=ROOT / "analyses/round_7/results/AMP/free/assessment.json.gz",
-        reference_keys=("rows",),
-        objective=REPORTED / "AMP_free/reference-control.json.gz",
-        objective_keys=("tracking", "cost"),
-    ),
-    "system-pressure-fixed-slope": dict(
-        route=ExpandedPressure,
-        declaration=DECLARATION,
-        reference_pressure_pa=None,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=REPORTED / "AMP_fixed/manifest.json.gz",
-        endpoint_keys=("prior_declaration",),
-        reference=ROOT / "analyses/round_7/results/AMP/fixed/assessment.json.gz",
-        reference_keys=("rows",),
-        objective=REPORTED / "AMP_fixed/reference-control.json.gz",
-        objective_keys=("tracking", "cost"),
-    ),
     "reported": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
         retained=RESULTS / "amp/reported/fit",
-        reference_pressure_pa=P_REF,
-        maximum_seconds=6750,
-        replay_tolerance=1e-8,
-    ),
-    "fixed-slope": dict(
-        route=ExpandedPressure,
-        declaration=DECLARATION,
-        retained=RESULTS / "amp/fixed-slope/fit",
         reference_pressure_pa=P_REF,
         maximum_seconds=6750,
         replay_tolerance=1e-8,

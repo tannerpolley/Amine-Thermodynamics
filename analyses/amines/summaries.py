@@ -1,16 +1,14 @@
 """Write display summaries from the retained output of the fit, phase and property stages."""
 
-from collections import Counter, defaultdict
-from csv import DictReader
+from collections import Counter
 from math import fsum, sqrt
 
 from .records import RESULTS, input_path, read
-from scipy.constants import R
 
 from . import amp as amp_model, dea as dea_model, mdea
 from .fit import retained_endpoint, route_for, save
-from .model import P_REF, REPORTED, ROOT
-from .phase import grid_axes, grid_states, phase_outcome
+from .model import REPORTED, ROOT
+from .phase import grid_axes, grid_states, retained_measured_grid
 from .wheel import verify
 
 ROUND9 = "analyses/round_9/"
@@ -90,48 +88,6 @@ def amp(s):
     return record
 
 
-def endpoint_stages(record):
-    stages = endpoint_stages(record['previous_stage']) if 'previous_stage' in record else []
-    report = record['report']
-    tol = record['controls']['gradient_tolerance']
-    gradient = (report.get('covariance') or {}).get('projected_gradient_norm')
-    return stages + [dict(status=report['status'], termination=report['message'],
-                          endpoint=record.get('endpoint_fingerprint'),
-                          C=record.get('replay', {}).get('cost'), projected_gradient=gradient,
-                          gradient_limit=tol, fit_seconds=record.get('fit_seconds', record.get('fit_wall_s')),
-                          wall_seconds=record.get('wall_s'), gradient_passed=None if gradient is None else gradient <= tol)]
-
-
-def fit_accounting(s, attempts):
-    endpoints = {}
-    for amine, fits in attempts.items():
-        endpoints[amine] = {label: endpoint_stages(s.fixed(f'{amine}/{label}.json.gz')) for label in fits}
-    for label in ('A-continuation', 'A-descent-continuation'):
-        endpoints['MDEA'][label] = endpoint_stages(s.fixed(f'MDEA/stationarity/{label}.json.gz'))
-    preservation = s.read(RESULTS / 'shared/preservation/fit-cost-budgets.json.gz')
-    diagnostic = preservation['fits']['MDEA LHS-53, common prefix']
-    stage = endpoints['MDEA']['LHS-53'][-1]
-    if preservation['wheel'] == s.wheel and stage['endpoint'] == diagnostic['retained_fingerprint']:
-        stage['historical_stop'] = preservation['mdea_path']['printed_stop']
-
-    draws = s.fixed('MDEA/replacement-starts.json.gz')
-    initial = attempts['MDEA']
-    manifest = s.fixed('MDEA/manifest.json.gz')
-    initial_draws = {q['draw'] for q in manifest['starts'].values() if q['draw'] is not None}
-    tested = initial_draws | {q['start']['draw'] for q in draws['draws'].values()}
-    start_counts = dict(inherited=draws['accepted_original'], drawn=len(tested | set(draws['remaining'])), tested=len(tested),
-                        replacement_draws=len(draws['draws']),
-                        evaluable=[k for k, q in draws['draws'].items() if q['disposition'] == 'eligible'],
-                        untested_draws=draws['remaining'], fitted_endpoints=[k for k,q in initial.items() if q['endpoint']])
-    properties = s.fixed('MDEA/properties.json.gz')['rows']
-    start_counts['A_AARD_percent'] = {
-        group: aard((row['value'], row['observed']) for row in properties
-                    if row['group'] == group and row['unit'] == 'Pa' and available(row))
-        for group in ('Kuranov', 'Ermatchkov')
-    }
-    return dict(mdea_start_counts=start_counts, endpoint_stages=endpoints)
-
-
 def phase_accounting(s):
     mea = s.fixed('MEA/screen/summary.json.gz')
     grid = mea['grid']
@@ -205,27 +161,21 @@ def paired(before, after):
 
 
 def shared(s):
-    quantities, fits = {}, {}
+    quantities = {}
     mea = s.fixed('E/MEA/replay.json.gz')
     mdea = s.fixed('MDEA/properties.json.gz')
     baselines = {'MEA': {'legacy-47': [q for q in mea['rows'] if q['group'] == 'common149' and q['unit'] == 'Pa'],
                          'Mamun2005': [q for q in mea['rows'] if mea['pressure_population'].get(q['identity'], {}).get('source_key') == 'Mamun2005']},
                  'MDEA': {g: [q for q in mdea['rows'] if q['group'] == g] for g in ('Kuranov', 'Ermatchkov', 'Carson')}}
     for name, before in baselines.items():
-        fit = s.new(f'{name}-shared-fit.json.gz')
-        assess = s.new(f'{name}-shared-assessment.json.gz')
-        assert assess['endpoint_fingerprint'] == fit['endpoint_fingerprint']
-        fits[name] = endpoint_stages(fit)
+        directory = RESULTS / name.lower() / 'water-bicarbonate-ablation'
+        fit = s.read(directory / 'fit/A.json.gz')
+        assess = s.read(directory / 'properties/assessment.json.gz')
+        if {fit['wheel'], assess['wheel']} != {s.wheel} or assess['endpoint_fingerprint'] != fit['endpoint_fingerprint']:
+            raise ValueError(f'{name}: ablation assessment does not match the held fit')
         for group, rows in before.items():
             quantities[f'{name} {group}'] = paired(rows, assess['rows'][group])
-    phase_record = s.new('mdea-phase-controls.json.gz')
-    phases = phase_record['value']
-    for case in phases.values():
-        for model in case['models'].values():
-            model['outcome'] = ('unavailable' if 'refusal' in model else
-                                'confirmed split' if any(a['confirmed'] for a in model['attempts']) else
-                                'unresolved phase identity' if model['instability'] == 'resolved descent' else model['instability'])
-    return dict(comparisons=quantities, fit_stages=fits, phase_controls=phases)
+    return dict(comparisons=quantities)
 
 
 def kamps(s):
@@ -240,133 +190,19 @@ def kamps(s):
 
 def amp_units(s):
     source = s.read('analyses/amp_transfer/results/salt-anchored-435/hydrolysis/shift.json')
-    values = {}
-    for label in ('AMP_free', 'AMP_fixed'):
-        manifest = s.fixed(f'{label}/manifest.json.gz')
-        index = manifest['coordinate_order'].index(AMP_H)
-        coord = manifest['start_A_declaration']['coordinates'][index]
-        physical = source['bounds']['enthalpy']
-        offset = physical[0]-coord['bounds'][0]
-        assert [v + offset for v in coord['bounds']] == physical
-        fit = s.fixed(f'{label}/A.json.gz')
-        final, = [q['correlation']['b'] for q in fit['endpoint']['reactions']['aqueous'] if q['name'] == 'carbamate-hydrolysis']
-        fitted_increment = -R*(final-source['source_law']['b'])
-        values[label] = dict(coordinate_index=index, offset_J_mol=offset, physical_bounds_J_mol=physical,
-                             fit_bounds_J_mol=coord['bounds'], endpoint_increment_J_mol=fitted_increment)
-    return values
+    manifest = s.fixed('AMP_free/manifest.json.gz')
+    index = manifest['coordinate_order'].index(AMP_H)
+    coord = manifest['start_A_declaration']['coordinates'][index]
+    physical = source['bounds']['enthalpy']
+    offset = physical[0] - coord['bounds'][0]
+    if [value + offset for value in coord['bounds']] != physical:
+        raise ValueError('AMP enthalpy bounds differ before and after reference conversion')
+    return {'AMP_free': dict(physical_bounds_J_mol=physical)}
 
 
 def aard(pairs):
     errors = [abs((calc - observed) / observed) * 100 for calc, observed in pairs]
     return fsum(errors) / len(errors) if errors else None
-
-
-def comparison(models, spread_labels):
-    """Use the same nonzero measurements for each endpoint in a spread."""
-    a = models['A']
-    assert all(a.keys() == rows.keys() for rows in models.values())
-    common, unavailable, excluded, spreads = [], {}, [], {}
-    for key, observed in a.items():
-        y = observed['observed']
-        samples = {label: rows[key] for label, rows in models.items()}
-        assert all(row['observed'] == y and row['unit'] == observed['unit'] for row in samples.values()), key
-        refusals = {name: row for name, row in samples.items()
-                    if row['status'].lower() != 'available' or row.get('value') is None}
-        if refusals:
-            unavailable[key] = refusals
-        if not y:
-            excluded.append(key)
-        if refusals or not y:
-            continue
-        common.append(key)
-        values = [models[name][key]['value'] for name in spread_labels]
-        spreads[key] = dict(relative_spread_percent=100 * (max(values) - min(values)) / abs(y),
-                            selected_abs_relative_deviation_percent=100 * abs(a[key]['value'] - y) / abs(y))
-    deviations = {name: aard((rows[key]['value'], a[key]['observed']) for key in common)
-                  for name, rows in models.items()}
-    low, high = (None, None) if not common else (min(deviations[k] for k in spread_labels),
-                                                 max(deviations[k] for k in spread_labels))
-    maximum = max(spreads, key=lambda key: spreads[key]['relative_spread_percent'], default=None)
-    return dict(requested=len(a), common=len(common), endpoints=list(spread_labels),
-                endpoint_AARD_percent=deviations, AARD_spread_pp=None if low is None else high-low,
-                max_row=maximum, row_spreads=spreads, unavailable=unavailable,
-                zero_observation=excluded)
-
-
-def cohorts(design, rows, canonical):
-    pools = defaultdict(dict)
-
-    def add(group, r):
-        assert r['identity'] not in pools[group]
-        pools[group][r['identity']] = r
-
-    for r in rows:
-        g = r['group']
-        if design != 'MEA':
-            add(g, r)
-            if g == 'corrected-Kamps' and r['identity'] != 'comparison:113':
-                add('corrected-Kamps common rows', r)
-            continue
-        if r['unit'] != 'Pa':
-            add(g, r)
-            if r['T_K'] >= 370:
-                add(g + ' (hot)', r)
-            continue
-        if g == 'canonical':
-            add('Canonical pressures outside objective', r)
-            add(r['source'] + ' (outside objective)', r)
-        elif g == 'off-window':
-            add(r['source'] + ' (off-window)', r)
-            if r['source'] == 'Aronu2011':
-                source = canonical[r['identity'].removeprefix('off-window:')]
-                add(f"Aronu2011 ({100*float(source['MEA_weight_fraction']):.0f} wt%)", r)
-        else:
-            add('Wagner2013', r)
-        if g != 'off-window' or r['source'] == 'Aronu2011':
-            add('All Table 8 outside-objective pressures', r)
-        if r['T_K'] >= 370 and g in ('canonical', 'Wagner'):
-            add('Hot pressures including Wagner', r)
-            add('Hot canonical pressures' if g == 'canonical' else 'Hot Wagner pressures', r)
-    return pools
-
-
-def endpoint_predictions(s):
-    canonical = s.read_bytes('data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')
-    canonical = {q['observation_id']: q for q in DictReader(canonical.decode().splitlines())}
-    pure = s.read('analyses/amp_transfer/results/retransfer-344-05e94210/pure-binary-on-05e94210.json')
-    assert pure['engine']['wheel_sha256'] == s.wheel
-    pappas = [dict(identity=f"Pappa2006:{i}", group='Pappa2006', unit='Pa',
-                   observed=q['observed'], value=q['predicted'], status=q['status'])
-              for i, q in enumerate(pure['pure']['rows']) if q['campaign'] == 'Pappa2006']
-    output = {}
-    for design, labels in ENDPOINTS.items():
-        case, runtimes, fingerprints, source_wheels, pure_amp = {}, {}, {}, {}, []
-        selected = s.fixed(f'{design}/selection.json')
-        for label in labels:
-            prefix = 'stationarity/' if label.endswith('continuation') else ''
-            # A-continuation was obtained on an earlier wheel. Its vector is
-            # read unchanged and all round-10 predictions use the study wheel.
-            fit = s.fixed(f'{design}/{prefix}{label}.json.gz')
-            source_wheels[label] = fit['wheel']
-            record = s.read(f'analyses/round_10/results/{design}-{label}.json.gz')
-            assert record['wheel'] == s.wheel and record['reference_pressure_Pa'] == P_REF
-            assert record['endpoint_fingerprint'] == fit['endpoint_fingerprint']
-            rows = record['rows']
-            if design == 'AMP_free':
-                pure_amp.append(next(c for c in fit['endpoint']['parameters']['components']
-                                     if c['component_id'] == 'aminomethylpropanol'))
-                rows = rows + pappas
-            assert len({q['identity'] for q in rows}) == len(rows)
-            case[label] = cohorts(design, rows, canonical)
-            runtimes[label] = record['seconds']
-            fingerprints[label] = record['endpoint_fingerprint']
-        assert fingerprints[selected['selected']] == selected['endpoint_fingerprint']
-        assert all(groups.keys() == case['A'].keys() for groups in case.values())
-        span = labels[1:] if design == 'MDEA' else labels
-        groups = {g: comparison({label: pools[g] for label, pools in case.items()}, span) for g in case['A']}
-        output[design] = dict(groups=groups, replay_seconds=runtimes, endpoint_fingerprints=fingerprints,
-                              endpoint_source_wheel_sha256=source_wheels)
-    return output
 
 
 def selected(s, design, path):
@@ -415,27 +251,6 @@ def amp_outcomes(s):
     return outcomes
 
 
-def dea_density(s):
-    record = s.read(ROUND9 + 'results/dea-phase-controls.json.gz')
-    densities = selected(s, 'DEA', 'property-comparisons/selected.json.gz')
-    assert record['wheel'] == s.wheel and record['value']['endpoint_fingerprint'] == densities['endpoint_fingerprint']
-    by_id = {q['identity']: q for q in densities['rows'] if q['group'] == 'Weiland'}
-    rows = []
-    for case in record['value']['rows']:
-        q = by_id[case['key'].removesuffix(':problem')]
-        deposit_id = int(q['identity'].split(':')[1])
-        source_row = int(q['row']['source_row'])
-        assert q['status'] == 'Available' and q['T_K'] == case['T_K']
-        assert float(q['row']['alpha_mol_CO2_per_mol_DEA']) == case['loading']
-        daughters = case['phases']
-        bulk = 1 / fsum(p['mass_fraction'] / p['density_kg_m3'] for p in daughters)
-        rows.append(dict(key=case['key'], deposit_id=deposit_id, processed_source_row=source_row,
-                         T_K=case['T_K'], pressure_Pa=case['P_Pa'], pressure_basis=case['pressure_basis'],
-                         observed_kg_m3=q['observed'], single_liquid_kg_m3=q['value'], two_liquid_kg_m3=bulk))
-    return dict(rows=rows, AARD_percent={model: aard((r[model+'_kg_m3'], r['observed_kg_m3']) for r in rows)
-                                        for model in ('single_liquid', 'two_liquid')})
-
-
 def mdea_bubble(s, pressure_basis):
     screen = selected(s, 'MDEA', 'screen/selected/declared/summary.json.gz')
     inventory = selected(s, 'MDEA', 'screen/selected/declared/state-inventory.json.gz')
@@ -461,7 +276,7 @@ def available(row):
 
 def fit_attempts(s):
     attempts, distances = {}, {}
-    for design in ('MEA', 'DEA', 'MDEA', 'AMP_free', 'AMP_fixed'):
+    for design in ('MEA', 'DEA', 'MDEA', 'AMP_free'):
         manifest = s.fixed(f'{design}/manifest.json.gz')
         initial = manifest['starts']
         admitted = initial
@@ -509,24 +324,6 @@ def fit_attempts(s):
 
 
 def mdea_properties(s):
-    fixed = s.fixed('MDEA/properties.json.gz')
-    tracking = s.read('analyses/round_7/results/C/salt/refit.json.gz')
-    paired_scores = {}
-    for group, unit in [('Kuranov', 'Pa'), ('Ermatchkov', 'Pa'), ('Xiao', 'Pa'),
-                        ('Carson', 'J/mol'), ('corrected-Kamps', 'Pa')]:
-        left, right = ({row['identity']: row for row in records['rows']
-                         if row['group'] == group and row['unit'] == unit}
-                        for records in (tracking, fixed))
-        common = [i for i in right if i in left and available(left[i]) and available(right[i]) and right[i]['observed']]
-        paired_scores[group] = dict(n=len(common), models=[
-            dict(AARD_percent=aard((r[i]['value'], r[i]['observed']) for i in common),
-                 bias_percent=100 * fsum(r[i]['value']/r[i]['observed'] - 1 for i in common) / len(common))
-            for r in (left, right)
-        ])
-    endpoint = s.fixed('MDEA/A.json.gz')
-    residual = {row['identity']: row['residual'] for row in endpoint['replay']['rows']}
-    objectives = {weight: fsum(.5 * row['weight'] * residual[row['identity']] ** 2 for row in target['rows'])
-                  for weight, target in tracking['objective'].items()}
     comparison = s.fixed('MDEA/property-comparisons/A.json.gz')
     literature = s.read('analyses/round_8/results/literature-populations.json.gz')['quantities']
     source_rows = set(map(str, literature['kuranov']['source_rows']))
@@ -535,8 +332,7 @@ def mdea_properties(s):
     if {row['row']['source_row'] for row in rows} != source_rows:
         raise ValueError('Mismatched Kuranov published comparison rows')
     values = [(row['value'], row['observed']) for row in rows if available(row)]
-    return dict(paired=paired_scores, objectives=objectives,
-                kuranov=dict(available=len(values), AARD_percent=aard(values)))
+    return dict(kuranov=dict(available=len(values), AARD_percent=aard(values)))
 
 
 def reported_grid_axes(s):
@@ -560,71 +356,36 @@ def reported_grid_axes(s):
     return result
 
 
-def historical_bicarbonate_profile(s):
-    declaration = s.read('analyses/mea_parameter_bundle/results/reduced-refit/F2/current/unpenalized/declaration.json')
-    coordinates = [row['identity'] for row in declaration['declared']
-                   if row['identity'] != 'pair/bicarbonate-anion/water/k_ij']
-    starts = {}
-    for case, fit_set in (('low', 'bicarbonate-0.1325'), ('high', 'bicarbonate-1.0')):
-        directory = mdea.FIT_SETS[fit_set]['endpoint'].parent
-        starts[case] = {
-            path.parent.parent.name: [row['identity'] for row in s.read(path)['coordinates']]
-            for path in sorted(directory.glob('fit-*/stage-0/parameters.json.gz'))
-        }
-    return dict(mea_refitted_coordinates=coordinates, mdea_starts=starts)
-
-
-def tied_phase_controls(s):
-    return {
-        family: {
-            start: {key: phase_outcome(row['value']) for key, row in
-                    s.fixed(f'{family}/controls/{start}.json.gz')['rows'].items()}
-            for start in ENDPOINTS[family]
-        }
-        for family in ('DEA', 'AMP_free')
-    }
-
-
 def main():
     s = Records()
     attempts, distances = fit_attempts(s)
     s.write('shared/fit/display-summary.json.gz', dict(
         attempts=attempts, start_distances=distances, amp_enthalpy=amp_units(s),
-        historical_bicarbonate_profile=historical_bicarbonate_profile(s), **fit_accounting(s, attempts),
     ))
     account = phase_accounting(s)
-    amp_early = s.read('analyses/round_3/results/q1.json')['rows']
-    mdea_early = s.read('analyses/round_3/results/q3.json')['rows']
-    mdea_measured = s.read('analyses/mdea_mea_workflow/results/phase-search-421/measured-phase.json')
     s.write('shared/phase/display-summary.json.gz', dict(
-        **account, grid_axes=reported_grid_axes(s), tied_controls=tied_phase_controls(s),
-        mea_search=mea_search(s), mea_grid=s.fixed('MEA/screen/summary.json.gz')['grid'],
+        **account, grid_axes=reported_grid_axes(s), mea_search=mea_search(s),
         dea_controls=dea(s), amp_controls=amp(s), amp_outcomes=amp_outcomes(s),
-        amp_worked={family: phase_outcome(selected(s, family, 'controls/A.json.gz')['rows']['worked-state']['value'])
-                    for family in ('AMP_free', 'AMP_fixed')},
-        amp_early={fit: dict(
-            attempted=len(amp_early),
-            confirmed=sum(any(a['confirmed'] for a in row[fit]['attempts']) for row in amp_early),
-        ) for fit in ('free', 'fixed')},
-        mdea_early=[{key: row[key] for key in ('key', 'P_Pa', 'T_K', 'instability', 'reference', 'attempts')}
-                    for row in mdea_early],
-        mdea_historical_measured=[{key: row[key] for key in ('key', 'native_branch', 'supplied_branch', 'attempts')}
-                                  for row in mdea_measured],
     ))
-    covariance = s.read('analyses/mea_parameter_bundle/results/paper-evidence-341/uncertainty/covariance.json')
-    mea_early = s.read('analyses/round_3/results/q4.json')
-    readback = s.read('analyses/round_3/results/q8.json')
-    amp_reference = s.read('analyses/mea_parameter_bundle/results/reference-states-428/amp.json')
-    candidate = readback['dea']
+    selected_fits = {name: dict(endpoint_fingerprints={
+        label: s.fixed(f'{name}/{label}.json.gz')['endpoint_fingerprint'] for label in ENDPOINTS[name]
+    }) for name in ('MEA', 'DEA', 'AMP_free')}
     s.write('shared/properties/display-summary.json.gz', dict(
         shared=shared(s), kamps=kamps(s), mdea=mdea_properties(s), mdea_bubble=mdea_bubble(s, account),
-        dea_density=dea_density(s), spread=endpoint_predictions(s),
+        spread=selected_fits,
         mea_mamun=s.fixed('E/MEA/replay.json.gz')['summary']['pressure']['Mamun2005']['AARD_percent'],
-        mea_historical_covariance=covariance['native_correlation'],
-        mea_early_reference={key: mea_early[key] for key in ('rows', 'heat_previous_kJ_mol', 'heat_change')},
-        dea_alternative={key: candidate[key] for key in ('endpoint', 'chosen_cost', 'alternative_cost', 'rows', 'scores')},
-        water_calibration=readback['water'],
-        amp_historical_reference_state=amp_reference,
+        water_calibration=s.read('analyses/round_3/results/q8.json')['water'],
+    ))
+    screen_path = 'mdea/reported/phase/MDEA/screen/selected/declared/summary.json.gz'
+    screen = s.read(RESULTS / screen_path)
+    fit = mdea.FIT_SETS['reported']
+    point, selection = retained_endpoint(fit)
+    if (screen['wheel'], screen['endpoint_fingerprint']) != (s.wheel, selection['endpoint_fingerprint']):
+        raise ValueError('MDEA restricted grid uses a different wheel or endpoint')
+    route = route_for(fit)
+    s.write('mdea/reported/phase/diagnosis/restricted-grid.json.gz', dict(
+        endpoint_fingerprint=selection['endpoint_fingerprint'], source=screen_path,
+        **retained_measured_grid(route, route.bind(point), screen),
     ))
 
 

@@ -248,6 +248,44 @@ def curve_rows(route, point, declarations=None):
     return dict(rows=output, wheel=verify())
 
 
+def amp_isotherms(route, point):
+    groups = {"loaded-pressure", "hartono-2021-supplemental", "tong"}
+    declarations = [row for row in route.load(route.config["curve_rows"])
+                    if row["observation"]["group"] in groups]
+    return curve_rows(route, point, declarations)["rows"]
+
+
+def mdea_speciation_curves(route, point):
+    spec = route.bind(point)
+    amine = route.config["amine"]
+    series = {}
+    for row in spec.inputs["observations"]["comparisons"]:
+        if not row["group"].startswith("Bottinger-"):
+            continue
+        parent = spec.problems[row["problem"]]
+        feed = parent.feed.values
+        key = row["group"], parent.T, feed["water"] / feed[amine], parent.P
+        series.setdefault(key, []).append((feed["carbon-dioxide"] / feed[amine], row))
+    curves = []
+    for (group, T, stock, pressure), rows in sorted(series.items()):
+        first, last = min(a for a, _ in rows), max(a for a, _ in rows)
+        if first == last:
+            continue
+        parent = spec.problems[rows[0][1]["problem"]]
+        for i, loading in enumerate(np.linspace(first, last, 21)):
+            key = f"curve:{group}:{T}:{stock}:{pressure}:{i}"
+            problem = copy.copy(parent)
+            feed = parent.feed.values
+            problem.feed = eq.Amounts(dict(feed, **{"carbon-dioxide": float(loading) * feed[amine]}))
+            spec.problems[key] = problem
+            result = spec.prediction(dict(rows[0][1], identity=key, problem=key))
+            curves.append(dict(identity=key, group=group, T_K=T, water_per_mole_amine=stock,
+                               pressure_Pa=pressure, loading=float(loading), value=result["value"],
+                               status=result["status"], message=result["message"],
+                               requested_tolerance_met=result["requested_tolerance_met"]))
+    return curves
+
+
 def reported_curves(amine, route, point):
     from .fit import fingerprint
 
@@ -256,6 +294,8 @@ def reported_curves(amine, route, point):
         from .mea import reported_curves as mea_curves
 
         return mea_curves(route, point)
+    if amine == "amp":
+        return dict(curves=amp_isotherms(route, point))
     if amine == "dea":
         groups = {"Lawson", "Lawson-394K", "SeoHong", "Lal"}
         declarations = [row for row in route.load(route.config["curve_rows"])
@@ -286,7 +326,10 @@ def reported_curves(amine, route, point):
         return {}
     fresh = curve_rows(route, point, declarations)["rows"]
     key = lambda row: (row["curve"], row["identity"], row["loading"])
-    return dict(curves=fresh, curve_differences=curve_differences(retained, fresh, key))
+    result = dict(curves=fresh, curve_differences=curve_differences(retained, fresh, key))
+    if amine == "mdea":
+        result["speciation_curves"] = mdea_speciation_curves(route, point)
+    return result
 
 
 def curve_differences(retained, fresh, key):

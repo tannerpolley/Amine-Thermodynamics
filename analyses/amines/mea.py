@@ -9,7 +9,6 @@ from dataclasses import dataclass
 import gzip
 import json
 import math
-import re
 import tarfile
 from pathlib import Path
 
@@ -17,26 +16,22 @@ from .fit import compare_rows, retained_endpoint, route_for, save
 from .model import (
     CAMPAIGN_ARCHIVE,
     P_REF,
-    REPORTED,
     ROOT,
     Route,
     evaluate,
     parameter_mapping,
     parameter_values,
-    replay,
-    target_identity,
     with_parameter_values,
 )
 from MEA.common.mea_source_contracts import (
     EXPECTED_REACTION_CORRELATIONS,
     REACTION_CONTRACT_PATH,
 )
-from .records import RESULTS, archive_paths, input_path, read
+from .records import RESULTS, input_path, read
 from MEA.solvent_specification import SolventSpecification
 import epcsaft
 import numpy as np
 from epcsaft import equilibrium, regression as reg
-from scipy.constants import R
 
 from .wheel import verify
 
@@ -46,7 +41,7 @@ SALT_FIT = BUNDLE / "results/salt-anchored-435/MEA/F4"
 EXPANDED_FIT = ROOT / "analyses/round_7/results/E"
 RESTRICTION_FIT = BUNDLE / "results/reduced-refit"
 PAPER_EVIDENCE = BUNDLE / "results/paper-evidence-341"
-HONG = BUNDLE / "results/same-data-comparison/hong-2027"
+SAME_DATA = BUNDLE / "results/same-data-comparison"
 PRESSURE_INPUTS = dict(
     packet=BUNDLE / "results/source-corrections-152/state-packet.json.gz",
     canonical=ROOT / "data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv",
@@ -808,43 +803,6 @@ def off_window_statistics(rows):
     return {group: pressure_statistics(pool) for group, pool in pools.items()}
 
 
-def write_expanded_weights_summary():
-    wheel = verify()
-    results = ROOT / "analyses/amines/results/mea"
-    stage = results / "expanded-weights/replay"
-    expanded = read(stage / "endpoint.json.gz")
-    reported = read(results / "reported/replay/endpoint.json.gz")
-    reported_off = read(REPORTED / "MEA/off-window.json.gz")
-    if any(record["wheel"] != wheel for record in (expanded, reported, reported_off)):
-        raise ValueError("MEA comparison records use another wheel")
-    expanded_off = expanded["F4"]["off_window"]["rows"]
-    differences, _ = compare_rows(reported_off["rows"], expanded_off)
-    if differences:
-        raise ValueError(f"Different MEA off-window populations: {differences}")
-
-    heat_file = EXPANDED_FIT.parent / "display-replays/mea-heat-sensitivity.json.gz"
-    heat = read(heat_file)["replay"]["rows"]
-    hot_heat = {}
-    for source in ("Kim2014", "Vinjarapu2024"):
-        cohort = [row for row in heat if row["source"] == source and row["T_K"] >= 370]
-        values = [row["predicted_kJ_mol"] for row in cohort if row["status"] == "available"]
-        hot_heat[source] = dict(available=len(values), attempted=len(cohort),
-                               minimum=min(values), maximum=max(values))
-    save(stage / "summary.json", dict(
-        wheel=wheel,
-        hot_heat=hot_heat,
-        off_window=dict(
-            reported=off_window_statistics(reported_off["rows"]),
-            expanded=off_window_statistics(expanded_off),
-            incumbent=off_window_statistics(expanded["incumbent"]["off_window"]["rows"]),
-            population=len(expanded_off),
-        ),
-        objective={name: dict(
-            count=len(rows),
-            expanded_fit=expanded["F4"][name + "_cost"],
-        ) for name, rows in (("original", reported["replay"]["rows"]),
-                             ("expanded", expanded["F4"]["rows"]))},
-    ))
 
 
 def pressure_inputs(declaration):
@@ -958,59 +916,6 @@ def off_window_pressures(spec, legacy, templates, population, reference):
     return dict(rows=rows, statistics=groups, row_differences=differences, value_differences=values)
 
 
-def replay_expanded_weights(declaration):
-    templates, population = pressure_inputs(declaration)
-    with input_path(declaration["wagner"]).open(newline="") as stream:
-        wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-
-    cases = {}
-    for name, (parameters, reference) in declaration["cases"].items():
-        reference = read(reference)
-        mapping = read(parameters)
-        spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-        spec.inputs["endpoint"] = mapping
-        originals = spec.inputs["observations"]["fitted"]
-        legacy, added = pressure_additions(spec, templates, population)
-        old_ids = {row["identity"] for row in legacy}
-        hot_wagner = wagner_pressure_records(spec, legacy[0], templates, wagner, minimum_temperature=370)
-        rows = evaluate(spec, [*originals, *added])
-        held = evaluate(spec, hot_wagner)
-        pressure_rows = {row["identity"]: row for row in rows if row["identity"] in population}
-        hot = [
-            row
-            for identity, row in pressure_rows.items()
-            if float(population[identity]["temperature_reported_C"]) + 273.15 >= 370
-        ]
-        pools = dict(
-            legacy=[row for identity, row in pressure_rows.items() if identity in old_ids],
-            added=[row for identity, row in pressure_rows.items() if identity not in old_ids],
-            hot_expanded=hot,
-            hot_published=hot + held,
-            all_pressure=list(pressure_rows.values()),
-        )
-        for identity, row in pressure_rows.items():
-            source = population[identity]
-            pools.setdefault(source["source_key"], []).append(row)
-            pools.setdefault(f"{pressure_series(source)} C nominal", []).append(row)
-        differences, values = compare_rows(reference["rows"] + reference["hot_wagner"], rows + held)
-        cost = [
-            math.fsum(row["cost"] for row in group) if all("cost" in row for row in group) else None
-            for group in (rows[: len(originals)], rows)
-        ]
-        cases[name] = dict(
-            rows=rows,
-            hot_wagner=held,
-            row_differences=differences,
-            value_differences=values,
-            original_cost=cost[0],
-            expanded_cost=cost[1],
-            pressure={name: pressure_statistics(rows) for name, rows in pools.items()},
-        )
-        if name in declaration["off_window"]:
-            cases[name]["off_window"] = off_window_pressures(
-                spec, legacy[0], templates, population, read(declaration["off_window"][name])
-            )
-    return cases
 
 
 def transfer_pressure_records(spec, legacy, templates, canonical, rows):
@@ -1024,281 +929,10 @@ def transfer_pressure_records(spec, legacy, templates, canonical, rows):
         )
 
 
-def replay_restrictions(declaration):
-    templates, population = pressure_inputs(declaration)
-    with input_path(declaration["statistics"]).open(newline="") as stream:
-        agreement = {(row["fit"], row["dataset"]): row for row in csv.DictReader(stream)}
-    cases = {}
-    for name in declaration["cases"]:
-        folder = declaration["reference"] / name
-        mapping = parameter_mapping(folder / "parameters.json")
-        spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-        spec.inputs["endpoint"] = mapping
-        result = replay(spec)
-        retained = read(folder / "replay.json")
-        differences, values = compare_rows(retained["rows"], result["rows"])
-        legacy, additional = pressure_additions(spec, templates, population)
-        additional = evaluate(spec, additional)
-        original_ids = {row["identity"] for row in legacy}
-        selected = {row["identity"] for row in additional}
-        with input_path(declaration["assessment"][name]).open(newline="") as stream:
-            assessment = list(csv.DictReader(stream))
-        prior = [row for row in assessment if row["target"] in selected]
-        held = additional
-        if name == declaration["transfer_case"]:
-            with input_path(declaration["wagner"]).open(newline="") as stream:
-                wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-            with input_path(declaration["canonical"]).open(newline="") as stream:
-                canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
-            transfers = [row for row in assessment if row["kind"] == "transfer"]
-            extra = wagner_pressure_records(spec, legacy[0], templates, wagner) + list(
-                transfer_pressure_records(spec, legacy[0], templates, canonical, transfers)
-            )
-            held = additional + evaluate(spec, extra)
-            prior.extend(row for row in assessment if row["kind"] in ("wagner", "transfer"))
-        held = [dict(row, role="not fitted") for row in held]
-        held_differences, held_values = compare_rows(
-            [
-                dict(
-                    identity=row["target"],
-                    value=float(row["predicted"]) if row["predicted"] else None,
-                    status=row["status"],
-                    requested_tolerance_met=row["status"] == "Available",
-                    role="not fitted",
-                )
-                for row in prior
-            ],
-            held,
-        )
-        pools = {
-            "fitted: fitted CO2 partial pressure": [row for row in result["rows"] if row["identity"] in original_ids],
-            "fitted: loaded density": [row for row in result["rows"] if row["group"] == "loaded density"],
-            "not fitted: six-source pressures": additional,
-        }
-        aard = {
-            key: dict(
-                retained=float(agreement[name, key]["aard_percent"]), replayed=pressure_statistics(rows)["AARD_percent"]
-            )
-            for key, rows in pools.items()
-        }
-        cases[name] = dict(
-            result,
-            rows=[dict(row, role="fitted") for row in result["rows"]],
-            retained_cost=retained["cost"],
-            row_differences=differences + held_differences,
-            value_differences=values + held_values,
-            comparisons=held,
-            aard_percent=aard,
-            parameter_source=(folder / "parameters.json").relative_to(ROOT).as_posix(),
-        )
-    return dict(cases=cases)
 
 
-def replay_bound_profiles(declaration):
-    mapping = parameter_mapping(declaration["endpoint"])
-    folder = declaration["profile"]
-    coordinates = read(folder / "inputs.json")["coordinates"]
-    indices = {coordinate["identity"]: index for index, coordinate in enumerate(coordinates)}
-    baseline = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-    retained_predictions = read(folder / "predictions.json")
-    results = []
-    baseline_rows = {row["identity"]: row for row in baseline.inputs["observations"]["fitted"]}
-    records = []
-    for row in retained_predictions["records"]:
-        identity = row["identity"]
-        source = baseline_rows[identity.removesuffix(":bicarbonate-only")]
-        records.append(dict(source, arguments=row["arguments"], identity=identity, group=row["group"]))
-    baseline_values = {row["identity"]: row["value"] for row in evaluate(baseline, records)}
-    base_cost = replay(baseline)["cost"]
-    for profile in read(folder / "profiles.json"):
-        index = indices[profile["parameter"]]
-        name = f"profile-{index}-{profile['fraction']}"
-        fit = read(folder / name / "fit.json")
-        physical = iter(fit["physical"])
-        updates = {}
-        for i, coordinate in enumerate(coordinates):
-            for family, species, factor in coordinate["targets"]:
-                identity = target_identity(mapping, family, species)
-                updates[identity] = next(physical) if i in fit["indices"] else factor * profile["fixed_value"]
-        if next(physical, None) is not None:
-            raise ValueError(f"{name}: unexpected profile coefficient")
-        point = with_parameter_values(mapping, updates)
-        spec = bind_mea(point, declaration["specification"], reaction_reference_pressure_pa=None)
-        result = replay(spec)
-        predicted = evaluate(spec, records)
-        retained = read(folder / name / "predictions.json")["values"]
-        # The retained derivative report provides finite predictions for each requested row.
-        before = [
-            dict(identity=row["identity"], value=value, status="Available", requested_tolerance_met=True)
-            for row, value in zip(records, retained, strict=True)
-        ]
-        differences, values = compare_rows(before, predicted)
-        changes = {}
-        for row in predicted:
-            if row["status"] == "Available" and row["requested_tolerance_met"]:
-                change = abs(row["value"] / baseline_values[row["identity"]] - 1)
-                changes[row["group"]] = max(changes.get(row["group"], 0.0), change)
-        results.append(
-            dict(
-                result,
-                profile=name,
-                retained=profile,
-                comparisons=predicted,
-                row_differences=differences,
-                value_differences=values,
-                delta_cost=result["cost"] - base_cost,
-                group_changes=changes,
-            )
-        )
-    return dict(profiles=results)
 
 
-class Hong:
-    def __init__(self, parameters):
-        self.input = read(parameters)
-        self.masses = {
-            row["component_id"]: row["fixed"]["molar_mass"]["value"]["magnitude"]
-            for row in self.input["parameters"]["components"]
-        }
-        self.species = tuple(self.masses)
-        self.temperatures = np.arange(9) * 10 + 313.15
-        self.loadings = np.arange(1, 11) / 10
-        self.weights = np.asarray(self.input["weights"])
-
-    def weight(self, a, T):
-        return float(np.interp(T, self.temperatures, [np.interp(a, self.loadings, row) for row in self.weights]))
-
-    def coefficient(self, name, magnitude, unit="dimensionless"):
-        return dict(identity=name, value=dict(magnitude=magnitude, unit=unit))
-
-    def model(self, w):
-        doc = copy.deepcopy(self.input["parameters"])
-        topology = doc["topology"]
-        neutral = self.input["neutral_association"]
-        (km, kw), (em, ew) = (
-            [e[k]["value"]["magnitude"] for e in neutral["edges"][:2]] for k in ("volume", "energy_over_k")
-        )
-        cross_volume = ((km ** (1 / 3) + kw ** (1 / 3)) / 2) ** 3
-        cross_energy = self.input["mea_water_alpha_HB"] * math.sqrt(em * ew)
-        intercept = -800 if w == 0 else 800 if w == 1 else math.log(w / (1 - w))
-        doc["pathway_weight"]["coefficients"][0]["value"]["magnitude"] = intercept
-        reactive_sites, topology["sites"] = topology["sites"], []
-        for site in reactive_sites:
-            suffix = site["site_id"][1:]
-            for q in neutral["sites"]:
-                topology["sites"].append(dict(q, site_id=q["site_id"] + suffix, pathway=site["pathway"]))
-            topology["sites"].append(site)
-            for i, q in enumerate(copy.deepcopy(neutral["edges"])):
-                for end in ("endpoint_a", "endpoint_b"):
-                    q[end]["site_id"] += suffix
-                if i >= 2:
-                    q.update(
-                        energy_over_k=self.coefficient(f"cross-{i}", cross_energy, "kelvin"),
-                        volume=self.coefficient(f"cross-{i}/volume", cross_volume),
-                    )
-                for k in ("energy_over_k", "volume"):
-                    q[k]["identity"] += suffix
-                topology["edges"].append(q)
-        return epcsaft.Mixture(epcsaft.Parameters.from_mapping(doc))
-
-    def composition(self, a, water):
-        n = np.array([1.0, water, a])
-        return n / n.sum()
-
-    def phase_solve(self, mix, a, T, water, pinned=0.0):
-        x = self.composition(a, water)
-        problem = equilibrium.bubble_point(
-            liquid=equilibrium.Phase("L", kind="liquid", composition_guess=dict(zip(self.species, x))),
-            T=T,
-            feed=equilibrium.Amounts(dict(zip(self.species, (1.0, water, a)))),
-        )
-        if pinned:
-            # Seed the same fixed-amount solve with the liquid's 1 bar fugacities.
-            state = mix.state(T, P=1e5, x=x, phase="liquid")
-            fugacity = x * np.exp(state.log_fugacity_coefficient) * 1e5
-            guess = float(fugacity.sum())
-            problem.P = equilibrium.Free(guess)
-            problem.phases[1].composition_guess = dict(zip(self.species, fugacity / guess))
-            problem.phases[1].amount = equilibrium.Pinned(pinned)
-        return equilibrium.solve_equilibrium(mix, problem)
-
-    @cache
-    def pressure(self, a, T, water, w):
-        mix = self.model(w)
-        result = self.phase_solve(mix, a, T, water)
-        eigenvalue, stability = None, "stable"
-        if not result.success:
-            match = re.search(r"lowest eigenvalue (-?[\d.eE+-]+)", result.message)
-            if match is None or "local phase instability:" not in result.message or float(match[1]) >= 0:
-                raise RuntimeError((a, T, water, w, result.message))
-            eigenvalue, stability = float(match[1]), "locally unstable"
-            result = self.phase_solve(mix, a, T, water, 1e-9)
-            if not result.success:
-                raise RuntimeError((a, T, water, w, eigenvalue, result.message))
-        x, y = np.asarray(result.mole_fractions).reshape(2, 3)
-        predicted = float(result.pressure * y[2])
-        return dict(
-            predicted=predicted,
-            stability=stability,
-            minimum_eigenvalue=eigenvalue,
-            w=w,
-            pressure_Pa=result.pressure,
-            liquid_density_mol_m3=result.molar_densities[0],
-            max_solver_residual=max(map(abs, result.classified_residuals)),
-            liquid=x.tolist(),
-            vapor=y.tolist(),
-        )
-
-    def heat(self, row):
-        a, b, T, w = (row[k] for k in ("previous_loading", "loading", "T_K", "water_per_mea"))
-        points = [a, a + (b - a) / 4, a + (b - a) / 2, a + 3 * (b - a) / 4, b]
-        output, states = {}, []
-        for side in (1,) if T == 313.15 else (-1,) if T == 393.15 else (-1, 1):
-            label = "warm" if side == 1 else "cool"
-            for step in (0.1, 0.01):
-                Ta = T + side * step
-                p = [
-                    (self.pressure(x, T, w, self.weight(x, T)), self.pressure(x, Ta, w, self.weight(x, Ta)))
-                    for x in points
-                ]
-                states.extend(q for pair in p for q in pair)
-                g = [-R * math.log(v["predicted"] / u["predicted"]) / (1 / Ta - 1 / T) / 1000 for u, v in p]
-                output.update(
-                    {
-                        f"{label}_{step}_simpson": (g[0] + 4 * g[2] + g[4]) / 6,
-                        f"{label}_{step}_halved": (g[0] + 4 * g[1] + 2 * g[2] + 4 * g[3] + g[4]) / 12,
-                        f"{label}_{step}_endpoint": g[4],
-                    }
-                )
-        unstable = [r for r in states if r["stability"] == "locally unstable"]
-        return dict(
-            output,
-            stability="locally unstable" if unstable else "stable",
-            minimum_eigenvalue=min((q["minimum_eigenvalue"] for q in unstable), default=None),
-            max_solver_residual=max(q["max_solver_residual"] for q in states),
-            w=self.weight(b, T),
-            pressure_states=len(states),
-            unstable_pressure_states=len(unstable),
-            min_w=min(q["w"] for q in states),
-            max_w=max(q["w"] for q in states),
-        )
-
-    def predict(self, row):
-        T, a, water = (row[k] for k in ("T_K", "analytical_loading", "water_per_mea"))
-        if row["block"].startswith("Kim "):
-            return self.heat(row)
-        w = self.weight(a, 313.15 if row["hilliard_edge"] else T)
-        if not row["pressure_Pa"]:
-            return self.pressure(a, T, water, w)
-        x = self.composition(a, water)
-        P = float(row["pressure_Pa"])
-        state = self.model(w).state(T, P=P, x=x, phase="liquid")
-        return dict(
-            predicted=float(state.molar_density * (x @ list(self.masses.values()))),
-            w=w,
-            liquid_density_mol_m3=state.molar_density,
-            pressure_residual_Pa=state.pressure - P,
-        )
 
 
 def comparison_metrics(rows, predicted):
@@ -1312,157 +946,10 @@ def comparison_metrics(rows, predicted):
     )
 
 
-def hong_scores(rows):
-
-    output = []
-    for block in dict.fromkeys(r["block"] for r in rows):
-        selected = [r for r in rows if r["block"] == block and r["three_model_eligible"]]
-        groups = [("all", selected)]
-        unmatched = [r for r in rows if r["block"] == block and not r["three_model_eligible"]]
-        if unmatched:
-            groups.append(("above 0.60, Hong only", unmatched))
-        if block == "canonical":
-            for domain, base in [("all", selected), ("strict grid", [r for r in selected if r["inside_hong_grid"]])]:
-                if domain != "all":
-                    groups.append((domain, base))
-                for field, labels in [
-                    ("adopted_role", ("fitted", "not fitted")),
-                    ("stability", ("stable", "locally unstable")),
-                ]:
-                    groups.extend((f"{domain}, {label}", [r for r in base if r[field] == label]) for label in labels)
-        kim_block = block.startswith("Kim ")
-        sides = (
-            ("cool", "warm")
-            if block == "Kim 353.15 K"
-            else ("cool",)
-            if block == "Kim 393.15 K"
-            else ("warm",)
-            if kim_block
-            else ("",)
-        )
-        metric = "aard_percent" if block in ("canonical", "wagner") else "rmse"
-        for group, data in groups:
-            for side in sides:
-                key = f"{side}_0.01_halved" if side else "predicted"
-                models = [("hong", key), ("adopted", "adopted"), ("polley_hedengren_2026", "polley_hedengren_2026")]
-                if data is unmatched:
-                    models = models[:1]
-                assert len({r["record_id"] for r in data}) == len(data)
-                # Every model is scored on the same rows; a row any model cannot predict is listed, not dropped silently.
-                unavailable = [r["record_id"] for r in data if any(r.get(k) is None for _, k in models)]
-                scored = [r for r in data if r["record_id"] not in unavailable]
-                n = len(scored)
-                values = {m: comparison_metrics(scored, predicted=k) for m, k in models} if n else {}
-                role_2026 = (
-                    "fitted / not fitted" if block in ("canonical", "Kim 313.15 K", "Kim 353.15 K") else "not fitted"
-                )
-                output.append(
-                    dict(
-                        block=block,
-                        subset=group,
-                        side=side,
-                        n=n,
-                        unavailable=unavailable,
-                        metric=metric,
-                        adopted_fitted=sum(r["adopted_role"] == "fitted" for r in scored),
-                        polley_hedengren_2026_role=role_2026 if data is not unmatched else "above_ceiling",
-                        hong_role="not fitted",
-                        stable=sum(r.get("stability") == "stable" for r in scored),
-                        locally_unstable=sum(r.get("stability") == "locally unstable" for r in scored),
-                        **{m: values[m][metric] if values else None for m, _ in models},
-                    )
-                )
-    return output
 
 
-def replay_published_pressures(declaration):
-    templates, population = pressure_inputs(declaration)
-    with input_path(declaration["wagner"]).open(newline="") as stream:
-        wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-    results = {}
-    for label, (endpoint, path) in declaration["pressure_cases"].items():
-        mapping = parameter_mapping(endpoint)
-        spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-        spec.inputs["endpoint"] = mapping
-        legacy, added = pressure_additions(spec, templates, population)
-        rows = evaluate(spec, legacy + added + wagner_pressure_records(spec, legacy[0], templates, wagner))
-        with input_path(path).open(newline="") as stream:
-            prior = [
-                dict(
-                    identity=row["target"],
-                    value=float(row["predicted"]) if row["predicted"] else None,
-                    status=row["status"],
-                    requested_tolerance_met=row["status"] == "Available",
-                )
-                for row in csv.DictReader(stream)
-                if row["kind"] in ("canonical", "wagner")
-            ]
-        differences, values = compare_rows(prior, rows)
-        canonical = [row for row in rows if row["identity"] in population]
-        results[label] = dict(
-            rows=rows, row_differences=differences, value_differences=values, canonical=pressure_statistics(canonical)
-        )
-    baygi = read(declaration["baygi"])
-    comparison_ids = {row["target"] for row in baygi["rows"]}
-    matched = {
-        label: pressure_statistics([row for row in record["rows"] if row["identity"] in comparison_ids])
-        for label, record in results.items()
-    }
-    return dict(results=results, baygi_matched=matched, baygi_literature_input=baygi["reference"])
 
 
-def replay_hong(declaration):
-    model = Hong(declaration["endpoint"])
-    with input_path(declaration["admission"]).open(newline="") as stream:
-        pressures = {row["record_id"]: row["pressure_Pa"] for row in csv.DictReader(stream)}
-    rows = []
-    for path in declaration["blocks"]:
-        with input_path(path).open(newline="") as stream:
-            for record in csv.DictReader(stream):
-                row = {field: record[field] for field in ("record_id", "block", "adopted_role")}
-                for field in ("hilliard_edge", "three_model_eligible", "inside_hong_grid"):
-                    row[field] = record[field] == "True"
-                for field in (
-                    "T_K",
-                    "analytical_loading",
-                    "water_per_mea",
-                    "observed",
-                    "loading",
-                    "previous_loading",
-                    "adopted",
-                    "polley_hedengren_2026",
-                ):
-                    row[field] = float(record[field]) if record[field] else None
-                row["pressure_Pa"] = (
-                    float(pressures[row["record_id"]]) if pressures[row["record_id"]] else None
-                )
-                try:
-                    row.update(model.predict(row), failure="")
-                except (RuntimeError, ValueError) as error:
-                    row["failure"] = str(error)
-                row["retained_failure"] = record["failure"]
-                rows.append(row)
-    comparisons = replay_published_pressures(declaration)
-    templates, _ = pressure_inputs(declaration)
-    identities = {row["record_id"] for row in rows}
-    for column, (name, density, kim) in declaration["comparison_cases"].items():
-        endpoint, _ = declaration["pressure_cases"][name]
-        mapping = parameter_mapping(endpoint)
-        spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-        spec.inputs["endpoint"] = mapping
-        with input_path(density).open(newline="") as stream:
-            records = [row for row in csv.DictReader(stream) if row["id"] in identities]
-        predicted = {row["identity"]: row["value"] for row in evaluate(spec, list(density_records(spec, records)))}
-        predicted.update({row["identity"]: row["value"] for row in comparisons["results"][name]["rows"]})
-        intervals = [
-            row for row in kim_intervals(kim, declaration["heat_pressure"], declaration["loading_ceiling"])
-            if row["identity"] in identities
-        ]
-        predicted.update({row["identity"]: row["predicted"] for row in heat_intervals(spec, mapping, templates, intervals)})
-        for row in rows:
-            row[f"retained_{column}"] = row[column]
-            row[column] = predicted[row["record_id"]]
-    return dict(rows=rows, statistics=hong_scores(rows), pressure_comparisons=comparisons)
 
 
 def carbonate_shares(spec, inputs, reference):
@@ -1578,117 +1065,6 @@ def absolute_shares(rows):
     )
 
 
-def replay_sensitivities(declaration):
-    specification = declaration["specification"]
-    shared_inputs = read(declaration["share_inputs"])
-    prefix = declaration["shared_root"].relative_to(ROOT).as_posix() + "/"
-    (control,) = (ROOT / path for path in archive_paths()
-                  if path.startswith(prefix) and path.endswith("/arm-replay-costs.json"))
-    shared = {}
-    for name in declaration["arms"]:
-        folder = control.parent / name
-        mapping = read(folder / "parameters.json.gz")
-        spec = bind_mea(mapping, specification, reaction_reference_pressure_pa=None)
-        result = replay(spec)
-        retained = read(folder / "replay.json.gz")
-        difference, values = compare_rows(retained["rows"], result["rows"])
-        share = read(folder / "carbonate-share.json")
-        shares = carbonate_shares(spec, shared_inputs, share["rows"])
-        share_difference, share_values = compare_rows(share["rows"], shares)
-        shared[name] = dict(
-            result,
-            retained_cost=retained["cost"],
-            row_differences=difference + share_difference,
-            value_differences=values + share_values,
-            shares=shares,
-            retained_shares=share["summary"],
-        )
-    baseline = {row["state"]: row for row in shared["P0"]["shares"]}
-    for arm in shared.values():
-        rows = arm["shares"]
-        for label, subset in (
-            ("all", rows),
-            ("without 018", [row for row in rows if not row["state"].endswith("_018")]),
-        ):
-            matched = [row for row in subset if row["status"] == baseline[row["state"]]["status"] == "Available"]
-            old = absolute_shares([baseline[row["state"]] for row in matched])["geometric_mean"]
-            current = absolute_shares(matched)["geometric_mean"]
-            arm.setdefault("summary", {})[label] = dict(
-                absolute_shares(subset),
-                matched_n=len(matched),
-                F2_matched_geometric_mean=old,
-                matched_change=current - old if matched else None,
-                matched_factor=current / old if matched else None,
-            )
-
-    profile = read(declaration["profile_mapping"])
-    prior = read(declaration["profile_replay"])
-    records = []
-    for point, retained in zip([profile["center"], *profile["points"].values()], prior["rows"], strict=True):
-        if point["k"] != retained["k"]:
-            raise ValueError(f"Bicarbonate profile key differs at {point['k']}")
-        spec = bind_mea(point["mapping"], specification, reaction_reference_pressure_pa=None)
-        result = replay(spec)
-        differences, values = compare_rows(retained["rows"], result["rows"])
-        stage = [row for row in result["rows"] if row["group"] != "Kiepe"]
-        rss = 2 * math.fsum(row["cost"] for row in stage) if all("cost" in row for row in stage) else None
-        records.append(
-            dict(
-                result,
-                k=point["k"],
-                retained_cost=retained["replay_cost"],
-                stage_rss=rss,
-                stage_n=len(stage),
-                row_differences=differences,
-                value_differences=values,
-            )
-        )
-    center = records[0]
-    rank = read(declaration["information"])["result"]["p"]
-    variance = center["stage_rss"] / (center["stage_n"] - rank) if center["stage_rss"] is not None else None
-    cutoff = 0.5 * variance * declaration["profile_chi_square"] if variance is not None else None
-    for point in records:
-        point["increase_from_center"] = point["cost"] - center["cost"] if point["cost"] is not None else None
-
-    mapping = parameter_mapping(declaration["endpoint"])
-    retained = read(declaration["born"])
-    born = {}
-    for case in [*retained["cases"], dict(retained["bicarbonate_interior"], ion="bicarbonate-anion")]:
-        ion = case["ion"]
-        name = f"{ion}-{case['diameter_A']:g}" if ion else "baseline"
-        parameters = (
-            with_parameter_values(mapping, {f"component/{ion}/born_diameter": case["diameter_A"]}) if ion else mapping
-        )
-        spec = bind_mea(parameters, specification, reaction_reference_pressure_pa=None)
-        result = replay(spec)
-        born[name] = dict(result, retained_cost=case["cost"])
-        if ion and "jou_pressure" in case:
-            target = case["jou_pressure"]
-            row = next(row for row in result["rows"] if row["identity"] == target["identity"])
-            born[name]["jou_pressure"] = dict(retained=target["perturbed"], replayed=row["value"])
-    base = {row["identity"]: row for row in born["baseline"]["rows"]}
-    for case in retained["cases"][1:]:
-        name = f"{case['ion']}-{case['diameter_A']:g}"
-        rows = born[name]["rows"]
-        shifts = [
-            dict(identity=row["identity"], change_percent=100 * (row["value"] / base[row["identity"]]["value"] - 1))
-            for row in rows
-            if row["row"].get("quantity") == "PartialPressure"
-            and row.get("value") is not None
-            and base[row["identity"]].get("value")
-        ]
-        born[name]["largest_pressure_change"] = max(shifts, key=lambda row: abs(row["change_percent"]))
-    largest_objective_change_percent = (
-        100 * max(abs(case["cost"] - born["baseline"]["cost"]) for case in born.values()) / retained["reference_cost"]
-    )
-    return dict(
-        shared=shared,
-        bicarbonate=dict(
-            rows=records, stage_variance=variance, delta_cutoff=cutoff, retained_delta_cutoff=prior["delta_cutoff"]
-        ),
-        born=born,
-        largest_born_objective_change_percent=largest_objective_change_percent,
-    )
 
 
 def density_records(spec, rows):
@@ -2051,199 +1427,6 @@ def band_statistics(points):
     return summary
 
 
-def replay_temperature_bands(declaration):
-    endpoint, evidence = declaration["endpoint"], declaration["reference"]
-    mapping = parameter_mapping(endpoint)
-    spec = bind_mea(mapping, declaration["specification"], reaction_reference_pressure_pa=None)
-    spec.inputs["endpoint"] = mapping
-    fitted = {row["identity"]: row for row in replay(spec)["rows"]}
-    templates, population = pressure_inputs(declaration)
-    with input_path(declaration["wagner"]).open(newline="") as stream:
-        wagner = [row for row in csv.DictReader(stream) if row["admitted"] == "yes"]
-    with input_path(declaration["canonical"]).open(newline="") as stream:
-        canonical = {row["observation_id"]: row for row in csv.DictReader(stream)}
-    legacy, added = pressure_additions(spec, templates, population)
-    pressure = {
-        row["identity"]: row
-        for row in evaluate(spec, added + wagner_pressure_records(spec, legacy[0], templates, wagner))
-    }
-    points = []
-    with input_path((evidence / "state-targets.csv")).open(newline="") as stream:
-        for row in csv.DictReader(stream):
-            kind, identity = row["kind"], row["target"]
-            if row["quantity"] != "pressure" or kind not in ("canonical", "wagner", "transfer"):
-                continue
-            if kind == "transfer":
-                (record,) = transfer_pressure_records(spec, legacy[0], templates, canonical, [row])
-                pressure[identity] = spec.prediction(record)
-            prediction = fitted.get(identity, pressure.get(identity))
-            role = "fitted" if identity in fitted else "not fitted, 15/45 wt%" if kind == "transfer" else "not fitted"
-            cohort = (
-                "Hilliard 2008 + Jou 1995 (common149)"
-                if role == "fitted"
-                else {"canonical": "six-source 30 wt%", "wagner": "Wagner 2013", "transfer": "Aronu 2011 15/45 wt%"}[
-                    kind
-                ]
-            )
-            points.append(
-                dict(
-                    property="CO2 partial pressure",
-                    role=role,
-                    cohort=cohort,
-                    source=row["source"],
-                    T_K=float(row["temperature_K"]),
-                    observed=float(row["observed"]),
-                    predicted=prediction["value"],
-                    unit="Pa",
-                    identity=identity,
-                    status=prediction["status"],
-                )
-            )
-
-    retained_density = read(evidence / "density-268/density.json")["result"]
-    fitted_density = {
-        identity.replace("AMU-DENS-", "Amundsen2009_state_"): row
-        for identity, row in fitted.items()
-        if "density" in row["group"]
-    }
-    density = evaluate(spec, list(density_records(spec, (row["row"] for row in retained_density))))
-    density_differences, density_values = compare_rows(retained_density, density)
-    for prediction in density:
-        identity, row = prediction["identity"], prediction["row"]
-        use_fit = identity in fitted_density
-        prediction = fitted_density[identity] if use_fit else prediction
-        source, loaded = row["source"], float(row["loading"]) > 0
-        points.append(
-            dict(
-                property="density",
-                role="fitted" if use_fit else "not fitted",
-                cohort=f"{source} {'loaded' if loaded else 'CO2-free'}",
-                source=source,
-                T_K=float(row["T_K"]),
-                observed=float(row["observed_kg_m3"]),
-                predicted=prediction.get("value"),
-                unit="kg/m3",
-                identity=identity,
-                status=prediction["status"],
-            )
-        )
-
-    with input_path((evidence / "cp.csv")).open(newline="") as stream:
-        direct_cp = list(csv.DictReader(stream))
-    with input_path(declaration["cp_source"]).open(newline="") as stream:
-        cp = list(heat_capacity_records(spec, csv.DictReader(stream)))
-    direct_cp_coordinates = {(float(row["T_K"]), float(row["loading"])) for row in direct_cp}
-    for source, prediction in zip(cp, evaluate(spec, cp), strict=True):
-        row = source["row"]
-        T, loading = float(row["T_K"]), float(row["loading"])
-        if (T, loading) not in direct_cp_coordinates:
-            value = prediction["value"] / source["mass_to_mol"] if prediction["value"] is not None else None
-            name = row["source"]
-            points.append(
-                dict(
-                    property="heat capacity",
-                    role="not fitted",
-                    cohort=f"{name} {'loaded' if loading > 0 else 'CO2-free'}",
-                    source=name,
-                    T_K=T,
-                    observed=float(row["cp_kJ_kg_K"]),
-                    predicted=value,
-                    unit="kJ/(kg K)",
-                    identity=source["identity"],
-                    status=prediction["status"],
-                )
-            )
-    for row in direct_cp:
-        record = next(record for record in spec.inputs["observations"]["fitted"] if record["identity"] == row["id"])
-        problem = spec.problems[record["problem"]]
-        masses = {c["component_id"]: c["fixed"]["molar_mass"]["value"]["magnitude"] for c in mapping["components"]}
-        factor = sum(problem.feed.values.values()) / sum(n * masses[c] for c, n in problem.feed.values.items()) / 1000
-        prediction = fitted[record["identity"]]
-        points.append(
-            dict(
-                property="heat capacity",
-                role="fitted",
-                cohort="Hilliard 2008 (fitted states)",
-                source="Hilliard2008",
-                T_K=float(row["T_K"]),
-                observed=float(row["observed_kJ_kg_K"]),
-                predicted=prediction["value"] * factor,
-                unit="kJ/(kg K)",
-                identity=record["identity"],
-                status=prediction["status"],
-            )
-        )
-
-    heat = []
-    with input_path((evidence / "heat.csv")).open(newline="") as stream:
-        for row in csv.DictReader(stream):
-            role = "fitted" if row["role"] == "fitted" else "not fitted"
-            heat.append(
-                dict(
-                    identity=row["id"],
-                    T_K=float(row["T_K"]),
-                    loading=float(row["loading"]),
-                    previous_loading=0.0,
-                    pressure=float(row["P_Pa"]),
-                    observed=-float(row["observed_kJ_mol"]),
-                    retained=-float(row["predicted_kJ_mol"]),
-                    retained_status="available",
-                    cohort=row["source"],
-                    role=role,
-                    source=row["source"],
-                )
-            )
-    heat_reference = read(declaration["heat_reference"])
-    with input_path((evidence / "kim2007-heat-pathways/kim-heat.csv")).open(newline="") as stream:
-        for row in csv.DictReader(stream):
-            flagged = row["source_inconsistent"] == "True" or row["first_120"] == "True"
-            heat.append(
-                dict(
-                    identity=row["record_id"],
-                    T_K=float(row["T_K"]),
-                    loading=float(row["loading"]),
-                    previous_loading=float(row["previous_loading"]),
-                    pressure=heat_reference["system_pressure_Pa"],
-                    loading_ceiling=heat_reference["loading_ceiling"],
-                    observed=float(row["observed"]),
-                    retained=float(row["predicted"]) if row["predicted"] else None,
-                    retained_status=row["interval_status"],
-                    cohort="Kim and Svendsen 2007",
-                    role="not fitted, source-flagged" if flagged else "not fitted",
-                    source="Kim2007",
-                )
-            )
-    for row in heat_reference["rows"]:
-        cohort = "Kim et al. 2014 (replayed)" if row["source"] == "Kim2014" else "Vinjarapu 2024 Table 5 (replayed)"
-        heat.append(
-            dict(
-                identity=row["record_id"],
-                T_K=row["T_K"],
-                loading=row["loading"],
-                previous_loading=row["previous_loading"],
-                pressure=heat_reference["system_pressure_Pa"],
-                loading_ceiling=heat_reference["loading_ceiling"],
-                observed=row["observed_kJ_mol"],
-                retained=row["predicted_kJ_mol"],
-                retained_status=row["status"],
-                cohort=cohort,
-                role="not fitted",
-                source=row["source"],
-            )
-        )
-    heat = list(heat_intervals(spec, mapping, templates, heat))
-    points += [
-        dict(row, property="heat of absorption", unit="kJ/mol CO2")
-        for row in heat
-        if row["retained_status"] == "available"
-    ]
-    return dict(
-        points=points,
-        statistics=band_statistics(points),
-        heat=heat,
-        density_row_differences=density_differences,
-        density_value_differences=density_values,
-    )
 
 
 def retained_state_targets(mapping, model, observation, retained):
@@ -2498,178 +1681,30 @@ def replay_part1(declaration):
 
 
 FIT_SETS = {
-    "temperature-bands": dict(
-        replay=replay_temperature_bands,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        endpoint=RESTRICTION_FIT / "F2/parameters.json",
-        reference=RESTRICTION_FIT / "evidence/F2",
-        wagner=BUNDLE / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
-        cp_source=BUNDLE / "heat-capacity-264/sources.csv",
-        heat_reference=BUNDLE / "results/stripper-temperature-409/heat-replay.json",
-        statistics=BUNDLE / "results/stripper-temperature-409/band-table.csv",
-        **PRESSURE_INPUTS,
-    ),
-    "sensitivities": dict(
-        replay=replay_sensitivities,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        endpoint=RESTRICTION_FIT / "F2/parameters.json",
-        shared_root=BUNDLE / "results/shared-ion-electrostatics-423",
-        share_inputs=BUNDLE / "results/bicarbonate-carbonate-266/inputs.json",
-        arms=(
-            "P0",
-            "M1",
-            "M3",
-            "M3-refit",
-            "P1",
-            "P1-refit",
-            "bicarbonate-anion-2.5",
-            "bicarbonate-anion-3.5",
-            "bicarbonate-anion-4",
-            "carbonate-anion-2.5",
-            "carbonate-anion-4",
-            "carbonate-anion-4.953",
-            "permittivity-+5pct",
-            "permittivity--5pct",
-        ),
-        profile_mapping=ROOT / "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz",
-        profile_replay=ROOT / "analyses/round_5/results/C/MEA-k-profile.json.gz",
-        profile_chi_square=3.84146,
-        information=BUNDLE / "results/objective-weights-420/MEA/information.json.gz",
-        born=BUNDLE / "results/born-diameter-sensitivity-405/summary.json",
-    ),
     "published-properties": dict(
         replay=replay_part1,
         archive=CAMPAIGN_ARCHIVE,
         specification=HISTORICAL_SPEC,
-        endpoint=HONG.parent / "polley-2026-explicit-defaults.json",
-        assessment=HONG.parent / "part1/published/selected-assessment/assessment-rows.tar.gz",
-        ratios=HONG.parent / "part1/published/ratios.json",
-        broad_cp=HONG.parent / "part1/published/heat-capacity-264.json",
+        endpoint=SAME_DATA / "polley-2026-explicit-defaults.json",
+        assessment=SAME_DATA / "part1/published/selected-assessment/assessment-rows.tar.gz",
+        ratios=SAME_DATA / "part1/published/ratios.json",
+        broad_cp=SAME_DATA / "part1/published/heat-capacity-264.json",
         cp_source=BUNDLE / "heat-capacity-264/sources.csv",
-        kim=HONG.parent / "part1/published/kim2007-heat-pathways/kim-heat.csv",
+        kim=SAME_DATA / "part1/published/kim2007-heat-pathways/kim-heat.csv",
         heat_pressure=1734000.0,
         loading_ceiling=0.6,
-        statistics=HONG.parent / "part1-scores.json",
+        statistics=SAME_DATA / "part1-scores.json",
         **PRESSURE_INPUTS,
     ),
-    "published": dict(
-        replay=replay_hong,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=HONG / "parameters.json",
-        specification=HISTORICAL_SPEC,
-        **PRESSURE_INPUTS,
-        wagner=BUNDLE / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
-        pressure_cases={
-            "Polley and Hedengren": (
-                BUNDLE / "results/same-data-comparison/polley-2026-explicit-defaults.json",
-                BUNDLE / "results/same-data-comparison/part1/published/selected-assessment/state-targets.csv",
-            ),
-            "16-parameter calibration": (
-                RESTRICTION_FIT / "F0/parameters.json",
-                BUNDLE / "results/adoption-297/paper-evidence/state-targets.csv",
-            ),
-            "prior F2": (RESTRICTION_FIT / "F2/parameters.json", PAPER_EVIDENCE / "paper-evidence/state-targets.csv"),
-            "salt-anchored": (
-                SALT_FIT / "parameters.json",
-                SALT_FIT.parent / "evidence/F4/state-targets.csv",
-            ),
-        },
-        comparison_cases={
-            "adopted": (
-                "prior F2",
-                PAPER_EVIDENCE / "paper-evidence/density.csv",
-                PAPER_EVIDENCE / "paper-evidence/kim2007-heat-pathways/kim-heat.csv",
-            ),
-            "polley_hedengren_2026": (
-                "Polley and Hedengren",
-                HONG.parent / "part1/published/selected-assessment/density.csv",
-                HONG.parent / "part1/published/kim2007-heat-pathways/kim-heat.csv",
-            ),
-        },
-        heat_pressure=1734000.0,
-        loading_ceiling=0.6,
-        baygi=SALT_FIT.parent / "baygi-matched-pressure.json",
-        admission=HONG / "admission.csv",
-        statistics=HONG / "scores.csv",
-        blocks=tuple(
-            HONG / f"{name}.csv"
-            for name in (
-                "canonical",
-                "wagner",
-                "Amundsen2009",
-                "Hartono2014",
-                "Han2012",
-                "Kim 313.15 K",
-                "Kim 353.15 K",
-                "Kim 393.15 K",
-            )
-        ),
-    ),
-    "restrictions": dict(
-        replay=replay_restrictions,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        reference=RESTRICTION_FIT,
-        statistics=RESTRICTION_FIT / "agreement.csv",
-        **PRESSURE_INPUTS,
-        cases=("F0", "F1", "F2", "F3", "F4", "F4-0", "F5"),
-        transfer_case="F2",
-        wagner=BUNDLE / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
-        assessment={
-            "F0": BUNDLE / "results/adoption-297/paper-evidence/state-targets.csv",
-            **{
-                name: RESTRICTION_FIT / f"evidence/{name}/state-targets.csv"
-                for name in ("F1", "F2", "F3", "F4", "F4-0", "F5")
-            },
-        },
-    ),
-    "restrictions-bound-profiles": dict(
-        replay=replay_bound_profiles,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        endpoint=RESTRICTION_FIT / "F2/parameters.json",
-        profile=PAPER_EVIDENCE / "uncertainty",
-    ),
-    "system-pressure-bound-profiles": dict(
-        replay=replay_bound_profiles,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        endpoint=SALT_FIT / "parameters.json",
-        profile=SALT_FIT / "uncertainty",
-    ),
-    "expanded-weights": dict(
-        replay=replay_expanded_weights,
-        archive=CAMPAIGN_ARCHIVE,
-        specification=HISTORICAL_SPEC,
-        **PRESSURE_INPUTS,
-        wagner=BUNDLE / "results/temperature-reanchor-140/never-accessed-vle-admission.csv",
-        off_window={name: EXPANDED_FIT / f"{name}/off-window.json.gz" for name in ("F4", "incumbent")},
-        cases={
-            "F4": (
-                EXPANDED_FIT / "F4/parameters.json",
-                EXPANDED_FIT / "F4/replay.json.gz",
-            ),
-            "F2": (
-                EXPANDED_FIT / "F2/parameters.json",
-                EXPANDED_FIT / "F2/replay.json.gz",
-            ),
-            "incumbent": (
-                SALT_FIT / "parameters.json",
-                EXPANDED_FIT / "incumbent/replay.json.gz",
-            ),
-        },
-    ),
-    "system-pressure": dict(
+    "water-bicarbonate-ablation": dict(
         route=MEARoute,
         declaration=HISTORICAL_SPEC,
-        reference_pressure_pa=None,
+        reference_pressure_pa=P_REF,
         archive=CAMPAIGN_ARCHIVE,
-        endpoint=REPORTED / "MEA/manifest.json.gz",
-        endpoint_keys=("prior_declaration",),
-        reference=REPORTED / "MEA/reference-control.json.gz",
-        reference_keys=("tracking",),
+        endpoint=RESULTS / "mea/water-bicarbonate-ablation/fit/A.json.gz",
+        endpoint_keys=("endpoint",),
+        reference=RESULTS / "mea/water-bicarbonate-ablation/fit/A.json.gz",
+        reference_keys=("replay",),
     ),
     "reported": dict(
         route=MEARoute,
