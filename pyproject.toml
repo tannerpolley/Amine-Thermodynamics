@@ -54,3 +54,5 @@ src = ["src", "scripts", "analyses", "tests"]
 [tool.pytest.ini_options]
 # tests import the repository-root analyses/ tree, which is not an installed package
 pythonpath = ["."]
+# the nested upstream/ Engine clones carry their own tests
+testpaths = ["tests", "scripts"]
