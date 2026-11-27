@@ -30,12 +30,6 @@
     "reason": "constant"
   },
   {
-    "file": "docs/scientific/latex/sections/data_code_availability.tex",
-    "context": " DEA split at 30 wt\\% and a loading",
-    "token": "30",
-    "reason": "identifier"
-  },
-  {
     "file": "docs/scientific/latex/sections/data_methods.tex",
     "context": "only at nominal 30 wt\\% and 313-",
     "token": "30",
@@ -433,12 +427,6 @@
   },
   {
     "file": "docs/scientific/latex/sections/transfer_results.tex",
-    "context": "and at 373--\\SI{393}{\\kelvin} (upper",
-    "token": "393",
-    "reason": "condition"
-  },
-  {
-    "file": "docs/scientific/latex/sections/transfer_results.tex",
     "context": "a feed of \\SI{1}{\\mole} DEA gives",
     "token": "1",
     "reason": "condition"
@@ -495,8 +483,7 @@
     "file": "docs/scientific/latex/sections/transfer_results.tex",
     "context": "al.\\ near \\SI{393}{\\kelvin}, which",
     "token": "393",
-    "reason": "condition",
-    "count": 2
+    "reason": "condition"
   },
   {
     "file": "docs/scientific/latex/sections/transfer_results.tex",
@@ -1373,12 +1360,6 @@
     "literal": true
   },
   {
-    "file": "docs/scientific/latex/sections/data_code_availability.tex",
-    "context": " wt\\% and a loading of 0.50, and the Gibbs pressur",
-    "token": "0.50",
-    "reason": "identifier"
-  },
-  {
     "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
     "context": "so \\(f_{\\mathrm{mix}}=1+0.5\\,x_{\\HtwoO}\\) and the ",
     "token": "0.5",
@@ -1745,7 +1726,7 @@
   {
     "file": "docs/scientific/latex/supplement.tex",
     "token": "393",
-    "context": "\\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\\SI{353}{\\kelvin}, has a detected instability toward a second liquid: filled symbols where the two-liquid equilibrium was calculated, open circles elsewhere, and diamonds at measured states. The AMP model, which also fits the pressures at 373--\\SI{393}{\\kelvin}, has none at these states. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\\ and Tong et al.}",
+    "context": "also fits the pressures at 373--\\SI{393}{\\kelvin}, has none at these states",
     "reason": "condition"
   },
   {
@@ -1763,5 +1744,17 @@
     "reason": "condition",
     "literal": true,
     "statement": "+ (' at 0.5 MPa' if group.endswith('-5bar') else ' at 2.5 MPa'),"
+  },
+  {
+    "file": "docs/scientific/latex/sections/transfer_results.tex",
+    "context": "the lines are calculated at 0.5 and \\SI{2.5}",
+    "token": "0.5",
+    "reason": "condition"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "context": "rows at 0.5 and 2.5 MPa repeat",
+    "token": "0.5",
+    "reason": "condition"
   }
 ]

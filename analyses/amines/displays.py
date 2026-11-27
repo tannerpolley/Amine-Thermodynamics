@@ -732,7 +732,7 @@ def transfer_displays(outputs):
           ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           transfer_rows, [.15,.10,.095,.048,.095,.09,.073,.065,.06,.10], long=True,
-          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Table~\ref{tab:published-models}). \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Table~\ref{tab:published-models}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same 58 observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
     # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
     # the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
@@ -2082,7 +2082,7 @@ def result_values(required):
         key = "rows[fitted," + "|".join(groups) + "].observed,value"
         reported_aard[label] = (record, key, stats(rows, predicted="value")["AARD_percent"])
     locations = {
-        "mea-fitted-pressure": ("abstract", "introduction", "mea-results", "transfer-comparison", "conclusion", "reference-comparison"),
+        "mea-fitted-pressure": ("abstract", "introduction", "mea-results", "conclusion", "reference-comparison"),
         "dea-fitted-pressure": ("abstract", "introduction", "dea-results", "conclusion", "reference-comparison"),
         "mdea-fitted-pressure": ("abstract", "introduction", "mdea-results", "transfer-comparison", "conclusion",
                                  "reference-comparison", "literature-subsets"),
@@ -2421,15 +2421,10 @@ def result_values(required):
     for label, ion in (("carbamate", "carbamate-anion"), ("protonated-mea", "protonated-monoethanolamine")):
         parameter = f"pair/{ion}/water/k_ij"
     parameter = "pair/bicarbonate-anion/water/k_ij"
-    for passage in ("theory", "supplement"):
+    for passage in ("supplement",):
         add(f"mea-shared-bicarbonate-water-conditional-se-{passage}", record,
             f"parameter={parameter}: native_stage_SE", f"{standard_errors[parameter]:.2f}")
 
-    record = "analyses/amines/results/shared/deposit/reviewer-package.json"
-    package = read(record)
-    add("reproducibility-package-size", record, "bytes / 1000000", f"{package['bytes'] / 1e6:.2f}")
-    add("reproducibility-package-checksum-covered-files", record, "checksum_entries",
-        str(package["checksum_entries"]))
 
     record = STUDY + "results/AMP_free/properties.json.gz"
     amp_pressures = [row for row in read(record)["rows"]
@@ -2525,7 +2520,7 @@ def result_values(required):
     record = STUDY + "results/E/MEA/replay.json.gz"
     pressure_stats = read(record)["summary"]["pressure"]
     for cohort, passages in (
-        ("legacy", ("results", "conclusion", "shared-set", "historical-comparison", "residual-caption",
+        ("legacy", ("results", "conclusion", "historical-comparison", "residual-caption",
                     "weighting-sensitivity", "weighting-interpretation")),
         ("added", ("results", "residual-caption", "restriction-comparison", "weighting-sensitivity")),
     ):
@@ -2535,7 +2530,7 @@ def result_values(required):
     for label, cohort in (("added-same-sources", "added"), ("aronu-nominal", "Aronu2011")):
         add(f"mea-{label}-pressure-aard-results", record,
             f"summary.pressure.{cohort}.AARD_percent", f"{pressure_stats[cohort]['AARD_percent']:.2f}")
-    for passage in ("mea-results", "shared-set", "literature-comparison"):
+    for passage in ("mea-results", "literature-comparison"):
         add(f"mea-mamun-pressure-aard-{passage}", record, "summary.pressure.Mamun2005.AARD_percent",
             f"{pressure_stats['Mamun2005']['AARD_percent']:.2f}")
         add(f"mea-mamun-assessment-pressure-count-{passage}", record, "summary.pressure.Mamun2005.attempted",
@@ -2663,20 +2658,6 @@ def result_values(required):
                     add(f"mdea-hot-fitted-pressure-{metric.split('_')[0].lower()}-{passage}", record,
                         f"rows[Kuranov,outside MDEA-dissociation].value,observed: {metric}", format(summary[metric], fmt))
 
-    record = PROPERTY_SUMMARY
-    data = read(record)
-    shared = data["shared"]["comparisons"]
-    for group, label in (
-        (MEA_LEGACY_PRESSURE_GROUP, "mea-fitted-pressure"),
-        ("MEA Mamun2005", "mea-mamun"),
-        ("MDEA Kuranov", "mdea-kuranov"),
-        ("MDEA Ermatchkov", "mdea-ermatchkov"),
-        ("MDEA Carson", "mdea-carson"),
-    ):
-        value = shared[group]["models"]["MEA-fitted"]["AARD_percent"]
-        add(f"{label}-mea-fitted-shared-set-aard", record,
-            f"shared.comparisons[{group}].models[MEA-fitted].AARD_percent", f"{value:.2f}")
-
     record = STUDY + "results/salt.json.gz"
     salt = read(record)
     for formula, label, locations in (
@@ -2692,7 +2673,7 @@ def result_values(required):
         if formula in ("NaHCO3", "mixed"):
             for bound, reduce in (("minimum", min), ("maximum", max)):
                 pass
-    for passage in ("theory", "deviation", "refusal-description"):
+    for passage in ("theory", "refusal-description"):
         add(f"salt-mixed-unavailable-count-{passage}", record, "mixed_refusals.count",
             NUMBER_WORDS[len(salt["mixed_refusals"])])
     for label, ion in (("bicarbonate", "bicarbonate-anion"), ("carbonate", "carbonate-anion")):
@@ -2708,7 +2689,7 @@ def result_values(required):
 
     record = "analyses/mdea_mea_workflow/results/shared-bicarbonate-417/profile.json.gz"
     coefficient = read(record)["center"]["k"]
-    for passage, digits in (("theory", 3), ("transfer", 3), ("supplement-shared-set", 4),
+    for passage, digits in (("transfer", 3), ("supplement-shared-set", 4),
                             ("sensitivity-center", 3), ("sensitivity-control", 4), ("sensitivity-comparison", 4),
                             ("matched-fits", 4)):
         add(f"historical-mea-fitted-water-bicarbonate-interaction-{passage}", record, "center.k",
@@ -3433,6 +3414,10 @@ def result_values(required):
             add(name, DEA_SCREEN, locator, reduced_gibbs_value(decrease))
     add("mdea-restricted-grid-states", MDEA_RESTRICTED_GRID, "len(rows)",
         str(len(read(MDEA_RESTRICTED_GRID)["rows"])))
+    add("mdea-restricted-grid-unsearched-states", MDEA_RESTRICTED_GRID, "len(not_in_S_screen)",
+        str(len(read(MDEA_RESTRICTED_GRID)["not_in_S_screen"])))
+    add("mdea-restricted-grid-requested-states", MDEA_RESTRICTED_GRID, "len(rows) + len(not_in_S_screen)",
+        str(len(read(MDEA_RESTRICTED_GRID)["rows"]) + len(read(MDEA_RESTRICTED_GRID)["not_in_S_screen"])))
     add("mdea-zheng-row-6-bubble-pressure", MDEA_ZHENG, "cold.pressure / 1e6",
         f"{read(MDEA_ZHENG)['cold']['pressure'] / 1e6:.1f}")
     add('mdea-kamps-comparison-count-results', PROPERTY_SUMMARY, 'kamps.full_rows', str(read(PROPERTY_SUMMARY)["kamps"]["full_rows"]))
@@ -3538,9 +3523,6 @@ def result_values(required):
         add(f'{amine}-adjusted-coordinate-count-across-stages', records,
             'endpoint.coordinates plus neutral fitted dielectric coefficients and prior binary or pure fit coordinates',
             str(adjusted))
-    deposit_record = 'analyses/amines/results/shared/deposit/reviewer-package.json'
-    add('deposit-executable-example-count', deposit_record, 'executable_examples.count',
-        NUMBER_WORDS[len(read(deposit_record)['executable_examples'])].capitalize())
 
     dea_confirmed = [q for q in read(PHASE_SUMMARY)['dea_controls']['rows'] if q['split']['confirmed']]
     for concentration, label in ((30, 'lower'), (40, 'higher')):

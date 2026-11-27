@@ -59,7 +59,7 @@ The cation--water interaction, $\res{mdea-cation-water-interaction-results}\pm\r
 % measured temperatures (lines). Colors and symbol shapes identify temperature.
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=0.9\linewidth]{mdea-isotherms.pdf}
-\caption{Loaded aqueous MDEA against loading: measurements (circles, filled if fitted) and MDEA model values at the measured states (crosses), colored by temperature. Total pressures of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} at \SI{413}{\kelvin}, of P\'erez-Salado Kamps et al.\ at the temperatures corrected by Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Sedighi et al.\ \cite{sedighiExperimentalMeasurementThermodynamic2024} (upper row); \COtwo partial pressures of Ermatchkov et al.\ \cite{ermatchkovSolubilityCarbonDioxide2006} and of Xiao et al.\ \cite{xiaoCO2AbsorptionAqueous2018a}, and the fitted total pressures of Kuranov et al.\ (lower row). Each panel pools the temperatures and MDEA contents of its source.}
+\caption{Total pressure over loaded aqueous MDEA against loading at the three MDEA molalities of Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, one panel for each: measurements (symbols; filled if fitted, open at \SI{413}{\kelvin}, where they are not fitted) and isotherms of the MDEA model at the measured temperatures (lines). Colors and symbol shapes identify temperature.}
 \label{fig:mdea-pressure}
 \end{figure}
 
@@ -67,7 +67,7 @@ The cation--water interaction, $\res{mdea-cation-water-interaction-results}\pm\r
 % by the figure; keep the caption and label.
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=0.9\linewidth]{mdea-speciation.pdf}
-\caption{Liquid mole fractions in loaded aqueous MDEA against loading: the NMR measurements of B\"ottinger et al.\ \cite{bottingerOnlineNMRSpectroscopic2008} for the sum of MDEA and \ce{MDEAH+} and for the sum of bicarbonate and carbonate (symbols), none of them fitted, and single-liquid calculations with the MDEA model (lines). Colors and symbol shapes identify temperature.}
+\caption{Liquid mole fractions in loaded aqueous MDEA against loading: the NMR measurements of B\"ottinger et al.\ \cite{bottingerOnlineNMRSpectroscopic2008} for the sum of MDEA and \ce{MDEAH+} and for the sum of bicarbonate and carbonate (symbols), none of them fitted, and single-liquid calculations with the MDEA model (lines). The upper and lower rows show the same observations; the lines are calculated at 0.5 and \SI{2.5}{\mega\pascal}, the two ends of the reported cell-pressure interval. Colors and symbol shapes identify temperature, and line styles the nominal MDEA content.}
 \label{fig:mdea-speciation}
 \end{figure}
 
@@ -90,7 +90,7 @@ The fixed carbamate inputs of AMP, an energy of \SI{\res{amp-carbamate-dispersio
 % measured temperatures (lines). Colors and symbol shapes identify temperature.
 \begin{figure}[pos=!tbp]
 \centering\includegraphics[width=0.85\linewidth]{amp-isotherms.pdf}
-\caption{Loaded aqueous AMP against loading: measurements (circles, filled if fitted) and AMP model values at the measured states (crosses), colored by temperature. Total pressures of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} at 313--\SI{353}{\kelvin} and at 373--\SI{393}{\kelvin} (upper row), total pressures of Tong et al.\ \cite{Tong2012} and \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003} (lower row). Each panel pools the temperatures and AMP contents of its source.}
+\caption{Total pressure over loaded aqueous AMP against loading: measurements of Hartono et al.\ \cite{hartonoNewSolubilityHeat2021} (a) and of Tong et al.\ \cite{Tong2012} (b) (symbols; all fitted) and isotherms of the AMP model at the measured temperatures (lines). Colors and symbol shapes identify temperature.}
 \label{fig:amp-pressure}
 \end{figure}
 
@@ -100,7 +100,7 @@ The fixed carbamate inputs of AMP, an energy of \SI{\res{amp-carbamate-dispersio
 The fitted loaded-solution pressures are not one quantity across the amines: they are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP.
 MDEA is the amine most sensitive to the shared interactions, because it forms no carbamate: bicarbonate is its main product, so the water--bicarbonate interaction acts on its pressures directly.
 The salt-fitted water--anion interactions are adopted because data without an amine determine them, not because the amine data are fitted better.
-With the water--bicarbonate interaction fitted to the MEA data instead, the \res{mea-legacy-pressure-count-shared-set} fitted \COtwo partial pressures of MEA deviate by \res{mea-fitted-pressure-mea-fitted-shared-set-aard} instead of \res{mea-fitted-pressure-aard-transfer-comparison}\,\%, and the \res{mea-mamun-assessment-pressure-count-shared-set} \COtwo partial pressures of Ma'mun et al.\ near \SI{393}{\kelvin}, which are not fitted, by \res{mea-mamun-mea-fitted-shared-set-aard} instead of \res{mea-mamun-pressure-aard-shared-set}\,\%; Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} gives the same comparison for MDEA.
+Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} compares the deviations of the MEA and MDEA models with those of the same fits made with the water--bicarbonate interaction fitted to the MEA data.
 
 \input{tables/amine-summary}
 
@@ -118,7 +118,8 @@ Neither Hartono et al.\ nor Tong et al.\ report the phase state of their samples
 For MDEA the result has two parts.
 In the \COtwo-free solution the bound of \cref{sec:methods-phase} keeps the MDEA--water interaction below the calculated onset of a liquid--liquid gap at each of the \res{mdea-binary-gap-tested-temperatures-transfer} tested temperatures (\cref{fig:mdea-gap-onset}).
 The bound acts only through the tested temperatures: with the fitted temperature law extrapolated, the gap appears just above \SI{423}{\kelvin}, so the MDEA model must not be used above that temperature.
-In the loaded solution the MDEA model predicts no liquid--liquid split at any of the \res{mdea-measurement-derived-searches-attempted-transfer} measured states and has no detected instability at the \res{mdea-restricted-grid-states} grid states, which are restricted to the measured concentrations and loadings.
+In the loaded solution the MDEA model predicts no liquid--liquid split at any of the \res{mdea-measurement-derived-searches-attempted-transfer} measured states.
+Of the \res{mdea-restricted-grid-requested-states} grid states, which lie within the measured loading range of each concentration, the \res{mdea-restricted-grid-states} searched have no detected instability; the other \res{mdea-restricted-grid-unsearched-states}, at two concentrations, are searched with the next epcsaft version.
 At \res{mdea-distinct-descent-states-transfer} of the measured states the measured or assigned pressure lies below the bubble pressure of the model, for example \SI{2.57}{\mega\pascal} against \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal} at row 5 of the heats of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} and \SI{0.100}{\mega\pascal} against \SI{\res{mdea-sobrino-example-bubble-pressure-transfer}}{\mega\pascal} for the \COtwo-free densities of Sobrino et al.\ \cite{sobrinoViscosityDensityMeasurements2016} at \SI{393.15}{\kelvin}, and there the model predicts partial vaporization, not a second liquid.
 The model overpredicts the pressure of highly loaded, concentrated MDEA: at the highest loading of Zheng et al., 1.18 in 50 wt\% MDEA at \SI{323.15}{\kelvin}, the calculated bubble pressure is \res{mdea-zheng-row-6-bubble-pressure}~MPa against \SI{4.19}{\mega\pascal} measured.
 No measurement of liquid--liquid coexistence in this system was used.

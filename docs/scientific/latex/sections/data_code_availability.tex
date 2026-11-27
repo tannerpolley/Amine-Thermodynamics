@@ -2,10 +2,7 @@
 % P:availability-01
 The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code under the MIT license; third-party measurements remain under the terms of their sources.
 The Zenodo DOI will be assigned at submission.
-The reproducibility package is \res{reproducibility-package-size} MB, with a SHA-256 checksum list covering \num{\res{reproducibility-package-checksum-covered-files}} files.
-It contains the archived epcsaft wheels used for the reported models (version 1.3.1) and for the earlier MEA calculations (version 1.3.0), with source revisions and checksums in the software index and replay commands in the README.
-It also contains the full parameter vectors of the four models, caloric inputs, source-row transformations and calculation outputs.
-\res{deposit-executable-example-count} executable examples replay the MEA heat of absorption, the DEA split at 30 wt\% and a loading of 0.50, and the Gibbs pressure- and temperature-derivative check at one fitted MEA bubble state.
+The deposit contains the epcsaft wheel with which the reported values were calculated; the retained inputs, which are the processed observations with their source-row transformations, the caloric inputs and the full parameter vectors of the four models; the retained calculation records; and the commands that regenerate every table and figure of the article and the supplement from them.
 The current public release, version 1.3.2, with its source at \url{https://github.com/tannerpolley/epcsaft} and a conda package installed with \texttt{conda create -n epcsaft -c conda-forge -c tannerwpolley python=3.13 epcsaft=1.3.2}, was not used for the reported calculations, and whether it reproduces them has not been tested.
 
 \section*{Funding}

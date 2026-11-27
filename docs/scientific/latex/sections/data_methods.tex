@@ -62,9 +62,8 @@ There the loaded total pressures contribute \res{mdea-loaded-pressures-objective
 In the MEA objective the \res{mea-cai-binary-observation-count-methods} MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the objective value, \res{mea-selected-objective-cai-weight}, but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
-The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, stopped on a relative function tolerance of $10^{-10}$.
-For MEA, DEA and AMP, fits from \res{reported-tied-start-count-methods} starts in different parts of the parameter box reach the same objective value; the MDEA fit was made from one start.
-Each fit is a local solution.
+The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
+For MEA, DEA and AMP, fits from \res{reported-tied-start-count-methods} starts in different parts of the parameter box reach the same objective value, and the reported MDEA parameters come from start A, the MDEA start with the lowest objective value (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),

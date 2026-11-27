@@ -204,7 +204,7 @@ Each fitted interaction is linear in temperature, $k(T)=a_0+a_1(T-\SI{298.15}{\k
 The water--sodium intercept is fitted first, to \res{salt-sodium-chloride-fitted-osmotic-row-count} osmotic coefficients of sodium chloride at \SI{298.15}{\kelvin} and 0.1--\SI{1.0}{\mole\per\kilogram} \cite{HamerWu1972}, with the slope of Held et al.\ retained; it ends on its lower bound, $\res{salt-sodium-intercept-at-lower-bound-supplement}$, and the sodium chloride coefficients deviate by \res{salt-sodium-chloride-osmotic-aard-supplement}\,\%.
 The water--bicarbonate interaction is fitted next and is not on a bound: $a_0=\res{salt-water-bicarbonate-original-intercept}$ and $a_1=\SI{\res{salt-water-bicarbonate-linear-slope}}{\per\kelvin}$, which is \res{salt-water-bicarbonate-value-at-reference-temperature} at \SI{313.15}{\kelvin}, with an AARD of \res{salt-sodium-bicarbonate-osmotic-aard-supplement}\,\% on the \res{salt-sodium-bicarbonate-fitted-osmotic-row-count} sodium bicarbonate coefficients.
 The water--carbonate interaction is fitted last: its intercept ends on the lower bound, $a_0=\res{salt-water-carbonate-intercept-at-lower-bound-supplement}$, with $a_1=\SI{\res{salt-water-carbonate-linear-slope}}{\per\kelvin}$, which is $\res{salt-water-carbonate-value-at-reference-temperature}$ at \SI{313.15}{\kelvin}, and the \res{salt-sodium-carbonate-fitted-osmotic-row-count} sodium carbonate coefficients deviate by \res{salt-sodium-carbonate-osmotic-aard-supplement}\,\%, the calculated values being low.
-For \res{salt-mixed-assessment-available-osmotic-row-count} coefficients of mixed bicarbonate--carbonate solutions that were not fitted, the deviation is \res{salt-mixed-salts-osmotic-aard-supplement}\,\%; \res{salt-mixed-unavailable-count-deviation} further mixed rows, whose printed compositions give a zero or negative amount of the minor anion on closing the charge balance, are left out.
+For \res{salt-mixed-assessment-available-osmotic-row-count} coefficients of mixed bicarbonate--carbonate solutions that were not fitted, the deviation is \res{salt-mixed-salts-osmotic-aard-supplement}\,\%.
 
 % P:supplement-salt-target
 The printed water activities of Peiper and Pitzer satisfy $-\ln a_w/M_w=\phi_{\mathrm{eq}}\sum_im_i=\phi_{\mathrm{st}}\sum_s\nu_sm_s$ within printed precision, where the first sum runs over the equilibrium solute species and the second over the stoichiometric salt.
@@ -212,7 +212,7 @@ The fitted target is the equilibrium coefficient of the ions: the molality of di
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.72\linewidth]{salt-osmotic-residuals.pdf}
-\caption{Signed relative deviations of the calculated ionic osmotic coefficient from the target derived from Peiper and Pitzer. The lower-right panel marks the nominal molality and temperature of the mixed-salt rows that are left out.}
+\caption{Signed relative deviations of the calculated ionic osmotic coefficient from the target derived from Peiper and Pitzer, against nominal salt molality, for the fitted sodium bicarbonate and sodium carbonate solutions and the mixed bicarbonate--carbonate solutions, which are not fitted. Color identifies temperature.}
 \label{fig:salt-osmotic-residuals}
 \end{figure}
 
@@ -465,7 +465,7 @@ The MDEA standard errors are conditional on the \res{mdea-active-bound-count-sup
 \input{tables/supplement-transfer-bounds}
 
 % P:supplement-starts
-For MEA, DEA and AMP, fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reach the same objective values, \res{mea-selected-objective-starts}, \res{dea-selected-objective-starts} and \res{amp-selected-objective-starts}; the MDEA fit, made from one start, has an objective value of \res{mdea-selected-objective-continuation}.
+For MEA, DEA and AMP, fits from \res{reported-tied-admitted-start-count-supplement} starts in different parts of the parameter box reach the same objective values, \res{mea-selected-objective-starts}, \res{dea-selected-objective-starts} and \res{amp-selected-objective-starts}; the reported MDEA parameters come from start A, which has the lowest objective value of the MDEA starts, \res{mdea-selected-objective-continuation}.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
 % P:supplement-ranges
@@ -506,7 +506,7 @@ A separate search at the \res{mea-measured-state-search-requests-supplement} mea
 % P:supplement-phase-transfer-grid
 For DEA, MDEA and AMP, the search covers the measured states and a grid.
 The grid spans 313.15--393.15 K in 10 K steps and loadings of $10^{-5}$ and then 0.1 upward in steps of 0.1 to the largest loading in the data of the amine, which is added, at 1.05 and 3.0 times the calculated bubble pressure; its amine concentrations are those of the fitted data, with concentrations within 1 wt\% of each other searched once.
-For MDEA the grid is restricted to the concentrations and loadings of the measured loaded solutions, so that no state is searched at a loading that was not measured near its concentration.
+For MDEA each fitted concentration is searched on its own, at the grid loadings that lie within the range of loadings measured at that concentration, so that no state is searched at a loading that was not measured at its concentration.
 
 % P:supplement-phase-dea
 For DEA, the search covers \res{dea-phase-search-measurement-requests} measured states and \res{dea-phase-search-grid-requests} grid states, the latter at the \res{dea-reported-grid-stocks-supplement} fitted DEA concentrations (10, 20, 25 and 30 wt\%), the \res{dea-reported-grid-temperatures-supplement} grid temperatures and \res{dea-reported-grid-loadings-supplement} loadings up to \res{dea-reported-grid-maximum-loading-supplement} mol/mol at both pressures.
@@ -519,7 +519,7 @@ Weiland et al.\ measured these densities with hydrometers on samples made by mix
 
 % P:supplement-phase-mdea
 For MDEA, the search covers \res{mdea-measurement-derived-searches-attempted-supplement-design} measured states and the grid states of the main text.
-The MDEA model predicts no liquid--liquid split at any measured state and has no detected instability at the grid states.
+The MDEA model predicts no liquid--liquid split at any measured state and has no detected instability at the searched grid states.
 At \res{mdea-distinct-descent-states-supplement-total} measured states it predicts liquid plus vapor, because the measured or assigned pressure lies below its bubble pressure: \res{mdea-distinct-descents-sobrino-supplement} at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 
 % P:supplement-phase-amp
@@ -552,7 +552,7 @@ The first fit differs from the AMP model in its data, in the water--anion intera
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.72\linewidth]{amp-splits.pdf}
-\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid: filled symbols where the two-liquid equilibrium was calculated, open circles elsewhere, and diamonds at measured states. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none at these states. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.}
+\caption{Searched states at which the first AMP fit, made with only the loaded total pressures at 313--\SI{353}{\kelvin}, has a detected instability toward a second liquid (open circles), projected onto temperature and loading. The AMP model, which also fits the pressures at 373--\SI{393}{\kelvin}, has none at these states. States at different AMP contents and pressures can project onto one point; states without a detected instability are not drawn. Shaded band: temperatures of the loaded-solution pressures in the first fit; dashed line: upper limit of the measured R5 range; plus signs: states of the measured total pressures of Hartono et al.\ and Tong et al.}
 \label{fig:amp-splits}
 \end{figure}
 
