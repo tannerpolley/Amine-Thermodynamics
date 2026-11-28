@@ -1239,7 +1239,7 @@ def transfer_displays(outputs):
           COLUMNS, main_rows, [], spec=SPEC,
           notes=r'AARD follows Eq.~\eqref{eq:aard}. ' + TERMS + r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. '
                 r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. '
-                rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi et al.\ \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
+                rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi and Pahlavanzadeh \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
     table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources and temperatures that this work did not fit.',
           COLUMNS, other_rows, [], spec=SPEC,
           notes=r'AARD follows main-text Eq.~(\ref{main-eq:aard}). ' + TERMS + r'Unclear: see the text. This work: MEA at nominal 30 wt\%; sets I and II: the two parameter sets of Ermatchkov et al. '
