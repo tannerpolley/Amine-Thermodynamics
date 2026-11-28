@@ -200,8 +200,9 @@ def publish(draft_id, token):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--token-file", type=Path, default=os.environ.get("ZENODO_TOKEN_FILE"),
-                        help="file containing the Zenodo token (or set ZENODO_TOKEN_FILE)")
+    parser.add_argument("--token-file", type=Path,
+                        default=os.environ.get("ZENODO_TOKEN_FILE", "~/.config/secrets/zenodo.env"),
+                        help="file holding the token, bare or as ZENODO_TOKEN=... (default: ~/.config/secrets/zenodo.env)")
     commands = parser.add_subparsers(dest="command", required=True)
     create = commands.add_parser("draft", help="stage the archive in a new Zenodo version draft")
     create.add_argument("--deposit", type=Path, help="sealed directory (defaults to local_data_release)")
@@ -216,9 +217,7 @@ def main():
             if args.dry_run:
                 draft(destination, text, dry_run=True)
                 return
-        if not args.token_file:
-            parser.error("provide --token-file or set ZENODO_TOKEN_FILE")
-        token = args.token_file.expanduser().read_text().strip()
+        token = args.token_file.expanduser().read_text().strip().removeprefix("ZENODO_TOKEN=")
         if not re.fullmatch(r"[!-~]+", token):
             parser.error("invalid Zenodo token file")
         if args.command == "draft":
