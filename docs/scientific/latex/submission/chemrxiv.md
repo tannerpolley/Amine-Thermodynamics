@@ -2,7 +2,7 @@
 
 ## Title
 
-Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability
+Modeling CO₂ solubility in aqueous alkanolamine solutions with ePC-SAFT
 
 ## Author and affiliation
 

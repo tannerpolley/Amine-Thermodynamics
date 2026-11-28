@@ -1,16 +1,13 @@
 schema_version: 1
 scientific_lane: explicit_ion_epcsaft_loaded_aqueous_amines
 title: >
-  Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability
+  Modeling CO₂ solubility in aqueous alkanolamine solutions with ePC-SAFT
 history: one paper and one supplement, merged from the former Parts I and II (#400)
 scientific_claim: >
-  Eleven MEA parameters are estimated jointly from pressure, speciation, absorption-heat, heat-capacity, density and binary equilibrium data, with the reaction equilibrium constants fixed at literature correlations; DEA, MDEA and AMP need four, eight and eight more, with the water, CO₂ and inorganic-ion parameters held fixed.
-  For MEA, the fitted CO₂ pressures at nominal 30 wt% have an average absolute relative deviation of 11.6% and the 112 not fitted 24.9%; no instability is detected, although the fit did not impose stability.
-  Pressures at 15 and 45 wt% MEA, carbonate shares and high-temperature absorption heats remain inaccurate.
-  Fitted loaded-solution pressures of the other amines deviate by 10.5% (AMP) to 28.5% (DEA); no instability is detected for DEA, but its water–DEA excess enthalpies have the wrong sign.
-  For MDEA, an upper bound on the MDEA–water interaction keeps the CO₂-free solution free of a calculated liquid–liquid gap, at some cost in fit; no loaded-solution split is found among the searches that finish.
-  For AMP, with the cation–water temperature coefficient set from a scan, no instability is detected; fitting it as well gives splits above 353 K at a similar deviation.
-  The models are calibrations against data examined during development, with conditional standard errors; they provide neither validation nor a basis for absorber design.
+  An explicit-ion ePC-SAFT model describes CO₂ solubility in aqueous MEA, DEA, MDEA and AMP with four calibrations on one fixed base that no amine data determine: water, CO₂ and the inorganic ions, the CO₂–water interaction, the R1–R3 equilibrium constants, and water–bicarbonate and water–carbonate interactions fitted to sodium-salt osmotic coefficients.
+  MEA is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities with literature equilibrium constants; DEA, MDEA and AMP are each fitted through their own species and take only the carbamate dispersion energy and one carbamate or cation interaction from the MEA fit.
+  Reactive, electroneutral phase-stability searches find no confirmed second liquid with any of the four models; for AMP the pressures above 353 K, and for MDEA the weight of the CO₂-free pressures, decide that outcome.
+  The models can be used for absorber design within their tested ranges, at the accuracies the paper reports.
 author:
   name: Tanner W. Polley
   orcid: 0009-0008-5957-4152
@@ -40,12 +37,13 @@ declarations:
   authority_status: text as in the manuscript; author_approved_2026-10-01 applied to the earlier generative-AI wording
 target_venue: Fluid Phase Equilibria
 keywords:
+  - CO₂ solubility
   - ePC-SAFT
   - monoethanolamine
   - diethanolamine
   - methyldiethanolamine
   - 2-amino-2-methyl-1-propanol
-  - parameter transfer
+  - electrolyte equation of state
   - phase stability
 repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT

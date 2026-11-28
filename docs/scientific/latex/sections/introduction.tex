@@ -1,7 +1,7 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
-Aqueous amine solutions are widely used to remove carbon dioxide (\COtwo) from gas streams by absorption and stripping, and the design of these processes starts from the thermodynamic properties of the loaded solvent \cite{Zhang2011}.
-\COtwo partial pressure, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}; an equation of state gives them all from one Helmholtz energy, but each depends on different derivatives of it and on different parameters, so each has to be tested against its own data.
+Aqueous amine solutions are widely used to remove carbon dioxide (\COtwo) from gas streams by absorption and stripping, and the design of these processes starts from the solubility of \COtwo in the solvent and the other thermodynamic properties of the loaded solution \cite{Zhang2011}.
+The \COtwo partial pressure that expresses the solubility, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}; an equation of state gives them all from one Helmholtz energy, but each depends on different derivatives of it and on different parameters, so each has to be tested against its own data.
 
 % P:introduction-02
 Amines of different classes absorb \COtwo through different reactions.
@@ -34,10 +34,10 @@ The tangent-plane criterion of Michelsen tests whether an additional phase lower
 A phase search is thus a test of a calibration that its deviations do not replace.
 Tsanas et al.\ applied such a reactive electrolyte stability analysis to a demixing amine blend, water, \COtwo, 2-(diethylamino)ethanol and 3-(methylamino)propylamine, described with eNRTL, and did not parameterize the model \cite{Tsanas2022}.
 Perdomo et al.\ describe the reactions implicitly by association in the SAFT-$\gamma$ Mie group-contribution approach, solve phase stability and equilibrium with the HELD algorithm, and predict ternary phase diagrams of amine solvents that separate into two liquids \cite{perdomoPredictiveGroupcontributionFramework2023}.
-Here the question is asked of conventional amines measured as one liquid, with explicit ions in one equation of state and a phase search of each of four calibrations on one fixed base.
+Neither study applies the test to conventional amines measured as one liquid and described with explicit ions in one equation of state.
 
 % P:introduction-06
-This work calibrates ePC-SAFT models of loaded aqueous MEA, DEA, MDEA and AMP on one fixed base and searches each fitted model for a second liquid.
+This work models the \COtwo solubility in aqueous MEA, DEA, MDEA and AMP with ePC-SAFT, calibrating the four amines on one fixed base and searching each fitted model for a second liquid.
 The base is set without amine data: the parameters of water, \COtwo and the inorganic ions, the \COtwo--water interaction, the equilibrium constants of the inorganic reactions, and the water--bicarbonate and water--carbonate interactions, fixed from osmotic coefficients of the sodium salts as Wangler et al.\ fixed the first of them \cite{Wangler2018}.
 The MEA model is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities, with its amine equilibrium constants fixed at literature correlations.
 DEA, MDEA and AMP are then each fitted through their own species, and from the MEA fit they take only the carbamate dispersion energy, for DEA and AMP, the carbamate--water interaction, for AMP, and the cation--bicarbonate interaction, for DEA.
@@ -45,4 +45,4 @@ DEA, MDEA and AMP are then each fitted through their own species, and from the M
 % P:introduction-results
 The fitted \COtwo partial pressures of MEA at nominal 30 wt\% deviate by \res{mea-fitted-pressure-aard-introduction}\,\%, and the fitted pressures of DEA, MDEA and AMP by \res{dea-fitted-pressure-aard-introduction}, \res{mdea-fitted-pressure-aard-introduction} and \res{amp-fitted-pressure-aard-introduction}\,\%, on \res{dea-fitted-partial-pressure-count-introduction}, \res{mdea-fitted-kuranov-pressure-count-introduction} and \res{amp-reported-loaded-pressure-count-introduction} observations.
 The phase searches find no confirmed second liquid with any of the four models (\cref{sec:results-phase}).
-For two amines the data of the fit decide that result: an AMP fit to fewer pressures, none above \SI{353}{\kelvin}, predicts a second liquid in the loaded solution, and an MDEA fit that weights its \COtwo-free pressures weakly predicts a liquid--liquid gap in the \COtwo-free solution.
+For two amines the data of the fit decide that result: an AMP calibration to fewer pressures, none above \SI{353}{\kelvin}, predicts a second liquid in the loaded solution, and an MDEA calibration that weights its \COtwo-free pressures weakly predicts a liquid--liquid gap in the \COtwo-free solution.

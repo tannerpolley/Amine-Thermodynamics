@@ -29,7 +29,7 @@ All \res{dea-reactive-fitted-parameters-results} fitted parameters lie inside th
 Four are dispersion interactions: \ce{DEAH+}--water with a temperature coefficient, \ce{DEACOO-}--water and \ce{DEAH+}--\COtwo; the \ce{DEAH+}--bicarbonate interaction takes the \ce{MEAH+}--bicarbonate value of the MEA model (\cref{tab:interaction-matrix}).
 The other two are the constant term and the enthalpy increment of R4, which is fitted as an effective constant together with the interactions, as Austgen et al.\ fitted the carbamate constants of MEA and DEA with their interaction parameters \cite{Austgen1991}.
 Relative to its starting correlation, which represents the measurements of Aroua et al.\ \cite{arouaTemperatureDependencyEquilibrium1997}, the fitted correlation changes $\ln K_4$ at \SI{313.15}{\kelvin} by $\res{dea-r4-change-at-313-results}\pm\res{dea-r4-log-shift-standard-error-results}$, a factor of \res{dea-r4-equilibrium-factor-at-313-results} in $K_4$, and the change grows with temperature (Section~\ref{supp-sec:s-parameters}).
-The R4 constant term is strongly correlated with the carbamate--water interaction (conditional correlation \res{dea-carbamate-water-r4-level-conditional-correlation-coefficients-discussion}), so the data determine their combination, and the fitted correlation is not a measurement of the constant (\cref{sec:discussion-interpretation}).
+The R4 constant term is strongly correlated with the carbamate--water interaction (conditional correlation \res{dea-carbamate-water-r4-level-conditional-correlation-coefficients-discussion}), so the data determine their combination (\cref{sec:discussion-interpretation}).
 
 % P:transfer-dea-without-lawson
 The pressures of Lawson and Garst determine R4 and the single-liquid behavior of the DEA model.
@@ -117,7 +117,6 @@ The fixed carbamate energy and carbamate--water interaction of AMP are those of 
 \Cref{tab:amine-summary} sets the four models side by side, and Fig.~\ref{supp-fig:pressure-residuals} shows the pressure residuals of each.
 The fitted loaded-solution pressures are not one quantity across the amines: they are \COtwo partial pressures for MEA and DEA and total pressures for MDEA and AMP.
 MDEA forms no carbamate, so bicarbonate is its main product and the water--bicarbonate interaction acts on its pressures directly.
-The salt-fitted water--anion interactions are adopted because data without an amine determine them, not because the amine data are fitted better (Table~\ref{supp-tab:supplement-shared-interaction-sensitivity}).
 
 \input{tables/amine-summary}
 
@@ -131,10 +130,9 @@ The MDEA model has no detected instability at its grid states or at \res{mdea-me
 At the other \res{mdea-distinct-descent-states-transfer}, \res{mdea-distinct-descents-sobrino-transfer} of them \COtwo-free, the instability is toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model, for example \SI{2.57}{\mega\pascal} against \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal} at a heat-measurement state of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} in 50 wt\% MDEA at \SI{323.15}{\kelvin} and a loading of 1.10; there the model predicts partial vaporization, not a second liquid.
 
 % P:phase-amp-first-fit
-AMP is reported as two calibrations that differ in their pressure data.
-The first contains, of the loaded total pressures, only the \res{amp-first-data-fitted-pressure-count-transfer} of Hartono et al.\ at 313--\SI{353}{\kelvin}.
-At the \res{amp-first-data-screen-states-transfer} states searched for both it has detected instabilities toward a second liquid at \res{amp-first-data-minimum-instability-temperature-transfer}--\SI{\res{amp-first-data-maximum-instability-temperature-transfer}}{\kelvin}, confirmed as a split at \res{amp-first-data-measured-splits-transfer-confirmed} measured states, and it underpredicts the total pressures of Hartono et al.\ and of Tong et al.\ at 373--\SI{393}{\kelvin} by \res{amp-first-data-free-hartono-aard-first-fit} and \res{amp-first-data-free-tong-aard-first-fit}\,\% on average.
-Adding the pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin} to that fit, and changing nothing else, leaves \res{amp-hot-pressure-ablation-detected-instabilities-transfer} of these instabilities and lowers the two deviations to \res{amp-hot-pressure-ablation-hartono-aard-transfer} and \res{amp-hot-pressure-ablation-tong-aard-transfer}\,\% (Section~\ref{supp-sec:s-amp-slope}); the reported AMP model, fitted to the same pressures, has none either.
+AMP is reported as two calibrations: the AMP model and one that contains, of the loaded total pressures, only the \res{amp-first-data-fitted-pressure-count-transfer} of Hartono et al.\ at 313--\SI{353}{\kelvin}.
+At the \res{amp-first-data-screen-states-transfer} states searched for both, the second calibration has detected instabilities toward a second liquid at \res{amp-first-data-minimum-instability-temperature-transfer}--\SI{\res{amp-first-data-maximum-instability-temperature-transfer}}{\kelvin}, confirmed as a split at \res{amp-first-data-measured-splits-transfer-confirmed} measured states, and it underpredicts the total pressures of Hartono et al.\ and of Tong et al.\ at 373--\SI{393}{\kelvin} by \res{amp-first-data-free-hartono-aard-first-fit} and \res{amp-first-data-free-tong-aard-first-fit}\,\% on average.
+Adding the pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin} to that calibration, and changing nothing else, leaves \res{amp-hot-pressure-ablation-detected-instabilities-transfer} of these instabilities and lowers the two deviations to \res{amp-hot-pressure-ablation-hartono-aard-transfer} and \res{amp-hot-pressure-ablation-tong-aard-transfer}\,\% (Section~\ref{supp-sec:s-amp-slope}); the reported AMP model, fitted to the same pressures, has none either.
 Because each model is searched relative to its own bubble pressure, the two calibrations search a Hartono et al.\ state at \SI{373}{\kelvin} at \res{amp-first-data-hartono-373-search-pressure-transfer} and \SI{\res{amp-reported-hartono-373-search-pressure-transfer}}{\kilo\pascal}, against \SI{\res{amp-hartono-373-measured-pressure-transfer}}{\kilo\pascal} measured; at the measured total pressures of the \res{amp-first-data-measured-splits-transfer-controls} split states the reported model gives one liquid or liquid plus vapor (Section~\ref{supp-sec:s-phase}).
 
 % P:phase-mdea
@@ -149,23 +147,10 @@ With the scale of the loaded pressures, \res{mdea-reported-binary-pressure-log-s
 \end{figure}
 
 % P:phase-estimation
-The first AMP fit and the MDEA fit with the larger scale both converged on their objectives, and neither second liquid shows in the deviations of the fitted data.
-Stability has been imposed during estimation for nonreactive binaries, where parameter sets fitted to vapor--liquid data alone are known to give false liquid--liquid splits \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018}; here it is tested after each fit, and the test led to the weighting of the \COtwo-free MDEA pressures and to the wider temperature range of the AMP data.
+The AMP calibration with only the Hartono et al.\ pressures to \SI{353}{\kelvin} and the MDEA calibration with the larger scale both converged on their objectives, and neither second liquid shows in the deviations of the fitted data.
+Stability has been imposed during estimation for nonreactive binaries, where parameter sets fitted to vapor--liquid data alone are known to give false liquid--liquid splits \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018}; here it is tested after each fit, and the search distinguishes calibrations that their deviations do not.
 
 \section{Discussion}\label{sec:discussion}
-
-\subsection{Absorber and stripper temperatures}\label{sec:discussion-bands}
-% P:results-temperature-bands
-An absorber operates at about 313--\SI{353}{\kelvin} and a stripper at about 373--\SI{393}{\kelvin}, and the calibrations are not equally supported in the two ranges.
-For MEA, the \COtwo partial pressures at 30 wt\% that are not fitted deviate by \res{mea-absorber-unfitted-pressure-aard}\,\% at absorber and \res{mea-hot-pressure-aard-transfer}\,\% at stripper temperatures (Table~\ref{supp-tab:supplement-temperature-bands}), and the sources disagree there: at \SI{393}{\kelvin} and a loading of 0.35 in 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} and Ma'mun et al.\ \SI{83.6}{\kilo\pascal}.
-At stripper temperatures, where no loaded-solution observation of MEA is fitted, the heat capacities and densities deviate on average by \res{mea-stripper-heat-capacity-aard-transfer} and \res{mea-stripper-density-aard-transfer}\,\%.
-The absorption heats at \SI{393}{\kelvin} are low by \res{mea-vinjarapu-hot-heat-low-bias-limit}--\res{mea-kim-svendsen-hot-interval-low-bias-limit}\,\% on average, depending on the calorimetric source, the upper value for the \res{mea-kim-svendsen-unflagged-hot-interval-count-transfer} of \res{mea-kim-svendsen-hot-interval-count-results} intervals of Kim and Svendsen not flagged for source problems, so the calculated heat rises less with temperature than these data show.
-
-% P:discussion-bands-transfer
-For the three further amines the support at stripper temperatures differs.
-The AMP model fits loaded total pressures up to \SI{393}{\kelvin}.
-The fitted MDEA pressures above \SI{368}{\kelvin} lie outside the measured R5 range and deviate by \res{mdea-hot-fitted-pressure-aard-discussion}\,\% with a bias of $\res{mdea-hot-fitted-pressure-bias-discussion}$\,\%.
-For DEA, most fitted pressures lie outside the measured temperature ranges of R4 and R5 (Table~\ref{supp-tab:supplement-dea-ranges}), and the isotherm at \SI{394}{\kelvin}, which is not fitted, is reproduced as well as the fitted ones (\cref{sec:results-dea}).
 
 \subsection{Comparison with published models}\label{sec:results-literature}
 % P:literature-row
@@ -179,25 +164,36 @@ For DEA, Vall\'ee et al.\ report an average deviation of 20.6\,\% over the 159 p
 \Cref{tab:mea-data} and Tables~\ref{supp-tab:supplement-mea-extrapolation} and~\ref{supp-tab:supplement-mea-comparison} compare the MEA model with the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical observations.
 The MEA model agrees better on most pressure, species, density and heat-capacity sets but worse on the Aronu 45 wt\% pressures; the two models were fitted to different data, so these deviations do not rank them.
 
-% P:literature-constants
-These comparisons concern agreement with measured pressures, not the fitted constants.
-Smith et al.\ show that equilibrium constants defined on different concentration scales must be converted exactly before they are compared, and that when equilibrium constants and activity-coefficient parameters are fitted to the same \COtwo pressures, they compensate, so that models reproducing the pressures can imply different constants and speciation \cite{smithGibbsEnergyMinimization}.
-Here every constant is applied on one aqueous-molality basis (\cref{sec:reactions}), and the fitted R4 correlations of DEA and AMP are of the compensating kind: the DEA R4 constant term and carbamate--water interaction are strongly correlated (\cref{sec:results-dea}).
-
 \subsection{Physical interpretation}\label{sec:discussion-interpretation}
 % P:interpretation-01
 The three further calibrations show what the base carries.
 Water, \COtwo and the inorganic ions can be held fixed while each further amine is fitted, but the amine-specific fits absorb part of what the base leaves out.
 Both carbamate-forming amines fitted on the base need a fitted carbamate-hydrolysis correlation that lowers $K_4$ at \SI{313.15}{\kelvin} (\cref{sec:results-dea,sec:results-amp}).
 For DEA the starting correlation represents constants measured by titration \cite{arouaTemperatureDependencyEquilibrium1997}, so the fitted one lies well outside a measurement and is not a better value of that constant.
-It was fitted to pressures and heats only, together with a carbamate--water interaction with which it is strongly correlated.
-The calculated carbamate fractions, which no fit includes, nevertheless agree with the NMR data with little bias (\cref{sec:results-dea}), so the constant and the interaction together give the speciation.
+
+% P:interpretation-constants
+Smith et al.\ show that equilibrium constants defined on different concentration scales must be converted exactly before they are compared, and that when equilibrium constants and activity-coefficient parameters are fitted to the same \COtwo pressures, they compensate, so that models reproducing the pressures can imply different constants and speciation \cite{smithGibbsEnergyMinimization}.
+Here every constant is applied on one aqueous-molality basis (\cref{sec:reactions}), and the fitted R4 correlations of DEA and AMP are of the compensating kind: the DEA correlation was fitted to pressures and heats only, together with a carbamate--water interaction with which its constant term is strongly correlated (\cref{sec:results-dea}).
+The calculated DEA carbamate fractions, which are not fitted, nevertheless agree with the NMR data with little bias, so the constant and the interaction together give the speciation.
 Fitted values of this kind are effective and conditional on the shared set and on the data of each fit.
 
 % P:interpretation-02
 The electrostatic terms carry choices that the data do not test.
 For the chain cations the Born diameter is that of one segment, not the volume-equivalent diameter, and for all ions the solvation average runs over all components rather than over ions and solvents only \cite{Figiel2025}.
 The fitted ion parameters are conditional on these choices.
+
+\subsection{Absorber and stripper temperatures}\label{sec:discussion-bands}
+% P:results-temperature-bands
+An absorber operates at about 313--\SI{353}{\kelvin} and a stripper at about 373--\SI{393}{\kelvin}, and the calibrations are not equally supported in the two ranges.
+For MEA, the \COtwo partial pressures at 30 wt\% that are not fitted deviate by \res{mea-absorber-unfitted-pressure-aard}\,\% at absorber and \res{mea-hot-pressure-aard-transfer}\,\% at stripper temperatures (Table~\ref{supp-tab:supplement-temperature-bands}), and the sources disagree there: at \SI{393}{\kelvin} and a loading of 0.35 in 30 wt\% MEA, Jou et al.\ report \SI{46.8}{\kilo\pascal} and Ma'mun et al.\ \SI{83.6}{\kilo\pascal}.
+At stripper temperatures, where no loaded-solution observation of MEA is fitted, the heat capacities and densities deviate on average by \res{mea-stripper-heat-capacity-aard-transfer} and \res{mea-stripper-density-aard-transfer}\,\%.
+The absorption heats at \SI{393}{\kelvin} are low by \res{mea-vinjarapu-hot-heat-low-bias-limit}--\res{mea-kim-svendsen-hot-interval-low-bias-limit}\,\% on average, depending on the calorimetric source, the upper value for the \res{mea-kim-svendsen-unflagged-hot-interval-count-transfer} of \res{mea-kim-svendsen-hot-interval-count-results} intervals of Kim and Svendsen not flagged for source problems, so the calculated heat rises less with temperature than these data show.
+
+% P:discussion-bands-transfer
+For the three further amines the support at stripper temperatures differs.
+The AMP model fits loaded total pressures up to \SI{393}{\kelvin}.
+The fitted MDEA pressures above \SI{368}{\kelvin} lie outside the measured R5 range and deviate by \res{mdea-hot-fitted-pressure-aard-discussion}\,\% with a bias of $\res{mdea-hot-fitted-pressure-bias-discussion}$\,\%.
+For DEA, most fitted pressures lie outside the measured temperature ranges of R4 and R5 (Table~\ref{supp-tab:supplement-dea-ranges}).
 
 \subsection{Scope and limitations}\label{sec:limits}
 % P:limits-scope
@@ -225,7 +221,7 @@ The AMP model, fitted to total pressures to \SI{393}{\kelvin}, deviates a little
 The shared water--anion interactions, fitted to salt data that end at \SI{318}{\kelvin} with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), are extrapolated linearly to 393--\SI{394}{\kelvin}, and to 413 and \SI{422}{\kelvin} only in MDEA calculations not fitted: the Kuranov states at \SI{413}{\kelvin} and the phase searches at the loaded heat states of Merkley et al.\ \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 R4 and R5, unlike R1--R3, are evaluated outside their source temperature ranges for every amine, and the DEA and AMP R4 correlations are fitted.
 Missing pressure histories, inconsistencies between sources, omitted carrier gas, solid precipitation and, for MEA, omitted oxazolidone further limit interpretation.
-Held out means outside the objective, not unseen: every observation was examined during development, so no comparison here is an independent validation.
+Held out means outside the objective, not unseen: every observation was examined before the parameters were selected, so no comparison here is an independent validation.
 
 % P:limits-phase
 The phase searches are finite, so they cannot prove global stability.

@@ -1,6 +1,6 @@
 Dear Editors of Fluid Phase Equilibria,
 
-Please consider “Thermodynamics of CO₂-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability” as a research article.
+Please consider “Modeling CO₂ solubility in aqueous alkanolamine solutions with ePC-SAFT” as a research article.
 
 The paper reports an ePC-SAFT model of CO₂-loaded aqueous monoethanolamine (MEA) and tests how far its shared parameters carry to three further amines. The MEA model is calibrated first, with its reaction equilibrium constants fixed at literature correlations; its water, CO₂ and inorganic-ion parameters are then held fixed while diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each fitted, and every fitted model is searched for phase instability.
 
