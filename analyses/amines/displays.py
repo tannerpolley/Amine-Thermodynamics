@@ -927,7 +927,7 @@ def transfer_displays(outputs):
     adh = r4['amp']['delta_h_J_mol']
     rows.append([r'R4, enthalpy increment $\delta h$, contained in $B_4$', bold(f'${adh}$'), 'J/mol', 'This work'])
     table('supplement-transfer-parameters', 'Amine-specific parameter values of the DEA, MDEA and AMP models at full precision.', ['Parameter','Value','Unit','Source'], rows, [.45,.24,.07,.21], long=True,
-          notes=r'Bold values were fitted in this work; main-text Tables~\ref{main-tab:dea-fitted}--\ref{main-tab:amp-fitted} give the standard errors of the parameters of the reactive fits, and Table~\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are the final coefficients after the fit, not additional independent fitted parameters. For DEA and AMP, $\delta h$ is measured from the starting R4 correlation, as in the main-text tables, and is contained in $B_4$. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K, except MDEA--water, at 423 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value\textquotedblright{} and ``MDEA value\textquotedblright{}: the value of the molecular amine. The data deposit gives the source and basis of each value.')
+          notes=r'Bold values were fitted in this work; main-text Tables~\ref{main-tab:dea-fitted}--\ref{main-tab:amp-fitted} give the standard errors of the parameters of the reactive fits, and Table~\ref{tab:supplement-transfer-bounds} their bounds. For DEA, the R4 coefficients $A_4$ and $B_4$ are printed as their values after the fit of $A_4$ and $\delta h$. For DEA and AMP, $\delta h$ is measured from the starting R4 correlation, as in the main-text tables, and is contained in $B_4$. R4: carbamate hydrolysis; R5: amine dissociation; $\ln K=a+b/T+c\ln(T/T_{\mathrm{ref}})+dT$ with $T$ in K and $T_{\mathrm{ref}}=313.15$ K, on the common-molality reference basis; coefficients not listed are zero. For R4, where $c=d=0$, $a$ and $b$ are written $A_4$ and $B_4$: they are the coefficients of main-text Eq.~(\ref{main-eq:reaction-equilibrium-constant-temperature}) on that basis, with $\Delta_4=0$. Binary dispersion interactions not listed are zero; a $k_{ij}$ with a slope is the value at 313.15 K, except MDEA--water, at 423 K. Each of the chain cations DEAH$^+$ and MDEAH$^+$ keeps the dispersion between its own segments. ``DEA value\textquotedblright{}, ``MDEA value\textquotedblright{} and ``AMP value\textquotedblright{}: the value of the molecular amine. The data deposit gives the source and basis of each value.')
     def amp_loading(r):
         return float(r['row']['alpha_mol_CO2_per_mol_AMP'])
 
@@ -1183,7 +1183,7 @@ def transfer_displays(outputs):
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           pooled + transfer_rows, [.15,.10,.107,.048,.095,.09,.084,.065,.068,.10], long=True,
           notes=r'Pooled deviations give AARD in \% with $N$ in parentheses. '
-                r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+                r'$N$: observations in the data set (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     P341 = MEAEVIDENCE
     mea_fit = read(P341 + 'fitted-rows.csv')
     cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -1482,7 +1482,7 @@ def transfer_displays(outputs):
     kim_first_additions = sum(row['first_120'] == 'True' for row in kim_hot)
     kim_flagged = sum('True' in (row['source_inconsistent'], row['first_120']) for row in kim_hot)
     table('supplement-temperature-bands', 'Deviations of the MEA model by temperature band.', ['Property', 'Band', 'Role', '$N$', 'AARD (\\%)', 'MSRD (\\%)', 'Sources'], brows, [.17, .17, .16, .045, .08, .08, .13],
-          notes=r'Absorber: $T\le\SI{353.2}{\kelvin}$; stripper: $T\ge\SI{370}{\kelvin}$; intermediate: between the two. Fitted observations are in the objective of the MEA model; no loaded-solution observation at or above \SI{370}{\kelvin} is fitted; ' + cai_high + r'. AARD follows Eq.~\eqref{main-eq:aard}; MSRD is the mean of $100\,(y^{\mathrm{calc}}-y^{\mathrm{obs}})/y^{\mathrm{obs}}$, negative where the calculated value is low. Pressures are at nominal 30 wt\% MEA unless stated. Absorption heats are heat releases per mole of \COtwo as each source defines them; the heats of Kim and Svendsen, Kim et al.\ and Vinjarapu et al.\ are calculated at \SI{1.734}{\mega\pascal}, the pressure reported by Vinjarapu et al. '
+          notes=r'Absorber: $T\le\SI{353.2}{\kelvin}$; stripper: $T\ge\SI{370}{\kelvin}$; intermediate: between the two. Fitted observations are in the objective of the MEA model; no loaded-solution observation at or above \SI{370}{\kelvin} is fitted; ' + cai_high + r'. AARD follows main-text Eq.~\eqref{main-eq:aard}; MSRD is the mean of $100\,(y^{\mathrm{calc}}-y^{\mathrm{obs}})/y^{\mathrm{obs}}$, negative where the calculated value is low. Pressures are at nominal 30 wt\% MEA unless stated. Absorption heats are heat releases per mole of \COtwo as each source defines them; the heats of Kim and Svendsen, Kim et al.\ and Vinjarapu et al.\ are calculated at \SI{1.734}{\mega\pascal}, the pressure reported by Vinjarapu et al. '
                 rf'\textsuperscript{{a}}{NUMBER_WORDS[kim_flagged].capitalize()} intervals of Kim and Svendsen at \SI{{393.15}}{{\kelvin}}, '
                 f'{NUMBER_WORDS[kim_inconsistent]} inconsistent with their integrals and the first {NUMBER_WORDS[kim_first_additions]} additions from zero loading, reported separately.')
 
@@ -3684,9 +3684,10 @@ def result_values(required):
     record = base + "phase/declared.json.gz"
     phase = read(record)
     without_states = {row["key"] for row in distinct_phase_rows(phase)}
-    add("dea-without-lawson-split-states-transfer", record, "classifications[distinct rows, confirmed split].count",
-        str(sum(confirmed_split(c) for c in phase["classifications"] if c["key"] in without_states)))
-    add("dea-without-lawson-searched-states-transfer", record, "len(distinct rows)", str(len(without_states)))
+    split = str(sum(confirmed_split(c) for c in phase["classifications"] if c["key"] in without_states))
+    for place in ("transfer", "supplement"):
+        add(f"dea-without-lawson-split-states-{place}", record, "classifications[distinct rows, confirmed split].count", split)
+        add(f"dea-without-lawson-searched-states-{place}", record, "len(distinct rows)", str(len(without_states)))
     record = MOVE + "dea/reported/held-out-pressures/summary.json.gz"
     held = read(record)["sources"]
     for name, label in (("HajiSulaiman1998", "hajisulaiman"), ("Lee1972", "lee"), ("KennardMeisen1984", "kennard")):

@@ -383,7 +383,7 @@ Figure~\ref{fig:density-curves} compares the calculated densities with the three
 % P:supplement-transfer-observations
 Table~\ref{tab:transfer-deviations} lists the data sets of DEA, MDEA and AMP with their roles in the fit of each model, their ranges and the model deviations; the DEA and MDEA rows use the source's own basis, and the AMP rows give the unloaded AMP content in wt\% used in the calculation.
 The 2.0 kmol/m$^3$ DEA concentration of Lal et al.\ is represented by unloaded mass fraction \res{dea-lal-unloaded-feed-mass-fraction} using solution density.
-Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson and Garst cell is not reconstructed; methane up to the cell limit, about \SI{7.0}{\mega\pascal}, raises the calculated \COtwo partial pressure at the \res{dea-lawson-methane-row-count-supplement} fitted states by at most \res{dea-lawson-methane-minimum-pressure-increase-supplement} to \res{dea-lawson-methane-maximum-pressure-increase-supplement}\,\%, depending on the state.
+Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson and Garst cell is not reconstructed; methane up to the cell limit, about \SI{7.0}{\mega\pascal}, raises the calculated \COtwo partial pressure at the \res{dea-lawson-methane-row-count-supplement} fitted states by \res{dea-lawson-methane-minimum-pressure-increase-supplement} to \res{dea-lawson-methane-maximum-pressure-increase-supplement}\,\%, depending on the state.
 The DEA species calculations for B\"ottinger et al.\ use 2.5 MPa because the source gives a 0.5--2.5 MPa cell-pressure interval without individual values.
 All observations of Weiland et al.\ are kept, including a suspected misprint: at 20 wt\% DEA and a loading of 0.50 mol/mol the tabulated density is 1.167 g/mL, beside 1.062 g/mL at a loading of 0.45 mol/mol.
 The \COtwo-free pressures of Kuranov et al.\ are read from the column of their Table~2 that is 10 times the total pressure in MPa \cite{kuranovSolubilitySingleGases1996}.
@@ -482,7 +482,7 @@ No MDEA parameter is on a bound, so no active bound conditions the MDEA standard
 \input{tables/supplement-transfer-bounds}
 
 % P:supplement-starts
-For MEA and AMP, \res{mea-tied-start-count-supplement} and \res{amp-tied-start-count-supplement} starts, respectively, reach the same objective value at the printed precision.
+For MEA, \res{mea-tied-start-count-supplement} starts, and for AMP, \res{amp-tied-start-count-supplement} starts, reach the same objective value at the printed precision.
 The fits give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA, which is fitted from a single start, the initial parameter vector archived for it in the data deposit.
 For DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}.
 
@@ -533,7 +533,7 @@ No search detects an instability.
 The measured states include states that are not fitted: the densities of Weiland et al.\ \cite{Weiland1998} at 298.15 K and 10--40 wt\% DEA, searched at an assigned pressure of 101.325 kPa, and the pressures of Lawson and Garst at 50--54.5 wt\% DEA \cite{lawsonGasSweeteningData1976}.
 
 % P:supplement-phase-dea-sensitivity
-Fitted without the pressures of Lawson and Garst, the DEA model deviates by \res{dea-without-lawson-lal-aard-supplement} and \res{dea-without-lawson-carson-aard-supplement}\,\% from the Lal pressures and the Carson heats, which remain fitted, and by \res{dea-without-lawson-lawson-aard-supplement}\,\% from the Lawson and Garst pressures (main-text \cref{main-sec:results-dea}).
+A DEA fit without the pressures of Lawson and Garst deviates by \res{dea-without-lawson-lal-aard-supplement} and \res{dea-without-lawson-carson-aard-supplement}\,\% from the Lal pressures and the Carson heats, which remain fitted, and by \res{dea-without-lawson-lawson-aard-supplement}\,\% from the Lawson and Garst pressures, and it predicts a second liquid at \res{dea-without-lawson-split-states-supplement} of its \res{dea-without-lawson-searched-states-supplement} searched states (main-text \cref{main-sec:results-dea}).
 
 % P:supplement-phase-mdea
 For MDEA, the search covers \res{mdea-measured-states-supplement-design} distinct measured states and \res{mdea-restricted-grid-states} grid states.

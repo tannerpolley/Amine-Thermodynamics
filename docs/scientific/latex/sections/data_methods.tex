@@ -2,7 +2,7 @@
 \subsection{Experimental data}\label{sec:data-roles}
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the amine content is the amine mass fraction of the unloaded solution, written in wt\%.
-\emph{Fitted} means that an observation enters the objective of the model, and \emph{not fitted} that it is outside that objective.
+\emph{Fitted} means that an observation enters the objective of the model, and \emph{not fitted}, or \emph{held out}, that it is outside that objective.
 \emph{Comparison only} marks a different quantity or different conditions from those the model was built for.
 \Cref{tab:mea-data} lists the MEA data with their roles and deviations, and Table~\ref{supp-tab:transfer-deviations} those of DEA, MDEA and AMP.
 The objectives contain \res{mea-objective-observations-methods} observations for MEA, \res{dea-objective-observations-methods} for DEA, \res{mdea-objective-observations-methods} for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Table~\ref{supp-tab:supplement-mea-comparison} gives the MEA sets that are compared and are not pressures.
@@ -71,7 +71,7 @@ MDEA is fitted from a single start, the initial parameter vector archived for it
 For AMP, \res{amp-tied-start-count-methods} starts reach the same objective value at the printed precision (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
-Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),
+Agreement is reported as AARD, relative bias and root-mean-square error (RMSE),
 \begin{equation}
  \operatorname{AARD}=\frac{100\,\%}{N}\sum_l\left|\frac{y_l^{\mathrm{calc}}}{y_l^{\mathrm{obs}}}-1\right|,
  \qquad \operatorname{bias}=\frac{100\,\%}{N}\sum_l\left(\frac{y_l^{\mathrm{calc}}}{y_l^{\mathrm{obs}}}-1\right),
