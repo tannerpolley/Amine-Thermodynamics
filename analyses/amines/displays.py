@@ -2212,6 +2212,84 @@ def mea_figures(outputs):
     main()
 
 
+GRAPHICAL_ABSTRACT = LATEX / "submission/graphical_abstract"
+
+
+def graphical_abstract(outputs):
+    """Elsevier graphical abstract: the shared base over the lowest- and highest-temperature pressure isotherm of each amine, from the records of the manuscript pressure figures."""
+    fixed = FixedReference(read)
+    meta = {r['observation_id']: r for r in read(ROOT/'data/reference/MEA/observations/vapor_liquid_equilibrium/Canonical_VLE_Observations.csv')}
+    mea_measured = read(BUNDLE/'results/salt-anchored-435/MEA/evidence/F4/canonical-pressure.csv')
+    mea_curves = read(MOVE + 'mea/reported/properties/summary.json.gz')['curves']['pressure']
+    dea = fixed.endpoint_record('DEA/property-comparisons/selected.json.gz', 'DEA')
+    mdea = fixed.endpoint_record('MDEA/properties.json.gz', 'MDEA')['rows']
+    mdea_curves = fixed.load('MDEA/properties.json.gz')['curves']
+    amp = fixed.endpoint_record('AMP_free/properties.json.gz', 'AMP_free')
+    usable = lambda r: r['status'] == 'Available' and r['requested_tolerance_met']
+    kuranov = lambda r: r['group'] == 'Kuranov' and r['row']['m_MDEA_mol_per_kg_H2O'] == '3.9707'
+    # Per amine: (temperature, measured (loading, kPa), retained model curve (loading, kPa)) of each isotherm.
+    panels = {
+        'MEA': [(T, [(float(meta[r['target'].removesuffix('-pco2')]['CO2_loading']), float(r['observed'])/1000)
+                  for r in mea_measured if abs(float(r['temperature_K']) - T) < 2],
+                 [(r['analytical_loading'], r['value']/1000) for r in mea_curves
+                  if r['temperature_K'] == T and r['status'] == 'available']) for T in (313.15, 393.15)],
+        'DEA': [(T, [(float(r['row']['alpha_mol_CO2_per_mol_DEA']), r['observed']/1000) for r in dea['rows'] if r['group'] == g and r['T_K'] == T],
+                 [(r['loading'], r['value']/1000) for r in dea['curves'] if r['group'] == g and r['T_K'] == T and usable(r)])
+                for g in ('Lawson', 'Lawson-394K') for T in [min(r['T_K'] for r in dea['curves'] if r['group'] == g)]],
+        'MDEA': [(T, [(float(r['row']['m_CO2_mol_per_kg_H2O'])/float(r['row']['m_MDEA_mol_per_kg_H2O']), r['observed']/1000)
+                   for r in mdea if kuranov(r) and r['row']['source_series'].rsplit(' ', 2)[-2] == f'{T:.0f}'],
+                  [(r['loading'], r['value']/1000) for r in mdea_curves if kuranov(r) and r['T_K'] == T and usable(r)])
+                 for T in (313.15, 393.15)],
+        'AMP': [(T, [(float(r['row']['alpha_mol_CO2_per_mol_AMP']), r['observed']/1000) for r in amp['rows'] if r['group'] == g and r['T_K'] == T],
+                 [(r['loading'], r['value']/1000) for r in amp['curves'] if r['group'] == g and r['T_K'] == T and usable(r)])
+                for g, T in (('loaded-pressure', 313.0), ('hartono-2021-supplemental', 393.0))],
+    }
+    for amine, isotherms in panels.items():
+        if not all(measured and curve for _, measured, curve in isotherms):
+            raise ValueError(f"Empty graphical-abstract isotherm for {amine}")
+    # DejaVu Sans ships with Matplotlib, so the rendered bytes do not depend on installed system fonts.
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'mathtext.fontset': 'dejavusans', 'pdf.fonttype': 42, 'font.size': 7.5,
+                         'axes.labelsize': 7.5, 'xtick.labelsize': 7, 'ytick.labelsize': 7, 'axes.linewidth': .6,
+                         'xtick.major.width': .6, 'ytick.major.width': .6, 'xtick.major.size': 2.5, 'ytick.major.size': 2.5})
+    styles = (('#0072B2', 'o', '-'), ('#D55E00', '^', (0, (4, 1.5))))
+    fig = plt.figure(figsize=(1328/254, 531/254))  # Elsevier minimum 1328 x 531 px, drawn at the 13 x 5 cm reading size
+    left, width, pair_gap, gap, bottom, height = .112, .188, .105, .012, .3, .445
+    xs = [left, left + width + gap, left + 2*width + gap + pair_gap, left + 3*width + 2*gap + pair_gap]
+    axes = [fig.add_axes((x, bottom, width, height)) for x in xs]
+    for ax, (amine, isotherms) in zip(axes, panels.items(), strict=True):
+        for (T, measured, curve), (color, marker, dash), y in zip(isotherms, styles, (.07, .2), strict=True):
+            ax.plot(*zip(*sorted(curve)), color=color, ls=dash, lw=1.1)
+            ax.plot(*zip(*measured), ls='none', marker=marker, ms=2.8, mfc='none', mec=color, mew=.7)
+            ax.text(.95, y, f'{T:.0f} K', color=color, transform=ax.transAxes, ha='right', va='bottom', fontsize=7)
+        ax.set_yscale('log'); ax.minorticks_off()
+        ax.xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(3))
+        ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%g'))
+        ax.set_title(amine, fontsize=9, fontweight='bold', pad=2.5)
+    for ax, partner, low, ticks, label in ((axes[0], axes[1], 1e-3, (1e-2, 1, 1e2, 1e4), 'CO$_2$ partial\npressure (kPa)'),
+                                           (axes[2], axes[3], .1, (1, 1e2, 1e4), 'Total\npressure (kPa)')):
+        for a in (ax, partner):
+            a.set_ylim(low, 1e4); a.set_yticks(ticks)
+        partner.tick_params(labelleft=False)
+        ax.set_ylabel(label, labelpad=2, linespacing=1.1)
+    fig.text(.45, .165, 'Loading (mol CO$_2$/mol amine)', ha='center', va='center')
+    fig.legend(handles=[Line2D([], [], color='0.25', ls='none', marker='o', ms=2.8, mfc='none', mew=.7, label='Measured'),
+                        Line2D([], [], color='0.25', lw=1.1, label='ePC-SAFT')],
+               loc='center right', bbox_to_anchor=(.995, .165), ncols=2, frameon=False, handlelength=1.8, columnspacing=1, fontsize=7.5)
+    for y0, h, y, text in ((.88, .105, .9325, 'Shared base without amine data: water, CO$_2$, inorganic ions and reactions'),
+                           (.012, .095, .0595, 'Reactive stability searches find no confirmed second liquid in the four models')):
+        fig.patches.append(matplotlib.patches.FancyBboxPatch((.008, y0), .984, h, boxstyle='round,pad=0,rounding_size=.012',
+                                                             transform=fig.transFigure, fc='0.93', ec='0.35', lw=.6))
+        fig.text(.5, y, text, ha='center', va='center', fontsize=8)
+    for x in xs:
+        fig.patches.append(matplotlib.patches.FancyArrowPatch((x + width/2, .88), (x + width/2, .815), transform=fig.transFigure,
+                                                              arrowstyle=matplotlib.patches.ArrowStyle('-|>', head_length=2.5, head_width=1.5), color='0.35', lw=.8))
+    for suffix, options in (('.png', {'dpi': 508}), ('.pdf', {'metadata': {'CreationDate': None, 'ModDate': None}})):
+        with BytesIO() as buffer:
+            fig.savefig(buffer, format=suffix[1:], facecolor='white', **options)
+            outputs[GRAPHICAL_ABSTRACT.with_suffix(suffix)] = buffer.getvalue()
+    plt.close(fig)
+
+
 def render_all():
     outputs = {}
     with matplotlib.rc_context():
@@ -2219,6 +2297,8 @@ def render_all():
     mea_tables(outputs)
     with matplotlib.rc_context():
         mea_figures(outputs)
+    with matplotlib.rc_context():
+        graphical_abstract(outputs)
     return outputs
 
 
@@ -4244,7 +4324,7 @@ def main():
         LATEX / "figures/generated" / name
         for name in re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}", manuscript)
     }
-    expected = expected_tables | expected_figures
+    expected = expected_tables | expected_figures | {GRAPHICAL_ABSTRACT.with_suffix(s) for s in (".png", ".pdf")}
     if expected != outputs.keys():
         raise ValueError(f"Display files differ from the manuscript: missing {sorted(expected - outputs.keys())}; "
                          f"unused {sorted(outputs.keys() - expected)}")
