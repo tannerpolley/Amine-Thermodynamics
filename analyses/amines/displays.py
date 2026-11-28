@@ -742,10 +742,12 @@ def transfer_displays(outputs):
     akey = lambda e: e['group'] + ('-y' if e['group'] == 'binary' and e['unit'] != 'Pa' else '')
     for r in arows: r['key'] = akey(r)
     amass = {c['component_id']: c['fixed']['molar_mass']['value']['magnitude'] for c in adoc['parameters']['components']}
+    def amp_mass_percent(feed):
+        return 100*amass['aminomethylpropanol']/(amass['aminomethylpropanol'] + amass['water']*float(feed['water']))
     def amp_basis(rs):
         feed = [afeed[r['identity']] for r in rs]
         if 'x_AMP' in rs[0]['row']: return r'$x_{\mathrm{A}}=\,$' + span([float(r['row']['x_AMP']) for r in rs], sig), '---'
-        wt = [100*amass['aminomethylpropanol']/(amass['aminomethylpropanol'] + amass['water']*float(f['water'])) for f in feed]
+        wt = list(map(amp_mass_percent, feed))
         return span(wt, sig) + r' wt\%', span([float(f['alpha']) for f in feed], sig)
     aunc = fixed.conditional('AMP_free')
     aorder = ['AMP-water-k', 'AMP-water-slope', 'AMPH-water-k', 'AMPH-water-slope', 'AMPH-CO2-k',
@@ -835,12 +837,6 @@ def transfer_displays(outputs):
                  for g in MSETS if g.startswith('Bottinger-')}
     (nmr_keys,) = nmr_pairs
     nmr_rows = len(nmr_keys)
-    table('transfer-deviations',
-          r'Data for DEA, MDEA and AMP by source: observable, role in the fit of each model, number of observations $N$, ranges of temperature, amine content and loading, and the deviation of the DEA, MDEA and AMP models, beside the deviations that published models report for the same observations.',
-          ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
-           r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
-          transfer_rows, [.15,.10,.107,.048,.095,.09,.084,.065,.068,.10], long=True,
-          notes=r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     AMINES = [('DEA', dflat, 'diethanolamine'), ('MDEA', flatten(mdoc, {'methyldiethanolamine', 'protonated-methyldiethanolamine'}), 'methyldiethanolamine'), ('AMP', flatten(adoc, {'aminomethylpropanol', 'protonated-aminomethylpropanol', 'carbamate-anion'}), 'aminomethylpropanol')]
     # Values fitted in this work, by key of each retained record: the reactive fit of each amine (checked against its fit record) and the fits made beforehand:
     # the permittivity coefficients (Hsieh et al.), the water--DEA interaction (Horstmann et al.) and the five pure-AMP parameters.
@@ -1028,27 +1024,84 @@ def transfer_displays(outputs):
     # The free fit (selected start 1) is the comparison whose splits the paper names; its classification and search.
     aclass = read(W_AMP_FIRST)
     cell = lambda s: num(s['AARD_percent'],2) + ' (' + str(s['rows']) + ')'
-    def pressure_stats(rows, pred='value'):
-        deviations = [100 * (float(r[pred]) / float(r['observed']) - 1) for r in rows
-                      if r.get('status', 'Available').lower() == 'available']
-        return dict(AARD_percent=math.fsum(map(abs, deviations))/len(deviations), rows=len(deviations))
+    def pressure_cell(rows):
+        available = [r for r in rows if r.get('status', 'Available').lower() == 'available']
+        if not available:
+            return '--- (0)'
+        return cell(dict(stats(available, predicted='value'), rows=len(available)))
 
+    def split_pressures(pools, within):
+        groups = []
+        for symbol, pool in pools:
+            inside, outside = [], []
+            for row in pool:
+                (inside if within(row) else outside).append(row)
+            groups.append((symbol + ': ' + pressure_cell(inside), symbol + ': ' + pressure_cell(outside)))
+        return tuple('; '.join(cells) for cells in zip(*groups, strict=True))
 
-    def scores(rows, groups):
-        return cell(pressure_stats([r for r in rows if r['group'] in groups]))
-    def pressure_columns(rows, groups, total, partial):
-        fitted = [r for r in rows if r['unit'] == 'Pa' and r['role'] == 'fitted']
-        return [scores(fitted, groups), cell(pressure_stats(fitted)),
-                '$P$: ' + scores(rows, total) + r'; $p_{\COtwo}$: ' + scores(rows, partial)]
+    def fitted_conditions(fitted, conditions):
+        temperatures, concentrations = zip(*map(conditions, fitted))
+        def within(row):
+            temperature, concentration = conditions(row)
+            return (min(temperatures) <= temperature <= max(temperatures)
+                    and min(concentrations) <= concentration <= max(concentrations))
+        return within, temperatures, concentrations
 
-    e47 = cell(pressure_stats([eprops[k] for k in fitted_pressure]))
+    pco2, ptotal = r'$p_{\COtwo}$', '$P$'
+    efit = [eprops[k] for k in fitted_pressure]
     wagner = mea_replay['hot_wagner'] + fixed.endpoint_record('display-replays/wagner.json.gz', 'MEA')['rows']
     enot = ([eprops[r['target']] for r in mea_pressure if r['target'] not in fitted_pressure] + wagner
             + [r for r in mea_off if r['group'] == 'Aronu2011'])
+    mea_inside = {row['target'] for role, row, _ in mea_nominal_pressure_rows()
+                  if role != 'fitted' and temperature_band(float(row['temperature_K'])) == 'absorber'}
+    if collections.Counter(r['identity'] for r in enot if r['identity'] in mea_inside) != dict.fromkeys(mea_inside, 1):
+        raise ValueError('The MEA summary pool must contain each held-out absorber observation once')
+    mea_within, mea_outside = split_pressures([(pco2, enot)], lambda r: r['identity'] in mea_inside)
+
     dloaded = {'Lawson', 'Lawson-394K', 'SeoHong', 'Lal', 'Lawson-VIII'}
-    doutside = [r for r in data if r['group'] in dloaded and r['unit'] == 'Pa' and r['role'] != 'fitted']
-    dfitted = scores([r for r in data if r['role'] == 'fitted' and r['unit'] == 'Pa'], dloaded)
+    dea_pressure = [r for r in data if r['group'] in dloaded and r['unit'] == 'Pa']
+    dfit = [r for r in dea_pressure if r['role'] == 'fitted']
+    lal_wt = 100 * dea_lal_unloaded_mass_fraction(read(MOVE + 'dea/reported/fit/manifest.json.gz'),
+                                                   ddoc['parameters']['components'])
+    def dea_conditions(r):
+        return r['T_K'], lal_wt if r['group'] == 'Lal' else float(r['row']['DEA_mass_percent'])
+    dea_inside, dea_temperatures, dea_concentrations = fitted_conditions(dfit, dea_conditions)
+    dea_within, dea_outside = split_pressures(
+        [(pco2, [r for r in dea_pressure if r['role'] != 'fitted'])], dea_inside)
+
+    mdea_pressures = [r for r in mdea_pressure_rows(read(W_MDEA_PROPERTIES)) if r['unit'] == 'Pa']
+    mloaded = [r for r in mdea_pressures if r['group'] == 'Kuranov' and r['role'] == 'fitted']
+    kuranov = {r['source_row']: r for r in read(KURANOV_DATA)}
+    def mdea_conditions(r):
+        source = r['row']
+        if r['group'].startswith('Kuranov'):
+            source = kuranov[source['source_row']]
+            # Use the named isotherm, including the retained 393 K supplemental point.
+            T = float(source['source_series'].rsplit(' ', 2)[-2])
+            return T, round(float(source['m_MDEA_mol_per_kg_H2O']))
+        if r['group'] == 'Ermatchkov':
+            # The measured molalities vary within the nominal source stocks.
+            return round(r['T_K']), float(source['source_series'].split()[-2])
+        if r['group'] == 'corrected-Kamps':
+            return r['T_K'], float(source['m_MDEA_mol_kg_water'])
+        fraction = float(source['unloaded_MDEA_mass_fraction'])
+        return round(r['T_K']), fraction / ((1 - fraction) * amine_mass)
+    mdea_inside, mdea_temperatures, mdea_concentrations = fitted_conditions(mloaded, mdea_conditions)
+    mdea_partial = {'Ermatchkov', 'Xiao'}
+    mnot = [r for r in mdea_pressures if r['role'] != 'fitted']
+    mdea_within, mdea_outside = split_pressures(
+        [(ptotal, [r for r in mnot if r['group'] not in mdea_partial]),
+         (pco2, [r for r in mnot if r['group'] in mdea_partial])], mdea_inside)
+
     amp_loaded = {'loaded-pressure', 'hartono-2021-supplemental', 'tong'}
+    aloaded = [r for r in arows if r['group'] in amp_loaded and r['unit'] == 'Pa' and r['role'] == 'fitted']
+    def amp_conditions(r):
+        return r['T_K'], amp_mass_percent(afeed[r['identity']])
+    amp_inside, amp_temperatures, amp_concentrations = fitted_conditions(aloaded, amp_conditions)
+    amp_within, amp_outside = split_pressures(
+        [(ptotal, [r for r in arows if r['group'] == 'tong-baseline']),
+         (pco2, [r for r in arows if r['group'] == 'kundu'])], amp_inside)
+
     unclassified = []
     def measured_coverage(record):
         phase = read(record)
@@ -1057,26 +1110,23 @@ def transfer_displays(outputs):
         splits = str(sum(row["key"] in classified and confirmed_split(row) for row in phase["classifications"]))
         if len(classified) < len(measured):
             unclassified.append((len(classified), len(measured)))
-            splits += r'\textsuperscript{b}'
+            splits += r'\textsuperscript{a}'
         return splits
 
     amp_w = MOVE + 'amp/reported/phase/supplied.json.gz'
     mea_measured = [row for row in distinct_mea_measured_rows(read(W_MEA_PHASE + 'measured.json.gz'))
                     if row["available"]]
     mea_no_detection = str(sum(row['descent'] for row in mea_measured))
-    mdea_pressures = mdea_pressure_rows(read(W_MDEA_PROPERTIES))
-    mdea_partial = {"Ermatchkov", "Xiao"}
-    mdea_total = {row["group"] for row in mdea_pressures if row["unit"] == "Pa"
-                  and row["role"] != "fitted"} - mdea_partial
     rows = [
-        ['MEA', len(mea_stage['coordinates']), len(mea_stage['active_bounds']), e47,
-         cell(pressure_stats(enot)), mea_no_detection],
-        ['DEA', len(dcoords), sum(r['on_bound'] for r in dcoords.values()), dfitted, cell(pressure_stats(doutside)),
+        ['MEA', len(mea_stage['coordinates']), len(mea_stage['active_bounds']),
+         pco2 + ': ' + pressure_cell(efit), mea_within, mea_no_detection],
+        ['DEA', len(dcoords), sum(r['on_bound'] for r in dcoords.values()),
+         pco2 + ': ' + pressure_cell(dfit), dea_within,
          measured_coverage(W_DEA_SCREEN)],
         ['MDEA', len(mfit), sum(r['on_bound'] for r in mfit),
-         *pressure_columns(mdea_pressures, {'Kuranov'}, mdea_total, mdea_partial)[::2],
+         ptotal + ': ' + pressure_cell(mloaded), mdea_within,
          measured_coverage(W_MDEA_SCREEN)],
-        ['AMP', len(acoords), len(aunc['active_bounds']), *pressure_columns(arows, amp_loaded, {'tong-baseline'}, {'kundu'})[::2],
+        ['AMP', len(acoords), len(aunc['active_bounds']), ptotal + ': ' + pressure_cell(aloaded), amp_within,
          measured_coverage(amp_w)],
     ]
     salt_data = read(W_SALT)['rows']
@@ -1098,16 +1148,33 @@ def transfer_displays(outputs):
                  ticks=salt_temperatures, label='Temperature (K)', aspect=30)
     figure(fig, 'salt-osmotic-residuals.pdf')
 
-    for row in rows:
-        prefix = r'$p_{\COtwo}$: ' if row[0] in ('MEA', 'DEA') else '$P$: '
-        row[3] = prefix + row[3]
-        if row[0] in ('MEA', 'DEA'):
-            row[4] = prefix + row[4]
-    tong_binary_count = sum(row['group'] == 'tong-baseline' for row in arows)
-    table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', r'Fitted loaded-solution pressures\textsuperscript{a}', r'Pressures not fitted', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
-          notes=r'Pressure columns: AARD (Eq.~\eqref{eq:aard}) in \%, with the number of observations $N$ in parentheses; $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. \textsuperscript{a}Fitted $p_{\COtwo}$ of loaded MEA and DEA and fitted $P$ of loaded MDEA and AMP. '
-                rf'The AMP total pressures not fitted are the {NUMBER_WORDS[tong_binary_count]} \COtwo-free ones of Tong et al. '
-                + ''.join(rf'\textsuperscript{{b}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified))
+    def conditions_note(label, temperatures, concentrations, unit):
+        return (label + ' (' + span(temperatures, lambda t: f'{t:.5g}') + ' K, '
+                + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + ')')
+    conditions = ', '.join([
+        conditions_note('MEA', [min(float(r['temperature_K']) for r in mea_pressure
+                                    if r['target'] in fitted_pressure), MEA_ABSORBER_MAX_K], [30], r'wt\%'),
+        conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%'),
+        conditions_note('MDEA', mdea_temperatures, mdea_concentrations, 'mol/kg water'),
+        'and ' + conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
+    ])
+    pressure_note = r'AARD (Eq.~\eqref{eq:aard}) in \% with the number of observations in parentheses. $P$ is total pressure and $p_{\COtwo}$ is \COtwo partial pressure.'
+    table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', 'Fitted loaded-solution pressures', 'Held out within the fitted conditions', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
+          notes=pressure_note + ' The fitted conditions are given by temperature and nominal unloaded amine content for ' + conditions + '. '
+                r'The held-out AMP total pressures are the \COtwo-free observations of Tong et al. '
+                r'Supplementary Table~\ref{supp-tab:transfer-deviations} gives deviations outside the fitted conditions. '
+                + ''.join(rf'\textsuperscript{{a}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified))
+    pooled = [head('Pooled pressure deviations outside the fitted conditions', 10)]
+    for label, deviation in zip(('MEA', 'DEA', 'MDEA', 'AMP'),
+                                (mea_outside, dea_outside, mdea_outside, amp_outside), strict=True):
+        pooled.append([label, r'\multicolumn{9}{l}{' + deviation + '}'])
+    table('transfer-deviations',
+          r'Pooled pressure deviations outside the fitted conditions, followed by data and model deviations for DEA, MDEA and AMP by source.',
+          ['Source', 'Observable', 'Role', '$N$', '$T$ (K)', 'Amine content', 'Loading',
+           r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
+          pooled + transfer_rows, [.15,.10,.107,.048,.095,.09,.084,.065,.068,.10], long=True,
+          notes=r'Pooled deviations give AARD in \% with $N$ in parentheses. '
+                r'$N$: observations submitted (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
     P341 = MEAEVIDENCE
     mea_fit = read(P341 + 'fitted-rows.csv')
     cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -2175,20 +2242,24 @@ MEA_NOMINAL_PRESSURE_RECORDS = (
     STUDY + "results/E/MEA/replay.json.gz",
     STUDY + "results/display-replays/wagner.json.gz",
 )
+MEA_ABSORBER_MAX_K = 353.2
 
 
-def mea_nominal_pressure_points():
+def mea_nominal_pressure_rows():
     canonical, wagner, fitted, replay, comparison = map(read, MEA_NOMINAL_PRESSURE_RECORDS)
     fitted_ids = {r["identity"] for r in fitted["replay"]["rows"] if r["unit"] == "Pa"}
     predicted = {r["identity"]: r for r in replay["rows"] + replay["hot_wagner"] + comparison["rows"]}
     for row in canonical + wagner:
-        value = predicted[row["target"]]
-        yield ("fitted" if row["target"] in fitted_ids else "not fitted", row["source"],
-               float(row["temperature_K"]), value["observed"], value["value"])
+        yield ("fitted" if row["target"] in fitted_ids else "not fitted", row, predicted[row["target"]])
+
+
+def mea_nominal_pressure_points():
+    for role, row, result in mea_nominal_pressure_rows():
+        yield role, row["source"], float(row["temperature_K"]), result["observed"], result["value"]
 
 
 def temperature_band(T):
-    return 'absorber' if T <= 353.2 else 'stripper' if T >= 370 else 'intermediate'
+    return 'absorber' if T <= MEA_ABSORBER_MAX_K else 'stripper' if T >= 370 else 'intermediate'
 
 
 def result_values(required):
