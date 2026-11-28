@@ -15,7 +15,7 @@ from .wheel import verify
 
 DECLARATION = ROOT / "analyses/mdea_mea_workflow/inputs/bounded-binary-411.json"
 BOUNDED_BINARY = ROOT / "analyses/mdea_mea_workflow/results/bounded-binary-411"
-KURANOV_LOG_SCALE = 0.015
+PRESSURE_LOG_SCALE = 0.015
 
 
 def census_status(prediction):
@@ -26,6 +26,8 @@ def census_status(prediction):
 
 
 class MDEAWeights(Route):
+    pressure_groups = ("Kuranov",)
+
     def bind(self, point):
         spec = super().bind(point)
         rows = spec.inputs["observations"]["fitted"]
@@ -34,9 +36,9 @@ class MDEAWeights(Route):
         for row in rows:
             group = row["group"]
             row["weight"] = 1 / group_counts[group]
-            if group == "Kuranov":
+            if group in self.pressure_groups:
                 assert row["arguments"]["form"] == "log_ratio"
-                row["weight"] /= KURANOV_LOG_SCALE**2
+                row["weight"] /= PRESSURE_LOG_SCALE**2
         return spec
 
 
@@ -52,6 +54,8 @@ class NonDigitizedHeats(MDEAWeights):
         return spec
 
 
+class WeightedBinaryPressures(NonDigitizedHeats):
+    pressure_groups = (*MDEAWeights.pressure_groups, "Kim", "Kuranov-binary")
 
 
 T_REF = 298.15  # Wangler Eqs. 34-35, T+ = 298.15 K
@@ -500,7 +504,7 @@ def pressure_deviation(rows, name):
     )
 
 
-def binary_stability_search(route, point):
+def binary_stability_search(route, point, *, reactive=False):
     """Search the declared CO₂-free liquids at the fixed binary pressure."""
     from time import monotonic
 
@@ -510,17 +514,28 @@ def binary_stability_search(route, point):
     pressure = design["pressure_Pa"]
     spec = route.bind(point)
     tick = monotonic()
-    rows = [
-        dict(native_search(route, spec, dict(key=f"binary:{T}:{x}", T=T, P=pressure, binary_x=x)),
-             T_K=T, x_MDEA=x, pressure_Pa=pressure)
-        for T in design["temperatures_K"] for x in design["x_MDEA"]
-    ]
+    rows, outside = [], []
+    for T in design["temperatures_K"]:
+        lo, hi = route.config["calculation_interval_K"]
+        if reactive and not lo <= T <= hi:
+            outside.append(T)
+            continue
+        for x in design["x_MDEA"]:
+            key = f"binary:{T}:{x}"
+            state = dict(key=key, T=T, P=pressure, binary_x=x)
+            if reactive:
+                spec.problems[key] = spec.problem("zero-liquid", dict(T=T, P=pressure, water=(1 - x) / x))
+                state = dict(key=key, problem=key)
+            rows.append(dict(native_search(route, spec, state), T_K=T, x_MDEA=x, pressure_Pa=pressure))
     available = [row["search"] for row in rows if row["search"]["available"]]
     descents = [search for search in available if search_descent(search)]
-    return dict(rows=rows, searched=len(rows), available=len(available), descent=len(descents),
-                liquid_descent=sum(any(w["kind"] == "Liquid" for w in search["witnesses"]) for search in descents),
-                minimum_TPD_RT=min((search["value"] for search in available), default=None),
-                seconds=monotonic() - tick)
+    result = dict(rows=rows, searched=len(rows), available=len(available), descent=len(descents),
+                  liquid_descent=sum(any(w["kind"] == "Liquid" for w in search["witnesses"]) for search in descents),
+                  minimum_TPD_RT=min((search["value"] for search in available), default=None),
+                  seconds=monotonic() - tick)
+    if reactive:
+        result.update(template="zero-liquid", outside_reaction_calculation_interval_K=outside)
+    return result
 
 
 def binary_gap(point):
@@ -747,6 +762,30 @@ FIT_SETS = {
         maximum_seconds=10980,
         replay_tolerance=1e-8,
     ),
+    "weighted-binary": dict(
+        route=WeightedBinaryPressures,
+        declaration=DECLARATION,
+        reference_pressure_pa=P_REF,
+        retained=RESULTS / "move/mdea/weighted-binary/fit",
+        fit_from="reported",
+        maximum_seconds=900,
+        replay_tolerance=1e-8,
+    ),
 }
+
+FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mdea/water-anion-control/fit",
+    water_anion_intercepts=True,
+)
+
+FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mdea/common-pressure-weight/fit",
+    pressure_log_scale=0.05,
+)
+
+FIT_SETS["weighted-binary-without-gap-bound"] = FIT_SETS["weighted-binary"] | dict(
+    retained=RESULTS / "move/mdea/weighted-binary-without-gap-bound/fit",
+    without_binary_gap_bound=True,
+)
 
 REPORTED_SET = "reported"
