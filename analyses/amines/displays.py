@@ -1280,10 +1280,14 @@ def transfer_displays(outputs):
     if k82_adopted['available'] != len(kuranov_rows):
         raise ValueError(f"Kuranov: {k82_adopted['available']} of {len(kuranov_rows)} observations calculated; the table gives no count of the rest")
     n = len(kuranov_rows)
+    # This work is scored at its fitted conditions: the loaded pressures at the fitted temperatures, not the 413 K or CO2-free ones.
+    kuranov_loaded = [r for r in kuranov_rows if r['group'] in ('Kuranov', 'Kuranov-393K')]
+    kuranov_source = {r["source_row"]: r for r in read(KURANOV_DATA)}
     # Each model's own paper reports its deviation on the Kuranov pressures: Ermatchkov et al. Table 5 (sets I and II, 82, fitted), Zhang and Chen Table 14,
     # Sadegh et al. Table 7 (77 of them, fitted), Raeispour Shirazi and Lotfollahi Table 4 (no temperatures), Wangler et al. Table 11, Uyan et al. Table 6, Pahlavanzadeh and Baygi Table 6 (not fitted).
     main_rows += [head(r'Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA $P$', 5),
-                  [r'\quad This work', f"{sum(r['role'] == 'fitted' for r in kuranov_rows)} of {n}", n, kelvin([r['temperature_K'] for r in read(KURANOV_DATA)]), f"{k82_adopted['AARD_percent']:.2f}"],
+                  [r'\quad This work', f"{sum(r['role'] == 'fitted' for r in kuranov_loaded)} of {len(kuranov_loaded)}", len(kuranov_loaded),
+                   kelvin([float(kuranov_source[r["row"]["source_row"]]["temperature_K"]) for r in kuranov_loaded]), f"{stats(kuranov_loaded, predicted='value')['AARD_percent']:.2f}"],
                   [r'\quad Ermatchkov et al., set I ' + ERM, 'yes', n, '313--413', '1.7'], [r'\quad Ermatchkov et al., set II ' + ERM, 'yes', n, '313--413', '3'],
                   [r'\quad ' + ZHANG_CHEN, 'yes', n, '313--413', '6.8'], [r'\quad extended UNIQUAC \cite{sadeghThermodynamicModelingCO22015}', 'yes', 77, '313--413', '8.60'],
                   [r'\quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'yes', krae['rows'], '--', str(krae['AARD_percent'])],
@@ -1312,10 +1316,10 @@ def transfer_displays(outputs):
     SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2,detect-weight]'
     main_rows, other_rows = ([[r'\bfseries ' + str(c) for c in row] if str(row[0]).startswith(r'\quad This work') else row for row in rows] for rows in (main_rows, other_rows))
     TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. Bold: this work. '
-    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, for MEA at absorber temperatures, and of published models that report a deviation on each source, each over its own observations.',
+    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, at its fitted conditions, and of published models that report a deviation on each source, each over its own observations.',
           COLUMNS, main_rows, [], spec=SPEC,
           notes=r'AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. ' + TERMS + r'Unclear: the source calls these results predictions in its methods and fitted in its conclusions. '
-                r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
+                r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$, MDEA loaded pressures only; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
                 r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. '
                 rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi and Pahlavanzadeh \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
     table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources that this work did not fit.',
