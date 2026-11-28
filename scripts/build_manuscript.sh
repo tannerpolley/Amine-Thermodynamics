@@ -17,6 +17,7 @@ cd "$latex_dir"
 for document in supplement main supplement main; do
     latexmk -g -pdf -recorder -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
 done
+latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds submission/cover_letter.tex
 
 cd "$repo_root"
 for document in main supplement; do

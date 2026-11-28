@@ -1,0 +1,73 @@
+% Cover letter for the Fluid Phase Equilibria submission; built to builds/cover_letter.pdf by scripts/build_manuscript.sh.
+\documentclass[11pt]{article}
+\usepackage[letterpaper,hmargin=0.8in,vmargin=0.65in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[version=4]{mhchem}
+\usepackage{xspace}
+\usepackage{siunitx}
+\usepackage{enumitem}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{same}
+\input{chemistry_macros}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4\baselineskip}
+\pagestyle{empty}
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.2\baselineskip,topsep=0.1\baselineskip}
+
+\begin{document}
+
+\begin{center}
+{\large\textbf{Tanner W. Polley}}\\[2pt]
+Department of Chemical Engineering, Brigham Young University, Provo, UT 84602, United States\\
+\href{mailto:tpolley3@byu.edu}{tpolley3@byu.edu}
+\end{center}
+\vspace{-0.6\baselineskip}
+\rule{\linewidth}{0.4pt}
+
+\today
+
+The Editors, \textit{Fluid Phase Equilibria}
+
+Dear Editors of \textit{Fluid Phase Equilibria},
+
+Please consider ``Modeling \COtwo solubility in aqueous alkanolamine solutions with ePC-SAFT'' as a research article.
+
+The paper describes \COtwo solubility in four aqueous amines with one ePC-SAFT model with explicit ions.
+The four calibrations share one base set that no amine data determine: water, \COtwo, the inorganic ions and reactions, and water--anion interactions from osmotic coefficients of the sodium salts.
+Monoethanolamine (MEA) is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities.
+Diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are then fitted one by one, each through its own species, and every fitted model is searched for a second liquid.
+
+What is new:
+\begin{itemize}
+\item \textbf{Four amines on one base without amine data.}
+The fitted \COtwo partial pressures of MEA at 30\,wt\% and of DEA deviate by \res{mea-fitted-pressure-aard-abstract} and \res{dea-fitted-pressure-aard-abstract}\,\%, and the fitted total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%.
+DEA and AMP each hold two parameters at their MEA values, so the base and these parameters give the pressures of a primary, a secondary, a tertiary and a hindered amine from one Helmholtz energy.
+\item \textbf{Water--anion interactions from salt data.}
+The water--bicarbonate and water--carbonate interactions are fitted to osmotic coefficients of the sodium salts and adopted because data without an amine determine them.
+The supplement compares the deviations with those of an interaction fitted to the MEA data.
+\item \textbf{Phase stability of the fitted models.}
+Reactive, electroneutral tangent-plane searches at measured and gridded states find no confirmed second liquid in the four models, and the fitted data decide that outcome.
+A DEA fit without the Lawson--Garst pressures predicts a second liquid.
+Weighting the \COtwo-free MDEA pressures like the loaded ones removes a calculated liquid--liquid gap from that solution.
+An AMP fit without the loaded Tong pressures and the Hartono pressures above \SI{353}{\kelvin} predicts a second liquid, and the AMP model, which fits them, predicts none.
+A phase-stability search therefore tests a fitted electrolyte model in a way that its deviations from the fitted data do not.
+\end{itemize}
+
+The work fits the journal's scope in equations of state for electrolyte and reacting systems, chemical and phase equilibrium, and phase-stability analysis.
+It builds on ePC-SAFT studies of aqueous amines and electrolytes published in \textit{Fluid Phase Equilibria}.
+The MEA model is compared with the author's earlier reactive ePC-SAFT model of MEA (Polley and Hedengren, \textit{Next Chemical Engineering} 3 (2026) 100132), whose parameters were estimated in separate steps.
+
+The four models supply thermodynamic properties for absorber design within the ranges and deviations that the limitations section states property by property.
+That section also gives the conditions where the deviations are larger, among them MEA pressures at 15 and 45\,wt\% and absorption heats at \SI{393}{\kelvin}.
+
+A supplement gives the model contributions, parameters, data conventions, deviations by data set and phase-stability details.
+The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code; the deposit also contains the epcsaft build used for the reported values, whose source is public.
+The deposit is archived on Zenodo at \url{https://doi.org/10.5281/zenodo.24623748}.
+The manuscript includes funding, competing-interest, CRediT and generative-AI declarations.
+
+Sincerely,\\[1.4\baselineskip]
+Tanner W. Polley
+
+\end{document}
