@@ -1198,26 +1198,23 @@ def transfer_displays(outputs):
     figure(fig, 'salt-osmotic-residuals.pdf')
 
     def conditions_note(label, temperatures, concentrations, unit, extra=''):
-        return (label + ' (' + span(temperatures, lambda t: f'{t:.5g}') + ' K, '
-                + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + extra + ')')
-    conditions = ', '.join([
+        return (r'\par\textit{' + label + '.} ' + span(temperatures, lambda t: f'{t:.5g}') + ' K, '
+                + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + extra + '.')
+    conditions = ''.join([
         conditions_note('MEA', [float(r['temperature_K']) for r in mea_pressure
                                 if r['target'] in fitted_pressure], [30], r'wt\%'),
-        conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%', r', $p_{\COtwo}\ge\SI{0.05}{\kilo\pascal}$'),
+        conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%', r', $p_{\COtwo}\ge\SI{0.05}{\kilo\pascal}$')
+        + r' The held-out DEA entry includes only the measurements of Haji-Sulaiman et al.\ (Section~\ref{sec:results-dea}).',
         conditions_note('MDEA', mdea_temperatures, mdea_concentrations, 'mol/kg water',
                         f'; fitted loadings from {mdea_loading_floor:.3f}, and {mdea_below_floor} of the '
                         f'{len(mdea_inside_held)} held-out MDEA pressures within these conditions lie below it'),
-        'and ' + conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
+        conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
     ])
     pressure_note = r'AARD (Eq.~\eqref{eq:aard}) in \% with the number of observations in parentheses. $P$ is total pressure and $p_{\COtwo}$ is \COtwo partial pressure.'
     table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', 'Fitted loaded-solution pressures', 'Held-out pressures', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
-          notes=pressure_note + ' The fitted conditions are the temperatures and nominal unloaded amine contents of the fitted loaded-solution pressures of ' + conditions + '. '
-                + f'All {count_word(len(amp_free))} held-out AMP total pressures are \\COtwo-free observations of Tong et al. '
-                r'The held-out pressures lie within the fitted conditions, except those marked b. '
-                + f'For DEA they are the {len(haji)} measured pressures of Haji-Sulaiman et al. at '
-                + span([r['T_K'] for r in haji], lambda t: f'{t:.0f}') + r' K; the smoothed pressures of Lee et al. and the values '
-                r'that Kennard and Meisen interpolated within these conditions are not measurements and are compared in Section~\ref{sec:results-dea}. '
-                r'Supplementary Table~\ref{supp-tab:transfer-deviations} gives deviations outside the fitted conditions. '
+          notes=pressure_note + r' The fitted conditions are the temperatures and nominal unloaded amine contents of the fitted loaded-solution pressures, listed below. '
+                r'Held-out pressures lie within them, except those marked b; Supplementary Table~\ref{supp-tab:transfer-deviations} gives deviations outside them.'
+                + conditions + r'\par '
                 + ''.join(rf'\textsuperscript{{a}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified)
                 + r' \textsuperscript{b}Above the fitted MEA temperatures and not among the deviations outside the fitted conditions.')
     pooled = [head('Pooled pressure deviations outside the fitted conditions', 10)]
@@ -1394,7 +1391,7 @@ def transfer_displays(outputs):
     fitted_T = [float(r['row']['T_K']) for r in arows if r['group'] == 'loaded-pressure']  # the Hartono pressures that both AMP fits contain
     fig, ax = plt.subplots(figsize=(4.6, 3.5), constrained_layout=True)
     ax.axhspan(min(fitted_T), max(fitted_T), color='0.87', lw=0, label='Temperatures of the fitted Hartono et al. pressures')
-    ax.axhline(read('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']['AMP-dissociation'][1], color='k', ls=(0, (5, 2)), lw=1.3, zorder=4, label='Upper limit of the measured R5 range')
+    ax.axhline(read('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']['AMP-dissociation'][1], color='k', ls=(0, (5, 2)), lw=1.3, zorder=4, label='Upper temperature limit for the measured AMP dissociation constant')
     mstates = [r for r in arows if r['group'] in ('loaded-pressure', 'hartono-2021-supplemental', 'tong')]
     ax.scatter([amp_loading(r) for r in mstates], [float(r['T_K']) for r in mstates], s=14, marker='+', color='0.45', linewidths=.7, zorder=2, label='Measured total-pressure states (Hartono, Tong)')
     ax.scatter([r['loading_mol_CO2_per_mol_AMP'] for r in states], [r['T_K'] for r in states],

@@ -9,7 +9,6 @@ The objectives contain \res{mea-objective-observations-methods} observations for
 The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it.
 
 % P:methods-selection
-The fitted sets were chosen amine by amine.
 The MEA objective contains the \COtwo partial pressures of two sources at nominal 30 wt\% and up to \SI{333.15}{\kelvin}: \res{mea-hilliard-fitted-pressure-count-methods} of the \res{mea-hilliard-pressure-count-methods} of Hilliard \cite{Hilliard2008}, whose remaining pressure is at \SI{\res{mea-hilliard-unfitted-pressure-temperature-methods}}{\kelvin}, and \res{mea-jou-fitted-pressure-count-methods} of the \res{mea-jou-pressure-count-methods} of Jou et al.\ \cite{Jou1995}.
 The other sources at 30 wt\%, the pressures at 15 and 45 wt\% and those at higher temperatures are compared but not fitted.
 The DEA objective contains the \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, measured with methane in the cell, which the calculation omits, and those of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA at or above \SI{0.05}{\kilo\pascal}.
@@ -100,12 +99,17 @@ Each fitted parameter set is searched for a phase split with the tangent-plane c
 Here $g=G^*/n$ is the molar Gibbs energy of the trial phase on the true-species basis, with $G^*$ the Gibbs energy of \cref{sec:reactions}.
 The trial composition $\boldsymbol w$ is restricted to the species that can form from the feed and, for a vapor, to \COtwo, water and the molecular amine, and the condition $w_i>0$ applies to these species only.
 A liquid trial phase also satisfies the reaction equilibria of \cref{eq:activity-reaction-equilibrium}, which do not arise in a vapor of neutral species.
-$B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\boldsymbol\nu_r=0$ for every reaction; and $\boldsymbol\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched state, divided by $RT$, so that $B^{\mathsf T}\boldsymbol\lambda$ is the tangent plane of that state.
+$B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\boldsymbol\nu_r=0$ for every reaction.
+The vector $\boldsymbol\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched state, divided by $RT$, so that $B^{\mathsf T}\boldsymbol\lambda$ is the tangent plane of that state.
 A negative distance that is confirmed by a finite, mass-conserving transfer lowering the Gibbs energy by more than its numerical error estimate is a \emph{detected instability}, classed as toward a second liquid or toward a vapor from the density of the trial phase.
 A liquid--liquid split is reported when a separate equilibrium calculation at the same feed, temperature and pressure gives two distinct liquids of lower Gibbs energy.
-The searched states are the measured states of each amine and grids of temperature, amine content and loading at the concentrations and loadings of its data; the MDEA grid is restricted to the concentrations and loadings of the measured loaded solutions (Section~\ref{supp-sec:s-phase} gives the grids and the starting compositions).
-The states of measured pressures are searched as liquids at 1.05 times the calculated bubble pressure, and for AMP also at 3 times, so that such a state has the measured temperature and liquid composition but a calculated pressure; the states of heat, density and species measurements at their measured or assigned pressure; and the grid states at 1.05 and 3 times the calculated bubble pressure, with further MEA states at 1.5 times and below it.
-Each searched state has one of four outcomes: no detected instability, a detected instability toward a vapor, a detected instability toward a second liquid, or unclassified, when the search ends in an exception or cannot assign the searched phase or a trial at its smallest distance to the liquid or the vapor density root.
+The searched states are the measured states of each amine and grids of temperature, amine content and loading at the concentrations and loadings of its data.
+The MDEA grid is restricted to the concentrations and loadings of the measured loaded solutions (Section~\ref{supp-sec:s-phase} gives the grids and the starting compositions).
+The states of measured pressures are searched as liquids at 1.05 times the calculated bubble pressure, and for AMP also at 3 times, so that such a state has the measured temperature and liquid composition but a calculated pressure.
+The states of heat, density and species measurements are searched at their measured or assigned pressure.
+The grid states are searched at 1.05 and 3 times the calculated bubble pressure, with further MEA states at 1.5 times and below it.
+Each searched state has one of four outcomes: no detected instability, a detected instability toward a vapor, a detected instability toward a second liquid, or unclassified.
+A state is unclassified when the search ends in an exception or cannot assign the searched phase or a trial at its smallest distance to the liquid or the vapor density root.
 
 % P:methods-stability-in-fits
 No objective contains a stability condition, and no parameter bound is set from a search.
