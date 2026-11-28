@@ -38,8 +38,11 @@ AMP_SCREEN = "analyses/amines/results/amp/reported/phase/AMP_free/screen/selecte
 KURANOV_DATA = "data/reference/MDEA/Kuranov_1996_CO2_MDEA_total_pressure.csv"
 AMP_PURE_INPUT = "analyses/amp_transfer/inputs/amp-pure-endpoint.json"
 MOVE = "analyses/amines/results/move/"
-W_AMP_FIRST = MOVE + "amp/first-data/phase/supplied.json.gz"
-W_AMP_FIRST_PROPERTIES = MOVE + "amp/first-data/replay/endpoint.json.gz"
+W_AMP_WITHOUT_HOT = MOVE + "amp/without-hot-pressures/phase/supplied.json.gz"
+W_AMP_WITHOUT_HOT_PROPERTIES = MOVE + "amp/without-hot-pressures/properties/summary.json.gz"
+W_AMP_WITHOUT_HOT_REPLAY = MOVE + "amp/without-hot-pressures/replay/endpoint.json.gz"
+W_AMP_WITHOUT_HOT_FIT = MOVE + "amp/without-hot-pressures/fit/A.json.gz"
+W_AMP_WITHOUT_HOT_CONTROLS = MOVE + "amp/without-hot-pressures/phase/measured-controls.json.gz"
 W_AMP_CONTROLS = MOVE + "amp/reported/phase/measured-controls.json.gz"
 W_DEA_BINARY = MOVE + "dea/binary-temperature-dependent/replay/endpoint.json.gz"
 W_DEA_SCREEN = MOVE + "dea/reported/phase/declared.json.gz"
@@ -1021,8 +1024,8 @@ def transfer_displays(outputs):
                loc='outside lower center', ncols=len(stock_styles))
     figure(fig, 'mdea-speciation.pdf')
 
-    # The free fit (selected start 1) is the comparison whose splits the paper names; its classification and search.
-    aclass = read(W_AMP_FIRST)
+    # The AMP fit without the Tong and hot Hartono pressures is the comparison whose splits the paper names.
+    aclass = read(W_AMP_WITHOUT_HOT)
     cell = lambda s: num(s['AARD_percent'],2) + ' (' + str(s['rows']) + ')'
     def pressure_cell(rows):
         available = [r for r in rows if r.get('status', 'Available').lower() == 'available']
@@ -1338,15 +1341,15 @@ def transfer_displays(outputs):
         confirmed = [a for a in s['attempts'] if a['confirmed']]
         return dict(T_K=s['temperature_K'], loading_mol_CO2_per_mol_AMP=feed['carbon-dioxide'] / feed['aminomethylpropanol'], P_Pa=s['pressure_Pa'], outside=s['outside_ranges'],
                     wt=100 * amass['aminomethylpropanol'] / (amass['aminomethylpropanol'] + amass['water'] * feed['water'] / feed['aminomethylpropanol']), split=confirmed[0] if confirmed else None)
-    states = [astate(s) for s in aclass['classifications'] if s['liquid_directed']]
-    fitted_T = [float(r['row']['T_K']) for r in arows if r['group'] == 'loaded-pressure']  # loaded pressures of the Hartono-only AMP calibration, the one with the splits
+    states = [astate(s) for s in aclass['classifications'] if s['liquid_directed'] and confirmed_split(s)]
+    fitted_T = [float(r['row']['T_K']) for r in arows if r['group'] == 'loaded-pressure']  # the Hartono pressures that both AMP fits contain
     fig, ax = plt.subplots(figsize=(4.6, 3.5), constrained_layout=True)
     ax.axhspan(min(fitted_T), max(fitted_T), color='0.87', lw=0, label='Temperatures of the fitted Hartono et al. pressures')
     ax.axhline(read('analyses/amp_transfer/inputs/retransfer-344/phase-2/AMP-05e94210.json')['reaction_ranges_K']['AMP-dissociation'][1], color='k', ls=(0, (5, 2)), lw=1.3, zorder=4, label='Upper limit of the measured R5 range')
     mstates = [r for r in arows if r['group'] in ('loaded-pressure', 'hartono-2021-supplemental', 'tong')]
     ax.scatter([amp_loading(r) for r in mstates], [float(r['T_K']) for r in mstates], s=14, marker='+', color='0.45', linewidths=.7, zorder=2, label='Measured total-pressure states (Hartono, Tong)')
     ax.scatter([r['loading_mol_CO2_per_mol_AMP'] for r in states], [r['T_K'] for r in states],
-               label='Instability toward a second liquid', s=28, facecolors='none', edgecolors=colors[0])
+               label='Confirmed liquid–liquid split', s=28, facecolors='none', edgecolors=colors[0])
     ax.set(xlabel='Loading (mol CO$_2$/mol AMP)', ylabel='Temperature (K)', xlim=(0, 1.02), ylim=(308, 398))
     ax.legend(loc='upper center', bbox_to_anchor=(.5, -.18), frameon=False, ncol=1, handletextpad=.5)
     figure(fig, 'amp-splits.pdf')
@@ -2400,15 +2403,19 @@ def result_values(required):
     record, key, value = reported_aard["dea-fitted-pressure"]
     add("dea-fitted-pressure-aard-limitations", record, key, f"{value:.1f}")
 
-    record = W_AMP_FIRST_PROPERTIES
-    rows = read(record)["replay"]["properties"]["rows"]
+    record = W_AMP_WITHOUT_HOT_PROPERTIES
+    rows = [r for r in read(record)["rows"] if r["unit"] == "Pa" and r["status"] == "Available"]
     for source, group in (("hartono", "hartono-2021-supplemental"), ("tong", "tong")):
-        hot = [r for r in rows if r["group"] == group and r["unit"] == "Pa"
-               and r["T_K"] >= 373. and r["status"] == "Available"]
+        hot = [r for r in rows if r["group"] == group and r["T_K"] >= 373.]
+        if any(float(r["value"]) >= float(r["observed"]) for r in hot):
+            raise ValueError(f"The AMP fit without the added pressures no longer underpredicts every {group} pressure from 373 K")
         score = stats(hot, predicted="value")["AARD_percent"]
-        for passage, digits in (("supplement", 2), ("first-fit", 1)):
-            add(f"amp-first-data-free-{source}-aard-{passage}", record, f"properties.rows[{group}, T >= 373 K]: AARD",
+        for passage, digits in (("supplement", 2), ("transfer", 1)):
+            add(f"amp-without-hot-{source}-aard-{passage}", record, f"rows[{group}, Pa, T >= 373 K]: AARD",
                 f"{score:.{digits}f}")
+    fitted = [r for r in rows if r["group"] == "loaded-pressure" and r["role"] == "fitted"]
+    add("amp-without-hot-fitted-pressure-aard-transfer", record, "rows[loaded-pressure, Pa, fitted]: AARD",
+        f"{stats(fitted, predicted='value')['AARD_percent']:.1f}")
 
     for name, label, occurrences in (
         ("MEA", "mea", (("starts", 3), ("cai-weight", 2), ("reference-comparison", 3), ("restrictions", 3))),
@@ -2464,48 +2471,33 @@ def result_values(required):
             str(len(screen) - grid))
     add("amp-reported-screen-states-transfer", record, "distinct rows.count", str(len(screen)))
 
-    record = W_AMP_FIRST
-    instabilities = [row for row in read(record)["classifications"] if row["liquid_directed"]]
-    split_states = [row for row in instabilities if any(attempt["confirmed"] for attempt in row["attempts"])]
+    record = W_AMP_WITHOUT_HOT
+    search = read(record)
+    split_states = [row for row in search["classifications"] if row["liquid_directed"] and confirmed_split(row)]
     temperatures = [row["temperature_K"] for row in split_states]
     for bound, fun in (("minimum", min), ("maximum", max)):
-        add(f"amp-first-data-{bound}-instability-temperature-supplement", record,
-            f"states[confirmed splits].temperature_K: {bound}", f"{fun(temperatures):.2f}")
-        for passage in ("abstract", "conclusion", "transfer"):
-            values_in_scope = [row["temperature_K"] for row in instabilities] if passage == "transfer" else temperatures
-            scope = "detected instabilities" if passage == "transfer" else "confirmed splits"
-            add(f"amp-first-data-{bound}-instability-temperature-{passage}", record,
-                f"states[{scope}].temperature_K: {bound}", f"{fun(values_in_scope):.0f}")
-    first_data = 'analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/parameters.json'
-    masses = {row['component_id']: row['fixed']['molar_mass']['value']['magnitude']
-              for row in read(first_data)['parameters']['components']}
-    def amp_loading_and_stock(row):
-        feed = dict(zip(masses, row['feed_mol'], strict=True))
-        amine, water = (feed[k] * masses[k] for k in ('aminomethylpropanol', 'water'))
-        return feed['carbon-dioxide'] / feed['aminomethylpropanol'], 100 * amine / (amine + water)
-
-
-    trial, state = max(((trial, state) for state in split_states for trial in state['attempts'] if trial['confirmed']),
-                       key=lambda pair: pair[0]['Gibbs_decrease_over_RT_mol'])
-    loading, stock = amp_loading_and_stock(state)
+        add(f"amp-without-hot-{bound}-split-temperature-supplement", record,
+            f"classifications[confirmed splits].temperature_K: {bound}", f"{fun(temperatures):.2f}")
+        for passage in ("conclusion", "transfer"):
+            add(f"amp-without-hot-{bound}-split-temperature-{passage}", record,
+                f"classifications[confirmed splits].temperature_K: {bound}", f"{fun(temperatures):.0f}")
+    for passage in ("transfer", "supplement"):
+        add(f"amp-without-hot-split-states-{passage}", record, "classifications[confirmed splits].count",
+            str(len(split_states)))
+        add(f"amp-without-hot-screen-states-{passage}", record, "distinct rows.count",
+            str(len(distinct_phase_rows(search))))
+    add("amp-without-hot-measured-split-states-supplement", record, "classifications[measured, confirmed splits].count",
+        count_word(sum(not row["key"].startswith("grid:") for row in split_states)))
     record = STUDY + "results/AMP_free/screen/selected/native/state-inventory.json.gz"
     maximum = max(row["T_K"] for row in read(record)["rows"])
     add("amp-reported-screen-maximum-temperature", record, "rows[].T_K: max", f"{maximum:.2f}")
-    record = W_AMP_FIRST
-    for passage in ("transfer", "supplement-first-fit"):
-        add(f"amp-first-data-screen-states-{passage}", record, "distinct rows.count",
-            str(len(distinct_phase_rows(read(record)))))
-    record = W_AMP_CONTROLS
+    record = W_AMP_WITHOUT_HOT_CONTROLS
     controls = read(record)["rows"]
-    confirmed = sum(confirmed_split(row) and not row["key"].startswith("grid:") for row in instabilities)
-    for passage in ("caption-diamonds", "caption-observations", "abstract", "conclusion-controls",
-                    "conclusion-confirmed", "transfer-controls", "transfer-confirmed", "transfer-interpretation",
-                    "transfer-claim", "supplement"):
-        uses_controls = passage in ("conclusion-controls", "transfer-controls", "transfer-interpretation",
-                                    "transfer-claim")
-        key = "len(rows)" if uses_controls else "classifications[measured, confirmed split].count"
-        add(f"amp-first-data-measured-splits-{passage}", record if uses_controls else W_AMP_FIRST, key,
-            NUMBER_WORDS[len(controls) if uses_controls else confirmed])
+    if controls.keys() != read(W_AMP_CONTROLS)["rows"].keys() or any(
+            row["outcome"] != "confirmed split" for row in controls.values()):
+        raise ValueError("The AMP fit without the added pressures no longer splits at every measured control of the AMP model")
+    for passage in ("transfer", "supplement"):
+        add(f"amp-measured-control-states-{passage}", record, "len(rows)", count_word(len(controls)))
     for amine in ("mea", "amp"):
         record = MOVE + f"{amine}/reported/alternate-starts/summary.json.gz"
         count = read(record)["tied_count"]
@@ -2750,9 +2742,9 @@ def result_values(required):
     n_fit = len(read(record)["replay"]["rows"])
     for passage in ("transfer", "methods", "supplement"):
         add(f"amp-reported-objective-row-count-{passage}", record, "replay.rows.count", str(n_fit))
-    record = W_AMP_FIRST_PROPERTIES
+    record = W_AMP_WITHOUT_HOT_REPLAY
     rows = read(record)["replay"]["rows"]
-    add("amp-first-data-objective-row-count-supplement", record, "replay.rows.count", str(len(rows)))
+    add("amp-without-hot-objective-row-count-supplement", record, "replay.rows.count", str(len(rows)))
 
     record = STUDY + "results/MDEA/properties.json.gz"
     available_rows = read(record)["rows"]
@@ -2792,10 +2784,6 @@ def result_values(required):
         add(f"mea-hot-pressure-count-{passage}", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".count", str(len(hot)))
     add("mea-hot-pressure-aard-transfer", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".AARD_percent",
         f"{stats(hot)['AARD_percent']:.1f}")
-
-    record = W_AMP_FIRST
-    add("amp-first-data-detected-instabilities-supplement", record, "classifications[liquid_directed].count",
-        str(len(instabilities)))
 
     record = STUDY + "results/MDEA/property-comparisons/A.json.gz"
     row72 = read(record)["additional_Kuranov_72"]
@@ -2943,12 +2931,9 @@ def result_values(required):
         add(f"dea-binary-law-excess-enthalpy-rmse-{passage}", W_DEA_BINARY,
             "rows[Horstmann].law.value, observed: RMSE", f"{rmse:.{digits}f}")
 
-    record = W_AMP_FIRST_PROPERTIES
-    first_pressures = sum(row["group"] == "loaded-pressure" and row["unit"] == "Pa"
-                          for row in read(record)["replay"]["rows"])
-    for passage in ("transfer", "supplement", "slope-comparison", "extended-data"):
-        add(f"amp-first-data-fitted-pressure-count-{passage}", record,
-            "replay.rows[loaded-pressure,Pa].count", str(first_pressures))
+    record = W_AMP_WITHOUT_HOT_REPLAY
+    add("amp-without-hot-fitted-pressure-count-supplement", record, "replay.rows[loaded-pressure,Pa].count",
+        str(sum(row["group"] == "loaded-pressure" and row["unit"] == "Pa" for row in read(record)["replay"]["rows"])))
 
     record = MOVE + "dea/reported/properties/summary.json.gz"
     rows = read(record)["rows"]
@@ -3257,32 +3242,6 @@ def result_values(required):
         add(f'amp-{source}-liquid-vapor-qualified-controls-supplement', W_AMP_CONTROLS,
             f'rows[{prefix}, outcome {liquid_vapor}].count',
             NUMBER_WORDS[sum(r['outcome'] == liquid_vapor for key, r in amp_controls.items() if key.startswith(prefix))])
-    state = 'hartono-2021:55:problem'
-    add('amp-hartono-373-measured-pressure-transfer', W_AMP_CONTROLS, f'rows[{state}].pressure_Pa / 1e3',
-        f"{amp_controls[state]['pressure_Pa'] / 1e3:.1f}")
-    first_search, = (row for row in read(W_AMP_FIRST)['classifications'] if row['key'] == state)
-    add('amp-first-data-hartono-373-search-pressure-transfer', W_AMP_FIRST,
-        f'classifications[{state}].pressure_Pa / 1e3', f"{first_search['pressure_Pa'] / 1e3:.0f}")
-    record = MOVE + 'amp/reported/phase/supplied.json.gz'
-    reported_search, = (row for row in read(record)['rows'] if row['key'] == state)
-    add('amp-reported-hartono-373-search-pressure-transfer', record,
-        f'rows[{state}].supplied_parent_pressure_Pa / 1e3', f"{reported_search['supplied_parent_pressure_Pa'] / 1e3:.0f}")
-    record = MOVE + 'amp/first-data-hot-pressures/properties/summary.json.gz'
-    rows = read(record)['rows']
-    for source, group in (("hartono", "hartono-2021-supplemental"), ("tong", "tong")):
-        hot = [r for r in rows if r["group"] == group and r["unit"] == "Pa"
-               and r["T_K"] >= 373. and r["status"] == "Available"]
-        score = stats(hot, predicted="value")["AARD_percent"]
-        for passage, digits in (("supplement", 2), ("transfer", 1)):
-            add(f"amp-hot-pressure-ablation-{source}-aard-{passage}", record,
-                f"rows[{group}, T >= 373 K]: AARD", f"{score:.{digits}f}")
-    record = MOVE + 'amp/first-data-hot-pressures/phase/supplied.json.gz'
-    ablation = read(record)
-    for passage in ("transfer", "supplement", "conclusion"):
-        add(f"amp-hot-pressure-ablation-detected-instabilities-{passage}", record, "len(classifications)",
-            count_word(len(ablation["classifications"])))
-    add("amp-hot-pressure-ablation-screen-states-supplement", record, "distinct rows.count",
-        str(len(distinct_phase_rows(ablation))))
     changes, change_records = [], []
     for amine in ("mea", "dea", "amp"):
         kind = "pressure" if amine == "amp" else "partial_pressure"
@@ -3422,23 +3381,13 @@ def result_values(required):
         'rows[highest T_K].k_no_gap',
         format((max(r["rows"],key=lambda x:x["T_K"])["k_no_gap"]), '.4f'))
 
-    record = W_AMP_FIRST_PROPERTIES
-    r = read(record)
-    add('amp-first-data-fitted-slope-free-starts', record,
-        'endpoint.coordinates[AMPH-water-slope].origin',
-        f'{next(q["origin"] for q in r["endpoint"]["coordinates"] if q["identity"] == "AMPH-water-slope"):.2f}')
-
-    species = list(masses)
-    water, carbamate = (species.index(key) for key in ('water', 'carbamate-anion'))
-
-    record = W_AMP_FIRST_PROPERTIES
-    r = read(record)["endpoint"]
-    add('amp-first-data-cation-water-interaction-fitted-range-end', record,
-        'parameters.pairs[AMPH+,water].k_ij and slope at 353.15 K',
-        format((next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[0]["value"]["magnitude"] + next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[1]["value"]["magnitude"] * (1/353.15 - 1/next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[1]["reference_temperature"]["magnitude"])), '.3f'))
-    add('amp-first-data-cation-water-interaction-stripper-range-end', record,
-        'parameters.pairs[AMPH+,water].k_ij and slope at 393.15 K',
-        format((next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[0]["value"]["magnitude"] + next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[1]["value"]["magnitude"] * (1/393.15 - 1/next(x["coefficients"] for x in r["parameters"]["pairs"] if (x["component_id_a"],x["component_id_b"])==("protonated-aminomethylpropanol","water"))[1]["reference_temperature"]["magnitude"])), '.3f'))
+    for label, record in (("without-hot", W_AMP_WITHOUT_HOT_FIT), ("reported", MOVE + "amp/reported/fit/A.json.gz")):
+        pair = next(x["coefficients"] for x in read(record)["endpoint"]["parameters"]["pairs"]
+                    if (x["component_id_a"], x["component_id_b"]) == ("protonated-aminomethylpropanol", "water"))
+        for T in (353.15, 393.15):
+            add(f"amp-{label}-cation-water-interaction-{T:.0f}", record,
+                f"endpoint.parameters.pairs[AMPH+,water].k_ij and slope at {T} K",
+                f"{pair[0]['value']['magnitude'] + pair[1]['value']['magnitude'] * (1 / T - 1 / pair[1]['reference_temperature']['magnitude']):.3f}")
 
 
     record = 'analyses/fixed_reaction_reference/results/AMP_free/properties.json.gz'

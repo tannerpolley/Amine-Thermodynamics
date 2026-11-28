@@ -129,11 +129,11 @@ The MDEA model has no detected instability at its grid states or at \res{mdea-me
 At the other \res{mdea-distinct-descent-states-transfer}, \res{mdea-distinct-descents-sobrino-transfer} of them \COtwo-free, the instability is toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model, and the model predicts partial vaporization.
 At a heat-measurement state of Zheng et al.\ \cite{zhengCO2HeatAbsorption2020} in 50 wt\% MDEA at \SI{323.15}{\kelvin} and a loading of 1.10, for example, the pressure of \SI{2.57}{\mega\pascal} lies below the calculated bubble pressure of \SI{\res{mdea-zheng-row-5-bubble-pressure-transfer}}{\mega\pascal}.
 
-% P:phase-amp-first-fit
-AMP is reported as two calibrations: the AMP model and one that contains, of the loaded total pressures, only the \res{amp-first-data-fitted-pressure-count-transfer} of Hartono et al.\ at 313--\SI{353}{\kelvin}, and that differs from the AMP model also in its water--anion interactions and carbamate inputs.
-At the \res{amp-first-data-screen-states-transfer} states searched for both, the second calibration has detected instabilities toward a second liquid at \res{amp-first-data-minimum-instability-temperature-transfer}--\SI{\res{amp-first-data-maximum-instability-temperature-transfer}}{\kelvin}, confirmed as a split at \res{amp-first-data-measured-splits-transfer-confirmed} measured states, and it underpredicts the total pressures of Hartono et al.\ and of Tong et al.\ at 373--\SI{393}{\kelvin} by \res{amp-first-data-free-hartono-aard-first-fit} and \res{amp-first-data-free-tong-aard-first-fit}\,\% on average.
-Adding the pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin} to that calibration, and changing nothing else, leaves \res{amp-hot-pressure-ablation-detected-instabilities-transfer} of these instabilities and lowers the two deviations to \res{amp-hot-pressure-ablation-hartono-aard-transfer} and \res{amp-hot-pressure-ablation-tong-aard-transfer}\,\% (Section~\ref{supp-sec:s-amp-slope}); the AMP model, fitted to the same pressures, has none either.
-Because each model is searched relative to its own bubble pressure, the two calibrations search a Hartono et al.\ state at \SI{373}{\kelvin} at \res{amp-first-data-hartono-373-search-pressure-transfer} and \SI{\res{amp-reported-hartono-373-search-pressure-transfer}}{\kilo\pascal}, against \SI{\res{amp-hartono-373-measured-pressure-transfer}}{\kilo\pascal} measured; at the measured total pressures of the \res{amp-first-data-measured-splits-transfer-controls} split states the AMP model gives one liquid or liquid plus vapor (Section~\ref{supp-sec:s-phase}).
+% P:phase-amp-without-hot
+AMP is reported as two calibrations: the AMP model and a fit without the pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin}, which is otherwise the same (Section~\ref{supp-sec:s-amp-slope}).
+At the \res{amp-without-hot-screen-states-transfer} states searched for both, that fit has a confirmed liquid--liquid split at \res{amp-without-hot-split-states-transfer}, all at \res{amp-without-hot-minimum-split-temperature-transfer}--\SI{\res{amp-without-hot-maximum-split-temperature-transfer}}{\kelvin}, and the AMP model has none.
+That fit deviates by \res{amp-without-hot-fitted-pressure-aard-transfer}\,\% from its fitted pressures, and at 373--\SI{393}{\kelvin} it underpredicts every measured total pressure of Hartono et al.\ and of Tong et al., by \res{amp-without-hot-hartono-aard-transfer} and \res{amp-without-hot-tong-aard-transfer}\,\% on average.
+Because each model is searched relative to its own bubble pressure, both were also searched at the measured total pressures of \res{amp-measured-control-states-transfer} states of the two sources: that fit has a confirmed split at each, and the AMP model gives one liquid or liquid plus vapor (Section~\ref{supp-sec:s-phase}).
 
 % P:phase-mdea
 For MDEA the weight of the \COtwo-free pressures in the fit decides the phase behavior of the \COtwo-free solution.
@@ -147,7 +147,7 @@ With the scale of the loaded pressures, \res{mdea-reported-binary-pressure-log-s
 \end{figure}
 
 % P:phase-estimation
-The AMP calibration with only the loaded total pressures of Hartono et al.\ at 313--\SI{353}{\kelvin} and the MDEA calibration with the larger scale both converged on their objectives, and neither second liquid shows in the deviations of the fitted data.
+The AMP and MDEA calibrations that predict a second liquid both converged on their objectives, and neither second liquid shows in the deviations of the fitted data.
 Stability is tested here after each fit, and the search distinguishes calibrations that these deviations do not.
 
 \FloatBarrier
