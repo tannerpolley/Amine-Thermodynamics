@@ -135,7 +135,7 @@ def check_draft(record, draft_id):
         raise ValueError("Expected an unpublished draft of the amine manuscript concept")
 
 
-def draft(destination, text, *, token=None, dry_run=False):
+def draft(destination, text, *, token=None, dry_run=False, draft_id=None):
     commit = json.loads((destination / "provenance/source.json").read_text())["commit"]
     if not re.fullmatch(r"[a-f0-9]{40}", commit):
         raise ValueError("Invalid deposit commit")
@@ -158,8 +158,9 @@ def draft(destination, text, *, token=None, dry_run=False):
     if str(latest["conceptrecid"]) != CONCEPT_ID:
         raise ValueError("Latest record is outside the expected Zenodo concept")
     inherited = {entry["key"] for entry in latest["files"]}
-    version = request("POST", f"{DEPOSITIONS}/{int(latest['id'])}/actions/newversion", token=token)
-    draft_id = int(urlsplit(version["links"]["latest_draft"]).path.rstrip("/").rsplit("/", 1)[-1])
+    if draft_id is None:  # Zenodo refuses a new version while one is still a draft
+        version = request("POST", f"{DEPOSITIONS}/{int(latest['id'])}/actions/newversion", token=token)
+        draft_id = int(urlsplit(version["links"]["latest_draft"]).path.rstrip("/").rsplit("/", 1)[-1])
     endpoint = f"{DEPOSITIONS}/{draft_id}"
     record = request("GET", endpoint, token=token)
     check_draft(record, draft_id)
@@ -207,6 +208,7 @@ def main():
     create = commands.add_parser("draft", help="stage the archive in a new Zenodo version draft")
     create.add_argument("--deposit", type=Path, help="sealed directory (defaults to local_data_release)")
     create.add_argument("--dry-run", action="store_true", help="show requests without contacting Zenodo")
+    create.add_argument("--draft-id", type=int, help="replace the archive in this open draft")
     commands.add_parser("publish", help="publish the specified draft").add_argument("draft_id", type=int)
     args = parser.parse_args()
     try:
@@ -221,7 +223,7 @@ def main():
         if not re.fullmatch(r"[!-~]+", token):
             parser.error("invalid Zenodo token file")
         if args.command == "draft":
-            draft(destination, text, token=token)
+            draft(destination, text, token=token, draft_id=args.draft_id)
         else:
             publish(args.draft_id, token)
     except (OSError, ValueError, KeyError, TypeError) as error:
