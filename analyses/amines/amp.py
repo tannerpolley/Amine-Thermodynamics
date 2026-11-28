@@ -282,6 +282,11 @@ FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
     water_anion_intercepts=True,
 )
 
+FIT_SETS["without-hot-pressures"] = FIT_SETS["reported"] | dict(
+    route=Route,
+    retained=RESULTS / "move/amp/without-hot-pressures/fit",
+)
+
 FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/amp/common-pressure-weight/fit",
     pressure_log_scale=0.05,
