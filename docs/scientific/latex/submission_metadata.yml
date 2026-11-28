@@ -49,7 +49,7 @@ release_tag: null
 release_commit: null
 data_commit: 109b50506b0edfc0ae027182e9eee5343b82a445
 fitting_stage_commit: null
-data_delivery: merged-paper deposit rebuilt and sealed locally for Zenodo
+data_delivery: sealed deposit archive uploaded to Zenodo draft 24623748 by scripts/upload_manuscript_deposit.py
 local_data_release: ~/Workspaces/External/mea-manuscript-deposit/ (outside the repository; staged by scripts/stage_manuscript_deposit.py)
 engines:
   - scope: Earlier MEA calculations and the 16-parameter calibration
@@ -91,8 +91,8 @@ pdf_pages: 26
 supplement_pdf_sha256: d8234dceb156040fb73d68bd04b484f146509df41c2fc4d84d894930828add32
 supplement_pdf_pages: 38
 source_zip_sha256: 87af7efc9af6ea5542d880755bcdb8366594c96acae730dd3a71722d55ae92a4  # builds/fpe-latex-source.zip from scripts/fpe_source_zip.sh
-archive_doi: null
-archive_doi_status: pending
+archive_doi: 10.5281/zenodo.24623748
+archive_doi_status: reserved on Zenodo draft 24623748, a new version of concept 10.5281/zenodo.23323106; publish with scripts/upload_manuscript_deposit.py publish 24623748
 historical_f1_deposit:
   release_tag: manuscript-fpe-v1
   release_commit: a4c667dbee502aea482cdd56bc555bb04d2dec04
@@ -110,6 +110,6 @@ excluded_from_upload:
   - docs/scientific/latex/submission_metadata.yml
 remaining_human_gate:
   - owner review of main.pdf and supplement.pdf
-  - owner authorization to create the Zenodo draft, reserve its DOI, and publish
+  - owner authorization to publish Zenodo draft 24623748 (DOI reserved)
   - referee access to the epcsaft 1.3.0 and 1.3.1 wheels, arranged through the corresponding author
   - owner authorization for Overleaf sync, a ChemRxiv preprint and journal submission

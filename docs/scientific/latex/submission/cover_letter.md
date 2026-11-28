@@ -14,7 +14,7 @@ The work fits the journal's scope in equations of state for electrolyte and reac
 
 The four models supply thermodynamic properties for absorber design within the ranges and deviations that the limitations section states property by property. That section also gives the conditions where the deviations are larger, among them MEA pressures at 15 and 45 wt% and absorption heats at 393 K.
 
-A supplement gives the model contributions, parameters, data conventions, deviations by data set and phase-stability details. The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code; the deposit also contains the epcsaft build used for the reported values, whose source is public. Deposit identifier: [Zenodo DOI supplied in the final submission]. The manuscript includes funding, competing-interest, CRediT and generative-AI declarations.
+A supplement gives the model contributions, parameters, data conventions, deviations by data set and phase-stability details. The electronic data comprise processed observations, parameter values, numerical results and the analysis and figure code; the deposit also contains the epcsaft build used for the reported values, whose source is public. The deposit is archived on Zenodo at https://doi.org/10.5281/zenodo.24623748. The manuscript includes funding, competing-interest, CRediT and generative-AI declarations.
 
 Sincerely,
 
