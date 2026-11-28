@@ -65,10 +65,10 @@
 \def\floatpagepagefraction{1}
 \def\textpagefraction{.001}
 
-\shorttitle{Thermodynamics of loaded aqueous amines with ePC-SAFT}
+\shorttitle{Four loaded aqueous amines on one ePC-SAFT base}
 \shortauthors{Polley}
 
-\title[mode = title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability}{Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability}}
+\title[mode = title]{\texorpdfstring{Thermodynamics of \ce{CO2}-loaded aqueous monoethanolamine, DEA, MDEA and AMP with ePC-SAFT: four calibrations on one fixed water and inorganic-ion base, checked for phase stability}{Thermodynamics of CO2-loaded aqueous monoethanolamine, DEA, MDEA and AMP with ePC-SAFT: four calibrations on one fixed water and inorganic-ion base, checked for phase stability}}
 
 \author[1]{Tanner W. Polley}[orcid=0009-0008-5957-4152]
 \cormark[1]
@@ -87,26 +87,29 @@
 \hyphenation{mono-ethanolamine}
 \begin{abstract}
 % P:abstract-01
-Equation-of-state models of carbon dioxide (\COtwo) in aqueous amines are judged by their deviations from measured pressures, but a fit to single-liquid data does not require the calculated liquid to be stable, so pressure agreement leaves open whether a second liquid is predicted.
-An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with explicit ions is calibrated for \COtwo-loaded aqueous monoethanolamine (MEA) jointly to pressures, species fractions, absorption heats, heat capacities and densities, with literature equilibrium constants.
-The parameters of water, \COtwo and the inorganic ions are then held fixed, with the water--anion interactions from sodium-salt osmotic coefficients, and diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each described by a small fit of their own species.
-One set of shared parameters thus serves four classes of amine: the fitted \COtwo partial pressures of MEA at 30 wt\% and of DEA deviate by \res{mea-fitted-pressure-aard-abstract} and \res{dea-fitted-pressure-aard-abstract}\,\%, and the fitted total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%.
-Reactive phase-stability searches at the measured states and on grids of temperature, amine content and loading find no second liquid with any of the four models at a state they classify; the AMP states are searched above the calculated bubble pressure.
-The searches add information that the deviations lack: they set the upper bound on the MDEA--water interaction that keeps the \COtwo-free MDEA solution a single liquid up to \SI{423}{\kelvin}, and they led to fitting the AMP pressures up to \SI{393}{\kelvin}.
+Equation-of-state models of carbon dioxide (\COtwo) in aqueous amines are calibrated amine by amine and judged by their deviations from measured pressures, but a fit to single-liquid data does not require the calculated liquid to be stable.
+Here an electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with explicit ions is calibrated for four amines on one base set without amine data: the parameters of water, \COtwo and the inorganic ions, the equilibrium constants of the inorganic reactions, and water--anion interactions fixed from sodium-salt osmotic coefficients.
+Monoethanolamine (MEA) is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities.
+Diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each fitted through their own species, DEA and AMP taking two carbamate or cation parameters each from the MEA fit.
+The fitted \COtwo partial pressures of MEA at 30 wt\% and of DEA deviate by \res{mea-fitted-pressure-aard-abstract} and \res{dea-fitted-pressure-aard-abstract}\,\%, and the fitted total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%.
+Reactive phase-stability searches at the measured states and on grids of temperature, amine content and loading find no confirmed second liquid with any of the four models.
+For two amines that outcome rests on the data of the fit.
+An AMP fit to fewer pressures, none above \SI{353}{\kelvin}, predicted a second liquid at higher temperatures, and adding the remaining pressures alone removes it.
+Weighting the \COtwo-free MDEA pressures like the loaded ones removes a calculated liquid--liquid gap in the \COtwo-free solution.
 
 \end{abstract}
 
 \begin{keywords}
-ePC-SAFT\sep{}monoethanolamine\sep{}diethanolamine\sep{}methyldiethanolamine\sep{}2-amino-2-methyl-1-propanol\sep{}parameter transfer\sep{}phase stability
+ePC-SAFT\sep{}monoethanolamine\sep{}diethanolamine\sep{}methyldiethanolamine\sep{}2-amino-2-methyl-1-propanol\sep{}electrolyte equation of state\sep{}phase stability
 \end{keywords}
 
 \maketitle
 
 \hypersetup{
-    pdftitle={Thermodynamics of CO2-loaded aqueous amines with ePC-SAFT: monoethanolamine calibration, transfer to DEA, MDEA and AMP, and phase stability},
+    pdftitle={Thermodynamics of CO2-loaded aqueous monoethanolamine, DEA, MDEA and AMP with ePC-SAFT: four calibrations on one fixed water and inorganic-ion base, checked for phase stability},
     pdfauthor={Tanner W. Polley},
     pdfsubject={Equilibrium, caloric and density properties and phase stability of CO2-loaded aqueous MEA, DEA, MDEA and AMP with ePC-SAFT},
-    pdfkeywords={ePC-SAFT, monoethanolamine, diethanolamine, methyldiethanolamine, 2-amino-2-methyl-1-propanol, parameter transfer, phase stability}
+    pdfkeywords={ePC-SAFT, monoethanolamine, diethanolamine, methyldiethanolamine, 2-amino-2-methyl-1-propanol, electrolyte equation of state, phase stability}
 }
 
 \input{sections/introduction}

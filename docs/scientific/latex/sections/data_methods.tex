@@ -10,7 +10,8 @@ The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et a
 
 % P:methods-selection
 The fitted sets were chosen amine by amine, not by one rule.
-The MEA objective contains \COtwo partial pressures only at nominal 30 wt\% and 313--\SI{333}{\kelvin}; the pressures at 15 and 45 wt\% and at higher temperatures are compared but not fitted.
+The MEA objective contains the \COtwo partial pressures of two sources at nominal 30 wt\% and up to \SI{333.15}{\kelvin}: \res{mea-hilliard-fitted-pressure-count-methods} of the \res{mea-hilliard-pressure-count-methods} of Hilliard \cite{Hilliard2008}, whose remaining pressure is at \SI{\res{mea-hilliard-unfitted-pressure-temperature-methods}}{\kelvin}, and \res{mea-jou-fitted-pressure-count-methods} of the \res{mea-jou-pressure-count-methods} of Jou et al.\ \cite{Jou1995}.
+The other sources at 30 wt\%, the pressures at 15 and 45 wt\% and those at higher temperatures are compared but not fitted.
 The DEA objective contains the \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, measured with methane in the cell, which the calculation omits, and those of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA at or above \SI{0.05}{\kilo\pascal}.
 Four further DEA pressure sets are compared and not fitted.
 The pressures of Lal et al.\ below \SI{0.05}{\kilo\pascal} lie under the pressure above which that source states its accuracy, 15\,\%, and its authors consider four of them probably in error \cite{lalSolubilityH2SCO21985}.
@@ -18,6 +19,7 @@ The pressures of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} conflict w
 The pressures of Lawson and Garst at \SI{394}{\kelvin} and at 50--54.5 wt\% DEA lie above the fitted temperatures and DEA contents.
 For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation, and for AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
 The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
+The \emph{fitted conditions} of a model are the temperature and amine-concentration ranges of its fitted observations.
 
 % P:methods-range
 A calculation is attempted for every observation, including those outside the measured temperature range of an equilibrium constant (\cref{tab:reaction-equilibrium-constants}).
@@ -43,7 +45,8 @@ The semi-differential heats of Kim and Svendsen are calculated over each finite 
 Estimation is sequential.
 The water parameters, the \COtwo--water interaction, fitted to the pressures of Kiepe et al.\ \cite{kiepeExperimentalDeterminationPrediction2002}, the permittivity coefficients and the two salt-fitted water--anion interactions (\cref{sec:species}) are determined first and remain fixed.
 \res{mea-jointly-fitted-parameter-count-methods} MEA parameters are then estimated jointly (\cref{tab:species-parameters,tab:interaction-matrix}), and with all shared parameters fixed, \res{dea-reactive-fitted-parameter-count-methods} DEA, \res{mdea-reactive-fitted-parameter-count-methods} MDEA and \res{amp-reactive-fitted-parameter-count-methods} AMP parameters are fitted (\cref{tab:dea-fitted,tab:mdea-fitted,tab:amp-fitted}).
-Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction with its temperature coefficient and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
+Other amine parameters were set beforehand from data without \COtwo: the two permittivity coefficients of each amine, the DEA--water interaction with its temperature coefficient and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}).
+Counting these with the fitted parameters, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
 Each fit minimizes
 \begin{equation}
  C(\boldsymbol\theta)=\frac12\sum_lw_lr_l^2,\qquad
@@ -58,7 +61,7 @@ with the logarithmic form for pressures.
 Section~\ref{supp-sec:s-objective} gives the scale $s_l$ and weight $w_l$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
 Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective; the loaded-solution pressures contribute \res{dea-loaded-pressures-objective-share-methods} and \res{amp-loaded-pressures-objective-share-methods}\,\% of the DEA and AMP objectives.
-In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
+In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate, and the \COtwo-free total pressures of Kim et al.\ \cite{kimEbulliometricDeterminationVaporLiquid2008} and Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996} have the scale of its loaded pressures, $s_l=\res{mdea-reported-binary-pressure-log-scale}$.
 The MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} contribute \res{mea-cai-objective-share-methods}\,\% of the MEA objective but respond only to the MEA--water interaction and its temperature coefficient, so they determine those two parameters and leave the weighting among the loaded-solution data unchanged.
 
 % P:methods-starts
@@ -98,10 +101,11 @@ Here $g=G^*/n$ is the molar Gibbs energy of the trial phase on the true-species 
 $B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\boldsymbol\nu_r=0$ for every reaction; and $\boldsymbol\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched state, divided by $RT$, so that $B^{\mathsf T}\boldsymbol\lambda$ is the tangent plane of that state.
 A negative distance that is confirmed by a finite, mass-conserving transfer lowering the Gibbs energy by more than its numerical error estimate is a \emph{detected instability}, classed as toward a second liquid or toward a vapor from the density of the trial phase.
 A liquid--liquid split is reported when a separate equilibrium calculation at the same feed, temperature and pressure gives two distinct liquids of lower Gibbs energy.
-The searched states are the measured states of each amine and grids of temperature, amine content and loading at the concentrations and loadings of its data, mostly liquids at 1.05 and 3 times the calculated bubble pressure; the MDEA grid is restricted to the concentrations and loadings of the measured loaded solutions (Section~\ref{supp-sec:s-phase} gives the grids and the starting compositions).
+The searched states are the measured states of each amine and grids of temperature, amine content and loading at the concentrations and loadings of its data; the MDEA grid is restricted to the concentrations and loadings of the measured loaded solutions (Section~\ref{supp-sec:s-phase} gives the grids and the starting compositions).
+The states of measured pressures are searched as liquids at 1.05 times the calculated bubble pressure, and for AMP also at 3 times; the states of heat, density and species measurements at their measured or assigned pressure; and the grid states at 1.05 and 3 times the calculated bubble pressure, with further MEA states at 1.5 times and below it.
+Each searched state has one of four outcomes: no detected instability, a detected instability toward a vapor, a detected instability toward a second liquid, or unclassified, when the search cannot be evaluated or its smallest distance is zero within its numerical resolution.
 
-% P:methods-bound
-Stability enters one fit, through a bound.
-Only the MDEA--water interaction acts on the \COtwo-free MDEA solution, and its value at \SI{423}{\kelvin}, the highest temperature tested, is bounded above at $\res{mdea-bound-binary-limit-methods}$, $10^{-4}$ below the largest tested value without a liquid--liquid gap at \SI{1.466}{\mega\pascal}, so that this solution stays a single liquid.
-The bound was fixed before fitting (Section~\ref{supp-sec:s-mdea-bound}), and \cref{sec:results-phase} gives the fit without it.
-The loaded MDEA states are not constrained, and the MEA, DEA and AMP fits carry no stability condition.
+% P:methods-stability-in-fits
+No objective contains a stability condition, and no parameter bound is set from a search.
+Two data choices were informed by searches of earlier fits, and \cref{sec:results-phase} compares each with the reported model: the scale of the \COtwo-free MDEA pressures, previously \res{mdea-without-binary-gap-bound-binary-pressure-log-scale}, and the AMP pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin}, previously not fitted.
+Section~\ref{supp-sec:s-phase} also gives an earlier DEA fit that gave a second liquid.

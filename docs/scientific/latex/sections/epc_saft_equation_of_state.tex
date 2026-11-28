@@ -1,4 +1,4 @@
-\section{Model and transfer design}\label{sec:theory}
+\section{Model and shared base}\label{sec:theory}
 % P:theory-01
 Each liquid contains molecular \COtwo, water, the amine A and its cation \ce{AH+}, together with bicarbonate, carbonate, hydronium and hydroxide; the MEA, DEA and AMP liquids also contain the carbamate \ce{ACOO-}, which MDEA does not form.
 Only \COtwo, water and the molecular amine enter the vapor, and one ePC-SAFT equation of state describes both phases.
@@ -84,7 +84,7 @@ Ions affect the permittivity only through the phase volume and the neutral amoun
 % P:theory-shared
 Six species are common to the four amines: \COtwo, water and the four inorganic ions.
 Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are set before any amine is fitted and are the same in all four models; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
-This is the transfer design: every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
+These six species form the base of the four calibrations: every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
 Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007,Schick2023,Pabsch2020}.
 
 % P:theory-salt

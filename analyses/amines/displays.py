@@ -2367,6 +2367,10 @@ def result_values(required):
     for label, group in (("mdea-fitted-pressure", "Kuranov"), ("mdea-ermatchkov-pressure", "Ermatchkov")):
         rows = [row for row in mdea_rows if row["group"] == group and row["unit"] == "Pa"]
         reported_aard[label] = (record, f"rows[{group},Pa].observed,value", stats(rows, predicted="value")["AARD_percent"])
+    for label, group in (("kim", "Kim"), ("kuranov-co2-free", "Kuranov-binary")):
+        rows = [row for row in mdea_rows if row["group"] == group and row["unit"] == "Pa"]
+        add(f"mdea-{label}-fitted-pressure-aard-mdea-results", record, f"rows[{group},Pa].observed,value",
+            f"{stats(rows, predicted='value')['AARD_percent']:.1f}")
     for label, filename, groups in (
         ("dea-fitted-pressure", "DEA/property-comparisons/selected.json.gz", ("Lawson", "SeoHong", "Lal")),
         ("amp-fitted-pressure", "AMP_free/properties.json.gz", ("loaded-pressure", "hartono-2021-supplemental", "tong")),
@@ -2811,6 +2815,20 @@ def result_values(required):
         for passage in passages:
             add(f"mea-{cohort}-pressure-count-{passage}", record, f"summary.pressure.{cohort}.attempted",
                 str(pressure_stats[cohort]["attempted"]))
+    replay = read(record)
+    population = replay["pressure_population"]
+    fitted_ids = {x["row"]["id"] for x in replay["rows"]
+                  if x["group"] == "common149" and x["row"].get("quantity") == "PartialPressure"}
+    assert len(fitted_ids) == pressure_stats["legacy"]["attempted"]
+    for source, label in (("Hilliard2008", "hilliard"), ("Jou1995", "jou")):
+        ids = [k for k, v in population.items() if v["source_key"] == source]
+        add(f"mea-{label}-fitted-pressure-count-methods", record,
+            f"pressure_population[{source}] in fitted rows: count", str(sum(k in fitted_ids for k in ids)))
+        add(f"mea-{label}-pressure-count-methods", record, f"pressure_population[{source}].count", str(len(ids)))
+    unfitted, = (v for k, v in population.items() if v["source_key"] == "Hilliard2008" and k not in fitted_ids)
+    add("mea-hilliard-unfitted-pressure-temperature-methods", record,
+        f"pressure_population[{unfitted['observation_id']}].temperature_reported_C + 273.15",
+        f"{float(unfitted['temperature_reported_C']) + 273.15:.2f}")
     for label, cohort in (("added-same-sources", "added"), ("aronu-nominal", "Aronu2011")):
         add(f"mea-{label}-pressure-aard-results", record,
             f"summary.pressure.{cohort}.AARD_percent", f"{pressure_stats[cohort]['AARD_percent']:.1f}")
@@ -2832,6 +2850,10 @@ def result_values(required):
     binary_search = read(record)
     add("mdea-unbounded-binary-states-searched", record, "searched", str(binary_search["searched"]))
     add("mdea-unbounded-binary-instabilities", record, "liquid_descent", str(binary_search["liquid_descent"]))
+    unstable = [row["T_K"] for row in binary_search["rows"] if (row["search"]["value"] or 0) < 0]
+    assert len(unstable) == binary_search["liquid_descent"]
+    add("mdea-unbounded-binary-minimum-instability-temperature", record, "rows[search.value < 0].T_K: min",
+        f"{min(unstable):.0f}")
 
     for key, source in (("reported", W_MDEA_NEUTRAL),
                         ("unweighted-reactive", W_MDEA_UNWEIGHTED_REACTIVE),
@@ -2839,10 +2861,12 @@ def result_values(required):
         search = read(source)
         add(f"mdea-{key}-binary-states-searched", source, "searched", str(search["searched"]))
         add(f"mdea-{key}-binary-instabilities", source, "liquid_descent", str(search["liquid_descent"]))
+        add(f"mdea-{key}-binary-instabilities-words", source, "liquid_descent", count_word(search["liquid_descent"]))
     for name in ("without-binary-gap-bound", "reported"):
         manifest = MOVE + f"mdea/{name}/fit/manifest.json.gz"
-        add(f"mdea-{name}-binary-pressure-log-scale", manifest, "1 / sqrt(n * weight) for Kuranov-binary",
-            f"{mdea_binary_pressure_scale(read(manifest)):g}")
+        for passage in ("", "-transfer"):
+            add(f"mdea-{name}-binary-pressure-log-scale{passage}", manifest, "1 / sqrt(n * weight) for Kuranov-binary",
+                f"{mdea_binary_pressure_scale(read(manifest)):g}")
     endpoint = MOVE + "mdea/reported/fit/A.json.gz"
     coordinate = next(row for row in read(endpoint)["endpoint"]["coordinates"]
                       if row["identity"].startswith("pair/mdea-water/k_ij/a0"))
@@ -3248,6 +3272,13 @@ def result_values(required):
         for passage, digits in (("supplement", 2), ("transfer", 1)):
             add(f"amp-hot-pressure-ablation-{source}-aard-{passage}", record,
                 f"rows[{group}, T >= 373 K]: AARD", f"{score:.{digits}f}")
+    record = MOVE + 'amp/first-data-hot-pressures/phase/supplied.json.gz'
+    ablation = read(record)
+    for passage in ("transfer", "supplement", "conclusion"):
+        add(f"amp-hot-pressure-ablation-detected-instabilities-{passage}", record, "len(classifications)",
+            count_word(len(ablation["classifications"])))
+    add("amp-hot-pressure-ablation-screen-states-supplement", record, "distinct rows.count",
+        str(len(distinct_phase_rows(ablation))))
     changes, change_records = [], []
     for amine in ("mea", "dea", "amp"):
         kind = "pressure" if amine == "amp" else "partial_pressure"
@@ -3285,6 +3316,47 @@ def result_values(required):
         change_records.append(record)
     add("common-pressure-weight-maximum-aard-change-transfer", change_records,
         "max over MEA, DEA, AMP of |AARD after - AARD before| on loaded_pressure[fitted]", f"{max(changes):.1f}")
+    record = MOVE + "mdea/water-anion-control/properties/summary.json.gz"
+    control = read(record)
+    before, after = control["objective_before"], control["objective_after"]
+    add("mdea-water-anion-release-objective-supplement", record, "objective_before", f"{before:.5g}")
+    add("mdea-water-anion-release-objective-decrease-supplement", record,
+        "objective_before - objective_after", f"{before - after:.2g}")
+    intercept = control["water_anion_intercepts"]["bicarbonate-anion"]
+    for side in ("before", "after"):
+        add(f"mdea-water-bicarbonate-release-intercept-{side}-supplement", record,
+            f"water_anion_intercepts[bicarbonate-anion].a0_{side}", f"{intercept[f'a0_{side}']:.3f}")
+    add("mdea-water-bicarbonate-release-se-supplement", record,
+        "water_anion_intercepts[bicarbonate-anion].standard_error", f"{intercept['standard_error']:.3f}")
+    for side in ("before", "after"):
+        add(f"mdea-water-anion-release-ermatchkov-{side}-aard-supplement", record,
+            f"pressure[Ermatchkov].{side}.AARD_percent",
+            f"{next(e for e in control['pressure'] if e['source'] == 'Ermatchkov')[side]['AARD_percent']:.2f}")
+    record = MOVE + "mdea/common-pressure-weight/properties/summary.json.gz"
+    weighted = {e["source"]: e for e in read(record)["pressure"]}
+    for source, group in (("kim", "Kim"), ("kuranov", "Kuranov"), ("ermatchkov", "Ermatchkov"), ("xiao", "Xiao")):
+        for side in ("before", "after"):
+            add(f"mdea-common-pressure-weight-{source}-{side}-aard-supplement", record,
+                f"pressure[{group}].{side}.AARD_percent", f"{weighted[group][side]['AARD_percent']:.2f}")
+    manifests = [MOVE + f"{amine}/common-pressure-weight/fit/manifest.json.gz" for amine in ("dea", "amp", "mdea")]
+    scales = set()
+    for manifest in manifests:
+        rows = [r for r in read(manifest)["rows"]["fitted"] if r.get("unit") == "Pa"]
+        for group in {r["group"] for r in rows}:
+            weights = [r["weight"] for r in rows if r["group"] == group]
+            scales.add(f"{1 / math.sqrt(len(weights) * weights[0]):.3g}")
+    assert len(scales) == 1, scales
+    add("common-pressure-weight-log-scale-supplement", manifests,
+        "1 / sqrt(n * weight) for every fitted pressure group (DEA, AMP, MDEA)", scales.pop())
+    add("mdea-reported-binary-pressure-log-scale-supplement", MOVE + "mdea/reported/fit/manifest.json.gz",
+        "1 / sqrt(n * weight) for Kuranov-binary", f"{mdea_binary_pressure_scale(read(MOVE + 'mdea/reported/fit/manifest.json.gz')):g}")
+    record = MOVE + "mdea/common-pressure-weight/fit/descent-probe.json.gz"
+    probe = read(record)
+    refused = [x for t in probe["trials"] for x in t["replay"]["rows"] if x["status"] != "Available"]
+    assert {x["group"] for x in refused} == {"Kuranov-binary"} and len(refused) == len(probe["trials"]), refused
+    add("mdea-common-pressure-weight-remaining-reduction-supplement", record,
+        "relative_linearized_reduction * 100", f"{100 * probe['relative_linearized_reduction']:.1f}")
+    add("mdea-common-pressure-weight-trial-steps-supplement", record, "len(trials)", NUMBER_WORDS[len(probe["trials"])])
     kuranov_rows = mdea_kuranov_rows(read(W_MDEA_PROPERTIES))
     records = (W_MDEA_PROPERTIES, KURANOV_DATA)
     add("mdea-published-kuranov-total-pressure-count", records, "matched Kuranov Table 2 rows.count",
@@ -3664,6 +3736,8 @@ def result_values(required):
     for name, label in (("HajiSulaiman1998", "hajisulaiman"), ("Lee1972", "lee"), ("KennardMeisen1984", "kennard")):
         score = stats([r for r in held[name]["rows"] if r.get("value") is not None], predicted="value")
         add(f"dea-held-out-{label}-count-transfer", record, f"sources.{name}.rows[value]: count", str(score["n"]))
+        if score["n"] < len(NUMBER_WORDS):
+            add(f"dea-held-out-{label}-count-words-transfer", record, f"sources.{name}.rows[value]: count", count_word(score["n"]))
         add(f"dea-held-out-{label}-aard-transfer", record, f"sources.{name}.rows[value]: AARD", f"{score['AARD_percent']:.1f}")
         add(f"dea-held-out-{label}-bias-transfer", record, f"sources.{name}.rows[value]: bias", f"{score['bias_percent']:.1f}")
     amp_log_change = amp_r4_delta["a"] + amp_r4_delta["b"]/313.15
@@ -3760,6 +3834,9 @@ def result_values(required):
         add(f"mdea-distinct-descents-{label}-supplement", (W_MDEA_SCREEN, W_MDEA_PROPERTIES),
             f"classifications joined to measured rows with source_key={source}",
             str(count) if label == "bottinger" else count_word(count, zero="zero"))
+    add("mdea-distinct-descents-sobrino-transfer", (W_MDEA_SCREEN, W_MDEA_PROPERTIES),
+        "classifications joined to measured rows with source_key=Sobrino2016",
+        count_word(descent_sources["Sobrino2016"], zero="zero"))
     add('mdea-source-matched-kuranov-count-supplement', (W_MDEA_PROPERTIES, KURANOV_DATA), 'matched Kuranov Table 2 rows.count', str(len(mdea_kuranov_rows(read(W_MDEA_PROPERTIES)))))
     add('mdea-source-matched-kuranov-free-fitted-count', W_MDEA_PROPERTIES, 'fitted Kuranov-binary record count', NUMBER_WORDS[sum(q["role"]=="fitted" and q["group"]=="Kuranov-binary" for q in mdea_properties_data["rows"])])
 

@@ -31,6 +31,6 @@ uv run --locked python scripts/deposit_examples/dea_split.py
 uv run --locked python scripts/deposit_examples/mea_heat.py
 ```
 
-The C1 example checks the pressure and temperature derivatives of the Gibbs energy at a retained MEA bubble state against the volume and enthalpy readbacks. The DEA script searches the repaired model at the former split state at 30 wt% DEA and a loading of 0.50 mol CO₂/mol DEA. The MEA caloric example uses the retained 313.15 K, 1.734 MPa state at 30 wt% MEA, from zero to 0.31 mol CO₂/mol MEA. Each script checks the quantities it prints against the retained numerical results.
+The C1 example checks the pressure and temperature derivatives of the Gibbs energy at a retained MEA bubble state against the volume and enthalpy readbacks. The DEA script searches the reported DEA model at the density state of Weiland et al. at 30 wt% DEA, 298.15 K and a loading of 0.50 mol CO₂/mol DEA, where an earlier DEA fit gives a liquid–liquid split. The MEA caloric example uses the retained 313.15 K, 1.734 MPa state at 30 wt% MEA, from zero to 0.31 mol CO₂/mol MEA. Each script checks the quantities it prints against the retained numerical results.
 
 These tests reproduce calculations with the stated models and inputs. They do not establish that the models predict physical phase stability outside the tested states.
