@@ -1430,14 +1430,53 @@ def born_sensitivity(route, point):
     return dict(reference_cost=base["cost"], cases=cases)
 
 
+def _bulk_relative_permittivity(state):
+    epsilon = getattr(state, "bulk_relative_permittivity", None)
+    if epsilon is None:
+        raise NotImplementedError("The pinned Engine does not return bulk relative permittivity for the MEA liquid")
+    return epsilon
+
+
+def permittivity_validation(route, point):
+    """Compare the reported MEA model with the unloaded dielectric spectra."""
+    spec = route.bind(point)
+    source = ROOT / "data/reference/MEA/observations/permittivity/Agieienko_Buchner_2024.csv"
+    P = 101325.0
+    rows = []
+    with source.open(newline="") as stream:
+        for retained in csv.DictReader(stream):
+            T = float(retained["T_K"])
+            x_mea = float(retained["MEA_mole_percent"]) / 100
+            amounts = {"monoethanolamine": x_mea, "water": 1 - x_mea}
+            x = [amounts.get(species, 0.0) for species in COMPONENT_IDS]
+            # The calibration data use analytical binary composition.
+            with warnings.catch_warnings(record=True) as observed_warnings:
+                warnings.simplefilter("always", epcsaft.DomainWarning)
+                state = spec.model.state(T, P=P, x=x, phase="liquid")
+                epsilon = _bulk_relative_permittivity(state)
+            observed = float(retained["epsilon_static"])
+            rows.append(dict(source=retained, T_K=T, P_Pa=P,
+                             liquid_mole_fractions=dict(zip(COMPONENT_IDS, x, strict=True)),
+                             liquid_molar_density_mol_m3=state.molar_density,
+                             observed=observed, predicted=epsilon, predicted_minus_observed=epsilon - observed,
+                             pressure_residual_Pa=state.pressure - P,
+                             warnings=sorted({str(w.message) for w in observed_warnings})))
+    first, last = rows[0], rows[-1]
+    mixtures = [row for row in rows if 0 < float(row["source"]["MEA_mole_percent"]) < 100]
+    return dict(source=str(source.relative_to(ROOT)), source_sha256=sha256(source.read_bytes()).hexdigest(),
+                rows=rows,
+                statistics=deviation_statistics([(r["observed"], r["predicted"]) for r in rows], "dimensionless"),
+                mixture_statistics=deviation_statistics([(r["observed"], r["predicted"]) for r in mixtures],
+                                                       "dimensionless"),
+                observed_change=last["observed"] - first["observed"],
+                predicted_change=last["predicted"] - first["predicted"])
+
+
 def hajj_permittivity(route, point):
     """Read the bulk relative permittivity of the reported reactive liquid."""
     spec = route.bind(point)
     source = BUNDLE / "results/permittivity-refit/hajj-table-1.csv"
     template = spec.problems["Bottinger2008_state_030::MEA + MEAH+:problem"]
-    if not hasattr(epcsaft.State, "bulk_relative_permittivity"):
-        raise NotImplementedError("The pinned Engine lacks State.bulk_relative_permittivity")
-
     rows = []
     with source.open(newline="") as stream:
         for retained in csv.DictReader(stream):
@@ -1458,9 +1497,7 @@ def hajj_permittivity(route, point):
                 if result.molar_densities:
                     x, rho = list(result.phase_mole_fractions(0)), result.molar_densities[0]
                     state = spec.model.state(result.temperature, rho=rho, x=x)
-                    epsilon = state.bulk_relative_permittivity
-                    if epsilon is None:
-                        raise NotImplementedError("The pinned Engine does not return bulk relative permittivity for the reactive MEA liquid")
+                    epsilon = _bulk_relative_permittivity(state)
                     row.update(predicted=epsilon, predicted_minus_inferred=epsilon - row["inferred"],
                                liquid_molar_density_mol_m3=rho,
                                pressure_residual_Pa=state.pressure - problem.P,
