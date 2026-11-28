@@ -1173,8 +1173,8 @@ def transfer_displays(outputs):
         return [r'\quad ' + label, fitted or yes(r['data_role']), r['n'] or '--', kelvin([t for t in T.groups() if t]) if T else '--', str(r['deviation_percent'])]
 
     def mea_group(key, heading, points):
-        # Najafloo and Zarei describe the fitting of the Ma'mun pressures differently in their methods and conclusions (Section S7).
-        rows = sorted((theirs(r, PUB[r['model']], 'unclear' if key == 'Mamun' and r['model'].startswith('Najafloo') else None) for r in published[key]),
+        # Najafloo and Zarei call their ternary results predictions in their methods and fitted in their conclusions (Section S7).
+        rows = sorted((theirs(r, PUB[r['model']], 'unclear' if r['model'].startswith('Najafloo') else None) for r in published[key]),
                       key=lambda row: (row[1] != 'yes', float(row[4])))
         return [head(heading, 5), ours(points), *rows]
     absorber = lambda points: [p for p in points if temperature_band(p[1]) == 'absorber']
@@ -1183,7 +1183,9 @@ def transfer_displays(outputs):
     other_rows = mea_group('Mamun', r"Ma'mun et al.\ \cite{Mamun2005}, MEA $p_{\COtwo}$", mea_points['Mamun'])
     other_rows += mea_group('Xu', r'Xu and Rochelle \cite{Xu2011}, MEA $p_{\COtwo}$', mea_points['Xu'])
     aronu, = published['Aronu']
-    other_rows += [head(r'Aronu et al.\ \cite{Aronu2011}, MEA $p_{\COtwo}$', 5), ours(mea_points['Aronu']), theirs(aronu, r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{a}')]
+    # Biget et al., Results: 19 % on the 30 wt% Aronu pressures, which they fitted, with no count or temperatures.
+    other_rows += [head(r'Aronu et al.\ \cite{Aronu2011}, MEA $p_{\COtwo}$', 5), ours(mea_points['Aronu']),
+                   [r'\quad extended UNIQUAC \cite{bigetDevelopmentThermodynamicIdentification2015a}', 'yes', '--', '--', '19'], theirs(aronu, r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{a}')]
     mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
     k82_adopted, r9_kamps = mdea_pressure_comparisons()
@@ -1209,11 +1211,15 @@ def transfer_displays(outputs):
     if k82_adopted['available'] != len(kuranov_rows):
         raise ValueError(f"Kuranov: {k82_adopted['available']} of {len(kuranov_rows)} observations calculated; the table gives no count of the rest")
     n = len(kuranov_rows)
-    # Each source reports its deviation on all 82 Kuranov pressures: Zhang and Chen Table 14, Raeispour Shirazi and Lotfollahi Table 4 (no temperatures), Uyan et al. Table 6, Wangler et al. Table 11.
+    # Each model's own paper reports its deviation on the Kuranov pressures: Ermatchkov et al. Table 5 (sets I and II, 82, fitted), Zhang and Chen Table 14,
+    # Sadegh et al. Table 7 (77 of them, fitted), Raeispour Shirazi and Lotfollahi Table 4 (no temperatures), Wangler et al. Table 11, Uyan et al. Table 6, Pahlavanzadeh and Baygi Table 6 (not fitted).
     main_rows += [head(r'Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA $P$', 5),
                   [r'\quad This work', f"{sum(r['role'] == 'fitted' for r in kuranov_rows)} of {n}", n, kelvin([r['temperature_K'] for r in read(KURANOV_DATA)]), f"{k82_adopted['AARD_percent']:.2f}"],
-                  [r'\quad ' + ZHANG_CHEN, 'yes', n, '313--413', '6.8'], [r'\quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'yes', krae['rows'], '--', str(krae['AARD_percent'])],
-                  [r'\quad ePC-SAFT \cite{Wangler2018}', 'no', n, '313--413', '19.7'], [r'\quad ePC-SAFT \cite{Uyan2015}\textsuperscript{a}', 'no', n, '313--413', '22.9']]
+                  [r'\quad Ermatchkov et al., set I ' + ERM, 'yes', n, '313--413', '1.7'], [r'\quad Ermatchkov et al., set II ' + ERM, 'yes', n, '313--413', '3'],
+                  [r'\quad ' + ZHANG_CHEN, 'yes', n, '313--413', '6.8'], [r'\quad extended UNIQUAC \cite{sadeghThermodynamicModelingCO22015}', 'yes', 77, '313--413', '8.60'],
+                  [r'\quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'yes', krae['rows'], '--', str(krae['AARD_percent'])],
+                  [r'\quad ePC-SAFT \cite{Wangler2018}', 'no', n, '313--413', '19.7'], [r'\quad ePC-SAFT \cite{Uyan2015}\textsuperscript{a}', 'no', n, '313--413', '22.9'],
+                  [r'\quad PC-SAFT \cite{Pahlavanzadeh2013}', 'no', n, '313--413', '26.42']]
     # Yi et al. (their Table 4: 45 Tong and 51 Kundu pressures, no temperatures) and Hartono et al. (2020) (their Table 13: no counts or temperatures) fitted both sources.
     YI, HARTONO = r'\quad eNRTL \cite{yiOpenAccessThermodynamically2024}', r'\quad eNRTL \cite{hartonoSolubilityCO201M2020}'
     main_rows += [head(r'Tong et al.\ \cite{Tong2012}, AMP $P$', 5),
@@ -1223,26 +1229,28 @@ def transfer_displays(outputs):
     other_rows += [head(r'Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, AMP $p_{\COtwo}$', 5),
                    [r'\quad This work', 'no', r'\res{amp-kundu-comparison-partial-pressure-count}', kelvin([r['T_K'] for r in arows if r['group'] == 'kundu']), r'\res{amp-kundu-pressure-aard-literature}'],
                    [YI, 'yes', '51', '--', '15.4'], [HARTONO, 'yes', '--', '--', '17.3']]
-    # Each model's overall value over its MEA pressures; Zhang et al. as tabulated in Baygi et al., Table 5, row Overall.
+    # Each model's overall value over its MEA pressures; Biget et al. Table 1 (387, fitted); Zhang et al. as tabulated in Baygi and Pahlavanzadeh, Table 5, row Overall.
     by_model = {r['model']: r for rs in published.values() for r in rs if r['source'] in ('all 18 sources', 'Aronu2011', 'water-MEA-CO2', '30 wt% subset')}
     zhang_fitted = sum(r['n'] for rs in published.values() for r in rs if r['model'] == 'Zhang2011 eNRTL' and r['data_role'] == 'fitted')
     main_rows += [head(r'All MEA $p_{\COtwo}$', 5), ours(absorber(p for points in mea_points.values() for p in points)),
                   theirs(by_model['Tellez2013 eCTS'], r'eCTS \cite{tellez-arredondoModelingCO2H2S2013}\textsuperscript{b}'),
+                  [r'\quad extended UNIQUAC \cite{bigetDevelopmentThermodynamicIdentification2015a}', 'yes', 387, '--', '20.6'],
                   theirs(by_model['Aronu2011 extended UNIQUAC'], r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{c}'),
-                  theirs(by_model['Najafloo2018 SAFT-HR'], PUB['Najafloo2018 SAFT-HR']), theirs(by_model['Baygi2015 PC-SAFT'], PUB['Baygi2015 PC-SAFT']),
+                  theirs(by_model['Najafloo2018 SAFT-HR'], PUB['Najafloo2018 SAFT-HR'], 'unclear'), theirs(by_model['Baygi2015 PC-SAFT'], PUB['Baygi2015 PC-SAFT']),
                   theirs(by_model['Akula2023 modified eNRTL'], r'modified eNRTL \cite{Akula2023a}\textsuperscript{d}'),
                   [r'\quad ' + PUB['Zhang2011 eNRTL'] + r'\textsuperscript{e}', f'{zhang_fitted} of 725', 725, '--', '42.29']]
     COLUMNS = ['Source and model', 'Fitted', '$N$', '$T$ (K)', r'{AARD (\%)}']
     SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2]'
     TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. '
-    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, at the temperatures it fitted, and of the published models that report a deviation on each source, each over its own observations.',
+    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, for MEA at absorber temperatures, and of published models that report a deviation on each source, each over its own observations.',
           COLUMNS, main_rows, [], spec=SPEC,
-          notes=r'AARD follows Eq.~\eqref{eq:aard}. ' + TERMS + r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. '
+          notes=r'AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. ' + TERMS + r'Unclear: the source calls these results predictions in its methods and fitted in its conclusions. '
+                r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
                 r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. '
                 rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi and Pahlavanzadeh \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
-    table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources and temperatures that this work did not fit.',
+    table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources that this work did not fit.',
           COLUMNS, other_rows, [], spec=SPEC,
-          notes=r'AARD follows main-text Eq.~(\ref{main-eq:aard}). ' + TERMS + r'Unclear: see the text. This work: MEA at nominal 30 wt\%; sets I and II: the two parameter sets of Ermatchkov et al. '
+          notes=r'AARD of this work follows main-text Eq.~(\ref{main-eq:aard}); published values are those reported in each source. ' + TERMS + r'Unclear: see the text. This work: MEA at nominal 30 wt\%; sets I and II: the two parameter sets of Ermatchkov et al. '
                 r'\textsuperscript{a}15--60 wt\% MEA. \textsuperscript{b}Used to choose the initial parameters.')
     # Where the AMP splits lie: retained search states, projected onto temperature and loading.
     acomponents = [c['component_id'] for c in adoc['parameters']['components']]

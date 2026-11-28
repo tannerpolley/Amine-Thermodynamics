@@ -1,22 +1,26 @@
-\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure AARD of this work on the pressure sources it fitted, at the temperatures it fitted, and of the published models that report a deviation on each source, each over its own observations.}\label{tab:published-models}
+\begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Pressure AARD of this work on the pressure sources it fitted, for MEA at absorber temperatures, and of published models that report a deviation on each source, each over its own observations.}\label{tab:published-models}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2]@{}}
 \toprule Source and model & Fitted & $N$ & $T$ (K) & {AARD (\%)} \\ \midrule
 \addlinespace\multicolumn{5}{@{}l}{\textit{Hilliard \cite{Hilliard2008}, MEA $p_{\COtwo}$}} \\*
 \quad This work & 30 of 31 & 31 & 313--333 & 8.06 \\
 \quad eNRTL \cite{Zhang2011} & yes & 55 & 313--333 & 35.5 \\
 \quad PC-SAFT \cite{Baygi2015} & no & 42 & 313--333 & 34.97 \\
-\quad SAFT-HR \cite{Najafloo2018} & no & 42 & 313--333 & 42.59 \\
+\quad SAFT-HR \cite{Najafloo2018} & unclear & 42 & 313--333 & 42.59 \\
 \addlinespace\multicolumn{5}{@{}l}{\textit{Jou et al.\ \cite{Jou1995}, MEA $p_{\COtwo}$}} \\*
 \quad This work & 17 of 28 & 28 & 313--353 & 15.22 \\
 \quad eNRTL \cite{Zhang2011} & yes & 124 & 273--423 & 33.5 \\
 \quad PC-SAFT \cite{Baygi2015} & no & 100 & 273--423 & 43.16 \\
-\quad SAFT-HR \cite{Najafloo2018} & no & 100 & 273--423 & 49.52 \\
+\quad SAFT-HR \cite{Najafloo2018} & unclear & 100 & 273--423 & 49.52 \\
 \addlinespace\multicolumn{5}{@{}l}{\textit{Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA $P$}} \\*
 \quad This work & 70 of 82 & 82 & 313--413 & 4.40 \\
+\quad Ermatchkov et al., set I \cite{ermatchkovSolubilityCarbonDioxide2006} & yes & 82 & 313--413 & 1.7 \\
+\quad Ermatchkov et al., set II \cite{ermatchkovSolubilityCarbonDioxide2006} & yes & 82 & 313--413 & 3 \\
 \quad eNRTL \cite{zhangThermodynamicModelingCO22011} & yes & 82 & 313--413 & 6.8 \\
+\quad extended UNIQUAC \cite{sadeghThermodynamicModelingCO22015} & yes & 77 & 313--413 & 8.60 \\
 \quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020} & yes & 82 & -- & 10.9 \\
 \quad ePC-SAFT \cite{Wangler2018} & no & 82 & 313--413 & 19.7 \\
 \quad ePC-SAFT \cite{Uyan2015}\textsuperscript{a} & no & 82 & 313--413 & 22.9 \\
+\quad PC-SAFT \cite{Pahlavanzadeh2013} & no & 82 & 313--413 & 26.42 \\
 \addlinespace\multicolumn{5}{@{}l}{\textit{Tong et al.\ \cite{Tong2012}, AMP $P$}} \\*
 \quad This work & \res{amp-reported-tong-fitted-pressure-count-literature} of \res{amp-assessment-tong-pressure-count-note} & \res{amp-assessment-tong-pressure-count-literature} & 313--393 & \res{amp-reported-tong-total-pressure-aard-literature} \\
 \quad eNRTL \cite{yiOpenAccessThermodynamically2024} & yes & 45 & -- & 8.0 \\
@@ -24,10 +28,11 @@
 \addlinespace\multicolumn{5}{@{}l}{\textit{All MEA $p_{\COtwo}$}} \\*
 \quad This work & 47 of 116 & 116 & 313--353 & 20.84 \\
 \quad eCTS \cite{tellez-arredondoModelingCO2H2S2013}\textsuperscript{b} & yes & -- & 298--367 & 12.5 \\
+\quad extended UNIQUAC \cite{bigetDevelopmentThermodynamicIdentification2015a} & yes & 387 & -- & 20.6 \\
 \quad extended UNIQUAC \cite{Aronu2011}\textsuperscript{c} & yes & -- & 313--353 & 24.3 \\
-\quad SAFT-HR \cite{Najafloo2018} & no & 691 & -- & 34.71 \\
+\quad SAFT-HR \cite{Najafloo2018} & unclear & 691 & -- & 34.71 \\
 \quad PC-SAFT \cite{Baygi2015} & no & 691 & -- & 36.42 \\
 \quad modified eNRTL \cite{Akula2023a}\textsuperscript{d} & yes & -- & 313--393 & 40.5 \\
 \quad eNRTL \cite{Zhang2011}\textsuperscript{e} & 261 of 725 & 725 & -- & 42.29 \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright AARD follows Eq.~\eqref{eq:aard}. $N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. \textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. \textsuperscript{d}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{e}As tabulated by Baygi and Pahlavanzadeh \cite{Baygi2015}; the 261 fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. $N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. Unclear: the source calls these results predictions in its methods and fitted in its conclusions. This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. \textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. \textsuperscript{d}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{e}As tabulated by Baygi and Pahlavanzadeh \cite{Baygi2015}; the 261 fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.\par}\end{table}
