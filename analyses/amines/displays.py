@@ -3229,6 +3229,52 @@ def result_values(required):
     reported_search, = (row for row in read(record)['rows'] if row['key'] == state)
     add('amp-reported-hartono-373-search-pressure-transfer', record,
         f'rows[{state}].supplied_parent_pressure_Pa / 1e3', f"{reported_search['supplied_parent_pressure_Pa'] / 1e3:.0f}")
+    record = MOVE + 'amp/first-data-hot-pressures/properties/summary.json.gz'
+    rows = read(record)['rows']
+    for source, group in (("hartono", "hartono-2021-supplemental"), ("tong", "tong")):
+        hot = [r for r in rows if r["group"] == group and r["unit"] == "Pa"
+               and r["T_K"] >= 373. and r["status"] == "Available"]
+        score = stats(hot, predicted="value")["AARD_percent"]
+        for passage, digits in (("supplement", 2), ("transfer", 1)):
+            add(f"amp-hot-pressure-ablation-{source}-aard-{passage}", record,
+                f"rows[{group}, T >= 373 K]: AARD", f"{score:.{digits}f}")
+    changes, change_records = [], []
+    for amine in ("mea", "dea", "amp"):
+        kind = "pressure" if amine == "amp" else "partial_pressure"
+        record = MOVE + f"{amine}/water-anion-control/properties/summary.json.gz"
+        control = read(record)
+        before, after = control["objective_before"], control["objective_after"]
+        add(f"{amine}-water-anion-release-objective-supplement", record, "objective_before", f"{before:.4g}")
+        add(f"{amine}-water-anion-release-objective-decrease-supplement", record,
+            "objective_before - objective_after", f"{before - after:.2g}")
+        for anion in ("bicarbonate", "carbonate"):
+            released = control["parameters"][f"pair/{anion}-anion/water/k_ij/a0"]["after"]
+            if released["bound"] is None:
+                add(f"{amine}-water-{anion}-release-se-supplement", record,
+                    f"parameters[pair/{anion}-anion/water/k_ij/a0].after.standard_error",
+                    f"{released['standard_error']:.{3 if amine == 'amp' else 1}f}")
+        fitted, = (e for e in control["loaded_pressure"] if e["role"] == "fitted" and e["kind"] == kind)
+        add(f"{amine}-water-anion-release-fitted-aard-supplement", record,
+            f"loaded_pressure[fitted,{kind}].rows.after: AARD",
+            f"{stats([r['after'] for r in fitted['rows']], predicted='value')['AARD_percent']:.2f}")
+        if amine == "amp":
+            kundu, = (e for e in control["pressure"] if e["source"] == "kundu")
+            for side, passages in (("before", ("supplement",)), ("after", ("supplement", "transfer"))):
+                score = stats([r[side] for r in kundu["rows"]], predicted="value")["AARD_percent"]
+                for passage in passages:
+                    add(f"amp-water-anion-release-kundu-{side}-aard-{passage}", record,
+                        f"pressure[kundu].rows.{side}: AARD", f"{score:.1f}")
+        record = MOVE + f"{amine}/common-pressure-weight/properties/summary.json.gz"
+        fitted, = (e for e in read(record)["loaded_pressure"] if e["role"] == "fitted" and e["kind"] == kind)
+        scores = {side: stats([r[side] for r in fitted["rows"]], predicted="value")["AARD_percent"]
+                  for side in ("before", "after")}
+        for side, score in scores.items():
+            add(f"{amine}-common-pressure-weight-{side}-aard-supplement", record,
+                f"loaded_pressure[fitted,{kind}].rows.{side}: AARD", f"{score:.2f}")
+        changes.append(abs(scores["after"] - scores["before"]))
+        change_records.append(record)
+    add("common-pressure-weight-maximum-aard-change-transfer", change_records,
+        "max over MEA, DEA, AMP of |AARD after - AARD before| on loaded_pressure[fitted]", f"{max(changes):.1f}")
     kuranov_rows = mdea_kuranov_rows(read(W_MDEA_PROPERTIES))
     records = (W_MDEA_PROPERTIES, KURANOV_DATA)
     add("mdea-published-kuranov-total-pressure-count", records, "matched Kuranov Table 2 rows.count",
@@ -3597,6 +3643,34 @@ def result_values(required):
     add('dea-r4-log-shift-standard-error-results', dea_fit, 'conditional SE of hydrolysis-a at the response-adjusted variance', format(dea_r4_se["hydrolysis-a"], '.3f'))
     add('dea-r4-enthalpy-standard-error-results', dea_fit, 'response-adjusted conditional SE of hydrolysis-enthalpy-shift in J/mol', format(dea_r4_se["hydrolysis-enthalpy-shift"], '.0f'))
     add('dea-r4-change-at-393-results', (dea_fit, dea_r4), 'endpoint R4 a,b minus source_law a,b at 393.15 K', format(dea_r4_delta["a"] + dea_r4_delta["b"]/393.15, '.3f'))
+    base = MOVE + "dea/without-lawson/"
+    record = base + "properties/summary.json.gz"
+    rows = read(record)["rows"]
+    for group, role, label in (("Lal", "fitted", "lal"), ("Carson", "fitted", "carson"), ("Lawson", "not fitted", "lawson")):
+        score = stats([r for r in rows if r["group"] == group and r["role"] == role], predicted="value")
+        add(f"dea-without-lawson-{label}-aard-supplement", record, f"rows[{group},{role}]: AARD", f"{score['AARD_percent']:.1f}")
+        add(f"dea-without-lawson-{label}-bias-transfer", record, f"rows[{group},{role}]: bias", f"{score['bias_percent']:.1f}")
+    record = base + "fit/A.json.gz"
+    without = read(record)
+    law = next(r["correlation"] for r in without["endpoint"]["reactions"]["aqueous"] if r["name"] == "carbamate-hydrolysis")
+    add("dea-without-lawson-r4-change-at-313-transfer", (record, dea_r4), "endpoint R4 a,b minus source_law a,b at 313.15 K",
+        format(law["a"] - dea_r4_data["a"] + (law["b"] - dea_r4_data["b"]) / 313.15, "+.2f"))
+    add("dea-without-lawson-r4-standard-error-transfer", record,
+        "diagnostics.uncertainty.conditional_standard_error[hydrolysis-a]",
+        format(without["diagnostics"]["uncertainty"]["conditional_standard_error"]["hydrolysis-a"], ".2f"))
+    record = base + "phase/declared.json.gz"
+    phase = read(record)
+    without_states = {row["key"] for row in distinct_phase_rows(phase)}
+    add("dea-without-lawson-split-states-transfer", record, "classifications[distinct rows, confirmed split].count",
+        str(sum(confirmed_split(c) for c in phase["classifications"] if c["key"] in without_states)))
+    add("dea-without-lawson-searched-states-transfer", record, "len(distinct rows)", str(len(without_states)))
+    record = MOVE + "dea/reported/held-out-pressures/summary.json.gz"
+    held = read(record)["sources"]
+    for name, label in (("HajiSulaiman1998", "hajisulaiman"), ("Lee1972", "lee"), ("KennardMeisen1984", "kennard")):
+        score = stats([r for r in held[name]["rows"] if r.get("value") is not None], predicted="value")
+        add(f"dea-held-out-{label}-count-transfer", record, f"sources.{name}.rows[value]: count", str(score["n"]))
+        add(f"dea-held-out-{label}-aard-transfer", record, f"sources.{name}.rows[value]: AARD", f"{score['AARD_percent']:.1f}")
+        add(f"dea-held-out-{label}-bias-transfer", record, f"sources.{name}.rows[value]: bias", f"{score['bias_percent']:.1f}")
     amp_log_change = amp_r4_delta["a"] + amp_r4_delta["b"]/313.15
     add('amp-r4-log-decrease-at-313-results', (amp_fit, amp_r4), 'negative of endpoint R4 a,b change from source_law at 313.15 K', format(-amp_log_change, '.3f'))
     add('amp-r4-log-shift-standard-error-results', amp_fit, 'response-adjusted conditional SE of AMP-hydrolysis-a', format(amp_r4_se["AMP-hydrolysis-a"], '.3f'))
