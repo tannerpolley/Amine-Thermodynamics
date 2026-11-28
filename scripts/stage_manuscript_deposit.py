@@ -69,7 +69,8 @@ def stage(destination):
                 or path == Path("analyses/amines/number-collisions.json")
                 or path == Path("analyses/amines/sources.json")
                 or path.is_relative_to(LATEX) and (path.suffix in {".tex", ".bib", ".cls", ".bst", ".sty"}
-                    or path.name == ".latexmkrc" or "figures" in path.parts)):
+                    or path.name == ".latexmkrc" or "figures" in path.parts
+                    or path.name.startswith("graphical_abstract."))):  # displays --check regenerates it
             selected.add(path)
     wheels = engine_wheels()
     selected.update(wheels)
