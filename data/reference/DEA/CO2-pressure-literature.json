@@ -1,0 +1,105 @@
+{
+  "issue": 429,
+  "conditions": "20.6–25 wt % unloaded DEA, 310.93–380.37 K, CO₂ partial pressure at least 0.05 kPa.",
+  "solubility_sources": [
+    {
+      "source": "Lee, Otto and Mather (1972)",
+      "doi": "10.1021/je60055a015",
+      "zotero_parent": "ZPJHWKSV",
+      "pdf_attachment": "GQ63LV58",
+      "locator": "Tables I–II and Figure 2, pp. 466–468",
+      "numeric_table_rows_in_conditions": 26,
+      "evidence": "Table II smooths the authors' data together with Mason–Dodge data. The three 1000 psia entries are beyond the authors' reported 827 psia experimental maximum. The deposited Table I with the individual measurements was unavailable."
+    },
+    {
+      "source": "Kennard and Meisen (1984)",
+      "doi": "10.1021/je00037a025",
+      "zotero_parent": "8HW4ATXJ",
+      "pdf_attachment": "MG4J7ISU",
+      "locator": "Tables III–VI, pp. 310–312",
+      "numeric_table_rows_in_conditions": 2,
+      "evidence": "Tables III–V contain measurements at 10, 20 and 30 wt %. The two 25 wt %, 107 °C Table VI values in the 'this study' column are interpolations from Figures 3 and 4."
+    },
+    {
+      "source": "Haji-Sulaiman, Aroua and Benamor (1998)",
+      "doi": "10.1205/026387698525603",
+      "zotero_parent": "N87JNRR4",
+      "pdf_attachment": "I5BN7ZJB",
+      "locator": "Methods p. 964 and Table 2 p. 965",
+      "numeric_table_rows_in_conditions": 15,
+      "evidence": "Sixteen candidate measured rows in the 2 M blocks at 313 and 323 K. The 313 K entry printed as 104.0.727 cannot be screened or scored numerically. The authors report concentration variations generally below 3 %, occasionally up to 5 % at low pressure, and about 2 % error in solution analysis."
+    },
+    {
+      "source": "Sidi-Boumedine et al. (2004)",
+      "doi": "10.1016/j.fluid.2003.11.014",
+      "zotero_parent": "6DBQTHRE",
+      "pdf_attachment": null,
+      "locator": "Publisher abstract and HAL hal-00848778v1",
+      "numeric_table_rows_in_conditions": null,
+      "evidence": "The abstract confirms measurements with DEA. The Zotero item has no PDF, and HAL's ISTEX full-text link did not serve the PDF. Table and overlap remain unverified."
+    }
+  ],
+  "model_comparisons": [
+    {
+      "source": "Vallée et al. (1999)",
+      "doi": "10.1021/ie980777p",
+      "zotero_parent": "5G3Y8SAT",
+      "pdf_attachment": "E5W4SZTR",
+      "model": "Electrolyte equation of state",
+      "overlapping_sources": ["Lawson and Garst (1976)", "Lal et al. (1985)", "Lee, Otto and Mather (1972)"],
+      "locator": "Table 1 p. 3475 and §4.2.1 pp. 3476–3477, Figures 1–2",
+      "deviation": "20.6 % pooled average relative deviation of CO₂ partial pressure. Table 1 lists 159 fitted ternary CO₂ points, including 101 Lee, 8 Lal, 20 Bhairi, and 30 Lawson–Garst. Matching individual literature rows to the DEA calibration was not verified.",
+      "lawson_garst_comparison": "§4.2.2 p. 3478 assigns mean relative deviations of 14.4 % to CO₂ and 20.6 % to H₂S, in that order in the text, for ternary Lawson–Garst data excluded from their fit. Figure 6 is the CO₂ comparison at 25 wt % DEA and 310–366 K. Figure 5 is the H₂S comparison.",
+      "limit": "The 35 % Lal deviation on p. 3478 is for the mixed-gas system."
+    },
+    {
+      "source": "Li and Fürst (2000)",
+      "doi": "10.1016/S0009-2509(99)00550-3",
+      "model": "Electrolyte equation of state for aqueous MDEA",
+      "overlapping_sources": [],
+      "locator": "Publisher title and abstract",
+      "deviation": null,
+      "limit": "Publisher metadata identifies aqueous MDEA. Full text was unavailable."
+    },
+    {
+      "source": "Huttenhuis et al. (2008)",
+      "doi": "10.1016/j.fluid.2007.10.020",
+      "model": "Electrolyte equation of state for aqueous MDEA with CO₂ and CH₄",
+      "overlapping_sources": [],
+      "locator": "Abstract p. 99 and experimental data and parameter fitting §3, pp. 103–108",
+      "deviation": null
+    },
+    {
+      "source": "Austgen et al. (1989)",
+      "doi": "10.1021/ie00091a028",
+      "zotero_parent": "BRS85W5C",
+      "pdf_attachment": "ZJPWCSR6",
+      "model": "Electrolyte NRTL",
+      "overlapping_sources": ["Lawson and Garst (1976)", "Lal et al. (1985)", "Lee, Otto and Mather (1972)"],
+      "locator": "Table III p. 1064, Figure 2 and discussion pp. 1066–1067",
+      "deviation": "Figure 2 shows ratios of estimated to measured CO₂ partial pressures from maximum-likelihood fitting. The authors summarize that pressure and loading estimates agree within 10 % with the bulk of the data across all four ternaries. No DEA-specific aggregate or per-source CO₂ AARD is given.",
+      "limit": "Table VII p. 1071 gives exact ratio comparisons against Lal et al. for DEA with both H₂S and CO₂."
+    },
+    {
+      "source": "Austgen et al. (1991)",
+      "doi": "10.1021/ie00051a016",
+      "zotero_parent": "NL4W5CA6",
+      "pdf_attachment": "UNTA6KIT",
+      "model": "Electrolyte NRTL",
+      "overlapping_sources": [],
+      "locator": "Parameter estimation and results for DEA/MDEA blends",
+      "deviation": null,
+      "limit": "Uses the DEA parameters developed in the 1989 paper to model DEA/MDEA blends. No single-amine DEA CO₂ deviation was identified."
+    },
+    {
+      "source": "Barreau et al. (2006)",
+      "doi": "10.2516/ogst:2006038a",
+      "zotero_parent": "E5ETULV6",
+      "model": "Electrolyte NRTL",
+      "overlapping_sources": ["Lawson and Garst (1976)", "Lal et al. (1985)", "Lee, Otto and Mather (1972)"],
+      "locator": "§2.4.1, Equation 47 and Table 8 p. 356, Figure 7 p. 357",
+      "deviation": "22.32 % pooled relative RMSD for 220 fitted DEA–CO₂–H₂O values. The pool includes Lee, Lawson–Garst, Lal, Maddox et al., and Maddox–Elizondo. Figure 7 plots the Lawson–Garst comparison by temperature without a source-specific numeric deviation.",
+      "limit": "Tables 2 and 3 pp. 348–349 also contain 16 in-domain experimental points from the authors' own 25 wt % CO₂–DEA measurements, outside the four sources named in D2."
+    }
+  ]
+}
