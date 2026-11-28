@@ -291,3 +291,8 @@ FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/amp/common-pressure-weight/fit",
     pressure_log_scale=0.05,
 )
+
+FIT_SETS["fixed-r4"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/amp/fixed-r4/fit",
+    fixed_r4=AMP_TRANSFER / "inputs/retransfer-344/phase-2/declarations.toml",
+)

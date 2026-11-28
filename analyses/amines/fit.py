@@ -8,6 +8,7 @@ from hashlib import sha256
 import json
 import os
 from time import monotonic
+import tomllib
 
 from .model import parameter_values, replay, row_manifest, with_parameter_values
 from .properties import endpoint_diagnostics, property_rows
@@ -284,6 +285,37 @@ def move_manifest(amine, fit_set, output, *, ablation=False):
     return dict(wheel=wheel, source_wheel=retained["wheel"], source=retained["source"],
                 start_A_declaration=point, fit_controls=controls, starts=starts, diagnostic_starts={},
                 rows=row_manifest(route_for(fit_set).bind(point)))
+
+
+def fixed_r4_manifest(reported, fit_set):
+    """Project the reported optimizer starts onto the source-law calibration."""
+    source = fit_set["fixed_r4"]
+    chemistry = tomllib.loads(source.read_text())["chemistry"]
+    reaction_name = "carbamate-hydrolysis"
+    (law,) = (r["correlation"] for r in chemistry["reactions"]["aqueous"] if r["name"] == reaction_name)
+
+    path = reported["retained"] / "manifest.json.gz"
+    declaration = read(path)
+    if declaration["wheel"] != verify():
+        raise ValueError(f"{path}: reported starts use another wheel")
+    point = declaration["start_A_declaration"]
+    (reaction,) = (r for r in point["reactions"]["aqueous"] if r["name"] == reaction_name)
+    reaction["correlation"] = law
+    coordinates = point["coordinates"]
+    keep = [q.get("name") != reaction_name for q in coordinates]
+    point["coordinates"] = [q for q, use in zip(coordinates, keep, strict=True) if use]
+    for start in declaration["starts"].values():
+        start["optimizer"] = [x for x, use in zip(start["optimizer"], keep, strict=True) if use]
+
+    def observations(records):
+        return [{k: v for k, v in r.items() if k != "states"} for r in records]
+
+    rows = row_manifest(bind_fit(fit_set, point))
+    for role, records in rows.items():
+        if observations(records) != observations(declaration["rows"][role]):
+            raise ValueError(f"{path}: {role} observation declarations changed")
+    return dict(declaration, rows=rows, reported_manifest=str(path.relative_to(ROOT)),
+                fixed_r4_source=str(source.relative_to(ROOT)), fixed_r4_source_sha256=sha256(source.read_bytes()).hexdigest())
 
 
 def alternate_starts(fit_set, target):

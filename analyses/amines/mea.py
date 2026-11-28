@@ -7,10 +7,12 @@ from functools import cache
 import csv
 from dataclasses import dataclass
 import gzip
+from hashlib import sha256
 import json
 import math
 import tarfile
 from pathlib import Path
+import warnings
 
 from .fit import compare_rows, retained_endpoint, route_for, save
 from .model import (
@@ -30,7 +32,7 @@ from MEA.common.mea_source_contracts import (
     REACTION_CONTRACT_PATH,
 )
 from .records import RESULTS, input_path, read
-from MEA.solvent_specification import SolventSpecification
+from MEA.solvent_specification import SolventSpecification, deviation_statistics
 import epcsaft
 import numpy as np
 from epcsaft import equilibrium, regression as reg
@@ -1426,6 +1428,57 @@ def born_sensitivity(route, point):
             cases.append(dict(ion=ion, diameter_A=diameter, cost=result["cost"], refused=result["refused"],
                               pressure_count=len(pressures), largest_pressure_change_percent=100 * max(pressures)))
     return dict(reference_cost=base["cost"], cases=cases)
+
+
+def hajj_permittivity(route, point):
+    """Read the bulk relative permittivity of the reported reactive liquid."""
+    spec = route.bind(point)
+    source = BUNDLE / "results/permittivity-refit/hajj-table-1.csv"
+    template = spec.problems["Bottinger2008_state_030::MEA + MEAH+:problem"]
+    if not hasattr(epcsaft.State, "bulk_relative_permittivity"):
+        raise NotImplementedError("The pinned Engine lacks State.bulk_relative_permittivity")
+
+    rows = []
+    with source.open(newline="") as stream:
+        for retained in csv.DictReader(stream):
+            problem = copy.copy(template)
+            problem.T, problem.P = float(retained["T_K"]), float(retained["P"])
+            feed = {species: float(retained[column]) for species, column in zip(
+                COMPONENT_IDS[:3], ("carbon", "amine", "water"), strict=True)}
+            problem.feed = equilibrium.Amounts(feed)
+            metadata = json.loads(retained["source"])
+            row = dict(identity=retained["identity"], source=metadata, feed_mol=feed,
+                       T_K=problem.T, P_Pa=problem.P, loading=float(metadata["loading"]),
+                       inferred=float(retained["epsilon"]), row_tolerance=problem.row_tolerance)
+            with warnings.catch_warnings(record=True) as observed_warnings:
+                warnings.simplefilter("always", epcsaft.DomainWarning)
+                result = equilibrium.solve_equilibrium(spec.model, problem)
+                row.update(diagnostic=result.message, residual=result.convergence.residual,
+                           requested_tolerance_met=result.requested_tolerance_met, predicted=None)
+                if result.molar_densities:
+                    x, rho = list(result.phase_mole_fractions(0)), result.molar_densities[0]
+                    state = spec.model.state(result.temperature, rho=rho, x=x)
+                    epsilon = state.bulk_relative_permittivity
+                    if epsilon is None:
+                        raise NotImplementedError("The pinned Engine does not return bulk relative permittivity for the reactive MEA liquid")
+                    row.update(predicted=epsilon, predicted_minus_inferred=epsilon - row["inferred"],
+                               liquid_molar_density_mol_m3=rho,
+                               pressure_residual_Pa=state.pressure - problem.P,
+                               liquid_mole_fractions=dict(zip(COMPONENT_IDS, x, strict=True)))
+            row["warnings"] = sorted({str(w.message) for w in observed_warnings})
+            rows.append(row)
+    isotherms = []
+    for T in sorted({r["T_K"] for r in rows}):
+        series = sorted((r for r in rows if r["T_K"] == T), key=lambda r: r["loading"])
+        first, last = series[0], series[-1]
+        inferred_change = last["inferred"] - first["inferred"]
+        change = last["predicted"] - first["predicted"] if None not in (first["predicted"], last["predicted"]) else None
+        isotherms.append(dict(T_K=T, inferred_change=inferred_change, predicted_change=change,
+                              same_sign=None if change is None else bool(np.sign(change) == np.sign(inferred_change))))
+    pairs = [(r["inferred"], r["predicted"]) for r in rows if r["requested_tolerance_met"] and r["predicted"] is not None]
+    return dict(source=str(source.relative_to(ROOT)), source_sha256=sha256(source.read_bytes()).hexdigest(),
+                caveat="Hajj et al. §3.3.1 question whether their microwave-band measurements reach the static limit.",
+                rows=rows, isotherms=isotherms, statistics=deviation_statistics(pairs, "dimensionless") if pairs else None)
 
 
 def reference_bubbles(spec, retained):

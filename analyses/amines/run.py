@@ -15,10 +15,11 @@ from .wheel import verify  # noqa: E402
 
 
 def main():
+    studies = {"zheng-saturation": "mdea", "hajj-permittivity": "mea"}
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
-    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts",
+    parser.add_argument("stage", choices=(*studies, "rows", "fit", "replay", "phase", "properties", "alternate-starts",
                                           "water-calibration", "born-sensitivity", "held-out-pressures"))
     parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
@@ -31,6 +32,13 @@ def main():
     name = "summary.json.gz"
     if args.stage == "alternate-starts" and args.amine in ("mea", "amp") and args.fit_set == "reported":
         record = fit.alternate_starts(declaration, target)
+    elif args.stage in studies:
+        if args.amine != studies[args.stage] or args.fit_set != "reported":
+            parser.error("This study uses its amine's reported fit")
+        point, selected = fit.retained_endpoint(declaration)
+        calculate = getattr(module, args.stage.replace("-", "_"))
+        record = calculate(fit.route_for(declaration), point)
+        record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
     elif args.fit_set == "without-binary-gap-bound" and args.amine == "mdea" and args.stage in ("fit", "phase"):
         if args.stage == "fit":
             record = fit.mdea_without_gap_bound(declaration, target)
@@ -50,8 +58,11 @@ def main():
         point, selected = fit.retained_endpoint(declaration)
         record = module.born_sensitivity(fit.route_for(declaration), point)
         record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
-    elif args.amine == "dea" and args.fit_set == "reported" and args.stage == "held-out-pressures":
-        point, selected = fit.retained_endpoint(declaration)
+    elif args.amine == "dea" and args.fit_set in ("reported", "fixed-r4") and args.stage == "held-out-pressures":
+        local = target.parent / "fit"
+        point, selected = fit.retained_endpoint(declaration | {
+            "retained": local if (local / "selection.json").is_file() else declaration["retained"],
+        })
         record = module.held_out_pressures(fit.route_for(declaration), point)
         record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
     elif args.stage == "replay":
@@ -69,6 +80,10 @@ def main():
                 record["endpoint"] = endpoint
     elif args.amine == "salt" and args.stage in ("rows", "fit"):
         record = getattr(module, args.stage)(declaration)
+    elif "fixed_r4" in declaration and args.stage == "fit":
+        manifest = fit.fixed_r4_manifest(module.FIT_SETS["reported"], declaration)
+        fit.save(target / "manifest.json.gz", manifest)
+        record = fit.reported_fit(declaration, manifest, target)
     elif args.fit_set in ("water-anion-control", "common-pressure-weight") and args.stage == "fit":
         manifest = fit.control_manifest(module.FIT_SETS["reported"], declaration)
         fit.save(target / "manifest.json.gz", manifest)
@@ -163,6 +178,8 @@ def main():
                     fit.save(target / "measured-controls.json.gz", phase.amp_measured_controls(route, point, fit.read(first)))
             else:
                 record = phase.reported_searches(args.amine, args.fit_set, route, point, target)
+        elif "fixed_r4" in declaration:
+            record = properties.fixed_r4_properties(module.FIT_SETS["reported"], route, point, chosen)
         else:
             record = properties.property_rows(route, point)
             record.update(properties.reported_curves(args.amine, route, point))

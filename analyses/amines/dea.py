@@ -518,6 +518,11 @@ FIT_SETS["without-lawson"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/dea/without-lawson/fit",
 )
 
+FIT_SETS["fixed-r4"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/dea/fixed-r4/fit",
+    fixed_r4=DEA / "declarations.toml",
+)
+
 FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/dea/water-anion-control/fit",
     water_anion_intercepts=True,
