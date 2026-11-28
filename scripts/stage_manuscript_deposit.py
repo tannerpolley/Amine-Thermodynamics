@@ -39,7 +39,7 @@ def stage(destination):
     for name in filter(None, tracked):
         path = Path(name)
         if (name.startswith(("src/MEA/", "scripts/deposit_examples/"))
-                or name.startswith("analyses/amines/") and path.suffix in {".py", ".qmd", ".jsonl"}
+                or name.startswith("analyses/amines/") and path.suffix in {".py", ".qmd"}
                 or path == Path("analyses/amines/number-collisions.json")
                 or path == Path("analyses/amines/sources.json")
                 or path.is_relative_to(LATEX) and (path.suffix in {".tex", ".bib", ".cls", ".bst", ".sty"}
