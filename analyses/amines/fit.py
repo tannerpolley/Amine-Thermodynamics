@@ -325,12 +325,36 @@ def alternate_starts(fit_set, target):
                 tied_count=1 + sum(a["tied"] for a in attempts.values()))
 
 
-def mdea_without_gap_bound(fit_set, target):
-    declaration = read(fit_set["retained"] / "manifest.json.gz")
-    coordinate = next(q for q in declaration["start_A_declaration"]["coordinates"]
+def remove_mdea_gap_bound(point):
+    coordinate = next(q for q in point["coordinates"]
                       if q["identity"].startswith("pair/mdea-water/k_ij/a0"))
     # Restore the upper limit of the interaction coordinate before the binary gap constraint.
     coordinate["bounds"][1] = 0.5
+
+
+def pressure_fit_manifest(fit_set, source, controls_source):
+    wheel = verify()
+    path = controls_source["retained"] / "manifest.json.gz"
+    controls = read(path)
+    if controls["wheel"] != wheel:
+        raise ValueError(f"{path}: fit controls use another wheel")
+    if "endpoint" in source:
+        path = source["endpoint"]
+        point = read(path)
+    else:
+        point = controls["start_A_declaration"]
+    if fit_set.get("without_binary_gap_bound"):
+        remove_mdea_gap_bound(point)
+    return dict(wheel=wheel, source_wheel=controls["wheel"],
+                source=path.relative_to(ROOT).as_posix(),
+                start_A_declaration=point, fit_controls=controls["fit_controls"],
+                starts={"A": dict(optimizer=[0.0] * len(point["coordinates"]))},
+                diagnostic_starts={}, rows=row_manifest(route_for(fit_set).bind(point)))
+
+
+def mdea_without_gap_bound(fit_set, target):
+    declaration = read(fit_set["retained"] / "manifest.json.gz")
+    remove_mdea_gap_bound(declaration["start_A_declaration"])
     save(target / "manifest.json.gz", declaration)
     return reported_fit(fit_set, declaration, target)
 

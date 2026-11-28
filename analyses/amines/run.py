@@ -96,6 +96,38 @@ def main():
         point = fit.read(declaration["endpoint"])
         route = fit.route_for(declaration)
         record = phase.fresh_searches(args.amine, route, point, target)
+    elif "fit_from" in declaration:
+        if args.stage == "fit":
+            source = module.FIT_SETS[declaration["fit_from"]]
+            manifest = fit.pressure_fit_manifest(declaration, source, module.FIT_SETS["reported"])
+            fit.save(target / "manifest.json.gz", manifest)
+            record = fit.reported_fit(declaration, manifest, target)
+        elif args.stage in ("phase", "properties"):
+            local = target.parent / "fit"
+            chosen = local if (local / "selection.json").is_file() else declaration["retained"]
+            point, selection = fit.retained_endpoint({"retained": chosen})
+            route = fit.route_for(declaration)
+            if args.stage == "properties":
+                attempt = fit.read(chosen / f'{selection["selected"]}.json.gz')
+                record = properties.property_rows(route, point, attempt["replay"]["rows"])
+            elif args.amine == "amp":
+                record = phase.fresh_searches(args.amine, route, point, target)
+            else:
+                record = module.binary_stability_search(route, point)
+                if declaration.get("without_binary_gap_bound"):
+                    baseline = module.FIT_SETS["without-binary-gap-bound"]
+                    old_point, old_selection = fit.retained_endpoint(baseline)
+                    old_route = fit.route_for(module.FIT_SETS["reported"])
+                    fit.save(target / "reactive-zero-loading.json.gz", dict(
+                        wheel=verify(),
+                        unweighted=dict(module.binary_stability_search(old_route, old_point, reactive=True),
+                                        endpoint_fingerprint=old_selection["endpoint_fingerprint"]),
+                        weighted=dict(module.binary_stability_search(route, point, reactive=True),
+                                      endpoint_fingerprint=selection["endpoint_fingerprint"]),
+                    ))
+            record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
+        else:
+            parser.error("This pressure fit set supports fit, phase and properties")
     elif args.stage in ("alternate-starts", "water-calibration", "born-sensitivity") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
         parser.error("This fit set is replayed on the locked wheel")
     elif args.stage == "rows":
