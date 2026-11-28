@@ -3640,10 +3640,8 @@ def result_values(required):
         add(f"mdea-distinct-descents-{label}-supplement", (W_MDEA_SCREEN, W_MDEA_PROPERTIES),
             f"classifications joined to measured rows with source_key={source}",
             str(count) if label == "bottinger" else count_word(count, zero="zero"))
-    mdea_kuranov_properties = 'analyses/fixed_reaction_reference/results/MDEA/property-comparisons/A.json.gz'
-    mdea_kuranov_properties_data = read(mdea_kuranov_properties)
     add('mdea-source-matched-kuranov-count-supplement', (W_MDEA_PROPERTIES, KURANOV_DATA), 'matched Kuranov Table 2 rows.count', str(len(mdea_kuranov_rows(read(W_MDEA_PROPERTIES)))))
-    add('mdea-source-matched-kuranov-free-fitted-count', mdea_kuranov_properties, 'fitted Kuranov-binary record count', NUMBER_WORDS[sum(q["role"]=="fitted" and q["group"]=="Kuranov-binary" for q in mdea_kuranov_properties_data["rows"])])
+    add('mdea-source-matched-kuranov-free-fitted-count', W_MDEA_PROPERTIES, 'fitted Kuranov-binary record count', NUMBER_WORDS[sum(q["role"]=="fitted" and q["group"]=="Kuranov-binary" for q in mdea_properties_data["rows"])])
 
     salt_replay = 'analyses/mea_parameter_bundle/results/salt-anchored-435/salt/summary.json'
     salt_replay_data = read(salt_replay)
@@ -3657,8 +3655,6 @@ def result_values(required):
     amp_assessed = 'analyses/fixed_reaction_reference/results/AMP_free/properties.json.gz'
     amp_assessed_data = read(amp_assessed)
     add('amp-unfitted-kundu-partial-pressure-count', amp_assessed, 'rows[group=kundu,role=not fitted] count', str(sum(q["group"]=="kundu" and q["role"]=="not fitted" for q in amp_assessed_data["rows"])))
-    prop_summary = 'analyses/amines/results/shared/properties/display-summary.json.gz'
-    prop_summary_data = read(prop_summary)
     add('mdea-sobrino-example-bubble-pressure-transfer', W_MDEA_PROPERTIES, 'mdea_bubble[fit:218:problem].bubble_Pa / 1e6',
         format(read(W_MDEA_PROPERTIES)["mdea_bubble"]["fit:218:problem"]["bubble_Pa"]/1e6, '.2f'))
 
