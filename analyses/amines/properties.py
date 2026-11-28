@@ -3,7 +3,7 @@
 import copy
 import csv
 import json
-from math import fsum, log
+from math import exp, fsum, log, sqrt
 from types import SimpleNamespace
 
 import epcsaft
@@ -12,7 +12,7 @@ from epcsaft import equilibrium as eq, regression as reg
 from .records import RESULTS, read
 from MEA.solvent_specification import conditional_information, deviation_statistics
 
-from .model import P_REF, calculation_declaration, parameter_values
+from .model import P_REF, calculation_declaration, evaluate, parameter_values
 from .phase import DENSITY_WINDOW, ERROR_TERMS, R, matched, physical, pressure_roots
 from .wheel import ROOT, verify
 
@@ -276,6 +276,161 @@ def property_rows(route, point, fitted=None):
                     )
                 )
     return dict(rows=output, deviations=summary, wheel=verify())
+
+
+def parameter_changes(baseline, trial):
+    """Compare optimizer coordinates on the reported fit's reference chart."""
+    before = {q["identity"]: q for q in baseline["endpoint"]["coordinates"]}
+    changes = {}
+    for q in trial["endpoint"]["coordinates"]:
+        key = q["identity"]
+        prior = before.get(key)
+        values = {}
+        for side, coordinate, record in (("before", prior, baseline), ("after", q, trial)):
+            if coordinate is None:
+                values[side] = None
+                continue
+            diagnostics = record["diagnostics"]
+            errors = diagnostics.get("uncertainty", {}).get("conditional_standard_error", {})
+            value = coordinate["origin"]
+            if coordinate.get("kind") == "reaction_enthalpy_shift":
+                # The endpoint recenters Δh at zero and translates both bounds by the fitted shift.
+                value = prior["bounds"][0] - coordinate["bounds"][0]
+            values[side] = dict(value=value, standard_error=errors.get(key),
+                                bound=diagnostics.get("active_bounds", {}).get(key))
+        reference = values["before"]
+        change = values["after"]["value"] - reference["value"] if reference is not None else None
+        error = reference["standard_error"] if reference is not None else None
+        changes[key] = dict(**values, change=change, change_over_reported_se=change / error if error else None)
+    return changes
+
+
+def control_properties(amine, reported, declaration, folder):
+    """Compare the control and reported endpoint on matched pressure and species observations."""
+    from collections import defaultdict
+
+    from .fit import bind_fit, is_pressure, retained_endpoint
+    from .mea import pressure_statistics
+
+    point, selected = retained_endpoint(declaration | {"retained": folder})
+    trial = read(folder / f'{selected["selected"]}.json.gz')
+    _, original = retained_endpoint(reported)
+    baseline = read(reported["retained"] / f'{original["selected"]}.json.gz')
+    retained = reported["retained"].parent / "properties"
+    retained_properties = read(retained / "summary.json.gz")
+    if retained_properties["endpoint_fingerprint"] != original["endpoint_fingerprint"]:
+        raise ValueError("Reported properties belong to another endpoint")
+    comparisons = {r["identity"]: r for r in retained_properties["rows"]}
+    spec = bind_fit(declaration, point)
+    fitted_before, fitted_after = ({r["identity"]: r for r in attempt["replay"]["rows"]}
+                                   for attempt in (baseline, trial))
+    pressures, species, loaded = defaultdict(list), defaultdict(list), defaultdict(list)
+    if amine == "mea":
+        from . import mea
+
+        templates, population = mea.pressure_inputs(mea.PRESSURE_INPUTS)
+    for role in ("fitted", "comparisons"):
+        records = spec.inputs["observations"][role]
+        for row in records:
+            pressure = is_pressure(row)
+            args = row["arguments"]
+            if not pressure and not (declaration.get("water_anion_intercepts")
+                                     and row["kind"] in ("mole_fraction", "amount_ratio")
+                                     and args.get("phase") in ("L", "mea-nine-species-liquid")):
+                continue
+            identity = row["identity"]
+            if role == "fitted":
+                before, after = fitted_before[identity], fitted_after[identity]
+            else:
+                before, after = comparisons[identity], spec.prediction(row)
+            pair = dict(before=before, after=after)
+            if pressure:
+                source = row["group"]
+                if amine == "mea" and source == "common149":
+                    source = population[identity]["source_key"]
+                pressures[(role, source, row["kind"])].append(pair)
+                if source != "Kiepe" and spec.problems[row["problem"]].feed.values.get("carbon-dioxide", 0) > 0:
+                    loaded[(role, row["kind"])].append(pair)
+            else:
+                species[(role, row["group"], row["kind"], tuple(args["species"]))].append(pair)
+
+    carbonate = {}
+    if amine == "mea":
+        expanded = read(retained / "expanded-pressure.json.gz")
+        legacy, added = mea.pressure_additions(spec, templates, population)
+        prior = {r["identity"]: r for r in expanded["rows"]}
+        held = [*expanded["hot_wagner"], *read(retained / "wagner.json.gz")["rows"],
+                *(row for row in read(retained / "off-window.json.gz")["rows"] if row["group"] == "Aronu2011")]
+        pairs = [(prior[row["identity"]], after) for row, after in zip(added, evaluate(spec, added), strict=True)]
+        pairs.extend(zip(held, mea.refresh_pressure_rows(spec, legacy[0], held), strict=True))
+        for before, after in pairs:
+            pair = dict(before=before, after=after)
+            pressures[("comparisons", before["row"]["source"], "partial_pressure")].append(pair)
+            loaded[("comparisons", "partial_pressure")].append(pair)
+        if declaration.get("water_anion_intercepts"):
+            before = read(retained / "mea-comparisons.json.gz")["carbonate_share"]
+            after = mea.reported_carbonate_shares(spec, before)
+            for side, rows in (("before", before), ("after", after)):
+                ratios = [r["value"] / r["observed"] for r in rows
+                          if r["status"] == "Available" and r["value"] > 0 and r["observed"] > 0]
+                carbonate[side] = dict(rows=rows, geometric_mean_ratio=exp(fsum(map(log, ratios)) / len(rows))
+                                       if len(ratios) == len(rows) else None)
+    elif amine == "mdea":
+        from . import mdea
+
+        row = next(row for row in mdea.kuranov_rows(mdea.FIT_SETS["published"]["observations"])
+                   if row["row"] == mdea.FIT_SETS["published"]["restored_row"])
+        record = mdea.replay_records(spec, dict(row, alpha=row["m_co2"] / row["m_mdea"]))[-1]
+        pair = dict(before=retained_properties["additional_Kuranov_72"], after=spec.prediction(record))
+        pressures[("comparisons", "Kuranov-393K", "pressure")].append(pair)
+        loaded[("comparisons", "pressure")].append(pair)
+
+    def pressure_summary(rows):
+        return dict(rows=rows, **{side: pressure_statistics([pair[side] for pair in rows])
+                                  for side in ("before", "after")})
+
+    def species_summary(rows):
+        results = {}
+        for side in ("before", "after"):
+            errors = [r["value"] - r["observed"] for pair in rows if (r := pair[side])["status"] == "Available"
+                      and r["requested_tolerance_met"]]
+            results[side] = dict(available=len(errors), rmse=sqrt(fsum(e**2 for e in errors) / len(errors))
+                                 if errors else None)
+        return dict(rows=rows, **results)
+
+    parameters = parameter_changes(baseline, trial)
+    water_anion = {}
+    if declaration.get("water_anion_intercepts"):
+        from . import salt
+
+        laws = read(RESULTS / "move/salt/sodium-salts/fit/summary.json.gz")["laws_at_record_reference"]
+        for ion in (salt.HCO3, salt.CO3):
+            identity = salt.LAWS[ion]
+            law = laws[ion]
+            values = {}
+            for side, record in (("before", baseline), ("after", trial)):
+                mapping = record["endpoint"]["parameters"]
+                (coefficient,) = (c for pair in mapping["pairs"] for c in pair["coefficients"]
+                                  if c["identity"] == identity)
+                reference = coefficient["temperature_law"]["reference_temperature"]["magnitude"]
+                a0, a1 = (parameter_values(mapping)[f"{identity}/a{i}"] for i in (0, 1))
+                if a1 != law["a1"]:
+                    raise ValueError(f"{ion}: expected the same slope as the sodium-salt fit")
+                values[side] = a0 + a1 * (law["t_ref"] - reference)
+            water_anion[ion] = dict(reference_K=law["t_ref"], a0_salt=law["a0"], a1=law["a1"],
+                                    a0_before=values["before"], a0_after=values["after"],
+                                    standard_error=parameters[f"{identity}/a0"]["after"]["standard_error"],
+                                    bound=parameters[f"{identity}/a0"]["after"]["bound"])
+    return dict(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"],
+                reported_endpoint_fingerprint=original["endpoint_fingerprint"],
+                objective_before=original["cost"], objective_after=selected["cost"], parameters=parameters,
+                pressure=[dict(role=role, source=source, kind=kind, **pressure_summary(rows))
+                          for (role, source, kind), rows in sorted(pressures.items())],
+                loaded_pressure=[dict(role=role, kind=kind, **pressure_summary(rows))
+                                 for (role, kind), rows in sorted(loaded.items())],
+                speciation=[dict(role=role, source=source, kind=kind, species=names, **species_summary(rows))
+                            for (role, source, kind, names), rows in sorted(species.items())],
+                carbonate_share=carbonate, water_anion_intercepts=water_anion)
 
 
 def curve_rows(route, point, declarations=None):

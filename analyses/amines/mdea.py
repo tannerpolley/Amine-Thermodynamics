@@ -749,4 +749,14 @@ FIT_SETS = {
     ),
 }
 
+FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mdea/water-anion-control/fit",
+    water_anion_intercepts=True,
+)
+
+FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mdea/common-pressure-weight/fit",
+    pressure_log_scale=0.05,
+)
+
 REPORTED_SET = "reported"

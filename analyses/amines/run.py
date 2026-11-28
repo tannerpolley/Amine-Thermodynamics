@@ -64,6 +64,14 @@ def main():
                 record["endpoint"] = endpoint
     elif args.amine == "salt" and args.stage in ("rows", "fit"):
         record = getattr(module, args.stage)(declaration)
+    elif args.fit_set in ("water-anion-control", "common-pressure-weight") and args.stage == "fit":
+        manifest = fit.control_manifest(module.FIT_SETS["reported"], declaration)
+        fit.save(target / "manifest.json.gz", manifest)
+        record = fit.reported_fit(declaration, manifest, target)
+    elif args.fit_set in ("water-anion-control", "common-pressure-weight") and args.stage == "properties":
+        local = target.parent / "fit"
+        chosen = local if (local / "selection.json").is_file() else declaration["retained"]
+        record = properties.control_properties(args.amine, module.FIT_SETS["reported"], declaration, chosen)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "fit":
         reported = module.FIT_SETS["reported"]
         manifest = fit.move_manifest(args.amine, reported, args.output.resolve(), ablation=True)
