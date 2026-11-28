@@ -31,7 +31,7 @@ A single-liquid objective contains no requirement of stability, and ePC-SAFT ion
 For nonreactive binary mixtures, parameters fitted to vapor--liquid data alone are known to give false liquid--liquid splits, and stability has been imposed as a constraint on the estimation \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018,gauReliableNonlinearParameter2000}.
 The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; in an electrolyte the trial phase must be electroneutral \cite{Perdomo2025}, and in a reacting liquid it must also satisfy the chemical constraints \cite{Tsanas2022,Ascani2022}.
 A phase search is thus a test of a calibration that its deviations do not replace.
-Tsanas et al.\ applied such a reactive electrolyte stability analysis to a demixing amine blend, water, \COtwo, DEEA and MAPA, described with eNRTL, and did not parameterize the model \cite{Tsanas2022}; Rodr\'iguez et al.\ treat the four amines of this work with transferable SAFT-VR parameters and association in place of explicit ions \cite{Rodriguez2012}.
+Tsanas et al.\ applied such a reactive electrolyte stability analysis to a demixing amine blend, water, \COtwo, 2-(diethylamino)ethanol and 3-(methylamino)propylamine, described with eNRTL, and did not parameterize the model \cite{Tsanas2022}; Rodr\'iguez et al.\ treat the four amines of this work with transferable SAFT-VR parameters and association in place of explicit ions \cite{Rodriguez2012}.
 The combination tested here is different: explicit ions in one equation of state, with a phase search of each of four linked calibrations.
 
 % P:introduction-06
@@ -40,5 +40,7 @@ The MEA model is fitted jointly to pressures, species fractions, absorption heat
 Its water, \COtwo and inorganic-ion parameters and the reaction correlations of those species are then held fixed while DEA, MDEA and AMP are each fitted; \emph{transfer} here means only that.
 The shared water--bicarbonate and water--carbonate interactions are fixed from osmotic coefficients of the sodium salts, as Wangler et al.\ fixed the first of them \cite{Wangler2018}, so that no amine data determine them.
 The MEA model also supplies the fixed carbamate energy of DEA and AMP and the fixed cation--bicarbonate interaction of DEA.
+
+% P:introduction-results
 The fitted \COtwo partial pressures of MEA at nominal 30 wt\% deviate by \res{mea-fitted-pressure-aard-introduction}\,\%, and the fitted pressures of DEA, MDEA and AMP by \res{dea-fitted-pressure-aard-introduction}, \res{mdea-fitted-pressure-aard-introduction} and \res{amp-fitted-pressure-aard-introduction}\,\%, on \res{dea-fitted-partial-pressure-count-introduction}, \res{mdea-fitted-kuranov-pressure-count-introduction} and \res{amp-reported-loaded-pressure-count-introduction} observations.
-None of the four models predicts a second liquid at its measured states; two fits made on the way did, which led to a bound in the MDEA fit and to a wider temperature range of the fitted AMP pressures.
+The phase searches find no second liquid with any of the four models at the measured and grid states they classify, the AMP states being searched above its calculated bubble pressure, and they set the bound of the MDEA fit and the temperature range of the fitted AMP pressures (\cref{sec:results-phase}).

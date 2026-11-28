@@ -156,6 +156,7 @@ Ion segment count one and the diameter ties are modeling assumptions.
 The Born diameter of hydronium is that of the hydrogen ion in Figiel et al.\ \cite{Figiel2025}.
 The Born diameter of hydroxide, \SI{\res{mea-fixed-hydroxide-born-diameter}}{\angstrom}, was calculated here from the Born equation, $d^{\mathrm{Born}}=z^2e^2N_{\mathrm A}(1-1/\varepsilon_r)/(4\pi\varepsilon_0|\Delta G^{\mathrm{hyd}}|)$, where $N_{\mathrm A}$ is the Avogadro constant, with the hydration free energy $\Delta G^{\mathrm{hyd}}$ of $-106.4$ kcal/mol of Palascak and Shields \cite{palascakAccurateExperimentalValues2004} and the relative permittivity of water at \SI{298.15}{\kelvin}, $\varepsilon_r=78.37$.
 The Born diameters of bicarbonate and carbonate are set at \SI{3.0}{\angstrom}.
+With all other parameters fixed, the tested bicarbonate diameters (2.5, 3.5 and \SI{4.0}{\angstrom}) and carbonate diameters (2.5 and \SI{4.0}{\angstrom}) change the objective by at most 0.16\,\% and individual \COtwo partial pressures by up to about 6\,\% for bicarbonate and below 0.02\,\% for carbonate.
 None of these inputs is fitted in the calibrations of this work.
 All other interactions are zero by assumption except the fixed water interactions listed below.
 \Cref{tab:supplement-species-parameters,tab:supplement-interaction-matrix} list the exact values.
@@ -332,10 +333,10 @@ Figure~\ref{fig:mea-water} shows the fitted bubble temperatures of Cai et al.\ w
 % P:supplement-density-01
 The fitted loaded densities comprise Amundsen and Hartono data, and their residual scale is
 \begin{equation}
- s_{\rho,j}=\left[u_{\rho,j}^2+(g_j u_{\alpha,j})^2\right]^{1/2},
+ s_{\rho,l}=\left[u_{\rho,l}^2+(g_l u_{\alpha,l})^2\right]^{1/2},
  \label{eq:density-scale}
 \end{equation}
-where $u_{\rho,j}$ and $u_{\alpha,j}$ are the density and loading inputs of the source and $g_j$ is the secant of density against loading between neighboring loadings at the same source temperature and composition, with a one-sided secant at either end.
+where $u_{\rho,l}$ and $u_{\alpha,l}$ are the density and loading inputs of the source and $g_l$ is the secant of density against loading between neighboring loadings at the same source temperature and composition, with a one-sided secant at either end.
 Amundsen's density and loading inputs are \SI{2}{\kilogram\per\cubic\metre} and 2\,\% of loading for the fitted loaded series; the source does not state whether the density estimate applies at high temperature and loading \cite{Amundsen2009}.
 Hartono's inputs are \SI{0.02}{\kilogram\per\cubic\metre} and 0.01 mol/mol loading; the density input is the reported expanded uncertainty with coverage factor two and is used without division by that factor \cite{Hartono2014}.
 The calculations adopt the loading $\alpha$ tabulated in Hartono's Table~3.
@@ -367,7 +368,7 @@ Figure~\ref{fig:density-curves} compares the calculated densities with the three
 % P:supplement-transfer-observations
 Table~\ref{tab:transfer-deviations} lists the data sets of DEA, MDEA and AMP with their roles in the fit of each model, their ranges and the model deviations; the DEA and MDEA rows use the source's own basis, and the AMP rows give the unloaded AMP content in wt\% used in the calculation.
 The 2.0 kmol/m$^3$ DEA concentration of Lal et al.\ is represented by unloaded mass fraction \res{dea-lal-unloaded-feed-mass-fraction} using solution density.
-Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson and Garst cell is not reconstructed.
+Carrier gases are omitted from bubble calculations, so the unreported methane pressure in the Lawson and Garst cell is not reconstructed; methane up to the cell limit, about \SI{7.0}{\mega\pascal}, changes the calculated \COtwo partial pressures by at most \SI{\res{dea-largest-lawson-methane-pressure-change}}{\mega\pascal}.
 The DEA species calculations for B\"ottinger et al.\ use 2.5 MPa because the source gives a 0.5--2.5 MPa cell-pressure interval without individual values.
 All observations of Weiland et al.\ are kept, including a suspected misprint: at 20 wt\% DEA and a loading of 0.50 mol/mol the tabulated density is 1.167 g/mL, beside 1.062 g/mL at a loading of 0.45 mol/mol.
 The \COtwo-free pressures of Kuranov et al.\ are read from the column of their Table~2 that is 10 times the total pressure in MPa \cite{kuranovSolubilitySingleGases1996}.
@@ -387,7 +388,7 @@ The loading read from the figure is uncertain by about 0.02 mol/mol.
 The final loading is the smaller of the read loading and the calculated saturation loading at the assigned pressure, and a second comparison evaluates the same measured heat at half the read loading.
 
 % P:supplement-transfer-scales
-Table~\ref{tab:transfer-scales} lists the residual scale $s_j$ and weight $w_j$ of main-text Eq.~(\ref{main-eq:fit-objective}) for each fitted data set of DEA, MDEA and AMP, and Table~\ref{tab:supplement-objective-contributions} gives the contribution of each fitted data set to the objective of its model.
+Table~\ref{tab:transfer-scales} lists the residual scale $s_l$ and weight $w_l$ of main-text Eq.~(\ref{main-eq:fit-objective}) for each fitted data set of DEA, MDEA and AMP, and Table~\ref{tab:supplement-objective-contributions} gives the contribution of each fitted data set to the objective of its model.
 The scales and weights of the logarithmic pressure residuals differ between the amines: for MEA each loaded-solution pressure residual has unit scale and a weight of $100/9$, which is equivalent to a scale of 0.3 with unit weight, whereas for DEA and AMP the scales are 0.09 and 0.015 and the weight averages the squared residuals over the pressures of the amine.
 In the MDEA objective every group averages its squared standardized residuals; the loaded total pressures have an equivalent logarithmic scale of 0.015 and a weight of 1/\res{mdea-fitted-kuranov-pressure-count-normalized-weight}.
 The loaded pressures therefore dominate the DEA and AMP objectives, and in the MDEA objective they contribute \res{mdea-loaded-pressures-objective-share-supplement}\,\% and the \res{mdea-unloaded-density-count-supplement-weights} densities of the \COtwo-free solution \res{mdea-unloaded-densities-objective-share-supplement}\,\%.
@@ -467,7 +468,7 @@ The MDEA standard errors are conditional on the \res{mdea-active-bound-count-sup
 
 % P:supplement-starts
 For MEA and AMP, \res{mea-tied-start-count-supplement} and \res{amp-tied-start-count-supplement} starts, respectively, reach the same objective value at the reported precision.
-The reported fits give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA, which is fitted from start A as specified in the data deposit.
+The reported fits give objective values of \res{mea-selected-objective-starts} for MEA, \res{amp-selected-objective-starts} for AMP and \res{mdea-selected-objective-continuation} for MDEA, which is fitted from a single start, the initial parameter vector archived for it in the data deposit.
 For DEA the fits from \res{dea-tied-start-count-supplement} starts reach \res{dea-selected-objective-starts}.
 
 \section{Deviations inside and outside the measured ranges of the equilibrium constants}\label{sec:s-ranges}
@@ -536,7 +537,7 @@ At the \res{amp-first-data-measured-splits-supplement} measured states where the
 The MDEA--water interaction $k_{\mathrm{MDEA,w}}(T)=k_{\mathrm{MDEA,w}}(423\ \mathrm{K})+(\mathrm{d}k_{\mathrm{MDEA,w}}/\mathrm{d}T)(T-423\ \mathrm{K})$ is the only fitted parameter that acts on the \COtwo-free solution.
 With all other parameters fixed, the largest value without a gap in the lower convex envelope of the liquid Gibbs energy over \res{mdea-binary-hull-compositions} compositions at \res{mdea-binary-hull-pressure} MPa rises from $\res{mdea-binary-hull-cold-no-gap-limit}$ at 290 K to $\res{mdea-binary-hull-hot-no-gap-limit}$ at 423 K, and $k_{\mathrm{MDEA,w}}(423\ \mathrm{K})$ is bounded above at $\res{mdea-bound-binary-limit-supplement}$, $10^{-4}$ below it.
 At the reported solution only this bound is active.
-Without the binary-gap bound, the MDEA fit from start A converges to parameters for which the search detects liquid instability at \res{mdea-unbounded-binary-instabilities} of the \res{mdea-unbounded-binary-states-searched} \COtwo-free MDEA--water states at 1.466 MPa, spanning 13 MDEA mole fractions from 0.01 to 0.24 at each of 393, 403, 413, 413.15, 422.04 and 423 K.
+Without the binary-gap bound, the MDEA fit from the same initial vector converges to parameters for which the search detects liquid instability at \res{mdea-unbounded-binary-instabilities} of the \res{mdea-unbounded-binary-states-searched} \COtwo-free MDEA--water states at 1.466 MPa, spanning 13 MDEA mole fractions from 0.01 to 0.24 at each of 393, 403, 413, 413.15, 422.04 and 423 K.
 For the MDEA model the fitted interaction equals the bound at 423 K and lies below the onset value at each of the \res{mdea-binary-gap-tested-temperatures-supplement} tested temperatures from 290 to 423 K (main-text \cref{main-fig:mdea-gap-onset}).
 The bound was fixed before fitting and independently of the deviations.
 At 423 K it lies below the largest tested value without a gap at 1.121, 1.466 and 1.811 MPa alike, and with the fitted temperature law extrapolated the gap appears just above 423 K at all three pressures, so the bound suppresses the calculated gap through the tested temperatures and no further.

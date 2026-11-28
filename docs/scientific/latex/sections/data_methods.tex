@@ -46,16 +46,16 @@ The water parameters, the \COtwo--water interaction, fitted to the pressures of 
 Parameters were also set beforehand: the two permittivity coefficients of each amine, the DEA--water interaction with its temperature coefficient and the \res{amp-pure-adjusted-coordinate-count-methods} pure-AMP parameters (\cref{tab:transfer-species}, Table~\ref{supp-tab:supplement-transfer-parameters}); with these, \res{dea-adjusted-coordinate-count-across-stages} quantities are adjusted for DEA, \res{mdea-adjusted-coordinate-count-across-stages} for MDEA and \res{amp-adjusted-coordinate-count-across-stages} for AMP.
 Each fit minimizes
 \begin{equation}
- C(\boldsymbol\theta)=\frac12\sum_jw_jr_j^2,\qquad
- r_j=\frac{y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}}}{s_j}
+ C(\boldsymbol\theta)=\frac12\sum_lw_lr_l^2,\qquad
+ r_l=\frac{y_l^{\mathrm{calc}}-y_l^{\mathrm{obs}}}{s_l}
  \quad\text{or}\quad
- r_j=\frac{\ln(y_j^{\mathrm{calc}}/y_j^{\mathrm{obs}})}{s_j},
+ r_l=\frac{\ln(y_l^{\mathrm{calc}}/y_l^{\mathrm{obs}})}{s_l},
  \label{eq:fit-objective}
 \end{equation}
 with the logarithmic form for pressures.
 
 % P:methods-weights
-Section~\ref{supp-sec:s-objective} gives the scale $s_j$ and weight $w_j$ of each data set.
+Section~\ref{supp-sec:s-objective} gives the scale $s_l$ and weight $w_l$ of each data set.
 Several are assigned without a statistical derivation and they differ between the amines, so an objective value sets fitting priorities within one fit and does not compare accuracy between amines.
 Table~\ref{supp-tab:supplement-objective-contributions} gives the contribution of every data set to its objective; the loaded-solution pressures contribute \res{dea-loaded-pressures-objective-share-methods} and \res{amp-loaded-pressures-objective-share-methods}\,\% of the DEA and AMP objectives.
 In the MDEA objective each group enters as the mean of its squared standardized residuals, so that the many densities do not dominate.
@@ -64,22 +64,22 @@ The MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid199
 % P:methods-starts
 The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
 For MEA, \res{mea-tied-start-count-methods} starts reach the same objective value at the reported precision, and for AMP, \res{amp-tied-start-count-methods} do.
-MDEA is fitted from start A, the initial parameter vector given for each amine in the data deposit.
+MDEA is fitted from a single start, the initial parameter vector archived for it in the data deposit.
 The DEA fits from \res{dea-tied-start-count-methods} starts reach the same objective value (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),
 \begin{equation}
- \operatorname{AARD}=\frac{100\,\%}{N}\sum_j\left|\frac{y_j^{\mathrm{calc}}}{y_j^{\mathrm{obs}}}-1\right|,
- \qquad \operatorname{bias}=\frac{100\,\%}{N}\sum_j\left(\frac{y_j^{\mathrm{calc}}}{y_j^{\mathrm{obs}}}-1\right),
- \qquad \operatorname{RMSE}=\sqrt{\frac1N\sum_j(y_j^{\mathrm{calc}}-y_j^{\mathrm{obs}})^2},
+ \operatorname{AARD}=\frac{100\,\%}{N}\sum_l\left|\frac{y_l^{\mathrm{calc}}}{y_l^{\mathrm{obs}}}-1\right|,
+ \qquad \operatorname{bias}=\frac{100\,\%}{N}\sum_l\left(\frac{y_l^{\mathrm{calc}}}{y_l^{\mathrm{obs}}}-1\right),
+ \qquad \operatorname{RMSE}=\sqrt{\frac1N\sum_l(y_l^{\mathrm{calc}}-y_l^{\mathrm{obs}})^2},
  \label{eq:aard}
 \end{equation}
 where $N$ is the number of observations in the set, restricted for AARD and bias to nonzero observations.
 For the parameters that are not on a bound, the local covariance is
 \begin{equation}
  \operatorname{cov}(\boldsymbol\theta_I)=s_C^2(J_I^{\mathsf T}J_I)^{-1},\qquad
- s_C^2=\frac{\sum_{j\in\mathcal R}w_jr_j^2}{N_{\mathrm{resp}}-|I|},
+ s_C^2=\frac{\sum_{l\in\mathcal R}w_lr_l^2}{N_{\mathrm{resp}}-|I|},
  \label{eq:conditional-covariance}
 \end{equation}
 where $J_I$ is the weighted residual Jacobian and $\mathcal R$ is the set of the $N_{\mathrm{resp}}$ observations in the objective whose calculated value depends on at least one fitted parameter; a parameter on a bound is held fixed and has no standard error.
@@ -102,6 +102,6 @@ The searched states are the measured states of each amine and grids of temperatu
 
 % P:methods-bound
 Stability enters one fit, through a bound.
-Only the MDEA--water interaction acts on the \COtwo-free MDEA solution, and the fit from start A without the binary-gap bound converged to parameters that give a calculated liquid--liquid gap near the upper end of the tested temperature range (Section~\ref{supp-sec:s-mdea-bound}).
-The value of the interaction at \SI{423}{\kelvin}, the highest temperature tested, is therefore bounded above at $\res{mdea-bound-binary-limit-methods}$, $10^{-4}$ below the largest tested value without a gap at \SI{1.466}{\mega\pascal}; the bound was fixed before fitting (Section~\ref{supp-sec:s-mdea-bound}).
+Only the MDEA--water interaction acts on the \COtwo-free MDEA solution, and its value at \SI{423}{\kelvin}, the highest temperature tested, is bounded above at $\res{mdea-bound-binary-limit-methods}$, $10^{-4}$ below the largest tested value without a liquid--liquid gap at \SI{1.466}{\mega\pascal}, so that this solution stays a single liquid.
+The bound was fixed before fitting (Section~\ref{supp-sec:s-mdea-bound}), and \cref{sec:results-phase} gives the fit without it.
 The loaded MDEA states are not constrained, and the MEA, DEA and AMP fits carry no stability condition.
