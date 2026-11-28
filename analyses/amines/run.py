@@ -18,7 +18,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
-    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts", "water-calibration", "born-sensitivity"))
+    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts",
+                                          "water-calibration", "born-sensitivity", "held-out-pressures"))
     parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
     module = import_module(f"{__package__}.{args.amine}")
@@ -48,6 +49,10 @@ def main():
     elif args.amine == "mea" and args.fit_set == "reported" and args.stage == "born-sensitivity":
         point, selected = fit.retained_endpoint(declaration)
         record = module.born_sensitivity(fit.route_for(declaration), point)
+        record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
+    elif args.amine == "dea" and args.fit_set == "reported" and args.stage == "held-out-pressures":
+        point, selected = fit.retained_endpoint(declaration)
+        record = module.held_out_pressures(fit.route_for(declaration), point)
         record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
     elif args.stage == "replay":
         name = "endpoint.json.gz"
@@ -121,7 +126,7 @@ def main():
             record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
         else:
             parser.error("This pressure fit set supports fit, phase and properties")
-    elif args.stage in ("alternate-starts", "water-calibration", "born-sensitivity") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
+    elif args.stage in ("alternate-starts", "water-calibration", "born-sensitivity", "held-out-pressures") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
         parser.error("This fit set is replayed on the locked wheel")
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))
@@ -163,7 +168,7 @@ def main():
             record.update(properties.reported_curves(args.amine, route, point))
             if "preserved" in declaration or args.amine == "mdea":
                 fit.save(target / "derivatives.json.gz", properties.reported_derivatives(args.amine, route, point))
-            if args.amine == "dea" and "preserved" in declaration:
+            if args.amine == "dea" and args.fit_set == "reported":
                 fit.save(target / "lawson-methane.json.gz", module.lawson_methane(route, point))
             if args.amine == "mdea":
                 record.update(module.move_property_cases(route, point))

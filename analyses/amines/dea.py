@@ -2,6 +2,7 @@
 
 import copy
 import csv
+from hashlib import sha256
 import math
 
 import epcsaft
@@ -59,13 +60,15 @@ class ExpandedDEA(Route):
 
 
 class RepairedDEA(ExpandedDEA):
+    fit_lawson = True
+
     def bind(self, point):
         spec = super().bind(point)
         observations = spec.inputs["observations"]
         rows = sorted(observations["fitted"] + observations["comparisons"], key=lambda r: r["observation_order"])
         fitted, comparisons = [], []
         for row in rows:
-            if row["group"] in ("Lawson", "Carson") or (
+            if row["group"] == "Carson" or (self.fit_lawson and row["group"] == "Lawson") or (
                 row["group"] == "Lal" and row["arguments"]["observed"] >= 50.0
             ):
                 row["role"] = "fitted"
@@ -79,6 +82,10 @@ class RepairedDEA(ExpandedDEA):
             row["weight"] = 1 / (len(pressures) * PRESSURE_LOG_SCALE**2)
         observations.update(fitted=fitted, comparisons=comparisons)
         return spec
+
+
+class DEAWithoutLawson(RepairedDEA):
+    fit_lawson = False
 
 
 def water_dea_law(parameters, binary):
@@ -107,6 +114,60 @@ def alternate_start(point):
     trial = {"k-DEAH-water": -0.25, "k-DEACOO-water": -0.10, "hydrolysis-a": 6.264,
              "hydrolysis-enthalpy-shift": 5000.0, "k-DEAH-water-slope": -50.0, "k-DEAH-CO2": 0.2}
     return [(trial[q["identity"]] - q["origin"]) / q["scale"] for q in point["coordinates"]]
+
+
+def held_out_pressures(route, point):
+    from MEA.solvent_specification import deviation_statistics
+
+    spec = route.bind(point)
+    template = next(row for row in spec.inputs["observations"]["fitted"] if row["group"] == "Lal")
+    # Reuse the fitted Lal stock conversion for the 2 mol DEA/L sources.
+    lal_water = spec.problems[template["problem"]].feed.values[WATER]
+    masses = {
+        c["component_id"]: c["fixed"]["molar_mass"]["value"]["magnitude"]
+        for c in point["parameters"]["components"]
+    }
+    registry = read(ROOT / "data/reference/DEA/sources.json")["sources"]
+    sources = {}
+    for group, temperature_column, offset, pressure_column, to_pascal in (
+        ("Lee1972", "T_C", 273.15, "p_CO2_psia", 6894.757293168),
+        ("HajiSulaiman1998", "T_K", 0.0, "p_CO2_kPa", 1000.0),
+        ("KennardMeisen1984", "T_C", 273.15, "p_CO2_kPa", 1000.0),
+    ):
+        source = next(entry for entry in registry if entry["source"] == group)
+        path = ROOT / source["file"]
+        if sha256(path.read_bytes()).hexdigest() != source["sha256"]:
+            raise ValueError(f"DEA comparison input hash changed for {path}")
+        rows = []
+        with path.open(newline="") as file:
+            for row in csv.DictReader(file):
+                T = float(row[temperature_column]) + offset
+                key = f'{group}:{row["source_row"]}:{T}'
+                try:
+                    pressure = float(row[pressure_column]) * to_pascal
+                except ValueError:
+                    rows.append(dict(identity=key, group=group, row=row, T_K=T,
+                                     status="InvalidPrintedPressure", value=None))
+                    continue
+                assert 310.93 <= T <= 380.37 and pressure >= 50.0
+                if "DEA_wt_percent" in row:
+                    wt = float(row["DEA_wt_percent"]) / 100
+                    assert 0.206 <= wt <= 0.25
+                    water = (1 - wt) / wt * masses[DIETHANOLAMINE] / masses[WATER]
+                    alpha = float(row["loading_g_CO2_per_g_DEA"]) * masses[DIETHANOLAMINE] / masses["carbon-dioxide"]
+                else:
+                    assert float(row["DEA_kmol_per_m3"]) == LAL_MOLARITY_MOL_M3 / 1000
+                    water = lal_water
+                    alpha = float(row["alpha_mol_CO2_per_mol_DEA"])
+                spec.problems[key] = spec.problem("loaded-bubble",
+                    dict(T=T, P=pressure + P_REF, water=water, alpha=alpha))
+                observation = dict(template, identity=key, problem=key, group=group, row=row,
+                                   arguments=dict(template["arguments"], observed=pressure))
+                rows.append(dict(spec.prediction(observation), T_K=T, water_mol_per_mol_DEA=water))
+        pairs = [(row["observed"], row["value"]) for row in rows if row.get("requested_tolerance_met")]
+        sources[group] = dict(source=source, rows=rows,
+                              deviations=deviation_statistics(pairs, "Pa") if pairs else None)
+    return dict(sources=sources)
 
 
 def lawson_methane(route, point):
@@ -451,6 +512,11 @@ FIT_SETS = {
         replay_tolerance=1e-8,
     ),
 }
+
+FIT_SETS["without-lawson"] = FIT_SETS["reported"] | dict(
+    route=DEAWithoutLawson,
+    retained=RESULTS / "move/dea/without-lawson/fit",
+)
 
 FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/dea/water-anion-control/fit",
