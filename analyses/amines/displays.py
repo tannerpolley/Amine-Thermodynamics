@@ -2389,6 +2389,8 @@ def result_values(required):
             digits = 1 if occurrence in ("abstract", "introduction", "mea-results", "dea-results",
                                          "mdea-results", "amp-results", "conclusion") else 2
             add(f"{quantity}-aard-{occurrence}", record, key, f"{value:.{digits}f}")
+    record, key, value = reported_aard["dea-fitted-pressure"]
+    add("dea-fitted-pressure-aard-limitations", record, key, f"{value:.1f}")
 
     record = W_AMP_FIRST_PROPERTIES
     rows = read(record)["replay"]["properties"]["rows"]
@@ -2885,6 +2887,9 @@ def result_values(required):
             digits = 1 if passage == "transfer" else 2
             add(f"dea-binary-law-{label}-pressure-aard-{passage}", W_DEA_BINARY,
                 f"rows[{group}, fitted beforehand].law.value AARD", f"{aard:.{digits}f}")
+        if label == "cai":
+            add("dea-binary-law-cai-pressure-aard-transfer", W_DEA_BINARY,
+                f"rows[{group}, fitted beforehand].law.value AARD", f"{aard:.1f}")
     heat = [row for row in binary if row["group"] == "Horstmann"]
     rmse = sqrt(fsum((row["law"]["value"] - row["observed"])**2 for row in heat) / len(heat))
     for passage, digits in (("transfer", 0), ("supplement", 0)):
@@ -3209,6 +3214,21 @@ def result_values(required):
     add('amp-reported-measured-pressure-control-no-descent-supplement', W_AMP_CONTROLS,
         'rows[outcome no resolved descent].count',
         NUMBER_WORDS[sum(r['outcome'] == 'No resolved descent' for r in amp_controls.values())])
+    liquid_vapor = 'L+V passed; L+L unresolved'
+    for source, prefix in (("hartono", "hartono-2021:"), ("tong", "tong-2012:"), ("reported", "")):
+        add(f'amp-{source}-liquid-vapor-qualified-controls-supplement', W_AMP_CONTROLS,
+            f'rows[{prefix}, outcome {liquid_vapor}].count',
+            NUMBER_WORDS[sum(r['outcome'] == liquid_vapor for key, r in amp_controls.items() if key.startswith(prefix))])
+    state = 'hartono-2021:55:problem'
+    add('amp-hartono-373-measured-pressure-transfer', W_AMP_CONTROLS, f'rows[{state}].pressure_Pa / 1e3',
+        f"{amp_controls[state]['pressure_Pa'] / 1e3:.1f}")
+    first_search, = (row for row in read(W_AMP_FIRST)['classifications'] if row['key'] == state)
+    add('amp-first-data-hartono-373-search-pressure-transfer', W_AMP_FIRST,
+        f'classifications[{state}].pressure_Pa / 1e3', f"{first_search['pressure_Pa'] / 1e3:.0f}")
+    record = MOVE + 'amp/reported/phase/supplied.json.gz'
+    reported_search, = (row for row in read(record)['rows'] if row['key'] == state)
+    add('amp-reported-hartono-373-search-pressure-transfer', record,
+        f'rows[{state}].supplied_parent_pressure_Pa / 1e3', f"{reported_search['supplied_parent_pressure_Pa'] / 1e3:.0f}")
     kuranov_rows = mdea_kuranov_rows(read(W_MDEA_PROPERTIES))
     records = (W_MDEA_PROPERTIES, KURANOV_DATA)
     add("mdea-published-kuranov-total-pressure-count", records, "matched Kuranov Table 2 rows.count",
@@ -3601,6 +3621,32 @@ def result_values(required):
     dea_methane = MOVE + "dea/reported/properties/lawson-methane.json.gz"
     dea_methane_data = read(dea_methane)
     add('dea-largest-lawson-methane-pressure-change', dea_methane, 'maximum |pCO2_change_Pa| / 1e6', format(max(abs(change) for q in dea_methane_data["rows"] for change in q["pCO2_change_Pa"])/1e6, '.3f'))
+    increases = [100 * math.expm1(max(q["node_log_corrections"])) for q in dea_methane_data["rows"]]
+    for passage in ("limitations", "supplement"):
+        add(f'dea-lawson-methane-row-count-{passage}', dea_methane, 'len(rows)', str(len(increases)))
+        for name, value in (("minimum", min(increases)), ("maximum", max(increases))):
+            add(f'dea-lawson-methane-{name}-pressure-increase-{passage}', dea_methane,
+                f'{name} over rows of 100 (exp(max node_log_corrections) - 1)', f'{value:.1f}')
+    earlier = "analyses/amines/results/dea/reported/"
+    record = earlier + "fit/manifest.json.gz"
+    earlier_fit = read(record)
+    groups = collections.Counter(row["group"] for row in earlier_fit["rows"]["fitted"])
+    add('dea-earlier-fit-fitted-observation-count-supplement', record, 'len(rows.fitted)',
+        str(len(earlier_fit["rows"]["fitted"])))
+    for group in ("SeoHong", "Lal"):
+        add(f'dea-earlier-fit-{group.lower()}-count-supplement', record, f'rows.fitted[{group}].count', str(groups[group]))
+    add('dea-earlier-fit-coordinate-count-supplement', record, 'len(coordinate_order)',
+        NUMBER_WORDS[len(earlier_fit["coordinate_order"])])
+    record = earlier + "phase/rebuild-441/declared/summary.json.gz"
+    tally = read(record)["tally"]
+    add('dea-earlier-fit-searched-states-supplement', record, 'tally.states', str(tally["states"]))
+    add('dea-earlier-fit-descent-states-supplement', record, 'tally.descent', NUMBER_WORDS[tally["descent"]])
+    record = earlier + "phase/diagnosis/assemblages.json.gz"
+    splits = [row["feed"][0] for row in read(record)["dea"]
+              if row["key"] == "weiland-1998:32:problem" and row["physical_checks_pass"]]
+    for name, value in (("minimum", min(splits)), ("maximum", max(splits))):
+        add(f'dea-earlier-fit-split-{name}-loading-supplement', record,
+            f'{name} feed[CO2]/feed[DEA] over dea[weiland-1998:32:problem, physical_checks_pass]', f'{value:.2f}')
     add('mea-active-interactions-count-results', mea_fit, 'len(diagnostics.active_bounds)', NUMBER_WORDS[len(mea_fit_data["diagnostics"]["active_bounds"])].capitalize())
     mea_coordinates = {row['identity']: row['origin'] for row in mea_fit_data['endpoint']['coordinates']}
     for end, identity in (
