@@ -1012,6 +1012,52 @@ def fixed_control(route, spec, state, P, seed, *, mdea=False, assemblages=False)
     return out
 
 
+def assemblage_phase(template, name, kind, support, guess=(None, None), *, pinned=False):
+    phase = type(template)()
+    phase.name, phase.kind = name, getattr(type(template.kind), kind)
+    phase.support, phase.support_declared = support, True
+    x, phase.packing_guess = guess
+    if x is not None:
+        phase.composition_guess = [x[i] for i in support]
+    if pinned:
+        phase.amount = type(phase.amount).pinned(0.)
+    return phase
+
+
+def amp_assemblage(spec, problem, kind, phases):
+    entry = dict(support=kind, qualified=False)
+    original, pressure = problem.phases, problem.pressure
+    incipient = 'incipient' in kind
+    model = spec.model
+    try:
+        problem.phases = phases
+        problem.pressure = (type(pressure).variable(pressure.value) if incipient
+                            else type(pressure).fixed(pressure.value))
+        solved = eq.solve_equilibrium(model, problem)
+        entry.update(message=solved.message, pressure_Pa=solved.pressure, amounts_mol=list(solved.amounts),
+                     requested_tolerance_met=solved.requested_tolerance_met, residuals=list(solved.residuals))
+        if solved.requested_tolerance_met and len(solved.amounts) == len(phases):
+            entry.update(physical(spec, problem, solved))
+            roots = [pressure_roots(model, solved.temperature, solved.pressure, p['x'], p['density_mol_m3'])
+                     for p in entry['phases']]
+            entry['roots'] = roots
+            wanted = ['liquid']*(len(phases)-1)+['vapor']
+            entry['root_checks_pass'] = all(any(r['returned']==branch for r in matched(test, problem.row_tolerance))
+                                            for branch, test in zip(wanted, roots, strict=True))
+            entry['qualified'] = (entry['physical_checks_pass'] and entry['root_checks_pass']
+                                  and min(solved.amounts[:(-1 if incipient else None)])>0)
+            if not incipient:
+                compiled = eq.compile_problem(model, problem)
+                report = eq.stability_test(compiled, solved)
+                entry['Gibbs_over_RT_mol'], entry['error'] = gibbs(compiled, solved, report)
+                entry['omitted_phase_trials'] = trials(report)
+    except (ValueError, RuntimeError) as error:
+        entry.update(message=str(error))
+    finally:
+        problem.phases, problem.pressure = original, pressure
+    return entry
+
+
 def amp_candidates(spec, route, problem, out, pair_solution):
     model = spec.model
     vapor = [spec.parameters.component_ids.index(c) for c in route.config['vapor_species']]
@@ -1022,20 +1068,7 @@ def amp_candidates(spec, route, problem, out, pair_solution):
     candidates = [dict(support='L', Gibbs_over_RT_mol=g, error=error, qualified=out['physical_checks_pass']),
                   out['liquid_vapor']]
     out['candidates'] = candidates
-    original = problem.phases
-    pressure = type(problem.pressure).fixed(problem.pressure.value)
-
-    def make_phase(name, kind, support, guess=(None, None), pinned=False):
-        phase = type(original[0])()
-        phase.name, phase.kind = name, getattr(type(original[0].kind), kind)
-        phase.support, phase.support_declared = support, True
-        x, phase.packing_guess = guess
-        if x is not None:
-            phase.composition_guess = [x[i] for i in support]
-        if pinned:
-            phase.amount = type(phase.amount).pinned(0.)
-        return phase
-
+    template = problem.phases[0]
     variants = []
     if pair:
         compiled, solved = pair_solution
@@ -1044,43 +1077,16 @@ def amp_candidates(spec, route, problem, out, pair_solution):
                                Gibbs_over_RT_mol=pair['split_Gibbs_over_RT_mol'],
                                error=pair['numerical_error_over_RT_mol']-error,
                                amounts_mol=pair['amounts_mol'], omitted_phase_trials=omitted))
-        liquid = [make_phase(f'L{i+1}', 'Liquid', support, seed)
+        liquid = [assemblage_phase(template, f'L{i+1}', 'Liquid', support, seed)
                   for i, seed in enumerate(zip(pair['phases'], pair['packings'], strict=True))]
         seed = next(t for t in out['native_trials'] if t['kind']=='Vapor' and t['seed']=='positive-neutral-base')
         vapor_guess = (seed['composition'], None)
-        variants.append(('L1+L2+incipient V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess, pinned=True)]))
+        variants.append(('L1+L2+incipient V', liquid+[assemblage_phase(template, 'V', 'Vapor', vapor, vapor_guess, pinned=True)]))
         if any(t['kind']=='Vapor' and t['descent'] for t in omitted):
-            variants.append(('L1+L2+V', liquid+[make_phase('V', 'Vapor', vapor, vapor_guess)]))
+            variants.append(('L1+L2+V', liquid+[assemblage_phase(template, 'V', 'Vapor', vapor, vapor_guess)]))
     else:
         candidates.append(dict(support='L1+L2', qualified=False, message='Seeded attempts did not confirm distinct liquid roots below parent Gibbs beyond paired error.'))
-    for kind, phases in variants:
-        entry = dict(support=kind, qualified=False)
-        candidates.append(entry)
-        incipient = 'incipient' in kind
-        try:
-            problem.phases = phases
-            problem.pressure = type(pressure).variable(pressure.value) if incipient else pressure
-            solved = eq.solve_equilibrium(model, problem)
-            entry.update(message=solved.message, pressure_Pa=solved.pressure, amounts_mol=list(solved.amounts),
-                         requested_tolerance_met=solved.requested_tolerance_met)
-            if solved.requested_tolerance_met and solved.amounts:
-                entry.update(physical(spec, problem, solved))
-                roots = [pressure_roots(model, solved.temperature, solved.pressure, p['x'], p['density_mol_m3'])
-                         for p in entry['phases']]
-                entry['roots'] = roots
-                wanted = ['liquid']*(len(phases)-1)+['vapor']
-                entry['root_checks_pass'] = all(any(r['returned']==branch for r in matched(test, problem.row_tolerance))
-                                                for branch, test in zip(wanted, roots, strict=True))
-                entry['qualified'] = (entry['physical_checks_pass'] and entry['root_checks_pass']
-                                      and min(solved.amounts[:(-1 if incipient else None)])>0)
-                if not incipient:
-                    compiled = eq.compile_problem(model, problem)
-                    entry['Gibbs_over_RT_mol'], entry['error'] = gibbs(compiled, solved)
-                    entry['omitted_phase_trials'] = trials(eq.stability_test(compiled, solved))
-        except (ValueError, RuntimeError) as error:
-            entry.update(message=str(error))
-        finally:
-            problem.phases, problem.pressure = original, pressure
+    candidates.extend(amp_assemblage(spec, problem, kind, phases) for kind, phases in variants)
     eligible = sorted((c for c in candidates if c['qualified'] and 'Gibbs_over_RT_mol' in c), key=lambda c: c['Gibbs_over_RT_mol'])
     out['lowest_found'] = dict(scope='lowest-G feasible assemblage found among the tested supports', support=eligible[0]['support']) if eligible else None
     out['unresolved_supports'] = [c['support'] for c in candidates if not c['qualified'] and 'incipient' not in c['support']]
@@ -1302,6 +1308,106 @@ def amp_measured_controls(route, point, first):
         rows[key] = dict(outcome=outcome, pressure_Pa=observed[key], result=result)
     return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point),
                 first_fit_fingerprint=first["endpoint_fingerprint"], rows=rows)
+
+
+def amp_third_liquid(route, point, controls):
+    """Search for a second liquid at the measured-pressure L+V parents."""
+    from .fit import fingerprint
+
+    wheel, endpoint = verify(), fingerprint(point)
+    if (controls["wheel"], controls["endpoint_fingerprint"]) != (wheel, endpoint):
+        raise ValueError("The AMP measured controls use a different wheel or endpoint")
+    spec = route.bind(point)
+    vapor_support = [spec.parameters.component_ids.index(c) for c in route.config["vapor_species"]]
+    rows = {}
+    for key, control in controls["rows"].items():
+        retained = control["result"].get("liquid_vapor", {})
+        if not retained.get("qualified"):
+            continue
+        pressure = control["pressure_Pa"]
+        problem = stability_row(route, spec, dict(key=key, problem=key), 1.).problem
+        problem.pressure = type(problem.pressure).fixed(pressure)
+        template = problem.phases[0]
+        support = template.support
+        guesses = [(p["x"], packing) for p, packing in zip(retained["phases"], retained["packings"], strict=True)]
+        liquid = assemblage_phase(template, "L1", "Liquid", support, guesses[0])
+        vapor = assemblage_phase(template, "V", "Vapor", vapor_support, guesses[1])
+        problem.phases = [liquid, vapor]
+        compiled = eq.compile_problem(spec.model, problem)
+        parent = eq.solve_equilibrium(spec.model, problem, prepared=compiled)
+        feed = list(problem.feed.values)
+        ids = list(spec.parameters.component_ids)
+        row = rows[key] = dict(T_K=parent.temperature, P_Pa=pressure, feed_mol=dict(zip(ids, feed, strict=True)),
+                               loading=feed[ids.index("carbon-dioxide")]/feed[ids.index(route.config["amine"])],
+                               declaration=calculation_declaration(problem), candidates=[])
+        parent_record = row["parent"] = dict(message=parent.message, amounts_mol=list(parent.amounts),
+                                             requested_tolerance_met=parent.requested_tolerance_met,
+                                             residuals=list(parent.residuals))
+        if not parent.requested_tolerance_met or len(parent.amounts) != 2 or min(parent.amounts) <= 0:
+            row["outcome"] = "The reconstructed L+V parent did not qualify"
+            continue
+        parent_record.update(physical(spec, problem, parent))
+        options = eq.StabilityOptions()
+        options.trials = [assemblage_phase(template, "L2", "Liquid", support)]
+        options.plane_value_errors = True
+        search = row["search"] = dict(call="eq.stability_test(compiled, parent, options)",
+                                      options=calculation_declaration(options))
+        try:
+            report = eq.stability_test(compiled, parent, options)
+        except (ValueError, RuntimeError) as error:
+            search.update(completed=False, message=str(error), error_type=type(error).__name__)
+            row["outcome"] = "Engine error during the two-phase-parent search"
+            break
+        search.update(completed=report.completed, message=report.message,
+                      no_descent_in_trial_set=report.no_descent_in_trial_set, trials=trials(report))
+        g, error = gibbs(compiled, parent, report)
+        parent_record.update(Gibbs_over_RT_mol=g, error=error,
+                             retained_Gibbs_difference_over_RT_mol=g-retained["Gibbs_over_RT_mol"])
+        if not parent_record["physical_checks_pass"] or abs(g-retained["Gibbs_over_RT_mol"]) > error+retained["error"]:
+            row["outcome"] = "The reconstructed L+V parent did not reproduce the retained parent within error"
+            continue
+        dense_trials = []
+        for trial in search["trials"]:
+            q = trial["quantities"]
+            if "tpd_over_rt" not in q or "plane_value_error_estimate_over_rt" not in q:
+                continue
+            x, rho = trial["composition"], 1/q["volume_m3_per_mol"]
+            roots = pressure_roots(spec.model, parent.temperature, pressure, x, rho)
+            trial["roots"] = roots
+            trial["liquid_root"] = any(root["returned"] == "liquid" for root in matched(roots, problem.row_tolerance))
+            if not trial["liquid_root"] or not trial["optimizer_tolerance_met"]:
+                continue
+            dense_trials.append(trial)
+            phases = parent_record["phases"]
+            trial["distinct"] = all(distinct_phases((p["x"], x), (p["density_mol_m3"], rho)) for p in phases)
+            if trial["distinct"] and q["tpd_over_rt"] < -q["plane_value_error_estimate_over_rt"]:
+                packing = rho * spec.model._model.packing_fraction_coefficient(parent.temperature, x)
+                second = assemblage_phase(template, "L2", "Liquid", support, (x, packing))
+                candidate = amp_assemblage(spec, problem, "L1+L2+V", [liquid, second, vapor])
+                candidate["seed"] = trial["seed"]
+                if "Gibbs_over_RT_mol" in candidate:
+                    first_liquid, second_liquid = candidate["phases"][:2]
+                    candidate["distinct_liquids"] = distinct_phases(
+                        (first_liquid["x"], second_liquid["x"]),
+                        (first_liquid["density_mol_m3"], second_liquid["density_mol_m3"]),
+                    )
+                    candidate["Gibbs_decrease_over_RT_mol"] = g-candidate["Gibbs_over_RT_mol"]
+                    candidate["numerical_error_over_RT_mol"] = error+candidate["error"]
+                    candidate["qualified"] &= (candidate["distinct_liquids"] and
+                                               candidate["Gibbs_decrease_over_RT_mol"] > candidate["numerical_error_over_RT_mol"])
+                else:
+                    candidate["qualified"] = False
+                row["candidates"].append(candidate)
+        search["minimum_liquid_trial"] = min(dense_trials, key=lambda t: t["quantities"]["tpd_over_rt"], default=None)
+        if any(candidate["qualified"] for candidate in row["candidates"]):
+            row["outcome"] = "Confirmed L1+L2+V"
+        elif row["candidates"]:
+            row["outcome"] = "Distinct liquid descent without a qualified L1+L2+V result"
+        elif report.completed and report.no_descent_in_trial_set and dense_trials:
+            row["outcome"] = "No resolved additional liquid descent in the finite search"
+        else:
+            row["outcome"] = "The Engine did not complete a liquid search against the L+V parent"
+    return dict(wheel=wheel, endpoint_fingerprint=endpoint, controls_fingerprint=fingerprint(controls), rows=rows)
 
 
 def _census(row):

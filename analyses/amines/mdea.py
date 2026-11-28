@@ -2,12 +2,13 @@
 
 from collections import Counter
 import csv
+from hashlib import sha256
 import math
 from math import comb
 from statistics import fmean
 
 import epcsaft
-from epcsaft import equilibrium
+from epcsaft import equilibrium, regression as reg
 from .records import RESULTS, input_path, read
 
 from .model import CAMPAIGN_ARCHIVE, P_REF, ROOT, Route, evaluate
@@ -662,6 +663,98 @@ def binary_gap(point):
         brackets[str(int(p))] = onset
     return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point),
                 pressure_Pa=pressure, compositions=len(x), rows=rows, brackets_K=brackets, onset_tests=tested)
+
+
+def zheng_saturation(route, point):
+    """Evaluate Zheng Table 4 at the model's first reactive bubble crossing."""
+    from .fit import fingerprint
+    from MEA.solvent_specification import deviation_statistics
+
+    spec = route.bind(point)
+    retained = FIT_SETS["reported"]["retained"].parent
+    heat_path = retained / "properties/summary.json.gz"
+    phase_path = retained / "phase/declared.json.gz"
+    properties, phase = read(heat_path), read(phase_path)
+    if any(r["endpoint_fingerprint"] != fingerprint(point) or r["wheel"] != verify()
+           for r in (properties, phase)):
+        raise ValueError("Zheng comparison records belong to another fit or wheel")
+    heats = {r["identity"]: r for r in properties["rows"] if r["group"] == "Zheng"}
+    states = {r["key"]: r for r in phase["rows"] if isinstance(r["key"], str)}
+
+    # Reuse the loading scan declared for the earlier Zheng saturation calculation.
+    grid = [i / 20 for i in range(1, 31)]
+    rows = []
+    for source in spec.inputs["observations"]["comparisons"]:
+        if source["group"] != "Zheng":
+            continue
+        initial = spec.problems[source["initial"]]
+        key = source["final"]
+        measured = heats[source["identity"]]
+        measured_bubble = properties["mdea_bubble"][key]
+        phase_row = states[key]
+        witnesses = [w for w in phase_row["witnesses"] if w["kind"] == "Vapor" and w["resolved_descent"]]
+        args = dict(source["arguments"])
+        loading = args.pop("amount") / initial.feed.values[MDEA]
+        bubble = spec.problem("cap-bubble", dict(T=initial.T, P=initial.P, water=initial.feed.values[W]))
+        observation = reg.saturation_capped_addition_enthalpy(
+            spec.parameters, initial, bubble, **args, basis_amount=initial.feed.values[MDEA],
+            loading_cap=grid[-1], loading_bounds=(grid[0], grid[-1]), loading_grid=grid,
+        )
+        predicted = reg.predict(spec.model, observation)
+        search = predicted.saturation
+        row = dict(
+            identity=source["identity"], source=source["row"], unloaded_feed_mol=initial.feed.values,
+            T_K=initial.T, total_pressure_Pa=initial.P,
+            measured_loading=loading, calculated_loading=predicted.saturation_loading,
+            measured_heat_J_per_mol_CO2=measured["observed"],
+            heat_at_measured_loading_J_per_mol_CO2=measured["value"],
+            heat_at_calculated_loading_J_per_mol_CO2=(predicted.value if predicted.cap_branch == "saturation_cap" else None),
+            native_endpoint_heat_J_per_mol_CO2=predicted.value,
+            endpoint_loading=predicted.endpoint_loading, cap_branch=predicted.cap_branch,
+            status=predicted.status.name, diagnostic=predicted.message,
+            requested_tolerance_met=predicted.requested_tolerance_met,
+            equilibrium_residual=None if predicted.convergence is None else predicted.convergence.residual,
+            measured_loading_phase=dict(bubble_Pa=measured_bubble["bubble_Pa"],
+                                        vapor_descent=bool(witnesses), search_status=phase_row["status"],
+                                        search_cause=phase_row["cause"], vapor_witnesses=witnesses),
+        )
+        if search is not None:
+            def nodes(items):
+                return [dict(loading=n.loading, pressure_Pa=n.state.pressure, mismatch_Pa=n.mismatch,
+                             slope_Pa=n.slope, diagnostic=n.state.message, action_cause=n.action_cause)
+                        for n in items]
+
+            row["saturation_search"] = dict(
+                nodes=nodes(search.nodes), rejected_starts=nodes(search.rejected_starts),
+                brackets=search.events, complete=search.complete, causes=search.causes,
+                detection_limits=search.detection_limits,
+            )
+        if predicted.saturation_loading is not None:
+            check = spec.problem("loaded-bubble", dict(T=initial.T, P=initial.P, water=initial.feed.values[W],
+                                                       alpha=predicted.saturation_loading))
+            solved = equilibrium.solve_equilibrium(spec.model, check)
+            row["bubble_pressure_check"] = dict(
+                pressure_Pa=solved.pressure, requested_tolerance_met=solved.requested_tolerance_met,
+                difference_Pa=None if solved.pressure is None else solved.pressure - initial.P,
+                residual=solved.convergence.residual, diagnostic=solved.message,
+                incipient_vapor_amount_mol=solved.amounts[1] if solved.amounts else None,
+            )
+        rows.append(row)
+    statistics = {}
+    for name, observed, calculated, unit in (
+        ("loading", "measured_loading", "calculated_loading", "mol/mol"),
+        ("heat_at_calculated_loading", "measured_heat_J_per_mol_CO2", "heat_at_calculated_loading_J_per_mol_CO2", "J/mol"),
+        ("heat_at_measured_loading", "measured_heat_J_per_mol_CO2", "heat_at_measured_loading_J_per_mol_CO2", "J/mol"),
+    ):
+        pairs = [(r[observed], r[calculated]) for r in rows if r[calculated] is not None]
+        statistics[name] = deviation_statistics(pairs, unit) if pairs else None
+    source = ROOT / "data/reference/MDEA/Zheng2020_stage1.csv"
+    return dict(
+        source=str(source.relative_to(ROOT)), source_sha256=sha256(source.read_bytes()).hexdigest(),
+        measured_loading_heat_record=str(heat_path.relative_to(ROOT)),
+        measured_loading_phase_record=str(phase_path.relative_to(ROOT)),
+        loading_grid=grid, rows=rows, statistics=statistics,
+    )
 
 
 def move_property_cases(route, point):

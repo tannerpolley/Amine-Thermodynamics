@@ -305,6 +305,56 @@ def parameter_changes(baseline, trial):
     return changes
 
 
+def fixed_r4_properties(reported, route, point, folder):
+    """Compare the fixed and fitted R4 calibrations on identical observations."""
+    from .fit import fingerprint, retained_endpoint
+
+    _, baseline = retained_endpoint(reported)
+    fit_folder = reported["retained"]
+    retained = read(fit_folder.parent / "properties/summary.json.gz")
+    if retained["endpoint_fingerprint"] != baseline["endpoint_fingerprint"]:
+        raise ValueError("Reported properties belong to another endpoint")
+    selected = read(folder / "selection.json")
+    trial = read(folder / f'{selected["selected"]}.json.gz')
+    original = read(fit_folder / f'{baseline["selected"]}.json.gz')
+    result = property_rows(route, point, trial["replay"]["rows"])
+    before = {row["identity"]: row for row in retained["rows"]}
+    groups = {}
+    for row in result["rows"]:
+        prior = before[row["identity"]]
+        fields = ("observed", "role", "unit", "basis")
+        if any(prior[k] != row[k] for k in fields):
+            raise ValueError(f'{row["identity"]}: reported and fixed R4 observations differ')
+        # AMP's NMR group contains distinct Ciftja observables.
+        observable = row["basis"]
+        if isinstance(observable, dict):
+            observable = ", ".join(observable.get("arguments", {}).get("species", ()))
+        key = row["group"], row["role"], row["unit"], observable
+        groups.setdefault(key, []).append((prior, row))
+    statistics = []
+    for (group, role, unit, observable), pairs in sorted(groups.items()):
+        available = [(a, b) for a, b in pairs if a["status"] == b["status"] == "Available"]
+        statistics.append(dict(group=group, role=role, unit=unit, observable=observable,
+                               rows=len(pairs), matched_available=len(available), **{
+            name: deviation_statistics([(pair[i]["observed"], pair[i]["value"]) for pair in available], unit)
+            if available else None for i, name in enumerate(("reported", "fixed_r4"))
+        }))
+    result.update(comparison=dict(
+        reported_endpoint_fingerprint=baseline["endpoint_fingerprint"],
+        endpoint_fingerprint=fingerprint(point),
+        objective={"reported": baseline["cost"], "fixed_r4": selected["cost"]},
+        statistics=statistics,
+        coordinates=parameter_changes(original, trial),
+        reaction_correlations={name: next(
+            r["correlation"] for r in attempt["endpoint"]["reactions"]["aqueous"] if r["name"] == "carbamate-hydrolysis"
+        ) for name, attempt in (("reported", original), ("fixed_r4", trial))},
+        **{field: {name: record["diagnostics"][field]
+                   for name, record in (("reported", original), ("fixed_r4", trial))}
+           for field in ("active_bounds", "optimizer_projected_gradient_inf")},
+    ))
+    return result
+
+
 def control_properties(amine, reported, declaration, folder):
     """Compare the control and reported endpoint on matched pressure and species observations."""
     from collections import defaultdict
