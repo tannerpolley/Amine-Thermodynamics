@@ -12,7 +12,7 @@ The MEA model has \res{mea-jointly-fitted-parameter-count-results} jointly fitte
 \res{mea-active-interactions-count-results} interactions are on bounds.
 The \MEAH--\MEACOO interaction is at $\res{mea-active-interaction-lower-value-results}$, which doubles the unlike-pair dispersion energy under \cref{eq:dispersion-combining-rule}, and the \MEAH--bicarbonate interaction is at $\res{mea-active-interaction-upper-value-results}$, which removes it.
 The MEA--water interaction has a small conditional standard error (\cref{tab:interaction-matrix}), and the calculated bubble temperatures follow both isobars of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid1996} with an RMSE of \SI{\res{mea-cai-bubble-temperature-rmse}}{\kelvin} (Fig.~\ref{supp-fig:mea-water}).
-The diameters of the two MEA ions have a conditional correlation of $\res{mea-ion-segment-diameter-conditional-correlation}$ and are not separately identified, so the fitted values are not unique molecular properties.
+The diameters of the two MEA ions have a conditional correlation of $\res{mea-ion-segment-diameter-conditional-correlation}$ and are not separately identified.
 Propagated to the \res{mea-reported-covariance-volatilization-pressure-count-results} fitted \COtwo partial pressures, the parameter covariance gives relative standard errors of \res{mea-reported-fitted-pressure-minimum-relative-se-results}--\res{mea-reported-fitted-pressure-maximum-relative-se-results}\,\%, of the same size as the deviations themselves.
 
 \FloatBarrier
@@ -32,9 +32,8 @@ The \res{mea-legacy-pressure-count-results} fitted pressures, at 313--\SI{333}{\
 
 % P:results-species-01
 The species curves show molecular MEA being replaced by protonated MEA and carbamate as loading increases, followed by increasing bicarbonate (\cref{fig:speciation}).
-Agreement with the NMR amine sum does not independently establish the separate molecular and protonated fractions.
 The carbonate share of dissolved carbon remains far below the observations of Jakobsen et al.\ \cite{Jakobsen2005}: the geometric mean of the calculated-to-observed ratios is \res{mea-carbonate-share-geometric-mean-mea-results} (Fig.~\ref{supp-fig:jakobsen-carbonate-share}).
-Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}C} NMR signal and state that their carbonate is most likely overpredicted, which limits the accuracy of these observations.
+Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}C} NMR signal and state that their carbonate is most likely overpredicted.
 
 \begin{figure}[pos=!htbp]
 \centering
@@ -47,7 +46,7 @@ Jakobsen et al.\ obtain that share from the chemical shift of a merged \ce{^{13}
 % P:results-heat-01
 The integral heats of Vinjarapu et al.\ at \SI{313.15}{\kelvin} are fitted \cite{HemaBhavya2025}; those of Arcis et al.\ at \SI{322.5}{\kelvin} are not, although they were used to select the parameters \cite{arcisEnthalpySolutionCarbon2011}.
 The calculated absorption at the Arcis conditions is less exothermic than measured, with the larger discrepancy in the lower-pressure series (\cref{fig:heat}).
-The measurements themselves differ between the two series at nearby loadings, so this comparison isolates neither a pressure effect nor a model contribution.
+The two measured series themselves differ at nearby loadings.
 
 \begin{figure}[pos=!htbp]
 \centering

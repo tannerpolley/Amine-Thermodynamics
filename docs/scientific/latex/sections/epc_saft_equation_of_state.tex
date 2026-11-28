@@ -18,7 +18,7 @@ The reduced residual Helmholtz energy, $a^{\mathrm{res}}=A^{\mathrm{res}}/(nRT)$
 \end{equation}
 A neutral species is a chain of $m_i^{\mathrm{seg}}$ spherical segments of diameter $\sigma_i$ and dispersion energy $u_i$; an ion is a single charged sphere, except the DEA and MDEA cations, which keep the chain of their amine.
 Pressure, chemical potentials and caloric properties follow from the derivatives of $a^{\mathrm{res}}$ \cite{Gross2001}, including the variation of the relative permittivity (\cref{eq:solvent-permittivity}).
-Below, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative permittivity, as distinct from the association energy $\epsilon^{AB}$.
+Throughout, $\mathcal I$ is the set of ions, and $\varepsilon$ denotes a relative permittivity, as distinct from the association energy $\epsilon^{AB}$.
 
 % P:theory-02a
 The hard-chain and dispersion terms are those of Gross and Sadowski \cite{Gross2001}, the association term follows Wertheim's first-order theory in the form used with PC-SAFT \cite{Kleiner2007}, and the Debye--H\"uckel term is that of Cameretti et al.\ \cite{Cameretti2005}; Section~\ref{supp-sec:s-contributions} of the Supplementary Material gives the four terms.
@@ -83,17 +83,18 @@ Ions affect the permittivity only through the phase volume and the neutral amoun
 \subsection{Species and shared parameters}\label{sec:species}
 % P:theory-shared
 Six species are common to the four amines: \COtwo, water and the four inorganic ions.
-Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) are set before any amine is fitted and are the same in all four models; \cref{tab:species-parameters,tab:interaction-matrix} mark them.
-These six species form the base of the four calibrations: every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
+Their parameters, their interactions with water and the equilibrium-constant correlations of their reactions (R1--R3, \cref{sec:reactions}) form the base of the four calibrations: they are set before any amine is fitted and are the same in all four models (marked in \cref{tab:species-parameters,tab:interaction-matrix}).
+Every difference between the amine models lies in the amine species, their interactions and their own reaction correlations.
 Water has one donor and one acceptor association site, with parameters fitted to the IAPWS-95 reference equation \cite{internationalassociationforthepropertiesofwaterandsteamRevisedReleaseIAPWS2018}, and \COtwo has one induced-association site of each type that bonds only with water \cite{Kleiner2007,Schick2023,Pabsch2020}.
 
 % P:theory-salt
 The water--bicarbonate and water--carbonate interactions are fixed from data that contain no amine.
 They are fitted to the osmotic coefficients of aqueous sodium bicarbonate and sodium carbonate tabulated by Peiper and Pitzer from their ion-interaction model, 45 values for each salt at 278--\SI{318}{\kelvin} and up to \SI{1}{\mole\per\kilogram} \cite{peiperThermodynamicsAqueousCarbonate1982}.
-The fit is made at the ionic compositions printed with each tabulated value, with the dissolved \COtwo subtracted as an ideal solute, so it reproduces the tabulated coefficients of the ions conditional on those compositions and on the parameter bounds: the AARD is \res{salt-sodium-bicarbonate-osmotic-aard-theory}\,\% for sodium bicarbonate and \res{salt-sodium-carbonate-osmotic-aard-theory}\,\% for sodium carbonate (Section~\ref{supp-sec:s-salt}).
-Wangler et al.\ fitted a water--bicarbonate interaction to the same source with their own water and ion parameters \cite{Wangler2018}; the two values are not interchangeable.
-The fit is conditional on \res{salt-interactions-on-lower-bounds-species-model} values that lie on their lower bound of $-1$: the water--sodium interaction, fitted beforehand to sodium chloride, and the water--carbonate interaction at \SI{298.15}{\kelvin}.
-The MEA data alone do not determine the water--bicarbonate interaction, and the salt-fitted interactions are adopted because data without an amine determine them, not because the amine data are fitted better: Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} compares the deviations obtained with the salt-fitted interaction and with one fitted to the MEA data.
+The fit is made at the ionic compositions printed with each tabulated value, with the dissolved \COtwo subtracted as an ideal solute, and the AARD is \res{salt-sodium-bicarbonate-osmotic-aard-theory}\,\% for sodium bicarbonate and \res{salt-sodium-carbonate-osmotic-aard-theory}\,\% for sodium carbonate (Section~\ref{supp-sec:s-salt}).
+Wangler et al.\ fitted a water--bicarbonate interaction to the same source with their own water and ion parameters \cite{Wangler2018}, so the two values are not interchangeable.
+In this fit, \res{salt-interactions-on-lower-bounds-species-model} values lie on their lower bound of $-1$: the water--sodium interaction, fitted beforehand to sodium chloride, and the water--carbonate interaction at \SI{298.15}{\kelvin}.
+The MEA data alone do not determine the water--bicarbonate interaction, and the salt-fitted interactions are adopted because data without an amine determine them.
+Table~\ref{supp-tab:supplement-shared-interaction-sensitivity} compares the deviations obtained with the salt-fitted interaction and with one fitted to the MEA data.
 
 % P:theory-amine-species
 MEA and AMP are two-site chains and DEA and MDEA four-site chains; the MEA, DEA and MDEA parameters are taken from the literature, and the \res{amp-pure-adjusted-coordinate-count-theory} pure-component parameters of AMP were fitted here to vapor pressures and liquid densities (\cref{tab:species-parameters,tab:transfer-species}, Table~\ref{supp-tab:transfer-deviations}).
@@ -101,12 +102,10 @@ No amine species bonds with \COtwo.
 The MEA and AMP cations and the three carbamates are single spheres; the DEA and MDEA cations keep the segment count and association sites of their amine, with zero self-association energy.
 For every amine ion the Debye--H\"uckel and Born diameters equal the segment diameter, so no amine ion has a separately fitted Born diameter.
 For the two chain cations the tied Born diameter is therefore that of one segment, \SI{2.948}{\angstrom} for \ce{DEAH+} and \SI{\res{mdea-cation-segment-diameter-equation}}{\angstrom} for \ce{MDEAH+}, not the volume-equivalent diameter $\sigma(m^{\mathrm{seg}})^{1/3}$ of \res{dea-cation-volume-equivalent-diameter} and \SI{\res{mdea-cation-volume-equivalent-diameter-equation}}{\angstrom}.
-These diameters define the parameterization and are not measured ion sizes.
 
 % P:theory-permittivity-inputs
 The permittivity coefficients of each amine were fitted beforehand to measured permittivities without \COtwo: for MEA those of the aqueous solution at \SI{298.15}{\kelvin} \cite{agieienkoWhatGasStream2024a}, and for DEA, MDEA and AMP those of Hsieh et al.\ \cite{hsiehDielectricConstantsAqueous2007}.
 The water coefficients are those of Yang et al.\ \cite{Yang2024} and the \COtwo coefficients are set in this work.
-Use of \cref{eq:solvent-permittivity} at other temperatures and in loaded solutions is a model assumption.
 
 \subsection{Reactions and phase equilibrium}\label{sec:reactions}
 % P:theory-06
@@ -146,7 +145,7 @@ The correlations of R1--R3 and of MEA have the form \cite{Austgen1991}
 \end{equation}
 where $\Delta_r$ converts the source to the common basis; Table~\ref{supp-tab:supplement-transfer-parameters} gives those of the other amines in an equivalent form.
 R1--R3 and the R4 and R5 correlations of MEA are fixed at their literature forms, and so is R5 of DEA, MDEA and AMP.
-The MEA R4 correlation of Tong et al.\ converts a constant that Aroua et al.\ measured by titration of dilute MEA solutions, not one fitted to phase-equilibrium data \cite{Tong2012,arouaEquilibriumConstantCarbamate1999}.
+The MEA R4 correlation of Tong et al.\ converts a constant that Aroua et al.\ measured by titration of dilute MEA solutions \cite{Tong2012,arouaEquilibriumConstantCarbamate1999}.
 The R4 correlations of DEA and AMP start from a literature correlation and are then fitted: the fit adjusts the constant term and an enthalpy increment $\delta h$ that changes the temperature dependence through
 \begin{equation}
  \delta\ln K(T)=-\frac{\delta h}{R}\left(\frac1T-\frac1{T_{\mathrm{ref}}}\right).

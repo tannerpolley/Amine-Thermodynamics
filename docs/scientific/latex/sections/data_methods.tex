@@ -2,14 +2,14 @@
 \subsection{Experimental data}\label{sec:data-roles}
 % P:methods-01
 Loading is $\alpha=n_{\COtwo,\mathrm{added}}/n_{\mathrm{amine,total}}$, and the amine content is the amine mass fraction of the unloaded solution, written in wt\%.
-\emph{Fitted} means that an observation enters the objective of the reported fit, and \emph{not fitted} that it is outside that objective.
-\emph{Comparison only} marks a different quantity or different conditions from those the model was built for, and \emph{development} data are observations outside the objective that informed a choice of parameters or of an initial parameter set.
+\emph{Fitted} means that an observation enters the objective of the model, and \emph{not fitted} that it is outside that objective.
+\emph{Comparison only} marks a different quantity or different conditions from those the model was built for.
 \Cref{tab:mea-data} lists the MEA data with their roles and deviations, and Table~\ref{supp-tab:transfer-deviations} those of DEA, MDEA and AMP.
 The objectives contain \res{mea-objective-observations-methods} observations for MEA, \res{dea-objective-observations-methods} for DEA, \res{mdea-objective-observations-methods} for MDEA and \res{amp-reported-objective-row-count-methods} for AMP; Table~\ref{supp-tab:supplement-mea-comparison} gives the MEA sets that are compared and are not pressures.
 The \res{mea-kiepe-pressure-count-methods} \COtwo--water pressures of Kiepe et al.\ in the MEA objective were fitted beforehand and contribute a constant to it.
 
 % P:methods-selection
-The fitted sets were chosen amine by amine, not by one rule.
+The fitted sets were chosen amine by amine.
 The MEA objective contains the \COtwo partial pressures of two sources at nominal 30 wt\% and up to \SI{333.15}{\kelvin}: \res{mea-hilliard-fitted-pressure-count-methods} of the \res{mea-hilliard-pressure-count-methods} of Hilliard \cite{Hilliard2008}, whose remaining pressure is at \SI{\res{mea-hilliard-unfitted-pressure-temperature-methods}}{\kelvin}, and \res{mea-jou-fitted-pressure-count-methods} of the \res{mea-jou-pressure-count-methods} of Jou et al.\ \cite{Jou1995}.
 The other sources at 30 wt\%, the pressures at 15 and 45 wt\% and those at higher temperatures are compared but not fitted.
 The DEA objective contains the \COtwo partial pressures of Lawson and Garst \cite{lawsonGasSweeteningData1976} in 25 wt\% DEA at 311--\SI{380}{\kelvin}, measured with methane in the cell, which the calculation omits, and those of Lal et al.\ \cite{lalSolubilityH2SCO21985} in 20.6 wt\% DEA at or above \SI{0.05}{\kilo\pascal}.
@@ -17,7 +17,7 @@ Four further DEA pressure sets are compared and not fitted.
 The pressures of Lal et al.\ below \SI{0.05}{\kilo\pascal} lie under the pressure above which that source states its accuracy, 15\,\%, and its authors consider four of them probably in error \cite{lalSolubilityH2SCO21985}.
 The pressures of Seo and Hong \cite{seoSolubilitiesCarbonDioxide1996} conflict with those of Lawson and Garst, giving a lower pressure at nearly the same loading and a higher temperature and DEA content (Section~\ref{supp-sec:s-transfer-data}).
 The pressures of Lawson and Garst at \SI{394}{\kelvin} and at 50--54.5 wt\% DEA lie above the fitted temperatures and DEA contents.
-For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} were set aside as an extrapolation, and for AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
+For MDEA the loaded total pressures of Kuranov et al.\ at \SI{413}{\kelvin} are held out as an extrapolation, and for AMP all loaded total pressures of Hartono et al.\ and of Tong et al., 313--\SI{393}{\kelvin}, are fitted.
 The fitted loaded pressures of MDEA and AMP are total pressures, and their \COtwo partial pressures are not fitted.
 The \emph{fitted conditions} of a model are the temperature and amine-concentration ranges of its fitted observations.
 
@@ -66,9 +66,9 @@ The MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid199
 
 % P:methods-starts
 The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
-For MEA, \res{mea-tied-start-count-methods} starts reach the same objective value at the reported precision, and for AMP, \res{amp-tied-start-count-methods} do.
+For MEA, \res{mea-tied-start-count-methods} starts reach the same objective value at the printed precision, and the DEA fits from \res{dea-tied-start-count-methods} starts reach the same value.
 MDEA is fitted from a single start, the initial parameter vector archived for it in the data deposit.
-The DEA fits from \res{dea-tied-start-count-methods} starts reach the same objective value (Section~\ref{supp-sec:s-uncertainty}).
+For AMP, \res{amp-tied-start-count-methods} starts reach the same objective value at the printed precision (Section~\ref{supp-sec:s-uncertainty}).
 
 % P:methods-06
 Agreement is reported as average absolute relative deviation (AARD), relative bias and root-mean-square error (RMSE),
@@ -97,7 +97,9 @@ Each fitted parameter set is searched for a phase split with the tangent-plane c
  \quad \sum_iw_i=1,\quad\sum_i z_iw_i=0,\quad w_i>0.
  \label{eq:tpd}
 \end{equation}
-Here $g=G^*/n$ is the molar Gibbs energy of the trial phase on the true-species basis, with $G^*$ the Gibbs energy of \cref{sec:reactions}, and $\boldsymbol w$ is its composition, restricted to the species that can form from the feed and, for a vapor, to \COtwo, water and the molecular amine; the condition $w_i>0$ applies to these species only, and a liquid trial phase also satisfies the reaction equilibria of \cref{eq:activity-reaction-equilibrium}, which do not arise in a vapor of neutral species.
+Here $g=G^*/n$ is the molar Gibbs energy of the trial phase on the true-species basis, with $G^*$ the Gibbs energy of \cref{sec:reactions}.
+The trial composition $\boldsymbol w$ is restricted to the species that can form from the feed and, for a vapor, to \COtwo, water and the molecular amine, and the condition $w_i>0$ applies to these species only.
+A liquid trial phase also satisfies the reaction equilibria of \cref{eq:activity-reaction-equilibrium}, which do not arise in a vapor of neutral species.
 $B$ is the conservation matrix, whose rows are the independent conserved groups of the true species, so that $B\boldsymbol\nu_r=0$ for every reaction; and $\boldsymbol\lambda$ holds the Lagrange multipliers of the corresponding balances at the searched state, divided by $RT$, so that $B^{\mathsf T}\boldsymbol\lambda$ is the tangent plane of that state.
 A negative distance that is confirmed by a finite, mass-conserving transfer lowering the Gibbs energy by more than its numerical error estimate is a \emph{detected instability}, classed as toward a second liquid or toward a vapor from the density of the trial phase.
 A liquid--liquid split is reported when a separate equilibrium calculation at the same feed, temperature and pressure gives two distinct liquids of lower Gibbs energy.
@@ -107,4 +109,5 @@ Each searched state has one of four outcomes: no detected instability, a detecte
 
 % P:methods-stability-in-fits
 No objective contains a stability condition, and no parameter bound is set from a search.
-The searches informed two data choices, the weight of the \COtwo-free MDEA pressures and the fitting of the AMP pressures of Tong et al.\ and those of Hartono et al.\ above \SI{353}{\kelvin}, and \cref{sec:results-phase} gives, for each, calibrations that differ in that choice alone.
+The searches informed two data choices: the weight of the \COtwo-free MDEA pressures, and the fitting of the AMP pressures of Tong et al.\ and of Hartono et al.\ above \SI{353}{\kelvin}.
+For each choice, \cref{sec:results-phase} compares calibrations that differ in that choice alone.

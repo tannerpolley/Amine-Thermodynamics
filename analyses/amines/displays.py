@@ -302,7 +302,7 @@ def shared_interaction_table(shared, table, num):
           'Deviations of the MEA and MDEA models, with the water--anion interactions fixed from the sodium-salt data, and of the same fits with the water--bicarbonate interaction fitted to the MEA data, on identical observations.',
           ['Observable', '$N$', r'Salt-fitted interactions, AARD (\%)', r'MEA-fitted interaction, AARD (\%)'],
           rows, [.41,.15,.19,.19],
-          notes=rf'In the refits the water--bicarbonate interaction is the constant ${bicarbonate:.3f}$ and the water--carbonate interaction is $-0.25$ \cite{{Held2014}}; the refits retain the observation weights and the bounds on the reported fit coordinates.')
+          notes=rf'In the fits with the MEA-fitted interaction, the water--bicarbonate interaction is the constant ${bicarbonate:.3f}$ and the water--carbonate interaction is $-0.25$ \cite{{Held2014}}; these fits keep the observation weights and parameter bounds of the models.')
 def transfer_displays(outputs):
     BASE = 'analyses/dea_transfer/results/refit-413/'
     MEA = 'analyses/mea_parameter_bundle/results/'  # read as retained files, so replacing them refreshes every MEA number shown here
@@ -1378,7 +1378,7 @@ def transfer_displays(outputs):
                 crow.append([label + r'\textsuperscript{a}', n, num(cost, 7), num(100 * cost / total, 1)])
             else:
                 crow.append([label, n, num(cost, 3), num(100 * cost / total, 1)])
-    table('supplement-objective-contributions', 'Contribution of each fitted data set to the objective value of its reported model.', ['Data set', '$N$', 'Contribution', r'Share (\%)'], crow, [.52, .08, .14, .12],
+    table('supplement-objective-contributions', 'Contribution of each fitted data set to the objective value of its model.', ['Data set', '$N$', 'Contribution', r'Share (\%)'], crow, [.52, .08, .14, .12],
           notes=r'The objective is that of main-text Eq.~(\ref{main-eq:fit-objective}) with the scales and weights of Tables~\ref{tab:objective-groups} and \ref{tab:transfer-scales}; values of different amines are not comparable. \textsuperscript{a} Fitted beforehand and constant in the reactive objective.')
     weighted_rows = fixed.fits['MDEA']['replay']['rows']
     manifest = read(MOVE + "mdea/reported/fit/manifest.json.gz")
@@ -2014,7 +2014,7 @@ def mea_tables(outputs):
         }
         (prior_heat_count,) = set(kim_prior_interval_counts().values())
         prior_rmse_range = '--'.join(f'{value:.0f}' for value in sorted(prior_density_rmse.values()))
-        table('supplement_mea_comparison.tex', (r"Data for MEA that are not fitted, or fitted in part, and are not pressures, with the deviations of the MEA model and the model of Polley and Hedengren CITE14 on identical observations. || The columns are those of main-text Table~\ref{main-tab:mea-data}. $^{\mathrm{a}}$Also used to select the parameters; $^{\mathrm{b}}$" + NUMBER_WORDS[prior_heat_count] + r" of these intervals are in the objective of the model of Ref.~CITE14; no interval of Kim and Svendsen is in the reported fit; $^{\mathrm{c}}$the comparison between density sources informed the choice of fitted density observations. The densities of Ref.~CITE14 are those of its equation of state; for column hydraulics Ref.~CITE14 uses a separate empirical density correlation (its Section~2.2 and Appendix~A.2), so its loaded-density RMSEs of " + prior_rmse_range + r" kg/m$^3$ describe the liquid volume of that equation of state under load, not that hydraulic density. These sets overlap with each other and with the fitted observations, so their counts are not additive.").replace('CITE14', CITE14),
+        table('supplement_mea_comparison.tex', (r"Data for MEA that are not fitted, or fitted in part, and are not pressures, with the deviations of the MEA model and the model of Polley and Hedengren CITE14 on identical observations. || The columns are those of main-text Table~\ref{main-tab:mea-data}. $^{\mathrm{a}}$Also used to select the parameters; $^{\mathrm{b}}$" + NUMBER_WORDS[prior_heat_count] + r" of these intervals are in the objective of the model of Ref.~CITE14; no interval of Kim and Svendsen is in the objective of the MEA model; $^{\mathrm{c}}$the comparison between density sources informed the choice of fitted density observations. The densities of Ref.~CITE14 are those of its equation of state; for column hydraulics Ref.~CITE14 uses a separate empirical density correlation (its Section~2.2 and Appendix~A.2), so its loaded-density RMSEs of " + prior_rmse_range + r" kg/m$^3$ describe the liquid volume of that equation of state under load, not that hydraulic density. These sets overlap with each other and with the fitted observations, so their counts are not additive.").replace('CITE14', CITE14),
               ['Quantity (unit)', '$N$', 'Role', r'\makecell[rb]{AARD\\(\%)}', 'RMSE', 'Role in '+CITE14, r'\makecell[rb]{AARD (\%)\\'+CITE14+'}', r'\makecell[rb]{RMSE\\'+CITE14+'}'], aside, [.24,'r',.12,'r','r',.08,'r','r'])
         interior = [label(k) for k in uncertainty['free_coordinates']]
         correlation = uncertainty['conditional_correlation']
@@ -2879,7 +2879,7 @@ def result_values(required):
     add("mdea-reported-water-k-423", endpoint, "MDEA–water k(423 K)", f"{k423:.5f}")
     add("mdea-water-gap-onset-k-423", W_MDEA_BINARY, "rows[T_K=423].k_gap", f"{onset:.5f}")
     add("mdea-reported-water-k-423-distance-to-gap-onset", (endpoint, W_MDEA_BINARY),
-        "rows[T_K=423].k_gap minus MDEA–water k(423 K)", f"{onset - k423:.5f}")
+        "rows[T_K=423].k_gap minus MDEA–water k(423 K)", f"{onset - k423:.3f}")
 
     fixed = FixedReference(read)
     for family in ("MEA", "DEA", "MDEA", "AMP_free"):

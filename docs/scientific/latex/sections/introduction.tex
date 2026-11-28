@@ -1,7 +1,8 @@
 \section{Introduction}\label{sec:introduction}
 % P:introduction-01
 Aqueous amine solutions are widely used to remove carbon dioxide (\COtwo) from gas streams by absorption and stripping, and the design of these processes starts from the solubility of \COtwo in the solvent and the other thermodynamic properties of the loaded solution \cite{Zhang2011}.
-The \COtwo partial pressure that expresses the solubility, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}; an equation of state gives them all from one Helmholtz energy, but each depends on different derivatives of it and on different parameters, so each has to be tested against its own data.
+The \COtwo partial pressure that expresses the solubility, species concentrations, heat release and liquid density enter different parts of an absorber calculation but describe the same reacting solvent \cite{Zhang2011,Freguia2003,Amundsen2009}.
+An equation of state gives them all from one Helmholtz energy, but each depends on different derivatives of it and on different parameters, so each has to be tested against its own data.
 
 % P:introduction-02
 Amines of different classes absorb \COtwo through different reactions.
@@ -21,7 +22,7 @@ MDEA forms no carbamate, so these studies do not determine the parameters of car
 Polley and Hedengren describe the explicit MEA ions, including carbamate, with ePC-SAFT, but they estimate the parameters in separate steps and use empirical caloric properties in their column calculations \cite{polleyReactiveEPCSAFTModeling2026}.
 
 % P:introduction-04
-In equations of state of the statistical associating fluid theory (SAFT) without explicit ions, the reaction products are represented by association, and it is the association or group parameters that are carried between compounds.
+In equations of state of the statistical associating fluid theory (SAFT) without explicit ions, the reaction products are represented by association, and the association or group parameters are carried between compounds.
 Mac Dowell et al.\ describe \COtwo in aqueous MEA with association parameters taken from ethanol and ethylamine \cite{MacDowell2010}, Rodr\'iguez et al.\ extend that approach to MEA, DEA, MDEA and AMP, the four amines studied here \cite{Rodriguez2012}, and reactive-association and group-contribution models share parameters between compounds \cite{lloretConsistentTransferableThermodynamic2017,perdomoPredictiveGroupcontributionFramework2023}.
 Perturbed-chain SAFT (PC-SAFT) and Huang--Radosz SAFT (SAFT-HR) have also been combined with ideal-activity reaction equilibria for MEA, DEA and MDEA \cite{Baygi2015,Nasrifar2010,Pahlavanzadeh2013,Najafloo2018}.
 These studies judge a calibration by its deviations from measured pressures and compositions.
@@ -31,7 +32,7 @@ Deviations do not show whether the calculated liquid is stable.
 A single-liquid objective contains no requirement of stability, and ePC-SAFT ion parameters can predict liquid--liquid demixing that contradicts observation \cite{Held2014}.
 For nonreactive binary mixtures, parameters fitted to vapor--liquid data alone are known to give false liquid--liquid splits, and stability has been imposed as a constraint on the estimation \cite{mitsosBilevelOptimizationFormulation2009,bollasBilevelOptimizationFormulation2009,glassParameterEstimationCubic2018,gauReliableNonlinearParameter2000}.
 The tangent-plane criterion of Michelsen tests whether an additional phase lowers the Gibbs energy \cite{Michelsen1982}; in an electrolyte the trial phase must be electroneutral \cite{Perdomo2025}, and in a reacting liquid it must also satisfy the chemical constraints \cite{Tsanas2022,Ascani2022}.
-A phase search is thus a test of a calibration that its deviations from the fitted data do not replace.
+A phase search thus tests a calibration in a way that its deviations from the fitted data do not.
 Tsanas et al.\ applied such a reactive electrolyte stability analysis to a demixing amine blend, water, \COtwo, 2-(diethylamino)ethanol and 3-(methylamino)propylamine, described with eNRTL, and did not parameterize the model \cite{Tsanas2022}.
 Perdomo et al.\ describe the reactions implicitly by association in the SAFT-$\gamma$ Mie group-contribution approach, solve phase stability and equilibrium with the HELD algorithm, and predict ternary phase diagrams of amine solvents that separate into two liquids \cite{perdomoPredictiveGroupcontributionFramework2023}.
 Neither study applies the test to conventional amines measured as one liquid and described with explicit ions in one equation of state.
@@ -40,9 +41,12 @@ Neither study applies the test to conventional amines measured as one liquid and
 This work models the \COtwo solubility in aqueous MEA, DEA, MDEA and AMP with ePC-SAFT, calibrating the four amines on one fixed base and searching each fitted model for a second liquid.
 The base is set without amine data: the parameters of water, \COtwo and the inorganic ions, the \COtwo--water interaction, the equilibrium constants of the inorganic reactions, and the water--bicarbonate and water--carbonate interactions, fixed from osmotic coefficients of the sodium salts as Wangler et al.\ fixed the first of them \cite{Wangler2018}.
 The MEA model is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities, with its amine equilibrium constants fixed at literature correlations.
-DEA, MDEA and AMP are then each fitted through their own species; DEA and AMP hold the carbamate dispersion energy of the MEA fit, AMP also its carbamate--water interaction and DEA its cation--bicarbonate interaction, and the MEA carbamate diameter scales the DEA carbamate diameter and bounds that of AMP from below.
+DEA, MDEA and AMP are each fitted through their own species.
+DEA and AMP hold the carbamate dispersion energy of the MEA fit, AMP also its carbamate--water interaction and DEA its cation--bicarbonate interaction, and the MEA carbamate diameter scales the DEA carbamate diameter and bounds that of AMP from below.
 
 % P:introduction-results
 The fitted \COtwo partial pressures of MEA at nominal 30 wt\% deviate by \res{mea-fitted-pressure-aard-introduction}\,\%, and the fitted \COtwo partial pressures of DEA and total pressures of MDEA and AMP by \res{dea-fitted-pressure-aard-introduction}, \res{mdea-fitted-pressure-aard-introduction} and \res{amp-fitted-pressure-aard-introduction}\,\%, on \res{dea-fitted-partial-pressure-count-introduction}, \res{mdea-fitted-kuranov-pressure-count-introduction} and \res{amp-reported-loaded-pressure-count-introduction} observations.
 The phase searches find no confirmed second liquid with any of the four models (\cref{sec:results-phase}).
-The fitted data decide that result for three amines: a DEA fit without the pressures of Lawson and Garst predicts a second liquid, an AMP calibration with other water--anion and carbamate inputs and no loaded pressures above \SI{353}{\kelvin} predicts one at higher temperatures until the remaining loaded pressures are added, and an MDEA calibration that weights its \COtwo-free pressures weakly predicts a liquid--liquid gap in the \COtwo-free solution.
+For three amines the fitted data decide that result.
+A DEA fit without the pressures of Lawson and Garst predicts a second liquid, and an MDEA calibration that weights its \COtwo-free pressures weakly predicts a liquid--liquid gap in the \COtwo-free solution.
+An AMP calibration with other water--anion and carbamate inputs and no loaded pressures above \SI{353}{\kelvin} predicts a second liquid at higher temperatures until the remaining loaded pressures are added.
