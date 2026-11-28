@@ -46,8 +46,8 @@
 
 % P:supplement-contents
 This supplement gives the four standard contributions of the equation of state, the model inputs, the fit of the shared water--anion interactions to sodium-salt data and the parameter values at full precision (Section~\ref{sec:s-parameters}), and the source conventions of the data, the deviations by data set and the objective scales and weights (Section~\ref{sec:s-corrections}).
-It also gives the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}) and the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}).
-The last sections give the phase-stability searches, the weighting of the \COtwo-free MDEA pressures and the AMP fit without the pressures of Tong et al.\ and of Hartono et al.\ above \SI{353}{\kelvin} (Section~\ref{sec:s-phase}) and the published comparisons that are not on identical observations (Section~\ref{sec:s-published}).
+It also gives the caloric functions and reference values for checking an implementation (Section~\ref{sec:s-files}), the conditional parameter uncertainty (Section~\ref{sec:s-uncertainty}) the deviations inside and outside the measured temperature ranges of the equilibrium constants (Section~\ref{sec:s-ranges}) and the DEA and AMP fits with the carbamate-hydrolysis correlation held at its starting form (Section~\ref{sec:s-fixed-r4}).
+The last sections give the phase-stability searches, the weighting of the \COtwo-free MDEA pressures and the AMP fits without the pressures of Tong et al.\ (Section~\ref{sec:s-phase}) and the published comparisons that are not on identical observations (Section~\ref{sec:s-published}).
 
 \section{Model equations, inputs and parameter values}\label{sec:s-parameters}
 \subsection{Hard-chain, dispersion, association and Debye--H\"uckel contributions}\label{sec:s-contributions}
@@ -313,7 +313,7 @@ Table~\ref{tab:supplement-temperature-bands} divides the MEA data used here by t
 % P:supplement-carbonate
 The MEA model gives ratios of calculated to observed carbonate share of \res{mea-carbonate-share-minimum-calculated-to-observed-ratio}--\res{mea-carbonate-share-maximum-calculated-to-observed-ratio} at the \res{mea-carbonate-share-observation-count-supplement-description} states of Jakobsen et al.\ \cite{Jakobsen2005}, \res{mea-carbonate-share-observations-lower-temperature} at \SI{293.15}{\kelvin} and \res{mea-carbonate-share-observations-higher-temperature} at \SI{313.15}{\kelvin}, with a geometric mean of \res{mea-carbonate-share-geometric-mean-detailed-supplement} (\cref{fig:jakobsen-carbonate-share}).
 Fast proton exchange merges bicarbonate and carbonate into one \ce{^{13}C} NMR signal, and Jakobsen et al.\ obtain the carbonate share from its chemical shift, calibrated against standards; they state that fractions below about 10\,\% cannot be evaluated accurately and that their carbonate is most likely overpredicted.
-For the bicarbonate--carbonate pool alone, the carbonate fraction $c_{\ce{CO3^{2-}}}/(c_{\ce{CO3^{2-}}}+c_{\ce{HCO3-}})$ calculated with the MEA model at the \res{mea-reported-jakobsen-carbonate-pool-states} Jakobsen et al.\ states at \SI{313.15}{\kelvin}, 0.09--0.95 mol/mol, is $\res{mea-reported-carbonate-pool-ratio-minimum}$ to \res{mea-reported-carbonate-pool-ratio-maximum} against measured values of \res{mea-jakobsen-carbonate-pool-observation-minimum} to \res{mea-jakobsen-carbonate-pool-observation-maximum}.
+For the bicarbonate--carbonate pool alone, the carbonate fraction $c_{\ce{CO3^{2-}}}/(c_{\ce{CO3^{2-}}}+c_{\ce{HCO3-}})$ calculated with the MEA model at the \res{mea-reported-jakobsen-carbonate-pool-states} Jakobsen et al.\ states at \SI{313.15}{\kelvin}, 0.09--0.95 mol/mol, the \res{mea-jakobsen-carbonate-pool-share-states} carbonate-share states at that temperature and \res{mea-jakobsen-carbonate-pool-additional-states} at higher loadings, is $\res{mea-reported-carbonate-pool-ratio-minimum}$ to \res{mea-reported-carbonate-pool-ratio-maximum} against measured values of \res{mea-jakobsen-carbonate-pool-observation-minimum} to \res{mea-jakobsen-carbonate-pool-observation-maximum}.
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=0.5\linewidth]{jakobsen-carbonate-share.pdf}
@@ -500,6 +500,15 @@ Counts include zero-valued species observations, while relative deviations use o
 % P:supplement-ranges-amp
 For Tong, the groups inside and outside the R5 range are the same as for R4.
 
+\section{Carbamate-hydrolysis correlations held at their starting forms}\label{sec:s-fixed-r4}
+% P:supplement-fixed-r4
+The DEA and AMP fits were repeated with the R4 correlation held at its starting form, that of Aroua et al.\ for DEA and that of Silkenb\"aumer et al.\ for AMP (Section~\ref{sec:s-parameters}), and the other parameters refitted from the same start with the same base, held parameters, bounds and weights.
+The reported models keep their fitted R4 correlations; these fits show how much of each calibration rests on R4.
+For DEA the objective rises from \res{dea-fixed-r4-reported-objective-supplement} to \res{dea-fixed-r4-fixed-r4-objective-supplement}, with \res{dea-fixed-r4-reported-bound-count-supplement} parameter on a bound in either fit.
+The fitted pressures of Lawson and Garst then deviate by \res{dea-fixed-r4-lawson-fixed-r4-aard-supplement} instead of \res{dea-fixed-r4-lawson-reported-aard-supplement}\,\%, those of Lal et al.\ by \res{dea-fixed-r4-lal-fixed-r4-aard-supplement} instead of \res{dea-fixed-r4-lal-reported-aard-supplement}\,\% and the Carson et al.\ heats by \res{dea-fixed-r4-carson-fixed-r4-aard-supplement} instead of \res{dea-fixed-r4-carson-reported-aard-supplement}\,\%, while the pressures of Seo and Hong, which are not fitted, deviate by \res{dea-fixed-r4-seo-hong-fixed-r4-aard-supplement} instead of \res{dea-fixed-r4-seo-hong-reported-aard-supplement}\,\%.
+For AMP the objective rises from \res{amp-fixed-r4-reported-objective-supplement} to \res{amp-fixed-r4-fixed-r4-objective-supplement}, and no parameter is on a bound, against \res{amp-fixed-r4-reported-bound-count-supplement} in the AMP model.
+The fitted carbamate fractions then deviate by \res{amp-fixed-r4-nmr-fixed-r4-aard-supplement} instead of \res{amp-fixed-r4-nmr-reported-aard-supplement}\,\%, and the fitted loaded total pressures change little: those of Tong et al.\ by \res{amp-fixed-r4-tong-fixed-r4-aard-supplement} instead of \res{amp-fixed-r4-tong-reported-aard-supplement}\,\%, those of Hartono et al.\ above \SI{353}{\kelvin} by \res{amp-fixed-r4-hartono-fixed-r4-aard-supplement} instead of \res{amp-fixed-r4-hartono-reported-aard-supplement}\,\% and the other Hartono et al.\ pressures by \res{amp-fixed-r4-loaded-fixed-r4-aard-supplement} instead of \res{amp-fixed-r4-loaded-reported-aard-supplement}\,\%.
+
 \section{Phase stability}\label{sec:s-phase}
 \subsection{Search conditions and results}
 % P:supplement-phase-method
@@ -540,10 +549,12 @@ For MDEA, the search covers \res{mdea-measured-states-supplement-design} distinc
 No grid state has a detected instability, and no instability is detected at \res{mdea-measured-states-without-instability-supplement} measured states.
 At \res{mdea-distinct-descent-states-supplement-total} measured states the searches detect an instability toward a vapor, because the measured or assigned pressure lies below the bubble pressure of the model: \res{mdea-distinct-descents-sobrino-supplement} \COtwo-free states at 393.15 K and 0.1 MPa \cite{sobrinoViscosityDensityMeasurements2016}, \res{mdea-distinct-descents-bottinger-supplement} at 293.15--333.15 K and 0.5 or 2.5 MPa \cite{bottingerOnlineNMRSpectroscopic2008}, \res{mdea-distinct-descents-zheng-supplement} at 323.15 K and 0.53--4.19 MPa \cite{zhengCO2HeatAbsorption2020} and \res{mdea-distinct-descents-merkley-supplement} at 333.15 K and 1.121 MPa \cite{merkleyEnthalpiesAbsorptionCarbon1987}.
 The deviations of Table~\ref{tab:transfer-deviations} at these states are single-liquid values at the measured state, those of the Zheng et al.\ heats at the measured final loading.
+At each of the \res{mdea-zheng-saturation-states-supplement} Zheng et al.\ states the single liquid at the measured pressure saturates below the measured final loading, by \res{mdea-zheng-saturation-loading-aard-supplement}\,\% on average, and the heats calculated at that saturation loading deviate by \res{mdea-zheng-saturation-heat-aard-supplement}\,\%.
+The Merkley et al.\ heat at 333.15 K and 1.121 MPa is instead evaluated at its final loading, the calculated saturation loading, which lies below the read loading (Section~\ref{sec:s-transfer-data}); the search at that final loading is unclassified.
 A further \res{mdea-measured-states-unclassified-supplement} states from the heat measurements of Merkley et al.\ are unclassified.
 Of these, \res{mdea-merkley-searches-outside-caloric-interval-supplement} fall outside the temperature ranges of the ideal-gas caloric functions: 288.71 K is below both the \COtwo{} Shomate interval (298--1200 K) and the MDEA ideal-gas heat-capacity polynomial interval (293--423 K), and 422.04 K is above the IAPWS-95-based ideal-gas water polynomial interval (273.15--400 K).
 The \COtwo-free binary search at 422.04 K uses liquid fugacity coefficients without the ideal-gas caloric functions.
-At the other \res{mdea-merkley-searches-within-resolution-supplement}, at 333.15 and 388.71 K and 1.121 MPa, the smallest tangent-plane distance found is zero within its numerical resolution, and each of the \res{mdea-supplied-trial-count-supplement} trial compositions supplied to a search gives a positive distance.
+At the other \res{mdea-merkley-searches-within-resolution-supplement}, at 333.15 and 388.71 K and 1.121 MPa, the smallest tangent-plane distance found is zero within its numerical resolution, the search does not assign the phase at that distance to the liquid or the vapor density root, and each of the \res{mdea-supplied-trial-count-supplement} trial compositions supplied to a search gives a positive distance.
 
 % P:supplement-phase-amp
 For AMP, the search covers \res{amp-reported-screen-measured-states-supplement} measured states and \res{amp-reported-screen-grid-states-supplement} grid states, all at 1.05 and 3.0 times the bubble pressure of the AMP model, the latter at \res{amp-reported-grid-minimum-stock-supplement} and \res{amp-reported-grid-maximum-stock-supplement} wt\% AMP, the \res{amp-reported-grid-temperatures-supplement} grid temperatures and \res{amp-reported-grid-loadings-supplement} loadings up to \res{amp-reported-grid-maximum-loading-supplement} mol/mol.
@@ -551,7 +562,8 @@ No search detects an instability.
 The grid ends at 393.15 K; the measured states, which extend to the Tong et al.\ pressures at 393.20 K, are searched at their own temperatures, and the AMP model was not searched above \res{amp-reported-screen-maximum-temperature} K.
 The AMP model and the fit without the pressures of Tong et al.\ and of Hartono et al.\ above \SI{353}{\kelvin} (Section~\ref{sec:s-amp-slope}) were also searched at the measured total pressures of \res{amp-measured-control-states-supplement} measured states, \res{amp-hartono-373-pressure-control-count-supplement} Hartono et al.\ states at 373 K and \res{amp-tong-measured-pressure-control-count-supplement} Tong et al.\ states, and that fit has a confirmed split at each.
 For the AMP model, the measured pressure lies below its bubble pressure at \res{amp-reported-liquid-vapor-qualified-controls-supplement} of them, the \res{amp-hartono-liquid-vapor-qualified-controls-supplement} Hartono states and \res{amp-tong-liquid-vapor-qualified-controls-supplement} Tong state at 373.2 K.
-There the equilibrium is liquid plus vapor, and the search does not decide whether a second liquid also forms; at the other \res{amp-reported-measured-pressure-control-no-descent-supplement} it detects no instability.
+There the equilibrium is liquid plus vapor; at the other \res{amp-reported-measured-pressure-control-no-descent-supplement} it detects no instability.
+At each liquid--vapor equilibrium a further search with \res{amp-third-liquid-trial-count-supplement} liquid trial compositions, near-pure neutral-species and mixed, finds no descent below the tangent plane of the equilibrium: every distance is zero within its error estimate, so no second liquid is found.
 
 % P:supplement-phase-worked-control
 The Hartono et al.\ state at \SI{373}{\kelvin}, \SI{\res{amp-worked-control-pressure}}{\kilo\pascal} and a loading of \res{amp-worked-control-loading} shows how a split is confirmed under the fit without the pressures of Tong et al.\ and of Hartono et al.\ above \SI{353}{\kelvin}.
@@ -562,7 +574,8 @@ Its residuals and element balances meet the row tolerance of $\res{amp-worked-co
 % P:supplement-phase-decision-rule
 A split is confirmed only when the two-liquid calculation meets the row tolerance with two positive phase amounts, its pressure, normalization and charge residuals and scaled element balances meet their tolerances, the two phases differ in composition or density beyond a fixed coincidence tolerance, each phase density matches a liquid root of the equation of state at its composition, and the decrease in Gibbs energy exceeds the summed numerical error estimates of the single liquid and the split.
 A trial that returns to the present liquid has a tangent-plane distance of zero and counts as no descent.
-A negative distance without a confirmed split does not decide the identity of the new phase, and a smallest distance that is zero within its numerical resolution leaves the state unclassified.
+A negative distance without a confirmed split does not identify the new phase.
+A state is unclassified when its search ends in an exception, or when the search cannot assign the present phase or a trial at its smallest distance to the liquid or the vapor density root; a smallest distance of zero within its numerical resolution is then not known to belong to the present liquid.
 
 \subsection{Weighting of the \COtwo-free MDEA pressures}\label{sec:s-mdea-bound}
 % P:supplement-bound-mdea
@@ -572,7 +585,7 @@ The MDEA model and the fit compared with it in main-text \cref{main-sec:results-
 Their \COtwo-free states are 13 MDEA mole fractions from 0.01 to 0.24 at each of 393, 403, 413, 413.15, 422.04 and 423 K and 1.466 MPa, searched without the reactions, and with them at each of these temperatures except 423 K.
 The interaction of the MDEA model lies below the onset value at each of the \res{mdea-binary-gap-tested-temperatures-supplement} tested temperatures from 290 to 423 K (main-text \cref{main-fig:mdea-gap-onset}).
 
-\subsection{AMP fit without the pressures of Tong et al.\ and of Hartono et al.\ above \SI{353}{\kelvin}}\label{sec:s-amp-slope}
+\subsection{AMP fits without the pressures of Tong et al.}\label{sec:s-amp-slope}
 % P:supplement-amp-without-hot
 The AMP model fits the \res{amp-reported-hot-hartono-fitted-pressure-count-supplement-additions} pressures of Hartono et al.\ at 373 and \SI{393}{\kelvin} and the \res{amp-reported-tong-fitted-pressure-count-supplement-additions} loaded pressures of Tong et al.\ at 313--\SI{393}{\kelvin}.
 The fit compared with it in main-text \cref{main-sec:results-phase} leaves these pressures out: it starts from the same initial vector and has the same shared base, parameters held at their MEA values, bounds and total weight of the loaded total pressures, so each of its loaded pressures weighs more.
@@ -581,6 +594,12 @@ Searched at the \res{amp-without-hot-screen-states-supplement} states of Section
 In each split one liquid holds less water and more AMP, \ce{AMPH+} and bicarbonate than the other.
 At 373--\SI{393}{\kelvin} that fit underpredicts every measured loaded total pressure of the two sources, by \res{amp-without-hot-hartono-aard-supplement} and \res{amp-without-hot-tong-aard-supplement}\,\% on average.
 The two fits differ in several parameters at once; the \ce{AMPH+}--water interaction $k_{\mathrm{AMPH^+,w}}$, for example, is $\res{amp-without-hot-cation-water-interaction-353}$ at \SI{353.15}{\kelvin} and $\res{amp-without-hot-cation-water-interaction-393}$ at \SI{393.15}{\kelvin} in that fit and $\res{amp-reported-cation-water-interaction-353}$ and $\res{amp-reported-cation-water-interaction-393}$ in the AMP model.
+
+% P:supplement-amp-without-tong
+A third fit with the same start, base, held parameters, bounds and total weight of the loaded total pressures leaves out only the loaded pressures of Tong et al., so that it fits all those of Hartono et al.
+Searched at the same states, it has no detected instability, and at the measured total pressures of Section~\ref{sec:s-phase} it detects none at \res{amp-without-tong-control-no-descent-supplement} and liquid plus vapor at \res{amp-without-tong-control-liquid-vapor-supplement}.
+At 373--\SI{393}{\kelvin} it deviates by \res{amp-without-tong-hartono-aard-supplement}\,\% from the Hartono et al.\ pressures, which it fits, and by \res{amp-without-tong-tong-aard-supplement}\,\% from the Tong et al.\ pressures, which it does not.
+The Hartono et al.\ pressures above \SI{353}{\kelvin} are therefore enough to remove the split of the fit without both sources.
 
 \section{Published comparisons}\label{sec:s-published}
 % P:supplement-published-table
@@ -614,7 +633,9 @@ For MDEA, three ePC-SAFT studies report deviations from the total pressures of K
 Uyan et al.\ report 19.22\,\% at 19 wt\% MDEA and 25.91\,\% at 32 wt\%, and 22.9\,\% for 82 observations \cite{Uyan2015}.
 Wangler et al.\ report 19.44\,\% at 32 wt\% and 19.7\,\% for 82 observations, and they redetermine the 82-observation value of Uyan et al.\ as 34.4\,\% \cite{Wangler2018}.
 Cleeton et al.\ report 20.26\,\% at 18.9 wt\% and do not state the formula of their deviation \cite{Cleeton2020}.
-The value of the MDEA model is calculated on the \res{mdea-source-matched-kuranov-count-supplement} total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only. Main-text Table~\ref{main-tab:published-models} lists those values beside this work on its loaded pressures at its fitted temperatures; on all these pressures, of which it fitted \res{mdea-fitted-kuranov-pressure-count-published-fit-coverage} loaded and \res{mdea-source-matched-kuranov-free-fitted-count} \COtwo-free ones, the MDEA model deviates by \res{mdea-kuranov-all-pressure-aard-supplement}\,\%.
+The value of the MDEA model is calculated on the \res{mdea-source-matched-kuranov-count-supplement} total pressures of Table~2 of Kuranov et al.\ matched to the source rows one by one; the published 82-observation values are identified with them by their count only.
+These include row 72, at 393.16 K and a measured \SI{\res{mdea-kuranov-row-72-measured-pressure}}{\mega\pascal}, which is not in the fitted set and is calculated at \SI{\res{mdea-kuranov-row-72-reported-reference-pressure}}{\mega\pascal}; it is among the held-out MDEA total pressures of main-text Table~\ref{main-tab:amine-summary}, but not in Table~\ref{tab:transfer-deviations} or Fig.~\ref{fig:pressure-residuals}.
+Main-text Table~\ref{main-tab:published-models} lists those values beside this work on its loaded pressures at its fitted temperatures; on all these pressures, of which it fitted \res{mdea-fitted-kuranov-pressure-count-published-fit-coverage} loaded and \res{mdea-source-matched-kuranov-free-fitted-count} \COtwo-free ones, the MDEA model deviates by \res{mdea-kuranov-all-pressure-aard-supplement}\,\%.
 The subset values are for different observation sets from the \res{mdea-fitted-kuranov-pressure-count-literature-subsets} pressures fitted here, from which the MDEA model deviates by \res{mdea-fitted-pressure-aard-literature-subsets}\,\%, and they are listed without a comparison.
 
 \bibliographystyle{styles/model1-num-names}

@@ -6,7 +6,7 @@ history: one paper and one supplement, merged from the former Parts I and II (#4
 scientific_claim: >
   An explicit-ion ePC-SAFT model describes CO₂ solubility in aqueous MEA, DEA, MDEA and AMP with four calibrations on one fixed base that no amine data determine: water, CO₂ and the inorganic ions, the CO₂–water interaction, the R1–R3 equilibrium constants, and water–bicarbonate and water–carbonate interactions fitted to sodium-salt osmotic coefficients.
   MEA is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities with literature equilibrium constants; DEA, MDEA and AMP are each fitted through their own species and DEA and AMP each hold two parameters at their MEA values.
-  Reactive, electroneutral phase-stability searches find no confirmed second liquid with any of the four models; for DEA the pressures of Lawson and Garst, for AMP the remaining loaded pressures added to a calibration with none above 353 K, and for MDEA the weight of the CO₂-free pressures decide whether a second liquid is predicted.
+  Reactive, electroneutral phase-stability searches find no confirmed second liquid with any of the four models; for DEA the pressures of Lawson and Garst, for AMP the Hartono pressures above 353 K, which remove the second liquid of a calibration without them and the Tong pressures, and for MDEA the weight of the CO₂-free pressures decide whether a second liquid is predicted.
   The models supply thermodynamic properties for absorber calculations within the property-specific ranges and deviations the paper reports.
 author:
   name: Tanner W. Polley
@@ -43,7 +43,6 @@ keywords:
   - diethanolamine
   - methyldiethanolamine
   - 2-amino-2-methyl-1-propanol
-  - electrolyte equation of state
   - phase stability
 repository: https://github.com/tannerpolley/Amine-Thermodynamics
 repository_license: MIT
@@ -79,6 +78,11 @@ parameter_records:
 comparison_fits:
   - 16-parameter MEA calibration (analyses/mea_parameter_bundle/results/reduced-refit/, fit F0)
   - AMP fit with the AMPH⁺–water temperature slope also fitted (analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/)
+  - DEA fit without the Lawson and Garst pressures (analyses/amines/results/move/dea/without-lawson/)
+  - MDEA fit that differs from the MDEA model only in the scale of the CO₂-free pressures (analyses/amines/results/move/mdea/without-binary-gap-bound/)
+  - AMP fit without the Tong pressures and the Hartono pressures above 353 K (analyses/amines/results/move/amp/without-hot-pressures/)
+  - AMP fit without the Tong pressures (analyses/amines/results/move/amp/without-tong/)
+  - DEA and AMP fits with the carbamate-hydrolysis correlation held at its starting form (analyses/amines/results/move/{dea,amp}/fixed-r4/)
 pdf_commit: 0ef6c1898  # builds whose hashes are recorded below
 pdf_sha256: a73a5812ff3c13a26c61286cc062cdbb53d75cca0acf5b263d18530dde30e3ea
 pdf_pages: 25

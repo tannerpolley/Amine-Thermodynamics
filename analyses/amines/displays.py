@@ -1210,9 +1210,13 @@ def transfer_displays(outputs):
         'and ' + conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
     ])
     pressure_note = r'AARD (Eq.~\eqref{eq:aard}) in \% with the number of observations in parentheses. $P$ is total pressure and $p_{\COtwo}$ is \COtwo partial pressure.'
-    table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', 'Fitted loaded-solution pressures', 'Held out within the fitted conditions', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
+    table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', 'Fitted loaded-solution pressures', 'Held-out pressures', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
           notes=pressure_note + ' The fitted conditions are the temperatures and nominal unloaded amine contents of the fitted loaded-solution pressures of ' + conditions + '. '
                 + f'All {count_word(len(amp_free))} held-out AMP total pressures are \\COtwo-free observations of Tong et al. '
+                r'The held-out pressures lie within the fitted conditions, except those marked b. '
+                + f'For DEA they are the {len(haji)} measured pressures of Haji-Sulaiman et al. at '
+                + span([r['T_K'] for r in haji], lambda t: f'{t:.0f}') + r' K; the smoothed pressures of Lee et al. and the values '
+                r'that Kennard and Meisen interpolated within these conditions are not measurements and are compared in Section~\ref{sec:results-dea}. '
                 r'Supplementary Table~\ref{supp-tab:transfer-deviations} gives deviations outside the fitted conditions. '
                 + ''.join(rf'\textsuperscript{{a}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified)
                 + r' \textsuperscript{b}Above the fitted MEA temperatures and not among the deviations outside the fitted conditions.')
@@ -1368,10 +1372,10 @@ def transfer_displays(outputs):
     SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2,detect-weight]'
     main_rows, other_rows = ([[r'\bfseries ' + str(c) for c in row] if str(row[0]).startswith(r'\quad This work') else row for row in rows] for rows in (main_rows, other_rows))
     TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. Bold: this work. '
-    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, at its fitted conditions, and of published models that report a deviation on each source, each over its own observations.',
+    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, at its fitted conditions and for MEA up to 353 K, and of published models that report a deviation on each source, each over its own observations.',
           COLUMNS, main_rows, [], spec=SPEC,
           notes=r'AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. ' + TERMS + r'Unclear: the source calls these results predictions in its methods and fitted in its conclusions. '
-                r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$, MDEA loaded pressures only; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
+                r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$, above the fitted 313--333 K, MDEA loaded pressures only; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
                 r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated fitting interval. \textsuperscript{c}15--60 wt\% MEA. '
                 rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi and Pahlavanzadeh \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
     table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources that this work did not fit.',
@@ -1867,10 +1871,10 @@ def mea_tables(outputs):
                 if source == 'CO2--water fit':
                     return source + note('b')
                 bound = active_pairs.get(unordered(f'pair/{s}/{u}/k_ij'))
-                return source + (note({'lower': 'c', 'upper': 'd'}[bound]) if bound else '')
+                return source + (note({'upper': 'c', 'lower': 'd'}[bound]) if bound else '')
             return [[symbol[s]+'--'+symbol[u]+mark*(errors and {s,u} <= set(shared_species)),pair(s,u,decimals=decimals),*[pair_se(s,u)]*errors,(pair(s,u,'/temperature_slope',decimals) + r'~K$^{-1}$' if source == 'Sodium-salt fit' else
                     pair(s,u,'/reciprocal_temperature_slope',decimals) + '~K' if pair(s,u,'/reciprocal_temperature_slope',decimals) != '--' else '--'),*[pair_se(s,u,'/reciprocal_temperature_slope')]*errors,ref(s,u,source)] for s,u,source in pair_specs]
-        table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. The two sodium-salt slopes are linear in $T-313.15\,\mathrm{K}$. $^{\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Fitted beforehand to \ce{CO2}--water pressures (Section~\ref{sec:parameters}). $^{\mathrm{c}}$On its lower bound. $^{\mathrm{d}}$On its upper bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.",
+        table('interaction_matrix.tex', r"Nonzero or fitted binary interaction parameters of the MEA model with their conditional standard errors (s.e.), $k_{ij}(T)=k_{ij}(313.15\,\mathrm{K})+b_{ij}(1/T-1/313.15\,\mathrm{K})$. || Bold: fitted in this work. A standard error is given for the jointly fitted values that are not on a bound; an absent slope is zero. The two sodium-salt slopes are linear in $T-313.15\,\mathrm{K}$. $^{\mathrm{a}}$Shared interaction, held fixed for DEA, MDEA and AMP. $^{\mathrm{b}}$Fitted beforehand to \ce{CO2}--water pressures (Section~\ref{sec:parameters}). $^{\mathrm{c}}$On its upper bound. $^{\mathrm{d}}$On its lower bound. All unlisted unlike-charge or neutral pairs have $k_{ij}=0$; same-sign ion dispersion is excluded. Table~\ref{supp-tab:supplement-interaction-matrix} gives unrounded values.",
               ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$','s.e.','Slope','s.e. (K)','Ref.'],pair_rows(4,True),['l','r','r','r','r','l'])
         table('supplement_interaction_matrix.tex', r"Binary interactions at full precision. || Bold values were fitted in this work. Sodium-salt slopes multiply $T-313.15\,\mathrm{K}$; slopes in kelvin multiply $1/T-1/(313.15\,\mathrm{K})$. All unlisted interactions and slopes are zero; same-sign ion dispersion is excluded.",
               ['Pair',r'$k_{ij}(313.15\,\mathrm{K})$','Slope','Source'],pair_rows(),['l','r','r','l'])
@@ -2575,6 +2579,90 @@ def result_values(required):
             ("gibbs-error", prose_scientific(attempt["numerical_error_over_RT_mol"], ".1e")),
             ("row-tolerance", prose_scientific(worked["row_tolerance"], None))):
         add(f"amp-worked-control-{name}", record, locator, value)
+
+    # Additional-liquid search of the AMP model at its liquid-vapor measured controls.
+    record = MOVE + "amp/reported/phase/third-liquid.json.gz"
+    third = read(record)["rows"]
+    liquid_vapor = {key for key, row in read(W_AMP_CONTROLS)["rows"].items() if row["outcome"] == "L+V passed; L+L unresolved"}
+    trials = {len(row["search"]["trials"]) for row in third.values()}
+    if third.keys() != liquid_vapor or len(trials) != 1 or any(
+            not row["search"]["completed"] or not row["search"]["no_descent_in_trial_set"]
+            or any(t["kind"] != "Liquid" or t["descent"]
+                   or abs(t["quantities"]["tpd_over_rt"]) > t["quantities"]["plane_value_error_estimate_over_rt"]
+                   for t in row["search"]["trials"]) for row in third.values()):
+        raise ValueError("The additional-liquid search no longer finds no descent at every liquid-vapor AMP control")
+    for passage in ("abstract", "transfer", "limits", "conclusion", "supplement"):
+        add(f"amp-third-liquid-trial-count-{passage}", record, "rows[].search.trials.count (per state)",
+            count_word(next(iter(trials))))
+
+    # AMP fit without the Tong et al. pressures: Hartono et al. above 353 K fitted, Tong et al. predicted.
+    record = MOVE + "amp/without-tong/phase/supplied.json.gz"
+    search = read(record)
+    if ({row["key"] for row in distinct_phase_rows(search)} != {row["key"] for row in distinct_phase_rows(read(W_AMP_WITHOUT_HOT))}
+            or any(search_class(row) != "searched, no instability" for row in distinct_phase_rows(search))):
+        raise ValueError("The AMP fit without the Tong et al. pressures no longer has no detected instability at the states searched for the other fits")
+    record = MOVE + "amp/without-tong/phase/measured-controls.json.gz"
+    controls = read(record)["rows"]
+    if controls.keys() != read(W_AMP_CONTROLS)["rows"].keys() or any(row["outcome"] == "confirmed split" for row in controls.values()):
+        raise ValueError("The AMP fit without the Tong et al. pressures no longer has no split at the measured controls")
+    for name, outcome in (("no-descent", "No resolved descent"), ("liquid-vapor", "L+V passed; L+L unresolved")):
+        add(f"amp-without-tong-control-{name}-supplement", record, f"rows[outcome {outcome}].count",
+            count_word(sum(row["outcome"] == outcome for row in controls.values())))
+    record = MOVE + "amp/without-tong/properties/summary.json.gz"
+    rows = [r for r in read(record)["rows"] if r["unit"] == "Pa" and r["status"] == "Available"]
+    for source, group, role in (("hartono", "hartono-2021-supplemental", "fitted"), ("tong", "tong", "not fitted")):
+        hot = [r for r in rows if r["group"] == group and r["T_K"] >= 373.]
+        if {r["role"] for r in hot} != {role}:
+            raise ValueError(f"The {group} pressures from 373 K are no longer all {role} in the AMP fit without Tong et al.")
+        score = stats(hot, predicted="value")["AARD_percent"]
+        for passage, digits in (("supplement", 2), ("transfer", 1)):
+            add(f"amp-without-tong-{source}-aard-{passage}", record, f"rows[{group}, Pa, T >= 373 K]: AARD",
+                f"{score:.{digits}f}")
+
+    # Carbamate-hydrolysis correlation held at its starting form (sensitivity of the reported DEA and AMP fits).
+    for amine, source in (("dea", DEA_R4_SOURCE), ("amp", AMP_R4_SOURCE)):
+        record = MOVE + f"{amine}/fixed-r4/properties/summary.json.gz"
+        comparison = read(record)["comparison"]
+        start = source_r4(source)
+        held = comparison["reaction_correlations"]["fixed_r4"]
+        if (held["a"], held["b"]) != (start["a"], start["b"]) or comparison["active_bounds"]["fixed_r4"]:
+            raise ValueError(f"The {amine.upper()} fixed-R4 fit no longer holds the starting correlation off its bounds")
+        for fit in ("reported", "fixed_r4"):
+            label = fit.replace("_", "-")
+            for passage, digits in (("transfer", ".3g"), ("supplement", ".4g")):
+                add(f"{amine}-fixed-r4-{label}-objective-{passage}", record, f"comparison.objective.{fit}",
+                    format(comparison["objective"][fit], digits))
+        add(f"{amine}-fixed-r4-reported-bound-count-supplement", record, "comparison.active_bounds.reported.count",
+            count_word(len(comparison["active_bounds"]["reported"]), zero="no"))
+        groups = {(s["group"], s["role"], s["unit"]): s for s in comparison["statistics"]}
+        for name, group, passages in {
+            "dea": (("lawson", ("Lawson", "fitted", "Pa"), ("transfer", "supplement")),
+                    ("lal", ("Lal", "fitted", "Pa"), ("supplement",)),
+                    ("carson", ("Carson", "fitted", "J/mol CO2"), ("supplement",)),
+                    ("seo-hong", ("SeoHong", "not fitted", "Pa"), ("supplement",))),
+            "amp": (("nmr", ("nmr", "fitted", "dimensionless"), ("transfer", "supplement")),
+                    ("tong", ("tong", "fitted", "Pa"), ("transfer", "supplement")),
+                    ("hartono", ("hartono-2021-supplemental", "fitted", "Pa"), ("supplement",)),
+                    ("loaded", ("loaded-pressure", "fitted", "Pa"), ("supplement",))),
+        }[amine]:
+            for fit in ("reported", "fixed_r4"):
+                value = groups[group][fit]["AARD_percent"]
+                for passage in passages:
+                    add(f"{amine}-fixed-r4-{name}-{fit.replace('_', '-')}-aard-{passage}", record,
+                        f"comparison.statistics[{', '.join(group)}].{fit}.AARD_percent",
+                        f"{value:.{1 if passage == 'transfer' else 2}f}")
+
+    # Zheng et al. heats at the calculated saturation loading, where the measured final loading lies above it.
+    record = MOVE + "mdea/reported/zheng-saturation/summary.json.gz"
+    zheng = read(record)
+    if any(r["calculated_loading"] >= r["measured_loading"] or not r["measured_loading_phase"]["vapor_descent"]
+           for r in zheng["rows"]):
+        raise ValueError("A Zheng et al. state no longer saturates below its measured loading with a vapor at that loading")
+    for passage, digits in (("transfer", 1), ("supplement", 2)):
+        add(f"mdea-zheng-saturation-states-{passage}", record, "len(rows)", count_word(len(zheng["rows"])))
+        for name, field in (("saturation-loading", "loading"), ("saturation-heat", "heat_at_calculated_loading")):
+            add(f"mdea-zheng-{name}-aard-{passage}", record, f"statistics.{field}.AARD_percent",
+                f"{zheng['statistics'][field]['AARD_percent']:.{digits}f}")
     for amine in ("mea", "amp"):
         record = MOVE + f"{amine}/reported/alternate-starts/summary.json.gz"
         count = read(record)["tied_count"]
@@ -2710,12 +2798,12 @@ def result_values(required):
     grid_rows, census_rows = (read(p)["rows"] for p in (mea_grid, mea_census))
     measured_rows = distinct_mea_measured_rows(read(mea_measured))
     census_classes = collections.Counter(row["classification"] for row in census_rows)
-    for passage in ("transfer", "supplement"):
+    for passage in ("transfer", "supplement", "limits"):
         add(f"mea-liquid-grid-requests-{passage}", mea_grid, "len(rows)", str(len(grid_rows)))
         add(f"mea-measured-state-search-requests-{passage}", mea_measured, "distinct measured states by temperature, pressure and composition", str(len(measured_rows)))
         add(f"mea-census-two-phase-parent-count-{passage}", mea_census, "rows[passed-two-phase].count",
             str(census_classes["passed-two-phase"]))
-    for passage in ("transfer-all", "transfer-outcomes", "supplement"):
+    for passage in ("transfer-all", "transfer-outcomes", "supplement", "limits"):
         add(f"mea-liquid-vapor-census-requests-{passage}", mea_census, "len(rows)", str(len(census_rows)))
     for population, count in collections.Counter(r["key"].split("|", 1)[0] for r in grid_rows).items():
         add(f"mea-liquid-grid-{population}-requests", mea_grid, f"rows[{population}].count", str(count))
@@ -2873,9 +2961,9 @@ def result_values(required):
     record = STUDY + "results/MDEA/property-comparisons/A.json.gz"
     row72 = read(record)["additional_Kuranov_72"]
     add("mdea-kuranov-row-72-reported-reference-pressure", record, "additional_Kuranov_72.value / 1e6",
-        f"{row72['value']/1e6:.6f}")
+        f"{row72['value']/1e6:.4f}")
     add("mdea-kuranov-row-72-measured-pressure", record, "additional_Kuranov_72.observed / 1e6",
-        f"{row72['observed']/1e6:.6f}")
+        f"{row72['observed']/1e6:.4f}")
 
     record = W_MDEA_BINARY
     count = len(read(record)["rows"])
@@ -3628,6 +3716,15 @@ def result_values(required):
     activity = read(record)
     pool = activity["carbonate_pool"]
     add("mea-reported-jakobsen-carbonate-pool-states", record, "len(carbonate_pool)", NUMBER_WORDS[len(pool)])
+    share_states = {row["id"] for row in read(temperatures_record)}
+    shared = [row for row in pool if row["identity"].split(":", 1)[0] in share_states]
+    additional = [row for row in pool if row not in shared]
+    if min(row["loading"] for row in additional) <= max(row["loading"] for row in shared):
+        raise ValueError("The Jakobsen et al. carbonate-pool states outside the carbonate-share set no longer lie above its loadings")
+    add("mea-jakobsen-carbonate-pool-share-states", (record, temperatures_record),
+        "carbonate_pool[state id in carbonate-share.csv].count", count_word(len(shared)))
+    add("mea-jakobsen-carbonate-pool-additional-states", (record, temperatures_record),
+        "carbonate_pool[state id not in carbonate-share.csv].count", count_word(len(additional)))
     for label, select, precision in (("minimum", min, ".1e"), ("maximum", max, ".3f")):
         value = select(row["carbonate_pool_split"] for row in pool if row["available"])
         add(f"mea-reported-carbonate-pool-ratio-{label}", record,
