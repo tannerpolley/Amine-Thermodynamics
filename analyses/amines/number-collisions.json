@@ -963,22 +963,6 @@
     "context": "1",
     "token": "1",
     "reason": "definition",
-    "statement": "(r'\\COtwo-free pressures of Kuranov et al.', 'Kuranov-binary', '1'),",
-    "literal": true
-  },
-  {
-    "file": "analyses/amines/displays.py",
-    "context": "1",
-    "token": "1",
-    "reason": "definition",
-    "statement": "('Mixture and pure-water pressures of Kim et al.', 'Kim', '1'),",
-    "literal": true
-  },
-  {
-    "file": "analyses/amines/displays.py",
-    "context": "1",
-    "token": "1",
-    "reason": "definition",
     "statement": "return '1'",
     "literal": true
   },
@@ -1021,7 +1005,7 @@
     "context": "$1/",
     "token": "1",
     "reason": "equation",
-    "statement": "['MDEA', 'Loaded total pressures of Kuranov et al.', '0.015', f'$1/{kuranov_count}$'],",
+    "statement": "['MDEA', 'Loaded total pressures of Kuranov et al.', mdea_pressure_scale, f'$1/{kuranov_count}$'],",
     "literal": true
   },
   {
@@ -1181,14 +1165,6 @@
     "token": "30",
     "reason": "condition",
     "statement": "notes=r'Absorber: $T\\le\\SI{353.2}{\\kelvin}$; stripper: $T\\ge\\SI{370}{\\kelvin}$; intermediate: between the two. Fitted observations are in the objective of the MEA model; no loaded-solution observation at or above \\SI{370}{\\kelvin} is fitted, and all were examined during development; ' + cai_high + r'. AARD follows Eq.~\\eqref{main-eq:aard}; MSRD is the mean of $100\\,(y^{\\mathrm{calc}}-y^{\\mathrm{obs}})/y^{\\mathrm{obs}}$, negative where the calculated value is low. Pressures are at nominal 30 wt\\% MEA unless stated. Absorption heats are heat releases per mole of \\COtwo as each source defines them; the heats of Kim and Svendsen, Kim et al.\\ and Vinjarapu et al.\\ are calculated at \\SI{1.734}{\\mega\\pascal}, the pressure reported by Vinjarapu et al. '",
-    "literal": true
-  },
-  {
-    "file": "analyses/amines/displays.py",
-    "context": "comparison:363:final",
-    "token": "363",
-    "reason": "identifier",
-    "statement": "cold_control, = (q for q in mdea_control_data if q[\"key\"]==\"comparison:363:final\" and q[\"label\"]==\"reported water-bicarbonate only\")",
     "literal": true
   },
   {
@@ -1595,12 +1571,6 @@
   },
   {
     "file": "docs/scientific/latex/supplement.tex",
-    "context": "and \\SI{0.7}{\\mega\\pascal} at higher temperatures",
-    "token": "0.7",
-    "reason": "condition"
-  },
-  {
-    "file": "docs/scientific/latex/supplement.tex",
     "context": "at 1.5 times the bubble pressure",
     "token": "1.5",
     "reason": "condition"
@@ -1722,5 +1692,62 @@
     "context": "about \\SI{7.0}{\\mega\\pascal}",
     "token": "7.0",
     "reason": "condition"
+  },
+  {
+    "file": "docs/scientific/latex/sections/epc_saft_equation_of_state.tex",
+    "context": "4\\pi\\varepsilon_0k_BT",
+    "token": "4",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "\\right)^4}",
+    "token": "4",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "4\\pi\\varepsilon_0|",
+    "token": "4",
+    "reason": "equation"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "\\SI{4.0}{\\angstrom}",
+    "token": "4.0",
+    "reason": "condition",
+    "count": 2
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "at most 0.60 mol",
+    "token": "0.60",
+    "reason": "condition"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "their Fig.~4;",
+    "token": "4",
+    "reason": "identifier"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "0.025--0.6 mol/mol",
+    "token": "0.6",
+    "reason": "condition"
+  },
+  {
+    "file": "docs/scientific/latex/supplement.tex",
+    "context": "0.5 and 0.6 mol/mol",
+    "token": "0.6",
+    "reason": "condition"
+  },
+  {
+    "file": "analyses/amines/displays.py",
+    "context": "raeispour-table-4.json",
+    "token": "4",
+    "reason": "identifier",
+    "literal": true,
+    "statement": "krae = read(K422 + 'raeispour-table-4.json')"
   }
 ]

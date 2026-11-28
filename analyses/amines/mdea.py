@@ -538,6 +538,44 @@ def binary_stability_search(route, point, *, reactive=False):
     return result
 
 
+def loaded_split_state(route, point):
+    """Revisit the 363.15 K split at its retained absolute and bubble-relative pressures."""
+    from .phase import fixed_control, stability_row
+
+    source = ROOT / "analyses/mdea_mea_workflow/results/phase-search-421/fixed-pressure.json"
+    reference = read(source)
+    spec = route.bind(point)
+    feed = reference["feed"]
+    state = dict(key="historical-loaded-split", T=reference["T_K"],
+                 stock={W: feed[W], MDEA: feed[MDEA]}, a=feed[CO2] / feed[MDEA], c=1.05)
+    pair = next(attempt for attempt in reference["attempts"] if attempt["confirmed"])
+    seed = dict(pair=pair)
+    fixed = fixed_control(route, spec, state, reference["P_Pa"], seed, mdea=True)
+    item = stability_row(route, spec, state, 1.0)
+    bubble = equilibrium.solve_equilibrium(spec.model, item.pressure_reference)
+    relative = dict(bubble_pressure_Pa=bubble.pressure, message=bubble.message,
+                    residual=bubble.convergence.residual, tolerance=item.problem.row_tolerance,
+                    requested_tolerance_met=bubble.requested_tolerance_met)
+    bubble_pressure = bubble.pressure if bubble.requested_tolerance_met else None
+    if bubble_pressure is None and fixed.get("liquid_vapor", {}).get("qualified"):
+        # Use pressure-closed liquid and vapor at the same feed to initialize the incipient vapor.
+        start = fixed["liquid_vapor"]
+        problem = item.pressure_reference
+        problem.pressure = type(problem.pressure).variable(reference["P_Pa"])
+        for phase, result, packing in zip(problem.phases, start["phases"], start["packings"], strict=True):
+            phase.composition_guess = [result["x"][j] for j in phase.support]
+            phase.packing_guess = packing
+        candidate = equilibrium.solve_equilibrium(spec.model, problem)
+        relative["from_fixed_coexistence"] = dict(
+            bubble_pressure_Pa=candidate.pressure, message=candidate.message,
+            residual=candidate.convergence.residual, requested_tolerance_met=candidate.requested_tolerance_met)
+        if candidate.requested_tolerance_met:
+            bubble_pressure = candidate.pressure
+    if bubble_pressure is not None:
+        relative["search"] = fixed_control(route, spec, state, state["c"] * bubble_pressure, seed, mdea=True)
+    return dict(source=source.relative_to(ROOT).as_posix(), state=state, fixed=fixed, relative=relative)
+
+
 def binary_gap(point):
     """Replay the isothermal binary bounds and follow the fitted law through onset."""
     import numpy as np
@@ -605,7 +643,7 @@ def binary_gap(point):
     finally:
         terms[0]["magnitude"] = intercept
     old = read(ROOT / "analyses/fixed_reaction_reference/results/display-replays/mdea-binary-onset.json.gz")
-    brackets = {}
+    brackets, tested = {}, {}
     for p in old["pressures"]:
         p = float(p)
         onset = []
@@ -613,15 +651,17 @@ def binary_gap(point):
             lo, hi = interval["adjacent_K"]
             if hull(lo, p, refined=True) or not hull(hi, p, refined=True):
                 lo, hi = 422.04, 430.
-                if hull(lo, p, refined=True) or not hull(hi, p, refined=True):
-                    raise ValueError(f"MDEA binary fitted law at {p} Pa: cannot bracket onset")
+            low, high = hull(lo, p, refined=True), hull(hi, p, refined=True)
+            tested[str(int(p))] = dict(temperatures_K=[lo, hi], gaps=[low, high])
+            if low or not high:
+                continue
             while hi-lo > .01:
                 mid = (lo+hi)/2
                 lo, hi = (lo, mid) if hull(mid, p, refined=True) else (mid, hi)
             onset.append([lo, hi])
         brackets[str(int(p))] = onset
     return dict(wheel=verify(), endpoint_fingerprint=fingerprint(point),
-                pressure_Pa=pressure, compositions=len(x), rows=rows, brackets_K=brackets)
+                pressure_Pa=pressure, compositions=len(x), rows=rows, brackets_K=brackets, onset_tests=tested)
 
 
 def move_property_cases(route, point):
@@ -656,9 +696,13 @@ def move_property_cases(route, point):
 
 
 def replay_published(declaration):
+    from .fit import retained_endpoint, route_for
+
+    reported = FIT_SETS["reported"]
+    point, selection = retained_endpoint(reported)
+    route = route_for(reported)
+    spec = route.bind(point)
     rows = [dict(row, alpha=row["m_co2"] / row["m_mdea"]) for row in kuranov_rows(declaration["observations"])]
-    route = Route(declaration["specification"], reference_pressure_pa=None)
-    spec = route.bind(read(declaration["endpoint"]))
     restore = next(row for row in rows if row["row"] == declaration["restored_row"])
     records = replay_records(spec, restore)
     predictions = [
@@ -722,15 +766,30 @@ def replay_published(declaration):
         )
         for r in stats["reconstruction"]
     ]
-    return dict(kuranov=rows, wangler=own, statistics=dict(present=present, reconstruction=reconstruction))
+    source = read(declaration["ermatchkov"])
+    properties = read(reported["retained"].parent / "properties/summary.json.gz")
+    if properties["endpoint_fingerprint"] != selection["endpoint_fingerprint"]:
+        raise ValueError("Published pressure comparison requires properties from the reported endpoint")
+    for comparison in source["comparisons"]:
+        ids = set(comparison["row_ids"])
+        candidates = [r for r in properties["rows"] if r["identity"] in ids]
+        if len(candidates) != comparison["measured_rows"] or {r["identity"] for r in candidates} != ids:
+            raise ValueError(f"{comparison['group']}: published comparison population changed")
+        predictions = [dict(row=r["identity"], p_exp=r["observed"],
+                            present=dict(pressure_Pa=r["value"] if census_status(r) == "Available" else None))
+                       for r in candidates]
+        comparison["selected_point_mean_absolute_relative_deviation_percent"] = pressure_deviation(
+            predictions, "present")["AARD_percent"]
+    return dict(endpoint_fingerprint=selection["endpoint_fingerprint"], kuranov=rows, wangler=own,
+                statistics=dict(present=present, reconstruction=reconstruction),
+                comparisons=source["comparisons"])
 
 
 FIT_SETS = {
     "published": dict(
         replay=replay_published,
         archive=CAMPAIGN_ARCHIVE,
-        specification=DECLARATION,
-        endpoint=BOUNDED_BINARY / "endpoint.json",
+        ermatchkov=BOUNDED_BINARY / "published-pressure-comparisons.json",
         observations=ROOT / "data/reference/MDEA/Kuranov_1996_CO2_MDEA_total_pressure.csv",
         restored_row=72,
         reference={
@@ -739,39 +798,27 @@ FIT_SETS = {
             "statistics": BOUNDED_BINARY.parent / "kuranov-published-422/statistics.json",
         },
     ),
-    "water-bicarbonate-ablation": dict(
-        route=NonDigitizedHeats,
-        declaration=DECLARATION,
-        reference_pressure_pa=P_REF,
-        archive=CAMPAIGN_ARCHIVE,
-        endpoint=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
-        endpoint_keys=("endpoint",),
-        reference=RESULTS / "mdea/water-bicarbonate-ablation/fit/A.json.gz",
-        reference_keys=("replay",),
-        retained=RESULTS / "move/mdea/water-bicarbonate-ablation/fit",
-    ),
     "without-binary-gap-bound": dict(
-        retained=RESULTS / "move/mdea/without-binary-gap-bound/fit",
-    ),
-    "reported": dict(
         route=NonDigitizedHeats,
         declaration=DECLARATION,
-        retained=RESULTS / "move/mdea/reported/fit",
-        preserved=RESULTS / "mdea/reported/fit",
         reference_pressure_pa=P_REF,
+        retained=RESULTS / "move/mdea/without-binary-gap-bound/fit",
         maximum_seconds=10980,
         replay_tolerance=1e-8,
     ),
-    "weighted-binary": dict(
+    "reported": dict(
         route=WeightedBinaryPressures,
         declaration=DECLARATION,
+        retained=RESULTS / "move/mdea/reported/fit",
         reference_pressure_pa=P_REF,
-        retained=RESULTS / "move/mdea/weighted-binary/fit",
-        fit_from="reported",
         maximum_seconds=900,
         replay_tolerance=1e-8,
     ),
 }
+
+FIT_SETS["water-bicarbonate-ablation"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mdea/water-bicarbonate-ablation/fit",
+)
 
 FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/mdea/water-anion-control/fit",
@@ -781,11 +828,6 @@ FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
 FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
     retained=RESULTS / "move/mdea/common-pressure-weight/fit",
     pressure_log_scale=0.05,
-)
-
-FIT_SETS["weighted-binary-without-gap-bound"] = FIT_SETS["weighted-binary"] | dict(
-    retained=RESULTS / "move/mdea/weighted-binary-without-gap-bound/fit",
-    without_binary_gap_bound=True,
 )
 
 REPORTED_SET = "reported"

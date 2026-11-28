@@ -34,12 +34,7 @@ TABLES = LATEX / "tables"
 MEA_REPORTED_PROPERTIES = "analyses/amines/results/mea/reported/properties/uncertainty-and-activities.json.gz"
 GIBBS_DERIVATIVES = "analyses/amines/results/shared/properties/gibbs-derivatives.json"
 FIT_SUMMARY = "analyses/amines/results/shared/fit/display-summary.json.gz"
-PHASE_SUMMARY = "analyses/amines/results/shared/phase/display-summary.json.gz"
-PROPERTY_SUMMARY = "analyses/amines/results/shared/properties/display-summary.json.gz"
-MDEA_SCREEN = "analyses/amines/results/mdea/reported/phase/MDEA/screen/selected/declared/summary.json.gz"
 AMP_SCREEN = "analyses/amines/results/amp/reported/phase/AMP_free/screen/selected/supplied/summary.json.gz"
-MDEA_RESTRICTED_GRID = "analyses/amines/results/mdea/reported/phase/diagnosis/restricted-grid.json.gz"
-MDEA_ZHENG = "analyses/amines/results/mdea/reported/phase/diagnosis/zheng-row-6.json"
 KURANOV_DATA = "data/reference/MDEA/Kuranov_1996_CO2_MDEA_total_pressure.csv"
 AMP_PURE_INPUT = "analyses/amp_transfer/inputs/amp-pure-endpoint.json"
 MOVE = "analyses/amines/results/move/"
@@ -53,6 +48,10 @@ W_MDEA_PROPERTIES = MOVE + "mdea/reported/properties/summary.json.gz"
 W_MEA_PHASE = MOVE + "mea/reported/phase/"
 W_SALT = MOVE + "salt/sodium-salts/fit/summary.json.gz"
 W_MDEA_BINARY = MOVE + "mdea/reported/phase/binary-gap.json.gz"
+W_MDEA_NEUTRAL = MOVE + "mdea/reported/phase/binary-neutral.json.gz"
+W_MDEA_REACTIVE = MOVE + "mdea/reported/phase/reactive-zero-loading.json.gz"
+W_MDEA_UNWEIGHTED_REACTIVE = MOVE + "mdea/without-binary-gap-bound/phase/reactive-zero-loading.json.gz"
+W_MDEA_PUBLISHED = MOVE + "mdea/published/replay/endpoint.json.gz"
 W_MDEA_WITHOUT_GAP_BOUND = MOVE + "mdea/without-binary-gap-bound/phase/summary.json.gz"
 W_ABLATION = MOVE + "shared/properties/water-bicarbonate-ablation.json.gz"
 W_MEA_ABLATION_FIT = MOVE + "mea/water-bicarbonate-ablation/fit/A.json.gz"
@@ -97,6 +96,7 @@ def register_records(catalog):
     }.items():
         record_paths[STUDY + "results/" + source] = MOVE + f"mea/reported/properties/{target}.json.gz"
     record_paths[MEA_REPORTED_PROPERTIES] = MOVE + "mea/reported/properties/uncertainty-and-activities.json.gz"
+    record_paths[STUDY + "results/MDEA/manifest.json.gz"] = MOVE + "mdea/reported/fit/manifest.json.gz"
     record_paths[STUDY + "results/MDEA/property-comparisons/A.json.gz"] = W_MDEA_PROPERTIES
 
 
@@ -269,6 +269,11 @@ def amp_pure_coordinate_count():
         key in edge for edge in edges for key in ("energy_over_k", "volume"))
 
 
+def mdea_binary_pressure_scale(manifest):
+    rows = [row for row in manifest["rows"]["fitted"] if row["group"] == "Kuranov-binary"]
+    return 1 / math.sqrt(len(rows) * rows[0]["weight"])
+
+
 def mdea_pressure_comparisons():
     result = read(W_MDEA_PROPERTIES)
     selected = mdea_kuranov_rows(result)
@@ -376,8 +381,6 @@ def transfer_displays(outputs):
 
     fixed = FixedReference(read)
     fit_summary = read(FIT_SUMMARY)
-    phases = read(PHASE_SUMMARY)
-    property_summary = read(PROPERTY_SUMMARY)
     amp_outcomes = read(W_AMP_CONTROLS)['rows']
     amp_enthalpy = fit_summary['amp_enthalpy']
 
@@ -554,7 +557,6 @@ def transfer_displays(outputs):
         ax.legend(fontsize=8, loc='center' if group=='Horstmann' else 'upper right')
     figure(fig,'dea-current-binary-comparisons.pdf')
     # MDEA and AMP: the same displays, built from each amine's retained files.
-    MD = 'analyses/mdea_mea_workflow/results/bounded-binary-411/'  # the reported MDEA fit: k(MDEA-water) at 423 K bounded at the CO2-free gap onset
     critical = read(W_MDEA_BINARY)
     fig, ax = plt.subplots(figsize=(3.2, 2.7), constrained_layout=True)
     def mdea_water(point):
@@ -804,16 +806,12 @@ def transfer_displays(outputs):
     main_fit = [r for r in columns(3, lambda r: r[:3]) if not r[0].startswith('R4 change')]
     starts = [i for i, r in enumerate(main_fit) if len(r) == 1] + [len(main_fit)]
     dea_fit, mdea_fit, amp_fit = (main_fit[i + 1:j] for i, j in zip(starts, starts[1:]))
-    mdea_bounds = fixed.fits['MDEA']['diagnostics']['active_bounds']
-    mdea_water_bound = mdea_bounds.get('pair/mdea-water/k_ij/a0 / temperature_law_coefficient')
-    mdea_bound_note = (r'\textsuperscript{a}On its upper bound, which keeps the \COtwo-free MDEA--water solution a single liquid (Section~\ref{sec:methods-phase}); no standard error is assigned. '
-                       if mdea_water_bound == 'upper' else '')
     amp_bounds = fixed.fits['AMP_free']['diagnostics']['active_bounds']
     amp_bound_note = (r'\textsuperscript{a}On its lower bound; no standard error is assigned. '
                       if all(amp_bounds.get(key) == 'lower' for key in ('AMPCOO-segment-diameter', 'AMP-hydrolysis-enthalpy-increment')) else '')
     enthalpy_note = r'$\delta h$ is measured from the starting R4 correlation of Table~\ref{tab:reaction-equilibrium-constants}; the final R4 coefficients include it (Table~\ref{supp-tab:supplement-transfer-parameters}). '
     errors_note = r'Standard errors follow Eq.~\eqref{eq:conditional-covariance}; Table~\ref{supp-tab:supplement-transfer-bounds} gives the bounds.'
-    for name, label, rows_, note in (('dea-fitted', 'DEA', dea_fit, enthalpy_note), ('mdea-fitted', 'MDEA', mdea_fit, mdea_bound_note),
+    for name, label, rows_, note in (('dea-fitted', 'DEA', dea_fit, enthalpy_note), ('mdea-fitted', 'MDEA', mdea_fit, ''),
                                      ('amp-fitted', 'AMP', amp_fit, amp_bound_note + enthalpy_note)):
         table(name, f'Fitted parameters of the {label} model.', ['Parameter', 'Value', 'Standard error'], rows_, [.46, .2, .2],
               notes='Bold: fitted in this work. ' + note + errors_note)
@@ -824,7 +822,7 @@ def transfer_displays(outputs):
     for key, who in [('Klepacova2011', r"Klep\'a\v{c}ov\'a et al.\ \cite{klepacovaVaporPressuresSeveral2011}"), ('Belabbaci2010', r'Belabbaci et al.\ \cite{belabbaciInvestigationIsothermalVapour2010}'), ('Pappa2006', r'Pappa et al.\ \cite{pappaMeasurementThermodynamicModeling2006}'), ('Ayad2023', r'Ayad et al.\ \cite{ayadMeasurementsModelingThermodynamic2023}')]:
         g, t = apure['groups'][key], [r['T_K'] for r in apure['rows'] if r['campaign'] == key]
         data_rows.append([who, g['metric'], ROLE[g['role']], str(g['n']), span(t, lambda v: num(v,2)), 'pure AMP', '---', '---', '---', *([num(g['AARD_percent'],2), num(g['signed_relative_bias_percent'],2)] if 'AARD_percent' in g else [r'---\textsuperscript{b}', '---'])])
-    mdea_literature = read(MD + 'published-pressure-comparisons.json')['comparisons']
+    mdea_literature = read(W_MDEA_PUBLISHED)['comparisons']
     literature_by_source = {
         MSETS[group['group']][0] + r' \cite{' + MSETS[group['group']][1] + '}':
         ' / '.join(f"{published['mean_absolute_relative_deviation_percent']:g}"
@@ -1257,7 +1255,7 @@ def transfer_displays(outputs):
     # Biget et al., Results: 19 % on the 30 wt% Aronu pressures, which they fitted, with no count or temperatures.
     other_rows += [head(r'Aronu et al.\ \cite{Aronu2011}, MEA $p_{\COtwo}$', 5), ours(mea_points['Aronu']),
                    [r'\quad extended UNIQUAC \cite{bigetDevelopmentThermodynamicIdentification2015a}', 'yes', '--', '--', '19'], theirs(aronu, r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{a}')]
-    mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
+    mpub = read(W_MDEA_PUBLISHED)['comparisons']
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
     k82_adopted, r9_kamps = mdea_pressure_comparisons()
     # Ermatchkov et al., their Table 5: their 101 pressures at 313-393 K and the 28 corrected Kamps pressures at 314-395 K, the counts of this work.
@@ -1379,16 +1377,18 @@ def transfer_displays(outputs):
     table('supplement-objective-contributions', 'Contribution of each fitted data set to the objective value of its reported model.', ['Data set', '$N$', 'Contribution', r'Share (\%)'], crow, [.52, .08, .14, .12],
           notes=r'The objective is that of main-text Eq.~(\ref{main-eq:fit-objective}) with the scales and weights of Tables~\ref{tab:objective-groups} and \ref{tab:transfer-scales}; values of different amines are not comparable. \textsuperscript{a} Fitted beforehand and constant in the reactive objective.')
     weighted_rows = fixed.fits['MDEA']['replay']['rows']
+    manifest = read(MOVE + "mdea/reported/fit/manifest.json.gz")
+    mdea_pressure_scale = f"{mdea_binary_pressure_scale(manifest):g}"
     kuranov_count = sum(row['group'] == 'Kuranov' for row in weighted_rows)
     pressures = sum(row['unit'] == 'Pa' for row in fixed.fits['DEA']['replay']['rows'])
     scale_rows = [
         ['DEA', r'\COtwo partial pressures', '0.09', f"average over {pressures} pressures"],
         ['', 'Integral absorption heats', r'$0.02\,|y_l^{\mathrm{obs}}|$', f"average over {sum(row['group'] == 'Carson' for row in fixed.fits['DEA']['replay']['rows'])} heats"],
-        ['MDEA', 'Loaded total pressures of Kuranov et al.', '0.015', f'$1/{kuranov_count}$'],
+        ['MDEA', 'Loaded total pressures of Kuranov et al.', mdea_pressure_scale, f'$1/{kuranov_count}$'],
     ]
     for label, group, scale in [
-            (r'\COtwo-free pressures of Kuranov et al.', 'Kuranov-binary', '1'),
-            ('Mixture and pure-water pressures of Kim et al.', 'Kim', '1'),
+            (r'\COtwo-free pressures of Kuranov et al.', 'Kuranov-binary', mdea_pressure_scale),
+            ('Mixture and pure-water pressures of Kim et al.', 'Kim', mdea_pressure_scale),
             ('Species ratios of Jakobsen et al.', 'Jakobsen', r'$0.10\,|y_l^{\mathrm{obs}}|$'),
             ('Heat capacities', 'Cp', r'$0.02\,|y_l^{\mathrm{obs}}|$'),
             ('Integral absorption heats, Carson et al.', 'Carson', r'max(3000 J/mol, $0.05\,|y_l^{\mathrm{obs}}|$)'),
@@ -1407,7 +1407,7 @@ def transfer_displays(outputs):
     ]
     table('supplement-transfer-scales', 'Residual scales and weights of the fitted DEA, MDEA and AMP data sets.',
           ['Amine','Data set',r'Scale $s_l$',r'Weight $w_l$'], scale_rows, [.08,.32,.27,.27],
-          notes=r'Pressure residuals are logarithmic, with dimensionless scales. $\rho_l$ is the measured density and $g_l$ the local secant slope against loading. For MDEA the weights average each observation group. The extra factor $0.015^{-2}$ in the retained Kuranov weight is written in the scale column.')
+          notes=r'Pressure residuals are logarithmic, with dimensionless scales. $\rho_l$ is the measured density and $g_l$ the local secant slope against loading. For MDEA the weights average each observation group. The pressure log scale applies to the loaded and binary MDEA pressures.')
     scales_path = LATEX / 'tables/supplement-transfer-scales.tex'
     outputs[scales_path] = outputs[scales_path].replace('tab:supplement-transfer-scales', 'tab:transfer-scales')
 
@@ -2569,8 +2569,6 @@ def result_values(required):
                       ("liquid-vapor-gibbs-difference", "delta_G_liquid_minus_vapor_J_mol"),
                       ("density-margin", "density_margin_mol_m3")):
         add(f"pure-water-selected-{name}", record, f"roots.{key} / 1000", f"{roots[key] / 1000:.2f}")
-    record = PHASE_SUMMARY
-    phase_results = read(record)
     mdea_screen = read(W_MDEA_SCREEN)
     mdea_rows = mdea_screen["rows"]
     mdea_grid = [r for r in mdea_rows if r["key"].startswith("grid:")]
@@ -2585,7 +2583,7 @@ def result_values(required):
             str(measured_counts["searched, no instability"]))
     for passage in ("supplement", "transfer"):
         add(f"mdea-measured-states-unclassified-{passage}", W_MDEA_SCREEN,
-            "distinct measured rows[unavailable].count", NUMBER_WORDS[measured_counts["unavailable"]])
+            "distinct measured rows[unavailable].count", count_word(measured_counts["unavailable"], zero="zero"))
     record = MOVE + "mdea/reported/phase/capped-heat-diagnosis.json.gz"
     diagnosis = read(record)["rows"]
     outside = [row for row in diagnosis if row["key"] not in mdea_screen["aliases"]
@@ -2593,13 +2591,15 @@ def result_values(required):
     within = [row for row in diagnosis if row["key"] not in mdea_screen["aliases"] and row.get("minimum") is not None
               and abs(row["minimum"]) <= row["uncertainty"]]
     add("mdea-merkley-searches-outside-caloric-interval-supplement", record,
-        "rows[cause includes outside_interval].count", NUMBER_WORDS[len(outside)])
+        "rows[cause includes outside_interval].count", count_word(len(outside), zero="zero"))
     add("mdea-merkley-searches-within-resolution-supplement", record,
-        "rows[abs(minimum) <= uncertainty].count", NUMBER_WORDS[len(within)])
+        "rows[abs(minimum) <= uncertainty].count", count_word(len(within), zero="zero"))
     keys = {row["key"] for row in within}
-    supplied, = {row["supplied_trial_counts"]["available"] for row in mdea_rows if row["key"] in keys}
-    add("mdea-supplied-trial-count-supplement", (record, W_MDEA_SCREEN),
-        "rows[abs(minimum) <= uncertainty].supplied_trial_counts.available (per state)", str(supplied))
+    supplied = {row["supplied_trial_counts"]["available"] for row in mdea_rows
+                if row["key"] in keys and "supplied_trial_counts" in row}
+    if len(supplied) == 1:
+        add("mdea-supplied-trial-count-supplement", (record, W_MDEA_SCREEN),
+            "rows[abs(minimum) <= uncertainty].supplied_trial_counts.available (per state)", str(supplied.pop()))
     observations = {row["identity"]: row["row"] for row in read(W_MDEA_PROPERTIES)["rows"]}
     states = []
     for row in mdea_screen["classifications"]:
@@ -2613,19 +2613,18 @@ def result_values(required):
         raise ValueError("The MDEA classifications differ from the distinct descent states")
     for passage in ("transfer", "supplement-total", "supplement-by-source"):
         add(f"mdea-distinct-descent-states-{passage}", W_MDEA_SCREEN, "len(classifications)", str(len(states)))
-    zheng = {str(row["source"]["source_row"]): row["key"]
-             for row in states if row["source"]["source_key"] == "Zheng2020"}
+    mdea_bubbles = read(W_MDEA_PROPERTIES)["mdea_bubble"]
+    zheng = {str(observations[key.rsplit(":", 1)[0]]["source_row"]): key
+             for key in mdea_bubbles
+             if observations.get(key.rsplit(":", 1)[0], {}).get("source_key") == "Zheng2020"}
     for row, digits, passages in (("2", 3, ("transfer", "supplement")), ("5", 2, ("transfer",))):
+        if row not in zheng:
+            continue
         key = zheng[row]
-        result = read(W_MDEA_PROPERTIES)["mdea_bubble"][key]
+        result = mdea_bubbles[key]
         for passage in passages:
             add(f"mdea-zheng-row-{row}-bubble-pressure-{passage}", W_MDEA_PROPERTIES,
                 f"mdea_bubble[{key}].bubble_Pa / 1e6", f"{result['bubble_Pa']/1e6:.{digits}f}")
-    for passage in ("transfer", "supplement"):
-        for branch, label, words in (("vapor", "vapor-only", True), ("mixed", "mixed", False),
-                                     ("none", "unlabeled", True)):
-            count = sum(row["native_branch"] == branch for row in states)
-            value = NUMBER_WORDS[count] if words else str(count)
     mea_grid = W_MEA_PHASE + "grid.json.gz"
     mea_measured = W_MEA_PHASE + "measured.json.gz"
     mea_census = W_MEA_PHASE + "census.json.gz"
@@ -2831,6 +2830,26 @@ def result_values(required):
     binary_search = read(record)
     add("mdea-unbounded-binary-states-searched", record, "searched", str(binary_search["searched"]))
     add("mdea-unbounded-binary-instabilities", record, "liquid_descent", str(binary_search["liquid_descent"]))
+
+    for key, source in (("reported", W_MDEA_NEUTRAL),
+                        ("unweighted-reactive", W_MDEA_UNWEIGHTED_REACTIVE),
+                        ("reported-reactive", W_MDEA_REACTIVE)):
+        search = read(source)
+        add(f"mdea-{key}-binary-states-searched", source, "searched", str(search["searched"]))
+        add(f"mdea-{key}-binary-instabilities", source, "liquid_descent", str(search["liquid_descent"]))
+    for name in ("without-binary-gap-bound", "reported"):
+        manifest = MOVE + f"mdea/{name}/fit/manifest.json.gz"
+        add(f"mdea-{name}-binary-pressure-log-scale", manifest, "1 / sqrt(n * weight) for Kuranov-binary",
+            f"{mdea_binary_pressure_scale(read(manifest)):g}")
+    endpoint = MOVE + "mdea/reported/fit/A.json.gz"
+    coordinate = next(row for row in read(endpoint)["endpoint"]["coordinates"]
+                      if row["identity"].startswith("pair/mdea-water/k_ij/a0"))
+    k423 = coordinate["origin"]
+    onset = next(row["k_gap"] for row in read(W_MDEA_BINARY)["rows"] if row["T_K"] == 423)
+    add("mdea-reported-water-k-423", endpoint, "MDEA–water k(423 K)", f"{k423:.5f}")
+    add("mdea-water-gap-onset-k-423", W_MDEA_BINARY, "rows[T_K=423].k_gap", f"{onset:.5f}")
+    add("mdea-reported-water-k-423-distance-to-gap-onset", (endpoint, W_MDEA_BINARY),
+        "rows[T_K=423].k_gap minus MDEA–water k(423 K)", f"{onset - k423:.5f}")
 
     fixed = FixedReference(read)
     for family in ("MEA", "DEA", "MDEA", "AMP_free"):
@@ -3156,12 +3175,6 @@ def result_values(required):
     add('mdea-unloaded-density-count-methods', record,
         'replay.rows[unloaded-density].count',
         format((sum(x["group"]=='unloaded-density' for x in r["replay"]["rows"])), '.0f'))
-    add('mdea-bound-binary-limit-supplement', record,
-        'endpoint.coordinates[pair/mdea-water/k_ij/a0 / temperature_law_coefficient].bounds[1]',
-        format((next(x["bounds"][1] for x in r["endpoint"]["coordinates"] if x["identity"]=='pair/mdea-water/k_ij/a0 / temperature_law_coefficient')), '.4f'))
-    add('mdea-bound-binary-limit-methods', record,
-        'endpoint.coordinates[pair/mdea-water/k_ij/a0 / temperature_law_coefficient].bounds[1]',
-        format((next(x["bounds"][1] for x in r["endpoint"]["coordinates"] if x["identity"]=='pair/mdea-water/k_ij/a0 / temperature_law_coefficient')), '.4f'))
     add('mdea-reactive-fitted-parameter-count-methods', record,
         'endpoint.coordinates.count',
         NUMBER_WORDS[int(len(r["endpoint"]["coordinates"]))])
@@ -3183,9 +3196,6 @@ def result_values(required):
     add('mdea-cation-water-and-dispersion-conditional-correlation-covariance', record,
         'diagnostics.uncertainty.conditional_correlation: cation-water interaction and cation dispersion energy',
         format((r["diagnostics"]["uncertainty"]["conditional_correlation"][r["diagnostics"]["uncertainty"]["free_coordinates"].index("['protonated-methyldiethanolamine', 'water'] / k_ij")][r["diagnostics"]["uncertainty"]["free_coordinates"].index("protonated-methyldiethanolamine / dispersion_energy_over_k")]), '+.4f'))
-    add('mdea-active-bound-count-supplement', record,
-        'fit coordinates or structural exclusions identified by conditional covariance',
-        NUMBER_WORDS[int(len(r["diagnostics"]["active_bounds"]))])
     add('mdea-pure-water-pressures-constant-methods', record,
         'fit coordinates or structural exclusions identified by conditional covariance',
         NUMBER_WORDS[int(len(r["replay"]["rows"]) - FixedReference(read).conditional("MDEA")["responsive"])])
@@ -3517,21 +3527,6 @@ def result_values(required):
         'Amundsen source-conflict five.row_ids',
         NUMBER_WORDS[int(len(r["Amundsen source-conflict five"]["row_ids"]))].capitalize())
 
-    record = 'analyses/fixed_reaction_reference/diagnosis-starts/results/saturation.json.gz'
-    mdea_manifest = STUDY + 'results/MDEA/manifest.json.gz'
-    starts_by_label = read(mdea_manifest)['starts']
-    records_by_draw = {row['draw']: row['rows'] for row in read(record)['records']}
-    nodes = {}
-    for label, number in (('B', 123), ('C', 126)):
-        case, = (row for row in records_by_draw[starts_by_label[label]['draw']] if row['row'] == number)
-        nodes[label] = [(node['mismatch'] + case['P']) / 1e3 for node in case['nodes'] if node['solved']]
-
-
-
-
-
-
-
     record = 'analyses/mea_parameter_bundle/results/salt-anchored-435/MEA/F4/uncertainty/standard-errors.csv'
     r = read(record)
 
@@ -3596,7 +3591,7 @@ def result_values(required):
         f"{read(W_MDEA_PROPERTIES)['zheng_row_6']['cold']['pressure'] / 1e6:.1f}")
     add('mdea-kamps-comparison-count-results', W_MDEA_PROPERTIES, 'kamps.full_rows', str(kamps["full_rows"]))
     add('mdea-kamps-same-row-count-results', W_MDEA_PROPERTIES, 'kamps.full_rows', str(kamps["full_rows"]))
-    add('mdea-kamps-additional-row-ordinal-results', PROPERTY_SUMMARY, 'kamps.common_rows + one additional row', str(read(PROPERTY_SUMMARY)["kamps"]["common_rows"]+1))
+    add('mdea-kamps-additional-row-ordinal-results', W_MDEA_PROPERTIES, 'kamps.common_rows + one additional row', str(kamps["common_rows"]+1))
     add('mdea-kuranov-source-matched-count-literature-results', (W_MDEA_PROPERTIES, KURANOV_DATA), 'matched Kuranov Table 2 rows.count', str(len(mdea_kuranov_rows(read(W_MDEA_PROPERTIES)))))
     dea_methane = MOVE + "dea/reported/properties/lawson-methane.json.gz"
     dea_methane_data = read(dea_methane)
@@ -3637,9 +3632,6 @@ def result_values(required):
     add('mdea-bottinger-bicarbonate-aard-twenty-five-bar', mdea_properties, 'rows[Bottinger-bicarbonate-25bar,value,observed].AARD percent', format(stats([q for q in mdea_properties_data["rows"] if q["group"]=="Bottinger-bicarbonate-25bar" and q["observed"] and q["status"]=="Available"],predicted="value")["AARD_percent"], '.2f'))
     kiepe_derivative = max(abs(v) for q,j in zip(mea_fit_data["replay"]["rows"], mea_fit_data["diagnostics"]["jacobian_bound_normalized"], strict=True) if q["group"]=="Kiepe" for v in j)
     add('mea-kiepe-zero-derivative-value', mea_fit, 'max(abs(diagnostics.jacobian_bound_normalized[rows group=Kiepe]))', count_word(0, zero="zero") if kiepe_derivative == 0 else prose_scientific(kiepe_derivative, ".2e"))
-    mdea_control = 'analyses/mea_parameter_bundle/results/split-diagnosis-433/mdea-controls.json'
-    mdea_control_data = read(mdea_control)
-    cold_control, = (q for q in mdea_control_data if q["key"]=="comparison:363:final" and q["label"]=="reported water-bicarbonate only")
     add('mea-single-liquid-census-parents-supplement', mea_census, 'rows[passed-single-liquid].count', str(census_classes["passed-single-liquid"]))
     descent_sources = collections.Counter(row["source"]["source_key"] for row in states)
     for label, source in (("sobrino", "Sobrino2016"), ("bottinger", "BottingerMDEA2008"),
@@ -3647,7 +3639,7 @@ def result_values(required):
         count = descent_sources[source]
         add(f"mdea-distinct-descents-{label}-supplement", (W_MDEA_SCREEN, W_MDEA_PROPERTIES),
             f"classifications joined to measured rows with source_key={source}",
-            str(count) if label == "bottinger" else NUMBER_WORDS[count])
+            str(count) if label == "bottinger" else count_word(count, zero="zero"))
     mdea_kuranov_properties = 'analyses/fixed_reaction_reference/results/MDEA/property-comparisons/A.json.gz'
     mdea_kuranov_properties_data = read(mdea_kuranov_properties)
     add('mdea-source-matched-kuranov-count-supplement', (W_MDEA_PROPERTIES, KURANOV_DATA), 'matched Kuranov Table 2 rows.count', str(len(mdea_kuranov_rows(read(W_MDEA_PROPERTIES)))))

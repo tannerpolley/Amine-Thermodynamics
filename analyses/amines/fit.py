@@ -343,13 +343,22 @@ def pressure_fit_manifest(fit_set, source, controls_source):
         point = read(path)
     else:
         point = controls["start_A_declaration"]
-    if fit_set.get("without_binary_gap_bound"):
-        remove_mdea_gap_bound(point)
     return dict(wheel=wheel, source_wheel=controls["wheel"],
                 source=path.relative_to(ROOT).as_posix(),
                 start_A_declaration=point, fit_controls=controls["fit_controls"],
                 starts={"A": dict(optimizer=[0.0] * len(point["coordinates"]))},
                 diagnostic_starts={}, rows=row_manifest(route_for(fit_set).bind(point)))
+
+
+def mdea_weighted_manifest(fit_set, unweighted):
+    """Use the unweighted control's start and change the binary row weights."""
+    source = unweighted["retained"] / "manifest.json.gz"
+    declaration = read(source)
+    if declaration["wheel"] != verify():
+        raise ValueError(f"{source}: unweighted start uses another wheel")
+    point = declaration["start_A_declaration"]
+    return dict(declaration, source=source.relative_to(ROOT).as_posix(),
+                source_wheel=declaration["wheel"], rows=row_manifest(bind_fit(fit_set, point)))
 
 
 def mdea_without_gap_bound(fit_set, target):
@@ -359,9 +368,19 @@ def mdea_without_gap_bound(fit_set, target):
     return reported_fit(fit_set, declaration, target)
 
 
-def control_manifest(reported, fit_set):
+def control_manifest(reported, fit_set, *, bicarbonate_donor=None):
     """Start the control at the selected reported endpoint on the locked wheel."""
     point, selection = retained_endpoint(reported)
+    if bicarbonate_donor is not None:
+        from . import salt
+
+        donor, donor_selection = retained_endpoint({"retained": bicarbonate_donor})
+        record = read(bicarbonate_donor / f'{donor_selection["selected"]}.json.gz')
+        if salt.LAWS[salt.HCO3] in record["diagnostics"]["active_bounds"]:
+            raise ValueError("The MEA water–bicarbonate interaction is on a bound")
+        node = next(c for pair in donor["parameters"]["pairs"] for c in pair["coefficients"]
+                    if c["identity"] == salt.LAWS[salt.HCO3])
+        salt.set_pair(point["parameters"], salt.W, salt.HCO3, node)
     if fit_set.get("water_anion_intercepts"):
         from . import salt
 
@@ -387,6 +406,8 @@ def control_manifest(reported, fit_set):
         starts={"A": dict(optimizer=[0.0] * len(point["coordinates"]))},
         diagnostic_starts={},
         rows=row_manifest(bind_fit(fit_set, point)),
+        **({"donor_endpoint_fingerprint": donor_selection["endpoint_fingerprint"]}
+           if bicarbonate_donor is not None else {}),
     )
 
 

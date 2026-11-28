@@ -30,17 +30,17 @@ def main():
     name = "summary.json.gz"
     if args.stage == "alternate-starts" and args.amine in ("mea", "amp") and args.fit_set == "reported":
         record = fit.alternate_starts(declaration, target)
-    elif args.fit_set == "without-binary-gap-bound" and args.amine == "mdea":
-        reported = module.FIT_SETS["reported"]
+    elif args.fit_set == "without-binary-gap-bound" and args.amine == "mdea" and args.stage in ("fit", "phase"):
         if args.stage == "fit":
-            record = fit.mdea_without_gap_bound(reported, target)
-        elif args.stage == "phase":
+            record = fit.mdea_without_gap_bound(declaration, target)
+        else:
             local = target.parent / "fit"
             point, selected = fit.retained_endpoint({"retained": local if local.exists() else declaration["retained"]})
-            record = module.binary_stability_search(fit.route_for(reported), point)
-            record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
-        else:
-            parser.error("The MDEA fit without the binary-gap bound supports fit and phase")
+            route = fit.route_for(declaration)
+            fingerprint = dict(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
+            record = dict(module.binary_stability_search(route, point), **fingerprint)
+            reactive = module.binary_stability_search(route, point, reactive=True)
+            fit.save(target / "reactive-zero-loading.json.gz", dict(reactive, **fingerprint))
     elif args.amine == "mea" and args.fit_set == "reported" and args.stage == "water-calibration":
         point, selected = fit.retained_endpoint(declaration)
         record = properties.water_calibration(fit.route_for(declaration), point)
@@ -74,7 +74,13 @@ def main():
         record = properties.control_properties(args.amine, module.FIT_SETS["reported"], declaration, chosen)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "fit":
         reported = module.FIT_SETS["reported"]
-        manifest = fit.move_manifest(args.amine, reported, args.output.resolve(), ablation=True)
+        if args.amine == "mdea":
+            from .mea import FIT_SETS
+
+            manifest = fit.control_manifest(reported, declaration,
+                                            bicarbonate_donor=FIT_SETS["water-bicarbonate-ablation"]["retained"])
+        else:
+            manifest = fit.move_manifest(args.amine, reported, args.output.resolve(), ablation=True)
         fit.save(target / "manifest.json.gz", manifest)
         record = fit.reported_fit(reported | declaration, manifest, target)
     elif args.fit_set == "water-bicarbonate-ablation" and args.stage == "properties":
@@ -110,21 +116,8 @@ def main():
             if args.stage == "properties":
                 attempt = fit.read(chosen / f'{selection["selected"]}.json.gz')
                 record = properties.property_rows(route, point, attempt["replay"]["rows"])
-            elif args.amine == "amp":
-                record = phase.fresh_searches(args.amine, route, point, target)
             else:
-                record = module.binary_stability_search(route, point)
-                if declaration.get("without_binary_gap_bound"):
-                    baseline = module.FIT_SETS["without-binary-gap-bound"]
-                    old_point, old_selection = fit.retained_endpoint(baseline)
-                    old_route = fit.route_for(module.FIT_SETS["reported"])
-                    fit.save(target / "reactive-zero-loading.json.gz", dict(
-                        wheel=verify(),
-                        unweighted=dict(module.binary_stability_search(old_route, old_point, reactive=True),
-                                        endpoint_fingerprint=old_selection["endpoint_fingerprint"]),
-                        weighted=dict(module.binary_stability_search(route, point, reactive=True),
-                                      endpoint_fingerprint=selection["endpoint_fingerprint"]),
-                    ))
+                record = phase.fresh_searches(args.amine, route, point, target)
             record.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
         else:
             parser.error("This pressure fit set supports fit, phase and properties")
@@ -133,7 +126,9 @@ def main():
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))
     elif args.stage == "fit":
-        if "preserved" in declaration:
+        if args.amine == "mdea":
+            manifest = fit.mdea_weighted_manifest(declaration, module.FIT_SETS["without-binary-gap-bound"])
+        elif "preserved" in declaration:
             manifest = fit.move_manifest(args.amine, declaration, args.output.resolve())
         else:
             manifest = fit.reported_manifest(args.amine, declaration, args.output.resolve())
@@ -145,10 +140,17 @@ def main():
         point, selection = fit.retained_endpoint(declaration | {"retained": chosen})
         route = fit.route_for(declaration)
         if args.stage == "phase":
-            if "preserved" in declaration:
+            if "preserved" in declaration or args.amine == "mdea":
                 record = phase.fresh_searches(args.amine, route, point, target)
                 if args.amine == "mdea":
+                    for reactive, name_ in ((False, "binary-neutral"), (True, "reactive-zero-loading")):
+                        search = module.binary_stability_search(route, point, reactive=reactive)
+                        search.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
+                        fit.save(target / f"{name_}.json.gz", search)
                     fit.save(target / "binary-gap.json.gz", module.binary_gap(point))
+                    worked = module.loaded_split_state(route, point)
+                    worked.update(wheel=verify(), endpoint_fingerprint=selection["endpoint_fingerprint"])
+                    fit.save(target / "loaded-split-state.json.gz", worked)
                 first = args.output.resolve() / "amp/first-data/phase/supplied.json.gz"
                 if not first.is_file():
                     first = declaration["retained"].parents[1] / "first-data/phase/supplied.json.gz"
@@ -159,11 +161,11 @@ def main():
         else:
             record = properties.property_rows(route, point)
             record.update(properties.reported_curves(args.amine, route, point))
-            if "preserved" in declaration:
+            if "preserved" in declaration or args.amine == "mdea":
                 fit.save(target / "derivatives.json.gz", properties.reported_derivatives(args.amine, route, point))
             if args.amine == "dea" and "preserved" in declaration:
                 fit.save(target / "lawson-methane.json.gz", module.lawson_methane(route, point))
-            if args.amine == "mdea" and "preserved" in declaration:
+            if args.amine == "mdea":
                 record.update(module.move_property_cases(route, point))
             if args.amine == "mea" and "preserved" in declaration:
                 selected = fit.read(chosen / f'{selection["selected"]}.json.gz')
