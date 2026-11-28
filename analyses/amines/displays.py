@@ -1142,74 +1142,108 @@ def transfer_displays(outputs):
         if role:
             design.append([r[1], r'\cite' + cite, r[3], r[4], role])
             if role == 'fitted': objective_n[who] = objective_n.get(who, 0) + int(str(r[3]).split()[0])
-    # Published models on the same observations, by observation set: (heading, this work's AARD, role, mark, published models).
-    # The main-text table keeps a published model only where it had the same role for those observations as this work
-    # (owner decision 2026-11-27, "Like with like"); the other comparisons are in the Section S7 table with their roles.
+    # Published models on the pressure sources this work fitted: this work at the temperatures it fitted there, beside every
+    # published model that reports a deviation on the source, each over its own observations (owner decision 2026-11-27,
+    # "Sets our model fitted"); the Section S7 table holds the sources and temperatures this work did not fit.
     PUB = {'Baygi2015 PC-SAFT': r'PC-SAFT \cite{Baygi2015}', 'Najafloo2018 SAFT-HR': r'SAFT-HR \cite{Najafloo2018}', 'Zhang2011 eNRTL': r'eNRTL \cite{Zhang2011}'}
     ERM = r'\cite{ermatchkovSolubilityCarbonDioxide2006}'
-    ZHANG_CHEN = r'eNRTL \cite{zhangThermodynamicModelingCO22011}'  # Zhang and Chen, their Table 14: AARD 6.8 % on the 82 Kuranov total pressures and 17.7 % on the 101 Ermatchkov CO2 partial pressures, both in their regression
-    exact = [r for r in read(MEA + 'paper-evidence-341/same-data-comparison/published-deviations.json') if r['comparison'].startswith('exact:')]
-    # Najafloo and Zarei describe the fitting of the Ma'mun pressures differently in their methods and conclusions (Section S7).
-    mamun = [(PUB[r['model']], f"{r['deviation_percent']:g}", 'unclear' if r['model'].startswith('Najafloo') else r['data_role']) for r in exact]
-    mamun_pressure = mea_replay['summary']['pressure']['Mamun2005']
-    groups = [(rf"Ma'mun et al.\ \cite{{Mamun2005}}, MEA $p_{{\COtwo}}$, 393 K ({mamun_pressure['attempted']})",
-               f"{mamun_pressure['AARD_percent']:.2f}", 'not fitted', '', mamun)]
+    ZHANG_CHEN = r'eNRTL \cite{zhangThermodynamicModelingCO22011}'  # Zhang and Chen, their Table 14: AARD 6.8 % on the 82 Kuranov total pressures and 17.7 % on the 101 Ermatchkov CO2 partial pressures, 313-413 K and 313-393 K, both in their regression
+    kelvin = lambda ts: span([round(float(t)) for t in ts], str)
+    source_key = lambda name: re.match(r"[A-Za-z']*", name)[0].replace("'", '')
+    yes = lambda role: {'fitted': 'yes', 'not fitted': 'no'}.get(role, role)
+    mea_points = collections.defaultdict(list)
+    for role, source, T, observed, value in mea_nominal_pressure_points():
+        if value is None:
+            raise ValueError(f'{source} at {T} K: MEA pressure not calculated; the table gives no count of the rest')
+        mea_points[source_key(source)].append((role, T, observed, value))
+
+    def ours(points, mark=''):
+        """This work on (role, T, observed, calculated) points: fitted count, N, temperature range and AARD."""
+        fitted = sum(role == 'fitted' for role, *_ in points)
+        return [r'\quad This work' + mark, f'{fitted} of {len(points)}' if fitted else 'no', len(points), kelvin([p[1] for p in points]),
+                f'{100 * fsum(abs(value / observed - 1) for _, _, observed, value in points) / len(points):.2f}']
+    published = collections.defaultdict(list)
+    for r in read(MEA + 'paper-evidence-341/same-data-comparison/published-deviations.json'):
+        if r['property'] == 'pressure':
+            published[source_key(r['source'])].append(r)
+
+    def theirs(r, label, fitted=None):
+        """A published deviation as reported: its role, N and temperature range (--, not reported) and AARD."""
+        T = re.search(r'(?<![\d.])(\d{3}(?:\.\d+)?)(?:\s*[-–]\s*(\d{3}(?:\.\d+)?))?\s*K', r['conditions'])
+        return [r'\quad ' + label, fitted or yes(r['data_role']), r['n'] or '--', kelvin([t for t in T.groups() if t]) if T else '--', str(r['deviation_percent'])]
+
+    def mea_group(key, heading, points):
+        # Najafloo and Zarei describe the fitting of the Ma'mun pressures differently in their methods and conclusions (Section S7).
+        rows = sorted((theirs(r, PUB[r['model']], 'unclear' if key == 'Mamun' and r['model'].startswith('Najafloo') else None) for r in published[key]),
+                      key=lambda row: (row[1] != 'yes', float(row[4])))
+        return [head(heading, 5), ours(points), *rows]
+    absorber = lambda points: [p for p in points if temperature_band(p[1]) == 'absorber']
+    main_rows = mea_group('Hilliard', r'Hilliard \cite{Hilliard2008}, MEA $p_{\COtwo}$', mea_points['Hilliard'])
+    main_rows += mea_group('Jou', r'Jou et al.\ \cite{Jou1995}, MEA $p_{\COtwo}$', absorber(mea_points['Jou']))
+    other_rows = mea_group('Mamun', r"Ma'mun et al.\ \cite{Mamun2005}, MEA $p_{\COtwo}$", mea_points['Mamun'])
+    other_rows += mea_group('Xu', r'Xu and Rochelle \cite{Xu2011}, MEA $p_{\COtwo}$', mea_points['Xu'])
+    aronu, = published['Aronu']
+    other_rows += [head(r'Aronu et al.\ \cite{Aronu2011}, MEA $p_{\COtwo}$', 5), ours(mea_points['Aronu']), theirs(aronu, r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{a}')]
     mpub = read(MD + 'published-pressure-comparisons.json')['comparisons']
     literature = read(ROUND8 + 'literature-populations.json.gz')['quantities']
     k82_adopted, r9_kamps = mdea_pressure_comparisons()
-    role = {'predicted': 'not fitted'}
+    # Ermatchkov et al., their Table 5: their 101 pressures at 313-393 K and the 28 corrected Kamps pressures at 314-395 K, the counts of this work.
+    ERM_T = {'Ermatchkov': '313--393', 'corrected-Kamps': '314--395'}
     for c in mpub:
-        published = [(r'Ermatchkov et al., set ' + q['set'] + ' ' + ERM, f"{literature['published_Kamps_28']['Ermatchkov ' + q['set']]:g}" if c['group'] == 'corrected-Kamps'
-                      else f"{q['mean_absolute_relative_deviation_percent']:g}", role.get(q['data_role'], q['data_role'])) for q in c['published_parameter_sets']]
+        sets = [(r'Ermatchkov et al., set ' + q['set'] + ' ' + ERM, yes({'predicted': 'not fitted'}.get(q['data_role'], q['data_role'])),
+                 str(literature['published_Kamps_28']['Ermatchkov ' + q['set']] if c['group'] == 'corrected-Kamps' else q['mean_absolute_relative_deviation_percent'])) for q in c['published_parameter_sets']]
         if c['group'] == 'corrected-Kamps':
             label, available, aard, mark = r"P\'erez-Salado Kamps et al.\ in " + ERM + ', MDEA $P$', r9_kamps['full_rows'], r9_kamps['full_AARD_percent'], ''
         else:
-            published.append((ZHANG_CHEN, '17.7', 'fitted'))
+            sets.append((ZHANG_CHEN, 'yes', '17.7'))
             score = mstats[c['group']]['R1']['False']
-            label, available, aard, mark = 'Ermatchkov et al.\\ ' + ERM + r', MDEA $p_{\COtwo}$', score['rows'], score['AARD_percent'], r'\textsuperscript{b}'
+            label, available, aard, mark = r'Ermatchkov et al.\ ' + ERM + r', MDEA $p_{\COtwo}$', score['rows'], score['AARD_percent'], r'\textsuperscript{b}'
         if available != c['measured_rows']:
             raise ValueError(f"{c['group']}: {available} of {c['measured_rows']} observations calculated; the table gives no count of the rest")
-        groups.append((f"{label} ({c['measured_rows']})", f'{aard:.2f}', c['data_role'], mark, published))
+        T = [r['T_K'] for r in mrows if r['group'] == c['group'] and r['status'] == 'Available']
+        other_rows += [head(label, 5), [r'\quad This work' + mark, 'no', available, kelvin(T), f'{aard:.2f}'],
+                       *sorted(([r'\quad ' + model, fitted, c['measured_rows'], ERM_T[c['group']], value] for model, fitted, value in sets), key=lambda row: (row[1] != 'yes', float(row[4])))]
     K422 = 'analyses/mdea_mea_workflow/results/kuranov-published-422/'
     kuranov_rows = mdea_kuranov_rows(read(W_MDEA_PROPERTIES))
     krae = read(K422 + 'raeispour-table-4.json')
-    role_counts = collections.Counter(row['role'] for row in kuranov_rows)
     if k82_adopted['available'] != len(kuranov_rows):
         raise ValueError(f"Kuranov: {k82_adopted['available']} of {len(kuranov_rows)} observations calculated; the table gives no count of the rest")
-    # Most Kuranov and Tong observations are fitted here, so this work counts as fitting them; footnote a gives the counts.
-    groups.append((rf'Kuranov et al.\ \cite{{kuranovSolubilitySingleGases1996}}, MDEA $P$ ({len(kuranov_rows)})\textsuperscript{{a}}',
-                   f"{k82_adopted['AARD_percent']:.2f}", 'fitted', '',
-                   [(ZHANG_CHEN, '6.8', 'fitted'), (r'ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', f"{krae['AARD_percent']:g}", 'fitted'),
-                    (r'ePC-SAFT \cite{Uyan2015}\textsuperscript{a}', '22.9', 'not fitted'), (r'ePC-SAFT \cite{Wangler2018}', '19.7', 'not fitted')]))
-    # Yi et al. and Hartono et al. (2020) report these deviations for the Kundu and Tong pressures, both fitted in their regressions.
-    AMP_PUB = lambda yi, hartono: [(r'eNRTL \cite{yiOpenAccessThermodynamically2024}', yi, 'fitted'), (r'eNRTL \cite{hartonoSolubilityCO201M2020}', hartono, 'fitted')]
-    groups += [(r'Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, AMP $p_{\COtwo}$ (\res{amp-kundu-comparison-partial-pressure-count})',
-                r'\res{amp-kundu-pressure-aard-literature}', 'not fitted', '', AMP_PUB('15.4', '17.3')),
-               (r'Tong et al.\ \cite{Tong2012}, AMP $P$ (\res{amp-assessment-tong-pressure-count-literature})\textsuperscript{a}',
-                r'\res{amp-reported-tong-total-pressure-aard-literature}', 'fitted', '', AMP_PUB('8.0', '9.3'))]
-    main_rows, other_rows = [], []
-    for block in ('not fitted', 'fitted'):
-        main_rows.append(head('Not fitted by any listed model' if block == 'not fitted' else 'Fitted by every listed model', 2))
-        gap = ''
-        for label, aard, this_role, mark, published in groups:
-            same = [(model, value) for model, value, r in published if r == this_role == block]
-            if same:
-                main_rows += [[gap + label, ''], [r'\quad This work' + mark, aard], *([r'\quad ' + model, value] for model, value in same)]
-                gap = r'\addlinespace[2pt]'
-    for label, aard, this_role, mark, published in groups:
-        other = [(model, r, value) for model, value, r in published if r != this_role]
-        if other:
-            counts = f"{role_counts['fitted']} of {len(kuranov_rows)} fitted" if 'Kuranov' in label else this_role + mark
-            other_rows += [[r'\addlinespace ' + label.replace(r'\textsuperscript{a}', ''), '', ''], [r'\quad This work', counts, aard],
-                           *([r'\quad ' + model, r, value] for model, r, value in other)]
-    table('published-models', 'Pressure AARD of this work and of published models on observation sets that no listed model fitted or that every listed model fitted.',
-          ['Observations and model', r'{AARD (\%)}'], main_rows, [], spec=r'>{\raggedright\arraybackslash}p{0.5\linewidth}S[table-format=2.2]',
-          notes=r'AARD follows Eq.~\eqref{eq:aard}; published values are those reported in each source; number of observations in parentheses. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; set I: the first of the two parameter sets of Ermatchkov et al. '
-                rf'\textsuperscript{{a}}This work fitted {role_counts["fitted"]} of the {len(kuranov_rows)} and \res{{amp-reported-tong-fitted-pressure-count-literature}} of the \res{{amp-assessment-tong-pressure-count-note}}; the published Kuranov values are matched to the {len(kuranov_rows)} by count. \textsuperscript{{b}}Used to choose the initial parameters.')
-    table('supplement-published-models', 'Pressure AARD of this work and of published models on observation sets that the models fitted in different roles.',
-          ['Observations and model', 'Role in the fit', r'{AARD (\%)}'], other_rows, [],
-          spec=r'>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.2\linewidth}S[table-format=2.2]',
-          notes=r'AARD follows main-text Eq.~(\ref{main-eq:aard}); published values are those reported in each source; number of observations in parentheses. Role: of the observations in the fit of each model; unclear: see the text. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure; sets I and II: the two parameter sets of Ermatchkov et al. \textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}Used to choose the initial parameters.')
+    n = len(kuranov_rows)
+    # Each source reports its deviation on all 82 Kuranov pressures: Zhang and Chen Table 14, Raeispour Shirazi and Lotfollahi Table 4 (no temperatures), Uyan et al. Table 6, Wangler et al. Table 11.
+    main_rows += [head(r'Kuranov et al.\ \cite{kuranovSolubilitySingleGases1996}, MDEA $P$', 5),
+                  [r'\quad This work', f"{sum(r['role'] == 'fitted' for r in kuranov_rows)} of {n}", n, kelvin([r['temperature_K'] for r in read(KURANOV_DATA)]), f"{k82_adopted['AARD_percent']:.2f}"],
+                  [r'\quad ' + ZHANG_CHEN, 'yes', n, '313--413', '6.8'], [r'\quad ePC-SAFT \cite{raeispourshiraziApplicationEPC_SAFTMBEoS2020}', 'yes', krae['rows'], '--', str(krae['AARD_percent'])],
+                  [r'\quad ePC-SAFT \cite{Wangler2018}', 'no', n, '313--413', '19.7'], [r'\quad ePC-SAFT \cite{Uyan2015}\textsuperscript{a}', 'no', n, '313--413', '22.9']]
+    # Yi et al. (their Table 4: 45 Tong and 51 Kundu pressures, no temperatures) and Hartono et al. (2020) (their Table 13: no counts or temperatures) fitted both sources.
+    YI, HARTONO = r'\quad eNRTL \cite{yiOpenAccessThermodynamically2024}', r'\quad eNRTL \cite{hartonoSolubilityCO201M2020}'
+    main_rows += [head(r'Tong et al.\ \cite{Tong2012}, AMP $P$', 5),
+                  [r'\quad This work', r'\res{amp-reported-tong-fitted-pressure-count-literature} of \res{amp-assessment-tong-pressure-count-note}', r'\res{amp-assessment-tong-pressure-count-literature}',
+                   kelvin([r['T_K'] for r in arows if r['group'] in ('tong', 'tong-baseline')]), r'\res{amp-reported-tong-total-pressure-aard-literature}'],
+                  [YI, 'yes', '45', '--', '8.0'], [HARTONO, 'yes', '--', '--', '9.3']]
+    other_rows += [head(r'Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003}, AMP $p_{\COtwo}$', 5),
+                   [r'\quad This work', 'no', r'\res{amp-kundu-comparison-partial-pressure-count}', kelvin([r['T_K'] for r in arows if r['group'] == 'kundu']), r'\res{amp-kundu-pressure-aard-literature}'],
+                   [YI, 'yes', '51', '--', '15.4'], [HARTONO, 'yes', '--', '--', '17.3']]
+    # Each model's overall value over its MEA pressures; Zhang et al. as tabulated in Baygi et al., Table 5, row Overall.
+    by_model = {r['model']: r for rs in published.values() for r in rs if r['source'] in ('all 18 sources', 'Aronu2011', 'water-MEA-CO2', '30 wt% subset')}
+    zhang_fitted = sum(r['n'] for rs in published.values() for r in rs if r['model'] == 'Zhang2011 eNRTL' and r['data_role'] == 'fitted')
+    main_rows += [head(r'All MEA $p_{\COtwo}$', 5), ours(absorber(p for points in mea_points.values() for p in points)),
+                  theirs(by_model['Tellez2013 eCTS'], r'eCTS \cite{tellez-arredondoModelingCO2H2S2013}\textsuperscript{b}'),
+                  theirs(by_model['Aronu2011 extended UNIQUAC'], r'extended UNIQUAC \cite{Aronu2011}\textsuperscript{c}'),
+                  theirs(by_model['Najafloo2018 SAFT-HR'], PUB['Najafloo2018 SAFT-HR']), theirs(by_model['Baygi2015 PC-SAFT'], PUB['Baygi2015 PC-SAFT']),
+                  theirs(by_model['Akula2023 modified eNRTL'], r'modified eNRTL \cite{Akula2023a}\textsuperscript{d}'),
+                  [r'\quad ' + PUB['Zhang2011 eNRTL'] + r'\textsuperscript{e}', f'{zhang_fitted} of 725', 725, '--', '42.29']]
+    COLUMNS = ['Source and model', 'Fitted', '$N$', '$T$ (K)', r'{AARD (\%)}']
+    SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2]'
+    TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. '
+    table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, at the temperatures it fitted, and of the published models that report a deviation on each source, each over its own observations.',
+          COLUMNS, main_rows, [], spec=SPEC,
+          notes=r'AARD follows Eq.~\eqref{eq:aard}. ' + TERMS + r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$; All MEA $p_{\COtwo}$: the overall value of each model. '
+                r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. '
+                rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi et al.\ \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
+    table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources and temperatures that this work did not fit.',
+          COLUMNS, other_rows, [], spec=SPEC,
+          notes=r'AARD follows main-text Eq.~(\ref{main-eq:aard}). ' + TERMS + r'Unclear: see the text. This work: MEA at nominal 30 wt\%; sets I and II: the two parameter sets of Ermatchkov et al. '
+                r'\textsuperscript{a}15--60 wt\% MEA. \textsuperscript{b}Used to choose the initial parameters.')
     # Where the AMP splits lie: retained search states, projected onto temperature and loading.
     acomponents = [c['component_id'] for c in adoc['parameters']['components']]
     def astate(s):
