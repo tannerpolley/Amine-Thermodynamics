@@ -1,5 +1,5 @@
 \begin{table}[pos=!htbp]\small\setlength{\tabcolsep}{3pt}\centering
-\caption{Data for MEA with their roles in the joint fit of the MEA model, the deviations of that model and the deviations of the model of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical observations.}\label{tab:mea-data}
+\caption{Data for MEA with their roles in the joint fit and deviations of this work and of Polley and Hedengren \cite{polleyReactiveEPCSAFTModeling2026} on identical observations. Held-out \ce{CO2} partial pressures are at nominal 30 wt\% MEA and $T\le\SI{353.2}{\kelvin}$.}\label{tab:mea-data}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.2400\linewidth}r>{\raggedright\arraybackslash}p{0.1200\linewidth}rr>{\raggedright\arraybackslash}p{0.0800\linewidth}rr@{}}
 \toprule
 Quantity (unit) & $N$ & Role & \makecell[rb]{AARD\\(\%)} & RMSE & Role in \cite{polleyReactiveEPCSAFTModeling2026} & \makecell[rb]{AARD (\%)\\\cite{polleyReactiveEPCSAFTModeling2026}} & \makecell[rb]{RMSE\\\cite{polleyReactiveEPCSAFTModeling2026}} \\
@@ -16,13 +16,9 @@ MEA--water vapor water mole fraction, Cai \cite{caiBinaryIsobaricVaporLiquid1996
 Loaded-solution density, Amundsen and Hartono \cite{Amundsen2009,Hartono2014} (kg/\allowbreak{}m$^3$) & $47$ & fitted & $0.15$ & $1.843$ & -- & -- & -- \\*
 Heat capacity per mole of apparent components, Hilliard \cite{Hilliard2008} (J/\allowbreak{}(mol K)) & $4$ & fitted & $3.02$ & $3.089$ & not fitted & $11.41$ & -- \\
 \addlinespace[\aboverulesep]\multicolumn{8}{@{}l}{\itshape Not fitted, or fitted in part} \\*
-All pressures at 30 wt\% MEA, six sources \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,Mamun2005,Xu2011} & $159$ & 47 fitted /\allowbreak{} 112 not fitted & $22.99$ & -- & not stated & $52.34$ & -- \\*
-Pressures not fitted, the same six sources & $112$ & not fitted & $27.88$ & -- & not stated & $45.40$ & -- \\*
-All species fractions \cite{Bottinger2008,matinFacileMethodDetermination2012} (mole fraction) & $131$ & 101 fitted /\allowbreak{} 30 not fitted & -- & $0.0032$ & not stated & -- & $0.0077$ \\*
-Wagner pressures \cite{wagnerSolubilityCarbonDioxide2013} & $23$ & not fitted & $31.84$ & -- & not fitted & $33.44$ & -- \\*
-Aronu 15 wt\% pressures \cite{Aronu2011} & $33$ & not fitted & $44.26$ & -- & com\-parison only & $90.26$ & -- \\*
-Aronu 45 wt\% pressures \cite{Aronu2011} & $37$ & not fitted & $46.89$ & -- & com\-parison only & $32.13$ & -- \\
+\ce{CO2} partial pressure \cite{Aronu2011,Hilliard2008,idrisSpeciationMEACO2Adducts2014,Jou1995,wagnerSolubilityCarbonDioxide2013} & $69$ & not fitted & $27.31$ & -- & not stated & $47.00$ & -- \\*
+All species fractions \cite{Bottinger2008,matinFacileMethodDetermination2012} (mole fraction) & $131$ & 101 fitted /\allowbreak{} 30 not fitted & -- & $0.0032$ & not stated & -- & $0.0077$ \\
 \bottomrule
 \end{tabular}
-\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright --: not calculated; a pressure deviation is given as AARD only. Roles refer to the objective of each model; ``not stated'': Ref.~\cite{polleyReactiveEPCSAFTModeling2026} does not state for every pressure and species observation whether it was fitted. For that model, the species-ratio and carbonate-share measurements informed an earlier fit of the ion parameters but were not in the objective of the published parameters. The sets of the lower block overlap with each other and with the fitted observations, so their counts are not additive; Table~\ref{supp-tab:supplement-mea-comparison} lists the sets of that block that are not pressures. The 39 \ce{CO2}--water pressures of Kiepe et al.\ remain in the objective although the \ce{CO2}--water interaction was fitted to them beforehand and is fixed; they contribute 0.0007 to $C$ (Table~\ref{supp-tab:objective-groups}). Deviations on fitted and not-fitted data are not directly comparable.}
+\par\smallskip\parbox{\linewidth}{\footnotesize\raggedright --: not calculated; pressure deviations are given as AARD. For pressures and species fractions marked ``not stated'', Ref.~\cite{polleyReactiveEPCSAFTModeling2026} does not give the role of every observation. The species ratios informed an earlier ion parameter fit and were outside its published objective. The \ce{CO2}--water pressures of Kiepe et al.\ contribute 0.0007 to $C$ (Table~\ref{supp-tab:objective-groups}); the interaction was fitted beforehand and held fixed. Tables~\ref{supp-tab:supplement-mea-extrapolation} and~\ref{supp-tab:supplement-mea-comparison} give the pressure extrapolations and the other property comparisons, respectively.}
 \end{table}

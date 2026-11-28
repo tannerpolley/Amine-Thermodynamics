@@ -1,20 +1,20 @@
 \begin{table}[!htbp]\small\setlength{\tabcolsep}{2pt}\caption{Residual scales and weights of the fitted DEA, MDEA and AMP data sets.}\label{tab:transfer-scales}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.08\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}@{}}
-\toprule Amine & Data set & Scale $s_j$ & Weight $w_j$ \\ \midrule
+\toprule Amine & Data set & Scale $s_l$ & Weight $w_l$ \\ \midrule
 DEA & \COtwo partial pressures & 0.09 & average over 58 pressures \\
- & Integral absorption heats & $0.02\,|y_j^{\mathrm{obs}}|$ & average over 50 heats \\
+ & Integral absorption heats & $0.02\,|y_l^{\mathrm{obs}}|$ & average over 50 heats \\
 MDEA & Loaded total pressures of Kuranov et al. & 0.015 & $1/66$ \\
  & \COtwo-free pressures of Kuranov et al. & 1 & $1/4$ \\
  & Mixture and pure-water pressures of Kim et al. & 1 & $1/61$ \\
- & Species ratios of Jakobsen et al. & $0.10\,|y_j^{\mathrm{obs}}|$ & $1/16$ \\
- & Heat capacities & $0.02\,|y_j^{\mathrm{obs}}|$ & $1/33$ \\
- & Integral absorption heats, Carson et al. & max(3000 J/mol, $0.05\,|y_j^{\mathrm{obs}}|$) & $1/40$ \\
+ & Species ratios of Jakobsen et al. & $0.10\,|y_l^{\mathrm{obs}}|$ & $1/16$ \\
+ & Heat capacities & $0.02\,|y_l^{\mathrm{obs}}|$ & $1/33$ \\
+ & Integral absorption heats, Carson et al. & max(3000 J/mol, $0.05\,|y_l^{\mathrm{obs}}|$) & $1/40$ \\
  & Integral absorption heats, Merkley et al. & --- & not fitted \\
- & Loaded densities & $[(0.001\rho_j)^2+(0.01g_j)^2]^{1/2}$ & $1/33$ \\
+ & Loaded densities & $[(0.001\rho_l)^2+(0.01g_l)^2]^{1/2}$ & $1/33$ \\
  & Unloaded densities & 0.5 kg/m$^3$ & $1/24$ \\
 AMP & Loaded total pressures & 0.015 & average over 105 pressures \\
  & Binary bubble pressures & 0.05 & average over 52 binary observations \\
- & Vapor AMP mole fractions & $\max(10^{-4},0.05\,y_j^{\mathrm{obs}})$ & average over 52 binary observations \\
+ & Vapor AMP mole fractions & $\max(10^{-4},0.05\,y_l^{\mathrm{obs}})$ & average over 52 binary observations \\
  & Carbamate fractions & 0.003 & average over 57 fractions \\
 \bottomrule\end{tabular}
-\par\smallskip{\footnotesize\raggedright Pressure residuals are logarithmic, with dimensionless scales. $\rho_j$ is the measured density and $g_j$ the local secant slope against loading. For MDEA the weights average each observation group. The extra factor $0.015^{-2}$ in the retained Kuranov weight is written in the scale column.\par}\end{table}
+\par\smallskip{\footnotesize\raggedright Pressure residuals are logarithmic, with dimensionless scales. $\rho_l$ is the measured density and $g_l$ the local secant slope against loading. For MDEA the weights average each observation group. The extra factor $0.015^{-2}$ in the retained Kuranov weight is written in the scale column.\par}\end{table}

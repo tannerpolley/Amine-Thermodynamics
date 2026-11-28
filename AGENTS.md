@@ -30,7 +30,7 @@ the task needs before selecting the evidence-justified route.
 - cse:zotero, cse:data, cse:digitize — sources, datasets, figure values, and PDF transcription
 - cse:plot, cse:tikz, cse:latex, cse:quarto, cse:beamer — figures, diagrams, and documents. For PowerPoint .pptx/.potx decks, read the CSE reference `references/visualize/slide-decks.md` first, then use pptx.
 - cse:audit — inspect software ceremony, duplicated values, misplaced records, or untraced numerical limits read-only
-- delegated roles — review: cse:review; implementation: cse:build; design: cse:design; research: cse:research; diagnosis: cse:diagnose; analysis: cse:analyze; writing: cse:write
+- delegated roles — review: cse:review; implementation: cse:build; design: cse:design; research: cse:research; diagnosis: cse:diagnose; test: cse:analyze; analysis: cse:analyze; writing: cse:write
 
 For a writing retrospective, invoke the skill for the work under review (`cse:write`, `cse:prose`, or `cse:review`) and read the installed `references/workflow/retrospective.md`. For other retrospectives, invoke `cse:audit` and use the same reference.
 
