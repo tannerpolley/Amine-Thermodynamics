@@ -15,7 +15,7 @@ from .wheel import verify  # noqa: E402
 
 
 def main():
-    studies = {"zheng-saturation": "mdea", "hajj-permittivity": "mea"}
+    studies = {"zheng-saturation": "mdea", "hajj-permittivity": "mea", "permittivity-validation": "mea"}
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
