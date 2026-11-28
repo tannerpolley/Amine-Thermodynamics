@@ -1381,6 +1381,34 @@ def _census(row):
     return record
 
 
+def capped_heat_diagnosis(route, point, screen):
+    """Retain the capped heat calculations and their phase-search resolution."""
+    spec = route.bind(point)
+    observations = {row["identity"]: row for pool in ("fitted", "comparisons")
+                    for row in spec.inputs["observations"][pool]
+                    if row["constructor"] == "saturation_capped_addition_enthalpy"}
+    rows = []
+    for search in screen["rows"]:
+        identity, _, suffix = search["key"].rpartition(":")
+        if suffix != "cap" or identity not in observations or search["available"]:
+            continue
+        row = observations[identity]
+        initial = spec.problems[row["initial"]]
+        rows.append(dict(key=search["key"], T_K=initial.T, P_Pa=row["arguments"]["P"],
+                         source=row["row"], observed=row["arguments"]["observed"], status=search["status"],
+                         message=search["message"],
+                         cause=search.get("cause") or search["message"],
+                         minimum=search.get("raw_minimum"), uncertainty=search.get("uncertainty")))
+        if search.get("raw_minimum") is not None:
+            state = dict(key=search["key"], cap_record=identity)
+            item = stability_row(route, spec, state, 1.0, cap_from_prediction=True)
+            prediction = reg.predict(spec.model, item)
+            rows[-1]["trials"] = [dict(evidence=trial.evidence, message=trial.message,
+                                       support=list(trial.phase.support), quantities=dict(trial.quantities))
+                                  for trial in prediction.stability.report.trials]
+    return dict(wheel=screen["wheel"], endpoint_fingerprint=screen["endpoint_fingerprint"], rows=rows)
+
+
 def fresh_searches(amine, route, point, target):
     """Search the W declarations at the selected endpoint."""
     from time import monotonic
@@ -1433,6 +1461,8 @@ def fresh_searches(amine, route, point, target):
         save(target / f"{protocol}.json.gz", dict(payload, classifications=confirmations, seconds=monotonic() - start))
         checks[protocol] = dict(counts=dict(Counter(search_class(row) for row in rows)),
                                seconds=monotonic() - start)
+        if amine == "mdea":
+            save(target / "capped-heat-diagnosis.json.gz", capped_heat_diagnosis(route, point, payload))
     if amine == "mea":
         requests = RESULTS / "mea/reported/phase/requests"
         bank = read(ROOT / "analyses/mea_parameter_bundle/results/reduced-refit/split-registry.json")["trials"]
