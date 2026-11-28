@@ -193,18 +193,21 @@ The fitted ion parameters are conditional on these choices, and the carbonate de
 
 \subsection{Scope and limitations}\label{sec:limits}
 % P:limits-scope
-Within the ranges of their data, the models can be used for absorber design at the accuracies reported here; these ranges of use are the following.
-The MEA model is fitted at nominal 30 wt\% MEA, and at 15 and 45 wt\% its pressures deviate more (\cref{sec:results-concentration}).
-Its absorption heats at \SI{393}{\kelvin} are low on average (\cref{sec:discussion-bands}), so stripper and regeneration duties calculated with it come out correspondingly low.
-The MDEA model represents the total pressures inside the fitted window of Kuranov et al.; outside it, \COtwo partial pressures are underpredicted, most at low loadings, and pressures of concentrated MDEA above a loading of 1 are overpredicted (\cref{sec:results-mdea}), and above \SI{423}{\kelvin} its \COtwo-free solution has a calculated liquid--liquid gap (\cref{sec:results-phase}), so the model should not be used there.
-The DEA model is fitted at 20.6 and 25 wt\% DEA; at 50--54.5 wt\% it underpredicts the \COtwo partial pressures (\cref{sec:results-dea}) and should not be used without a refit.
-The shared water--anion interactions rest on a salt fit, with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), to data that end at \SI{318}{\kelvin}, so their linear laws are extrapolated to 393--\SI{394}{\kelvin} in the MEA, DEA and AMP calculations and to \SI{413}{\kelvin} only for the MDEA pressures of Kuranov et al.\ that are not fitted.
-The amine reaction correlations, R4 and R5, are evaluated outside their source temperature ranges for every amine, unlike R1--R3, and the R4 correlations of DEA and AMP are fitted.
-The DEA model rests on \res{dea-pressure-source-count-limitations} sources of loaded pressures; those of Lawson and Garst were measured with methane in the cell, whose amount they do not report, and with methane partial pressures from zero to the cell limit of about \SI{7.0}{\mega\pascal} the largest change of their calculated \COtwo partial pressures is \SI{\res{dea-largest-lawson-methane-pressure-change}}{\mega\pascal}.
+The models can be used for absorber design inside their fitted conditions, at the fitted and held-out deviations of \cref{tab:amine-summary}, and as extrapolations beyond them (Table~\ref{supp-tab:transfer-deviations}).
+Fitted at 30 wt\% and absorber temperatures, the MEA model deviates more on pressures at 15 and 45 wt\% (\cref{sec:results-concentration}), and its absorption heats at \SI{393}{\kelvin} are low on average (\cref{sec:discussion-bands}), so stripper and regeneration duties calculated with it are correspondingly low.
+The DEA model is fitted at 20.6--25 wt\% and \COtwo partial pressures from \SI{0.05}{\kilo\pascal}, and every pressure not fitted lies beyond them: it represents those at \SI{394}{\kelvin} as well as the fitted ones, is about \res{dea-lawson-concentrated-pressure-low-bias-limit}\,\% low at 50--54.5 wt\% and is high below \SI{0.05}{\kilo\pascal} (\cref{sec:results-dea}).
+Its fitted pressures come from \res{dea-pressure-source-count-limitations} sources, and methane in the cell of Lawson and Garst, in an unreported amount, changes the calculated \COtwo partial pressures by at most \SI{\res{dea-largest-lawson-methane-pressure-change}}{\mega\pascal} for methane up to the cell limit, about \SI{7.0}{\mega\pascal}.
+Fitted to the total pressures of Kuranov et al., the MDEA model represents those at \SI{413}{\kelvin} about as well, and its range of use ends at \SI{423}{\kelvin}, above which its \COtwo-free solution has a calculated liquid--liquid gap (\cref{sec:results-phase}).
+Its \COtwo partial pressures are low, most at loadings below 0.07, under the fitted ones, and its total pressures in concentrated MDEA above a loading of 1 are high (\cref{sec:results-mdea}).
+The AMP model, fitted to total pressures to \SI{393}{\kelvin}, deviates a little more on the \COtwo partial pressures of Kundu et al.\ \cite{kunduVaporLiquidEquilibriumCO22003} below its fitted temperatures and contents than inside them.
+
+% P:limits-shared
+The shared water--anion interactions, fitted to salt data that end at \SI{318}{\kelvin} with \res{salt-interactions-on-lower-bounds-limits} values on their bounds (\cref{sec:species}), are extrapolated linearly to 393--\SI{394}{\kelvin}, and to \SI{413}{\kelvin} only in the MDEA pressures not fitted.
+R4 and R5, unlike R1--R3, are evaluated outside their source temperature ranges for every amine, and the DEA and AMP R4 correlations are fitted.
 Missing pressure histories, inconsistencies between sources, omitted carrier gas, solid precipitation and, for MEA, omitted oxazolidone further limit interpretation.
-The four models are calibrations: every observation was examined during development, so no comparison in this paper is an independent validation or a blind test.
+Held out means outside the objective, not unseen: every observation was examined during development, so no comparison here is an independent validation.
 
 % P:limits-phase
-The phase searches are finite, so the absence of a detected instability is not a proof of global stability.
+The phase searches are finite, so they cannot prove global stability.
 Equations of state of the SAFT family can predict phase behavior that depends on the formulation \cite{privatAreSafeResults2010,yelashGlobalInvestigationPhase2005,polishukNumericalPitfallsCharacteristic2010}, and in electrolyte models the Born term and the permittivity mixing rule change the calculated liquid--liquid equilibrium \cite{AscaniHeld2021,Yang2024}.
-The phase behaviors reported are those calculated with the fitted models, and no measurement used here establishes them.
+No measurement used here establishes the calculated phase behaviors.
