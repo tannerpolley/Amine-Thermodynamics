@@ -1240,8 +1240,9 @@ def transfer_displays(outputs):
                   theirs(by_model['Akula2023 modified eNRTL'], r'modified eNRTL \cite{Akula2023a}\textsuperscript{d}'),
                   [r'\quad ' + PUB['Zhang2011 eNRTL'] + r'\textsuperscript{e}', f'{zhang_fitted} of 725', 725, '--', '42.29']]
     COLUMNS = ['Source and model', 'Fitted', '$N$', '$T$ (K)', r'{AARD (\%)}']
-    SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2]'
-    TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. '
+    SPEC = r'>{\raggedright\arraybackslash}p{0.46\linewidth}lccS[table-format=2.2,detect-weight]'
+    main_rows, other_rows = ([[r'\bfseries ' + str(c) for c in row] if str(row[0]).startswith(r'\quad This work') else row for row in rows] for rows in (main_rows, other_rows))
+    TERMS = r'$N$, $T$: number and temperature range of the observations of each AARD, as reported (--, not reported); Fitted: the observations of this work in its objective, or whether the published model fitted its own. $p_{\COtwo}$: \COtwo partial pressure; $P$: total pressure. Bold: this work. '
     table('published-models', 'Pressure AARD of this work on the pressure sources it fitted, for MEA at absorber temperatures, and of published models that report a deviation on each source, each over its own observations.',
           COLUMNS, main_rows, [], spec=SPEC,
           notes=r'AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. ' + TERMS + r'Unclear: the source calls these results predictions in its methods and fitted in its conclusions. '
