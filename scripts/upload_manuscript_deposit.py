@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SUBMISSION = ROOT / "docs/scientific/latex/submission_metadata.yml"
@@ -20,6 +20,7 @@ ORIGIN = "https://zenodo.org"
 LATEST = f"{ORIGIN}/api/records/{RECORD_ID}/versions/latest"
 DEPOSITIONS = f"{ORIGIN}/api/deposit/depositions"
 ARCHIVE_NAME = "amine-thermodynamics-fpe.zip"
+EPOCH = (1980, 1, 1, 0, 0, 0)  # fixed entry times make the archive bytes reproducible
 
 
 def field(text, name, indent=0):
@@ -47,7 +48,7 @@ def submission_metadata(text, commit):
         raise ValueError("License differs from the MIT license on the published Zenodo version")
     repository = field(text, "repository")
     return {"metadata": {
-        "title": " ".join(title),
+        "title": "Data and code for: " + " ".join(title),
         "description": (
             "<p>Data and code for the Fluid Phase Equilibria article on CO₂ solubility in aqueous "
             "MEA, DEA, MDEA and AMP with ePC-SAFT. The archive includes processed observations, "
@@ -91,8 +92,8 @@ def pack(destination):
                 content = (destination / name).read_bytes()
                 if sha256(content).hexdigest() != digest:
                     raise ValueError(f"Seal checksum mismatch: {name}")
-                output.writestr(name, content)
-            output.writestr(manifest.name, manifest.read_bytes())
+                output.writestr(ZipInfo(name, EPOCH), content, ZIP_DEFLATED)
+            output.writestr(ZipInfo(manifest.name, EPOCH), manifest.read_bytes(), ZIP_DEFLATED)
         candidate.replace(archive)
     return archive
 
