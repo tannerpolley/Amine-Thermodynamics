@@ -2663,6 +2663,24 @@ def result_values(required):
         for name, field in (("saturation-loading", "loading"), ("saturation-heat", "heat_at_calculated_loading")):
             add(f"mdea-zheng-{name}-aard-{passage}", record, f"statistics.{field}.AARD_percent",
                 f"{zheng['statistics'][field]['AARD_percent']:.{digits}f}")
+
+    # Static permittivity: the CO2-free calibration values and the loaded values that Hajj et al. inferred.
+    record = MOVE + "mea/reported/permittivity-validation/summary.json.gz"
+    calibration = read(record)["statistics"]
+    add("mea-permittivity-calibration-rows-supplement", record, "statistics.rows", str(calibration["rows"]))
+    add("mea-permittivity-calibration-aard-supplement", record, "statistics.AARD_percent",
+        f"{calibration['AARD_percent']:.2f}")
+    add("mea-permittivity-calibration-bias-supplement", record, "statistics.bias_percent",
+        f"{calibration['bias_percent']:+.2f}")
+    record = MOVE + "mea/reported/hajj-permittivity/summary.json.gz"
+    hajj = read(record)
+    if (any(r["predicted"] >= r["inferred"] for r in hajj["rows"])
+            or any(i["predicted_change"] >= 0 or i["inferred_change"] <= 0 for i in hajj["isotherms"])):
+        raise ValueError("A Hajj et al. permittivity is no longer above its calculated value, or an isotherm trend changed sign")
+    add("mea-hajj-permittivity-states-supplement", record, "statistics.rows", str(hajj["statistics"]["rows"]))
+    add("mea-hajj-permittivity-isotherms-supplement", record, "len(isotherms)", count_word(len(hajj["isotherms"])))
+    add("mea-hajj-permittivity-aard-supplement", record, "statistics.AARD_percent",
+        f"{hajj['statistics']['AARD_percent']:.2f}")
     for amine in ("mea", "amp"):
         record = MOVE + f"{amine}/reported/alternate-starts/summary.json.gz"
         count = read(record)["tied_count"]
