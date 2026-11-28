@@ -66,7 +66,7 @@ The MEA--water observations of Cai et al.\ \cite{caiBinaryIsobaricVaporLiquid199
 
 % P:methods-starts
 The minimization is a bounded nonlinear least-squares calculation with the epcsaft package, solved by the trust-region Levenberg--Marquardt method of Ceres Solver \cite{agarwalCeresSolver2023} with dense QR factorization and stopped on a relative function tolerance of $10^{-10}$.
-For MEA, \res{mea-tied-start-count-methods} starts reach the same objective value at the printed precision, and the DEA fits from \res{dea-tied-start-count-methods} starts reach the same value.
+For MEA, \res{mea-tied-start-count-methods} starts reach the same objective value at the printed precision, and for DEA \res{dea-tied-start-count-methods} starts do.
 MDEA is fitted from a single start, the initial parameter vector archived for it in the data deposit.
 For AMP, \res{amp-tied-start-count-methods} starts reach the same objective value at the printed precision (Section~\ref{supp-sec:s-uncertainty}).
 

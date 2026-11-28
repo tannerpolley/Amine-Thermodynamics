@@ -3234,14 +3234,17 @@ def result_values(required):
     add('amp-reported-measured-pressure-control-vapor-directed-supplement', W_AMP_CONTROLS,
         'rows[outcome L+V passed or vapor-directed].count',
         NUMBER_WORDS[sum(amp_vapor_outcome(r['outcome']) for r in amp_controls.values())])
-    add('amp-reported-measured-pressure-control-no-descent-supplement', W_AMP_CONTROLS,
-        'rows[outcome no resolved descent].count',
-        NUMBER_WORDS[sum(r['outcome'] == 'No resolved descent' for r in amp_controls.values())])
+    for passage in ("supplement", "transfer"):
+        add(f'amp-reported-measured-pressure-control-no-descent-{passage}', W_AMP_CONTROLS,
+            'rows[outcome no resolved descent].count',
+            NUMBER_WORDS[sum(r['outcome'] == 'No resolved descent' for r in amp_controls.values())])
     liquid_vapor = 'L+V passed; L+L unresolved'
-    for source, prefix in (("hartono", "hartono-2021:"), ("tong", "tong-2012:"), ("reported", "")):
-        add(f'amp-{source}-liquid-vapor-qualified-controls-supplement', W_AMP_CONTROLS,
-            f'rows[{prefix}, outcome {liquid_vapor}].count',
-            NUMBER_WORDS[sum(r['outcome'] == liquid_vapor for key, r in amp_controls.items() if key.startswith(prefix))])
+    for source, prefix, passages in (("hartono", "hartono-2021:", ("supplement",)), ("tong", "tong-2012:", ("supplement",)),
+                                     ("reported", "", ("supplement", "transfer"))):
+        for passage in passages:
+            add(f'amp-{source}-liquid-vapor-qualified-controls-{passage}', W_AMP_CONTROLS,
+                f'rows[{prefix}, outcome {liquid_vapor}].count',
+                NUMBER_WORDS[sum(r['outcome'] == liquid_vapor for key, r in amp_controls.items() if key.startswith(prefix))])
     changes, change_records = [], []
     for amine in ("mea", "dea", "amp"):
         kind = "pressure" if amine == "amp" else "partial_pressure"
