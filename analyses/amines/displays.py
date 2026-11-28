@@ -835,6 +835,27 @@ def transfer_displays(outputs):
     transfer_rows = [[*row[:7], *row[9:], literature_by_source.get(row[0], '---')]
                      if len(row) > 1 else [row[0].replace(r'\multicolumn{11}', r'\multicolumn{10}')]
                      for row in data_rows]
+    # MDEA data sets whose measured or assigned pressure the model puts in its liquid-vapor region.
+    mdea_groups = {r['identity']: r['group'] for r in read(W_MDEA_PROPERTIES)['rows']}
+    vapor_states = collections.Counter()
+    for state in read(W_MDEA_SCREEN)['classifications']:
+        identity = state['key'].rsplit(':', 1)[0]
+        group = mdea_groups.get(identity) or mdea_groups.get(identity.rsplit(':', 1)[0])
+        if group in MSETS and state['liquid_vapor']['qualified'] and min(state['liquid_vapor']['amounts_mol']) > 0:
+            vapor_states[group] += 1
+    for group in [g for g in MSETS if g.startswith('Bottinger-bicarbonate-')]:
+        # The bicarbonate rows are the same NMR states as the amine-sum rows, which carry the search.
+        vapor_states[group] = vapor_states[group.replace('bicarbonate', 'amine-sum')]
+    for group in ('unloaded-density', 'Bottinger-amine-sum-5bar', 'Bottinger-amine-sum-25bar', 'Bottinger-bicarbonate-5bar',
+                  'Bottinger-bicarbonate-25bar', 'Zheng'):
+        title, source, _ = MSETS[group]
+        next(r for r in transfer_rows if r[0] == title + r' \cite{' + source + '}')[3] += r'\textsuperscript{c}'
+    sobrino, nmr5, nmr25, zheng = ((vapor_states[g], sum(r['group'] == g for r in mrows))
+                                   for g in ('unloaded-density', 'Bottinger-amine-sum-5bar', 'Bottinger-amine-sum-25bar', 'Zheng'))
+    assert nmr5[1] == nmr25[1]
+    vapor_note = (f'At {sobrino[0]} of the {sobrino[1]} states of Sobrino et al., {nmr5[0]} and {nmr25[0]} of the {nmr5[1]} '
+                  r'states of B\"ottinger et al.\ at 0.5 and 2.5 MPa and '
+                  + (f'all {count_word(zheng[1])}' if zheng[0] == zheng[1] else f'{zheng[0]} of the {zheng[1]}') + ' states of Zheng et al.')
     nmr_pairs = {frozenset(r['row']['source_row'] for r in mrows if r['group'] == g)
                  for g in MSETS if g.startswith('Bottinger-')}
     (nmr_keys,) = nmr_pairs
@@ -1059,7 +1080,12 @@ def transfer_displays(outputs):
                   if role != 'fitted' and temperature_band(float(row['temperature_K'])) == 'absorber'}
     if collections.Counter(r['identity'] for r in enot if r['identity'] in mea_inside) != dict.fromkeys(mea_inside, 1):
         raise ValueError('The MEA summary pool must contain each held-out absorber observation once')
-    mea_within, mea_outside = split_pressures([(pco2, enot)], lambda r: r['identity'] in mea_inside)
+    _, mea_outside = split_pressures([(pco2, enot)], lambda r: r['identity'] in mea_inside)
+    # MEA pressures are fitted at 313-333 K only, so the absorber-band pool splits at the fitted temperatures.
+    mea_hot_inside = {target for target, _ in mea_held_out_absorber_split()[1]}
+    mea_within = (pco2 + ': ' + pressure_cell([r for r in enot if r['identity'] in mea_inside - mea_hot_inside])
+                  + '; ' + pco2 + r' at \SI{353}{\kelvin}\textsuperscript{b}: '
+                  + pressure_cell([r for r in enot if r['identity'] in mea_hot_inside]))
 
     dloaded = {'Lawson', 'Lawson-394K', 'SeoHong', 'Lal', 'Lawson-VIII'}
     dea_pressure = [r for r in data if r['group'] in dloaded and r['unit'] == 'Pa']
@@ -1101,14 +1127,28 @@ def transfer_displays(outputs):
     mdea_within, mdea_outside = split_pressures(
         [(ptotal, [r for r in mnot if r['group'] not in mdea_partial]),
          (pco2, [r for r in mnot if r['group'] in mdea_partial])], mdea_inside)
+    def mdea_loading(r):
+        source = kuranov[r['row']['source_row']] if r['group'].startswith('Kuranov') else r['row']
+        for k in ('alpha_exp', 'alpha_mol_CO2_per_mol_MDEA'):
+            if source.get(k) not in (None, ''):
+                return float(source[k])
+        k = next(k for k in ('m_CO2_mol_per_kg_H2O', 'm_CO2_mol_kg_water') if source.get(k) not in (None, ''))
+        return float(source[k]) / float(source[k.replace('CO2', 'MDEA')])
+    # The fitted conditions are temperature and content only; held-out MDEA pressures inside them reach lower loadings.
+    mdea_loading_floor = min(map(mdea_loading, mloaded))
+    mdea_inside_held = [r for r in mnot if mdea_inside(r) and r.get('status', 'Available').lower() == 'available']
+    mdea_below_floor = sum(mdea_loading(r) < mdea_loading_floor for r in mdea_inside_held)
 
     amp_loaded = {'loaded-pressure', 'hartono-2021-supplemental', 'tong'}
     aloaded = [r for r in arows if r['group'] in amp_loaded and r['unit'] == 'Pa' and r['role'] == 'fitted']
     def amp_conditions(r):
         return r['T_K'], amp_mass_percent(afeed[r['identity']])
     amp_inside, amp_temperatures, amp_concentrations = fitted_conditions(aloaded, amp_conditions)
+    amp_free = [r for r in arows if r['group'] == 'tong-baseline']
+    if any(float(afeed[r['identity']]['alpha']) for r in amp_free):
+        raise ValueError('The held-out AMP total pressures of Tong et al. are no longer all CO2-free')
     amp_within, amp_outside = split_pressures(
-        [(ptotal, [r for r in arows if r['group'] == 'tong-baseline']),
+        [(ptotal + r', \COtwo-free', amp_free),
          (pco2, [r for r in arows if r['group'] == 'kundu'])], amp_inside)
 
     unclassified = []
@@ -1161,18 +1201,21 @@ def transfer_displays(outputs):
         return (label + ' (' + span(temperatures, lambda t: f'{t:.5g}') + ' K, '
                 + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + extra + ')')
     conditions = ', '.join([
-        conditions_note('MEA', [min(float(r['temperature_K']) for r in mea_pressure
-                                    if r['target'] in fitted_pressure), MEA_ABSORBER_MAX_K], [30], r'wt\%'),
+        conditions_note('MEA', [float(r['temperature_K']) for r in mea_pressure
+                                if r['target'] in fitted_pressure], [30], r'wt\%'),
         conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%', r', $p_{\COtwo}\ge\SI{0.05}{\kilo\pascal}$'),
-        conditions_note('MDEA', mdea_temperatures, mdea_concentrations, 'mol/kg water'),
+        conditions_note('MDEA', mdea_temperatures, mdea_concentrations, 'mol/kg water',
+                        f'; fitted loadings from {mdea_loading_floor:.3f}, and {mdea_below_floor} of the '
+                        f'{len(mdea_inside_held)} held-out MDEA pressures within these conditions lie below it'),
         'and ' + conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
     ])
     pressure_note = r'AARD (Eq.~\eqref{eq:aard}) in \% with the number of observations in parentheses. $P$ is total pressure and $p_{\COtwo}$ is \COtwo partial pressure.'
     table('amine-summary', 'The four models: fitted parameters, pressure deviations and predicted liquid--liquid splits.', ['Model', 'Fitted parameters', 'On bounds', 'Fitted loaded-solution pressures', 'Held out within the fitted conditions', 'Liquid--liquid splits at measured states'], rows, [.09, .1, .08, .22, .28, .17],
-          notes=pressure_note + ' The fitted conditions are given by temperature and nominal unloaded amine content for ' + conditions + '. '
-                r'The held-out AMP total pressures are the \COtwo-free observations of Tong et al. '
+          notes=pressure_note + ' The fitted conditions are the temperatures and nominal unloaded amine contents of the fitted loaded-solution pressures of ' + conditions + '. '
+                + f'All {count_word(len(amp_free))} held-out AMP total pressures are \\COtwo-free observations of Tong et al. '
                 r'Supplementary Table~\ref{supp-tab:transfer-deviations} gives deviations outside the fitted conditions. '
-                + ''.join(rf'\textsuperscript{{a}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified))
+                + ''.join(rf'\textsuperscript{{a}}At the {c} of {n} measured states that the search classified (Section~\ref{{supp-sec:s-phase}}).' for c, n in unclassified)
+                + r' \textsuperscript{b}Above the fitted MEA temperatures and not among the deviations outside the fitted conditions.')
     pooled = [head('Pooled pressure deviations outside the fitted conditions', 10)]
     for label, deviation in zip(('MEA', 'DEA', 'MDEA', 'AMP'),
                                 (mea_outside, dea_outside, mdea_outside, amp_outside), strict=True):
@@ -1183,7 +1226,9 @@ def transfer_displays(outputs):
            r'AARD (\%)', r'Bias (\%)', r'Published AARD (\%)'],
           pooled + transfer_rows, [.15,.10,.107,.048,.095,.09,.084,.065,.068,.10], long=True,
           notes=r'Pooled deviations give AARD in \% with $N$ in parentheses. '
-                r'$N$: observations in the data set (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set.')
+                r'$N$: observations in the data set (number with a defined relative deviation in parentheses if different). Bias: mean signed relative deviation. Published deviations are for the parameter sets I and II of Ermatchkov et al.\ (Section~\ref{sec:s-published}). The B\"ottinger et al.\ rows at 0.5 and 2.5 MPa repeat the same ' + str(nmr_rows) + r' observations, calculated at the two ends of the reported cell-pressure interval. \textsuperscript{a}Mole fraction of added \COtwo. \textsuperscript{b}A relative density deviation is not reported for this set. '
+                r'\textsuperscript{c}Single-liquid values at the measured state, for the heats of Zheng et al.\ at the measured final loading. '
+                + vapor_note + r', the measured or assigned pressure lies below the calculated bubble pressure, and the model predicts a vapor (Section~\ref{sec:s-phase}).')
     P341 = MEAEVIDENCE
     mea_fit = read(P341 + 'fitted-rows.csv')
     cai_T = [float(r['observed']) for r in mea_fit if r['group'] == 'Cai' and r['quantity'] == 'temperature']
@@ -2332,6 +2377,20 @@ def temperature_band(T):
     return 'absorber' if T <= MEA_ABSORBER_MAX_K else 'stripper' if T >= 370 else 'intermediate'
 
 
+def mea_held_out_absorber_split():
+    """Held-out MEA absorber-band pressures at the fitted temperatures and above them, as (target, point) pairs."""
+    rows = list(mea_nominal_pressure_rows())
+    fitted_max = max(float(row["temperature_K"]) for role, row, _ in rows if role == "fitted")
+    held = [(row["target"], dict(observed=result["observed"], predicted=result["value"], T=float(row["temperature_K"])))
+            for role, row, result in rows if role == "not fitted" and temperature_band(float(row["temperature_K"])) == "absorber"]
+    # Measured isotherm temperatures scatter by tenths of a kelvin (Hilliard 2008 at 333.26 K belongs to 333 K).
+    inside = [h for h in held if h[1]["T"] <= fitted_max + 1]
+    above = [h for h in held if h[1]["T"] > fitted_max + 1]
+    if min(p["T"] for _, p in above) < 350:
+        raise ValueError("The held-out MEA absorber pressures above the fitted temperatures are no longer the 353 K isotherm")
+    return inside, above
+
+
 def result_values(required):
     values = {}
 
@@ -2496,8 +2555,26 @@ def result_values(required):
     if controls.keys() != read(W_AMP_CONTROLS)["rows"].keys() or any(
             row["outcome"] != "confirmed split" for row in controls.values()):
         raise ValueError("The AMP fit without the added pressures no longer splits at every measured control of the AMP model")
-    for passage in ("transfer", "supplement"):
+    for passage in ("transfer", "supplement", "abstract", "limits", "conclusion"):
         add(f"amp-measured-control-states-{passage}", record, "len(rows)", count_word(len(controls)))
+    # Worked positive control of Section S6: the first Hartono et al. state at 373 K under that fit.
+    locator = "rows[hartono-2021:55:problem].result"
+    worked = controls["hartono-2021:55:problem"]["result"]
+    attempt = next(a for a in worked["attempts"] if a["confirmed"])
+    liquids = attempt["diagnostics"]["phases"]
+    for name, value in (
+            ("pressure", f"{worked['P_Pa'] / 1e3:.1f}"),
+            ("loading", f"{worked['feed_mol'][0] / worked['feed_mol'][1]:.2f}"),
+            ("trial-distance", f"{worked['minimum_trial']['quantities']['tpd_over_rt']:.5f}"),
+            ("first-density", f"{liquids[0]['density_mol_m3'] / 1e3:.1f}"),
+            ("second-density", f"{liquids[1]['density_mol_m3'] / 1e3:.1f}"),
+            ("first-water", f"{liquids[0]['x'][worked['species'].index('water')]:.3f}"),
+            ("second-water", f"{liquids[1]['x'][worked['species'].index('water')]:.3f}"),
+            ("first-amount", f"{attempt['amounts_mol'][0]:.2f}"), ("second-amount", f"{attempt['amounts_mol'][1]:.2f}"),
+            ("gibbs-decrease", f"{attempt['Gibbs_decrease_over_RT_mol']:.5f}"),
+            ("gibbs-error", prose_scientific(attempt["numerical_error_over_RT_mol"], ".1e")),
+            ("row-tolerance", prose_scientific(worked["row_tolerance"], None))):
+        add(f"amp-worked-control-{name}", record, locator, value)
     for amine in ("mea", "amp"):
         record = MOVE + f"{amine}/reported/alternate-starts/summary.json.gz"
         count = read(record)["tied_count"]
@@ -2583,7 +2660,7 @@ def result_values(required):
         add(f"mdea-measured-states-without-instability-{passage}", W_MDEA_SCREEN,
             "distinct measured rows[searched, no instability].count",
             str(measured_counts["searched, no instability"]))
-    for passage in ("supplement", "transfer"):
+    for passage in ("supplement", "transfer", "abstract", "limits", "conclusion"):
         add(f"mdea-measured-states-unclassified-{passage}", W_MDEA_SCREEN,
             "distinct measured rows[unavailable].count", count_word(measured_counts["unavailable"], zero="zero"))
     record = MOVE + "mdea/reported/phase/capped-heat-diagnosis.json.gz"
@@ -2613,7 +2690,7 @@ def result_values(required):
         states.append(dict(row, source=source))
     if len(states) != measured_counts["descent"]:
         raise ValueError("The MDEA classifications differ from the distinct descent states")
-    for passage in ("transfer", "supplement-total", "supplement-by-source"):
+    for passage in ("transfer", "supplement-total", "supplement-by-source", "limits"):
         add(f"mdea-distinct-descent-states-{passage}", W_MDEA_SCREEN, "len(classifications)", str(len(states)))
     mdea_bubbles = read(W_MDEA_PROPERTIES)["mdea_bubble"]
     zheng = {str(observations[key.rsplit(":", 1)[0]]["source_row"]): key
@@ -2779,6 +2856,14 @@ def result_values(required):
     hot = [dict(observed=observed, predicted=value)
            for role, _, T, observed, value in mea_nominal_pressure_points()
            if role == "not fitted" and temperature_band(T) == "stripper"]
+    for label, part in zip(("fitted-temperature", "353"), mea_held_out_absorber_split(), strict=True):
+        part = stats([point for _, point in part])
+        locator = f"canonical and Wagner [not fitted, absorber band, {label}]"
+        add(f"mea-held-out-{label}-pressure-count", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".count", str(part["n"]))
+        add(f"mea-held-out-{label}-pressure-aard", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".AARD_percent",
+            f"{part['AARD_percent']:.1f}")
+        add(f"mea-held-out-{label}-pressure-bias", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".bias_percent",
+            f"{part['bias_percent']:.1f}")
     locator = "canonical and Wagner [not fitted, stripper temperature band]"
     for passage in ("supplement", "transfer"):
         add(f"mea-hot-pressure-count-{passage}", MEA_NOMINAL_PRESSURE_RECORDS, locator + ".count", str(len(hot)))
@@ -3234,13 +3319,13 @@ def result_values(required):
     add('amp-reported-measured-pressure-control-vapor-directed-supplement', W_AMP_CONTROLS,
         'rows[outcome L+V passed or vapor-directed].count',
         NUMBER_WORDS[sum(amp_vapor_outcome(r['outcome']) for r in amp_controls.values())])
-    for passage in ("supplement", "transfer"):
+    for passage in ("supplement", "transfer", "abstract", "limits", "conclusion"):
         add(f'amp-reported-measured-pressure-control-no-descent-{passage}', W_AMP_CONTROLS,
             'rows[outcome no resolved descent].count',
             NUMBER_WORDS[sum(r['outcome'] == 'No resolved descent' for r in amp_controls.values())])
     liquid_vapor = 'L+V passed; L+L unresolved'
     for source, prefix, passages in (("hartono", "hartono-2021:", ("supplement",)), ("tong", "tong-2012:", ("supplement",)),
-                                     ("reported", "", ("supplement", "transfer"))):
+                                     ("reported", "", ("supplement", "transfer", "abstract", "limits", "conclusion"))):
         for passage in passages:
             add(f'amp-{source}-liquid-vapor-qualified-controls-{passage}', W_AMP_CONTROLS,
                 f'rows[{prefix}, outcome {liquid_vapor}].count',

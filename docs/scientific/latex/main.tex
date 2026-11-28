@@ -87,22 +87,21 @@
 \hyphenation{mono-ethanolamine}
 \begin{abstract}
 % P:abstract-01
-Equation-of-state models of carbon dioxide (\COtwo) solubility in aqueous alkanolamines are calibrated amine by amine and judged by their deviations from measured pressures, but a fit to single-liquid data does not require the calculated liquid to be stable.
-An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with explicit ions describes \COtwo solubility in four aqueous amines calibrated on one base set without amine data: water, \COtwo, the inorganic ions and reactions, and water--anion interactions fixed from sodium-salt osmotic coefficients.
-Monoethanolamine (MEA) is fitted jointly to pressures, species fractions, absorption heats, heat capacities and densities.
-Diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) are each fitted through their own species, DEA and AMP each holding two parameters at their MEA values.
-The fitted \COtwo partial pressures of MEA at 30 wt\% and of DEA deviate by \res{mea-fitted-pressure-aard-abstract} and \res{dea-fitted-pressure-aard-abstract}\,\%, and the fitted total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%.
-Reactive phase-stability searches at measured and gridded states find no confirmed second liquid in the four models.
-That outcome depends on the fitted data.
+Equation-of-state models of carbon dioxide (\COtwo) solubility in aqueous alkanolamines are calibrated amine by amine and judged by their pressure deviations, but fits to single-liquid data do not require a stable calculated liquid.
+An electrolyte perturbed-chain statistical associating fluid theory (ePC-SAFT) model with explicit ions describes four aqueous amines on shared parameters determined without amine measurements: water, \COtwo, inorganic ions and reactions, and water--anion interactions from sodium-salt osmotic coefficients.
+Monoethanolamine (MEA) is fitted to pressures, species, heats, heat capacities and densities, and diethanolamine (DEA), methyldiethanolamine (MDEA) and 2-amino-2-methyl-1-propanol (AMP) through their own species, DEA and AMP each holding two parameters at MEA values.
+The fitted \COtwo partial pressures of MEA at 30 wt\% and of DEA deviate by \res{mea-fitted-pressure-aard-abstract} and \res{dea-fitted-pressure-aard-abstract}\,\%, and the total pressures of MDEA and AMP by \res{mdea-fitted-pressure-aard-abstract} and \res{amp-fitted-pressure-aard-abstract}\,\%.
+Reactive phase-stability searches with liquid and vapor trials at measured and gridded states confirm no second liquid in any model, with \res{mdea-measured-states-unclassified-abstract} MDEA heat-measurement states unclassified.
+This outcome depends on the fitted data.
 A DEA fit without the Lawson--Garst pressures predicts one.
-Weighting the \COtwo-free MDEA pressures like the loaded ones removes a calculated liquid--liquid gap from that solution.
-An AMP fit without the loaded Tong pressures and the Hartono pressures above \SI{353}{\kelvin} predicts a second liquid, and the AMP model, which fits them, predicts none.
-A phase-stability search thus tests a fitted electrolyte model beyond its deviations from the fitted data.
+Weighting the \COtwo-free MDEA pressures like the loaded ones removes a calculated liquid--liquid gap.
+An AMP fit without the loaded Tong pressures and Hartono pressures above \SI{353}{\kelvin} predicts a second liquid; the AMP model, fitting them, detects no instability at \res{amp-reported-measured-pressure-control-no-descent-abstract} of \res{amp-measured-control-states-abstract} measured pressures and a vapor at \res{amp-reported-liquid-vapor-qualified-controls-abstract}, without deciding whether a second liquid also forms.
+Phase-stability searches test fitted electrolyte models beyond the deviations of their fits.
 
 \end{abstract}
 
 \begin{keywords}
-\ce{CO2} solubility\sep{}ePC-SAFT\sep{}monoethanolamine\sep{}diethanolamine\sep{}methyldiethanolamine\sep{}2-amino-2-methyl-1-propanol\sep{}electrolyte equation of state\sep{}phase stability
+\ce{CO2} solubility\sep{}ePC-SAFT\sep{}monoethanolamine\sep{}diethanolamine\sep{}methyldiethanolamine\sep{}2-amino-2-methyl-1-propanol\sep{}phase stability
 \end{keywords}
 
 \maketitle
@@ -111,22 +110,21 @@ A phase-stability search thus tests a fitted electrolyte model beyond its deviat
     pdftitle={Modeling CO2 solubility in aqueous alkanolamine solutions with ePC-SAFT},
     pdfauthor={Tanner W. Polley},
     pdfsubject={CO2 solubility, caloric and density properties and phase stability of aqueous MEA, DEA, MDEA and AMP with ePC-SAFT},
-    pdfkeywords={CO2 solubility, ePC-SAFT, monoethanolamine, diethanolamine, methyldiethanolamine, 2-amino-2-methyl-1-propanol, electrolyte equation of state, phase stability}
+    pdfkeywords={CO2 solubility, ePC-SAFT, monoethanolamine, diethanolamine, methyldiethanolamine, 2-amino-2-methyl-1-propanol, phase stability}
 }
 
 \input{sections/introduction}
 \input{sections/epc_saft_equation_of_state}
 \input{sections/data_methods}
 \input{sections/mea_system_modeling_results}
-\FloatBarrier
 \input{sections/transfer_results}
 \FloatBarrier
 \input{sections/conclusion}
 \input{sections/data_code_availability}
 
 \FloatBarrier
-\input{sections/acknowledgements}
 \input{sections/nomenclature}
+\input{sections/acknowledgements}
 
 \bibliographystyle{styles/model1-num-names}
 \bibliography{references,transfer_sources}
