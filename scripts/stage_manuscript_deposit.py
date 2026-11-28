@@ -143,6 +143,7 @@ def pdf_text(path):
 def seal(destination):
     paths = sorted(path for path in destination.rglob("*") if path.is_file()
                    and not any((part.startswith(".") and part != ".latexmkrc") or part == "__pycache__"
+                               or part.endswith(".egg-info")
                                for part in path.relative_to(destination).parts)
                    and path.name != "SHA256SUMS")
     (destination / "SHA256SUMS").write_text("".join(

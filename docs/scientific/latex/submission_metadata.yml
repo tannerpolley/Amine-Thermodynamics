@@ -47,9 +47,9 @@ repository_license: MIT
 repository_visibility_at_submission: public
 release_tag: null
 release_commit: null
-data_commit: null  # the 7db3ea91 staging was for the MEA-only paper; set when the deposit is re-staged
+data_commit: 109b50506b0edfc0ae027182e9eee5343b82a445
 fitting_stage_commit: null
-data_delivery: local deposit preparation for Zenodo; DOI added at submission
+data_delivery: merged-paper deposit rebuilt and sealed locally for Zenodo
 local_data_release: ~/Workspaces/External/mea-manuscript-deposit/ (outside the repository; staged by scripts/stage_manuscript_deposit.py)
 engines:
   - scope: Earlier MEA calculations and the 16-parameter calibration
@@ -110,6 +110,6 @@ excluded_from_upload:
   - docs/scientific/latex/submission_metadata.yml
 remaining_human_gate:
   - owner review of main.pdf and supplement.pdf
-  - re-stage the deposit for the merged paper, then owner authorization for data publication and DOI creation
+  - owner authorization to create the Zenodo draft, reserve its DOI, and publish
   - referee access to the epcsaft 1.3.0 and 1.3.1 wheels, arranged through the corresponding author
   - owner authorization for Overleaf sync, a ChemRxiv preprint and journal submission

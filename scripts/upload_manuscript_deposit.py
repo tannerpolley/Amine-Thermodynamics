@@ -147,8 +147,8 @@ def draft(destination, text, *, token=None, dry_run=False):
         print(f"GET {LATEST}")
         print(f"POST {DEPOSITIONS}/{RECORD_ID}/actions/newversion (using the latest version ID from GET)")
         print(f"GET {DEPOSITIONS}/<draft-id>")
-        print(f"DELETE {DEPOSITIONS}/<draft-id>/files/<file-id> (for each file in the draft)")
-        print(f"PUT {ORIGIN}/api/files/<bucket-id>/{archive.name}")
+        print(f"DELETE {DEPOSITIONS}/<draft-id>/files/<file-id> (for each inherited or superseded file)")
+        print(f"PUT {ORIGIN}/api/files/<bucket-id>/{archive.name} (if the matching archive is absent)")
         print(f"PUT {DEPOSITIONS}/<draft-id>")
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return
@@ -156,17 +156,26 @@ def draft(destination, text, *, token=None, dry_run=False):
     latest = request("GET", LATEST)
     if str(latest["conceptrecid"]) != CONCEPT_ID:
         raise ValueError("Latest record is outside the expected Zenodo concept")
+    inherited = {entry["key"] for entry in latest["files"]}
     version = request("POST", f"{DEPOSITIONS}/{int(latest['id'])}/actions/newversion", token=token)
     draft_id = int(urlsplit(version["links"]["latest_draft"]).path.rstrip("/").rsplit("/", 1)[-1])
     endpoint = f"{DEPOSITIONS}/{draft_id}"
     record = request("GET", endpoint, token=token)
     check_draft(record, draft_id)
-    for entry in record["files"]:
-        request("DELETE", f"{endpoint}/files/{quote(str(entry['id']), safe='')}", token=token)
-    bucket = record["links"]["bucket"].rstrip("/")
-    uploaded = request("PUT", f"{bucket}/{quote(archive.name)}", token=token, archive=archive)
+    unexpected = {entry["filename"] for entry in record["files"]} - inherited - {archive.name}
+    if unexpected:
+        raise ValueError(f"Existing draft {draft_id} contains files outside this deposit: {sorted(unexpected)}")
     with archive.open("rb") as stream:
         md5 = file_digest(stream, "md5").hexdigest()
+    uploaded = None
+    for entry in record["files"]:
+        if entry["filename"] == archive.name and entry["checksum"].removeprefix("md5:") == md5:
+            uploaded = entry
+        else:
+            request("DELETE", f"{endpoint}/files/{quote(str(entry['id']), safe='')}", token=token)
+    if uploaded is None:
+        bucket = record["links"]["bucket"].rstrip("/")
+        uploaded = request("PUT", f"{bucket}/{quote(archive.name)}", token=token, archive=archive)
     if uploaded["checksum"].removeprefix("md5:") != md5:
         raise ValueError("Zenodo's upload checksum differs from the archive MD5")
     updated = request("PUT", endpoint, token=token, payload=payload)
