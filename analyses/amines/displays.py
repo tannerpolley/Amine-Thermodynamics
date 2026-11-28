@@ -1027,7 +1027,7 @@ def transfer_displays(outputs):
     def pressure_cell(rows):
         available = [r for r in rows if r.get('status', 'Available').lower() == 'available']
         if not available:
-            return '--- (0)'
+            return 'none'
         return cell(dict(stats(available, predicted='value'), rows=len(available)))
 
     def split_pressures(pools, within):
@@ -1066,8 +1066,10 @@ def transfer_displays(outputs):
     def dea_conditions(r):
         return r['T_K'], lal_wt if r['group'] == 'Lal' else float(r['row']['DEA_mass_percent'])
     dea_inside, dea_temperatures, dea_concentrations = fitted_conditions(dfit, dea_conditions)
+    # The DEA objective fits pressures at or above 0.05 kPa, so the lower Lal pressures lie outside its fitted conditions.
+    dea_floor = min(float(r['observed']) for r in dfit)
     dea_within, dea_outside = split_pressures(
-        [(pco2, [r for r in dea_pressure if r['role'] != 'fitted'])], dea_inside)
+        [(pco2, [r for r in dea_pressure if r['role'] != 'fitted'])], lambda r: dea_inside(r) and float(r['observed']) >= dea_floor)
 
     mdea_pressures = [r for r in mdea_pressure_rows(read(W_MDEA_PROPERTIES)) if r['unit'] == 'Pa']
     mloaded = [r for r in mdea_pressures if r['group'] == 'Kuranov' and r['role'] == 'fitted']
@@ -1148,13 +1150,13 @@ def transfer_displays(outputs):
                  ticks=salt_temperatures, label='Temperature (K)', aspect=30)
     figure(fig, 'salt-osmotic-residuals.pdf')
 
-    def conditions_note(label, temperatures, concentrations, unit):
+    def conditions_note(label, temperatures, concentrations, unit, extra=''):
         return (label + ' (' + span(temperatures, lambda t: f'{t:.5g}') + ' K, '
-                + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + ')')
+                + span(concentrations, lambda c: f'{c:.3g}') + ' ' + unit + extra + ')')
     conditions = ', '.join([
         conditions_note('MEA', [min(float(r['temperature_K']) for r in mea_pressure
                                     if r['target'] in fitted_pressure), MEA_ABSORBER_MAX_K], [30], r'wt\%'),
-        conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%'),
+        conditions_note('DEA', dea_temperatures, dea_concentrations, r'wt\%', r', $p_{\COtwo}\ge\SI{0.05}{\kilo\pascal}$'),
         conditions_note('MDEA', mdea_temperatures, mdea_concentrations, 'mol/kg water'),
         'and ' + conditions_note('AMP', amp_temperatures, amp_concentrations, r'wt\%'),
     ])
