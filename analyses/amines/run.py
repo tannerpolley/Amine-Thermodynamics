@@ -20,7 +20,7 @@ def main():
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
     parser.add_argument("stage", choices=(*studies, "rows", "fit", "replay", "phase", "properties", "alternate-starts",
-                                          "water-calibration", "born-sensitivity", "held-out-pressures"))
+                                          "water-calibration", "born-sensitivity", "held-out-pressures", "third-liquid"))
     parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
     module = import_module(f"{__package__}.{args.amine}")
@@ -30,7 +30,16 @@ def main():
     verify()
     target = args.output.resolve() / args.amine / args.fit_set / args.stage
     name = "summary.json.gz"
-    if args.stage == "alternate-starts" and args.amine in ("mea", "amp") and args.fit_set == "reported":
+    if args.stage == "third-liquid":
+        if (args.amine, args.fit_set) != ("amp", "reported"):
+            parser.error("The third-liquid controls are declared for the reported AMP fit")
+        target, name = target.parent / "phase", "third-liquid.json.gz"
+        local = target.parent / "fit"
+        chosen = local if (local / "selection.json").is_file() else declaration["retained"]
+        point, _ = fit.retained_endpoint(declaration | {"retained": chosen})
+        controls = fit.read(chosen.parent / "phase/measured-controls.json.gz")
+        record = phase.amp_third_liquid(fit.route_for(declaration), point, controls)
+    elif args.stage == "alternate-starts" and args.amine in ("mea", "amp") and args.fit_set == "reported":
         record = fit.alternate_starts(declaration, target)
     elif args.stage in studies:
         if args.amine != studies[args.stage] or args.fit_set != "reported":
