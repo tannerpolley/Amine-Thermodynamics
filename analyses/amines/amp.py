@@ -226,6 +226,18 @@ class ExpandedPressure(Route):
         return spec
 
 
+class WithoutTong(ExpandedPressure):
+    def bind(self, point):
+        spec = super().bind(point)
+        observations = spec.inputs["observations"]
+        fitted = observations["fitted"]
+        observations["comparisons"].extend(
+            dict(row, role="not fitted") for row in fitted if row["group"] == "tong"
+        )
+        observations["fitted"] = [row for row in fitted if row["group"] != "tong"]
+        return spec
+
+
 FIT_SETS = {
     "pure-and-binary": dict(
         replay=replay_pure_and_binary,
@@ -285,6 +297,11 @@ FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
 FIT_SETS["without-hot-pressures"] = FIT_SETS["reported"] | dict(
     route=Route,
     retained=RESULTS / "move/amp/without-hot-pressures/fit",
+)
+
+FIT_SETS["without-tong"] = FIT_SETS["reported"] | dict(
+    route=WithoutTong,
+    retained=RESULTS / "move/amp/without-tong/fit",
 )
 
 FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
