@@ -18,7 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("amine", choices=("salt", "mea", "dea", "mdea", "amp"))
     parser.add_argument("fit_set")
-    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts", "water-calibration"))
+    parser.add_argument("stage", choices=("rows", "fit", "replay", "phase", "properties", "alternate-starts", "water-calibration", "born-sensitivity"))
     parser.add_argument("--output", type=Path, default=ROOT / "build/amine-reproduction")
     args = parser.parse_args()
     module = import_module(f"{__package__}.{args.amine}")
@@ -44,6 +44,10 @@ def main():
     elif args.amine == "mea" and args.fit_set == "reported" and args.stage == "water-calibration":
         point, selected = fit.retained_endpoint(declaration)
         record = properties.water_calibration(fit.route_for(declaration), point)
+        record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
+    elif args.amine == "mea" and args.fit_set == "reported" and args.stage == "born-sensitivity":
+        point, selected = fit.retained_endpoint(declaration)
+        record = module.born_sensitivity(fit.route_for(declaration), point)
         record.update(wheel=verify(), endpoint_fingerprint=selected["endpoint_fingerprint"])
     elif args.stage == "replay":
         name = "endpoint.json.gz"
@@ -84,7 +88,7 @@ def main():
         point = fit.read(declaration["endpoint"])
         route = fit.route_for(declaration)
         record = phase.fresh_searches(args.amine, route, point, target)
-    elif args.stage in ("alternate-starts", "water-calibration") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
+    elif args.stage in ("alternate-starts", "water-calibration", "born-sensitivity") or "retained" not in declaration or (args.amine == "mdea" and args.fit_set != "reported"):
         parser.error("This fit set is replayed on the locked wheel")
     elif args.stage == "rows":
         record = fit.rows(declaration, fit.manifest(declaration))

@@ -20,6 +20,7 @@ from .model import (
     Route,
     evaluate,
     parameter_mapping,
+    replay,
     parameter_values,
     with_parameter_values,
 )
@@ -1403,6 +1404,23 @@ def display_properties(route, point, fit):
         "caloric-and-species": dict(identity, arcis=arcis, species=list(species.values()),
                                     reference_state=worked_calorimetry(spec, caloric["reference_state"])),
     }
+
+
+def born_sensitivity(route, point):
+    """Replay the fitted rows with one fixed Born diameter of 3.0 A changed at a time."""
+    base = replay(route.bind(point))
+    cases = []
+    for ion, diameters in (("bicarbonate-anion", (2.5, 3.5, 4.0)), ("carbonate-anion", (2.5, 4.0))):
+        for diameter in diameters:
+            changed = dict(point, parameters=with_parameter_values(
+                point["parameters"], {f"component/{ion}/born_diameter": diameter}))
+            result = replay(route.bind(changed))
+            pressures = [abs(row["value"] / reference["value"] - 1)
+                         for row, reference in zip(result["rows"], base["rows"], strict=True)
+                         if reference["identity"].endswith("-pco2")]
+            cases.append(dict(ion=ion, diameter_A=diameter, cost=result["cost"], refused=result["refused"],
+                              pressure_count=len(pressures), largest_pressure_change_percent=100 * max(pressures)))
+    return dict(reference_cost=base["cost"], cases=cases)
 
 
 def reference_bubbles(spec, retained):

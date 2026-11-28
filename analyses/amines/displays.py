@@ -57,6 +57,7 @@ W_MDEA_WITHOUT_GAP_BOUND = MOVE + "mdea/without-binary-gap-bound/phase/summary.j
 W_ABLATION = MOVE + "shared/properties/water-bicarbonate-ablation.json.gz"
 W_MEA_ABLATION_FIT = MOVE + "mea/water-bicarbonate-ablation/fit/A.json.gz"
 W_WATER = MOVE + "mea/reported/water-calibration/summary.json.gz"
+BORN = MOVE + "mea/reported/born-sensitivity/summary.json.gz"
 DEA_R4_SOURCE = "analyses/dea_transfer/declarations.toml"
 AMP_R4_SOURCE = "analyses/amp_transfer/inputs/retransfer-344/phase-2/declarations.toml"
 sources = {}
@@ -864,8 +865,8 @@ def transfer_displays(outputs):
     # Hydroxide Born diameter from the Born equation: hydration free energy -106.4 kcal/mol, water permittivity 78.37 at 298.15 K.
     born_oh = 6.02214076e23 * 1.602176634e-19 ** 2 * (1 - 1 / 78.37) / (4 * math.pi * 8.8541878128e-12 * 106.4 * 4184) * 1e10
     # Sensitivity of the MEA fit to the two Born diameters set at 3.0 A (supplement): the tested diameters, the largest objective change and the largest shifts of fitted CO2 partial pressures.
-    born = read(MEA + 'born-diameter-sensitivity-405/summary.json')
-    born_cost = f"at most {100 * max(abs(c['cost_change']) for c in [*born['cases'], born['bicarbonate_interior']]) / born['reference_cost']:.2f}"
+    born = read(BORN)
+    born_cost = f"at most {100 * max(abs(c['cost'] / born['reference_cost'] - 1) for c in born['cases']):.2f}"
     [born_cost, f"{dflat['carbamate-anion/dispersion_energy_over_k'][0]:.4f}", f"{f2['component/carbamate-anion/segment_diameter']:.4f}", f'{size_ratio:.4f}', f'{born_oh:.4f}', '$-106.4$ kcal/mol', '78.37']
     ROWS = [(0, 'diethanolamine', r'\ce{DEA}'), (0, 'protonated-diethanolamine', r'\ce{DEAH+}'), (0, 'carbamate-anion', r'\ce{DEACOO-}'), (1, 'methyldiethanolamine', r'\ce{MDEA}'), (1, 'protonated-methyldiethanolamine', r'\ce{MDEAH+}'), (2, 'aminomethylpropanol', r'\ce{AMP}'), (2, 'protonated-aminomethylpropanol', r'\ce{AMPH+}'), (2, 'carbamate-anion', r'\ce{AMPCOO-}')]
     table('transfer-species', 'Segment, association and Born parameters of the DEA, MDEA and AMP species.', ['Species', r'$m^{\mathrm{seg}}$', r'$\sigma$ (\AA)', r'$u/k_B$ (K)', r'$\epsilon^{AB}/k_B$ (K)', r'$\kappa^{AB}$', r'$d^{\mathrm{Born}}$ (\AA)', 'Ref.'], [species_row(AMINES[i][1], s, label, source, FITTED_HERE[i]) for (i, s, label), source in zip(ROWS, SOURCE)], [.12,.10,.10,.12,.13,.10,.12,.14],
@@ -3059,6 +3060,12 @@ def result_values(required):
     add('mea-all-row-variance-supplement', record,
         'replay.rows: twice cost / (all rows minus free coordinates)',
         format((2 * fsum(x["cost"] for x in r["replay"]["rows"]) / (len(r["replay"]["rows"])-len(r["diagnostics"]["uncertainty"]["free_coordinates"]))), '.8f'))
+    born = read(BORN)
+    add('mea-born-objective-change', BORN, 'cases: largest |cost / reference_cost - 1| in percent',
+        format(100 * max(abs(c['cost'] / born['reference_cost'] - 1) for c in born['cases']), '.2f'))
+    for ion, digits in (('bicarbonate', '.1f'), ('carbonate', '.2f')):
+        add(f'mea-born-{ion}-pressure-change', BORN, f'cases[ion={ion}-anion].largest_pressure_change_percent, largest',
+            format(max(c['largest_pressure_change_percent'] for c in born['cases'] if c['ion'] == f'{ion}-anion'), digits))
     add('mea-fixed-hydroxide-born-diameter', record,
         'endpoint.parameters.components[hydroxide-anion].born_diameter in Å',
         format((next(c["value"]["magnitude"] for x in r["endpoint"]["parameters"]["components"] if x["component_id"]=='hydroxide-anion' for c in x["coefficients"] if c["family"]=='born_diameter')), '.4f'))
