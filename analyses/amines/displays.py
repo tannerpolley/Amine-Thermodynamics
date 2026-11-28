@@ -1068,8 +1068,12 @@ def transfer_displays(outputs):
     dea_inside, dea_temperatures, dea_concentrations = fitted_conditions(dfit, dea_conditions)
     # The DEA objective fits pressures at or above 0.05 kPa, so the lower Lal pressures lie outside its fitted conditions.
     dea_floor = min(float(r['observed']) for r in dfit)
+    # Measured Haji-Sulaiman pressures only; their stage asserts the fitted temperature and pressure range.
+    haji = [r for r in read(MOVE + 'dea/reported/held-out-pressures/summary.json.gz')['sources']['HajiSulaiman1998']['rows']
+            if r.get('value') is not None]
     dea_within, dea_outside = split_pressures(
-        [(pco2, [r for r in dea_pressure if r['role'] != 'fitted'])], lambda r: dea_inside(r) and float(r['observed']) >= dea_floor)
+        [(pco2, [r for r in dea_pressure if r['role'] != 'fitted'] + haji)],
+        lambda r: r['group'] == 'HajiSulaiman1998' or (dea_inside(r) and float(r['observed']) >= dea_floor))
 
     mdea_pressures = [r for r in mdea_pressure_rows(read(W_MDEA_PROPERTIES)) if r['unit'] == 'Pa']
     mloaded = [r for r in mdea_pressures if r['group'] == 'Kuranov' and r['role'] == 'fitted']
@@ -1320,7 +1324,7 @@ def transfer_displays(outputs):
           COLUMNS, main_rows, [], spec=SPEC,
           notes=r'AARD of this work follows Eq.~\eqref{eq:aard}; published values are those reported in each source. ' + TERMS + r'Unclear: the source calls these results predictions in its methods and fitted in its conclusions. '
                 r'This work: MEA at nominal 30 wt\% and $T\le\SI{353.2}{\kelvin}$, MDEA loaded pressures only; All MEA $p_{\COtwo}$: the overall value of each model. eCTS: electrolyte cubic-two-state equation of state. '
-                r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated regression interval. \textsuperscript{c}15--60 wt\% MEA. '
+                r'\textsuperscript{a}Recalculated as 34.4\,\% by Wangler et al.\ \cite{Wangler2018}. \textsuperscript{b}15.2--30.0 wt\% MEA; $T$: their stated fitting interval. \textsuperscript{c}15--60 wt\% MEA. '
                 rf"\textsuperscript{{d}}30 wt\% MEA at loadings 0.003--0.5. \textsuperscript{{e}}As tabulated by Baygi and Pahlavanzadeh \cite{{Baygi2015}}; the {zhang_fitted} fitted are the observations of Hilliard, Jou et al., Ma'mun et al.\ and Xu and Rochelle.")
     table('supplement-published-models', 'Pressure AARD of this work and of published models on the pressure sources that this work did not fit.',
           COLUMNS, other_rows, [], spec=SPEC,
