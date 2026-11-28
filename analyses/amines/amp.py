@@ -257,6 +257,15 @@ FIT_SETS = {
         objective=ROOT / "analyses/round_5/results/A/original-main.json.gz",
         objective_keys=("cost",),
     ),
+    "first-data-hot-pressures": dict(
+        route=ExpandedPressure,
+        declaration=DECLARATION,
+        reference_pressure_pa=None,
+        retained=RESULTS / "move/amp/first-data-hot-pressures/fit",
+        fit_from="first-data",
+        maximum_seconds=900,
+        replay_tolerance=1e-8,
+    ),
     "reported": dict(
         route=ExpandedPressure,
         declaration=DECLARATION,
@@ -267,3 +276,13 @@ FIT_SETS = {
         replay_tolerance=1e-8,
     ),
 }
+
+FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/amp/water-anion-control/fit",
+    water_anion_intercepts=True,
+)
+
+FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/amp/common-pressure-weight/fit",
+    pressure_log_scale=0.05,
+)

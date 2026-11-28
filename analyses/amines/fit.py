@@ -1,5 +1,6 @@
 """Reported fit starts, attempts, selection and replay."""
 
+from collections import Counter
 import csv
 from copy import deepcopy
 import gzip
@@ -76,6 +77,27 @@ def route_for(fit_set):
     return fit_set["route"](fit_set["declaration"], reference_pressure_pa=fit_set["reference_pressure_pa"])
 
 
+def is_pressure(row):
+    return row["constructor"] == "observation" and row["kind"] in ("pressure", "partial_pressure")
+
+
+def bind_fit(fit_set, point):
+    spec = route_for(fit_set).bind(point)
+    if "pressure_log_scale" in fit_set:
+        held_groups = fit_set.get("held_pressure_groups", ())
+        rows = [row for row in spec.inputs["observations"]["fitted"]
+                if is_pressure(row) and row["group"] not in held_groups]
+        counts = Counter((row["group"], row["kind"]) for row in rows)
+        for row in rows:
+            arguments = row["arguments"]
+            arguments["form"] = "log_ratio"
+            arguments.pop("scale", None)
+            row["weight"] = 1 / (counts[row["group"], row["kind"]] * fit_set["pressure_log_scale"]**2)
+            if isinstance(row["basis"], dict) and "arguments" in row["basis"]:
+                row["basis"] = dict(row["basis"], arguments=arguments)
+    return spec
+
+
 def retained_endpoint(fit_set):
     path = fit_set["retained"]
     selection = read(path / "selection.json")
@@ -89,7 +111,7 @@ def retained_endpoint(fit_set):
 
 def replay_endpoint(fit_set):
     point, selection = retained_endpoint(fit_set)
-    spec = route_for(fit_set).bind(point)
+    spec = bind_fit(fit_set, point)
     expected = read(fit_set["retained"] / "manifest.json.gz")
     inputs = spec.inputs["observations"]["fitted"]
     retained = expected["rows"]["fitted"]
@@ -106,7 +128,7 @@ def replay_endpoint(fit_set):
 
 
 def rows(fit_set, declaration):
-    measured = row_manifest(route_for(fit_set).bind(declaration["start_A_declaration"]))
+    measured = row_manifest(bind_fit(fit_set, declaration["start_A_declaration"]))
     if measured != declaration["rows"]:
         raise ValueError(f"{fit_set['retained']}: changed start-state row declarations")
     return dict(wheel=verify(), rows=measured)
@@ -303,14 +325,69 @@ def alternate_starts(fit_set, target):
                 tied_count=1 + sum(a["tied"] for a in attempts.values()))
 
 
-def mdea_without_gap_bound(fit_set, target):
-    declaration = read(fit_set["retained"] / "manifest.json.gz")
-    coordinate = next(q for q in declaration["start_A_declaration"]["coordinates"]
+def remove_mdea_gap_bound(point):
+    coordinate = next(q for q in point["coordinates"]
                       if q["identity"].startswith("pair/mdea-water/k_ij/a0"))
     # Restore the upper limit of the interaction coordinate before the binary gap constraint.
     coordinate["bounds"][1] = 0.5
+
+
+def pressure_fit_manifest(fit_set, source, controls_source):
+    wheel = verify()
+    path = controls_source["retained"] / "manifest.json.gz"
+    controls = read(path)
+    if controls["wheel"] != wheel:
+        raise ValueError(f"{path}: fit controls use another wheel")
+    if "endpoint" in source:
+        path = source["endpoint"]
+        point = read(path)
+    else:
+        point = controls["start_A_declaration"]
+    if fit_set.get("without_binary_gap_bound"):
+        remove_mdea_gap_bound(point)
+    return dict(wheel=wheel, source_wheel=controls["wheel"],
+                source=path.relative_to(ROOT).as_posix(),
+                start_A_declaration=point, fit_controls=controls["fit_controls"],
+                starts={"A": dict(optimizer=[0.0] * len(point["coordinates"]))},
+                diagnostic_starts={}, rows=row_manifest(route_for(fit_set).bind(point)))
+
+
+def mdea_without_gap_bound(fit_set, target):
+    declaration = read(fit_set["retained"] / "manifest.json.gz")
+    remove_mdea_gap_bound(declaration["start_A_declaration"])
     save(target / "manifest.json.gz", declaration)
     return reported_fit(fit_set, declaration, target)
+
+
+def control_manifest(reported, fit_set):
+    """Start the control at the selected reported endpoint on the locked wheel."""
+    point, selection = retained_endpoint(reported)
+    if fit_set.get("water_anion_intercepts"):
+        from . import salt
+
+        values = parameter_values(point["parameters"])
+        for ion in (salt.HCO3, salt.CO3):
+            identity = salt.LAWS[ion] + "/a0"
+            point["coordinates"].append(dict(
+                identity=identity,
+                origin=values[identity],
+                scale=salt.SCALES[0],
+                bounds=salt.BOUNDS[0],
+                targets=[("temperature_law_coefficient", identity, 1.0)],
+            ))
+    source = reported["retained"] / f'{selection["selected"]}.json.gz'
+    controls = dict(read(source)["controls"], maximum_elapsed_time_seconds=reported["maximum_seconds"])
+    return dict(
+        wheel=selection["wheel"],
+        source_wheel=selection["wheel"],
+        source=str(source.relative_to(ROOT)),
+        source_endpoint_fingerprint=selection["endpoint_fingerprint"],
+        start_A_declaration=point,
+        fit_controls=controls,
+        starts={"A": dict(optimizer=[0.0] * len(point["coordinates"]))},
+        diagnostic_starts={},
+        rows=row_manifest(bind_fit(fit_set, point)),
+    )
 
 
 def reported_fit(fit_set, declaration, target):
@@ -378,7 +455,7 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
         # A tolerance stop tests its final step before reaching the iteration limit.
         controls.update(maximum_iterations=budget["entries"] - 1 + budget["converged"],
                         maximum_elapsed_time_seconds=24 * 60 * 60)
-    spec = route.bind(point)
+    spec = bind_fit(fit_set, point)
     spec.spec["optimizer"] = controls
     tick = monotonic()
     _, report, _ = spec.fit(starts=None if previous is not None else [u])
@@ -401,7 +478,7 @@ def attempt(fit_set, declaration, label, path, *, previous=None):
         record.update(endpoint=endpoint, endpoint_fingerprint=fingerprint(endpoint))
         save(path, record)
         tick = monotonic()
-        bound = route.bind(endpoint)
+        bound = bind_fit(fit_set, endpoint)
         fit_replay = replay(bound)
         record.update(replay=fit_replay, replay_seconds=monotonic() - tick)
         cost = report["data_cost"] if report["data_cost"] is not None else report["final_cost"]

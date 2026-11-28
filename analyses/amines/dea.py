@@ -517,3 +517,13 @@ FIT_SETS["without-lawson"] = FIT_SETS["reported"] | dict(
     route=DEAWithoutLawson,
     retained=RESULTS / "move/dea/without-lawson/fit",
 )
+
+FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/dea/water-anion-control/fit",
+    water_anion_intercepts=True,
+)
+
+FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/dea/common-pressure-weight/fit",
+    pressure_log_scale=0.05,
+)

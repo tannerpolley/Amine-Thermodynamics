@@ -22,6 +22,7 @@ from .model import (
     parameter_mapping,
     replay,
     parameter_values,
+    target_identity,
     with_parameter_values,
 )
 from MEA.common.mea_source_contracts import (
@@ -628,7 +629,7 @@ def mea_endpoint_mapping(start, report, declared):
     updates, index = {}, 0
     for q in declared:
         for family, target, factor in q.get("targets", []):
-            identity = (
+            identity = target_identity(start, family, target) if family == "temperature_law_coefficient" else (
                 f"component/{target}/{family}"
                 if isinstance(target, str)
                 else f"pair/{'/'.join(sorted(target))}/"
@@ -1295,6 +1296,35 @@ def heat_comparison(spec, mapping, templates, retained):
         "sources": source["sources"]}
 
 
+def refresh_pressure_rows(spec, legacy_template, rows):
+    template = next(row["request"] for row in load_state_packet()["observations"]
+                    if row["request"]["pressure"]["role"] == "solved")
+    records = []
+    for row in rows:
+        source = row["row"]["source_coordinates"]
+        records.append(pressure_record(spec, legacy_template, row["identity"], source_feed_request(template, source),
+                                       row["observed"], row["row"]["source"], row["group"]))
+    return [dict(old, **new) for old, new in zip(rows, evaluate(spec, records), strict=True)]
+
+
+def reported_carbonate_shares(spec, references):
+    shares = []
+    for row in references:
+        path = PAPER_EVIDENCE / "paper-evidence/selected-assessment/carbonate-requests" / (row["state"] + ".json")
+        problem = _problem_from_request(corrected_request(read(path), spec.inputs["endpoint"]))
+        for reaction in problem.reactions:
+            reaction.reference = equilibrium.ReactionReference(reaction.reference.source_basis, reference_pressure_pa=P_REF)
+        result = equilibrium.solve_equilibrium(spec.model, problem)
+        value = None
+        if result.requested_tolerance_met:
+            x = dict(zip(COMPONENT_IDS, result.phase_mole_fractions(0), strict=True))
+            value = x["carbonate-anion"] / sum(x[species] for species in (
+                "carbon-dioxide", "carbamate-anion", "bicarbonate-anion", "carbonate-anion"))
+        shares.append(dict(row, status="Available" if value is not None else "Unavailable", value=value,
+                           cause=None if value is not None else result.message))
+    return shares
+
+
 def display_properties(route, point, fit):
     spec = route.bind(point)
     mapping = point["parameters"]
@@ -1306,21 +1336,9 @@ def display_properties(route, point, fit):
     retained = read(held_base / "E/MEA/replay.json.gz")
     held_pressures = read(held_display / "wagner.json.gz")
     held_off_window = read(held_base / "MEA/off-window.json.gz")
-    legacy_template = legacy[0]
-    template = next(row["request"] for row in load_state_packet()["observations"]
-                    if row["request"]["pressure"]["role"] == "solved")
-
-    def refresh_pressures(rows):
-        records = []
-        for row in rows:
-            source = row["row"]["source_coordinates"]
-            records.append(pressure_record(spec, legacy_template, row["identity"], source_feed_request(template, source),
-                                           row["observed"], row["row"]["source"], row["group"]))
-        return [dict(old, **new) for old, new in zip(rows, evaluate(spec, records), strict=True)]
-
-    hot = refresh_pressures(retained["hot_wagner"])
-    wagner = refresh_pressures(held_pressures["rows"])
-    off_window = refresh_pressures(held_off_window["rows"])
+    hot = refresh_pressure_rows(spec, legacy[0], retained["hot_wagner"])
+    wagner = refresh_pressure_rows(spec, legacy[0], held_pressures["rows"])
+    off_window = refresh_pressure_rows(spec, legacy[0], held_off_window["rows"])
     fitted_rows = fit["replay"]["rows"]
     legacy_ids = {r["identity"] for r in legacy}
     fitted_pressure = [r for r in fitted_rows if r["identity"] in legacy_ids]
@@ -1341,20 +1359,7 @@ def display_properties(route, point, fit):
     capacities = [dict(old, **{**prediction, "predicted_kJ_kg_K": None if prediction["value"] is None
                               else prediction["value"] / record["mass_to_mol"]})
                   for old, prediction, record in zip(held["heat_capacity"], evaluate(spec, records), records, strict=True)]
-    shares = []
-    for row in held["carbonate_share"]:
-        path = PAPER_EVIDENCE / "paper-evidence/selected-assessment/carbonate-requests" / (row["state"] + ".json")
-        problem = _problem_from_request(corrected_request(read(path), mapping))
-        for reaction in problem.reactions:
-            reaction.reference = equilibrium.ReactionReference(reaction.reference.source_basis, reference_pressure_pa=P_REF)
-        result = equilibrium.solve_equilibrium(spec.model, problem)
-        value = None
-        if result.requested_tolerance_met:
-            x = dict(zip(COMPONENT_IDS, result.phase_mole_fractions(0), strict=True))
-            value = x["carbonate-anion"] / sum(x[species] for species in (
-                "carbon-dioxide", "carbamate-anion", "bicarbonate-anion", "carbonate-anion"))
-        shares.append(dict(row, status="Available" if value is not None else "Unavailable", value=value,
-                           cause=None if value is not None else result.message))
+    shares = reported_carbonate_shares(spec, held["carbonate_share"])
 
     kim = []
     source = FIT_SETS["published-properties"]
@@ -1915,3 +1920,14 @@ FIT_SETS = {
         replay_tolerance=1e-10,
     ),
 }
+
+FIT_SETS["water-anion-control"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mea/water-anion-control/fit",
+    water_anion_intercepts=True,
+)
+
+FIT_SETS["common-pressure-weight"] = FIT_SETS["reported"] | dict(
+    retained=RESULTS / "move/mea/common-pressure-weight/fit",
+    pressure_log_scale=0.05,
+    held_pressure_groups=("Kiepe",),  # CO₂–water, with no amine.
+)
