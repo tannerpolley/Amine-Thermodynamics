@@ -1,3 +1,0 @@
-# Current displayed-number evidence for issue 197
-
-The owner-approved reframe is indexed in `197-reframe-numeric-check.json` and explained in `197-reframe-number-sources.md`. These include retained-value and population checks, every paragraph identifier, generated table rows and their source hashes, prose-number additions and cuts, and rounding. `197-reframe-build-checks.json` binds the final PDFs and generated outputs to their source files. Earlier revision and correction audits remain the evidence for unchanged coefficients and process details moved to the supplement. Independent scientific and reader reviews remain with the parent.

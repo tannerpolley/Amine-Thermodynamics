@@ -89,7 +89,7 @@ bash scripts/build_manuscript.sh
 uv run python scripts/check_manuscript_freshness.py
 ```
 
-The build is written only to `docs/scientific/latex/builds/`. The tracked `manuscript_references.bib`, `project_sources.bib`, and `official_sources.bib` files make citations reproducible in a clean clone; a full personal-library `references.bib` export remains ignored.
+The build is written only to `docs/scientific/latex/builds/`. The tracked `references.bib`, the cited subset of the Zotero export written by `docs/scientific/latex/scripts/cited_bibliography.py`, and `transfer_sources.bib` make citations reproducible in a clean clone. `bash docs/scientific/latex/scripts/fpe_source_zip.sh` then writes the flat LaTeX source archive that Editorial Manager compiles.
 
 Sync the local manuscript source back to the Overleaf mirror with:
 
