@@ -47,32 +47,36 @@ repository_license: MIT
 repository_visibility_at_submission: public
 release_tag: null
 release_commit: null
-data_commit: null  # the 7db3ea91 staging was for the MEA-only paper; set when the deposit is re-staged
+data_commit: 109b50506b0edfc0ae027182e9eee5343b82a445
 fitting_stage_commit: null
-data_delivery: local deposit preparation for Zenodo; DOI added at submission
+data_delivery: merged-paper deposit rebuilt and sealed locally for Zenodo
 local_data_release: ~/Workspaces/External/mea-manuscript-deposit/ (outside the repository; staged by scripts/stage_manuscript_deposit.py)
 engines:
-  - scope: MEA calculations and the 16-parameter calibration
+  - scope: Earlier MEA calculations and the 16-parameter calibration
     version: 1.3.0
     engine_commit: 391dfe5d64ede5036bf160bc6ae037ad5e14af32
     engine_wheel_sha256: 0962e21d2fa7a8ba1ed4622f1110b3e8053bacd878fa41c999d85e8b9afab66b
-  - scope: DEA, MDEA and AMP calculations
+  - scope: Earlier transfer calculations and the salt-anchored fits used to initialize later fits
     version: 1.3.1
     engine_commit: 05e94210fa64cf69725e45babc0411d32139df5a
     engine_wheel_sha256: c9fbf898b14d004f915f01ed77675867908dd30d77dc28544b2860e9195c80bb
+  - scope: Reported fits and reproduction of the merged paper
+    version: 0.1.0
+    engine_commit: c8867574c4d1dc4f9f35ff9f2186a13c3208c1d3
+    engine_wheel_sha256: 48309bb7e9ccbab1f436c4e294a873e745c368bbe57e8cf14f113ad75cbb574c
 parameter_records:
   - scope: MEA model
-    path: analyses/mea_parameter_bundle/results/paper-evidence-341/paper-evidence/reported-parameters.json
-    sha256: ae17803e1bcb2ca0a1970e05c7cc235d615c4d8a3a349b5afef0b0401dedefed
+    path: analyses/amines/results/move/mea/reported/fit/A.json.gz
+    sha256: 371f7b5bf02d2e20ca560cff39ab388bb6500223f600d17e41b3fd28f075d8a2
   - scope: DEA model
-    path: analyses/dea_transfer/results/refit-413/parameter-values.csv
-    sha256: 6de25ccae04ca7478d322a44fc6f4267079ac857e70440fbcf3672cda9bb5e44
+    path: analyses/amines/results/move/dea/reported/fit/A.json.gz
+    sha256: f8b91089b3b1b2e5c4d15d7dad97a18078d2113eadb79df5edc402442cd565e7
   - scope: MDEA model
-    path: analyses/mdea_mea_workflow/results/bounded-binary-411/parameter-table.json
-    sha256: a00d0b04b37a99fcc27727d95e325b213fb2e2e317594dcad6a4bbfebc72d0d3
+    path: analyses/amines/results/move/mdea/reported/fit/A.json.gz
+    sha256: e955c252bc664459fbf03cf9e27050b1ef4f5b86be3bc7d792949e8fcbcf2bc0
   - scope: AMP model
-    path: analyses/amp_transfer/results/retransfer-412-f2-05e94210/slope-150/parameters.json
-    sha256: 5c0bf32b4945d3cfdfd9bdc713799b0956adc296bbd17ba3f2450e1433bc6006
+    path: analyses/amines/results/move/amp/reported/fit/A.json.gz
+    sha256: 3cdbac1d2d36bee0651e564788b162cd1d35be38c9f575cf4a4166d7404e7ad6
 comparison_fits:
   - 16-parameter MEA calibration (analyses/mea_parameter_bundle/results/reduced-refit/, fit F0)
   - AMP fit with the AMPH⁺–water temperature slope also fitted (analyses/amp_transfer/results/retransfer-412-f2-05e94210/main/)
@@ -106,6 +110,6 @@ excluded_from_upload:
   - docs/scientific/latex/submission_metadata.yml
 remaining_human_gate:
   - owner review of main.pdf and supplement.pdf
-  - re-stage the deposit for the merged paper, then owner authorization for data publication and DOI creation
+  - owner authorization to create the Zenodo draft, reserve its DOI, and publish
   - referee access to the epcsaft 1.3.0 and 1.3.1 wheels, arranged through the corresponding author
   - owner authorization for Overleaf sync, a ChemRxiv preprint and journal submission

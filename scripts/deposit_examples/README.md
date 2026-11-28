@@ -1,14 +1,26 @@
 # Reproduce the aqueous amine calculations
 
-The staged repository contains the fixed-reference MEA, DEA, MDEA and AMP declarations, the selected endpoints and the numerical records used by the manuscript. `uv.lock` identifies the ePC-SAFT wheel. The package checks its hash and installed bytes before running a calculation.
+The archive contains the fixed-reference MEA, DEA, MDEA and AMP declarations, processed observations, selected parameters and numerical results. The reported fit manifests and selections are under `analyses/amines/results/move/{mea,dea,mdea,amp}/reported/fit/`.
 
-From the deposit root, check the tables, figures and named manuscript values.
+Use Python 3.13 and uv on x86-64 Linux with glibc 2.39 or later. `uv.lock` pins the development wheel used for the reported fits and the reproduction commands. The calculation code verifies its hash and installed bytes. The archive also contains the earlier 1.3.0 and 1.3.1 wheels used for the MEA comparison calibration and earlier transfer calculations. See `provenance/source.json` for wheel paths and hashes. The project code is under MIT. Third-party measurements remain under the terms of their sources.
+
+From the deposit root, check the archived tables, figures and named manuscript values, then regenerate the display files from the retained results.
 
 ```sh
+sha256sum -c SHA256SUMS
 uv run --locked python -m analyses.amines.displays --check
+uv run --locked python -m analyses.amines.displays
 ```
 
-Build the supplement and main paper in `docs/scientific/latex` with `latexmk -pdf`. Compile the supplement, then the main paper, and repeat this order to resolve their cross-references.
+Build both PDFs with TeX Live and latexmk. The second pass resolves cross-references between the article and supplement.
+
+```sh
+cd docs/scientific/latex
+for document in supplement main supplement main; do
+    latexmk -g -pdf -interaction=nonstopmode -halt-on-error -outdir=builds "$document.tex"
+done
+cd ../../..
+```
 
 ## Fits and replays
 
